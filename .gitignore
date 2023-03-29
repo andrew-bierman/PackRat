@@ -1,6 +1,17 @@
 *.env
 node_modules
-
+dist
+old/
+.zip
+app.json
+Podfile
+Podfile.lock
+gradle.properties
+client.zip
+*.zip
+.vscode
+*.DS_Store
+package-lock.json
 
 # Logs
 logs
