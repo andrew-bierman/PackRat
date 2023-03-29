@@ -25,7 +25,7 @@ PackRat is built using the following technologies:
 - Redux: a predictable state container for JavaScript apps.
 - Mapbox: a location data platform for mobile and web applications.
 
-## Installation and Usage 📲
+## Local installation 📲
 
 PackRat consists of two main components: a client and a server. Follow the steps below to install and run both components.
 
@@ -33,8 +33,15 @@ PackRat consists of two main components: a client and a server. Follow the steps
 
 1. Navigate to the `client` directory: `cd client`.
 2. Create a new file called `.env` and add the necessary environment variables. You can copy the `.env.example` file and replace the values with your own.
-3. Install dependencies using `npm install`.
-4. Start the app using `npm start`.
+3. Copy the `app.example.json` file and rename it to `app.json`. Open the file and replace the `MAPBOX_API_KEY` value with your own Mapbox API key.
+4. Navigate to the ios directory
+5. Copy the `Podfile.example` file and rename it to `Podfile`. Open the file and replace the `MAPBOX_ACCESS_TOKEN` value with your own Mapbox access token.
+6. Navigate to the android directory. 
+7. Copy the `gradle.properties.example` file and rename it to `gradle.properties`. Open the file and replace the `MAPBOX_DOWNLOADS_TOKEN` value with your own Mapbox downloads token.
+8. Install dependencies using `npm install`.
+9.  Start the app using `npm run dev`.
+10. Install dependencies using `npm install`.
+11. Start the app using `npm run ios` or `npm run android`.
 
 ### Server
 
@@ -46,10 +53,6 @@ PackRat consists of two main components: a client and a server. Follow the steps
 Make sure to start the server before starting the client, as the client relies on the server for data.
 
 Note that the client and server are designed to run concurrently in development mode. To do so, follow these steps:
-
-1. Navigate to the root directory.
-2. Install dependencies using `npm install`.
-3. Start the app using `npm run dev`.
 
 This will start both the client and server simultaneously.
 
