@@ -3,9 +3,8 @@ import mapboxgl from 'mapbox-gl';
 import { Platform } from 'react-native';
 import { Asset } from 'expo-asset';
 
-'client/assets/mapbox/mapbox-gl.css'
+import { MAPBOX_ACCESS_TOKEN } from '@env';
 
-const MAPBOX_ACCESS_TOKEN = 'YOUR_MAPBOX_ACCESS_TOKEN';
 
 export function WebMap() {
   const mapContainer = useRef(null);
@@ -17,8 +16,9 @@ export function WebMap() {
   useEffect(() => {
     if (map.current) return; // initialize map only once
     if (Platform.OS === 'web') {
-      Asset.fromModule(require('../../assets/mapbox/mapbox-gl.js')).downloadAsync();
-      Asset.fromModule(require('../../assets/mapbox/mapbox-gl.css')).downloadAsync();
+       require('mapbox-gl/dist/mapbox-gl.css');
+    //   Asset.fromModule(require('../../assets/mapbox/mapbox-gl.js')).downloadAsync();
+    //   Asset.fromModule(require('../../assets/mapbox/mapbox-gl.css')).downloadAsync();
 
       mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
       map.current = new mapboxgl.Map({
