@@ -98,6 +98,31 @@ export default function Login() {
               </Text>
             </Link>
           </HStack>
+          <HStack mt="6" justifyContent="center">
+            <Heading
+              mt="1"
+              _dark={{
+                color: "warmGray.200",
+              }}
+              color="coolGray.600"
+              fontWeight="medium"
+              size="xs"
+            >
+              Or
+            </Heading>
+          </HStack>
+          <HStack mt="6" justifyContent="center">
+            <Button
+              onPress={() => {
+                loginUser.mutate({ email, password });
+                signIn({ email, password });
+              }}
+              mt="2"
+              colorScheme="red"
+            >
+              {loginUser.isLoading ? "Loading...." : "Sign in with google"}
+            </Button>
+          </HStack>
         </VStack>
       </Box>
       {loginUser.isSuccess && router.push("/")}

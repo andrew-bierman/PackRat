@@ -1,5 +1,7 @@
 import Pack from "../models/packModel.js";
 import mongoose from "mongoose";
+import { oneEntity } from "../utils/oneEntity.js"
+import { packValidation } from "../utils/pack.js"
 
 export const getPublicPacks = async (req, res) => {
   const { queryBy } = req.query;
@@ -59,7 +61,7 @@ export const getPublicPacks = async (req, res) => {
 };
 
 export const getPacks = async (req, res) => {
-  const { ownerId } = req.params;
+  const { ownerId } = oneEntity(req.params);
 
   try {
     const aggr = await Pack.aggregate([
@@ -91,7 +93,7 @@ export const getPacks = async (req, res) => {
 };
 
 export const getPackById = async (req, res) => {
-  const { _id } = req.body;
+  const { _id } = oneEntity(req.body._id)
 
   try {
     const pack = await Pack.findById({ _id }).populate("total_weight");
@@ -125,8 +127,9 @@ export const getPackById = async (req, res) => {
 };
 
 export const addPack = async (req, res) => {
+  const packBody = packValidation(req.body)
   const newPack = {
-    ...req.body,
+    ...packBody,
     items: [],
     is_public: false,
     favorited_by: [],
@@ -149,7 +152,7 @@ export const addPack = async (req, res) => {
 };
 
 export const editPack = async (req, res) => {
-  const { _id } = req.body;
+  const { _id } = oneEntity(req.body._id)
 
   try {
     const newPack = await Pack.findOneAndUpdate({ _id }, req.body, {
@@ -163,7 +166,8 @@ export const editPack = async (req, res) => {
 };
 
 export const deletePack = async (req, res) => {
-  const { packId } = req.body;
+  const { packId } = oneEntity(req.body.packId)
+
   try {
     await Pack.findOneAndDelete({ _id: packId });
     res.status(200).json({ msg: "pack was deleted successfully" });
