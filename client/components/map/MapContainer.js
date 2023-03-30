@@ -4,6 +4,8 @@ import { Platform, StyleSheet, Text, View, Picker } from "react-native";
 import Mapbox from '@rnmapbox/maps';
 import { Select, Center, Box, CheckIcon } from "native-base";
 
+// import { WebMap } from "./WebMap";
+
 // get mapbox access token from .env file
 import { MAPBOX_ACCESS_TOKEN } from "@env";
 
@@ -27,10 +29,6 @@ export function CustomizedMap() {
   const mapViewRef = useRef(null);
 
   const [style, setStyle] = React.useState("mapbox://styles/mapbox/outdoors-v11");
-
-  useEffect(() => {
-    console.log("StyleURL:", Mapbox?.StyleURL);
-  }, []);
 
   const [lng, setLng] = useState(103.8519599);
   const [lat, setLat] = useState(1.29027);
@@ -234,6 +232,7 @@ export function MapContainer() {
         <Text>
           Mapbox maps are not supported on web yet.
         </Text>
+        {/* <WebMap /> */}
       </View>
     )
   }

@@ -26,6 +26,7 @@
     "date-fns": "^2.29.3",
     "dotenv": "^16.0.3",
     "expo": "~48.0.7",
+    "expo-asset": "~8.9.1",
     "expo-checkbox": "~2.3.1",
     "expo-constants": "~14.2.1",
     "expo-router": "^1.2.2",
