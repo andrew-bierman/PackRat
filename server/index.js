@@ -17,14 +17,14 @@ import userRoutes from "./routes/userRoutes.js";
 import packRoutes from "./routes/packRoutes.js";
 import itemRoutes from "./routes/itemRoutes.js";
 import tripRoutes from "./routes/tripRoutes.js";
-import weather from "./routes/weatherRoutes.js";
+import weatherRoutes from "./routes/weatherRoutes.js";
 
 // use routes
 app.use("/user", userRoutes);
 app.use("/pack", packRoutes);
 app.use("/item", itemRoutes);
 app.use("/trip", tripRoutes);
-app.use("/weather", weather);
+app.use("/weather", weatherRoutes);
 
 mongoose.connect(connectionString).then(() => console.log("connected"));
 

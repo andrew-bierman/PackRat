@@ -8,11 +8,17 @@ import {
   Center,
   HStack,
   Text,
+  View
 } from "native-base";
-import { useState } from "react";
+import * as WebBrowser from 'expo-web-browser';
+import * as Google from 'expo-auth-session/providers/google';
+import { useState, useEffect } from "react";
 import useRegister from "../hooks/useRegister";
 import { useRouter } from "expo-router";
 import { Link } from "expo-router";
+import { WEB_CLIENT_ID } from "@env"
+
+WebBrowser.maybeCompleteAuthSession();
 
 export default function Register() {
   const [name, setName] = useState("");
@@ -21,6 +27,46 @@ export default function Register() {
 
   const { addUser } = useRegister();
   const router = useRouter();
+
+  // -------------------------------------------------------------------
+  const [token, setToken] = useState("");
+  const [userInfo, setUserInfo] = useState(null);
+
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    webClientId: WEB_CLIENT_ID
+    // androidClientId: "GOOGLE_GUID.apps.googleusercontent.com",
+    // iosClientId: "GOOGLE_GUID.apps.googleusercontent.com",
+  });
+
+  useEffect(() => {
+    if (response?.type === "success") {
+      setToken(response.authentication.accessToken);
+      getUserInfo();
+    }
+  }, [response, token]);
+
+  if (userInfo) {
+    if (userInfo.name && userInfo.email && userInfo.password) {
+      addUser.mutate(userInfo)
+      { router.push("/sign-in") }
+    }
+  }
+
+  const getUserInfo = async () => {
+    try {
+      const response = await fetch(
+        "https://www.googleapis.com/userinfo/v2/me",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      const user = await response.json();
+      setUserInfo({ name: user.name, email: user.email, password: token });
+    } catch (error) {
+      // Add your own error handler here
+    }
+  };
+  // -------------------------------------------------------------------
 
   return (
     <Center w="100%">
@@ -93,6 +139,33 @@ export default function Register() {
               </Text>
             </Link>
           </HStack>
+          {/* Google register */}
+          <HStack mt="1" justifyContent="center">
+            <Heading
+              mt="1"
+              _dark={{
+                color: "warmGray.200",
+              }}
+              color="coolGray.600"
+              fontWeight="medium"
+              size="xs"
+            >
+              Or
+            </Heading>
+          </HStack>
+          <HStack mt="1" justifyContent="center">
+            <Button
+              w="100%"
+              onPress={() => {
+                promptAsync();
+              }}
+              mt="2"
+              colorScheme="red"
+            >
+              {"Sign up with google"}
+            </Button>
+          </HStack>
+          {/* Google register */}
         </VStack>
       </Box>
       {addUser.isSuccess && router.push("/sign-in")}

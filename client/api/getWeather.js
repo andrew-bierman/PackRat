@@ -3,6 +3,8 @@ import { api } from "../constants/api";
 export const getWeather = async (lat, lon, state) => {
   let weatherObject = {};
 
+  let params = `?`;
+
   const latParams = lat;
   const lonParams = lon;
 

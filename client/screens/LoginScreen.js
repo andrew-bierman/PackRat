@@ -11,13 +11,18 @@ import {
   NativeBaseProvider,
 } from "native-base";
 
-import { useState } from "react";
+import * as WebBrowser from 'expo-web-browser';
+import * as Google from 'expo-auth-session/providers/google';
+import { useState, useEffect } from "react";
 import useLogin from "../hooks/useLogin";
 import { useAuth } from "../auth/provider";
 import { Link } from "expo-router";
 import { useRouter } from "expo-router";
 import { theme } from "../theme";
+import { WEB_CLIENT_ID } from "@env"
 
+
+WebBrowser.maybeCompleteAuthSession();
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -26,6 +31,48 @@ export default function Login() {
   const { loginUser } = useLogin();
 
   const router = useRouter();
+
+  // -------------------------------------------------------------------
+  const [token, setToken] = useState("");
+  const [userInfo, setUserInfo] = useState(null);
+
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    webClientId: WEB_CLIENT_ID
+    // androidClientId: "GOOGLE_GUID.apps.googleusercontent.com",
+    // iosClientId: "GOOGLE_GUID.apps.googleusercontent.com",
+  });
+
+  useEffect(() => {
+    if (response?.type === "success") {
+      setToken(response.authentication.accessToken);
+      getUserInfo();
+    }
+  }, [response, token]);
+
+
+  if (userInfo) {
+    if (userInfo.email && userInfo.password) {
+      loginUser.mutate(userInfo);
+      signIn(userInfo);
+      { router.push("/") }
+    }
+  }
+
+  const getUserInfo = async () => {
+    try {
+      const response = await fetch(
+        "https://www.googleapis.com/userinfo/v2/me",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      const user = await response.json();
+      setUserInfo({ email: user.email, password: token });
+    } catch (error) {
+      // Add your own error handler here
+    }
+  };
+  // -------------------------------------------------------------------
 
   return (
     <Center w="100%">
@@ -98,6 +145,7 @@ export default function Login() {
               </Text>
             </Link>
           </HStack>
+          {/* Google Login starts*/}
           <HStack mt="6" justifyContent="center">
             <Heading
               mt="1"
@@ -111,18 +159,19 @@ export default function Login() {
               Or
             </Heading>
           </HStack>
-          <HStack mt="6" justifyContent="center">
+          <HStack mt="1" justifyContent="center">
             <Button
+              w="100%"
               onPress={() => {
-                loginUser.mutate({ email, password });
-                signIn({ email, password });
+                promptAsync();
               }}
               mt="2"
               colorScheme="red"
             >
-              {loginUser.isLoading ? "Loading...." : "Sign in with google"}
+              {"Sign in with Google"}
             </Button>
           </HStack>
+          {/* Google Login */}
         </VStack>
       </Box>
       {loginUser.isSuccess && router.push("/")}
