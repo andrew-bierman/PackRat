@@ -33,8 +33,8 @@ export default function Register() {
   const [userInfo, setUserInfo] = useState(null);
 
   const [request, response, promptAsync] = Google.useAuthRequest({
-    webClientId: WEB_CLIENT_ID
-    // androidClientId: "GOOGLE_GUID.apps.googleusercontent.com",
+    webClientId: WEB_CLIENT_ID,
+    androidClientId: "962352557394-u0gkrlu5eoohu64165lp7t9af3qt56ut.apps.googleusercontent.com",
     // iosClientId: "GOOGLE_GUID.apps.googleusercontent.com",
   });
 
@@ -46,7 +46,7 @@ export default function Register() {
   }, [response, token]);
 
   if (userInfo) {
-    if (userInfo.name && userInfo.email && userInfo.password) {
+    if (userInfo.name && userInfo.email && userInfo.from) {
       addUser.mutate(userInfo)
       { router.push("/sign-in") }
     }
@@ -61,7 +61,7 @@ export default function Register() {
         }
       );
       const user = await response.json();
-      setUserInfo({ name: user.name, email: user.email, password: token });
+      setUserInfo({ name: user.name, email: user.email, password: "", from: "GoogleSignIn" });
     } catch (error) {
       // Add your own error handler here
     }
@@ -110,7 +110,7 @@ export default function Register() {
             />
           </FormControl>
           <Button
-            onPress={() => addUser.mutate({ name, email, password })}
+            onPress={() => addUser.mutate({ name, email, password, from: "UserSignIn" })}
             mt="2"
             colorScheme="indigo"
             disabled={!email || !password || !name}

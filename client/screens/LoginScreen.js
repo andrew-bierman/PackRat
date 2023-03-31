@@ -10,6 +10,7 @@ import {
   Center,
   NativeBaseProvider,
 } from "native-base";
+// import { Platform } from "react-native";
 
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
@@ -20,6 +21,7 @@ import { Link } from "expo-router";
 import { useRouter } from "expo-router";
 import { theme } from "../theme";
 import { WEB_CLIENT_ID } from "@env"
+import { ANDROID_CLIENT_ID } from "@env"
 
 
 WebBrowser.maybeCompleteAuthSession();
@@ -31,14 +33,13 @@ export default function Login() {
   const { loginUser } = useLogin();
 
   const router = useRouter();
-
   // -------------------------------------------------------------------
   const [token, setToken] = useState("");
   const [userInfo, setUserInfo] = useState(null);
 
   const [request, response, promptAsync] = Google.useAuthRequest({
+    androidClientId: ANDROID_CLIENT_ID,
     webClientId: WEB_CLIENT_ID
-    // androidClientId: "GOOGLE_GUID.apps.googleusercontent.com",
     // iosClientId: "GOOGLE_GUID.apps.googleusercontent.com",
   });
 
@@ -49,9 +50,8 @@ export default function Login() {
     }
   }, [response, token]);
 
-
   if (userInfo) {
-    if (userInfo.email && userInfo.password) {
+    if (userInfo.email && userInfo.from) {
       loginUser.mutate(userInfo);
       signIn(userInfo);
       { router.push("/") }
@@ -67,7 +67,7 @@ export default function Login() {
         }
       );
       const user = await response.json();
-      setUserInfo({ email: user.email, password: token });
+      setUserInfo({ email: user.email, password: "", from: "GoogleSignIn" });
     } catch (error) {
       // Add your own error handler here
     }
@@ -115,8 +115,8 @@ export default function Login() {
           <Button
             disabled={!email || !password}
             onPress={() => {
-              loginUser.mutate({ email, password });
-              signIn({ email, password });
+              loginUser.mutate({ email, password, from: "UserSignIn" });
+              signIn({ email, password, from: "UserSignIn" });
             }}
             mt="2"
             colorScheme="indigo"
