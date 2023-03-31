@@ -10,6 +10,7 @@ import {
   Text,
   View
 } from "native-base";
+import { FontAwesome } from '@expo/vector-icons';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
 import { useState, useEffect } from "react";
@@ -153,16 +154,18 @@ export default function Register() {
               Or
             </Heading>
           </HStack>
-          <HStack mt="1" justifyContent="center">
+          <HStack mt="1" justifyContent="center" alignItems="center">
             <Button
               w="100%"
               onPress={() => {
                 promptAsync();
               }}
-              mt="2"
-              colorScheme="red"
+              colorScheme={"red"}
+              startIcon={
+                <FontAwesome name="google" size={16} color="white" />
+              }
             >
-              {"Sign up with google"}
+              Sign up with Google
             </Button>
           </HStack>
           {/* Google register */}
