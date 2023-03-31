@@ -5,11 +5,8 @@ export const getWeather = async (lat, lon, state) => {
 
   let params = `?`;
 
-  const latParams = lat;
-  const lonParams = lon;
-
-  if (latParams) params += `lat=${latParams}`;
-  if (lonParams) params += `&lon=${lonParams}`;
+  if (lat) params += `lat=${lat}`;
+  if (lon) params += `&lon=${lon}`;
 
   const url = api + "/weather" + params;
 

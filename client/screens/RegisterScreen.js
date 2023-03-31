@@ -17,6 +17,7 @@ import useRegister from "../hooks/useRegister";
 import { useRouter } from "expo-router";
 import { Link } from "expo-router";
 import { WEB_CLIENT_ID } from "@env"
+import { ANDROID_CLIENT_ID } from "@env"
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -33,8 +34,9 @@ export default function Register() {
   const [userInfo, setUserInfo] = useState(null);
 
   const [request, response, promptAsync] = Google.useAuthRequest({
+    // expoClientId: ANDROID_CLIENT_ID,
+    androidClientId: ANDROID_CLIENT_ID,
     webClientId: WEB_CLIENT_ID,
-    androidClientId: "962352557394-u0gkrlu5eoohu64165lp7t9af3qt56ut.apps.googleusercontent.com",
     // iosClientId: "GOOGLE_GUID.apps.googleusercontent.com",
   });
 

@@ -20,7 +20,6 @@ export const getWeatherWeek = async (req, res) => {
     await fetch(url)
         .then((res) => res.json())
         .then((json) => {
-            console.log(json)
             res.send(json)
         }).catch(() => {
             res.send({ message: "Went wrong" });

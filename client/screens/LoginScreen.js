@@ -25,6 +25,7 @@ import { ANDROID_CLIENT_ID } from "@env"
 
 
 WebBrowser.maybeCompleteAuthSession();
+
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -38,8 +39,9 @@ export default function Login() {
   const [userInfo, setUserInfo] = useState(null);
 
   const [request, response, promptAsync] = Google.useAuthRequest({
+    // expoClientId: ANDROID_CLIENT_ID,
     androidClientId: ANDROID_CLIENT_ID,
-    webClientId: WEB_CLIENT_ID
+    webClientId: WEB_CLIENT_ID,
     // iosClientId: "GOOGLE_GUID.apps.googleusercontent.com",
   });
 

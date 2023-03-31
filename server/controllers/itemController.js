@@ -4,7 +4,7 @@ import { oneEntity } from "../utils/oneEntity.js"
 import Pack from "../models/packModel.js";
 
 export const getItems = async (req, res) => {
-  const { packId } = oneEntity(req.params);
+  const { packId } = await oneEntity(req.params);
 
   try {
     const items = await Item.find({ packId });
@@ -16,7 +16,7 @@ export const getItems = async (req, res) => {
 };
 
 export const getItemById = async (req, res) => {
-  const { _id } = oneEntity(req.body._id);
+  const { _id } = await oneEntity(req.body._id);
 
   try {
     const item = await Item.findById({ _id });
@@ -41,7 +41,7 @@ export const addItem = async (req, res) => {
 };
 
 export const editItem = async (req, res) => {
-  const { _id } = oneEntity(req.body._id);
+  const { _id } = await oneEntity(req.body._id);
 
   try {
     const newItem = await Item.findOneAndUpdate({ _id }, req.body, {
@@ -55,7 +55,7 @@ export const editItem = async (req, res) => {
 };
 
 export const deleteItem = async (req, res) => {
-  const { itemId } = oneEntity(req.body.itemId);
+  const { itemId } = await oneEntity(req.body.itemId);
 
   try {
     await Item.findOneAndDelete({ _id: itemId });
