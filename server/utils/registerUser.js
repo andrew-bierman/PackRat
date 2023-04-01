@@ -1,6 +1,7 @@
 import User from "../models/userModel.js";
 
 export const register = async ({ email, password, name, from }) => {
+
   if (from === "UserSignIn") {
     if (!email || !password || !name) {
       throw new Error("All fields must be filled");

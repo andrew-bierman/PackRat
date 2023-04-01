@@ -10,16 +10,12 @@ import {
   Text,
   View
 } from "native-base";
-import * as WebBrowser from 'expo-web-browser';
-import * as Google from 'expo-auth-session/providers/google';
+
 import { useState, useEffect } from "react";
 import useRegister from "../hooks/useRegister";
 import { useRouter } from "expo-router";
 import { Link } from "expo-router";
-import { WEB_CLIENT_ID } from "@env"
-import { ANDROID_CLIENT_ID } from "@env"
-
-WebBrowser.maybeCompleteAuthSession();
+import { signInWithGoogle } from "./firebase";
 
 export default function Register() {
   const [name, setName] = useState("");
@@ -28,47 +24,6 @@ export default function Register() {
 
   const { addUser } = useRegister();
   const router = useRouter();
-
-  // -------------------------------------------------------------------
-  const [token, setToken] = useState("");
-  const [userInfo, setUserInfo] = useState(null);
-
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    // expoClientId: ANDROID_CLIENT_ID,
-    androidClientId: ANDROID_CLIENT_ID,
-    webClientId: WEB_CLIENT_ID,
-    // iosClientId: "GOOGLE_GUID.apps.googleusercontent.com",
-  });
-
-  useEffect(() => {
-    if (response?.type === "success") {
-      setToken(response.authentication.accessToken);
-      getUserInfo();
-    }
-  }, [response, token]);
-
-  if (userInfo) {
-    if (userInfo.name && userInfo.email && userInfo.from) {
-      addUser.mutate(userInfo)
-      { router.push("/sign-in") }
-    }
-  }
-
-  const getUserInfo = async () => {
-    try {
-      const response = await fetch(
-        "https://www.googleapis.com/userinfo/v2/me",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      const user = await response.json();
-      setUserInfo({ name: user.name, email: user.email, password: "", from: "GoogleSignIn" });
-    } catch (error) {
-      // Add your own error handler here
-    }
-  };
-  // -------------------------------------------------------------------
 
   return (
     <Center w="100%">
@@ -159,9 +114,18 @@ export default function Register() {
             <Button
               w="100%"
               onPress={() => {
-                promptAsync();
-              }}
-              mt="2"
+                signInWithGoogle().then(async (res) => {
+                  let { email, name } = res
+                  if (email && name) {
+                    addUser.mutate({ name, email, password: "", from: "GoogleSignIn" });
+                    router.push("/sign-in")
+                  } else {
+                    console.log("Email and Name empty")
+                  }
+                }).catch((err) => {
+                  console.log(err)
+                })
+              }} mt="2"
               colorScheme="red"
             >
               {"Sign up with google"}
