@@ -9,6 +9,9 @@ import { queryClient } from "../constants/queryClient";
 import { NativeBaseProvider } from "native-base";
 import store from "../store/store";
 import NavigationMobile from "./screens/NavigationMobile";
+import 'mapbox-gl/dist/mapbox-gl.css';
+import 'mapbox://mapbox.mapbox-streets-v7'
+
 
 import { ProviderAuth } from "../auth/provider";
 
