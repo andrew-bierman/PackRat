@@ -5,7 +5,7 @@ export const loginUser = async ({ email, password, from }) => {
   if (from === "UserSignIn") {
     user = await User.find({
       $and: [
-        { "email": email },
+        { "email": email.toLowerCase() },
         { "password": password }
       ]
     }).select("-password");
@@ -16,7 +16,7 @@ export const loginUser = async ({ email, password, from }) => {
   }
 
   if (from === "GoogleSignIn") {
-    user = await User.findOne({ email }).select("-password");
+    user = await User.findOne({ "email": email.toLowerCase() }).select("-password");
     if (!email) {
       throw new Error("All fields must be filled");
     }
