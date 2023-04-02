@@ -43,7 +43,7 @@ const MobileDropdown = ({ setIsMenuOpen }) => {
           <Text>Home</Text>
         </View>
       </Link>
-      <Link href="profile">
+      <Link href="/profile">
         <View style={styles.mobileLink}>
           <FontAwesome name="book" size={24} color={theme.colors.iconColor} />
           <Text>Profile</Text>

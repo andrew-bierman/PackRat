@@ -18,6 +18,8 @@
     "i": "^0.3.7",
     "mongoose": "^7.0.1",
     "node-fetch": "^3.3.1",
+    "nodemailer": "^6.9.1",
+    "nodemailer-smtp-transport": "^2.7.4",
     "nodemon": "^2.0.21",
     "npm": "^9.6.3"
   }
