@@ -4,13 +4,18 @@ import { useMutation } from "@tanstack/react-query";
 import { queryClient } from "../constants/queryClient";
 
 const addUser = async (newUser) => {
-  return await fetcher(`${api}/user/`, {
+  const response = await fetch(`${api}/user/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(newUser),
   });
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.error.message);
+  }
+  return data;
 };
 
 export default function useRegister() {
@@ -18,7 +23,7 @@ export default function useRegister() {
     mutationFn: async (newUser) => {
       return addUser(newUser);
     },
-    onSuccess: () => {
+    onSuccess: (data, variables, context) => {
       // Invalidate and refetch
       queryClient.invalidateQueries({ queryKey: ["user"] });
     },

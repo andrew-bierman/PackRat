@@ -35,18 +35,19 @@ import { getWeatherWeek } from "../api/getWeatherWeek";
 
 export const SearchInput = () => {
   const [searchString, setSearchString] = useState("Virginia US");
-  const [geoCode, setGeoCode] = useState();
+  const [geoCode, setGeoCode] = useState({});
   const [isLoadingMobile, setIsLoadingMobile] = useState(false);
 
   const dispatch = useDispatch();
-  const lat = geoCode?.features[0]?.geometry?.coordinates[1];
-  const lon = geoCode?.features[0]?.geometry?.coordinates[0];
-  const state = geoCode?.features[0]?.properties.state;
+  // const lat = geoCode?.features[0]?.geometry?.coordinates[1];
+  // const lon = geoCode?.features[0]?.geometry?.coordinates[0];
+  // const state = geoCode?.features[0]?.properties?.state;
 
   useEffect(() => {
     const getCode = async () => {
       setIsLoadingMobile(true);
       const code = await getGeoCode(searchString);
+      console.log("code:", code);
       setIsLoadingMobile(false);
       setGeoCode(code);
     };
@@ -67,12 +68,18 @@ export const SearchInput = () => {
       const weeekArray = await getWeatherWeek(lat, lon);
       dispatch(addWeek(weeekArray));
     };
-
-    if (lat && lon) {
-      getWeatherObject();
-      getWeek();
+  
+    if (geoCode?.features) {
+      const lat = geoCode.features[0]?.geometry?.coordinates?.[1];
+      const lon = geoCode.features[0]?.geometry?.coordinates?.[0];
+      const state = geoCode.features[0]?.properties?.state;
+  
+      if (lat && lon) {
+        getWeatherObject();
+        getWeek();
+      }
     }
-  }, [lat, lon, state]);
+  }, [geoCode, dispatch]);
 
   return Platform.OS === "web" ? (
     <VStack my="4" space={5} w="100%" maxW="300px">
