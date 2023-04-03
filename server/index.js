@@ -3,6 +3,14 @@ import mongoose from "mongoose";
 import cors from "cors";
 import { MONGODB_URI } from "./config.js";
 
+import firebase from "firebase-admin";
+import serviceAccountKey from "./serviceAccountKey.json" assert { type: "json" };
+
+// Initialize Firebase
+firebase.initializeApp({
+  credential: firebase.credential.cert(serviceAccountKey)
+});
+
 // express items
 const app = express();
 app.use(cors());

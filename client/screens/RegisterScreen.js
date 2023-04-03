@@ -15,7 +15,7 @@ import { useState, useEffect } from "react";
 import useRegister from "../hooks/useRegister";
 import { useRouter } from "expo-router";
 import { Link } from "expo-router";
-import { signInWithGoogle } from "./firebase";
+import { signInWithGoogle } from "../auth/firebase";
 
 export default function Register() {
   const [name, setName] = useState("");

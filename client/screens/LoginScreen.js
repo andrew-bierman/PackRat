@@ -17,7 +17,7 @@ import { useAuth } from "../auth/provider";
 import { Link } from "expo-router";
 import { useRouter } from "expo-router";
 import { theme } from "../theme";
-import { signInWithGoogle } from "./firebase";
+import { signInWithGoogle } from "../auth/firebase";
 
 
 
