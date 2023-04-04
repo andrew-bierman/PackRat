@@ -5,9 +5,12 @@ import { Link } from "expo-router";
 import { AntDesign, Entypo, FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import { theme } from "../../theme";
 import { Box } from "native-base";
+import { useAuth } from "../../auth/provider";
 
 
 export default function Drawer() {
+
+    const { signOut } = useAuth();
     return Platform.OS === "web" ? (
         <>
             <Header.Screen
