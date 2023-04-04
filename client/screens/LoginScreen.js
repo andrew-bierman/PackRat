@@ -11,6 +11,11 @@ import {
   NativeBaseProvider,
 } from "native-base";
 
+
+import { FontAwesome } from "@expo/vector-icons";
+
+import * as WebBrowser from 'expo-web-browser';
+import * as Google from 'expo-auth-session/providers/google';
 import { useState, useEffect } from "react";
 import useLogin from "../hooks/useLogin";
 import { useAuth } from "../auth/provider";
@@ -117,7 +122,7 @@ export default function Login() {
               Or
             </Heading>
           </HStack>
-          <HStack mt="1" justifyContent="center">
+          <HStack mt="1" justifyContent="center" alignItems="center">
             <Button
               w="100%"
               onPress={() => {
@@ -134,10 +139,12 @@ export default function Login() {
                   console.log(err)
                 })
               }}
-              mt="2"
-              colorScheme="red"
+              colorScheme={"red"}
+              startIcon={
+                <FontAwesome name="google" size={18} color="white" />
+              }
             >
-              {"Sign in with Google"}
+              Sign in with Google
             </Button>
           </HStack>
           {/* Google Login */}
