@@ -3,7 +3,7 @@ import { oneEntity } from "../utils/oneEntity.js"
 import { tripValidation } from "../utils/trip.js"
 
 export const getTrips = async (req, res) => {
-  const { owner_id } = oneEntity(req.body.owner_id)
+  const { owner_id } = await oneEntity(req.body.owner_id)
 
   try {
     const trips = await Trip.find({ owner_id }).populate("packs");
@@ -15,7 +15,7 @@ export const getTrips = async (req, res) => {
 };
 
 export const getTripById = async (req, res) => {
-  const { tripId } = oneEntity(req.body.tripId)
+  const { tripId } = await oneEntity(req.body.tripId)
 
   try {
     const trip = await Trip.findById({ _id: tripId }).populate("packs");
@@ -38,7 +38,7 @@ export const addTrip = async (req, res) => {
 };
 
 export const editTrip = async (req, res) => {
-  const { _id } = oneEntity(req.body._id)
+  const { _id } = await oneEntity(req.body._id)
 
   try {
     const newTrip = await Trip.findOneAndUpdate({ _id }, req.body, {
@@ -52,7 +52,7 @@ export const editTrip = async (req, res) => {
 };
 
 export const deleteTrip = async (req, res) => {
-  const { tripId } = oneEntity(req.body.tripId)
+  const { tripId } = await oneEntity(req.body.tripId)
 
   try {
     await Trip.findOneAndDelete({ _id: tripId });

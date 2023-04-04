@@ -61,7 +61,7 @@ export const getPublicPacks = async (req, res) => {
 };
 
 export const getPacks = async (req, res) => {
-  const { ownerId } = oneEntity(req.params);
+  const { ownerId } = await oneEntity(req.params);
 
   try {
     const aggr = await Pack.aggregate([
@@ -93,7 +93,7 @@ export const getPacks = async (req, res) => {
 };
 
 export const getPackById = async (req, res) => {
-  const { _id } = oneEntity(req.body._id)
+  const { _id } = await oneEntity(req.body._id)
 
   try {
     const pack = await Pack.findById({ _id }).populate("total_weight");
@@ -152,7 +152,7 @@ export const addPack = async (req, res) => {
 };
 
 export const editPack = async (req, res) => {
-  const { _id } = oneEntity(req.body._id)
+  const { _id } = await oneEntity(req.body._id)
 
   try {
     const newPack = await Pack.findOneAndUpdate({ _id }, req.body, {
@@ -166,7 +166,7 @@ export const editPack = async (req, res) => {
 };
 
 export const deletePack = async (req, res) => {
-  const { packId } = oneEntity(req.body.packId)
+  const { packId } = await oneEntity(req.body.packId)
 
   try {
     await Pack.findOneAndDelete({ _id: packId });

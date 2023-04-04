@@ -12,6 +12,7 @@ client.zip
 .vscode
 *.DS_Store
 package-lock.json
+serviceAccountKey.json
 
 # Logs
 logs
@@ -87,6 +88,7 @@ web_modules/
 .env
 .env.test
 
+.expo/
 # parcel-bundler cache (https://parceljs.org/)
 .cache
 .parcel-cache

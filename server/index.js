@@ -3,6 +3,14 @@ import mongoose from "mongoose";
 import cors from "cors";
 import { MONGODB_URI } from "./config.js";
 
+import firebase from "firebase-admin";
+import serviceAccountKey from "./serviceAccountKey.json" assert { type: "json" };
+
+// Initialize Firebase
+firebase.initializeApp({
+  credential: firebase.credential.cert(serviceAccountKey)
+});
+
 // express items
 const app = express();
 app.use(cors());
@@ -18,6 +26,9 @@ import packRoutes from "./routes/packRoutes.js";
 import itemRoutes from "./routes/itemRoutes.js";
 import tripRoutes from "./routes/tripRoutes.js";
 import weatherRoutes from "./routes/weatherRoutes.js";
+import geoCodeRoutes from "./routes/geoCodeRoutes.js";
+import getParkRoutes from "./routes/getParkRoutes.js";
+import getTrailRoutes from "./routes/getTrailRoutes.js";
 
 // use routes
 app.use("/user", userRoutes);
@@ -25,6 +36,9 @@ app.use("/pack", packRoutes);
 app.use("/item", itemRoutes);
 app.use("/trip", tripRoutes);
 app.use("/weather", weatherRoutes);
+app.use("/geocode", geoCodeRoutes);
+app.use("/getparks", getParkRoutes);
+app.use("/gettrails", getTrailRoutes);
 
 mongoose.connect(connectionString).then(() => console.log("connected"));
 

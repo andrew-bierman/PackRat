@@ -10,16 +10,16 @@ import {
   Text,
   View
 } from "native-base";
+
 import { FontAwesome } from '@expo/vector-icons';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
+
 import { useState, useEffect } from "react";
 import useRegister from "../hooks/useRegister";
 import { useRouter } from "expo-router";
 import { Link } from "expo-router";
-import { WEB_CLIENT_ID } from "@env"
-
-WebBrowser.maybeCompleteAuthSession();
+import { signInWithGoogle } from "../auth/firebase";
 
 export default function Register() {
   const [name, setName] = useState("");
@@ -28,46 +28,6 @@ export default function Register() {
 
   const { addUser } = useRegister();
   const router = useRouter();
-
-  // -------------------------------------------------------------------
-  const [token, setToken] = useState("");
-  const [userInfo, setUserInfo] = useState(null);
-
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    webClientId: WEB_CLIENT_ID
-    // androidClientId: "GOOGLE_GUID.apps.googleusercontent.com",
-    // iosClientId: "GOOGLE_GUID.apps.googleusercontent.com",
-  });
-
-  useEffect(() => {
-    if (response?.type === "success") {
-      setToken(response.authentication.accessToken);
-      getUserInfo();
-    }
-  }, [response, token]);
-
-  if (userInfo) {
-    if (userInfo.name && userInfo.email && userInfo.password) {
-      addUser.mutate(userInfo)
-      { router.push("/sign-in") }
-    }
-  }
-
-  const getUserInfo = async () => {
-    try {
-      const response = await fetch(
-        "https://www.googleapis.com/userinfo/v2/me",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      const user = await response.json();
-      setUserInfo({ name: user.name, email: user.email, password: token });
-    } catch (error) {
-      // Add your own error handler here
-    }
-  };
-  // -------------------------------------------------------------------
 
   return (
     <Center w="100%">
@@ -111,7 +71,7 @@ export default function Register() {
             />
           </FormControl>
           <Button
-            onPress={() => addUser.mutate({ name, email, password })}
+            onPress={() => addUser.mutate({ name, email, password, from: "UserSignIn" })}
             mt="2"
             colorScheme="indigo"
             disabled={!email || !password || !name}
@@ -164,6 +124,19 @@ export default function Register() {
               startIcon={
                 <FontAwesome name="google" size={16} color="white" />
               }
+                signInWithGoogle().then(async (res) => {
+                  let { email, name } = res
+                  if (email && name) {
+                    addUser.mutate({ name, email, password: "", from: "GoogleSignIn" });
+                    router.push("/sign-in")
+                  } else {
+                    console.log("Email and Name empty")
+                  }
+                }).catch((err) => {
+                  console.log(err)
+                })
+              }} mt="2"
+              colorScheme="red"
             >
               Sign up with Google
             </Button>
