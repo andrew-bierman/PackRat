@@ -3,6 +3,19 @@ import { register } from "../utils/registerUser.js";
 import { loginUser } from "../utils/loginUser.js";
 import Pack from "../models/packModel.js";
 import { ObjectId } from "mongoose";
+import firebase from "firebase-admin";
+
+// Middleware to check if user is authenticated
+export const isAuthenticated = async (req, res, next) => {
+  const token = req.headers.authorization.split(" ")[1];
+  try {
+    const decodedToken = await firebase.auth().verifyIdToken(token);
+    req.userData = decodedToken;
+    next();
+  } catch (error) {
+    res.status(401).json({ error: "Unauthorized" });
+  }
+};
 
 export const getUsers = async (req, res) => {
   try {
@@ -28,7 +41,11 @@ export const getUserById = async (req, res) => {
 
 export const addUser = async (req, res) => {
   try {
-    const user = await register(req.body);
+    const { email, password } = req.body;
+    const userRecord = await firebase.auth().createUser({
+      email: email,
+      password: password,
+    });
 
     res.status(200).json({ message: "Successfully signed up" });
   } catch (error) {
@@ -38,11 +55,18 @@ export const addUser = async (req, res) => {
 
 export const login = async (req, res) => {
   try {
-    const user = await loginUser(req.body);
+    const { email, password } = req.body;
+
+    const userRecord = await firebase.auth().getUserByEmail(email);
+    const uid = userRecord.uid;
+
+    await firebase.auth().signInWithEmailAndPassword(email, password);
+
+
 
     res.status(200).json({
-      message: "Successfully loged in",
-      user,
+      message: "Successfully logged in",
+      user: userRecord,
     });
   } catch (error) {
     res.status(400).json({ error: error.message });

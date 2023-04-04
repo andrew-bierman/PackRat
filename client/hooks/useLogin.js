@@ -3,15 +3,31 @@ import { api } from "../constants/api";
 import { useMutation } from "@tanstack/react-query";
 import { queryClient } from "../constants/queryClient";
 import { useAuth } from "../auth/provider";
+import { app, auth } from "../auth/firebase";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 const loginUser = async (user) => {
-  return await fetcher(`${api}/user/login`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(user),
-  });
+  try {
+    const { email, password } = user;
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        // ...
+        const token = user.getIdToken();
+
+        return user;
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+      });
+      
+
+  } catch (error) {
+    console.log(error);
+  }
+
 };
 
 export default function useLogin() {
@@ -22,8 +38,7 @@ export default function useLogin() {
       return loginUser(user);
     },
     onSuccess: (data, variables, context) => {
-      // Invalidate and refetch
-      signIn(data.user);
+      signIn(data);
       queryClient.invalidateQueries({ queryKey: ["user"] });
     },
   });
