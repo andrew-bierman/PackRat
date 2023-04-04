@@ -21,6 +21,7 @@ import weatherRoutes from "./routes/weatherRoutes.js";
 import geoCodeRoutes from "./routes/geoCodeRoutes.js";
 import getParkRoutes from "./routes/getParkRoutes.js";
 import getTrailRoutes from "./routes/getTrailRoutes.js";
+import osmRoutes from "./routes/osmRoutes.js";
 
 // use routes
 app.use("/user", userRoutes);
@@ -31,6 +32,7 @@ app.use("/weather", weatherRoutes);
 app.use("/geocode", geoCodeRoutes);
 app.use("/getparks", getParkRoutes);
 app.use("/gettrails", getTrailRoutes);
+app.use("/osm", osmRoutes);
 
 mongoose.connect(connectionString).then(() => console.log("connected"));
 
