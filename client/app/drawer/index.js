@@ -11,23 +11,7 @@ import { useAuth } from "../../auth/provider";
 export default function Drawer() {
 
     const { signOut } = useAuth();
-    return Platform.OS === "web" ? (
-        <>
-            <Header.Screen
-                options={{
-                    // https://reactnavigation.org/docs/headers#setting-the-header-title
-                    title: "Drawer",
-                    // https://reactnavigation.org/docs/headers#adjusting-header-styles
-
-                    // https://reactnavigation.org/docs/headers#replacing-the-title-with-a-custom-component
-                }}
-            />
-
-            <Box>
-                <Text>Web-view</Text>
-            </Box>
-        </>
-    ) : (
+    return  (
         <>
             <View
                 style={{
