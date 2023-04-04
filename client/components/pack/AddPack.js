@@ -25,7 +25,7 @@ export const AddPack = () => {
       />
 
       <Button
-        width={"50%"}
+        width={Platform.OS === "web" ? null : "50%"}
         onPress={() => {
           addPack.mutate({ name, owner_id: user?._id });
           setName("");
