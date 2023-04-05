@@ -12,15 +12,21 @@ import {
   View,
 } from "native-base";
 
+
+import { FontAwesome } from "@expo/vector-icons";
+
+import * as WebBrowser from 'expo-web-browser';
+import * as Google from 'expo-auth-session/providers/google';
 import { useState, useEffect } from "react";
 import useLogin from "../hooks/useLogin";
 import { useAuth } from "../auth/provider";
 import { Link } from "expo-router";
 import { useRouter } from "expo-router";
 import { theme } from "../theme";
-import { signInWithGoogle } from "./firebase";
-import Axios from 'axios'
-import { api } from '../constants/api'
+import { signInWithGoogle } from "../auth/firebase";
+
+
+
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -98,159 +104,97 @@ export default function Login() {
             Sign in to continue!
           </Heading>
 
-          <VStack space={3} mt="5">
-            <FormControl>
-              <FormControl.Label>Email ID</FormControl.Label>
-              <Input value={email} onChangeText={(text) => setEmail(text)} />
-            </FormControl>
-            <FormControl>
-              <FormControl.Label>Password</FormControl.Label>
-              <Input
-                value={password}
-                onChangeText={(text) => setPassword(text)}
-                type="password"
-              />
-            </FormControl>
+        <VStack space={3} mt="5">
+          <FormControl>
+            <FormControl.Label>Email ID</FormControl.Label>
+            <Input value={email} onChangeText={(text) => setEmail(text)} />
+          </FormControl>
+          <FormControl>
+            <FormControl.Label>Password</FormControl.Label>
+            <Input
+              value={password}
+              onChangeText={(text) => setPassword(text)}
+              type="password"
+            />
+          </FormControl>
+          <Button
+            disabled={!email || !password}
+            onPress={() => {
+              loginUser.mutate({ email, password, from: "UserSignIn" });
+              signIn({ email, password, from: "UserSignIn" });
+              router.push("/")
+            }}
+            mt="2"
+            colorScheme="indigo"
+          >
+            {loginUser.isLoading ? "Loading...." : "Sign in"}
+          </Button>
+          <HStack mt="6" justifyContent="center">
             <Text
               fontSize="sm"
-              color="coolBlue.600"
+              color="coolGray.600"
               _dark={{
                 color: "warmGray.200",
               }}
-              onPress={() => { setStatus("email") }}
             >
-              forgot password
+              I'm a new user.
             </Text>
-            <Button
-              disabled={!email || !password}
-              onPress={() => {
-                loginUser.mutate({ email, password, from: "UserSignIn" });
-                signIn({ email, password, from: "UserSignIn" });
-                router.push("/")
-              }}
-              mt="2"
-              colorScheme="indigo"
-            >
-              {loginUser.isLoading ? "Loading...." : "Sign in"}
-            </Button>
-            <HStack mt="6" justifyContent="center">
+            <Link href="/register">
               <Text
-                fontSize="sm"
-                color="coolGray.600"
-                _dark={{
-                  color: "warmGray.200",
+                style={{
+                  color: "#818cf8",
+                  fontWeight: 400,
+                  fontSize: 12,
                 }}
               >
-                I'm a new user.
+                Sign Up
               </Text>
-              <Link href="/register">
-                <Text
-                  style={{
-                    color: "#818cf8",
-                    fontWeight: 400,
-                    fontSize: 12,
-                  }}
-                >
-                  Sign Up
-                </Text>
-              </Link>
-            </HStack>
-            {/* Google Login starts*/}
-            <HStack mt="6" justifyContent="center">
-              <Heading
-                mt="1"
-                _dark={{
-                  color: "warmGray.200",
-                }}
-                color="coolGray.600"
-                fontWeight="medium"
-                size="xs"
-              >
-                Or
-              </Heading>
-            </HStack>
-            <HStack mt="1" justifyContent="center">
-              <Button
-                w="100%"
-                onPress={() => {
-                  signInWithGoogle().then(async (res) => {
-                    let { email } = res
-                    if (email) {
-                      loginUser.mutate({ email, password: "", from: "GoogleSignIn" });
-                      signIn({ email: res.email, password: "", from: "GoogleSignIn" });
-                      router.push("/")
-                    } else {
-                      console.log("email Empty")
-                    }
-                  }).catch((err) => {
-                    console.log(err)
-                  })
-                }}
-                mt="2"
-                colorScheme="red"
-              >
-                {"Sign in with Google"}
-              </Button>
-            </HStack>
-            {/* Google Login */}
-          </VStack>
-        </Box>
-      }
-      < Box safeArea p="2" py="8" w="90%" maxW="290">
-        <VStack space={3} mt="5">
-          {status == "email" &&
-            <View>
-              <Text style={{ color: "red" }}>{error}</Text>
-              <FormControl>
-                <FormControl.Label>Enter Email ID</FormControl.Label>
-                <Input value={email} onChangeText={(text) => setEmail(text)} />
-              </FormControl>
-              <Button
-                disabled={!email}
-                onPress={emailExists}
-                mt="2"
-                colorScheme="indigo"
-              >
-                {loginUser.isLoading ? "Loading...." : "Search email"}
-              </Button>
-            </View>
-          }
-          {status == "verification" &&
-            <View>
-              <Text style={{ color: "red" }}>{error}</Text>
-              <FormControl>
-                <FormControl.Label>Enter Verification code</FormControl.Label>
-                <Input value={code} onChangeText={(text) => setCode(text)} />
-              </FormControl>
-              <Button
-                disabled={!code}
-                onPress={checkCode}
-                mt="2"
-                colorScheme="indigo"
-              >
-                {loginUser.isLoading ? "Loading...." : "Verify"}
-              </Button>
-            </View>}
-          {status == "confirm" &&
-            <View>
-              <Text style={{ color: "red" }}>{error}</Text>
-              <FormControl>
-                <FormControl.Label>Enter new password</FormControl.Label>
-                <Input value={password} onChangeText={(text) => setPassword(text)} />
-              </FormControl>
-              <Button
-                disabled={!password}
-                onPress={updatePassword}
-                mt="2"
-                colorScheme="indigo"
-              >
-                {loginUser.isLoading ? "Loading...." : "Change password"}
-              </Button>
-            </View>
-          }
+            </Link>
+          </HStack>
+          {/* Google Login starts*/}
+          <HStack mt="6" justifyContent="center">
+            <Heading
+              mt="1"
+              _dark={{
+                color: "warmGray.200",
+              }}
+              color="coolGray.600"
+              fontWeight="medium"
+              size="xs"
+            >
+              Or
+            </Heading>
+          </HStack>
+          <HStack mt="1" justifyContent="center" alignItems="center">
+            <Button
+              w="100%"
+              onPress={() => {
+                signInWithGoogle().then(async (res) => {
+                  let { email } = res
+                  if (email) {
+                    loginUser.mutate({ email, password: "", from: "GoogleSignIn" });
+                    signIn({ email: res.email, password: "", from: "GoogleSignIn" });
+                    router.push("/")
+                  } else {
+                    console.log("email Empty")
+                  }
+                }).catch((err) => {
+                  console.log(err)
+                })
+              }}
+              colorScheme={"red"}
+              startIcon={
+                <FontAwesome name="google" size={18} color="white" />
+              }
+            >
+              Sign in with Google
+            </Button>
+          </HStack>
+          {/* Google Login */}
         </VStack>
       </Box>
       {loginUser.isSuccess && router.push("/")}
+      
     </Center >
   );
 
