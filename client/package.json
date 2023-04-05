@@ -28,6 +28,7 @@
     "expo": "~48.0.7",
     "expo-checkbox": "~2.3.1",
     "expo-constants": "~14.2.1",
+    "expo-linking": "^4.0.1",
     "expo-router": "^1.2.2",
     "expo-splash-screen": "~0.18.1",
     "expo-status-bar": "~1.4.4",

@@ -94,8 +94,6 @@ export default function Index() {
             )}
           />
 
-          <WeatherCard />
-
           <Card
             title="Nearby Trails"
             value="Trail List"

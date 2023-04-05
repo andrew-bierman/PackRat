@@ -1,17 +1,14 @@
 import { View, StyleSheet, Text, Image } from "react-native";
-import { Stack as Header } from "expo-router";
-import ProfileContainer from "../../components/user/ProfileContainer";
 import { Link } from "expo-router";
-import { AntDesign, Entypo, FontAwesome, MaterialIcons } from "@expo/vector-icons";
+import { AntDesign, Entypo, FontAwesome, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { theme } from "../../theme";
-import { Box } from "native-base";
 import { useAuth } from "../../auth/provider";
 
 
 export default function Drawer() {
 
     const { signOut } = useAuth();
-    return  (
+    return (
         <>
             <View
                 style={{
@@ -25,7 +22,6 @@ export default function Drawer() {
                             name="close"
                             size={35}
                             color={theme.colors.drawerIconColor}
-                        // onPress={() => setIsMenuOpen(false)}
                         />
                     </Link>
                 </View>
@@ -34,6 +30,13 @@ export default function Drawer() {
                         <Entypo name="home" size={24} color={theme.colors.drawerIconColor} />
 
                         <Text style={{ color: "#3B3B3B" }}>Home</Text>
+                    </View>
+                </Link>
+                <Link href="/trips">
+                    <View style={styles.link}>
+                        <MaterialCommunityIcons name="weather-pouring" size={24} color={theme.colors.drawerIconColor} />
+
+                        <Text style={{ color: "#3B3B3B" }}>Trips</Text>
                     </View>
                 </Link>
                 <Link href="profile">
@@ -51,6 +54,17 @@ export default function Drawer() {
                         />
 
                         <Text style={{ color: "#3B3B3B" }}>Packs</Text>
+                    </View>
+                </Link>
+                <Link href="/about">
+                    <View style={styles.link}>
+                        <MaterialIcons
+                            name="info"
+                            size={24}
+                            color={theme.colors.drawerIconColor}
+                        />
+
+                        <Text style={{ color: "#3B3B3B" }}>About</Text>
                     </View>
                 </Link>
                 <View style={styles.link}>
