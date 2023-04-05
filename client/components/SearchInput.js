@@ -20,7 +20,7 @@ import { SafeAreaView } from "react-native";
 import { Platform } from "react-native";
 
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-import { GOOGLE_API_KEY } from "@env";
+import { GOOGLE_PLACES_API_KEY } from "@env";
 
 // redux
 import { useDispatch } from "react-redux";
@@ -38,7 +38,6 @@ export const SearchInput = () => {
   const [isLoadingMobile, setIsLoadingMobile] = useState(false);
 
   const dispatch = useDispatch();
-
   const lat = geoCode?.features[0]?.geometry?.coordinates[1];
   const lon = geoCode?.features[0]?.geometry?.coordinates[0];
   const state = geoCode?.features[0]?.properties.state;
@@ -79,7 +78,7 @@ export const SearchInput = () => {
       <GooglePlacesAutocomplete
         placeholder="Search"
         query={{
-          key: GOOGLE_API_KEY,
+          key: GOOGLE_PLACES_API_KEY,
           language: "en", // language of the results
         }}
         minLength={2}

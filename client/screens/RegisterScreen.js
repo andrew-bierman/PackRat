@@ -8,11 +8,14 @@ import {
   Center,
   HStack,
   Text,
+  View
 } from "native-base";
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
 import useRegister from "../hooks/useRegister";
 import { useRouter } from "expo-router";
 import { Link } from "expo-router";
+import { signInWithGoogle } from "./firebase";
 
 export default function Register() {
   const [name, setName] = useState("");
@@ -64,7 +67,7 @@ export default function Register() {
             />
           </FormControl>
           <Button
-            onPress={() => addUser.mutate({ name, email, password })}
+            onPress={() => addUser.mutate({ name, email, password, from: "UserSignIn" })}
             mt="2"
             colorScheme="indigo"
             disabled={!email || !password || !name}
@@ -93,6 +96,42 @@ export default function Register() {
               </Text>
             </Link>
           </HStack>
+          {/* Google register */}
+          <HStack mt="1" justifyContent="center">
+            <Heading
+              mt="1"
+              _dark={{
+                color: "warmGray.200",
+              }}
+              color="coolGray.600"
+              fontWeight="medium"
+              size="xs"
+            >
+              Or
+            </Heading>
+          </HStack>
+          <HStack mt="1" justifyContent="center">
+            <Button
+              w="100%"
+              onPress={() => {
+                signInWithGoogle().then(async (res) => {
+                  let { email, name } = res
+                  if (email && name) {
+                    addUser.mutate({ name, email, password: "", from: "GoogleSignIn" });
+                    router.push("/sign-in")
+                  } else {
+                    console.log("Email and Name empty")
+                  }
+                }).catch((err) => {
+                  console.log(err)
+                })
+              }} mt="2"
+              colorScheme="red"
+            >
+              {"Sign up with google"}
+            </Button>
+          </HStack>
+          {/* Google register */}
         </VStack>
       </Box>
       {addUser.isSuccess && router.push("/sign-in")}
