@@ -23,6 +23,13 @@ import getParkRoutes from "./routes/getParkRoutes.js";
 import getTrailRoutes from "./routes/getTrailRoutes.js";
 import osmRoutes from "./routes/osmRoutes.js";
 
+const logger = (req, res, next) => {
+  console.log(`${req.method} ${req.path}`);
+  next();
+};
+
+app.use(logger);
+
 // use routes
 app.use("/user", userRoutes);
 app.use("/pack", packRoutes);
