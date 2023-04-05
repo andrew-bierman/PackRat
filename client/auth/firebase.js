@@ -21,12 +21,10 @@ export const signInWithGoogle = async () => {
     return new Promise((resolve, reject) => {
         signInWithPopup(auth, provider)
             .then((result) => {
-                console.log({ name: result.user.displayName, email: result.user.email })
                 resolve({ name: result.user.displayName, email: result.user.email })
             })
             .catch(() => {
                 resolve({ message: "error" })
             });
-
     })
 };
