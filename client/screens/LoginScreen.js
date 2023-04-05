@@ -9,6 +9,7 @@ import {
   HStack,
   Center,
   NativeBaseProvider,
+  View,
 } from "native-base";
 
 
@@ -30,36 +31,78 @@ import { signInWithGoogle } from "../auth/firebase";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [code, setCode] = useState("")
+
+  const [status, setStatus] = useState("login")
+  const [error, setError] = useState("")
 
   const { signIn } = useAuth();
   const { loginUser } = useLogin();
 
   const router = useRouter();
 
+  const checkCode = () => {
+    setError(null)
+    Axios.post(`${api}/user/checkcode`, { email: email, code: code }).then((res) => {
+      if (res.data.message == "success") {
+        setStatus("confirm")
+      } else {
+        setError(res.data.message)
+      }
+    }).catch(() => {
+      setError("Error on your browser")
+    })
+  }
+  const emailExists = () => {
+    setError(null)
+    Axios.post(`${api}/user/emailexists`, { email: email }).then((res) => {
+      if (res.data.message == "success") {
+        setStatus("verification")
+      } else {
+        setError(res.data.message)
+      }
+    }).catch(() => {
+      setError("Error on your browser")
+    })
+  }
+  const updatePassword = () => {
+    setError(null)
+    Axios.post(`${api}/user/updatepassword`, { email: email, password: password }).then((res) => {
+      if (res.data.message == "success") {
+        setStatus("login")
+      } else {
+        setError(res.data.message)
+      }
+    }).catch(() => {
+      setError("Error on your browser")
+    })
+  }
+
   return (
     <Center w="100%">
-      <Box safeArea p="2" py="8" w="90%" maxW="290">
-        <Heading
-          size="lg"
-          fontWeight="600"
-          color="coolGray.800"
-          _dark={{
-            color: "warmGray.50",
-          }}
-        >
-          <Text>Welcome</Text>
-        </Heading>
-        <Heading
-          mt="1"
-          _dark={{
-            color: "warmGray.200",
-          }}
-          color="coolGray.600"
-          fontWeight="medium"
-          size="xs"
-        >
-          Sign in to continue!
-        </Heading>
+      {status == "login" &&
+        < Box safeArea p="2" py="8" w="90%" maxW="290">
+          <Heading
+            size="lg"
+            fontWeight="600"
+            color="coolGray.800"
+            _dark={{
+              color: "warmGray.50",
+            }}
+          >
+            <Text>Welcome</Text>
+          </Heading>
+          <Heading
+            mt="1"
+            _dark={{
+              color: "warmGray.200",
+            }}
+            color="coolGray.600"
+            fontWeight="medium"
+            size="xs"
+          >
+            Sign in to continue!
+          </Heading>
 
         <VStack space={3} mt="5">
           <FormControl>
@@ -151,6 +194,8 @@ export default function Login() {
         </VStack>
       </Box>
       {loginUser.isSuccess && router.push("/")}
-    </Center>
+      
+    </Center >
   );
+
 }
