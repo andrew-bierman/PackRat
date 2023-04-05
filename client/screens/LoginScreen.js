@@ -193,6 +193,7 @@ export default function Login() {
           {/* Google Login */}
         </VStack>
       </Box>
+      }
       {loginUser.isSuccess && router.push("/")}
       
     </Center >

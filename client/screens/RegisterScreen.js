@@ -117,13 +117,9 @@ export default function Register() {
           <HStack mt="1" justifyContent="center" alignItems="center">
             <Button
               w="100%"
+              mt="2"
               onPress={() => {
                 promptAsync();
-              }}
-              colorScheme={"red"}
-              startIcon={
-                <FontAwesome name="google" size={16} color="white" />
-              }
                 signInWithGoogle().then(async (res) => {
                   let { email, name } = res
                   if (email && name) {
@@ -135,8 +131,12 @@ export default function Register() {
                 }).catch((err) => {
                   console.log(err)
                 })
-              }} mt="2"
-              colorScheme="red"
+              }}
+              colorScheme={"red"}
+              startIcon={
+                <FontAwesome name="google" size={16} color="white" />
+              }
+
             >
               Sign up with Google
             </Button>
