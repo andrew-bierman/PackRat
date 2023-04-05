@@ -13,6 +13,7 @@ client.zip
 *.DS_Store
 package-lock.json
 serviceAccountKey.json
+google-services.json
 
 # Logs
 logs
