@@ -25,6 +25,7 @@ export const AddPack = () => {
       />
 
       <Button
+        width={Platform.OS === "web" ? null : "50%"}
         onPress={() => {
           addPack.mutate({ name, owner_id: user?._id });
           setName("");
@@ -56,7 +57,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 25,
-    gap: 10,
+    gap: 25,
   },
 
   input: {
