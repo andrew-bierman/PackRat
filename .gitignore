@@ -12,6 +12,7 @@ client.zip
 .vscode
 *.DS_Store
 package-lock.json
+serviceAccountKey.json
 
 # Logs
 logs
