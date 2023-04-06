@@ -12,5 +12,6 @@ module.exports = function (api) {
         allowUndefined: true,
       }]
     ],
+    ignore: ['./node_modules/mapbox-gl/dist/mapbox-gl.js']
   };
 };

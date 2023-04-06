@@ -20,7 +20,7 @@ import { SafeAreaView } from "react-native";
 import { Platform } from "react-native";
 
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-// import { Google_Api_Key } from "../constants/api";
+import { Google_Api_Key } from "../constants/api";
 
 // redux
 import { useDispatch } from "react-redux";

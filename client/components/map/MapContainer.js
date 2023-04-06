@@ -172,23 +172,23 @@ export function CustomizedMap() {
         // onMapIdle={handleMapIdle}
         ref={mapViewRef}
       >
-        <Mapbox.Camera
+         <Mapbox.Camera
           centerCoordinate={[-77.035, 38.875]}
         // zoomLevel={12}
         />
 
-        <Mapbox.PointAnnotation
+        {/* <Mapbox.PointAnnotation
           coordinate={[-77.044211, 38.852924]}
           id="pt-ann"
           title={'this is a point annotation'}
         >
-        </Mapbox.PointAnnotation>
+        </Mapbox.PointAnnotation> */}
 
-        <Mapbox.MarkerView id={'test-marker'} coordinate={[-77.044211, 38.852924]}>
+        {/*<Mapbox.MarkerView id={'test-marker'} coordinate={[-77.044211, 38.852924]}>
           <Mapbox.PointAnnotation id={'test-marker-pointer'} title={'this is a marker view'} coordinate={[-77.044211, 38.852924]} />
-        </Mapbox.MarkerView>
+      </Mapbox.MarkerView>*/}
 
-        <Mapbox.ShapeSource
+        {/*<Mapbox.ShapeSource
           id="source1"
           lineMetrics={true}
           shape={{
@@ -220,7 +220,7 @@ export function CustomizedMap() {
           onLoad={handleShapeSourceLoad}
         >
           <Mapbox.LineLayer id="layer1" style={styles.lineLayer} />
-        </Mapbox.ShapeSource>
+        </Mapbox.ShapeSource>*/}
 
       </Mapbox.MapView>
     </View>
@@ -228,15 +228,15 @@ export function CustomizedMap() {
 }
 
 export function MapContainer() {
-  if (Platform.OS === "web") {
-    return (
-      <View style={styles.page}>
-        <Text>
-          Mapbox maps are not supported on web yet.
-        </Text>
-      </View>
-    )
-  }
+  // if (Platform.OS === "web") {
+  //   return (
+  //     <View style={styles.page}>
+  //       <Text>
+  //         Mapbox maps are not supported on web yet.
+  //       </Text>
+  //     </View>
+  //   )
+  // }
 
   return (
     <View style={styles.container}>
