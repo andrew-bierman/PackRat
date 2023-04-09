@@ -68,4 +68,4 @@ Contributions to PackRat are welcome! To contribute, follow these steps:
 
 ## License 📝
 
-PackRat is licensed under the MIT License. See `LICENSE` for more information.
+PackRat is licensed under the terms of the [GNU General Public License v3.0](LICENSE). See `LICENSE` for more information.
