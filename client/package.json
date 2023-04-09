@@ -53,7 +53,9 @@
     "react-responsive": "^9.0.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.21.3"
+    "@babel/core": "^7.21.3",
+    "css-loader": "^6.7.3",
+    "style-loader": "^3.3.2"
   },
   "overrides": {
     "metro": "0.73.7",
