@@ -1,34 +1,30 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Platform, StyleSheet, Text, View, Picker, TouchableOpacity, Dimensions, Alert } from "react-native";
+import { Platform, StyleSheet, Text, View, Picker, TouchableOpacity, Dimensions } from "react-native";
 import Geolocation from '@react-native-community/geolocation';
 // import { check, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import { MaterialCommunityIcons, MaterialIcons, Entypo } from "@expo/vector-icons";
-import MapView from '@rnmapbox/maps';
-import { offlineManager, Camera } from '@rnmapbox/maps';
+import MapboxGL, { Camera } from '@rnmapbox/maps';
 import { Select, Center, Box, CheckIcon } from "native-base";
 // get mapbox access token from .env file
 import { MAPBOX_ACCESS_TOKEN } from "@env";
-
-MapView.setAccessToken(MAPBOX_ACCESS_TOKEN);
+Mapbox.setAccessToken(MAPBOX_ACCESS_TOKEN);
 
 const dw = Dimensions.get('screen').width;
 const dh = Dimensions.get('screen').height
 
-// MapView.setConnected(true);
+// MapboxGL.setConnected(true);
 
 export function BasicMap() {
   return (
     <View style={{ flex: 1 }}>
-      <MapView.MapView style={{ flex: 1 }} />
+      <Mapbox.MapView style={{ flex: 1 }} />
     </View>
   );
 }
 
 export function CustomizedMap() {
-  const camera = useRef(null);
   const mapViewRef = useRef(null);
-  const mapViewFullScreenRef = useRef();
-
+  const mapViewFullScreenRef = useRef(null);
   const [style, setStyle] = React.useState("mapbox://styles/mapbox/outdoors-v11");
   const [location, setLocation] = useState({
     longitude: 0.0,
@@ -41,48 +37,6 @@ export function CustomizedMap() {
   const [mapViewLoaded, setMapViewLoaded] = useState(false);
   const [zoomLevel, setZoomLevel] = useState(10.5);
   const [mapFullscreen, setMapFullscreen] = useState(true);
-  const [progress, setProgress] = useState(0);
-  const [downloading, setDownloading] = useState(false);
-
-  const trail = {
-    type: 'Feature',
-    geometry: {
-      type: 'LineString',
-      coordinates: [
-        [-77.044211, 38.852924],
-        [-77.045659, 38.860158],
-        [-77.044232, 38.862326],
-        [-77.040879, 38.865454],
-        [-77.039936, 38.867698],
-        [-77.040338, 38.86943],
-        [-77.04264, 38.872528],
-        [-77.03696, 38.878424],
-        [-77.032309, 38.87937],
-        [-77.030056, 38.880945],
-        [-77.027645, 38.881779],
-        [-77.026946, 38.882645],
-        [-77.026942, 38.885502],
-        [-77.028054, 38.887449],
-        [-77.02806, 38.892088],
-        [-77.03364, 38.892108],
-        [-77.033643, 38.899926],
-      ],
-    },
-  }
-  const optionsForDownload = {
-    name: 'Downlaod',
-    styleURL: 'mapbox://styles/mapbox/outdoors-v11',
-    bounds: [
-      trail.geometry.coordinates[0],
-      trail.geometry.coordinates[trail.geometry.coordinates.length - 1]
-    ],
-    minZoom: 10,
-    maxZoom: 20,
-  };
-
-  useEffect(() => {
-    getPosition();
-  }, [])
 
   const getPosition = () => {
     Geolocation.getCurrentPosition((data) => {
@@ -243,9 +197,33 @@ export function CustomizedMap() {
     // Do something with the ID, e.g. display an info window
     console.log(`Shape with ID ${featureId} was clicked!`);
   }
-
+  const trail = {
+    type: 'Feature',
+    geometry: {
+      type: 'LineString',
+      coordinates: [
+        [-77.044211, 38.852924],
+        [-77.045659, 38.860158],
+        [-77.044232, 38.862326],
+        [-77.040879, 38.865454],
+        [-77.039936, 38.867698],
+        [-77.040338, 38.86943],
+        [-77.04264, 38.872528],
+        [-77.03696, 38.878424],
+        [-77.032309, 38.87937],
+        [-77.030056, 38.880945],
+        [-77.027645, 38.881779],
+        [-77.026946, 38.882645],
+        [-77.026942, 38.885502],
+        [-77.028054, 38.887449],
+        [-77.02806, 38.892088],
+        [-77.03364, 38.892108],
+        [-77.033643, 38.899926],
+      ],
+    },
+  }
   function onMapLoaded() {
-    // const bounds = MapView.geoUtils.bbox(trail);
+    // const bounds = Mapbox.geoUtils.bbox(trail);
     // console.log(bounds,"ssss")
     // mapRef.current.fitBounds(bounds, 50, 1000);
 
@@ -259,85 +237,32 @@ export function CustomizedMap() {
     // });
 
 
-    // const bounds = new MapView.LngLatBounds();
+    // const bounds = new Mapbox.LngLatBounds();
     // trail.forEach(coord => bounds.extend(coord));
 
     // const { width, height } = mapViewFullScreenRef.getContainer();
     // const padding = 50; // adjust as needed
-    // const zoom = mapViewFullScreenRef.getBoundsZoom(bounds, { width, height, padding });
+    // const zoom = map.getBoundsZoom(bounds, { width, height, padding });
 
     // // adjust the zoom level if necessary
     // const minZoom = 5; // adjust as needed
     // const maxZoom = 16; // adjust as needed
     // const adjustedZoom = Math.max(minZoom, Math.min(maxZoom, zoom));
-    // Calculate the bounds of the trail
-    // const mp =  MapView.LngLatBounds()
 
-    // const mapp = new MapView.LngLatBounds(trail[0], trail[0])
-    // const bounds = trail.reduce(
-    //   (bounds, coord) => bounds.extend(coord),
-    //   MapView.LngLatBounds(trail[0], trail[0])
-    // );
+    // mapViewFullScreenRef.fitBounds(bounds, { padding, maxZoom: adjustedZoom });
 
-    // // Fit the bounds of the trail to the viewport
-    // mapViewFullScreenRef.fitBounds(bounds, {
-    //   padding: 50, // Optional padding around the bounds
-    // });
-
-    // Calculate the bounds of the trail
-    // const bounds = trail.reduce(
-    //   (bounds, coord) => bounds.extend(coord),
-    //   new mapboxgl.LngLatBounds(trailCoordinates[0], trailCoordinates[0])
-    // );
-
-    // // Fit the bounds of the trail to the viewport
-    // mapViewFullScreenRef.fitBounds(bounds, {
-    //   padding: 50, // Optional padding around the bounds
-    // });
-
-
-  }
-  function changeMapStyle() {
-    // setMapFullscreen(true)
-    // camera?.setCamera({
-    //   centerCoordinate: [-77.03696, 38.878424],
-    //   zoomLevel: 20
-    // });
-    const bounds = [[-122.5, 37.5], [-122, 38]]; // replace with your trail's bounds
-    mapViewFullScreenRef.current.fitBounds.fitBounds(bounds, {
-      edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
-      animated: false,
-    }, (error) => {
-      if (error) {
-        console.log(error);
-        return;
-      }
-      const zoom = mapViewRef.current.getZoom();
+    const bounds = trail.reduce(
+      (bounds, coord) => bounds.extend(coord),
+      new MapboxGL.LngLatBounds(-77.03696, 38.878424)
+    );
+    mapViewFullScreenRef.current.fitBounds(bounds, {
+      padding: 50,
+      animated: true,
     });
   }
-  function onDownloadProgress(offlineRegion, offlineRegionStatus) {
-    setProgress(offlineRegionStatus.percentage)
-    setDownloading(true);
-    if (offlineRegionStatus.percentage == 100) {
-      setDownloading(false)
-    }
+  function changeMapStyle() {
+    setMapFullscreen(true)
   }
-  function errorListener(offlineRegion, error) {
-    Alert.alert(error)
-  }
-
-  function onDownload() {
-    // start download
-    offlineManager.createPack(
-      optionsForDownload,
-      onDownloadProgress,
-      errorListener,
-    ).catch((error) => {
-      console.log(error, "erroryy")
-      Alert.alert(error.message)
-    })
-  }
-
 
 
   return (
@@ -361,7 +286,7 @@ export function CustomizedMap() {
         !mapFullscreen ?
           (
             <View style={{ height: 220, width: '90%', alignSelf: 'center' }}>
-              <MapView.MapView
+              <MapboxGL.MapView
                 ref={mapViewRef}
                 style={{ flex: 1, borderRadius: 15, overflow: 'hidden' }}
                 styleURL={style}
@@ -375,13 +300,13 @@ export function CustomizedMap() {
                 zoomEnabled={false}
               >
                 {/* // user location */}
-                <MapView.Camera
+                <MapboxGL.Camera
                   zoomLevel={zoomLevel}
                   centerCoordinate={[-77.03696, 38.878424]}
                   animationMode={'flyTo'}
                   animationDuration={2000}
                 />
-                <MapView.PointAnnotation
+                <MapboxGL.PointAnnotation
                   id={"1212"}
                   coordinate={[location.longitude, location.latitude]}
                 >
@@ -392,9 +317,9 @@ export function CustomizedMap() {
                       color={"#de0910"}
                     />
                   </View>
-                </MapView.PointAnnotation>
+                </Mapbox.PointAnnotation>
                 {/* trail */}
-                <MapView.ShapeSource
+                <Mapbox.ShapeSource
                   id="source1"
                   lineMetrics={true}
                   shape={trail}
@@ -404,9 +329,9 @@ export function CustomizedMap() {
                   clusterRadius={80}
                   clusterMaxZoomLevel={14}
                 >
-                  <MapView.LineLayer id="layer1" style={styles.lineLayer} />
-                </MapView.ShapeSource>
-              </MapView.MapView>
+                  <Mapbox.LineLayer id="layer1" style={styles.lineLayer} />
+                </Mapbox.ShapeSource>
+              </Mapbox.MapView>
               {/* to come in fullscreen btn which is absolute */}
               <TouchableOpacity
                 style={[styles.headerBtnView, { width: 40, height: 40, position: 'absolute', bottom: 10, right: 10 }]}
@@ -422,79 +347,74 @@ export function CustomizedMap() {
           )
           :
           (
-            <View>
-              <View style={{ height: 360, width: '100%', alignSelf: 'center' }}>
-                <MapView.MapView
-                  ref={mapViewFullScreenRef}
-                  style={{ flex: 1 }}
-                  styleURL={style}
-                  // zoomLevel={zoomLevel}
-                  // centerCoordinate={[location.longitude, location.latitude]}
-                  // onLayout={onMapLoaded}
-                  onDidFinishLoadingMap={onMapLoaded}
-                  compassEnabled={false}
-                  logoEnabled={false}
-                  zoomEnabled={true}
-                >
-                  {/* // user location */}
-                  <MapView.Camera
-                    ref={camera}
-                  // zoomLevel={zoomLevel}
-                  // centerCoordinate={[-77.03696, 38.878424]}
-                  // animationMode={'flyTo'}
-                  // animationDuration={2000}
-
-                  />
-                  <MapView.PointAnnotation
-                    id={"1212"}
-                    coordinate={[location.longitude, location.latitude]}
-                  >
-                    <View style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: 'transparent' }}>
-                      <MaterialCommunityIcons
-                        name="map-marker"
-                        size={35}
-                        color={"#de0910"}
-                      />
-                    </View>
-                  </MapView.PointAnnotation>
-                  {/* trail */}
-                  <MapView.ShapeSource
-                    id="source1"
-                    lineMetrics={true}
-                    shape={trail}
-                    onPress={handleShapePress}
-                    // onLoad={handleShapeSourceLoad}
-                    cluster
-                    clusterRadius={80}
-                    clusterMaxZoomLevel={14}
-                  >
-                    <MapView.LineLayer
-                      id="layer1"
-                      style={styles.lineLayer}
-                      lineDasharray={[1, 2]} // set the dash array pattern here
-                      lineDashOffset={0}
-                    />
-                  </MapView.ShapeSource>
-                </MapView.MapView>
-                {/* to come in fullscreen btn which is absolute */}
-                <TouchableOpacity
-                  style={[styles.headerBtnView, { width: 45, height: 45, position: 'absolute', bottom: 10, left: 10 }]}
-                  onPress={() => changeMapStyle()}
-                >
-                  <MaterialCommunityIcons
-                    name="navigation-variant-outline"
-                    size={25}
-                    color={"black"}
-                  />
-                </TouchableOpacity>
-              </View>
-              <TouchableOpacity
-                style={[styles.headerBtnView, { flexDirection: 'row', width: '88%', height: 46, marginVertical: 10, alignSelf: 'center', justifyContent: 'center', alignItems: 'center', backgroundColor: 'green' }]}
-                onPress={() => onDownload()}
-                disabled={downloading}
+            <View style={{ height: 400, width: '100%', alignSelf: 'center' }}>
+              <Mapbox.MapView
+                ref={mapViewFullScreenRef}
+                style={{ flex: 1 }}
+                styleURL={style}
+                // zoomLevel={zoomLevel}
+                centerCoordinate={[-77.03696, 38.878424]}
+                onLayout={handleMapViewLayout}
+                onDidFinishRenderingMapFully={onMapLoaded}
+                compassEnabled={false}
+                logoEnabled={false}
+                zoomEnabled={true}
               >
-                <Text style={{ fontSize: 16, color: 'white' }}>{downloading ? "Downloading" : "Download Map"}</Text>
-                {downloading && <Text style={{ backgroundColor: 'white', color: 'blue', paddingHorizontal: 3, marginHorizontal: 7, minWidth: 20 }}>{progress}</Text>}
+                {/* // user location */}
+                <Mapbox.Camera
+                  // zoomLevel={zoomLevel}
+                  centerCoordinate={[-77.03696, 38.878424]}
+                  animationMode={'flyTo'}
+                  animationDuration={2000}
+                />
+                <Mapbox.PointAnnotation
+                  id={"1212"}
+                  coordinate={[location.longitude, location.latitude]}
+                >
+                  <View style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: 'transparent' }}>
+                    <MaterialCommunityIcons
+                      name="map-marker"
+                      size={35}
+                      color={"#de0910"}
+                    />
+                  </View>
+                </Mapbox.PointAnnotation>
+                {/* trail */}
+                <Mapbox.ShapeSource
+                  id="source1"
+                  lineMetrics={true}
+                  shape={trail}
+                  onPress={handleShapePress}
+                  // onLoad={handleShapeSourceLoad}
+                  cluster
+                  clusterRadius={80}
+                  clusterMaxZoomLevel={14}
+                >
+                  <Mapbox.LineLayer
+                    id="layer1"
+                    style={styles.lineLayer}
+                    lineLayerStyle={{
+                      lineJoin: 'round',
+                      lineCap: 'round',
+                      lineColor: 'red', // trail color
+                      lineOpacity: 0.8,
+                      lineDasharray: [1, 2],
+                    }}
+                    lineDasharray={[1, 2]} // set the dash array pattern here
+                    lineDashOffset={0}
+                  />
+                </Mapbox.ShapeSource>
+              </Mapbox.MapView>
+              {/* to come in fullscreen btn which is absolute */}
+              <TouchableOpacity
+                style={[styles.headerBtnView, { width: 45, height: 45, position: 'absolute', bottom: 10, left: 10 }]}
+                onPress={() => changeMapStyle()}
+              >
+                <MaterialCommunityIcons
+                  name="navigation-variant-outline"
+                  size={25}
+                  color={"black"}
+                />
               </TouchableOpacity>
             </View>
           )
