@@ -22,6 +22,5 @@ export const register = async ({ email, password, name }) => {
     packs: [],
     trips: [],
   });
-
   return user;
 };
