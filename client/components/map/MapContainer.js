@@ -187,13 +187,13 @@ export function CustomizedMap() {
     setTrailCenterPoint([avgLatitude, avgLongitude])
     // Set the initial state
   }
-  function onMapPress() {
-    if (trailCenterPoint) {
-      mapViewRef?.current.flyTo(trailCenterPoint);
-      mapViewFullScreenRef?.current.setCamera({
-        centerCoordinate: trailCenterPoint,
-      });
-    }
+  function onMapPress(event) {
+    console.log(event, "eventtt")
+    // if (trailCenterPoint) {
+    //   mapViewFullScreenRef?.current.setCamera({
+    //     centerCoordinate: trailCenterPoint,
+    //   });
+    // }
   }
 
   function MapContainer({ coordinates }) {
@@ -236,7 +236,6 @@ export function CustomizedMap() {
       onDownloadProgress,
       errorListener,
     ).catch((error) => {
-      console.log(error, "erroryy")
       Alert.alert(error.message)
     })
   }
@@ -248,14 +247,11 @@ export function CustomizedMap() {
         borderRadius: 16,
         borderWidth: 3,
         borderColor: 'white',
-        backgroundColor: 'green',
+        backgroundColor: '#16b22d',
       }}>
       </View>
     )
   }
-
-  console.log(zoomLevel, "zoomlevel")
-  console.log(trailCenterPoint, "trailCenterPoint")
 
   return (
     <View style={{ flex: 1, paddingVertical: 10 }}>
