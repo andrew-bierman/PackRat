@@ -1,6 +1,9 @@
 import { useRouter, useSegments } from "expo-router";
 import React from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./firebase";
+import { signInWithEmailAndPassword, signInWithGoogle, GoogleAuthProvider } from "firebase/auth";
 
 const AuthContext = React.createContext(null);
 
@@ -34,25 +37,29 @@ function useProtectedRoute(user) {
 export function ProviderAuth(props) {
   const [user, setAuth] = React.useState(null);
 
-  // local storage here
-
-  const getData = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem("user");
-      return jsonValue != null ? JSON.parse(jsonValue) : null;
-    } catch (e) {
-      // error reading value
-    }
-  };
-
   React.useEffect(() => {
-    const getUser = async () => {
-      const user = await getData();
-      setAuth(user);
-    };
+    // This listener will be called every time the user's authentication state changes.
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      if (firebaseUser) {
+        // User is signed in.
+        const { uid, email } = firebaseUser;
+        setAuth({ uid, email });
+        storeData({ uid, email });
+      } else {
+        // User is signed out.
+        setAuth(null);
+        deleteData();
+      }
+    });
 
-    getUser();
+    // Return a function that will unsubscribe the listener when the component unmounts.
+    return () => unsubscribe();
   }, []);
+
+
+  const googleAuthProvider = new GoogleAuthProvider();
+
+  console.log("user in provider", user)
 
   useProtectedRoute(user);
 
@@ -73,19 +80,35 @@ export function ProviderAuth(props) {
     }
   };
 
-  const signIn = (user) => {
-    setAuth(user);
-    storeData(user);
+  const signInWithEmailPasswordProvider = async (email, password) => {
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const firebaseUser = userCredential.user;
+      setAuth(firebaseUser);
+    } catch (error) {
+      console.log(error);
+    }
   };
-  const signOut = () => {
-    setAuth(null);
-    deleteData();
+
+  const signInWithGoogleProvider = async () => {
+    try {
+      const userCredential = await signInWithPopup(auth, googleAuthProvider);
+      const firebaseUser = userCredential.user;
+      setAuth(firebaseUser);
+    } catch (error) {
+      console.log(error);
+    }
+};
+  
+  const signOut = async () => {
+    await auth.signOut();
   };
 
   return (
     <AuthContext.Provider
       value={{
-        signIn,
+        signInWithEmailPasswordProvider,
+        signInWithGoogleProvider,
         signOut,
         user,
       }}
