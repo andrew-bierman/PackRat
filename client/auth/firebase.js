@@ -15,16 +15,29 @@ const firebaseConfig = {
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 
-const provider = new GoogleAuthProvider();
+// export const googleProvider = new GoogleAuthProvider();
 
-export const signInWithGoogle = async () => {
-    return new Promise((resolve, reject) => {
-        signInWithPopup(auth, provider)
-            .then((result) => {
-                resolve({ name: result.user.displayName, email: result.user.email })
-            })
-            .catch(() => {
-                resolve({ message: "error" })
-            });
-    })
-};
+// export const signInWithGoogle = async () => {
+//     try {
+//       const result = await signInWithPopup(auth, provider);
+//       const user = result.user;
+//       const email = user.email;
+//       loginUser.mutate({ email, password: "", from: "GoogleSignIn" });
+//       signIn({ email, password: "", from: "GoogleSignIn" });
+//       router.push("/");
+//     } catch (error) {
+//       console.log(error);
+//     }
+//   };
+
+// export const signInWithGoogle = async () => {
+//     return new Promise((resolve, reject) => {
+//         signInWithPopup(auth, provider)
+//             .then((result) => {
+//                 resolve({ name: result.user.displayName, email: result.user.email })
+//             })
+//             .catch(() => {
+//                 resolve({ message: "error" })
+//             });
+//     })
+// };
