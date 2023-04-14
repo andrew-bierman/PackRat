@@ -10,6 +10,7 @@ import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
 import { theme } from "../../theme";
 import { Link } from "expo-router";
 import { CheckIcon, Select } from "native-base";
+import WebPackconatiner from "./WebMapcontainer";
 
 Mapbox.setAccessToken(MAPBOX_ACCESS_TOKEN);
 
@@ -18,13 +19,6 @@ Mapbox.setAccessToken(MAPBOX_ACCESS_TOKEN);
 console.log("Mapbox:", Mapbox);
 console.log("Mapbox.MapView:", Mapbox?.MapView);
 
-export function BasicMap() {
-  return (
-    <View style={{ flex: 1 }}>
-      <Mapbox.MapView style={{ flex: 1 }} />
-    </View>
-  );
-}
 
 export function CustomizedMap() {
 
@@ -49,6 +43,29 @@ export function CustomizedMap() {
       setLocation(location);
     })();
   }, []);
+
+
+  useEffect(async () => {
+
+    await Mapbox.offlineManager.createPack(
+      {
+        name: 'field-1', // any
+        bounds: [[32.23782523101579, 46.39912398458027], [33.43887899585923, 47.041693870480955]],
+        styleURL: Mapbox.StyleURL.Satellite,
+        minZoom: 10,
+        maxZoom: 12,
+      },
+      (pack, status) => {
+        console.log('>>>>>>>>>>pack progress', pack.name, status.percentage, status.completedTileCount);
+      },
+      (pack, error) => {
+        console.log('>>>>>>>>>>pack error', pack.name, error);
+      },
+    );
+
+    console.log(await Mapbox.offlineManager.getPacks());
+
+  }, [])
 
   const [lng, setLng] = useState(103.8519599);
   const [lat, setLat] = useState(1.29027);
@@ -271,10 +288,8 @@ export function CustomizedMap() {
 export function MapContainer() {
   if (Platform.OS === "web") {
     return (
-      <View style={styles.page}>
-        <Text>
-          Mapbox maps are not supported on web yet.
-        </Text>
+      <View >
+        <WebPackconatiner />
       </View>
     )
   }

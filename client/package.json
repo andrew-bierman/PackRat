@@ -29,10 +29,11 @@
     "expo-checkbox": "~2.3.1",
     "expo-constants": "~14.2.1",
     "expo-linking": "^4.0.1",
+    "expo-location": "~15.1.1",
     "expo-router": "^1.2.2",
     "expo-splash-screen": "~0.18.1",
     "expo-status-bar": "~1.4.4",
-    "mapbox-gl": "^2.13.0",
+    "mapbox-gl": "^2.14.0",
     "native-base": "^3.4.28",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -50,8 +51,7 @@
     "react-native-web": "~0.18.12",
     "react-native-webview": "11.26.0",
     "react-redux": "^8.0.5",
-    "react-responsive": "^9.0.2",
-    "expo-location": "~15.1.1"
+    "react-responsive": "^9.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.21.3"
