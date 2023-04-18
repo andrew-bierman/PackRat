@@ -12,11 +12,10 @@ import {
   View,
 } from "native-base";
 
-
 import { FontAwesome } from "@expo/vector-icons";
 
-import * as WebBrowser from 'expo-web-browser';
-import * as Google from 'expo-auth-session/providers/google';
+import * as WebBrowser from "expo-web-browser";
+import * as Google from "expo-auth-session/providers/google";
 import { useState, useEffect } from "react";
 import useLogin from "../hooks/useLogin";
 import { useAuth } from "../auth/provider";
@@ -25,30 +24,30 @@ import { useRouter } from "expo-router";
 import { theme } from "../theme";
 // import { signInWithGoogle } from "../auth/firebase";
 import { signInWithGoogle } from "../auth/firebase";
-
-
-
+import { useDispatch } from "react-redux";
+import { signIn } from "../store/authStore";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [code, setCode] = useState("")
+  const [code, setCode] = useState("");
 
-  const [status, setStatus] = useState("login")
-  const [error, setError] = useState("")
+  const [status, setStatus] = useState("login");
+  const [error, setError] = useState("");
+
+  const dispatch = useDispatch();
 
   const { signInWithEmailPasswordProvider } = useAuth();
   const { loginUser } = useLogin();
 
-  const router = useRouter(); 
-
+  const router = useRouter();
 
   const [token, setToken] = useState("");
   const [userInfo, setUserInfo] = useState(null);
 
-
-  
-  
+  const handleLogin = () => {
+    dispatch(signIn({ email, password }));
+  };
 
   // useEffect(() => {
   //   if (response?.type === 'success') {
@@ -144,11 +143,14 @@ export default function Login() {
             </FormControl>
             <Button
               disabled={!email || !password}
-              onPress={() => {
-                loginUser.mutate({ email, password, from: "UserSignIn" });
-                signInWithEmailPasswordProvider({ email, password, from: "UserSignIn" });
-                router.push("/");
-              }}
+              // onPress={() => {
+
+              //   loginUser.mutate({ email, password, from: "UserSignIn" });
+              // signInWithEmailPasswordProvider({ email, password, from: "UserSignIn" });
+              //   console.log("sign in");
+              //   router.push("/home");
+              // }}
+              onPress={handleLogin}
               mt="2"
               colorScheme="indigo"
             >
@@ -211,5 +213,4 @@ export default function Login() {
       {loginUser.isSuccess && router.push("/")}
     </Center>
   );
-
 }
