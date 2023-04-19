@@ -1,31 +1,31 @@
 // import { Geoapify_Key } from "../constants/api";
 import { GEOAPIFY_KEY } from "@env";
+import axios from "axios";
 
-export const getGeoCode = async (addressArray = "Virginia") => {
-  const transform = addressArray.split(", ").join("%20").split(" ").join("%20");
+export const getGeoCode = async (addressArray) => {
+  // const transform = addressArray.split(", ").join("%20").split(" ").join("%20");
+  // let trailsArray = [];
 
-  const root = "https://api.geoapify.com/v1/geocode/search";
+  // if (addressArray) params += `text=${transform}`;
 
-  let params = `?`;
+  // const api_key = `&apiKey=${GEOAPIFY_KEY}`;
 
-  //   let addressParams = addressArray.join("%20").replace(/\s/g, "%20");
+  // params += api_key;
 
-  if (addressArray) params += `text=${transform}`;
+  const response = await axios.get(`https://photon.komoot.io/api/?q=${addressArray}&osm_tag=highway:footway`);
 
-  const api_key = `&apiKey=${GEOAPIFY_KEY}`;
+  console.log("response", response);
 
-  params += api_key;
+  trailsArray = response.data.features.map((_item) => _item?.properties?.name);
+  return trailsArray
 
-  const url = root + params;
+  // await fetch(url)
+  //   .then((response) => response.json())
+  //   .then((result) => {
+  //     resultReturn = result;
+  //   })
+  //   .catch((error) => console.log("error", error));
 
-  let resultReturn;
 
-  await fetch(url)
-    .then((response) => response.json())
-    .then((result) => {
-      resultReturn = result;
-    })
-    .catch((error) => console.log("error", error));
-
-  return resultReturn;
+  // return resultReturn;
 };

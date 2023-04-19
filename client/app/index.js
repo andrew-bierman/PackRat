@@ -24,30 +24,14 @@ export default function Index() {
   const [parksData, setParksData] = useState();
   const [trails, setTrailsData] = useState();
   const weatherObject = useSelector((state) => state.weather.weatherObject);
+  const trailsObject = useSelector((state) => state.trails.trailsDetails);
+
 
   useEffect(() => {
-    const getParks = async () => {
-      const parks = await getParksRapid(weatherObject.state);
-      setParksData(parks);
-    };
-    const getTrails = async () => {
-      const defaultLocationObject = {
-        administrative_area_level_1: weatherObject.name,
-        country: weatherObject.sys.country,
-        locality: weatherObject.name,
-      };
 
-      const trails = await getTrailsRapid(
-        defaultLocationObject,
-        weatherObject.coord.lat,
-        weatherObject.coord.lon
-      );
-      setTrailsData(trails);
-    };
+    setTrailsData(trailsObject)
 
-    getParks();
-    getTrails();
-  }, [weatherObject.name, weatherObject.coord.lat, weatherObject.state]);
+  }, [trailsObject]);
 
   return (
     <ScrollView>
@@ -98,7 +82,7 @@ export default function Index() {
             title="Nearby Trails"
             value="Trail List"
             isTrail={true}
-            data={trails}
+            data={trails || []}
             Icon={() => (
               <FontAwesome5
                 name="hiking"

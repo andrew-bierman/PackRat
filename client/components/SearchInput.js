@@ -31,25 +31,23 @@ import { useState, useEffect } from "react";
 import { getGeoCode } from "../api/getGeoCode";
 import { getWeather } from "../api/getWeather";
 import { getWeatherWeek } from "../api/getWeatherWeek";
+import { getTrails } from "../store/trailsStore";
 
 export const SearchInput = () => {
-  const [searchString, setSearchString] = useState("Virginia US");
-  const [geoCode, setGeoCode] = useState();
+  const [searchString, setSearchString] = useState("");
   const [isLoadingMobile, setIsLoadingMobile] = useState(false);
 
   const dispatch = useDispatch();
 
-  const lat = geoCode?.features[0]?.geometry?.coordinates[1];
-  const lon = geoCode?.features[0]?.geometry?.coordinates[0];
-  const state = geoCode?.features[0]?.properties.state;
 
   useEffect(() => {
     const getCode = async () => {
       setIsLoadingMobile(true);
-      const code = await getGeoCode(searchString);
+      const trailsData = await getGeoCode(searchString);
       setIsLoadingMobile(false);
-      setGeoCode(code);
+      dispatch(getTrails(trailsData))
     };
+
 
     const timeout = setTimeout(async () => {
       getCode();
@@ -58,21 +56,21 @@ export const SearchInput = () => {
     return () => clearTimeout(timeout);
   }, [searchString]);
 
-  useEffect(() => {
-    const getWeatherObject = async () => {
-      const object = await getWeather(lat, lon, state);
-      dispatch(add(object));
-    };
-    const getWeek = async () => {
-      const weeekArray = await getWeatherWeek(lat, lon);
-      dispatch(addWeek(weeekArray));
-    };
+  // useEffect(() => {
+  //   const getWeatherObject = async () => {
+  //     const object = await getWeather(lat, lon, state);
+  //     dispatch(add(object));
+  //   };
+  //   const getWeek = async () => {
+  //     const weeekArray = await getWeatherWeek(lat, lon);
+  //     dispatch(addWeek(weeekArray));
+  //   };
 
-    if (lat && lon) {
-      getWeatherObject();
-      getWeek();
-    }
-  }, [lat, lon, state]);
+  //   if (lat && lon) {
+  //     getWeatherObject();
+  //     getWeek();
+  //   }
+  // }, [lat, lon, state]);
 
   return Platform.OS === "web" ? (
     <VStack my="4" space={5} w="100%" maxW="300px">
@@ -117,6 +115,7 @@ export const SearchInput = () => {
         borderRadius="4"
         py="3"
         px="1"
+        value={searchString}
         fontSize="14"
         InputLeftElement={
           <Icon
