@@ -16,6 +16,8 @@ import { FontAwesome } from "@expo/vector-icons";
 
 import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
+import { WEB_CLIENT_ID } from "@env";
+
 import { useState, useEffect } from "react";
 import useLogin from "../hooks/useLogin";
 import { useAuth } from "../auth/provider";
@@ -26,6 +28,8 @@ import { theme } from "../theme";
 import { signInWithGoogle } from "../auth/firebase";
 import { useDispatch } from "react-redux";
 import { signIn } from "../store/authStore";
+
+WebBrowser.maybeCompleteAuthSession();
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -43,10 +47,32 @@ export default function Login() {
   const router = useRouter();
 
   const [token, setToken] = useState("");
-  const [userInfo, setUserInfo] = useState(null);
+
+  const [accessToken, setAccessToken] = useState(null);
+  const [user, setUser] = useState(null);
+  const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
+    clientId: WEB_CLIENT_ID,
+  });
 
   const handleLogin = () => {
     dispatch(signIn({ email, password }));
+  };
+
+  useEffect(() => {
+    if (response?.type === "success") {
+      setAccessToken(response.authentication.accessToken);
+      accessToken && fetchUserInfo();
+    }
+  }, [response, accessToken]);
+
+  const fetchUserInfo = async () => {
+    let response = await fetch("https://www.googleapis.com/userinfo/v2/me", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    const userInfo = await response.json();
+    setUser(userInfo);
   };
 
   // useEffect(() => {
@@ -195,8 +221,9 @@ export default function Login() {
             <HStack mt="1" justifyContent="center" alignItems="center">
               <Button
                 w="100%"
+                disabled={!request}
                 onPress={() => {
-                  signInWithGoogle();
+                  promptAsync();
                 }}
                 colorScheme={"red"}
                 startIcon={
