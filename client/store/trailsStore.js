@@ -8,7 +8,7 @@ export const trailsSlice = createSlice({
         trailsDetails: []
     },
     reducers: {
-        getTrails: (state, action) => {
+        setTrails: (state, action) => {
             // Redux Toolkit allows us to write "mutating" logic in reducers. It
             // doesn't actually mutate the state because it uses the Immer library,
             // which detects changes to a "draft state" and produces a brand new
@@ -19,5 +19,5 @@ export const trailsSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { getTrails } = trailsSlice.actions;
+export const { setTrails } = trailsSlice.actions;
 export default trailsSlice.reducer;
