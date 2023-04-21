@@ -33,9 +33,11 @@ import { useSelector } from "react-redux";
 import { getTrailsResult } from "../api/getTrailsResult";
 import { getPhotonResults } from "../api/getPhotonResults";
 import { setTrails } from "../store/trailsStore";
+import { setParks } from "../store/parksStore";
 
 import { setSearchResults, setSelectedSearchResult, clearSearchResults } from "../store/searchStore";
 import { getTrailsOSM } from "../api/getTrails";
+import { getParksOSM } from "../api/getParks";
 
 export const SearchInput = () => {
   const [searchString, setSearchString] = useState("");
@@ -79,7 +81,7 @@ export const SearchInput = () => {
 
   useEffect(() => {
 
-    const getTrailsDetails = async () => {
+    const getTrailsAndParksDetails = async () => {
       if (!selectedSearchResult || Object.keys(selectedSearchResult).length === 0) return;
 
       setIsLoadingMobile(true);
@@ -95,8 +97,7 @@ export const SearchInput = () => {
 
       const trailsData = await getTrailsOSM(lat, lon);
 
-
-      const trailsFeatures = trailsData.features;
+      const trailsFeatures = trailsData?.features;
 
       if (!trailsFeatures || trailsFeatures.length === 0) return;
 
@@ -111,11 +112,28 @@ export const SearchInput = () => {
 
       dispatch(setTrails(filteredTrails));
 
+      const parksData = await getParksOSM(lat, lon);
+
+      const parksFeatures = parksData?.features;
+
+      if (!parksFeatures || parksFeatures.length === 0) return;
+
+      const filteredParks = parksFeatures
+        .map((park) => {
+          const { properties: { name } } = park;
+          if (name !== selectedSearch) {
+            return name;
+          }
+        })
+        .slice(0, 25)
+
+      dispatch(setParks(filteredParks));
+
       setIsLoadingMobile(false);
     };
 
     const timeout = setTimeout(async () => {
-      getTrailsDetails();
+      getTrailsAndParksDetails();
     }, 1000);
 
 

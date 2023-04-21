@@ -23,6 +23,7 @@ export default function Index() {
   const [trails, setTrailsData] = useState();
   const weatherObject = useSelector((state) => state.weather.weatherObject);
   const trailsObject = useSelector((state) => state.trails.trailsDetails);
+  const parksObject = useSelector((state) => state.parks.parksDetails);
 
 
    useEffect(() => {
@@ -30,6 +31,12 @@ export default function Index() {
     setTrailsData(trailsObject)
 
   }, [trailsObject]);
+
+  useEffect(() => {
+
+    setParksData(parksObject)
+
+  }, [parksObject]);
 
   return (
     <ScrollView>
