@@ -35,6 +35,7 @@ import { getPhotonResults } from "../api/getPhotonResults";
 import { setTrails } from "../store/trailsStore";
 
 import { setSearchResults, setSelectedSearchResult, clearSearchResults } from "../store/searchStore";
+import { getTrailsOSM } from "../api/getTrails";
 
 export const SearchInput = () => {
   const [searchString, setSearchString] = useState("");
@@ -42,6 +43,8 @@ export const SearchInput = () => {
   const [selectedSearch, setSelectedSearch] = useState("");
 
   const searchResults = useSelector((state) => state.search.searchResults) || [];
+
+  const selectedSearchResult = useSelector((state) => state.search.selectedSearchResult) || {};
 
   // const [searchResults, setSearchResults] = useState([]);
   const [showSearchResults, setShowSearchResults] = useState(false);
@@ -77,12 +80,37 @@ export const SearchInput = () => {
   useEffect(() => {
 
     const getTrailsDetails = async () => {
+      if(!selectedSearchResult || Object.keys(selectedSearchResult).length === 0) return;
+
       setIsLoadingMobile(true);
 
-      const trailsData = await getTrailsResult(selectedSearch);
+      // const trailsData = await getTrailsResult(selectedSearch);
+      const { geometry: { coordinates }} = selectedSearchResult;
+      const [lon, lat] = coordinates
 
+      if(!lat || !lon) return;
+
+      console.log('lat', lat)
+      console.log('lon', lon)
+
+      const trailsData = await getTrailsOSM(lat, lon);
+      console.log('trailsData', trailsData)
+
+      const trailsFeatures = trailsData.features;
+
+      if(!trailsFeatures || trailsFeatures.length === 0) return;
+
+      const filteredTrails = trailsFeatures.filter((trail) => {
+        const { properties: { name } } = trail;
+    
+        if (name !== selectedSearch) {
+          return name;
+        }
+      });
+    
+      dispatch(setTrails(filteredTrails));
+    
       setIsLoadingMobile(false);
-      dispatch(setTrails(trailsData));
     };
 
     const timeout = setTimeout(async () => {
