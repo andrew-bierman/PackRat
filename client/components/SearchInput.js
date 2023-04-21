@@ -30,7 +30,7 @@ import { add, addWeek } from "../store/weatherStore";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 
-import {  getTrailsResult } from "../api/getTrailsResult";
+import { getTrailsResult } from "../api/getTrailsResult";
 import { getPhotonResults } from "../api/getPhotonResults";
 import { setTrails } from "../store/trailsStore";
 
@@ -80,36 +80,37 @@ export const SearchInput = () => {
   useEffect(() => {
 
     const getTrailsDetails = async () => {
-      if(!selectedSearchResult || Object.keys(selectedSearchResult).length === 0) return;
+      if (!selectedSearchResult || Object.keys(selectedSearchResult).length === 0) return;
 
       setIsLoadingMobile(true);
 
       // const trailsData = await getTrailsResult(selectedSearch);
-      const { geometry: { coordinates }} = selectedSearchResult;
+      const { geometry: { coordinates } } = selectedSearchResult;
       const [lon, lat] = coordinates
 
-      if(!lat || !lon) return;
+      if (!lat || !lon) return;
 
       console.log('lat', lat)
       console.log('lon', lon)
 
       const trailsData = await getTrailsOSM(lat, lon);
-      console.log('trailsData', trailsData)
+
 
       const trailsFeatures = trailsData.features;
 
-      if(!trailsFeatures || trailsFeatures.length === 0) return;
+      if (!trailsFeatures || trailsFeatures.length === 0) return;
 
-      const filteredTrails = trailsFeatures.filter((trail) => {
-        const { properties: { name } } = trail;
-    
-        if (name !== selectedSearch) {
-          return name;
-        }
-      });
-    
+      const filteredTrails = trailsFeatures
+        .map((trail) => {
+          const { properties: { name } } = trail;
+          if (name !== selectedSearch) {
+            return name;
+          }
+        })
+        .slice(0, 25)
+
       dispatch(setTrails(filteredTrails));
-    
+
       setIsLoadingMobile(false);
     };
 
@@ -189,7 +190,7 @@ export const SearchInput = () => {
               maxHeight="100"
               borderWidth={1}
               borderColor="gray.200"
-              borderRadius={4}
+              borderRadius={10}
               backgroundColor="white"
               showsVerticalScrollIndicator={false}
               zIndex={10}
@@ -252,12 +253,12 @@ export const SearchInput = () => {
           maxHeight="100"
           borderWidth={1}
           borderColor="gray.200"
-          borderRadius={4}
+          borderRadius={12}
           backgroundColor="white"
           showsVerticalScrollIndicator={false}
           zIndex={10}
         >
-          <List space={2} mt={2} w="100%">
+          <List space={2} w="100%">
             {searchResults.map((result, i) => (
 
               <Pressable

@@ -9,8 +9,6 @@ import WeatherCard from "../components/WeatherCard";
 import { FontAwesome } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Platform, StyleSheet } from "react-native";
-import { getParksRapid } from "../api/getParks";
-import { getTrailsRapid } from "../api/getTrails";
 
 import { useEffect, useState } from "react";
 
@@ -27,7 +25,7 @@ export default function Index() {
   const trailsObject = useSelector((state) => state.trails.trailsDetails);
 
 
-  useEffect(() => {
+   useEffect(() => {
 
     setTrailsData(trailsObject)
 
@@ -77,7 +75,7 @@ export default function Index() {
               />
             )}
           />
-
+          
           <Card
             title="Nearby Trails"
             value="Trail List"
