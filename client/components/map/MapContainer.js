@@ -74,6 +74,7 @@ export function CustomizedMap() {
 
   function handleMapViewLayout() {
     setMapViewLoaded(true);
+    
   }
 
   const handleStyleChange = (value) => {
@@ -141,22 +142,26 @@ export function CustomizedMap() {
 
     const bounds = getShapeSourceBounds(shape);
 
-    mapViewRef.current.fitBounds(bounds, {
+    mapViewRef?.current?.fitBounds(bounds, {
       edgePadding: {
-        top: 5,
-        right: 5,
-        bottom: 5,
-        left: 5
+        top: 100,
+        right: 100,
+        bottom: 100,
+        left: 100
       }
+    }, () => {
+      const centerLng = (bounds[0][0] + bounds[1][0]) / 2;
+      const centerLat = (bounds[0][1] + bounds[1][1]) / 2;
+
+      mapViewRef.current.setCamera({
+        centerCoordinate: [centerLng, centerLat],
+        minZoomLevel: 10,
+      });
     });
 
-    mapViewRef.current.setCamera({
-      centerCoordinate: mapViewRef.current.getCenter(),
-      zoomLevel: Math.min(
-        mapViewRef.current.zoomLevel,
-        mapViewRef.current.getZoomForBounds(bounds, { padding: 50 })
-      )
-    });
+    console.log('shape:', shape);
+    console.log('bounds:', bounds);
+    console.log('mapViewRef:', mapViewRef);
   }
 
 
@@ -214,6 +219,7 @@ export function CustomizedMap() {
       >
         <Mapbox.Camera
           centerCoordinate={[-77.035, 38.875]}
+
         // zoomLevel={12}
         />
 
