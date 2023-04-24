@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+
 import { Platform, StyleSheet, Text, View, Picker, TouchableOpacity, Dimensions, Alert } from "react-native";
 import Geolocation from '@react-native-community/geolocation';
 // import { check, PERMISSIONS, RESULTS } from 'react-native-permissions';
@@ -6,8 +7,14 @@ import { MaterialCommunityIcons, MaterialIcons, Entypo } from "@expo/vector-icon
 import MapView, { ShapeSource } from '@rnmapbox/maps';
 import { offlineManager, Camera } from '@rnmapbox/maps';
 import { Select, Center, Box, CheckIcon } from "native-base";
+
 // get mapbox access token from .env file
 import { MAPBOX_ACCESS_TOKEN } from "@env";
+import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
+import { theme } from "../../theme";
+import { Link } from "expo-router";
+import { CheckIcon, Select } from "native-base";
+import WebPackconatiner from "./WebMapcontainer";
 
 MapView.setAccessToken(MAPBOX_ACCESS_TOKEN);
 // consts
@@ -18,20 +25,13 @@ const previewMapDiemension = { width: dw * 0.9, height: 220 }
 
 // MapView.setConnected(true);
 
-export function BasicMap() {
-  return (
-    <View style={{ flex: 1 }}>
-      <MapView.MapView style={{ flex: 1 }} />
-    </View>
-  );
-}
-
 export function CustomizedMap() {
   const camera = useRef(MapView.Camera);
   const mapViewRef = useRef(null);
   const mapViewFullScreenRef = useRef();
 
   const [style, setStyle] = React.useState("mapbox://styles/mapbox/outdoors-v11");
+
   const [location, setLocation] = useState({
     longitude: 0.0,
     latitude: 0.0
@@ -117,6 +117,7 @@ export function CustomizedMap() {
       setCorrectLocation(false)
       Alert.alert("Something went wrong with current location", error.message)
     }, { enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 })
+
   }
   function getShapeSourceBounds(shape) {
     let minLng = Infinity;
@@ -143,6 +144,7 @@ export function CustomizedMap() {
 
     return [[minLng, minLat], [maxLng, maxLat]];
   }
+
   function handleShapeSourceLoad({ width: width, height: height }) {
     if (shape?.features[0]?.geometry?.coordinates?.length > 1) {
       let bounds = getShapeSourceBounds(shape);
@@ -151,6 +153,7 @@ export function CustomizedMap() {
       findTrailCenter();
     }
   }
+  
   function latRad(lat) {
     var sin = Math.sin(lat * Math.PI / 180);
     var radX2 = Math.log((1 + sin) / (1 - sin)) / 2;
@@ -446,10 +449,8 @@ export function CustomizedMap() {
 export function MapContainer() {
   if (Platform.OS === "web") {
     return (
-      <View style={styles.page}>
-        <Text>
-          Mapbox maps are not supported on web yet.
-        </Text>
+      <View >
+        <WebPackconatiner />
       </View>
     )
   }
@@ -476,6 +477,15 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     marginBottom: 20
   },
+    height: 300,
+    width: '100%',
+    marginBottom: 20,
+    paddingHorizontal: 5,
+
+  },
+  map: {
+    flex: 1,
+  },
   lineLayer: {
     lineColor: '#16b22d',
     lineWidth: 4,
@@ -494,5 +504,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 32,
     backgroundColor: 'white',
+  },
+  button: {
+    position: 'absolute',
+    bottom: 10,
+    right: 10,
+    backgroundColor: theme.colors.primary,
+    borderRadius: 50,
+    width: 45,
+    height: 45,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

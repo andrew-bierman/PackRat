@@ -8,11 +8,18 @@ import {
   Center,
   HStack,
   Text,
+  View
 } from "native-base";
-import { useState } from "react";
+
+import { FontAwesome } from '@expo/vector-icons';
+import * as WebBrowser from 'expo-web-browser';
+import * as Google from 'expo-auth-session/providers/google';
+
+import { useState, useEffect } from "react";
 import useRegister from "../hooks/useRegister";
 import { useRouter } from "expo-router";
 import { Link } from "expo-router";
+import { signInWithGoogle } from "../auth/firebase";
 
 export default function Register() {
   const [name, setName] = useState("");
@@ -64,7 +71,7 @@ export default function Register() {
             />
           </FormControl>
           <Button
-            onPress={() => addUser.mutate({ name, email, password })}
+            onPress={() => addUser.mutate({ name, email, password, from: "UserSignIn" })}
             mt="2"
             colorScheme="indigo"
             disabled={!email || !password || !name}
@@ -93,6 +100,48 @@ export default function Register() {
               </Text>
             </Link>
           </HStack>
+          {/* Google register */}
+          <HStack mt="1" justifyContent="center">
+            <Heading
+              mt="1"
+              _dark={{
+                color: "warmGray.200",
+              }}
+              color="coolGray.600"
+              fontWeight="medium"
+              size="xs"
+            >
+              Or
+            </Heading>
+          </HStack>
+          <HStack mt="1" justifyContent="center" alignItems="center">
+            <Button
+              w="100%"
+              mt="2"
+              onPress={() => {
+                promptAsync();
+                signInWithGoogle().then(async (res) => {
+                  let { email, name } = res
+                  if (email && name) {
+                    addUser.mutate({ name, email, password: "", from: "GoogleSignIn" });
+                    router.push("/sign-in")
+                  } else {
+                    console.log("Email and Name empty")
+                  }
+                }).catch((err) => {
+                  console.log(err)
+                })
+              }}
+              colorScheme={"red"}
+              startIcon={
+                <FontAwesome name="google" size={16} color="white" />
+              }
+
+            >
+              Sign up with Google
+            </Button>
+          </HStack>
+          {/* Google register */}
         </VStack>
       </Box>
       {addUser.isSuccess && router.push("/sign-in")}
