@@ -58,11 +58,11 @@ export const getOsm = async (req, res) => {
             // res.send(response.text());
         } else {
             console.log(response.status, response.statusText);
-            res.send({ message: 'Something went wrong' });
+            res.send({ message: 'Error processing Overpass Data' });
         }
     } catch (error) {
         console.error(error);
-        res.status(500).send({ message: 'Something went wrong' });
+        res.status(500).send({ message: 'Error retrieving Overpass Data' });
     }
 };
 

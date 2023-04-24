@@ -22,7 +22,7 @@ export const getWeatherWeek = async (req, res) => {
         .then((json) => {
             res.send(json)
         }).catch(() => {
-            res.send({ message: "Went wrong" });
+            res.send({ message: "Error retrieving weekly weather data from OpenWeather" });
         });
 };
 
@@ -49,6 +49,6 @@ export const getWeather = async (req, res) => {
         .then((json) => {
             res.send(json)
         }).catch(() => {
-            res.send({ message: "Went wrong" });
+            res.send({ message: "Error retrieving weather data from OpenWeather" });
         });
 };

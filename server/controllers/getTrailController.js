@@ -48,6 +48,6 @@ export const getTrails = async (req, res) => {
             res.send(json)
         })
         .catch((_err) => {
-            res.send({ message: "Went wrong" });
+            res.send({ message: "Error retrieving trail data from RapidAPI" });
         });
 }
