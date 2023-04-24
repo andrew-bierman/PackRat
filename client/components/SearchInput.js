@@ -21,6 +21,7 @@ import { Platform } from "react-native";
 
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 // import { Google_Api_Key } from "../constants/api";
+import { GOOGLE_API_KEY } from "@env";
 
 // redux
 import { useDispatch } from "react-redux";
@@ -79,7 +80,7 @@ export const SearchInput = () => {
       <GooglePlacesAutocomplete
         placeholder="Search"
         query={{
-          key: Google_Api_Key,
+          key: GOOGLE_API_KEY,
           language: "en", // language of the results
         }}
         minLength={2}

@@ -19,11 +19,14 @@ import { useSelector } from "react-redux";
 import { GearList } from "../components/GearList";
 
 import { MapContainer } from "../components/map/MapContainer";
+import Dashboard from "../components/dashboard";
+import LandingPage from "../components/landing_page";
 
 export default function Index() {
   const [parksData, setParksData] = useState();
   const [trails, setTrailsData] = useState();
   const weatherObject = useSelector((state) => state.weather.weatherObject);
+
 
   useEffect(() => {
     const getParks = async () => {
@@ -60,6 +63,8 @@ export default function Index() {
         />
       ) : null}
       <Box style={styles.mutualStyles}>
+        <LandingPage />
+        <Dashboard />
         <Stack m={[0, 0, 12, 16]} style={{ gap: 25 }}>
           <Box
             style={{
