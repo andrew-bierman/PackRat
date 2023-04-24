@@ -41,7 +41,8 @@ export default function Login() {
 
   const dispatch = useDispatch();
 
-  const { signInWithEmailPasswordProvider } = useAuth();
+  const { signInWithEmailPasswordProvider, signInWithGoogleProvider } =
+    useAuth();
   const { loginUser } = useLogin();
 
   const router = useRouter();
@@ -222,9 +223,7 @@ export default function Login() {
               <Button
                 w="100%"
                 disabled={!request}
-                onPress={() => {
-                  promptAsync();
-                }}
+                onPress={signInWithGoogleProvider}
                 colorScheme={"red"}
                 startIcon={
                   <FontAwesome name="google" size={18} color="white" />
