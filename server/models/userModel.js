@@ -6,8 +6,11 @@ const { Schema } = mongoose;
 
 const UserSchema = new Schema({
   name: { type: String, required: true },
-  password: { type: String, required: true },
-  email: { type: String, required: true },
+  password: { type: String },
+  email: {
+    type: String, required: true, lowercase: true
+  },
+  code: { type: String },
   trips: [{ type: Schema.Types.ObjectId, ref: Trip }],
   is_certified_guide: { type: Boolean },
   favorites: [{ type: Schema.Types.ObjectId, ref: Pack }],

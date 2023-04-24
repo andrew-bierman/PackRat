@@ -124,7 +124,7 @@ export default function Index() {
           />
         </Stack>
 
-        <MapContainer />
+        <MapContainer style="height: 100%" />
 
       </Box>
 
