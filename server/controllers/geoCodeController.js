@@ -22,5 +22,5 @@ export const getGeoCode = async (req, res) => {
         .then((response) => response.json())
         .then((result) => {
             res.send(result);
-        }).catch(() => res.send({ message: "Went wrong" }));
+        }).catch(() => res.send({ message: "Error fetching GeoCode" }));
 };
