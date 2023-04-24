@@ -1,7 +1,7 @@
 import { useRouter, useSegments } from "expo-router";
 import React from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged ,signInWithPopup} from "firebase/auth";
 import { auth } from "./firebase";
 import { signInWithEmailAndPassword, signInWithGoogle, GoogleAuthProvider } from "firebase/auth";
 
