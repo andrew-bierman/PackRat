@@ -49,7 +49,7 @@ export default function Index() {
         />
       ) : null}
       <Box style={styles.mutualStyles}>
-        <Stack m={[0, 0, 12, 16]} style={{ gap: 25 }}>
+        <Stack m={[0, 0, 12, 16]} style={{ gap: 25}}>
           <Box
             style={{
               alignItems: "center",
