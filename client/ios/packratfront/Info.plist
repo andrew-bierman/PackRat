@@ -53,6 +53,12 @@
     <array>
       <string>armv7</string>
     </array>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>Allow Packrat to use your location</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>Allow Packrat to use your location</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>Allow Packrat to use your location</string>
     <key>UIRequiresFullScreen</key>
     <false/>
     <key>UIStatusBarStyle</key>
