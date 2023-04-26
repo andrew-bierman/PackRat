@@ -10,7 +10,7 @@ import {
 
 const router = express.Router();
 
-router.get("/:packId", getItems);
+router.get("/packItems/:packId", getItems);
 router.get("/i/:packId", getItemById);
 router.get("/search", searchItemsByName)
 router.post("/", addItem);
