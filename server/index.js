@@ -4,7 +4,7 @@ import cors from "cors";
 import { MONGODB_URI } from "./config.js";
 
 import firebase from "firebase-admin";
-const serviceAccountKey = require("./serviceAccountKey.json");
+import serviceAccountKey from "./serviceAccountKey.json" assert { type: "json" };
 
 // Initialize Firebase
 firebase.initializeApp({
