@@ -8,12 +8,12 @@ import firebase from "firebase-admin";
 // import serviceAccountKey from "./serviceAccountKey.json" assert { type: "json" };
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
-const serviceAccountKey = require("./serviceAccountKey.json");
+// const serviceAccountKey = require("./serviceAccountKey.json");
 
-// // Initialize Firebase
-firebase.initializeApp({
-  credential: firebase.credential.cert(serviceAccountKey)
-});
+// // // Initialize Firebase
+// firebase.initializeApp({
+//   credential: firebase.credential.cert(serviceAccountKey)
+// });
 
 // express items
 const app = express();
