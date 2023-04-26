@@ -3,6 +3,7 @@ apply plugin: "com.facebook.react"
 
 import com.android.build.OutputFile
 
+
 def projectRoot = rootDir.getAbsoluteFile().getParentFile().getAbsolutePath()
 def expoDebuggableVariants = ['debug']
 // Override `debuggableVariants` for expo-updates debugging
