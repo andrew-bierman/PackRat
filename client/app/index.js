@@ -82,6 +82,8 @@ export default function Index() {
               />
             )}
           />
+
+          <WeatherCard weatherObject={weatherObject} />
           
           <Card
             title="Nearby Trails"
@@ -123,8 +125,6 @@ export default function Index() {
             isMap={true}
           />
         </Stack>
-
-        <MapContainer style="height: 100%" />
 
       </Box>
 

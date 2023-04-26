@@ -10,11 +10,11 @@ import { Select, Center, Box, CheckIcon } from "native-base";
 
 // get mapbox access token from .env file
 import { MAPBOX_ACCESS_TOKEN } from "@env";
-import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
+
 import { theme } from "../../theme";
 import { Link } from "expo-router";
-import { CheckIcon, Select } from "native-base";
-import WebPackconatiner from "./WebMapcontainer";
+
+import WebPackContainer from "./WebMapcontainer.web";
 
 MapView.setAccessToken(MAPBOX_ACCESS_TOKEN);
 // consts
@@ -450,7 +450,7 @@ export function MapContainer() {
   if (Platform.OS === "web") {
     return (
       <View >
-        <WebPackconatiner />
+        <WebPackContainer />
       </View>
     )
   }
@@ -475,10 +475,7 @@ const styles = StyleSheet.create({
     // height: 500,
     width: '100%',
     backgroundColor: "white",
-    marginBottom: 20
-  },
-    height: 300,
-    width: '100%',
+    marginBottom: 20,
     marginBottom: 20,
     paddingHorizontal: 5,
 
@@ -517,3 +514,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+export default MapContainer;
