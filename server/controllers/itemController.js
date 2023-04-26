@@ -65,3 +65,15 @@ export const deleteItem = async (req, res) => {
     res.status(404).json({ msg: "Unable to delete item" });
   }
 };
+
+export const searchItemsByName = async (req, res) => {
+  console.log(req)
+  console.log(req.query.name);
+  try {
+    const items = await Item.find({ name: { $regex: `.*${req.query.name}.*`, $options: 'i' } });
+    res.status(200).json(items);
+  } catch (error) {
+    res.status(404).json({ msg: "Items cannot be found" });
+  }
+}
+
