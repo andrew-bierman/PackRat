@@ -6,7 +6,7 @@ import { Desktop, Tablet, Mobile } from "../media";
 import { useAuth } from "../auth/provider";
 
 import { theme } from "../theme";
-import { Entypo } from "@expo/vector-icons";
+import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { EvilIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
@@ -53,6 +53,12 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
               <Text>Home</Text>
             </View>
           </Link>
+          <Link href="/trips">
+            <View style={isMobile ? styles.mobileLink : styles.link}>
+            <MaterialCommunityIcons name="weather-pouring" size={24} color={theme.colors.iconColor} />
+              <Text>Trips</Text>
+            </View>
+          </Link>
           <Link href="profile">
             <View style={isMobile ? styles.mobileLink : styles.link}>
               <FontAwesome
@@ -72,6 +78,16 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
               />
 
               <Text>Packs</Text>
+            </View>
+          </Link>
+          <Link href="/about">
+            <View style={isMobile ? styles.mobileLink : styles.link}>
+              <MaterialIcons
+                name="info"
+                size={24}
+                color={theme.colors.iconColor}
+              />
+              <Text>About</Text>
             </View>
           </Link>
           <View style={isMobile ? styles.mobileLink : styles.link}>
