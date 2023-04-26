@@ -9,8 +9,6 @@ import WeatherCard from "../components/WeatherCard";
 import { FontAwesome } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Platform, StyleSheet } from "react-native";
-import { getParksRapid } from "../api/getParks";
-import { getTrailsRapid } from "../api/getTrails";
 
 import { useEffect, useState } from "react";
 
@@ -24,30 +22,21 @@ export default function Index() {
   const [parksData, setParksData] = useState();
   const [trails, setTrailsData] = useState();
   const weatherObject = useSelector((state) => state.weather.weatherObject);
+  const trailsObject = useSelector((state) => state.trails.trailsDetails);
+  const parksObject = useSelector((state) => state.parks.parksDetails);
+
+
+   useEffect(() => {
+
+    setTrailsData(trailsObject)
+
+  }, [trailsObject]);
 
   useEffect(() => {
-    const getParks = async () => {
-      const parks = await getParksRapid(weatherObject.state);
-      setParksData(parks);
-    };
-    const getTrails = async () => {
-      const defaultLocationObject = {
-        administrative_area_level_1: weatherObject.name,
-        country: weatherObject.sys.country,
-        locality: weatherObject.name,
-      };
 
-      const trails = await getTrailsRapid(
-        defaultLocationObject,
-        weatherObject.coord.lat,
-        weatherObject.coord.lon
-      );
-      setTrailsData(trails);
-    };
+    setParksData(parksObject)
 
-    getParks();
-    getTrails();
-  }, [weatherObject.name, weatherObject.coord.lat, weatherObject.state]);
+  }, [parksObject]);
 
   return (
     <ScrollView>
@@ -60,7 +49,7 @@ export default function Index() {
         />
       ) : null}
       <Box style={styles.mutualStyles}>
-        <Stack m={[0, 0, 12, 16]} style={{ gap: 25 }}>
+        <Stack m={[0, 0, 12, 16]} style={{ gap: 25}}>
           <Box
             style={{
               alignItems: "center",
@@ -94,13 +83,13 @@ export default function Index() {
             )}
           />
 
-          <WeatherCard />
-
+          <WeatherCard weatherObject={weatherObject} />
+          
           <Card
             title="Nearby Trails"
             value="Trail List"
             isTrail={true}
-            data={trails}
+            data={trails || []}
             Icon={() => (
               <FontAwesome5
                 name="hiking"
@@ -136,8 +125,6 @@ export default function Index() {
             isMap={true}
           />
         </Stack>
-
-        <MapContainer style="height: 100%" />
 
       </Box>
 
