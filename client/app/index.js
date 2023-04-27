@@ -9,7 +9,20 @@ import ProfileContainerMobile from "../components/user/ProfileContainerMobile";
 
 import { Stack as Header } from "expo-router";
 
+import { theme } from "../theme";
+
+import { ScrollView, Box } from "native-base";
+
+import { StyleSheet } from "react-native";
+
+import LandingPage from "../components/landing_page";
+
+import Dashboard from "../components/dashboard";
+
 export default function Index() {
+
+  const user = useSelector((state) => state.auth.user);
+
   return (
     <ScrollView>
       {Platform.OS === "web" ? (
@@ -21,59 +34,25 @@ export default function Index() {
         />
       ) : null}
       <Box style={styles.mutualStyles}>
-        <LandingPage />
-        <Dashboard />
-        <Stack m={[0, 0, 12, 16]} style={{ gap: 25 }}>
-          <Box
-            style={{
-              alignItems: "center",
-              textAlign: "center",
-              paddingVertical: 18,
-              marginTop: Platform.OS !== "web" ? 25 : 1,
-            }}
-          >
-            {Platform.OS === "web" ? (
-              <Text style={{ color: "white", fontSize: theme.font.headerFont }}>
-                PackRat
-              </Text>
-            ) : (
-              <Text style={{ color: "white", fontSize: 20, fontWeight: 600 }}>
-                PackRat
-              </Text>
-            )}
-            <Text style={{ color: "white", fontSize: 18 }}>
-              The Ultimate Travel App
-            </Text>
-          </Box>
-          <Card
-            title="Where are you heading?"
-            isSearch={true}
-            Icon={() => (
-              <FontAwesome
-                name="map"
-                size={20}
-                color={theme.colors.cardIconColor}
-              />
-            )}
-          />
-          
-  return Platform.OS === "web" ? (
-    <>
-      <Header.Screen
-        options={{
-          // https://reactnavigation.org/docs/headers#setting-the-header-title
-          title: "Home",
-          // https://reactnavigation.org/docs/headers#adjusting-header-styles
-
-          // https://reactnavigation.org/docs/headers#replacing-the-title-with-a-custom-component
-        }}
-      />
-
-      <ProfileContainer />
-    </>
-  ) : (
-    <ProfileContainerMobile />
+        { !user ?
+          <LandingPage />
+          :
+          <Dashboard />
+        }
+      </Box>
+    </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  mutualStyles: {
+    backgroundColor: theme.colors.primary,
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    minHeight: "100vh",
+  },
+});
+
 
 

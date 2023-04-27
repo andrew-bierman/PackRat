@@ -7,6 +7,7 @@ import {
     Icon,
     Text,
     Card,
+    Box
 } from 'native-base';
 
 import { MaterialIcons } from '@expo/vector-icons';
@@ -75,6 +76,27 @@ const LandingPage = () => {
 
     return (
         <Container>
+            <Box
+                style={{
+                    alignItems: "center",
+                    textAlign: "center",
+                    paddingVertical: 18,
+                    marginTop: Platform.OS !== "web" ? 25 : 1,
+                }}
+            >
+                {Platform.OS === "web" ? (
+                    <Text style={{ color: "white", fontSize: theme.font.headerFont }}>
+                        PackRat
+                    </Text>
+                ) : (
+                    <Text style={{ color: "white", fontSize: 20, fontWeight: 600 }}>
+                        PackRat
+                    </Text>
+                )}
+                <Text style={{ color: "white", fontSize: 18 }}>
+                    The Ultimate Travel App
+                </Text>
+            </Box>
             <ImageBackground
                 source={require('../../assets/background-image.png')}
                 style={styles.backgroundImage}
@@ -108,6 +130,12 @@ const LandingPage = () => {
 };
 
 const styles = StyleSheet.create({
+    mutualStyles: {
+        backgroundColor: theme.colors.background,
+        flex: 1,
+        flexDirection: "column",
+        height: "100%",
+    },
     backgroundImage: {
         flex: 1,
         resizeMode: 'cover',

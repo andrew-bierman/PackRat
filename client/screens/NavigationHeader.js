@@ -33,7 +33,7 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
 
   const user = useSelector((state) => state.auth.user);
 
-  console.log('user',user)
+  console.log('user', user)
 
   return user ? (
     <View style={desktopContainer}>
@@ -71,7 +71,7 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
           </Link>
           <Link href="/trips">
             <View style={isMobile ? styles.mobileLink : styles.link}>
-            <MaterialCommunityIcons name="weather-pouring" size={24} color={theme.colors.iconColor} />
+              <MaterialCommunityIcons name="weather-pouring" size={24} color={theme.colors.iconColor} />
               <Text>Trips</Text>
             </View>
           </Link>
@@ -121,33 +121,26 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
 
     </View>
   ) : (
-    // display simplified navigation for signed-out users
     <View style={desktopNav}>
+      <Image
+        style={isMobile ? styles.smallLogo : styles.logo}
+        source={packratlogo}
+      />
+      <Text
+        style={{
+          color: theme.colors.text,
+          fontSize: isMobile ? 28 : 48,
+          fontWeight: 900,
+        }}
+      >
+        PackRat
+      </Text>
       <Link href="/">
         <View style={isMobile ? styles.mobileLink : styles.link}>
-          <Entypo
-            name="home"
-            size={24}
-            color={theme.colors.iconColor}
-          />
+          <Entypo name="home" size={24} color={theme.colors.iconColor} />
           <Text>Home</Text>
         </View>
       </Link>
-      <View style={{ flexDirection: "row", alignItems: "center", gap: 1 }}>
-        <Image
-          style={isMobile ? styles.smallLogo : styles.logo}
-          source={packratlogo}
-        />
-        <Text
-          style={{
-            color: theme.colors.text,
-            fontSize: isMobile ? 28 : 48,
-            fontWeight: 900,
-          }}
-        >
-          PackRat
-        </Text>
-      </View>
       <Link href="/sign-in">
         <View style={isMobile ? styles.mobileLink : styles.link}>
           <MaterialIcons
@@ -159,7 +152,7 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
         </View>
       </Link>
     </View>
-  );
+  )
 };
 
 export default function Navigation() {
@@ -221,6 +214,8 @@ const styles = StyleSheet.create({
   desktopNav: {
     flexDirection: "row",
     gap: 15,
+    backgroundColor: theme.colors.background,
+    alignItems: "center",
   },
 
   logo: {

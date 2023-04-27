@@ -14,6 +14,9 @@ export function AuthStateListener() {
         if (user) {
           // User is signed in, update the Redux store
         //   dispatch(signInWithGoogle({ idToken: await user.getIdToken() }));
+            if(store !== null){
+                // navigation.navigate("Home");
+            }
         } else {
           // User is signed out, update the Redux store
           dispatch(signOut());
