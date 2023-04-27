@@ -15,13 +15,29 @@ import { MaterialIcons } from "@expo/vector-icons";
 import packratlogo from "../assets/packrat.png";
 import { useState } from "react";
 
+import { useDispatch, useSelector } from "react-redux";
+
+import { AuthStateListener } from "../../client/auth/AuthStateListener";
+import { signOut } from "../store/authStore";
+
 
 const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { signOut, user } = useAuth();
+  // const { signOut, user } = useAuth();
+
+  const dispatch = useDispatch();
+
+  const handleSignOut = () => {
+    dispatch(signOut());
+  };
+
+  const user = useSelector((state) => state.auth.user);
+
+  console.log('user',user)
 
   return user ? (
     <View style={desktopContainer}>
+      <AuthStateListener />
       <View style={{ flexDirection: "row", alignItems: "center", gap: 1 }}>
         <Image
           style={isMobile ? styles.smallLogo : styles.logo}
@@ -96,7 +112,7 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
               size={24}
               color={theme.colors.iconColor}
             />
-            <Text style={{ color: "white" }} onPress={() => signOut()}>
+            <Text style={{ color: "white" }} onPress={() => handleSignOut()}>
               Logout
             </Text>
           </View>
@@ -104,7 +120,46 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
       )}
 
     </View>
-  ) : null;
+  ) : (
+    // display simplified navigation for signed-out users
+    <View style={desktopNav}>
+      <Link href="/">
+        <View style={isMobile ? styles.mobileLink : styles.link}>
+          <Entypo
+            name="home"
+            size={24}
+            color={theme.colors.iconColor}
+          />
+          <Text>Home</Text>
+        </View>
+      </Link>
+      <View style={{ flexDirection: "row", alignItems: "center", gap: 1 }}>
+        <Image
+          style={isMobile ? styles.smallLogo : styles.logo}
+          source={packratlogo}
+        />
+        <Text
+          style={{
+            color: theme.colors.text,
+            fontSize: isMobile ? 28 : 48,
+            fontWeight: 900,
+          }}
+        >
+          PackRat
+        </Text>
+      </View>
+      <Link href="/sign-in">
+        <View style={isMobile ? styles.mobileLink : styles.link}>
+          <MaterialIcons
+            name="login"
+            size={24}
+            color={theme.colors.iconColor}
+          />
+          <Text>Sign In</Text>
+        </View>
+      </Link>
+    </View>
+  );
 };
 
 export default function Navigation() {

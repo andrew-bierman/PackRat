@@ -6,7 +6,8 @@ import useAddToFavorite from "../../hooks/useAddToFavorites";
 
 import { Box, Heading, Text, HStack, Stack } from "native-base";
 
-import { useAuth } from "../../auth/provider";
+// import { useAuth } from "../../auth/provider";
+import { useSelector } from "react-redux";
 
 export default function CardMobile({
   _id,
@@ -18,7 +19,8 @@ export default function CardMobile({
   owner_id,
   createdAt,
 }) {
-  const { user } = useAuth();
+  // const { user } = useAuth();
+  const user = useSelector((state) => state.auth.user);
   const { addToFavorite } = useAddToFavorite();
   return (
     <Box alignItems="center" padding="4">

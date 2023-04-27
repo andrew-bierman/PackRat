@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { auth } from "../auth/firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut as firebaseSignOut, signInWithPopup, GoogleAuthProvider, signInWithCredential } from "firebase/auth";
+
 
 const initialState = {
   user: null,
@@ -38,12 +39,28 @@ export const signOut = createAsyncThunk(
   "auth/signOut",
   async (_, { rejectWithValue }) => {
     try {
-      await signOut();
+      await firebaseSignOut(auth);
     } catch (error) {
       return rejectWithValue(error.message);
     }
   }
 );
+
+
+export const signInWithGoogle = createAsyncThunk(
+  "auth/signInWithGoogle",
+  async ({ idToken }, { rejectWithValue }) => {
+    try {
+      const credential = GoogleAuthProvider.credential(idToken);
+      const response = await signInWithCredential(auth, credential);
+      console.log("signInWithGoogle user:", response.user); // Add this line
+      return response.user;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 
 export const authSlice = createSlice({
   name: "auth",
@@ -87,7 +104,20 @@ export const authSlice = createSlice({
       .addCase(signOut.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-      });
+      })
+      .addCase(signInWithGoogle.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(signInWithGoogle.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.loading = false;
+      })
+      .addCase(signInWithGoogle.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      
   },
 });
 

@@ -2,12 +2,20 @@ import { View, StyleSheet, Text, Image } from "react-native";
 import { Link } from "expo-router";
 import { AntDesign, Entypo, FontAwesome, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { theme } from "../../theme";
-import { useAuth } from "../../auth/provider";
+// import { useAuth } from "../../auth/provider";
+
+import { useDispatch } from "react-redux";
 
 
 export default function Drawer() {
 
-    const { signOut } = useAuth();
+    // const { signOut } = useAuth();
+    const dispatch = useDispatch();
+
+    const handleSignOut = () => {
+        dispatch(signOut());
+    };
+
     return (
         <>
             <View
@@ -69,7 +77,7 @@ export default function Drawer() {
                 </Link>
                 <View style={styles.link}>
                     <MaterialIcons name="logout" size={24} color={theme.colors.drawerIconColor} />
-                    <Text style={{ color: "#3B3B3B" }} onPress={() => signOut()}>
+                    <Text style={{ color: "#3B3B3B" }} onPress={() => handleSignOut()}>
                         Logout
                     </Text>
                 </View>

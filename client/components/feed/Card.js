@@ -3,6 +3,7 @@ import { formatDistanceToNow } from "date-fns";
 import { MaterialIcons } from "@expo/vector-icons";
 import { theme } from "../../theme";
 import useAddToFavorite from "../../hooks/useAddToFavorites";
+// import { useAuth } from "../../auth/provider";
 
 import {
   Box,
@@ -14,7 +15,7 @@ import {
   Stack,
 } from "native-base";
 
-import { useAuth } from "../../auth/provider";
+// import { useAuth } from "../../auth/provider";
 
 export default function Card({
   _id,
@@ -26,7 +27,10 @@ export default function Card({
   owner_id,
   createdAt,
 }) {
-  const { user } = useAuth();
+
+  // const { user } = useAuth();
+  const user = useSelector((state) => state.auth.user);
+
   const { addToFavorite } = useAddToFavorite();
   return (
     <Box alignItems="center" padding="4">

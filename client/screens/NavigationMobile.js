@@ -12,11 +12,13 @@ import { MaterialIcons } from "@expo/vector-icons";
 
 import packratlogo from "../assets/packrat.png";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 
 export default function NavigationMobile() {
 
-  const { user } = useAuth();
+  // const { user } = useAuth();
+  const user = useSelector((state) => state.auth.user);
 
   return user ? (
     <View style={styles.mobileContainer}>

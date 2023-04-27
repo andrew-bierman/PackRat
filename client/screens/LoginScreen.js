@@ -26,7 +26,7 @@ import { useRouter } from "expo-router";
 import { theme } from "../theme";
 // import { signInWithGoogle } from "../auth/firebase";
 import { signInWithGoogle } from "../auth/firebase";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { signIn } from "../store/authStore";
 
 WebBrowser.maybeCompleteAuthSession();
@@ -34,47 +34,83 @@ WebBrowser.maybeCompleteAuthSession();
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [code, setCode] = useState("");
-
-  const [status, setStatus] = useState("login");
-  const [error, setError] = useState("");
-
-  const dispatch = useDispatch();
-
-  const { signInWithEmailPasswordProvider, signInWithGoogleProvider } =
-    useAuth();
-  const { loginUser } = useLogin();
 
   const router = useRouter();
 
-  const [token, setToken] = useState("");
+  const { loginUserWithEmailAndPassword, loginUserWithGoogle } = useLogin();
 
-  const [accessToken, setAccessToken] = useState(null);
-  const [user, setUser] = useState(null);
+  // Add Google auth-related variables
   const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
     clientId: WEB_CLIENT_ID,
   });
 
-  const handleLogin = () => {
-    dispatch(signIn({ email, password }));
-  };
+  const auth = useSelector((state) => state.auth);
+  // Add useEffect hook to listen for auth state changes
+  useEffect(() => {
+    if (auth.isLoggedIn) {
+      router.push("/");
+    }
+  }, [auth, router]);
 
   useEffect(() => {
     if (response?.type === "success") {
-      setAccessToken(response.authentication.accessToken);
-      accessToken && fetchUserInfo();
+      const { id_token } = response.params;
+      loginUserWithGoogle(id_token);
     }
-  }, [response, accessToken]);
+  }, [response]);
 
-  const fetchUserInfo = async () => {
-    let response = await fetch("https://www.googleapis.com/userinfo/v2/me", {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-    const userInfo = await response.json();
-    setUser(userInfo);
-  };
+  // const [email, setEmail] = useState("");
+  // const [password, setPassword] = useState("");
+  // const [code, setCode] = useState("");
+
+  // const [status, setStatus] = useState("login");
+  // const [error, setError] = useState("");
+
+  // const dispatch = useDispatch();
+
+  // // const { signInWithEmailPasswordProvider, signInWithGoogleProvider } =
+  // //   useAuth();
+
+  // const { loginUserWithEmailAndPassword, loginUserWithGoogle } = useLogin();
+
+
+  // const router = useRouter();
+
+  // const [token, setToken] = useState("");
+  // const [user, setUser] = useState(null);
+  // const [accessToken, setAccessToken] = useState(null);
+
+  // const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
+  //   clientId: WEB_CLIENT_ID,
+  // });
+
+  // const handleLogin = () => {
+  //   dispatch(signIn({ email, password }));
+  // };
+
+  // useEffect(() => {
+  //   if (response?.type === "success") {
+  //     const { id_token } = response.params;
+  //     loginUserWithGoogle(id_token);
+  //   }
+  // }, [response]);
+
+  // useEffect(() => {
+  //   if (response?.type === "success") {
+  //     setAccessToken(response.authentication.accessToken);
+  //     accessToken && fetchUserInfo();
+  //   }
+  // }, [response, accessToken]);
+
+  // const fetchUserInfo = async () => {
+  //   let response = await fetch("https://www.googleapis.com/userinfo/v2/me", {
+  //     headers: {
+  //       Authorization: `Bearer ${accessToken}`,
+  //     },
+  //   });
+  //   const userInfo = await response.json();
+  //   setUser(userInfo);
+  // };
 
   // useEffect(() => {
   //   if (response?.type === 'success') {
@@ -131,112 +167,102 @@ export default function Login() {
 
   return (
     <Center w="100%">
-      {status == "login" && (
-        <Box safeArea p="2" py="8" w="90%" maxW="290">
-          <Heading
-            size="lg"
-            fontWeight="600"
-            color="coolGray.800"
-            _dark={{
-              color: "warmGray.50",
-            }}
-          >
-            <Text>Welcome</Text>
-          </Heading>
-          <Heading
-            mt="1"
-            _dark={{
-              color: "warmGray.200",
-            }}
-            color="coolGray.600"
-            fontWeight="medium"
-            size="xs"
-          >
-            Sign in to continue!
-          </Heading>
+      <Box safeArea p="2" py="8" w="90%" maxW="290">
+        <Heading
+          size="lg"
+          fontWeight="600"
+          color="coolGray.800"
+          _dark={{
+            color: "warmGray.50",
+          }}
+        >
+          <Text>Welcome</Text>
+        </Heading>
+        <Heading
+          mt="1"
+          _dark={{
+            color: "warmGray.200",
+          }}
+          color="coolGray.600"
+          fontWeight="medium"
+          size="xs"
+        >
+          Sign in to continue!
+        </Heading>
 
-          <VStack space={3} mt="5">
-            <FormControl>
-              <FormControl.Label>Email ID</FormControl.Label>
-              <Input value={email} onChangeText={(text) => setEmail(text)} />
-            </FormControl>
-            <FormControl>
-              <FormControl.Label>Password</FormControl.Label>
-              <Input
-                value={password}
-                onChangeText={(text) => setPassword(text)}
-                type="password"
-              />
-            </FormControl>
-            <Button
-              disabled={!email || !password}
-              // onPress={() => {
-
-              //   loginUser.mutate({ email, password, from: "UserSignIn" });
-              // signInWithEmailPasswordProvider({ email, password, from: "UserSignIn" });
-              //   console.log("sign in");
-              //   router.push("/home");
-              // }}
-              onPress={handleLogin}
-              mt="2"
-              colorScheme="indigo"
+        <VStack space={3} mt="5">
+          <FormControl>
+            <FormControl.Label>Email ID</FormControl.Label>
+            <Input value={email} onChangeText={(text) => setEmail(text)} />
+          </FormControl>
+          <FormControl>
+            <FormControl.Label>Password</FormControl.Label>
+            <Input
+              value={password}
+              onChangeText={(text) => setPassword(text)}
+              type="password"
+            />
+          </FormControl>
+          <Button
+            disabled={!email || !password}
+            onPress={() => loginUserWithEmailAndPassword(email, password)}
+            mt="2"
+            colorScheme="indigo"
+          >
+            Sign in
+          </Button>
+          <HStack mt="6" justifyContent="center">
+            <Text
+              fontSize="sm"
+              color="coolGray.600"
+              _dark={{
+                color: "warmGray.200",
+              }}
             >
-              {loginUser.isLoading ? "Loading...." : "Sign in"}
-            </Button>
-            <HStack mt="6" justifyContent="center">
+              I'm a new user.
+            </Text>
+            <Link href="/register">
               <Text
-                fontSize="sm"
-                color="coolGray.600"
-                _dark={{
-                  color: "warmGray.200",
+                style={{
+                  color: "#818cf8",
+                  fontWeight: 400,
+                  fontSize: 12,
                 }}
               >
-                I'm a new user.
+                Sign Up
               </Text>
-              <Link href="/register">
-                <Text
-                  style={{
-                    color: "#818cf8",
-                    fontWeight: 400,
-                    fontSize: 12,
-                  }}
-                >
-                  Sign Up
-                </Text>
-              </Link>
-            </HStack>
-            {/* Google Login starts*/}
-            <HStack mt="6" justifyContent="center">
-              <Heading
-                mt="1"
-                _dark={{
-                  color: "warmGray.200",
-                }}
-                color="coolGray.600"
-                fontWeight="medium"
-                size="xs"
-              >
-                Or
-              </Heading>
-            </HStack>
-            <HStack mt="1" justifyContent="center" alignItems="center">
-              <Button
-                w="100%"
-                disabled={!request}
-                onPress={signInWithGoogleProvider}
-                colorScheme={"red"}
-                startIcon={
-                  <FontAwesome name="google" size={18} color="white" />
-                }
-              >
-                Sign in with Google
-              </Button>
-            </HStack>
-            {/* Google Login */}
-          </VStack>
-        </Box>
-      )}
-      {loginUser.isSuccess && router.push("/")}
+            </Link>
+          </HStack>
+          {/* Google Login starts*/}
+          <HStack mt="6" justifyContent="center">
+            <Heading
+              mt="1"
+              _dark={{
+                color: "warmGray.200",
+              }}
+              color="coolGray.600"
+              fontWeight="medium"
+              size="xs"
+            >
+              Or
+            </Heading>
+          </HStack>
+          <HStack mt="1" justifyContent="center" alignItems="center">
+          <Button
+              w="100%"
+              disabled={!request}
+              onPress={() => promptAsync()}
+              colorScheme={"red"}
+              startIcon={
+                <FontAwesome name="google" size={18} color="white" />
+              }
+            >
+              Sign in with Google
+            </Button>
+          </HStack>
+          {/* Google Login */}
+        </VStack>
+      </Box>
     </Center>
   );
 }
