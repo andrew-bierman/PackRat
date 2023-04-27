@@ -5,13 +5,15 @@ import { Platform } from "react-native";
 import useAddPack from "../../hooks/useAddPack";
 import { theme } from "../../theme";
 import { useState } from "react";
-import { useAuth } from "../../auth/provider";
+// import { useAuth } from "../../auth/provider";
+import { useSelector } from "react-redux";
 
 export const AddPack = () => {
   const [name, setName] = useState("");
 
   const { addPack } = useAddPack();
-  const { user } = useAuth();
+  // const { user } = useAuth();
+  const user = useSelector((state) => state.auth.user);
 
   return (
     <Box style={styles.mobileStyle}>

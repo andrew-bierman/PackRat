@@ -13,8 +13,11 @@ import { theme } from "../../theme";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import useGetPacks from "../../hooks/useGetPacks";
 
+import { useSelector } from "react-redux";
+
 export default function ProfileContainerMobile() {
-  const { user } = useAuth();
+  // const { user } = useAuth();
+  const user = useSelector((state) => state.auth.user);
 
   const { data, isLoading, isError, error } = useGetPacks(user?._id);
 

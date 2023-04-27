@@ -14,7 +14,6 @@ import { ProviderAuth } from "../auth/provider";
 
 export default function HomeLayout() {
   return (
-    <ProviderAuth>
       <NativeBaseProvider>
         <Provider store={store}>
           <QueryClientProvider client={queryClient}>
@@ -23,6 +22,5 @@ export default function HomeLayout() {
           </QueryClientProvider>
         </Provider>
       </NativeBaseProvider>
-    </ProviderAuth>
   );
 }
