@@ -6,12 +6,14 @@ import DropdownComponent from "../Dropdown";
 import useGetPacks from "../../hooks/useGetPacks";
 import { AddItem } from "../AddItem";
 import { TableContainer } from "../Table";
-import { useAuth } from "../../auth/provider";
+// import { useAuth } from "../../auth/provider";
+import { useSelector } from "react-redux";
 
 export default function PackContainer() {
   const [currentPack, setCurrentPack] = useState();
   const [packName, setPackName] = useState("");
-  const { user } = useAuth();
+  // const { user } = useAuth();
+  const user = useSelector((state) => state.auth.user);
 
   const { data, isLoading, isError, error } = useGetPacks(user?._id);
 

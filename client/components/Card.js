@@ -8,6 +8,7 @@ import { Platform } from "react-native";
 import { theme } from "../theme/index";
 
 import { useSelector } from "react-redux";
+import MapContainer from "./map/MapContainer";
 
 export default function Card({ title, Icon, isMap, data, isSearch, isTrail }) {
   const currentTrail = useSelector((state) => state.dropdown.currentTrail);
@@ -22,10 +23,10 @@ export default function Card({ title, Icon, isMap, data, isSearch, isTrail }) {
         isSearch
           ? styles.searchContainer
           : isMap
-          ? styles.mapCard
-          : styles.containerMobile
-          ? styles.containerMobile
-          : styles.mutualStyles
+            ? styles.mapCard
+            : styles.containerMobile
+              ? styles.containerMobile
+              : styles.mutualStyles
       }
     >
       <Box
@@ -47,18 +48,25 @@ export default function Card({ title, Icon, isMap, data, isSearch, isTrail }) {
           {title}
         </Text>
       </Box>
-      {isMap ? null : isSearch ? (
-        <SearchInput />
-      ) : (
-        <DropdownComponent
-          {...{
-            value: isTrail ? currentTrail : currentPark,
-            data,
-            isTrail,
-            width: "300",
-          }}
-        />
-      )}
+      {isMap
+        ?
+        <MapContainer/>
+        :
+        isSearch
+          ?
+          (
+            <SearchInput />
+            // <Text>Search</Text>
+          ) : (
+            <DropdownComponent
+              {...{
+                value: isTrail ? currentTrail : currentPark,
+                data,
+                isTrail,
+                width: "300",
+              }}
+            />
+          )}
     </Stack>
   );
 }
@@ -101,7 +109,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.card,
     flex: 1,
 
-    flexDirection: "row",
+    flexDirection: "column",
     gap: 45,
     justifyContent: "center",
     alignItems: "center",

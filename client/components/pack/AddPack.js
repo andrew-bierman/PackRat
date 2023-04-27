@@ -5,13 +5,15 @@ import { Platform } from "react-native";
 import useAddPack from "../../hooks/useAddPack";
 import { theme } from "../../theme";
 import { useState } from "react";
-import { useAuth } from "../../auth/provider";
+// import { useAuth } from "../../auth/provider";
+import { useSelector } from "react-redux";
 
 export const AddPack = () => {
   const [name, setName] = useState("");
 
   const { addPack } = useAddPack();
-  const { user } = useAuth();
+  // const { user } = useAuth();
+  const user = useSelector((state) => state.auth.user);
 
   return (
     <Box style={styles.mobileStyle}>
@@ -25,6 +27,7 @@ export const AddPack = () => {
       />
 
       <Button
+        width={Platform.OS === "web" ? null : "50%"}
         onPress={() => {
           addPack.mutate({ name, owner_id: user?._id });
           setName("");
@@ -56,7 +59,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 25,
-    gap: 10,
+    gap: 25,
   },
 
   input: {

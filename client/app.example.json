@@ -1,45 +1,44 @@
 {
-    "expo": {
-      "name": "packrat-front",
-      "slug": "packrat-front",
-      "version": "1.0.0",
-      "orientation": "portrait",
-      "icon": "./assets/icon.png",
-      "userInterfaceStyle": "light",
-      "scheme": "./app/index.js",
-      "splash": {
-        "image": "./assets/splash.png",
-        "resizeMode": "contain",
-        "backgroundColor": "#ffffff",
-        "scheme": "myapp"
+  "expo": {
+    "name": "packrat-front",
+    "slug": "packrat-front",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "scheme": "./app/index.js",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff",
+      "scheme": "myapp"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.andrewbierman.packratfront"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
       },
-      "assetBundlePatterns": [
-        "**/*"
-      ],
-      "ios": {
-        "supportsTablet": true,
-        "bundleIdentifier": "com.andrewbierman.packratfront"
-      },
-      "android": {
-        "adaptiveIcon": {
-          "foregroundImage": "./assets/adaptive-icon.png",
-          "backgroundColor": "#ffffff"
-        },
-        "package": "com.andrewbierman.packratfront"
-      },
-      "web": {
-        "favicon": "./assets/favicon.png",
-        "bundler": "metro"
-      },
-      "plugins": [
-        [
-          "@rnmapbox/maps",
-          {
-            "RNMapboxMapsImpl": "mapbox",
-            "RNMapboxMapsDownloadToken": "sk..."
-          }
-        ]
+      "package": "com.andrewbierman.packratfront"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
+    },
+    "plugins": [
+      [
+        "@rnmapbox/maps",
+        {
+          "RNMapboxMapsImpl": "mapbox",
+          "RNMapboxMapsDownloadToken": "sk..."
+        }
       ]
-    }
+    ]
   }
-  
+}
