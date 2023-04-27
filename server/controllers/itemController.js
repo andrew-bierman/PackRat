@@ -1,8 +1,10 @@
 import Item from "../models/itemModel.js";
+import { itemValidation } from "../utils/item.js";
+import { oneEntity } from "../utils/oneEntity.js"
 import Pack from "../models/packModel.js";
 
 export const getItems = async (req, res) => {
-  const { packId } = req.params;
+  const { packId } = await oneEntity(req.params);
 
   try {
     const items = await Item.find({ packId });
@@ -14,7 +16,7 @@ export const getItems = async (req, res) => {
 };
 
 export const getItemById = async (req, res) => {
-  const { _id } = req.body;
+  const { _id } = await oneEntity(req.body._id);
 
   try {
     const item = await Item.findById({ _id });
@@ -27,8 +29,7 @@ export const getItemById = async (req, res) => {
 
 export const addItem = async (req, res) => {
   try {
-    const newItem = await Item.create(req.body);
-
+    const newItem = await itemValidation(req.body);
     await Pack.updateOne(
       { _id: req.body.packId },
       { $push: { items: newItem._id } }
@@ -40,7 +41,7 @@ export const addItem = async (req, res) => {
 };
 
 export const editItem = async (req, res) => {
-  const { _id } = req.body;
+  const { _id } = await oneEntity(req.body._id);
 
   try {
     const newItem = await Item.findOneAndUpdate({ _id }, req.body, {
@@ -54,7 +55,8 @@ export const editItem = async (req, res) => {
 };
 
 export const deleteItem = async (req, res) => {
-  const { itemId } = req.body;
+  const { itemId } = await oneEntity(req.body.itemId);
+
   try {
     await Item.findOneAndDelete({ _id: itemId });
 
@@ -63,3 +65,14 @@ export const deleteItem = async (req, res) => {
     res.status(404).json({ msg: "Unable to delete item" });
   }
 };
+
+export const searchItemsByName = async (req, res) => {
+  console.log(req.query.name);
+  try {
+    const items = await Item.find({ name: { $regex: `.*${req.query.name}.*`, $options: 'i' } });
+    res.status(200).json(items);
+  } catch (error) {
+    res.status(404).json({ msg: "Items cannot be found", 'req.query': req.query });
+  }
+}
+

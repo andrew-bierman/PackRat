@@ -1,57 +1,15 @@
-import Footer from "../components/footer/Footer";
-import { Stack, Box, Text, ScrollView } from "native-base";
-import { Stack as Header } from "expo-router";
-
-import { theme } from "../theme";
-import Card from "../components/Card";
-import WeatherCard from "../components/WeatherCard";
-
-import { FontAwesome } from "@expo/vector-icons";
-import { FontAwesome5 } from "@expo/vector-icons";
-import { Platform, StyleSheet } from "react-native";
-import { getParksRapid } from "../api/getParks";
-import { getTrailsRapid } from "../api/getTrails";
-
-import { useEffect, useState } from "react";
 
 import { useSelector } from "react-redux";
 
-import { GearList } from "../components/GearList";
+import { Platform } from "react-native";
 
-import { MapContainer } from "../components/map/MapContainer";
-import Dashboard from "../components/dashboard";
-import LandingPage from "../components/landing_page";
+import ProfileContainer from "../components/user/ProfileContainer";
+
+import ProfileContainerMobile from "../components/user/ProfileContainerMobile";
+
+import { Stack as Header } from "expo-router";
 
 export default function Index() {
-  const [parksData, setParksData] = useState();
-  const [trails, setTrailsData] = useState();
-  const weatherObject = useSelector((state) => state.weather.weatherObject);
-
-
-  useEffect(() => {
-    const getParks = async () => {
-      const parks = await getParksRapid(weatherObject.state);
-      setParksData(parks);
-    };
-    const getTrails = async () => {
-      const defaultLocationObject = {
-        administrative_area_level_1: weatherObject.name,
-        country: weatherObject.sys.country,
-        locality: weatherObject.name,
-      };
-
-      const trails = await getTrailsRapid(
-        defaultLocationObject,
-        weatherObject.coord.lat,
-        weatherObject.coord.lon
-      );
-      setTrailsData(trails);
-    };
-
-    getParks();
-    getTrails();
-  }, [weatherObject.name, weatherObject.coord.lat, weatherObject.state]);
-
   return (
     <ScrollView>
       {Platform.OS === "web" ? (
@@ -98,64 +56,24 @@ export default function Index() {
               />
             )}
           />
+          
+  return Platform.OS === "web" ? (
+    <>
+      <Header.Screen
+        options={{
+          // https://reactnavigation.org/docs/headers#setting-the-header-title
+          title: "Home",
+          // https://reactnavigation.org/docs/headers#adjusting-header-styles
 
-          <WeatherCard />
+          // https://reactnavigation.org/docs/headers#replacing-the-title-with-a-custom-component
+        }}
+      />
 
-          <Card
-            title="Nearby Trails"
-            value="Trail List"
-            isTrail={true}
-            data={trails}
-            Icon={() => (
-              <FontAwesome5
-                name="hiking"
-                size={20}
-                color={theme.colors.cardIconColor}
-              />
-            )}
-          />
-
-          <Card
-            title="Nearby Parks"
-            value="Parks List"
-            data={parksData}
-            Icon={() => (
-              <FontAwesome5
-                name="mountain"
-                size={20}
-                color={theme.colors.cardIconColor}
-              />
-            )}
-          />
-          <GearList />
-
-          <Card
-            Icon={() => (
-              <FontAwesome5
-                name="route"
-                size={24}
-                color={theme.colors.cardIconColor}
-              />
-            )}
-            title="Map"
-            isMap={true}
-          />
-        </Stack>
-
-        <MapContainer />
-
-      </Box>
-
-      <Footer />
-    </ScrollView>
+      <ProfileContainer />
+    </>
+  ) : (
+    <ProfileContainerMobile />
   );
 }
 
-const styles = StyleSheet.create({
-  mutualStyles: {
-    backgroundColor: theme.colors.background,
-    flex: 1,
-    flexDirection: "column",
-    height: "100%",
-  },
-});
+

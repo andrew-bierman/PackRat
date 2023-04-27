@@ -5,11 +5,17 @@ import { useAuth } from "../../auth/provider";
 import { theme } from "../../theme";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import useGetPacks from "../../hooks/useGetPacks";
+import { useSelector } from "react-redux";
 
 export default function ProfileContainer() {
-  const { user } = useAuth();
+  // const { user } = useAuth();
+  const user = useSelector((state) => state.auth.user);
 
-  const { data, isLoading, isError, error } = useGetPacks(user?._id);
+  const { data } = useGetPacks(user?._id);
+  console.log(user)
+
+  const isLoading = useSelector((state) => state?.auth?.loading);
+  const error = useSelector((state) => state?.auth?.error);
 
   if (isLoading) return <Text>Loading...</Text>;
 
@@ -50,7 +56,7 @@ export default function ProfileContainer() {
         >
           <Text style={{ fontSize: 18, fontWeight: 600 }}>Packs</Text>
         </Box>
-        {isError ? <Text>{error}</Text> : null}
+        {error ? <Text>{error}</Text> : null}
       </Box>
       {isLoading ? <Text>Loading....</Text> : <PacksContainer data={data} />}
     </Box>
