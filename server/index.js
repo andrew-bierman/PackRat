@@ -37,6 +37,10 @@ import osmRoutes from "./routes/osmRoutes.js";
 
 const logger = (req, res, next) => {
   console.log(`${req.method} ${req.path}`);
+  res.on("finish", () => {
+    console.log(`${req.method} ${req.path} ${res.statusCode}`);
+    console.log(res.body);
+  });
   next();
 };
 

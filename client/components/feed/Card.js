@@ -2,8 +2,10 @@ import { AntDesign } from "@expo/vector-icons";
 import { formatDistanceToNow } from "date-fns";
 import { MaterialIcons } from "@expo/vector-icons";
 import { theme } from "../../theme";
-import useAddToFavorite from "../../hooks/useAddToFavorites";
+// import useAddToFavorite from "../../hooks/useAddToFavorites";
 // import { useAuth } from "../../auth/provider";
+import { useSelector, useDispatch } from "react-redux";
+import { addFavorite } from "../../store/favoritesStore";
 
 import {
   Box,
@@ -30,8 +32,25 @@ export default function Card({
 
   // const { user } = useAuth();
   const user = useSelector((state) => state.auth.user);
+  const favorites = useSelector((state) => state.favorites.favorites);
+  const dispatch = useDispatch();
 
-  const { addToFavorite } = useAddToFavorite();
+  const isFavorite = favorites.some((favorite) => favorite.pack_id === _id);
+
+  const handleAddToFavorite = () => {
+    dispatch(addFavorite({ pack_id: _id, user_id: user._id }));
+  };
+
+  const handleRemoveFromFavorite = () => {
+    const favorite = favorites.find(
+      (favorite) => favorite.pack_id === _id && favorite.user_id === user._id
+    );
+    if (favorite) {
+      dispatch(removeFavorite(favorite.id));
+    }
+  };
+  // const { addToFavorite } = useAddToFavorite();
+
   return (
     <Box alignItems="center" padding="4">
       <Box
@@ -122,21 +141,16 @@ export default function Card({
                     gap: 10,
                   }}
                 >
-                  {user?._id === owner_id ? null : addToFavorite.isLoading ? (
-                    <Text>Loading...</Text>
-                  ) : (
-                    <AntDesign
-                      onPress={() =>
-                        addToFavorite.mutate({
-                          packId: _id,
-                          userId: user?._id,
-                        })
-                      }
-                      name="heart"
-                      size={16}
-                      color={user?.favorites.includes(_id) ? "red" : "grey"}
-                    />
+                  {user?._id === owner_id ? null : (
+                    <button onClick={handleAddToFavorite}>
+                      <AntDesign
+                        name="heart"
+                        size={16}
+                        color={isFavorite ? "red" : "grey"}
+                      />
+                    </button>
                   )}
+
                   <Text
                     color="coolGray.600"
                     _dark={{
