@@ -18,7 +18,7 @@ export const AddPack = () => {
       <Input
         size="lg"
         variant="outline"
-        placeholder="Name"
+        placeholder="Pack Name"
         value={name}
         onChangeText={(text) => setName(text)}
         width={Platform.OS === "web" ? "25%" : "100%"}
