@@ -17,7 +17,7 @@ export const signUp = createAsyncThunk(
       const response = await createUserWithEmailAndPassword(email, password);
 
       return response.user;
-      
+
     } catch (error) {
       console.log(error);
       return rejectWithValue(error.message);
@@ -62,13 +62,18 @@ export const signInWithGoogle = createAsyncThunk(
     try {
       const credential = GoogleAuthProvider.credential(idToken);
       const response = await signInWithCredential(auth, credential);
-      // console.log("signInWithGoogle user:", response.user); // Add this line
+      console.log("signInWithGoogle user:", response.user); // Add this line
+
 
       // Link the user's accounts
       const idToken = await auth.currentUser.getIdToken();
-      await linkFirebaseAuth(idToken);
+      await linkFirebaseAuth(idToken)
+      .then((res) => {
+        console.log("linkFirebaseAuth res:", res);
+      })
 
       return response.user;
+      
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -79,13 +84,13 @@ export const linkFirebaseAuth = async (firebaseAuthToken) => {
   const token = await auth.currentUser.getIdToken();
   const headers = { Authorization: `Bearer ${token}` };
   const data = { firebaseAuthToken };
-  const response = await axios.post('/api/link-firebase-auth', data, { headers });
+  const response = await axios.post('/user/link-firebase-auth', data, { headers });
   return response.data;
 };
 
 export const createMongoDbUser = async ({ email, firebaseUid }) => {
     try {
-      const response = await axios.post("/api/create-mongodb-user", {
+      const response = await axios.post("/user/create-mongodb-user", {
         email,
         firebaseUid,
       });

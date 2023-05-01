@@ -1,19 +1,19 @@
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
-import { MONGODB_URI } from "./config.js";
+import { MONGODB_URI, SERVICE_ACCOUNT_KEY } from "./config.js";
 
 import firebase from "firebase-admin";
 
 // import serviceAccountKey from "./serviceAccountKey.json" assert { type: "json" };
-import { createRequire } from "module";
-const require = createRequire(import.meta.url);
+// import { createRequire } from "module";
+// const require = createRequire(import.meta.url);
 // const serviceAccountKey = require("./serviceAccountKey.json");
 
-// // // Initialize Firebase
-// firebase.initializeApp({
-//   credential: firebase.credential.cert(serviceAccountKey)
-// });
+// // Initialize Firebase
+firebase.initializeApp({
+  credential: firebase.credential.cert(SERVICE_ACCOUNT_KEY)
+});
 
 // express items
 const app = express();
@@ -56,6 +56,17 @@ app.use("/geocode", geoCodeRoutes);
 app.use("/getparks", getParkRoutes);
 app.use("/gettrails", getTrailRoutes);
 app.use("/osm", osmRoutes);
+
+// Also listen to /api for backwards compatibility
+app.use("/api/user", userRoutes);
+app.use("/api/pack", packRoutes);
+app.use("/api/item", itemRoutes);
+app.use("/api/trip", tripRoutes);
+app.use("/api/weather", weatherRoutes);
+app.use("/api/geocode", geoCodeRoutes);
+app.use("/api/getparks", getParkRoutes);
+app.use("/api/gettrails", getTrailRoutes);
+app.use("/api/osm", osmRoutes);
 
 mongoose.connect(connectionString).then(() => console.log("connected"));
 
