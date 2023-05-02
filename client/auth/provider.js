@@ -3,9 +3,16 @@ import React from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { onAuthStateChanged ,signInWithPopup} from "firebase/auth";
 import { auth } from "./firebase";
-import { signInWithEmailAndPassword, signInWithGoogle, GoogleAuthProvider } from "firebase/auth";
+import { signInWithEmailAndPassword, signInWithGoogle, GoogleAuthProvider, signInWithCredential } from "firebase/auth";
+import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin'
+import { WEB_CLIENT_ID } from "@env";
 
 const AuthContext = React.createContext(null);
+
+GoogleSignin.configure({
+  webClientId: WEB_CLIENT_ID,
+  offlineAccess: false,
+});
 
 // This hook can be used to access the user info.
 export function useAuth() {
@@ -92,11 +99,26 @@ export function ProviderAuth(props) {
 
   const signInWithGoogleProvider = async () => {
     try {
-      const userCredential = await signInWithPopup(auth, googleAuthProvider);
+      // const userCredential = await signInWithPopup(auth, googleAuthProvider);
+      // const firebaseUser = userCredential.user;
+      // setAuth(firebaseUser);
+
+      await GoogleSignin.hasPlayServices();
+      const { idToken } = await GoogleSignin.signIn();
+      const userCredential = await signInWithCredential(auth, idToken);
       const firebaseUser = userCredential.user;
       setAuth(firebaseUser);
     } catch (error) {
-      console.log(error);
+      console.log(error)
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        // user cancelled the login flow
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        // operation (f.e. sign in) is in progress already
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        // play services not available or outdated
+      } else {
+        // some other error happened
+      }
     }
 };
   
