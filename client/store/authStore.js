@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { auth } from "../auth/firebase";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut as firebaseSignOut, signInWithPopup, GoogleAuthProvider, signInWithCredential } from "firebase/auth";
 import axios from "axios";
-
+import { api } from "../constants/api";
 
 const initialState = {
   user: null,
@@ -15,6 +15,13 @@ export const signUp = createAsyncThunk(
   async ({ email, password }, { rejectWithValue }) => {
     try {
       const response = await createUserWithEmailAndPassword(email, password);
+
+      // Create a user in the database
+      await createUserInMongoDB({ email: response.user.email, uid: response.user.uid })
+
+      // Link the user's accounts
+      const idToken = await auth.currentUser.getIdToken();
+      await linkFirebaseAuthInDBRequest(idToken)
 
       return response.user;
 
@@ -34,7 +41,7 @@ export const signIn = createAsyncThunk(
 
       // Link the user's accounts
       const idToken = await auth.currentUser.getIdToken();
-      await linkFirebaseAuth(idToken);
+      await linkFirebaseAuthInDBRequest(idToken)
 
 
       return response.user;
@@ -62,43 +69,63 @@ export const signInWithGoogle = createAsyncThunk(
     try {
       const credential = GoogleAuthProvider.credential(idToken);
       const response = await signInWithCredential(auth, credential);
-      console.log("signInWithGoogle user:", response.user); // Add this line
-
+      
+      // Obtain the Firebase auth token
+      const firebaseAuthToken = await response.user.getIdToken();
 
       // Link the user's accounts
-      const idToken = await auth.currentUser.getIdToken();
-      await linkFirebaseAuth(idToken)
-      .then((res) => {
-        console.log("linkFirebaseAuth res:", res);
-      })
+      const mongoUser = await linkFirebaseAuthInDBRequest(firebaseAuthToken);
+
+      const firebaseUser = response.user;
+
+      if (!mongoUser) {
+        await createUserInMongoDB({ email: firebaseUser.email, uid: firebaseUser.uid });
+      }
+
+      const mergedResponse = { ...firebaseUser, ...mongoUser };
+
+      console.log("signInWithGoogle mergedResponse:", mergedResponse);
+      console.log("signInWithGoogle mongoUser:", mongoUser);
 
       return response.user;
-      
+
     } catch (error) {
       return rejectWithValue(error.message);
     }
   }
 );
 
-export const linkFirebaseAuth = async (firebaseAuthToken) => {
-  const token = await auth.currentUser.getIdToken();
-  const headers = { Authorization: `Bearer ${token}` };
-  const data = { firebaseAuthToken };
-  const response = await axios.post('/user/link-firebase-auth', data, { headers });
-  return response.data;
-};
 
-export const createMongoDbUser = async ({ email, firebaseUid }) => {
-    try {
-      const response = await axios.post("/user/create-mongodb-user", {
-        email,
-        firebaseUid,
-      });
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
-  };
+
+export const linkFirebaseAuthInDBRequest = async (firebaseAuthToken) => {
+  try {
+    const token = await auth.currentUser.getIdToken();
+    const headers = { Authorization: `Bearer ${token}` };
+    const data = { firebaseAuthToken };
+    const response = await axios.post(
+      `${api}/user/link-firebase-auth`, 
+      data, 
+      // { headers }
+      );
+    return response.data;
+  } catch (error) {
+    console.error("Error in linkFirebaseAuthInDBRequest:", error.message);
+  }
+}
+
+
+export const createUserInMongoDB = async ({ email, uid }) => {
+  try {
+    const response = await axios.post(`${api}/user/create-mongodb-user`, {
+      email,
+      firebaseUid: uid,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error in createUserInMongoDB:", error.message);
+  }
+}
+
 
 
 
@@ -161,7 +188,6 @@ export const authSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-
   },
 });
 

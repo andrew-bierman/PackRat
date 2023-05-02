@@ -10,7 +10,7 @@ const UserSchema = new Schema({
   email: {
     type: String, required: true, lowercase: true
   },
-  firebaseAuthId: { type: String },
+  firebaseUid: { type: String },
   code: { type: String },
   trips: [{ type: Schema.Types.ObjectId, ref: Trip }],
   is_certified_guide: { type: Boolean },
