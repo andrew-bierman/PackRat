@@ -30,7 +30,7 @@ export default function Feed() {
         flexWrap="wrap"
       >
         {data?.length > 0 ? (
-          data?.map((pack) => <Link href={"/pack/" + pack?._id}><Card key={pack?._id} {...{ ...pack }} /></Link>)
+          data?.map((pack) => <Link href={"/pack/" + pack?.owner_id}><Card key={pack?.owner_id} {...{ ...pack }} /></Link>)
         ) : (
           <Text>No Public Packs Available</Text>
         )}

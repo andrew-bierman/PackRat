@@ -1,12 +1,13 @@
-import { Container, Box, Text, HStack, Stack, ScrollView } from "native-base";
+import { Box, Text, ScrollView } from "native-base";
 import { StyleSheet } from "react-native";
 import CardMobile from "./CardMobile";
 import { theme } from "../../theme";
-import useGetItems from "../../hooks/useGetItems";
+import { useSearchParams } from "expo-router";
+import useGetPacks from "../../hooks/useGetPacks";
 
 export default function FeedDetailMobile() {
   const { pack } = useSearchParams();
-  const { data, isLoading, isError, error } = useGetItems(pack);
+  const { data, isLoading, isError, error } = useGetPacks(pack);
 
   if (isLoading) return <Text>Loading...</Text>;
 
@@ -14,7 +15,7 @@ export default function FeedDetailMobile() {
     <ScrollView>
       <Box style={styles.mainContainer}>
         {data?.length > 0 ? (
-          <CardMobile {...{ ...data[0] }} total_weight={data[0].weight} />)
+          <CardMobile {...{ ...data[0] }} />)
           : (
             <Text>No Pack Available to that Id</Text>
           )}
