@@ -3,18 +3,18 @@ import { StyleSheet, TouchableOpacity } from "react-native";
 import Card from "./Card";
 import { theme } from "../../theme";
 import { useSearchParams } from "expo-router";
-import useGetItems from "../../hooks/useGetItems";
+import useGetPacks from "../../hooks/useGetPacks";
 
 export default function FeedDetail() {
   const { pack } = useSearchParams();
-  const { data, isLoading, isError, error } = useGetItems(pack);
-  console.log(data)
+  const { data, isLoading, isError, error } = useGetPacks(pack);
+
   if (isLoading) return <Text>Loading...</Text>;
 
   return (
     <Box style={styles.mainContainer}>
       {data?.length > 0 ? (
-        <Card {...{ ...data[0] }} total_weight={data[0].weight} />)
+        <Card {...{ ...data[0] }} />)
         : (
           <Text>No Pack Available to that Id</Text>
         )}
