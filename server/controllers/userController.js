@@ -3,8 +3,11 @@ import { register } from "../utils/registerUser.js";
 import { loginUser } from "../utils/loginUser.js";
 import Pack from "../models/packModel.js";
 import { ObjectId } from "mongoose";
-import firebase from "firebase-admin";
+import firebase from "../index.js";
+import firebaseAdmin from "firebase-admin";
 import { v4 as uuid } from "uuid";
+
+
 
 
 // Middleware to check if user is authenticated
@@ -22,22 +25,21 @@ export const isAuthenticated = async (req, res, next) => {
 export const linkFirebaseAuth = async (req, res) => {
   const { firebaseAuthToken } = req.body;
 
-  console.log("linkFirebaseAuth firebaseAuthToken:", firebaseAuthToken)
-
   try {
     // Verify Firebase auth token and get the Firebase user ID
-    const decodedToken = await firebaseAdmin.auth().verifyIdToken(firebaseAuthToken);
+    const decodedToken = await firebaseAdmin.auth().verifyIdToken(firebaseAuthToken, { audience: 'your-firebase-project-id' });
     const firebaseUserId = decodedToken.uid;
 
     // Find the MongoDB user with the same email address as the Firebase user
     const user = await User.findOne({ email: decodedToken.email });
+    // console.log("linkFirebaseAuth user:", user)
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
 
     // Update the MongoDB user document with the Firebase auth ID if it's not already set
-    if (!user.firebaseAuthId) {
-      user.firebaseAuthId = firebaseUserId;
+    if (!user.firebaseUid) {
+      user.firebaseUid = firebaseUserId;
       await user.save();
     }
 
