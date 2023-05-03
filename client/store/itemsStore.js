@@ -3,11 +3,6 @@ import axios from "axios";
 import { api } from "../constants/api";
 import { queryClient } from "../constants/queryClient";
 
-export const addItem = createAsyncThunk("items/addItem", async (newItem) => {
-  const response = await axios.post(`${api}/item/`, newItem);
-  return response.data;
-});
-
 export const deleteItem = createAsyncThunk("items/deleteItem", async (itemId) => {
   const response = await axios.delete(`${api}/item`, {
     headers: {
@@ -40,19 +35,6 @@ const itemsSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(addItem.pending, (state) => {
-        state.isLoading = true;
-        state.error = null;
-      })
-      .addCase(addItem.fulfilled, (state, action) => {
-        state.items.push(action.payload);
-        state.isLoading = false;
-        state.error = null;
-      })
-      .addCase(addItem.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.error.message;
-      })
       .addCase(deleteItem.pending, (state) => {
         state.isLoading = true;
         state.error = null;

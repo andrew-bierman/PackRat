@@ -73,17 +73,16 @@ export const getPacks = async (req, res) => {
           from: "items", // name of the foreign collection
           localField: "_id",
           foreignField: "packId",
-          as: "lookup-data",
+          as: "items",
         },
       },
       {
         $addFields: {
           total_weight: {
-            $sum: "$lookup-data.weight",
+            $sum: "$items.weight",
           },
         },
       },
-      { $project: { "lookup-data": 0 } },
     ]);
 
     res.status(200).json(aggr);
@@ -91,6 +90,7 @@ export const getPacks = async (req, res) => {
     res.status(404).json({ msg: "Users cannot be found" });
   }
 };
+
 
 export const getPackById = async (req, res) => {
   const { _id } = await oneEntity(req.body._id)
@@ -107,7 +107,7 @@ export const getPackById = async (req, res) => {
           from: "items", // name of the foreign collection
           localField: "_id",
           foreignField: "packId",
-          as: "lookup-data",
+          as: "items",
         },
       },
       {

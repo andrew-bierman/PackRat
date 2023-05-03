@@ -14,13 +14,13 @@ import { ProviderAuth } from "../auth/provider";
 
 export default function HomeLayout() {
   return (
+    <Provider store={store}>
       <NativeBaseProvider>
-        <Provider store={store}>
-          <QueryClientProvider client={queryClient}>
-            {Platform.OS === "web" ? <Navigation /> : <NavigationMobile />}
-            <Slot />
-          </QueryClientProvider>
-        </Provider>
+        <QueryClientProvider client={queryClient}>
+          {Platform.OS === "web" ? <Navigation /> : <NavigationMobile />}
+          <Slot />
+        </QueryClientProvider>
       </NativeBaseProvider>
+    </Provider>
   );
 }

@@ -87,6 +87,8 @@ export const signInWithGoogle = createAsyncThunk(
       console.log("signInWithGoogle mergedResponse:", mergedResponse);
       console.log("signInWithGoogle mongoUser:", mongoUser);
 
+      return mergedResponse;
+
       return response.user;
 
     } catch (error) {

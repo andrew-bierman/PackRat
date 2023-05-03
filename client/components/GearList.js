@@ -3,7 +3,7 @@ import { theme } from "../theme";
 import { Stack, Box, Text } from "native-base";
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { AddPack } from "./pack/AddPack";
+import { AddPack, AddPackContainer } from "./pack/AddPack";
 
 import PackContainer from "./pack/PackContainer";
 import WideColumn from "./WideColumn";
@@ -40,7 +40,8 @@ export const GearList = () => {
           Gear List
         </Text>
       </Box>
-      <AddPack />
+      {/* <AddPack/> */}
+      <AddPackContainer />
       <PackContainer />
       <WideColumn />
     </Stack>

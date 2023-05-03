@@ -2,48 +2,90 @@ import { StyleSheet } from "react-native";
 import { Box, Input, Button, Text } from "native-base";
 import { Platform } from "react-native";
 
-import useAddPack from "../../hooks/useAddPack";
+// import useAddPack from "../../hooks/useAddPack";
+import { addPack } from "../../store/packsStore";
 import { theme } from "../../theme";
 import { useState } from "react";
 // import { useAuth } from "../../auth/provider";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { CustomModal } from "../modal";
 
 export const AddPack = () => {
+  const dispatch = useDispatch()
+
   const [name, setName] = useState("");
 
-  const { addPack } = useAddPack();
+  // const { addPack } = useAddPack();
   // const { user } = useAuth();
   const user = useSelector((state) => state.auth.user);
 
+  const isLoading = useSelector((state) => state.packs.isLoading);
+
+  const error = useSelector((state) => state.packs.error);
+
+  const isError = error !== null;
+
+  const handleAddPack = () => {
+    dispatch(addPack({ name, owner_id: user?._id }));
+    setName("");
+  };
+
   return (
-    <Box style={styles.mobileStyle}>
-      <Input
-        size="lg"
-        variant="outline"
-        placeholder="Name"
-        value={name}
-        onChangeText={(text) => setName(text)}
-        width={Platform.OS === "web" ? "25%" : "100%"}
-      />
+    <Box style={styles.container}>
+      <Box style={styles.mobileStyle}>
+        <Input
+          size="lg"
+          variant="outline"
+          placeholder="Name"
+          value={name}
+          onChangeText={(text) => setName(text)}
+          width={Platform.OS === "web" ? "25%" : "100%"}
+        />
 
-      <Button
-        width={Platform.OS === "web" ? null : "50%"}
-        onPress={() => {
-          addPack.mutate({ name, owner_id: user?._id });
-          setName("");
-        }}
-      >
-        <Text style={{ color: theme.colors.text }}>
-          {addPack.isLoading ? "Loading..." : "Add Pack"}
-        </Text>
-      </Button>
+        <Button
+          width={Platform.OS === "web" ? null : "50%"}
+          onPress={() => {
+            // addPack.mutate({ name, owner_id: user?._id });
+            // setName("");
+            handleAddPack()
+          }}
+        >
+          <Text style={{ color: theme.colors.text }}>
+            {isLoading ? "Loading..." : "Add Pack"}
+          </Text>
+        </Button>
 
-      {addPack.isError && <Text>Pack already exists</Text>}
+        {isError && <Text>Pack already exists</Text>}
+      </Box>
     </Box>
   );
 };
 
+export const AddPackContainer = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  return (
+    <CustomModal
+      title="Add Pack"
+      trigger="Add Pack"
+      isActive={isOpen}
+      onTrigger={setIsOpen}
+
+    >
+      <AddPack />
+    </CustomModal>
+  );
+};
+
 const styles = StyleSheet.create({
+  container: {
+    flexDirection: "column",
+    alignItems: "center",
+    textAlign: "center",
+    justifyContent: "center",
+    width: "100%",
+    paddingHorizontal: 18,
+    gap: 20,
+  },
   desktopStyle: {
     flexDirection: "row",
     alignItems: "center",
