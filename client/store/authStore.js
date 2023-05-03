@@ -1,6 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { auth } from "../auth/firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut as firebaseSignOut, signInWithPopup, GoogleAuthProvider, signInWithCredential } from "firebase/auth";
+import axios from "axios";
+import { api } from "../constants/api";
 
 const initialState = {
   user: null,
@@ -13,8 +15,16 @@ export const signUp = createAsyncThunk(
   async ({ email, password }, { rejectWithValue }) => {
     try {
       const response = await createUserWithEmailAndPassword(email, password);
-      console.log(response);
+
+      // Create a user in the database
+      await createUserInMongoDB({ email: response.user.email, uid: response.user.uid })
+
+      // Link the user's accounts
+      const idToken = await auth.currentUser.getIdToken();
+      await linkFirebaseAuthInDBRequest(idToken)
+
       return response.user;
+
     } catch (error) {
       console.log(error);
       return rejectWithValue(error.message);
@@ -22,11 +32,18 @@ export const signUp = createAsyncThunk(
   }
 );
 
+
 export const signIn = createAsyncThunk(
   "auth/signIn",
   async ({ email, password }, { rejectWithValue }) => {
     try {
       const response = await signInWithEmailAndPassword(auth, email, password);
+
+      // Link the user's accounts
+      const idToken = await auth.currentUser.getIdToken();
+      await linkFirebaseAuthInDBRequest(idToken)
+
+
       return response.user;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -38,12 +55,82 @@ export const signOut = createAsyncThunk(
   "auth/signOut",
   async (_, { rejectWithValue }) => {
     try {
-      await signOut();
+      await firebaseSignOut(auth);
     } catch (error) {
       return rejectWithValue(error.message);
     }
   }
 );
+
+
+export const signInWithGoogle = createAsyncThunk(
+  "auth/signInWithGoogle",
+  async ({ idToken }, { rejectWithValue }) => {
+    try {
+      const credential = GoogleAuthProvider.credential(idToken);
+      const response = await signInWithCredential(auth, credential);
+      
+      // Obtain the Firebase auth token
+      const firebaseAuthToken = await response.user.getIdToken();
+
+      // Link the user's accounts
+      const mongoUser = await linkFirebaseAuthInDBRequest(firebaseAuthToken);
+
+      const firebaseUser = response.user;
+
+      if (!mongoUser) {
+        await createUserInMongoDB({ email: firebaseUser.email, uid: firebaseUser.uid });
+      }
+
+      const mergedResponse = { ...firebaseUser, ...mongoUser };
+
+      console.log("signInWithGoogle mergedResponse:", mergedResponse);
+      console.log("signInWithGoogle mongoUser:", mongoUser);
+
+      return mergedResponse;
+
+      return response.user;
+
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+
+
+export const linkFirebaseAuthInDBRequest = async (firebaseAuthToken) => {
+  try {
+    const token = await auth.currentUser.getIdToken();
+    const headers = { Authorization: `Bearer ${token}` };
+    const data = { firebaseAuthToken };
+    const response = await axios.post(
+      `${api}/user/link-firebase-auth`, 
+      data, 
+      // { headers }
+      );
+    return response.data;
+  } catch (error) {
+    console.error("Error in linkFirebaseAuthInDBRequest:", error.message);
+  }
+}
+
+
+export const createUserInMongoDB = async ({ email, uid }) => {
+  try {
+    const response = await axios.post(`${api}/user/create-mongodb-user`, {
+      email,
+      firebaseUid: uid,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error in createUserInMongoDB:", error.message);
+  }
+}
+
+
+
+
 
 export const authSlice = createSlice({
   name: "auth",
@@ -58,6 +145,9 @@ export const authSlice = createSlice({
       .addCase(signUp.fulfilled, (state, action) => {
         state.user = action.payload;
         state.loading = false;
+
+        createMongoDbUser({ email: action.payload.email, firebaseUid: action.payload.uid });
+
       })
       .addCase(signUp.rejected, (state, action) => {
         state.loading = false;
@@ -87,7 +177,19 @@ export const authSlice = createSlice({
       .addCase(signOut.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-      });
+      })
+      .addCase(signInWithGoogle.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(signInWithGoogle.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.loading = false;
+      })
+      .addCase(signInWithGoogle.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
   },
 });
 

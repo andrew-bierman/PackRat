@@ -117,5 +117,6 @@ const styles = StyleSheet.create({
     padding: theme.size.cardPadding,
     paddingHorizontal: theme.padding.paddingInside,
     marginBottom: 20,
+    height: 'fit-content'
   },
 });

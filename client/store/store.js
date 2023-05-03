@@ -5,14 +5,22 @@ import authReducer from "./authStore";
 import trailsReducer from "./trailsStore";
 import searchReducer from "./searchStore";
 import parksReducer from "./parksStore";
+import itemsReducer from "./itemsStore";
+import packsReducer from "./packsStore";
+import favoritesReducer from "./favoritesStore";
+import feedReducer from "./feedStore";
 
 export default configureStore({
   reducer: {
-    weather: weatherReducer,
-    dropdown: dropdownReducer,
     auth: authReducer,
+    dropdown: dropdownReducer,
+    search: searchReducer,
+    weather: weatherReducer,
     trails: trailsReducer,
     parks: parksReducer,
-    search: searchReducer,
+    items: itemsReducer,
+    packs: packsReducer,
+    favorites: favoritesReducer,
+    feed: feedReducer,
   },
 });

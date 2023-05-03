@@ -8,7 +8,8 @@ import useGetPacks from "../../hooks/useGetPacks";
 import { useSelector } from "react-redux";
 
 export default function ProfileContainer() {
-  const { user } = useAuth();
+  // const { user } = useAuth();
+  const user = useSelector((state) => state.auth.user);
 
   const { data } = useGetPacks(user?._id);
   console.log(user)

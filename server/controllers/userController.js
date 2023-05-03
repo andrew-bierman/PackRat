@@ -3,19 +3,52 @@ import { register } from "../utils/registerUser.js";
 import { loginUser } from "../utils/loginUser.js";
 import Pack from "../models/packModel.js";
 import { ObjectId } from "mongoose";
-import firebase from "firebase-admin";
+import firebase from "../index.js";
+import firebaseAdmin from "firebase-admin";
+import { v4 as uuid } from "uuid";
+
+
+
 
 // Middleware to check if user is authenticated
 export const isAuthenticated = async (req, res, next) => {
-  const token = req.headers.authorization.split(" ")[1];
+  const token = req.headers.authorization.split(' ')[1];
   try {
-    const decodedToken = await firebase.auth().verifyIdToken(token);
+    const decodedToken = await firebaseAdmin.auth().verifyIdToken(token);
     req.userData = decodedToken;
     next();
   } catch (error) {
-    res.status(401).json({ error: "Unauthorized" });
+    res.status(401).json({ error: 'Unauthorized' });
   }
 };
+
+export const linkFirebaseAuth = async (req, res) => {
+  const { firebaseAuthToken } = req.body;
+
+  try {
+    // Verify Firebase auth token and get the Firebase user ID
+    const decodedToken = await firebaseAdmin.auth().verifyIdToken(firebaseAuthToken, { audience: 'your-firebase-project-id' });
+    const firebaseUserId = decodedToken.uid;
+
+    // Find the MongoDB user with the same email address as the Firebase user
+    const user = await User.findOne({ email: decodedToken.email });
+    // console.log("linkFirebaseAuth user:", user)
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Update the MongoDB user document with the Firebase auth ID if it's not already set
+    if (!user.firebaseUid) {
+      user.firebaseUid = firebaseUserId;
+      await user.save();
+    }
+
+    return res.status(200).json(user);
+  } catch (error) {
+    return res.status(400).json({ error: error.message });
+  }
+};
+
 
 export const getUsers = async (req, res) => {
   try {
@@ -39,30 +72,65 @@ export const getUserById = async (req, res) => {
   }
 };
 
-export const addUser = async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    const userRecord = await firebase.auth().createUser({
-      email: email,
-      password: password,
-    });
+// export const addUser = async (req, res) => {
+//   try {
+//     const { email, password } = req.body;
 
-    res.status(200).json({ message: "Successfully signed up" });
+//     // Create user in Firebase Auth
+//     const userRecord = await firebase.auth().createUser({
+//       email: email,
+//       password: password,
+//     });
+//     const uid = userRecord.uid;
+
+//     // Create user in MongoDB and link to Firebase Auth UID
+//     const newUser = new User({
+//       email: email,
+//       firebaseUid: uid, // <-- Store Firebase UID in MongoDB
+//       // ... other user fields
+//     });
+//     await newUser.save();
+
+//     res.status(200).json({ message: 'Successfully signed up' });
+//   } catch (error) {
+//     res.status(400).json({ error: error.message });
+//   }
+// };
+
+export const createMongoDBUser = async (req, res) => {
+  const { email, firebaseUid } = req.body;
+
+  console.log("createMongoDBUser email:", email)
+
+  try {
+    // Check if a user with the given email already exists
+    const existingUser = await User.findOne({ email: email });
+
+    if (existingUser) {
+      return res.status(409).json({ error: "User already exists" });
+    }
+
+    // Create new user record in MongoDB
+    const newUser = new User({
+      email: email,
+      firebaseUid: firebaseUid,
+      // any other relevant user information
+    });
+    await newUser.save();
+
+    return res.status(201).json({ message: "User created successfully" });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    return res.status(500).json({ error: error.message });
   }
 };
+
+
 
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const userRecord = await firebase.auth().getUserByEmail(email);
-    const uid = userRecord.uid;
-
-    await firebase.auth().signInWithEmailAndPassword(email, password);
-
-
+    const userRecord = await firebase.auth().signInWithEmailAndPassword(email, password);
 
     res.status(200).json({
       message: "Successfully logged in",
@@ -72,6 +140,7 @@ export const login = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
 
 export const addToFavorite = async (req, res) => {
   const { packId, userId } = req.body;
