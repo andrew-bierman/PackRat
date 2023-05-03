@@ -41,6 +41,14 @@ export default function Login() {
 
   // const { loginUserWithEmailAndPassword, loginUserWithGoogle } = useLogin();
 
+  const user = useSelector((state) => state.auth.user);
+
+  if (user?.uid) {
+    router.push("/");
+  }
+
+  // const { loginUserWithEmailAndPassword, loginUserWithGoogle } = useLogin();
+
   // Add Google auth-related variables
   const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
     clientId: WEB_CLIENT_ID,
@@ -53,7 +61,7 @@ export default function Login() {
       router.push("/");
     }
   }, [auth, router]);
-
+  
   useEffect(() => {
     if (response?.type === "success") {
       console.log("+++++++++++++++++++++++++++++", response);
@@ -251,7 +259,7 @@ export default function Login() {
             </Heading>
           </HStack>
           <HStack mt="1" justifyContent="center" alignItems="center">
-          <Button
+            <Button
               w="100%"
               disabled={!request}
               onPress={() => promptAsync()}
