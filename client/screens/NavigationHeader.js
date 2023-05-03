@@ -33,7 +33,6 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
 
   const user = useSelector((state) => state.auth.user);
 
-  console.log('user', user)
 
   return user ? (
     <View style={desktopContainer}>
