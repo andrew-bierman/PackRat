@@ -34,7 +34,11 @@ export const addItem = async (req, res) => {
       { _id: req.body.packId },
       { $push: { items: newItem._id } }
     );
-    res.status(200).json({ msg: "success" });
+    res.status(200).json({
+      msg: "success",
+      newItem,
+      packId: req.body.packId,
+    });
   } catch (error) {
     res.status(404).json({ msg: "Unable to add item" });
   }

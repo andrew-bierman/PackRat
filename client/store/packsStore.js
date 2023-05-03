@@ -12,8 +12,13 @@ export const changePackStatus = createAsyncThunk("packs/changePackStatus", async
     return response.data;
 });
 
-export const fetchPacks = createAsyncThunk("packs/fetchPacks", async (owner_id) => {
-    const response = await axios.get(`${api}/pack/${owner_id}`);
+export const fetchUserPacks = createAsyncThunk("packs/fetchUserPacks", async (ownerId) => {
+    const response = await axios.get(`${api}/pack/${ownerId}`);
+    return response.data;
+});
+
+export const addPackItem = createAsyncThunk("items/addPackItem", async (newItem) => {
+    const response = await axios.post(`${api}/item/`, newItem);
     return response.data;
 });
 
@@ -57,20 +62,57 @@ const packsSlice = createSlice({
                 state.isLoading = false;
                 state.error = action.error.message;
             })
-            .addCase(fetchPacks.pending, (state) => {
+            .addCase(fetchUserPacks.pending, (state) => {
                 state.isLoading = true;
                 state.error = null;
             })
-            .addCase(fetchPacks.fulfilled, (state, action) => {
+            .addCase(fetchUserPacks.fulfilled, (state, action) => {
+                console.log("action.payload in fetch packs", action.payload)
                 state.packs = action.payload;
                 state.isLoading = false;
                 state.error = null;
             })
-            .addCase(fetchPacks.rejected, (state, action) => {
+            .addCase(fetchUserPacks.rejected, (state, action) => {
                 state.isLoading = false;
                 state.error = action.error.message;
-            });
+            })
+            .addCase(addPackItem.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(addPackItem.fulfilled, (state, action) => {
+                const { packId, newItem } = action.payload;
+                const packIndex = state.packs.findIndex((pack) => pack._id === packId);
+                if (packIndex !== -1) {
+                    const updatedPack = {
+                        ...state.packs[packIndex],
+                        items: [...state.packs[packIndex].items, newItem],
+                    };
+                    const newPacks = [
+                        ...state.packs.slice(0, packIndex),
+                        updatedPack,
+                        ...state.packs.slice(packIndex + 1),
+                    ];
+                    state.packs = newPacks;
+                }
+                state.isLoading = false;
+                state.error = null;
+            })
+
+
+            .addCase(addPackItem.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.error.message;
+            })
     },
 });
+
+export const selectPacks = (state) => state.packs.packs;
+
+export const selectIsLoading = (state) => state.packs.isLoading;
+
+export const selectError = (state) => state.packs.error;
+
+export const selectPackById = (state, packId) => state.packs.packs.find((pack) => pack.id === packId);
 
 export default packsSlice.reducer;

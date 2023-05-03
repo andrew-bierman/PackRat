@@ -54,6 +54,7 @@ export default function Login() {
 
   useEffect(() => {
     if (response?.type === "success") {
+      console.log("+++++++++++++++++++++++++++++", response);
       const { id_token } = response.params;
       loginUserWithGoogle(id_token);
     }
