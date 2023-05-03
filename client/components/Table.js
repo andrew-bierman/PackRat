@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 import { Table, TableWrapper, Row, Cell } from "react-native-table-component";
 
 import { Feather } from "@expo/vector-icons";
-import { MaterialIcons } from "@expo/vector-icons";
+import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 
 // import useGetItems from "../hooks/useGetItems";
 
@@ -35,18 +35,12 @@ export const TableContainer = ({ currentPack }) => {
 
   const tableData = {
     tableHead: ["Item Name", "Weight", "Quantity", "Delete", "Edit"],
+    tableData: data?.map((value) => Object.values(value).slice(1)),
+    tableWater: ["Water", totalWaterWeight, "", "", ""],
+    tableFood: ["Food", totalFoodWeight, "", "", ""],
     tableWaterFood: ["Water + Food", totalWaterWeight + totalFoodWeight, "", "", ""],
     tableTotal: ["Total", totalWeight, "", "", ""],
   };
-
-  // const tableDb = useMemo(
-  //   () => edit?.map((value) => Object.values(value).slice(1, -1)),
-  //   [edit]
-  // );
-  // const tablekeys = useMemo(
-  //   () => edit?.map((value) => Object.keys(value).slice(1)),
-  //   [edit]
-  // );
 
   const tableDb = data?.map((value) => Object.values(value).slice(1, -1));
   const tablekeys = data?.map((value) => Object.keys(value).slice(1));
@@ -63,26 +57,11 @@ export const TableContainer = ({ currentPack }) => {
     // Update the food value in the currentPack
   };
 
-  // const handleEdit = (id, value, cellIndex) => {
-  //   setEdit((prevState) => {
-  //     return prevState.map((row, idx) => {
-  //       if (id === idx) {
-  //         return {
-  //           ...row,
-  //           [tablekeys[id][cellIndex]]: value,
-  //         };
-  //       } else {
-  //         return row;
-  //       }
-  //     });
-  //   });
-  // };
 
   const handleEdit = (id, value, cellIndex) => {
     const newRow = { ...data[id], [tablekeys[id][cellIndex]]: value };
     setEdit((prevState) => [...prevState.slice(0, id), newRow, ...prevState.slice(id + 1)]);
   };
-
 
   // const { deleteItem } = useDeleteItem();
   // const { editItem } = useEditItem();
@@ -158,7 +137,15 @@ export const TableContainer = ({ currentPack }) => {
         <Text>Add your First Item</Text>
       )}
 
-      <Box style={{ flexDirection: "row", alignItems: "center", marginTop: 30 }}>
+      <Box
+        style={styles.waterContainer}
+      >
+        <MaterialCommunityIcons
+          name="water"
+          size={24}
+          color="black"
+          style={{ marginRight: 10 }}
+        />
         <Text style={{ marginRight: 20 }}>Water:</Text>
         <Input
           style={{ flex: 1 }}
@@ -168,7 +155,15 @@ export const TableContainer = ({ currentPack }) => {
           onChangeText={handleWaterChange}
         />
       </Box>
-      <Box style={{ flexDirection: "row", alignItems: "center", marginTop: 30 }}>
+      <Box
+        style={styles.foodContainer}
+      >
+        <MaterialCommunityIcons
+          name="food-apple"
+          size={24}
+          color="black"
+          style={{ marginRight: 10 }}
+        />
         <Text style={{ marginRight: 20 }}>Food:</Text>
         <Input
           style={{ flex: 1 }}
@@ -249,6 +244,42 @@ const styles = StyleSheet.create({
 
     gap: 10,
   },
+  specialRow: {
+    flexDirection: "row",
+    width: "100%",
+    height: 25,
+    justifyContent: "space-between",
+    alignItems: "center",
+    textAlign: "left",
+    
+    gap: 10,
+  },
+  
+  waterContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 30,
+    paddingLeft: 15,
+    backgroundColor: "#78B7BB",
+    borderRadius: 5,
+    padding: 10,
+    width: "90%",
+    alignSelf: "center",
+
+  },
+
+  foodContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 30,
+    paddingLeft: 15,
+    backgroundColor: "#78B7BB",
+    borderRadius: 5,
+    padding: 10,
+    width: "90%",
+    alignSelf: "center",
+  },
+
   btn: { width: 58, height: 18, backgroundColor: "#78B7BB", borderRadius: 2 },
   btnText: { textAlign: "center", color: "#fff" },
 });
