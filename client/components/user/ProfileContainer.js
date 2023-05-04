@@ -4,14 +4,24 @@ import PacksContainer from "./PacksContainer";
 import { useAuth } from "../../auth/provider";
 import { theme } from "../../theme";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import useGetPacks from "../../hooks/useGetPacks";
-import { useSelector } from "react-redux";
+// import useGetPacks from "../../hooks/useGetPacks";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserPacks } from "../../store/packsStore";
 
 export default function ProfileContainer() {
   // const { user } = useAuth();
-  const user = useSelector((state) => state.auth.user);
+  const dispatch = useDispatch();
 
-  const { data } = useGetPacks(user?._id);
+  useEffect(() => {
+    dispatch(fetchUserPacks(user?._id))
+  }, [dispatch, user?._id])
+
+
+  const user = useSelector((state) => state.auth.user);
+  const PacksData = useSelector((state) => state?.packs);
+
+ 
+  // const { data } = useGetPacks(user?._id);
   console.log(user)
 
   const isLoading = useSelector((state) => state?.auth?.loading);
@@ -33,7 +43,7 @@ export default function ProfileContainer() {
           </Box>
           <Box style={styles.cardInfo}>
             <Text>Packs</Text>
-            <Text>{data?.length}</Text>
+            <Text>{PacksData?.packs?.length}</Text>
           </Box>
           <Box style={styles.cardInfo}>
             <Text>Certified</Text>
@@ -58,7 +68,7 @@ export default function ProfileContainer() {
         </Box>
         {error ? <Text>{error}</Text> : null}
       </Box>
-      {isLoading ? <Text>Loading....</Text> : <PacksContainer data={data} />}
+      {isLoading ? <Text>Loading....</Text> : <PacksContainer data={PacksData?.packs} />}
     </Box>
   );
 }
