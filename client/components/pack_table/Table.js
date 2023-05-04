@@ -6,13 +6,15 @@ import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 
 // import useGetItems from "../hooks/useGetItems";
 
-import useEditItem from "../hooks/useEditItem";
-import useDeleteItem from "../hooks/useDeleteItem";
+import useEditItem from "../../hooks/useEditItem";
+import useDeleteItem from "../../hooks/useDeleteItem";
 
 import { useState, useMemo, useEffect } from "react";
 import { Box, Text, Input } from "native-base";
 
 import { useSelector } from "react-redux";
+
+import { Dimensions } from "react-native";
 
 export const TableContainer = ({ currentPack }) => {
   // const { data, isLoading, isError, error } = useGetItems(packId);
@@ -33,13 +35,23 @@ export const TableContainer = ({ currentPack }) => {
   const totalWeight = totalBaseWeight + totalWaterWeight + totalFoodWeight;
 
   const tableData = {
-    tableHead: ["Item Name", "Weight", "Quantity", "Delete", "Edit"],
+    tableTitle: ["Pack List"],
+    tableHead: [
+      "Item Name",
+      "Weight",
+      "Quantity",
+      "Delete",
+      "Edit",
+    ],
+
     tableData: data?.map((value) => Object.values(value).slice(1)),
     tableWater: ["Water", totalWaterWeight, "", "", ""],
     tableFood: ["Food", totalFoodWeight, "", "", ""],
     tableWaterFood: ["Water + Food", totalWaterWeight + totalFoodWeight, "", "", ""],
     tableTotal: ["Total", totalWeight, "", "", ""],
   };
+
+  const flexWidthArr = [2, 1, 1, 0.5, 0.5];
 
   const tableDb = data?.map((value) => Object.values(value).slice(1, -1));
   const tablekeys = data?.map((value) => Object.keys(value).slice(1));
@@ -71,30 +83,27 @@ export const TableContainer = ({ currentPack }) => {
 
   return (
     <Box
-      style={{
-        textAlign: "center",
-        width: "100%",
-        alignItems: "center",
-        justifyContent: "center",
-        flex: 1,
-      }}
+      style={styles.container}
     >
       {data?.length > 0 ? (
         <Table
-          style={{
-            width: "95%",
-            gap: 15,
-            textAlign: "center",
-            alignItems: "center",
-          }}
+          style={styles.tableStyle}
           borderStyle={{ borderColor: "transparent" }}
         >
-          <Row data={tableData.tableHead} style={styles.head} />
+          <Row data={tableData.tableTitle} style={styles.title} flexArr={flexWidthArr} />
+          <Row
+            data={tableData.tableHead.map((header, index) => (
+              <Cell key={index} data={header} />
+            ))}
+            style={styles.head}
+            flexArr={flexWidthArr}
+          />
           {tableDb.map((rowData, index) => (
-            <TableWrapper key={index} style={styles.row}>
+            <TableWrapper key={index} style={styles.row} flexArr={flexWidthArr}>
               {rowData.map((cellData, cellIndex) => (
                 <Cell
                   key={cellIndex}
+                  style={[cellIndex === 3 || cellIndex === 4 ? styles.smallCell : styles.dataCell, {flex: flexWidthArr[cellIndex]}]}
                   data={
                     cellIndex === 3 ? (
                       deleteItem.isLoading ? (
@@ -120,13 +129,14 @@ export const TableContainer = ({ currentPack }) => {
                         />
                       )
                     ) : (
-                      <Input
-                        style={{ textAlign: "center", padding: 3 }}
-                        value={String(cellData)}
-                        onChangeText={(text) =>
-                          handleEdit(index, text, cellIndex)
-                        }
-                      />
+                      // <Input
+                      //   style={{ textAlign: "center", padding: 3 }}
+                      //   value={String(cellData)}
+                      //   onChangeText={(text) =>
+                      //     handleEdit(index, text, cellIndex)
+                      //   }
+                      // />
+                      String(cellData)
                     )
                   }
                 />
@@ -224,6 +234,30 @@ export const TableContainer = ({ currentPack }) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    textAlign: "center",
+    width: "90%",
+    alignItems: "center",
+    justifyContent: "center",
+    flex: 1,
+  },
+  tableStyle: {
+    width: "95%",
+    gap: 15,
+    textAlign: "center",
+    alignItems: "center",
+  },
+  title: {
+    height: 40,
+    backgroundColor: "#f1f8ff",
+    borderRadius: 5,
+    width: "100%",
+    marginBottom: 15,
+    alignItems: "center",
+    justifyContent: "center",
+    flex: 1,
+    fontSize: 20,
+  },
   head: {
     height: 40,
     borderBottomWidth: 2,
@@ -235,6 +269,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
+  editDeleteHead: {
+    width: 50,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
   row: {
     flexDirection: "row",
     width: "100%",
@@ -242,9 +282,23 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     textAlign: "center",
-
     gap: 10,
   },
+
+  dataCell: {
+    // flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  
+
+  smallCell: {
+    // width: 50,
+    // flex: 0.5,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
   specialRow: {
     flexDirection: "row",
     width: "100%",
@@ -252,10 +306,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     textAlign: "left",
-    
+
     gap: 10,
   },
-  
+
   waterContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -264,7 +318,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#78B7BB",
     borderRadius: 5,
     padding: 10,
-    width: "90%",
+    width: "100%",
     alignSelf: "center",
 
   },
@@ -277,7 +331,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#78B7BB",
     borderRadius: 5,
     padding: 10,
-    width: "90%",
+    width: "100%",
     alignSelf: "center",
   },
 

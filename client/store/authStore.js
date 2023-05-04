@@ -14,7 +14,7 @@ export const signUp = createAsyncThunk(
   "auth/signUp",
   async ({ email, password }, { rejectWithValue }) => {
     try {
-      const response = await createUserWithEmailAndPassword(email, password);
+      const response = await createUserWithEmailAndPassword(email, password)
 
       // Create a user in the database
       await createUserInMongoDB({ email: response.user.email, uid: response.user.uid })
@@ -116,11 +116,12 @@ export const linkFirebaseAuthInDBRequest = async (firebaseAuthToken) => {
 }
 
 
-export const createUserInMongoDB = async ({ email, uid }) => {
+export const createUserInMongoDB = async ({ email, uid, name }) => {
   try {
     const response = await axios.post(`${api}/user/create-mongodb-user`, {
       email,
       firebaseUid: uid,
+      name,
     });
     return response.data;
   } catch (error) {
