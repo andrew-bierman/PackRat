@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import DropdownComponent from "../Dropdown";
 import useGetPacks from "../../hooks/useGetPacks";
 import { AddItem } from "../AddItem";
-import { TableContainer } from "../Table";
+import { TableContainer } from "../pack_table/Table";
 // import { useAuth } from "../../auth/provider";
 import { useSelector } from "react-redux";
 import { fetchUserPacks } from "../../store/packsStore";

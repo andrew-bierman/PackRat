@@ -27,14 +27,22 @@ export const linkFirebaseAuth = async (req, res) => {
 
   try {
     // Verify Firebase auth token and get the Firebase user ID
-    const decodedToken = await firebaseAdmin.auth().verifyIdToken(firebaseAuthToken, { audience: 'your-firebase-project-id' });
+    const decodedToken = await firebaseAdmin.auth().verifyIdToken(firebaseAuthToken, { audience: process.env.SERVICE_ACCOUNT_KEY_PROJECT_ID });
     const firebaseUserId = decodedToken.uid;
 
     // Find the MongoDB user with the same email address as the Firebase user
-    const user = await User.findOne({ email: decodedToken.email });
+    let user = await User.findOne({ email: decodedToken.email });
+
     // console.log("linkFirebaseAuth user:", user)
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      const newUser = new User({
+        email: decodedToken.email,
+        firebaseUid: firebaseUserId,
+        name: decodedToken.name,
+        // any other relevant user information
+      });
+      user = await newUser.save();
+      // return res.status(404).json({ error: 'User not found' });
     }
 
     // Update the MongoDB user document with the Firebase auth ID if it's not already set
