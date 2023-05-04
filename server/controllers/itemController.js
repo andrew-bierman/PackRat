@@ -7,7 +7,7 @@ export const getItems = async (req, res) => {
   const { packId } = await oneEntity(req.params);
 
   try {
-    const items = await Item.find({ packId });
+    const items = await Item.find({ packs: packId });
 
     res.status(200).json(items);
   } catch (error) {
@@ -29,11 +29,25 @@ export const getItemById = async (req, res) => {
 
 export const addItem = async (req, res) => {
   try {
-    const newItem = await itemValidation(req.body);
+    const newItemData = await itemValidation(req.body);
+    const newItem = await Item.create(newItemData); // Create and save the new item
+
     await Pack.updateOne(
       { _id: req.body.packId },
       { $push: { items: newItem._id } }
     );
+
+    await Item.findByIdAndUpdate(
+      newItem._id,
+      {
+        $addToSet: {
+          owners: req.body.ownerId,
+          packs: req.body.packId,
+        },
+      },
+      { new: true }
+    );
+
     res.status(200).json({
       msg: "success",
       newItem,
@@ -43,6 +57,7 @@ export const addItem = async (req, res) => {
     res.status(404).json({ msg: "Unable to add item" });
   }
 };
+
 
 export const editItem = async (req, res) => {
   const { _id } = await oneEntity(req.body._id);
