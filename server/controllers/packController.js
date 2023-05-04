@@ -7,52 +7,40 @@ export const getPublicPacks = async (req, res) => {
   const { queryBy } = req.query;
 
   try {
-    let publicPacks;
+    let publicPacksPipeline = [
+      {
+        $match: { is_public: true },
+      },
+      {
+        $lookup: {
+          from: "items", // name of the foreign collection
+          localField: "_id",
+          foreignField: "packs",
+          as: "items",
+        },
+      },
+      {
+        $addFields: {
+          total_weight: {
+            $sum: {
+              $map: {
+                input: "$items",
+                as: "item",
+                in: { $multiply: ["$$item.weight", "$$item.quantity"] },
+              },
+            },
+          },
+        },
+      },
+    ];
+
     if (queryBy === "Favorite") {
-      publicPacks = await Pack.aggregate([
-        {
-          $match: { is_public: true },
-        },
-        {
-          $lookup: {
-            from: "items", // name of the foreign collection
-            localField: "_id",
-            foreignField: "packId",
-            as: "lookup-data",
-          },
-        },
-        {
-          $addFields: {
-            total_weight: {
-              $sum: "$lookup-data.weight",
-            },
-          },
-        },
-        { $project: { "lookup-data": 0 } },
-      ]).sort({ favorites_count: -1 });
+      publicPacksPipeline.push({ $sort: { favorites_count: -1 } });
     } else {
-      publicPacks = await Pack.aggregate([
-        {
-          $match: { is_public: true },
-        },
-        {
-          $lookup: {
-            from: "items", // name of the foreign collection
-            localField: "_id",
-            foreignField: "packId",
-            as: "lookup-data",
-          },
-        },
-        {
-          $addFields: {
-            total_weight: {
-              $sum: "$lookup-data.weight",
-            },
-          },
-        },
-        { $project: { "lookup-data": 0 } },
-      ]).sort({ _id: -1 });
+      publicPacksPipeline.push({ $sort: { _id: -1 } });
     }
+
+    const publicPacks = await Pack.aggregate(publicPacksPipeline);
 
     res.status(200).json(publicPacks);
   } catch (error) {
@@ -61,31 +49,37 @@ export const getPublicPacks = async (req, res) => {
 };
 
 export const getPacks = async (req, res) => {
-  const { ownerId } = await oneEntity(req.params);
+  const { ownerId } = req.params;
 
   try {
-    const aggr = await Pack.aggregate([
+    const packs = await Pack.aggregate([
       {
-        $match: { owner_id: new mongoose.Types.ObjectId(ownerId) },
+        $match: { owners: new mongoose.Types.ObjectId(ownerId) },
       },
       {
         $lookup: {
           from: "items", // name of the foreign collection
           localField: "_id",
-          foreignField: "packId",
+          foreignField: "packs",
           as: "items",
         },
       },
       {
         $addFields: {
           total_weight: {
-            $sum: "$items.weight",
+            $sum: {
+              $map: {
+                input: "$items",
+                as: "item",
+                in: { $multiply: ["$$item.weight", "$$item.quantity"] },
+              },
+            },
           },
         },
       },
     ]);
 
-    res.status(200).json(aggr);
+    res.status(200).json(packs);
   } catch (error) {
     res.status(404).json({ msg: "Users cannot be found" });
   }
@@ -93,38 +87,17 @@ export const getPacks = async (req, res) => {
 
 
 export const getPackById = async (req, res) => {
-  const { _id } = await oneEntity(req.body._id)
+  const { _id } = req.params;
 
   try {
-    const pack = await Pack.findById({ _id }).populate("total_weight");
+    const pack = await Pack.findById(_id).populate("items");
 
-    const aggr = await Pack.aggregate([
-      {
-        $match: { _id: new mongoose.Types.ObjectId(_id) },
-      },
-      {
-        $lookup: {
-          from: "items", // name of the foreign collection
-          localField: "_id",
-          foreignField: "packId",
-          as: "items",
-        },
-      },
-      {
-        $addFields: {
-          total_weight: {
-            $sum: "$lookup-data.weight",
-          },
-        },
-      },
-      { $project: { "lookup-data": 0 } },
-    ]);
-
-    res.status(200).json(aggr);
+    res.status(200).json(pack);
   } catch (error) {
     res.status(404).json({ msg: "Pack cannot be found" });
   }
 };
+
 
 export const addPack = async (req, res) => {
   const packBody = packValidation(req.body)
