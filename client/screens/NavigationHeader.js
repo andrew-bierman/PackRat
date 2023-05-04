@@ -6,7 +6,7 @@ import { Desktop, Tablet, Mobile } from "../media";
 import { useAuth } from "../auth/provider";
 
 import { theme } from "../theme";
-import { Entypo } from "@expo/vector-icons";
+import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { EvilIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
@@ -15,60 +15,6 @@ import { MaterialIcons } from "@expo/vector-icons";
 import packratlogo from "../assets/packrat.png";
 import { useState } from "react";
 
-const MobileDropdown = ({ setIsMenuOpen }) => {
-  const { signOut } = useAuth();
-  return (
-    <View
-      style={{
-        position: "absolute",
-        right: 0,
-        top: 25,
-        backgroundColor: theme.colors.background,
-        width: "150px",
-        cursor: "pointer",
-      }}
-    >
-      <View style={styles.mobileLink}>
-        <AntDesign
-          name="close"
-          size={28}
-          color={theme.colors.iconColor}
-          onPress={() => setIsMenuOpen(false)}
-        />
-      </View>
-      <Link href="/">
-        <View style={styles.mobileLink}>
-          <Entypo name="home" size={24} color={theme.colors.iconColor} />
-
-          <Text>Home</Text>
-        </View>
-      </Link>
-      <Link href="profile">
-        <View style={styles.mobileLink}>
-          <FontAwesome name="book" size={24} color={theme.colors.iconColor} />
-          <Text>Profile</Text>
-        </View>
-      </Link>
-      <Link href="/packs">
-        <View style={styles.mobileLink}>
-          <MaterialIcons
-            name="backpack"
-            size={24}
-            color={theme.colors.iconColor}
-          />
-
-          <Text>Packs</Text>
-        </View>
-      </Link>
-      <View style={styles.mobileLink}>
-        <MaterialIcons name="logout" size={24} color={theme.colors.iconColor} />
-        <Text style={{ color: "white" }} onPress={() => signOut()}>
-          Logout
-        </Text>
-      </View>
-    </View>
-  );
-};
 
 const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -92,18 +38,25 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
         </Text>
       </View>
       {isMobile ? (
-        <EvilIcons
-          name="navicon"
-          size={48}
-          color={theme.colors.iconColor}
-          onPress={() => setIsMenuOpen(!isMenuOpen)}
-        />
+        <Link href="/drawer">
+          <EvilIcons
+            name="navicon"
+            size={48}
+            color={theme.colors.iconColor}
+          />
+        </Link>
       ) : (
         <View style={desktopNav}>
           <Link href="/">
             <View style={isMobile ? styles.mobileLink : styles.link}>
               <Entypo name="home" size={24} color={theme.colors.iconColor} />
               <Text>Home</Text>
+            </View>
+          </Link>
+          <Link href="/trips">
+            <View style={isMobile ? styles.mobileLink : styles.link}>
+            <MaterialCommunityIcons name="weather-pouring" size={24} color={theme.colors.iconColor} />
+              <Text>Trips</Text>
             </View>
           </Link>
           <Link href="profile">
@@ -127,6 +80,16 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
               <Text>Packs</Text>
             </View>
           </Link>
+          <Link href="/about">
+            <View style={isMobile ? styles.mobileLink : styles.link}>
+              <MaterialIcons
+                name="info"
+                size={24}
+                color={theme.colors.iconColor}
+              />
+              <Text>About</Text>
+            </View>
+          </Link>
           <View style={isMobile ? styles.mobileLink : styles.link}>
             <MaterialIcons
               name="logout"
@@ -139,7 +102,7 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
           </View>
         </View>
       )}
-      {isMenuOpen ? <MobileDropdown setIsMenuOpen={setIsMenuOpen} /> : null}
+
     </View>
   ) : null;
 };

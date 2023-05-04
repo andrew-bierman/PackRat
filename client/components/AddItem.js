@@ -5,71 +5,179 @@ import useAddItem from "../hooks/useAddItem";
 import DropdownComponent from "./Dropdown";
 import { theme } from "../theme";
 import { useState } from "react";
+import axios from "axios";
+import { api } from "../constants/api";
 
 const data = ["oz", "lb", "g", "kg"];
 
 export const AddItem = ({ packId }) => {
-  const [name, setName] = useState("");
   const [weight, setWeight] = useState("");
   const [quantity, setQuantity] = useState("");
   const [unit, setUnit] = useState("");
+  const [addItemArr, setAddItemArr] = useState([1]);
+  const [searchText, setSearchText] = useState('');
 
   const { addItem } = useAddItem();
+
+  const addTextInput = () => {
+    setAddItemArr([...addItemArr, 1]);
+  };
+
+  const handleSearchTextChange = (text) => {
+    setSearchText(text);
+    searchFunction(text);
+  };
+
+  const searchFunction = async (inputValue) => {
+    // filter or search data based on the inputValue
+    const response = await axios.get(`${api}/item/search?name=${inputValue}`);
+    console.log("data log here", response);
+  };
+
 
   return (
     <Box style={styles.container}>
       <Box style={styles.mobileStyle}>
         <Input
           size="lg"
-          value={name}
+          value={searchText}
+          onChangeText={handleSearchTextChange}
           variant="outline"
-          placeholder="Item Name"
-          onChangeText={(text) => setName(text)}
+          placeholder="Search for Item"
           width="100%"
         />
-        <Box
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
 
-            width: "100%",
-          }}
-        >
-          <Input
-            size="lg"
-            value={weight}
-            variant="outline"
-            placeholder="Weight"
-            onChangeText={(text) => setWeight(text)}
-            flex={1}
-          />
-          {data && (
-            <DropdownComponent data={data} setUnit={setUnit} width="120" />
-          )}
-        </Box>
-
-        <Input
-          size="lg"
-          value={quantity}
-          variant="outline"
-          placeholder="Quantity"
-          onChangeText={(text) => setQuantity(text)}
-          width="100%"
-        />
       </Box>
+
+      <Box style={{ gap: 10 }}>
+        <Box style={{ flexDirection: 'row', justifyContent: 'space-around', padding: 7 }}>
+          <Text fontWeight={'medium'} fontSize={14}> Item Name</Text>
+          <Text fontWeight={'medium'} fontSize={14}>Weight</Text>
+        </Box>
+        {addItemArr?.map((_item, index) => {
+          return (
+            <Box
+              key={index}
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+                width: "100%",
+                gap: 10
+              }}
+            >
+              <Input
+                size="lg"
+                value={weight}
+                variant="outline"
+                placeholder="Item Name"
+                onChangeText={(text) => setWeight(text)}
+                flex={1}
+              />
+              <Input
+                value={weight}
+                variant="outline"
+                placeholder="Weight"
+                onChangeText={(text) => setWeight(text)}
+                flex={1}
+              />
+            </Box>
+          )
+        })}
+
+      </Box>
+
+
       <Button
+        width={40}
         onPress={() => {
-          addItem.mutate({ name, weight, quantity, unit, packId });
-          setName("");
-          setQuantity("");
-          setWeight("");
+          addTextInput()
+          // addItem.mutate({ name, weight, quantity, unit, packId });
+          // setName("");
+          // setQuantity("");
+          // setWeight("");
         }}
       >
         <Text style={{ color: theme.colors.text }}>
           {addItem.isLoading ? "Loading.." : "Add Item"}
         </Text>
       </Button>
+
+      {/* Base Weight component */}
+
+      <Box style={{ gap: 10 }}>
+        <Text fontWeight={'bold'} fontSize={18}>Base Weight</Text>
+        <Box style={{ flexDirection: 'row', justifyContent: 'space-around', padding: 7 }}>
+          <Text fontWeight={'medium'} fontSize={14}>Water + Food</Text>
+          <Text fontWeight={'medium'} fontSize={14}>Weight</Text>
+        </Box>
+        <Box
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+            width: "100%",
+            gap: 10
+          }}
+        >
+          <Input
+            size="lg"
+            value={weight}
+            variant="outline"
+            placeholder="Water"
+            onChangeText={(text) => setWeight(text)}
+            flex={1}
+          />
+          <Input
+            value={weight}
+            variant="outline"
+            placeholder="1 L"
+            onChangeText={(text) => setWeight(text)}
+            flex={1}
+          />
+        </Box>
+        <Box
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+            width: "100%",
+            gap: 10
+          }}
+        >
+          <Input
+            size="lg"
+            value={weight}
+            variant="outline"
+            placeholder="Food"
+            onChangeText={(text) => setWeight(text)}
+            flex={1}
+          />
+          <Input
+            value={weight}
+            variant="outline"
+            placeholder="1 KG"
+            onChangeText={(text) => setWeight(text)}
+            flex={1}
+          />
+        </Box>
+      </Box>
+
+      <Button
+        width={40}
+        onPress={() => {
+          // addTextInput()
+          // addItem.mutate({ name, weight, quantity, unit, packId });
+          // setName("");
+          // setQuantity("");
+          // setWeight("");
+        }}
+      >
+        <Text style={{ color: theme.colors.text }}>
+          {addItem.isLoading ? "Loading.." : "Save Pack"}
+        </Text>
+      </Button>
+
     </Box>
   );
 };

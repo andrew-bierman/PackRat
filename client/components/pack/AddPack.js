@@ -18,13 +18,14 @@ export const AddPack = () => {
       <Input
         size="lg"
         variant="outline"
-        placeholder="Name"
+        placeholder="Pack Name"
         value={name}
         onChangeText={(text) => setName(text)}
         width={Platform.OS === "web" ? "25%" : "100%"}
       />
 
       <Button
+        width={Platform.OS === "web" ? null : "50%"}
         onPress={() => {
           addPack.mutate({ name, owner_id: user?._id });
           setName("");
@@ -56,7 +57,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 25,
-    gap: 10,
+    gap: 25,
   },
 
   input: {

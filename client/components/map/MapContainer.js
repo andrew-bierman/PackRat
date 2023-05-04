@@ -1,11 +1,16 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Platform, StyleSheet, Text, View, Picker } from "react-native";
+import { Platform, StyleSheet, Text, View, Picker, TouchableOpacity, PermissionsAndroid, Permission } from "react-native";
 
 import Mapbox from '@rnmapbox/maps';
-import { Select, Center, Box, CheckIcon } from "native-base";
+import * as Location from 'expo-location';
 
 // get mapbox access token from .env file
 import { MAPBOX_ACCESS_TOKEN } from "@env";
+import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
+import { theme } from "../../theme";
+import { Link } from "expo-router";
+import { CheckIcon, Select } from "native-base";
+import WebPackconatiner from "./WebMapcontainer";
 
 Mapbox.setAccessToken(MAPBOX_ACCESS_TOKEN);
 
@@ -14,23 +19,53 @@ Mapbox.setAccessToken(MAPBOX_ACCESS_TOKEN);
 console.log("Mapbox:", Mapbox);
 console.log("Mapbox.MapView:", Mapbox?.MapView);
 
-export function BasicMap() {
-  return (
-    <View style={{ flex: 1 }}>
-      <Mapbox.MapView style={{ flex: 1 }} />
-    </View>
-  );
-}
 
 export function CustomizedMap() {
 
   const mapViewRef = useRef(null);
 
   const [style, setStyle] = React.useState("mapbox://styles/mapbox/outdoors-v11");
+  const [location, setLocation] = useState(null);
+  console.log("location", location);
+  const [errorMsg, setErrorMsg] = useState(null);
 
   useEffect(() => {
-    console.log("StyleURL:", Mapbox?.StyleURL);
+    (async () => {
+
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      console.log("status", status);
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+    })();
   }, []);
+
+
+  useEffect(async () => {
+
+    await Mapbox.offlineManager.createPack(
+      {
+        name: 'field-1', // any
+        bounds: [[32.23782523101579, 46.39912398458027], [33.43887899585923, 47.041693870480955]],
+        styleURL: Mapbox.StyleURL.Satellite,
+        minZoom: 10,
+        maxZoom: 12,
+      },
+      (pack, status) => {
+        console.log('>>>>>>>>>>pack progress', pack.name, status.percentage, status.completedTileCount);
+      },
+      (pack, error) => {
+        console.log('>>>>>>>>>>pack error', pack.name, error);
+      },
+    );
+
+    console.log(await Mapbox.offlineManager.getPacks());
+
+  }, [])
 
   const [lng, setLng] = useState(103.8519599);
   const [lat, setLat] = useState(1.29027);
@@ -145,8 +180,12 @@ export function CustomizedMap() {
     console.log(`Shape with ID ${featureId} was clicked!`);
   }
 
+  const handleButtonPress = () => {
+    // Add your desired action here
+  };
+
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, borderRadius: 30, overflow: 'hidden' }}>
       <Select selectedValue={style} minWidth="200" accessibilityLabel="Choose Service" placeholder="Choose Service" _selectedItem={{
         bg: "teal.600",
         endIcon: <CheckIcon size="5" />
@@ -160,15 +199,16 @@ export function CustomizedMap() {
       </Select>
 
       <Mapbox.MapView
-        style={styles.map}
-        styleURL={style}
+        style={{ flex: 1 }}
+        // styleURL={style}
         // zoomLevel={10}
-        centerCoordinate={[lng, lat]}
+        // centerCoordinate={[lng, lat]}
         x={0}
         y={0}
         onLayout={handleMapViewLayout}
-        compassEnabled={true}
-        logoEnabled={false}
+        // compassEnabled={true}
+        // logoEnabled={false}
+
         // onMapIdle={handleMapIdle}
         ref={mapViewRef}
       >
@@ -187,6 +227,15 @@ export function CustomizedMap() {
         <Mapbox.MarkerView id={'test-marker'} coordinate={[-77.044211, 38.852924]}>
           <Mapbox.PointAnnotation id={'test-marker-pointer'} title={'this is a marker view'} coordinate={[-77.044211, 38.852924]} />
         </Mapbox.MarkerView>
+
+        <Mapbox.UserLocation
+          visible={true}
+          androidRenderMode={'compass'}
+          showsUserHeadingIndicator={true}
+          onUpdate={newLocation => {
+            console.log(newLocation)
+          }}
+        />
 
         <Mapbox.ShapeSource
           id="source1"
@@ -221,6 +270,15 @@ export function CustomizedMap() {
         >
           <Mapbox.LineLayer id="layer1" style={styles.lineLayer} />
         </Mapbox.ShapeSource>
+        <View style={styles.button}>
+          <Link href={'/map'}>
+            <MaterialCommunityIcons
+              name="arrow-expand"
+              size={30}
+              color={theme.colors.text}
+            />
+          </Link>
+        </View>
 
       </Mapbox.MapView>
     </View>
@@ -230,19 +288,14 @@ export function CustomizedMap() {
 export function MapContainer() {
   if (Platform.OS === "web") {
     return (
-      <View style={styles.page}>
-        <Text>
-          Mapbox maps are not supported on web yet.
-        </Text>
+      <View >
+        <WebPackconatiner />
       </View>
     )
   }
 
   return (
     <View style={styles.container}>
-      <Text>Map - Basic</Text>
-      <BasicMap />
-
       <Text>Map - Customized</Text>
       <CustomizedMap />
 
@@ -260,17 +313,29 @@ const styles = StyleSheet.create({
     backgroundColor: "#F5FCFF"
   },
   container: {
-    height: 500,
+    height: 300,
     width: '100%',
-    backgroundColor: "tomato",
-    marginBottom: 20
+    marginBottom: 20,
+    paddingHorizontal: 5,
+
   },
   map: {
-    flex: 1
+    flex: 1,
   },
   lineLayer: {
     lineColor: 'red',
     lineWidth: 3,
     lineOpacity: 0.84,
+  },
+  button: {
+    position: 'absolute',
+    bottom: 10,
+    right: 10,
+    backgroundColor: theme.colors.primary,
+    borderRadius: 50,
+    width: 45,
+    height: 45,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
