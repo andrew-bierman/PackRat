@@ -6,17 +6,18 @@ import { MaterialIcons } from "@expo/vector-icons";
 
 // import useGetItems from "../hooks/useGetItems";
 
-import useEditItem from "../hooks/useEditItem";
-import useDeleteItem from "../hooks/useDeleteItem";
+// import useEditItem from "../hooks/useEditItem";
+// import useDeleteItem from "../hooks/useDeleteItem";
 
 import { useState, useMemo, useEffect } from "react";
 import { Box, Text, Input } from "native-base";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteItem, editItem } from "../store/itemsStore";
 
 export const TableContainer = ({ currentPack }) => {
   // const { data, isLoading, isError, error } = useGetItems(packId);
-
+  const dispatch = useDispatch();
   const data = currentPack?.items;
 
   const isLoading = useSelector((state) => state.items.isLoading);
@@ -83,8 +84,8 @@ export const TableContainer = ({ currentPack }) => {
   };
 
 
-  const { deleteItem } = useDeleteItem();
-  const { editItem } = useEditItem();
+  // const { deleteItem } = useDeleteItem();
+  // const { editItem } = useEditItem();
 
   if (isLoading) return <Text>Loading....</Text>;
 
@@ -116,26 +117,26 @@ export const TableContainer = ({ currentPack }) => {
                   key={cellIndex}
                   data={
                     cellIndex === 3 ? (
-                      deleteItem.isLoading ? (
+                      isLoading ? (
                         <Text>Loading...</Text>
                       ) : (
                         <Feather
                           name="x-circle"
                           size={20}
                           color="black"
-                          onPress={() => deleteItem.mutate(data[index]._id)}
+                          onPress={() => dispatch(deleteItem(data[index]._id))}
                           style={{ alignSelf: "center" }}
                         />
                       )
                     ) : cellIndex === 4 ? (
-                      editItem.isLoading ? (
+                      isLoading ? (
                         <Text>Loading...</Text>
                       ) : (
                         <MaterialIcons
                           name="edit"
                           size={20}
                           color="black"
-                          onPress={() => editItem.mutate(edit[index])}
+                          onPress={() => dispatch(editItem(edit[index]))}
                         />
                       )
                     ) : (

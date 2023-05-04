@@ -7,7 +7,8 @@ import useAddToFavorite from "../../hooks/useAddToFavorites";
 import { Box, Heading, Text, HStack, Stack } from "native-base";
 
 // import { useAuth } from "../../auth/provider";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { addFavorite } from "../../store/favoritesStore";
 
 export default function CardMobile({
   _id,
@@ -21,7 +22,13 @@ export default function CardMobile({
 }) {
   // const { user } = useAuth();
   const user = useSelector((state) => state.auth.user);
-  const { addToFavorite } = useAddToFavorite();
+  const dispatch = useDispatch();
+  const favorites = useSelector((state) => state.favorites);
+  // const { addToFavorite } = useAddToFavorite();
+
+  const handleAddToFavorite = () => {
+    dispatch(addFavorite({ pack_id: _id, user_id: user._id }));
+  };
   return (
     <Box alignItems="center" padding="4">
       <Box
@@ -101,15 +108,12 @@ export default function CardMobile({
                     gap: 10,
                   }}
                 >
-                  {user?._id === owner_id ? null : addToFavorite.isLoading ? (
+                  {user?._id === owner_id ? null : favorites.isLoading ? (
                     <Text>Loading...</Text>
                   ) : (
                     <AntDesign
                       onPress={() =>
-                        addToFavorite.mutate({
-                          packId: _id,
-                          userId: user?._id,
-                        })
+                        handleAddToFavorite()
                       }
                       name="heart"
                       size={16}
