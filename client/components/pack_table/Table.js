@@ -43,7 +43,6 @@ export const TableContainer = ({ currentPack }) => {
       "Delete",
       "Edit",
     ],
-
     tableData: data?.map((value) => Object.values(value).slice(1)),
     tableWater: ["Water", totalWaterWeight, "", "", ""],
     tableFood: ["Food", totalFoodWeight, "", "", ""],
@@ -177,7 +176,7 @@ export const TableContainer = ({ currentPack }) => {
         />
         <Text style={{ marginRight: 20 }}>Food:</Text>
         <Input
-          style={{ flex: 1 }}
+          style={{ flex: 1, color: "white" }}
           keyboardType="numeric"
           placeholder="Enter food weight"
           value={String(currentPack?.food ?? "")}
