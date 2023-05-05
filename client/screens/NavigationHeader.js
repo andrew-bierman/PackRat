@@ -12,7 +12,7 @@ import { EvilIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 
-import packratlogo from "../assets/packrat.png";
+import packratlogo from "../assets/packrat_icon.png";
 import { useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -218,8 +218,10 @@ const styles = StyleSheet.create({
   },
 
   logo: {
-    width: 160,
-    height: 150,
+    width: 75,
+    height: 75,
+    marginLeft: 20,
+    marginTop: 10,
   },
   smallLogo: {
     width: 100,
