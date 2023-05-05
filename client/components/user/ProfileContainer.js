@@ -1,3 +1,4 @@
+import React, { useEffect } from "react";
 import { NativeBaseProvider, Container, Box, Text, Stack } from "native-base";
 import { StyleSheet } from "react-native";
 import PacksContainer from "./PacksContainer";

@@ -19,15 +19,15 @@ import * as Google from "expo-auth-session/providers/google";
 import { WEB_CLIENT_ID } from "@env";
 
 import { useState, useEffect } from "react";
-import useLogin from "../hooks/useLogin";
+// import useLogin from "../hooks/useLogin";
 import { useAuth } from "../auth/provider";
 import { Link } from "expo-router";
 import { useRouter } from "expo-router";
 import { theme } from "../theme";
 // import { signInWithGoogle } from "../auth/firebase";
-import { signInWithGoogle } from "../auth/firebase";
+// import { signInWithGoogle } from "../auth/firebase";
 import { useDispatch, useSelector } from "react-redux";
-import { signIn } from "../store/authStore";
+import { signIn, signInWithGoogle } from "../store/authStore";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -37,7 +37,9 @@ export default function Login() {
 
   const router = useRouter();
 
-  const { loginUserWithEmailAndPassword, loginUserWithGoogle } = useLogin();
+  const dispatch = useDispatch();
+
+  // const { loginUserWithEmailAndPassword, loginUserWithGoogle } = useLogin();
 
   // Add Google auth-related variables
   const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
@@ -56,7 +58,7 @@ export default function Login() {
     if (response?.type === "success") {
       console.log("+++++++++++++++++++++++++++++", response);
       const { id_token } = response.params;
-      loginUserWithGoogle(id_token);
+      dispatch(signInWithGoogle({ idToken: id_token }));
     }
   }, [response]);
 
@@ -85,9 +87,9 @@ export default function Login() {
   //   clientId: WEB_CLIENT_ID,
   // });
 
-  // const handleLogin = () => {
-  //   dispatch(signIn({ email, password }));
-  // };
+  const handleLogin = () => {
+    dispatch(signIn({ email, password }));
+  };
 
   // useEffect(() => {
   //   if (response?.type === "success") {
@@ -206,7 +208,7 @@ export default function Login() {
           </FormControl>
           <Button
             disabled={!email || !password}
-            onPress={() => loginUserWithEmailAndPassword(email, password)}
+            onPress={handleLogin}
             mt="2"
             colorScheme="indigo"
           >
