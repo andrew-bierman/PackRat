@@ -1,6 +1,8 @@
 import axios from "axios";
 
 export const getPhotonResults = async (addressArray) => {
+    if(!addressArray) return;
+
     let params = {
         q: addressArray,
         osm_tag: [
