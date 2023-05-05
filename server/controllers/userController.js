@@ -103,48 +103,48 @@ export const getUserById = async (req, res) => {
 //   }
 // };
 
+const getFirebaseUserByEmail = async (email) => {
+  try {
+    const firebaseUser = await firebaseAdmin.auth().getUserByEmail(email);
+    return firebaseUser;
+  } catch (error) {
+    if (error.code === 'auth/user-not-found') {
+      return null;
+    }
+    throw error;
+  }
+};
+
+
 export const createMongoDBUser = async (req, res) => {
   const { email, password } = req.body;
 
   try {
     // Check if a user with the given email already exists in Firebase Auth
-    const signInMethods = await firebaseAdmin.auth().fetchSignInMethodsForEmail(email);
-    const firebaseUser = signInMethods.length > 0 ? await firebaseAdmin.auth().getUserByEmail(email) : null;
+    const firebaseUser = await getFirebaseUserByEmail(email);
 
-    // If a user already exists in Firebase Auth, check if the provided password matches the user's password
-    if (firebaseUser) {
-      const signInResult = await firebaseAdmin.auth().signInWithEmailAndPassword(email, password);
+    // Check if the user already exists in MongoDB
+    const user = await User.findOne({ email: email });
 
-      const hashedPassword = await bcrypt.hash(password, 10); // <-- Hash the password
-      const newUser = new User({
-        email: email,
-        firebaseUid: firebaseUser.uid,
-        password: hashedPassword, // <-- Store hashed password in MongoDB
-      });
-      await newUser.save();
-
-      return res.status(201).json({ message: "User created successfully" });
+    if (user) {
+      return res.status(409).json({ error: 'Email already in use' });
     }
 
-    // If no user exists in Firebase Auth, create a new user and link it to the new MongoDB user record
-    const newFirebaseUser = await firebaseAdmin.auth().createUserWithEmailAndPassword(email, password);
     const hashedPassword = await bcrypt.hash(password, 10); // <-- Hash the password
     const newUser = new User({
       email: email,
-      firebaseUid: newFirebaseUser.user.uid,
+      firebaseUid: firebaseUser.uid,
       password: hashedPassword, // <-- Store hashed password in MongoDB
       // any other relevant user information
     });
     await newUser.save();
 
-    return res.status(201).json({ message: "User created successfully" });
+    return res.status(201).json({ message: "User created successfully", user: newUser });
   } catch (error) {
-    if (error.code === "auth/wrong-password") {
-      return res.status(409).json({ error: "Email already in use with a different password" });
-    }
     return res.status(500).json({ error: error.message });
   }
 };
+
 
 
 export const login = async (req, res) => {
