@@ -4,6 +4,8 @@ import { Table, TableWrapper, Row, Cell } from "react-native-table-component";
 import { Feather } from "@expo/vector-icons";
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 
+import { Select } from "native-base";
+
 // import useGetItems from "../hooks/useGetItems";
 
 
@@ -16,7 +18,7 @@ import { Box, Text, Input } from "native-base";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteItem, editItem } from "../store/itemsStore";
 
-import { Dimensions } from "react-native";
+import { convertWeight } from "../../utils/convertWeight";
 
 export const TableContainer = ({ currentPack }) => {
   // const { data, isLoading, isError, error } = useGetItems(packId);
@@ -31,6 +33,32 @@ export const TableContainer = ({ currentPack }) => {
 
   const [edit, setEdit] = useState();
 
+  const [weightUnit, setWeightUnit] = useState('lb');
+
+  const WeightUnitDropdown = ({ value, onChange }) => {
+    return (
+      <Select
+        selectedValue={value}
+        accessibilityLabel="Select weight unit"
+        placeholder="Select weight unit"
+        onValueChange={(itemValue) => onChange(itemValue)}
+      >
+        <Select.Item label="lb" value="lb" />
+        <Select.Item label="kg" value="kg" />
+        <Select.Item label="oz" value="oz" />
+        <Select.Item label="g" value="g" />
+      </Select>
+    );
+  };
+
+  const handleWeightChange = (value, index) => {
+    const newItem = { ...data[index], weight: value };
+    const convertedWeight = convertWeight(value, weightUnit, 'lb');
+    setData((prevState) => [...prevState.slice(0, index), newItem, ...prevState.slice(index + 1)]);
+  };
+
+
+
   const totalBaseWeight = data?.reduce((acc, curr) => acc + curr.weight, 0);
   const totalWaterWeight = currentPack?.water ?? 0;
   const totalFoodWeight = currentPack?.food ?? 0;
@@ -40,12 +68,12 @@ export const TableContainer = ({ currentPack }) => {
     tableTitle: ["Pack List"],
     tableHead: [
       "Item Name",
-      "Weight",
+      `Weight (${weightUnit})`,
       "Quantity",
-      "Delete",
       "Edit",
+      "Delete",
     ],
-    tableData: data?.map((value) => Object.values(value).slice(1)),
+    tableBaseData: data?.map((value) => Object.values(value).slice(1)),
     tableWater: ["Water", totalWaterWeight, "", "", ""],
     tableFood: ["Food", totalFoodWeight, "", "", ""],
     tableWaterFood: ["Water + Food", totalWaterWeight + totalFoodWeight, "", "", ""],
@@ -54,7 +82,28 @@ export const TableContainer = ({ currentPack }) => {
 
   const flexWidthArr = [2, 1, 1, 0.5, 0.5];
 
-  const tableDb = data?.map((value) => Object.values(value).slice(1, -1));
+  const tableDb = data?.map(({ name, weight, quantity, _id }, index) => [
+    name,
+    weight,
+    quantity,
+    <MaterialIcons
+      name="edit"
+      size={20}
+      color="black"
+      onPress={() => setEdit(index)}
+    />,
+    <Feather
+      name="x-circle"
+      size={20}
+      color="black"
+      onPress={() => deleteItem.mutate(_id)}
+      style={{ alignSelf: "center" }}
+    />,
+  ]);
+  
+
+  console.log("tableDb", tableDb);
+
   const tablekeys = data?.map((value) => Object.keys(value).slice(1));
 
   useEffect(() => {
@@ -72,11 +121,8 @@ export const TableContainer = ({ currentPack }) => {
 
   const handleEdit = (id, value, cellIndex) => {
     const newRow = { ...data[id], [tablekeys[id][cellIndex]]: value };
-    setEdit((prevState) => [...prevState.slice(0, id), newRow, ...prevState.slice(id + 1)]);
+    setData((prevState) => [...prevState.slice(0, id), newRow, ...prevState.slice(id + 1)]);
   };
-
-  // const { deleteItem } = useDeleteItem();
-  // const { editItem } = useEditItem();
 
   if (isLoading) return <Text>Loading....</Text>;
 
@@ -84,7 +130,9 @@ export const TableContainer = ({ currentPack }) => {
     <Box
       style={styles.container}
     >
+      <WeightUnitDropdown value={weightUnit} onChange={() => handleWeightChange(value, )} />
       {data?.length > 0 ? (
+
         <Table
           style={styles.tableStyle}
           borderStyle={{ borderColor: "transparent" }}
@@ -142,10 +190,12 @@ export const TableContainer = ({ currentPack }) => {
               ))}
             </TableWrapper>
           ))}
+
         </Table>
       ) : (
         <Text>Add your First Item</Text>
       )}
+
 
       <Box
         style={styles.waterContainer}
@@ -289,7 +339,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  
+
 
   smallCell: {
     // width: 50,
