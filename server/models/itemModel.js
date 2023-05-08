@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import Pack from "./packModel.js";
+import myDB from "./dbConnection.js";
 
 const { Schema } = mongoose;
 
@@ -14,6 +15,5 @@ const ItemSchema = new Schema({
   createdAt: String,
 });
 
-const myDB = mongoose.connection.useDb("packratdb");
-
-export default myDB.model("Item", ItemSchema);
+const Item = myDB.model("Item", ItemSchema);
+export default Item;

@@ -87,17 +87,18 @@ export const getPacks = async (req, res) => {
 
 
 export const getPackById = async (req, res) => {
-  const { _id } = req.params;
+  const { packId } = req.params;
 
   try {
-    const pack = await Pack.findById(_id).populate("items");
+    const objectId = new mongoose.Types.ObjectId(packId);
+    const pack = await Pack.findById(objectId) .populate("items");
 
     res.status(200).json(pack);
   } catch (error) {
+    console.error('getPackById error', error); // Add this line
     res.status(404).json({ msg: "Pack cannot be found" });
   }
 };
-
 
 export const addPack = async (req, res) => {
   const packBody = packValidation(req.body)
