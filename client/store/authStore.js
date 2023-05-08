@@ -12,12 +12,12 @@ const initialState = {
 
 export const signUp = createAsyncThunk(
   "auth/signUp",
-  async ({ email, password }, { rejectWithValue }) => {
+  async ({ email, password, name }, { rejectWithValue }) => {
     try {
       const response = await createUserWithEmailAndPassword(email, password)
 
       // Create a user in the database
-      await createUserInMongoDB({ email: response.user.email, uid: response.user.uid, password })
+      await createUserInMongoDB({ email: response.user.email, uid: response.user.uid, password, name })
 
       // Link the user's accounts
       const idToken = await auth.currentUser.getIdToken();
