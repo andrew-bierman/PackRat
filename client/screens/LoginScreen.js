@@ -10,6 +10,7 @@ import {
   Center,
   NativeBaseProvider,
   View,
+  Toast,
 } from "native-base";
 
 import { FontAwesome } from "@expo/vector-icons";
@@ -39,7 +40,10 @@ export default function Login() {
 
   const user = useSelector((state) => state.auth.user);
 
+  console.log("_______++++++++", user);
+
   if (user?.uid) {
+    Toast.show({ title: "Login sucessfully", duration: 5000, placement: 'top-right', style: { backgroundColor: 'green'} })
     router.push("/");
   }
 
@@ -53,14 +57,14 @@ export default function Login() {
   const auth = useSelector((state) => state.auth);
   // Add useEffect hook to listen for auth state changes
   useEffect(() => {
+    console.log({ auth });
     if (auth.isLoggedIn) {
       router.push("/");
     }
   }, [auth, router]);
-  
+
   useEffect(() => {
     if (response?.type === "success") {
-      console.log("+++++++++++++++++++++++++++++", response);
       const { id_token } = response.params;
       loginUserWithGoogle(id_token);
     }

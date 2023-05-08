@@ -8,26 +8,58 @@ import {
   Center,
   HStack,
   Text,
-  View
+  View,
+  Toast
 } from "native-base";
 
 import { FontAwesome } from '@expo/vector-icons';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
-
+import { WEB_CLIENT_ID } from "@env";
 import { useState, useEffect } from "react";
 import useRegister from "../hooks/useRegister";
 import { useRouter } from "expo-router";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { Link } from "expo-router";
-import { signInWithGoogle } from "../auth/firebase";
+import { useSelector } from "react-redux";
 
 export default function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { addUser } = useRegister();
+  const { signupWithEmail } = useRegister();
   const router = useRouter();
+
+
+  const user = useSelector((state) => state.auth.user);
+
+  console.log("USER LOG", user);
+
+  if (user?.user?.firebaseUid) {
+    Toast.show({ title: user?.message, duration: 5000, placement: 'top-right', style: { backgroundColor: 'green'} })
+    router.push("/");
+  }
+
+  const registerUser = () => {
+    try {
+      const auth = getAuth();
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          // Signed in 
+          const user = userCredential.user;
+          if (user) {
+            console.log({ user });
+            signupWithEmail(user?.uid, name, email, password);
+          }
+        })
+
+    }
+    catch (e) {
+      console.log("Error", e)
+    }
+  }
+
 
   return (
     <Center w="100%">
@@ -71,12 +103,12 @@ export default function Register() {
             />
           </FormControl>
           <Button
-            onPress={() => addUser.mutate({ name, email, password, from: "UserSignIn" })}
+            onPress={() => registerUser()}
             mt="2"
             colorScheme="indigo"
             disabled={!email || !password || !name}
           >
-            {addUser.isLoading ? "Loading..." : "Sign up"}
+            {"Sign up"}
           </Button>
           <HStack mt="6" justifyContent="center">
             <Text
@@ -144,7 +176,7 @@ export default function Register() {
           {/* Google register */}
         </VStack>
       </Box>
-      {addUser.isSuccess && router.push("/sign-in")}
+      {/* {addUser.isSuccess && router.push("/sign-in")} */}
     </Center>
   );
 }
