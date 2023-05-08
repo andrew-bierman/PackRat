@@ -117,7 +117,7 @@ const getFirebaseUserByEmail = async (email) => {
 
 
 export const createMongoDBUser = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, name } = req.body;
 
   try {
     // Check if a user with the given email already exists in Firebase Auth
@@ -135,7 +135,7 @@ export const createMongoDBUser = async (req, res) => {
       email: email,
       firebaseUid: firebaseUser.uid,
       password: hashedPassword, // <-- Store hashed password in MongoDB
-      // any other relevant user information
+      name: name
     });
     await newUser.save();
 
