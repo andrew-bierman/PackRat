@@ -1,9 +1,9 @@
 import { useRouter, useSegments } from "expo-router";
 import React from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { onAuthStateChanged ,signInWithPopup} from "firebase/auth";
+import { onAuthStateChanged, signInWithPopup } from "firebase/auth";
 import { auth } from "./firebase";
-import { signInWithEmailAndPassword, signInWithGoogle, GoogleAuthProvider } from "firebase/auth";
+import { signInWithEmailAndPassword, signInWithGoogle, GoogleAuthProvider, createUserWithEmailAndPassword } from "firebase/auth";
 
 const AuthContext = React.createContext(null);
 
@@ -98,11 +98,21 @@ export function ProviderAuth(props) {
     } catch (error) {
       console.log(error);
     }
-};
-  
+  };
+
   const signOut = async () => {
     await auth.signOut();
   };
+
+  const signUpWithEmailPasswordProvider = async (email, password) => {
+    try {
+      const newUser = await createUserWithEmailAndPassword(email, password);
+      console.log({ newUser });
+
+    } catch (e) {
+      console.log("Error", e)
+    }
+  }
 
   return (
     <AuthContext.Provider
@@ -110,6 +120,7 @@ export function ProviderAuth(props) {
         signInWithEmailPasswordProvider,
         signInWithGoogleProvider,
         signOut,
+        signUpWithEmailPasswordProvider,
         user,
       }}
     >
