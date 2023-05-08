@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import Item from "./itemModel.js";
+import myDB from "./dbConnection.js";
 
 const { Schema } = mongoose;
 
@@ -15,9 +16,12 @@ const PackSchema = new Schema({
 });
 
 PackSchema.virtual("total_weight").get(function () {
-  return this.items.reduce((total, item) => total + item.weight * item.quantity, 0);
+  if (this.items && this.items.length > 0 && this.items[0] instanceof Item) {
+    return this.items.reduce((total, item) => total + item.weight * item.quantity, 0);
+  } else {
+    return 0;
+  }
 });
 
-const myDB = mongoose.connection.useDb("packratdb");
-
-export default myDB.model("Pack", PackSchema);
+const Pack = myDB.model("Pack", PackSchema);
+export default Pack;

@@ -9,6 +9,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getPublicPacks } from "../../store/feedStore";
+import { Link } from "expo-router";
 
 const dataValues = ["Favorite", "Most Recent"];
 
@@ -39,8 +40,8 @@ export default function Feed() {
         flexWrap="wrap"
       >
         {publicParksData?.length > 0 ? (
-          publicParksData?.map((pack) => <Card key={pack?._id} {...{ ...pack }} />)
-        ) : (
+          publicParksData?.map((pack) => <Link href={"/pack/" + pack?._id}><Card key={pack?.owner_id} {...{ ...pack }} /></Link>)
+          ) : (
           <Text>No Public Packs Available</Text>
         )}
       </Stack>
