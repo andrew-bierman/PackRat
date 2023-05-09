@@ -53,14 +53,15 @@ const sendPasswordResetEmail = async (email, resetUrl) => {
 export const requestPasswordResetEmailAndToken = async (req, res) => {
     try {
         const { email } = req.body;
-
-        // Generate a password reset token that includes the user's email address
+        const user = await User.findOne({ email });
+    
+        if (!user) {
+          return res.status(400).send({ error: 'No user found with this email address' });
+        }
+    
         const resetToken = generatePasswordResetToken(email);
-
-        // Update the user's password reset token and token expiration in MongoDB
-        const user = await User.findOneAndUpdate({ email }, { passwordResetToken: resetToken, passwordResetTokenExpiration: Date.now() + (24 * 60 * 60 * 1000) });
-
-        // Send the password reset email with the reset token included in the URL
+        await User.findOneAndUpdate({ email }, { passwordResetToken: resetToken, passwordResetTokenExpiration: Date.now() + (24 * 60 * 60 * 1000) });
+    
         const resetUrl = `${CLIENT_URL}/password-reset?token=${resetToken}`;
         sendPasswordResetEmail(email, resetUrl);
 
@@ -76,17 +77,23 @@ export const handlePasswordReset = async (req, res) => {
     const { password } = req.body;
     const { token } = req.params;
     const email = verifyPasswordResetToken(token);
-    const hashedPassword = await bcrypt.hash(password, 10); // hash the password
+    const hashedPassword = bcrypt.hashSync(password, 10); // hash the password
 
-    const user = await User.findOneAndUpdate({ email }, { password: hashedPassword, passwordResetToken: null, passwordResetTokenExpiration: null });
+    const user = await User.findOne({ email });
 
     if (!user) {
       throw new Error('No user found with this email address');
     }
 
+    if (Date.now() > user.passwordResetTokenExpiration) {
+      throw new Error('Password reset token has expired');
+    }
+
+    await User.findOneAndUpdate({ email }, { password: hashedPassword, passwordResetToken: null, passwordResetTokenExpiration: null });
+
     return res.send({ message: 'Password reset successful' });
   } catch (error) {
     console.error('Error resetting password:', error);
-    return res.status(500).send({ error: 'Internal server error' });
+    return res.status(500).send({ error: error.message || 'Internal server error' });
   }
 };
