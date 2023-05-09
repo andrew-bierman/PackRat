@@ -34,6 +34,7 @@ import geoCodeRoutes from "./routes/geoCodeRoutes.js";
 import getParkRoutes from "./routes/getParkRoutes.js";
 import getTrailRoutes from "./routes/getTrailRoutes.js";
 import osmRoutes from "./routes/osmRoutes.js";
+import passwordResetRoutes from "./routes/passwordResetRoutes.js";
 
 const logger = (req, res, next) => {
   console.log(`${req.method} ${req.path}`);
@@ -56,6 +57,7 @@ app.use("/geocode", geoCodeRoutes);
 app.use("/getparks", getParkRoutes);
 app.use("/gettrails", getTrailRoutes);
 app.use("/osm", osmRoutes);
+app.use("/password-reset", passwordResetRoutes);
 
 // Also listen to /api for backwards compatibility
 app.use("/api/user", userRoutes);
@@ -67,6 +69,7 @@ app.use("/api/geocode", geoCodeRoutes);
 app.use("/api/getparks", getParkRoutes);
 app.use("/api/gettrails", getTrailRoutes);
 app.use("/api/osm", osmRoutes);
+app.use("/api/password-reset", passwordResetRoutes);
 
 mongoose.connect(connectionString).then(() => console.log("connected"));
 
