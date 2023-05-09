@@ -15,6 +15,8 @@ const UserSchema = new Schema({
   trips: [{ type: Schema.Types.ObjectId, ref: Trip }],
   is_certified_guide: { type: Boolean },
   favorites: [{ type: Schema.Types.ObjectId, ref: Pack }],
+  passwordResetToken: { type: String },
+  passwordResetTokenExpiration: { type: Date },
 });
 
 const myDB = mongoose.connection.useDb("packratdb");
