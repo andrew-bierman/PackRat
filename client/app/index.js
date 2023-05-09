@@ -22,7 +22,9 @@ import Dashboard from "../components/dashboard";
 export default function Index() {
 
   const user = useSelector((state) => state.auth.user);
+  const reduxState = useSelector((state) => state);
 
+  console.log("reduxState", reduxState)
   return (
     <ScrollView>
       {Platform.OS === "web" ? (
