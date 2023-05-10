@@ -16,7 +16,7 @@ export default function ResetPasswordRoute() {
         }}
       />
       <RequestPasswordReset />
-      <PasswordResetForm />
+      {/* <PasswordResetForm /> */}
     </>
   ) : (
     <ResetPassword />
