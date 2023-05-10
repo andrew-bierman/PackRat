@@ -25,12 +25,10 @@ export const PasswordResetForm = () => {
                 duration: 3000,
             });
         } catch (error) {
+            console.log("Error here", error);
             setLoading(false);
-            Toast.show({
-                text: 'Error resetting password',
-                type: 'danger',
-                duration: 3000,
-            });
+            Toast.show({ title: 'Error resetting password', duration: 5000, placement: 'top-right', style: { backgroundColor: 'red' } })
+
         }
     };
 
