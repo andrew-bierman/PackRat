@@ -40,13 +40,13 @@ export const signIn = createAsyncThunk(
     try {
       const response = await signInWithEmailAndPassword(auth, email, password);
 
+      console.log({response});
       // Link the user's accounts
       const idToken = await auth.currentUser.getIdToken();
       await linkFirebaseAuthInDBRequest(idToken)
-
-
       return response.user;
     } catch (error) {
+      console.log("Error message ++++",error.message);
       return rejectWithValue(error.message);
     }
   }
@@ -159,15 +159,18 @@ export const authSlice = createSlice({
       .addCase(signIn.pending, (state) => {
         state.loading = true;
         state.error = null;
+        state.error = null;
       })
       .addCase(signIn.fulfilled, (state, action) => {
         // console.log("userinfo", action.payload);
         state.user = action.payload;
         state.loading = false;
+        state.error = null;
       })
       .addCase(signIn.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+        state.user = null;
       })
       .addCase(signOut.pending, (state) => {
         state.loading = true;
