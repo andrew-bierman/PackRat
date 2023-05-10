@@ -24,3 +24,5 @@ export const STMP_PASSWORD = process.env.STMP_PASSWORD
 export const CLIENT_URL = process.env.CLIENT_URL
 
 export const JWT_SECRET = process.env.JWT_SECRET
+
+export const SEND_GRID_API_KEY = process.env.SEND_GRID_API_KEY
