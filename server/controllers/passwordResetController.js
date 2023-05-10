@@ -56,9 +56,20 @@ const verifyPasswordResetToken = (token) => {
 const sendPasswordResetEmail = async (email, resetUrl) => {
     const mailOptions = {
         to: email,
-        from: STMP_EMAIL,
+        from: {
+            email: STMP_EMAIL,
+            name: 'PackRat Support'
+        },
         subject: 'Password Reset',
-        text: `Click the link below to reset your password:\n\n${resetUrl}\n\nIf you did not request to reset your password, please ignore this email.`,
+        // text: `Click the link below to reset your password:\n\n${resetUrl}\n\nIf you did not request to reset your password, please ignore this email.`,
+        html: `
+        <div style="font-family: Arial, sans-serif; font-size: 14px; line-height: 1.5;">
+          <h2 style="font-size: 18px; font-weight: bold; margin-bottom: 16px;">Password Reset</h2>
+          <p style="margin-bottom: 16px;">Click the link below to reset your password:</p>
+          <a href="${resetUrl}" style="display: inline-block; padding: 8px 16px; background-color: #0070f3; color: #fff; text-decoration: none; border-radius: 4px; margin-bottom: 16px;">Reset Password</a>
+          <p>If you did not request to reset your password, please ignore this email.</p>
+        </div>
+      `,
     };
 
     try {
