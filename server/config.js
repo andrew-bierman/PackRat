@@ -17,3 +17,12 @@ export const SERVICE_ACCOUNT_KEY = {
     "auth_provider_x509_cert_url": process.env.SERVICE_ACCOUNT_KEY_AUTH_PROVIDER_X509_CERT_URL,
     "client_x509_cert_url": process.env.SERVICE_ACCOUNT_KEY_CLIENT_X509_CERT_URL
 }
+
+export const STMP_EMAIL = process.env.STMP_EMAIL
+export const STMP_PASSWORD = process.env.STMP_PASSWORD
+
+export const CLIENT_URL = process.env.CLIENT_URL
+
+export const JWT_SECRET = process.env.JWT_SECRET
+
+export const SEND_GRID_API_KEY = process.env.SEND_GRID_API_KEY

@@ -10,6 +10,7 @@ import {
   Center,
   NativeBaseProvider,
   View,
+  Toast,
 } from "native-base";
 
 import { FontAwesome } from "@expo/vector-icons";
@@ -38,9 +39,15 @@ export default function Login() {
   const router = useRouter();
 
   const user = useSelector((state) => state.auth.user);
+  const error = useSelector((state) => state.auth.error);
+
 
   if (user?.uid) {
+    Toast.show({ title: "Login sucessfully", duration: 3000, placement: 'top-right', style: { backgroundColor: 'green' } })
     router.push("/");
+  }
+  if(error){
+    Toast.show({ title: "Wrong-password", duration: 3000, placement: 'top-right', style: { backgroundColor: 'red' } })
   }
 
   const { loginUserWithEmailAndPassword, loginUserWithGoogle } = useLogin();
@@ -57,10 +64,9 @@ export default function Login() {
       router.push("/");
     }
   }, [auth, router]);
-  
+
   useEffect(() => {
     if (response?.type === "success") {
-      console.log("+++++++++++++++++++++++++++++", response);
       const { id_token } = response.params;
       loginUserWithGoogle(id_token);
     }
@@ -239,6 +245,21 @@ export default function Login() {
                 Sign Up
               </Text>
             </Link>
+          </HStack>
+
+          <HStack justifyContent="center">
+            <Link href="/password-reset">
+              <Text
+                style={{
+                  color: "#818cf8",
+                  fontWeight: 400,
+                  fontSize: 12,
+                }}
+              >
+                Reset Password?
+              </Text>
+            </Link>
+
           </HStack>
           {/* Google Login starts*/}
           <HStack mt="6" justifyContent="center">

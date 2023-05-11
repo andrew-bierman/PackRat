@@ -3,6 +3,7 @@ import { auth } from "../auth/firebase";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut as firebaseSignOut, signInWithPopup, GoogleAuthProvider, signInWithCredential } from "firebase/auth";
 import axios from "axios";
 import { api } from "../constants/api";
+import { Alert } from "react-native";
 
 const initialState = {
   user: null,
@@ -12,12 +13,12 @@ const initialState = {
 
 export const signUp = createAsyncThunk(
   "auth/signUp",
-  async ({ email, password }, { rejectWithValue }) => {
+  async ({ email, password, name }, { rejectWithValue }) => {
     try {
       const response = await createUserWithEmailAndPassword(email, password)
 
       // Create a user in the database
-      await createUserInMongoDB({ email: response.user.email, uid: response.user.uid, password })
+      await createUserInMongoDB({ email: response.user.email, uid: response.user.uid, password, name })
 
       // Link the user's accounts
       const idToken = await auth.currentUser.getIdToken();
@@ -39,13 +40,13 @@ export const signIn = createAsyncThunk(
     try {
       const response = await signInWithEmailAndPassword(auth, email, password);
 
+      console.log({response});
       // Link the user's accounts
       const idToken = await auth.currentUser.getIdToken();
       await linkFirebaseAuthInDBRequest(idToken)
-
-
       return response.user;
     } catch (error) {
+      console.log("Error message ++++",error.message);
       return rejectWithValue(error.message);
     }
   }
@@ -69,7 +70,7 @@ export const signInWithGoogle = createAsyncThunk(
     try {
       const credential = GoogleAuthProvider.credential(idToken);
       const response = await signInWithCredential(auth, credential);
-      
+
       // Obtain the Firebase auth token
       const firebaseAuthToken = await response.user.getIdToken();
 
@@ -105,10 +106,10 @@ export const linkFirebaseAuthInDBRequest = async (firebaseAuthToken) => {
     const headers = { Authorization: `Bearer ${token}` };
     const data = { firebaseAuthToken };
     const response = await axios.post(
-      `${api}/user/link-firebase-auth`, 
-      data, 
+      `${api}/user/link-firebase-auth`,
+      data,
       // { headers }
-      );
+    );
     return response.data;
   } catch (error) {
     console.error("Error in linkFirebaseAuthInDBRequest:", error.message);
@@ -116,22 +117,22 @@ export const linkFirebaseAuthInDBRequest = async (firebaseAuthToken) => {
 }
 
 
-export const createUserInMongoDB = async ({ email, uid, name, password }) => {
-  try {
-    const response = await axios.post(`${api}/user/create-mongodb-user`, {
-      email,
-      firebaseUid: uid,
-      name,
-      password,
-    });
-    return response.data;
-  } catch (error) {
-    console.error("Error in createUserInMongoDB:", error.message);
+export const createUserInMongoDB = createAsyncThunk(
+  "auth/signUpWithEmailPassword",
+  async ({ uid, name, email, password }, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(`${api}/user/create-mongodb-user`, {
+        email,
+        name,
+        firebaseUid: uid,
+        password,
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
   }
-}
-
-
-
+);
 
 
 export const authSlice = createSlice({
@@ -158,15 +159,18 @@ export const authSlice = createSlice({
       .addCase(signIn.pending, (state) => {
         state.loading = true;
         state.error = null;
+        state.error = null;
       })
       .addCase(signIn.fulfilled, (state, action) => {
         // console.log("userinfo", action.payload);
         state.user = action.payload;
         state.loading = false;
+        state.error = null;
       })
       .addCase(signIn.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+        state.user = null;
       })
       .addCase(signOut.pending, (state) => {
         state.loading = true;
@@ -189,6 +193,18 @@ export const authSlice = createSlice({
         state.loading = false;
       })
       .addCase(signInWithGoogle.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(createUserInMongoDB.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(createUserInMongoDB.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.loading = false;
+      })
+      .addCase(createUserInMongoDB.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })

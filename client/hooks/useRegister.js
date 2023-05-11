@@ -1,33 +1,19 @@
-import fetcher from "../api/fetcher";
-import { api } from "../constants/api";
-import { useMutation } from "@tanstack/react-query";
-import { queryClient } from "../constants/queryClient";
-
-const addUser = async (newUser) => {
-  const response = await fetch(`${api}/user/`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(newUser),
-  });
-  const data = await response.json();
-  if (!response.ok) {
-    throw new Error(data.error.message);
-  }
-  return data;
-};
+// import { api } from "../constants/api";
+// import { useMutation } from "@tanstack/react-query";
+// import { queryClient } from "../constants/queryClient";
+import { useDispatch } from "react-redux";
+// import { useAuth } from "../auth/provider";
+// import { signInWithEmailAndPassword, signInWithGoogle } from "firebase/auth";
+import { createUserInMongoDB, signIn, signInWithGoogle } from "../store/authStore";
 
 export default function useRegister() {
-  const mutation = useMutation({
-    mutationFn: async (newUser) => {
-      return addUser(newUser);
-    },
-    onSuccess: (data, variables, context) => {
-      // Invalidate and refetch
-      queryClient.invalidateQueries({ queryKey: ["user"] });
-    },
-  });
+  const dispatch = useDispatch();
 
-  return { addUser: mutation };
+  const signupWithEmail = (uid, name, email, password) => {
+    dispatch(createUserInMongoDB({ uid, name,email, password }));
+  };
+
+  return {
+    signupWithEmail
+  };
 }
