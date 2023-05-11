@@ -15,12 +15,14 @@ import { Select } from "native-base";
 import { useState, useMemo, useEffect } from "react";
 import { Box, Text, Input } from "native-base";
 
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector, useDispatch } from "react-redux";
 import { deleteItem, editItem } from "../store/itemsStore";
 
 import { convertWeight } from "../../utils/convertWeight";
+import { selectPackById } from "../../store/packsStore";
 
 export const TableContainer = ({ currentPack }) => {
+
   // const { data, isLoading, isError, error } = useGetItems(packId);
   const dispatch = useDispatch();
   const data = currentPack?.items;
