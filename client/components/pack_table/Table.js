@@ -14,11 +14,13 @@ import useDeleteItem from "../../hooks/useDeleteItem";
 import { useState, useMemo, useEffect } from "react";
 import { Box, Text, Input } from "native-base";
 
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 import { convertWeight } from "../../utils/convertWeight";
+import { selectPackById } from "../../store/packsStore";
 
 export const TableContainer = ({ currentPack }) => {
+
   // const { data, isLoading, isError, error } = useGetItems(packId);
 
   const data = currentPack?.items;

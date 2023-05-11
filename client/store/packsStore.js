@@ -113,6 +113,6 @@ export const selectIsLoading = (state) => state.packs.isLoading;
 
 export const selectError = (state) => state.packs.error;
 
-export const selectPackById = (state, packId) => state.packs.packs.find((pack) => pack.id === packId);
+export const selectPackById = (state, packId) => state.packs.packs.find((pack) => pack._id === packId);
 
 export default packsSlice.reducer;

@@ -8,44 +8,36 @@ import { AddItem } from "../AddItem";
 import { TableContainer } from "../pack_table/Table";
 // import { useAuth } from "../../auth/provider";
 import { useSelector } from "react-redux";
-import { fetchUserPacks } from "../../store/packsStore";
+import { fetchUserPacks, selectPackById } from "../../store/packsStore";
 import { useDispatch } from "react-redux";
 
 import { CustomModal } from "../modal";
 
 export default function PackContainer() {
-  const dispatch = useDispatch()
-
-  const [currentPack, setCurrentPack] = useState();
-  const [packName, setPackName] = useState("");
-  // const { user } = useAuth();
-  const user = useSelector((state) => state.auth.user);
-
-  useEffect(() => {
-    dispatch(fetchUserPacks(user?._id))
-  }, [dispatch, user?._id])
-
-  // const { data, isLoading, isError, error } = useGetPacks(user?._id);
-
-  const data = useSelector((state) => state.packs.packs);
-
-  const isLoading = useSelector((state) => state.packs.isLoading);
-
-  const error = useSelector((state) => state.packs.error);
-
-  const isError = error !== null;
-
-
+  const dispatch = useDispatch();
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
 
+  const user = useSelector((state) => state.auth.user);
+  const packs = useSelector((state) => state.packs.packs);
+
+  const [packName, setPackName] = useState("");
+  const [currentPackId, setCurrentPackId] = useState(null);
+
+  useEffect(() => {
+    dispatch(fetchUserPacks(user?._id));
+  }, [dispatch, user?._id]);
+
   const handlePack = (name) => {
-    setCurrentPack(data?.find((pack) => pack.name === name));
     setPackName(name);
+    const selectedPack = packs.find((pack) => pack.name === name);
+    setCurrentPackId(selectedPack?._id);
   };
 
-  const dataValues = data?.map((pack) => pack.name) ?? [];
+  const currentPack = useSelector((state) =>
+    selectPackById(state, currentPackId)
+  );
 
-  // if (isLoading) return <Text>Loading....</Text>;
+  const dataValues = packs?.map((pack) => pack.name) ?? [];
 
   return dataValues?.length > 0 ? (
     <Box style={styles.mainContainer}>
@@ -55,7 +47,7 @@ export default function PackContainer() {
         setUnit={handlePack}
         width="300"
       />
-      {currentPack?._id ? (
+      {currentPackId && (
         <>
           <CustomModal
             title="Add Item"
@@ -75,17 +67,18 @@ export default function PackContainer() {
               },
             ]}
           >
-            {/* Add your modal content here */}
-            <AddItem key={`addItem comp - ${currentPack._id}`} packId={currentPack._id} />
+            <AddItem packId={currentPackId} />
           </CustomModal>
-          <TableContainer key={`table - ${currentPack._id}`} currentPack={currentPack} />
+          <TableContainer
+            key={`table - ${currentPackId}`}
+            currentPack={currentPack}
+          />
         </>
-      ) : null}
-
-      {isError ? <Text>{error}</Text> : null}
+      )}
     </Box>
   ) : null;
 }
+
 
 const styles = StyleSheet.create({
   mainContainer: {
