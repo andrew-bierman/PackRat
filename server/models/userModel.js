@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import Pack from "./packModel.js";
 import Trip from "./tripModel.js";
+import myDB from "./dbConnection.js";
 
 const { Schema } = mongoose;
 
@@ -19,6 +20,5 @@ const UserSchema = new Schema({
   passwordResetTokenExpiration: { type: Date },
 });
 
-const myDB = mongoose.connection.useDb("packratdb");
-
-export default myDB.model("User", UserSchema);
+const User = myDB.model("User", UserSchema);
+export default User;

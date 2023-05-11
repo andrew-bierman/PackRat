@@ -1,23 +1,26 @@
-import Feed from "../../components/feed/Feed";
-import FeedMobile from "../../components/feed/FeedMobile";
+import PackContainer from "../../components/pack/PackContainer";
+import { PackDetails } from "../../components/pack/PackDetails";
+import { DetailsComponent } from "../../components/details";
 import { Platform } from "react-native";
+import ProfileContainerMobile from "../../components/user/ProfileContainerMobile";
 import { Stack as Header } from "expo-router";
 
-export default function Packs() {
+export default function Pack() {
   return Platform.OS === "web" ? (
     <>
       <Header.Screen
         options={{
           // https://reactnavigation.org/docs/headers#setting-the-header-title
-          title: "Packs",
+          title: "Pack",
           // https://reactnavigation.org/docs/headers#adjusting-header-styles
 
           // https://reactnavigation.org/docs/headers#replacing-the-title-with-a-custom-component
         }}
       />
-      <Feed />
+      {/* <DetailsComponent type='pack'/> */}
+      <PackDetails />
     </>
   ) : (
-    <FeedMobile />
+    <></>
   );
 }

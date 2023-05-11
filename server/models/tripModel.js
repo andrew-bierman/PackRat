@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import User from "./userModel.js";
 import Pack from "./packModel.js";
+import myDB from "./dbConnection.js";
 
 const { Schema } = mongoose;
 
@@ -16,6 +17,5 @@ const TripSchema = new Schema({
   is_public: { type: Boolean },
 });
 
-const myDB = mongoose.connection.useDb("packratdb");
-
-export default myDB.model("Trip", TripSchema);
+const Trip = myDB.model("Trip", TripSchema);
+export default Trip;

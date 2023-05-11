@@ -10,7 +10,7 @@ import { NativeBaseProvider } from "native-base";
 import store from "../store/store";
 import NavigationMobile from "../screens/NavigationMobile";
 
-import { ProviderAuth } from "../auth/provider";
+// import { ProviderAuth } from "../auth/provider";
 
 export default function HomeLayout() {
   return (
