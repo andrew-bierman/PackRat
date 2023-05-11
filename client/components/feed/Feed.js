@@ -6,6 +6,7 @@ import useGetPublicPacks from "../../hooks/useGetPublicPacks";
 import { theme } from "../../theme";
 import DropdownComponent from "../Dropdown";
 import { useState } from "react";
+import { Link } from "expo-router";
 
 const dataValues = ["Favorite", "Most Recent"];
 
@@ -29,8 +30,8 @@ export default function Feed() {
         flexWrap="wrap"
       >
         {data?.length > 0 ? (
-          data?.map((pack) => <Card key={pack?._id} {...{ ...pack }} />)
-        ) : (
+          data?.map((pack) => <Link href={"/pack/" + pack?._id}><Card key={pack?.owner_id} {...{ ...pack }} /></Link>)
+          ) : (
           <Text>No Public Packs Available</Text>
         )}
       </Stack>

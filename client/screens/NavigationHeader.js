@@ -68,20 +68,21 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
               <Text>Home</Text>
             </View>
           </Link>
-          <Link href="/trips">
+          <Link href="/feed">
             <View style={isMobile ? styles.mobileLink : styles.link}>
-              <MaterialCommunityIcons name="weather-pouring" size={24} color={theme.colors.iconColor} />
-              <Text>Trips</Text>
-            </View>
-          </Link>
-          <Link href="profile">
-            <View style={isMobile ? styles.mobileLink : styles.link}>
-              <FontAwesome
-                name="book"
+              <MaterialCommunityIcons
+                name="newspaper-variant"
                 size={24}
                 color={theme.colors.iconColor}
               />
-              <Text>Profile</Text>
+
+              <Text>Feed</Text>
+            </View>
+          </Link>
+          <Link href="/trips">
+            <View style={isMobile ? styles.mobileLink : styles.link}>
+              <MaterialCommunityIcons name="routes" size={24} color={theme.colors.iconColor} />
+              <Text>Trips</Text>
             </View>
           </Link>
           <Link href="/packs">
@@ -103,6 +104,16 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
                 color={theme.colors.iconColor}
               />
               <Text>About</Text>
+            </View>
+          </Link>
+          <Link href="profile">
+            <View style={isMobile ? styles.mobileLink : styles.link}>
+              <FontAwesome
+                name="book"
+                size={24}
+                color={theme.colors.iconColor}
+              />
+              <Text>Profile</Text>
             </View>
           </Link>
           <View style={isMobile ? styles.mobileLink : styles.link}>
