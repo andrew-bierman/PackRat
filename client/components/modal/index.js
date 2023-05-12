@@ -26,7 +26,7 @@ export const CustomModal = ({
 
     return (
         <>
-            <Button onPress={() => onTrigger(true)}>{trigger}</Button>
+            <Button top={5} alignSelf={'center'} w={"30%"} onPress={() => onTrigger(true)}>{trigger}</Button>
             <NBModal isOpen={isActive} onClose={closeModal} {...rest} placement="center">
                 <NBModal.Content maxWidth="400px">
                     <NBModal.CloseButton />
