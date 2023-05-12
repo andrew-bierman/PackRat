@@ -6,22 +6,24 @@ import { useSearchParams } from 'expo-router';
 import axios from 'axios';
 import { api } from '../../constants/api';
 
-export const PasswordResetForm = () => {
+export const PasswordResetForm = ({ token }) => {
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
-    //   get token from url using expo router
-    const { token } = useSearchParams();
 
-    console.log('token', token)
+    // const { token } = useSearchParams();
+
+    // console.log('token', token)
 
     const handlePasswordReset = async () => {
         try {
             setLoading(true);
             await axios.post(`${api}/password-reset/${token}`, { password });
+            setPassword('');
             setLoading(false);
             Toast.show({
-                text: 'Password reset successful',
-                type: 'success',
+                title: 'Password reset successful',
+                style: { backgroundColor: 'red' },
+                placement: 'top-right',
                 duration: 3000,
             });
         } catch (error) {

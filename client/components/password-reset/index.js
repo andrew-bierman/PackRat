@@ -4,10 +4,16 @@ import { Box, Button, Center, Heading, Input, Text, Toast, VStack } from 'native
 import axios from 'axios';
 import { api } from '../../constants/api';
 import { PasswordResetForm } from './PasswordResetForm';
+import { CustomModal } from '../modal';
+import { useSearchParams } from 'expo-router';
 
 export const RequestPasswordReset = () => {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
+  //   get token from url using expo router
+  const { token } = useSearchParams();
 
   const handleResetPassword = async () => {
     try {
@@ -17,6 +23,7 @@ export const RequestPasswordReset = () => {
       // The API endpoint should send an email with a reset link to the provided email
       await axios.post(`${api}/password-reset`, { email });
       setLoading(false);
+      setIsOpen(false);
       Toast.show({
         title: 'Password reset email sent',
         style: { backgroundColor: 'green' },
@@ -31,44 +38,58 @@ export const RequestPasswordReset = () => {
   };
 
   return (
-    <Center w="100%">
-      <Box safeArea p="2" py="8" w="90%" maxW="290">
-        <Heading
-          size="lg"
-          fontWeight="600"
-          color="coolGray.800"
-          _dark={{
-            color: "warmGray.50",
-          }}
-        >
-          <Text>Reset Password</Text>
-        </Heading>
+    <>
+      {
+        token ?
+          <View style={styles.resetForm}>
+            <PasswordResetForm token={token} />
+          </View> :
+          <CustomModal
+            title="Reset Email"
+            trigger="Request Password Reset Email"
+            isActive={isOpen}
+            onTrigger={setIsOpen}
 
-        <VStack space={3} mt="5">
-          <View style={styles.container}>
-            <Input
-              placeholder="Email"
-              autoCapitalize="none"
-              keyboardType="email-address"
-              value={email}
-              onChangeText={(value) => setEmail(value)}
-            />
-            <Button
-              block
-              style={styles.button}
-              onPress={handleResetPassword}
-              disabled={!email || loading}
-            >
-              <Text>{loading ? 'Loading...' : 'Request Password Reset Email'}</Text>
-            </Button>
-          </View>
-          <View>
-            <PasswordResetForm />
-          </View>
-        </VStack>
-      </Box>
+          >
+            <Center w="100%">
+              <Box safeArea p="2" py="8" w="90%" maxW="290">
+                <Heading
+                  size="lg"
+                  fontWeight="600"
+                  color="coolGray.800"
+                  _dark={{
+                    color: "warmGray.50",
+                  }}
+                >
+                  <Text>Reset Password</Text>
+                </Heading>
 
-    </Center>
+                <VStack space={3} mt="5">
+                  <View style={styles.container}>
+                    <Input
+                      placeholder="Email"
+                      autoCapitalize="none"
+                      keyboardType="email-address"
+                      value={email}
+                      onChangeText={(value) => setEmail(value)}
+                    />
+                    <Button
+                      block
+                      style={styles.button}
+                      onPress={handleResetPassword}
+                      disabled={!email || loading}
+                    >
+                      <Text>{loading ? 'Loading...' : 'Request Password Reset Email'}</Text>
+                    </Button>
+                  </View>
+                </VStack>
+              </Box>
+
+            </Center>
+          </CustomModal>
+
+      }
+    </>
 
   );
 };
@@ -82,4 +103,7 @@ const styles = StyleSheet.create({
   button: {
     marginTop: 20,
   },
+  resetForm: {
+    marginTop: 20
+  }
 });
