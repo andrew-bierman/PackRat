@@ -15,8 +15,8 @@ import { Select } from "native-base";
 import { useState, useMemo, useEffect } from "react";
 import { Box, Text, Input } from "native-base";
 
-import { useDispatch, useSelector, useDispatch } from "react-redux";
-import { deleteItem, editItem } from "../store/itemsStore";
+import { useDispatch, useSelector } from "react-redux";
+import { editItem, deleteItem } from "../../store/itemsStore";
 
 import { convertWeight } from "../../utils/convertWeight";
 import { selectPackById } from "../../store/packsStore";
