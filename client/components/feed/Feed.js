@@ -6,9 +6,11 @@ import Card from "./Card";
 import { theme } from "../../theme";
 import DropdownComponent from "../Dropdown";
 import { useState } from "react";
+
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getPublicPacks } from "../../store/feedStore";
+
 import { Link } from "expo-router";
 
 const dataValues = ["Favorite", "Most Recent"];
@@ -19,7 +21,7 @@ export default function Feed() {
   // const { data, isLoading, isError, error } = useGetPublicPacks(queryString);
   
   const dispatch = useDispatch()
-  const publicParksData = useSelector((state) => state.feed.publicPacks);
+  const publicPacksData = useSelector((state) => state.feed.publicPacks);
 
   useEffect(() => {
     dispatch(getPublicPacks(queryString))
@@ -39,8 +41,9 @@ export default function Feed() {
         space={[3, 3, 3, 0]}
         flexWrap="wrap"
       >
-        {publicParksData?.length > 0 ? (
-          publicParksData?.map((pack) => <Link href={"/pack/" + pack?._id}><Card key={pack?.owner_id} {...{ ...pack }} /></Link>)
+
+        {publicPacksData?.length > 0 ? (
+          publicPacksData?.map((pack) => <Link href={"/pack/" + pack?._id}><Card key={pack?.owner_id} {...{ ...pack }} /></Link>)
           ) : (
           <Text>No Public Packs Available</Text>
         )}
