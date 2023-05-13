@@ -12,8 +12,6 @@ export const PasswordResetForm = ({ token }) => {
 
     // const { token } = useSearchParams();
 
-    // console.log('token', token)
-
     const handlePasswordReset = async () => {
         try {
             setLoading(true);

@@ -126,12 +126,15 @@ export const addPack = async (req, res) => {
 };
 
 export const editPack = async (req, res) => {
-  const { _id } = await oneEntity(req.body._id)
-
+  // const { _id } = await oneEntity(req.body._id)
+  const { _id } = req.body
+  
   try {
     const newPack = await Pack.findOneAndUpdate({ _id }, req.body, {
       returnOriginal: false,
     });
+    
+    console.log('newPack', newPack)
 
     res.status(200).json(newPack);
   } catch (error) {

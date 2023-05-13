@@ -4,6 +4,7 @@ import { Box, Button, Center, Heading, Input, Text, Toast, VStack } from 'native
 import axios from 'axios';
 import { api } from '../../constants/api';
 import { PasswordResetForm } from './PasswordResetForm';
+
 import { CustomModal } from '../modal';
 import { useSearchParams } from 'expo-router';
 import { RequestPasswordResetEmailModal } from './RequestEmailModal';
@@ -26,7 +27,6 @@ export const RequestPasswordReset = () => {
           
       }
     </>
-
   );
 };
 
