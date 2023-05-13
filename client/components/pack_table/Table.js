@@ -8,13 +8,15 @@ import { Select } from "native-base";
 
 // import useGetItems from "../hooks/useGetItems";
 
-import useEditItem from "../../hooks/useEditItem";
-import useDeleteItem from "../../hooks/useDeleteItem";
+// import useEditItem from "../hooks/useEditItem";
+// import useDeleteItem from "../hooks/useDeleteItem";
+
 
 import { useState, useMemo, useEffect } from "react";
 import { Box, Text, Input } from "native-base";
 
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { editItem, deleteItem } from "../../store/itemsStore";
 
 import { convertWeight } from "../../utils/convertWeight";
 import { selectPackById } from "../../store/packsStore";
@@ -22,6 +24,8 @@ import { selectPackById } from "../../store/packsStore";
 export const TableContainer = ({ currentPack }) => {
 
   // const { data, isLoading, isError, error } = useGetItems(packId);
+
+  const dispatch = useDispatch();
 
   const data = currentPack?.items;
 
@@ -123,9 +127,6 @@ export const TableContainer = ({ currentPack }) => {
     const newRow = { ...data[id], [tablekeys[id][cellIndex]]: value };
     setData((prevState) => [...prevState.slice(0, id), newRow, ...prevState.slice(id + 1)]);
   };
-
-  const { deleteItem } = useDeleteItem();
-  const { editItem } = useEditItem();
 
   if (isLoading) return <Text>Loading....</Text>;
 
