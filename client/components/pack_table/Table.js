@@ -8,9 +8,9 @@ import { Select } from "native-base";
 
 // import useGetItems from "../hooks/useGetItems";
 
-
 // import useEditItem from "../hooks/useEditItem";
 // import useDeleteItem from "../hooks/useDeleteItem";
+
 
 import { useState, useMemo, useEffect } from "react";
 import { Box, Text, Input } from "native-base";
@@ -24,7 +24,9 @@ import { selectPackById } from "../../store/packsStore";
 export const TableContainer = ({ currentPack }) => {
 
   // const { data, isLoading, isError, error } = useGetItems(packId);
+
   const dispatch = useDispatch();
+
   const data = currentPack?.items;
 
   const isLoading = useSelector((state) => state.items.isLoading);
@@ -152,42 +154,8 @@ export const TableContainer = ({ currentPack }) => {
               {rowData.map((cellData, cellIndex) => (
                 <Cell
                   key={cellIndex}
-                  style={[cellIndex === 3 || cellIndex === 4 ? styles.smallCell : styles.dataCell, {flex: flexWidthArr[cellIndex]}]}
-                  data={
-                    cellIndex === 3 ? (
-                      isLoading ? (
-                        <Text>Loading...</Text>
-                      ) : (
-                        <Feather
-                          name="x-circle"
-                          size={20}
-                          color="black"
-                          onPress={() => dispatch(deleteItem(data[index]._id))}
-                          style={{ alignSelf: "center" }}
-                        />
-                      )
-                    ) : cellIndex === 4 ? (
-                      isLoading ? (
-                        <Text>Loading...</Text>
-                      ) : (
-                        <MaterialIcons
-                          name="edit"
-                          size={20}
-                          color="black"
-                          onPress={() => dispatch(editItem(edit[index]))}
-                        />
-                      )
-                    ) : (
-                      // <Input
-                      //   style={{ textAlign: "center", padding: 3 }}
-                      //   value={String(cellData)}
-                      //   onChangeText={(text) =>
-                      //     handleEdit(index, text, cellIndex)
-                      //   }
-                      // />
-                      String(cellData)
-                    )
-                  }
+                  style={[cellIndex === 3 || cellIndex === 4 ? styles.smallCell : styles.dataCell, { flex: flexWidthArr[cellIndex] }]}
+                  data={cellData}
                 />
               ))}
             </TableWrapper>
