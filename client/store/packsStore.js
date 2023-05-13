@@ -51,7 +51,9 @@ const packsSlice = createSlice({
             })
             .addCase(changePackStatus.fulfilled, (state, action) => {
                 const updatedPack = action.payload;
-                const index = state.packs.findIndex((pack) => pack.id === updatedPack.id);
+                console.log('state.packs', state.packs)
+                console.log('state.packs.packs', state.packs.packs)
+                const index = state.packs.packs.findIndex((pack) => pack._id === updatedPack._id);
                 if (index !== -1) {
                     state.packs[index] = updatedPack;
                 }
