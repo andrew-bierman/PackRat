@@ -42,6 +42,7 @@ export const CustomModal = ({
                                 key={index}
                                 onPress={button.onClick}
                                 colorScheme={button.color}
+                                disabled={button.disabled}
                             >
                                 {button.label}
                             </Button>
