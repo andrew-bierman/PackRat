@@ -7,16 +7,18 @@ import firebase from "../index.js";
 import firebaseAdmin from "firebase-admin";
 import { v4 as uuid } from "uuid";
 import bcrypt from "bcrypt";
+import validator from "validator";
+import { sendWelcomeEmail, resetEmail } from "../utils/accountEmail.js";
 
 // Middleware to check if user is authenticated
 export const isAuthenticated = async (req, res, next) => {
-  const token = req.headers.authorization.split(' ')[1];
+  const token = req.headers.authorization.split(" ")[1];
   try {
     const decodedToken = await firebaseAdmin.auth().verifyIdToken(token);
     req.userData = decodedToken;
     next();
   } catch (error) {
-    res.status(401).json({ error: 'Unauthorized' });
+    res.status(401).json({ error: "Unauthorized" });
   }
 };
 
@@ -25,7 +27,11 @@ export const linkFirebaseAuth = async (req, res) => {
 
   try {
     // Verify Firebase auth token and get the Firebase user ID
-    const decodedToken = await firebaseAdmin.auth().verifyIdToken(firebaseAuthToken, { audience: process.env.SERVICE_ACCOUNT_KEY_PROJECT_ID });
+    const decodedToken = await firebaseAdmin
+      .auth()
+      .verifyIdToken(firebaseAuthToken, {
+        audience: process.env.SERVICE_ACCOUNT_KEY_PROJECT_ID,
+      });
     const firebaseUserId = decodedToken.uid;
 
     // Find the MongoDB user with the same email address as the Firebase user
@@ -54,7 +60,6 @@ export const linkFirebaseAuth = async (req, res) => {
     return res.status(400).json({ error: error.message });
   }
 };
-
 
 export const getUsers = async (req, res) => {
   try {
@@ -108,13 +113,12 @@ const getFirebaseUserByEmail = async (email) => {
     const firebaseUser = await firebaseAdmin.auth().getUserByEmail(email);
     return firebaseUser;
   } catch (error) {
-    if (error.code === 'auth/user-not-found') {
+    if (error.code === "auth/user-not-found") {
       return null;
     }
     throw error;
   }
 };
-
 
 export const createMongoDBUser = async (req, res) => {
   const { email, password, name } = req.body;
@@ -127,7 +131,7 @@ export const createMongoDBUser = async (req, res) => {
     const user = await User.findOne({ email: email });
 
     if (user) {
-      return res.status(409).json({ error: 'Email already in use' });
+      return res.status(409).json({ error: "Email already in use" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10); // <-- Hash the password
@@ -135,17 +139,17 @@ export const createMongoDBUser = async (req, res) => {
       email: email,
       firebaseUid: firebaseUser.uid,
       password: hashedPassword, // <-- Store hashed password in MongoDB
-      name: name
+      name: name,
     });
     await newUser.save();
 
-    return res.status(201).json({ message: "User created successfully", user: newUser });
+    return res
+      .status(201)
+      .json({ message: "User created successfully", user: newUser });
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
 };
-
-
 
 export const login = async (req, res) => {
   const { email, password } = req.body;
@@ -166,7 +170,9 @@ export const login = async (req, res) => {
     }
 
     // Sign in the user in Firebase Auth to generate a Firebase auth token
-    const firebaseUser = await firebaseAdmin.auth().signInWithEmailAndPassword(email, password);
+    const firebaseUser = await firebaseAdmin
+      .auth()
+      .signInWithEmailAndPassword(email, password);
     const firebaseAuthToken = await firebaseUser.user.getIdToken();
 
     // Return the user details and Firebase auth token to the client
@@ -179,7 +185,6 @@ export const login = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
-
 
 export const addToFavorite = async (req, res) => {
   const { packId, userId } = req.body;
@@ -235,5 +240,66 @@ export const deleteUser = async (req, res) => {
     res.status(200).json({ msg: "user was deleted successfully" });
   } catch (error) {
     res.status(404).json({ msg: "Unable to edit user" });
+  }
+};
+
+export const userSignin = async (req, res) => {
+  try {
+    const user = await User.findByCredentials({
+      email: req.body.email,
+      password: req.body.password,
+    });
+    const token = await user.generateAuthToken();
+    res.status(200).send({ user });
+  } catch (err) {
+    res.status(400).send({ message: err.message });
+  }
+};
+
+export const userSignup = async (req, res) => {
+  try {
+    // If the Mongoose index is re-index or restart the, it will be removed. Refer to this link for more information: https://stackoverflow.com/questions/5535610/mongoose-unique-index-not-working
+    await User.alreadyLogin(req.body.email);
+    const user = new User(req.body);
+    await user.save();
+    await user.generateAuthToken();
+    sendWelcomeEmail(user.email, user.name);
+    res.status(201).send({ user });
+  } catch (err) {
+    res.status(400).send({ message: err.message });
+  }
+};
+
+export const sentEmail = async (req, res) => {
+  try {
+    if (!validator.isEmail(req.body.email)) throw new Error("Email is invalid");
+    const user = await User.findOne({ email: req.body.email });
+    if (!user) {
+      throw new Error("User not found");
+    }
+    const resetUrl = await user.generateResetToken();
+    resetEmail(user.email, resetUrl);
+    res.status(200).send({
+      message: "Reset Token has been sent successfully",
+      status: "success",
+      statusCode: 200,
+    });
+  } catch (err) {
+    res.status(400).send({ message: err.message });
+  }
+};
+
+export const resetPassword = async (req, res) => {
+  try {
+    const user = await User.validateResetToken(req.body.resetToken);
+    user.password = req.body.password;
+    await user.save();
+    res.status(200).send({
+      message: "Successfully reset password",
+      status: "success",
+      statusCode: 200,
+    });
+  } catch (err) {
+    res.status(400).send({ message: err.message });
   }
 };
