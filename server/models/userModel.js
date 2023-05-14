@@ -11,11 +11,12 @@ const UserSchema = new Schema({
   email: {
     type: String, required: true, lowercase: true
   },
-  firebaseUid: { type: String },
+  googleId: { type: String },
   code: { type: String },
-  trips: [{ type: Schema.Types.ObjectId, ref: Trip }],
   is_certified_guide: { type: Boolean },
+  trips: [{ type: Schema.Types.ObjectId, ref: Trip }],
   favorites: [{ type: Schema.Types.ObjectId, ref: Pack }],
+  packs: [{ type: Schema.Types.ObjectId, ref: Pack }],
   passwordResetToken: { type: String },
   passwordResetTokenExpiration: { type: Date },
 });

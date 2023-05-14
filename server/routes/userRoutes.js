@@ -13,12 +13,18 @@ import {
 
 import { checkCode, emailExists, updatePassword } from '../controllers/auth.js'
 
+import { signInLocal, signUpLocal, signInGoogle } from "../controllers/passportController.js";
+
 const router = express.Router();
 
 router.get("/", getUsers);
 router.get("/:userId", getUserById);
 // router.post("/", addUser);
-router.post("/login", login);
+
+router.post("/signin", signInLocal);
+router.post("/signup", signUpLocal);
+router.post("/google", signInGoogle);
+
 router.post("/favorite", addToFavorite);
 router.put("/", editUser);
 router.delete("/", deleteUser);
