@@ -12,7 +12,7 @@ import firebase from "firebase-admin";
 
 // // Initialize Firebase
 firebase.initializeApp({
-  credential: firebase.credential.cert(SERVICE_ACCOUNT_KEY)
+  credential: firebase.credential.cert(SERVICE_ACCOUNT_KEY),
 });
 
 // express items
@@ -71,7 +71,12 @@ app.use("/api/gettrails", getTrailRoutes);
 app.use("/api/osm", osmRoutes);
 app.use("/api/password-reset", passwordResetRoutes);
 
-mongoose.connect(connectionString).then(() => console.log("connected"));
+mongoose
+  .connect(connectionString, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("connected"));
 
 // app.listen(3000, () => console.log("listening on port 3000"));
 
@@ -83,4 +88,4 @@ app.listen(port, () =>
   console.log(`listening on port ${port}`)
 );
 
-export default firebase
+export default firebase;
