@@ -20,6 +20,7 @@
     "express": "^4.18.2",
     "firebase": "^9.19.1",
     "firebase-admin": "^11.5.0",
+    "google-auth-library": "^8.8.0",
     "i": "^0.3.7",
     "mongoose": "^7.0.1",
     "node-fetch": "^3.3.1",
@@ -27,6 +28,9 @@
     "nodemailer-smtp-transport": "^2.7.4",
     "nodemon": "^2.0.21",
     "npm": "^9.6.3",
-    "osmtogeojson": "^3.0.0-beta.5"
+    "osmtogeojson": "^3.0.0-beta.5",
+    "passport": "^0.6.0",
+    "passport-google-oauth20": "^2.0.0",
+    "passport-local": "^1.0.0"
   }
 }

@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { auth } from "../auth/firebase";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut as firebaseSignOut, signInWithPopup, GoogleAuthProvider, signInWithCredential } from "firebase/auth";
+// import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut as firebaseSignOut, signInWithPopup, GoogleAuthProvider, signInWithCredential } from "firebase/auth";
 import axios from "axios";
 import { api } from "../constants/api";
 import { Alert } from "react-native";
@@ -15,20 +15,10 @@ export const signUp = createAsyncThunk(
   "auth/signUp",
   async ({ email, password, name }, { rejectWithValue }) => {
     try {
-      const response = await createUserWithEmailAndPassword(email, password)
-
-      // Create a user in the database
-      await createUserInMongoDB({ email: response.user.email, uid: response.user.uid, password, name })
-
-      // Link the user's accounts
-      const idToken = await auth.currentUser.getIdToken();
-      await linkFirebaseAuthInDBRequest(idToken)
-
-      return response.user;
-
+      const response = await axios.post(`${api}/user/signup`, { email, password, name });
+      return response.data.user;
     } catch (error) {
-      console.log(error);
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.response.data.error);
     }
   }
 );
@@ -38,16 +28,10 @@ export const signIn = createAsyncThunk(
   "auth/signIn",
   async ({ email, password }, { rejectWithValue }) => {
     try {
-      const response = await signInWithEmailAndPassword(auth, email, password);
-
-      console.log({response});
-      // Link the user's accounts
-      const idToken = await auth.currentUser.getIdToken();
-      await linkFirebaseAuthInDBRequest(idToken)
-      return response.user;
+      const response = await axios.post(`${api}/user/signin`, { email, password });
+      return response.data.user;
     } catch (error) {
-      console.log("Error message ++++",error.message);
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.response.data.error);
     }
   }
 );
@@ -55,8 +39,9 @@ export const signIn = createAsyncThunk(
 export const signOut = createAsyncThunk(
   "auth/signOut",
   async (_, { rejectWithValue }) => {
+    console.log("signOut")
     try {
-      await firebaseSignOut(auth);
+      // await firebaseSignOut(auth);
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -68,32 +53,10 @@ export const signInWithGoogle = createAsyncThunk(
   "auth/signInWithGoogle",
   async ({ idToken }, { rejectWithValue }) => {
     try {
-      const credential = GoogleAuthProvider.credential(idToken);
-      const response = await signInWithCredential(auth, credential);
-
-      // Obtain the Firebase auth token
-      const firebaseAuthToken = await response.user.getIdToken();
-
-      // Link the user's accounts
-      const mongoUser = await linkFirebaseAuthInDBRequest(firebaseAuthToken);
-
-      const firebaseUser = response.user;
-
-      if (!mongoUser) {
-        await createUserInMongoDB({ email: firebaseUser.email, uid: firebaseUser.uid });
-      }
-
-      const mergedResponse = { ...firebaseUser, ...mongoUser };
-
-      console.log("signInWithGoogle mergedResponse:", mergedResponse);
-      console.log("signInWithGoogle mongoUser:", mongoUser);
-
-      return mergedResponse;
-
-      return response.user;
-
+      const response = await axios.post(`${api}/user/google`, { token: idToken });
+      return response.data.user;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.response.data.error);
     }
   }
 );

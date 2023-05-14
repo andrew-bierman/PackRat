@@ -18,6 +18,9 @@ export const SERVICE_ACCOUNT_KEY = {
     "client_x509_cert_url": process.env.SERVICE_ACCOUNT_KEY_CLIENT_X509_CERT_URL
 }
 
+export const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID
+export const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET
+
 export const STMP_EMAIL = process.env.STMP_EMAIL
 export const STMP_PASSWORD = process.env.STMP_PASSWORD
 

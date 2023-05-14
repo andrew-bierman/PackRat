@@ -14,12 +14,8 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 // import 'mapbox://mapbox.mapbox-streets-v7'
 // import 'mapbox://styles/mapbox/outdoors-v11'
 
-
-import { ProviderAuth } from "../auth/provider";
-
 export default function HomeLayout() {
   return (
-    <ProviderAuth>
       <NativeBaseProvider>
         <Provider store={store}>
           <QueryClientProvider client={queryClient}>
@@ -28,6 +24,5 @@ export default function HomeLayout() {
           </QueryClientProvider>
         </Provider>
       </NativeBaseProvider>
-    </ProviderAuth>
   );
 }
