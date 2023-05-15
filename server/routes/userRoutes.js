@@ -13,8 +13,11 @@ import {
   userSignup,
   sentEmail,
   resetPassword,
+  getGoogleAuthURL,
+  googleSignin,
+  getMe,
 } from "../controllers/userController.js";
-
+import auth from "../middleware/auth.js";
 import { checkCode, emailExists, updatePassword } from "../controllers/auth.js";
 
 import {
@@ -22,6 +25,7 @@ import {
   signUpLocal,
   signInGoogle,
 } from "../controllers/passportController.js";
+import { REDIRECT_URL } from "../config.js";
 
 const router = express.Router();
 
@@ -33,6 +37,10 @@ router.post("/signin", userSignin);
 router.post("/signup", userSignup);
 router.post("/reset-password-email", sentEmail);
 router.post("/reset-password", resetPassword);
+router.get("/me/info", auth, getMe);
+router.get("/google/url", getGoogleAuthURL);
+router.get(`/${REDIRECT_URL}`, googleSignin);
+
 router.post("/google", signInGoogle);
 
 router.post("/favorite", addToFavorite);
