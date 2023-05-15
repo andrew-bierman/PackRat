@@ -1,4 +1,4 @@
-import User from "../models/userModel";
+import User from "../models/userModel.js";
 import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../config.js";
 
@@ -19,4 +19,4 @@ const auth = async (req, res, next) => {
     res.status(401).send({ error: "Please authenticate" });
   }
 };
-module.exports = auth;
+export default auth;

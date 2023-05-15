@@ -9,6 +9,22 @@ import { v4 as uuid } from "uuid";
 import bcrypt from "bcrypt";
 import validator from "validator";
 import { sendWelcomeEmail, resetEmail } from "../utils/accountEmail.js";
+import { google } from "googleapis";
+import {
+  GOOGLE_CLIENT_ID,
+  GOOGLE_CLIENT_SECRET,
+  SERVER_ROOT_URI,
+  REDIRECT_URL,
+  UI_ROOT_URI,
+} from "../config.js";
+import axios from "axios";
+import utilsService from "../utils/utils.service.js";
+
+const oauth2Client = new google.auth.OAuth2(
+  GOOGLE_CLIENT_ID,
+  GOOGLE_CLIENT_SECRET,
+  `${SERVER_ROOT_URI}/user/${REDIRECT_URL}`
+);
 
 // Middleware to check if user is authenticated
 export const isAuthenticated = async (req, res, next) => {
@@ -249,7 +265,7 @@ export const userSignin = async (req, res) => {
       email: req.body.email,
       password: req.body.password,
     });
-    const token = await user.generateAuthToken();
+    await user.generateAuthToken();
     res.status(200).send({ user });
   } catch (err) {
     res.status(400).send({ message: err.message });
@@ -301,5 +317,85 @@ export const resetPassword = async (req, res) => {
     });
   } catch (err) {
     res.status(400).send({ message: err.message });
+  }
+};
+
+export const getGoogleAuthURL = async (req, res) => {
+  try {
+    const scopes = [
+      "https://www.googleapis.com/auth/userinfo.profile",
+      "https://www.googleapis.com/auth/userinfo.email",
+    ];
+    return res.status(200).send({
+      googleUrl: oauth2Client.generateAuthUrl({
+        access_type: "offline",
+        prompt: "consent",
+        scope: scopes,
+      }),
+      status: "success",
+      statusCode: 200,
+    });
+  } catch (err) {
+    res.status(400).send({ message: err.message });
+  }
+};
+
+const getGoogleUserInfo = async (code) => {
+  const { tokens } = await oauth2Client.getToken(code);
+  const googleUser = await axios
+    .get(
+      `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${tokens.access_token}`,
+      {
+        headers: {
+          Authorization: `Bearer ${tokens.id_token}`,
+        },
+      }
+    )
+    .then((res) => res.data)
+    .catch((error) => {
+      throw new Error(error.message);
+    });
+  return googleUser;
+};
+
+export const googleSignin = async (req, res) => {
+  try {
+    const code = req.query.code;
+    const userInfo = await getGoogleUserInfo(code);
+
+    const alreadyGoogleSignin = await User.findOne({
+      email: userInfo.email,
+      googleId: userInfo.id,
+    });
+    if (!alreadyGoogleSignin) {
+      const isLocalLogin = await User.findOne({ email: userInfo.email });
+      if (isLocalLogin) {
+        throw new Error("Already user registered on that email address");
+      }
+      const user = new User({
+        email: userInfo.email,
+        name: userInfo.name,
+        password: utilsService.randomPasswordGenerator(8),
+        googleId: userInfo.id,
+      });
+      await user.save();
+      await user.generateAuthToken();
+      sendWelcomeEmail(user.email, user.name);
+      res.redirect(`${UI_ROOT_URI}?token=${user.token}`);
+    } else {
+      alreadyGoogleSignin.googleId = userInfo.id;
+      await alreadyGoogleSignin.generateAuthToken();
+      res.redirect(`${UI_ROOT_URI}?token=${alreadyGoogleSignin.token}`);
+    }
+  } catch (err) {
+    res.status(400).send({ message: err.message });
+  }
+};
+
+export const getMe = async (req, res) => {
+  try {
+    res.status(200).send(req.user);
+  } catch (err) {
+    res.status(401).send({ message: err.message });
   }
 };
