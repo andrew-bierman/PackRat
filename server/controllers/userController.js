@@ -342,25 +342,18 @@ export const getGoogleAuthURL = async (req, res) => {
 
 const getGoogleUserInfo = async (code) => {
   const { tokens } = await oauth2Client.getToken(code);
-  const googleUser = await axios
-    .get(
-      `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${tokens.access_token}`,
-      {
-        headers: {
-          Authorization: `Bearer ${tokens.id_token}`,
-        },
-      }
-    )
-    .then((res) => res.data)
-    .catch((error) => {
-      throw new Error(error.message);
-    });
+  oauth2Client.setCredentials(tokens);
+  const { data: googleUser } = await google.oauth2("v2").userinfo.get({
+    auth: oauth2Client,
+  });
   return googleUser;
 };
 
 export const googleSignin = async (req, res) => {
   try {
     const code = req.query.code;
+    console.log(code);
+    res.status(400).send({ message: "check" });
     const userInfo = await getGoogleUserInfo(code);
 
     const alreadyGoogleSignin = await User.findOne({
