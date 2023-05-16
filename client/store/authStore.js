@@ -52,17 +52,29 @@ export const signIn = createAsyncThunk(
   }
 );
 
+// export const signOut = createAsyncThunk(
+//   "auth/signOut",
+//   async (_, { rejectWithValue }) => {
+//     console.log("signOut")
+//     try {
+//       // await firebaseSignOut(auth);
+//     } catch (error) {
+//       return rejectWithValue(error.message);
+//     }
+//   }
+// );
+
 export const signOut = createAsyncThunk(
   "auth/signOut",
-  async (_, { rejectWithValue }) => {
+  async () => {
+    console.log("signOut")
     try {
-      await firebaseSignOut(auth);
+      // await firebaseSignOut(auth);
     } catch (error) {
       return rejectWithValue(error.message);
     }
   }
 );
-
 
 export const signInWithGoogle = createAsyncThunk(
   "auth/signInWithGoogle",
