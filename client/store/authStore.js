@@ -112,7 +112,7 @@ export const authSlice = createSlice({
         state.user = action.payload;
         state.loading = false;
 
-        createMongoDbUser({ email: action.payload.email, firebaseUid: action.payload.uid });
+        // createMongoDbUser({ email: action.payload.email, firebaseUid: action.payload.uid });
 
       })
       .addCase(signUp.rejected, (state, action) => {

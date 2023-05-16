@@ -91,7 +91,7 @@ export const getPackById = async (req, res) => {
 
   try {
     const objectId = new mongoose.Types.ObjectId(packId);
-    const pack = await Pack.findById(objectId) .populate("items");
+    const pack = await Pack.findById(objectId).populate("items");
 
     res.status(200).json(pack);
   } catch (error) {
@@ -101,25 +101,34 @@ export const getPackById = async (req, res) => {
 };
 
 export const addPack = async (req, res) => {
-  const packBody = packValidation(req.body)
+  // const packBody = packValidation(req.body)
+  if (!req.body.name || !req.body.owner_id) {
+    res.status(404).json({ msg: "All fields must be filled" });
+  }
+
   const newPack = {
-    ...packBody,
+    // ...packBody,
+    name: req.body.name,
+    owner_id: req.body.owner_id,
     items: [],
     is_public: false,
     favorited_by: [],
     favorites_count: 0,
     createdAt: new Date(),
+    owners: [req.body.owner_id],
   };
+
+  console.log('newPack', newPack)
 
   try {
     const exists = await Pack.find({ name: req.body.name });
 
-    if (exists[0]?.name?.toLowerCase() === req.body.name.toLowerCase()) {
-      throw new Error("Pack already exists");
-    }
+    // if (exists[0]?.name?.toLowerCase() === req.body.name.toLowerCase()) {
+    //   throw new Error("Pack already exists");
+    // }
 
-    await Pack.create(newPack);
-    res.status(200).json({ msg: "success" });
+    const createdPack = await Pack.create(newPack);
+    res.status(200).json({ msg: "success", createdPack });
   } catch (error) {
     res.status(404).json({ msg: error.msg });
   }
@@ -128,12 +137,12 @@ export const addPack = async (req, res) => {
 export const editPack = async (req, res) => {
   // const { _id } = await oneEntity(req.body._id)
   const { _id } = req.body
-  
+
   try {
     const newPack = await Pack.findOneAndUpdate({ _id }, req.body, {
       returnOriginal: false,
     });
-    
+
     console.log('newPack', newPack)
 
     res.status(200).json(newPack);
