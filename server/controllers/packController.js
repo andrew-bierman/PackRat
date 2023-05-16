@@ -91,7 +91,7 @@ export const getPackById = async (req, res) => {
 
   try {
     const objectId = new mongoose.Types.ObjectId(packId);
-    const pack = await Pack.findById(objectId) .populate("items");
+    const pack = await Pack.findById(objectId).populate("items");
 
     res.status(200).json(pack);
   } catch (error) {
@@ -102,10 +102,10 @@ export const getPackById = async (req, res) => {
 
 export const addPack = async (req, res) => {
   // const packBody = packValidation(req.body)
-  if(!req.body.name || !req.body.owner_id) {
+
+  if (!req.body.name || !req.body.owner_id) {
     res.status(404).json({ msg: "All fields must be filled" });
   }
-  
   const newPack = {
     // ...packBody,
     name: req.body.name,
@@ -137,12 +137,12 @@ export const addPack = async (req, res) => {
 export const editPack = async (req, res) => {
   // const { _id } = await oneEntity(req.body._id)
   const { _id } = req.body
-  
+
   try {
     const newPack = await Pack.findOneAndUpdate({ _id }, req.body, {
       returnOriginal: false,
     });
-    
+
     console.log('newPack', newPack)
 
     res.status(200).json(newPack);

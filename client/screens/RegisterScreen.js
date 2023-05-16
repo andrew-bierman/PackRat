@@ -17,20 +17,22 @@ import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
 import { WEB_CLIENT_ID } from "@env";
 import { useState, useEffect } from "react";
-import useRegister from "../hooks/useRegister";
+// import useRegister from "../hooks/useRegister";
 import { useRouter } from "expo-router";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { Link } from "expo-router";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { signUp } from "../store/authStore";
 
 export default function Register() {
+  const dispatch = useDispatch();
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { signupWithEmail } = useRegister();
+  // const { signupWithEmail } = useRegister();
   const router = useRouter();
-
 
   const user = useSelector((state) => state.auth.user);
 
@@ -43,16 +45,18 @@ export default function Register() {
 
   const registerUser = () => {
     try {
-      const auth = getAuth();
-      createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          // Signed in 
-          const user = userCredential.user;
-          if (user) {
-            console.log({ user });
-            signupWithEmail(user?.uid, name, email, password);
-          }
-        })
+      // const auth = getAuth();
+      // createUserWithEmailAndPassword(auth, email, password)
+      //   .then((userCredential) => {
+      //     // Signed in 
+      //     const user = userCredential.user;
+      //     if (user) {
+      //       console.log({ user });
+      //       signupWithEmail(user?.uid, name, email, password);
+      //     }
+      //   })
+
+      dispatch(signUp({ name, email, password}))
 
     }
     catch (e) {
