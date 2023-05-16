@@ -7,11 +7,21 @@ import User from "../models/userModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } from "../config.js";
+import {
+  GOOGLE_CLIENT_ID,
+  GOOGLE_CLIENT_SECRET,
+  REDIRECT_URL,
+  SERVER_ROOT_URI,
+} from "../config.js";
 
 import { OAuth2Client } from "google-auth-library";
+import utilsService from "../utils/utils.service.js";
 
-const client = new OAuth2Client(GOOGLE_CLIENT_ID);
+const client = new OAuth2Client(
+  GOOGLE_CLIENT_ID,
+  GOOGLE_CLIENT_SECRET,
+  `${SERVER_ROOT_URI}/user/${REDIRECT_URL}`
+);
 
 // Passport Configuration
 // Local Strategy
@@ -122,43 +132,39 @@ export const signInLocal = async (req, res, next) => {
 };
 
 export const signInGoogle = async (req, res) => {
-  const { token } = req.body;
+  try {
+    const { code } = req.body;
+    const { tokens } = await client.getToken(code);
 
-  const ticket = await client.verifyIdToken({
-    idToken: token,
-    audience: GOOGLE_CLIENT_ID,
-  });
+    const url = `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${tokens.access_token}`;
+    const { data: userInfo } = await axios.get(url);
 
-  const payload = ticket.getPayload();
-  const userid = payload["sub"];
-
-  const existingUser = await User.findOne({ googleId: userid });
-
-  if (existingUser) {
-    // User exists, generate a JWT
-    const userToken = jwt.sign({ id: existingUser.id }, "your_jwt_secret");
-    return res.status(200).json({
-      message: "User signed in successfully",
-      user: existingUser,
-      token: userToken,
+    const alreadyGoogleSignin = await User.findOne({
+      email: userInfo.email,
+      googleId: userInfo.id,
     });
-  } else {
-    // User doesn't exist, create a new user
-    const newUser = new User({
-      googleId: userid,
-      name: payload.name,
-      email: payload.email,
-    });
-
-    await newUser.save();
-
-    // Generate a JWT for the new user
-    const userToken = jwt.sign({ id: newUser.id }, "your_jwt_secret");
-    return res.status(201).json({
-      message: "User created successfully",
-      user: newUser,
-      token: userToken,
-    });
+    if (!alreadyGoogleSignin) {
+      const isLocalLogin = await User.findOne({ email: userInfo.email });
+      if (isLocalLogin) {
+        throw new Error("Already user registered on that email address");
+      }
+      const user = new User({
+        email: userInfo.email,
+        name: userInfo.name,
+        password: utilsService.randomPasswordGenerator(8),
+        googleId: userInfo.id,
+      });
+      await user.save();
+      await user.generateAuthToken();
+      sendWelcomeEmail(user.email, user.name);
+      res.status(200).send({ user });
+    } else {
+      alreadyGoogleSignin.googleId = userInfo.id;
+      await alreadyGoogleSignin.generateAuthToken();
+      res.status(200).send({ user: alreadyGoogleSignin });
+    }
+  } catch (err) {
+    res.status(400).send({ message: err.message });
   }
 };
 
