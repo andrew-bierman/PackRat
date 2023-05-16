@@ -62,10 +62,11 @@ export default function Login() {
   });
 
   const auth = useSelector((state) => state.auth);
+
   // Add useEffect hook to listen for auth state changes
   useEffect(() => {
     if (auth.isLoggedIn) {
-      router.push("/");
+      // router.push("/");
     }
   }, [auth, router]);
 
