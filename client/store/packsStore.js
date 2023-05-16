@@ -37,7 +37,7 @@ const packsSlice = createSlice({
                 state.error = null;
             })
             .addCase(addPack.fulfilled, (state, action) => {
-                state.packs.push(action.payload);
+                state.packs.push(action.payload.createdPack);
                 state.isLoading = false;
                 state.error = null;
             })

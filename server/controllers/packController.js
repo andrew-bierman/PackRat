@@ -102,10 +102,10 @@ export const getPackById = async (req, res) => {
 
 export const addPack = async (req, res) => {
   // const packBody = packValidation(req.body)
+
   if (!req.body.name || !req.body.owner_id) {
     res.status(404).json({ msg: "All fields must be filled" });
   }
-
   const newPack = {
     // ...packBody,
     name: req.body.name,
