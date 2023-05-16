@@ -69,7 +69,7 @@ export const signOut = createAsyncThunk(
   async () => {
     console.log("signOut")
     try {
-      // await firebaseSignOut(auth);
+      return null;
     } catch (error) {
       return rejectWithValue(error.message);
     }
