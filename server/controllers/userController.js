@@ -17,7 +17,6 @@ import {
   REDIRECT_URL,
   UI_ROOT_URI,
 } from "../config.js";
-import axios from "axios";
 import utilsService from "../utils/utils.service.js";
 
 const oauth2Client = new google.auth.OAuth2(
@@ -352,8 +351,6 @@ const getGoogleUserInfo = async (code) => {
 export const googleSignin = async (req, res) => {
   try {
     const code = req.query.code;
-    console.log(code);
-    res.status(400).send({ message: "check" });
     const userInfo = await getGoogleUserInfo(code);
 
     const alreadyGoogleSignin = await User.findOne({
