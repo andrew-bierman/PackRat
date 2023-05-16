@@ -18,7 +18,7 @@ const UserSchema = new Schema({
     required: true,
     validate(value) {
       if (value.search(/password/i) !== -1)
-        throw new Error("Don't entered the password is password");
+        throw new Error("The password cannot contain the word 'password'");
     },
   },
   email: {
