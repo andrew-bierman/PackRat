@@ -56,6 +56,44 @@ Note that the client and server are designed to run concurrently in development 
 
 This will start both the client and server simultaneously.
 
+## Docker Installation 🐳
+
+PackRat can also be installed using Docker. Follow the steps below to install and run the app using Docker.
+
+### Dependencies
+
+- [Docker](https://www.docker.com/get-started)
+- [Docker Compose](https://docs.docker.com/compose/install/)
+
+### Installation
+
+1. Clone the repository: 
+
+HTTPS:
+```
+git clone https://github.com/andrew-bierman/PackRat.git
+```
+SSH:
+```
+git clone git@github.com:andrew-bierman/PackRat.git
+```
+
+
+2. In the `client` directory, create a new file called `.env` and add the necessary environment variables. You can copy the `.env.example` file and replace the values with your own.
+3. In the `server` directory, create a new file called `.env` and add the necessary environment variables. You can copy the `.env.example` file and replace the values with your own.
+4. Run the following command to start the app
+```
+docker-compose build
+docker-compose up
+```
+5. Navigate to `http://localhost:19000/` to view the app. The server will be running on `http://localhost:3000/`.
+6. If you encounter errors, try running the following commands:
+```
+docker-compose down
+docker-compose build
+docker-compose up
+```
+
 ## Contributing 🤝
 
 Contributions to PackRat are welcome! To contribute, follow these steps:
