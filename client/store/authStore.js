@@ -64,15 +64,18 @@ export const signInWithGoogle = createAsyncThunk(
   "auth/signInWithGoogle",
   async ({ idToken }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${api}/user/google`, { token: idToken });
+      const response = await axios.post(`${api}/user/google`, { 
+        // token: idToken,
+        // code: idToken,
+        idToken: idToken,
+      });
       return response.data.user;
     } catch (error) {
-      return rejectWithValue(error.response.data.error);
+      console.log("error.response.data.error", error.response.data.error)
+      return rejectWithValue(error);
     }
   }
 );
-
-
 
 export const linkFirebaseAuthInDBRequest = async (firebaseAuthToken) => {
   try {
