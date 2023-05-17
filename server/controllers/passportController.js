@@ -133,40 +133,61 @@ export const signInLocal = async (req, res, next) => {
 
 export const signInGoogle = async (req, res) => {
   try {
-    const { code } = req.body;
-    const { tokens } = await client.getToken(code);
+    const { idToken } = req.body;
 
-    const url = `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${tokens.access_token}`;
-    const { data: userInfo } = await axios.get(url);
+    const decodedToken = jwt.decode(idToken);
+    if (!decodedToken) {
+      throw new Error('Invalid ID token');
+    }
 
-    const alreadyGoogleSignin = await User.findOne({
-      email: userInfo.email,
-      googleId: userInfo.id,
-    });
+    const { email, name, sub: googleId } = decodedToken;
+
+    const alreadyGoogleSignin = await User.findOne({ email, googleId });
     if (!alreadyGoogleSignin) {
-      const isLocalLogin = await User.findOne({ email: userInfo.email });
+      const isLocalLogin = await User.findOne({ email });
+
       if (isLocalLogin) {
-        throw new Error("Already user registered on that email address");
+        throw new Error('Already user registered on that email address');
       }
+
+      const randomPassword = utilsService.randomPasswordGenerator(8);
+      // const randomPassword = '1234abcdefg5678';
+
       const user = new User({
-        email: userInfo.email,
-        name: userInfo.name,
-        password: utilsService.randomPasswordGenerator(8),
-        googleId: userInfo.id,
+        email,
+        name,
+        password: randomPassword,
+        googleId,
       });
-      await user.save();
+
+      await user.save(); // save the user without callback
+
       await user.generateAuthToken();
+
       sendWelcomeEmail(user.email, user.name);
+
       res.status(200).send({ user });
+
     } else {
-      alreadyGoogleSignin.googleId = userInfo.id;
+
+      if (!alreadyGoogleSignin.password) {
+        alreadyGoogleSignin.password = utilsService.randomPasswordGenerator(8);
+      }
+
+      alreadyGoogleSignin.googleId = googleId;
+
       await alreadyGoogleSignin.generateAuthToken();
+
+      await alreadyGoogleSignin.save();
+
       res.status(200).send({ user: alreadyGoogleSignin });
     }
   } catch (err) {
+
     res.status(400).send({ message: err.message });
   }
 };
+
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
