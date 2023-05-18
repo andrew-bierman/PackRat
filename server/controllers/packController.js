@@ -1,8 +1,5 @@
 import Pack from "../models/packModel.js";
 import mongoose from "mongoose";
-import Joi from "joi";
-import { JoiObjectId } from "../utils/validator.js"
-
 
 export const getPublicPacks = async (req, res) => {
   try {
@@ -53,14 +50,6 @@ export const getPacks = async (req, res) => {
   try {
     const { ownerId } = req.params;
 
-    const bodySchema = Joi.object({
-      ownerId: JoiObjectId().required(),
-    });
-    const { error } = bodySchema.validate(req.params);
-    if (error) {
-      return res.status(400).send(error.details[0].message);
-    }
-
     const packs = await Pack.aggregate([
       {
         $match: { owners: new mongoose.Types.ObjectId(ownerId) },
@@ -94,18 +83,9 @@ export const getPacks = async (req, res) => {
   }
 };
 
-
 export const getPackById = async (req, res) => {
   try {
     const { packId } = req.params;
-
-    const bodySchema = Joi.object({
-      packId: JoiObjectId().required(),
-    });
-    const { error } = bodySchema.validate(req.params);
-    if (error) {
-      return res.status(400).send(error.details[0].message);
-    }
 
     const objectId = new mongoose.Types.ObjectId(packId);
     const pack = await Pack.findById(objectId).populate("items");
@@ -120,15 +100,6 @@ export const getPackById = async (req, res) => {
 export const addPack = async (req, res) => {
   try {
     const { name, owner_id } = req.body;
-
-    const bodySchema = Joi.object({
-      name: Joi.string().required(),
-      owner_id: JoiObjectId().required(),
-    });
-    const { error } = bodySchema.validate(req.body);
-    if (error) {
-      return res.status(400).send(error.details[0].message);
-    }
 
     const newPack = {
       // ...packBody,
@@ -161,14 +132,6 @@ export const editPack = async (req, res) => {
   try {
     const { _id } = req.body
 
-    const bodySchema = Joi.object({
-      _id: JoiObjectId().required(),
-    });
-    const { error } = bodySchema.validate(req.body);
-    if (error) {
-      return res.status(400).send(error.details[0].message);
-    }
-
     const newPack = await Pack.findOneAndUpdate({ _id }, req.body, {
       returnOriginal: false,
     });
@@ -184,14 +147,6 @@ export const editPack = async (req, res) => {
 export const deletePack = async (req, res) => {
   try {
     const { packId } = req.body
-
-    const bodySchema = Joi.object({
-      _id: JoiObjectId().required(),
-    });
-    const { error } = bodySchema.validate(req.body);
-    if (error) {
-      return res.status(400).send(error.details[0].message);
-    }
 
     await Pack.findOneAndDelete({ _id: packId });
     res.status(200).json({ msg: "pack was deleted successfully" });
