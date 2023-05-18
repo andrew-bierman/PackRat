@@ -3,8 +3,8 @@ import { register } from "../utils/registerUser.js";
 import { loginUser } from "../utils/loginUser.js";
 import Pack from "../models/packModel.js";
 import { ObjectId } from "mongoose";
-import firebase from "../index.js";
-import firebaseAdmin from "firebase-admin";
+// import firebase from "../index.js";
+// import firebaseAdmin from "firebase-admin";
 import { v4 as uuid } from "uuid";
 import bcrypt from "bcrypt";
 import { sendWelcomeEmail, resetEmail } from "../utils/accountEmail.js";
@@ -26,54 +26,18 @@ const oauth2Client = new google.auth.OAuth2(
 );
 
 // Middleware to check if user is authenticated
-export const isAuthenticated = async (req, res, next) => {
-  const token = req.headers.authorization.split(" ")[1];
-  try {
-    const decodedToken = await firebaseAdmin.auth().verifyIdToken(token);
-    req.userData = decodedToken;
-    next();
-  } catch (error) {
-    res.status(401).json({ error: "Unauthorized" });
-  }
-};
+// export const isAuthenticated = async (req, res, next) => {
+//   const token = req.headers.authorization.split(" ")[1];
+//   try {
+//     const decodedToken = await firebaseAdmin.auth().verifyIdToken(token);
+//     req.userData = decodedToken;
+//     next();
+//   } catch (error) {
+//     res.status(401).json({ error: "Unauthorized" });
+//   }
+// };
 
-export const linkFirebaseAuth = async (req, res) => {
-  try {
-    const { firebaseAuthToken } = req.body;
-    // Verify Firebase auth token and get the Firebase user ID
-    const decodedToken = await firebaseAdmin
-      .auth()
-      .verifyIdToken(firebaseAuthToken, {
-        audience: process.env.SERVICE_ACCOUNT_KEY_PROJECT_ID,
-      });
-    const firebaseUserId = decodedToken.uid;
 
-    // Find the MongoDB user with the same email address as the Firebase user
-    let user = await User.findOne({ email: decodedToken.email });
-
-    // console.log("linkFirebaseAuth user:", user)
-    if (!user) {
-      const newUser = new User({
-        email: decodedToken.email,
-        firebaseUid: firebaseUserId,
-        name: decodedToken.name,
-        // any other relevant user information
-      });
-      user = await newUser.save();
-      // return res.status(404).json({ error: 'User not found' });
-    }
-
-    // Update the MongoDB user document with the Firebase auth ID if it's not already set
-    if (!user.firebaseUid) {
-      user.firebaseUid = firebaseUserId;
-      await user.save();
-    }
-
-    return res.status(200).json(user);
-  } catch (error) {
-    return res.status(400).json({ error: error.message });
-  }
-};
 
 export const getUsers = async (req, res) => {
   try {
@@ -122,83 +86,6 @@ export const getUserById = async (req, res) => {
 //   }
 // };
 
-const getFirebaseUserByEmail = async (email) => {
-  try {
-    const firebaseUser = await firebaseAdmin.auth().getUserByEmail(email);
-    return firebaseUser;
-  } catch (error) {
-    if (error.code === "auth/user-not-found") {
-      return null;
-    }
-    throw error;
-  }
-};
-
-export const createMongoDBUser = async (req, res) => {
-  try {
-    const { email, password, name } = req.body;
-
-    // Check if a user with the given email already exists in Firebase Auth
-    const firebaseUser = await getFirebaseUserByEmail(email);
-
-    // Check if the user already exists in MongoDB
-    const user = await User.findOne({ email: email });
-
-    if (user) {
-      return res.status(409).json({ error: "Email already in use" });
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10); // <-- Hash the password
-    const newUser = new User({
-      email: email,
-      firebaseUid: firebaseUser.uid,
-      password: hashedPassword, // <-- Store hashed password in MongoDB
-      name: name,
-    });
-    await newUser.save();
-
-    return res
-      .status(201)
-      .json({ message: "User created successfully", user: newUser });
-  } catch (error) {
-    return res.status(500).json({ error: error.message });
-  }
-};
-
-export const login = async (req, res) => {
-  try {
-    const { email, password } = req.body;
-
-    // Find the user in MongoDB
-    const user = await User.findOne({ email: email });
-
-    // If the user does not exist, return an error
-    if (!user) {
-      return res.status(401).json({ error: "Invalid credentials" });
-    }
-
-    // Check if the provided password matches the stored hash of the password
-    const passwordMatches = await bcrypt.compare(password, user.password);
-    if (!passwordMatches) {
-      return res.status(401).json({ error: "Invalid credentials" });
-    }
-
-    // Sign in the user in Firebase Auth to generate a Firebase auth token
-    const firebaseUser = await firebaseAdmin
-      .auth()
-      .signInWithEmailAndPassword(email, password);
-    const firebaseAuthToken = await firebaseUser.user.getIdToken();
-
-    // Return the user details and Firebase auth token to the client
-    res.status(200).json({
-      message: "Successfully logged in",
-      user: user,
-      firebaseAuthToken: firebaseAuthToken,
-    });
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-};
 
 export const addToFavorite = async (req, res) => {
   try {
