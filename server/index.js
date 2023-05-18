@@ -1,6 +1,8 @@
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
+import { isCelebrateError, errors } from "celebrate";
+
 import { MONGODB_URI, SERVICE_ACCOUNT_KEY } from "./config.js";
 
 import firebase from "firebase-admin";
@@ -70,6 +72,17 @@ app.use("/api/getparks", getParkRoutes);
 app.use("/api/gettrails", getTrailRoutes);
 app.use("/api/osm", osmRoutes);
 app.use("/api/password-reset", passwordResetRoutes);
+
+// middleware to log Celebrate validation errors
+app.use((err, req, res, next) => {
+  if (isCelebrateError(err)) {
+    console.error(err);
+  }
+  next(err);
+});
+
+// Celebrate middleware to return validation errors
+app.use(errors());
 
 mongoose
   .connect(connectionString, {
