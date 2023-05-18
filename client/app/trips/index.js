@@ -1,5 +1,5 @@
 import Footer from "../../components/footer/Footer";
-import { Stack, Box, Text, ScrollView } from "native-base";
+import { Stack, Box, Text, ScrollView, Button, Input, HStack } from "native-base";
 import { Stack as Header } from "expo-router";
 
 import { theme } from "../../theme";
@@ -18,25 +18,29 @@ import { GearList } from "../../components/GearList";
 
 import { MapContainer } from "../../components/map/MapContainer";
 
+import { CustomModal } from "../../components/modal";
+
 export default function Trips() {
+
+    const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
 
     const [parksData, setParksData] = useState();
     const [trails, setTrailsData] = useState();
     const weatherObject = useSelector((state) => state.weather.weatherObject);
     const trailsObject = useSelector((state) => state.trails.trailsDetails);
     const parksObject = useSelector((state) => state.parks.parksDetails);
-  
-  
+
+
     useEffect(() => {
-  
-      setTrailsData(trailsObject)
-  
+
+        setTrailsData(trailsObject)
+
     }, [trailsObject]);
-  
+
     useEffect(() => {
-  
-      setParksData(parksObject)
-  
+
+        setParksData(parksObject)
+
     }, [parksObject]);
 
     return (
@@ -106,9 +110,72 @@ export default function Trips() {
                     />
                 </Stack>
 
+                <CustomModal
+                    title="Save Trip"
+                    trigger="Save Trip"
+                    isActive={isSaveModalOpen}
+                    onTrigger={() => setIsSaveModalOpen(!isSaveModalOpen)}
+                    footerButtons={
+                        [
+                            {
+                                label: "Save",
+                                onPress: () => console.log("Save"),
+                            },
+                        ]
+                    }
+                >
+                    <>
+                        <Input placeholder="Trip Name" />
+                        <Input placeholder="Trip Description" />
+                        <>
+                            <Text>
+                                Duration
+                            </Text>
+                            <HStack>
+                                <Input placeholder="Trip Start Date" />
+                                <Input placeholder="Trip End Date" />
+                            </HStack>
+                        </>
+                        <>
+                            <Text>
+                                Trip Weather
+                            </Text>
+                            <Text>
+                                `Abbreviated Weather Info`
+                            </Text>
+                        </>
+                        <HStack>
+                            <Text>
+                                Pack
+                            </Text>
+                            <Text>
+                                `Selected Pack Name`
+                            </Text>
+                        </HStack>
+                        <HStack>
+                            <Text>
+                                Trip Location
+                            </Text>
+                            <Text>
+                                `Selected Location`
+                            </Text>
+                        </HStack>
+                        <HStack>
+                            <Text>
+                                Selected Trail
+                            </Text>
+                            <Text>
+                                `Selected Trail`
+                            </Text>
+                        </HStack>
+
+                    </>
+
+                </CustomModal>
+
             </Box>
 
-            <Footer />
+            {/* <Footer /> */}
         </ScrollView>
     );
 }
