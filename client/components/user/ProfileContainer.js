@@ -19,7 +19,7 @@ export default function ProfileContainer() {
 
 
   const user = useSelector((state) => state.auth.user);
-  const PacksData = useSelector((state) => state?.packs);
+  const PacksData = useSelector((state) => state.packs);
 
  
   // const { data } = useGetPacks(user?._id);
