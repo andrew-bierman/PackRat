@@ -19,7 +19,7 @@ import { WEB_CLIENT_ID } from "@env";
 import { useState, useEffect } from "react";
 // import useRegister from "../hooks/useRegister";
 import { useRouter } from "expo-router";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+// import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { Link } from "expo-router";
 import { useSelector, useDispatch } from "react-redux";
 import { signUp } from "../store/authStore";
@@ -38,7 +38,7 @@ export default function Register() {
 
   console.log("USER LOG", user);
 
-  if (user?.user?.firebaseUid) {
+  if (user?.user?._id) {
     Toast.show({ title: user?.message, duration: 5000, placement: 'top-right', style: { backgroundColor: 'green'} })
     router.push("/");
   }

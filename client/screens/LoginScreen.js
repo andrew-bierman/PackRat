@@ -21,7 +21,7 @@ import { WEB_CLIENT_ID } from "@env";
 
 import { useState, useEffect } from "react";
 // import useLogin from "../hooks/useLogin";
-import { useAuth } from "../auth/provider";
+// import { useAuth } from "../auth/provider";
 import { Link } from "expo-router";
 import { useRouter } from "expo-router";
 import { theme } from "../theme";
