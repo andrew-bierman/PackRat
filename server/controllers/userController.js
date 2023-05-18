@@ -7,7 +7,6 @@ import firebase from "../index.js";
 import firebaseAdmin from "firebase-admin";
 import { v4 as uuid } from "uuid";
 import bcrypt from "bcrypt";
-import validator from "validator";
 import { sendWelcomeEmail, resetEmail } from "../utils/accountEmail.js";
 import { google } from "googleapis";
 import {
@@ -18,8 +17,6 @@ import {
   UI_ROOT_URI,
 } from "../config.js";
 import utilsService from "../utils/utils.service.js";
-import Joi from "joi";
-import { JoiObjectId } from "../utils/validator.js"
 
 
 const oauth2Client = new google.auth.OAuth2(
@@ -41,15 +38,8 @@ export const isAuthenticated = async (req, res, next) => {
 };
 
 export const linkFirebaseAuth = async (req, res) => {
-  const { firebaseAuthToken } = req.body;
-
-  const bodySchema = Joi.object({
-    firebaseAuthToken: Joi.string().required(),
-  });
-  const { error } = bodySchema.validate(req.body);
-  if (error) { return res.status(400).send(error.details[0].message); }
-
   try {
+    const { firebaseAuthToken } = req.body;
     // Verify Firebase auth token and get the Firebase user ID
     const decodedToken = await firebaseAdmin
       .auth()
@@ -99,12 +89,6 @@ export const getUserById = async (req, res) => {
   try {
     const { userId } = req.body;
 
-    const bodySchema = Joi.object({
-      userId: JoiObjectId().required(),
-    });
-    const { error } = bodySchema.validate(req.body);
-    if (error) { return res.status(400).send(error.details[0].message); }
-
     const user = await User.findById({ _id: userId }).populate("packs");
 
     res.status(200).json(user);
@@ -151,17 +135,9 @@ const getFirebaseUserByEmail = async (email) => {
 };
 
 export const createMongoDBUser = async (req, res) => {
-  const { email, password, name } = req.body;
-
-  const bodySchema = Joi.object({
-    email: Joi.string().required(),
-    name: Joi.string().required(),
-    password: Joi.string().required(),
-  });
-  const { error } = bodySchema.validate(req.body);
-  if (error) { return res.status(400).send(error.details[0].message); }
-
   try {
+    const { email, password, name } = req.body;
+
     // Check if a user with the given email already exists in Firebase Auth
     const firebaseUser = await getFirebaseUserByEmail(email);
 
@@ -190,16 +166,9 @@ export const createMongoDBUser = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-  const { email, password } = req.body;
-
-  const bodySchema = Joi.object({
-    email: Joi.string().required(),
-    password: Joi.string().required(),
-  });
-  const { error } = bodySchema.validate(req.body);
-  if (error) { return res.status(400).send(error.details[0].message); }
-
   try {
+    const { email, password } = req.body;
+
     // Find the user in MongoDB
     const user = await User.findOne({ email: email });
 
@@ -232,16 +201,9 @@ export const login = async (req, res) => {
 };
 
 export const addToFavorite = async (req, res) => {
-  const { packId, userId } = req.body;
-
-  const bodySchema = Joi.object({
-    packId: JoiObjectId().required(),
-    userId: JoiObjectId().required(),
-  });
-  const { error } = bodySchema.validate(req.body);
-  if (error) { return res.status(400).send(error.details[0].message); }
-
   try {
+    const { packId, userId } = req.body;
+
     const exists = await User.find(
       { favorites: { $in: [packId] } },
       { _id: userId }
@@ -272,15 +234,9 @@ export const addToFavorite = async (req, res) => {
 };
 
 export const editUser = async (req, res) => {
-  const { userId } = req.body;
-
-  const bodySchema = Joi.object({
-    userId: JoiObjectId().required(),
-  });
-  const { error } = bodySchema.validate(req.body);
-  if (error) { return res.status(400).send(error.details[0].message); }
-
   try {
+    const { userId } = req.body;
+
     const editedUser = await User.findOneAndUpdate({ _id: userId }, req.body, {
       returnOriginal: false,
     }).populate("favorites");
@@ -291,15 +247,9 @@ export const editUser = async (req, res) => {
 };
 
 export const deleteUser = async (req, res) => {
-  const { userId } = req.body;
-
-  const bodySchema = Joi.object({
-    userId: JoiObjectId().required(),
-  });
-  const { error } = bodySchema.validate(req.body);
-  if (error) { return res.status(400).send(error.details[0].message); }
-
   try {
+    const { userId } = req.body;
+
     await User.findOneAndDelete({ _id: userId });
 
     res.status(200).json({ msg: "user was deleted successfully" });
@@ -311,13 +261,6 @@ export const deleteUser = async (req, res) => {
 export const userSignin = async (req, res) => {
   try {
     const { email, password } = req.body;
-
-    const bodySchema = Joi.object({
-      email: Joi.string().required(),
-      password: Joi.string().required(),
-    });
-    const { error } = bodySchema.validate(req.body);
-    if (error) { return res.status(400).send(error.details[0].message); }
 
     const user = await User.findByCredentials({
       email: email,
@@ -335,12 +278,6 @@ export const userSignup = async (req, res) => {
     // If the Mongoose index is re-index or restart the, it will be removed. Refer to this link for more information: https://stackoverflow.com/questions/5535610/mongoose-unique-index-not-working
     const { email } = req.body;
 
-    const bodySchema = Joi.object({
-      email: Joi.string().required(),
-    });
-    const { error } = bodySchema.validate(req.body);
-    if (error) { return res.status(400).send(error.details[0].message); }
-
     await User.alreadyLogin(email);
     const user = new User(req.body);
     await user.save();
@@ -355,12 +292,6 @@ export const userSignup = async (req, res) => {
 export const sentEmail = async (req, res) => {
   try {
     const { email } = req.body;
-
-    const bodySchema = Joi.object({
-      email: Joi.string().required(),
-    });
-    const { error } = bodySchema.validate(req.body);
-    if (error) { return res.status(400).send(error.details[0].message); }
 
     const user = await User.findOne({ email: email });
     if (!user) {
@@ -381,13 +312,6 @@ export const sentEmail = async (req, res) => {
 export const resetPassword = async (req, res) => {
   try {
     const { resetToken, password } = req.body;
-
-    const bodySchema = Joi.object({
-      resetToken: Joi.string().required(),
-      password: Joi.string().required(),
-    });
-    const { error } = bodySchema.validate(req.body);
-    if (error) { return res.status(400).send(error.details[0].message); }
 
     const user = await User.validateResetToken(resetToken);
     user.password = password;
