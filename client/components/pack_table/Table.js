@@ -37,8 +37,19 @@ export const TableContainer = ({ currentPack }) => {
 
   const [edit, setEdit] = useState();
 
-  const [weightUnit, setWeightUnit] = useState('lb');
+  // PREFERED WEIGHTING UNIT FOR DISPLAY TO CLIENTSIDE
+  const [weightUnit, setWeightUnit] = useState('g');
+  const calculate = (value) => {
+    // update the item values and then recalculate
+    return currentPack.items?.reduce((acc, item) => {
+      const convertedWeight = convertWeight(item?.weight, item?.unit, weightUnit);
+      const result = acc + (convertedWeight * item.quantity);
+      return result;
+    }, 0)
+  }
+  const totalItemsWeight = useMemo(() => calculate(currentPack), [currentPack, weightUnit])
 
+  // UI component
   const WeightUnitDropdown = ({ value, onChange }) => {
     return (
       <Select
@@ -47,10 +58,10 @@ export const TableContainer = ({ currentPack }) => {
         placeholder="Select weight unit"
         onValueChange={(itemValue) => onChange(itemValue)}
       >
-        <Select.Item label="lb" value="lb" />
-        <Select.Item label="kg" value="kg" />
-        <Select.Item label="oz" value="oz" />
-        <Select.Item label="g" value="g" />
+        <Select.Item label="Kg Kilogram" value="kg" />
+        <Select.Item label="G Gram" value="g" />
+        <Select.Item label="Lb Pound" value="lb" />
+        <Select.Item label="Oz Ounce" value="oz" />
       </Select>
     );
   };
@@ -72,7 +83,8 @@ export const TableContainer = ({ currentPack }) => {
     tableTitle: ["Pack List"],
     tableHead: [
       "Item Name",
-      `Weight (${weightUnit})`,
+      `Weight`,
+      // `Weight (${weightUnit})`,
       "Quantity",
       "Edit",
       "Delete",
@@ -86,9 +98,9 @@ export const TableContainer = ({ currentPack }) => {
 
   const flexWidthArr = [2, 1, 1, 0.5, 0.5];
 
-  const tableDb = data?.map(({ name, weight, quantity, _id }, index) => [
+  const tableDb = data?.map(({ name, weight, unit, quantity, _id }, index) => [
     name,
-    weight,
+    `${weight} ${unit}`,
     quantity,
     <MaterialIcons
       name="edit"
@@ -134,7 +146,7 @@ export const TableContainer = ({ currentPack }) => {
     <Box
       style={styles.container}
     >
-      <WeightUnitDropdown value={weightUnit} onChange={() => handleWeightChange(value, )} />
+      <WeightUnitDropdown value={weightUnit} onChange={setWeightUnit} />
       {data?.length > 0 ? (
 
         <Table
@@ -178,7 +190,7 @@ export const TableContainer = ({ currentPack }) => {
         />
         <Text style={{ marginRight: 20 }}>Water:</Text>
         <Input
-          style={{ flex: 1 }}
+          style={{ flex: 1, placeholderTextColor: "#000" }}
           keyboardType="numeric"
           placeholder="Enter water weight"
           value={String(currentPack?.water ?? "")}
@@ -216,6 +228,19 @@ export const TableContainer = ({ currentPack }) => {
               flex: 1,
             }}
           >
+            <Text>Items Weight</Text>
+            <Text>{totalItemsWeight}</Text>
+          </Box>
+          <Box
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              width: "100%",
+              paddingHorizontal: 25,
+              marginVertical: 30,
+              flex: 1,
+            }}
+          >
             <Text>Base Weight</Text>
             <Text>{totalBaseWeight}</Text>
           </Box>
@@ -243,7 +268,7 @@ export const TableContainer = ({ currentPack }) => {
             }}
           >
             <Text>Total Weight</Text>
-            <Text>{totalWeight}</Text>
+            <Text>{`${totalWeight} (${weightUnit})`}</Text>
           </Box>
         </>
       )}
