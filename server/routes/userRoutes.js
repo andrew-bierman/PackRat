@@ -5,10 +5,7 @@ import {
   // addUser,
   editUser,
   deleteUser,
-  login,
   addToFavorite,
-  linkFirebaseAuth,
-  createMongoDBUser,
   userSignin,
   userSignup,
   sentEmail,
@@ -46,9 +43,6 @@ router.post("/google", signInGoogle);
 router.post("/favorite", addToFavorite);
 router.put("/", editUser);
 router.delete("/", deleteUser);
-
-router.post("/link-firebase-auth", linkFirebaseAuth);
-router.post("/create-mongodb-user", createMongoDBUser);
 
 router.post("/checkcode", checkCode);
 router.post("/updatepassword", updatePassword);
