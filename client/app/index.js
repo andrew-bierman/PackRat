@@ -42,6 +42,7 @@ export default function Index() {
           <Dashboard />
         }
       </Box>
+
     </ScrollView>
   );
 }
