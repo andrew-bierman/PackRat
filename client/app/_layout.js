@@ -9,6 +9,7 @@ import { queryClient } from "../constants/queryClient";
 import { NativeBaseProvider } from "native-base";
 import store from "../store/store";
 import NavigationMobile from "../screens/NavigationMobile";
+import Footer from "../components/footer/Footer";
 
 // import { ProviderAuth } from "../auth/provider";
 
@@ -19,6 +20,7 @@ export default function HomeLayout() {
         <QueryClientProvider client={queryClient}>
           {Platform.OS === "web" ? <Navigation /> : <NavigationMobile />}
           <Slot />
+          <Footer />
         </QueryClientProvider>
       </NativeBaseProvider>
     </Provider>
