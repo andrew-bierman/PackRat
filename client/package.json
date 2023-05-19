@@ -59,7 +59,8 @@
     "react-native-web": "~0.18.12",
     "react-native-webview": "11.26.0",
     "react-redux": "^8.0.5",
-    "react-responsive": "^9.0.2"
+    "react-responsive": "^9.0.2",
+    "serve": "^14.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.21.3"
