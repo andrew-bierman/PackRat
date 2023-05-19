@@ -1,6 +1,6 @@
 import { Container, Box, Text, HStack, Stack } from "native-base";
 import { StyleSheet } from "react-native";
-import { useAuth } from "../../auth/provider";
+
 import Card from "./Card";
 // import useGetPublicPacks from "../../hooks/useGetPublicPacks";
 import { theme } from "../../theme";
@@ -21,7 +21,7 @@ export default function Feed({ feedType = "public" }) {
 
   const dispatch = useDispatch()
 
-  const ownerId = useSelector((state) => state.auth.user._id);
+  const ownerId = useSelector((state) => state.auth.user?._id);
 
   const publicPacksData = useSelector((state) => state.feed.publicPacks);
   const userPacksData = useSelector((state) => state.packs.packs);
@@ -30,53 +30,46 @@ export default function Feed({ feedType = "public" }) {
   useEffect(() => {
     if (feedType === "public") {
       dispatch(getPublicPacks(queryString))
-    } else if (feedType === "userPacks") {
+    } else if (feedType === "userPacks" && ownerId) {
       dispatch(fetchUserPacks(ownerId))
+    } else if (feedType === "userTrips") {
+      
     } else if (feedType === "favoritePacks") {
       dispatch(getFavoritePacks())
     }
 
-  }, [queryString]);
+  }, [queryString, feedType, ownerId]);
 
-  const renderData = () => {
+const renderData = () => {
+  const data = feedType === "public" ? publicPacksData : userPacksData;
 
-    const data = feedType === "public" ? publicPacksData : userPacksData
+  let urlPath = "/pack/";
+  let errorText = "No Public Packs Available";
 
-    let urlPath = "/pack/"
-    let errorText = "No Public Packs Available"
-
-
-    if (feedType === "public") {
-      urlPath = "/pack/"
-      errorText = "No Public Packs Available"
-    } else if (feedType === "userPacks") {
-      urlPath = "/pack/"
-      errorText = "No User Packs Available"
-    } else if (feedType === "favoritePacks") {
-      urlPath = "/pack/"
-      errorText = "No Favorite Packs Available"
-    }
-
-    if (data?.length > 0) {
-      return data.map((item) =>
-        <Link
-          key={"link-key" + item?._id}
-          href={urlPath + item?._id}
-        >
-          <Card
-            key={item?._id}
-            {...{ ...item }}
-          />
-        </Link>
-      )
-    } else {
-      return (
-        <Text>
-          {errorText}
-        </Text>
-      )
-    }
+  switch (feedType) {
+    case "userPacks":
+      urlPath = "/pack/";
+      errorText = "No User Packs Available";
+      break;
+    case "favoritePacks":
+      urlPath = "/pack/";
+      errorText = "No Favorite Packs Available";
+      break;
+    default:
+      break;
   }
+
+  if (data?.length > 0) {
+    return data.map((item) => (
+      <Link key={"link-key" + item?._id} href={urlPath + item?._id}>
+        <Card key={item?._id} {...{ ...item }} />
+      </Link>
+    ));
+  } else {
+    return <Text>{errorText}</Text>;
+  }
+};
+
 
   return (
     <Box style={styles.mainContainer}>
