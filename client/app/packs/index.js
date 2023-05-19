@@ -15,7 +15,7 @@ export default function Packs() {
           // https://reactnavigation.org/docs/headers#replacing-the-title-with-a-custom-component
         }}
       />
-      <Feed />
+      <Feed feedType="userPacks" />
     </>
   ) : (
     <FeedMobile />
