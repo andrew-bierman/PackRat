@@ -196,6 +196,7 @@ export const TableContainer = ({ currentPack }) => {
           value={String(currentPack?.water ?? "")}
           onChangeText={handleWaterChange}
         />
+        <Text style={{ marginLeft: 20 }}>({weightUnit})</Text>
       </Box>
       <Box
         style={styles.foodContainer}
@@ -208,12 +209,13 @@ export const TableContainer = ({ currentPack }) => {
         />
         <Text style={{ marginRight: 20 }}>Food:</Text>
         <Input
-          style={{ flex: 1, color: "white" }}
+          style={{ flex: 1, placeholderTextColor: "#000" }}
           keyboardType="numeric"
           placeholder="Enter food weight"
           value={String(currentPack?.food ?? "")}
           onChangeText={handleFoodChange}
         />
+        <Text style={{ marginLeft: 20 }}>({weightUnit})</Text>
       </Box>
 
       {data?.length > 0 && (
