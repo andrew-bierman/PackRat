@@ -71,6 +71,7 @@ app.use("/api/gettrails", getTrailRoutes);
 app.use("/api/osm", osmRoutes);
 app.use("/api/password-reset", passwordResetRoutes);
 
+// connect to mongoDB
 mongoose
   .connect(connectionString, {
     useNewUrlParser: true,
