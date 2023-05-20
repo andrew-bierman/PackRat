@@ -84,6 +84,7 @@ app.use((err, req, res, next) => {
 // Celebrate middleware to return validation errors
 app.use(errors());
 
+// connect to mongodb
 mongoose
   .connect(connectionString, {
     useNewUrlParser: true,
