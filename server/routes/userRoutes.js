@@ -27,13 +27,16 @@ import {
 } from "../controllers/passportController.js";
 import { REDIRECT_URL } from "../config.js";
 
+import { validate } from "../middleware/validation.js";
+import userSchemas from "../utils/validationSchemas/userSchemas.js";
+
 const router = express.Router();
 
 router.get("/", getUsers);
-router.get("/:userId", getUserById);
+router.get("/:userId", validate(userSchemas.getUserById, "body"), getUserById);
 // router.post("/", addUser);
 
-router.post("/signin", userSignin);
+router.post("/signin", validate(userSchemas.login, "body"), userSignin);
 router.post("/signup", userSignup);
 router.post("/reset-password-email", sentEmail);
 router.post("/reset-password", resetPassword);

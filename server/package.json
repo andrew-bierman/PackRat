@@ -24,6 +24,7 @@
     "google-auth-library": "^8.8.0",
     "googleapis": "^118.0.0",
     "i": "^0.3.7",
+    "joi": "^14.3.1",
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.0.1",
     "node-fetch": "^3.3.1",
