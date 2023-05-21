@@ -117,6 +117,8 @@ const styles = StyleSheet.create({
     padding: theme.size.cardPadding,
     paddingHorizontal: theme.padding.paddingInside,
     marginBottom: 20,
-    height: 'fit-content'
+    // height: 'fit-content'
+    height: Platform.OS === "web" ? "450px" : "100%",
+    overflow: "hidden",
   },
 });

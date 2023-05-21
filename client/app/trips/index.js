@@ -1,5 +1,5 @@
 import Footer from "../../components/footer/Footer";
-import { Stack, Box, Text, ScrollView } from "native-base";
+import { Stack, Box, Text, ScrollView, Button, Input, HStack, VStack } from "native-base";
 import { Stack as Header } from "expo-router";
 
 import { theme } from "../../theme";
@@ -18,6 +18,9 @@ import { GearList } from "../../components/GearList";
 
 import { MapContainer } from "../../components/map/MapContainer";
 
+import { CustomModal } from "../../components/modal";
+import { SaveTripContainer } from "../../components/trip/createTrip";
+
 export default function Trips() {
 
     const [parksData, setParksData] = useState();
@@ -25,22 +28,22 @@ export default function Trips() {
     const weatherObject = useSelector((state) => state.weather.weatherObject);
     const trailsObject = useSelector((state) => state.trails.trailsDetails);
     const parksObject = useSelector((state) => state.parks.parksDetails);
-  
-  
+
+
     useEffect(() => {
-  
-      setTrailsData(trailsObject)
-  
+
+        setTrailsData(trailsObject)
+
     }, [trailsObject]);
-  
+
     useEffect(() => {
-  
-      setParksData(parksObject)
-  
+
+        setParksData(parksObject)
+
     }, [parksObject]);
 
     return (
-        <ScrollView>
+        <VStack>
             {Platform.OS === "web" ? (
                 <Header.Screen
                     options={{
@@ -104,12 +107,16 @@ export default function Trips() {
                         title="Map"
                         isMap={true}
                     />
+                    <Box>
+                        <SaveTripContainer />
+                    </Box>
                 </Stack>
+
 
             </Box>
 
-            <Footer />
-        </ScrollView>
+            {/* <Footer /> */}
+        </VStack>
     );
 }
 

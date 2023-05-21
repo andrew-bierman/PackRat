@@ -2,6 +2,7 @@ import Pack from "../models/packModel.js";
 import mongoose from "mongoose";
 import { oneEntity } from "../utils/oneEntity.js"
 import { packValidation } from "../utils/pack.js"
+import { calculatePackScore } from "../utils/scorePack.js"
 
 export const getPublicPacks = async (req, res) => {
   const { queryBy } = req.query;
@@ -160,4 +161,24 @@ export const deletePack = async (req, res) => {
   } catch (error) {
     res.status(404).json({ msg: "Unable to delete pack" });
   }
+};
+
+
+export const scorePack = async (req, res) => {
+  const { packId } = req.body;
+
+  try {
+    const packData = await Pack.findById(packId).populate("items");
+
+    // Call the scoring function to calculate the pack score
+    const packScore = calculatePackScore(packData);
+
+    await Pack.findByIdAndUpdate({ _id: packId }, { score: packScore },
+      { returnOriginal: false });   
+    
+    res.status(200).json({ msg: "Pack was scored successfully" });
+
+  } catch (error) {
+    res.status(404).json({ msg: "Unable to score pack" });
+   }
 };
