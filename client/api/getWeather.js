@@ -1,6 +1,7 @@
 import { api } from "../constants/api";
 
 export const getWeather = async (lat, lon, state) => {
+  console.log('data received in api - ', lat, lon, state)
   let weatherObject = {};
 
   let params = `?`;

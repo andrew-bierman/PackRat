@@ -23,10 +23,10 @@ export default function Card({ title, Icon, isMap, data, isSearch, isTrail }) {
         isSearch
           ? styles.searchContainer
           : isMap
-            ? styles.mapCard
-            : styles.containerMobile
-              ? styles.containerMobile
-              : styles.mutualStyles
+          ? styles.mapCard
+          : styles.containerMobile
+          ? styles.containerMobile
+          : styles.mutualStyles
       }
     >
       <Box
@@ -48,25 +48,21 @@ export default function Card({ title, Icon, isMap, data, isSearch, isTrail }) {
           {title}
         </Text>
       </Box>
-      {isMap
-        ?
-        <MapContainer/>
-        :
-        isSearch
-          ?
-          (
-            <SearchInput />
-            // <Text>Search</Text>
-          ) : (
-            <DropdownComponent
-              {...{
-                value: isTrail ? currentTrail : currentPark,
-                data,
-                isTrail,
-                width: "300",
-              }}
-            />
-          )}
+      {isMap ? (
+        <MapContainer />
+      ) : isSearch ? (
+        <SearchInput />
+      ) : (
+        // <Text>Search</Text>
+        <DropdownComponent
+          {...{
+            value: isTrail ? currentTrail : currentPark,
+            data,
+            isTrail,
+            width: "300",
+          }}
+        />
+      )}
     </Stack>
   );
 }
@@ -117,6 +113,6 @@ const styles = StyleSheet.create({
     padding: theme.size.cardPadding,
     paddingHorizontal: theme.padding.paddingInside,
     marginBottom: 20,
-    height: 'fit-content'
+    height: "fit-content",
   },
 });

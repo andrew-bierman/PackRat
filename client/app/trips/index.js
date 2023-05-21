@@ -19,105 +19,108 @@ import { GearList } from "../../components/GearList";
 import { MapContainer } from "../../components/map/MapContainer";
 
 export default function Trips() {
+  const [parksData, setParksData] = useState();
+  const [trails, setTrailsData] = useState();
+  const weatherObject = useSelector((state) => state.weather.weatherObject);
+  const trailsObject = useSelector((state) => state.trails.trailsDetails);
+  const parksObject = useSelector((state) => state.parks.parksDetails);
 
-    const [parksData, setParksData] = useState();
-    const [trails, setTrailsData] = useState();
-    const weatherObject = useSelector((state) => state.weather.weatherObject);
-    const trailsObject = useSelector((state) => state.trails.trailsDetails);
-    const parksObject = useSelector((state) => state.parks.parksDetails);
-  
-  
-    useEffect(() => {
-  
-      setTrailsData(trailsObject)
-  
-    }, [trailsObject]);
-  
-    useEffect(() => {
-  
-      setParksData(parksObject)
-  
-    }, [parksObject]);
+  useEffect(() => {
+    setTrailsData(trailsObject);
+  }, [trailsObject]);
 
-    return (
-        <ScrollView>
-            {Platform.OS === "web" ? (
-                <Header.Screen
-                    options={{
-                        // https://reactnavigation.org/docs/headers#setting-the-header-title
-                        title: "Home",
-                    }}
-                />
-            ) : null}
-            <Box style={styles.mutualStyles}>
-                <Stack m={[0, 0, 12, 16]} style={{ gap: 25 }}>
-                    <Card
-                        title="Where are you heading?"
-                        isSearch={true}
-                        Icon={() => (
-                            <FontAwesome
-                                name="map"
-                                size={20}
-                                color={theme.colors.cardIconColor}
-                            />
-                        )}
-                    />
+  useEffect(() => {
+    setParksData(parksObject);
+  }, [parksObject]);
 
-                    <WeatherCard weatherObject={weatherObject} />
+  // getting selected location from search
+//   const getSelectedLocation = useSelector(
+//     (state) => state.search.selectedSearchResult
+//   );
 
-                    <Card
-                        title="Nearby Trails"
-                        value="Trail List"
-                        isTrail={true}
-                        data={trails || []}
-                        Icon={() => (
-                            <FontAwesome5
-                                name="hiking"
-                                size={20}
-                                color={theme.colors.cardIconColor}
-                            />
-                        )}
-                    />
+//   // showing selected location in the console
+//   useEffect(() => {
+//     console.log("-- hey i got the data here - ", getSelectedLocation);
+//   }, [getSelectedLocation]);
 
-                    <Card
-                        title="Nearby Parks"
-                        value="Parks List"
-                        data={parksData}
-                        Icon={() => (
-                            <FontAwesome5
-                                name="mountain"
-                                size={20}
-                                color={theme.colors.cardIconColor}
-                            />
-                        )}
-                    />
-                    <GearList />
+  return (
+    <ScrollView>
+      {Platform.OS === "web" ? (
+        <Header.Screen
+          options={{
+            // https://reactnavigation.org/docs/headers#setting-the-header-title
+            title: "Home",
+          }}
+        />
+      ) : null}
+      <Box style={styles.mutualStyles}>
+        <Stack m={[0, 0, 12, 16]} style={{ gap: 25 }}>
+          <Card
+            title="Where are you heading?"
+            isSearch={true}
+            Icon={() => (
+              <FontAwesome
+                name="map"
+                size={20}
+                color={theme.colors.cardIconColor}
+              />
+            )}
+          />
 
-                    <Card
-                        Icon={() => (
-                            <FontAwesome5
-                                name="route"
-                                size={24}
-                                color={theme.colors.cardIconColor}
-                            />
-                        )}
-                        title="Map"
-                        isMap={true}
-                    />
-                </Stack>
+          <WeatherCard weatherObject={weatherObject} />
 
-            </Box>
+          <Card
+            title="Nearby Trails"
+            value="Trail List"
+            isTrail={true}
+            data={trails || []}
+            Icon={() => (
+              <FontAwesome5
+                name="hiking"
+                size={20}
+                color={theme.colors.cardIconColor}
+              />
+            )}
+          />
 
-            <Footer />
-        </ScrollView>
-    );
+          <Card
+            title="Nearby Parks"
+            value="Parks List"
+            data={parksData}
+            Icon={() => (
+              <FontAwesome5
+                name="mountain"
+                size={20}
+                color={theme.colors.cardIconColor}
+              />
+            )}
+          />
+          <GearList />
+
+          <Card
+            Icon={() => (
+              <FontAwesome5
+                name="route"
+                size={24}
+                color={theme.colors.cardIconColor}
+              />
+            )}
+            title="Map"
+            isMap={true}
+          />
+        </Stack>
+      </Box>
+
+      <Footer />
+    </ScrollView>
+  );
 }
 
 const styles = StyleSheet.create({
-    mutualStyles: {
-        backgroundColor: theme.colors.background,
-        flex: 1,
-        flexDirection: "column",
-        height: "100%",
-    },
+  mutualStyles: {
+    backgroundColor: theme.colors.background,
+    flex: 1,
+    flexDirection: "column",
+    height: "100%",
+  },
 });
