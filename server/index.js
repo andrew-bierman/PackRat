@@ -4,7 +4,7 @@ import cors from "cors";
 import { MONGODB_URI, SERVICE_ACCOUNT_KEY } from "./config.js";
 import routes from "./routes/index.js";
 
-import firebase from "firebase-admin";
+// import firebase from "firebase-admin";
 
 // import serviceAccountKey from "./serviceAccountKey.json" assert { type: "json" };
 // import { createRequire } from "module";
@@ -12,9 +12,9 @@ import firebase from "firebase-admin";
 // const serviceAccountKey = require("./serviceAccountKey.json");
 
 // // Initialize Firebase
-firebase.initializeApp({
-  credential: firebase.credential.cert(SERVICE_ACCOUNT_KEY),
-});
+// firebase.initializeApp({
+//   credential: firebase.credential.cert(SERVICE_ACCOUNT_KEY),
+// });
 
 // express items
 const app = express();
@@ -46,4 +46,4 @@ app.listen(port, () =>
   console.log(`listening on port ${port}`)
 );
 
-export default firebase;
+// export default firebase;
