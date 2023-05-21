@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { api } from "../constants/api";
-import { queryClient } from "../constants/queryClient";
 
 export const deleteItem = createAsyncThunk("items/deleteItem", async (itemId) => {
   const response = await axios.delete(`${api}/item`, {

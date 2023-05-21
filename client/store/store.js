@@ -10,6 +10,7 @@ import packsReducer from "./packsStore";
 import favoritesReducer from "./favoritesStore";
 import feedReducer from "./feedStore";
 import singlePackReducer from "./singlePackStore";
+import tripsReducer from "./tripsStore";
 
 export default configureStore({
   reducer: {
@@ -21,6 +22,7 @@ export default configureStore({
     parks: parksReducer,
     items: itemsReducer,
     packs: packsReducer,
+    trips: tripsReducer,
     favorites: favoritesReducer,
     singlePack: singlePackReducer,
     feed: feedReducer,

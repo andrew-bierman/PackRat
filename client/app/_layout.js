@@ -8,6 +8,7 @@ import { Provider } from "react-redux";
 import { NativeBaseProvider } from "native-base";
 import store from "../store/store";
 import NavigationMobile from "../screens/NavigationMobile";
+import Footer from "../components/footer/Footer";
 
 export default function HomeLayout() {
   return (
