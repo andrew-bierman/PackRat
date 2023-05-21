@@ -64,7 +64,7 @@ if (process.env.NODE_ENV === "production") {
     // Serve the client's index.html file at the root route
     router.get("/", (req, res) => {
         // Attach the CSRF token cookie to the response
-        res.cookie("XSRF-TOKEN", req.csrfToken());
+        // res.cookie("XSRF-TOKEN", req.csrfToken());
 
         res.sendFile(
             path.resolve(__dirname, "../client", "dist", "index.html"));
@@ -75,7 +75,7 @@ if (process.env.NODE_ENV === "production") {
 
     // Serve the client's index.html file at all other routes NOT starting with /api
     router.get(/^(?!\/?api).*/, (req, res) => {
-        res.cookie("XSRF-TOKEN", req.csrfToken());
+        // res.cookie("XSRF-TOKEN", req.csrfToken());
         res.sendFile(
             path.resolve(__dirname, "../client", "dist", "index.html"));
     });
@@ -84,7 +84,7 @@ if (process.env.NODE_ENV === "production") {
 // Attach the CSRF token to a specific route in development
 if (process.env.NODE_ENV !== "production") {
     router.get("/api/csrf/restore", (req, res) => {
-        res.cookie("XSRF-TOKEN", req.csrfToken());
+        // res.cookie("XSRF-TOKEN", req.csrfToken());
         res.status(201).json({});
     });
 }
