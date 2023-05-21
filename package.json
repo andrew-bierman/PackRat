@@ -6,10 +6,7 @@
   "scripts": {
     "install": "npm --prefix server install && npm --prefix client install",    
     "build:client": "npm install --prefix client && npx --prefix client expo export --platform web",
-    "expo:export": "
-    cd client && 
-    cp app.example.json app.json &&
-    npx expo export --platform web",
+    "expo:export": "cd client && cp app.example.json app.json && npx expo export --platform web",
     "start": "npm start --prefix server",
     "dev:client": "npm start --prefix client",
     "dev:server": "npm start --prefix server"
