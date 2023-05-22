@@ -14,16 +14,14 @@ export default function ProfileContainer() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchUserPacks(user?._id))
-  }, [dispatch, user?._id])
-
+    dispatch(fetchUserPacks(user?._id));
+  }, [dispatch, user?._id]);
 
   const user = useSelector((state) => state.auth.user);
   const PacksData = useSelector((state) => state?.packs);
 
- 
   // const { data } = useGetPacks(user?._id);
-  console.log(user)
+  console.log(user);
 
   const isLoading = useSelector((state) => state?.auth?.loading);
   const error = useSelector((state) => state?.auth?.error);
@@ -69,7 +67,11 @@ export default function ProfileContainer() {
         </Box>
         {error ? <Text>{error}</Text> : null}
       </Box>
-      {isLoading ? <Text>Loading....</Text> : <PacksContainer data={PacksData?.packs} />}
+      {isLoading ? (
+        <Text>Loading....</Text>
+      ) : (
+        <PacksContainer data={PacksData?.packs} />
+      )}
     </Box>
   );
 }

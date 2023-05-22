@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
-import Item from '../models/itemModel.js';
-import Pack from '../models/packModel.js';
+import Item from "../models/itemModel.js";
+import Pack from "../models/packModel.js";
 
 import { MONGODB_URI } from "../config.js";
 
-console.log("Connecting to MongoDB:", MONGODB_URI)
+console.log("Connecting to MongoDB:", MONGODB_URI);
 
 const main = async () => {
   await mongoose.connect(MONGODB_URI, {

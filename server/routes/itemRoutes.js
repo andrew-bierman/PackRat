@@ -5,14 +5,14 @@ import {
   addItem,
   editItem,
   deleteItem,
-  searchItemsByName
+  searchItemsByName,
 } from "../controllers/itemController.js";
 
 const router = express.Router();
 
 router.get("/packItems/:packId", getItems);
 router.get("/i/:packId", getItemById);
-router.get("/search", searchItemsByName)
+router.get("/search", searchItemsByName);
 router.post("/", addItem);
 router.put("/", editItem);
 router.delete("/", deleteItem);

@@ -8,8 +8,7 @@ import axios from "axios";
 
 export const fetchWeather = createAsyncThunk(
   "weather/fetchWeather",
-  async ({lat, lon, state}) => {
-
+  async ({ lat, lon, state }) => {
     let params = `?`;
 
     if (lat) params += `lat=${lat}`;
@@ -18,7 +17,7 @@ export const fetchWeather = createAsyncThunk(
     const url = api + "/weather" + params;
 
     try {
-      const response = await axios.get(url)
+      const response = await axios.get(url);
       // console.log('response', response)
       return response.data;
     } catch (error) {
@@ -29,8 +28,7 @@ export const fetchWeather = createAsyncThunk(
 
 export const fetchWeatherWeek = createAsyncThunk(
   "weather/fetchWeatherWeek",
-  async ({lat, lon}) => {
-
+  async ({ lat, lon }) => {
     let params = `?`;
 
     if (lat) params += `lat=${lat}`;
@@ -39,7 +37,7 @@ export const fetchWeatherWeek = createAsyncThunk(
     const url = api + "/weather/week" + params;
 
     try {
-      const response = await axios.get(url)
+      const response = await axios.get(url);
       // console.log('response', response)
       return response.data;
     } catch (error) {
@@ -99,8 +97,8 @@ export const weatherSlice = createSlice({
       .addCase(fetchWeatherWeek.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message;
-      })
-    },
+      });
+  },
 });
 
 // Action creators are generated for each case reducer function

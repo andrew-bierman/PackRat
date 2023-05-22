@@ -2,17 +2,20 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { api } from "../constants/api";
 
-export const deleteItem = createAsyncThunk("items/deleteItem", async (itemId) => {
-  const response = await axios.delete(`${api}/item`, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    data: {
-      itemId,
-    },
-  });
-  return response.data;
-});
+export const deleteItem = createAsyncThunk(
+  "items/deleteItem",
+  async (itemId) => {
+    const response = await axios.delete(`${api}/item`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: {
+        itemId,
+      },
+    });
+    return response.data;
+  }
+);
 
 export const editItem = createAsyncThunk("items/editItem", async (newItem) => {
   const response = await axios.put(`${api}/item/`, newItem);
@@ -39,7 +42,9 @@ const itemsSlice = createSlice({
         state.error = null;
       })
       .addCase(deleteItem.fulfilled, (state, action) => {
-        state.items = state.items.filter((item) => item.id !== action.payload.id);
+        state.items = state.items.filter(
+          (item) => item.id !== action.payload.id
+        );
         state.isLoading = false;
         state.error = null;
       })

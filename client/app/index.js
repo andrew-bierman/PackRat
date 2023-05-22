@@ -1,4 +1,3 @@
-
 import { useSelector } from "react-redux";
 
 import { Platform } from "react-native";
@@ -20,11 +19,10 @@ import LandingPage from "../components/landing_page";
 import Dashboard from "../components/dashboard";
 
 export default function Index() {
-
   const user = useSelector((state) => state.auth.user);
   const reduxState = useSelector((state) => state);
 
-  console.log("reduxState", reduxState)
+  console.log("reduxState", reduxState);
   return (
     <ScrollView>
       {Platform.OS === "web" ? (
@@ -36,13 +34,8 @@ export default function Index() {
         />
       ) : null}
       <Box style={styles.mutualStyles}>
-        { !user ?
-          <LandingPage />
-          :
-          <Dashboard />
-        }
+        {!user ? <LandingPage /> : <Dashboard />}
       </Box>
-
     </ScrollView>
   );
 }
@@ -56,6 +49,3 @@ const styles = StyleSheet.create({
     minHeight: "100vh",
   },
 });
-
-
-

@@ -112,9 +112,7 @@ export default function CardMobile({
                     <Text>Loading...</Text>
                   ) : (
                     <AntDesign
-                      onPress={() =>
-                        handleAddToFavorite()
-                      }
+                      onPress={() => handleAddToFavorite()}
                       name="heart"
                       size={16}
                       color={user?.favorites.includes(_id) ? "red" : "grey"}

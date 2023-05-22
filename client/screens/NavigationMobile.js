@@ -14,9 +14,7 @@ import packratlogo from "../assets/packrat.png";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 
-
 export default function NavigationMobile() {
-
   // const { user } = useAuth();
   const user = useSelector((state) => state.auth.user);
 
@@ -39,10 +37,9 @@ export default function NavigationMobile() {
           name="navicon"
           size={48}
           color={theme.colors.iconColor}
-        // onPress={() => setIsMenuOpen(!isMenuOpen)}
+          // onPress={() => setIsMenuOpen(!isMenuOpen)}
         />
       </Link>
-
     </View>
   ) : null;
 }

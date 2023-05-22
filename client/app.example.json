@@ -13,9 +13,7 @@
       "backgroundColor": "#ffffff",
       "scheme": "myapp"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.andrewbierman.packratfront"

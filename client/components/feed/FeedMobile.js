@@ -17,11 +17,11 @@ export default function FeedMobile() {
 
   // const { data, isLoading, isError, error } = useGetPublicPacks(queryString);
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const publicParksData = useSelector((state) => state.feed.publicPacks);
 
   useEffect(() => {
-    dispatch(getPublicPacks(queryString))
+    dispatch(getPublicPacks(queryString));
   }, [queryString]);
 
   return (
@@ -40,7 +40,9 @@ export default function FeedMobile() {
           flexWrap="wrap"
         >
           {publicParksData?.length > 0 ? (
-            publicParksData?.map((pack) => <CardMobile key={pack?._id} {...{ ...pack }} />)
+            publicParksData?.map((pack) => (
+              <CardMobile key={pack?._id} {...{ ...pack }} />
+            ))
           ) : (
             <Text>No Public Packs Available</Text>
           )}

@@ -1,8 +1,8 @@
 import Pack from "../models/packModel.js";
 import mongoose from "mongoose";
-import { oneEntity } from "../utils/oneEntity.js"
-import { packValidation } from "../utils/pack.js"
-import { calculatePackScore } from "../utils/scorePack.js"
+import { oneEntity } from "../utils/oneEntity.js";
+import { packValidation } from "../utils/pack.js";
+import { calculatePackScore } from "../utils/scorePack.js";
 
 export const getPublicPacks = async (req, res) => {
   const { queryBy } = req.query;
@@ -86,7 +86,6 @@ export const getPacks = async (req, res) => {
   }
 };
 
-
 export const getPackById = async (req, res) => {
   const { packId } = req.params;
 
@@ -96,7 +95,7 @@ export const getPackById = async (req, res) => {
 
     res.status(200).json(pack);
   } catch (error) {
-    console.error('getPackById error', error); // Add this line
+    console.error("getPackById error", error); // Add this line
     res.status(404).json({ msg: "Pack cannot be found" });
   }
 };
@@ -119,7 +118,7 @@ export const addPack = async (req, res) => {
     owners: [req.body.owner_id],
   };
 
-  console.log('newPack', newPack)
+  console.log("newPack", newPack);
 
   try {
     const exists = await Pack.find({ name: req.body.name });
@@ -137,14 +136,14 @@ export const addPack = async (req, res) => {
 
 export const editPack = async (req, res) => {
   // const { _id } = await oneEntity(req.body._id)
-  const { _id } = req.body
+  const { _id } = req.body;
 
   try {
     const newPack = await Pack.findOneAndUpdate({ _id }, req.body, {
       returnOriginal: false,
     });
 
-    console.log('newPack', newPack)
+    console.log("newPack", newPack);
 
     res.status(200).json(newPack);
   } catch (error) {
@@ -153,7 +152,7 @@ export const editPack = async (req, res) => {
 };
 
 export const deletePack = async (req, res) => {
-  const { packId } = await oneEntity(req.body.packId)
+  const { packId } = await oneEntity(req.body.packId);
 
   try {
     await Pack.findOneAndDelete({ _id: packId });
@@ -162,7 +161,6 @@ export const deletePack = async (req, res) => {
     res.status(404).json({ msg: "Unable to delete pack" });
   }
 };
-
 
 export const scorePack = async (req, res) => {
   const { packId } = req.body;
@@ -173,12 +171,14 @@ export const scorePack = async (req, res) => {
     // Call the scoring function to calculate the pack score
     const packScore = calculatePackScore(packData);
 
-    await Pack.findByIdAndUpdate({ _id: packId }, { score: packScore },
-      { returnOriginal: false });   
-    
-    res.status(200).json({ msg: "Pack was scored successfully" });
+    await Pack.findByIdAndUpdate(
+      { _id: packId },
+      { score: packScore },
+      { returnOriginal: false }
+    );
 
+    res.status(200).json({ msg: "Pack was scored successfully" });
   } catch (error) {
     res.status(404).json({ msg: "Unable to score pack" });
-   }
+  }
 };

@@ -29,7 +29,6 @@ export default function Card({
   owner_id,
   createdAt,
 }) {
-
   // const { user } = useAuth();
   const user = useSelector((state) => state.auth.user);
   const favorites = useSelector((state) => state.favorites.favorites);

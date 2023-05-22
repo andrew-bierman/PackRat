@@ -1,13 +1,10 @@
 import User from "../models/userModel.js";
 
 export const loginUser = async ({ email, password, from }) => {
-  let user = []
+  let user = [];
   if (from === "UserSignIn") {
     user = await User.find({
-      $and: [
-        { "email": email.toLowerCase() },
-        { "password": password }
-      ]
+      $and: [{ email: email.toLowerCase() }, { password: password }],
     }).select("-password");
 
     if (!email || !password) {
@@ -16,7 +13,9 @@ export const loginUser = async ({ email, password, from }) => {
   }
 
   if (from === "GoogleSignIn") {
-    user = await User.findOne({ "email": email.toLowerCase() }).select("-password");
+    user = await User.findOne({ email: email.toLowerCase() }).select(
+      "-password"
+    );
     if (!email) {
       throw new Error("All fields must be filled");
     }

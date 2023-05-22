@@ -19,57 +19,53 @@ const dataValues = ["Favorite", "Most Recent"];
 export default function Feed({ feedType = "public" }) {
   const [queryString, setQueryString] = useState("");
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const ownerId = useSelector((state) => state.auth.user?._id);
 
   const publicPacksData = useSelector((state) => state.feed.publicPacks);
   const userPacksData = useSelector((state) => state.packs.packs);
 
-
   useEffect(() => {
     if (feedType === "public") {
-      dispatch(getPublicPacks(queryString))
+      dispatch(getPublicPacks(queryString));
     } else if (feedType === "userPacks" && ownerId) {
-      dispatch(fetchUserPacks(ownerId))
+      dispatch(fetchUserPacks(ownerId));
     } else if (feedType === "userTrips") {
-      
     } else if (feedType === "favoritePacks") {
-      dispatch(getFavoritePacks())
+      dispatch(getFavoritePacks());
     }
-
   }, [queryString, feedType, ownerId]);
 
-const renderData = () => {
-  const data = feedType === "public" ? publicPacksData : userPacksData;
+  const renderData = () => {
+    const data = feedType === "public" ? publicPacksData : userPacksData;
 
-  let urlPath = "/pack/";
-  let errorText = "No Public Packs Available";
+    let urlPath = "/pack/";
+    let errorText = "No Public Packs Available";
 
-  switch (feedType) {
-    case "userPacks":
-      urlPath = "/pack/";
-      errorText = "No User Packs Available";
-      break;
-    case "favoritePacks":
-      urlPath = "/pack/";
-      errorText = "No Favorite Packs Available";
-      break;
-    default:
-      break;
-  }
+    switch (feedType) {
+      case "userPacks":
+        urlPath = "/pack/";
+        errorText = "No User Packs Available";
+        break;
+      case "favoritePacks":
+        urlPath = "/pack/";
+        errorText = "No Favorite Packs Available";
+        break;
+      default:
+        break;
+    }
 
-  if (data?.length > 0) {
-    return data.map((item) => (
-      <Link key={"link-key" + item?._id} href={urlPath + item?._id}>
-        <Card key={item?._id} {...{ ...item }} />
-      </Link>
-    ));
-  } else {
-    return <Text>{errorText}</Text>;
-  }
-};
-
+    if (data?.length > 0) {
+      return data.map((item) => (
+        <Link key={"link-key" + item?._id} href={urlPath + item?._id}>
+          <Card key={item?._id} {...{ ...item }} />
+        </Link>
+      ));
+    } else {
+      return <Text>{errorText}</Text>;
+    }
+  };
 
   return (
     <Box style={styles.mainContainer}>
@@ -85,11 +81,7 @@ const renderData = () => {
         space={[3, 3, 3, 0]}
         flexWrap="wrap"
       >
-
-        {
-          renderData()
-        }
-
+        {renderData()}
       </Stack>
     </Box>
   );

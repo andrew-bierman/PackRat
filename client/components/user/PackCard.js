@@ -31,12 +31,10 @@ export default function PackCard({
   const dispatch = useDispatch();
 
   const handleChangePackStatus = () => {
-    dispatch(changePackStatus({_id, isPublic: !is_public}));
+    dispatch(changePackStatus({ _id, isPublic: !is_public }));
   };
 
   const isLoading = useSelector((state) => state.packs.isLoading);
-
-
 
   return (
     <Box alignItems="center" padding="5">

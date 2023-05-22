@@ -1,5 +1,14 @@
 import Footer from "../../components/footer/Footer";
-import { Stack, Box, Text, ScrollView, Button, Input, HStack, VStack } from "native-base";
+import {
+  Stack,
+  Box,
+  Text,
+  ScrollView,
+  Button,
+  Input,
+  HStack,
+  VStack,
+} from "native-base";
 import { Stack as Header } from "expo-router";
 
 import { theme } from "../../theme";
@@ -22,109 +31,101 @@ import { CustomModal } from "../../components/modal";
 import { SaveTripContainer } from "../../components/trip/createTrip";
 
 export default function Trips() {
+  const [parksData, setParksData] = useState();
+  const [trails, setTrailsData] = useState();
+  const weatherObject = useSelector((state) => state.weather.weatherObject);
+  const trailsObject = useSelector((state) => state.trails.trailsDetails);
+  const parksObject = useSelector((state) => state.parks.parksDetails);
 
-    const [parksData, setParksData] = useState();
-    const [trails, setTrailsData] = useState();
-    const weatherObject = useSelector((state) => state.weather.weatherObject);
-    const trailsObject = useSelector((state) => state.trails.trailsDetails);
-    const parksObject = useSelector((state) => state.parks.parksDetails);
+  useEffect(() => {
+    setTrailsData(trailsObject);
+  }, [trailsObject]);
 
+  useEffect(() => {
+    setParksData(parksObject);
+  }, [parksObject]);
 
-    useEffect(() => {
+  return (
+    <VStack>
+      {Platform.OS === "web" ? (
+        <Header.Screen
+          options={{
+            // https://reactnavigation.org/docs/headers#setting-the-header-title
+            title: "Home",
+          }}
+        />
+      ) : null}
+      <Box style={styles.mutualStyles}>
+        <Stack m={[0, 0, 12, 16]} style={{ gap: 25 }}>
+          <Card
+            title="Where are you heading?"
+            isSearch={true}
+            Icon={() => (
+              <FontAwesome
+                name="map"
+                size={20}
+                color={theme.colors.cardIconColor}
+              />
+            )}
+          />
 
-        setTrailsData(trailsObject)
+          <WeatherCard weatherObject={weatherObject} />
 
-    }, [trailsObject]);
+          <Card
+            title="Nearby Trails"
+            value="Trail List"
+            isTrail={true}
+            data={trails || []}
+            Icon={() => (
+              <FontAwesome5
+                name="hiking"
+                size={20}
+                color={theme.colors.cardIconColor}
+              />
+            )}
+          />
 
-    useEffect(() => {
+          <Card
+            title="Nearby Parks"
+            value="Parks List"
+            data={parksData}
+            Icon={() => (
+              <FontAwesome5
+                name="mountain"
+                size={20}
+                color={theme.colors.cardIconColor}
+              />
+            )}
+          />
+          <GearList />
 
-        setParksData(parksObject)
+          <Card
+            Icon={() => (
+              <FontAwesome5
+                name="route"
+                size={24}
+                color={theme.colors.cardIconColor}
+              />
+            )}
+            title="Map"
+            isMap={true}
+          />
+          <Box>
+            <SaveTripContainer />
+          </Box>
+        </Stack>
+      </Box>
 
-    }, [parksObject]);
-
-    return (
-        <VStack>
-            {Platform.OS === "web" ? (
-                <Header.Screen
-                    options={{
-                        // https://reactnavigation.org/docs/headers#setting-the-header-title
-                        title: "Home",
-                    }}
-                />
-            ) : null}
-            <Box style={styles.mutualStyles}>
-                <Stack m={[0, 0, 12, 16]} style={{ gap: 25 }}>
-                    <Card
-                        title="Where are you heading?"
-                        isSearch={true}
-                        Icon={() => (
-                            <FontAwesome
-                                name="map"
-                                size={20}
-                                color={theme.colors.cardIconColor}
-                            />
-                        )}
-                    />
-
-                    <WeatherCard weatherObject={weatherObject} />
-
-                    <Card
-                        title="Nearby Trails"
-                        value="Trail List"
-                        isTrail={true}
-                        data={trails || []}
-                        Icon={() => (
-                            <FontAwesome5
-                                name="hiking"
-                                size={20}
-                                color={theme.colors.cardIconColor}
-                            />
-                        )}
-                    />
-
-                    <Card
-                        title="Nearby Parks"
-                        value="Parks List"
-                        data={parksData}
-                        Icon={() => (
-                            <FontAwesome5
-                                name="mountain"
-                                size={20}
-                                color={theme.colors.cardIconColor}
-                            />
-                        )}
-                    />
-                    <GearList />
-
-                    <Card
-                        Icon={() => (
-                            <FontAwesome5
-                                name="route"
-                                size={24}
-                                color={theme.colors.cardIconColor}
-                            />
-                        )}
-                        title="Map"
-                        isMap={true}
-                    />
-                    <Box>
-                        <SaveTripContainer />
-                    </Box>
-                </Stack>
-
-
-            </Box>
-
-            {/* <Footer /> */}
-        </VStack>
-    );
+      {/* <Footer /> */}
+    </VStack>
+  );
 }
 
 const styles = StyleSheet.create({
-    mutualStyles: {
-        backgroundColor: theme.colors.background,
-        flex: 1,
-        flexDirection: "column",
-        height: "100%",
-    },
+  mutualStyles: {
+    backgroundColor: theme.colors.background,
+    flex: 1,
+    flexDirection: "column",
+    height: "100%",
+  },
 });
