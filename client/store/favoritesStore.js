@@ -3,15 +3,21 @@ import axios from "axios";
 import { api } from "../constants/api";
 import { queryClient } from "../constants/queryClient";
 
-export const addFavorite = createAsyncThunk("favorites/addFavorite", async (newFavorite) => {
-  const response = await axios.post(`${api}/user/favorite`, newFavorite);
-  return response.data;
-});
+export const addFavorite = createAsyncThunk(
+  "favorites/addFavorite",
+  async (newFavorite) => {
+    const response = await axios.post(`${api}/user/favorite`, newFavorite);
+    return response.data;
+  }
+);
 
-export const fetchFavorites = createAsyncThunk("favorites/fetchFavorites", async () => {
-  const response = await axios.get(`${api}/user/favorite`);
-  return response.data;
-});
+export const fetchFavorites = createAsyncThunk(
+  "favorites/fetchFavorites",
+  async () => {
+    const response = await axios.get(`${api}/user/favorite`);
+    return response.data;
+  }
+);
 
 const favoritesSlice = createSlice({
   name: "favorites",

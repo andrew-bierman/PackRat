@@ -4,7 +4,6 @@
 // import { queryClient } from "../constants/queryClient";
 // // import { useAuth } from "../auth/provider";
 
-
 // const addFavorite = async (data) => {
 //   return await fetcher(`${api}/user/favorite`, {
 //     method: "POST",

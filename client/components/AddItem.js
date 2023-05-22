@@ -13,7 +13,7 @@ import { CustomModal } from "./modal";
 const data = ["oz", "lb", "g", "kg"];
 
 export const AddItem = ({ packId }) => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const [name, setName] = useState("");
   const [weight, setWeight] = useState("");
@@ -26,14 +26,13 @@ export const AddItem = ({ packId }) => {
   const error = useSelector((state) => state.packs.error);
   const isError = error !== null;
 
-
   const handleAddPackItem = async (item) => {
-    dispatch(addPackItem({ name, weight, quantity, unit, packId }))
- 
-    setName("")
-    setWeight("")
-    setQuantity("")
-  }
+    dispatch(addPackItem({ name, weight, quantity, unit, packId }));
+
+    setName("");
+    setWeight("");
+    setQuantity("");
+  };
 
   return (
     <Box style={styles.container}>
@@ -80,8 +79,7 @@ export const AddItem = ({ packId }) => {
       <Button
         onPress={() => {
           // addItem.mutate({ name, weight, quantity, unit, packId });
-          handleAddPackItem({ name, weight, quantity, unit, packId })
-
+          handleAddPackItem({ name, weight, quantity, unit, packId });
         }}
       >
         <Text style={{ color: theme.colors.text }}>

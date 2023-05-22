@@ -1,7 +1,7 @@
 import { api } from "../constants/api";
 
 export const getGeoCode = async (addressArray) => {
-  let resultReturn
+  let resultReturn;
   await fetch(`${api}/geocode?addressArray=${addressArray}`)
     .then((response) => response.json())
     .then((result) => {

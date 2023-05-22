@@ -11,7 +11,6 @@ import { Select } from "native-base";
 // import useEditItem from "../hooks/useEditItem";
 // import useDeleteItem from "../hooks/useDeleteItem";
 
-
 import { useState, useMemo, useEffect } from "react";
 import { Box, Text, Input } from "native-base";
 
@@ -22,7 +21,6 @@ import { convertWeight } from "../../utils/convertWeight";
 import { selectPackById } from "../../store/packsStore";
 
 export const TableContainer = ({ currentPack }) => {
-
   // const { data, isLoading, isError, error } = useGetItems(packId);
 
   const dispatch = useDispatch();
@@ -37,7 +35,7 @@ export const TableContainer = ({ currentPack }) => {
 
   const [edit, setEdit] = useState();
 
-  const [weightUnit, setWeightUnit] = useState('lb');
+  const [weightUnit, setWeightUnit] = useState("lb");
 
   const WeightUnitDropdown = ({ value, onChange }) => {
     return (
@@ -57,11 +55,13 @@ export const TableContainer = ({ currentPack }) => {
 
   const handleWeightChange = (value, index) => {
     const newItem = { ...data[index], weight: value };
-    const convertedWeight = convertWeight(value, weightUnit, 'lb');
-    setData((prevState) => [...prevState.slice(0, index), newItem, ...prevState.slice(index + 1)]);
+    const convertedWeight = convertWeight(value, weightUnit, "lb");
+    setData((prevState) => [
+      ...prevState.slice(0, index),
+      newItem,
+      ...prevState.slice(index + 1),
+    ]);
   };
-
-
 
   const totalBaseWeight = data?.reduce((acc, curr) => acc + curr.weight, 0);
   const totalWaterWeight = currentPack?.water ?? 0;
@@ -80,7 +80,13 @@ export const TableContainer = ({ currentPack }) => {
     tableBaseData: data?.map((value) => Object.values(value).slice(1)),
     tableWater: ["Water", totalWaterWeight, "", "", ""],
     tableFood: ["Food", totalFoodWeight, "", "", ""],
-    tableWaterFood: ["Water + Food", totalWaterWeight + totalFoodWeight, "", "", ""],
+    tableWaterFood: [
+      "Water + Food",
+      totalWaterWeight + totalFoodWeight,
+      "",
+      "",
+      "",
+    ],
     tableTotal: ["Total", totalWeight, "", "", ""],
   };
 
@@ -104,7 +110,6 @@ export const TableContainer = ({ currentPack }) => {
       style={{ alignSelf: "center" }}
     />,
   ]);
-  
 
   console.log("tableDb", tableDb);
 
@@ -122,26 +127,33 @@ export const TableContainer = ({ currentPack }) => {
     // Update the food value in the currentPack
   };
 
-
   const handleEdit = (id, value, cellIndex) => {
     const newRow = { ...data[id], [tablekeys[id][cellIndex]]: value };
-    setData((prevState) => [...prevState.slice(0, id), newRow, ...prevState.slice(id + 1)]);
+    setData((prevState) => [
+      ...prevState.slice(0, id),
+      newRow,
+      ...prevState.slice(id + 1),
+    ]);
   };
 
   if (isLoading) return <Text>Loading....</Text>;
 
   return (
-    <Box
-      style={styles.container}
-    >
-      <WeightUnitDropdown value={weightUnit} onChange={() => handleWeightChange(value, )} />
+    <Box style={styles.container}>
+      <WeightUnitDropdown
+        value={weightUnit}
+        onChange={() => handleWeightChange(value)}
+      />
       {data?.length > 0 ? (
-
         <Table
           style={styles.tableStyle}
           borderStyle={{ borderColor: "transparent" }}
         >
-          <Row data={tableData.tableTitle} style={styles.title} flexArr={flexWidthArr} />
+          <Row
+            data={tableData.tableTitle}
+            style={styles.title}
+            flexArr={flexWidthArr}
+          />
           <Row
             data={tableData.tableHead.map((header, index) => (
               <Cell key={index} data={header} />
@@ -154,22 +166,23 @@ export const TableContainer = ({ currentPack }) => {
               {rowData.map((cellData, cellIndex) => (
                 <Cell
                   key={cellIndex}
-                  style={[cellIndex === 3 || cellIndex === 4 ? styles.smallCell : styles.dataCell, { flex: flexWidthArr[cellIndex] }]}
+                  style={[
+                    cellIndex === 3 || cellIndex === 4
+                      ? styles.smallCell
+                      : styles.dataCell,
+                    { flex: flexWidthArr[cellIndex] },
+                  ]}
                   data={cellData}
                 />
               ))}
             </TableWrapper>
           ))}
-
         </Table>
       ) : (
         <Text>Add your First Item</Text>
       )}
 
-
-      <Box
-        style={styles.waterContainer}
-      >
+      <Box style={styles.waterContainer}>
         <MaterialCommunityIcons
           name="water"
           size={24}
@@ -185,9 +198,7 @@ export const TableContainer = ({ currentPack }) => {
           onChangeText={handleWaterChange}
         />
       </Box>
-      <Box
-        style={styles.foodContainer}
-      >
+      <Box style={styles.foodContainer}>
         <MaterialCommunityIcons
           name="food-apple"
           size={24}
@@ -306,10 +317,9 @@ const styles = StyleSheet.create({
 
   dataCell: {
     // flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
-
 
   smallCell: {
     // width: 50,
@@ -339,7 +349,6 @@ const styles = StyleSheet.create({
     padding: 10,
     width: "100%",
     alignSelf: "center",
-
   },
 
   foodContainer: {

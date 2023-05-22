@@ -13,24 +13,23 @@ import getTrailRoutes from "./getTrailRoutes.js";
 import osmRoutes from "./osmRoutes.js";
 import passwordResetRoutes from "./passwordResetRoutes.js";
 
-
 const router = express.Router();
 
 // Create a CSRF middleware
 const csrfProtection = csrf({ cookie: true });
 
 const logger = (req, res, next) => {
-    console.log(`Incoming ${req.method} ${req.path}`);
-    res.on("finish", () => {
-        console.log(`Finished ${req.method} ${req.path} ${res.statusCode}`);
-        console.log(`Body ${res.body}`);
-    });
-    next();
+  console.log(`Incoming ${req.method} ${req.path}`);
+  res.on("finish", () => {
+    console.log(`Finished ${req.method} ${req.path} ${res.statusCode}`);
+    console.log(`Body ${res.body}`);
+  });
+  next();
 };
 
 // use logger middleware in development
 if (process.env.NODE_ENV !== "production") {
-    router.use(logger);
+  router.use(logger);
 }
 
 // use routes
@@ -59,34 +58,32 @@ router.use("/api/password-reset", passwordResetRoutes);
 
 // Static routes for serving the React Native Web app
 if (process.env.NODE_ENV === "production") {
-    const __dirname = path.resolve();
+  const __dirname = path.resolve();
 
-    // Serve the client's index.html file at the root route
-    router.get("/", (req, res) => {
-        // Attach the CSRF token cookie to the response
-        // res.cookie("XSRF-TOKEN", req.csrfToken());
+  // Serve the client's index.html file at the root route
+  router.get("/", (req, res) => {
+    // Attach the CSRF token cookie to the response
+    // res.cookie("XSRF-TOKEN", req.csrfToken());
 
-        res.sendFile(
-            path.resolve(__dirname, "../client", "dist", "index.html"));
-    })
+    res.sendFile(path.resolve(__dirname, "../client", "dist", "index.html"));
+  });
 
-    // Serve the static assets from the client's dist app
-    router.use(express.static(path.join(__dirname, "../client/dist")));
+  // Serve the static assets from the client's dist app
+  router.use(express.static(path.join(__dirname, "../client/dist")));
 
-    // Serve the client's index.html file at all other routes NOT starting with /api
-    router.get(/^(?!\/?api).*/, (req, res) => {
-        // res.cookie("XSRF-TOKEN", req.csrfToken());
-        res.sendFile(
-            path.resolve(__dirname, "../client", "dist", "index.html"));
-    });
+  // Serve the client's index.html file at all other routes NOT starting with /api
+  router.get(/^(?!\/?api).*/, (req, res) => {
+    // res.cookie("XSRF-TOKEN", req.csrfToken());
+    res.sendFile(path.resolve(__dirname, "../client", "dist", "index.html"));
+  });
 }
 
 // Attach the CSRF token to a specific route in development
 if (process.env.NODE_ENV !== "production") {
-    router.get("/api/csrf/restore", (req, res) => {
-        // res.cookie("XSRF-TOKEN", req.csrfToken());
-        res.status(201).json({});
-    });
+  router.get("/api/csrf/restore", (req, res) => {
+    // res.cookie("XSRF-TOKEN", req.csrfToken());
+    res.status(201).json({});
+  });
 }
 
 export default router;

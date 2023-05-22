@@ -137,7 +137,7 @@ export const signInGoogle = async (req, res) => {
 
     const decodedToken = jwt.decode(idToken);
     if (!decodedToken) {
-      throw new Error('Invalid ID token');
+      throw new Error("Invalid ID token");
     }
 
     const { email, name, sub: googleId } = decodedToken;
@@ -147,7 +147,7 @@ export const signInGoogle = async (req, res) => {
       const isLocalLogin = await User.findOne({ email });
 
       if (isLocalLogin) {
-        throw new Error('Already user registered on that email address');
+        throw new Error("Already user registered on that email address");
       }
 
       const randomPassword = utilsService.randomPasswordGenerator(8);
@@ -167,9 +167,7 @@ export const signInGoogle = async (req, res) => {
       sendWelcomeEmail(user.email, user.name);
 
       res.status(200).send({ user });
-
     } else {
-
       if (!alreadyGoogleSignin.password) {
         alreadyGoogleSignin.password = utilsService.randomPasswordGenerator(8);
       }
@@ -183,11 +181,9 @@ export const signInGoogle = async (req, res) => {
       res.status(200).send({ user: alreadyGoogleSignin });
     }
   } catch (err) {
-
     res.status(400).send({ message: err.message });
   }
 };
-
 
 passport.serializeUser((user, done) => {
   done(null, user.id);

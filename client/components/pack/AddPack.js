@@ -11,7 +11,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { CustomModal } from "../modal";
 
 export const AddPack = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const [name, setName] = useState("");
 
@@ -47,7 +47,7 @@ export const AddPack = () => {
           onPress={() => {
             // addPack.mutate({ name, owner_id: user?._id });
             // setName("");
-            handleAddPack()
+            handleAddPack();
           }}
         >
           <Text style={{ color: theme.colors.text }}>
@@ -69,7 +69,6 @@ export const AddPackContainer = () => {
       trigger="Add Pack"
       isActive={isOpen}
       onTrigger={setIsOpen}
-
     >
       <AddPack />
     </CustomModal>

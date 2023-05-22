@@ -1,6 +1,6 @@
 import Item from "../models/itemModel.js";
 import { itemValidation } from "../utils/item.js";
-import { oneEntity } from "../utils/oneEntity.js"
+import { oneEntity } from "../utils/oneEntity.js";
 import Pack from "../models/packModel.js";
 
 export const getItems = async (req, res) => {
@@ -58,7 +58,6 @@ export const addItem = async (req, res) => {
   }
 };
 
-
 export const editItem = async (req, res) => {
   const { _id } = await oneEntity(req.body._id);
 
@@ -88,10 +87,13 @@ export const deleteItem = async (req, res) => {
 export const searchItemsByName = async (req, res) => {
   console.log(req.query.name);
   try {
-    const items = await Item.find({ name: { $regex: `.*${req.query.name}.*`, $options: 'i' } });
+    const items = await Item.find({
+      name: { $regex: `.*${req.query.name}.*`, $options: "i" },
+    });
     res.status(200).json(items);
   } catch (error) {
-    res.status(404).json({ msg: "Items cannot be found", 'req.query': req.query });
+    res
+      .status(404)
+      .json({ msg: "Items cannot be found", "req.query": req.query });
   }
-}
-
+};

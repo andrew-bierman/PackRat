@@ -20,7 +20,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { AuthStateListener } from "../../client/auth/AuthStateListener";
 import { signOut } from "../store/authStore";
 
-
 const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   // const { signOut, user } = useAuth();
@@ -32,7 +31,6 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
   };
 
   const user = useSelector((state) => state.auth.user);
-
 
   return user ? (
     <View style={desktopContainer}>
@@ -54,11 +52,7 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
       </View>
       {isMobile ? (
         <Link href="/drawer">
-          <EvilIcons
-            name="navicon"
-            size={48}
-            color={theme.colors.iconColor}
-          />
+          <EvilIcons name="navicon" size={48} color={theme.colors.iconColor} />
         </Link>
       ) : (
         <View style={desktopNav}>
@@ -81,7 +75,11 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
           </Link>
           <Link href="/trips">
             <View style={isMobile ? styles.mobileLink : styles.link}>
-              <MaterialCommunityIcons name="routes" size={24} color={theme.colors.iconColor} />
+              <MaterialCommunityIcons
+                name="routes"
+                size={24}
+                color={theme.colors.iconColor}
+              />
               <Text>Trips</Text>
             </View>
           </Link>
@@ -128,7 +126,6 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
           </View>
         </View>
       )}
-
     </View>
   ) : (
     <View style={desktopNav}>
@@ -162,7 +159,7 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
         </View>
       </Link>
     </View>
-  )
+  );
 };
 
 export default function Navigation() {

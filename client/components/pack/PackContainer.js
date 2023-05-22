@@ -79,7 +79,6 @@ export default function PackContainer() {
   ) : null;
 }
 
-
 const styles = StyleSheet.create({
   mainContainer: {
     flexDirection: "column",

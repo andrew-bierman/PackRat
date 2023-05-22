@@ -6,13 +6,18 @@ export const getTrailsRapid = async (locationObject, latParams, lonParams) => {
   let trailsArray = [];
 
   await fetch(api + "/gettrails", {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      Accept: "application/json",
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify({ ...locationObject, latitude: latParams, longitude: lonParams })
-  }).then((res) => res.json())
+    body: JSON.stringify({
+      ...locationObject,
+      latitude: latParams,
+      longitude: lonParams,
+    }),
+  })
+    .then((res) => res.json())
     .then((json) => {
       Object.values(json).forEach((item) => {
         trailsArray.push(item);
@@ -42,21 +47,17 @@ export const getTrailsOSM = async (lat, lon) => {
   (._;>;);
   out tags geom qt;
   `;
-  const overpassUrl = 'https://overpass-api.de/api/interpreter'; // change to server on merge
+  const overpassUrl = "https://overpass-api.de/api/interpreter"; // change to server on merge
 
   try {
     const response = await axios.post(overpassUrl, query, {
-      headers: { 'Content-Type': 'text/plain' },
+      headers: { "Content-Type": "text/plain" },
     });
-        // Convert the response data to GeoJSON format
-        const geojsonData = osmtogeojson(response.data);
+    // Convert the response data to GeoJSON format
+    const geojsonData = osmtogeojson(response.data);
 
-        return geojsonData;
+    return geojsonData;
   } catch (error) {
-    console.error('Error fetching trails:', error);
+    console.error("Error fetching trails:", error);
   }
-}
-
-
-
-
+};
