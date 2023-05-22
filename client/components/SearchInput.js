@@ -38,6 +38,7 @@ import {
   setSearchResults,
   setSelectedSearchResult,
   clearSearchResults,
+  fetchPhotonSearchResults,
 } from "../store/searchStore";
 import { getTrailsOSM } from "../api/getTrails";
 import { getParksOSM } from "../api/getParks";
@@ -63,10 +64,11 @@ export const SearchInput = () => {
     const getPhotonResultsTimeout = async () => {
       setIsLoadingMobile(true);
 
-      const photonResultsData = await getPhotonResults(searchString);
+      // const photonResultsData = await getPhotonResults(searchString);
+      dispatch(fetchPhotonSearchResults(searchString));
 
       setIsLoadingMobile(false);
-      dispatch(setSearchResults(photonResultsData));
+      // dispatch(setSearchResults(photonResultsData));
     };
 
     if (searchString.length === 0) {
