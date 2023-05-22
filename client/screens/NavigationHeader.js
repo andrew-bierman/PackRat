@@ -167,7 +167,7 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
 
 export default function Navigation() {
   return (
-    <View stye={{ width: "100%" }}>
+    <View style={{ width: "100%" }}>
       <Desktop>
         <MutualContent
           desktopContainer={styles.desktopContainer}
@@ -202,7 +202,7 @@ const styles = StyleSheet.create({
 
   desktopContainer: {
     backgroundColor: theme.colors.background,
-    width: "100",
+    width: "100%",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
@@ -212,13 +212,13 @@ const styles = StyleSheet.create({
 
   mobileContainer: {
     backgroundColor: theme.colors.background,
-    width: "100",
+    width: "100%",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     padding: 25,
     position: "relative",
-    height: "300px",
+    // height: "300px",
   },
 
   desktopNav: {
