@@ -4,7 +4,7 @@ import { View, StyleSheet, Platform } from "react-native";
 
 import { CustomizedMap } from "./NativeMap";
 
-import WebPackContainer from "./WebMapcontainer.web";
+import WebPackContainer from "./WebMapcontainer";
 
 
 export function MapContainer() {
