@@ -25,7 +25,6 @@ import { Platform } from "react-native";
 
 // redux
 import { useDispatch } from "react-redux";
-import { add, addWeek, fetchWeatherWeek } from "../store/weatherStore";
 
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
@@ -38,7 +37,7 @@ import { setParks } from "../store/parksStore";
 import { setSearchResults, setSelectedSearchResult, clearSearchResults } from "../store/searchStore";
 import { getTrailsOSM } from "../api/getTrails";
 import { getParksOSM } from "../api/getParks";
-import { fetchWeather } from "../store/weatherStore";
+import { fetchWeather, fetchWeatherWeek } from "../store/weatherStore";
 
 export const SearchInput = () => {
   const [searchString, setSearchString] = useState("");
