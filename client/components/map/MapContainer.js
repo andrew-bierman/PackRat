@@ -15,11 +15,11 @@ export function MapContainer() {
     );
   }
 
-  return (
+  if(Platform.OS === "android" || Platform.OS === "ios"){
     <View style={[styles.nativeContainer]}>
       <CustomizedMap />
     </View>
-  );
+  }
 }
 
 export default MapContainer;
