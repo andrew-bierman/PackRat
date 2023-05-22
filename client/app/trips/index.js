@@ -34,8 +34,8 @@ export default function Trips() {
   const [parksData, setParksData] = useState();
   const [trails, setTrailsData] = useState();
   const weatherObject = useSelector((state) => state.weather.weatherObject);
-  const trailsObject = useSelector((state) => state.trails.trailsDetails);
-  const parksObject = useSelector((state) => state.parks.parksDetails);
+  const trailsObject = useSelector((state) => state.trails.trailNames);
+  const parksObject = useSelector((state) => state.parks.parkNames);
 
   useEffect(() => {
     setTrailsData(trailsObject);
