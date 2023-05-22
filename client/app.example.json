@@ -4,7 +4,7 @@
     "slug": "packrat-front",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/packrat-app-icon.png",
     "userInterfaceStyle": "light",
     "scheme": "./app/index.js",
     "splash": {
@@ -20,7 +20,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/packrat-app-icon.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.andrewbierman.packratfront"
