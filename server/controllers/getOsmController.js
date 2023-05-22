@@ -43,13 +43,13 @@ export const getOsm = async (req, res) => {
       endPoint
     );
 
-    console.log("overpassQuery", overpassQuery);
+    // console.log("overpassQuery", overpassQuery);
 
     const response = await axios.post(overpassUrl, overpassQuery, {
       headers: { "Content-Type": "text/plain" },
     });
 
-    console.log("response", response);
+    // console.log("response", response);
 
     if (response.status === 200) {
       const responseFormat = response.data;
@@ -65,7 +65,6 @@ export const getOsm = async (req, res) => {
   }
 };
 
-
 export const getPhotonResults = async (req, res) => {
   const { searchString } = req.query;
 
@@ -73,7 +72,7 @@ export const getPhotonResults = async (req, res) => {
     res.status(400).send({ message: "Invalid request parameters" });
     return; // Return early to avoid further execution
   }
-  
+
   let params = {
     q: searchString,
     osm_tag: ["highway:footway", "highway:cycleway", "place"],
@@ -90,14 +89,14 @@ export const getPhotonResults = async (req, res) => {
     )
     .join("&");
 
-  console.log("queryString", queryString);
+  // console.log("queryString", queryString);
 
   try {
     const response = await axios.get(
       `https://photon.komoot.io/api/?${queryString}`
     );
 
-    console.log("response", response);
+    // console.log("response", response);
 
     const resultsArray = response.data.features;
 
@@ -105,5 +104,72 @@ export const getPhotonResults = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).send({ message: "Error retrieving Photon results" });
+  }
+};
+
+export const getTrailsOSM = async (req, res) => {
+  try {
+    // set default values for lat, lon, and radius
+    const { lat = 45.5231, lon = -122.6765, radius = 50000 } = req.query;
+
+    if (!lat || !lon || !radius) {
+      res.status(400).send({ message: "Invalid request parameters" });
+      return; // Return early to avoid further execution
+    }
+
+    const overpassUrl = process.env.OSM_URI;
+
+    const overpassQuery = `
+      [out:json][timeout:25];
+      (
+        way["highway"~"footway"]["name"](around:${radius},${lat},${lon});
+      );
+      (._;>;);
+      out tags geom qt;
+      `;
+
+    const response = await axios.post(overpassUrl, overpassQuery, {
+      headers: { "Content-Type": "text/plain" },
+    });
+
+    const geojsonData = osmtogeojson(response.data);
+
+    res.send(geojsonData);
+  } catch (error) {
+    console.error(error);
+    res.status(400).send({ message: "Error retrieving Trails OSM results" });
+  }
+};
+
+export const getParksOSM = async (req, res) => {
+  try {
+    const { lat = 45.5231, lon = -122.6765, radius = 50000 } = req.query;
+
+    if (!lat || !lon || !radius) {
+      res.status(400).send({ message: "Invalid request parameters" });
+      return; // Return early to avoid further execution
+    }
+
+    const overpassUrl = process.env.OSM_URI;
+
+    const overpassQuery = `
+      [out:json][timeout:25];
+      (
+        way["leisure"~"park|nature_reserve|garden|recreation_ground"](around:${radius},${lat},${lon});
+      );
+      (._;>;);
+      out tags geom qt;
+      `;
+
+    const response = await axios.post(overpassUrl, overpassQuery, {
+      headers: { "Content-Type": "text/plain" },
+    });
+
+    const geojsonData = osmtogeojson(response.data);
+
+    res.send(geojsonData);
+  } catch (error) {
+    console.error(error);
+    res.status(400).send({ message: "Error retrieving Parks OSM results" });
   }
 };
