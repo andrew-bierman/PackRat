@@ -25,7 +25,6 @@ import { Platform } from "react-native";
 
 // redux
 import { useDispatch } from "react-redux";
-import { add, addWeek } from "../store/weatherStore";
 
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
@@ -38,6 +37,7 @@ import { setParks } from "../store/parksStore";
 import { setSearchResults, setSelectedSearchResult, clearSearchResults } from "../store/searchStore";
 import { getTrailsOSM } from "../api/getTrails";
 import { getParksOSM } from "../api/getParks";
+import { fetchWeather, fetchWeatherWeek } from "../store/weatherStore";
 
 export const SearchInput = () => {
   const [searchString, setSearchString] = useState("");
@@ -128,6 +128,10 @@ export const SearchInput = () => {
         .slice(0, 25)
 
       dispatch(setParks(filteredParks));
+
+      dispatch(fetchWeather({lat, lon}));
+
+      dispatch(fetchWeatherWeek({lat, lon}))
 
       setIsLoadingMobile(false);
     };
