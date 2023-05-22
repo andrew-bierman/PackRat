@@ -93,7 +93,7 @@ export const getPackById = async (req, res) => {
 
     res.status(200).json(pack);
   } catch (error) {
-    console.error('getPackById error', error); // Add this line
+    console.error("getPackById error", error); // Add this line
     res.status(404).json({ msg: "Pack cannot be found" });
   }
 };
@@ -114,7 +114,7 @@ export const addPack = async (req, res) => {
       owners: [owner_id],
     };
 
-    console.log('newPack', newPack)
+    console.log("newPack", newPack);
 
     const exists = await Pack.find({ name: name });
 
@@ -137,7 +137,7 @@ export const editPack = async (req, res) => {
       returnOriginal: false,
     });
 
-    console.log('newPack', newPack)
+    console.log("newPack", newPack);
 
     res.status(200).json(newPack);
   } catch (error) {
@@ -156,7 +156,6 @@ export const deletePack = async (req, res) => {
   }
 };
 
-
 export const scorePack = async (req, res) => {
   const { packId } = req.body;
 
@@ -166,12 +165,14 @@ export const scorePack = async (req, res) => {
     // Call the scoring function to calculate the pack score
     const packScore = calculatePackScore(packData);
 
-    await Pack.findByIdAndUpdate({ _id: packId }, { score: packScore },
-      { returnOriginal: false });   
-    
-    res.status(200).json({ msg: "Pack was scored successfully" });
+    await Pack.findByIdAndUpdate(
+      { _id: packId },
+      { score: packScore },
+      { returnOriginal: false }
+    );
 
+    res.status(200).json({ msg: "Pack was scored successfully" });
   } catch (error) {
     res.status(404).json({ msg: "Unable to score pack" });
-   }
+  }
 };

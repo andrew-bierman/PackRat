@@ -16,14 +16,17 @@ export const getWeatherWeek = async (req, res) => {
 
   const url = root + params;
 
-  console.log('url', url)
+  console.log("url", url);
 
   try {
     const response = await axios.get(url);
-    console.log(response.data)
+    console.log(response.data);
     res.send(response.data);
   } catch (error) {
-    res.status(404).send({ message: "Error retrieving weather data from OpenWeather", error });
+    res.status(404).send({
+      message: "Error retrieving weather data from OpenWeather",
+      error,
+    });
   }
 };
 
@@ -48,7 +51,9 @@ export const getWeather = async (req, res) => {
     res.send(response.data);
   } catch (error) {
     // send back error message
-    res.status(404).send({ message: "Error retrieving weather data from OpenWeather" });
+    res
+      .status(404)
+      .send({ message: "Error retrieving weather data from OpenWeather" });
     // res.send({ message: "Error retrieving weather data from OpenWeather" });
   }
 };

@@ -41,105 +41,145 @@ PackRat consists of two main components: a client and a server. Follow the steps
 ### Environment Setup
 
 1. Clone the repository:
-HTTPS:
+   HTTPS:
+
 ```bash
 git clone https://github.com/andrew-bierman/PackRat.git
 ```
+
 SSH:
+
 ```bash
 git clone git@github.com:andrew-bierman/PackRat.git
 ```
-2. Navigate to the `PackRat` directory: 
+
+2. Navigate to the `PackRat` directory:
+
 ```
 cd PackRat
 ```
-3. Set up the environment variables for the client and server. 
+
+3. Set up the environment variables for the client and server.
    - See the `.env.example` files in the `client` and `server` directories for the necessary environment variables. Replace the values with your own.
-   - Note that for the client to run, you need to also make the following changes: 
+   - Note that for the client to run, you need to also make the following changes:
      - Copy the `app.example.json` file and rename it to `app.json`. Open the file and replace the `MAPBOX_API_KEY` value with your own Mapbox API key.
      - Navigate to the ios directory. Copy the `Podfile.example` file and rename it to `Podfile`. Open the file and replace the `MAPBOX_ACCESS_TOKEN` value with your own Mapbox access token.
      - Navigate to the android directory. Copy the `gradle.properties.example` file and rename it to `gradle.properties`. Open the file and replace the `MAPBOX_DOWNLOADS_TOKEN` value with your own Mapbox downloads token.
      - See the [Mapbox documentation](https://docs.mapbox.com/help/getting-started/access-tokens/) for more information on how to obtain Mapbox API keys and access tokens.
 4. Navigate to the `client` directory.
+
 ```
 cd client
 ```
+
 5. Duplicate the `.env.example` file and rename it to `.env`. Open the file and replace the values with your own.
+
 ```
 cp .env.example .env
 ```
+
 6. Duplicate the `app.example.json` file and rename it to `app.json`. Open the file and replace the `MAPBOX_API_KEY` value with your own Mapbox API key.
+
 ```
 cp app.example.json app.json
 ```
+
 7. Navigate to the ios directory.
+
 ```
 cd ios
 ```
+
 8. Duplicate the `Podfile.example` file and rename it to `Podfile`. Open the file and replace the `MAPBOX_ACCESS_TOKEN` value with your own Mapbox access token.
+
 ```
 cp Podfile.example Podfile
 ```
+
 9. Navigate to the android directory.
+
 ```
 cd ../android
 
 ```
+
 10. Duplicate the `gradle.properties.example` file and rename it to `gradle.properties`. Open the file and replace the `MAPBOX_DOWNLOADS_TOKEN` value with your own Mapbox downloads token.
+
 ```
 cp gradle.properties.example gradle.properties
 ```
+
 11. Navigate back to the `PackRat` directory.
+
 ```
 cd ../..
 ```
+
 12. Navigate to the `server` directory.
+
 ```
 cd server
 ```
+
 13. Duplicate the `.env.example` file and rename it to `.env`. Open the file and replace the values with your own.
+
 ```
 cp .env.example .env
 ```
+
 14. Navigate back to the `PackRat` directory.
+
 ```
 cd ..
 ```
 
 ### NPM Setup
 
-Recommended to open two terminal windows. 
+Recommended to open two terminal windows.
 
 #### Server
+
 1. Navigate to the `server` directory.
+
 ```
 cd server
 ```
+
 2. Install dependencies for the server.
+
 ```
 npm install
 ```
+
 3. Start the server.
+
 ```
 npm start
 ```
 
 #### Client
+
 1. Navigate to the `client` directory.
+
 ```
 cd client
 ```
+
 2. Install dependencies for the client.
+
 ```
 npm install
 ```
+
 3. Start the Expo server.
+
 ```
 npm start
 ```
+
 4. Here you will be able to run the app on an iOS or Android simulator (or on your own device), or on the web. See the [Expo documentation](https://docs.expo.io/get-started/installation/) for more information on how to set up your development environment.
 
-Note that the client and server are designed to run concurrently in development mode. 
+Note that the client and server are designed to run concurrently in development mode.
 
 ## Docker Installation 🐳
 
@@ -153,27 +193,36 @@ PackRat can also be installed using Docker. After setting up the development env
 ### Installation
 
 1. Run the following command to start the app
+
 ```
 docker-compose build
 docker-compose up
 ```
+
 2. Navigate to `http://localhost:19000/` to view the app. The server will be running on `http://localhost:3000/`.
 3. If you encounter errors with edits to files not automatically applying, try running the following commands:
+
 ```
 docker-compose down
 docker-compose build
 docker-compose up
 ```
+
 3. To stop the app, run the following command:
+
 ```
 docker-compose down
 ```
+
 4. If you encounter issues with docker-compose, you can build the images manually by running the following commands from the root folder:
+
 ```
 docker build -t packrat-client client/Dockerfile
 docker build -t packrat-server server/Dockerfile
 ```
+
 5. To run the images, run the following commands:
+
 ```
 docker run -p 19000:19000 packrat-client
 docker run -p 3000:3000 packrat-server

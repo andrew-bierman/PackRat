@@ -15,7 +15,11 @@ export const signUp = createAsyncThunk(
   "auth/signUp",
   async ({ email, password, name }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${api}/user/signup`, { email, password, name });
+      const response = await axios.post(`${api}/user/signup`, {
+        email,
+        password,
+        name,
+      });
       return response.data.user;
     } catch (error) {
       return rejectWithValue(error.response.data.error);
@@ -23,12 +27,14 @@ export const signUp = createAsyncThunk(
   }
 );
 
-
 export const signIn = createAsyncThunk(
   "auth/signIn",
   async ({ email, password }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${api}/user/signin`, { email, password });
+      const response = await axios.post(`${api}/user/signin`, {
+        email,
+        password,
+      });
       return response.data.user;
     } catch (error) {
       return rejectWithValue(error.response.data.error);
@@ -48,30 +54,27 @@ export const signIn = createAsyncThunk(
 //   }
 // );
 
-export const signOut = createAsyncThunk(
-  "auth/signOut",
-  async () => {
-    console.log("signOut")
-    try {
-      return null;
-    } catch (error) {
-      return console.log(error.message);
-    }
+export const signOut = createAsyncThunk("auth/signOut", async () => {
+  console.log("signOut");
+  try {
+    return null;
+  } catch (error) {
+    return console.log(error.message);
   }
-);
+});
 
 export const signInWithGoogle = createAsyncThunk(
   "auth/signInWithGoogle",
   async ({ idToken }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${api}/user/google`, { 
+      const response = await axios.post(`${api}/user/google`, {
         // token: idToken,
         // code: idToken,
         idToken: idToken,
       });
       return response.data.user;
     } catch (error) {
-      console.log("error.response.data.error", error.response.data.error)
+      console.log("error.response.data.error", error.response.data.error);
       return rejectWithValue(error);
     }
   }
@@ -91,7 +94,6 @@ export const authSlice = createSlice({
         state.user = action.payload;
         state.loading = false;
         state.error = null;
-
       })
       .addCase(signUp.rejected, (state, action) => {
         state.loading = false;
@@ -136,7 +138,7 @@ export const authSlice = createSlice({
       .addCase(signInWithGoogle.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-      })
+      });
   },
 });
 

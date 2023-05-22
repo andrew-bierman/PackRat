@@ -56,7 +56,6 @@
 //     return () => unsubscribe();
 //   }, []);
 
-
 //   const googleAuthProvider = new GoogleAuthProvider();
 
 //   console.log("user in provider", user)

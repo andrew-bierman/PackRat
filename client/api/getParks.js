@@ -13,7 +13,8 @@ export const getParksRapid = async (state) => {
         json.data.forEach((item) => {
           parksArray.push(item);
         });
-      }).catch((err) => console.error("error:" + err));
+      })
+      .catch((err) => console.error("error:" + err));
   }
   if (parksArray.length > 0) {
     parksArray = parksArray.map((park) => park.name);
@@ -35,15 +36,15 @@ export const getParksOSM = async (lat, lon) => {
     (._;>;);
     out tags geom qt;
   `;
-  const overpassUrl = 'https://overpass-api.de/api/interpreter';
+  const overpassUrl = "https://overpass-api.de/api/interpreter";
 
   try {
     const response = await axios.post(overpassUrl, query, {
-      headers: { 'Content-Type': 'text/plain' },
+      headers: { "Content-Type": "text/plain" },
     });
     const geojsonData = osmtogeojson(response.data);
     return geojsonData;
   } catch (error) {
-    console.error('Error fetching parks:', error);
+    console.error("Error fetching parks:", error);
   }
 };

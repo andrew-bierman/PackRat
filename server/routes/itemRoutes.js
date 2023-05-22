@@ -5,7 +5,7 @@ import {
   addItem,
   editItem,
   deleteItem,
-  searchItemsByName
+  searchItemsByName,
 } from "../controllers/itemController.js";
 import * as validator from "../middleware/validators/index.js"
 

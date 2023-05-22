@@ -1,5 +1,8 @@
 import { Platform } from "react-native";
-import { RequestPasswordReset, ResetPassword } from "../../components/password-reset";
+import {
+  RequestPasswordReset,
+  ResetPassword,
+} from "../../components/password-reset";
 import { Stack as Header } from "expo-router";
 import { PasswordResetForm } from "../../components/password-reset/PasswordResetForm";
 
