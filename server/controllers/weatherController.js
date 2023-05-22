@@ -1,54 +1,54 @@
-import fetch from "node-fetch";
+import axios from "axios";
 
 export const getWeatherWeek = async (req, res) => {
-    const root = process.env.WEATHER_WEEK_URL
-    const OPENWEATHER_KEY = process.env.OPENWEATHER_KEY
-    let params = `?`;
-    const latParams = req.query.lat;
-    const lonParams = req.query.lon;
-    const unitParams = "imperial";
+  const root = process.env.WEATHER_WEEK_URL;
+  const OPENWEATHER_KEY = process.env.OPENWEATHER_KEY;
+  const latParams = req.query.lat;
+  const lonParams = req.query.lon;
+  const unitParams = "imperial";
+  const apiParams = true;
 
-    const apiParams = true;
+  let params = `?`;
+  if (latParams) params += `lat=${latParams}`;
+  if (lonParams) params += `&lon=${lonParams}`;
+  if (unitParams) params += `&units=${unitParams}`;
+  if (apiParams) params += `&appid=${OPENWEATHER_KEY}`;
 
-    if (latParams) params += `lat=${latParams}`;
-    if (lonParams) params += `&lon=${lonParams}`;
-    if (unitParams) params += `&units=${unitParams}`;
-    if (apiParams) params += `&appid=${OPENWEATHER_KEY}`;
+  const url = root + params;
 
-    const url = root + params;
+  console.log('url', url)
 
-    await fetch(url)
-        .then((res) => res.json())
-        .then((json) => {
-            res.send(json)
-        }).catch(() => {
-            res.send({ message: "Error retrieving weekly weather data from OpenWeather" });
-        });
+  try {
+    const response = await axios.get(url);
+    console.log(response.data)
+    res.send(response.data);
+  } catch (error) {
+    res.status(404).send({ message: "Error retrieving weather data from OpenWeather", error });
+  }
 };
 
 export const getWeather = async (req, res) => {
+  const root = process.env.WEATHER_URL;
+  const OPENWEATHER_KEY = process.env.OPENWEATHER_KEY;
+  const latParams = req.query.lat;
+  const lonParams = req.query.lon;
+  const unitParams = "imperial";
+  const apiParams = true;
 
-    const root = process.env.WEATHER_URL
-    const OPENWEATHER_KEY = process.env.OPENWEATHER_KEY
+  let params = `?`;
+  if (latParams) params += `lat=${latParams}`;
+  if (lonParams) params += `&lon=${lonParams}`;
+  if (unitParams) params += `&units=${unitParams}`;
+  if (apiParams) params += `&appid=${OPENWEATHER_KEY}`;
 
-    let params = `?`;
-    const latParams = req.query.lat;
-    const lonParams = req.query.lon;
-    const unitParams = "imperial";
-    const apiParams = true;
+  const url = root + params;
 
-    if (latParams) params += `lat=${latParams}`;
-    if (lonParams) params += `&lon=${lonParams}`;
-    if (unitParams) params += `&units=${unitParams}`;
-    if (apiParams) params += `&appid=${OPENWEATHER_KEY}`;
-
-    const url = root + params;
-
-    await fetch(url)
-        .then((res) => res.json())
-        .then((json) => {
-            res.send(json)
-        }).catch(() => {
-            res.send({ message: "Error retrieving weather data from OpenWeather" });
-        });
+  try {
+    const response = await axios.get(url);
+    res.send(response.data);
+  } catch (error) {
+    // send back error message
+    res.status(404).send({ message: "Error retrieving weather data from OpenWeather" });
+    // res.send({ message: "Error retrieving weather data from OpenWeather" });
+  }
 };
