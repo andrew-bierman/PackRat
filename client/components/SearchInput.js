@@ -34,7 +34,11 @@ import { getPhotonResults } from "../api/getPhotonResults";
 import { setTrails } from "../store/trailsStore";
 import { setParks } from "../store/parksStore";
 
-import { setSearchResults, setSelectedSearchResult, clearSearchResults } from "../store/searchStore";
+import {
+  setSearchResults,
+  setSelectedSearchResult,
+  clearSearchResults,
+} from "../store/searchStore";
 import { getTrailsOSM } from "../api/getTrails";
 import { getParksOSM } from "../api/getParks";
 import { fetchWeather, fetchWeatherWeek } from "../store/weatherStore";
@@ -44,25 +48,25 @@ export const SearchInput = () => {
   const [isLoadingMobile, setIsLoadingMobile] = useState(false);
   const [selectedSearch, setSelectedSearch] = useState("");
 
-  const searchResults = useSelector((state) => state.search.searchResults) || [];
+  const searchResults =
+    useSelector((state) => state.search.searchResults) || [];
 
-  const selectedSearchResult = useSelector((state) => state.search.selectedSearchResult) || {};
+  const selectedSearchResult =
+    useSelector((state) => state.search.selectedSearchResult) || {};
 
   // const [searchResults, setSearchResults] = useState([]);
   const [showSearchResults, setShowSearchResults] = useState(false);
 
   const dispatch = useDispatch();
 
-
   useEffect(() => {
     const getPhotonResultsTimeout = async () => {
       setIsLoadingMobile(true);
 
-
       const photonResultsData = await getPhotonResults(searchString);
 
       setIsLoadingMobile(false);
-      dispatch(setSearchResults(photonResultsData))
+      dispatch(setSearchResults(photonResultsData));
     };
 
     if (searchString.length === 0) {
@@ -78,22 +82,26 @@ export const SearchInput = () => {
     return () => clearTimeout(timeout);
   }, [searchString]);
 
-
   useEffect(() => {
-
     const getTrailsAndParksDetails = async () => {
-      if (!selectedSearchResult || Object.keys(selectedSearchResult).length === 0) return;
+      if (
+        !selectedSearchResult ||
+        Object.keys(selectedSearchResult).length === 0
+      )
+        return;
 
       setIsLoadingMobile(true);
 
       // const trailsData = await getTrailsResult(selectedSearch);
-      const { geometry: { coordinates } } = selectedSearchResult;
-      const [lon, lat] = coordinates
+      const {
+        geometry: { coordinates },
+      } = selectedSearchResult;
+      const [lon, lat] = coordinates;
 
       if (!lat || !lon) return;
 
-      console.log('lat', lat)
-      console.log('lon', lon)
+      console.log("lat", lat);
+      console.log("lon", lon);
 
       const trailsData = await getTrailsOSM(lat, lon);
 
@@ -103,12 +111,14 @@ export const SearchInput = () => {
 
       const filteredTrails = trailsFeatures
         .map((trail) => {
-          const { properties: { name } } = trail;
+          const {
+            properties: { name },
+          } = trail;
           if (name !== selectedSearch) {
             return name;
           }
         })
-        .slice(0, 25)
+        .slice(0, 25);
 
       dispatch(setTrails(filteredTrails));
 
@@ -120,18 +130,20 @@ export const SearchInput = () => {
 
       const filteredParks = parksFeatures
         .map((park) => {
-          const { properties: { name } } = park;
+          const {
+            properties: { name },
+          } = park;
           if (name !== selectedSearch) {
             return name;
           }
         })
-        .slice(0, 25)
+        .slice(0, 25);
 
       dispatch(setParks(filteredParks));
 
-      dispatch(fetchWeather({lat, lon}));
+      dispatch(fetchWeather({ lat, lon }));
 
-      dispatch(fetchWeatherWeek({lat, lon}))
+      dispatch(fetchWeatherWeek({ lat, lon }));
 
       setIsLoadingMobile(false);
     };
@@ -140,21 +152,19 @@ export const SearchInput = () => {
       getTrailsAndParksDetails();
     }, 1000);
 
-
     return () => clearTimeout(timeout);
   }, [selectedSearch]);
 
   const handleSearchResultClick = (result, index) => {
-
-    const { properties: { name, osm_id } } = result;
-    setSelectedSearch(result.properties.name)
+    const {
+      properties: { name, osm_id },
+    } = result;
+    setSelectedSearch(result.properties.name);
     setSearchString(name);
     setShowSearchResults(false);
-    dispatch(setSelectedSearchResult(result))
+    dispatch(setSelectedSearchResult(result));
     dispatch(clearSearchResults());
-
   };
-
 
   return Platform.OS === "web" ? (
     <VStack my="4" space={5} w="100%" maxW="300px">
@@ -192,7 +202,7 @@ export const SearchInput = () => {
                     />
                   }
                   onPress={() => {
-                    console.log("close button pressed")
+                    console.log("close button pressed");
                     setShowSearchResults(false);
                     setSearchString("");
                     // dispatch(getTrails([])); // clear search results
@@ -201,7 +211,6 @@ export const SearchInput = () => {
               )
             }
           />
-
 
           {showSearchResults && searchResults?.length > 0 && (
             <ScrollView
@@ -219,7 +228,6 @@ export const SearchInput = () => {
             >
               <List space={2} mt={2} w="100%">
                 {searchResults.map((result, i) => (
-
                   <Pressable
                     key={`result + ${i}`}
                     onPress={() => handleSearchResultClick(result, i)}
@@ -229,7 +237,11 @@ export const SearchInput = () => {
                       <Text fontSize="sm" fontWeight="medium">
                         {result.properties.name}
                       </Text>
-                      <Text fontSize="sm" color="gray.500" textTransform={'capitalize'} >
+                      <Text
+                        fontSize="sm"
+                        color="gray.500"
+                        textTransform={"capitalize"}
+                      >
                         {result.properties.osm_value}
                       </Text>
                     </HStack>
@@ -265,7 +277,6 @@ export const SearchInput = () => {
         }
       />
 
-
       {showSearchResults && searchResults?.length > 0 && (
         <ScrollView
           position="absolute"
@@ -282,7 +293,6 @@ export const SearchInput = () => {
         >
           <List space={2} w="100%">
             {searchResults.map((result, i) => (
-
               <Pressable
                 key={`result + ${i}`}
                 onPress={() => handleSearchResultClick(result, i)}
@@ -292,7 +302,11 @@ export const SearchInput = () => {
                   <Text fontSize="sm" fontWeight="medium">
                     {result.properties.name}
                   </Text>
-                  <Text fontSize="sm" color="gray.500" textTransform={'capitalize'} >
+                  <Text
+                    fontSize="sm"
+                    color="gray.500"
+                    textTransform={"capitalize"}
+                  >
                     {result.properties.osm_value}
                   </Text>
                 </HStack>
@@ -301,7 +315,6 @@ export const SearchInput = () => {
           </List>
         </ScrollView>
       )}
-
     </VStack>
   );
 };
