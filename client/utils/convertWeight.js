@@ -8,7 +8,6 @@ export const convertWeight = (weight, fromUnit, toUnit) => {
 
   const weightInGrams = weight * units[fromUnit];
   const convertedWeight = weightInGrams / units[toUnit];
-  // console.log(weight, fromUnit, toUnit, weightInGrams, convertedWeight);
 
   return convertedWeight;
 };

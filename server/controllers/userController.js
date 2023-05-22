@@ -37,8 +37,6 @@ const oauth2Client = new google.auth.OAuth2(
 //   }
 // };
 
-
-
 export const getUsers = async (req, res) => {
   try {
     const users = await User.find({}).populate("packs trips");
@@ -85,7 +83,6 @@ export const getUserById = async (req, res) => {
 //     res.status(400).json({ error: error.message });
 //   }
 // };
-
 
 export const addToFavorite = async (req, res) => {
   try {

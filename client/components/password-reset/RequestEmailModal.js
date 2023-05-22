@@ -1,66 +1,77 @@
-import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Box, Button, Center, Heading, Input, Text, Toast, VStack } from 'native-base';
-import { CustomModal } from '../modal';
-import axios from 'axios';
-import { api } from '../../constants/api';
+import React, { useState } from "react";
+import { StyleSheet, View } from "react-native";
+import {
+  Box,
+  Button,
+  Center,
+  Heading,
+  Input,
+  Text,
+  Toast,
+  VStack,
+} from "native-base";
+import { CustomModal } from "../modal";
+import axios from "axios";
+import { api } from "../../constants/api";
 
 export const RequestPasswordResetEmailModal = () => {
-    const [isOpen, setIsOpen] = useState(false);
-    const [email, setEmail] = useState('');
-    const [loading, setLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
 
-    const handleResetPasswordEmail = async () => {
-        try {
-            setLoading(true);
-            // Call your API to initiate the password reset process
-            // Pass the email entered by the user to the API endpoint
-            // The API endpoint should send an email with a reset link to the provided email
-            await axios.post(`${api}/password-reset`, { email });
-            setLoading(false);
-            setIsOpen(false);
-            Toast.show({
-                title: 'Password reset email sent',
-                style: { backgroundColor: 'green' },
-                placement: 'top-right',
-                duration: 5000,
-            });
-        } catch (error) {
-            console.log("Error here", error);
-            setLoading(false);
-            Toast.show({ title: error?.response?.data?.error, duration: 7000, placement: 'top-right', style: { backgroundColor: 'red' } })
-        }
-    };
+  const handleResetPasswordEmail = async () => {
+    try {
+      setLoading(true);
+      // Call your API to initiate the password reset process
+      // Pass the email entered by the user to the API endpoint
+      // The API endpoint should send an email with a reset link to the provided email
+      await axios.post(`${api}/password-reset`, { email });
+      setLoading(false);
+      setIsOpen(false);
+      Toast.show({
+        title: "Password reset email sent",
+        style: { backgroundColor: "green" },
+        placement: "top-right",
+        duration: 5000,
+      });
+    } catch (error) {
+      console.log("Error here", error);
+      setLoading(false);
+      Toast.show({
+        title: error?.response?.data?.error,
+        duration: 7000,
+        placement: "top-right",
+        style: { backgroundColor: "red" },
+      });
+    }
+  };
 
-    return (
-        <CustomModal
-            title="Reset Password"
-            trigger="Request Password Reset Email"
-            isActive={isOpen}
-            onTrigger={setIsOpen}
-            footerButtons={
-                [
-                    {
-                        label: 'Send Email',
-                        onClick: handleResetPasswordEmail,
-                        disabled: !email || loading,
-                    },
-                    {
-                        label: 'Cancel',
-                        onClick: () => setIsOpen(false),
-                    }
-                ]
-            }
-
-        >
-            <Input
-                placeholder="Email"
-                autoCapitalize="none"
-                keyboardType="email-address"
-                value={email}
-                onChangeText={(value) => setEmail(value)}
-            />
-            {/* <Center w="100%">
+  return (
+    <CustomModal
+      title="Reset Password"
+      trigger="Request Password Reset Email"
+      isActive={isOpen}
+      onTrigger={setIsOpen}
+      footerButtons={[
+        {
+          label: "Send Email",
+          onClick: handleResetPasswordEmail,
+          disabled: !email || loading,
+        },
+        {
+          label: "Cancel",
+          onClick: () => setIsOpen(false),
+        },
+      ]}
+    >
+      <Input
+        placeholder="Email"
+        autoCapitalize="none"
+        keyboardType="email-address"
+        value={email}
+        onChangeText={(value) => setEmail(value)}
+      />
+      {/* <Center w="100%">
                 <Box safeArea p="2" py="8" w="90%" maxW="290">
                     {/* <Heading
                         size="lg"
@@ -89,21 +100,21 @@ export const RequestPasswordResetEmailModal = () => {
                 </Box>
 
             </Center> */}
-        </CustomModal>
-    );
-}
+    </CustomModal>
+  );
+};
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '100%'
-    },
-    button: {
-        marginTop: 20,
-    },
-    resetForm: {
-        marginTop: 20
-    }
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
+  },
+  button: {
+    marginTop: 20,
+  },
+  resetForm: {
+    marginTop: 20,
+  },
 });

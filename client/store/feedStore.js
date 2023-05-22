@@ -2,15 +2,23 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { api } from "../constants/api";
 import axios from "axios";
 
-export const getPublicPacks = createAsyncThunk("feed/getPublicPacks", async (queryBy) => {
-  const response = await axios.get(`${api}/pack/?queryBy=${queryBy || "Favorite"}`);
-  return response.data;
-});
+export const getPublicPacks = createAsyncThunk(
+  "feed/getPublicPacks",
+  async (queryBy) => {
+    const response = await axios.get(
+      `${api}/pack/?queryBy=${queryBy || "Favorite"}`
+    );
+    return response.data;
+  }
+);
 
-export const getPublicTrips = createAsyncThunk("feed/getPublicTrips", async () => {
-  const response = await axios.get(`${api}/trips/public`);
-  return response.data;
-});
+export const getPublicTrips = createAsyncThunk(
+  "feed/getPublicTrips",
+  async () => {
+    const response = await axios.get(`${api}/trips/public`);
+    return response.data;
+  }
+);
 
 const feedSlice = createSlice({
   name: "feed",

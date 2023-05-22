@@ -9,12 +9,12 @@ import {
   HStack,
   Text,
   View,
-  Toast
+  Toast,
 } from "native-base";
 
-import { FontAwesome } from '@expo/vector-icons';
-import * as WebBrowser from 'expo-web-browser';
-import * as Google from 'expo-auth-session/providers/google';
+import { FontAwesome } from "@expo/vector-icons";
+import * as WebBrowser from "expo-web-browser";
+import * as Google from "expo-auth-session/providers/google";
 import { WEB_CLIENT_ID } from "@env";
 import { useState, useEffect } from "react";
 // import useRegister from "../hooks/useRegister";
@@ -39,7 +39,12 @@ export default function Register() {
   console.log("USER LOG", user);
 
   if (user?.user?._id) {
-    Toast.show({ title: user?.message, duration: 5000, placement: 'top-right', style: { backgroundColor: 'green'} })
+    Toast.show({
+      title: user?.message,
+      duration: 5000,
+      placement: "top-right",
+      style: { backgroundColor: "green" },
+    });
     router.push("/");
   }
 
@@ -48,7 +53,7 @@ export default function Register() {
       // const auth = getAuth();
       // createUserWithEmailAndPassword(auth, email, password)
       //   .then((userCredential) => {
-      //     // Signed in 
+      //     // Signed in
       //     const user = userCredential.user;
       //     if (user) {
       //       console.log({ user });
@@ -56,14 +61,11 @@ export default function Register() {
       //     }
       //   })
 
-      dispatch(signUp({ name, email, password}))
-
+      dispatch(signUp({ name, email, password }));
+    } catch (e) {
+      console.log("Error", e);
     }
-    catch (e) {
-      console.log("Error", e)
-    }
-  }
-
+  };
 
   return (
     <Center w="100%">
@@ -156,23 +158,27 @@ export default function Register() {
               mt="2"
               onPress={() => {
                 promptAsync();
-                signInWithGoogle().then(async (res) => {
-                  let { email, name } = res
-                  if (email && name) {
-                    addUser.mutate({ name, email, password: "", from: "GoogleSignIn" });
-                    router.push("/sign-in")
-                  } else {
-                    console.log("Email and Name empty")
-                  }
-                }).catch((err) => {
-                  console.log(err)
-                })
+                signInWithGoogle()
+                  .then(async (res) => {
+                    let { email, name } = res;
+                    if (email && name) {
+                      addUser.mutate({
+                        name,
+                        email,
+                        password: "",
+                        from: "GoogleSignIn",
+                      });
+                      router.push("/sign-in");
+                    } else {
+                      console.log("Email and Name empty");
+                    }
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                  });
               }}
               colorScheme={"red"}
-              startIcon={
-                <FontAwesome name="google" size={16} color="white" />
-              }
-
+              startIcon={<FontAwesome name="google" size={16} color="white" />}
             >
               Sign up with Google
             </Button>

@@ -18,11 +18,11 @@ import { fetchUserPacks } from "../../store/packsStore";
 
 export default function ProfileContainerMobile() {
   // const { user } = useAuth();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchUserPacks(user?._id))
-  }, [dispatch, user?._id])
+    dispatch(fetchUserPacks(user?._id));
+  }, [dispatch, user?._id]);
   const user = useSelector((state) => state.auth.user);
 
   // const { data, isLoading, isError, error } = useGetPacks(user?._id);
@@ -73,7 +73,11 @@ export default function ProfileContainerMobile() {
           </Box>
           {PacksData.error != "" ? <Text>{PacksData?.error}</Text> : null}
         </Box>
-        {PacksData?.isLoading ? <Text>Loading....</Text> : <PacksContainer data={PacksData?.packs} />}
+        {PacksData?.isLoading ? (
+          <Text>Loading....</Text>
+        ) : (
+          <PacksContainer data={PacksData?.packs} />
+        )}
       </Box>
     </ScrollView>
   );

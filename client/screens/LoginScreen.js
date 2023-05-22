@@ -45,13 +45,22 @@ export default function Login() {
   const user = useSelector((state) => state.auth.user);
   const error = useSelector((state) => state.auth.error);
 
-
   if (user?.uid) {
-    Toast.show({ title: "Login sucessfully", duration: 3000, placement: 'top-right', style: { backgroundColor: 'green' } })
+    Toast.show({
+      title: "Login sucessfully",
+      duration: 3000,
+      placement: "top-right",
+      style: { backgroundColor: "green" },
+    });
     router.push("/");
   }
-  if(error){
-    Toast.show({ title: "Wrong-password", duration: 3000, placement: 'top-right', style: { backgroundColor: 'red' } })
+  if (error) {
+    Toast.show({
+      title: "Wrong-password",
+      duration: 3000,
+      placement: "top-right",
+      style: { backgroundColor: "red" },
+    });
   }
 
   // const { loginUserWithEmailAndPassword, loginUserWithGoogle } = useLogin();
@@ -90,7 +99,6 @@ export default function Login() {
   // //   useAuth();
 
   // const { loginUserWithEmailAndPassword, loginUserWithGoogle } = useLogin();
-
 
   // const router = useRouter();
 
@@ -264,7 +272,6 @@ export default function Login() {
                 Reset Password?
               </Text>
             </Link>
-
           </HStack>
           {/* Google Login starts*/}
           <HStack mt="6" justifyContent="center">
@@ -286,9 +293,7 @@ export default function Login() {
               disabled={!request}
               onPress={() => promptAsync()}
               colorScheme={"red"}
-              startIcon={
-                <FontAwesome name="google" size={18} color="white" />
-              }
+              startIcon={<FontAwesome name="google" size={18} color="white" />}
             >
               Sign in with Google
             </Button>
