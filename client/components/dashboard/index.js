@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
   },
   content: {
     flexGrow: 1,
-    justifyContent: "center",
+    justifyContent: "start",
     alignItems: "stretch",
     paddingHorizontal: 20,
   },

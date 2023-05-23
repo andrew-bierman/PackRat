@@ -60,7 +60,7 @@ export const SaveTripContainer = () => {
       footerButtons={[
         {
           label: "Save",
-          onPress: () => console.log("Save"),
+          onClick: () => console.log("Save"),
         },
       ]}
     >

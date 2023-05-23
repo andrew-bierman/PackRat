@@ -7,7 +7,6 @@ import { ObjectId } from "mongoose";
 // import firebaseAdmin from "firebase-admin";
 import { v4 as uuid } from "uuid";
 import bcrypt from "bcrypt";
-import validator from "validator";
 import { sendWelcomeEmail, resetEmail } from "../utils/accountEmail.js";
 import { google } from "googleapis";
 import {
@@ -18,6 +17,7 @@ import {
   UI_ROOT_URI,
 } from "../config.js";
 import utilsService from "../utils/utils.service.js";
+
 
 const oauth2Client = new google.auth.OAuth2(
   GOOGLE_CLIENT_ID,
@@ -48,9 +48,9 @@ export const getUsers = async (req, res) => {
 };
 
 export const getUserById = async (req, res) => {
-  const { userId } = req.body;
-
   try {
+    const { userId } = req.body;
+
     const user = await User.findById({ _id: userId }).populate("packs");
 
     res.status(200).json(user);
@@ -85,9 +85,9 @@ export const getUserById = async (req, res) => {
 // };
 
 export const addToFavorite = async (req, res) => {
-  const { packId, userId } = req.body;
-
   try {
+    const { packId, userId } = req.body;
+
     const exists = await User.find(
       { favorites: { $in: [packId] } },
       { _id: userId }
@@ -118,9 +118,9 @@ export const addToFavorite = async (req, res) => {
 };
 
 export const editUser = async (req, res) => {
-  const { userId } = req.body;
-
   try {
+    const { userId } = req.body;
+
     const editedUser = await User.findOneAndUpdate({ _id: userId }, req.body, {
       returnOriginal: false,
     }).populate("favorites");
@@ -131,8 +131,9 @@ export const editUser = async (req, res) => {
 };
 
 export const deleteUser = async (req, res) => {
-  const { userId } = req.body;
   try {
+    const { userId } = req.body;
+
     await User.findOneAndDelete({ _id: userId });
 
     res.status(200).json({ msg: "user was deleted successfully" });
@@ -143,9 +144,11 @@ export const deleteUser = async (req, res) => {
 
 export const userSignin = async (req, res) => {
   try {
+    const { email, password } = req.body;
+
     const user = await User.findByCredentials({
-      email: req.body.email,
-      password: req.body.password,
+      email: email,
+      password: password,
     });
     await user.generateAuthToken();
     res.status(200).send({ user });
@@ -157,7 +160,9 @@ export const userSignin = async (req, res) => {
 export const userSignup = async (req, res) => {
   try {
     // If the Mongoose index is re-index or restart the, it will be removed. Refer to this link for more information: https://stackoverflow.com/questions/5535610/mongoose-unique-index-not-working
-    await User.alreadyLogin(req.body.email);
+    const { email } = req.body;
+
+    await User.alreadyLogin(email);
     const user = new User(req.body);
     await user.save();
     await user.generateAuthToken();
@@ -170,8 +175,9 @@ export const userSignup = async (req, res) => {
 
 export const sentEmail = async (req, res) => {
   try {
-    if (!validator.isEmail(req.body.email)) throw new Error("Email is invalid");
-    const user = await User.findOne({ email: req.body.email });
+    const { email } = req.body;
+
+    const user = await User.findOne({ email: email });
     if (!user) {
       throw new Error("User not found");
     }
@@ -189,8 +195,10 @@ export const sentEmail = async (req, res) => {
 
 export const resetPassword = async (req, res) => {
   try {
-    const user = await User.validateResetToken(req.body.resetToken);
-    user.password = req.body.password;
+    const { resetToken, password } = req.body;
+
+    const user = await User.validateResetToken(resetToken);
+    user.password = password;
     await user.save();
     res.status(200).send({
       message: "Successfully reset password",

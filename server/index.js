@@ -1,6 +1,8 @@
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
+import { isCelebrateError, errors } from "celebrate";
+
 import { MONGODB_URI, SERVICE_ACCOUNT_KEY } from "./config.js";
 import routes from "./routes/index.js";
 
@@ -28,7 +30,18 @@ const connectionString = MONGODB_URI;
 // use routes
 app.use(routes);
 
-// connect to mongoDB
+// middleware to log Celebrate validation errors
+app.use((err, req, res, next) => {
+  if (isCelebrateError(err)) {
+    console.error(err);
+  }
+  next(err);
+});
+
+// Celebrate middleware to return validation errors
+app.use(errors());
+
+// connect to mongodb
 mongoose
   .connect(connectionString, {
     useNewUrlParser: true,
