@@ -44,8 +44,8 @@ router.post("/favorite", validator.addToFavorite, addToFavorite);
 router.put("/", validator.editUser, editUser);
 router.delete("/", validator.deleteUser, deleteUser);
 
-router.post("/link-firebase-auth", validator.linkFirebaseAuth, linkFirebaseAuth);
-router.post("/create-mongodb-user", validator.createMongoDBUser, createMongoDBUser);
+// router.post("/link-firebase-auth", validator.linkFirebaseAuth, linkFirebaseAuth);
+// router.post("/create-mongodb-user", validator.createMongoDBUser, createMongoDBUser);
 
 router.post("/checkcode", validator.checkCode, checkCode);
 router.post("/updatepassword", validator.updatePassword, updatePassword);
