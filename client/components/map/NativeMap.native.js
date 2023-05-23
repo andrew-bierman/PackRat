@@ -36,7 +36,7 @@ const previewMapDiemension = { width: dw * 0.9, height: 220 };
 
 // MapView.setConnected(true);
 
-export function CustomizedMap() {
+function CustomizedMap() {
   const camera = useRef(MapView.Camera);
   const mapViewRef = useRef(null);
   const mapViewFullScreenRef = useRef();
@@ -601,3 +601,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
+
+export default CustomizedMap;
