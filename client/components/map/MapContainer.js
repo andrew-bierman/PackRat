@@ -4,13 +4,13 @@ import { View, StyleSheet, Platform } from "react-native";
 
 import NativeMap from "./NativeMap";
 
-import WebMapContainer from "./WebMapcontainer";
+import WebMap from "./WebMap";
 
 export function MapContainer() {
   if (Platform.OS === "web") {
     return (
       <View style={[styles.webContainer]}>
-        <WebMapContainer />
+        <WebMap />
       </View>
     );
   }
