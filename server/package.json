@@ -7,6 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon index.js",
+    "dev": "nodemon index.js",
     "debug": "cross-env NODE_OPTIONS='--inspect-brk' nodemon index.js"
   },
   "author": "",
@@ -16,6 +17,7 @@
     "axios": "^1.4.0",
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.2",
+    "celebrate": "^15.0.1",
     "cors": "^2.8.5",
     "csurf": "^1.11.0",
     "dotenv": "^16.0.3",
@@ -26,6 +28,7 @@
     "google-auth-library": "^8.8.0",
     "googleapis": "^118.0.0",
     "i": "^0.3.7",
+    "joi": "^17.9.2",
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.0.1",
     "node-fetch": "^3.3.1",
