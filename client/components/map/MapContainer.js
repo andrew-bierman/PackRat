@@ -2,22 +2,22 @@ import React from "react";
 
 import { View, StyleSheet, Platform } from "react-native";
 
-import { CustomizedMap } from "./NativeMap";
+import NativeMap from "./NativeMap";
 
-import WebPackContainer from "./WebMapcontainer";
+import WebMapContainer from "./WebMapcontainer";
 
 export function MapContainer() {
   if (Platform.OS === "web") {
     return (
       <View style={[styles.webContainer]}>
-        <WebPackContainer />
+        <WebMapContainer />
       </View>
     );
   }
 
   if(Platform.OS === "android" || Platform.OS === "ios"){
     <View style={[styles.nativeContainer]}>
-      <CustomizedMap />
+      <NativeMap />
     </View>
   }
 }
