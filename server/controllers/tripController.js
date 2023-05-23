@@ -29,6 +29,7 @@ export const addTrip = async (req, res) => {
     const { name, duration, weather, start_date, end_date, destination, owner_id, packs, is_public } = req.body;
 
     await Trip.create({ name, duration, weather, start_date, end_date, destination, owner_id, packs, is_public });
+
     res.status(200).json({ msg: "success" });
   } catch (error) {
     res.status(404).json({ msg: "Unable to add trip" });
@@ -36,6 +37,7 @@ export const addTrip = async (req, res) => {
 };
 
 export const editTrip = async (req, res) => {
+
   try {
     const { _id } = req.body;
 

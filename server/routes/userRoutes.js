@@ -16,6 +16,7 @@ import {
 } from "../controllers/userController.js";
 import auth from "../middleware/auth.js";
 import * as validator from "../middleware/validators/index.js"
+
 import { checkCode, emailExists, updatePassword } from "../controllers/auth.js";
 
 import {
@@ -26,6 +27,7 @@ import {
 import { REDIRECT_URL } from "../config.js";
 
 const router = express.Router();
+
 router.get("/", getUsers);
 router.get("/:userId", validator.getUserById, getUserById);
 // router.post("/", addUser);
@@ -34,6 +36,7 @@ router.post("/signin", validator.userSignIn, userSignin);
 router.post("/signup", validator.userSignUp, userSignup);
 router.post("/reset-password-email", validator.sentEmail, sentEmail);
 router.post("/reset-password", validator.resetPassword, resetPassword);
+
 router.get("/me/info", auth, getMe);
 router.get("/google/url", getGoogleAuthURL);
 router.get(`/${REDIRECT_URL}`, googleSignin);

@@ -27,6 +27,7 @@ export const getItemById = async (req, res) => {
 
 export const addItem = async (req, res) => {
   try {
+
     const { name, weight, quantity, unit, packId } = req.body;
 
     const newItem = await Item.create({ name, weight, quantity, unit, packId }); // Create and save the new item
@@ -58,6 +59,7 @@ export const addItem = async (req, res) => {
 };
 
 export const editItem = async (req, res) => {
+
   try {
     const { _id } = req.body;
 
@@ -72,6 +74,7 @@ export const editItem = async (req, res) => {
 };
 
 export const deleteItem = async (req, res) => {
+
   try {
     const { itemId } = req.body;
 

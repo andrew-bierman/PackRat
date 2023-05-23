@@ -132,7 +132,7 @@ export const addPack = async (req, res) => {
 export const editPack = async (req, res) => {
   try {
     const { _id } = req.body
-
+    
     const newPack = await Pack.findOneAndUpdate({ _id }, req.body, {
       returnOriginal: false,
     });
