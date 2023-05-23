@@ -4,7 +4,7 @@ export const JoiObjectId = (message = 'valid id') => Joi.string().regex(/^[0-9a-
 
 export const getPacks = celebrate({
     [Segments.PARAMS]: Joi.object().keys({
-        owner_id: JoiObjectId().required(),
+        ownerId: JoiObjectId().required(),
     }),
 });
 export const getPackById = celebrate({
