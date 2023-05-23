@@ -126,6 +126,9 @@ const WebPackContainer = () => {
     <View style={styles.container}>
       <View ref={mapContainer} style={styles.map} />
     </View>
+    // <div style={styles.container}>
+    //   <div ref={mapContainer} style={styles.map} />;
+    // </div>
   );
 };
 
@@ -134,7 +137,9 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    position: "relative",
     height: "100%",
+    width: "100%",
   },
   map: {
     width: "100%",
