@@ -3,7 +3,7 @@ import { oneEntity } from "../utils/oneEntity.js";
 import { tripValidation } from "../utils/trip.js";
 
 export const getTrips = async (req, res) => {
-  const { owner_id } = await oneEntity(req.body.owner_id);
+  const { owner_id } = await oneEntity(req.params.ownerId);
 
   try {
     const trips = await Trip.find({ owner_id }).populate("packs");
@@ -15,7 +15,7 @@ export const getTrips = async (req, res) => {
 };
 
 export const getTripById = async (req, res) => {
-  const { tripId } = await oneEntity(req.body.tripId);
+  const { tripId } = await oneEntity(req.params.tripId);
 
   try {
     const trip = await Trip.findById({ _id: tripId }).populate("packs");
