@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { ImageBackground, StyleSheet, View } from "react-native";
-import { Container, Button, Icon, Text, Card, Box } from "native-base";
+import { Container, Button, Icon, Text, Card, Box, VStack } from "native-base";
 
 import { MaterialIcons } from "@expo/vector-icons";
 import { theme } from "../../theme";
@@ -77,7 +77,7 @@ const CustomAccordion = ({ title, content, iconName }) => {
 
 const LandingPage = () => {
   return (
-    <Container>
+    <VStack style={styles.container}>
       <Box
         style={{
           alignItems: "center",
@@ -133,7 +133,7 @@ const LandingPage = () => {
         </Container>
         <StatusBar style="auto" />
       </ImageBackground>
-    </Container>
+    </VStack>
   );
 };
 
@@ -143,6 +143,12 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     height: "100%",
+  },
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
   },
   backgroundImage: {
     flex: 1,
