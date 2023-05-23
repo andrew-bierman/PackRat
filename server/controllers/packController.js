@@ -1,13 +1,11 @@
 import Pack from "../models/packModel.js";
 import mongoose from "mongoose";
-import { oneEntity } from "../utils/oneEntity.js";
-import { packValidation } from "../utils/pack.js";
-import { calculatePackScore } from "../utils/scorePack.js";
+import { calculatePackScore } from "../utils/scorePack.js"
 
 export const getPublicPacks = async (req, res) => {
-  const { queryBy } = req.query;
-
   try {
+    const { queryBy } = req.query;
+
     let publicPacksPipeline = [
       {
         $match: { is_public: true },
@@ -50,9 +48,9 @@ export const getPublicPacks = async (req, res) => {
 };
 
 export const getPacks = async (req, res) => {
-  const { ownerId } = req.params;
-
   try {
+    const { ownerId } = req.params;
+
     const packs = await Pack.aggregate([
       {
         $match: { owners: new mongoose.Types.ObjectId(ownerId) },
@@ -87,9 +85,9 @@ export const getPacks = async (req, res) => {
 };
 
 export const getPackById = async (req, res) => {
-  const { packId } = req.params;
-
   try {
+    const { packId } = req.params;
+
     const objectId = new mongoose.Types.ObjectId(packId);
     const pack = await Pack.findById(objectId).populate("items");
 
@@ -101,29 +99,26 @@ export const getPackById = async (req, res) => {
 };
 
 export const addPack = async (req, res) => {
-  // const packBody = packValidation(req.body)
-
-  if (!req.body.name || !req.body.owner_id) {
-    res.status(404).json({ msg: "All fields must be filled" });
-  }
-  const newPack = {
-    // ...packBody,
-    name: req.body.name,
-    owner_id: req.body.owner_id,
-    items: [],
-    is_public: false,
-    favorited_by: [],
-    favorites_count: 0,
-    createdAt: new Date(),
-    owners: [req.body.owner_id],
-  };
-
-  console.log("newPack", newPack);
-
   try {
-    const exists = await Pack.find({ name: req.body.name });
+    const { name, owner_id } = req.body;
 
-    // if (exists[0]?.name?.toLowerCase() === req.body.name.toLowerCase()) {
+    const newPack = {
+      // ...packBody,
+      name: name,
+      owner_id: owner_id,
+      items: [],
+      is_public: false,
+      favorited_by: [],
+      favorites_count: 0,
+      createdAt: new Date(),
+      owners: [owner_id],
+    };
+
+    console.log("newPack", newPack);
+
+    const exists = await Pack.find({ name: name });
+
+    // if (exists[0]?.name?.toLowerCase() === name.toLowerCase()) {
     //   throw new Error("Pack already exists");
     // }
 
@@ -135,10 +130,9 @@ export const addPack = async (req, res) => {
 };
 
 export const editPack = async (req, res) => {
-  // const { _id } = await oneEntity(req.body._id)
-  const { _id } = req.body;
-
   try {
+    const { _id } = req.body
+    
     const newPack = await Pack.findOneAndUpdate({ _id }, req.body, {
       returnOriginal: false,
     });
@@ -152,9 +146,9 @@ export const editPack = async (req, res) => {
 };
 
 export const deletePack = async (req, res) => {
-  const { packId } = await oneEntity(req.body.packId);
-
   try {
+    const { packId } = req.body
+
     await Pack.findOneAndDelete({ _id: packId });
     res.status(200).json({ msg: "pack was deleted successfully" });
   } catch (error) {

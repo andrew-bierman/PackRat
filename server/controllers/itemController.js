@@ -1,24 +1,22 @@
 import Item from "../models/itemModel.js";
-import { itemValidation } from "../utils/item.js";
-import { oneEntity } from "../utils/oneEntity.js";
 import Pack from "../models/packModel.js";
 
 export const getItems = async (req, res) => {
-  const { packId } = await oneEntity(req.params);
-
   try {
+    const { packId } = req.params;
+
     const items = await Item.find({ packs: packId });
 
-    res.status(200).json(items);
+    return res.status(200).json(items);
   } catch (error) {
     res.status(404).json({ msg: "Items cannot be found" });
   }
 };
 
 export const getItemById = async (req, res) => {
-  const { _id } = await oneEntity(req.body._id);
-
   try {
+    const { _id } = req.body;
+
     const item = await Item.findById({ _id });
 
     res.status(200).json(item);
@@ -29,8 +27,10 @@ export const getItemById = async (req, res) => {
 
 export const addItem = async (req, res) => {
   try {
-    const newItemData = await itemValidation(req.body);
-    const newItem = await Item.create(newItemData); // Create and save the new item
+
+    const { name, weight, quantity, unit, packId } = req.body;
+
+    const newItem = await Item.create({ name, weight, quantity, unit, packId }); // Create and save the new item
 
     await Pack.updateOne(
       { _id: req.body.packId },
@@ -59,9 +59,10 @@ export const addItem = async (req, res) => {
 };
 
 export const editItem = async (req, res) => {
-  const { _id } = await oneEntity(req.body._id);
 
   try {
+    const { _id } = req.body;
+
     const newItem = await Item.findOneAndUpdate({ _id }, req.body, {
       returnOriginal: false,
     });
@@ -73,9 +74,10 @@ export const editItem = async (req, res) => {
 };
 
 export const deleteItem = async (req, res) => {
-  const { itemId } = await oneEntity(req.body.itemId);
 
   try {
+    const { itemId } = req.body;
+
     await Item.findOneAndDelete({ _id: itemId });
 
     res.status(200).json({ msg: "Item was deleted successfully" });

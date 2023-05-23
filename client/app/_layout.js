@@ -16,6 +16,7 @@ export default function HomeLayout() {
       <NativeBaseProvider>
         {Platform.OS === "web" ? <Navigation /> : <NavigationMobile />}
         <Slot />
+          <Footer />
       </NativeBaseProvider>
     </Provider>
   );
