@@ -46,6 +46,9 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    minHeight: "100vh",
+    height: "100%",
+    width: "100%",
+    // minHeight: "100vh",
+    // minWidth: "100vw",
   },
 });
