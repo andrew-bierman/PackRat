@@ -99,10 +99,11 @@ const LandingPage = () => {
           The Ultimate Travel App
         </Text>
       </Box>
-      <ImageBackground
-        source={require("../../assets/background-image.png")}
-        style={styles.backgroundImage}
-      >
+      <Box style={styles.secondaryContentContainer}>
+        {/* <ImageBackground
+          source={require("../../assets/background-image.png")}
+          style={styles.backgroundImage}
+        > */}
         <View style={styles.overlay} />
         <Container style={styles.contentContainer}>
           <Text style={styles.introText}>
@@ -132,7 +133,8 @@ const LandingPage = () => {
           </Button>
         </Container>
         <StatusBar style="auto" />
-      </ImageBackground>
+        {/* </ImageBackground> */}
+      </Box>
     </VStack>
   );
 };
@@ -150,6 +152,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
   },
+  secondaryContentContainer: {
+    flex: 1,
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: theme.colors.background,
+  },
   backgroundImage: {
     flex: 1,
     resizeMode: "cover",
@@ -158,6 +167,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     justifyContent: "center",
+    alignItems: "center",
     paddingHorizontal: 20,
   },
   introText: {
