@@ -1,10 +1,43 @@
 import Trip from "../models/tripModel.js";
 
+export const getPublicTrips = async (req, res) => {
+  try {
+    const { queryBy } = req.query;
+
+    let publicTripsPipeline = [
+      {
+        $match: { is_public: true },
+      },
+      {
+        $lookup: {
+          from: "packs", // name of the foreign collection
+          localField: "_id",
+          foreignField: "trips",
+          as: "packs",
+        },
+      },
+    ];
+
+    if (queryBy === "Favorite") {
+      publicTripsPipeline.push({ $sort: { favorites_count: -1 } });
+    } else {
+      publicTripsPipeline.push({ $sort: { _id: -1 } });
+    }
+
+    const publicTrips = await Trip.aggregate(publicTripsPipeline);
+
+    res.status(200).json(publicTrips);
+
+  } catch (error) {
+    res.status(404).json({ msg: "Trips cannot be found" });
+  }
+};
+
 export const getTrips = async (req, res) => {
   try {
-    const { owner_id } = req.body;
+    const { ownerId } = req.packs;
 
-    const trips = await Trip.find({ owner_id }).populate("packs");
+    const trips = await Trip.find({ owner_id: ownerId }).populate("packs");
 
     res.status(200).json(trips);
   } catch (error) {
