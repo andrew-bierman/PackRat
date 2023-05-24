@@ -41,7 +41,32 @@ export default function NavigationMobile() {
         />
       </Link>
     </View>
-  ) : null;
+  ) : 
+  (
+    <View style={styles.mobileContainer}>
+      <View style={{ flexDirection: "row", alignItems: "center", gap: 1 }}>
+        <Image src={String(packratlogo)} alt="logo" />
+        <Text
+          style={{
+            color: theme.colors.text,
+            fontSize: 28,
+            fontWeight: 900,
+          }}
+        >
+          PackRat
+        </Text>
+      </View>
+      <Link href="/drawer">
+        <EvilIcons
+          name="navicon"
+          size={48}
+          color={theme.colors.iconColor}
+          // onPress={() => setIsMenuOpen(!isMenuOpen)}
+        />
+      </Link>
+    </View>
+  )
+  ;
 }
 
 const styles = StyleSheet.create({
