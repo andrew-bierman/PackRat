@@ -1,9 +1,18 @@
 import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { ImageBackground, StyleSheet, View } from "react-native";
-import { Container, Button, Icon, Text, Card, Box, VStack } from "native-base";
+import {
+  Container,
+  Button,
+  Icon,
+  Text,
+  Card,
+  Box,
+  VStack,
+  HStack,
+} from "native-base";
 
-import { MaterialIcons } from "@expo/vector-icons";
+import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { theme } from "../../theme";
 
 const dataArray = [
@@ -112,14 +121,50 @@ const LandingPage = () => {
             with ease, whether it's a weekend camping trip, a day hike, or a
             cross-country road trip.
           </Text>
-          {dataArray.map((item, index) => (
-            <CustomAccordion
-              key={index}
-              title={item.title}
-              content={item.content}
-              iconName={item.iconName}
-            />
-          ))}
+          <View style={styles.appBadges}>
+            <View style={{ flexDirection: "row", justifyContent: "center" }}>
+              <Button title="App Store" style={{ marginRight: 10 }}>
+                <HStack space={2} alignItems="center">
+                  <MaterialCommunityIcons
+                    name="apple"
+                    size={44}
+                    color="white"
+                  />
+                  <Text style={{ color: "white" }}>
+                    Download on the App Store
+                  </Text>
+                </HStack>
+              </Button>
+              <Button title="Google Play">
+                <HStack space={2} alignItems="center">
+                  <MaterialCommunityIcons
+                    name="google-play"
+                    size={44}
+                    color="white"
+                  />
+                  <Text style={{ color: "white" }}>
+                    Download on Google Play
+                  </Text>
+                </HStack>
+              </Button>
+            </View>
+            <Button title="Web" style={{ marginTop: 10, width: '100%' }}>
+              <HStack space={2} alignItems="center">
+                <MaterialCommunityIcons name="web" size={44} color="white" />
+                <Text style={{ color: "white" }}>Use on Web</Text>
+              </HStack>
+            </Button>
+          </View>
+          <View>
+            {dataArray.map((item, index) => (
+              <CustomAccordion
+                key={index}
+                title={item.title}
+                content={item.content}
+                iconName={item.iconName}
+              />
+            ))}
+          </View>
         </Container>
         <Container style={styles.buttonContainer}>
           <Button
@@ -158,6 +203,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: theme.colors.background,
+  },
+  appBadges: {
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    marginVertical: 20,
+    marginBottom: 20,
   },
   backgroundImage: {
     flex: 1,
