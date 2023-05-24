@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     lineHeight: 28,
     letterSpacing: 1,
-    fontFamily: "sans-serif",
+    // fontFamily: "sans-serif",
     color: theme.colors.text,
     textAlign: "center",
   },
