@@ -57,6 +57,7 @@ const tripsSlice = createSlice({
       state.newTrip[action.payload.key] = action.payload.value;
     },
     updateNewTripPack(state, action) {
+      console.log("action.payload in updatenewtrippack", action.payload);
       state.newTrip.packId = action.payload;
     },
     updateNewTripWeather(state, action) {
@@ -146,5 +147,14 @@ const tripsSlice = createSlice({
       });
   },
 });
+
+export const {
+  updateNewTrip,
+  updateNewTripVersatile,
+  updateNewTripPack,
+  updateNewTripWeather,
+  updateNewTripTrail,
+  resetNewTrip,
+} = tripsSlice.actions;
 
 export default tripsSlice.reducer;
