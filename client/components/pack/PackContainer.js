@@ -9,19 +9,23 @@ import { TableContainer } from "../pack_table/Table";
 // import { useAuth } from "../../auth/provider";
 import { useSelector } from "react-redux";
 import { fetchUserPacks, selectPackById } from "../../store/packsStore";
+import { updateNewTripPack } from "../../store/tripsStore";
 import { useDispatch } from "react-redux";
 
 import { CustomModal } from "../modal";
 
-export default function PackContainer() {
+export default function PackContainer({ isCreatingTrip = false }) {
   const dispatch = useDispatch();
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
 
   const user = useSelector((state) => state.auth.user);
   const packs = useSelector((state) => state.packs.packs);
 
+  const newTrip = useSelector((state) => state.trips.newTrip);
+
   const [packName, setPackName] = useState("");
   const [currentPackId, setCurrentPackId] = useState(null);
+
 
   useEffect(() => {
     dispatch(fetchUserPacks(user?._id));
@@ -31,6 +35,11 @@ export default function PackContainer() {
     setPackName(name);
     const selectedPack = packs.find((pack) => pack.name === name);
     setCurrentPackId(selectedPack?._id);
+
+    if(isCreatingTrip && selectedPack?._id){
+      dispatch(updateNewTripPack(selectedPack?._id))
+    }
+
   };
 
   const currentPack = useSelector((state) =>
