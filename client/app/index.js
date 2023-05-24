@@ -42,7 +42,7 @@ export default function Index() {
 
 const styles = StyleSheet.create({
   mutualStyles: {
-    backgroundColor: theme.colors.primary,
+    backgroundColor: theme.colors.background,
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
