@@ -7,7 +7,7 @@ import {
   ScrollView,
 } from "native-base";
 import { StyleSheet } from "react-native";
-import PacksContainer from "./PacksContainer";
+import UserDataContainer from "./UserDataContainer";
 import { useAuth } from "../../auth/provider";
 import { theme } from "../../theme";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
