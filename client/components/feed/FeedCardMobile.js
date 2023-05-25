@@ -10,7 +10,7 @@ import { Box, Heading, Text, HStack, Stack } from "native-base";
 import { useDispatch, useSelector } from "react-redux";
 import { addFavorite } from "../../store/favoritesStore";
 
-export default function CardMobile({
+export default function FeedCardMobile({
   _id,
   name,
   total_weight,
