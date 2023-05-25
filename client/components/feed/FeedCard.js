@@ -1,6 +1,6 @@
 import { AntDesign } from "@expo/vector-icons";
 import { formatDistanceToNow } from "date-fns";
-import { MaterialIcons } from "@expo/vector-icons";
+import { MaterialIcons, Entypo } from "@expo/vector-icons";
 import { theme } from "../../theme";
 // import useAddToFavorite from "../../hooks/useAddToFavorites";
 // import { useAuth } from "../../auth/provider";
@@ -20,6 +20,7 @@ import {
 // import { useAuth } from "../../auth/provider";
 
 export default function Card({
+  type,
   _id,
   name,
   total_weight,
@@ -27,6 +28,7 @@ export default function Card({
   favorited_by,
   favorites_count,
   owner_id,
+  destination,
   createdAt,
 }) {
   // const { user } = useAuth();
@@ -84,24 +86,47 @@ export default function Card({
                 }}
               >
                 {name}
-                <MaterialIcons name="backpack" size={24} color="gray.700" />
+                {type === "pack" && (
+                  <MaterialIcons name="backpack" size={24} color="gray.700" />
+                )}
+                {type === "trip" && (
+                  <Entypo name="location-pin" size={24} color="gray.700" />
+                )}
               </Box>
             </Heading>
+            {type === "pack" && (
+              <Text
+                fontSize="xs"
+                _light={{
+                  color: "violet.500",
+                }}
+                _dark={{
+                  color: "violet.400",
+                }}
+                fontWeight="500"
+                ml="-0.5"
+                mt="-1"
+              >
+                Total Weight: {total_weight}
+              </Text>
+            )}
 
-            <Text
-              fontSize="xs"
-              _light={{
-                color: "violet.500",
-              }}
-              _dark={{
-                color: "violet.400",
-              }}
-              fontWeight="500"
-              ml="-0.5"
-              mt="-1"
-            >
-              Total Weight: {total_weight}
-            </Text>
+            {type === "trip" && (
+              <Text
+                fontSize="xs"
+                _light={{
+                  color: "violet.500",
+                }}
+                _dark={{
+                  color: "violet.400",
+                }}
+                fontWeight="500"
+                ml="-0.5"
+                mt="-1"
+              >
+                {destination}
+              </Text>
+            )}
           </Stack>
 
           <HStack alignItems="center" space={4} justifyContent="space-between">

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
-import { ImageBackground, StyleSheet, View } from "react-native";
+import { ImageBackground, Platform, StyleSheet, View } from "react-native";
 import {
   Container,
   Button,
@@ -121,40 +121,42 @@ const LandingPage = () => {
             with ease, whether it's a weekend camping trip, a day hike, or a
             cross-country road trip.
           </Text>
-          <View style={styles.appBadges}>
-            <View style={{ flexDirection: "row", justifyContent: "center" }}>
-              <Button title="App Store" style={{ marginRight: 10 }}>
+          {Platform.OS === "web" && (
+            <View style={styles.appBadges}>
+              <View style={{ flexDirection: "row", justifyContent: "center" }}>
+                <Button title="App Store" style={{ marginRight: 10 }}>
+                  <HStack space={2} alignItems="center">
+                    <MaterialCommunityIcons
+                      name="apple"
+                      size={44}
+                      color="white"
+                    />
+                    <Text style={{ color: "white" }}>
+                      Download on the App Store
+                    </Text>
+                  </HStack>
+                </Button>
+                <Button title="Google Play">
+                  <HStack space={2} alignItems="center">
+                    <MaterialCommunityIcons
+                      name="google-play"
+                      size={44}
+                      color="white"
+                    />
+                    <Text style={{ color: "white" }}>
+                      Download on Google Play
+                    </Text>
+                  </HStack>
+                </Button>
+              </View>
+              <Button title="Web" style={{ marginTop: 10, width: "100%" }}>
                 <HStack space={2} alignItems="center">
-                  <MaterialCommunityIcons
-                    name="apple"
-                    size={44}
-                    color="white"
-                  />
-                  <Text style={{ color: "white" }}>
-                    Download on the App Store
-                  </Text>
-                </HStack>
-              </Button>
-              <Button title="Google Play">
-                <HStack space={2} alignItems="center">
-                  <MaterialCommunityIcons
-                    name="google-play"
-                    size={44}
-                    color="white"
-                  />
-                  <Text style={{ color: "white" }}>
-                    Download on Google Play
-                  </Text>
+                  <MaterialCommunityIcons name="web" size={44} color="white" />
+                  <Text style={{ color: "white" }}>Use on Web</Text>
                 </HStack>
               </Button>
             </View>
-            <Button title="Web" style={{ marginTop: 10, width: '100%' }}>
-              <HStack space={2} alignItems="center">
-                <MaterialCommunityIcons name="web" size={44} color="white" />
-                <Text style={{ color: "white" }}>Use on Web</Text>
-              </HStack>
-            </Button>
-          </View>
+          )}
           <View>
             {dataArray.map((item, index) => (
               <CustomAccordion

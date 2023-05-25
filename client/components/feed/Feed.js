@@ -1,7 +1,7 @@
-import { Container, Box, Text, HStack, Stack } from "native-base";
+import { Container, Box, Text, HStack, Stack, Switch } from "native-base";
 import { StyleSheet } from "react-native";
 
-import Card from "./Card";
+import Card from "./FeedCard";
 // import useGetPublicPacks from "../../hooks/useGetPublicPacks";
 import { theme } from "../../theme";
 import DropdownComponent from "../Dropdown";
@@ -9,15 +9,20 @@ import { useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { getPublicPacks } from "../../store/feedStore";
+import { getPublicPacks, getPublicTrips } from "../../store/feedStore";
 import { fetchUserPacks } from "../../store/packsStore";
 
 import { Link } from "expo-router";
+import { fetchUserTrips } from "../../store/tripsStore";
 
 const dataValues = ["Favorite", "Most Recent"];
 
 export default function Feed({ feedType = "public" }) {
   const [queryString, setQueryString] = useState("");
+  const [selectedTypes, setSelectedTypes] = useState({
+    pack: true,
+    trip: false,
+  });
 
   const dispatch = useDispatch();
 
@@ -26,22 +31,51 @@ export default function Feed({ feedType = "public" }) {
   const publicPacksData = useSelector((state) => state.feed.publicPacks);
   const userPacksData = useSelector((state) => state.packs.packs);
 
+  const publicTripsData = useSelector((state) => state.feed.publicTrips);
+
   useEffect(() => {
     if (feedType === "public") {
       dispatch(getPublicPacks(queryString));
+      dispatch(getPublicTrips(queryString));
     } else if (feedType === "userPacks" && ownerId) {
       dispatch(fetchUserPacks(ownerId));
-    } else if (feedType === "userTrips") {
+    } else if (feedType === "userTrips" && ownerId) {
+      dispatch(fetchUserTrips(ownerId));
     } else if (feedType === "favoritePacks") {
       dispatch(getFavoritePacks());
     }
   }, [queryString, feedType, ownerId]);
 
   const renderData = () => {
-    const data = feedType === "public" ? publicPacksData : userPacksData;
+    // const data =
+    //   feedType === "public"
+    //     ? [...publicPacksData, ...publicTripsData]
+    //     : userPacksData;
+
+    let data = [];
+    if (feedType === "public") {
+      if (selectedTypes.pack) {
+        data = [
+          ...data,
+          ...publicPacksData,
+        ];
+      }
+      if (selectedTypes.trip) {
+        data = [
+          ...data,
+          ...publicTripsData,
+        ];
+      }
+    } else if (feedType === "userPacks") {
+      data = userPacksData;
+    } else if (feedType === "userTrips") {
+      data = userTripsData;
+    } else if (feedType === "favoritePacks") {
+      data = userPacksData.filter((pack) => pack.isFavorite);
+    }
 
     let urlPath = "/pack/";
-    let errorText = "No Public Packs Available";
+    let errorText = "No Public Feed Data Available";
 
     switch (feedType) {
       case "userPacks":
@@ -52,6 +86,10 @@ export default function Feed({ feedType = "public" }) {
         urlPath = "/pack/";
         errorText = "No Favorite Packs Available";
         break;
+      case "userTrips":
+        urlPath = "/trip/";
+        errorText = "No User Trips Available";
+        break;
       default:
         break;
     }
@@ -59,7 +97,7 @@ export default function Feed({ feedType = "public" }) {
     if (data?.length > 0) {
       return data.map((item) => (
         <Link key={"link-key" + item?._id} href={urlPath + item?._id}>
-          <Card key={item?._id} {...{ ...item }} />
+          <Card key={item?._id} type={item.type} {...{ ...item }} />
         </Link>
       ));
     } else {
@@ -69,12 +107,42 @@ export default function Feed({ feedType = "public" }) {
 
   return (
     <Box style={styles.mainContainer}>
-      <DropdownComponent
-        value={queryString}
-        data={dataValues}
-        setUnit={setQueryString}
-        style={styles.dropdown}
-      />
+      <HStack space={3} alignItems="center">
+        <Text fontSize="lg" fontWeight="bold">
+          Packs
+        </Text>
+
+        <Switch
+          size="lg"
+          isChecked={selectedTypes.pack}
+          onToggle={() =>
+            setSelectedTypes({ ...selectedTypes, pack: !selectedTypes.pack })
+          }
+        />
+
+        <Text fontSize="lg" fontWeight="bold">
+          Trips
+        </Text>
+
+        <Switch
+          size="lg"
+          isChecked={selectedTypes.trip}
+          onToggle={() =>
+            setSelectedTypes({ ...selectedTypes, trip: !selectedTypes.trip })
+          }
+        />
+
+        <Text fontSize="lg" fontWeight="bold">
+          Sort By:
+        </Text>
+
+        <DropdownComponent
+          value={queryString}
+          data={dataValues}
+          setUnit={setQueryString}
+          style={styles.dropdown}
+        />
+      </HStack>
 
       <Stack
         direction={["column", "column", "column", "row"]}

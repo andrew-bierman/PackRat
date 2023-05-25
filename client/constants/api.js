@@ -8,6 +8,7 @@ if (ENVIRONMENT === "production") {
   api = API_URL;
 } else {
   api = "http://localhost:3000";
+  // api = "https://packrat.onrender.com";
 }
 
 export { api };

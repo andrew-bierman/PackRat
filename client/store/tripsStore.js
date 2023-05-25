@@ -35,10 +35,50 @@ const tripsSlice = createSlice({
   name: "trips",
   initialState: {
     trips: [],
+    newTrip: {
+      name: "",
+      description: "",
+      startDate: "",
+      endDate: "",
+      location: "",
+      trail: "",
+      weather: {},
+      packId: "",
+    },
     isLoading: false,
     error: null,
   },
-  reducers: {},
+  reducers: {
+    updateNewTrip(state, action) {
+      state.newTrip = action.payload;
+    },
+    updateNewTripVersatile(state, action) {
+      // accepts an object with a key and value
+      state.newTrip[action.payload.key] = action.payload.value;
+    },
+    updateNewTripPack(state, action) {
+      console.log("action.payload in updatenewtrippack", action.payload);
+      state.newTrip.packId = action.payload;
+    },
+    updateNewTripWeather(state, action) {
+      state.newTrip.weather = action.payload;
+    },
+    updateNewTripTrail(state, action) {
+      state.newTrip.trail = action.payload;
+    },
+    resetNewTrip(state) {
+      state.newTrip = {
+        name: "",
+        description: "",
+        startDate: "",
+        endDate: "",
+        location: "",
+        trail: "",
+        weather: {},
+        packId: "",
+      };
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(deleteTrip.pending, (state) => {
@@ -107,5 +147,14 @@ const tripsSlice = createSlice({
       });
   },
 });
+
+export const {
+  updateNewTrip,
+  updateNewTripVersatile,
+  updateNewTripPack,
+  updateNewTripWeather,
+  updateNewTripTrail,
+  resetNewTrip,
+} = tripsSlice.actions;
 
 export default tripsSlice.reducer;
