@@ -6,15 +6,33 @@ import DropdownComponent from "./Dropdown";
 import { theme } from "../theme";
 import { useState } from "react";
 
+import { addPackItem } from "../store/packsStore";
+import { useDispatch, useSelector } from "react-redux";
+import { CustomModal } from "./modal";
+
 const data = ["oz", "lb", "g", "kg"];
 
 export const AddItem = ({ packId }) => {
+  const dispatch = useDispatch();
+
   const [name, setName] = useState("");
   const [weight, setWeight] = useState("");
   const [quantity, setQuantity] = useState("");
   const [unit, setUnit] = useState("");
 
-  const { addItem } = useAddItem();
+  // const { addItem } = useAddItem();
+
+  const isLoading = useSelector((state) => state.packs.isLoading);
+  const error = useSelector((state) => state.packs.error);
+  const isError = error !== null;
+
+  const handleAddPackItem = async (item) => {
+    dispatch(addPackItem({ name, weight, quantity, unit, packId }));
+
+    setName("");
+    setWeight("");
+    setQuantity("");
+  };
 
   return (
     <Box style={styles.container}>
@@ -60,14 +78,12 @@ export const AddItem = ({ packId }) => {
       </Box>
       <Button
         onPress={() => {
-          addItem.mutate({ name, weight, quantity, unit, packId });
-          setName("");
-          setQuantity("");
-          setWeight("");
+          // addItem.mutate({ name, weight, quantity, unit, packId });
+          handleAddPackItem({ name, weight, quantity, unit, packId });
         }}
       >
         <Text style={{ color: theme.colors.text }}>
-          {addItem.isLoading ? "Loading.." : "Add Item"}
+          {isLoading ? "Loading.." : "Add Item"}
         </Text>
       </Button>
     </Box>

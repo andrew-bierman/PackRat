@@ -1,56 +1,45 @@
 import Pack from "../models/packModel.js";
 import mongoose from "mongoose";
+import { calculatePackScore } from "../utils/scorePack.js"
 
 export const getPublicPacks = async (req, res) => {
-  const { queryBy } = req.query;
-
   try {
-    let publicPacks;
+    const { queryBy } = req.query;
+
+    let publicPacksPipeline = [
+      {
+        $match: { is_public: true },
+      },
+      {
+        $lookup: {
+          from: "items", // name of the foreign collection
+          localField: "_id",
+          foreignField: "packs",
+          as: "items",
+        },
+      },
+      {
+        $addFields: {
+          total_weight: {
+            $sum: {
+              $map: {
+                input: "$items",
+                as: "item",
+                in: { $multiply: ["$$item.weight", "$$item.quantity"] },
+              },
+            },
+          },
+        },
+      },
+    ];
+
     if (queryBy === "Favorite") {
-      publicPacks = await Pack.aggregate([
-        {
-          $match: { is_public: true },
-        },
-        {
-          $lookup: {
-            from: "items", // name of the foreign collection
-            localField: "_id",
-            foreignField: "packId",
-            as: "lookup-data",
-          },
-        },
-        {
-          $addFields: {
-            total_weight: {
-              $sum: "$lookup-data.weight",
-            },
-          },
-        },
-        { $project: { "lookup-data": 0 } },
-      ]).sort({ favorites_count: -1 });
+      publicPacksPipeline.push({ $sort: { favorites_count: -1 } });
     } else {
-      publicPacks = await Pack.aggregate([
-        {
-          $match: { is_public: true },
-        },
-        {
-          $lookup: {
-            from: "items", // name of the foreign collection
-            localField: "_id",
-            foreignField: "packId",
-            as: "lookup-data",
-          },
-        },
-        {
-          $addFields: {
-            total_weight: {
-              $sum: "$lookup-data.weight",
-            },
-          },
-        },
-        { $project: { "lookup-data": 0 } },
-      ]).sort({ _id: -1 });
+      publicPacksPipeline.push({ $sort: { _id: -1 } });
     }
+
+    const publicPacks = await Pack.aggregate(publicPacksPipeline);
 
     res.status(200).json(publicPacks);
   } catch (error) {
@@ -59,102 +48,96 @@ export const getPublicPacks = async (req, res) => {
 };
 
 export const getPacks = async (req, res) => {
-  const { ownerId } = req.params;
-
   try {
-    const aggr = await Pack.aggregate([
+    const { ownerId } = req.params;
+
+    const packs = await Pack.aggregate([
       {
-        $match: { owner_id: new mongoose.Types.ObjectId(ownerId) },
+        $match: { owners: new mongoose.Types.ObjectId(ownerId) },
       },
       {
         $lookup: {
           from: "items", // name of the foreign collection
           localField: "_id",
-          foreignField: "packId",
-          as: "lookup-data",
+          foreignField: "packs",
+          as: "items",
         },
       },
       {
         $addFields: {
           total_weight: {
-            $sum: "$lookup-data.weight",
+            $sum: {
+              $map: {
+                input: "$items",
+                as: "item",
+                in: { $multiply: ["$$item.weight", "$$item.quantity"] },
+              },
+            },
           },
         },
       },
-      { $project: { "lookup-data": 0 } },
     ]);
 
-    res.status(200).json(aggr);
+    res.status(200).json(packs);
   } catch (error) {
     res.status(404).json({ msg: "Users cannot be found" });
   }
 };
 
 export const getPackById = async (req, res) => {
-  const { _id } = req.body;
-
   try {
-    const pack = await Pack.findById({ _id }).populate("total_weight");
+    const { packId } = req.params;
 
-    const aggr = await Pack.aggregate([
-      {
-        $match: { _id: new mongoose.Types.ObjectId(_id) },
-      },
-      {
-        $lookup: {
-          from: "items", // name of the foreign collection
-          localField: "_id",
-          foreignField: "packId",
-          as: "lookup-data",
-        },
-      },
-      {
-        $addFields: {
-          total_weight: {
-            $sum: "$lookup-data.weight",
-          },
-        },
-      },
-      { $project: { "lookup-data": 0 } },
-    ]);
+    const objectId = new mongoose.Types.ObjectId(packId);
+    const pack = await Pack.findById(objectId).populate("items");
 
-    res.status(200).json(aggr);
+    res.status(200).json(pack);
   } catch (error) {
+    console.error("getPackById error", error); // Add this line
     res.status(404).json({ msg: "Pack cannot be found" });
   }
 };
 
 export const addPack = async (req, res) => {
-  const newPack = {
-    ...req.body,
-    items: [],
-    is_public: false,
-    favorited_by: [],
-    favorites_count: 0,
-    createdAt: new Date(),
-  };
-
   try {
-    const exists = await Pack.find({ name: req.body.name });
+    const { name, owner_id } = req.body;
 
-    if (exists[0]?.name?.toLowerCase() === req.body.name.toLowerCase()) {
-      throw new Error("Pack already exists");
-    }
+    const newPack = {
+      // ...packBody,
+      name: name,
+      owner_id: owner_id,
+      items: [],
+      is_public: false,
+      favorited_by: [],
+      favorites_count: 0,
+      createdAt: new Date(),
+      owners: [owner_id],
+    };
 
-    await Pack.create(newPack);
-    res.status(200).json({ msg: "success" });
+    console.log("newPack", newPack);
+
+    const exists = await Pack.find({ name: name });
+
+    // if (exists[0]?.name?.toLowerCase() === name.toLowerCase()) {
+    //   throw new Error("Pack already exists");
+    // }
+
+    const createdPack = await Pack.create(newPack);
+    res.status(200).json({ msg: "success", createdPack });
   } catch (error) {
     res.status(404).json({ msg: error.msg });
   }
 };
 
 export const editPack = async (req, res) => {
-  const { _id } = req.body;
-
   try {
+    const { _id } = req.body
+    
     const newPack = await Pack.findOneAndUpdate({ _id }, req.body, {
       returnOriginal: false,
     });
+
+    console.log("newPack", newPack);
 
     res.status(200).json(newPack);
   } catch (error) {
@@ -163,11 +146,33 @@ export const editPack = async (req, res) => {
 };
 
 export const deletePack = async (req, res) => {
-  const { packId } = req.body;
   try {
+    const { packId } = req.body
+
     await Pack.findOneAndDelete({ _id: packId });
     res.status(200).json({ msg: "pack was deleted successfully" });
   } catch (error) {
     res.status(404).json({ msg: "Unable to delete pack" });
+  }
+};
+
+export const scorePack = async (req, res) => {
+  const { packId } = req.body;
+
+  try {
+    const packData = await Pack.findById(packId).populate("items");
+
+    // Call the scoring function to calculate the pack score
+    const packScore = calculatePackScore(packData);
+
+    await Pack.findByIdAndUpdate(
+      { _id: packId },
+      { score: packScore },
+      { returnOriginal: false }
+    );
+
+    res.status(200).json({ msg: "Pack was scored successfully" });
+  } catch (error) {
+    res.status(404).json({ msg: "Unable to score pack" });
   }
 };
