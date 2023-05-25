@@ -12,7 +12,10 @@ import {
   Stack,
   Switch,
 } from "native-base";
-import useChangePublicStatus from "../../hooks/useChangePublicStatus";
+// import useChangePublicStatus from "../../hooks/useChangePublicStatus";
+import { changePackStatus } from "../../store/packsStore";
+
+import { useDispatch, useSelector } from "react-redux";
 
 export default function PackCard({
   _id,
@@ -23,7 +26,15 @@ export default function PackCard({
   favorites_count,
   createdAt,
 }) {
-  const { changeStatus } = useChangePublicStatus();
+  // const { changeStatus } = useChangePublicStatus();
+
+  const dispatch = useDispatch();
+
+  const handleChangePackStatus = () => {
+    dispatch(changePackStatus({ _id, isPublic: !is_public }));
+  };
+
+  const isLoading = useSelector((state) => state.packs.isLoading);
 
   return (
     <Box alignItems="center" padding="5">
@@ -61,14 +72,12 @@ export default function PackCard({
                 }}
               >
                 {name}
-                {changeStatus.isLoading ? (
+                {isLoading ? (
                   <Text>Loading....</Text>
                 ) : (
                   <Switch
                     isChecked={is_public}
-                    onToggle={() =>
-                      changeStatus.mutate({ _id, is_public: !is_public })
-                    }
+                    onToggle={handleChangePackStatus}
                     size="sm"
                   />
                 )}

@@ -2,6 +2,7 @@ export const theme = {
   colors: {
     primary: "#0A84FF",
     background: "#0284c7",
+    secondaryBlue: "#0C66A1",
     card: "#fafafa",
     text: "#FFFFFF",
     border: "#fafafa",
@@ -12,6 +13,7 @@ export const theme = {
     cardIconColor: "#22c55e",
     iconColor: "#FFFFFF",
     weatherIcon: "#0284c7",
+    drawerIconColor: "#3B3B3B",
   },
   font: {
     headerFont: 56,

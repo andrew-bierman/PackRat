@@ -4,25 +4,20 @@ import { Platform } from "react-native";
 import Navigation from "../screens/NavigationHeader";
 
 import { Provider } from "react-redux";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { queryClient } from "../constants/queryClient";
+
 import { NativeBaseProvider } from "native-base";
 import store from "../store/store";
 import NavigationMobile from "../screens/NavigationMobile";
-
-import { ProviderAuth } from "../auth/provider";
+import Footer from "../components/footer/Footer";
 
 export default function HomeLayout() {
   return (
-    <ProviderAuth>
+    <Provider store={store}>
       <NativeBaseProvider>
-        <Provider store={store}>
-          <QueryClientProvider client={queryClient}>
-            {Platform.OS === "web" ? <Navigation /> : <NavigationMobile />}
-            <Slot />
-          </QueryClientProvider>
-        </Provider>
+        {Platform.OS === "web" ? <Navigation /> : <NavigationMobile />}
+        <Slot />
+        { Platform.OS ==="web" ? <Footer /> : null }
       </NativeBaseProvider>
-    </ProviderAuth>
+    </Provider>
   );
 }

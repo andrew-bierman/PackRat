@@ -1,15 +1,30 @@
+import React, { useEffect } from "react";
 import { NativeBaseProvider, Container, Box, Text, Stack } from "native-base";
 import { StyleSheet } from "react-native";
 import PacksContainer from "./PacksContainer";
 import { useAuth } from "../../auth/provider";
 import { theme } from "../../theme";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import useGetPacks from "../../hooks/useGetPacks";
+// import useGetPacks from "../../hooks/useGetPacks";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserPacks } from "../../store/packsStore";
 
 export default function ProfileContainer() {
-  const { user } = useAuth();
+  // const { user } = useAuth();
+  const dispatch = useDispatch();
 
-  const { data, isLoading, isError, error } = useGetPacks(user?._id);
+  useEffect(() => {
+    dispatch(fetchUserPacks(user?._id));
+  }, [dispatch, user?._id]);
+
+  const user = useSelector((state) => state.auth.user);
+  const PacksData = useSelector((state) => state.packs);
+
+  // const { data } = useGetPacks(user?._id);
+  console.log(user);
+
+  const isLoading = useSelector((state) => state?.auth?.loading);
+  const error = useSelector((state) => state?.auth?.error);
 
   if (isLoading) return <Text>Loading...</Text>;
 
@@ -27,7 +42,7 @@ export default function ProfileContainer() {
           </Box>
           <Box style={styles.cardInfo}>
             <Text>Packs</Text>
-            <Text>{data?.length}</Text>
+            <Text>{PacksData?.packs?.length}</Text>
           </Box>
           <Box style={styles.cardInfo}>
             <Text>Certified</Text>
@@ -50,9 +65,13 @@ export default function ProfileContainer() {
         >
           <Text style={{ fontSize: 18, fontWeight: 600 }}>Packs</Text>
         </Box>
-        {isError ? <Text>{error}</Text> : null}
+        {error ? <Text>{error}</Text> : null}
       </Box>
-      {isLoading ? <Text>Loading....</Text> : <PacksContainer data={data} />}
+      {isLoading ? (
+        <Text>Loading....</Text>
+      ) : (
+        <PacksContainer data={PacksData?.packs} />
+      )}
     </Box>
   );
 }

@@ -11,14 +11,24 @@ import PacksContainer from "./PacksContainer";
 import { useAuth } from "../../auth/provider";
 import { theme } from "../../theme";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import useGetPacks from "../../hooks/useGetPacks";
+// import useGetPacks from "../../hooks/useGetPacks";
+
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserPacks } from "../../store/packsStore";
 
 export default function ProfileContainerMobile() {
-  const { user } = useAuth();
+  // const { user } = useAuth();
+  const dispatch = useDispatch();
 
-  const { data, isLoading, isError, error } = useGetPacks(user?._id);
+  useEffect(() => {
+    dispatch(fetchUserPacks(user?._id));
+  }, [dispatch, user?._id]);
+  const user = useSelector((state) => state.auth.user);
 
-  if (isLoading) return <Text>Loading...</Text>;
+  // const { data, isLoading, isError, error } = useGetPacks(user?._id);
+  const PacksData = useSelector((state) => state?.packs);
+
+  if (PacksData?.isLoading) return <Text>Loading...</Text>;
 
   return (
     <ScrollView style={{ flex: 1 }}>
@@ -38,7 +48,7 @@ export default function ProfileContainerMobile() {
             </Box>
             <Box style={styles.cardInfo}>
               <Text>Packs</Text>
-              <Text>{data?.length}</Text>
+              <Text>{PacksData?.packs?.length}</Text>
             </Box>
             <Box style={styles.cardInfo}>
               <Text>Certified</Text>
@@ -61,9 +71,13 @@ export default function ProfileContainerMobile() {
           >
             <Text style={{ fontSize: 18, fontWeight: 600 }}>Packs</Text>
           </Box>
-          {isError ? <Text>{error}</Text> : null}
+          {PacksData.error != "" ? <Text>{PacksData?.error}</Text> : null}
         </Box>
-        {isLoading ? <Text>Loading....</Text> : <PacksContainer data={data} />}
+        {PacksData?.isLoading ? (
+          <Text>Loading....</Text>
+        ) : (
+          <PacksContainer data={PacksData?.packs} />
+        )}
       </Box>
     </ScrollView>
   );
