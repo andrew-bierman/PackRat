@@ -1,7 +1,7 @@
 import { Container, Box, Text, HStack, Stack, ScrollView } from "native-base";
 import { StyleSheet } from "react-native";
 import { useAuth } from "../../auth/provider";
-import CardMobile from "./CardMobile";
+import FeedCardMobile from "./FeedCardMobile";
 // import useGetPublicPacks from "../../hooks/useGetPublicPacks";
 import { theme } from "../../theme";
 import DropdownComponent from "../Dropdown";
@@ -41,7 +41,7 @@ export default function FeedMobile() {
         >
           {publicParksData?.length > 0 ? (
             publicParksData?.map((pack) => (
-              <CardMobile key={pack?._id} {...{ ...pack }} />
+              <FeedCardMobile key={pack?._id} {...{ ...pack }} />
             ))
           ) : (
             <Text>No Public Packs Available</Text>

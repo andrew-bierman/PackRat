@@ -1,7 +1,7 @@
 import { Container, Box, Text, HStack, Stack, Switch } from "native-base";
 import { StyleSheet } from "react-native";
 
-import Card from "./Card";
+import Card from "./FeedCard";
 // import useGetPublicPacks from "../../hooks/useGetPublicPacks";
 import { theme } from "../../theme";
 import DropdownComponent from "../Dropdown";
