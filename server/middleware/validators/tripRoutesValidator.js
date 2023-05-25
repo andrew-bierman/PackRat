@@ -8,7 +8,7 @@ export const getTrips = celebrate({
     }),
 });
 export const getTripById = celebrate({
-    [Segments.BODY]: Joi.object().keys({
+    [Segments.PARAMS]: Joi.object().keys({
         tripId: JoiObjectId().required(),
     }),
 });
