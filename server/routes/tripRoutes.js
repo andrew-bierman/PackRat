@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  getPublicTrips,
   getTrips,
   getTripById,
   addTrip,
@@ -10,9 +11,9 @@ import * as validator from "../middleware/validators/index.js"
 
 const router = express.Router();
 
-// router.get("/", getPublicTrips); // getPublicTrips is not defined yet
-router.get("/", validator.getTrips, getTrips);
-router.get("/:tripId", validator.getTripById, getTripById);
+router.get("/", getPublicTrips);
+router.get("/:ownerId", validator.getTrips, getTrips);
+router.get("/t/:tripId", validator.getTripById, getTripById);
 router.post("/", validator.addTrip, addTrip);
 router.put("/", validator.editTrip, editTrip);
 router.delete("/", validator.deleteTrip, deleteTrip);
