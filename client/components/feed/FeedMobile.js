@@ -1,4 +1,4 @@
-import { Container, Box, Text, HStack, Stack, ScrollView } from "native-base";
+import { Container, Box, Text, HStack, Stack, ScrollView, VStack } from "native-base";
 import { StyleSheet } from "react-native";
 import { useAuth } from "../../auth/provider";
 import FeedCardMobile from "./FeedCardMobile";
@@ -25,7 +25,7 @@ export default function FeedMobile() {
   }, [queryString]);
 
   return (
-    <ScrollView>
+    <VStack>
       <Box style={styles.mainContainer}>
         <DropdownComponent
           value={queryString}
@@ -48,7 +48,7 @@ export default function FeedMobile() {
           )}
         </Stack>
       </Box>
-    </ScrollView>
+    </VStack>
   );
 }
 

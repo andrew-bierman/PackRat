@@ -8,6 +8,7 @@ import {
   HStack,
   Badge,
   VStack,
+  Box,
 } from "native-base";
 import { StyleSheet, TouchableOpacity, ScrollView } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
@@ -48,7 +49,7 @@ const FeedPreview = () => {
 const Dashboard = () => {
   return (
     <VStack style={styles.container}>
-      <ScrollView contentContainerStyle={styles.content}>
+      <Box contentContainerStyle={styles.content}>
         <Text style={styles.title}>Welcome, User!</Text>
         <View style={styles.cardContainer}>
           <TouchableOpacity
@@ -86,7 +87,7 @@ const Dashboard = () => {
             </Card>
           </TouchableOpacity>
         </View>
-      </ScrollView>
+      </Box>
     </VStack>
   );
 };
@@ -95,10 +96,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
+    flexGrow: 1,
+    backgroundColor: theme.colors.background,
   },
   content: {
     flexGrow: 1,
-    justifyContent: "start",
+    justifyContent: "flex-start",
     alignItems: "stretch",
     paddingHorizontal: 20,
   },
