@@ -10,11 +10,13 @@ import {
 import { theme } from "../../theme";
 // import { useAuth } from "../../auth/provider";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Drawer() {
   // const { signOut } = useAuth();
   const dispatch = useDispatch();
+
+  const user = useSelector((state) => state.auth.user);
 
   const handleSignOut = () => {
     dispatch(signOut());
@@ -37,70 +39,100 @@ export default function Drawer() {
             />
           </Link>
         </View>
-        <Link href="/">
-          <View style={styles.link}>
-            <Entypo
-              name="home"
-              size={24}
-              color={theme.colors.drawerIconColor}
-            />
+        {user ? (
+          <>
+            <Link href="/">
+              <View style={styles.link}>
+                <Entypo
+                  name="home"
+                  size={24}
+                  color={theme.colors.drawerIconColor}
+                />
 
-            <Text style={{ color: "#3B3B3B" }}>Home</Text>
-          </View>
-        </Link>
-        <Link href="/trips">
-          <View style={styles.link}>
-            <MaterialCommunityIcons
-              name="weather-pouring"
-              size={24}
-              color={theme.colors.drawerIconColor}
-            />
+                <Text style={{ color: "#3B3B3B" }}>Home</Text>
+              </View>
+            </Link>
+            <Link href="/trips">
+              <View style={styles.link}>
+                <MaterialCommunityIcons
+                  name="weather-pouring"
+                  size={24}
+                  color={theme.colors.drawerIconColor}
+                />
 
-            <Text style={{ color: "#3B3B3B" }}>Trips</Text>
-          </View>
-        </Link>
-        <Link href="profile">
-          <View style={styles.link}>
-            <FontAwesome
-              name="book"
-              size={24}
-              color={theme.colors.drawerIconColor}
-            />
-            <Text style={{ color: "#3B3B3B" }}>Profile</Text>
-          </View>
-        </Link>
-        <Link href="/packs">
-          <View style={styles.link}>
-            <MaterialIcons
-              name="backpack"
-              size={24}
-              color={theme.colors.drawerIconColor}
-            />
+                <Text style={{ color: "#3B3B3B" }}>Trips</Text>
+              </View>
+            </Link>
+            <Link href="profile">
+              <View style={styles.link}>
+                <FontAwesome
+                  name="book"
+                  size={24}
+                  color={theme.colors.drawerIconColor}
+                />
+                <Text style={{ color: "#3B3B3B" }}>Profile</Text>
+              </View>
+            </Link>
+            <Link href="/packs">
+              <View style={styles.link}>
+                <MaterialIcons
+                  name="backpack"
+                  size={24}
+                  color={theme.colors.drawerIconColor}
+                />
 
-            <Text style={{ color: "#3B3B3B" }}>Packs</Text>
-          </View>
-        </Link>
-        <Link href="/about">
-          <View style={styles.link}>
-            <MaterialIcons
-              name="info"
-              size={24}
-              color={theme.colors.drawerIconColor}
-            />
+                <Text style={{ color: "#3B3B3B" }}>Packs</Text>
+              </View>
+            </Link>
+            <Link href="/about">
+              <View style={styles.link}>
+                <MaterialIcons
+                  name="info"
+                  size={24}
+                  color={theme.colors.drawerIconColor}
+                />
 
-            <Text style={{ color: "#3B3B3B" }}>About</Text>
+                <Text style={{ color: "#3B3B3B" }}>About</Text>
+              </View>
+            </Link>
+            <View style={styles.link}>
+              <MaterialIcons
+                name="logout"
+                size={24}
+                color={theme.colors.drawerIconColor}
+              />
+              <Text
+                style={{ color: "#3B3B3B" }}
+                onPress={() => handleSignOut()}
+              >
+                Logout
+              </Text>
+            </View>
+          </>
+        ) : (
+          <View>
+            <Link href="/sign-in">
+              <View style={styles.link}>
+                <MaterialIcons
+                  name="login"
+                  size={24}
+                  color={theme.colors.drawerIconColor}
+                />
+                <Text style={{ color: "#3B3B3B" }}>Login</Text>
+              </View>
+            </Link>
+            <Link href="/signup">
+              <View style={styles.link}>
+                <MaterialIcons
+                  name="person-add"
+                  size={24}
+                  color={theme.colors.drawerIconColor}
+                />
+                <Text style={{ color: "#3B3B3B" }}>Sign Up</Text>
+              </View>
+            </Link>
           </View>
-        </Link>
-        <View style={styles.link}>
-          <MaterialIcons
-            name="logout"
-            size={24}
-            color={theme.colors.drawerIconColor}
-          />
-          <Text style={{ color: "#3B3B3B" }} onPress={() => handleSignOut()}>
-            Logout
-          </Text>
-        </View>
+        )}
       </View>
     </>
   );
