@@ -48,6 +48,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     height: "100%",
     width: "100%",
+    minHeight: "100%",
+    minWidth: "100%",
     // minHeight: "100vh",
     // minWidth: "100vw",
   },
