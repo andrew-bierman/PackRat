@@ -11,13 +11,17 @@ import {
   HStack,
   Stack,
   Switch,
+  Button,
+  Link,
 } from "native-base";
 // import useChangePublicStatus from "../../hooks/useChangePublicStatus";
 import { changePackStatus } from "../../store/packsStore";
 
 import { useDispatch, useSelector } from "react-redux";
 
-export default function PackCard({
+export default function UserDataCard({
+  type, // "pack" or "trip"
+  destination,
   _id,
   name,
   total_weight,
@@ -30,8 +34,13 @@ export default function PackCard({
 
   const dispatch = useDispatch();
 
-  const handleChangePackStatus = () => {
-    dispatch(changePackStatus({ _id, isPublic: !is_public }));
+  const handleChangeStatus = () => {
+    if (type === "pack") {
+      dispatch(changePackStatus({ _id, is_public: !is_public }));
+    } else if (type === "trip") {
+      // Dispatch action for trips
+      // ...
+    }
   };
 
   const isLoading = useSelector((state) => state.packs.isLoading);
@@ -77,26 +86,43 @@ export default function PackCard({
                 ) : (
                   <Switch
                     isChecked={is_public}
-                    onToggle={handleChangePackStatus}
+                    onToggle={handleChangeStatus}
                     size="sm"
                   />
                 )}
               </Box>
             </Heading>
-            <Text
-              fontSize="xs"
-              _light={{
-                color: "violet.500",
-              }}
-              _dark={{
-                color: "violet.400",
-              }}
-              fontWeight="500"
-              ml="-0.5"
-              mt="-1"
-            >
-              Total Weight: {total_weight}
-            </Text>
+            {type === "pack" ? (
+              <Text
+                fontSize="xs"
+                _light={{
+                  color: "violet.500",
+                }}
+                _dark={{
+                  color: "violet.400",
+                }}
+                fontWeight="500"
+                ml="-0.5"
+                mt="-1"
+              >
+                Total Weight: {total_weight}
+              </Text>
+            ) : (
+              <Text
+                fontSize="xs"
+                _light={{
+                  color: "violet.500",
+                }}
+                _dark={{
+                  color: "violet.400",
+                }}
+                fontWeight="500"
+                ml="-0.5"
+                mt="-1"
+              >
+                Destination: {destination}
+              </Text>
+            )}
           </Stack>
 
           <HStack alignItems="center" space={4} justifyContent="space-between">
@@ -141,6 +167,17 @@ export default function PackCard({
             </HStack>
           </HStack>
         </Stack>
+        <Box alignItems="center">
+          <Link href={`/${type}/${_id}`}>
+            <Button
+              _text={{
+                color: "white",
+              }}
+            >
+              View Details
+            </Button>
+          </Link>
+        </Box>
       </Box>
     </Box>
   );

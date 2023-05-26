@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { api } from "../constants/api";
-import { queryClient } from "../constants/queryClient";
 
 export const addFavorite = createAsyncThunk(
   "favorites/addFavorite",

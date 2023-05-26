@@ -1,7 +1,14 @@
 import React, { useEffect } from "react";
-import { NativeBaseProvider, Container, Box, Text, Stack } from "native-base";
+import {
+  NativeBaseProvider,
+  Container,
+  Box,
+  Text,
+  Stack,
+  VStack,
+} from "native-base";
 import { StyleSheet } from "react-native";
-import PacksContainer from "./PacksContainer";
+import UserDataContainer from "./UserDataContainer";
 import { useAuth } from "../../auth/provider";
 import { theme } from "../../theme";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -19,6 +26,7 @@ export default function ProfileContainer() {
 
   const user = useSelector((state) => state.auth.user);
   const PacksData = useSelector((state) => state.packs);
+  const tripsData = useSelector((state) => state.trips);
 
   // const { data } = useGetPacks(user?._id);
   console.log(user);
@@ -29,7 +37,7 @@ export default function ProfileContainer() {
   if (isLoading) return <Text>Loading...</Text>;
 
   return (
-    <Box style={styles.mainContainer}>
+    <VStack style={styles.mainContainer}>
       <Box w={["100%", "100%", "70%", "50%"]} style={styles.infoSection}>
         <Box style={styles.cardInfo}>
           <Text>{user?.name}</Text>
@@ -38,7 +46,7 @@ export default function ProfileContainer() {
         <Stack direction={["column", "row", "row", "row"]} style={styles.card}>
           <Box style={styles.cardInfo}>
             <Text>Trips</Text>
-            <Text>0</Text>
+            <Text>{tripsData?.trips?.length}</Text>
           </Box>
           <Box style={styles.cardInfo}>
             <Text>Packs</Text>
@@ -53,6 +61,7 @@ export default function ProfileContainer() {
             />
           </Box>
         </Stack>
+
         <Box
           style={{
             width: "100%",
@@ -70,9 +79,12 @@ export default function ProfileContainer() {
       {isLoading ? (
         <Text>Loading....</Text>
       ) : (
-        <PacksContainer data={PacksData?.packs} />
+        <Box style={{ width: "100%", height: '100%' }} space={4} alignItems="center">
+          <UserDataContainer data={PacksData?.packs} type="packs" />
+          <UserDataContainer data={tripsData?.trips} type="trips" />
+        </Box>
       )}
-    </Box>
+    </VStack>
   );
 }
 
@@ -91,8 +103,9 @@ const styles = StyleSheet.create({
     gap: 25,
     backgroundColor: "white",
     alignItems: "center",
-
     borderRadius: 12,
+    marginBottom: 25,
+    position: "relative",
   },
   card: {
     gap: 25,

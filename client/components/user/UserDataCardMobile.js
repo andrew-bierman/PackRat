@@ -3,7 +3,7 @@ import { formatDistanceToNow } from "date-fns";
 import { Box, Heading, Text, HStack, Stack, Switch } from "native-base";
 import useChangePublicStatus from "../../hooks/useChangePublicStatus";
 
-export default function PackCardMobile({
+export default function UserDataCardMobile({
   _id,
   name,
   total_weight,

@@ -42,7 +42,7 @@ export const GearList = () => {
       </Box>
       {/* <AddPack/> */}
       <AddPackContainer />
-      <PackContainer />
+      <PackContainer isCreatingTrip={true} />
       <WideColumn />
     </Stack>
   );
