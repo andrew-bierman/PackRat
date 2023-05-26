@@ -30,6 +30,13 @@ export const addTrip = celebrate({
 export const editTrip = celebrate({
     [Segments.BODY]: Joi.object().keys({
         _id: JoiObjectId().required(),
+        name: Joi.string(),
+        duration: Joi.string(),
+        weather: Joi.string(),
+        start_date: Joi.string(),
+        end_date: Joi.string(),
+        destination: Joi.string(),
+        is_public: Joi.boolean(),
     }),
 });
 export const deleteTrip = celebrate({
