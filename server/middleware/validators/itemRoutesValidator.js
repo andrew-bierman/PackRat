@@ -24,6 +24,10 @@ export const addItem = celebrate({
 export const editItem = celebrate({
     [Segments.BODY]: Joi.object().keys({
         _id: JoiObjectId().required(),
+        name: Joi.string(),
+        weight: Joi.string(),
+        quantity: Joi.string(),
+        unit: Joi.string(),
     }),
 });
 export const deleteItem = celebrate({
