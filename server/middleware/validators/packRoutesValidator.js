@@ -16,11 +16,14 @@ export const addPack = celebrate({
     [Segments.BODY]: Joi.object().keys({
         name: Joi.string().required(),
         owner_id: JoiObjectId().required(),
+        is_public: Joi.boolean(),
     }),
 });
 export const editPack = celebrate({
     [Segments.BODY]: Joi.object().keys({
         _id: JoiObjectId().required(),
+        name: Joi.string(),
+        is_public: Joi.boolean(),
     }),
 });
 export const deletePack = celebrate({
