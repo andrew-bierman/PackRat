@@ -7,7 +7,7 @@ import {
   Platform,
   TouchableOpacity,
 } from "react-native";
-import { FontAwesome } from "@expo/vector-icons";
+import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
 import { theme } from "../../theme";
 import { Desktop, Mobile, Tablet } from "../../media";
 import { Button, HStack } from "native-base";
@@ -18,6 +18,12 @@ const AboutContent = ({ desktopContainer, isMobile }) => {
     // Add the URL of your GitHub repo here
     const githubUrl = "https://github.com/andrew-bierman/PackRat";
     Linking.openURL(githubUrl);
+  };
+
+  const handleDiscordLink = () => {
+    // Add the URL of your Discord server here
+    const discordUrl = "https://discord.gg/jFUuYBTXfY";
+    Linking.openURL(discordUrl);
   };
 
   return (
@@ -40,14 +46,28 @@ const AboutContent = ({ desktopContainer, isMobile }) => {
         </Text>
       </View>
       <View style={desktopContainer}>
-        <View style={styles.buttonContainer}>
-          <Button style={styles.button} onPress={handleGithubLink}>
-            <HStack>
-              <FontAwesome name="github" style={styles.githubIcon} />
-              <Text style={styles.githubText}>View on GitHub</Text>
-            </HStack>
-          </Button>
-        </View>
+        <HStack>
+          <View style={styles.buttonContainer}>
+            <Button style={styles.githubButton} onPress={handleGithubLink}>
+              <HStack>
+                <FontAwesome name="github" style={styles.githubIcon} />
+                <Text style={styles.githubText}>View on GitHub</Text>
+              </HStack>
+            </Button>
+            <Button
+              style={styles.discordButton}
+              // onPress={handleDiscordLink}
+            >
+              <HStack>
+                <MaterialCommunityIcons
+                  name="discord"
+                  style={styles.githubIcon}
+                />
+                <Text style={styles.githubText}>Join Us on Discord</Text>
+              </HStack>
+            </Button>
+          </View>
+        </HStack>
       </View>
     </View>
   );
@@ -85,7 +105,6 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.background,
     padding: 20,
     alignItems: "center",
-    justifyContent: "center",
   },
   headerContainer: {
     flexDirection: "row",
@@ -100,16 +119,32 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   buttonContainer: {
-    marginTop: 20,
-    marginLeft: Platform.OS === "web" ? 0 : 20,
-  },
-  button: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: theme.colors.primary,
+    marginBottom: 20,
+    marginTop: 20,
+    marginLeft: Platform.OS === "web" ? 0 : 20,
+    marginRight: Platform.OS === "web" ? 0 : 20,
+  },
+  githubButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    // backgroundColor: theme.colors.primary,
+    margin: 5,
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 4,
+    backgroundColor: "#24292E",
+  },
+  discordButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    // backgroundColor: theme.colors.primary,
+    margin: 5,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 4,
+    backgroundColor: "#7289DA",
   },
   githubIcon: {
     fontSize: 24,
