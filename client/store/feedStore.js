@@ -14,8 +14,10 @@ export const getPublicPacks = createAsyncThunk(
 
 export const getPublicTrips = createAsyncThunk(
   "feed/getPublicTrips",
-  async () => {
-    const response = await axios.get(`${api}/trips/public`);
+  async (queryBy) => {
+    const response = await axios.get(
+      `${api}/trip/?queryBy=${queryBy || "Favorite"}`
+    );
     return response.data;
   }
 );
@@ -36,7 +38,14 @@ const feedSlice = createSlice({
         state.error = null;
       })
       .addCase(getPublicPacks.fulfilled, (state, action) => {
-        state.publicPacks = action.payload;
+        // map over the array of packs and add a type property to each pack
+        state.publicPacks = action.payload
+        .map((pack) => {
+          return {
+            ...pack,
+            type: "pack",
+          };
+        })
         state.isLoading = false;
         state.error = null;
       })
@@ -49,7 +58,14 @@ const feedSlice = createSlice({
         state.error = null;
       })
       .addCase(getPublicTrips.fulfilled, (state, action) => {
-        state.publicTrips = action.payload;
+        // map over the array of trips and add a type property to each trip
+        state.publicTrips = action.payload
+        .map((trip) => {
+          return {
+            ...trip,
+            type: "trip",
+          };
+        })
         state.isLoading = false;
         state.error = null;
       })
