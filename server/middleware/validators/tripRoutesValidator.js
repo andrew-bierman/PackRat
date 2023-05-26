@@ -21,12 +21,19 @@ export const addTrip = celebrate({
         end_date: Joi.string().required(),
         destination: Joi.string().required(),
         owner_id: Joi.string().required(),
-        packs: Joi.string().required(),
+        is_public: Joi.boolean(),
     }),
 });
 export const editTrip = celebrate({
     [Segments.BODY]: Joi.object().keys({
         _id: JoiObjectId().required(),
+        name: Joi.string(),
+        duration: Joi.string(),
+        weather: Joi.string(),
+        start_date: Joi.string(),
+        end_date: Joi.string(),
+        destination: Joi.string(),
+        is_public: Joi.boolean(),
     }),
 });
 export const deleteTrip = celebrate({
