@@ -6,6 +6,7 @@ module.exports = function (api) {
       "**/node_modules/mapbox-gl/dist/mapbox-gl.js",
       "**/node_modules/mapbox-gl/dist/mapbox-gl.js.map",
       "./node_modules/mapbox-gl/dist/mapbox-gl.js",
+      "./node_modules/mapbox-gl/**/*",
     ],
 
     plugins: [
