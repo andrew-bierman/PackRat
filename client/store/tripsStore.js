@@ -40,7 +40,7 @@ const tripsSlice = createSlice({
       description: "",
       startDate: "",
       endDate: "",
-      location: "",
+      destination: "",
       trail: "",
       weather: {},
       packId: "",

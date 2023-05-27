@@ -59,9 +59,9 @@ export const getTripById = async (req, res) => {
 
 export const addTrip = async (req, res) => {
   try {
-    const { name, duration, weather, start_date, end_date, destination, owner_id, packs, is_public } = req.body;
+    const { name, description, duration, weather, start_date, end_date, destination, trail, owner_id, packs, is_public } = req.body;
 
-    await Trip.create({ name, duration, weather, start_date, end_date, destination, owner_id, packs, is_public });
+    await Trip.create({ name, description, duration, weather, start_date, end_date, destination, trail, owner_id, packs, is_public });
 
     res.status(200).json({ msg: "success" });
   } catch (error) {
