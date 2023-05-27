@@ -26,9 +26,10 @@ export default function PackContainer({ isCreatingTrip = false }) {
   const [packName, setPackName] = useState("");
   const [currentPackId, setCurrentPackId] = useState(null);
 
-
   useEffect(() => {
-    dispatch(fetchUserPacks(user?._id));
+    if (user && user._id) {
+      dispatch(fetchUserPacks(user?._id));
+    }
   }, [dispatch, user?._id]);
 
   const handlePack = (name) => {
@@ -36,10 +37,9 @@ export default function PackContainer({ isCreatingTrip = false }) {
     const selectedPack = packs.find((pack) => pack.name === name);
     setCurrentPackId(selectedPack?._id);
 
-    if(isCreatingTrip && selectedPack?._id){
-      dispatch(updateNewTripPack(selectedPack?._id))
+    if (isCreatingTrip && selectedPack?._id) {
+      dispatch(updateNewTripPack(selectedPack?._id));
     }
-
   };
 
   const currentPack = useSelector((state) =>

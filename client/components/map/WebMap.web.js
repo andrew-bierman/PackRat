@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import mapboxgl from "mapbox-gl";
 import { MAPBOX_ACCESS_TOKEN } from "@env";
 import { View, StyleSheet } from "react-native";
+// import 'mapbox-gl/dist/mapbox-gl.css'
 
 mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
@@ -37,6 +38,23 @@ mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 // }
 
 const WebPackContainer = () => {
+  useEffect(() => {
+    // temporary solution to fix mapbox-gl-js missing css error
+    if (Platform.OS === "web") {
+      // inject mapbox css into head
+      const link = document.createElement("link");
+      link.href = "https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css";
+      link.rel = "stylesheet";
+      document.head.appendChild(link);
+
+      // inject mapbox js into head
+      const script = document.createElement("script");
+      script.src = "https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js";
+      script.async = true;
+      document.head.appendChild(script);
+    }
+  }, []);
+
   const mapContainer = useRef(null);
   const map = useRef(null);
   const [lng, setLng] = useState(-70);
@@ -134,16 +152,16 @@ const WebPackContainer = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 'auto',
     alignItems: "center",
     justifyContent: "center",
-    position: "relative",
+    // position: "relative",
     height: "100%",
     width: "100%",
   },
   map: {
     width: "100%",
-    height: "100%",
+    minHeight: "100%",
   },
 });
 

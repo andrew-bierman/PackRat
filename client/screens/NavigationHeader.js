@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { AuthStateListener } from "../../client/auth/AuthStateListener";
 import { signOut } from "../store/authStore";
+import SVGLogoComponent from "../components/logo";
 
 const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -36,10 +37,17 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
     <View style={desktopContainer}>
       <AuthStateListener />
       <View style={{ flexDirection: "row", alignItems: "center", gap: 1 }}>
-        <Image
+        {/* <Image
           style={isMobile ? styles.smallLogo : styles.logo}
           source={packratlogo}
-        />
+        /> */}
+        <View style={{ margin: '10px' }}>
+          <SVGLogoComponent
+            width={isMobile ? 48 : 64}
+            height={isMobile ? 48 : 64}
+            fill="#fff"
+          />
+        </View>
         <Text
           style={{
             color: theme.colors.text,

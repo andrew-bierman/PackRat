@@ -12,7 +12,7 @@ import {
 import { Stack as Header } from "expo-router";
 
 import { theme } from "../../theme";
-import Card from "../../components/Card";
+import TripCard from "../../components/TripCard";
 import WeatherCard from "../../components/WeatherCard";
 
 import { FontAwesome } from "@expo/vector-icons";
@@ -57,7 +57,7 @@ export default function Trips() {
       ) : null}
       <Box style={styles.mutualStyles}>
         <Stack m={[0, 0, 12, 16]} style={{ gap: 25 }}>
-          <Card
+          <TripCard
             title="Where are you heading?"
             isSearch={true}
             Icon={() => (
@@ -71,7 +71,7 @@ export default function Trips() {
 
           <WeatherCard weatherObject={weatherObject} />
 
-          <Card
+          <TripCard
             title="Nearby Trails"
             value="Trail List"
             isTrail={true}
@@ -85,7 +85,7 @@ export default function Trips() {
             )}
           />
 
-          <Card
+          <TripCard
             title="Nearby Parks"
             value="Parks List"
             data={parksData}
@@ -99,7 +99,7 @@ export default function Trips() {
           />
           <GearList />
 
-          <Card
+          <TripCard
             Icon={() => (
               <FontAwesome5
                 name="route"

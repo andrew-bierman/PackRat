@@ -1,3 +1,4 @@
+import React, { useEffect } from "react";
 import {
   NativeBaseProvider,
   Container,
@@ -76,7 +77,7 @@ export default function ProfileContainerMobile() {
         {PacksData?.isLoading ? (
           <Text>Loading....</Text>
         ) : (
-          <PacksContainer data={PacksData?.packs} />
+          <UserDataContainer data={PacksData?.packs} type='packs'/>
         )}
       </Box>
     </ScrollView>
