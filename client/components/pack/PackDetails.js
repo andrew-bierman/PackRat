@@ -15,6 +15,7 @@ import { DetailsComponent } from "../details";
 import { StyleSheet } from "react-native";
 import { theme } from "../../theme";
 import { CLIENT_URL } from "@env";
+import ScoreContainer from "../ScoreContainer";
 
 export function PackDetails() {
   const dispatch = useDispatch();
@@ -43,7 +44,12 @@ export function PackDetails() {
             data={currentPack}
             isLoading={isLoading}
             error={error}
-            additionalComps={<TableContainer currentPack={currentPack} />}
+            additionalComps={
+              <>
+                <TableContainer currentPack={currentPack} />
+                <ScoreContainer type='pack' data={currentPack}/>
+              </>
+            }
             link={link}
           />
         </>

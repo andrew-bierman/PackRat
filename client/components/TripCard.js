@@ -10,7 +10,7 @@ import { theme } from "../theme/index";
 import { useSelector } from "react-redux";
 import MapContainer from "./map/MapContainer";
 
-export default function Card({ title, Icon, isMap, data, isSearch, isTrail }) {
+export default function TripCard({ title, Icon, isMap, data, isSearch, isTrail }) {
   const currentTrail = useSelector((state) => state.dropdown.currentTrail);
   const currentPark = useSelector((state) => state.dropdown.currentPark);
   return (
@@ -103,10 +103,10 @@ const styles = StyleSheet.create({
 
   mapCard: {
     backgroundColor: theme.colors.card,
-    flex: 1,
+    flex: 2,
 
     flexDirection: "column",
-    gap: 45,
+    // gap: 45,
     justifyContent: "center",
     alignItems: "center",
     textAlign: "center",
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: theme.padding.paddingInside,
     marginBottom: 20,
     // height: 'fit-content'
-    height: Platform.OS === "web" ? "450px" : "100%",
+    height: Platform.OS === "web" ? "650px" : "100%",
     overflow: "hidden",
   },
 });
