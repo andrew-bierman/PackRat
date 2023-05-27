@@ -7,12 +7,14 @@ const SVGLogoComponent = ({
   fill = "fff",
   ...props
 }) => {
-  const viewBoxWidth = width;
-  const viewBoxHeight = height;
-  const translateX = -viewBoxWidth / 2;
-  const translateY = -viewBoxHeight / 2;
+  // need to figure out how to get the dynamic viewbox and transform to work
 
-  console.log('fill', fill)
+  //   const viewBoxWidth = width;
+  //   const viewBoxHeight = height;
+  //   const translateX = -viewBoxWidth / 2;
+  //   const translateY = -viewBoxHeight / 2;
+
+//   console.log("fill", fill);
 
   return (
     <Svg
