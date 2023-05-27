@@ -12,12 +12,13 @@ import {
   Stack,
   Switch,
   Button,
-  Link,
 } from "native-base";
 // import useChangePublicStatus from "../../hooks/useChangePublicStatus";
 import { changePackStatus } from "../../store/packsStore";
 
 import { useDispatch, useSelector } from "react-redux";
+
+import { Link } from "expo-router";
 
 export default function UserDataCard({
   type, // "pack" or "trip"
