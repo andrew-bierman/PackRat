@@ -37,24 +37,23 @@ mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 //     }
 // }
 
-// temporary solution to fix mapbox-gl-js missing css error
-if (Platform.OS === "web") {
-  // inject mapbox css into head
-  const link = document.createElement("link");
-  link.href = "https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css";
-  link.rel = "stylesheet";
-  document.head.appendChild(link);
-
-  // inject mapbox js into head
-  const script = document.createElement("script");
-  script.src = "https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js";
-  script.async = true;
-  document.head.appendChild(script);
-
-}
-
 const WebPackContainer = () => {
+  useEffect(() => {
+    // temporary solution to fix mapbox-gl-js missing css error
+    if (Platform.OS === "web") {
+      // inject mapbox css into head
+      const link = document.createElement("link");
+      link.href = "https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css";
+      link.rel = "stylesheet";
+      document.head.appendChild(link);
 
+      // inject mapbox js into head
+      const script = document.createElement("script");
+      script.src = "https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js";
+      script.async = true;
+      document.head.appendChild(script);
+    }
+  }, []);
 
   const mapContainer = useRef(null);
   const map = useRef(null);

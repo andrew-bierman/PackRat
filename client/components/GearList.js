@@ -6,7 +6,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { AddPack, AddPackContainer } from "./pack/AddPack";
 
 import PackContainer from "./pack/PackContainer";
-import WideColumn from "./WideColumn";
+import ScoreContainer from "./ScoreContainer";
 
 export const GearList = () => {
   return (
@@ -43,7 +43,7 @@ export const GearList = () => {
       {/* <AddPack/> */}
       <AddPackContainer />
       <PackContainer isCreatingTrip={true} />
-      <WideColumn />
+      {/* <ScoreContainer /> */}
     </Stack>
   );
 };

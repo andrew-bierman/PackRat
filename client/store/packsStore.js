@@ -31,6 +31,14 @@ export const addPackItem = createAsyncThunk(
   }
 );
 
+export const scorePack = createAsyncThunk(
+  "packs/scorePack",
+  async (packId) => {
+    const response = await axios.put(`${api}/pack/score/${packId}`);
+    return response.data;
+  }
+);
+
 const packsSlice = createSlice({
   name: "packs",
   initialState: {
@@ -114,7 +122,28 @@ const packsSlice = createSlice({
       .addCase(addPackItem.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message;
-      });
+      })
+
+      .addCase(scorePack.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(scorePack.fulfilled, (state, action) => {
+        const updatedPack = action.payload.updatedPack;
+        const index = state.packs.findIndex(
+          (pack) => pack._id === updatedPack._id
+        );
+        if (index !== -1) {
+          state.packs[index] = updatedPack;
+        }
+        state.isLoading = false;
+        state.error = null;
+      })
+      .addCase(scorePack.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message;
+      })
+
   },
 });
 
