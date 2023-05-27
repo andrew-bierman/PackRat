@@ -157,22 +157,34 @@ export const deletePack = async (req, res) => {
 };
 
 export const scorePack = async (req, res) => {
-  const { packId } = req.body;
-
+  
   try {
-    const packData = await Pack.findById(packId).populate("items");
+    const { packId } = req.params;
+
+    const objectId = new mongoose.Types.ObjectId(packId);
+    const packData = await Pack.findById(objectId).populate("items")
+
+    // console.log("packData", packData)
 
     // Call the scoring function to calculate the pack score
-    const packScore = calculatePackScore(packData);
 
-    await Pack.findByIdAndUpdate(
+    const packScore = calculatePackScore(packData)
+
+    console.log("packScore", packScore)
+
+    const { scores, grades } = packScore
+
+    const updatedPack = await Pack.findByIdAndUpdate(
       { _id: packId },
-      { score: packScore },
+      { scores: scores, grades: grades },
       { returnOriginal: false }
     );
 
-    res.status(200).json({ msg: "Pack was scored successfully" });
+    console.log("updatedPack", updatedPack)
+
+    res.status(200).json({ msg: "Pack was scored successfully", updatedPack });
   } catch (error) {
-    res.status(404).json({ msg: "Unable to score pack" });
+    console.log("error", error)
+    res.status(404).json({ msg: "Unable to score pack", error });
   }
 };
