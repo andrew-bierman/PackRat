@@ -13,6 +13,22 @@ const PackSchema = new Schema({
   favorites_count: { type: Number },
   createdAt: String,
   owners: [{ type: Schema.Types.ObjectId, ref: "User", default: [] }],
+  grades: { 
+    type: Object, 
+    default: {
+      weight: "",
+      essentialItems: "",
+      redundancyAndVersatility: ""
+    }
+  },
+  scores: { 
+    type: Object, 
+    default: {
+      weightScore: 0,
+      essentialItemsScore: 0,
+      redundancyAndVersatilityScore: 0,
+    } 
+  },
 });
 
 PackSchema.virtual("total_weight").get(function () {
@@ -25,6 +41,19 @@ PackSchema.virtual("total_weight").get(function () {
     return 0;
   }
 });
+
+PackSchema.virtual("totalScore").get(function () {
+  const scoresArray = Object.values(this.scores);
+  const sum = scoresArray.reduce((total, score) => total + score, 0);
+  const average = scoresArray.length > 0 ? sum / scoresArray.length : 0;
+
+  return (
+    Math.round(average * 100) / 100
+  );
+});
+
+PackSchema.set("toObject", { virtuals: true });
+PackSchema.set("toJSON", { virtuals: true });
 
 const Pack = myDB.model("Pack", PackSchema);
 export default Pack;

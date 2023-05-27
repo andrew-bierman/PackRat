@@ -10,7 +10,7 @@ import { theme } from "../theme/index";
 import { useSelector } from "react-redux";
 import MapContainer from "./map/MapContainer";
 
-export default function Card({ title, Icon, isMap, data, isSearch, isTrail }) {
+export default function TripCard({ title, Icon, isMap, data, isSearch, isTrail }) {
   const currentTrail = useSelector((state) => state.dropdown.currentTrail);
   const currentPark = useSelector((state) => state.dropdown.currentPark);
   return (
