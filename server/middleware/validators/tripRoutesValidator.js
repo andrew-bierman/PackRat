@@ -15,13 +15,16 @@ export const getTripById = celebrate({
 export const addTrip = celebrate({
     [Segments.BODY]: Joi.object().keys({
         name: Joi.string().required(),
+        description: Joi.string().required(),
         duration: Joi.string().required(),
         weather: Joi.string().required(),
         start_date: Joi.string().required(),
         end_date: Joi.string().required(),
         destination: Joi.string().required(),
+        trail: Joi.string().required(),
         owner_id: Joi.string().required(),
-        is_public: Joi.boolean(),
+        packs: Joi.string().required(),
+        is_public: Joi.boolean().required(),
     }),
 });
 export const editTrip = celebrate({
