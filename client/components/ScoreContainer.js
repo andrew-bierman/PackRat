@@ -153,7 +153,7 @@ const GradingPieChart = ({ scores, size = 150, strokeWidth = 10 }) => {
   );
 };
 
-export default function ScoreContainer({ type, data }) {
+export default function ScoreContainer({ type, data, isOwner }) {
   const dispatch = useDispatch();
 
   const id = data._id;
@@ -169,12 +169,14 @@ export default function ScoreContainer({ type, data }) {
     pack: {
       title: isAlreadyScored ? "Pack Score" : "Score this pack!",
       subheader: "See how this pack matches up with our scoring system!",
-      description: "PackRating is our proprietary scoring system that rates packs based on their weight, essential items, and redundancy and versatility. We worked with experts to create a system that is as objective as possible. The higher the score, the better the pack!",
+      description:
+        "PackRating is our proprietary scoring system that rates packs based on their weight, essential items, and redundancy and versatility. We worked with experts to create a system that is as objective as possible. The higher the score, the better the pack!",
     },
     trip: {
       title: isAlreadyScored ? "Trip Score" : "Score this trip!",
       subheader: "See how this trip matches up with our scoring system!",
-      description: "PackRating is our proprietary scoring system that rates trips based on their weight, essential items, and redundancy and versatility. We worked with experts to create a system that is as objective as possible. The higher the score, the better the trip!"
+      description:
+        "PackRating is our proprietary scoring system that rates trips based on their weight, essential items, and redundancy and versatility. We worked with experts to create a system that is as objective as possible. The higher the score, the better the trip!",
     },
   };
 
@@ -183,13 +185,11 @@ export default function ScoreContainer({ type, data }) {
   const description = textData[type].description;
 
   const handleScoreClick = () => {
-    if(type === "pack"){
-      dispatch(scorePack(id))
-
-    } else if (type === "trip"){
-      dispatch(scoreTrip(id))
+    if (type === "pack") {
+      dispatch(scorePack(id));
+    } else if (type === "trip") {
+      dispatch(scoreTrip(id));
     }
-
   };
 
   return (
@@ -200,12 +200,12 @@ export default function ScoreContainer({ type, data }) {
             {isAlreadyScored ? title : "Score this pack!"}
           </Text>
           <Text>{subheader}</Text>
-          <Text style={{ fontWeight: 300 }}>
-            {description}
-          </Text>
-          <Button style={styles.button} onPress={handleScoreClick}>
-            <Text>Calculate Score</Text>
-          </Button>
+          <Text style={{ fontWeight: 300 }}>{description}</Text>
+          {isOwner && (
+            <Button style={styles.button} onPress={handleScoreClick}>
+              <Text>Calculate Score</Text>
+            </Button>
+          )}
         </VStack>
         {isAlreadyScored && (
           <>
