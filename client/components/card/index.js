@@ -1,12 +1,36 @@
-import React from "react";
-import { VStack, Box, Divider, Link, IconButton, Text } from "native-base";
+import React, { useState } from "react";
+import {
+  VStack,
+  Box,
+  Divider,
+  Link,
+  IconButton,
+  Text,
+  Toast,
+} from "native-base";
 import { StyleSheet, TouchableOpacity, Clipboard } from "react-native";
 import { theme } from "../../theme";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export const CustomCard = ({ title, content, footer, link }) => {
+  const [isCopied, setIsCopied] = useState(false);
+
   const handleCopyLink = () => {
     Clipboard.setString(link);
+
+    setIsCopied(true);
+
+    const resetCopyStateTimeout = setTimeout(() => {
+      setIsCopied(false);
+    }, 2000);
+
+    Toast.show({
+      title: "Link copied to clipboard",
+      placement: "bottom",
+      duration: 2000,
+    });
+
+    return () => clearTimeout(resetCopyStateTimeout);
   };
 
   return (
@@ -38,12 +62,21 @@ export const CustomCard = ({ title, content, footer, link }) => {
           </Box>
           {link && (
             <Box>
-              <MaterialCommunityIcons
-                name="link"
-                size={24}
-                color="black"
-                onPress={handleCopyLink}
-              />
+              {isCopied ? (
+                <MaterialCommunityIcons
+                  name="check"
+                  size={24}
+                  color="green"
+                  onPress={handleCopyLink}
+                />
+              ) : (
+                <MaterialCommunityIcons
+                  name="link"
+                  size={24}
+                  color="black"
+                  onPress={handleCopyLink}
+                />
+              )}
             </Box>
           )}
         </Box>
@@ -71,7 +104,10 @@ const styles = StyleSheet.create({
     gap: 45,
     justifyContent: "space-between",
     alignItems: "center",
-    padding: 15,
+    paddingLeft: 25,
+    paddingRight: 25,
+    paddingTop: 15,
+    paddingBottom: 15,
     border: "1",
   },
   containerMobile: {
