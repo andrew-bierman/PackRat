@@ -170,13 +170,15 @@ export default function UserDataCard({
         </Stack>
         <Box alignItems="center">
           <Link href={`/${type}/${_id}`}>
-            <Button
-              _text={{
-                color: "white",
+            <Text
+              color="coolGray.600"
+              _dark={{
+                color: "warmGray.200",
               }}
+              fontWeight="bold"
             >
               View Details
-            </Button>
+            </Text>
           </Link>
         </Box>
       </Box>

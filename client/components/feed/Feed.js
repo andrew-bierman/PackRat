@@ -107,7 +107,9 @@ export default function Feed({ feedType = "public" }) {
 
   return (
     <Box style={styles.mainContainer}>
-      <HStack space={3} alignItems="center">
+      <HStack space={3} alignItems="center"
+        style={styles.bar}
+      >
         <Text fontSize="lg" fontWeight="bold">
           Packs
         </Text>
@@ -164,6 +166,11 @@ const styles = StyleSheet.create({
     padding: 15,
     fontSize: 18,
     width: "100%",
+  },
+  bar: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
   },
   packsContainer: {
     flexDirection: "column",

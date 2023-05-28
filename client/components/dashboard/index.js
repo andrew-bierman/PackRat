@@ -95,9 +95,9 @@ const Dashboard = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
     flexGrow: 1,
     backgroundColor: theme.colors.background,
+    minHeight: "100vh"
   },
   content: {
     flexGrow: 1,
