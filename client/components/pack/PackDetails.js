@@ -25,10 +25,19 @@ export function PackDetails() {
   const link = `${CLIENT_URL}/packs/${packId}`;
 
   useEffect(() => {
+    if(!packId) return;
     dispatch(fetchSinglePack(packId));
   }, [dispatch, packId]);
 
   const currentPack = useSelector((state) => state.singlePack.singlePack);
+
+  const user = useSelector((state) => state.auth.user);
+
+  // check if user is owner of pack, and that pack and user exists
+  const isOwner = currentPack && user && currentPack.owner_id === user._id;
+
+  console.log('isOwner in packdetails', isOwner)
+
   const isLoading = useSelector((state) => state.singlePack.isLoading);
   const error = useSelector((state) => state.singlePack.error);
   const isError = error !== null;
@@ -47,7 +56,7 @@ export function PackDetails() {
             additionalComps={
               <>
                 <TableContainer currentPack={currentPack} />
-                <ScoreContainer type='pack' data={currentPack}/>
+                <ScoreContainer type='pack' data={currentPack} isOwner={isOwner}/>
               </>
             }
             link={link}
@@ -64,7 +73,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     minHeight: "100vh",
     gap: 15,
-    padding: 15,
+    padding: [25, 25, 0, 25], // [top, right, bottom, left
     fontSize: 18,
     width: "100%",
   },

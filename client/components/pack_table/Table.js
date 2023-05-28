@@ -292,7 +292,7 @@ export const TableContainer = ({ currentPack }) => {
 const styles = StyleSheet.create({
   container: {
     textAlign: "center",
-    width: "90%",
+    width: "100%",
     alignItems: "center",
     justifyContent: "center",
     flex: 1,

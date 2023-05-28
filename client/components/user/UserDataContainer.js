@@ -42,7 +42,7 @@ export default function UserDataContainer({ data, type }) {
               }}
               w={["100%", "100%", "100%", "auto"]}
             >
-              Create your first {typeUppercaseSingular}
+              {`Create your first ${typeUppercaseSingular}`}
             </Button>
           </Link>
         )}
