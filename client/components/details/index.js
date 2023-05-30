@@ -12,15 +12,17 @@ export const DetailsComponent = ({ type, data, additionalComps, link }) => {
         return (
           <>
             <CustomCard
-              title={data.name}
+              title={data?.name}
               link={link}
               content={
                 <>
-                  {data.description && <Text>{data.description}</Text>}
+                  {data?.description && <Text>Description: {data?.description}</Text>}
+                 
                   {additionalComps}
                 </>
               }
-              footer={data.details}
+              footer={data?.details}
+              type = "pack"
             />
           </>
         );
@@ -28,12 +30,26 @@ export const DetailsComponent = ({ type, data, additionalComps, link }) => {
         // Add trip-specific logic here
         return (
           <>
-            <View>
-              <Text>{data.title}</Text>
+                  <CustomCard
+              title={data?.name}
+              link={link}
+              content={
+                <>
+                  {data?.description && <Text>Description: {data?.description}</Text>}
+                  {data?.destination && <Text>Destination: {data?.destination}</Text>}
+                  {additionalComps}
+                </>
+              }
+              destination={data?.destination}
+              footer={data?.details}
+              type = "trip"
+            />
+            {/* <View>
+              <Text>{data?.title}</Text>
             </View>
             <View>
-              <Text>{data.details}</Text>
-            </View>
+              <Text>{data?.details}</Text>
+            </View> */}
           </>
         );
       case "item":
