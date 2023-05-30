@@ -20,7 +20,7 @@ export const getWeatherWeek = async (req, res) => {
 
   try {
     const response = await axios.get(url);
-    console.log(response.data);
+    // console.log(response.data);
     res.send(response.data);
   } catch (error) {
     res.status(404).send({
