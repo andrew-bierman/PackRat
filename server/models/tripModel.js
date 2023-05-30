@@ -14,8 +14,9 @@ const TripSchema = new Schema({
   end_date: { type: Date, required: true },
   destination: { type: String, required: true },
   owner_id: { type: Schema.Types.ObjectId, ref: "User" },
-  packs: { type: Schema.Types.ObjectId, ref: Pack },
+  packs: { type: Schema.Types.ObjectId, ref: 'Pack' },
   is_public: { type: Boolean },
+  type:{type:String,default: 'trip'}
 });
 
 const Trip = myDB.model("Trip", TripSchema);
