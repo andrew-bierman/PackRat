@@ -6,17 +6,8 @@ import { isCelebrateError, errors } from "celebrate";
 import { MONGODB_URI, SERVICE_ACCOUNT_KEY } from "./config.js";
 import routes from "./routes/index.js";
 
-// import firebase from "firebase-admin";
-
-// import serviceAccountKey from "./serviceAccountKey.json" assert { type: "json" };
-// import { createRequire } from "module";
-// const require = createRequire(import.meta.url);
-// const serviceAccountKey = require("./serviceAccountKey.json");
-
-// // Initialize Firebase
-// firebase.initializeApp({
-//   credential: firebase.credential.cert(SERVICE_ACCOUNT_KEY),
-// });
+import swaggerUi from "swagger-ui-express";
+import specs from "./swaggerOptions.js";
 
 // express items
 const app = express();
@@ -29,6 +20,12 @@ const connectionString = MONGODB_URI;
 
 // use routes
 app.use(routes);
+
+// Serve the Swagger UI at /api-docs for api documentation, only in development
+if (process.env.NODE_ENV !== "production") {
+  app.use("/api-docs", swaggerUi.serve);
+  app.get("/api-docs", swaggerUi.setup(specs));
+}
 
 // middleware to log Celebrate validation errors
 app.use((err, req, res, next) => {
