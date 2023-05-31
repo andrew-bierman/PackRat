@@ -24,8 +24,8 @@ const styles = StyleSheet.create({
     margin: '10px',
     // height: "fit-content",
     // position: "relative",
-    border: "1px solid red",
-    width: "400px",
-    height: '100%',
+    width: "600px",
+    height: '400px',
+    borderRadius: '10px',
   },
 });

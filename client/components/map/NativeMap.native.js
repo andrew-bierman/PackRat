@@ -36,7 +36,7 @@ const previewMapDiemension = { width: dw * 0.9, height: 220 };
 
 // MapView.setConnected(true);
 
-function CustomizedMap() {
+function NativeMap() {
   const camera = useRef(MapView.Camera);
   const mapViewRef = useRef(null);
   const mapViewFullScreenRef = useRef();
@@ -602,4 +602,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CustomizedMap;
+export default NativeMap;
