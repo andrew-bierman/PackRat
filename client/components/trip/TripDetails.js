@@ -9,7 +9,7 @@ import { selectPackById } from "../../store/packsStore";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchSingleTrip } from "../../store/singleTripStore";
 
-import { Box, Text } from "native-base";
+import { Box, Text, View } from "native-base";
 import { DetailsComponent } from "../details";
 import { StyleSheet } from "react-native";
 import { theme } from "../../theme";
@@ -60,7 +60,8 @@ export function TripDetails() {
             error={error}
             additionalComps={
               <>
-                <TableContainer currentPack={currentTrip?.packs} />
+                <View><TableContainer currentPack={currentTrip?.packs} /></View>
+                <View style={{marginTop:'5%'}}>
                 <WeatherCard
                   weatherObject={
                     currentTrip?.weather
@@ -68,7 +69,8 @@ export function TripDetails() {
                       : weatherObject
                   }
                   weatherWeek={weatherWeek}
-                />
+                /></View>
+                  {/* <View style={{marginTop:'5%', backgroundColor:'red'}}> */}
                 <TripCard
                   Icon={() => (
                     <FontAwesome5
@@ -83,11 +85,15 @@ export function TripDetails() {
                     ? JSON?.parse(currentTrip?.weather)?.coord
                     : weatherObject?.coord}
                 />
+                {/* </View> */}
+                <View style={{marginTop:'5%'}}>
                 <ScoreContainer
                   type="trip"
                   data={currentTrip}
                   isOwner={isOwner}
                 />
+                </View>
+  
               </>
             }
             link={link}

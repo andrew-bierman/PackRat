@@ -26,7 +26,7 @@ export const userSignIn = celebrate({
     }),
 });
 export const getUserById = celebrate({
-    [Segments.BODY]: Joi.object().keys({
+    [Segments.PARAMS]: Joi.object().keys({
         userId: JoiObjectId().required(),
     }),
 });

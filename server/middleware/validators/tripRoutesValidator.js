@@ -7,6 +7,9 @@ export const getTrips = celebrate({
         owner_id: JoiObjectId().required(),
     }),
 });
+
+
+
 export const getTripById = celebrate({
     [Segments.PARAMS]: Joi.object().keys({
         tripId: JoiObjectId().required(),
