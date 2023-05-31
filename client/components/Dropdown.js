@@ -1,8 +1,7 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { addPark, addTrail } from "../store/parksStore";
-import { Box, Center, Select } from "native-base";
-import { CheckIcon } from "native-base";
+import { Box, Center, Select, CheckIcon } from "native-base";
 
 export const DropdownComponent = ({
   data,
