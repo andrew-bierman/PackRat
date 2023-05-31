@@ -35,9 +35,19 @@ export const DetailsComponent = ({ type, data, additionalComps, link }) => {
               link={link}
               content={
                 <>
-                  {data?.description && <Text>Description: {data?.description}</Text>}
-                  {data?.destination && <Text>Destination: {data?.destination}</Text>}
-                  {additionalComps}
+                  
+                  {
+                    <>
+                     {data?.description && <Text>Description: {data?.description}</Text>}
+                      {data?.destination && <Text>Destination: {data?.destination}</Text>}
+
+                    </>
+                  }
+                  {
+                    <View style={{marginTop:'10%'}}>
+                      {additionalComps}
+                    </View>
+                  }
                 </>
               }
               destination={data?.destination}

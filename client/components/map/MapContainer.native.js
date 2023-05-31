@@ -4,7 +4,10 @@ import { View, StyleSheet, Platform } from "react-native";
 
 import NativeMap from "./NativeMap";
 
-export function MapContainer() {
+export function MapContainer({cords}) {
+  console.log('kjahsdkjashdkjsadh   app',cords)
+
+  
   if(Platform.OS === "android" || Platform.OS === "ios"){
     <View style={[styles.nativeContainer]}>
       <NativeMap />

@@ -158,6 +158,7 @@ export const CustomCard = ({ title, content, footer, link, type, destination }) 
          </Box>
          <Box
            px="4"
+           pb="4"
            style={{
              alignItems: "center",
              justifyContent: "center",
