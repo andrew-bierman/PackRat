@@ -10,7 +10,7 @@ import { theme } from "../theme/index";
 import { useSelector } from "react-redux";
 import MapContainer from "./map/MapContainer";
 
-export default function TripCard({ title, Icon, isMap, data, isSearch, isTrail }) {
+export default function TripCard({ title, Icon, isMap, data, isSearch, isTrail, cords }) {
   const currentTrail = useSelector((state) => state.dropdown.currentTrail);
   const currentPark = useSelector((state) => state.dropdown.currentPark);
   return (
@@ -49,7 +49,7 @@ export default function TripCard({ title, Icon, isMap, data, isSearch, isTrail }
         </Text>
       </Box>
       {isMap ? (
-        <MapContainer />
+        <MapContainer cords={cords}/>
       ) : isSearch ? (
         <SearchInput />
       ) : (

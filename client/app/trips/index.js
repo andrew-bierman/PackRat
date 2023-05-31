@@ -34,6 +34,8 @@ export default function Trips() {
   const [parksData, setParksData] = useState();
   const [trails, setTrailsData] = useState();
   const weatherObject = useSelector((state) => state.weather.weatherObject);
+  const weatherWeek = useSelector((state) => state.weather.weatherWeek);
+
   const trailsObject = useSelector((state) => state.trails.trailNames);
   const parksObject = useSelector((state) => state.parks.parkNames);
 
@@ -69,7 +71,7 @@ export default function Trips() {
             )}
           />
 
-          <WeatherCard weatherObject={weatherObject} />
+          <WeatherCard weatherObject={weatherObject} weatherWeek={weatherWeek} />
 
           <TripCard
             title="Nearby Trails"
@@ -109,6 +111,7 @@ export default function Trips() {
             )}
             title="Map"
             isMap={true}
+           
           />
           <Box>
             <SaveTripContainer />

@@ -37,7 +37,8 @@ mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 //     }
 // }
 
-const WebPackContainer = () => {
+const WebPackContainer = ({cords}) => {
+  console.log('kjahsdkjashdkjsadh   webview',cords)
   useEffect(() => {
     // temporary solution to fix mapbox-gl-js missing css error
     if (Platform.OS === "web") {
@@ -57,8 +58,8 @@ const WebPackContainer = () => {
 
   const mapContainer = useRef(null);
   const map = useRef(null);
-  const [lng, setLng] = useState(-70);
-  const [lat, setLat] = useState(0);
+  const [lng, setLng] = useState(cords?.lon ? cords?.lon: -70);
+  const [lat, setLat] = useState(cords?.lat ? cords?.lat : 0);
   const [zoom, setZoom] = useState(10);
 
   const shape = {
