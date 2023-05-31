@@ -31,10 +31,12 @@ export default function TripCard({ title, Icon, isMap, data, isSearch, isTrail, 
     >
       <Box
         style={{
+         
           flexDirection: "row",
           gap: 15,
           alignItems: "center",
           paddingVertical: 15,
+          
         }}
       >
         <Icon />
