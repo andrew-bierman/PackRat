@@ -16,13 +16,13 @@ import {
 
 import { FontAwesome } from "@expo/vector-icons";
 import Mapbox from "@rnmapbox/maps";
-Mapbox.setAccessToken(
-  "pk.eyJ1IjoibWlhbi1iaWxhbCIsImEiOiJja3k5YzExdGcwNHY0Mm9tbmo0ajhrOGx5In0.VAkiap76DG7NiKc23A9tcg"
-);
+// Mapbox.setAccessToken(
+//   "pk.eyJ1IjoibWlhbi1iaWxhbCIsImEiOiJja3k5YzExdGcwNHY0Mm9tbmo0ajhrOGx5In0.VAkiap76DG7NiKc23A9tcg"
+// );
 
 import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
-import { WEB_CLIENT_ID } from "@env";
+import { WEB_CLIENT_ID, NODE_ENV } from "@env";
 
 import { useState, useEffect } from "react";
 // import useLogin from "../hooks/useLogin";
@@ -36,42 +36,47 @@ import { useDispatch, useSelector } from "react-redux";
 import { signIn, signInWithGoogle } from "../store/authStore";
 import { StyleSheet } from "react-native";
 
-const defaultStyle = {
-  version: 8,
-  name: "Land",
-  sources: {
-    map: {
-      type: "raster",
-      tiles: ["https://a.tile.openstreetmap.org/{z}/{x}/{y}.png"],
-      tileSize: 256,
-      minzoom: 1,
-      maxzoom: 19,
-    },
-  },
-  layers: [
-    {
-      id: "background",
-      type: "background",
-      paint: {
-        "background-color": "#f2efea",
-      },
-    },
-    {
-      id: "map",
-      type: "raster",
-      source: "map",
-      paint: {
-        "raster-fade-duration": 100,
-      },
-    },
-  ],
-};
+// const defaultStyle = {
+//   version: 8,
+//   name: "Land",
+//   sources: {
+//     map: {
+//       type: "raster",
+//       tiles: ["https://a.tile.openstreetmap.org/{z}/{x}/{y}.png"],
+//       tileSize: 256,
+//       minzoom: 1,
+//       maxzoom: 19,
+//     },
+//   },
+//   layers: [
+//     {
+//       id: "background",
+//       type: "background",
+//       paint: {
+//         "background-color": "#f2efea",
+//       },
+//     },
+//     {
+//       id: "map",
+//       type: "raster",
+//       source: "map",
+//       paint: {
+//         "raster-fade-duration": 100,
+//       },
+//     },
+//   ],
+// };
 
 WebBrowser.maybeCompleteAuthSession();
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const demoUser = {
+    email: "email52@email.com",
+    password: "12345678",
+  };
 
   const router = useRouter();
 
@@ -229,7 +234,7 @@ export default function Login() {
   // }
 
   return (
-    <ScrollView>
+    <VStack>
       <Center w="100%">
         <Box safeArea p="2" py="8" w="90%" maxW="290">
           <Heading
@@ -339,16 +344,30 @@ export default function Login() {
               </Button>
             </HStack>
             {/* Google Login */}
+
+            {/* Demo Login for Development start */}
+            {NODE_ENV !== "production" && (
+              <HStack mt="1" justifyContent="center" alignItems="center">
+                <Button
+                  w="100%"
+                  disabled={!request}
+                  onPress={() => {
+                    setEmail(demoUser.email)
+                    setPassword(demoUser.password)
+                    
+                    handleLogin();
+                  }}
+                  colorScheme={"purple"}
+                >
+                  Demo User
+                </Button>
+              </HStack>
+            )}
+            {/* Demo Login for Development end */}
           </VStack>
         </Box>
       </Center>
-      <View style={styles.container}>
-        <Mapbox.MapView
-          style={styles.map}
-          styleJSON={JSON.stringify(defaultStyle)}
-        />
-      </View>
-    </ScrollView>
+    </VStack>
   );
 }
 
