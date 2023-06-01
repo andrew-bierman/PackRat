@@ -11,9 +11,14 @@ import {
   NativeBaseProvider,
   View,
   Toast,
+  ScrollView,
 } from "native-base";
 
 import { FontAwesome } from "@expo/vector-icons";
+import Mapbox from "@rnmapbox/maps";
+Mapbox.setAccessToken(
+  "pk.eyJ1IjoibWlhbi1iaWxhbCIsImEiOiJja3k5YzExdGcwNHY0Mm9tbmo0ajhrOGx5In0.VAkiap76DG7NiKc23A9tcg"
+);
 
 import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
@@ -29,6 +34,38 @@ import { theme } from "../theme";
 // import { signInWithGoogle } from "../auth/firebase";
 import { useDispatch, useSelector } from "react-redux";
 import { signIn, signInWithGoogle } from "../store/authStore";
+import { StyleSheet } from "react-native";
+
+const defaultStyle = {
+  version: 8,
+  name: "Land",
+  sources: {
+    map: {
+      type: "raster",
+      tiles: ["https://a.tile.openstreetmap.org/{z}/{x}/{y}.png"],
+      tileSize: 256,
+      minzoom: 1,
+      maxzoom: 19,
+    },
+  },
+  layers: [
+    {
+      id: "background",
+      type: "background",
+      paint: {
+        "background-color": "#f2efea",
+      },
+    },
+    {
+      id: "map",
+      type: "raster",
+      source: "map",
+      paint: {
+        "raster-fade-duration": 100,
+      },
+    },
+  ],
+};
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -192,115 +229,139 @@ export default function Login() {
   // }
 
   return (
-    <Center w="100%">
-      <Box safeArea p="2" py="8" w="90%" maxW="290">
-        <Heading
-          size="lg"
-          fontWeight="600"
-          color="coolGray.800"
-          _dark={{
-            color: "warmGray.50",
-          }}
-        >
-          <Text>Welcome</Text>
-        </Heading>
-        <Heading
-          mt="1"
-          _dark={{
-            color: "warmGray.200",
-          }}
-          color="coolGray.600"
-          fontWeight="medium"
-          size="xs"
-        >
-          Sign in to continue!
-        </Heading>
-
-        <VStack space={3} mt="5">
-          <FormControl>
-            <FormControl.Label>Email ID</FormControl.Label>
-            <Input value={email} onChangeText={(text) => setEmail(text)} />
-          </FormControl>
-          <FormControl>
-            <FormControl.Label>Password</FormControl.Label>
-            <Input
-              value={password}
-              onChangeText={(text) => setPassword(text)}
-              type="password"
-            />
-          </FormControl>
-          <Button
-            disabled={!email || !password}
-            onPress={handleLogin}
-            mt="2"
-            colorScheme="indigo"
+    <ScrollView>
+      <Center w="100%">
+        <Box safeArea p="2" py="8" w="90%" maxW="290">
+          <Heading
+            size="lg"
+            fontWeight="600"
+            color="coolGray.800"
+            _dark={{
+              color: "warmGray.50",
+            }}
           >
-            Sign in
-          </Button>
-          <HStack mt="6" justifyContent="center">
-            <Text
-              fontSize="sm"
-              color="coolGray.600"
-              _dark={{
-                color: "warmGray.200",
-              }}
-            >
-              I'm a new user.
-            </Text>
-            <Link href="/register">
-              <Text
-                style={{
-                  color: "#818cf8",
-                  fontWeight: 400,
-                  fontSize: 12,
-                }}
-              >
-                Sign Up
-              </Text>
-            </Link>
-          </HStack>
+            <Text>Welcome</Text>
+          </Heading>
+          <Heading
+            mt="1"
+            _dark={{
+              color: "warmGray.200",
+            }}
+            color="coolGray.600"
+            fontWeight="medium"
+            size="xs"
+          >
+            Sign in to continue here!
+          </Heading>
 
-          <HStack justifyContent="center">
-            <Link href="/password-reset">
+          <VStack space={3} mt="5">
+            <FormControl>
+              <FormControl.Label>Email ID</FormControl.Label>
+              <Input value={email} onChangeText={(text) => setEmail(text)} />
+            </FormControl>
+            <FormControl>
+              <FormControl.Label>Password</FormControl.Label>
+              <Input
+                value={password}
+                onChangeText={(text) => setPassword(text)}
+                type="password"
+              />
+            </FormControl>
+            <Button
+              disabled={!email || !password}
+              onPress={handleLogin}
+              mt="2"
+              colorScheme="indigo"
+            >
+              Sign in
+            </Button>
+            <HStack mt="6" justifyContent="center">
               <Text
-                style={{
-                  color: "#818cf8",
-                  fontWeight: 400,
-                  fontSize: 12,
+                fontSize="sm"
+                color="coolGray.600"
+                _dark={{
+                  color: "warmGray.200",
                 }}
               >
-                Reset Password?
+                I'm a new user.
               </Text>
-            </Link>
-          </HStack>
-          {/* Google Login starts*/}
-          <HStack mt="6" justifyContent="center">
-            <Heading
-              mt="1"
-              _dark={{
-                color: "warmGray.200",
-              }}
-              color="coolGray.600"
-              fontWeight="medium"
-              size="xs"
-            >
-              Or
-            </Heading>
-          </HStack>
-          <HStack mt="1" justifyContent="center" alignItems="center">
-            <Button
-              w="100%"
-              disabled={!request}
-              onPress={() => promptAsync()}
-              colorScheme={"red"}
-              startIcon={<FontAwesome name="google" size={18} color="white" />}
-            >
-              Sign in with Google
-            </Button>
-          </HStack>
-          {/* Google Login */}
-        </VStack>
-      </Box>
-    </Center>
+              <Link href="/register">
+                <Text
+                  style={{
+                    color: "#818cf8",
+                    fontWeight: 400,
+                    fontSize: 12,
+                  }}
+                >
+                  Sign Up
+                </Text>
+              </Link>
+            </HStack>
+
+            <HStack justifyContent="center">
+              <Link href="/password-reset">
+                <Text
+                  style={{
+                    color: "#818cf8",
+                    fontWeight: 400,
+                    fontSize: 12,
+                  }}
+                >
+                  Reset Password?
+                </Text>
+              </Link>
+            </HStack>
+            {/* Google Login starts*/}
+            <HStack mt="6" justifyContent="center">
+              <Heading
+                mt="1"
+                _dark={{
+                  color: "warmGray.200",
+                }}
+                color="coolGray.600"
+                fontWeight="medium"
+                size="xs"
+              >
+                Or
+              </Heading>
+            </HStack>
+            <HStack mt="1" justifyContent="center" alignItems="center">
+              <Button
+                w="100%"
+                disabled={!request}
+                onPress={() => promptAsync()}
+                colorScheme={"red"}
+                startIcon={
+                  <FontAwesome name="google" size={18} color="white" />
+                }
+              >
+                Sign in with Google
+              </Button>
+            </HStack>
+            {/* Google Login */}
+          </VStack>
+        </Box>
+      </Center>
+      <View style={styles.container}>
+        <Mapbox.MapView
+          style={styles.map}
+          styleJSON={JSON.stringify(defaultStyle)}
+        />
+      </View>
+    </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    marginTop: 20,
+    height: 300,
+    width: "100%",
+    alignItems: "center",
+    marginVertical: 20,
+  },
+  map: {
+    flex: 1,
+    width: "90%",
+  },
+});
