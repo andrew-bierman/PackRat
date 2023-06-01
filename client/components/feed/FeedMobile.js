@@ -1,21 +1,31 @@
-import { Container, Box, Text, HStack, Stack, ScrollView } from "native-base";
+import { Container, Box, Text, HStack, Stack, ScrollView, VStack } from "native-base";
 import { StyleSheet } from "react-native";
 import { useAuth } from "../../auth/provider";
-import CardMobile from "./CardMobile";
-import useGetPublicPacks from "../../hooks/useGetPublicPacks";
+import FeedCardMobile from "./FeedCardMobile";
+// import useGetPublicPacks from "../../hooks/useGetPublicPacks";
 import { theme } from "../../theme";
 import DropdownComponent from "../Dropdown";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { getPublicPacks } from "../../store/feedStore";
 
 const dataValues = ["Favorite", "Most Recent"];
 
 export default function FeedMobile() {
   const [queryString, setQueryString] = useState("");
 
-  const { data, isLoading, isError, error } = useGetPublicPacks(queryString);
+  // const { data, isLoading, isError, error } = useGetPublicPacks(queryString);
+
+  const dispatch = useDispatch();
+  const publicParksData = useSelector((state) => state.feed.publicPacks);
+
+  useEffect(() => {
+    dispatch(getPublicPacks(queryString));
+  }, [queryString]);
 
   return (
-    <ScrollView>
+    <VStack>
       <Box style={styles.mainContainer}>
         <DropdownComponent
           value={queryString}
@@ -29,14 +39,16 @@ export default function FeedMobile() {
           space={[3, 3, 3, 0]}
           flexWrap="wrap"
         >
-          {data?.length > 0 ? (
-            data?.map((pack) => <CardMobile key={pack?._id} {...{ ...pack }} />)
+          {publicParksData?.length > 0 ? (
+            publicParksData?.map((pack) => (
+              <FeedCardMobile key={pack?._id} {...{ ...pack }} />
+            ))
           ) : (
             <Text>No Public Packs Available</Text>
           )}
         </Stack>
       </Box>
-    </ScrollView>
+    </VStack>
   );
 }
 

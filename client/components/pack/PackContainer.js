@@ -1,28 +1,52 @@
 import { StyleSheet } from "react-native";
 import { Box, Text } from "native-base";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import DropdownComponent from "../Dropdown";
 import useGetPacks from "../../hooks/useGetPacks";
 import { AddItem } from "../AddItem";
-import { TableContainer } from "../Table";
-import { useAuth } from "../../auth/provider";
+import { TableContainer } from "../pack_table/Table";
+// import { useAuth } from "../../auth/provider";
+import { useSelector } from "react-redux";
+import { fetchUserPacks, selectPackById } from "../../store/packsStore";
+import { updateNewTripPack } from "../../store/tripsStore";
+import { useDispatch } from "react-redux";
 
-export default function PackContainer() {
-  const [currentPack, setCurrentPack] = useState();
+import { CustomModal } from "../modal";
+
+export default function PackContainer({ isCreatingTrip = false }) {
+  const dispatch = useDispatch();
+  const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
+
+  const user = useSelector((state) => state.auth.user);
+  const packs = useSelector((state) => state.packs.packs);
+
+  const newTrip = useSelector((state) => state.trips.newTrip);
+
   const [packName, setPackName] = useState("");
-  const { user } = useAuth();
+  const [currentPackId, setCurrentPackId] = useState(null);
 
-  const { data, isLoading, isError, error } = useGetPacks(user?._id);
+  useEffect(() => {
+    if (user && user._id) {
+      dispatch(fetchUserPacks(user?._id));
+    }
+  }, [dispatch, user?._id]);
 
   const handlePack = (name) => {
-    setCurrentPack(data?.find((pack) => pack.name === name));
     setPackName(name);
+    const selectedPack = packs.find((pack) => pack.name === name);
+    setCurrentPackId(selectedPack?._id);
+
+    if (isCreatingTrip && selectedPack?._id) {
+      dispatch(updateNewTripPack(selectedPack?._id));
+    }
   };
 
-  const dataValues = data?.map((pack) => pack.name) ?? [];
+  const currentPack = useSelector((state) =>
+    selectPackById(state, currentPackId)
+  );
 
-  if (isLoading) return <Text>Loading....</Text>;
+  const dataValues = packs?.map((pack) => pack.name) ?? [];
 
   return dataValues?.length > 0 ? (
     <Box style={styles.mainContainer}>
@@ -32,9 +56,34 @@ export default function PackContainer() {
         setUnit={handlePack}
         width="300"
       />
-      {currentPack?._id ? <AddItem packId={currentPack._id} /> : null}
-      {currentPack?._id ? <TableContainer packId={currentPack._id} /> : null}
-      {isError ? <Text>{error}</Text> : null}
+      {currentPackId && (
+        <>
+          <CustomModal
+            title="Add Item"
+            trigger="Add Item"
+            isActive={isAddItemModalOpen}
+            onTrigger={setIsAddItemModalOpen}
+            footerButtons={[
+              {
+                label: "Save",
+                color: "primary",
+                onClick: () => setIsAddItemModalOpen(false),
+              },
+              {
+                label: "Cancel",
+                color: "danger",
+                onClick: () => setIsAddItemModalOpen(false),
+              },
+            ]}
+          >
+            <AddItem packId={currentPackId} />
+          </CustomModal>
+          <TableContainer
+            key={`table - ${currentPackId}`}
+            currentPack={currentPack}
+          />
+        </>
+      )}
     </Box>
   ) : null;
 }
@@ -45,5 +94,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 35,
     width: "100%",
+    padding: 20,
   },
 });

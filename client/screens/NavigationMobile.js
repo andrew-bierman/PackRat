@@ -12,64 +12,11 @@ import { MaterialIcons } from "@expo/vector-icons";
 
 import packratlogo from "../assets/packrat.png";
 import { useState } from "react";
-
-const MobileDropdown = ({ setIsMenuOpen }) => {
-  const { signOut } = useAuth();
-  return (
-    <View
-      style={{
-        position: "absolute",
-        right: 0,
-        top: 28,
-        backgroundColor: theme.colors.background,
-        cursor: "pointer",
-      }}
-    >
-      <View style={styles.link}>
-        <AntDesign
-          name="close"
-          size={28}
-          color={theme.colors.iconColor}
-          onPress={() => setIsMenuOpen(false)}
-        />
-      </View>
-      <Link href="/">
-        <View style={styles.link}>
-          <Entypo name="home" size={24} color={theme.colors.iconColor} />
-
-          <Text style={{ color: "white" }}>Home</Text>
-        </View>
-      </Link>
-      <Link href="profile">
-        <View style={styles.link}>
-          <FontAwesome name="book" size={24} color={theme.colors.iconColor} />
-          <Text style={{ color: "white" }}>Profile</Text>
-        </View>
-      </Link>
-      <Link href="/packs">
-        <View style={styles.link}>
-          <MaterialIcons
-            name="backpack"
-            size={24}
-            color={theme.colors.iconColor}
-          />
-
-          <Text style={{ color: "white" }}>Packs</Text>
-        </View>
-      </Link>
-      <View style={styles.link}>
-        <MaterialIcons name="logout" size={24} color={theme.colors.iconColor} />
-        <Text style={{ color: "white" }} onPress={() => signOut()}>
-          Logout
-        </Text>
-      </View>
-    </View>
-  );
-};
+import { useSelector } from "react-redux";
 
 export default function NavigationMobile() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { user } = useAuth();
+  // const { user } = useAuth();
+  const user = useSelector((state) => state.auth.user);
 
   return user ? (
     <View style={styles.mobileContainer}>
@@ -85,17 +32,41 @@ export default function NavigationMobile() {
           PackRat
         </Text>
       </View>
-
-      <EvilIcons
-        name="navicon"
-        size={48}
-        color={theme.colors.iconColor}
-        onPress={() => setIsMenuOpen(!isMenuOpen)}
-      />
-
-      {isMenuOpen ? <MobileDropdown setIsMenuOpen={setIsMenuOpen} /> : null}
+      <Link href="/drawer">
+        <EvilIcons
+          name="navicon"
+          size={48}
+          color={theme.colors.iconColor}
+          // onPress={() => setIsMenuOpen(!isMenuOpen)}
+        />
+      </Link>
     </View>
-  ) : null;
+  ) : 
+  (
+    <View style={styles.mobileContainer}>
+      <View style={{ flexDirection: "row", alignItems: "center", gap: 1 }}>
+        <Image src={String(packratlogo)} alt="logo" />
+        <Text
+          style={{
+            color: theme.colors.text,
+            fontSize: 28,
+            fontWeight: 900,
+          }}
+        >
+          PackRat
+        </Text>
+      </View>
+      <Link href="/drawer">
+        <EvilIcons
+          name="navicon"
+          size={48}
+          color={theme.colors.iconColor}
+          // onPress={() => setIsMenuOpen(!isMenuOpen)}
+        />
+      </Link>
+    </View>
+  )
+  ;
 }
 
 const styles = StyleSheet.create({
@@ -105,9 +76,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    padding: 25,
+    padding: 40,
     position: "relative",
-    paddingVertical: 120,
   },
 
   logo: {

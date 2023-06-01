@@ -1,10 +1,43 @@
 import Trip from "../models/tripModel.js";
 
-export const getTrips = async (req, res) => {
-  const { owner_id } = req.body;
-
+export const getPublicTrips = async (req, res) => {
   try {
-    const trips = await Trip.find({ owner_id }).populate("packs");
+    const { queryBy } = req.query;
+
+    let publicTripsPipeline = [
+      {
+        $match: { is_public: true },
+      },
+      {
+        $lookup: {
+          from: "packs", // name of the foreign collection
+          localField: "_id",
+          foreignField: "trips",
+          as: "packs",
+        },
+      },
+    ];
+
+    if (queryBy === "Favorite") {
+      publicTripsPipeline.push({ $sort: { favorites_count: -1 } });
+    } else {
+      publicTripsPipeline.push({ $sort: { _id: -1 } });
+    }
+
+    const publicTrips = await Trip.aggregate(publicTripsPipeline);
+
+    res.status(200).json(publicTrips);
+
+  } catch (error) {
+    res.status(404).json({ msg: "Trips cannot be found" });
+  }
+};
+
+export const getTrips = async (req, res) => {
+  try {
+    const { ownerId } = req.packs;
+
+    const trips = await Trip.find({ owner_id: ownerId }).populate("packs");
 
     res.status(200).json(trips);
   } catch (error) {
@@ -13,9 +46,9 @@ export const getTrips = async (req, res) => {
 };
 
 export const getTripById = async (req, res) => {
-  const { tripId } = req.body;
-
   try {
+    const { tripId } = req.body;
+
     const trip = await Trip.findById({ _id: tripId }).populate("packs");
 
     res.status(200).json(trip);
@@ -25,10 +58,11 @@ export const getTripById = async (req, res) => {
 };
 
 export const addTrip = async (req, res) => {
-  let newDocument = req.body;
-
   try {
-    await Trip.create(newDocument);
+    const { name, description, duration, weather, start_date, end_date, destination, trail, owner_id, packs, is_public } = req.body;
+
+    await Trip.create({ name, description, duration, weather, start_date, end_date, destination, trail, owner_id, packs, is_public });
+
     res.status(200).json({ msg: "success" });
   } catch (error) {
     res.status(404).json({ msg: "Unable to add trip" });
@@ -36,9 +70,10 @@ export const addTrip = async (req, res) => {
 };
 
 export const editTrip = async (req, res) => {
-  const { _id } = req.body;
 
   try {
+    const { _id } = req.body;
+
     const newTrip = await Trip.findOneAndUpdate({ _id }, req.body, {
       returnOriginal: false,
     }).populate("packs");
@@ -50,8 +85,9 @@ export const editTrip = async (req, res) => {
 };
 
 export const deleteTrip = async (req, res) => {
-  const { tripId } = req.body;
   try {
+    const { tripId } = req.body;
+
     await Trip.findOneAndDelete({ _id: tripId });
     res.status(200).json({ msg: "trip was deleted successfully" });
   } catch (error) {
