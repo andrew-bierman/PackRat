@@ -121,7 +121,7 @@ export default function Drawer() {
                 <Text style={{ color: "#3B3B3B" }}>Login</Text>
               </View>
             </Link>
-            <Link href="/signup">
+            <Link href="/register">
               <View style={styles.link}>
                 <MaterialIcons
                   name="person-add"
