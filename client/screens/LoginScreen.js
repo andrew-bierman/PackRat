@@ -234,7 +234,7 @@ export default function Login() {
   // }
 
   return (
-    <ScrollView>
+    <VStack>
       <Center w="100%">
         <Box safeArea p="2" py="8" w="90%" maxW="290">
           <Heading
@@ -367,7 +367,7 @@ export default function Login() {
           </VStack>
         </Box>
       </Center>
-    </ScrollView>
+    </VStack>
   );
 }
 
