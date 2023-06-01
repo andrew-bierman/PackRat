@@ -16,9 +16,9 @@ import {
 
 import { FontAwesome } from "@expo/vector-icons";
 import Mapbox from "@rnmapbox/maps";
-Mapbox.setAccessToken(
-  "pk.eyJ1IjoibWlhbi1iaWxhbCIsImEiOiJja3k5YzExdGcwNHY0Mm9tbmo0ajhrOGx5In0.VAkiap76DG7NiKc23A9tcg"
-);
+// Mapbox.setAccessToken(
+//   "pk.eyJ1IjoibWlhbi1iaWxhbCIsImEiOiJja3k5YzExdGcwNHY0Mm9tbmo0ajhrOGx5In0.VAkiap76DG7NiKc23A9tcg"
+// );
 
 import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
@@ -35,6 +35,8 @@ import { theme } from "../theme";
 import { useDispatch, useSelector } from "react-redux";
 import { signIn, signInWithGoogle } from "../store/authStore";
 import { StyleSheet } from "react-native";
+import MapContainer from "../components/map/MapContainer.native";
+import NativeMap from "../components/map/NativeMap.native";
 
 const defaultStyle = {
   version: 8,
@@ -343,10 +345,12 @@ export default function Login() {
         </Box>
       </Center>
       <View style={styles.container}>
-        <Mapbox.MapView
+        {/* <Mapbox.MapView
           style={styles.map}
           styleJSON={JSON.stringify(defaultStyle)}
-        />
+        /> */}
+        <NativeMap />
+        <MapContainer />
       </View>
     </ScrollView>
   );
