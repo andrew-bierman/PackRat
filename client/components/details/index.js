@@ -1,3 +1,4 @@
+import { Link } from "expo-router";
 import React, { useState, useEffect } from "react";
 import { View, Text } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,6 +18,14 @@ export const DetailsComponent = ({ type, data, additionalComps, link }) => {
               content={
                 <>
                   {data?.description && <Text>Description: {data?.description}</Text>}
+                  {
+                    <Text>Owner:                      
+                      <Link style={{color:'red'}} href={'/profile/' + data?.owner_id?._id}>
+                      {data?.owner_id?.name}
+                     </Link>
+                     </Text>
+
+                  }
                  
                   {additionalComps}
                 </>
@@ -37,6 +46,13 @@ export const DetailsComponent = ({ type, data, additionalComps, link }) => {
                 <>
                   {data?.description && <Text>Description: {data?.description}</Text>}
                   {data?.destination && <Text>Destination: {data?.destination}</Text>}
+                  {
+                    <Text>Owner:                      <Link style={{color:'red'}} href={'/profile/' + data?.owner_id?._id}>
+                      {data?.owner_id?.name}
+                     </Link>
+                     </Text>
+
+                  }
                   {additionalComps}
                 </>
               }

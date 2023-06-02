@@ -89,7 +89,7 @@ export const getPackById = async (req, res) => {
     const { packId } = req.params;
 
     const objectId = new mongoose.Types.ObjectId(packId);
-    const pack = await Pack.findById(objectId).populate("items");
+    const pack = await Pack.findById(objectId).populate("items").populate('owner_id');
 
     res.status(200).json(pack);
   } catch (error) {

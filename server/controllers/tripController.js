@@ -51,7 +51,7 @@ export const getTripById = async (req, res) => {
     const { tripId } = req.body;
     console.log('akjsdhkjsahdkshjd', await Trip.findById({ _id: tripId ?tripId : req?.params?.tripId }))
 
-    const trip = await Trip.findById({ _id: tripId ?tripId : req?.params?.tripId }).populate({path:"packs", populate:{path:'items'}});
+    const trip = await Trip.findById({ _id: tripId ?tripId : req?.params?.tripId }).populate({path:"packs", populate:{path:'items'}}).populate('owner_id');
 
     res.status(200).json(trip);
   } catch (error) {

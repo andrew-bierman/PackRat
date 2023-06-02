@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 
 import { DetailsHeader } from "../details/header";
 
-import { useSearchParams } from "expo-router";
+import { Link, useSearchParams } from "expo-router";
 import { TableContainer } from "../pack_table/Table";
 import { selectPackById } from "../../store/packsStore";
 
@@ -61,6 +61,7 @@ export function TripDetails() {
               <>
                 <TableContainer currentPack={currentTrip?.packs} />
                 <ScoreContainer type='trip' data={currentTrip} isOwner={isOwner}/>
+               
               </>
             }
             link={link}
