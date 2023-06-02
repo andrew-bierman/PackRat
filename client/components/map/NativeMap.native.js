@@ -27,7 +27,10 @@ import { MAPBOX_ACCESS_TOKEN } from "@env";
 import { theme } from "../../theme";
 import { Link } from "expo-router";
 
+MapView.setWellKnownTileServer(Platform.OS === 'android' ? 'Mapbox' : 'mapbox')
 MapView.setAccessToken(MAPBOX_ACCESS_TOKEN);
+
+// console.log("MAPBOX_ACCESS_TOKEN", MAPBOX_ACCESS_TOKEN, typeof MAPBOX_ACCESS_TOKEN)
 // consts
 const dw = Dimensions.get("screen").width;
 const dh = Dimensions.get("screen").height;
@@ -36,7 +39,7 @@ const previewMapDiemension = { width: dw * 0.9, height: 220 };
 
 // MapView.setConnected(true);
 
-function CustomizedMap() {
+function NativeMap() {
   const camera = useRef(MapView.Camera);
   const mapViewRef = useRef(null);
   const mapViewFullScreenRef = useRef();
@@ -337,7 +340,7 @@ function CustomizedMap() {
             styleURL={style}
             zoomLevel={zoomLevel ? zoomLevel - 0.8 : 10}
             centerCoordinate={trailCenterPoint ? trailCenterPoint : null}
-            onDidFinishRenderingMapFully={onMapLoaded}
+            // onDidFinishRenderingMapFully={onMapLoaded}
             compassEnabled={false}
             logoEnabled={false}
             scrollEnabled={false}
@@ -423,7 +426,7 @@ function CustomizedMap() {
               styleURL={style}
               zoomLevel={zoomLevel ? zoomLevel : 12}
               centerCoordinate={trailCenterPoint ? trailCenterPoint : null}
-              onDidFinishLoadingMap={onMapLoaded}
+              // onDidFinishLoadingMap={onMapLoaded}
               compassEnabled={false}
               logoEnabled={false}
               zoomEnabled={true}
@@ -602,4 +605,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CustomizedMap;
+export default NativeMap;

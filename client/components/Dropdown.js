@@ -1,7 +1,7 @@
 import React from "react";
-import { addPark, addTrail } from "../store/dropdownStore";
 import { useDispatch } from "react-redux";
-import { Select, Center, Box, CheckIcon, Text } from "native-base";
+import { addPark, addTrail } from "../store/parksStore";
+import { Box, Center, Select, CheckIcon } from "native-base";
 
 export const DropdownComponent = ({
   data,
@@ -12,6 +12,8 @@ export const DropdownComponent = ({
   style,
 }) => {
   const dispatch = useDispatch();
+
+  console.log("data in dropdown", data)
 
   return (
     <Center>
@@ -34,8 +36,8 @@ export const DropdownComponent = ({
           }}
         >
           {data
-            ? data?.map((value, id) => (
-                <Select.Item key={id} label={value} value={value} />
+            ? data?.map((item, index) => (
+                <Select.Item key={`${item.id} + ${index}`} label={item.name} value={item.id || item._id || item.name} />
               ))
             : null}
         </Select>

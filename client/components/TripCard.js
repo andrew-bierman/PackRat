@@ -105,11 +105,11 @@ const styles = StyleSheet.create({
 
   mapCard: {
     backgroundColor: theme.colors.card,
-    flex: 2,
+    // flex: 2,
 
     flexDirection: "column",
     // gap: 45,
-    justifyContent: "center",
+    // justifyContent: "center",
     alignItems: "center",
     textAlign: "center",
     padding: theme.size.cardPadding,
