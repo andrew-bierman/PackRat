@@ -96,7 +96,7 @@ export default function Feed({ feedType = "public" }) {
 
     if (data?.length > 0) {
       return data.map((item) => (
-        <Link key={"link-key" + item?._id} href={urlPath + item?._id}>
+        <Link key={"link-key" + item?._id} href={item?.type === 'pack' ? '/pack/' + item?._id : '/trip/' + item?._id}>
           <Card key={item?._id} type={item.type} {...{ ...item }} />
         </Link>
       ));
