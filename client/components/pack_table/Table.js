@@ -39,7 +39,7 @@ export const TableContainer = ({ currentPack }) => {
   const [weightUnit, setWeightUnit] = useState('g');
   const calculate = (value) => {
     // update the item values and then recalculate
-    return currentPack.items?.reduce((acc, item) => {
+    return currentPack?.items?.reduce((acc, item) => {
       const convertedWeight = convertWeight(item?.weight, item?.unit, weightUnit);
       const result = acc + (convertedWeight * item.quantity);
       return result;

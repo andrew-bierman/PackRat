@@ -33,9 +33,7 @@ const monthArr = [
   "December",
 ];
 
-export default function WeatherCard() {
-  const weatherObject = useSelector((state) => state.weather.weatherObject);
-  const weatherWeek = useSelector((state) => state.weather.weatherWeek);
+export default function WeatherCard({weatherObject, weatherWeek}) {
 
   const date = new Date();
   const dayOfMonth = date.getDate();

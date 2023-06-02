@@ -29,6 +29,7 @@ const PackSchema = new Schema({
       redundancyAndVersatilityScore: 0,
     } 
   },
+  type:{type:String,default:'pack'}
 });
 
 PackSchema.virtual("total_weight").get(function () {
