@@ -36,7 +36,7 @@ const router = express.Router();
  *       '500':
  *         description: Error retrieving Photon results
  */
-router.get("/osm/photon/search", getPhotonResults);
+router.get("/photon/search", getPhotonResults);
 
 /**
  * @swagger
