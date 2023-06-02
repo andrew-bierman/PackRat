@@ -15,7 +15,7 @@ import {
 } from "native-base";
 
 import { FontAwesome } from "@expo/vector-icons";
-import Mapbox from "@rnmapbox/maps";
+// import Mapbox from "@rnmapbox/maps";
 // Mapbox.setAccessToken(
 //   "pk.eyJ1IjoibWlhbi1iaWxhbCIsImEiOiJja3k5YzExdGcwNHY0Mm9tbmo0ajhrOGx5In0.VAkiap76DG7NiKc23A9tcg"
 // );
