@@ -5,7 +5,7 @@ import { Platform } from "react-native";
 import UserDataCard from "./UserDataCard";
 import UserDataCardMobile from "./UserDataCardMobile";
 
-export default function UserDataContainer({ data, type }) {
+export default function UserDataContainer({ data, type, source }) {
   const typeUppercase = type.charAt(0).toUpperCase() + type.slice(1);
 
   const typeUppercaseSingular = typeUppercase.slice(0, -1);
@@ -15,7 +15,7 @@ export default function UserDataContainer({ data, type }) {
   return (
     <VStack space={2} alignItems="center" flex={1} width="100%">
       <Text fontSize="2xl" fontWeight="bold" color="white" uppercase={true}>
-        Your {typeUppercase}
+      {source} {typeUppercase}
       </Text>
       <Stack
         direction={["column", "column", "column", "row"]}

@@ -15,21 +15,34 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 // import useGetPacks from "../../hooks/useGetPacks";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUserPacks } from "../../store/packsStore";
+import { fetchUser } from "../../store/userStore";
+import { useSearchParams } from "expo-router";
+
 
 export default function ProfileContainer() {
   // const { user } = useAuth();
   const dispatch = useDispatch();
+  const { userId } = useSearchParams();
+
+  console.log(userId)
 
   useEffect(() => {
-    dispatch(fetchUserPacks(user?._id));
-  }, [dispatch, user?._id]);
+    dispatch(fetchUserPacks(userId ? userId : user?._id));
+  }, [dispatch, userId ? userId: user?._id]);
 
+  useEffect(() => {
+    dispatch(fetchUser(userId ? userId : user?._id));
+  }, [dispatch, userId ? userId: user?._id]);
   const user = useSelector((state) => state.auth.user);
+  const userProfile = useSelector((state) => state.users.user);
   const PacksData = useSelector((state) => state.packs);
   const tripsData = useSelector((state) => state.trips);
 
   // const { data } = useGetPacks(user?._id);
-  console.log(user);
+
+  const statesssss = useSelector((state) => state);
+
+  console.log('akjshdkjsahdkasjhd', statesssss)
 
   const isLoading = useSelector((state) => state?.auth?.loading);
   const error = useSelector((state) => state?.auth?.error);
@@ -40,8 +53,8 @@ export default function ProfileContainer() {
     <VStack style={styles.mainContainer}>
       <Box w={["100%", "100%", "70%", "50%"]} style={styles.infoSection}>
         <Box style={styles.cardInfo}>
-          <Text>{user?.name}</Text>
-          <Text>{user?.email}</Text>
+          <Text>{userId ? userProfile?.name: user?.name}</Text>
+          <Text>{userId ?  userProfile?.email : user?.email}</Text>
         </Box>
         <Stack direction={["column", "row", "row", "row"]} style={styles.card}>
           <Box style={styles.cardInfo}>
@@ -80,8 +93,8 @@ export default function ProfileContainer() {
         <Text>Loading....</Text>
       ) : (
         <Box style={{ width: "100%", height: '100%' }} space={4} alignItems="center">
-          <UserDataContainer data={PacksData?.packs} type="packs" />
-          <UserDataContainer data={tripsData?.trips} type="trips" />
+          <UserDataContainer data={PacksData?.packs} type="packs" source = {userId ? userProfile?.name + "'s" : "Your"} />
+          <UserDataContainer data={tripsData?.trips} type="trips" source = {userId ? userProfile?.name : "Your"} />
         </Box>
       )}
     </VStack>
