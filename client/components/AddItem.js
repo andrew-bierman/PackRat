@@ -50,7 +50,6 @@ export const AddItem = ({ packId }) => {
             flexDirection: "row",
             alignItems: "center",
             justifyContent: "space-between",
-
             width: "100%",
           }}
         >
@@ -63,7 +62,13 @@ export const AddItem = ({ packId }) => {
             flex={1}
           />
           {data && (
-            <DropdownComponent data={data} setUnit={setUnit} width="120" />
+            <DropdownComponent
+              data={data}
+              value={unit}
+              onValueChange={(value) => setUnit(value)}
+              placeholder={"Unit"}
+              width="120px"
+            />
           )}
         </Box>
 

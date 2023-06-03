@@ -7,12 +7,38 @@ import { Platform } from "react-native";
 
 import { theme } from "../theme/index";
 
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { addTrail, addPark } from "../store/dropdownStore";
 import MapContainer from "./map/MapContainer";
 
-export default function TripCard({ title, Icon, isMap, data, isSearch, isTrail, cords }) {
+export default function TripCard({
+  title,
+  Icon,
+  isMap,
+  data,
+  isSearch,
+  isTrail,
+}) {
+  const dispatch = useDispatch();
+
   const currentTrail = useSelector((state) => state.dropdown.currentTrail);
   const currentPark = useSelector((state) => state.dropdown.currentPark);
+
+  const currentShape = useSelector(
+    (state) => state.search.selectedSearchResult
+  );
+
+  const handleValueChange = (value) => {
+    // Assuming that you have a redux action to set the current trail and park
+    if(isTrail) {
+      dispatch(addTrail(value));
+    } else if (isPark){
+      dispatch(addPark(value));
+    }
+  }
+
+  console.log("currentShape", currentShape);
+
   return (
     <Stack
       alignSelf="center"
@@ -31,12 +57,10 @@ export default function TripCard({ title, Icon, isMap, data, isSearch, isTrail, 
     >
       <Box
         style={{
-         
           flexDirection: "row",
           gap: 15,
           alignItems: "center",
           paddingVertical: 15,
-          
         }}
       >
         <Icon />
@@ -51,7 +75,7 @@ export default function TripCard({ title, Icon, isMap, data, isSearch, isTrail, 
         </Text>
       </Box>
       {isMap ? (
-        <MapContainer cords={cords}/>
+        <MapContainer shape={currentShape} />
       ) : isSearch ? (
         <SearchInput />
       ) : (
@@ -60,7 +84,9 @@ export default function TripCard({ title, Icon, isMap, data, isSearch, isTrail, 
           {...{
             value: isTrail ? currentTrail : currentPark,
             data,
+            placeholder: isTrail ? "Select Trail" : "Select Park",
             isTrail,
+            onValueChange: handleValueChange,
             width: "300",
           }}
         />
