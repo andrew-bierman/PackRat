@@ -4,11 +4,12 @@ import { View, StyleSheet, Platform } from "react-native";
 
 import WebMap from "./WebMap";
 
-export function MapContainer() {
+export function MapContainer({cords}) {
+  
   if (Platform.OS === "web") {
     return (
       <View style={[styles.webContainer]}>
-        <WebMap />
+        <WebMap cords={cords}/>
       </View>
     );
   }
@@ -24,6 +25,7 @@ const styles = StyleSheet.create({
     margin: '10px',
     // height: "fit-content",
     // position: "relative",
+
     width: "600px",
     height: '400px',
     borderRadius: '10px',

@@ -70,7 +70,7 @@ router.get("/", getUsers);
  *       '500':
  *         description: Error retrieving the user
  */
-router.get("/:userId", validator.getTripById, getUserById);
+router.get("/:userId", validator.getUserById, getUserById);
 
 // router.post("/", addUser);
 
