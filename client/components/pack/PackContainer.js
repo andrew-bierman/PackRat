@@ -23,7 +23,6 @@ export default function PackContainer({ isCreatingTrip = false }) {
 
   const newTrip = useSelector((state) => state.trips.newTrip);
 
-  const [packName, setPackName] = useState("");
   const [currentPackId, setCurrentPackId] = useState(null);
 
   useEffect(() => {
@@ -32,9 +31,8 @@ export default function PackContainer({ isCreatingTrip = false }) {
     }
   }, [dispatch, user?._id]);
 
-  const handlePack = (name) => {
-    setPackName(name);
-    const selectedPack = packs.find((pack) => pack.name === name);
+  const handlePack = (val) => {
+    const selectedPack = packs.find((pack) => pack._id === val);
     setCurrentPackId(selectedPack?._id);
 
     if (isCreatingTrip && selectedPack?._id) {
@@ -46,13 +44,13 @@ export default function PackContainer({ isCreatingTrip = false }) {
     selectPackById(state, currentPackId)
   );
 
-  const dataValues = packs?.map((pack) => pack.name) ?? [];
+  const dataValues = packs ?? [];
 
   return dataValues?.length > 0 ? (
     <Box style={styles.mainContainer}>
       <DropdownComponent
         data={dataValues}
-        value={packName}
+        value={currentPackId}
         setUnit={handlePack}
         width="300"
       />
@@ -87,6 +85,7 @@ export default function PackContainer({ isCreatingTrip = false }) {
     </Box>
   ) : null;
 }
+
 
 const styles = StyleSheet.create({
   mainContainer: {
