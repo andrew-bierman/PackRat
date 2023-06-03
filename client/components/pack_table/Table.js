@@ -36,16 +36,23 @@ export const TableContainer = ({ currentPack }) => {
   const [edit, setEdit] = useState();
 
   // PREFERED WEIGHTING UNIT FOR DISPLAY TO CLIENTSIDE
-  const [weightUnit, setWeightUnit] = useState('g');
+  const [weightUnit, setWeightUnit] = useState("g");
   const calculate = (value) => {
-    // update the item values and then recalculate
     return currentPack?.items?.reduce((acc, item) => {
-      const convertedWeight = convertWeight(item?.weight, item?.unit, weightUnit);
-      const result = acc + (convertedWeight * item.quantity);
+      const convertedWeight = convertWeight(
+        item?.weight,
+        item?.unit,
+        weightUnit
+      );
+      const result = acc + convertedWeight * item.quantity;
       return result;
-    }, 0)
-  }
-  const totalItemsWeight = useMemo(() => calculate(currentPack), [currentPack, weightUnit])
+    }, 0);
+  };
+
+  const totalItemsWeight = useMemo(
+    () => calculate(currentPack),
+    [currentPack, weightUnit]
+  );
 
   // UI component
   const WeightUnitDropdown = ({ value, onChange }) => {
@@ -151,9 +158,7 @@ export const TableContainer = ({ currentPack }) => {
   if (isLoading) return <Text>Loading....</Text>;
 
   return (
-    <Box
-      style={styles.container}
-    >
+    <Box style={styles.container}>
       <WeightUnitDropdown value={weightUnit} onChange={setWeightUnit} />
       {data?.length > 0 ? (
         <Table

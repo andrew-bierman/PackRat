@@ -13,44 +13,74 @@ const PackSchema = new Schema({
   favorites_count: { type: Number },
   createdAt: String,
   owners: [{ type: Schema.Types.ObjectId, ref: "User", default: [] }],
-  grades: { 
-    type: Object, 
+  grades: {
+    type: Object,
     default: {
       weight: "",
       essentialItems: "",
-      redundancyAndVersatility: ""
-    }
+      redundancyAndVersatility: "",
+    },
   },
-  scores: { 
-    type: Object, 
+  scores: {
+    type: Object,
     default: {
       weightScore: 0,
       essentialItemsScore: 0,
       redundancyAndVersatilityScore: 0,
-    } 
+    },
   },
-  type:{type:String,default:'pack'}
+  type: { type: String, default: "pack" },
 });
+
+PackSchema.virtual("weightInPounds").get(function () {
+  const totalWeightInGrams = this.total_weight;
+  const weightInPounds = totalWeightInGrams / 453.59237; // 1 pound = 453.59237 grams
+  return Math.round(weightInPounds * 100) / 100; // Round to two decimal places
+});
+
+PackSchema.virtual("weightInKilograms").get(function () {
+  const totalWeightInGrams = this.total_weight;
+  const weightInKilograms = totalWeightInGrams / 1000; // 1 kilogram = 1000 grams
+  return Math.round(weightInKilograms * 100) / 100; // Round to two decimal places
+});
+
+PackSchema.virtual("weightInOunces").get(function () {
+  const totalWeightInGrams = this.total_weight;
+  const weightInOunces = totalWeightInGrams / 28.34952; // 1 ounce = 28.34952 grams
+  return Math.round(weightInOunces * 100) / 100; // Round to two decimal places
+});
+
+// PackSchema.virtual("total_weight").get(function () {
+//   if (this.items && this.items.length > 0 && this.items[0] instanceof Item) {
+//     return this.items.reduce((total, item) => {
+//       const itemWeight = item.weight * item.quantity;
+//       return total + itemWeight;
+//     }, 0);
+//   } else {
+//     return 0;
+//   }
+// });
 
 PackSchema.virtual("total_weight").get(function () {
   if (this.items && this.items.length > 0 && this.items[0] instanceof Item) {
-    return this.items.reduce(
-      (total, item) => total + item.weight * item.quantity,
-      0
-    );
+    return this.items.reduce((total, item) => {
+      let itemWeight = item.weight;
+      // Convert item weight to grams based on the unit
+      if (item.unit === "lb") {
+        // Convert pounds to grams: 1 pound = 453.59237 grams
+        itemWeight *= 453.59237;
+      } else if (item.unit === "kg") {
+        // Convert kilograms to grams: 1 kilogram = 1000 grams
+        itemWeight *= 1000;
+      } else if (item.unit === "oz") {
+        // Convert ounces to grams: 1 ounce = 28.34952 grams
+        itemWeight *= 28.34952;
+      }
+      return total + itemWeight * item.quantity;
+    }, 0);
   } else {
     return 0;
   }
-});
-
-PackSchema.virtual("totalScore").get(function () {
-  const scoresArray = Object.values(this.scores);
-  const sum = scoresArray.reduce((total, score) => total + score, 0);
-  const average = scoresArray.length > 0 ? sum / scoresArray.length : 0;
-
-  return (
-    Math.round(average * 100) / 100
-  );
 });
 
 PackSchema.set("toObject", { virtuals: true });

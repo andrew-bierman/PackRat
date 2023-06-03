@@ -25,18 +25,18 @@ export function PackDetails() {
   const link = `${CLIENT_URL}/packs/${packId}`;
 
   useEffect(() => {
-    if(!packId) return;
+    if (!packId) return;
     dispatch(fetchSinglePack(packId));
   }, [dispatch, packId]);
 
   const currentPack = useSelector((state) => state.singlePack.singlePack);
-
+  console.log("pack data", currentPack);
   const user = useSelector((state) => state.auth.user);
 
   // check if user is owner of pack, and that pack and user exists
   const isOwner = currentPack && user && currentPack.owner_id === user._id;
 
-  console.log('isOwner in packdetails', isOwner)
+  console.log("isOwner in packdetails", isOwner);
 
   const isLoading = useSelector((state) => state.singlePack.isLoading);
   const error = useSelector((state) => state.singlePack.error);
@@ -56,7 +56,11 @@ export function PackDetails() {
             additionalComps={
               <>
                 <TableContainer currentPack={currentPack} />
-                <ScoreContainer type='pack' data={currentPack} isOwner={isOwner}/>
+                <ScoreContainer
+                  type="pack"
+                  data={currentPack}
+                  isOwner={isOwner}
+                />
               </>
             }
             link={link}

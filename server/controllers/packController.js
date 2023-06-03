@@ -1,6 +1,6 @@
 import Pack from "../models/packModel.js";
 import mongoose from "mongoose";
-import { calculatePackScore } from "../utils/scorePack.js"
+import { calculatePackScore } from "../utils/scorePack.js";
 
 export const getPublicPacks = async (req, res) => {
   try {
@@ -131,8 +131,8 @@ export const addPack = async (req, res) => {
 
 export const editPack = async (req, res) => {
   try {
-    const { _id } = req.body
-    
+    const { _id } = req.body;
+
     const newPack = await Pack.findOneAndUpdate({ _id }, req.body, {
       returnOriginal: false,
     });
@@ -147,7 +147,7 @@ export const editPack = async (req, res) => {
 
 export const deletePack = async (req, res) => {
   try {
-    const { packId } = req.body
+    const { packId } = req.body;
 
     await Pack.findOneAndDelete({ _id: packId });
     res.status(200).json({ msg: "pack was deleted successfully" });
@@ -157,22 +157,21 @@ export const deletePack = async (req, res) => {
 };
 
 export const scorePack = async (req, res) => {
-  
   try {
     const { packId } = req.params;
 
     const objectId = new mongoose.Types.ObjectId(packId);
-    const packData = await Pack.findById(objectId).populate("items")
+    const packData = await Pack.findById(objectId).populate("items");
 
     // console.log("packData", packData)
 
     // Call the scoring function to calculate the pack score
 
-    const packScore = calculatePackScore(packData)
+    const packScore = calculatePackScore(packData);
 
-    console.log("packScore", packScore)
+    console.log("packScore", packScore);
 
-    const { scores, grades } = packScore
+    const { scores, grades } = packScore;
 
     const updatedPack = await Pack.findByIdAndUpdate(
       { _id: packId },
@@ -180,11 +179,11 @@ export const scorePack = async (req, res) => {
       { returnOriginal: false }
     );
 
-    console.log("updatedPack", updatedPack)
+    console.log("updatedPack", updatedPack);
 
     res.status(200).json({ msg: "Pack was scored successfully", updatedPack });
   } catch (error) {
-    console.log("error", error)
+    console.log("error", error);
     res.status(404).json({ msg: "Unable to score pack", error });
   }
 };

@@ -11,6 +11,7 @@ import geoCodeRoutes from "./geoCodeRoutes.js";
 import getParkRoutes from "./getParkRoutes.js";
 import getTrailRoutes from "./getTrailRoutes.js";
 import osmRoutes from "./osmRoutes.js";
+import conversionRoutes from "./conversionRoutes.js";
 import passwordResetRoutes from "./passwordResetRoutes.js";
 
 const router = express.Router();
@@ -34,6 +35,7 @@ if (process.env.NODE_ENV !== "production") {
 
 // use routes
 router.use("/user", userRoutes);
+router.use("/convert", conversionRoutes);
 router.use("/pack", packRoutes);
 router.use("/item", itemRoutes);
 router.use("/trip", tripRoutes);
@@ -46,6 +48,7 @@ router.use("/password-reset", passwordResetRoutes);
 
 // Also listen to /api for backwards compatibility
 router.use("/api/user", userRoutes);
+router.use("/api/convert", conversionRoutes);
 router.use("/api/pack", packRoutes);
 router.use("/api/item", itemRoutes);
 router.use("/api/trip", tripRoutes);
