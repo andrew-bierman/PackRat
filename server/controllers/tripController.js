@@ -23,7 +23,7 @@ export const getPublicTrips = async (req, res) => {
     } else {
       publicTripsPipeline.push({ $sort: { _id: -1 } });
     }
-
+   
     const publicTrips = await Trip.aggregate(publicTripsPipeline);
 
     res.status(200).json(publicTrips);
@@ -47,9 +47,11 @@ export const getTrips = async (req, res) => {
 
 export const getTripById = async (req, res) => {
   try {
+    
     const { tripId } = req.body;
+    console.log('akjsdhkjsahdkshjd', await Trip.findById({ _id: tripId ?tripId : req?.params?.tripId }))
 
-    const trip = await Trip.findById({ _id: tripId }).populate("packs");
+    const trip = await Trip.findById({ _id: tripId ?tripId : req?.params?.tripId }).populate({path:"packs", populate:{path:'items'}});
 
     res.status(200).json(trip);
   } catch (error) {
