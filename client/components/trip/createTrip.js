@@ -86,7 +86,7 @@ export const SaveTripContainer = () => {
       description,
       start_date: startDate,
       end_date: endDate,
-      destination: search.properties.name,
+      destination: JSON.stringify(search),
       trail: dropdown.currentTrail,
       duration: JSON.stringify(duration),
       weather: JSON.stringify(weatherObject),
