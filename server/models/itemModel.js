@@ -103,9 +103,20 @@ function convertWeightToOunces(weight, unit) {
   return weightInGrams / 28.34952; // 1 ounce = 28.34952 grams
 }
 
+// ItemSchema.pre("save", async function (next) {
+//   // Update the weight in grams before saving
+//   this.weight = convertWeightToGrams(this.weight, this.unit);
+//   next();
+// });
+
 ItemSchema.pre("save", async function (next) {
-  // Update the weight in grams before saving
-  this.weight = convertWeightToGrams(this.weight, this.unit);
+  if (this.unit === "lb") {
+    this.weight = convertWeightToGrams(this.weight, "lb");
+  } else if (this.unit === "kg") {
+    this.weight = convertWeightToGrams(this.weight, "kg");
+  } else if (this.unit === "oz") {
+    this.weight = convertWeightToGrams(this.weight, "oz");
+  }
   next();
 });
 
