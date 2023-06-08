@@ -51,7 +51,8 @@ export default function PackContainer({ isCreatingTrip = false }) {
       <DropdownComponent
         data={dataValues}
         value={currentPackId}
-        setUnit={handlePack}
+        onValueChange={handlePack}
+        placeholder={"Select a Pack"}
         width="300"
       />
       {currentPackId && (

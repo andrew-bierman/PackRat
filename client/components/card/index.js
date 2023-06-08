@@ -14,8 +14,6 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export const CustomCard = ({ title, content, footer, link, type, destination }) => {
 
-
-  console.log('kshjdjkashdkjashd', type)
   const [isCopied, setIsCopied] = useState(false);
 
   const handleCopyLink = () => {
