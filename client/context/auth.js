@@ -35,7 +35,6 @@ function useProtectedRoute(user) {
 
 export function AuthProvider({ children }) {
   const user = useSelector((state) => state.auth.user);
-  const dispatch = useDispatch();
 
   useProtectedRoute(user);
 
