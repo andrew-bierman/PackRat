@@ -1,5 +1,6 @@
 import osmtogeojson from "osmtogeojson";
 import axios from "axios";
+import Way from "../models/osm/wayModel.js";
 
 export const getOsm = async (req, res) => {
   console.log("req", req); // log the request body to see what it looks like
@@ -107,6 +108,25 @@ export const getPhotonResults = async (req, res) => {
   }
 };
 
+const updateDatabaseWithGeoJSONDataFromOverpass = async (data) => {
+  try {
+
+    if(!data) {
+      throw new Error("No data provided");
+    }
+
+    await Way.findOrCreateManyFromGeoJSON(data, (err, ways) => {
+      if (err) {
+        console.error(err);
+      } else {
+        console.log("ways", ways);
+      }
+    });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export const getTrailsOSM = async (req, res) => {
   try {
     // set default values for lat, lon, and radius
@@ -133,6 +153,8 @@ export const getTrailsOSM = async (req, res) => {
     });
 
     const geojsonData = osmtogeojson(response.data);
+
+    updateDatabaseWithGeoJSONDataFromOverpass(geojsonData);
 
     res.send(geojsonData);
   } catch (error) {
