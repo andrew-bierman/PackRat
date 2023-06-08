@@ -16,6 +16,7 @@ function useProtectedRoute(user) {
 
   React.useEffect(() => {
     const inAuthGroup = segments[0] === "(auth)";
+    // need to add check for approved pages as well
 
     if (
       // If the user is not signed in and the initial segment is not anything in the auth group.
@@ -38,11 +39,8 @@ export function AuthProvider({ children }) {
 
   useProtectedRoute(user);
 
-  const signIn = () => dispatch({ type: "SIGN_IN" });
-  const signOut = () => dispatch({ type: "SIGN_OUT" });
-
   return (
-    <AuthContext.Provider value={{ user, signIn, signOut }}>
+    <AuthContext.Provider value={{ user }}>
       {children}
     </AuthContext.Provider>
   );
