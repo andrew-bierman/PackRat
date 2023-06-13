@@ -4,15 +4,16 @@ import { Box, Input, Button, Text } from "native-base";
 import useAddItem from "../hooks/useAddItem";
 import DropdownComponent from "./Dropdown";
 import { theme } from "../theme";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import { addPackItem } from "../store/packsStore";
+import { addPackItem, editPackItem } from "../store/packsStore";
 import { useDispatch, useSelector } from "react-redux";
 import { CustomModal } from "./modal";
 
 const data = ["oz", "lb", "g", "kg"];
 
-export const AddItem = ({ packId }) => {
+export const AddItem = ({ _id, isEdit, packData }) => {
+
   const dispatch = useDispatch();
 
   const [name, setName] = useState("");
@@ -22,16 +23,35 @@ export const AddItem = ({ packId }) => {
 
   // const { addItem } = useAddItem();
 
+
+  useEffect(() => {
+
+    if (packData) {
+      setName(packData?.name);
+      setWeight(packData?.weight.toString());
+      setQuantity(packData?.quantity.toString());
+      setUnit(packData?.unit);
+    }
+
+  }, [packData])
+
   const isLoading = useSelector((state) => state.packs.isLoading);
   const error = useSelector((state) => state.packs.error);
   const isError = error !== null;
 
   const handleAddPackItem = async (item) => {
     dispatch(addPackItem({ name, weight, quantity, unit, packId }));
-
     setName("");
     setWeight("");
     setQuantity("");
+  };
+
+  const handleEditPackItem = async () => {
+    dispatch(editPackItem({ name, weight, quantity, unit, _id }));
+    setName("");
+    setWeight("");
+    setQuantity("");
+    setUnit("");
   };
 
   return (
@@ -62,13 +82,7 @@ export const AddItem = ({ packId }) => {
             flex={1}
           />
           {data && (
-            <DropdownComponent
-              data={data}
-              value={unit}
-              onValueChange={(value) => setUnit(value)}
-              placeholder={"Unit"}
-              width="120px"
-            />
+            <DropdownComponent data={data} value={packData?.unit} setUnit={setUnit} width="120" />
           )}
         </Box>
 
@@ -83,12 +97,16 @@ export const AddItem = ({ packId }) => {
       </Box>
       <Button
         onPress={() => {
+          if (isEdit) {
+            handleEditPackItem()
+          } else {
+            handleAddPackItem({ name, weight, quantity, unit, packId });
+          }
           // addItem.mutate({ name, weight, quantity, unit, packId });
-          handleAddPackItem({ name, weight, quantity, unit, packId });
         }}
       >
         <Text style={{ color: theme.colors.text }}>
-          {isLoading ? "Loading.." : "Add Item"}
+          {isLoading ? "Loading.." : isEdit == true ? "Edit item" : "Add Item"}
         </Text>
       </Button>
     </Box>

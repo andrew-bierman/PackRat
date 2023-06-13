@@ -3,7 +3,7 @@ import { Table, TableWrapper, Row, Cell } from "react-native-table-component";
 
 import { Feather } from "@expo/vector-icons";
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
-
+import { CustomModal } from "../../components/modal";
 import { Select } from "native-base";
 
 // import useGetItems from "../hooks/useGetItems";
@@ -18,10 +18,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { editItem, deleteItem } from "../../store/itemsStore";
 
 import { convertWeight } from "../../utils/convertWeight";
-import { selectPackById } from "../../store/packsStore";
+import { openModal, selectPackById } from "../../store/packsStore";
+import { AddItem } from "../AddItem";
+import { EditPackModal } from "./EditPackModal";
 
 export const TableContainer = ({ currentPack }) => {
   // const { data, isLoading, isError, error } = useGetItems(packId);
+  const [currentPackId, setCurrentPackId] = useState(null);
+
 
   const dispatch = useDispatch();
 
@@ -30,7 +34,6 @@ export const TableContainer = ({ currentPack }) => {
   const isLoading = useSelector((state) => state.items.isLoading);
 
   const error = useSelector((state) => state.items.error);
-
   const isError = error !== null;
 
   const [edit, setEdit] = useState();
@@ -104,7 +107,8 @@ export const TableContainer = ({ currentPack }) => {
 
   const flexWidthArr = [2, 1, 1, 0.5, 0.5];
 
-  const tableDb = data?.map(({ name, weight, unit, quantity, _id }, index) => [
+
+  const tableDb = data?.map(({ name, weight, quantity, unit, _id }, index) => [
     name,
     `${weight} ${unit}`,
     quantity,
@@ -112,7 +116,7 @@ export const TableContainer = ({ currentPack }) => {
       name="edit"
       size={20}
       color="black"
-      onPress={() => setEdit(index)}
+      onPress={() => { setEdit(index), dispatch(openModal()) }}
     />,
     <Feather
       name="x-circle"
@@ -121,14 +125,13 @@ export const TableContainer = ({ currentPack }) => {
       onPress={() => deleteItem.mutate(_id)}
       style={{ alignSelf: "center" }}
     />,
+    <EditPackModal packId={_id} packData={data[edit]} />
   ]);
-
-  console.log("tableDb", tableDb);
 
   const tablekeys = data?.map((value) => Object.keys(value).slice(1));
 
   useEffect(() => {
-    console.log("data", data);
+    // console.log("data", data);odod
   }, [data]);
 
   const handleWaterChange = (value) => {
@@ -177,6 +180,7 @@ export const TableContainer = ({ currentPack }) => {
               {rowData.map((cellData, cellIndex) => (
                 <Cell
                   key={cellIndex}
+                  onPress={() => console.log("index of ", index)}
                   style={[
                     cellIndex === 3 || cellIndex === 4
                       ? styles.smallCell
@@ -185,9 +189,13 @@ export const TableContainer = ({ currentPack }) => {
                   ]}
                   data={cellData}
                 />
+
               ))}
+
             </TableWrapper>
+
           ))}
+
         </Table>
       ) : (
         <Text>Add your First Item</Text>
