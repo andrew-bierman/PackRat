@@ -29,6 +29,9 @@ export function propertiesToTags(properties) {
     console.error("properties is undefined or null");
     return {};
   }
+  if (typeof properties !== "object" || properties === null) {
+    throw new Error("Properties should be an object");
+  }
   console.log("properties in propertiesToTags", properties);
   const tags = {};
   for (let [k, v] of Object.entries(properties)) {
@@ -37,26 +40,97 @@ export function propertiesToTags(properties) {
   return tags;
 }
 
-export async function createInstanceFromCoordinates([lon, lat]) {
-  const instance = new Node({ lon, lat });
+export async function createInstanceFromCoordinates(Model, [lon, lat]) {
+  if (typeof lon !== "number" || typeof lat !== "number") {
+    console.error("Invalid coordinate format");
+    return null;
+  }
+
+  const instance = new Model({ lon, lat });
   await instance.save();
   return instance._id;
 }
 
-export async function coordinatesToInstances(coordinates) {
-  return await Promise.all(
-    coordinates.map((coordinate) => createInstanceFromCoordinates(coordinate))
-  );
+export async function coordinatesToInstances(Model, coordinates) {
+    if (!Array.isArray(coordinates)) {
+      console.error("Coordinates is not an array");
+      return [];
+    }
+  
+    if (coordinates.length === 0) {
+      return [];
+    }
+  
+    const isNestedArray = Array.isArray(coordinates[0]);
+  
+    if (!isNestedArray) {
+      // Check if we have coordinates or an id
+      if (typeof coordinates[0] === "number") {
+        return [await createInstanceFromCoordinates(Model, coordinates)];
+      } else {
+        return coordinates;
+      }
+    }
+  
+    if (typeof coordinates[0][0] === "number") {
+      return await Promise.all(
+        coordinates.map((coordinate) =>
+          createInstanceFromCoordinates(Model, coordinate)
+        )
+      );
+    } else {
+      return coordinates;
+    }
+  }
+  
+
+export async function handleGeometry(Model, geometry) {
+  console.log("handleGeometry");
+  console.log("handleGeometry geometry", geometry);
+
+  if (!geometry || !Array.isArray(geometry.coordinates)) {
+    console.error("geometry is undefined or not an array");
+    return [];
+  }
+
+  const nodes = [];
+
+  if (geometry.type === "Point") {
+    const instance = await createInstanceFromCoordinates(
+      Model,
+      geometry.coordinates
+    );
+    nodes.push(instance._id);
+  } else {
+    for (const coords of geometry.coordinates) {
+      const instance = await createInstanceFromCoordinates(Model, coords);
+      nodes.push(instance._id);
+    }
+  }
+
+  return nodes;
 }
 
-export async function handleGeometry(geometry) {
-  if (geometry.type === "Point") {
-    return [await createInstanceFromCoordinates(geometry.coordinates)];
-  } else if (geometry.type === "LineString") {
-    return await coordinatesToInstances(geometry.coordinates);
-  } else {
-    // handle other geometry types if needed
+export function handleGeoJSONGeometry(geometry) {
+  console.log("handleGeometry");
+  console.log("handleGeometry geometry", geometry);
+
+  if (!geometry || !Array.isArray(geometry.coordinates)) {
+    console.error("geometry is undefined or not an array");
+    return [];
   }
+
+  const nodes = [];
+
+  if (geometry.type === "Point") {
+    nodes.push(geometry.coordinates);
+  } else {
+    for (const coords of geometry.coordinates) {
+      nodes.push(coords);
+    }
+  }
+
+  return nodes;
 }
 
 export async function fromOSM(Model, data) {
@@ -69,11 +143,11 @@ export async function fromOSM(Model, data) {
     updated_at: data.timestamp,
   };
 
-  // Find or create nodes/ways/relations
+  // Find or create nodes
   const ids = data.nodes.map((node) => node.id);
-  const instances = await Model.findOrCreateMany(ids, data.nodes);
+  const instances = await Node.findOrCreateMany(ids, data.nodes);
 
-  // Add nodes/ways/relations to instance
+  // Add nodes to instance
   instanceData.nodes = instances.map((instance) => instance._id);
 
   // Create instance
@@ -100,8 +174,11 @@ export async function fromGeoJSON(Model, geoJSON) {
   // Convert properties to tags
   instance.tags = propertiesToTags(geoJSON.properties || {});
 
-  // Convert coordinates to nodes/ways/relations
-  instance.nodes = await handleGeometry(Model, geoJSON.geometry);
+  // Convert coordinates to nodes
+  instance.nodes = await coordinatesToInstances(
+    Node,
+    handleGeoJSONGeometry(geoJSON.geometry)
+  );
 
   // Set the GeoJSON representation
   if (isGeoJSONFormat(geoJSON)) {
@@ -109,17 +186,16 @@ export async function fromGeoJSON(Model, geoJSON) {
   } else {
     console.error("geoJSON is not in GeoJSON format");
   }
-  // instance.geoJSON = toGeoJSON(Model, instance);
 
   // Save and return the new instance
   await instance.save();
   return instance;
 }
 
-export function toGeoJSON(Model, instance) {
+export async function toGeoJSON(Model, instance) {
   console.log("toGeoJSON instance", instance);
 
-  if(!instance) {
+  if (!instance) {
     console.error("instance is undefined or null");
     return {};
   }
@@ -136,52 +212,98 @@ export function toGeoJSON(Model, instance) {
     geoJSON.properties = propertiesToTags(instance.tags);
   }
 
-  instance.nodes.forEach((node) => {
-    const copiedNode = { ...node }; // Create a shallow copy of the node
-    geoJSON.geometry.coordinates.push([copiedNode.lon, copiedNode.lat]);
+  // Retrieve the Node documents from the database
+  const nodes = await Node.find({ _id: { $in: instance.nodes } }).exec();
+
+  nodes.forEach((node) => {
+    // assuming nodes are already saved and their ids are stored in `nodes`
+    // we can fetch the node data here using findById or leave it as it is if id is enough
+    geoJSON.geometry.coordinates.push([node.lat, node.lon]);
   });
 
-  geoJSON.id = instance.osm_type + "/" + instance.osm_id;
   return geoJSON;
 }
 
-export async function findOrCreateMany(Model, data) {
-  const instances = [];
-
-  for (let element of data) {
-    // Extract OSM ID
-    const id = element.id
-      ? Number(element.id.split("/")[1])
-      : Number(element.properties.id.split("/")[1]);
-    const type = element.id
-      ? element.id.split("/")[0]
-      : element.properties.id.split("/")[0];
-    const foundInstance = await Model.findOne({ osm_id: id, osm_type: type });
-
-    if (foundInstance) {
-      if (isGeoJSONFormat(element)) {
-        // update existing instance if data is in GeoJSON format
-        foundInstance.tags = propertiesToTags(element.properties);
-        foundInstance.nodes = await handleGeometry(Model, element.geometry);
-        foundInstance.geoJSON = element;
-        await foundInstance.save();
-      }
-      instances.push(foundInstance);
-    } else {
-      let newInstance;
-
-      if (isOSMFormat(element)) {
-        // create new instance from OSM data
-        console.log("findOrCreateMany, isOSM element", element);
-        newInstance = await fromOSM(Model, element);
-      } else if (isGeoJSONFormat(element)) {
-        // create new instance from GeoJSON data
-        newInstance = await fromGeoJSON(Model, element);
-      }
-
-      instances.push(newInstance);
+// Mapping of types to Models
+const modelMappingFunc = (type) => {
+    switch (type) {
+        case "node":
+            return Node;
+        case "way":
+            return Way;
+        case "relation":
+            // return Relation;
+        default:
+            return null;
     }
-  }
+};
+  
+  export async function findOrCreateMany(Model = Way, data) {
 
-  return instances;
-}
+    // Check if data is iterable
+    if (!Array.isArray(data)) {
+        console.error("Data is not iterable");
+        console.log("Data", data)
+        throw new Error("Data is not iterable, cannot proceed."); // This line is added
+      }
+
+    const instances = [];
+  
+    for (let element of data) {
+      // Extract OSM ID and type
+      const id = element.id
+        ? Number(element.id.split("/")[1])
+        : Number(element.properties.id.split("/")[1]);
+      const type = element.id
+        ? element.id.split("/")[0]
+        : element.properties.id.split("/")[0];
+  
+      // Retrieve corresponding Model
+      const Model = modelMappingFunc(type);
+  
+      if (!Model) {
+        console.error(`Invalid type: ${type}`);
+        continue;
+      }
+  
+      const foundInstance = await Model.findOne({ osm_id: id, osm_type: type });
+  
+      console.log("findOrCreateMany, foundInstance", foundInstance);
+      console.log("findOrCreateMany, osm_id", id);
+      console.log("findOrCreateMany, osm_type", type);
+  
+      if (foundInstance) {
+        if (isGeoJSONFormat(element)) {
+          console.log("findOrCreateMany, isGeoJSON element", element);
+          foundInstance.updated_at = element.properties.timestamp;
+          foundInstance.osm_id = id;
+          foundInstance.osm_type = type;
+          foundInstance.tags = propertiesToTags(element.properties);
+          foundInstance.nodes = handleGeoJSONGeometry(element.geometry);
+          foundInstance.geoJSON = element;
+  
+          console.log(
+            "findOrCreateMany, foundInstance before save ------",
+            foundInstance
+          );
+  
+          await foundInstance.save();
+        }
+        instances.push(foundInstance);
+      } else {
+        let newInstance;
+  
+        if (isOSMFormat(element)) {
+          console.log("findOrCreateMany, isOSM element", element);
+          newInstance = await fromOSM(Model, element);
+        } else if (isGeoJSONFormat(element)) {
+          newInstance = await fromGeoJSON(Model, element);
+        }
+  
+        instances.push(newInstance);
+      }
+    }
+  
+    return instances;
+  }
+  

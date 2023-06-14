@@ -11,6 +11,13 @@ const NodeSchema = Schema({
   updated_at: Date, // last update from OSM
 });
 
+// add a to JSON method to the schema
+NodeSchema.method("toJSON", function () {
+  const { _id, ...object } = this.toObject();
+  object.id = object.id.toString();
+  return object;
+});
+
 NodeSchema.statics.findOrCreateMany = async function (ids, nodes) {
   // Find existing nodes
   const existingNodes = await this.find({ id: { $in: ids } });
