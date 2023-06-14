@@ -26,11 +26,10 @@ const WaySchema = new Schema({
 
 WaySchema.pre("save", async function (next) {
   try {
-
-    if(this.type !== 'way') {
-      throw new Error('This is not a way')
+    if (this.osm_type !== 'way') {
+      console.log('ERROR in WaySchema.pre("save"): this.osm_type !== "way"', this.osm_type)
+      throw new Error('This is not a way');
     }
-
     next();
   } catch (err) {
     next(err);
@@ -49,11 +48,20 @@ WaySchema.pre("save", async function (next) {
   }
 });
 
-WaySchema.method("toGeoJSON", function () {
-  console.log("toGeoJSON instance in mongo schema", this)
-  return toGeoJSON(this);
+WaySchema.method("toGeoJSON", async function () {
+  console.log("toGeoJSON instance in mongo schema", this);
+  return await toGeoJSON(this.constructor, this);
 });
 
-const Way = mongoose.model("Way", WaySchema);
+// add a to JSON method to the schema that populates the nodes
+WaySchema.method("toJSON", async function () {
+  const { _id, ...object } = this.toObject();
+  object.id = object.id.toString();
+  object.nodes = await this.populate("nodes").execPopulate();
+  return object;
+});
+
+
+const Way = myDB.model("Way", WaySchema);
 
 export default Way;
