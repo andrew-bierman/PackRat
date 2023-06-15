@@ -3,7 +3,7 @@ import axios from "axios";
 import Way from "../models/osm/wayModel.js";
 import Node from "../models/osm/nodeModel.js";
 import mongoose from "mongoose";
-import { findOrCreateMany } from "../utils/osmFunctions.js";
+import { findOrCreateMany } from "../utils/osmFunctions/modelHandlers.js";
 
 export const getOsm = async (req, res) => {
   console.log("req", req); // log the request body to see what it looks like
@@ -189,7 +189,10 @@ export const getParksOSM = async (req, res) => {
 
     const geojsonData = osmtogeojson(response.data);
 
+    updateDatabaseWithGeoJSONDataFromOverpass(geojsonData);
+
     res.send(geojsonData);
+    
   } catch (error) {
     console.error(error);
     res.status(400).send({ message: "Error retrieving Parks OSM results" });
