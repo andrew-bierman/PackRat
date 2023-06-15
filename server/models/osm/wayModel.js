@@ -1,11 +1,5 @@
 import mongoose from "mongoose";
-import {
-  fromOSM,
-  fromGeoJSON,
-  toGeoJSON,
-  isGeoJSONFormat,
-  isOSMFormat,
-} from "../../utils/osmFunctions.js";
+import { toGeoJSON } from "../../utils/osmFunctions/modelHandlers.js";
 import myDB from "../dbConnection.js";
 
 const { Schema } = mongoose;
