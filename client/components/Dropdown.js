@@ -1,44 +1,47 @@
 import React from "react";
-import { useDispatch } from "react-redux";
-import { addPark, addTrail } from "../store/parksStore";
 import { Box, Center, Select, CheckIcon } from "native-base";
 
 export const DropdownComponent = ({
   data,
-  setUnit,
   value,
-  isTrail,
+  onValueChange,
+  placeholder,
   width,
   style,
 }) => {
-  const dispatch = useDispatch();
-
-  console.log("data in dropdown", data)
+  console.log("data in dropdown", data);
 
   return (
     <Center>
-      <Box maxW={width} style={style}>
+      <Box style={{...style, width: width || '100%'}}>
         <Select
           selectedValue={value}
-          minWidth={setUnit ? "105" : "200"}
+          width="100%"
           accessibilityLabel="Choose Service"
-          placeholder="Select"
+          placeholder={placeholder || "Select"}
           _selectedItem={{
             bg: "teal.600",
             endIcon: <CheckIcon size="5" />,
           }}
-          onValueChange={(itemValue) => {
-            setUnit
-              ? setUnit(itemValue)
-              : isTrail
-              ? dispatch(addTrail(itemValue))
-              : dispatch(addPark(itemValue));
-          }}
+          onValueChange={onValueChange}
         >
           {data
-            ? data?.map((item, index) => (
-                <Select.Item key={`${item.id} + ${index}`} label={item.name} value={item.id || item._id || item.name} />
-              ))
+            ? data?.map((item, index) => {
+                let val = item;
+                let label = item;
+                // Check if the item is an object
+                if (typeof item === 'object' && item !== null) {
+                  val = item.id || item._id || item.name;
+                  label = item.name;
+                }
+                return (
+                  <Select.Item
+                    key={index}
+                    label={String(label)}
+                    value={val}
+                  />
+                );
+              })
             : null}
         </Select>
       </Box>
