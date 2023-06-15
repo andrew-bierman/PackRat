@@ -10,6 +10,8 @@ import {
   TouchableOpacity,
   Dimensions,
   Alert,
+  Image,
+  ActivityIndicator,
 } from "react-native";
 import * as Location from "expo-location";
 import {
@@ -33,11 +35,8 @@ import {
 
 mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
-const WebMap = ({
-  shape = {
-    ...defaultShape,
-  }
-}) => {
+const WebMap = ({ shape = { ...defaultShape } }) => {
+
   useEffect(() => {
     // temporary solution to fix mapbox-gl-js missing css error
     if (Platform.OS === "web") {
@@ -114,9 +113,7 @@ const WebMap = ({
       container: mapContainer.current,
       style: "mapbox://styles/mapbox/outdoors-v11",
       // center: [lng, lat],
-      center: trailCenterPointRef.current
-        ? trailCenterPointRef.current
-        : [lng, lat],
+      center: trailCenterPointRef.current ? trailCenterPointRef.current : [lng, lat],
       zoom: zoomLevelRef.current ? zoomLevelRef.current : zoomLevel,
     });
 
@@ -197,108 +194,81 @@ const WebMap = ({
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status === "granted") {
         const location = await Location.getCurrentPositionAsync({});
-        setLocation({
-          ...location,
-          longitude: location.coords.longitude,
-          latitude: location.coords.latitude,
-        });
-        setCorrectLocation(true);
+        setLng(location.coords.longitude)
+        setLat(location.coords.latitude)
+        setGetLocationLoading(false)
       } else {
-        setCorrectLocation(false);
+        setGetLocationLoading(false)
         Alert.alert("Permission denied");
       }
     } catch (error) {
+      setGetLocationLoading(false)
       if (!mountedRef.current) return null;
-      setCorrectLocation(false);
       Alert.alert("Something went wrong with current location", error.message);
     }
   };
 
   const changeMapStyle = () => {
     setMapFullscreen(true);
-    handleShapeSourceLoad({ width: dw, height: 360 });
+    handleShapeSourceLoad({ defaultShape, width: dw, height: 360 });
   };
 
   const mapButtonsOverlay = () => (
-    <View>
+    <>
       <TouchableOpacity
-        style={styles.locationButton}
+        style={[styles.headerBtnView, styles.locationButton]}
         onPress={goToMyLocation}
         disabled={getLocationLoading}
       >
-        {getLocationLoading ? (
-          <ActivityIndicator size="small" color="white" />
-        ) : (
-          <MaterialCommunityIcons name="crosshairs" size={24} color="white" />
-        )}
+        {
+          getLocationLoading
+            ? (<ActivityIndicator size="small" color="grey" />)
+            : (<MaterialCommunityIcons name="crosshairs" size={21} color="grey" />)
+        }
       </TouchableOpacity>
 
       {!mapFullscreen ? (
         // Preview map
-        <View style={[previewMapDiemension, { alignSelf: "center" }]}>
-          <TouchableOpacity
-            style={[
-              styles.headerBtnView,
-              {
-                width: 40,
-                height: 40,
-                position: "absolute",
-                bottom: 10,
-                right: 10,
-              },
-            ]}
-            onPress={changeMapStyle}
-          >
-            <Entypo name="resize-full-screen" size={21} color={"grey"} />
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity
+          style={[styles.headerBtnView, styles.previewBtn]}
+          onPress={changeMapStyle}
+        >
+          <Entypo name="resize-full-screen" size={21} color={"grey"} />
+        </TouchableOpacity>
       ) : (
         // Fullscreen map
-        <View>
-          <View style={fullMapDiemention}>{/* ... existing code ... */}</View>
-          <TouchableOpacity
-            style={[
-              styles.headerBtnView,
-              {
-                flexDirection: "row",
-                width: "88%",
-                height: 46,
-                marginVertical: 10,
-                alignSelf: "center",
-                justifyContent: "center",
-                alignItems: "center",
-                backgroundColor: "green",
-              },
-            ]}
-            onPress={onDownload}
-            disabled={downloading}
+        <TouchableOpacity
+          style={[styles.headerBtnView, styles.fullScreen]}
+          onPress={() => { }}
+          disabled={downloading}
+        >
+          <Image style={{ width: 21, height: 21 }} source={require('../../assets/download.svg')} />
+          <Text style={{ fontSize: 13, fontWeight: '500', marginLeft: 8 }}>
+            {downloading ? "Downloading" : "Download map"}
+          </Text>
+          {/* {downloading && (
+          <Text
+            style={{
+              backgroundColor: "white",
+              color: "blue",
+              paddingHorizontal: 3,
+              marginHorizontal: 7,
+              minWidth: 20,
+            }}
           >
-            <Text style={{ fontSize: 16, color: "white" }}>
-              {downloading ? "Downloading" : "Download Map"}
-            </Text>
-            {downloading && (
-              <Text
-                style={{
-                  backgroundColor: "white",
-                  color: "blue",
-                  paddingHorizontal: 3,
-                  marginHorizontal: 7,
-                  minWidth: 20,
-                }}
-              >
-                {progress}
-              </Text>
-            )}
-          </TouchableOpacity>
-        </View>
+            {progress}
+          </Text>
+        )} */}
+        </TouchableOpacity>
       )}
-    </View>
+    </>
   );
 
   return (
     <View style={styles.container}>
-      {/* {mapButtonsOverlay()} */}
       <View key="map" ref={mapContainer} style={styles.map} />
+      {mapButtonsOverlay()}
+
     </View>
   );
 };
@@ -315,14 +285,35 @@ const styles = StyleSheet.create({
     minHeight: "100vh", // Adjust the height to your needs
   },
   locationButton: {
+    width: 40, height: 40,
     position: "absolute",
-    bottom: 20,
-    right: 20,
-    backgroundColor: "blue",
-    borderRadius: 20,
-    padding: 10,
+    bottom: 60, right: 10,
+    backgroundColor: "white",
+    borderRadius: 30,
     zIndex: 1,
   },
+  headerBtnView: {
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 30,
+    backgroundColor: "white",
+  },
+  previewBtn: {
+    width: 40, height: 40,
+    position: "absolute",
+    bottom: 10, right: 10,
+  },
+  fullScreen: {
+    width: "25%",
+    padding: 10,
+    marginVertical: 10,
+    backgroundColor: "#EBEDFD",
+    position: 'absolute',
+    bottom: 10,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  }
 });
 
 export default WebMap;
