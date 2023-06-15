@@ -60,8 +60,8 @@ function getShapeSourceBounds(shape) {
   ];
 }
 
-function handleShapeSourceLoad(shape, width, height) {
-  if (shape && shape?.features[0]?.geometry?.coordinates?.length > 1) {
+function handleShapeSourceLoad(width, height) {
+  if (shape?.features[0]?.geometry?.coordinates?.length > 1) {
     let bounds = getShapeSourceBounds(shape);
     bounds = bounds[0].concat(bounds[1]);
     return calculateZoomLevel(bounds, { width, height });

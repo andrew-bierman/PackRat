@@ -2,7 +2,7 @@ import React from "react";
 
 import { View, StyleSheet, Platform } from "react-native";
 
-import WebMap from "./WebMap";
+import WebMap from "./WebMap.web";
 
 export function MapContainer({cords}) {
   
