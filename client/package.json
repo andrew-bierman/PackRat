@@ -62,6 +62,7 @@
     "react-native-webview": "11.26.0",
     "react-redux": "^8.0.5",
     "react-responsive": "^9.0.2",
+    "redux-persist": "^6.0.0",
     "serve": "^14.2.0"
   },
   "devDependencies": {
