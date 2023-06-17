@@ -6,12 +6,12 @@ import {
   StyleSheet,
   Text,
   View,
-  Picker,
   TouchableOpacity,
   Dimensions,
   Alert,
   Image,
   ActivityIndicator,
+  Modal,
 } from "react-native";
 import * as Location from "expo-location";
 import {
@@ -77,6 +77,7 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
   const [progress, setProgress] = useState(0);
   const [downloading, setDownloading] = useState(false);
 
+  const [showModal, setShowModal] = useState(false);
   const [defaultMapSize, setDefaultMapSize] = useState({ width: '70%', height: '100%' })
 
   // useEffect(() => {
@@ -212,14 +213,14 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
 
   const enableFullScreen = () => {
     setMapFullscreen(true);
-    setDefaultMapSize({ width: '100%', height: '100%' })
-    // handleShapeSourceLoad({ defaultShape, width: dw, height: 360 });
+    setShowModal(true)
+    // setDefaultMapSize({ width: '100%', height: '100%' })
   };
 
   const disableFullScreen = () => {
     setMapFullscreen(false);
-    setDefaultMapSize({ width: '70%', height: '100%' })
-    // handleShapeSourceLoad({ defaultShape, width: dw, height: 360 });
+    setShowModal(false)
+    // setDefaultMapSize({ width: '70%', height: '100%' })
   };
 
   const mapButtonsOverlay = () => (
@@ -239,7 +240,7 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
       {!mapFullscreen ? (
         // Preview map
         <TouchableOpacity
-          style={[styles.headerBtnView, styles.previewBtn]}
+          style={[styles.headerBtnView, styles.enterFullScreenBtn]}
           onPress={enableFullScreen}
         >
           <Entypo name="resize-full-screen" size={21} color={"grey"} />
@@ -247,12 +248,12 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
       ) : (
         // Fullscreen map
         <>
-          <TouchableOpacity
-            style={[styles.headerBtnView, styles.previewBtn]}
+          {mapFullscreen && (<TouchableOpacity
+            style={[styles.headerBtnView, styles.exitFullscreenBtn]}
             onPress={disableFullScreen}
           >
-            <Entypo name="resize-100" size={21} color={"grey"} />
-          </TouchableOpacity>
+            <Entypo name="circle-with-cross" size={21} color={"grey"} />
+          </TouchableOpacity>)}
           <TouchableOpacity
             style={[styles.headerBtnView, styles.fullScreen]}
             onPress={() => { }}
@@ -283,9 +284,19 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
 
   return (
     <View style={styles.container}>
-      <View key="map" ref={mapContainer} style={[defaultMapSize, { borderRadius: '10px' }]} />
+      <View key="map" ref={mapContainer} style={styles.map} />
       {mapButtonsOverlay()}
 
+      <Modal
+        animationType={'fade'}
+        transparent={false}
+        visible={showModal}
+      >
+        <View style={styles.modal}>
+          <View key="map" ref={mapContainer} style={styles.map} />
+          {mapButtonsOverlay()}
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -316,10 +327,15 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     backgroundColor: "white",
   },
-  previewBtn: {
+  enterFullScreenBtn: {
     width: 40, height: 40,
     position: "absolute",
     bottom: 10, right: 10,
+  },
+  exitFullscreenBtn: {
+    width: 40, height: 40,
+    position: "absolute",
+    top: 10, right: 10,
   },
   fullScreen: {
     width: "25%",
@@ -327,11 +343,14 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     backgroundColor: "#EBEDFD",
     position: 'absolute',
-    bottom: 10,
+    bottom: 30,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-  }
+  },
+  modal: {
+    alignItems: 'center',
+  },
 });
 
 export default WebMap;
