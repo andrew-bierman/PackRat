@@ -9,7 +9,7 @@ import { theme } from "../theme/index";
 
 import { useSelector, useDispatch } from "react-redux";
 import { addTrail, addPark } from "../store/dropdownStore";
-import MapContainer from "./map/MapContainer.web";
+import MapContainer from "./map/MapContainer";
 
 export default function TripCard({
   title,
