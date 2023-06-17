@@ -8,17 +8,9 @@ export function MapContainer({ cords }) {
 
   if (Platform.OS === "web") {
     return (
-      // <View style={{
-      //   alignItems: "center",
-      //   justifyContent: "center",
-      //   overflow: "hidden",
-      //   marginVertical: '10px',
-      //   width: "100%",
-      //   height: '400px',
-      //   borderRadius: '10px',
-      // }}>
+      <View style={styles.webContainer}>
         <WebMap cords={cords} />
-      // </View>
+      </View>
     );
   }
 }
@@ -30,11 +22,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     overflow: "hidden",
-    margin: '10px',
-    // height: "fit-content",
-    // position: "relative",
-
-    width: "600px",
+    marginVertical: '10px',
+    width: "100%",
     height: '400px',
     borderRadius: '10px',
   },
