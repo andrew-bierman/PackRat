@@ -27,6 +27,7 @@ export default function Index() {
     <ScrollView>
       {Platform.OS === "web" ? (
         <Header.Screen
+          name="Home"
           options={{
             // https://reactnavigation.org/docs/headers#setting-the-header-title
             title: "Home",
