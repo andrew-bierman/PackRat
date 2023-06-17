@@ -77,6 +77,8 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
   const [progress, setProgress] = useState(0);
   const [downloading, setDownloading] = useState(false);
 
+  const [defaultMapSize, setDefaultMapSize] = useState({ width: '70%', height: '100%' })
+
   // useEffect(() => {
   //   console.log("trailCenterPoint state", trailCenterPoint);
   //   console.log("zoomLevel state -- ", zoomLevel);
@@ -102,7 +104,7 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
   }, [shape, fullMapDiemention]);
 
   useEffect(() => {
-    if (map.current) return; // Initialize map only once
+    // if (map.current) return; // Initialize map only once
 
     let processedShape = processShapeData(shape);
 
@@ -165,7 +167,7 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
     return () => {
       // mapInstance.remove();
     };
-  }, []);
+  }, [mapFullscreen]);
 
   const getPosition = async () => {
     try {
@@ -208,9 +210,16 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
     }
   };
 
-  const changeMapStyle = () => {
+  const enableFullScreen = () => {
     setMapFullscreen(true);
-    handleShapeSourceLoad({ defaultShape, width: dw, height: 360 });
+    setDefaultMapSize({ width: '100%', height: '100%' })
+    // handleShapeSourceLoad({ defaultShape, width: dw, height: 360 });
+  };
+
+  const disableFullScreen = () => {
+    setMapFullscreen(false);
+    setDefaultMapSize({ width: '70%', height: '100%' })
+    // handleShapeSourceLoad({ defaultShape, width: dw, height: 360 });
   };
 
   const mapButtonsOverlay = () => (
@@ -231,22 +240,29 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
         // Preview map
         <TouchableOpacity
           style={[styles.headerBtnView, styles.previewBtn]}
-          onPress={changeMapStyle}
+          onPress={enableFullScreen}
         >
           <Entypo name="resize-full-screen" size={21} color={"grey"} />
         </TouchableOpacity>
       ) : (
         // Fullscreen map
-        <TouchableOpacity
-          style={[styles.headerBtnView, styles.fullScreen]}
-          onPress={() => { }}
-          disabled={downloading}
-        >
-          <Image style={{ width: 21, height: 21 }} source={require('../../assets/download.svg')} />
-          <Text style={{ fontSize: 13, fontWeight: '500', marginLeft: 8 }}>
-            {downloading ? "Downloading" : "Download map"}
-          </Text>
-          {/* {downloading && (
+        <>
+          <TouchableOpacity
+            style={[styles.headerBtnView, styles.previewBtn]}
+            onPress={disableFullScreen}
+          >
+            <Entypo name="resize-100" size={21} color={"grey"} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.headerBtnView, styles.fullScreen]}
+            onPress={() => { }}
+            disabled={downloading}
+          >
+            <Image style={{ width: 21, height: 21 }} source={require('../../assets/download.svg')} />
+            <Text style={{ fontSize: 13, fontWeight: '500', marginLeft: 8 }}>
+              {downloading ? "Downloading" : "Download map"}
+            </Text>
+            {/* {downloading && (
           <Text
             style={{
               backgroundColor: "white",
@@ -259,14 +275,15 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
             {progress}
           </Text>
         )} */}
-        </TouchableOpacity>
+          </TouchableOpacity>
+        </>
       )}
     </>
   );
 
   return (
     <View style={styles.container}>
-      <View key="map" ref={mapContainer} style={styles.map} />
+      <View key="map" ref={mapContainer} style={[defaultMapSize, { borderRadius: '10px' }]} />
       {mapButtonsOverlay()}
 
     </View>
@@ -277,8 +294,9 @@ const styles = StyleSheet.create({
   container: {
     alignItems: "center",
     justifyContent: "center",
-    height: "100%",
+    height: "400px",
     width: "100%",
+    borderRadius: '10px',
   },
   map: {
     width: "100%",
