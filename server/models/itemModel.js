@@ -1,3 +1,8 @@
+import mongoose from "mongoose";
+import myDB from "./dbConnection.js";
+
+const { Schema } = mongoose;
+
 const ItemSchema = new Schema(
   {
     name: { type: String, required: true },
@@ -81,38 +86,8 @@ function convertWeightToGrams(weight, unit) {
   }
 }
 
-// Helper function to convert weight to pounds
-function convertWeightToPounds(weight, unit) {
-  const weightInGrams = convertWeightToGrams(weight, unit);
-  return weightInGrams / 453.59237; // 1 pound = 453.59237 grams
-}
-
-// Helper function to convert weight to kilograms
-function convertWeightToKilograms(weight, unit) {
-  const weightInGrams = convertWeightToGrams(weight, unit);
-  return weightInGrams / 1000; // 1 kilogram = 1000 grams
-}
-
-// Helper function to convert weight to ounces
-function convertWeightToOunces(weight, unit) {
-  const weightInGrams = convertWeightToGrams(weight, unit);
-  return weightInGrams / 28.34952; // 1 ounce = 28.34952 grams
-}
-
-// ItemSchema.pre("save", async function (next) {
-//   // Update the weight in grams before saving
-//   this.weight = convertWeightToGrams(this.weight, this.unit);
-//   next();
-// });
-
 ItemSchema.pre("save", async function (next) {
-  if (this.unit === "lb") {
-    this.weight = convertWeightToGrams(this.weight, "lb");
-  } else if (this.unit === "kg") {
-    this.weight = convertWeightToGrams(this.weight, "kg");
-  } else if (this.unit === "oz") {
-    this.weight = convertWeightToGrams(this.weight, "oz");
-  }
+  this.weight = convertWeightToGrams(this.weight, this.unit);
   next();
 });
 
