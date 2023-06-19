@@ -1,31 +1,11 @@
 import React, { useRef, useState, useEffect } from "react";
 import mapboxgl from "mapbox-gl";
 import { MAPBOX_ACCESS_TOKEN } from "@env";
-import {
-  Platform,
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Dimensions,
-  Alert,
-  Image,
-  ActivityIndicator,
-  Modal,
-} from "react-native";
-import * as Location from "expo-location";
-import {
-  FontAwesome,
-  MaterialCommunityIcons,
-  Entypo,
-} from "@expo/vector-icons";
+import { Platform, StyleSheet, View, Dimensions, } from "react-native";
 
 import {
   defaultShape,
   getShapeSourceBounds,
-  handleShapeSourceLoad,
-  latRad,
-  zoom,
   calculateZoomLevel,
   findTrailCenter,
   processShapeData,
