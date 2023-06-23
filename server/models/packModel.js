@@ -60,7 +60,7 @@ PackSchema.virtual("totalWeightInKilograms").get(function () {
 });
 
 PackSchema.virtual("Total_weight").get(function () {
-  let totalWeight = this.baseWeight + this.waterAndFood;
+  let totalWeight = this.waterAndFood;
 
   // Iterate over each item in the pack
   for (const item of this.items) {
@@ -108,7 +108,15 @@ PackSchema.virtual("waterAndFood").get(function () {
   // Iterate over each item in the pack
   for (const item of this.items) {
     if (item.isFood || item.isWater) {
-      waterAndFood += item.originalWeight;
+      if (item.unit === "lb") {
+        waterAndFood += item.originalWeight * 453.59237; // Convert pounds to grams
+      } else if (item.unit === "kg") {
+        waterAndFood += item.originalWeight * 1000; // Convert kilograms to grams
+      } else if (item.unit === "oz") {
+        waterAndFood += item.originalWeight * 28.34952; // Convert ounces to grams
+      } else {
+        waterAndFood += item.originalWeight; // Assume weight is already in grams if unit is not recognized
+      }
     }
   }
 

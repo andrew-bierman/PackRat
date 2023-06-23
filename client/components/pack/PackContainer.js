@@ -44,6 +44,8 @@ export default function PackContainer({ isCreatingTrip = false }) {
     selectPackById(state, currentPackId)
   );
 
+  console.log("current pack", currentPack);
+
   const dataValues = packs ?? [];
 
   return dataValues?.length > 0 ? (
@@ -86,7 +88,6 @@ export default function PackContainer({ isCreatingTrip = false }) {
     </Box>
   ) : null;
 }
-
 
 const styles = StyleSheet.create({
   mainContainer: {

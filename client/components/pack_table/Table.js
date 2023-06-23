@@ -37,11 +37,28 @@ export const TableContainer = ({ currentPack }) => {
 
   // PREFERED WEIGHTING UNIT FOR DISPLAY TO CLIENTSIDE
   const [weightUnit, setWeightUnit] = useState("g");
-  const calculate = (value) => {
+  // const calculate = () => {
+  //   return currentPack?.items?.reduce((acc, item) => {
+  //     const convertedWeight = convertWeight(
+  //       item.originalWeight,
+  //       item.unit,
+  //       weightUnit
+  //     );
+  //     const result = acc + convertedWeight * item.quantity;
+  //     return result;
+  //   }, 0);
+  // };
+
+  // const totalItemsWeight = useMemo(calculate, [
+  //   currentPack.originalWeight,
+  //   weightUnit,
+  // ]);
+
+  const calculateTotalItemsWeight = () => {
     return currentPack?.items?.reduce((acc, item) => {
       const convertedWeight = convertWeight(
-        item?.weight,
-        item?.unit,
+        item.originalWeight,
+        item.unit,
         weightUnit
       );
       const result = acc + convertedWeight * item.quantity;
@@ -49,10 +66,26 @@ export const TableContainer = ({ currentPack }) => {
     }, 0);
   };
 
-  const totalItemsWeight = useMemo(
-    () => calculate(currentPack),
-    [currentPack, weightUnit]
-  );
+  const totalItemsWeight = useMemo(calculateTotalItemsWeight, [
+    currentPack?.items,
+    weightUnit,
+  ]);
+
+  const getTotalWeight = () => {
+    if (weightUnit === "kg") {
+      return currentPack?.totalWeightInKilograms || 0;
+    } else if (weightUnit === "g") {
+      return currentPack?.totalWeightInGrams || 0;
+    } else if (weightUnit === "lb") {
+      return currentPack?.totalWeightInPounds || 0;
+    } else if (weightUnit === "oz") {
+      return currentPack?.totalWeightInOunces || 0;
+    }
+  };
+
+  console.log(currentPack?.totalWeightInKilograms);
+
+  const totalWeight = getTotalWeight();
 
   // UI component
   const WeightUnitDropdown = ({ value, onChange }) => {
@@ -81,10 +114,10 @@ export const TableContainer = ({ currentPack }) => {
     ]);
   };
 
-  const totalBaseWeight = data?.reduce((acc, curr) => acc + curr.weight, 0);
+  const totalBaseWeight = currentPack?.baseWeight?.toFixed(2);
   const totalWaterWeight = currentPack?.water ?? 0;
   const totalFoodWeight = currentPack?.food ?? 0;
-  const totalWeight = totalBaseWeight + totalWaterWeight + totalFoodWeight;
+  // const totalWeight = currentPack?.Total_weight?.toFixed(2);
 
   const tableData = {
     tableTitle: ["Pack List"],
@@ -111,28 +144,33 @@ export const TableContainer = ({ currentPack }) => {
 
   const flexWidthArr = [2, 1, 1, 0.5, 0.5];
 
-  const tableDb = data?.map(({ name, weight, unit, quantity, _id }, index) => [
-    name,
-    `${weight} ${unit}`,
-    quantity,
-    <MaterialIcons
-      name="edit"
-      size={20}
-      color="black"
-      onPress={() => setEdit(index)}
-    />,
-    <Feather
-      name="x-circle"
-      size={20}
-      color="black"
-      onPress={() => deleteItem.mutate(_id)}
-      style={{ alignSelf: "center" }}
-    />,
-  ]);
+  const tableDb = data?.map(
+    ({ name, originalWeight, unit, quantity, _id }, index) => [
+      name,
+      `${originalWeight} ${unit}`,
+      quantity,
+      <MaterialIcons
+        name="edit"
+        size={20}
+        color="black"
+        onPress={() => setEdit(index)}
+      />,
+      <Feather
+        name="x-circle"
+        size={20}
+        color="black"
+        onPress={() => deleteItem.mutate(_id)}
+        style={{ alignSelf: "center" }}
+      />,
+    ]
+  );
 
   console.log("tableDb", tableDb);
+  console.log("tableDATA", tableData);
 
   const tablekeys = data?.map((value) => Object.keys(value).slice(1));
+
+  console.log("table keys", tablekeys);
 
   useEffect(() => {
     console.log("data", data);
@@ -235,7 +273,7 @@ export const TableContainer = ({ currentPack }) => {
 
       {data?.length > 0 && (
         <>
-          <Box
+          {/* <Box
             style={{
               flexDirection: "row",
               justifyContent: "space-between",
@@ -247,7 +285,7 @@ export const TableContainer = ({ currentPack }) => {
           >
             <Text>Items Weight</Text>
             <Text>{totalItemsWeight}</Text>
-          </Box>
+          </Box> */}
           <Box
             style={{
               flexDirection: "row",
@@ -259,7 +297,7 @@ export const TableContainer = ({ currentPack }) => {
             }}
           >
             <Text>Base Weight</Text>
-            <Text>{totalBaseWeight}</Text>
+            <Text>{`${totalBaseWeight} (g)`}</Text>
           </Box>
           <Box
             style={{
@@ -272,7 +310,7 @@ export const TableContainer = ({ currentPack }) => {
             }}
           >
             <Text>Water + Food Weight</Text>
-            <Text>{totalWaterWeight + totalFoodWeight}</Text>
+            <Text>{`${currentPack?.waterAndFood?.toFixed(2)} (g)`}</Text>
           </Box>
           <Box
             style={{
@@ -285,7 +323,10 @@ export const TableContainer = ({ currentPack }) => {
             }}
           >
             <Text>Total Weight</Text>
-            <Text>{`${totalWeight} (${weightUnit})`}</Text>
+            <Text>{`${getTotalWeight(
+              totalWeight.toFixed(2),
+              weightUnit
+            )} (${weightUnit})`}</Text>
           </Box>
         </>
       )}

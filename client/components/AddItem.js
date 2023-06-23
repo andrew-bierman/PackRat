@@ -17,7 +17,7 @@ export const AddItem = ({ packId }) => {
 
   const [name, setName] = useState("");
   const [weight, setWeight] = useState("");
-  const [quantity, setQuantity] = useState("");
+  const [quantity, setQuantity] = useState("1");
   const [unit, setUnit] = useState("");
 
   // const { addItem } = useAddItem();

@@ -48,6 +48,7 @@ export function TripDetails() {
 
   if (isLoading) return <Text>Loading...</Text>;
 
+  console.log(currentTrip);
 
   return (
     <Box style={styles.mainContainer}>
@@ -60,17 +61,20 @@ export function TripDetails() {
             error={error}
             additionalComps={
               <>
-                <View><TableContainer currentPack={currentTrip?.packs} /></View>
-                <View style={{marginTop:'5%'}}>
-                <WeatherCard
-                  weatherObject={
-                    currentTrip?.weather
-                      ? JSON?.parse(currentTrip?.weather)
-                      : weatherObject
-                  }
-                  weatherWeek={weatherWeek}
-                /></View>
-                  {/* <View style={{marginTop:'5%', backgroundColor:'red'}}> */}
+                <View>
+                  <TableContainer currentPack={currentTrip?.packs} />
+                </View>
+                <View style={{ marginTop: "5%" }}>
+                  <WeatherCard
+                    weatherObject={
+                      currentTrip?.weather
+                        ? JSON?.parse(currentTrip?.weather)
+                        : weatherObject
+                    }
+                    weatherWeek={weatherWeek}
+                  />
+                </View>
+                {/* <View style={{marginTop:'5%', backgroundColor:'red'}}> */}
                 <TripCard
                   Icon={() => (
                     <FontAwesome5
@@ -81,19 +85,20 @@ export function TripDetails() {
                   )}
                   title="Map"
                   isMap={true}
-                  cords={currentTrip?.weather
-                    ? JSON?.parse(currentTrip?.weather)?.coord
-                    : weatherObject?.coord}
+                  cords={
+                    currentTrip?.weather
+                      ? JSON?.parse(currentTrip?.weather)?.coord
+                      : weatherObject?.coord
+                  }
                 />
                 {/* </View> */}
-                <View style={{marginTop:'5%'}}>
-                <ScoreContainer
-                  type="trip"
-                  data={currentTrip}
-                  isOwner={isOwner}
-                />
+                <View style={{ marginTop: "5%" }}>
+                  <ScoreContainer
+                    type="trip"
+                    data={currentTrip}
+                    isOwner={isOwner}
+                  />
                 </View>
-  
               </>
             }
             link={link}
@@ -113,10 +118,9 @@ const styles = StyleSheet.create({
     padding: [25, 25, 0, 25], // [top, right, bottom, left
     fontSize: 18,
     width: "100%",
-    
   },
   packsContainer: {
-    backgroundColor: 'green',
+    backgroundColor: "green",
     flexDirection: "column",
     minHeight: "100vh",
 
