@@ -38,17 +38,6 @@ const PackSchema = new Schema(
   }
 );
 
-// Virtuals
-
-// Calculate the total weight of items in grams
-// PackSchema.virtual("totalWeightInGrams").get(function () {
-//   let totalWeight = 0;
-//   for (const item of this.items) {
-//     totalWeight += item.weightInGrams;
-//   }
-//   return totalWeight;
-// });
-
 // Calculate the total weight of items in ounces
 PackSchema.virtual("totalWeightInOunces").get(function () {
   const totalWeightInGrams = this.totalWeightInGrams;
@@ -70,29 +59,19 @@ PackSchema.virtual("totalWeightInKilograms").get(function () {
   return Math.round(weightInKilograms * 100) / 100; // Round to two decimal places
 });
 
-// PackSchema.virtual("waterAndFood").get(function () {
-//   let waterAndFood = 0;
-//   for (const item of this.items) {
-//     if (item.isFood || item.isWater) {
-//       waterAndFood += item.weightInGrams;
-//     }
-//   }
-//   return waterAndFood;
-// });
-
 PackSchema.virtual("Total_weight").get(function () {
   let totalWeight = this.baseWeight + this.waterAndFood;
 
   // Iterate over each item in the pack
   for (const item of this.items) {
     if (item.unit === "lb") {
-      totalWeight += item.weight * 453.59237; // Convert pounds to grams
+      totalWeight += item.originalWeight * 453.59237; // Convert pounds to grams
     } else if (item.unit === "kg") {
-      totalWeight += item.weight * 1000; // Convert kilograms to grams
+      totalWeight += item.originalWeight * 1000; // Convert kilograms to grams
     } else if (item.unit === "oz") {
-      totalWeight += item.weight * 28.34952; // Convert ounces to grams
+      totalWeight += item.originalWeight * 28.34952; // Convert ounces to grams
     } else {
-      totalWeight += item.weight; // Assume weight is already in grams if unit is not recognized
+      totalWeight += item.originalWeight; // Assume weight is already in grams if unit is not recognized
     }
   }
 
@@ -110,13 +89,13 @@ PackSchema.virtual("baseWeight").get(function () {
 
     // Add the weight of non-food and non-water items to the base weight
     if (item.unit === "lb") {
-      baseWeight += item.weight * 453.59237; // Convert pounds to grams
+      baseWeight += item.originalWeight * 453.59237; // Convert pounds to grams
     } else if (item.unit === "kg") {
-      baseWeight += item.weight * 1000; // Convert kilograms to grams
+      baseWeight += item.originalWeight * 1000; // Convert kilograms to grams
     } else if (item.unit === "oz") {
-      baseWeight += item.weight * 28.34952; // Convert ounces to grams
+      baseWeight += item.originalWeight * 28.34952; // Convert ounces to grams
     } else {
-      baseWeight += item.weight; // Assume weight is already in grams if unit is not recognized
+      baseWeight += item.originalWeight; // Assume weight is already in grams if unit is not recognized
     }
   }
 
@@ -129,7 +108,7 @@ PackSchema.virtual("waterAndFood").get(function () {
   // Iterate over each item in the pack
   for (const item of this.items) {
     if (item.isFood || item.isWater) {
-      waterAndFood += item.weightInGrams;
+      waterAndFood += item.originalWeight;
     }
   }
 
@@ -142,13 +121,13 @@ PackSchema.virtual("totalWeightInGrams").get(function () {
   // Iterate over each item in the pack
   for (const item of this.items) {
     if (item.unit === "lb") {
-      totalWeight += item.weight * 453.59237; // Convert pounds to grams
+      totalWeight += item.originalWeight * 453.59237; // Convert pounds to grams
     } else if (item.unit === "kg") {
-      totalWeight += item.weight * 1000; // Convert kilograms to grams
+      totalWeight += item.originalWeight * 1000; // Convert kilograms to grams
     } else if (item.unit === "oz") {
-      totalWeight += item.weight * 28.34952; // Convert ounces to grams
+      totalWeight += item.originalWeight * 28.34952; // Convert ounces to grams
     } else {
-      totalWeight += item.weight; // Assume weight is already in grams if unit is not recognized
+      totalWeight += item.originalWeight; // Assume weight is already in grams if unit is not recognized
     }
   }
 
