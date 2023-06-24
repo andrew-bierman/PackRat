@@ -1,6 +1,9 @@
 import osmtogeojson from "osmtogeojson";
 import axios from "axios";
 import Way from "../models/osm/wayModel.js";
+import Node from "../models/osm/nodeModel.js";
+import mongoose from "mongoose";
+import { findOrCreateMany } from "../utils/osmFunctions/modelHandlers.js";
 
 export const getOsm = async (req, res) => {
   console.log("req", req); // log the request body to see what it looks like
@@ -115,13 +118,10 @@ const updateDatabaseWithGeoJSONDataFromOverpass = async (data) => {
       throw new Error("No data provided");
     }
 
-    await Way.findOrCreateManyFromGeoJSON(data, (err, ways) => {
-      if (err) {
-        console.error(err);
-      } else {
-        console.log("ways", ways);
-      }
-    });
+    const results = await findOrCreateMany(Way, data.features);
+
+    console.log("results", results);
+
   } catch (error) {
     console.error(error);
   }
@@ -189,7 +189,10 @@ export const getParksOSM = async (req, res) => {
 
     const geojsonData = osmtogeojson(response.data);
 
+    updateDatabaseWithGeoJSONDataFromOverpass(geojsonData);
+
     res.send(geojsonData);
+    
   } catch (error) {
     console.error(error);
     res.status(400).send({ message: "Error retrieving Parks OSM results" });
