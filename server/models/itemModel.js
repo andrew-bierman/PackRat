@@ -12,6 +12,11 @@ const ItemSchema = new Schema(
     unit: { type: String, required: true },
     isFood: { type: Boolean, default: false },
     isWater: { type: Boolean, default: false },
+    itemType: { 
+      type: String, 
+      enum: ['food', 'water', 'base', 'other'], // Define possible item types
+      default: 'other' // If not specified, default to 'other'
+    },
     owners: [{ type: Schema.Types.ObjectId, ref: "User", default: [] }],
     packs: [{ type: Schema.Types.ObjectId, ref: "Pack", default: [] }],
     createdAt: String,
@@ -19,6 +24,7 @@ const ItemSchema = new Schema(
   {
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
+    timestamps: true,
   }
 );
 
