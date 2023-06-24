@@ -55,16 +55,10 @@ export default function Feed({ feedType = "public" }) {
     let data = [];
     if (feedType === "public") {
       if (selectedTypes.pack) {
-        data = [
-          ...data,
-          ...publicPacksData,
-        ];
+        data = [...data, ...publicPacksData];
       }
       if (selectedTypes.trip) {
-        data = [
-          ...data,
-          ...publicTripsData,
-        ];
+        data = [...data, ...publicTripsData];
       }
     } else if (feedType === "userPacks") {
       data = userPacksData;
@@ -96,7 +90,12 @@ export default function Feed({ feedType = "public" }) {
 
     if (data?.length > 0) {
       return data.map((item) => (
-        <Link key={"link-key" + item?._id} href={item?.type === 'pack' ? '/pack/' + item?._id : '/trip/' + item?._id}>
+        <Link
+          key={"link-key" + item?._id}
+          href={
+            item?.type === "pack" ? "/pack/" + item?._id : "/trip/" + item?._id
+          }
+        >
           <Card key={item?._id} type={item.type} {...{ ...item }} />
         </Link>
       ));
@@ -107,9 +106,7 @@ export default function Feed({ feedType = "public" }) {
 
   return (
     <Box style={styles.mainContainer}>
-      <HStack space={3} alignItems="center"
-        style={styles.bar}
-      >
+      <HStack space={3} alignItems="center" style={styles.bar}>
         <Text fontSize="lg" fontWeight="bold">
           Packs
         </Text>
@@ -141,8 +138,10 @@ export default function Feed({ feedType = "public" }) {
         <DropdownComponent
           value={queryString}
           data={dataValues}
-          setUnit={setQueryString}
+          onValueChange={setQueryString}
+          placeholder="Sort By"
           style={styles.dropdown}
+          width="auto" // or provide a fixed width if you prefer
         />
       </HStack>
 

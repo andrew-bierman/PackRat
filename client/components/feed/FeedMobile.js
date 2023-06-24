@@ -1,4 +1,12 @@
-import { Container, Box, Text, HStack, Stack, ScrollView, VStack } from "native-base";
+import {
+  Container,
+  Box,
+  Text,
+  HStack,
+  Stack,
+  ScrollView,
+  VStack,
+} from "native-base";
 import { StyleSheet } from "react-native";
 import { useAuth } from "../../auth/provider";
 import FeedCardMobile from "./FeedCardMobile";
@@ -30,8 +38,10 @@ export default function FeedMobile() {
         <DropdownComponent
           value={queryString}
           data={dataValues}
-          setUnit={setQueryString}
+          onValueChange={setQueryString}
+          placeholder="Sort By"
           style={styles.dropdown}
+          width="auto" // or provide a fixed width if you prefer
         />
 
         <Stack
