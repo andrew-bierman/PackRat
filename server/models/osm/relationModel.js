@@ -4,20 +4,23 @@ import { toGeoJSON } from "../../utils/osmFunctions/modelHandlers.js";
 
 const { Schema } = mongoose;
 
-const RelationSchema = new Schema({
-  osm_id: Number,
-  osm_type: { type: String, default: "relation" },
-  tags: Object,
-  members: [
-    {
-      type: { type: String, enum: ["node", "way", "relation"] },
-      refId: { type: Schema.Types.ObjectId }, // This will store ObjectId of related Node, Way, or Relation
-      role: String,
-    },
-  ],
-  geoJSON: Object,
-  updated_at: Date,
-});
+const RelationSchema = new Schema(
+  {
+    osm_id: Number,
+    osm_type: { type: String, default: "relation" },
+    tags: Object,
+    members: [
+      {
+        type: { type: String, enum: ["node", "way", "relation"] },
+        refId: { type: Schema.Types.ObjectId }, // This will store ObjectId of related Node, Way, or Relation
+        role: String,
+      },
+    ],
+    geoJSON: Object,
+    updated_at: Date,
+  },
+  { timestamps: true }
+);
 
 RelationSchema.pre("save", async function (next) {
   if (this.osm_type !== "relation") {
