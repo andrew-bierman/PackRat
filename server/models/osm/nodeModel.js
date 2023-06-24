@@ -3,13 +3,16 @@ import myDB from "../dbConnection.js";
 
 const { Schema } = mongoose;
 
-const NodeSchema = Schema({
-  id: Number, // the OSM ID
-  lat: Number, // latitude
-  lon: Number, // longitude
-  tags: { type: Map, of: String }, // tags as a map
-  updated_at: Date, // last update from OSM
-});
+const NodeSchema = Schema(
+  {
+    id: Number, // the OSM ID
+    lat: Number, // latitude
+    lon: Number, // longitude
+    tags: { type: Map, of: String }, // tags as a map
+    updated_at: Date, // last update from OSM
+  },
+  { timestamps: true }
+);
 
 // add a to JSON method to the schema
 NodeSchema.method("toJSON", function () {
