@@ -14,10 +14,11 @@ const TripSchema = new Schema(
     start_date: { type: Date, required: true },
     end_date: { type: Date, required: true },
     destination: { type: String, required: true },
+    trail_way: { type: Schema.ObjectId, ref: "Way" }, // reference to the Way table for this trip
     owner_id: { type: Schema.Types.ObjectId, ref: "User" },
-    packs: { type: Schema.Types.ObjectId, ref: "Pack" },
+    packs: { type: Schema.Types.ObjectId, ref: 'Pack' },
     is_public: { type: Boolean },
-    type: { type: String, default: "trip" },
+    type:{type:String,default: 'trip'}
   },
   { timestamps: true }
 );
