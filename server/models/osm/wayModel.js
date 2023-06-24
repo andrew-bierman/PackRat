@@ -4,25 +4,31 @@ import myDB from "../dbConnection.js";
 
 const { Schema } = mongoose;
 
-const WaySchema = new Schema({
-  osm_id: Number,
-  osm_type: String,
-  tags: Object,
-  nodes: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Node",
-    },
-  ],
-  geoJSON: Object,
-  updated_at: Date,
-});
+const WaySchema = new Schema(
+  {
+    osm_id: Number,
+    osm_type: String,
+    tags: Object,
+    nodes: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Node",
+      },
+    ],
+    geoJSON: Object,
+    updated_at: Date,
+  },
+  { timestamps: true }
+);
 
 WaySchema.pre("save", async function (next) {
   try {
-    if (this.osm_type !== 'way') {
-      console.log('ERROR in WaySchema.pre("save"): this.osm_type !== "way"', this.osm_type)
-      throw new Error('This is not a way');
+    if (this.osm_type !== "way") {
+      console.log(
+        'ERROR in WaySchema.pre("save"): this.osm_type !== "way"',
+        this.osm_type
+      );
+      throw new Error("This is not a way");
     }
     next();
   } catch (err) {
@@ -54,7 +60,6 @@ WaySchema.method("toJSON", async function () {
   object.nodes = await this.populate("nodes").execPopulate();
   return object;
 });
-
 
 const Way = myDB.model("Way", WaySchema);
 
