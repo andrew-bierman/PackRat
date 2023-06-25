@@ -45,8 +45,8 @@ export async function coordinatesToInstances(Model, coordinates) {
 }
 
 export async function handleGeometry(Model, geometry) {
-  console.log("handleGeometry");
-  console.log("handleGeometry geometry", geometry);
+  // console.log("handleGeometry");
+  // console.log("handleGeometry geometry", geometry);
 
   if (!geometry || !Array.isArray(geometry.coordinates)) {
     console.error("geometry is undefined or not an array");
@@ -72,8 +72,8 @@ export async function handleGeometry(Model, geometry) {
 }
 
 export function handleGeoJSONGeometry(geometry) {
-  console.log("handleGeometry");
-  console.log("handleGeometry geometry", geometry);
+  // console.log("handleGeometry");
+  // console.log("handleGeometry geometry", geometry);
 
   if (!geometry || !Array.isArray(geometry.coordinates)) {
     console.error("geometry is undefined or not an array");
