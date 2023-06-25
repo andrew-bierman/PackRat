@@ -31,7 +31,7 @@ export function propertiesToTags(properties) {
   if (typeof properties !== "object" || properties === null) {
     throw new Error("Properties should be an object");
   }
-  console.log("properties in propertiesToTags", properties);
+  // console.log("properties in propertiesToTags", properties);
   const tags = {};
   for (let [k, v] of Object.entries(properties)) {
     tags[k] = v;
