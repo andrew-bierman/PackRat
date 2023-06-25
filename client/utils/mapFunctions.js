@@ -144,9 +144,24 @@ const mapboxStyles = [
   { label: "Light", style: "mapbox://styles/mapbox/light-v10" },
   { label: "Dark", style: "mapbox://styles/mapbox/dark-v10" },
   { label: "Satellite", style: "mapbox://styles/mapbox/satellite-v9" },
-  { label: "Satellite Street", style: "mapbox://styles/mapbox/satellite-streets-v11" },
+  {
+    label: "Satellite Street",
+    style: "mapbox://styles/mapbox/satellite-streets-v11",
+  },
 ];
 
+const getLocation = async () => {
+  let { status } = await Location.requestForegroundPermissionsAsync();
+  
+  if (status !== "granted") {
+    alert("Permission to access location was denied");
+    return;
+  }
+
+  let location = await Location.getCurrentPositionAsync({});
+
+  return location;
+};
 
 export {
   defaultShape,
@@ -158,4 +173,5 @@ export {
   findTrailCenter,
   processShapeData,
   mapboxStyles,
+  getLocation,
 };
