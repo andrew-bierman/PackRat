@@ -55,6 +55,7 @@ const MapButtonsOverlay = ({
             </TouchableOpacity>
           )}
 
+          {/* Style Picker Button */}
           <TouchableOpacity
             style={[styles.headerBtnView, styles.stylePicker]}
             onPress={handleStyleOptionPress}
@@ -62,6 +63,7 @@ const MapButtonsOverlay = ({
             <MaterialCommunityIcons name="palette" size={21} color="grey" />
           </TouchableOpacity>
 
+          {/* Style Selection Modal */}
           <Modal
             animationType="fade"
             transparent={true}
@@ -85,6 +87,7 @@ const MapButtonsOverlay = ({
             </TouchableOpacity>
           </Modal>
 
+          {/* Download Button */}
           <TouchableOpacity
             style={[styles.headerBtnView, styles.fullScreen]}
             onPress={() => {}}
@@ -99,6 +102,7 @@ const MapButtonsOverlay = ({
             </Text>
           </TouchableOpacity>
 
+          {/* Location Button */}
           <TouchableOpacity
             style={styles.locationButton}
             onPress={fetchLocation}
@@ -128,6 +132,7 @@ const styles = StyleSheet.create({
     minHeight: "100vh", // Adjust the height to your needs
   },
   stylePicker: {
+    // Style Picker Button
     position: "absolute",
     top: 10,
     left: 10,
@@ -190,7 +195,7 @@ const styles = StyleSheet.create({
     right: 10,
   },
   fullScreen: {
-    width: 40,
+    width: '25%',
     height: 40,
     padding: 10,
     backgroundColor: "white",

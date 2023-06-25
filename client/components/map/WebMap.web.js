@@ -11,9 +11,6 @@ import {
   Image,
   Modal,
 } from "react-native";
-import { Box, Select } from "native-base";
-import { Entypo, Ionicons } from "@expo/vector-icons";
-
 import {
   defaultShape,
   getShapeSourceBounds,
@@ -23,6 +20,7 @@ import {
   mapboxStyles,
   getLocation,
 } from "../../utils/mapFunctions";
+import MapButtonsOverlay from "./MapButtonsOverlay";
 
 // import 'mapbox-gl/dist/mapbox-gl.css'
 
@@ -138,14 +136,6 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
       });
 
       if (mapFullscreen && showUserLocation) {
-        // mapInstance.addControl(
-        //   new mapboxgl.GeolocateControl({
-        //     positionOptions: { enableHighAccuracy: true },
-        //     trackUserLocation: true,
-        //     showUserHeading: true,
-        //   }),
-        //   "bottom-right"
-        // );
         mapInstance.addLayer({
           id: "user-location",
           type: "circle",
@@ -316,7 +306,6 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
               "circle-color": "#3388ff",
             },
           });
-
         }
       }
     } catch (error) {
@@ -324,88 +313,35 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
     }
   };
 
-  const mapButtonsOverlay = () => (
-    <>
-      {!mapFullscreen ? (
-        // Preview map
-        <TouchableOpacity
-          style={[styles.headerBtnView, styles.enterFullScreenBtn]}
-          onPress={enableFullScreen}
-        >
-          <Entypo name="resize-full-screen" size={21} color={"grey"} />
-        </TouchableOpacity>
-      ) : (
-        // Fullscreen map
-        <>
-          {mapFullscreen && (
-            <TouchableOpacity
-              style={[styles.headerBtnView, styles.exitFullscreenBtn]}
-              onPress={disableFullScreen}
-            >
-              <Entypo name="circle-with-cross" size={21} color={"grey"} />
-            </TouchableOpacity>
-          )}
-          <Box
-            w="200"
-            alignItems="center"
-            justifyContent="center"
-            style={styles.stylePicker} // Define this style according to your layout
-          >
-            <Select
-              selectedValue={mapStyle}
-              minWidth="200"
-              accessibilityLabel="Select Map Style"
-              placeholder="Select Map Style"
-              onValueChange={(itemValue) => handleChangeMapStyle(itemValue)}
-              _selectedItem={{
-                bg: "cyan.600",
-                endIcon: <Ionicons name="checkmark" size={24} color="black" />, // Using Ionicons as an alternative
-              }}
-            >
-              {mapboxStyles.map((item, index) => (
-                <Select.Item
-                  key={index}
-                  label={item.label}
-                  value={item.style}
-                />
-              ))}
-            </Select>
-          </Box>
-
-          <TouchableOpacity
-            style={[styles.headerBtnView, styles.fullScreen]}
-            onPress={() => {}}
-            disabled={downloading}
-          >
-            <Image
-              style={{ width: 21, height: 21 }}
-              source={require("../../assets/download.svg")}
-            />
-            <Text style={{ fontSize: 13, fontWeight: "500", marginLeft: 8 }}>
-              {downloading ? "Downloading" : "Download map"}
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.locationButton}
-            onPress={fetchLocation}
-          >
-            <Ionicons name="location-outline" size={24} color="black" />
-          </TouchableOpacity>
-        </>
-      )}
-    </>
-  );
-
   return (
     <View style={styles.container}>
       <View key="map" ref={mapContainer} style={styles.map} />
-      {mapButtonsOverlay()}
+      <MapButtonsOverlay
+        mapFullscreen={mapFullscreen}
+        enableFullScreen={enableFullScreen}
+        disableFullScreen={disableFullScreen}
+        mapStyle={mapStyle}
+        handleChangeMapStyle={handleChangeMapStyle}
+        downloading={downloading}
+        fetchLocation={fetchLocation}
+        showModal={showModal}
+        styles={styles}
+      />
 
       <Modal animationType={"fade"} transparent={false} visible={showModal}>
         <View style={styles.modal}>
           <View key="map" ref={mapContainer} style={styles.map} />
-          {mapButtonsOverlay()}
+          <MapButtonsOverlay
+            mapFullscreen={mapFullscreen}
+            enableFullScreen={enableFullScreen}
+            disableFullScreen={disableFullScreen}
+            mapStyle={mapStyle}
+            handleChangeMapStyle={handleChangeMapStyle}
+            downloading={downloading}
+            fetchLocation={fetchLocation}
+            showModal={showModal}
+            styles={styles}
+          />
         </View>
       </Modal>
     </View>
@@ -423,55 +359,6 @@ const styles = StyleSheet.create({
   map: {
     width: "100%",
     minHeight: "100vh", // Adjust the height to your needs
-  },
-  stylePicker: {
-    // adjust style as needed
-    backgroundColor: "white",
-    position: "absolute",
-    top: 10,
-    left: 10,
-    borderRadius: 30,
-  },
-  locationButton: {
-    width: 40,
-    height: 40,
-    position: "absolute",
-    bottom: 60,
-    right: 10,
-    backgroundColor: "white",
-    borderRadius: 30,
-    zIndex: 1,
-  },
-  headerBtnView: {
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 30,
-    backgroundColor: "white",
-  },
-  enterFullScreenBtn: {
-    width: 40,
-    height: 40,
-    position: "absolute",
-    bottom: 10,
-    right: 10,
-  },
-  exitFullscreenBtn: {
-    width: 40,
-    height: 40,
-    position: "absolute",
-    top: 10,
-    right: 10,
-  },
-  fullScreen: {
-    width: "25%",
-    padding: 10,
-    marginVertical: 10,
-    backgroundColor: "#EBEDFD",
-    position: "absolute",
-    bottom: 30,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
   },
   modal: {
     alignItems: "center",
