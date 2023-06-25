@@ -1,18 +1,33 @@
 import React, { useRef, useState, useEffect, useCallback } from "react";
 import mapboxgl from "mapbox-gl";
 import { MAPBOX_ACCESS_TOKEN } from "@env";
-import { Platform, StyleSheet, Text, View, TouchableOpacity, Dimensions, Image, Modal } from "react-native";
+import {
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Dimensions,
+  Image,
+  Modal,
+} from "react-native";
 import { Box, Select } from "native-base";
 import { Entypo, Ionicons } from "@expo/vector-icons";
 
-import { defaultShape, getShapeSourceBounds, calculateZoomLevel, findTrailCenter, processShapeData, mapboxStyles } from "../../utils/mapFunctions";
+import {
+  defaultShape,
+  getShapeSourceBounds,
+  calculateZoomLevel,
+  findTrailCenter,
+  processShapeData,
+  mapboxStyles,
+} from "../../utils/mapFunctions";
 
 // import 'mapbox-gl/dist/mapbox-gl.css'
 
 mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
 const WebMap = ({ shape = { ...defaultShape } }) => {
-
   useEffect(() => {
     // temporary solution to fix mapbox-gl-js missing css error
     if (Platform.OS === "web") {
@@ -59,7 +74,6 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
   //   console.log("trailCenterPointRef", trailCenterPointRef.current);
   // }, [trailCenterPoint, zoomLevel]);
 
-
   useEffect(() => {
     if (map.current) return; // Initialize map only once
 
@@ -89,17 +103,21 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
       container: mapContainer.current,
       style: mapStyle,
       // center: [lng, lat],
-      center: trailCenterPointRef.current ? trailCenterPointRef.current : [lng, lat],
+      center: trailCenterPointRef.current
+        ? trailCenterPointRef.current
+        : [lng, lat],
       zoom: zoomLevelRef.current ? zoomLevelRef.current : zoomLevel,
-      interactive: mapFullscreen
+      interactive: mapFullscreen,
     });
 
     if (mapFullscreen) {
       mapInstance.addControl(
         new mapboxgl.GeolocateControl({
           positionOptions: { enableHighAccuracy: true },
-          trackUserLocation: true, showUserHeading: true
-        }), 'bottom-right'
+          trackUserLocation: true,
+          showUserHeading: true,
+        }),
+        "bottom-right"
       );
     }
 
@@ -155,30 +173,30 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
 
   const addTrailLayer = (mapInstance) => {
     let processedShape = processShapeData(shape);
-  
+
     // Remove existing source and layers if they exist
-    if(mapInstance.getLayer("trail-cap")) {
+    if (mapInstance.getLayer("trail-cap")) {
       mapInstance.removeLayer("trail-cap");
     }
-  
-    if(mapInstance.getSource("trail-cap")) {
+
+    if (mapInstance.getSource("trail-cap")) {
       mapInstance.removeSource("trail-cap");
     }
-  
+
     if (mapInstance.getLayer("trail")) {
       mapInstance.removeLayer("trail");
     }
-  
+
     if (mapInstance.getSource("trail")) {
       mapInstance.removeSource("trail");
     }
-  
+
     // Add new source and layers
     mapInstance.addSource("trail", {
       type: "geojson",
       data: processedShape ? processedShape : shape,
     });
-  
+
     mapInstance.addLayer({
       id: "trail",
       type: "line",
@@ -189,7 +207,7 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
         "line-opacity": 1,
       },
     });
-  
+
     // Add circle cap to the line ends
     mapInstance.addLayer({
       id: "trail-cap",
@@ -202,42 +220,43 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
       filter: ["==", "meta", "end"],
     });
   };
-  
-  
 
   const enableFullScreen = () => {
     setMapFullscreen(true);
-    setShowModal(true)
+    setShowModal(true);
   };
 
   const disableFullScreen = () => {
     setMapFullscreen(false);
-    setShowModal(false)
+    setShowModal(false);
   };
 
-  const setMapboxStyle = useCallback((style) => {
-    if (map.current) {
-      // Step 1: remove sources, layers, etc.
-      if (map.current.getLayer("trail-cap")) {
-        map.current.removeLayer("trail-cap");
-      }
-      if (map.current.getSource("trail-cap")) {
-        map.current.removeSource("trail-cap");
-      }
-      if (map.current.getLayer("trail")) {
-        map.current.removeLayer("trail");
-      }
-      if (map.current.getSource("trail")) {
-        map.current.removeSource("trail");
-      }
+  const setMapboxStyle = useCallback(
+    (style) => {
+      if (map.current) {
+        // Step 1: remove sources, layers, etc.
+        if (map.current.getLayer("trail-cap")) {
+          map.current.removeLayer("trail-cap");
+        }
+        if (map.current.getSource("trail-cap")) {
+          map.current.removeSource("trail-cap");
+        }
+        if (map.current.getLayer("trail")) {
+          map.current.removeLayer("trail");
+        }
+        if (map.current.getSource("trail")) {
+          map.current.removeSource("trail");
+        }
 
-      // Step 2: change the style
-      map.current.setStyle(style);
+        // Step 2: change the style
+        map.current.setStyle(style);
 
-      // Step 3: add the sources, layers, etc. back once the style has loaded
-      map.current.on('style.load', () => addTrailLayer(map.current));
-    }
-}, [addTrailLayer]);  
+        // Step 3: add the sources, layers, etc. back once the style has loaded
+        map.current.on("style.load", () => addTrailLayer(map.current));
+      }
+    },
+    [addTrailLayer]
+  );
 
   const handleChangeMapStyle = (style) => {
     setMapStyle(style);
@@ -257,16 +276,18 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
       ) : (
         // Fullscreen map
         <>
-          {mapFullscreen && (<TouchableOpacity
-            style={[styles.headerBtnView, styles.exitFullscreenBtn]}
-            onPress={disableFullScreen}
-          >
-            <Entypo name="circle-with-cross" size={21} color={"grey"} />
-          </TouchableOpacity>)}
-          <Box 
-            w="200" 
-            alignItems="center" 
-            justifyContent="center" 
+          {mapFullscreen && (
+            <TouchableOpacity
+              style={[styles.headerBtnView, styles.exitFullscreenBtn]}
+              onPress={disableFullScreen}
+            >
+              <Entypo name="circle-with-cross" size={21} color={"grey"} />
+            </TouchableOpacity>
+          )}
+          <Box
+            w="200"
+            alignItems="center"
+            justifyContent="center"
             style={styles.stylePicker} // Define this style according to your layout
           >
             <Select
@@ -281,18 +302,25 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
               }}
             >
               {mapboxStyles.map((item, index) => (
-                <Select.Item key={index} label={item.label} value={item.style} />
+                <Select.Item
+                  key={index}
+                  label={item.label}
+                  value={item.style}
+                />
               ))}
             </Select>
           </Box>
 
           <TouchableOpacity
             style={[styles.headerBtnView, styles.fullScreen]}
-            onPress={() => { }}
+            onPress={() => {}}
             disabled={downloading}
           >
-            <Image style={{ width: 21, height: 21 }} source={require('../../assets/download.svg')} />
-            <Text style={{ fontSize: 13, fontWeight: '500', marginLeft: 8 }}>
+            <Image
+              style={{ width: 21, height: 21 }}
+              source={require("../../assets/download.svg")}
+            />
+            <Text style={{ fontSize: 13, fontWeight: "500", marginLeft: 8 }}>
               {downloading ? "Downloading" : "Download map"}
             </Text>
           </TouchableOpacity>
@@ -306,11 +334,7 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
       <View key="map" ref={mapContainer} style={styles.map} />
       {mapButtonsOverlay()}
 
-      <Modal
-        animationType={'fade'}
-        transparent={false}
-        visible={showModal}
-      >
+      <Modal animationType={"fade"} transparent={false} visible={showModal}>
         <View style={styles.modal}>
           <View key="map" ref={mapContainer} style={styles.map} />
           {mapButtonsOverlay()}
@@ -326,7 +350,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     height: "400px",
     width: "100%",
-    borderRadius: '10px',
+    borderRadius: "10px",
   },
   map: {
     width: "100%",
@@ -341,9 +365,11 @@ const styles = StyleSheet.create({
     borderRadius: 30,
   },
   locationButton: {
-    width: 40, height: 40,
+    width: 40,
+    height: 40,
     position: "absolute",
-    bottom: 60, right: 10,
+    bottom: 60,
+    right: 10,
     backgroundColor: "white",
     borderRadius: 30,
     zIndex: 1,
@@ -355,28 +381,32 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   enterFullScreenBtn: {
-    width: 40, height: 40,
+    width: 40,
+    height: 40,
     position: "absolute",
-    bottom: 10, right: 10,
+    bottom: 10,
+    right: 10,
   },
   exitFullscreenBtn: {
-    width: 40, height: 40,
+    width: 40,
+    height: 40,
     position: "absolute",
-    top: 10, right: 10,
+    top: 10,
+    right: 10,
   },
   fullScreen: {
     width: "25%",
     padding: 10,
     marginVertical: 10,
     backgroundColor: "#EBEDFD",
-    position: 'absolute',
+    position: "absolute",
     bottom: 30,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
   },
   modal: {
-    alignItems: 'center',
+    alignItems: "center",
   },
 });
 
