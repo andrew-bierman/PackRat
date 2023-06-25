@@ -1,35 +1,10 @@
 import React, { useRef, useState, useEffect } from "react";
 import mapboxgl from "mapbox-gl";
 import { MAPBOX_ACCESS_TOKEN } from "@env";
-import {
-  Platform,
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Dimensions,
-  Alert,
-  Image,
-  ActivityIndicator,
-  Modal,
-} from "react-native";
-import * as Location from "expo-location";
-import {
-  FontAwesome,
-  MaterialCommunityIcons,
-  Entypo,
-} from "@expo/vector-icons";
+import { Platform, StyleSheet, Text, View, TouchableOpacity, Dimensions, Image, Modal } from "react-native";
+import { Entypo } from "@expo/vector-icons";
 
-import {
-  defaultShape,
-  getShapeSourceBounds,
-  handleShapeSourceLoad,
-  latRad,
-  zoom,
-  calculateZoomLevel,
-  findTrailCenter,
-  processShapeData,
-} from "../../utils/mapFunctions";
+import { defaultShape, getShapeSourceBounds, calculateZoomLevel, findTrailCenter, processShapeData } from "../../utils/mapFunctions";
 
 // import 'mapbox-gl/dist/mapbox-gl.css'
 
@@ -65,20 +40,15 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
   const fullMapDiemention = { width: dw, height: 360 };
   const previewMapDiemension = { width: dw * 0.9, height: 220 };
 
-  const [getLocationLoading, setGetLocationLoading] = useState(false);
-  const [correctLocation, setCorrectLocation] = useState(false);
-
   const [zoomLevel, setZoomLevel] = useState(10);
   const [trailCenterPoint, setTrailCenterPoint] = useState(null);
   const zoomLevelRef = useRef(10);
   const trailCenterPointRef = useRef(null);
 
   const [mapFullscreen, setMapFullscreen] = useState(false);
-  const [progress, setProgress] = useState(0);
   const [downloading, setDownloading] = useState(false);
 
   const [showModal, setShowModal] = useState(false);
-  const [defaultMapSize, setDefaultMapSize] = useState({ width: '70%', height: '100%' })
 
   // useEffect(() => {
   //   console.log("trailCenterPoint state", trailCenterPoint);
@@ -118,7 +88,17 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
       // center: [lng, lat],
       center: trailCenterPointRef.current ? trailCenterPointRef.current : [lng, lat],
       zoom: zoomLevelRef.current ? zoomLevelRef.current : zoomLevel,
+      interactive: mapFullscreen
     });
+
+    if (mapFullscreen) {
+      mapInstance.addControl(
+        new mapboxgl.GeolocateControl({
+          positionOptions: { enableHighAccuracy: true },
+          trackUserLocation: true, showUserHeading: true
+        }), 'bottom-right'
+      );
+    }
 
     mapInstance.on("load", () => {
       mapInstance.addSource("trail", {
@@ -163,80 +143,25 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
       map.current = mapInstance;
     });
 
-    console.log("mapInstance", mapInstance);
+    // console.log("mapInstance", mapInstance);
 
     return () => {
       // mapInstance.remove();
     };
   }, [mapFullscreen]);
 
-  const getPosition = async () => {
-    try {
-      const { status } = await Location.requestForegroundPermissionsAsync();
-      if (status === "granted") {
-        const location = await Location.getCurrentPositionAsync({});
-        setLocation({
-          ...location,
-          longitude: location.coords.longitude,
-          latitude: location.coords.latitude,
-        });
-        setCorrectLocation(true);
-      } else {
-        setCorrectLocation(false);
-        Alert.alert("Permission denied");
-      }
-    } catch (error) {
-      setCorrectLocation(false);
-      Alert.alert("Something went wrong with location", error.message);
-    }
-  };
-
-  const goToMyLocation = async () => {
-    setGetLocationLoading(true);
-    try {
-      const { status } = await Location.requestForegroundPermissionsAsync();
-      if (status === "granted") {
-        const location = await Location.getCurrentPositionAsync({});
-        setLng(location.coords.longitude)
-        setLat(location.coords.latitude)
-        setGetLocationLoading(false)
-      } else {
-        setGetLocationLoading(false)
-        Alert.alert("Permission denied");
-      }
-    } catch (error) {
-      setGetLocationLoading(false)
-      if (!mountedRef.current) return null;
-      Alert.alert("Something went wrong with current location", error.message);
-    }
-  };
-
   const enableFullScreen = () => {
     setMapFullscreen(true);
     setShowModal(true)
-    // setDefaultMapSize({ width: '100%', height: '100%' })
   };
 
   const disableFullScreen = () => {
     setMapFullscreen(false);
     setShowModal(false)
-    // setDefaultMapSize({ width: '70%', height: '100%' })
   };
 
   const mapButtonsOverlay = () => (
     <>
-      <TouchableOpacity
-        style={[styles.headerBtnView, styles.locationButton]}
-        onPress={goToMyLocation}
-        disabled={getLocationLoading}
-      >
-        {
-          getLocationLoading
-            ? (<ActivityIndicator size="small" color="grey" />)
-            : (<MaterialCommunityIcons name="crosshairs" size={21} color="grey" />)
-        }
-      </TouchableOpacity>
-
       {!mapFullscreen ? (
         // Preview map
         <TouchableOpacity
@@ -263,19 +188,6 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
             <Text style={{ fontSize: 13, fontWeight: '500', marginLeft: 8 }}>
               {downloading ? "Downloading" : "Download map"}
             </Text>
-            {/* {downloading && (
-          <Text
-            style={{
-              backgroundColor: "white",
-              color: "blue",
-              paddingHorizontal: 3,
-              marginHorizontal: 7,
-              minWidth: 20,
-            }}
-          >
-            {progress}
-          </Text>
-        )} */}
           </TouchableOpacity>
         </>
       )}
