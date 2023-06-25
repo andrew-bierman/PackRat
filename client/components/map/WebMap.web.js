@@ -73,6 +73,13 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
   const zoomLevelRef = useRef(10);
   const trailCenterPointRef = useRef(null);
 
+  const [mapFullscreen, setMapFullscreen] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [downloading, setDownloading] = useState(false);
+
+  const [showModal, setShowModal] = useState(false);
+  const [defaultMapSize, setDefaultMapSize] = useState({ width: '70%', height: '100%' })
+
   // useEffect(() => {
   //   console.log("trailCenterPoint state", trailCenterPoint);
   //   console.log("zoomLevel state -- ", zoomLevel);
@@ -111,23 +118,7 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
       // center: [lng, lat],
       center: trailCenterPointRef.current ? trailCenterPointRef.current : [lng, lat],
       zoom: zoomLevelRef.current ? zoomLevelRef.current : zoomLevel,
-      cooperativeGestures: true
     });
-
-    // Add geolocate control to the map.
-    mapInstance.addControl(
-      new mapboxgl.GeolocateControl({
-        positionOptions: {
-          enableHighAccuracy: true
-        },
-        // When active the map will receive updates to the device's location as it changes.
-        trackUserLocation: true,
-        // Draw an arrow next to the location dot to indicate which direction the device is heading.
-        showUserHeading: true
-      })
-    );
-
-    mapInstance.addControl(new mapboxgl.FullscreenControl());
 
     mapInstance.on("load", () => {
       mapInstance.addSource("trail", {
@@ -177,11 +168,135 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
     return () => {
       // mapInstance.remove();
     };
-  }, []);
+  }, [mapFullscreen]);
+
+  const getPosition = async () => {
+    try {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status === "granted") {
+        const location = await Location.getCurrentPositionAsync({});
+        setLocation({
+          ...location,
+          longitude: location.coords.longitude,
+          latitude: location.coords.latitude,
+        });
+        setCorrectLocation(true);
+      } else {
+        setCorrectLocation(false);
+        Alert.alert("Permission denied");
+      }
+    } catch (error) {
+      setCorrectLocation(false);
+      Alert.alert("Something went wrong with location", error.message);
+    }
+  };
+
+  const goToMyLocation = async () => {
+    setGetLocationLoading(true);
+    try {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status === "granted") {
+        const location = await Location.getCurrentPositionAsync({});
+        setLng(location.coords.longitude)
+        setLat(location.coords.latitude)
+        setGetLocationLoading(false)
+      } else {
+        setGetLocationLoading(false)
+        Alert.alert("Permission denied");
+      }
+    } catch (error) {
+      setGetLocationLoading(false)
+      if (!mountedRef.current) return null;
+      Alert.alert("Something went wrong with current location", error.message);
+    }
+  };
+
+  const enableFullScreen = () => {
+    setMapFullscreen(true);
+    setShowModal(true)
+    // setDefaultMapSize({ width: '100%', height: '100%' })
+  };
+
+  const disableFullScreen = () => {
+    setMapFullscreen(false);
+    setShowModal(false)
+    // setDefaultMapSize({ width: '70%', height: '100%' })
+  };
+
+  const mapButtonsOverlay = () => (
+    <>
+      <TouchableOpacity
+        style={[styles.headerBtnView, styles.locationButton]}
+        onPress={goToMyLocation}
+        disabled={getLocationLoading}
+      >
+        {
+          getLocationLoading
+            ? (<ActivityIndicator size="small" color="grey" />)
+            : (<MaterialCommunityIcons name="crosshairs" size={21} color="grey" />)
+        }
+      </TouchableOpacity>
+
+      {!mapFullscreen ? (
+        // Preview map
+        <TouchableOpacity
+          style={[styles.headerBtnView, styles.enterFullScreenBtn]}
+          onPress={enableFullScreen}
+        >
+          <Entypo name="resize-full-screen" size={21} color={"grey"} />
+        </TouchableOpacity>
+      ) : (
+        // Fullscreen map
+        <>
+          {mapFullscreen && (<TouchableOpacity
+            style={[styles.headerBtnView, styles.exitFullscreenBtn]}
+            onPress={disableFullScreen}
+          >
+            <Entypo name="circle-with-cross" size={21} color={"grey"} />
+          </TouchableOpacity>)}
+          <TouchableOpacity
+            style={[styles.headerBtnView, styles.fullScreen]}
+            onPress={() => { }}
+            disabled={downloading}
+          >
+            <Image style={{ width: 21, height: 21 }} source={require('../../assets/download.svg')} />
+            <Text style={{ fontSize: 13, fontWeight: '500', marginLeft: 8 }}>
+              {downloading ? "Downloading" : "Download map"}
+            </Text>
+            {/* {downloading && (
+          <Text
+            style={{
+              backgroundColor: "white",
+              color: "blue",
+              paddingHorizontal: 3,
+              marginHorizontal: 7,
+              minWidth: 20,
+            }}
+          >
+            {progress}
+          </Text>
+        )} */}
+          </TouchableOpacity>
+        </>
+      )}
+    </>
+  );
 
   return (
     <View style={styles.container}>
       <View key="map" ref={mapContainer} style={styles.map} />
+      {mapButtonsOverlay()}
+
+      <Modal
+        animationType={'fade'}
+        transparent={false}
+        visible={showModal}
+      >
+        <View style={styles.modal}>
+          <View key="map" ref={mapContainer} style={styles.map} />
+          {mapButtonsOverlay()}
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -196,7 +311,45 @@ const styles = StyleSheet.create({
   },
   map: {
     width: "100%",
-    minHeight: "400px", // Adjust the height to your needs
+    minHeight: "100vh", // Adjust the height to your needs
+  },
+  locationButton: {
+    width: 40, height: 40,
+    position: "absolute",
+    bottom: 60, right: 10,
+    backgroundColor: "white",
+    borderRadius: 30,
+    zIndex: 1,
+  },
+  headerBtnView: {
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 30,
+    backgroundColor: "white",
+  },
+  enterFullScreenBtn: {
+    width: 40, height: 40,
+    position: "absolute",
+    bottom: 10, right: 10,
+  },
+  exitFullscreenBtn: {
+    width: 40, height: 40,
+    position: "absolute",
+    top: 10, right: 10,
+  },
+  fullScreen: {
+    width: "25%",
+    padding: 10,
+    marginVertical: 10,
+    backgroundColor: "#EBEDFD",
+    position: 'absolute',
+    bottom: 30,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modal: {
+    alignItems: 'center',
   },
 });
 
