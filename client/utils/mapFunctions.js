@@ -138,6 +138,15 @@ const processShapeData = (shape) => {
   return processedShape;
 };
 
+const mapboxStyles = [
+  { label: "Outdoors", style: "mapbox://styles/mapbox/outdoors-v11" },
+  { label: "Street", style: "mapbox://styles/mapbox/streets-v11" },
+  { label: "Light", style: "mapbox://styles/mapbox/light-v10" },
+  { label: "Dark", style: "mapbox://styles/mapbox/dark-v10" },
+  { label: "Satellite", style: "mapbox://styles/mapbox/satellite-v9" },
+  { label: "Satellite Street", style: "mapbox://styles/mapbox/satellite-streets-v11" },
+];
+
 
 export {
   defaultShape,
@@ -148,4 +157,5 @@ export {
   calculateZoomLevel,
   findTrailCenter,
   processShapeData,
+  mapboxStyles,
 };
