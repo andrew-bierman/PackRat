@@ -21,6 +21,7 @@ import {
   findTrailCenter,
   processShapeData,
   mapboxStyles,
+  getLocation,
 } from "../../utils/mapFunctions";
 
 // import 'mapbox-gl/dist/mapbox-gl.css'
@@ -67,12 +68,9 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
   const [showModal, setShowModal] = useState(false);
 
   const [mapStyle, setMapStyle] = useState(mapboxStyles[0].style);
-
-  // useEffect(() => {
-  //   console.log("trailCenterPoint state", trailCenterPoint);
-  //   console.log("zoomLevel state -- ", zoomLevel);
-  //   console.log("trailCenterPointRef", trailCenterPointRef.current);
-  // }, [trailCenterPoint, zoomLevel]);
+  const [showUserLocation, setShowUserLocation] = useState(false);
+  const [userLng, setUserLng] = useState(null);
+  const [userLat, setUserLat] = useState(null);
 
   useEffect(() => {
     if (map.current) return; // Initialize map only once
@@ -110,17 +108,6 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
       interactive: mapFullscreen,
     });
 
-    if (mapFullscreen) {
-      mapInstance.addControl(
-        new mapboxgl.GeolocateControl({
-          positionOptions: { enableHighAccuracy: true },
-          trackUserLocation: true,
-          showUserHeading: true,
-        }),
-        "bottom-right"
-      );
-    }
-
     mapInstance.on("load", () => {
       mapInstance.addSource("trail", {
         type: "geojson",
@@ -149,6 +136,32 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
         },
         filter: ["==", "meta", "end"],
       });
+
+      if (mapFullscreen && showUserLocation) {
+        // mapInstance.addControl(
+        //   new mapboxgl.GeolocateControl({
+        //     positionOptions: { enableHighAccuracy: true },
+        //     trackUserLocation: true,
+        //     showUserHeading: true,
+        //   }),
+        //   "bottom-right"
+        // );
+        mapInstance.addLayer({
+          id: "user-location",
+          type: "circle",
+          source: {
+            type: "geojson",
+            data: {
+              type: "Point",
+              coordinates: [lng, lat],
+            },
+          },
+          paint: {
+            "circle-radius": 8,
+            "circle-color": "#3388ff",
+          },
+        });
+      }
 
       // const marker = new mapboxgl.Marker()
       //   .setLngLat([lng, lat])
@@ -263,6 +276,54 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
     setMapboxStyle(style);
   };
 
+  const fetchLocation = async () => {
+    try {
+      const location = await getLocation();
+
+      if (location) {
+        const { latitude, longitude } = location.coords;
+        setUserLng(longitude);
+        setUserLat(latitude);
+        setShowUserLocation(true);
+
+        if (map.current) {
+          map.current.flyTo({
+            center: [longitude, latitude],
+            zoom: 14,
+          });
+
+          // Remove existing user location layer if it exists
+          if (map.current.getLayer("user-location")) {
+            map.current.removeLayer("user-location");
+          }
+          if (map.current.getSource("user-location")) {
+            map.current.removeSource("user-location");
+          }
+
+          // Add new user location layer
+          map.current.addLayer({
+            id: "user-location",
+            type: "circle",
+            source: {
+              type: "geojson",
+              data: {
+                type: "Point",
+                coordinates: [userLng, userLat],
+              },
+            },
+            paint: {
+              "circle-radius": 8,
+              "circle-color": "#3388ff",
+            },
+          });
+
+        }
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
   const mapButtonsOverlay = () => (
     <>
       {!mapFullscreen ? (
@@ -323,6 +384,13 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
             <Text style={{ fontSize: 13, fontWeight: "500", marginLeft: 8 }}>
               {downloading ? "Downloading" : "Download map"}
             </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.locationButton}
+            onPress={fetchLocation}
+          >
+            <Ionicons name="location-outline" size={24} color="black" />
           </TouchableOpacity>
         </>
       )}
