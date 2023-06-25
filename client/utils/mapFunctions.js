@@ -60,8 +60,8 @@ function getShapeSourceBounds(shape) {
   ];
 }
 
-function handleShapeSourceLoad(shape, width, height) {
-  if (shape && shape?.features[0]?.geometry?.coordinates?.length > 1) {
+function handleShapeSourceLoad(width, height) {
+  if (shape?.features[0]?.geometry?.coordinates?.length > 1) {
     let bounds = getShapeSourceBounds(shape);
     bounds = bounds[0].concat(bounds[1]);
     return calculateZoomLevel(bounds, { width, height });
@@ -138,6 +138,30 @@ const processShapeData = (shape) => {
   return processedShape;
 };
 
+const mapboxStyles = [
+  { label: "Outdoors", style: "mapbox://styles/mapbox/outdoors-v11" },
+  { label: "Street", style: "mapbox://styles/mapbox/streets-v11" },
+  { label: "Light", style: "mapbox://styles/mapbox/light-v10" },
+  { label: "Dark", style: "mapbox://styles/mapbox/dark-v10" },
+  { label: "Satellite", style: "mapbox://styles/mapbox/satellite-v9" },
+  {
+    label: "Satellite Street",
+    style: "mapbox://styles/mapbox/satellite-streets-v11",
+  },
+];
+
+const getLocation = async () => {
+  let { status } = await Location.requestForegroundPermissionsAsync();
+  
+  if (status !== "granted") {
+    alert("Permission to access location was denied");
+    return;
+  }
+
+  let location = await Location.getCurrentPositionAsync({});
+
+  return location;
+};
 
 export {
   defaultShape,
@@ -148,4 +172,6 @@ export {
   calculateZoomLevel,
   findTrailCenter,
   processShapeData,
+  mapboxStyles,
+  getLocation,
 };
