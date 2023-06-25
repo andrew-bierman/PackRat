@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import { isCelebrateError, errors } from "celebrate";
 
-import { MONGODB_URI, SERVICE_ACCOUNT_KEY } from "./config.js";
+import { MONGODB_URI, SERVICE_ACCOUNT_KEY,CORS_METHODS,CORS_ORIGIN } from "./config.js";
 import routes from "./routes/index.js";
 
 import swaggerUi from "swagger-ui-express";
@@ -11,7 +11,10 @@ import specs from "./swaggerOptions.js";
 
 // express items
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin:CORS_ORIGIN,
+  methods:CORS_METHODS
+}));
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
