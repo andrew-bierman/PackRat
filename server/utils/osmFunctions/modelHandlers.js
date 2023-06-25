@@ -39,9 +39,9 @@ export async function fromOSM(Model, data) {
 }
 
 export async function fromGeoJSON(Model, geoJSON) {
-  console.log("fromGeoJSON");
-  console.log("fromGeoJSON geoJSON", geoJSON);
-  console.log("fromGeoJSON Model", Model);
+  // console.log("fromGeoJSON");
+  // console.log("fromGeoJSON geoJSON", geoJSON);
+  // console.log("fromGeoJSON Model", Model);
 
   const instance = new Model();
   instance.tags = new Map();
@@ -75,7 +75,7 @@ export async function fromGeoJSON(Model, geoJSON) {
 }
 
 export async function toGeoJSON(Model, instance) {
-  console.log("toGeoJSON instance", instance);
+  // console.log("toGeoJSON instance", instance);
 
   if (!instance) {
     console.error("instance is undefined or null");
