@@ -1,6 +1,8 @@
 import React, { useRef, useState, useEffect, useCallback } from "react";
 import mapboxgl from "mapbox-gl";
 import { MAPBOX_ACCESS_TOKEN } from "@env";
+import { useSelector, useDispatch } from "react-redux";
+import { convertGeoJSONToGPX } from "../../store/gpxStore";
 import {
   Platform,
   StyleSheet,
@@ -19,6 +21,8 @@ import {
   processShapeData,
   mapboxStyles,
   getLocation,
+  isShapeDownloadable,
+  handleGpxDownload,
 } from "../../utils/mapFunctions";
 import MapButtonsOverlay from "./MapButtonsOverlay";
 
@@ -70,6 +74,12 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
   const [userLng, setUserLng] = useState(null);
   const [userLat, setUserLat] = useState(null);
 
+  // download variables
+  const dispatch = useDispatch();
+  const gpxData = useSelector((state) => state.gpx.gpxData);
+  const [downloadable, setDownloadable] = useState(false);
+
+
   useEffect(() => {
     if (map.current) return; // Initialize map only once
 
@@ -84,6 +94,8 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
 
       zoomLevelRef.current = latZoom;
       trailCenterPointRef.current = trailCenter;
+
+      setDownloadable(isShapeDownloadable(shape));
     }
   }, [shape, fullMapDiemention]);
 
@@ -313,6 +325,9 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
     }
   };
 
+
+  
+
   return (
     <View style={styles.container}>
       <View key="map" ref={mapContainer} style={styles.map} />
@@ -322,10 +337,12 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
         disableFullScreen={disableFullScreen}
         mapStyle={mapStyle}
         handleChangeMapStyle={handleChangeMapStyle}
-        downloading={downloading}
         fetchLocation={fetchLocation}
         showModal={showModal}
         styles={styles}
+        downloadable={downloadable}
+        downloading={downloading}
+        shape={shape}
       />
 
       <Modal animationType={"fade"} transparent={false} visible={showModal}>
@@ -341,6 +358,8 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
             fetchLocation={fetchLocation}
             showModal={showModal}
             styles={styles}
+            downloadable={downloadable}
+            shape={shape}
           />
         </View>
       </Modal>
