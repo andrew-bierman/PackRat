@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   TouchableOpacity,
   Image,
@@ -9,8 +9,10 @@ import {
 } from "react-native";
 import { Box, Select } from "native-base";
 import { Entypo, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { useDispatch, useSelector } from "react-redux";
+import { convertGeoJSONToGPX, resetGpxData } from "../../store/gpxStore";
 
-import { mapboxStyles } from "../../utils/mapFunctions";
+import { mapboxStyles, handleGpxDownload } from "../../utils/mapFunctions";
 
 const MapButtonsOverlay = ({
   mapFullscreen,
@@ -18,11 +20,16 @@ const MapButtonsOverlay = ({
   disableFullScreen,
   mapStyle,
   handleChangeMapStyle,
-  downloading,
+  downloadable,
   fetchLocation,
   showModal,
+  shape,
 }) => {
+  const dispatch = useDispatch();
+  const gpxData = useSelector((state) => state.gpx.gpxData);
+
   const [showStyleOptions, setShowStyleOptions] = useState(false);
+  const [downloading, setDownloading] = useState(false); // New state for downloading
 
   const handleStyleOptionPress = () => {
     setShowStyleOptions(!showStyleOptions);
@@ -32,6 +39,26 @@ const MapButtonsOverlay = ({
     handleChangeMapStyle(style);
     setShowStyleOptions(false);
   };
+
+  const fetchGpxDownload = async () => {
+    setDownloading(true);
+  
+    console.log("gpxData at start of fetchGpxDownload", gpxData);
+  
+    try {
+      const updatedGpxData = await dispatch(convertGeoJSONToGPX(shape));
+
+      const { payload } = updatedGpxData;
+  
+      await handleGpxDownload(payload);
+      
+      setDownloading(false);
+    } catch (error) {
+      console.log("error", error);
+      setDownloading(false);
+    }
+  };
+  
 
   return (
     <>
@@ -60,7 +87,11 @@ const MapButtonsOverlay = ({
             style={[styles.headerBtnView, styles.stylePicker]}
             onPress={handleStyleOptionPress}
           >
-            <MaterialCommunityIcons name="palette" size={21} color="grey" />
+            <MaterialCommunityIcons
+              name="layers-triple-outline"
+              size={21}
+              color="grey"
+            />
           </TouchableOpacity>
 
           {/* Style Selection Modal */}
@@ -88,19 +119,21 @@ const MapButtonsOverlay = ({
           </Modal>
 
           {/* Download Button */}
-          <TouchableOpacity
-            style={[styles.headerBtnView, styles.fullScreen]}
-            onPress={() => {}}
-            disabled={downloading}
-          >
-            <Image
-              style={styles.downloadIcon}
-              source={require("../../assets/download.svg")}
-            />
-            <Text style={styles.downloadText}>
-              {downloading ? "Downloading" : "Download map"}
-            </Text>
-          </TouchableOpacity>
+          {downloadable && (
+            <TouchableOpacity
+              style={[styles.headerBtnView, styles.fullScreen]}
+              onPress={fetchGpxDownload}
+              disabled={downloading}
+            >
+              <Image
+                style={styles.downloadIcon}
+                source={require("../../assets/download.svg")}
+              />
+              <Text style={styles.downloadText}>
+                {downloading ? "Downloading" : "Download map"}
+              </Text>
+            </TouchableOpacity>
+          )}
 
           {/* Location Button */}
           <TouchableOpacity
@@ -195,7 +228,7 @@ const styles = StyleSheet.create({
     right: 10,
   },
   fullScreen: {
-    width: '25%',
+    width: "25%",
     height: 40,
     padding: 10,
     backgroundColor: "white",
