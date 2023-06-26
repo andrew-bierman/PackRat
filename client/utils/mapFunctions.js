@@ -177,7 +177,7 @@ const handleGpxDownload = async (gpxData, filename = "trail") => {
       await FileSystem.writeAsStringAsync(fileUri, gpxData, {
         encoding: FileSystem.EncodingType.UTF8,
       });
-      await FileSystem.downloadAsync(fileUri, FileSystem.cacheDirectory + `${filename}.gpx``);
+      await FileSystem.downloadAsync(fileUri, FileSystem.cacheDirectory + `${filename}.gpx`);
     }
   }
 };
