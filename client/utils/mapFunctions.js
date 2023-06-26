@@ -171,9 +171,9 @@ const handleGpxDownload = async (gpxData, filename = "trail") => {
     // Check the platform (native or web)
     if (Platform.OS === 'web') {
       const blob = new Blob([gpxData], { type: 'application/gpx+xml' });
-      saveAs(blob, 'trail.gpx');
+      saveAs(blob, `${filename}.gpx`);
     } else {
-      const fileUri = FileSystem.documentDirectory + 'trail.gpx';
+      const fileUri = FileSystem.documentDirectory + `${filename}.gpx`;
       await FileSystem.writeAsStringAsync(fileUri, gpxData, {
         encoding: FileSystem.EncodingType.UTF8,
       });
