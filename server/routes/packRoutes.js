@@ -9,7 +9,7 @@ import {
   scorePack,
 } from "../controllers/packController.js";
 import * as validator from "../middleware/validators/index.js";
-
+import {auth} from '../middleware/auth.js'
 const router = express.Router();
 
 /**
@@ -39,6 +39,8 @@ router.get("/", getPublicPacks);
  *   get:
  *     summary: Get packs by owner ID
  *     tags: [Packs]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: ownerId
@@ -54,7 +56,7 @@ router.get("/", getPublicPacks);
  *       '500':
  *         description: Error retrieving packs by owner ID
  */
-router.get("/:ownerId", validator.getPacks, getPacks);
+router.get("/:ownerId", validator.getPacks, auth ,getPacks);
 
 /**
  * @swagger
@@ -62,6 +64,8 @@ router.get("/:ownerId", validator.getPacks, getPacks);
  *   get:
  *     summary: Get pack by ID
  *     tags: [Packs]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: packId
@@ -77,7 +81,7 @@ router.get("/:ownerId", validator.getPacks, getPacks);
  *       '500':
  *         description: Error retrieving pack by ID
  */
-router.get("/p/:packId", validator.getPackById, getPackById);
+router.get("/p/:packId", validator.getPackById, auth,getPackById);
 
 /**
  * @swagger
@@ -85,6 +89,8 @@ router.get("/p/:packId", validator.getPackById, getPackById);
  *   put:
  *     summary: Score a pack
  *     tags: [Packs]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: packId
@@ -100,7 +106,7 @@ router.get("/p/:packId", validator.getPackById, getPackById);
  *       '500':
  *         description: Error scoring the pack
  */
-router.put("/score/:packId", validator.getPackById, scorePack);
+router.put("/score/:packId", validator.getPackById, auth,scorePack);
 
 /**
  * @swagger
@@ -108,6 +114,8 @@ router.put("/score/:packId", validator.getPackById, scorePack);
  *   post:
  *     summary: Add a pack
  *     tags: [Packs]
+*     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -129,7 +137,7 @@ router.put("/score/:packId", validator.getPackById, scorePack);
  *       '500':
  *         description: Error adding the pack
  */
-router.post("/", validator.addPack, addPack);
+router.post("/", validator.addPack, auth,addPack);
 
 /**
  * @swagger
@@ -137,6 +145,8 @@ router.post("/", validator.addPack, addPack);
  *   put:
  *     summary: Edit a pack
  *     tags: [Packs]
+*     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -158,7 +168,7 @@ router.post("/", validator.addPack, addPack);
  *       '500':
  *         description: Error editing the pack
  */
-router.put("/", validator.editPack, editPack);
+router.put("/", validator.editPack, auth,editPack);
 
 /**
  * @swagger
@@ -166,6 +176,8 @@ router.put("/", validator.editPack, editPack);
  *   delete:
  *     summary: Delete a pack
  *     tags: [Packs]
+*     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -183,6 +195,6 @@ router.put("/", validator.editPack, editPack);
  *       '500':
  *         description: Error deleting the pack
  */
-router.delete("/", validator.deletePack, deletePack);
+router.delete("/", validator.deletePack, auth,deletePack);
 
 export default router;
