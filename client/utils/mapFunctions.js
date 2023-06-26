@@ -166,7 +166,7 @@ const getLocation = async () => {
   return location;
 };
 
-const handleGpxDownload = async (gpxData) => {
+const handleGpxDownload = async (gpxData, filename = "trail") => {
   if (gpxData) {
     // Check the platform (native or web)
     if (Platform.OS === 'web') {
@@ -177,7 +177,7 @@ const handleGpxDownload = async (gpxData) => {
       await FileSystem.writeAsStringAsync(fileUri, gpxData, {
         encoding: FileSystem.EncodingType.UTF8,
       });
-      await FileSystem.downloadAsync(fileUri, FileSystem.cacheDirectory + 'trail.gpx');
+      await FileSystem.downloadAsync(fileUri, FileSystem.cacheDirectory + `${filename}.gpx``);
     }
   }
 };
