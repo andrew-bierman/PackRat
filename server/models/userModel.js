@@ -51,7 +51,7 @@ const UserSchema = new Schema(
 UserSchema.statics.findByCredentials = async function ({ email, password }) {
   const user = await User.findOne({ email });
 
-  if (!user) throw new Error("Unable to login");
+  if (!user) throw new Error("User does not exists");
 
   const isMatch = await bycrypt.compare(password, user.password);
 

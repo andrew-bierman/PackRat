@@ -35,6 +35,7 @@ import { theme } from "../theme";
 import { useDispatch, useSelector } from "react-redux";
 import { signIn, signInWithGoogle } from "../store/authStore";
 import { StyleSheet } from "react-native";
+import validator from 'validator';
 
 // const defaultStyle = {
 //   version: 8,
@@ -72,6 +73,8 @@ WebBrowser.maybeCompleteAuthSession();
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [emailError,setEmailError]=useState("");
+  const [passwordError,setPasswordError]=useState("");
 
   const demoUser = {
     email: "email52@email.com",
@@ -97,17 +100,21 @@ export default function Login() {
     router.push("/");
   }
   if (error) {
-    Toast.show({
-      title: "Wrong-password",
-      duration: 3000,
-      placement: "top-right",
-      style: { backgroundColor: "red" },
-    });
+    // Toast.show({
+    //   title: "Wrong-password",
+    //   duration: 3000,
+    //   placement: "top-right",
+    //   style: { backgroundColor: "red" },
+    // });
   }
 
   // const { loginUserWithEmailAndPassword, loginUserWithGoogle } = useLogin();
 
   // Add Google auth-related variables
+
+
+
+
   const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
     clientId: WEB_CLIENT_ID,
   });
@@ -153,7 +160,22 @@ export default function Login() {
   // });
 
   const handleLogin = () => {
-    dispatch(signIn({ email, password }));
+    console.log(error);
+    if(validator.isEmpty(email)){
+        setEmailError('Email is required');
+      }
+      if(!validator.isEmpty(email) && !validator.isEmail(email)){
+        setEmailError('Invalid Email');
+      }
+    if(validator.isEmpty(password)){
+      setPasswordError('Password is required');
+    }
+    if(!validator.isEmpty(password) && !validator.isEmpty(email)){
+      dispatch(signIn({ email, password }));
+
+    }
+
+      
   };
 
   // useEffect(() => {
@@ -232,6 +254,14 @@ export default function Login() {
   //     setError("Error on your browser")
   //   })
   // }
+  const passwordChangeHandler =(text)=>{
+      setPassword(text)
+      setPasswordError("")
+  }
+  const emailChangeHandler =(text)=>{
+      setEmail(text)
+      setEmailError("")
+}
 
   return (
     <VStack>
@@ -262,18 +292,27 @@ export default function Login() {
           <VStack space={3} mt="5">
             <FormControl>
               <FormControl.Label>Email ID</FormControl.Label>
-              <Input value={email} onChangeText={(text) => setEmail(text)} />
+              <Input type="text" value={email} onChangeText={emailChangeHandler} style={{ borderColor: emailError ? 'red' : 'gray',borderWidth:1 }} />
+              {
+                emailError ? <Text style={{color:'red'}} >{emailError}</Text>: null
+              }
             </FormControl>
             <FormControl>
               <FormControl.Label>Password</FormControl.Label>
               <Input
                 value={password}
-                onChangeText={(text) => setPassword(text)}
+                
+                secureTextEntry={true}
+                onChangeText={passwordChangeHandler}
                 type="password"
+                style={{ borderColor: passwordError ? 'red' : 'gray',borderWidth:1 }}
+
               />
+              {
+                passwordError ? <Text style={{color:'red'}}>{passwordError}</Text>: null
+              }
             </FormControl>
             <Button
-              disabled={!email || !password}
               onPress={handleLogin}
               mt="2"
               colorScheme="indigo"

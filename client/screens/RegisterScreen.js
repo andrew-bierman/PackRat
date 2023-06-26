@@ -23,13 +23,21 @@ import { useRouter } from "expo-router";
 import { Link } from "expo-router";
 import { useSelector, useDispatch } from "react-redux";
 import { signUp } from "../store/authStore";
+import validator from 'validator'
 
 export default function Register() {
   const dispatch = useDispatch();
 
   const [name, setName] = useState("");
+  const [nameError, setNameError] = useState("");
+  
   const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
+  
   const [password, setPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+
+
 
   // const { signupWithEmail } = useRegister();
   const router = useRouter();
@@ -60,8 +68,24 @@ export default function Register() {
       //       signupWithEmail(user?.uid, name, email, password);
       //     }
       //   })
-
-      dispatch(signUp({ name, email, password }));
+      if(validator.isEmpty(name)){
+        setNameError('Name is required')
+      }
+      if(validator.isEmpty(email)){
+        setEmailError('Email is required')
+      }
+      if(!validator.isEmpty(email) && !validator.isEmail(email)){
+        setEmailError('Invalid Email')
+      }
+      if(validator.isEmpty(password)){
+        setPasswordError('Password is required')
+      }
+      if(validator.isEmpty(name) && validator.isEmpty(email) && validator.isEmpty(password)){
+        return
+      }
+      if(!validator.isEmpty(name) && !validator.isEmpty(email) && !validator.isEmpty(password) ){
+        dispatch(signUp({ name, email, password }));
+      }
     } catch (e) {
       console.log("Error", e);
     }
@@ -94,11 +118,26 @@ export default function Register() {
         <VStack space={3} mt="5">
           <FormControl>
             <FormControl.Label>Name</FormControl.Label>
-            <Input value={name} onChangeText={(text) => setName(text)} />
+            <Input value={name} onChangeText={(text) =>{
+               setName(text)
+               setNameError('')
+            }} style={{borderColor: nameError ? 'red' : 'gray',borderWidth:1}} />
+            {
+              nameError ? <Text style={{color:'red'}}>{nameError}</Text> : null
+            }
           </FormControl>
           <FormControl>
             <FormControl.Label>Email</FormControl.Label>
-            <Input value={email} onChangeText={(text) => setEmail(text)} />
+            <Input value={email} onChangeText={(text) => {
+             setEmail(text)
+              setEmailError('')
+            }}
+            style={{borderColor: emailError ? 'red' : 'gray',borderWidth:1}}
+
+            />
+              {
+                emailError ? <Text style={{color:'red'}}>{emailError}</Text> : null
+             }
           </FormControl>
           <FormControl>
             <FormControl.Label>Password</FormControl.Label>
@@ -106,13 +145,16 @@ export default function Register() {
               value={password}
               onChangeText={(text) => setPassword(text)}
               type="password"
+              style={{borderColor: passwordError ? 'red' : 'gray',borderWidth:1}}
             />
+             {
+                passwordError ? <Text style={{color:'red'}}>{passwordError}</Text> : null
+             }
           </FormControl>
           <Button
             onPress={() => registerUser()}
             mt="2"
             colorScheme="indigo"
-            disabled={!email || !password || !name}
           >
             {"Sign up"}
           </Button>
