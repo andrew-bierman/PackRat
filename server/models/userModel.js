@@ -9,41 +9,44 @@ import validator from "validator";
 
 const { Schema } = mongoose;
 
-const UserSchema = new Schema({
-  name: { type: String, required: true },
-  password: {
-    type: String,
-    trim: true,
-    minLength: 7,
-    required: true,
-    validate(value) {
-      if (value.search(/password/i) !== -1)
-        throw new Error("The password cannot contain the word 'password'");
+const UserSchema = new Schema(
+  {
+    name: { type: String, required: true },
+    password: {
+      type: String,
+      trim: true,
+      minLength: 7,
+      required: true,
+      validate(value) {
+        if (value.search(/password/i) !== -1)
+          throw new Error("The password cannot contain the word 'password'");
+      },
     },
-  },
-  email: {
-    type: String,
-    trim: true,
-    lowercase: true,
-    unique: true,
-    required: "Email address is required",
-    validate(value) {
-      if (!validator.isEmail(value)) throw new Error("Email is invalid");
+    email: {
+      type: String,
+      trim: true,
+      lowercase: true,
+      unique: true,
+      required: "Email address is required",
+      validate(value) {
+        if (!validator.isEmail(value)) throw new Error("Email is invalid");
+      },
     },
+    token: {
+      type: String,
+      trim: true,
+    },
+    googleId: { type: String },
+    code: { type: String },
+    is_certified_guide: { type: Boolean },
+    trips: [{ type: Schema.Types.ObjectId, ref: Trip }],
+    favorites: [{ type: Schema.Types.ObjectId, ref: Pack }],
+    packs: [{ type: Schema.Types.ObjectId, ref: Pack }],
+    passwordResetToken: { type: String },
+    passwordResetTokenExpiration: { type: Date },
   },
-  token: {
-    type: String,
-    trim: true,
-  },
-  googleId: { type: String },
-  code: { type: String },
-  is_certified_guide: { type: Boolean },
-  trips: [{ type: Schema.Types.ObjectId, ref: Trip }],
-  favorites: [{ type: Schema.Types.ObjectId, ref: Pack }],
-  packs: [{ type: Schema.Types.ObjectId, ref: Pack }],
-  passwordResetToken: { type: String },
-  passwordResetTokenExpiration: { type: Date },
-});
+  { timestamps: true }
+);
 
 UserSchema.statics.findByCredentials = async function ({ email, password }) {
   const user = await User.findOne({ email });

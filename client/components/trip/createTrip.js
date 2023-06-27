@@ -59,6 +59,7 @@ export const SaveTripContainer = () => {
   const packId = useSelector((state) => state.trips.newTrip.packId);
 
   console.log('- note for me', packId);
+  console.log('search in save trip container ->', search)
 
   // defining dispatch
   const dispatch = useDispatch();
@@ -87,7 +88,8 @@ export const SaveTripContainer = () => {
       start_date: startDate,
       end_date: endDate,
       destination: search.properties.name,
-      trail: dropdown.currentTrail,
+      geoJSON: search,
+      // trail: dropdown.currentTrail,
       duration: JSON.stringify(duration),
       weather: JSON.stringify(weatherObject),
       owner_id: user?._id,
@@ -96,7 +98,7 @@ export const SaveTripContainer = () => {
     }
 
     // creating a trip
-    console.log(data)
+    console.log('create trip data ->', data)
     dispatch(addTrip(data));
     setIsSaveModalOpen(!isSaveModalOpen);
   }
