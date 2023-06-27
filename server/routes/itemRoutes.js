@@ -63,7 +63,7 @@ router.get("/i/:packId", validator.getItemById, getItemById);
  *  get:
  *    tags:
  *      - Items
- *     security:
+ *    security:
  *      - bearerAuth: []
  *    summary: Search items by name
  *    responses:
@@ -78,7 +78,7 @@ router.get("/search", auth,searchItemsByName);
  *  post:
  *    tags:
  *      - Items
- *     security:
+ *    security:
  *      - bearerAuth: []
  *    summary: Add a new item
  *    requestBody:
@@ -110,7 +110,7 @@ router.post("/", validator.addItem,auth, addItem);
  *  put:
  *    tags:
  *      - Items
- *     security:
+ *    security:
  *      - bearerAuth: []
  *    summary: Edit an existing item
 

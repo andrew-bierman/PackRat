@@ -24,7 +24,7 @@ const router = express.Router();
  * /trip:
  *   get:
  *     tags:
- *      - Trips
+ *       - Trips
  *     summary: Get public trips
  *     responses:
  *       200:
@@ -59,7 +59,7 @@ router.get("/:ownerId", validator.getTrips, auth,getTrips);
  *   get:
  *     tags:
  *       - Trips
- *      security:
+ *     security:
  *       - bearerAuth: []
  *     summary: Get trip by trip ID
  *     parameters:
@@ -126,9 +126,7 @@ router.post("/", validator.addTrip, auth, addTrip);
  *   put:
  *     tags:
  *       - Trips
- *      security:
- *       - bearerAuth: []
- *      security:
+ *     security:
  *       - bearerAuth: []
  *     summary: Edit an existing trip
  *     requestBody:
