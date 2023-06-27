@@ -13,14 +13,14 @@ import {
   Switch,
   Button,
 } from "native-base";
-
+// import useChangePublicStatus from "../../hooks/useChangePublicStatus";
 import { changePackStatus } from "../../store/packsStore";
 
 import { useDispatch, useSelector } from "react-redux";
 
 import { Link } from "expo-router";
 
-const UserDataCard = ({
+export default function UserDataCard({
   type, // "pack" or "trip"
   destination,
   _id,
@@ -30,7 +30,8 @@ const UserDataCard = ({
   favorited_by,
   favorites_count,
   createdAt,
-}) => {
+}) {
+  // const { changeStatus } = useChangePublicStatus();
 
   const dispatch = useDispatch();
 
@@ -184,5 +185,3 @@ const UserDataCard = ({
     </Box>
   );
 }
-
-export default UserDataCard;

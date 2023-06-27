@@ -31,10 +31,6 @@ export const JWT_SECRET = process.env.JWT_SECRET;
 
 export const SEND_GRID_API_KEY = process.env.SEND_GRID_API_KEY;
 
-export const SERVER_ROOT_URI = process.env.SERVER_ROOT_URI;
-export const UI_ROOT_URI = process.env.CLIENT_URL;
-
+export const SERVER_ROOT_URI = "http://localhost:3000";
+export const UI_ROOT_URI = "http://localhost:8081";
 export const REDIRECT_URL = "auth/google";
-
-export const CORS_ORIGIN = process.env.CORS_ORIGIN;
-export const CORS_METHODS = ['GET','POST','PUT','DELETE','PATCH']
