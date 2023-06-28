@@ -19,13 +19,12 @@ import { editItem, deleteItem } from "../../store/itemsStore";
 
 import { convertWeight } from "../../utils/convertWeight";
 import { openModal, selectPackById } from "../../store/packsStore";
-import { AddItem } from "../AddItem";
-import { EditPackModal } from "./EditPackModal";
+import { AddItem } from "../item/AddItem";
+import { EditPackItemModal } from "./EditPackItemModal";
 
 export const TableContainer = ({ currentPack }) => {
   // const { data, isLoading, isError, error } = useGetItems(packId);
   const [currentPackId, setCurrentPackId] = useState(null);
-
 
   const dispatch = useDispatch();
 
@@ -39,16 +38,23 @@ export const TableContainer = ({ currentPack }) => {
   const [edit, setEdit] = useState();
 
   // PREFERED WEIGHTING UNIT FOR DISPLAY TO CLIENTSIDE
-  const [weightUnit, setWeightUnit] = useState('g');
+  const [weightUnit, setWeightUnit] = useState("g");
   const calculate = (value) => {
     // update the item values and then recalculate
     return currentPack?.items?.reduce((acc, item) => {
-      const convertedWeight = convertWeight(item?.weight, item?.unit, weightUnit);
-      const result = acc + (convertedWeight * item.quantity);
+      const convertedWeight = convertWeight(
+        item?.weight,
+        item?.unit,
+        weightUnit
+      );
+      const result = acc + convertedWeight * item.quantity;
       return result;
-    }, 0)
-  }
-  const totalItemsWeight = useMemo(() => calculate(currentPack), [currentPack, weightUnit])
+    }, 0);
+  };
+  const totalItemsWeight = useMemo(
+    () => calculate(currentPack),
+    [currentPack, weightUnit]
+  );
 
   // UI component
   const WeightUnitDropdown = ({ value, onChange }) => {
@@ -107,17 +113,11 @@ export const TableContainer = ({ currentPack }) => {
 
   const flexWidthArr = [2, 1, 1, 0.5, 0.5];
 
-
   const tableDb = data?.map(({ name, weight, quantity, unit, _id }, index) => [
     name,
     `${weight} ${unit}`,
     quantity,
-    <MaterialIcons
-      name="edit"
-      size={20}
-      color="black"
-      onPress={() => { setEdit(index), dispatch(openModal()) }}
-    />,
+    <EditPackItemModal packId={_id} initialData={data[index]}/>,
     <Feather
       name="x-circle"
       size={20}
@@ -125,7 +125,6 @@ export const TableContainer = ({ currentPack }) => {
       onPress={() => deleteItem.mutate(_id)}
       style={{ alignSelf: "center" }}
     />,
-    <EditPackModal packId={_id} packData={data[edit]} />
   ]);
 
   const tablekeys = data?.map((value) => Object.keys(value).slice(1));
@@ -154,9 +153,7 @@ export const TableContainer = ({ currentPack }) => {
   if (isLoading) return <Text>Loading....</Text>;
 
   return (
-    <Box
-      style={styles.container}
-    >
+    <Box style={styles.container}>
       <WeightUnitDropdown value={weightUnit} onChange={setWeightUnit} />
       {data?.length > 0 ? (
         <Table
@@ -189,13 +186,9 @@ export const TableContainer = ({ currentPack }) => {
                   ]}
                   data={cellData}
                 />
-
               ))}
-
             </TableWrapper>
-
           ))}
-
         </Table>
       ) : (
         <Text>Add your First Item</Text>
