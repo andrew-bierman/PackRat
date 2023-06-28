@@ -1,10 +1,10 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { Modal as NBModal, Box, Heading, Button } from "native-base";
 
 export const CustomModal = ({
   id,
   title,
-  trigger,
+  trigger = "Open",
   children,
   onSave,
   onCancel,
@@ -14,6 +14,7 @@ export const CustomModal = ({
   isActive,
   onTrigger,
   buttonText,
+  triggerComponent = null,
   ...rest
 }) => {
   const closeModal = () => {
@@ -24,16 +25,20 @@ export const CustomModal = ({
     }
   };
 
+  const triggerElement = triggerComponent || (
+    <Button
+      top={5}
+      alignSelf={"center"}
+      w={"30%"}
+      onPress={() => onTrigger(true)}
+    >
+      {trigger}
+    </Button>
+  );
+
   return (
     <>
-      <Button
-        top={5}
-        alignSelf={"center"}
-        w={"30%"}
-        onPress={() => onTrigger(true)}
-      >
-        {trigger}
-      </Button>
+      {triggerElement}
       <NBModal
         isOpen={isActive}
         onClose={closeModal}

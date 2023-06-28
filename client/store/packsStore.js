@@ -31,13 +31,10 @@ export const addPackItem = createAsyncThunk(
   }
 );
 
-export const scorePack = createAsyncThunk(
-  "packs/scorePack",
-  async (packId) => {
-    const response = await axios.put(`${api}/pack/score/${packId}`);
-    return response.data;
-  }
-);
+export const scorePack = createAsyncThunk("packs/scorePack", async (packId) => {
+  const response = await axios.put(`${api}/pack/score/${packId}`);
+  return response.data;
+});
 
 export const editPackItem = createAsyncThunk(
   "items/editPackItem",
@@ -53,7 +50,7 @@ const packsSlice = createSlice({
     packs: [],
     isLoading: false,
     error: null,
-    isOpenEditModal: false
+    isOpenEditModal: false,
   },
   reducers: {
     openModal: (state) => {
@@ -84,7 +81,6 @@ const packsSlice = createSlice({
       })
       .addCase(changePackStatus.fulfilled, (state, action) => {
         const updatedPack = action.payload;
-        console.log("state.packs", state.packs);
         const index = state.packs.findIndex(
           (pack) => pack._id === updatedPack._id
         );
@@ -164,19 +160,36 @@ const packsSlice = createSlice({
       .addCase(editPackItem.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message;
+      })
+      
+      .addCase(scorePack.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(scorePack.fulfilled, (state, action) => {
+        const updatedPack = action.payload.updatedPack;
+        const index = state.packs.findIndex(
+          (pack) => pack._id === updatedPack._id
+        );
+        if (index !== -1) {
+          state.packs[index] = updatedPack;
+        }
+        state.isLoading = false;
+        state.error = null;
+      })
+      .addCase(scorePack.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message;
       });
   },
 });
 
 export const selectPacks = (state) => state.packs.packs;
-
 export const selectIsLoading = (state) => state.packs.isLoading;
-
 export const selectError = (state) => state.packs.error;
-
 export const selectPackById = (state, packId) =>
-  state?.packs?.packs?.find((pack) => pack?._id === packId);
+  state.packs.packs.find((pack) => pack._id === packId);
 
-  export const { openModal, closeModal } = packsSlice.actions;
+export const { openModal, closeModal } = packsSlice.actions;
 
 export default packsSlice.reducer;
