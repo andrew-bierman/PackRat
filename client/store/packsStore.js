@@ -39,14 +39,30 @@ export const scorePack = createAsyncThunk(
   }
 );
 
+export const editPackItem = createAsyncThunk(
+  "items/editPackItem",
+  async (newItem) => {
+    const response = await axios.put(`${api}/item/`, newItem);
+    return response.data;
+  }
+);
+
 const packsSlice = createSlice({
   name: "packs",
   initialState: {
     packs: [],
     isLoading: false,
     error: null,
+    isOpenEditModal: false
   },
-  reducers: {},
+  reducers: {
+    openModal: (state) => {
+      state.isOpenEditModal = true;
+    },
+    closeModal: (state) => {
+      state.isOpenEditModal = false;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(addPack.pending, (state) => {
@@ -87,7 +103,6 @@ const packsSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchUserPacks.fulfilled, (state, action) => {
-        console.log("action.payload in fetch packs", action.payload);
         state.packs = action.payload;
         state.isLoading = false;
         state.error = null;
@@ -118,32 +133,38 @@ const packsSlice = createSlice({
         state.isLoading = false;
         state.error = null;
       })
-
       .addCase(addPackItem.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message;
       })
-
-      .addCase(scorePack.pending, (state) => {
+      .addCase(editPackItem.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(scorePack.fulfilled, (state, action) => {
-        const updatedPack = action.payload.updatedPack;
-        const index = state.packs.findIndex(
-          (pack) => pack._id === updatedPack._id
-        );
-        if (index !== -1) {
-          state.packs[index] = updatedPack;
+      .addCase(editPackItem.fulfilled, (state, action) => {
+        const { packId, newItem } = action.payload;
+        // state.packs = action.payload;
+        const packIndex = state.packs.findIndex((pack) => pack._id === packId);
+        if (packIndex !== -1) {
+          const updatedPack = {
+            ...state.packs[packIndex],
+            items: [...state.packs[packIndex].items, newItem],
+          };
+          const newPacks = [
+            ...state.packs.slice(0, packIndex),
+            updatedPack,
+            ...state.packs.slice(packIndex + 1),
+          ];
+          state.packs = newPacks;
         }
         state.isLoading = false;
         state.error = null;
+        state.isOpenEditModal = false;
       })
-      .addCase(scorePack.rejected, (state, action) => {
+      .addCase(editPackItem.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message;
-      })
-
+      });
   },
 });
 
@@ -154,6 +175,8 @@ export const selectIsLoading = (state) => state.packs.isLoading;
 export const selectError = (state) => state.packs.error;
 
 export const selectPackById = (state, packId) =>
-  state.packs.packs.find((pack) => pack._id === packId);
+  state?.packs?.packs?.find((pack) => pack?._id === packId);
+
+  export const { openModal, closeModal } = packsSlice.actions;
 
 export default packsSlice.reducer;
