@@ -4,6 +4,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { api } from "../constants/api";
 import { Alert } from "react-native";
+import { Toast } from "native-base";
 
 const initialState = {
   user: null,
@@ -36,8 +37,8 @@ export const signIn = createAsyncThunk(
         password,
       });
       return response.data.user;
-    } catch (error) {
-      return rejectWithValue(error.response.data.error);
+    } catch ({response}) {
+      return rejectWithValue(response.data.message);
     }
   }
 );
@@ -105,15 +106,21 @@ export const authSlice = createSlice({
         state.error = null;
       })
       .addCase(signIn.fulfilled, (state, action) => {
-        // console.log("userinfo", action.payload);
         state.user = action.payload;
         state.loading = false;
         state.error = null;
       })
       .addCase(signIn.rejected, (state, action) => {
+
         state.loading = false;
         state.error = action.payload;
         state.user = null;
+        Toast.show({
+          title: action.payload+'. Invalid Email or Password',
+          duration: 3000,
+          placement: "top-right",
+          style: { backgroundColor: "red" },
+      });
       })
       .addCase(signOut.pending, (state) => {
         state.loading = true;
@@ -126,6 +133,7 @@ export const authSlice = createSlice({
       .addCase(signOut.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+         
       })
       .addCase(signInWithGoogle.pending, (state) => {
         state.loading = true;

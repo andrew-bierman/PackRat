@@ -9,7 +9,6 @@ import {
 } from "@expo/vector-icons";
 import { theme } from "../../theme";
 // import { useAuth } from "../../auth/provider";
-import { signOut } from "../../store/authStore";
 
 import { useDispatch, useSelector } from "react-redux";
 
