@@ -1,4 +1,8 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import {
+  createSlice,
+  createAsyncThunk,
+  createEntityAdapter,
+} from "@reduxjs/toolkit";
 import axios from "axios";
 import { api } from "../constants/api";
 
@@ -44,14 +48,19 @@ export const editPackItem = createAsyncThunk(
   }
 );
 
+const packsAdapter = createEntityAdapter({
+  selectId: (pack) => pack._id,
+});
+
+const initialState = packsAdapter.getInitialState({
+  isLoading: false,
+  error: null,
+  isOpenEditModal: false,
+});
+
 const packsSlice = createSlice({
   name: "packs",
-  initialState: {
-    packs: [],
-    isLoading: false,
-    error: null,
-    isOpenEditModal: false,
-  },
+  initialState,
   reducers: {
     openModal: (state) => {
       state.isOpenEditModal = true;
@@ -67,7 +76,7 @@ const packsSlice = createSlice({
         state.error = null;
       })
       .addCase(addPack.fulfilled, (state, action) => {
-        state.packs.push(action.payload.createdPack);
+        packsAdapter.addOne(state, action.payload.createdPack);
         state.isLoading = false;
         state.error = null;
       })
@@ -80,13 +89,10 @@ const packsSlice = createSlice({
         state.error = null;
       })
       .addCase(changePackStatus.fulfilled, (state, action) => {
-        const updatedPack = action.payload;
-        const index = state.packs.findIndex(
-          (pack) => pack._id === updatedPack._id
-        );
-        if (index !== -1) {
-          state.packs[index] = updatedPack;
-        }
+        packsAdapter.updateOne(state, {
+          id: action.payload._id,
+          changes: action.payload,
+        });
         state.isLoading = false;
         state.error = null;
       })
@@ -99,7 +105,7 @@ const packsSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchUserPacks.fulfilled, (state, action) => {
-        state.packs = action.payload;
+        packsAdapter.setAll(state, action.payload);
         state.isLoading = false;
         state.error = null;
       })
@@ -112,19 +118,9 @@ const packsSlice = createSlice({
         state.error = null;
       })
       .addCase(addPackItem.fulfilled, (state, action) => {
-        const { packId, newItem } = action.payload;
-        const packIndex = state.packs.findIndex((pack) => pack._id === packId);
-        if (packIndex !== -1) {
-          const updatedPack = {
-            ...state.packs[packIndex],
-            items: [...state.packs[packIndex].items, newItem],
-          };
-          const newPacks = [
-            ...state.packs.slice(0, packIndex),
-            updatedPack,
-            ...state.packs.slice(packIndex + 1),
-          ];
-          state.packs = newPacks;
+        const existingPack = state.entities[action.payload.packId];
+        if (existingPack) {
+          existingPack.items.push(action.payload.newItem);
         }
         state.isLoading = false;
         state.error = null;
@@ -138,42 +134,43 @@ const packsSlice = createSlice({
         state.error = null;
       })
       .addCase(editPackItem.fulfilled, (state, action) => {
-        const { packId, newItem } = action.payload;
-        // state.packs = action.payload;
-        const packIndex = state.packs.findIndex((pack) => pack._id === packId);
-        if (packIndex !== -1) {
-          const updatedPack = {
-            ...state.packs[packIndex],
-            items: [...state.packs[packIndex].items, newItem],
-          };
-          const newPacks = [
-            ...state.packs.slice(0, packIndex),
-            updatedPack,
-            ...state.packs.slice(packIndex + 1),
-          ];
-          state.packs = newPacks;
-        }
+        const newItem = action.payload;
+        const packIds = newItem.packs; // packIds is an array of pack Ids
+        
+        packIds.forEach(packId => {  // loop through each packId
+          const existingPack = state.entities[packId];
+          if (!existingPack) {
+            return;
+          }
+      
+          const updatedItems = existingPack.items.map((item) =>
+            item._id === newItem._id ? newItem : item
+          );
+      
+          packsAdapter.updateOne(state, {
+            id: packId,
+            changes: { items: updatedItems },
+          });
+        });
+      
         state.isLoading = false;
         state.error = null;
         state.isOpenEditModal = false;
       })
+      
       .addCase(editPackItem.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message;
       })
-      
       .addCase(scorePack.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
       .addCase(scorePack.fulfilled, (state, action) => {
-        const updatedPack = action.payload.updatedPack;
-        const index = state.packs.findIndex(
-          (pack) => pack._id === updatedPack._id
-        );
-        if (index !== -1) {
-          state.packs[index] = updatedPack;
-        }
+        packsAdapter.updateOne(state, {
+          id: action.payload.updatedPack._id,
+          changes: action.payload.updatedPack,
+        });
         state.isLoading = false;
         state.error = null;
       })
@@ -184,11 +181,11 @@ const packsSlice = createSlice({
   },
 });
 
-export const selectPacks = (state) => state.packs.packs;
+export const { selectAll: selectAllPacks, selectById: selectPackById } =
+  packsAdapter.getSelectors((state) => state.packs);
+
 export const selectIsLoading = (state) => state.packs.isLoading;
 export const selectError = (state) => state.packs.error;
-export const selectPackById = (state, packId) =>
-  state.packs.packs.find((pack) => pack._id === packId);
 
 export const { openModal, closeModal } = packsSlice.actions;
 
