@@ -14,7 +14,7 @@ import { theme } from "../../theme";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 // import useGetPacks from "../../hooks/useGetPacks";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUserPacks } from "../../store/packsStore";
+import { fetchUserPacks, selectAllPacks } from "../../store/packsStore";
 
 export default function ProfileContainer() {
   // const { user } = useAuth();
@@ -25,7 +25,7 @@ export default function ProfileContainer() {
   }, [dispatch, user?._id]);
 
   const user = useSelector((state) => state.auth.user);
-  const PacksData = useSelector((state) => state.packs);
+  const packsData = useSelector(selectAllPacks);
   const tripsData = useSelector((state) => state.trips);
 
   // const { data } = useGetPacks(user?._id);
@@ -50,7 +50,7 @@ export default function ProfileContainer() {
           </Box>
           <Box style={styles.cardInfo}>
             <Text>Packs</Text>
-            <Text>{PacksData?.packs?.length}</Text>
+            <Text>{packsData?.length}</Text>
           </Box>
           <Box style={styles.cardInfo}>
             <Text>Certified</Text>
@@ -80,7 +80,7 @@ export default function ProfileContainer() {
         <Text>Loading....</Text>
       ) : (
         <Box style={{ width: "100%", height: '100%' }} space={4} alignItems="center">
-          <UserDataContainer data={PacksData?.packs} type="packs" />
+          <UserDataContainer data={packsData} type="packs" />
           <UserDataContainer data={tripsData?.trips} type="trips" />
         </Box>
       )}

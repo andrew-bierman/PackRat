@@ -42,19 +42,30 @@ export const TableContainer = ({ currentPack }) => {
   const calculate = (value) => {
     // update the item values and then recalculate
     return currentPack?.items?.reduce((acc, item) => {
-      const convertedWeight = convertWeight(
-        item?.weight,
-        item?.unit,
-        weightUnit
-      );
-      const result = acc + convertedWeight * item.quantity;
-      return result;
+      if(item?.weight === NaN) {
+        console.log(`Invalid weight or quantity for item: ${JSON.stringify(item)}`);
+        return acc;
+      }
+      if (typeof item?.weight === "number" && typeof item?.quantity === "number") {
+        const convertedWeight = convertWeight(
+          item?.weight,
+          item?.unit,
+          weightUnit
+        );
+        const result = acc + convertedWeight * item.quantity;
+        return result;
+      } else {
+        console.log(`Invalid weight or quantity for item: ${JSON.stringify(item)}`);
+        return acc;
+      }
     }, 0);
   };
-  const totalItemsWeight = useMemo(
-    () => calculate(currentPack),
-    [currentPack, weightUnit]
-  );
+  
+  
+  // const totalItemsWeight = useMemo(
+  //   () => calculate(currentPack),
+  //   [currentPack, weightUnit]
+  // );
 
   // UI component
   const WeightUnitDropdown = ({ value, onChange }) => {
@@ -241,8 +252,8 @@ export const TableContainer = ({ currentPack }) => {
               flex: 1,
             }}
           >
-            <Text>Items Weight</Text>
-            <Text>{totalItemsWeight}</Text>
+            {/* <Text>Items Weight</Text>
+            <Text>{totalItemsWeight}</Text> */}
           </Box>
           <Box
             style={{
