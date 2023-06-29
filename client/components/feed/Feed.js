@@ -10,7 +10,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getPublicPacks, getPublicTrips } from "../../store/feedStore";
-import { fetchUserPacks } from "../../store/packsStore";
+import { fetchUserPacks, selectAllPacks } from "../../store/packsStore";
 
 import { Link } from "expo-router";
 import { fetchUserTrips } from "../../store/tripsStore";
@@ -29,7 +29,7 @@ export default function Feed({ feedType = "public" }) {
   const ownerId = useSelector((state) => state.auth.user?._id);
 
   const publicPacksData = useSelector((state) => state.feed.publicPacks);
-  const userPacksData = useSelector((state) => state.packs.packs);
+  const userPacksData = useSelector(selectAllPacks);
 
   const publicTripsData = useSelector((state) => state.feed.publicTrips);
 
