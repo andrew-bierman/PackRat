@@ -2,7 +2,7 @@ import User from "../models/userModel.js";
 import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../config.js";
 
-const auth = async (req, res, next) => {
+export const auth = async (req, res, next) => {
   try {
     const token = req.header("Authorization").replace("Bearer ", "");
     const decoded = jwt.verify(token, JWT_SECRET);
@@ -19,4 +19,3 @@ const auth = async (req, res, next) => {
     res.status(401).send({ error: "Please authenticate" });
   }
 };
-export default auth;

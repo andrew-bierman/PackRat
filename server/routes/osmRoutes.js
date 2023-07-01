@@ -5,7 +5,7 @@ import {
   getPhotonResults,
   getTrailsOSM,
 } from "../controllers/getOsmController.js";
-
+import {auth} from '../middleware/auth.js'
 const router = express.Router();
 
 /**
@@ -21,6 +21,8 @@ const router = express.Router();
  *   get:
  *     summary: Get Photon search results
  *     tags: [OSM]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: query
  *         name: searchString
@@ -36,7 +38,7 @@ const router = express.Router();
  *       '500':
  *         description: Error retrieving Photon results
  */
-router.get("/photon/search", getPhotonResults);
+router.get("/photon/search", auth,getPhotonResults);
 
 /**
  * @swagger
@@ -44,6 +46,8 @@ router.get("/photon/search", getPhotonResults);
  *   get:
  *     summary: Get Trails OSM results
  *     tags: [OSM]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: query
  *         name: lat
@@ -68,7 +72,7 @@ router.get("/photon/search", getPhotonResults);
  *       500:
  *         description: Error retrieving Trails OSM results
  */
-router.get("/trails", getTrailsOSM);
+router.get("/trails",auth, getTrailsOSM);
 
 /**
  * @swagger
@@ -76,6 +80,8 @@ router.get("/trails", getTrailsOSM);
  *   get:
  *     summary: Get Parks OSM results
  *     tags: [OSM]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: query
  *         name: lat
@@ -100,7 +106,7 @@ router.get("/trails", getTrailsOSM);
  *       '500':
  *         description: Error retrieving Parks OSM results
  */
-router.get("/parks", getParksOSM);
+router.get("/parks", auth,getParksOSM);
 
 /**
  * @swagger
@@ -108,6 +114,8 @@ router.get("/parks", getParksOSM);
  *   post:
  *     summary: Get OSM data
  *     tags: [OSM]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -139,6 +147,6 @@ router.get("/parks", getParksOSM);
  *       '500':
  *         description: Error retrieving Overpass Data
  */
-router.post("/osm", getOsm);
+router.post("/osm", auth,getOsm);
 
 export default router;

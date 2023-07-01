@@ -14,7 +14,7 @@ import {
   googleSignin,
   getMe,
 } from "../controllers/userController.js";
-import auth from "../middleware/auth.js";
+import {auth} from "../middleware/auth.js";
 import * as validator from "../middleware/validators/index.js";
 
 import { checkCode, emailExists, updatePassword } from "../controllers/auth.js";
@@ -25,7 +25,6 @@ import {
   signInGoogle,
 } from "../controllers/passportController.js";
 import { REDIRECT_URL } from "../config.js";
-
 const router = express.Router();
 
 /**
@@ -41,13 +40,15 @@ const router = express.Router();
  *   get:
  *     summary: Get all users
  *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       '200':
  *         description: Successful response with all users
  *       '500':
  *         description: Error retrieving users
  */
-router.get("/", getUsers);
+router.get("/", auth,getUsers);
 
 /**
  * @swagger
@@ -55,6 +56,8 @@ router.get("/", getUsers);
  *   get:
  *     summary: Get user by ID
  *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: userId
@@ -70,7 +73,7 @@ router.get("/", getUsers);
  *       '500':
  *         description: Error retrieving the user
  */
-router.get("/:userId", validator.getUserById, getUserById);
+router.get("/:userId", validator.getUserById, auth, getUserById);
 
 // router.post("/", addUser);
 
@@ -247,6 +250,8 @@ router.post("/google", signInGoogle);
  *   post:
  *     summary: Add to favorite
  *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -266,7 +271,7 @@ router.post("/google", signInGoogle);
  *       '500':
  *         description: Error adding to favorite
  */
-router.post("/favorite", validator.addToFavorite, addToFavorite);
+router.post("/favorite", validator.addToFavorite, auth,addToFavorite);
 
 /**
  * @swagger
@@ -274,6 +279,8 @@ router.post("/favorite", validator.addToFavorite, addToFavorite);
  *   put:
  *     summary: Edit user
  *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -291,7 +298,7 @@ router.post("/favorite", validator.addToFavorite, addToFavorite);
  *       '500':
  *         description: Error editing the user
  */
-router.put("/", validator.editUser, editUser);
+router.put("/", validator.editUser, auth,editUser);
 
 /**
  * @swagger
@@ -299,6 +306,8 @@ router.put("/", validator.editUser, editUser);
  *   delete:
  *     summary: Delete user
  *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -316,7 +325,7 @@ router.put("/", validator.editUser, editUser);
  *       '500':
  *         description: Error deleting the user
  */
-router.delete("/", validator.deleteUser, deleteUser);
+router.delete("/", validator.deleteUser, auth,deleteUser);
 
 router.post("/checkcode", validator.checkCode, checkCode);
 router.post("/updatepassword", validator.updatePassword, updatePassword);

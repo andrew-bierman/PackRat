@@ -8,7 +8,7 @@ import {
   deleteTrip,
 } from "../controllers/tripController.js";
 import * as validator from "../middleware/validators/index.js";
-
+import {auth} from '../middleware/auth.js'
 const router = express.Router();
 
 /**
@@ -24,7 +24,7 @@ const router = express.Router();
  * /trip:
  *   get:
  *     tags:
- *      - Trips
+ *       - Trips
  *     summary: Get public trips
  *     responses:
  *       200:
@@ -38,6 +38,8 @@ router.get("/", getPublicTrips);
  *   get:
  *     tags:
  *       - Trips
+ *     security:
+ *       - bearerAuth: []
  *     summary: Get trips by owner ID
  *     parameters:
  *       - in: path
@@ -49,7 +51,7 @@ router.get("/", getPublicTrips);
  *       200:
  *         description: Successful response
  */
-router.get("/:ownerId", validator.getTrips, getTrips);
+router.get("/:ownerId", validator.getTrips, auth,getTrips);
 
 /**
  * @swagger
@@ -57,6 +59,8 @@ router.get("/:ownerId", validator.getTrips, getTrips);
  *   get:
  *     tags:
  *       - Trips
+ *     security:
+ *       - bearerAuth: []
  *     summary: Get trip by trip ID
  *     parameters:
  *       - in: path
@@ -68,7 +72,7 @@ router.get("/:ownerId", validator.getTrips, getTrips);
  *       200:
  *         description: Successful response
  */
-router.get("/t/:tripId", validator.getTripById, getTripById);
+router.get("/t/:tripId", validator.getTripById, auth,getTripById);
 
 /**
  * @swagger
@@ -76,6 +80,8 @@ router.get("/t/:tripId", validator.getTripById, getTripById);
  *   post:
  *     tags:
  *       - Trips
+ *     security:
+ *       - bearerAuth: []
  *     summary: Add a new trip
  *     requestBody:
  *       required: true
@@ -112,7 +118,7 @@ router.get("/t/:tripId", validator.getTripById, getTripById);
  *       200:
  *         description: Successful response
  */
-router.post("/", validator.addTrip, addTrip);
+router.post("/", validator.addTrip, auth, addTrip);
 
 /**
  * @swagger
@@ -120,6 +126,8 @@ router.post("/", validator.addTrip, addTrip);
  *   put:
  *     tags:
  *       - Trips
+ *     security:
+ *       - bearerAuth: []
  *     summary: Edit an existing trip
  *     requestBody:
  *       required: true
@@ -158,7 +166,7 @@ router.post("/", validator.addTrip, addTrip);
  *       200:
  *         description: Successful response
  */
-router.put("/", validator.editTrip, editTrip);
+router.put("/", validator.editTrip,auth, editTrip);
 
 /**
  * @swagger
@@ -166,6 +174,8 @@ router.put("/", validator.editTrip, editTrip);
  *   delete:
  *     tags:
  *       - Trips
+ *     security:
+ *       - bearerAuth: []
  *     summary: Delete a trip by ID
  *     requestBody:
  *       required: true
@@ -180,6 +190,6 @@ router.put("/", validator.editTrip, editTrip);
  *       200:
  *         description: Successful response
  */
-router.delete("/", validator.deleteTrip, deleteTrip);
+router.delete("/", validator.deleteTrip, auth,deleteTrip);
 
 export default router;

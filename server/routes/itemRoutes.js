@@ -8,7 +8,7 @@ import {
   searchItemsByName,
 } from "../controllers/itemController.js";
 import * as validator from "../middleware/validators/index.js";
-
+import {auth} from '../middleware/auth.js'
 const router = express.Router();
 
 /**
@@ -63,12 +63,14 @@ router.get("/i/:packId", validator.getItemById, getItemById);
  *  get:
  *    tags:
  *      - Items
+ *    security:
+ *      - bearerAuth: []
  *    summary: Search items by name
  *    responses:
  *      200:
  *        description: Successful response
  */
-router.get("/search", searchItemsByName);
+router.get("/search", auth,searchItemsByName);
 
 /**
  * @swagger
@@ -76,6 +78,8 @@ router.get("/search", searchItemsByName);
  *  post:
  *    tags:
  *      - Items
+ *    security:
+ *      - bearerAuth: []
  *    summary: Add a new item
  *    requestBody:
  *      required: true
@@ -98,7 +102,7 @@ router.get("/search", searchItemsByName);
  *      200:
  *        description: Successful response
  */
-router.post("/", validator.addItem, addItem);
+router.post("/", validator.addItem,auth, addItem);
 
 /**
  * @swagger
@@ -106,7 +110,10 @@ router.post("/", validator.addItem, addItem);
  *  put:
  *    tags:
  *      - Items
+ *    security:
+ *      - bearerAuth: []
  *    summary: Edit an existing item
+
  *    requestBody:
  *      required: true
  *      content:
@@ -128,7 +135,7 @@ router.post("/", validator.addItem, addItem);
  *      200:
  *        description: Successful response
  */
-router.put("/", validator.editItem, editItem);
+router.put("/", validator.editItem, auth,editItem);
 
 /**
  * @swagger
@@ -136,6 +143,8 @@ router.put("/", validator.editItem, editItem);
  *  delete:
  *    tags:
  *      - Items
+ *    security:
+ *      - bearerAuth: []
  *    summary: Delete an item by ID
  *    requestBody:
  *      required: true
@@ -150,6 +159,6 @@ router.put("/", validator.editItem, editItem);
  *      200:
  *        description: Successful response
  */
-router.delete("/", validator.deleteItem, deleteItem);
+router.delete("/", validator.deleteItem, auth,deleteItem);
 
 export default router;
