@@ -50,7 +50,7 @@ import { getTrailsOSM } from "../api/getTrails";
 import { getParksOSM } from "../api/getParks";
 import { fetchWeather, fetchWeatherWeek } from "../store/weatherStore";
 
-export const SearchInput = () => {
+export const SearchInput = ({ onSelect }) => {
   const [searchString, setSearchString] = useState("");
   const [isLoadingMobile, setIsLoadingMobile] = useState(false);
   const [selectedSearch, setSelectedSearch] = useState("");
@@ -126,6 +126,11 @@ export const SearchInput = () => {
     setShowSearchResults(false);
     dispatch(setSelectedSearchResult(result));
     dispatch(clearSearchResults());
+
+    if (onSelect) {
+      onSelect(result);
+    }
+
   };
 
   return Platform.OS === "web" ? (
@@ -142,6 +147,7 @@ export const SearchInput = () => {
             px="1"
             value={searchString}
             fontSize="14"
+            backgroundColor={"white"}
             InputLeftElement={
               <Icon
                 m="2"
