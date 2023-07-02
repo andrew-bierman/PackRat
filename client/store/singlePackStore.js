@@ -1,6 +1,6 @@
 // redux toolkit slice for single pack
 
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
 
 import axios from "axios";
 
@@ -14,13 +14,17 @@ export const fetchSinglePack = createAsyncThunk(
   }
 );
 
+const singlePackAdapter = createEntityAdapter();
+
+const initialState = singlePackAdapter.getInitialState({
+  singlePack: {},
+  isLoading: false,
+  error: null,
+});
+
 const singlePackSlice = createSlice({
   name: "singlePack",
-  initialState: {
-    singlePack: {},
-    isLoading: false,
-    error: null,
-  },
+  initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
@@ -29,6 +33,7 @@ const singlePackSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchSinglePack.fulfilled, (state, action) => {
+        singlePackAdapter.setAll(state.singlePack. action.payload);
         state.singlePack = action.payload;
         state.isLoading = false;
         state.error = null;
@@ -39,5 +44,11 @@ const singlePackSlice = createSlice({
       });
   },
 });
+
+export const { selectAll, selectById} =
+  singlePackAdapter.getSelectors((state) => state.singlePack);
+
+export const selectIsLoading = (state) => state.singlePack.isLoading;
+export const selectError = (state) => state.singlePack.error;  
 
 export default singlePackSlice.reducer;

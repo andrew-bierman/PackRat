@@ -1,6 +1,14 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
 import axios from "axios";
 import { api } from "../constants/api";
+
+const itemsAdapter = createEntityAdapter();
+
+const initialState = itemsAdapter.getInitialState({
+  items: [],
+  isLoading: false,
+  error: null,
+});
 
 export const deleteItem = createAsyncThunk(
   "items/deleteItem",
@@ -29,11 +37,7 @@ export const getItems = createAsyncThunk("items/getItems", async (packId) => {
 
 const itemsSlice = createSlice({
   name: "items",
-  initialState: {
-    items: [],
-    isLoading: false,
-    error: null,
-  },
+  initialState: initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
@@ -76,6 +80,7 @@ const itemsSlice = createSlice({
         state.error = null;
       })
       .addCase(getItems.fulfilled, (state, action) => {
+        itemsAdapter.setAll(state.items, action.payload);
         state.items = action.payload;
         state.isLoading = false;
         state.error = null;
@@ -86,5 +91,13 @@ const itemsSlice = createSlice({
       });
   },
 });
+
+export const {
+  selectAll: selectAllItems,
+  selectById: selectItemById ,
+} = itemsAdapter.getSelectors((state) => state.items);
+
+export const selectIsLoading = (state) => state.items.isLoading;
+export const selectError = (state) => state.items.error;
 
 export default itemsSlice.reducer;

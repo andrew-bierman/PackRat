@@ -1,6 +1,14 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
 import axios from "axios";
 import { api } from "../constants/api";
+
+const favoriteAdapter = createEntityAdapter();
+
+const initialState = favoriteAdapter.getInitialState({
+  favorites: [],
+  isLoading: false,
+  error: null,
+});
 
 export const addFavorite = createAsyncThunk(
   "favorites/addFavorite",
@@ -20,11 +28,7 @@ export const fetchFavorites = createAsyncThunk(
 
 const favoritesSlice = createSlice({
   name: "favorites",
-  initialState: {
-    favorites: [],
-    isLoading: false,
-    error: null,
-  },
+  initialState: initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
@@ -33,6 +37,7 @@ const favoritesSlice = createSlice({
         state.error = null;
       })
       .addCase(addFavorite.fulfilled, (state, action) => {
+        favoriteAdapter.addOne(state.favorites, action.payload);
         state.favorites.push(action.payload);
         state.isLoading = false;
         state.error = null;
@@ -46,6 +51,7 @@ const favoritesSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchFavorites.fulfilled, (state, action) => {
+        favoriteAdapter.setAll(state.favorites, action.payload);
         state.favorites = action.payload;
         state.isLoading = false;
         state.error = null;
@@ -56,5 +62,13 @@ const favoritesSlice = createSlice({
       });
   },
 });
+
+export const {
+  selectAll: selectAllFavourites,
+  selectById: selectFavouriteById,
+} = favoriteAdapter.getSelectors((state) => state.favorites);
+
+export const selectIsLoading = (state) => state.favorites.isLoading;
+export const selectError = (state) => state.favorites.error;
 
 export default favoritesSlice.reducer;

@@ -1,8 +1,17 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
 
 import { api } from "../constants/api";
 
 import axios from "axios";
+
+const trailsAdapter = createEntityAdapter();
+
+const initialState = trailsAdapter.getInitialState({
+  trailsDetails: [],
+  trailNames: [],
+  isLoading: false,
+  error: null,
+});
 
 export const fetchTrails = createAsyncThunk(
   "trails/fetchTrails",
@@ -35,12 +44,7 @@ export const fetchTrails = createAsyncThunk(
 
 export const trailsSlice = createSlice({
   name: "trails",
-  initialState: {
-    trailsDetails: [],
-    trailNames: [],
-    isLoading: false,
-    error: null,
-  },
+  initialState,
 
   reducers: {},
   extraReducers: (builder) => {
@@ -84,5 +88,11 @@ export const trailsSlice = createSlice({
 //     return [];
 //   }
 // };
+
+export const { selectAll: selectTrails, selectById: selectTrailById } =
+  trailsAdapter.getSelectors((state) => state.trails);
+
+export const selectIsLoading = (state) => state.trails.isLoading;
+export const selectError = (state) => state.trails.error;
 
 export default trailsSlice.reducer;
