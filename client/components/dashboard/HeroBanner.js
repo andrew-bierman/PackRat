@@ -9,6 +9,7 @@ import Hero from "../hero";
 import { useRouter } from "expo-router";
 import { isObjectEmpty } from "../../utils/isObjectEmpty";
 import { processGeoJSON } from "../../store/destinationStore";
+import { hexToRGBA } from "../../utils/colorFunctions";
 
 const HeroSection = ({ onSelect }) => {
   const dispatch = useDispatch();
@@ -39,6 +40,10 @@ const HeroSection = ({ onSelect }) => {
   const { name } = user;
   const firstNameOrUser = name.split(" ")[0] ?? "User";
 
+  const cardBackgroundColor = hexToRGBA(theme.colors.secondaryBlue, 0.5);
+
+  // console.log("cardBackgroundColor", cardBackgroundColor)
+
   return (
     <View style={styles.banner}>
       <Hero
@@ -51,12 +56,12 @@ const HeroSection = ({ onSelect }) => {
       >
         <LargeCard
           customStyle={{
-            backgroundColor: "rgba(0,0,0,0.5)",
+            backgroundColor: cardBackgroundColor || theme.colors.secondaryBlue,
             alignItems: "center",
             justifyContent: "center",
             width: "100%",
             height: "100%",
-            padding: 20,
+            padding: 50,
           }}
         >
           <VStack
