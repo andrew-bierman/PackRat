@@ -19,6 +19,7 @@ export default function Profile() {
       <ProfileContainer />
     </>
   ) : (
-    <ProfileContainerMobile />
+    <ProfileContainer />
+    // <ProfileContainerMobile />
   );
 }
