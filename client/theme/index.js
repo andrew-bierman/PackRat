@@ -15,6 +15,7 @@ export const theme = {
     iconColor: "#FFFFFF",
     weatherIcon: "#0284c7",
     drawerIconColor: "#3B3B3B",
+    white: "#FFFFFF",
   },
   font: {
     headerFont: 56,
