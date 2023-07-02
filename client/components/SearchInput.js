@@ -112,6 +112,9 @@ export const SearchInput = ({ onSelect }) => {
 
   useEffect(() => {
     const timeout = setTimeout(getTrailsParksAndWeatherDetails, 1000);
+    // const timeout = setTimeout(() => {
+    //   console.log("selectedSearchResult", selectedSearchResult);
+    // }, 1000);
 
     return () => clearTimeout(timeout);
   }, [selectedSearch, selectedSearchResult, dispatch]);
@@ -130,7 +133,6 @@ export const SearchInput = ({ onSelect }) => {
     if (onSelect) {
       onSelect(result);
     }
-
   };
 
   return Platform.OS === "web" ? (
@@ -177,45 +179,46 @@ export const SearchInput = ({ onSelect }) => {
               )
             }
           />
-
-          {showSearchResults && searchResults?.length > 0 && (
-            <ScrollView
-              position="absolute"
-              top="100%"
-              left="0"
-              right="0"
-              maxHeight="100"
-              borderWidth={1}
-              borderColor="gray.200"
-              borderRadius={10}
-              backgroundColor="white"
-              showsVerticalScrollIndicator={false}
-              zIndex={10}
-            >
-              <List space={2} mt={2} w="100%">
-                {searchResults.map((result, i) => (
-                  <Pressable
-                    key={`result + ${i}`}
-                    onPress={() => handleSearchResultClick(result, i)}
-                    underlayColor="gray.100"
-                  >
-                    <HStack space={3}>
-                      <Text fontSize="sm" fontWeight="medium">
-                        {result.properties.name}
-                      </Text>
-                      <Text
-                        fontSize="sm"
-                        color="gray.500"
-                        textTransform={"capitalize"}
-                      >
-                        {result.properties.osm_value}
-                      </Text>
-                    </HStack>
-                  </Pressable>
-                ))}
-              </List>
-            </ScrollView>
-          )}
+          <View style={{ position: "relative" }}>
+            {showSearchResults && searchResults?.length > 0 && (
+              <ScrollView
+                position="absolute"
+                top="100%"
+                left="0"
+                right="0"
+                maxHeight="100"
+                borderWidth={1}
+                borderColor="gray.200"
+                borderRadius={12}
+                backgroundColor="white"
+                showsVerticalScrollIndicator={false}
+                zIndex={10}
+              >
+                <List space={2} w="100%">
+                  {searchResults.map((result, i) => (
+                    <Pressable
+                      key={`result + ${i}`}
+                      onPress={() => handleSearchResultClick(result, i)}
+                      underlayColor="gray.100"
+                    >
+                      <HStack space={3}>
+                        <Text fontSize="sm" fontWeight="medium">
+                          {result.properties.name}
+                        </Text>
+                        <Text
+                          fontSize="sm"
+                          color="gray.500"
+                          textTransform={"capitalize"}
+                        >
+                          {result.properties.osm_value}
+                        </Text>
+                      </HStack>
+                    </Pressable>
+                  ))}
+                </List>
+              </ScrollView>
+            )}
+          </View>
         </Box>
       </VStack>
     </VStack>

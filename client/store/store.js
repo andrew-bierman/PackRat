@@ -18,6 +18,7 @@ import singlePackReducer from "./singlePackStore";
 import singleTripReducer from "./singleTripStore";
 import tripsReducer from "./tripsStore";
 import gpxReducer from "./gpxStore";
+import destinationReducer from "./destinationStore";
 
 // combine reducers
 const rootReducer = combineReducers({
@@ -35,6 +36,7 @@ const rootReducer = combineReducers({
   singleTrip: singleTripReducer,
   feed: feedReducer,
   gpx: gpxReducer,
+  destination: destinationReducer,
 });
 
 // configure persist store and whitelist reducers
