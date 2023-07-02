@@ -1,6 +1,15 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
 import { api } from "../constants/api";
 import axios from "axios";
+
+const feedAdapter = createEntityAdapter();
+
+const initialState = feedAdapter.getInitialState({
+  publicPacks: [],
+  publicTrips: [],
+  isLoading: false,
+  error: null,
+});
 
 export const getPublicPacks = createAsyncThunk(
   "feed/getPublicPacks",
@@ -24,12 +33,7 @@ export const getPublicTrips = createAsyncThunk(
 
 const feedSlice = createSlice({
   name: "feed",
-  initialState: {
-    publicPacks: [],
-    publicTrips: [],
-    isLoading: false,
-    error: null,
-  },
+  initialState: initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
@@ -39,6 +43,13 @@ const feedSlice = createSlice({
       })
       .addCase(getPublicPacks.fulfilled, (state, action) => {
         // map over the array of packs and add a type property to each pack
+        feedAdapter.setAll(state.publicPacks, action.payload
+          .map((pack) => {
+            return {
+              ...pack,
+              type: "pack",
+            };
+          }));
         state.publicPacks = action.payload
         .map((pack) => {
           return {
@@ -59,13 +70,20 @@ const feedSlice = createSlice({
       })
       .addCase(getPublicTrips.fulfilled, (state, action) => {
         // map over the array of trips and add a type property to each trip
+        feedAdapter.setAll(state.publicTrips, action.payload
+          .map((trip) => {
+            return {
+              ...trip,
+              type: "trip",
+            };
+          }));
         state.publicTrips = action.payload
         .map((trip) => {
           return {
             ...trip,
             type: "trip",
           };
-        })
+        });
         state.isLoading = false;
         state.error = null;
       })
@@ -75,5 +93,13 @@ const feedSlice = createSlice({
       });
   },
 });
+
+export const {
+  selectAll: selectAllFeed,
+  selectById: selectFeedById,
+} = feedAdapter.getSelectors((state) => state.feed);
+
+export const selectIsLoading = (state) => state.feed.isLoading;
+export const selectError = (state) => state.feed.error;
 
 export default feedSlice.reducer;

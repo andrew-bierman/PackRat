@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
 
 import { api } from "../constants/api";
 
@@ -19,10 +19,12 @@ export const fetchPhotonSearchResults = createAsyncThunk(
   }
 );
 
-const initialState = {
+const searchAdapter = createEntityAdapter();
+
+const initialState = searchAdapter.getInitialState({
   searchResults: [],
   selectedSearchResult: {},
-};
+});
 
 const searchSlice = createSlice({
   name: "search",
@@ -44,6 +46,7 @@ const searchSlice = createSlice({
         state.searchResults = [];
       })
       .addCase(fetchPhotonSearchResults.fulfilled, (state, action) => {
+        searchAdapter.setAll(state.searchResults, action.payload);
         state.searchResults = action.payload;
       })
       .addCase(fetchPhotonSearchResults.rejected, (state, action) => {
@@ -52,6 +55,14 @@ const searchSlice = createSlice({
   },
 });
 
+export const { selectAll, selectById } =
+  searchAdapter.getSelectors((state) => state.search);
+
 export const { setSearchResults, setSelectedSearchResult, clearSearchResults } =
   searchSlice.actions;
+
+export const selectIsLoading = (state) => state.search.isLoading;
+export const selectError = (state) => state.search.error;
+  
+
 export default searchSlice.reducer;

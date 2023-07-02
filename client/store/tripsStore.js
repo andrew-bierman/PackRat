@@ -1,6 +1,24 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
 import axios from "axios";
 import { api } from "../constants/api";
+
+const tripsAdapter = createEntityAdapter();
+
+const initialState = tripsAdapter.getInitialState({
+  trips: [],
+  newTrip: {
+    name: "",
+    description: "",
+    startDate: "",
+    endDate: "",
+    destination: "",
+    trail: "",
+    weather: {},
+    packId: "",
+  },
+  isLoading: false,
+  error: null,
+});
 
 export const deleteTrip = createAsyncThunk(
   "trips/deleteTrip",
@@ -33,23 +51,13 @@ export const editTrip = createAsyncThunk(
 
 const tripsSlice = createSlice({
   name: "trips",
-  initialState: {
-    trips: [],
-    newTrip: {
-      name: "",
-      description: "",
-      startDate: "",
-      endDate: "",
-      destination: "",
-      trail: "",
-      weather: {},
-      packId: "",
-    },
-    isLoading: false,
-    error: null,
-  },
+  initialState,
   reducers: {
     updateNewTrip(state, action) {
+      tripsAdapter.updateOne(state, {
+        id: action.payload._id,
+        newTrip: action.payload
+      })
       state.newTrip = action.payload;
     },
     updateNewTripVersatile(state, action) {
@@ -156,5 +164,11 @@ export const {
   updateNewTripTrail,
   resetNewTrip,
 } = tripsSlice.actions;
+
+export const { selectAll: selectAllTrips, selectById: selectTripById } =
+  tripsAdapter.getSelectors((state) => state.trips);
+
+export const selectIsLoading = (state) => state.trips.isLoading;
+export const selectError = (state) => state.trips.error;
 
 export default tripsSlice.reducer;
