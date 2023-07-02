@@ -34,6 +34,25 @@ const defaultShape = {
   ],
 };
 
+function convertPhotonGeoJsonToShape(photonGeoJson) {
+  return {
+    type: "FeatureCollection",
+    features: [
+      {
+        type: "Feature",
+        geometry: {
+          type: "LineString",
+          coordinates: [
+            photonGeoJson.geometry.coordinates,
+            photonGeoJson.geometry.coordinates,
+          ],
+        },
+        properties: photonGeoJson.properties,
+      },
+    ],
+  };
+}
+
 function getShapeSourceBounds(shape) {
   let minLng = Infinity;
   let maxLng = -Infinity;
@@ -100,13 +119,30 @@ function calculateZoomLevel(bounds, mapDim) {
 
 function findTrailCenter(shape) {
   const trailCoords = shape?.features[0]?.geometry?.coordinates;
-  const latitudes = trailCoords.map((coord) => coord[0]);
-  const longitudes = trailCoords.map((coord) => coord[1]);
+
+  console.log("trailCoords", trailCoords);
+
+  let latitudes;
+  let longitudes;
+
+  if (Array.isArray(trailCoords[0][0])) {
+    // If the coordinates are in the format: [[[lat, lng]], [[lat, lng]], ...]
+    latitudes = trailCoords.map((coord) => coord[0][0]);
+    longitudes = trailCoords.map((coord) => coord[0][1]);
+  } else {
+    // If the coordinates are in the format: [[lat, lng], [lat, lng], ...]
+    latitudes = trailCoords.map((coord) => coord[0]);
+    longitudes = trailCoords.map((coord) => coord[1]);
+  }
+
   const avgLatitude = latitudes.reduce((a, b) => a + b, 0) / latitudes.length;
-  const avgLongitude =
-    longitudes.reduce((a, b) => a + b, 0) / longitudes.length;
+  const avgLongitude = longitudes.reduce((a, b) => a + b, 0) / longitudes.length;
+
+  console.log('trailCords return', [avgLatitude, avgLongitude])
+
   return [avgLatitude, avgLongitude];
 }
+
 
 const processShapeData = (shape) => {
   let processedShape = { ...shape };
@@ -114,6 +150,9 @@ const processShapeData = (shape) => {
 
   shape.features.forEach((feature) => {
     if (feature.geometry.type === "LineString") {
+      // Make sure coordinates are in the correct format
+      feature.geometry.coordinates = ensure2DArray(feature.geometry.coordinates);
+
       let points = feature.geometry.coordinates.map((coord, index) => {
         return {
           type: "Feature",
@@ -140,6 +179,16 @@ const processShapeData = (shape) => {
 
   return processedShape;
 };
+
+const ensure2DArray = (arr) => {
+  // If the first element of the array is not an array itself, add an additional array layer
+  if (!Array.isArray(arr[0])) {
+    return [arr];
+  }
+  // If the array is already 2D, return it as is
+  return arr;
+};
+
 
 const mapboxStyles = [
   { label: "Outdoors", style: "mapbox://styles/mapbox/outdoors-v11" },
@@ -199,5 +248,6 @@ export {
   mapboxStyles,
   getLocation,
   handleGpxDownload,
-  isShapeDownloadable
+  isShapeDownloadable,
+  convertPhotonGeoJsonToShape,
 };

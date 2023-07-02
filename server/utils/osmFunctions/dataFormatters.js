@@ -2,6 +2,7 @@ import Way from "../../models/osm/wayModel.js";
 import Node from "../../models/osm/nodeModel.js";
 
 export const extractIdAndType = (string) => {
+  // console.log("string", string)
   if (string.includes("/")) {
     let [type, idString] = string.split("/");
 
