@@ -29,18 +29,18 @@ const styles = StyleSheet.create({
   heroContainer: {
     backgroundRepeat: "repeat",
     backgroundSize: "cover",
-    overflow: "hidden",
+    // overflow: "hidden",
     alignItems: "center",
     justifyContent: "center",
     width: "100%",
-    height: "200px",
+    height: "310px",
   },
   heroImage: {
     width: "100%",
     height: "100%",
     resizeMode: "cover",
     position: "absolute",
-    backgroundColor: theme.colors.primary,
+    // backgroundColor: theme.colors.primary,
   },
 });
 
