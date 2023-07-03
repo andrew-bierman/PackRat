@@ -2,7 +2,8 @@ import { Slot } from "expo-router";
 
 import { Platform } from "react-native";
 
-import Navigation from "../screens/NavigationHeader";
+// import Navigation from "../screens/NavigationHeader";
+import Navigation from "../screens/Navigation";
 import NavigationMobile from "../screens/NavigationMobile";
 // import NavigationDrawer from "../screens/NavigationDrawer";
 
@@ -22,8 +23,7 @@ export default function HomeLayout() {
       <PersistGate loading={null} persistor={persistor}>
         <AuthProvider>
           <NativeBaseProvider>
-            {/* <NavigationDrawer /> */}
-            {Platform.OS === "web" ? <Navigation /> : <NavigationMobile />}
+            <Navigation />
             <Slot />
             {Platform.OS === "web" ? <Footer /> : null}
           </NativeBaseProvider>
