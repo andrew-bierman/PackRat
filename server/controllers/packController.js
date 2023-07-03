@@ -64,14 +64,39 @@ export const getPacks = async (req, res) => {
         },
       },
       {
+        $unwind: "$items",
+      },
+      {
+        $lookup: {
+          from: "itemcategories",
+          localField: "items.category",
+          foreignField: "_id",
+          as: "items.category",
+        },
+      },
+      {
         $addFields: {
+          "items.category": { $arrayElemAt: ["$items.category", 0] },
+        },
+      },
+      {
+        $group: {
+          _id: "$_id",
+          name: { $first: "$name" },
+          owner_id: { $first: "$owner_id" },
+          is_public: { $first: "$is_public" },
+          favorited_by: { $first: "$favorited_by" },
+          favorites_count: { $first: "$favorites_count" },
+          createdAt: { $first: "$createdAt" },
+          owners: { $first: "$owners" },
+          grades: { $first: "$grades" },
+          scores: { $first: "$scores" },
+          type: { $first: "$type" },
+          items: { $push: "$items" },
+          category: { $first: "$items.category.name" },
           total_weight: {
             $sum: {
-              $map: {
-                input: "$items",
-                as: "item",
-                in: { $multiply: ["$$item.weight", "$$item.quantity"] },
-              },
+              $multiply: ["$items.weight", "$items.quantity"],
             },
           },
         },
@@ -80,6 +105,7 @@ export const getPacks = async (req, res) => {
 
     res.status(200).json(packs);
   } catch (error) {
+    console.log("error", error);
     res.status(404).json({ msg: "Users cannot be found" });
   }
 };
