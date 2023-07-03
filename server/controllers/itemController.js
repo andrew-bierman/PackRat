@@ -68,7 +68,7 @@ export const addItem = async (req, res) => {
       { $push: { items: newItem._id } }
     );
 
-    await Item.findByIdAndUpdate(
+    const updatedItem = await Item.findByIdAndUpdate(
       newItem._id,
       {
         $addToSet: {
@@ -77,11 +77,11 @@ export const addItem = async (req, res) => {
         },
       },
       { new: true }
-    );
+    ).populate("category"); // <=== Here's the change
 
     res.status(200).json({
       msg: "success",
-      newItem,
+      newItem: updatedItem, // <=== And here's the other change
       packId: req.body.packId,
     });
   } catch (error) {
