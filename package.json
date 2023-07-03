@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "clean": "rm -rf server/node_modules && rm -rf client/node_modules && rm -rf server/package-lock.json && rm -rf client/package-lock.json",
-    "install": "npm --prefix server install && npm --prefix client install && npm install -g expo-cli",
-    "build:client": "npm install --prefix client && npx --prefix client expo export --platform web",
+    "install": "npm --prefix server install && npm --prefix client install && npm --prefix client install expo-cli",    "build:client": "npm install --prefix client && npx --prefix client expo export --platform web",
     "expo:export": "cd client && cp app.example.json app.json && npx expo export --platform web",
     "start": "npm start --prefix server",
     "dev:client": "npm start --prefix client",
