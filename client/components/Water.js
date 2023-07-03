@@ -2,30 +2,29 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Button, Input, Text, Box } from "native-base";
 import React, { useState } from "react";
 import { StyleSheet } from "react-native";
-import { AxiosInstance } from "../Axios";
 import { ItemCategoryEnum } from "../constants/itemCategory";
+import { useDispatch } from "react-redux";
+import { addPackItem } from "../store/packsStore";
 
 export default function Water({ currentPack, setWaterItem }) {
   const [waterWeight, setWaterWeight] = useState(0);
+  const dispatch = useDispatch();
 
   const handleWaterChange = (value) => {
     setWaterWeight(value);
   };
-  const addWater = async () => {
-    try {
-      const data = {
-        name: "Water",
-        weight: waterWeight,
-        quantity: "1",
-        unit: "oz",
-        packId: currentPack["_id"],
-        type: ItemCategoryEnum.WATER,
-      };
 
-      const response = await AxiosInstance.addItem(data);
-    } catch (error) {
-      console.log("Error", error);
-    }
+  const addWater = () => {
+    const data = {
+      name: "Water",
+      weight: waterWeight,
+      quantity: "1",
+      unit: "oz",
+      packId: currentPack["_id"],
+      type: ItemCategoryEnum.WATER,
+    };
+    
+    dispatch(addPackItem(data));
   };
 
   return (
