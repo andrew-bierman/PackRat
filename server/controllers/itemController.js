@@ -1,5 +1,7 @@
+import { ItemCategoryModel } from "../models/itemCategory.js";
 import Item from "../models/itemModel.js";
 import Pack from "../models/packModel.js";
+import { ItemCategory, ItemCategoryEnum } from "../utils/itemCategory.js";
 
 export const getItems = async (req, res) => {
   try {
@@ -27,10 +29,39 @@ export const getItemById = async (req, res) => {
 
 export const addItem = async (req, res) => {
   try {
+    const { name, weight, quantity, unit, packId, type } = req.body;
 
-    const { name, weight, quantity, unit, packId } = req.body;
+    let category = null;
+    switch (type) {
+      case ItemCategoryEnum.FOOD: {
+        category = await ItemCategoryModel.findOne({
+          name: ItemCategoryEnum.FOOD,
+        });
+        break;
+      }
+      case ItemCategoryEnum.WATER: {
+        category = await ItemCategoryModel.findOne({
+          name: ItemCategoryEnum.WATER,
+        });
+        break;
+      }
+      default: {
+        category = await ItemCategoryModel.findOne({
+          name: ItemCategoryEnum.Essentials,
+        });
+        break;
+      }
+    }
+    // Create and save the new item
 
-    const newItem = await Item.create({ name, weight, quantity, unit, packId }); // Create and save the new item
+    const newItem = await Item.create({
+      name,
+      weight,
+      quantity,
+      unit,
+      packId,
+      category: category.id,
+    });
 
     await Pack.updateOne(
       { _id: req.body.packId },
@@ -59,7 +90,6 @@ export const addItem = async (req, res) => {
 };
 
 export const editItem = async (req, res) => {
-
   try {
     const { _id } = req.body;
 
@@ -74,7 +104,6 @@ export const editItem = async (req, res) => {
 };
 
 export const deleteItem = async (req, res) => {
-
   try {
     const { itemId } = req.body;
 
