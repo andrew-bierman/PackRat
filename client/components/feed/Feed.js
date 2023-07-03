@@ -1,23 +1,38 @@
-import { Container, Box, Text, HStack, Stack, Switch } from "native-base";
-import { StyleSheet } from "react-native";
-
-import Card from "./FeedCard";
-// import useGetPublicPacks from "../../hooks/useGetPublicPacks";
-import { theme } from "../../theme";
-import DropdownComponent from "../Dropdown";
-import { useState } from "react";
-
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import { getPublicPacks, getPublicTrips } from "../../store/feedStore";
-import { fetchUserPacks, selectAllPacks } from "../../store/packsStore";
-
 import { Link } from "expo-router";
+import { Container, Box, Text, HStack, Stack, Switch, Button } from "native-base";
+import { StyleSheet } from "react-native";
+import Card from "./FeedCard";
+import DropdownComponent from "../Dropdown";
+import { theme } from "../../theme";
+import {
+  getPublicPacks,
+  getPublicTrips,
+  getFavoritePacks,
+} from "../../store/feedStore";
+import { fetchUserPacks, selectAllPacks } from "../../store/packsStore";
 import { fetchUserTrips } from "../../store/tripsStore";
+import { useRouter } from "expo-router";
+
+const URL_PATHS = {
+  userPacks: "/pack/",
+  favoritePacks: "/pack/",
+  userTrips: "/trip/",
+};
+
+const ERROR_MESSAGES = {
+  public: "No Public Feed Data Available",
+  userPacks: "No User Packs Available",
+  favoritePacks: "No Favorite Packs Available",
+  userTrips: "No User Trips Available",
+};
 
 const dataValues = ["Favorite", "Most Recent"];
 
-export default function Feed({ feedType = "public" }) {
+const Feed = ({ feedType = "public" }) => {
+  const router = useRouter();
+
   const [queryString, setQueryString] = useState("");
   const [selectedTypes, setSelectedTypes] = useState({
     pack: true,
@@ -25,13 +40,11 @@ export default function Feed({ feedType = "public" }) {
   });
 
   const dispatch = useDispatch();
-
   const ownerId = useSelector((state) => state.auth.user?._id);
-
   const publicPacksData = useSelector((state) => state.feed.publicPacks);
   const userPacksData = useSelector(selectAllPacks);
-
   const publicTripsData = useSelector((state) => state.feed.publicTrips);
+  const userTripsData = useSelector((state) => state.trips.userTrips);
 
   useEffect(() => {
     if (feedType === "public") {
@@ -47,11 +60,6 @@ export default function Feed({ feedType = "public" }) {
   }, [queryString, feedType, ownerId]);
 
   const renderData = () => {
-    // const data =
-    //   feedType === "public"
-    //     ? [...publicPacksData, ...publicTripsData]
-    //     : userPacksData;
-
     let data = [];
     if (feedType === "public") {
       if (selectedTypes.pack) {
@@ -68,68 +76,62 @@ export default function Feed({ feedType = "public" }) {
       data = userPacksData.filter((pack) => pack.isFavorite);
     }
 
-    let urlPath = "/pack/";
-    let errorText = "No Public Feed Data Available";
-
-    switch (feedType) {
-      case "userPacks":
-        urlPath = "/pack/";
-        errorText = "No User Packs Available";
-        break;
-      case "favoritePacks":
-        urlPath = "/pack/";
-        errorText = "No Favorite Packs Available";
-        break;
-      case "userTrips":
-        urlPath = "/trip/";
-        errorText = "No User Trips Available";
-        break;
-      default:
-        break;
-    }
-
-    if (data?.length > 0) {
+    if (data.length > 0) {
       return data.map((item) => (
         <Link
           key={"link-key" + item?._id}
-          href={
-            item?.type === "pack" ? "/pack/" + item?._id : "/trip/" + item?._id
-          }
+          href={item.type === "pack" ? "/pack/" + item?._id : "/trip/" + item?._id}
         >
-          <Card key={item?._id} type={item.type} {...{ ...item }} />
+          <Card key={item?._id} type={item.type} {...item} />
         </Link>
       ));
     } else {
-      return <Text>{errorText}</Text>;
+      return <Text>{ERROR_MESSAGES[feedType]}</Text>;
     }
   };
+
+  const handleTogglePack = () => {
+    setSelectedTypes((prevState) => ({
+      ...prevState,
+      pack: !prevState.pack,
+    }));
+  };
+
+  const handleToggleTrip = () => {
+    setSelectedTypes((prevState) => ({
+      ...prevState,
+      trip: !prevState.trip,
+    }));
+  };
+
+  const handleSortChange = (value) => {
+    setQueryString(value);
+  };
+
+  const handleCreateClick = () => {
+    // handle create click logic
+    router.push(createUrlPath)
+  };
+
+  const urlPath = URL_PATHS[feedType];
+  const createUrlPath = URL_PATHS[feedType] + "create";
+  const errorText = ERROR_MESSAGES[feedType];
 
   return (
     <Box style={styles.mainContainer}>
       <HStack space={3} alignItems="center" style={styles.bar}>
-        <Text fontSize="lg" fontWeight="bold">
-          Packs
-        </Text>
-
-        <Switch
-          size="lg"
-          isChecked={selectedTypes.pack}
-          onToggle={() =>
-            setSelectedTypes({ ...selectedTypes, pack: !selectedTypes.pack })
-          }
-        />
-
-        <Text fontSize="lg" fontWeight="bold">
-          Trips
-        </Text>
-
-        <Switch
-          size="lg"
-          isChecked={selectedTypes.trip}
-          onToggle={() =>
-            setSelectedTypes({ ...selectedTypes, trip: !selectedTypes.trip })
-          }
-        />
+        {feedType === "public" && (
+          <>
+            <Text fontSize="lg" fontWeight="bold">
+              Packs
+            </Text>
+            <Switch size="lg" isChecked={selectedTypes.pack} onToggle={handleTogglePack} />
+            <Text fontSize="lg" fontWeight="bold">
+              Trips
+            </Text>
+            <Switch size="lg" isChecked={selectedTypes.trip} onToggle={handleToggleTrip} />
+          </>
+        )}
 
         <Text fontSize="lg" fontWeight="bold">
           Sort By:
@@ -138,23 +140,23 @@ export default function Feed({ feedType = "public" }) {
         <DropdownComponent
           value={queryString}
           data={dataValues}
-          onValueChange={setQueryString}
+          onValueChange={handleSortChange}
           placeholder="Sort By"
           style={styles.dropdown}
-          width="auto" // or provide a fixed width if you prefer
+          width="auto"
         />
+
+        {(feedType === "userPacks" || feedType === "userTrips") && (
+          <Button onPress={handleCreateClick}>Create</Button>
+        )}
       </HStack>
 
-      <Stack
-        direction={["column", "column", "column", "row"]}
-        space={[3, 3, 3, 0]}
-        flexWrap="wrap"
-      >
+      <Stack direction={["column", "column", "column", "row"]} space={[3, 3, 3, 0]} flexWrap="wrap">
         {renderData()}
       </Stack>
     </Box>
   );
-}
+};
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -174,7 +176,6 @@ const styles = StyleSheet.create({
   packsContainer: {
     flexDirection: "column",
     minHeight: "100vh",
-
     padding: 25,
     fontSize: 26,
   },
@@ -182,3 +183,5 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
 });
+
+export default Feed;

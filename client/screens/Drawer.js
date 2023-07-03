@@ -1,4 +1,4 @@
-import { View, StyleSheet, Text, TouchableOpacity, Modal, Animated } from "react-native";
+import { View, StyleSheet, Text, TouchableOpacity, Modal } from "react-native";
 import { Link } from "expo-router";
 import { theme } from "../theme";
 import { AntDesign, MaterialIcons } from "@expo/vector-icons";
