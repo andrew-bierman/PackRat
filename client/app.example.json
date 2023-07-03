@@ -6,7 +6,7 @@
     "orientation": "portrait",
     "icon": "./assets/packrat-app-icon.png",
     "userInterfaceStyle": "light",
-    "scheme": "./app/index.js",
+    "scheme": "packrat",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
