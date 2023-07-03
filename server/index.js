@@ -2,12 +2,14 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import { isCelebrateError, errors } from "celebrate";
-
+import {ItemCategoryModel} from './models/itemCategory.js'
 import { MONGODB_URI, SERVICE_ACCOUNT_KEY,CORS_METHODS,CORS_ORIGIN } from "./config.js";
 import routes from "./routes/index.js";
 
 import swaggerUi from "swagger-ui-express";
 import specs from "./swaggerOptions.js";
+import {ItemCategory} from './utils/itemCategory.js'
+import bodyParser from "body-parser";
 
 // express items
 const app = express();
@@ -15,8 +17,8 @@ app.use(cors({
   origin:CORS_ORIGIN,
   methods:CORS_METHODS
 }));
-app.use(express.json({ limit: "50mb" }));
-app.use(express.urlencoded({ limit: "50mb", extended: true }));
+app.use(bodyParser.json({limit:"50mb"}));
+// app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
 // const connectionString = " your connection string";
 const connectionString = MONGODB_URI;
@@ -28,6 +30,15 @@ app.use(routes);
 if (process.env.NODE_ENV !== "production") {
   app.use("/api-docs", swaggerUi.serve);
   app.get("/api-docs", swaggerUi.setup(specs));
+  app.get('/seed/category',(req,res)=>{
+    console.log('Seeding...')
+    ItemCategory.forEach(async(category)=>{
+      await ItemCategoryModel.create({
+        name:category
+      });
+    })
+    res.status(200).send('Seeding done')
+  })
 }
 
 // middleware to log Celebrate validation errors
