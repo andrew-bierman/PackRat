@@ -4,15 +4,12 @@ import { Table, TableWrapper, Row, Cell } from "react-native-table-component";
 import { Feather } from "@expo/vector-icons";
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { CustomModal } from "../../components/modal";
-import { Select } from "native-base";
+import { Select, Button, Checkbox } from "native-base";
 
-// import useGetItems from "../hooks/useGetItems";
-
-// import useEditItem from "../hooks/useEditItem";
-// import useDeleteItem from "../hooks/useDeleteItem";
+import Water from "../Water";
 
 import { useState, useMemo, useEffect } from "react";
-import { Box, Text, Input } from "native-base";
+import { Box, Text, Input, View } from "native-base";
 
 import { useDispatch, useSelector } from "react-redux";
 import { editItem, deleteItem } from "../../store/itemsStore";
@@ -21,10 +18,12 @@ import { convertWeight } from "../../utils/convertWeight";
 import { openModal, selectPackById } from "../../store/packsStore";
 import { AddItem } from "../item/AddItem";
 import { EditPackItemModal } from "./EditPackItemModal";
+import { ItemCategoryEnum } from "../../constants/itemCategory";
 
 export const TableContainer = ({ currentPack }) => {
   // const { data, isLoading, isError, error } = useGetItems(packId);
   const [currentPackId, setCurrentPackId] = useState(null);
+  const [waterItem, setWaterItem] = useState(null);
 
   const dispatch = useDispatch();
 
@@ -39,14 +38,31 @@ export const TableContainer = ({ currentPack }) => {
 
   // PREFERED WEIGHTING UNIT FOR DISPLAY TO CLIENTSIDE
   const [weightUnit, setWeightUnit] = useState("g");
+  const [checkedItems, setCheckedItems] = useState([]);
+  let totalFoodWeight = 0;
+  let totalWaterWeight = 0;
+  let totalBaseWeight = 0;
+
+  const handleCheckboxChange = (item) => {
+    if (checkedItems.includes(item)) {
+      setCheckedItems((prevCheckedItems) =>
+        prevCheckedItems.filter((checkedItem) => checkedItem !== item)
+      );
+    } else {
+      setCheckedItems((prevCheckedItems) => [...prevCheckedItems, item]);
+    }
+  };
+
   const calculate = (value) => {
     // update the item values and then recalculate
     return currentPack?.items?.reduce((acc, item) => {
-      if(item?.weight === NaN) {
-        console.log(`Invalid weight or quantity for item: ${JSON.stringify(item)}`);
+      if (item?.weight === NaN) {
         return acc;
       }
-      if (typeof item?.weight === "number" && typeof item?.quantity === "number") {
+      if (
+        typeof item?.weight === "number" &&
+        typeof item?.quantity === "number"
+      ) {
         const convertedWeight = convertWeight(
           item?.weight,
           item?.unit,
@@ -55,19 +71,11 @@ export const TableContainer = ({ currentPack }) => {
         const result = acc + convertedWeight * item.quantity;
         return result;
       } else {
-        console.log(`Invalid weight or quantity for item: ${JSON.stringify(item)}`);
         return acc;
       }
     }, 0);
   };
-  
-  
-  // const totalItemsWeight = useMemo(
-  //   () => calculate(currentPack),
-  //   [currentPack, weightUnit]
-  // );
 
-  // UI component
   const WeightUnitDropdown = ({ value, onChange }) => {
     return (
       <Select
@@ -93,21 +101,49 @@ export const TableContainer = ({ currentPack }) => {
       ...prevState.slice(index + 1),
     ]);
   };
+  data &&
+    data
+      .filter((item) => !checkedItems.includes(item.name))
+      .forEach((item) => {
+        switch (item.category.name) {
+          case ItemCategoryEnum.ESSENTIALS: {
+            totalBaseWeight += convertWeight(
+              item.weight * item.quantity,
+              item.unit,
+              weightUnit
+            );
 
-  const totalBaseWeight = data?.reduce((acc, curr) => acc + curr.weight, 0);
-  const totalWaterWeight = currentPack?.water ?? 0;
-  const totalFoodWeight = currentPack?.food ?? 0;
-  const totalWeight = totalBaseWeight + totalWaterWeight + totalFoodWeight;
+            break;
+          }
+          case ItemCategoryEnum.FOOD: {
+            totalFoodWeight += convertWeight(
+              item.weight * item.quantity,
+              item.unit,
+              weightUnit
+            );
 
+            break;
+          }
+          case ItemCategoryEnum.WATER: {
+            totalWaterWeight += convertWeight(
+              item.weight * item.quantity,
+              item.unit,
+              weightUnit
+            );
+          }
+        }
+      });
+  let totalWeight = totalBaseWeight + totalWaterWeight + totalFoodWeight;
   const tableData = {
     tableTitle: ["Pack List"],
     tableHead: [
       "Item Name",
       `Weight`,
-      // `Weight (${weightUnit})`,
       "Quantity",
+      "Category",
       "Edit",
       "Delete",
+      "Ignore",
     ],
     tableBaseData: data?.map((value) => Object.values(value).slice(1)),
     tableWater: ["Water", totalWaterWeight, "", "", ""],
@@ -124,33 +160,32 @@ export const TableContainer = ({ currentPack }) => {
 
   const flexWidthArr = [2, 1, 1, 0.5, 0.5];
 
-  const tableDb = data?.map(({ name, weight, quantity, unit, _id }, index) => [
-    name,
-    `${weight} ${unit}`,
-    quantity,
-    <EditPackItemModal packId={_id} initialData={data[index]}/>,
-    <Feather
-      name="x-circle"
-      size={20}
-      color="black"
-      onPress={() => deleteItem.mutate(_id)}
-      style={{ alignSelf: "center" }}
-    />,
-  ]);
+  const tableDb = data?.map(
+    ({ name, weight, category, quantity, unit, _id }, index) => [
+      name,
+      `${weight} ${unit}`,
+      quantity,
+      `${category.name}`,
+      <EditPackItemModal packId={_id} initialData={data[index]} />,
+      <Feather
+        name="x-circle"
+        size={20}
+        color="black"
+        onPress={() => deleteItem.mutate(_id)}
+        style={{ alignSelf: "center" }}
+      />,
+      <Checkbox
+        marginLeft="20"
+        key={_id}
+        isChecked={checkedItems.includes(name)}
+        onChange={() => handleCheckboxChange(name)}
+      />,
+    ]
+  );
 
   const tablekeys = data?.map((value) => Object.keys(value).slice(1));
 
-  useEffect(() => {
-    // console.log("data", data);odod
-  }, [data]);
-
-  const handleWaterChange = (value) => {
-    // Update the water value in the currentPack
-  };
-
-  const handleFoodChange = (value) => {
-    // Update the food value in the currentPack
-  };
+  useEffect(() => {}, [data]);
 
   const handleEdit = (id, value, cellIndex) => {
     const newRow = { ...data[id], [tablekeys[id][cellIndex]]: value };
@@ -171,17 +206,12 @@ export const TableContainer = ({ currentPack }) => {
           style={styles.tableStyle}
           borderStyle={{ borderColor: "transparent" }}
         >
-          <Row
-            data={tableData.tableTitle}
-            style={styles.title}
-            flexArr={flexWidthArr}
-          />
+          <Row data={tableData.tableTitle} style={styles.title} />
           <Row
             data={tableData.tableHead.map((header, index) => (
               <Cell key={index} data={header} />
             ))}
             style={styles.head}
-            flexArr={flexWidthArr}
           />
           {tableDb.map((rowData, index) => (
             <TableWrapper key={index} style={styles.row} flexArr={flexWidthArr}>
@@ -189,12 +219,6 @@ export const TableContainer = ({ currentPack }) => {
                 <Cell
                   key={cellIndex}
                   onPress={() => console.log("index of ", index)}
-                  style={[
-                    cellIndex === 3 || cellIndex === 4
-                      ? styles.smallCell
-                      : styles.dataCell,
-                    { flex: flexWidthArr[cellIndex] },
-                  ]}
                   data={cellData}
                 />
               ))}
@@ -204,41 +228,7 @@ export const TableContainer = ({ currentPack }) => {
       ) : (
         <Text>Add your First Item</Text>
       )}
-
-      <Box style={styles.waterContainer}>
-        <MaterialCommunityIcons
-          name="water"
-          size={24}
-          color="black"
-          style={{ marginRight: 10 }}
-        />
-        <Text style={{ marginRight: 20 }}>Water:</Text>
-        <Input
-          style={{ flex: 1, placeholderTextColor: "#000" }}
-          keyboardType="numeric"
-          placeholder="Enter water weight"
-          value={String(currentPack?.water ?? "")}
-          onChangeText={handleWaterChange}
-        />
-        <Text style={{ marginLeft: 20 }}>({weightUnit})</Text>
-      </Box>
-      <Box style={styles.foodContainer}>
-        <MaterialCommunityIcons
-          name="food-apple"
-          size={24}
-          color="black"
-          style={{ marginRight: 10 }}
-        />
-        <Text style={{ marginRight: 20 }}>Food:</Text>
-        <Input
-          style={{ flex: 1, placeholderTextColor: "#000" }}
-          keyboardType="numeric"
-          placeholder="Enter food weight"
-          value={String(currentPack?.food ?? "")}
-          onChangeText={handleFoodChange}
-        />
-        <Text style={{ marginLeft: 20 }}>({weightUnit})</Text>
-      </Box>
+      <Water currentPack={currentPack} setWaterItem={setWaterItem} />
 
       {data?.length > 0 && (
         <>
@@ -251,10 +241,7 @@ export const TableContainer = ({ currentPack }) => {
               marginVertical: 30,
               flex: 1,
             }}
-          >
-            {/* <Text>Items Weight</Text>
-            <Text>{totalItemsWeight}</Text> */}
-          </Box>
+          ></Box>
           <Box
             style={{
               flexDirection: "row",
@@ -266,7 +253,9 @@ export const TableContainer = ({ currentPack }) => {
             }}
           >
             <Text>Base Weight</Text>
-            <Text>{totalBaseWeight}</Text>
+            <Text>
+              {totalBaseWeight} ({weightUnit})
+            </Text>
           </Box>
           <Box
             style={{
@@ -278,8 +267,10 @@ export const TableContainer = ({ currentPack }) => {
               flex: 1,
             }}
           >
-            <Text>Water + Food Weight</Text>
-            <Text>{totalWaterWeight + totalFoodWeight}</Text>
+            <Text>Water + Food Weight </Text>
+            <Text>
+              {totalWaterWeight + totalFoodWeight} ({weightUnit})
+            </Text>
           </Box>
           <Box
             style={{
@@ -375,18 +366,6 @@ const styles = StyleSheet.create({
     textAlign: "left",
 
     gap: 10,
-  },
-
-  waterContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 30,
-    paddingLeft: 15,
-    backgroundColor: "#78B7BB",
-    borderRadius: 5,
-    padding: 10,
-    width: "100%",
-    alignSelf: "center",
   },
 
   foodContainer: {
