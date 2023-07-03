@@ -42,6 +42,8 @@ const HeroSection = ({ onSelect }) => {
 
   const cardBackgroundColor = hexToRGBA(theme.colors.secondaryBlue, 0.5);
 
+  const bannerText = firstNameOrUser !== "User" ? `Let's find a new trail, ${firstNameOrUser}` : "Let's find a new trail";
+
   // console.log("cardBackgroundColor", cardBackgroundColor)
 
   return (
@@ -73,9 +75,9 @@ const HeroSection = ({ onSelect }) => {
             }}
           >
             <Text style={styles.title}>
-              Let's find a new trail, {firstNameOrUser}
+              {bannerText}
             </Text>
-            <SearchInput onSelect={handleSearchSelect} />
+            <SearchInput onSelect={handleSearchSelect} placeholder={"Search by park, city, or trail"}/>
           </VStack>
         </LargeCard>
       </Hero>

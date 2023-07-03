@@ -50,7 +50,7 @@ import { getTrailsOSM } from "../api/getTrails";
 import { getParksOSM } from "../api/getParks";
 import { fetchWeather, fetchWeatherWeek } from "../store/weatherStore";
 
-export const SearchInput = ({ onSelect }) => {
+export const SearchInput = ({ onSelect, placeholder }) => {
   const [searchString, setSearchString] = useState("");
   const [isLoadingMobile, setIsLoadingMobile] = useState(false);
   const [selectedSearch, setSelectedSearch] = useState("");
@@ -142,7 +142,7 @@ export const SearchInput = ({ onSelect }) => {
         <Box position="relative" height="auto">
           <Input
             onChangeText={(text) => setSearchString(text)}
-            placeholder="Search"
+            placeholder={placeholder ?? "Search"}
             width="100%"
             borderRadius="4"
             py="3"
