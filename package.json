@@ -4,7 +4,7 @@
   "description": "PackRat is the ultimate adventure planner designed for those who love to explore the great outdoors. Our app helps users plan and organize their trips with ease, whether it's a weekend camping trip, a day hike, or a cross-country road trip.",
   "main": "index.js",
   "scripts": {
-    "clean": "rm -rf server/node_modules client/node_modules server/package-lock.json client/package-lock.json",
+    "clean": "rm -rf server/node_modules && rm -rf client/node_modules && rm -rf server/package-lock.json && rm -rf client/package-lock.json",
     "install": "npm run clean && npm --prefix server install && npm --prefix client install && npm install -g expo-cli",
     "build:client": "npm install --prefix client && npx --prefix client expo export --platform web",
     "expo:export": "cd client && cp app.example.json app.json && npx expo export --platform web",
