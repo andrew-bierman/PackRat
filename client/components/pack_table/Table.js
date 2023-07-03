@@ -38,6 +38,21 @@ export const TableContainer = ({ currentPack }) => {
 
   // PREFERED WEIGHTING UNIT FOR DISPLAY TO CLIENTSIDE
   const [weightUnit, setWeightUnit] = useState("g");
+  const [checkedItems, setCheckedItems] = useState([]);
+  let totalFoodWeight = 0;
+  let totalWaterWeight = 0;
+  let totalBaseWeight = 0;
+
+  const handleCheckboxChange = (item) => {
+    if (checkedItems.includes(item)) {
+      setCheckedItems((prevCheckedItems) =>
+        prevCheckedItems.filter((checkedItem) => checkedItem !== item)
+      );
+    } else {
+      setCheckedItems((prevCheckedItems) => [...prevCheckedItems, item]);
+    }
+  };
+
   const calculate = (value) => {
     // update the item values and then recalculate
     return currentPack?.items?.reduce((acc, item) => {
@@ -86,42 +101,39 @@ export const TableContainer = ({ currentPack }) => {
       ...prevState.slice(index + 1),
     ]);
   };
-  let totalFoodWeight = 0;
-  let totalWaterWeight = 0;
-  let totalBaseWeight = 0;
-
   data &&
-    data.forEach((item) => {
-      switch (item.category.name) {
-        case ItemCategoryEnum.ESSENTIALS: {
-          totalBaseWeight += convertWeight(
-            item.weight * item.quantity,
-            item.unit,
-            weightUnit
-          );
+    data
+      .filter((item) => !checkedItems.includes(item.name))
+      .forEach((item) => {
+        switch (item.category.name) {
+          case ItemCategoryEnum.ESSENTIALS: {
+            totalBaseWeight += convertWeight(
+              item.weight * item.quantity,
+              item.unit,
+              weightUnit
+            );
 
-          break;
-        }
-        case ItemCategoryEnum.FOOD: {
-          totalFoodWeight += convertWeight(
-            item.weight * item.quantity,
-            item.unit,
-            weightUnit
-          );
+            break;
+          }
+          case ItemCategoryEnum.FOOD: {
+            totalFoodWeight += convertWeight(
+              item.weight * item.quantity,
+              item.unit,
+              weightUnit
+            );
 
-          break;
+            break;
+          }
+          case ItemCategoryEnum.WATER: {
+            totalWaterWeight += convertWeight(
+              item.weight * item.quantity,
+              item.unit,
+              weightUnit
+            );
+          }
         }
-        case ItemCategoryEnum.WATER: {
-          totalWaterWeight += convertWeight(
-            item.weight * item.quantity,
-            item.unit,
-            weightUnit
-          );
-        }
-      }
-    });
-  const totalWeight = totalBaseWeight + totalWaterWeight + totalFoodWeight;
-
+      });
+  let totalWeight = totalBaseWeight + totalWaterWeight + totalFoodWeight;
   const tableData = {
     tableTitle: ["Pack List"],
     tableHead: [
@@ -162,7 +174,12 @@ export const TableContainer = ({ currentPack }) => {
         onPress={() => deleteItem.mutate(_id)}
         style={{ alignSelf: "center" }}
       />,
-      <Checkbox value="false" />,
+      <Checkbox
+        marginLeft="20"
+        key={_id}
+        isChecked={checkedItems.includes(name)}
+        onChange={() => handleCheckboxChange(name)}
+      />,
     ]
   );
 
@@ -189,17 +206,12 @@ export const TableContainer = ({ currentPack }) => {
           style={styles.tableStyle}
           borderStyle={{ borderColor: "transparent" }}
         >
-          <Row
-            data={tableData.tableTitle}
-            style={styles.title}
-            flexArr={flexWidthArr}
-          />
+          <Row data={tableData.tableTitle} style={styles.title} />
           <Row
             data={tableData.tableHead.map((header, index) => (
               <Cell key={index} data={header} />
             ))}
             style={styles.head}
-            flexArr={flexWidthArr}
           />
           {tableDb.map((rowData, index) => (
             <TableWrapper key={index} style={styles.row} flexArr={flexWidthArr}>
@@ -207,12 +219,6 @@ export const TableContainer = ({ currentPack }) => {
                 <Cell
                   key={cellIndex}
                   onPress={() => console.log("index of ", index)}
-                  style={[
-                    cellIndex === 3 || cellIndex === 4
-                      ? styles.smallCell
-                      : styles.dataCell,
-                    { flex: flexWidthArr[cellIndex] },
-                  ]}
                   data={cellData}
                 />
               ))}
