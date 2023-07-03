@@ -1,4 +1,5 @@
 import { celebrate, Joi, Segments } from "celebrate";
+import {  ItemCategoryEnum } from "../../utils/itemCategory.js";
 
 export const JoiObjectId = (message = 'valid id') => Joi.string().regex(/^[0-9a-fA-F]{24}$/, message)
 
@@ -19,6 +20,7 @@ export const addItem = celebrate({
         quantity: Joi.string().required(),
         unit: Joi.string().required(),
         packId: JoiObjectId().required(),
+        type: Joi.string().optional()
     }),
 });
 export const editItem = celebrate({
