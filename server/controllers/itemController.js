@@ -32,39 +32,74 @@ export const addItem = async (req, res) => {
     const { name, weight, quantity, unit, packId, type } = req.body;
 
     let category = null;
+    let newItem = null;
+
     switch (type) {
       case ItemCategoryEnum.FOOD: {
         category = await ItemCategoryModel.findOne({
           name: ItemCategoryEnum.FOOD,
         });
+
+        newItem = await Item.create({
+          name,
+          weight,
+          quantity,
+          unit,
+          packs: [packId],
+          category: category._id,
+        });
+
         break;
       }
       case ItemCategoryEnum.WATER: {
         category = await ItemCategoryModel.findOne({
           name: ItemCategoryEnum.WATER,
         });
+
+        const existingWaterItems = await Item.find({ category: category._id, packs: packId });
+
+        if (existingWaterItems && existingWaterItems.length > 0) {
+          existingWaterItems[0].weight += Number(weight);  // Ensure weight is treated as a number
+          await existingWaterItems[0].save();
+
+          for (let i = 1; i < existingWaterItems.length; i++) {
+            await Item.findByIdAndDelete(existingWaterItems[i]._id);
+          }
+
+          newItem = existingWaterItems[0];
+        } else {
+          newItem = await Item.create({
+            name,
+            weight,
+            quantity: 1,
+            unit,
+            packs: [packId],
+            category: category._id,
+          });
+        }
+
         break;
       }
       default: {
         category = await ItemCategoryModel.findOne({
           name: ItemCategoryEnum.ESSENTIALS,
         });
+
+        newItem = await Item.create({
+          name,
+          weight,
+          quantity,
+          unit,
+          packs: [packId],
+          category: category._id,
+        });
+
         break;
       }
     }
-    // Create and save the new item
-
-    const newItem = await Item.create({
-      name,
-      weight,
-      quantity,
-      unit,
-      packId,
-      category: category.id,
-    });
 
     await Pack.updateOne(
-      { _id: req.body.packId },
+      { _id: packId },
       { $push: { items: newItem._id } }
     );
 
@@ -73,21 +108,22 @@ export const addItem = async (req, res) => {
       {
         $addToSet: {
           owners: req.body.ownerId,
-          packs: req.body.packId,
         },
       },
       { new: true }
-    ).populate("category"); // <=== Here's the change
+    ).populate("category");
 
     res.status(200).json({
       msg: "success",
-      newItem: updatedItem, // <=== And here's the other change
-      packId: req.body.packId,
+      newItem: updatedItem,
+      packId: packId,
     });
   } catch (error) {
-    res.status(404).json({ msg: "Unable to add item" });
+    res.status(404).json({ msg: "Unable to add item", error: error.message });
   }
 };
+
+
 
 export const editItem = async (req, res) => {
   try {
