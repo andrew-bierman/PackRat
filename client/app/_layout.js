@@ -2,10 +2,7 @@ import { Slot } from "expo-router";
 
 import { Platform } from "react-native";
 
-// import Navigation from "../screens/NavigationHeader";
 import Navigation from "../screens/Navigation";
-import NavigationMobile from "../screens/NavigationMobile";
-// import NavigationDrawer from "../screens/NavigationDrawer";
 
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
