@@ -47,7 +47,7 @@ export const addItem = async (req, res) => {
       }
       default: {
         category = await ItemCategoryModel.findOne({
-          name: ItemCategoryEnum.Essentials,
+          name: ItemCategoryEnum.ESSENTIALS,
         });
         break;
       }
