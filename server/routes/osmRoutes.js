@@ -1,9 +1,11 @@
 import express from "express";
 import {
+  getDestination,
   getOsm,
   getParksOSM,
   getPhotonResults,
   getTrailsOSM,
+  postSingleGeoJSON,
 } from "../controllers/getOsmController.js";
 
 const router = express.Router();
@@ -140,5 +142,9 @@ router.get("/parks", getParksOSM);
  *         description: Error retrieving Overpass Data
  */
 router.post("/osm", getOsm);
+
+router.post("/process/geojson", postSingleGeoJSON);
+
+router.get("/destination/:id", getDestination);
 
 export default router;

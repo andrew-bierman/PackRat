@@ -31,6 +31,7 @@ import MapButtonsOverlay from "./MapButtonsOverlay";
 mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
 const WebMap = ({ shape = { ...defaultShape } }) => {
+  console.log("WebMap shape", shape);
   useEffect(() => {
     // temporary solution to fix mapbox-gl-js missing css error
     if (Platform.OS === "web") {
@@ -91,6 +92,7 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
 
       const latZoom = calculateZoomLevel(bounds, mapDim);
       const trailCenter = findTrailCenter(shape);
+      console.log("trailCenter in useEffect", trailCenter)
 
       zoomLevelRef.current = latZoom;
       trailCenterPointRef.current = trailCenter;
@@ -107,13 +109,15 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
     console.log("processedShape", processedShape);
     console.log("shape", shape);
 
+    console.log("trailCenterPointRef.current", trailCenterPointRef.current);
+
     const mapInstance = new mapboxgl.Map({
       container: mapContainer.current,
       style: mapStyle,
       // center: [lng, lat],
-      center: trailCenterPointRef.current
-        ? trailCenterPointRef.current
-        : [lng, lat],
+      center: trailCenterPointRef.current && !isNaN(trailCenterPointRef.current[0]) && !isNaN(trailCenterPointRef.current[1])
+      ? trailCenterPointRef.current
+      : [lng, lat],
       zoom: zoomLevelRef.current ? zoomLevelRef.current : zoomLevel,
       interactive: mapFullscreen,
     });

@@ -50,7 +50,7 @@ import { getTrailsOSM } from "../api/getTrails";
 import { getParksOSM } from "../api/getParks";
 import { fetchWeather, fetchWeatherWeek } from "../store/weatherStore";
 
-export const SearchInput = () => {
+export const SearchInput = ({ onSelect, placeholder }) => {
   const [searchString, setSearchString] = useState("");
   const [isLoadingMobile, setIsLoadingMobile] = useState(false);
   const [selectedSearch, setSelectedSearch] = useState("");
@@ -112,6 +112,9 @@ export const SearchInput = () => {
 
   useEffect(() => {
     const timeout = setTimeout(getTrailsParksAndWeatherDetails, 1000);
+    // const timeout = setTimeout(() => {
+    //   console.log("selectedSearchResult", selectedSearchResult);
+    // }, 1000);
 
     return () => clearTimeout(timeout);
   }, [selectedSearch, selectedSearchResult, dispatch]);
@@ -126,6 +129,10 @@ export const SearchInput = () => {
     setShowSearchResults(false);
     dispatch(setSelectedSearchResult(result));
     dispatch(clearSearchResults());
+
+    if (onSelect) {
+      onSelect(result);
+    }
   };
 
   return Platform.OS === "web" ? (
@@ -135,13 +142,14 @@ export const SearchInput = () => {
         <Box position="relative" height="auto">
           <Input
             onChangeText={(text) => setSearchString(text)}
-            placeholder="Search"
+            placeholder={placeholder ?? "Search"}
             width="100%"
             borderRadius="4"
             py="3"
             px="1"
             value={searchString}
             fontSize="14"
+            backgroundColor={"white"}
             InputLeftElement={
               <Icon
                 m="2"
@@ -171,45 +179,46 @@ export const SearchInput = () => {
               )
             }
           />
-
-          {showSearchResults && searchResults?.length > 0 && (
-            <ScrollView
-              position="absolute"
-              top="100%"
-              left="0"
-              right="0"
-              maxHeight="100"
-              borderWidth={1}
-              borderColor="gray.200"
-              borderRadius={10}
-              backgroundColor="white"
-              showsVerticalScrollIndicator={false}
-              zIndex={10}
-            >
-              <List space={2} mt={2} w="100%">
-                {searchResults.map((result, i) => (
-                  <Pressable
-                    key={`result + ${i}`}
-                    onPress={() => handleSearchResultClick(result, i)}
-                    underlayColor="gray.100"
-                  >
-                    <HStack space={3}>
-                      <Text fontSize="sm" fontWeight="medium">
-                        {result.properties.name}
-                      </Text>
-                      <Text
-                        fontSize="sm"
-                        color="gray.500"
-                        textTransform={"capitalize"}
-                      >
-                        {result.properties.osm_value}
-                      </Text>
-                    </HStack>
-                  </Pressable>
-                ))}
-              </List>
-            </ScrollView>
-          )}
+          <View style={{ position: "relative" }}>
+            {showSearchResults && searchResults?.length > 0 && (
+              <ScrollView
+                position="absolute"
+                top="100%"
+                left="0"
+                right="0"
+                maxHeight="100"
+                borderWidth={1}
+                borderColor="gray.200"
+                borderRadius={12}
+                backgroundColor="white"
+                showsVerticalScrollIndicator={false}
+                zIndex={10}
+              >
+                <List space={2} w="100%">
+                  {searchResults.map((result, i) => (
+                    <Pressable
+                      key={`result + ${i}`}
+                      onPress={() => handleSearchResultClick(result, i)}
+                      underlayColor="gray.100"
+                    >
+                      <HStack space={3}>
+                        <Text fontSize="sm" fontWeight="medium">
+                          {result.properties.name}
+                        </Text>
+                        <Text
+                          fontSize="sm"
+                          color="gray.500"
+                          textTransform={"capitalize"}
+                        >
+                          {result.properties.osm_value}
+                        </Text>
+                      </HStack>
+                    </Pressable>
+                  ))}
+                </List>
+              </ScrollView>
+            )}
+          </View>
         </Box>
       </VStack>
     </VStack>
