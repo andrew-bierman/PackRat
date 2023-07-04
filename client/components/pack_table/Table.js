@@ -10,6 +10,7 @@ import { ItemCategoryEnum } from "../../constants/itemCategory";
 import Water from "../Water";
 import { DeletePackItemModal } from "./DeletePackItemModal";
 import { formatNumber } from "../../utils/formatNumber";
+import { theme } from "../../theme";
 
 const WeightUnitDropdown = ({ value, onChange }) => {
   return (
@@ -64,33 +65,31 @@ const Loading = () => <Text>Loading....</Text>;
 
 const ErrorMessage = ({ message }) => <Text>{message}</Text>;
 
-const TableItem = ({ itemData, checkedItems, handleCheckboxChange, index }) => {
+const TableItem = ({
+  itemData,
+  checkedItems,
+  handleCheckboxChange,
+  index,
+  flexArr,
+}) => {
   const { name, weight, category, quantity, unit, _id } = itemData;
   const dispatch = useDispatch();
 
-  return (
-    <TableWrapper
-      key={index}
-      style={styles.row}
-      flexArr={[2, 1, 1, 0.3, 0.3, 0.3, 0.3]}
-    >
-      {[
-        name,
-        `${formatNumber(weight)} ${unit}`,
-        quantity,
-        `${category.name}`,
-        <EditPackItemModal packId={_id} initialData={itemData} />,
-        <DeletePackItemModal itemId={_id} />,
-        <IgnoreItemCheckbox
-          itemId={_id}
-          isChecked={checkedItems.includes(_id)}
-          handleCheckboxChange={handleCheckboxChange}
-        />,
-      ].map((cellData, cellIndex) => (
-        <Cell key={cellIndex} data={cellData} />
-      ))}
-    </TableWrapper>
-  );
+  const rowData = [
+    name,
+    `${formatNumber(weight)} ${unit}`,
+    quantity,
+    `${category.name}`,
+    <EditPackItemModal packId={_id} initialData={itemData} />,
+    <DeletePackItemModal itemId={_id} />,
+    <IgnoreItemCheckbox
+      itemId={_id}
+      isChecked={checkedItems.includes(_id)}
+      handleCheckboxChange={handleCheckboxChange}
+    />,
+  ];
+
+  return <Row data={rowData} style={styles.row} flexArr={flexArr} />;
 };
 
 export const TableContainer = ({ currentPack }) => {
@@ -151,6 +150,14 @@ export const TableContainer = ({ currentPack }) => {
     );
   };
 
+  // Group items by category
+  const groupedData = data?.reduce((acc, item) => {
+    (acc[item.category.name] = acc[item.category.name] || []).push(item);
+    return acc;
+  }, {});
+
+  const flexArr = [2, 1, 1, 1, 0.65, 0.65, 0.65];
+
   if (isLoading) return <Loading />;
   if (error) return <ErrorMessage message={error} />;
 
@@ -162,9 +169,11 @@ export const TableContainer = ({ currentPack }) => {
           <Table
             style={styles.tableStyle}
             borderStyle={{ borderColor: "transparent" }}
+            flexArr={flexArr}
           >
             <Row data={["Pack List"]} style={styles.title} />
             <Row
+              flexArr={flexArr}
               data={[
                 "Item Name",
                 `Weight`,
@@ -178,14 +187,20 @@ export const TableContainer = ({ currentPack }) => {
               ))}
               style={styles.head}
             />
-            {data.map((item, index) => (
-              <TableItem
-                key={index}
-                itemData={item}
-                checkedItems={checkedItems}
-                handleCheckboxChange={handleCheckboxChange}
-                index={index}
-              />
+            {Object.entries(groupedData).map(([category, items]) => (
+              <>
+                <Row data={[`${category}`]} style={styles.title} />
+                {items.map((item, index) => (
+                  <TableItem
+                    key={index}
+                    itemData={item}
+                    checkedItems={checkedItems}
+                    handleCheckboxChange={handleCheckboxChange}
+                    index={index}
+                    flexArr={flexArr}
+                  />
+                ))}
+              </>
             ))}
           </Table>
           <Water currentPack={currentPack} />
@@ -215,55 +230,53 @@ export const TableContainer = ({ currentPack }) => {
 // Styles
 const styles = StyleSheet.create({
   container: {
-    textAlign: "center",
-    width: "100%",
-    alignItems: "center",
-    justifyContent: "center",
     flex: 1,
+    padding: 10,
+    backgroundColor: "#F8F8F8",
+    width: "100%",
   },
   tableStyle: {
-    width: "95%",
-    gap: 15,
-    textAlign: "center",
-    alignItems: "center",
+    width: "100%",
+    marginVertical: 20,
   },
   title: {
-    height: 40,
-    backgroundColor: "#f1f8ff",
-    borderRadius: 5,
-    width: "100%",
-    marginBottom: 15,
-    alignItems: "center",
+    height: 50,
+    backgroundColor: theme.colors.primary,
+    borderRadius: 10,
     justifyContent: "center",
-    flex: 1,
-    fontSize: 20,
+    paddingLeft: 15,
+    fontWeight: "bold",
+    color: "#FFFFFF",
   },
   head: {
-    height: 40,
-    borderBottomWidth: 2,
-    borderBottomColor: "grey",
-    width: "100%",
-    marginBottom: 15,
-    alignItems: "center",
-    justifyContent: "center",
-    flex: 1,
+    height: 50,
+    backgroundColor: "#F3F4F6",
+    borderBottomWidth: 1,
+    borderBottomColor: "#D1D5DB",
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+  },
+  headerText: {
+    fontWeight: "bold",
+    color: "#000000",
+  },
+  cellText: {
+    fontWeight: "normal",
+    color: "#000000",
   },
   row: {
     flexDirection: "row",
-    width: "100%",
-    height: 25,
-    justifyContent: "space-between",
+    height: 60,
     alignItems: "center",
-    textAlign: "center",
-    gap: 10,
+    backgroundColor: "#FFFFFF",
+    borderBottomWidth: 1,
+    borderBottomColor: "#D1D5DB",
   },
   infoContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    width: "100%",
-    paddingHorizontal: 25,
-    marginVertical: 30,
-    flex: 1,
+    padding: 25,
+    backgroundColor: "#F8F8F8",
   },
 });
 
