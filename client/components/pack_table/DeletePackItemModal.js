@@ -1,7 +1,7 @@
 import React from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useDispatch } from "react-redux";
-import { deleteItem } from "../../store/itemsStore";
+import { deletePackItem } from "../../store/packsStore";
 import { CustomModal } from "../modal";
 
 export const DeletePackItemModal = ({ itemId }) => {
@@ -15,9 +15,10 @@ export const DeletePackItemModal = ({ itemId }) => {
   };
 
   const deleteItemHandler = () => {
-    dispatch(deleteItem(itemId));
+    dispatch(deletePackItem(itemId));
     setIsModalOpen(false);
   };
+ 
 
   const footerButtons = [
     {
