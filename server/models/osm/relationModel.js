@@ -12,35 +12,47 @@ const RelationSchema = new Schema(
     members: [
       {
         type: { type: String, enum: ["node", "way", "relation"] },
-        refId: { type: Schema.Types.ObjectId }, // This will store ObjectId of related Node, Way, or Relation
+        refId: { type: Schema.Types.ObjectId },
         role: String,
       },
     ],
     geoJSON: Object,
-    updated_at: Date,
+    updated_at: { type: Date, default: Date.now },
   },
   { timestamps: true }
 );
 
 RelationSchema.pre("save", async function (next) {
-  if (this.osm_type !== "relation") {
-    throw new Error("This is not a relation");
+  try {
+    if (this.osm_type !== "relation") {
+      console.error("This is not a relation");
+      throw new Error("This is not a relation");
+    }
+    next();
+  } catch (err) {
+    console.error(err);
+    next(err);
   }
-  next();
 });
 
 RelationSchema.method("toGeoJSON", async function () {
-  console.log("toGeoJSON instance in mongo schema", this);
-  return await toGeoJSON(this.constructor, this);
+  return await toGeoJSON(Relation, this);
 });
 
 RelationSchema.method("toJSON", async function () {
   const { _id, ...object } = this.toObject();
-  object.id = object.id.toString();
-  // Asynchronously populate the members (you may need to add your own logic to populate based on type)
-  for (let member of object.members) {
-    member.refId = await mongoose.model(member.type).findById(member.refId);
+  object.id = _id.toString();
+
+  try {
+    const memberPromises = object.members.map(async (member) => {
+      member.refId = await mongoose.model(member.type).findById(member.refId);
+    });
+
+    await Promise.all(memberPromises);
+  } catch (err) {
+    console.error(err);
   }
+
   return object;
 });
 

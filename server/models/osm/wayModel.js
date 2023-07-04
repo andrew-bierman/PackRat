@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 import { toGeoJSON } from "../../utils/osmFunctions/modelHandlers.js";
 import myDB from "../dbConnection.js";
-import autopopulate from "mongoose-autopopulate";
 
 const { Schema } = mongoose;
 
@@ -14,21 +13,18 @@ const WaySchema = new Schema(
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Node",
-        // autopopulate: true,
       },
     ],
     geoJSON: Object,
-    updated_at: Date,
+    updated_at: { type: Date, default: Date.now },
   },
   { timestamps: true }
 );
 
-// WaySchema.plugin(autopopulate);
-
 WaySchema.pre("save", async function (next) {
   try {
     if (this.osm_type !== "way") {
-      console.log(
+      console.error(
         'ERROR in WaySchema.pre("save"): this.osm_type !== "way"',
         this.osm_type
       );
@@ -36,35 +32,24 @@ WaySchema.pre("save", async function (next) {
     }
     next();
   } catch (err) {
+    console.error(err);
     next(err);
   }
 });
 
 WaySchema.pre("save", async function (next) {
   try {
-    // this.geoJSON = toGeoJSON(this.constructor, this); // use the exported toGeoJSON
-
-    this.geoJSON = await this.toGeoJSON(); // use the instance method toGeoJSON
-
+    this.geoJSON = await this.toGeoJSON();
     next();
   } catch (err) {
+    console.error(err);
     next(err);
   }
 });
 
 WaySchema.method("toGeoJSON", async function () {
-  // console.log("toGeoJSON instance in mongo schema", this);
-  return await toGeoJSON(this.constructor, this);
+  return await toGeoJSON(Way, this);
 });
-
-// add a to JSON method to the schema that populates the nodes
-// WaySchema.method("toJSON", async function () {
-//   console.log("toJSON instance in mongo schema", this)
-//   const { _id, ...object } = this.toObject();
-//   object.id = _id.toString();
-//   // object.nodes = await this.populate("nodes").execPopulate();
-//   return object;
-// });
 
 const Way = myDB.model("Way", WaySchema);
 
