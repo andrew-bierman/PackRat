@@ -45,6 +45,21 @@ const TotalWeightBox = ({ label, weight, unit }) => {
   );
 };
 
+const IgnoreItemCheckbox = ({ itemId, isChecked, handleCheckboxChange }) => (
+  <Box
+    style={{
+      justifyContent: "center",
+      alignItems: "center",
+    }}
+  >
+    <Checkbox
+      key={itemId}
+      isChecked={isChecked}
+      onChange={() => handleCheckboxChange(itemId)}
+    />
+  </Box>
+);
+
 const Loading = () => <Text>Loading....</Text>;
 
 const ErrorMessage = ({ message }) => <Text>{message}</Text>;
@@ -54,7 +69,11 @@ const TableItem = ({ itemData, checkedItems, handleCheckboxChange, index }) => {
   const dispatch = useDispatch();
 
   return (
-    <TableWrapper key={index} style={styles.row} flexArr={[2, 1, 1, 0.5, 0.5]}>
+    <TableWrapper
+      key={index}
+      style={styles.row}
+      flexArr={[2, 1, 1, 0.3, 0.3, 0.3, 0.3]}
+    >
       {[
         name,
         `${formatNumber(weight)} ${unit}`,
@@ -62,11 +81,10 @@ const TableItem = ({ itemData, checkedItems, handleCheckboxChange, index }) => {
         `${category.name}`,
         <EditPackItemModal packId={_id} initialData={itemData} />,
         <DeletePackItemModal itemId={_id} />,
-        <Checkbox
-          marginLeft="20"
-          key={_id}
-          isChecked={checkedItems.includes(_id)} // Check if the item's ID is in the list
-          onChange={() => handleCheckboxChange(_id)} // Pass the item's ID instead of its name
+        <IgnoreItemCheckbox
+          itemId={_id}
+          isChecked={checkedItems.includes(_id)}
+          handleCheckboxChange={handleCheckboxChange}
         />,
       ].map((cellData, cellIndex) => (
         <Cell key={cellIndex} data={cellData} />
@@ -127,9 +145,11 @@ export const TableContainer = ({ currentPack }) => {
 
   const handleCheckboxChange = (itemId) => {
     setCheckedItems((prev) =>
-      prev.includes(itemId) ? prev.filter((id) => id !== itemId) : [...prev, itemId]
+      prev.includes(itemId)
+        ? prev.filter((id) => id !== itemId)
+        : [...prev, itemId]
     );
-  }; 
+  };
 
   if (isLoading) return <Loading />;
   if (error) return <ErrorMessage message={error} />;
