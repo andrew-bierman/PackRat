@@ -4,7 +4,6 @@ import { Feather } from "@expo/vector-icons";
 import { Select, Checkbox, Box, Text } from "native-base";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteItem } from "../../store/itemsStore";
 import { convertWeight } from "../../utils/convertWeight";
 import { EditPackItemModal } from "./EditPackItemModal";
 import { ItemCategoryEnum } from "../../constants/itemCategory";
@@ -66,8 +65,8 @@ const TableItem = ({ itemData, checkedItems, handleCheckboxChange, index }) => {
         <Checkbox
           marginLeft="20"
           key={_id}
-          isChecked={checkedItems.includes(name)}
-          onChange={() => handleCheckboxChange(name)}
+          isChecked={checkedItems.includes(_id)} // Check if the item's ID is in the list
+          onChange={() => handleCheckboxChange(_id)} // Pass the item's ID instead of its name
         />,
       ].map((cellData, cellIndex) => (
         <Cell key={cellIndex} data={cellData} />
@@ -88,9 +87,10 @@ export const TableContainer = ({ currentPack }) => {
   let totalWaterWeight = 0;
   let totalBaseWeight = 0;
 
+  let waterItem;
   data &&
     data
-      .filter((item) => !checkedItems.includes(item.name))
+      .filter((item) => !checkedItems.includes(item._id))
       .forEach((item) => {
         switch (item.category.name) {
           case ItemCategoryEnum.ESSENTIALS: {
@@ -115,18 +115,21 @@ export const TableContainer = ({ currentPack }) => {
               item.unit,
               weightUnit
             );
+            waterItem = item;
             break;
           }
         }
       });
 
+  console.log("waterItem", waterItem);
+
   let totalWeight = totalBaseWeight + totalWaterWeight + totalFoodWeight;
 
-  const handleCheckboxChange = (item) => {
+  const handleCheckboxChange = (itemId) => {
     setCheckedItems((prev) =>
-      prev.includes(item) ? prev.filter((i) => i !== item) : [...prev, item]
+      prev.includes(itemId) ? prev.filter((id) => id !== itemId) : [...prev, itemId]
     );
-  };
+  }; 
 
   if (isLoading) return <Loading />;
   if (error) return <ErrorMessage message={error} />;
