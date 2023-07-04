@@ -9,6 +9,8 @@ import { convertWeight } from "../../utils/convertWeight";
 import { EditPackItemModal } from "./EditPackItemModal";
 import { ItemCategoryEnum } from "../../constants/itemCategory";
 import Water from "../Water";
+import { DeletePackItemModal } from "./DeletePackItemModal";
+import { formatNumber } from "../../utils/formatNumber";
 
 const WeightUnitDropdown = ({ value, onChange }) => {
   return (
@@ -39,7 +41,7 @@ const TotalWeightBox = ({ label, weight, unit }) => {
       }}
     >
       <Text>{label}</Text>
-      <Text>{`${weight} (${unit})`}</Text>
+      <Text>{`${formatNumber(weight)} (${unit})`}</Text>
     </Box>
   );
 };
@@ -56,17 +58,11 @@ const TableItem = ({ itemData, checkedItems, handleCheckboxChange, index }) => {
     <TableWrapper key={index} style={styles.row} flexArr={[2, 1, 1, 0.5, 0.5]}>
       {[
         name,
-        `${weight} ${unit}`,
+        `${formatNumber(weight)} ${unit}`,
         quantity,
         `${category.name}`,
         <EditPackItemModal packId={_id} initialData={itemData} />,
-        <Feather
-          name="x-circle"
-          size={20}
-          color="black"
-          onPress={() => dispatch(deleteItem(_id))}
-          style={{ alignSelf: "center" }}
-        />,
+        <DeletePackItemModal itemId={_id} />,
         <Checkbox
           marginLeft="20"
           key={_id}
@@ -170,9 +166,21 @@ export const TableContainer = ({ currentPack }) => {
             ))}
           </Table>
           <Water currentPack={currentPack} />
-          <TotalWeightBox label="Base Weight" weight={totalBaseWeight} unit={weightUnit} />
-          <TotalWeightBox label="Water + Food Weight " weight={totalWaterWeight + totalFoodWeight} unit={weightUnit} />
-          <TotalWeightBox label="Total Weight" weight={totalWeight} unit={weightUnit} />
+          <TotalWeightBox
+            label="Base Weight"
+            weight={totalBaseWeight}
+            unit={weightUnit}
+          />
+          <TotalWeightBox
+            label="Water + Food Weight"
+            weight={totalWaterWeight + totalFoodWeight}
+            unit={weightUnit}
+          />
+          <TotalWeightBox
+            label="Total Weight"
+            weight={totalWeight}
+            unit={weightUnit}
+          />
         </>
       ) : (
         <Text>Add your First Item</Text>
@@ -180,7 +188,6 @@ export const TableContainer = ({ currentPack }) => {
     </Box>
   );
 };
-
 
 // Styles
 const styles = StyleSheet.create({
