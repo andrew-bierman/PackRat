@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 import { Table, Row, Cell, TableWrapper } from "react-native-table-component";
 import { Feather } from "@expo/vector-icons";
-import { Select, Checkbox, Box, Text, HStack } from "native-base";
+import { Select, Checkbox, Box, Text, HStack, Button } from "native-base";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { convertWeight } from "../../utils/convertWeight";
@@ -107,9 +107,7 @@ const CategoryRow = ({ category }) => {
   };
 
   const rowData = [
-    <HStack
-      style={styles.categoryRow}
-    >
+    <HStack style={styles.categoryRow}>
       <Feather name={categoryIcons[category]} size={16} color="white" />
       <Text style={styles.titleText}> {category}</Text>
     </HStack>,
@@ -145,6 +143,7 @@ export const TableContainer = ({ currentPack }) => {
   let totalBaseWeight = 0;
 
   let waterItem;
+  let foodItems = [];
   data &&
     data
       .filter((item) => !checkedItems.includes(item._id))
@@ -164,6 +163,7 @@ export const TableContainer = ({ currentPack }) => {
               item.unit,
               weightUnit
             );
+            foodItems.push(item);
             break;
           }
           case ItemCategoryEnum.WATER: {
@@ -243,7 +243,8 @@ export const TableContainer = ({ currentPack }) => {
               </>
             ))}
           </Table>
-          <Water currentPack={currentPack} />
+          {!foodItems.length && <Button>Add Food Item</Button>}
+          {!waterItem && <Water currentPack={currentPack} />}
           <TotalWeightBox
             label="Base Weight"
             weight={totalBaseWeight}
