@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import {
   View,
   StyleSheet,
@@ -32,70 +32,75 @@ const Navigation = () => {
     Dimensions.get("window").width < 768
   );
 
+  const [navBarWidth, setNavBarWidth] = useState(null);
+
   const toggleDrawer = () => {
     setIsDrawerOpen(!isDrawerOpen);
   };
-  const navigationItems = [
-    {
-      href: "/",
-      icon: "home",
-      text: "Home",
-      iconSource: Entypo,
-    },
-    ...(user
+  const navigationItems = useMemo(
+    () => [
+      {
+        href: "/",
+        icon: "home",
+        text: "Home",
+        iconSource: Entypo,
+      },
+      ...(user
         ? [
-          {
-            href: "/feed",
-            icon: "newspaper-variant",
-            text: "Feed",
-            iconSource: MaterialCommunityIcons,
-          },
-          {
-            href: "/trips",
-            icon: "routes",
-            text: "Trips",
-            iconSource: MaterialCommunityIcons,
-          },
-          {
-            href: "/packs",
-            icon: "backpack",
-            text: "Packs",
-            iconSource: MaterialIcons,
-          },
-          {
-            href: "/about",
-            icon: "info",
-            text: "About",
-            iconSource: MaterialIcons,
-          },
-          {
-            href: "profile",
-            icon: "book",
-            text: "Profile",
-            iconSource: FontAwesome,
-          },
-          {
-            href: "logout",
-            icon: "logout",
-            text: "Logout",
-            iconSource: MaterialIcons,
-          },
-        ]
-      : [
             {
-                href: "sign-in",
-                icon: "login",
-                text: "Login",
-                iconSource: MaterialIcons,
+              href: "/feed",
+              icon: "newspaper-variant",
+              text: "Feed",
+              iconSource: MaterialCommunityIcons,
             },
             {
-                href: "register",
-                icon: "person-add",
-                text: "Register",
-                iconSource: MaterialIcons,
+              href: "/trips",
+              icon: "routes",
+              text: "Trips",
+              iconSource: MaterialCommunityIcons,
             },
-      ]),
-  ];
+            {
+              href: "/packs",
+              icon: "backpack",
+              text: "Packs",
+              iconSource: MaterialIcons,
+            },
+            {
+              href: "/about",
+              icon: "info",
+              text: "About",
+              iconSource: MaterialIcons,
+            },
+            {
+              href: "profile",
+              icon: "book",
+              text: "Profile",
+              iconSource: FontAwesome,
+            },
+            {
+              href: "logout",
+              icon: "logout",
+              text: "Logout",
+              iconSource: MaterialIcons,
+            },
+          ]
+        : [
+            {
+              href: "sign-in",
+              icon: "login",
+              text: "Login",
+              iconSource: MaterialIcons,
+            },
+            {
+              href: "register",
+              icon: "person-add",
+              text: "Register",
+              iconSource: MaterialIcons,
+            },
+          ]),
+    ],
+    [user]
+  );
 
   const navigateTo = (href) => {
     // Implement navigation logic here
@@ -109,41 +114,48 @@ const Navigation = () => {
 
   useEffect(() => {
     const handleScreenResize = () => {
-      setIsMobileView(Dimensions.get("window").width < 768);
+      setIsMobileView(Dimensions.get("window").width < navBarWidth);
     };
 
     Dimensions.addEventListener("change", handleScreenResize);
     return () => {
       Dimensions.removeEventListener("change", handleScreenResize);
     };
-  }, []);
+  }, [navBarWidth]);
 
-  const renderNavigationItem = (item) => {
-    const { icon, iconSource, text, href } = item;
-    const IconComponent = iconSource || EvilIcons;
+  const renderNavigationItem = useCallback(
+    (item) => {
+      const { icon, iconSource, text, href } = item;
+      const IconComponent = iconSource || EvilIcons;
 
-    if ((href === "profile" || href === "logout") && !user) {
-      return null; // Do not render the item if the user is not signed in
-    }
+      if ((href === "profile" || href === "logout") && !user) {
+        return null; // Do not render the item if the user is not signed in
+      }
 
-    return (
-      <TouchableOpacity
-        key={item.href}
-        style={styles.menuBarItem}
-        onPress={() => navigateTo(item.href)}
-      >
-        <IconComponent
-          name={icon}
-          size={isMobileView ? 24 : 18}
-          color={theme.colors.iconColor}
-        />
-        <Text style={styles.menuBarItemText}>{text}</Text>
-      </TouchableOpacity>
-    );
-  };
+      return (
+        <TouchableOpacity
+          key={item.href}
+          style={styles.menuBarItem}
+          onPress={() => navigateTo(item.href)}
+        >
+          <IconComponent
+            name={icon}
+            size={isMobileView ? 24 : 18}
+            color={theme.colors.iconColor}
+            key={item.href + "icon"}
+          />
+          <Text style={styles.menuBarItemText}>{text}</Text>
+        </TouchableOpacity>
+      );
+    },
+    [user, navigateTo, isMobileView] // add any other dependencies that this function uses
+  );
 
   return (
-    <View style={styles.container}>
+    <View
+      style={styles.container}
+      onLayout={(event) => setNavBarWidth(event.nativeEvent.layout.width)} // calculate the width of the navbar
+    >
       {user && <AuthStateListener />}
       <View style={styles.header}>
         <View style={styles.logoContainer}>
@@ -229,6 +241,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: 16,
     height: 60,
+    flexWrap: "wrap",
   },
   menuBarItem: {
     flexDirection: "row",
