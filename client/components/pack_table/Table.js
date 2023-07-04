@@ -273,7 +273,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
-    backgroundColor: "#F8F8F8",
     width: "100%",
   },
   tableStyle: {
@@ -287,7 +286,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   categoryRow: {
-    backgroundColor: theme.colors.primary,
     padding: 10,
     borderRadius: 5,
     alignItems: "center",
@@ -306,7 +304,6 @@ const styles = StyleSheet.create({
   },
   head: {
     height: 50,
-    backgroundColor: "#F3F4F6",
     borderBottomWidth: 1,
     borderBottomColor: "#D1D5DB",
     borderTopLeftRadius: 10,
