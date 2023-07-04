@@ -56,17 +56,15 @@ export const addItem = async (req, res) => {
           name: ItemCategoryEnum.WATER,
         });
 
-        const existingWaterItems = await Item.find({ category: category._id, packs: packId });
+        let existingWaterItem = await Item.findOne({
+          category: category._id,
+          packs: packId,
+        });
 
-        if (existingWaterItems && existingWaterItems.length > 0) {
-          existingWaterItems[0].weight += Number(weight);  // Ensure weight is treated as a number
-          await existingWaterItems[0].save();
-
-          for (let i = 1; i < existingWaterItems.length; i++) {
-            await Item.findByIdAndDelete(existingWaterItems[i]._id);
-          }
-
-          newItem = existingWaterItems[0];
+        if (existingWaterItem) {
+          existingWaterItem.weight += Number(weight); // Ensure weight is treated as a number
+          await existingWaterItem.save();
+          newItem = existingWaterItem;
         } else {
           newItem = await Item.create({
             name,
@@ -100,7 +98,7 @@ export const addItem = async (req, res) => {
 
     await Pack.updateOne(
       { _id: packId },
-      { $push: { items: newItem._id } }
+      { $addToSet: { items: newItem._id } }
     );
 
     const updatedItem = await Item.findByIdAndUpdate(
@@ -123,8 +121,6 @@ export const addItem = async (req, res) => {
   }
 };
 
-
-
 export const editItem = async (req, res) => {
   try {
     const { _id } = req.body;
@@ -143,10 +139,11 @@ export const deleteItem = async (req, res) => {
   try {
     const { itemId } = req.body;
 
-    await Item.findOneAndDelete({ _id: itemId });
+    const deletedItem = await Item.findByIdAndDelete({ _id: itemId });
 
-    res.status(200).json({ msg: "Item was deleted successfully" });
+    res.status(200).json(deletedItem);
   } catch (error) {
+    console.error(error);
     res.status(404).json({ msg: "Unable to delete item" });
   }
 };
