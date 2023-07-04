@@ -136,7 +136,10 @@ const packsSlice = createSlice({
       .addCase(addPackItem.fulfilled, (state, action) => {
         const existingPack = state.entities[action.payload.packId];
         if (existingPack) {
-          existingPack.items.push(action.payload.newItem);
+          packsAdapter.updateOne(state, {
+            id: action.payload.packId,
+            changes: { items: [...existingPack.items, action.payload.newItem] },
+          });
         }
         state.isLoading = false;
         state.error = null;
@@ -195,13 +198,13 @@ const packsSlice = createSlice({
             return;
           }
 
-          const updatedItems = existingPack.items.filter(
-            (item) => item._id !== deletedItem._id
-          );
-
           packsAdapter.updateOne(state, {
             id: packId,
-            changes: { items: updatedItems },
+            changes: {
+              items: existingPack.items.filter(
+                (item) => item._id !== deletedItem._id
+              ),
+            },
           });
         });
         state.isLoading = false;
