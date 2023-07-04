@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 import { Table, Row, Cell, TableWrapper } from "react-native-table-component";
 import { Feather } from "@expo/vector-icons";
-import { Select, Checkbox, Box, Text } from "native-base";
+import { Select, Checkbox, Box, Text, HStack } from "native-base";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { convertWeight } from "../../utils/convertWeight";
@@ -92,6 +92,46 @@ const TableItem = ({
   return <Row data={rowData} style={styles.row} flexArr={flexArr} />;
 };
 
+const CategoryRow = ({ category }) => {
+  const categoryIcons = {
+    [ItemCategoryEnum.ESSENTIALS]: "check-square",
+    [ItemCategoryEnum.FOOD]: "coffee",
+    [ItemCategoryEnum.WATER]: "droplet",
+    [ItemCategoryEnum.CLOTHING]: "tshirt",
+    [ItemCategoryEnum.SHELTER]: "home",
+    [ItemCategoryEnum.SLEEPING]: "moon",
+    [ItemCategoryEnum.HYGIENE]: "smile",
+    [ItemCategoryEnum.TOOLS]: "tool",
+    [ItemCategoryEnum.MEDICAL]: "heart",
+    [ItemCategoryEnum.OTHER]: "more-horizontal",
+  };
+
+  const rowData = [
+    <HStack
+      style={styles.categoryRow}
+    >
+      <Feather name={categoryIcons[category]} size={16} color="white" />
+      <Text style={styles.titleText}> {category}</Text>
+    </HStack>,
+  ];
+
+  return (
+    <Row data={rowData} style={[styles.title]} textStyle={styles.titleText} />
+  );
+};
+
+const TitleRow = ({ title }) => {
+  const rowData = [
+    <HStack style={styles.mainTitle}>
+      <Text style={styles.titleText}>{title}</Text>
+    </HStack>,
+  ];
+
+  return (
+    <Row data={rowData} style={[styles.title]} textStyle={styles.titleText} />
+  );
+};
+
 export const TableContainer = ({ currentPack }) => {
   const [weightUnit, setWeightUnit] = useState("g");
   const [checkedItems, setCheckedItems] = useState([]);
@@ -171,11 +211,7 @@ export const TableContainer = ({ currentPack }) => {
             borderStyle={{ borderColor: "transparent" }}
             flexArr={flexArr}
           >
-            <Row
-              data={["Pack List"]}
-              style={styles.title}
-              textStyle={styles.titleText}
-            />
+            <TitleRow title="Pack List" />
             <Row
               flexArr={flexArr}
               data={[
@@ -193,9 +229,7 @@ export const TableContainer = ({ currentPack }) => {
             />
             {Object.entries(groupedData).map(([category, items]) => (
               <>
-                <Row data={[`${category}`]} style={styles.title} 
-                textStyle={styles.titleText}
-                />
+                <CategoryRow category={category} />
                 {items.map((item, index) => (
                   <TableItem
                     key={index}
@@ -244,6 +278,19 @@ const styles = StyleSheet.create({
   tableStyle: {
     width: "100%",
     marginVertical: 20,
+  },
+  mainTitle: {
+    marginTop: 10,
+    marginBottom: 10,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  categoryRow: {
+    backgroundColor: theme.colors.primary,
+    padding: 10,
+    borderRadius: 5,
+    alignItems: "center",
+    justifyContent: "flex-start",
   },
   title: {
     height: 50,
