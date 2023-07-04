@@ -1,8 +1,8 @@
 import { StyleSheet } from "react-native";
-import { Table, TableWrapper, Row, Cell } from "react-native-table-component";
+import { Table, Row, Cell, TableWrapper } from "react-native-table-component";
 import { Feather } from "@expo/vector-icons";
 import { Select, Checkbox, Box, Text } from "native-base";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteItem } from "../../store/itemsStore";
 import { convertWeight } from "../../utils/convertWeight";
@@ -44,17 +44,49 @@ const TotalWeightBox = ({ label, weight, unit }) => {
   );
 };
 
+const Loading = () => <Text>Loading....</Text>;
+
+const ErrorMessage = ({ message }) => <Text>{message}</Text>;
+
+const TableItem = ({ itemData, checkedItems, handleCheckboxChange, index }) => {
+  const { name, weight, category, quantity, unit, _id } = itemData;
+  const dispatch = useDispatch();
+
+  return (
+    <TableWrapper key={index} style={styles.row} flexArr={[2, 1, 1, 0.5, 0.5]}>
+      {[
+        name,
+        `${weight} ${unit}`,
+        quantity,
+        `${category.name}`,
+        <EditPackItemModal packId={_id} initialData={itemData} />,
+        <Feather
+          name="x-circle"
+          size={20}
+          color="black"
+          onPress={() => dispatch(deleteItem(_id))}
+          style={{ alignSelf: "center" }}
+        />,
+        <Checkbox
+          marginLeft="20"
+          key={_id}
+          isChecked={checkedItems.includes(name)}
+          onChange={() => handleCheckboxChange(name)}
+        />,
+      ].map((cellData, cellIndex) => (
+        <Cell key={cellIndex} data={cellData} />
+      ))}
+    </TableWrapper>
+  );
+};
+
 export const TableContainer = ({ currentPack }) => {
   const [weightUnit, setWeightUnit] = useState("g");
   const [checkedItems, setCheckedItems] = useState([]);
-
-  const data = currentPack?.items;
-
   const isLoading = useSelector((state) => state.items.isLoading);
   const error = useSelector((state) => state.items.error);
-  const isError = error !== null;
 
-  const dispatch = useDispatch();
+  const data = currentPack?.items;
 
   let totalFoodWeight = 0;
   let totalWaterWeight = 0;
@@ -95,86 +127,60 @@ export const TableContainer = ({ currentPack }) => {
   let totalWeight = totalBaseWeight + totalWaterWeight + totalFoodWeight;
 
   const handleCheckboxChange = (item) => {
-    if (checkedItems.includes(item)) {
-      setCheckedItems((prevCheckedItems) =>
-        prevCheckedItems.filter((checkedItem) => checkedItem !== item)
-      );
-    } else {
-      setCheckedItems((prevCheckedItems) => [...prevCheckedItems, item]);
-    }
+    setCheckedItems((prev) =>
+      prev.includes(item) ? prev.filter((i) => i !== item) : [...prev, item]
+    );
   };
 
-  const tableData = data?.map(
-    ({ name, weight, category, quantity, unit, _id }, index) => [
-      name,
-      `${weight} ${unit}`,
-      quantity,
-      `${category.name}`,
-      <EditPackItemModal packId={_id} initialData={data[index]} />,
-      <Feather
-        name="x-circle"
-        size={20}
-        color="black"
-        onPress={() => dispatch(deleteItem(_id))}
-        style={{ alignSelf: "center" }}
-      />,
-      <Checkbox
-        marginLeft="20"
-        key={_id}
-        isChecked={checkedItems.includes(name)}
-        onChange={() => handleCheckboxChange(name)}
-      />,
-    ]
-  );
-
-  if (isLoading) return <Text>Loading....</Text>;
+  if (isLoading) return <Loading />;
+  if (error) return <ErrorMessage message={error} />;
 
   return (
     <Box style={styles.container}>
       <WeightUnitDropdown value={weightUnit} onChange={setWeightUnit} />
-      {tableData && tableData.length > 0 ? (
-        <Table
-          style={styles.tableStyle}
-          borderStyle={{ borderColor: "transparent" }}
-        >
-          <Row data={["Pack List"]} style={styles.title} />
-          <Row
-            data={[
-              "Item Name",
-              `Weight`,
-              "Quantity",
-              "Category",
-              "Edit",
-              "Delete",
-              "Ignore",
-            ].map((header, index) => (
-              <Cell key={index} data={header} />
-            ))}
-            style={styles.head}
-          />
-          {tableData.map((rowData, index) => (
-            <TableWrapper key={index} style={styles.row} flexArr={[2, 1, 1, 0.5, 0.5]}>
-              {rowData.map((cellData, cellIndex) => (
-                <Cell key={cellIndex} data={cellData} />
-              ))}
-            </TableWrapper>
-          ))}
-        </Table>
-      ) : (
-        <Text>Add your First Item</Text>
-      )}
-      <Water currentPack={currentPack} />
-      {tableData && tableData.length > 0 && (
+      {data?.length ? (
         <>
+          <Table
+            style={styles.tableStyle}
+            borderStyle={{ borderColor: "transparent" }}
+          >
+            <Row data={["Pack List"]} style={styles.title} />
+            <Row
+              data={[
+                "Item Name",
+                `Weight`,
+                "Quantity",
+                "Category",
+                "Edit",
+                "Delete",
+                "Ignore",
+              ].map((header, index) => (
+                <Cell key={index} data={header} />
+              ))}
+              style={styles.head}
+            />
+            {data.map((item, index) => (
+              <TableItem
+                key={index}
+                itemData={item}
+                checkedItems={checkedItems}
+                handleCheckboxChange={handleCheckboxChange}
+                index={index}
+              />
+            ))}
+          </Table>
+          <Water currentPack={currentPack} />
           <TotalWeightBox label="Base Weight" weight={totalBaseWeight} unit={weightUnit} />
           <TotalWeightBox label="Water + Food Weight " weight={totalWaterWeight + totalFoodWeight} unit={weightUnit} />
           <TotalWeightBox label="Total Weight" weight={totalWeight} unit={weightUnit} />
         </>
+      ) : (
+        <Text>Add your First Item</Text>
       )}
-      {isError ? <Text>{error}</Text> : null}
     </Box>
   );
 };
+
 
 // Styles
 const styles = StyleSheet.create({
