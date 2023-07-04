@@ -50,7 +50,7 @@ const IgnoreItemCheckbox = ({ itemId, isChecked, handleCheckboxChange }) => (
   <Box
     style={{
       justifyContent: "center",
-      alignItems: "center",
+      alignItems: "flex-start",
     }}
   >
     <Checkbox
@@ -171,7 +171,11 @@ export const TableContainer = ({ currentPack }) => {
             borderStyle={{ borderColor: "transparent" }}
             flexArr={flexArr}
           >
-            <Row data={["Pack List"]} style={styles.title} />
+            <Row
+              data={["Pack List"]}
+              style={styles.title}
+              textStyle={styles.titleText}
+            />
             <Row
               flexArr={flexArr}
               data={[
@@ -183,13 +187,15 @@ export const TableContainer = ({ currentPack }) => {
                 "Delete",
                 "Ignore",
               ].map((header, index) => (
-                <Cell key={index} data={header} />
+                <Cell key={index} data={header} textStyle={styles.headerText} />
               ))}
               style={styles.head}
             />
             {Object.entries(groupedData).map(([category, items]) => (
               <>
-                <Row data={[`${category}`]} style={styles.title} />
+                <Row data={[`${category}`]} style={styles.title} 
+                textStyle={styles.titleText}
+                />
                 {items.map((item, index) => (
                   <TableItem
                     key={index}
@@ -221,7 +227,7 @@ export const TableContainer = ({ currentPack }) => {
           />
         </>
       ) : (
-        <Text>Add your First Item</Text>
+        <Text style={styles.noItemsText}>Add your First Item</Text>
       )}
     </Box>
   );
@@ -245,6 +251,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: "center",
     paddingLeft: 15,
+  },
+  titleText: {
     fontWeight: "bold",
     color: "#FFFFFF",
   },
@@ -260,10 +268,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#000000",
   },
-  cellText: {
-    fontWeight: "normal",
-    color: "#000000",
-  },
   row: {
     flexDirection: "row",
     height: 60,
@@ -277,6 +281,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     padding: 25,
     backgroundColor: "#F8F8F8",
+  },
+  noItemsText: {
+    fontWeight: "bold",
+    fontSize: 16,
+    marginTop: 20,
+    textAlign: "center",
   },
 });
 
