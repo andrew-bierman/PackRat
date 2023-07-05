@@ -23,16 +23,13 @@ const HeroSection = ({ onSelect }) => {
   console.log("currentDestination", currentDestination);
 
   const handleSearchSelect = (selectedResult) => {
-    // console.log("-_-DASHBOARD Selected Result: ", selectedResult);
-    // const osm_id = selectedResult.properties.osm_id;
-
     dispatch(processGeoJSON(selectedResult));
-    
-    // if(currentDestination){
-      router.push(`/destination/${currentDestination._id}`);
-    // }
 
-    // router.push("/destination/" + osm_id);
+    if (currentDestination && currentDestination._id) {
+      router.push(`/destination/${currentDestination._id}`);
+    } else {
+      console.log("Current destination or _id is null or undefined");
+    }
   };
 
   const user = useSelector((state) => state.auth?.user);
@@ -42,7 +39,10 @@ const HeroSection = ({ onSelect }) => {
 
   const cardBackgroundColor = hexToRGBA(theme.colors.secondaryBlue, 0.5);
 
-  const bannerText = firstNameOrUser !== "User" ? `Let's find a new trail, ${firstNameOrUser}` : "Let's find a new trail";
+  const bannerText =
+    firstNameOrUser !== "User"
+      ? `Let's find a new trail, ${firstNameOrUser}`
+      : "Let's find a new trail";
 
   // console.log("cardBackgroundColor", cardBackgroundColor)
 
@@ -74,10 +74,11 @@ const HeroSection = ({ onSelect }) => {
               justifyContent: "center",
             }}
           >
-            <Text style={styles.title}>
-              {bannerText}
-            </Text>
-            <SearchInput onSelect={handleSearchSelect} placeholder={"Search by park, city, or trail"}/>
+            <Text style={styles.title}>{bannerText}</Text>
+            <SearchInput
+              onSelect={handleSearchSelect}
+              placeholder={"Search by park, city, or trail"}
+            />
           </VStack>
         </LargeCard>
       </Hero>
