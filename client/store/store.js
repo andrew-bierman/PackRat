@@ -19,6 +19,7 @@ import singleTripReducer from "./singleTripStore";
 import tripsReducer from "./tripsStore";
 import gpxReducer from "./gpxStore";
 import destinationReducer from "./destinationStore";
+import chatReducer from "./chatStore";
 
 // combine reducers
 const rootReducer = combineReducers({
@@ -37,6 +38,7 @@ const rootReducer = combineReducers({
   feed: feedReducer,
   gpx: gpxReducer,
   destination: destinationReducer,
+  chat: chatReducer,
 });
 
 // configure persist store and whitelist reducers
