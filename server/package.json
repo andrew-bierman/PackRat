@@ -38,6 +38,7 @@
     "nodemailer-smtp-transport": "^2.7.4",
     "nodemon": "^2.0.21",
     "npm": "^9.6.3",
+    "openai": "^3.3.0",
     "osmtogeojson": "^3.0.0-beta.5",
     "passport": "^0.6.0",
     "passport-google-oauth20": "^2.0.0",
