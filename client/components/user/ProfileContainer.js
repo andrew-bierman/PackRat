@@ -7,7 +7,7 @@ import {
   Stack,
   VStack,
 } from "native-base";
-import { StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 import UserDataContainer from "./UserDataContainer";
 import { useAuth } from "../../auth/provider";
 import { theme } from "../../theme";
@@ -37,7 +37,12 @@ export default function ProfileContainer() {
   if (isLoading) return <Text>Loading...</Text>;
 
   return (
-    <VStack style={styles.mainContainer}>
+    <VStack
+      style={[
+        styles.mainContainer,
+        Platform.OS == "web" ? { minHeight: "100vh" } : null,
+      ]}
+    >
       <Box w={["100%", "100%", "70%", "50%"]} style={styles.infoSection}>
         <Box style={styles.cardInfo}>
           <Text>{user?.name}</Text>
@@ -79,7 +84,11 @@ export default function ProfileContainer() {
       {isLoading ? (
         <Text>Loading....</Text>
       ) : (
-        <Box style={{ width: "100%", height: '100%' }} space={4} alignItems="center">
+        <Box
+          style={{ width: "100%", height: "100%" }}
+          space={4}
+          alignItems="center"
+        >
           <UserDataContainer data={packsData} type="packs" />
           <UserDataContainer data={tripsData?.trips} type="trips" />
         </Box>
@@ -92,7 +101,6 @@ const styles = StyleSheet.create({
   mainContainer: {
     backgroundColor: theme.colors.background,
     gap: 35,
-    minHeight: "100vh",
     width: "100%",
     alignItems: "center",
     padding: 25,

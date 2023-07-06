@@ -24,7 +24,7 @@ export default function Index() {
 
   console.log("reduxState", reduxState);
   return (
-    <ScrollView>
+    <>
       {Platform.OS === "web" ? (
         <Header.Screen
           options={{
@@ -36,7 +36,7 @@ export default function Index() {
       <Box style={styles.mutualStyles}>
         {!user ? <LandingPage /> : <Dashboard />}
       </Box>
-    </ScrollView>
+    </>
   );
 }
 
