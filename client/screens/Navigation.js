@@ -5,6 +5,7 @@ import {
   Text,
   TouchableOpacity,
   Dimensions,
+  ScrollView,
   Modal,
 } from "react-native";
 import { AuthStateListener } from "../../client/auth/AuthStateListener";
@@ -29,7 +30,7 @@ const Navigation = () => {
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isMobileView, setIsMobileView] = useState(
-    Dimensions.get("window").width < 768
+    Dimensions.get("window").width < 1024
   );
 
   const [navBarWidth, setNavBarWidth] = useState(null);
@@ -102,7 +103,7 @@ const Navigation = () => {
     [user]
   );
 
-  const navigateTo = (href) => {
+  const navigateTo = useCallback((href) => {
     // Implement navigation logic here
     if (href === "logout") {
       dispatch(signOut());
@@ -110,18 +111,19 @@ const Navigation = () => {
       setIsDrawerOpen(false);
       router.push(href);
     }
-  };
+  }, [dispatch, router]);
+
 
   useEffect(() => {
     const handleScreenResize = () => {
-      setIsMobileView(Dimensions.get("window").width < navBarWidth);
+      setIsMobileView(Dimensions.get("window").width < 1024);
     };
 
     Dimensions.addEventListener("change", handleScreenResize);
     return () => {
       Dimensions.removeEventListener("change", handleScreenResize);
     };
-  }, [navBarWidth]);
+  }, []);
 
   const renderNavigationItem = useCallback(
     (item) => {
@@ -148,7 +150,7 @@ const Navigation = () => {
         </TouchableOpacity>
       );
     },
-    [user, navigateTo, isMobileView] // add any other dependencies that this function uses
+    [user] // add any other dependencies that this function uses
   );
 
   return (
@@ -199,9 +201,13 @@ const Navigation = () => {
             />
           </Modal>
         ) : (
-          <View style={styles.menuBar}>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.menuBar}
+          >
             {navigationItems.map((item) => renderNavigationItem(item))}
-          </View>
+          </ScrollView>
         )}
       </View>
     </View>
@@ -238,10 +244,10 @@ const styles = StyleSheet.create({
   menuBar: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "flex-end",
     paddingHorizontal: 16,
     height: 60,
-    flexWrap: "wrap",
+    width: "100%",
   },
   menuBarItem: {
     flexDirection: "row",
