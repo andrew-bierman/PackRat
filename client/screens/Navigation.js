@@ -158,7 +158,10 @@ const Navigation = () => {
     >
       {user && <AuthStateListener />}
       <View style={styles.header}>
-        <View style={styles.logoContainer}>
+        <TouchableOpacity
+          style={styles.logoContainer}
+          onPress={() => navigateTo("/")}
+        >
           <View style={styles.logoWrapper}>
             <SVGLogoComponent
               width={isMobileView ? 48 : 64}
@@ -167,7 +170,7 @@ const Navigation = () => {
             />
           </View>
           <Text style={styles.logoText}>PackRat</Text>
-        </View>
+        </TouchableOpacity>
 
         {/* Trigger to open/close the drawer */}
         <View style={styles.drawerContainer}>
