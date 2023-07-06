@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Dimensions,
   Modal,
+  PixelRatio
 } from "react-native";
 import { AuthStateListener } from "../../client/auth/AuthStateListener";
 import { theme } from "../theme";
@@ -47,57 +48,57 @@ const Navigation = () => {
       },
       ...(user
         ? [
-            {
-              href: "/feed",
-              icon: "newspaper-variant",
-              text: "Feed",
-              iconSource: MaterialCommunityIcons,
-            },
-            {
-              href: "/trips",
-              icon: "routes",
-              text: "Trips",
-              iconSource: MaterialCommunityIcons,
-            },
-            {
-              href: "/packs",
-              icon: "backpack",
-              text: "Packs",
-              iconSource: MaterialIcons,
-            },
-            {
-              href: "/about",
-              icon: "info",
-              text: "About",
-              iconSource: MaterialIcons,
-            },
-            {
-              href: "profile",
-              icon: "book",
-              text: "Profile",
-              iconSource: FontAwesome,
-            },
-            {
-              href: "logout",
-              icon: "logout",
-              text: "Logout",
-              iconSource: MaterialIcons,
-            },
-          ]
+          {
+            href: "/feed",
+            icon: "newspaper-variant",
+            text: "Feed",
+            iconSource: MaterialCommunityIcons,
+          },
+          {
+            href: "/trips",
+            icon: "routes",
+            text: "Trips",
+            iconSource: MaterialCommunityIcons,
+          },
+          {
+            href: "/packs",
+            icon: "backpack",
+            text: "Packs",
+            iconSource: MaterialIcons,
+          },
+          {
+            href: "/about",
+            icon: "info",
+            text: "About",
+            iconSource: MaterialIcons,
+          },
+          {
+            href: "profile",
+            icon: "book",
+            text: "Profile",
+            iconSource: FontAwesome,
+          },
+          {
+            href: "logout",
+            icon: "logout",
+            text: "Logout",
+            iconSource: MaterialIcons,
+          },
+        ]
         : [
-            {
-              href: "sign-in",
-              icon: "login",
-              text: "Login",
-              iconSource: MaterialIcons,
-            },
-            {
-              href: "register",
-              icon: "person-add",
-              text: "Register",
-              iconSource: MaterialIcons,
-            },
-          ]),
+          {
+            href: "sign-in",
+            icon: "login",
+            text: "Login",
+            iconSource: MaterialIcons,
+          },
+          {
+            href: "register",
+            icon: "person-add",
+            text: "Register",
+            iconSource: MaterialIcons,
+          },
+        ]),
     ],
     [user]
   );
@@ -114,14 +115,29 @@ const Navigation = () => {
 
   useEffect(() => {
     const handleScreenResize = () => {
-      setIsMobileView(Dimensions.get("window").width < navBarWidth);
+      const screenWidth = Dimensions.get("window").width;
+      const screenDensity = PixelRatio.get();
+
+      // Calculate the physical screen width in points (1 point = 1/72 of an inch)
+      const physicalScreenWidth = screenWidth / screenDensity;
+
+      // Define the threshold for mobile view based on inches or points
+      const mobileThresholdInches = 7; // Adjust this value as needed
+
+      // Convert inches to points
+      const mobileThresholdPoints = mobileThresholdInches * 72;
+
+      setIsMobileView(physicalScreenWidth < mobileThresholdPoints);
     };
 
+    console.log("mobile", isMobileView);
+
     Dimensions.addEventListener("change", handleScreenResize);
+
     return () => {
       Dimensions.removeEventListener("change", handleScreenResize);
     };
-  }, [navBarWidth]);
+  }, []);
 
   const renderNavigationItem = useCallback(
     (item) => {
@@ -195,7 +211,7 @@ const Navigation = () => {
           >
             <Drawer
               toggleDrawer={toggleDrawer}
-              handleSignOut={() => {}}
+              handleSignOut={() => { }}
               navigationItems={navigationItems}
               navigateTo={navigateTo}
               renderNavigationItem={renderNavigationItem}
