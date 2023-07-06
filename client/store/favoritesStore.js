@@ -38,7 +38,7 @@ const favoritesSlice = createSlice({
       })
       .addCase(addFavorite.fulfilled, (state, action) => {
         favoriteAdapter.addOne(state.favorites, action.payload);
-        state.favorites.push(action.payload);
+        // state.favorites.push(action.payload);
         state.isLoading = false;
         state.error = null;
       })

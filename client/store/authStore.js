@@ -93,6 +93,7 @@ export const authSlice = createSlice({
         state.error = null;
       })
       .addCase(signUp.fulfilled, (state, action) => {
+        authAdapter.setAll(state.user, action.payload);
         state.user = action.payload;
         state.loading = false;
         state.error = null;
@@ -107,7 +108,6 @@ export const authSlice = createSlice({
         state.error = null;
       })
       .addCase(signIn.fulfilled, (state, action) => {
-        // console.log("userinfo", action.payload);
         authAdapter.setAll(state.user, action.payload);
         state.user = action.payload;
         state.loading = false;
