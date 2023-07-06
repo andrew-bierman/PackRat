@@ -21,7 +21,8 @@ import SVGLogoComponent from "../components/logo";
 import { useSelector, useDispatch } from "react-redux";
 import { signOut } from "../store/authStore";
 import Drawer from "./Drawer";
-import { Link, useRouter } from "expo-router";
+import { Link, useRouter, usePathname } from "expo-router";
+import { hexToRGBA } from "../utils/colorFunctions";
 
 const Navigation = () => {
   const router = useRouter();
@@ -35,10 +36,13 @@ const Navigation = () => {
 
   const [navBarWidth, setNavBarWidth] = useState(null);
 
+  const hoverColor = hexToRGBA(theme.colors.primary, 0.2);
+
   const toggleDrawer = () => {
     setIsDrawerOpen(!isDrawerOpen);
   };
-  const navigationItems = useMemo(
+
+  const staticNavigationItems = useMemo(
     () => [
       {
         href: "/",
@@ -46,7 +50,19 @@ const Navigation = () => {
         text: "Home",
         iconSource: Entypo,
       },
-      ...(user
+      {
+        href: "/about",
+        icon: "info",
+        text: "About",
+        iconSource: MaterialIcons,
+      },
+    ],
+    []
+  ); // static items don't have any dependencies
+
+  const userNavigationItems = useMemo(
+    () =>
+      user
         ? [
             {
               href: "/feed",
@@ -64,12 +80,6 @@ const Navigation = () => {
               href: "/packs",
               icon: "backpack",
               text: "Packs",
-              iconSource: MaterialIcons,
-            },
-            {
-              href: "/about",
-              icon: "info",
-              text: "About",
               iconSource: MaterialIcons,
             },
             {
@@ -98,21 +108,24 @@ const Navigation = () => {
               text: "Register",
               iconSource: MaterialIcons,
             },
-          ]),
-    ],
+          ],
     [user]
   );
 
-  const navigateTo = useCallback((href) => {
-    // Implement navigation logic here
-    if (href === "logout") {
-      dispatch(signOut());
-    } else {
-      setIsDrawerOpen(false);
-      router.push(href);
-    }
-  }, [dispatch, router]);
+  const navigationItems = [...staticNavigationItems, ...userNavigationItems];
 
+  const navigateTo = useCallback(
+    (href) => {
+      // Implement navigation logic here
+      if (href === "logout") {
+        dispatch(signOut());
+      } else {
+        setIsDrawerOpen(false);
+        router.push(href);
+      }
+    },
+    [dispatch, router]
+  );
 
   useEffect(() => {
     const handleScreenResize = () => {
@@ -129,24 +142,37 @@ const Navigation = () => {
     (item) => {
       const { icon, iconSource, text, href } = item;
       const IconComponent = iconSource || EvilIcons;
+      const pathName = usePathname();
 
       if ((href === "profile" || href === "logout") && !user) {
         return null; // Do not render the item if the user is not signed in
       }
 
+      const isCurrentPage = pathName === href; // compare the current route with the href
+
       return (
         <TouchableOpacity
           key={item.href}
-          style={styles.menuBarItem}
+          style={[
+            styles.menuBarItem,
+            isCurrentPage && styles.menuBarItemActive, // apply the active style if this is the current page
+          ]}
           onPress={() => navigateTo(item.href)}
         >
           <IconComponent
             name={icon}
             size={isMobileView ? 24 : 18}
-            color={theme.colors.iconColor}
+            color={isCurrentPage ? theme.colors.iconColor : theme.colors.iconColor} // change the color if this is the current page
             key={item.href + "icon"}
           />
-          <Text style={styles.menuBarItemText}>{text}</Text>
+          <Text
+            style={[
+              styles.menuBarItemText,
+              isCurrentPage && styles.menuBarItemTextActive, // apply the active style to the text if this is the current page
+            ]}
+          >
+            {text}
+          </Text>
         </TouchableOpacity>
       );
     },
@@ -241,7 +267,7 @@ const styles = StyleSheet.create({
   },
   logoText: {
     color: theme.colors.text,
-    fontSize: 48,
+    fontSize: 38,
     fontWeight: "900",
   },
   menuBar: {
@@ -267,6 +293,17 @@ const styles = StyleSheet.create({
   },
   drawerTrigger: {
     // Remove the marginLeft: "auto"
+  },
+  menuBarItemActive: {
+    // borderBottomWidth: 2, // example active style
+    // borderBottomColor: theme.colors.accentPurple, // example active style
+    // border: "1px solid red",
+    backgroundColor: hexToRGBA(theme.colors.accentPurple, 0.3),
+    borderRadius: 5,
+  },
+  menuBarItemTextActive: {
+    // color: theme.colors.primary, // example active style
+    // fontWeight: "bold", // example active style
   },
 });
 
