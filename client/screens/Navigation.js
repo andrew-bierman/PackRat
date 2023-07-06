@@ -298,8 +298,8 @@ const styles = StyleSheet.create({
     // borderBottomWidth: 2, // example active style
     // borderBottomColor: theme.colors.accentPurple, // example active style
     // border: "1px solid red",
-    backgroundColor: hexToRGBA(theme.colors.accentPurple, 0.3),
-    borderRadius: 5,
+    // backgroundColor: hexToRGBA(theme.colors.accentPurple, 0.3),
+    // borderRadius: 5,
   },
   menuBarItemTextActive: {
     // color: theme.colors.primary, // example active style
