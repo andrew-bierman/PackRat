@@ -119,7 +119,7 @@ const Navigation = () => {
 
     Dimensions.addEventListener("change", handleScreenResize);
     return () => {
-      Dimensions.removeEventListener("change", handleScreenResize);
+      // Dimensions.removeEventListener("change", handleScreenResize); TODO get an error: removeEventListener is undefined
     };
   }, [navBarWidth]);
 
@@ -136,7 +136,9 @@ const Navigation = () => {
         <TouchableOpacity
           key={item.href}
           style={styles.menuBarItem}
-          onPress={() => navigateTo(item.href)}
+          onPress={() => {
+            navigateTo(item.href)
+            }}
         >
           <IconComponent
             name={icon}

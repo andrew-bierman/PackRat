@@ -12,7 +12,7 @@ import { fetchSinglePack } from "../../store/singlePackStore";
 
 import { Box, Text } from "native-base";
 import { DetailsComponent } from "../details";
-import { StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 import { theme } from "../../theme";
 import { CLIENT_URL } from "@env";
 import ScoreContainer from "../ScoreContainer";
@@ -45,7 +45,7 @@ export function PackDetails() {
   if (isLoading) return <Text>Loading...</Text>;
 
   return (
-    <Box style={styles.mainContainer}>
+    <Box style={[styles.mainContainer, Platform.OS == 'web' ? {minHeight: "100vh",} : null]}>
       {!isError && (
         <>
           <DetailsComponent
@@ -71,7 +71,6 @@ const styles = StyleSheet.create({
   mainContainer: {
     backgroundColor: theme.colors.background,
     flexDirection: "column",
-    minHeight: "100vh",
     gap: 15,
     padding: [25, 25, 0, 25], // [top, right, bottom, left
     fontSize: 18,
