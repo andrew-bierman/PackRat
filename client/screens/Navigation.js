@@ -129,9 +129,6 @@ const Navigation = () => {
 
       setIsMobileView(physicalScreenWidth < mobileThresholdPoints);
     };
-
-    console.log("mobile", isMobileView);
-
     Dimensions.addEventListener("change", handleScreenResize);
 
     return () => {
