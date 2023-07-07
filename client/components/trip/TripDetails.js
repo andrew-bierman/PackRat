@@ -7,7 +7,7 @@ import { TableContainer } from "../pack_table/Table";
 import { selectPackById } from "../../store/packsStore";
 
 import { useSelector, useDispatch } from "react-redux";
-import { fetchSingleTrip } from "../../store/singleTripStore";
+import { fetchSingleTrip, selectIsLoading, selectError } from "../../store/singleTripStore";
 
 import { Box, Text, View } from "native-base";
 import { DetailsComponent } from "../details";
@@ -42,8 +42,8 @@ export function TripDetails() {
   // check if user is owner of pack, and that pack and user exists
   const isOwner = currentTrip && user && currentTrip.owner_id === user._id;
 
-  const isLoading = useSelector((state) => state.singleTrip.isLoading);
-  const error = useSelector((state) => state.singleTrip.error);
+  const isLoading = useSelector(selectIsLoading);
+  const error = useSelector(selectError);
   const isError = error !== null;
 
   if (isLoading) return <Text>Loading...</Text>;

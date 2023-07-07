@@ -43,13 +43,6 @@ const feedSlice = createSlice({
       })
       .addCase(getPublicPacks.fulfilled, (state, action) => {
         // map over the array of packs and add a type property to each pack
-        feedAdapter.setAll(state.publicPacks, action.payload
-          .map((pack) => {
-            return {
-              ...pack,
-              type: "pack",
-            };
-          }));
         state.publicPacks = action.payload
         .map((pack) => {
           return {
@@ -70,13 +63,6 @@ const feedSlice = createSlice({
       })
       .addCase(getPublicTrips.fulfilled, (state, action) => {
         // map over the array of trips and add a type property to each trip
-        feedAdapter.setAll(state.publicTrips, action.payload
-          .map((trip) => {
-            return {
-              ...trip,
-              type: "trip",
-            };
-          }));
         state.publicTrips = action.payload
         .map((trip) => {
           return {
@@ -95,7 +81,7 @@ const feedSlice = createSlice({
 });
 
 export const {
-  selectAll: selectAllFeed,
+  selectAll: selectAllFeeds,
   selectById: selectFeedById,
 } = feedAdapter.getSelectors((state) => state.feed);
 

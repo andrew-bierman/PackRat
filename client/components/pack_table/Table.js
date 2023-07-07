@@ -19,6 +19,7 @@ import { editItem, deleteItem } from "../../store/itemsStore";
 
 import { convertWeight } from "../../utils/convertWeight";
 import { openModal, selectPackById } from "../../store/packsStore";
+import { selectIsLoading, selectError } from "../../store/itemsStore";
 import { AddItem } from "../item/AddItem";
 import { EditPackItemModal } from "./EditPackItemModal";
 
@@ -30,9 +31,9 @@ export const TableContainer = ({ currentPack }) => {
 
   const data = currentPack?.items;
 
-  const isLoading = useSelector((state) => state.items.isLoading);
+  const isLoading = useSelector(selectIsLoading);
 
-  const error = useSelector((state) => state.items.error);
+  const error = useSelector(selectError);
   const isError = error !== null;
 
   const [edit, setEdit] = useState();

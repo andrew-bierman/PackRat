@@ -37,7 +37,7 @@ const gpxSlice = createSlice({
         state.error = null;
       })
       .addCase(convertGeoJSONToGPX.fulfilled, (state, action) => {
-        state.gpxData = action.payload;
+        // state.gpxData = action.payload;
         gpxAdapter.setAll(state.gpxData, action.payload);
         state.loading = false;
         state.error = null;
