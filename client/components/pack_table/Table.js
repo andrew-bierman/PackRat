@@ -78,11 +78,14 @@ const TableItem = ({
   const { name, weight, category, quantity, unit, _id } = itemData;
   const dispatch = useDispatch();
 
+  // Here, you can set a default category if item.category is null or undefined
+  const categoryName = category ? category.name : "Undefined";
+
   const rowData = [
     name,
     `${formatNumber(weight)} ${unit}`,
     quantity,
-    `${category.name}`,
+    categoryName,
     <EditPackItemModal packId={_id} initialData={itemData} />,
     <DeletePackItemModal itemId={_id} />,
     <IgnoreItemCheckbox
@@ -107,6 +110,7 @@ const CategoryRow = ({ category }) => {
     [ItemCategoryEnum.TOOLS]: "tool",
     [ItemCategoryEnum.MEDICAL]: "heart",
     [ItemCategoryEnum.OTHER]: "more-horizontal",
+    Undefined: "help-circle", // Choose an appropriate icon for "Undefined" category
   };
 
   const rowData = [
@@ -151,7 +155,9 @@ export const TableContainer = ({ currentPack }) => {
     data
       .filter((item) => !checkedItems.includes(item._id))
       .forEach((item) => {
-        switch (item.category.name) {
+        const categoryName = item.category ? item.category.name : "Undefined";
+
+        switch (categoryName) {
           case ItemCategoryEnum.ESSENTIALS: {
             totalBaseWeight += convertWeight(
               item.weight * item.quantity,
@@ -193,9 +199,10 @@ export const TableContainer = ({ currentPack }) => {
     );
   };
 
-  // Group items by category
+  // In your groupedData definition, provide a default category for items without one
   const groupedData = data?.reduce((acc, item) => {
-    (acc[item.category.name] = acc[item.category.name] || []).push(item);
+    const categoryName = item.category ? item.category.name : "Undefined";
+    (acc[categoryName] = acc[categoryName] || []).push(item);
     return acc;
   }, {});
 
