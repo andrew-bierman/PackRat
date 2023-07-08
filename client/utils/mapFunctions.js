@@ -1,6 +1,6 @@
 import * as Location from "expo-location";
 import * as FileSystem from 'expo-file-system';
-import { saveAs } from 'file-saver';
+// import { saveAs } from 'file-saver';
 
 
 const defaultShape = {
@@ -220,7 +220,7 @@ const handleGpxDownload = async (gpxData, filename = "trail") => {
     // Check the platform (native or web)
     if (Platform.OS === 'web') {
       const blob = new Blob([gpxData], { type: 'application/gpx+xml' });
-      saveAs(blob, `${filename}.gpx`);
+      // saveAs(blob, `${filename}.gpx`);
     } else {
       const fileUri = FileSystem.documentDirectory + `${filename}.gpx`;
       await FileSystem.writeAsStringAsync(fileUri, gpxData, {

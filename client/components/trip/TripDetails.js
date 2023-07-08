@@ -11,7 +11,7 @@ import { fetchSingleTrip, selectIsLoading, selectError } from "../../store/singl
 
 import { Box, Text, View } from "native-base";
 import { DetailsComponent } from "../details";
-import { StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 import { theme } from "../../theme";
 import { CLIENT_URL } from "@env";
 import ScoreContainer from "../ScoreContainer";
@@ -50,7 +50,12 @@ export function TripDetails() {
 
 
   return (
-    <Box style={styles.mainContainer}>
+    <Box
+      style={[
+        styles.mainContainer,
+        Platform.OS == "web" ? { minHeight: "100vh" } : null,
+      ]}
+    >
       {!isError && (
         <>
           <DetailsComponent
@@ -60,17 +65,20 @@ export function TripDetails() {
             error={error}
             additionalComps={
               <>
-                <View><TableContainer currentPack={currentTrip?.packs} /></View>
-                <View style={{marginTop:'5%'}}>
-                <WeatherCard
-                  weatherObject={
-                    currentTrip?.weather
-                      ? JSON?.parse(currentTrip?.weather)
-                      : weatherObject
-                  }
-                  weatherWeek={weatherWeek}
-                /></View>
-                  {/* <View style={{marginTop:'5%', backgroundColor:'red'}}> */}
+                <View>
+                  <TableContainer currentPack={currentTrip?.packs} />
+                </View>
+                <View style={{ marginTop: "5%" }}>
+                  <WeatherCard
+                    weatherObject={
+                      currentTrip?.weather
+                        ? JSON?.parse(currentTrip?.weather)
+                        : weatherObject
+                    }
+                    weatherWeek={weatherWeek}
+                  />
+                </View>
+                {/* <View style={{marginTop:'5%', backgroundColor:'red'}}> */}
                 <TripCard
                   Icon={() => (
                     <FontAwesome5
@@ -81,19 +89,20 @@ export function TripDetails() {
                   )}
                   title="Map"
                   isMap={true}
-                  cords={currentTrip?.weather
-                    ? JSON?.parse(currentTrip?.weather)?.coord
-                    : weatherObject?.coord}
+                  cords={
+                    currentTrip?.weather
+                      ? JSON?.parse(currentTrip?.weather)?.coord
+                      : weatherObject?.coord
+                  }
                 />
                 {/* </View> */}
-                <View style={{marginTop:'5%'}}>
-                <ScoreContainer
-                  type="trip"
-                  data={currentTrip}
-                  isOwner={isOwner}
-                />
+                <View style={{ marginTop: "5%" }}>
+                  <ScoreContainer
+                    type="trip"
+                    data={currentTrip}
+                    isOwner={isOwner}
+                  />
                 </View>
-  
               </>
             }
             link={link}
@@ -108,15 +117,13 @@ const styles = StyleSheet.create({
   mainContainer: {
     backgroundColor: theme.colors.background,
     flexDirection: "column",
-    minHeight: "100vh",
     gap: 15,
     padding: [25, 25, 0, 25], // [top, right, bottom, left
     fontSize: 18,
     width: "100%",
-    
   },
   packsContainer: {
-    backgroundColor: 'green',
+    backgroundColor: "green",
     flexDirection: "column",
     minHeight: "100vh",
 

@@ -87,7 +87,7 @@ export default function TripCard({
             placeholder: isTrail ? "Select Trail" : "Select Park",
             isTrail,
             onValueChange: handleValueChange,
-            width: "300",
+            width: 300,
           }}
         />
       )}
