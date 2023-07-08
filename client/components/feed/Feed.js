@@ -1,8 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "expo-router";
-import { Container, Box, Text, HStack, Stack, Switch, Button } from "native-base";
-import { StyleSheet, FlatList } from "react-native";
+import {
+  Container,
+  Box,
+  Text,
+  HStack,
+  Stack,
+  Switch,
+  Button,
+  Input,
+  IconButton,
+  Divider,
+  Center,
+} from "native-base";
+import { AntDesign } from "@expo/vector-icons";
+import { StyleSheet, FlatList, View } from "react-native";
 import Card from "./FeedCard";
 import DropdownComponent from "../Dropdown";
 import { theme } from "../../theme";
@@ -30,6 +42,90 @@ const ERROR_MESSAGES = {
 
 const dataValues = ["Favorite", "Most Recent"];
 
+const FeedSearchFilter = ({
+  feedType,
+  handleSortChange,
+  handleTogglePack,
+  handleToggleTrip,
+  selectedTypes,
+  queryString,
+  setSearchQuery,
+  handleCreateClick,
+}) => {
+  return (
+    <View style={styles.filterContainer}>
+      <Box style={styles.searchContainer}>
+        <HStack space={3}>
+          <Input
+            w="80%"
+            variant="outline"
+            placeholder={`Search ${feedType ? feedType : "Feed"}`}
+            onChangeText={setSearchQuery}
+          />
+          <IconButton
+            icon={
+              <AntDesign
+                name="search1"
+                size={24}
+                color="gray"
+              />
+            }
+            variant="ghost"
+          />
+        </HStack>
+      </Box>
+      <Divider my={3} />
+      <Center
+        space={3}
+        flexDirection="row"
+        justifyContent="space-between"
+        alignItems="center"
+        flexWrap={"wrap"}
+        padding={2}
+        margin={2}
+      >
+        {feedType === "public" && (
+          <HStack space={3} alignItems="center">
+            <Text fontSize="lg" fontWeight="bold">
+              Packs
+            </Text>
+            <Switch
+              size="lg"
+              isChecked={selectedTypes.pack}
+              onToggle={handleTogglePack}
+            />
+            <Text fontSize="lg" fontWeight="bold">
+              Trips
+            </Text>
+            <Switch
+              size="lg"
+              isChecked={selectedTypes.trip}
+              onToggle={handleToggleTrip}
+            />
+          </HStack>
+        )}
+        <HStack space={3} alignItems="center">
+          <Text fontSize="lg" fontWeight="bold">
+            Sort By:
+          </Text>
+          <DropdownComponent
+            value={queryString}
+            data={dataValues}
+            onValueChange={handleSortChange}
+            placeholder="Sort By"
+            style={styles.dropdown}
+            width="auto"
+          />
+        </HStack>
+        {(feedType === "userPacks" || feedType === "userTrips") && (
+          <Button onPress={handleCreateClick}>Create</Button>
+        )}
+      </Center>
+      <Divider my={3} />
+    </View>
+  );
+};
+
 const Feed = ({ feedType = "public" }) => {
   const router = useRouter();
 
@@ -38,6 +134,7 @@ const Feed = ({ feedType = "public" }) => {
     pack: true,
     trip: false,
   });
+  const [searchQuery, setSearchQuery] = useState("");
 
   const dispatch = useDispatch();
   const ownerId = useSelector((state) => state.auth.user?._id);
@@ -76,18 +173,20 @@ const Feed = ({ feedType = "public" }) => {
       data = userPacksData.filter((pack) => pack.isFavorite);
     }
 
+    data = data.filter((item) =>
+      item.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
     if (data.length > 0) {
-      return (
+      return Platform.OS === "web" ? (
+        data.map((item) => <Card key={item._id} type={item.type} {...item} />)
+      ) : (
         <FlatList
           data={data}
-          keyExtractor={(item) => item?._id}
+          numColumns={1}
+          keyExtractor={(item) => item._id}
           renderItem={({ item }) => (
-            <Link
-              key={"link-key" + item?._id}
-              href={item.type === "pack" ? "/pack/" + item?._id : "/trip/" + item?._id}
-            >
-              <Card key={item?._id} type={item.type} {...item} />
-            </Link>
+            <Card key={item._id} type={item.type} {...item} />
           )}
         />
       );
@@ -116,7 +215,7 @@ const Feed = ({ feedType = "public" }) => {
 
   const handleCreateClick = () => {
     // handle create click logic
-    router.push(createUrlPath)
+    router.push(createUrlPath);
   };
 
   const urlPath = URL_PATHS[feedType];
@@ -124,56 +223,22 @@ const Feed = ({ feedType = "public" }) => {
   const errorText = ERROR_MESSAGES[feedType];
 
   return (
-    <Box
-      style={[
-        styles.mainContainer,
-        Platform.OS === "web" ? { minHeight: "100vh" } : null,
-      ]}
-    >
-      <HStack space={3} alignItems="center" style={styles.bar}>
-        {feedType === "public" && (
-          <>
-            <Text fontSize="lg" fontWeight="bold">
-              Packs
-            </Text>
-            <Switch
-              size="lg"
-              isChecked={selectedTypes.pack}
-              onToggle={handleTogglePack}
-            />
-            <Text fontSize="lg" fontWeight="bold">
-              Trips
-            </Text>
-            <Switch
-              size="lg"
-              isChecked={selectedTypes.trip}
-              onToggle={handleToggleTrip}
-            />
-          </>
-        )}
-
-        <Text fontSize="lg" fontWeight="bold">
-          Sort By:
-        </Text>
-
-        <DropdownComponent
-          value={queryString}
-          data={dataValues}
-          onValueChange={handleSortChange}
-          placeholder="Sort By"
-          style={styles.dropdown}
-          width="auto"
-        />
-
-        {(feedType === "userPacks" || feedType === "userTrips") && (
-          <Button onPress={handleCreateClick}>Create</Button>
-        )}
-      </HStack>
-
+    <Box style={styles.mainContainer}>
+      <FeedSearchFilter
+        feedType={feedType}
+        handleSortChange={handleSortChange}
+        handleTogglePack={handleTogglePack}
+        handleToggleTrip={handleToggleTrip}
+        selectedTypes={selectedTypes}
+        queryString={queryString}
+        setSearchQuery={setSearchQuery}
+        handleCreateClick={handleCreateClick}
+      />
       <Stack
         direction={["column", "column", "column", "row"]}
         space={[3, 3, 3, 0]}
         flexWrap="wrap"
+        justifyContent="space-between"
       >
         {renderData()}
       </Stack>
@@ -184,24 +249,24 @@ const Feed = ({ feedType = "public" }) => {
 const styles = StyleSheet.create({
   mainContainer: {
     backgroundColor: theme.colors.background,
-    flexDirection: "column",
-    gap: 15,
     padding: 15,
     fontSize: 18,
     width: "100%",
   },
-  bar: {
+  filterContainer: {
+    backgroundColor: theme.colors.white,
+    padding: 15,
+    fontSize: 18,
+    width: "100%",
+    borderRadius: 10,
+  },
+  searchContainer: {
     flexDirection: "row",
-    justifyContent: "center",
     alignItems: "center",
-  },
-  packsContainer: {
-    flexDirection: "column",
-    padding: 25,
-    fontSize: 26,
-  },
-  dropdown: {
-    backgroundColor: "white",
+    justifyContent: "center",
+    marginBottom: 10,
+    padding: 10,
+    borderRadius: 5,
   },
 });
 
