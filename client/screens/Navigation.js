@@ -134,7 +134,7 @@ const Navigation = () => {
 
     Dimensions.addEventListener("change", handleScreenResize);
     return () => {
-      Dimensions.removeEventListener("change", handleScreenResize);
+      // Dimensions.removeEventListener("change", handleScreenResize); TODO get an error: removeEventListener is undefined
     };
   }, []);
 

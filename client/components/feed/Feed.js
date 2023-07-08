@@ -118,18 +118,31 @@ const Feed = ({ feedType = "public" }) => {
   const errorText = ERROR_MESSAGES[feedType];
 
   return (
-    <Box style={styles.mainContainer}>
+    <Box
+      style={[
+        styles.mainContainer,
+        Platform.OS === "web" ? { minHeight: "100vh" } : null,
+      ]}
+    >
       <HStack space={3} alignItems="center" style={styles.bar}>
         {feedType === "public" && (
           <>
             <Text fontSize="lg" fontWeight="bold">
               Packs
             </Text>
-            <Switch size="lg" isChecked={selectedTypes.pack} onToggle={handleTogglePack} />
+            <Switch
+              size="lg"
+              isChecked={selectedTypes.pack}
+              onToggle={handleTogglePack}
+            />
             <Text fontSize="lg" fontWeight="bold">
               Trips
             </Text>
-            <Switch size="lg" isChecked={selectedTypes.trip} onToggle={handleToggleTrip} />
+            <Switch
+              size="lg"
+              isChecked={selectedTypes.trip}
+              onToggle={handleToggleTrip}
+            />
           </>
         )}
 
@@ -151,7 +164,11 @@ const Feed = ({ feedType = "public" }) => {
         )}
       </HStack>
 
-      <Stack direction={["column", "column", "column", "row"]} space={[3, 3, 3, 0]} flexWrap="wrap">
+      <Stack
+        direction={["column", "column", "column", "row"]}
+        space={[3, 3, 3, 0]}
+        flexWrap="wrap"
+      >
         {renderData()}
       </Stack>
     </Box>
@@ -162,7 +179,6 @@ const styles = StyleSheet.create({
   mainContainer: {
     backgroundColor: theme.colors.background,
     flexDirection: "column",
-    minHeight: "100vh",
     gap: 15,
     padding: 15,
     fontSize: 18,
@@ -175,7 +191,6 @@ const styles = StyleSheet.create({
   },
   packsContainer: {
     flexDirection: "column",
-    minHeight: "100vh",
     padding: 25,
     fontSize: 26,
   },
