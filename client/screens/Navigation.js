@@ -7,6 +7,7 @@ import {
   Dimensions,
   ScrollView,
   Modal,
+  SafeAreaView,
 } from "react-native";
 import { AuthStateListener } from "../../client/auth/AuthStateListener";
 import { theme } from "../theme";
@@ -162,7 +163,9 @@ const Navigation = () => {
           <IconComponent
             name={icon}
             size={isMobileView ? 24 : 18}
-            color={isCurrentPage ? theme.colors.iconColor : theme.colors.iconColor} // change the color if this is the current page
+            color={
+              isCurrentPage ? theme.colors.iconColor : theme.colors.iconColor
+            } // change the color if this is the current page
             key={item.href + "icon"}
           />
           <Text
@@ -180,70 +183,75 @@ const Navigation = () => {
   );
 
   return (
-    <View
-      style={styles.container}
-      onLayout={(event) => setNavBarWidth(event.nativeEvent.layout.width)} // calculate the width of the navbar
-    >
-      {user && <AuthStateListener />}
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.logoContainer}
-          onPress={() => navigateTo("/")}
-        >
-          <View style={styles.logoWrapper}>
-            <SVGLogoComponent
-              width={isMobileView ? 48 : 64}
-              height={isMobileView ? 48 : 64}
-              fill="#fff"
-            />
-          </View>
-          <Text style={styles.logoText}>PackRat</Text>
-        </TouchableOpacity>
-
-        {/* Trigger to open/close the drawer */}
-        <View style={styles.drawerContainer}>
-          {!isDrawerOpen && isMobileView && (
-            <TouchableOpacity
-              style={styles.drawerTrigger}
-              onPress={toggleDrawer}
-            >
-              <EvilIcons
-                name={isDrawerOpen ? "close" : "navicon"}
-                size={isMobileView ? 36 : 24}
-                color={theme.colors.iconColor}
+    <SafeAreaView style={styles.safeArea}>
+      <View
+        style={styles.container}
+        onLayout={(event) => setNavBarWidth(event.nativeEvent.layout.width)} // calculate the width of the navbar
+      >
+        {user && <AuthStateListener />}
+        <View style={styles.header}>
+          <TouchableOpacity
+            style={styles.logoContainer}
+            onPress={() => navigateTo("/")}
+          >
+            <View style={styles.logoWrapper}>
+              <SVGLogoComponent
+                width={isMobileView ? 48 : 64}
+                height={isMobileView ? 48 : 64}
+                fill="#fff"
               />
-            </TouchableOpacity>
+            </View>
+            <Text style={styles.logoText}>PackRat</Text>
+          </TouchableOpacity>
+
+          {/* Trigger to open/close the drawer */}
+          <View style={styles.drawerContainer}>
+            {!isDrawerOpen && isMobileView && (
+              <TouchableOpacity
+                style={styles.drawerTrigger}
+                onPress={toggleDrawer}
+              >
+                <EvilIcons
+                  name={isDrawerOpen ? "close" : "navicon"}
+                  size={isMobileView ? 36 : 24}
+                  color={theme.colors.iconColor}
+                />
+              </TouchableOpacity>
+            )}
+          </View>
+          {isMobileView ? (
+            <Modal
+              visible={isDrawerOpen}
+              animationType="slide"
+              transparent={true}
+            >
+              <Drawer
+                toggleDrawer={toggleDrawer}
+                handleSignOut={() => {}}
+                navigationItems={navigationItems}
+                navigateTo={navigateTo}
+                renderNavigationItem={renderNavigationItem}
+              />
+            </Modal>
+          ) : (
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.menuBar}
+            >
+              {navigationItems.map((item) => renderNavigationItem(item))}
+            </ScrollView>
           )}
         </View>
-        {isMobileView ? (
-          <Modal
-            visible={isDrawerOpen}
-            animationType="slide"
-            transparent={true}
-          >
-            <Drawer
-              toggleDrawer={toggleDrawer}
-              handleSignOut={() => {}}
-              navigationItems={navigationItems}
-              navigateTo={navigateTo}
-              renderNavigationItem={renderNavigationItem}
-            />
-          </Modal>
-        ) : (
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.menuBar}
-          >
-            {navigationItems.map((item) => renderNavigationItem(item))}
-          </ScrollView>
-        )}
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    backgroundColor: theme.colors.background,
+  },
   container: {
     width: "100%",
     backgroundColor: theme.colors.background,
