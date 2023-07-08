@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "expo-router";
 import { Container, Box, Text, HStack, Stack, Switch, Button } from "native-base";
-import { StyleSheet } from "react-native";
+import { StyleSheet, FlatList } from "react-native";
 import Card from "./FeedCard";
 import DropdownComponent from "../Dropdown";
 import { theme } from "../../theme";
@@ -77,14 +77,20 @@ const Feed = ({ feedType = "public" }) => {
     }
 
     if (data.length > 0) {
-      return data.map((item) => (
-        <Link
-          key={"link-key" + item?._id}
-          href={item.type === "pack" ? "/pack/" + item?._id : "/trip/" + item?._id}
-        >
-          <Card key={item?._id} type={item.type} {...item} />
-        </Link>
-      ));
+      return (
+        <FlatList
+          data={data}
+          keyExtractor={(item) => item?._id}
+          renderItem={({ item }) => (
+            <Link
+              key={"link-key" + item?._id}
+              href={item.type === "pack" ? "/pack/" + item?._id : "/trip/" + item?._id}
+            >
+              <Card key={item?._id} type={item.type} {...item} />
+            </Link>
+          )}
+        />
+      );
     } else {
       return <Text>{ERROR_MESSAGES[feedType]}</Text>;
     }

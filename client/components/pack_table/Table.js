@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { FlatList, StyleSheet } from "react-native";
 import { Table, Row, Cell, TableWrapper } from "react-native-table-component";
 import { Feather } from "@expo/vector-icons";
 import { Select, Checkbox, Box, Text, HStack, Button } from "native-base";
@@ -227,21 +227,27 @@ export const TableContainer = ({ currentPack }) => {
               ))}
               style={styles.head}
             />
-            {Object.entries(groupedData).map(([category, items]) => (
-              <>
-                <CategoryRow category={category} />
-                {items.map((item, index) => (
-                  <TableItem
-                    key={index}
-                    itemData={item}
-                    checkedItems={checkedItems}
-                    handleCheckboxChange={handleCheckboxChange}
-                    index={index}
-                    flexArr={flexArr}
+            <FlatList
+              data={Object.entries(groupedData)}
+              keyExtractor={([category, items]) => category}
+              renderItem={({ item: [category, items] }) => (
+                <>
+                  <CategoryRow category={category} />
+                  <FlatList
+                    data={items}
+                    keyExtractor={(item, index) => item._id}
+                    renderItem={({ item }) => (
+                      <TableItem
+                        itemData={item}
+                        checkedItems={checkedItems}
+                        handleCheckboxChange={handleCheckboxChange}
+                        flexArr={flexArr}
+                      />
+                    )}
                   />
-                ))}
-              </>
-            ))}
+                </>
+              )}
+            />
           </Table>
           {!foodItems.length && <Button>Add Food Item</Button>}
           {!waterItem && <Water currentPack={currentPack} />}
