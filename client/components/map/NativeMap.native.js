@@ -383,6 +383,8 @@ function NativeMap() {
         downloadable={isShapeDownloadable(shape)}
         downloading={downloading}
         shape={shape}
+        onDownload={onDownload}
+        progress={progress}
       />
     </View>
   );

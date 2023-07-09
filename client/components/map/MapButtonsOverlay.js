@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   TouchableOpacity,
   Image,
@@ -9,12 +9,9 @@ import {
   Alert,
   Platform,
 } from "react-native";
-import { Box, Select } from "native-base";
-import { Entypo, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import { useDispatch, useSelector } from "react-redux";
-import { convertGeoJSONToGPX, resetGpxData } from "../../store/gpxStore";
+import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 
-import { mapboxStyles, handleGpxDownload } from "../../utils/mapFunctions";
+import { mapboxStyles } from "../../utils/mapFunctions";
 
 const MapButtonsOverlay = ({
   mapFullscreen,
@@ -22,14 +19,12 @@ const MapButtonsOverlay = ({
   disableFullScreen,
   handleChangeMapStyle,
   downloadable,
+  downloading,
   fetchLocation,
-  shape,
+  onDownload,
+  progress
 }) => {
-  const dispatch = useDispatch();
-  const gpxData = useSelector((state) => state.gpx.gpxData);
-
   const [showStyleOptions, setShowStyleOptions] = useState(false);
-  const [downloading, setDownloading] = useState(false); // New state for downloading
 
   const handleStyleOptionPress = () => {
     setShowStyleOptions(!showStyleOptions);
@@ -40,24 +35,7 @@ const MapButtonsOverlay = ({
     setShowStyleOptions(false);
   };
 
-  const fetchGpxDownload = async () => {
-    setDownloading(true);
 
-    console.log("gpxData at start of fetchGpxDownload", gpxData);
-
-    try {
-      const updatedGpxData = await dispatch(convertGeoJSONToGPX(shape));
-
-      const { payload } = updatedGpxData;
-
-      await handleGpxDownload(payload);
-
-      setDownloading(false);
-    } catch (error) {
-      console.log("error", error);
-      setDownloading(false);
-    }
-  };
 
   return (
     <>
@@ -142,7 +120,7 @@ const MapButtonsOverlay = ({
           {downloadable && (
             <TouchableOpacity
               style={[styles.headerBtnView, styles.fullScreen]}
-              onPress={fetchGpxDownload}
+              onPress={onDownload}
               disabled={downloading}
             >
               <Image
@@ -150,7 +128,7 @@ const MapButtonsOverlay = ({
                 source={require("../../assets/download.svg")}
               />
               <Text style={styles.downloadText}>
-                {downloading ? "Downloading" : "Download map"}
+                {downloading ? `Downloading... ${progress ? Math.floor(progress) + '%' : '' }` : "Download map"}
               </Text>
             </TouchableOpacity>
           )}
