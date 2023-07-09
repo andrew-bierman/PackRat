@@ -25,7 +25,6 @@ import {
   handleGpxDownload,
 } from "../../utils/mapFunctions";
 import MapButtonsOverlay from "./MapButtonsOverlay";
-import MapButtons from "./MapButtons";
 
 // import 'mapbox-gl/dist/mapbox-gl.css'
 
@@ -243,6 +242,25 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
     });
   };
 
+  const fetchGpxDownload = async () => {
+    setDownloading(true);
+
+    console.log("gpxData at start of fetchGpxDownload", gpxData);
+
+    try {
+      const updatedGpxData = await dispatch(convertGeoJSONToGPX(shape));
+
+      const { payload } = updatedGpxData;
+
+      await handleGpxDownload(payload);
+
+      setDownloading(false);
+    } catch (error) {
+      console.log("error", error);
+      setDownloading(false);
+    }
+  };
+
   const enableFullScreen = () => {
     setMapFullscreen(true);
     setShowModal(true);
@@ -345,6 +363,7 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
         styles={styles}
         downloadable={downloadable}
         downloading={downloading}
+        onDownload={fetchGpxDownload}
         shape={shape}
       />
     </View>
