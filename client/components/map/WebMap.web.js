@@ -25,6 +25,7 @@ import {
   handleGpxDownload,
 } from "../../utils/mapFunctions";
 import MapButtonsOverlay from "./MapButtonsOverlay";
+import MapButtons from "./MapButtons";
 
 // import 'mapbox-gl/dist/mapbox-gl.css'
 
@@ -80,7 +81,6 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
   const gpxData = useSelector((state) => state.gpx.gpxData);
   const [downloadable, setDownloadable] = useState(false);
 
-
   useEffect(() => {
     if (map.current) return; // Initialize map only once
 
@@ -92,7 +92,7 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
 
       const latZoom = calculateZoomLevel(bounds, mapDim);
       const trailCenter = findTrailCenter(shape);
-      console.log("trailCenter in useEffect", trailCenter)
+      console.log("trailCenter in useEffect", trailCenter);
 
       zoomLevelRef.current = latZoom;
       trailCenterPointRef.current = trailCenter;
@@ -115,9 +115,12 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
       container: mapContainer.current,
       style: mapStyle,
       // center: [lng, lat],
-      center: trailCenterPointRef.current && !isNaN(trailCenterPointRef.current[0]) && !isNaN(trailCenterPointRef.current[1])
-      ? trailCenterPointRef.current
-      : [lng, lat],
+      center:
+        trailCenterPointRef.current &&
+        !isNaN(trailCenterPointRef.current[0]) &&
+        !isNaN(trailCenterPointRef.current[1])
+          ? trailCenterPointRef.current
+          : [lng, lat],
       zoom: zoomLevelRef.current ? zoomLevelRef.current : zoomLevel,
       interactive: mapFullscreen,
     });
@@ -329,45 +332,30 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
     }
   };
 
-
-  
-
-  return (
-    <View style={styles.container}>
+  const component = (
+    <View style={[styles.container, { height: showModal ? "100%" : "400px" }]}>
       <View key="map" ref={mapContainer} style={styles.map} />
+      {/* <MapButtons /> */}
       <MapButtonsOverlay
         mapFullscreen={mapFullscreen}
         enableFullScreen={enableFullScreen}
         disableFullScreen={disableFullScreen}
-        mapStyle={mapStyle}
         handleChangeMapStyle={handleChangeMapStyle}
         fetchLocation={fetchLocation}
-        showModal={showModal}
         styles={styles}
         downloadable={downloadable}
         downloading={downloading}
         shape={shape}
       />
-
-      <Modal animationType={"fade"} transparent={false} visible={showModal}>
-        <View style={styles.modal}>
-          <View key="map" ref={mapContainer} style={styles.map} />
-          <MapButtonsOverlay
-            mapFullscreen={mapFullscreen}
-            enableFullScreen={enableFullScreen}
-            disableFullScreen={disableFullScreen}
-            mapStyle={mapStyle}
-            handleChangeMapStyle={handleChangeMapStyle}
-            downloading={downloading}
-            fetchLocation={fetchLocation}
-            showModal={showModal}
-            styles={styles}
-            downloadable={downloadable}
-            shape={shape}
-          />
-        </View>
-      </Modal>
     </View>
+  );
+
+  return showModal ? (
+    <Modal animationType={"fade"} transparent={false} visible={true}>
+      {component}
+    </Modal>
+  ) : (
+    component
   );
 };
 
@@ -375,7 +363,6 @@ const styles = StyleSheet.create({
   container: {
     alignItems: "center",
     justifyContent: "center",
-    height: "400px",
     width: "100%",
     borderRadius: "10px",
   },
