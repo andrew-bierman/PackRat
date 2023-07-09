@@ -18,7 +18,7 @@ import {
   MaterialIcons,
   Entypo,
 } from "@expo/vector-icons";
-import MapView, { ShapeSource, offlineManager, Camera } from "@rnmapbox/maps";
+import Mapbox, { ShapeSource, offlineManager, Camera } from "@rnmapbox/maps";
 import { Select, Center, Box, CheckIcon } from "native-base";
 
 // get mapbox access token from .env file
@@ -29,24 +29,25 @@ import { Link } from "expo-router";
 import MapButtonsOverlay from "./MapButtonsOverlay";
 import { isShapeDownloadable, mapboxStyles } from "../../utils/mapFunctions";
 
-MapView.setWellKnownTileServer(Platform.OS === "android" ? "Mapbox" : "mapbox");
-MapView.setAccessToken(MAPBOX_ACCESS_TOKEN);
+Mapbox.setWellKnownTileServer(Platform.OS === "android" ? "Mapbox" : "mapbox");
+Mapbox.setAccessToken(MAPBOX_ACCESS_TOKEN);
 
 // console.log("MAPBOX_ACCESS_TOKEN", MAPBOX_ACCESS_TOKEN, typeof MAPBOX_ACCESS_TOKEN)
 // consts
 const dw = Dimensions.get("screen").width;
-const dh = Dimensions.get("screen").height;
-const fullMapDiemention = { width: dw, height: "100%" };
-const previewMapDiemension = {
+const fullMapDimension = { width: dw, height: "100%" };
+const previewMapStyle = {
   width: dw * 0.9,
   height: 220,
+  borderRadius: 20,
+  overflow: "hidden",
   alignSelf: "center",
 };
 
 // MapView.setConnected(true);
 
 function NativeMap() {
-  const camera = useRef(MapView.Camera);
+  const camera = useRef(Mapbox.Camera);
   const mapViewRef = useRef(null);
   const mapViewFullScreenRef = useRef();
 
@@ -95,7 +96,7 @@ function NativeMap() {
     ],
   };
   const optionsForDownload = {
-    name: "Downlaod",
+    name: "Downloaad",
     styleURL: "mapbox://styles/mapbox/outdoors-v11",
     bounds: [getShapeSourceBounds(shape)[0], getShapeSourceBounds(shape)[1]],
     minZoom: 0,
@@ -106,7 +107,7 @@ function NativeMap() {
     getPosition();
   }, []);
   useEffect(() => {
-    handleShapeSourceLoad(fullMapDiemention);
+    handleShapeSourceLoad(fullMapDimension);
   }, []);
   // functions
   const getPosition = (onSucccess) => {
@@ -118,7 +119,7 @@ function NativeMap() {
           latitude: Number(data.coords.latitude),
         });
         setCorrectLocation(true);
-        onSucccess && onSucccess(location)
+        onSucccess && onSucccess(location);
       },
       (error) => {
         setCorrectLocation(false);
@@ -127,28 +128,7 @@ function NativeMap() {
       { enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 }
     );
   };
-  const goToMyLocation = () => {
-    setGetLocationLoading(true);
-    Geolocation.getCurrentPosition(
-      (data) => {
-        setLocation({
-          ...location,
-          longitude: Number(data.coords.longitude),
-          latitude: Number(data.coords.latitude),
-        });
-        setCorrectLocation(true);
-      },
-      (error) => {
-        if (!mountedRef.current) return null;
-        setCorrectLocation(false);
-        Alert.alert(
-          "Something went wrong with current location",
-          error.message
-        );
-      },
-      { enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 }
-    );
-  };
+
   function getShapeSourceBounds(shape) {
     let minLng = Infinity;
     let maxLng = -Infinity;
@@ -236,33 +216,6 @@ function NativeMap() {
     // }
   }
 
-  function MapContainer({ coordinates }) {
-    const [region, setRegion] = useState(null);
-
-    return (
-      <MapView
-        style={{ flex: 1 }}
-        region={region}
-        showsUserLocation
-        showsMyLocationButton
-      >
-        <Polyline
-          coordinates={coordinates}
-          strokeColor="#FF0000"
-          strokeWidth={2}
-        />
-      </MapView>
-    );
-  }
-
-  function changeMapStyle() {
-    setMapFullscreen(true);
-    handleShapeSourceLoad({ width: dw, height: 360 });
-  }
-  function onMapLoaded() {
-    setZoomLevel(zoomLevel);
-    // mapViewFullScreenRef.setCamera()
-  }
   function onDownloadProgress(offlineRegion, offlineRegionStatus) {
     setProgress(offlineRegionStatus.percentage);
     setDownloading(true);
@@ -297,8 +250,8 @@ function NativeMap() {
   }
 
   const component = (
-    <View style={mapFullscreen ? fullMapDiemention : previewMapDiemension}>
-      <MapView.MapView
+    <View style={mapFullscreen ? fullMapDimension : previewMapStyle}>
+      <Mapbox.MapView
         key={zoomLevel}
         ref={mapViewFullScreenRef}
         style={{ flex: 1 }}
@@ -310,7 +263,7 @@ function NativeMap() {
         zoomEnabled={true}
         onPress={onMapPress}
       >
-        <MapView.Camera
+        <Mapbox.Camera
           key={zoomLevel + 1}
           ref={camera}
           zoomLevel={zoomLevel ? zoomLevel : 12}
@@ -319,7 +272,7 @@ function NativeMap() {
           animationDuration={2000}
         />
         {/* // user location */}
-        <MapView.PointAnnotation
+        <Mapbox.PointAnnotation
           id={"1212"}
           coordinate={[location?.latitude, location.longitude]}
         >
@@ -336,9 +289,9 @@ function NativeMap() {
               color={"#de0910"}
             />
           </View>
-        </MapView.PointAnnotation>
+        </Mapbox.PointAnnotation>
         {/* trail */}
-        <MapView.ShapeSource
+        <Mapbox.ShapeSource
           id="source1"
           lineMetrics={true}
           shape={shape?.features[0]}
@@ -346,16 +299,16 @@ function NativeMap() {
           clusterRadius={80}
           clusterMaxZoomLevel={14}
         >
-          <MapView.LineLayer
+          <Mapbox.LineLayer
             id="layer1"
             style={styles.lineLayer}
             lineDasharray={[1, 2]} // set the dash array pattern here
             lineDashOffset={0}
           />
-        </MapView.ShapeSource>
+        </Mapbox.ShapeSource>
         {/* // top location */}
         {shape?.features[0]?.geometry?.coordinates?.length > 0 && (
-          <MapView.PointAnnotation
+          <Mapbox.PointAnnotation
             id={"cicleCap"}
             coordinate={
               shape?.features[0]?.geometry?.coordinates[
@@ -366,9 +319,9 @@ function NativeMap() {
             <View>
               <CircleCapComp />
             </View>
-          </MapView.PointAnnotation>
+          </Mapbox.PointAnnotation>
         )}
-      </MapView.MapView>
+      </Mapbox.MapView>
       <MapButtonsOverlay
         mapFullscreen={mapFullscreen}
         enableFullScreen={() => setMapFullscreen(true)}
