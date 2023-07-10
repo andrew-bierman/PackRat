@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet } from "react-native";
+import { FlatList, Platform, StyleSheet } from "react-native";
 import { Table, Row, Cell, TableWrapper } from "react-native-table-component";
 import { Feather } from "@expo/vector-icons";
 import { Select, Checkbox, Box, Text, HStack, Button } from "native-base";
@@ -31,14 +31,7 @@ const WeightUnitDropdown = ({ value, onChange }) => {
 const TotalWeightBox = ({ label, weight, unit }) => {
   return (
     <Box
-      style={{
-        flexDirection: "row",
-        justifyContent: "space-between",
-        width: "100%",
-        paddingHorizontal: 25,
-        marginVertical: 30,
-        flex: 1,
-      }}
+      style={styles.totalWeightBox}
     >
       <Text>{label}</Text>
       <Text>{`${formatNumber(weight)} (${unit})`}</Text>
@@ -57,6 +50,7 @@ const IgnoreItemCheckbox = ({ itemId, isChecked, handleCheckboxChange }) => (
       key={itemId}
       isChecked={isChecked}
       onChange={() => handleCheckboxChange(itemId)}
+      aria-label="Ignore item"
     />
   </Box>
 );
@@ -135,6 +129,7 @@ const TitleRow = ({ title }) => {
 };
 
 export const TableContainer = ({ currentPack }) => {
+
   const [weightUnit, setWeightUnit] = useState("g");
   const [checkedItems, setCheckedItems] = useState([]);
   const isLoading = useSelector((state) => state.items.isLoading);
@@ -184,7 +179,7 @@ export const TableContainer = ({ currentPack }) => {
         }
       });
 
-  console.log("waterItem", waterItem);
+  // console.log("waterItem", waterItem);
 
   let totalWeight = totalBaseWeight + totalWaterWeight + totalFoodWeight;
 
@@ -286,10 +281,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
-    width: "100%",
+    width: Platform.OS === "web" ? "100%" : 310,
   },
   tableStyle: {
-    width: "100%",
+    width: Platform.OS === "web" ? "100%" : 300,
     marginVertical: 20,
   },
   mainTitle: {
@@ -325,6 +320,7 @@ const styles = StyleSheet.create({
   headerText: {
     fontWeight: "bold",
     color: "#000000",
+    fontSize: Platform.OS === "web" ? 12 : 8,
   },
   row: {
     flexDirection: "row",
@@ -345,6 +341,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginTop: 20,
     textAlign: "center",
+  },
+  totalWeightBox: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: Platform.OS === "web" ? "100%" : 300,
+    paddingHorizontal: 25,
+    marginVertical: 30,
+    flex: 1,
   },
 });
 
