@@ -107,7 +107,7 @@ function NativeMap() {
     getPosition();
   }, []);
   useEffect(() => {
-    handleShapeSourceLoad(fullMapDimension);
+    handleShapeSourceLoad({ width: dw, height: 360 });
   }, []);
   // functions
   const getPosition = (onSucccess) => {
@@ -252,21 +252,17 @@ function NativeMap() {
   const component = (
     <View style={mapFullscreen ? fullMapDimension : previewMapStyle}>
       <Mapbox.MapView
-        key={zoomLevel}
-        ref={mapViewFullScreenRef}
+        ref={mapViewRef}
         style={{ flex: 1 }}
         styleURL={mapStyle}
-        zoomLevel={zoomLevel ? zoomLevel : 12}
-        // onDidFinishLoadingMap={onMapLoaded}
+        // onDidFinishRenderingMapFully={onMapLoaded}
         compassEnabled={false}
         logoEnabled={false}
-        zoomEnabled={true}
-        onPress={onMapPress}
+        scrollEnabled={false}
+        zoomEnabled={false}
       >
         <Mapbox.Camera
-          key={zoomLevel + 1}
-          ref={camera}
-          zoomLevel={zoomLevel ? zoomLevel : 12}
+          zoomLevel={zoomLevel ? zoomLevel - 0.8 : 10}
           centerCoordinate={trailCenterPoint ? trailCenterPoint : null}
           animationMode={"flyTo"}
           animationDuration={2000}
@@ -274,7 +270,7 @@ function NativeMap() {
         {/* // user location */}
         <Mapbox.PointAnnotation
           id={"1212"}
-          coordinate={[location?.latitude, location.longitude]}
+          coordinate={[location.longitude, location.latitude]}
         >
           <View
             style={{
@@ -294,17 +290,13 @@ function NativeMap() {
         <Mapbox.ShapeSource
           id="source1"
           lineMetrics={true}
-          shape={shape?.features[0]}
+          shape={shape.features[0]}
           cluster
           clusterRadius={80}
           clusterMaxZoomLevel={14}
+          style={{ zIndex: 1 }}
         >
-          <Mapbox.LineLayer
-            id="layer1"
-            style={styles.lineLayer}
-            lineDasharray={[1, 2]} // set the dash array pattern here
-            lineDashOffset={0}
-          />
+          <Mapbox.LineLayer id="layer1" style={styles.lineLayer} />
         </Mapbox.ShapeSource>
         {/* // top location */}
         {shape?.features[0]?.geometry?.coordinates?.length > 0 && (
