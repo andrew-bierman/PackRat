@@ -7,6 +7,7 @@ import {
   View,
   Picker,
   TouchableOpacity,
+  SafeAreaView,
   Dimensions,
   Modal,
   Alert,
@@ -335,7 +336,7 @@ function NativeMap() {
   );
 
   return (
-    <View style={{ flex: 1, paddingVertical: 10 }}>
+    <SafeAreaView style={{ flex: 1, paddingVertical: 10 }}>
       {!mapFullscreen ? (
         component
       ) : (
@@ -346,7 +347,7 @@ function NativeMap() {
           {component}
         </Modal>
       )}
-    </View>
+    </SafeAreaView>
   );
 }
 
