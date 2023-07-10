@@ -27,6 +27,7 @@ export default function ProfileContainer() {
   const user = useSelector((state) => state.auth.user);
   const packsData = useSelector(selectAllPacks);
   const tripsData = useSelector((state) => state.trips);
+  const favoritesData = useSelector((state) => state.favorites);
 
   // const { data } = useGetPacks(user?._id);
   console.log(user);
@@ -79,9 +80,18 @@ export default function ProfileContainer() {
       {isLoading ? (
         <Text>Loading....</Text>
       ) : (
-        <Box style={{ width: "100%", height: '100%' }} space={4} alignItems="center">
-          <UserDataContainer data={packsData} type="packs" />
-          <UserDataContainer data={tripsData?.trips} type="trips" />
+        <Box style={styles.mainContentContainer}>
+          <Box style={styles.userDataContainer}>
+            <UserDataContainer data={favoritesData} type="favorites" />
+          </Box>
+
+          <Box style={styles.userDataContainer}>
+            <UserDataContainer data={packsData} type="packs" />
+          </Box>
+
+          <Box style={styles.userDataContainer}>
+            <UserDataContainer data={tripsData?.trips} type="trips" />
+          </Box>
         </Box>
       )}
     </VStack>
@@ -118,5 +128,23 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     flex: 1,
     padding: 12,
+  },
+
+  favoritesContainer: {
+    width: "100%",
+    alignItems: "center",
+    marginTop: 25,
+  },
+  favoritesTitle: {
+    fontSize: 18,
+    fontWeight: 600,
+    marginBottom: 12,
+  },
+  mainContentContainer: {
+    width: "100%",
+    flex: 1,
+  },
+  userDataContainer: {
+    marginBottom: 25,
   },
 });
