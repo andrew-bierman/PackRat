@@ -22,13 +22,19 @@ const HeroSection = ({ onSelect }) => {
 
   console.log("currentDestination", currentDestination);
 
-  const handleSearchSelect = (selectedResult) => {
-    dispatch(processGeoJSON(selectedResult));
+  const handleSearchSelect = async (selectedResult) => {
+    try {
+      // console.log("selectedResult", selectedResult)
+      const actionResult = await dispatch(processGeoJSON(selectedResult));
 
-    if (currentDestination && currentDestination._id) {
-      router.push(`/destination/${currentDestination._id}`);
-    } else {
-      console.log("Current destination or _id is null or undefined");
+      // Accessing payload from actionResult
+      const destinationId = actionResult.payload.data.newInstance._id;
+
+      if (destinationId) {
+        router.push(`/destination/${destinationId}`);
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 
