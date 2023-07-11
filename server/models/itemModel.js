@@ -16,7 +16,7 @@ const ItemSchema = new Schema(
     },
     owners: [{ type: Schema.Types.ObjectId, ref: "User", default: [] }],
     packs: [{ type: Schema.Types.ObjectId, ref: "Pack", default: [] }],
-    modified: {
+    global: {
       type: Boolean,
       default: false,
     },
