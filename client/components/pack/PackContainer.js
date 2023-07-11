@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { Box, Text } from "native-base";
+import { Box, Input, Select, Text } from "native-base";
 import { useEffect, useState } from "react";
 
 import DropdownComponent from "../Dropdown";
@@ -8,7 +8,11 @@ import { AddItem } from "../item/AddItem";
 import { TableContainer } from "../pack_table/Table";
 // import { useAuth } from "../../auth/provider";
 import { useSelector } from "react-redux";
-import { fetchUserPacks, selectPackById, selectAllPacks } from "../../store/packsStore";
+import {
+  fetchUserPacks,
+  selectPackById,
+  selectAllPacks,
+} from "../../store/packsStore";
 import { updateNewTripPack } from "../../store/tripsStore";
 import { useDispatch } from "react-redux";
 
@@ -86,7 +90,6 @@ export default function PackContainer({ isCreatingTrip = false }) {
     </Box>
   ) : null;
 }
-
 
 const styles = StyleSheet.create({
   mainContainer: {

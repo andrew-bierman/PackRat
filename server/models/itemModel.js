@@ -14,9 +14,12 @@ const ItemSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "ItemCategory",
     },
-    // packId: { type: Schema.Types.ObjectId, ref: "Pack" },
     owners: [{ type: Schema.Types.ObjectId, ref: "User", default: [] }],
     packs: [{ type: Schema.Types.ObjectId, ref: "Pack", default: [] }],
+    modified: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

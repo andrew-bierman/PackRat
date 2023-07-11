@@ -12,8 +12,6 @@ export const EditPackItemModal = ({ initialData, packId }) => {
     setIsModalOpen(true);
   };
 
-  console.log("initialData", initialData);
-
   const footerButtons = [
     {
       label: "Cancel",

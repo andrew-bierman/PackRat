@@ -83,6 +83,12 @@ const Navigation = () => {
               iconSource: MaterialIcons,
             },
             {
+              href: "/items",
+              icon: "fastfood",
+              text: "Items",
+              iconSource: MaterialIcons,
+            },
+            {
               href: "profile",
               icon: "book",
               text: "Profile",
@@ -162,7 +168,9 @@ const Navigation = () => {
           <IconComponent
             name={icon}
             size={isMobileView ? 24 : 18}
-            color={isCurrentPage ? theme.colors.iconColor : theme.colors.iconColor} // change the color if this is the current page
+            color={
+              isCurrentPage ? theme.colors.iconColor : theme.colors.iconColor
+            } // change the color if this is the current page
             key={item.href + "icon"}
           />
           <Text
