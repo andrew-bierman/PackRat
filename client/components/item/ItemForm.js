@@ -1,6 +1,7 @@
-import { Box, Input, Button, Text, VStack, Checkbox } from "native-base";
+import { Box, Input, Button, Text, VStack, Radio } from "native-base";
 import { DropdownComponent } from "../Dropdown";
 import { theme } from "../../theme";
+import { ItemCategoryEnum } from "../../constants/itemCategory";
 
 const data = ["lbs", "oz", "kg", "g"];
 
@@ -13,8 +14,8 @@ export const ItemForm = ({
   setQuantity,
   unit,
   setUnit,
-  isFood,
-  setIsFood,
+  categoryType,
+  setCategoryType,
   handleSubmit,
   showSubmitButton = true,
   isLoading,
@@ -65,18 +66,22 @@ export const ItemForm = ({
           placeholder="Quantity"
           onChangeText={(text) => setQuantity(text)}
           width="100%"
+          type="text"
         />
-        <Checkbox
-          size="sm"
-          accessibilityLabel="mark wether it is a food item or not"
-          value={isFood}
-          onChange={(e) => {
-            setIsFood(e);
-          }}
+        <Radio.Group
+          value={categoryType}
+          name="category"
+          accessibilityLabel="category for the type of item"
+          onChange={(nextVal) => setCategoryType(nextVal)}
         >
-          <Text color="gray.500">Is this a Food item? </Text>
-        </Checkbox>
-
+          {Object.values(ItemCategoryEnum).map((value, key) => {
+            return (
+              <Radio key={key} value={value} mx="2">
+                {value}
+              </Radio>
+            );
+          })}
+        </Radio.Group>
         {showSubmitButton && (
           <Button onPress={handleSubmit}>
             <Text style={{ color: theme.colors.text }}>

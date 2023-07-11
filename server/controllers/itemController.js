@@ -161,3 +161,90 @@ export const searchItemsByName = async (req, res) => {
       .json({ msg: "Items cannot be found", "req.query": req.query });
   }
 };
+
+export const addItemGlobal = async (req, res) => {
+  try {
+    const { name, weight, quantity, unit, type } = req.body;
+
+    let category = null;
+    let newItem = null;
+
+    switch (type) {
+      case ItemCategoryEnum.FOOD: {
+        category = await ItemCategoryModel.findOne({
+          name: ItemCategoryEnum.FOOD,
+        });
+
+        newItem = await Item.create({
+          name,
+          weight,
+          quantity,
+          unit,
+          category: category._id,
+        });
+
+        break;
+      }
+      case ItemCategoryEnum.WATER: {
+        category = await ItemCategoryModel.findOne({
+          name: ItemCategoryEnum.WATER,
+        });
+        newItem = await Item.create({
+          name,
+          weight,
+          quantity: 1,
+          unit,
+          category: category._id,
+        });
+
+        break;
+      }
+      default: {
+        category = await ItemCategoryModel.findOne({
+          name: ItemCategoryEnum.ESSENTIALS,
+        });
+
+        newItem = await Item.create({
+          name,
+          weight,
+          quantity,
+          unit,
+          category: category._id,
+        });
+
+        break;
+      }
+    }
+
+    res.status(200).json({
+      msg: "success",
+      newItem: newItem,
+    });
+  } catch (error) {
+    res.status(404).json({ msg: "Unable to add item", error: error.message });
+  }
+};
+
+export const getItemsGlobally = async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const startIndex = (page - 1) * limit;
+
+    const totalItems = await Item.countDocuments({ modified: false });
+    const totalPages = Math.ceil(totalItems / limit);
+
+    const items = await Item.find({ modified: false })
+      .populate("category", "name")
+      .skip(startIndex)
+      .limit(limit);
+
+    return res.status(200).json({
+      items,
+      page,
+      totalPages,
+    });
+  } catch (error) {
+    res.status(404).json({ msg: "Items cannot be found" });
+  }
+};
