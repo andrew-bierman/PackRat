@@ -24,6 +24,7 @@ const HeroSection = ({ onSelect }) => {
 
   const handleSearchSelect = async (selectedResult) => {
     try {
+      // console.log("selectedResult", selectedResult)
       const actionResult = await dispatch(processGeoJSON(selectedResult));
   
       // Accessing payload from actionResult
