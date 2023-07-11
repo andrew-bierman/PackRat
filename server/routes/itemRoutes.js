@@ -8,6 +8,8 @@ import {
   deleteItem,
   searchItemsByName,
   getItemsGlobally,
+  addGlobalItemToPack,
+  editGlobalItemAsDuplicate,
 } from "../controllers/itemController.js";
 import auth from "../middleware/auth.js";
 import * as validator from "../middleware/validators/index.js";
@@ -204,5 +206,34 @@ router.post("/global", validator.addItemGlobal, addItemGlobal);
  *        description: Successful response
  */
 router.get("/global", getItemsGlobally);
+
+/**
+ * @swagger
+ * /item/:
+ *  post:
+ *    tags:
+ *      - Items
+ *    summary: add a item to Pack
+ *    requestBody:
+ *      required: false
+ *    responses:
+ *      200:
+ *        description: Successful response
+ */
+router.post("/global/:packId", addGlobalItemToPack);
+/**
+ * @swagger
+ * /item/:
+ *  post:
+ *    tags:
+ *      - Items
+ *    summary: edit a item in Pack
+ *    requestBody:
+ *      required: false
+ *    responses:
+ *      200:
+ *        description: Successful response
+ */
+router.put("/global/:itemId", editGlobalItemAsDuplicate);
 
 export default router;

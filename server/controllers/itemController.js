@@ -181,6 +181,7 @@ export const addItemGlobal = async (req, res) => {
           quantity,
           unit,
           category: category._id,
+          global: true,
         });
 
         break;
@@ -195,6 +196,7 @@ export const addItemGlobal = async (req, res) => {
           quantity: 1,
           unit,
           category: category._id,
+          global: true,
         });
 
         break;
@@ -210,6 +212,7 @@ export const addItemGlobal = async (req, res) => {
           quantity,
           unit,
           category: category._id,
+          global: true,
         });
 
         break;
@@ -231,10 +234,10 @@ export const getItemsGlobally = async (req, res) => {
     const limit = parseInt(req.query.limit) || 10;
     const startIndex = (page - 1) * limit;
 
-    const totalItems = await Item.countDocuments({ modified: false });
+    const totalItems = await Item.countDocuments({ global: true });
     const totalPages = Math.ceil(totalItems / limit);
 
-    const items = await Item.find({ modified: false })
+    const items = await Item.find({ global: true })
       .populate("category", "name")
       .skip(startIndex)
       .limit(limit);
@@ -244,6 +247,86 @@ export const getItemsGlobally = async (req, res) => {
       page,
       totalPages,
     });
+  } catch (error) {
+    res.status(404).json({ msg: "Items cannot be found" });
+  }
+};
+
+export const addGlobalItemToPack = async (req, res) => {
+  try {
+    const { packId } = req.params;
+    const { itemId } = req.body;
+    const { ownerId } = req.body;
+
+    const item = await Item.findById(itemId);
+
+    await Pack.updateOne({ _id: packId }, { $addToSet: { items: item._id } });
+
+    await Item.findByIdAndUpdate(
+      item._id,
+      {
+        $addToSet: {
+          owners: ownerId,
+        },
+      },
+      { new: true }
+    );
+
+    await Item.findByIdAndUpdate(
+      item._id,
+      {
+        $addToSet: {
+          packs: packId,
+        },
+      },
+      { new: true }
+    );
+
+    return res.status(200).send("succesfully updated");
+  } catch (error) {
+    res.status(404).json({ msg: "Items cannot be found" });
+  }
+};
+
+export const editGlobalItemAsDuplicate = async (req, res) => {
+  try {
+    const { itemId } = req.params;
+    const { packId, name, weight, quantity, unit, type } = req.body;
+
+    let category = await ItemCategoryModel.findOne({
+      name: type,
+    });
+    // duplicate the item with new changes
+    let newItem = await Item.create({
+      name,
+      weight,
+      unit,
+      quantity,
+      category: category._id,
+      global: false,
+      packs: [packId],
+    });
+    // add to pack list
+    await Pack.updateOne(
+      { _id: packId },
+      { $addToSet: { items: newItem._id } }
+    );
+    // remove the already added item from pack list
+    await Pack.updateOne({ _id: packId }, { $pull: { items: itemId } });
+    //update the individual item
+
+    await Item.updateOne(
+      {
+        _id: itemId,
+      },
+      {
+        $pull: {
+          packs: packId,
+        },
+      }
+    );
+
+    return res.status(200).send("succesfully updated");
   } catch (error) {
     res.status(404).json({ msg: "Items cannot be found" });
   }
