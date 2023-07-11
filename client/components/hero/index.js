@@ -1,7 +1,7 @@
 import React from "react";
 import { VStack, Text, Image } from "native-base";
 import LargeCard from "../card/LargeCard";
-import { StyleSheet, View } from "react-native";
+import { Platform, StyleSheet, View } from "react-native";
 import { theme } from "../../theme";
 import { isObjectEmpty } from "../../utils/isObjectEmpty";
 
@@ -18,7 +18,12 @@ const Hero = ({ children, imageDetails }) => {
   const { title, subtitle, source, alt } = imageDetails;
 
   return (
-    <View style={styles.heroContainer}>
+    <View
+      style={[
+        styles.heroContainer,
+        Platform.OS === "web" ? { height: "310px" } : null,
+      ]}
+    >
       <Image source={source} alt={alt} style={styles.heroImage} />
       <VStack>{children}</VStack>
     </View>
@@ -33,7 +38,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     width: "100%",
-    height: "310px",
   },
   heroImage: {
     width: "100%",

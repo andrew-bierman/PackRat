@@ -57,7 +57,7 @@ export default function PackContainer({ isCreatingTrip = false }) {
         value={currentPackId}
         onValueChange={handlePack}
         placeholder={"Select a Pack"}
-        width="300"
+        width= {300}
       />
       {currentPackId && (
         <>
