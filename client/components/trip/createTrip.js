@@ -53,7 +53,7 @@ export default function Trips() {
         <Header.Screen
           options={{
             // https://reactnavigation.org/docs/headers#setting-the-header-title
-            title: "Home",
+            title: "Trips",
           }}
         />
       ) : null}
@@ -71,7 +71,10 @@ export default function Trips() {
             )}
           />
 
-          <WeatherCard weatherObject={weatherObject} weatherWeek={weatherWeek} />
+          <WeatherCard
+            weatherObject={weatherObject}
+            weatherWeek={weatherWeek}
+          />
 
           <TripCard
             title="Nearby Trails"
@@ -111,7 +114,6 @@ export default function Trips() {
             )}
             title="Map"
             isMap={true}
-           
           />
           <Box>
             <SaveTripContainer />
