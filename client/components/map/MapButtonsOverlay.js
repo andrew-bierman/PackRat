@@ -23,7 +23,6 @@ const MapButtonsOverlay = ({
   fetchLocation,
   onDownload,
   progress,
-  handleOffline,
 }) => {
   const [showStyleOptions, setShowStyleOptions] = useState(false);
 
@@ -136,24 +135,6 @@ const MapButtonsOverlay = ({
               </Text>
             </TouchableOpacity>
           )}
-
-          <TouchableOpacity
-            style={{
-              alignItems: "center",
-              justifyContent: "center",
-              width: 40,
-              height: 40,
-              position: "absolute",
-              bottom: 80,
-              right: 10,
-              backgroundColor: "white",
-              borderRadius: 30,
-              zIndex: 1,
-            }}
-            onPress={handleOffline}
-          >
-            <Entypo name="map" size={24} color="black" />
-          </TouchableOpacity>
 
           {/* Location Button */}
           <TouchableOpacity

@@ -73,9 +73,7 @@ function NativeMap() {
   const [downloading, setDownloading] = useState(false);
   const [mapStyle, setMapStyle] = useState(mapboxStyles[0].style);
   const [showMapNameInputDialog, setShowMapNameInputDialog] = useState(false);
-  const [showOfflinePacks, setShowOfflinePacks] = useState(false);
   const [mapName, setMapName] = useState("");
-  const [offlinePacks, setofflinePacks] = useState(null);
 
   // consts
   const shape = {
@@ -250,7 +248,7 @@ function NativeMap() {
       .createPack(optionsForDownload, onDownloadProgress, errorListener)
       .catch((error) => {
         Alert.alert(error.message);
-      });
+      })
   }
   function CircleCapComp() {
     return (
@@ -349,9 +347,6 @@ function NativeMap() {
         shape={shape}
         onDownload={() => setShowMapNameInputDialog(true)}
         progress={progress}
-        handleOffline={() => {
-          setShowOfflinePacks(true);
-        }}
       />
     </View>
   );
@@ -376,7 +371,7 @@ function NativeMap() {
             <AlertDialog.Content>
               <AlertDialog.CloseButton />
               <AlertDialog.Header>
-                Enter map name to download
+                Enter the name you wish to save this map as:
               </AlertDialog.Header>
               <AlertDialog.Body>
                 <Input
@@ -407,7 +402,7 @@ function NativeMap() {
                         styleURL: "mapbox://styles/mapbox/outdoors-v11",
                         bounds: await mapViewRef.current.getVisibleBounds(),
                         minZoom: 0,
-                        maxZoom: 21,
+                        maxZoom: 15,
                       };
                       onDownload(options);
                     }}
@@ -418,62 +413,6 @@ function NativeMap() {
               </AlertDialog.Footer>
             </AlertDialog.Content>
           </AlertDialog>
-          <Actionsheet
-            isOpen={showOfflinePacks}
-            onClose={() => setShowOfflinePacks(false)}
-          >
-            <Actionsheet.Content>
-              <Box w="100%" h={60} px={4} justifyContent="center">
-                <Text
-                  fontSize="16"
-                  color="#000"
-                  style={{ textAlign: "center", fontWeight: "bold" }}
-                >
-                  Downloaded Maps
-                </Text>
-              </Box>
-              {offlinePacks.map(({ pack }) => {
-                metadata = JSON.parse(pack.metadata);
-                return (
-                  <Actionsheet.Item
-                    onPress={() => {
-                      camera.current.flyTo([
-                        (pack.bounds[0][0] + pack.bounds[1][0]) / 2,
-                        (pack.bounds[0][1] + pack.bounds[1][1]) / 2,
-                      ]);
-                      setShowOfflinePacks(false)
-                    }}
-                    key={metadata.name}
-                    style={{ flexDirection: "row" }}
-                  >
-                    {metadata.name}
-                    {/* <TouchableOpacity
-                      style={{
-                        color: "#000",
-                        fontSize: 16,
-                        backgroundColor: "blue",
-                        width: "100%",
-                        alignSelf: "stretch",
-                      }}
-                    >
-                      <Text
-                        onPress={() => {
-                          camera.current.fitBounds(pack.bounds);
-                        }}
-                      >
-                        {metadata.name}
-                      </Text>
-                    </TouchableOpacity> */}
-                    {/* <Button onPress={async ()=>{
-                    await offlineManager.deletePack(metadata.name)
-                    const newPacks = await offlineManager.getPacks()
-                    setofflinePacks(newPacks);
-                  }}>Delete</Button> */}
-                  </Actionsheet.Item>
-                );
-              })}
-            </Actionsheet.Content>
-          </Actionsheet>
         </>
       )}
     </SafeAreaView>
