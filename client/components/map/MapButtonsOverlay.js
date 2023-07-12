@@ -22,7 +22,8 @@ const MapButtonsOverlay = ({
   downloading,
   fetchLocation,
   onDownload,
-  progress
+  progress,
+  handleOffline,
 }) => {
   const [showStyleOptions, setShowStyleOptions] = useState(false);
 
@@ -34,8 +35,6 @@ const MapButtonsOverlay = ({
     handleChangeMapStyle(style);
     setShowStyleOptions(false);
   };
-
-
 
   return (
     <>
@@ -81,8 +80,9 @@ const MapButtonsOverlay = ({
               },
             ]}
             onPress={() => {
-              Platform.OS == 'web'? alert("Sorry, currently not implemented"):
-              Alert.alert("Sorry, currently not implemented");
+              Platform.OS == "web"
+                ? alert("Sorry, currently not implemented")
+                : Alert.alert("Sorry, currently not implemented");
             }}
           >
             <MaterialCommunityIcons
@@ -128,10 +128,32 @@ const MapButtonsOverlay = ({
                 source={require("../../assets/download.svg")}
               />
               <Text style={styles.downloadText}>
-                {downloading ? `Downloading... ${progress ? Math.floor(progress) + '%' : '' }` : "Download map"}
+                {downloading
+                  ? `Downloading... ${
+                      progress ? Math.floor(progress) + "%" : ""
+                    }`
+                  : "Download map"}
               </Text>
             </TouchableOpacity>
           )}
+
+          <TouchableOpacity
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              width: 40,
+              height: 40,
+              position: "absolute",
+              bottom: 80,
+              right: 10,
+              backgroundColor: "white",
+              borderRadius: 30,
+              zIndex: 1,
+            }}
+            onPress={handleOffline}
+          >
+            <Entypo name="map" size={24} color="black" />
+          </TouchableOpacity>
 
           {/* Location Button */}
           <TouchableOpacity
