@@ -83,6 +83,16 @@ const Navigation = () => {
               text: "Packs",
               iconSource: MaterialIcons,
             },
+            ...(Platform.OS != "web"
+              ? [
+                  {
+                    href: "maps",
+                    icon: "map",
+                    text: "Downloaded Maps",
+                    iconsSource: Entypo,
+                  },
+                ]
+              : []),
             {
               href: "profile",
               icon: "book",
