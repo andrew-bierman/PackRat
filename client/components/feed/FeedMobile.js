@@ -16,7 +16,7 @@ import DropdownComponent from "../Dropdown";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { getPublicPacks } from "../../store/feedStore";
+import { getPublicPacks, selectAllFeed } from "../../store/feedStore";
 
 const dataValues = ["Favorite", "Most Recent"];
 
@@ -27,10 +27,13 @@ export default function FeedMobile() {
 
   const dispatch = useDispatch();
   const publicParksData = useSelector((state) => state.feed.publicPacks);
+  const feeds = useSelector(selectAllFeed);
 
   useEffect(() => {
     dispatch(getPublicPacks(queryString));
   }, [queryString]);
+
+  console.log(feeds);
 
   return (
     <VStack>

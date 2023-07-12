@@ -7,7 +7,7 @@ import { TableContainer } from "../pack_table/Table";
 import { selectPackById } from "../../store/packsStore";
 
 import { useSelector, useDispatch } from "react-redux";
-import { fetchSingleTrip } from "../../store/singleTripStore";
+import { fetchSingleTrip, selectAllSingleTrip } from "../../store/singleTripStore";
 
 import { Box, Text, View } from "native-base";
 import { DetailsComponent } from "../details";
@@ -24,10 +24,12 @@ export function TripDetails() {
   const weatherWeek = useSelector((state) => state.weather.weatherWeek);
 
   const dispatch = useDispatch();
-
+  const singleTrip = useSelector(selectAllSingleTrip);
+  
   const { tripId } = useSearchParams();
 
   const link = `${CLIENT_URL}/trip/${tripId}`;
+  console.log(singleTrip);
 
   useEffect(() => {
     if (!tripId) return;

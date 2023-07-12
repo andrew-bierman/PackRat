@@ -8,7 +8,7 @@ import { Box, Heading, Text, HStack, Stack } from "native-base";
 
 // import { useAuth } from "../../auth/provider";
 import { useDispatch, useSelector } from "react-redux";
-import { addFavorite } from "../../store/favoritesStore";
+import { addFavorite, selectAllFavourites } from "../../store/favoritesStore";
 
 export default function FeedCardMobile({
   _id,
@@ -24,6 +24,7 @@ export default function FeedCardMobile({
   const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
   const favorites = useSelector((state) => state.favorites);
+  const favorite = useSelector(selectAllFavourites);
   // const { addToFavorite } = useAddToFavorite();
 
   const handleAddToFavorite = () => {

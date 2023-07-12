@@ -33,7 +33,7 @@ const singlePackSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchSinglePack.fulfilled, (state, action) => {
-        singlePackAdapter.setAll(state.singlePack. action.payload);
+        // singlePackAdapter.setAll(state.singlePack. action.payload);
         state.singlePack = action.payload;
         state.isLoading = false;
         state.error = null;
