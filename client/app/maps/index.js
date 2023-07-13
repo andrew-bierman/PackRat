@@ -1,8 +1,9 @@
-import { Modal, Text, View } from "react-native";
+import { Modal, Text, View, Image } from "react-native";
 import Mapbox, { offlineManager } from "@rnmapbox/maps";
 import { useEffect, useState } from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import MapButtonsOverlay from "../../components/map/MapButtonsOverlay";
+import { theme } from "../../theme";
 
 export default function DownloadedMaps() {
   const [offlinePacks, setOfflinePacks] = useState(null);
@@ -16,13 +17,14 @@ export default function DownloadedMaps() {
   }, []);
 
   return (
-    <>
+    <View style={{ backgroundColor: theme.colors.background }}>
       <Text
         style={{
           textAlign: "center",
-          fontSize: 28,
+          fontSize: 20,
           fontWeight: "bold",
           marginBottom: 20,
+          color: theme.colors.text
         }}
       >
         Downloaded Maps
@@ -34,16 +36,39 @@ export default function DownloadedMaps() {
             return (
               <TouchableOpacity
                 style={{
-                  backgroundColor: "#f3f3f3",
-                  paddingVertical: 20,
-                  paddingLeft: 10,
+                  padding: 20,
                 }}
                 onPress={() => {
                   setPack(pack);
                   setShowMap(true);
                 }}
               >
-                <Text style={{ fontSize: 16 }}>{metadata.name}</Text>
+                <Image
+                  style={{
+                    width: "100%",
+                    height: 200,
+                    borderRadius: 10,
+                  }}
+                  source={{
+                    uri: `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/[${pack.bounds[1]
+                      .concat(pack.bounds[0])
+                      .reduce(
+                        (prev, curr) => prev + "," + curr
+                      )}]/600x600?access_token=${
+                      process.env.MAPBOX_ACCESS_TOKEN
+                    }`,
+                  }}
+                />
+                <Text
+                  style={{
+                    fontSize: 16,
+                    fontWeight: "bold",
+                    marginTop: 5,
+                    color: theme.colors.text,
+                  }}
+                >
+                  {metadata.name}
+                </Text>
               </TouchableOpacity>
             );
           })}
@@ -78,6 +103,6 @@ export default function DownloadedMaps() {
           />
         </Modal>
       ) : null}
-    </>
+    </View>
   );
 }
