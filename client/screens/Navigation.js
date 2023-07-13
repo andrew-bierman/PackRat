@@ -89,7 +89,7 @@ const Navigation = () => {
                     href: "maps",
                     icon: "map",
                     text: "Downloaded Maps",
-                    iconsSource: Entypo,
+                    iconSource: Entypo,
                   },
                 ]
               : []),
