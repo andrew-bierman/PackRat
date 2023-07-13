@@ -240,7 +240,7 @@ function NativeMap() {
     }
   }
   function errorListener(offlineRegion, error) {
-    Alert.alert(error);
+    Alert.alert(error.message);
   }
   function onDownload(optionsForDownload) {
     // start download
