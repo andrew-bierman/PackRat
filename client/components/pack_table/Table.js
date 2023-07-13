@@ -68,7 +68,6 @@ const Loading = () => <Text>Loading....</Text>;
 
 const ErrorMessage = ({ message }) => <Text>{message}</Text>;
 
-
 const TableItem = ({
   itemData,
   checkedItems,
