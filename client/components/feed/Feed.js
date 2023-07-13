@@ -1,16 +1,16 @@
-import { Container, Box, Text, HStack, Stack } from "native-base";
-import { StyleSheet } from "react-native";
-import { useAuth } from "../../auth/provider";
-import Card from "./Card";
-import useGetPublicPacks from "../../hooks/useGetPublicPacks";
-import { theme } from "../../theme";
-import DropdownComponent from "../Dropdown";
-import { useState } from "react";
+import { Container, Box, Text, HStack, Stack } from 'native-base';
+import { StyleSheet } from 'react-native';
+import { useAuth } from '../../auth/provider';
+import Card from './Card';
+import useGetPublicPacks from '../../hooks/useGetPublicPacks';
+import { theme } from '../../theme';
+import DropdownComponent from '../Dropdown';
+import { useState } from 'react';
 
-const dataValues = ["Favorite", "Most Recent"];
+const dataValues = ['Favorite', 'Most Recent'];
 
 export default function Feed() {
-  const [queryString, setQueryString] = useState("");
+  const [queryString, setQueryString] = useState('');
 
   const { data, isLoading, isError, error } = useGetPublicPacks(queryString);
 
@@ -24,7 +24,7 @@ export default function Feed() {
       />
 
       <Stack
-        direction={["column", "column", "column", "row"]}
+        direction={['column', 'column', 'column', 'row']}
         space={[3, 3, 3, 0]}
         flexWrap="wrap"
       >
@@ -41,21 +41,21 @@ export default function Feed() {
 const styles = StyleSheet.create({
   mainContainer: {
     backgroundColor: theme.colors.background,
-    flexDirection: "column",
-    minHeight: "100vh",
+    flexDirection: 'column',
+    minHeight: '100vh',
     gap: 15,
     padding: 15,
     fontSize: 18,
-    width: "100%",
+    width: '100%',
   },
   packsContainer: {
-    flexDirection: "column",
-    minHeight: "100vh",
+    flexDirection: 'column',
+    minHeight: '100vh',
 
     padding: 25,
     fontSize: 26,
   },
   dropdown: {
-    backgroundColor: "white",
+    backgroundColor: 'white',
   },
 });

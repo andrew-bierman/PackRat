@@ -1,12 +1,12 @@
-import { AntDesign } from "@expo/vector-icons";
-import { formatDistanceToNow } from "date-fns";
-import { MaterialIcons } from "@expo/vector-icons";
+import { AntDesign } from '@expo/vector-icons';
+import { formatDistanceToNow } from 'date-fns';
+import { MaterialIcons } from '@expo/vector-icons';
 
-import useAddToFavorite from "../../hooks/useAddToFavorites";
+import useAddToFavorite from '../../hooks/useAddToFavorites';
 
-import { Box, Heading, Text, HStack, Stack } from "native-base";
+import { Box, Heading, Text, HStack, Stack } from 'native-base';
 
-import { useAuth } from "../../auth/provider";
+import { useAuth } from '../../auth/provider';
 
 export default function CardMobile({
   _id,
@@ -25,10 +25,10 @@ export default function CardMobile({
       <Box
         style={{
           borderRadius: 18,
-          borderColor: "grey",
-          overflow: "hidden",
+          borderColor: 'grey',
+          overflow: 'hidden',
           borderWidth: 1,
-          backgroundColor: "white",
+          backgroundColor: 'white',
         }}
       >
         <Stack p="4" space={10}>
@@ -36,10 +36,10 @@ export default function CardMobile({
             <Heading size="md" ml="-1">
               <Box
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  width: "100%",
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  width: '100%',
                   gap: 10,
                 }}
               >
@@ -51,7 +51,7 @@ export default function CardMobile({
             <Text
               style={{
                 fontSize: 18,
-                color: "violet",
+                color: 'violet',
                 fontWeight: 500,
                 marginLeft: 1,
                 marginTop: 2,
@@ -66,7 +66,7 @@ export default function CardMobile({
               <Text
                 style={{
                   fontSize: 18,
-                  color: "violet",
+                  color: 'violet',
                   fontWeight: 500,
                   marginLeft: 1,
                   marginTop: 2,
@@ -86,16 +86,16 @@ export default function CardMobile({
               </Text>
               <Box
                 style={{
-                  flexDirection: "column",
-                  alignItems: "center",
+                  flexDirection: 'column',
+                  alignItems: 'center',
                   gap: 10,
                 }}
               >
                 <Text>Favorites</Text>
                 <Box
                   style={{
-                    flexDirection: "row",
-                    alignItems: "center",
+                    flexDirection: 'row',
+                    alignItems: 'center',
                     gap: 10,
                   }}
                 >
@@ -111,13 +111,13 @@ export default function CardMobile({
                       }
                       name="heart"
                       size={16}
-                      color={user?.favorites.includes(_id) ? "red" : "grey"}
+                      color={user?.favorites?.includes(_id) ? 'red' : 'grey'}
                     />
                   )}
                   <Text
                     style={{
                       fontSize: 18,
-                      color: "violet",
+                      color: 'violet',
                       fontWeight: 500,
                       marginLeft: 1,
                       marginTop: 2,

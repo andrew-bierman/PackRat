@@ -1,8 +1,8 @@
-import { AntDesign } from "@expo/vector-icons";
-import { formatDistanceToNow } from "date-fns";
-import { MaterialIcons } from "@expo/vector-icons";
-import { theme } from "../../theme";
-import useAddToFavorite from "../../hooks/useAddToFavorites";
+import { AntDesign } from '@expo/vector-icons';
+import { formatDistanceToNow } from 'date-fns';
+import { MaterialIcons } from '@expo/vector-icons';
+import { theme } from '../../theme';
+import useAddToFavorite from '../../hooks/useAddToFavorites';
 
 import {
   Box,
@@ -12,9 +12,9 @@ import {
   Center,
   HStack,
   Stack,
-} from "native-base";
+} from 'native-base';
 
-import { useAuth } from "../../auth/provider";
+import { useAuth } from '../../auth/provider';
 
 export default function Card({
   _id,
@@ -38,15 +38,15 @@ export default function Card({
         borderColor="coolGray.200"
         borderWidth="1"
         _dark={{
-          borderColor: "coolGray.600",
-          backgroundColor: "gray.700",
+          borderColor: 'coolGray.600',
+          backgroundColor: 'gray.700',
         }}
         _web={{
           shadow: 2,
           borderWidth: 0,
         }}
         _light={{
-          backgroundColor: "gray.50",
+          backgroundColor: 'gray.50',
         }}
       >
         <Stack p="4" space={10}>
@@ -54,10 +54,10 @@ export default function Card({
             <Heading size="md" ml="-1">
               <Box
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  width: "100%",
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  width: '100%',
                   gap: 10,
                 }}
               >
@@ -69,10 +69,10 @@ export default function Card({
             <Text
               fontSize="xs"
               _light={{
-                color: "violet.500",
+                color: 'violet.500',
               }}
               _dark={{
-                color: "violet.400",
+                color: 'violet.400',
               }}
               fontWeight="500"
               ml="-0.5"
@@ -87,7 +87,7 @@ export default function Card({
               <Text
                 color="coolGray.600"
                 _dark={{
-                  color: "warmGray.200",
+                  color: 'warmGray.200',
                 }}
                 fontWeight="400"
                 flex={1}
@@ -105,16 +105,16 @@ export default function Card({
               </Text>
               <Box
                 style={{
-                  flexDirection: "column",
-                  alignItems: "center",
+                  flexDirection: 'column',
+                  alignItems: 'center',
                   gap: 10,
                 }}
               >
                 <Text>Favorites</Text>
                 <Box
                   style={{
-                    flexDirection: "row",
-                    alignItems: "center",
+                    flexDirection: 'row',
+                    alignItems: 'center',
                     gap: 10,
                   }}
                 >
@@ -130,13 +130,13 @@ export default function Card({
                       }
                       name="heart"
                       size={16}
-                      color={user?.favorites.includes(_id) ? "red" : "grey"}
+                      color={user?.favorites?.includes(_id) ? 'red' : 'grey'}
                     />
                   )}
                   <Text
                     color="coolGray.600"
                     _dark={{
-                      color: "warmGray.200",
+                      color: 'warmGray.200',
                     }}
                     fontWeight="400"
                   >

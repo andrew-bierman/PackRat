@@ -9,18 +9,18 @@ import {
   HStack,
   Center,
   NativeBaseProvider,
-} from "native-base";
+} from 'native-base';
 
-import { useState } from "react";
-import useLogin from "../hooks/useLogin";
-import { useAuth } from "../auth/provider";
-import { Link } from "expo-router";
-import { useRouter } from "expo-router";
-import { theme } from "../theme";
+import { useState } from 'react';
+import useLogin from '../hooks/useLogin';
+import { useAuth } from '../auth/provider';
+import { Link } from 'expo-router';
+import { useRouter } from 'expo-router';
+import { theme } from '../theme';
 
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const { signIn } = useAuth();
   const { loginUser } = useLogin();
@@ -35,7 +35,7 @@ export default function Login() {
           fontWeight="600"
           color="coolGray.800"
           _dark={{
-            color: "warmGray.50",
+            color: 'warmGray.50',
           }}
         >
           <Text>Welcome</Text>
@@ -43,7 +43,7 @@ export default function Login() {
         <Heading
           mt="1"
           _dark={{
-            color: "warmGray.200",
+            color: 'warmGray.200',
           }}
           color="coolGray.600"
           fontWeight="medium"
@@ -54,7 +54,7 @@ export default function Login() {
 
         <VStack space={3} mt="5">
           <FormControl>
-            <FormControl.Label>Email ID</FormControl.Label>
+            <FormControl.Label>Email Ids</FormControl.Label>
             <Input value={email} onChangeText={(text) => setEmail(text)} />
           </FormControl>
           <FormControl>
@@ -74,14 +74,14 @@ export default function Login() {
             mt="2"
             colorScheme="indigo"
           >
-            {loginUser.isLoading ? "Loading...." : "Sign in"}
+            {loginUser.isLoading ? 'Loading....' : 'Sign in'}
           </Button>
           <HStack mt="6" justifyContent="center">
             <Text
               fontSize="sm"
               color="coolGray.600"
               _dark={{
-                color: "warmGray.200",
+                color: 'warmGray.200',
               }}
             >
               I'm a new user.
@@ -89,7 +89,7 @@ export default function Login() {
             <Link href="/register">
               <Text
                 style={{
-                  color: "#818cf8",
+                  color: '#818cf8',
                   fontWeight: 400,
                   fontSize: 12,
                 }}
@@ -100,7 +100,7 @@ export default function Login() {
           </HStack>
         </VStack>
       </Box>
-      {loginUser.isSuccess && router.push("/")}
+      {loginUser.isSuccess && router.push('/')}
     </Center>
   );
 }
