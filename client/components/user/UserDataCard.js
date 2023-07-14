@@ -14,7 +14,7 @@ import {
   Button,
 } from "native-base";
 
-import { changePackStatus, selectIsLoading } from "../../store/packsStore";
+import { changePackStatus, selectIsLoading, selectAllPacks } from "../../store/packsStore";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -43,6 +43,7 @@ const UserDataCard = ({
     }
   };
 
+  const packs = useSelector(selectAllPacks);
   const isLoading = useSelector(selectIsLoading);
 
   return (

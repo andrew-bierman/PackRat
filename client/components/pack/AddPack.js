@@ -18,11 +18,10 @@ export const AddPack = () => {
   // const { addPack } = useAddPack();
   // const { user } = useAuth();
   const user = useSelector((state) => state.auth.user);
-  console.log(user);
 
-  const isLoading = useSelector(selectIsLoading);
+  const isLoading = useSelector((state) => state.packs.isLoading);
 
-  const error = useSelector(selectError);
+  const error = useSelector((state) => state.packs.error);
 
   const isError = error !== null;
 
