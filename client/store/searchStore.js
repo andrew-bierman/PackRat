@@ -46,7 +46,6 @@ const searchSlice = createSlice({
         state.searchResults = [];
       })
       .addCase(fetchPhotonSearchResults.fulfilled, (state, action) => {
-        searchAdapter.setAll(state.searchResults, action.payload);
         state.searchResults = action.payload;
       })
       .addCase(fetchPhotonSearchResults.rejected, (state, action) => {
