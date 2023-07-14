@@ -12,45 +12,22 @@ import {
   IconButton,
   Center,
   Heading,
-<<<<<<< HEAD
-} from 'native-base';
-import { Ionicons, MaterialIcons } from '@expo/vector-icons';
-=======
   HStack,
   List,
   View,
   Pressable,
 } from "native-base";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
->>>>>>> f2fc0eb8af20a251efb67559880e245cf7d90cab
 
 import { SafeAreaView } from 'react-native';
 
 import { Platform } from 'react-native';
 
-<<<<<<< HEAD
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-// import { Google_Api_Key } from "../constants/api";
-
-// redux
-import { useDispatch } from 'react-redux';
-import { add, addWeek } from '../store/weatherStore';
-=======
 // redux
 import { useDispatch, useSelector } from "react-redux";
->>>>>>> f2fc0eb8af20a251efb67559880e245cf7d90cab
 
 import { useState, useEffect } from 'react';
 
-<<<<<<< HEAD
-import { getGeoCode } from '../api/getGeoCode';
-import { getWeather } from '../api/getWeather';
-import { getWeatherWeek } from '../api/getWeatherWeek';
-
-export const SearchInput = () => {
-  const [searchString, setSearchString] = useState('Virginia US');
-  const [geoCode, setGeoCode] = useState();
-=======
 // import { getTrailsResult } from "../api/getTrailsResult";
 // import { getPhotonResults } from "../api/getPhotonResults";
 
@@ -75,7 +52,6 @@ import { fetchWeather, fetchWeatherWeek } from "../store/weatherStore";
 
 export const SearchInput = ({ onSelect, placeholder }) => {
   const [searchString, setSearchString] = useState("");
->>>>>>> f2fc0eb8af20a251efb67559880e245cf7d90cab
   const [isLoadingMobile, setIsLoadingMobile] = useState(false);
   const [selectedSearch, setSelectedSearch] = useState("");
 
@@ -161,37 +137,6 @@ export const SearchInput = ({ onSelect, placeholder }) => {
 
   return Platform.OS === 'web' ? (
     <VStack my="4" space={5} w="100%" maxW="300px">
-<<<<<<< HEAD
-      <GooglePlacesAutocomplete
-        placeholder="Search"
-        query={{
-          key: 'AIzaSyBTuWUrM5WaEzMZLq_9ps6ii4xwmWBlmJk',
-          language: 'en', // language of the results
-        }}
-        minLength={2}
-        styles={{
-          textInput: {
-            borderColor: '#9ca3af',
-            borderWidth: 1,
-            paddingVertical: 3,
-            paddingHorizontal: 6,
-            borderRadius: 4,
-            fontSize: 14,
-          },
-
-          predefinedPlacesDescription: {
-            color: '#1faadb',
-            zIndex: 100,
-          },
-        }}
-        onPress={(data, details = null) => setSearchString(data?.description)}
-        onFail={(error) => console.error(error)}
-        requestUrl={{
-          url: 'https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api',
-          useOnPlatform: 'all',
-        }} // this in only required for use on the web. See https://git.io/JflFv more for details.
-      />
-=======
       {/* ... */}
       <VStack w="100%" space={5} alignSelf="center">
         <Box position="relative" height="auto">
@@ -276,7 +221,6 @@ export const SearchInput = ({ onSelect, placeholder }) => {
           </View>
         </Box>
       </VStack>
->>>>>>> f2fc0eb8af20a251efb67559880e245cf7d90cab
     </VStack>
   ) : isLoadingMobile ? (
     <Text>Loading...</Text>
