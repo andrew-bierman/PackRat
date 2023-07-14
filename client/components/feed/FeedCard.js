@@ -5,8 +5,8 @@ import { theme } from "../../theme";
 // import useAddToFavorite from "../../hooks/useAddToFavorites";
 // import { useAuth } from "../../auth/provider";
 import { useSelector, useDispatch } from "react-redux";
-import { addFavorite } from "../../store/favoritesStore";
-import { TouchableOpacity } from "react-native";
+import { addFavorite, selectAllFavourites } from "../../store/favoritesStore";
+import { TouchableOpacity, useAnimatedValue } from "react-native";
 import { Link } from "expo-router";
 
 import {
@@ -37,12 +37,13 @@ export default function Card({
   const user = useSelector((state) => state.auth.user);
   const favorites = useSelector((state) => state.favorites.favorites);
   const dispatch = useDispatch();
-
+  const favorite = useSelector(selectAllFavourites);
   const isFavorite = favorites.some((favorite) => favorite.pack_id === _id);
 
   const handleAddToFavorite = () => {
     dispatch(addFavorite({ pack_id: _id, user_id: user._id }));
   };
+  console.log(favorite);
 
   const handleRemoveFromFavorite = () => {
     const favorite = favorites.find(

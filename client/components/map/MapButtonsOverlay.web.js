@@ -10,7 +10,7 @@ import {
 import { Box, Select } from "native-base";
 import { Entypo, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
-import { convertGeoJSONToGPX, resetGpxData } from "../../store/gpxStore";
+import { convertGeoJSONToGPX, resetGpxData, selectAllGpx } from "../../store/gpxStore";
 
 import { mapboxStyles, handleGpxDownload } from "../../utils/mapFunctions";
 
@@ -26,7 +26,7 @@ const MapButtonsOverlay = ({
   shape,
 }) => {
   const dispatch = useDispatch();
-  const gpxData = useSelector((state) => state.gpx.gpxData);
+  const gpxData = useSelector(selectAllGpx);
 
   const [showStyleOptions, setShowStyleOptions] = useState(false);
   const [downloading, setDownloading] = useState(false); // New state for downloading

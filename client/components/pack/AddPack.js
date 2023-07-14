@@ -3,7 +3,7 @@ import { Box, Input, Button, Text } from "native-base";
 import { Platform } from "react-native";
 
 // import useAddPack from "../../hooks/useAddPack";
-import { addPack } from "../../store/packsStore";
+import { addPack, selectIsLoading,  selectError} from "../../store/packsStore";
 import { theme } from "../../theme";
 import { useState } from "react";
 // import { useAuth } from "../../auth/provider";

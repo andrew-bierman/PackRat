@@ -1,6 +1,15 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
 import { api } from "../constants/api";
 import axios from "axios";
+
+const parksAdapter = createEntityAdapter();
+
+const initialState = parksAdapter.getInitialState({
+  parksDetails: [],
+  parkNames: [],
+  isLoading: false,
+  error: null,
+});
 
 export const fetchParks = createAsyncThunk(
   "parks/fetchParks",
@@ -33,12 +42,7 @@ export const fetchParks = createAsyncThunk(
 
 export const parksSlice = createSlice({
   name: "parks",
-  initialState: {
-    parksDetails: [],
-    parkNames: [],
-    isLoading: false,
-    error: null,
-  },
+  initialState: initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
@@ -49,6 +53,7 @@ export const parksSlice = createSlice({
         error = null;
       })
       .addCase(fetchParks.fulfilled, (state, action) => {
+        parksAdapter.setAll(state, action.payload);
         state.parksDetails = action.payload.parks;
         state.parkNames = action.payload.filteredParks;
         isLoading = false;
@@ -62,6 +67,13 @@ export const parksSlice = createSlice({
       });
   },
 });
+
+export const { selectAll: selectAllParks, selectById: selectParkById } =
+  parksAdapter.getSelectors((state) => state.parks);
+
+  export const selectIsLoading = (state) => state.parks.isLoading;
+  export const selectError = (state) => state.parks.error;
+  
 
 // Action creators are generated for each case reducer function
 export default parksSlice.reducer;

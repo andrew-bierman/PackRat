@@ -1,10 +1,17 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
 import { defaultWeatherObject } from "../constants/defaultWeatherObj";
 import { defaultWeekObj } from "../constants/defaultWeekObj";
 
 import { api } from "../constants/api";
 
 import axios from "axios";
+
+const weatherAdapter = createEntityAdapter();
+
+const initialState = weatherAdapter.getInitialState({
+  weatherObject: defaultWeatherObject,
+  weatherWeek: defaultWeekObj,
+})
 
 export const fetchWeather = createAsyncThunk(
   "weather/fetchWeather",
@@ -48,10 +55,7 @@ export const fetchWeatherWeek = createAsyncThunk(
 
 export const weatherSlice = createSlice({
   name: "weather",
-  initialState: {
-    weatherObject: defaultWeatherObject,
-    weatherWeek: defaultWeekObj,
-  },
+  initialState,
   reducers: {
     add: (state, action) => {
       // Redux Toolkit allows us to write "mutating" logic in reducers. It
@@ -75,6 +79,7 @@ export const weatherSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchWeather.fulfilled, (state, action) => {
+        weatherAdapter.addOne(state.weatherObject, action.payload);
         state.weatherObject = action.payload;
         state.isLoading = false;
         state.error = null;
@@ -90,6 +95,7 @@ export const weatherSlice = createSlice({
       })
       .addCase(fetchWeatherWeek.fulfilled, (state, action) => {
         const week = action.payload.list.slice(0, 4);
+        weatherAdapter.setAll(state.weatherWeek, week);
         state.weatherWeek = week;
         state.isLoading = false;
         state.error = null;
@@ -103,4 +109,11 @@ export const weatherSlice = createSlice({
 
 // Action creators are generated for each case reducer function
 export const { add, addWeek } = weatherSlice.actions;
+
+export const { selectAll: selectAllWeathers, selectById: selectWeatherById } =
+  weatherAdapter.getSelectors((state) => state.weather);
+
+export const selectIsLoading = (state) => state.weather.isLoading;
+export const selectError = (state) => state.weather.error;
+
 export default weatherSlice.reducer;

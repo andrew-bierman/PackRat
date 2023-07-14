@@ -15,7 +15,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 // import useGetPacks from "../../hooks/useGetPacks";
 
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUserPacks } from "../../store/packsStore";
+import { fetchUserPacks, selectAllPacks } from "../../store/packsStore";
 
 export default function ProfileContainerMobile() {
   // const { user } = useAuth();
@@ -28,8 +28,10 @@ export default function ProfileContainerMobile() {
 
   // const { data, isLoading, isError, error } = useGetPacks(user?._id);
   const PacksData = useSelector((state) => state?.packs);
+  const Packs = useSelector(selectAllPacks);
 
   if (PacksData?.isLoading) return <Text>Loading...</Text>;
+  console.log(Packs);
 
   return (
     <ScrollView style={{ flex: 1 }}>

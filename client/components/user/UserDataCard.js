@@ -14,7 +14,7 @@ import {
   Button,
 } from "native-base";
 
-import { changePackStatus } from "../../store/packsStore";
+import { changePackStatus, selectIsLoading, selectAllPacks } from "../../store/packsStore";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -43,7 +43,8 @@ const UserDataCard = ({
     }
   };
 
-  const isLoading = useSelector((state) => state.packs.isLoading);
+  const packs = useSelector(selectAllPacks);
+  const isLoading = useSelector(selectIsLoading);
 
   return (
     <Box alignItems="center" padding="5">

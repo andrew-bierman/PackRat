@@ -1,15 +1,17 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, createEntityAdapter } from "@reduxjs/toolkit";
 // import { auth } from "../auth/firebase";
 // import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut as firebaseSignOut, signInWithPopup, GoogleAuthProvider, signInWithCredential } from "firebase/auth";
 import axios from "axios";
 import { api } from "../constants/api";
 import { Alert } from "react-native";
 
-const initialState = {
+const authAdapter = createEntityAdapter();
+
+const initialState = authAdapter.getInitialState({
   user: null,
   loading: false,
   error: null,
-};
+});
 
 export const signUp = createAsyncThunk(
   "auth/signUp",
@@ -91,6 +93,7 @@ export const authSlice = createSlice({
         state.error = null;
       })
       .addCase(signUp.fulfilled, (state, action) => {
+        authAdapter.setAll(state.user, action.payload);
         state.user = action.payload;
         state.loading = false;
         state.error = null;
@@ -105,7 +108,7 @@ export const authSlice = createSlice({
         state.error = null;
       })
       .addCase(signIn.fulfilled, (state, action) => {
-        // console.log("userinfo", action.payload);
+        authAdapter.setAll(state.user, action.payload);
         state.user = action.payload;
         state.loading = false;
         state.error = null;
@@ -132,6 +135,7 @@ export const authSlice = createSlice({
         state.error = null;
       })
       .addCase(signInWithGoogle.fulfilled, (state, action) => {
+        authAdapter.setAll(state.user, action.payload);
         state.user = action.payload;
         state.loading = false;
       })
@@ -142,4 +146,13 @@ export const authSlice = createSlice({
   },
 });
 
+export const {
+  selectAll: selectAllAuths,
+  selectById: selectAuthById,
+} = authAdapter.getSelectors((state) => state.auth);
+
+export const selectIsLoading = (state) => state.auth.isLoading;
+export const selectError = (state) => state.auth.error;
+
 export default authSlice.reducer;
+ 

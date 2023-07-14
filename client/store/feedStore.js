@@ -1,6 +1,15 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
 import { api } from "../constants/api";
 import axios from "axios";
+
+const feedAdapter = createEntityAdapter();
+
+const initialState = feedAdapter.getInitialState({
+  publicPacks: [],
+  publicTrips: [],
+  isLoading: false,
+  error: null,
+});
 
 export const getPublicPacks = createAsyncThunk(
   "feed/getPublicPacks",
@@ -24,12 +33,7 @@ export const getPublicTrips = createAsyncThunk(
 
 const feedSlice = createSlice({
   name: "feed",
-  initialState: {
-    publicPacks: [],
-    publicTrips: [],
-    isLoading: false,
-    error: null,
-  },
+  initialState: initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
@@ -65,7 +69,7 @@ const feedSlice = createSlice({
             ...trip,
             type: "trip",
           };
-        })
+        });
         state.isLoading = false;
         state.error = null;
       })
@@ -75,5 +79,13 @@ const feedSlice = createSlice({
       });
   },
 });
+
+export const {
+  selectAll: selectAllFeeds,
+  selectById: selectFeedById,
+} = feedAdapter.getSelectors((state) => state.feed);
+
+export const selectIsLoading = (state) => state.feed.isLoading;
+export const selectError = (state) => state.feed.error;
 
 export default feedSlice.reducer;

@@ -1,6 +1,14 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, createEntityAdapter } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { api } from '../constants/api';
+
+const gpxAdapter = createEntityAdapter();
+
+const initialState = gpxAdapter.getInitialState({
+  gpxData: null,
+  loading: false,
+  error: null,
+});
 
 export const convertGeoJSONToGPX = createAsyncThunk(
   'gpx/convertGeoJSONToGPX',
@@ -16,11 +24,7 @@ export const convertGeoJSONToGPX = createAsyncThunk(
 
 const gpxSlice = createSlice({
   name: 'gpx',
-  initialState: {
-    gpxData: null,
-    loading: false,
-    error: null,
-  },
+  initialState: initialState,
   reducers: {
     resetGpxData: (state) => {
       state.gpxData = null;
@@ -33,7 +37,8 @@ const gpxSlice = createSlice({
         state.error = null;
       })
       .addCase(convertGeoJSONToGPX.fulfilled, (state, action) => {
-        state.gpxData = action.payload;
+        // state.gpxData = action.payload;
+        gpxAdapter.setAll(state.gpxData, action.payload);
         state.loading = false;
         state.error = null;
       })
@@ -45,5 +50,13 @@ const gpxSlice = createSlice({
 });
 
 export const { resetGpxData } = gpxSlice.actions;
+
+export const {
+  selectAll: selectAllGpx,
+  selectById: selectGpxById,
+} = gpxAdapter.getSelectors((state) => state.gpx);
+
+export const selectIsLoading = (state) => state.gpx.isLoading;
+export const selectError = (state) => state.gpx.error;
 
 export default gpxSlice.reducer;
