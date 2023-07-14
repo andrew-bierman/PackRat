@@ -1,22 +1,24 @@
+import { ItemCategoryModel } from "../models/itemCategory.js";
 import Item from "../models/itemModel.js";
 import Pack from "../models/packModel.js";
+import { ItemCategory, ItemCategoryEnum } from "../utils/itemCategory.js";
 
 export const getItems = async (req, res) => {
-  const { packId } = req.params;
-
   try {
-    const items = await Item.find({ packId });
+    const { packId } = req.params;
 
-    res.status(200).json(items);
+    const items = await Item.find({ packs: packId });
+
+    return res.status(200).json(items);
   } catch (error) {
     res.status(404).json({ msg: "Items cannot be found" });
   }
 };
 
 export const getItemById = async (req, res) => {
-  const { _id } = req.body;
-
   try {
+    const { _id } = req.body;
+
     const item = await Item.findById({ _id });
 
     res.status(200).json(item);
@@ -27,22 +29,102 @@ export const getItemById = async (req, res) => {
 
 export const addItem = async (req, res) => {
   try {
-    const newItem = await Item.create(req.body);
+    const { name, weight, quantity, unit, packId, type } = req.body;
+
+    let category = null;
+    let newItem = null;
+
+    switch (type) {
+      case ItemCategoryEnum.FOOD: {
+        category = await ItemCategoryModel.findOne({
+          name: ItemCategoryEnum.FOOD,
+        });
+
+        newItem = await Item.create({
+          name,
+          weight,
+          quantity,
+          unit,
+          packs: [packId],
+          category: category._id,
+        });
+
+        break;
+      }
+      case ItemCategoryEnum.WATER: {
+        category = await ItemCategoryModel.findOne({
+          name: ItemCategoryEnum.WATER,
+        });
+
+        let existingWaterItem = await Item.findOne({
+          category: category._id,
+          packs: packId,
+        });
+
+        if (existingWaterItem) {
+          existingWaterItem.weight += Number(weight); // Ensure weight is treated as a number
+          await existingWaterItem.save();
+          newItem = existingWaterItem;
+        } else {
+          newItem = await Item.create({
+            name,
+            weight,
+            quantity: 1,
+            unit,
+            packs: [packId],
+            category: category._id,
+          });
+        }
+
+        break;
+      }
+      default: {
+        category = await ItemCategoryModel.findOne({
+          name: ItemCategoryEnum.ESSENTIALS,
+        });
+
+        newItem = await Item.create({
+          name,
+          weight,
+          quantity,
+          unit,
+          packs: [packId],
+          category: category._id,
+        });
+
+        break;
+      }
+    }
 
     await Pack.updateOne(
-      { _id: req.body.packId },
-      { $push: { items: newItem._id } }
+      { _id: packId },
+      { $addToSet: { items: newItem._id } }
     );
-    res.status(200).json({ msg: "success" });
+
+    const updatedItem = await Item.findByIdAndUpdate(
+      newItem._id,
+      {
+        $addToSet: {
+          owners: req.body.ownerId,
+        },
+      },
+      { new: true }
+    ).populate("category");
+
+    res.status(200).json({
+      msg: "success",
+      newItem: updatedItem,
+      packId: packId,
+    });
   } catch (error) {
-    res.status(404).json({ msg: "Unable to add item" });
+    res.status(404).json({ msg: "Unable to add item", error: error.message });
   }
 };
 
 export const editItem = async (req, res) => {
-  const { _id } = req.body;
-
   try {
+    const { _id } = req.body;
+
     const newItem = await Item.findOneAndUpdate({ _id }, req.body, {
       returnOriginal: false,
     });
@@ -54,12 +136,28 @@ export const editItem = async (req, res) => {
 };
 
 export const deleteItem = async (req, res) => {
-  const { itemId } = req.body;
   try {
-    await Item.findOneAndDelete({ _id: itemId });
+    const { itemId } = req.body;
 
-    res.status(200).json({ msg: "Item was deleted successfully" });
+    const deletedItem = await Item.findByIdAndDelete({ _id: itemId });
+
+    res.status(200).json(deletedItem);
   } catch (error) {
+    console.error(error);
     res.status(404).json({ msg: "Unable to delete item" });
+  }
+};
+
+export const searchItemsByName = async (req, res) => {
+  console.log(req.query.name);
+  try {
+    const items = await Item.find({
+      name: { $regex: `.*${req.query.name}.*`, $options: "i" },
+    });
+    res.status(200).json(items);
+  } catch (error) {
+    res
+      .status(404)
+      .json({ msg: "Items cannot be found", "req.query": req.query });
   }
 };
