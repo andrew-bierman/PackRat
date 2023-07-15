@@ -30,14 +30,12 @@ export default function TripCard({
 
   const handleValueChange = (value) => {
     // Assuming that you have a redux action to set the current trail and park
-    if(isTrail) {
+    if (isTrail) {
       dispatch(addTrail(value));
-    } else if (isPark){
+    } else if (isPark) {
       dispatch(addPark(value));
     }
-  }
-
-  console.log("currentShape", currentShape);
+  };
 
   return (
     <Stack

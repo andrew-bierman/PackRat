@@ -10,6 +10,7 @@ import {
   getItemsGlobally,
   addGlobalItemToPack,
   editGlobalItemAsDuplicate,
+  deleteGlobalItem,
 } from "../controllers/itemController.js";
 import auth from "../middleware/auth.js";
 import * as validator from "../middleware/validators/index.js";
@@ -220,7 +221,7 @@ router.get("/global", getItemsGlobally);
  *      200:
  *        description: Successful response
  */
-router.post("/global/:packId", addGlobalItemToPack);
+router.post("/global/select/:packId", addGlobalItemToPack);
 /**
  * @swagger
  * /item/:
@@ -235,5 +236,27 @@ router.post("/global/:packId", addGlobalItemToPack);
  *        description: Successful response
  */
 router.put("/global/:itemId", editGlobalItemAsDuplicate);
+
+/**
+ * @swagger
+ * /item/:
+ *  delete:
+ *    tags:
+ *      - Items
+ *    summary: Delete an item by ID
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              _id:
+ *                type: string
+ *    responses:
+ *      200:
+ *        description: Successful response
+ */
+router.delete("/global/:itemId", deleteGlobalItem);
 
 export default router;

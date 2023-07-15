@@ -11,16 +11,17 @@ export const addPack = createAsyncThunk("packs/addPack", async (newPack) => {
   return response.data;
 });
 
-// update backend logic to support this
 export const deletePackItem = createAsyncThunk(
   "items/deletePackItem",
-  async (itemId) => {
+  async (item) => {
+    console.log("item", item);
     const response = await axios.delete(`${api}/item`, {
       headers: {
         "Content-Type": "application/json",
       },
       data: {
-        itemId,
+        itemId: item.itemId,
+        packId: item.currentPackId,
       },
     });
     return response.data;
@@ -153,26 +154,31 @@ const packsSlice = createSlice({
         state.error = null;
       })
       .addCase(editPackItem.fulfilled, (state, action) => {
+        console.log("edited", action.payload);
         const newItem = action.payload;
         const packIds = newItem.packs; // packIds is an array of pack Ids
+        if (newItem.global) {
+        } else {
+          packIds.forEach((packId) => {
+            console.log("packid", packId);
+            // loop through each packId
+            const existingPack = state.entities[packId];
+            console.log("existingPack", existingPack);
+            if (!existingPack) {
+              return;
+            }
 
-        packIds.forEach((packId) => {
-          // loop through each packId
-          const existingPack = state.entities[packId];
-          if (!existingPack) {
-            return;
-          }
+            const updatedItems = existingPack.items.map((item) =>
+              item._id === newItem._id ? newItem : item
+            );
+            console.log("updatediTEMS", updatedItems);
 
-          const updatedItems = existingPack.items.map((item) =>
-            item._id === newItem._id ? newItem : item
-          );
-
-          packsAdapter.updateOne(state, {
-            id: packId,
-            changes: { items: updatedItems },
+            packsAdapter.updateOne(state, {
+              id: packId,
+              changes: { items: updatedItems },
+            });
           });
-        });
-
+        }
         state.isLoading = false;
         state.error = null;
         state.isOpenEditModal = false;

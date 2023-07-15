@@ -20,7 +20,18 @@ export const ItemForm = ({
   showSubmitButton = true,
   isLoading,
   isEdit,
+  currentPack,
 }) => {
+  let hasWaterAdded = false;
+  if (
+    currentPack &&
+    Array.isArray(currentPack.items) &&
+    currentPack.items.length > 0
+  ) {
+    hasWaterAdded = currentPack.items.some(
+      (item) => item.category && item.category.name === ItemCategoryEnum.WATER
+    );
+  }
   return (
     <Box>
       <VStack space={2}>
@@ -75,6 +86,7 @@ export const ItemForm = ({
           onChange={(nextVal) => setCategoryType(nextVal)}
         >
           {Object.values(ItemCategoryEnum).map((value, key) => {
+            if (hasWaterAdded && value === ItemCategoryEnum.WATER) return;
             return (
               <Radio key={key} value={value} mx="2">
                 {value}

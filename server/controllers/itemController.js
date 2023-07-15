@@ -123,11 +123,23 @@ export const addItem = async (req, res) => {
 
 export const editItem = async (req, res) => {
   try {
-    const { _id } = req.body;
-
-    const newItem = await Item.findOneAndUpdate({ _id }, req.body, {
-      returnOriginal: false,
+    const { _id, name, weight, unit, quantity, type } = req.body;
+    const category = await ItemCategoryModel.findOne({
+      name: type,
     });
+    let newItem = await Item.findOneAndUpdate(
+      { _id },
+      {
+        name,
+        weight,
+        unit,
+        quantity,
+        category: category.id,
+      },
+      {
+        returnOriginal: false,
+      }
+    ).populate("category", "name");
 
     res.status(200).json(newItem);
   } catch (error) {
@@ -138,13 +150,50 @@ export const editItem = async (req, res) => {
 export const deleteItem = async (req, res) => {
   try {
     const { itemId } = req.body;
+    const { packId } = req.body;
+    let itemDeleted;
 
-    const deletedItem = await Item.findByIdAndDelete({ _id: itemId });
+    const item = await Item.findById(itemId);
 
-    res.status(200).json(deletedItem);
+    if (item.global) {
+      // remove the item from pack list
+      await Pack.updateOne({ _id: packId }, { $pull: { items: itemId } });
+      //update the individual item
+
+      await Item.updateOne(
+        {
+          _id: itemId,
+        },
+        {
+          $pull: {
+            packs: packId,
+          },
+        }
+      );
+      itemDeleted = await Item.findById(itemId);
+    } else {
+      itemDeleted = await Item.findByIdAndDelete({ _id: itemId });
+    }
+
+    res.status(200).json(itemDeleted);
   } catch (error) {
     console.error(error);
-    res.status(404).json({ msg: "Unable to delete item" });
+    res.status(404).json({ msg: "Unable to delete item" + error.message });
+  }
+};
+
+export const deleteGlobalItem = async (req, res) => {
+  try {
+    const { itemId } = req.params;
+
+    const itemDeleted = await Item.findByIdAndDelete(itemId);
+
+    res.status(200).json({
+      data: itemDeleted,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(404).json({ msg: "Unable to delete item " + error.message });
   }
 };
 
@@ -161,14 +210,14 @@ export const searchItemsByName = async (req, res) => {
       .json({ msg: "Items cannot be found", "req.query": req.query });
   }
 };
-
+// need to change the name
 export const addItemGlobal = async (req, res) => {
   try {
     const { name, weight, quantity, unit, type } = req.body;
 
     let category = null;
     let newItem = null;
-
+    // need to look into below logic. open window issue
     switch (type) {
       case ItemCategoryEnum.FOOD: {
         category = await ItemCategoryModel.findOne({
@@ -183,6 +232,7 @@ export const addItemGlobal = async (req, res) => {
           category: category._id,
           global: true,
         });
+        newItem = await Item.findById(newItem.id).populate("category", "name");
 
         break;
       }
@@ -198,7 +248,7 @@ export const addItemGlobal = async (req, res) => {
           category: category._id,
           global: true,
         });
-
+        newItem = await Item.findById(newItem.id).populate("category", "name");
         break;
       }
       default: {
@@ -214,6 +264,8 @@ export const addItemGlobal = async (req, res) => {
           category: category._id,
           global: true,
         });
+
+        newItem = await Item.findById(newItem.id).populate("category", "name");
 
         break;
       }
@@ -231,7 +283,7 @@ export const addItemGlobal = async (req, res) => {
 export const getItemsGlobally = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
+    const limit = parseInt(req.query.limit) || 7;
     const startIndex = (page - 1) * limit;
 
     const totalItems = await Item.countDocuments({ global: true });
@@ -240,7 +292,10 @@ export const getItemsGlobally = async (req, res) => {
     const items = await Item.find({ global: true })
       .populate("category", "name")
       .skip(startIndex)
-      .limit(limit);
+      .limit(limit)
+      .sort({
+        createdAt: -1,
+      });
 
     return res.status(200).json({
       items,
@@ -282,7 +337,7 @@ export const addGlobalItemToPack = async (req, res) => {
       { new: true }
     );
 
-    return res.status(200).send("succesfully updated");
+    return res.status(200).json({ message: "succesfully updated", data: item });
   } catch (error) {
     res.status(404).json({ msg: "Items cannot be found" });
   }

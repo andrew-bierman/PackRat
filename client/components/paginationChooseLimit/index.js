@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { StyleSheet } from "react-native";
 import { Select } from "native-base";
 
-export const PaginationLimit = ({ limit, setLimit }) => {
+export const PaginationLimit = ({ limit, setLimit, setPage }) => {
   return (
     <View style={styles.selectContainer}>
       <Select
@@ -12,6 +12,7 @@ export const PaginationLimit = ({ limit, setLimit }) => {
         placeholder="Choose a value"
         onValueChange={(itemValue) => {
           setLimit(itemValue);
+          setPage(1);
         }}
       >
         <Select.Item key={"item 1"} label="10" value="10" />
@@ -25,6 +26,6 @@ const styles = StyleSheet.create({
   selectContainer: {
     width: "15rem",
     marginLeft: "auto",
-    marginRight: "1rem",
+    marginRight: "2rem",
   },
 });

@@ -11,6 +11,7 @@ import Water from "../Water";
 import { DeletePackItemModal } from "./DeletePackItemModal";
 import { formatNumber } from "../../utils/formatNumber";
 import { theme } from "../../theme";
+import { ItemPicker } from "../Picker";
 
 const WeightUnitDropdown = ({ value, onChange }) => {
   return (
@@ -30,9 +31,7 @@ const WeightUnitDropdown = ({ value, onChange }) => {
 
 const TotalWeightBox = ({ label, weight, unit }) => {
   return (
-    <Box
-      style={styles.totalWeightBox}
-    >
+    <Box style={styles.totalWeightBox}>
       <Text>{label}</Text>
       <Text>{`${formatNumber(weight)} (${unit})`}</Text>
     </Box>
@@ -65,8 +64,14 @@ const TableItem = ({
   handleCheckboxChange,
   index,
   flexArr,
+  currentPack,
 }) => {
+  console.log("currentPack", currentPack);
   const { name, weight, category, quantity, unit, _id } = itemData;
+  /* 
+  * this _id is passed as pack id but it is a item id which is confusing
+  Todo need to change the name for this passing argument and remaining functions who are getting it
+   */
   const dispatch = useDispatch();
 
   // Here, you can set a default category if item.category is null or undefined
@@ -76,9 +81,13 @@ const TableItem = ({
     name,
     `${formatNumber(weight)} ${unit}`,
     quantity,
-    categoryName,
-    <EditPackItemModal packId={_id} initialData={itemData} />,
-    <DeletePackItemModal itemId={_id} />,
+    `${category.name}`,
+    <EditPackItemModal
+      packId={_id}
+      initialData={itemData}
+      currentPack={currentPack}
+    />,
+    <DeletePackItemModal itemId={_id} pack={currentPack} />,
     <IgnoreItemCheckbox
       itemId={_id}
       isChecked={checkedItems.includes(_id)}
@@ -128,8 +137,12 @@ const TitleRow = ({ title }) => {
   );
 };
 
-export const TableContainer = ({ currentPack }) => {
-
+export const TableContainer = ({
+  currentPack,
+  selectedPack,
+  refetch,
+  setRefetch,
+}) => {
   const [weightUnit, setWeightUnit] = useState("g");
   const [checkedItems, setCheckedItems] = useState([]);
   const isLoading = useSelector((state) => state.items.isLoading);
@@ -147,9 +160,8 @@ export const TableContainer = ({ currentPack }) => {
     data
       .filter((item) => !checkedItems.includes(item._id))
       .forEach((item) => {
-        const categoryName = item.category ? item.category.name : "Undefined";
-
-        switch (categoryName) {
+        console.log("item", item);
+        switch (item.category.name) {
           case ItemCategoryEnum.ESSENTIALS: {
             totalBaseWeight += convertWeight(
               item.weight * item.quantity,
@@ -179,8 +191,6 @@ export const TableContainer = ({ currentPack }) => {
         }
       });
 
-  // console.log("waterItem", waterItem);
-
   let totalWeight = totalBaseWeight + totalWaterWeight + totalFoodWeight;
 
   const handleCheckboxChange = (itemId) => {
@@ -205,7 +215,12 @@ export const TableContainer = ({ currentPack }) => {
 
   return (
     <Box style={styles.container}>
-      <WeightUnitDropdown value={weightUnit} onChange={setWeightUnit} />
+      <ItemPicker
+        currentPack={selectedPack}
+        refetch={refetch}
+        setRefetch={setRefetch}
+      />
+
       {data?.length ? (
         <>
           <Table
@@ -251,8 +266,6 @@ export const TableContainer = ({ currentPack }) => {
               )}
             />
           </Table>
-          {!foodItems.length && <Button>Add Food Item</Button>}
-          {!waterItem && <Water currentPack={currentPack} />}
           <TotalWeightBox
             label="Base Weight"
             weight={totalBaseWeight}
@@ -272,6 +285,7 @@ export const TableContainer = ({ currentPack }) => {
       ) : (
         <Text style={styles.noItemsText}>Add your First Item</Text>
       )}
+      <WeightUnitDropdown value={weightUnit} onChange={setWeightUnit} />
     </Box>
   );
 };
