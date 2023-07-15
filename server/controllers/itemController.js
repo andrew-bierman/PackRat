@@ -282,12 +282,11 @@ export const addItemGlobal = async (req, res) => {
 
 export const getItemsGlobally = async (req, res) => {
   try {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 7;
-    const startIndex = (page - 1) * limit;
-
     const totalItems = await Item.countDocuments({ global: true });
+    const limit = parseInt(req.query.limit) || totalItems;
     const totalPages = Math.ceil(totalItems / limit);
+    const page = parseInt(req.query.page) || totalPages;
+    const startIndex = (page - 1) * limit;
 
     const items = await Item.find({ global: true })
       .populate("category", "name")

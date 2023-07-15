@@ -67,6 +67,7 @@ export const AddItem = ({
             _id: initialData["_id"],
           })
         );
+        setPage(page === 1 ? 0 : 1);
         closeModalHandler();
       }
     } else {

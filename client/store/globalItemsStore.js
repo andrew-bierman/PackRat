@@ -30,10 +30,14 @@ export const selectItemsGlobal = createAsyncThunk(
 export const getItemsGlobal = createAsyncThunk(
   "Items/getItemsGlobal",
   async ({ limit, page }) => {
-    const response = await axios.get(
-      `${api}/item/global?limit=${limit}&page=${page}`
-    );
-    return response.data;
+    try {
+      const response = await axios.get(
+        `${api}/item/global?limit=${limit}&page=${page}`
+      );
+      return response.data;
+    } catch (error) {
+      console.log("error", error.message);
+    }
   }
 );
 export const deleteGlobalItem = createAsyncThunk(
