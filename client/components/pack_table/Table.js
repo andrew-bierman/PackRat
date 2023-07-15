@@ -11,7 +11,7 @@ import Water from "../Water";
 import { DeletePackItemModal } from "./DeletePackItemModal";
 import { formatNumber } from "../../utils/formatNumber";
 import { theme } from "../../theme";
-import { ItemPicker } from "../Picker";
+import ItemPicker from "../Picker";
 
 const WeightUnitDropdown = ({ value, onChange }) => {
   return (

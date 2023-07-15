@@ -8,7 +8,6 @@ import { AddItem } from "../item/AddItem";
 import { TableContainer } from "../pack_table/Table";
 // import { useAuth } from "../../auth/provider";
 import { useSelector } from "react-redux";
-import { ItemPicker } from "../Picker";
 import {
   fetchUserPacks,
   selectPackById,
@@ -58,7 +57,7 @@ export default function PackContainer({ isCreatingTrip = false }) {
         value={currentPackId}
         onValueChange={handlePack}
         placeholder={"Select a Pack"}
-        width= {300}
+        width={300}
       />
       {currentPackId && (
         <>
