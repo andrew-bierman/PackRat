@@ -31,11 +31,13 @@ export const editItem = celebrate({
     weight: Joi.string(),
     quantity: Joi.string(),
     unit: Joi.string(),
+    type: Joi.string(),
   }),
 });
 export const deleteItem = celebrate({
   [Segments.BODY]: Joi.object().keys({
     itemId: JoiObjectId().required(),
+    packId: JoiObjectId(),
   }),
 });
 

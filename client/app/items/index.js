@@ -8,17 +8,21 @@ import { Tooltip } from "native-base";
 import { CustomModal } from "../../components/modal";
 import { AddItemGlobal } from "../../components/item/AddItemGlobal";
 import { ItemsTable } from "../../components/itemtable/itemTable";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getItemsGlobal } from "../../store/globalItemsStore";
 
 export default function Items() {
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(2);
   const [page, setPage] = useState(1);
+  const data = useSelector((state) => state.globalItems);
+  // console.log("data", );
+  const isLoading = useSelector((state) => state.globalItems.isLoading);
+  const isError = useSelector((state) => state.globalItems.isError);
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getItemsGlobal(limit, page));
+    dispatch(getItemsGlobal({ limit, page }));
   }, [limit, page]);
 
   return (
@@ -70,15 +74,24 @@ export default function Items() {
           }
           onCancel={setIsAddItemModalOpen}
         >
-          <AddItemGlobal setIsAddItemModalOpen={setIsAddItemModalOpen} />
+          <AddItemGlobal
+            setPage={setPage}
+            setIsAddItemModalOpen={setIsAddItemModalOpen}
+          />
         </CustomModal>
       </>
-      <ItemsTable
-        limit={limit}
-        setLimit={setLimit}
-        page={page}
-        setPage={setPage}
-      />
+      {!isError && Array.isArray(data.globalItems.items) ? (
+        <ItemsTable
+          limit={limit}
+          setLimit={setLimit}
+          page={page}
+          setPage={setPage}
+          data={data}
+          isLoading={isLoading}
+          isError={isError}
+          totalPages={data?.globalItems?.totalPages}
+        />
+      ) : null}
     </Box>
   );
 }

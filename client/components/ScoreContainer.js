@@ -8,7 +8,6 @@ import { Svg, Circle, Path, G, Text as SvgText } from "react-native-svg";
 
 const ScoreProgressChart = ({ score, size = 150, strokeWidth = 10 }) => {
   if (!score) return null;
-  console.log("score in progress chart", score);
 
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
@@ -54,7 +53,6 @@ const ScoreProgressChart = ({ score, size = 150, strokeWidth = 10 }) => {
 const GradingPieChart = ({ scores, size = 150, strokeWidth = 10 }) => {
   if (!scores) return null;
 
-  console.log("scores: ", scores);
   const { weightScore, essentialItemsScore, redundancyAndVersatilityScore } =
     scores;
 
@@ -160,8 +158,6 @@ export default function ScoreContainer({ type, data, isOwner }) {
   const totalScore = data.totalScore;
   const grades = data.grades;
   const scores = data.scores;
-
-  console.log("scores", scores);
 
   const isAlreadyScored = totalScore !== null;
 

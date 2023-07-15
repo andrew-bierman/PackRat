@@ -8,10 +8,18 @@ import { formatNumber } from "../../utils/formatNumber";
 import { EditPackItemModal } from "../pack_table/EditPackItemModal";
 import { DeletePackItemModal } from "../pack_table/DeletePackItemModal";
 import { PaginationLimit } from "../paginationChooseLimit";
-export const ItemsTable = ({ limit, setLimit, page, setPage }) => {
+import Loader from "../Loader";
+export const ItemsTable = ({
+  limit,
+  setLimit,
+  page,
+  setPage,
+  data,
+  isLoading,
+  isError,
+  totalPages,
+}) => {
   const flexArr = [2, 1, 1, 1, 0.65, 0.65, 0.65];
-  const data = useSelector((state) => state.globalItems);
-  const isLoading = useSelector((state) => state.globalItems.isLoading);
 
   const TitleRow = ({ title }) => {
     const rowData = [
@@ -24,19 +32,29 @@ export const ItemsTable = ({ limit, setLimit, page, setPage }) => {
       <Row data={rowData} style={[styles.title]} textStyle={styles.titleText} />
     );
   };
-  const TableItem = ({ itemData, index }) => {
-    const { name, weight, category, quantity, unit } = itemData;
+  const TableItem = ({ itemData }) => {
+    const { name, weight, category, quantity, unit, _id } = itemData;
 
     const rowData = [
-      name || "a",
-      `${formatNumber(weight || 0)} ${unit || "c"}`,
+      name,
+      `${formatNumber(weight)} ${unit}`,
       quantity,
-      `${category?.name || "d"}`,
-      <EditPackItemModal />,
-      <DeletePackItemModal itemId="1bc" />,
+      `${category?.name}`,
+      <EditPackItemModal
+        initialData={itemData}
+        editAsDuplicate={false}
+        setPage={setPage}
+        page={page}
+      />,
+      <DeletePackItemModal itemId={_id} page={page} setPage={setPage} />,
     ];
-
     return <Row data={rowData} style={styles.row} flexArr={flexArr} />;
+  };
+  const handleNextPage = () => {
+    setPage(page + 1);
+  };
+  const handlePreviousPage = () => {
+    setPage(page - 1);
   };
 
   return (
@@ -64,14 +82,22 @@ export const ItemsTable = ({ limit, setLimit, page, setPage }) => {
           ))}
           style={styles.head}
         />
-        {/* { {!isLoading && */}
-        {/* // data && // data.globalItems && // data.globalItems.items && // */}
-        {/* Array.isArray(data.globalItems.items) && */}
-        {["a", "b", "c", "d"].map((item, index) => (
-          <TableItem key={index} itemData={item} />
-        ))}
+        <Box
+          style={{
+            height: "400px",
+            overflowY: "scroll",
+          }}
+        >
+          {isLoading ? (
+            <Loader />
+          ) : (
+            data.globalItems.items.map((item, index) => {
+              return <TableItem key={index} itemData={item} />;
+            })
+          )}
+        </Box>
       </Table>
-      <PaginationLimit limit={limit} setLimit={setLimit} />
+      <PaginationLimit limit={limit} setLimit={setLimit} setPage={setPage} />
       <Box style={{ display: "flex", flexDirection: "row", margin: "auto" }}>
         <Button
           style={{
@@ -79,17 +105,14 @@ export const ItemsTable = ({ limit, setLimit, page, setPage }) => {
             width: "4px",
             backgroundColor: "transparent",
             borderRadius: "5px",
-            borderColor: "#0284c7",
+            borderColor: page <= 1 ? "gray" : "#0284c7",
             borderWidth: "1px",
             borderStyle: "solid",
           }}
-          disabled={page === 0}
-          onPress={() => {
-            console.log("pressed", page);
-            setPage(page - 1);
-          }}
+          disabled={page <= 1}
+          onPress={handlePreviousPage}
         >
-          <Text style={{ color: "#0284c7" }}>{"<"}</Text>
+          <Text style={{ color: page <= 1 ? "gray" : "#0284c7" }}>{"<"}</Text>
         </Button>
         <Button
           style={{
@@ -97,16 +120,16 @@ export const ItemsTable = ({ limit, setLimit, page, setPage }) => {
             width: "4px",
             backgroundColor: "transparent",
             borderRadius: "5px",
-            borderColor: "#0284c7",
+            borderColor: page === totalPages ? "gray" : "#0284c7",
             borderWidth: "1px",
             borderStyle: "solid",
           }}
-          onPress={() => {
-            console.log("pressed", page);
-            setPage(page + 1);
-          }}
+          disabled={page === totalPages}
+          onPress={handleNextPage}
         >
-          <div style={{ color: "#0284c7" }}>{">"}</div>
+          <div style={{ color: page === totalPages ? "gray" : "#0284c7" }}>
+            {">"}
+          </div>
         </Button>
       </Box>
     </Box>
@@ -121,7 +144,6 @@ const styles = StyleSheet.create({
   },
   tableStyle: {
     width: "100%",
-    marginVertical: 20,
     paddingHorizontal: 20,
   },
   mainTitle: {

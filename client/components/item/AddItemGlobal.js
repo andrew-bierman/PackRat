@@ -11,6 +11,7 @@ export const AddItemGlobal = ({
   isEdit,
   initialData,
   setIsAddItemModalOpen,
+  setPage,
 }) => {
   const dispatch = useDispatch();
   const isLoading = useSelector((state) => state.items.isLoading);
@@ -49,6 +50,7 @@ export const AddItemGlobal = ({
 
     if (isEdit) {
       dispatch(editPackItem({ name, weight, quantity, unit, _id, packId }));
+      setIsAddItemModalOpen(false);
     } else {
       dispatch(
         addItemsGlobal({
@@ -60,6 +62,8 @@ export const AddItemGlobal = ({
         })
       );
       resetAddForm();
+      setIsAddItemModalOpen(false);
+      setPage(0);
     }
   };
 
