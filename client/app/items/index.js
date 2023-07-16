@@ -15,7 +15,10 @@ export default function Items() {
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
   const [limit, setLimit] = useState(2);
   const [page, setPage] = useState(1);
+  const [refetch, setRefetch] = useState(false);
+
   const data = useSelector((state) => state.globalItems);
+
   // console.log("data", );
   const isLoading = useSelector((state) => state.globalItems.isLoading);
   const isError = useSelector((state) => state.globalItems.isError);
@@ -23,7 +26,7 @@ export default function Items() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getItemsGlobal({ limit, page }));
-  }, [limit, page]);
+  }, [limit, page, refetch]);
 
   return (
     <Box>
@@ -90,6 +93,8 @@ export default function Items() {
           isLoading={isLoading}
           isError={isError}
           totalPages={data?.globalItems?.totalPages}
+          refetch={refetch}
+          setRefetch={setRefetch}
         />
       ) : null}
     </Box>

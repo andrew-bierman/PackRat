@@ -63,7 +63,7 @@ export const AddItemGlobal = ({
       );
       resetAddForm();
       setIsAddItemModalOpen(false);
-      setPage(0);
+      setPage(1);
     }
   };
 

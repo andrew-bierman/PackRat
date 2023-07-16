@@ -65,8 +65,9 @@ const TableItem = ({
   index,
   flexArr,
   currentPack,
+  refetch,
+  setRefetch,
 }) => {
-  console.log("currentPack", currentPack);
   const { name, weight, category, quantity, unit, _id } = itemData;
   /* 
   * this _id is passed as pack id but it is a item id which is confusing
@@ -86,8 +87,15 @@ const TableItem = ({
       packId={_id}
       initialData={itemData}
       currentPack={currentPack}
+      refetch={refetch}
+      setRefetch={setRefetch}
     />,
-    <DeletePackItemModal itemId={_id} pack={currentPack} />,
+    <DeletePackItemModal
+      itemId={_id}
+      pack={currentPack}
+      refetch={refetch}
+      setRefetch={setRefetch}
+    />,
     <IgnoreItemCheckbox
       itemId={_id}
       isChecked={checkedItems.includes(_id)}
@@ -261,6 +269,9 @@ export const TableContainer = ({
                         checkedItems={checkedItems}
                         handleCheckboxChange={handleCheckboxChange}
                         flexArr={flexArr}
+                        currentPack={currentPack}
+                        refetch={refetch}
+                        setRefetch={setRefetch}
                       />
                     )}
                   />

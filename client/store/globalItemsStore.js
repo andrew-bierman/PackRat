@@ -9,24 +9,7 @@ export const addItemsGlobal = createAsyncThunk(
     return response.data;
   }
 );
-export const selectItemsGlobal = createAsyncThunk(
-  "Items/selectItemsGlobal",
-  async (item) => {
-    try {
-      const itemId = item.selectedItem;
-      const ownerId = item.ownerId;
-      const packId = item.packId;
 
-      const response = await axios.post(`${api}/item/global/select/${packId}`, {
-        itemId: itemId,
-        ownerId: ownerId,
-      });
-      return response.data;
-    } catch (error) {
-      console.log("error", error.message);
-    }
-  }
-);
 export const getItemsGlobal = createAsyncThunk(
   "Items/getItemsGlobal",
   async ({ limit, page }) => {
@@ -47,18 +30,10 @@ export const deleteGlobalItem = createAsyncThunk(
     return response.data;
   }
 );
-export const editItemsGlobalAsDuplicate = createAsyncThunk(
-  "Items/editItemsGlobalAsDuplicate",
-  async (item) => {
-    const { itemId, packId, name, weight, quantity, unit, type } = item;
-    const response = await axios.put(`${api}/item/global/${itemId}`, {
-      packId,
-      name,
-      weight,
-      quantity,
-      unit,
-      type,
-    });
+export const editGlobalItem = createAsyncThunk(
+  "items/editGlobalItem",
+  async (newItem) => {
+    const response = await axios.put(`${api}/item/`, newItem);
     return response.data;
   }
 );
@@ -98,22 +73,7 @@ const itemsSlice = createSlice({
         state.isLoading = false;
         state.error = action.error.message;
       })
-      .addCase(selectItemsGlobal.pending, (state) => {
-        state.isLoading = true;
-        state.error = null;
-      })
-      .addCase(selectItemsGlobal.fulfilled, (state, action) => {
-        state.globalItems.items = [
-          ...state.globalItems.items,
-          action.payload.data,
-        ];
-        state.isLoading = false;
-        state.error = null;
-      })
-      .addCase(selectItemsGlobal.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.error.message;
-      })
+
       .addCase(deleteGlobalItem.pending, (state) => {
         state.isLoading = true;
         state.error = null;

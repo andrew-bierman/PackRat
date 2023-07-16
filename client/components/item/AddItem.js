@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Box, Input, Button, Text } from "native-base";
 import { useDispatch, useSelector } from "react-redux";
 import { addPackItem, editPackItem } from "../../store/packsStore";
-import { editItemsGlobalAsDuplicate } from "../../store/globalItemsStore";
+import { editItemsGlobalAsDuplicate } from "../../store/packsStore";
 import { ItemForm } from "./ItemForm"; // assuming you moved the form related code to a separate component
 import { ItemCategoryEnum } from "../../constants/itemCategory";
 
@@ -16,6 +16,8 @@ export const AddItem = ({
   setPage = () => {},
   page,
   closeModalHandler,
+  refetch,
+  setRefetch,
 }) => {
   const dispatch = useDispatch();
   const isLoading = useSelector((state) => state.packs.isLoading);
@@ -41,8 +43,11 @@ export const AddItem = ({
   }, [initialData]);
 
   const handleSubmit = () => {
+    console.log("initial", initialData);
     if (isEdit) {
-      if (packId) {
+      if (packId && initialData.global) {
+        console.log("editing", packId);
+
         dispatch(
           editItemsGlobalAsDuplicate({
             itemId: _id,
@@ -54,9 +59,8 @@ export const AddItem = ({
             type: categoryType,
           })
         );
-        setIsAddItemModalOpen(false);
+        closeModalHandler();
       } else {
-        console.log("here");
         dispatch(
           editPackItem({
             name,
@@ -67,8 +71,9 @@ export const AddItem = ({
             _id: initialData["_id"],
           })
         );
-        setPage(page === 1 ? 0 : 1);
+        setPage(1);
         closeModalHandler();
+        setRefetch(refetch === true ? false : true);
       }
     } else {
       dispatch(
