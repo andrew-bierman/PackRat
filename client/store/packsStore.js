@@ -47,6 +47,7 @@ export const fetchUserPacks = createAsyncThunk(
 export const addPackItem = createAsyncThunk(
   "items/addPackItem",
   async (newItem) => {
+    console.log("calling apis");
     const response = await axios.post(`${api}/item/`, newItem);
     return response.data;
   }

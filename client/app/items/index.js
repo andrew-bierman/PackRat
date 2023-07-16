@@ -78,7 +78,8 @@ export default function Items() {
           onCancel={setIsAddItemModalOpen}
         >
           <AddItemGlobal
-            setPage={setPage}
+            setRefetch={setRefetch}
+            refetch={refetch}
             setIsAddItemModalOpen={setIsAddItemModalOpen}
           />
         </CustomModal>
