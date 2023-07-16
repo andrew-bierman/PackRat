@@ -81,7 +81,7 @@ const TableItem = ({
     name,
     `${formatNumber(weight)} ${unit}`,
     quantity,
-    `${category.name}`,
+    `${categoryName}`,
     <EditPackItemModal
       packId={_id}
       initialData={itemData}
@@ -160,8 +160,10 @@ export const TableContainer = ({
     data
       .filter((item) => !checkedItems.includes(item._id))
       .forEach((item) => {
+        const categoryName = item.category ? item.category.name : "Undefined";
+
         console.log("item", item);
-        switch (item.category.name) {
+        switch (categoryName) {
           case ItemCategoryEnum.ESSENTIALS: {
             totalBaseWeight += convertWeight(
               item.weight * item.quantity,

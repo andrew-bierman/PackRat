@@ -13,7 +13,7 @@ export const AddItem = ({
   packId,
   currentPack,
   editAsDuplicate,
-  setPage,
+  setPage = () => {},
   page,
   closeModalHandler,
 }) => {
@@ -27,7 +27,7 @@ export const AddItem = ({
     initialData?.quantity?.toString() || ""
   );
   const [categoryType, setCategoryType] = useState(
-    initialData?.category.name || ""
+    initialData?.category?.name || ""
   );
 
   const [unit, setUnit] = useState(initialData?.unit || "");
