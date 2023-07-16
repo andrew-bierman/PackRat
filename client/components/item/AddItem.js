@@ -88,6 +88,7 @@ export const AddItem = ({
         })
       );
       setIsAddItemModalOpen(false);
+      setRefetch(refetch === true ? false : true);
     }
   };
 

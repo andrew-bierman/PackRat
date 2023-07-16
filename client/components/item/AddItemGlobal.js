@@ -11,7 +11,8 @@ export const AddItemGlobal = ({
   isEdit,
   initialData,
   setIsAddItemModalOpen,
-  setPage,
+  setRefetch,
+  refetch,
 }) => {
   const dispatch = useDispatch();
   const isLoading = useSelector((state) => state.items.isLoading);
@@ -63,7 +64,7 @@ export const AddItemGlobal = ({
       );
       resetAddForm();
       setIsAddItemModalOpen(false);
-      setPage(1);
+      setRefetch(refetch === true ? false : true);
     }
   };
 
