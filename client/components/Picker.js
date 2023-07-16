@@ -1,7 +1,8 @@
 import { Select } from "native-base";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getItemsGlobal, selectItemsGlobal } from "../store/globalItemsStore";
+import { getItemsGlobal } from "../store/globalItemsStore";
+import { selectItemsGlobal } from "../store/packsStore";
 
 const ItemPicker = ({ currentPack, refetch, setRefetch }) => {
   const [selectedValue, setSelectedValue] = useState();
@@ -37,6 +38,7 @@ const ItemPicker = ({ currentPack, refetch, setRefetch }) => {
       }}
     >
       {data &&
+        data.globalItems &&
         data.globalItems.items &&
         data.globalItems.items.map((item, index) => {
           console.log("item", item);

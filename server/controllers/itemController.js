@@ -283,9 +283,9 @@ export const addItemGlobal = async (req, res) => {
 export const getItemsGlobally = async (req, res) => {
   try {
     const totalItems = await Item.countDocuments({ global: true });
-    const limit = parseInt(req.query.limit) || totalItems;
+    const limit = Number(req.query.limit) || totalItems;
     const totalPages = Math.ceil(totalItems / limit);
-    const page = parseInt(req.query.page) || totalPages;
+    const page = Number(req.query.page) || 1;
     const startIndex = (page - 1) * limit;
 
     const items = await Item.find({ global: true })
@@ -312,7 +312,7 @@ export const addGlobalItemToPack = async (req, res) => {
     const { itemId } = req.body;
     const { ownerId } = req.body;
 
-    const item = await Item.findById(itemId);
+    const item = await Item.findById(itemId).populate("category", "name");
 
     await Pack.updateOne({ _id: packId }, { $addToSet: { items: item._id } });
 
@@ -360,6 +360,7 @@ export const editGlobalItemAsDuplicate = async (req, res) => {
       global: false,
       packs: [packId],
     });
+    newItem = await Item.findById(newItem._id).populate("category", "name");
     // add to pack list
     await Pack.updateOne(
       { _id: packId },
@@ -380,7 +381,7 @@ export const editGlobalItemAsDuplicate = async (req, res) => {
       }
     );
 
-    return res.status(200).send("succesfully updated");
+    return res.status(200).json(newItem);
   } catch (error) {
     res.status(404).json({ msg: "Items cannot be found" });
   }

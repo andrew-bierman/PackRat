@@ -10,10 +10,12 @@ export const EditPackItemModal = ({
   editAsDuplicate,
   setPage,
   page,
+  setRefetch,
+  refetch,
 }) => {
   let currentPackId = undefined;
   if (currentPack) {
-    currentPack = currentPack["_id"];
+    currentPackId = currentPack["_id"];
   }
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const closeModalHandler = () => setIsModalOpen(false);
@@ -57,6 +59,8 @@ export const EditPackItemModal = ({
         setPage={setPage}
         page={page}
         closeModalHandler={closeModalHandler}
+        setRefetch={setRefetch}
+        refetch={refetch}
       />
     </CustomModal>
   );

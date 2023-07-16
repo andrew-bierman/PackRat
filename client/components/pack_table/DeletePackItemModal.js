@@ -5,12 +5,7 @@ import { deletePackItem } from "../../store/packsStore";
 import { CustomModal } from "../modal";
 import { deleteGlobalItem } from "../../store/globalItemsStore";
 
-export const DeletePackItemModal = ({ itemId, pack, setPage, page }) => {
-  let currentPackId;
-  if (pack) {
-    currentPackId = pack["_id"];
-  }
-
+export const DeletePackItemModal = ({ itemId, pack, refetch, setRefetch }) => {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const dispatch = useDispatch();
 
@@ -21,8 +16,12 @@ export const DeletePackItemModal = ({ itemId, pack, setPage, page }) => {
   };
 
   const deleteItemHandler = () => {
-    dispatch(deleteGlobalItem(itemId));
-    setPage(page === 0 ? 1 : 0);
+    if (pack) {
+      dispatch(deletePackItem({ itemId, currentPackId: pack["_id"] }));
+    } else {
+      dispatch(deleteGlobalItem(itemId));
+      setRefetch(refetch === true ? false : true);
+    }
     setIsModalOpen(false);
   };
 
