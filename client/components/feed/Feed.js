@@ -172,26 +172,35 @@ const Feed = ({ feedType = "public" }) => {
       item.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    if (data.length > 0) {
-      return Platform.OS === "web" ? (
-        <View style={styles.cardContainer}>
-          {data.map((item) => (
-            <Card key={item._id} type={item.type} {...item} />
-          ))}
-        </View>
-      ) : (
-        <FlatList
-          data={data}
-          numColumns={1}
-          keyExtractor={(item) => item._id}
-          renderItem={({ item }) => (
-            <Card key={item._id} type={item.type} {...item} />
-          )}
+    return Platform.OS === "web" ? (
+      <View style={styles.cardContainer}>
+        {data?.map((item) => (
+          <Card key={item._id} type={item.type} {...item} />
+        ))}
+      </View>
+    ) : (
+      <FlatList
+        data={data}
+        numColumns={1}
+        keyExtractor={(item) => item._id}
+        renderItem={({ item }) => (
+          <Card key={item._id} type={item.type} {...item} />
+        )}
+        ListHeaderComponent={() => <FeedSearchFilter
+          feedType={feedType}
+          handleSortChange={handleSortChange}
+          handleTogglePack={handleTogglePack}
+          handleToggleTrip={handleToggleTrip}
+          selectedTypes={selectedTypes}
+          queryString={queryString}
+          setSearchQuery={setSearchQuery}
+          handleCreateClick={handleCreateClick}
         />
-      );
-    } else {
-      return <Text>{ERROR_MESSAGES[feedType]}</Text>;
-    }
+        }
+        ListEmptyComponent={() => <Text>{ERROR_MESSAGES[feedType]}</Text>}
+        showsVerticalScrollIndicator={false}
+      />
+    );
   };
 
   const handleTogglePack = () => {
@@ -223,16 +232,6 @@ const Feed = ({ feedType = "public" }) => {
 
   return (
     <Box style={styles.mainContainer}>
-      <FeedSearchFilter
-        feedType={feedType}
-        handleSortChange={handleSortChange}
-        handleTogglePack={handleTogglePack}
-        handleToggleTrip={handleToggleTrip}
-        selectedTypes={selectedTypes}
-        queryString={queryString}
-        setSearchQuery={setSearchQuery}
-        handleCreateClick={handleCreateClick}
-      />
       <View>{renderData()}</View>
     </Box>
   );
