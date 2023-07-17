@@ -12,6 +12,7 @@ import {
   IconButton,
   Divider,
   Center,
+  Flex,
 } from "native-base";
 import { AntDesign } from "@expo/vector-icons";
 import { StyleSheet, FlatList, View } from "react-native";
@@ -63,13 +64,7 @@ const FeedSearchFilter = ({
             onChangeText={setSearchQuery}
           />
           <IconButton
-            icon={
-              <AntDesign
-                name="search1"
-                size={24}
-                color="gray"
-              />
-            }
+            icon={<AntDesign name="search1" size={24} color="gray" />}
             variant="ghost"
           />
         </HStack>
@@ -179,7 +174,11 @@ const Feed = ({ feedType = "public" }) => {
 
     if (data.length > 0) {
       return Platform.OS === "web" ? (
-        data.map((item) => <Card key={item._id} type={item.type} {...item} />)
+        <View style={styles.cardContainer}>
+          {data.map((item) => (
+            <Card key={item._id} type={item.type} {...item} />
+          ))}
+        </View>
       ) : (
         <FlatList
           data={data}
@@ -234,14 +233,7 @@ const Feed = ({ feedType = "public" }) => {
         setSearchQuery={setSearchQuery}
         handleCreateClick={handleCreateClick}
       />
-      <Stack
-        direction={["column", "column", "column", "row"]}
-        space={[3, 3, 3, 0]}
-        flexWrap="wrap"
-        justifyContent="space-between"
-      >
-        {renderData()}
-      </Stack>
+      <View>{renderData()}</View>
     </Box>
   );
 };
@@ -267,6 +259,12 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     padding: 10,
     borderRadius: 5,
+  },
+  cardContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-around",
+    alignItems: "center",
   },
 });
 
