@@ -1,15 +1,11 @@
-import { useEffect, useState } from "react";
-import { Box, Input, Button, Text } from "native-base";
+import { useState } from "react";
+import { Box } from "native-base";
 import { useDispatch, useSelector } from "react-redux";
-import { addPackItem, editPackItem } from "../../store/packsStore";
 import { addItemsGlobal } from "../../store/globalItemsStore";
 
 import { ItemForm } from "./ItemForm"; // assuming you moved the form related code to a separate component
-import { ItemCategoryEnum } from "../../constants/itemCategory";
 
 export const AddItemGlobal = ({
-  isEdit,
-  initialData,
   setIsAddItemModalOpen,
   setRefetch,
   refetch,
@@ -17,13 +13,10 @@ export const AddItemGlobal = ({
   const dispatch = useDispatch();
   const isLoading = useSelector((state) => state.items.isLoading);
 
-  // Moved the state up to the parent component
-  const [name, setName] = useState(initialData?.name || "");
-  const [weight, setWeight] = useState(initialData?.weight?.toString() || "");
-  const [quantity, setQuantity] = useState(
-    initialData?.quantity?.toString() || ""
-  );
-  const [unit, setUnit] = useState(initialData?.unit || "");
+  const [name, setName] = useState("");
+  const [weight, setWeight] = useState("");
+  const [quantity, setQuantity] = useState("");
+  const [unit, setUnit] = useState("");
 
   const [categoryType, setCategoryType] = useState("");
 
@@ -36,36 +29,20 @@ export const AddItemGlobal = ({
   };
 
   // handle updates to initialData
-  useEffect(() => {
-    setName(initialData?.name || "");
-    setWeight(initialData?.weight?.toString() || "");
-    setQuantity(initialData?.quantity?.toString() || "");
-    setUnit(initialData?.unit || "");
-  }, [initialData]);
 
   const handleSubmit = () => {
-    // if(!_id) {
-    //   console.log("no _id")
-    //   return;
-    // }
-
-    if (isEdit) {
-      dispatch(editPackItem({ name, weight, quantity, unit, _id, packId }));
-      setIsAddItemModalOpen(false);
-    } else {
-      dispatch(
-        addItemsGlobal({
-          name,
-          weight,
-          quantity,
-          type: categoryType,
-          unit,
-        })
-      );
-      resetAddForm();
-      setIsAddItemModalOpen(false);
-      setRefetch(refetch === true ? false : true);
-    }
+    dispatch(
+      addItemsGlobal({
+        name,
+        weight,
+        quantity,
+        type: categoryType,
+        unit,
+      })
+    );
+    resetAddForm();
+    setIsAddItemModalOpen(false);
+    setRefetch(refetch === true ? false : true);
   };
 
   return (
@@ -83,7 +60,6 @@ export const AddItemGlobal = ({
         setCategoryType={setCategoryType}
         handleSubmit={handleSubmit}
         isLoading={isLoading}
-        isEdit={isEdit}
       />
     </Box>
   );

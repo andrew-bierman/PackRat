@@ -1,5 +1,5 @@
-import { Text, View } from "react-native";
-import React, { Component, useEffect, useState } from "react";
+import { View } from "react-native";
+import React, { useEffect, useState } from "react";
 import { Box, Button } from "native-base";
 import { StyleSheet, Platform } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -13,13 +13,15 @@ import { getItemsGlobal } from "../../store/globalItemsStore";
 
 export default function Items() {
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
-  const [limit, setLimit] = useState(2);
+  // pagination index limit
+  const [limit, setLimit] = useState(5);
+  // page number for pagination
   const [page, setPage] = useState(1);
+  // it will be used as a dependency for reloading the data in case of some modifications
   const [refetch, setRefetch] = useState(false);
 
   const data = useSelector((state) => state.globalItems);
 
-  // console.log("data", );
   const isLoading = useSelector((state) => state.globalItems.isLoading);
   const isError = useSelector((state) => state.globalItems.isError);
 
@@ -92,7 +94,6 @@ export default function Items() {
           setPage={setPage}
           data={data}
           isLoading={isLoading}
-          isError={isError}
           totalPages={data?.globalItems?.totalPages}
           refetch={refetch}
           setRefetch={setRefetch}

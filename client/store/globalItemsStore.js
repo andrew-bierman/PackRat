@@ -5,7 +5,6 @@ import { api } from "../constants/api";
 export const addItemsGlobal = createAsyncThunk(
   "Items/addItemsGlobal",
   async (newItem) => {
-    console.log("calling");
     const response = await axios.post(`${api}/item/global`, newItem);
     return response.data;
   }
@@ -15,7 +14,6 @@ export const getItemsGlobal = createAsyncThunk(
   "Items/getItemsGlobal",
   async ({ limit, page }) => {
     try {
-      console.log("getting global");
       const response = await axios.get(
         `${api}/item/global?limit=${limit}&page=${page}`
       );
