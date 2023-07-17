@@ -1,4 +1,10 @@
-import React, { useRef, useState, useEffect, useCallback } from "react";
+import React, {
+  useRef,
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+} from "react";
 import mapboxgl from "mapbox-gl";
 import { MAPBOX_ACCESS_TOKEN } from "@env";
 import { useSelector, useDispatch } from "react-redux";
@@ -30,7 +36,7 @@ import MapButtonsOverlay from "./MapButtonsOverlay";
 
 mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
-const WebMap = ({ shape = { ...defaultShape } }) => {
+const WebMap = ({ shape }) => {
   console.log("WebMap shape", shape);
   useEffect(() => {
     // temporary solution to fix mapbox-gl-js missing css error
@@ -57,7 +63,7 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
   // consts
   const dw = Dimensions.get("screen").width;
   const dh = Dimensions.get("screen").height;
-  const fullMapDiemention = { width: dw, height: 360 };
+  const fullMapDiemention = useMemo(() => ({ width: dw, height: 360 }), [dw]);
   const previewMapDiemension = { width: dw * 0.9, height: 220 };
 
   const [zoomLevel, setZoomLevel] = useState(10);
@@ -81,8 +87,6 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
   const [downloadable, setDownloadable] = useState(false);
 
   useEffect(() => {
-    if (map.current) return; // Initialize map only once
-
     if (shape?.features[0]?.geometry?.coordinates?.length > 1) {
       let bounds = getShapeSourceBounds(shape);
       bounds = bounds[0].concat(bounds[1]);
@@ -101,15 +105,6 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
   }, [shape, fullMapDiemention]);
 
   useEffect(() => {
-    // if (map.current) return; // Initialize map only once
-
-    let processedShape = processShapeData(shape);
-
-    console.log("processedShape", processedShape);
-    console.log("shape", shape);
-
-    console.log("trailCenterPointRef.current", trailCenterPointRef.current);
-
     const mapInstance = new mapboxgl.Map({
       container: mapContainer.current,
       style: mapStyle,
@@ -125,34 +120,7 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
     });
 
     mapInstance.on("load", () => {
-      mapInstance.addSource("trail", {
-        type: "geojson",
-        data: processedShape ? processedShape : shape,
-      });
-
-      mapInstance.addLayer({
-        id: "trail",
-        type: "line",
-        source: "trail",
-        paint: {
-          "line-color": "#16b22d",
-          "line-width": 4, // Modify this value to set the desired line thickness,
-          "line-opacity": 1,
-        },
-      });
-
-      // Add circle cap to the line ends
-      mapInstance.addLayer({
-        id: "trail-cap",
-        type: "circle",
-        source: "trail",
-        paint: {
-          "circle-radius": 6,
-          "circle-color": "#16b22d",
-        },
-        filter: ["==", "meta", "end"],
-      });
-
+      addTrailLayer(mapInstance);
       if (mapFullscreen && showUserLocation) {
         mapInstance.addLayer({
           id: "user-location",
@@ -184,17 +152,22 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
 
       map.current = mapInstance;
     });
-
-    // console.log("mapInstance", mapInstance);
-
-    return () => {
-      // mapInstance.remove();
-    };
   }, [mapFullscreen]);
 
-  const addTrailLayer = (mapInstance) => {
-    let processedShape = processShapeData(shape);
+  useEffect(() => {
+    if (map.current) {
+      removeTrailLayer(map.current);
+      addTrailLayer(map.current);
+      map.current.setCenter(trailCenterPointRef.current);
+      map.current.setZoom(zoomLevelRef.current);
+    }
 
+    console.log("trailCenterPointRef.current", trailCenterPointRef.current);
+
+    // console.log("mapInstance", mapInstance);
+  }, [shape]);
+
+  const removeTrailLayer = (mapInstance) => {
     // Remove existing source and layers if they exist
     if (mapInstance.getLayer("trail-cap")) {
       mapInstance.removeLayer("trail-cap");
@@ -211,6 +184,10 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
     if (mapInstance.getSource("trail")) {
       mapInstance.removeSource("trail");
     }
+  };
+
+  const addTrailLayer = (mapInstance) => {
+    let processedShape = processShapeData(shape);
 
     // Add new source and layers
     mapInstance.addSource("trail", {
@@ -275,18 +252,7 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
     (style) => {
       if (map.current) {
         // Step 1: remove sources, layers, etc.
-        if (map.current.getLayer("trail-cap")) {
-          map.current.removeLayer("trail-cap");
-        }
-        if (map.current.getSource("trail-cap")) {
-          map.current.removeSource("trail-cap");
-        }
-        if (map.current.getLayer("trail")) {
-          map.current.removeLayer("trail");
-        }
-        if (map.current.getSource("trail")) {
-          map.current.removeSource("trail");
-        }
+        removeTrailLayer(map.current);
 
         // Step 2: change the style
         map.current.setStyle(style);
@@ -295,7 +261,7 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
         map.current.on("style.load", () => addTrailLayer(map.current));
       }
     },
-    [addTrailLayer]
+    [addTrailLayer, removeTrailLayer]
   );
 
   const handleChangeMapStyle = (style) => {
@@ -350,10 +316,9 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
     }
   };
 
-  const component = (
+  const element = (
     <View style={[styles.container, { height: showModal ? "100%" : "400px" }]}>
       <View key="map" ref={mapContainer} style={styles.map} />
-      {/* <MapButtons /> */}
       <MapButtonsOverlay
         mapFullscreen={mapFullscreen}
         enableFullScreen={enableFullScreen}
@@ -371,10 +336,10 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
 
   return showModal ? (
     <Modal animationType={"fade"} transparent={false} visible={true}>
-      {component}
+      {element}
     </Modal>
   ) : (
-    component
+    element
   );
 };
 
