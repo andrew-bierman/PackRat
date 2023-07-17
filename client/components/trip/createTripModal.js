@@ -151,14 +151,15 @@ export const SaveTripContainer = () => {
           </HStack>
 
           <View style={{ marginTop: 20, marginBottom: 20 }}>
+
             <Picker
-              style={{ width: '100%' }}
+              style={{ height: 30, borderRadius: 5, borderColor: "rgb(212, 212, 212)", color: "rgb(23, 23, 23)", backgroundColor: "rgba(0, 0, 0, 0)" }}
               selectedValue={isPublic}
-              onValueChange={handleValueChange}
-              getItemLayout={getItemLayout}
-              data={options}
-              renderItem={renderItem}
-            />
+              onValueChange={handleValueChange}>
+              <Picker.Item label="Yes" value="true" />
+              <Picker.Item label="For me only" value="false" />
+            </Picker>
+
           </View>
         </>
         <>
