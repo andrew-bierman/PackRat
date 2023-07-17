@@ -51,15 +51,12 @@ export const getTripById = async (req, res) => {
     const { tripId } = req.body;
 
     const trip = await Trip.findById({
-      _id: tripId ? tripId : req?.params?.tripId,
-    })
-    
-      .populate({ path: "osm_ref", populate: { path: "nodes" }})
-      // .populate({ path: "packs", populate: { path: "items" } })
-  
+      id: tripId ? tripId : req.params.tripId,
+    }).populate({ path: "osm_ref", populate: { path: "nodes" } });
+    // .populate({ path: "packs", populate: { path: "items" } })
 
     console.log("find trip by id", trip);
-    console.log("find trip by id osm_ref", trip?.osm_ref);
+    console.log("find trip by id osm_ref", trip.osm_ref);
 
     res.status(200).json(trip);
   } catch (error) {
