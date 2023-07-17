@@ -151,7 +151,6 @@ export const getTrailsOSM = async (req, res) => {
     });
 
     const geojsonData = osmtogeojson(response.data);
-    console.log('traills', geojsonData.features[0]);
 
     updateDatabaseWithGeoJSONDataFromOverpass(geojsonData);
 

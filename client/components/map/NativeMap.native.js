@@ -20,15 +20,19 @@ import {
   Entypo,
 } from "@expo/vector-icons";
 import Mapbox, { ShapeSource, offlineManager, Camera } from "@rnmapbox/maps";
-import { Select, Center, Box, CheckIcon } from "native-base";
 
 // get mapbox access token from .env file
 import { MAPBOX_ACCESS_TOKEN } from "@env";
 
 import { theme } from "../../theme";
-import { Link } from "expo-router";
 import MapButtonsOverlay from "./MapButtonsOverlay";
-import { isShapeDownloadable, mapboxStyles } from "../../utils/mapFunctions";
+import {
+  calculateZoomLevel,
+  findTrailCenter,
+  getShapeSourceBounds,
+  isShapeDownloadable,
+  mapboxStyles,
+} from "../../utils/mapFunctions";
 
 Mapbox.setWellKnownTileServer(Platform.OS === "android" ? "Mapbox" : "mapbox");
 Mapbox.setAccessToken(MAPBOX_ACCESS_TOKEN);
@@ -47,7 +51,8 @@ const previewMapStyle = {
 
 // MapView.setConnected(true);
 
-function NativeMap() {
+function NativeMap({ shape }) {
+  console.log("nativemap shape", shape);
   const camera = useRef(Mapbox.Camera);
   const mapViewRef = useRef(null);
   const mapViewFullScreenRef = useRef();
@@ -58,44 +63,16 @@ function NativeMap() {
   });
   const [getLocationLoading, setGetLocationLoading] = useState(false);
   const [correctLocation, setCorrectLocation] = useState(false);
-  const [zoomLevel, setZoomLevel] = useState(10);
-  const [trailCenterPoint, setTrailCenterPoint] = useState(null);
   const [mapFullscreen, setMapFullscreen] = useState(false);
   const [progress, setProgress] = useState(0);
   const [downloading, setDownloading] = useState(false);
   const [mapStyle, setMapStyle] = useState(mapboxStyles[0].style);
 
   // consts
-  const shape = {
-    type: "FeatureCollection",
-    features: [
-      {
-        type: "Feature",
-        geometry: {
-          type: "LineString",
-          coordinates: [
-            [-77.044211, 38.852924],
-            [-77.045659, 38.860158],
-            [-77.044232, 38.862326],
-            [-77.040879, 38.865454],
-            [-77.039936, 38.867698],
-            [-77.040338, 38.86943],
-            [-77.04264, 38.872528],
-            [-77.03696, 38.878424],
-            [-77.032309, 38.87937],
-            [-77.030056, 38.880945],
-            [-77.027645, 38.881779],
-            [-77.026946, 38.882645],
-            [-77.026942, 38.885502],
-            [-77.028054, 38.887449],
-            [-77.02806, 38.892088],
-            [-77.03364, 38.892108],
-            [-77.033643, 38.899926],
-          ],
-        },
-      },
-    ],
-  };
+  const trailCenterPoint = findTrailCenter(shape);
+  let bounds = getShapeSourceBounds(shape);
+  bounds = bounds[0].concat(bounds[1]);
+  const zoomLevel = calculateZoomLevel(bounds, { width: dw, height: 360 });
   const optionsForDownload = {
     name: "Downloaad",
     styleURL: "mapbox://styles/mapbox/outdoors-v11",
@@ -107,9 +84,7 @@ function NativeMap() {
   useEffect(() => {
     getPosition();
   }, []);
-  useEffect(() => {
-    handleShapeSourceLoad({ width: dw, height: 360 });
-  }, []);
+
   // functions
   const getPosition = (onSucccess) => {
     Geolocation.getCurrentPosition(
@@ -130,84 +105,6 @@ function NativeMap() {
     );
   };
 
-  function getShapeSourceBounds(shape) {
-    let minLng = Infinity;
-    let maxLng = -Infinity;
-    let minLat = Infinity;
-    let maxLat = -Infinity;
-    shape.features[0].geometry.coordinates.forEach((coord) => {
-      const lng = coord[0];
-      const lat = coord[1];
-
-      if (lng < minLng) {
-        minLng = lng;
-      }
-      if (lng > maxLng) {
-        maxLng = lng;
-      }
-      if (lat < minLat) {
-        minLat = lat;
-      }
-      if (lat > maxLat) {
-        maxLat = lat;
-      }
-    });
-
-    return [
-      [minLng, minLat],
-      [maxLng, maxLat],
-    ];
-  }
-
-  function handleShapeSourceLoad({ width: width, height: height }) {
-    if (shape?.features[0]?.geometry?.coordinates?.length > 1) {
-      let bounds = getShapeSourceBounds(shape);
-      bounds = bounds[0].concat(bounds[1]);
-      calculateZoomLevel(bounds, { width: width, height: height });
-      findTrailCenter();
-    }
-  }
-
-  function latRad(lat) {
-    var sin = Math.sin((lat * Math.PI) / 180);
-    var radX2 = Math.log((1 + sin) / (1 - sin)) / 2;
-    return Math.max(Math.min(radX2, Math.PI), -Math.PI) / 2;
-  }
-  function zoom(mapPx, worldPx, fraction) {
-    return Math.floor(Math.log(mapPx / worldPx / fraction) / Math.LN2);
-  }
-  function calculateZoomLevel(
-    bounds,
-    mapDim = { width: width, height: height }
-  ) {
-    var WORLD_DIM = { height: 256, width: 256 };
-    let ne = { lat: bounds[2], lng: bounds[3] };
-    let sw = { lat: bounds[0], lng: bounds[1] };
-
-    var latFraction = (latRad(ne.lat) - latRad(sw.lat)) / Math.PI;
-
-    var lngDiff = ne.lng - sw.lng;
-    var lngFraction = (lngDiff < 0 ? lngDiff + 360 : lngDiff) / 360;
-
-    var latZoom = zoom(mapDim.height, WORLD_DIM.height, latFraction);
-    var lngZoom = zoom(mapDim.width, WORLD_DIM.width, lngFraction);
-    setZoomLevel(latZoom);
-    // mapViewFullScreenRef?.current.setCamera({
-    //   centerCoordinate: [location.longitude, location.latitude],
-    //   zoomLevel: 13,
-    //   animationDuration: 3000,
-    // });
-  }
-  function findTrailCenter() {
-    const trailCoords = shape?.features[0]?.geometry?.coordinates;
-    const latitudes = trailCoords.map((coord) => coord[0]);
-    const longitudes = trailCoords.map((coord) => coord[1]);
-    const avgLatitude = latitudes.reduce((a, b) => a + b, 0) / latitudes.length;
-    const avgLongitude =
-      longitudes.reduce((a, b) => a + b, 0) / longitudes.length;
-    setTrailCenterPoint([avgLatitude, avgLongitude]);
-    // Set the initial state
-  }
   function onMapPress(event) {
     console.log(event, "eventtt");
     // if (trailCenterPoint) {
@@ -250,7 +147,7 @@ function NativeMap() {
     );
   }
 
-  const component = (
+  const element = (
     <View style={mapFullscreen ? fullMapDimension : previewMapStyle}>
       <Mapbox.MapView
         ref={mapViewRef}
@@ -259,8 +156,8 @@ function NativeMap() {
         // onDidFinishRenderingMapFully={onMapLoaded}
         compassEnabled={false}
         logoEnabled={false}
-        scrollEnabled={false}
-        zoomEnabled={false}
+        scrollEnabled={mapFullscreen}
+        zoomEnabled={mapFullscreen}
       >
         <Mapbox.Camera
           zoomLevel={zoomLevel ? zoomLevel - 0.8 : 10}
@@ -338,13 +235,13 @@ function NativeMap() {
   return (
     <SafeAreaView style={{ flex: 1, paddingVertical: 10 }}>
       {!mapFullscreen ? (
-        component
+        element
       ) : (
         <Modal
           visible={true}
           // style={{ backgroundColor: "#000", height: "100%" }}
         >
-          {component}
+          {element}
         </Modal>
       )}
     </SafeAreaView>
