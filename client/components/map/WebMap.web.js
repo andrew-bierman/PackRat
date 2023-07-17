@@ -20,7 +20,6 @@ import {
   Modal,
 } from "react-native";
 import {
-  defaultShape,
   getShapeSourceBounds,
   calculateZoomLevel,
   findTrailCenter,
@@ -28,9 +27,9 @@ import {
   mapboxStyles,
   getLocation,
   isShapeDownloadable,
-  handleGpxDownload,
 } from "../../utils/mapFunctions";
 import MapButtonsOverlay from "./MapButtonsOverlay";
+import { saveFile } from "../../utils/fileSaver/fileSaver";
 
 // import 'mapbox-gl/dist/mapbox-gl.css'
 
@@ -267,6 +266,17 @@ const WebMap = ({ shape }) => {
   const handleChangeMapStyle = (style) => {
     setMapStyle(style);
     setMapboxStyle(style);
+  };
+
+  const handleGpxDownload = async (
+    gpxData,
+    filename = "trail",
+    extension = "gpx"
+  ) => {
+    if (gpxData) {
+      const type = "application/gpx+xml";
+      await saveFile(gpxData, filename, extension, type);
+    }
   };
 
   const fetchLocation = async () => {
