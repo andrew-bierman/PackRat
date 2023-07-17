@@ -1,20 +1,21 @@
-import express from 'express';
+import express from "express";
 import {
   getTemplates,
   getTemplateById,
   addTemplate,
   editTemplate,
-  deleteTemplate
-} from '../controllers/templateController.js';
+  deleteTemplate,
+} from "../controllers/templateController.js";
+import { isAdmin } from "../middleware/isAdmin.js"; // Assuming this is your middleware file
 // import * as validator from "../middleware/validators/index.js";
 
 // TODO - add validators, this is just a placeholder
 const validator = {
-    getTemplateById: (req, res, next) => next(),
-    addTemplate: (req, res, next) => next(),
-    editTemplate: (req, res, next) => next(),
-    deleteTemplate: (req, res, next) => next(),
-  }
+  getTemplateById: (req, res, next) => next(),
+  addTemplate: (req, res, next) => next(),
+  editTemplate: (req, res, next) => next(),
+  deleteTemplate: (req, res, next) => next(),
+};
 
 const router = express.Router();
 
@@ -37,7 +38,7 @@ const router = express.Router();
  *       '500':
  *         description: Error retrieving templates
  */
-router.get('/', getTemplates);
+router.get("/", getTemplates);
 
 /**
  * @swagger
@@ -60,7 +61,7 @@ router.get('/', getTemplates);
  *       '500':
  *         description: Error retrieving template by ID
  */
-router.get('/:templateId', validator.getTemplateById, getTemplateById);
+router.get("/:templateId", validator.getTemplateById, getTemplateById);
 
 /**
  * @swagger
@@ -91,7 +92,7 @@ router.get('/:templateId', validator.getTemplateById, getTemplateById);
  *       '500':
  *         description: Error adding the template
  */
-router.post('/', validator.addTemplate, addTemplate);
+router.post("/", isAdmin, validator.addTemplate, addTemplate);
 
 /**
  * @swagger
@@ -125,7 +126,7 @@ router.post('/', validator.addTemplate, addTemplate);
  *       '500':
  *         description: Error editing the template
  */
-router.put('/:templateId', validator.editTemplate, editTemplate);
+router.put("/:templateId", isAdmin, validator.editTemplate, editTemplate);
 
 /**
  * @swagger
@@ -148,6 +149,11 @@ router.put('/:templateId', validator.editTemplate, editTemplate);
  *       '500':
  *         description: Error deleting the template
  */
-router.delete('/:templateId', validator.deleteTemplate, deleteTemplate);
+router.delete(
+  "/:templateId",
+  isAdmin,
+  validator.deleteTemplate,
+  deleteTemplate
+);
 
 export default router;
