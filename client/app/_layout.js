@@ -1,6 +1,6 @@
 import { Slot } from "expo-router";
 
-import { Platform, ScrollView } from "react-native";
+import { Platform, View } from "react-native";
 
 import Navigation from "../screens/Navigation";
 
@@ -21,9 +21,9 @@ export default function HomeLayout() {
         <AuthProvider>
           <NativeBaseProvider>
             <Navigation />
-            <ScrollView>
+            <View>
               <Slot />
-            </ScrollView>
+            </View>
             {Platform.OS === "web" ? <Footer /> : null}
           </NativeBaseProvider>
         </AuthProvider>
