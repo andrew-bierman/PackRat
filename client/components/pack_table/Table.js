@@ -1,13 +1,12 @@
 import { FlatList, Platform, StyleSheet } from "react-native";
-import { Table, Row, Cell, TableWrapper } from "react-native-table-component";
+import { Table, Row, Cell } from "react-native-table-component";
 import { Feather } from "@expo/vector-icons";
 import { Select, Checkbox, Box, Text, HStack, Button } from "native-base";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { convertWeight } from "../../utils/convertWeight";
 import { EditPackItemModal } from "./EditPackItemModal";
 import { ItemCategoryEnum } from "../../constants/itemCategory";
-import Water from "../Water";
 import { DeletePackItemModal } from "./DeletePackItemModal";
 import { formatNumber } from "../../utils/formatNumber";
 import { theme } from "../../theme";
@@ -71,9 +70,8 @@ const TableItem = ({
   const { name, weight, category, quantity, unit, _id } = itemData;
   /* 
   * this _id is passed as pack id but it is a item id which is confusing
-  Todo need to change the name for this passing argument and remaining functions who are getting it
+  Todo need to change the name for this passing argument and remaining functions which are getting it
    */
-  const dispatch = useDispatch();
 
   // Here, you can set a default category if item.category is null or undefined
   const categoryName = category ? category.name : "Undefined";
@@ -164,13 +162,16 @@ export const TableContainer = ({
 
   let waterItem;
   let foodItems = [];
+  // for calculating the total.
+  /* 
+  Todo better to move this all inside a utility function and pass them variables 
+  */
   data &&
     data
       .filter((item) => !checkedItems.includes(item._id))
       .forEach((item) => {
         const categoryName = item.category ? item.category.name : "Undefined";
 
-        console.log("item", item);
         switch (categoryName) {
           case ItemCategoryEnum.ESSENTIALS: {
             totalBaseWeight += convertWeight(

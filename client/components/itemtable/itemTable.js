@@ -1,9 +1,8 @@
-import { View, Text, StyleSheet } from "react-native";
-import React, { useState } from "react";
-import { Table, Row, Cell, TableWrapper } from "react-native-table-component";
+import { Text, StyleSheet } from "react-native";
+import React from "react";
+import { Table, Row, Cell } from "react-native-table-component";
 import { theme } from "../../theme";
-import { Box, Button, HStack, Input, Select } from "native-base";
-import { useDispatch, useSelector } from "react-redux";
+import { Box, Button, HStack } from "native-base";
 import { formatNumber } from "../../utils/formatNumber";
 import { EditPackItemModal } from "../pack_table/EditPackItemModal";
 import { DeletePackItemModal } from "../pack_table/DeletePackItemModal";
@@ -16,7 +15,6 @@ export const ItemsTable = ({
   setPage,
   data,
   isLoading,
-  isError,
   totalPages,
   refetch,
   setRefetch,
