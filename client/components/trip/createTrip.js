@@ -1,12 +1,6 @@
-import Footer from "../../components/footer/Footer";
 import {
   Stack,
   Box,
-  Text,
-  ScrollView,
-  Button,
-  Input,
-  HStack,
   VStack,
 } from "native-base";
 import { Stack as Header } from "expo-router";
@@ -25,9 +19,6 @@ import { useSelector } from "react-redux";
 
 import { GearList } from "../GearList";
 
-import { MapContainer } from "../map/MapContainer";
-
-import { CustomModal } from "../modal";
 import { SaveTripContainer } from "./createTripModal";
 
 export default function Trips() {
@@ -111,7 +102,7 @@ export default function Trips() {
             )}
             title="Map"
             isMap={true}
-           
+
           />
           <Box>
             <SaveTripContainer />

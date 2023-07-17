@@ -83,7 +83,7 @@ export const SaveTripContainer = () => {
 
     // main object
     const data = {
-      name, 
+      name,
       description,
       start_date: startDate,
       end_date: endDate,
