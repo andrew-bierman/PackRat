@@ -3,7 +3,7 @@ import axios from "axios";
 import Way from "../models/osm/wayModel.js";
 import Node from "../models/osm/nodeModel.js";
 import mongoose from "mongoose";
-import { findOrCreateMany, findOrCreateOne, ensureIdProperty, ensureModelProperty } from "../utils/osmFunctions/modelHandlers.js";
+import { findOrCreateMany, findOrCreateOne, ensureIdProperty, ensureModelProperty, checkandsave } from "../utils/osmFunctions/modelHandlers.js";
 import { isGeoJSONFormat } from "../utils/osmFunctions/dataFormatters.js";
 
 export const getOsm = async (req, res) => {
@@ -104,6 +104,16 @@ export const getPhotonResults = async (req, res) => {
     // console.log("response", response);
 
     const resultsArray = response.data.features;
+    
+    for (let obj of resultsArray) {
+      let checkJSONFormat = isGeoJSONFormat(obj);
+      if(checkJSONFormat){
+        let checkensureIdProperty = ensureIdProperty(obj);
+        let checkensureModelProperty = ensureModelProperty(checkensureIdProperty)
+  
+        checkandsave(checkensureModelProperty,checkensureIdProperty.properties.osm_id,checkensureIdProperty.properties.osm_type,checkensureIdProperty);
+      }
+    }
 
     res.send(resultsArray);
   } catch (error) {
