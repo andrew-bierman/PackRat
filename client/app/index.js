@@ -22,7 +22,6 @@ export default function Index() {
   const user = useSelector((state) => state.auth.user);
   const reduxState = useSelector((state) => state);
 
-  console.log("reduxState", reduxState);
   return (
     <>
       {Platform.OS === "web" ? (

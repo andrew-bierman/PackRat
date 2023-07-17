@@ -26,9 +26,7 @@ export default function Map() {
       "mapbox://styles/mapbox/outdoors-v11"
     );
 
-    useEffect(() => {
-      console.log("StyleURL:", Mapbox?.StyleURL);
-    }, []);
+    useEffect(() => {}, []);
 
     const [lng, setLng] = useState(103.8519599);
     const [lat, setLat] = useState(1.29027);
@@ -144,7 +142,6 @@ export default function Map() {
       const featureId = event.features[0].id;
 
       // Do something with the ID, e.g. display an info window
-      console.log(`Shape with ID ${featureId} was clicked!`);
     }
 
     const handleButtonPress = () => {
