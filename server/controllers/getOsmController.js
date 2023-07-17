@@ -143,15 +143,15 @@ export const getTrailsOSM = async (req, res) => {
       (
         way["highway"~"footway"]["name"](around:${radius},${lat},${lon});
       );
-      (._;>;);
       out tags geom qt;
       `;
 
     const response = await axios.post(overpassUrl, overpassQuery, {
-      headers: { "Content-Type": "text/plain" },
+      headers: { 'Content-Type': 'text/plain' },
     });
 
     const geojsonData = osmtogeojson(response.data);
+    console.log('traills', geojsonData.features[0]);
 
     updateDatabaseWithGeoJSONDataFromOverpass(geojsonData);
 

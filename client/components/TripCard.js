@@ -18,14 +18,18 @@ export default function TripCard({
   data,
   isSearch,
   isTrail,
+  isPark,
 }) {
   const dispatch = useDispatch();
 
   const currentTrail = useSelector((state) => state.dropdown.currentTrail);
   const currentPark = useSelector((state) => state.dropdown.currentPark);
+  const trailsDetails = useSelector((state) => state.trails.trailsDetails);
 
-  const currentShape = useSelector(
-    (state) => state.search.selectedSearchResult
+  const currentShape = useSelector((state) =>
+    state.trails.trailsDetails.filter(
+      (trail) => trail.properties.name == currentTrail
+    )
   );
 
   const handleValueChange = (value) => {
@@ -73,7 +77,16 @@ export default function TripCard({
         </Text>
       </Box>
       {isMap ? (
-        <MapContainer shape={currentShape} />
+        <MapContainer
+          shape={
+            currentShape.length == 0
+              ? {}
+              : {
+                  type: "FeatureCollection",
+                  features: currentShape,
+                }
+          }
+        />
       ) : isSearch ? (
         <SearchInput />
       ) : (
