@@ -271,8 +271,9 @@ export const TableContainer = ({ currentPack }) => {
         </>
       ) : (
         <Text style={styles.noItemsText}>Add your First Item</Text>
-      )}
-    </Box>
+      )
+      }
+    </Box >
   );
 };
 
