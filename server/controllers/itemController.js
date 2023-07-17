@@ -123,11 +123,23 @@ export const addItem = async (req, res) => {
 
 export const editItem = async (req, res) => {
   try {
-    const { _id } = req.body;
-
-    const newItem = await Item.findOneAndUpdate({ _id }, req.body, {
-      returnOriginal: false,
+    const { _id, name, weight, unit, quantity, type } = req.body;
+    const category = await ItemCategoryModel.findOne({
+      name: type,
     });
+    let newItem = await Item.findOneAndUpdate(
+      { _id },
+      {
+        name,
+        weight,
+        unit,
+        quantity,
+        category: category.id,
+      },
+      {
+        returnOriginal: false,
+      }
+    ).populate("category", "name");
 
     res.status(200).json(newItem);
   } catch (error) {
@@ -138,13 +150,50 @@ export const editItem = async (req, res) => {
 export const deleteItem = async (req, res) => {
   try {
     const { itemId } = req.body;
+    const { packId } = req.body;
+    let itemDeleted;
 
-    const deletedItem = await Item.findByIdAndDelete({ _id: itemId });
+    const item = await Item.findById(itemId);
 
-    res.status(200).json(deletedItem);
+    if (item.global) {
+      // remove the item from pack list
+      await Pack.updateOne({ _id: packId }, { $pull: { items: itemId } });
+      //update the individual item
+
+      await Item.updateOne(
+        {
+          _id: itemId,
+        },
+        {
+          $pull: {
+            packs: packId,
+          },
+        }
+      );
+      itemDeleted = await Item.findById(itemId);
+    } else {
+      itemDeleted = await Item.findByIdAndDelete({ _id: itemId });
+    }
+
+    res.status(200).json(itemDeleted);
   } catch (error) {
     console.error(error);
-    res.status(404).json({ msg: "Unable to delete item" });
+    res.status(404).json({ msg: "Unable to delete item" + error.message });
+  }
+};
+
+export const deleteGlobalItem = async (req, res) => {
+  try {
+    const { itemId } = req.params;
+
+    const itemDeleted = await Item.findByIdAndDelete(itemId);
+
+    res.status(200).json({
+      data: itemDeleted,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(404).json({ msg: "Unable to delete item " + error.message });
   }
 };
 
@@ -159,5 +208,181 @@ export const searchItemsByName = async (req, res) => {
     res
       .status(404)
       .json({ msg: "Items cannot be found", "req.query": req.query });
+  }
+};
+// need to change the name
+export const addItemGlobal = async (req, res) => {
+  try {
+    const { name, weight, quantity, unit, type } = req.body;
+
+    let category = null;
+    let newItem = null;
+    // need to look into below logic. open window issue
+    switch (type) {
+      case ItemCategoryEnum.FOOD: {
+        category = await ItemCategoryModel.findOne({
+          name: ItemCategoryEnum.FOOD,
+        });
+
+        newItem = await Item.create({
+          name,
+          weight,
+          quantity,
+          unit,
+          category: category._id,
+          global: true,
+        });
+        newItem = await Item.findById(newItem.id).populate("category", "name");
+
+        break;
+      }
+      case ItemCategoryEnum.WATER: {
+        category = await ItemCategoryModel.findOne({
+          name: ItemCategoryEnum.WATER,
+        });
+        newItem = await Item.create({
+          name,
+          weight,
+          quantity: 1,
+          unit,
+          category: category._id,
+          global: true,
+        });
+        newItem = await Item.findById(newItem.id).populate("category", "name");
+        break;
+      }
+      default: {
+        category = await ItemCategoryModel.findOne({
+          name: ItemCategoryEnum.ESSENTIALS,
+        });
+
+        newItem = await Item.create({
+          name,
+          weight,
+          quantity,
+          unit,
+          category: category._id,
+          global: true,
+        });
+
+        newItem = await Item.findById(newItem.id).populate("category", "name");
+
+        break;
+      }
+    }
+
+    res.status(200).json({
+      msg: "success",
+      newItem: newItem,
+    });
+  } catch (error) {
+    res.status(404).json({ msg: "Unable to add item", error: error.message });
+  }
+};
+
+export const getItemsGlobally = async (req, res) => {
+  try {
+    const totalItems = await Item.countDocuments({ global: true });
+    const limit = Number(req.query.limit) || totalItems;
+    const totalPages = Math.ceil(totalItems / limit);
+    const page = Number(req.query.page) || 1;
+    const startIndex = (page - 1) * limit;
+
+    const items = await Item.find({ global: true })
+      .populate("category", "name")
+      .skip(startIndex)
+      .limit(limit)
+      .sort({
+        createdAt: -1,
+      });
+
+    return res.status(200).json({
+      items,
+      page,
+      totalPages,
+    });
+  } catch (error) {
+    res.status(404).json({ msg: "Items cannot be found" });
+  }
+};
+
+export const addGlobalItemToPack = async (req, res) => {
+  try {
+    const { packId } = req.params;
+    const { itemId } = req.body;
+    const { ownerId } = req.body;
+
+    const item = await Item.findById(itemId).populate("category", "name");
+
+    await Pack.updateOne({ _id: packId }, { $addToSet: { items: item._id } });
+
+    await Item.findByIdAndUpdate(
+      item._id,
+      {
+        $addToSet: {
+          owners: ownerId,
+        },
+      },
+      { new: true }
+    );
+
+    await Item.findByIdAndUpdate(
+      item._id,
+      {
+        $addToSet: {
+          packs: packId,
+        },
+      },
+      { new: true }
+    );
+
+    return res.status(200).json({ message: "succesfully updated", data: item });
+  } catch (error) {
+    res.status(404).json({ msg: "Items cannot be found" });
+  }
+};
+
+export const editGlobalItemAsDuplicate = async (req, res) => {
+  try {
+    const { itemId } = req.params;
+    const { packId, name, weight, quantity, unit, type } = req.body;
+
+    let category = await ItemCategoryModel.findOne({
+      name: type,
+    });
+    // duplicate the item with new changes
+    let newItem = await Item.create({
+      name,
+      weight,
+      unit,
+      quantity,
+      category: category._id,
+      global: false,
+      packs: [packId],
+    });
+    newItem = await Item.findById(newItem._id).populate("category", "name");
+    // add to pack list
+    await Pack.updateOne(
+      { _id: packId },
+      { $addToSet: { items: newItem._id } }
+    );
+    // remove the already added item from pack list
+    await Pack.updateOne({ _id: packId }, { $pull: { items: itemId } });
+    //update the individual item
+
+    await Item.updateOne(
+      {
+        _id: itemId,
+      },
+      {
+        $pull: {
+          packs: packId,
+        },
+      }
+    );
+
+    return res.status(200).json(newItem);
+  } catch (error) {
+    res.status(404).json({ msg: "Items cannot be found" });
   }
 };
