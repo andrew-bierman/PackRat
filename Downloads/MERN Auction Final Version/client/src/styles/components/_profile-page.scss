@@ -1,0 +1,45 @@
+.profile-top {
+  background-color: #68696b;
+  color: #ffffff;
+  height: 55rem;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.profile-top > * {
+  margin: 15px;
+  color: white;
+}
+
+.round-image {
+  border-radius: 50%;
+}
+
+.review-item {
+  padding-top: 20px;
+}
+
+.see-more {
+  float: right;
+}
+
+.listing-card-title {
+  h3 {
+    float: left;
+  }
+}
+
+.link h3,
+.link h4 {
+  color: #293241;
+  font-size: 100%;
+  text-decoration: none;
+}
+
+.small {
+  padding: 5px;
+}
+
+.right {
+  float: right;
+}

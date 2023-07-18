@@ -1,0 +1,50 @@
+html {
+  color: #555;
+  font-family: 'Lato', 'Arial', sans-serif;
+  font-size: 62.5%;
+  font-weight: 300;
+  text-rendering: optimizeLegibility;
+}
+
+.medium-heading {
+  color: $dark-gray;
+  font-size: 2rem;
+  text-decoration: none;
+}
+
+.small-text-white {
+  color: $white;
+  font-size: 1.7rem;
+}
+.small-text {
+  color: $light-gray;
+  font-size: 1.7rem;
+}
+
+.small-heading {
+  color: $dark-gray;
+  font-size: 1.6rem;
+}
+
+.page-heading {
+  border-bottom: 0.1rem solid lightgray;
+  padding-top: 0.6rem;
+  margin-top: 0.4rem;
+  padding-bottom: 0.8rem;
+  margin-bottom: 0.6rem;
+}
+
+.large-heading {
+  color: $dark-gray;
+  font-size: 3rem;
+}
+
+.link {
+  text-decoration: none;
+  font-size: 1.6rem;
+}
+
+.link:hover {
+  color: $light-gray;
+  text-decoration: underline;
+}

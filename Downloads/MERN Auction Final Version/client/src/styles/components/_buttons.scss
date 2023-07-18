@@ -1,0 +1,62 @@
+.ghost-btn {
+  margin-top: 5px;
+  text-decoration: none;
+  text-transform: uppercase;
+  color: #293241;
+  background-color: white;
+  display: inline-block;
+  border: 1.5px solid black;
+}
+
+.white-btn {
+  color: #293241;
+  text-decoration: none;
+  text-transform: uppercase;
+  background-color: white;
+  border-radius: 5rem;
+  display: inline-block;
+  border: none;
+}
+
+.btn-gray {
+  color: $white;
+  background-color: $gray;
+  border: none;
+  border-radius: 5rem;
+}
+.btn-gray:disabled,
+.btn-gray[disabled] {
+  background-color: $light-gray;
+}
+
+.btn-spaced {
+  margin-right: 1.4rem;
+}
+
+.btn-gray:hover {
+  background-color: $light-gray;
+  cursor: pointer;
+}
+
+.large {
+  font-size: 1.4rem;
+  padding: 1rem;
+}
+
+.full {
+  width: 100%;
+}
+
+.button-row {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.fileContainer .chooseFileButton {
+  background: $gray;
+  transition: none;
+}
+
+.fileContainer .chooseFileButton:hover {
+  background: $light-gray;
+}

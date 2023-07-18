@@ -1,0 +1,32 @@
+.form-group {
+  margin-top: $m-size;
+  margin-bottom: $m-size;
+}
+
+.form .form-group > input[type='text'],
+input[type='email'],
+input[type='password'],
+input[type='textarea'],
+input[type='number'],
+textarea {
+  width: 100%;
+  padding: $s-size $s-size;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+textarea {
+  height: 15rem;
+  color: #555;
+  font-family: 'Lato';
+}
+.form {
+  padding-top: $m-size;
+}
+
+.recaptcha-container,
+select {
+  margin-top: $s-size;
+}

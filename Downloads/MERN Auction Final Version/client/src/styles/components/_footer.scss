@@ -1,0 +1,21 @@
+footer {
+  background-color: $light-gray;
+  color: $white;
+  padding: 4rem;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  overflow: hidden;
+  margin-top: $m-size;
+  text-align: center;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin: 0 0 11rem;
+}

@@ -1,0 +1,118 @@
+.listing-page {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  padding-top: 20px;
+}
+
+.listing-page-img {
+  grid-area: 1 / 1 / 3 / 3;
+  padding-right: 10px;
+  img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    padding-right: 10px;
+  }
+}
+.listing-page-text {
+  grid-area: 1 / 3 / 3 / 6;
+  h2 {
+    padding-bottom: 5px;
+    border-bottom: 1px solid lightgray;
+  }
+  .link h3 {
+    color: #293241;
+    font-size: 100%;
+    text-decoration: none;
+    display: inline;
+  }
+  h3 {
+    padding-top: 5px;
+  }
+}
+
+.bid-form-group {
+  display: inline;
+  input {
+    width: 40%;
+    border-radius: 0;
+  }
+  input[type='submit'] {
+    height: 41px;
+    width: 20%;
+  }
+}
+.item-description {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid lightgray;
+  margin-bottom: 15px;
+  p {
+    padding-top: 10px;
+  }
+}
+
+.listing-card-row {
+  width: 100%;
+  margin: auto;
+  height: 300px;
+  h2 {
+    padding-bottom: 15px;
+  }
+  .listing-card-item {
+    width: 20%;
+    overflow: hidden;
+    padding-right: 15px;
+    float: left;
+    img {
+      width: 100%;
+      max-height: 150px;
+      display: block;
+      object-fit: cover;
+    }
+  }
+}
+
+.bid-item {
+  padding: 0.5rem;
+}
+
+@media screen and (max-width: 600px) {
+  .listing-page {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(1, 1fr);
+    grid-column-gap: 0px;
+    overflow: auto;
+    grid-row-gap: 0px;
+    position: relative;
+  }
+
+  .listing-page-img {
+    overflow: auto;
+    grid-area: 1 / 1 / 2 / 2;
+  }
+  .listing-page-text {
+    grid-area: 2 / 1 / 3 / 2;
+  }
+  .listing-card-row {
+    .listing-card-item {
+      width: 33%;
+    }
+    .listing-card-item:nth-last-child(-n + 2) {
+      display: none;
+      overflow: hidden;
+      width: 33%;
+      float: left;
+      img {
+        width: 100%;
+        max-height: 150px;
+        display: block;
+        object-fit: cover;
+      }
+    }
+  }
+}
