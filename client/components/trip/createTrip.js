@@ -29,10 +29,12 @@ import { MapContainer } from "../map/MapContainer";
 
 import { CustomModal } from "../modal";
 import { SaveTripContainer } from "./createTripModal";
+import TripDateRange from "./TripDateRange";
 
 export default function Trips() {
   const [parksData, setParksData] = useState();
   const [trails, setTrailsData] = useState();
+  const [dateRange, setDateRange] = useState({ startDate: undefined, endDate: undefined });
   const weatherObject = useSelector((state) => state.weather.weatherObject);
   const weatherWeek = useSelector((state) => state.weather.weatherWeek);
 
@@ -100,6 +102,7 @@ export default function Trips() {
             )}
           />
           <GearList />
+          <TripDateRange dateRange={dateRange} setDateRange={setDateRange}  />
 
           <TripCard
             Icon={() => (
@@ -114,7 +117,7 @@ export default function Trips() {
            
           />
           <Box>
-            <SaveTripContainer />
+            <SaveTripContainer dateRange={dateRange} />
           </Box>
         </Stack>
       </Box>
