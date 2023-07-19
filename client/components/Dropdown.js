@@ -1,5 +1,6 @@
 import React from "react";
 import { Box, Center, Select, CheckIcon } from "native-base";
+import { Picker } from "@react-native-picker/picker"
 
 export const DropdownComponent = ({
   data,
@@ -13,37 +14,34 @@ export const DropdownComponent = ({
 
   return (
     <Center>
-      <Box style={{...style, width: width || '100%'}}>
-        <Select
+      <Box style={{ ...style, width: width || '100%' }}>
+        <Picker
           selectedValue={value}
           width="100%"
-          accessibilityLabel="Choose Service"
+          onValueChange={onValueChange}
           placeholder={placeholder || "Select"}
+          accessibilityLabel="Choose Service"
           _selectedItem={{
             bg: "teal.600",
             endIcon: <CheckIcon size="5" />,
           }}
-          onValueChange={onValueChange}
         >
           {data
             ? data?.map((item, index) => {
-                let val = item;
-                let label = item;
-                // Check if the item is an object
-                if (typeof item === 'object' && item !== null) {
-                  val = item.id || item._id || item.name;
-                  label = item.name;
-                }
-                return (
-                  <Select.Item
-                    key={index}
-                    label={String(label)}
-                    value={val}
-                  />
-                );
-              })
+              let val = item;
+              let label = item;
+              // Check if the item is an object
+              if (typeof item === 'object' && item !== null) {
+                val = item.id || item._id || item.name;
+                label = item.name;
+              }
+              return (
+                <Picker.Item key={index} label={String(label)} value={val} />
+
+              );
+            })
             : null}
-        </Select>
+        </Picker>
       </Box>
     </Center>
   );
