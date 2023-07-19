@@ -27,7 +27,7 @@ const TripDateRange = ({ dateRange, setDateRange}) => {
   );
 
   useEffect(() => {
-    registerTranslation('en-GB', enGB);
+    registerTranslation('en', enGB);
   }, [])
   
 
@@ -88,8 +88,10 @@ const TripDateRange = ({ dateRange, setDateRange}) => {
             </Button>
             <DatePickerModal
               locale="en"
+              label="Select Date"
               mode="range"
               visible={open}
+              validRange={{ startDate: new Date() }}
               onDismiss={onDismiss}
               startDate={dateRange?.startDate}
               endDate={dateRange?.endDate}
