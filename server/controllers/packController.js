@@ -245,11 +245,16 @@ export const copyPack = async (req, res) => {
       return;
     }
 
+    // increment copied_count for the original pack
+    packToCopy.copied_count += 1;
+    await packToCopy.save();
+
     const newPack = new Pack(packToCopy.toObject());
-    newPack._id = mongoose.Types.ObjectId(); // Generate a new id for copied pack
-    newPack.owner_id = ownerId; // Assign new owner
-    newPack.owners = [ownerId]; // Assign new owner
-    newPack.isNew = true; // This makes mongoose treat this document as a new one
+    newPack._id = mongoose.Types.ObjectId();
+    newPack.owner_id = ownerId;
+    newPack.owners = [ownerId];
+    newPack.copied_from = packId; // set copied_from field
+    newPack.isNew = true;
 
     await newPack.save();
     res.status(200).json(newPack);
@@ -258,3 +263,4 @@ export const copyPack = async (req, res) => {
     res.status(500).json({ msg: "Unable to copy pack" });
   }
 };
+

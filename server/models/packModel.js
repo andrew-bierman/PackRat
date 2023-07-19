@@ -31,6 +31,8 @@ const PackSchema = new Schema(
       },
     },
     type: { type: String, default: "pack" },
+    copied_from: { type: Schema.Types.ObjectId, ref: "Pack", default: null },
+    copied_count: { type: Number, default: 0 },
   },
   { timestamps: true }
 );
