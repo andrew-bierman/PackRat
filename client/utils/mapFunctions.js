@@ -60,7 +60,7 @@ function convertPhotonGeoJsonToShape(photonGeoJson) {
         type: "Feature",
         geometry: {
           type: "LineString",
-          coordinates: normalizeCoordinates(photonGeoJson.geometry.coordinates),
+          coordinates: normalizeCoordinates(photonGeoJson?.geometry?.coordinates),
         },
         properties: photonGeoJson.properties,
       },
@@ -227,7 +227,7 @@ const mapboxStyles = [
 
 const getLocation = async () => {
   let { status } = await Location.requestForegroundPermissionsAsync();
-  
+
   if (status !== "granted") {
     alert("Permission to access location was denied");
     return;

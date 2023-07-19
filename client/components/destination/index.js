@@ -20,9 +20,9 @@ export const DestinationPage = () => {
   const dispatch = useDispatch();
   const { destinationId } = useSearchParams();
   const status = useSelector((state) => state.destination.status);
-  const currentDestination = useSelector((state) => state.destination.currentDestination);
+  const currentDestination = useSelector((state) => state.search.selectedSearchResult);
   // const geoJSON = useSelector((state) => state.search.selectedSearchResult);
-  const geoJSON = currentDestination?.geoJSON;
+  const geoJSON = currentDestination
   const weatherObject = useSelector((state) => state.weather.weatherObject);
   const weatherWeek = useSelector((state) => state.weather.weatherWeek);
 

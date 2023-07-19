@@ -83,7 +83,7 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
   useEffect(() => {
     if (map.current) return; // Initialize map only once
 
-    if (shape?.features[0]?.geometry?.coordinates?.length > 1) {
+    if (shape?.features[0]?.geometry?.coordinates?.length > 0) {
       let bounds = getShapeSourceBounds(shape);
       bounds = bounds[0].concat(bounds[1]);
 
@@ -108,16 +108,14 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
     console.log("processedShape", processedShape);
     console.log("shape", shape);
 
-    console.log("trailCenterPointRef.current", trailCenterPointRef.current);
-
     const mapInstance = new mapboxgl.Map({
       container: mapContainer.current,
       style: mapStyle,
       // center: [lng, lat],
       center:
         trailCenterPointRef.current &&
-        !isNaN(trailCenterPointRef.current[0]) &&
-        !isNaN(trailCenterPointRef.current[1])
+          !isNaN(trailCenterPointRef.current[0]) &&
+          !isNaN(trailCenterPointRef.current[1])
           ? trailCenterPointRef.current
           : [lng, lat],
       zoom: zoomLevelRef.current ? zoomLevelRef.current : zoomLevel,
