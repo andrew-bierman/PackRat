@@ -3,6 +3,7 @@ import {
   Box,
   VStack,
 } from "native-base";
+import { ScrollView } from 'react-native'
 import { Stack as Header } from "expo-router";
 
 import { theme } from "../../theme";
@@ -39,79 +40,82 @@ export default function Trips() {
   }, [parksObject]);
 
   return (
-    <VStack>
-      {Platform.OS === "web" ? (
-        <Header.Screen
-          options={{
-            // https://reactnavigation.org/docs/headers#setting-the-header-title
-            title: "Home",
-          }}
-        />
-      ) : null}
-      <Box style={styles.mutualStyles}>
-        <Stack m={[0, 0, 12, 16]} style={{ gap: 25 }}>
-          <TripCard
-            title="Where are you heading?"
-            isSearch={true}
-            Icon={() => (
-              <FontAwesome
-                name="map"
-                size={20}
-                color={theme.colors.cardIconColor}
-              />
-            )}
+    <ScrollView
+      nestedScrollEnabled={true}>
+      <VStack>
+        {Platform.OS === "web" ? (
+          <Header.Screen
+            options={{
+              // https://reactnavigation.org/docs/headers#setting-the-header-title
+              title: "Home",
+            }}
           />
+        ) : null}
+        <Box style={styles.mutualStyles}>
+          <Stack m={[0, 0, 12, 16]} style={{ gap: 25 }}>
+            <TripCard
+              title="Where are you heading?"
+              isSearch={true}
+              Icon={() => (
+                <FontAwesome
+                  name="map"
+                  size={20}
+                  color={theme.colors.cardIconColor}
+                />
+              )}
+            />
 
-          <WeatherCard weatherObject={weatherObject} weatherWeek={weatherWeek} />
+            <WeatherCard weatherObject={weatherObject} weatherWeek={weatherWeek} />
 
-          <TripCard
-            title="Nearby Trails"
-            value="Trail List"
-            isTrail={true}
-            data={trails || []}
-            Icon={() => (
-              <FontAwesome5
-                name="hiking"
-                size={20}
-                color={theme.colors.cardIconColor}
-              />
-            )}
-          />
+            <TripCard
+              title="Nearby Trails"
+              value="Trail List"
+              isTrail={true}
+              data={trails || []}
+              Icon={() => (
+                <FontAwesome5
+                  name="hiking"
+                  size={20}
+                  color={theme.colors.cardIconColor}
+                />
+              )}
+            />
 
-          <TripCard
-            title="Nearby Parks"
-            value="Parks List"
-            data={parksData}
-            Icon={() => (
-              <FontAwesome5
-                name="mountain"
-                size={20}
-                color={theme.colors.cardIconColor}
-              />
-            )}
-          />
-          <GearList />
+            <TripCard
+              title="Nearby Parks"
+              value="Parks List"
+              data={parksData}
+              Icon={() => (
+                <FontAwesome5
+                  name="mountain"
+                  size={20}
+                  color={theme.colors.cardIconColor}
+                />
+              )}
+            />
+            <GearList />
 
-          <TripCard
-            Icon={() => (
-              <FontAwesome5
-                name="route"
-                size={24}
-                color={theme.colors.cardIconColor}
-              />
-            )}
-            title="Map"
-            isMap={true}
+            <TripCard
+              Icon={() => (
+                <FontAwesome5
+                  name="route"
+                  size={24}
+                  color={theme.colors.cardIconColor}
+                />
+              )}
+              title="Map"
+              isMap={true}
 
-          />
-          <Box>
-            <SaveTripContainer />
-          </Box>
-        </Stack>
-      </Box>
+            />
+            <Box>
+              <SaveTripContainer />
+            </Box>
+          </Stack>
+        </Box>
 
-      {/* <Footer /> */}
-    </VStack>
+        {/* <Footer /> */}
+      </VStack>
+    </ScrollView>
   );
 }
 

@@ -65,51 +65,51 @@ const Navigation = () => {
     () =>
       user
         ? [
-            {
-              href: "/feed",
-              icon: "newspaper-variant",
-              text: "Feed",
-              iconSource: MaterialCommunityIcons,
-            },
-            {
-              href: "/trips",
-              icon: "routes",
-              text: "Trips",
-              iconSource: MaterialCommunityIcons,
-            },
-            {
-              href: "/packs",
-              icon: "backpack",
-              text: "Packs",
-              iconSource: MaterialIcons,
-            },
-            {
-              href: "profile",
-              icon: "book",
-              text: "Profile",
-              iconSource: FontAwesome,
-            },
-            {
-              href: "logout",
-              icon: "logout",
-              text: "Logout",
-              iconSource: MaterialIcons,
-            },
-          ]
+          {
+            href: "/feed",
+            icon: "newspaper-variant",
+            text: "Feed",
+            iconSource: MaterialCommunityIcons,
+          },
+          {
+            href: "/trips",
+            icon: "routes",
+            text: "Trips",
+            iconSource: MaterialCommunityIcons,
+          },
+          {
+            href: "/packs",
+            icon: "backpack",
+            text: "Packs",
+            iconSource: MaterialIcons,
+          },
+          {
+            href: "profile",
+            icon: "book",
+            text: "Profile",
+            iconSource: FontAwesome,
+          },
+          {
+            href: "logout",
+            icon: "logout",
+            text: "Logout",
+            iconSource: MaterialIcons,
+          },
+        ]
         : [
-            {
-              href: "sign-in",
-              icon: "login",
-              text: "Login",
-              iconSource: MaterialIcons,
-            },
-            {
-              href: "register",
-              icon: "person-add",
-              text: "Register",
-              iconSource: MaterialIcons,
-            },
-          ],
+          {
+            href: "sign-in",
+            icon: "login",
+            text: "Login",
+            iconSource: MaterialIcons,
+          },
+          {
+            href: "register",
+            icon: "person-add",
+            text: "Register",
+            iconSource: MaterialIcons,
+          },
+        ],
     [user]
   );
 
@@ -227,20 +227,22 @@ const Navigation = () => {
             >
               <Drawer
                 toggleDrawer={toggleDrawer}
-                handleSignOut={() => {}}
+                handleSignOut={() => { }}
                 navigationItems={navigationItems}
                 navigateTo={navigateTo}
                 renderNavigationItem={renderNavigationItem}
               />
             </Modal>
           ) : (
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.menuBar}
-            >
-              {navigationItems.map((item) => renderNavigationItem(item))}
-            </ScrollView>
+            // <ScrollView
+            //   horizontal
+            //   showsHorizontalScrollIndicator={false}
+            //   contentContainerStyle={styles.menuBar}
+            // >
+            <>
+              {navigationItems?.map((item) => renderNavigationItem(item))}
+            </>
+            // </ScrollView>
           )}
         </View>
       </View>
