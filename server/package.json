@@ -30,7 +30,7 @@
     "i": "^0.3.7",
     "joi": "^17.9.2",
     "jsonwebtoken": "^9.0.0",
-    "mongoose": "^7.0.1",
+    "mongoose": "^7.4.0",
     "mongoose-autopopulate": "^1.0.1",
     "mongoose-to-swagger": "^1.4.0",
     "node-fetch": "^3.3.1",
