@@ -26,10 +26,10 @@ const HeroSection = ({ onSelect }) => {
     try {
       // console.log("selectedResult", selectedResult)
       const actionResult = await dispatch(processGeoJSON(selectedResult));
-
+  
       // Accessing payload from actionResult
       const destinationId = actionResult.payload.data.newInstance._id;
-
+      
       if (destinationId) {
         router.push(`/destination/${destinationId}`);
       }

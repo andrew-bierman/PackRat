@@ -1,5 +1,5 @@
 import { FlatList, Platform, StyleSheet } from "react-native";
-import { Table, Row, Cell } from "react-native-table-component";
+import { Table, Row, Cell, TableWrapper } from "react-native-table-component";
 import { Feather } from "@expo/vector-icons";
 import { Select, Checkbox, Box, Text, HStack, Button } from "native-base";
 import { useState } from "react";
@@ -30,7 +30,9 @@ const WeightUnitDropdown = ({ value, onChange }) => {
 
 const TotalWeightBox = ({ label, weight, unit }) => {
   return (
-    <Box style={styles.totalWeightBox}>
+    <Box
+      style={styles.totalWeightBox}
+    >
       <Text>{label}</Text>
       <Text>{`${formatNumber(weight)} (${unit})`}</Text>
     </Box>
