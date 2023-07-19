@@ -17,6 +17,7 @@ import {
   FontAwesome,
   MaterialIcons,
   Entypo,
+  Fontisto,
 } from "@expo/vector-icons";
 import SVGLogoComponent from "../components/logo";
 import { useSelector, useDispatch } from "react-redux";
@@ -93,6 +94,12 @@ const Navigation = () => {
                   },
                 ]
               : []),
+            {
+              href: "/items",
+              icon: "tent",
+              text: "Items",
+              iconSource: Fontisto,
+            },
             {
               href: "profile",
               icon: "book",
