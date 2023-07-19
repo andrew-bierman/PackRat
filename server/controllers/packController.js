@@ -132,10 +132,15 @@ export const getPackById = async (req, res) => {
 
 export const addPack = async (req, res) => {
   try {
-    const { name, owner_id } = req.body;
+    const { name, owner_id, owners } = req.body;
+
+    const exists = await Pack.find({ name: name });
+
+    if (exists.length > 0) {
+      return res.status(400).json({ msg: "Pack already exists" });
+    }
 
     const newPack = {
-      // ...packBody,
       name: name,
       owner_id: owner_id,
       items: [],
@@ -143,12 +148,10 @@ export const addPack = async (req, res) => {
       favorited_by: [],
       favorites_count: 0,
       createdAt: new Date(),
-      owners: [owner_id],
+      owners: owners || [owner_id], // Use owners if provided or default to owner_id
     };
 
     console.log("newPack", newPack);
-
-    const exists = await Pack.find({ name: name });
 
     // if (exists[0]?.name?.toLowerCase() === name.toLowerCase()) {
     //   throw new Error("Pack already exists");
@@ -163,13 +166,17 @@ export const addPack = async (req, res) => {
 
 export const editPack = async (req, res) => {
   try {
-    const { _id } = req.body;
+    const { _id, owners } = req.body; // Added owners
 
     const newPack = await Pack.findOneAndUpdate({ _id }, req.body, {
       returnOriginal: false,
     });
 
-    console.log("newPack", newPack);
+    // After updating the pack, if owners were provided, sync them
+    if (owners) {
+      newPack.owners = owners;
+      await newPack.save();
+    }
 
     res.status(200).json(newPack);
   } catch (error) {
@@ -217,5 +224,37 @@ export const scorePack = async (req, res) => {
   } catch (error) {
     console.log("error", error);
     res.status(404).json({ msg: "Unable to score pack", error });
+  }
+};
+
+export const copyPack = async (req, res) => {
+  try {
+    const { packId } = req.params;
+    const { ownerId } = req.body;
+
+    // Input validation
+    if (!mongoose.Types.ObjectId.isValid(packId) || !mongoose.Types.ObjectId.isValid(ownerId)) {
+      res.status(400).json({ msg: "Invalid packId or ownerId" });
+      return;
+    }
+
+    const packToCopy = await Pack.findById(packId);
+
+    if (!packToCopy) {
+      res.status(404).json({ msg: "Pack not found" });
+      return;
+    }
+
+    const newPack = new Pack(packToCopy.toObject());
+    newPack._id = mongoose.Types.ObjectId(); // Generate a new id for copied pack
+    newPack.owner_id = ownerId; // Assign new owner
+    newPack.owners = [ownerId]; // Assign new owner
+    newPack.isNew = true; // This makes mongoose treat this document as a new one
+
+    await newPack.save();
+    res.status(200).json(newPack);
+  } catch (error) {
+    console.log("error", error);
+    res.status(500).json({ msg: "Unable to copy pack" });
   }
 };

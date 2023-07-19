@@ -35,6 +35,12 @@ const PackSchema = new Schema(
   { timestamps: true }
 );
 
+// Added a pre-save middleware for score calculation
+PackSchema.pre('save', function (next) {
+  this.scores = calculatePackScore(this);
+  next();
+});
+
 PackSchema.virtual("total_weight").get(function () {
   if (this.items && this.items.length > 0 && this.items[0] instanceof Item) {
     return this.items.reduce(
