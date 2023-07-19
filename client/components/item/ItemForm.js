@@ -1,6 +1,7 @@
-import { Box, Input, Button, Text, VStack, Checkbox } from "native-base";
+import { Box, Input, Button, Text, VStack, Radio } from "native-base";
 import { DropdownComponent } from "../Dropdown";
 import { theme } from "../../theme";
+import { ItemCategoryEnum } from "../../constants/itemCategory";
 
 const data = ["lbs", "oz", "kg", "g"];
 
@@ -13,13 +14,24 @@ export const ItemForm = ({
   setQuantity,
   unit,
   setUnit,
-  isFood,
-  setIsFood,
+  categoryType,
+  setCategoryType,
   handleSubmit,
   showSubmitButton = true,
   isLoading,
   isEdit,
+  currentPack,
 }) => {
+  let hasWaterAdded = false;
+  if (
+    currentPack &&
+    Array.isArray(currentPack.items) &&
+    currentPack.items.length > 0
+  ) {
+    hasWaterAdded = currentPack.items.some(
+      (item) => item.category && item.category.name === ItemCategoryEnum.WATER
+    );
+  }
   return (
     <Box>
       <VStack space={2}>
@@ -65,18 +77,23 @@ export const ItemForm = ({
           placeholder="Quantity"
           onChangeText={(text) => setQuantity(text)}
           width="100%"
+          type="text"
         />
-        <Checkbox
-          size="sm"
-          accessibilityLabel="mark wether it is a food item or not"
-          value={isFood}
-          onChange={(e) => {
-            setIsFood(e);
-          }}
+        <Radio.Group
+          value={categoryType}
+          name="category"
+          accessibilityLabel="category for the type of item"
+          onChange={(nextVal) => setCategoryType(nextVal)}
         >
-          <Text color="gray.500">Is this a Food item? </Text>
-        </Checkbox>
-
+          {Object.values(ItemCategoryEnum).map((value, key) => {
+            if (hasWaterAdded && value === ItemCategoryEnum.WATER) return;
+            return (
+              <Radio key={key} value={value} mx="2">
+                {value}
+              </Radio>
+            );
+          })}
+        </Radio.Group>
         {showSubmitButton && (
           <Button onPress={handleSubmit}>
             <Text style={{ color: theme.colors.text }}>
