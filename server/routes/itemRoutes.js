@@ -3,10 +3,16 @@ import {
   getItems,
   getItemById,
   addItem,
+  addItemGlobal,
   editItem,
   deleteItem,
   searchItemsByName,
+  getItemsGlobally,
+  addGlobalItemToPack,
+  editGlobalItemAsDuplicate,
+  deleteGlobalItem,
 } from "../controllers/itemController.js";
+import auth from "../middleware/auth.js";
 import * as validator from "../middleware/validators/index.js";
 
 const router = express.Router();
@@ -17,7 +23,6 @@ const router = express.Router();
  *   name: Items
  *   description: item routes
  */
-
 
 /**
  * @swagger
@@ -60,13 +65,19 @@ router.get("/i/:packId", validator.getItemById, getItemById);
 /**
  * @swagger
  * /item/search:
- *  get:
- *    tags:
- *      - Items
- *    summary: Search items by name
- *    responses:
- *      200:
- *        description: Successful response
+ *   get:
+ *     tags:
+ *       - Items
+ *     summary: Search items by name
+ *     parameters:
+ *       - in: query
+ *         name: name
+ *         schema:
+ *           type: string
+ *         description: Text to search for items by name
+ *     responses:
+ *       200:
+ *         description: Successful response
  */
 router.get("/search", searchItemsByName);
 
@@ -151,5 +162,101 @@ router.put("/", validator.editItem, editItem);
  *        description: Successful response
  */
 router.delete("/", validator.deleteItem, deleteItem);
+
+/**
+ * @swagger
+ * /item/:
+ *  post:
+ *    tags:
+ *      - Items
+ *    summary: Add a item to Global items list
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              name:
+ *                type: string
+ *              weight:
+ *                type: number
+ *              quantity:
+ *                type: number
+ *              unit:
+ *                type: string
+ *              type:
+ *                type: string
+ *    responses:
+ *      200:
+ *        description: Successful response
+ */
+router.post("/global", validator.addItemGlobal, addItemGlobal);
+
+/**
+ * @swagger
+ * /item/:
+ *  get:
+ *    tags:
+ *      - Items
+ *    summary: get a item to Global items list
+ *    requestBody:
+ *      required: false
+ *    responses:
+ *      200:
+ *        description: Successful response
+ */
+router.get("/global", getItemsGlobally);
+
+/**
+ * @swagger
+ * /item/:
+ *  post:
+ *    tags:
+ *      - Items
+ *    summary: add a item to Pack
+ *    requestBody:
+ *      required: false
+ *    responses:
+ *      200:
+ *        description: Successful response
+ */
+router.post("/global/select/:packId", addGlobalItemToPack);
+/**
+ * @swagger
+ * /item/:
+ *  post:
+ *    tags:
+ *      - Items
+ *    summary: edit a item in Pack
+ *    requestBody:
+ *      required: false
+ *    responses:
+ *      200:
+ *        description: Successful response
+ */
+router.put("/global/:itemId", editGlobalItemAsDuplicate);
+
+/**
+ * @swagger
+ * /item/:
+ *  delete:
+ *    tags:
+ *      - Items
+ *    summary: Delete an item by ID
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              _id:
+ *                type: string
+ *    responses:
+ *      200:
+ *        description: Successful response
+ */
+router.delete("/global/:itemId", deleteGlobalItem);
 
 export default router;

@@ -3,8 +3,9 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { useDispatch } from "react-redux";
 import { deletePackItem } from "../../store/packsStore";
 import { CustomModal } from "../modal";
+import { deleteGlobalItem } from "../../store/globalItemsStore";
 
-export const DeletePackItemModal = ({ itemId }) => {
+export const DeletePackItemModal = ({ itemId, pack, refetch, setRefetch }) => {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const dispatch = useDispatch();
 
@@ -15,10 +16,14 @@ export const DeletePackItemModal = ({ itemId }) => {
   };
 
   const deleteItemHandler = () => {
-    dispatch(deletePackItem(itemId));
+    if (pack) {
+      dispatch(deletePackItem({ itemId, currentPackId: pack["_id"] }));
+    } else {
+      dispatch(deleteGlobalItem(itemId));
+      setRefetch(refetch === true ? false : true);
+    }
     setIsModalOpen(false);
   };
- 
 
   const footerButtons = [
     {

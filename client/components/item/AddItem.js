@@ -2,11 +2,23 @@ import { useEffect, useState } from "react";
 import { Box, Input, Button, Text } from "native-base";
 import { useDispatch, useSelector } from "react-redux";
 import { addPackItem, editPackItem } from "../../store/packsStore";
-
+import { editItemsGlobalAsDuplicate } from "../../store/packsStore";
 import { ItemForm } from "./ItemForm"; // assuming you moved the form related code to a separate component
 import { ItemCategoryEnum } from "../../constants/itemCategory";
 
-export const AddItem = ({ _id, isEdit, initialData, packId }) => {
+export const AddItem = ({
+  _id,
+  isEdit,
+  initialData,
+  packId,
+  currentPack,
+  editAsDuplicate,
+  setPage = () => {},
+  page,
+  closeModalHandler,
+  refetch,
+  setRefetch,
+}) => {
   const dispatch = useDispatch();
   const isLoading = useSelector((state) => state.packs.isLoading);
 
@@ -16,9 +28,11 @@ export const AddItem = ({ _id, isEdit, initialData, packId }) => {
   const [quantity, setQuantity] = useState(
     initialData?.quantity?.toString() || ""
   );
-  const [unit, setUnit] = useState(initialData?.unit || "");
+  const [categoryType, setCategoryType] = useState(
+    initialData?.category?.name || ""
+  );
 
-  const [isFood, setIsFood] = useState(false);
+  const [unit, setUnit] = useState(initialData?.unit || "");
 
   // handle updates to initialData
   useEffect(() => {
@@ -26,30 +40,55 @@ export const AddItem = ({ _id, isEdit, initialData, packId }) => {
     setWeight(initialData?.weight?.toString() || "");
     setQuantity(initialData?.quantity?.toString() || "");
     setUnit(initialData?.unit || "");
-
-    setIsFood(initialData?.isFood ?? false);
   }, [initialData]);
 
   const handleSubmit = () => {
-    // if(!_id) {
-    //   console.log("no _id")
-    //   return;
-    // }
-
+    console.log("initial", initialData);
     if (isEdit) {
-      dispatch(editPackItem({ name, weight, quantity, unit, _id, packId }));
+      if (packId && initialData.global) {
+        console.log("editing", packId);
+
+        dispatch(
+          editItemsGlobalAsDuplicate({
+            itemId: _id,
+            packId,
+            name,
+            weight,
+            quantity,
+            unit,
+            type: categoryType,
+          })
+        );
+        closeModalHandler();
+      } else {
+        dispatch(
+          editPackItem({
+            name,
+            weight,
+            quantity,
+            unit,
+            type: categoryType,
+            _id: initialData["_id"],
+          })
+        );
+        setPage(1);
+        closeModalHandler();
+        setRefetch(refetch === true ? false : true);
+      }
     } else {
       dispatch(
         addPackItem({
           name,
           weight,
           quantity,
-          type: isFood ? ItemCategoryEnum.FOOD : ItemCategoryEnum.ESSENTIALS,
+          type: categoryType,
           unit,
           _id,
           packId,
         })
       );
+      setIsAddItemModalOpen(false);
+      setRefetch(refetch === true ? false : true);
     }
   };
 
@@ -64,11 +103,12 @@ export const AddItem = ({ _id, isEdit, initialData, packId }) => {
         setQuantity={setQuantity}
         unit={unit}
         setUnit={setUnit}
-        isFood={isFood}
-        setIsFood={setIsFood}
         handleSubmit={handleSubmit}
         isLoading={isLoading}
         isEdit={isEdit}
+        categoryType={categoryType}
+        setCategoryType={setCategoryType}
+        currentPack={currentPack}
       />
     </Box>
   );

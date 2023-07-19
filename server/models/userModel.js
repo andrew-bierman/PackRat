@@ -44,6 +44,11 @@ const UserSchema = new Schema(
     packs: [{ type: Schema.Types.ObjectId, ref: Pack }],
     passwordResetToken: { type: String },
     passwordResetTokenExpiration: { type: Date },
+    role: {
+      type: String,
+      enum: ['user', 'admin'],  // 'user' and 'admin' are the valid roles
+      default: 'user'
+    },
   },
   { timestamps: true }
 );
