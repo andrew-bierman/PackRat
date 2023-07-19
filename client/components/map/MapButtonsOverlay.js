@@ -22,7 +22,7 @@ const MapButtonsOverlay = ({
   downloading,
   fetchLocation,
   onDownload,
-  progress
+  progress,
 }) => {
   const [showStyleOptions, setShowStyleOptions] = useState(false);
 
@@ -34,8 +34,6 @@ const MapButtonsOverlay = ({
     handleChangeMapStyle(style);
     setShowStyleOptions(false);
   };
-
-
 
   return (
     <>
@@ -81,8 +79,9 @@ const MapButtonsOverlay = ({
               },
             ]}
             onPress={() => {
-              Platform.OS == 'web'? alert("Sorry, currently not implemented"):
-              Alert.alert("Sorry, currently not implemented");
+              Platform.OS == "web"
+                ? alert("Sorry, currently not implemented")
+                : Alert.alert("Sorry, currently not implemented");
             }}
           >
             <MaterialCommunityIcons
@@ -128,7 +127,11 @@ const MapButtonsOverlay = ({
                 source={require("../../assets/download.svg")}
               />
               <Text style={styles.downloadText}>
-                {downloading ? `Downloading... ${progress ? Math.floor(progress) + '%' : '' }` : "Download map"}
+                {downloading
+                  ? `Downloading... ${
+                      progress ? Math.floor(progress) + "%" : ""
+                    }`
+                  : "Download map"}
               </Text>
             </TouchableOpacity>
           )}
