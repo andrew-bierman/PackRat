@@ -33,10 +33,14 @@
     "expo-auth-session": "^4.0.3",
     "expo-checkbox": "~2.3.1",
     "expo-constants": "~14.2.1",
+<<<<<<< HEAD
+    "expo-router": "^1.2.2",
+=======
     "expo-crypto": "^12.2.2",
     "expo-file-system": "^15.2.2",
     "expo-linking": "~4.0.1",
     "expo-location": "~15.1.1",
+>>>>>>> f2fc0eb8af20a251efb67559880e245cf7d90cab
     "expo-splash-screen": "~0.18.2",
     "expo-status-bar": "~1.4.4",
     "expo-web-browser": "~12.1.1",
@@ -44,8 +48,12 @@
     "firebase": "^9.19.1",
     "mapbox-gl": "^2.13.0",
     "native-base": "^3.4.28",
+<<<<<<< HEAD
+    "pods": "^2.0.0",
+=======
     "osmtogeojson": "^3.0.0-beta.5",
     "prettier": "^2.8.8",
+>>>>>>> f2fc0eb8af20a251efb67559880e245cf7d90cab
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-native": "0.71.8",

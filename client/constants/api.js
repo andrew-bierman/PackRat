@@ -2,7 +2,7 @@
 
 import { NODE_ENV, API_URL } from "@env";
 
-let api = "http://localhost:3000";
+let api = 'http://localhost:3000';
 
 if (NODE_ENV === "production") {
   api = API_URL;

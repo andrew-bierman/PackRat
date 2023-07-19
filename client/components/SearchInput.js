@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet } from 'react-native';
 
 import {
   VStack,
@@ -19,14 +19,14 @@ import {
 } from "native-base";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 
-import { SafeAreaView } from "react-native";
+import { SafeAreaView } from 'react-native';
 
-import { Platform } from "react-native";
+import { Platform } from 'react-native';
 
 // redux
 import { useDispatch, useSelector } from "react-redux";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 
 // import { getTrailsResult } from "../api/getTrailsResult";
 // import { getPhotonResults } from "../api/getPhotonResults";
@@ -132,7 +132,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
     }
   };
 
-  return Platform.OS === "web" ? (
+  return Platform.OS === 'web' ? (
     <VStack my="4" space={5} w="100%" maxW="300px">
       {/* ... */}
       <VStack w="100%" space={5} alignSelf="center">

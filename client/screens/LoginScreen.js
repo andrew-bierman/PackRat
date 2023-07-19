@@ -70,8 +70,8 @@ import { StyleSheet } from "react-native";
 WebBrowser.maybeCompleteAuthSession();
 
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const demoUser = {
     email: "email52@email.com",

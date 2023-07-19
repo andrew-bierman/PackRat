@@ -41,7 +41,7 @@ const ERROR_MESSAGES = {
   userTrips: "No User Trips Available",
 };
 
-const dataValues = ["Favorite", "Most Recent"];
+const dataValues = ['Favorite', 'Most Recent'];
 
 const FeedSearchFilter = ({
   feedType,
@@ -243,7 +243,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.background,
     padding: 15,
     fontSize: 18,
-    width: "100%",
+    width: '100%',
   },
   filterContainer: {
     backgroundColor: theme.colors.white,
