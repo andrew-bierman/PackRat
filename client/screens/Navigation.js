@@ -129,7 +129,7 @@ const Navigation = () => {
         setTimeout(() => {
           router.push(href);
           setIsLoading(false); // Stop loading after a delay
-        }, 50); // Adjust the delay as needed
+        }, 0); // Adjust the delay as needed
       }
     },
     [dispatch, router]

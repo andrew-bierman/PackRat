@@ -1,17 +1,11 @@
 import { View, StyleSheet, Text, Image } from "react-native";
 import { Link } from "expo-router";
 
-import { useAuth } from "../auth/provider";
-
 import { theme } from "../theme";
-import { Entypo } from "@expo/vector-icons";
-import { FontAwesome } from "@expo/vector-icons";
+
 import { EvilIcons } from "@expo/vector-icons";
-import { AntDesign } from "@expo/vector-icons";
-import { MaterialIcons } from "@expo/vector-icons";
 
 import packratlogo from "../assets/packrat.png";
-import { useState } from "react";
 import { useSelector } from "react-redux";
 
 export default function NavigationMobile() {
@@ -41,8 +35,7 @@ export default function NavigationMobile() {
         />
       </Link>
     </View>
-  ) : 
-  (
+  ) : (
     <View style={styles.mobileContainer}>
       <View style={{ flexDirection: "row", alignItems: "center", gap: 1 }}>
         <Image src={String(packratlogo)} alt="logo" />
@@ -65,8 +58,7 @@ export default function NavigationMobile() {
         />
       </Link>
     </View>
-  )
-  ;
+  );
 }
 
 const styles = StyleSheet.create({
