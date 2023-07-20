@@ -275,7 +275,7 @@ export const getPhotonDetails = async (req, res) => {
   [out:json][timeout:25];
   ${type}(${id});
   (._;>;);
-  out skel qt;
+  out body;
   `;
 
   console.log("overpassQuery", overpassQuery)
