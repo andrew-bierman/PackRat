@@ -106,7 +106,7 @@ router.get("/parks", getParksOSM);
 
 /**
  * @swagger
- * /osm:
+ * /osm/osm:
  *   post:
  *     summary: Get OSM data
  *     tags: [OSM]

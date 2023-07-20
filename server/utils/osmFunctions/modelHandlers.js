@@ -132,8 +132,8 @@ export function findExisting(Model, id, type) {
 }
 
 export async function checkandsave(Model, id, type, obj) {
-  let a = await Model.findOne({ osm_id: id, osm_type: type })
-  if(!a){
+  let osm = await Model.findOne({ osm_id: id, osm_type: type })
+  if(!osm){
     createNewInstance(Model, obj)
   }
 }

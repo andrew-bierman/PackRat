@@ -3,7 +3,7 @@ import axios from "axios";
 import Way from "../models/osm/wayModel.js";
 import Node from "../models/osm/nodeModel.js";
 import mongoose from "mongoose";
-import { findOrCreateMany, findOrCreateOne, ensureIdProperty, ensureModelProperty, checkandsave } from "../utils/osmFunctions/modelHandlers.js";
+import { findOrCreateMany, findOrCreateOne, ensureIdProperty, ensureModelProperty, checkandsave, processElement } from "../utils/osmFunctions/modelHandlers.js";
 import { isGeoJSONFormat } from "../utils/osmFunctions/dataFormatters.js";
 
 export const getOsm = async (req, res) => {
@@ -59,6 +59,9 @@ export const getOsm = async (req, res) => {
     if (response.status === 200) {
       const responseFormat = response.data;
       const geojsonData = osmtogeojson(responseFormat);
+      for (let obj of geojsonData.features) {
+        processElement(obj)
+      }
       res.send(geojsonData);
     } else {
       console.log(response.status, response.statusText);
