@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from "react";
-
 import {
   Platform,
   StyleSheet,
@@ -29,6 +28,7 @@ import {
   Box,
   Actionsheet,
   CheckIcon,
+  useToast,
 } from "native-base";
 
 // get mapbox access token from .env file
@@ -43,6 +43,12 @@ import {
   isShapeDownloadable,
   mapboxStyles,
 } from "../../utils/mapFunctions";
+
+import * as DocumentPicker from "expo-document-picker";
+import * as FileSystem from "expo-file-system";
+import { DOMParser } from "xmldom";
+import { gpx as toGeoJSON } from "@tmcw/togeojson";
+import togpx from "togpx";
 
 Mapbox.setWellKnownTileServer(Platform.OS === "android" ? "Mapbox" : "mapbox");
 Mapbox.setAccessToken(MAPBOX_ACCESS_TOKEN);
@@ -61,7 +67,7 @@ const previewMapStyle = {
 
 // MapView.setConnected(true);
 
-function NativeMap({ shape }) {
+function NativeMap({ shape: shapeProp }) {
   const camera = useRef(null);
   const mapViewRef = useRef(null);
   const cancelRef = React.useRef(null);
@@ -76,29 +82,30 @@ function NativeMap({ shape }) {
   const [downloading, setDownloading] = useState(false);
   const [mapStyle, setMapStyle] = useState(mapboxStyles[0].style);
   const [showMapNameInputDialog, setShowMapNameInputDialog] = useState(false);
-  const [mapName, setMapName] = useState("");
+  const [shape, setShape] = useState(shapeProp);
+  const [mapName, setMapName] = useState(shape?.features[0]?.properties?.name);
+
+  const toast = useToast();
 
   // consts
   const trailCenterPoint = findTrailCenter(shape);
   let bounds = getShapeSourceBounds(shape);
   bounds = bounds[0].concat(bounds[1]);
   const zoomLevel = calculateZoomLevel(bounds, { width: dw, height: 360 });
-  const optionsForDownload = {
-    name: "Downloaad",
-    styleURL: "mapbox://styles/mapbox/outdoors-v11",
-    bounds: [getShapeSourceBounds(shape)[0], getShapeSourceBounds(shape)[1]],
-    minZoom: 0,
-    maxZoom: 21,
-  };
-  // useEffects
+  console.log("trailCenterPoint", trailCenterPoint);
+  console.log("zoomLevel", zoomLevel);
+
+  // effects
   useEffect(() => {
-    getPosition();
-  }, []);
+    // update the shape state when a new shapeProp gets passed
+    if (shapeProp !== shape) setShape(shapeProp);
+  }, [shapeProp]);
+
   useEffect(() => {
-    offlineManager.getPacks().then((packs) => {
-      setofflinePacks(packs);
-    });
-  }, []);
+    // update mapName whenever shape changes e.g newly passed shapeProp or new shape from gpx upload
+    setMapName(shape?.features[0]?.properties?.name);
+  }, [shape]);
+
   // functions
   const getPosition = (onSucccess) => {
     Geolocation.getCurrentPosition(
@@ -233,15 +240,31 @@ function NativeMap({ shape }) {
         disableFullScreen={() => setMapFullscreen(false)}
         handleChangeMapStyle={setMapStyle}
         fetchLocation={() =>
-          getPosition((location) =>
-            setTrailCenterPoint([location.latitude, location.longitude])
-          )
+          getPosition((location) => {
+            // setTrailCenterPoint([location.latitude, location.longitude])
+            // TODO
+          })
         }
         styles={styles}
         downloadable={isShapeDownloadable(shape)}
         downloading={downloading}
         shape={shape}
         onDownload={() => setShowMapNameInputDialog(true)}
+        handleGpxUpload={async () => {
+          try {
+            const result = await DocumentPicker.getDocumentAsync({
+              type: "*/*",
+            });
+            if (result.type === "success") {
+              const gpxString = await FileSystem.readAsStringAsync(result.uri);
+              const parsedGpx = new DOMParser().parseFromString(gpxString);
+              const geojson = toGeoJSON(parsedGpx);
+              setShape(geojson);
+            }
+          } catch (err) {
+            Alert.alert("An error occured");
+          }
+        }}
         progress={progress}
       />
     </View>
@@ -291,16 +314,45 @@ function NativeMap({ shape }) {
                   <Button
                     colorScheme="success"
                     onPress={async () => {
-                      setMapName("");
                       setShowMapNameInputDialog(false);
-                      const options = {
-                        name: mapName,
-                        styleURL: "mapbox://styles/mapbox/outdoors-v11",
-                        bounds: await mapViewRef.current.getVisibleBounds(),
-                        minZoom: 0,
-                        maxZoom: 15,
-                      };
-                      onDownload(options);
+                      try {
+                        const downloadOptions = {
+                          name: mapName,
+                          styleURL: "mapbox://styles/mapbox/outdoors-v11",
+                          bounds: await mapViewRef.current.getVisibleBounds(),
+                          minZoom: 0,
+                          maxZoom: 15,
+                          metadata: {
+                            gpx: fileUri,
+                          },
+                        };
+                        console.log("downloaddinggg...");
+                        const toGpxOptions = {
+                          creator: "PackRat", // Hardcoded creator option
+                          metadata: {
+                            name: mapName || "", // Extract name from geoJSON (if available)
+                            desc: shape.description || "", // Extract description from geoJSON (if available)
+                          },
+                          //   featureTitle: (properties) => properties.name || "", // Extract feature title from properties (if available)
+                          //   featureDescription: (properties) => properties.description || "", // Extract feature description from properties (if available)
+                        };
+                        const gpx = togpx(shape, toGpxOptions);
+                        console.log("gpx", gpx);
+                        const fileUri =
+                          FileSystem.documentDirectory + mapName + ".gpx";
+                        console.log("fileUri", fileUri);
+                        await FileSystem.writeAsStringAsync(fileUri, gpx);
+                        toast.show({ description: fileUri });
+                        setMapName("");
+                        onDownload(downloadOptions);
+                        toast.show({
+                          description: "Region now available for offline",
+                        });
+                      } catch (err) {
+                        console.log("error downloading map", err);
+                        Alert.alert("Error", "Failed to download map.");
+                        setShowMapNameInputDialog(false);
+                      }
                     }}
                   >
                     OK

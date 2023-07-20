@@ -10,6 +10,7 @@ import { theme } from "../theme/index";
 import { useSelector, useDispatch } from "react-redux";
 import { addTrail, addPark } from "../store/dropdownStore";
 import MapContainer from "./map/MapContainer";
+import { convertPhotonGeoJsonToShape } from "../utils/mapFunctions";
 
 export default function TripCard({
   title,
@@ -81,10 +82,7 @@ export default function TripCard({
           shape={
             currentShape.length == 0
               ? {}
-              : {
-                  type: "FeatureCollection",
-                  features: currentShape,
-                }
+              : convertPhotonGeoJsonToShape(currentShape[0])
           }
         />
       ) : isSearch ? (

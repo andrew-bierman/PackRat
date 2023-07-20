@@ -8,7 +8,7 @@ import React, {
 import mapboxgl from "mapbox-gl";
 import { MAPBOX_ACCESS_TOKEN } from "@env";
 import { useSelector, useDispatch } from "react-redux";
-import { convertGeoJSONToGPX } from "../../store/gpxStore";
+
 import {
   Platform,
   StyleSheet,
@@ -18,6 +18,7 @@ import {
   Dimensions,
   Image,
   Modal,
+  Alert,
 } from "react-native";
 import {
   getShapeSourceBounds,
@@ -30,13 +31,16 @@ import {
 } from "../../utils/mapFunctions";
 import MapButtonsOverlay from "./MapButtonsOverlay";
 import { saveFile } from "../../utils/fileSaver/fileSaver";
+import * as DocumentPicker from "expo-document-picker";
+import togpx from "togpx";
+import { gpx as toGeoJSON } from "@tmcw/togeojson";
+import { DOMParser } from "xmldom";
 
 // import 'mapbox-gl/dist/mapbox-gl.css'
 
 mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
-const WebMap = ({ shape }) => {
-  console.log("WebMap shape", shape);
+const WebMap = ({ shape: shapeProp }) => {
   useEffect(() => {
     // temporary solution to fix mapbox-gl-js missing css error
     if (Platform.OS === "web") {
@@ -53,6 +57,9 @@ const WebMap = ({ shape }) => {
       document.head.appendChild(script);
     }
   }, []);
+
+  const [shape, setShape] = useState(shapeProp);
+  console.log("WebMap shape", shape);
 
   const mapContainer = useRef(null);
   const map = useRef(null);
@@ -82,8 +89,12 @@ const WebMap = ({ shape }) => {
 
   // download variables
   const dispatch = useDispatch();
-  const gpxData = useSelector((state) => state.gpx.gpxData);
   const [downloadable, setDownloadable] = useState(false);
+
+  useEffect(() => {
+    // update the shape state when a new shapeProp gets passed
+    if (shapeProp !== shape) setShape(shapeProp);
+  }, [shapeProp]);
 
   useEffect(() => {
     if (shape?.features[0]?.geometry?.coordinates?.length > 1) {
@@ -221,14 +232,19 @@ const WebMap = ({ shape }) => {
   const fetchGpxDownload = async () => {
     setDownloading(true);
 
-    console.log("gpxData at start of fetchGpxDownload", gpxData);
-
     try {
-      const updatedGpxData = await dispatch(convertGeoJSONToGPX(shape));
+      const options = {
+        creator: "PackRat", // Hardcoded creator option
+        metadata: {
+          name: shape.name || "", // Extract name from geoJSON (if available)
+          desc: shape.description || "", // Extract description from geoJSON (if available)
+        },
+        //   featureTitle: (properties) => properties.name || "", // Extract feature title from properties (if available)
+        //   featureDescription: (properties) => properties.description || "", // Extract feature description from properties (if available)
+      };
+      const gpx = togpx(shape, options);
 
-      const { payload } = updatedGpxData;
-
-      await handleGpxDownload(payload);
+      await handleGpxDownload(gpx);
 
       setDownloading(false);
     } catch (error) {
@@ -270,7 +286,7 @@ const WebMap = ({ shape }) => {
 
   const handleGpxDownload = async (
     gpxData,
-    filename = "trail",
+    filename = shape?.features[0]?.properties?.name ?? "trail",
     extension = "gpx"
   ) => {
     if (gpxData) {
@@ -339,6 +355,24 @@ const WebMap = ({ shape }) => {
         downloadable={downloadable}
         downloading={downloading}
         onDownload={fetchGpxDownload}
+        handleGpxUpload={async () => {
+          console.log("clikedd");
+          try {
+            const result = await DocumentPicker.getDocumentAsync({
+              type: "application/gpx+xml",
+            });
+            console.log("result", result);
+            if (result.type === "success") {
+              const base64Gpx = result.uri.split(",")[1];
+              const gpxString = atob(base64Gpx);
+              const parsedGpx = new DOMParser().parseFromString(gpxString);
+              const geojson = toGeoJSON(parsedGpx);
+              setShape(geojson);
+            }
+          } catch (err) {
+            Alert.alert("An error occured");
+          }
+        }}
         shape={shape}
       />
     </View>
