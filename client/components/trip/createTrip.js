@@ -155,7 +155,7 @@ export default function Trips() {
 
   return (
     <VStack>
-      <MultiStepForm steps={steps} />
+      {/* <MultiStepForm steps={steps} /> */}
       <Box style={styles.mutualStyles}>
         <Stack m={[0, 0, 12, 16]} style={{ gap: 25 }}>
           <TripCard
