@@ -52,20 +52,20 @@ export const getPacks = async (req, res) => {
     const { ownerId } = req.params;
 
     const packs = await Pack.aggregate([
+      // matches the pack owners array with the given ownerId
       {
         $match: { owners: new mongoose.Types.ObjectId(ownerId) },
       },
       {
+        // looks up into the items collection for those docs that have _id in packs column in items collection and returns them as items
         $lookup: {
-          from: "items", // name of the foreign collection
+          from: "items",
           localField: "_id",
           foreignField: "packs",
           as: "items",
         },
       },
-      {
-        $unwind: "$items",
-      },
+      // looks up into the itemscategories collection for those docs that have items.category in itemcategories column as id and returns them as items.category. basically its left joining the document
       {
         $lookup: {
           from: "itemcategories",
@@ -75,11 +75,13 @@ export const getPacks = async (req, res) => {
         },
       },
       {
+        // then it picks the category name to be added in docs
         $addFields: {
-          "items.category": { $arrayElemAt: ["$items.category", 0] },
+          category: { $arrayElemAt: ["$items.category.name", 0] },
         },
       },
       {
+        // then it groups the item based on individual items
         $group: {
           _id: "$_id",
           name: { $first: "$name" },
@@ -93,7 +95,6 @@ export const getPacks = async (req, res) => {
           scores: { $first: "$scores" },
           type: { $first: "$type" },
           items: { $push: "$items" },
-          category: { $first: "$items.category.name" },
           total_weight: {
             $sum: {
               $multiply: ["$items.weight", "$items.quantity"],
@@ -106,7 +107,7 @@ export const getPacks = async (req, res) => {
     res.status(200).json(packs);
   } catch (error) {
     console.log("error", error);
-    res.status(404).json({ msg: "Users cannot be found" });
+    res.status(404).json({ msg: "Packs cannot be found " + error.message });
   }
 };
 
