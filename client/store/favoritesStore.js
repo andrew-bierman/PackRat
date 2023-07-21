@@ -1,11 +1,11 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
 import axios from "axios";
 import { api } from "../constants/api";
 
 export const addFavorite = createAsyncThunk(
   "favorites/addFavorite",
   async (newFavorite) => {
-    const response = await axios.post(`${api}/user/favorite`, newFavorite);
+    const response = await axios.post(`${api}/favorite`, newFavorite);
     return response.data;
   }
 );
@@ -13,18 +13,39 @@ export const addFavorite = createAsyncThunk(
 export const fetchFavorites = createAsyncThunk(
   "favorites/fetchFavorites",
   async () => {
-    const response = await axios.get(`${api}/user/favorite`);
+    const response = await axios.get(`${api}/favorite`);
     return response.data;
   }
 );
 
+export const fetchUserFavorites = createAsyncThunk(
+  "favorites/fetchUserFavorites",
+  async (userId) => {
+    const response = await axios.get(`${api}/favorite/user/${userId}`);
+    return response.data;
+  }
+);
+
+export const fetchFavoritePacks = createAsyncThunk(
+  "favorites/fetchFavoritePacks",
+  async (userId) => {
+    const response = await axios.get(`${api}/favorite/user/${userId}/packs`);
+    return response.data;
+  }
+);
+
+const favoritesAdapter = createEntityAdapter();
+const favoritePacksAdapter = createEntityAdapter();
+
+const initialState = favoritesAdapter.getInitialState({
+  isLoading: false,
+  error: null,
+  favoritePacks: favoritePacksAdapter.getInitialState(),
+});
+
 const favoritesSlice = createSlice({
   name: "favorites",
-  initialState: {
-    favorites: [],
-    isLoading: false,
-    error: null,
-  },
+  initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
@@ -33,7 +54,7 @@ const favoritesSlice = createSlice({
         state.error = null;
       })
       .addCase(addFavorite.fulfilled, (state, action) => {
-        state.favorites.push(action.payload);
+        favoritesAdapter.addOne(state, action.payload);
         state.isLoading = false;
         state.error = null;
       })
@@ -46,15 +67,51 @@ const favoritesSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchFavorites.fulfilled, (state, action) => {
-        state.favorites = action.payload;
+        favoritesAdapter.setAll(state, action.payload);
         state.isLoading = false;
         state.error = null;
       })
       .addCase(fetchFavorites.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message;
+      })
+      .addCase(fetchUserFavorites.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchUserFavorites.fulfilled, (state, action) => {
+        favoritesAdapter.setAll(state, action.payload);
+        state.isLoading = false;
+        state.error = null;
+      })
+      .addCase(fetchUserFavorites.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message;
+      })
+      .addCase(fetchFavoritePacks.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchFavoritePacks.fulfilled, (state, action) => {
+        favoritePacksAdapter.setAll(state.favoritePacks, action.payload);
+        state.isLoading = false;
+        state.error = null;
+      })
+      .addCase(fetchFavoritePacks.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message;
       });
   },
 });
+
+export const {
+  selectAll: selectAllFavorites,
+  selectById: selectFavoriteById,
+} = favoritesAdapter.getSelectors((state) => state.favorites);
+
+export const {
+  selectAll: selectAllFavoritePacks,
+  selectById: selectFavoritePackById,
+} = favoritePacksAdapter.getSelectors((state) => state.favorites.favoritePacks);
 
 export default favoritesSlice.reducer;
