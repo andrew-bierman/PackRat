@@ -53,6 +53,17 @@ export const addPackItem = createAsyncThunk(
   }
 );
 
+export const duplicatePackItem = createAsyncThunk(
+  "items/duplicatePackItem",
+  async (newItem) => {
+    const response = await axios.post(`${api}/pack/duplicate`, {
+      packId: newItem.packId,
+      ownerId: newItem.ownerId,
+    });
+    return response.data;
+  }
+);
+
 export const scorePack = createAsyncThunk("packs/scorePack", async (packId) => {
   const response = await axios.put(`${api}/pack/score/${packId}`);
   return response.data;
@@ -316,6 +327,18 @@ const packsSlice = createSlice({
         state.error = null;
       })
       .addCase(editItemsGlobalAsDuplicate.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message;
+      })
+      .addCase(duplicatePackItem.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(duplicatePackItem.fulfilled, (state, action) => {
+        isLoading = false;
+        state.error = null;
+      })
+      .addCase(duplicatePackItem.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message;
       });
