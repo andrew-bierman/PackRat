@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, Text } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
+import { format } from "date-fns";
 import { fetchSinglePack } from "../../store/singlePackStore";
 import { CustomCard } from "../card";
 
@@ -30,29 +31,39 @@ export const DetailsComponent = ({ type, data, additionalComps, link }) => {
         // Add trip-specific logic here
         return (
           <>
-                  <CustomCard
+            <CustomCard
               title={data?.name}
               link={link}
               content={
                 <>
-                  
                   {
                     <>
-                     {data?.description && <Text>Description: {data?.description}</Text>}
-                      {data?.destination && <Text>Destination: {data?.destination}</Text>}
-
+                      {data?.description && (
+                        <Text>Description: {data?.description}</Text>
+                      )}
+                      {data?.destination && (
+                        <Text>Destination: {data?.destination}</Text>
+                      )}
+                      {data.start_date && (
+                        <Text>
+                          Start Date:{" "}
+                          {format(new Date(data.start_date), "MM/dd/yyyy")}
+                        </Text>
+                      )}
+                      {data.end_date && (
+                        <Text>
+                          End Date:{" "}
+                          {format(new Date(data.end_date), "MM/dd/yyyy")}
+                        </Text>
+                      )}
                     </>
                   }
-                  {
-                    <View style={{marginTop:'10%'}}>
-                      {additionalComps}
-                    </View>
-                  }
+                  {<View style={{ marginTop: "10%" }}>{additionalComps}</View>}
                 </>
               }
               destination={data?.destination}
               footer={data?.details}
-              type = "trip"
+              type="trip"
             />
             {/* <View>
               <Text>{data?.title}</Text>
