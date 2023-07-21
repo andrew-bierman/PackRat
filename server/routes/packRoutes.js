@@ -7,6 +7,7 @@ import {
   deletePack,
   getPublicPacks,
   scorePack,
+  duplicatePublicPack,
 } from "../controllers/packController.js";
 import * as validator from "../middleware/validators/index.js";
 
@@ -184,5 +185,30 @@ router.put("/", validator.editPack, editPack);
  *         description: Error deleting the pack
  */
 router.delete("/", validator.deletePack, deletePack);
+
+/**
+ * @swagger
+ * /pack:
+ *   post:
+ *     summary: Duplicate a public pack
+ *     tags: [Pack]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               packId:
+ *                 type: string
+ *     responses:
+ *       '200':
+ *         description: Successful response after duplicating the pack
+ *       '400':
+ *         description: Invalid request parameters
+ *       '500':
+ *         description: Error duplicating the pack
+ */
+router.post("/duplicate", validator.duplicatePublicPack, duplicatePublicPack);
 
 export default router;
