@@ -5,7 +5,7 @@ import { theme } from "../../theme";
 // import useAddToFavorite from "../../hooks/useAddToFavorites";
 // import { useAuth } from "../../auth/provider";
 import { useSelector, useDispatch } from "react-redux";
-import { addFavorite } from "../../store/favoritesStore";
+import { addFavorite, selectFavoriteById, selectAllFavorites } from "../../store/favoritesStore";
 import { duplicatePackItem } from "../../store/packsStore";
 import { TouchableOpacity } from "react-native";
 import { Link } from "expo-router";
@@ -35,16 +35,21 @@ export default function Card({
   destination,
   createdAt,
 }) {
-  // const { user } = useAuth();
+
   const user = useSelector((state) => state.auth.user);
-  console.log("user", user);
-  const favorites = useSelector((state) => state.favorites.favorites);
+
+  const favorites = useSelector(selectAllFavorites);
   const dispatch = useDispatch();
 
   const isFavorite = favorites.some((favorite) => favorite.pack_id === _id);
 
   const handleAddToFavorite = () => {
-    dispatch(addFavorite({ pack_id: _id, user_id: user._id }));
+    const data = {
+      packId: _id,
+      userId: user._id,
+    };
+
+    dispatch(addFavorite(data));
   };
   const handleDuplicate = () => {
     const data = {
