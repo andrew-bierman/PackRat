@@ -1,4 +1,4 @@
-import Footer from "../../components/footer/Footer";
+import Footer from '../../components/footer/Footer';
 import {
   Stack,
   Box,
@@ -8,29 +8,29 @@ import {
   Input,
   HStack,
   VStack,
-} from "native-base";
-import { Stack as Header } from "expo-router";
+} from 'native-base';
+import { Stack as Header } from 'expo-router';
 
-import { theme } from "../../theme";
-import TripCard from "../TripCard";
-import WeatherCard from "../WeatherCard";
+import { theme } from '../../theme';
+import TripCard from '../TripCard';
+import WeatherCard from '../WeatherCard';
 
-import { FontAwesome } from "@expo/vector-icons";
-import { FontAwesome5 } from "@expo/vector-icons";
-import { Platform, StyleSheet } from "react-native";
+import { FontAwesome } from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons';
+import { Platform, StyleSheet } from 'react-native';
 
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
-import { useSelector } from "react-redux";
+import { useSelector } from 'react-redux';
 
-import { GearList } from "../GearList";
+import { GearList } from '../GearList';
 
-import { MapContainer } from "../map/MapContainer";
+import { MapContainer } from '../map/MapContainer';
 
-import { CustomModal } from "../modal";
-import { SaveTripContainer } from "./createTripModal";
-import TripDateRange from "./TripDateRange";
-import MultiStepForm from "../multi_step";
+import { CustomModal } from '../modal';
+import { SaveTripContainer } from './createTripModal';
+import TripDateRange from './TripDateRange';
+import MultiStepForm from '../multi_step';
 
 export default function Trips() {
   const [parksData, setParksData] = useState();
@@ -55,7 +55,7 @@ export default function Trips() {
 
   const steps = [
     {
-      name: "Step 1",
+      name: 'Step 1',
       component: () => (
         <TripCard
           title="Where are you heading?"
@@ -70,7 +70,7 @@ export default function Trips() {
         />
       ),
       sidebarData: {
-        title: "Where are you heading?",
+        title: 'Where are you heading?',
         Icon: () => (
           <FontAwesome
             name="map"
@@ -81,13 +81,13 @@ export default function Trips() {
       },
     },
     {
-      name: "Step 2",
+      name: 'Step 2',
       component: () => (
         <WeatherCard weatherObject={weatherObject} weatherWeek={weatherWeek} />
       ),
     },
     {
-      name: "Step 3",
+      name: 'Step 3',
       component: () => (
         <TripCard
           title="Nearby Trails"
@@ -105,7 +105,7 @@ export default function Trips() {
       ),
     },
     {
-      name: "Step 4",
+      name: 'Step 4',
       component: () => (
         <TripCard
           title="Nearby Parks"
@@ -122,33 +122,33 @@ export default function Trips() {
       ),
     },
     {
-      name: "Step 5",
+      name: 'Step 5',
       component: GearList,
     },
     {
-      name: "Step 6",
+      name: 'Step 6',
       component: () => (
         <TripDateRange dateRange={dateRange} setDateRange={setDateRange} />
       ),
     },
     {
-      name: "Step 7",
+      name: 'Step 7',
       component: () => (
         <TripCard
-        Icon={() => (
-          <FontAwesome5
-            name="route"
-            size={24}
-            color={theme.colors.cardIconColor}
-          />
-        )}
-        title="Map"
-        isMap={true}
-      />
+          Icon={() => (
+            <FontAwesome5
+              name="route"
+              size={24}
+              color={theme.colors.cardIconColor}
+            />
+          )}
+          title="Map"
+          isMap={true}
+        />
       ),
     },
     {
-      name: "Step 8",
+      name: 'Step 8',
       component: () => <SaveTripContainer dateRange={dateRange} />,
     },
   ];
@@ -230,7 +230,7 @@ const styles = StyleSheet.create({
   mutualStyles: {
     backgroundColor: theme.colors.background,
     flex: 1,
-    flexDirection: "column",
-    height: "100%",
+    flexDirection: 'column',
+    height: '100%',
   },
 });

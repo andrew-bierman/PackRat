@@ -1,34 +1,34 @@
-import React, { useState } from "react";
-import { Platform } from "react-native";
-import { CustomModal } from "../modal";
-import { Input, VStack, HStack, Text, Select } from "native-base";
-import { useDispatch, useSelector } from "react-redux";
-import { format, intervalToDuration } from "date-fns";
-import { addTrip } from "../../store/tripsStore";
+import React, { useState } from 'react';
+import { Platform } from 'react-native';
+import { CustomModal } from '../modal';
+import { Input, VStack, HStack, Text, Select, FlatList } from 'native-base';
+import { useDispatch, useSelector } from 'react-redux';
+import { format, intervalToDuration } from 'date-fns';
+import { addTrip } from '../../store/tripsStore';
 
 const NumberInput = (props) => {
   const { min, max, value, ...otherProps } = props;
 
   // Custom validation function to enforce positive numbers only
   const validateNumber = (text) => {
-    const sanitizedText = text.replace(/[^0-9-]/g, ""); // Allow only numbers and minus sign
+    const sanitizedText = text.replace(/[^0-9-]/g, ''); // Allow only numbers and minus sign
 
-    if (sanitizedText === "") {
-      return "";
+    if (sanitizedText === '') {
+      return '';
     }
 
     const number = parseInt(sanitizedText, 10);
 
     if (isNaN(number) || number < 0) {
       // Check for NaN and negative numbers
-      return "";
+      return '';
     }
 
-    if (typeof min !== "undefined" && number < min) {
+    if (typeof min !== 'undefined' && number < min) {
       return min.toString();
     }
 
-    if (typeof max !== "undefined" && number > max) {
+    if (typeof max !== 'undefined' && number > max) {
       return max.toString();
     }
 
@@ -58,38 +58,42 @@ export const SaveTripContainer = ({ dateRange }) => {
   const dropdown = useSelector((state) => state.dropdown);
   const user = useSelector((state) => state.auth.user);
   const packId = useSelector((state) => state.trips.newTrip.packId);
+  const options = [
+    { label: 'Yes', value: 'true' },
+    { label: 'For me only', value: 'false' },
+  ];
 
-  console.log("- note for me", packId);
-  console.log("search in save trip container ->", search);
-  console.log("selected in dateRange ->", dateRange);
+  console.log('- note for me', packId);
+  console.log('search in save trip container ->', search);
+  console.log('selected in dateRange ->', dateRange);
 
   // defining dispatch
   const dispatch = useDispatch();
 
   // trip info states value
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
   // const [numberOfNights, setNumberOfNights] = useState("");
   // const [startDate, setStartDate] = useState("");
   // const [endDate, setEndDate] = useState("");
-  const [isPublic, setIsPublic] = useState("");
+  const [isPublic, setIsPublic] = useState('');
 
   // create trip
   const handleCreateTrip = () => {
     // duration object
     const startDate = dateRange.startDate
-      ? format(dateRange.startDate, "MM/dd/yyyy")
-      : "";
+      ? format(dateRange.startDate, 'MM/dd/yyyy')
+      : '';
     const endDate = dateRange.endDate
-      ? format(dateRange.endDate, "MM/dd/yyyy")
-      : "";
+      ? format(dateRange.endDate, 'MM/dd/yyyy')
+      : '';
     const numNights =
       dateRange.startDate && dateRange.endDate
         ? intervalToDuration({
             start: dateRange.startDate,
             end: dateRange.endDate,
           }).days
-        : "";
+        : '';
     const duration = {
       numberOfNights: numNights,
       startDate,
@@ -113,7 +117,7 @@ export const SaveTripContainer = ({ dateRange }) => {
     };
 
     // creating a trip
-    console.log("create trip data ->", data);
+    console.log('create trip data ->', data);
     dispatch(addTrip(data));
     setIsSaveModalOpen(!isSaveModalOpen);
   };
@@ -126,7 +130,7 @@ export const SaveTripContainer = ({ dateRange }) => {
       onTrigger={() => setIsSaveModalOpen(!isSaveModalOpen)}
       footerButtons={[
         {
-          label: "Save",
+          label: 'Save',
           onClick: handleCreateTrip,
         },
       ]}
@@ -162,7 +166,7 @@ export const SaveTripContainer = ({ dateRange }) => {
             />
           </HStack> */}
 
-          <Select
+          {/* <Select
             minWidth="full"
             placeholder="Is Public"
             mt={4}
@@ -171,12 +175,24 @@ export const SaveTripContainer = ({ dateRange }) => {
           >
             <Select.Item label="Yes" value="true" />
             <Select.Item label="For me only" value="false" />
-          </Select>
+          </Select> */}
+
+          <FlatList
+            data={options}
+            renderItem={({ item }) => (
+              <Select.Item label={item.label} value={item.value} />
+            )}
+            keyExtractor={(item) => item.value}
+            horizontal // Or vertical, depending on your needs
+            showsHorizontalScrollIndicator={false} // If horizontal
+            showsVerticalScrollIndicator={false} // If vertical
+            contentContainerStyle={{ flexGrow: 1 }} // Adjust styling as needed
+          />
         </>
         <>
           <Text>Trip Weather</Text>
           <Text>
-            Temparature - {weatherObject?.main?.temp}, Humidity -{" "}
+            Temparature - {weatherObject?.main?.temp}, Humidity -{' '}
             {weatherObject?.main?.humidity}
           </Text>
         </>
@@ -196,9 +212,9 @@ export const SaveTripContainer = ({ dateRange }) => {
           <Text>Selected Date Range - </Text>
           <Text>
             {dateRange.startDate
-              ? format(dateRange.startDate, "MM/dd/yyyy")
-              : ""}{" "}
-            - {dateRange.endDate ? format(dateRange.endDate, "MM/dd/yyyy") : ""}
+              ? format(dateRange.startDate, 'MM/dd/yyyy')
+              : ''}{' '}
+            - {dateRange.endDate ? format(dateRange.endDate, 'MM/dd/yyyy') : ''}
           </Text>
         </HStack>
         <HStack>

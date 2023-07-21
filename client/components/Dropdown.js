@@ -1,5 +1,5 @@
-import React from "react";
-import { Box, Center, Select, CheckIcon } from "native-base";
+import React from 'react';
+import { Box, Center, Select, CheckIcon } from 'native-base';
 
 export const DropdownComponent = ({
   data,
@@ -13,8 +13,8 @@ export const DropdownComponent = ({
 
   return (
     <Center>
-      <Box style={{...style, width: width || '100%'}}>
-        <Select
+      <Box style={{ ...style, width: width || '100%' }}>
+        {/* <Select
           selectedValue={value}
           width="100%"
           accessibilityLabel="Choose Service"
@@ -43,7 +43,7 @@ export const DropdownComponent = ({
                 );
               })
             : null}
-        </Select>
+        </Select> */}
       </Box>
     </Center>
   );

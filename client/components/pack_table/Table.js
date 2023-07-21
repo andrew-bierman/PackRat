@@ -1,16 +1,16 @@
-import { FlatList, Platform, StyleSheet } from "react-native";
-import { Table, Row, Cell, TableWrapper } from "react-native-table-component";
-import { Feather } from "@expo/vector-icons";
-import { Select, Checkbox, Box, Text, HStack, Button } from "native-base";
-import { useState } from "react";
-import { useSelector } from "react-redux";
-import { convertWeight } from "../../utils/convertWeight";
-import { EditPackItemModal } from "./EditPackItemModal";
-import { ItemCategoryEnum } from "../../constants/itemCategory";
-import { DeletePackItemModal } from "./DeletePackItemModal";
-import { formatNumber } from "../../utils/formatNumber";
-import { theme } from "../../theme";
-import ItemPicker from "../Picker";
+import { FlatList, Platform, StyleSheet } from 'react-native';
+import { Table, Row, Cell, TableWrapper } from 'react-native-table-component';
+import { Feather } from '@expo/vector-icons';
+import { Select, Checkbox, Box, Text, HStack, Button } from 'native-base';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { convertWeight } from '../../utils/convertWeight';
+import { EditPackItemModal } from './EditPackItemModal';
+import { ItemCategoryEnum } from '../../constants/itemCategory';
+import { DeletePackItemModal } from './DeletePackItemModal';
+import { formatNumber } from '../../utils/formatNumber';
+import { theme } from '../../theme';
+import ItemPicker from '../Picker';
 
 const WeightUnitDropdown = ({ value, onChange }) => {
   return (
@@ -30,9 +30,7 @@ const WeightUnitDropdown = ({ value, onChange }) => {
 
 const TotalWeightBox = ({ label, weight, unit }) => {
   return (
-    <Box
-      style={styles.totalWeightBox}
-    >
+    <Box style={styles.totalWeightBox}>
       <Text>{label}</Text>
       <Text>{`${formatNumber(weight)} (${unit})`}</Text>
     </Box>
@@ -42,8 +40,8 @@ const TotalWeightBox = ({ label, weight, unit }) => {
 const IgnoreItemCheckbox = ({ itemId, isChecked, handleCheckboxChange }) => (
   <Box
     style={{
-      justifyContent: "center",
-      alignItems: "flex-start",
+      justifyContent: 'center',
+      alignItems: 'flex-start',
     }}
   >
     <Checkbox
@@ -76,7 +74,7 @@ const TableItem = ({
    */
 
   // Here, you can set a default category if item.category is null or undefined
-  const categoryName = category ? category.name : "Undefined";
+  const categoryName = category ? category.name : 'Undefined';
 
   const rowData = [
     name,
@@ -108,17 +106,17 @@ const TableItem = ({
 
 const CategoryRow = ({ category }) => {
   const categoryIcons = {
-    [ItemCategoryEnum.ESSENTIALS]: "check-square",
-    [ItemCategoryEnum.FOOD]: "coffee",
-    [ItemCategoryEnum.WATER]: "droplet",
-    [ItemCategoryEnum.CLOTHING]: "tshirt",
-    [ItemCategoryEnum.SHELTER]: "home",
-    [ItemCategoryEnum.SLEEPING]: "moon",
-    [ItemCategoryEnum.HYGIENE]: "smile",
-    [ItemCategoryEnum.TOOLS]: "tool",
-    [ItemCategoryEnum.MEDICAL]: "heart",
-    [ItemCategoryEnum.OTHER]: "more-horizontal",
-    Undefined: "help-circle", // Choose an appropriate icon for "Undefined" category
+    [ItemCategoryEnum.ESSENTIALS]: 'check-square',
+    [ItemCategoryEnum.FOOD]: 'coffee',
+    [ItemCategoryEnum.WATER]: 'droplet',
+    [ItemCategoryEnum.CLOTHING]: 'tshirt',
+    [ItemCategoryEnum.SHELTER]: 'home',
+    [ItemCategoryEnum.SLEEPING]: 'moon',
+    [ItemCategoryEnum.HYGIENE]: 'smile',
+    [ItemCategoryEnum.TOOLS]: 'tool',
+    [ItemCategoryEnum.MEDICAL]: 'heart',
+    [ItemCategoryEnum.OTHER]: 'more-horizontal',
+    Undefined: 'help-circle', // Choose an appropriate icon for "Undefined" category
   };
 
   const rowData = [
@@ -151,7 +149,7 @@ export const TableContainer = ({
   refetch,
   setRefetch,
 }) => {
-  const [weightUnit, setWeightUnit] = useState("g");
+  const [weightUnit, setWeightUnit] = useState('g');
   const [checkedItems, setCheckedItems] = useState([]);
   const isLoading = useSelector((state) => state.items.isLoading);
   const error = useSelector((state) => state.items.error);
@@ -172,7 +170,7 @@ export const TableContainer = ({
     data
       .filter((item) => !checkedItems.includes(item._id))
       .forEach((item) => {
-        const categoryName = item.category ? item.category.name : "Undefined";
+        const categoryName = item.category ? item.category.name : 'Undefined';
 
         switch (categoryName) {
           case ItemCategoryEnum.ESSENTIALS: {
@@ -216,7 +214,7 @@ export const TableContainer = ({
 
   // In your groupedData definition, provide a default category for items without one
   const groupedData = data?.reduce((acc, item) => {
-    const categoryName = item.category ? item.category.name : "Undefined";
+    const categoryName = item.category ? item.category.name : 'Undefined';
     (acc[categoryName] = acc[categoryName] || []).push(item);
     return acc;
   }, {});
@@ -238,20 +236,20 @@ export const TableContainer = ({
         <>
           <Table
             style={styles.tableStyle}
-            borderStyle={{ borderColor: "transparent" }}
+            borderStyle={{ borderColor: 'transparent' }}
             flexArr={flexArr}
           >
             <TitleRow title="Pack List" />
             <Row
               flexArr={flexArr}
               data={[
-                "Item Name",
+                'Item Name',
                 `Weight`,
-                "Quantity",
-                "Category",
-                "Edit",
-                "Delete",
-                "Ignore",
+                'Quantity',
+                'Category',
+                'Edit',
+                'Delete',
+                'Ignore',
               ].map((header, index) => (
                 <Cell key={index} data={header} textStyle={styles.headerText} />
               ))}
@@ -311,71 +309,71 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
-    width: Platform.OS === "web" ? "100%" : 310,
+    width: Platform.OS === 'web' ? '100%' : 310,
   },
   tableStyle: {
-    width: Platform.OS === "web" ? "100%" : 300,
+    width: Platform.OS === 'web' ? '100%' : 300,
     marginVertical: 20,
   },
   mainTitle: {
     marginTop: 10,
     marginBottom: 10,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   categoryRow: {
     padding: 10,
     borderRadius: 5,
-    alignItems: "center",
-    justifyContent: "flex-start",
+    alignItems: 'center',
+    justifyContent: 'flex-start',
   },
   title: {
     height: 50,
     backgroundColor: theme.colors.primary,
     borderRadius: 10,
-    justifyContent: "center",
+    justifyContent: 'center',
     paddingLeft: 15,
   },
   titleText: {
-    fontWeight: "bold",
-    color: "#FFFFFF",
+    fontWeight: 'bold',
+    color: '#FFFFFF',
   },
   head: {
     height: 50,
     borderBottomWidth: 1,
-    borderBottomColor: "#D1D5DB",
+    borderBottomColor: '#D1D5DB',
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
   },
   headerText: {
-    fontWeight: "bold",
-    color: "#000000",
-    fontSize: Platform.OS === "web" ? 12 : 8,
+    fontWeight: 'bold',
+    color: '#000000',
+    fontSize: Platform.OS === 'web' ? 12 : 8,
   },
   row: {
-    flexDirection: "row",
+    flexDirection: 'row',
     height: 60,
-    alignItems: "center",
-    backgroundColor: "#FFFFFF",
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
-    borderBottomColor: "#D1D5DB",
+    borderBottomColor: '#D1D5DB',
   },
   infoContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     padding: 25,
-    backgroundColor: "#F8F8F8",
+    backgroundColor: '#F8F8F8',
   },
   noItemsText: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
     fontSize: 16,
     marginTop: 20,
-    textAlign: "center",
+    textAlign: 'center',
   },
   totalWeightBox: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: Platform.OS === "web" ? "100%" : 300,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: Platform.OS === 'web' ? '100%' : 300,
     paddingHorizontal: 25,
     marginVertical: 30,
     flex: 1,
