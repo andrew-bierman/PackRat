@@ -48,7 +48,6 @@ import * as DocumentPicker from "expo-document-picker";
 import * as FileSystem from "expo-file-system";
 import { DOMParser } from "xmldom";
 import { gpx as toGeoJSON } from "@tmcw/togeojson";
-import togpx from "togpx";
 
 Mapbox.setWellKnownTileServer(Platform.OS === "android" ? "Mapbox" : "mapbox");
 Mapbox.setAccessToken(MAPBOX_ACCESS_TOKEN);
@@ -84,11 +83,13 @@ function NativeMap({ shape: shapeProp }) {
   const [showMapNameInputDialog, setShowMapNameInputDialog] = useState(false);
   const [shape, setShape] = useState(shapeProp);
   const [mapName, setMapName] = useState(shape?.features[0]?.properties?.name);
+  const [trailCenterPoint, setTrailCenterPoint] = useState(
+    findTrailCenter(shape)
+  );
 
   const toast = useToast();
 
   // consts
-  const trailCenterPoint = findTrailCenter(shape);
   let bounds = getShapeSourceBounds(shape);
   bounds = bounds[0].concat(bounds[1]);
   const zoomLevel = calculateZoomLevel(bounds, { width: dw, height: 360 });
@@ -102,8 +103,9 @@ function NativeMap({ shape: shapeProp }) {
   }, [shapeProp]);
 
   useEffect(() => {
-    // update mapName whenever shape changes e.g newly passed shapeProp or new shape from gpx upload
+    // update mapName & calculate new trailCenter whenever shape changes e.g newly passed shapeProp or new shape from gpx upload
     setMapName(shape?.features[0]?.properties?.name);
+    setTrailCenterPoint(findTrailCenter(shape));
   }, [shape]);
 
   // functions
@@ -241,8 +243,7 @@ function NativeMap({ shape: shapeProp }) {
         handleChangeMapStyle={setMapStyle}
         fetchLocation={() =>
           getPosition((location) => {
-            // setTrailCenterPoint([location.latitude, location.longitude])
-            // TODO
+            setTrailCenterPoint([location.latitude, location.longitude]);
           })
         }
         styles={styles}
@@ -315,44 +316,19 @@ function NativeMap({ shape: shapeProp }) {
                     colorScheme="success"
                     onPress={async () => {
                       setShowMapNameInputDialog(false);
-                      try {
-                        const downloadOptions = {
-                          name: mapName,
-                          styleURL: "mapbox://styles/mapbox/outdoors-v11",
-                          bounds: await mapViewRef.current.getVisibleBounds(),
-                          minZoom: 0,
-                          maxZoom: 15,
-                          metadata: {
-                            gpx: fileUri,
-                          },
-                        };
-                        console.log("downloaddinggg...");
-                        const toGpxOptions = {
-                          creator: "PackRat", // Hardcoded creator option
-                          metadata: {
-                            name: mapName || "", // Extract name from geoJSON (if available)
-                            desc: shape.description || "", // Extract description from geoJSON (if available)
-                          },
-                          //   featureTitle: (properties) => properties.name || "", // Extract feature title from properties (if available)
-                          //   featureDescription: (properties) => properties.description || "", // Extract feature description from properties (if available)
-                        };
-                        const gpx = togpx(shape, toGpxOptions);
-                        console.log("gpx", gpx);
-                        const fileUri =
-                          FileSystem.documentDirectory + mapName + ".gpx";
-                        console.log("fileUri", fileUri);
-                        await FileSystem.writeAsStringAsync(fileUri, gpx);
-                        toast.show({ description: fileUri });
-                        setMapName("");
-                        onDownload(downloadOptions);
-                        toast.show({
-                          description: "Region now available for offline",
-                        });
-                      } catch (err) {
-                        console.log("error downloading map", err);
-                        Alert.alert("Error", "Failed to download map.");
-                        setShowMapNameInputDialog(false);
-                      }
+                      const downloadOptions = {
+                        name: mapName,
+                        styleURL: "mapbox://styles/mapbox/outdoors-v11",
+                        bounds: await mapViewRef.current.getVisibleBounds(),
+                        minZoom: 0,
+                        maxZoom: 8,
+                        metadata: {
+                          shape: JSON.stringify(shape),
+                        },
+                      };
+
+                      onDownload(downloadOptions);
+                      setShowMapNameInputDialog(false);
                     }}
                   >
                     OK
