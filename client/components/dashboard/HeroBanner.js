@@ -8,8 +8,9 @@ import { useSelector, useDispatch } from "react-redux";
 import Hero from "../hero";
 import { useRouter } from "expo-router";
 import { isObjectEmpty } from "../../utils/isObjectEmpty";
-import { processGeoJSON } from "../../store/destinationStore";
+import { photonDetails, processGeoJSON } from "../../store/destinationStore";
 import { hexToRGBA } from "../../utils/colorFunctions";
+import { getParksOSM } from "../../api/getParks";
 
 const HeroSection = ({ onSelect }) => {
   const dispatch = useDispatch();
@@ -22,17 +23,22 @@ const HeroSection = ({ onSelect }) => {
 
   console.log("currentDestination", currentDestination);
 
-  const handleSearchSelect = (selectedResult) => {
-    // console.log("-_-DASHBOARD Selected Result: ", selectedResult);
-    // const osm_id = selectedResult.properties.osm_id;
+  const handleSearchSelect = async (selectedResult) => {
+    try {
+      console.log("selectedResult", selectedResult)
+      const geojson = await dispatch(photonDetails(selectedResult));
 
-    dispatch(processGeoJSON(selectedResult));
-    
-    // if(currentDestination){
-      router.push(`/destination/${currentDestination._id}`);
-    // }
+      const actionResult = await dispatch(processGeoJSON(geojson));
 
-    // router.push("/destination/" + osm_id);
+      // Accessing payload from actionResult
+      const destinationId = actionResult.payload.data.newInstance._id;
+
+      if (destinationId) {
+        router.push(`/destination/${destinationId}`);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const user = useSelector((state) => state.auth?.user);
@@ -42,7 +48,10 @@ const HeroSection = ({ onSelect }) => {
 
   const cardBackgroundColor = hexToRGBA(theme.colors.secondaryBlue, 0.5);
 
-  const bannerText = firstNameOrUser !== "User" ? `Let's find a new trail, ${firstNameOrUser}` : "Let's find a new trail";
+  const bannerText =
+    firstNameOrUser !== "User"
+      ? `Let's find a new trail, ${firstNameOrUser}`
+      : "Let's find a new trail";
 
   // console.log("cardBackgroundColor", cardBackgroundColor)
 
@@ -74,10 +83,11 @@ const HeroSection = ({ onSelect }) => {
               justifyContent: "center",
             }}
           >
-            <Text style={styles.title}>
-              {bannerText}
-            </Text>
-            <SearchInput onSelect={handleSearchSelect} placeholder={"Search by park, city, or trail"}/>
+            <Text style={styles.title}>{bannerText}</Text>
+            <SearchInput
+              onSelect={handleSearchSelect}
+              placeholder={"Search by park, city, or trail"}
+            />
           </VStack>
         </LargeCard>
       </Hero>

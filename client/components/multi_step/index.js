@@ -1,0 +1,146 @@
+import React, { useState } from "react";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { Svg, Line, Circle } from "react-native-svg";
+
+const ProgressBar = ({ steps, currentStep }) => {
+  const percentage = ((currentStep + 1) / steps.length) * 100;
+
+  return (
+    <View style={styles.progressBar}>
+      <Svg style={styles.svg}>
+        <Line x1="0" y1="15" x2="100%" y2="15" stroke="grey" strokeWidth="10" />
+        <Line
+          x1="0"
+          y1="15"
+          x2={`${percentage}%`}
+          y2="15"
+          stroke="green"
+          strokeWidth="10"
+        />
+        {steps.map((_, i) => (
+          <Circle
+            key={i}
+            cx={`${(i / (steps.length - 1)) * 100}%`}
+            cy="15"
+            r="10"
+            fill={i <= currentStep ? "green" : "grey"}
+          />
+        ))}
+      </Svg>
+    </View>
+  );
+};
+
+const Sidebar = ({ stepsData, currentStep }) => {
+  // Get the data for the current step and all previous steps
+  const displayData = Object.values(stepsData).slice(0, currentStep + 1);
+
+  if (!displayData.length) return null;
+
+  return (
+    <View style={styles.sidebar}>
+      {/* Display your data here */}
+      {displayData.map((data, index) => {
+        if(!data) return null;
+        const { title, subtext } = data;
+        return (
+          <View key={index}>
+            {title && <Text>{title}</Text>}
+            {subtext && <Text>{subtext}</Text>}
+          </View>
+        );
+      })}
+    </View>
+  );
+};
+
+const MultiStepForm = ({ steps = [] }) => {
+  const [currentStep, setCurrentStep] = useState(0);
+  const [stepsData, setStepsData] = useState({});
+
+  const updateStep = (newStep) => {
+    // Save data of the current step before moving
+    setStepsData({
+      ...stepsData,
+      [currentStep]: steps[currentStep].sidebarData,
+    });
+    setCurrentStep(newStep);
+  };
+
+  const nextStep = () => {
+    if (currentStep < steps.length - 1) {
+      updateStep(currentStep + 1);
+    }
+  };
+
+  const prevStep = () => {
+    if (currentStep > 0) {
+      updateStep(currentStep - 1);
+    }
+  };
+
+  const { component: CurrentComponent, props } = steps[currentStep] || {};
+
+  if (!steps.length) return null;
+
+  return (
+    <View style={styles.container}>
+      <ProgressBar steps={steps} currentStep={currentStep} />
+
+      <Sidebar stepsData={stepsData} currentStep={currentStep} />
+
+      {CurrentComponent && <CurrentComponent {...props} />}
+
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity onPress={prevStep} disabled={currentStep === 0}>
+          <Text style={styles.button}>Previous</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={nextStep}
+          disabled={currentStep === steps.length - 1}
+        >
+          <Text style={styles.button}>Next</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    // flex: 1,
+    height: '800px',
+    backgroundColor: "#F5F5F5",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  progressBar: {
+    width: "100%",
+    marginBottom: 20,
+  },
+  svg: {
+    width: "100%",
+    height: 50,
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    margin: 20,
+    width: "60%",
+  },
+  button: {
+    padding: 15,
+    backgroundColor: "#007AFF",
+    color: "white",
+    borderRadius: 20,
+    width: 100,
+    textAlign: "center",
+  },
+  sidebar: {
+    width: "20%", // adjust as necessary
+    padding: 10,
+    backgroundColor: "#f5f5f5", // adjust as necessary
+  },
+});
+
+export default MultiStepForm;
