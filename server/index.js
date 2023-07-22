@@ -13,10 +13,7 @@ import bodyParser from "body-parser";
 
 // express items
 const app = express();
-app.use(cors({
-  origin:CORS_ORIGIN,
-  methods:CORS_METHODS
-}));
+app.use(cors());
 app.use(bodyParser.json({limit:"50mb"}));
 // app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
