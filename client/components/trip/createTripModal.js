@@ -3,6 +3,7 @@ import { Platform, View } from "react-native";
 import { CustomModal } from "../modal";
 import { Input, VStack, HStack, Text, Select } from "native-base";
 import { useDispatch, useSelector } from "react-redux";
+import { format, intervalToDuration } from "date-fns";
 import { addTrip } from "../../store/tripsStore";
 import { Picker } from '@react-native-picker/picker';
 
@@ -56,7 +57,7 @@ const NumberInput = (props) => {
   );
 };
 
-export const SaveTripContainer = () => {
+export const SaveTripContainer = ({ dateRange }) => {
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
   const weatherObject = useSelector((state) => state.weather.weatherObject);
   const search = useSelector((state) => state.search.selectedSearchResult);
@@ -64,28 +65,42 @@ export const SaveTripContainer = () => {
   const user = useSelector((state) => state.auth.user);
   const packId = useSelector((state) => state.trips.newTrip.packId);
 
-  console.log('- note for me', packId);
-  console.log('search in save trip container ->', search)
+  console.log("- note for me", packId);
+  console.log("search in save trip container ->", search);
+  console.log("selected in dateRange ->", dateRange);
 
   // defining dispatch
   const dispatch = useDispatch();
 
   // trip info states value
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [numberOfNights, setNumberOfNights] = useState('');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
-  const [isPublic, setIsPublic] = useState('');
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  // const [numberOfNights, setNumberOfNights] = useState("");
+  // const [startDate, setStartDate] = useState("");
+  // const [endDate, setEndDate] = useState("");
+  const [isPublic, setIsPublic] = useState("");
 
   // create trip
   const handleCreateTrip = () => {
     // duration object
+    const startDate = dateRange.startDate
+      ? format(dateRange.startDate, "MM/dd/yyyy")
+      : "";
+    const endDate = dateRange.endDate
+      ? format(dateRange.endDate, "MM/dd/yyyy")
+      : "";
+    const numNights =
+      dateRange.startDate && dateRange.endDate
+        ? intervalToDuration({
+            start: dateRange.startDate,
+            end: dateRange.endDate,
+          }).days
+        : "";
     const duration = {
-      numberOfNights,
+      numberOfNights: numNights,
       startDate,
-      endDate
-    }
+      endDate,
+    };
 
     // main object
     const data = {
@@ -100,11 +115,11 @@ export const SaveTripContainer = () => {
       weather: JSON.stringify(weatherObject),
       owner_id: user?._id,
       packs: packId,
-      is_public: isPublic
-    }
+      is_public: isPublic,
+    };
 
     // creating a trip
-    console.log('create trip data ->', data)
+    console.log("create trip data ->", data);
     dispatch(addTrip(data));
     setIsSaveModalOpen(!isSaveModalOpen);
   }
@@ -124,7 +139,6 @@ export const SaveTripContainer = () => {
   });
 
 
-
   return (
     <CustomModal
       title="Save Trip"
@@ -139,13 +153,26 @@ export const SaveTripContainer = () => {
       ]}
     >
       <VStack>
-        <Input placeholder="Trip Name" onChange={event => setName(event.target.value)} />
-        <Input placeholder="Trip Description" mt={4} onChange={event => setDescription(event.target.value)} />
+        <Input
+          placeholder="Trip Name"
+          onChange={(event) => setName(event.target.value)}
+        />
+        <Input
+          placeholder="Trip Description"
+          mt={4}
+          onChange={(event) => setDescription(event.target.value)}
+        />
         <>
-          <Text mt={4}>Duration</Text>
-          <Input placeholder="Number of nights" min={0} max={100} onChange={event => setNumberOfNights(event.target.value)} />
+          {/* <Text mt={4}>Duration</Text>
+          <Input
+            placeholder="Number of nights"
+            min={0}
+            max={100}
+            onChange={(event) => setNumberOfNights(event.target.value)}
+          />
 
           <HStack mt={4}>
+
             <Input placeholder="Trip Start Date" onChange={event => setStartDate(event.target.value)} />
             <Input placeholder="Trip End Date" onChange={event => setEndDate(event.target.value)} ml={4} />
           </HStack>
@@ -161,10 +188,36 @@ export const SaveTripContainer = () => {
             </Picker>
 
           </View>
+
+            <Input
+              placeholder="Trip Start Date"
+              onChange={(event) => setStartDate(event.target.value)}
+            />
+            <Input
+              placeholder="Trip End Date"
+              onChange={(event) => setEndDate(event.target.value)}
+              ml={4}
+            />
+          </HStack> */}
+
+          <Select
+            minWidth="full"
+            placeholder="Is Public"
+            mt={4}
+            mb={4}
+            onValueChange={(itemValue) => setIsPublic(itemValue)}
+          >
+            <Select.Item label="Yes" value="true" />
+            <Select.Item label="For me only" value="false" />
+          </Select>
+
         </>
         <>
           <Text>Trip Weather</Text>
-          <Text>Temparature - {weatherObject?.main?.temp}, Humidity - {weatherObject?.main?.humidity}</Text>
+          <Text>
+            Temparature - {weatherObject?.main?.temp}, Humidity -{" "}
+            {weatherObject?.main?.humidity}
+          </Text>
         </>
         <HStack>
           <Text>Pack</Text>
@@ -177,6 +230,28 @@ export const SaveTripContainer = () => {
         <HStack>
           <Text>Selected Trail - </Text>
           <Text>{dropdown?.currentTrail}</Text>
+        </HStack>
+        <HStack>
+          <Text>Selected Date Range - </Text>
+          <Text>
+            {dateRange.startDate
+              ? format(dateRange.startDate, "MM/dd/yyyy")
+              : ""}{" "}
+            - {dateRange.endDate ? format(dateRange.endDate, "MM/dd/yyyy") : ""}
+          </Text>
+        </HStack>
+        <HStack>
+          <Text>Duration {`(Number of nights) - `} </Text>
+          {dateRange.startDate && dateRange.endDate && (
+            <Text>
+              {
+                intervalToDuration({
+                  start: dateRange.startDate,
+                  end: dateRange.endDate,
+                }).days
+              }
+            </Text>
+          )}
         </HStack>
       </VStack>
     </CustomModal>

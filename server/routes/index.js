@@ -13,6 +13,8 @@ import getTrailRoutes from "./getTrailRoutes.js";
 import osmRoutes from "./osmRoutes.js";
 import passwordResetRoutes from "./passwordResetRoutes.js";
 import gpxRoutes from "./gpxRoutes.js";
+import templateRoutes from "./templateRoutes.js";
+import favoriteRouters from "./favoriteRoutes.js";
 
 const router = express.Router();
 
@@ -45,6 +47,8 @@ router.use("/gettrails", getTrailRoutes);
 router.use("/osm", osmRoutes);
 router.use("/password-reset", passwordResetRoutes);
 router.use("/gpx", gpxRoutes);
+router.use("/template", templateRoutes);
+router.use("/favorite", favoriteRouters);
 
 // Also listen to /api for backwards compatibility
 router.use("/api/user", userRoutes);
@@ -57,7 +61,9 @@ router.use("/api/getparks", getParkRoutes);
 router.use("/api/gettrails", getTrailRoutes);
 router.use("/api/osm", osmRoutes);
 router.use("/api/password-reset", passwordResetRoutes);
-router.use("/gpx", gpxRoutes);
+router.use("/api/gpx", gpxRoutes);
+router.use("/api/template", templateRoutes);
+router.use("/api/favorite", favoriteRouters);
 
 // Static routes for serving the React Native Web app
 if (process.env.NODE_ENV === "production") {

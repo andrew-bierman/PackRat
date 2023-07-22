@@ -17,6 +17,7 @@ import {
   FontAwesome,
   MaterialIcons,
   Entypo,
+  Fontisto,
 } from "@expo/vector-icons";
 import SVGLogoComponent from "../components/logo";
 import { useSelector, useDispatch } from "react-redux";
@@ -65,37 +66,53 @@ const Navigation = () => {
     () =>
       user
         ? [
-          {
-            href: "/feed",
-            icon: "newspaper-variant",
-            text: "Feed",
-            iconSource: MaterialCommunityIcons,
-          },
-          {
-            href: "/trips",
-            icon: "routes",
-            text: "Trips",
-            iconSource: MaterialCommunityIcons,
-          },
-          {
-            href: "/packs",
-            icon: "backpack",
-            text: "Packs",
-            iconSource: MaterialIcons,
-          },
-          {
-            href: "profile",
-            icon: "book",
-            text: "Profile",
-            iconSource: FontAwesome,
-          },
-          {
-            href: "logout",
-            icon: "logout",
-            text: "Logout",
-            iconSource: MaterialIcons,
-          },
-        ]
+            {
+              href: "/feed",
+              icon: "newspaper-variant",
+              text: "Feed",
+              iconSource: MaterialCommunityIcons,
+            },
+            {
+              href: "/trips",
+              icon: "routes",
+              text: "Trips",
+              iconSource: MaterialCommunityIcons,
+            },
+            {
+              href: "/packs",
+              icon: "backpack",
+              text: "Packs",
+              iconSource: MaterialIcons,
+            },
+            ...(Platform.OS != "web"
+              ? [
+                  {
+                    href: "maps",
+                    icon: "map",
+                    text: "Downloaded Maps",
+                    iconSource: Entypo,
+                  },
+                ]
+              : []),
+            {
+              href: "/items",
+              icon: "tent",
+              text: "Items",
+              iconSource: Fontisto,
+            },
+            {
+              href: "profile",
+              icon: "book",
+              text: "Profile",
+              iconSource: FontAwesome,
+            },
+            {
+              href: "logout",
+              icon: "logout",
+              text: "Logout",
+              iconSource: MaterialIcons,
+            },
+          ]
         : [
           {
             href: "sign-in",

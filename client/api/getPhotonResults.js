@@ -19,13 +19,9 @@ export const getPhotonResults = async (addressArray) => {
     )
     .join("&");
 
-  console.log("queryString", queryString);
-
   const response = await axios.get(
     `https://photon.komoot.io/api/?${queryString}`
   );
-
-  console.log("response", response);
 
   //   const trailsArray = response.data.features.map((_item) => _item?.properties?.name);
 

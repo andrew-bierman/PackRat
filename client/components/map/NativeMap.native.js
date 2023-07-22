@@ -7,7 +7,9 @@ import {
   View,
   Picker,
   TouchableOpacity,
+  SafeAreaView,
   Dimensions,
+  Modal,
   Alert,
 } from "react-native";
 import Geolocation from "@react-native-community/geolocation";
@@ -17,37 +19,47 @@ import {
   MaterialIcons,
   Entypo,
 } from "@expo/vector-icons";
-import MapView, { ShapeSource } from "@rnmapbox/maps";
-import { offlineManager, Camera } from "@rnmapbox/maps";
-import { Select, Center, Box, CheckIcon } from "native-base";
+import Mapbox, { ShapeSource, offlineManager, Camera } from "@rnmapbox/maps";
+import {
+  Select,
+  Center,
+  AlertDialog,
+  Button,
+  Input,
+  Box,
+  Actionsheet,
+  CheckIcon,
+} from "native-base";
 
 // get mapbox access token from .env file
 import { MAPBOX_ACCESS_TOKEN } from "@env";
 
 import { theme } from "../../theme";
 import { Link } from "expo-router";
+import MapButtonsOverlay from "./MapButtonsOverlay";
+import { isShapeDownloadable, mapboxStyles } from "../../utils/mapFunctions";
 
-MapView.setWellKnownTileServer(Platform.OS === 'android' ? 'Mapbox' : 'mapbox')
-MapView.setAccessToken(MAPBOX_ACCESS_TOKEN);
+Mapbox.setWellKnownTileServer(Platform.OS === "android" ? "Mapbox" : "mapbox");
+Mapbox.setAccessToken(MAPBOX_ACCESS_TOKEN);
 
 // console.log("MAPBOX_ACCESS_TOKEN", MAPBOX_ACCESS_TOKEN, typeof MAPBOX_ACCESS_TOKEN)
 // consts
 const dw = Dimensions.get("screen").width;
-const dh = Dimensions.get("screen").height;
-const fullMapDiemention = { width: dw, height: 360 };
-const previewMapDiemension = { width: dw * 0.9, height: 220 };
+const fullMapDimension = { width: dw, height: "100%" };
+const previewMapStyle = {
+  width: dw * 0.9,
+  height: 220,
+  borderRadius: 20,
+  overflow: "hidden",
+  alignSelf: "center",
+};
 
 // MapView.setConnected(true);
 
 function NativeMap() {
-  const camera = useRef(MapView.Camera);
+  const camera = useRef(null);
   const mapViewRef = useRef(null);
-  const mapViewFullScreenRef = useRef();
-
-  const [style, setStyle] = React.useState(
-    "mapbox://styles/mapbox/outdoors-v11"
-  );
-
+  const cancelRef = React.useRef(null);
   const [location, setLocation] = useState({
     longitude: 0.0,
     latitude: 0.0,
@@ -59,6 +71,10 @@ function NativeMap() {
   const [mapFullscreen, setMapFullscreen] = useState(false);
   const [progress, setProgress] = useState(0);
   const [downloading, setDownloading] = useState(false);
+  const [mapStyle, setMapStyle] = useState(mapboxStyles[0].style);
+  const [showMapNameInputDialog, setShowMapNameInputDialog] = useState(false);
+  const [mapName, setMapName] = useState("");
+
   // consts
   const shape = {
     type: "FeatureCollection",
@@ -91,7 +107,7 @@ function NativeMap() {
     ],
   };
   const optionsForDownload = {
-    name: "Downlaod",
+    name: "Downloaad",
     styleURL: "mapbox://styles/mapbox/outdoors-v11",
     bounds: [getShapeSourceBounds(shape)[0], getShapeSourceBounds(shape)[1]],
     minZoom: 0,
@@ -102,10 +118,15 @@ function NativeMap() {
     getPosition();
   }, []);
   useEffect(() => {
-    handleShapeSourceLoad(fullMapDiemention);
+    handleShapeSourceLoad({ width: dw, height: 360 });
+  }, []);
+  useEffect(() => {
+    offlineManager.getPacks().then((packs) => {
+      setofflinePacks(packs);
+    });
   }, []);
   // functions
-  const getPosition = () => {
+  const getPosition = (onSucccess) => {
     Geolocation.getCurrentPosition(
       (data) => {
         setLocation({
@@ -114,6 +135,7 @@ function NativeMap() {
           latitude: Number(data.coords.latitude),
         });
         setCorrectLocation(true);
+        onSucccess && onSucccess(location);
       },
       (error) => {
         setCorrectLocation(false);
@@ -122,28 +144,7 @@ function NativeMap() {
       { enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 }
     );
   };
-  const goToMyLocation = () => {
-    setGetLocationLoading(true);
-    Geolocation.getCurrentPosition(
-      (data) => {
-        setLocation({
-          ...location,
-          longitude: Number(data.coords.longitude),
-          latitude: Number(data.coords.latitude),
-        });
-        setCorrectLocation(true);
-      },
-      (error) => {
-        if (!mountedRef.current) return null;
-        setCorrectLocation(false);
-        Alert.alert(
-          "Something went wrong with current location",
-          error.message
-        );
-      },
-      { enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 }
-    );
-  };
+
   function getShapeSourceBounds(shape) {
     let minLng = Infinity;
     let maxLng = -Infinity;
@@ -231,33 +232,6 @@ function NativeMap() {
     // }
   }
 
-  function MapContainer({ coordinates }) {
-    const [region, setRegion] = useState(null);
-
-    return (
-      <MapView
-        style={{ flex: 1 }}
-        region={region}
-        showsUserLocation
-        showsMyLocationButton
-      >
-        <Polyline
-          coordinates={coordinates}
-          strokeColor="#FF0000"
-          strokeWidth={2}
-        />
-      </MapView>
-    );
-  }
-
-  function changeMapStyle() {
-    setMapFullscreen(true);
-    handleShapeSourceLoad({ width: dw, height: 360 });
-  }
-  function onMapLoaded() {
-    setZoomLevel(zoomLevel);
-    // mapViewFullScreenRef.setCamera()
-  }
   function onDownloadProgress(offlineRegion, offlineRegionStatus) {
     setProgress(offlineRegionStatus.percentage);
     setDownloading(true);
@@ -266,15 +240,15 @@ function NativeMap() {
     }
   }
   function errorListener(offlineRegion, error) {
-    Alert.alert(error);
+    Alert.alert(error.message);
   }
-  function onDownload() {
+  function onDownload(optionsForDownload) {
     // start download
     offlineManager
       .createPack(optionsForDownload, onDownloadProgress, errorListener)
       .catch((error) => {
         Alert.alert(error.message);
-      });
+      })
   }
   function CircleCapComp() {
     return (
@@ -291,266 +265,157 @@ function NativeMap() {
     );
   }
 
-  return (
-    <View style={{ flex: 1, paddingVertical: 10 }}>
-      {mapFullscreen && (
-        <Select
-          selectedValue={style}
-          minWidth="200"
-          accessibilityLabel="Choose Service"
-          placeholder="Choose Service"
-          _selectedItem={{
-            bg: "teal.600",
-            endIcon: <CheckIcon size="5" />,
-          }}
-          mt={1}
-          onValueChange={(itemValue) => setStyle(itemValue)}
+  const component = (
+    <View style={mapFullscreen ? fullMapDimension : previewMapStyle}>
+      <Mapbox.MapView
+        ref={mapViewRef}
+        style={{ flex: 1 }}
+        styleURL={mapStyle}
+        // onDidFinishRenderingMapFully={onMapLoaded}
+        compassEnabled={false}
+        logoEnabled={false}
+        scrollEnabled={mapFullscreen}
+        zoomEnabled={mapFullscreen}
+      >
+        <Mapbox.Camera
+          ref={camera}
+          zoomLevel={zoomLevel ? zoomLevel - 0.8 : 10}
+          centerCoordinate={trailCenterPoint ? trailCenterPoint : null}
+          animationMode={"flyTo"}
+          animationDuration={2000}
+        />
+        {/* // user location */}
+        <Mapbox.PointAnnotation
+          id={"1212"}
+          coordinate={[location.longitude, location.latitude]}
         >
-          <Select.Item
-            label="mapbox://styles/mapbox/dark-v10"
-            value="mapbox://styles/mapbox/dark-v10"
-          />
-          <Select.Item
-            label="mapbox://styles/mapbox/light-v10"
-            value="mapbox://styles/mapbox/light-v10"
-          />
-          <Select.Item
-            label="mapbox://styles/mapbox/outdoors-v11"
-            value="mapbox://styles/mapbox/outdoors-v11"
-          />
-          <Select.Item
-            label="mapbox://styles/mapbox/satellite-v9"
-            value="mapbox://styles/mapbox/satellite-v9"
-          />
-          <Select.Item
-            label="mapbox://styles/mapbox/satellite-streets-v11"
-            value="mapbox://styles/mapbox/satellite-streets-v11"
-          />
-          <Select.Item
-            label="mapbox://styles/mapbox/streets-v11"
-            value="mapbox://styles/mapbox/streets-v11"
-          />
-        </Select>
-      )}
-      {!mapFullscreen ? (
-        <View style={[previewMapDiemension, { alignSelf: "center" }]}>
-          <MapView.MapView
-            ref={mapViewRef}
-            style={{ flex: 1, borderRadius: 15, overflow: "hidden" }}
-            styleURL={style}
-            zoomLevel={zoomLevel ? zoomLevel - 0.8 : 10}
-            centerCoordinate={trailCenterPoint ? trailCenterPoint : null}
-            // onDidFinishRenderingMapFully={onMapLoaded}
-            compassEnabled={false}
-            logoEnabled={false}
-            scrollEnabled={false}
-            zoomEnabled={false}
+          <View
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+              backgroundColor: "transparent",
+            }}
           >
-            <MapView.Camera
-              zoomLevel={zoomLevel ? zoomLevel - 0.8 : 10}
-              centerCoordinate={trailCenterPoint ? trailCenterPoint : null}
-              animationMode={"flyTo"}
-              animationDuration={2000}
+            <MaterialCommunityIcons
+              name="map-marker"
+              size={35}
+              color={"#de0910"}
             />
-            {/* // user location */}
-            <MapView.PointAnnotation
-              id={"1212"}
-              coordinate={[location.longitude, location.latitude]}
-            >
-              <View
-                style={{
-                  justifyContent: "center",
-                  alignItems: "center",
-                  backgroundColor: "transparent",
-                }}
-              >
-                <MaterialCommunityIcons
-                  name="map-marker"
-                  size={35}
-                  color={"#de0910"}
-                />
-              </View>
-            </MapView.PointAnnotation>
-            {/* trail */}
-            <MapView.ShapeSource
-              id="source1"
-              lineMetrics={true}
-              shape={shape.features[0]}
-              cluster
-              clusterRadius={80}
-              clusterMaxZoomLevel={14}
-              style={{ zIndex: 1 }}
-            >
-              <MapView.LineLayer id="layer1" style={styles.lineLayer} />
-            </MapView.ShapeSource>
-            {/* // top location */}
-            {shape?.features[0]?.geometry?.coordinates?.length > 0 && (
-              <MapView.PointAnnotation
-                id={"cicleCap"}
-                coordinate={
-                  shape?.features[0]?.geometry?.coordinates[
-                    shape?.features[0]?.geometry?.coordinates?.length - 1
-                  ]
-                }
-              >
-                <View>
-                  <CircleCapComp />
-                </View>
-              </MapView.PointAnnotation>
-            )}
-          </MapView.MapView>
-          {/* to come in fullscreen btn which is absolute */}
-          <TouchableOpacity
-            style={[
-              styles.headerBtnView,
-              {
-                width: 40,
-                height: 40,
-                position: "absolute",
-                bottom: 10,
-                right: 10,
-              },
-            ]}
-            onPress={() => changeMapStyle()}
-          >
-            <Entypo name="resize-full-screen" size={21} color={"grey"} />
-          </TouchableOpacity>
-        </View>
-      ) : (
-        <View>
-          <View style={fullMapDiemention}>
-            <MapView.MapView
-              key={zoomLevel}
-              ref={mapViewFullScreenRef}
-              style={{ flex: 1 }}
-              styleURL={style}
-              zoomLevel={zoomLevel ? zoomLevel : 12}
-              centerCoordinate={trailCenterPoint ? trailCenterPoint : null}
-              // onDidFinishLoadingMap={onMapLoaded}
-              compassEnabled={false}
-              logoEnabled={false}
-              zoomEnabled={true}
-              onPress={onMapPress}
-            >
-              <MapView.Camera
-                key={zoomLevel + 1}
-                ref={camera}
-                zoomLevel={zoomLevel ? zoomLevel : 12}
-                centerCoordinate={trailCenterPoint ? trailCenterPoint : null}
-                animationMode={"flyTo"}
-                animationDuration={2000}
-              />
-              {/* // user location */}
-              <MapView.PointAnnotation
-                id={"1212"}
-                coordinate={[location?.latitude, location.longitude]}
-              >
-                <View
-                  style={{
-                    justifyContent: "center",
-                    alignItems: "center",
-                    backgroundColor: "transparent",
-                  }}
-                >
-                  <MaterialCommunityIcons
-                    name="map-marker"
-                    size={35}
-                    color={"#de0910"}
-                  />
-                </View>
-              </MapView.PointAnnotation>
-              {/* trail */}
-              <MapView.ShapeSource
-                id="source1"
-                lineMetrics={true}
-                shape={shape?.features[0]}
-                cluster
-                clusterRadius={80}
-                clusterMaxZoomLevel={14}
-              >
-                <MapView.LineLayer
-                  id="layer1"
-                  style={styles.lineLayer}
-                  lineDasharray={[1, 2]} // set the dash array pattern here
-                  lineDashOffset={0}
-                />
-              </MapView.ShapeSource>
-              {/* // top location */}
-              {shape?.features[0]?.geometry?.coordinates?.length > 0 && (
-                <MapView.PointAnnotation
-                  id={"cicleCap"}
-                  coordinate={
-                    shape?.features[0]?.geometry?.coordinates[
-                      shape?.features[0]?.geometry?.coordinates?.length - 1
-                    ]
-                  }
-                >
-                  <View>
-                    <CircleCapComp />
-                  </View>
-                </MapView.PointAnnotation>
-              )}
-            </MapView.MapView>
-            {/* to come in fullscreen btn which is absolute */}
-            <TouchableOpacity
-              style={[
-                styles.headerBtnView,
-                {
-                  width: 45,
-                  height: 45,
-                  position: "absolute",
-                  bottom: 10,
-                  left: 10,
-                },
-              ]}
-              onPress={() => {
-                Alert.alert("Sorry, currently not implemented");
-              }}
-            >
-              <MaterialCommunityIcons
-                name="navigation-variant-outline"
-                size={25}
-                color={"black"}
-              />
-            </TouchableOpacity>
           </View>
-          <TouchableOpacity
-            style={[
-              styles.headerBtnView,
-              {
-                flexDirection: "row",
-                width: "88%",
-                height: 46,
-                marginVertical: 10,
-                alignSelf: "center",
-                justifyContent: "center",
-                alignItems: "center",
-                backgroundColor: "green",
-              },
-            ]}
-            onPress={() => onDownload()}
-            disabled={downloading}
+        </Mapbox.PointAnnotation>
+        {/* trail */}
+        <Mapbox.ShapeSource
+          id="source1"
+          lineMetrics={true}
+          shape={shape.features[0]}
+          cluster
+          clusterRadius={80}
+          clusterMaxZoomLevel={14}
+          style={{ zIndex: 1 }}
+        >
+          <Mapbox.LineLayer id="layer1" style={styles.lineLayer} />
+        </Mapbox.ShapeSource>
+        {/* // top location */}
+        {shape?.features[0]?.geometry?.coordinates?.length > 0 && (
+          <Mapbox.PointAnnotation
+            id={"cicleCap"}
+            coordinate={
+              shape?.features[0]?.geometry?.coordinates[
+                shape?.features[0]?.geometry?.coordinates?.length - 1
+              ]
+            }
           >
-            <Text style={{ fontSize: 16, color: "white" }}>
-              {downloading ? "Downloading" : "Download Map"}
-            </Text>
-            {downloading && (
-              <Text
-                style={{
-                  backgroundColor: "white",
-                  color: "blue",
-                  paddingHorizontal: 3,
-                  marginHorizontal: 7,
-                  minWidth: 20,
-                }}
-              >
-                {progress}
-              </Text>
-            )}
-          </TouchableOpacity>
-        </View>
-      )}
+            <View>
+              <CircleCapComp />
+            </View>
+          </Mapbox.PointAnnotation>
+        )}
+      </Mapbox.MapView>
+      <MapButtonsOverlay
+        mapFullscreen={mapFullscreen}
+        enableFullScreen={() => setMapFullscreen(true)}
+        disableFullScreen={() => setMapFullscreen(false)}
+        handleChangeMapStyle={setMapStyle}
+        fetchLocation={() =>
+          getPosition((location) =>
+            setTrailCenterPoint([location.latitude, location.longitude])
+          )
+        }
+        styles={styles}
+        downloadable={isShapeDownloadable(shape)}
+        downloading={downloading}
+        shape={shape}
+        onDownload={() => setShowMapNameInputDialog(true)}
+        progress={progress}
+      />
     </View>
+  );
+
+  return (
+    <SafeAreaView style={{ flex: 1, paddingVertical: 10 }}>
+      {!mapFullscreen ? (
+        component
+      ) : (
+        <>
+          <Modal
+            visible={true}
+            // style={{ backgroundColor: "#000", height: "100%" }}
+          >
+            {component}
+          </Modal>
+          <AlertDialog
+            isOpen={showMapNameInputDialog}
+            onClose={() => setShowMapNameInputDialog(false)}
+            leastDestructiveRef={cancelRef}
+          >
+            <AlertDialog.Content>
+              <AlertDialog.CloseButton />
+              <AlertDialog.Header>
+                Enter the name you wish to save this map as:
+              </AlertDialog.Header>
+              <AlertDialog.Body>
+                <Input
+                  onChangeText={(text) => setMapName(text)}
+                  value={mapName}
+                  mx="3"
+                  placeholder="map name"
+                  w="100%"
+                />
+              </AlertDialog.Body>
+              <AlertDialog.Footer>
+                <Button.Group space={2}>
+                  <Button
+                    variant="unstyled"
+                    colorScheme="coolGray"
+                    onPress={() => setShowMapNameInputDialog(false)}
+                    ref={cancelRef}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    colorScheme="success"
+                    onPress={async () => {
+                      setMapName("");
+                      setShowMapNameInputDialog(false);
+                      const options = {
+                        name: mapName,
+                        styleURL: "mapbox://styles/mapbox/outdoors-v11",
+                        bounds: await mapViewRef.current.getVisibleBounds(),
+                        minZoom: 0,
+                        maxZoom: 15,
+                      };
+                      onDownload(options);
+                    }}
+                  >
+                    OK
+                  </Button>
+                </Button.Group>
+              </AlertDialog.Footer>
+            </AlertDialog.Content>
+          </AlertDialog>
+        </>
+      )}
+    </SafeAreaView>
   );
 }
 
