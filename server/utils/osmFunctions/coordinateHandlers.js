@@ -12,6 +12,22 @@ export async function createInstanceFromCoordinates(Model, [lon, lat]) {
   return instance._id;
 }
 
+export async function createOrFindInstanceFromCoordinates(Model, [lon, lat]) {
+  if (typeof lon !== "number" || typeof lat !== "number") {
+    console.error("Invalid coordinate format");
+    return null;
+  }
+
+  const findNode = await Model.findOne({ lon, lat });
+  if( findNode ){
+    return findNode._id;
+  }
+
+  const instance = new Model({ lon, lat });
+  await instance.save();
+  return instance._id;
+}
+
 export async function coordinatesToInstances(Model, coordinates) {
   if (!Array.isArray(coordinates)) {
     console.error("Coordinates is not an array");
@@ -27,7 +43,7 @@ export async function coordinatesToInstances(Model, coordinates) {
   if (!isNestedArray) {
     // Check if we have coordinates or an id
     if (typeof coordinates[0] === "number") {
-      return [await createInstanceFromCoordinates(Model, coordinates)];
+      return [await createOrFindInstanceFromCoordinates(Model, coordinates)];
     } else {
       return coordinates;
     }
@@ -36,7 +52,7 @@ export async function coordinatesToInstances(Model, coordinates) {
   if (typeof coordinates[0][0] === "number") {
     return await Promise.all(
       coordinates.map((coordinate) =>
-        createInstanceFromCoordinates(Model, coordinate)
+      createOrFindInstanceFromCoordinates(Model, coordinate)
       )
     );
   } else {
