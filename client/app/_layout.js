@@ -21,9 +21,7 @@ export default function HomeLayout() {
         <AuthProvider>
           <NativeBaseProvider>
             <Navigation />
-            <View>
-              <Slot />
-            </View>
+            <Slot />
             {Platform.OS === "web" ? <Footer /> : null}
           </NativeBaseProvider>
         </AuthProvider>
