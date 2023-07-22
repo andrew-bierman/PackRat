@@ -29,6 +29,8 @@ import {
   Box,
   Actionsheet,
   CheckIcon,
+  useToast,
+  Toast,
 } from "native-base";
 
 // get mapbox access token from .env file
@@ -331,6 +333,7 @@ function NativeMap() {
           </Mapbox.PointAnnotation>
         )}
       </Mapbox.MapView>
+  
       <MapButtonsOverlay
         mapFullscreen={mapFullscreen}
         enableFullScreen={() => setMapFullscreen(true)}
@@ -345,7 +348,7 @@ function NativeMap() {
         downloadable={isShapeDownloadable(shape)}
         downloading={downloading}
         shape={shape}
-        onDownload={() => setShowMapNameInputDialog(true)}
+        onDownload={() =>{ setShowMapNameInputDialog(true)}}
         progress={progress}
       />
     </View>
@@ -362,6 +365,7 @@ function NativeMap() {
             // style={{ backgroundColor: "#000", height: "100%" }}
           >
             {component}
+
           </Modal>
           <AlertDialog
             isOpen={showMapNameInputDialog}
@@ -395,8 +399,9 @@ function NativeMap() {
                   <Button
                     colorScheme="success"
                     onPress={async () => {
-                      setMapName("");
+                    
                       setShowMapNameInputDialog(false);
+                      // setMapFullscreen(true)
                       const options = {
                         name: mapName,
                         styleURL: "mapbox://styles/mapbox/outdoors-v11",
@@ -405,6 +410,8 @@ function NativeMap() {
                         maxZoom: 15,
                       };
                       onDownload(options);
+                      setMapName("");
+
                     }}
                   >
                     OK
@@ -415,6 +422,7 @@ function NativeMap() {
           </AlertDialog>
         </>
       )}
+      
     </SafeAreaView>
   );
 }
