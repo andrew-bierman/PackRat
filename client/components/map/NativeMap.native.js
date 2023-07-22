@@ -20,7 +20,7 @@ import {
   Entypo,
 } from "@expo/vector-icons";
 import Mapbox, { ShapeSource, offlineManager, Camera } from "@rnmapbox/maps";
-import { Select, Center, Box, CheckIcon } from "native-base";
+import {  Toast} from "native-base";
 
 // get mapbox access token from .env file
 import { MAPBOX_ACCESS_TOKEN } from "@env";
@@ -48,10 +48,9 @@ const previewMapStyle = {
 // MapView.setConnected(true);
 
 function NativeMap() {
-  const camera = useRef(Mapbox.Camera);
+  const camera = useRef(null);
   const mapViewRef = useRef(null);
-  const mapViewFullScreenRef = useRef();
-
+  const cancelRef = React.useRef(null);
   const [location, setLocation] = useState({
     longitude: 0.0,
     latitude: 0.0,
@@ -64,6 +63,8 @@ function NativeMap() {
   const [progress, setProgress] = useState(0);
   const [downloading, setDownloading] = useState(false);
   const [mapStyle, setMapStyle] = useState(mapboxStyles[0].style);
+  const [showMapNameInputDialog, setShowMapNameInputDialog] = useState(false);
+  const [mapName, setMapName] = useState("");
 
   // consts
   const shape = {
@@ -110,6 +111,11 @@ function NativeMap() {
   useEffect(() => {
     handleShapeSourceLoad({ width: dw, height: 360 });
   }, []);
+  // useEffect(() => {
+  //   offlineManager.getPacks().then((packs) => {
+  //     setofflinePacks(packs);
+  //   });
+  // }, []);
   // functions
   const getPosition = (onSucccess) => {
     Geolocation.getCurrentPosition(
@@ -218,22 +224,24 @@ function NativeMap() {
   }
 
   function onDownloadProgress(offlineRegion, offlineRegionStatus) {
+    console.log('control there',offlineRegionStatus?.percentage)
     setProgress(offlineRegionStatus.percentage);
     setDownloading(true);
     if (offlineRegionStatus.percentage == 100) {
+      Alert.alert('Map download successfully!')
       setDownloading(false);
     }
   }
   function errorListener(offlineRegion, error) {
-    Alert.alert(error);
+    Alert.alert(error.message);
   }
-  function onDownload() {
+  function onDownload(optionsForDownload) {
     // start download
     offlineManager
       .createPack(optionsForDownload, onDownloadProgress, errorListener)
       .catch((error) => {
         Alert.alert(error.message);
-      });
+      })
   }
   function CircleCapComp() {
     return (
@@ -259,10 +267,11 @@ function NativeMap() {
         // onDidFinishRenderingMapFully={onMapLoaded}
         compassEnabled={false}
         logoEnabled={false}
-        scrollEnabled={false}
-        zoomEnabled={false}
+        scrollEnabled={mapFullscreen}
+        zoomEnabled={mapFullscreen}
       >
         <Mapbox.Camera
+          ref={camera}
           zoomLevel={zoomLevel ? zoomLevel - 0.8 : 10}
           centerCoordinate={trailCenterPoint ? trailCenterPoint : null}
           animationMode={"flyTo"}
@@ -315,6 +324,7 @@ function NativeMap() {
           </Mapbox.PointAnnotation>
         )}
       </Mapbox.MapView>
+  
       <MapButtonsOverlay
         mapFullscreen={mapFullscreen}
         enableFullScreen={() => setMapFullscreen(true)}
@@ -329,7 +339,41 @@ function NativeMap() {
         downloadable={isShapeDownloadable(shape)}
         downloading={downloading}
         shape={shape}
-        onDownload={onDownload}
+        onDownload={() =>{ 
+   
+          Alert.prompt(
+            "Enter the name you wish to save this map as:",
+           "",
+            [
+              {
+                text: "Cancel",
+                onPress: () => console.log("Cancel Pressed"),
+                style: "cancel"
+              },
+              {
+                text: "OK",
+                onPress: async(mapName)  => {
+                  
+                 
+                  const options = {
+                    name: mapName,
+                    styleURL: "mapbox://styles/mapbox/outdoors-v11",
+                    bounds: await mapViewRef.current.getVisibleBounds(),
+                    minZoom: 0,
+                    maxZoom: 15,
+                  };
+                  onDownload(options);
+                
+
+                }
+              }
+            ],
+            "plain-text",
+
+          );
+         
+        }
+        }
         progress={progress}
       />
     </View>
@@ -340,13 +384,18 @@ function NativeMap() {
       {!mapFullscreen ? (
         component
       ) : (
-        <Modal
-          visible={true}
-          // style={{ backgroundColor: "#000", height: "100%" }}
-        >
-          {component}
-        </Modal>
+        <>
+          <Modal
+            visible={true}
+            // style={{ backgroundColor: "#000", height: "100%" }}
+          >
+            {component}
+
+          </Modal>
+         
+        </>
       )}
+     
     </SafeAreaView>
   );
 }

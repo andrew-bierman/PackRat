@@ -354,6 +354,7 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
     <View style={[styles.container, { height: showModal ? "100%" : "400px" }]}>
       <View key="map" ref={mapContainer} style={styles.map} />
       {/* <MapButtons /> */}
+      
       <MapButtonsOverlay
         mapFullscreen={mapFullscreen}
         enableFullScreen={enableFullScreen}

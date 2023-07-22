@@ -5,7 +5,8 @@ import { theme } from "../../theme";
 // import useAddToFavorite from "../../hooks/useAddToFavorites";
 // import { useAuth } from "../../auth/provider";
 import { useSelector, useDispatch } from "react-redux";
-import { addFavorite } from "../../store/favoritesStore";
+import { addFavorite, selectFavoriteById, selectAllFavorites } from "../../store/favoritesStore";
+import { duplicatePackItem } from "../../store/packsStore";
 import { TouchableOpacity } from "react-native";
 import { Link } from "expo-router";
 
@@ -17,6 +18,7 @@ import {
   Center,
   HStack,
   Stack,
+  Button,
 } from "native-base";
 
 // import { useAuth } from "../../auth/provider";
@@ -33,15 +35,28 @@ export default function Card({
   destination,
   createdAt,
 }) {
-  // const { user } = useAuth();
+
   const user = useSelector((state) => state.auth.user);
-  const favorites = useSelector((state) => state.favorites.favorites);
+
+  const favorites = useSelector(selectAllFavorites);
   const dispatch = useDispatch();
 
   const isFavorite = favorites.some((favorite) => favorite.pack_id === _id);
 
   const handleAddToFavorite = () => {
-    dispatch(addFavorite({ pack_id: _id, user_id: user._id }));
+    const data = {
+      packId: _id,
+      userId: user._id,
+    };
+
+    dispatch(addFavorite(data));
+  };
+  const handleDuplicate = () => {
+    const data = {
+      packId: _id,
+      ownerId: user._id,
+    };
+    dispatch(duplicatePackItem(data));
   };
 
   const handleRemoveFromFavorite = () => {
@@ -86,14 +101,31 @@ export default function Card({
                   alignItems: "center",
                   justifyContent: "space-between",
                   width: "100%",
-                  gap: 10,
                 }}
               >
                 <Link href={type === "pack" ? "/pack/" + _id : "/trip/" + _id}>
                   {name}
                 </Link>
                 {type === "pack" && (
-                  <MaterialIcons name="backpack" size={24} color="gray" />
+                  <Box
+                    style={{
+                      flexDirection: "row",
+                    }}
+                  >
+                    <MaterialIcons name="backpack" size={24} color="gray" />
+                    <Button
+                      onPress={handleDuplicate}
+                      style={{
+                        backgroundColor: "transparent",
+                        width: "10",
+                        height: "10",
+                        padding: 0,
+                        paddingLeft: 15,
+                      }}
+                    >
+                      <MaterialIcons name="file-copy" size={24} color="gray" />
+                    </Button>
+                  </Box>
                 )}
                 {type === "trip" && (
                   <Entypo name="location-pin" size={24} color="gray" />
