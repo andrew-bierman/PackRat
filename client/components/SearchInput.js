@@ -88,9 +88,6 @@ export const SearchInput = ({ onSelect, placeholder }) => {
       return;
     }
 
-    console.log("lat", lat);
-    console.log("lon", lon);
-
     try {
       await Promise.all([
         dispatch(fetchTrails({ lat, lon, selectedSearch })),

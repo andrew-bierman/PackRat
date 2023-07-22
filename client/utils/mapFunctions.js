@@ -1,6 +1,7 @@
 import * as Location from "expo-location";
 import * as FileSystem from 'expo-file-system';
-// import { saveAs } from 'file-saver';
+import { saveFile } from './fileSaver/fileSaver';
+import { Platform } from "react-native";
 
 
 const defaultShape = {
@@ -237,19 +238,10 @@ const getLocation = async () => {
   return location;
 };
 
-const handleGpxDownload = async (gpxData, filename = "trail") => {
+const handleGpxDownload = async (gpxData, filename = "trail", extension = "gpx") => {
   if (gpxData) {
-    // Check the platform (native or web)
-    if (Platform.OS === 'web') {
-      const blob = new Blob([gpxData], { type: 'application/gpx+xml' });
-      // saveAs(blob, `${filename}.gpx`);
-    } else {
-      const fileUri = FileSystem.documentDirectory + `${filename}.gpx`;
-      await FileSystem.writeAsStringAsync(fileUri, gpxData, {
-        encoding: FileSystem.EncodingType.UTF8,
-      });
-      await FileSystem.downloadAsync(fileUri, FileSystem.cacheDirectory + `${filename}.gpx`);
-    }
+    const type = 'application/gpx+xml';
+    await saveFile(gpxData, filename, extension, type);
   }
 };
 

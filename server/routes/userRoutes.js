@@ -243,33 +243,6 @@ router.post("/google", signInGoogle);
 
 /**
  * @swagger
- * /user/favorite:
- *   post:
- *     summary: Add to favorite
- *     tags: [User]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               packId:
- *                 type: string
- *               userId:
- *                 type: string
- *     responses:
- *       '200':
- *         description: Successful response adding to favorite
- *       '400':
- *         description: Invalid request parameters
- *       '500':
- *         description: Error adding to favorite
- */
-router.post("/favorite", validator.addToFavorite, addToFavorite);
-
-/**
- * @swagger
  * /user:
  *   put:
  *     summary: Edit user
