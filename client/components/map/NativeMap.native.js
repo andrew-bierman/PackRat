@@ -20,16 +20,7 @@ import {
   Entypo,
 } from "@expo/vector-icons";
 import Mapbox, { ShapeSource, offlineManager, Camera } from "@rnmapbox/maps";
-import {
-  Select,
-  Center,
-  AlertDialog,
-  Button,
-  Input,
-  Box,
-  Actionsheet,
-  CheckIcon,
-} from "native-base";
+import {  Toast} from "native-base";
 
 // get mapbox access token from .env file
 import { MAPBOX_ACCESS_TOKEN } from "@env";
@@ -120,11 +111,11 @@ function NativeMap() {
   useEffect(() => {
     handleShapeSourceLoad({ width: dw, height: 360 });
   }, []);
-  useEffect(() => {
-    offlineManager.getPacks().then((packs) => {
-      setofflinePacks(packs);
-    });
-  }, []);
+  // useEffect(() => {
+  //   offlineManager.getPacks().then((packs) => {
+  //     setofflinePacks(packs);
+  //   });
+  // }, []);
   // functions
   const getPosition = (onSucccess) => {
     Geolocation.getCurrentPosition(
@@ -233,9 +224,11 @@ function NativeMap() {
   }
 
   function onDownloadProgress(offlineRegion, offlineRegionStatus) {
+    console.log('control there',offlineRegionStatus?.percentage)
     setProgress(offlineRegionStatus.percentage);
     setDownloading(true);
     if (offlineRegionStatus.percentage == 100) {
+      Alert.alert('Map download successfully!')
       setDownloading(false);
     }
   }
@@ -331,6 +324,7 @@ function NativeMap() {
           </Mapbox.PointAnnotation>
         )}
       </Mapbox.MapView>
+  
       <MapButtonsOverlay
         mapFullscreen={mapFullscreen}
         enableFullScreen={() => setMapFullscreen(true)}
@@ -345,7 +339,41 @@ function NativeMap() {
         downloadable={isShapeDownloadable(shape)}
         downloading={downloading}
         shape={shape}
-        onDownload={() => setShowMapNameInputDialog(true)}
+        onDownload={() =>{ 
+   
+          Alert.prompt(
+            "Enter the name you wish to save this map as:",
+           "",
+            [
+              {
+                text: "Cancel",
+                onPress: () => console.log("Cancel Pressed"),
+                style: "cancel"
+              },
+              {
+                text: "OK",
+                onPress: async(mapName)  => {
+                  
+                 
+                  const options = {
+                    name: mapName,
+                    styleURL: "mapbox://styles/mapbox/outdoors-v11",
+                    bounds: await mapViewRef.current.getVisibleBounds(),
+                    minZoom: 0,
+                    maxZoom: 15,
+                  };
+                  onDownload(options);
+                
+
+                }
+              }
+            ],
+            "plain-text",
+
+          );
+         
+        }
+        }
         progress={progress}
       />
     </View>
@@ -362,59 +390,12 @@ function NativeMap() {
             // style={{ backgroundColor: "#000", height: "100%" }}
           >
             {component}
+
           </Modal>
-          <AlertDialog
-            isOpen={showMapNameInputDialog}
-            onClose={() => setShowMapNameInputDialog(false)}
-            leastDestructiveRef={cancelRef}
-          >
-            <AlertDialog.Content>
-              <AlertDialog.CloseButton />
-              <AlertDialog.Header>
-                Enter the name you wish to save this map as:
-              </AlertDialog.Header>
-              <AlertDialog.Body>
-                <Input
-                  onChangeText={(text) => setMapName(text)}
-                  value={mapName}
-                  mx="3"
-                  placeholder="map name"
-                  w="100%"
-                />
-              </AlertDialog.Body>
-              <AlertDialog.Footer>
-                <Button.Group space={2}>
-                  <Button
-                    variant="unstyled"
-                    colorScheme="coolGray"
-                    onPress={() => setShowMapNameInputDialog(false)}
-                    ref={cancelRef}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    colorScheme="success"
-                    onPress={async () => {
-                      setMapName("");
-                      setShowMapNameInputDialog(false);
-                      const options = {
-                        name: mapName,
-                        styleURL: "mapbox://styles/mapbox/outdoors-v11",
-                        bounds: await mapViewRef.current.getVisibleBounds(),
-                        minZoom: 0,
-                        maxZoom: 15,
-                      };
-                      onDownload(options);
-                    }}
-                  >
-                    OK
-                  </Button>
-                </Button.Group>
-              </AlertDialog.Footer>
-            </AlertDialog.Content>
-          </AlertDialog>
+         
         </>
       )}
+     
     </SafeAreaView>
   );
 }

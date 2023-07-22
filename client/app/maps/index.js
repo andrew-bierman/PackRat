@@ -31,6 +31,7 @@ export default function DownloadedMaps() {
       </Text>
       {offlinePacks ? (
         <View style={{ gap: 4 }}>
+     
           {offlinePacks.map(({ pack }) => {
             const metadata = JSON.parse(pack.metadata);
             return (
@@ -43,22 +44,17 @@ export default function DownloadedMaps() {
                   setShowMap(true);
                 }}
               >
-                <Image
+             
+               {pack&&<Image
                   style={{
                     width: "100%",
                     height: 200,
                     borderRadius: 10,
                   }}
                   source={{
-                    uri: `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/[${pack.bounds[1]
-                      .concat(pack.bounds[0])
-                      .reduce(
-                        (prev, curr) => prev + "," + curr
-                      )}]/600x600?access_token=${
-                      process.env.MAPBOX_ACCESS_TOKEN
-                    }`,
+                    uri: `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/${pack?.bounds[0]+','+pack?.bounds[1]},10,60,60/600x600?access_token=${process.env.MAPBOX_ACCESS_TOKEN}`,
                   }}
-                />
+                />}
                 <Text
                   style={{
                     fontSize: 16,
@@ -86,7 +82,14 @@ export default function DownloadedMaps() {
             scrollEnabled={true}
             zoomEnabled={true}
           >
+           
             <Mapbox.Camera
+              zoomLevel={10}
+              centerCoordinate={pack.bounds}
+              animationMode={"flyTo"}
+              animationDuration={2000}
+            />
+            {/* <Mapbox.Camera
               zoomLevel={10}
               centerCoordinate={[
                 (pack.bounds[0][0] + pack.bounds[1][0]) / 2,
@@ -94,8 +97,9 @@ export default function DownloadedMaps() {
               ]}
               animationMode={"flyTo"}
               animationDuration={2000}
-            />
+            /> */}
           </Mapbox.MapView>
+          
           <MapButtonsOverlay
             mapFullscreen={true}
             disableFullScreen={() => setShowMap(false)}
