@@ -3,7 +3,12 @@ import axios from "axios";
 import Way from "../models/osm/wayModel.js";
 import Node from "../models/osm/nodeModel.js";
 import mongoose from "mongoose";
-import { findOrCreateMany, findOrCreateOne, ensureIdProperty, ensureModelProperty } from "../utils/osmFunctions/modelHandlers.js";
+import {
+  findOrCreateMany,
+  findOrCreateOne,
+  ensureIdProperty,
+  ensureModelProperty,
+} from "../utils/osmFunctions/modelHandlers.js";
 import { isGeoJSONFormat } from "../utils/osmFunctions/dataFormatters.js";
 
 export const getOsm = async (req, res) => {
@@ -199,7 +204,7 @@ export const getParksOSM = async (req, res) => {
 
 export const postSingleGeoJSON = async (req, res) => {
   // console.log("req.body", req.body)
-  console.log("in postSingleGeoJSON")
+  console.log("in postSingleGeoJSON");
   const geojson = req.body;
 
   if (!geojson || !isGeoJSONFormat(geojson)) {
@@ -208,11 +213,11 @@ export const postSingleGeoJSON = async (req, res) => {
   }
 
   try {
-    const data = geojson
-    console.log("data", data)
+    const data = geojson;
+    console.log("data", data);
     const processedElement = ensureIdProperty(data);
     const Model = ensureModelProperty(processedElement);
-    console.log("processedElement", processedElement)
+    console.log("processedElement", processedElement);
     const newInstance = await findOrCreateOne(Model, processedElement);
     res.status(201).json({
       status: "success",
@@ -228,6 +233,57 @@ export const postSingleGeoJSON = async (req, res) => {
     });
   }
 };
+
+export const postCollectionGeoJSON = async (req, res) => {
+  console.log("in postGeoJSON");
+  const geojson = req.body;
+
+  if (!geojson || !isGeoJSONFormat(geojson)) {
+    res.status(400).send({ message: "Invalid or missing geoJSON" });
+    return; // Return early to avoid further execution
+  }
+
+  try {
+    // Check if the GeoJSON is a FeatureCollection
+    if (geojson.type === "FeatureCollection") {
+      const data = geojson.features;
+      console.log("data", data);
+      const processedElements = data.map((element) => ensureIdProperty(element));
+      const Models = processedElements.map((element) =>
+        ensureModelProperty(element)
+      );
+      console.log("processedElements", processedElements);
+      const newInstances = await Promise.all(
+        Models.map((Model, index) => findOrCreateOne(Model, processedElements[index]))
+      );
+      res.status(201).json({
+        status: "success",
+        data: {
+          newInstances,
+        },
+      });
+    } else {
+      // Handle single feature
+      const processedElement = ensureIdProperty(geojson);
+      const Model = ensureModelProperty(processedElement);
+      console.log("processedElement", processedElement);
+      const newInstance = await findOrCreateOne(Model, processedElement);
+      res.status(201).json({
+        status: "success",
+        data: {
+          newInstance,
+        },
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({
+      status: "fail",
+      message: error.message,
+    });
+  }
+};
+
 
 export const getDestination = async (req, res) => {
   try {
@@ -262,11 +318,31 @@ export const getDestination = async (req, res) => {
 };
 
 export const getPhotonDetails = async (req, res) => {
-  const { id, type } = req.params;
+  let { id, type } = req.params;
 
   if (!id || !type) {
     res.status(400).send({ message: "Invalid request parameters" });
     return; // Return early to avoid further execution
+  }
+
+  type = type.toLowerCase(); // Standardize osm_type to be lowercase
+
+  switch (type) {
+    case "way":
+    case "w":
+      type = "way";
+      break;
+    case "node":
+    case "n":
+      type = "node";
+      break;
+    case "relation":
+    case "r":
+      type = "relation";
+      break;
+    default:
+      res.status(400).send({ message: "Invalid request parameters" });
+      return; // Return early to avoid further execution
   }
 
   const overpassUrl = process.env.OSM_URI;
@@ -278,14 +354,14 @@ export const getPhotonDetails = async (req, res) => {
   out body;
   `;
 
-  console.log("overpassQuery", overpassQuery)
+  console.log("overpassQuery", overpassQuery);
 
   try {
     const response = await axios.post(overpassUrl, overpassQuery, {
       headers: { "Content-Type": "text/plain" },
     });
 
-    console.log("response", response)
+    console.log("response", response);
     const geojsonData = osmtogeojson(response.data);
 
     await updateDatabaseWithGeoJSONDataFromOverpass(geojsonData);
@@ -296,4 +372,3 @@ export const getPhotonDetails = async (req, res) => {
     res.status(500).send({ message: "Error retrieving Photon details" });
   }
 };
-

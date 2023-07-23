@@ -25,20 +25,30 @@ const HeroSection = ({ onSelect }) => {
   const handleSearchSelect = async (selectedResult) => {
     try {
       console.log("selectedResult", selectedResult)
-      const geojson = await dispatch(photonDetails(selectedResult));
-
-      const actionResult = await dispatch(processGeoJSON(geojson));
-
-      // Accessing payload from actionResult
-      const destinationId = actionResult.payload.data.newInstance._id;
-
-      if (destinationId) {
-        router.push(`/destination/${destinationId}`);
+      // Fetch full details of the selected result from the Overpass API
+      const overpassDetailsAction = await dispatch(photonDetails(selectedResult));
+  
+      // Check if the action completed successfully
+      if (overpassDetailsAction.payload) {
+        const overpassDetails = overpassDetailsAction.payload;
+  
+        // Process the Overpass details and save it as a destination in the database
+        const actionResult = await dispatch(processGeoJSON(overpassDetails));
+  
+        // Accessing payload from actionResult
+        const destinationId = actionResult.payload.data.newInstance._id;
+  
+        if (destinationId) {
+          router.push(`/destination/${destinationId}`);
+        }
+      } else {
+        console.error(overpassDetailsAction.error);
       }
     } catch (error) {
       console.error(error);
     }
   };
+  
 
   const user = useSelector((state) => state.auth?.user);
 
