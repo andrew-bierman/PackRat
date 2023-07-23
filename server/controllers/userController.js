@@ -150,7 +150,7 @@ export const userSignin = async (req, res) => {
       email: email,
       password: password,
     });
-    await User.generateAuthToken();
+    await user.generateAuthToken();
     res.status(200).send({ user });
   } catch (err) {
     res.status(400).send({ message: err.message });
