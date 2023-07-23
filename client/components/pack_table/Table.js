@@ -3,13 +3,15 @@ import { Table, Row, Cell, TableWrapper } from "react-native-table-component";
 import { Feather } from "@expo/vector-icons";
 import { Select, Checkbox, Box, Text, HStack, Button } from "native-base";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { convertWeight } from "../../utils/convertWeight";
 import { EditPackItemModal } from "./EditPackItemModal";
 import { ItemCategoryEnum } from "../../constants/itemCategory";
 import { DeletePackItemModal } from "./DeletePackItemModal";
+import { duplicatePackItem } from "../../store/packsStore";
 import { formatNumber } from "../../utils/formatNumber";
 import { theme } from "../../theme";
+import CustomButton from "../custombutton";
 import ItemPicker from "../Picker";
 
 const WeightUnitDropdown = ({ value, onChange }) => {
@@ -30,9 +32,7 @@ const WeightUnitDropdown = ({ value, onChange }) => {
 
 const TotalWeightBox = ({ label, weight, unit }) => {
   return (
-    <Box
-      style={styles.totalWeightBox}
-    >
+    <Box style={styles.totalWeightBox}>
       <Text>{label}</Text>
       <Text>{`${formatNumber(weight)} (${unit})`}</Text>
     </Box>
@@ -150,9 +150,26 @@ export const TableContainer = ({
   selectedPack,
   refetch,
   setRefetch,
+  copy,
 }) => {
+  const user = useSelector((state) => state.auth.user);
+  const dispatch = useDispatch();
+  let ids = [];
+  if (currentPack && currentPack.items) {
+    ids = copy ? currentPack.items.map((item) => item._id) : [];
+  }
+  const [checkedItems, setCheckedItems] = useState([...ids]);
+
+  const handleDuplicate = () => {
+    const data = {
+      packId: currentPack._id,
+      ownerId: user._id,
+      items: checkedItems,
+    };
+    dispatch(duplicatePackItem(data));
+  };
+
   const [weightUnit, setWeightUnit] = useState("g");
-  const [checkedItems, setCheckedItems] = useState([]);
   const isLoading = useSelector((state) => state.items.isLoading);
   const error = useSelector((state) => state.items.error);
 
@@ -173,33 +190,34 @@ export const TableContainer = ({
       .filter((item) => !checkedItems.includes(item._id))
       .forEach((item) => {
         const categoryName = item.category ? item.category.name : "Undefined";
-
-        switch (categoryName) {
-          case ItemCategoryEnum.ESSENTIALS: {
-            totalBaseWeight += convertWeight(
-              item.weight * item.quantity,
-              item.unit,
-              weightUnit
-            );
-            break;
-          }
-          case ItemCategoryEnum.FOOD: {
-            totalFoodWeight += convertWeight(
-              item.weight * item.quantity,
-              item.unit,
-              weightUnit
-            );
-            foodItems.push(item);
-            break;
-          }
-          case ItemCategoryEnum.WATER: {
-            totalWaterWeight += convertWeight(
-              item.weight * item.quantity,
-              item.unit,
-              weightUnit
-            );
-            waterItem = item;
-            break;
+        if (!copy) {
+          switch (categoryName) {
+            case ItemCategoryEnum.ESSENTIALS: {
+              totalBaseWeight += convertWeight(
+                item.weight * item.quantity,
+                item.unit,
+                weightUnit
+              );
+              break;
+            }
+            case ItemCategoryEnum.FOOD: {
+              totalFoodWeight += convertWeight(
+                item.weight * item.quantity,
+                item.unit,
+                weightUnit
+              );
+              foodItems.push(item);
+              break;
+            }
+            case ItemCategoryEnum.WATER: {
+              totalWaterWeight += convertWeight(
+                item.weight * item.quantity,
+                item.unit,
+                weightUnit
+              );
+              waterItem = item;
+              break;
+            }
           }
         }
       });
@@ -251,7 +269,7 @@ export const TableContainer = ({
                 "Category",
                 "Edit",
                 "Delete",
-                "Ignore",
+                `${copy ? "Copy" : "Ignore"}`,
               ].map((header, index) => (
                 <Cell key={index} data={header} textStyle={styles.headerText} />
               ))}
@@ -282,6 +300,7 @@ export const TableContainer = ({
               )}
             />
           </Table>
+          <CustomButton text="Copy" handler={handleDuplicate} copy={copy} />
           <TotalWeightBox
             label="Base Weight"
             weight={totalBaseWeight}
