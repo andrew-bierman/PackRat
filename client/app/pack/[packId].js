@@ -2,7 +2,6 @@ import PackContainer from "../../components/pack/PackContainer";
 import { PackDetails } from "../../components/pack/PackDetails";
 import { DetailsComponent } from "../../components/details";
 import { Platform } from "react-native";
-import ProfileContainerMobile from "../../components/user/ProfileContainerMobile";
 import { Stack as Header } from "expo-router";
 
 export default function Pack() {
@@ -21,6 +20,6 @@ export default function Pack() {
       <PackDetails />
     </>
   ) : (
-    <></>
+    <PackDetails />
   );
 }
