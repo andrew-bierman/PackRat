@@ -22,6 +22,7 @@ export const signUp = createAsyncThunk(
       });
       return response.data.user;
     } catch (error) {
+      alert("Name is required\nPassword must be at least 7 characters\nEmail is required\nEmail must be valid");
       return rejectWithValue(error.response.data.error);
     }
   }
