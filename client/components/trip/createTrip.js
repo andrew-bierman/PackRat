@@ -8,6 +8,7 @@ import {
   Input,
   HStack,
   VStack,
+  View,
 } from "native-base";
 import { Stack as Header } from "expo-router";
 
@@ -100,6 +101,8 @@ export default function Trips() {
   const [currentStep, setCurrentStep] = useState(0);
   const [parksData, setParksData] = useState();
   const [trails, setTrailsData] = useState();
+  const [tripData, setTripData] = useState({});
+
   const weatherObject = useSelector((state) => state.weather.weatherObject);
   const weatherWeek = useSelector((state) => state.weather.weatherWeek);
 
@@ -122,6 +125,10 @@ export default function Trips() {
   // Function to handle the previous step
   const handlePreviousStep = () => {
     setCurrentStep((prevStep) => prevStep - 1);
+  };
+
+  const updateTripData = (stepData) => {
+    setTripData((prevData) => ({ ...prevData, ...stepData }));
   };
 
   // Function to render the current step based on the currentStep state
@@ -152,7 +159,7 @@ export default function Trips() {
   };
 
   return (
-    <VStack>
+    <View style={styles.primaryContainer}>
       {Platform.OS === "web" ? (
         <Header.Screen
           options={{
@@ -161,28 +168,52 @@ export default function Trips() {
           }}
         />
       ) : null}
-      <Box style={styles.mutualStyles}>
-        <Stack m={[0, 0, 12, 16]} style={{ gap: 25 }}>
+      <Box style={styles.container}>
+        <Stack m={[0, 0, 12, 16]} style={{ gap: 25, flex: 1 }}>
           {renderCurrentStep()}
 
           {/* Step Navigation Buttons */}
-          <HStack justifyContent="space-between">
+          <View style={styles.buttonContainer}>
             {currentStep > 0 && (
               <Button onPress={handlePreviousStep}>Previous</Button>
             )}
-            {currentStep < 6 && <Button onPress={handleNextStep}>Next</Button>}
-          </HStack>
+            {currentStep === 0 ? (
+              <Button onPress={handleNextStep} ml="auto">
+                Next
+              </Button>
+            ) : (
+              currentStep < 6 && <Button onPress={handleNextStep}>Next</Button>
+            )}
+          </View>
         </Stack>
       </Box>
-    </VStack>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  mutualStyles: {
-    backgroundColor: theme.colors.background,
+  container: {
+    backgroundColor: "white", // White background for the form
+    width: "80%", // Adjust the width as needed
+    alignSelf: "center", // Center the form horizontally
+    borderRadius: 8,
+    padding: 16,
+    marginTop: 16,
+    height: 800,
+  },
+  primaryContainer: {
+    backgroundColor: theme.colors.primary,
     flex: 1,
-    flexDirection: "column",
+    padding: 20,
     height: "100%",
+  },
+  buttonContainer: {
+    position: "absolute",
+    bottom: 16,
+    left: 0,
+    right: 0,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingHorizontal: 16,
   },
 });

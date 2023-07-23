@@ -30,12 +30,12 @@ export default function TripCard({
 
   const handleValueChange = (value) => {
     // Assuming that you have a redux action to set the current trail and park
-    if(isTrail) {
+    if (isTrail) {
       dispatch(addTrail(value));
-    } else if (isPark){
+    } else if (isPark) {
       dispatch(addPark(value));
     }
-  }
+  };
 
   console.log("currentShape", currentShape);
 
@@ -45,6 +45,7 @@ export default function TripCard({
       w={["100%", "100%", "100%", "90%"]}
       direction={["column", "column", "row", "row"]}
       rounded={["none", "none", "md", "lg"]}
+      // h={["100%", "100%", "100%", "90%"]}
       style={
         isSearch
           ? styles.searchContainer
