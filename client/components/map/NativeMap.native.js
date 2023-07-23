@@ -138,9 +138,11 @@ function NativeMap({ shape: shapeProp }) {
   }
 
   function onDownloadProgress(offlineRegion, offlineRegionStatus) {
+    console.log("control there", offlineRegionStatus?.percentage);
     setProgress(offlineRegionStatus.percentage);
     setDownloading(true);
     if (offlineRegionStatus.percentage == 100) {
+      Alert.alert("Map download successfully!");
       setDownloading(false);
     }
   }
@@ -236,6 +238,7 @@ function NativeMap({ shape: shapeProp }) {
           </Mapbox.PointAnnotation>
         )}
       </Mapbox.MapView>
+
       <MapButtonsOverlay
         mapFullscreen={mapFullscreen}
         enableFullScreen={() => setMapFullscreen(true)}

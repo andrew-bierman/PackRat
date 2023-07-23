@@ -77,22 +77,22 @@ export default function DownloadedMaps() {
                   setShowMap(true);
                 }}
               >
-                <Image
-                  style={{
-                    width: "100%",
-                    height: 200,
-                    borderRadius: 10,
-                  }}
-                  source={{
-                    uri: `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/[${pack.bounds[1]
-                      .concat(pack.bounds[0])
-                      .reduce(
-                        (prev, curr) => prev + "," + curr
-                      )}]/600x600?access_token=${
-                      process.env.MAPBOX_ACCESS_TOKEN
-                    }`,
-                  }}
-                />
+                {pack && (
+                  <Image
+                    style={{
+                      width: "100%",
+                      height: 200,
+                      borderRadius: 10,
+                    }}
+                    source={{
+                      uri: `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/${
+                        pack?.bounds[0] + "," + pack?.bounds[1]
+                      },10,60,60/600x600?access_token=${
+                        process.env.MAPBOX_ACCESS_TOKEN
+                      }`,
+                    }}
+                  />
+                )}
                 <Text
                   style={{
                     fontSize: 16,
@@ -157,6 +157,7 @@ export default function DownloadedMaps() {
               </Mapbox.PointAnnotation>
             )}
           </Mapbox.MapView>
+
           <MapButtonsOverlay
             mapFullscreen={true}
             disableFullScreen={() => setShowMap(false)}
