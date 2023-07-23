@@ -3,6 +3,7 @@ import { PackDetails } from "../../components/pack/PackDetails";
 import { DetailsComponent } from "../../components/details";
 import { Platform } from "react-native";
 import { Stack as Header } from "expo-router";
+import ChatComponent from "../../components/chat";
 
 export default function Pack() {
   return Platform.OS === "web" ? (
@@ -17,7 +18,10 @@ export default function Pack() {
         }}
       />
       {/* <DetailsComponent type='pack'/> */}
+      <>
+      <ChatComponent />
       <PackDetails />
+      </>
     </>
   ) : (
     <PackDetails />
