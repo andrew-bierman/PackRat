@@ -7,10 +7,9 @@ import { theme } from "../../theme";
 import { useSelector, useDispatch } from "react-redux";
 import Hero from "../hero";
 import { useRouter } from "expo-router";
-import { isObjectEmpty } from "../../utils/isObjectEmpty";
 import { photonDetails, processGeoJSON } from "../../store/destinationStore";
 import { hexToRGBA } from "../../utils/colorFunctions";
-import { getParksOSM } from "../../api/getParks";
+
 
 const HeroSection = ({ onSelect }) => {
   const dispatch = useDispatch();
@@ -88,6 +87,8 @@ const HeroSection = ({ onSelect }) => {
               onSelect={handleSearchSelect}
               placeholder={"Search by park, city, or trail"}
             />
+         
+           
           </VStack>
         </LargeCard>
       </Hero>
