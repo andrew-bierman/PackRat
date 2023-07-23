@@ -14,6 +14,8 @@ import osmRoutes from "./osmRoutes.js";
 import passwordResetRoutes from "./passwordResetRoutes.js";
 import gpxRoutes from "./gpxRoutes.js";
 import openAiRoutes from "./openAiRoutes.js";
+import templateRoutes from "./templateRoutes.js";
+import favoriteRouters from "./favoriteRoutes.js";
 
 const router = express.Router();
 
@@ -47,6 +49,8 @@ router.use("/osm", osmRoutes);
 router.use("/password-reset", passwordResetRoutes);
 router.use("/gpx", gpxRoutes);
 router.use("/openai", openAiRoutes);
+router.use("/template", templateRoutes);
+router.use("/favorite", favoriteRouters);
 
 // Also listen to /api for backwards compatibility
 router.use("/api/user", userRoutes);
@@ -61,6 +65,8 @@ router.use("/api/osm", osmRoutes);
 router.use("/api/password-reset", passwordResetRoutes);
 router.use("/gpx", gpxRoutes);
 router.use("/api/openai", openAiRoutes);
+router.use("/api/template", templateRoutes);
+router.use("/api/favorite", favoriteRouters);
 
 // Static routes for serving the React Native Web app
 if (process.env.NODE_ENV === "production") {

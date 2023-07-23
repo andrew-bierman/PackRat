@@ -11,16 +11,17 @@ export const addPack = createAsyncThunk("packs/addPack", async (newPack) => {
   return response.data;
 });
 
-// update backend logic to support this
 export const deletePackItem = createAsyncThunk(
   "items/deletePackItem",
-  async (itemId) => {
+  async (item) => {
+    console.log("item", item);
     const response = await axios.delete(`${api}/item`, {
       headers: {
         "Content-Type": "application/json",
       },
       data: {
-        itemId,
+        itemId: item.itemId,
+        packId: item.currentPackId,
       },
     });
     return response.data;
@@ -46,7 +47,19 @@ export const fetchUserPacks = createAsyncThunk(
 export const addPackItem = createAsyncThunk(
   "items/addPackItem",
   async (newItem) => {
+    console.log("calling apis");
     const response = await axios.post(`${api}/item/`, newItem);
+    return response.data;
+  }
+);
+
+export const duplicatePackItem = createAsyncThunk(
+  "items/duplicatePackItem",
+  async (newItem) => {
+    const response = await axios.post(`${api}/pack/duplicate`, {
+      packId: newItem.packId,
+      ownerId: newItem.ownerId,
+    });
     return response.data;
   }
 );
@@ -61,6 +74,41 @@ export const editPackItem = createAsyncThunk(
   async (newItem) => {
     const response = await axios.put(`${api}/item/`, newItem);
     return response.data;
+  }
+);
+
+export const editItemsGlobalAsDuplicate = createAsyncThunk(
+  "Items/editItemsGlobalAsDuplicate",
+  async (item) => {
+    const { itemId, packId, name, weight, quantity, unit, type } = item;
+    const response = await axios.put(`${api}/item/global/${itemId}`, {
+      packId,
+      name,
+      weight,
+      quantity,
+      unit,
+      type,
+    });
+    return response.data;
+  }
+);
+
+export const selectItemsGlobal = createAsyncThunk(
+  "Items/selectItemsGlobal",
+  async (item) => {
+    try {
+      const itemId = item.selectedItem;
+      const ownerId = item.ownerId;
+      const packId = item.packId;
+
+      const response = await axios.post(`${api}/item/global/select/${packId}`, {
+        itemId: itemId,
+        ownerId: ownerId,
+      });
+      return response.data;
+    } catch (error) {
+      console.log("error", error.message);
+    }
   }
 );
 
@@ -157,8 +205,10 @@ const packsSlice = createSlice({
         const packIds = newItem.packs; // packIds is an array of pack Ids
 
         packIds.forEach((packId) => {
+          console.log("packid", packId);
           // loop through each packId
           const existingPack = state.entities[packId];
+          console.log("existingPack", existingPack);
           if (!existingPack) {
             return;
           }
@@ -166,6 +216,7 @@ const packsSlice = createSlice({
           const updatedItems = existingPack.items.map((item) =>
             item._id === newItem._id ? newItem : item
           );
+          console.log("updatediTEMS", updatedItems);
 
           packsAdapter.updateOne(state, {
             id: packId,
@@ -188,25 +239,22 @@ const packsSlice = createSlice({
         state.error = null;
       })
       .addCase(deletePackItem.fulfilled, (state, action) => {
-        const deletedItem = action.payload;
-        const packIds = deletedItem.packs; // packIds is an array of pack Ids
+        const { itemId, currentPackId } = action.meta.arg;
 
-        packIds.forEach((packId) => {
-          // loop through each packId
-          const existingPack = state.entities[packId];
-          if (!existingPack) {
-            return;
-          }
+        let existing = state.entities[currentPackId];
+        if (!existing) {
+          return;
+        }
 
-          packsAdapter.updateOne(state, {
-            id: packId,
-            changes: {
-              items: existingPack.items.filter(
-                (item) => item._id !== deletedItem._id
-              ),
-            },
-          });
+        const updatedItems = existing.items.filter(
+          (item) => item._id !== itemId
+        );
+
+        packsAdapter.updateOne(state, {
+          id: currentPackId,
+          changes: { items: updatedItems },
         });
+
         state.isLoading = false;
         state.error = null;
       })
@@ -229,6 +277,68 @@ const packsSlice = createSlice({
         state.error = null;
       })
       .addCase(scorePack.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message;
+      })
+      .addCase(selectItemsGlobal.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(selectItemsGlobal.fulfilled, (state, action) => {
+        const { itemId, packId } = action.meta.arg;
+        const existing = state.entities[packId];
+
+        if (existing) {
+          packsAdapter.updateOne(state, {
+            id: packId,
+            changes: { items: [...existing.items, action.payload.data] },
+          });
+        }
+
+        state.isLoading = false;
+        state.error = null;
+      })
+      .addCase(selectItemsGlobal.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message;
+      })
+      .addCase(editItemsGlobalAsDuplicate.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(editItemsGlobalAsDuplicate.fulfilled, (state, action) => {
+        const { itemId, packId } = action.meta.arg;
+        console.log("meta", itemId, packId);
+        const existingPack = state.entities[packId];
+
+        if (!existingPack) {
+          return;
+        }
+        const updatedItems = existingPack.items.map((item) =>
+          item._id === itemId ? action.payload : item
+        );
+        console.log("updated items", updatedItems);
+
+        packsAdapter.updateOne(state, {
+          id: packId,
+          changes: { items: updatedItems },
+        });
+        state.isLoading = false;
+        state.error = null;
+      })
+      .addCase(editItemsGlobalAsDuplicate.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message;
+      })
+      .addCase(duplicatePackItem.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(duplicatePackItem.fulfilled, (state, action) => {
+        isLoading = false;
+        state.error = null;
+      })
+      .addCase(duplicatePackItem.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message;
       });

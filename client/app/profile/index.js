@@ -1,6 +1,5 @@
 import ProfileContainer from "../../components/user/ProfileContainer";
 import { Platform } from "react-native";
-import ProfileContainerMobile from "../../components/user/ProfileContainerMobile";
 import { Stack as Header } from "expo-router";
 
 export default function Profile() {
@@ -20,6 +19,5 @@ export default function Profile() {
     </>
   ) : (
     <ProfileContainer />
-    // <ProfileContainerMobile />
   );
 }

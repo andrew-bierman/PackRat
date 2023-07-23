@@ -4,8 +4,6 @@ import { Platform } from "react-native";
 
 import ProfileContainer from "../components/user/ProfileContainer";
 
-import ProfileContainerMobile from "../components/user/ProfileContainerMobile";
-
 import { Stack as Header } from "expo-router";
 
 import { theme } from "../theme";
@@ -22,9 +20,8 @@ export default function Index() {
   const user = useSelector((state) => state.auth.user);
   const reduxState = useSelector((state) => state);
 
-  console.log("reduxState", reduxState);
   return (
-    <ScrollView>
+    <>
       {Platform.OS === "web" ? (
         <Header.Screen
           options={{
@@ -36,7 +33,7 @@ export default function Index() {
       <Box style={styles.mutualStyles}>
         {!user ? <LandingPage /> : <Dashboard />}
       </Box>
-    </ScrollView>
+    </>
   );
 }
 

@@ -1,5 +1,4 @@
 import Feed from "../../components/feed/Feed";
-import FeedMobile from "../../components/feed/FeedMobile";
 import { Platform } from "react-native";
 import { Stack as Header } from "expo-router";
 
@@ -18,6 +17,6 @@ export default function FeedNav() {
       <Feed />
     </>
   ) : (
-    <FeedMobile />
+    <Feed />
   );
 }

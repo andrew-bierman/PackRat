@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 import { VStack, Box } from "native-base";
 import { theme } from "../../theme";
 import HeroBanner from "./HeroBanner";
@@ -10,7 +10,12 @@ import SectionHeader from "./SectionHeader";
 
 const Dashboard = () => {
   return (
-    <VStack style={styles.container}>
+    <VStack
+      style={[
+        styles.container,
+        Platform.OS === "web" ? { minHeight: "100vh" } : null,
+      ]}
+    >
       <Box contentContainerStyle={styles.content}>
         <HeroBanner style={styles.cardContainer} />
 
@@ -33,7 +38,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexGrow: 1,
     backgroundColor: theme.colors.background,
-    minHeight: "100vh",
     width: "100%",
   },
   content: {

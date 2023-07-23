@@ -1,7 +1,6 @@
 import * as Location from "expo-location";
-import * as FileSystem from 'expo-file-system';
-import { saveAs } from 'file-saver';
-
+import * as FileSystem from "expo-file-system";
+import { Platform } from "react-native";
 
 const defaultShape = {
   type: "FeatureCollection",
@@ -34,6 +33,23 @@ const defaultShape = {
   ],
 };
 
+function normalizeCoordinates(coordinates) {
+  // check if coordinates are nested, flip them if so
+  if (typeof coordinates[0][0] === "number") {
+    // If first value is greater than 90, it's likely in the format of (longitude, latitude)
+    if (coordinates[0][0] > 90) {
+      return coordinates.map((coordinate) => [coordinate[1], coordinate[0]]);
+    }
+    return coordinates;
+  }
+  // if not nested, nest them
+  // If first value is greater than 90, it's likely in the format of (longitude, latitude)
+  if (coordinates[0] > 90) {
+    return [[coordinates[1], coordinates[0]]];
+  }
+  return [[coordinates[0], coordinates[1]]];
+}
+
 function convertPhotonGeoJsonToShape(photonGeoJson) {
   return {
     type: "FeatureCollection",
@@ -42,10 +58,7 @@ function convertPhotonGeoJsonToShape(photonGeoJson) {
         type: "Feature",
         geometry: {
           type: "LineString",
-          coordinates: [
-            photonGeoJson.geometry.coordinates,
-            photonGeoJson.geometry.coordinates,
-          ],
+          coordinates: normalizeCoordinates(photonGeoJson.geometry.coordinates),
         },
         properties: photonGeoJson.properties,
       },
@@ -121,9 +134,19 @@ function findTrailCenter(shape) {
   const trailCoords = shape?.features[0]?.geometry?.coordinates;
 
   console.log("trailCoords", trailCoords);
+  console.log("trailCoords.length", trailCoords.length);
 
   let latitudes;
   let longitudes;
+
+  // Handle the case where there's only one pair of coordinates
+  if (trailCoords.length === 1) {
+    console.log(
+      "Single coordinate found, using as trail center.",
+      trailCoords[0]
+    );
+    return trailCoords[0];
+  }
 
   if (Array.isArray(trailCoords[0][0])) {
     // If the coordinates are in the format: [[[lat, lng]], [[lat, lng]], ...]
@@ -138,11 +161,10 @@ function findTrailCenter(shape) {
   const avgLatitude = latitudes.reduce((a, b) => a + b, 0) / latitudes.length;
   const avgLongitude = longitudes.reduce((a, b) => a + b, 0) / longitudes.length;
 
-  console.log('trailCords return', [avgLatitude, avgLongitude])
+  console.log("trailCords return", [avgLatitude, avgLongitude]);
 
   return [avgLatitude, avgLongitude];
 }
-
 
 const processShapeData = (shape) => {
   let processedShape = { ...shape };
@@ -151,7 +173,9 @@ const processShapeData = (shape) => {
   shape.features.forEach((feature) => {
     if (feature.geometry.type === "LineString") {
       // Make sure coordinates are in the correct format
-      feature.geometry.coordinates = ensure2DArray(feature.geometry.coordinates);
+      feature.geometry.coordinates = ensure2DArray(
+        feature.geometry.coordinates
+      );
 
       let points = feature.geometry.coordinates.map((coord, index) => {
         return {
@@ -189,7 +213,6 @@ const ensure2DArray = (arr) => {
   return arr;
 };
 
-
 const mapboxStyles = [
   { label: "Outdoors", style: "mapbox://styles/mapbox/outdoors-v11" },
   { label: "Street", style: "mapbox://styles/mapbox/streets-v11" },
@@ -204,7 +227,7 @@ const mapboxStyles = [
 
 const getLocation = async () => {
   let { status } = await Location.requestForegroundPermissionsAsync();
-  
+
   if (status !== "granted") {
     alert("Permission to access location was denied");
     return;
@@ -215,26 +238,9 @@ const getLocation = async () => {
   return location;
 };
 
-const handleGpxDownload = async (gpxData, filename = "trail") => {
-  if (gpxData) {
-    // Check the platform (native or web)
-    if (Platform.OS === 'web') {
-      const blob = new Blob([gpxData], { type: 'application/gpx+xml' });
-      saveAs(blob, `${filename}.gpx`);
-    } else {
-      const fileUri = FileSystem.documentDirectory + `${filename}.gpx`;
-      await FileSystem.writeAsStringAsync(fileUri, gpxData, {
-        encoding: FileSystem.EncodingType.UTF8,
-      });
-      await FileSystem.downloadAsync(fileUri, FileSystem.cacheDirectory + `${filename}.gpx`);
-    }
-  }
-};
-
 const isShapeDownloadable = (shape) => {
   return shape?.features[0]?.geometry?.coordinates?.length > 1;
 };
-
 
 export {
   defaultShape,
@@ -247,7 +253,6 @@ export {
   processShapeData,
   mapboxStyles,
   getLocation,
-  handleGpxDownload,
   isShapeDownloadable,
   convertPhotonGeoJsonToShape,
 };
