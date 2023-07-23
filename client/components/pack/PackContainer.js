@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { Box, Text } from "native-base";
+import { Box, Button, Input, Select, Text } from "native-base";
 import { useEffect, useState } from "react";
 
 import DropdownComponent from "../Dropdown";
@@ -8,7 +8,11 @@ import { AddItem } from "../item/AddItem";
 import { TableContainer } from "../pack_table/Table";
 // import { useAuth } from "../../auth/provider";
 import { useSelector } from "react-redux";
-import { fetchUserPacks, selectPackById, selectAllPacks } from "../../store/packsStore";
+import {
+  fetchUserPacks,
+  selectPackById,
+  selectAllPacks,
+} from "../../store/packsStore";
 import { updateNewTripPack } from "../../store/tripsStore";
 import { useDispatch } from "react-redux";
 
@@ -24,12 +28,13 @@ export default function PackContainer({ isCreatingTrip = false }) {
   const newTrip = useSelector((state) => state.trips.newTrip);
 
   const [currentPackId, setCurrentPackId] = useState(null);
+  const [refetch, setRefetch] = useState(false);
 
   useEffect(() => {
     if (user && user._id) {
       dispatch(fetchUserPacks(user?._id));
     }
-  }, [dispatch, user?._id]);
+  }, [dispatch, user?._id, refetch]);
 
   const handlePack = (val) => {
     const selectedPack = packs.find((pack) => pack._id === val);
@@ -39,7 +44,6 @@ export default function PackContainer({ isCreatingTrip = false }) {
       dispatch(updateNewTripPack(selectedPack?._id));
     }
   };
-
   const currentPack = useSelector((state) =>
     selectPackById(state, currentPackId)
   );
@@ -53,40 +57,48 @@ export default function PackContainer({ isCreatingTrip = false }) {
         value={currentPackId}
         onValueChange={handlePack}
         placeholder={"Select a Pack"}
-        width="300"
+        width={300}
       />
       {currentPackId && (
         <>
-          <CustomModal
-            title="Add Item"
-            trigger="Add Item"
-            isActive={isAddItemModalOpen}
-            onTrigger={setIsAddItemModalOpen}
-            footerButtons={[
-              {
-                label: "Save",
-                color: "primary",
-                onClick: () => setIsAddItemModalOpen(false),
-              },
-              {
-                label: "Cancel",
-                color: "danger",
-                onClick: () => setIsAddItemModalOpen(false),
-              },
-            ]}
-          >
-            <AddItem packId={currentPackId} />
-          </CustomModal>
-          <TableContainer
-            key={`table - ${currentPackId}`}
-            currentPack={currentPack}
-          />
+          <>
+            <CustomModal
+              title="Add Item"
+              trigger="Add Item"
+              isActive={isAddItemModalOpen}
+              onTrigger={setIsAddItemModalOpen}
+              footerButtons={[
+                {
+                  label: "Save",
+                  color: "primary",
+                  onClick: () => setIsAddItemModalOpen(false),
+                },
+                {
+                  label: "Cancel",
+                  color: "danger",
+                  onClick: () => setIsAddItemModalOpen(false),
+                },
+              ]}
+            >
+              <AddItem
+                packId={currentPackId}
+                currentPack={currentPack}
+                setIsAddItemModalOpen={setIsAddItemModalOpen}
+              />
+            </CustomModal>
+            <TableContainer
+              key={`table - ${currentPackId}`}
+              currentPack={currentPack}
+              selectedPack={currentPackId}
+              refetch={refetch}
+              setRefetch={setRefetch}
+            />
+          </>
         </>
       )}
     </Box>
   ) : null;
 }
-
 
 const styles = StyleSheet.create({
   mainContainer: {

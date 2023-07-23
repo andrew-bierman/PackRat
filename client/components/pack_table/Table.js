@@ -1,16 +1,16 @@
-import { StyleSheet } from "react-native";
+import { FlatList, Platform, StyleSheet } from "react-native";
 import { Table, Row, Cell, TableWrapper } from "react-native-table-component";
 import { Feather } from "@expo/vector-icons";
 import { Select, Checkbox, Box, Text, HStack, Button } from "native-base";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { convertWeight } from "../../utils/convertWeight";
 import { EditPackItemModal } from "./EditPackItemModal";
 import { ItemCategoryEnum } from "../../constants/itemCategory";
-import Water from "../Water";
 import { DeletePackItemModal } from "./DeletePackItemModal";
 import { formatNumber } from "../../utils/formatNumber";
 import { theme } from "../../theme";
+import ItemPicker from "../Picker";
 
 const WeightUnitDropdown = ({ value, onChange }) => {
   return (
@@ -31,14 +31,7 @@ const WeightUnitDropdown = ({ value, onChange }) => {
 const TotalWeightBox = ({ label, weight, unit }) => {
   return (
     <Box
-      style={{
-        flexDirection: "row",
-        justifyContent: "space-between",
-        width: "100%",
-        paddingHorizontal: 25,
-        marginVertical: 30,
-        flex: 1,
-      }}
+      style={styles.totalWeightBox}
     >
       <Text>{label}</Text>
       <Text>{`${formatNumber(weight)} (${unit})`}</Text>
@@ -57,6 +50,7 @@ const IgnoreItemCheckbox = ({ itemId, isChecked, handleCheckboxChange }) => (
       key={itemId}
       isChecked={isChecked}
       onChange={() => handleCheckboxChange(itemId)}
+      aria-label="Ignore item"
     />
   </Box>
 );
@@ -71,17 +65,37 @@ const TableItem = ({
   handleCheckboxChange,
   index,
   flexArr,
+  currentPack,
+  refetch,
+  setRefetch,
 }) => {
   const { name, weight, category, quantity, unit, _id } = itemData;
-  const dispatch = useDispatch();
+  /* 
+  * this _id is passed as pack id but it is a item id which is confusing
+  Todo need to change the name for this passing argument and remaining functions which are getting it
+   */
+
+  // Here, you can set a default category if item.category is null or undefined
+  const categoryName = category ? category.name : "Undefined";
 
   const rowData = [
     name,
     `${formatNumber(weight)} ${unit}`,
     quantity,
-    `${category.name}`,
-    <EditPackItemModal packId={_id} initialData={itemData} />,
-    <DeletePackItemModal itemId={_id} />,
+    `${categoryName}`,
+    <EditPackItemModal
+      packId={_id}
+      initialData={itemData}
+      currentPack={currentPack}
+      refetch={refetch}
+      setRefetch={setRefetch}
+    />,
+    <DeletePackItemModal
+      itemId={_id}
+      pack={currentPack}
+      refetch={refetch}
+      setRefetch={setRefetch}
+    />,
     <IgnoreItemCheckbox
       itemId={_id}
       isChecked={checkedItems.includes(_id)}
@@ -104,6 +118,7 @@ const CategoryRow = ({ category }) => {
     [ItemCategoryEnum.TOOLS]: "tool",
     [ItemCategoryEnum.MEDICAL]: "heart",
     [ItemCategoryEnum.OTHER]: "more-horizontal",
+    Undefined: "help-circle", // Choose an appropriate icon for "Undefined" category
   };
 
   const rowData = [
@@ -130,7 +145,12 @@ const TitleRow = ({ title }) => {
   );
 };
 
-export const TableContainer = ({ currentPack }) => {
+export const TableContainer = ({
+  currentPack,
+  selectedPack,
+  refetch,
+  setRefetch,
+}) => {
   const [weightUnit, setWeightUnit] = useState("g");
   const [checkedItems, setCheckedItems] = useState([]);
   const isLoading = useSelector((state) => state.items.isLoading);
@@ -144,11 +164,17 @@ export const TableContainer = ({ currentPack }) => {
 
   let waterItem;
   let foodItems = [];
+  // for calculating the total.
+  /* 
+  Todo better to move this all inside a utility function and pass them variables 
+  */
   data &&
     data
       .filter((item) => !checkedItems.includes(item._id))
       .forEach((item) => {
-        switch (item.category.name) {
+        const categoryName = item.category ? item.category.name : "Undefined";
+
+        switch (categoryName) {
           case ItemCategoryEnum.ESSENTIALS: {
             totalBaseWeight += convertWeight(
               item.weight * item.quantity,
@@ -178,8 +204,6 @@ export const TableContainer = ({ currentPack }) => {
         }
       });
 
-  console.log("waterItem", waterItem);
-
   let totalWeight = totalBaseWeight + totalWaterWeight + totalFoodWeight;
 
   const handleCheckboxChange = (itemId) => {
@@ -190,9 +214,10 @@ export const TableContainer = ({ currentPack }) => {
     );
   };
 
-  // Group items by category
+  // In your groupedData definition, provide a default category for items without one
   const groupedData = data?.reduce((acc, item) => {
-    (acc[item.category.name] = acc[item.category.name] || []).push(item);
+    const categoryName = item.category ? item.category.name : "Undefined";
+    (acc[categoryName] = acc[categoryName] || []).push(item);
     return acc;
   }, {});
 
@@ -203,14 +228,15 @@ export const TableContainer = ({ currentPack }) => {
 
   return (
     <Box style={styles.container}>
-      <WeightUnitDropdown value={weightUnit} onChange={setWeightUnit} />
+      <ItemPicker
+        currentPack={selectedPack}
+        refetch={refetch}
+        setRefetch={setRefetch}
+      />
+
       {data?.length ? (
         <>
-          <Table
-            style={styles.tableStyle}
-            borderStyle={{ borderColor: "transparent" }}
-            flexArr={flexArr}
-          >
+          <Table style={styles.tableStyle} flexArr={flexArr}>
             <TitleRow title="Pack List" />
             <Row
               flexArr={flexArr}
@@ -227,24 +253,31 @@ export const TableContainer = ({ currentPack }) => {
               ))}
               style={styles.head}
             />
-            {Object.entries(groupedData).map(([category, items]) => (
-              <>
-                <CategoryRow category={category} />
-                {items.map((item, index) => (
-                  <TableItem
-                    key={index}
-                    itemData={item}
-                    checkedItems={checkedItems}
-                    handleCheckboxChange={handleCheckboxChange}
-                    index={index}
-                    flexArr={flexArr}
+            <FlatList
+              data={Object.entries(groupedData)}
+              keyExtractor={([category, items]) => category}
+              renderItem={({ item: [category, items] }) => (
+                <>
+                  <CategoryRow category={category} />
+                  <FlatList
+                    data={items}
+                    keyExtractor={(item, index) => item._id}
+                    renderItem={({ item }) => (
+                      <TableItem
+                        itemData={item}
+                        checkedItems={checkedItems}
+                        handleCheckboxChange={handleCheckboxChange}
+                        flexArr={flexArr}
+                        currentPack={currentPack}
+                        refetch={refetch}
+                        setRefetch={setRefetch}
+                      />
+                    )}
                   />
-                ))}
-              </>
-            ))}
+                </>
+              )}
+            />
           </Table>
-          {!foodItems.length && <Button>Add Food Item</Button>}
-          {!waterItem && <Water currentPack={currentPack} />}
           <TotalWeightBox
             label="Base Weight"
             weight={totalBaseWeight}
@@ -264,6 +297,7 @@ export const TableContainer = ({ currentPack }) => {
       ) : (
         <Text style={styles.noItemsText}>Add your First Item</Text>
       )}
+      <WeightUnitDropdown value={weightUnit} onChange={setWeightUnit} />
     </Box>
   );
 };
@@ -273,10 +307,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
-    width: "100%",
+    width: Platform.OS === "web" ? "100%" : 310,
   },
   tableStyle: {
-    width: "100%",
+    width: Platform.OS === "web" ? "100%" : 300,
     marginVertical: 20,
   },
   mainTitle: {
@@ -312,6 +346,7 @@ const styles = StyleSheet.create({
   headerText: {
     fontWeight: "bold",
     color: "#000000",
+    fontSize: Platform.OS === "web" ? 12 : 8,
   },
   row: {
     flexDirection: "row",
@@ -332,6 +367,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginTop: 20,
     textAlign: "center",
+  },
+  totalWeightBox: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: Platform.OS === "web" ? "100%" : 300,
+    paddingHorizontal: 25,
+    marginVertical: 30,
+    flex: 1,
   },
 });
 

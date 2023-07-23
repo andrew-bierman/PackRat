@@ -20,6 +20,8 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { Link } from "expo-router";
 
+import { truncateString } from "../../utils/truncateString";
+
 const UserDataCard = ({
   type, // "pack" or "trip"
   destination,
@@ -44,6 +46,9 @@ const UserDataCard = ({
   };
 
   const isLoading = useSelector((state) => state.packs.isLoading);
+
+  const truncatedName = truncateString(name, 25);
+  const truncatedDestination = truncateString(destination, 25);
 
   return (
     <Box alignItems="center" padding="5">
@@ -80,7 +85,7 @@ const UserDataCard = ({
                   gap: 10,
                 }}
               >
-                {name}
+                {truncatedName}
                 {isLoading ? (
                   <Text>Loading....</Text>
                 ) : (
@@ -120,7 +125,7 @@ const UserDataCard = ({
                 ml="-0.5"
                 mt="-1"
               >
-                Destination: {destination}
+                Destination: {truncatedDestination}
               </Text>
             )}
           </Stack>
