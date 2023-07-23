@@ -236,11 +236,7 @@ export const TableContainer = ({
 
       {data?.length ? (
         <>
-          <Table
-            style={styles.tableStyle}
-            borderStyle={{ borderColor: "transparent" }}
-            flexArr={flexArr}
-          >
+          <Table style={styles.tableStyle} flexArr={flexArr}>
             <TitleRow title="Pack List" />
             <Row
               flexArr={flexArr}

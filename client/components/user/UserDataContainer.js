@@ -1,9 +1,6 @@
 import { Link } from "expo-router";
 import { ScrollView, Stack, VStack, Text, Button } from "native-base";
-import { Platform } from "react-native";
-
 import UserDataCard from "./UserDataCard";
-import UserDataCardMobile from "./UserDataCardMobile";
 
 export default function UserDataContainer({ data, type }) {
   const typeUppercase = type.charAt(0).toUpperCase() + type.slice(1);
@@ -23,17 +20,13 @@ export default function UserDataContainer({ data, type }) {
         flexWrap="wrap"
       >
         {data && data.length > 0 ? (
-          data?.map((dataItem) =>
-            Platform.OS === "web" ? (
-              <UserDataCard
-                key={dataItem._id}
-                {...{ ...dataItem }}
-                type={cardType}
-              />
-            ) : (
-              <UserDataCardMobile key={dataItem._id} {...{ ...dataItem }} />
-            )
-          )
+          data?.map((dataItem) => (
+            <UserDataCard
+              key={dataItem._id}
+              {...{ ...dataItem }}
+              type={cardType}
+            />
+          ))
         ) : (
           <Link href="/">
             <Button
