@@ -8,8 +8,9 @@ import { useSelector, useDispatch } from "react-redux";
 import Hero from "../hero";
 import { useRouter } from "expo-router";
 import { isObjectEmpty } from "../../utils/isObjectEmpty";
-import { processGeoJSON } from "../../store/destinationStore";
+import { photonDetails, processGeoJSON } from "../../store/destinationStore";
 import { hexToRGBA } from "../../utils/colorFunctions";
+import { getParksOSM } from "../../api/getParks";
 
 const HeroSection = ({ onSelect }) => {
   const dispatch = useDispatch();
@@ -24,12 +25,14 @@ const HeroSection = ({ onSelect }) => {
 
   const handleSearchSelect = async (selectedResult) => {
     try {
-      // console.log("selectedResult", selectedResult)
-      const actionResult = await dispatch(processGeoJSON(selectedResult));
-  
+      console.log("selectedResult", selectedResult)
+      const geojson = await dispatch(photonDetails(selectedResult));
+
+      const actionResult = await dispatch(processGeoJSON(geojson));
+
       // Accessing payload from actionResult
       const destinationId = actionResult.payload.data.newInstance._id;
-      
+
       if (destinationId) {
         router.push(`/destination/${destinationId}`);
       }
