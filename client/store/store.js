@@ -19,6 +19,7 @@ import singleTripReducer from "./singleTripStore";
 import tripsReducer from "./tripsStore";
 import gpxReducer from "./gpxStore";
 import destinationReducer from "./destinationStore";
+import chatReducer from "./chatStore";
 import globalItems from "./globalItemsStore";
 import chatReducer from "./chatStore";
 
@@ -39,6 +40,7 @@ const rootReducer = combineReducers({
   feed: feedReducer,
   gpx: gpxReducer,
   destination: destinationReducer,
+  chat: chatReducer,
   globalItems,
   chat: chatReducer,
 });
