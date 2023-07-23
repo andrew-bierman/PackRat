@@ -55,7 +55,7 @@ export default function ProfileContainer() {
           <Text>{user?.name}</Text>
           <Text>{user?.email}</Text>
         </Box>
-        <Stack direction={["column", "row", "row", "row"]} style={styles.card}>
+        <Stack direction="row" style={styles.card}>
           <Box style={styles.cardInfo}>
             <Text>Trips</Text>
             <Text>{tripsData?.trips?.length}</Text>
