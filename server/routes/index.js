@@ -16,6 +16,7 @@ import gpxRoutes from "./gpxRoutes.js";
 import openAiRoutes from "./openAiRoutes.js";
 import templateRoutes from "./templateRoutes.js";
 import favoriteRouters from "./favoriteRoutes.js";
+import openAiRoutes from "./openAiRoutes.js";
 
 const router = express.Router();
 
@@ -51,6 +52,7 @@ router.use("/gpx", gpxRoutes);
 router.use("/openai", openAiRoutes);
 router.use("/template", templateRoutes);
 router.use("/favorite", favoriteRouters);
+router.use("/openai", openAiRoutes);
 
 // Also listen to /api for backwards compatibility
 router.use("/api/user", userRoutes);
@@ -67,6 +69,7 @@ router.use("/gpx", gpxRoutes);
 router.use("/api/openai", openAiRoutes);
 router.use("/api/template", templateRoutes);
 router.use("/api/favorite", favoriteRouters);
+router.use("/api/openai", openAiRoutes);
 
 // Static routes for serving the React Native Web app
 if (process.env.NODE_ENV === "production") {
@@ -99,3 +102,4 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 export default router;
+
