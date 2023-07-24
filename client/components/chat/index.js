@@ -5,6 +5,8 @@ import {
   FlatList,
   TextInput,
   TouchableOpacity,
+  StyleSheet,
+  ScrollView,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -13,13 +15,38 @@ import {
   selectConversationById,
   selectAllConversations,
 } from "../../store/chatStore";
-import { HStack, VStack } from "native-base";
+import { Box, VStack } from "native-base";
+// import {CustomModal} from "../modal";
+import { CustomModal } from "../modal";
 
-const ChatComponent = () => {
+const MessageBubble = ({ message }) => {
+  const isAI = message.role === "ai";
+  return (
+    <View style={isAI ? styles.aiBubble : styles.userBubble}>
+      <Text style={isAI ? styles.aiText : styles.userText}>
+        {message.content}
+      </Text>
+    </View>
+  );
+};
+
+const ChatSelector = ({ conversation, onSelect }) => (
+  <TouchableOpacity
+    key={conversation._id}
+    onPress={() => onSelect(conversation._id)}
+    style={styles.chatSelector}
+  >
+    <Text style={styles.chatSelectorText}>{conversation._id}</Text>
+  </TouchableOpacity>
+);
+
+const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
-  const [conversationId, setConversationId] = useState(null);
-  const conversation = useSelector((state) => selectConversationById(state, conversationId));
+  const [conversationId, setConversationId] = useState(defaultChatId);
+  const conversation = useSelector((state) =>
+    selectConversationById(state, conversationId)
+  );
   const conversations = useSelector((state) => selectAllConversations(state));
 
   const [userInput, setUserInput] = useState("");
@@ -37,89 +64,151 @@ const ChatComponent = () => {
 
   const parseConversationHistory = (historyString) => {
     const historyArray = historyString.split("\n");
-    const formattedHistory = historyArray.reduce((accumulator, current, index) => {
-      const isAI = current.startsWith("AI:");
-      const content = isAI ? current.substring(3) : current;
-      const role = isAI ? "ai" : "user";
-      if (content) {
-        accumulator.push({ role, content });
-      }
-      return accumulator;
-    }, []);
+    const formattedHistory = historyArray.reduce(
+      (accumulator, current, index) => {
+        const isAI = current.startsWith("AI:");
+        const content = isAI ? current.substring(3) : current;
+        const role = isAI ? "ai" : "user";
+        if (content) {
+          accumulator.push({ role, content });
+        }
+        return accumulator;
+      },
+      []
+    );
     return formattedHistory;
   };
 
   const handleSendMessage = async () => {
-    await dispatch(getAIResponse({ userId: user._id, conversationId, userInput }));
+    await dispatch(
+      getAIResponse({ userId: user._id, conversationId, userInput })
+    );
     setUserInput("");
     dispatch(getUserChats(user._id));
   };
 
-  const renderMessage = ({ item }) => {
-    const isUser = item.role === "user";
-    const bubbleStyle = {
-      alignSelf: isUser ? "flex-start" : "flex-end",
-      backgroundColor: isUser ? "#e0e0e0" : "#3777f0",
-      borderRadius: 8,
-      paddingHorizontal: 12,
-      paddingVertical: 8,
-      marginVertical: 4,
-      marginHorizontal: 16,
-    };
-    const textStyle = { color: isUser ? "black" : "white" };
-
-    return (
-      <View style={bubbleStyle}>
-        <Text style={textStyle}>{item.content}</Text>
-      </View>
-    );
-  };
-
   return (
-    <View style={{ flex: 1, padding: 16 }}>
-      <VStack justifyContent="center" alignItems="center">
-        <Text style={{ fontSize: 24, fontWeight: "bold" }}>Chat</Text>
-        {conversations.map((conversation) => (
-          <TouchableOpacity key={conversation._id} onPress={() => setConversationId(conversation._id)}>
-            <Text>{conversation._id}</Text>
-          </TouchableOpacity>
-        ))}
+    <View style={styles.container}>
+      <VStack space={2} alignItems="center">
+        <Text style={styles.headerText}>Chat</Text>
+        {showChatSelector && (
+          <ScrollView horizontal>
+            <Box
+              borderRadius="lg"
+              borderColor="coolGray.200"
+              borderWidth={1}
+              p={3}
+            >
+              <FlatList
+                data={conversations}
+                renderItem={({ item }) => (
+                  <ChatSelector
+                    conversation={item}
+                    onSelect={setConversationId}
+                  />
+                )}
+                keyExtractor={(item) => item._id}
+              />
+            </Box>
+          </ScrollView>
+        )}
       </VStack>
       <FlatList
         data={parsedMessages}
-        renderItem={renderMessage}
+        renderItem={({ item }) => <MessageBubble message={item} />}
         keyExtractor={(item, index) => index.toString()}
-        contentContainerStyle={{ flexGrow: 1, justifyContent: "flex-end" }}
+        contentContainerStyle={styles.flatList}
       />
-      <View style={{ flexDirection: "row", alignItems: "center", marginTop: 8 }}>
-        <TextInput
-          style={{
-            flex: 1,
-            height: 40,
-            borderColor: "gray",
-            borderWidth: 1,
-            borderRadius: 8,
-            paddingHorizontal: 12,
-          }}
-          value={userInput}
-          onChangeText={setUserInput}
-        />
-        <TouchableOpacity
-          style={{
-            backgroundColor: "#3777f0",
-            paddingHorizontal: 16,
-            paddingVertical: 8,
-            borderRadius: 8,
-            marginLeft: 8,
-          }}
-          onPress={handleSendMessage}
-          disabled={!userInput}
-        >
-          <Text style={{ color: "white" }}>Send</Text>
-        </TouchableOpacity>
-      </View>
     </View>
   );
 };
 
-export default ChatComponent;
+export const ChatModalTrigger = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [userInput, setUserInput] = useState("");
+
+  const handleOpen = () => setIsOpen(true);
+  const handleClose = () => setIsOpen(false);
+
+  const handleSendMessage = () => {
+    // Call send message function from ChatComponent and clear userInput
+    setIsOpen(false);
+  };
+
+  return (
+    <Box style={styles.container}>
+      <CustomModal
+        title="Chat"
+        trigger="Open Chat"
+        isActive={isOpen}
+        onTrigger={setIsOpen}
+        onCancel={handleClose}
+        buttonText="Send"
+        onSave={handleSendMessage}
+        footerButtons={[
+          {
+            label: "Send",
+            color: "primary",
+            disabled: !userInput,
+            onClick: handleSendMessage,
+          },
+        ]}
+      >
+        <ChatComponent onClose={handleClose} />
+      </CustomModal>
+    </Box>
+  );
+};
+
+
+const styles = StyleSheet.create({
+  container: { flex: 1, padding: 16 },
+  headerText: { fontSize: 24, fontWeight: "bold" },
+  flatList: { flexGrow: 1, justifyContent: "flex-end" },
+  inputContainer: { flexDirection: "row", alignItems: "center", marginTop: 8 },
+  input: {
+    flex: 1,
+    height: 40,
+    borderColor: "gray",
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 12,
+  },
+  sendButton: {
+    backgroundColor: "#3777f0",
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 8,
+    marginLeft: 8,
+  },
+  sendText: { color: "white" },
+  aiBubble: {
+    alignSelf: "flex-end",
+    backgroundColor: "#3777f0",
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    marginVertical: 4,
+    marginHorizontal: 16,
+  },
+  userBubble: {
+    alignSelf: "flex-start",
+    backgroundColor: "#e0e0e0",
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    marginVertical: 4,
+    marginHorizontal: 16,
+  },
+  aiText: { color: "white" },
+  userText: { color: "black" },
+  chatSelector: {
+    backgroundColor: "#e0e0e0",
+    padding: 10,
+    marginVertical: 5,
+    borderRadius: 5,
+  },
+  chatSelectorText: { fontSize: 16 },
+});
+
+export default ChatModalTrigger;
