@@ -90,7 +90,9 @@ export default function ProfileContainer() {
             {favoritesData?.length > 0 ? (
               <UserDataContainer data={favoritesData} type="favorites" />
             ) : (
-              <Text>No favorites yet</Text>
+              <Text fontSize="2xl" fontWeight="bold" color="white">
+                No favorites yet
+              </Text>
             )}
           </Box>
           {Array.isArray(packsData) && packsData.length > 0 && (
