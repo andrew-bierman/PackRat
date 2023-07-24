@@ -18,7 +18,7 @@ export const getUserChats = async (req, res) => {
 
     const conversations = await Conversation.find({ userId }).exec();
 
-    res.json({conversations: conversations});
+    res.json({ conversations: conversations });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to retrieve user chats." });
@@ -26,6 +26,9 @@ export const getUserChats = async (req, res) => {
 };
 
 export const getAIResponse = async (req, res) => {
+  if (!process.env.OPENAI_API_KEY)
+    return res.status(500).json({ error: "Failed to get response from AI." });
+
   const configuration = new Configuration({
     apiKey: process.env.OPENAI_API_KEY,
   });
@@ -44,35 +47,36 @@ export const getAIResponse = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    console.log("user", user);
-
     let conversation = await Conversation.findOne({
       userId,
-      id: conversationId,
+      _id: conversationId, // use _id here
     });
-    let conversationHistory = conversation ? conversation.history : "";
 
-    const prompt = conversationHistory + "\n" + userInput;
+    console.log("conversation after find ---->", conversation)
+
+    let conversationHistory = conversation ? conversation.history : "";
+    let messages = conversationHistory
+      ? conversationHistory.split("\n").map((message, i) => ({
+          role: i % 2 === 0 ? "user" : "assistant",
+          content: message,
+        }))
+      : [
+          {
+            role: "system",
+            content:
+              "You are a helpful Outdoor Adventure Planning assistant for PackRat. Please assist the user with planning their trip using the following information:",
+          },
+        ];
+
+    messages.push({ role: "user", content: userInput });
 
     const response = await openai.createChatCompletion({
       model: "gpt-3.5-turbo",
-      messages: [
-        {
-          role: "system",
-          content:
-            "You are a helpful Outdoor Adventure Planning assistant for PackRat. Please assist the user with planning their trip using the following information:",
-        },
-        { role: "user", content: userInput },
-      ],
-      //   maxTokens: 100, // Limit the length of the response
-      //   temperature: 0.5, // Control the randomness of the response
-      //   topP: 1, // Control the diversity of the response
-      //   frequencyPenalty: 0, // Control the repetition of the response
-      //   presencePenalty: 0, // Control the sensitivity to the input message
+      messages: messages,
     });
 
     const aiResponse = response.data.choices[0].message.content.trim();
-    conversationHistory = prompt + "\nAI: " + aiResponse;
+    conversationHistory += `\n${userInput}\nAI: ${aiResponse}`;
 
     if (conversation) {
       // Update existing conversation
@@ -89,7 +93,7 @@ export const getAIResponse = async (req, res) => {
 
     res.json({
       aiResponse,
-      conversationHistory,
+      conversation: conversation.toJSON(),
     });
   } catch (error) {
     console.error(error);

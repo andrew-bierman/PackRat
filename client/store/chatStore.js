@@ -68,20 +68,18 @@ const chatSlice = createSlice({
         state.error = null;
       })
       .addCase(getAIResponse.fulfilled, (state, action) => {
-        const { aiResponse, conversationId } = action.payload;
+        const { aiResponse, conversation } = action.payload;
+        const { _id, history } = conversation;
         console.log("payload:", action.payload);
         console.log("state.entities:", state.entities);
         console.log(
-          "state.entities[conversationId]:",
-          state.entities[conversationId]
+          "state.entities[_id]:",
+          state.entities[_id]
         );
-        chatAdapter.updateOne(state, {
-          id: conversationId,
+        chatAdapter.upsertOne(state, { // use upsertOne to add new conversation if it doesn't exist
+          id: _id,
           changes: {
-            history: [
-              ...(state.entities[conversationId]?.history || []), // Access history using optional chaining
-              aiResponse,
-            ],
+            history: history.split('\n') // assuming history is a string
           },
         });
         state.loading = false;

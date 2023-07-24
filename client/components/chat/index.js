@@ -1,59 +1,75 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, FlatList, TextInput, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { api } from "../../constants/api";
-import { getUserChats, getAIResponse, selectConversationById, selectAllConversations } from "../../store/chatStore";
+import {
+  getUserChats,
+  getAIResponse,
+  selectConversationById,
+  selectAllConversations,
+} from "../../store/chatStore";
+import { HStack, VStack } from "native-base";
 
 const ChatComponent = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
-  const conversationId = "your_conversation_id";
+  const [conversationId, setConversationId] = useState(null);
   const conversation = useSelector((state) => selectConversationById(state, conversationId));
-  const conversations= useSelector((state) => selectAllConversations(state));
-  const loading = useSelector((state) => state.chat.loading);
-  const error = useSelector((state) => state.chat.error);
+  const conversations = useSelector((state) => selectAllConversations(state));
 
   const [userInput, setUserInput] = useState("");
+  const [parsedMessages, setParsedMessages] = useState([]);
 
   useEffect(() => {
     dispatch(getUserChats(user._id));
-  }, []);
+  }, [dispatch, user._id, conversationId]);
 
-  const handleUserInput = (text) => {
-    setUserInput(text);
+  useEffect(() => {
+    if (conversation) {
+      setParsedMessages(parseConversationHistory(conversation.history));
+    }
+  }, [conversation]);
+
+  const parseConversationHistory = (historyString) => {
+    const historyArray = historyString.split("\n");
+    const formattedHistory = historyArray.reduce((accumulator, current, index) => {
+      const isAI = current.startsWith("AI:");
+      const content = isAI ? current.substring(3) : current;
+      const role = isAI ? "ai" : "user";
+      if (content) {
+        accumulator.push({ role, content });
+      }
+      return accumulator;
+    }, []);
+    return formattedHistory;
   };
 
-  const handleSendMessage = () => {
-    dispatch(
-      getAIResponse({
-        userId: user._id,
-        conversationId,
-        userInput,
-      })
-    );
+  const handleSendMessage = async () => {
+    await dispatch(getAIResponse({ userId: user._id, conversationId, userInput }));
     setUserInput("");
+    dispatch(getUserChats(user._id));
   };
 
   const renderMessage = ({ item }) => {
-    const bubbleStyle =
-      item.role === "user"
-        ? { alignSelf: "flex-start", backgroundColor: "#e0e0e0" }
-        : { alignSelf: "flex-end", backgroundColor: "#3777f0" };
-
-    const textStyle =
-      item.role === "user" ? { color: "black" } : { color: "white" };
+    const isUser = item.role === "user";
+    const bubbleStyle = {
+      alignSelf: isUser ? "flex-start" : "flex-end",
+      backgroundColor: isUser ? "#e0e0e0" : "#3777f0",
+      borderRadius: 8,
+      paddingHorizontal: 12,
+      paddingVertical: 8,
+      marginVertical: 4,
+      marginHorizontal: 16,
+    };
+    const textStyle = { color: isUser ? "black" : "white" };
 
     return (
-      <View
-        style={{
-          ...bubbleStyle,
-          borderRadius: 8,
-          paddingHorizontal: 12,
-          paddingVertical: 8,
-          marginVertical: 4,
-          marginHorizontal: 16,
-        }}
-      >
+      <View style={bubbleStyle}>
         <Text style={textStyle}>{item.content}</Text>
       </View>
     );
@@ -61,20 +77,21 @@ const ChatComponent = () => {
 
   return (
     <View style={{ flex: 1, padding: 16 }}>
-        <Text>{JSON.stringify(conversations)}</Text>
+      <VStack justifyContent="center" alignItems="center">
+        <Text style={{ fontSize: 24, fontWeight: "bold" }}>Chat</Text>
+        {conversations.map((conversation) => (
+          <TouchableOpacity key={conversation._id} onPress={() => setConversationId(conversation._id)}>
+            <Text>{conversation._id}</Text>
+          </TouchableOpacity>
+        ))}
+      </VStack>
       <FlatList
-        data={conversation ? conversation.history : []}
+        data={parsedMessages}
         renderItem={renderMessage}
-        keyExtractor={(item) => item._id}
+        keyExtractor={(item, index) => index.toString()}
         contentContainerStyle={{ flexGrow: 1, justifyContent: "flex-end" }}
       />
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          marginTop: 8,
-        }}
-      >
+      <View style={{ flexDirection: "row", alignItems: "center", marginTop: 8 }}>
         <TextInput
           style={{
             flex: 1,
@@ -85,7 +102,7 @@ const ChatComponent = () => {
             paddingHorizontal: 12,
           }}
           value={userInput}
-          onChangeText={handleUserInput}
+          onChangeText={setUserInput}
         />
         <TouchableOpacity
           style={{
