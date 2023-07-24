@@ -99,12 +99,13 @@ export default function TripCard({
 const styles = StyleSheet.create({
   mutualStyles: {
     backgroundColor: theme.colors.card,
-    flex: 1,
     gap: 45,
     justifyContent: "space-between",
     alignItems: "center",
     textAlign: "center",
     padding: theme.size.cardPadding,
+    paddingHorizontal: 60,
+    paddingVertical: 70,
   },
 
   containerMobile: {
@@ -123,11 +124,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     gap: 10,
-    flex: 1,
     paddingHorizontal: 60,
     paddingVertical: 70,
 
-    height: Platform.OS === "web" ? "450px" : "100%",
+    height: Platform.OS === "web" ? "470px" : "100%",
   },
 
   mapCard: {

@@ -29,7 +29,7 @@ export const CustomModal = ({
     <Button
       top={5}
       alignSelf={"center"}
-      w={"30%"}
+      w={"100%"}
       onPress={() => onTrigger(true)}
     >
       {trigger}

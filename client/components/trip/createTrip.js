@@ -1,108 +1,23 @@
-import React, { useState, useEffect } from "react";
-import {
-  Stack,
-  Box,
-  Text,
-  ScrollView,
-  Button,
-  Input,
-  HStack,
-  VStack,
-  View,
-} from "native-base";
-import { Stack as Header } from "expo-router";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, Platform } from "react-native";
+import { Stack, Box, VStack, HStack, Button, View } from "native-base";
+import { useSelector } from "react-redux";
+import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
+import Swiper from "react-native-swiper";
 
 import { theme } from "../../theme";
 import TripCard from "../TripCard";
 import WeatherCard from "../WeatherCard";
-
-import { FontAwesome } from "@expo/vector-icons";
-import { FontAwesome5 } from "@expo/vector-icons";
-import { Platform, StyleSheet } from "react-native";
-
-import { useSelector } from "react-redux";
-
 import { GearList } from "../GearList";
-
 import { MapContainer } from "../map/MapContainer";
-
 import { CustomModal } from "../modal";
 import { SaveTripContainer } from "./createTripModal";
 
-// Step 1: Create a component for each step of the form
-
-// Step 1: TripCard Step
-const TripCardStep = () => (
-  <TripCard
-    title="Where are you heading?"
-    isSearch={true}
-    Icon={() => (
-      <FontAwesome name="map" size={20} color={theme.colors.cardIconColor} />
-    )}
-  />
-);
-
-// Step 2: WeatherCard Step
-const WeatherCardStep = ({ weatherObject, weatherWeek }) => (
-  <WeatherCard weatherObject={weatherObject} weatherWeek={weatherWeek} />
-);
-
-// Step 3: Nearby Trails Step
-const NearbyTrailsStep = ({ trails }) => (
-  <TripCard
-    title="Nearby Trails"
-    value="Trail List"
-    isTrail={true}
-    data={trails || []}
-    Icon={() => (
-      <FontAwesome5
-        name="hiking"
-        size={20}
-        color={theme.colors.cardIconColor}
-      />
-    )}
-  />
-);
-
-// Step 4: Nearby Parks Step
-const NearbyParksStep = ({ parksData }) => (
-  <TripCard
-    title="Nearby Parks"
-    value="Parks List"
-    data={parksData}
-    Icon={() => (
-      <FontAwesome5
-        name="mountain"
-        size={20}
-        color={theme.colors.cardIconColor}
-      />
-    )}
-  />
-);
-
-// Step 5: Gear List Step
-const GearListStep = () => <GearList />;
-
-// Step 6: Map Step
-const MapStep = () => (
-  <TripCard
-    Icon={() => (
-      <FontAwesome5 name="route" size={24} color={theme.colors.cardIconColor} />
-    )}
-    title="Map"
-    isMap={true}
-  />
-);
-
-// Step 7: Save Trip Step
-const SaveTripStep = () => <SaveTripContainer />;
+const swiperHeight = 1000; // Adjust this value according to your preference
 
 export default function Trips() {
-  const [currentStep, setCurrentStep] = useState(0);
   const [parksData, setParksData] = useState();
   const [trails, setTrailsData] = useState();
-  const [tripData, setTripData] = useState({});
-
   const weatherObject = useSelector((state) => state.weather.weatherObject);
   const weatherWeek = useSelector((state) => state.weather.weatherWeek);
 
@@ -117,103 +32,171 @@ export default function Trips() {
     setParksData(parksObject);
   }, [parksObject]);
 
-  // Function to handle the next step
+  const [formData, setFormData] = useState({
+    heading: "",
+    trail: "",
+    park: "",
+  });
+
+  const handleFormChange = (field, value) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      [field]: value,
+    }));
+  };
+
   const handleNextStep = () => {
-    setCurrentStep((prevStep) => prevStep + 1);
+    // Do any necessary validation here before moving to the next step
+    // In this example, we're just moving to the next step directly.
+    swiperRef.current.scrollBy(1);
   };
 
-  // Function to handle the previous step
   const handlePreviousStep = () => {
-    setCurrentStep((prevStep) => prevStep - 1);
+    // Do any necessary validation here before moving to the previous step
+    // In this example, we're just moving to the previous step directly.
+    swiperRef.current.scrollBy(-1);
   };
-
-  const updateTripData = (stepData) => {
-    setTripData((prevData) => ({ ...prevData, ...stepData }));
-  };
-
-  // Function to render the current step based on the currentStep state
-  const renderCurrentStep = () => {
-    switch (currentStep) {
-      case 0:
-        return <TripCardStep />;
-      case 1:
-        return (
-          <WeatherCardStep
-            weatherObject={weatherObject}
-            weatherWeek={weatherWeek}
-          />
-        );
-      case 2:
-        return <NearbyTrailsStep trails={trails} />;
-      case 3:
-        return <NearbyParksStep parksData={parksData} />;
-      case 4:
-        return <GearListStep />;
-      case 5:
-        return <MapStep />;
-      case 6:
-        return <SaveTripStep />;
-      default:
-        return null;
-    }
-  };
+  const swiperRef = React.useRef(null);
 
   return (
-    <View style={styles.primaryContainer}>
-      {Platform.OS === "web" ? (
-        <Header.Screen
-          options={{
-            // https://reactnavigation.org/docs/headers#setting-the-header-title
-            title: "Home",
-          }}
-        />
-      ) : null}
-      <Box style={styles.container}>
-        <Stack m={[0, 0, 12, 16]} style={{ gap: 25, flex: 1 }}>
-          {renderCurrentStep()}
+    <VStack style={styles.container}>
+      {/* No Header element here */}
 
-          {/* Step Navigation Buttons */}
-          <View style={styles.buttonContainer}>
-            {currentStep > 0 && (
-              <Button onPress={handlePreviousStep}>Previous</Button>
+      <Swiper
+        ref={swiperRef}
+        loop={false}
+        showsPagination={false}
+        scrollEnabled={false}
+        style={[styles.swiperContainer, { height: swiperHeight }]}
+      >
+        {/* Step 1 */}
+        <Box style={styles.stepContainer}>
+          <TripCard
+            title="Where are you heading?"
+            isSearch={true}
+            Icon={() => (
+              <FontAwesome
+                name="map"
+                size={20}
+                color={theme.colors.cardIconColor}
+              />
             )}
-            {currentStep === 0 ? (
-              <Button onPress={handleNextStep} ml="auto">
-                Next
-              </Button>
-            ) : (
-              currentStep < 6 && <Button onPress={handleNextStep}>Next</Button>
+            onChangeText={(value) => handleFormChange("heading", value)}
+          />
+        </Box>
+
+        {/* Step 2 */}
+        <Box style={styles.stepContainer}>
+          <WeatherCard
+            weatherObject={weatherObject}
+            weatherWeek={weatherWeek}
+            onWeatherChange={(value) => handleFormChange("weather", value)}
+          />
+        </Box>
+
+        {/* Step 3 */}
+        <Box style={styles.stepContainer}>
+          <TripCard
+            title="Nearby Trails"
+            value="Trail List"
+            isTrail={true}
+            data={trails || []}
+            Icon={() => (
+              <FontAwesome5
+                name="hiking"
+                size={20}
+                color={theme.colors.cardIconColor}
+              />
             )}
-          </View>
-        </Stack>
-      </Box>
-    </View>
+            onChangeText={(value) => handleFormChange("trail", value)}
+          />
+        </Box>
+
+        {/* Step 4 */}
+        <Box style={styles.stepContainer}>
+          <TripCard
+            title="Nearby Parks"
+            value="Parks List"
+            data={parksData}
+            Icon={() => (
+              <FontAwesome5
+                name="mountain"
+                size={20}
+                color={theme.colors.cardIconColor}
+              />
+            )}
+            onChangeText={(value) => handleFormChange("park", value)}
+          />
+        </Box>
+
+        {/* Step 5 */}
+        <Box style={styles.stepContainer}>
+          <GearList />
+        </Box>
+
+        {/* Step 6 */}
+        <Box style={styles.mapStepContainer}>
+          <TripCard
+            Icon={() => (
+              <FontAwesome5
+                name="route"
+                size={24}
+                color={theme.colors.cardIconColor}
+              />
+            )}
+            title="Map"
+            isMap={true}
+          />
+        </Box>
+
+        {/* Step 7 */}
+        <Box style={styles.stepContainer}>
+          <Box>
+            <SaveTripContainer formData={formData} />
+          </Box>
+        </Box>
+      </Swiper>
+      <View
+        flexDirection="row"
+        justifyContent="space-between"
+        mt={4}
+        px={4}
+        style={{ paddingBottom: 100 }}
+      >
+        <Button
+          onPress={handlePreviousStep}
+          colorScheme="primary"
+          isDisabled={swiperRef.current && swiperRef.current.index === 0}
+        >
+          Previous
+        </Button>
+        <Button
+          onPress={handleNextStep}
+          colorScheme="primary"
+          isDisabled={swiperRef.current && swiperRef.current.index === 6}
+        >
+          Next
+        </Button>
+      </View>
+    </VStack>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "white", // White background for the form
-    width: "80%", // Adjust the width as needed
-    alignSelf: "center", // Center the form horizontally
-    borderRadius: 8,
-    padding: 16,
-    marginTop: 16,
-    height: 800,
-  },
-  primaryContainer: {
-    backgroundColor: theme.colors.primary,
     flex: 1,
-    padding: 20,
-    height: "100%",
+    flexDirection: "column",
+    backgroundColor: theme.colors.background,
   },
-  buttonContainer: {
-    position: "absolute",
-    bottom: 16,
-    left: 0,
-    right: 0,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingHorizontal: 16,
+  swiperContainer: {},
+  stepContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    height: 500,
+  },
+  mapStepContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    height: 1000,
   },
 });
