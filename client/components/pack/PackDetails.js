@@ -16,6 +16,7 @@ import { Platform, StyleSheet } from "react-native";
 import { theme } from "../../theme";
 import { CLIENT_URL } from "@env";
 import ScoreContainer from "../ScoreContainer";
+import ChatContainer from "../chat";
 
 export function PackDetails() {
   const dispatch = useDispatch();
@@ -66,6 +67,13 @@ export function PackDetails() {
                   data={currentPack}
                   isOwner={isOwner}
                 />
+                <Box
+                  style={{
+                    width: "100%",
+                  }}
+                >
+                <ChatContainer />
+                </Box>
               </>
             }
             link={link}
