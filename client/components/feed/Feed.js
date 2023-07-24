@@ -182,7 +182,6 @@ const Feed = ({ feedType = "public" }) => {
       ) : (
         <FlatList
           data={data}
-          numColumns={1}
           keyExtractor={(item) => item._id}
           renderItem={({ item }) => (
             <Card key={item._id} type={item.type} {...item} />
