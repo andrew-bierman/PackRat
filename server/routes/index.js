@@ -15,7 +15,6 @@ import passwordResetRoutes from "./passwordResetRoutes.js";
 import openAiRoutes from "./openAiRoutes.js";
 import templateRoutes from "./templateRoutes.js";
 import favoriteRouters from "./favoriteRoutes.js";
-import openAiRoutes from "./openAiRoutes.js";
 
 const router = express.Router();
 
