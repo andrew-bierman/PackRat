@@ -7,9 +7,9 @@ import { theme } from "../../theme";
 import { useSelector, useDispatch } from "react-redux";
 import Hero from "../hero";
 import { useRouter } from "expo-router";
-import { isObjectEmpty } from "../../utils/isObjectEmpty";
-import { processGeoJSON } from "../../store/destinationStore";
+import { photonDetails, processGeoJSON } from "../../store/destinationStore";
 import { hexToRGBA } from "../../utils/colorFunctions";
+
 
 const HeroSection = ({ onSelect }) => {
   const dispatch = useDispatch();
@@ -24,19 +24,31 @@ const HeroSection = ({ onSelect }) => {
 
   const handleSearchSelect = async (selectedResult) => {
     try {
-      // console.log("selectedResult", selectedResult)
-      const actionResult = await dispatch(processGeoJSON(selectedResult));
+      console.log("selectedResult", selectedResult)
+      // Fetch full details of the selected result from the Overpass API
+      const overpassDetailsAction = await dispatch(photonDetails(selectedResult));
   
-      // Accessing payload from actionResult
-      const destinationId = actionResult.payload.data.newInstance._id;
-      
-      if (destinationId) {
-        router.push(`/destination/${destinationId}`);
+      // Check if the action completed successfully
+      if (overpassDetailsAction.payload) {
+        const overpassDetails = overpassDetailsAction.payload;
+  
+        // Process the Overpass details and save it as a destination in the database
+        const actionResult = await dispatch(processGeoJSON(overpassDetails));
+  
+        // Accessing payload from actionResult
+        const destinationId = actionResult.payload.data.newInstance._id;
+  
+        if (destinationId) {
+          router.push(`/destination/${destinationId}`);
+        }
+      } else {
+        console.error(overpassDetailsAction.error);
       }
     } catch (error) {
       console.error(error);
     }
   };
+  
 
   const user = useSelector((state) => state.auth?.user);
 
@@ -85,6 +97,8 @@ const HeroSection = ({ onSelect }) => {
               onSelect={handleSearchSelect}
               placeholder={"Search by park, city, or trail"}
             />
+         
+           
           </VStack>
         </LargeCard>
       </Hero>
