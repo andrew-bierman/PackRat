@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   NativeBaseProvider,
   Container,
@@ -21,12 +21,9 @@ import {
 } from "../../store/favoritesStore";
 
 export default function ProfileContainer() {
-  // const { user } = useAuth();
   const dispatch = useDispatch();
-
   useEffect(() => {
     dispatch(fetchUserPacks(user?._id));
-    // dispatch(fetchUserTrips(user?._id));
     dispatch(fetchUserFavorites(user?._id));
   }, [dispatch, user?._id]);
 
@@ -34,9 +31,6 @@ export default function ProfileContainer() {
   const packsData = useSelector(selectAllPacks);
   const tripsData = useSelector((state) => state.trips);
   const favoritesData = useSelector(selectAllFavorites);
-
-  // const { data } = useGetPacks(user?._id);
-  console.log(user);
 
   const isLoading = useSelector((state) => state?.auth?.loading);
   const error = useSelector((state) => state?.auth?.error);
@@ -96,17 +90,21 @@ export default function ProfileContainer() {
             {favoritesData?.length > 0 ? (
               <UserDataContainer data={favoritesData} type="favorites" />
             ) : (
-              <Text>No favorites yet</Text>
+              <Text fontSize="2xl" fontWeight="bold" color="white">
+                No favorites yet
+              </Text>
             )}
           </Box>
-
-          <Box style={styles.userDataContainer}>
-            <UserDataContainer data={packsData} type="packs" />
-          </Box>
-
-          <Box style={styles.userDataContainer}>
-            <UserDataContainer data={tripsData?.trips} type="trips" />
-          </Box>
+          {Array.isArray(packsData) && packsData.length > 0 && (
+            <Box style={styles.userDataContainer}>
+              <UserDataContainer data={packsData} type="packs" />
+            </Box>
+          )}
+          {Array.isArray(tripsData?.trips) && tripsData?.trips.length > 0 && (
+            <Box style={styles.userDataContainer}>
+              <UserDataContainer data={tripsData?.trips} type="trips" />
+            </Box>
+          )}
         </Box>
       )}
     </VStack>
