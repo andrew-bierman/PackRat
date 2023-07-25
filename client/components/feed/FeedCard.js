@@ -5,10 +5,14 @@ import { theme } from "../../theme";
 // import useAddToFavorite from "../../hooks/useAddToFavorites";
 // import { useAuth } from "../../auth/provider";
 import { useSelector, useDispatch } from "react-redux";
-import { addFavorite, selectFavoriteById, selectAllFavorites } from "../../store/favoritesStore";
-import { duplicatePackItem } from "../../store/packsStore";
+import {
+  addFavorite,
+  selectFavoriteById,
+  selectAllFavorites,
+} from "../../store/favoritesStore";
 import { TouchableOpacity } from "react-native";
 import { Link } from "expo-router";
+import { DuplicateIcon } from "../DuplicateIcon/index";
 import { truncateString } from "../../utils/truncateString";
 
 import {
@@ -35,8 +39,8 @@ export default function Card({
   owner_id,
   destination,
   createdAt,
+  owners,
 }) {
-
   const user = useSelector((state) => state.auth.user);
 
   const favorites = useSelector(selectAllFavorites);
@@ -51,13 +55,6 @@ export default function Card({
     };
 
     dispatch(addFavorite(data));
-  };
-  const handleDuplicate = () => {
-    const data = {
-      packId: _id,
-      ownerId: user._id,
-    };
-    dispatch(duplicatePackItem(data));
   };
 
   const handleRemoveFromFavorite = () => {
@@ -117,18 +114,9 @@ export default function Card({
                     }}
                   >
                     <MaterialIcons name="backpack" size={24} color="gray" />
-                    <Button
-                      onPress={handleDuplicate}
-                      style={{
-                        backgroundColor: "transparent",
-                        width: "10",
-                        height: "10",
-                        padding: 0,
-                        paddingLeft: 15,
-                      }}
-                    >
-                      <MaterialIcons name="file-copy" size={24} color="gray" />
-                    </Button>
+                    <Link href={"/pack/" + _id + "?copy=true"}>
+                      <DuplicateIcon />
+                    </Link>
                   </Box>
                 )}
                 {type === "trip" && (

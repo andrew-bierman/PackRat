@@ -191,7 +191,7 @@ export const deletePack = async (req, res) => {
 
 export const duplicatePublicPack = async (req, res) => {
   try {
-    const { packId, ownerId } = req.body;
+    const { packId, ownerId, items } = req.body;
 
     let pack = await Pack.findById(packId);
     if (!pack) {
@@ -201,7 +201,7 @@ export const duplicatePublicPack = async (req, res) => {
 
     pack = await Pack.create({
       name: pack.name,
-      items: pack.items,
+      items: items,
       owner_id: pack.owner_id,
       is_public: false,
       favorited_by: pack.favorited_by,

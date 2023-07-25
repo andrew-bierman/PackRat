@@ -19,6 +19,9 @@ import ScoreContainer from "../ScoreContainer";
 import ChatContainer from "../chat";
 
 export function PackDetails() {
+  const searchParams = new URLSearchParams(window.location.search);
+  let canCopy = searchParams.get("copy");
+
   const dispatch = useDispatch();
 
   const { packId } = useSearchParams();
@@ -36,8 +39,6 @@ export function PackDetails() {
 
   // check if user is owner of pack, and that pack and user exists
   const isOwner = currentPack && user && currentPack.owner_id === user._id;
-
-  console.log("isOwner in packdetails", isOwner);
 
   const isLoading = useSelector((state) => state.singlePack.isLoading);
   const error = useSelector((state) => state.singlePack.error);
@@ -61,7 +62,7 @@ export function PackDetails() {
             error={error}
             additionalComps={
               <>
-                <TableContainer currentPack={currentPack} />
+                <TableContainer currentPack={currentPack} copy={canCopy} />
                 <ScoreContainer
                   type="pack"
                   data={currentPack}

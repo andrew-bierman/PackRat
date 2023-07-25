@@ -3,15 +3,17 @@ import { Platform } from "react-native";
 import { Stack, Box, Text, Button, HStack } from "native-base";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { View } from "react-native";
-import { format } from 'date-fns';
+import { format } from "date-fns";
 // import { Button } from 'react-native-paper';
-import { DatePickerModal, enGB, registerTranslation } from 'react-native-paper-dates';
+import {
+  DatePickerModal,
+  enGB,
+  registerTranslation,
+} from "react-native-paper-dates";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-
-
 import { theme } from "../../theme";
 
-const TripDateRange = ({ dateRange, setDateRange}) => {
+const TripDateRange = ({ dateRange, setDateRange }) => {
   const [open, setOpen] = React.useState(false);
 
   const onDismiss = React.useCallback(() => {
@@ -27,9 +29,8 @@ const TripDateRange = ({ dateRange, setDateRange}) => {
   );
 
   useEffect(() => {
-    registerTranslation('en', enGB);
-  }, [])
-  
+    registerTranslation("en", enGB);
+  }, []);
 
   return (
     <Stack
@@ -70,7 +71,7 @@ const TripDateRange = ({ dateRange, setDateRange}) => {
           <View
             style={{ justifyContent: "center", flex: 1, alignItems: "center" }}
           >
-            {(dateRange.startDate && dateRange.endDate) && (
+            {dateRange.startDate && dateRange.endDate && (
               <HStack style={{ marginBottom: 5 }}>
                 <Text>Selected Date Range - </Text>
                 <Text>
