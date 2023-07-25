@@ -42,4 +42,4 @@ router.get("/", [middlewareHandler.auth.verifyUserToken],getWeather);
  */
 router.get("/week", [middlewareHandler.auth.verifyUserToken],getWeatherWeek);
 
-export default router;
+export default router; 
