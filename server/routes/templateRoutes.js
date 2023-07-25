@@ -7,6 +7,7 @@ import {
   deleteTemplate,
 } from "../controllers/templateController.js";
 import { isAdmin } from "../middleware/isAdmin.js"; // Assuming this is your middleware file
+import middlewareHandler from "../middleware/index.js";
 // import * as validator from "../middleware/validators/index.js";
 
 // TODO - add validators, this is just a placeholder
@@ -38,7 +39,7 @@ const router = express.Router();
  *       '500':
  *         description: Error retrieving templates
  */
-router.get("/", getTemplates);
+router.get("/", [middlewareHandler.auth.verifyUserToken],getTemplates);
 
 /**
  * @swagger
@@ -61,7 +62,7 @@ router.get("/", getTemplates);
  *       '500':
  *         description: Error retrieving template by ID
  */
-router.get("/:templateId", validator.getTemplateById, getTemplateById);
+router.get("/:templateId",[middlewareHandler.auth.verifyUserToken], validator.getTemplateById, getTemplateById);
 
 /**
  * @swagger
@@ -92,7 +93,7 @@ router.get("/:templateId", validator.getTemplateById, getTemplateById);
  *       '500':
  *         description: Error adding the template
  */
-router.post("/", isAdmin, validator.addTemplate, addTemplate);
+router.post("/", [middlewareHandler.auth.verifyAdminToken], validator.addTemplate, addTemplate);
 
 /**
  * @swagger
@@ -126,7 +127,7 @@ router.post("/", isAdmin, validator.addTemplate, addTemplate);
  *       '500':
  *         description: Error editing the template
  */
-router.put("/:templateId", isAdmin, validator.editTemplate, editTemplate);
+router.put("/:templateId", [middlewareHandler.auth.verifyAdminToken], validator.editTemplate, editTemplate);
 
 /**
  * @swagger

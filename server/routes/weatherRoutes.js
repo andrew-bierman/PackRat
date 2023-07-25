@@ -3,6 +3,7 @@ import {
   getWeatherWeek,
   getWeather,
 } from "../controllers/weatherController.js";
+import middlewareHandler from "../middleware/index.js";
 
 const router = express.Router();
 
@@ -25,7 +26,7 @@ const router = express.Router();
  *       '500':
  *         description: Error retrieving current weather
  */
-router.get("/", getWeather);
+router.get("/", [middlewareHandler.auth.verifyUserToken],getWeather);
 
 /**
  * @swagger
@@ -39,6 +40,6 @@ router.get("/", getWeather);
  *       '500':
  *         description: Error retrieving weekly weather forecast
  */
-router.get("/week", getWeatherWeek);
+router.get("/week", [middlewareHandler.auth.verifyUserToken],getWeatherWeek);
 
 export default router;

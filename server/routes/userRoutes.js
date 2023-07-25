@@ -25,6 +25,8 @@ import {
   signInGoogle,
 } from "../controllers/passportController.js";
 import { REDIRECT_URL } from "../config.js";
+import middlewareHandler from "../middleware/index.js";
+import verifyUserToken from "../middleware/auth/verifyUserToken.js";
 
 const router = express.Router();
 
@@ -47,7 +49,7 @@ const router = express.Router();
  *       '500':
  *         description: Error retrieving users
  */
-router.get("/", getUsers);
+router.get("/",[middlewareHandler.auth.verifyAdminToken],getUsers);
 
 /**
  * @swagger
@@ -70,7 +72,7 @@ router.get("/", getUsers);
  *       '500':
  *         description: Error retrieving the user
  */
-router.get("/:userId", validator.getUserById, getUserById);
+router.get("/:userId",[middlewareHandler.auth.verifyAdminToken], validator.getUserById, getUserById);
 
 // router.post("/", addUser);
 
@@ -264,7 +266,7 @@ router.post("/google", signInGoogle);
  *       '500':
  *         description: Error editing the user
  */
-router.put("/", validator.editUser, editUser);
+router.put("/",[middlewareHandler.auth.verifyUserToken], validator.editUser, editUser);
 
 /**
  * @swagger

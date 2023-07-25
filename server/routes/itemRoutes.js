@@ -14,6 +14,7 @@ import {
 } from "../controllers/itemController.js";
 import auth from "../middleware/auth.js";
 import * as validator from "../middleware/validators/index.js";
+import middlewareHandler from "../middleware/index.js";
 
 const router = express.Router();
 
@@ -41,7 +42,7 @@ const router = express.Router();
  *      200:
  *        description: Successful response
  */
-router.get("/packItems/:packId", validator.getItems, getItems);
+router.get("/packItems/:packId",[middlewareHandler.auth.verifyUserToken] ,validator.getItems, getItems);
 
 /**
  * @swagger
@@ -60,7 +61,7 @@ router.get("/packItems/:packId", validator.getItems, getItems);
  *      200:
  *        description: Successful response
  */
-router.get("/i/:packId", validator.getItemById, getItemById);
+router.get("/i/:packId", [middlewareHandler.auth.verifyUserToken],validator.getItemById, getItemById);
 
 /**
  * @swagger
@@ -79,7 +80,7 @@ router.get("/i/:packId", validator.getItemById, getItemById);
  *       200:
  *         description: Successful response
  */
-router.get("/search", searchItemsByName);
+router.get("/search",[middlewareHandler.auth.verifyUserToken] ,searchItemsByName);
 
 /**
  * @swagger
@@ -109,7 +110,7 @@ router.get("/search", searchItemsByName);
  *      200:
  *        description: Successful response
  */
-router.post("/", validator.addItem, addItem);
+router.post("/", [middlewareHandler.auth.verifyUserToken],validator.addItem, addItem);
 
 /**
  * @swagger
@@ -139,7 +140,7 @@ router.post("/", validator.addItem, addItem);
  *      200:
  *        description: Successful response
  */
-router.put("/", validator.editItem, editItem);
+router.put("/",[middlewareHandler.auth.verifyUserToken], validator.editItem, editItem);
 
 /**
  * @swagger
@@ -161,7 +162,7 @@ router.put("/", validator.editItem, editItem);
  *      200:
  *        description: Successful response
  */
-router.delete("/", validator.deleteItem, deleteItem);
+router.delete("/", [middlewareHandler.auth.verifyUserToken],validator.deleteItem, deleteItem);
 
 /**
  * @swagger
@@ -191,7 +192,7 @@ router.delete("/", validator.deleteItem, deleteItem);
  *      200:
  *        description: Successful response
  */
-router.post("/global", validator.addItemGlobal, addItemGlobal);
+router.post("/global",[middlewareHandler.auth.verifyUserToken] ,validator.addItemGlobal, addItemGlobal);
 
 /**
  * @swagger
@@ -206,7 +207,7 @@ router.post("/global", validator.addItemGlobal, addItemGlobal);
  *      200:
  *        description: Successful response
  */
-router.get("/global", getItemsGlobally);
+router.get("/global", [middlewareHandler.auth.verifyUserToken],getItemsGlobally);
 
 /**
  * @swagger
@@ -221,7 +222,7 @@ router.get("/global", getItemsGlobally);
  *      200:
  *        description: Successful response
  */
-router.post("/global/select/:packId", addGlobalItemToPack);
+router.post("/global/select/:packId", [middlewareHandler.auth.verifyUserToken],addGlobalItemToPack);
 /**
  * @swagger
  * /item/:
@@ -235,7 +236,7 @@ router.post("/global/select/:packId", addGlobalItemToPack);
  *      200:
  *        description: Successful response
  */
-router.put("/global/:itemId", editGlobalItemAsDuplicate);
+router.put("/global/:itemId",[middlewareHandler.auth.verifyUserToken] ,editGlobalItemAsDuplicate);
 
 /**
  * @swagger
@@ -257,6 +258,6 @@ router.put("/global/:itemId", editGlobalItemAsDuplicate);
  *      200:
  *        description: Successful response
  */
-router.delete("/global/:itemId", deleteGlobalItem);
+router.delete("/global/:itemId", [middlewareHandler.auth.verifyUserToken],deleteGlobalItem);
 
 export default router;
