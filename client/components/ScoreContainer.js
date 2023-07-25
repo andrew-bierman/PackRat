@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 import { Box, Button, VStack, Text, HStack, View } from "native-base";
 import { theme } from "../theme";
 import { useDispatch } from "react-redux";
@@ -228,7 +228,7 @@ const styles = StyleSheet.create({
   vStack: {
     justifyContent: "center",
     alignItems: "flex-start",
-    width: "60%",
+    width: Platform.OS == "web" ? "60%" : "100%",
   },
   scoreText: {
     color: theme.colors.textPrimary,

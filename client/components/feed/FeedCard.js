@@ -13,6 +13,7 @@ import {
 import { TouchableOpacity } from "react-native";
 import { Link } from "expo-router";
 import { DuplicateIcon } from "../DuplicateIcon/index";
+import { truncateString } from "../../utils/truncateString";
 
 import {
   Box,
@@ -66,6 +67,9 @@ export default function Card({
   };
   // const { addToFavorite } = useAddToFavorite();
 
+  const truncatedName = truncateString(name, 25);
+  const truncatedDestination = truncateString(destination, 25);
+
   return (
     <Box alignItems="center" padding="4">
       <Box
@@ -101,7 +105,7 @@ export default function Card({
                 }}
               >
                 <Link href={type === "pack" ? "/pack/" + _id : "/trip/" + _id}>
-                  {name}
+                  {truncatedName}
                 </Link>
                 {type === "pack" && (
                   <Box
@@ -151,7 +155,7 @@ export default function Card({
                 ml="-0.5"
                 mt="-1"
               >
-                {destination}
+                {truncatedDestination}
               </Text>
             )}
           </Stack>

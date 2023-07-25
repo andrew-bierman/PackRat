@@ -192,6 +192,7 @@ export default function Trips() {
           <TripCard
             title="Nearby Parks"
             value="Parks List"
+            isPark={true}
             data={parksData}
             Icon={() => (
               <FontAwesome5
