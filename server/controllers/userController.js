@@ -3,6 +3,7 @@ import { register } from "../utils/registerUser.js";
 import { loginUser } from "../utils/loginUser.js";
 import Pack from "../models/packModel.js";
 import { ObjectId } from "mongoose";
+import bycrypt from "bcrypt";
 // import firebase from "../index.js";
 // import firebaseAdmin from "firebase-admin";
 import { v4 as uuid } from "uuid";
@@ -15,6 +16,7 @@ import {
   SERVER_ROOT_URI,
   REDIRECT_URL,
   UI_ROOT_URI,
+  JWT_SECRET,
 } from "../config.js";
 import utilsService from "../utils/utils.service.js";
 
@@ -148,7 +150,7 @@ export const userSignin = async (req, res) => {
 
     const user = await User.findByCredentials({
       email: email,
-      password: password,
+      password: await bycrypt.hash(password, JWT_SECRET),
     });
     await user.generateAuthToken();
     res.status(200).send({ user });
@@ -164,6 +166,7 @@ export const userSignup = async (req, res) => {
 
     await User.alreadyLogin(email);
     const user = new User(req.body);
+    user.password = await bycrypt.hash(user.password, JWT_SECRET);
     await user.save();
     await user.generateAuthToken();
     sendWelcomeEmail(user.email, user.name);
