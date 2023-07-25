@@ -16,6 +16,7 @@ import { Platform, StyleSheet } from "react-native";
 import { theme } from "../../theme";
 import { CLIENT_URL } from "@env";
 import ScoreContainer from "../ScoreContainer";
+import ChatContainer from "../chat";
 
 export function PackDetails() {
   const searchParams = new URLSearchParams(window.location.search);
@@ -67,6 +68,13 @@ export function PackDetails() {
                   data={currentPack}
                   isOwner={isOwner}
                 />
+                <Box
+                  style={{
+                    width: "100%",
+                  }}
+                >
+                <ChatContainer />
+                </Box>
               </>
             }
             link={link}
@@ -82,7 +90,6 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.background,
     flexDirection: "column",
     gap: 15,
-    padding: [25, 25, 0, 25], // [top, right, bottom, left
     fontSize: 18,
     width: "100%",
   },

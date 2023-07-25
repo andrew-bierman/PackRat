@@ -20,6 +20,9 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { Link } from "expo-router";
 
+import { truncateString } from "../../utils/truncateString";
+import { useEffect } from "react";
+
 const UserDataCard = ({
   type, // "pack" or "trip"
   destination,
@@ -30,20 +33,30 @@ const UserDataCard = ({
   favorited_by,
   favorites_count,
   createdAt,
+  state,
+  setState,
+  index,
 }) => {
-
   const dispatch = useDispatch();
 
-  const handleChangeStatus = () => {
+  const updateState = (index, boolState) => {
+    let states = state;
+    states = states.map((state, iterator) => {
+      return iterator === index ? boolState : state;
+    });
+    setState(states);
+  };
+
+  const handleChangeStatus = (index) => {
+    updateState(index, true);
     if (type === "pack") {
       dispatch(changePackStatus({ _id, is_public: !is_public }));
     } else if (type === "trip") {
-      // Dispatch action for trips
-      // ...
     }
   };
 
-  const isLoading = useSelector((state) => state.packs.isLoading);
+  const truncatedName = truncateString(name, 25);
+  const truncatedDestination = truncateString(destination, 25);
 
   return (
     <Box alignItems="center" padding="5">
@@ -80,13 +93,15 @@ const UserDataCard = ({
                   gap: 10,
                 }}
               >
-                {name}
-                {isLoading ? (
+                {truncatedName}
+                {state[index] ? (
                   <Text>Loading....</Text>
                 ) : (
                   <Switch
                     isChecked={is_public}
-                    onToggle={handleChangeStatus}
+                    onToggle={() => {
+                      handleChangeStatus(index);
+                    }}
                     size="sm"
                   />
                 )}
@@ -120,7 +135,7 @@ const UserDataCard = ({
                 ml="-0.5"
                 mt="-1"
               >
-                Destination: {destination}
+                Destination: {truncatedDestination}
               </Text>
             )}
           </Stack>
@@ -183,6 +198,6 @@ const UserDataCard = ({
       </Box>
     </Box>
   );
-}
+};
 
 export default UserDataCard;
