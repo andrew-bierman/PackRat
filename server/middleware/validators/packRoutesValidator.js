@@ -36,5 +36,6 @@ export const duplicatePublicPack = celebrate({
   [Segments.BODY]: Joi.object().keys({
     packId: JoiObjectId().required(),
     ownerId: JoiObjectId().required(),
+    items: Joi.array().optional(),
   }),
 });

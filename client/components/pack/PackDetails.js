@@ -16,8 +16,12 @@ import { Platform, StyleSheet } from "react-native";
 import { theme } from "../../theme";
 import { CLIENT_URL } from "@env";
 import ScoreContainer from "../ScoreContainer";
+import ChatContainer from "../chat";
 
 export function PackDetails() {
+  const searchParams = new URLSearchParams(window.location.search);
+  let canCopy = searchParams.get("copy");
+
   const dispatch = useDispatch();
 
   const { packId } = useSearchParams();
@@ -25,7 +29,7 @@ export function PackDetails() {
   const link = `${CLIENT_URL}/packs/${packId}`;
 
   useEffect(() => {
-    if(!packId) return;
+    if (!packId) return;
     dispatch(fetchSinglePack(packId));
   }, [dispatch, packId]);
 
@@ -36,8 +40,6 @@ export function PackDetails() {
   // check if user is owner of pack, and that pack and user exists
   const isOwner = currentPack && user && currentPack.owner_id === user._id;
 
-  console.log('isOwner in packdetails', isOwner)
-
   const isLoading = useSelector((state) => state.singlePack.isLoading);
   const error = useSelector((state) => state.singlePack.error);
   const isError = error !== null;
@@ -45,7 +47,12 @@ export function PackDetails() {
   if (isLoading) return <Text>Loading...</Text>;
 
   return (
-    <Box style={[styles.mainContainer, Platform.OS == 'web' ? {minHeight: "100vh",} : null]}>
+    <Box
+      style={[
+        styles.mainContainer,
+        Platform.OS == "web" ? { minHeight: "100vh" } : null,
+      ]}
+    >
       {!isError && (
         <>
           <DetailsComponent
@@ -55,8 +62,19 @@ export function PackDetails() {
             error={error}
             additionalComps={
               <>
-                <TableContainer currentPack={currentPack} />
-                <ScoreContainer type='pack' data={currentPack} isOwner={isOwner}/>
+                <TableContainer currentPack={currentPack} copy={canCopy} />
+                <ScoreContainer
+                  type="pack"
+                  data={currentPack}
+                  isOwner={isOwner}
+                />
+                <Box
+                  style={{
+                    width: "100%",
+                  }}
+                >
+                <ChatContainer />
+                </Box>
               </>
             }
             link={link}
@@ -72,7 +90,6 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.background,
     flexDirection: "column",
     gap: 15,
-    padding: [25, 25, 0, 25], // [top, right, bottom, left
     fontSize: 18,
     width: "100%",
   },
