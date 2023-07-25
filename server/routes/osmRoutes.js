@@ -171,7 +171,7 @@ router.post("/process/geojson", postSingleGeoJSON);
 
 /**
  * @swagger
- * /destination/{id}:
+ * /osm/destination/{id}:
  *   get:
  *     summary: Get a single destination by ID
  *     tags: [OSM]
@@ -194,7 +194,7 @@ router.get("/destination/:id", getDestination);
 
 /**
  * @swagger
- * /photonDetails/:type/:id:
+ * /osm/photonDetails/{type}/{id}:
  *   get:
  *     summary: Get Photon details for a specific result
  *     tags: [OSM]
