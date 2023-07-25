@@ -9,6 +9,7 @@ import {
   findOrCreateOne,
   ensureIdProperty,
   ensureModelProperty,
+  processElement,
 } from "../utils/osmFunctions/modelHandlers.js";
 import { isGeoJSONFormat } from "../utils/osmFunctions/dataFormatters.js";
 
