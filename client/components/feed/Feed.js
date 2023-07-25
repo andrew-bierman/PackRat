@@ -109,7 +109,7 @@ const FeedSearchFilter = ({
             onValueChange={handleSortChange}
             placeholder="Sort By"
             style={styles.dropdown}
-            width="auto"
+            width={150}
           />
         </HStack>
         {(feedType === "userPacks" || feedType === "userTrips") && (
@@ -154,10 +154,10 @@ const Feed = ({ feedType = "public" }) => {
   const renderData = () => {
     let data = [];
     if (feedType === "public") {
-      if (selectedTypes.pack) {
+      if (selectedTypes?.pack) {
         data = [...data, ...publicPacksData];
       }
-      if (selectedTypes.trip) {
+      if (selectedTypes?.trip) {
         data = [...data, ...publicTripsData];
       }
     } else if (feedType === "userPacks") {
@@ -182,7 +182,6 @@ const Feed = ({ feedType = "public" }) => {
       ) : (
         <FlatList
           data={data}
-          numColumns={1}
           keyExtractor={(item) => item._id}
           renderItem={({ item }) => (
             <Card key={item._id} type={item.type} {...item} />

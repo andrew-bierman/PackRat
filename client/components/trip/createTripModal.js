@@ -5,6 +5,7 @@ import { Input, VStack, HStack, Text, Select } from "native-base";
 import { useDispatch, useSelector } from "react-redux";
 import { format, intervalToDuration } from "date-fns";
 import { addTrip } from "../../store/tripsStore";
+import DropdownComponent from "../Dropdown";
 
 const NumberInput = (props) => {
   const { min, max, value, ...otherProps } = props;
@@ -162,7 +163,16 @@ export const SaveTripContainer = ({ dateRange }) => {
             />
           </HStack> */}
 
-          <Select
+<DropdownComponent
+    onValueChange={(itemValue) => setIsPublic(itemValue=='Yes'?true:false)}
+    data={['Yes','For me only']}
+    value={isPublic}
+    placeholder="Is Public"
+    style={{marginTop:4,marginBottom:4}}
+    width={150}
+
+/>
+          {/* <Select
             minWidth="full"
             placeholder="Is Public"
             mt={4}
@@ -171,7 +181,7 @@ export const SaveTripContainer = ({ dateRange }) => {
           >
             <Select.Item label="Yes" value="true" />
             <Select.Item label="For me only" value="false" />
-          </Select>
+          </Select> */}
         </>
         <>
           <Text>Trip Weather</Text>

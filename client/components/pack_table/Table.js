@@ -172,7 +172,7 @@ export const TableContainer = ({
   const [weightUnit, setWeightUnit] = useState("g");
   const isLoading = useSelector((state) => state.items.isLoading);
   const error = useSelector((state) => state.items.error);
-
+console.log('c',currentPack)
   const data = currentPack?.items;
 
   let totalFoodWeight = 0;
