@@ -1,6 +1,5 @@
 import ProfileContainer from "../../components/user/ProfileContainer";
 import { Platform } from "react-native";
-import ProfileContainerMobile from "../../components/user/ProfileContainerMobile";
 import { Stack as Header } from "expo-router";
 import { ScrollView } from 'react-native'
 
@@ -18,7 +17,6 @@ export default function Profile() {
               // https://reactnavigation.org/docs/headers#replacing-the-title-with-a-custom-component
             }}
           />
-
           <ProfileContainer />
         </>
         :
@@ -27,4 +25,5 @@ export default function Profile() {
       }
     </ScrollView>
   )
+
 }

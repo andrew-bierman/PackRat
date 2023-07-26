@@ -1,11 +1,16 @@
 import { Link } from "expo-router";
 import { Stack, VStack, Text, Button } from "native-base";
 import { Platform } from "react-native";
-
 import UserDataCard from "./UserDataCard";
-import UserDataCardMobile from "./UserDataCardMobile";
+import { useEffect, useState } from "react";
 
 export default function UserDataContainer({ data, type }) {
+  const [dataState, setDataState] = useState(
+    data.length > 0 ? Array(data.length).fill(false) : []
+  );
+  useEffect(() => {
+    setDataState(Array(data.length).fill(false));
+  }, [data]);
   const typeUppercase = type.charAt(0).toUpperCase() + type.slice(1);
 
   const typeUppercaseSingular = typeUppercase.slice(0, -1);
@@ -23,17 +28,16 @@ export default function UserDataContainer({ data, type }) {
         flexWrap="wrap"
       >
         {data && data.length > 0 ? (
-          data?.map((dataItem) =>
-            Platform.OS === "web" ? (
-              <UserDataCard
-                key={dataItem._id}
-                {...{ ...dataItem }}
-                type={cardType}
-              />
-            ) : (
-              <UserDataCardMobile key={dataItem._id} {...{ ...dataItem }} />
-            )
-          )
+          data?.map((dataItem, index) => (
+            <UserDataCard
+              key={dataItem._id}
+              {...{ ...dataItem }}
+              type={cardType}
+              state={dataState}
+              setState={setDataState}
+              index={index}
+            />
+          ))
         ) : (
           <Link href="/">
             <Button

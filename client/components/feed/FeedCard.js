@@ -5,10 +5,15 @@ import { theme } from "../../theme";
 // import useAddToFavorite from "../../hooks/useAddToFavorites";
 // import { useAuth } from "../../auth/provider";
 import { useSelector, useDispatch } from "react-redux";
-import { addFavorite, selectFavoriteById, selectAllFavorites } from "../../store/favoritesStore";
-import { duplicatePackItem } from "../../store/packsStore";
+import {
+  addFavorite,
+  selectFavoriteById,
+  selectAllFavorites,
+} from "../../store/favoritesStore";
 import { TouchableOpacity } from "react-native";
 import { Link } from "expo-router";
+import { DuplicateIcon } from "../DuplicateIcon/index";
+import { truncateString } from "../../utils/truncateString";
 
 import {
   Box,
@@ -34,8 +39,8 @@ export default function Card({
   owner_id,
   destination,
   createdAt,
+  owners,
 }) {
-
   const user = useSelector((state) => state.auth.user);
 
   const favorites = useSelector(selectAllFavorites);
@@ -51,13 +56,6 @@ export default function Card({
 
     dispatch(addFavorite(data));
   };
-  const handleDuplicate = () => {
-    const data = {
-      packId: _id,
-      ownerId: user._id,
-    };
-    dispatch(duplicatePackItem(data));
-  };
 
   const handleRemoveFromFavorite = () => {
     const favorite = favorites.find(
@@ -68,6 +66,9 @@ export default function Card({
     }
   };
   // const { addToFavorite } = useAddToFavorite();
+
+  const truncatedName = truncateString(name, 25);
+  const truncatedDestination = truncateString(destination, 25);
 
   return (
     <Box alignItems="center" padding="4">
@@ -104,7 +105,7 @@ export default function Card({
                 }}
               >
                 <Link href={type === "pack" ? "/pack/" + _id : "/trip/" + _id}>
-                  {name}
+                  {truncatedName}
                 </Link>
                 {type === "pack" && (
                   <Box
@@ -113,18 +114,9 @@ export default function Card({
                     }}
                   >
                     <MaterialIcons name="backpack" size={24} color="gray" />
-                    <Button
-                      onPress={handleDuplicate}
-                      style={{
-                        backgroundColor: "transparent",
-                        width: "10",
-                        height: "10",
-                        padding: 0,
-                        paddingLeft: 15,
-                      }}
-                    >
-                      <MaterialIcons name="file-copy" size={24} color="gray" />
-                    </Button>
+                    <Link href={"/pack/" + _id + "?copy=true"}>
+                      <DuplicateIcon />
+                    </Link>
                   </Box>
                 )}
                 {type === "trip" && (
@@ -163,7 +155,7 @@ export default function Card({
                 ml="-0.5"
                 mt="-1"
               >
-                {destination}
+                {truncatedDestination}
               </Text>
             )}
           </Stack>

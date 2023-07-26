@@ -109,7 +109,7 @@ const FeedSearchFilter = ({
             onValueChange={handleSortChange}
             placeholder="Sort By"
             style={styles.dropdown}
-            width="auto"
+            width={150}
           />
         </HStack>
         {(feedType === "userPacks" || feedType === "userTrips") && (
@@ -154,10 +154,10 @@ const Feed = ({ feedType = "public" }) => {
   const renderData = () => {
     let data = [];
     if (feedType === "public") {
-      if (selectedTypes.pack) {
+      if (selectedTypes?.pack) {
         data = [...data, ...publicPacksData];
       }
-      if (selectedTypes.trip) {
+      if (selectedTypes?.trip) {
         data = [...data, ...publicTripsData];
       }
     } else if (feedType === "userPacks") {
@@ -171,6 +171,7 @@ const Feed = ({ feedType = "public" }) => {
     data = data.filter((item) =>
       item.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
+
 
     return Platform.OS === "web" ? (
       <View style={styles.cardContainer}>
@@ -195,6 +196,7 @@ const Feed = ({ feedType = "public" }) => {
           queryString={queryString}
           setSearchQuery={setSearchQuery}
           handleCreateClick={handleCreateClick}
+
         />
         }
         ListEmptyComponent={() => <Text>{ERROR_MESSAGES[feedType]}</Text>}
