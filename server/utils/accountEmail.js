@@ -13,6 +13,13 @@ export const sendWelcomeEmail = (email, name) => {
     },
     subject: "Thanks for joining in PackRat!!",
     text: `Welcome to the app, ${name}. Let me know how you get along with the app.`,
+  }) .then((res) => {
+    console.log("Email Sent");
+    return res;
+  })
+  .catch((err) => {
+    console.log("Email did not  Send", err);
+    return err;
   });
 };
 
@@ -32,5 +39,12 @@ export const resetEmail = (email, resetUrl) => {
           <p>If you did not request to reset your password, please ignore this email.</p>
         </div>
       `,
+  }) .then((res) => {
+    console.log("Email Sent");
+    return res;
+  })
+  .catch((err) => {
+    console.log("Email did not  Send", err);
+    return err;
   });
 };
