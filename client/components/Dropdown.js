@@ -1,11 +1,24 @@
 import React from "react";
+
 import { View, StyleSheet } from "react-native";
 import DropDownPicker from 'react-native-dropdown-picker';
+
+import { Box, Center, Select, CheckIcon } from "native-base";
+import SelectDropdown from "react-native-select-dropdown";
+import { FontAwesome } from "@expo/vector-icons";
+import { StyleSheet } from "react-native";
+
 
 export const DropdownComponent = ({
   data,
   value,
   onValueChange,
+  icon,
+  iconPosition,
+  ItemStyle,
+  ItemTextStyle,
+  SelectTextStyle,
+  SelectStyle,
   placeholder,
   width,
   style,
@@ -38,6 +51,7 @@ export const DropdownComponent = ({
         onChangeItem={item => onValueChange(item.value)}
       />
     </View>
+
   );
 };
 
@@ -83,3 +97,4 @@ const styles = StyleSheet.create({
 });
 
 export default DropdownComponent;
+

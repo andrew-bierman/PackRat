@@ -22,8 +22,10 @@ const MapButtonsOverlay = ({
   downloading,
   fetchLocation,
   onDownload,
+  handleGpxUpload,
   progress,
 }) => {
+  console.log("newwwww");
   const [showStyleOptions, setShowStyleOptions] = useState(false);
 
   const handleStyleOptionPress = () => {
@@ -136,6 +138,26 @@ const MapButtonsOverlay = ({
             </TouchableOpacity>
           )}
 
+          {handleGpxUpload && (
+            <TouchableOpacity
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+                width: 40,
+                height: 40,
+                position: "absolute",
+                bottom: 80,
+                right: 10,
+                backgroundColor: "white",
+                borderRadius: 30,
+                zIndex: 1,
+              }}
+              onPress={handleGpxUpload}
+            >
+              <MaterialCommunityIcons name="map-plus" size={24} color="grey" />
+            </TouchableOpacity>
+          )}
+
           {/* Location Button */}
           <TouchableOpacity
             style={styles.locationButton}
@@ -212,6 +234,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 30,
+    marginTop:30,
     backgroundColor: "white",
   },
   enterFullScreenBtn: {
@@ -238,7 +261,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    alignSelf: 'center',
+    alignSelf: "center",
     borderRadius: 20,
   },
   downloadIcon: {

@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from "react";
-
 import {
   Platform,
   StyleSheet,
@@ -29,15 +28,26 @@ import {
   Box,
   Actionsheet,
   CheckIcon,
+  useToast,
 } from "native-base";
 
 // get mapbox access token from .env file
 import { MAPBOX_ACCESS_TOKEN } from "@env";
 
 import { theme } from "../../theme";
-import { Link } from "expo-router";
 import MapButtonsOverlay from "./MapButtonsOverlay";
-import { isShapeDownloadable, mapboxStyles } from "../../utils/mapFunctions";
+import {
+  calculateZoomLevel,
+  findTrailCenter,
+  getShapeSourceBounds,
+  isShapeDownloadable,
+  mapboxStyles,
+} from "../../utils/mapFunctions";
+
+import * as DocumentPicker from "expo-document-picker";
+import * as FileSystem from "expo-file-system";
+import { DOMParser } from "xmldom";
+import { gpx as toGeoJSON } from "@tmcw/togeojson";
 
 Mapbox.setWellKnownTileServer(Platform.OS === "android" ? "Mapbox" : "mapbox");
 Mapbox.setAccessToken(MAPBOX_ACCESS_TOKEN);
@@ -56,7 +66,7 @@ const previewMapStyle = {
 
 // MapView.setConnected(true);
 
-function NativeMap() {
+function NativeMap({ shape: shapeProp }) {
   const camera = useRef(null);
   const mapViewRef = useRef(null);
   const cancelRef = React.useRef(null);
@@ -66,65 +76,38 @@ function NativeMap() {
   });
   const [getLocationLoading, setGetLocationLoading] = useState(false);
   const [correctLocation, setCorrectLocation] = useState(false);
-  const [zoomLevel, setZoomLevel] = useState(10);
-  const [trailCenterPoint, setTrailCenterPoint] = useState(null);
   const [mapFullscreen, setMapFullscreen] = useState(false);
   const [progress, setProgress] = useState(0);
   const [downloading, setDownloading] = useState(false);
   const [mapStyle, setMapStyle] = useState(mapboxStyles[0].style);
   const [showMapNameInputDialog, setShowMapNameInputDialog] = useState(false);
-  const [mapName, setMapName] = useState("");
+  const [shape, setShape] = useState(shapeProp);
+  const [mapName, setMapName] = useState(shape?.features[0]?.properties?.name);
+  const [trailCenterPoint, setTrailCenterPoint] = useState(
+    findTrailCenter(shape)
+  );
+
+  const toast = useToast();
 
   // consts
-  const shape = {
-    type: "FeatureCollection",
-    features: [
-      {
-        type: "Feature",
-        geometry: {
-          type: "LineString",
-          coordinates: [
-            [-77.044211, 38.852924],
-            [-77.045659, 38.860158],
-            [-77.044232, 38.862326],
-            [-77.040879, 38.865454],
-            [-77.039936, 38.867698],
-            [-77.040338, 38.86943],
-            [-77.04264, 38.872528],
-            [-77.03696, 38.878424],
-            [-77.032309, 38.87937],
-            [-77.030056, 38.880945],
-            [-77.027645, 38.881779],
-            [-77.026946, 38.882645],
-            [-77.026942, 38.885502],
-            [-77.028054, 38.887449],
-            [-77.02806, 38.892088],
-            [-77.03364, 38.892108],
-            [-77.033643, 38.899926],
-          ],
-        },
-      },
-    ],
-  };
-  const optionsForDownload = {
-    name: "Downloaad",
-    styleURL: "mapbox://styles/mapbox/outdoors-v11",
-    bounds: [getShapeSourceBounds(shape)[0], getShapeSourceBounds(shape)[1]],
-    minZoom: 0,
-    maxZoom: 21,
-  };
-  // useEffects
+  let bounds = getShapeSourceBounds(shape);
+  bounds = bounds[0].concat(bounds[1]);
+  const zoomLevel = calculateZoomLevel(bounds, { width: dw, height: 360 });
+  console.log("trailCenterPoint", trailCenterPoint);
+  console.log("zoomLevel", zoomLevel);
+
+  // effects
   useEffect(() => {
-    getPosition();
-  }, []);
+    // update the shape state when a new shapeProp gets passed
+    if (shapeProp !== shape) setShape(shapeProp);
+  }, [shapeProp]);
+
   useEffect(() => {
-    handleShapeSourceLoad({ width: dw, height: 360 });
-  }, []);
-  useEffect(() => {
-    offlineManager.getPacks().then((packs) => {
-      setofflinePacks(packs);
-    });
-  }, []);
+    // update mapName & calculate new trailCenter whenever shape changes e.g newly passed shapeProp or new shape from gpx upload
+    setMapName(shape?.features[0]?.properties?.name);
+    setTrailCenterPoint(findTrailCenter(shape));
+  }, [shape]);
+
   // functions
   const getPosition = (onSucccess) => {
     Geolocation.getCurrentPosition(
@@ -145,84 +128,6 @@ function NativeMap() {
     );
   };
 
-  function getShapeSourceBounds(shape) {
-    let minLng = Infinity;
-    let maxLng = -Infinity;
-    let minLat = Infinity;
-    let maxLat = -Infinity;
-    shape.features[0].geometry.coordinates.forEach((coord) => {
-      const lng = coord[0];
-      const lat = coord[1];
-
-      if (lng < minLng) {
-        minLng = lng;
-      }
-      if (lng > maxLng) {
-        maxLng = lng;
-      }
-      if (lat < minLat) {
-        minLat = lat;
-      }
-      if (lat > maxLat) {
-        maxLat = lat;
-      }
-    });
-
-    return [
-      [minLng, minLat],
-      [maxLng, maxLat],
-    ];
-  }
-
-  function handleShapeSourceLoad({ width: width, height: height }) {
-    if (shape?.features[0]?.geometry?.coordinates?.length > 1) {
-      let bounds = getShapeSourceBounds(shape);
-      bounds = bounds[0].concat(bounds[1]);
-      calculateZoomLevel(bounds, { width: width, height: height });
-      findTrailCenter();
-    }
-  }
-
-  function latRad(lat) {
-    var sin = Math.sin((lat * Math.PI) / 180);
-    var radX2 = Math.log((1 + sin) / (1 - sin)) / 2;
-    return Math.max(Math.min(radX2, Math.PI), -Math.PI) / 2;
-  }
-  function zoom(mapPx, worldPx, fraction) {
-    return Math.floor(Math.log(mapPx / worldPx / fraction) / Math.LN2);
-  }
-  function calculateZoomLevel(
-    bounds,
-    mapDim = { width: width, height: height }
-  ) {
-    var WORLD_DIM = { height: 256, width: 256 };
-    let ne = { lat: bounds[2], lng: bounds[3] };
-    let sw = { lat: bounds[0], lng: bounds[1] };
-
-    var latFraction = (latRad(ne.lat) - latRad(sw.lat)) / Math.PI;
-
-    var lngDiff = ne.lng - sw.lng;
-    var lngFraction = (lngDiff < 0 ? lngDiff + 360 : lngDiff) / 360;
-
-    var latZoom = zoom(mapDim.height, WORLD_DIM.height, latFraction);
-    var lngZoom = zoom(mapDim.width, WORLD_DIM.width, lngFraction);
-    setZoomLevel(latZoom);
-    // mapViewFullScreenRef?.current.setCamera({
-    //   centerCoordinate: [location.longitude, location.latitude],
-    //   zoomLevel: 13,
-    //   animationDuration: 3000,
-    // });
-  }
-  function findTrailCenter() {
-    const trailCoords = shape?.features[0]?.geometry?.coordinates;
-    const latitudes = trailCoords.map((coord) => coord[0]);
-    const longitudes = trailCoords.map((coord) => coord[1]);
-    const avgLatitude = latitudes.reduce((a, b) => a + b, 0) / latitudes.length;
-    const avgLongitude =
-      longitudes.reduce((a, b) => a + b, 0) / longitudes.length;
-    setTrailCenterPoint([avgLatitude, avgLongitude]);
-    // Set the initial state
-  }
   function onMapPress(event) {
     console.log(event, "eventtt");
     // if (trailCenterPoint) {
@@ -233,9 +138,11 @@ function NativeMap() {
   }
 
   function onDownloadProgress(offlineRegion, offlineRegionStatus) {
+    console.log("control there", offlineRegionStatus?.percentage);
     setProgress(offlineRegionStatus.percentage);
     setDownloading(true);
     if (offlineRegionStatus.percentage == 100) {
+      Alert.alert("Map download successfully!");
       setDownloading(false);
     }
   }
@@ -248,7 +155,7 @@ function NativeMap() {
       .createPack(optionsForDownload, onDownloadProgress, errorListener)
       .catch((error) => {
         Alert.alert(error.message);
-      })
+      });
   }
   function CircleCapComp() {
     return (
@@ -265,7 +172,7 @@ function NativeMap() {
     );
   }
 
-  const component = (
+  const element = (
     <View style={mapFullscreen ? fullMapDimension : previewMapStyle}>
       <Mapbox.MapView
         ref={mapViewRef}
@@ -331,21 +238,37 @@ function NativeMap() {
           </Mapbox.PointAnnotation>
         )}
       </Mapbox.MapView>
+
       <MapButtonsOverlay
         mapFullscreen={mapFullscreen}
         enableFullScreen={() => setMapFullscreen(true)}
         disableFullScreen={() => setMapFullscreen(false)}
         handleChangeMapStyle={setMapStyle}
         fetchLocation={() =>
-          getPosition((location) =>
-            setTrailCenterPoint([location.latitude, location.longitude])
-          )
+          getPosition((location) => {
+            setTrailCenterPoint([location.latitude, location.longitude]);
+          })
         }
         styles={styles}
         downloadable={isShapeDownloadable(shape)}
         downloading={downloading}
         shape={shape}
         onDownload={() => setShowMapNameInputDialog(true)}
+        handleGpxUpload={async () => {
+          try {
+            const result = await DocumentPicker.getDocumentAsync({
+              type: "*/*",
+            });
+            if (result.type === "success") {
+              const gpxString = await FileSystem.readAsStringAsync(result.uri);
+              const parsedGpx = new DOMParser().parseFromString(gpxString);
+              const geojson = toGeoJSON(parsedGpx);
+              setShape(geojson);
+            }
+          } catch (err) {
+            Alert.alert("An error occured");
+          }
+        }}
         progress={progress}
       />
     </View>
@@ -354,14 +277,14 @@ function NativeMap() {
   return (
     <SafeAreaView style={{ flex: 1, paddingVertical: 10 }}>
       {!mapFullscreen ? (
-        component
+        element
       ) : (
         <>
           <Modal
             visible={true}
             // style={{ backgroundColor: "#000", height: "100%" }}
           >
-            {component}
+            {element}
           </Modal>
           <AlertDialog
             isOpen={showMapNameInputDialog}
@@ -395,16 +318,20 @@ function NativeMap() {
                   <Button
                     colorScheme="success"
                     onPress={async () => {
-                      setMapName("");
                       setShowMapNameInputDialog(false);
-                      const options = {
+                      const downloadOptions = {
                         name: mapName,
                         styleURL: "mapbox://styles/mapbox/outdoors-v11",
                         bounds: await mapViewRef.current.getVisibleBounds(),
                         minZoom: 0,
-                        maxZoom: 15,
+                        maxZoom: 8,
+                        metadata: {
+                          shape: JSON.stringify(shape),
+                        },
                       };
-                      onDownload(options);
+
+                      onDownload(downloadOptions);
+                      setShowMapNameInputDialog(false);
                     }}
                   >
                     OK
