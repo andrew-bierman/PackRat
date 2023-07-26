@@ -147,10 +147,10 @@ export const deleteUser = async (req, res) => {
 export const userSignin = async (req, res) => {
   try {
     const { email, password } = req.body;
-
+    console.log('user',req.body)
     const user = await User.findByCredentials({
       email: email,
-      password: await bycrypt.hash(password, JWT_SECRET),
+      password:password,
     });
     await user.generateAuthToken();
     res.status(200).send({ user });
@@ -161,12 +161,11 @@ export const userSignin = async (req, res) => {
 
 export const userSignup = async (req, res) => {
   try {
-    // If the Mongoose index is re-index or restart the, it will be removed. Refer to this link for more information: https://stackoverflow.com/questions/5535610/mongoose-unique-index-not-working
     const { email } = req.body;
-
     await User.alreadyLogin(email);
+    const salt = await bcrypt.genSalt(parseInt(JWT_SECRET));
+    req.body.password = await bycrypt.hash(req.body.password, salt);
     const user = new User(req.body);
-    user.password = await bycrypt.hash(user.password, JWT_SECRET);
     await user.save();
     await user.generateAuthToken();
     sendWelcomeEmail(user.email, user.name);
