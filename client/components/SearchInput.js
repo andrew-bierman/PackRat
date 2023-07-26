@@ -125,7 +125,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
     setSearchString(name);
     setShowSearchResults(false);
     dispatch(setSelectedSearchResult(result));
-    dispatch(clearSearchResults());
+    // dispatch(clearSearchResults());
 
     if (onSelect) {
       onSelect(result);
