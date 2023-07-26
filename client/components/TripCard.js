@@ -32,7 +32,7 @@ export default function TripCard({
     // Assuming that you have a redux action to set the current trail and park
     if (isTrail) {
       dispatch(addTrail(value));
-    } else if (isPark) {
+    } else {
       dispatch(addPark(value));
     }
   };
