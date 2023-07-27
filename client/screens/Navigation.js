@@ -66,7 +66,12 @@ const Navigation = () => {
     () =>
       user
         ? [
-            {
+          {
+            href: "/",
+            icon: "home",
+            text: "Home",
+            iconSource: Entypo,
+          },{
               href: "/feed",
               icon: "newspaper-variant",
               text: "Feed",

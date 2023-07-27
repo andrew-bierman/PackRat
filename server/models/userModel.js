@@ -87,14 +87,14 @@ UserSchema.statics.validateResetToken = async function (token) {
 };
 
 //password to store the in hash map
-UserSchema.pre("save", async function (next) {
-  const user = this;
+// UserSchema.pre("save", async function (next) {
+//   const user = this;
 
-  if (user.isModified("password"))
-    user.password = await bycrypt.hash(user.password, 8);
+//   if (user.isModified("password"))
+//     user.password = await bycrypt.hash(user.password, 8);
 
-  next();
-});
+//   next();
+// });
 
 UserSchema.methods.generateAuthToken = async function () {
   const user = this;
