@@ -162,7 +162,7 @@ const Navigation = () => {
   }, []);
 
   const renderNavigationItem = useCallback(
-    (item) => {
+    (item, index) => {
       const { icon, iconSource, text, href } = item;
       const IconComponent = iconSource || EvilIcons;
       const pathName = usePathname();
@@ -175,7 +175,7 @@ const Navigation = () => {
 
       return (
         <TouchableOpacity
-          key={item.href}
+          key={item.href + "nav" + index}
           style={[
             styles.menuBarItem,
             isCurrentPage && styles.menuBarItemActive, // apply the active style if this is the current page
@@ -213,6 +213,7 @@ const Navigation = () => {
         {user && <AuthStateListener />}
         <View style={styles.header}>
           <TouchableOpacity
+            key={"logo-nav"}
             style={styles.logoContainer}
             onPress={() => navigateTo("/")}
           >
@@ -262,7 +263,7 @@ const Navigation = () => {
             //   contentContainerStyle={styles.menuBar}
             // >
             <>
-              {navigationItems?.map((item) => renderNavigationItem(item))}
+              {navigationItems?.map((item, index) => renderNavigationItem(item, index))}
             </>
             // </ScrollView>
           )}

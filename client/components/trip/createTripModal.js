@@ -6,7 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { format, intervalToDuration } from "date-fns";
 import { addTrip } from "../../store/tripsStore";
 
-import { Picker } from '@react-native-picker/picker';
+// import { Picker } from '@react-native-picker/picker';
+import { DropdownComponent } from "../Dropdown";
 
 const options = [
   { label: 'Yes', value: 'true' },
