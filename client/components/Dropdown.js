@@ -1,13 +1,11 @@
 import React from "react";
 
 import { View, StyleSheet } from "react-native";
-import DropDownPicker from 'react-native-dropdown-picker';
+import DropDownPicker from "react-native-dropdown-picker";
 
 import { Box, Center, Select, CheckIcon } from "native-base";
 import SelectDropdown from "react-native-select-dropdown";
 import { FontAwesome } from "@expo/vector-icons";
-import { StyleSheet } from "react-native";
-
 
 export const DropdownComponent = ({
   data,
@@ -23,20 +21,21 @@ export const DropdownComponent = ({
   width,
   style,
 }) => {
-  console.log('data in dropdown ------->', data)
-  const items = data?.map((item, index) => {
-    let val = item;
-    let label = item;
-    // Check if the item is an object
-    if (typeof item === 'object' && item !== null) {
-      val = item.id || item._id || item.name;
-      label = item.name;
-    }
-    return { label: String(label), value: val };
-  }) || [];
+  console.log("data in dropdown ------->", data);
+  const items =
+    data?.map((item, index) => {
+      let val = item;
+      let label = item;
+      // Check if the item is an object
+      if (typeof item === "object" && item !== null) {
+        val = item.id || item._id || item.name;
+        label = item.name;
+      }
+      return { label: String(label), value: val };
+    }) || [];
 
   return (
-    <View style={{ ...styles.container, ...style, width: width || '100%'}}>
+    <View style={{ ...styles.container, ...style, width: width || "100%" }}>
       <DropDownPicker
         // items={[{label: placeholder || "Select", value: null}, ...items]}
         items={items}
@@ -48,10 +47,9 @@ export const DropdownComponent = ({
         dropDownStyle={styles.dropDownStyle}
         labelStyle={styles.label}
         activeLabelStyle={styles.activeLabel}
-        onChangeItem={item => onValueChange(item.value)}
+        onChangeItem={(item) => onValueChange(item.value)}
       />
     </View>
-
   );
 };
 
@@ -68,33 +66,32 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   dropDownContainer: {
-    height: 50, 
-    borderRadius: 5
+    height: 50,
+    borderRadius: 5,
   },
   dropDown: {
-    backgroundColor: '#fafafa', 
-    borderBottomColor: '#000', 
-    borderBottomWidth: 0.5
+    backgroundColor: "#fafafa",
+    borderBottomColor: "#000",
+    borderBottomWidth: 0.5,
   },
   item: {
-    justifyContent: 'flex-start',
+    justifyContent: "flex-start",
     padding: 10,
     marginVertical: 2,
-    borderBottomColor: '#ccc',
-    borderBottomWidth: 0.5
+    borderBottomColor: "#ccc",
+    borderBottomWidth: 0.5,
   },
   dropDownStyle: {
-    backgroundColor: '#fafafa', 
-    marginTop: 2
+    backgroundColor: "#fafafa",
+    marginTop: 2,
   },
   label: {
-    fontSize: 16, 
-    color: '#000'
+    fontSize: 16,
+    color: "#000",
   },
   activeLabel: {
-    color: '#00BFFF'
+    color: "#00BFFF",
   },
 });
 
 export default DropdownComponent;
-
