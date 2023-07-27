@@ -41,7 +41,6 @@ const ItemPicker = ({ currentPack, refetch, setRefetch }) => {
         data.globalItems &&
         data.globalItems.items &&
         data.globalItems.items.map((item, index) => {
-          console.log("item", item);
           return (
             <Select.Item
               key={index}
