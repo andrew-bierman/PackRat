@@ -1,8 +1,11 @@
 import React from "react";
+
+import { View, StyleSheet } from "react-native";
+import DropDownPicker from "react-native-dropdown-picker";
+
 import { Box, Center, Select, CheckIcon } from "native-base";
 import SelectDropdown from "react-native-select-dropdown";
 import { FontAwesome } from "@expo/vector-icons";
-import { StyleSheet } from "react-native";
 
 export const DropdownComponent = ({
   data,
@@ -18,92 +21,77 @@ export const DropdownComponent = ({
   width,
   style,
 }) => {
-  console.log("data in dropdown", style);
+  console.log("data in dropdown ------->", data);
+  const items =
+    data?.map((item, index) => {
+      let val = item;
+      let label = item;
+      // Check if the item is an object
+      if (typeof item === "object" && item !== null) {
+        val = item.id || item._id || item.name;
+        label = item.name;
+      }
+      return { label: String(label), value: val };
+    }) || [];
 
   return (
-    <Center>
-    
-           <SelectDropdown
-            data={data}
-          defaultValue={value}
-           
-            onSelect={(item, index) => onValueChange(item)}
-            defaultButtonText={placeholder||"Select"}
-            buttonTextAfterSelection={(category, index) => {
-              return category;
-            }}
-            rowTextForSelection={(item, index) => {
-              return item;
-            }}
-            buttonStyle={style?{...style,width:width||'100%'}:{...styles.buttonStyle,width:width||'100%'}}
-            buttonTextStyle={SelectTextStyle}
-            renderDropdownIcon={isOpened => {
-              return (icon?icon:
-                <FontAwesome
-                  name={isOpened ? 'chevron-up' : 'chevron-down'}
-                  color={'#BDC3C4'}
-                 
-
-                  size={14}
-                />
-              );
-            }}
-            dropdownIconPosition={iconPosition?iconPosition:'right'}
-            dropdownStyle={SelectStyle?SelectStyle:styles.dropdownStyle}
-            rowStyle={ItemStyle?ItemStyle:styles.rowStyle}
-            rowTextStyle={ItemTextStyle?ItemTextStyle:styles.rowTextStyle}
-          />
-    
-    {/* <Box style={{...style, width: width || '100%'}}>
-        <Select
-          selectedValue={value}
-          width="100%"
-          accessibilityLabel="Choose Service"
-          placeholder={placeholder || "Select"}
-          _selectedItem={{
-            bg: "teal.600",
-            endIcon: <CheckIcon size="5" />,
-          }}
-          onValueChange={onValueChange}
-        >
-          {data
-            ? data?.map((item, index) => {
-                let val = item;
-                let label = item;
-                // Check if the item is an object
-                if (typeof item === 'object' && item !== null) {
-                  val = item.id || item._id || item.name;
-                  label = item.name;
-                }
-                return (
-                  <Select.Item
-                    key={index}
-                    label={String(label)}
-                    value={val}
-                  />
-                );
-              })
-            : null}
-        </Select>
-      </Box> */}
-    </Center>
+    <View style={{ ...styles.container, ...style, width: width || "100%" }}>
+      <DropDownPicker
+        // items={[{label: placeholder || "Select", value: null}, ...items]}
+        items={items}
+        defaultValue={value}
+        value={value}
+        containerStyle={styles.dropDownContainer}
+        style={styles.dropDown}
+        itemStyle={styles.item}
+        dropDownStyle={styles.dropDownStyle}
+        labelStyle={styles.label}
+        activeLabelStyle={styles.activeLabel}
+        onChangeItem={(item) => onValueChange(item.value)}
+      />
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  buttonStyle: {
-   backgroundColor:'white',borderWidth:1,borderColor:'gray',borderRadius:10,height:40
+  container: {
+    flex: 1,
+    flexGrow: 1,
+    width: "100%",
   },
-  dropdownStyle:{
-    borderRadius:10,
-    backgroundColor:'white'
+  content: {
+    flexGrow: 1,
+    justifyContent: "flex-start",
+    alignItems: "stretch",
+    paddingHorizontal: 20,
   },
-  rowTextStyle:{
-
+  dropDownContainer: {
+    height: 50,
+    borderRadius: 5,
   },
-  rowStyle:{
-    paddingVertical:10,
-  }
+  dropDown: {
+    backgroundColor: "#fafafa",
+    borderBottomColor: "#000",
+    borderBottomWidth: 0.5,
+  },
+  item: {
+    justifyContent: "flex-start",
+    padding: 10,
+    marginVertical: 2,
+    borderBottomColor: "#ccc",
+    borderBottomWidth: 0.5,
+  },
+  dropDownStyle: {
+    backgroundColor: "#fafafa",
+    marginTop: 2,
+  },
+  label: {
+    fontSize: 16,
+    color: "#000",
+  },
+  activeLabel: {
+    color: "#00BFFF",
+  },
 });
 
 export default DropdownComponent;
