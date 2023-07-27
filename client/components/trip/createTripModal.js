@@ -1,11 +1,18 @@
 import React, { useState } from "react";
-import { Platform } from "react-native";
+import { Platform, View } from "react-native";
 import { CustomModal } from "../modal";
 import { Input, VStack, HStack, Text, Select } from "native-base";
 import { useDispatch, useSelector } from "react-redux";
 import { format, intervalToDuration } from "date-fns";
 import { addTrip } from "../../store/tripsStore";
-import DropdownComponent from "../Dropdown";
+
+import { Picker } from '@react-native-picker/picker';
+
+const options = [
+  { label: 'Yes', value: 'true' },
+  { label: 'For me only', value: 'false' },
+];
+
 
 const NumberInput = (props) => {
   const { min, max, value, ...otherProps } = props;
@@ -117,7 +124,22 @@ export const SaveTripContainer = ({ dateRange }) => {
     console.log("create trip data ->", data);
     dispatch(addTrip(data));
     setIsSaveModalOpen(!isSaveModalOpen);
+  }
+
+  const handleValueChange = (itemValue) => {
+    setIsPublic(itemValue);
   };
+
+  const renderItem = ({ item }) => (
+    <Picker.Item label={item.label} value={item.value} />
+  );
+
+  const getItemLayout = (_, index) => ({
+    length: 30, // height of each item
+    offset: 30 * index, // calculate the offset based on item height
+    index,
+  });
+
 
   return (
     <CustomModal
@@ -152,6 +174,23 @@ export const SaveTripContainer = ({ dateRange }) => {
           />
 
           <HStack mt={4}>
+
+            <Input placeholder="Trip Start Date" onChange={event => setStartDate(event.target.value)} />
+            <Input placeholder="Trip End Date" onChange={event => setEndDate(event.target.value)} ml={4} />
+          </HStack>
+
+          <View style={{ marginTop: 20, marginBottom: 20 }}>
+
+            <Picker
+              style={{ height: 30, borderRadius: 5, borderColor: "rgb(212, 212, 212)", color: "rgb(23, 23, 23)", backgroundColor: "rgba(0, 0, 0, 0)" }}
+              selectedValue={isPublic}
+              onValueChange={handleValueChange}>
+              <Picker.Item label="Yes" value="true" />
+              <Picker.Item label="For me only" value="false" />
+            </Picker>
+
+          </View>
+
             <Input
               placeholder="Trip Start Date"
               onChange={(event) => setStartDate(event.target.value)}
@@ -181,6 +220,7 @@ export const SaveTripContainer = ({ dateRange }) => {
           >
             <Select.Item label="Yes" value="true" />
             <Select.Item label="For me only" value="false" />
+
           </Select> */}
         </>
         <>

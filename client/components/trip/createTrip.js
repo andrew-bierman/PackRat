@@ -1,14 +1,9 @@
-import Footer from "../../components/footer/Footer";
 import {
   Stack,
   Box,
-  Text,
-  ScrollView,
-  Button,
-  Input,
-  HStack,
   VStack,
 } from "native-base";
+import { ScrollView } from 'react-native'
 import { Stack as Header } from "expo-router";
 
 import { theme } from "../../theme";
@@ -25,9 +20,6 @@ import { useSelector } from "react-redux";
 
 import { GearList } from "../GearList";
 
-import { MapContainer } from "../map/MapContainer";
-
-import { CustomModal } from "../modal";
 import { SaveTripContainer } from "./createTripModal";
 import TripDateRange from "./TripDateRange";
 import MultiStepForm from "../multi_step";
@@ -154,6 +146,8 @@ export default function Trips() {
   ];
 
   return (
+    <ScrollView
+      nestedScrollEnabled={true}>
     <VStack>
       {/* <MultiStepForm steps={steps} /> */}
       <Box style={styles.mutualStyles}>
@@ -192,6 +186,7 @@ export default function Trips() {
           <TripCard
             title="Nearby Parks"
             value="Parks List"
+            isPark={true}
             data={parksData}
             Icon={() => (
               <FontAwesome5
@@ -223,6 +218,7 @@ export default function Trips() {
 
       {/* <Footer /> */}
     </VStack>
+    </ScrollView>
   );
 }
 

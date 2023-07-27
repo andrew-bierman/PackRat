@@ -12,7 +12,7 @@ import getParkRoutes from "./getParkRoutes.js";
 import getTrailRoutes from "./getTrailRoutes.js";
 import osmRoutes from "./osmRoutes.js";
 import passwordResetRoutes from "./passwordResetRoutes.js";
-import gpxRoutes from "./gpxRoutes.js";
+import openAiRoutes from "./openAiRoutes.js";
 import templateRoutes from "./templateRoutes.js";
 import favoriteRouters from "./favoriteRoutes.js";
 
@@ -46,9 +46,10 @@ router.use("/getparks", getParkRoutes);
 router.use("/gettrails", getTrailRoutes);
 router.use("/osm", osmRoutes);
 router.use("/password-reset", passwordResetRoutes);
-router.use("/gpx", gpxRoutes);
+router.use("/openai", openAiRoutes);
 router.use("/template", templateRoutes);
 router.use("/favorite", favoriteRouters);
+router.use("/openai", openAiRoutes);
 
 // Also listen to /api for backwards compatibility
 router.use("/api/user", userRoutes);
@@ -61,9 +62,10 @@ router.use("/api/getparks", getParkRoutes);
 router.use("/api/gettrails", getTrailRoutes);
 router.use("/api/osm", osmRoutes);
 router.use("/api/password-reset", passwordResetRoutes);
-router.use("/api/gpx", gpxRoutes);
+router.use("/api/openai", openAiRoutes);
 router.use("/api/template", templateRoutes);
 router.use("/api/favorite", favoriteRouters);
+router.use("/api/openai", openAiRoutes);
 
 // Static routes for serving the React Native Web app
 if (process.env.NODE_ENV === "production") {
@@ -96,3 +98,4 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 export default router;
+

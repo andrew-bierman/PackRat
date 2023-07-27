@@ -59,6 +59,7 @@ export const duplicatePackItem = createAsyncThunk(
     const response = await axios.post(`${api}/pack/duplicate`, {
       packId: newItem.packId,
       ownerId: newItem.ownerId,
+      items: newItem.items,
     });
     return response.data;
   }
