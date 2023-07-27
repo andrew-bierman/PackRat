@@ -21,7 +21,8 @@ export const DropdownComponent = ({
   width,
   style,
 }) => {
-  console.log("data in dropdown ------->", data);
+  // console.log("data in dropdown ------->", data);
+
   const items =
     data?.map((item, index) => {
       let val = item;
