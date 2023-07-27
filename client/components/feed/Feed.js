@@ -172,9 +172,22 @@ const Feed = ({ feedType = "public" }) => {
       item.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
+    const feedSearchFilterComponent = (
+      <FeedSearchFilter
+        feedType={feedType}
+        handleSortChange={handleSortChange}
+        handleTogglePack={handleTogglePack}
+        handleToggleTrip={handleToggleTrip}
+        selectedTypes={selectedTypes}
+        queryString={queryString}
+        setSearchQuery={setSearchQuery}
+        handleCreateClick={handleCreateClick}
+      />
+    );
 
     return Platform.OS === "web" ? (
       <View style={styles.cardContainer}>
+        {feedSearchFilterComponent}
         {data?.map((item) => (
           <Card key={item._id} type={item.type} {...item} />
         ))}
@@ -187,18 +200,7 @@ const Feed = ({ feedType = "public" }) => {
         renderItem={({ item }) => (
           <Card key={item._id} type={item.type} {...item} />
         )}
-        ListHeaderComponent={() => <FeedSearchFilter
-          feedType={feedType}
-          handleSortChange={handleSortChange}
-          handleTogglePack={handleTogglePack}
-          handleToggleTrip={handleToggleTrip}
-          selectedTypes={selectedTypes}
-          queryString={queryString}
-          setSearchQuery={setSearchQuery}
-          handleCreateClick={handleCreateClick}
-
-        />
-        }
+        ListHeaderComponent={() => feedSearchFilterComponent}
         ListEmptyComponent={() => <Text>{ERROR_MESSAGES[feedType]}</Text>}
         showsVerticalScrollIndicator={false}
       />
