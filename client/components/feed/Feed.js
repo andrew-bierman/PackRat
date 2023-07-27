@@ -27,6 +27,7 @@ import {
 import { fetchUserPacks, selectAllPacks } from "../../store/packsStore";
 import { fetchUserTrips } from "../../store/tripsStore";
 import { useRouter } from "expo-router";
+import { fuseSearch } from "../../utils/fuseSearch";
 
 const URL_PATHS = {
   userPacks: "/pack/",
@@ -168,9 +169,23 @@ const Feed = ({ feedType = "public" }) => {
       data = userPacksData.filter((pack) => pack.isFavorite);
     }
 
-    data = data.filter((item) =>
-      item.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    // Fuse search
+    let keys = ['name', 'items.name', 'items.category'];
+    let options = {  // your options
+      threshold: 0.420,
+      location: 0,
+      distance: 100,
+      maxPatternLength: 32,
+      minMatchCharLength: 1,
+    };
+    
+    let results = fuseSearch (data, searchQuery, keys, options);
+    
+    // Convert fuse results back into the format we want
+    // if searchQuery is empty, use the original data
+    data = searchQuery ? results.map((result) => result.item) : data;
+
+    // console.log("data", data);
 
     const feedSearchFilterComponent = (
       <FeedSearchFilter
