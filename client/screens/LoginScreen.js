@@ -349,10 +349,7 @@ export default function Login() {
                   w="100%"
                   disabled={!request}
                   onPress={() => {
-                    setEmail(demoUser.email)
-                    setPassword(demoUser.password)
-
-                    handleLogin();
+                    dispatch(signIn(demoUser));
                   }}
                   colorScheme={"purple"}
                 >
