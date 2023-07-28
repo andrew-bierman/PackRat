@@ -10,7 +10,7 @@ export const CustomModal = ({
   onCancel,
   buttonColor = "primary",
   type,
-  size = 'lg',
+  size = "lg",
   footerButtons = [],
   isActive,
   onTrigger,
