@@ -1,4 +1,3 @@
-import { StyleSheet } from "react-native";
 
 import {
   VStack,
@@ -33,15 +32,11 @@ import { useState, useEffect } from "react";
 
 import {
   fetchTrails,
-  filterTrailsForNames,
-  setTrailNames,
-  setTrails,
 } from "../store/trailsStore";
 
 import { fetchParks } from "../store/parksStore";
 
 import {
-  setSearchResults,
   setSelectedSearchResult,
   clearSearchResults,
   fetchPhotonSearchResults,

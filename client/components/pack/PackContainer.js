@@ -37,7 +37,8 @@ export default function PackContainer({ isCreatingTrip = false }) {
   }, [dispatch, user?._id, refetch]);
 
   const handlePack = (val) => {
-    const selectedPack = packs.find((pack) => pack._id === val);
+    const selectedPack = packs.find((pack) => pack.name== val);
+   
     setCurrentPackId(selectedPack?._id);
 
     if (isCreatingTrip && selectedPack?._id) {
@@ -48,7 +49,8 @@ export default function PackContainer({ isCreatingTrip = false }) {
     selectPackById(state, currentPackId)
   );
 
-  const dataValues = packs ?? [];
+  const dataValues = packs.map((item)=>item?.name) ?? [];
+ 
 
   return dataValues?.length > 0 ? (
     <Box style={styles.mainContainer}>

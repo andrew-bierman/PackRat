@@ -9,9 +9,7 @@ import { defaultShape } from "../../utils/mapFunctions";
 export function MapContainer({ shape }) {
 
   if(isObjectEmpty(shape)){
-    shape = {
-      ...defaultShape
-    }
+    shape = defaultShape;
   }
 
   if (Platform.OS === "web") {
