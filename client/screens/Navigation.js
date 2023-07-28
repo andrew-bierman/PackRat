@@ -66,7 +66,12 @@ const Navigation = () => {
     () =>
       user
         ? [
-            {
+          {
+            href: "/",
+            icon: "home",
+            text: "Home",
+            iconSource: Entypo,
+          },{
               href: "/feed",
               icon: "newspaper-variant",
               text: "Feed",
@@ -114,19 +119,19 @@ const Navigation = () => {
             },
           ]
         : [
-            {
-              href: "sign-in",
-              icon: "login",
-              text: "Login",
-              iconSource: MaterialIcons,
-            },
-            {
-              href: "register",
-              icon: "person-add",
-              text: "Register",
-              iconSource: MaterialIcons,
-            },
-          ],
+          {
+            href: "sign-in",
+            icon: "login",
+            text: "Login",
+            iconSource: MaterialIcons,
+          },
+          {
+            href: "register",
+            icon: "person-add",
+            text: "Register",
+            iconSource: MaterialIcons,
+          },
+        ],
     [user]
   );
 
@@ -157,7 +162,7 @@ const Navigation = () => {
   }, []);
 
   const renderNavigationItem = useCallback(
-    (item) => {
+    (item, index) => {
       const { icon, iconSource, text, href } = item;
       const IconComponent = iconSource || EvilIcons;
       const pathName = usePathname();
@@ -170,7 +175,7 @@ const Navigation = () => {
 
       return (
         <TouchableOpacity
-          key={item.href}
+          key={item.href + "nav" + index}
           style={[
             styles.menuBarItem,
             isCurrentPage && styles.menuBarItemActive, // apply the active style if this is the current page
@@ -208,6 +213,7 @@ const Navigation = () => {
         {user && <AuthStateListener />}
         <View style={styles.header}>
           <TouchableOpacity
+            key={"logo-nav"}
             style={styles.logoContainer}
             onPress={() => navigateTo("/")}
           >
@@ -244,20 +250,22 @@ const Navigation = () => {
             >
               <Drawer
                 toggleDrawer={toggleDrawer}
-                handleSignOut={() => {}}
+                handleSignOut={() => { }}
                 navigationItems={navigationItems}
                 navigateTo={navigateTo}
                 renderNavigationItem={renderNavigationItem}
               />
             </Modal>
           ) : (
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.menuBar}
-            >
-              {navigationItems.map((item) => renderNavigationItem(item))}
-            </ScrollView>
+            // <ScrollView
+            //   horizontal
+            //   showsHorizontalScrollIndicator={false}
+            //   contentContainerStyle={styles.menuBar}
+            // >
+            <>
+              {navigationItems?.map((item, index) => renderNavigationItem(item, index))}
+            </>
+            // </ScrollView>
           )}
         </View>
       </View>
