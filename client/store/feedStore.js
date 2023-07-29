@@ -1,13 +1,24 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
 import { api } from "../constants/api";
 import axios from "axios";
+
+// Define the adapter for packs and trips
+const feedAdapter = createEntityAdapter({
+  selectId: (entity) => entity._id,
+});
+
+// Define initial entity state
+const initialState = feedAdapter.getInitialState({
+  publicPacks: [],
+  publicTrips: [],
+  isLoading: false,
+  error: null,
+});
 
 export const getPublicPacks = createAsyncThunk(
   "feed/getPublicPacks",
   async (queryBy) => {
-    const response = await axios.get(
-      `${api}/pack/?queryBy=${queryBy || "Favorite"}`
-    );
+    const response = await axios.get(`${api}/pack/?queryBy=${queryBy || "Favorite"}`);
     return response.data;
   }
 );
@@ -15,21 +26,14 @@ export const getPublicPacks = createAsyncThunk(
 export const getPublicTrips = createAsyncThunk(
   "feed/getPublicTrips",
   async (queryBy) => {
-    const response = await axios.get(
-      `${api}/trip/?queryBy=${queryBy || "Favorite"}`
-    );
+    const response = await axios.get(`${api}/trip/?queryBy=${queryBy || "Favorite"}`);
     return response.data;
   }
 );
 
 const feedSlice = createSlice({
   name: "feed",
-  initialState: {
-    publicPacks: [],
-    publicTrips: [],
-    isLoading: false,
-    error: null,
-  },
+  initialState : initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
@@ -38,7 +42,7 @@ const feedSlice = createSlice({
         state.error = null;
       })
       .addCase(getPublicPacks.fulfilled, (state, action) => {
-        // map over the array of packs and add a type property to each pack
+        // feedAdapter.upsertMany(state.entities, action.payload.map((pack) => ({ ...pack, type: "pack" })));
         state.publicPacks = action.payload
         .map((pack) => {
           return {
@@ -58,14 +62,14 @@ const feedSlice = createSlice({
         state.error = null;
       })
       .addCase(getPublicTrips.fulfilled, (state, action) => {
-        // map over the array of trips and add a type property to each trip
+        //  feedAdapter.upsertMany(state.entities, action.payload.map((trip) => ({ ...trip, type: "trip" })));
         state.publicTrips = action.payload
         .map((trip) => {
           return {
             ...trip,
             type: "trip",
           };
-        })
+        });
         state.isLoading = false;
         state.error = null;
       })
@@ -75,5 +79,16 @@ const feedSlice = createSlice({
       });
   },
 });
+
+// Export the adapter selectors
+export const {
+  selectAll: selectAllPublicPacks,
+  selectById: selectPublicPackById,
+} = feedAdapter.getSelectors((state) => state.feed.publicPacks);
+
+export const {
+  selectAll: selectAllPublicTrips,
+  selectById: selectPublicTripById,
+} = feedAdapter.getSelectors((state) => state.feed.publicTrips);
 
 export default feedSlice.reducer;

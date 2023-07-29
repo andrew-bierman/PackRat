@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
 import axios from "axios";
 import { api } from "../constants/api";
 
@@ -31,29 +31,33 @@ export const editTrip = createAsyncThunk(
   }
 );
 
+const tripsAdapter = createEntityAdapter({
+  selectId: (trip) => trip._id,
+});
+
+const initialState = tripsAdapter.getInitialState({
+  newTrip: {
+    name: "",
+    description: "",
+    startDate: "",
+    endDate: "",
+    destination: "",
+    trail: "",
+    weather: {},
+    packId: "",
+  },
+  isLoading: false,
+  error: null,
+});
+
 const tripsSlice = createSlice({
   name: "trips",
-  initialState: {
-    trips: [],
-    newTrip: {
-      name: "",
-      description: "",
-      startDate: "",
-      endDate: "",
-      destination: "",
-      trail: "",
-      weather: {},
-      packId: "",
-    },
-    isLoading: false,
-    error: null,
-  },
+  initialState,
   reducers: {
     updateNewTrip(state, action) {
       state.newTrip = action.payload;
     },
     updateNewTripVersatile(state, action) {
-      // accepts an object with a key and value
       state.newTrip[action.payload.key] = action.payload.value;
     },
     updateNewTripPack(state, action) {
@@ -86,13 +90,7 @@ const tripsSlice = createSlice({
         state.error = null;
       })
       .addCase(deleteTrip.fulfilled, (state, action) => {
-        const deletedTrip = action.payload;
-        const index = state.trips.findIndex(
-          (trip) => trip._id === deletedTrip._id
-        );
-        if (index !== -1) {
-          state.trips.splice(index, 1);
-        }
+        tripsAdapter.removeOne(state, action.payload._id);
         state.isLoading = false;
         state.error = null;
       })
@@ -105,7 +103,7 @@ const tripsSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchUserTrips.fulfilled, (state, action) => {
-        state.trips = action.payload;
+        tripsAdapter.setAll(state, action.payload);
         state.isLoading = false;
         state.error = null;
       })
@@ -118,7 +116,7 @@ const tripsSlice = createSlice({
         state.error = null;
       })
       .addCase(addTrip.fulfilled, (state, action) => {
-        state.trips.push(action.payload.createdTrip);
+        tripsAdapter.addOne(state, action.payload.createdTrip);
         state.isLoading = false;
         state.error = null;
       })
@@ -131,13 +129,7 @@ const tripsSlice = createSlice({
         state.error = null;
       })
       .addCase(editTrip.fulfilled, (state, action) => {
-        const updatedTrip = action.payload;
-        const index = state.trips.findIndex(
-          (trip) => trip._id === updatedTrip._id
-        );
-        if (index !== -1) {
-          state.trips[index] = updatedTrip;
-        }
+        tripsAdapter.upsertOne(state, action.payload);
         state.isLoading = false;
         state.error = null;
       })
@@ -156,5 +148,11 @@ export const {
   updateNewTripTrail,
   resetNewTrip,
 } = tripsSlice.actions;
+
+export const { selectAll: selectAllTrips, selectById: selectTripById } =
+  tripsAdapter.getSelectors((state) => state.trips);
+
+export const selectIsLoading = (state) => state.trips.isLoading;
+export const selectError = (state) => state.trips.error;
 
 export default tripsSlice.reducer;
