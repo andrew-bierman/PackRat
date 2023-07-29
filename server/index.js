@@ -31,6 +31,11 @@ app.use(routes);
 if (process.env.NODE_ENV !== "production") {
   app.use("/api-docs", swaggerUi.serve);
   app.get("/api-docs", swaggerUi.setup(specs));
+  app.get('/swagger.json', (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.send(specs);
+  });  
+  
   app.get('/seed/category',(req,res)=>{
     console.log('Seeding...')
     ItemCategory.forEach(async(category)=>{
