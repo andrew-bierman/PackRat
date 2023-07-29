@@ -67,7 +67,7 @@ const TableItem = ({
   flexArr,
   currentPack,
   refetch,
-  setRefetch,
+  setRefetch = () => {},
 }) => {
   const { name, weight, category, quantity, unit, _id } = itemData;
   /* 
