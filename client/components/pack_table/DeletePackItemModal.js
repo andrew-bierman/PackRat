@@ -5,7 +5,7 @@ import { deletePackItem } from "../../store/packsStore";
 import { CustomModal } from "../modal";
 import { deleteGlobalItem } from "../../store/globalItemsStore";
 
-export const DeletePackItemModal = ({ itemId, pack, refetch, setRefetch }) => {
+export const DeletePackItemModal = ({ itemId, pack, refetch, setRefetch = () => {} }) => {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const dispatch = useDispatch();
 

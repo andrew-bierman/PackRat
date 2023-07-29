@@ -6,7 +6,16 @@
     "start": "expo start --dev-client",
     "android": "expo run:android",
     "ios": "expo run:ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "setup": "npm run setup:copy && npm run setup:move",
+    "setup:copy": "npm run copy:env && npm run copy:app && npm run copy:gradle && npm run copy:pod",
+    "setup:move": "npm run move:gradle && npm run move:pod",
+    "copy:env": "cp .env.example .env",
+    "copy:app": "cp app.example.json app.json",
+    "copy:gradle": "cp gradle.properties.example gradle.properties",
+    "copy:pod": "cp Podfile.example Podfile",
+    "move:gradle": "mv gradle.properties android/gradle.properties",
+    "move:pod": "mv Podfile ios/Podfile"
   },
   "dependencies": {
     "@babel/runtime": "^7.21.0",
