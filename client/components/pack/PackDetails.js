@@ -5,7 +5,7 @@ import { DetailsHeader } from "../details/header";
 
 import { useSearchParams } from "expo-router";
 import { TableContainer } from "../pack_table/Table";
-import { selectPackById } from "../../store/packsStore";
+import { fetchUserPacks, selectPackById } from "../../store/packsStore";
 
 import { useSelector, useDispatch } from "react-redux";
 import { fetchSinglePack } from "../../store/singlePackStore";
@@ -28,14 +28,16 @@ export function PackDetails() {
 
   const link = `${CLIENT_URL}/packs/${packId}`;
 
+  const user = useSelector((state) => state.auth.user);
+  const userId = user && user._id;
   useEffect(() => {
     if (!packId) return;
     dispatch(fetchSinglePack(packId));
+    if(userId) dispatch(fetchUserPacks(userId));
   }, [dispatch, packId]);
 
   const currentPack = useSelector((state) => state.singlePack.singlePack);
 
-  const user = useSelector((state) => state.auth.user);
 
   // check if user is owner of pack, and that pack and user exists
   const isOwner = currentPack && user && currentPack.owner_id === user._id;
