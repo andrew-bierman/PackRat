@@ -3,6 +3,7 @@ import { formatDistanceToNow } from "date-fns";
 import { MaterialIcons } from "@expo/vector-icons";
 import { theme } from "../../theme";
 import useAddToFavorite from "../../hooks/useAddToFavorites";
+import { Link } from "expo-router";
 
 import {
   Box,
@@ -80,6 +81,9 @@ export default function Card({
             >
               Total Weight: {total_weight}
             </Text>
+            <Link href={`/profile/${owner_id}`} asChild>
+              <Text>View Owner</Text>
+            </Link>
           </Stack>
 
           <HStack alignItems="center" space={4} justifyContent="space-between">
