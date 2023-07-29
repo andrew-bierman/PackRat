@@ -39,18 +39,21 @@ const UserSchema = new Schema(
     googleId: { type: String },
     code: { type: String },
     is_certified_guide: { type: Boolean },
-    trips: [{ type: Schema.Types.ObjectId, ref: Trip }],
     favorites: [{ type: Schema.Types.ObjectId, ref: Pack }],
-    packs: [{ type: Schema.Types.ObjectId, ref: Pack }],
+    // trips: [{ type: Schema.Types.ObjectId, ref: Trip }],
+    // packs: [{ type: Schema.Types.ObjectId, ref: Pack }],
     passwordResetToken: { type: String },
     passwordResetTokenExpiration: { type: Date },
     role: {
       type: String,
-      enum: ['user', 'admin'],  // 'user' and 'admin' are the valid roles
-      default: 'user'
+      enum: ["user", "admin"], // 'user' and 'admin' are the valid roles
+      default: "user",
     },
   },
-  { timestamps: true }
+  { timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
 );
 
 UserSchema.statics.findByCredentials = async function ({ email, password }) {
@@ -119,6 +122,22 @@ UserSchema.methods.generateResetToken = async function () {
   await user.save();
   return `${CLIENT_URL}/password-reset?token=${resetToken}`;
 };
+
+UserSchema.virtual("packs", {
+  ref: "Pack", // The model to use
+  localField: "_id", // Find packs where `localField`
+  foreignField: "owner_id", // is equal to `foreignField`
+  justOne: false, // And only get the first one found
+});
+
+UserSchema.virtual("trips", {
+  ref: "Trip", // The model to use
+  localField: "_id", // Find packs where `localField`
+  foreignField: "owner_id", // is equal to `foreignField`
+  justOne: false, // And only get the first one found
+});
+
+// TODO: better solution for favorites virtual
 
 UserSchema.methods.toJSON = function () {
   const user = this;
