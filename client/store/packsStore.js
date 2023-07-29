@@ -5,7 +5,7 @@ import {
 } from "@reduxjs/toolkit";
 import axios from "axios";
 import { api } from "../constants/api";
-
+import { Toast } from "native-base";
 export const addPack = createAsyncThunk("packs/addPack", async (newPack) => {
   const response = await axios.post(`${api}/pack/`, newPack);
   return response.data;
@@ -112,6 +112,25 @@ export const selectItemsGlobal = createAsyncThunk(
     }
   }
 );
+
+export const updatePack = createAsyncThunk("packs/updatePack", async (pack) => {
+  const response = await axios.put(`${api}/pack`, {
+    _id: pack["_id"],
+    name: pack.name,
+    is_public: pack.is_public,
+  });
+  return response.data;
+});
+
+export const deletePack = createAsyncThunk("packs/deletePack", async (pack) => {
+  const response = await axios.delete(`${api}/pack`, {
+    data: { packId: pack.id },
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  return response.data;
+});
 
 const packsAdapter = createEntityAdapter({
   selectId: (pack) => pack._id,
@@ -340,6 +359,41 @@ const packsSlice = createSlice({
         state.error = null;
       })
       .addCase(duplicatePackItem.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message;
+      })
+      .addCase(updatePack.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(updatePack.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+        Toast.show({
+          title: "Pack has been succesfully updated",
+          placement: "bottom",
+          duration: 2000,
+        });
+      })
+      .addCase(updatePack.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message;
+        Toast.show({
+          title: "Error while Updating pack",
+          placement: "bottom",
+          duration: 2000,
+        });
+      })
+      .addCase(deletePack.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(deletePack.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+        console.log("here fyl");
+      })
+      .addCase(deletePack.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message;
       });
