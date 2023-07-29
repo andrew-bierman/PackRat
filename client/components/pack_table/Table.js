@@ -67,7 +67,7 @@ const TableItem = ({
   flexArr,
   currentPack,
   refetch,
-  setRefetch,
+  setRefetch = () => {},
 }) => {
   const { name, weight, category, quantity, unit, _id } = itemData;
   /* 
@@ -149,7 +149,7 @@ export const TableContainer = ({
   currentPack,
   selectedPack,
   refetch,
-  setRefetch,
+  setRefetch = () => {},
   copy,
 }) => {
   const user = useSelector((state) => state.auth.user);

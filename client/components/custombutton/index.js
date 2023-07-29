@@ -2,7 +2,7 @@ import { Button } from "native-base";
 import React from "react";
 
 const CustomButton = ({ text, handler, ...args }) => {
-  const copy = { ...args };
+  const { copy } = { ...args };
   return (
     <>
       {copy && (
@@ -17,7 +17,6 @@ const CustomButton = ({ text, handler, ...args }) => {
           {text}
         </Button>
       )}
-      ;
     </>
   );
 };

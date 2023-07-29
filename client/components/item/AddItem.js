@@ -17,7 +17,8 @@ export const AddItem = ({
   page,
   closeModalHandler,
   refetch,
-  setRefetch,
+  setIsAddItemModalOpen = () => {},
+  setRefetch = () => {},
 }) => {
   const dispatch = useDispatch();
   const isLoading = useSelector((state) => state.packs.isLoading);

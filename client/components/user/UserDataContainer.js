@@ -1,5 +1,6 @@
 import { Link } from "expo-router";
-import { ScrollView, Stack, VStack, Text, Button } from "native-base";
+import { Stack, VStack, Text, Button } from "native-base";
+import { Platform } from "react-native";
 import UserDataCard from "./UserDataCard";
 import { useEffect, useState } from "react";
 

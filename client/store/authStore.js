@@ -1,16 +1,17 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-// import { auth } from "../auth/firebase";
-// import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut as firebaseSignOut, signInWithPopup, GoogleAuthProvider, signInWithCredential } from "firebase/auth";
+import { createAsyncThunk, createSlice, createEntityAdapter } from "@reduxjs/toolkit";
 import axios from "axios";
 import { api } from "../constants/api";
 import { Alert } from "react-native";
 
-const initialState = {
+const authAdapter = createEntityAdapter();
+
+const initialState = authAdapter.getInitialState({
   user: null,
   loading: false,
   error: null,
-};
+});
 
+// Thunks for async actions
 export const signUp = createAsyncThunk(
   "auth/signUp",
   async ({ email, password, name }, { rejectWithValue }) => {
@@ -22,6 +23,7 @@ export const signUp = createAsyncThunk(
       });
       return response.data.user;
     } catch (error) {
+      alert('Name is required\nPassword must be at least 7 characters\nEmail is required\nEmail must be valid');
       return rejectWithValue(error.response.data.error);
     }
   }
@@ -42,24 +44,13 @@ export const signIn = createAsyncThunk(
   }
 );
 
-// export const signOut = createAsyncThunk(
-//   "auth/signOut",
-//   async (_, { rejectWithValue }) => {
-//     console.log("signOut")
-//     try {
-//       // await firebaseSignOut(auth);
-//     } catch (error) {
-//       return rejectWithValue(error.message);
-//     }
-//   }
-// );
-
 export const signOut = createAsyncThunk("auth/signOut", async () => {
-  console.log("signOut");
   try {
+    // Perform any sign-out operations here
     return null;
   } catch (error) {
-    return console.log(error.message);
+    console.log(error.message);
+    return rejectWithValue("Sign-out failed");
   }
 });
 
@@ -68,13 +59,11 @@ export const signInWithGoogle = createAsyncThunk(
   async ({ idToken }, { rejectWithValue }) => {
     try {
       const response = await axios.post(`${api}/user/google`, {
-        // token: idToken,
-        // code: idToken,
-        idToken: idToken,
+        idToken,
       });
       return response.data.user;
     } catch (error) {
-      console.log("error.response.data.error", error.response.data.error);
+      console.log('error.response.data.error', error.response.data.error);
       return rejectWithValue(error);
     }
   }
@@ -91,6 +80,7 @@ export const authSlice = createSlice({
         state.error = null;
       })
       .addCase(signUp.fulfilled, (state, action) => {
+        authAdapter.setAll(state, [action.payload]);
         state.user = action.payload;
         state.loading = false;
         state.error = null;
@@ -105,7 +95,7 @@ export const authSlice = createSlice({
         state.error = null;
       })
       .addCase(signIn.fulfilled, (state, action) => {
-        // console.log("userinfo", action.payload);
+        authAdapter.setAll(state, [action.payload]);
         state.user = action.payload;
         state.loading = false;
         state.error = null;
@@ -120,6 +110,7 @@ export const authSlice = createSlice({
         state.error = null;
       })
       .addCase(signOut.fulfilled, (state) => {
+        authAdapter.removeAll(state);
         state.user = null;
         state.loading = false;
       })
@@ -132,6 +123,7 @@ export const authSlice = createSlice({
         state.error = null;
       })
       .addCase(signInWithGoogle.fulfilled, (state, action) => {
+        authAdapter.setAll(state, [action.payload]);
         state.user = action.payload;
         state.loading = false;
       })
@@ -141,5 +133,6 @@ export const authSlice = createSlice({
       });
   },
 });
-
+export const authReducer = authSlice.reducer;
+export const { selectAll: selectAllUsers, selectById: selectUserById } = authAdapter.getSelectors((state) => state.auth);
 export default authSlice.reducer;

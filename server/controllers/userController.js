@@ -3,6 +3,7 @@ import { register } from "../utils/registerUser.js";
 import { loginUser } from "../utils/loginUser.js";
 import Pack from "../models/packModel.js";
 import { ObjectId } from "mongoose";
+import bycrypt from "bcrypt";
 // import firebase from "../index.js";
 // import firebaseAdmin from "firebase-admin";
 import { v4 as uuid } from "uuid";
@@ -15,6 +16,7 @@ import {
   SERVER_ROOT_URI,
   REDIRECT_URL,
   UI_ROOT_URI,
+  JWT_SECRET,
 } from "../config.js";
 import utilsService from "../utils/utils.service.js";
 
@@ -49,12 +51,22 @@ export const getUsers = async (req, res) => {
 
 export const getUserById = async (req, res) => {
   try {
-    const { userId } = req.body;
+    const { userId } = req.params;
 
-    const user = await User.findById({ _id: userId }).populate("packs");
+    const user = await User.findById({ _id: userId })
+    .populate({
+      path: 'packs',
+      populate: {
+        path: 'items',
+        model: 'Item' // replace 'Item' with your actual Item model name
+      }
+    })
+    .populate('favorites')
+    .populate('trips');
 
     res.status(200).json(user);
   } catch (error) {
+    console.error(error);
     res.status(404).json({ msg: "User cannot be found" });
   }
 };
@@ -145,10 +157,10 @@ export const deleteUser = async (req, res) => {
 export const userSignin = async (req, res) => {
   try {
     const { email, password } = req.body;
-
+    console.log('user',req.body)
     const user = await User.findByCredentials({
       email: email,
-      password: password,
+      password:password,
     });
     await user.generateAuthToken();
     res.status(200).send({ user });
@@ -159,10 +171,10 @@ export const userSignin = async (req, res) => {
 
 export const userSignup = async (req, res) => {
   try {
-    // If the Mongoose index is re-index or restart the, it will be removed. Refer to this link for more information: https://stackoverflow.com/questions/5535610/mongoose-unique-index-not-working
     const { email } = req.body;
-
     await User.alreadyLogin(email);
+    const salt = await bcrypt.genSalt(parseInt(JWT_SECRET));
+    req.body.password = await bycrypt.hash(req.body.password, salt);
     const user = new User(req.body);
     await user.save();
     await user.generateAuthToken();
