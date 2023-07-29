@@ -31,9 +31,17 @@ const PackSchema = new Schema(
       },
     },
     type: { type: String, default: "pack" },
+    copied_from: { type: Schema.Types.ObjectId, ref: "Pack", default: null },
+    copied_count: { type: Number, default: 0 },
   },
   { timestamps: true }
 );
+
+// Added a pre-save middleware for score calculation
+PackSchema.pre('save', function (next) {
+  this.scores = calculatePackScore(this);
+  next();
+});
 
 PackSchema.virtual("total_weight").get(function () {
   if (this.items && this.items.length > 0 && this.items[0] instanceof Item) {
