@@ -51,12 +51,22 @@ export const getUsers = async (req, res) => {
 
 export const getUserById = async (req, res) => {
   try {
-    const { userId } = req.body;
+    const { userId } = req.params;
 
-    const user = await User.findById({ _id: userId }).populate("packs");
+    const user = await User.findById({ _id: userId })
+    .populate({
+      path: 'packs',
+      populate: {
+        path: 'items',
+        model: 'Item' // replace 'Item' with your actual Item model name
+      }
+    })
+    .populate('favorites')
+    .populate('trips');
 
     res.status(200).json(user);
   } catch (error) {
+    console.error(error);
     res.status(404).json({ msg: "User cannot be found" });
   }
 };
