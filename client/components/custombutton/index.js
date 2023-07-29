@@ -17,7 +17,6 @@ const CustomButton = ({ text, handler, ...args }) => {
           {text}
         </Button>
       )}
-      ;
     </>
   );
 };
