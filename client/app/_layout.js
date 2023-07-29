@@ -1,28 +1,31 @@
 import { Slot } from "expo-router";
 
-import { Platform } from "react-native";
-import Navigation from "../screens/NavigationHeader";
+import { Platform, View } from "react-native";
+
+import Navigation from "../screens/Navigation";
 
 import { Provider } from "react-redux";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { queryClient } from "../constants/queryClient";
-import { NativeBaseProvider } from "native-base";
-import store from "../store/store";
-import NavigationMobile from "../screens/NavigationMobile";
+import { PersistGate } from "redux-persist/integration/react";
 
-import { ProviderAuth } from "../auth/provider";
+import { NativeBaseProvider } from "native-base";
+
+import { store, persistor } from "../store/store";
+
+import { AuthProvider } from "../context/auth";
+import Footer from "../components/footer/Footer";
 
 export default function HomeLayout() {
   return (
-    <ProviderAuth>
-      <NativeBaseProvider>
-        <Provider store={store}>
-          <QueryClientProvider client={queryClient}>
-            {Platform.OS === "web" ? <Navigation /> : <NavigationMobile />}
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <AuthProvider>
+          <NativeBaseProvider>
+            <Navigation />
             <Slot />
-          </QueryClientProvider>
-        </Provider>
-      </NativeBaseProvider>
-    </ProviderAuth>
+            {Platform.OS === "web" ? <Footer /> : null}
+          </NativeBaseProvider>
+        </AuthProvider>
+      </PersistGate>
+    </Provider>
   );
 }

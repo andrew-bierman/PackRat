@@ -1,8 +1,20 @@
 import User from "../models/userModel.js";
 
-export const register = async ({ email, password, name }) => {
-  if (!email || !password || !name) {
-    throw new Error("All fields must be filled");
+export const register = async ({ email, password, name, from }) => {
+  if (from === "UserSignIn") {
+    if (!email || !password || !name) {
+      throw new Error("All fields must be filled");
+    }
+  }
+
+  if (from === "GoogleSignIn") {
+    if (!email || !name) {
+      throw new Error("All fields must be filled");
+    }
+  }
+
+  if (!(from === "GoogleSignIn" || from === "UserSignIn")) {
+    throw new Error("Something went wrong");
   }
 
   const exist = await User?.findOne({ email });
@@ -22,6 +34,10 @@ export const register = async ({ email, password, name }) => {
     packs: [],
     trips: [],
   });
-
   return user;
+};
+
+export const validateEmail = function (email) {
+  var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  return re.test(email);
 };
