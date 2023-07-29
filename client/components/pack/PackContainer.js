@@ -17,6 +17,7 @@ import { updateNewTripPack } from "../../store/tripsStore";
 import { useDispatch } from "react-redux";
 
 import { CustomModal } from "../modal";
+import { AddItemModal } from "./AddItemModal";
 
 export default function PackContainer({ isCreatingTrip = false }) {
   const dispatch = useDispatch();
@@ -37,8 +38,8 @@ export default function PackContainer({ isCreatingTrip = false }) {
   }, [dispatch, user?._id, refetch]);
 
   const handlePack = (val) => {
-    const selectedPack = packs.find((pack) => pack.name== val);
-   
+    const selectedPack = packs.find((pack) => pack.name == val);
+
     setCurrentPackId(selectedPack?._id);
 
     if (isCreatingTrip && selectedPack?._id) {
@@ -49,8 +50,7 @@ export default function PackContainer({ isCreatingTrip = false }) {
     selectPackById(state, currentPackId)
   );
 
-  const dataValues = packs.map((item)=>item?.name) ?? [];
- 
+  const dataValues = packs.map((item) => item?.name) ?? [];
 
   return dataValues?.length > 0 ? (
     <Box style={styles.mainContainer}>
@@ -63,39 +63,19 @@ export default function PackContainer({ isCreatingTrip = false }) {
       />
       {currentPackId && (
         <>
-          <>
-            <CustomModal
-              title="Add Item"
-              trigger="Add Item"
-              isActive={isAddItemModalOpen}
-              onTrigger={setIsAddItemModalOpen}
-              footerButtons={[
-                {
-                  label: "Save",
-                  color: "primary",
-                  onClick: () => setIsAddItemModalOpen(false),
-                },
-                {
-                  label: "Cancel",
-                  color: "danger",
-                  onClick: () => setIsAddItemModalOpen(false),
-                },
-              ]}
-            >
-              <AddItem
-                packId={currentPackId}
-                currentPack={currentPack}
-                setIsAddItemModalOpen={setIsAddItemModalOpen}
-              />
-            </CustomModal>
-            <TableContainer
-              key={`table - ${currentPackId}`}
-              currentPack={currentPack}
-              selectedPack={currentPackId}
-              refetch={refetch}
-              setRefetch={setRefetch}
-            />
-          </>
+          <AddItemModal
+            currentPackId={currentPackId}
+            currentPack={currentPack}
+            isAddItemModalOpen={isAddItemModalOpen}
+            setIsAddItemModalOpen={setIsAddItemModalOpen}
+          />
+          <TableContainer
+            key={`table - ${currentPackId}`}
+            currentPack={currentPack}
+            selectedPack={currentPackId}
+            refetch={refetch}
+            setRefetch={setRefetch}
+          />
         </>
       )}
     </Box>
