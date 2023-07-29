@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { getItemsGlobal } from "../store/globalItemsStore";
 import { selectItemsGlobal } from "../store/packsStore";
 
-const ItemPicker = ({ currentPack, refetch, setRefetch }) => {
+const ItemPicker = ({ currentPack, refetch, setRefetch = () => {} }) => {
   const [selectedValue, setSelectedValue] = useState();
   const dispatch = useDispatch();
 
