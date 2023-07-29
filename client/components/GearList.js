@@ -3,10 +3,10 @@ import { theme } from "../theme";
 import { Stack, Box, Text } from "native-base";
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { AddPack } from "./pack/AddPack";
+import { AddPack, AddPackContainer } from "./pack/AddPack";
 
 import PackContainer from "./pack/PackContainer";
-import WideColumn from "./WideColumn";
+import ScoreContainer from "./ScoreContainer";
 
 export const GearList = () => {
   return (
@@ -40,9 +40,10 @@ export const GearList = () => {
           Gear List
         </Text>
       </Box>
-      <AddPack />
-      <PackContainer />
-      <WideColumn />
+      {/* <AddPack/> */}
+      <AddPackContainer />
+      <PackContainer isCreatingTrip={true} />
+      {/* <ScoreContainer /> */}
     </Stack>
   );
 };

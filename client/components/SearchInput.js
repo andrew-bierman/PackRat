@@ -1,4 +1,3 @@
-import { StyleSheet } from "react-native";
 
 import {
   VStack,
@@ -12,6 +11,10 @@ import {
   IconButton,
   Center,
   Heading,
+  HStack,
+  List,
+  View,
+  Pressable,
 } from "native-base";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 
@@ -19,92 +22,197 @@ import { SafeAreaView } from "react-native";
 
 import { Platform } from "react-native";
 
-import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-// import { Google_Api_Key } from "../constants/api";
-
 // redux
-import { useDispatch } from "react-redux";
-import { add, addWeek } from "../store/weatherStore";
+import { useDispatch, useSelector } from "react-redux";
 
 import { useState, useEffect } from "react";
 
-import { getGeoCode } from "../api/getGeoCode";
-import { getWeather } from "../api/getWeather";
-import { getWeatherWeek } from "../api/getWeatherWeek";
+// import { getTrailsResult } from "../api/getTrailsResult";
+// import { getPhotonResults } from "../api/getPhotonResults";
 
-export const SearchInput = () => {
-  const [searchString, setSearchString] = useState("Virginia US");
-  const [geoCode, setGeoCode] = useState();
+import {
+  fetchTrails,
+} from "../store/trailsStore";
+
+import { fetchParks } from "../store/parksStore";
+
+import {
+  setSelectedSearchResult,
+  clearSearchResults,
+  fetchPhotonSearchResults,
+} from "../store/searchStore";
+import { getTrailsOSM } from "../api/getTrails";
+import { getParksOSM } from "../api/getParks";
+import { fetchWeather, fetchWeatherWeek } from "../store/weatherStore";
+
+export const SearchInput = ({ onSelect, placeholder }) => {
+  const [searchString, setSearchString] = useState("");
   const [isLoadingMobile, setIsLoadingMobile] = useState(false);
+  const [selectedSearch, setSelectedSearch] = useState("");
+
+  const searchResults =
+    useSelector((state) => state.search.searchResults) || [];
+
+  const selectedSearchResult =
+    useSelector((state) => state.search.selectedSearchResult) || {};
+
+  // const [searchResults, setSearchResults] = useState([]);
+  const [showSearchResults, setShowSearchResults] = useState(false);
 
   const dispatch = useDispatch();
 
-  const lat = geoCode?.features[0]?.geometry?.coordinates[1];
-  const lon = geoCode?.features[0]?.geometry?.coordinates[0];
-  const state = geoCode?.features[0]?.properties.state;
-
   useEffect(() => {
-    const getCode = async () => {
-      setIsLoadingMobile(true);
-      const code = await getGeoCode(searchString);
-      setIsLoadingMobile(false);
-      setGeoCode(code);
-    };
+    setShowSearchResults(searchString.length > 0);
 
-    const timeout = setTimeout(async () => {
-      getCode();
+    const timeout = setTimeout(() => {
+      if (!searchString) return;
+      dispatch(fetchPhotonSearchResults(searchString));
     }, 2000);
 
     return () => clearTimeout(timeout);
-  }, [searchString]);
+  }, [searchString, dispatch]);
+
+  const getTrailsParksAndWeatherDetails = async () => {
+    if (!selectedSearchResult || Object.keys(selectedSearchResult).length === 0)
+      return;
+
+    setIsLoadingMobile(true);
+
+    const {
+      geometry: { coordinates },
+    } = selectedSearchResult;
+    const [lon, lat] = coordinates;
+
+    if (!lat || !lon) {
+      setIsLoadingMobile(false);
+      return;
+    }
+
+    try {
+      await Promise.all([
+        dispatch(fetchTrails({ lat, lon, selectedSearch })),
+        dispatch(fetchParks({ lat, lon, selectedSearch })),
+        dispatch(fetchWeather({ lat, lon })),
+        dispatch(fetchWeatherWeek({ lat, lon })),
+      ]);
+    } catch (error) {
+      console.error(error);
+    }
+
+    setIsLoadingMobile(false);
+  };
 
   useEffect(() => {
-    const getWeatherObject = async () => {
-      const object = await getWeather(lat, lon, state);
-      dispatch(add(object));
-    };
-    const getWeek = async () => {
-      const weeekArray = await getWeatherWeek(lat, lon);
-      dispatch(addWeek(weeekArray));
-    };
+    const timeout = setTimeout(getTrailsParksAndWeatherDetails, 1000);
+    // const timeout = setTimeout(() => {
+    //   console.log("selectedSearchResult", selectedSearchResult);
+    // }, 1000);
 
-    if (lat && lon) {
-      getWeatherObject();
-      getWeek();
+    return () => clearTimeout(timeout);
+  }, [selectedSearch, selectedSearchResult, dispatch]);
+
+  const handleSearchResultClick = (result, index) => {
+    const {
+      properties: { name, osm_id },
+    } = result;
+
+    setSelectedSearch(name);
+    setSearchString(name);
+    setShowSearchResults(false);
+    dispatch(setSelectedSearchResult(result));
+    dispatch(clearSearchResults());
+
+    if (onSelect) {
+      onSelect(result);
     }
-  }, [lat, lon, state]);
+  };
 
   return Platform.OS === "web" ? (
     <VStack my="4" space={5} w="100%" maxW="300px">
-      <GooglePlacesAutocomplete
-        placeholder="Search"
-        query={{
-          key: Google_Api_Key,
-          language: "en", // language of the results
-        }}
-        minLength={2}
-        styles={{
-          textInput: {
-            borderColor: "#9ca3af",
-            borderWidth: 1,
-            paddingVertical: 3,
-            paddingHorizontal: 6,
-            borderRadius: 4,
-            fontSize: 14,
-          },
-
-          predefinedPlacesDescription: {
-            color: "#1faadb",
-            zIndex: 100,
-          },
-        }}
-        onPress={(data, details = null) => setSearchString(data?.description)}
-        onFail={(error) => console.error(error)}
-        requestUrl={{
-          url: "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api",
-          useOnPlatform: "all",
-        }} // this in only required for use on the web. See https://git.io/JflFv more for details.
-      />
+      {/* ... */}
+      <VStack w="100%" space={5} alignSelf="center">
+        <Box position="relative" height="auto">
+          <Input
+            onChangeText={(text) => setSearchString(text)}
+            placeholder={placeholder ?? "Search"}
+            width="100%"
+            borderRadius="4"
+            py="3"
+            px="1"
+            value={searchString}
+            fontSize="14"
+            backgroundColor={"white"}
+            InputLeftElement={
+              <Icon
+                m="2"
+                ml="3"
+                size="6"
+                color="gray.400"
+                as={<MaterialIcons name="search" />}
+              />
+            }
+            InputRightElement={
+              showSearchResults && (
+                <IconButton
+                  mr={2}
+                  icon={
+                    <Icon
+                      as={<MaterialIcons name="close" />}
+                      m="0"
+                      size="4"
+                      color="gray.400"
+                    />
+                  }
+                  onPress={() => {
+                    setShowSearchResults(false);
+                    setSearchString("");
+                  }}
+                />
+              )
+            }
+          />
+          <View style={{ position: "relative" }}>
+            {showSearchResults && searchResults?.length > 0 && (
+              <ScrollView
+                position="absolute"
+                top="100%"
+                left="0"
+                right="0"
+                maxHeight="100"
+                borderWidth={1}
+                borderColor="gray.200"
+                borderRadius={12}
+                backgroundColor="white"
+                showsVerticalScrollIndicator={false}
+                zIndex={10}
+              >
+                <List space={2} w="100%">
+                  {searchResults.map((result, i) => (
+                    <Pressable
+                      key={`result + ${i}`}
+                      onPress={() => handleSearchResultClick(result, i)}
+                      underlayColor="gray.100"
+                    >
+                      <HStack space={3}>
+                        <Text fontSize="sm" fontWeight="medium">
+                          {result.properties.name}
+                        </Text>
+                        <Text
+                          fontSize="sm"
+                          color="gray.500"
+                          textTransform={"capitalize"}
+                        >
+                          {result.properties.osm_value}
+                        </Text>
+                      </HStack>
+                    </Pressable>
+                  ))}
+                </List>
+              </ScrollView>
+            )}
+          </View>
+        </Box>
+      </VStack>
     </VStack>
   ) : isLoadingMobile ? (
     <Text>Loading...</Text>
@@ -117,6 +225,7 @@ export const SearchInput = () => {
         borderRadius="4"
         py="3"
         px="1"
+        value={searchString}
         fontSize="14"
         InputLeftElement={
           <Icon
@@ -128,6 +237,45 @@ export const SearchInput = () => {
           />
         }
       />
+
+      {showSearchResults && searchResults?.length > 0 && (
+        <ScrollView
+          position="absolute"
+          top="100%"
+          left="0"
+          right="0"
+          maxHeight="100"
+          borderWidth={1}
+          borderColor="gray.200"
+          borderRadius={12}
+          backgroundColor="white"
+          showsVerticalScrollIndicator={false}
+          zIndex={10}
+        >
+          <List space={2} w="100%">
+            {searchResults.map((result, i) => (
+              <Pressable
+                key={`result + ${i}`}
+                onPress={() => handleSearchResultClick(result, i)}
+                underlayColor="gray.100"
+              >
+                <HStack space={3}>
+                  <Text fontSize="sm" fontWeight="medium">
+                    {result.properties.name}
+                  </Text>
+                  <Text
+                    fontSize="sm"
+                    color="gray.500"
+                    textTransform={"capitalize"}
+                  >
+                    {result.properties.osm_value}
+                  </Text>
+                </HStack>
+              </Pressable>
+            ))}
+          </List>
+        </ScrollView>
+      )}
     </VStack>
   );
 };
