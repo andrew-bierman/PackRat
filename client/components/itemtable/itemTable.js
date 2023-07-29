@@ -17,7 +17,7 @@ export const ItemsTable = ({
   isLoading,
   totalPages,
   refetch,
-  setRefetch,
+  setRefetch = () => {},
 }) => {
   const flexArr = [2, 1, 1, 1, 0.65, 0.65, 0.65];
 
