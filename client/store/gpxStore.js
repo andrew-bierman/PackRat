@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, createEntityAdapter } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { api } from '../constants/api';
 
@@ -14,17 +14,19 @@ export const convertGeoJSONToGPX = createAsyncThunk(
   }
 );
 
+const gpxAdapter = createEntityAdapter();
+
 const gpxSlice = createSlice({
   name: 'gpx',
-  initialState: {
+  initialState: gpxAdapter.getInitialState({
     gpxData: null,
     loading: false,
     error: null,
-  },
+  }),
   reducers: {
     resetGpxData: (state) => {
       state.gpxData = null;
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -33,7 +35,7 @@ const gpxSlice = createSlice({
         state.error = null;
       })
       .addCase(convertGeoJSONToGPX.fulfilled, (state, action) => {
-        state.gpxData = action.payload;
+        gpxAdapter.setAll(state, action.payload);
         state.loading = false;
         state.error = null;
       })
