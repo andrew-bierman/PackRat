@@ -10,7 +10,7 @@ export const EditPackItemModal = ({
   editAsDuplicate,
   setPage,
   page,
-  setRefetch,
+  setRefetch = () => {},
   refetch,
 }) => {
   let currentPackId = undefined;
