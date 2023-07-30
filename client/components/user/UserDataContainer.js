@@ -20,10 +20,15 @@ export default function UserDataContainer({ data, type, userId }) {
 
   const cardType = type === "packs" ? "pack" : "trip";
 
+  const differentUser = userId && userId !== currentUser._id;
+
   return (
     <VStack space={2} alignItems="center" flex={1} width="100%">
       <Text fontSize="2xl" fontWeight="bold" color="white" uppercase={true}>
-        Your {typeUppercase}
+        {differentUser
+          // ? `${userId}'s ${typeUppercase}`
+          ? `${typeUppercase}`
+          : `Your ${typeUppercase}`}
       </Text>
       <Stack
         direction={["column", "column", "column", "row"]}
@@ -39,6 +44,7 @@ export default function UserDataContainer({ data, type, userId }) {
               state={dataState}
               setState={setDataState}
               index={index}
+              differentUser={differentUser}
             />
           ))
         ) : currentUser?._id === userId ? (
