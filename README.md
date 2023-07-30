@@ -60,74 +60,97 @@ cd PackRat
 ```
 
 3. Set up the environment variables for the client and server.
-   - See the `.env.example` files in the `client` and `server` directories for the necessary environment variables. Replace the values with your own.
-   - Note that for the client to run, you need to also make the following changes:
-     - Copy the `app.example.json` file and rename it to `app.json`. Open the file and replace the `MAPBOX_API_KEY` value with your own Mapbox API key.
-     - Navigate to the ios directory. Copy the `Podfile.example` file and rename it to `Podfile`. Open the file and replace the `MAPBOX_ACCESS_TOKEN` value with your own Mapbox access token.
-     - Navigate to the android directory. Copy the `gradle.properties.example` file and rename it to `gradle.properties`. Open the file and replace the `MAPBOX_DOWNLOADS_TOKEN` value with your own Mapbox downloads token.
-     - See the [Mapbox documentation](https://docs.mapbox.com/help/getting-started/access-tokens/) for more information on how to obtain Mapbox API keys and access tokens.
-4. Navigate to the `client` directory.
+   - If you have access to the development env files, use those. Otherwise, replace the values with your own.
+   - See the `.env.example` files in the `client` and `server` directories for the necessary environment variables. 
+
+#### Automated Setup 🛠️
+
+1. Run the setup script from the `PackRat` directory.
+```
+npm run setup
+```
+
+#### Manual Setup 📝
+
+1. Navigate to the `PackRat` directory if you are not already there.
+
+2. Navigate to the `client` directory.
 
 ```
 cd client
 ```
 
-5. Duplicate the `.env.example` file and rename it to `.env`. Open the file and replace the values with your own.
+- Note that for the client to run, you need to also make the following changes:
+     - Copy the `app.example.json` file and rename it to `app.json`. Open the file and replace the `MAPBOX_DOWNLOADS_TOKEN_FROM_ENV` value with your own Mapbox API key.
+     - Navigate to the ios directory. Copy the `Podfile.example` file and rename it to `Podfile`. Open the file and replace the `MAPBOX_DOWNLOADS_TOKEN_FROM_ENV` value with your own Mapbox access token.
+     - Navigate to the android directory. Copy the `gradle.properties.example` file and rename it to `gradle.properties`. Open the file and replace the `MAPBOX_DOWNLOADS_TOKEN_FROM_ENV` value with your own Mapbox downloads token.
+     - See the [Mapbox documentation](https://docs.mapbox.com/help/getting-started/access-tokens/) for more information on how to obtain Mapbox API keys and access tokens.
+
+2. Duplicate the `.env.example` file and rename it to `.env`. Open the file and replace the values with your own. 
+   - If you have access to the development env file, skip this step. Otherwise, replace the values with your own.
 
 ```
 cp .env.example .env
 ```
 
-6. Duplicate the `app.example.json` file and rename it to `app.json`. Open the file and replace the `MAPBOX_API_KEY` value with your own Mapbox API key.
+1. Duplicate the `app.example.json` file and rename it to `app.json`. Open the file and replace the `MAPBOX_DOWNLOADS_TOKEN_FROM_ENV` value with your own Mapbox API key.
 
 ```
 cp app.example.json app.json
 ```
 
-7. Navigate to the ios directory.
+4. Navigate to the ios directory.
 
 ```
 cd ios
 ```
 
-8. Duplicate the `Podfile.example` file and rename it to `Podfile`. Open the file and replace the `MAPBOX_ACCESS_TOKEN` value with your own Mapbox access token.
+5. Duplicate the `Podfile.example` file and rename it to `Podfile`. Open the file and replace the `MAPBOX_DOWNLOADS_TOKEN_FROM_ENV` value with your own Mapbox access token.
 
 ```
 cp Podfile.example Podfile
 ```
 
-9. Navigate to the android directory.
+6. Navigate to the android directory.
 
 ```
 cd ../android
 
 ```
 
-10. Duplicate the `gradle.properties.example` file and rename it to `gradle.properties`. Open the file and replace the `MAPBOX_DOWNLOADS_TOKEN` value with your own Mapbox downloads token.
+7. Duplicate the `gradle.properties.example` file and rename it to `gradle.properties`. Open the file and replace the `MAPBOX_DOWNLOADS_TOKEN_FROM_ENV` value with your own Mapbox downloads token.
 
 ```
 cp gradle.properties.example gradle.properties
 ```
 
-11. Navigate back to the `PackRat` directory.
+- Note, for the replacement steps, these replaced values should now be strings with the mapbox secret key for download token, in the following format:
+
+```
+"sk..."
+```
+
+
+1. Navigate back to the `PackRat` directory.
 
 ```
 cd ../..
 ```
 
-12. Navigate to the `server` directory.
+9. Navigate to the `server` directory.
 
 ```
 cd server
 ```
 
-13. Duplicate the `.env.example` file and rename it to `.env`. Open the file and replace the values with your own.
+10. Duplicate the `.env.example` file and rename it to `.env`. Open the file and replace the values with your own. 
+        - If you have access to the development env file, skip this step. Otherwise, replace the values with your own.
 
 ```
 cp .env.example .env
 ```
 
-14. Navigate back to the `PackRat` directory.
+1.  Navigate back to the `PackRat` directory.
 
 ```
 cd ..
