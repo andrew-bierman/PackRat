@@ -204,7 +204,7 @@ export const SaveTripContainer = ({ dateRange }) => {
           </HStack> */}
 
 <DropdownComponent
-    onValueChange={(itemValue) => setIsPublic(itemValue=='Yes'?true:false)}
+    onValueChange={(itemValue) => setIsPublic(itemValue)}
     data={['Yes','For me only']}
     value={isPublic}
     placeholder="Is Public"
