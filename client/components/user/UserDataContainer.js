@@ -3,14 +3,17 @@ import { Stack, VStack, Text, Button } from "native-base";
 import { Platform } from "react-native";
 import UserDataCard from "./UserDataCard";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
-export default function UserDataContainer({ data, type }) {
+export default function UserDataContainer({ data, type, userId }) {
   const [dataState, setDataState] = useState(
     data.length > 0 ? Array(data.length).fill(false) : []
   );
   useEffect(() => {
     setDataState(Array(data.length).fill(false));
   }, [data]);
+  const currentUser = useSelector((state) => state.auth.user);
+
   const typeUppercase = type.charAt(0).toUpperCase() + type.slice(1);
 
   const typeUppercaseSingular = typeUppercase.slice(0, -1);
@@ -38,7 +41,7 @@ export default function UserDataContainer({ data, type }) {
               index={index}
             />
           ))
-        ) : (
+        ) : currentUser?._id === userId ? (
           <Link href="/">
             <Button
               _text={{
@@ -49,6 +52,8 @@ export default function UserDataContainer({ data, type }) {
               {`Create your first ${typeUppercaseSingular}`}
             </Button>
           </Link>
+        ) : (
+          <></>
         )}
       </Stack>
     </VStack>

@@ -7,25 +7,16 @@ import { Platform } from "react-native";
 import UserProfileContainerMobile from '../../components/user/UserProfileContainerMobile';
 import { Stack as Header } from "expo-router";
 
-const CatDetails = () => {
-  const { user } = useAuth();
-  const [cat, setCat] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+const Profile = () => {
   const { id } = useSearchParams();
-
-  useEffect(() => {
-    console.log("sdfsfsd");
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
-  }, []);
 
   return Platform.OS === "web" ? (
     <>
       <UserProfileContainer id={id} />
     </>
   ) : (
-    <UserProfileContainerMobile id={id} />
+      <UserProfileContainer id={id} />
+    // <UserProfileContainerMobile id={id} />
   );
 };
 
@@ -43,4 +34,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CatDetails;
+export default Profile;

@@ -21,6 +21,7 @@ import gpxReducer from "./gpxStore";
 import destinationReducer from "./destinationStore";
 import chatReducer from "./chatStore";
 import globalItems from "./globalItemsStore";
+import userStore from './userStore';
 
 // combine reducers
 const rootReducer = combineReducers({
@@ -42,6 +43,7 @@ const rootReducer = combineReducers({
   chat: chatReducer,
   globalItems,
   chat: chatReducer,
+  userStore,
 });
 
 // configure persist store and whitelist reducers

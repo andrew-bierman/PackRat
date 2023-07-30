@@ -88,7 +88,7 @@ export default function ProfileContainer() {
         <Box style={styles.mainContentContainer}>
           <Box style={styles.userDataContainer}>
             {favoritesData?.length > 0 ? (
-              <UserDataContainer data={favoritesData} type="favorites" />
+              <UserDataContainer data={favoritesData} type="favorites" userId={user?._id} />
             ) : (
               <Text fontSize="2xl" fontWeight="bold" color="white">
                 No favorites yet
@@ -97,12 +97,12 @@ export default function ProfileContainer() {
           </Box>
           {Array.isArray(packsData) && packsData.length > 0 && (
             <Box style={styles.userDataContainer}>
-              <UserDataContainer data={packsData} type="packs" />
+              <UserDataContainer data={packsData} type="packs" userId={user?._id} />
             </Box>
           )}
           {Array.isArray(tripsData?.trips) && tripsData?.trips.length > 0 && (
             <Box style={styles.userDataContainer}>
-              <UserDataContainer data={tripsData?.trips} type="trips" />
+              <UserDataContainer data={tripsData?.trips} type="trips" userId={user?._id} />
             </Box>
           )}
         </Box>
