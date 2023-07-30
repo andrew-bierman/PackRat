@@ -52,4 +52,4 @@ expo.webp.enabled=true
 # Disabled by default because iOS doesn't support animated webp
 expo.webp.animated=false
 
-MAPBOX_DOWNLOADS_TOKEN="sk..."
+MAPBOX_DOWNLOADS_TOKEN="MAPBOX_DOWNLOADS_TOKEN_FROM_ENV"
