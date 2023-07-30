@@ -4,7 +4,6 @@ import { StyleSheet, Text, View } from "react-native";
 import { useAuth } from "../../auth/provider";
 import UserProfileContainer from '../../components/user/UserProfileContainer';
 import { Platform } from "react-native";
-import UserProfileContainerMobile from '../../components/user/UserProfileContainerMobile';
 import { Stack as Header } from "expo-router";
 
 const Profile = () => {
@@ -16,7 +15,6 @@ const Profile = () => {
     </>
   ) : (
       <UserProfileContainer id={id} />
-    // <UserProfileContainerMobile id={id} />
   );
 };
 
