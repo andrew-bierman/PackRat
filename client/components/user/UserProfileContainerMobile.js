@@ -7,7 +7,7 @@ import {
   ScrollView,
 } from "native-base";
 import { StyleSheet } from "react-native";
-import PacksContainer from "./PacksContainer";
+// import PacksContainer from "./PacksContainer";
 import { useAuth } from "../../auth/provider";
 import { theme } from "../../theme";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -63,7 +63,7 @@ export default function UserProfileContainerMobile() {
           </Box>
           {isError ? <Text>{error}</Text> : null}
         </Box>
-        {isLoading ? <Text>Loading....</Text> : <PacksContainer data={data} />}
+        {/* {isLoading ? <Text>Loading....</Text> : <PacksContainer data={data} />} */}
       </Box>
     </ScrollView>
   );
