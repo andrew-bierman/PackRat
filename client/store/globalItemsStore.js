@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
 import axios from "axios";
 import { api } from "../constants/api";
 
@@ -23,6 +23,7 @@ export const getItemsGlobal = createAsyncThunk(
     }
   }
 );
+
 export const deleteGlobalItem = createAsyncThunk(
   "items/deleteGlobalItem",
   async (item) => {
@@ -30,6 +31,7 @@ export const deleteGlobalItem = createAsyncThunk(
     return response.data;
   }
 );
+
 export const editGlobalItem = createAsyncThunk(
   "items/editGlobalItem",
   async (newItem) => {
@@ -38,13 +40,17 @@ export const editGlobalItem = createAsyncThunk(
   }
 );
 
+const itemsAdapter = createEntityAdapter({
+  selectId: (item) => item._id, // Assuming the unique identifier field is '_id'
+});
+
 const itemsSlice = createSlice({
   name: "globalItems",
-  initialState: {
+  initialState: itemsAdapter.getInitialState({
     globalItems: [],
     isLoading: false,
     error: null,
-  },
+  }),
   reducers: {},
   extraReducers: (builder) => {
     builder
@@ -65,6 +71,7 @@ const itemsSlice = createSlice({
         state.error = null;
       })
       .addCase(getItemsGlobal.fulfilled, (state, action) => {
+        itemsAdapter.setAll(state, action.payload);
         state.globalItems = action.payload;
         state.isLoading = false;
         state.error = null;
@@ -73,15 +80,12 @@ const itemsSlice = createSlice({
         state.isLoading = false;
         state.error = action.error.message;
       })
-
       .addCase(deleteGlobalItem.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
       .addCase(deleteGlobalItem.fulfilled, (state, action) => {
-        state.globalItems.items = state.globalItems.items.filter(
-          (item) => item["_id"] !== action.payload.data["_id"]
-        );
+        itemsAdapter.removeOne(state, action.payload.data._id);
         state.isLoading = false;
         state.error = null;
       })

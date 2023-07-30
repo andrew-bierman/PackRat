@@ -1,6 +1,8 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
 import axios from "axios";
 import { api } from "../constants/api";
+
+const itemsAdapter = createEntityAdapter();
 
 export const deleteItem = createAsyncThunk(
   "items/deleteItem",
@@ -27,13 +29,15 @@ export const getItems = createAsyncThunk("items/getItems", async (packId) => {
   return response.data;
 });
 
+const initialState = itemsAdapter.getInitialState({
+  items: [],
+  isLoading: false,
+  error: null,
+});
+
 const itemsSlice = createSlice({
   name: "items",
-  initialState: {
-    items: [],
-    isLoading: false,
-    error: null,
-  },
+  initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
@@ -42,9 +46,7 @@ const itemsSlice = createSlice({
         state.error = null;
       })
       .addCase(deleteItem.fulfilled, (state, action) => {
-        state.items = state.items.filter(
-          (item) => item.id !== action.payload.id
-        );
+        itemsAdapter.removeOne(state, action.payload.id);
         state.isLoading = false;
         state.error = null;
       })
@@ -57,13 +59,7 @@ const itemsSlice = createSlice({
         state.error = null;
       })
       .addCase(editItem.fulfilled, (state, action) => {
-        state.items = state.items.map((item) => {
-          if (item.id === action.payload.id) {
-            return action.payload;
-          } else {
-            return item;
-          }
-        });
+        itemsAdapter.upsertOne(state, action.payload);
         state.isLoading = false;
         state.error = null;
       })
@@ -76,7 +72,7 @@ const itemsSlice = createSlice({
         state.error = null;
       })
       .addCase(getItems.fulfilled, (state, action) => {
-        state.items = action.payload;
+        itemsAdapter.setAll(state, action.payload);
         state.isLoading = false;
         state.error = null;
       })
