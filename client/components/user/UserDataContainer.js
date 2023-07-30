@@ -3,24 +3,32 @@ import { Stack, VStack, Text, Button } from "native-base";
 import { Platform } from "react-native";
 import UserDataCard from "./UserDataCard";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
-export default function UserDataContainer({ data, type }) {
+export default function UserDataContainer({ data, type, userId }) {
   const [dataState, setDataState] = useState(
     data.length > 0 ? Array(data.length).fill(false) : []
   );
   useEffect(() => {
     setDataState(Array(data.length).fill(false));
   }, [data]);
+  const currentUser = useSelector((state) => state.auth.user);
+
   const typeUppercase = type.charAt(0).toUpperCase() + type.slice(1);
 
   const typeUppercaseSingular = typeUppercase.slice(0, -1);
 
   const cardType = type === "packs" ? "pack" : "trip";
 
+  const differentUser = userId && userId !== currentUser._id;
+
   return (
     <VStack space={2} alignItems="center" flex={1} width="100%">
       <Text fontSize="2xl" fontWeight="bold" color="white" uppercase={true}>
-        Your {typeUppercase}
+        {differentUser
+          // ? `${userId}'s ${typeUppercase}`
+          ? `${typeUppercase}`
+          : `Your ${typeUppercase}`}
       </Text>
       <Stack
         direction={["column", "column", "column", "row"]}
@@ -36,9 +44,10 @@ export default function UserDataContainer({ data, type }) {
               state={dataState}
               setState={setDataState}
               index={index}
+              differentUser={differentUser}
             />
           ))
-        ) : (
+        ) : currentUser?._id === userId ? (
           <Link href="/">
             <Button
               _text={{
@@ -49,6 +58,8 @@ export default function UserDataContainer({ data, type }) {
               {`Create your first ${typeUppercaseSingular}`}
             </Button>
           </Link>
+        ) : (
+          <></>
         )}
       </Stack>
     </VStack>
