@@ -87,6 +87,17 @@ export const CustomCard = ({
                 titleRef={titleRef}
               />
             </Box>
+            <Box
+              flexDirection="row"
+              alignItems="center"
+            >
+              <Box
+              mx="4"
+              >
+            <Link href={`/profile/${data['owner_id']}`}>
+            <Text>View Owner</Text>
+            </Link>
+              </Box>
             {link && (
               <Box
                 flexDir={"row"}
@@ -118,6 +129,7 @@ export const CustomCard = ({
                 )}
               </Box>
             )}
+            </Box>
           </Box>
           <Box
             px="4"
@@ -156,7 +168,18 @@ export const CustomCard = ({
             alignItems="center"
           >
             <Box></Box>
-            {link && (
+            <Box
+              flexDirection="row"
+              alignItems="center"
+            >
+              <Box
+              mx="4"
+              >
+            <Link href={`/profile/${data['owner_id']}`}>
+            <Text>View Owner</Text>
+            </Link>
+              </Box>
+              {link && (
               <Box>
                 {isCopied ? (
                   <MaterialCommunityIcons
@@ -175,6 +198,8 @@ export const CustomCard = ({
                 )}
               </Box>
             )}
+            </Box>
+            
           </Box>
           <Box
             px="4"

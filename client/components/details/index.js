@@ -35,6 +35,7 @@ export const DetailsComponent = ({ type, data, additionalComps, link }) => {
         return (
           <>
             <CustomCard
+              data={data}
               title={data?.name}
               link={link}
               content={

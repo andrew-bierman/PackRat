@@ -19,21 +19,37 @@ import {
   fetchUserFavorites,
   selectAllFavorites,
 } from "../../store/favoritesStore";
+import { getUser } from '../../store/userStore';
 
-export default function ProfileContainer() {
+export default function ProfileContainer({ id = null }) {
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(fetchUserPacks(user?._id));
-    dispatch(fetchUserFavorites(user?._id));
-  }, [dispatch, user?._id]);
 
-  const user = useSelector((state) => state.auth.user);
-  const packsData = useSelector(selectAllPacks);
+  const authUser = useSelector((state) => state.auth.user);
+  const userStore = useSelector((state) => state.userStore);
+  const authStore = useSelector((state) => state.auth);
+  const allPacks = useSelector(selectAllPacks);
   const tripsData = useSelector((state) => state.trips);
-  const favoritesData = useSelector(selectAllFavorites);
+  const allFavorites = useSelector(selectAllFavorites);
 
-  const isLoading = useSelector((state) => state?.auth?.loading);
-  const error = useSelector((state) => state?.auth?.error);
+  const differentUser = id && id !== authUser._id;
+
+  useEffect(() => {
+    if (differentUser) {
+      dispatch(getUser(id));
+    } else {
+      dispatch(fetchUserPacks(authUser?._id));
+      dispatch(fetchUserFavorites(authUser?._id));
+    }
+  }, [dispatch, id, authUser, differentUser]);
+
+  const user = differentUser ? userStore.user : authUser;
+  
+  const isLoading = differentUser ? userStore.loading : authStore.loading;
+
+  const error = differentUser ? userStore.error : authStore.error;
+
+  const packsData = differentUser ? user?.packs : allPacks;
+  const favoritesData = differentUser ? user?.favorites : allFavorites;
 
   if (isLoading) return <Text>Loading...</Text>;
 
@@ -88,7 +104,7 @@ export default function ProfileContainer() {
         <Box style={styles.mainContentContainer}>
           <Box style={styles.userDataContainer}>
             {favoritesData?.length > 0 ? (
-              <UserDataContainer data={favoritesData} type="favorites" />
+              <UserDataContainer data={favoritesData} type="favorites" userId={user?._id} />
             ) : (
               <Text fontSize="2xl" fontWeight="bold" color="white">
                 No favorites yet
@@ -97,12 +113,12 @@ export default function ProfileContainer() {
           </Box>
           {Array.isArray(packsData) && packsData.length > 0 && (
             <Box style={styles.userDataContainer}>
-              <UserDataContainer data={packsData} type="packs" />
+              <UserDataContainer data={packsData} type="packs" userId={user?._id} />
             </Box>
           )}
           {Array.isArray(tripsData?.trips) && tripsData?.trips.length > 0 && (
             <Box style={styles.userDataContainer}>
-              <UserDataContainer data={tripsData?.trips} type="trips" />
+              <UserDataContainer data={tripsData?.trips} type="trips" userId={user?._id} />
             </Box>
           )}
         </Box>
@@ -158,5 +174,8 @@ const styles = StyleSheet.create({
   },
   userDataContainer: {
     marginBottom: 25,
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
