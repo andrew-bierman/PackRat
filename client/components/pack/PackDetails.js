@@ -1,11 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import PackContainer from "./PackContainer";
 import { DetailsHeader } from "../details/header";
 
 import { useSearchParams } from "expo-router";
 import { TableContainer } from "../pack_table/Table";
-import { selectPackById } from "../../store/packsStore";
+import { fetchUserPacks, selectPackById } from "../../store/packsStore";
 
 import { useSelector, useDispatch } from "react-redux";
 import { fetchSinglePack } from "../../store/singlePackStore";
@@ -17,6 +17,8 @@ import { theme } from "../../theme";
 import { CLIENT_URL } from "@env";
 import ScoreContainer from "../ScoreContainer";
 import ChatContainer from "../chat";
+import { AddItem } from "../item/AddItem";
+import { AddItemModal } from "./AddItemModal";
 
 export function PackDetails() {
   const searchParams = new URLSearchParams(window.location.search);
@@ -28,14 +30,18 @@ export function PackDetails() {
 
   const link = `${CLIENT_URL}/packs/${packId}`;
 
+  const user = useSelector((state) => state.auth.user);
+  const userId = user && user._id;
   useEffect(() => {
     if (!packId) return;
     dispatch(fetchSinglePack(packId));
+    if (userId) dispatch(fetchUserPacks(userId));
   }, [dispatch, packId]);
 
   const currentPack = useSelector((state) => state.singlePack.singlePack);
+  const currentPackId = currentPack && currentPack._id;
 
-  const user = useSelector((state) => state.auth.user);
+  const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
 
   // check if user is owner of pack, and that pack and user exists
   const isOwner = currentPack && user && currentPack.owner_id === user._id;
@@ -63,17 +69,25 @@ export function PackDetails() {
             additionalComps={
               <>
                 <TableContainer currentPack={currentPack} copy={canCopy} />
+                <Box
+                  style={styles.boxStyle}
+                >
+                  <AddItemModal
+                    currentPackId={currentPackId}
+                    currentPack={currentPack}
+                    isAddItemModalOpen={isAddItemModalOpen}
+                    setIsAddItemModalOpen={setIsAddItemModalOpen}
+                  />
+                </Box>
                 <ScoreContainer
                   type="pack"
                   data={currentPack}
                   isOwner={isOwner}
                 />
                 <Box
-                  style={{
-                    width: "100%",
-                  }}
+                  style={styles.boxStyle}
                 >
-                <ChatContainer />
+                  <ChatContainer />
                 </Box>
               </>
             }
@@ -102,5 +116,11 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     backgroundColor: "white",
+  },
+  boxStyle: {
+    padding: 10,
+    borderRadius: 10,
+    width: "100%",
+    minHeight: 100,
   },
 });

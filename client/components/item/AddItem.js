@@ -17,6 +17,7 @@ export const AddItem = ({
   page,
   closeModalHandler,
   refetch,
+  setIsAddItemModalOpen = () => {},
   setRefetch = () => {},
 }) => {
   const dispatch = useDispatch();

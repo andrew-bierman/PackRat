@@ -11,6 +11,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { addTrail, addPark } from "../store/dropdownStore";
 import MapContainer from "./map/MapContainer";
 import { convertPhotonGeoJsonToShape } from "../utils/mapFunctions";
+import { selectAllTrails } from "../store/trailsStore";
 
 export default function TripCard({
   title,
@@ -25,19 +26,16 @@ export default function TripCard({
 
   const currentTrail = useSelector((state) => state.dropdown.currentTrail);
   const currentPark = useSelector((state) => state.dropdown.currentPark);
-  const trailsDetails = useSelector((state) => state.trails.trailsDetails);
-
-  const currentShape = useSelector((state) =>
-    state.trails.trailsDetails.filter(
-      (trail) => trail.properties.name == currentTrail
-    )
+  const trailsDetails = useSelector(selectAllTrails); // updated selector for new trails slice
+  const currentShape = trailsDetails.filter(
+    (trail) => trail.properties.name == currentTrail
   );
 
   const handleValueChange = (value) => {
     // Assuming that you have a redux action to set the current trail and park
     if (isTrail) {
       dispatch(addTrail(value));
-    } else if (isPark) {
+    } else {
       dispatch(addPark(value));
     }
   };
