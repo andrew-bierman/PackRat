@@ -232,8 +232,10 @@ const Navigation = () => {
           >
             <View style={styles.logoWrapper}>
               <SVGLogoComponent
-                width={isMobileView ? 48 : 64}
-                height={isMobileView ? 48 : 64}
+                // width={isMobileView ? 48 : 64}
+                // height={isMobileView ? 48 : 64}
+                width={48}
+                height={48}
                 fill="#fff"
               />
             </View>
@@ -276,9 +278,9 @@ const Navigation = () => {
             //   showsHorizontalScrollIndicator={false}
             //   contentContainerStyle={styles.menuBar}
             // >
-            <>
+            <View style={styles.menuBar}>
               {navigationItems?.map((item, index) => renderNavigationItem(item, index))}
-            </>
+            </View>
             // </ScrollView>
           )}
         </View>
@@ -323,7 +325,6 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     paddingHorizontal: 16,
     height: 60,
-    width: "100%",
   },
   menuBarItem: {
     flexDirection: "row",
