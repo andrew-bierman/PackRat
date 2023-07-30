@@ -10,6 +10,7 @@ import { AddItemGlobal } from "../../components/item/AddItemGlobal";
 import { ItemsTable } from "../../components/itemtable/itemTable";
 import { useDispatch, useSelector } from "react-redux";
 import { getItemsGlobal } from "../../store/globalItemsStore";
+import { Stack as Header } from "expo-router";
 
 export default function Items() {
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
@@ -32,6 +33,11 @@ export default function Items() {
 
   return (
     <ScrollView>
+      <Header.Screen
+        options={{
+          title: "Items",
+        }}
+      />
       <Box>
         <>
           <CustomModal
