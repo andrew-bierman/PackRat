@@ -3,7 +3,6 @@ import { Text } from "react-native";
 import { theme } from "../../theme";
 
 export default function Footer() {
-  const year = new Date().getFullYear();
   return (
     <Box
       style={{
@@ -21,7 +20,7 @@ export default function Footer() {
           textAlign: "center",
         }}
       >
-        Copyright &copy; {year}
+        Copyright &copy; 2023
       </Text>
     </Box>
   );

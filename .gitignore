@@ -1,7 +1,6 @@
 *.env
 node_modules
-yarn.lock
-# dist
+dist
 old/
 .zip
 app.json
@@ -14,7 +13,6 @@ client.zip
 *.DS_Store
 package-lock.json
 serviceAccountKey.json
-google-services.json
 
 # Logs
 logs
@@ -90,7 +88,6 @@ web_modules/
 .env
 .env.test
 
-.expo/
 # parcel-bundler cache (https://parceljs.org/)
 .cache
 .parcel-cache

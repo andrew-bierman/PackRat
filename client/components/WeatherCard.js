@@ -33,7 +33,9 @@ const monthArr = [
   "December",
 ];
 
-export default function WeatherCard({weatherObject, weatherWeek}) {
+export default function WeatherCard() {
+  const weatherObject = useSelector((state) => state.weather.weatherObject);
+  const weatherWeek = useSelector((state) => state.weather.weatherWeek);
 
   const date = new Date();
   const dayOfMonth = date.getDate();
@@ -43,7 +45,7 @@ export default function WeatherCard({weatherObject, weatherWeek}) {
   const dateFormatted = `${monthArr[date.getMonth()]} ${dayOfMonth}, ${year}`;
   const restOfWeek = getNext4Days(day);
 
-  const weatherIconUrl = `https://openweathermap.org/img/wn/${weatherObject.weather[0].icon}@2x.png`;
+  const weatherIconUrl = `http://openweathermap.org/img/wn/${weatherObject.weather[0].icon}@2x.png`;
 
   return (
     <Stack
@@ -175,7 +177,7 @@ export default function WeatherCard({weatherObject, weatherWeek}) {
           style={styles.cardContainer}
         >
           {weatherWeek.map((day, i) => {
-            const weatherIconUrl = `https://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png`;
+            const weatherIconUrl = `http://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png`;
 
             return (
               <Stack
