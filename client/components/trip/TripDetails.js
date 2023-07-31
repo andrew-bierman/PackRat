@@ -48,7 +48,6 @@ export function TripDetails() {
 
   if (isLoading) return <Text>Loading...</Text>;
 
-
   return (
     <Box
       style={[
