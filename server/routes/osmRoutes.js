@@ -7,6 +7,7 @@ import {
   getTrailsOSM,
   postSingleGeoJSON,
   getPhotonDetails,
+  getEnhancedPhotonDetails,
 } from "../controllers/getOsmController.js";
 
 const router = express.Router();
@@ -220,6 +221,7 @@ router.get("/destination/:id", getDestination);
  *         description: Error retrieving Photon details
  */
 router.get('/photonDetails/:type/:id', getPhotonDetails);
+// router.get("/photonDetails/:type/:id", getEnhancedPhotonDetails)
 
 
 export default router;
