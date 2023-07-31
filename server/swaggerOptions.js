@@ -33,15 +33,15 @@ const options = {
 
   servers: [
     {
-      url: "http://localhost:3000",
+      // url: "http://localhost:3000",
+      url: " https://26af-182-185-161-23.ngrok-free.app",
       description: "Development server",
     },
     {
-      url: "https://packrat.onrender.com",
+      url: " https://26af-182-185-161-23.ngrok-free.app",
       description: "Production server",
     },
   ],
-
 };
 //  Swagger-jsdoc with the options
 const specs = swaggerJsdoc(options);
@@ -58,6 +58,5 @@ specs.components = {
 
 // console.log("options ----- ", options);
 // console.log("specs ----- ", specs);
-
 
 export default specs;

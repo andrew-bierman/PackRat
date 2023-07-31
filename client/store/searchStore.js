@@ -7,11 +7,13 @@ import axios from "axios";
 export const fetchPhotonSearchResults = createAsyncThunk(
   "search/fetchPhotonSearchResults",
   async (searchString) => {
-    const url = api + `/osm/photon/search?searchString=${encodeURIComponent(searchString)}`;
+    const url =
+      api +
+      `/osm/photon/search?searchString=${encodeURIComponent(searchString)}`;
 
     try {
       const response = await axios.get(url);
-      console.log("response", response);
+      console.log("response==>", response);
       return response.data;
     } catch (error) {
       console.error("error:" + error);
@@ -48,7 +50,7 @@ const searchSlice = createSlice({
       })
       .addCase(fetchPhotonSearchResults.rejected, (state, action) => {
         state.searchResults = [];
-      })
+      });
   },
 });
 

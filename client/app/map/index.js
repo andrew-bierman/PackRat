@@ -15,10 +15,13 @@ import { Select, Center, Box, CheckIcon } from "native-base";
 import { MAPBOX_ACCESS_TOKEN } from "@env";
 import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
 import { theme } from "../../theme";
-
+import UseTheme from "../../hooks/useTheme";
 Mapbox.setAccessToken(MAPBOX_ACCESS_TOKEN);
 
 export default function Map() {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
+  // sourcery skip: avoid-function-declarations-in-blocks
   function CustomizedMap() {
     const mapViewRef = useRef(null);
 
@@ -239,7 +242,7 @@ export default function Map() {
             <MaterialCommunityIcons
               name="arrow-expand"
               size={30}
-              color={theme.colors.text}
+              color={currentTheme.colors.text}
             />
           </TouchableOpacity>
         </Mapbox.MapView>

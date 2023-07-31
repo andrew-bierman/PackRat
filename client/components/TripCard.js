@@ -10,7 +10,7 @@ import { theme } from "../theme/index";
 import { useSelector, useDispatch } from "react-redux";
 import { addTrail, addPark } from "../store/dropdownStore";
 import MapContainer from "./map/MapContainer";
-
+import UseTheme from "../hooks/useTheme";
 export default function TripCard({
   title,
   Icon,
@@ -19,6 +19,8 @@ export default function TripCard({
   isSearch,
   isTrail,
 }) {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
   const dispatch = useDispatch();
 
   const currentTrail = useSelector((state) => state.dropdown.currentTrail);
@@ -30,12 +32,12 @@ export default function TripCard({
 
   const handleValueChange = (value) => {
     // Assuming that you have a redux action to set the current trail and park
-    if(isTrail) {
+    if (isTrail) {
       dispatch(addTrail(value));
-    } else if (isPark){
+    } else if (isPark) {
       dispatch(addPark(value));
     }
-  }
+  };
 
   console.log("currentShape", currentShape);
 
@@ -66,8 +68,8 @@ export default function TripCard({
         <Icon />
         <Text
           style={{
-            color: theme.colors.textPrimary,
-            fontSize: theme.font.size,
+            color: currentTheme.colors.textPrimary,
+            fontSize: currentTheme.font.size,
             fontWeight: 600,
           }}
         >

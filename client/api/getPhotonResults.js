@@ -1,6 +1,8 @@
 import axios from "axios";
 
 export const getPhotonResults = async (addressArray) => {
+  console.log("addressArray", addressArray);
+
   if (!addressArray) return;
 
   let params = {
@@ -24,8 +26,8 @@ export const getPhotonResults = async (addressArray) => {
   const response = await axios.get(
     `https://photon.komoot.io/api/?${queryString}`
   );
-
-  console.log("response", response);
+  console.log("blahhhhhhhhhhhhhhhh");
+  console.log("response=================>", response);
 
   //   const trailsArray = response.data.features.map((_item) => _item?.properties?.name);
 

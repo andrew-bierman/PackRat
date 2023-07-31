@@ -29,8 +29,10 @@ import { MapContainer } from "../map/MapContainer";
 
 import { CustomModal } from "../modal";
 import { SaveTripContainer } from "./createTripModal";
-
+import UseTheme from "../../hooks/useTheme";
 export default function Trips() {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
   const [parksData, setParksData] = useState();
   const [trails, setTrailsData] = useState();
   const weatherObject = useSelector((state) => state.weather.weatherObject);
@@ -66,12 +68,15 @@ export default function Trips() {
               <FontAwesome
                 name="map"
                 size={20}
-                color={theme.colors.cardIconColor}
+                color={currentTheme.colors.cardIconColor}
               />
             )}
           />
 
-          <WeatherCard weatherObject={weatherObject} weatherWeek={weatherWeek} />
+          <WeatherCard
+            weatherObject={weatherObject}
+            weatherWeek={weatherWeek}
+          />
 
           <TripCard
             title="Nearby Trails"
@@ -82,7 +87,7 @@ export default function Trips() {
               <FontAwesome5
                 name="hiking"
                 size={20}
-                color={theme.colors.cardIconColor}
+                color={currentTheme.colors.cardIconColor}
               />
             )}
           />
@@ -95,7 +100,7 @@ export default function Trips() {
               <FontAwesome5
                 name="mountain"
                 size={20}
-                color={theme.colors.cardIconColor}
+                color={currentTheme.colors.cardIconColor}
               />
             )}
           />
@@ -106,12 +111,11 @@ export default function Trips() {
               <FontAwesome5
                 name="route"
                 size={24}
-                color={theme.colors.cardIconColor}
+                color={currentTheme.colors.cardIconColor}
               />
             )}
             title="Map"
             isMap={true}
-           
           />
           <Box>
             <SaveTripContainer />

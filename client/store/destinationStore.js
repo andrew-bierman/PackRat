@@ -5,6 +5,7 @@ import { api } from "../constants/api";
 export const processGeoJSON = createAsyncThunk(
   "destination/processGeoJSON",
   async (data, { rejectWithValue }) => {
+    console.log("dataoo", data);
     try {
       const response = await axios.post(`${api}/osm/process/geojson`, data);
       return response.data;
@@ -18,7 +19,9 @@ export const getDestination = createAsyncThunk(
   "destination/getDestination",
   async (destinationId, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${api}/osm/destination/${destinationId}`);
+      const response = await axios.get(
+        `${api}/osm/destination/${destinationId}`
+      );
       return response.data;
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -28,11 +31,12 @@ export const getDestination = createAsyncThunk(
 
 export const destinationSlice = createSlice({
   name: "destination",
-  initialState: { 
-    data: null, 
+  initialState: {
+    data: null,
     currentDestination: null,
-    status: "idle", 
-    error: null },
+    status: "idle",
+    error: null,
+  },
   reducers: {
     setData: (state, action) => {
       state.data = action.payload;

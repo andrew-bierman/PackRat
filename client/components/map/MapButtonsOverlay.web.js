@@ -11,7 +11,6 @@ import { Box, Select } from "native-base";
 import { Entypo, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { convertGeoJSONToGPX, resetGpxData } from "../../store/gpxStore";
-
 import { mapboxStyles, handleGpxDownload } from "../../utils/mapFunctions";
 
 const MapButtonsOverlay = ({
@@ -42,23 +41,22 @@ const MapButtonsOverlay = ({
 
   const fetchGpxDownload = async () => {
     setDownloading(true);
-  
+
     console.log("gpxData at start of fetchGpxDownload", gpxData);
-  
+
     try {
       const updatedGpxData = await dispatch(convertGeoJSONToGPX(shape));
 
       const { payload } = updatedGpxData;
-  
+
       await handleGpxDownload(payload);
-      
+
       setDownloading(false);
     } catch (error) {
       console.log("error", error);
       setDownloading(false);
     }
   };
-  
 
   return (
     <>
