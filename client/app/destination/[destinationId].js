@@ -21,7 +21,6 @@ export default function Destination() {
       <DestinationPage />
     </>
   ) : (
-    <></>
-    // <ProfileContainerMobile />
+    <DestinationPage />
   );
 }

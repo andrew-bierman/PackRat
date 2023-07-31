@@ -6,6 +6,8 @@ import {
   Text,
   Stack,
   VStack,
+  Image,
+  HStack,
 } from "native-base";
 import { Platform, StyleSheet } from "react-native";
 import UserDataContainer from "./UserDataContainer";
@@ -19,21 +21,50 @@ import {
   fetchUserFavorites,
   selectAllFavorites,
 } from "../../store/favoritesStore";
+import { getUser } from "../../store/userStore";
+import { fetchUserTrips } from "../../store/tripsStore";
 
-export default function ProfileContainer() {
+export default function ProfileContainer({ id = null }) {
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(fetchUserPacks(user?._id));
-    dispatch(fetchUserFavorites(user?._id));
-  }, [dispatch, user?._id]);
 
-  const user = useSelector((state) => state.auth.user);
-  const packsData = useSelector(selectAllPacks);
+  const authUser = useSelector((state) => state.auth.user);
+  const userStore = useSelector((state) => state.userStore);
+  const authStore = useSelector((state) => state.auth);
+  const allPacks = useSelector(selectAllPacks);
   const tripsData = useSelector((state) => state.trips);
-  const favoritesData = useSelector(selectAllFavorites);
+  const allFavorites = useSelector(selectAllFavorites);
 
-  const isLoading = useSelector((state) => state?.auth?.loading);
-  const error = useSelector((state) => state?.auth?.error);
+  const differentUser = id && id !== authUser._id;
+
+  useEffect(() => {
+    if (differentUser) {
+      dispatch(getUser(id));
+    } else {
+      dispatch(fetchUserPacks(authUser?._id));
+      dispatch(fetchUserFavorites(authUser?._id));
+      dispatch(fetchUserTrips(authUser?._id));
+    }
+  }, [dispatch, id, authUser, differentUser]);
+
+  const user = differentUser ? userStore.user : authUser;
+
+  const isLoading = differentUser ? userStore.loading : authStore.loading;
+
+  const error = differentUser ? userStore.error : authStore.error;
+
+  const packsData = differentUser ? user?.packs : allPacks;
+  const favoritesData = differentUser ? user?.favorites : allFavorites;
+
+  const tripsCount = tripsData?.trips?.length ?? 0;
+  const packsCount = packsData?.length ?? 0;
+  const favoritesCount = favoritesData?.length ?? 0;
+  const isCertified = user?.isCertified ?? false;
+
+  const profileImage = user?.profileImage ?? null;
+  const userRealName = user?.name ?? null;
+  const userEmail = user?.email ?? null;
+  const userEmailSplitFirstHalf = userEmail?.split("@")[0] ?? null;
+  const username = user?.username ? `@${user?.username}` : `@${userEmailSplitFirstHalf}`;
 
   if (isLoading) return <Text>Loading...</Text>;
 
@@ -46,17 +77,35 @@ export default function ProfileContainer() {
     >
       <Box w={["100%", "100%", "70%", "50%"]} style={styles.infoSection}>
         <Box style={styles.cardInfo}>
-          <Text>{user?.name}</Text>
-          <Text>{user?.email}</Text>
+          {profileImage ? (
+            <Image
+              source={{ uri: user?.profileImage }}
+              alt="Profile Image"
+              borderRadius={50}
+              size={100}
+            />
+          ) : (
+            <MaterialCommunityIcons
+              name="account-circle"
+              size={100}
+              color="grey"
+            />
+          )}
+        <Text style={styles.userName}>{userRealName}</Text>
+        <Text style={styles.userEmail}>{username}</Text>
         </Box>
         <Stack direction="row" style={styles.card}>
           <Box style={styles.cardInfo}>
             <Text>Trips</Text>
-            <Text>{tripsData?.trips?.length}</Text>
+            <Text>{tripsCount}</Text>
           </Box>
           <Box style={styles.cardInfo}>
             <Text>Packs</Text>
-            <Text>{packsData?.length}</Text>
+            <Text>{packsCount}</Text>
+          </Box>
+          <Box style={styles.cardInfo}>
+            <Text>Favorites</Text>
+            <Text>{favoritesCount}</Text>
           </Box>
           <Box style={styles.cardInfo}>
             <Text>Certified</Text>
@@ -88,7 +137,11 @@ export default function ProfileContainer() {
         <Box style={styles.mainContentContainer}>
           <Box style={styles.userDataContainer}>
             {favoritesData?.length > 0 ? (
-              <UserDataContainer data={favoritesData} type="favorites" />
+              <UserDataContainer
+                data={favoritesData}
+                type="favorites"
+                userId={user?._id}
+              />
             ) : (
               <Text fontSize="2xl" fontWeight="bold" color="white">
                 No favorites yet
@@ -97,12 +150,20 @@ export default function ProfileContainer() {
           </Box>
           {Array.isArray(packsData) && packsData.length > 0 && (
             <Box style={styles.userDataContainer}>
-              <UserDataContainer data={packsData} type="packs" />
+              <UserDataContainer
+                data={packsData}
+                type="packs"
+                userId={user?._id}
+              />
             </Box>
           )}
           {Array.isArray(tripsData?.trips) && tripsData?.trips.length > 0 && (
             <Box style={styles.userDataContainer}>
-              <UserDataContainer data={tripsData?.trips} type="trips" />
+              <UserDataContainer
+                data={tripsData?.trips}
+                type="trips"
+                userId={user?._id}
+              />
             </Box>
           )}
         </Box>
@@ -114,43 +175,52 @@ export default function ProfileContainer() {
 const styles = StyleSheet.create({
   mainContainer: {
     backgroundColor: theme.colors.background,
-    gap: 35,
-    width: "100%",
+    flex: 1,
     alignItems: "center",
-    padding: 25,
-    fontSize: 26,
+    padding: 20,
   },
   infoSection: {
     flexDirection: "column",
-    gap: 25,
-    backgroundColor: "white",
+    backgroundColor: "#ffffff",
     alignItems: "center",
     borderRadius: 12,
     marginBottom: 25,
-    position: "relative",
+    padding: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.18,
+    shadowRadius: 1.0,
+    elevation: 1,
+  },
+  userInfo: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 15,
+  },
+  userName: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginLeft: 10,
+  },
+  userEmail: {
+    fontSize: 16,
+    color: "grey",
+    marginLeft: 10,
   },
   card: {
-    gap: 25,
-    backgroundColor: "white",
-    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: "100%",
+    padding: 15,
+    borderRadius: 12,
+    backgroundColor: "#f2f3f7",
+    marginVertical: 15,
   },
-
   cardInfo: {
     alignItems: "center",
-    justifyContent: "space-between",
-    flex: 1,
-    padding: 12,
-  },
-
-  favoritesContainer: {
-    width: "100%",
-    alignItems: "center",
-    marginTop: 25,
-  },
-  favoritesTitle: {
-    fontSize: 18,
-    fontWeight: 600,
-    marginBottom: 12,
   },
   mainContentContainer: {
     width: "100%",
@@ -158,5 +228,22 @@ const styles = StyleSheet.create({
   },
   userDataContainer: {
     marginBottom: 25,
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  userDataCard: {
+    borderRadius: 15,
+    backgroundColor: "white",
+    padding: 10,
+    margin: 5,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.18,
+    shadowRadius: 1.0,
+    elevation: 1,
   },
 });
