@@ -178,18 +178,20 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     width: "100%",
-    backgroundColor: theme.colors.accentPurple,
-    padding: 15,
+    backgroundColor: theme.colors.white,
+    padding: 25,
     borderRadius: 10,
     marginBottom: 20,
+    flexDirection: "column",
+    alignItems: "flex-start",
   },
   headerText: {
-    color: theme.colors.white,
+    color: theme.colors.textPrimary,
     fontSize: 22,
     fontWeight: "bold",
   },
   headerSubText: {
-    color: theme.colors.white,
+    color: theme.colors.textDarkGrey,
     fontSize: 16,
     marginTop: 5,
   },
@@ -198,7 +200,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   languageText: {
-    color: theme.colors.white,
+    color: theme.colors.textDarkGrey,
     fontSize: 14,
     marginRight: 10,
     marginBottom: 5, // Add margin to provide spacing between the language texts
