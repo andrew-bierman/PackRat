@@ -78,6 +78,8 @@ export default function Login() {
     password: "12345678",
   };
 
+  console.log("WEB_CLIENT_ID", WEB_CLIENT_ID);
+
   const router = useRouter();
 
   const dispatch = useDispatch();
@@ -352,9 +354,9 @@ export default function Login() {
                   w="100%"
                   disabled={!request}
                   onPress={() => {
-                    setEmail(demoUser.email)
-                    setPassword(demoUser.password)
-                    
+                    setEmail(demoUser.email);
+                    setPassword(demoUser.password);
+
                     handleLogin();
                   }}
                   colorScheme={"purple"}

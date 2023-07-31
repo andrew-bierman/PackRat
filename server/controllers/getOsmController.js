@@ -3,7 +3,12 @@ import axios from "axios";
 import Way from "../models/osm/wayModel.js";
 import Node from "../models/osm/nodeModel.js";
 import mongoose from "mongoose";
-import { findOrCreateMany, findOrCreateOne, ensureIdProperty, ensureModelProperty } from "../utils/osmFunctions/modelHandlers.js";
+import {
+  findOrCreateMany,
+  findOrCreateOne,
+  ensureIdProperty,
+  ensureModelProperty,
+} from "../utils/osmFunctions/modelHandlers.js";
 import { isGeoJSONFormat } from "../utils/osmFunctions/dataFormatters.js";
 
 export const getOsm = async (req, res) => {
@@ -73,6 +78,8 @@ export const getOsm = async (req, res) => {
 export const getPhotonResults = async (req, res) => {
   const { searchString } = req.query;
 
+  conaole.log("queryyyyy:", req.query);
+
   if (!searchString) {
     res.status(400).send({ message: "Invalid request parameters" });
     return; // Return early to avoid further execution
@@ -94,7 +101,7 @@ export const getPhotonResults = async (req, res) => {
     )
     .join("&");
 
-  // console.log("queryString", queryString);
+  console.log("queryString----", queryString);
 
   try {
     const response = await axios.get(
@@ -150,7 +157,6 @@ export const getTrailsOSM = async (req, res) => {
     const response = await axios.post(overpassUrl, overpassQuery, {
       headers: { "Content-Type": "text/plain" },
     });
-
     const geojsonData = osmtogeojson(response.data);
 
     updateDatabaseWithGeoJSONDataFromOverpass(geojsonData);
@@ -187,6 +193,7 @@ export const getParksOSM = async (req, res) => {
     });
 
     const geojsonData = osmtogeojson(response.data);
+    console.log("geojsonData==============", geojsonData);
 
     updateDatabaseWithGeoJSONDataFromOverpass(geojsonData);
 
@@ -199,7 +206,7 @@ export const getParksOSM = async (req, res) => {
 
 export const postSingleGeoJSON = async (req, res) => {
   // console.log("req.body", req.body)
-  console.log("in postSingleGeoJSON")
+  console.log("in postSingleGeoJSON");
   const geojson = req.body;
 
   if (!geojson || !isGeoJSONFormat(geojson)) {
@@ -208,11 +215,11 @@ export const postSingleGeoJSON = async (req, res) => {
   }
 
   try {
-    const data = geojson
-    console.log("data", data)
+    const data = geojson;
+    console.log("data", data);
     const processedElement = ensureIdProperty(data);
     const Model = ensureModelProperty(processedElement);
-    console.log("processedElement", processedElement)
+    console.log("processedElement", processedElement);
     const newInstance = await findOrCreateOne(Model, processedElement);
     res.status(201).json({
       status: "success",
@@ -260,4 +267,3 @@ export const getDestination = async (req, res) => {
     });
   }
 };
-

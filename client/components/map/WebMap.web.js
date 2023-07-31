@@ -80,7 +80,6 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
   const gpxData = useSelector((state) => state.gpx.gpxData);
   const [downloadable, setDownloadable] = useState(false);
 
-
   useEffect(() => {
     if (map.current) return; // Initialize map only once
 
@@ -92,7 +91,7 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
 
       const latZoom = calculateZoomLevel(bounds, mapDim);
       const trailCenter = findTrailCenter(shape);
-      console.log("trailCenter in useEffect", trailCenter)
+      console.log("trailCenter in useEffect", trailCenter);
 
       zoomLevelRef.current = latZoom;
       trailCenterPointRef.current = trailCenter;
@@ -115,9 +114,12 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
       container: mapContainer.current,
       style: mapStyle,
       // center: [lng, lat],
-      center: trailCenterPointRef.current && !isNaN(trailCenterPointRef.current[0]) && !isNaN(trailCenterPointRef.current[1])
-      ? trailCenterPointRef.current
-      : [lng, lat],
+      center:
+        trailCenterPointRef.current &&
+        !isNaN(trailCenterPointRef.current[0]) &&
+        !isNaN(trailCenterPointRef.current[1])
+          ? trailCenterPointRef.current
+          : [lng, lat],
       zoom: zoomLevelRef.current ? zoomLevelRef.current : zoomLevel,
       interactive: mapFullscreen,
     });
@@ -328,9 +330,6 @@ const WebMap = ({ shape = { ...defaultShape } }) => {
       console.log("error", error);
     }
   };
-
-
-  
 
   return (
     <View style={styles.container}>

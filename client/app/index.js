@@ -8,7 +8,7 @@ import ProfileContainerMobile from "../components/user/ProfileContainerMobile";
 
 import { Stack as Header } from "expo-router";
 
-import { theme } from "../theme";
+import { darkTheme, theme } from "../theme";
 
 import { ScrollView, Box } from "native-base";
 

@@ -20,9 +20,12 @@ export const DestinationPage = () => {
   const dispatch = useDispatch();
   const { destinationId } = useSearchParams();
   const status = useSelector((state) => state.destination.status);
-  const currentDestination = useSelector((state) => state.destination.currentDestination);
+  const currentDestination = useSelector(
+    (state) => state.destination.currentDestination
+  );
   // const geoJSON = useSelector((state) => state.search.selectedSearchResult);
   const geoJSON = currentDestination?.geoJSON;
+
   const weatherObject = useSelector((state) => state.weather.weatherObject);
   const weatherWeek = useSelector((state) => state.weather.weatherWeek);
 
@@ -40,7 +43,9 @@ export const DestinationPage = () => {
   let shape = convertPhotonGeoJsonToShape(geoJSON);
 
   const map = () => <MapContainer shape={shape} />;
-  const weather = () => <WeatherCard weatherObject={weatherObject} weatherWeek={weatherWeek} />;
+  const weather = () => (
+    <WeatherCard weatherObject={weatherObject} weatherWeek={weatherWeek} />
+  );
 
   const {
     country = "N/A",

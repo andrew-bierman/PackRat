@@ -35,3 +35,40 @@ export const theme = {
     widthDesktop: "85%",
   },
 };
+export const darkTheme = {
+  colors: {
+    primary: "red",
+    background: "red",
+    secondaryBlue: "red",
+    accentPurple: "red",
+    card: "red",
+    text: "red",
+    border: "red",
+    notification: "red",
+    error: "red",
+    textPrimary: "red",
+    textSecondary: "red",
+    cardIconColor: "red",
+    iconColor: "red",
+    weatherIcon: "red",
+    drawerIconColor: "red",
+    white: "red",
+  },
+  font: {
+    headerFont: 56,
+    size: 18,
+    desktop: 36,
+  },
+  padding: {
+    paddingDesktop: 24,
+    paddingInside: 105,
+    paddingTablet: 80,
+  },
+  size: {
+    cardPadding: 45,
+    mobilePadding: 30,
+  },
+  width: {
+    widthDesktop: "85%",
+  },
+};

@@ -18,13 +18,14 @@ import {
   MaterialIcons,
   Entypo,
 } from "@expo/vector-icons";
+
 import SVGLogoComponent from "../components/logo";
 import { useSelector, useDispatch } from "react-redux";
 import { signOut } from "../store/authStore";
 import Drawer from "./Drawer";
 import { Link, useRouter, usePathname } from "expo-router";
 import { hexToRGBA } from "../utils/colorFunctions";
-
+import UseTheme from "../hooks/useTheme";
 const Navigation = () => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -36,8 +37,9 @@ const Navigation = () => {
   );
 
   const [navBarWidth, setNavBarWidth] = useState(null);
-
-  const hoverColor = hexToRGBA(theme.colors.primary, 0.2);
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
+  const hoverColor = hexToRGBA(currentTheme.colors.primary, 0.2);
 
   const toggleDrawer = () => {
     setIsDrawerOpen(!isDrawerOpen);
@@ -84,10 +86,16 @@ const Navigation = () => {
               iconSource: MaterialIcons,
             },
             {
-              href: "profile",
+              href: "/profile",
               icon: "book",
               text: "Profile",
               iconSource: FontAwesome,
+            },
+            {
+              href: "/appearance",
+              icon: "theme-light-dark",
+              text: "Appearance",
+              iconSource: MaterialCommunityIcons,
             },
             {
               href: "logout",
@@ -117,6 +125,7 @@ const Navigation = () => {
 
   const navigateTo = useCallback(
     (href) => {
+      console.log("href", href);
       // Implement navigation logic here
       if (href === "logout") {
         dispatch(signOut());
@@ -164,7 +173,9 @@ const Navigation = () => {
             name={icon}
             size={isMobileView ? 24 : 18}
             color={
-              isCurrentPage ? theme.colors.iconColor : theme.colors.iconColor
+              isCurrentPage
+                ? currentTheme.colors.iconColor
+                : currentTheme.colors.iconColor
             } // change the color if this is the current page
             key={item.href + "icon"}
           />
@@ -214,7 +225,7 @@ const Navigation = () => {
                 <EvilIcons
                   name={isDrawerOpen ? "close" : "navicon"}
                   size={isMobileView ? 36 : 24}
-                  color={theme.colors.iconColor}
+                  color={currentTheme.colors.iconColor}
                 />
               </TouchableOpacity>
             )}

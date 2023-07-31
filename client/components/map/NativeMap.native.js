@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import Geolocation from "@react-native-community/geolocation";
 // import { check, PERMISSIONS, RESULTS } from 'react-native-permissions';
+import { shape } from "./data";
 import {
   MaterialCommunityIcons,
   MaterialIcons,
@@ -27,7 +28,7 @@ import { MAPBOX_ACCESS_TOKEN } from "@env";
 import { theme } from "../../theme";
 import { Link } from "expo-router";
 
-MapView.setWellKnownTileServer(Platform.OS === 'android' ? 'Mapbox' : 'mapbox')
+MapView.setWellKnownTileServer(Platform.OS === "android" ? "Mapbox" : "mapbox");
 MapView.setAccessToken(MAPBOX_ACCESS_TOKEN);
 
 // console.log("MAPBOX_ACCESS_TOKEN", MAPBOX_ACCESS_TOKEN, typeof MAPBOX_ACCESS_TOKEN)
@@ -59,7 +60,7 @@ function NativeMap() {
   const [mapFullscreen, setMapFullscreen] = useState(false);
   const [progress, setProgress] = useState(0);
   const [downloading, setDownloading] = useState(false);
-  // consts
+
   const shape = {
     type: "FeatureCollection",
     features: [
@@ -90,6 +91,7 @@ function NativeMap() {
       },
     ],
   };
+
   const optionsForDownload = {
     name: "Downlaod",
     styleURL: "mapbox://styles/mapbox/outdoors-v11",
@@ -149,7 +151,7 @@ function NativeMap() {
     let maxLng = -Infinity;
     let minLat = Infinity;
     let maxLat = -Infinity;
-    shape.features[0].geometry.coordinates.forEach((coord) => {
+    shape?.features[0].geometry.coordinates.forEach((coord) => {
       const lng = coord[0];
       const lat = coord[1];
 

@@ -1,7 +1,7 @@
 import { Box, Input, Button, Text, VStack, Checkbox } from "native-base";
 import { DropdownComponent } from "../Dropdown";
 import { theme } from "../../theme";
-
+import UseTheme from "../../hooks/useTheme";
 const data = ["lbs", "oz", "kg", "g"];
 
 export const ItemForm = ({
@@ -20,6 +20,8 @@ export const ItemForm = ({
   isLoading,
   isEdit,
 }) => {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
   return (
     <Box>
       <VStack space={2}>
@@ -79,7 +81,7 @@ export const ItemForm = ({
 
         {showSubmitButton && (
           <Button onPress={handleSubmit}>
-            <Text style={{ color: theme.colors.text }}>
+            <Text style={{ color: currentTheme.colors.text }}>
               {isLoading
                 ? "Loading.."
                 : isEdit == true

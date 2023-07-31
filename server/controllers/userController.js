@@ -18,7 +18,6 @@ import {
 } from "../config.js";
 import utilsService from "../utils/utils.service.js";
 
-
 const oauth2Client = new google.auth.OAuth2(
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
@@ -145,7 +144,7 @@ export const deleteUser = async (req, res) => {
 export const userSignin = async (req, res) => {
   try {
     const { email, password } = req.body;
-
+    console.log("first", email, password);
     const user = await User.findByCredentials({
       email: email,
       password: password,
