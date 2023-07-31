@@ -91,13 +91,15 @@ const WebMap = ({ shape: shapeProp }) => {
   const dispatch = useDispatch();
   const [downloadable, setDownloadable] = useState(false);
 
+  const shapeType = shape?.features[0]?.geometry?.type;
+
   useEffect(() => {
     // update the shape state when a new shapeProp gets passed
     if (shapeProp !== shape) setShape(shapeProp);
   }, [shapeProp]);
 
   useEffect(() => {
-    if (shape?.features[0]?.geometry?.coordinates?.length > 1) {
+    if (shape?.features[0]?.geometry?.coordinates?.length > 0 && shapeType !== "Point") {
       let bounds = getShapeSourceBounds(shape);
       bounds = bounds[0].concat(bounds[1]);
 
@@ -111,6 +113,10 @@ const WebMap = ({ shape: shapeProp }) => {
       trailCenterPointRef.current = trailCenter;
 
       setDownloadable(isShapeDownloadable(shape));
+    } else if (shapeType === "Point") {
+      const trailCenter = shape?.features[0]?.geometry?.coordinates;
+      trailCenterPointRef.current = trailCenter;
+      setDownloadable(true);
     }
   }, [shape, fullMapDiemention]);
 
@@ -198,37 +204,75 @@ const WebMap = ({ shape: shapeProp }) => {
 
   const addTrailLayer = (mapInstance) => {
     let processedShape = processShapeData(shape);
-
+  
     // Add new source and layers
     mapInstance.addSource("trail", {
       type: "geojson",
       data: processedShape ? processedShape : shape,
     });
-
-    mapInstance.addLayer({
-      id: "trail",
-      type: "line",
-      source: "trail",
-      paint: {
-        "line-color": "#16b22d",
-        "line-width": 4,
-        "line-opacity": 1,
-      },
-    });
-
-    // Add circle cap to the line ends
-    mapInstance.addLayer({
-      id: "trail-cap",
-      type: "circle",
-      source: "trail",
-      paint: {
-        "circle-radius": 6,
-        "circle-color": "#16b22d",
-      },
-      filter: ["==", "meta", "end"],
-    });
+  
+    // Check if the geometry type is a Point
+    if (shapeType === "Point") {
+      // Add a layer for the Point geometry type
+      mapInstance.addLayer({
+        id: "point",
+        type: "circle",
+        source: "trail",
+        paint: {
+          "circle-radius": 6,
+          "circle-color": "#ff0000",
+        },
+      });
+    } else {
+      // If it's not a Point, then we're dealing with a LineString or Polygon
+      mapInstance.addLayer({
+        id: "trail",
+        type: "line",
+        source: "trail",
+        paint: {
+          "line-color": "#16b22d",
+          "line-width": 4,
+          "line-opacity": 1,
+        },
+      });
+  
+      // Add circle cap to the line ends
+      mapInstance.addLayer({
+        id: "trail-cap",
+        type: "circle",
+        source: "trail",
+        paint: {
+          "circle-radius": 6,
+          "circle-color": "#16b22d",
+        },
+        filter: ["==", "meta", "end"],
+      });
+  
+      // Add a layer for each point in the shape
+      if (processedShape && processedShape.features) {
+        processedShape.features.forEach((feature, index) => {
+          if (feature.geometry.type === "Point") {
+            mapInstance.addLayer({
+              id: `point-${index}`,
+              type: "circle",
+              source: {
+                type: "geojson",
+                data: {
+                  type: "Point",
+                  coordinates: feature.geometry.coordinates,
+                },
+              },
+              paint: {
+                "circle-radius": 6,
+                "circle-color": "#ff0000",
+              },
+            });
+          }
+        });
+      }
+    }
   };
-
+  
   const fetchGpxDownload = async () => {
     setDownloading(true);
 
