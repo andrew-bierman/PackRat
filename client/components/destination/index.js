@@ -55,6 +55,11 @@ const DestinationHeader = ({ geoJSON, selectedSearchResult }) => {
       <Text style={styles.headerText}>
         {name !== "N/A" ? name : "Destination"}
       </Text>
+      <Text style={styles.headerSubText}>
+        {county !== "N/A" && `${county}, `}
+        {state !== "N/A" && `${state}, `}
+        {country !== "N/A" ? country : ""}
+      </Text>
       <View style={styles.languageContainer}>
         {Object.entries(languageNames).map(([key, value]) => (
           <Text key={key} style={styles.languageText}>
@@ -62,11 +67,6 @@ const DestinationHeader = ({ geoJSON, selectedSearchResult }) => {
           </Text>
         ))}
       </View>
-      <Text style={styles.headerSubText}>
-        {county !== "N/A" && `${county}, `}
-        {state !== "N/A" && `${state}, `}
-        {country !== "N/A" ? country : ""}
-      </Text>
     </View>
   );
 };
@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     width: "100%",
-    backgroundColor: theme.colors.primary,
+    backgroundColor: theme.colors.accentPurple,
     padding: 15,
     borderRadius: 10,
     marginBottom: 20,
@@ -194,7 +194,6 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   languageContainer: {
-    flexDirection: "row",
     flexWrap: "wrap",
     marginTop: 10,
   },
@@ -202,5 +201,6 @@ const styles = StyleSheet.create({
     color: theme.colors.white,
     fontSize: 14,
     marginRight: 10,
+    marginBottom: 5, // Add margin to provide spacing between the language texts
   },
 });
