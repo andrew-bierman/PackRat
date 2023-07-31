@@ -53,6 +53,8 @@ const destinationSlice = createSlice({
     currentDestination: null,
     photonDetails: null,
     selectedSearchResult: null,
+    weatherObject: null,
+    weatherWeek: null,
     status: "idle",
     error: null,
   }),
@@ -62,6 +64,12 @@ const destinationSlice = createSlice({
     },
     setSelectedSearchResult: (state, action) => {
       state.selectedSearchResult = action.payload;
+    },
+    setWeatherObject: (state, action) => {
+      state.weatherObject = action.payload;
+    },
+    setWeatherWeek: (state, action) => {
+      state.weatherWeek = action.payload;
     }
   },
   extraReducers: (builder) => {
@@ -102,5 +110,5 @@ const destinationSlice = createSlice({
   },
 });
 
-export const { setSelectedSearchResult } = destinationSlice.actions;
+export const { setSelectedSearchResult, setWeatherObject, setWeatherWeek } = destinationSlice.actions;
 export default destinationSlice.reducer;
