@@ -61,6 +61,10 @@ export default function ProfileContainer({ id = null }) {
   const isCertified = user?.isCertified ?? false;
 
   const profileImage = user?.profileImage ?? null;
+  const userRealName = user?.name ?? null;
+  const userEmail = user?.email ?? null;
+  const userEmailSplitFirstHalf = userEmail?.split("@")[0] ?? null;
+  const username = user?.username ? `@${user?.username}` : `@${userEmailSplitFirstHalf}`;
 
   if (isLoading) return <Text>Loading...</Text>;
 
@@ -87,8 +91,8 @@ export default function ProfileContainer({ id = null }) {
               color="grey"
             />
           )}
-        <Text style={styles.userName}>{user?.name}</Text>
-        <Text style={styles.userEmail}>{user?.email}</Text>
+        <Text style={styles.userName}>{userRealName}</Text>
+        <Text style={styles.userEmail}>{username}</Text>
         </Box>
         <Stack direction="row" style={styles.card}>
           <Box style={styles.cardInfo}>
