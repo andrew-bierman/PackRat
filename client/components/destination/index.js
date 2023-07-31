@@ -13,23 +13,58 @@ import TripCard from "../TripCard";
 import LargeCard from "../card/LargeCard";
 import WeatherCard from "../WeatherCard";
 import { Ionicons } from "@expo/vector-icons";
-import { processGeoJSON, getDestination } from "../../store/destinationStore";
+import {
+  processGeoJSON,
+  getDestination,
+  photonDetails,
+} from "../../store/destinationStore";
 
 export const DestinationPage = () => {
   const router = useRouter();
+
   const dispatch = useDispatch();
-  const { destinationId } = useSearchParams();
+
+  const { destinationId, id, type } = useSearchParams();
   const status = useSelector((state) => state.destination.status);
-  const currentDestination = useSelector((state) => state.destination.currentDestination);
+  // const currentDestination = useSelector(
+  //   (state) => state.destination.currentDestination
+  // );
+
+  const photonDetailsStore = useSelector(
+    (state) => state.destination.photonDetails
+  );
+  const currentDestination = {
+    geoJSON: photonDetailsStore,
+  };
+
   // const geoJSON = useSelector((state) => state.search.selectedSearchResult);
   const geoJSON = currentDestination?.geoJSON;
+  const selectedSearchResult = useSelector(
+    (state) => state.destination.selectedSearchResult
+  );
+
   const weatherObject = useSelector((state) => state.weather.weatherObject);
   const weatherWeek = useSelector((state) => state.weather.weatherWeek);
 
   useEffect(() => {
     if (destinationId) {
       console.log("destinationId", destinationId);
-      dispatch(getDestination(destinationId));
+      console.log("id", id);
+      console.log("type", type);
+
+      if (type && id) {
+        const matchPhotonFormattingForData = {
+          properties: {
+            osm_id: id,
+            osm_type: type,
+          },
+        };
+
+        // Fetch full details of the selected result from the Overpass API
+        dispatch(photonDetails(matchPhotonFormattingForData));
+      } else if (destinationId && !type && !id && destinationId !== "query") {
+        dispatch(getDestination(destinationId));
+      }
     }
   }, [destinationId]);
 
@@ -37,17 +72,25 @@ export const DestinationPage = () => {
     return null;
   }
 
-  let shape = convertPhotonGeoJsonToShape(geoJSON);
+  console.log("geoJSON ---->", geoJSON);
+
+  // let shape = convertPhotonGeoJsonToShape(geoJSON);
+  let shape = geoJSON ?? defaultShape;
 
   const map = () => <MapContainer shape={shape} />;
-  const weather = () => <WeatherCard weatherObject={weatherObject} weatherWeek={weatherWeek} />;
+  const weather = () => (
+    <WeatherCard weatherObject={weatherObject} weatherWeek={weatherWeek} />
+  );
 
-  const {
-    country = "N/A",
-    state = "N/A",
-    county = "N/A",
-    name = "N/A",
-  } = geoJSON?.properties || {};
+  const properties = {
+    ...geoJSON?.features[0]?.properties,
+    ...selectedSearchResult?.properties,
+  };
+
+  const { country = "N/A", state = "N/A", county = "N/A", name = "N/A" } =
+    // geoJSON?.features[0]?.properties || {};
+    // selectedSearchResult?.properties || {};
+    properties;
 
   return (
     <View style={styles.container}>
