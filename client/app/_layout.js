@@ -20,11 +20,13 @@ export default function HomeLayout() {
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <AuthProvider>
-          <NativeBaseProvider>
-            <Navigation />
-            <Slot />
-            {Platform.OS === "web" ? <Footer /> : null}
-          </NativeBaseProvider>
+          <ThemeProvider>
+            <NativeBaseProvider>
+              <Navigation />
+              <Slot />
+              {Platform.OS === "web" ? <Footer /> : null}
+            </NativeBaseProvider>
+          </ThemeProvider>
         </AuthProvider>
       </PersistGate>
     </Provider>

@@ -13,7 +13,6 @@ import {
 } from "react-native";
 import Geolocation from "@react-native-community/geolocation";
 // import { check, PERMISSIONS, RESULTS } from 'react-native-permissions';
-import { shape } from "./data";
 import {
   MaterialCommunityIcons,
   MaterialIcons,

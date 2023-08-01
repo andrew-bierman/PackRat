@@ -49,7 +49,7 @@ allprojects {
       authentication { basic(BasicAuthentication) }
       credentials {
         username = 'mapbox'
-        password = "sk..."
+        password = project.properties['MAPBOX_DOWNLOADS_TOKEN'] ?: ""
       }
     }
   }
