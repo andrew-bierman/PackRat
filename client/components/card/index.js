@@ -3,7 +3,6 @@ import {
   VStack,
   Box,
   Divider,
-  Link,
   IconButton,
   Text,
   Toast,
@@ -21,7 +20,7 @@ import { EditableInput } from "../EditableText";
 import { theme } from "../../theme";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
-import { useRouter } from "expo-router";
+import { useRouter, Link } from "expo-router";
 import { ThreeDotsMenu } from "../ThreeDotsMenu";
 export const CustomCard = ({
   title,
