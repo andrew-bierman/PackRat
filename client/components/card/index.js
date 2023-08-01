@@ -30,6 +30,7 @@ export const CustomCard = ({
   link,
   type,
   destination,
+  data,
 }) => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     UseTheme();

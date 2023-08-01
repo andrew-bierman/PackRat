@@ -144,16 +144,6 @@ export const DestinationPage = () => {
   let shape = geoJSON ?? defaultShape;
 
   const map = () => <MapContainer shape={shape} />;
-  const weather = () => (
-    <WeatherCard weatherObject={weatherObject} weatherWeek={weatherWeek} />
-  );
-
-  const {
-    country = "N/A",
-    state = "N/A",
-    county = "N/A",
-    name = "N/A",
-  } = geoJSON?.properties || {};
 
   return (
     <View style={styles.container}>
