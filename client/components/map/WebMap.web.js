@@ -5,7 +5,7 @@ import React, {
   useCallback,
   useMemo,
 } from "react";
-import mapboxgl from "mapbox-gl";
+import mapboxgl, { Marker } from "mapbox-gl";
 import { MAPBOX_ACCESS_TOKEN } from "@env";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -28,6 +28,7 @@ import {
   mapboxStyles,
   getLocation,
   isShapeDownloadable,
+  isDestinationMap
 } from "../../utils/mapFunctions";
 import MapButtonsOverlay from "./MapButtonsOverlay";
 import { saveFile } from "../../utils/fileSaver/fileSaver";
@@ -40,7 +41,10 @@ import { DOMParser } from "xmldom";
 
 mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
-const WebMap = ({ shape: shapeProp }) => {
+const DESTINATION = 'destination'
+const TRIP= 'trip';
+const WebMap = ({ shape: shapeProp, selectedSearchResult, type }) => {
+  console.log("🚀 ~ file: WebMap.web.js:44 ~ WebMap ~ shape:", type)
   useEffect(() => {
     // temporary solution to fix mapbox-gl-js missing css error
     if (Platform.OS === "web") {
@@ -130,7 +134,11 @@ const WebMap = ({ shape: shapeProp }) => {
     });
 
     mapInstance.on("load", () => {
-      addTrailLayer(mapInstance);
+      if(isDestinationMap(selectedSearchResult, type)) {
+        addPoints(mapInstance);
+      } else if(type===TRIP) {
+        addTrailLayer(mapInstance);
+      }
       if (mapFullscreen && showUserLocation) {
         mapInstance.addLayer({
           id: "user-location",
@@ -165,17 +173,19 @@ const WebMap = ({ shape: shapeProp }) => {
   }, [mapFullscreen]);
 
   useEffect(() => {
-    if (map.current) {
+    if (map.current && selectedSearchResult?.geometry?.type !== 'Point' && type === TRIP) {
       removeTrailLayer(map.current);
       addTrailLayer(map.current);
       map.current.setCenter(trailCenterPointRef.current);
       map.current.setZoom(zoomLevelRef.current);
     }
-
+    else if(map.current && isDestinationMap(selectedSearchResult, type)) {
+      addPoints(map.current);
+    }
     console.log("trailCenterPointRef.current", trailCenterPointRef.current);
 
     // console.log("mapInstance", mapInstance);
-  }, [shape]);
+  }, [shape, selectedSearchResult]);
 
   const removeTrailLayer = (mapInstance) => {
     // Remove existing source and layers if they exist
@@ -229,6 +239,14 @@ const WebMap = ({ shape: shapeProp }) => {
     });
   };
 
+
+  const addPoints = (mapInstance) => {
+      if(mapInstance) {
+        const pointLatLong = selectedSearchResult?.geometry?.coordinates
+        new mapboxgl.Marker().setLngLat([pointLatLong[0], pointLatLong[1]]).addTo(mapInstance);
+        mapInstance.setCenter(pointLatLong);
+      }
+      }
   const fetchGpxDownload = async () => {
     setDownloading(true);
 
@@ -273,7 +291,11 @@ const WebMap = ({ shape: shapeProp }) => {
         map.current.setStyle(style);
 
         // Step 3: add the sources, layers, etc. back once the style has loaded
-        map.current.on("style.load", () => addTrailLayer(map.current));
+        if(isDestinationMap(selectedSearchResult, type)) {
+          map.current.on('style.load', () => addPoints(map.current))
+        } else if(type=== TRIP)  {
+          map.current.on("style.load", () => addTrailLayer(map.current));
+        }
       }
     },
     [addTrailLayer, removeTrailLayer]

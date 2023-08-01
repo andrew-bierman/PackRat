@@ -10,11 +10,13 @@ import {
   Dimensions,
   Modal,
   Alert,
+  Image
 } from "react-native";
 import Geolocation from "@react-native-community/geolocation";
 // import { check, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import {
   MaterialCommunityIcons,
+  FontAwesome,
   MaterialIcons,
   Entypo,
 } from "@expo/vector-icons";
@@ -42,6 +44,7 @@ import {
   getShapeSourceBounds,
   isShapeDownloadable,
   mapboxStyles,
+  isDestinationMap
 } from "../../utils/mapFunctions";
 
 import * as DocumentPicker from "expo-document-picker";
@@ -66,7 +69,7 @@ const previewMapStyle = {
 
 // MapView.setConnected(true);
 
-function NativeMap({ shape: shapeProp }) {
+function NativeMap({ shape: shapeProp, selectedSearchResult, type }) {
   const camera = useRef(null);
   const mapViewRef = useRef(null);
   const cancelRef = React.useRef(null);
@@ -171,7 +174,7 @@ function NativeMap({ shape: shapeProp }) {
       ></View>
     );
   }
-
+  const pointLatLong = selectedSearchResult?.geometry?.coordinates
   const element = (
     <View style={mapFullscreen ? fullMapDimension : previewMapStyle}>
       <Mapbox.MapView
@@ -187,7 +190,8 @@ function NativeMap({ shape: shapeProp }) {
         <Mapbox.Camera
           ref={camera}
           zoomLevel={zoomLevel ? zoomLevel - 0.8 : 10}
-          centerCoordinate={trailCenterPoint ? trailCenterPoint : null}
+          // centerCoordinate={trailCenterPoint ? trailCenterPoint : null}
+          centerCoordinate={type === 'destination' ? pointLatLong : trailCenterPoint}
           animationMode={"flyTo"}
           animationDuration={2000}
         />
@@ -211,7 +215,18 @@ function NativeMap({ shape: shapeProp }) {
           </View>
         </Mapbox.PointAnnotation>
         {/* trail */}
-        <Mapbox.ShapeSource
+        {
+          isDestinationMap(selectedSearchResult, type) ?
+          <Mapbox.PointAnnotation
+          id="destination"
+          coordinate={pointLatLong}
+          >
+           <CircleCapComp />
+
+          </Mapbox.PointAnnotation>
+           :
+          <>
+          <Mapbox.ShapeSource
           id="source1"
           lineMetrics={true}
           shape={shape.features[0]}
@@ -237,6 +252,9 @@ function NativeMap({ shape: shapeProp }) {
             </View>
           </Mapbox.PointAnnotation>
         )}
+          </>
+        }
+
       </Mapbox.MapView>
 
       <MapButtonsOverlay

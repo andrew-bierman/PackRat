@@ -72,6 +72,7 @@ const DestinationHeader = ({ geoJSON, selectedSearchResult }) => {
 };
 
 const WeatherData = ({ geoJSON }) => {
+
   const dispatch = useDispatch();
   const weatherObject = useSelector((state) => state.destination.weatherObject);
   const weatherWeek = useSelector((state) => state.destination.weatherWeek);
@@ -103,14 +104,19 @@ const WeatherData = ({ geoJSON }) => {
 };
 
 export const DestinationPage = () => {
+  console.log('destination page')
   const router = useRouter();
 
   const dispatch = useDispatch();
 
   const { destinationId, id, type } = useSearchParams();
+  // console.log("🚀 ~ file: index.js:113 ~ DestinationPage ~ type:", type)
+  // console.log("🚀 ~ file: index.js:113 ~ DestinationPage ~ id:", id)
+  // console.log("🚀 ~ file: index.js:113 ~ DestinationPage ~ destinationId:", destinationId)
   const photonDetailsStore = useSelector(
     (state) => state.destination.photonDetails
   );
+  // console.log("🚀 ~ file: index.js:119 ~ DestinationPage ~ photonDetailsStore:", photonDetailsStore)
   const currentDestination = {
     geoJSON: photonDetailsStore,
   };
@@ -143,7 +149,7 @@ export const DestinationPage = () => {
 
   let shape = geoJSON ?? defaultShape;
 
-  const map = () => <MapContainer shape={shape} />;
+  const map = () => <MapContainer shape={shape} selectedSearchResult={selectedSearchResult} type="destination" />;
 
   return (
     <View style={styles.container}>

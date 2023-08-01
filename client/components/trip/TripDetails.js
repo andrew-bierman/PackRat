@@ -22,10 +22,11 @@ import { FontAwesome5 } from "@expo/vector-icons";
 export function TripDetails() {
   const weatherObject = useSelector((state) => state.weather.weatherObject);
   const weatherWeek = useSelector((state) => state.weather.weatherWeek);
-
+  console.log('trip detail')
   const dispatch = useDispatch();
 
   const { tripId } = useSearchParams();
+  // console.log("🚀 ~ file: TripDetails.js:29 ~ TripDetails ~ tripId:", tripId)
 
   const link = `${CLIENT_URL}/trip/${tripId}`;
 
@@ -44,6 +45,7 @@ export function TripDetails() {
 
   const isLoading = useSelector((state) => state.singleTrip.isLoading);
   const error = useSelector((state) => state.singleTrip.error);
+  console.log("🚀 ~ file: TripDetails.js:48 ~ TripDetails ~ error:", error)
   const isError = error !== null;
 
   if (isLoading) return <Text>Loading...</Text>;
