@@ -125,9 +125,10 @@ const updateDatabaseWithGeoJSONDataFromOverpass = async (data) => {
       throw new Error("No data provided");
     }
 
-    const results = await findOrCreateMany(Way, data.features);
+    // TEMPORARY: Commenting due to performance issues
+    // const results = await findOrCreateMany(Way, data.features);
 
-    console.log("results", results);
+    // console.log("results", results);
   } catch (error) {
     console.error(error);
   }
@@ -150,12 +151,11 @@ export const getTrailsOSM = async (req, res) => {
       (
         way["highway"~"footway"]["name"](around:${radius},${lat},${lon});
       );
-      (._;>;);
       out tags geom qt;
       `;
 
     const response = await axios.post(overpassUrl, overpassQuery, {
-      headers: { "Content-Type": "text/plain" },
+      headers: { 'Content-Type': 'text/plain' },
     });
     const geojsonData = osmtogeojson(response.data);
 
@@ -236,6 +236,57 @@ export const postSingleGeoJSON = async (req, res) => {
   }
 };
 
+export const postCollectionGeoJSON = async (req, res) => {
+  console.log("in postGeoJSON");
+  const geojson = req.body;
+
+  if (!geojson || !isGeoJSONFormat(geojson)) {
+    res.status(400).send({ message: "Invalid or missing geoJSON" });
+    return; // Return early to avoid further execution
+  }
+
+  try {
+    // Check if the GeoJSON is a FeatureCollection
+    if (geojson.type === "FeatureCollection") {
+      const data = geojson.features;
+      console.log("data", data);
+      const processedElements = data.map((element) => ensureIdProperty(element));
+      const Models = processedElements.map((element) =>
+        ensureModelProperty(element)
+      );
+      console.log("processedElements", processedElements);
+      const newInstances = await Promise.all(
+        Models.map((Model, index) => findOrCreateOne(Model, processedElements[index]))
+      );
+      res.status(201).json({
+        status: "success",
+        data: {
+          newInstances,
+        },
+      });
+    } else {
+      // Handle single feature
+      const processedElement = ensureIdProperty(geojson);
+      const Model = ensureModelProperty(processedElement);
+      console.log("processedElement", processedElement);
+      const newInstance = await findOrCreateOne(Model, processedElement);
+      res.status(201).json({
+        status: "success",
+        data: {
+          newInstance,
+        },
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({
+      status: "fail",
+      message: error.message,
+    });
+  }
+};
+
+
 export const getDestination = async (req, res) => {
   try {
     const id = req.params.id;
@@ -265,5 +316,173 @@ export const getDestination = async (req, res) => {
       status: "error",
       message: error.message,
     });
+  }
+};
+
+export const getPhotonDetails = async (req, res) => {
+  let { id, type } = req.params;
+
+  if (!id || !type) {
+    res.status(400).send({ message: "Invalid request parameters" });
+    return; // Return early to avoid further execution
+  }
+
+  type = type.toLowerCase(); // Standardize osm_type to be lowercase
+
+  switch (type) {
+    case "way":
+    case "w":
+      type = "way";
+      break;
+    case "node":
+    case "n":
+      type = "node";
+      break;
+    case "relation":
+    case "r":
+      type = "relation";
+      break;
+    default:
+      res.status(400).send({ message: "Invalid request parameters" });
+      return; // Return early to avoid further execution
+  }
+
+  const overpassUrl = process.env.OSM_URI;
+
+  const overpassQuery = `
+  [out:json][timeout:25];
+  ${type}(${id});
+  (._;>;);
+  out body;
+  `;
+
+  console.log("overpassQuery", overpassQuery);
+
+  try {
+    const response = await axios.post(overpassUrl, overpassQuery, {
+      headers: { "Content-Type": "text/plain" },
+    });
+
+    // console.log("response", response);
+
+    const geojsonData = osmtogeojson(response.data);
+
+    // await updateDatabaseWithGeoJSONDataFromOverpass(geojsonData);
+
+    res.send(geojsonData);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Error retrieving Photon details" });
+  }
+};
+
+export const getNominatimDetails = async (req, res) => {
+  const { lat, lon, place_id } = req.query;
+  
+  let nominatimUrl = "";
+
+  if (place_id) {
+    nominatimUrl = `https://nominatim.openstreetmap.org/lookup?format=json&osm_ids=${place_id}&addressdetails=1`;
+  } else if (lat && lon) {
+    nominatimUrl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`;
+  } else {
+    res.status(400).send({ message: "Invalid request parameters" });
+    return; // Return early to avoid further execution
+  }
+
+  try {
+    const response = await axios.get(nominatimUrl);
+
+    if (response.status === 200) {
+      res.send(response.data);
+    } else {
+      console.log(response.status, response.statusText);
+      res.send({ message: "Error processing Nominatim Data" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Error retrieving Nominatim Data" });
+  }
+};
+
+export const getEnhancedPhotonDetails = async (req, res) => {
+  let { id, type } = req.params;
+
+  if (!id || !type) {
+    res.status(400).send({ message: "Invalid request parameters" });
+    return; // Return early to avoid further execution
+  }
+
+  type = type.toLowerCase(); // Standardize osm_type to be lowercase
+
+  switch (type) {
+    case "way":
+    case "w":
+      type = "way";
+      break;
+    case "node":
+    case "n":
+      type = "node";
+      break;
+    case "relation":
+    case "r":
+      type = "relation";
+      break;
+    default:
+      res.status(400).send({ message: "Invalid request parameters" });
+      return; // Return early to avoid further execution
+  }
+
+  const overpassUrl = process.env.OSM_URI;
+  const overpassQuery = `
+  [out:json][timeout:25];
+  ${type}(${id});
+  (._;>;);
+  out body;
+  `;
+
+  console.log("overpassQuery", overpassQuery);
+
+  const nominatimUrl = `https://nominatim.openstreetmap.org/lookup?format=json&osm_ids=${type[0]}${id}&addressdetails=1`;
+
+  try {
+    const overpassPromise = axios.post(overpassUrl, overpassQuery, {
+      headers: { "Content-Type": "text/plain" },
+    });
+
+    const nominatimPromise = axios.get(nominatimUrl);
+
+    const [overpassResponse, nominatimResponse] = await Promise.all([
+      overpassPromise,
+      nominatimPromise,
+    ]);
+
+    const geojsonData = osmtogeojson(overpassResponse.data);
+
+    if (overpassResponse.status === 200 && nominatimResponse.status === 200) {
+      // Assuming nominatimResponse.data is an array of objects
+      const nominatimData = nominatimResponse.data
+
+      console.log("nominatimData", nominatimData)
+
+      // Add Nominatim data into each feature properties of the GeoJSON
+      geojsonData.features.forEach((feature) => {
+        feature.properties = {
+          ...feature.properties,
+          ...nominatimData,
+        };
+      });
+
+      res.send({
+        photon: geojsonData,
+      });
+    } else {
+      console.log(overpassResponse.status, overpassResponse.statusText);
+      console.log(nominatimResponse.status, nominatimResponse.statusText);
+      res.send({ message: "Error processing data" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Error retrieving data" });
   }
 };

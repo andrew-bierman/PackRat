@@ -1,10 +1,20 @@
 // redux toolkit slice for single pack
 
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
 
 import axios from "axios";
 
 import { api } from "../constants/api";
+
+const singleTripAdapter = createEntityAdapter({
+  selectId: (singleTrip) => singleTrip._id,
+});
+
+const initialState = singleTripAdapter.getInitialState({
+  singleTrip: {},
+  isLoading: false,
+  error: null,
+});
 
 export const fetchSingleTrip = createAsyncThunk(
   "trips/fetchSingleTrip",
@@ -16,11 +26,7 @@ export const fetchSingleTrip = createAsyncThunk(
 
 const singleTripSlice = createSlice({
   name: "singleTrip",
-  initialState: {
-    singleTrip: {},
-    isLoading: false,
-    error: null,
-  },
+  initialState: initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
@@ -29,7 +35,8 @@ const singleTripSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchSingleTrip.fulfilled, (state, action) => {
-        console.log("fetchSingleTrip.fulfilled", action.payload)
+        console.log("fetchSingleTrip.fulfilled", action.payload);
+        singleTripAdapter.setAll(state.singleTrip, action.payload);
         state.singleTrip = action.payload;
         state.isLoading = false;
         state.error = null;
@@ -40,5 +47,10 @@ const singleTripSlice = createSlice({
       });
   },
 });
+
+export const {
+  selectById: selectSingleTripById,
+  selectAll: selectAllSingleTrips,
+} = singleTripAdapter.getSelectors((state) => state.singleTrip);
 
 export default singleTripSlice.reducer;

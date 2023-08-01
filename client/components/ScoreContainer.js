@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 import { Box, Button, VStack, Text, HStack, View } from "native-base";
 import { theme } from "../theme";
 import { useDispatch } from "react-redux";
@@ -8,7 +8,6 @@ import { Svg, Circle, Path, G, Text as SvgText } from "react-native-svg";
 
 const ScoreProgressChart = ({ score, size = 150, strokeWidth = 10 }) => {
   if (!score) return null;
-  console.log("score in progress chart", score);
 
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
@@ -54,7 +53,6 @@ const ScoreProgressChart = ({ score, size = 150, strokeWidth = 10 }) => {
 const GradingPieChart = ({ scores, size = 150, strokeWidth = 10 }) => {
   if (!scores) return null;
 
-  console.log("scores: ", scores);
   const { weightScore, essentialItemsScore, redundancyAndVersatilityScore } =
     scores;
 
@@ -161,8 +159,6 @@ export default function ScoreContainer({ type, data, isOwner }) {
   const grades = data.grades;
   const scores = data.scores;
 
-  console.log("scores", scores);
-
   const isAlreadyScored = totalScore !== null;
 
   const textData = {
@@ -232,7 +228,7 @@ const styles = StyleSheet.create({
   vStack: {
     justifyContent: "center",
     alignItems: "flex-start",
-    width: "60%",
+    width: Platform.OS == "web" ? "60%" : "100%",
   },
   scoreText: {
     color: theme.colors.textPrimary,

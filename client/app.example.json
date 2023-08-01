@@ -34,7 +34,13 @@
         "@rnmapbox/maps",
         {
           "RNMapboxMapsImpl": "mapbox",
-          "RNMapboxMapsDownloadToken": "sk..."
+          "RNMapboxMapsDownloadToken": "MAPBOX_DOWNLOADS_TOKEN_FROM_ENV"
+        }
+      ],
+      [
+        "expo-document-picker",
+        {
+          "iCloudContainerEnvironment": "Production"
         }
       ]
     ]

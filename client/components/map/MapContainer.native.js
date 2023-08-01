@@ -1,14 +1,20 @@
 import React from "react";
 
 import { View, StyleSheet, Platform } from "react-native";
+import { isObjectEmpty } from "../../utils/isObjectEmpty";
+import { defaultShape } from "../../utils/mapFunctions";
 
 import NativeMap from "./NativeMap";
 
 export function MapContainer({ shape }) {
+  if (isObjectEmpty(shape)) {
+    shape = defaultShape;
+  }
+
   if (Platform.OS === "android" || Platform.OS === "ios") {
     return (
       <View style={[styles.nativeContainer]}>
-        <NativeMap />
+        <NativeMap shape={shape} />
       </View>
     );
   }

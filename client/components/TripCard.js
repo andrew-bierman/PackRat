@@ -10,6 +10,8 @@ import { theme } from "../theme/index";
 import { useSelector, useDispatch } from "react-redux";
 import { addTrail, addPark } from "../store/dropdownStore";
 import MapContainer from "./map/MapContainer";
+import { convertPhotonGeoJsonToShape } from "../utils/mapFunctions";
+import { selectAllTrails } from "../store/trailsStore";
 import UseTheme from "../hooks/useTheme";
 export default function TripCard({
   title,
@@ -18,6 +20,7 @@ export default function TripCard({
   data,
   isSearch,
   isTrail,
+  isPark,
 }) {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     UseTheme();
@@ -25,9 +28,9 @@ export default function TripCard({
 
   const currentTrail = useSelector((state) => state.dropdown.currentTrail);
   const currentPark = useSelector((state) => state.dropdown.currentPark);
-
-  const currentShape = useSelector(
-    (state) => state.search.selectedSearchResult
+  const trailsDetails = useSelector(selectAllTrails); // updated selector for new trails slice
+  const currentShape = trailsDetails.filter(
+    (trail) => trail.properties.name == currentTrail
   );
 
   const handleValueChange = (value) => {
@@ -38,8 +41,6 @@ export default function TripCard({
       dispatch(addPark(value));
     }
   };
-
-  console.log("currentShape", currentShape);
 
   return (
     <Stack
@@ -77,7 +78,13 @@ export default function TripCard({
         </Text>
       </Box>
       {isMap ? (
-        <MapContainer shape={currentShape} />
+        <MapContainer
+          shape={
+            currentShape.length == 0
+              ? {}
+              : convertPhotonGeoJsonToShape(currentShape[0])
+          }
+        />
       ) : isSearch ? (
         <SearchInput />
       ) : (

@@ -50,9 +50,7 @@ export function TripDetails() {
   const error = useSelector((state) => state.singleTrip.error);
   const isError = error !== null;
 
-  if (isLoading) {
-    return <Text>Loading...</Text>;
-  }
+  if (isLoading) return <Text>Loading...</Text>;
 
   return (
     <Box

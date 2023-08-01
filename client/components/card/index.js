@@ -1,16 +1,27 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   VStack,
   Box,
   Divider,
-  Link,
   IconButton,
   Text,
   Toast,
+  Menu,
+  ThreeDotsIcon,
 } from "native-base";
-import { StyleSheet, TouchableOpacity, Clipboard } from "react-native";
+import {
+  StyleSheet,
+  TouchableOpacity,
+  Clipboard,
+  TextInput,
+  Pressable,
+} from "react-native";
+import { EditableInput } from "../EditableText";
 import { theme } from "../../theme";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useDispatch, useSelector } from "react-redux";
+import { useRouter, Link } from "expo-router";
+import { ThreeDotsMenu } from "../ThreeDotsMenu";
 import UseTheme from "../../hooks/useTheme";
 export const CustomCard = ({
   title,
@@ -23,6 +34,13 @@ export const CustomCard = ({
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     UseTheme();
   const [isCopied, setIsCopied] = useState(false);
+  const [editTitle, setEditTitle] = useState(false);
+  const titleRef = useRef(null);
+  const dispatch = useDispatch();
+  const router = useRouter();
+
+  const user = useSelector((state) => state.auth.user);
+  const userId = user["_id"];
 
   const handleCopyLink = () => {
     Clipboard.setString(link);
@@ -62,33 +80,52 @@ export const CustomCard = ({
             alignItems="center"
           >
             <Box>
-              <Text
-                fontSize="xl"
-                fontWeight="bold"
-                color={currentTheme.colors.textPrimary}
-              >
-                {title}
-              </Text>
+              <EditableInput
+                data={data}
+                title={title}
+                editTitle={editTitle}
+                setEditTitle={setEditTitle}
+                titleRef={titleRef}
+              />
             </Box>
-            {link && (
-              <Box>
-                {isCopied ? (
-                  <MaterialCommunityIcons
-                    name="check"
-                    size={24}
-                    color="green"
-                    onPress={handleCopyLink}
-                  />
-                ) : (
-                  <MaterialCommunityIcons
-                    name="link"
-                    size={24}
-                    color="black"
-                    onPress={handleCopyLink}
-                  />
-                )}
+            <Box flexDirection="row" alignItems="center">
+              <Box mx="4">
+                <Link href={`/profile/${data["owner_id"]}`}>
+                  <Text>View Owner</Text>
+                </Link>
               </Box>
-            )}
+              {link && (
+                <Box
+                  flexDir={"row"}
+                  style={{
+                    gap: "10px",
+                  }}
+                >
+                  {isCopied ? (
+                    <MaterialCommunityIcons
+                      name="check"
+                      size={24}
+                      color="green"
+                      onPress={handleCopyLink}
+                    />
+                  ) : (
+                    <MaterialCommunityIcons
+                      name="link"
+                      size={24}
+                      color="black"
+                      onPress={handleCopyLink}
+                    />
+                  )}
+                  {userId === data.owner_id && (
+                    <ThreeDotsMenu
+                      data={data}
+                      titleRef={titleRef}
+                      setEditTitle={setEditTitle}
+                    />
+                  )}
+                </Box>
+              )}
+            </Box>
           </Box>
           <Box
             px="4"
@@ -126,34 +163,33 @@ export const CustomCard = ({
             justifyContent="space-between"
             alignItems="center"
           >
-            <Box>
-              <Text
-                fontSize="xl"
-                fontWeight="bold"
-                color={currentTheme.colors.textPrimary}
-              >
-                {title}
-              </Text>
-            </Box>
-            {link && (
-              <Box>
-                {isCopied ? (
-                  <MaterialCommunityIcons
-                    name="check"
-                    size={24}
-                    color="green"
-                    onPress={handleCopyLink}
-                  />
-                ) : (
-                  <MaterialCommunityIcons
-                    name="link"
-                    size={24}
-                    color="black"
-                    onPress={handleCopyLink}
-                  />
-                )}
+            <Box></Box>
+            <Box flexDirection="row" alignItems="center">
+              <Box mx="4">
+                <Link href={`/profile/${data["owner_id"]}`}>
+                  <Text>View Owner</Text>
+                </Link>
               </Box>
-            )}
+              {link && (
+                <Box>
+                  {isCopied ? (
+                    <MaterialCommunityIcons
+                      name="check"
+                      size={24}
+                      color="green"
+                      onPress={handleCopyLink}
+                    />
+                  ) : (
+                    <MaterialCommunityIcons
+                      name="link"
+                      size={24}
+                      color="black"
+                      onPress={handleCopyLink}
+                    />
+                  )}
+                </Box>
+              )}
+            </Box>
           </Box>
           <Box
             px="4"

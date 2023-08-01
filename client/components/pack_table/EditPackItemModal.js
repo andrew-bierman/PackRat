@@ -3,16 +3,26 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { AddItem } from "../item/AddItem";
 import { CustomModal } from "../modal";
 
-export const EditPackItemModal = ({ initialData, packId }) => {
+export const EditPackItemModal = ({
+  initialData,
+  packId,
+  currentPack,
+  editAsDuplicate,
+  setPage,
+  page,
+  setRefetch = () => {},
+  refetch,
+}) => {
+  let currentPackId = undefined;
+  if (currentPack) {
+    currentPackId = currentPack["_id"];
+  }
   const [isModalOpen, setIsModalOpen] = React.useState(false);
-
   const closeModalHandler = () => setIsModalOpen(false);
 
   const onTrigger = () => {
     setIsModalOpen(true);
   };
-
-  console.log("initialData", initialData);
 
   const footerButtons = [
     {
@@ -40,7 +50,18 @@ export const EditPackItemModal = ({ initialData, packId }) => {
       footerButtons={footerButtons}
       onCancel={closeModalHandler}
     >
-      <AddItem _id={packId} isEdit={true} initialData={initialData} />
+      <AddItem
+        _id={packId}
+        packId={currentPackId}
+        isEdit={true}
+        initialData={initialData}
+        editAsDuplicate={editAsDuplicate}
+        setPage={setPage}
+        page={page}
+        closeModalHandler={closeModalHandler}
+        setRefetch={setRefetch}
+        refetch={refetch}
+      />
     </CustomModal>
   );
 };

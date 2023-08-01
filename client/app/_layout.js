@@ -1,6 +1,6 @@
 import { Slot } from "expo-router";
 
-import { Platform, ScrollView } from "react-native";
+import { Platform, View } from "react-native";
 
 import Navigation from "../screens/Navigation";
 
@@ -17,20 +17,16 @@ import { ThemeProvider } from "../context/theme";
 
 export default function HomeLayout() {
   return (
-    <ThemeProvider>
-      <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
-          <AuthProvider>
-            <NativeBaseProvider>
-              <Navigation />
-              <ScrollView>
-                <Slot />
-              </ScrollView>
-              {Platform.OS === "web" ? <Footer /> : null}
-            </NativeBaseProvider>
-          </AuthProvider>
-        </PersistGate>
-      </Provider>
-    </ThemeProvider>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <AuthProvider>
+          <NativeBaseProvider>
+            <Navigation />
+            <Slot />
+            {Platform.OS === "web" ? <Footer /> : null}
+          </NativeBaseProvider>
+        </AuthProvider>
+      </PersistGate>
+    </Provider>
   );
 }

@@ -6,6 +6,8 @@ import {
   getPhotonResults,
   getTrailsOSM,
   postSingleGeoJSON,
+  getPhotonDetails,
+  getEnhancedPhotonDetails,
 } from "../controllers/getOsmController.js";
 
 const router = express.Router();
@@ -143,8 +145,83 @@ router.get("/parks", getParksOSM);
  */
 router.post("/osm", getOsm);
 
+/**
+ * @swagger
+ * /process/geojson:
+ *   post:
+ *     summary: Post a single GeoJSON object
+ *     tags: [OSM]
+ *     requestBody:
+ *     required: true
+ *     content:
+ *       application/json:
+ *         schema:
+ *           type: object
+ *           properties:
+ *             geojson:
+ *               type: object
+ *     responses:
+ *       '201':
+ *         description: Successfully created new instance
+ *       '400':
+ *         description: Invalid or missing geoJSON
+ *       '500':
+ *         description: Error processing request
+ */
 router.post("/process/geojson", postSingleGeoJSON);
 
+/**
+ * @swagger
+ * /destination/{id}:
+ *   get:
+ *     summary: Get a single destination by ID
+ *     tags: [OSM]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The id of the destination
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved destination
+ *       '404':
+ *         description: No destination found with provided ID
+ *       '500':
+ *         description: Error retrieving destination
+ */
 router.get("/destination/:id", getDestination);
+
+/**
+ * @swagger
+ * /photonDetails/:type/:id:
+ *   get:
+ *     summary: Get Photon details for a specific result
+ *     tags: [OSM]
+ *     parameters:
+ *       - in: path
+ *         name: type
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The type of the Photon result
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The id of the Photon result
+ *     responses:
+ *       '200':
+ *         description: Successful response with Photon details
+ *       '400':
+ *         description: Invalid request parameters
+ *       '500':
+ *         description: Error retrieving Photon details
+ */
+router.get('/photonDetails/:type/:id', getPhotonDetails);
+// router.get("/photonDetails/:type/:id", getEnhancedPhotonDetails)
+
 
 export default router;

@@ -1,11 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import PackContainer from "./PackContainer";
 import { DetailsHeader } from "../details/header";
 
 import { useSearchParams } from "expo-router";
 import { TableContainer } from "../pack_table/Table";
-import { selectPackById } from "../../store/packsStore";
+import { fetchUserPacks, selectPackById } from "../../store/packsStore";
 
 import { useSelector, useDispatch } from "react-redux";
 import { fetchSinglePack } from "../../store/singlePackStore";
@@ -16,27 +16,35 @@ import { Platform, StyleSheet } from "react-native";
 import { theme } from "../../theme";
 import { CLIENT_URL } from "@env";
 import ScoreContainer from "../ScoreContainer";
+import ChatContainer from "../chat";
+import { AddItem } from "../item/AddItem";
+import { AddItemModal } from "./AddItemModal";
 
 export function PackDetails() {
+  const searchParams = new URLSearchParams(window.location.search);
+  let canCopy = searchParams.get("copy");
+
   const dispatch = useDispatch();
 
   const { packId } = useSearchParams();
 
   const link = `${CLIENT_URL}/packs/${packId}`;
 
+  const user = useSelector((state) => state.auth.user);
+  const userId = user && user._id;
   useEffect(() => {
-    if(!packId) return;
+    if (!packId) return;
     dispatch(fetchSinglePack(packId));
+    if (userId) dispatch(fetchUserPacks(userId));
   }, [dispatch, packId]);
 
   const currentPack = useSelector((state) => state.singlePack.singlePack);
+  const currentPackId = currentPack && currentPack._id;
 
-  const user = useSelector((state) => state.auth.user);
+  const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
 
   // check if user is owner of pack, and that pack and user exists
   const isOwner = currentPack && user && currentPack.owner_id === user._id;
-
-  console.log('isOwner in packdetails', isOwner)
 
   const isLoading = useSelector((state) => state.singlePack.isLoading);
   const error = useSelector((state) => state.singlePack.error);
@@ -45,7 +53,12 @@ export function PackDetails() {
   if (isLoading) return <Text>Loading...</Text>;
 
   return (
-    <Box style={[styles.mainContainer, Platform.OS == 'web' ? {minHeight: "100vh",} : null]}>
+    <Box
+      style={[
+        styles.mainContainer,
+        Platform.OS == "web" ? { minHeight: "100vh" } : null,
+      ]}
+    >
       {!isError && (
         <>
           <DetailsComponent
@@ -55,8 +68,27 @@ export function PackDetails() {
             error={error}
             additionalComps={
               <>
-                <TableContainer currentPack={currentPack} />
-                <ScoreContainer type='pack' data={currentPack} isOwner={isOwner}/>
+                <TableContainer currentPack={currentPack} copy={canCopy} />
+                <Box
+                  style={styles.boxStyle}
+                >
+                  <AddItemModal
+                    currentPackId={currentPackId}
+                    currentPack={currentPack}
+                    isAddItemModalOpen={isAddItemModalOpen}
+                    setIsAddItemModalOpen={setIsAddItemModalOpen}
+                  />
+                </Box>
+                <ScoreContainer
+                  type="pack"
+                  data={currentPack}
+                  isOwner={isOwner}
+                />
+                <Box
+                  style={styles.boxStyle}
+                >
+                  <ChatContainer />
+                </Box>
               </>
             }
             link={link}
@@ -72,7 +104,6 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.background,
     flexDirection: "column",
     gap: 15,
-    padding: [25, 25, 0, 25], // [top, right, bottom, left
     fontSize: 18,
     width: "100%",
   },
@@ -85,5 +116,11 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     backgroundColor: "white",
+  },
+  boxStyle: {
+    padding: 10,
+    borderRadius: 10,
+    width: "100%",
+    minHeight: 100,
   },
 });
