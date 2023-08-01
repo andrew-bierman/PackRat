@@ -19,13 +19,14 @@ import {
   Entypo,
   Fontisto,
 } from "@expo/vector-icons";
+
 import SVGLogoComponent from "../components/logo";
 import { useSelector, useDispatch } from "react-redux";
 import { signOut } from "../store/authStore";
 import Drawer from "./Drawer";
 import { Link, useRouter, usePathname } from "expo-router";
 import { hexToRGBA } from "../utils/colorFunctions";
-
+import UseTheme from "../hooks/useTheme";
 const Navigation = () => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -39,8 +40,9 @@ const Navigation = () => {
   const [navBarWidth, setNavBarWidth] = useState(null);
   const [selectedNavItem, setSelectedNavItem] = useState("");
   const [isLoading, setIsLoading] = useState(false); // Loading state
-
-  const hoverColor = hexToRGBA(theme.colors.primary, 0.2);
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
+  const hoverColor = hexToRGBA(currentTheme.colors.primary, 0.2);
 
   const toggleDrawer = () => {
     setIsDrawerOpen(!isDrawerOpen);
@@ -103,10 +105,16 @@ const Navigation = () => {
             iconSource: Fontisto,
           },
             {
-              href: "profile",
+              href: "/profile",
               icon: "book",
               text: "Profile",
               iconSource: FontAwesome,
+            },
+            {
+              href: "/appearance",
+              icon: "theme-light-dark",
+              text: "Appearance",
+              iconSource: MaterialCommunityIcons,
             },
             {
               href: "logout",
@@ -197,8 +205,8 @@ const Navigation = () => {
             size={isMobileView ? 24 : 18}
             color={
               isCurrentPage || isSelected
-                ? theme.colors.primary
-                : theme.colors.iconColor
+              ? currentTheme.colors.iconColor
+              : currentTheme.colors.iconColor
             } // change the color if this is the current page or selected item
             key={item.href + "icon"}
           />
@@ -252,7 +260,7 @@ const Navigation = () => {
                 <EvilIcons
                   name={isDrawerOpen ? "close" : "navicon"}
                   size={isMobileView ? 36 : 24}
-                  color={theme.colors.iconColor}
+                  color={currentTheme.colors.iconColor}
                 />
               </TouchableOpacity>
             )}
