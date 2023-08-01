@@ -13,8 +13,10 @@ import { MaterialIcons } from "@expo/vector-icons";
 import packratlogo from "../assets/packrat.png";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-
+import UseTheme from "../hooks/useTheme";
 export default function NavigationMobile() {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
   // const { user } = useAuth();
   const user = useSelector((state) => state.auth.user);
 
@@ -24,7 +26,7 @@ export default function NavigationMobile() {
         <Image src={String(packratlogo)} alt="logo" />
         <Text
           style={{
-            color: theme.colors.text,
+            color: currentTheme.colors.text,
             fontSize: 28,
             fontWeight: 900,
           }}
@@ -36,19 +38,18 @@ export default function NavigationMobile() {
         <EvilIcons
           name="navicon"
           size={48}
-          color={theme.colors.iconColor}
+          color={currentTheme.colors.iconColor}
           // onPress={() => setIsMenuOpen(!isMenuOpen)}
         />
       </Link>
     </View>
-  ) : 
-  (
+  ) : (
     <View style={styles.mobileContainer}>
       <View style={{ flexDirection: "row", alignItems: "center", gap: 1 }}>
         <Image src={String(packratlogo)} alt="logo" />
         <Text
           style={{
-            color: theme.colors.text,
+            color: currentTheme.colors.text,
             fontSize: 28,
             fontWeight: 900,
           }}
@@ -60,13 +61,12 @@ export default function NavigationMobile() {
         <EvilIcons
           name="navicon"
           size={48}
-          color={theme.colors.iconColor}
+          color={currentTheme.colors.iconColor}
           // onPress={() => setIsMenuOpen(!isMenuOpen)}
         />
       </Link>
     </View>
-  )
-  ;
+  );
 }
 
 const styles = StyleSheet.create({

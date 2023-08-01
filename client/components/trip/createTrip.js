@@ -23,8 +23,10 @@ import { GearList } from "../GearList";
 import { SaveTripContainer } from "./createTripModal";
 import TripDateRange from "./TripDateRange";
 import MultiStepForm from "../multi_step";
-
+import UseTheme from "../../hooks/useTheme";
 export default function Trips() {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
   const [parksData, setParksData] = useState();
   const [trails, setTrailsData] = useState();
   const [dateRange, setDateRange] = useState({
@@ -159,7 +161,7 @@ export default function Trips() {
               <FontAwesome
                 name="map"
                 size={20}
-                color={theme.colors.cardIconColor}
+                color={currentTheme.colors.cardIconColor}
               />
             )}
           />
@@ -178,7 +180,7 @@ export default function Trips() {
               <FontAwesome5
                 name="hiking"
                 size={20}
-                color={theme.colors.cardIconColor}
+                color={currentTheme.colors.cardIconColor}
               />
             )}
           />
@@ -192,7 +194,7 @@ export default function Trips() {
               <FontAwesome5
                 name="mountain"
                 size={20}
-                color={theme.colors.cardIconColor}
+                color={currentTheme.colors.cardIconColor}
               />
             )}
           />
@@ -204,7 +206,7 @@ export default function Trips() {
               <FontAwesome5
                 name="route"
                 size={24}
-                color={theme.colors.cardIconColor}
+                color={currentTheme.colors.cardIconColor}
               />
             )}
             title="Map"

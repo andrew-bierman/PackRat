@@ -49,6 +49,21 @@ const UserSchema = new Schema(
       enum: ["user", "admin"], // 'user' and 'admin' are the valid roles
       default: "user",
     },
+    username: {
+      type: String,
+      trim: true,
+      lowercase: true,
+      unique: true,
+      required: "Username is required",
+      validate(value) {
+        if (!validator.isAlphanumeric(value))
+          throw new Error("Username is invalid");
+      },
+
+    },
+    profilePicture: {
+      type: String,
+    },
   },
   { timestamps: true,
     toJSON: { virtuals: true },
@@ -88,6 +103,32 @@ UserSchema.statics.validateResetToken = async function (token) {
 
   return user;
 };
+
+// Middleware to default username to email if not provided.
+UserSchema.pre("save", async function (next) {
+  const user = this;
+  
+  if (!user.username) {
+    let generatedUsername = user.email ? user.email.split("@")[0] : "packratuser";
+    
+    const exists = await User.exists({ username: generatedUsername });
+
+    let counter = 1;
+    while(exists) {
+      generatedUsername = `${generatedUsername}${counter}`;
+      counter++;
+    }
+
+    user.username = generatedUsername;
+  }
+
+  // hashing the password
+  // if (user.isModified("password"))
+  //   user.password = await bcrypt.hash(user.password, 8);
+
+  next();
+});
+
 
 //password to store the in hash map
 // UserSchema.pre("save", async function (next) {

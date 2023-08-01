@@ -79,7 +79,6 @@ export const weatherSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchWeather.fulfilled, (state, action) => {
-        weatherAdapter.setAll(state.weatherObject, action.payload);
         state.weatherObject = action.payload;
         state.isLoading = false;
         state.error = null;
@@ -95,7 +94,6 @@ export const weatherSlice = createSlice({
       })
       .addCase(fetchWeatherWeek.fulfilled, (state, action) => {
         const week = action.payload.list.slice(0, 4);
-        weatherAdapter.setAll(state.weatherWeek, week);
         state.weatherWeek = week;
         state.isLoading = false;
         state.error = null;

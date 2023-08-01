@@ -3,7 +3,6 @@ import {
   VStack,
   Box,
   Divider,
-  Link,
   IconButton,
   Text,
   Toast,
@@ -21,8 +20,9 @@ import { EditableInput } from "../EditableText";
 import { theme } from "../../theme";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
-import { useRouter } from "expo-router";
+import { useRouter, Link } from "expo-router";
 import { ThreeDotsMenu } from "../ThreeDotsMenu";
+import UseTheme from "../../hooks/useTheme";
 export const CustomCard = ({
   title,
   content,
@@ -32,6 +32,8 @@ export const CustomCard = ({
   destination,
   data,
 }) => {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
   const [isCopied, setIsCopied] = useState(false);
   const [editTitle, setEditTitle] = useState(false);
   const titleRef = useRef(null);
@@ -211,7 +213,6 @@ export const CustomCard = ({
                 </Box>
               )}
             </Box>
-            
           </Box>
           <Box
             px="4"

@@ -18,7 +18,9 @@ export const getDestination = createAsyncThunk(
   "destination/getDestination",
   async (destinationId, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${api}/osm/destination/${destinationId}`);
+      const response = await axios.get(
+        `${api}/osm/destination/${destinationId}`
+      );
       return response.data;
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -36,6 +38,7 @@ export const photonDetails = createAsyncThunk(
       if (!osm_id || !osm_type) return rejectWithValue("Invalid request parameters");
 
       const response = await axios.get(`${api}/osm/photonDetails/${osm_type}/${osm_id}`);
+
       return response.data;
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -51,6 +54,9 @@ const destinationSlice = createSlice({
     data: null,
     currentDestination: null,
     photonDetails: null,
+    selectedSearchResult: null,
+    weatherObject: null,
+    weatherWeek: null,
     status: "idle",
     error: null,
   }),
@@ -58,6 +64,15 @@ const destinationSlice = createSlice({
     setData: (state, action) => {
       state.data = action.payload;
     },
+    setSelectedSearchResult: (state, action) => {
+      state.selectedSearchResult = action.payload;
+    },
+    setWeatherObject: (state, action) => {
+      state.weatherObject = action.payload;
+    },
+    setWeatherWeek: (state, action) => {
+      state.weatherWeek = action.payload;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -88,7 +103,7 @@ const destinationSlice = createSlice({
       })
       .addCase(photonDetails.fulfilled, (state, action) => {
         state.status = "succeeded";
-        destinationAdapter.upsertOne(state.photonDetails, action.payload.data);
+        state.photonDetails = action.payload; // assign data directly to state field
       })
       .addCase(photonDetails.rejected, (state, action) => {
         state.status = "failed";
@@ -97,4 +112,5 @@ const destinationSlice = createSlice({
   },
 });
 
+export const { setSelectedSearchResult, setWeatherObject, setWeatherWeek } = destinationSlice.actions;
 export default destinationSlice.reducer;
