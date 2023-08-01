@@ -51,9 +51,11 @@ export const ThemeProvider = (props) => {
     });
   };
 
+  const key = `themeContext + isDark=${state.isDark} + isLight=${state.isLight}`;
+
   return (
     <ThemeContext.Provider
-      key={`themeContext + isDark=${state.isDark} + isLight=${state.isLight}`}
+      key={key}
       value={{
         ...state,
         enableDarkMode,
