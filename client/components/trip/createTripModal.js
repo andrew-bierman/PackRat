@@ -111,7 +111,7 @@ export const SaveTripContainer = ({ dateRange }) => {
       description,
       start_date: startDate,
       end_date: endDate,
-      destination: search.properties.name,
+      destination: JSON.stringify(search),
       geoJSON: search,
       // trail: dropdown.currentTrail,
       duration: JSON.stringify(duration),
@@ -120,8 +120,9 @@ export const SaveTripContainer = ({ dateRange }) => {
       packs: packId,
       is_public: isPublic,
     };
-
+    
     // creating a trip
+    console.log("search ya s7by", search);
     console.log("create trip data ->", data);
     dispatch(addTrip(data));
     setIsSaveModalOpen(!isSaveModalOpen);
@@ -204,7 +205,7 @@ export const SaveTripContainer = ({ dateRange }) => {
           </HStack> */}
 
 <DropdownComponent
-    onValueChange={(itemValue) => setIsPublic(itemValue)}
+    onValueChange={(itemValue) => setIsPublic(itemValue== 'Yes' ? true : false)}
     data={['Yes','For me only']}
     value={isPublic}
     placeholder="Is Public"
