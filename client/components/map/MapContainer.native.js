@@ -6,7 +6,7 @@ import { defaultShape } from "../../utils/mapFunctions";
 
 import NativeMap from "./NativeMap";
 
-export function MapContainer({ shape }) {
+export function MapContainer({ shape,selectedSearchResult, type  }) {
   if (isObjectEmpty(shape)) {
     shape = defaultShape;
   }
@@ -14,7 +14,7 @@ export function MapContainer({ shape }) {
   if (Platform.OS === "android" || Platform.OS === "ios") {
     return (
       <View style={[styles.nativeContainer]}>
-        <NativeMap shape={shape} />
+        <NativeMap shape={shape} selectedSearchResult={selectedSearchResult} type={type}/>
       </View>
     );
   }
