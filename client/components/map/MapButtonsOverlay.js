@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   TouchableOpacity,
   Image,
@@ -6,29 +6,27 @@ import {
   StyleSheet,
   Modal,
   View,
+  Alert,
+  Platform,
 } from "react-native";
-import { Box, Select } from "native-base";
-import { Entypo, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import { useDispatch, useSelector } from "react-redux";
-import { convertGeoJSONToGPX, resetGpxData } from "../../store/gpxStore";
-import { mapboxStyles, handleGpxDownload } from "../../utils/mapFunctions";
+import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
+
+import { mapboxStyles } from "../../utils/mapFunctions";
 
 const MapButtonsOverlay = ({
   mapFullscreen,
   enableFullScreen,
   disableFullScreen,
-  mapStyle,
   handleChangeMapStyle,
   downloadable,
+  downloading,
   fetchLocation,
-  showModal,
-  shape,
+  onDownload,
+  handleGpxUpload,
+  progress,
 }) => {
-  const dispatch = useDispatch();
-  const gpxData = useSelector((state) => state.gpx.gpxData);
-
+  console.log("newwwww");
   const [showStyleOptions, setShowStyleOptions] = useState(false);
-  const [downloading, setDownloading] = useState(false); // New state for downloading
 
   const handleStyleOptionPress = () => {
     setShowStyleOptions(!showStyleOptions);
@@ -39,25 +37,6 @@ const MapButtonsOverlay = ({
     setShowStyleOptions(false);
   };
 
-  const fetchGpxDownload = async () => {
-    setDownloading(true);
-
-    console.log("gpxData at start of fetchGpxDownload", gpxData);
-
-    try {
-      const updatedGpxData = await dispatch(convertGeoJSONToGPX(shape));
-
-      const { payload } = updatedGpxData;
-
-      await handleGpxDownload(payload);
-
-      setDownloading(false);
-    } catch (error) {
-      console.log("error", error);
-      setDownloading(false);
-    }
-  };
-
   return (
     <>
       {!mapFullscreen ? (
@@ -66,19 +45,17 @@ const MapButtonsOverlay = ({
           style={[styles.headerBtnView, styles.enterFullScreenBtn]}
           onPress={enableFullScreen}
         >
-          <Entypo name="resize-full-screen" size={21} color={"grey"} />
+          <Entypo name="resize-full-screen" size={21} color="grey" />
         </TouchableOpacity>
       ) : (
         // Fullscreen map
         <>
-          {mapFullscreen && (
-            <TouchableOpacity
-              style={[styles.headerBtnView, styles.exitFullscreenBtn]}
-              onPress={disableFullScreen}
-            >
-              <Entypo name="circle-with-cross" size={21} color={"grey"} />
-            </TouchableOpacity>
-          )}
+          <TouchableOpacity
+            style={[styles.headerBtnView, styles.exitFullscreenBtn]}
+            onPress={disableFullScreen}
+          >
+            <Entypo name="circle-with-cross" size={21} color="grey" />
+          </TouchableOpacity>
 
           {/* Style Picker Button */}
           <TouchableOpacity
@@ -89,6 +66,30 @@ const MapButtonsOverlay = ({
               name="layers-triple-outline"
               size={21}
               color="grey"
+            />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[
+              styles.headerBtnView,
+              {
+                width: 40,
+                height: 40,
+                position: "absolute",
+                bottom: 30,
+                left: 10,
+              },
+            ]}
+            onPress={() => {
+              Platform.OS == "web"
+                ? alert("Sorry, currently not implemented")
+                : Alert.alert("Sorry, currently not implemented");
+            }}
+          >
+            <MaterialCommunityIcons
+              name="navigation-variant-outline"
+              size={25}
+              color={"black"}
             />
           </TouchableOpacity>
 
@@ -120,7 +121,7 @@ const MapButtonsOverlay = ({
           {downloadable && (
             <TouchableOpacity
               style={[styles.headerBtnView, styles.fullScreen]}
-              onPress={fetchGpxDownload}
+              onPress={onDownload}
               disabled={downloading}
             >
               <Image
@@ -128,8 +129,32 @@ const MapButtonsOverlay = ({
                 source={require("../../assets/download.svg")}
               />
               <Text style={styles.downloadText}>
-                {downloading ? "Downloading" : "Download map"}
+                {downloading
+                  ? `Downloading... ${
+                      progress ? Math.floor(progress) + "%" : ""
+                    }`
+                  : "Download map"}
               </Text>
+            </TouchableOpacity>
+          )}
+
+          {handleGpxUpload && (
+            <TouchableOpacity
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+                width: 40,
+                height: 40,
+                position: "absolute",
+                bottom: 80,
+                right: 10,
+                backgroundColor: "white",
+                borderRadius: 30,
+                zIndex: 1,
+              }}
+              onPress={handleGpxUpload}
+            >
+              <MaterialCommunityIcons name="map-plus" size={24} color="grey" />
             </TouchableOpacity>
           )}
 
@@ -209,6 +234,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 30,
+    marginTop:30,
     backgroundColor: "white",
   },
   enterFullScreenBtn: {
@@ -226,7 +252,7 @@ const styles = StyleSheet.create({
     right: 10,
   },
   fullScreen: {
-    width: "25%",
+    width: Platform.OS == "web" ? "25%" : "70%",
     height: 40,
     padding: 10,
     backgroundColor: "white",
@@ -235,6 +261,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+    alignSelf: "center",
     borderRadius: 20,
   },
   downloadIcon: {

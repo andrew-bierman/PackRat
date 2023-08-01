@@ -39,13 +39,36 @@ const UserSchema = new Schema(
     googleId: { type: String },
     code: { type: String },
     is_certified_guide: { type: Boolean },
-    trips: [{ type: Schema.Types.ObjectId, ref: Trip }],
     favorites: [{ type: Schema.Types.ObjectId, ref: Pack }],
-    packs: [{ type: Schema.Types.ObjectId, ref: Pack }],
+    // trips: [{ type: Schema.Types.ObjectId, ref: Trip }],
+    // packs: [{ type: Schema.Types.ObjectId, ref: Pack }],
     passwordResetToken: { type: String },
     passwordResetTokenExpiration: { type: Date },
+    role: {
+      type: String,
+      enum: ["user", "admin"], // 'user' and 'admin' are the valid roles
+      default: "user",
+    },
+    username: {
+      type: String,
+      trim: true,
+      lowercase: true,
+      unique: true,
+      required: "Username is required",
+      validate(value) {
+        if (!validator.isAlphanumeric(value))
+          throw new Error("Username is invalid");
+      },
+
+    },
+    profilePicture: {
+      type: String,
+    },
   },
-  { timestamps: true }
+  { timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
 );
 
 UserSchema.statics.findByCredentials = async function ({ email, password }) {
@@ -81,15 +104,41 @@ UserSchema.statics.validateResetToken = async function (token) {
   return user;
 };
 
-//password to store the in hash map
+// Middleware to default username to email if not provided.
 UserSchema.pre("save", async function (next) {
   const user = this;
+  
+  if (!user.username) {
+    let generatedUsername = user.email ? user.email.split("@")[0] : "packratuser";
+    
+    const exists = await User.exists({ username: generatedUsername });
 
-  if (user.isModified("password"))
-    user.password = await bycrypt.hash(user.password, 8);
+    let counter = 1;
+    while(exists) {
+      generatedUsername = `${generatedUsername}${counter}`;
+      counter++;
+    }
+
+    user.username = generatedUsername;
+  }
+
+  // hashing the password
+  // if (user.isModified("password"))
+  //   user.password = await bcrypt.hash(user.password, 8);
 
   next();
 });
+
+
+//password to store the in hash map
+// UserSchema.pre("save", async function (next) {
+//   const user = this;
+
+//   if (user.isModified("password"))
+//     user.password = await bycrypt.hash(user.password, 8);
+
+//   next();
+// });
 
 UserSchema.methods.generateAuthToken = async function () {
   const user = this;
@@ -114,6 +163,22 @@ UserSchema.methods.generateResetToken = async function () {
   await user.save();
   return `${CLIENT_URL}/password-reset?token=${resetToken}`;
 };
+
+UserSchema.virtual("packs", {
+  ref: "Pack", // The model to use
+  localField: "_id", // Find packs where `localField`
+  foreignField: "owner_id", // is equal to `foreignField`
+  justOne: false, // And only get the first one found
+});
+
+UserSchema.virtual("trips", {
+  ref: "Trip", // The model to use
+  localField: "_id", // Find packs where `localField`
+  foreignField: "owner_id", // is equal to `foreignField`
+  justOne: false, // And only get the first one found
+});
+
+// TODO: better solution for favorites virtual
 
 UserSchema.methods.toJSON = function () {
   const user = this;

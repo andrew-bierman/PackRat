@@ -17,6 +17,7 @@ import { FontAwesome } from "@expo/vector-icons";
 
 import { StyleSheet } from "react-native";
 import { theme } from "../theme";
+import { defaultWeatherObject } from "../constants/defaultWeatherObj";
 
 const monthArr = [
   "January",
@@ -33,7 +34,7 @@ const monthArr = [
   "December",
 ];
 
-export default function WeatherCard({ weatherObject, weatherWeek }) {
+export default function WeatherCard({weatherObject = defaultWeatherObject, weatherWeek = []}) {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     UseTheme();
   const date = new Date();

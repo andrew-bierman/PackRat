@@ -1,4 +1,3 @@
-import { StyleSheet } from "react-native";
 
 import {
   VStack,
@@ -33,15 +32,11 @@ import { useState, useEffect } from "react";
 
 import {
   fetchTrails,
-  filterTrailsForNames,
-  setTrailNames,
-  setTrails,
 } from "../store/trailsStore";
 
 import { fetchParks } from "../store/parksStore";
 
 import {
-  setSearchResults,
   setSelectedSearchResult,
   clearSearchResults,
   fetchPhotonSearchResults,
@@ -93,9 +88,6 @@ export const SearchInput = ({ onSelect, placeholder }) => {
       return;
     }
 
-    console.log("lat", lat);
-    console.log("lon", lon);
-
     try {
       await Promise.all([
         dispatch(fetchTrails({ lat, lon, selectedSearch })),
@@ -128,7 +120,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
     setSearchString(name);
     setShowSearchResults(false);
     dispatch(setSelectedSearchResult(result));
-    dispatch(clearSearchResults());
+    // dispatch(clearSearchResults());
 
     if (onSelect) {
       onSelect(result);

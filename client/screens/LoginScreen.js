@@ -8,10 +8,7 @@ import {
   Button,
   HStack,
   Center,
-  NativeBaseProvider,
-  View,
   Toast,
-  ScrollView,
 } from "native-base";
 
 import { FontAwesome } from "@expo/vector-icons";
@@ -354,10 +351,7 @@ export default function Login() {
                   w="100%"
                   disabled={!request}
                   onPress={() => {
-                    setEmail(demoUser.email);
-                    setPassword(demoUser.password);
-
-                    handleLogin();
+                    dispatch(signIn(demoUser));
                   }}
                   colorScheme={"purple"}
                 >

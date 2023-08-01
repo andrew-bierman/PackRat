@@ -10,6 +10,7 @@ export const CustomModal = ({
   onCancel,
   buttonColor = "primary",
   type,
+  size = "lg",
   footerButtons = [],
   isActive,
   onTrigger,
@@ -42,6 +43,7 @@ export const CustomModal = ({
       <NBModal
         isOpen={isActive}
         onClose={closeModal}
+        size={size}
         {...rest}
         placement="center"
       >

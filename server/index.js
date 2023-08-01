@@ -4,6 +4,7 @@ import cors from "cors";
 import { isCelebrateError, errors } from "celebrate";
 import {ItemCategoryModel} from './models/itemCategory.js'
 import { MONGODB_URI, SERVICE_ACCOUNT_KEY,CORS_METHODS,CORS_ORIGIN } from "./config.js";
+
 import routes from "./routes/index.js";
 
 import swaggerUi from "swagger-ui-express";
@@ -30,6 +31,11 @@ app.use(routes);
 if (process.env.NODE_ENV !== "production") {
   app.use("/api-docs", swaggerUi.serve);
   app.get("/api-docs", swaggerUi.setup(specs));
+  app.get('/swagger.json', (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.send(specs);
+  });  
+  
   app.get('/seed/category',(req,res)=>{
     console.log('Seeding...')
     ItemCategory.forEach(async(category)=>{

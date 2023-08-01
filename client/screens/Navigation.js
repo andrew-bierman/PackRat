@@ -17,6 +17,7 @@ import {
   FontAwesome,
   MaterialIcons,
   Entypo,
+  Fontisto,
 } from "@expo/vector-icons";
 
 import SVGLogoComponent from "../components/logo";
@@ -37,6 +38,8 @@ const Navigation = () => {
   );
 
   const [navBarWidth, setNavBarWidth] = useState(null);
+  const [selectedNavItem, setSelectedNavItem] = useState("");
+  const [isLoading, setIsLoading] = useState(false); // Loading state
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     UseTheme();
   const hoverColor = hexToRGBA(currentTheme.colors.primary, 0.2);
@@ -61,7 +64,7 @@ const Navigation = () => {
       },
     ],
     []
-  ); // static items don't have any dependencies
+  );
 
   const userNavigationItems = useMemo(
     () =>
@@ -85,6 +88,22 @@ const Navigation = () => {
               text: "Packs",
               iconSource: MaterialIcons,
             },
+            ...(Platform.OS != "web"
+            ? [
+                {
+                  href: "maps",
+                  icon: "map",
+                  text: "Downloaded Maps",
+                  iconSource: Entypo,
+                },
+              ]
+            : []),
+          {
+            href: "/items",
+            icon: "tent",
+            text: "Items",
+            iconSource: Fontisto,
+          },
             {
               href: "/profile",
               icon: "book",
@@ -125,13 +144,17 @@ const Navigation = () => {
 
   const navigateTo = useCallback(
     (href) => {
-      console.log("href", href);
-      // Implement navigation logic here
       if (href === "logout") {
         dispatch(signOut());
       } else {
         setIsDrawerOpen(false);
-        router.push(href);
+        setSelectedNavItem(href);
+        setIsLoading(true); // Start loading
+
+        setTimeout(() => {
+          router.push(href);
+          setIsLoading(false); // Stop loading after a delay
+        }, 0); // Adjust the delay as needed
       }
     },
     [dispatch, router]
@@ -139,7 +162,7 @@ const Navigation = () => {
 
   useEffect(() => {
     const handleScreenResize = () => {
-      setIsMobileView(Dimensions.get("window").width < 1024);
+      setIsMobileView(Dimensions.get("window").width < 1150);
     };
 
     Dimensions.addEventListener("change", handleScreenResize);
@@ -149,7 +172,7 @@ const Navigation = () => {
   }, []);
 
   const renderNavigationItem = useCallback(
-    (item) => {
+    (item, index) => {
       const { icon, iconSource, text, href } = item;
       const IconComponent = iconSource || EvilIcons;
       const pathName = usePathname();
@@ -159,30 +182,39 @@ const Navigation = () => {
       }
 
       const isCurrentPage = pathName === href; // compare the current route with the href
+      const isSelected = selectedNavItem === href; // check if the item is selected
+
+      const handleItemPress = () => {
+        setSelectedNavItem(href);
+        navigateTo(href);
+      };
 
       return (
         <TouchableOpacity
-          key={item.href}
+          key={item.href + "nav" + index}
           style={[
             styles.menuBarItem,
             isCurrentPage && styles.menuBarItemActive, // apply the active style if this is the current page
+            isSelected && styles.menuBarItemSelected, // apply the selected style if this item is selected
           ]}
-          onPress={() => navigateTo(item.href)}
+          onPress={handleItemPress}
+          activeOpacity={0.7} // Set the activeOpacity to create a hover effect
         >
           <IconComponent
             name={icon}
             size={isMobileView ? 24 : 18}
             color={
-              isCurrentPage
-                ? currentTheme.colors.iconColor
-                : currentTheme.colors.iconColor
-            } // change the color if this is the current page
+              isCurrentPage || isSelected
+              ? currentTheme.colors.iconColor
+              : currentTheme.colors.iconColor
+            } // change the color if this is the current page or selected item
             key={item.href + "icon"}
           />
           <Text
             style={[
               styles.menuBarItemText,
               isCurrentPage && styles.menuBarItemTextActive, // apply the active style to the text if this is the current page
+              isSelected && styles.menuBarItemTextSelected, // apply the selected style to the text if this item is selected
             ]}
           >
             {text}
@@ -190,7 +222,7 @@ const Navigation = () => {
         </TouchableOpacity>
       );
     },
-    [user] // add any other dependencies that this function uses
+    [user, selectedNavItem] // add any other dependencies that this function uses
   );
 
   return (
@@ -202,13 +234,16 @@ const Navigation = () => {
         {user && <AuthStateListener />}
         <View style={styles.header}>
           <TouchableOpacity
+            key={"logo-nav"}
             style={styles.logoContainer}
             onPress={() => navigateTo("/")}
           >
             <View style={styles.logoWrapper}>
               <SVGLogoComponent
-                width={isMobileView ? 48 : 64}
-                height={isMobileView ? 48 : 64}
+                // width={isMobileView ? 48 : 64}
+                // height={isMobileView ? 48 : 64}
+                width={48}
+                height={48}
                 fill="#fff"
               />
             </View>
@@ -230,6 +265,7 @@ const Navigation = () => {
               </TouchableOpacity>
             )}
           </View>
+
           {isMobileView ? (
             <Modal
               visible={isDrawerOpen}
@@ -245,13 +281,15 @@ const Navigation = () => {
               />
             </Modal>
           ) : (
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.menuBar}
-            >
-              {navigationItems.map((item) => renderNavigationItem(item))}
-            </ScrollView>
+            // <ScrollView
+            //   horizontal
+            //   showsHorizontalScrollIndicator={false}
+            //   contentContainerStyle={styles.menuBar}
+            // >
+            <View style={styles.menuBar}>
+              {navigationItems?.map((item, index) => renderNavigationItem(item, index))}
+            </View>
+            // </ScrollView>
           )}
         </View>
       </View>
@@ -275,7 +313,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     padding: 16,
-    width: "100%", // This will make sure your header take all available space
+    width: "100%",
   },
   logoContainer: {
     flexDirection: "row",
@@ -295,7 +333,6 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     paddingHorizontal: 16,
     height: 60,
-    width: "100%",
   },
   menuBarItem: {
     flexDirection: "row",
@@ -307,22 +344,23 @@ const styles = StyleSheet.create({
     color: theme.colors.text,
     fontSize: 18,
   },
-  drawerContainer: {
-    // Add your styles here if needed
-  },
-  drawerTrigger: {
-    // Remove the marginLeft: "auto"
-  },
+  drawerContainer: {},
+  drawerTrigger: {},
   menuBarItemActive: {
-    // borderBottomWidth: 2, // example active style
-    // borderBottomColor: theme.colors.accentPurple, // example active style
-    // border: "1px solid red",
-    // backgroundColor: hexToRGBA(theme.colors.accentPurple, 0.3),
-    // borderRadius: 5,
+    // Apply styles for the active item
+    // ...
   },
   menuBarItemTextActive: {
-    // color: theme.colors.primary, // example active style
-    // fontWeight: "bold", // example active style
+    // Apply styles for the active item's text
+    // ...
+  },
+  menuBarItemSelected: {
+    // Apply styles for the selected item
+    // ...
+  },
+  menuBarItemTextSelected: {
+    // Apply styles for the selected item's text
+    // ...
   },
 });
 

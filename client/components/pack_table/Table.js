@@ -7,10 +7,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { convertWeight } from "../../utils/convertWeight";
 import { EditPackItemModal } from "./EditPackItemModal";
 import { ItemCategoryEnum } from "../../constants/itemCategory";
-import Water from "../Water";
 import { DeletePackItemModal } from "./DeletePackItemModal";
+import { duplicatePackItem } from "../../store/packsStore";
 import { formatNumber } from "../../utils/formatNumber";
 import { theme } from "../../theme";
+import CustomButton from "../custombutton";
+import ItemPicker from "../Picker";
 
 const WeightUnitDropdown = ({ value, onChange }) => {
   return (
@@ -30,9 +32,7 @@ const WeightUnitDropdown = ({ value, onChange }) => {
 
 const TotalWeightBox = ({ label, weight, unit }) => {
   return (
-    <Box
-      style={styles.totalWeightBox}
-    >
+    <Box style={styles.totalWeightBox}>
       <Text>{label}</Text>
       <Text>{`${formatNumber(weight)} (${unit})`}</Text>
     </Box>
@@ -65,9 +65,15 @@ const TableItem = ({
   handleCheckboxChange,
   index,
   flexArr,
+  currentPack,
+  refetch,
+  setRefetch = () => {},
 }) => {
   const { name, weight, category, quantity, unit, _id } = itemData;
-  const dispatch = useDispatch();
+  /* 
+  * this _id is passed as pack id but it is a item id which is confusing
+  Todo need to change the name for this passing argument and remaining functions which are getting it
+   */
 
   // Here, you can set a default category if item.category is null or undefined
   const categoryName = category ? category.name : "Undefined";
@@ -76,9 +82,20 @@ const TableItem = ({
     name,
     `${formatNumber(weight)} ${unit}`,
     quantity,
-    categoryName,
-    <EditPackItemModal packId={_id} initialData={itemData} />,
-    <DeletePackItemModal itemId={_id} />,
+    `${categoryName}`,
+    <EditPackItemModal
+      packId={_id}
+      initialData={itemData}
+      currentPack={currentPack}
+      refetch={refetch}
+      setRefetch={setRefetch}
+    />,
+    <DeletePackItemModal
+      itemId={_id}
+      pack={currentPack}
+      refetch={refetch}
+      setRefetch={setRefetch}
+    />,
     <IgnoreItemCheckbox
       itemId={_id}
       isChecked={checkedItems.includes(_id)}
@@ -128,13 +145,34 @@ const TitleRow = ({ title }) => {
   );
 };
 
-export const TableContainer = ({ currentPack }) => {
+export const TableContainer = ({
+  currentPack,
+  selectedPack,
+  refetch,
+  setRefetch = () => {},
+  copy,
+}) => {
+  const user = useSelector((state) => state.auth.user);
+  const dispatch = useDispatch();
+  let ids = [];
+  if (currentPack && currentPack.items) {
+    ids = copy ? currentPack.items.map((item) => item._id) : [];
+  }
+  const [checkedItems, setCheckedItems] = useState([...ids]);
+
+  const handleDuplicate = () => {
+    const data = {
+      packId: currentPack._id,
+      ownerId: user._id,
+      items: checkedItems,
+    };
+    dispatch(duplicatePackItem(data));
+  };
 
   const [weightUnit, setWeightUnit] = useState("g");
-  const [checkedItems, setCheckedItems] = useState([]);
   const isLoading = useSelector((state) => state.items.isLoading);
   const error = useSelector((state) => state.items.error);
-
+console.log('c',currentPack)
   const data = currentPack?.items;
 
   let totalFoodWeight = 0;
@@ -143,43 +181,46 @@ export const TableContainer = ({ currentPack }) => {
 
   let waterItem;
   let foodItems = [];
+  // for calculating the total.
+  /* 
+  Todo better to move this all inside a utility function and pass them variables 
+  */
   data &&
     data
       .filter((item) => !checkedItems.includes(item._id))
       .forEach((item) => {
         const categoryName = item.category ? item.category.name : "Undefined";
-
-        switch (categoryName) {
-          case ItemCategoryEnum.ESSENTIALS: {
-            totalBaseWeight += convertWeight(
-              item.weight * item.quantity,
-              item.unit,
-              weightUnit
-            );
-            break;
-          }
-          case ItemCategoryEnum.FOOD: {
-            totalFoodWeight += convertWeight(
-              item.weight * item.quantity,
-              item.unit,
-              weightUnit
-            );
-            foodItems.push(item);
-            break;
-          }
-          case ItemCategoryEnum.WATER: {
-            totalWaterWeight += convertWeight(
-              item.weight * item.quantity,
-              item.unit,
-              weightUnit
-            );
-            waterItem = item;
-            break;
+        if (!copy) {
+          switch (categoryName) {
+            case ItemCategoryEnum.ESSENTIALS: {
+              totalBaseWeight += convertWeight(
+                item.weight * item.quantity,
+                item.unit,
+                weightUnit
+              );
+              break;
+            }
+            case ItemCategoryEnum.FOOD: {
+              totalFoodWeight += convertWeight(
+                item.weight * item.quantity,
+                item.unit,
+                weightUnit
+              );
+              foodItems.push(item);
+              break;
+            }
+            case ItemCategoryEnum.WATER: {
+              totalWaterWeight += convertWeight(
+                item.weight * item.quantity,
+                item.unit,
+                weightUnit
+              );
+              waterItem = item;
+              break;
+            }
           }
         }
       });
-
-  // console.log("waterItem", waterItem);
 
   let totalWeight = totalBaseWeight + totalWaterWeight + totalFoodWeight;
 
@@ -205,14 +246,15 @@ export const TableContainer = ({ currentPack }) => {
 
   return (
     <Box style={styles.container}>
-      <WeightUnitDropdown value={weightUnit} onChange={setWeightUnit} />
+      <ItemPicker
+        currentPack={selectedPack}
+        refetch={refetch}
+        setRefetch={setRefetch}
+      />
+
       {data?.length ? (
         <>
-          <Table
-            style={styles.tableStyle}
-            borderStyle={{ borderColor: "transparent" }}
-            flexArr={flexArr}
-          >
+          <Table style={styles.tableStyle} flexArr={flexArr}>
             <TitleRow title="Pack List" />
             <Row
               flexArr={flexArr}
@@ -223,7 +265,7 @@ export const TableContainer = ({ currentPack }) => {
                 "Category",
                 "Edit",
                 "Delete",
-                "Ignore",
+                `${copy ? "Copy" : "Ignore"}`,
               ].map((header, index) => (
                 <Cell key={index} data={header} textStyle={styles.headerText} />
               ))}
@@ -244,6 +286,9 @@ export const TableContainer = ({ currentPack }) => {
                         checkedItems={checkedItems}
                         handleCheckboxChange={handleCheckboxChange}
                         flexArr={flexArr}
+                        currentPack={currentPack}
+                        refetch={refetch}
+                        setRefetch={setRefetch}
                       />
                     )}
                   />
@@ -251,8 +296,7 @@ export const TableContainer = ({ currentPack }) => {
               )}
             />
           </Table>
-          {!foodItems.length && <Button>Add Food Item</Button>}
-          {!waterItem && <Water currentPack={currentPack} />}
+          <CustomButton text="Copy" handler={handleDuplicate} copy={copy} />
           <TotalWeightBox
             label="Base Weight"
             weight={totalBaseWeight}
@@ -272,6 +316,7 @@ export const TableContainer = ({ currentPack }) => {
       ) : (
         <Text style={styles.noItemsText}>Add your First Item</Text>
       )}
+      <WeightUnitDropdown value={weightUnit} onChange={setWeightUnit} />
     </Box>
   );
 };

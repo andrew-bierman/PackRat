@@ -11,6 +11,7 @@ export const theme = {
     error: "#FF453A",
     textPrimary: "#22c55e",
     textSecondary: "#EBEBF599",
+    textDarkGrey: "#3B3B3B",
     cardIconColor: "#22c55e",
     iconColor: "#FFFFFF",
     weatherIcon: "#0284c7",

@@ -5,9 +5,15 @@ import { theme } from "../../theme";
 // import useAddToFavorite from "../../hooks/useAddToFavorites";
 // import { useAuth } from "../../auth/provider";
 import { useSelector, useDispatch } from "react-redux";
-import { addFavorite } from "../../store/favoritesStore";
+import {
+  addFavorite,
+  selectFavoriteById,
+  selectAllFavorites,
+} from "../../store/favoritesStore";
 import { TouchableOpacity } from "react-native";
 import { Link } from "expo-router";
+import { DuplicateIcon } from "../DuplicateIcon/index";
+import { truncateString } from "../../utils/truncateString";
 
 import {
   Box,
@@ -17,6 +23,7 @@ import {
   Center,
   HStack,
   Stack,
+  Button,
 } from "native-base";
 
 // import { useAuth } from "../../auth/provider";
@@ -32,16 +39,22 @@ export default function Card({
   owner_id,
   destination,
   createdAt,
+  owners,
 }) {
-  // const { user } = useAuth();
   const user = useSelector((state) => state.auth.user);
-  const favorites = useSelector((state) => state.favorites.favorites);
+
+  const favorites = useSelector(selectAllFavorites);
   const dispatch = useDispatch();
 
   const isFavorite = favorites.some((favorite) => favorite.pack_id === _id);
 
   const handleAddToFavorite = () => {
-    dispatch(addFavorite({ pack_id: _id, user_id: user._id }));
+    const data = {
+      packId: _id,
+      userId: user._id,
+    };
+
+    dispatch(addFavorite(data));
   };
 
   const handleRemoveFromFavorite = () => {
@@ -53,6 +66,9 @@ export default function Card({
     }
   };
   // const { addToFavorite } = useAddToFavorite();
+
+  const truncatedName = truncateString(name, 25);
+  const truncatedDestination = truncateString(destination, 25);
 
   return (
     <Box alignItems="center" padding="4">
@@ -86,14 +102,22 @@ export default function Card({
                   alignItems: "center",
                   justifyContent: "space-between",
                   width: "100%",
-                  gap: 10,
                 }}
               >
                 <Link href={type === "pack" ? "/pack/" + _id : "/trip/" + _id}>
-                  {name}
+                  {truncatedName}
                 </Link>
                 {type === "pack" && (
-                  <MaterialIcons name="backpack" size={24} color="gray" />
+                  <Box
+                    style={{
+                      flexDirection: "row",
+                    }}
+                  >
+                    <MaterialIcons name="backpack" size={24} color="gray" />
+                    <Link href={"/pack/" + _id + "?copy=true"}>
+                      <DuplicateIcon />
+                    </Link>
+                  </Box>
                 )}
                 {type === "trip" && (
                   <Entypo name="location-pin" size={24} color="gray" />
@@ -131,13 +155,31 @@ export default function Card({
                 ml="-0.5"
                 mt="-1"
               >
-                {destination}
+                {truncatedDestination}
               </Text>
             )}
           </Stack>
 
           <HStack alignItems="center" space={4} justifyContent="space-between">
-            <HStack alignItems="center" width="100%">
+            <HStack alignItems="center" justifyContent="space-between" width="100%">
+            <Box
+                style={{
+                  flexDirection: "column",
+                  alignItems: "flex-start",
+                  gap: 10,
+                }}
+              >
+                <Link href={`/profile/${owner_id}`} >
+                <Text>View Owner</Text>
+                </Link>
+                <Box
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    gap: 10,
+                  }}
+                >
+
               <Text
                 color="coolGray.600"
                 _dark={{
@@ -157,6 +199,9 @@ export default function Card({
                   }
                 ) ?? 0}
               </Text>
+                </Box>
+              </Box>
+             
               <Box
                 style={{
                   flexDirection: "column",
