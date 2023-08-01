@@ -1,6 +1,4 @@
-import ProfileContainer from "../../components/user/ProfileContainer";
 import { Platform } from "react-native";
-import ProfileContainerMobile from "../../components/user/ProfileContainerMobile";
 import { Stack as Header } from "expo-router";
 import AppearanceContainer from "../../components/appearance/AppearanceContainer";
 
