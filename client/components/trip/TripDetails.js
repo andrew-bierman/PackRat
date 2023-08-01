@@ -20,8 +20,7 @@ import TripCard from "../TripCard";
 import { FontAwesome5 } from "@expo/vector-icons";
 import UseTheme from "../../hooks/useTheme";
 export function TripDetails() {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } = UseTheme();
   const weatherObject = useSelector((state) => state.weather.weatherObject);
   const weatherWeek = useSelector((state) => state.weather.weatherWeek);
 
@@ -32,9 +31,7 @@ export function TripDetails() {
   const link = `${CLIENT_URL}/trip/${tripId}`;
 
   useEffect(() => {
-    if (!tripId) {
-      return;
-    }
+    if (!tripId) return;
     dispatch(fetchSingleTrip(tripId));
   }, [dispatch, tripId]);
   const states = useSelector((state) => state);
