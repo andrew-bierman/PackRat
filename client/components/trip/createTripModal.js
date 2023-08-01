@@ -111,7 +111,7 @@ export const SaveTripContainer = ({ dateRange }) => {
       description,
       start_date: startDate,
       end_date: endDate,
-      destination: JSON.stringify(search),
+      destination: search.properties.name,
       geoJSON: search,
       // trail: dropdown.currentTrail,
       duration: JSON.stringify(duration),

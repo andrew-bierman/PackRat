@@ -29,7 +29,8 @@ const TripSchema = new Schema(
     owner_id: { type: Schema.Types.ObjectId, ref: "User" },
     packs: { type: Schema.Types.ObjectId, ref: 'Pack' },
     is_public: { type: Boolean },
-    type:{type:String,default: 'trip'}
+    type:{type:String,default: 'trip'},
+    geoJSON : {type: Object}
   },
   { timestamps: true }
 );

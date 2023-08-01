@@ -7,7 +7,7 @@ import axios from "axios";
 import { api } from "../constants/api";
 
 const singleTripAdapter = createEntityAdapter({
-  selectId: (singleTrip) => singleTrip._id,
+  selectId: (trip) => (trip ? trip._id : null),
 });
 
 const initialState = singleTripAdapter.getInitialState({

@@ -141,6 +141,7 @@ export const addTrip = async (req, res) => {
       owner_id,
       packs,
       is_public,
+      geoJSON
     });
 
     res.status(200).json({ msg: "success" });
