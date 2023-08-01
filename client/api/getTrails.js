@@ -55,7 +55,7 @@ export const getTrailsOSM = async (lat, lon) => {
     });
     // Convert the response data to GeoJSON format
     const geojsonData = osmtogeojson(response.data);
-    
+
     return geojsonData;
   } catch (error) {
     console.error("Error fetching trails:", error);

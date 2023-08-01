@@ -78,8 +78,6 @@ export const getOsm = async (req, res) => {
 export const getPhotonResults = async (req, res) => {
   const { searchString } = req.query;
 
-  conaole.log("queryyyyy:", req.query);
-
   if (!searchString) {
     res.status(400).send({ message: "Invalid request parameters" });
     return; // Return early to avoid further execution

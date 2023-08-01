@@ -15,17 +15,11 @@ export const fetchTrails = createAsyncThunk(
     }
     const radius = 500;
     const url = api + "/osm/trails" + params;
-    console.log("url", url);
-    console.log("params", params);
-    console.log("hi");
 
     try {
-      console.log("bye");
-
       const response = await axios.get(url);
       const trails = response.data.features;
-      console.log("trails", trails);
-      console.log("response hi", response);
+
       const filteredTrails = trails
         .filter(
           (trail) =>

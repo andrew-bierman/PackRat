@@ -5,7 +5,6 @@ import { api } from "../constants/api";
 export const processGeoJSON = createAsyncThunk(
   "destination/processGeoJSON",
   async (data, { rejectWithValue }) => {
-    console.log("dataoo", data);
     try {
       const response = await axios.post(`${api}/osm/process/geojson`, data);
       return response.data;

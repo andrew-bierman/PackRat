@@ -75,8 +75,6 @@ export default function Login() {
     password: "12345678",
   };
 
-  console.log("WEB_CLIENT_ID", WEB_CLIENT_ID);
-
   const router = useRouter();
 
   const dispatch = useDispatch();
