@@ -92,43 +92,49 @@ export const CustomCard = ({
               alignItems="center"
             >
               <Box
-              mx="4"
+              mx="5"
               >
             <Link href={`/profile/${data['owner_id']}`}>
-            <Text>View Owner</Text>
+            <Text>View {data["name"]}</Text>
             </Link>
               </Box>
-            {link && (
-              <Box
-                flexDir={"row"}
-                style={{
-                  gap: "10px",
-                }}
-              >
-                {isCopied ? (
-                  <MaterialCommunityIcons
-                    name="check"
-                    size={24}
-                    color="green"
-                    onPress={handleCopyLink}
-                  />
-                ) : (
-                  <MaterialCommunityIcons
-                    name="link"
-                    size={24}
-                    color="black"
-                    onPress={handleCopyLink}
-                  />
-                )}
-                {userId === data.owner_id && (
-                  <ThreeDotsMenu
-                    data={data}
-                    titleRef={titleRef}
-                    setEditTitle={setEditTitle}
-                  />
-                )}
-              </Box>
-            )}
+              {link && (
+                <Box
+                  flexDir={"row"}
+                  style={{
+                    gap: "5px",
+                    alignItems: "center",
+                  }}>
+                  {isCopied ? (
+                    <>
+                      <MaterialCommunityIcons
+                        name='check'
+                        size={24}
+                        color='green'
+                        onPress={handleCopyLink}
+                      />
+                      <Text color='green'>Copied</Text>
+                    </>
+                  ) : (
+                    <>
+                      <MaterialCommunityIcons
+                        name='link'
+                        size={24}
+                        color='black'
+                        onPress={handleCopyLink}
+                      />
+                      <Text color='black'>Copy</Text>
+                    </>
+                  )}
+                  {userId === data.owner_id && (
+                    <ThreeDotsMenu
+                      data={data}
+                      titleRef={titleRef}
+                      setEditTitle={setEditTitle}
+                    />
+                  )}
+                </Box>
+              )}
             </Box>
           </Box>
           <Box
@@ -173,31 +179,37 @@ export const CustomCard = ({
               alignItems="center"
             >
               <Box
-              mx="4"
+              mx="5"
               >
             <Link href={`/profile/${data['owner_id']}`}>
-            <Text>View Owner</Text>
+            <Text>View {data["name"]}</Text>
             </Link>
               </Box>
               {link && (
-              <Box>
-                {isCopied ? (
-                  <MaterialCommunityIcons
-                    name="check"
-                    size={24}
-                    color="green"
-                    onPress={handleCopyLink}
-                  />
-                ) : (
-                  <MaterialCommunityIcons
-                    name="link"
-                    size={24}
-                    color="black"
-                    onPress={handleCopyLink}
-                  />
-                )}
-              </Box>
-            )}
+                <Box>
+                  {isCopied ? (
+                    <>
+                      <MaterialCommunityIcons
+                        name='check'
+                        size={24}
+                        color='green'
+                        onPress={handleCopyLink}
+                      />
+                      <Text color='green'>Copied</Text>
+                    </>
+                  ) : (
+                    <>
+                      <MaterialCommunityIcons
+                        name='link'
+                        size={24}
+                        color='black'
+                        onPress={handleCopyLink}
+                      />
+                      <Text color='black'>Copy</Text>
+                    </>
+                  )}
+                </Box>
+              )}
             </Box>
             
           </Box>
