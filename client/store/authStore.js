@@ -14,16 +14,17 @@ const initialState = authAdapter.getInitialState({
 // Thunks for async actions
 export const signUp = createAsyncThunk(
   "auth/signUp",
-  async ({ email, password, name }, { rejectWithValue }) => {
+  async ({ name, username, email, password }, { rejectWithValue }) => {
     try {
+      // Add check for unique username here.
       const response = await axios.post(`${api}/user/signup`, {
+        name,
+        username,  // add username
         email,
         password,
-        name,
       });
       return response.data.user;
     } catch (error) {
-      alert('Name is required\nPassword must be at least 7 characters\nEmail is required\nEmail must be valid');
       return rejectWithValue(error.response.data.error);
     }
   }
