@@ -17,6 +17,7 @@ export default function TripCard({
   title,
   Icon,
   isMap,
+  shape,
   data,
   isSearch,
   isTrail,
@@ -78,9 +79,10 @@ export default function TripCard({
       {isMap ? (
         <MapContainer
           shape={
-            currentShape.length == 0
+            shape ??
+            (currentShape.length == 0
               ? {}
-              : convertPhotonGeoJsonToShape(currentShape[0])
+              : convertPhotonGeoJsonToShape(currentShape[0]))
           }
         />
       ) : isSearch ? (

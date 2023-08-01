@@ -18,18 +18,18 @@ const TripSchema = new Schema(
     end_date: { type: Date, required: true },
     destination: { type: String, required: true },
     osm_ref: {
-      type: Schema.Types.ObjectId,  // the id of the Way or Node
-      refPath: 'osm_type',  // the name of the model to use for populating
+      type: Schema.Types.ObjectId, // the id of the Way or Node
+      refPath: "osm_type", // the name of the model to use for populating
       // autopopulate: true
     },
     osm_type: {
       type: String,
-      enum: ['Way', 'Node'],  // it can be either a Way or a Node
+      enum: ["Way", "Node", "Relation"], // it can be either a Way, Node or a Relation
     },
     owner_id: { type: Schema.Types.ObjectId, ref: "User" },
-    packs: { type: Schema.Types.ObjectId, ref: 'Pack' },
+    packs: { type: Schema.Types.ObjectId, ref: "Pack" },
     is_public: { type: Boolean },
-    type:{type:String,default: 'trip'}
+    type: { type: String, default: "trip" },
   },
   { timestamps: true }
 );

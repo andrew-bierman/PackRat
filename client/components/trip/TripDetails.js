@@ -18,6 +18,7 @@ import ScoreContainer from "../ScoreContainer";
 import WeatherCard from "../WeatherCard";
 import TripCard from "../TripCard";
 import { FontAwesome5 } from "@expo/vector-icons";
+import { convertPhotonGeoJsonToShape } from "../../utils/mapFunctions";
 
 export function TripDetails() {
   const weatherObject = useSelector((state) => state.weather.weatherObject);
@@ -47,7 +48,6 @@ export function TripDetails() {
   const isError = error !== null;
 
   if (isLoading) return <Text>Loading...</Text>;
-
 
   return (
     <Box
@@ -89,6 +89,10 @@ export function TripDetails() {
                   )}
                   title="Map"
                   isMap={true}
+                  shape={
+                    currentTrip.osm_ref &&
+                    convertPhotonGeoJsonToShape(currentTrip.osm_ref.geoJSON)
+                  }
                   cords={
                     currentTrip?.weather
                       ? JSON?.parse(currentTrip?.weather)?.coord
