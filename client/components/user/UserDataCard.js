@@ -36,6 +36,7 @@ const UserDataCard = ({
   state,
   setState,
   index,
+  differentUser,
 }) => {
   const dispatch = useDispatch();
 
@@ -97,13 +98,17 @@ const UserDataCard = ({
                 {state[index] ? (
                   <Text>Loading....</Text>
                 ) : (
-                  <Switch
-                    isChecked={is_public}
-                    onToggle={() => {
-                      handleChangeStatus(index);
-                    }}
-                    size="sm"
-                  />
+                  <>
+                    {!differentUser && (
+                      <Switch
+                        isChecked={is_public}
+                        onToggle={() => {
+                          handleChangeStatus(index);
+                        }}
+                        size="sm"
+                      />
+                    )}
+                  </>
                 )}
               </Box>
             </Heading>

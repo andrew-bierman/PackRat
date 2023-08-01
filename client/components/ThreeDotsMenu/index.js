@@ -4,6 +4,7 @@ import { Box, Menu, ThreeDotsIcon } from "native-base";
 import { useDispatch } from "react-redux";
 import { deletePack } from "../../store/packsStore";
 import { useRouter } from "expo-router";
+import { deleteTrip } from "../../store/tripsStore";
 export const ThreeDotsMenu = ({ data, titleRef, setEditTitle }) => {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -32,11 +33,15 @@ export const ThreeDotsMenu = ({ data, titleRef, setEditTitle }) => {
         </Menu.Item>
         <Menu.Item
           onPress={() => {
-            dispatch(
-              deletePack({
-                id: data["_id"],
-              })
-            );
+            if (data.type === "pack") {
+              dispatch(
+                deletePack({
+                  id: data["_id"],
+                })
+              );
+            } else {
+              dispatch(deleteTrip(data["_id"]));
+            }
             router.replace("/feed");
           }}
         >

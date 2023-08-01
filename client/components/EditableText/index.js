@@ -3,6 +3,8 @@ import { TextInput } from "react-native";
 import { theme } from "../../theme";
 import { useDispatch } from "react-redux";
 import { updatePack } from "../../store/packsStore";
+import { editTrip } from "../../store/tripsStore";
+
 export const EditableInput = ({
   data,
   title,
@@ -26,17 +28,29 @@ export const EditableInput = ({
       }}
       value={headerTitle}
       onBlur={() => {
-        const packDetails = {
-          _id: data["_id"],
-          name: headerTitle,
-          is_public: data.is_public,
-        };
-        console.log("updated", packDetails);
-        setEditTitle(false);
-        titleRef.current.style =
-          "font-size:20px !important;font-weight:bold;color: #22c67c;";
+        if (data.type === "pack") {
+          const packDetails = {
+            _id: data["_id"],
+            name: headerTitle,
+            is_public: data.is_public,
+          };
+          setEditTitle(false);
+          titleRef.current.style =
+            "font-size:20px !important;font-weight:bold;color: #22c67c;";
 
-        dispatch(updatePack(packDetails));
+          dispatch(updatePack(packDetails));
+        } else {
+          const tripDetails = {
+            _id: data["_id"],
+            name: headerTitle,
+            is_public: data.is_public,
+          };
+          setEditTitle(false);
+          titleRef.current.style =
+            "font-size:20px !important;font-weight:bold;color: #22c67c;";
+
+          dispatch(editTrip(tripDetails));
+        }
       }}
     />
   );
