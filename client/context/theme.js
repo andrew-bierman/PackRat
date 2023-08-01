@@ -53,6 +53,7 @@ export const ThemeProvider = (props) => {
 
   return (
     <ThemeContext.Provider
+      key={`themeContext + isDark=${state.isDark} + isLight=${state.isLight}`}
       value={{
         ...state,
         enableDarkMode,
