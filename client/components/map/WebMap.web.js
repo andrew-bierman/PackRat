@@ -136,7 +136,7 @@ const WebMap = ({ shape: shapeProp, selectedSearchResult, type }) => {
     mapInstance.on("load", () => {
       if(isDestinationMap(selectedSearchResult, type)) {
         addPoints(mapInstance);
-      } else if(type===TRIP) {
+      } else {
         addTrailLayer(mapInstance);
       }
       if (mapFullscreen && showUserLocation) {
@@ -173,15 +173,16 @@ const WebMap = ({ shape: shapeProp, selectedSearchResult, type }) => {
   }, [mapFullscreen]);
 
   useEffect(() => {
-    if (map.current && selectedSearchResult?.geometry?.type !== 'Point' && type === TRIP) {
+    if(map.current && isDestinationMap(selectedSearchResult, type)) {
+      addPoints(map.current);
+    }
+    else if (map.current && selectedSearchResult?.geometry?.type !== 'Point') {
       removeTrailLayer(map.current);
       addTrailLayer(map.current);
       map.current.setCenter(trailCenterPointRef.current);
       map.current.setZoom(zoomLevelRef.current);
     }
-    else if(map.current && isDestinationMap(selectedSearchResult, type)) {
-      addPoints(map.current);
-    }
+
     console.log("trailCenterPointRef.current", trailCenterPointRef.current);
 
     // console.log("mapInstance", mapInstance);
@@ -293,7 +294,7 @@ const WebMap = ({ shape: shapeProp, selectedSearchResult, type }) => {
         // Step 3: add the sources, layers, etc. back once the style has loaded
         if(isDestinationMap(selectedSearchResult, type)) {
           map.current.on('style.load', () => addPoints(map.current))
-        } else if(type=== TRIP)  {
+        } else   {
           map.current.on("style.load", () => addTrailLayer(map.current));
         }
       }
