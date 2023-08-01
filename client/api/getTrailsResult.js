@@ -14,7 +14,7 @@ export const getTrailsResult = async (addressArray) => {
         : `${key}=${values}`
     )
     .join("&");
-  console.log("queryString", queryString);
+
   const response = await axios.get(
     `https://photon.komoot.io/api/?${queryString}`
   );

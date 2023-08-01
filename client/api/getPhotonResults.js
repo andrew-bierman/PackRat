@@ -1,8 +1,6 @@
 import axios from "axios";
 
 export const getPhotonResults = async (addressArray) => {
-  console.log("addressArray", addressArray);
-
   if (!addressArray) return;
 
   let params = {

@@ -1,4 +1,4 @@
-import { createContext, useReducer } from "react";
+import { createContext, useReducer, useEffect, useState } from "react";
 import { theme, darkTheme } from "../theme";
 
 const initialState = {
@@ -46,7 +46,6 @@ export const ThemeProvider = (props) => {
   };
   const enableLightMode = () => {
     console.log("enableLightMode");
-
     dispatch({
       type: "ENABLE_LIGHT_MODE",
     });
