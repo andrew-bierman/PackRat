@@ -70,7 +70,7 @@ const TableItem = ({
   setRefetch = () => {},
 }) => {
   const { name, weight, category, quantity, unit, _id } = itemData;
-  /* 
+  /*
   * this _id is passed as pack id but it is a item id which is confusing
   Todo need to change the name for this passing argument and remaining functions which are getting it
    */
@@ -152,6 +152,7 @@ export const TableContainer = ({
   setRefetch = () => {},
   copy,
 }) => {
+  console.log('current pack', currentPack)
   const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
   let ids = [];
@@ -182,8 +183,8 @@ console.log('c',currentPack)
   let waterItem;
   let foodItems = [];
   // for calculating the total.
-  /* 
-  Todo better to move this all inside a utility function and pass them variables 
+  /*
+  Todo better to move this all inside a utility function and pass them variables
   */
   data &&
     data
@@ -231,13 +232,15 @@ console.log('c',currentPack)
         : [...prev, itemId]
     );
   };
-
+  console.log(data, 'data of group')
+  // console.log(data?.filter(fItem => !Array.isArray(fItem.category)), 'filtered data')
   // In your groupedData definition, provide a default category for items without one
-  const groupedData = data?.reduce((acc, item) => {
+  const groupedData = data?.filter(fItem => !Array.isArray(fItem.category))?.reduce((acc, item) => {
     const categoryName = item.category ? item.category.name : "Undefined";
     (acc[categoryName] = acc[categoryName] || []).push(item);
     return acc;
   }, {});
+  console.log(groupedData, 'groupedData')
 
   const flexArr = [2, 1, 1, 1, 0.65, 0.65, 0.65];
 

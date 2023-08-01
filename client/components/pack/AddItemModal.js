@@ -6,6 +6,7 @@ export const AddItemModal = ({
   currentPack,
   isAddItemModalOpen,
   setIsAddItemModalOpen,
+  setRefetch,
 }) => {
   return (
     <CustomModal
@@ -30,6 +31,7 @@ export const AddItemModal = ({
         packId={currentPackId}
         currentPack={currentPack}
         setIsAddItemModalOpen={setIsAddItemModalOpen}
+        // setRefetch={() => setRefetch()}
       />
     </CustomModal>
   );

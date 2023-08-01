@@ -44,7 +44,7 @@ mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 const DESTINATION = 'destination'
 const TRIP= 'trip';
 const WebMap = ({ shape: shapeProp, selectedSearchResult, type }) => {
-  console.log("🚀 ~ file: WebMap.web.js:44 ~ WebMap ~ shape:", type)
+
   useEffect(() => {
     // temporary solution to fix mapbox-gl-js missing css error
     if (Platform.OS === "web") {
