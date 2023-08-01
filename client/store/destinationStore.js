@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
 import axios from "axios";
 import { api } from "../constants/api";
 
@@ -35,11 +35,10 @@ export const photonDetails = createAsyncThunk(
       const { properties } = data;
       const { osm_id, osm_type } = properties;
 
-      if(!osm_id || !osm_type) return rejectWithValue("Invalid request parameters");
+      if (!osm_id || !osm_type) return rejectWithValue("Invalid request parameters");
 
-      const response = await axios.get(
-        `${api}/osm/photonDetails/${osm_type}/${osm_id}`
-      );
+      const response = await axios.get(`${api}/osm/photonDetails/${osm_type}/${osm_id}`);
+
       return response.data;
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -47,19 +46,33 @@ export const photonDetails = createAsyncThunk(
   }
 );
 
-export const destinationSlice = createSlice({
+const destinationAdapter = createEntityAdapter();
+
+const destinationSlice = createSlice({
   name: "destination",
-  initialState: {
+  initialState: destinationAdapter.getInitialState({
     data: null,
     currentDestination: null,
     photonDetails: null,
+    selectedSearchResult: null,
+    weatherObject: null,
+    weatherWeek: null,
     status: "idle",
     error: null,
-  },
+  }),
   reducers: {
     setData: (state, action) => {
       state.data = action.payload;
     },
+    setSelectedSearchResult: (state, action) => {
+      state.selectedSearchResult = action.payload;
+    },
+    setWeatherObject: (state, action) => {
+      state.weatherObject = action.payload;
+    },
+    setWeatherWeek: (state, action) => {
+      state.weatherWeek = action.payload;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -67,9 +80,8 @@ export const destinationSlice = createSlice({
         state.status = "loading";
       })
       .addCase(processGeoJSON.fulfilled, (state, action) => {
-        console.log("processGeoJSON.fulfilled action", action);
         state.status = "succeeded";
-        state.currentDestination = action.payload.data.newInstance;
+        destinationAdapter.upsertOne(state.currentDestination, action.payload.data.newInstance);
       })
       .addCase(processGeoJSON.rejected, (state, action) => {
         state.status = "failed";
@@ -79,9 +91,8 @@ export const destinationSlice = createSlice({
         state.status = "loading";
       })
       .addCase(getDestination.fulfilled, (state, action) => {
-        console.log("getDestination.fulfilled action", action);
         state.status = "succeeded";
-        state.currentDestination = action.payload.data.destination;
+        destinationAdapter.upsertOne(state.currentDestination, action.payload.data.destination);
       })
       .addCase(getDestination.rejected, (state, action) => {
         state.status = "failed";
@@ -91,9 +102,8 @@ export const destinationSlice = createSlice({
         state.status = "loading";
       })
       .addCase(photonDetails.fulfilled, (state, action) => {
-        console.log("photonDetails.fulfilled action", action);
         state.status = "succeeded";
-        state.photonDetails = action.payload.data;
+        state.photonDetails = action.payload; // assign data directly to state field
       })
       .addCase(photonDetails.rejected, (state, action) => {
         state.status = "failed";
@@ -102,4 +112,5 @@ export const destinationSlice = createSlice({
   },
 });
 
+export const { setSelectedSearchResult, setWeatherObject, setWeatherWeek } = destinationSlice.actions;
 export default destinationSlice.reducer;

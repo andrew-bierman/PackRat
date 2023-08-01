@@ -13,17 +13,20 @@ export const DetailsComponent = ({ type, data, additionalComps, link }) => {
         return (
           <>
             <CustomCard
+              data={data}
               title={data?.name}
               link={link}
               content={
                 <>
-                  {data?.description && <Text>Description: {data?.description}</Text>}
-                 
+                  {data?.description && (
+                    <Text>Description: {data?.description}</Text>
+                  )}
+
                   {additionalComps}
                 </>
               }
               footer={data?.details}
-              type = "pack"
+              type="pack"
             />
           </>
         );
@@ -32,6 +35,7 @@ export const DetailsComponent = ({ type, data, additionalComps, link }) => {
         return (
           <>
             <CustomCard
+              data={data}
               title={data?.name}
               link={link}
               content={

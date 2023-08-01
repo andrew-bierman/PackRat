@@ -7,7 +7,7 @@ import { ItemForm } from "./ItemForm"; // assuming you moved the form related co
 
 export const AddItemGlobal = ({
   setIsAddItemModalOpen,
-  setRefetch,
+  setRefetch = () => {},
   refetch,
 }) => {
   const dispatch = useDispatch();

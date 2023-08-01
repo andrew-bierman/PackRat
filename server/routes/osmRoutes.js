@@ -7,6 +7,7 @@ import {
   getTrailsOSM,
   postSingleGeoJSON,
   getPhotonDetails,
+  getEnhancedPhotonDetails,
 } from "../controllers/getOsmController.js";
 import middlewareHandler from "../middleware/index.js";
 
@@ -220,7 +221,8 @@ router.get("/destination/:id",[middlewareHandler.auth.verifyUserToken] ,getDesti
  *       '500':
  *         description: Error retrieving Photon details
  */
-router.get('/photonDetails/:type/:id',[middlewareHandler.auth.verifyUserToken] ,getPhotonDetails);
+router.get('/photonDetails/:type/:id', getPhotonDetails);
+// router.get("/photonDetails/:type/:id", getEnhancedPhotonDetails)
 
 
 export default router;
