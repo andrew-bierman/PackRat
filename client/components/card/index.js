@@ -22,6 +22,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter, Link } from "expo-router";
 import { ThreeDotsMenu } from "../ThreeDotsMenu";
+import UseTheme from "../../hooks/useTheme";
 export const CustomCard = ({
   title,
   content,
@@ -31,6 +32,8 @@ export const CustomCard = ({
   destination,
   data,
 }) => {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
   const [isCopied, setIsCopied] = useState(false);
   const [editTitle, setEditTitle] = useState(false);
   const titleRef = useRef(null);
