@@ -5,7 +5,7 @@ import { getNext4Days } from "../utils/getNextDays";
 import { dayNumToString } from "../utils/dayNumToString";
 import { convertToKmh } from "../utils/convertToKmh";
 import { convertToCelsius } from "../utils/convertToCelsius";
-
+import UseTheme from "../hooks/useTheme";
 // redux
 import { useSelector } from "react-redux";
 
@@ -17,6 +17,7 @@ import { FontAwesome } from "@expo/vector-icons";
 
 import { StyleSheet } from "react-native";
 import { theme } from "../theme";
+import { defaultWeatherObject } from "../constants/defaultWeatherObj";
 
 const monthArr = [
   "January",
@@ -33,8 +34,9 @@ const monthArr = [
   "December",
 ];
 
-export default function WeatherCard({weatherObject, weatherWeek}) {
-
+export default function WeatherCard({weatherObject = defaultWeatherObject, weatherWeek = []}) {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
   const date = new Date();
   const dayOfMonth = date.getDate();
   const year = date.getFullYear();
@@ -57,11 +59,11 @@ export default function WeatherCard({weatherObject, weatherWeek}) {
         <Octicons
           name="broadcast"
           size={18}
-          color={theme.colors.cardIconColor}
+          color={currentTheme.colors.cardIconColor}
         />
         <Text
           style={{
-            color: theme.colors.textPrimary,
+            color: currentTheme.colors.textPrimary,
             fontSize: 18,
             fontWeight: 600,
           }}
@@ -79,7 +81,7 @@ export default function WeatherCard({weatherObject, weatherWeek}) {
         <Box>
           <Text
             style={{
-              color: theme.colors.weatherIcon,
+              color: currentTheme.colors.weatherIcon,
               fontSize: 18,
               fontWeight: 600,
             }}
@@ -104,7 +106,7 @@ export default function WeatherCard({weatherObject, weatherWeek}) {
         <Box>
           <Text
             style={{
-              color: theme.colors.weatherIcon,
+              color: currentTheme.colors.weatherIcon,
               fontSize: 18,
               fontWeight: 600,
             }}
@@ -129,10 +131,13 @@ export default function WeatherCard({weatherObject, weatherWeek}) {
               <FontAwesome5
                 name="cloud-rain"
                 size={18}
-                color={theme.colors.weatherIcon}
+                color={currentTheme.colors.weatherIcon}
               />
               <Text
-                style={{ color: theme.colors.weatherIcon, fontWeight: 600 }}
+                style={{
+                  color: currentTheme.colors.weatherIcon,
+                  fontWeight: 600,
+                }}
               >
                 PRECIPITATION
               </Text>
@@ -144,10 +149,13 @@ export default function WeatherCard({weatherObject, weatherWeek}) {
               <Feather
                 name="droplet"
                 size={18}
-                color={theme.colors.weatherIcon}
+                color={currentTheme.colors.weatherIcon}
               />
               <Text
-                style={{ color: theme.colors.weatherIcon, fontWeight: 600 }}
+                style={{
+                  color: currentTheme.colors.weatherIcon,
+                  fontWeight: 600,
+                }}
               >
                 HUMIDITY
               </Text>
@@ -156,9 +164,16 @@ export default function WeatherCard({weatherObject, weatherWeek}) {
           </Box>
           <Box style={styles.weatherInfo}>
             <Box style={styles.iconsSection}>
-              <Feather name="wind" size={18} color={theme.colors.weatherIcon} />
+              <Feather
+                name="wind"
+                size={18}
+                color={currentTheme.colors.weatherIcon}
+              />
               <Text
-                style={{ color: theme.colors.weatherIcon, fontWeight: 600 }}
+                style={{
+                  color: currentTheme.colors.weatherIcon,
+                  fontWeight: 600,
+                }}
               >
                 WIND
               </Text>
