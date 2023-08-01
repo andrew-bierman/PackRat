@@ -28,6 +28,7 @@ export default function Register() {
   const dispatch = useDispatch();
 
   const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -35,8 +36,6 @@ export default function Register() {
   const router = useRouter();
 
   const user = useSelector((state) => state.auth.user);
-
-  console.log("USER LOG", user);
 
   if (user?.user?._id) {
     Toast.show({
@@ -50,18 +49,12 @@ export default function Register() {
 
   const registerUser = () => {
     try {
-      // const auth = getAuth();
-      // createUserWithEmailAndPassword(auth, email, password)
-      //   .then((userCredential) => {
-      //     // Signed in
-      //     const user = userCredential.user;
-      //     if (user) {
-      //       console.log({ user });
-      //       signupWithEmail(user?.uid, name, email, password);
-      //     }
-      //   })
-
-      dispatch(signUp({ name, email, password }));
+      const alphanumeric = /^[a-zA-Z0-9]+$/;
+      if (!alphanumeric.test(username)) {
+        alert("Username should be alphanumeric");
+        return;
+      }
+      dispatch(signUp({ name, username, email, password }));
     } catch (e) {
       console.log("Error", e);
     }
@@ -99,6 +92,13 @@ export default function Register() {
           <FormControl>
             <FormControl.Label>Email</FormControl.Label>
             <Input value={email} onChangeText={(text) => setEmail(text)} />
+          </FormControl>
+          <FormControl>
+            <FormControl.Label>Username</FormControl.Label>
+            <Input
+              value={username}
+              onChangeText={(text) => setUsername(text)}
+            />
           </FormControl>
           <FormControl>
             <FormControl.Label>Password</FormControl.Label>
