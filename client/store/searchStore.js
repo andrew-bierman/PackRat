@@ -5,7 +5,9 @@ import axios from "axios";
 export const fetchPhotonSearchResults = createAsyncThunk(
   "search/fetchPhotonSearchResults",
   async (searchString) => {
-    const url = api + `/osm/photon/search?searchString=${encodeURIComponent(searchString)}`;
+    const url =
+      api +
+      `/osm/photon/search?searchString=${encodeURIComponent(searchString)}`;
 
     try {
       const response = await axios.get(url);

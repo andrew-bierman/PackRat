@@ -1,20 +1,24 @@
 import { useSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { useAuth } from "../../auth/provider";
-import UserProfileContainer from '../../components/user/UserProfileContainer';
 import { Platform } from "react-native";
 import { Stack as Header } from "expo-router";
+import ProfileContainer from "../../components/user/ProfileContainer";
 
 const Profile = () => {
   const { id } = useSearchParams();
 
   return Platform.OS === "web" ? (
     <>
-      <UserProfileContainer id={id} />
+      <Header.Screen
+        options={{
+          title: `${id}'s Profile`
+        }}
+      />
+      <ProfileContainer id={id} />
     </>
   ) : (
-      <UserProfileContainer id={id} />
+    <ProfileContainer id={id} />
   );
 };
 

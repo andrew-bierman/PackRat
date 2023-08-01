@@ -11,7 +11,7 @@ import {
   VStack,
   HStack,
 } from "native-base";
-
+import UseTheme from "../../hooks/useTheme";
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { theme } from "../../theme";
 
@@ -85,6 +85,8 @@ const CustomAccordion = ({ title, content, iconName }) => {
 };
 
 const LandingPage = () => {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
   return (
     <VStack style={styles.container}>
       <Box
@@ -96,7 +98,9 @@ const LandingPage = () => {
         }}
       >
         {Platform.OS === "web" ? (
-          <Text style={{ color: "white", fontSize: theme.font.headerFont }}>
+          <Text
+            style={{ color: "white", fontSize: currentTheme.font.headerFont }}
+          >
             PackRat
           </Text>
         ) : (
