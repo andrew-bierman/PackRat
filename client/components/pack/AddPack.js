@@ -9,8 +9,10 @@ import { useState } from "react";
 // import { useAuth } from "../../auth/provider";
 import { useSelector, useDispatch } from "react-redux";
 import { CustomModal } from "../modal";
-
+import UseTheme from "../../hooks/useTheme";
 export const AddPack = () => {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
   const dispatch = useDispatch();
 
   const [name, setName] = useState("");
@@ -50,7 +52,7 @@ export const AddPack = () => {
             handleAddPack();
           }}
         >
-          <Text style={{ color: theme.colors.text }}>
+          <Text style={{ color: currentTheme.colors.text }}>
             {isLoading ? "Loading..." : "Add Pack"}
           </Text>
         </Button>

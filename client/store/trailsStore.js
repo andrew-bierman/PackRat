@@ -7,9 +7,13 @@ export const fetchTrails = createAsyncThunk(
   async ({ lat, lon, selectedSearch }) => {
     let params = `?`;
 
-    if (lat) params += `lat=${lat}`;
-    if (lon) params += `&lon=${lon}`;
-
+    if (lat) {
+      params += `lat=${lat}`;
+    }
+    if (lon) {
+      params += `&lon=${lon}`;
+    }
+    const radius = 500;
     const url = api + "/osm/trails" + params;
 
     try {
