@@ -18,7 +18,9 @@ export const getDestination = createAsyncThunk(
   "destination/getDestination",
   async (destinationId, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${api}/osm/destination/${destinationId}`);
+      const response = await axios.get(
+        `${api}/osm/destination/${destinationId}`
+      );
       return response.data;
     } catch (err) {
       return rejectWithValue(err.response.data);
