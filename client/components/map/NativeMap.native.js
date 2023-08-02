@@ -10,6 +10,7 @@ import {
   Dimensions,
   Modal,
   Alert,
+  Linking,
   Image
 } from "react-native";
 import Geolocation from "@react-native-community/geolocation";
@@ -180,6 +181,19 @@ function NativeMap({ shape: shapeProp }) {
   }
 
   const pointLatLong = shape?.features[0]?.geometry?.coordinates;
+  const openMaps = (latLong) => {
+    console.log(latLong.join(','), 'lat long');
+    const scheme = Platform.select({ ios: 'maps://0,0?q=', android: 'geo:0,0?q=' });
+    const latLng = latLong.join(',');
+    // console.log('shape?.features[0]?.properties?.name',shape?.features[0]?.properties?.name)
+    const label = shape?.features[0]?.properties?.name
+    const url = Platform.select({
+      ios: `${scheme}${label}@${latLng}`,
+      android: `${scheme}${latLng}(${label})`
+    });
+    Linking.openURL(url);
+
+  }
   const element = (
     <View style={mapFullscreen ? fullMapDimension : previewMapStyle}>
       <Mapbox.MapView
@@ -226,8 +240,20 @@ function NativeMap({ shape: shapeProp }) {
           <Mapbox.PointAnnotation
           id="destination"
           coordinate={pointLatLong}
+          onSelected={() => {
+            console.log('selected');
+            openMaps(pointLatLong)
+          }}
           >
-           <CircleCapComp />
+           {/* <CircleCapComp /> */}
+          <View >
+           <MaterialCommunityIcons
+              name="map-marker"
+              size={35}
+              color={"#de0910"}
+              />
+        </View>
+
 
           </Mapbox.PointAnnotation>
            :
