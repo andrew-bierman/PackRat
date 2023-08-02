@@ -74,12 +74,14 @@ const createOSMObject = async (geoJSON) => {
 
   // Access the OSM type directly from geoJSON properties
   const osmType = geoJSON.properties.osm_type;
-
+/*
   let OSMModel;
   if (osmType === "N") {
     OSMModel = Node;
   } else if (osmType === "W") {
     OSMModel = Way;
+  } else if (osmType === "R") {
+    OSMModel = Relation;
   } else {
     throw new Error("Invalid OSM type");
   }
@@ -96,10 +98,14 @@ const createOSMObject = async (geoJSON) => {
   await osmData.save();
 
   console.log("osmData", osmData);
+*/
+  const osmIdNumber = geoJSON.properties.osm_id;
 
+// Convert the number to a hexadecimal string
+  const osmIdHexString = osmIdNumber.toString(16).padStart(24, '0');
   return {
-    osm_ref: osmData._id,
-    osm_type: OSMModel === Node ? "Node" : "Way",
+    osm_ref: osmIdHexString,
+    osm_type: osmType === "N" ? "Node" : osmType === "W" ? "Way" : "Relation"
   };
 };
 
@@ -135,6 +141,7 @@ export const addTrip = async (req, res) => {
       owner_id,
       packs,
       is_public,
+      geoJSON
     });
 
     res.status(200).json({ msg: "success" });

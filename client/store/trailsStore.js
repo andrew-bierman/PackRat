@@ -38,6 +38,8 @@ export const fetchTrails = createAsyncThunk(
 const trailsAdapter = createEntityAdapter();
 
 const initialState = trailsAdapter.getInitialState({
+  trailsDetails: [],
+  trailNames: [],
   isLoading: false,
   error: null,
 });
