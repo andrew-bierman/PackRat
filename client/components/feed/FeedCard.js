@@ -169,9 +169,7 @@ export default function Card({
                   gap: 10,
                 }}
               >
-                <Link href={`/profile/${owner_id}`} >
-                <Text>View Owner</Text>
-                </Link>
+                 <Box></Box>
                 <Box
                   style={{
                     flexDirection: "row",
