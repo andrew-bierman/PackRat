@@ -99,7 +99,7 @@ export const getPhotonResults = async (req, res) => {
     )
     .join("&");
 
-  // console.log("queryString", queryString);
+  console.log("queryString----", queryString);
 
   try {
     const response = await axios.get(
@@ -155,7 +155,6 @@ export const getTrailsOSM = async (req, res) => {
     const response = await axios.post(overpassUrl, overpassQuery, {
       headers: { 'Content-Type': 'text/plain' },
     });
-
     const geojsonData = osmtogeojson(response.data);
 
     updateDatabaseWithGeoJSONDataFromOverpass(geojsonData);
@@ -192,6 +191,7 @@ export const getParksOSM = async (req, res) => {
     });
 
     const geojsonData = osmtogeojson(response.data);
+    console.log("geojsonData==============", geojsonData);
 
     updateDatabaseWithGeoJSONDataFromOverpass(geojsonData);
 
