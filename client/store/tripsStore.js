@@ -1,11 +1,22 @@
-import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
+import {
+  createSlice,
+  createAsyncThunk,
+  createEntityAdapter,
+} from "@reduxjs/toolkit";
 import axios from "axios";
 import { api } from "../constants/api";
 
 export const deleteTrip = createAsyncThunk(
   "trips/deleteTrip",
   async (tripId) => {
-    const response = await axios.delete(`${api}/trip/${tripId}`);
+    const response = await axios.delete(`${api}/trip`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: {
+        tripId,
+      },
+    });
     return response.data;
   }
 );

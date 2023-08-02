@@ -7,13 +7,17 @@ import {
   MaterialCommunityIcons,
   MaterialIcons,
 } from "@expo/vector-icons";
-import { theme } from "../../theme";
+import { theme, darkTheme } from "../../theme";
 // import { useAuth } from "../../auth/provider";
+import UseTheme from "../../hooks/useTheme";
 import { signOut } from "../../store/authStore";
 
 import { useDispatch, useSelector } from "react-redux";
 
 export default function Drawer() {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
+  console.log("isDark, isLight", isDark, isLight);
   // const { signOut } = useAuth();
   const dispatch = useDispatch();
 
@@ -36,7 +40,7 @@ export default function Drawer() {
             <AntDesign
               name="close"
               size={35}
-              color={theme.colors.drawerIconColor}
+              color={currentTheme.colors.drawerIconColor}
             />
           </Link>
         </View>
@@ -47,7 +51,7 @@ export default function Drawer() {
                 <Entypo
                   name="home"
                   size={24}
-                  color={theme.colors.drawerIconColor}
+                  color={currentTheme.colors.drawerIconColor}
                 />
 
                 <Text style={{ color: "#3B3B3B" }}>Home</Text>
@@ -58,7 +62,7 @@ export default function Drawer() {
                 <MaterialCommunityIcons
                   name="weather-pouring"
                   size={24}
-                  color={theme.colors.drawerIconColor}
+                  color={currentTheme.colors.drawerIconColor}
                 />
 
                 <Text style={{ color: "#3B3B3B" }}>Trips</Text>
@@ -69,9 +73,19 @@ export default function Drawer() {
                 <FontAwesome
                   name="book"
                   size={24}
-                  color={theme.colors.drawerIconColor}
+                  color={currentTheme.colors.drawerIconColor}
                 />
                 <Text style={{ color: "#3B3B3B" }}>Profile</Text>
+              </View>
+            </Link>
+            <Link href="appearance">
+              <View style={styles.link}>
+                <MaterialCommunityIcons
+                  name="theme-light-dark"
+                  size={24}
+                  color={currentTheme.colors.drawerIconColor}
+                />
+                <Text style={{ color: "#3B3B3B" }}>Appearance</Text>
               </View>
             </Link>
             <Link href="/packs">
@@ -79,7 +93,7 @@ export default function Drawer() {
                 <MaterialIcons
                   name="backpack"
                   size={24}
-                  color={theme.colors.drawerIconColor}
+                  color={currentTheme.colors.drawerIconColor}
                 />
 
                 <Text style={{ color: "#3B3B3B" }}>Packs</Text>
@@ -90,7 +104,7 @@ export default function Drawer() {
                 <MaterialIcons
                   name="info"
                   size={24}
-                  color={theme.colors.drawerIconColor}
+                  color={currentTheme.colors.drawerIconColor}
                 />
 
                 <Text style={{ color: "#3B3B3B" }}>About</Text>
@@ -100,7 +114,7 @@ export default function Drawer() {
               <MaterialIcons
                 name="logout"
                 size={24}
-                color={theme.colors.drawerIconColor}
+                color={currentTheme.colors.drawerIconColor}
               />
               <Text
                 style={{ color: "#3B3B3B" }}
@@ -117,7 +131,7 @@ export default function Drawer() {
                 <MaterialIcons
                   name="login"
                   size={24}
-                  color={theme.colors.drawerIconColor}
+                  color={currentTheme.colors.drawerIconColor}
                 />
                 <Text style={{ color: "#3B3B3B" }}>Login</Text>
               </View>
@@ -127,7 +141,7 @@ export default function Drawer() {
                 <MaterialIcons
                   name="person-add"
                   size={24}
-                  color={theme.colors.drawerIconColor}
+                  color={currentTheme.colors.drawerIconColor}
                 />
                 <Text style={{ color: "#3B3B3B" }}>Sign Up</Text>
               </View>

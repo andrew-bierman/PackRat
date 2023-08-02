@@ -23,11 +23,13 @@ import { useRouter } from "expo-router";
 import { Link } from "expo-router";
 import { useSelector, useDispatch } from "react-redux";
 import { signUp } from "../store/authStore";
+import { InformUser } from "../utils/ToastUtils";
 
 export default function Register() {
   const dispatch = useDispatch();
 
   const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -36,10 +38,8 @@ export default function Register() {
 
   const user = useSelector((state) => state.auth.user);
 
-  console.log("USER LOG", user);
-
   if (user?.user?._id) {
-    Toast.show({
+    InformUser({
       title: user?.message,
       duration: 5000,
       placement: "top-right",
@@ -50,18 +50,12 @@ export default function Register() {
 
   const registerUser = () => {
     try {
-      // const auth = getAuth();
-      // createUserWithEmailAndPassword(auth, email, password)
-      //   .then((userCredential) => {
-      //     // Signed in
-      //     const user = userCredential.user;
-      //     if (user) {
-      //       console.log({ user });
-      //       signupWithEmail(user?.uid, name, email, password);
-      //     }
-      //   })
-
-      dispatch(signUp({ name, email, password }));
+      const alphanumeric = /^[a-zA-Z0-9]+$/;
+      if (!alphanumeric.test(username)) {
+        alert("Username should be alphanumeric");
+        return;
+      }
+      dispatch(signUp({ name, username, email, password }));
     } catch (e) {
       console.log("Error", e);
     }
@@ -99,6 +93,13 @@ export default function Register() {
           <FormControl>
             <FormControl.Label>Email</FormControl.Label>
             <Input value={email} onChangeText={(text) => setEmail(text)} />
+          </FormControl>
+          <FormControl>
+            <FormControl.Label>Username</FormControl.Label>
+            <Input
+              value={username}
+              onChangeText={(text) => setUsername(text)}
+            />
           </FormControl>
           <FormControl>
             <FormControl.Label>Password</FormControl.Label>
