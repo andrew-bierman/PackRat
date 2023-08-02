@@ -44,7 +44,7 @@ mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 const DESTINATION = 'destination'
 const TRIP= 'trip';
 const WebMap = ({ shape: shapeProp, selectedSearchResult, type }) => {
-  console.log("🚀 ~ file: WebMap.web.js:44 ~ WebMap ~ shape:", type)
+
   useEffect(() => {
     // temporary solution to fix mapbox-gl-js missing css error
     if (Platform.OS === "web") {
@@ -136,7 +136,7 @@ const WebMap = ({ shape: shapeProp, selectedSearchResult, type }) => {
     mapInstance.on("load", () => {
       if(isDestinationMap(selectedSearchResult, type)) {
         addPoints(mapInstance);
-      } else {
+      } else if(type===TRIP) {
         addTrailLayer(mapInstance);
       }
       if (mapFullscreen && showUserLocation) {
@@ -173,16 +173,15 @@ const WebMap = ({ shape: shapeProp, selectedSearchResult, type }) => {
   }, [mapFullscreen]);
 
   useEffect(() => {
-    if(map.current && isDestinationMap(selectedSearchResult, type)) {
-      addPoints(map.current);
-    }
-    else if (map.current && selectedSearchResult?.geometry?.type !== 'Point') {
+    if (map.current && selectedSearchResult?.geometry?.type !== 'Point' && type === TRIP) {
       removeTrailLayer(map.current);
       addTrailLayer(map.current);
       map.current.setCenter(trailCenterPointRef.current);
       map.current.setZoom(zoomLevelRef.current);
     }
-
+    else if(map.current && isDestinationMap(selectedSearchResult, type)) {
+      addPoints(map.current);
+    }
     console.log("trailCenterPointRef.current", trailCenterPointRef.current);
 
     // console.log("mapInstance", mapInstance);
@@ -294,7 +293,7 @@ const WebMap = ({ shape: shapeProp, selectedSearchResult, type }) => {
         // Step 3: add the sources, layers, etc. back once the style has loaded
         if(isDestinationMap(selectedSearchResult, type)) {
           map.current.on('style.load', () => addPoints(map.current))
-        } else   {
+        } else if(type=== TRIP)  {
           map.current.on("style.load", () => addTrailLayer(map.current));
         }
       }

@@ -13,6 +13,7 @@ export const EditPackItemModal = ({
   setRefetch = () => {},
   refetch,
 }) => {
+  console.log(initialData,'initial data')
   let currentPackId = undefined;
   if (currentPack) {
     currentPackId = currentPack["_id"];

@@ -48,7 +48,6 @@ export const AddItem = ({
     if (isEdit) {
       if (packId && initialData.global) {
         console.log("editing", packId);
-
         dispatch(
           editItemsGlobalAsDuplicate({
             itemId: _id,
@@ -62,6 +61,16 @@ export const AddItem = ({
         );
         closeModalHandler();
       } else {
+
+        // const newObj = {
+        //   name,
+        //   weight,
+        //   quantity,
+        //   unit,
+        //   type: categoryType,
+        //   _id: initialData._id,
+        // }
+        // console.log(initialData._id, 'updated name id',newObj)
         dispatch(
           editPackItem({
             name,
@@ -72,9 +81,8 @@ export const AddItem = ({
             _id: initialData["_id"],
           })
         );
-        setPage(1);
+
         closeModalHandler();
-        setRefetch(refetch === true ? false : true);
       }
     } else {
       dispatch(
@@ -89,7 +97,8 @@ export const AddItem = ({
         })
       );
       setIsAddItemModalOpen(false);
-      setRefetch(refetch === true ? false : true);
+
+      // setRefetch(refetch === true ? false : true);
     }
   };
 
