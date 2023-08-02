@@ -5,7 +5,6 @@ import {
   Divider,
   IconButton,
   Text,
-  Toast,
   Menu,
   ThreeDotsIcon,
 } from "native-base";
@@ -23,6 +22,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter, Link } from "expo-router";
 import { ThreeDotsMenu } from "../ThreeDotsMenu";
 import UseTheme from "../../hooks/useTheme";
+import { InformUser } from "../../utils/ToastUtils";
+
 export const CustomCard = ({
   title,
   content,
@@ -51,8 +52,7 @@ export const CustomCard = ({
     const resetCopyStateTimeout = setTimeout(() => {
       setIsCopied(false);
     }, 2000);
-
-    Toast.show({
+    InformUser({
       title: "Link copied to clipboard",
       placement: "bottom",
       duration: 2000,
