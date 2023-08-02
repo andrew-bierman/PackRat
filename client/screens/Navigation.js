@@ -162,7 +162,7 @@ const Navigation = () => {
 
   useEffect(() => {
     const handleScreenResize = () => {
-      const isMobile = Dimensions.get("window").width < 1150 ||
+      const isMobile = Dimensions.get("window").width < 1300 ||
        navBarWidth < 1024; // Adjust these values as needed
       setIsMobileView(isMobile);
     };
