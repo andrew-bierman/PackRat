@@ -19,13 +19,14 @@ import {
   Entypo,
   Fontisto,
 } from "@expo/vector-icons";
+
 import SVGLogoComponent from "../components/logo";
 import { useSelector, useDispatch } from "react-redux";
 import { signOut } from "../store/authStore";
 import Drawer from "./Drawer";
 import { Link, useRouter, usePathname } from "expo-router";
 import { hexToRGBA } from "../utils/colorFunctions";
-
+import UseTheme from "../hooks/useTheme";
 const Navigation = () => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -39,8 +40,9 @@ const Navigation = () => {
   const [navBarWidth, setNavBarWidth] = useState(null);
   const [selectedNavItem, setSelectedNavItem] = useState("");
   const [isLoading, setIsLoading] = useState(false); // Loading state
-
-  const hoverColor = hexToRGBA(theme.colors.primary, 0.2);
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
+  const hoverColor = hexToRGBA(currentTheme.colors.primary, 0.2);
 
   const toggleDrawer = () => {
     setIsDrawerOpen(!isDrawerOpen);
@@ -103,10 +105,16 @@ const Navigation = () => {
             iconSource: Fontisto,
           },
             {
-              href: "profile",
+              href: "/profile",
               icon: "book",
               text: "Profile",
               iconSource: FontAwesome,
+            },
+            {
+              href: "/appearance",
+              icon: "theme-light-dark",
+              text: "Appearance",
+              iconSource: MaterialCommunityIcons,
             },
             {
               href: "logout",
@@ -154,14 +162,16 @@ const Navigation = () => {
 
   useEffect(() => {
     const handleScreenResize = () => {
-      setIsMobileView(Dimensions.get("window").width < 1150);
+      const isMobile = Dimensions.get("window").width < 1300 ||
+       navBarWidth < 1024; // Adjust these values as needed
+      setIsMobileView(isMobile);
     };
 
-    Dimensions.addEventListener("change", handleScreenResize);
+    const subscription = Dimensions.addEventListener("change", handleScreenResize);
     return () => {
-      // Dimensions.removeEventListener("change", handleScreenResize); TODO get an error: removeEventListener is undefined
+      subscription.remove(); // Proper event listener cleanup
     };
-  }, []);
+  }, [navBarWidth]); // Add navBarWidth as a dependency to the effect
 
   const renderNavigationItem = useCallback(
     (item, index) => {
@@ -197,8 +207,8 @@ const Navigation = () => {
             size={isMobileView ? 24 : 18}
             color={
               isCurrentPage || isSelected
-                ? theme.colors.primary
-                : theme.colors.iconColor
+              ? currentTheme.colors.iconColor
+              : currentTheme.colors.iconColor
             } // change the color if this is the current page or selected item
             key={item.href + "icon"}
           />
@@ -232,8 +242,10 @@ const Navigation = () => {
           >
             <View style={styles.logoWrapper}>
               <SVGLogoComponent
-                width={isMobileView ? 48 : 64}
-                height={isMobileView ? 48 : 64}
+                // width={isMobileView ? 48 : 64}
+                // height={isMobileView ? 48 : 64}
+                width={48}
+                height={48}
                 fill="#fff"
               />
             </View>
@@ -250,7 +262,7 @@ const Navigation = () => {
                 <EvilIcons
                   name={isDrawerOpen ? "close" : "navicon"}
                   size={isMobileView ? 36 : 24}
-                  color={theme.colors.iconColor}
+                  color={currentTheme.colors.iconColor}
                 />
               </TouchableOpacity>
             )}
@@ -276,9 +288,9 @@ const Navigation = () => {
             //   showsHorizontalScrollIndicator={false}
             //   contentContainerStyle={styles.menuBar}
             // >
-            <>
+            <View style={styles.menuBar}>
               {navigationItems?.map((item, index) => renderNavigationItem(item, index))}
-            </>
+            </View>
             // </ScrollView>
           )}
         </View>
@@ -323,7 +335,6 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     paddingHorizontal: 16,
     height: 60,
-    width: "100%",
   },
   menuBarItem: {
     flexDirection: "row",

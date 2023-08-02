@@ -20,8 +20,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { AuthStateListener } from "../../client/auth/AuthStateListener";
 import { signOut } from "../store/authStore";
 import SVGLogoComponent from "../components/logo";
-
+import UseTheme from "../hooks/useTheme";
 const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   // const { signOut, user } = useAuth();
 
@@ -41,7 +43,7 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
           style={isMobile ? styles.smallLogo : styles.logo}
           source={packratlogo}
         /> */}
-        <View style={{ margin: '10px' }}>
+        <View style={{ margin: "10px" }}>
           <SVGLogoComponent
             width={isMobile ? 48 : 64}
             height={isMobile ? 48 : 64}
@@ -50,7 +52,7 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
         </View>
         <Text
           style={{
-            color: theme.colors.text,
+            color: currentTheme.colors.text,
             fontSize: isMobile ? 28 : 48,
             fontWeight: 900,
           }}
@@ -60,13 +62,21 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
       </View>
       {isMobile ? (
         <Link href="/drawer">
-          <EvilIcons name="navicon" size={48} color={theme.colors.iconColor} />
+          <EvilIcons
+            name="navicon"
+            size={48}
+            color={currentTheme.colors.iconColor}
+          />
         </Link>
       ) : (
         <View style={desktopNav}>
           <Link href="/">
             <View style={isMobile ? styles.mobileLink : styles.link}>
-              <Entypo name="home" size={24} color={theme.colors.iconColor} />
+              <Entypo
+                name="home"
+                size={24}
+                color={currentTheme.colors.iconColor}
+              />
               <Text>Home</Text>
             </View>
           </Link>
@@ -75,7 +85,7 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
               <MaterialCommunityIcons
                 name="newspaper-variant"
                 size={24}
-                color={theme.colors.iconColor}
+                color={currentTheme.colors.iconColor}
               />
 
               <Text>Feed</Text>
@@ -86,7 +96,7 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
               <MaterialCommunityIcons
                 name="routes"
                 size={24}
-                color={theme.colors.iconColor}
+                color={currentTheme.colors.iconColor}
               />
               <Text>Trips</Text>
             </View>
@@ -96,7 +106,7 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
               <MaterialIcons
                 name="backpack"
                 size={24}
-                color={theme.colors.iconColor}
+                color={currentTheme.colors.iconColor}
               />
 
               <Text>Packs</Text>
@@ -107,7 +117,7 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
               <MaterialIcons
                 name="info"
                 size={24}
-                color={theme.colors.iconColor}
+                color={currentTheme.colors.iconColor}
               />
               <Text>About</Text>
             </View>
@@ -117,7 +127,7 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
               <FontAwesome
                 name="book"
                 size={24}
-                color={theme.colors.iconColor}
+                color={currentTheme.colors.iconColor}
               />
               <Text>Profile</Text>
             </View>
@@ -126,7 +136,7 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
             <MaterialIcons
               name="logout"
               size={24}
-              color={theme.colors.iconColor}
+              color={currentTheme.colors.iconColor}
             />
             <Text style={{ color: "white" }} onPress={() => handleSignOut()}>
               Logout
@@ -143,7 +153,7 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
       />
       <Text
         style={{
-          color: theme.colors.text,
+          color: currentTheme.colors.text,
           fontSize: isMobile ? 28 : 48,
           fontWeight: 900,
         }}
@@ -152,7 +162,7 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
       </Text>
       <Link href="/">
         <View style={isMobile ? styles.mobileLink : styles.link}>
-          <Entypo name="home" size={24} color={theme.colors.iconColor} />
+          <Entypo name="home" size={24} color={currentTheme.colors.iconColor} />
           <Text>Home</Text>
         </View>
       </Link>
@@ -161,7 +171,7 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
           <MaterialIcons
             name="login"
             size={24}
-            color={theme.colors.iconColor}
+            color={currentTheme.colors.iconColor}
           />
           <Text>Sign In</Text>
         </View>
