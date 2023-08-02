@@ -28,7 +28,9 @@ import {
   mapboxStyles,
   getLocation,
   isShapeDownloadable,
-  isPoint
+  isPoint,
+  isPolygonOrMultiPolygon,
+  multiPolygonBounds
 } from "../../utils/mapFunctions";
 import MapButtonsOverlay from "./MapButtonsOverlay";
 import { saveFile } from "../../utils/fileSaver/fileSaver";
@@ -136,6 +138,9 @@ const WebMap = ({ shape: shapeProp, selectedSearchResult, type }) => {
     mapInstance.on("load", () => {
       if(isPoint(shape)) {
         addPoints(mapInstance);
+      } else if(isPolygonOrMultiPolygon(shape)) {
+        console.log('it is polygon')
+        addPolygons(mapInstance);
       } else {
         addTrailLayer(mapInstance);
       }
@@ -244,9 +249,32 @@ const WebMap = ({ shape: shapeProp, selectedSearchResult, type }) => {
   const addPoints = (mapInstance) => {
       if(mapInstance) {
         const pointLatLong = shape?.features[0]?.geometry?.coordinates
-        new mapboxgl.Marker().setLngLat([pointLatLong[0], pointLatLong[1]]).addTo(mapInstance);
+        const [lng, lat] = pointLatLong;
+        const marker = new mapboxgl.Marker().setLngLat([lng,lat]).addTo(mapInstance);
+        marker.getElement().addEventListener('click', () => {
+          window.open(`https://maps.google.com?q=${lat},${lng}`);
+        });
         mapInstance.setCenter(pointLatLong);
       }
+      }
+
+      const addPolygons = (mapInstance) => {
+        if(mapInstance) {
+
+          mapInstance.addLayer({
+            id: 'polygon-layer',
+            type: 'fill',
+            source: {
+              type: 'geojson',
+              data : shape.features[0],
+            },
+            paint : {
+              'fill-color' : "#3388ff",
+              'fill-opacity': 0.3,
+            }
+          })
+          mapInstance.setCenter(multiPolygonBounds(shape.features[0]))
+        }
       }
   const fetchGpxDownload = async () => {
     setDownloading(true);
@@ -294,7 +322,10 @@ const WebMap = ({ shape: shapeProp, selectedSearchResult, type }) => {
         // Step 3: add the sources, layers, etc. back once the style has loaded
         if(isPoint(shape)) {
           map.current.on('style.load', () => addPoints(map.current))
-        } else   {
+        } else if(isPolygonOrMultiPolygon) {
+          // Add Polygon
+        }
+        else {
           map.current.on("style.load", () => addTrailLayer(map.current));
         }
       }
