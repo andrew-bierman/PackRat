@@ -33,32 +33,42 @@ const defaultShape = {
   ],
 };
 
-function normalizeCoordinates(coordinates) {
-  // check if coordinates are nested, flip them if so
-  if (typeof coordinates[0][0] === "number") {
+function normalizeCoordinates(coordinates, geometryType) {
+  if (geometryType === "Point") {
     // If first value is greater than 90, it's likely in the format of (longitude, latitude)
-    if (coordinates[0][0] > 90) {
-      return coordinates.map((coordinate) => [coordinate[1], coordinate[0]]);
+    if (coordinates[0] > 90) {
+      return [coordinates[1], coordinates[0]];
     }
     return coordinates;
+  } else {
+    // existing code to handle LineStrings
+    if (Array.isArray(coordinates[0])) {
+      // If first value is greater than 90, it's likely in the format of (longitude, latitude)
+      if (coordinates[0][0] > 90) {
+        return coordinates.map((coordinate) => [coordinate[1], coordinate[0]]);
+      }
+      return coordinates;
+    } else {
+      // If first value is greater than 90, it's likely in the format of (longitude, latitude)
+      if (coordinates[0] > 90) {
+        return [[coordinates[1], coordinates[0]]];
+      }
+      return [[coordinates[0], coordinates[1]]];
+    }
   }
-  // if not nested, nest them
-  // If first value is greater than 90, it's likely in the format of (longitude, latitude)
-  if (coordinates[0] > 90) {
-    return [[coordinates[1], coordinates[0]]];
-  }
-  return [[coordinates[0], coordinates[1]]];
 }
 
 function convertPhotonGeoJsonToShape(photonGeoJson) {
+  const geometryType = photonGeoJson.geometry.type;
+  const coordinates = normalizeCoordinates(photonGeoJson.geometry.coordinates, geometryType);
   return {
     type: "FeatureCollection",
     features: [
       {
         type: "Feature",
         geometry: {
-          type: "LineString",
-          coordinates: normalizeCoordinates(photonGeoJson.geometry.coordinates),
+          type: geometryType,
+          coordinates: coordinates,
         },
         properties: photonGeoJson.properties,
       },
@@ -71,23 +81,25 @@ function getShapeSourceBounds(shape) {
   let maxLng = -Infinity;
   let minLat = Infinity;
   let maxLat = -Infinity;
-  shape.features[0].geometry.coordinates.forEach((coord) => {
-    const lng = coord[0];
-    const lat = coord[1];
 
-    if (lng < minLng) {
-      minLng = lng;
+  let coords = shape.features[0].geometry.coordinates;
+
+  if (shape.features[0].geometry.type === "Point") {
+    [minLng, minLat] = coords;
+    maxLng = minLng;
+    maxLat = minLat;
+  } else if (shape.features[0].geometry.type === "LineString" || shape.features[0].geometry.type === "Polygon") {
+    if (shape.features[0].geometry.type === "Polygon") {
+      coords = coords[0];  // polygons have an extra nesting level
     }
-    if (lng > maxLng) {
-      maxLng = lng;
-    }
-    if (lat < minLat) {
-      minLat = lat;
-    }
-    if (lat > maxLat) {
-      maxLat = lat;
-    }
-  });
+    coords.forEach((coord) => {
+      const [lng, lat] = coord;
+      minLng = Math.min(minLng, lng);
+      maxLng = Math.max(maxLng, lng);
+      minLat = Math.min(minLat, lat);
+      maxLat = Math.max(maxLat, lat);
+    });
+  }
 
   return [
     [minLng, minLat],
@@ -96,12 +108,13 @@ function getShapeSourceBounds(shape) {
 }
 
 function handleShapeSourceLoad(width, height) {
-  if (shape?.features[0]?.geometry?.coordinates?.length > 1) {
+  if (shape?.features[0]?.geometry?.coordinates?.length > 1 && shape?.features[0]?.geometry?.type !== "Point") {
     let bounds = getShapeSourceBounds(shape);
     bounds = bounds[0].concat(bounds[1]);
     return calculateZoomLevel(bounds, { width, height });
   }
-  return null;
+  console.log("handleShapeSourceLoad: no bounds found")
+  return 13;
 }
 
 function latRad(lat) {
@@ -127,11 +140,12 @@ function calculateZoomLevel(bounds, mapDim) {
   var latZoom = zoom(mapDim.height, WORLD_DIM.height, latFraction);
   var lngZoom = zoom(mapDim.width, WORLD_DIM.width, lngFraction);
 
-  return latZoom;
+  return Math.min(latZoom, lngZoom);  // Use the minimum of latZoom and lngZoom
 }
 
 function findTrailCenter(shape) {
   const trailCoords = shape?.features[0]?.geometry?.coordinates;
+  const geometryType = shape?.features[0]?.geometry?.type;
 
   console.log("trailCoords", trailCoords);
   console.log("trailCoords.length", trailCoords.length);
@@ -140,31 +154,39 @@ function findTrailCenter(shape) {
   let longitudes;
 
   // Handle the case where there's only one pair of coordinates
-  if (trailCoords.length === 1) {
+  if (geometryType === "Point") {
     console.log(
       "Single coordinate found, using as trail center.",
-      trailCoords[0]
+      trailCoords
     );
-    return trailCoords[0];
+    return trailCoords;
   }
 
-  if (Array.isArray(trailCoords[0][0])) {
-    // If the coordinates are in the format: [[[lat, lng]], [[lat, lng]], ...]
-    latitudes = trailCoords.map((coord) => coord[0][0]);
-    longitudes = trailCoords.map((coord) => coord[0][1]);
-  } else {
-    // If the coordinates are in the format: [[lat, lng], [lat, lng], ...]
-    latitudes = trailCoords.map((coord) => coord[0]);
-    longitudes = trailCoords.map((coord) => coord[1]);
+  // Handle the case where there's multiple pairs of coordinates
+  if (geometryType === "LineString") {
+    if (Array.isArray(trailCoords[0][0])) {
+      // If the coordinates are in the format: [[[lat, lng]], [[lat, lng]], ...]
+      latitudes = trailCoords.map((coord) => coord[0][0]);
+      longitudes = trailCoords.map((coord) => coord[0][1]);
+    } else {
+      // If the coordinates are in the format: [[lat, lng], [lat, lng], ...]
+      latitudes = trailCoords.map((coord) => coord[0]);
+      longitudes = trailCoords.map((coord) => coord[1]);
+    }
+
+    const avgLatitude = latitudes.reduce((a, b) => a + b, 0) / latitudes.length;
+    const avgLongitude = longitudes.reduce((a, b) => a + b, 0) / longitudes.length;
+
+    console.log("trailCords return", [avgLatitude, avgLongitude]);
+
+    return [avgLatitude, avgLongitude];
   }
 
-  const avgLatitude = latitudes.reduce((a, b) => a + b, 0) / latitudes.length;
-  const avgLongitude = longitudes.reduce((a, b) => a + b, 0) / longitudes.length;
-
-  console.log("trailCords return", [avgLatitude, avgLongitude]);
-
-  return [avgLatitude, avgLongitude];
+  // If neither of the above conditions are met, return null
+  console.log("trailCoords format not recognized");
+  return null;
 }
+
 
 const processShapeData = (shape) => {
   let processedShape = { ...shape };
@@ -173,7 +195,7 @@ const processShapeData = (shape) => {
   shape.features.forEach((feature) => {
     if (feature.geometry.type === "LineString") {
       // Make sure coordinates are in the correct format
-      feature.geometry.coordinates = ensure2DArray(
+      feature.geometry.coordinates = normalizeCoordinates(
         feature.geometry.coordinates
       );
 
@@ -198,11 +220,25 @@ const processShapeData = (shape) => {
 
       // Keep the original LineString feature
       processedShape.features.push(feature);
+    } else if (feature.geometry.type === "Point") {
+      // For Point geometry, add the feature directly to the processed shape
+      processedShape.features.push({
+        type: "Feature",
+        properties: {
+          // If you want to add some properties to the point
+        },
+        geometry: {
+          type: "Point",
+          coordinates: normalizeCoordinates(feature.geometry.coordinates),
+        },
+      });
     }
+    // Add more conditions here to handle other geometry types if needed.
   });
 
   return processedShape;
 };
+
 
 const ensure2DArray = (arr) => {
   // If the first element of the array is not an array itself, add an additional array layer
