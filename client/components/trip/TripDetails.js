@@ -18,8 +18,9 @@ import ScoreContainer from "../ScoreContainer";
 import WeatherCard from "../WeatherCard";
 import TripCard from "../TripCard";
 import { FontAwesome5 } from "@expo/vector-icons";
-
+import UseTheme from "../../hooks/useTheme";
 export function TripDetails() {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } = UseTheme();
   const weatherObject = useSelector((state) => state.weather.weatherObject);
   const weatherWeek = useSelector((state) => state.weather.weatherWeek);
 
@@ -83,7 +84,7 @@ export function TripDetails() {
                     <FontAwesome5
                       name="route"
                       size={24}
-                      color={theme.colors.cardIconColor}
+                      color={currentTheme.colors.cardIconColor}
                     />
                   )}
                   title="Map"
