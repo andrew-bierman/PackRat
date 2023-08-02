@@ -28,7 +28,7 @@ import {
   mapboxStyles,
   getLocation,
   isShapeDownloadable,
-  isDestinationMap
+  isPoint
 } from "../../utils/mapFunctions";
 import MapButtonsOverlay from "./MapButtonsOverlay";
 import { saveFile } from "../../utils/fileSaver/fileSaver";
@@ -44,7 +44,7 @@ mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 const DESTINATION = 'destination'
 const TRIP= 'trip';
 const WebMap = ({ shape: shapeProp, selectedSearchResult, type }) => {
-  console.log("🚀 ~ file: WebMap.web.js:44 ~ WebMap ~ shape:", type)
+
   useEffect(() => {
     // temporary solution to fix mapbox-gl-js missing css error
     if (Platform.OS === "web") {
@@ -134,7 +134,7 @@ const WebMap = ({ shape: shapeProp, selectedSearchResult, type }) => {
     });
 
     mapInstance.on("load", () => {
-      if(isDestinationMap(selectedSearchResult, type)) {
+      if(isPoint(shape)) {
         addPoints(mapInstance);
       } else {
         addTrailLayer(mapInstance);
@@ -173,10 +173,10 @@ const WebMap = ({ shape: shapeProp, selectedSearchResult, type }) => {
   }, [mapFullscreen]);
 
   useEffect(() => {
-    if(map.current && isDestinationMap(selectedSearchResult, type)) {
+    if(map.current && isPoint(shape)) {
       addPoints(map.current);
     }
-    else if (map.current && selectedSearchResult?.geometry?.type !== 'Point') {
+    else if (map.current && shape.features[0].geometry.type !== 'Point') {
       removeTrailLayer(map.current);
       addTrailLayer(map.current);
       map.current.setCenter(trailCenterPointRef.current);
@@ -243,7 +243,7 @@ const WebMap = ({ shape: shapeProp, selectedSearchResult, type }) => {
 
   const addPoints = (mapInstance) => {
       if(mapInstance) {
-        const pointLatLong = selectedSearchResult?.geometry?.coordinates
+        const pointLatLong = shape?.features[0]?.geometry?.coordinates
         new mapboxgl.Marker().setLngLat([pointLatLong[0], pointLatLong[1]]).addTo(mapInstance);
         mapInstance.setCenter(pointLatLong);
       }
@@ -292,7 +292,7 @@ const WebMap = ({ shape: shapeProp, selectedSearchResult, type }) => {
         map.current.setStyle(style);
 
         // Step 3: add the sources, layers, etc. back once the style has loaded
-        if(isDestinationMap(selectedSearchResult, type)) {
+        if(isPoint(shape)) {
           map.current.on('style.load', () => addPoints(map.current))
         } else   {
           map.current.on("style.load", () => addTrailLayer(map.current));

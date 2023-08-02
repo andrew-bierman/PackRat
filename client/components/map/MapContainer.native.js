@@ -14,7 +14,7 @@ export function MapContainer({ shape,selectedSearchResult, type  }) {
   if (Platform.OS === "android" || Platform.OS === "ios") {
     return (
       <View style={[styles.nativeContainer]}>
-        <NativeMap shape={shape} selectedSearchResult={selectedSearchResult} type={type}/>
+        <NativeMap shape={shape} />
       </View>
     );
   }
