@@ -5,6 +5,7 @@ import { Button, Input, Text, Toast } from "native-base";
 import { useSearchParams } from "expo-router";
 import axios from "axios";
 import { api } from "../../constants/api";
+import { InformUser } from "../../utils/ToastUtils";
 
 export const PasswordResetForm = ({ token }) => {
   const [password, setPassword] = useState("");
@@ -18,20 +19,24 @@ export const PasswordResetForm = ({ token }) => {
       await axios.post(`${api}/password-reset/${token}`, { password });
       setPassword("");
       setLoading(false);
-      Toast.show({
+      InformUser({
         title: "Password reset successful",
-        style: { backgroundColor: "red" },
         placement: "top-right",
         duration: 3000,
+        style: {
+          backgroundColor: "red",
+        },
       });
     } catch (error) {
       console.log("Error here", error);
       setLoading(false);
-      Toast.show({
+      InformUser({
         title: "Error resetting password",
-        duration: 5000,
         placement: "top-right",
-        style: { backgroundColor: "red" },
+        duration: 5000,
+        style: {
+          backgroundColor: "red",
+        },
       });
     }
   };
