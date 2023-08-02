@@ -24,6 +24,76 @@ import {
 import { getUser } from "../../store/userStore";
 import { fetchUserTrips } from "../../store/tripsStore";
 
+const Header = ({
+  user,
+  isLoading,
+  error,
+  tripsCount,
+  packsCount,
+  favoritesCount,
+}) => {
+  const profileImage = user?.profileImage ?? null;
+  const userRealName = user?.name ?? null;
+  const userEmail = user?.email ?? null;
+  const userEmailSplitFirstHalf = userEmail?.split("@")[0] ?? null;
+  const username = user?.username
+    ? `@${user?.username}`
+    : `@${userEmailSplitFirstHalf}`;
+
+  return (
+    <Box w={["100%", "100%", "70%", "50%"]} style={styles.infoSection}>
+      <Box style={styles.userInfo}>
+        {profileImage ? (
+          <Image
+            source={{ uri: user?.profileImage }}
+            alt="Profile Image"
+            borderRadius={50}
+            size={100}
+            style={{ width: 100, height: 100, borderRadius: 50 }}
+          />
+        ) : (
+          <MaterialCommunityIcons
+            name="account-circle"
+            size={100}
+            color="grey"
+            style={{
+              width: 100,
+              height: 100,
+              borderRadius: 50,
+              alignSelf: "center",
+            }}
+          />
+        )}
+        <Text style={styles.userName}>{userRealName}</Text>
+        <Text style={styles.userEmail}>{username}</Text>
+      </Box>
+      <Stack direction="row" style={styles.card}>
+        <Box style={styles.cardInfo}>
+          <Text>Trips</Text>
+          <Text>{tripsCount}</Text>
+        </Box>
+        <Box style={styles.cardInfo}>
+          <Text>Packs</Text>
+          <Text>{packsCount}</Text>
+        </Box>
+        <Box style={styles.cardInfo}>
+          <Text>Favorites</Text>
+          <Text>{favoritesCount}</Text>
+        </Box>
+        <Box style={styles.cardInfo}>
+          <Text>Certified</Text>
+          <MaterialCommunityIcons
+            name="certificate-outline"
+            size={24}
+            color={user?.is_certified_guide ? "green" : "grey"}
+          />
+        </Box>
+      </Stack>
+      {error ? <Text>{error}</Text> : null}
+    </Box>
+  );
+};
+
 export default function ProfileContainer({ id = null }) {
   const dispatch = useDispatch();
 
@@ -60,12 +130,6 @@ export default function ProfileContainer({ id = null }) {
   const favoritesCount = favoritesData?.length ?? 0;
   const isCertified = user?.isCertified ?? false;
 
-  const profileImage = user?.profileImage ?? null;
-  const userRealName = user?.name ?? null;
-  const userEmail = user?.email ?? null;
-  const userEmailSplitFirstHalf = userEmail?.split("@")[0] ?? null;
-  const username = user?.username ? `@${user?.username}` : `@${userEmailSplitFirstHalf}`;
-
   if (isLoading) return <Text>Loading...</Text>;
 
   return (
@@ -75,62 +139,14 @@ export default function ProfileContainer({ id = null }) {
         Platform.OS == "web" ? { minHeight: "100vh" } : null,
       ]}
     >
-      <Box w={["100%", "100%", "70%", "50%"]} style={styles.infoSection}>
-        <Box style={styles.cardInfo}>
-          {profileImage ? (
-            <Image
-              source={{ uri: user?.profileImage }}
-              alt="Profile Image"
-              borderRadius={50}
-              size={100}
-            />
-          ) : (
-            <MaterialCommunityIcons
-              name="account-circle"
-              size={100}
-              color="grey"
-            />
-          )}
-        <Text style={styles.userName}>{userRealName}</Text>
-        <Text style={styles.userEmail}>{username}</Text>
-        </Box>
-        <Stack direction="row" style={styles.card}>
-          <Box style={styles.cardInfo}>
-            <Text>Trips</Text>
-            <Text>{tripsCount}</Text>
-          </Box>
-          <Box style={styles.cardInfo}>
-            <Text>Packs</Text>
-            <Text>{packsCount}</Text>
-          </Box>
-          <Box style={styles.cardInfo}>
-            <Text>Favorites</Text>
-            <Text>{favoritesCount}</Text>
-          </Box>
-          <Box style={styles.cardInfo}>
-            <Text>Certified</Text>
-            <MaterialCommunityIcons
-              name="certificate-outline"
-              size={24}
-              color={user?.is_certified_guide ? "green" : "grey"}
-            />
-          </Box>
-        </Stack>
-
-        <Box
-          style={{
-            width: "100%",
-            alignItems: "center",
-            padding: 8,
-            backgroundColor: "#dbeafe",
-            borderBottomEndRadius: 12,
-            borderBottomStartRadius: 12,
-          }}
-        >
-          <Text style={{ fontSize: 18, fontWeight: 600 }}>Packs</Text>
-        </Box>
-        {error ? <Text>{error}</Text> : null}
-      </Box>
+      <Header
+        user={user}
+        isLoading={isLoading}
+        error={error}
+        tripsCount={tripsCount}
+        packsCount={packsCount}
+        favoritesCount={favoritesCount}
+      />
       {isLoading ? (
         <Text>Loading....</Text>
       ) : (
@@ -194,21 +210,23 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.18,
     shadowRadius: 1.0,
     elevation: 1,
+    justifyContent: "center",
   },
   userInfo: {
-    flexDirection: "row",
+    flexDirection: "column",
     alignItems: "center",
+    justifyContent: "center",
     marginBottom: 15,
   },
   userName: {
     fontSize: 20,
     fontWeight: "bold",
-    marginLeft: 10,
+    textAlign: "center",
   },
   userEmail: {
     fontSize: 16,
     color: "grey",
-    marginLeft: 10,
+    textAlign: "center",
   },
   card: {
     flexDirection: "row",
