@@ -18,7 +18,6 @@ const router = express.Router();
  *   description: Trip routes
  */
 
-
 /**
  * @swagger
  * /trip:

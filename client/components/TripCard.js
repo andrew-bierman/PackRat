@@ -12,7 +12,7 @@ import { addTrail, addPark } from "../store/dropdownStore";
 import MapContainer from "./map/MapContainer";
 import { convertPhotonGeoJsonToShape } from "../utils/mapFunctions";
 import { selectAllTrails } from "../store/trailsStore";
-
+import UseTheme from "../hooks/useTheme";
 export default function TripCard({
   title,
   Icon,
@@ -22,6 +22,8 @@ export default function TripCard({
   isTrail,
   isPark,
 }) {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
   const dispatch = useDispatch();
 
   const currentTrail = useSelector((state) => state.dropdown.currentTrail);
@@ -35,7 +37,7 @@ export default function TripCard({
     // Assuming that you have a redux action to set the current trail and park
     if (isTrail) {
       dispatch(addTrail(value));
-    } else {
+    } else if (isPark) {
       dispatch(addPark(value));
     }
   };
@@ -67,8 +69,8 @@ export default function TripCard({
         <Icon />
         <Text
           style={{
-            color: theme.colors.textPrimary,
-            fontSize: theme.font.size,
+            color: currentTheme.colors.textPrimary,
+            fontSize: currentTheme.font.size,
             fontWeight: 600,
           }}
         >
