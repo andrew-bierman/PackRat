@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import { Container, Text } from "native-base";
 import { useRouter, useSearchParams } from "expo-router";
 import { theme } from "../../theme";
@@ -110,13 +110,10 @@ export const DestinationPage = () => {
   const dispatch = useDispatch();
 
   const { destinationId, id, type } = useSearchParams();
-  // console.log("🚀 ~ file: index.js:113 ~ DestinationPage ~ type:", type)
-  // console.log("🚀 ~ file: index.js:113 ~ DestinationPage ~ id:", id)
-  // console.log("🚀 ~ file: index.js:113 ~ DestinationPage ~ destinationId:", destinationId)
   const photonDetailsStore = useSelector(
     (state) => state.destination.photonDetails
   );
-  // console.log("🚀 ~ file: index.js:119 ~ DestinationPage ~ photonDetailsStore:", photonDetailsStore)
+
   const currentDestination = {
     geoJSON: photonDetailsStore,
   };
@@ -149,9 +146,12 @@ export const DestinationPage = () => {
 
   let shape = geoJSON ?? defaultShape;
 
-  const map = () => <MapContainer shape={shape} selectedSearchResult={selectedSearchResult} type="destination" />;
+  const map = () => <MapContainer shape={shape}  />;
 
   return (
+    <ScrollView>
+
+
     <View style={styles.container}>
       <DestinationHeader geoJSON={geoJSON} selectedSearchResult={selectedSearchResult} />
       <LargeCard
@@ -169,6 +169,7 @@ export const DestinationPage = () => {
       />
       <WeatherData geoJSON={geoJSON} />
     </View>
+    </ScrollView>
   );
 };
 

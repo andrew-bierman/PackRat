@@ -6,7 +6,7 @@ import WebMap from "./WebMap";
 import { isObjectEmpty } from "../../utils/isObjectEmpty";
 import { defaultShape } from "../../utils/mapFunctions";
 
-export function MapContainer({ shape,selectedSearchResult, type }) {
+export function MapContainer({ shape }) {
   // console.log("🚀 ~ file: MapContainer.web.js:10 ~ MapContainer ~ selectedSearchResult:", selectedSearchResult)
 
   if(isObjectEmpty(shape)){
@@ -17,7 +17,7 @@ export function MapContainer({ shape,selectedSearchResult, type }) {
   if (Platform.OS === "web") {
     return (
       <View style={styles.webContainer}>
-        <WebMap shape={shape} selectedSearchResult={selectedSearchResult} type={type}  />
+        <WebMap shape={shape} />
       </View>
     );
   }
