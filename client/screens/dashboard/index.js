@@ -2,11 +2,11 @@ import React from "react";
 import { Platform, StyleSheet } from "react-native";
 import { VStack, Box, ScrollView } from "native-base";
 import { theme } from "../../theme";
-import HeroBanner from "./HeroBanner";
-import QuickActionsSection from "./QuickActionSection";
-import FeedPreview from "./FeedPreview";
-import Section from "./Section";
-import SectionHeader from "./SectionHeader";
+import HeroBanner from "../../components/dashboard/HeroBanner";
+import QuickActionsSection from "../../components/dashboard/QuickActionSection";
+import FeedPreview from "../../components/dashboard/FeedPreview";
+import Section from "../../components/dashboard/Section";
+import SectionHeader from "../../components/dashboard/SectionHeader";
 
 const Dashboard = () => {
   return (

@@ -7,8 +7,8 @@ import { ScrollView } from 'react-native'
 import { Stack as Header } from "expo-router";
 
 import { theme } from "../../theme";
-import TripCard from "../TripCard";
-import WeatherCard from "../WeatherCard";
+import TripCard from "../../components/TripCard";
+import WeatherCard from "../../components/WeatherCard";
 
 import { FontAwesome } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
@@ -18,11 +18,11 @@ import { useEffect, useState } from "react";
 
 import { useSelector } from "react-redux";
 
-import { GearList } from "../GearList";
+import { GearList } from "../../components/GearList";
 
-import { SaveTripContainer } from "./createTripModal";
-import TripDateRange from "./TripDateRange";
-import MultiStepForm from "../multi_step";
+import { SaveTripContainer } from "../../components/trip/createTripModal";
+import TripDateRange from "../../components/trip/TripDateRange";
+import MultiStepForm from "../../components/multi_step";
 import UseTheme from "../../hooks/useTheme";
 export default function Trips() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
