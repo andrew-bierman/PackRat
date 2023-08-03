@@ -98,7 +98,7 @@ const WebMap = ({ shape: shapeProp }) => {
   }, [shapeProp]);
 
   useEffect(() => {
-    if (shape?.features[0]?.geometry?.coordinates?.length > 1) {
+    if (shape?.features[0]?.geometry?.coordinates?.length >= 1) {
       let bounds = getShapeSourceBounds(shape);
       bounds = bounds[0].concat(bounds[1]);
 
