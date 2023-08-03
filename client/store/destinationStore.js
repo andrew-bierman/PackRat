@@ -6,7 +6,11 @@ export const processGeoJSON = createAsyncThunk(
   "destination/processGeoJSON",
   async (data, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${api}/osm/process/geojson`, data);
+      const token = await AsyncStorage.getItem('userToken');
+      const config = {
+        headers: { Authorization: `Bearer ${token}` }
+      };
+      const response = await axios.post(`${api}/osm/process/geojson`, data,config);
       return response.data;
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -18,8 +22,12 @@ export const getDestination = createAsyncThunk(
   "destination/getDestination",
   async (destinationId, { rejectWithValue }) => {
     try {
+      const token = await AsyncStorage.getItem('userToken');
+      const config = {
+        headers: { Authorization: `Bearer ${token}` }
+      };
       const response = await axios.get(
-        `${api}/osm/destination/${destinationId}`
+        `${api}/osm/destination/${destinationId}`,config
       );
       return response.data;
     } catch (err) {
@@ -37,7 +45,7 @@ export const photonDetails = createAsyncThunk(
 
       if (!osm_id || !osm_type) return rejectWithValue("Invalid request parameters");
 
-      const response = await axios.get(`${api}/osm/photonDetails/${osm_type}/${osm_id}`);
+      const response = await axios.get(`${api}/osm/photonDetails/${osm_type}/${osm_id}`,config);
 
       return response.data;
     } catch (err) {

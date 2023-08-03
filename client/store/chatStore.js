@@ -14,7 +14,11 @@ export const getUserChats = createAsyncThunk(
   "chat/getUserChats",
   async (userId) => {
     try {
-      const response = await axios.get(`${api}/openai/user-chats/${userId}`);
+      const token = await AsyncStorage.getItem('userToken');
+      const config = {
+        headers: { Authorization: `Bearer ${token}` }
+      };
+      const response = await axios.get(`${api}/openai/user-chats/${userId}`,config);
       return response.data;
     } catch (error) {
       console.error(error);
@@ -27,11 +31,15 @@ export const getAIResponse = createAsyncThunk(
   "chat/getAIResponse",
   async ({ userId, conversationId, userInput }) => {
     try {
+      const token = await AsyncStorage.getItem('userToken');
+      const config = {
+        headers: { Authorization: `Bearer ${token}` }
+      };
       const response = await axios.post(`${api}/openai/ai-response`, {
         userId,
         conversationId,
         userInput,
-      });
+      },config);
       return response.data;
     } catch (error) {
       console.error(error);

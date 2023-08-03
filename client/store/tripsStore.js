@@ -9,9 +9,14 @@ import { api } from "../constants/api";
 export const deleteTrip = createAsyncThunk(
   "trips/deleteTrip",
   async (tripId) => {
+    const token = await AsyncStorage.getItem('userToken');
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
     const response = await axios.delete(`${api}/trip`, {
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}` 
       },
       data: {
         tripId,
@@ -24,20 +29,37 @@ export const deleteTrip = createAsyncThunk(
 export const fetchUserTrips = createAsyncThunk(
   "trips/fetchUserTrips",
   async (ownerId) => {
-    const response = await axios.get(`${api}/trip/${ownerId}`);
+    const token = await AsyncStorage.getItem('userToken');
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
+    const response = await axios.get(`${api}/trip/${ownerId}`,config);
     return response.data;
   }
 );
 
 export const addTrip = createAsyncThunk("trips/addTrip", async (newTrip) => {
-  const response = await axios.post(`${api}/trip/`, newTrip);
-  return response.data;
+  try {
+    const token = await AsyncStorage.getItem('userToken');
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
+    const response = await axios.post(`${api}/trip/`, newTrip,config);
+    return response.data;
+    
+  } catch (error) {
+    
+  }
 });
 
 export const editTrip = createAsyncThunk(
   "trips/editTrip",
   async (updatedTrip) => {
-    const response = await axios.put(`${api}/trip/`, updatedTrip);
+    const token = await AsyncStorage.getItem('userToken');
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
+    const response = await axios.put(`${api}/trip/`, updatedTrip,config);
     return response.data;
   }
 );

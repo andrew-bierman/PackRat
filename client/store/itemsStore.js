@@ -7,9 +7,11 @@ const itemsAdapter = createEntityAdapter();
 export const deleteItem = createAsyncThunk(
   "items/deleteItem",
   async (itemId) => {
+    const token = await AsyncStorage.getItem('userToken');
     const response = await axios.delete(`${api}/item`, {
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}` 
       },
       data: {
         itemId,
@@ -20,12 +22,20 @@ export const deleteItem = createAsyncThunk(
 );
 
 export const editItem = createAsyncThunk("items/editItem", async (newItem) => {
-  const response = await axios.put(`${api}/item/`, newItem);
+  const token = await AsyncStorage.getItem('userToken');
+  const config = {
+    headers: { Authorization: `Bearer ${token}` }
+  };
+  const response = await axios.put(`${api}/item/`, newItem,config);
   return response.data;
 });
 
 export const getItems = createAsyncThunk("items/getItems", async (packId) => {
-  const response = await axios.get(`${api}/item/${packId}`);
+  const token = await AsyncStorage.getItem('userToken');
+  const config = {
+    headers: { Authorization: `Bearer ${token}` }
+  };
+  const response = await axios.get(`${api}/item/${packId}`,config);
   return response.data;
 });
 

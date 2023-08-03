@@ -5,6 +5,10 @@ import { api } from "../constants/api";
 export const fetchTrails = createAsyncThunk(
   "trails/fetchTrails",
   async ({ lat, lon, selectedSearch }) => {
+    const token = await AsyncStorage.getItem('userToken');
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
     let params = `?`;
 
     if (lat) {
@@ -17,7 +21,7 @@ export const fetchTrails = createAsyncThunk(
     const url = api + "/osm/trails" + params;
 
     try {
-      const response = await axios.get(url);
+      const response = await axios.get(url,config);
       const trails = response.data.features;
 
       const filteredTrails = trails

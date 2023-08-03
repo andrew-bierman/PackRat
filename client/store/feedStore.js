@@ -18,7 +18,11 @@ const initialState = feedAdapter.getInitialState({
 export const getPublicPacks = createAsyncThunk(
   "feed/getPublicPacks",
   async (queryBy) => {
-    const response = await axios.get(`${api}/pack/?queryBy=${queryBy || "Favorite"}`);
+    const token = await AsyncStorage.getItem('userToken');
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
+    const response = await axios.get(`${api}/pack/?queryBy=${queryBy || "Favorite"}`,config);
     return response.data;
   }
 );
@@ -26,7 +30,11 @@ export const getPublicPacks = createAsyncThunk(
 export const getPublicTrips = createAsyncThunk(
   "feed/getPublicTrips",
   async (queryBy) => {
-    const response = await axios.get(`${api}/trip/?queryBy=${queryBy || "Favorite"}`);
+    const token = await AsyncStorage.getItem('userToken');
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
+    const response = await axios.get(`${api}/trip/?queryBy=${queryBy || "Favorite"}`,config);
     return response.data;
   }
 );

@@ -5,12 +5,16 @@ import axios from "axios";
 export const fetchPhotonSearchResults = createAsyncThunk(
   "search/fetchPhotonSearchResults",
   async (searchString) => {
+    const token = await AsyncStorage.getItem('userToken');
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
     const url =
       api +
       `/osm/photon/search?searchString=${encodeURIComponent(searchString)}`;
 
     try {
-      const response = await axios.get(url);
+      const response = await axios.get(url,config);
       return response.data;
     } catch (error) {
       console.error("error:" + error);

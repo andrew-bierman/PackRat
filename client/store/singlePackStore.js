@@ -22,7 +22,11 @@ const initialState = singlePackAdapter.getInitialState({
 export const fetchSinglePack = createAsyncThunk(
   "packs/fetchSinglePack",
   async (packId) => {
-    const response = await axios.get(`${api}/pack/p/${packId}`);
+    const token = await AsyncStorage.getItem('userToken');
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
+    const response = await axios.get(`${api}/pack/p/${packId}`,config);
     return response.data;
   }
 );

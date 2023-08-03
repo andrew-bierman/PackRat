@@ -5,7 +5,11 @@ import { api } from "../constants/api";
 export const addItemsGlobal = createAsyncThunk(
   "Items/addItemsGlobal",
   async (newItem) => {
-    const response = await axios.post(`${api}/item/global`, newItem);
+    const token = await AsyncStorage.getItem('userToken');
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
+    const response = await axios.post(`${api}/item/global`, newItem,config);
     return response.data;
   }
 );
@@ -14,8 +18,12 @@ export const getItemsGlobal = createAsyncThunk(
   "Items/getItemsGlobal",
   async ({ limit, page }) => {
     try {
+      const token = await AsyncStorage.getItem('userToken');
+      const config = {
+        headers: { Authorization: `Bearer ${token}` }
+      };
       const response = await axios.get(
-        `${api}/item/global?limit=${limit}&page=${page}`
+        `${api}/item/global?limit=${limit}&page=${page}`,config
       );
       return response.data;
     } catch (error) {
@@ -27,7 +35,11 @@ export const getItemsGlobal = createAsyncThunk(
 export const deleteGlobalItem = createAsyncThunk(
   "items/deleteGlobalItem",
   async (item) => {
-    const response = await axios.delete(`${api}/item/global/${item}`);
+    const token = await AsyncStorage.getItem('userToken');
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
+    const response = await axios.delete(`${api}/item/global/${item}`,config);
     return response.data;
   }
 );
@@ -35,7 +47,11 @@ export const deleteGlobalItem = createAsyncThunk(
 export const editGlobalItem = createAsyncThunk(
   "items/editGlobalItem",
   async (newItem) => {
-    const response = await axios.put(`${api}/item/`, newItem);
+    const token = await AsyncStorage.getItem('userToken');
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
+    const response = await axios.put(`${api}/item/`, newItem,config);
     return response.data;
   }
 );

@@ -16,6 +16,7 @@ export const userSignUp = celebrate({
     [Segments.BODY]: Joi.object().keys({
         name: Joi.string().required(),
         email: Joi.string().required(),
+        username:Joi.string().required(),
         password: Joi.string().required(),
     }),
 });

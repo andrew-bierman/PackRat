@@ -16,9 +16,11 @@ export const deletePackItem = createAsyncThunk(
   "items/deletePackItem",
   async (item) => {
     console.log("item", item);
+    const token = await AsyncStorage.getItem('userToken');
     const response = await axios.delete(`${api}/item`, {
       headers: {
         "Content-Type": "application/json",
+       "Authorization": `Bearer ${token}` 
       },
       data: {
         itemId: item.itemId,
@@ -32,7 +34,11 @@ export const deletePackItem = createAsyncThunk(
 export const changePackStatus = createAsyncThunk(
   "packs/changePackStatus",
   async (updatedPack) => {
-    const response = await axios.put(`${api}/pack`, updatedPack);
+    const token = await AsyncStorage.getItem('userToken');
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
+    const response = await axios.put(`${api}/pack`, updatedPack,config);
     return response.data;
   }
 );
@@ -40,7 +46,11 @@ export const changePackStatus = createAsyncThunk(
 export const fetchUserPacks = createAsyncThunk(
   "packs/fetchUserPacks",
   async (ownerId) => {
-    const response = await axios.get(`${api}/pack/${ownerId}`);
+    const token = await AsyncStorage.getItem('userToken');
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
+    const response = await axios.get(`${api}/pack/${ownerId}`,config);
     return response.data;
   }
 );
@@ -49,7 +59,11 @@ export const addPackItem = createAsyncThunk(
   "items/addPackItem",
   async (newItem) => {
     console.log("calling apis");
-    const response = await axios.post(`${api}/item/`, newItem);
+    const token = await AsyncStorage.getItem('userToken');
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
+    const response = await axios.post(`${api}/item/`, newItem,config);
     return response.data;
   }
 );
@@ -57,24 +71,36 @@ export const addPackItem = createAsyncThunk(
 export const duplicatePackItem = createAsyncThunk(
   "items/duplicatePackItem",
   async (newItem) => {
+    const token = await AsyncStorage.getItem('userToken');
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
     const response = await axios.post(`${api}/pack/duplicate`, {
       packId: newItem.packId,
       ownerId: newItem.ownerId,
       items: newItem.items,
-    });
+    },config);
     return response.data;
   }
 );
 
 export const scorePack = createAsyncThunk("packs/scorePack", async (packId) => {
-  const response = await axios.put(`${api}/pack/score/${packId}`);
+  const token = await AsyncStorage.getItem('userToken');
+  const config = {
+    headers: { Authorization: `Bearer ${token}` }
+  };
+  const response = await axios.put(`${api}/pack/score/${packId}`,config);
   return response.data;
 });
 
 export const editPackItem = createAsyncThunk(
   "items/editPackItem",
   async (newItem) => {
-    const response = await axios.put(`${api}/item/`, newItem);
+    const token = await AsyncStorage.getItem('userToken');
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
+    const response = await axios.put(`${api}/item/`, newItem,config);
     return response.data;
   }
 );
@@ -82,6 +108,10 @@ export const editPackItem = createAsyncThunk(
 export const editItemsGlobalAsDuplicate = createAsyncThunk(
   "Items/editItemsGlobalAsDuplicate",
   async (item) => {
+    const token = await AsyncStorage.getItem('userToken');
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
     const { itemId, packId, name, weight, quantity, unit, type } = item;
     const response = await axios.put(`${api}/item/global/${itemId}`, {
       packId,
@@ -90,7 +120,7 @@ export const editItemsGlobalAsDuplicate = createAsyncThunk(
       quantity,
       unit,
       type,
-    });
+    },config);
     return response.data;
   }
 );
@@ -102,11 +132,15 @@ export const selectItemsGlobal = createAsyncThunk(
       const itemId = item.selectedItem;
       const ownerId = item.ownerId;
       const packId = item.packId;
+      const token = await AsyncStorage.getItem('userToken');
+      const config = {
+        headers: { Authorization: `Bearer ${token}` }
+      };
 
       const response = await axios.post(`${api}/item/global/select/${packId}`, {
         itemId: itemId,
         ownerId: ownerId,
-      });
+      },config);
       return response.data;
     } catch (error) {
       console.log("error", error.message);
@@ -115,21 +149,29 @@ export const selectItemsGlobal = createAsyncThunk(
 );
 
 export const updatePack = createAsyncThunk("packs/updatePack", async (pack) => {
+  const token = await AsyncStorage.getItem('userToken');
+  const config = {
+    headers: { Authorization: `Bearer ${token}` }
+  };
   const response = await axios.put(`${api}/pack`, {
     _id: pack["_id"],
     name: pack.name,
     is_public: pack.is_public,
-  });
+  },config);
   return response.data;
 });
 
 export const deletePack = createAsyncThunk("packs/deletePack", async (pack) => {
+  const token = await AsyncStorage.getItem('userToken');
+  const config = {
+    headers: { Authorization: `Bearer ${token}` }
+  };
   const response = await axios.delete(`${api}/pack`, {
     data: { packId: pack.id },
     headers: {
       "Content-Type": "application/json",
     },
-  });
+  },config);
   return response.data;
 });
 
