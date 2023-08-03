@@ -169,7 +169,7 @@ export default function Card({
                   gap: 10,
                 }}
               >
-                <Box></Box>
+                 <Box></Box>
                 <Box
                   style={{
                     flexDirection: "row",

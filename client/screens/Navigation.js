@@ -162,14 +162,16 @@ const Navigation = () => {
 
   useEffect(() => {
     const handleScreenResize = () => {
-      setIsMobileView(Dimensions.get("window").width < 1150);
+      const isMobile = Dimensions.get("window").width < 1300 ||
+       navBarWidth < 1024; // Adjust these values as needed
+      setIsMobileView(isMobile);
     };
 
-    Dimensions.addEventListener("change", handleScreenResize);
+    const subscription = Dimensions.addEventListener("change", handleScreenResize);
     return () => {
-      // Dimensions.removeEventListener("change", handleScreenResize); TODO get an error: removeEventListener is undefined
+      subscription.remove(); // Proper event listener cleanup
     };
-  }, []);
+  }, [navBarWidth]); // Add navBarWidth as a dependency to the effect
 
   const renderNavigationItem = useCallback(
     (item, index) => {
