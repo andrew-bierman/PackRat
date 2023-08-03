@@ -1,6 +1,7 @@
 import Pack from "../models/packModel.js";
 import mongoose from "mongoose";
 import { calculatePackScore } from "../utils/scorePack.js";
+import { itemRecommendationAlgorithm } from "../utils/itemRecommendation.js";
 
 export const getPublicPacks = async (req, res) => {
   try {
@@ -149,6 +150,10 @@ export const addPack = async (req, res) => {
 
     console.log("newPack", newPack);
 
+    const recommendedItems = await itemRecommendationAlgorithm();
+
+    newPack.items = recommendedItems.map((item) => item._id);
+
     const exists = await Pack.find({ name: name });
 
     // if (exists[0]?.name?.toLowerCase() === name.toLowerCase()) {
@@ -166,13 +171,22 @@ export const editPack = async (req, res) => {
   try {
     const { _id } = req.body;
 
-    const newPack = await Pack.findOneAndUpdate({ _id }, req.body, {
+    const existingPack = await Pack.findById(_id);
+    if (!existingPack) {
+      return res.status(404).json({ msg: "Pack not found" });
+    }
+
+    const updatedPack = await Pack.findOneAndUpdate({ _id }, req.body, {
       returnOriginal: false,
     });
 
-    console.log("newPack", newPack);
+    const recommendedItems = await itemRecommendationAlgorithm();
 
-    res.status(200).json(newPack);
+    updatedPack.items = recommendedItems.map((item) => item._id);
+
+    console.log("updatedPack", updatedPack);
+
+    res.status(200).json(updatedPack);
   } catch (error) {
     res.status(404).json({ msg: "Unable to edit pack" });
   }
