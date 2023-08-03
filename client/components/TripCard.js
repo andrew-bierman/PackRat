@@ -84,6 +84,7 @@ export default function TripCard({
               ? {}
               : convertPhotonGeoJsonToShape(currentShape[0])
           }
+          type="trip"
         />
       ) : isSearch ? (
         <SearchInput />

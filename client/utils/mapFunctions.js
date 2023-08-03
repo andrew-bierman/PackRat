@@ -242,6 +242,11 @@ const isShapeDownloadable = (shape) => {
   return shape?.features[0]?.geometry?.coordinates?.length > 1;
 };
 
+const DESTINATION = 'destination'
+const TRIP= 'trip';
+const isDestinationMap = (selectedSearchResult, type) => {
+  return selectedSearchResult?.geometry?.type === 'Point' && type === DESTINATION
+}
 export {
   defaultShape,
   getShapeSourceBounds,
@@ -255,4 +260,5 @@ export {
   getLocation,
   isShapeDownloadable,
   convertPhotonGeoJsonToShape,
+  isDestinationMap
 };
