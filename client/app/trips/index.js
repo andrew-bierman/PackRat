@@ -1,8 +1,8 @@
-import CreateTrip from "../../components/trip/createTrip";
+import CreateTrip from "../../screens/trip/createTrip";
 
 import { Platform } from "react-native";
 import { Stack as Header } from "expo-router";
-
+import { Text } from "react-native";
 export default function Trip() {
   return Platform.OS === "web" ? (
     <>

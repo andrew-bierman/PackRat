@@ -16,8 +16,8 @@ import {
 } from "native-base";
 import { AntDesign } from "@expo/vector-icons";
 import { StyleSheet, FlatList, View } from "react-native";
-import Card from "./FeedCard";
-import DropdownComponent from "../Dropdown";
+import Card from "../../components/feed/FeedCard";
+import DropdownComponent from "../../components/Dropdown";
 import { theme } from "../../theme";
 import {
   getPublicPacks,
@@ -178,9 +178,9 @@ const Feed = ({ feedType = "public" }) => {
       maxPatternLength: 32,
       minMatchCharLength: 1,
     };
-    
+
     let results = fuseSearch (data, searchQuery, keys, options);
-    
+
     // Convert fuse results back into the format we want
     // if searchQuery is empty, use the original data
     data = searchQuery ? results.map((result) => result.item) : data;

@@ -1,4 +1,4 @@
-import About from "../../components/about";
+import About from "../../screens/about";
 import { Platform, ScrollView, StyleSheet } from "react-native";
 import { Stack as Header } from "expo-router";
 
