@@ -6,6 +6,7 @@ import {
 import axios from "axios";
 import { api } from "../constants/api";
 import { Toast } from "native-base";
+import { InformUser } from "../utils/ToastUtils";
 export const addPack = createAsyncThunk("packs/addPack", async (newPack) => {
   const response = await axios.post(`${api}/pack/`, newPack);
   return response.data;
@@ -369,19 +370,25 @@ const packsSlice = createSlice({
       .addCase(updatePack.fulfilled, (state, action) => {
         state.isLoading = false;
         state.error = null;
-        Toast.show({
+        InformUser({
           title: "Pack has been succesfully updated",
           placement: "bottom",
           duration: 2000,
+          style: {
+            backgroundColor: "green",
+          },
         });
       })
       .addCase(updatePack.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message;
-        Toast.show({
+        InformUser({
           title: "Error while Updating pack",
           placement: "bottom",
           duration: 2000,
+          style: {
+            backgroundColor: "red",
+          },
         });
       })
       .addCase(deletePack.pending, (state) => {
