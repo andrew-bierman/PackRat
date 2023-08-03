@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import {
   VStack,
   Box,
@@ -22,6 +22,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter, Link } from "expo-router";
 import { ThreeDotsMenu } from "../ThreeDotsMenu";
+import { getUser } from '../../store/userStore';
 import UseTheme from "../../hooks/useTheme";
 export const CustomCard = ({
   title,
@@ -41,7 +42,12 @@ export const CustomCard = ({
   const router = useRouter();
 
   const user = useSelector((state) => state.auth.user);
+  const userStore = useSelector((state) => state.userStore);
   const userId = user["_id"];
+  
+  useEffect(()=>{
+    dispatch(getUser(data['owner_id']))
+  },[])
 
   const handleCopyLink = () => {
     Clipboard.setString(link);
@@ -97,7 +103,7 @@ export const CustomCard = ({
               mx="5"
               >
             <Link href={`/profile/${data['owner_id']}`}>
-            <Text>View {data["name"]}</Text>
+            <Text>{user._id === data['owner_id'] ? 'Your Profile': `View ${userStore.user.name}`}</Text>
             </Link>
               </Box>
               {link && (
@@ -184,7 +190,7 @@ export const CustomCard = ({
               mx="5"
               >
             <Link href={`/profile/${data['owner_id']}`}>
-            <Text>View {data["name"]}</Text>
+            <Text>{user._id === data['owner_id'] ? 'Your Profile': `View ${userStore.user.name}`}</Text>
             </Link>
               </Box>
               {link && (
