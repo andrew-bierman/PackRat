@@ -13,6 +13,7 @@ import {
 import { CustomModal } from "../modal";
 import axios from "axios";
 import { api } from "../../constants/api";
+import { InformUser } from "../../utils/ToastUtils";
 
 export const RequestPasswordResetEmailModal = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -28,7 +29,7 @@ export const RequestPasswordResetEmailModal = () => {
       await axios.post(`${api}/password-reset`, { email });
       setLoading(false);
       setIsOpen(false);
-      Toast.show({
+      InformUser({
         title: "Password reset email sent",
         style: { backgroundColor: "green" },
         placement: "top-right",
@@ -37,7 +38,7 @@ export const RequestPasswordResetEmailModal = () => {
     } catch (error) {
       console.log("Error here", error);
       setLoading(false);
-      Toast.show({
+      InformUser({
         title: error?.response?.data?.error,
         duration: 7000,
         placement: "top-right",
