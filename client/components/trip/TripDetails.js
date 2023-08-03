@@ -18,6 +18,7 @@ import ScoreContainer from "../ScoreContainer";
 import WeatherCard from "../WeatherCard";
 import TripCard from "../TripCard";
 import { FontAwesome5 } from "@expo/vector-icons";
+import { convertPhotonGeoJsonToShape } from "../../utils/mapFunctions";
 import UseTheme from "../../hooks/useTheme";
 export function TripDetails() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } = UseTheme();
@@ -89,6 +90,10 @@ export function TripDetails() {
                   )}
                   title="Map"
                   isMap={true}
+                  shape={
+                    currentTrip.osm_ref &&
+                    convertPhotonGeoJsonToShape(currentTrip.osm_ref.geoJSON)
+                  }
                   cords={
                     currentTrip?.weather
                       ? JSON?.parse(currentTrip?.weather)?.coord
