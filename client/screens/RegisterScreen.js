@@ -23,6 +23,7 @@ import { useRouter } from "expo-router";
 import { Link } from "expo-router";
 import { useSelector, useDispatch } from "react-redux";
 import { signUp } from "../store/authStore";
+import { InformUser } from "../utils/ToastUtils";
 
 export default function Register() {
   const dispatch = useDispatch();
@@ -38,7 +39,7 @@ export default function Register() {
   const user = useSelector((state) => state.auth.user);
 
   if (user?.user?._id) {
-    Toast.show({
+    InformUser({
       title: user?.message,
       duration: 5000,
       placement: "top-right",

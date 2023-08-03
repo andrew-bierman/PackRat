@@ -5,7 +5,6 @@ import {
   Divider,
   IconButton,
   Text,
-  Toast,
   Menu,
   ThreeDotsIcon,
 } from "native-base";
@@ -24,6 +23,8 @@ import { useRouter, Link } from "expo-router";
 import { ThreeDotsMenu } from "../ThreeDotsMenu";
 import { getUser } from '../../store/userStore';
 import UseTheme from "../../hooks/useTheme";
+import { InformUser } from "../../utils/ToastUtils";
+
 export const CustomCard = ({
   title,
   content,
@@ -49,6 +50,10 @@ export const CustomCard = ({
     dispatch(getUser(data['owner_id']))
   },[])
 
+    useEffect(()=>{
+    dispatch(getUser(data['owner_id']))
+  },[])
+  
   const handleCopyLink = () => {
     Clipboard.setString(link);
 
@@ -57,8 +62,7 @@ export const CustomCard = ({
     const resetCopyStateTimeout = setTimeout(() => {
       setIsCopied(false);
     }, 2000);
-
-    Toast.show({
+    InformUser({
       title: "Link copied to clipboard",
       placement: "bottom",
       duration: 2000,
