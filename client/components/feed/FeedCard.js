@@ -31,6 +31,7 @@ import {
 export default function Card({
   type,
   _id,
+  owner,
   name,
   total_weight,
   is_public,
@@ -169,7 +170,9 @@ export default function Card({
                   gap: 10,
                 }}
               >
-                 <Box></Box>
+                <Link href={`/profile/${owner_id}`}>
+                 <Text>View {owner?.name || 'Owner'}</Text>
+                </Link>
                 <Box
                   style={{
                     flexDirection: "row",
