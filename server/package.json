@@ -48,6 +48,7 @@
     "passport-local": "^1.0.0",
     "piscina": "^4.0.0",
     "prettier": "^2.8.8",
+    "socket.io": "^4.7.2",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^4.6.3",
     "uuid": "^9.0.0",

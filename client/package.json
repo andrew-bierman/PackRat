@@ -85,6 +85,7 @@
     "react-responsive": "^9.0.2",
     "redux-persist": "^6.0.0",
     "serve": "^14.2.0",
+    "socket.io-client": "^4.7.2",
     "togpx": "^0.5.4",
     "xmldom": "^0.6.0"
   },

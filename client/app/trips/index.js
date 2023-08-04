@@ -2,6 +2,7 @@ import CreateTrip from "../../components/trip/createTrip";
 
 import { Platform } from "react-native";
 import { Stack as Header } from "expo-router";
+import Itinerary from "../../components/trip/itineraryTrip";
 
 export default function Trip() {
   return Platform.OS === "web" ? (
@@ -16,6 +17,7 @@ export default function Trip() {
         }}
       />
       <CreateTrip />
+      {/* <Itinerary/> */}
     </>
   ) : (
     <CreateTrip />

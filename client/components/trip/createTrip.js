@@ -24,6 +24,7 @@ import { SaveTripContainer } from "./createTripModal";
 import TripDateRange from "./TripDateRange";
 import MultiStepForm from "../multi_step";
 import UseTheme from "../../hooks/useTheme";
+import Itinerary from "./itineraryTrip";
 export default function Trips() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     UseTheme();
@@ -212,6 +213,7 @@ export default function Trips() {
             title="Map"
             isMap={true}
           />
+          <Itinerary/>
           <Box>
             <SaveTripContainer dateRange={dateRange} />
           </Box>
