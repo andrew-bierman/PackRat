@@ -1,7 +1,7 @@
 import fetch from "node-fetch";
 import { oneEntity } from "../utils/oneEntity.js";
 
-export const getParksByState = async (req, res) => {
+export const getParks = async (req, res) => {
   try {
     const abbrState = req.params.abbrState;
 
