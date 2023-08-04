@@ -25,7 +25,7 @@ export const getUserChats = async (req, res) => {
   }
 };
 
-export const createAIResponse = async (req, res) => {
+export const getAIResponse = async (req, res) => {
   if (!process.env.OPENAI_API_KEY)
     return res.status(500).json({ error: "Failed to get response from AI." });
 
@@ -35,8 +35,7 @@ export const createAIResponse = async (req, res) => {
 
   const openai = new OpenAIApi(configuration);
 
-  const { userId } = req.params;
-  const { conversationId, userInput } = req.body;
+  const { userId, conversationId, userInput } = req.body;
 
   try {
     if (!mongoose.Types.ObjectId.isValid(userId)) {

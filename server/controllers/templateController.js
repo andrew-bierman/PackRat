@@ -1,21 +1,16 @@
-import express from "express";
 import Template from "../models/templateModel.js";
 import User from "../models/userModel.js";
 
-const router = express.Router();
-
-// GET /api/templates
-router.get("/templates", async (req, res) => {
+export const getTemplates = async (req, res) => {
   try {
     const templates = await Template.find({}).populate("createdBy", "username");
     res.json(templates);
   } catch (error) {
     res.status(500).json({ error: error.toString() });
   }
-});
+};
 
-// GET /api/templates/:templateId
-router.get("/templates/:templateId", async (req, res) => {
+export const getTemplateById = async (req, res) => {
   const { templateId } = req.params;
 
   try {
@@ -31,36 +26,37 @@ router.get("/templates/:templateId", async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.toString() });
   }
-});
+};
 
-// POST /api/templates
-router.post("/templates", async (req, res) => {
+export const addTemplate = async (req, res) => {
   const { type, templateId, isGlobalTemplate, createdBy } = req.body;
 
+  //   check if user exists
+  const user = await User.findById(createdBy);
+
+  if (!user) {
+    res.status(404).json({ message: "User not found" });
+    return;
+  }
+
+  //   const createdBy = req.user._id;  // Assumes you have some kind of authentication middleware
+
+  const template = new Template({
+    type,
+    templateId,
+    isGlobalTemplate,
+    createdBy,
+  });
+
   try {
-    // Check if user exists
-    const user = await User.findById(createdBy);
-    if (!user) {
-      res.status(404).json({ message: "User not found" });
-      return;
-    }
-
-    const template = new Template({
-      type,
-      templateId,
-      isGlobalTemplate,
-      createdBy,
-    });
-
     const createdTemplate = await template.save();
     res.status(201).json(createdTemplate);
   } catch (error) {
     res.status(500).json({ error: error.toString() });
   }
-});
+};
 
-// PUT /api/templates/:templateId
-router.put("/templates/:templateId", async (req, res) => {
+export const editTemplate = async (req, res) => {
   const { templateId } = req.params;
   const { type, isGlobalTemplate } = req.body;
 
@@ -70,7 +66,9 @@ router.put("/templates/:templateId", async (req, res) => {
     if (template) {
       template.type = type || template.type;
       template.isGlobalTemplate =
-        isGlobalTemplate !== undefined ? isGlobalTemplate : template.isGlobalTemplate;
+        isGlobalTemplate !== undefined
+          ? isGlobalTemplate
+          : template.isGlobalTemplate;
       const updatedTemplate = await template.save();
       res.json(updatedTemplate);
     } else {
@@ -79,10 +77,9 @@ router.put("/templates/:templateId", async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.toString() });
   }
-});
+};
 
-// DELETE /api/templates/:templateId
-router.delete("/templates/:templateId", async (req, res) => {
+export const deleteTemplate = async (req, res) => {
   const { templateId } = req.params;
 
   try {
@@ -97,6 +94,4 @@ router.delete("/templates/:templateId", async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.toString() });
   }
-});
-
-export default router;
+};
