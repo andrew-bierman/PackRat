@@ -1,5 +1,4 @@
-// integrate passport js for email/passport sign in and google sign in
-
+// Import necessary modules and configurations
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { Strategy as LocalStrategy } from "passport-local";
@@ -17,6 +16,7 @@ import {
 import { OAuth2Client } from "google-auth-library";
 import utilsService from "../utils/utils.service.js";
 
+// Create an OAuth2Client for Google sign-in
 const client = new OAuth2Client(
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
@@ -24,7 +24,7 @@ const client = new OAuth2Client(
 );
 
 // Passport Configuration
-// Local Strategy
+// Local Strategy for email/password sign-in
 passport.use(
   new LocalStrategy(
     {
@@ -33,19 +33,21 @@ passport.use(
     },
     async (email, password, done) => {
       try {
+        // Find the user by email
         const user = await User.findOne({ email });
 
         if (!user) {
           return done(null, false, { message: "Incorrect email." });
         }
 
+        // Check if the password is valid
         const validPassword = await bcrypt.compare(password, user.password);
 
         if (!validPassword) {
-          return done(null, false, { message: "Incorrect passwordsss." });
+          return done(null, false, { message: "Incorrect password." });
         }
 
-        return done(null, user);
+        return done(null, user); // User is authenticated successfully
       } catch (err) {
         return done(err);
       }
@@ -53,10 +55,12 @@ passport.use(
   )
 );
 
+// Endpoint for local sign-up
 export const signUpLocal = async (req, res, next) => {
   const { email, password, name } = req.body;
 
   try {
+    // Check if the email is already in use
     const existingUser = await User.findOne({ email });
 
     if (existingUser) {
@@ -75,7 +79,7 @@ export const signUpLocal = async (req, res, next) => {
 
     await newUser.save();
 
-    // Authenticate the user
+    // Authenticate the user after sign-up
     passport.authenticate("local", (err, user, info) => {
       if (err) {
         return next(err);
@@ -101,6 +105,7 @@ export const signUpLocal = async (req, res, next) => {
   }
 };
 
+// Endpoint for local sign-in
 export const signInLocal = async (req, res, next) => {
   const { email, password } = req.body;
 
@@ -131,10 +136,12 @@ export const signInLocal = async (req, res, next) => {
   }
 };
 
+// Endpoint for Google sign-in
 export const signInGoogle = async (req, res) => {
   try {
     const { idToken } = req.body;
 
+    // Decode the Google ID token to get user information
     const decodedToken = jwt.decode(idToken);
     if (!decodedToken) {
       throw new Error("Invalid ID token");
@@ -142,17 +149,20 @@ export const signInGoogle = async (req, res) => {
 
     const { email, name, sub: googleId } = decodedToken;
 
+    // Check if the user has already signed in with Google before
     const alreadyGoogleSignin = await User.findOne({ email, googleId });
     if (!alreadyGoogleSignin) {
+      // Check if the user is registered with the email used for Google sign-in
       const isLocalLogin = await User.findOne({ email });
 
       if (isLocalLogin) {
-        throw new Error("Already user registered on that email address");
+        throw new Error("User is already registered with this email address");
       }
 
+      // Generate a random password for the new user
       const randomPassword = utilsService.randomPasswordGenerator(8);
-      // const randomPassword = '1234abcdefg5678';
 
+      // Create a new user with Google sign-in details
       const user = new User({
         email,
         name,
@@ -160,10 +170,12 @@ export const signInGoogle = async (req, res) => {
         googleId,
       });
 
-      await user.save(); // save the user without callback
+      await user.save();
 
+      // Generate an authentication token for the new user
       await user.generateAuthToken();
 
+      // Send a welcome email to the new user
       sendWelcomeEmail(user.email, user.name);
 
       res.status(200).send({ user });
@@ -172,6 +184,7 @@ export const signInGoogle = async (req, res) => {
         alreadyGoogleSignin.password = utilsService.randomPasswordGenerator(8);
       }
 
+      // Update the user's Google ID and generate a new authentication token
       alreadyGoogleSignin.googleId = googleId;
 
       await alreadyGoogleSignin.generateAuthToken();
@@ -185,6 +198,7 @@ export const signInGoogle = async (req, res) => {
   }
 };
 
+// Serialize and deserialize user for session management
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });

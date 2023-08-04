@@ -20,6 +20,7 @@ import {
 } from "../config.js";
 import utilsService from "../utils/utils.service.js";
 
+// Create a Google OAuth2 client with the provided credentials
 const oauth2Client = new google.auth.OAuth2(
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
@@ -48,20 +49,21 @@ export const getUsers = async (req, res) => {
   }
 };
 
+// Get a user by their ID, along with their associated packs, favorites, and trips
 export const getUserById = async (req, res) => {
   try {
     const { userId } = req.params;
 
     const user = await User.findById({ _id: userId })
-    .populate({
-      path: 'packs',
-      populate: {
-        path: 'items',
-        model: 'Item' // replace 'Item' with your actual Item model name
-      }
-    })
-    .populate('favorites')
-    .populate('trips');
+      .populate({
+        path: "packs",
+        populate: {
+          path: "items",
+          model: "Item", // Replace 'Item' with your actual Item model name
+        },
+      })
+      .populate("favorites")
+      .populate("trips");
 
     res.status(200).json(user);
   } catch (error) {
@@ -99,12 +101,14 @@ export const addToFavorite = async (req, res) => {
   try {
     const { packId, userId } = req.body;
 
+    // Check if the pack already exists in user's favorites
     const exists = await User.find(
       { favorites: { $in: [packId] } },
       { _id: userId }
     );
 
     if (exists.length > 0) {
+      // If the pack already exists in favorites, remove it
       await User.updateOne({ _id: userId }, { $pull: { favorites: packId } });
       await Pack.updateOne(
         { _id: packId },
@@ -112,6 +116,7 @@ export const addToFavorite = async (req, res) => {
       );
       await Pack.updateOne({ _id: packId }, { $inc: { favorites_count: -1 } });
     } else {
+      // If the pack does not exist in favorites, add it
       await User.updateOne({ _id: userId }, { $push: { favorites: packId } });
       await Pack.updateOne(
         { _id: packId },
@@ -120,18 +125,20 @@ export const addToFavorite = async (req, res) => {
       await Pack.updateOne({ _id: packId }, { $inc: { favorites_count: 1 } });
     }
 
+    // Get the updated user data and send it in the response
     const user = await User.findOne({ _id: userId }).select("-password");
-
     return res.status(200).json(user);
   } catch (error) {
     return res.status(400).json({ error: error.message });
   }
 };
 
+// Function to edit user data
 export const editUser = async (req, res) => {
   try {
     const { userId } = req.body;
 
+    // Find the user by their _id and update their data with the provided request body
     const editedUser = await User.findOneAndUpdate({ _id: userId }, req.body, {
       returnOriginal: false,
     }).populate("favorites");
@@ -141,49 +148,72 @@ export const editUser = async (req, res) => {
   }
 };
 
+// Function to delete a user by their ID
 export const deleteUser = async (req, res) => {
   try {
     const { userId } = req.body;
 
+    // Find the user by their ID and delete them
     await User.findOneAndDelete({ _id: userId });
 
-    res.status(200).json({ msg: "user was deleted successfully" });
+    res.status(200).json({ msg: "User was deleted successfully" });
   } catch (error) {
-    res.status(404).json({ msg: "Unable to edit user" });
+    res.status(404).json({ msg: "Unable to delete user" });
   }
 };
 
+// Function for user sign-in using email and password
 export const userSignin = async (req, res) => {
   try {
     const { email, password } = req.body;
+
+    // Find the user by their email and password
     const user = await User.findByCredentials({
       email: email,
-      password:password,
+      password: password,
     });
+
+    // Generate an authentication token for the user
     await user.generateAuthToken();
+
+    // Send the user data in the response
     res.status(200).send({ user });
   } catch (err) {
     res.status(400).send({ message: err.message });
   }
 };
 
+// Function for user signup using email and password
 export const userSignup = async (req, res) => {
   try {
     const { email } = req.body;
+
+    // Check if the user already exists with the given email
     await User.alreadyLogin(email);
+
+    // Generate a salt and hash the password
     const salt = await bcrypt.genSalt(parseInt(JWT_SECRET));
-    req.body.password = await bycrypt.hash(req.body.password, salt);
+    req.body.password = await bcrypt.hash(req.body.password, salt);
+
+    // Create a new user with the provided data
     const user = new User(req.body);
     await user.save();
+
+    // Generate an authentication token for the user
     await user.generateAuthToken();
+
+    // Send a welcome email to the user
     sendWelcomeEmail(user.email, user.name);
+
+    // Send the user data in the response
     res.status(201).send({ user });
   } catch (err) {
     res.status(400).send({ message: err.message });
   }
 };
 
-export const sentEmail = async (req, res) => {
+// Function to send a password reset email to the user
+export const sendEmail = async (req, res) => {
   try {
     const { email } = req.body;
 
@@ -191,8 +221,11 @@ export const sentEmail = async (req, res) => {
     if (!user) {
       throw new Error("User not found");
     }
+
+    // Generate a reset URL and send the reset email to the user
     const resetUrl = await user.generateResetToken();
     resetEmail(user.email, resetUrl);
+
     res.status(200).send({
       message: "Reset Token has been sent successfully",
       status: "success",
@@ -203,13 +236,18 @@ export const sentEmail = async (req, res) => {
   }
 };
 
+// Function to reset user's password using the reset token
 export const resetPassword = async (req, res) => {
   try {
     const { resetToken, password } = req.body;
 
+    // Validate the reset token and find the user
     const user = await User.validateResetToken(resetToken);
+
+    // Update the user's password and save the changes
     user.password = password;
     await user.save();
+
     res.status(200).send({
       message: "Successfully reset password",
       status: "success",
@@ -220,6 +258,7 @@ export const resetPassword = async (req, res) => {
   }
 };
 
+// Function to get the Google authentication URL for signing in with Google
 export const getGoogleAuthURL = async (req, res) => {
   try {
     const scopes = [
@@ -240,6 +279,7 @@ export const getGoogleAuthURL = async (req, res) => {
   }
 };
 
+// Function to get Google user information after signing in with Google
 const getGoogleUserInfo = async (code) => {
   const { tokens } = await oauth2Client.getToken(code);
   oauth2Client.setCredentials(tokens);
@@ -249,31 +289,39 @@ const getGoogleUserInfo = async (code) => {
   return googleUser;
 };
 
+// Function for signing in using Google authentication
 export const googleSignin = async (req, res) => {
   try {
     const code = req.query.code;
     const userInfo = await getGoogleUserInfo(code);
 
+    // Check if the user already signed in with Google using their email and Google ID
     const alreadyGoogleSignin = await User.findOne({
       email: userInfo.email,
       googleId: userInfo.id,
     });
+
     if (!alreadyGoogleSignin) {
+      // If the user does not have an existing Google sign-in, check if they have a local login using the email
       const isLocalLogin = await User.findOne({ email: userInfo.email });
       if (isLocalLogin) {
-        throw new Error("Already user registered on that email address");
+        throw new Error("Already a user registered on that email address");
       }
+
+      // Create a new user with Google sign-in
       const user = new User({
         email: userInfo.email,
         name: userInfo.name,
         password: utilsService.randomPasswordGenerator(8),
         googleId: userInfo.id,
       });
+
       await user.save();
       await user.generateAuthToken();
       sendWelcomeEmail(user.email, user.name);
       res.redirect(`${UI_ROOT_URI}?token=${user.token}`);
     } else {
+      // If the user already has an existing Google sign-in, update their Google ID and generate a new authentication token
       alreadyGoogleSignin.googleId = userInfo.id;
       await alreadyGoogleSignin.generateAuthToken();
       res.redirect(`${UI_ROOT_URI}?token=${alreadyGoogleSignin.token}`);
@@ -283,6 +331,7 @@ export const googleSignin = async (req, res) => {
   }
 };
 
+// Function to get the authenticated user's data
 export const getMe = async (req, res) => {
   try {
     res.status(200).send(req.user);
@@ -290,3 +339,5 @@ export const getMe = async (req, res) => {
     res.status(401).send({ message: err.message });
   }
 };
+
+// More functions and middleware can be added as needed for the user authentication and management process.

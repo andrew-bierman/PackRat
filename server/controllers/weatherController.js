@@ -1,5 +1,6 @@
 import axios from "axios";
 
+// Function to get weekly weather forecast based on latitude and longitude
 export const getWeatherWeek = async (req, res) => {
   const root = process.env.WEATHER_WEEK_URL;
   const OPENWEATHER_KEY = process.env.OPENWEATHER_KEY;
@@ -20,7 +21,6 @@ export const getWeatherWeek = async (req, res) => {
 
   try {
     const response = await axios.get(url);
-    // console.log(response.data);
     res.send(response.data);
   } catch (error) {
     res.status(404).send({
@@ -30,6 +30,7 @@ export const getWeatherWeek = async (req, res) => {
   }
 };
 
+// Function to get current weather data based on latitude and longitude
 export const getWeather = async (req, res) => {
   const root = process.env.WEATHER_URL;
   const OPENWEATHER_KEY = process.env.OPENWEATHER_KEY;
@@ -50,10 +51,7 @@ export const getWeather = async (req, res) => {
     const response = await axios.get(url);
     res.send(response.data);
   } catch (error) {
-    // send back error message
-    res
-      .status(404)
-      .send({ message: "Error retrieving weather data from OpenWeather" });
-    // res.send({ message: "Error retrieving weather data from OpenWeather" });
+    // If there is an error, send back an error message
+    res.status(404).send({ message: "Error retrieving weather data from OpenWeather" });
   }
 };

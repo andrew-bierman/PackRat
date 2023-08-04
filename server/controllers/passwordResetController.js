@@ -1,3 +1,4 @@
+// Import necessary modules and configurations
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
 import bcrypt from "bcrypt";
@@ -86,6 +87,7 @@ const sendPasswordResetEmail = async (email, resetUrl) => {
   }
 };
 
+// Request a password reset email and token for the user
 export const requestPasswordResetEmailAndToken = async (req, res) => {
   try {
     const { email } = req.body;
@@ -116,6 +118,7 @@ export const requestPasswordResetEmailAndToken = async (req, res) => {
   }
 };
 
+// Handle the password reset process
 export const handlePasswordReset = async (req, res) => {
   try {
     const { password } = req.body;

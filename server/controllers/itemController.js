@@ -3,10 +3,12 @@ import Item from "../models/itemModel.js";
 import Pack from "../models/packModel.js";
 import { ItemCategory, ItemCategoryEnum } from "../utils/itemCategory.js";
 
+// Function to get items for a specific pack based on packId
 export const getItems = async (req, res) => {
   try {
     const { packId } = req.params;
 
+    // Find items in the database that belong to the specified packId
     const items = await Item.find({ packs: packId });
 
     return res.status(200).json(items);
@@ -15,10 +17,12 @@ export const getItems = async (req, res) => {
   }
 };
 
+// Function to get item details by item id
 export const getItemById = async (req, res) => {
   try {
     const { _id } = req.body;
 
+    // Find the item in the database by its _id
     const item = await Item.findById({ _id });
 
     res.status(200).json(item);
@@ -27,19 +31,24 @@ export const getItemById = async (req, res) => {
   }
 };
 
+// Function to add an item to a pack
 export const addItem = async (req, res) => {
   try {
     const { name, weight, quantity, unit, packId, type } = req.body;
 
+    // Initialize variables for category and newItem
     let category = null;
     let newItem = null;
 
+    // Switch case based on the type of item (food, water, or essentials)
     switch (type) {
       case ItemCategoryEnum.FOOD: {
+        // Find the category with the name "food" in the database
         category = await ItemCategoryModel.findOne({
           name: ItemCategoryEnum.FOOD,
         });
 
+        // Create a new item in the database with the provided details
         newItem = await Item.create({
           name,
           weight,
@@ -52,20 +61,24 @@ export const addItem = async (req, res) => {
         break;
       }
       case ItemCategoryEnum.WATER: {
+        // Find the category with the name "water" in the database
         category = await ItemCategoryModel.findOne({
           name: ItemCategoryEnum.WATER,
         });
 
+        // Check if a water item already exists in the pack
         let existingWaterItem = await Item.findOne({
           category: category._id,
           packs: packId,
         });
 
         if (existingWaterItem) {
+          // If a water item already exists, update its weight by adding the new weight
           existingWaterItem.weight += Number(weight); // Ensure weight is treated as a number
           await existingWaterItem.save();
           newItem = existingWaterItem;
         } else {
+          // If a water item doesn't exist, create a new item in the database
           newItem = await Item.create({
             name,
             weight,
@@ -79,10 +92,12 @@ export const addItem = async (req, res) => {
         break;
       }
       default: {
+        // For all other item types (essentials), use the "essentials" category
         category = await ItemCategoryModel.findOne({
           name: ItemCategoryEnum.ESSENTIALS,
         });
 
+        // Create a new item in the database with the provided details
         newItem = await Item.create({
           name,
           weight,
@@ -96,11 +111,13 @@ export const addItem = async (req, res) => {
       }
     }
 
+    // Update the pack to include the newly added item
     await Pack.updateOne(
       { _id: packId },
       { $addToSet: { items: newItem._id } }
     );
 
+    // Update the newItem with the ownerId
     const updatedItem = await Item.findByIdAndUpdate(
       newItem._id,
       {
@@ -111,6 +128,7 @@ export const addItem = async (req, res) => {
       { new: true }
     ).populate("category");
 
+    // Send the response with the updated item and packId
     res.status(200).json({
       msg: "success",
       newItem: updatedItem,
@@ -121,12 +139,17 @@ export const addItem = async (req, res) => {
   }
 };
 
+// Function to edit an existing item
 export const editItem = async (req, res) => {
   try {
     const { _id, name, weight, unit, quantity, type } = req.body;
+
+    // Find the category with the specified type in the database
     const category = await ItemCategoryModel.findOne({
       name: type,
     });
+
+    // Update the item in the database with the new details
     let newItem = await Item.findOneAndUpdate(
       { _id },
       {
@@ -141,25 +164,26 @@ export const editItem = async (req, res) => {
       }
     ).populate("category", "name");
 
+    // Send the response with the updated item
     res.status(200).json(newItem);
   } catch (error) {
     res.status(404).json({ msg: "Unable to edit item" });
   }
 };
 
+// Function to delete an item
 export const deleteItem = async (req, res) => {
   try {
     const { itemId } = req.body;
     const { packId } = req.body;
     let itemDeleted;
 
+    // Find the item in the database by its itemId
     const item = await Item.findById(itemId);
 
     if (item.global) {
-      // remove the item from pack list
+      // If the item is global, remove it from the pack list and update the individual item
       await Pack.updateOne({ _id: packId }, { $pull: { items: itemId } });
-      //update the individual item
-
       await Item.updateOne(
         {
           _id: itemId,
@@ -172,9 +196,11 @@ export const deleteItem = async (req, res) => {
       );
       itemDeleted = await Item.findById(itemId);
     } else {
+      // If the item is not global, delete the item from the database
       itemDeleted = await Item.findByIdAndDelete({ _id: itemId });
     }
 
+    // Send the response with the deleted item
     res.status(200).json(itemDeleted);
   } catch (error) {
     console.error(error);
@@ -182,12 +208,15 @@ export const deleteItem = async (req, res) => {
   }
 };
 
+// Function to delete a global item
 export const deleteGlobalItem = async (req, res) => {
   try {
     const { itemId } = req.params;
 
+    // Find the global item in the database by its itemId and delete it
     const itemDeleted = await Item.findByIdAndDelete(itemId);
 
+    // Send the response with the deleted item
     res.status(200).json({
       data: itemDeleted,
     });
@@ -197,9 +226,11 @@ export const deleteGlobalItem = async (req, res) => {
   }
 };
 
+// Function to search items by name
 export const searchItemsByName = async (req, res) => {
   console.log(req.query.name);
   try {
+    // Find items in the database whose names match the search query (case-insensitive)
     const items = await Item.find({
       name: { $regex: `.*${req.query.name}.*`, $options: "i" },
     });
@@ -210,20 +241,25 @@ export const searchItemsByName = async (req, res) => {
       .json({ msg: "Items cannot be found", "req.query": req.query });
   }
 };
-// need to change the name
+
+// Function to add a global item
 export const addItemGlobal = async (req, res) => {
   try {
     const { name, weight, quantity, unit, type } = req.body;
 
+    // Initialize variables for category and newItem
     let category = null;
     let newItem = null;
-    // need to look into below logic. open window issue
+
+    // Switch case based on the type of global item (food, water, or essentials)
     switch (type) {
       case ItemCategoryEnum.FOOD: {
+        // Find the category with the name "food" in the database
         category = await ItemCategoryModel.findOne({
           name: ItemCategoryEnum.FOOD,
         });
 
+        // Create a new global item in the database with the provided details
         newItem = await Item.create({
           name,
           weight,
@@ -237,9 +273,12 @@ export const addItemGlobal = async (req, res) => {
         break;
       }
       case ItemCategoryEnum.WATER: {
+        // Find the category with the name "water" in the database
         category = await ItemCategoryModel.findOne({
           name: ItemCategoryEnum.WATER,
         });
+
+        // Create a new global item in the database with the provided details
         newItem = await Item.create({
           name,
           weight,
@@ -252,10 +291,12 @@ export const addItemGlobal = async (req, res) => {
         break;
       }
       default: {
+        // For all other global item types (essentials), use the "essentials" category
         category = await ItemCategoryModel.findOne({
           name: ItemCategoryEnum.ESSENTIALS,
         });
 
+        // Create a new global item in the database with the provided details
         newItem = await Item.create({
           name,
           weight,
@@ -271,6 +312,7 @@ export const addItemGlobal = async (req, res) => {
       }
     }
 
+    // Send the response with the newly added global item
     res.status(200).json({
       msg: "success",
       newItem: newItem,
@@ -280,6 +322,7 @@ export const addItemGlobal = async (req, res) => {
   }
 };
 
+// Function to get global items with pagination
 export const getItemsGlobally = async (req, res) => {
   try {
     const totalItems = await Item.countDocuments({ global: true });
@@ -288,6 +331,7 @@ export const getItemsGlobally = async (req, res) => {
     const page = Number(req.query.page) || 1;
     const startIndex = (page - 1) * limit;
 
+    // Find global items in the database with pagination and sort by createdAt in descending order
     const items = await Item.find({ global: true })
       .populate("category", "name")
       .skip(startIndex)
@@ -296,6 +340,7 @@ export const getItemsGlobally = async (req, res) => {
         createdAt: -1,
       });
 
+    // Send the response with global items, current page, and total pages
     return res.status(200).json({
       items,
       page,
@@ -306,16 +351,20 @@ export const getItemsGlobally = async (req, res) => {
   }
 };
 
+// Function to add a global item to a specific pack
 export const addGlobalItemToPack = async (req, res) => {
   try {
     const { packId } = req.params;
     const { itemId } = req.body;
     const { ownerId } = req.body;
 
+    // Find the global item in the database by its itemId and populate the category
     const item = await Item.findById(itemId).populate("category", "name");
 
+    // Update the pack to include the newly added global item
     await Pack.updateOne({ _id: packId }, { $addToSet: { items: item._id } });
 
+    // Update the global item with the ownerId
     await Item.findByIdAndUpdate(
       item._id,
       {
@@ -326,6 +375,7 @@ export const addGlobalItemToPack = async (req, res) => {
       { new: true }
     );
 
+    // Update the global item with the packId
     await Item.findByIdAndUpdate(
       item._id,
       {
@@ -336,21 +386,25 @@ export const addGlobalItemToPack = async (req, res) => {
       { new: true }
     );
 
+    // Send the response with the updated global item
     return res.status(200).json({ message: "succesfully updated", data: item });
   } catch (error) {
     res.status(404).json({ msg: "Items cannot be found" });
   }
 };
 
+// Function to edit a global item and add it as a duplicate to a specific pack
 export const editGlobalItemAsDuplicate = async (req, res) => {
   try {
     const { itemId } = req.params;
     const { packId, name, weight, quantity, unit, type } = req.body;
 
+    // Find the category with the specified type in the database
     let category = await ItemCategoryModel.findOne({
       name: type,
     });
-    // duplicate the item with new changes
+
+    // Duplicate the global item with new changes and add it to the pack
     let newItem = await Item.create({
       name,
       weight,
@@ -361,15 +415,17 @@ export const editGlobalItemAsDuplicate = async (req, res) => {
       packs: [packId],
     });
     newItem = await Item.findById(newItem._id).populate("category", "name");
-    // add to pack list
+
+    // Add the new item to the pack list
     await Pack.updateOne(
       { _id: packId },
       { $addToSet: { items: newItem._id } }
     );
-    // remove the already added item from pack list
-    await Pack.updateOne({ _id: packId }, { $pull: { items: itemId } });
-    //update the individual item
 
+    // Remove the original global item from the pack list
+    await Pack.updateOne({ _id: packId }, { $pull: { items: itemId } });
+
+    // Update the individual item to remove the packId
     await Item.updateOne(
       {
         _id: itemId,
@@ -381,6 +437,7 @@ export const editGlobalItemAsDuplicate = async (req, res) => {
       }
     );
 
+    // Send the response with the newly added duplicate item
     return res.status(200).json(newItem);
   } catch (error) {
     res.status(404).json({ msg: "Items cannot be found" });
