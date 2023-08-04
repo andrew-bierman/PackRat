@@ -24,5 +24,8 @@ const ItemSchema = new Schema(
   { timestamps: true }
 );
 
+ItemSchema.index({name:1});
+
+
 const Item = myDB.model("Item", ItemSchema);
 export default Item;

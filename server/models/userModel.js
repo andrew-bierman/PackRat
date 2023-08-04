@@ -71,6 +71,15 @@ const UserSchema = new Schema(
   }
 );
 
+// Create an index on the "email" field
+UserSchema.index({ email: 1 });
+
+// Create an index on the "username" field
+UserSchema.index({ username: 1 });
+
+// Create an index on the "role" field
+UserSchema.index({ role: 1 });
+
 UserSchema.statics.findByCredentials = async function ({ email, password }) {
   const user = await User.findOne({ email });
 

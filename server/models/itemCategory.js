@@ -13,4 +13,8 @@ const itemCategorySchema = new Schema(
   }
 );
 
+// Add an index on the "osm_id" field
+itemCategorySchema.index({ name: 1 });
+
+
 export const ItemCategoryModel = myDB.model("ItemCategory", itemCategorySchema);

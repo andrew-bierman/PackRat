@@ -14,5 +14,9 @@ const User_LogsSchema = new Schema(
 
 );
 
+// Create an index on the "user_name" field
+User_LogsSchema.index({ user_name: 1 });
+
+
 const User_Logs = myDB.model("User_Logs", User_LogsSchema);
 export default User_Logs;

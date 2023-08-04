@@ -16,6 +16,14 @@ const TemplateSchema = new Schema(
   },
   { timestamps: true }
 );
+// Create an index on the "type" field
+TemplateSchema.index({ type: 1 });
+
+// Create an index on the "templateId" field
+TemplateSchema.index({ templateId: 1 });
+
+// Create an index on the "createdBy" field
+TemplateSchema.index({ createdBy: 1 });
 
 const Template = myDB.model("Template", TemplateSchema);
 
