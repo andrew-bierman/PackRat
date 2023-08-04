@@ -7,8 +7,7 @@ import { isObjectEmpty } from "../../utils/isObjectEmpty";
 import { defaultShape } from "../../utils/mapFunctions";
 
 export function MapContainer({ shape }) {
-
-  if(isObjectEmpty(shape)){
+  if (isObjectEmpty(shape)) {
     shape = defaultShape;
   }
 
@@ -28,9 +27,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     overflow: "hidden",
-    marginVertical: '10px',
+    marginVertical: "10px",
     width: "100%",
-    height: '400px',
-    borderRadius: '10px',
+    height: "400px",
+    borderRadius: "10px",
   },
 });
