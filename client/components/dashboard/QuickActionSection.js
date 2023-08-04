@@ -1,8 +1,10 @@
-import { HStack } from "native-base";
+import { HStack,Tooltip,Button } from "native-base";
 import QuickActionButton from "./QuickActionButton";
-import { StyleSheet } from "react-native";
+import { StyleSheet,View } from "react-native";
 import { theme } from "../../theme";
 import { useRouter } from "expo-router";
+import { MaterialIcons } from "@expo/vector-icons";
+
 
 const QuickActionsSection = () => {
   const router = useRouter();
@@ -12,11 +14,13 @@ const QuickActionsSection = () => {
       action: "createPack",
       iconName: "backpack",
       text: "Create a Pack",
+      tooltip: "Create a pack and add items to it."
     },
     {
       action: "createTrip",
       iconName: "navigation",
       text: "Create a Trip",
+      tooltip: "Create a trip and add packs to it"
     },
   ];
 
@@ -31,12 +35,42 @@ const QuickActionsSection = () => {
   return (
     <HStack style={styles.section}>
       {quickActionData.map((action) => (
+        <View
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          marginTop: "2rem",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        {" "}
         <QuickActionButton
           key={action.action}
           onPress={() => handleActionSelect(action.action)}          
           iconName={action.iconName}
           text={action.text}
         />
+        {Platform.OS === "web" ? (
+          <Tooltip
+            label={action.tooltip}
+            placement="top left"
+            openDelay={500}
+          >
+            <Button
+              width={8}
+              height={8}
+              style={{ backgroundColor: "none" }}
+            >
+              <MaterialIcons
+                name="info-outline"
+                size={20}
+                color={theme.colors.background}
+              />
+            </Button>
+          </Tooltip>
+        ) : null}
+      </View>
       ))}
     </HStack>
   );
