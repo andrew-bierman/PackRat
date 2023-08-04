@@ -48,6 +48,7 @@ import * as DocumentPicker from "expo-document-picker";
 import * as FileSystem from "expo-file-system";
 import { DOMParser } from "xmldom";
 import { gpx as toGeoJSON } from "@tmcw/togeojson";
+import MapPreview from "./MapPreview";
 
 Mapbox.setWellKnownTileServer(Platform.OS === "android" ? "Mapbox" : "mapbox");
 Mapbox.setAccessToken(MAPBOX_ACCESS_TOKEN);
@@ -174,70 +175,74 @@ function NativeMap({ shape: shapeProp }) {
 
   const element = (
     <View style={mapFullscreen ? fullMapDimension : previewMapStyle}>
-      <Mapbox.MapView
-        ref={mapViewRef}
-        style={{ flex: 1 }}
-        styleURL={mapStyle}
-        // onDidFinishRenderingMapFully={onMapLoaded}
-        compassEnabled={false}
-        logoEnabled={false}
-        scrollEnabled={mapFullscreen}
-        zoomEnabled={mapFullscreen}
-      >
-        <Mapbox.Camera
-          ref={camera}
-          zoomLevel={zoomLevel ? zoomLevel - 0.8 : 10}
-          centerCoordinate={trailCenterPoint ? trailCenterPoint : null}
-          animationMode={"flyTo"}
-          animationDuration={2000}
-        />
-        {/* // user location */}
-        <Mapbox.PointAnnotation
-          id={"1212"}
-          coordinate={[location.longitude, location.latitude]}
+      {mapFullscreen ? (
+        <Mapbox.MapView
+          ref={mapViewRef}
+          style={{ flex: 1 }}
+          styleURL={mapStyle}
+          // onDidFinishRenderingMapFully={onMapLoaded}
+          compassEnabled={false}
+          logoEnabled={false}
+          scrollEnabled={mapFullscreen}
+          zoomEnabled={mapFullscreen}
         >
-          <View
-            style={{
-              justifyContent: "center",
-              alignItems: "center",
-              backgroundColor: "transparent",
-            }}
-          >
-            <MaterialCommunityIcons
-              name="map-marker"
-              size={35}
-              color={"#de0910"}
-            />
-          </View>
-        </Mapbox.PointAnnotation>
-        {/* trail */}
-        <Mapbox.ShapeSource
-          id="source1"
-          lineMetrics={true}
-          shape={shape.features[0]}
-          cluster
-          clusterRadius={80}
-          clusterMaxZoomLevel={14}
-          style={{ zIndex: 1 }}
-        >
-          <Mapbox.LineLayer id="layer1" style={styles.lineLayer} />
-        </Mapbox.ShapeSource>
-        {/* // top location */}
-        {shape?.features[0]?.geometry?.coordinates?.length > 0 && (
+          <Mapbox.Camera
+            ref={camera}
+            zoomLevel={zoomLevel ? zoomLevel - 0.8 : 10}
+            centerCoordinate={trailCenterPoint ? trailCenterPoint : null}
+            animationMode={"flyTo"}
+            animationDuration={2000}
+          />
+          {/* // user location */}
           <Mapbox.PointAnnotation
-            id={"cicleCap"}
-            coordinate={
-              shape?.features[0]?.geometry?.coordinates[
-                shape?.features[0]?.geometry?.coordinates?.length - 1
-              ]
-            }
+            id={"1212"}
+            coordinate={[location.longitude, location.latitude]}
           >
-            <View>
-              <CircleCapComp />
+            <View
+              style={{
+                justifyContent: "center",
+                alignItems: "center",
+                backgroundColor: "transparent",
+              }}
+            >
+              <MaterialCommunityIcons
+                name="map-marker"
+                size={35}
+                color={"#de0910"}
+              />
             </View>
           </Mapbox.PointAnnotation>
-        )}
-      </Mapbox.MapView>
+          {/* trail */}
+          <Mapbox.ShapeSource
+            id="source1"
+            lineMetrics={true}
+            shape={shape.features[0]}
+            cluster
+            clusterRadius={80}
+            clusterMaxZoomLevel={14}
+            style={{ zIndex: 1 }}
+          >
+            <Mapbox.LineLayer id="layer1" style={styles.lineLayer} />
+          </Mapbox.ShapeSource>
+          {/* // top location */}
+          {shape?.features[0]?.geometry?.coordinates?.length > 0 && (
+            <Mapbox.PointAnnotation
+              id={"cicleCap"}
+              coordinate={
+                shape?.features[0]?.geometry?.coordinates[
+                  shape?.features[0]?.geometry?.coordinates?.length - 1
+                ]
+              }
+            >
+              <View>
+                <CircleCapComp />
+              </View>
+            </Mapbox.PointAnnotation>
+          )}
+        </Mapbox.MapView>
+      ) : (
+        <MapPreview shape={shape} />
+      )}
 
       <MapButtonsOverlay
         mapFullscreen={mapFullscreen}
