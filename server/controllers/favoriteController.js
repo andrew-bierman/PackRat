@@ -1,32 +1,25 @@
-import User from "../models/userModel.js";
-import Pack from "../models/packModel.js";
-
 export const addToFavorite = async (req, res) => {
   try {
-    const { packId, userId } = req.body;
+    const { packId } = req.body;
+    const userId = req.params.userId;
 
-    const exists = await User.find(
-      { favorites: { $in: [packId] } },
-      { _id: userId }
-    );
+    const user = await User.findById(userId);
 
-    if (exists.length > 0) {
-      await User.updateOne({ _id: userId }, { $pull: { favorites: packId } });
-      await Pack.updateOne(
-        { _id: packId },
-        { $pull: { favorited_by: userId } }
-      );
-      await Pack.updateOne({ _id: packId }, { $inc: { favorites_count: -1 } });
-    } else {
-      await User.updateOne({ _id: userId }, { $push: { favorites: packId } });
-      await Pack.updateOne(
-        { _id: packId },
-        { $push: { favorited_by: userId } }
-      );
-      await Pack.updateOne({ _id: packId }, { $inc: { favorites_count: 1 } });
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
     }
 
-    const user = await User.findOne({ _id: userId }).select("-password");
+    const isPackFavorited = user.favorites.includes(packId);
+
+    if (isPackFavorited) {
+      user.favorites.pull(packId);
+      await user.save();
+      await Pack.updateOne({ _id: packId }, { $pull: { favorited_by: userId }, $inc: { favorites_count: -1 } });
+    } else {
+      user.favorites.push(packId);
+      await user.save();
+      await Pack.updateOne({ _id: packId }, { $push: { favorited_by: userId }, $inc: { favorites_count: 1 } });
+    }
 
     return res.status(200).json(user);
   } catch (error) {
@@ -36,28 +29,28 @@ export const addToFavorite = async (req, res) => {
 
 export const getUserFavorites = async (req, res) => {
   try {
-    const { userId } = req.params; // Change from req.body to req.params
+    const { userId } = req.params;
 
-    const user = await User.findById({ _id: userId }).populate("favorites");
+    const user = await User.findById(userId).populate("favorites");
 
-    if (!user) throw new Error("User not found");
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
 
     res.status(200).json(user.favorites);
   } catch (error) {
-    res.status(404).json({ msg: "User favorites cannot be found" });
+    res.status(500).json({ msg: "Failed to retrieve user favorites" });
   }
 };
 
-export const getFavoritePacksByUser = async (req, res) => {
+export const getFavoritePacksForUser = async (req, res) => {
   try {
-    const { userId } = req.body;
+    const { userId } = req.params;
 
-    const packs = await Pack.find({ favorited_by: { $in: [userId] } });
-
-    if (!packs) throw new Error("Packs not found");
+    const packs = await Pack.find({ favorited_by: userId });
 
     res.status(200).json(packs);
   } catch (error) {
-    res.status(404).json({ msg: "Packs cannot be found" });
+    res.status(500).json({ msg: "Failed to retrieve favorite packs for the user" });
   }
 };
