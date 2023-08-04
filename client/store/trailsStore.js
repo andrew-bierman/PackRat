@@ -1,17 +1,19 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-
-import { api } from "../constants/api";
-
+import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
 import axios from "axios";
+import { api } from "../constants/api";
 
 export const fetchTrails = createAsyncThunk(
   "trails/fetchTrails",
   async ({ lat, lon, selectedSearch }) => {
     let params = `?`;
 
-    if (lat) params += `lat=${lat}`;
-    if (lon) params += `&lon=${lon}`;
-
+    if (lat) {
+      params += `lat=${lat}`;
+    }
+    if (lon) {
+      params += `&lon=${lon}`;
+    }
+    const radius = 500;
     const url = api + "/osm/trails" + params;
 
     try {
@@ -33,56 +35,38 @@ export const fetchTrails = createAsyncThunk(
   }
 );
 
-export const trailsSlice = createSlice({
-  name: "trails",
-  initialState: {
-    trailsDetails: [],
-    trailNames: [],
-    isLoading: false,
-    error: null,
-  },
+const trailsAdapter = createEntityAdapter();
 
+const initialState = trailsAdapter.getInitialState({
+  isLoading: false,
+  error: null,
+});
+
+const trailsSlice = createSlice({
+  name: "trails",
+  initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchTrails.pending, (state, action) => {
         state.trailsDetails = [];
         state.trailNames = [];
-        isLoading = true;
-        error = null;
+        state.isLoading = true;
+        state.error = null;
       })
       .addCase(fetchTrails.fulfilled, (state, action) => {
-        state.trailsDetails = action.payload.trails;
+        trailsAdapter.setAll(state, action.payload.trails);
         state.trailNames = action.payload.filteredTrails;
-        isLoading = false;
-        error = null;
+        state.isLoading = false;
+        state.error = null;
       })
       .addCase(fetchTrails.rejected, (state, action) => {
-        state.trailsDetails = [];
-        state.trailNames = [];
-        isLoading = false;
-        error = action.error;
+        state.isLoading = false;
+        state.error = action.error;
       });
   },
 });
 
-// export const filterTrailsForNames = (trailsDetails, selectedSearch) => {
-//   console.log("trailsDetails", trailsDetails);
-//   console.log("selectedSearch", selectedSearch);
-//   if (trailsDetails && trailsDetails.length > 0) {
-//     const filteredTrails = trailsDetails
-//       .filter((trail) => {
-//         if(trail.properties.name && trail.properties.name !== selectedSearch){
-//           return trail
-//         }
-//         // trail.properties.name !== selectedSearch
-//       })
-//       .map((trail) => trail.properties.name)
-//       .slice(0, 25);
-//     return filteredTrails;
-//   } else {
-//     return [];
-//   }
-// };
+export const { selectAll: selectAllTrails } = trailsAdapter.getSelectors((state) => state.trails);
 
 export default trailsSlice.reducer;

@@ -1,6 +1,6 @@
 import { View } from "react-native";
 import React, { useEffect, useState } from "react";
-import { Box, Button } from "native-base";
+import { Box, Button, ScrollView } from "native-base";
 import { StyleSheet, Platform } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { theme } from "../../theme";
@@ -10,6 +10,7 @@ import { AddItemGlobal } from "../../components/item/AddItemGlobal";
 import { ItemsTable } from "../../components/itemtable/itemTable";
 import { useDispatch, useSelector } from "react-redux";
 import { getItemsGlobal } from "../../store/globalItemsStore";
+import { Stack as Header } from "expo-router";
 
 export default function Items() {
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
@@ -31,75 +32,82 @@ export default function Items() {
   }, [limit, page, refetch]);
 
   return (
-    <Box>
-      <>
-        <CustomModal
-          title="Add a global Item"
-          trigger="Add Item"
-          isActive={isAddItemModalOpen}
-          triggerComponent={
-            <View
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                marginTop: "2rem",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              {" "}
-              <Button
-                style={styles.button}
-                onPress={() => {
-                  setIsAddItemModalOpen(true);
+    <ScrollView>
+      <Header.Screen
+        options={{
+          title: "Items",
+        }}
+      />
+      <Box>
+        <>
+          <CustomModal
+            title="Add a global Item"
+            trigger="Add Item"
+            isActive={isAddItemModalOpen}
+            triggerComponent={
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  marginTop: "2rem",
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
               >
-                Add Item
-              </Button>
-              {Platform.OS === "web" ? (
-                <Tooltip
-                  label="Add a global item"
-                  placement="top left"
-                  openDelay={500}
+                {" "}
+                <Button
+                  style={styles.button}
+                  onPress={() => {
+                    setIsAddItemModalOpen(true);
+                  }}
                 >
-                  <Button
-                    width={8}
-                    height={8}
-                    style={{ backgroundColor: "none" }}
+                  Add Item
+                </Button>
+                {Platform.OS === "web" ? (
+                  <Tooltip
+                    label="Add a global item"
+                    placement="top left"
+                    openDelay={500}
                   >
-                    <MaterialIcons
-                      name="info-outline"
-                      size={20}
-                      color={theme.colors.background}
-                    />
-                  </Button>
-                </Tooltip>
-              ) : null}
-            </View>
-          }
-          onCancel={setIsAddItemModalOpen}
-        >
-          <AddItemGlobal
-            setRefetch={setRefetch}
+                    <Button
+                      width={8}
+                      height={8}
+                      style={{ backgroundColor: "none" }}
+                    >
+                      <MaterialIcons
+                        name="info-outline"
+                        size={20}
+                        color={theme.colors.background}
+                      />
+                    </Button>
+                  </Tooltip>
+                ) : null}
+              </View>
+            }
+            onCancel={setIsAddItemModalOpen}
+          >
+            <AddItemGlobal
+              setRefetch={setRefetch}
+              refetch={refetch}
+              setIsAddItemModalOpen={setIsAddItemModalOpen}
+            />
+          </CustomModal>
+        </>
+        {!isError && Array.isArray(data.globalItems.items) ? (
+          <ItemsTable
+            limit={limit}
+            setLimit={setLimit}
+            page={page}
+            setPage={setPage}
+            data={data}
+            isLoading={isLoading}
+            totalPages={data?.globalItems?.totalPages}
             refetch={refetch}
-            setIsAddItemModalOpen={setIsAddItemModalOpen}
+            setRefetch={setRefetch}
           />
-        </CustomModal>
-      </>
-      {!isError && Array.isArray(data.globalItems.items) ? (
-        <ItemsTable
-          limit={limit}
-          setLimit={setLimit}
-          page={page}
-          setPage={setPage}
-          data={data}
-          isLoading={isLoading}
-          totalPages={data?.globalItems?.totalPages}
-          refetch={refetch}
-          setRefetch={setRefetch}
-        />
-      ) : null}
-    </Box>
+        ) : null}
+      </Box>
+    </ScrollView>
   );
 }
 const styles = StyleSheet.create({

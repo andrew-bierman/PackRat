@@ -161,7 +161,25 @@ export default function Card({
           </Stack>
 
           <HStack alignItems="center" space={4} justifyContent="space-between">
-            <HStack alignItems="center" width="100%">
+            <HStack alignItems="center" justifyContent="space-between" width="100%">
+            <Box
+                style={{
+                  flexDirection: "column",
+                  alignItems: "flex-start",
+                  gap: 10,
+                }}
+              >
+                <Link href={`/profile/${owner_id}`} >
+                <Text>View Owner</Text>
+                </Link>
+                <Box
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    gap: 10,
+                  }}
+                >
+
               <Text
                 color="coolGray.600"
                 _dark={{
@@ -181,6 +199,9 @@ export default function Card({
                   }
                 ) ?? 0}
               </Text>
+                </Box>
+              </Box>
+             
               <Box
                 style={{
                   flexDirection: "column",

@@ -35,7 +35,7 @@ import * as DocumentPicker from "expo-document-picker";
 import togpx from "togpx";
 import { gpx as toGeoJSON } from "@tmcw/togeojson";
 import { DOMParser } from "xmldom";
-import { api } from "../../constants/api";
+import MapPreview from "./MapPreview";
 
 // import 'mapbox-gl/dist/mapbox-gl.css'
 
@@ -98,7 +98,7 @@ const WebMap = ({ shape: shapeProp }) => {
   }, [shapeProp]);
 
   useEffect(() => {
-    if (shape?.features[0]?.geometry?.coordinates?.length > 1) {
+    if (shape?.features[0]?.geometry?.coordinates?.length >= 1) {
       let bounds = getShapeSourceBounds(shape);
       bounds = bounds[0].concat(bounds[1]);
 
@@ -116,6 +116,7 @@ const WebMap = ({ shape: shapeProp }) => {
   }, [shape, fullMapDiemention]);
 
   useEffect(() => {
+    if (!mapFullscreen) return;
     const mapInstance = new mapboxgl.Map({
       container: mapContainer.current,
       style: mapStyle,
@@ -345,7 +346,11 @@ const WebMap = ({ shape: shapeProp }) => {
 
   const element = (
     <View style={[styles.container, { height: showModal ? "100%" : "400px" }]}>
-      <View key="map" ref={mapContainer} style={styles.map} />
+      {showModal ? (
+        <View key="map" ref={mapContainer} style={styles.map} />
+      ) : (
+        <MapPreview shape={shape} />
+      )}
       <MapButtonsOverlay
         mapFullscreen={mapFullscreen}
         enableFullScreen={enableFullScreen}

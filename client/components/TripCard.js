@@ -11,26 +11,27 @@ import { useSelector, useDispatch } from "react-redux";
 import { addTrail, addPark } from "../store/dropdownStore";
 import MapContainer from "./map/MapContainer";
 import { convertPhotonGeoJsonToShape } from "../utils/mapFunctions";
-
+import { selectAllTrails } from "../store/trailsStore";
+import UseTheme from "../hooks/useTheme";
 export default function TripCard({
   title,
   Icon,
   isMap,
+  shape,
   data,
   isSearch,
   isTrail,
   isPark,
 }) {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
   const dispatch = useDispatch();
 
   const currentTrail = useSelector((state) => state.dropdown.currentTrail);
   const currentPark = useSelector((state) => state.dropdown.currentPark);
-  const trailsDetails = useSelector((state) => state.trails.trailsDetails);
-
-  const currentShape = useSelector((state) =>
-    state.trails.trailsDetails.filter(
-      (trail) => trail.properties.name == currentTrail
-    )
+  const trailsDetails = useSelector(selectAllTrails); // updated selector for new trails slice
+  const currentShape = trailsDetails.filter(
+    (trail) => trail.properties.name == currentTrail
   );
 
   const handleValueChange = (value) => {
@@ -69,8 +70,8 @@ export default function TripCard({
         <Icon />
         <Text
           style={{
-            color: theme.colors.textPrimary,
-            fontSize: theme.font.size,
+            color: currentTheme.colors.textPrimary,
+            fontSize: currentTheme.font.size,
             fontWeight: 600,
           }}
         >
@@ -80,9 +81,10 @@ export default function TripCard({
       {isMap ? (
         <MapContainer
           shape={
-            currentShape.length == 0
+            shape ??
+            (currentShape.length == 0
               ? {}
-              : convertPhotonGeoJsonToShape(currentShape[0])
+              : convertPhotonGeoJsonToShape(currentShape[0]))
           }
         />
       ) : isSearch ? (

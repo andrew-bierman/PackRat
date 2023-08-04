@@ -1,24 +1,20 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createEntityAdapter } from "@reduxjs/toolkit";
+
+const dropdownAdapter = createEntityAdapter();
 
 export const dropdownSlice = createSlice({
   name: "dropdown",
-  initialState: {
+  initialState: dropdownAdapter.getInitialState({
     currentTrail: "",
     currentPark: "",
-  },
+  }),
   reducers: {
     addTrail: (state, action) => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
+      dropdownAdapter.updateOne(state, { id: "currentTrail", changes: { currentTrail: action.payload } });
       state.currentTrail = action.payload;
     },
     addPark: (state, action) => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
+      dropdownAdapter.updateOne(state, { id: "currentPark", changes: { currentPark: action.payload } });
       state.currentPark = action.payload;
     },
   },

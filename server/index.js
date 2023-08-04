@@ -14,10 +14,30 @@ import bodyParser from "body-parser";
 
 // express items
 const app = express();
+
+// Function to determine whether an origin is allowed.
+const isOriginAllowed = (origin, allowedOrigin) => {
+  const originDomain = new URL(origin).hostname;
+  const allowedOriginDomain = new URL(allowedOrigin).hostname;
+  const allowedOriginRegex = new RegExp(`^(packrat-pr-\\d+\.onrender\.com|${allowedOriginDomain.replace(/\./g, '\\.')})$`);
+  
+  return allowedOriginRegex.test(originDomain);
+};
+
 app.use(cors({
-  origin:CORS_ORIGIN,
+  origin: function (origin, callback) {
+    // If no origin, or if origin is allowed, call back with no error and "allowed" status.
+    if (!origin || isOriginAllowed(origin, CORS_ORIGIN)) {
+      return callback(null, true);
+    }
+    
+    // Otherwise, call back with an error.
+    callback(new Error('Not allowed by CORS'));
+  },
   methods:CORS_METHODS
 }));
+
+
 app.use(bodyParser.json({limit:"50mb"}));
 // app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
@@ -31,6 +51,11 @@ app.use(routes);
 if (process.env.NODE_ENV !== "production") {
   app.use("/api-docs", swaggerUi.serve);
   app.get("/api-docs", swaggerUi.setup(specs));
+  app.get('/swagger.json', (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.send(specs);
+  });  
+  
   app.get('/seed/category',(req,res)=>{
     console.log('Seeding...')
     ItemCategory.forEach(async(category)=>{

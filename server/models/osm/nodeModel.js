@@ -15,11 +15,11 @@ const NodeSchema = Schema(
 );
 
 // add a to JSON method to the schema
-// NodeSchema.method("toJSON", function () {
-//   const { _id, ...object } = this.toObject();
-//   object.id = object.id.toString();
-//   return object;
-// });
+NodeSchema.method("toJSON", async function () {
+  const { _id, ...object } = this.toObject();
+  object.id = _id.toString();
+  return object;
+});
 
 NodeSchema.statics.findOrCreateMany = async function (ids, nodes) {
   // Find existing nodes

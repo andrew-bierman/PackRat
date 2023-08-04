@@ -1,17 +1,16 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-
+import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
 import { api } from "../constants/api";
-
 import axios from "axios";
 
 export const fetchPhotonSearchResults = createAsyncThunk(
   "search/fetchPhotonSearchResults",
   async (searchString) => {
-    const url = api + `/osm/photon/search?searchString=${encodeURIComponent(searchString)}`;
+    const url =
+      api +
+      `/osm/photon/search?searchString=${encodeURIComponent(searchString)}`;
 
     try {
       const response = await axios.get(url);
-      console.log("response", response);
       return response.data;
     } catch (error) {
       console.error("error:" + error);
@@ -19,39 +18,35 @@ export const fetchPhotonSearchResults = createAsyncThunk(
   }
 );
 
-const initialState = {
+const searchAdapter = createEntityAdapter();
+
+const initialState = searchAdapter.getInitialState({
   searchResults: [],
   selectedSearchResult: {},
-};
+});
 
 const searchSlice = createSlice({
   name: "search",
   initialState,
   reducers: {
-    setSearchResults(state, action) {
-      state.searchResults = action.payload;
-    },
     setSelectedSearchResult(state, action) {
       state.selectedSearchResult = action.payload;
-    },
-    clearSearchResults(state) {
-      state.searchResults = [];
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchPhotonSearchResults.pending, (state, action) => {
+      .addCase(fetchPhotonSearchResults.pending, (state) => {
         state.searchResults = [];
       })
       .addCase(fetchPhotonSearchResults.fulfilled, (state, action) => {
+        searchAdapter.setAll(state, action.payload);
         state.searchResults = action.payload;
       })
-      .addCase(fetchPhotonSearchResults.rejected, (state, action) => {
+      .addCase(fetchPhotonSearchResults.rejected, (state) => {
         state.searchResults = [];
-      })
+      });
   },
 });
 
-export const { setSearchResults, setSelectedSearchResult, clearSearchResults } =
-  searchSlice.actions;
+export const { setSelectedSearchResult } = searchSlice.actions;
 export default searchSlice.reducer;

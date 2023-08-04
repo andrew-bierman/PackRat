@@ -1,6 +1,6 @@
 import React from "react";
 import { Platform, StyleSheet } from "react-native";
-import { VStack, Box } from "native-base";
+import { VStack, Box, ScrollView } from "native-base";
 import { theme } from "../../theme";
 import HeroBanner from "./HeroBanner";
 import QuickActionsSection from "./QuickActionSection";
@@ -10,26 +10,29 @@ import SectionHeader from "./SectionHeader";
 
 const Dashboard = () => {
   return (
-    <VStack
-      style={[
-        styles.container,
-        Platform.OS === "web" ? { minHeight: "100vh" } : null,
-      ]}
-    >
-      <Box contentContainerStyle={styles.content}>
-        <HeroBanner style={styles.cardContainer} />
+    <ScrollView contentContainerStyle={styles.content} horizontal={false}>
 
-        <Section>
-          <SectionHeader iconName="add-circle-outline" text="Quick Actions" />
-          <QuickActionsSection />
-        </Section>
+      <VStack
+        style={[
+          styles.container,
+          Platform.OS === "web" ? { minHeight: "100vh" } : null,
+        ]}
+      >
+        <Box>
+          <HeroBanner style={styles.cardContainer} />
 
-        <Section>
-          <SectionHeader iconName="newspaper-outline" text="Feed" />
-          <FeedPreview />
-        </Section>
-      </Box>
-    </VStack>
+          <Section>
+            <SectionHeader iconName="add-circle-outline" text="Quick Actions" />
+            <QuickActionsSection />
+          </Section>
+
+          <Section>
+            <SectionHeader iconName="newspaper-outline" text="Feed" />
+            <FeedPreview />
+          </Section>
+        </Box>
+      </VStack>
+    </ScrollView>
   );
 };
 
