@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
 import { api } from "../constants/api";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from "axios";
 
 export const fetchPhotonSearchResults = createAsyncThunk(

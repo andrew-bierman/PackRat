@@ -5,11 +5,23 @@ import {
 } from "@reduxjs/toolkit";
 import axios from "axios";
 import { api } from "../constants/api";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Toast } from "native-base";
 import { InformUser } from "../utils/ToastUtils";
 export const addPack = createAsyncThunk("packs/addPack", async (newPack) => {
-  const response = await axios.post(`${api}/pack/`, newPack);
-  return response.data;
+  try {
+    const token = await AsyncStorage.getItem('userToken');
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
+    const response = await axios.post(`${api}/pack`, newPack , config);
+    console.log({r:response});
+    return response.data;
+    
+  } catch (error) {
+    console.log({e:error});
+    
+  }
 });
 
 export const deletePackItem = createAsyncThunk(
@@ -203,7 +215,7 @@ const packsSlice = createSlice({
         state.error = null;
       })
       .addCase(addPack.fulfilled, (state, action) => {
-        packsAdapter.addOne(state, action.payload.createdPack);
+        packsAdapter.addOne(state, action.payload?.createdPack);
         state.isLoading = false;
         state.error = null;
       })

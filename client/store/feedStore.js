@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
 import { api } from "../constants/api";
 import axios from "axios";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Define the adapter for packs and trips
 const feedAdapter = createEntityAdapter({

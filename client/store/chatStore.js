@@ -5,6 +5,7 @@ import {
 } from "@reduxjs/toolkit";
 import axios from "axios";
 import { api } from "../constants/api";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const chatAdapter = createEntityAdapter(
     {selectId: (chat) => chat._id}

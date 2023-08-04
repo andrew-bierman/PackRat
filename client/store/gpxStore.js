@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk, createEntityAdapter } from '@reduxjs/toolkit';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { api } from '../constants/api';
 
 export const convertGeoJSONToGPX = createAsyncThunk(
