@@ -213,7 +213,7 @@ export const userSignup = async (req, res) => {
 };
 
 // Function to send a password reset email to the user
-export const sendEmail = async (req, res) => {
+export const sentEmail = async (req, res) => {
   try {
     const { email } = req.body;
 
