@@ -17,7 +17,7 @@ export const signUp = createAsyncThunk(
   async ({ name, username, email, password }, { rejectWithValue }) => {
     try {
       // Add check for unique username here.
-      const response = await axios.post(`${api}/user/signup`, {
+      const response = await axios.post(`${api}/users/signup`, {
         name,
         username,  // add username
         email,
@@ -35,7 +35,7 @@ export const signIn = createAsyncThunk(
   "auth/signIn",
   async ({ email, password }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${api}/user/signin`, {
+      const response = await axios.post(`${api}/users/signin`, {
         email,
         password,
       });
@@ -60,7 +60,7 @@ export const signInWithGoogle = createAsyncThunk(
   "auth/signInWithGoogle",
   async ({ idToken }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${api}/user/google`, {
+      const response = await axios.post(`${api}/users/google`, {
         idToken,
       });
       return response.data.user;

@@ -5,7 +5,7 @@ import { api } from "../constants/api";
 export const addItemsGlobal = createAsyncThunk(
   "Items/addItemsGlobal",
   async (newItem) => {
-    const response = await axios.post(`${api}/item/global`, newItem);
+    const response = await axios.post(`${api}/items/global`, newItem);
     return response.data;
   }
 );
@@ -15,7 +15,7 @@ export const getItemsGlobal = createAsyncThunk(
   async ({ limit, page }) => {
     try {
       const response = await axios.get(
-        `${api}/item/global?limit=${limit}&page=${page}`
+        `${api}/items/global?limit=${limit}&page=${page}`
       );
       return response.data;
     } catch (error) {
@@ -27,7 +27,7 @@ export const getItemsGlobal = createAsyncThunk(
 export const deleteGlobalItem = createAsyncThunk(
   "items/deleteGlobalItem",
   async (item) => {
-    const response = await axios.delete(`${api}/item/global/${item}`);
+    const response = await axios.delete(`${api}/items/global/${item}`);
     return response.data;
   }
 );
@@ -35,7 +35,7 @@ export const deleteGlobalItem = createAsyncThunk(
 export const editGlobalItem = createAsyncThunk(
   "items/editGlobalItem",
   async (newItem) => {
-    const response = await axios.put(`${api}/item/`, newItem);
+    const response = await axios.put(`${api}/items/`, newItem);
     return response.data;
   }
 );

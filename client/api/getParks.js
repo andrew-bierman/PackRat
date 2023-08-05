@@ -7,7 +7,7 @@ export const getParksRapid = async (state) => {
   let parksArray = [];
   const abbrState = abbrRegion(state, "abbr") ?? "";
   if (abbrState) {
-    await fetch(`${api}/getparks?abbrState=${abbrState}`)
+    await fetch(`${api}/parks?abbrState=${abbrState}`)
       .then((res) => res.json())
       .then((json) => {
         json.data.forEach((item) => {

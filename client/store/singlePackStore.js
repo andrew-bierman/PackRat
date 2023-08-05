@@ -22,7 +22,7 @@ const initialState = singlePackAdapter.getInitialState({
 export const fetchSinglePack = createAsyncThunk(
   "packs/fetchSinglePack",
   async (packId) => {
-    const response = await axios.get(`${api}/pack/p/${packId}`);
+    const response = await axios.get(`${api}/packs/p/${packId}`);
     return response.data;
   }
 );

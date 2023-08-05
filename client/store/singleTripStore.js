@@ -19,7 +19,7 @@ const initialState = singleTripAdapter.getInitialState({
 export const fetchSingleTrip = createAsyncThunk(
   "trips/fetchSingleTrip",
   async (tripId) => {
-    const response = await axios.get(`${api}/trip/t/${tripId}`);
+    const response = await axios.get(`${api}/trips/t/${tripId}`);
     return response.data;
   }
 );
