@@ -97,7 +97,7 @@ export const CustomCard = ({
               mx="5"
               >
             <Link href={`/profile/${data['owner_id']}`}>
-            <Text>{user._id === data['owner_id'] ? 'Your Profile': `View ${data.owners[0].name}`}</Text>
+            <Text>{user._id === data['owner_id'] ? 'Your Profile': `View ${data.owners ? data.owners[0].name : "Profile"}`}</Text>
             </Link>
               </Box>
               {link && (
@@ -108,7 +108,7 @@ export const CustomCard = ({
                     alignItems: "center",
                   }}>
                   {isCopied ? (
-                    <>
+                    <Box flexDirection='row' alignItems='center'>
                       <MaterialCommunityIcons
                         name='check'
                         size={24}
@@ -116,9 +116,9 @@ export const CustomCard = ({
                         onPress={handleCopyLink}
                       />
                       <Text color='green'>Copied</Text>
-                    </>
+                    </Box>
                   ) : (
-                    <>
+                    <Box flexDirection='row' alignItems='center'>
                       <MaterialCommunityIcons
                         name='link'
                         size={24}
@@ -126,7 +126,7 @@ export const CustomCard = ({
                         onPress={handleCopyLink}
                       />
                       <Text color='black'>Copy</Text>
-                    </>
+                    </Box>
                   )}
                   {userId === data.owner_id && (
                     <ThreeDotsMenu
@@ -183,14 +183,15 @@ export const CustomCard = ({
               <Box
               mx="5"
               >
-            <Link href={`/profile/${data['owner_id']}`}>
-            <Text>{user._id === data['owner_id'] ? 'Your Profile': `View ${data.owners[0].name}`}</Text>
+            <Link href={`/profile/${data.owner_id && data['owner_id']._id}`}>
+              {console.log({data})}
+            <Text>{user._id === data['owner_id'] ? 'Your Profile': `View ${data.owner_id ? data['owner_id'].name : 'Profile'}`}</Text>
             </Link>
               </Box>
               {link && (
                 <Box>
                   {isCopied ? (
-                    <>
+                    <Box flexDirection='row' alignItems='center'>
                       <MaterialCommunityIcons
                         name='check'
                         size={24}
@@ -198,9 +199,9 @@ export const CustomCard = ({
                         onPress={handleCopyLink}
                       />
                       <Text color='green'>Copied</Text>
-                    </>
+                    </Box>
                   ) : (
-                    <>
+                    <Box flexDirection='row' alignItems='center'>
                       <MaterialCommunityIcons
                         name='link'
                         size={24}
@@ -208,7 +209,7 @@ export const CustomCard = ({
                         onPress={handleCopyLink}
                       />
                       <Text color='black'>Copy</Text>
-                    </>
+                    </Box>
                   )}
                 </Box>
               )}
