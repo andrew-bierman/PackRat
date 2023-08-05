@@ -38,6 +38,7 @@ import * as DocumentPicker from "expo-document-picker";
 import togpx from "togpx";
 import { gpx as toGeoJSON } from "@tmcw/togeojson";
 import { DOMParser } from "xmldom";
+import MapPreview from "./MapPreview";
 
 // import 'mapbox-gl/dist/mapbox-gl.css'
 
@@ -103,7 +104,7 @@ const WebMap = ({ shape: shapeProp, selectedSearchResult, type }) => {
   }, [shapeProp]);
 
   useEffect(() => {
-    if (shape?.features[0]?.geometry?.coordinates?.length > 1) {
+    if (shape?.features[0]?.geometry?.coordinates?.length >= 1) {
       let bounds = getShapeSourceBounds(shape);
       bounds = bounds[0].concat(bounds[1]);
 
@@ -121,6 +122,8 @@ const WebMap = ({ shape: shapeProp, selectedSearchResult, type }) => {
   }, [shape, fullMapDiemention]);
 
   useEffect(() => {
+    console.log(!mapFullscreen || !isPolygonOrMultiPolygon(shape), 'is polygon or not')
+    if (!mapFullscreen && !isPolygonOrMultiPolygon(shape)) return;
     const mapInstance = new mapboxgl.Map({
       container: mapContainer.current,
       style: mapStyle,
@@ -395,10 +398,14 @@ const WebMap = ({ shape: shapeProp, selectedSearchResult, type }) => {
       console.log("error", error);
     }
   };
-
+  console.log(isPolygonOrMultiPolygon(shape) || showModal, 'polygon or not')
   const element = (
     <View style={[styles.container, { height: showModal ? "100%" : "400px" }]}>
-      <View key="map" ref={mapContainer} style={styles.map} />
+      {showModal || isPolygonOrMultiPolygon(shape) ? (
+        <View key="map" ref={mapContainer} style={{...styles.map, height: isPolygonOrMultiPolygon(shape) ? 200 : '100vh'}} />
+      ) : (
+        <MapPreview shape={shape} />
+      )}
       <MapButtonsOverlay
         mapFullscreen={mapFullscreen}
         enableFullScreen={enableFullScreen}

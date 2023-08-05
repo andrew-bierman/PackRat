@@ -55,6 +55,7 @@ import * as DocumentPicker from "expo-document-picker";
 import * as FileSystem from "expo-file-system";
 import { DOMParser } from "xmldom";
 import { gpx as toGeoJSON } from "@tmcw/togeojson";
+import MapPreview from "./MapPreview";
 
 Mapbox.setWellKnownTileServer(Platform.OS === "android" ? "Mapbox" : "mapbox");
 Mapbox.setAccessToken(MAPBOX_ACCESS_TOKEN);
@@ -273,15 +274,21 @@ function NativeMap({ shape: shapeProp }) {
         {/* // top location */}
         {shape?.features[0]?.geometry?.coordinates?.length > 0 && (
           <Mapbox.PointAnnotation
-            id={"cicleCap"}
-            coordinate={
-              shape?.features[0]?.geometry?.coordinates[
-                shape?.features[0]?.geometry?.coordinates?.length - 1
-              ]
-            }
+            id={"1212"}
+            coordinate={[location.longitude, location.latitude]}
           >
-            <View>
-              <CircleCapComp />
+            <View
+              style={{
+                justifyContent: "center",
+                alignItems: "center",
+                backgroundColor: "transparent",
+              }}
+            >
+              <MaterialCommunityIcons
+                name="map-marker"
+                size={35}
+                color={"#de0910"}
+              />
             </View>
           </Mapbox.PointAnnotation>
         )}
