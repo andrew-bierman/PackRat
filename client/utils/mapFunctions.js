@@ -235,8 +235,6 @@ const isShapeDownloadable = (shape) => {
   return shape?.features[0]?.geometry?.coordinates?.length > 1;
 };
 
-const DESTINATION = 'destination'
-const TRIP= 'trip';
 const isPoint = (shape) => {
   return shape?.features[0]?.geometry?.type === 'Point';
 }
