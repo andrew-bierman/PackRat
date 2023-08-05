@@ -1,6 +1,7 @@
 import Trip from "../models/tripModel.js";
 import Node from "../models/osm/nodeModel.js";
 import Way from "../models/osm/wayModel.js";
+import Relation from "../models/osm/relationModel.js";
 
 export const getPublicTrips = async (req, res) => {
   try {
@@ -48,17 +49,17 @@ export const getTrips = async (req, res) => {
 
 export const getTripById = async (req, res) => {
   try {
-    const trip = await Trip.findById({
-      _id: req.params.tripId,
-    })
-    .populate({ path: "osm_ref", strictPopulate: false });
+    const trip = await Trip.findById(req.params.tripId).populate("osm_ref");
     // .populate({ path: "osm_ref", populate: { path: "nodes" }});
     // .populate({ path: "packs", populate: { path: "items" } })
 
-    console.log("find trip by id", trip);
+    console.log("find trip by id", req.params.tripId);
     console.log("find trip by id osm_ref", trip.osm_ref);
+    // const detail = createOSMObject()
 
-    res.status(200).json(trip);
+    res
+      .status(200)
+      .json({ ...trip._doc, osm_ref: await trip.osm_ref.toJSON() });
   } catch (error) {
     console.error(error);
     res.status(404).json({ msg: "Trip cannot be found" });
@@ -80,6 +81,8 @@ const createOSMObject = async (geoJSON) => {
     OSMModel = Node;
   } else if (osmType === "W") {
     OSMModel = Way;
+  } else if (osmType === "R") {
+    OSMModel = Relation;
   } else {
     throw new Error("Invalid OSM type");
   }
@@ -87,7 +90,8 @@ const createOSMObject = async (geoJSON) => {
   // Create the corresponding OSM object
   const osmData = new OSMModel({
     osm_id: geoJSON.properties.osm_id,
-    osm_type: OSMModel === Node ? "node" : "way", // Here change "W" to "way"
+    osm_type:
+      OSMModel === Node ? "node" : OSMModel === Way ? "way" : "relation", // Here change "W" to "way"
     tags: geoJSON.properties,
     geoJSON,
   });
@@ -99,7 +103,8 @@ const createOSMObject = async (geoJSON) => {
 
   return {
     osm_ref: osmData._id,
-    osm_type: OSMModel === Node ? "Node" : "Way",
+    osm_type:
+      OSMModel === Node ? "Node" : OSMModel === Way ? "Way" : "Relation",
   };
 };
 
