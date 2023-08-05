@@ -32,6 +32,7 @@ import { theme } from "../theme";
 import { useDispatch, useSelector } from "react-redux";
 import { signIn, signInWithGoogle } from "../store/authStore";
 import { StyleSheet } from "react-native";
+import { InformUser } from "../utils/ToastUtils";
 
 // const defaultStyle = {
 //   version: 8,
@@ -83,18 +84,19 @@ export default function Login() {
 
   const user = useSelector((state) => state.auth.user);
   const error = useSelector((state) => state.auth.error);
-
-  if (user?.uid) {
-    Toast.show({
+  if (user?._id) {
+    InformUser({
       title: "Login sucessfully",
-      duration: 3000,
       placement: "top-right",
-      style: { backgroundColor: "green" },
+      duration: 3000,
+      style: {
+        backgroundColor: "green",
+      },
     });
     router.push("/");
   }
   if (error) {
-    Toast.show({
+    InformUser({
       title: "Wrong-password",
       duration: 3000,
       placement: "top-right",

@@ -54,14 +54,7 @@ function convertPhotonGeoJsonToShape(photonGeoJson) {
   return {
     type: "FeatureCollection",
     features: [
-      {
-        type: "Feature",
-        geometry: {
-          type: "LineString",
-          coordinates: normalizeCoordinates(photonGeoJson.geometry.coordinates),
-        },
-        properties: photonGeoJson.properties,
-      },
+      photonGeoJson
     ],
   };
 }
