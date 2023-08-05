@@ -1,11 +1,12 @@
 import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
 import axios from "axios";
 import { api } from "../constants/api";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const addFavorite = createAsyncThunk(
   "favorites/addFavorite",
   async (newFavorite) => {
-    const response = await axios.post(`${api}/favorite`, newFavorite);
+    const response = await axios.post(`${api}/favorite`, newFavorite,config);
     return response.data;
   }
 );
@@ -13,7 +14,11 @@ export const addFavorite = createAsyncThunk(
 export const fetchFavorites = createAsyncThunk(
   "favorites/fetchFavorites",
   async () => {
-    const response = await axios.get(`${api}/favorite`);
+    const token = await AsyncStorage.getItem('userToken');
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
+    const response = await axios.get(`${api}/favorite`,config);
     return response.data;
   }
 );
@@ -21,7 +26,11 @@ export const fetchFavorites = createAsyncThunk(
 export const fetchUserFavorites = createAsyncThunk(
   "favorites/fetchUserFavorites",
   async (userId) => {
-    const response = await axios.get(`${api}/favorite/user/${userId}`);
+    const token = await AsyncStorage.getItem('userToken');
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
+    const response = await axios.get(`${api}/favorite/user/${userId}`,config);
     return response.data;
   }
 );
@@ -29,7 +38,11 @@ export const fetchUserFavorites = createAsyncThunk(
 export const fetchFavoritePacks = createAsyncThunk(
   "favorites/fetchFavoritePacks",
   async (userId) => {
-    const response = await axios.get(`${api}/favorite/user/${userId}/packs`);
+    const token = await AsyncStorage.getItem('userToken');
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
+    const response = await axios.get(`${api}/favorite/user/${userId}/packs`,config);
     return response.data;
   }
 );

@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, createEntityAdapter } from "@reduxjs/too
 import axios from "axios";
 import { api } from "../constants/api";
 import { Alert } from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const authAdapter = createEntityAdapter();
 
@@ -23,6 +24,9 @@ export const signUp = createAsyncThunk(
         email,
         password,
       });
+      const token = response.data.user.token;
+      await AsyncStorage.setItem('userToken', token); // Save token in local storage
+     
       return response.data.user;
     } catch (error) {
       console.log("error", error);
@@ -39,6 +43,8 @@ export const signIn = createAsyncThunk(
         email,
         password,
       });
+      const token = response.data.user.token;
+      await AsyncStorage.setItem('userToken', token); // Save token in local storage
       return response.data.user;
     } catch (error) {
       return rejectWithValue(error.response.data.error);

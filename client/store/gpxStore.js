@@ -1,12 +1,17 @@
 import { createSlice, createAsyncThunk, createEntityAdapter } from '@reduxjs/toolkit';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { api } from '../constants/api';
 
 export const convertGeoJSONToGPX = createAsyncThunk(
   'gpx/convertGeoJSONToGPX',
   async (geoJSON, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${api}/gpx/geojson`, { geoJSON });
+      const token = await AsyncStorage.getItem('userToken');
+      const config = {
+        headers: { Authorization: `Bearer ${token}` }
+      };
+      const response = await axios.post(`${api}/gpx/geojson`, { geoJSON },config);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.message);

@@ -1,10 +1,15 @@
 import { createSlice, createAsyncThunk, createEntityAdapter } from '@reduxjs/toolkit';
 import { api } from '../constants/api';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
 export const fetchParks = createAsyncThunk(
   'parks/fetchParks',
   async ({ lat, lon, selectedSearch }) => {
+    const token = await AsyncStorage.getItem('userToken');
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
     let params = `?`;
 
     if (lat) params += `lat=${lat}`;
@@ -13,7 +18,7 @@ export const fetchParks = createAsyncThunk(
     const url = api + '/osm/parks' + params;
 
     try {
-      const response = await axios.get(url);
+      const response = await axios.get(url,config);
       const parks = response.data.features;
 
       const filteredParks = parks

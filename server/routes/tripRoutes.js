@@ -8,6 +8,7 @@ import {
   deleteTrip,
 } from "../controllers/tripController.js";
 import * as validator from "../middleware/validators/index.js";
+import middlewareHandler from "../middleware/index.js";
 
 const router = express.Router();
 
@@ -29,7 +30,7 @@ const router = express.Router();
  *       200:
  *         description: Successful response
  */
-router.get("/", getPublicTrips);
+router.get("/",[middlewareHandler.auth.verifyUserToken] ,getPublicTrips);
 
 /**
  * @swagger
@@ -48,7 +49,7 @@ router.get("/", getPublicTrips);
  *       200:
  *         description: Successful response
  */
-router.get("/:ownerId", validator.getTrips, getTrips);
+router.get("/:ownerId", [middlewareHandler.auth.verifyUserToken],validator.getTrips, getTrips);
 
 /**
  * @swagger
@@ -67,7 +68,7 @@ router.get("/:ownerId", validator.getTrips, getTrips);
  *       200:
  *         description: Successful response
  */
-router.get("/t/:tripId", validator.getTripById, getTripById);
+router.get("/t/:tripId",[middlewareHandler.auth.verifyUserToken] ,validator.getTripById, getTripById);
 
 /**
  * @swagger
@@ -111,7 +112,7 @@ router.get("/t/:tripId", validator.getTripById, getTripById);
  *       200:
  *         description: Successful response
  */
-router.post("/", validator.addTrip, addTrip);
+router.post("/",[middlewareHandler.auth.verifyUserToken] ,validator.addTrip, addTrip);
 
 /**
  * @swagger
@@ -157,7 +158,7 @@ router.post("/", validator.addTrip, addTrip);
  *       200:
  *         description: Successful response
  */
-router.put("/", validator.editTrip, editTrip);
+router.put("/",[middlewareHandler.auth.verifyUserToken] ,validator.editTrip, editTrip);
 
 /**
  * @swagger
@@ -179,6 +180,6 @@ router.put("/", validator.editTrip, editTrip);
  *       200:
  *         description: Successful response
  */
-router.delete("/", validator.deleteTrip, deleteTrip);
+router.delete("/",[middlewareHandler.auth.verifyUserToken] ,validator.deleteTrip, deleteTrip);
 
 export default router;

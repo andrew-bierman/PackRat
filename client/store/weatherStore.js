@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
 import { defaultWeatherObject } from "../constants/defaultWeatherObj";
 import { defaultWeekObj } from "../constants/defaultWeekObj";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { api } from "../constants/api";
 
@@ -16,6 +17,10 @@ const initialState = weatherAdapter.getInitialState({
 export const fetchWeather = createAsyncThunk(
   "weather/fetchWeather",
   async ({ lat, lon, state }) => {
+    const token = await AsyncStorage.getItem('userToken');
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
     let params = `?`;
 
     if (lat) params += `lat=${lat}`;
@@ -24,7 +29,7 @@ export const fetchWeather = createAsyncThunk(
     const url = api + "/weather" + params;
 
     try {
-      const response = await axios.get(url);
+      const response = await axios.get(url,config);
       // console.log('response', response)
       return response.data;
     } catch (error) {
@@ -36,6 +41,10 @@ export const fetchWeather = createAsyncThunk(
 export const fetchWeatherWeek = createAsyncThunk(
   "weather/fetchWeatherWeek",
   async ({ lat, lon }) => {
+    const token = await AsyncStorage.getItem('userToken');
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
     let params = `?`;
 
     if (lat) params += `lat=${lat}`;
@@ -44,7 +53,7 @@ export const fetchWeatherWeek = createAsyncThunk(
     const url = api + "/weather/week" + params;
 
     try {
-      const response = await axios.get(url);
+      const response = await axios.get(url,config);
       // console.log('response', response)
       return response.data;
     } catch (error) {

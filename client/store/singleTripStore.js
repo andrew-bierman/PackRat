@@ -3,6 +3,7 @@
 import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
 
 import axios from "axios";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { api } from "../constants/api";
 
@@ -19,7 +20,11 @@ const initialState = singleTripAdapter.getInitialState({
 export const fetchSingleTrip = createAsyncThunk(
   "trips/fetchSingleTrip",
   async (tripId) => {
-    const response = await axios.get(`${api}/trip/t/${tripId}`);
+    const token = await AsyncStorage.getItem('userToken');
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
+    const response = await axios.get(`${api}/trip/t/${tripId}`,config);
     return response.data;
   }
 );
