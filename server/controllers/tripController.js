@@ -18,6 +18,19 @@ export const getPublicTrips = async (req, res) => {
           as: "packs",
         },
       },
+      {
+        $lookup: {
+          from: 'users', // Replace 'users' with the actual name of your 'User' collection
+          localField: 'owner_id',
+          foreignField: '_id',
+          as: 'owner',
+        },
+      },
+      {
+        $addFields: {
+          owner: { $arrayElemAt: ['$owner', 0] },
+        },
+      },
     ];
 
     if (queryBy === "Favorite") {
@@ -51,7 +64,9 @@ export const getTripById = async (req, res) => {
     const trip = await Trip.findById({
       _id: req.params.tripId,
     })
-    .populate({ path: "osm_ref", strictPopulate: false });
+    .populate({ path: "osm_ref", strictPopulate: false }).populate({
+      path: "owner_id",
+    });
     // .populate({ path: "osm_ref", populate: { path: "nodes" }});
     // .populate({ path: "packs", populate: { path: "items" } })
 
