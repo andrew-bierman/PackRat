@@ -24,7 +24,11 @@ import {
   getPublicTrips,
   getFavoritePacks,
 } from "../../store/feedStore";
-import { changePackStatus, fetchUserPacks, selectAllPacks } from "../../store/packsStore";
+import {
+  changePackStatus,
+  fetchUserPacks,
+  selectAllPacks,
+} from "../../store/packsStore";
 import { fetchUserTrips } from "../../store/tripsStore";
 import { useRouter } from "expo-router";
 import { fuseSearch } from "../../utils/fuseSearch";
@@ -170,9 +174,10 @@ const Feed = ({ feedType = "public" }) => {
     }
 
     // Fuse search
-    let keys = ['name', 'items.name', 'items.category'];
-    let options = {  // your options
-      threshold: 0.420,
+    let keys = ["name", "items.name", "items.category"];
+    let options = {
+      // your options
+      threshold: 0.42,
       location: 0,
       distance: 100,
       maxPatternLength: 32,
@@ -207,8 +212,7 @@ const Feed = ({ feedType = "public" }) => {
         ))}
       </View>
     ) : (
-      <View style={{ flex: 1, paddingBottom: 10, }} >
-
+      <View style={{ flex: 1, paddingBottom: 10 }}>
         <FlatList
           data={data}
           numColumns={1}
@@ -251,12 +255,7 @@ const Feed = ({ feedType = "public" }) => {
     router.push(createUrlPath);
   };
 
-
-  return (
-    <Box style={styles.mainContainer}>
-      {renderData()}
-    </Box>
-  );
+  return <Box style={styles.mainContainer}>{renderData()}</Box>;
 };
 
 const styles = StyleSheet.create({
@@ -264,7 +263,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: theme.colors.background,
     fontSize: 18,
-    padding: 15
+    padding: 15,
   },
   filterContainer: {
     backgroundColor: theme.colors.white,
@@ -290,4 +289,3 @@ const styles = StyleSheet.create({
 });
 
 export default Feed;
-
