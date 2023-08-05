@@ -97,7 +97,7 @@ export const CustomCard = ({
               mx="5"
               >
             <Link href={`/profile/${data['owner_id']}`}>
-            <Text>{user._id === data['owner_id'] ? 'Your Profile': `View ${data.owners ? data.owners[0].name : "Profile"}`}</Text>
+            <Text>{user._id === data['owner_id'] ? 'Your Profile': `View ${data.owners && data.owners.length ? data.owners[0].name : "Profile"}`}</Text>
             </Link>
               </Box>
               {link && (
