@@ -46,7 +46,7 @@ mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
 const DESTINATION = 'destination'
 const TRIP= 'trip';
-const WebMap = ({ shape: shapeProp, selectedSearchResult, type }) => {
+const WebMap = ({ shape: shapeProp }) => {
 
   useEffect(() => {
     // temporary solution to fix mapbox-gl-js missing css error
@@ -194,7 +194,7 @@ const WebMap = ({ shape: shapeProp, selectedSearchResult, type }) => {
     console.log("trailCenterPointRef.current", trailCenterPointRef.current);
 
     // console.log("mapInstance", mapInstance);
-  }, [shape, selectedSearchResult]);
+  }, [shape]);
 
   const removeTrailLayer = (mapInstance) => {
     // Remove existing source and layers if they exist
