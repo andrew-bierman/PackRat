@@ -35,6 +35,8 @@ const PackSchema = new Schema(
   { timestamps: true }
 );
 
+PackSchema.index({name:1});
+
 PackSchema.virtual("total_weight").get(function () {
   if (this.items && this.items.length > 0 && this.items[0] instanceof Item) {
     return this.items.reduce(

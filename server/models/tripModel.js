@@ -34,6 +34,18 @@ const TripSchema = new Schema(
   { timestamps: true }
 );
 
+// Create an index on the "owner_id" field
+TripSchema.index({ owner_id: 1 });
+
+// Create an index on the "destination" field
+TripSchema.index({ destination: 1 });
+
+// Create an index on the "start_date" field
+TripSchema.index({ start_date: 1 });
+
+// Create an index on the "end_date" field
+TripSchema.index({ end_date: 1 });
+
 TripSchema.plugin(autopopulate)
 
 const Trip = myDB.model("Trip", TripSchema);

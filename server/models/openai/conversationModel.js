@@ -16,6 +16,8 @@ const ConversationSchema = Schema(
   },
   { timestamps: true }
 );
+// Create an index on the "userId" field
+ConversationSchema.index({ userId: 1 });
 
 const Conversation = myDB.model("Conversation", ConversationSchema);
 

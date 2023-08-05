@@ -14,6 +14,9 @@ const NodeSchema = Schema(
   { timestamps: true }
 );
 
+// Add an index on the "id" field
+NodeSchema.index({ id: 1 });
+
 // add a to JSON method to the schema
 NodeSchema.method("toJSON", async function () {
   const { _id, ...object } = this.toObject();
