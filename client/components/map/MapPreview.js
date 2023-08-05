@@ -79,6 +79,5 @@ export default function MapPreview({ shape }) {
         )}]/900x400?access_token=${MAPBOX_ACCESS_TOKEN}&padding=50,30,30,30`,
       }}
     />
-
   );
 }
