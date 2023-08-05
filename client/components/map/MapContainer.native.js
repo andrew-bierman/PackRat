@@ -6,7 +6,7 @@ import { defaultShape } from "../../utils/mapFunctions";
 
 import NativeMap from "./NativeMap";
 
-export function MapContainer({ shape,selectedSearchResult, type  }) {
+export function MapContainer({ shape }) {
   if (isObjectEmpty(shape)) {
     shape = defaultShape;
   }
