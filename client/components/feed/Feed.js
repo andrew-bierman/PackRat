@@ -24,7 +24,11 @@ import {
   getPublicTrips,
   getFavoritePacks,
 } from "../../store/feedStore";
-import { fetchUserPacks, selectAllPacks } from "../../store/packsStore";
+import {
+  changePackStatus,
+  fetchUserPacks,
+  selectAllPacks,
+} from "../../store/packsStore";
 import { fetchUserTrips } from "../../store/tripsStore";
 import { useRouter } from "expo-router";
 import { fuseSearch } from "../../utils/fuseSearch";
@@ -170,17 +174,18 @@ const Feed = ({ feedType = "public" }) => {
     }
 
     // Fuse search
-    let keys = ['name', 'items.name', 'items.category'];
-    let options = {  // your options
-      threshold: 0.420,
+    let keys = ["name", "items.name", "items.category"];
+    let options = {
+      // your options
+      threshold: 0.42,
       location: 0,
       distance: 100,
       maxPatternLength: 32,
       minMatchCharLength: 1,
     };
-    
-    let results = fuseSearch (data, searchQuery, keys, options);
-    
+
+    let results = fuseSearch(data, searchQuery, keys, options);
+
     // Convert fuse results back into the format we want
     // if searchQuery is empty, use the original data
     data = searchQuery ? results.map((result) => result.item) : data;
@@ -199,7 +204,6 @@ const Feed = ({ feedType = "public" }) => {
         handleCreateClick={handleCreateClick}
       />
     );
-
     return Platform.OS === "web" ? (
       <View style={styles.cardContainer}>
         {feedSearchFilterComponent}
@@ -208,17 +212,19 @@ const Feed = ({ feedType = "public" }) => {
         ))}
       </View>
     ) : (
-      <FlatList
-        data={data}
-        numColumns={1}
-        keyExtractor={(item) => item._id}
-        renderItem={({ item }) => (
-          <Card key={item._id} type={item.type} {...item} />
-        )}
-        ListHeaderComponent={() => feedSearchFilterComponent}
-        ListEmptyComponent={() => <Text>{ERROR_MESSAGES[feedType]}</Text>}
-        showsVerticalScrollIndicator={false}
-      />
+      <View style={{ flex: 1, paddingBottom: 10 }}>
+        <FlatList
+          data={data}
+          numColumns={1}
+          keyExtractor={(item) => item._id}
+          renderItem={({ item }) => (
+            <Card key={item._id} type={item.type} {...item} />
+          )}
+          ListHeaderComponent={() => feedSearchFilterComponent}
+          ListEmptyComponent={() => <Text>{ERROR_MESSAGES[feedType]}</Text>}
+          showsVerticalScrollIndicator={false}
+        />
+      </View>
     );
   };
 
@@ -240,28 +246,24 @@ const Feed = ({ feedType = "public" }) => {
     setQueryString(value);
   };
 
+  const urlPath = URL_PATHS[feedType];
+  const createUrlPath = URL_PATHS[feedType] + "create";
+  const errorText = ERROR_MESSAGES[feedType];
+
   const handleCreateClick = () => {
     // handle create click logic
     router.push(createUrlPath);
   };
 
-  const urlPath = URL_PATHS[feedType];
-  const createUrlPath = URL_PATHS[feedType] + "create";
-  const errorText = ERROR_MESSAGES[feedType];
-
-  return (
-    <Box style={styles.mainContainer}>
-      <View>{renderData()}</View>
-    </Box>
-  );
+  return <Box style={styles.mainContainer}>{renderData()}</Box>;
 };
 
 const styles = StyleSheet.create({
   mainContainer: {
+    flex: 1,
     backgroundColor: theme.colors.background,
-    padding: 15,
     fontSize: 18,
-    width: "100%",
+    padding: 15,
   },
   filterContainer: {
     backgroundColor: theme.colors.white,
