@@ -13,6 +13,13 @@ import { MapContainer } from "../map/MapContainer";
 import { CustomModal } from "../modal";
 import { SaveTripContainer } from "./createTripModal";
 
+import {
+  EvilIcons,
+  MaterialCommunityIcons,
+  MaterialIcons,
+  Entypo,
+} from "@expo/vector-icons";
+
 const swiperHeight = 1000; // Adjust this value according to your preference
 
 export default function Trips() {
@@ -83,6 +90,24 @@ export default function Trips() {
             )}
             onChangeText={(value) => handleFormChange("heading", value)}
           />
+          <View
+            flexDirection="row"
+            justifyContent="space-between"
+            mt={4}
+            px={4}
+            style={{ paddingBottom: 100 }}
+          >
+            <Button
+              onPress={handleNextStep}
+              colorScheme="primary"
+              isDisabled={swiperRef.current && swiperRef.current.index === 6}
+              endIcon={
+                <EvilIcons name="chevron-right" size={24} color="white" />
+              }
+            >
+              Next
+            </Button>
+          </View>
         </Box>
 
         {/* Step 2 */}
@@ -92,6 +117,35 @@ export default function Trips() {
             weatherWeek={weatherWeek}
             onWeatherChange={(value) => handleFormChange("weather", value)}
           />
+          <View
+            flexDirection="row"
+            justifyContent="space-between"
+            mt={4}
+            px={4}
+            style={{ paddingBottom: 100 }}
+          >
+            <Button
+              onPress={handlePreviousStep}
+              colorScheme="primary"
+              isDisabled={swiperRef.current && swiperRef.current.index === 0}
+              startIcon={
+                <EvilIcons name="chevron-left" size={24} color="white" />
+              }
+              style={{ marginHorizontal: 20 }}
+            >
+              Previous
+            </Button>
+            <Button
+              onPress={handleNextStep}
+              colorScheme="primary"
+              isDisabled={swiperRef.current && swiperRef.current.index === 6}
+              endIcon={
+                <EvilIcons name="chevron-right" size={24} color="white" />
+              }
+            >
+              Next
+            </Button>
+          </View>
         </Box>
 
         {/* Step 3 */}
@@ -110,6 +164,35 @@ export default function Trips() {
             )}
             onChangeText={(value) => handleFormChange("trail", value)}
           />
+          <View
+            flexDirection="row"
+            justifyContent="space-between"
+            mt={4}
+            px={4}
+            style={{ paddingBottom: 100 }}
+          >
+            <Button
+              onPress={handlePreviousStep}
+              colorScheme="primary"
+              isDisabled={swiperRef.current && swiperRef.current.index === 0}
+              startIcon={
+                <EvilIcons name="chevron-left" size={24} color="white" />
+              }
+              style={{ marginHorizontal: 20 }}
+            >
+              Previous
+            </Button>
+            <Button
+              onPress={handleNextStep}
+              colorScheme="primary"
+              isDisabled={swiperRef.current && swiperRef.current.index === 6}
+              endIcon={
+                <EvilIcons name="chevron-right" size={24} color="white" />
+              }
+            >
+              Next
+            </Button>
+          </View>
         </Box>
 
         {/* Step 4 */}
@@ -127,11 +210,69 @@ export default function Trips() {
             )}
             onChangeText={(value) => handleFormChange("park", value)}
           />
+          <View
+            flexDirection="row"
+            justifyContent="space-between"
+            mt={4}
+            px={4}
+            style={{ paddingBottom: 100 }}
+          >
+            <Button
+              onPress={handlePreviousStep}
+              colorScheme="primary"
+              isDisabled={swiperRef.current && swiperRef.current.index === 0}
+              startIcon={
+                <EvilIcons name="chevron-left" size={24} color="white" />
+              }
+              style={{ marginHorizontal: 20 }}
+            >
+              Previous
+            </Button>
+            <Button
+              onPress={handleNextStep}
+              colorScheme="primary"
+              isDisabled={swiperRef.current && swiperRef.current.index === 6}
+              endIcon={
+                <EvilIcons name="chevron-right" size={24} color="white" />
+              }
+            >
+              Next
+            </Button>
+          </View>
         </Box>
 
         {/* Step 5 */}
         <Box style={styles.stepContainer}>
           <GearList />
+          <View
+            flexDirection="row"
+            justifyContent="space-between"
+            mt={4}
+            px={4}
+            style={{ paddingBottom: 100 }}
+          >
+            <Button
+              onPress={handlePreviousStep}
+              colorScheme="primary"
+              isDisabled={swiperRef.current && swiperRef.current.index === 0}
+              startIcon={
+                <EvilIcons name="chevron-left" size={24} color="white" />
+              }
+              style={{ marginHorizontal: 20 }}
+            >
+              Previous
+            </Button>
+            <Button
+              onPress={handleNextStep}
+              colorScheme="primary"
+              isDisabled={swiperRef.current && swiperRef.current.index === 6}
+              endIcon={
+                <EvilIcons name="chevron-right" size={24} color="white" />
+              }
+            >
+              Next
+            </Button>
+          </View>
         </Box>
 
         {/* Step 6 */}
@@ -147,6 +288,35 @@ export default function Trips() {
             title="Map"
             isMap={true}
           />
+          <View
+            flexDirection="row"
+            justifyContent="space-between"
+            mt={4}
+            px={4}
+            style={{ paddingBottom: 100 }}
+          >
+            <Button
+              onPress={handlePreviousStep}
+              colorScheme="primary"
+              isDisabled={swiperRef.current && swiperRef.current.index === 0}
+              startIcon={
+                <EvilIcons name="chevron-left" size={24} color="white" />
+              }
+              style={{ marginHorizontal: 20 }}
+            >
+              Previous
+            </Button>
+            <Button
+              onPress={handleNextStep}
+              colorScheme="primary"
+              isDisabled={swiperRef.current && swiperRef.current.index === 6}
+              endIcon={
+                <EvilIcons name="chevron-right" size={24} color="white" />
+              }
+            >
+              Next
+            </Button>
+          </View>
         </Box>
 
         {/* Step 7 */}
@@ -154,30 +324,30 @@ export default function Trips() {
           <Box>
             <SaveTripContainer formData={formData} />
           </Box>
+          <View
+            flexDirection="row"
+            justifyContent="space-between"
+            mt={4}
+            px={4}
+          >
+            {/* <Button
+              onPress={handlePreviousStep}
+              colorScheme="primary"
+              isDisabled={swiperRef.current && swiperRef.current.index === 0}
+            >
+              Previous
+            </Button>
+            <Button
+              onPress={handleNextStep}
+              colorScheme="primary"
+              isDisabled={swiperRef.current && swiperRef.current.index === 6}
+              style={{ marginHorizontal: 30 }}
+            >
+              Next
+            </Button> */}
+          </View>
         </Box>
       </Swiper>
-      <View
-        flexDirection="row"
-        justifyContent="space-between"
-        mt={4}
-        px={4}
-        style={{ paddingBottom: 100 }}
-      >
-        <Button
-          onPress={handlePreviousStep}
-          colorScheme="primary"
-          isDisabled={swiperRef.current && swiperRef.current.index === 0}
-        >
-          Previous
-        </Button>
-        <Button
-          onPress={handleNextStep}
-          colorScheme="primary"
-          isDisabled={swiperRef.current && swiperRef.current.index === 6}
-        >
-          Next
-        </Button>
-      </View>
     </VStack>
   );
 }
@@ -187,12 +357,14 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     backgroundColor: theme.colors.background,
+    padding: 100,
   },
   swiperContainer: {},
   stepContainer: {
     justifyContent: "center",
     alignItems: "center",
-    height: 500,
+    height: 300,
+    marginTop: 100,
   },
   mapStepContainer: {
     justifyContent: "center",
