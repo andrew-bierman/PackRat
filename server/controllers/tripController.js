@@ -55,6 +55,7 @@ export const getTripById = async (req, res) => {
 
     console.log("find trip by id", req.params.tripId);
     console.log("find trip by id osm_ref", trip.osm_ref);
+    // const detail = createOSMObject()
 
     res
       .status(200)
