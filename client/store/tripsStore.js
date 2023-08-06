@@ -9,7 +9,7 @@ import { api } from "../constants/api";
 export const deleteTrip = createAsyncThunk(
   "trips/deleteTrip",
   async (tripId) => {
-    const response = await axios.delete(`${api}/trip`, {
+    const response = await axios.delete(`${api}/trips`, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -24,20 +24,20 @@ export const deleteTrip = createAsyncThunk(
 export const fetchUserTrips = createAsyncThunk(
   "trips/fetchUserTrips",
   async (ownerId) => {
-    const response = await axios.get(`${api}/trip/${ownerId}`);
+    const response = await axios.get(`${api}/trips/${ownerId}`);
     return response.data;
   }
 );
 
 export const addTrip = createAsyncThunk("trips/addTrip", async (newTrip) => {
-  const response = await axios.post(`${api}/trip/`, newTrip);
+  const response = await axios.post(`${api}/trips/`, newTrip);
   return response.data;
 });
 
 export const editTrip = createAsyncThunk(
   "trips/editTrip",
   async (updatedTrip) => {
-    const response = await axios.put(`${api}/trip/`, updatedTrip);
+    const response = await axios.put(`${api}/trips/`, updatedTrip);
     return response.data;
   }
 );

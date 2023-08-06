@@ -36,36 +36,68 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 // use routes
-router.use("/user", userRoutes);
-router.use("/pack", packRoutes);
-router.use("/item", itemRoutes);
-router.use("/trip", tripRoutes);
+// router.use("/user", userRoutes);
+// router.use("/pack", packRoutes);
+// router.use("/item", itemRoutes);
+// router.use("/trip", tripRoutes);
+// router.use("/weather", weatherRoutes);
+// router.use("/geocode", geoCodeRoutes);
+// router.use("/getparks", getParkRoutes);
+// router.use("/gettrails", getTrailRoutes);
+// router.use("/osm", osmRoutes);
+// router.use("/password-reset", passwordResetRoutes);
+// router.use("/openai", openAiRoutes);
+// router.use("/template", templateRoutes);
+// router.use("/favorite", favoriteRouters);
+// router.use("/openai", openAiRoutes);
+
+// use routes with improved resource naming
+router.use("/users", userRoutes);
+router.use("/packs", packRoutes);
+router.use("/items", itemRoutes);
+router.use("/trips", tripRoutes);
 router.use("/weather", weatherRoutes);
 router.use("/geocode", geoCodeRoutes);
-router.use("/getparks", getParkRoutes);
-router.use("/gettrails", getTrailRoutes);
+router.use("/parks", getParkRoutes);
+router.use("/trails", getTrailRoutes);
 router.use("/osm", osmRoutes);
 router.use("/password-reset", passwordResetRoutes);
 router.use("/openai", openAiRoutes);
-router.use("/template", templateRoutes);
-router.use("/favorite", favoriteRouters);
-router.use("/openai", openAiRoutes);
+router.use("/templates", templateRoutes);
+router.use("/favorites", favoriteRouters);
+
+
 
 // Also listen to /api for backwards compatibility
-router.use("/api/user", userRoutes);
-router.use("/api/pack", packRoutes);
-router.use("/api/item", itemRoutes);
-router.use("/api/trip", tripRoutes);
+// router.use("/api/user", userRoutes);
+// router.use("/api/pack", packRoutes);
+// router.use("/api/item", itemRoutes);
+// router.use("/api/trip", tripRoutes);
+// router.use("/api/weather", weatherRoutes);
+// router.use("/api/geocode", geoCodeRoutes);
+// router.use("/api/getparks", getParkRoutes);
+// router.use("/api/gettrails", getTrailRoutes);
+// router.use("/api/osm", osmRoutes);
+// router.use("/api/password-reset", passwordResetRoutes);
+// router.use("/api/openai", openAiRoutes);
+// router.use("/api/template", templateRoutes);
+// router.use("/api/favorite", favoriteRouters);
+// router.use("/api/openai", openAiRoutes);
+
+// Also listen to /api for backwards compatibility with improved resource naming
+router.use("/api/users", userRoutes);
+router.use("/api/packs", packRoutes);
+router.use("/api/items", itemRoutes);
+router.use("/api/trips", tripRoutes);
 router.use("/api/weather", weatherRoutes);
 router.use("/api/geocode", geoCodeRoutes);
-router.use("/api/getparks", getParkRoutes);
-router.use("/api/gettrails", getTrailRoutes);
+router.use("/api/parks", getParkRoutes);
+router.use("/api/trails", getTrailRoutes);
 router.use("/api/osm", osmRoutes);
 router.use("/api/password-reset", passwordResetRoutes);
 router.use("/api/openai", openAiRoutes);
-router.use("/api/template", templateRoutes);
-router.use("/api/favorite", favoriteRouters);
-router.use("/api/openai", openAiRoutes);
+router.use("/api/templates", templateRoutes);
+router.use("/api/favorites", favoriteRouters);
 
 // Static routes for serving the React Native Web app
 if (process.env.NODE_ENV === "production") {

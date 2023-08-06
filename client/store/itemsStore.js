@@ -7,7 +7,7 @@ const itemsAdapter = createEntityAdapter();
 export const deleteItem = createAsyncThunk(
   "items/deleteItem",
   async (itemId) => {
-    const response = await axios.delete(`${api}/item`, {
+    const response = await axios.delete(`${api}/items`, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -20,12 +20,12 @@ export const deleteItem = createAsyncThunk(
 );
 
 export const editItem = createAsyncThunk("items/editItem", async (newItem) => {
-  const response = await axios.put(`${api}/item/`, newItem);
+  const response = await axios.put(`${api}/items/`, newItem);
   return response.data;
 });
 
 export const getItems = createAsyncThunk("items/getItems", async (packId) => {
-  const response = await axios.get(`${api}/item/${packId}`);
+  const response = await axios.get(`${api}/items/${packId}`);
   return response.data;
 });
 

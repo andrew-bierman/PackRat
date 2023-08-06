@@ -8,7 +8,7 @@ import { api } from "../constants/api";
 import { Toast } from "native-base";
 import { InformUser } from "../utils/ToastUtils";
 export const addPack = createAsyncThunk("packs/addPack", async (newPack) => {
-  const response = await axios.post(`${api}/pack/`, newPack);
+  const response = await axios.post(`${api}/packs/`, newPack);
   return response.data;
 });
 
@@ -16,7 +16,7 @@ export const deletePackItem = createAsyncThunk(
   "items/deletePackItem",
   async (item) => {
     console.log("item", item);
-    const response = await axios.delete(`${api}/item`, {
+    const response = await axios.delete(`${api}/items`, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -32,7 +32,7 @@ export const deletePackItem = createAsyncThunk(
 export const changePackStatus = createAsyncThunk(
   "packs/changePackStatus",
   async (updatedPack) => {
-    const response = await axios.put(`${api}/pack`, updatedPack);
+    const response = await axios.put(`${api}/packs`, updatedPack);
     return response.data;
   }
 );
@@ -40,7 +40,7 @@ export const changePackStatus = createAsyncThunk(
 export const fetchUserPacks = createAsyncThunk(
   "packs/fetchUserPacks",
   async (ownerId) => {
-    const response = await axios.get(`${api}/pack/${ownerId}`);
+    const response = await axios.get(`${api}/packs/${ownerId}`);
     return response.data;
   }
 );
@@ -49,7 +49,7 @@ export const addPackItem = createAsyncThunk(
   "items/addPackItem",
   async (newItem) => {
     console.log("calling apis");
-    const response = await axios.post(`${api}/item/`, newItem);
+    const response = await axios.post(`${api}/items/`, newItem);
     return response.data;
   }
 );
@@ -57,7 +57,7 @@ export const addPackItem = createAsyncThunk(
 export const duplicatePackItem = createAsyncThunk(
   "items/duplicatePackItem",
   async (newItem) => {
-    const response = await axios.post(`${api}/pack/duplicate`, {
+    const response = await axios.post(`${api}/packs/duplicate`, {
       packId: newItem.packId,
       ownerId: newItem.ownerId,
       items: newItem.items,
@@ -67,14 +67,14 @@ export const duplicatePackItem = createAsyncThunk(
 );
 
 export const scorePack = createAsyncThunk("packs/scorePack", async (packId) => {
-  const response = await axios.put(`${api}/pack/score/${packId}`);
+  const response = await axios.put(`${api}/packs/score/${packId}`);
   return response.data;
 });
 
 export const editPackItem = createAsyncThunk(
   "items/editPackItem",
   async (newItem) => {
-    const response = await axios.put(`${api}/item/`, newItem);
+    const response = await axios.put(`${api}/items/`, newItem);
     return response.data;
   }
 );
@@ -83,7 +83,7 @@ export const editItemsGlobalAsDuplicate = createAsyncThunk(
   "Items/editItemsGlobalAsDuplicate",
   async (item) => {
     const { itemId, packId, name, weight, quantity, unit, type } = item;
-    const response = await axios.put(`${api}/item/global/${itemId}`, {
+    const response = await axios.put(`${api}/items/global/${itemId}`, {
       packId,
       name,
       weight,
@@ -103,7 +103,7 @@ export const selectItemsGlobal = createAsyncThunk(
       const ownerId = item.ownerId;
       const packId = item.packId;
 
-      const response = await axios.post(`${api}/item/global/select/${packId}`, {
+      const response = await axios.post(`${api}/items/global/select/${packId}`, {
         itemId: itemId,
         ownerId: ownerId,
       });
@@ -115,7 +115,7 @@ export const selectItemsGlobal = createAsyncThunk(
 );
 
 export const updatePack = createAsyncThunk("packs/updatePack", async (pack) => {
-  const response = await axios.put(`${api}/pack`, {
+  const response = await axios.put(`${api}/packs`, {
     _id: pack["_id"],
     name: pack.name,
     is_public: pack.is_public,
@@ -124,7 +124,7 @@ export const updatePack = createAsyncThunk("packs/updatePack", async (pack) => {
 });
 
 export const deletePack = createAsyncThunk("packs/deletePack", async (pack) => {
-  const response = await axios.delete(`${api}/pack`, {
+  const response = await axios.delete(`${api}/packs`, {
     data: { packId: pack.id },
     headers: {
       "Content-Type": "application/json",

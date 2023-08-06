@@ -5,7 +5,7 @@ import osmtogeojson from "osmtogeojson";
 export const getTrailsRapid = async (locationObject, latParams, lonParams) => {
   let trailsArray = [];
 
-  await fetch(api + "/gettrails", {
+  await fetch(api + "/trails", {
     method: "POST",
     headers: {
       Accept: "application/json",
