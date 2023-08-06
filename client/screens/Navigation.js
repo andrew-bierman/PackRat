@@ -34,7 +34,7 @@ const Navigation = () => {
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isMobileView, setIsMobileView] = useState(
-    Dimensions.get("window").width < 1024
+    Dimensions.get("window").width < 1024,
   );
 
   const [navBarWidth, setNavBarWidth] = useState(null);
@@ -63,7 +63,7 @@ const Navigation = () => {
         iconSource: MaterialIcons,
       },
     ],
-    []
+    [],
   );
 
   const userNavigationItems = useMemo(
@@ -89,21 +89,21 @@ const Navigation = () => {
               iconSource: MaterialIcons,
             },
             ...(Platform.OS != "web"
-            ? [
-                {
-                  href: "maps",
-                  icon: "map",
-                  text: "Downloaded Maps",
-                  iconSource: Entypo,
-                },
-              ]
-            : []),
-          {
-            href: "/items",
-            icon: "tent",
-            text: "Items",
-            iconSource: Fontisto,
-          },
+              ? [
+                  {
+                    href: "maps",
+                    icon: "map",
+                    text: "Downloaded Maps",
+                    iconSource: Entypo,
+                  },
+                ]
+              : []),
+            {
+              href: "/items",
+              icon: "tent",
+              text: "Items",
+              iconSource: Fontisto,
+            },
             {
               href: "/profile",
               icon: "book",
@@ -137,7 +137,7 @@ const Navigation = () => {
               iconSource: MaterialIcons,
             },
           ],
-    [user]
+    [user],
   );
 
   const navigationItems = [...staticNavigationItems, ...userNavigationItems];
@@ -157,17 +157,20 @@ const Navigation = () => {
         }, 0); // Adjust the delay as needed
       }
     },
-    [dispatch, router]
+    [dispatch, router],
   );
 
   useEffect(() => {
     const handleScreenResize = () => {
-      const isMobile = Dimensions.get("window").width < 1300 ||
-       navBarWidth < 1024; // Adjust these values as needed
+      const isMobile =
+        Dimensions.get("window").width < 1300 || navBarWidth < 1024; // Adjust these values as needed
       setIsMobileView(isMobile);
     };
 
-    const subscription = Dimensions.addEventListener("change", handleScreenResize);
+    const subscription = Dimensions.addEventListener(
+      "change",
+      handleScreenResize,
+    );
     return () => {
       subscription.remove(); // Proper event listener cleanup
     };
@@ -207,8 +210,8 @@ const Navigation = () => {
             size={isMobileView ? 24 : 18}
             color={
               isCurrentPage || isSelected
-              ? currentTheme.colors.iconColor
-              : currentTheme.colors.iconColor
+                ? currentTheme.colors.iconColor
+                : currentTheme.colors.iconColor
             } // change the color if this is the current page or selected item
             key={item.href + "icon"}
           />
@@ -224,7 +227,7 @@ const Navigation = () => {
         </TouchableOpacity>
       );
     },
-    [user, selectedNavItem] // add any other dependencies that this function uses
+    [user, selectedNavItem], // add any other dependencies that this function uses
   );
 
   return (
@@ -289,7 +292,9 @@ const Navigation = () => {
             //   contentContainerStyle={styles.menuBar}
             // >
             <View style={styles.menuBar}>
-              {navigationItems?.map((item, index) => renderNavigationItem(item, index))}
+              {navigationItems?.map((item, index) =>
+                renderNavigationItem(item, index),
+              )}
             </View>
             // </ScrollView>
           )}

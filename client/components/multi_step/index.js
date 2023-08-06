@@ -41,7 +41,7 @@ const Sidebar = ({ stepsData, currentStep }) => {
     <View style={styles.sidebar}>
       {/* Display your data here */}
       {displayData.map((data, index) => {
-        if(!data) return null;
+        if (!data) return null;
         const { title, subtext } = data;
         return (
           <View key={index}>
@@ -109,7 +109,7 @@ const MultiStepForm = ({ steps = [] }) => {
 const styles = StyleSheet.create({
   container: {
     // flex: 1,
-    height: '800px',
+    height: "800px",
     backgroundColor: "#F5F5F5",
     alignItems: "center",
     justifyContent: "center",

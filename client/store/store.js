@@ -21,7 +21,7 @@ import gpxReducer from "./gpxStore";
 import destinationReducer from "./destinationStore";
 import chatReducer from "./chatStore";
 import globalItems from "./globalItemsStore";
-import userStore from './userStore';
+import userStore from "./userStore";
 
 // combine reducers
 const rootReducer = combineReducers({

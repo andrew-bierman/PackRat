@@ -12,7 +12,7 @@ const Profile = () => {
     <>
       <Header.Screen
         options={{
-          title: `${id}'s Profile`
+          title: `${id}'s Profile`,
         }}
       />
       <ProfileContainer id={id} />

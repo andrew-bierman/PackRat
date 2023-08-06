@@ -1,5 +1,5 @@
 import { Platform } from "react-native";
-import { DestinationPage } from "../../components/destination"
+import { DestinationPage } from "../../components/destination";
 // import DestinationPage from "../../components/destination";
 import { Stack as Header } from "expo-router";
 

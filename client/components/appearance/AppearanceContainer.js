@@ -14,12 +14,11 @@ export default function AppearanceContainer() {
       return newState;
     });
   };
-  
 
   useEffect(() => {
     setIsEnabled(isDark); // synchronize isEnabled with isDark whenever isDark changes
   }, [isDark]);
-  
+
   return (
     <VStack style={styles.mainContainer}>
       <Box style={styles.infoSection}>

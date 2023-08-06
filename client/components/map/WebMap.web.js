@@ -30,7 +30,7 @@ import {
   isShapeDownloadable,
   isPoint,
   isPolygonOrMultiPolygon,
-  multiPolygonBounds
+  multiPolygonBounds,
 } from "../../utils/mapFunctions";
 import MapButtonsOverlay from "./MapButtonsOverlay";
 import { saveFile } from "../../utils/fileSaver/fileSaver";
@@ -44,10 +44,9 @@ import MapPreview from "./MapPreview";
 
 mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
-const DESTINATION = 'destination'
-const TRIP= 'trip';
+const DESTINATION = "destination";
+const TRIP = "trip";
 const WebMap = ({ shape: shapeProp }) => {
-
   useEffect(() => {
     // temporary solution to fix mapbox-gl-js missing css error
     if (Platform.OS === "web") {
@@ -122,7 +121,10 @@ const WebMap = ({ shape: shapeProp }) => {
   }, [shape, fullMapDiemention]);
 
   useEffect(() => {
-    console.log(!mapFullscreen || !isPolygonOrMultiPolygon(shape), 'is polygon or not')
+    console.log(
+      !mapFullscreen || !isPolygonOrMultiPolygon(shape),
+      "is polygon or not",
+    );
     if (!mapFullscreen && !isPolygonOrMultiPolygon(shape)) return;
     const mapInstance = new mapboxgl.Map({
       container: mapContainer.current,
@@ -139,10 +141,10 @@ const WebMap = ({ shape: shapeProp }) => {
     });
 
     mapInstance.on("load", () => {
-      if(isPoint(shape)) {
+      if (isPoint(shape)) {
         addPoints(mapInstance);
-      } else if(isPolygonOrMultiPolygon(shape)) {
-        console.log('it is polygon')
+      } else if (isPolygonOrMultiPolygon(shape)) {
+        console.log("it is polygon");
         addPolygons(mapInstance);
       } else {
         addTrailLayer(mapInstance);
@@ -181,10 +183,9 @@ const WebMap = ({ shape: shapeProp }) => {
   }, [mapFullscreen]);
 
   useEffect(() => {
-    if(map.current && isPoint(shape)) {
+    if (map.current && isPoint(shape)) {
       addPoints(map.current);
-    }
-    else if (map.current && shape.features[0].geometry.type !== 'Point') {
+    } else if (map.current && shape.features[0].geometry.type !== "Point") {
       removeTrailLayer(map.current);
       addTrailLayer(map.current);
       map.current.setCenter(trailCenterPointRef.current);
@@ -248,37 +249,37 @@ const WebMap = ({ shape: shapeProp }) => {
     });
   };
 
-
   const addPoints = (mapInstance) => {
-      if(mapInstance) {
-        const pointLatLong = shape?.features[0]?.geometry?.coordinates
-        const [lng, lat] = pointLatLong;
-        const marker = new mapboxgl.Marker().setLngLat([lng,lat]).addTo(mapInstance);
-        marker.getElement().addEventListener('click', () => {
-          window.open(`https://maps.google.com?q=${lat},${lng}`);
-        });
-        mapInstance.setCenter(pointLatLong);
-      }
-      }
+    if (mapInstance) {
+      const pointLatLong = shape?.features[0]?.geometry?.coordinates;
+      const [lng, lat] = pointLatLong;
+      const marker = new mapboxgl.Marker()
+        .setLngLat([lng, lat])
+        .addTo(mapInstance);
+      marker.getElement().addEventListener("click", () => {
+        window.open(`https://maps.google.com?q=${lat},${lng}`);
+      });
+      mapInstance.setCenter(pointLatLong);
+    }
+  };
 
-      const addPolygons = (mapInstance) => {
-        if(mapInstance) {
-
-          mapInstance.addLayer({
-            id: 'polygon-layer',
-            type: 'fill',
-            source: {
-              type: 'geojson',
-              data : shape.features[0],
-            },
-            paint : {
-              'fill-color' : "#3388ff",
-              'fill-opacity': 0.3,
-            }
-          })
-          mapInstance.setCenter(multiPolygonBounds(shape.features[0]))
-        }
-      }
+  const addPolygons = (mapInstance) => {
+    if (mapInstance) {
+      mapInstance.addLayer({
+        id: "polygon-layer",
+        type: "fill",
+        source: {
+          type: "geojson",
+          data: shape.features[0],
+        },
+        paint: {
+          "fill-color": "#3388ff",
+          "fill-opacity": 0.3,
+        },
+      });
+      mapInstance.setCenter(multiPolygonBounds(shape.features[0]));
+    }
+  };
   const fetchGpxDownload = async () => {
     setDownloading(true);
 
@@ -323,17 +324,16 @@ const WebMap = ({ shape: shapeProp }) => {
         map.current.setStyle(style);
 
         // Step 3: add the sources, layers, etc. back once the style has loaded
-        if(isPoint(shape)) {
-          map.current.on('style.load', () => addPoints(map.current))
-        } else if(isPolygonOrMultiPolygon) {
+        if (isPoint(shape)) {
+          map.current.on("style.load", () => addPoints(map.current));
+        } else if (isPolygonOrMultiPolygon) {
           // Add Polygon
-        }
-        else {
+        } else {
           map.current.on("style.load", () => addTrailLayer(map.current));
         }
       }
     },
-    [addTrailLayer, removeTrailLayer]
+    [addTrailLayer, removeTrailLayer],
   );
 
   const handleChangeMapStyle = (style) => {
@@ -344,7 +344,7 @@ const WebMap = ({ shape: shapeProp }) => {
   const handleGpxDownload = async (
     gpxData,
     filename = shape?.features[0]?.properties?.name ?? "trail",
-    extension = "gpx"
+    extension = "gpx",
   ) => {
     if (gpxData) {
       const type = "application/gpx+xml";
@@ -398,11 +398,18 @@ const WebMap = ({ shape: shapeProp }) => {
       console.log("error", error);
     }
   };
-  console.log(isPolygonOrMultiPolygon(shape) || showModal, 'polygon or not')
+  console.log(isPolygonOrMultiPolygon(shape) || showModal, "polygon or not");
   const element = (
     <View style={[styles.container, { height: showModal ? "100%" : "400px" }]}>
       {showModal || isPolygonOrMultiPolygon(shape) ? (
-        <View key="map" ref={mapContainer} style={{...styles.map, height: isPolygonOrMultiPolygon(shape) ? 200 : '100vh'}} />
+        <View
+          key="map"
+          ref={mapContainer}
+          style={{
+            ...styles.map,
+            height: isPolygonOrMultiPolygon(shape) ? 200 : "100vh",
+          }}
+        />
       ) : (
         <MapPreview shape={shape} />
       )}

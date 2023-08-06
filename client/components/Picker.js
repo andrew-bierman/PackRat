@@ -22,7 +22,7 @@ const ItemPicker = ({ currentPack, refetch, setRefetch = () => {} }) => {
           selectedItem: selectedValue,
           ownerId: auth["_id"],
           packId: currentPack,
-        })
+        }),
       );
       setRefetch(refetch === true ? false : true);
     }

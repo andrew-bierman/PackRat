@@ -24,7 +24,6 @@ const styles = StyleSheet.create({
     color: theme.colors.text,
     fontSize: 20,
     fontWeight: "bold",
-
   },
   icon: {
     fontSize: 40,

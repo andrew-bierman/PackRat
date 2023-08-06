@@ -10,10 +10,9 @@ import { addTrip } from "../../store/tripsStore";
 import { DropdownComponent } from "../Dropdown";
 
 const options = [
-  { label: 'Yes', value: 'true' },
-  { label: 'For me only', value: 'false' },
+  { label: "Yes", value: "true" },
+  { label: "For me only", value: "false" },
 ];
-
 
 const NumberInput = (props) => {
   const { min, max, value, ...otherProps } = props;
@@ -125,7 +124,7 @@ export const SaveTripContainer = ({ dateRange }) => {
     console.log("create trip data ->", data);
     dispatch(addTrip(data));
     setIsSaveModalOpen(!isSaveModalOpen);
-  }
+  };
 
   const handleValueChange = (itemValue) => {
     setIsPublic(itemValue);
@@ -140,7 +139,6 @@ export const SaveTripContainer = ({ dateRange }) => {
     offset: 30 * index, // calculate the offset based on item height
     index,
   });
-
 
   return (
     <CustomModal
@@ -203,15 +201,16 @@ export const SaveTripContainer = ({ dateRange }) => {
             />
           </HStack> */}
 
-<DropdownComponent
-    onValueChange={(itemValue) => setIsPublic(itemValue=='Yes'?true:false)}
-    data={['Yes','For me only']}
-    value={isPublic}
-    placeholder="Is Public"
-    style={{marginTop:4,marginBottom:4}}
-    width={150}
-
-/>
+          <DropdownComponent
+            onValueChange={(itemValue) =>
+              setIsPublic(itemValue == "Yes" ? true : false)
+            }
+            data={["Yes", "For me only"]}
+            value={isPublic}
+            placeholder="Is Public"
+            style={{ marginTop: 4, marginBottom: 4 }}
+            width={150}
+          />
           {/* <Select
             minWidth="full"
             placeholder="Is Public"

@@ -1,4 +1,3 @@
-
 // import React from "react";
 
 // import { View, StyleSheet } from "react-native";
@@ -23,7 +22,7 @@
 //   style,
 // }) => {
 //   // console.log("data in dropdown ------->", data);
-  
+
 //   const items =
 //   data?.map((item, index) => {
 //     let val = item;
@@ -41,7 +40,7 @@
 //     { label: "Item 2", value: "item2" },
 //     { label: "Item 3", value: "item3", selectable: false },
 //   ];
-  
+
 //   return (
 //     <View style={{ ...styles.container, ...style, width: width || "100%" }}>
 //       <DropDownPicker
@@ -132,7 +131,7 @@ export const DropdownComponent = ({
 
   return (
     <Center>
-      <Box style={{...style, width: width || '100%'}}>
+      <Box style={{ ...style, width: width || "100%" }}>
         <Select
           selectedValue={value}
           width="100%"
@@ -149,16 +148,12 @@ export const DropdownComponent = ({
                 let val = item;
                 let label = item;
                 // Check if the item is an object
-                if (typeof item === 'object' && item !== null) {
+                if (typeof item === "object" && item !== null) {
                   val = item.id || item._id || item.name;
                   label = item.name;
                 }
                 return (
-                  <Select.Item
-                    key={index}
-                    label={String(label)}
-                    value={val}
-                  />
+                  <Select.Item key={index} label={String(label)} value={val} />
                 );
               })
             : null}

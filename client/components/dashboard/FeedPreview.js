@@ -7,7 +7,7 @@ import { Link } from "expo-router";
 import { StyleSheet } from "react-native";
 import { getPublicPacks, getPublicTrips } from "../../store/feedStore";
 import { theme } from "../../theme";
-import Carousel from '../carousel'
+import Carousel from "../carousel";
 
 const FeedPreviewScroll = () => {
   const dispatch = useDispatch();
@@ -42,7 +42,6 @@ const FeedPreviewScroll = () => {
     </Carousel>
   );
 };
-
 
 const FeedPreview = () => {
   return <FeedPreviewScroll />;

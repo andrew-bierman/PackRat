@@ -1,4 +1,8 @@
-import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
+import {
+  createSlice,
+  createAsyncThunk,
+  createEntityAdapter,
+} from "@reduxjs/toolkit";
 import axios from "axios";
 import { api } from "../constants/api";
 
@@ -11,7 +15,7 @@ export const processGeoJSON = createAsyncThunk(
     } catch (err) {
       return rejectWithValue(err.response.data);
     }
-  }
+  },
 );
 
 export const getDestination = createAsyncThunk(
@@ -19,13 +23,13 @@ export const getDestination = createAsyncThunk(
   async (destinationId, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `${api}/osm/destination/${destinationId}`
+        `${api}/osm/destination/${destinationId}`,
       );
       return response.data;
     } catch (err) {
       return rejectWithValue(err.response.data);
     }
-  }
+  },
 );
 
 export const photonDetails = createAsyncThunk(
@@ -35,15 +39,18 @@ export const photonDetails = createAsyncThunk(
       const { properties } = data;
       const { osm_id, osm_type } = properties;
 
-      if (!osm_id || !osm_type) return rejectWithValue("Invalid request parameters");
+      if (!osm_id || !osm_type)
+        return rejectWithValue("Invalid request parameters");
 
-      const response = await axios.get(`${api}/osm/photonDetails/${osm_type}/${osm_id}`);
+      const response = await axios.get(
+        `${api}/osm/photonDetails/${osm_type}/${osm_id}`,
+      );
 
       return response.data;
     } catch (err) {
       return rejectWithValue(err.response.data);
     }
-  }
+  },
 );
 
 const destinationAdapter = createEntityAdapter();
@@ -72,7 +79,7 @@ const destinationSlice = createSlice({
     },
     setWeatherWeek: (state, action) => {
       state.weatherWeek = action.payload;
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -81,7 +88,10 @@ const destinationSlice = createSlice({
       })
       .addCase(processGeoJSON.fulfilled, (state, action) => {
         state.status = "succeeded";
-        destinationAdapter.upsertOne(state.currentDestination, action.payload.data.newInstance);
+        destinationAdapter.upsertOne(
+          state.currentDestination,
+          action.payload.data.newInstance,
+        );
       })
       .addCase(processGeoJSON.rejected, (state, action) => {
         state.status = "failed";
@@ -92,7 +102,10 @@ const destinationSlice = createSlice({
       })
       .addCase(getDestination.fulfilled, (state, action) => {
         state.status = "succeeded";
-        destinationAdapter.upsertOne(state.currentDestination, action.payload.data.destination);
+        destinationAdapter.upsertOne(
+          state.currentDestination,
+          action.payload.data.destination,
+        );
       })
       .addCase(getDestination.rejected, (state, action) => {
         state.status = "failed";
@@ -112,5 +125,6 @@ const destinationSlice = createSlice({
   },
 });
 
-export const { setSelectedSearchResult, setWeatherObject, setWeatherWeek } = destinationSlice.actions;
+export const { setSelectedSearchResult, setWeatherObject, setWeatherWeek } =
+  destinationSlice.actions;
 export default destinationSlice.reducer;

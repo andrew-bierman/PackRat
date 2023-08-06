@@ -60,7 +60,7 @@ export default function Card({
 
   const handleRemoveFromFavorite = () => {
     const favorite = favorites.find(
-      (favorite) => favorite.pack_id === _id && favorite.user_id === user._id
+      (favorite) => favorite.pack_id === _id && favorite.user_id === user._id,
     );
     if (favorite) {
       dispatch(removeFavorite(favorite.id));
@@ -198,11 +198,11 @@ export default function Card({
                       new Date(
                         !Number.isNaN(new Date(createdAt).getTime())
                           ? createdAt
-                          : new Date()
+                          : new Date(),
                       ).getTime(),
                       {
                         addSuffix: true,
-                      }
+                      },
                     ) ?? 0}
                   </Text>
                 </Box>

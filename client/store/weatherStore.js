@@ -1,4 +1,8 @@
-import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
+import {
+  createSlice,
+  createAsyncThunk,
+  createEntityAdapter,
+} from "@reduxjs/toolkit";
 import { defaultWeatherObject } from "../constants/defaultWeatherObj";
 import { defaultWeekObj } from "../constants/defaultWeekObj";
 
@@ -11,7 +15,7 @@ const weatherAdapter = createEntityAdapter();
 const initialState = weatherAdapter.getInitialState({
   weatherObject: defaultWeatherObject,
   weatherWeek: defaultWeekObj,
-})
+});
 
 export const fetchWeather = createAsyncThunk(
   "weather/fetchWeather",
@@ -30,7 +34,7 @@ export const fetchWeather = createAsyncThunk(
     } catch (error) {
       console.error("error:" + error);
     }
-  }
+  },
 );
 
 export const fetchWeatherWeek = createAsyncThunk(
@@ -50,7 +54,7 @@ export const fetchWeatherWeek = createAsyncThunk(
     } catch (error) {
       console.error("error:" + error);
     }
-  }
+  },
 );
 
 export const weatherSlice = createSlice({

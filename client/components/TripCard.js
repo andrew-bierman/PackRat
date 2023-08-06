@@ -31,7 +31,7 @@ export default function TripCard({
   const currentPark = useSelector((state) => state.dropdown.currentPark);
   const trailsDetails = useSelector(selectAllTrails); // updated selector for new trails slice
   const currentShape = trailsDetails.filter(
-    (trail) => trail.properties.name == currentTrail
+    (trail) => trail.properties.name == currentTrail,
   );
 
   const handleValueChange = (value) => {

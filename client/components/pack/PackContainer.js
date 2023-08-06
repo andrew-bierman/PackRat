@@ -47,7 +47,7 @@ export default function PackContainer({ isCreatingTrip = false }) {
     }
   };
   const currentPack = useSelector((state) =>
-    selectPackById(state, currentPackId)
+    selectPackById(state, currentPackId),
   );
 
   const dataValues = packs.map((item) => item?.name) ?? [];

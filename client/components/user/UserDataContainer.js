@@ -9,7 +9,7 @@ import { theme } from "../../theme";
 
 export default function UserDataContainer({ data, type, userId }) {
   const [dataState, setDataState] = useState(
-    data.length > 0 ? Array(data.length).fill(false) : []
+    data.length > 0 ? Array(data.length).fill(false) : [],
   );
   useEffect(() => {
     setDataState(Array(data.length).fill(false));
@@ -27,14 +27,18 @@ export default function UserDataContainer({ data, type, userId }) {
   return (
     <LargeCard
       customStyle={{
-        // backgroundColor: theme.colors.white, 
+        // backgroundColor: theme.colors.white,
         // light transparent grey
         backgroundColor: "rgba(255, 255, 255, 0.1)",
-
       }}
     >
       <VStack space={5} alignItems="center" flex={1} width="100%" padding={4}>
-        <Text fontSize="2xl" fontWeight="bold" color={theme.colors.white} uppercase={true}>
+        <Text
+          fontSize="2xl"
+          fontWeight="bold"
+          color={theme.colors.white}
+          uppercase={true}
+        >
           {differentUser
             ? // ? `${userId}'s ${typeUppercase}`
               `${typeUppercase}`

@@ -1,4 +1,8 @@
-import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
+import {
+  createSlice,
+  createAsyncThunk,
+  createEntityAdapter,
+} from "@reduxjs/toolkit";
 import { api } from "../constants/api";
 import axios from "axios";
 
@@ -15,7 +19,7 @@ export const fetchPhotonSearchResults = createAsyncThunk(
     } catch (error) {
       console.error("error:" + error);
     }
-  }
+  },
 );
 
 const searchAdapter = createEntityAdapter();

@@ -38,7 +38,7 @@ export const AddItemGlobal = ({
         quantity,
         type: categoryType,
         unit,
-      })
+      }),
     );
     resetAddForm();
     setIsAddItemModalOpen(false);

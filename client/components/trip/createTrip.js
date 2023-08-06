@@ -1,9 +1,5 @@
-import {
-  Stack,
-  Box,
-  VStack,
-} from "native-base";
-import { ScrollView } from 'react-native'
+import { Stack, Box, VStack } from "native-base";
+import { ScrollView } from "react-native";
 import { Stack as Header } from "expo-router";
 
 import { theme } from "../../theme";
@@ -35,8 +31,13 @@ export default function Trips() {
     endDate: undefined,
   });
   const dispatch = useDispatch();
-  const searchResult = useSelector(state => state.search.selectedSearchResult);
-  console.log("🚀 ~ file: createTrip.js:37 ~ Trips ~ searchResult:", searchResult)
+  const searchResult = useSelector(
+    (state) => state.search.selectedSearchResult,
+  );
+  console.log(
+    "🚀 ~ file: createTrip.js:37 ~ Trips ~ searchResult:",
+    searchResult,
+  );
 
   const weatherObject = useSelector((state) => state.weather.weatherObject);
   const weatherWeek = useSelector((state) => state.weather.weatherWeek);
@@ -44,7 +45,7 @@ export default function Trips() {
   const trailsObject = useSelector((state) => state.trails.trailNames);
   const parksObject = useSelector((state) => state.parks.parkNames);
   const photonDetailsStore = useSelector(
-    (state) => state.destination.photonDetails
+    (state) => state.destination.photonDetails,
   );
   // console.log("🚀 ~ file: createTrip.js:49 ~ Trips ~ photonDetailsStore:", photonDetailsStore)
   useEffect(() => {
@@ -56,7 +57,7 @@ export default function Trips() {
   }, [parksObject]);
 
   useEffect(() => {
-    if(searchResult?.properties) {
+    if (searchResult?.properties) {
       const matchPhotonFormattingForData = {
         properties: {
           osm_id: searchResult.properties?.osm_id,
@@ -65,7 +66,7 @@ export default function Trips() {
       };
       dispatch(photonDetails(matchPhotonFormattingForData));
     }
-  },[searchResult])
+  }, [searchResult]);
   const steps = [
     {
       name: "Step 1",
@@ -148,16 +149,16 @@ export default function Trips() {
       name: "Step 7",
       component: () => (
         <TripCard
-        Icon={() => (
-          <FontAwesome5
-            name="route"
-            size={24}
-            color={theme.colors.cardIconColor}
-          />
-        )}
-        title="Map"
-        isMap={true}
-      />
+          Icon={() => (
+            <FontAwesome5
+              name="route"
+              size={24}
+              color={theme.colors.cardIconColor}
+            />
+          )}
+          title="Map"
+          isMap={true}
+        />
       ),
     },
     {
@@ -167,79 +168,78 @@ export default function Trips() {
   ];
 
   return (
-    <ScrollView
-      nestedScrollEnabled={true}>
-    <VStack>
-      {/* <MultiStepForm steps={steps} /> */}
-      <Box style={styles.mutualStyles}>
-        <Stack m={[0, 0, 12, 16]} style={{ gap: 25 }}>
-          <TripCard
-            title="Where are you heading?"
-            isSearch={true}
-            Icon={() => (
-              <FontAwesome
-                name="map"
-                size={20}
-                color={currentTheme.colors.cardIconColor}
-              />
-            )}
-          />
+    <ScrollView nestedScrollEnabled={true}>
+      <VStack>
+        {/* <MultiStepForm steps={steps} /> */}
+        <Box style={styles.mutualStyles}>
+          <Stack m={[0, 0, 12, 16]} style={{ gap: 25 }}>
+            <TripCard
+              title="Where are you heading?"
+              isSearch={true}
+              Icon={() => (
+                <FontAwesome
+                  name="map"
+                  size={20}
+                  color={currentTheme.colors.cardIconColor}
+                />
+              )}
+            />
 
-          <WeatherCard
-            weatherObject={weatherObject}
-            weatherWeek={weatherWeek}
-          />
+            <WeatherCard
+              weatherObject={weatherObject}
+              weatherWeek={weatherWeek}
+            />
 
-          <TripCard
-            title="Nearby Trails"
-            value="Trail List"
-            isTrail={true}
-            data={trails || []}
-            Icon={() => (
-              <FontAwesome5
-                name="hiking"
-                size={20}
-                color={currentTheme.colors.cardIconColor}
-              />
-            )}
-          />
+            <TripCard
+              title="Nearby Trails"
+              value="Trail List"
+              isTrail={true}
+              data={trails || []}
+              Icon={() => (
+                <FontAwesome5
+                  name="hiking"
+                  size={20}
+                  color={currentTheme.colors.cardIconColor}
+                />
+              )}
+            />
 
-          <TripCard
-            title="Nearby Parks"
-            value="Parks List"
-            isPark={true}
-            data={parksData}
-            Icon={() => (
-              <FontAwesome5
-                name="mountain"
-                size={20}
-                color={currentTheme.colors.cardIconColor}
-              />
-            )}
-          />
-          <GearList />
-          <TripDateRange dateRange={dateRange} setDateRange={setDateRange} />
+            <TripCard
+              title="Nearby Parks"
+              value="Parks List"
+              isPark={true}
+              data={parksData}
+              Icon={() => (
+                <FontAwesome5
+                  name="mountain"
+                  size={20}
+                  color={currentTheme.colors.cardIconColor}
+                />
+              )}
+            />
+            <GearList />
+            <TripDateRange dateRange={dateRange} setDateRange={setDateRange} />
 
-          <TripCard
-            Icon={() => (
-              <FontAwesome5
-                name="route"
-                size={24}
-                color={currentTheme.colors.cardIconColor}
-              />
-            )}
-            title="Map"
-            isMap={true}
-            shape={photonDetailsStore}
-          />
-          <Box>
-            <SaveTripContainer dateRange={dateRange} />
-          </Box>
-        </Stack>
-      </Box>
+            <TripCard
+              Icon={() => (
+                <FontAwesome5
+                  name="route"
+                  size={24}
+                  color={currentTheme.colors.cardIconColor}
+                />
+              )}
+              title="Map"
+              isMap={true}
+              shape={photonDetailsStore}
+            />
+            <Box>
+              <SaveTripContainer dateRange={dateRange} />
+            </Box>
+          </Stack>
+        </Box>
 
-      {/* <Footer /> */}
-    </VStack>
+        {/* <Footer /> */}
+      </VStack>
     </ScrollView>
   );
 }

@@ -1,4 +1,8 @@
-import { createAsyncThunk, createSlice, createEntityAdapter } from "@reduxjs/toolkit";
+import {
+  createAsyncThunk,
+  createSlice,
+  createEntityAdapter,
+} from "@reduxjs/toolkit";
 import axios from "axios";
 import { api } from "../constants/api";
 import { Alert } from "react-native";
@@ -19,7 +23,7 @@ export const signUp = createAsyncThunk(
       // Add check for unique username here.
       const response = await axios.post(`${api}/user/signup`, {
         name,
-        username,  // add username
+        username, // add username
         email,
         password,
       });
@@ -28,7 +32,7 @@ export const signUp = createAsyncThunk(
       console.log("error", error);
       return rejectWithValue(error.response.data.error);
     }
-  }
+  },
 );
 
 export const signIn = createAsyncThunk(
@@ -43,7 +47,7 @@ export const signIn = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.response.data.error);
     }
-  }
+  },
 );
 
 export const signOut = createAsyncThunk("auth/signOut", async () => {
@@ -65,10 +69,10 @@ export const signInWithGoogle = createAsyncThunk(
       });
       return response.data.user;
     } catch (error) {
-      console.log('error.response.data.error', error.response.data.error);
+      console.log("error.response.data.error", error.response.data.error);
       return rejectWithValue(error);
     }
-  }
+  },
 );
 
 export const authSlice = createSlice({
@@ -136,5 +140,6 @@ export const authSlice = createSlice({
   },
 });
 export const authReducer = authSlice.reducer;
-export const { selectAll: selectAllUsers, selectById: selectUserById } = authAdapter.getSelectors((state) => state.auth);
+export const { selectAll: selectAllUsers, selectById: selectUserById } =
+  authAdapter.getSelectors((state) => state.auth);
 export default authSlice.reducer;

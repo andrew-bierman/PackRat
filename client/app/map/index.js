@@ -26,7 +26,7 @@ export default function Map() {
     const mapViewRef = useRef(null);
 
     const [style, setStyle] = React.useState(
-      "mapbox://styles/mapbox/outdoors-v11"
+      "mapbox://styles/mapbox/outdoors-v11",
     );
 
     useEffect(() => {}, []);
@@ -123,7 +123,7 @@ export default function Map() {
         centerCoordinate: mapViewRef.current.getCenter(),
         zoomLevel: Math.min(
           mapViewRef.current.zoomLevel,
-          mapViewRef.current.getZoomForBounds(bounds, { padding: 50 })
+          mapViewRef.current.getZoomForBounds(bounds, { padding: 50 }),
         ),
       });
     }

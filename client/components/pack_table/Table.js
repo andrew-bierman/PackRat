@@ -172,7 +172,7 @@ export const TableContainer = ({
   const [weightUnit, setWeightUnit] = useState("g");
   const isLoading = useSelector((state) => state.items.isLoading);
   const error = useSelector((state) => state.items.error);
-console.log('c',currentPack)
+  console.log("c", currentPack);
   const data = currentPack?.items;
 
   let totalFoodWeight = 0;
@@ -196,7 +196,7 @@ console.log('c',currentPack)
               totalBaseWeight += convertWeight(
                 item.weight * item.quantity,
                 item.unit,
-                weightUnit
+                weightUnit,
               );
               break;
             }
@@ -204,7 +204,7 @@ console.log('c',currentPack)
               totalFoodWeight += convertWeight(
                 item.weight * item.quantity,
                 item.unit,
-                weightUnit
+                weightUnit,
               );
               foodItems.push(item);
               break;
@@ -213,7 +213,7 @@ console.log('c',currentPack)
               totalWaterWeight += convertWeight(
                 item.weight * item.quantity,
                 item.unit,
-                weightUnit
+                weightUnit,
               );
               waterItem = item;
               break;
@@ -228,7 +228,7 @@ console.log('c',currentPack)
     setCheckedItems((prev) =>
       prev.includes(itemId)
         ? prev.filter((id) => id !== itemId)
-        : [...prev, itemId]
+        : [...prev, itemId],
     );
   };
 

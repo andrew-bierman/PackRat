@@ -21,9 +21,9 @@ const QuickActionsSection = () => {
   ];
 
   const handleActionSelect = (action) => {
-    if(action === "createPack") {
+    if (action === "createPack") {
       router.push("/pack/create");
-    } else if(action === "createTrip") {
+    } else if (action === "createTrip") {
       router.push("/trip/create");
     }
   };
@@ -33,7 +33,7 @@ const QuickActionsSection = () => {
       {quickActionData.map((action) => (
         <QuickActionButton
           key={action.action}
-          onPress={() => handleActionSelect(action.action)}          
+          onPress={() => handleActionSelect(action.action)}
           iconName={action.iconName}
           text={action.text}
         />

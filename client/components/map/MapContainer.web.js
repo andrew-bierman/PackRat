@@ -11,7 +11,6 @@ export function MapContainer({ shape }) {
     shape = defaultShape;
   }
 
-
   if (Platform.OS === "web") {
     return (
       <View style={styles.webContainer}>

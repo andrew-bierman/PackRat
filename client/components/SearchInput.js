@@ -1,4 +1,3 @@
-
 import {
   VStack,
   Input,
@@ -30,9 +29,7 @@ import { useState, useEffect } from "react";
 // import { getTrailsResult } from "../api/getTrailsResult";
 // import { getPhotonResults } from "../api/getPhotonResults";
 
-import {
-  fetchTrails,
-} from "../store/trailsStore";
+import { fetchTrails } from "../store/trailsStore";
 
 import { fetchParks } from "../store/parksStore";
 

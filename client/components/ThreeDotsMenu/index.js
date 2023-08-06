@@ -37,7 +37,7 @@ export const ThreeDotsMenu = ({ data, titleRef, setEditTitle }) => {
               dispatch(
                 deletePack({
                   id: data["_id"],
-                })
+                }),
               );
             } else {
               dispatch(deleteTrip(data["_id"]));

@@ -1,16 +1,18 @@
 // redux toolkit slice for single pack
 
-import { createSlice, createAsyncThunk, createEntityAdapter} from "@reduxjs/toolkit";
+import {
+  createSlice,
+  createAsyncThunk,
+  createEntityAdapter,
+} from "@reduxjs/toolkit";
 
 import axios from "axios";
 
 import { api } from "../constants/api";
 
-const singlePackAdapter = createEntityAdapter(
-  {
-    selectId: (singlePack) => singlePack._id,
-  }
-);
+const singlePackAdapter = createEntityAdapter({
+  selectId: (singlePack) => singlePack._id,
+});
 
 // Step 2: Create the initial state using the entity adapter
 const initialState = singlePackAdapter.getInitialState({
@@ -24,7 +26,7 @@ export const fetchSinglePack = createAsyncThunk(
   async (packId) => {
     const response = await axios.get(`${api}/pack/p/${packId}`);
     return response.data;
-  }
+  },
 );
 
 const singlePackSlice = createSlice({

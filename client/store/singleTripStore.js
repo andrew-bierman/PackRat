@@ -1,6 +1,10 @@
 // redux toolkit slice for single pack
 
-import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
+import {
+  createSlice,
+  createAsyncThunk,
+  createEntityAdapter,
+} from "@reduxjs/toolkit";
 
 import axios from "axios";
 
@@ -21,7 +25,7 @@ export const fetchSingleTrip = createAsyncThunk(
   async (tripId) => {
     const response = await axios.get(`${api}/trip/t/${tripId}`);
     return response.data;
-  }
+  },
 );
 
 const singleTripSlice = createSlice({

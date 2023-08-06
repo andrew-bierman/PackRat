@@ -72,7 +72,6 @@ const DestinationHeader = ({ geoJSON, selectedSearchResult }) => {
 };
 
 const WeatherData = ({ geoJSON }) => {
-
   const dispatch = useDispatch();
   const weatherObject = useSelector((state) => state.destination.weatherObject);
   const weatherWeek = useSelector((state) => state.destination.weatherWeek);
@@ -104,14 +103,14 @@ const WeatherData = ({ geoJSON }) => {
 };
 
 export const DestinationPage = () => {
-  console.log('destination page')
+  console.log("destination page");
   const router = useRouter();
 
   const dispatch = useDispatch();
 
   const { destinationId, id, type } = useSearchParams();
   const photonDetailsStore = useSelector(
-    (state) => state.destination.photonDetails
+    (state) => state.destination.photonDetails,
   );
 
   const currentDestination = {
@@ -120,7 +119,7 @@ export const DestinationPage = () => {
 
   const geoJSON = currentDestination?.geoJSON;
   const selectedSearchResult = useSelector(
-    (state) => state.destination.selectedSearchResult
+    (state) => state.destination.selectedSearchResult,
   );
 
   useEffect(() => {
@@ -146,29 +145,30 @@ export const DestinationPage = () => {
 
   let shape = geoJSON ?? defaultShape;
 
-  const map = () => <MapContainer shape={shape}  />;
+  const map = () => <MapContainer shape={shape} />;
 
   return (
     <ScrollView>
-
-
-    <View style={styles.container}>
-      <DestinationHeader geoJSON={geoJSON} selectedSearchResult={selectedSearchResult} />
-      <LargeCard
-        title="Map"
-        Icon={() => (
-          <Ionicons
-            name="location"
-            size={24}
-            color={theme.colors.textPrimary}
-          />
-        )}
-        ContentComponent={map}
-        contentProps={{ shape }}
-        type="map"
-      />
-      <WeatherData geoJSON={geoJSON} />
-    </View>
+      <View style={styles.container}>
+        <DestinationHeader
+          geoJSON={geoJSON}
+          selectedSearchResult={selectedSearchResult}
+        />
+        <LargeCard
+          title="Map"
+          Icon={() => (
+            <Ionicons
+              name="location"
+              size={24}
+              color={theme.colors.textPrimary}
+            />
+          )}
+          ContentComponent={map}
+          contentProps={{ shape }}
+          type="map"
+        />
+        <WeatherData geoJSON={geoJSON} />
+      </View>
     </ScrollView>
   );
 };

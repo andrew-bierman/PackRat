@@ -27,10 +27,10 @@ export const AddItem = ({
   const [name, setName] = useState(initialData?.name || "");
   const [weight, setWeight] = useState(initialData?.weight?.toString() || "");
   const [quantity, setQuantity] = useState(
-    initialData?.quantity?.toString() || ""
+    initialData?.quantity?.toString() || "",
   );
   const [categoryType, setCategoryType] = useState(
-    initialData?.category?.name || ""
+    initialData?.category?.name || "",
   );
 
   const [unit, setUnit] = useState(initialData?.unit || "");
@@ -58,7 +58,7 @@ export const AddItem = ({
             quantity,
             unit,
             type: categoryType,
-          })
+          }),
         );
         closeModalHandler();
       } else {
@@ -70,7 +70,7 @@ export const AddItem = ({
             unit,
             type: categoryType,
             _id: initialData["_id"],
-          })
+          }),
         );
         setPage(1);
         closeModalHandler();
@@ -86,7 +86,7 @@ export const AddItem = ({
           unit,
           _id,
           packId,
-        })
+        }),
       );
       setIsAddItemModalOpen(false);
       setRefetch(refetch === true ? false : true);

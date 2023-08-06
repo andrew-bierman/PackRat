@@ -14,7 +14,7 @@ const SVGLogoComponent = ({
   //   const translateX = -viewBoxWidth / 2;
   //   const translateY = -viewBoxHeight / 2;
 
-//   console.log("fill", fill);
+  //   console.log("fill", fill);
 
   return (
     <Svg

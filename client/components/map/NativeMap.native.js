@@ -11,7 +11,7 @@ import {
   Modal,
   Alert,
   Linking,
-  Image
+  Image,
 } from "react-native";
 import Geolocation from "@react-native-community/geolocation";
 // import { check, PERMISSIONS, RESULTS } from 'react-native-permissions';
@@ -48,7 +48,7 @@ import {
   isPoint,
   isLineString,
   isPolygonOrMultiPolygon,
-  multiPolygonBounds
+  multiPolygonBounds,
 } from "../../utils/mapFunctions";
 
 import * as DocumentPicker from "expo-document-picker";
@@ -92,7 +92,7 @@ function NativeMap({ shape: shapeProp }) {
   const [shape, setShape] = useState(shapeProp);
   const [mapName, setMapName] = useState(shape?.features[0]?.properties?.name);
   const [trailCenterPoint, setTrailCenterPoint] = useState(
-    findTrailCenter(shape)
+    findTrailCenter(shape),
   );
 
   const toast = useToast();
@@ -133,7 +133,7 @@ function NativeMap({ shape: shapeProp }) {
         setCorrectLocation(false);
         Alert.alert("Something went wrong with location", error.message);
       },
-      { enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 }
+      { enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 },
     );
   };
 
@@ -183,18 +183,20 @@ function NativeMap({ shape: shapeProp }) {
 
   const pointLatLong = shape?.features[0]?.geometry?.coordinates;
   const openMaps = (latLong) => {
-    console.log(latLong.join(','), 'lat long');
-    const scheme = Platform.select({ ios: 'maps://0,0?q=', android: 'geo:0,0?q=' });
-    const latLng = latLong.join(',');
+    console.log(latLong.join(","), "lat long");
+    const scheme = Platform.select({
+      ios: "maps://0,0?q=",
+      android: "geo:0,0?q=",
+    });
+    const latLng = latLong.join(",");
     // console.log('shape?.features[0]?.properties?.name',shape?.features[0]?.properties?.name)
-    const label = shape?.features[0]?.properties?.name
+    const label = shape?.features[0]?.properties?.name;
     const url = Platform.select({
       ios: `${scheme}${label}@${latLng}`,
-      android: `${scheme}${latLng}(${label})`
+      android: `${scheme}${latLng}(${label})`,
     });
     Linking.openURL(url);
-
-  }
+  };
   const element = (
     <View style={mapFullscreen ? fullMapDimension : previewMapStyle}>
       <Mapbox.MapView
@@ -207,12 +209,16 @@ function NativeMap({ shape: shapeProp }) {
         scrollEnabled={mapFullscreen}
         zoomEnabled={mapFullscreen}
       >
-
         <Mapbox.Camera
           ref={camera}
           zoomLevel={zoomLevel ? zoomLevel - 0.8 : 10}
-
-          centerCoordinate={isPoint(shape) ? pointLatLong : isPolygonOrMultiPolygon(shape) ? multiPolygonBounds(shape.features[0]) : trailCenterPoint}
+          centerCoordinate={
+            isPoint(shape)
+              ? pointLatLong
+              : isPolygonOrMultiPolygon(shape)
+              ? multiPolygonBounds(shape.features[0])
+              : trailCenterPoint
+          }
           animationMode={"flyTo"}
           animationDuration={2000}
         />
@@ -236,54 +242,17 @@ function NativeMap({ shape: shapeProp }) {
           </View>
         </Mapbox.PointAnnotation>
         {/* trail */}
-        {
-          isPoint(shape) ?
+        {isPoint(shape) ? (
           <Mapbox.PointAnnotation
-          id="destination"
-          coordinate={pointLatLong}
-          onSelected={() => {
-            console.log('selected');
-            openMaps(pointLatLong)
-          }}
+            id="destination"
+            coordinate={pointLatLong}
+            onSelected={() => {
+              console.log("selected");
+              openMaps(pointLatLong);
+            }}
           >
-           {/* <CircleCapComp /> */}
-          <View >
-           <MaterialCommunityIcons
-              name="map-marker"
-              size={35}
-              color={"#de0910"}
-              />
-        </View>
-
-
-          </Mapbox.PointAnnotation>
-           :
-          isLineString(shape) ?
-          <>
-          <Mapbox.ShapeSource
-          id="source1"
-          lineMetrics={true}
-          shape={shape.features[0]}
-          cluster
-          clusterRadius={80}
-          clusterMaxZoomLevel={14}
-          style={{ zIndex: 1 }}
-        >
-          <Mapbox.LineLayer id="layer1" style={styles.lineLayer} />
-        </Mapbox.ShapeSource>
-        {/* // top location */}
-        {shape?.features[0]?.geometry?.coordinates?.length > 0 && (
-          <Mapbox.PointAnnotation
-            id={"1212"}
-            coordinate={[location.longitude, location.latitude]}
-          >
-            <View
-              style={{
-                justifyContent: "center",
-                alignItems: "center",
-                backgroundColor: "transparent",
-              }}
-            >
+            {/* <CircleCapComp /> */}
+            <View>
               <MaterialCommunityIcons
                 name="map-marker"
                 size={35}
@@ -291,23 +260,57 @@ function NativeMap({ shape: shapeProp }) {
               />
             </View>
           </Mapbox.PointAnnotation>
-        )}
-          </>
-          :
-          <Mapbox.ShapeSource id={'some-feature'} shape={shape.features[0]}>
-                <Mapbox.LineLayer
-                    sourceID="some-feature"
-                    id="some-feature-line"
-                    style={{
-                        lineColor: '#ffffff',
-                        lineWidth: 10,
-                    }}
-                />
-                        <Mapbox.FillLayer id="multipolygonFill" style={{ fillOpacity: 0.5 }} />
-
+        ) : isLineString(shape) ? (
+          <>
+            <Mapbox.ShapeSource
+              id="source1"
+              lineMetrics={true}
+              shape={shape.features[0]}
+              cluster
+              clusterRadius={80}
+              clusterMaxZoomLevel={14}
+              style={{ zIndex: 1 }}
+            >
+              <Mapbox.LineLayer id="layer1" style={styles.lineLayer} />
             </Mapbox.ShapeSource>
-        }
-
+            {/* // top location */}
+            {shape?.features[0]?.geometry?.coordinates?.length > 0 && (
+              <Mapbox.PointAnnotation
+                id={"1212"}
+                coordinate={[location.longitude, location.latitude]}
+              >
+                <View
+                  style={{
+                    justifyContent: "center",
+                    alignItems: "center",
+                    backgroundColor: "transparent",
+                  }}
+                >
+                  <MaterialCommunityIcons
+                    name="map-marker"
+                    size={35}
+                    color={"#de0910"}
+                  />
+                </View>
+              </Mapbox.PointAnnotation>
+            )}
+          </>
+        ) : (
+          <Mapbox.ShapeSource id={"some-feature"} shape={shape.features[0]}>
+            <Mapbox.LineLayer
+              sourceID="some-feature"
+              id="some-feature-line"
+              style={{
+                lineColor: "#ffffff",
+                lineWidth: 10,
+              }}
+            />
+            <Mapbox.FillLayer
+              id="multipolygonFill"
+              style={{ fillOpacity: 0.5 }}
+            />
+          </Mapbox.ShapeSource>
+        )}
       </Mapbox.MapView>
 
       <MapButtonsOverlay

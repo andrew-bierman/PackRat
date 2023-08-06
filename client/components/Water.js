@@ -23,7 +23,7 @@ export default function Water({ currentPack, setWaterItem }) {
       packId: currentPack["_id"],
       type: ItemCategoryEnum.WATER,
     };
-    
+
     dispatch(addPackItem(data));
   };
 

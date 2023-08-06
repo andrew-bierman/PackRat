@@ -159,11 +159,11 @@ const UserDataCard = ({
                   new Date(
                     !Number.isNaN(new Date(createdAt).getTime())
                       ? createdAt
-                      : new Date()
+                      : new Date(),
                   ).getTime(),
                   {
                     addSuffix: true,
-                  }
+                  },
                 ) ?? 0}
               </Text>
               <Box

@@ -15,12 +15,12 @@ export const getPhotonResults = async (addressArray) => {
     .flatMap(([key, values]) =>
       Array.isArray(values)
         ? values.map((val) => `${key}=${val}`)
-        : `${key}=${values}`
+        : `${key}=${values}`,
     )
     .join("&");
 
   const response = await axios.get(
-    `https://photon.komoot.io/api/?${queryString}`
+    `https://photon.komoot.io/api/?${queryString}`,
   );
 
   //   const trailsArray = response.data.features.map((_item) => _item?.properties?.name);

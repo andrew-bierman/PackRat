@@ -6,9 +6,7 @@ import { theme } from "../../theme";
 const Section = ({ children, onPress }) => {
   return (
     <View style={styles.section} onPress={onPress}>
-      <Card style={styles.card}>
-        {children}
-      </Card>
+      <Card style={styles.card}>{children}</Card>
     </View>
   );
 };

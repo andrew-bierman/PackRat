@@ -28,7 +28,7 @@ export default function LargeCard({
   children,
 }) {
   const currentShape = useSelector(
-    (state) => state.search.selectedSearchResult
+    (state) => state.search.selectedSearchResult,
   );
 
   console.log("currentShape", currentShape);

@@ -53,9 +53,7 @@ function normalizeCoordinates(coordinates) {
 function convertPhotonGeoJsonToShape(photonGeoJson) {
   return {
     type: "FeatureCollection",
-    features: [
-      photonGeoJson
-    ],
+    features: [photonGeoJson],
   };
 }
 
@@ -136,7 +134,7 @@ function findTrailCenter(shape) {
   if (trailCoords.length === 1) {
     console.log(
       "Single coordinate found, using as trail center.",
-      trailCoords[0]
+      trailCoords[0],
     );
     return trailCoords[0];
   }
@@ -152,7 +150,8 @@ function findTrailCenter(shape) {
   }
 
   const avgLatitude = latitudes.reduce((a, b) => a + b, 0) / latitudes.length;
-  const avgLongitude = longitudes.reduce((a, b) => a + b, 0) / longitudes.length;
+  const avgLongitude =
+    longitudes.reduce((a, b) => a + b, 0) / longitudes.length;
 
   console.log("trailCords return", [avgLatitude, avgLongitude]);
 
@@ -167,7 +166,7 @@ const processShapeData = (shape) => {
     if (feature.geometry.type === "LineString") {
       // Make sure coordinates are in the correct format
       feature.geometry.coordinates = ensure2DArray(
-        feature.geometry.coordinates
+        feature.geometry.coordinates,
       );
 
       let points = feature.geometry.coordinates.map((coord, index) => {
@@ -236,19 +235,22 @@ const isShapeDownloadable = (shape) => {
 };
 
 const isPoint = (shape) => {
-  return shape?.features[0]?.geometry?.type === 'Point';
-}
+  return shape?.features[0]?.geometry?.type === "Point";
+};
 const isLineString = (shape) => {
-  return shape?.features[0]?.geometry?.type === 'LineString';
-}
+  return shape?.features[0]?.geometry?.type === "LineString";
+};
 
 const isPolygonOrMultiPolygon = (shape) => {
-  return shape?.features[0]?.geometry?.type === 'MultiPolygon' || shape?.features[0]?.geometry?.type === 'MultiPolygon';
-}
+  return (
+    shape?.features[0]?.geometry?.type === "MultiPolygon" ||
+    shape?.features[0]?.geometry?.type === "MultiPolygon"
+  );
+};
 
 const multiPolygonBounds = (multipolygonData) => {
   let coordinates = multipolygonData.geometry.coordinates[0];
-  if(multipolygonData.geometry.type === 'MultiPolygon') {
+  if (multipolygonData.geometry.type === "MultiPolygon") {
     coordinates = coordinates[0];
   }
   let minX = Infinity;
@@ -265,9 +267,9 @@ const multiPolygonBounds = (multipolygonData) => {
 
   const centerLng = (minX + maxX) / 2;
   const centerLat = (minY + maxY) / 2;
-  console.log(centerLat, centerLng, 'center lng lat');
-  return [centerLng, centerLat]
-}
+  console.log(centerLat, centerLng, "center lng lat");
+  return [centerLng, centerLat];
+};
 
 export {
   defaultShape,
@@ -285,5 +287,5 @@ export {
   isPoint,
   isLineString,
   isPolygonOrMultiPolygon,
-  multiPolygonBounds
+  multiPolygonBounds,
 };

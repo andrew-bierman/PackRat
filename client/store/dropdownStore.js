@@ -10,11 +10,17 @@ export const dropdownSlice = createSlice({
   }),
   reducers: {
     addTrail: (state, action) => {
-      dropdownAdapter.updateOne(state, { id: "currentTrail", changes: { currentTrail: action.payload } });
+      dropdownAdapter.updateOne(state, {
+        id: "currentTrail",
+        changes: { currentTrail: action.payload },
+      });
       state.currentTrail = action.payload;
     },
     addPark: (state, action) => {
-      dropdownAdapter.updateOne(state, { id: "currentPark", changes: { currentPark: action.payload } });
+      dropdownAdapter.updateOne(state, {
+        id: "currentPark",
+        changes: { currentPark: action.payload },
+      });
       state.currentPark = action.payload;
     },
   },

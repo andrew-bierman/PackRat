@@ -29,7 +29,7 @@ export const ItemForm = ({
     currentPack.items.length > 0
   ) {
     hasWaterAdded = currentPack.items.some(
-      (item) => item.category && item.category.name === ItemCategoryEnum.WATER
+      (item) => item.category && item.category.name === ItemCategoryEnum.WATER,
     );
   }
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =

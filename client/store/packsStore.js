@@ -26,7 +26,7 @@ export const deletePackItem = createAsyncThunk(
       },
     });
     return response.data;
-  }
+  },
 );
 
 export const changePackStatus = createAsyncThunk(
@@ -34,7 +34,7 @@ export const changePackStatus = createAsyncThunk(
   async (updatedPack) => {
     const response = await axios.put(`${api}/pack`, updatedPack);
     return response.data;
-  }
+  },
 );
 
 export const fetchUserPacks = createAsyncThunk(
@@ -42,7 +42,7 @@ export const fetchUserPacks = createAsyncThunk(
   async (ownerId) => {
     const response = await axios.get(`${api}/pack/${ownerId}`);
     return response.data;
-  }
+  },
 );
 
 export const addPackItem = createAsyncThunk(
@@ -51,7 +51,7 @@ export const addPackItem = createAsyncThunk(
     console.log("calling apis");
     const response = await axios.post(`${api}/item/`, newItem);
     return response.data;
-  }
+  },
 );
 
 export const duplicatePackItem = createAsyncThunk(
@@ -63,7 +63,7 @@ export const duplicatePackItem = createAsyncThunk(
       items: newItem.items,
     });
     return response.data;
-  }
+  },
 );
 
 export const scorePack = createAsyncThunk("packs/scorePack", async (packId) => {
@@ -76,7 +76,7 @@ export const editPackItem = createAsyncThunk(
   async (newItem) => {
     const response = await axios.put(`${api}/item/`, newItem);
     return response.data;
-  }
+  },
 );
 
 export const editItemsGlobalAsDuplicate = createAsyncThunk(
@@ -92,7 +92,7 @@ export const editItemsGlobalAsDuplicate = createAsyncThunk(
       type,
     });
     return response.data;
-  }
+  },
 );
 
 export const selectItemsGlobal = createAsyncThunk(
@@ -111,7 +111,7 @@ export const selectItemsGlobal = createAsyncThunk(
     } catch (error) {
       console.log("error", error.message);
     }
-  }
+  },
 );
 
 export const updatePack = createAsyncThunk("packs/updatePack", async (pack) => {
@@ -235,7 +235,7 @@ const packsSlice = createSlice({
           }
 
           const updatedItems = existingPack.items.map((item) =>
-            item._id === newItem._id ? newItem : item
+            item._id === newItem._id ? newItem : item,
           );
           console.log("updatediTEMS", updatedItems);
 
@@ -268,7 +268,7 @@ const packsSlice = createSlice({
         }
 
         const updatedItems = existing.items.filter(
-          (item) => item._id !== itemId
+          (item) => item._id !== itemId,
         );
 
         packsAdapter.updateOne(state, {
@@ -336,7 +336,7 @@ const packsSlice = createSlice({
           return;
         }
         const updatedItems = existingPack.items.map((item) =>
-          item._id === itemId ? action.payload : item
+          item._id === itemId ? action.payload : item,
         );
         console.log("updated items", updatedItems);
 

@@ -21,10 +21,11 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { convertPhotonGeoJsonToShape } from "../../utils/mapFunctions";
 import UseTheme from "../../hooks/useTheme";
 export function TripDetails() {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } = UseTheme();
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
   const weatherObject = useSelector((state) => state.weather.weatherObject);
   const weatherWeek = useSelector((state) => state.weather.weatherWeek);
-  console.log('trip detail')
+  console.log("trip detail");
   const dispatch = useDispatch();
 
   const { tripId } = useSearchParams();

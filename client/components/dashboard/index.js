@@ -11,7 +11,6 @@ import SectionHeader from "./SectionHeader";
 const Dashboard = () => {
   return (
     <ScrollView contentContainerStyle={styles.content} horizontal={false}>
-
       <VStack
         style={[
           styles.container,

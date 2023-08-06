@@ -44,7 +44,7 @@ const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
   const user = useSelector((state) => state.auth.user);
   const [conversationId, setConversationId] = useState(defaultChatId);
   const conversation = useSelector((state) =>
-    selectConversationById(state, conversationId)
+    selectConversationById(state, conversationId),
   );
   const conversations = useSelector((state) => selectAllConversations(state));
   const [userInput, setUserInput] = useState("");
@@ -75,7 +75,7 @@ const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
 
   const handleSendMessage = async () => {
     await dispatch(
-      getAIResponse({ userId: user._id, conversationId, userInput })
+      getAIResponse({ userId: user._id, conversationId, userInput }),
     );
     setUserInput("");
     dispatch(getUserChats(user._id));
@@ -106,8 +106,8 @@ const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
               <TouchableOpacity
                 style={styles.newChatButton}
                 onPress={() => {
-                  setConversationId(null)
-                  setParsedMessages([])
+                  setConversationId(null);
+                  setParsedMessages([]);
                 }}
               >
                 <Text style={styles.newChatButtonText}>New Chat</Text>

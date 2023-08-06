@@ -8,7 +8,7 @@ export default function AboutRoute() {
       showsHorizontalScrollIndicator={false}
       contentContainerStyle={styles.menuBar}
     >
-      {Platform.OS === "web" ?
+      {Platform.OS === "web" ? (
         <>
           <Header.Screen
             options={{
@@ -21,14 +21,15 @@ export default function AboutRoute() {
           />
           <About />
         </>
-        :
-        <About />}
+      ) : (
+        <About />
+      )}
     </ScrollView>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   menuBar: {
-    paddingBottom: 120
+    paddingBottom: 120,
   },
-})
+});

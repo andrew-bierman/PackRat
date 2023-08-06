@@ -1,37 +1,44 @@
-import { createSlice, createAsyncThunk, createEntityAdapter } from '@reduxjs/toolkit';
-import { api } from '../constants/api';
-import axios from 'axios';
+import {
+  createSlice,
+  createAsyncThunk,
+  createEntityAdapter,
+} from "@reduxjs/toolkit";
+import { api } from "../constants/api";
+import axios from "axios";
 
 export const fetchParks = createAsyncThunk(
-  'parks/fetchParks',
+  "parks/fetchParks",
   async ({ lat, lon, selectedSearch }) => {
     let params = `?`;
 
     if (lat) params += `lat=${lat}`;
     if (lon) params += `&lon=${lon}`;
 
-    const url = api + '/osm/parks' + params;
+    const url = api + "/osm/parks" + params;
 
     try {
       const response = await axios.get(url);
       const parks = response.data.features;
 
       const filteredParks = parks
-        .filter((park) => park.properties.name && park.properties.name !== selectedSearch)
+        .filter(
+          (park) =>
+            park.properties.name && park.properties.name !== selectedSearch,
+        )
         .map((park) => park.properties.name)
         .slice(0, 25);
 
       return { parks, filteredParks };
     } catch (error) {
-      console.error('error:' + error);
+      console.error("error:" + error);
     }
-  }
+  },
 );
 
 const parksAdapter = createEntityAdapter();
 
 const parksSlice = createSlice({
-  name: 'parks',
+  name: "parks",
   initialState: parksAdapter.getInitialState({
     parksDetails: [],
     parkNames: [],

@@ -69,9 +69,7 @@ export function PackDetails() {
             additionalComps={
               <>
                 <TableContainer currentPack={currentPack} copy={canCopy} />
-                <Box
-                  style={styles.boxStyle}
-                >
+                <Box style={styles.boxStyle}>
                   <AddItemModal
                     currentPackId={currentPackId}
                     currentPack={currentPack}
@@ -84,9 +82,7 @@ export function PackDetails() {
                   data={currentPack}
                   isOwner={isOwner}
                 />
-                <Box
-                  style={styles.boxStyle}
-                >
+                <Box style={styles.boxStyle}>
                   <ChatContainer />
                 </Box>
               </>

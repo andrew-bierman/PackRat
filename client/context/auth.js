@@ -39,8 +39,6 @@ export function AuthProvider({ children }) {
   useProtectedRoute(user);
 
   return (
-    <AuthContext.Provider value={{ user }}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>
   );
 }

@@ -1,5 +1,5 @@
 // fuseSearch.js
-import Fuse from 'fuse.js';
+import Fuse from "fuse.js";
 
 // Desc: Fuse search function
 export const fuseSearch = (data, searchTerm, keys, options = {}) => {

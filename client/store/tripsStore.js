@@ -18,7 +18,7 @@ export const deleteTrip = createAsyncThunk(
       },
     });
     return response.data;
-  }
+  },
 );
 
 export const fetchUserTrips = createAsyncThunk(
@@ -26,7 +26,7 @@ export const fetchUserTrips = createAsyncThunk(
   async (ownerId) => {
     const response = await axios.get(`${api}/trip/${ownerId}`);
     return response.data;
-  }
+  },
 );
 
 export const addTrip = createAsyncThunk("trips/addTrip", async (newTrip) => {
@@ -39,7 +39,7 @@ export const editTrip = createAsyncThunk(
   async (updatedTrip) => {
     const response = await axios.put(`${api}/trip/`, updatedTrip);
     return response.data;
-  }
+  },
 );
 
 const tripsAdapter = createEntityAdapter({

@@ -25,7 +25,7 @@ const TripDateRange = ({ dateRange, setDateRange }) => {
       setOpen(false);
       setDateRange({ startDate, endDate });
     },
-    [setOpen]
+    [setOpen],
   );
 
   useEffect(() => {

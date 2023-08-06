@@ -34,7 +34,10 @@ const monthArr = [
   "December",
 ];
 
-export default function WeatherCard({weatherObject = defaultWeatherObject, weatherWeek = []}) {
+export default function WeatherCard({
+  weatherObject = defaultWeatherObject,
+  weatherWeek = [],
+}) {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     UseTheme();
   const date = new Date();
