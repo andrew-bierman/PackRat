@@ -162,8 +162,12 @@ export default function Card({
           </Stack>
 
           <HStack alignItems="center" space={4} justifyContent="space-between">
-            <HStack alignItems="center" justifyContent="space-between" width="100%">
-            <Box
+            <HStack
+              alignItems="center"
+              justifyContent="space-between"
+              width="100%"
+            >
+              <Box
                 style={{
                   flexDirection: "column",
                   alignItems: "flex-start",
@@ -171,7 +175,9 @@ export default function Card({
                 }}
               >
                 <Link href={`/profile/${owner_id}`}>
-                 <Text>View {owner?.name || 'Owner'}</Text>
+                  <Text>
+                    View {owner?.username ? "@" + owner?.username : "Owner"}
+                  </Text>
                 </Link>
                 <Box
                   style={{
@@ -180,29 +186,28 @@ export default function Card({
                     gap: 10,
                   }}
                 >
-
-              <Text
-                color="coolGray.600"
-                _dark={{
-                  color: "warmGray.200",
-                }}
-                fontWeight="400"
-                flex={1}
-              >
-                {formatDistanceToNow(
-                  new Date(
-                    !Number.isNaN(new Date(createdAt).getTime())
-                      ? createdAt
-                      : new Date()
-                  ).getTime(),
-                  {
-                    addSuffix: true,
-                  }
-                ) ?? 0}
-              </Text>
+                  <Text
+                    color="coolGray.600"
+                    _dark={{
+                      color: "warmGray.200",
+                    }}
+                    fontWeight="400"
+                    flex={1}
+                  >
+                    {formatDistanceToNow(
+                      new Date(
+                        !Number.isNaN(new Date(createdAt).getTime())
+                          ? createdAt
+                          : new Date()
+                      ).getTime(),
+                      {
+                        addSuffix: true,
+                      }
+                    ) ?? 0}
+                  </Text>
                 </Box>
               </Box>
-             
+
               <Box
                 style={{
                   flexDirection: "column",

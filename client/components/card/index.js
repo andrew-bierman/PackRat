@@ -43,7 +43,7 @@ export const CustomCard = ({
 
   const user = useSelector((state) => state.auth.user);
   const userId = user["_id"];
-  
+
   const handleCopyLink = () => {
     Clipboard.setString(link);
 
@@ -89,16 +89,19 @@ export const CustomCard = ({
                 titleRef={titleRef}
               />
             </Box>
-            <Box
-              flexDirection="row"
-              alignItems="center"
-            >
-              <Box
-              mx="5"
-              >
-            <Link href={`/profile/${data['owner_id']}`}>
-            <Text>{user._id === data['owner_id'] ? 'Your Profile': `View ${data.owners && data.owners.length ? data.owners[0].name : "Profile"}`}</Text>
-            </Link>
+            <Box flexDirection="row" alignItems="center">
+              <Box mx="5">
+                <Link href={`/profile/${data["owner_id"]}`}>
+                  <Text>
+                    {user._id === data["owner_id"]
+                      ? "Your Profile"
+                      : `View ${
+                          data.owners && data.owners.length
+                            ? data.owners[0].name
+                            : "Profile"
+                        }`}
+                  </Text>
+                </Link>
               </Box>
               {link && (
                 <Box
@@ -106,26 +109,27 @@ export const CustomCard = ({
                   style={{
                     gap: "5px",
                     alignItems: "center",
-                  }}>
+                  }}
+                >
                   {isCopied ? (
-                    <Box flexDirection='row' alignItems='center'>
+                    <Box flexDirection="row" alignItems="center">
                       <MaterialCommunityIcons
-                        name='check'
+                        name="check"
                         size={24}
-                        color='green'
+                        color="green"
                         onPress={handleCopyLink}
                       />
-                      <Text color='green'>Copied</Text>
+                      <Text color="green">Copied</Text>
                     </Box>
                   ) : (
-                    <Box flexDirection='row' alignItems='center'>
+                    <Box flexDirection="row" alignItems="center">
                       <MaterialCommunityIcons
-                        name='link'
+                        name="link"
                         size={24}
-                        color='black'
+                        color="black"
                         onPress={handleCopyLink}
                       />
-                      <Text color='black'>Copy</Text>
+                      <Text color="black">Copy</Text>
                     </Box>
                   )}
                   {userId === data.owner_id && (
@@ -176,39 +180,44 @@ export const CustomCard = ({
             alignItems="center"
           >
             <Box></Box>
-            <Box
-              flexDirection="row"
-              alignItems="center"
-            >
-              <Box
-              mx="5"
-              >
-            <Link href={`/profile/${data.owner_id && data['owner_id']._id}`}>
-              {console.log({data})}
-            <Text>{user._id === data['owner_id'] ? 'Your Profile': `View ${data.owner_id ? data['owner_id'].name : 'Profile'}`}</Text>
-            </Link>
+            <Box flexDirection="row" alignItems="center">
+              <Box mx="5">
+                <Link
+                  href={`/profile/${data.owner_id && data["owner_id"]._id}`}
+                >
+                  {console.log({ data })}
+                  <Text>
+                    {user._id === data["owner_id"]
+                      ? "Your Profile"
+                      : `View ${
+                          data.owner_id
+                            ? "@" + data["owner_id"].username
+                            : "Profile"
+                        }`}
+                  </Text>
+                </Link>
               </Box>
               {link && (
                 <Box>
                   {isCopied ? (
-                    <Box flexDirection='row' alignItems='center'>
+                    <Box flexDirection="row" alignItems="center">
                       <MaterialCommunityIcons
-                        name='check'
+                        name="check"
                         size={24}
-                        color='green'
+                        color="green"
                         onPress={handleCopyLink}
                       />
-                      <Text color='green'>Copied</Text>
+                      <Text color="green">Copied</Text>
                     </Box>
                   ) : (
-                    <Box flexDirection='row' alignItems='center'>
+                    <Box flexDirection="row" alignItems="center">
                       <MaterialCommunityIcons
-                        name='link'
+                        name="link"
                         size={24}
-                        color='black'
+                        color="black"
                         onPress={handleCopyLink}
                       />
-                      <Text color='black'>Copy</Text>
+                      <Text color="black">Copy</Text>
                     </Box>
                   )}
                 </Box>
