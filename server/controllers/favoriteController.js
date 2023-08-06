@@ -7,21 +7,21 @@ export const addToFavorite = async (req, res) => {
 
     const exists = await User.find(
       { favorites: { $in: [packId] } },
-      { _id: userId }
+      { _id: userId },
     );
 
     if (exists.length > 0) {
       await User.updateOne({ _id: userId }, { $pull: { favorites: packId } });
       await Pack.updateOne(
         { _id: packId },
-        { $pull: { favorited_by: userId } }
+        { $pull: { favorited_by: userId } },
       );
       await Pack.updateOne({ _id: packId }, { $inc: { favorites_count: -1 } });
     } else {
       await User.updateOne({ _id: userId }, { $push: { favorites: packId } });
       await Pack.updateOne(
         { _id: packId },
-        { $push: { favorited_by: userId } }
+        { $push: { favorited_by: userId } },
       );
       await Pack.updateOne({ _id: packId }, { $inc: { favorites_count: 1 } });
     }

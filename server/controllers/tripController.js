@@ -21,15 +21,15 @@ export const getPublicTrips = async (req, res) => {
       },
       {
         $lookup: {
-          from: 'users', // Replace 'users' with the actual name of your 'User' collection
-          localField: 'owner_id',
-          foreignField: '_id',
-          as: 'owner',
+          from: "users", // Replace 'users' with the actual name of your 'User' collection
+          localField: "owner_id",
+          foreignField: "_id",
+          as: "owner",
         },
       },
       {
         $addFields: {
-          owner: { $arrayElemAt: ['$owner', 0] },
+          owner: { $arrayElemAt: ["$owner", 0] },
         },
       },
     ];
@@ -62,7 +62,9 @@ export const getTrips = async (req, res) => {
 
 export const getTripById = async (req, res) => {
   try {
-    const trip = await Trip.findById(req.params.tripId).populate("osm_ref").populate({ path: "owner_id" });
+    const trip = await Trip.findById(req.params.tripId)
+      .populate("osm_ref")
+      .populate({ path: "owner_id" });
     // .populate({ path: "osm_ref", populate: { path: "nodes" }});
     // .populate({ path: "packs", populate: { path: "items" } })
 

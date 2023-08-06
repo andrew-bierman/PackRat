@@ -1,7 +1,7 @@
-import Queue from 'bull';
-import { Piscina } from 'piscina';
-import { fileURLToPath } from 'url';
-import path from 'path';
+import Queue from "bull";
+import { Piscina } from "piscina";
+import { fileURLToPath } from "url";
+import path from "path";
 
 class QueueManager {
   constructor() {

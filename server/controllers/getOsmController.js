@@ -50,7 +50,7 @@ export const getOsm = async (req, res) => {
     const overpassQuery = await formatOverpassQuery(
       activityType,
       startPoint,
-      endPoint
+      endPoint,
     );
 
     // console.log("overpassQuery", overpassQuery);
@@ -95,7 +95,7 @@ export const getPhotonResults = async (req, res) => {
     .flatMap(([key, values]) =>
       Array.isArray(values)
         ? values.map((val) => `${key}=${val}`)
-        : `${key}=${values}`
+        : `${key}=${values}`,
     )
     .join("&");
 
@@ -103,7 +103,7 @@ export const getPhotonResults = async (req, res) => {
 
   try {
     const response = await axios.get(
-      `https://photon.komoot.io/api/?${queryString}`
+      `https://photon.komoot.io/api/?${queryString}`,
     );
 
     // console.log("response", response);
@@ -153,7 +153,7 @@ export const getTrailsOSM = async (req, res) => {
       `;
 
     const response = await axios.post(overpassUrl, overpassQuery, {
-      headers: { 'Content-Type': 'text/plain' },
+      headers: { "Content-Type": "text/plain" },
     });
     const geojsonData = osmtogeojson(response.data);
 
@@ -248,13 +248,17 @@ export const postCollectionGeoJSON = async (req, res) => {
     if (geojson.type === "FeatureCollection") {
       const data = geojson.features;
       console.log("data", data);
-      const processedElements = data.map((element) => ensureIdProperty(element));
+      const processedElements = data.map((element) =>
+        ensureIdProperty(element),
+      );
       const Models = processedElements.map((element) =>
-        ensureModelProperty(element)
+        ensureModelProperty(element),
       );
       console.log("processedElements", processedElements);
       const newInstances = await Promise.all(
-        Models.map((Model, index) => findOrCreateOne(Model, processedElements[index]))
+        Models.map((Model, index) =>
+          findOrCreateOne(Model, processedElements[index]),
+        ),
       );
       res.status(201).json({
         status: "success",
@@ -283,7 +287,6 @@ export const postCollectionGeoJSON = async (req, res) => {
     });
   }
 };
-
 
 export const getDestination = async (req, res) => {
   try {
@@ -376,7 +379,7 @@ export const getPhotonDetails = async (req, res) => {
 
 export const getNominatimDetails = async (req, res) => {
   const { lat, lon, place_id } = req.query;
-  
+
   let nominatimUrl = "";
 
   if (place_id) {
@@ -459,9 +462,9 @@ export const getEnhancedPhotonDetails = async (req, res) => {
 
     if (overpassResponse.status === 200 && nominatimResponse.status === 200) {
       // Assuming nominatimResponse.data is an array of objects
-      const nominatimData = nominatimResponse.data
+      const nominatimData = nominatimResponse.data;
 
-      console.log("nominatimData", nominatimData)
+      console.log("nominatimData", nominatimData);
 
       // Add Nominatim data into each feature properties of the GeoJSON
       geojsonData.features.forEach((feature) => {

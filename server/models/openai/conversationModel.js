@@ -14,7 +14,7 @@ const ConversationSchema = Schema(
       required: true,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const Conversation = myDB.model("Conversation", ConversationSchema);

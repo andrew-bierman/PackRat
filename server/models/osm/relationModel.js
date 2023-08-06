@@ -19,7 +19,7 @@ const RelationSchema = new Schema(
     geoJSON: Object,
     updated_at: Date,
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 RelationSchema.pre("save", async function (next) {

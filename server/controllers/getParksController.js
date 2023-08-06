@@ -26,6 +26,6 @@ export const getParks = async (req, res) => {
       res.send(json);
     })
     .catch(() =>
-      res.send({ message: "Error retrieving park data from RapidAPI" })
+      res.send({ message: "Error retrieving park data from RapidAPI" }),
     );
 };

@@ -37,4 +37,4 @@ export const UI_ROOT_URI = process.env.CLIENT_URL;
 export const REDIRECT_URL = "auth/google";
 
 export const CORS_ORIGIN = process.env.CORS_ORIGIN;
-export const CORS_METHODS = ['GET','POST','PUT','DELETE','PATCH']
+export const CORS_METHODS = ["GET", "POST", "PUT", "DELETE", "PATCH"];

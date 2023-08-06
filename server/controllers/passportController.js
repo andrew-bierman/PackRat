@@ -20,7 +20,7 @@ import utilsService from "../utils/utils.service.js";
 const client = new OAuth2Client(
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
-  `${SERVER_ROOT_URI}/user/${REDIRECT_URL}`
+  `${SERVER_ROOT_URI}/user/${REDIRECT_URL}`,
 );
 
 // Passport Configuration
@@ -49,8 +49,8 @@ passport.use(
       } catch (err) {
         return done(err);
       }
-    }
-  )
+    },
+  ),
 );
 
 export const signUpLocal = async (req, res, next) => {

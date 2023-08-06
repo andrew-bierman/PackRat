@@ -31,10 +31,10 @@ const TripSchema = new Schema(
     is_public: { type: Boolean },
     type: { type: String, default: "trip" },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-TripSchema.plugin(autopopulate)
+TripSchema.plugin(autopopulate);
 
 const Trip = myDB.model("Trip", TripSchema);
 export default Trip;

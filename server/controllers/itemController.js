@@ -98,7 +98,7 @@ export const addItem = async (req, res) => {
 
     await Pack.updateOne(
       { _id: packId },
-      { $addToSet: { items: newItem._id } }
+      { $addToSet: { items: newItem._id } },
     );
 
     const updatedItem = await Item.findByIdAndUpdate(
@@ -108,7 +108,7 @@ export const addItem = async (req, res) => {
           owners: req.body.ownerId,
         },
       },
-      { new: true }
+      { new: true },
     ).populate("category");
 
     res.status(200).json({
@@ -138,7 +138,7 @@ export const editItem = async (req, res) => {
       },
       {
         returnOriginal: false,
-      }
+      },
     ).populate("category", "name");
 
     res.status(200).json(newItem);
@@ -168,7 +168,7 @@ export const deleteItem = async (req, res) => {
           $pull: {
             packs: packId,
           },
-        }
+        },
       );
       itemDeleted = await Item.findById(itemId);
     } else {
@@ -323,7 +323,7 @@ export const addGlobalItemToPack = async (req, res) => {
           owners: ownerId,
         },
       },
-      { new: true }
+      { new: true },
     );
 
     await Item.findByIdAndUpdate(
@@ -333,7 +333,7 @@ export const addGlobalItemToPack = async (req, res) => {
           packs: packId,
         },
       },
-      { new: true }
+      { new: true },
     );
 
     return res.status(200).json({ message: "succesfully updated", data: item });
@@ -364,7 +364,7 @@ export const editGlobalItemAsDuplicate = async (req, res) => {
     // add to pack list
     await Pack.updateOne(
       { _id: packId },
-      { $addToSet: { items: newItem._id } }
+      { $addToSet: { items: newItem._id } },
     );
     // remove the already added item from pack list
     await Pack.updateOne({ _id: packId }, { $pull: { items: itemId } });
@@ -378,7 +378,7 @@ export const editGlobalItemAsDuplicate = async (req, res) => {
         $pull: {
           packs: packId,
         },
-      }
+      },
     );
 
     return res.status(200).json(newItem);

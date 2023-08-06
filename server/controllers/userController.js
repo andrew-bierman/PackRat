@@ -23,7 +23,7 @@ import utilsService from "../utils/utils.service.js";
 const oauth2Client = new google.auth.OAuth2(
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
-  `${SERVER_ROOT_URI}/user/${REDIRECT_URL}`
+  `${SERVER_ROOT_URI}/user/${REDIRECT_URL}`,
 );
 
 // Middleware to check if user is authenticated
@@ -53,15 +53,15 @@ export const getUserById = async (req, res) => {
     const { userId } = req.params;
 
     const user = await User.findById({ _id: userId })
-    .populate({
-      path: 'packs',
-      populate: {
-        path: 'items',
-        model: 'Item' // replace 'Item' with your actual Item model name
-      }
-    })
-    .populate('favorites')
-    .populate('trips');
+      .populate({
+        path: "packs",
+        populate: {
+          path: "items",
+          model: "Item", // replace 'Item' with your actual Item model name
+        },
+      })
+      .populate("favorites")
+      .populate("trips");
 
     res.status(200).json(user);
   } catch (error) {
@@ -101,21 +101,21 @@ export const addToFavorite = async (req, res) => {
 
     const exists = await User.find(
       { favorites: { $in: [packId] } },
-      { _id: userId }
+      { _id: userId },
     );
 
     if (exists.length > 0) {
       await User.updateOne({ _id: userId }, { $pull: { favorites: packId } });
       await Pack.updateOne(
         { _id: packId },
-        { $pull: { favorited_by: userId } }
+        { $pull: { favorited_by: userId } },
       );
       await Pack.updateOne({ _id: packId }, { $inc: { favorites_count: -1 } });
     } else {
       await User.updateOne({ _id: userId }, { $push: { favorites: packId } });
       await Pack.updateOne(
         { _id: packId },
-        { $push: { favorited_by: userId } }
+        { $push: { favorited_by: userId } },
       );
       await Pack.updateOne({ _id: packId }, { $inc: { favorites_count: 1 } });
     }
@@ -158,7 +158,7 @@ export const userSignin = async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findByCredentials({
       email: email,
-      password:password,
+      password: password,
     });
     await user.generateAuthToken();
     res.status(200).send({ user });

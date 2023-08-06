@@ -52,7 +52,7 @@ export const getAIResponse = async (req, res) => {
       _id: conversationId, // use _id here
     });
 
-    console.log("conversation after find ---->", conversation)
+    console.log("conversation after find ---->", conversation);
 
     let conversationHistory = conversation ? conversation.history : "";
     let messages = conversationHistory

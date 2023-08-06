@@ -10,7 +10,7 @@ const itemCategorySchema = new Schema(
   },
   {
     timestamp: true,
-  }
+  },
 );
 
 export const ItemCategoryModel = myDB.model("ItemCategory", itemCategorySchema);

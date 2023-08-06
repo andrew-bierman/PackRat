@@ -11,7 +11,7 @@ const NodeSchema = Schema(
     tags: { type: Map, of: String }, // tags as a map
     updated_at: Date, // last update from OSM
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 // add a to JSON method to the schema

@@ -153,7 +153,7 @@ router.delete(
   "/:templateId",
   isAdmin,
   validator.deleteTemplate,
-  deleteTemplate
+  deleteTemplate,
 );
 
 export default router;

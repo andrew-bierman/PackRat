@@ -1,4 +1,4 @@
-import { queueManager } from './queueManager.js';
+import { queueManager } from "./queueManager.js";
 
 export async function processJob(job, queueName, task) {
   // Get the queue for this job type
@@ -10,7 +10,7 @@ export async function processJob(job, queueName, task) {
 
   const { queue } = queueData;
 
-  console.log(`Adding job ${job} with task ${task} to queue ${queueName}`)
+  console.log(`Adding job ${job} with task ${task} to queue ${queueName}`);
 
   // Add the job and task to the queue
   await queue.add({ job, task });

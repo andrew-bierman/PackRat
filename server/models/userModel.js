@@ -59,16 +59,16 @@ const UserSchema = new Schema(
         if (!validator.isAlphanumeric(value))
           throw new Error("Username is invalid");
       },
-
     },
     profilePicture: {
       type: String,
     },
   },
-  { timestamps: true,
+  {
+    timestamps: true,
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
-  }
+  },
 );
 
 UserSchema.statics.findByCredentials = async function ({ email, password }) {
@@ -107,14 +107,16 @@ UserSchema.statics.validateResetToken = async function (token) {
 // Middleware to default username to email if not provided.
 UserSchema.pre("save", async function (next) {
   const user = this;
-  
+
   if (!user.username) {
-    let generatedUsername = user.email ? user.email.split("@")[0] : "packratuser";
-    
+    let generatedUsername = user.email
+      ? user.email.split("@")[0]
+      : "packratuser";
+
     const exists = await User.exists({ username: generatedUsername });
 
     let counter = 1;
-    while(exists) {
+    while (exists) {
       generatedUsername = `${generatedUsername}${counter}`;
       counter++;
     }
@@ -128,7 +130,6 @@ UserSchema.pre("save", async function (next) {
 
   next();
 });
-
 
 //password to store the in hash map
 // UserSchema.pre("save", async function (next) {

@@ -59,7 +59,7 @@ export async function fromGeoJSON(Model, geoJSON) {
   // Convert coordinates to nodes
   instance.nodes = await coordinatesToInstances(
     Node,
-    handleGeoJSONGeometry(geoJSON.geometry)
+    handleGeoJSONGeometry(geoJSON.geometry),
   );
 
   // Set the GeoJSON representation
@@ -108,19 +108,19 @@ export async function toGeoJSON(Model, instance) {
 
 // Mapping of types to Models
 const modelMappingFunc = (type) => {
-  console.log("modelMappingFunc type", type)
+  console.log("modelMappingFunc type", type);
   switch (type) {
     case "node":
-    case "n":   // In case 'n' is sent
-    case "N":   // In case 'N' is sent
+    case "n": // In case 'n' is sent
+    case "N": // In case 'N' is sent
       return Node;
     case "way":
-    case "w":   // Map 'W' to Way
-    case "W":   // Map 'W' to Way
+    case "w": // Map 'W' to Way
+    case "W": // Map 'W' to Way
       return Way;
     case "relation":
-    case "r":   // In case 'r' is sent
-    case "R":   // In case 'R' is sent
+    case "r": // In case 'r' is sent
+    case "R": // In case 'R' is sent
       return Relation;
     default:
       return null;
@@ -136,7 +136,7 @@ export async function updateInstanceFromGeoJSON(instance, geoJSON) {
   instance.tags = propertiesToTags(geoJSON.properties);
   instance.nodes = await coordinatesToInstances(
     Node,
-    handleGeoJSONGeometry(geoJSON.geometry)
+    handleGeoJSONGeometry(geoJSON.geometry),
   );
   instance.geoJSON = geoJSON;
   return instance;
@@ -156,12 +156,12 @@ export function ensureIdProperty(element) {
     // Create 'id' in the format 'type/id'
     let { osm_type, osm_id } = element.properties;
 
-    if(osm_type === 'N') {
-      osm_type = 'node';
-    } else if(osm_type === 'W') {
-      osm_type = 'way';
-    } else if(osm_type === 'R') {
-      osm_type = 'relation';
+    if (osm_type === "N") {
+      osm_type = "node";
+    } else if (osm_type === "W") {
+      osm_type = "way";
+    } else if (osm_type === "R") {
+      osm_type = "relation";
     }
 
     element.id = `${osm_type}/${osm_id}`;
@@ -204,7 +204,6 @@ export async function processElement(element) {
     console.error(`Invalid type: ${type}`);
     return;
   }
-
 
   let instance = await findExisting(ModelForElement, id, type);
   if (instance) {

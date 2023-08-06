@@ -220,8 +220,7 @@ router.get("/destination/:id", getDestination);
  *       '500':
  *         description: Error retrieving Photon details
  */
-router.get('/photonDetails/:type/:id', getPhotonDetails);
+router.get("/photonDetails/:type/:id", getPhotonDetails);
 // router.get("/photonDetails/:type/:id", getEnhancedPhotonDetails)
-
 
 export default router;

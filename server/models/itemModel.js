@@ -21,7 +21,7 @@ const ItemSchema = new Schema(
       default: false,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const Item = myDB.model("Item", ItemSchema);

@@ -103,7 +103,7 @@ export const requestPasswordResetEmailAndToken = async (req, res) => {
       {
         passwordResetToken: resetToken,
         passwordResetTokenExpiration: Date.now() + 24 * 60 * 60 * 1000,
-      }
+      },
     );
 
     const resetUrl = `${CLIENT_URL}/password-reset?token=${resetToken}`;
@@ -139,7 +139,7 @@ export const handlePasswordReset = async (req, res) => {
         password: hashedPassword,
         passwordResetToken: null,
         passwordResetTokenExpiration: null,
-      }
+      },
     );
 
     return res.send({ message: "Password reset successful" });

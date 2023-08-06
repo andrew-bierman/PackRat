@@ -2,14 +2,19 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import { isCelebrateError, errors } from "celebrate";
-import {ItemCategoryModel} from './models/itemCategory.js'
-import { MONGODB_URI, SERVICE_ACCOUNT_KEY,CORS_METHODS,CORS_ORIGIN } from "./config.js";
+import { ItemCategoryModel } from "./models/itemCategory.js";
+import {
+  MONGODB_URI,
+  SERVICE_ACCOUNT_KEY,
+  CORS_METHODS,
+  CORS_ORIGIN,
+} from "./config.js";
 
 import routes from "./routes/index.js";
 
 import swaggerUi from "swagger-ui-express";
 import specs from "./swaggerOptions.js";
-import {ItemCategory} from './utils/itemCategory.js'
+import { ItemCategory } from "./utils/itemCategory.js";
 import bodyParser from "body-parser";
 
 // express items
@@ -19,26 +24,32 @@ const app = express();
 const isOriginAllowed = (origin, allowedOrigin) => {
   const originDomain = new URL(origin).hostname;
   const allowedOriginDomain = new URL(allowedOrigin).hostname;
-  const allowedOriginRegex = new RegExp(`^(packrat-pr-\\d+\.onrender\.com|${allowedOriginDomain.replace(/\./g, '\\.')})$`);
-  
+  const allowedOriginRegex = new RegExp(
+    `^(packrat-pr-\\d+\.onrender\.com|${allowedOriginDomain.replace(
+      /\./g,
+      "\\.",
+    )})$`,
+  );
+
   return allowedOriginRegex.test(originDomain);
 };
 
-app.use(cors({
-  origin: function (origin, callback) {
-    // If no origin, or if origin is allowed, call back with no error and "allowed" status.
-    if (!origin || isOriginAllowed(origin, CORS_ORIGIN)) {
-      return callback(null, true);
-    }
-    
-    // Otherwise, call back with an error.
-    callback(new Error('Not allowed by CORS'));
-  },
-  methods:CORS_METHODS
-}));
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // If no origin, or if origin is allowed, call back with no error and "allowed" status.
+      if (!origin || isOriginAllowed(origin, CORS_ORIGIN)) {
+        return callback(null, true);
+      }
 
+      // Otherwise, call back with an error.
+      callback(new Error("Not allowed by CORS"));
+    },
+    methods: CORS_METHODS,
+  }),
+);
 
-app.use(bodyParser.json({limit:"50mb"}));
+app.use(bodyParser.json({ limit: "50mb" }));
 // app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
 // const connectionString = " your connection string";
@@ -51,20 +62,20 @@ app.use(routes);
 if (process.env.NODE_ENV !== "production") {
   app.use("/api-docs", swaggerUi.serve);
   app.get("/api-docs", swaggerUi.setup(specs));
-  app.get('/swagger.json', (req, res) => {
-    res.setHeader('Content-Type', 'application/json');
+  app.get("/swagger.json", (req, res) => {
+    res.setHeader("Content-Type", "application/json");
     res.send(specs);
-  });  
-  
-  app.get('/seed/category',(req,res)=>{
-    console.log('Seeding...')
-    ItemCategory.forEach(async(category)=>{
+  });
+
+  app.get("/seed/category", (req, res) => {
+    console.log("Seeding...");
+    ItemCategory.forEach(async (category) => {
       await ItemCategoryModel.create({
-        name:category
+        name: category,
       });
-    })
-    res.status(200).send('Seeding done')
-  })
+    });
+    res.status(200).send("Seeding done");
+  });
 }
 
 // middleware to log Celebrate validation errors
@@ -93,7 +104,7 @@ const port = process.env.PORT || 3000;
 // enter your ipaddress for the second param
 app.listen(port, () =>
   // console.log("listening on ipaddress")
-  console.log(`listening on port ${port}`)
+  console.log(`listening on port ${port}`),
 );
 
 // export default firebase;

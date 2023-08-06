@@ -36,8 +36,8 @@ export async function coordinatesToInstances(Model, coordinates) {
   if (typeof coordinates[0][0] === "number") {
     return await Promise.all(
       coordinates.map((coordinate) =>
-        createInstanceFromCoordinates(Model, coordinate)
-      )
+        createInstanceFromCoordinates(Model, coordinate),
+      ),
     );
   } else {
     return coordinates;
@@ -58,7 +58,7 @@ export async function handleGeometry(Model, geometry) {
   if (geometry.type === "Point") {
     const instance = await createInstanceFromCoordinates(
       Model,
-      geometry.coordinates
+      geometry.coordinates,
     );
     nodes.push(instance._id);
   } else {

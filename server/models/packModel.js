@@ -32,14 +32,14 @@ const PackSchema = new Schema(
     },
     type: { type: String, default: "pack" },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 PackSchema.virtual("total_weight").get(function () {
   if (this.items && this.items.length > 0 && this.items[0] instanceof Item) {
     return this.items.reduce(
       (total, item) => total + item.weight * item.quantity,
-      0
+      0,
     );
   } else {
     return 0;

@@ -31,7 +31,7 @@ export const emailExists = async (req, res) => {
             { code: newcode },
             {
               returnOriginal: false,
-            }
+            },
           )
             .then((result2) => {
               console.log(result2.email);
@@ -63,7 +63,7 @@ export const updatePassword = async (req, res) => {
       { password: password },
       {
         returnOriginal: false,
-      }
+      },
     );
     if (val.email) {
       res.status(200).json({ message: "success" });
@@ -86,7 +86,7 @@ async function sendEmailNotice(email) {
           user: process.env.EMAIL,
           pass: process.env.APPPASSWORD,
         },
-      })
+      }),
     );
 
     var mailOptions = {

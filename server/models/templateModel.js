@@ -14,7 +14,7 @@ const TemplateSchema = new Schema(
     isGlobalTemplate: { type: Boolean, default: false },
     createdBy: { type: Schema.Types.ObjectId, ref: "User" },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const Template = myDB.model("Template", TemplateSchema);

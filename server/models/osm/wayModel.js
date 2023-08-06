@@ -20,7 +20,7 @@ const WaySchema = new Schema(
     geoJSON: Object,
     updated_at: Date,
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 // WaySchema.plugin(autopopulate);
@@ -30,7 +30,7 @@ WaySchema.pre("save", async function (next) {
     if (this.osm_type !== "way") {
       console.log(
         'ERROR in WaySchema.pre("save"): this.osm_type !== "way"',
-        this.osm_type
+        this.osm_type,
       );
       throw new Error("This is not a way");
     }

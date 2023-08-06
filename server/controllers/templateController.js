@@ -16,7 +16,7 @@ export const getTemplateById = async (req, res) => {
   try {
     const template = await Template.findById(templateId).populate(
       "createdBy",
-      "username"
+      "username",
     );
     if (template) {
       res.json(template);

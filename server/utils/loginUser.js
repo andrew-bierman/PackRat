@@ -14,7 +14,7 @@ export const loginUser = async ({ email, password, from }) => {
 
   if (from === "GoogleSignIn") {
     user = await User.findOne({ email: email.toLowerCase() }).select(
-      "-password"
+      "-password",
     );
     if (!email) {
       throw new Error("All fields must be filled");

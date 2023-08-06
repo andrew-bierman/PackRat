@@ -1,5 +1,8 @@
 import express from "express";
-import { getAIResponse, getUserChats } from "../controllers/openAiController.js";
+import {
+  getAIResponse,
+  getUserChats,
+} from "../controllers/openAiController.js";
 
 const router = express.Router();
 
@@ -47,8 +50,8 @@ const router = express.Router();
  *                 aiResponse: "Hello, user!"
  *                 conversationHistory: "User: Hello, AI!\nAI: Hello, user!"
  */
-router.post('/ai-response', getAIResponse);
+router.post("/ai-response", getAIResponse);
 
-router.get('/user-chats/:userId', getUserChats);
+router.get("/user-chats/:userId", getUserChats);
 
 export default router;
