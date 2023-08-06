@@ -206,6 +206,7 @@ const Feed = ({ feedType = "public" }) => {
     );
     return Platform.OS === "web" ? (
       <View style={styles.cardContainer}>
+        {console.log({data})}
         {feedSearchFilterComponent}
         {data?.map((item) => (
           <Card key={item._id} type={item.type} {...item} />
