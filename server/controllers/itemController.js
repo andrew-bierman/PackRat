@@ -309,7 +309,6 @@ export const getItemsGlobally = async (req, res) => {
       .sort({
         createdAt: -1,
       });
-
     const totalPages = Math.ceil(totalItems / limit);
 
     return res.status(200).json({
