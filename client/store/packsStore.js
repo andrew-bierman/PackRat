@@ -306,13 +306,12 @@ const packsSlice = createSlice({
         state.error = null;
       })
       .addCase(selectItemsGlobal.fulfilled, (state, action) => {
-        const { itemId, packId } = action.meta.arg;
-        const existing = state.entities[packId];
-
-        if (existing) {
+        const { selectedItem, packId } = action.meta.arg;
+        const existingPack = state.entities[action.payload.packId];
+        if (existingPack) {
           packsAdapter.updateOne(state, {
-            id: packId,
-            changes: { items: [...existing.items, action.payload.data] },
+            id: action.payload.packId,
+            changes: { items: [...existingPack.items, action.payload.data] },
           });
         }
 
@@ -329,7 +328,6 @@ const packsSlice = createSlice({
       })
       .addCase(editItemsGlobalAsDuplicate.fulfilled, (state, action) => {
         const { itemId, packId } = action.meta.arg;
-        console.log("meta", itemId, packId);
         const existingPack = state.entities[packId];
 
         if (!existingPack) {
