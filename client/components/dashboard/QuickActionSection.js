@@ -3,7 +3,7 @@ import QuickActionButton from "./QuickActionButton";
 import { StyleSheet,View } from "react-native";
 import { theme } from "../../theme";
 import { useRouter } from "expo-router";
-import { MaterialIcons } from "@expo/vector-icons";
+import  ReusableTooltip  from "../../utils/ReusableTooltip";
 
 
 const QuickActionsSection = () => {
@@ -44,32 +44,17 @@ const QuickActionsSection = () => {
           alignItems: "center",
         }}
       >
-        {" "}
-        <QuickActionButton
-          key={action.action}
-          onPress={() => handleActionSelect(action.action)}          
-          iconName={action.iconName}
-          text={action.text}
-        />
-        {Platform.OS === "web" ? (
-          <Tooltip
-            label={action.tooltip}
-            placement="top left"
-            openDelay={500}
-          >
-            <Button
-              width={8}
-              height={8}
-              style={{ backgroundColor: "none" }}
-            >
-              <MaterialIcons
-                name="info-outline"
-                size={20}
-                color={theme.colors.background}
-              />
-            </Button>
-          </Tooltip>
-        ) : null}
+          <QuickActionButton
+            key={action.action}
+            onPress={() => handleActionSelect(action.action)}          
+            iconName={action.iconName}
+            text={action.text}
+          />
+          <ReusableTooltip
+          label={action.tooltip}
+          placement="top"
+          openDelay={500}
+          />
       </View>
       ))}
     </HStack>
