@@ -27,6 +27,7 @@ import Drawer from "./Drawer";
 import { Link, useRouter, usePathname } from "expo-router";
 import { hexToRGBA } from "../utils/colorFunctions";
 import UseTheme from "../hooks/useTheme";
+import { useRoute } from "@react-navigation/native";
 const Navigation = () => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -141,6 +142,7 @@ const Navigation = () => {
   );
 
   const navigationItems = [...staticNavigationItems, ...userNavigationItems];
+  console.log('navigationItems',navigationItems)
 
   const navigateTo = useCallback(
     (href) => {
@@ -159,6 +161,8 @@ const Navigation = () => {
     },
     [dispatch, router]
   );
+
+
 
   useEffect(() => {
     const handleScreenResize = () => {
@@ -226,6 +230,13 @@ const Navigation = () => {
     },
     [user, selectedNavItem] // add any other dependencies that this function uses
   );
+
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      router.push('/'); 
+    }, 0); 
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <SafeAreaView style={styles.safeArea}>
