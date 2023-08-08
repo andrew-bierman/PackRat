@@ -1,4 +1,4 @@
-import { HStack,Tooltip,Button } from "native-base";
+import { HStack } from "native-base";
 import QuickActionButton from "./QuickActionButton";
 import { StyleSheet,View } from "react-native";
 import { theme } from "../../theme";
