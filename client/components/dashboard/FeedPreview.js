@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Card, Text, HStack, Badge } from "native-base";
 import { Link } from "expo-router";
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { getPublicPacks, getPublicTrips } from "../../store/feedStore";
 import { theme } from "../../theme";
 import Carousel from '../carousel'
@@ -21,12 +21,12 @@ const FeedPreviewScroll = () => {
   const filteredFeedData = feedData.publicTrips.concat(feedData.publicPacks);
 
   return (
-    <Carousel itemWidth={250}>
+    <Carousel itemWidth={200}>
       {filteredFeedData.map((item, index) => {
         const linkStr = `/${item.type}/${item._id}`;
 
         return linkStr ? (
-          <Link href={linkStr} key={`${linkStr}`}>
+          <Link href={linkStr} style={styles.feedItem} key={`${linkStr}`}>
             <Card key={index} style={styles.feedItem}>
               <HStack justifyContent="space-between">
                 <Text style={styles.feedItemTitle}>{item.name}</Text>
@@ -55,14 +55,14 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   feedItem: {
-    width: 250,
+    width: 193,
     height: 100,
     backgroundColor: theme.colors.primary,
     marginBottom: 10,
     padding: 10,
     borderRadius: 5,
-    marginRight: 10,
-    marginLeft: 10,
+    // marginRight: 10,
+    // marginLeft: 10,
   },
   feedItemTitle: {
     fontWeight: "bold",
