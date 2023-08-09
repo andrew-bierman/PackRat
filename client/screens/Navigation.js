@@ -27,7 +27,6 @@ import Drawer from "./Drawer";
 import { Link, useRouter, usePathname } from "expo-router";
 import { hexToRGBA } from "../utils/colorFunctions";
 import UseTheme from "../hooks/useTheme";
-import { useRoute } from "@react-navigation/native";
 const Navigation = () => {
   const router = useRouter();
   const dispatch = useDispatch();
