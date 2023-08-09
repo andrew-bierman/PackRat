@@ -81,8 +81,9 @@ export const AddItem = ({
             _id: initialData["_id"],
           })
         );
-
+        setPage(1);
         closeModalHandler();
+        setRefetch(refetch === true ? false : true);
       }
     } else {
       dispatch(
@@ -98,7 +99,7 @@ export const AddItem = ({
       );
       setIsAddItemModalOpen(false);
 
-      // setRefetch(refetch === true ? false : true);
+      setRefetch(refetch === true ? false : true);
     }
   };
 

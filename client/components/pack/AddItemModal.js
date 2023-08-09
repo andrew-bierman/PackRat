@@ -31,7 +31,7 @@ export const AddItemModal = ({
         packId={currentPackId}
         currentPack={currentPack}
         setIsAddItemModalOpen={setIsAddItemModalOpen}
-        // setRefetch={() => setRefetch()}
+        setRefetch={() => setRefetch()}
       />
     </CustomModal>
   );
