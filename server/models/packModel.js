@@ -7,7 +7,7 @@ const { Schema } = mongoose;
 const PackSchema = new Schema(
   {
     name: { type: String, required: true },
-    items: [{ type: Schema.Types.ObjectId, ref: "Item" }],
+    items: [],
     owner_id: { type: Schema.Types.ObjectId, ref: "User" },
     is_public: { type: Boolean },
     favorited_by: [{ type: Schema.Types.ObjectId, ref: "User" }],

@@ -15,7 +15,7 @@ const ItemSchema = new Schema(
       ref: "ItemCategory",
     },
     owners: [{ type: Schema.Types.ObjectId, ref: "User", default: [] }],
-    packs: [{ type: Schema.Types.ObjectId, ref: "Pack", default: [] }],
+    // packs: [{ type: Schema.Types.ObjectId, ref: "Pack", default: [] }],
     global: {
       type: Boolean,
       default: false,
