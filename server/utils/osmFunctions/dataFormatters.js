@@ -21,7 +21,7 @@ export function isOSMFormat(data) {
 
 // Determine if data is in GeoJSON format
 export function isGeoJSONFormat(data) {
-  return data && data.type === "Feature" && data.geometry && data.properties;
+  return data && data.type === "Feature" && data.geometry && data.properties !== undefined;
 }
 
 export function propertiesToTags(properties) {

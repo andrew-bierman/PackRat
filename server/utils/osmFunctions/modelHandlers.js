@@ -131,6 +131,13 @@ export function findExisting(Model, id, type) {
   return Model.findOne({ osm_id: id, osm_type: type });
 }
 
+export async function checkandsave(Model, id, type, obj) {
+  let osm = await Model.findOne({ osm_id: id, osm_type: type })
+  if(!osm){
+    createNewInstance(Model, obj)
+  }
+}
+
 export async function updateInstanceFromGeoJSON(instance, geoJSON) {
   instance.updated_at = geoJSON.properties.timestamp;
   instance.tags = propertiesToTags(geoJSON.properties);
