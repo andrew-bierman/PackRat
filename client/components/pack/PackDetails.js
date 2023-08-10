@@ -12,7 +12,7 @@ import { fetchSinglePack } from "../../store/singlePackStore";
 
 import { Box, Text } from "native-base";
 import { DetailsComponent } from "../details";
-import { Platform, StyleSheet } from "react-native";
+import { Dimensions, Platform, StyleSheet } from "react-native";
 import { theme } from "../../theme";
 import { CLIENT_URL } from "@env";
 import ScoreContainer from "../ScoreContainer";
@@ -22,41 +22,45 @@ import { AddItemModal } from "./AddItemModal";
 
 export function PackDetails() {
   const searchParams = new URLSearchParams(window.location.search);
+
   let canCopy = searchParams.get("copy");
 
   const dispatch = useDispatch();
 
   const { packId } = useSearchParams();
-
   const link = `${CLIENT_URL}/packs/${packId}`;
-
+  const isLoading = useSelector((state) => state.singlePack.isLoading);
+  const updated = useSelector((state) => state.packs.update);
+  const [firstLoad, setFirstLoad] = useState(true);
   const user = useSelector((state) => state.auth.user);
   const userId = user && user._id;
+  const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
+  const currentPack = useSelector((state) => state.singlePack.singlePack);
   useEffect(() => {
     if (!packId) return;
-    dispatch(fetchSinglePack(packId));
-    if (userId) dispatch(fetchUserPacks(userId));
-  }, [dispatch, packId]);
+      dispatch(fetchSinglePack(packId));
+      if (userId) dispatch(fetchUserPacks(userId));
+      setFirstLoad(false)
+  }, [dispatch, packId, updated]); // TODO updated is a temporary fix to re-render when pack is update, due to bug in store
 
-  const currentPack = useSelector((state) => state.singlePack.singlePack);
   const currentPackId = currentPack && currentPack._id;
 
-  const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
+
 
   // check if user is owner of pack, and that pack and user exists
   const isOwner = currentPack && user && currentPack.owner_id === user._id;
 
-  const isLoading = useSelector((state) => state.singlePack.isLoading);
+
   const error = useSelector((state) => state.singlePack.error);
   const isError = error !== null;
 
-  if (isLoading) return <Text>Loading...</Text>;
+  if (isLoading && firstLoad) return <Text>Loading...</Text>;
 
   return (
     <Box
       style={[
         styles.mainContainer,
-        Platform.OS == "web" ? { minHeight: "100vh" } : null,
+        Platform.OS == "web" ? { minHeight: "100vh" } : Dimensions.get('screen').height,
       ]}
     >
       {!isError && (
@@ -68,7 +72,9 @@ export function PackDetails() {
             error={error}
             additionalComps={
               <>
-                <TableContainer currentPack={currentPack} copy={canCopy} />
+                <TableContainer currentPack={currentPack}
+                 copy={canCopy}
+                  />
                 <Box
                   style={styles.boxStyle}
                 >
@@ -77,6 +83,7 @@ export function PackDetails() {
                     currentPack={currentPack}
                     isAddItemModalOpen={isAddItemModalOpen}
                     setIsAddItemModalOpen={setIsAddItemModalOpen}
+                    setRefetch={() => setRefetch(prev => !prev)}
                   />
                 </Box>
                 <ScoreContainer
