@@ -21,9 +21,9 @@ import { AddItem } from "../item/AddItem";
 import { AddItemModal } from "./AddItemModal";
 
 export function PackDetails() {
-  // const searchParams = new URLSearchParams(window.location.search);
+  const searchParams = new URLSearchParams(window.location.search);
 
-  // let canCopy = searchParams.get("copy");
+  let canCopy = searchParams.get("copy");
 
   const dispatch = useDispatch();
 
@@ -41,7 +41,7 @@ export function PackDetails() {
       dispatch(fetchSinglePack(packId));
       if (userId) dispatch(fetchUserPacks(userId));
       setFirstLoad(false)
-  }, [dispatch, packId, updated]);
+  }, [dispatch, packId, updated]); // TODO updated is a temporary fix to re-render when pack is update, due to bug in store
 
   const currentPackId = currentPack && currentPack._id;
 
@@ -73,7 +73,8 @@ export function PackDetails() {
             additionalComps={
               <>
                 <TableContainer currentPack={currentPack}
-                //  copy={canCopy}
+
+                 copy={canCopy}
                   />
                 <Box
                   style={styles.boxStyle}
@@ -83,7 +84,7 @@ export function PackDetails() {
                     currentPack={currentPack}
                     isAddItemModalOpen={isAddItemModalOpen}
                     setIsAddItemModalOpen={setIsAddItemModalOpen}
-                    // setRefetch={() => setRefetch(prev => !prev)}
+                    setRefetch={() => setRefetch(prev => !prev)}
                   />
                 </Box>
                 <ScoreContainer

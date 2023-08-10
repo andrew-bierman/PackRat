@@ -6,7 +6,7 @@ export const AddItemModal = ({
   currentPack,
   isAddItemModalOpen,
   setIsAddItemModalOpen,
-  setRefetch,
+  setRefetch = () => {},
 }) => {
   return (
     <CustomModal
