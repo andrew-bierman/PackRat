@@ -95,9 +95,9 @@ export const SaveTripContainer = ({ dateRange }) => {
     const numNights =
       dateRange.startDate && dateRange.endDate
         ? intervalToDuration({
-            start: dateRange.startDate,
-            end: dateRange.endDate,
-          }).days
+          start: dateRange.startDate,
+          end: dateRange.endDate,
+        }).days
         : "";
     const duration = {
       numberOfNights: numNights,
@@ -203,15 +203,15 @@ export const SaveTripContainer = ({ dateRange }) => {
             />
           </HStack> */}
 
-<DropdownComponent
-    onValueChange={(itemValue) => setIsPublic(itemValue=='Yes'?true:false)}
-    data={['Yes','For me only']}
-    value={isPublic}
-    placeholder="Is Public"
-    style={{marginTop:4,marginBottom:4}}
-    width={150}
+          <DropdownComponent
+            onValueChange={(itemValue) => setIsPublic(itemValue == 'Yes' ? true : false)}
+            data={['Yes', 'For me only']}
+            value={isPublic}
+            placeholder="Is Public"
+            style={{ marginTop: 4, marginBottom: 4 }}
+            width={150}
 
-/>
+          />
           {/* <Select
             minWidth="full"
             placeholder="Is Public"

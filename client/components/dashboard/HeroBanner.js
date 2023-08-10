@@ -47,7 +47,7 @@ const HeroSection = ({ onSelect }) => {
       console.error(error);
     }
   };
-  
+
 
   const user = useSelector((state) => state.auth?.user);
 
@@ -96,8 +96,8 @@ const HeroSection = ({ onSelect }) => {
               onSelect={handleSearchSelect}
               placeholder={"Search by park, city, or trail"}
             />
-         
-           
+
+
           </VStack>
         </LargeCard>
       </Hero>
