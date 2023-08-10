@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Card, Text, HStack, Badge } from "native-base";
 import { Link } from "expo-router";
-import { StyleSheet, View } from "react-native";
+import { Platform, StyleSheet, View } from "react-native";
 import { getPublicPacks, getPublicTrips } from "../../store/feedStore";
 import { theme } from "../../theme";
 import Carousel from '../carousel'
@@ -21,7 +21,25 @@ const FeedPreviewScroll = () => {
   const filteredFeedData = feedData.publicTrips.concat(feedData.publicPacks);
 
   return (
-    <Carousel itemWidth={200}>
+    Platform.OS=='web'?<Carousel itemWidth={250}>
+      {filteredFeedData.map((item, index) => {
+        const linkStr = `/${item.type}/${item._id}`;
+
+        return linkStr ? (
+          <Link href={linkStr} key={`${linkStr}`}>
+            <Card key={index} style={{...styles.feedItem,width:250}}>
+              <HStack justifyContent="space-between">
+                <Text style={styles.feedItemTitle}>{item.name}</Text>
+                <Badge colorScheme="info" textTransform={"capitalize"}>
+                  {item.type}
+                </Badge>
+              </HStack>
+              <Text>{item.description}</Text>
+            </Card>
+          </Link>
+        ) : null;
+      })}
+    </Carousel>:<Carousel itemWidth={200}>
       {filteredFeedData.map((item, index) => {
         const linkStr = `/${item.type}/${item._id}`;
 
