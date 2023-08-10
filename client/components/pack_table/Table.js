@@ -12,7 +12,6 @@ import { duplicatePackItem } from "../../store/packsStore";
 import { formatNumber } from "../../utils/formatNumber";
 import { theme } from "../../theme";
 import CustomButton from "../custombutton";
-import ItemPicker from "../Picker";
 
 const WeightUnitDropdown = ({ value, onChange }) => {
   return (
@@ -172,7 +171,7 @@ export const TableContainer = ({
   const [weightUnit, setWeightUnit] = useState("g");
   const isLoading = useSelector((state) => state.items.isLoading);
   const error = useSelector((state) => state.items.error);
-console.log('c',currentPack)
+  console.log("c", currentPack);
   const data = currentPack?.items;
 
   let totalFoodWeight = 0;
@@ -246,12 +245,6 @@ console.log('c',currentPack)
 
   return (
     <Box style={styles.container}>
-      <ItemPicker
-        currentPack={selectedPack}
-        refetch={refetch}
-        setRefetch={setRefetch}
-      />
-
       {data?.length ? (
         <>
           <Table style={styles.tableStyle} flexArr={flexArr}>

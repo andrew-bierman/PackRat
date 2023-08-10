@@ -95,25 +95,6 @@ export const editItemsGlobalAsDuplicate = createAsyncThunk(
   }
 );
 
-export const selectItemsGlobal = createAsyncThunk(
-  "Items/selectItemsGlobal",
-  async (item) => {
-    try {
-      const itemId = item.selectedItem;
-      const ownerId = item.ownerId;
-      const packId = item.packId;
-
-      const response = await axios.post(`${api}/item/global/select/${packId}`, {
-        itemId: itemId,
-        ownerId: ownerId,
-      });
-      return response.data;
-    } catch (error) {
-      console.log("error", error.message);
-    }
-  }
-);
-
 export const updatePack = createAsyncThunk("packs/updatePack", async (pack) => {
   const response = await axios.put(`${api}/pack`, {
     _id: pack["_id"],
@@ -301,27 +282,7 @@ const packsSlice = createSlice({
         state.isLoading = false;
         state.error = action.error.message;
       })
-      .addCase(selectItemsGlobal.pending, (state) => {
-        state.isLoading = true;
-        state.error = null;
-      })
-      .addCase(selectItemsGlobal.fulfilled, (state, action) => {
-        const { selectedItem, packId } = action.meta.arg;
-        const existingPack = state.entities[action.payload.packId];
-        if (existingPack) {
-          packsAdapter.updateOne(state, {
-            id: action.payload.packId,
-            changes: { items: [...existingPack.items, action.payload.data] },
-          });
-        }
 
-        state.isLoading = false;
-        state.error = null;
-      })
-      .addCase(selectItemsGlobal.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.error.message;
-      })
       .addCase(editItemsGlobalAsDuplicate.pending, (state) => {
         state.isLoading = true;
         state.error = null;
