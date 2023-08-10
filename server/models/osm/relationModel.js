@@ -22,6 +22,9 @@ const RelationSchema = new Schema(
   { timestamps: true }
 );
 
+// Add an index on the "osm_id" field
+RelationSchema.index({ osm_id: 1 });
+
 RelationSchema.pre("save", async function (next) {
   if (this.osm_type !== "relation") {
     throw new Error("This is not a relation");

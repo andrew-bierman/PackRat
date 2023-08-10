@@ -23,6 +23,10 @@ const WaySchema = new Schema(
   { timestamps: true }
 );
 
+// Add an index on the "osm_id" field
+WaySchema.index({ osm_id: 1 });
+
+
 // WaySchema.plugin(autopopulate);
 
 WaySchema.pre("save", async function (next) {
