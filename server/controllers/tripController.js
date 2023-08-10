@@ -72,7 +72,7 @@ export const getTripById = async (req, res) => {
 
     res
       .status(200)
-      .json({ ...trip._doc, osm_ref: await trip.osm_ref.toJSON() });
+      .json({ ...trip._doc, osm_ref: await trip.osm_ref });
   } catch (error) {
     console.error(error);
     res.status(404).json({ msg: "Trip cannot be found" });
