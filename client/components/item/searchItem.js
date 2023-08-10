@@ -20,7 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 
 import { fetchItemsSearchResults } from "../../store/searchStore";
-import { selectItemsGlobal } from "../../store/packsStore";
+import { selectItemsGlobal } from "../../store/singlePackStore";
 
 export const SearchItem = ({ onSelect, placeholder }) => {
   const [searchString, setSearchString] = useState("");
