@@ -30,6 +30,10 @@ const HeroSection = ({ onSelect }) => {
 
       const { osm_id, osm_type } = selectedResult.properties;
 
+      const coordinates= selectedResult.geometry.coordinates;
+
+      const [lon, lat] = coordinates;
+
       if (!osm_id || !osm_type) {
         console.error("No OSM ID or OSM type found in the selected search result");
         return;
@@ -39,6 +43,8 @@ const HeroSection = ({ onSelect }) => {
           params: {
             type: osm_type,
             id: osm_id,
+            // lat,
+            // lon,
           },
         })
       }
