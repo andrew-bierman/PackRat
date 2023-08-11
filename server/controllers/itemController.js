@@ -282,19 +282,34 @@ export const addItemGlobal = async (req, res) => {
 
 export const getItemsGlobally = async (req, res) => {
   try {
-    const totalItems = await Item.countDocuments({ global: true });
-    const limit = Number(req.query.limit) || totalItems;
-    const totalPages = Math.ceil(totalItems / limit);
-    const page = Number(req.query.page) || 1;
+    let { search, limit, page } = req.query;
+    const totalItems = await Item.countDocuments(
+      search
+        ? { name: { $regex: search, $options: "i" }, global: true }
+        : { global: true }
+    );
+
+    if (search) {
+      limit = Number(limit) || totalItems;
+      page = Number(page) || 1;
+    } else {
+      limit = totalItems;
+      page = 1;
+    }
+
     const startIndex = (page - 1) * limit;
 
-    const items = await Item.find({ global: true })
+    const itemsQuery = search
+      ? Item.find({ name: { $regex: search, $options: "i" }, global: true })
+      : Item.find({ global: true });
+    const items = await itemsQuery
       .populate("category", "name")
       .skip(startIndex)
       .limit(limit)
       .sort({
         createdAt: -1,
       });
+    const totalPages = Math.ceil(totalItems / limit);
 
     return res.status(200).json({
       items,
