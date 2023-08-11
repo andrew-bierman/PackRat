@@ -18,11 +18,11 @@ export default function HomeLayout() {
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <AuthProvider>
-          {/* <ThemeProvider> */}
+          <ThemeProvider>
             <Navigation />
             <Slot />
             {Platform.OS === "web" ? <Footer /> : null}
-          {/* </ThemeProvider> */}
+          </ThemeProvider>
         </AuthProvider>
       </PersistGate>
     </Provider>
