@@ -47,6 +47,7 @@
     "expo-cli": "^5.0.2"
   },
   "dependencies": {
-    "@tamagui/core": "^1.52.2"
+    "@tamagui/core": "^1.52.2",
+    "@tamagui/react-native-media-driver": "^1.52.2"
   }
 }
