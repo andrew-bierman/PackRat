@@ -1,8 +1,5 @@
 import mongoose from "mongoose";
-import User from "./userModel.js";
 import Pack from "./packModel.js";
-import Way from "./osm/wayModel.js";
-import Node from "./osm/nodeModel.js";
 import myDB from "./dbConnection.js";
 import autopopulate from "mongoose-autopopulate";
 
@@ -17,14 +14,15 @@ const TripSchema = new Schema(
     start_date: { type: Date, required: true },
     end_date: { type: Date, required: true },
     destination: { type: String, required: true },
-    osm_ref: {
-      type: Schema.Types.ObjectId, // the id of the Way or Node
-      refPath: "osm_type", // the name of the model to use for populating
-      // autopopulate: true
-    },
-    osm_type: {
-      type: String,
-      enum: ["Way", "Node", "Relation"], // it can be either a Way, Node or a Relation
+    geojson: {
+      type: [
+        {
+          type: Schema.Types.ObjectId,
+          ref: "GeoJSON",
+          autopopulate: true,
+        },
+      ],
+      required: true,
     },
     owner_id: { type: Schema.Types.ObjectId, ref: "User" },
     packs: { type: Schema.Types.ObjectId, ref: "Pack" },
@@ -34,7 +32,16 @@ const TripSchema = new Schema(
   { timestamps: true }
 );
 
-TripSchema.plugin(autopopulate)
+TripSchema.plugin(autopopulate);
+
+TripSchema.set("toJSON", {
+  transform: (document, returnedObject) => {
+    returnedObject.geojson = {
+      type: "FeatureCollection",
+      features: returnedObject.geojson,
+    };
+  },
+});
 
 const Trip = myDB.model("Trip", TripSchema);
 export default Trip;
