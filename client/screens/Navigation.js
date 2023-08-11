@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import {
   View,
   StyleSheet,
@@ -39,6 +39,7 @@ const Navigation = () => {
 
   const [navBarWidth, setNavBarWidth] = useState(null);
   const [selectedNavItem, setSelectedNavItem] = useState("");
+  const firstRender = useRef(true);
   const [isLoading, setIsLoading] = useState(false); // Loading state
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     UseTheme();
@@ -162,9 +163,15 @@ const Navigation = () => {
 
   useEffect(() => {
     const handleScreenResize = () => {
-      const isMobile = Dimensions.get("window").width < 1300 ||
-       navBarWidth < 1024; // Adjust these values as needed
+      const isMobile = Dimensions.get("window").width < 1300 
+      ||
+       (navBarWidth < 1024 && !firstRender) // Adjust these values as needed
       setIsMobileView(isMobile);
+      // update first render 
+      if (firstRender.current) {
+        firstRender.current = false;
+      }
+
     };
 
     const subscription = Dimensions.addEventListener("change", handleScreenResize);
