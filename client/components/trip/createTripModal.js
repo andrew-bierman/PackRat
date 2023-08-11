@@ -5,15 +5,16 @@ import { Input, VStack, HStack, Text, Select } from "native-base";
 import { useDispatch, useSelector } from "react-redux";
 import { format, intervalToDuration } from "date-fns";
 import { addTrip } from "../../store/tripsStore";
+import { api } from "../../constants/api";
 
 // import { Picker } from '@react-native-picker/picker';
 import { DropdownComponent } from "../Dropdown";
+import axios from "axios";
 
 const options = [
-  { label: 'Yes', value: 'true' },
-  { label: 'For me only', value: 'false' },
+  { label: "Yes", value: "true" },
+  { label: "For me only", value: "false" },
 ];
-
 
 const NumberInput = (props) => {
   const { min, max, value, ...otherProps } = props;
@@ -84,7 +85,7 @@ export const SaveTripContainer = ({ dateRange }) => {
   const [isPublic, setIsPublic] = useState("");
 
   // create trip
-  const handleCreateTrip = () => {
+  const handleCreateTrip = async () => {
     // duration object
     const startDate = dateRange.startDate
       ? format(dateRange.startDate, "MM/dd/yyyy")
@@ -105,6 +106,11 @@ export const SaveTripContainer = ({ dateRange }) => {
       endDate,
     };
 
+    console.log("old rag", search);
+
+    const { data: geoJSON } = await axios.get(
+      `${api}/osm/photonDetails/${search.properties.osm_type}/${search.properties.osm_id}`
+    );
     // main object
     const data = {
       name,
@@ -112,7 +118,7 @@ export const SaveTripContainer = ({ dateRange }) => {
       start_date: startDate,
       end_date: endDate,
       destination: search.properties.name,
-      geoJSON: search,
+      geoJSON,
       // trail: dropdown.currentTrail,
       duration: JSON.stringify(duration),
       weather: JSON.stringify(weatherObject),
@@ -125,7 +131,7 @@ export const SaveTripContainer = ({ dateRange }) => {
     console.log("create trip data ->", data);
     dispatch(addTrip(data));
     setIsSaveModalOpen(!isSaveModalOpen);
-  }
+  };
 
   const handleValueChange = (itemValue) => {
     setIsPublic(itemValue);
@@ -140,7 +146,6 @@ export const SaveTripContainer = ({ dateRange }) => {
     offset: 30 * index, // calculate the offset based on item height
     index,
   });
-
 
   return (
     <CustomModal
@@ -203,15 +208,16 @@ export const SaveTripContainer = ({ dateRange }) => {
             />
           </HStack> */}
 
-<DropdownComponent
-    onValueChange={(itemValue) => setIsPublic(itemValue=='Yes'?true:false)}
-    data={['Yes','For me only']}
-    value={isPublic}
-    placeholder="Is Public"
-    style={{marginTop:4,marginBottom:4}}
-    width={150}
-
-/>
+          <DropdownComponent
+            onValueChange={(itemValue) =>
+              setIsPublic(itemValue == "Yes" ? true : false)
+            }
+            data={["Yes", "For me only"]}
+            value={isPublic}
+            placeholder="Is Public"
+            style={{ marginTop: 4, marginBottom: 4 }}
+            width={150}
+          />
           {/* <Select
             minWidth="full"
             placeholder="Is Public"
