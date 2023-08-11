@@ -16,15 +16,15 @@ import { Platform, StyleSheet } from "react-native";
 
 import { useEffect, useState } from "react";
 
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 import { GearList } from "../GearList";
 
 import { SaveTripContainer } from "./createTripModal";
 import TripDateRange from "./TripDateRange";
 import MultiStepForm from "../multi_step";
-import { photonDetails } from "../../store/destinationStore";
 import UseTheme from "../../hooks/useTheme";
+import Itinerary from "./itineraryTrip";
 export default function Trips() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     UseTheme();
@@ -34,19 +34,12 @@ export default function Trips() {
     startDate: undefined,
     endDate: undefined,
   });
-  const dispatch = useDispatch();
-  const searchResult = useSelector(state => state.search.selectedSearchResult);
-  console.log("🚀 ~ file: createTrip.js:37 ~ Trips ~ searchResult:", searchResult)
-
   const weatherObject = useSelector((state) => state.weather.weatherObject);
   const weatherWeek = useSelector((state) => state.weather.weatherWeek);
 
   const trailsObject = useSelector((state) => state.trails.trailNames);
   const parksObject = useSelector((state) => state.parks.parkNames);
-  const photonDetailsStore = useSelector(
-    (state) => state.destination.photonDetails
-  );
-  // console.log("🚀 ~ file: createTrip.js:49 ~ Trips ~ photonDetailsStore:", photonDetailsStore)
+
   useEffect(() => {
     setTrailsData(trailsObject);
   }, [trailsObject]);
@@ -55,17 +48,6 @@ export default function Trips() {
     setParksData(parksObject);
   }, [parksObject]);
 
-  useEffect(() => {
-    if(searchResult?.properties) {
-      const matchPhotonFormattingForData = {
-        properties: {
-          osm_id: searchResult.properties?.osm_id,
-          osm_type: searchResult.properties?.osm_type,
-        },
-      };
-      dispatch(photonDetails(matchPhotonFormattingForData));
-    }
-  },[searchResult])
   const steps = [
     {
       name: "Step 1",
@@ -230,8 +212,8 @@ export default function Trips() {
             )}
             title="Map"
             isMap={true}
-            shape={photonDetailsStore}
           />
+          <Itinerary/>
           <Box>
             <SaveTripContainer dateRange={dateRange} />
           </Box>
