@@ -14,6 +14,7 @@ import osmRoutes from "./osmRoutes.js";
 import passwordResetRoutes from "./passwordResetRoutes.js";
 import openAiRoutes from "./openAiRoutes.js";
 import templateRoutes from "./templateRoutes.js";
+import uploadGeoCodeRoutes from "./uploadGeoCodeRoutes.js"
 import favoriteRouters from "./favoriteRoutes.js";
 
 const router = express.Router();
@@ -42,6 +43,7 @@ router.use("/item", itemRoutes);
 router.use("/trip", tripRoutes);
 router.use("/weather", weatherRoutes);
 router.use("/geocode", geoCodeRoutes);
+router.use("/upload-geojson",uploadGeoCodeRoutes)
 router.use("/getparks", getParkRoutes);
 router.use("/gettrails", getTrailRoutes);
 router.use("/osm", osmRoutes);

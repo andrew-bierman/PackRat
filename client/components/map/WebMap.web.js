@@ -429,6 +429,14 @@ const WebMap = ({ shape: shapeProp }) => {
               const parsedGpx = new DOMParser().parseFromString(gpxString);
               const geojson = toGeoJSON(parsedGpx);
               setShape(geojson);
+              // Make a POST request to the backend to store the GeoJSON data
+              await fetch(`${api}/upload-geojson`, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(geojsonData),
+              });
             }
           } catch (err) {
             Alert.alert("An error occured");
