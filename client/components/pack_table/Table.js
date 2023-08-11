@@ -232,7 +232,7 @@ export const TableContainer = ({
   };
 
   // In your groupedData definition, provide a default category for items without one
-  const groupedData = data?.reduce((acc, item) => {
+  const groupedData = data?.filter(fItem => !Array.isArray(fItem.category))?.reduce((acc, item) => {
     const categoryName = item.category ? item.category.name : "Undefined";
     (acc[categoryName] = acc[categoryName] || []).push(item);
     return acc;

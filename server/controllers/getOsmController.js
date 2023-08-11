@@ -1,8 +1,6 @@
 import osmtogeojson from "osmtogeojson";
 import axios from "axios";
-import Way from "../models/osm/wayModel.js";
-import Node from "../models/osm/nodeModel.js";
-import mongoose from "mongoose";
+import GeoJSON from "../models/geojsonModel.js";
 import {
   findOrCreateMany,
   findOrCreateOne,
@@ -123,8 +121,7 @@ const updateDatabaseWithGeoJSONDataFromOverpass = async (data) => {
       throw new Error("No data provided");
     }
 
-    // TEMPORARY: Commenting due to performance issues
-    // const results = await findOrCreateMany(Way, data.features);
+    await GeoJSON.saveMany(data.features);
 
     // console.log("results", results);
   } catch (error) {
@@ -153,7 +150,7 @@ export const getTrailsOSM = async (req, res) => {
       `;
 
     const response = await axios.post(overpassUrl, overpassQuery, {
-      headers: { 'Content-Type': 'text/plain' },
+      headers: { "Content-Type": "text/plain" },
     });
     const geojsonData = osmtogeojson(response.data);
 
@@ -219,6 +216,7 @@ export const postSingleGeoJSON = async (req, res) => {
     const Model = ensureModelProperty(processedElement);
     console.log("processedElement", processedElement);
     const newInstance = await findOrCreateOne(Model, processedElement);
+
     res.status(201).json({
       status: "success",
       data: {
@@ -248,13 +246,17 @@ export const postCollectionGeoJSON = async (req, res) => {
     if (geojson.type === "FeatureCollection") {
       const data = geojson.features;
       console.log("data", data);
-      const processedElements = data.map((element) => ensureIdProperty(element));
+      const processedElements = data.map((element) =>
+        ensureIdProperty(element)
+      );
       const Models = processedElements.map((element) =>
         ensureModelProperty(element)
       );
       console.log("processedElements", processedElements);
       const newInstances = await Promise.all(
-        Models.map((Model, index) => findOrCreateOne(Model, processedElements[index]))
+        Models.map((Model, index) =>
+          findOrCreateOne(Model, processedElements[index])
+        )
       );
       res.status(201).json({
         status: "success",
@@ -284,29 +286,16 @@ export const postCollectionGeoJSON = async (req, res) => {
   }
 };
 
-
 export const getDestination = async (req, res) => {
   try {
     const id = req.params.id;
 
-    let destination = await Way.findById(id);
-
-    // If not found in Way, search in Node
-    if (!destination) {
-      destination = await Node.findById(id);
-    }
-
-    if (!destination) {
-      return res.status(404).json({
-        status: "fail",
-        message: "No destination found with that ID",
-      });
-    }
+    const destination = await GeoJSON.findById(id);
 
     res.status(200).json({
       status: "success",
       data: {
-        destination: destination,
+        destination,
       },
     });
   } catch (error) {
@@ -353,7 +342,6 @@ export const getPhotonDetails = async (req, res) => {
   (._;>;);
   out body;
   `;
-
   console.log("overpassQuery", overpassQuery);
 
   try {
@@ -365,7 +353,7 @@ export const getPhotonDetails = async (req, res) => {
 
     const geojsonData = osmtogeojson(response.data);
 
-    // await updateDatabaseWithGeoJSONDataFromOverpass(geojsonData);
+    updateDatabaseWithGeoJSONDataFromOverpass(geojsonData);
 
     res.send(geojsonData);
   } catch (error) {
@@ -376,7 +364,7 @@ export const getPhotonDetails = async (req, res) => {
 
 export const getNominatimDetails = async (req, res) => {
   const { lat, lon, place_id } = req.query;
-  
+
   let nominatimUrl = "";
 
   if (place_id) {
@@ -459,9 +447,9 @@ export const getEnhancedPhotonDetails = async (req, res) => {
 
     if (overpassResponse.status === 200 && nominatimResponse.status === 200) {
       // Assuming nominatimResponse.data is an array of objects
-      const nominatimData = nominatimResponse.data
+      const nominatimData = nominatimResponse.data;
 
-      console.log("nominatimData", nominatimData)
+      console.log("nominatimData", nominatimData);
 
       // Add Nominatim data into each feature properties of the GeoJSON
       geojsonData.features.forEach((feature) => {

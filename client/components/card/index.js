@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import {
   VStack,
   Box,
@@ -92,32 +92,47 @@ export const CustomCard = ({
               />
             </Box>
             <Box flexDirection="row" alignItems="center">
-              <Box mx="4">
+              <Box mx="5">
                 <Link href={`/profile/${data["owner_id"]}`}>
-                  <Text>View Owner</Text>
+                  <Text>
+                    {user._id === data["owner_id"]
+                      ? "Your Profile"
+                      : `View ${
+                          data.owners && data.owners.length
+                            ? data.owners[0].name
+                            : "Profile"
+                        }`}
+                  </Text>
                 </Link>
               </Box>
               {link && (
                 <Box
                   flexDir={"row"}
                   style={{
-                    gap: "10px",
+                    gap: "5px",
+                    alignItems: "center",
                   }}
                 >
                   {isCopied ? (
-                    <MaterialCommunityIcons
-                      name="check"
-                      size={24}
-                      color="green"
-                      onPress={handleCopyLink}
-                    />
+                    <Box flexDirection="row" alignItems="center">
+                      <MaterialCommunityIcons
+                        name="check"
+                        size={24}
+                        color="green"
+                        onPress={handleCopyLink}
+                      />
+                      <Text color="green">Copied</Text>
+                    </Box>
                   ) : (
-                    <MaterialCommunityIcons
-                      name="link"
-                      size={24}
-                      color="black"
-                      onPress={handleCopyLink}
-                    />
+                    <Box flexDirection="row" alignItems="center">
+                      <MaterialCommunityIcons
+                        name="link"
+                        size={24}
+                        color="black"
+                        onPress={handleCopyLink}
+                      />
+                      <Text color="black">Copy</Text>
+                    </Box>
                   )}
                   {userId === data.owner_id && (
                     <ThreeDotsMenu
@@ -168,27 +183,44 @@ export const CustomCard = ({
           >
             <Box></Box>
             <Box flexDirection="row" alignItems="center">
-              <Box mx="4">
-                <Link href={`/profile/${data["owner_id"]}`}>
-                  <Text>View Owner</Text>
+              <Box mx="5">
+                <Link
+                  href={`/profile/${data.owner_id && data["owner_id"]._id}`}
+                >
+                  {console.log({ data })}
+                  <Text>
+                    {user._id === data["owner_id"]
+                      ? "Your Profile"
+                      : `View ${
+                          data.owner_id
+                            ? "@" + data["owner_id"].username
+                            : "Profile"
+                        }`}
+                  </Text>
                 </Link>
               </Box>
               {link && (
                 <Box>
                   {isCopied ? (
-                    <MaterialCommunityIcons
-                      name="check"
-                      size={24}
-                      color="green"
-                      onPress={handleCopyLink}
-                    />
+                    <Box flexDirection="row" alignItems="center">
+                      <MaterialCommunityIcons
+                        name="check"
+                        size={24}
+                        color="green"
+                        onPress={handleCopyLink}
+                      />
+                      <Text color="green">Copied</Text>
+                    </Box>
                   ) : (
-                    <MaterialCommunityIcons
-                      name="link"
-                      size={24}
-                      color="black"
-                      onPress={handleCopyLink}
-                    />
+                    <Box flexDirection="row" alignItems="center">
+                      <MaterialCommunityIcons
+                        name="link"
+                        size={24}
+                        color="black"
+                        onPress={handleCopyLink}
+                      />
+                      <Text color="black">Copy</Text>
+                    </Box>
                   )}
                 </Box>
               )}
