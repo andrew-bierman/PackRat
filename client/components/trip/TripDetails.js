@@ -91,10 +91,7 @@ export function TripDetails() {
                   )}
                   title="Map"
                   isMap={true}
-                  shape={
-                    currentTrip.osm_ref &&
-                    convertPhotonGeoJsonToShape(currentTrip.osm_ref.geoJSON)
-                  }
+                  shape={currentTrip.geojson}
                   cords={
                     currentTrip?.weather
                       ? JSON?.parse(currentTrip?.weather)?.coord
