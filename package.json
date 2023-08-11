@@ -14,7 +14,7 @@
     "start": "npm start --prefix server",
     "dev:client": "npm start --prefix client",
     "dev:server": "npm start --prefix server"
-  },  
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/andrew-bierman/PackRat.git"
@@ -45,5 +45,8 @@
   "homepage": "https://github.com/andrew-bierman/PackRat#readme",
   "devDependencies": {
     "expo-cli": "^5.0.2"
+  },
+  "dependencies": {
+    "@tamagui/core": "^1.52.2"
   }
 }
