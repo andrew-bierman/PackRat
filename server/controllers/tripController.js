@@ -1,7 +1,5 @@
 import Trip from "../models/tripModel.js";
-import Node from "../models/osm/nodeModel.js";
-import Way from "../models/osm/wayModel.js";
-import Relation from "../models/osm/relationModel.js";
+import GeoJSON from "../models/geojsonModel.js";
 
 export const getPublicTrips = async (req, res) => {
   try {
@@ -17,6 +15,19 @@ export const getPublicTrips = async (req, res) => {
           localField: "_id",
           foreignField: "trips",
           as: "packs",
+        },
+      },
+      {
+        $lookup: {
+          from: "users", // Replace 'users' with the actual name of your 'User' collection
+          localField: "owner_id",
+          foreignField: "_id",
+          as: "owner",
+        },
+      },
+      {
+        $addFields: {
+          owner: { $arrayElemAt: ["$owner", 0] },
         },
       },
     ];
@@ -49,63 +60,15 @@ export const getTrips = async (req, res) => {
 
 export const getTripById = async (req, res) => {
   try {
-    const trip = await Trip.findById(req.params.tripId).populate("osm_ref");
-    // .populate({ path: "osm_ref", populate: { path: "nodes" }});
-    // .populate({ path: "packs", populate: { path: "items" } })
+    const trip = await Trip.findById(req.params.tripId);
 
     console.log("find trip by id", req.params.tripId);
-    console.log("find trip by id osm_ref", trip.osm_ref);
-    // const detail = createOSMObject()
 
-    res
-      .status(200)
-      .json({ ...trip._doc, osm_ref: await trip.osm_ref.toJSON() });
+    res.status(200).json(trip);
   } catch (error) {
     console.error(error);
     res.status(404).json({ msg: "Trip cannot be found" });
   }
-};
-
-// Helper function to create an OSM object (Node or Way) and return its _id
-const createOSMObject = async (geoJSON) => {
-  // Check if geoJSON object is valid
-  if (!geoJSON || !geoJSON.properties) {
-    throw new Error("Invalid or missing geoJSON");
-  }
-
-  // Access the OSM type directly from geoJSON properties
-  const osmType = geoJSON.properties.osm_type;
-
-  let OSMModel;
-  if (osmType === "N") {
-    OSMModel = Node;
-  } else if (osmType === "W") {
-    OSMModel = Way;
-  } else if (osmType === "R") {
-    OSMModel = Relation;
-  } else {
-    throw new Error("Invalid OSM type");
-  }
-
-  // Create the corresponding OSM object
-  const osmData = new OSMModel({
-    osm_id: geoJSON.properties.osm_id,
-    osm_type:
-      OSMModel === Node ? "node" : OSMModel === Way ? "way" : "relation", // Here change "W" to "way"
-    tags: geoJSON.properties,
-    geoJSON,
-  });
-
-  // Save the OSM object and return its _id
-  await osmData.save();
-
-  console.log("osmData", osmData);
-
-  return {
-    osm_ref: osmData._id,
-    osm_type:
-      OSMModel === Node ? "Node" : OSMModel === Way ? "Way" : "Relation",
-  };
 };
 
 export const addTrip = async (req, res) => {
@@ -124,8 +87,7 @@ export const addTrip = async (req, res) => {
       is_public,
     } = req.body;
 
-    // Create the OSM object and get its _id
-    const { osm_ref, osm_type } = await createOSMObject(geoJSON);
+    const savedFeatures = await GeoJSON.saveMany(geoJSON.features);
 
     await Trip.create({
       name,
@@ -135,8 +97,7 @@ export const addTrip = async (req, res) => {
       start_date,
       end_date,
       destination,
-      osm_ref,
-      osm_type,
+      geojson: savedFeatures.map((f) => f._id),
       owner_id,
       packs,
       is_public,
