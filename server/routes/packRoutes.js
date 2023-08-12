@@ -8,7 +8,7 @@ import {
   getPublicPacks,
   scorePack,
   duplicatePublicPack,
-} from "../controllers/packController.js";
+} from "../controllers/pack/index.js";
 import * as validator from "../middleware/validators/index.js";
 
 const router = express.Router();
