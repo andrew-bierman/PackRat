@@ -6,7 +6,7 @@ import {
   addTrip,
   editTrip,
   deleteTrip,
-} from "../controllers/tripController.js";
+} from "../controllers/trip/index.js";
 import * as validator from "../middleware/validators/index.js";
 
 const router = express.Router();

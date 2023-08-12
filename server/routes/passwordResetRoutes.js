@@ -2,7 +2,7 @@ import express from "express";
 import {
   requestPasswordResetEmailAndToken,
   handlePasswordReset,
-} from "../controllers/passwordResetController.js";
+} from "../controllers/passwordReset/index.js";
 
 const router = express.Router();
 
