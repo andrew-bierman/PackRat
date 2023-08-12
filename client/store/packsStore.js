@@ -8,7 +8,9 @@ import { api } from "../constants/api";
 import { Toast } from "native-base";
 import { InformUser } from "../utils/ToastUtils";
 export const addPack = createAsyncThunk("packs/addPack", async (newPack) => {
+  // console.log(newPack, "this is new pack")
   const response = await axios.post(`${api}/pack/`, newPack);
+  // console.log(response.data, 'this is response from server');
   return response.data;
 });
 
@@ -48,8 +50,9 @@ export const fetchUserPacks = createAsyncThunk(
 export const addPackItem = createAsyncThunk(
   "items/addPackItem",
   async (newItem) => {
-    console.log("calling apis");
+    // console.log("calling apis");
     const response = await axios.post(`${api}/item/`, newItem);
+
     return response.data;
   }
 );
@@ -74,7 +77,9 @@ export const scorePack = createAsyncThunk("packs/scorePack", async (packId) => {
 export const editPackItem = createAsyncThunk(
   "items/editPackItem",
   async (newItem) => {
+    console.log(newItem, 'new Item here');
     const response = await axios.put(`${api}/item/`, newItem);
+    console.log(response.data, 'new item response');
     return response.data;
   }
 );
@@ -92,25 +97,6 @@ export const editItemsGlobalAsDuplicate = createAsyncThunk(
       type,
     });
     return response.data;
-  }
-);
-
-export const selectItemsGlobal = createAsyncThunk(
-  "Items/selectItemsGlobal",
-  async (item) => {
-    try {
-      const itemId = item.selectedItem;
-      const ownerId = item.ownerId;
-      const packId = item.packId;
-
-      const response = await axios.post(`${api}/item/global/select/${packId}`, {
-        itemId: itemId,
-        ownerId: ownerId,
-      });
-      return response.data;
-    } catch (error) {
-      console.log("error", error.message);
-    }
   }
 );
 
@@ -136,11 +122,13 @@ export const deletePack = createAsyncThunk("packs/deletePack", async (pack) => {
 const packsAdapter = createEntityAdapter({
   selectId: (pack) => pack._id,
 });
+// console.log("🚀 ~ file: packsStore.js:143 ~ packsAdapter:", packsAdapter)
 
 const initialState = packsAdapter.getInitialState({
   isLoading: false,
   error: null,
   isOpenEditModal: false,
+  update : false,
 });
 
 const packsSlice = createSlice({
@@ -158,12 +146,14 @@ const packsSlice = createSlice({
     builder
       .addCase(addPack.pending, (state) => {
         state.isLoading = true;
+
         state.error = null;
       })
       .addCase(addPack.fulfilled, (state, action) => {
         packsAdapter.addOne(state, action.payload.createdPack);
         state.isLoading = false;
         state.error = null;
+        state.update = true;
       })
       .addCase(addPack.rejected, (state, action) => {
         state.isLoading = false;
@@ -212,6 +202,7 @@ const packsSlice = createSlice({
         }
         state.isLoading = false;
         state.error = null;
+        state.update = !state.update;
       })
       .addCase(addPackItem.rejected, (state, action) => {
         state.isLoading = false;
@@ -220,6 +211,7 @@ const packsSlice = createSlice({
       .addCase(editPackItem.pending, (state) => {
         state.isLoading = true;
         state.error = null;
+
       })
       .addCase(editPackItem.fulfilled, (state, action) => {
         const newItem = action.payload;
@@ -248,6 +240,7 @@ const packsSlice = createSlice({
         state.isLoading = false;
         state.error = null;
         state.isOpenEditModal = false;
+        state.update = !state.update;
       })
 
       .addCase(editPackItem.rejected, (state, action) => {
@@ -278,6 +271,7 @@ const packsSlice = createSlice({
 
         state.isLoading = false;
         state.error = null;
+        state.update = !state.update;
       })
 
       .addCase(deletePackItem.rejected, (state, action) => {
@@ -296,40 +290,19 @@ const packsSlice = createSlice({
         });
         state.isLoading = false;
         state.error = null;
+
       })
       .addCase(scorePack.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message;
       })
-      .addCase(selectItemsGlobal.pending, (state) => {
-        state.isLoading = true;
-        state.error = null;
-      })
-      .addCase(selectItemsGlobal.fulfilled, (state, action) => {
-        const { itemId, packId } = action.meta.arg;
-        const existing = state.entities[packId];
 
-        if (existing) {
-          packsAdapter.updateOne(state, {
-            id: packId,
-            changes: { items: [...existing.items, action.payload.data] },
-          });
-        }
-
-        state.isLoading = false;
-        state.error = null;
-      })
-      .addCase(selectItemsGlobal.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.error.message;
-      })
       .addCase(editItemsGlobalAsDuplicate.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
       .addCase(editItemsGlobalAsDuplicate.fulfilled, (state, action) => {
         const { itemId, packId } = action.meta.arg;
-        console.log("meta", itemId, packId);
         const existingPack = state.entities[packId];
 
         if (!existingPack) {

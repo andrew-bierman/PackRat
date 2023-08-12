@@ -21,6 +21,14 @@ export const getPublicPacks = async (req, res) => {
         },
       },
       {
+        $lookup: {
+          from: 'users', // Replace 'users' with the actual name of your 'User' collection
+          localField: 'owner_id',
+          foreignField: '_id',
+          as: 'owner',
+        },
+      },
+      {
         $addFields: {
           total_weight: {
             $sum: {
@@ -31,6 +39,7 @@ export const getPublicPacks = async (req, res) => {
               },
             },
           },
+          owner: { $arrayElemAt: ['$owner', 0] },
         },
       },
     ];
@@ -130,8 +139,10 @@ export const getPackById = async (req, res) => {
         path: "category",
         select: "name",
       },
+    }).populate({
+      path: "owners",
     });
-
+    
     res.status(200).json(pack);
   } catch (error) {
     console.error("getPackById error", error);

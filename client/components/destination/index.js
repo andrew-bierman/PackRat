@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import { Container, Text } from "native-base";
 import { useRouter, useSearchParams } from "expo-router";
 import { theme } from "../../theme";
@@ -72,6 +72,7 @@ const DestinationHeader = ({ geoJSON, selectedSearchResult }) => {
 };
 
 const WeatherData = ({ geoJSON }) => {
+
   const dispatch = useDispatch();
   const weatherObject = useSelector((state) => state.destination.weatherObject);
   const weatherWeek = useSelector((state) => state.destination.weatherWeek);
@@ -80,7 +81,15 @@ const WeatherData = ({ geoJSON }) => {
     const fetchWeatherData = async () => {
       if (geoJSON && geoJSON.features) {
         const { coordinates } = geoJSON.features[0].geometry;
-        const [lon, lat] = coordinates;
+
+        // const [lon, lat] = coordinates;
+        let lon, lat;
+
+        if((coordinates[0]) && Array.isArray(coordinates[0])) {
+          [lon, lat] = coordinates[0];
+        } else {
+          [lon, lat] = coordinates;
+        }
 
         if (lat && lon) {
           try {
@@ -103,14 +112,16 @@ const WeatherData = ({ geoJSON }) => {
 };
 
 export const DestinationPage = () => {
+  console.log('destination page')
   const router = useRouter();
 
   const dispatch = useDispatch();
 
-  const { destinationId, id, type } = useSearchParams();
+  const { destinationId, id, type, lat, lon } = useSearchParams();
   const photonDetailsStore = useSelector(
     (state) => state.destination.photonDetails
   );
+
   const currentDestination = {
     geoJSON: photonDetailsStore,
   };
@@ -143,9 +154,12 @@ export const DestinationPage = () => {
 
   let shape = geoJSON ?? defaultShape;
 
-  const map = () => <MapContainer shape={shape} />;
+  const map = () => <MapContainer shape={shape}  />;
 
   return (
+    <ScrollView>
+
+
     <View style={styles.container}>
       <DestinationHeader geoJSON={geoJSON} selectedSearchResult={selectedSearchResult} />
       <LargeCard
@@ -163,6 +177,7 @@ export const DestinationPage = () => {
       />
       <WeatherData geoJSON={geoJSON} />
     </View>
+    </ScrollView>
   );
 };
 

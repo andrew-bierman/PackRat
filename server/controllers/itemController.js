@@ -325,20 +325,35 @@ export const addItemGlobal = async (req, res) => {
 // Function to get global items with pagination
 export const getItemsGlobally = async (req, res) => {
   try {
-    const totalItems = await Item.countDocuments({ global: true });
-    const limit = Number(req.query.limit) || totalItems;
-    const totalPages = Math.ceil(totalItems / limit);
-    const page = Number(req.query.page) || 1;
+    let { search, limit, page } = req.query;
+    const totalItems = await Item.countDocuments(
+      search
+        ? { name: { $regex: search, $options: "i" }, global: true }
+        : { global: true }
+    );
+
+    if (search) {
+      limit = Number(limit) || totalItems;
+      page = Number(page) || 1;
+    } else {
+      limit = totalItems;
+      page = 1;
+    }
+
     const startIndex = (page - 1) * limit;
 
     // Find global items in the database with pagination and sort by createdAt in descending order
-    const items = await Item.find({ global: true })
+    const itemsQuery = search
+      ? Item.find({ name: { $regex: search, $options: "i" }, global: true })
+      : Item.find({ global: true });
+    const items = await itemsQuery
       .populate("category", "name")
       .skip(startIndex)
       .limit(limit)
       .sort({
         createdAt: -1,
       });
+    const totalPages = Math.ceil(totalItems / limit);
 
     // Send the response with global items, current page, and total pages
     return res.status(200).json({

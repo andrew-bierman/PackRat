@@ -1,7 +1,5 @@
 import Trip from "../models/tripModel.js";
-import Node from "../models/osm/nodeModel.js";
-import Way from "../models/osm/wayModel.js";
-import Relation from "../models/osm/relationModel.js";
+import GeoJSON from "../models/geojsonModel.js";
 
 // Get all public trips
 export const getPublicTrips = async (req, res) => {
@@ -19,6 +17,19 @@ export const getPublicTrips = async (req, res) => {
           localField: "_id",
           foreignField: "trips",
           as: "packs",
+        },
+      },
+      {
+        $lookup: {
+          from: "users", // Replace 'users' with the actual name of your 'User' collection
+          localField: "owner_id",
+          foreignField: "_id",
+          as: "owner",
+        },
+      },
+      {
+        $addFields: {
+          owner: { $arrayElemAt: ["$owner", 0] },
         },
       },
     ];
@@ -57,11 +68,10 @@ export const getTrips = async (req, res) => {
 // Get a trip by its ID
 export const getTripById = async (req, res) => {
   try {
-    const trip = await Trip.findById(req.params.tripId).populate("osm_ref");
+    const trip = await Trip.findById(req.params.tripId);
 
     // Log the trip ID and the associated osm_ref for debugging purposes
     console.log("find trip by id", req.params.tripId);
-    console.log("find trip by id osm_ref", trip.osm_ref);
 
     // Return the trip data along with the osm_ref as a JSON object
     res.status(200).json({ ...trip._doc, osm_ref: await trip.osm_ref.toJSON() });
@@ -131,8 +141,7 @@ export const addTrip = async (req, res) => {
       is_public,
     } = req.body;
 
-    // Create the OSM object and get its _id
-    const { osm_ref, osm_type } = await createOSMObject(geoJSON);
+    const savedFeatures = await GeoJSON.saveMany(geoJSON.features);
 
     // Create the new trip using the provided data and associated osm_ref
     await Trip.create({
@@ -143,8 +152,7 @@ export const addTrip = async (req, res) => {
       start_date,
       end_date,
       destination,
-      osm_ref,
-      osm_type,
+      geojson: savedFeatures.map((f) => f._id),
       owner_id,
       packs,
       is_public,

@@ -24,10 +24,11 @@ export function TripDetails() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } = UseTheme();
   const weatherObject = useSelector((state) => state.weather.weatherObject);
   const weatherWeek = useSelector((state) => state.weather.weatherWeek);
-
+  console.log('trip detail')
   const dispatch = useDispatch();
 
   const { tripId } = useSearchParams();
+  // console.log("🚀 ~ file: TripDetails.js:29 ~ TripDetails ~ tripId:", tripId)
 
   const link = `${CLIENT_URL}/trip/${tripId}`;
 
@@ -49,7 +50,7 @@ export function TripDetails() {
   const isError = error !== null;
 
   if (isLoading) return <Text>Loading...</Text>;
-
+  // console.log(currentTrip.osm_ref.geoJSON, 'geoJSON');
   return (
     <Box
       style={[
@@ -90,10 +91,7 @@ export function TripDetails() {
                   )}
                   title="Map"
                   isMap={true}
-                  shape={
-                    currentTrip.osm_ref &&
-                    convertPhotonGeoJsonToShape(currentTrip.osm_ref.geoJSON)
-                  }
+                  shape={currentTrip.geojson}
                   cords={
                     currentTrip?.weather
                       ? JSON?.parse(currentTrip?.weather)?.coord
