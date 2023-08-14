@@ -1,5 +1,6 @@
-import { createContext, useReducer, useEffect, useState } from "react";
+import { createContext, useReducer } from "react";
 import { theme, darkTheme } from "../theme";
+import ThirdPartyThemeProviders from "./ThirdPartyThemeProviders";
 
 const initialState = {
   isDark: false,
@@ -7,22 +8,18 @@ const initialState = {
   currentTheme: theme,
 };
 const handlers = {
-  ENABLE_DARK_MODE: (state) => {
-    return {
-      ...state,
-      isDark: true,
-      isLight: false,
-      currentTheme: darkTheme,
-    };
-  },
-  ENABLE_LIGHT_MODE: (state) => {
-    return {
-      ...state,
-      isDark: false,
-      isLight: true,
-      currentTheme: theme,
-    };
-  },
+  ENABLE_DARK_MODE: (state) => ({
+    ...state,
+    isDark: true,
+    isLight: false,
+    currentTheme: darkTheme,
+  }),
+  ENABLE_LIGHT_MODE: (state) => ({
+    ...state,
+    isDark: false,
+    isLight: true,
+    currentTheme: theme,
+  }),
 };
 const reducer = (state, action) => {
   const handler = handlers[action.type];
@@ -34,21 +31,17 @@ const ThemeContext = createContext({
   enableDarkMode: () => Promise.resolve(),
   enableLightMode: () => Promise.resolve(),
 });
-export const ThemeProvider = (props) => {
-  const { children } = props;
+
+export const ThemeProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const enableDarkMode = () => {
     console.log("enableDarkMode");
-    dispatch({
-      type: "ENABLE_DARK_MODE",
-    });
+    dispatch({ type: "ENABLE_DARK_MODE" });
   };
   const enableLightMode = () => {
     console.log("enableLightMode");
-    dispatch({
-      type: "ENABLE_LIGHT_MODE",
-    });
+    dispatch({ type: "ENABLE_LIGHT_MODE" });
   };
 
   const key = `themeContext + isDark=${state.isDark} + isLight=${state.isLight}`;
@@ -62,8 +55,11 @@ export const ThemeProvider = (props) => {
         enableLightMode,
       }}
     >
-      {children}
+      <ThirdPartyThemeProviders isDark={state.isDark}>
+        {children}
+      </ThirdPartyThemeProviders>
     </ThemeContext.Provider>
   );
 };
+
 export default ThemeContext;
