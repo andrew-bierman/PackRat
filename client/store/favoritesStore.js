@@ -1,5 +1,9 @@
-import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
-import axios from "axios";
+import {
+  createSlice,
+  createAsyncThunk,
+  createEntityAdapter,
+} from "@reduxjs/toolkit";
+import axios from "~/config/axios";
 import { api } from "../constants/api";
 
 export const addFavorite = createAsyncThunk(
@@ -104,10 +108,8 @@ const favoritesSlice = createSlice({
   },
 });
 
-export const {
-  selectAll: selectAllFavorites,
-  selectById: selectFavoriteById,
-} = favoritesAdapter.getSelectors((state) => state.favorites);
+export const { selectAll: selectAllFavorites, selectById: selectFavoriteById } =
+  favoritesAdapter.getSelectors((state) => state.favorites);
 
 export const {
   selectAll: selectAllFavoritePacks,
