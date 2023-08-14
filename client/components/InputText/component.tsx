@@ -30,11 +30,7 @@ export const InputText: React.ForwardRefExoticComponent<InputTextProps> =
       },
     }));
 
-    const {
-      control: formControl,
-      handleSubmit,
-      formState: { isValid },
-    } = useForm();
+    const { control: formControl } = useForm();
 
     if (!control) {
       control = formControl;
