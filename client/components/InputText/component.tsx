@@ -1,6 +1,6 @@
 import { FormControl, Input } from "native-base";
 import React, { forwardRef, useImperativeHandle, useRef } from "react";
-import { Controller } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { TextInput } from "react-native";
 import { InputTextProps, InputTextRef } from "./props";
 
@@ -12,12 +12,14 @@ export const InputText: React.ForwardRefExoticComponent<InputTextProps> =
       isDisabled = false,
       autoFocus = false,
       maxLength,
-      control,
-      name,
-      rules,
+      name = "input",
+      rules = { required: false },
       keyboardType = "default",
       secureTextEntry = false,
+      ...rest
     } = props;
+
+    let { control = undefined } = props;
 
     const inputRef = useRef<TextInput>(null);
     useImperativeHandle(ref, () => ({
@@ -27,6 +29,16 @@ export const InputText: React.ForwardRefExoticComponent<InputTextProps> =
         }
       },
     }));
+
+    const {
+      control: formControl,
+      handleSubmit,
+      formState: { isValid },
+    } = useForm();
+
+    if (!control) {
+      control = formControl;
+    }
 
     return (
       <Controller
@@ -39,7 +51,7 @@ export const InputText: React.ForwardRefExoticComponent<InputTextProps> =
         }) => (
           <>
             <FormControl isInvalid={error ? true : false}>
-              <FormControl.Label>{label}</FormControl.Label>
+              {label && <FormControl.Label>{label}</FormControl.Label>}
               <Input
                 value={value}
                 onChangeText={onChange}
@@ -64,6 +76,7 @@ export const InputText: React.ForwardRefExoticComponent<InputTextProps> =
                 placeholder={placeholder}
                 secureTextEntry={secureTextEntry}
                 ref={inputRef}
+                {...rest}
               />
               {error && (
                 <FormControl.ErrorMessage
