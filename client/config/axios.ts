@@ -1,4 +1,3 @@
-// @todo use relay instead of gql client
 import Axios from "axios";
 import { showMessage } from "react-native-flash-message";
 import { api } from "~/constants/api";
