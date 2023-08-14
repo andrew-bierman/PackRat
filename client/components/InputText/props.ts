@@ -1,3 +1,4 @@
+import { IInputProps } from "native-base";
 import React from "react";
 import { UseControllerProps } from "react-hook-form";
 import { KeyboardTypeOptions } from "react-native";
@@ -52,7 +53,8 @@ export type InputTextProps = {
    */
   secureTextEntry?: boolean | undefined;
 
-  control: UseControllerProps["control"];
-  name: UseControllerProps["name"];
-  rules: UseControllerProps["rules"];
-} & React.RefAttributes<InputTextRef>;
+  control?: UseControllerProps["control"];
+  name?: UseControllerProps["name"];
+  rules?: UseControllerProps["rules"];
+} & IInputProps &
+  React.RefAttributes<InputTextRef>;

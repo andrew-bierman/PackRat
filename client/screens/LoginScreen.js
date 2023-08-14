@@ -154,12 +154,6 @@ export default function Login() {
 
   const handleLogin = (data) => {
     const { email, password } = data;
-    console.info(
-      "FILTERING LOGGER ----- email & password  ------  ",
-      email,
-      " ------ ",
-      password
-    );
     dispatch(signIn({ email, password }));
   };
 

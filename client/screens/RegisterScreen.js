@@ -120,29 +120,6 @@ export default function Register() {
             rules={InputTextRules.password}
           />
 
-          {/* <FormControl>
-            <FormControl.Label>Name</FormControl.Label>
-            <Input value={name} onChangeText={(text) => setName(text)} />
-          </FormControl>
-          <FormControl>
-            <FormControl.Label>Email</FormControl.Label>
-            <Input value={email} onChangeText={(text) => setEmail(text)} />
-          </FormControl>
-          <FormControl>
-            <FormControl.Label>Username</FormControl.Label>
-            <Input
-              value={username}
-              onChangeText={(text) => setUsername(text)}
-            />
-          </FormControl>
-          <FormControl>
-            <FormControl.Label>Password</FormControl.Label>
-            <Input
-              value={password}
-              onChangeText={(text) => setPassword(text)}
-              type="password"
-            />
-          </FormControl> */}
           <Button
             isDisabled={!isValid}
             onPress={handleSubmit(registerUser)}
