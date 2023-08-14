@@ -9,7 +9,7 @@ import { api } from "../../constants/api";
 
 // import { Picker } from '@react-native-picker/picker';
 import { DropdownComponent } from "../Dropdown";
-import axios from "axios";
+import axios from "~/config/axios";
 
 const options = [
   { label: "Yes", value: "true" },

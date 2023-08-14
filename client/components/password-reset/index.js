@@ -10,7 +10,7 @@ import {
   Toast,
   VStack,
 } from "native-base";
-import axios from "axios";
+import axios from "~/config/axios";
 import { api } from "../../constants/api";
 import { PasswordResetForm } from "./PasswordResetForm";
 

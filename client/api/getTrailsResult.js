@@ -1,6 +1,6 @@
 // import { Geoapify_Key } from "../constants/api";
 import { GEOAPIFY_KEY } from "@env";
-import axios from "axios";
+import axios from "~/config/axios";
 
 export const getTrailsResult = async (addressArray) => {
   let params = {
