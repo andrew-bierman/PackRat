@@ -24,14 +24,17 @@ import { Link } from "expo-router";
 import { useSelector, useDispatch } from "react-redux";
 import { signUp } from "../store/authStore";
 import { InformUser } from "../utils/ToastUtils";
+import { useForm } from "react-hook-form";
+import { InputText, InputTextRules } from "~/components/InputText";
 
 export default function Register() {
   const dispatch = useDispatch();
 
-  const [name, setName] = useState("");
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const {
+    control,
+    handleSubmit,
+    formState: { isValid },
+  } = useForm();
 
   // const { signupWithEmail } = useRegister();
   const router = useRouter();
@@ -48,7 +51,8 @@ export default function Register() {
     router.push("/");
   }
 
-  const registerUser = () => {
+  const registerUser = (data) => {
+    const { name, username, email, password } = data;
     try {
       const alphanumeric = /^[a-zA-Z0-9]+$/;
       if (!alphanumeric.test(username)) {
@@ -86,7 +90,37 @@ export default function Register() {
           Sign up to continue!
         </Heading>
         <VStack space={3} mt="5">
-          <FormControl>
+          <InputText
+            label="Name"
+            control={control}
+            name="name"
+            rules={InputTextRules.name}
+          />
+
+          <InputText
+            label="Email ID"
+            keyboardType="email-address"
+            control={control}
+            name="email"
+            rules={InputTextRules.email}
+          />
+
+          <InputText
+            control={control}
+            label="Username"
+            name="username"
+            rules={InputTextRules.username}
+          />
+
+          <InputText
+            label="Password"
+            secureTextEntry
+            control={control}
+            name="password"
+            rules={InputTextRules.password}
+          />
+
+          {/* <FormControl>
             <FormControl.Label>Name</FormControl.Label>
             <Input value={name} onChangeText={(text) => setName(text)} />
           </FormControl>
@@ -108,12 +142,14 @@ export default function Register() {
               onChangeText={(text) => setPassword(text)}
               type="password"
             />
-          </FormControl>
+          </FormControl> */}
           <Button
-            onPress={() => registerUser()}
+            isDisabled={!isValid}
+            onPress={handleSubmit(registerUser)}
+            // onPress={() => registerUser()}
             mt="2"
             colorScheme="indigo"
-            disabled={!email || !password || !name}
+            // disabled={!email || !password || !name}
           >
             {"Sign up"}
           </Button>
@@ -158,7 +194,7 @@ export default function Register() {
               w="100%"
               mt="2"
               onPress={() => {
-                promptAsync();
+                // promptAsync();
                 signInWithGoogle()
                   .then(async (res) => {
                     let { email, name } = res;

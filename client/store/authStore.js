@@ -1,7 +1,10 @@
-import { createAsyncThunk, createSlice, createEntityAdapter } from "@reduxjs/toolkit";
-import axios from "axios";
-import { api } from "../constants/api";
-import { Alert } from "react-native";
+import {
+  createAsyncThunk,
+  createSlice,
+  createEntityAdapter,
+} from "@reduxjs/toolkit";
+
+import axios from "~/config/axios";
 
 const authAdapter = createEntityAdapter();
 
@@ -17,12 +20,14 @@ export const signUp = createAsyncThunk(
   async ({ name, username, email, password }, { rejectWithValue }) => {
     try {
       // Add check for unique username here.
-      const response = await axios.post(`${api}/user/signup`, {
+      axios.post();
+      const response = await axios.post(`/user/signup`, {
         name,
-        username,  // add username
+        username, // add username
         email,
         password,
       });
+      console.info("FILTERING LOGGER ----- resoooooo  ------  ", response);
       return response.data.user;
     } catch (error) {
       console.log("error", error);
@@ -35,7 +40,7 @@ export const signIn = createAsyncThunk(
   "auth/signIn",
   async ({ email, password }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${api}/user/signin`, {
+      const response = await axios.post(`/user/signin`, {
         email,
         password,
       });
@@ -60,12 +65,12 @@ export const signInWithGoogle = createAsyncThunk(
   "auth/signInWithGoogle",
   async ({ idToken }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${api}/user/google`, {
+      const response = await axios.post(`/user/google`, {
         idToken,
       });
       return response.data.user;
     } catch (error) {
-      console.log('error.response.data.error', error.response.data.error);
+      console.log("error.response.data.error", error.response.data.error);
       return rejectWithValue(error);
     }
   }
@@ -136,5 +141,6 @@ export const authSlice = createSlice({
   },
 });
 export const authReducer = authSlice.reducer;
-export const { selectAll: selectAllUsers, selectById: selectUserById } = authAdapter.getSelectors((state) => state.auth);
+export const { selectAll: selectAllUsers, selectById: selectUserById } =
+  authAdapter.getSelectors((state) => state.auth);
 export default authSlice.reducer;
