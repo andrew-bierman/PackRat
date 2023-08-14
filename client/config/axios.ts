@@ -3,27 +3,6 @@ import Axios from "axios";
 import { showMessage } from "react-native-flash-message";
 import { api } from "~/constants/api";
 
-const baseHeaders = {
-  Accept: "application/json",
-  "Content-Type": "application/json; charset=utf-8",
-};
-
-// Axios.interceptors.request.use(async (req) => {
-//   req.headers = { ...baseHeaders, ...req.headers };
-//   return req;
-// });
-
-// Axios.interceptors.response.use(async (res) => {
-//     console.info('FILTERING LOGGER ----- res  ------  ',res);
-//   if (res.data.errors && res.data.errors.length > 0) {
-//     showMessage({
-//       message: "Network Error",
-//       type: "danger",
-//     });
-//   }
-//   return res;
-// });
-
 Axios.interceptors.request.use(
   (config) => {
     config.baseURL = api;
@@ -36,14 +15,9 @@ Axios.interceptors.request.use(
 
 Axios.interceptors.response.use(
   async (response) => {
-    console.info(
-      "FILTERING LOGGER ----- AXIOS MAIN RESPONSE  ------  ",
-      response
-    );
     return response;
   },
   async (error) => {
-    console.info("FILTERING LOGGER ----- AXIOS MAIN ERROR   ------  ", error);
     if ("code" in error) {
       if (error.code === "ERR_CANCELED") {
         return;
