@@ -1,3 +1,4 @@
+process.env.TAMAGUI_TARGET = "web";
 module.exports = function (api) {
   api.cache(true);
   return {
@@ -33,6 +34,15 @@ module.exports = function (api) {
           },
         },
       ],
+      [
+        '@tamagui/babel-plugin', {
+          components : ['tamagui'],
+          config : './theme/tamagui.config.js'
+        }
+      ],
+      ['transform-inline-environment-variables', {
+        include: 'TAMAGUI_TARGET',
+      }],
     ],
   };
 };
