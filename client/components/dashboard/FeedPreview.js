@@ -31,9 +31,7 @@ const FeedPreviewScroll = () => {
         const linkStr = `/${item.type}/${item._id}`;
         return linkStr ? (
           <Link href={linkStr} key={`${linkStr}`}>
-            <Card key={index}
-              style={styles.feedItem}
-              onLongPress={() => { }}>
+            <View style={styles.cardStyles} key={index} >
               <HStack justifyContent="space-between">
                 <Text style={styles.feedItemTitle}>{item.name}</Text>
                 <Badge colorScheme="info" textTransform={"capitalize"}>
@@ -41,7 +39,7 @@ const FeedPreviewScroll = () => {
                 </Badge>
               </HStack>
               <Text>{item.description}</Text>
-            </Card>
+            </View>
           </Link>
         ) : null;
       })}
@@ -54,6 +52,15 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     width: "100%",
     marginBottom: 20,
+  },
+  cardStyles: {
+    height: 100,
+    width: 250,
+    backgroundColor: theme.colors.primary,
+    borderRadius: 5,
+    padding: 20,
+    marginLeft: 10,
+
   },
   feedItem: {
     width: 250,

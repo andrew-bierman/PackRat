@@ -117,7 +117,7 @@ const Carousel = ({ children, itemWidth }) => {
         gestureEnabled={false} // Add this prop
         style={styles.carousel}
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ backgroundColor: 'red', flexDirection: 'row' }}
+        contentContainerStyle={{ flexDirection: 'row' }}
         pagingEnabled
         onMomentumScrollEnd={handleScroll}
       >
@@ -140,7 +140,6 @@ const styles = StyleSheet.create({
   carousel: {
     flexDirection: "row",
     width: Platform.OS === 'web' ? "100%" : width * 0.8,
-    backgroundColor: 'green'
   },
 });
 
