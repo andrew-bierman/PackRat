@@ -21,6 +21,18 @@ module.exports = function (api) {
           allowUndefined: true,
         },
       ],
+      [
+        "module-resolver",
+        {
+          extensions: [".ios.js", ".android.js", ".js", ".ts", ".tsx", ".json"],
+          alias: {
+            "~/config": "./config",
+            "~/constants": "./constants",
+            "~/components": ["./components"],
+            "~/utils": ["./utils"],
+          },
+        },
+      ],
     ],
   };
 };
