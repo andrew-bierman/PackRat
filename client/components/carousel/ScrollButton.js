@@ -22,13 +22,10 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: "center",
     alignItems: "center",
-    flexDirection: "row",
   },
   scrollButton: {
     backgroundColor: "transparent",
     zIndex: 1,
-    // height: "100%",
-    // width: "10%",
     justifyContent: "center",
     alignItems: "center",
   },

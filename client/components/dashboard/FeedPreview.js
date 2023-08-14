@@ -4,10 +4,12 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Card, Text, HStack, Badge } from "native-base";
 import { Link } from "expo-router";
-import { StyleSheet } from "react-native";
+import { Dimensions, FlatList, StyleSheet, View } from "react-native";
 import { getPublicPacks, getPublicTrips } from "../../store/feedStore";
 import { theme } from "../../theme";
 import Carousel from '../carousel'
+
+const { height, width } = Dimensions.get('window')
 
 const FeedPreviewScroll = () => {
   const dispatch = useDispatch();
@@ -20,14 +22,18 @@ const FeedPreviewScroll = () => {
   const feedData = useSelector((state) => state.feed);
   const filteredFeedData = feedData.publicTrips.concat(feedData.publicPacks);
 
+  console.log({ filteredFeedData });
+
+
   return (
     <Carousel itemWidth={250}>
       {filteredFeedData.map((item, index) => {
         const linkStr = `/${item.type}/${item._id}`;
-
         return linkStr ? (
           <Link href={linkStr} key={`${linkStr}`}>
-            <Card key={index} style={styles.feedItem}>
+            <Card key={index}
+              style={styles.feedItem}
+              onLongPress={() => { }}>
               <HStack justifyContent="space-between">
                 <Text style={styles.feedItemTitle}>{item.name}</Text>
                 <Badge colorScheme="info" textTransform={"capitalize"}>
@@ -43,11 +49,6 @@ const FeedPreviewScroll = () => {
   );
 };
 
-
-const FeedPreview = () => {
-  return <FeedPreviewScroll />;
-};
-
 const styles = StyleSheet.create({
   feedPreview: {
     flexDirection: "row",
@@ -59,10 +60,9 @@ const styles = StyleSheet.create({
     height: 100,
     backgroundColor: theme.colors.primary,
     marginBottom: 10,
-    padding: 10,
     borderRadius: 5,
-    marginRight: 10,
-    marginLeft: 10,
+    marginHorizontal: 10,
+    padding: 10, // Add padding to create space within the card
   },
   feedItemTitle: {
     fontWeight: "bold",
@@ -72,4 +72,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FeedPreview;
+export default FeedPreviewScroll;
