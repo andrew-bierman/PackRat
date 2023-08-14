@@ -5,6 +5,10 @@ import { addPackItem, editPackItem } from "../../store/packsStore";
 import { editItemsGlobalAsDuplicate } from "../../store/packsStore";
 import { ItemForm } from "./ItemForm"; // assuming you moved the form related code to a separate component
 import { ItemCategoryEnum } from "../../constants/itemCategory";
+import {
+  addNewSinglePack,
+  updateExistingSinglePack,
+} from "../../store/singlePackStore";
 
 export const AddItem = ({
   _id,
@@ -16,9 +20,7 @@ export const AddItem = ({
   setPage = () => {},
   page,
   closeModalHandler,
-  refetch,
   setIsAddItemModalOpen = () => {},
-  setRefetch = () => {},
 }) => {
   const dispatch = useDispatch();
   const isLoading = useSelector((state) => state.packs.isLoading);
@@ -43,54 +45,61 @@ export const AddItem = ({
     setUnit(initialData?.unit || "");
   }, [initialData]);
 
+  const clearState = () => {
+    setName("");
+    setWeight("");
+    setQuantity("");
+    setCategoryType("");
+    setUnit("");
+  };
+
   const handleSubmit = () => {
     console.log("initial", initialData);
     if (isEdit) {
       if (packId && initialData.global) {
         console.log("editing", packId);
-
-        dispatch(
-          editItemsGlobalAsDuplicate({
-            itemId: _id,
-            packId,
-            name,
-            weight,
-            quantity,
-            unit,
-            type: categoryType,
-          })
-        );
-        closeModalHandler();
-      } else {
-        dispatch(
-          editPackItem({
-            name,
-            weight,
-            quantity,
-            unit,
-            type: categoryType,
-            _id: initialData["_id"],
-          })
-        );
-        setPage(1);
-        closeModalHandler();
-        setRefetch(refetch === true ? false : true);
-      }
-    } else {
-      dispatch(
-        addPackItem({
+        const newItem = {
+          itemId: _id,
+          packId,
           name,
           weight,
           quantity,
-          type: categoryType,
           unit,
-          _id,
-          packId,
-        })
-      );
+          type: categoryType,
+        };
+
+        dispatch(updateExistingSinglePack(newItem));
+        dispatch(editItemsGlobalAsDuplicate(newItem));
+        closeModalHandler();
+      } else {
+        const newItem = {
+          name,
+          weight,
+          quantity,
+          unit,
+          type: categoryType,
+          _id: initialData["_id"],
+        };
+        dispatch(updateExistingSinglePack(newItem));
+        dispatch(editPackItem(newItem));
+        setPage(1);
+        closeModalHandler();
+      }
+    } else {
+      const newItem = {
+        name,
+        weight,
+        quantity,
+        type: categoryType,
+        unit,
+        _id,
+        packId,
+      };
+      dispatch(addNewSinglePack(newItem));
+      dispatch(addPackItem(newItem));
       setIsAddItemModalOpen(false);
-      setRefetch(refetch === true ? false : true);
     }
+    clearState();
   };
 
   return (
