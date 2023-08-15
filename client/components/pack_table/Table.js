@@ -11,6 +11,7 @@ import { DeletePackItemModal } from "./DeletePackItemModal";
 import { duplicatePackItem } from "../../store/packsStore";
 import { formatNumber } from "../../utils/formatNumber";
 import { theme } from "../../theme";
+import { PackOptions } from "../PackOptions";
 import CustomButton from "../custombutton";
 
 const WeightUnitDropdown = ({ value, onChange }) => {
@@ -68,39 +69,86 @@ const TableItem = ({
   refetch,
   setRefetch = () => {},
 }) => {
-  const { name, weight, category, quantity, unit, _id } = itemData;
+  const { name, weight, quantity, unit, _id } = itemData;
+
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const onTrigger = () => {
+    console.log("called");
+    setIsEditModalOpen(true);
+  };
+  const closeModalHandler = () => setIsEditModalOpen(false);
+
+  let rowData = [];
+  if (
+    Platform.OS === "android" ||
+    Platform.OS === "ios" ||
+    window.innerWidth < 900
+  ) {
+    rowData = [
+      name,
+      `${formatNumber(weight)} ${unit}`,
+      quantity,
+      <PackOptions
+        Edit={
+          <EditPackItemModal
+            packId={_id}
+            initialData={itemData}
+            currentPack={currentPack}
+            refetch={refetch}
+            setRefetch={setRefetch}
+            onTrigger={onTrigger}
+            isModalOpen={isEditModalOpen}
+            closeModalHandler={closeModalHandler}
+          />
+        }
+        Delete={
+          <DeletePackItemModal
+            itemId={_id}
+            pack={currentPack}
+            refetch={refetch}
+            setRefetch={setRefetch}
+          />
+        }
+        Ignore={
+          <IgnoreItemCheckbox
+            itemId={_id}
+            isChecked={checkedItems.includes(_id)}
+            handleCheckboxChange={handleCheckboxChange}
+          />
+        }
+        editTrigger={onTrigger}
+      />,
+    ];
+  } else {
+    rowData = [
+      name,
+      `${formatNumber(weight)} ${unit}`,
+      quantity,
+      <EditPackItemModal
+        packId={_id}
+        initialData={itemData}
+        currentPack={currentPack}
+        refetch={refetch}
+        setRefetch={setRefetch}
+      />,
+      <DeletePackItemModal
+        itemId={_id}
+        pack={currentPack}
+        refetch={refetch}
+        setRefetch={setRefetch}
+      />,
+      <IgnoreItemCheckbox
+        itemId={_id}
+        isChecked={checkedItems.includes(_id)}
+        handleCheckboxChange={handleCheckboxChange}
+      />,
+    ];
+  }
+
   /* 
   * this _id is passed as pack id but it is a item id which is confusing
   Todo need to change the name for this passing argument and remaining functions which are getting it
    */
-
-  // Here, you can set a default category if item.category is null or undefined
-  const categoryName = category ? category.name : "Undefined";
-
-  const rowData = [
-    name,
-    `${formatNumber(weight)} ${unit}`,
-    quantity,
-    `${categoryName}`,
-    <EditPackItemModal
-      packId={_id}
-      initialData={itemData}
-      currentPack={currentPack}
-      refetch={refetch}
-      setRefetch={setRefetch}
-    />,
-    <DeletePackItemModal
-      itemId={_id}
-      pack={currentPack}
-      refetch={refetch}
-      setRefetch={setRefetch}
-    />,
-    <IgnoreItemCheckbox
-      itemId={_id}
-      isChecked={checkedItems.includes(_id)}
-      handleCheckboxChange={handleCheckboxChange}
-    />,
-  ];
 
   return <Row data={rowData} style={styles.row} flexArr={flexArr} />;
 };
@@ -232,17 +280,35 @@ export const TableContainer = ({
   };
 
   // In your groupedData definition, provide a default category for items without one
-  const groupedData = data?.filter(fItem => !Array.isArray(fItem.category))?.reduce((acc, item) => {
-    const categoryName = item.category ? item.category.name : "Undefined";
-    (acc[categoryName] = acc[categoryName] || []).push(item);
-    return acc;
-  }, {});
+  const groupedData = data
+    ?.filter((fItem) => !Array.isArray(fItem.category))
+    ?.reduce((acc, item) => {
+      const categoryName = item.category ? item.category.name : "Undefined";
+      (acc[categoryName] = acc[categoryName] || []).push(item);
+      return acc;
+    }, {});
 
-  const flexArr = [2, 1, 1, 1, 0.65, 0.65, 0.65];
+  let flexArr = [2, 1, 1, 1, 0.65, 0.65, 0.65];
+  let heading = [
+    "Item Name",
+    `Weight`,
+    "Quantity",
+    "Edit",
+    "Delete",
+    `${copy ? "Copy" : "Ignore"}`,
+  ];
+  if (
+    Platform.OS === "android" ||
+    Platform.OS === "ios" ||
+    window.innerWidth < 900
+  ) {
+    flexArr = [1, 1, 1, 1];
+    heading = ["Item Name", `Weight`, "Quantity", "Options"];
+  }
+  console.log(heading);
 
   if (isLoading) return <Loading />;
   if (error) return <ErrorMessage message={error} />;
-
   return (
     <Box style={styles.container}>
       {data?.length ? (
@@ -251,15 +317,7 @@ export const TableContainer = ({
             <TitleRow title="Pack List" />
             <Row
               flexArr={flexArr}
-              data={[
-                "Item Name",
-                `Weight`,
-                "Quantity",
-                "Category",
-                "Edit",
-                "Delete",
-                `${copy ? "Copy" : "Ignore"}`,
-              ].map((header, index) => (
+              data={heading.map((header, index) => (
                 <Cell key={index} data={header} textStyle={styles.headerText} />
               ))}
               style={styles.head}
