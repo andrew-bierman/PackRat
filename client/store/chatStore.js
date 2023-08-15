@@ -3,10 +3,12 @@ import {
   createAsyncThunk,
   createEntityAdapter,
 } from "@reduxjs/toolkit";
-import axios from "~/config/axios";
+import axios from "axios";
 import { api } from "../constants/api";
 
-const chatAdapter = createEntityAdapter({ selectId: (chat) => chat._id });
+const chatAdapter = createEntityAdapter(
+    {selectId: (chat) => chat._id}
+);
 
 export const getUserChats = createAsyncThunk(
   "chat/getUserChats",
@@ -70,12 +72,14 @@ const chatSlice = createSlice({
         const { _id, history } = conversation;
         console.log("payload:", action.payload);
         console.log("state.entities:", state.entities);
-        console.log("state.entities[_id]:", state.entities[_id]);
-        chatAdapter.upsertOne(state, {
-          // use upsertOne to add new conversation if it doesn't exist
+        console.log(
+          "state.entities[_id]:",
+          state.entities[_id]
+        );
+        chatAdapter.upsertOne(state, { // use upsertOne to add new conversation if it doesn't exist
           id: _id,
           changes: {
-            history: history.split("\n"), // assuming history is a string
+            history: history.split('\n') // assuming history is a string
           },
         });
         state.loading = false;

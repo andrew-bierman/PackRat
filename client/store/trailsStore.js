@@ -1,9 +1,5 @@
-import {
-  createSlice,
-  createAsyncThunk,
-  createEntityAdapter,
-} from "@reduxjs/toolkit";
-import axios from "~/config/axios";
+import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
+import axios from "axios";
 import { api } from "../constants/api";
 
 export const fetchTrails = createAsyncThunk(
@@ -71,8 +67,6 @@ const trailsSlice = createSlice({
   },
 });
 
-export const { selectAll: selectAllTrails } = trailsAdapter.getSelectors(
-  (state) => state.trails
-);
+export const { selectAll: selectAllTrails } = trailsAdapter.getSelectors((state) => state.trails);
 
 export default trailsSlice.reducer;

@@ -1,12 +1,8 @@
 // redux toolkit slice for single pack
 
-import {
-  createSlice,
-  createAsyncThunk,
-  createEntityAdapter,
-} from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
 
-import axios from "~/config/axios";
+import axios from "axios";
 
 import { api } from "../constants/api";
 
