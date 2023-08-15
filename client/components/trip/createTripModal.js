@@ -108,6 +108,7 @@ export const SaveTripContainer = ({ dateRange }) => {
 
     console.log("old rag", search);
 
+    // TODO - fix this, why making call not through redux
     const { data: geoJSON } = await axios.get(
       `${api}/osm/photonDetails/${search.properties.osm_type}/${search.properties.osm_id}`
     );
