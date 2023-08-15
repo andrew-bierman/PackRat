@@ -2,43 +2,18 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import { isCelebrateError, errors } from "celebrate";
-import {ItemCategoryModel} from './models/itemCategory.js'
-import { MONGODB_URI, SERVICE_ACCOUNT_KEY,CORS_METHODS,CORS_ORIGIN } from "./config.js";
-
+import { MONGODB_URI, } from "./config.js";
 import routes from "./routes/index.js";
-
-import swaggerUi from "swagger-ui-express";
-import specs from "./swaggerOptions.js";
-import {ItemCategory} from './utils/itemCategory.js'
 import bodyParser from "body-parser";
+import { serveSwaggerUI } from "./helpers/serveSwaggerUI.js";
+import { corsOptions } from "./helpers/corsOptions.js";
 
 // express items
 const app = express();
 
-// Function to determine whether an origin is allowed.
-const isOriginAllowed = (origin, allowedOrigin) => {
-  const originDomain = new URL(origin).hostname;
-  const allowedOriginDomain = new URL(allowedOrigin).hostname;
-  const allowedOriginRegex = new RegExp(`^(packrat-pr-\\d+\.onrender\.com|${allowedOriginDomain.replace(/\./g, '\\.')})$`);
-  
-  return allowedOriginRegex.test(originDomain);
-};
+app.use(cors(corsOptions));
 
-app.use(cors({
-  origin: function (origin, callback) {
-    // If no origin, or if origin is allowed, call back with no error and "allowed" status.
-    if (!origin || isOriginAllowed(origin, CORS_ORIGIN)) {
-      return callback(null, true);
-    }
-    
-    // Otherwise, call back with an error.
-    callback(new Error('Not allowed by CORS'));
-  },
-  methods:CORS_METHODS
-}));
-
-
-app.use(bodyParser.json({limit:"50mb"}));
+app.use(bodyParser.json({ limit: "50mb" }));
 // app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
 // const connectionString = " your connection string";
@@ -48,24 +23,7 @@ const connectionString = MONGODB_URI;
 app.use(routes);
 
 // Serve the Swagger UI at /api-docs for api documentation, only in development
-if (process.env.NODE_ENV !== "production") {
-  app.use("/api-docs", swaggerUi.serve);
-  app.get("/api-docs", swaggerUi.setup(specs));
-  app.get('/swagger.json', (req, res) => {
-    res.setHeader('Content-Type', 'application/json');
-    res.send(specs);
-  });  
-  
-  app.get('/seed/category',(req,res)=>{
-    console.log('Seeding...')
-    ItemCategory.forEach(async(category)=>{
-      await ItemCategoryModel.create({
-        name:category
-      });
-    })
-    res.status(200).send('Seeding done')
-  })
-}
+serveSwaggerUI(app);
 
 // middleware to log Celebrate validation errors
 app.use((err, req, res, next) => {
@@ -79,14 +37,11 @@ app.use((err, req, res, next) => {
 app.use(errors());
 
 // connect to mongodb
-mongoose
-  .connect(connectionString, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+mongoose.connect(connectionString, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
   .then(() => console.log("connected"));
-
-// app.listen(3000, () => console.log("listening on port 3000"));
 
 const port = process.env.PORT || 3000;
 
@@ -95,5 +50,3 @@ app.listen(port, () =>
   // console.log("listening on ipaddress")
   console.log(`listening on port ${port}`)
 );
-
-// export default firebase;
