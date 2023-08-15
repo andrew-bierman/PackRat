@@ -11,7 +11,7 @@ import {
   addGlobalItemToPack,
   editGlobalItemAsDuplicate,
   deleteGlobalItem,
-} from "../controllers/itemController.js";
+} from "../controllers/item/index.js";
 import auth from "../middleware/auth.js";
 import * as validator from "../middleware/validators/index.js";
 
