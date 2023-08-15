@@ -3,7 +3,7 @@ import {
   createAsyncThunk,
   createEntityAdapter,
 } from "@reduxjs/toolkit";
-import axios from "~/config/axios";
+import axios from "axios";
 import { api } from "../constants/api";
 import { Toast } from "native-base";
 import { InformUser } from "../utils/ToastUtils";
@@ -77,9 +77,9 @@ export const scorePack = createAsyncThunk("packs/scorePack", async (packId) => {
 export const editPackItem = createAsyncThunk(
   "items/editPackItem",
   async (newItem) => {
-    console.log(newItem, "new Item here");
+    console.log(newItem, 'new Item here');
     const response = await axios.put(`${api}/item/`, newItem);
-    console.log(response.data, "new item response");
+    console.log(response.data, 'new item response');
     return response.data;
   }
 );
@@ -128,7 +128,7 @@ const initialState = packsAdapter.getInitialState({
   isLoading: false,
   error: null,
   isOpenEditModal: false,
-  update: false,
+  update : false,
 });
 
 const packsSlice = createSlice({
@@ -211,6 +211,7 @@ const packsSlice = createSlice({
       .addCase(editPackItem.pending, (state) => {
         state.isLoading = true;
         state.error = null;
+
       })
       .addCase(editPackItem.fulfilled, (state, action) => {
         const newItem = action.payload;
@@ -289,6 +290,7 @@ const packsSlice = createSlice({
         });
         state.isLoading = false;
         state.error = null;
+
       })
       .addCase(scorePack.rejected, (state, action) => {
         state.isLoading = false;

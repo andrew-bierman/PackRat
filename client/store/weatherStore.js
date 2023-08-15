@@ -1,21 +1,17 @@
-import {
-  createSlice,
-  createAsyncThunk,
-  createEntityAdapter,
-} from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
 import { defaultWeatherObject } from "../constants/defaultWeatherObj";
 import { defaultWeekObj } from "../constants/defaultWeekObj";
 
 import { api } from "../constants/api";
 
-import axios from "~/config/axios";
+import axios from "axios";
 
 const weatherAdapter = createEntityAdapter();
 
 const initialState = weatherAdapter.getInitialState({
   weatherObject: defaultWeatherObject,
   weatherWeek: defaultWeekObj,
-});
+})
 
 export const fetchWeather = createAsyncThunk(
   "weather/fetchWeather",

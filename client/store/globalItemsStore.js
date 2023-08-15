@@ -1,9 +1,5 @@
-import {
-  createSlice,
-  createAsyncThunk,
-  createEntityAdapter,
-} from "@reduxjs/toolkit";
-import axios from "~/config/axios";
+import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
+import axios from "axios";
 import { api } from "../constants/api";
 
 export const addItemsGlobal = createAsyncThunk(

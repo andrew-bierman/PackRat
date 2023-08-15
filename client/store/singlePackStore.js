@@ -6,7 +6,7 @@ import {
   createEntityAdapter,
 } from "@reduxjs/toolkit";
 
-import axios from "~/config/axios";
+import axios from "axios";
 
 import { api } from "../constants/api";
 
