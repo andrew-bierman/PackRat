@@ -75,10 +75,12 @@
     "prettier": "^2.8.8",
     "react": "18.2.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.45.4",
     "react-native": "0.71.8",
     "react-native-dotenv": "^3.4.8",
     "react-native-dropdown-picker": "^5.4.6",
     "react-native-elements": "^3.4.3",
+    "react-native-flash-message": "^0.4.2",
     "react-native-gesture-handler": "~2.9.0",
     "react-native-google-places-autocomplete": "^2.5.1",
     "react-native-paper": "^5.9.1",
@@ -101,7 +103,15 @@
     "xmldom": "^0.6.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.21.3"
+    "@babel/core": "^7.21.3",
+    "@babel/preset-typescript": "^7.22.5",
+    "@tsconfig/react-native": "^3.0.2",
+    "@types/jest": "^29.5.3",
+    "@types/react": "^18.2.20",
+    "@types/react-native": "^0.72.2",
+    "@types/react-test-renderer": "^18.0.0",
+    "babel-plugin-module-resolver": "^5.0.0",
+    "typescript": "^5.1.6"
   },
   "overrides": {
     "metro": "0.73.7",
