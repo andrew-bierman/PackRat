@@ -1,4 +1,4 @@
-import axios from "~/config/axios";
+import axios from "axios";
 
 export const getPhotonResults = async (addressArray) => {
   if (!addressArray) return;

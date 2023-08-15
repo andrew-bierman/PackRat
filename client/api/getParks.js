@@ -1,6 +1,6 @@
 import { api } from "../constants/api";
 import abbrRegion from "../constants/convertStateToAbbr";
-import axios from "~/config/axios";
+import axios from "axios";
 import osmtogeojson from "osmtogeojson";
 
 export const getParksRapid = async (state) => {
