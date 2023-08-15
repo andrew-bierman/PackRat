@@ -1,4 +1,4 @@
-import {ItemCategory} from '../utils/itemCategory.js'
+import {ItemCategory} from '../utils/itemCategory.ts'
 import {ItemCategoryModel} from '../models/itemCategory.js'
 import swaggerUi from "swagger-ui-express";
 import specs from "../swaggerOptions.js";

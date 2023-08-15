@@ -4,7 +4,7 @@ import sgMail from "@sendgrid/mail";
 
 sgMail.setApiKey(SEND_GRID_API_KEY);
 
-export const sendWelcomeEmail = (email, name) => {
+export const sendWelcomeEmail = (email: string, name: string) => {
   sgMail.send({
     to: email,
     from: {
@@ -23,7 +23,7 @@ export const sendWelcomeEmail = (email, name) => {
   });
 };
 
-export const resetEmail = (email, resetUrl) => {
+export const resetEmail = (email: string, resetUrl: string) => {
   sgMail.send({
     to: email,
     from: {

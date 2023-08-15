@@ -10,7 +10,7 @@ export const tripValidation = async ({
   owner_id,
   packs,
   is_public,
-}) => {
+}: any) => {
   if (
     !name ||
     !duration ||

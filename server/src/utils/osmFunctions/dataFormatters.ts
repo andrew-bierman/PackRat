@@ -1,7 +1,7 @@
 import Way from "../../models/osm/wayModel.js";
 import Node from "../../models/osm/nodeModel.js";
 
-export const extractIdAndType = (string) => {
+export const extractIdAndType = (string: string) => {
   // console.log("string", string)
   if (string.includes("/")) {
     let [type, idString] = string.split("/");
@@ -15,16 +15,16 @@ export const extractIdAndType = (string) => {
 };
 
 // Determine if data is in OSM format
-export function isOSMFormat(data) {
+export function isOSMFormat(data: any) {
   return data && data.type && data.id && data.tags && data.nodes;
 }
 
 // Determine if data is in GeoJSON format
-export function isGeoJSONFormat(data) {
+export function isGeoJSONFormat(data: any) {
   return data && data.type === "Feature" && data.geometry && data.properties;
 }
 
-export function propertiesToTags(properties) {
+export function propertiesToTags(properties: any) {
   if (!properties) {
     console.error("properties is undefined or null");
     return {};
@@ -33,7 +33,7 @@ export function propertiesToTags(properties) {
     throw new Error("Properties should be an object");
   }
   // console.log("properties in propertiesToTags", properties);
-  const tags = {};
+  const tags: any = {};
   for (let [k, v] of Object.entries(properties)) {
     tags[k] = v;
   }

@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { ItemCategory } from "../utils/itemCategory.js";
+import { ItemCategory } from "../utils/itemCategory.ts";
 import myDB from "./dbConnection.js";
 const itemCategorySchema = new Schema(
   {

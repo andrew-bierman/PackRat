@@ -2,8 +2,8 @@ import {
   findOrCreateOne,
   ensureIdProperty,
   ensureModelProperty,
-} from "../../utils/osmFunctions/modelHandlers.js";
-import { isGeoJSONFormat } from "../../utils/osmFunctions/dataFormatters.js";
+} from "../../utils/osmFunctions/modelHandlers.ts";
+import { isGeoJSONFormat } from "../../utils/osmFunctions/dataFormatters.ts";
 
 /**
  * Handles the POST request for a single GeoJSON.

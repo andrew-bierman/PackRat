@@ -1,7 +1,7 @@
 import Way from "../../models/osm/wayModel.js";
 import Node from "../../models/osm/nodeModel.js";
 
-export async function createInstanceFromCoordinates(Model, [lon, lat]) {
+export async function createInstanceFromCoordinates(Model: any, [lon, lat]: [number, number]) {
   if (typeof lon !== "number" || typeof lat !== "number") {
     console.error("Invalid coordinate format");
     return null;
@@ -12,7 +12,7 @@ export async function createInstanceFromCoordinates(Model, [lon, lat]) {
   return instance._id;
 }
 
-export async function coordinatesToInstances(Model, coordinates) {
+export async function coordinatesToInstances(Model: any, coordinates: any) {
   if (!Array.isArray(coordinates)) {
     console.error("Coordinates is not an array");
     return [];
@@ -27,7 +27,7 @@ export async function coordinatesToInstances(Model, coordinates) {
   if (!isNestedArray) {
     // Check if we have coordinates or an id
     if (typeof coordinates[0] === "number") {
-      return [await createInstanceFromCoordinates(Model, coordinates)];
+      return [await createInstanceFromCoordinates(Model, coordinates as [number, number])];
     } else {
       return coordinates;
     }
@@ -44,7 +44,7 @@ export async function coordinatesToInstances(Model, coordinates) {
   }
 }
 
-export async function handleGeometry(Model, geometry) {
+export async function handleGeometry(Model: any, geometry: any) {
   // console.log("handleGeometry");
   // console.log("handleGeometry geometry", geometry);
 
@@ -71,7 +71,7 @@ export async function handleGeometry(Model, geometry) {
   return nodes;
 }
 
-export function handleGeoJSONGeometry(geometry) {
+export function handleGeoJSONGeometry(geometry: any) {
   // console.log("handleGeometry");
   // console.log("handleGeometry geometry", geometry);
 

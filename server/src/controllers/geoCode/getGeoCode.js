@@ -1,5 +1,5 @@
 let fetch = import('node-fetch')
-import { oneEntity } from "../../utils/oneEntity.js";
+import { oneEntity } from "../../utils/oneEntity.ts";
 
 /**
  * Retrieves the geocode for a given address array.

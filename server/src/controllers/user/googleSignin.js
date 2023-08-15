@@ -1,5 +1,5 @@
 import User from "../../models/userModel.js";
-import { sendWelcomeEmail, resetEmail } from "../../utils/accountEmail.js";
+import { sendWelcomeEmail, resetEmail } from "../../utils/accountEmail.ts";
 import { google } from "googleapis";
 import {
   GOOGLE_CLIENT_ID,
@@ -9,7 +9,7 @@ import {
   UI_ROOT_URI,
   JWT_SECRET,
 } from "../../config.js";
-import utilsService from "../../utils/utils.service.js";
+import utilsService from "../../utils/utils.service.ts";
 
 const oauth2Client = new google.auth.OAuth2(
   GOOGLE_CLIENT_ID,

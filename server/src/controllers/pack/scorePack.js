@@ -1,6 +1,6 @@
 import Pack from "../../models/packModel.js";
 import mongoose from "mongoose";
-import { calculatePackScore } from "../../utils/scorePack.js";
+import { calculatePackScore } from "../../utils/scorePack.ts";
 
 /**
  * Scores a pack by calculating its score and updating the pack object in the database.

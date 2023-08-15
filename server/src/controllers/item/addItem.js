@@ -1,7 +1,7 @@
 import { ItemCategoryModel } from "../../models/itemCategory.js";
 import Item from "../../models/itemModel.js";
 import Pack from "../../models/packModel.js";
-import { ItemCategory, ItemCategoryEnum } from "../../utils/itemCategory.js";
+import { ItemCategory, ItemCategoryEnum } from "../../utils/itemCategory.ts";
 
 /**
  * Adds an item to the database based on the provided request body.

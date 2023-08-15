@@ -8,7 +8,7 @@ export const packValidation = async ({
   favorited_by,
   favorites_count,
   createdAt,
-}) => {
+}: { name: string, items: string[], owner_id: string, is_public: boolean, favorited_by: string[], favorites_count: number, createdAt: string }) => {
   if (!name || !owner_id) {
     throw new Error("All fields must be filled");
   }
