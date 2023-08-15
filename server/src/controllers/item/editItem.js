@@ -1,5 +1,5 @@
-import { ItemCategoryModel } from "../../models/itemCategory.js";
-import Item from "../../models/itemModel.js";
+import { ItemCategoryModel } from "../../models/itemCategory.ts";
+import Item from "../../models/itemModel.ts";
 
 export const editItem = async (req, res) => {
   try {

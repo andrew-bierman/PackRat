@@ -1,7 +1,7 @@
 import User from "../models/userModel.js";
 
 export const loginUser = async ({ email, password, from }: { email: string, password: string, from: string }) => {
-  let user:any[] = [];
+  let user:any = [];
   if (from === "UserSignIn") {
     user = await User.find({
       $and: [{ email: email.toLowerCase() }, { password: password }],

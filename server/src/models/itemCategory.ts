@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 import { ItemCategory } from "../utils/itemCategory.ts";
-import myDB from "./dbConnection.js";
+import myDB from "./dbConnection.ts";
 const itemCategorySchema = new Schema(
   {
     name: {
@@ -9,7 +9,7 @@ const itemCategorySchema = new Schema(
     },
   },
   {
-    timestamp: true,
+    timestamps: true,
   }
 );
 

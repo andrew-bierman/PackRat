@@ -1,4 +1,4 @@
-import Trip from "../../models/tripModel.js";
+import Trip from "../../models/tripModel.ts";
 
 /**
  * Retrieves public trips based on the given query parameter.

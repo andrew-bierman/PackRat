@@ -1,19 +1,19 @@
-import Way from "../../models/osm/wayModel.js";
-import Node from "../../models/osm/nodeModel.js";
-import Relation from "../../models/osm/relationModel.js";
+import Way from "../../models/osm/wayModel.ts";
+import Node from "../../models/osm/nodeModel.ts";
+import Relation from "../../models/osm/relationModel.ts";
 
 import {
   createInstanceFromCoordinates,
   coordinatesToInstances,
   handleGeometry,
   handleGeoJSONGeometry,
-} from "./coordinateHandlers.js";
+} from "./coordinateHandlers.ts";
 import {
   isOSMFormat,
   isGeoJSONFormat,
   propertiesToTags,
   extractIdAndType,
-} from "./dataFormatters.js";
+} from "./dataFormatters.ts";
 
 export async function fromOSM(Model: any, data: any) {
   const { type, id } = extractIdAndType(data.id);
@@ -27,7 +27,7 @@ export async function fromOSM(Model: any, data: any) {
 
   // Find or create nodes
   const ids = data.nodes.map((node: any) => node.id);
-  const instances = await Node.findOrCreateMany(ids, data.nodes);
+  const instances = await (Node as any).findOrCreateMany(ids, data.nodes);
 
   // Add nodes to instance
   instanceData.nodes = instances.map((instance: any) => instance._id);

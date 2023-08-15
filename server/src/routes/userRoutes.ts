@@ -14,15 +14,15 @@ import {
   googleSignin,
   getMe,
 } from "../controllers/user/index.js";
-import auth from "../middleware/auth.js";
-import * as validator from "../middleware/validators/index.js";
+import auth from "../middleware/auth.ts";
+import * as validator from "../middleware/validators/index.ts";
 
 import {
   signInLocal,
   signUpLocal,
   signInGoogle,
 } from "../controllers/passport/index.js";
-import { REDIRECT_URL } from "../config.js";
+import { REDIRECT_URL } from "../config.ts";
 import { emailExists, updatePassword, checkCode } from "../controllers/auth/index.js";
 
 const router = express.Router();

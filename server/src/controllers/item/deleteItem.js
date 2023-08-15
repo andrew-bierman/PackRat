@@ -1,5 +1,5 @@
-import Item from "../../models/itemModel.js";
-import Pack from "../../models/packModel.js";
+import Item from "../../models/itemModel.ts";
+import Pack from "../../models/packModel.ts";
 
 /**
  * Deletes an item from the database.

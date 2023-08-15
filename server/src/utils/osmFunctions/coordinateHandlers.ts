@@ -1,5 +1,5 @@
-import Way from "../../models/osm/wayModel.js";
-import Node from "../../models/osm/nodeModel.js";
+import Way from "../../models/osm/wayModel.ts";
+import Node from "../../models/osm/nodeModel.ts";
 
 export async function createInstanceFromCoordinates(Model: any, [lon, lat]: [number, number]) {
   if (typeof lon !== "number" || typeof lat !== "number") {

@@ -1,6 +1,6 @@
-import { ItemCategoryModel } from "../../models/itemCategory.js";
-import Item from "../../models/itemModel.js";
-import Pack from "../../models/packModel.js";
+import { ItemCategoryModel } from "../../models/itemCategory.ts";
+import Item from "../../models/itemModel.ts";
+import Pack from "../../models/packModel.ts";
 import { ItemCategory, ItemCategoryEnum } from "../../utils/itemCategory.ts";
 
 /**

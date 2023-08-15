@@ -1,4 +1,4 @@
-import User from "../../models/userModel.js";
+import User from "../../models/userModel.ts";
 
 /**
  * Retrieves a user by their ID from the database and returns the user object as a JSON response.

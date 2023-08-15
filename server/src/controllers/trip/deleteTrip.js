@@ -1,4 +1,4 @@
-import Trip from "../../models/tripModel.js";
+import Trip from "../../models/tripModel.ts";
 
 /**
  * Deletes a trip from the database.

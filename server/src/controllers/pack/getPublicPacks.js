@@ -1,4 +1,4 @@
-import Pack from "../../models/packModel.js";
+import Pack from "../../models/packModel.ts";
 
 /**
  * Retrieves public packs based on the given query parameter.

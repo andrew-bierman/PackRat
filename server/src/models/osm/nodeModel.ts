@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
-import myDB from "../dbConnection.js";
+import myDB from "../dbConnection.ts";
 
 const { Schema } = mongoose;
 
-const NodeSchema = Schema(
+const NodeSchema =new  Schema(
   {
     id: Number, // the OSM ID
     lat: Number, // latitude
@@ -24,12 +24,12 @@ NodeSchema.method("toJSON", async function () {
 NodeSchema.statics.findOrCreateMany = async function (ids, nodes) {
   // Find existing nodes
   const existingNodes = await this.find({ id: { $in: ids } });
-  const existingIds = existingNodes.map((node) => node.id);
+  const existingIds = existingNodes.map((node: any) => node.id);
 
   // Create new nodes
   const newNodes = nodes
-    .filter((node) => !existingIds.includes(node.id))
-    .map((node) => new this(node));
+    .filter((node: any) => !existingIds.includes(node.id))
+    .map((node: any) => new this(node));
 
   // Save new nodes
   if (newNodes.length > 0) {

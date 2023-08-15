@@ -1,11 +1,11 @@
 import jwt from "jsonwebtoken";
-import User from "../../models/userModel.js";
+import User from "../../models/userModel.ts";
 import {
   STMP_EMAIL,
   CLIENT_URL,
   JWT_SECRET,
   SEND_GRID_API_KEY,
-} from "../../config.js";
+} from "../../config.ts";
 
 import sgMail from "@sendgrid/mail";
 

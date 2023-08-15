@@ -1,4 +1,4 @@
-import Trip from "../../models/tripModel.js";
+import Trip from "../../models/tripModel.ts";
 
 /**
  * Retrieves a trip by its ID and returns the trip details.

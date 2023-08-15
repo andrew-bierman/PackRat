@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 const { Schema } = mongoose;
-import myDB from "./dbConnection.js";
+import myDB from "./dbConnection.ts";
 
 const GeoJSONSchema = new Schema({
   type: {
@@ -43,7 +43,7 @@ GeoJSONSchema.statics.saveOne = async function (feature) {
 };
 
 GeoJSONSchema.statics.saveMany = async function (features) {
-  return await Promise.all(features.map((feature) => this.saveOne(feature)));
+  return await Promise.all(features.map((feature: any) => (this as any).saveOne(feature)));
 };
 
 const GeoJSON = myDB.model("GeoJSON", GeoJSONSchema);

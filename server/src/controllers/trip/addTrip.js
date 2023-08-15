@@ -1,7 +1,7 @@
-import Trip from "../../models/tripModel.js";
-import Node from "../../models/osm/nodeModel.js";
-import Way from "../../models/osm/wayModel.js";
-import Relation from "../../models/osm/relationModel.js";
+import Trip from "../../models/tripModel.ts";
+import Node from "../../models/osm/nodeModel.ts";
+import Way from "../../models/osm/wayModel.ts";
+import Relation from "../../models/osm/relationModel.ts";
 
 /**
  * Adds a trip to the database.

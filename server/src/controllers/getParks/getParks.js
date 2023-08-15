@@ -1,4 +1,4 @@
-import fetch from "node-fetch";
+const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 import { oneEntity } from "../../utils/oneEntity.ts";
 
 /**

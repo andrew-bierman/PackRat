@@ -1,5 +1,5 @@
-import Way from "../../models/osm/wayModel.js";
-import Node from "../../models/osm/nodeModel.js";
+import Way from "../../models/osm/wayModel.ts";
+import Node from "../../models/osm/nodeModel.ts";
 
 export const extractIdAndType = (string: string) => {
   // console.log("string", string)
