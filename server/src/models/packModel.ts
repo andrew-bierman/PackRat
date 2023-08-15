@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import Item from "./itemModel.js";
-import myDB from "./dbConnection.js";
+import Item from "./itemModel.ts";
+import myDB from "./dbConnection.ts";
 
 const { Schema } = mongoose;
 
@@ -38,7 +38,7 @@ const PackSchema = new Schema(
 PackSchema.virtual("total_weight").get(function () {
   if (this.items && this.items.length > 0 && this.items[0] instanceof Item) {
     return this.items.reduce(
-      (total, item) => total + item.weight * item.quantity,
+      (total, item: any) => total + item.weight * item.quantity,
       0
     );
   } else {
@@ -47,9 +47,9 @@ PackSchema.virtual("total_weight").get(function () {
 });
 
 PackSchema.virtual("totalScore").get(function () {
-  const scoresArray = Object.values(this.scores);
-  const sum = scoresArray.reduce((total, score) => total + score, 0);
-  const average = scoresArray.length > 0 ? sum / scoresArray.length : 0;
+  const scoresArray: number[] = Object.values(this.scores);
+  const sum: number = scoresArray.reduce((total: number, score: number) => total + score, 0);
+  const average: number = scoresArray.length > 0 ? sum / scoresArray.length : 0;
 
   return Math.round(average * 100) / 100;
 });

@@ -9,7 +9,7 @@ import {
   scorePack,
   duplicatePublicPack,
 } from "../controllers/pack/index.js";
-import * as validator from "../middleware/validators/index.js";
+import * as validator from "../middleware/validators/index.ts";
 
 const router = express.Router();
 

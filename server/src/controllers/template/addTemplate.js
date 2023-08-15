@@ -1,5 +1,5 @@
-import Template from "../../models/templateModel.js";
-import User from "../../models/userModel.js";
+import Template from "../../models/templateModel.ts";
+import User from "../../models/userModel.ts";
 
 /**
  * Adds a template to the database.

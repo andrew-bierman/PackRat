@@ -1,4 +1,4 @@
-import Item from "../../models/itemModel.js";
+import Item from "../../models/itemModel.ts";
 
 /**
  * Deletes a global item.

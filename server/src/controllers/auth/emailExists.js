@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 import smtpTransport from "nodemailer-smtp-transport";
-import User from "../../models/userModel.js";
+import User from "../../models/userModel.ts";
 
 /**
  * Check if the provided email exists in the database.

@@ -1,4 +1,4 @@
-import Item from "../../models/itemModel.js";
+import Item from "../../models/itemModel.ts";
 
 /**
  * Retrieves a list of items associated with a pack.

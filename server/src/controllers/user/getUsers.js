@@ -1,4 +1,4 @@
-import User from "../../models/userModel.js";
+import User from "../../models/userModel.ts";
 
 // Middleware to check if user is authenticated
 // export const isAuthenticated = async (req, res, next) => {

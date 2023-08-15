@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import User from "../../models/userModel.js";
-import Conversation from "../../models/openai/conversationModel.js";
+import User from "../../models/userModel.ts";
+import Conversation from "../../models/openai/conversationModel.ts";
 
 /**
  * Retrieves the chats of a user.

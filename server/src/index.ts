@@ -2,17 +2,18 @@ import express, { NextFunction } from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import { isCelebrateError, errors } from "celebrate";
-import { MONGODB_URI, } from "./config.js";
-import routes from "./routes/index.js";
+import { MONGODB_URI, } from "./config.ts";
+import routes from "./routes/index.ts";
 import bodyParser from "body-parser";
-import { serveSwaggerUI } from "./helpers/serveSwaggerUI.js";
-import { corsOptions } from "./helpers/corsOptions.js";
+import { serveSwaggerUI } from "./helpers/serveSwaggerUI.ts";
+import { corsOptions } from "./helpers/corsOptions.ts";
  
 // express items
 const app = express();
   
-app.use(cors(corsOptions));
-
+if(corsOptions){
+  app.use(cors(corsOptions as any));
+}
 app.use(bodyParser.json({ limit: "50mb" }));
 // app.use(express.urlencoded({ limit: "50mb", extended: true }));
 

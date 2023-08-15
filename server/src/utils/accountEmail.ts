@@ -1,23 +1,26 @@
-import { SEND_GRID_API_KEY, STMP_EMAIL } from "../config.js";
+import { SEND_GRID_API_KEY, STMP_EMAIL } from "../config.ts";
 
 import sgMail from "@sendgrid/mail";
 
+if(!SEND_GRID_API_KEY){
+  throw new Error("SEND_GRID_API_KEY is not set");
+}
 sgMail.setApiKey(SEND_GRID_API_KEY);
 
 export const sendWelcomeEmail = (email: string, name: string) => {
   sgMail.send({
     to: email,
     from: {
-      email: STMP_EMAIL,
+      email: STMP_EMAIL??"",
       name: "PackRat Support",
     },
     subject: "Thanks for joining in PackRat!!",
     text: `Welcome to the app, ${name}. Let me know how you get along with the app.`,
-  }) .then((res) => {
+  }) .then((res: any) => {
     console.log("Email Sent");
     return res;
   })
-  .catch((err) => {
+  .catch((err: any) => {
     console.log("Email did not  Send", err);
     return err;
   });
@@ -27,7 +30,7 @@ export const resetEmail = (email: string, resetUrl: string) => {
   sgMail.send({
     to: email,
     from: {
-      email: STMP_EMAIL,
+      email: STMP_EMAIL??"",
       name: "PackRat Support",
     },
     subject: "Password Reset",

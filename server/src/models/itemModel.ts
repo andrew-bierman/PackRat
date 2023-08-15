@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
-import Pack from "./packModel.js";
-import myDB from "./dbConnection.js";
+import myDB from "./dbConnection.ts";
 
 const { Schema } = mongoose;
 

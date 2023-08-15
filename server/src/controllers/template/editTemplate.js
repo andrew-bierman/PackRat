@@ -1,4 +1,4 @@
-import Template from "../../models/templateModel.js";
+import Template from "../../models/templateModel.ts";
 
 /**
  * Edits a template.

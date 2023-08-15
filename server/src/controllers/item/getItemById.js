@@ -1,4 +1,4 @@
-import Item from "../../models/itemModel.js";
+import Item from "../../models/itemModel.ts";
 
 /**
  * Retrieves an item by its ID.

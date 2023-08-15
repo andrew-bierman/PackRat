@@ -2,7 +2,7 @@
 
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
-import User from "../../models/userModel.js";
+import User from "../../models/userModel.ts";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -11,10 +11,10 @@ import {
     GOOGLE_CLIENT_SECRET,
     REDIRECT_URL,
     SERVER_ROOT_URI,
-} from "../../config.js";
+} from "../../config.ts";
 
 import { OAuth2Client } from "google-auth-library";
-import utilsService from "../../utils/utils.service.js";
+import utilsService from "../../utils/utils.service.ts";
 
 const client = new OAuth2Client(
     GOOGLE_CLIENT_ID,

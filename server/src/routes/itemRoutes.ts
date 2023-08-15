@@ -12,8 +12,7 @@ import {
   editGlobalItemAsDuplicate,
   deleteGlobalItem,
 } from "../controllers/item/index.js";
-import auth from "../middleware/auth.js";
-import * as validator from "../middleware/validators/index.js";
+import * as validator from "../middleware/validators/index.ts";
 
 const router = express.Router();
 

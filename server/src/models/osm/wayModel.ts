@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import { toGeoJSON } from "../../utils/osmFunctions/modelHandlers.js";
-import myDB from "../dbConnection.js";
+import { toGeoJSON } from "../../utils/osmFunctions/modelHandlers.ts";
+import myDB from "../dbConnection.ts";
 import autopopulate from "mongoose-autopopulate";
 
 const { Schema } = mongoose;
@@ -35,7 +35,7 @@ WaySchema.pre("save", async function (next) {
       throw new Error("This is not a way");
     }
     next();
-  } catch (err) {
+  } catch (err: any) {
     next(err);
   }
 });
@@ -43,11 +43,9 @@ WaySchema.pre("save", async function (next) {
 WaySchema.pre("save", async function (next) {
   try {
     // this.geoJSON = toGeoJSON(this.constructor, this); // use the exported toGeoJSON
-
-    this.geoJSON = await this.toGeoJSON(); // use the instance method toGeoJSON
-
+    const geoJSON = await (this as any).toGeoJSON(); // use the instance method toGeoJSON
     next();
-  } catch (err) {
+  } catch (err: any) {
     next(err);
   }
 });

@@ -1,6 +1,6 @@
 import { queueManager } from './queueManager.js';
 
-export async function processJob(job, queueName, task) {
+export async function processJob(job: any, queueName: string, task: string) {
   // Get the queue for this job type
   const queueData = queueManager.getQueue(queueName);
 

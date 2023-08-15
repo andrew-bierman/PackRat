@@ -1,5 +1,4 @@
-import fetch from "node-fetch";
-
+const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 /**
  * Retrieves trails based on the provided parameters.
  * @param {Object} req - The request object containing the parameters.

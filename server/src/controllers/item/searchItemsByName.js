@@ -1,4 +1,4 @@
-import Item from "../../models/itemModel.js";
+import Item from "../../models/itemModel.ts";
 
 /**
  * Searches for items by name.

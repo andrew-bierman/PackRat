@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
-import myDB from "../dbConnection.js";
+import myDB from "../dbConnection.ts";
 
 const { Schema } = mongoose;
 
-const ConversationSchema = Schema(
+const ConversationSchema = new Schema(
   {
     userId: {
       type: String,

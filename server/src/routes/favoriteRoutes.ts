@@ -1,5 +1,5 @@
 import express from "express";
-import * as validator from "../middleware/validators/index.js";
+import * as validator from "../middleware/validators/index.ts";
 import { addToFavorite, getFavoritePacksByUser, getUserFavorites } from "../controllers/favorite/index.js";
 
 const router = express.Router();

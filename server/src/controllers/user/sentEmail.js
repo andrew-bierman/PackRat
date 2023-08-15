@@ -1,4 +1,4 @@
-import User from "../../models/userModel.js";
+import User from "../../models/userModel.ts";
 import { sendWelcomeEmail, resetEmail } from "../../utils/accountEmail.ts";
 
 /**

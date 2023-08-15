@@ -1,4 +1,4 @@
-import Pack from "../../models/packModel.js";
+import Pack from "../../models/packModel.ts";
 
 /**
  * Adds a new pack to the database.

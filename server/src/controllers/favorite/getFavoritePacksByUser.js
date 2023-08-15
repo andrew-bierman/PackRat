@@ -1,4 +1,4 @@
-import Pack from "../../models/packModel.js";
+import Pack from "../../models/packModel.ts";
 
 /**
  * Retrieves favorite packs for a user.
