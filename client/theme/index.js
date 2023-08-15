@@ -1,3 +1,6 @@
+import { extendTheme } from 'native-base'
+import { DefaultTheme } from 'react-native-paper';
+
 export const theme = {
   colors: {
     primary: "#0A84FF",
@@ -74,3 +77,53 @@ export const darkTheme = {
     widthDesktop: "85%",
   },
 };
+
+export const nativeBaseLightTheme = extendTheme({
+  colors: {
+    primary : {
+      500 : theme.colors.background,
+    },
+    amber : {
+      100 : theme.colors.text
+    }
+  }
+})
+export const nativeBaseDarkTheme =  extendTheme({
+  colors: {
+    primary : {
+      500 : darkTheme.colors.background,
+    },
+    amber : {
+      100 : darkTheme.colors.text
+    }
+  }
+})
+
+
+
+export const lightThemePaper =  {
+  ...DefaultTheme,
+  'colors' : {
+    ...DefaultTheme.colors,
+    'primary' : theme.colors.primary,
+    'onSurface' : theme.colors.text,
+    'elevation' : {
+      ...DefaultTheme.colors.elevation,
+      'level1' : theme.colors.background,
+    }
+  }
+}
+
+
+export const darkPaperTheme =  {
+  ...DefaultTheme,
+  'colors' : {
+    ...DefaultTheme.colors,
+    'primary' : darkTheme.colors.primary,
+    'onSurface' : darkTheme.colors.text,
+    'elevation' : {
+      ...DefaultTheme.colors.elevation,
+      'level1' : darkTheme.colors.background,
+    }
+  }
+}
