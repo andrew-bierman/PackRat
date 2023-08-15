@@ -3,6 +3,7 @@ import { VStack, Box, Text, Switch } from "native-base";
 import { StyleSheet } from "react-native";
 import UseTheme from "../../hooks/useTheme";
 import { Paragraph, Card, H2,XStack,Button,Image } from 'tamagui'
+
 export default function AppearanceContainer() {
   const { enableDarkMode, enableLightMode, currentTheme, isDark } = UseTheme();
   const [isEnabled, setIsEnabled] = useState(false);

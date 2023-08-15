@@ -20,11 +20,11 @@ export default function HomeLayout() {
       <PersistGate loading={null} persistor={persistor}>
         <AuthProvider>
           <ThemeProvider>
+            <FlashMessage position="top" />
             <Navigation />
             <Slot />
             {Platform.OS === "web" ? <Footer /> : null}
           </ThemeProvider>
-          <FlashMessage position="top" />
         </AuthProvider>
       </PersistGate>
     </Provider>
