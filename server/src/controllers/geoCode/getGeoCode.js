@@ -1,4 +1,4 @@
-import fetch from "node-fetch";
+let fetch = import('node-fetch')
 import { oneEntity } from "../../utils/oneEntity.js";
 
 /**
@@ -33,3 +33,4 @@ export const getGeoCode = async (req, res) => {
     })
     .catch(() => res.send({ message: "Error fetching GeoCode" }));
 };
+ 

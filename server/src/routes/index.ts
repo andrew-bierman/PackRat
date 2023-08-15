@@ -1,31 +1,31 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import path from "path";
 import csrf from "csurf";
 
-import userRoutes from "./userRoutes.js";
-import packRoutes from "./packRoutes.js";
-import itemRoutes from "./itemRoutes.js";
-import tripRoutes from "./tripRoutes.js";
-import weatherRoutes from "./weatherRoutes.js";
-import geoCodeRoutes from "./geoCodeRoutes.js";
-import getParkRoutes from "./getParkRoutes.js";
-import getTrailRoutes from "./getTrailRoutes.js";
-import osmRoutes from "./osmRoutes.js";
-import passwordResetRoutes from "./passwordResetRoutes.js";
-import openAiRoutes from "./openAiRoutes.js";
-import templateRoutes from "./templateRoutes.js";
-import favoriteRouters from "./favoriteRoutes.js";
+import userRoutes from "./userRoutes.ts";
+import packRoutes from "./packRoutes.ts";
+import itemRoutes from "./itemRoutes.ts";
+import tripRoutes from "./tripRoutes.ts";
+import weatherRoutes from "./weatherRoutes.ts";
+import geoCodeRoutes from "./geoCodeRoutes.ts";
+import getParkRoutes from "./getParkRoutes.ts";
+import getTrailRoutes from "./getTrailRoutes.ts";
+import osmRoutes from "./osmRoutes.ts";
+import passwordResetRoutes from "./passwordResetRoutes.ts";
+import openAiRoutes from "./openAiRoutes.ts";
+import templateRoutes from "./templateRoutes.ts";
+import favoriteRouters from "./favoriteRoutes.ts";
 
 const router = express.Router();
 
 // Create a CSRF middleware
 const csrfProtection = csrf({ cookie: true });
 
-const logger = (req, res, next) => {
+const logger = (req:Request, res:Response, next:express.NextFunction) => {
   console.log(`Incoming ${req.method} ${req.path}`);
   res.on("finish", () => {
     console.log(`Finished ${req.method} ${req.path} ${res.statusCode}`);
-    console.log(`Body ${res.body}`);
+    console.log(`Body ${req.body}`);
   });
   next();
 };

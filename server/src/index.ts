@@ -1,4 +1,4 @@
-import express from "express";
+import express, { NextFunction } from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import { isCelebrateError, errors } from "celebrate";
@@ -7,17 +7,17 @@ import routes from "./routes/index.js";
 import bodyParser from "body-parser";
 import { serveSwaggerUI } from "./helpers/serveSwaggerUI.js";
 import { corsOptions } from "./helpers/corsOptions.js";
-
+ 
 // express items
 const app = express();
-
+  
 app.use(cors(corsOptions));
 
 app.use(bodyParser.json({ limit: "50mb" }));
 // app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
 // const connectionString = " your connection string";
-const connectionString = MONGODB_URI;
+const connectionString = MONGODB_URI ?? ""
 
 // use routes
 app.use(routes);
@@ -26,21 +26,18 @@ app.use(routes);
 serveSwaggerUI(app);
 
 // middleware to log Celebrate validation errors
-app.use((err, req, res, next) => {
+app.use((err:Error, req: express.Request, res: express.Response, next:NextFunction):void => {
   if (isCelebrateError(err)) {
     console.error(err);
   }
-  next(err);
+  next(err); 
 });
 
 // Celebrate middleware to return validation errors
 app.use(errors());
 
 // connect to mongodb
-mongoose.connect(connectionString, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
+mongoose.connect(connectionString, )
   .then(() => console.log("connected"));
 
 const port = process.env.PORT || 3000;
