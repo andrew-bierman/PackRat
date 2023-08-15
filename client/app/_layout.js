@@ -7,13 +7,11 @@ import Navigation from "../screens/Navigation";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 
-import { NativeBaseProvider } from "native-base";
-
 import { store, persistor } from "../store/store";
 
 import { AuthProvider } from "../context/auth";
-import Footer from "../components/footer/Footer";
 import { ThemeProvider } from "../context/theme";
+import Footer from "../components/footer/Footer";
 
 export default function HomeLayout() {
   return (
@@ -21,11 +19,9 @@ export default function HomeLayout() {
       <PersistGate loading={null} persistor={persistor}>
         <AuthProvider>
           <ThemeProvider>
-            <NativeBaseProvider>
-              <Navigation />
-              <Slot />
-              {Platform.OS === "web" ? <Footer /> : null}
-            </NativeBaseProvider>
+            <Navigation />
+            <Slot />
+            {Platform.OS === "web" ? <Footer /> : null}
           </ThemeProvider>
         </AuthProvider>
       </PersistGate>
