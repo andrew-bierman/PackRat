@@ -1,5 +1,5 @@
 import express from "express";
-import { getGeoCode } from "../controllers/geoCode/index.js";
+import { getGeoCode } from "../controllers/geoCode/index.ts";
 
 const router = express.Router();
 

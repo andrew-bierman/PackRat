@@ -1,5 +1,5 @@
 import express from "express";
-import { getParks } from "../controllers/getParks/index.js";
+import { getParks } from "../controllers/getParks/index.ts";
 
 const router = express.Router();
 

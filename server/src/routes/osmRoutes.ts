@@ -8,7 +8,7 @@ import {
   postSingleGeoJSON,
   getPhotonDetails,
   getEnhancedPhotonDetails,
-} from "../controllers/getOsm/index.js";
+} from "../controllers/getOsm/index.ts";
 
 const router = express.Router();
 
