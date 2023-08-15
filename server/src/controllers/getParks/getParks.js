@@ -1,5 +1,5 @@
 import fetch from "node-fetch";
-import { oneEntity } from "../../utils/oneEntity.js";
+import { oneEntity } from "../../utils/oneEntity.ts";
 
 /**
  * Retrieves a list of parks based on the specified state code.

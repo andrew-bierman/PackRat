@@ -15,10 +15,10 @@ import {
   extractIdAndType,
 } from "./dataFormatters.js";
 
-export async function fromOSM(Model, data) {
+export async function fromOSM(Model: any, data: any) {
   const { type, id } = extractIdAndType(data.id);
 
-  const instanceData = {
+  const instanceData: any = {
     osm_id: id,
     osm_type: type,
     tags: propertiesToTags(data.tags),
@@ -26,11 +26,11 @@ export async function fromOSM(Model, data) {
   };
 
   // Find or create nodes
-  const ids = data.nodes.map((node) => node.id);
+  const ids = data.nodes.map((node: any) => node.id);
   const instances = await Node.findOrCreateMany(ids, data.nodes);
 
   // Add nodes to instance
-  instanceData.nodes = instances.map((instance) => instance._id);
+  instanceData.nodes = instances.map((instance: any) => instance._id);
 
   // Create instance
   const newInstance = await Model.create(instanceData);
@@ -38,7 +38,7 @@ export async function fromOSM(Model, data) {
   return newInstance;
 }
 
-export async function fromGeoJSON(Model, geoJSON) {
+export async function fromGeoJSON(Model: any, geoJSON: any) {
   // console.log("fromGeoJSON");
   // console.log("fromGeoJSON geoJSON", geoJSON);
   // console.log("fromGeoJSON Model", Model);
@@ -74,7 +74,7 @@ export async function fromGeoJSON(Model, geoJSON) {
   return instance;
 }
 
-export async function toGeoJSON(Model, instance) {
+export async function toGeoJSON(Model: any, instance: any) {
   // console.log("toGeoJSON instance", instance);
 
   if (!instance) {
@@ -82,7 +82,7 @@ export async function toGeoJSON(Model, instance) {
     return {};
   }
 
-  const geoJSON = {
+  const geoJSON: any = {
     type: "Feature",
     geometry: {
       type: "LineString",
@@ -97,7 +97,7 @@ export async function toGeoJSON(Model, instance) {
   // Retrieve the Node documents from the database
   const nodes = await Node.find({ _id: { $in: instance.nodes } }).exec();
 
-  nodes.forEach((node) => {
+  nodes.forEach((node: any) => {
     // assuming nodes are already saved and their ids are stored in `nodes`
     // we can fetch the node data here using findById or leave it as it is if id is enough
     geoJSON.geometry.coordinates.push([node.lat, node.lon]);
@@ -107,7 +107,7 @@ export async function toGeoJSON(Model, instance) {
 }
 
 // Mapping of types to Models
-const modelMappingFunc = (type) => {
+const modelMappingFunc = (type: string) => {
   console.log("modelMappingFunc type", type)
   switch (type) {
     case "node":
@@ -127,11 +127,11 @@ const modelMappingFunc = (type) => {
   }
 };
 
-export function findExisting(Model, id, type) {
+export function findExisting(Model: any, id: any, type: string) {
   return Model.findOne({ osm_id: id, osm_type: type });
 }
 
-export async function updateInstanceFromGeoJSON(instance, geoJSON) {
+export async function updateInstanceFromGeoJSON(instance: any, geoJSON: any) {
   instance.updated_at = geoJSON.properties.timestamp;
   instance.tags = propertiesToTags(geoJSON.properties);
   instance.nodes = await coordinatesToInstances(
@@ -142,7 +142,7 @@ export async function updateInstanceFromGeoJSON(instance, geoJSON) {
   return instance;
 }
 
-export function createNewInstance(Model, element) {
+export function createNewInstance(Model: any, element: any) {
   if (isOSMFormat(element)) {
     return fromOSM(Model, element);
   } else if (isGeoJSONFormat(element)) {
@@ -151,7 +151,7 @@ export function createNewInstance(Model, element) {
   throw new Error("Element is neither in OSM or GeoJSON format.");
 }
 
-export function ensureIdProperty(element) {
+export function ensureIdProperty(element: any) {
   if (!element.id && element.properties && element.properties.osm_id) {
     // Create 'id' in the format 'type/id'
     let { osm_type, osm_id } = element.properties;
@@ -175,7 +175,7 @@ export function ensureIdProperty(element) {
   return element;
 }
 
-export function ensureModelProperty(element) {
+export function ensureModelProperty(element: any) {
   // Convert the osm_type to lowercase if it's a string
   const osmType =
     typeof element.properties.osm_type === "string"
@@ -189,7 +189,7 @@ export function ensureModelProperty(element) {
   return ModelForElement;
 }
 
-export async function processElement(element) {
+export async function processElement(element: any) {
   // Extract OSM ID and type
   const id = element.id
     ? Number(element.id.split("/")[1])
@@ -218,11 +218,11 @@ export async function processElement(element) {
   return instance;
 }
 
-export async function findOrCreateOne(Model = Way, element) {
+export async function findOrCreateOne(Model = Way, element: any) {
   return processElement(element);
 }
 
-export async function findOrCreateMany(Model = Way, data) {
+export async function findOrCreateMany(Model = Way, data: any) {
   // Check if data is iterable
   if (!Array.isArray(data)) {
     throw new Error("Data is not iterable, cannot proceed.");

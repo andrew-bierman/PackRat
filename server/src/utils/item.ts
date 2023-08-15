@@ -6,7 +6,7 @@ export const itemValidation = async ({
   quantity,
   unit,
   packId,
-}) => {
+}: any) => {
   if (!name || !weight || !quantity || !unit || !packId) {
     throw new Error("All fields must be filled");
   }

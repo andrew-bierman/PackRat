@@ -1,6 +1,6 @@
 import { ItemCategoryModel } from "../../models/itemCategory.js";
 import Item from "../../models/itemModel.js";
-import { ItemCategory, ItemCategoryEnum } from "../../utils/itemCategory.js";
+import { ItemCategory, ItemCategoryEnum } from "../../utils/itemCategory.ts";
 
 /**
  * Adds an item globally.

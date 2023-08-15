@@ -1,7 +1,7 @@
 import User from "../../models/userModel.js";
 import bycrypt from "bcrypt";
 import bcrypt from "bcrypt";
-import { sendWelcomeEmail, resetEmail } from "../../utils/accountEmail.js";
+import { sendWelcomeEmail, resetEmail } from "../../utils/accountEmail.ts";
 import {
     JWT_SECRET,
 } from "../../config.js";

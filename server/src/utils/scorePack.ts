@@ -7,8 +7,8 @@
 // Redundancy and Versatility:
 // Scale: 1-10 (10 being the least redundancy and high versatility)
 
-function checkEssentialItems(packItems) {
-  const essentialItems = {
+function checkEssentialItems(packItems: any) {
+  const essentialItems: any = {
     water: ["water", "hydration"],
     food: ["food", "nutrition"],
     map: ["map", "navigation"],
@@ -27,9 +27,9 @@ function checkEssentialItems(packItems) {
 
   for (const item in essentialItems) {
     // Check if the pack contains any item that matches or partially matches any name in the array
-    const matchingItem = packItems.find((packItem) =>
-      essentialItems[item].some((itemName) =>
-        packItem.name.toLowerCase().includes(itemName.toLowerCase())
+    const matchingItem = packItems.find((packItem: any) =>
+      essentialItems[item].some((itemName: string) =>
+        packItem.name.toLowerCase().includes(itemName.toLowerCase()) 
       )
     );
 
@@ -44,8 +44,8 @@ function checkEssentialItems(packItems) {
   return essentialItemsScore;
 }
 
-function checkRedundancy(packItems) {
-  const redundantItems = {
+function checkRedundancy(packItems: any) {
+  const redundantItems:any = {
     tools: ["multi-tool", "hammer"],
     lightSources: ["flashlight", "extra flashlight"],
     powerSources: ["batteries", "extra batteries"],
@@ -59,13 +59,13 @@ function checkRedundancy(packItems) {
 
   // Create a set of unique lowercase item names for efficient comparison
   const uniquePackItems = new Set(
-    packItems.map((item) => item.name.toLowerCase())
+    packItems.map((item: any) => item.name.toLowerCase())
   );
 
   for (const item in redundantItems) {
     // Check if the pack contains more than one item that matches or partially matches any name in the array
-    const matchingItems = packItems.filter((packItem) =>
-      redundantItems[item].some((itemName) =>
+    const matchingItems = packItems.filter((packItem: any) =>
+      redundantItems[item].some((itemName: string) =>
         packItem.name.toLowerCase().includes(itemName.toLowerCase())
       )
     );
@@ -89,14 +89,14 @@ function checkRedundancy(packItems) {
   return redundancyScore;
 }
 
-export function calculatePackScore(packData) {
+export function calculatePackScore(packData: any) {
   console.log("Calculating pack score...");
   console.log("packData: ", packData);
   const { items } = packData;
   // console.log("weight: ", weight);
   // console.log('items: ', items)
 
-  let totalWeight = packData.items.reduce((total, item) => {
+  let totalWeight = packData.items.reduce((total: number, item: any) => {
     if (item.unit === "lb") {
       return total + item.weight * 16 * item.quantity; // Considering 1 lb equals 16 oz
     } else {
