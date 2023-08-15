@@ -1,14 +1,23 @@
 {
   "compilerOptions": {
     "target": "es5",                          
-    "module": "commonjs",                    
+    "module": "ES2015",
+    "moduleResolution": "node",                    
     "lib": ["es6"],                     
     "allowJs": true,
     "outDir": "build",                          
     "rootDir": "src",
-    "strict": true,         
+    "strict": false,         
     "noImplicitAny": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
-  }
+    "allowImportingTsExtensions": true
+  },
+  "exclude": [
+    "node_modules",
+  ],
+  "ts-node":
+	{
+		"esm": true // from the top of https://typestrong.org/ts-node/docs/imports/
+	}
 }
