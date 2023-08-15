@@ -9,7 +9,7 @@ import { api } from "../../constants/api";
 
 // import { Picker } from '@react-native-picker/picker';
 import { DropdownComponent } from "../Dropdown";
-import axios from "~/config/axios";
+import axios from "axios";
 
 const options = [
   { label: "Yes", value: "true" },
@@ -108,6 +108,7 @@ export const SaveTripContainer = ({ dateRange }) => {
 
     console.log("old rag", search);
 
+    // TODO - fix this, why making call not through redux
     const { data: geoJSON } = await axios.get(
       `${api}/osm/photonDetails/${search.properties.osm_type}/${search.properties.osm_id}`
     );
