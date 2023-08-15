@@ -14,7 +14,7 @@
 //   }
 // };
 
-import User from "../models/userModel.js";
+import User from "../../models/userModel.js";
 
 export const up = async (db) => {
   console.log("Adding usernames to existing users...");
