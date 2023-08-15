@@ -8,7 +8,7 @@
     "test:generate": "npx openapi-generator url http://localhost:3000/swagger.json -d ./generated -t javascript",
     "test:expect": "mocha 'generated/test/**/*.spec.js'",
     "setup": "npm install",
-    "start": "nodemon index.js",
+    "start": "nodemon",
     "dev": "nodemon index.js",
     "debug": "cross-env NODE_OPTIONS='--inspect-brk' nodemon index.js"
   },
@@ -55,12 +55,14 @@
   },
   "devDependencies": {
     "@openapitools/openapi-generator-cli": "^2.7.0",
+    "@types/node": "^20.5.0",
     "cross-env": "^7.0.3",
     "expect.js": "^0.3.1",
     "jest": "^29.6.2",
     "migrate-mongo": "^10.0.0",
     "mocha": "^10.2.0",
-    "openapi-generator": "^0.1.39"
+    "openapi-generator": "^0.1.39",
+    "typescript": "^5.1.6"
   },
   "engines": {
     "node": ">=14.0.0"
