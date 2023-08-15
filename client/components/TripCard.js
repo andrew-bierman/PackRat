@@ -96,12 +96,12 @@ export default function TripCard({
       ) : (
         isTrail ?
 
-        // <Text>Search</Text>
+        
         <DropdownComponent
           {...{
-            value: isTrail ? currentTrail : currentPark,
+            value: currentTrail,
             data,
-            placeholder: isTrail ? "Select Trail" : "Select Park",
+            placeholder:"Select Trail",
             isTrail,
             onValueChange: handleValueChange,
             width: 300,
