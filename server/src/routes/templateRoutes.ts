@@ -5,7 +5,7 @@ import {
   addTemplate,
   editTemplate,
   deleteTemplate,
-} from "../controllers/template/index.js";
+} from "../controllers/template/index.ts";
 import { isAdmin } from "../middleware/isAdmin.ts"; // Assuming this is your middleware file
 
 // import * as validator from "../middleware/validators/index.js";

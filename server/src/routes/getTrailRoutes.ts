@@ -1,5 +1,5 @@
 import express from "express";
-import { getTrails } from "../controllers/getTrail/index.js";
+import { getTrails } from "../controllers/getTrail/index.ts";
 
 const router = express.Router();
 

@@ -2,7 +2,7 @@ import express from "express";
 import {
   getWeatherWeek,
   getWeather,
-} from "../controllers/weather/index.js";
+} from "../controllers/weather/index.ts";
 
 const router = express.Router();
 

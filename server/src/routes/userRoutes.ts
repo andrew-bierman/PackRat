@@ -6,14 +6,14 @@ import {
   editUser,
   deleteUser,
   addToFavorite,
-  userSignin,
+  userSignIn,
   userSignup,
   sentEmail,
   resetPassword,
   getGoogleAuthURL,
   googleSignin,
   getMe,
-} from "../controllers/user/index.js";
+} from "../controllers/user/index.ts";
 import auth from "../middleware/auth.ts";
 import * as validator from "../middleware/validators/index.ts";
 
@@ -21,9 +21,9 @@ import {
   signInLocal,
   signUpLocal,
   signInGoogle,
-} from "../controllers/passport/index.js";
+} from "../controllers/passport/index.ts";
 import { REDIRECT_URL } from "../config.ts";
-import { emailExists, updatePassword, checkCode } from "../controllers/auth/index.js";
+import { emailExists, updatePassword, checkCode } from "../controllers/auth/index.ts";
 
 const router = express.Router();
 
@@ -98,7 +98,7 @@ router.get("/:userId", validator.getUserById, getUserById);
  *       '500':
  *         description: Error signing in
  */
-router.post("/signin", validator.userSignIn, userSignin);
+router.post("/signin", validator.userSignIn, userSignIn);
 
 /**
  * @swagger
