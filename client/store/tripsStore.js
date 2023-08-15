@@ -30,6 +30,7 @@ export const fetchUserTrips = createAsyncThunk(
 );
 
 export const addTrip = createAsyncThunk("trips/addTrip", async (newTrip) => {
+  console.log("new trip", newTrip);
   const response = await axios.post(`${api}/trip/`, newTrip);
   return response.data;
 });
@@ -127,7 +128,7 @@ const tripsSlice = createSlice({
         state.error = null;
       })
       .addCase(addTrip.fulfilled, (state, action) => {
-        tripsAdapter.addOne(state, action.payload.createdTrip);
+        tripsAdapter.addOne(state, action.payload);
         state.isLoading = false;
         state.error = null;
       })
