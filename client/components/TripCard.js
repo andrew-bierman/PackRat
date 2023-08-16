@@ -116,11 +116,11 @@ export default function TripCard({
               let selectedValue = isTrail ? currentTrail : currentPark;
               return(
             <Card
-            backgroundColor={item === selectedValue ? 'gray' : null}
+            backgroundColor={item === selectedValue ? theme.colors.background : null}
              onPress={() => handleValueChange(item)} elevate bordered  margin={2}
              >
               <Card.Header padded>
-                <Paragraph >{item}</Paragraph>
+                <Paragraph color={item === selectedValue ? 'white' : 'black'}>{item}</Paragraph>
               </Card.Header>
             </Card>)})
           }
