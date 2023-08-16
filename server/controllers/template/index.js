@@ -1,5 +1,0 @@
-export * from './addTemplate.js'
-export * from './deleteTemplate.js'
-export * from './editTemplate.js'
-export * from './getTemplateById.js'
-export * from './getTemplates.js'
