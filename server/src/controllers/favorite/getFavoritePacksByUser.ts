@@ -1,4 +1,5 @@
 import Pack from "../../models/packModel.ts";
+import { getFavoritePacksByUserService } from "../../services/favorite/favorite.service.ts";
 
 /**
  * Retrieves favorite packs for a user.
@@ -10,7 +11,7 @@ export const getFavoritePacksByUser = async (req, res) => {
   try {
     const { userId } = req.body;
 
-    const packs = await Pack.find({ favorited_by: { $in: [userId] } });
+    const packs = await getFavoritePacksByUserService(userId);
 
     if (!packs) throw new Error("Packs not found");
 
