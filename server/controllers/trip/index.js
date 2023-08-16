@@ -1,6 +1,0 @@
-export * from './addTrip.js'
-export * from './deleteTrip.js'
-export * from './editTrip.js'
-export * from './getPublicTrips.js'
-export * from './getTrip.js'
-export * from './getTripById.js'
