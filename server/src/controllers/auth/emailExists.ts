@@ -1,6 +1,7 @@
 import nodemailer from "nodemailer";
 import smtpTransport from "nodemailer-smtp-transport";
 import User from "../../models/userModel.ts";
+import { findUserAndUpdate, findUserByEmail } from "../../services/user/user.service.ts";
 
 /**
  * Check if the provided email exists in the database.
@@ -11,33 +12,24 @@ import User from "../../models/userModel.ts";
 export const emailExists = async (req, res) => {
     const { email } = req.body;
     try {
-        let val = await User.find({ email: email.toLowerCase() });
-        if (val.length) {
+        let val = await findUserByEmail(email);
+        if (val) {
             sendEmailNotice(email).then(async (result1: any) => {
                 if (result1.status) {
                     let { newcode } = result1;
-                    User.findOneAndUpdate(
-                        { email: email.toLowerCase() },
-                        { code: newcode },
-                        {
-                            returnOriginal: false,
+                    findUserAndUpdate(email, newcode, "code").then(async (result2: any) => {
+                        if (result2.status) {
+                            res.status(200).json({ message: "success" });
+                        } else {
+                            res.status(500).json({ message: result2 });
                         }
-                    )
-                        .then((result2) => {
-                            console.log(result2.email);
-                            if (result2.code) {
-                                res.status(200).json({ message: "success" });
-                            }
-                        })
-                        .catch(() => {
-                            res.status(200).json({ message: "Unable to send code" });
-                        });
+                    })
                 } else {
                     res.status(200).json({ message: "Unable to send code" });
                 }
             });
         } else {
-            res.status(200).json({ message: "User not found" });
+            res.status(200).json({ message: val });
         }
     } catch (error) {
         res.status(404).json({ message: "Server Error" });
