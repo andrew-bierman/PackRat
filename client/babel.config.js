@@ -2,7 +2,7 @@ process.env.TAMAGUI_TARGET = "web";
 module.exports = function (api) {
   api.cache(true);
   return {
-    presets: ["babel-preset-expo", "@babel/preset-typescript"],
+    presets: ["babel-preset-expo"],
     ignore: [
       "**/node_modules/mapbox-gl/dist/mapbox-gl.js",
       "**/node_modules/mapbox-gl/dist/mapbox-gl.js.map",
