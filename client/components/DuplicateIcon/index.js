@@ -8,8 +8,8 @@ export const DuplicateIcon = () => {
     <Button
       style={{
         backgroundColor: "transparent",
-        width: "10%",
-        height: "10%",
+        width: "10",
+        height: "10",
         padding: 0,
         paddingLeft: 15,
       }}

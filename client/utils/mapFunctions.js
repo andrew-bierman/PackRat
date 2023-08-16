@@ -54,7 +54,14 @@ function convertPhotonGeoJsonToShape(photonGeoJson) {
   return {
     type: "FeatureCollection",
     features: [
-      photonGeoJson
+      {
+        type: "Feature",
+        geometry: {
+          type: "LineString",
+          coordinates: normalizeCoordinates(photonGeoJson.geometry.coordinates),
+        },
+        properties: photonGeoJson.properties,
+      },
     ],
   };
 }
@@ -235,40 +242,6 @@ const isShapeDownloadable = (shape) => {
   return shape?.features[0]?.geometry?.coordinates?.length > 1;
 };
 
-const isPoint = (shape) => {
-  return shape?.features[0]?.geometry?.type === 'Point';
-}
-const isLineString = (shape) => {
-  return shape?.features[0]?.geometry?.type === 'LineString';
-}
-
-const isPolygonOrMultiPolygon = (shape) => {
-  return shape?.features[0]?.geometry?.type === 'MultiPolygon' || shape?.features[0]?.geometry?.type === 'MultiPolygon';
-}
-
-const multiPolygonBounds = (multipolygonData) => {
-  let coordinates = multipolygonData.geometry.coordinates[0];
-  if(multipolygonData.geometry.type === 'MultiPolygon') {
-    coordinates = coordinates[0];
-  }
-  let minX = Infinity;
-  let maxX = -Infinity;
-  let minY = Infinity;
-  let maxY = -Infinity;
-
-  for (const [lng, lat] of coordinates) {
-    minX = Math.min(minX, lng);
-    maxX = Math.max(maxX, lng);
-    minY = Math.min(minY, lat);
-    maxY = Math.max(maxY, lat);
-  }
-
-  const centerLng = (minX + maxX) / 2;
-  const centerLat = (minY + maxY) / 2;
-  console.log(centerLat, centerLng, 'center lng lat');
-  return [centerLng, centerLat]
-}
-
 export {
   defaultShape,
   getShapeSourceBounds,
@@ -282,8 +255,4 @@ export {
   getLocation,
   isShapeDownloadable,
   convertPhotonGeoJsonToShape,
-  isPoint,
-  isLineString,
-  isPolygonOrMultiPolygon,
-  multiPolygonBounds
 };

@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
 import { defaultWeatherObject } from "../constants/defaultWeatherObj";
 import { defaultWeekObj } from "../constants/defaultWeekObj";
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { api } from "../constants/api";
 

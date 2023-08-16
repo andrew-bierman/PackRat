@@ -5,7 +5,6 @@ import {
 } from "@reduxjs/toolkit";
 import axios from "axios";
 import { api } from "../constants/api";
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const deleteTrip = createAsyncThunk(
   "trips/deleteTrip",
