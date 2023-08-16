@@ -22,7 +22,7 @@ import { useRouter } from "expo-router";
 // import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { Link } from "expo-router";
 import { useSelector, useDispatch } from "react-redux";
-import { signUp } from "../store/authStore";
+import { signUp, signInWithGoogle } from "../store/authStore";
 
 export default function Register() {
   const dispatch = useDispatch();
@@ -33,6 +33,11 @@ export default function Register() {
 
   // const { signupWithEmail } = useRegister();
   const router = useRouter();
+
+  // Add Google auth-related variables
+  const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
+    clientId: WEB_CLIENT_ID,
+  });
 
   const user = useSelector((state) => state.auth.user);
 
@@ -65,6 +70,28 @@ export default function Register() {
     } catch (e) {
       console.log("Error", e);
     }
+  };
+
+  const handleGoogleSignIn = () => {
+    promptAsync();
+    signInWithGoogle()
+      .then(async (res) => {
+        let { email, name } = res;
+        if (email && name) {
+          addUser.mutate({
+            name,
+            email,
+            password: "",
+            from: "GoogleSignIn",
+          });
+          router.push("/sign-in");
+        } else {
+          console.log("Email and Name empty");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -156,27 +183,7 @@ export default function Register() {
             <Button
               w="100%"
               mt="2"
-              onPress={() => {
-                promptAsync();
-                signInWithGoogle()
-                  .then(async (res) => {
-                    let { email, name } = res;
-                    if (email && name) {
-                      addUser.mutate({
-                        name,
-                        email,
-                        password: "",
-                        from: "GoogleSignIn",
-                      });
-                      router.push("/sign-in");
-                    } else {
-                      console.log("Email and Name empty");
-                    }
-                  })
-                  .catch((err) => {
-                    console.log(err);
-                  });
-              }}
+              onPress={() => handleGoogleSignIn()}
               colorScheme={"red"}
               startIcon={<FontAwesome name="google" size={16} color="white" />}
             >
