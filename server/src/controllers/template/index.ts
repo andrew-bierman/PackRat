@@ -1,0 +1,5 @@
+export * from './addTemplate.ts'
+export * from './deleteTemplate.ts'
+export * from './editTemplate.ts'
+export * from './getTemplateById.ts'
+export * from './getTemplates.ts'
