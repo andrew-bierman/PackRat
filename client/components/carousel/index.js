@@ -37,6 +37,8 @@ const Carousel = ({ children, itemWidth }) => {
       <ScrollView
         ref={scrollViewRef}
         horizontal={true}
+      //  pagingEnabled={true}
+        
         onScroll={(event) => setScrollX(event.nativeEvent.contentOffset.x)}
         scrollEventThrottle={16}
         style={styles.carousel}
