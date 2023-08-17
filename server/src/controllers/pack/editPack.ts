@@ -1,4 +1,4 @@
-import Pack from "../../models/packModel.ts";
+import { editPackService } from "../../services/pack/pack.service.ts";
 
 /**
  * Edits a pack in the database.
@@ -6,13 +6,12 @@ import Pack from "../../models/packModel.ts";
  * @param {Object} res - The response object.
  * @return {Object} The updated pack.
  */
+
 export const editPack = async (req, res) => {
   try {
     const { _id } = req.body;
 
-    const newPack = await Pack.findOneAndUpdate({ _id }, req.body, {
-      returnOriginal: false,
-    });
+    const newPack = await editPackService(_id, req.body);
 
     console.log("newPack", newPack);
 
