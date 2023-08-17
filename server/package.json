@@ -9,7 +9,11 @@
     "setup": "npm install",
     "start": "nodemon",
     "dev": "nodemon",
-    "debug": "cross-env NODE_OPTIONS='--inspect-brk' nodemon"
+    "debug": "cross-env NODE_OPTIONS='--inspect-brk' nodemon",
+    "build": "tsc",
+    "start:prod": "node build/index.js",
+    "start:ts-node": "ts-node src/index.ts"
+
   },
   "author": "",
   "license": "ISC",
