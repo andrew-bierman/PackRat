@@ -1,4 +1,5 @@
 import User from "../../models/userModel.ts";
+import { findUserAndUpdate } from "../../services/user/user.service.ts";
 
 /**
  * Updates the password for a user.
@@ -10,14 +11,8 @@ export const updatePassword = async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        let val = await User.findOneAndUpdate(
-            { email: email.toLowerCase() },
-            { password: password },
-            {
-                returnOriginal: false,
-            }
-        );
-        if (val.email) {
+        let val = await findUserAndUpdate(email, password,"password");
+        if (val) {
             res.status(200).json({ message: "success" });
         } else {
             res.status(200).json({ message: "Unable to update password" });

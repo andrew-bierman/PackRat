@@ -1,4 +1,5 @@
 import Item from "../../models/itemModel.ts";
+import { getItemsService } from "../../services/item/item.service.ts";
 
 /**
  * Retrieves a list of items associated with a pack.
@@ -8,13 +9,13 @@ import Item from "../../models/itemModel.ts";
  * @return {Object} An array of items associated with the pack.
  */
 export const getItems = async (req, res) => {
-    try {
-      const { packId } = req.params;
-  
-      const items = await Item.find({ packs: packId });
-  
-      return res.status(200).json(items);
-    } catch (error) {
-      res.status(404).json({ msg: "Items cannot be found" });
-    }
-  }; 
+  try {
+    const { packId } = req.params;
+
+    const items = await getItemsService(packId);
+
+    res.status(200).json(items);
+  } catch (error) {
+    res.status(404).json({ msg: "Items cannot be found" });
+  }
+};
