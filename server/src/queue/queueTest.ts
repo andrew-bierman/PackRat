@@ -1,14 +1,12 @@
-import { queueManager } from './queueManager.js';
-import { processJob } from './processJob.js';
+import { queueManager } from './queueManager';
+import { processJob } from './processJob';
 import path from 'path';
-import { fileURLToPath } from 'url';
 
 // Use this snippet at the top of your file
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export async function testQueueLogic() {
     const queueName = 'testQueue';
-    const workerScriptPath = path.resolve(__dirname, '../workers/mockWorker.js');
+    const workerScriptPath = path.resolve(__dirname, '../workers/mockWorker.ts');
     const testQueue = queueManager.createQueue(queueName, workerScriptPath);
   
     // Mock job and task
@@ -21,9 +19,9 @@ export async function testQueueLogic() {
     const jobCompletedPromise = new Promise((resolve, reject) => {
       testQueue.on('completed', (job, result) => {
         console.log(`Job ${job.id} completed with result ${result}`);
-        resolve();
+        resolve(result);
       });
-  
+    
       testQueue.on('failed', (job, err) => {
         console.error(`Job ${job.id} failed with error ${err}`);
         reject(err);

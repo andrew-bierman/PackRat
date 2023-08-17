@@ -1,5 +1,5 @@
-import User from "../../models/userModel.ts";
-import { sendWelcomeEmail, resetEmail } from "../../utils/accountEmail.ts";
+import User from "../../models/userModel";
+import { sendWelcomeEmail, resetEmail } from "../../utils/accountEmail";
 
 /**
  * Sends an email to the specified email address.

@@ -1,4 +1,4 @@
-import Pack from "../../models/packModel.ts";
+import Pack from "../../models/packModel";
 
 export const addPackService = async (name, owner_id) => {
   const newPack = {

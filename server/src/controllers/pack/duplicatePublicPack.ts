@@ -1,4 +1,4 @@
-import { duplicatePublicPackService } from "../../services/pack/pack.service.ts";
+import { duplicatePublicPackService } from "../../services/pack/pack.service";
 
 /**
  * Duplicates a public pack.

@@ -1,7 +1,7 @@
-import TripSchema from "./models/tripModel.ts";
-import PackSchema from "./models/packModel.ts";
-import ItemSchema from "./models/itemModel.ts";
-import UserSchema from "./models/userModel.ts";
+import TripSchema from "./models/tripModel";
+import PackSchema from "./models/packModel";
+import ItemSchema from "./models/itemModel";
+import UserSchema from "./models/userModel";
 
 import m2s from "mongoose-to-swagger";
 import swaggerJsdoc from "swagger-jsdoc";

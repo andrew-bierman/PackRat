@@ -1,3 +1,3 @@
-export * from './getDestinationService.ts'
-export * from './postCollectionGeoJSONService.ts'
-export * from './postSingleGeoJSONService.ts'
+export * from './getDestinationService'
+export * from './postCollectionGeoJSONService'
+export * from './postSingleGeoJSONService'

@@ -1,5 +1,5 @@
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args as Parameters<typeof fetch>));
-import { oneEntity } from "../../utils/oneEntity.ts";
+import { oneEntity } from "../../utils/oneEntity";
 
 /**
  * Retrieves a list of parks based on the specified state code.

@@ -1,4 +1,4 @@
-import { searchItemsByNameService } from "../../services/item/item.service.ts";
+import { searchItemsByNameService } from "../../services/item/item.service";
 
 /**
  * Searches for items by name.

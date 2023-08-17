@@ -1,2 +1,2 @@
-export * from './addTemplateService.ts';
-export * from './editTemplateService.ts'
+export * from './addTemplateService';
+export * from './editTemplateService'

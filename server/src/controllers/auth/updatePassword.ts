@@ -1,5 +1,5 @@
-import User from "../../models/userModel.ts";
-import { findUserAndUpdate } from "../../services/user/user.service.ts";
+import User from "../../models/userModel";
+import { findUserAndUpdate } from "../../services/user/user.service";
 
 /**
  * Updates the password for a user.

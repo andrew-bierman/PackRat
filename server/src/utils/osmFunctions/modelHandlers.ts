@@ -1,19 +1,19 @@
-import Way from "../../models/osm/wayModel.ts";
-import Node from "../../models/osm/nodeModel.ts";
-import Relation from "../../models/osm/relationModel.ts";
+import Way from "../../models/osm/wayModel";
+import Node from "../../models/osm/nodeModel";
+import Relation from "../../models/osm/relationModel";
 
 import {
   createInstanceFromCoordinates,
   coordinatesToInstances,
   handleGeometry,
   handleGeoJSONGeometry,
-} from "./coordinateHandlers.ts";
+} from "./coordinateHandlers";
 import {
   isOSMFormat,
   isGeoJSONFormat,
   propertiesToTags,
   extractIdAndType,
-} from "./dataFormatters.ts";
+} from "./dataFormatters";
 
 export async function fromOSM(Model: any, data: any) {
   const { type, id } = extractIdAndType(data.id);

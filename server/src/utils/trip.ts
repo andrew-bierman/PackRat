@@ -1,4 +1,4 @@
-import Trip from "../models/tripModel.js";
+import Trip from "../models/tripModel";
 
 export const tripValidation = async ({
   name,

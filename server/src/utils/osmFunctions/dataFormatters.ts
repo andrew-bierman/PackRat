@@ -1,5 +1,3 @@
-import Way from "../../models/osm/wayModel.ts";
-import Node from "../../models/osm/nodeModel.ts";
 
 export const extractIdAndType = (string: string) => {
   // console.log("string", string)

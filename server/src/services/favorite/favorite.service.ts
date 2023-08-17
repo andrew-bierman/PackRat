@@ -1,3 +1,3 @@
-export * from './addToFavoriteService.ts'
-export * from './getFavoritePacksByUserService.ts'
-export * from './getUserFavoritesService.ts'
+export * from './addToFavoriteService'
+export * from './getFavoritePacksByUserService'
+export * from './getUserFavoritesService'

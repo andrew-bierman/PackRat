@@ -1,1 +1,1 @@
-export * from "./getGeoCode.ts";
+export * from "./getGeoCode";

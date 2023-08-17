@@ -1,5 +1,5 @@
-import User from "../../models/userModel.ts";
-import { getUserFavoritesService } from "../../services/favorite/favorite.service.ts";
+import User from "../../models/userModel";
+import { getUserFavoritesService } from "../../services/favorite/favorite.service";
 
 /**
  * Retrieves the favorite items of a user.
