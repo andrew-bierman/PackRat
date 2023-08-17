@@ -8,6 +8,8 @@ import { EditPackItemModal } from "../pack_table/EditPackItemModal";
 import { DeletePackItemModal } from "../pack_table/DeletePackItemModal";
 import { PaginationLimit } from "../paginationChooseLimit";
 import Loader from "../Loader";
+// import NetInfo from '@react-native-community/netinfo';
+
 export const ItemsTable = ({
   limit,
   setLimit,
@@ -20,7 +22,7 @@ export const ItemsTable = ({
   setRefetch = () => {},
 }) => {
   const flexArr = [2, 1, 1, 1, 0.65, 0.65, 0.65];
-
+  
   const TitleRow = ({ title }) => {
     const rowData = [
       <HStack style={styles.mainTitle}>

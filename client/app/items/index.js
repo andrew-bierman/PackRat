@@ -11,7 +11,9 @@ import { ItemsTable } from "../../components/itemtable/itemTable";
 import { useDispatch, useSelector } from "react-redux";
 import { getItemsGlobal } from "../../store/globalItemsStore";
 import { Stack as Header } from "expo-router";
-
+// import NetInfo from '@react-native-community/netinfo';
+import { InformUser } from "~/utils/ToastUtils";
+import { isConnected } from "~/utils/netInfo";
 export default function Items() {
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
   // pagination index limit
@@ -20,15 +22,35 @@ export default function Items() {
   const [page, setPage] = useState(1);
   // it will be used as a dependency for reloading the data in case of some modifications
   const [refetch, setRefetch] = useState(false);
-
+  const [internetConnected, setInternetConnected] = useState(false);
+  console.log("🚀 ~ file: index.js:25 ~ Items ~ internetConnected:", internetConnected)
   const data = useSelector((state) => state.globalItems);
-
   const isLoading = useSelector((state) => state.globalItems.isLoading);
   const isError = useSelector((state) => state.globalItems.isError);
+  // useEffect(() => {
+  //   NetInfo.fetch().then(state => {
+  //     console.log('Connection type', state.type);
+  //     console.log('Is connected?', state.isConnected);
+  //     setInternetConnected(true);
+  //   });
+  // },[]);
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getItemsGlobal({ limit, page }));
+        isConnected().then(connected => {
+          if(connected) {
+            dispatch(getItemsGlobal({ limit, page }));
+          } else {
+            InformUser({
+              title : "You are not Connected to Internet",
+              placement: "bottom",
+              duration: 2000,
+              style: {
+                backgroundColor: "green",
+              },
+            })
+          }
+        })
   }, [limit, page, refetch]);
 
   return (
