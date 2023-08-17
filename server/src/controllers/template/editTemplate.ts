@@ -1,5 +1,5 @@
-import Template from "../../models/templateModel.ts";
-import { editTemplateService } from "../../services/template/template.service.ts";
+import Template from "../../models/templateModel";
+import { editTemplateService } from "../../services/template/template.service";
 
 /**
  * Edits a template.

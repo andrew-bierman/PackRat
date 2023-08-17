@@ -2,20 +2,20 @@
 
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
-import User from "../../models/userModel.ts";
+import User from "../../models/userModel";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { sendWelcomeEmail, resetEmail } from "../../utils/accountEmail.ts";
+import { sendWelcomeEmail, resetEmail } from "../../utils/accountEmail";
 
 import {
     GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET,
     REDIRECT_URL,
     SERVER_ROOT_URI,
-} from "../../config.ts";
+} from "../../config";
 
 import { OAuth2Client } from "google-auth-library";
-import utilsService from "../../utils/utils.service.ts";
+import utilsService from "../../utils/utils.service";
 
 const client = new OAuth2Client(
     GOOGLE_CLIENT_ID,

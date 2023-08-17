@@ -1,4 +1,4 @@
-import Item from "../../models/itemModel.ts";
+import Item from "../../models/itemModel";
 
 export const searchItemsByNameService = async (name) => {
     const items = await Item.find({

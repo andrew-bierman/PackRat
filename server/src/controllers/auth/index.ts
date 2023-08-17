@@ -1,3 +1,3 @@
-export *   from "./checkCode.ts";
-export *  from "./emailExists.ts";
-export * from "./updatePassword.ts";
+export *   from "./checkCode";
+export *  from "./emailExists";
+export * from "./updatePassword";

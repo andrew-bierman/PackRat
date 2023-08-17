@@ -1,7 +1,7 @@
 import nodemailer from "nodemailer";
 import smtpTransport from "nodemailer-smtp-transport";
-import User from "../../models/userModel.ts";
-import { findUserAndUpdate, findUserByEmail } from "../../services/user/user.service.ts";
+import User from "../../models/userModel";
+import { findUserAndUpdate, findUserByEmail } from "../../services/user/user.service";
 
 /**
  * Check if the provided email exists in the database.

@@ -1,4 +1,4 @@
-import { getItemByIdService } from "../../services/item/item.service.ts";
+import { getItemByIdService } from "../../services/item/item.service";
 
 /**
  * Retrieves an item by its ID.

@@ -1,1 +1,1 @@
-export * from './getParks.ts';
+export * from './getParks';

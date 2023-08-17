@@ -1,4 +1,4 @@
-import { getItemsGloballyService } from "../../services/item/item.service.ts";
+import { getItemsGloballyService } from "../../services/item/item.service";
 
 /**
  * Retrieves globally available items.

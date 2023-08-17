@@ -1,5 +1,5 @@
-import User from "../../models/userModel.ts";
-import Pack from "../../models/packModel.ts";
+import User from "../../models/userModel";
+import Pack from "../../models/packModel";
 
 /**
  * Adds or removes a pack from a user's favorites list.

@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 const { Schema } = mongoose;
 
-import myDB from "./dbConnection.ts";
+import myDB from "./dbConnection";
 
 const TemplateSchema = new Schema(
   {

@@ -1,6 +1,6 @@
-import User from "../models/userModel.ts";
+import User from "../models/userModel";
 import jwt from "jsonwebtoken";
-import { JWT_SECRET } from "../config.ts";
+import { JWT_SECRET } from "../config";
 import { Request ,Response,NextFunction} from "express";
 
 declare global {

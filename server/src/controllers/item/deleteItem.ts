@@ -1,4 +1,4 @@
-import { deleteItemService } from "../../services/item/item.service.ts";
+import { deleteItemService } from "../../services/item/item.service";
 
 /**
  * Deletes an item from the database.

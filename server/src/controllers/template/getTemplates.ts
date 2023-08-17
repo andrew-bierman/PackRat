@@ -1,4 +1,4 @@
-import Template from "../../models/templateModel.ts";
+import Template from "../../models/templateModel";
 
 /**
  * Retrieves templates from the database and sends them as a JSON response.

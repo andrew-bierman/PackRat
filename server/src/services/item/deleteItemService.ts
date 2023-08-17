@@ -1,5 +1,5 @@
-import Item from "../../models/itemModel.ts";
-import Pack from "../../models/packModel.ts";
+import Item from "../../models/itemModel";
+import Pack from "../../models/packModel";
 
 
 export const deleteItemService = async (itemId, packId) => {

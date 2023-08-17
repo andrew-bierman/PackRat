@@ -1,4 +1,4 @@
-import Pack from "../../models/packModel.ts";
+import Pack from "../../models/packModel";
 
 export const editPackService = async (packId, packData) => {
   const updatedPack = await Pack.findOneAndUpdate(

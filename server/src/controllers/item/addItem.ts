@@ -1,4 +1,4 @@
-import { addItemService } from "../../services/item/item.service.ts";
+import { addItemService } from "../../services/item/item.service";
 
 /**
  * Adds an item to the database based on the provided request body.

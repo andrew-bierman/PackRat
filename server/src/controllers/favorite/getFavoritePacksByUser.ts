@@ -1,5 +1,5 @@
-import Pack from "../../models/packModel.ts";
-import { getFavoritePacksByUserService } from "../../services/favorite/favorite.service.ts";
+import Pack from "../../models/packModel";
+import { getFavoritePacksByUserService } from "../../services/favorite/favorite.service";
 
 /**
  * Retrieves favorite packs for a user.
