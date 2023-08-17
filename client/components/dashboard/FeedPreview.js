@@ -22,15 +22,13 @@ const FeedPreviewScroll = () => {
   const feedData = useSelector((state) => state.feed);
   const filteredFeedData = feedData.publicTrips.concat(feedData.publicPacks);
 
-  console.log({ filteredFeedData });
-
 
   return (
     <Carousel itemWidth={250}>
       {filteredFeedData.map((item, index) => {
         const linkStr = `/${item.type}/${item._id}`;
         return linkStr ? (
-          <Link href={linkStr} key={`${linkStr}`}>
+          <Link href={linkStr} key={index}>
             <View style={styles.cardStyles} key={index} >
               <HStack justifyContent="space-between">
                 <Text style={styles.feedItemTitle}>{item.name}</Text>
