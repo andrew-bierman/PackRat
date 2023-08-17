@@ -1,4 +1,8 @@
-import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
+import {
+  createSlice,
+  createAsyncThunk,
+  createEntityAdapter,
+} from "@reduxjs/toolkit";
 import { api } from "../constants/api";
 import axios from "axios";
 
@@ -8,6 +12,19 @@ export const fetchPhotonSearchResults = createAsyncThunk(
     const url =
       api +
       `/osm/photon/search?searchString=${encodeURIComponent(searchString)}`;
+
+    try {
+      const response = await axios.get(url);
+      return response.data;
+    } catch (error) {
+      console.error("error:" + error);
+    }
+  }
+);
+export const fetchItemsSearchResults = createAsyncThunk(
+  "search/fetchItemsSearchResults",
+  async (searchString) => {
+    const url = api + `/item/global?search=${encodeURIComponent(searchString)}`;
 
     try {
       const response = await axios.get(url);
@@ -43,6 +60,15 @@ const searchSlice = createSlice({
         state.searchResults = action.payload;
       })
       .addCase(fetchPhotonSearchResults.rejected, (state) => {
+        state.searchResults = [];
+      })
+      .addCase(fetchItemsSearchResults.pending, (state) => {
+        state.searchResults = [];
+      })
+      .addCase(fetchItemsSearchResults.fulfilled, (state, action) => {
+        state.searchResults = action.payload;
+      })
+      .addCase(fetchItemsSearchResults.rejected, (state) => {
         state.searchResults = [];
       });
   },

@@ -1,0 +1,30 @@
+{
+  "extends": "@tsconfig/react-native/tsconfig.json",
+  "compilerOptions": {
+    "lib": ["es2022"],
+    "alwaysStrict": false,
+    "strictNullChecks": false,
+    "strictBindCallApply": false,
+    "strictFunctionTypes": false,
+    "strictPropertyInitialization": false,
+    "noImplicitAny": false,
+    "noImplicitThis": false,
+    "useUnknownInCatchVariables": false,
+    "baseUrl": ".",
+    "paths": {
+      "~/config/*": ["config/*"],
+      "~/constants/*": ["constants/*"],
+      "~/components/*": ["components/*"],
+      "~/utils/*": ["utils/*"],
+      "~/hooks/*": ["hooks/*"],
+      "~/screens/*": ["screens/*"],
+      "~/theme/*": ["theme/*"],
+    },
+  },
+  "exclude": [
+    "node_modules",
+    "babel.config.js",
+    "metro.config.js",
+    "jest.config.js"
+  ]
+}

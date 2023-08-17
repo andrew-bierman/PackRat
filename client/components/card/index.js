@@ -23,6 +23,7 @@ import { useRouter, Link } from "expo-router";
 import { ThreeDotsMenu } from "../ThreeDotsMenu";
 import UseTheme from "../../hooks/useTheme";
 import { InformUser } from "../../utils/ToastUtils";
+import { SearchItem } from "../item/searchItem";
 
 export const CustomCard = ({
   title,
@@ -72,6 +73,7 @@ export const CustomCard = ({
         rounded="lg"
         flexGrow={1}
       >
+        <SearchItem placeholder={"Search Item"} />
         <VStack space="4" width="100%" divider={<Divider />}>
           <Box
             px="4"

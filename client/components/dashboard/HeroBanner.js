@@ -8,9 +8,12 @@ import UseTheme from '../../hooks/useTheme';
 import { useSelector, useDispatch } from "react-redux";
 import Hero from "../hero";
 import { useRouter } from "expo-router";
-import { photonDetails, processGeoJSON, setSelectedSearchResult } from "../../store/destinationStore";
+import {
+  photonDetails, // TODO (use geojson)
+  processGeoJSON, // TODO (use geojson)
+  setSelectedSearchResult,
+} from "../../store/destinationStore";
 import { hexToRGBA } from "../../utils/colorFunctions";
-
 
 const HeroSection = ({ onSelect }) => {
   const dispatch = useDispatch();
@@ -24,15 +27,21 @@ const HeroSection = ({ onSelect }) => {
 
   const handleSearchSelect = async (selectedResult) => {
     try {
-      console.log("selectedResult ------->", selectedResult)
+      console.log("selectedResult ------->", selectedResult);
 
       // Set the selected search result in the Redux store
       dispatch(setSelectedSearchResult(selectedResult));
 
       const { osm_id, osm_type } = selectedResult.properties;
 
+      const coordinates= selectedResult.geometry.coordinates;
+
+      const [lon, lat] = coordinates;
+
       if (!osm_id || !osm_type) {
-        console.error("No OSM ID or OSM type found in the selected search result");
+        console.error(
+          "No OSM ID or OSM type found in the selected search result"
+        );
         return;
       } else {
         router.push({
@@ -40,15 +49,15 @@ const HeroSection = ({ onSelect }) => {
           params: {
             type: osm_type,
             id: osm_id,
+            // lat,
+            // lon,
           },
-        })
+        });
       }
-
     } catch (error) {
-      console.error(error);
+      console.error("errorrrrrr", error);
     }
   };
-  
 
   const user = useSelector((state) => state.auth?.user);
 
@@ -97,8 +106,6 @@ const HeroSection = ({ onSelect }) => {
               onSelect={handleSearchSelect}
               placeholder={"Search by park, city, or trail"}
             />
-         
-           
           </VStack>
         </LargeCard>
       </Hero>
