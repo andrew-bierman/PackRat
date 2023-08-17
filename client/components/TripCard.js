@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 import DropdownComponent from "./Dropdown";
-import { Box, Text, Stack } from "native-base";
+import { Box, Text, Stack, View } from "native-base";
 import { SearchInput } from "./SearchInput";
 
 import { Platform } from "react-native";
@@ -13,6 +13,8 @@ import MapContainer from "./map/MapContainer";
 import { convertPhotonGeoJsonToShape } from "../utils/mapFunctions";
 import { selectAllTrails } from "../store/trailsStore";
 import UseTheme from "../hooks/useTheme";
+import Carousel from "./carousel";
+import { Card, H2, Paragraph } from "tamagui";
 export default function TripCard({
   title,
   Icon,
@@ -29,12 +31,14 @@ export default function TripCard({
 
   const currentTrail = useSelector((state) => state.dropdown.currentTrail);
   const currentPark = useSelector((state) => state.dropdown.currentPark);
+  console.log("🚀 ~ file: TripCard.js:34 ~ currentPark:", currentPark)
   const trailsDetails = useSelector(selectAllTrails); // updated selector for new trails slice
   const currentShape = trailsDetails.filter(
     (trail) => trail.properties.name == currentTrail
   );
 
   const handleValueChange = (value) => {
+    console.log("🚀 ~ file: TripCard.js:40 ~ handleValueChange ~ value:", value)
     // Assuming that you have a redux action to set the current trail and park
     if (isTrail) {
       dispatch(addTrail(value));
@@ -90,17 +94,38 @@ export default function TripCard({
       ) : isSearch ? (
         <SearchInput />
       ) : (
-        // <Text>Search</Text>
-        <DropdownComponent
-          {...{
-            value: isTrail ? currentTrail : currentPark,
-            data,
-            placeholder: isTrail ? "Select Trail" : "Select Park",
-            isTrail,
-            onValueChange: handleValueChange,
-            width: 300,
-          }}
-        />
+        // isTrail ?
+
+        
+        // <DropdownComponent
+        //   {...{
+        //     value: currentTrail,
+        //     data,
+        //     placeholder:"Select Trail",
+        //     isTrail,
+        //     onValueChange: handleValueChange,
+        //     width: 300,
+        //   }}
+        // />
+        // : 
+        <View style={{ width : "80%" }} >
+
+        <Carousel iconColor={isDark ? '#fff' : '#000'} itemWidth={150}>
+          {
+            data && data?.map((item) => {
+              let selectedValue = isTrail ? currentTrail : currentPark;
+              return(
+            <Card
+            backgroundColor={item === selectedValue ? theme.colors.background : null}
+             onPress={() => handleValueChange(item)} elevate bordered  margin={2}
+             >
+              <Card.Header padded>
+                <Paragraph color={item === selectedValue ? 'white' : 'black'}>{item}</Paragraph>
+              </Card.Header>
+            </Card>)})
+          }
+        </Carousel>
+         </View>
       )}
     </Stack>
   );

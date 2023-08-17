@@ -1,5 +1,4 @@
-import Item from "../../models/itemModel.ts";
-import Pack from "../../models/packModel.ts";
+import { addGlobalItemToPackService } from "../../services/item/item.service.ts";
 
 /**
  * Adds a global item to a pack.
@@ -8,37 +7,14 @@ import Pack from "../../models/packModel.ts";
  * @return {Object} The updated item.
  */
 export const addGlobalItemToPack = async (req, res) => {
-    try {
-      const { packId } = req.params;
-      const { itemId } = req.body;
-      const { ownerId } = req.body;
-  
-      const item = await Item.findById(itemId).populate("category", "name");
-  
-      await Pack.updateOne({ _id: packId }, { $addToSet: { items: item._id } });
-  
-      await Item.findByIdAndUpdate(
-        item._id,
-        {
-          $addToSet: {
-            owners: ownerId,
-          },
-        },
-        { new: true }
-      );
-  
-      await Item.findByIdAndUpdate(
-        item._id,
-        {
-          $addToSet: {
-            packs: packId,
-          },
-        },
-        { new: true }
-      );
-  
-      return res.status(200).json({ message: "succesfully updated", data: item });
-    } catch (error) {
-      res.status(404).json({ msg: "Items cannot be found" });
-    }
-  };
+  try {
+    const { packId } = req.params;
+    const { itemId, ownerId } = req.body;
+
+    const result = await addGlobalItemToPackService(packId, itemId, ownerId);
+
+    res.status(200).json({ message: "successfully updated", data: result });
+  } catch (error) {
+    res.status(404).json({ msg: "Items cannot be found" });
+  }
+};

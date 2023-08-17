@@ -1,4 +1,5 @@
 import Template from "../../models/templateModel.ts";
+import { editTemplateService } from "../../services/template/template.service.ts";
 
 /**
  * Edits a template.
@@ -11,19 +12,9 @@ export const editTemplate = async (req, res) => {
   const { type, isGlobalTemplate } = req.body;
 
   try {
-    const template = await Template.findById(templateId);
+    const updatedTemplate = await editTemplateService(templateId, type, isGlobalTemplate);
 
-    if (template) {
-      template.type = type || template.type;
-      template.isGlobalTemplate =
-        isGlobalTemplate !== undefined
-          ? isGlobalTemplate
-          : template.isGlobalTemplate;
-      const updatedTemplate = await template.save();
-      res.json(updatedTemplate);
-    } else {
-      res.status(404).json({ message: "Template not found" });
-    }
+    res.json(updatedTemplate);
   } catch (error) {
     res.status(500).json({ error: error.toString() });
   }
