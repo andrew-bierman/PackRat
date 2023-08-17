@@ -1,4 +1,4 @@
-import Item from "../../models/itemModel.ts";
+import { getItemByIdService } from "../../services/item/item.service.ts";
 
 /**
  * Retrieves an item by its ID.
@@ -11,7 +11,7 @@ export const getItemById = async (req, res) => {
   try {
     const { _id } = req.body;
 
-    const item = await Item.findById({ _id });
+    const item = await getItemByIdService(_id);
 
     res.status(200).json(item);
   } catch (error) {

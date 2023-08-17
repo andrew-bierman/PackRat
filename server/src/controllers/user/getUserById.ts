@@ -1,4 +1,4 @@
-import User from "../../models/userModel.ts";
+import { getUserByIdService } from "../../services/user/getUserByIdService.ts";
 
 /**
  * Retrieves a user by their ID from the database and returns the user object as a JSON response.
@@ -7,23 +7,14 @@ import User from "../../models/userModel.ts";
  * @return {Object} The user object as a JSON response.
  */
 export const getUserById = async (req, res) => {
-    try {
-      const { userId } = req.params;
-  
-      const user = await User.findById({ _id: userId })
-      .populate({
-        path: 'packs',
-        populate: {
-          path: 'items',
-          model: 'Item' // replace 'Item' with your actual Item model name
-        }
-      })
-      .populate('favorites')
-      .populate('trips');
-  
-      res.status(200).json(user);
-    } catch (error) {
-      console.error(error);
-      res.status(404).json({ msg: "User cannot be found" });
-    }
-  };
+  try {
+    const { userId } = req.params;
+
+    const user = await getUserByIdService(userId);
+
+    res.status(200).json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(404).json({ msg: "User cannot be found" });
+  }
+};
