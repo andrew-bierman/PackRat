@@ -122,7 +122,7 @@ const Carousel = ({ children, itemWidth }) => {
         onMomentumScrollEnd={handleScroll}
       >
         {children.map((child, index) => (
-          <VStack style={{ width: itemWidth + 10, marginRight: 10, marginTop: 10, flexDirection: 'row' }}>
+          <VStack key={index} style={{ width: itemWidth + 10, marginRight: 10, marginTop: 10, flexDirection: 'row' }}>
             {child}
           </VStack>
         ))}
