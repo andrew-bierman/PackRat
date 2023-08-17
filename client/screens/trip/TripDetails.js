@@ -54,7 +54,7 @@ export function TripDetails() {
   return (
     <Box
       style={[
-        styles.mainContainer,
+        styles().mainContainer,
         Platform.OS == "web" ? { minHeight: "100vh" } : null,
       ]}
     >
@@ -116,24 +116,27 @@ export function TripDetails() {
   );
 }
 
-const styles = StyleSheet.create({
-  mainContainer: {
-    backgroundColor: theme.colors.background,
-    flexDirection: "column",
-    gap: 15,
-    padding: [25, 25, 0, 25], // [top, right, bottom, left
-    fontSize: 18,
-    width: "100%",
-  },
-  packsContainer: {
-    backgroundColor: "green",
-    flexDirection: "column",
-    minHeight: "100vh",
-
-    padding: 25,
-    fontSize: 26,
-  },
-  dropdown: {
-    backgroundColor: "white",
-  },
-});
+const styles = () => {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } = UseTheme();
+  return StyleSheet.create({
+    mainContainer: {
+      backgroundColor: currentTheme.colors.background,
+      flexDirection: "column",
+      gap: 15,
+      padding: [25, 25, 0, 25], // [top, right, bottom, left
+      fontSize: 18,
+      width: "100%",
+    },
+    packsContainer: {
+      backgroundColor: currentTheme.colors.cardIconColor,
+      flexDirection: "column",
+      minHeight: "100vh",
+  
+      padding: 25,
+      fontSize: 26,
+    },
+    dropdown: {
+      backgroundColor: currentTheme.colors.white,
+    },
+  });
+} 

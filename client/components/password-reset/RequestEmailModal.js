@@ -14,8 +14,10 @@ import { CustomModal } from "../modal";
 import axios from "axios";
 import { api } from "../../constants/api";
 import { InformUser } from "../../utils/ToastUtils";
+import UseTheme from '../../hooks/useTheme';
 
 export const RequestPasswordResetEmailModal = () => {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } = UseTheme();
   const [isOpen, setIsOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
@@ -31,7 +33,7 @@ export const RequestPasswordResetEmailModal = () => {
       setIsOpen(false);
       InformUser({
         title: "Password reset email sent",
-        style: { backgroundColor: "green" },
+        style: { backgroundColor: currentTheme.colors.textPrimary },
         placement: "top-right",
         duration: 5000,
       });
@@ -42,7 +44,7 @@ export const RequestPasswordResetEmailModal = () => {
         title: error?.response?.data?.error,
         duration: 7000,
         placement: "top-right",
-        style: { backgroundColor: "red" },
+        style: { backgroundColor: currentTheme.colors.error },
       });
     }
   };

@@ -9,6 +9,7 @@ import {
   ScrollView,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
+import UseTheme from '../../hooks/useTheme';
 import {
   getUserChats,
   getAIResponse,
@@ -21,8 +22,8 @@ import { CustomModal } from "../modal";
 const MessageBubble = ({ message }) => {
   const isAI = message.role === "ai";
   return (
-    <View style={isAI ? styles.aiBubble : styles.userBubble}>
-      <Text style={isAI ? styles.aiText : styles.userText}>
+    <View style={isAI ? styles().aiBubble : styles().userBubble}>
+      <Text style={isAI ? styles().aiText : styles().userText}>
         {message.content}
       </Text>
     </View>
@@ -33,9 +34,9 @@ const ChatSelector = ({ conversation, onSelect, isActive }) => (
   <TouchableOpacity
     key={conversation._id}
     onPress={() => onSelect(conversation._id)}
-    style={[styles.chatSelector, isActive && styles.activeChatSelector]}
+    style={[styles().chatSelector, isActive && styles().activeChatSelector]}
   >
-    <Text style={styles.chatSelectorText}>{conversation._id}</Text>
+    <Text style={styles().chatSelectorText}>{conversation._id}</Text>
   </TouchableOpacity>
 );
 
@@ -82,7 +83,7 @@ const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={styles().container}>
       <VStack space={2} alignItems="center">
         {showChatSelector && (
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -101,16 +102,16 @@ const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
                   />
                 )}
                 keyExtractor={(item) => item._id}
-                contentContainerStyle={styles.flatList}
+                contentContainerStyle={styles().flatList}
               />
               <TouchableOpacity
-                style={styles.newChatButton}
+                style={styles().newChatButton}
                 onPress={() => {
                   setConversationId(null)
                   setParsedMessages([])
                 }}
               >
-                <Text style={styles.newChatButtonText}>New Chat</Text>
+                <Text style={styles().newChatButtonText}>New Chat</Text>
               </TouchableOpacity>
             </Box>
           </ScrollView>
@@ -120,17 +121,17 @@ const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
         data={parsedMessages}
         renderItem={({ item }) => <MessageBubble message={item} />}
         keyExtractor={(item, index) => index.toString()}
-        contentContainerStyle={styles.flatList}
+        contentContainerStyle={styles().flatList}
       />
-      <View style={styles.inputContainer}>
+      <View style={styles().inputContainer}>
         <TextInput
-          style={styles.input}
+          style={styles().input}
           onChangeText={setUserInput}
           value={userInput}
           placeholder="Type a message..."
         />
-        <TouchableOpacity style={styles.sendButton} onPress={handleSendMessage}>
-          <Text style={styles.sendText}>Send</Text>
+        <TouchableOpacity style={styles().sendButton} onPress={handleSendMessage}>
+          <Text style={styles().sendText}>Send</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -142,7 +143,7 @@ const ChatModalTrigger = () => {
   const handleClose = () => setIsOpen(false);
 
   return (
-    <Box style={styles.container}>
+    <Box style={styles().container}>
       <CustomModal
         title="Chat"
         trigger="Open Chat"
@@ -156,69 +157,73 @@ const ChatModalTrigger = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16 },
-  headerText: { fontSize: 24, fontWeight: "bold" },
-  flatList: { flexGrow: 1, justifyContent: "flex-end" },
-  inputContainer: { flexDirection: "row", alignItems: "center", marginTop: 8 },
-  input: {
-    flex: 1,
-    height: 40,
-    borderColor: "gray",
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingHorizontal: 12,
-  },
-  sendButton: {
-    backgroundColor: "#3777f0",
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 8,
-    marginLeft: 8,
-  },
-  sendText: { color: "white" },
-  aiBubble: {
-    alignSelf: "flex-start",
-    backgroundColor: "blue",
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    marginVertical: 4,
-    marginHorizontal: 16,
-  },
-  userBubble: {
-    alignSelf: "flex-end",
-    backgroundColor: "#e0e0e0",
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    marginVertical: 4,
-    marginHorizontal: 16,
-  },
-  aiText: { color: "white" },
-  userText: { color: "black" },
-  chatSelector: {
-    backgroundColor: "#e0e0e0",
-    padding: 10,
-    marginVertical: 5,
-    borderRadius: 5,
-  },
-  chatSelectorText: { fontSize: 16 },
-  chatSelectorContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  newChatButton: {
-    backgroundColor: "#3777f0",
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 8,
-    marginLeft: 8,
-  },
-  newChatButtonText: {
-    color: "white",
-  },
-});
+const styles = () => {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } = UseTheme();
+
+  return StyleSheet.create({
+    container: { flex: 1, padding: 16 },
+    headerText: { fontSize: 24, fontWeight: "bold" },
+    flatList: { flexGrow: 1, justifyContent: "flex-end" },
+    inputContainer: { flexDirection: "row", alignItems: "center", marginTop: 8 },
+    input: {
+      flex: 1,
+      height: 40,
+      borderColor: currentTheme.colors.border,
+      borderWidth: 1,
+      borderRadius: 8,
+      paddingHorizontal: 12,
+    },
+    sendButton: {
+      backgroundColor: currentTheme.colors.background,
+      paddingHorizontal: 16,
+      paddingVertical: 8,
+      borderRadius: 8,
+      marginLeft: 8,
+    },
+    sendText: { color: currentTheme.colors.white },
+    aiBubble: {
+      alignSelf: "flex-start",
+      backgroundColor: currentTheme.colors.primary,
+      borderRadius: 8,
+      paddingHorizontal: 12,
+      paddingVertical: 8,
+      marginVertical: 4,
+      marginHorizontal: 16,
+    },
+    userBubble: {
+      alignSelf: "flex-end",
+      backgroundColor: "#e0e0e0",
+      borderRadius: 8,
+      paddingHorizontal: 12,
+      paddingVertical: 8,
+      marginVertical: 4,
+      marginHorizontal: 16,
+    },
+    aiText: { color: currentTheme.colors.white },
+    userText: { color: "black" },
+    chatSelector: {
+      backgroundColor: "#e0e0e0",
+      padding: 10,
+      marginVertical: 5,
+      borderRadius: 5,
+    },
+    chatSelectorText: { fontSize: 16 },
+    chatSelectorContainer: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+    },
+    newChatButton: {
+      backgroundColor: currentTheme.colors.background,
+      paddingHorizontal: 16,
+      paddingVertical: 8,
+      borderRadius: 8,
+      marginLeft: 8,
+    },
+    newChatButtonText: {
+      color: currentTheme.colors.white,
+    },
+  });
+}
 
 export default ChatModalTrigger;

@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { Container, Text } from "native-base";
 import { useRouter, useSearchParams } from "expo-router";
+import UseTheme from '../../hooks/useTheme';
 import { theme } from "../../theme";
 import { useDispatch, useSelector } from "react-redux";
 import MapContainer from "../map/MapContainer";
@@ -51,18 +52,18 @@ const DestinationHeader = ({ geoJSON, selectedSearchResult }) => {
   }, {});
 
   return (
-    <View style={styles.headerContainer}>
-      <Text style={styles.headerText}>
+    <View style={styles().headerContainer}>
+      <Text style={styles().headerText}>
         {name !== "N/A" ? name : "Destination"}
       </Text>
-      <Text style={styles.headerSubText}>
+      <Text style={styles().headerSubText}>
         {county !== "N/A" && `${county}, `}
         {state !== "N/A" && `${state}, `}
         {country !== "N/A" ? country : ""}
       </Text>
-      <View style={styles.languageContainer}>
+      <View style={styles().languageContainer}>
         {Object.entries(languageNames).map(([key, value]) => (
-          <Text key={key} style={styles.languageText}>
+          <Text key={key} style={styles().languageText}>
             {`${key.split(":")[1].toUpperCase()}: ${value}`}
           </Text>
         ))}
@@ -114,7 +115,7 @@ const WeatherData = ({ geoJSON }) => {
 export const DestinationPage = () => {
   console.log('destination page')
   const router = useRouter();
-
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } = UseTheme();
   const dispatch = useDispatch();
 
   const { destinationId, id, type, lat, lon } = useSearchParams();
@@ -160,7 +161,7 @@ export const DestinationPage = () => {
     <ScrollView>
 
 
-    <View style={styles.container}>
+    <View style={styles().container}>
       <DestinationHeader geoJSON={geoJSON} selectedSearchResult={selectedSearchResult} />
       <LargeCard
         title="Map"
@@ -168,7 +169,7 @@ export const DestinationPage = () => {
           <Ionicons
             name="location"
             size={24}
-            color={theme.colors.textPrimary}
+            color={currentTheme.colors.textPrimary}
           />
         )}
         ContentComponent={map}
@@ -181,7 +182,9 @@ export const DestinationPage = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const styles = () => {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } = UseTheme();
+  return StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "flex-start",
@@ -189,11 +192,11 @@ const styles = StyleSheet.create({
     paddingBottom: 12,
     paddingLeft: 16,
     width: "100%",
-    backgroundColor: theme.colors.background,
+    backgroundColor: currentTheme.colors.background,
   },
   headerContainer: {
     width: "100%",
-    backgroundColor: theme.colors.white,
+    backgroundColor: currentTheme.colors.white,
     padding: 25,
     borderRadius: 10,
     marginBottom: 20,
@@ -201,12 +204,12 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
   },
   headerText: {
-    color: theme.colors.textPrimary,
+    color: currentTheme.colors.textPrimary,
     fontSize: 22,
     fontWeight: "bold",
   },
   headerSubText: {
-    color: theme.colors.textDarkGrey,
+    color: currentTheme.colors.textDarkGrey,
     fontSize: 16,
     marginTop: 5,
   },
@@ -215,9 +218,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   languageText: {
-    color: theme.colors.textDarkGrey,
+    color: currentTheme.colors.textDarkGrey,
     fontSize: 14,
     marginRight: 10,
     marginBottom: 5, // Add margin to provide spacing between the language texts
   },
 });
+}

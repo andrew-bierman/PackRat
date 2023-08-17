@@ -78,7 +78,7 @@ export default function Trips() {
             <FontAwesome
               name="map"
               size={20}
-              color={theme.colors.cardIconColor}
+              color={currentTheme.colors.cardIconColor}
             />
           )}
         />
@@ -89,7 +89,7 @@ export default function Trips() {
           <FontAwesome
             name="map"
             size={20}
-            color={theme.colors.cardIconColor}
+            color={currentTheme.colors.cardIconColor}
           />
         ),
       },
@@ -112,7 +112,7 @@ export default function Trips() {
             <FontAwesome5
               name="hiking"
               size={20}
-              color={theme.colors.cardIconColor}
+              color={currentTheme.colors.cardIconColor}
             />
           )}
         />
@@ -129,7 +129,7 @@ export default function Trips() {
             <FontAwesome5
               name="mountain"
               size={20}
-              color={theme.colors.cardIconColor}
+              color={currentTheme.colors.cardIconColor}
             />
           )}
         />
@@ -153,7 +153,7 @@ export default function Trips() {
           <FontAwesome5
             name="route"
             size={24}
-            color={theme.colors.cardIconColor}
+            color={currentTheme.colors.cardIconColor}
           />
         )}
         title="Map"
@@ -172,7 +172,7 @@ export default function Trips() {
       nestedScrollEnabled={true}>
     <VStack>
       {/* <MultiStepForm steps={steps} /> */}
-      <Box style={styles.mutualStyles}>
+      <Box style={[styles.mutualStyles,{backgroundColor: currentTheme.colors.background,}]}>
         <Stack m={[0, 0, 12, 16]} style={{ gap: 25 }}>
           <TripCard
             title="Where are you heading?"
@@ -247,7 +247,6 @@ export default function Trips() {
 
 const styles = StyleSheet.create({
   mutualStyles: {
-    backgroundColor: theme.colors.background,
     flex: 1,
     flexDirection: "column",
     height: "100%",

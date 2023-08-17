@@ -2,6 +2,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { formatDistanceToNow } from "date-fns";
 import { MaterialIcons, Entypo } from "@expo/vector-icons";
 import { theme } from "../../theme";
+import UseTheme from '../../hooks/useTheme';
 // import useAddToFavorite from "../../hooks/useAddToFavorites";
 // import { useAuth } from "../../auth/provider";
 import { useSelector, useDispatch } from "react-redux";
@@ -43,7 +44,7 @@ export default function Card({
   owners,
 }) {
   const user = useSelector((state) => state.auth.user);
-
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } = UseTheme();
   const favorites = useSelector(selectAllFavorites);
   const dispatch = useDispatch();
 
@@ -83,15 +84,15 @@ export default function Card({
         borderColor="coolGray.200"
         borderWidth="1"
         _dark={{
-          borderColor: "coolGray.600",
-          backgroundColor: "gray",
+          borderColor:  `${currentTheme.colors.border}`,
+          backgroundColor: `${currentTheme.colors.card}`,
         }}
         _web={{
           shadow: 2,
           borderWidth: 0,
         }}
         _light={{
-          backgroundColor: "gray.50",
+          backgroundColor: `${currentTheme.colors.card}`,
         }}
       >
         <Stack p="4" space={10}>
@@ -106,7 +107,7 @@ export default function Card({
                 }}
               >
                 <Link href={type === "pack" ? "/pack/" + _id : "/trip/" + _id}>
-                  {truncatedName}
+                 <Text color={currentTheme.colors.textColor}>{truncatedName}</Text> 
                 </Link>
                 {type === "pack" && (
                   <Box
@@ -114,14 +115,14 @@ export default function Card({
                       flexDirection: "row",
                     }}
                   >
-                    <MaterialIcons name="backpack" size={24} color="gray" />
+                    <MaterialIcons name="backpack" size={24} color={currentTheme.colors.cardIconColor} />
                     <Link href={"/pack/" + _id + "?copy=true"}>
                       <DuplicateIcon />
                     </Link>
                   </Box>
                 )}
                 {type === "trip" && (
-                  <Entypo name="location-pin" size={24} color="gray" />
+                  <Entypo name="location-pin" size={24} color={currentTheme.colors.cardIconColor} />
                 )}
               </Box>
             </Heading>
@@ -175,7 +176,7 @@ export default function Card({
                 }}
               >
                 <Link href={`/profile/${owner_id}`}>
-                  <Text>
+                  <Text color={currentTheme.colors.textColor}>
                     View {owner?.username ? "@" + owner?.username : "Owner"}
                   </Text>
                 </Link>
@@ -215,7 +216,7 @@ export default function Card({
                   gap: 10,
                 }}
               >
-                <Text>Favorites</Text>
+                <Text color={currentTheme.colors.textColor}>Favorites</Text>
                 <Box
                   style={{
                     flexDirection: "row",
@@ -228,15 +229,15 @@ export default function Card({
                       <AntDesign
                         name="heart"
                         size={16}
-                        color={isFavorite ? "red" : "grey"}
+                        color={isFavorite ? `${currentTheme.colors.error}` : `${currentTheme.colors.cardIconColor}`}
                       />
                     </TouchableOpacity>
                   )}
 
                   <Text
-                    color="coolGray.600"
+                    color={currentTheme.colors.textColor}
                     _dark={{
-                      color: "warmGray.200",
+                      color: currentTheme.colors.textColor,
                     }}
                     fontWeight="400"
                   >

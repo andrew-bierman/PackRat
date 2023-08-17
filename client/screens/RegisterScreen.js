@@ -26,8 +26,10 @@ import { signUp } from "../store/authStore";
 import { InformUser } from "../utils/ToastUtils";
 import { useForm } from "react-hook-form";
 import { InputText, InputTextRules } from "~/components/InputText";
+import UseTheme from '../hooks/useTheme';
 
 export default function Register() {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } = UseTheme();
   const dispatch = useDispatch();
 
   const {
@@ -46,7 +48,7 @@ export default function Register() {
       title: user?.message,
       duration: 5000,
       placement: "top-right",
-      style: { backgroundColor: "green" },
+      style: { backgroundColor: currentTheme.colors.primary },
     });
     router.push("/");
   }
@@ -192,7 +194,7 @@ export default function Register() {
                   });
               }}
               colorScheme={"red"}
-              startIcon={<FontAwesome name="google" size={16} color="white" />}
+              startIcon={<FontAwesome name="google" size={16} color={currentTheme.colors.white} />}
             >
               Sign up with Google
             </Button>

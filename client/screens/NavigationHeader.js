@@ -42,7 +42,7 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
       <AuthStateListener />
       <View style={{ flexDirection: "row", alignItems: "center", gap: 1 }}>
         {/* <Image
-          style={isMobile ? styles.smallLogo : styles.logo}
+          style={isMobile ? styles().smallLogo : styles().logo}
           source={packratlogo}
         /> */}
         <View style={{ margin: "10px" }}>
@@ -71,8 +71,8 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
         </Link>
       ) : (
         <View style={desktopNav}>
-          <Link href='/'>
-            <View style={isMobile ? styles.mobileLink : styles.link}>
+          <Link href="/">
+            <View style={isMobile ? styles().mobileLink : styles().link}>
               <Entypo
                 name='home'
                 size={24}
@@ -81,8 +81,8 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
               <Text>Home</Text>
             </View>
           </Link>
-          <Link href='/feed'>
-            <View style={isMobile ? styles.mobileLink : styles.link}>
+          <Link href="/feed">
+            <View style={isMobile ? styles().mobileLink : styles().link}>
               <MaterialCommunityIcons
                 name='newspaper-variant'
                 size={24}
@@ -92,8 +92,8 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
               <Text>Feed</Text>
             </View>
           </Link>
-          <Link href='/trips'>
-            <View style={isMobile ? styles.mobileLink : styles.link}>
+          <Link href="/trips">
+            <View style={isMobile ? styles().mobileLink : styles().link}>
               <MaterialCommunityIcons
                 name='routes'
                 size={24}
@@ -102,8 +102,8 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
               <Text>Trips</Text>
             </View>
           </Link>
-          <Link href='/packs'>
-            <View style={isMobile ? styles.mobileLink : styles.link}>
+          <Link href="/packs">
+            <View style={isMobile ? styles().mobileLink : styles().link}>
               <MaterialIcons
                 name='backpack'
                 size={24}
@@ -113,8 +113,8 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
               <Text>Packs</Text>
             </View>
           </Link>
-          <Link href='/about'>
-            <View style={isMobile ? styles.mobileLink : styles.link}>
+          <Link href="/about">
+            <View style={isMobile ? styles().mobileLink : styles().link}>
               <MaterialIcons
                 name='info'
                 size={24}
@@ -123,8 +123,8 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
               <Text>About</Text>
             </View>
           </Link>
-          <Link href='profile'>
-            <View style={isMobile ? styles.mobileLink : styles.link}>
+          <Link href="profile">
+            <View style={isMobile ? styles().mobileLink : styles().link}>
               <FontAwesome
                 name='book'
                 size={24}
@@ -133,7 +133,7 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
               <Text>Profile</Text>
             </View>
           </Link>
-          <View style={isMobile ? styles.mobileLink : styles.link}>
+          <View style={isMobile ? styles().mobileLink : styles().link}>
             <MaterialIcons
               name='logout'
               size={24}
@@ -149,7 +149,7 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
   ) : (
     <View style={desktopNav}>
       <Image
-        style={isMobile ? styles.smallLogo : styles.logo}
+        style={isMobile ? styles().smallLogo : styles().logo}
         source={packratlogo}
       />
       <Text
@@ -160,14 +160,14 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
         }}>
         PackRat
       </Text>
-      <Link href='/'>
-        <View style={isMobile ? styles.mobileLink : styles.link}>
-          <Entypo name='home' size={24} color={currentTheme.colors.iconColor} />
+      <Link href="/">
+        <View style={isMobile ? styles().mobileLink : styles().link}>
+          <Entypo name="home" size={24} color={currentTheme.colors.iconColor} />
           <Text>Home</Text>
         </View>
       </Link>
-      <Link href='/sign-in'>
-        <View style={isMobile ? styles.mobileLink : styles.link}>
+      <Link href="/sign-in">
+        <View style={isMobile ? styles().mobileLink : styles().link}>
           <MaterialIcons
             name='login'
             size={24}
@@ -185,21 +185,21 @@ export default function Navigation() {
     <View style={{ width: "100%" }}>
       <Desktop>
         <MutualContent
-          desktopContainer={styles.desktopContainer}
-          desktopNav={styles.desktopNav}
+          desktopContainer={styles().desktopContainer}
+          desktopNav={styles().desktopNav}
         />
       </Desktop>
       <Tablet>
         <MutualContent
-          desktopContainer={styles.mobileContainer}
-          desktopNav={styles.desktopNav}
+          desktopContainer={styles().mobileContainer}
+          desktopNav={styles().desktopNav}
           isMobile={true}
         />
       </Tablet>
       <Mobile>
         <MutualContent
-          desktopContainer={styles.mobileContainer}
-          desktopNav={styles.desktopNav}
+          desktopContainer={styles().mobileContainer}
+          desktopNav={styles().desktopNav}
           isMobile={true}
         />
       </Mobile>
@@ -207,75 +207,78 @@ export default function Navigation() {
   );
 }
 
-const styles = StyleSheet.create({
-  mutualStyles: {
-    backgroundColor: theme.colors.background,
-    flex: 1,
-    flexDirection: "row",
-    height: "100%",
-  },
-
-  desktopContainer: {
-    backgroundColor: theme.colors.background,
-    width: "100%",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    padding: 16,
-    paddingHorizontal: 90,
-  },
-
-  mobileContainer: {
-    backgroundColor: theme.colors.background,
-    width: "100%",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    padding: 25,
-    position: "relative",
-    // height: "300px",
-  },
-
-  desktopNav: {
-    flexDirection: "row",
-    gap: 15,
-    backgroundColor: theme.colors.background,
-    alignItems: "center",
-  },
-
-  logo: {
-    width: 75,
-    height: 75,
-    marginLeft: 20,
-    marginTop: 10,
-  },
-  smallLogo: {
-    width: 100,
-    height: 95,
-  },
-
-  mobileLink: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    borderBottomColor: "white",
-    borderBottomWidth: 1,
-    width: "100%",
-    color: "white",
-  },
-
-  link: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    borderColor: "white",
-    borderWidth: 1,
-    borderRadius: 6,
-    cursor: "pointer",
-    color: "white",
-  },
-});
+const styles = () => {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } = UseTheme();
+  return StyleSheet.create({
+    mutualStyles: {
+      backgroundColor: currentTheme.colors.background,
+      flex: 1,
+      flexDirection: "row",
+      height: "100%",
+    },
+  
+    desktopContainer: {
+      backgroundColor: currentTheme.colors.background,
+      width: "100%",
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      padding: 16,
+      paddingHorizontal: 90,
+    },
+  
+    mobileContainer: {
+      backgroundColor: currentTheme.colors.background,
+      width: "100%",
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      padding: 25,
+      position: "relative",
+      // height: "300px",
+    },
+  
+    desktopNav: {
+      flexDirection: "row",
+      gap: 15,
+      backgroundColor: currentTheme.colors.background,
+      alignItems: "center",
+    },
+  
+    logo: {
+      width: 75,
+      height: 75,
+      marginLeft: 20,
+      marginTop: 10,
+    },
+    smallLogo: {
+      width: 100,
+      height: 95,
+    },
+  
+    mobileLink: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 10,
+      paddingVertical: 10,
+      paddingHorizontal: 15,
+      borderBottomColor: currentTheme.colors.border,
+      borderBottomWidth: 1,
+      width: "100%",
+      color: currentTheme.colors.white,
+    },
+  
+    link: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 10,
+      paddingVertical: 10,
+      paddingHorizontal: 15,
+      borderColor: currentTheme.colors.border,
+      borderWidth: 1,
+      borderRadius: 6,
+      cursor: "pointer",
+      color: currentTheme.colors.white,
+    },
+  });
+} 

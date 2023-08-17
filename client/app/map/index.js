@@ -252,7 +252,7 @@ export default function Map() {
       <View
         style={{
           flex: 1,
-          backgroundColor: "white",
+          backgroundColor: currentTheme.colors.white,
         }}
       >
         <CustomizedMap />

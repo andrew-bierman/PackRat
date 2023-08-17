@@ -78,51 +78,54 @@ export const AddPackContainer = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: "column",
-    alignItems: "center",
-    textAlign: "center",
-    justifyContent: "center",
-    width: "100%",
-    paddingHorizontal: 18,
-    gap: 20,
-  },
-  desktopStyle: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 25,
-    gap: 5,
-    flex: 1,
-  },
-
-  mobileStyle: {
-    width: "100%",
-    flexDirection: "column",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingHorizontal: 25,
-    gap: 25,
-  },
-
-  input: {
-    backgroundColor: "#ffffff",
-    paddingLeft: 15,
-    paddingRight: 15,
-    borderColor: "grey",
-    borderWidth: 1,
-    flex: 1,
-    width: "100%",
-    paddingVertical: 12,
-  },
-  btn: {
-    backgroundColor: "#22c55e",
-    paddingHorizontal: 25,
-    paddingVertical: 15,
-    textAlign: "center",
-    alignItems: "center",
-    color: theme.colors.text,
-    width: "50%",
-  },
-});
+const styles = () => {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } = UseTheme();
+  return StyleSheet.create({
+    container: {
+      flexDirection: "column",
+      alignItems: "center",
+      textAlign: "center",
+      justifyContent: "center",
+      width: "100%",
+      paddingHorizontal: 18,
+      gap: 20,
+    },
+    desktopStyle: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      paddingVertical: 25,
+      gap: 5,
+      flex: 1,
+    },
+  
+    mobileStyle: {
+      width: "100%",
+      flexDirection: "column",
+      justifyContent: "space-between",
+      alignItems: "center",
+      paddingHorizontal: 25,
+      gap: 25,
+    },
+  
+    input: {
+      backgroundColor: currentTheme.colors.white,
+      paddingLeft: 15,
+      paddingRight: 15,
+      borderColor: "grey",
+      borderWidth: 1,
+      flex: 1,
+      width: "100%",
+      paddingVertical: 12,
+    },
+    btn: {
+      backgroundColor: currentTheme.colors.cardIconColor,
+      paddingHorizontal: 25,
+      paddingVertical: 15,
+      textAlign: "center",
+      alignItems: "center",
+      color: theme.colors.text,
+      width: "50%",
+    },
+  });
+} 
