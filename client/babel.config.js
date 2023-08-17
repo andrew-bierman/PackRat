@@ -23,6 +23,21 @@ module.exports = function (api) {
         },
       ],
       [
+        "module-resolver",
+        {
+          extensions: [".ios.js", ".android.js", ".js", ".ts", ".tsx", ".json"],
+          alias: {
+            "~/config": "./config",
+            "~/constants": "./constants",
+            "~/components": ["./components"],
+            "~/utils": ["./utils"],
+            "~/hooks": ["./hooks"],
+            "~/store": ["./store"],
+            "~/theme": ["./theme"],
+          },
+        },
+      ],
+      [
         '@tamagui/babel-plugin', {
           components : ['tamagui'],
           config : './theme/tamagui.config.js'
