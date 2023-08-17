@@ -98,7 +98,7 @@
     "react-responsive": "^9.0.2",
     "redux-persist": "^6.0.0",
     "serve": "^14.2.0",
-    "tamagui": "^1.52.4",
+    "tamagui": "^1.52.5",
     "togpx": "^0.5.4",
     "xmldom": "^0.6.0"
   },

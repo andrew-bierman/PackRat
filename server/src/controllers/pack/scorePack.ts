@@ -1,6 +1,5 @@
-import Pack from "../../models/packModel.ts";
-import mongoose from "mongoose";
-import { calculatePackScore } from "../../utils/scorePack.ts";
+
+import { scorePackService } from "../../services/pack/pack.service.ts";
 
 /**
  * Scores a pack by calculating its score and updating the pack object in the database.
@@ -12,24 +11,7 @@ export const scorePack = async (req, res) => {
   try {
     const { packId } = req.params;
 
-    const objectId = new mongoose.Types.ObjectId(packId);
-    const packData = await Pack.findById(objectId).populate("items");
-
-    // console.log("packData", packData)
-
-    // Call the scoring function to calculate the pack score
-
-    const packScore = calculatePackScore(packData);
-
-    console.log("packScore", packScore);
-
-    const { scores, grades } = packScore;
-
-    const updatedPack = await Pack.findByIdAndUpdate(
-      { _id: packId },
-      { scores: scores, grades: grades },
-      { returnOriginal: false }
-    );
+    const updatedPack = await scorePackService(packId);
 
     console.log("updatedPack", updatedPack);
 

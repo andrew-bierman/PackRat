@@ -1,4 +1,4 @@
-import Item from "../../models/itemModel.ts";
+import { deleteGlobalItemService } from "../../services/item/item.service.ts";
 
 /**
  * Deletes a global item.
@@ -10,7 +10,7 @@ export const deleteGlobalItem = async (req, res) => {
   try {
     const { itemId } = req.params;
 
-    const itemDeleted = await Item.findByIdAndDelete(itemId);
+    const itemDeleted = await deleteGlobalItemService(itemId);
 
     res.status(200).json({
       data: itemDeleted,

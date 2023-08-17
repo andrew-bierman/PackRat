@@ -1,5 +1,5 @@
-import Template from "../../models/templateModel.ts";
 import User from "../../models/userModel.ts";
+import { addTemplateService } from "../../services/template/template.service.ts";
 
 /**
  * Adds a template to the database.
@@ -8,29 +8,20 @@ import User from "../../models/userModel.ts";
  * @return {Promise<void>} The created template.
  */
 export const addTemplate = async (req, res) => {
+  try {
     const { type, templateId, isGlobalTemplate, createdBy } = req.body;
-  
-    //   check if user exists
+
     const user = await User.findById(createdBy);
-  
+
     if (!user) {
       res.status(404).json({ message: "User not found" });
       return;
     }
-  
-    //   const createdBy = req.user._id;  // Assumes you have some kind of authentication middleware
-  
-    const template = new Template({
-      type,
-      templateId,
-      isGlobalTemplate,
-      createdBy,
-    });
-  
-    try {
-      const createdTemplate = await template.save();
-      res.status(201).json(createdTemplate);
-    } catch (error) {
-      res.status(500).json({ error: error.toString() });
-    }
-  };
+
+    await addTemplateService(type, templateId, isGlobalTemplate, createdBy);
+
+    res.status(201).json({ message: "Template created successfully" });
+  } catch (error) {
+    res.status(500).json({ error: error.toString() });
+  }
+};

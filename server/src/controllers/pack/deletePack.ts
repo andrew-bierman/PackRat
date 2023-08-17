@@ -1,4 +1,4 @@
-import Pack from "../../models/packModel.ts";
+import { deletePackService } from "../../services/pack/pack.service.ts";
 
 /**
  * Deletes a pack.
@@ -7,13 +7,13 @@ import Pack from "../../models/packModel.ts";
  * @return {Promise} A promise that resolves with the deletion result.
  */
 export const deletePack = async (req, res) => {
-    try {
-      const { packId } = req.body;
-  
-      await Pack.findOneAndDelete({ _id: packId });
-      res.status(200).json({ msg: "pack was deleted successfully" });
-    } catch (error) {
-      res.status(404).json({ msg: "Unable to delete pack" });
-    }
-  };
-  
+  try {
+    const { packId } = req.body;
+
+    await deletePackService(packId);
+
+    res.status(200).json({ msg: "pack was deleted successfully" });
+  } catch (error) {
+    res.status(404).json({ msg: "Unable to delete pack" });
+  }
+};
