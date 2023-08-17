@@ -17,7 +17,7 @@ import {
   Pressable,
 } from "native-base";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-
+import UseTheme from '../hooks/useTheme';
 import { SafeAreaView } from "react-native";
 
 import { Platform } from "react-native";
@@ -49,7 +49,8 @@ export const SearchInput = ({ onSelect, placeholder }) => {
   const [searchString, setSearchString] = useState("");
   const [isLoadingMobile, setIsLoadingMobile] = useState(false);
   const [selectedSearch, setSelectedSearch] = useState("");
-
+  
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } = UseTheme();
   const searchResults =
     useSelector((state) => state.search.searchResults) || [];
 
@@ -141,7 +142,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
             px="1"
             value={searchString}
             fontSize="14"
-            backgroundColor={"white"}
+            backgroundColor={currentTheme.colors.white}
             InputLeftElement={
               <Icon
                 m="2"
@@ -182,7 +183,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
                 borderWidth={1}
                 borderColor="gray.200"
                 borderRadius={12}
-                backgroundColor="white"
+                backgroundColor={currentTheme.colors.white}
                 showsVerticalScrollIndicator={false}
                 zIndex={10}
               >
@@ -248,7 +249,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
           borderWidth={1}
           borderColor="gray.200"
           borderRadius={12}
-          backgroundColor="white"
+          backgroundColor={currentTheme.colors.white}
           showsVerticalScrollIndicator={false}
           zIndex={10}
         >

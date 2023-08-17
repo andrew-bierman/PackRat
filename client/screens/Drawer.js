@@ -17,7 +17,7 @@ const Drawer = ({
     return navigationItems.map((item) => (
       <TouchableOpacity
         key={item.href}
-        style={styles.navigationItem}
+        style={styles().navigationItem}
         onPress={() => navigateTo(item.href)}
       >
         {renderNavigationItem(item)}
@@ -32,14 +32,14 @@ const Drawer = ({
       animationType="fade"
       onRequestClose={toggleDrawer}
     >
-      <View style={styles.modalOverlay}>
+      <View style={styles().modalOverlay}>
         <TouchableOpacity
-          style={styles.fullScreenTouchable}
+          style={styles().fullScreenTouchable}
           onPress={toggleDrawer}
         />
-        <View style={styles.drawerContainer}>
+        <View style={styles().drawerContainer}>
           {renderNavigationItems()}
-          <TouchableOpacity style={styles.closeButton} onPress={toggleDrawer}>
+          <TouchableOpacity style={styles().closeButton} onPress={toggleDrawer}>
             <AntDesign
               name="close"
               size={24}
@@ -52,31 +52,35 @@ const Drawer = ({
   );
 };
 
-const styles = StyleSheet.create({
-  modalOverlay: {
-    flex: 1,
-    flexDirection: "row",
-    backgroundColor: "rgba(0,0,0,0.5)",
-  },
-  fullScreenTouchable: {
-    flex: 1,
-  },
-  drawerContainer: {
-    backgroundColor: theme.colors.background,
-    width: "70%",
-    height: "100%",
-    padding: 16,
-  },
-  navigationItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingVertical: 8,
-  },
-  closeButton: {
-    position: "absolute",
-    top: 16,
-    right: 16,
-  },
-});
+const styles = () => {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+  UseTheme();
+  return StyleSheet.create({
+    modalOverlay: {
+      flex: 1,
+      flexDirection: "row",
+      backgroundColor: "rgba(0,0,0,0.5)",
+    },
+    fullScreenTouchable: {
+      flex: 1,
+    },
+    drawerContainer: {
+      backgroundColor: currentTheme.colors.background,
+      width: "70%",
+      height: "100%",
+      padding: 16,
+    },
+    navigationItem: {
+      flexDirection: "row",
+      alignItems: "center",
+      paddingVertical: 8,
+    },
+    closeButton: {
+      position: "absolute",
+      top: 16,
+      right: 16,
+    },
+  });
+} 
 
 export default Drawer;

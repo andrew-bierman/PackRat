@@ -4,6 +4,7 @@ import { Box, Button, ScrollView } from "native-base";
 import { StyleSheet, Platform } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { theme } from "../../theme";
+import UseTheme from '../../hooks/useTheme';
 import { Tooltip } from "native-base";
 import { CustomModal } from "../../components/modal";
 import { AddItemGlobal } from "../../components/item/AddItemGlobal";
@@ -21,6 +22,7 @@ export default function Items() {
   // it will be used as a dependency for reloading the data in case of some modifications
   const [refetch, setRefetch] = useState(false);
 
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } = UseTheme();
   const data = useSelector((state) => state.globalItems);
 
   const isLoading = useSelector((state) => state.globalItems.isLoading);
@@ -56,7 +58,7 @@ export default function Items() {
               >
                 {" "}
                 <Button
-                  style={styles.button}
+                  style={styles().button}
                   onPress={() => {
                     setIsAddItemModalOpen(true);
                   }}
@@ -77,7 +79,7 @@ export default function Items() {
                       <MaterialIcons
                         name="info-outline"
                         size={20}
-                        color={theme.colors.background}
+                        color={currentTheme.colors.background}
                       />
                     </Button>
                   </Tooltip>
@@ -110,13 +112,16 @@ export default function Items() {
     </ScrollView>
   );
 }
-const styles = StyleSheet.create({
-  button: {
-    backgroundColor: "#0284c7",
-    width: Platform.OS === "web" ? "20rem" : "20%",
-    display: "flex",
-    alignItems: "center",
-    textAlign: "center",
-    color: "#ffffff",
-  },
-});
+const styles = () => {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } = UseTheme();
+  return StyleSheet.create({
+    button: {
+      backgroundColor: currentTheme.colors.background, 
+      color: currentTheme.colors.white,
+      width: Platform.OS === "web" ? "20rem" : "20%",
+      display: "flex",
+      alignItems: "center",
+      textAlign: "center",
+    },
+  });
+} 

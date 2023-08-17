@@ -21,7 +21,7 @@ export default function NavigationMobile() {
   const user = useSelector((state) => state.auth.user);
 
   return user ? (
-    <View style={styles.mobileContainer}>
+    <View style={[styles.mobileContainer, { backgroundColor: theme.colors.background,}]}>
       <View style={{ flexDirection: "row", alignItems: "center", gap: 1 }}>
         <Image src={String(packratlogo)} alt="logo" />
         <Text
@@ -44,7 +44,7 @@ export default function NavigationMobile() {
       </Link>
     </View>
   ) : (
-    <View style={styles.mobileContainer}>
+    <View style={[styles.mobileContainer, { backgroundColor: theme.colors.background,}]}>
       <View style={{ flexDirection: "row", alignItems: "center", gap: 1 }}>
         <Image src={String(packratlogo)} alt="logo" />
         <Text
@@ -71,7 +71,6 @@ export default function NavigationMobile() {
 
 const styles = StyleSheet.create({
   mobileContainer: {
-    backgroundColor: theme.colors.background,
     width: "100%",
     flexDirection: "row",
     alignItems: "center",

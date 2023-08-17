@@ -23,9 +23,8 @@ export default function TripCard({
   isTrail,
   isPark,
 }) {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
   const dispatch = useDispatch();
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } = UseTheme();
 
   const currentTrail = useSelector((state) => state.dropdown.currentTrail);
   const currentPark = useSelector((state) => state.dropdown.currentPark);
@@ -51,12 +50,12 @@ export default function TripCard({
       rounded={["none", "none", "md", "lg"]}
       style={
         isSearch
-          ? styles.searchContainer
+          ? styles().searchContainer
           : isMap
-          ? styles.mapCard
-          : styles.containerMobile
-          ? styles.containerMobile
-          : styles.mutualStyles
+          ? styles().mapCard
+          : styles().containerMobile
+          ? styles().containerMobile
+          : styles().mutualStyles
       }
     >
       <Box
@@ -106,54 +105,57 @@ export default function TripCard({
   );
 }
 
-const styles = StyleSheet.create({
-  mutualStyles: {
-    backgroundColor: theme.colors.card,
-    flex: 1,
-    gap: 45,
-    justifyContent: "space-between",
-    alignItems: "center",
-    textAlign: "center",
-    padding: theme.size.cardPadding,
-  },
-
-  containerMobile: {
-    backgroundColor: theme.colors.card,
-    padding: theme.size.mobilePadding,
-    justifyContent: "space-between",
-    alignItems: "center",
-    gap: 25,
-    flex: 1,
-    paddingHorizontal: 100,
-  },
-
-  searchContainer: {
-    backgroundColor: theme.colors.card,
-    padding: theme.size.mobilePadding,
-    justifyContent: "space-between",
-    alignItems: "center",
-    gap: 10,
-    flex: 1,
-    paddingHorizontal: 60,
-    paddingVertical: 70,
-
-    height: Platform.OS === "web" ? "450px" : "100%",
-  },
-
-  mapCard: {
-    backgroundColor: theme.colors.card,
-    // flex: 2,
-
-    flexDirection: "column",
-    // gap: 45,
-    // justifyContent: "center",
-    alignItems: "center",
-    textAlign: "center",
-    padding: theme.size.cardPadding,
-    paddingHorizontal: theme.padding.paddingInside,
-    marginBottom: 20,
-    // height: 'fit-content'
-    height: Platform.OS === "web" ? "650px" : "100%",
-    overflow: "hidden",
-  },
-});
+const styles = () => {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } = UseTheme();
+  return StyleSheet.create({
+    mutualStyles: {
+      backgroundColor: currentTheme.colors.card,
+      flex: 1,
+      gap: 45,
+      justifyContent: "space-between",
+      alignItems: "center",
+      textAlign: "center",
+      padding: currentTheme.size.cardPadding,
+    },
+  
+    containerMobile: {
+      backgroundColor: currentTheme.colors.card,
+      padding: currentTheme.size.mobilePadding,
+      justifyContent: "space-between",
+      alignItems: "center",
+      gap: 25,
+      flex: 1,
+      paddingHorizontal: 100,
+    },
+  
+    searchContainer: {
+      backgroundColor: currentTheme.colors.card,
+      padding: currentTheme.size.mobilePadding,
+      justifyContent: "space-between",
+      alignItems: "center",
+      gap: 10,
+      flex: 1,
+      paddingHorizontal: 60,
+      paddingVertical: 70,
+  
+      height: Platform.OS === "web" ? "450px" : "100%",
+    },
+  
+    mapCard: {
+      backgroundColor: currentTheme.colors.card,
+      // flex: 2,
+  
+      flexDirection: "column",
+      // gap: 45,
+      // justifyContent: "center",
+      alignItems: "center",
+      textAlign: "center",
+      padding: currentTheme.size.cardPadding,
+      paddingHorizontal: currentTheme.padding.paddingInside,
+      marginBottom: 20,
+      // height: 'fit-content'
+      height: Platform.OS === "web" ? "650px" : "100%",
+      overflow: "hidden",
+    },
+  });
+} 
