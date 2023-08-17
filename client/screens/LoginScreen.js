@@ -1,14 +1,11 @@
 import {
   Box,
-  Text,
-  Heading,
-  VStack,
-  FormControl,
-  Input,
   Button,
-  HStack,
   Center,
-  Toast,
+  HStack,
+  Heading,
+  Text,
+  VStack,
 } from "native-base";
 
 import { FontAwesome } from "@expo/vector-icons";
@@ -17,21 +14,22 @@ import { FontAwesome } from "@expo/vector-icons";
 //   "pk.eyJ1IjoibWlhbi1iaWxhbCIsImEiOiJja3k5YzExdGcwNHY0Mm9tbmo0ajhrOGx5In0.VAkiap76DG7NiKc23A9tcg"
 // );
 
-import * as WebBrowser from "expo-web-browser";
+import { NODE_ENV, WEB_CLIENT_ID } from "@env";
 import * as Google from "expo-auth-session/providers/google";
-import { WEB_CLIENT_ID, NODE_ENV } from "@env";
+import * as WebBrowser from "expo-web-browser";
 
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 // import useLogin from "../hooks/useLogin";
 // import { useAuth } from "../auth/provider";
-import { Link } from "expo-router";
-import { useRouter } from "expo-router";
-import { theme } from "../theme";
+import { Link, useRouter } from "expo-router";
 // import { signInWithGoogle } from "../auth/firebase";
 // import { signInWithGoogle } from "../auth/firebase";
-import { useDispatch, useSelector } from "react-redux";
-import { signIn, signInWithGoogle } from "../store/authStore";
+import { useForm } from "react-hook-form";
 import { StyleSheet } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { InputText, InputTextRules } from "~/components/InputText";
+import { Regex } from "~/utils/regex";
+import { signIn, signInWithGoogle } from "../store/authStore";
 import { InformUser } from "../utils/ToastUtils";
 import UseTheme from '../hooks/useTheme';
 
@@ -72,6 +70,11 @@ export default function Login() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } = UseTheme();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const {
+    control,
+    handleSubmit,
+    formState: { isValid },
+  } = useForm();
 
   const demoUser = {
     email: "email52@email.com",
@@ -153,7 +156,8 @@ export default function Login() {
   //   clientId: WEB_CLIENT_ID,
   // });
 
-  const handleLogin = () => {
+  const handleLogin = (data) => {
+    const { email, password } = data;
     dispatch(signIn({ email, password }));
   };
 
@@ -261,23 +265,26 @@ export default function Login() {
           </Heading>
 
           <VStack space={3} mt="5">
-            <FormControl>
-              <FormControl.Label>Email ID</FormControl.Label>
-              <Input value={email} onChangeText={(text) => setEmail(text)} />
-            </FormControl>
-            <FormControl>
-              <FormControl.Label>Password</FormControl.Label>
-              <Input
-                value={password}
-                onChangeText={(text) => setPassword(text)}
-                type="password"
-              />
-            </FormControl>
+            <InputText
+              label="Email ID"
+              keyboardType="email-address"
+              control={control}
+              name="email"
+              rules={InputTextRules.email}
+            />
+            <InputText
+              label="Password"
+              secureTextEntry
+              control={control}
+              name="password"
+              rules={InputTextRules.password}
+            />
+
             <Button
-              disabled={!email || !password}
-              onPress={handleLogin}
+              isDisabled={!isValid}
+              onPress={handleSubmit(handleLogin)}
               mt="2"
-              colorScheme="indigo"
+              colorScheme={"indigo"}
             >
               Sign in
             </Button>
