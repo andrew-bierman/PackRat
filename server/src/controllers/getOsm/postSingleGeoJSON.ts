@@ -1,9 +1,4 @@
-import {
-  findOrCreateOne,
-  ensureIdProperty,
-  ensureModelProperty,
-} from "../../utils/osmFunctions/modelHandlers.ts";
-import { isGeoJSONFormat } from "../../utils/osmFunctions/dataFormatters.ts";
+import { postSingleGeoJSONService } from "../../services/osm/osm.service.ts";
 
 /**
  * Handles the POST request for a single GeoJSON.
@@ -12,33 +7,23 @@ import { isGeoJSONFormat } from "../../utils/osmFunctions/dataFormatters.ts";
  * @return {void} - does not return a value
  */
 export const postSingleGeoJSON = async (req, res) => {
-    // console.log("req.body", req.body)
+  try {
     console.log("in postSingleGeoJSON");
     const geojson = req.body;
-  
-    if (!geojson || !isGeoJSONFormat(geojson)) {
-      res.status(400).send({ message: "Invalid or missing geoJSON" });
-      return; // Return early to avoid further execution
-    }
-  
-    try {
-      const data = geojson;
-      console.log("data", data);
-      const processedElement = ensureIdProperty(data);
-      const Model:any = ensureModelProperty(processedElement);
-      console.log("processedElement", processedElement);
-      const newInstance = await findOrCreateOne(Model, processedElement);
-      res.status(201).json({
-        status: "success",
-        data: {
-          newInstance,
-        },
-      });
-    } catch (error) {
-      console.error(error);
-      res.status(400).json({
-        status: "fail",
-        message: error.message,
-      });
-    }
-  };
+
+    const result = await postSingleGeoJSONService(geojson);
+
+    res.status(201).json({
+      status: "success",
+      data: {
+        result,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({
+      status: "fail",
+      message: error.message,
+    });
+  }
+};
