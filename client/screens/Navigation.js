@@ -168,100 +168,104 @@ const Navigation = () => {
 
       const isCurrentPage = pathName === href; // compare the current route with the href
 
-      return (
-        <TouchableOpacity
-          key={item.href}
-          style={[
-            styles.menuBarItem,
-            isCurrentPage && styles.menuBarItemActive, // apply the active style if this is the current page
-          ]}
-          onPress={() => navigateTo(item.href)}
-        >
-          <IconComponent
-            name={icon}
-            size={isMobileView ? 24 : 18}
-            color={
-              isCurrentPage ? theme.colors.iconColor : theme.colors.iconColor
-            } // change the color if this is the current page
-            key={item.href + "icon"}
-          />
-          <Text
+      if (isCurrentPage) {
+        return (
+          <TouchableOpacity
+            key={item.href}
             style={[
-              styles.menuBarItemText,
-              isCurrentPage && styles.menuBarItemTextActive, // apply the active style to the text if this is the current page
+              styles.menuBarItem,
+              isCurrentPage && styles.menuBarItemActive, // apply the active style if this is the current page
             ]}
+            onPress={() => navigateTo(item.href)}
           >
-            {text}
-          </Text>
-        </TouchableOpacity>
-      );
+            <IconComponent
+              name={icon}
+              size={isMobileView ? 24 : 18}
+              color={
+                isCurrentPage ? theme.colors.iconColor : theme.colors.iconColor
+              } // change the color if this is the current page
+              key={item.href + "icon"}
+            />
+            <Text
+              style={[
+                styles.menuBarItemText,
+                isCurrentPage && styles.menuBarItemTextActive, // apply the active style to the text if this is the current page
+              ]}
+            >
+              {text}
+            </Text>
+          </TouchableOpacity>
+        );
+      } else {
+        return (
+          <SafeAreaView style={styles.safeArea}>
+            <View
+              style={styles.container}
+              onLayout={(event) =>
+                setNavBarWidth(event.nativeEvent.layout.width)
+              } // calculate the width of the navbar
+            >
+              {user && <AuthStateListener />}
+              <View style={styles.header}>
+                <TouchableOpacity
+                  style={styles.logoContainer}
+                  onPress={() => navigateTo("/")}
+                >
+                  <View style={styles.logoWrapper}>
+                    <SVGLogoComponent
+                      width={isMobileView ? 48 : 64}
+                      height={isMobileView ? 48 : 64}
+                      fill="#fff"
+                    />
+                  </View>
+                  <Text style={styles.logoText}>PackRat</Text>
+                </TouchableOpacity>
+
+                {/* Trigger to open/close the drawer */}
+                <View style={styles.drawerContainer}>
+                  {!isDrawerOpen && isMobileView && (
+                    <TouchableOpacity
+                      style={styles.drawerTrigger}
+                      onPress={toggleDrawer}
+                    >
+                      <EvilIcons
+                        name={isDrawerOpen ? "close" : "navicon"}
+                        size={isMobileView ? 36 : 24}
+                        color={theme.colors.iconColor}
+                      />
+                    </TouchableOpacity>
+                  )}
+                </View>
+                {isMobileView ? (
+                  <Modal
+                    visible={isDrawerOpen}
+                    animationType="slide"
+                    transparent={true}
+                  >
+                    <Drawer
+                      toggleDrawer={toggleDrawer}
+                      handleSignOut={() => {}}
+                      navigationItems={navigationItems}
+                      navigateTo={navigateTo}
+                      renderNavigationItem={renderNavigationItem}
+                    />
+                  </Modal>
+                ) : (
+                  <ScrollView
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    contentContainerStyle={styles.menuBar}
+                  >
+                    {navigationItems.map((item) => renderNavigationItem(item))}
+                  </ScrollView>
+                )}
+              </View>
+            </View>
+          </SafeAreaView>
+        );
+      }
     },
     [user] // add any other dependencies that this function uses
-  );
-
-  return (
-    <SafeAreaView style={styles.safeArea}>
-      <View
-        style={styles.container}
-        onLayout={(event) => setNavBarWidth(event.nativeEvent.layout.width)} // calculate the width of the navbar
-      >
-        {user && <AuthStateListener />}
-        <View style={styles.header}>
-          <TouchableOpacity
-            style={styles.logoContainer}
-            onPress={() => navigateTo("/")}
-          >
-            <View style={styles.logoWrapper}>
-              <SVGLogoComponent
-                width={isMobileView ? 48 : 64}
-                height={isMobileView ? 48 : 64}
-                fill="#fff"
-              />
-            </View>
-            <Text style={styles.logoText}>PackRat</Text>
-          </TouchableOpacity>
-
-          {/* Trigger to open/close the drawer */}
-          <View style={styles.drawerContainer}>
-            {!isDrawerOpen && isMobileView && (
-              <TouchableOpacity
-                style={styles.drawerTrigger}
-                onPress={toggleDrawer}
-              >
-                <EvilIcons
-                  name={isDrawerOpen ? "close" : "navicon"}
-                  size={isMobileView ? 36 : 24}
-                  color={theme.colors.iconColor}
-                />
-              </TouchableOpacity>
-            )}
-          </View>
-          {isMobileView ? (
-            <Modal
-              visible={isDrawerOpen}
-              animationType="slide"
-              transparent={true}
-            >
-              <Drawer
-                toggleDrawer={toggleDrawer}
-                handleSignOut={() => {}}
-                navigationItems={navigationItems}
-                navigateTo={navigateTo}
-                renderNavigationItem={renderNavigationItem}
-              />
-            </Modal>
-          ) : (
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.menuBar}
-            >
-              {navigationItems.map((item) => renderNavigationItem(item))}
-            </ScrollView>
-          )}
-        </View>
-      </View>
-    </SafeAreaView>
   );
 };
 
