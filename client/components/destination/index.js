@@ -82,7 +82,15 @@ const WeatherData = ({ geoJSON }) => {
     const fetchWeatherData = async () => {
       if (geoJSON && geoJSON.features) {
         const { coordinates } = geoJSON.features[0].geometry;
-        const [lon, lat] = coordinates;
+
+        // const [lon, lat] = coordinates;
+        let lon, lat;
+
+        if((coordinates[0]) && Array.isArray(coordinates[0])) {
+          [lon, lat] = coordinates[0];
+        } else {
+          [lon, lat] = coordinates;
+        }
 
         if (lat && lon) {
           try {
@@ -110,7 +118,7 @@ export const DestinationPage = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } = UseTheme();
   const dispatch = useDispatch();
 
-  const { destinationId, id, type } = useSearchParams();
+  const { destinationId, id, type, lat, lon } = useSearchParams();
   const photonDetailsStore = useSelector(
     (state) => state.destination.photonDetails
   );

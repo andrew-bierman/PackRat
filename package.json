@@ -11,10 +11,11 @@
     "setup:client": "npm --prefix client run setup",
     "setup:server": "npm --prefix server run setup",
     "expo:export": "cd client && cp app.example.json app.json && npx expo export --platform web",
-    "start": "npm start --prefix server",
+    "start": "npm run start:ts-node --prefix server",
+    "start:prod": "npm run start:prod --prefix server",
     "dev:client": "npm start --prefix client",
     "dev:server": "npm start --prefix server"
-  },  
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/andrew-bierman/PackRat.git"

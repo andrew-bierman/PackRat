@@ -3,7 +3,7 @@ import { ScrollView, StyleSheet } from "react-native";
 import { VStack } from "native-base";
 import ScrollButton from "./ScrollButton";
 
-const Carousel = ({ children, itemWidth }) => {
+const Carousel = ({ children, itemWidth, iconColor }) => {
   const scrollViewRef = useRef();
   const [scrollX, setScrollX] = useState(0);
 
@@ -23,18 +23,21 @@ const Carousel = ({ children, itemWidth }) => {
   return (
     <VStack
       style={{
-        width: "100%",
+        width: "100%",            
         justifyContent: "center",
         alignItems: "center",
         flexDirection: "row",
       }}
     >
       <ScrollButton
+        iconColor={iconColor}
         direction="left"
         scrollViewRef={scrollViewRef}
         onPress={() => scroll("left")}
       />
+      
       <ScrollView
+
         ref={scrollViewRef}
         horizontal={true}
         onScroll={(event) => setScrollX(event.nativeEvent.contentOffset.x)}
@@ -45,6 +48,7 @@ const Carousel = ({ children, itemWidth }) => {
         {children}
       </ScrollView>
       <ScrollButton
+        iconColor={iconColor}
         direction="right"
         scrollViewRef={scrollViewRef}
         onPress={() => scroll("right")}
@@ -55,8 +59,8 @@ const Carousel = ({ children, itemWidth }) => {
 
 const styles = StyleSheet.create({
   carousel: {
-    flexDirection: "row",
-    width: "100%",
+    // flexDirection: "row",
+    width: "80%",
   },
 });
 
