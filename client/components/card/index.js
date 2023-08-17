@@ -72,7 +72,7 @@ export const CustomCard = ({
   if (type === 'pack') {
     return (
       <Box
-        style={styles.mainContainer}
+        style={styles().mainContainer}
         alignSelf="center"
         alignItems={['center', 'center', 'flex-start', 'flex-start']}
         w={['100%', '100%', '100%', '90%']}
@@ -170,7 +170,7 @@ export const CustomCard = ({
   if (type === 'trip') {
     return (
       <Box
-        style={styles.mainContainer}
+        style={styles().mainContainer}
         alignSelf="center"
         alignItems={['center', 'center', 'flex-start', 'flex-start']}
         w={['100%', '100%', '100%', '90%']}
@@ -248,25 +248,29 @@ export const CustomCard = ({
   }
 };
 
-const styles = StyleSheet.create({
-  mainContainer: {
-    backgroundColor: theme.colors.card,
-    flex: 1,
-    gap: 45,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingLeft: 25,
-    paddingRight: 25,
-    paddingTop: 15,
-    paddingBottom: 15,
-    border: '1',
-  },
-  containerMobile: {
-    backgroundColor: theme.colors.card,
-    flex: 1,
-    gap: 45,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 15,
-  },
-});
+const styles = () => {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
+  return StyleSheet.create({
+    mainContainer: {
+      backgroundColor: currentTheme.colors.card,
+      flex: 1,
+      gap: 45,
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      paddingLeft: 25,
+      paddingRight: 25,
+      paddingTop: 15,
+      paddingBottom: 15,
+      border: '1',
+    },
+    containerMobile: {
+      backgroundColor: currentTheme.colors.card,
+      flex: 1,
+      gap: 45,
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      padding: 15,
+    },
+  });
+};
