@@ -1,4 +1,4 @@
-import { addItemGlobalService } from "../../services/item/item.service.ts";
+import { addItemGlobalService } from "../../services/item/item.service";
 
 /**
  * Adds an item globally.

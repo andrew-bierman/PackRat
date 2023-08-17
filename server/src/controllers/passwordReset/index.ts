@@ -1,2 +1,2 @@
-export * from './handlePasswordReset.ts'
-export * from './requestPasswordReset.ts'
+export * from './handlePasswordReset'
+export * from './requestPasswordReset'

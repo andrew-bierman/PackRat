@@ -11,8 +11,8 @@ import {
   addGlobalItemToPack,
   editGlobalItemAsDuplicate,
   deleteGlobalItem,
-} from "../controllers/item/index.ts";
-import * as validator from "../middleware/validators/index.ts";
+} from "../controllers/item/index";
+import * as validator from "../middleware/validators/index";
 
 const router = express.Router();
 

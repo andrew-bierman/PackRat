@@ -1,4 +1,4 @@
-import Item from "../../models/itemModel.ts";
+import Item from "../../models/itemModel";
 
 export const getItemsGloballyService = async (req) => {
     const totalItems = await Item.countDocuments({ global: true });

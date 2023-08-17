@@ -3,7 +3,7 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-import { MONGODB_URI } from "./config.ts";
+import { MONGODB_URI } from "./config";
 
 const connectionString = MONGODB_URI;
 

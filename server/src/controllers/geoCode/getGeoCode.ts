@@ -1,5 +1,5 @@
 const fetch = (...args: Parameters<typeof fetch>) => import('node-fetch').then(({default: fetch}) => fetch(...args as Parameters<typeof fetch>));
-import { oneEntity } from "../../utils/oneEntity.ts";
+import { oneEntity } from "../../utils/oneEntity";
 
 /**
  * Retrieves the geocode for a given address array.

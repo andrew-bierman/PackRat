@@ -1,4 +1,4 @@
-import User from '../../models/userModel.ts';
+import User from '../../models/userModel';
 
 export async function findUserByEmail(email: string): Promise<any> {
     try {

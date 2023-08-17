@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import myDB from "./dbConnection.ts";
+import myDB from "./dbConnection";
 
 const { Schema } = mongoose;
 

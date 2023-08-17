@@ -2,19 +2,19 @@ import express, { Request, Response } from "express";
 import path from "path";
 import csrf from "csurf";
 
-import userRoutes from "./userRoutes.ts";
-import packRoutes from "./packRoutes.ts";
-import itemRoutes from "./itemRoutes.ts";
-import tripRoutes from "./tripRoutes.ts";
-import weatherRoutes from "./weatherRoutes.ts";
-import geoCodeRoutes from "./geoCodeRoutes.ts";
-import getParkRoutes from "./getParkRoutes.ts";
-import getTrailRoutes from "./getTrailRoutes.ts";
-import osmRoutes from "./osmRoutes.ts";
-import passwordResetRoutes from "./passwordResetRoutes.ts";
-import openAiRoutes from "./openAiRoutes.ts";
-import templateRoutes from "./templateRoutes.ts";
-import favoriteRouters from "./favoriteRoutes.ts";
+import userRoutes from "./userRoutes";
+import packRoutes from "./packRoutes";
+import itemRoutes from "./itemRoutes";
+import tripRoutes from "./tripRoutes";
+import weatherRoutes from "./weatherRoutes";
+import geoCodeRoutes from "./geoCodeRoutes";
+import getParkRoutes from "./getParkRoutes";
+import getTrailRoutes from "./getTrailRoutes";
+import osmRoutes from "./osmRoutes";
+import passwordResetRoutes from "./passwordResetRoutes";
+import openAiRoutes from "./openAiRoutes";
+import templateRoutes from "./templateRoutes";
+import favoriteRouters from "./favoriteRoutes";
 
 const router = express.Router();
 

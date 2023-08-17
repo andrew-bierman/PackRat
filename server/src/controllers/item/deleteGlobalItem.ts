@@ -1,4 +1,4 @@
-import { deleteGlobalItemService } from "../../services/item/item.service.ts";
+import { deleteGlobalItemService } from "../../services/item/item.service";
 
 /**
  * Deletes a global item.

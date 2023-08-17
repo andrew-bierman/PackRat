@@ -1,4 +1,4 @@
-import { getTripByIdService } from "../../services/trip/getTripByIdService.ts";
+import { getTripByIdService } from "../../services/trip/getTripByIdService";
 
 /**
  * Retrieves a trip by its ID and returns the trip details.

@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import User from "../../models/userModel.ts";
-import Conversation from "../../models/openai/conversationModel.ts";
+import User from "../../models/userModel";
+import Conversation from "../../models/openai/conversationModel";
 import { Configuration, OpenAIApi } from "openai";
 
 export const getAIResponseService = async (userId, conversationId, userInput) => {

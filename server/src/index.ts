@@ -2,11 +2,11 @@ import express, { NextFunction } from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import { isCelebrateError, errors } from "celebrate";
-import { MONGODB_URI, } from "./config.ts";
-import routes from "./routes/index.ts";
+import { MONGODB_URI, } from "./config";
+import routes from "./routes/index";
 import bodyParser from "body-parser";
-import { serveSwaggerUI } from "./helpers/serveSwaggerUI.ts";
-import { corsOptions } from "./helpers/corsOptions.ts";
+import { serveSwaggerUI } from "./helpers/serveSwaggerUI";
+import { corsOptions } from "./helpers/corsOptions";
  
 // express items
 const app = express();

@@ -1,4 +1,4 @@
-import { editPackService } from "../../services/pack/pack.service.ts";
+import { editPackService } from "../../services/pack/pack.service";
 
 /**
  * Edits a pack in the database.

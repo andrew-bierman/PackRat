@@ -2,7 +2,7 @@
 
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
-import User from "../../models/userModel.ts";
+import User from "../../models/userModel";
 import bcrypt from "bcrypt";
 
 // Passport Configuration

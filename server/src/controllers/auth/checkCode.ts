@@ -1,4 +1,4 @@
-import User from "../../models/userModel.ts";
+import User from "../../models/userModel";
 
 /**
  * Checks the provided code against the user's email in the database.

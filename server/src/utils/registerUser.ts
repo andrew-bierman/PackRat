@@ -1,4 +1,4 @@
-import User from "../models/userModel.js";
+import User from "../models/userModel";
 
 export const register = async ({ email, password, name, from }: { email: string, password: string, name: string, from: string }) => {
   if (from === "UserSignIn") {

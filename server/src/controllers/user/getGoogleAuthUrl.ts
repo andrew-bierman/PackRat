@@ -6,7 +6,7 @@ import {
   REDIRECT_URL,
   UI_ROOT_URI,
   JWT_SECRET,
-} from "../../config.ts";
+} from "../../config";
 
 const oauth2Client = new google.auth.OAuth2(
   GOOGLE_CLIENT_ID,

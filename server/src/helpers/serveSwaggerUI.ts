@@ -1,7 +1,7 @@
-import {ItemCategory} from '../utils/itemCategory.ts'
-import {ItemCategoryModel} from '../models/itemCategory.ts'
+import {ItemCategory} from '../utils/itemCategory'
+import {ItemCategoryModel} from '../models/itemCategory'
 import swaggerUi from "swagger-ui-express";
-import specs from "../swaggerOptions.ts";
+import specs from "../swaggerOptions";
 import { Request, Response } from 'express';
 
 export const serveSwaggerUI = (app: any) => {

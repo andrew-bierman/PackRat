@@ -1,4 +1,4 @@
-import Trip from "../../models/tripModel.ts";
+import Trip from "../../models/tripModel";
 
 /**
  * Retrieves trips belonging to a specific owner.

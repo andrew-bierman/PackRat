@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import Item from "./itemModel.ts";
-import myDB from "./dbConnection.ts";
+import Item from "./itemModel";
+import myDB from "./dbConnection";
 
 const { Schema } = mongoose;
 

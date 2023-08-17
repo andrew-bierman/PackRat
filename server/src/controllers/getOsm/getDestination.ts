@@ -1,4 +1,4 @@
-import { getDestinationService } from "../../services/osm/osm.service.ts";
+import { getDestinationService } from "../../services/osm/osm.service";
 
 /**
  * Retrieves the destination based on the given ID.
