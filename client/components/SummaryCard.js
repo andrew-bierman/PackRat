@@ -12,8 +12,7 @@ const dummyData = [
 ];
 
 export default function SummaryCard() {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } = UseTheme();
 
   const handleDelete = () => {};
   const handleEdit = () => {};
@@ -31,7 +30,7 @@ export default function SummaryCard() {
       <Box>
         <Text>Image here</Text>
       </Box>
-      <Box style={styles.itemContainer}>
+      <Box style={styles().itemContainer}>
         {dummyData.map((data, id) => (
           <ItemRow key={id} packName={data} />
         ))}
@@ -46,19 +45,22 @@ export default function SummaryCard() {
   );
 }
 
-const styles = StyleSheet.create({
-  mainContainer: {
-    flexDirection: "row",
-    width: "100%",
-    alignItems: "center",
-    gap: 10,
-  },
-
-  itemContainer: {
-    flex: 1,
-    alignItems: "center",
-    backgroundColor: theme.colors.card,
-    padding: 5,
-    justifyContent: "space-between",
-  },
-});
+const styles = () => {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } = UseTheme();
+  return StyleSheet.create({
+   mainContainer: {
+     flexDirection: "row",
+     width: "100%",
+     alignItems: "center",
+     gap: 10,
+   },
+ 
+   itemContainer: {
+     flex: 1,
+     alignItems: "center",
+     backgroundColor: currentTheme.colors.card,
+     padding: 5,
+     justifyContent: "space-between",
+   },
+  });
+}

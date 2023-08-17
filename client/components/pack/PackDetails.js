@@ -9,7 +9,7 @@ import { fetchUserPacks, selectPackById } from "../../store/packsStore";
 
 import { useSelector, useDispatch } from "react-redux";
 import { fetchSinglePack } from "../../store/singlePackStore";
-
+import UseTheme from '../../hooks/useTheme';
 import { Box, Text } from "native-base";
 import { DetailsComponent } from "../details";
 import { Dimensions, Platform, StyleSheet } from "react-native";
@@ -106,28 +106,31 @@ export function PackDetails() {
   );
 }
 
-const styles = StyleSheet.create({
-  mainContainer: {
-    backgroundColor: theme.colors.background,
-    flexDirection: "column",
-    gap: 15,
-    fontSize: 18,
-    width: "100%",
-  },
-  packsContainer: {
-    flexDirection: "column",
-    minHeight: "100vh",
-
-    padding: 25,
-    fontSize: 26,
-  },
-  dropdown: {
-    backgroundColor: "white",
-  },
-  boxStyle: {
-    padding: 10,
-    borderRadius: 10,
-    width: "100%",
-    minHeight: 100,
-  },
-});
+const styles = () => {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } = UseTheme();
+  return StyleSheet.create({
+    mainContainer: {
+      backgroundColor: currentTheme.colors.background,
+      flexDirection: "column",
+      gap: 15,
+      fontSize: 18,
+      width: "100%",
+    },
+    packsContainer: {
+      flexDirection: "column",
+      minHeight: "100vh",
+  
+      padding: 25,
+      fontSize: 26,
+    },
+    dropdown: {
+      backgroundColor: currentTheme.colors.white,
+    },
+    boxStyle: {
+      padding: 10,
+      borderRadius: 10,
+      width: "100%",
+      minHeight: 100,
+    },
+  });
+} 

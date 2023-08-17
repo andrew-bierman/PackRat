@@ -2,6 +2,7 @@ import { HStack } from "native-base";
 import QuickActionButton from "./QuickActionButton";
 import { StyleSheet } from "react-native";
 import { theme } from "../../theme";
+import UseTheme from '../../hooks/useTheme';
 import { useRouter } from "expo-router";
 
 const QuickActionsSection = () => {
@@ -29,7 +30,7 @@ const QuickActionsSection = () => {
   };
 
   return (
-    <HStack style={styles.section}>
+    <HStack style={styles().section}>
       {quickActionData.map((action) => (
         <QuickActionButton
           key={action.action}
@@ -42,7 +43,9 @@ const QuickActionsSection = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const styles = () => {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } = UseTheme();
+  return StyleSheet.create({
   section: {
     marginBottom: 20,
     paddingHorizontal: 20, // Added padding here.
@@ -52,8 +55,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 10,
     paddingVertical: 20,
-    backgroundColor: theme.colors.secondaryBlue,
+    backgroundColor: currentTheme.colors.secondaryBlue,
   },
 });
-
+}
 export default QuickActionsSection;

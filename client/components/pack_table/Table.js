@@ -11,6 +11,7 @@ import { DeletePackItemModal } from "./DeletePackItemModal";
 import { duplicatePackItem } from "../../store/packsStore";
 import { formatNumber } from "../../utils/formatNumber";
 import { theme } from "../../theme";
+import UseTheme from '../../hooks/useTheme';
 import CustomButton from "../custombutton";
 import ItemPicker from "../Picker";
 
@@ -32,7 +33,7 @@ const WeightUnitDropdown = ({ value, onChange }) => {
 
 const TotalWeightBox = ({ label, weight, unit }) => {
   return (
-    <Box style={styles.totalWeightBox}>
+    <Box style={styles().totalWeightBox}>
       <Text>{label}</Text>
       <Text>{`${formatNumber(weight)} (${unit})`}</Text>
     </Box>
@@ -103,10 +104,11 @@ const TableItem = ({
     />,
   ];
 
-  return <Row data={rowData} style={styles.row} flexArr={flexArr} />;
+  return <Row data={rowData} style={styles().row} flexArr={flexArr} />;
 };
 
 const CategoryRow = ({ category }) => {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } = UseTheme();
   const categoryIcons = {
     [ItemCategoryEnum.ESSENTIALS]: "check-square",
     [ItemCategoryEnum.FOOD]: "coffee",
@@ -122,26 +124,26 @@ const CategoryRow = ({ category }) => {
   };
 
   const rowData = [
-    <HStack style={styles.categoryRow}>
-      <Feather name={categoryIcons[category]} size={16} color="white" />
-      <Text style={styles.titleText}> {category}</Text>
+    <HStack style={styles().categoryRow}>
+      <Feather name={categoryIcons[category]} size={16} color={currentTheme.colors.white} />
+      <Text style={styles().titleText}> {category}</Text>
     </HStack>,
   ];
 
   return (
-    <Row data={rowData} style={[styles.title]} textStyle={styles.titleText} />
+    <Row data={rowData} style={[styles().title]} textStyle={styles().titleText} />
   );
 };
 
 const TitleRow = ({ title }) => {
   const rowData = [
-    <HStack style={styles.mainTitle}>
-      <Text style={styles.titleText}>{title}</Text>
+    <HStack style={styles().mainTitle}>
+      <Text style={styles().titleText}>{title}</Text>
     </HStack>,
   ];
 
   return (
-    <Row data={rowData} style={[styles.title]} textStyle={styles.titleText} />
+    <Row data={rowData} style={[styles().title]} textStyle={styles().titleText} />
   );
 };
 
@@ -245,7 +247,7 @@ console.log('c',currentPack)
   if (error) return <ErrorMessage message={error} />;
 
   return (
-    <Box style={styles.container}>
+    <Box style={styles().container}>
       <ItemPicker
         currentPack={selectedPack}
         refetch={refetch}
@@ -254,7 +256,7 @@ console.log('c',currentPack)
 
       {data?.length ? (
         <>
-          <Table style={styles.tableStyle} flexArr={flexArr}>
+          <Table style={styles().tableStyle} flexArr={flexArr}>
             <TitleRow title="Pack List" />
             <Row
               flexArr={flexArr}
@@ -267,9 +269,9 @@ console.log('c',currentPack)
                 "Delete",
                 `${copy ? "Copy" : "Ignore"}`,
               ].map((header, index) => (
-                <Cell key={index} data={header} textStyle={styles.headerText} />
+                <Cell key={index} data={header} textStyle={styles().headerText} />
               ))}
-              style={styles.head}
+              style={styles().head}
             />
             <FlatList
               data={Object.entries(groupedData)}
@@ -314,7 +316,7 @@ console.log('c',currentPack)
           />
         </>
       ) : (
-        <Text style={styles.noItemsText}>Add your First Item</Text>
+        <Text style={styles().noItemsText}>Add your First Item</Text>
       )}
       <WeightUnitDropdown value={weightUnit} onChange={setWeightUnit} />
     </Box>
@@ -322,79 +324,82 @@ console.log('c',currentPack)
 };
 
 // Styles
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 10,
-    width: Platform.OS === "web" ? "100%" : 310,
-  },
-  tableStyle: {
-    width: Platform.OS === "web" ? "100%" : 300,
-    marginVertical: 20,
-  },
-  mainTitle: {
-    marginTop: 10,
-    marginBottom: 10,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  categoryRow: {
-    padding: 10,
-    borderRadius: 5,
-    alignItems: "center",
-    justifyContent: "flex-start",
-  },
-  title: {
-    height: 50,
-    backgroundColor: theme.colors.primary,
-    borderRadius: 10,
-    justifyContent: "center",
-    paddingLeft: 15,
-  },
-  titleText: {
-    fontWeight: "bold",
-    color: "#FFFFFF",
-  },
-  head: {
-    height: 50,
-    borderBottomWidth: 1,
-    borderBottomColor: "#D1D5DB",
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
-  },
-  headerText: {
-    fontWeight: "bold",
-    color: "#000000",
-    fontSize: Platform.OS === "web" ? 12 : 8,
-  },
-  row: {
-    flexDirection: "row",
-    height: 60,
-    alignItems: "center",
-    backgroundColor: "#FFFFFF",
-    borderBottomWidth: 1,
-    borderBottomColor: "#D1D5DB",
-  },
-  infoContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    padding: 25,
-    backgroundColor: "#F8F8F8",
-  },
-  noItemsText: {
-    fontWeight: "bold",
-    fontSize: 16,
-    marginTop: 20,
-    textAlign: "center",
-  },
-  totalWeightBox: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: Platform.OS === "web" ? "100%" : 300,
-    paddingHorizontal: 25,
-    marginVertical: 30,
-    flex: 1,
-  },
-});
+const styles = () => {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } = UseTheme();
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      padding: 10,
+      width: Platform.OS === "web" ? "100%" : 310,
+    },
+    tableStyle: {
+      width: Platform.OS === "web" ? "100%" : 300,
+      marginVertical: 20,
+    },
+    mainTitle: {
+      marginTop: 10,
+      marginBottom: 10,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    categoryRow: {
+      padding: 10,
+      borderRadius: 5,
+      alignItems: "center",
+      justifyContent: "flex-start",
+    },
+    title: {
+      height: 50,
+      backgroundColor: currentTheme.colors.primary,
+      borderRadius: 10,
+      justifyContent: "center",
+      paddingLeft: 15,
+    },
+    titleText: {
+      fontWeight: "bold",
+      color: currentTheme.colors.text,
+    },
+    head: {
+      height: 50,
+      borderBottomWidth: 1,
+      borderBottomColor: currentTheme.colors.border,
+      borderTopLeftRadius: 10,
+      borderTopRightRadius: 10,
+    },
+    headerText: {
+      fontWeight: "bold",
+      color: "#000000",
+      fontSize: Platform.OS === "web" ? 12 : 8,
+    },
+    row: {
+      flexDirection: "row",
+      height: 60,
+      alignItems: "center",
+      backgroundColor: currentTheme.colors.white,
+      borderBottomWidth: 1,
+      borderBottomColor: currentTheme.colors.border,
+    },
+    infoContainer: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      padding: 25,
+      backgroundColor: currentTheme.colors.white,
+    },
+    noItemsText: {
+      fontWeight: "bold",
+      fontSize: 16,
+      marginTop: 20,
+      textAlign: "center",
+    },
+    totalWeightBox: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      width: Platform.OS === "web" ? "100%" : 300,
+      paddingHorizontal: 25,
+      marginVertical: 30,
+      flex: 1,
+    },
+  });
+} 
 
 export default TableContainer;

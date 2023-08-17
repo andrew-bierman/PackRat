@@ -38,6 +38,7 @@ import {
 import { MAPBOX_ACCESS_TOKEN } from "@env";
 
 import { theme } from "../../theme";
+import UseTheme from "../../hooks/useTheme";
 import MapButtonsOverlay from "./MapButtonsOverlay";
 import {
   calculateZoomLevel,
@@ -269,7 +270,7 @@ function NativeMap({ shape: shapeProp }) {
           clusterMaxZoomLevel={14}
           style={{ zIndex: 1 }}
         >
-          <Mapbox.LineLayer id="layer1" style={styles.lineLayer} />
+          <Mapbox.LineLayer id="layer1" style={styles().lineLayer} />
         </Mapbox.ShapeSource>
         {/* // top location */}
         {shape?.features[0]?.geometry?.coordinates?.length > 0 && (
@@ -320,7 +321,7 @@ function NativeMap({ shape: shapeProp }) {
             setTrailCenterPoint([location.latitude, location.longitude]);
           })
         }
-        styles={styles}
+        styles={styles()}
         downloadable={isShapeDownloadable(shape)}
         downloading={downloading}
         shape={shape}
@@ -417,55 +418,59 @@ function NativeMap({ shape: shapeProp }) {
   );
 }
 
-const styles = StyleSheet.create({
-  page: {
-    flex: 1,
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#F5FCFF",
-  },
-  container: {
-    // height: 500,
-    width: "100%",
-    backgroundColor: "white",
-    marginBottom: 20,
-    marginBottom: 20,
-    paddingHorizontal: 5,
-  },
-  map: {
-    flex: 1,
-  },
-  lineLayer: {
-    lineColor: "#16b22d",
-    lineWidth: 4,
-    lineOpacity: 1,
-  },
-  headerView: {
-    position: "absolute",
-    marginTop: 20,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-evenly",
-    width: 100,
-  },
-  headerBtnView: {
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 32,
-    backgroundColor: "white",
-  },
-  button: {
-    position: "absolute",
-    bottom: 10,
-    right: 10,
-    backgroundColor: theme.colors.primary,
-    borderRadius: 50,
-    width: 45,
-    height: 45,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});
+const styles = () => {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
+  return StyleSheet.create({
+    page: {
+      flex: 1,
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center",
+      backgroundColor: "#F5FCFF",
+    },
+    container: {
+      // height: 500,
+      width: "100%",
+      backgroundColor: currentTheme.colors.white,
+      marginBottom: 20,
+      marginBottom: 20,
+      paddingHorizontal: 5,
+    },
+    map: {
+      flex: 1,
+    },
+    lineLayer: {
+      lineColor: "#16b22d",
+      lineWidth: 4,
+      lineOpacity: 1,
+    },
+    headerView: {
+      position: "absolute",
+      marginTop: 20,
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-evenly",
+      width: 100,
+    },
+    headerBtnView: {
+      justifyContent: "center",
+      alignItems: "center",
+      borderRadius: 32,
+      backgroundColor: currentTheme.colors.white,
+    },
+    button: {
+      position: "absolute",
+      bottom: 10,
+      right: 10,
+      backgroundColor: currentTheme.colors.primary,
+      borderRadius: 50,
+      width: 45,
+      height: 45,
+      justifyContent: "center",
+      alignItems: "center",
+    },
+  });
+};
 
 export default NativeMap;

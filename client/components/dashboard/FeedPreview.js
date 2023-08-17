@@ -7,6 +7,7 @@ import { Link } from "expo-router";
 import { StyleSheet } from "react-native";
 import { getPublicPacks, getPublicTrips } from "../../store/feedStore";
 import { theme } from "../../theme";
+import UseTheme from '../../hooks/useTheme';
 import Carousel from '../carousel'
 
 const FeedPreviewScroll = () => {
@@ -27,9 +28,9 @@ const FeedPreviewScroll = () => {
 
         return linkStr ? (
           <Link href={linkStr} key={`${linkStr}`}>
-            <Card key={index} style={styles.feedItem}>
+            <Card key={index} style={styles().feedItem}>
               <HStack justifyContent="space-between">
-                <Text style={styles.feedItemTitle}>{item.name}</Text>
+                <Text style={styles().feedItemTitle}>{item.name}</Text>
                 <Badge colorScheme="info" textTransform={"capitalize"}>
                   {item.type}
                 </Badge>
@@ -48,28 +49,31 @@ const FeedPreview = () => {
   return <FeedPreviewScroll />;
 };
 
-const styles = StyleSheet.create({
-  feedPreview: {
-    flexDirection: "row",
-    width: "100%",
-    marginBottom: 20,
-  },
-  feedItem: {
-    width: 250,
-    height: 100,
-    backgroundColor: theme.colors.primary,
-    marginBottom: 10,
-    padding: 10,
-    borderRadius: 5,
-    marginRight: 10,
-    marginLeft: 10,
-  },
-  feedItemTitle: {
-    fontWeight: "bold",
-    fontSize: 16,
-    color: theme.colors.text,
-    marginBottom: 5,
-  },
-});
+const styles = () => {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } = UseTheme();
+  return StyleSheet.create({
+    feedPreview: {
+      flexDirection: "row",
+      width: "100%",
+      marginBottom: 20,
+    },
+    feedItem: {
+      width: 250,
+      height: 100,
+      backgroundColor: currentTheme.colors.primary,
+      marginBottom: 10,
+      padding: 10,
+      borderRadius: 5,
+      marginRight: 10,
+      marginLeft: 10,
+    },
+    feedItemTitle: {
+      fontWeight: "bold",
+      fontSize: 16,
+      color: currentTheme.colors.text,
+      marginBottom: 5,
+    },
+  });
+}
 
 export default FeedPreview;
