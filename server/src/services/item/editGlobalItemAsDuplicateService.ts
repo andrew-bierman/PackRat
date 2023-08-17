@@ -1,6 +1,6 @@
-import Item from "../../models/itemModel.ts";
-import Pack from "../../models/packModel.ts";
-import { ItemCategoryModel } from "../../models/itemCategory.ts";
+import Item from "../../models/itemModel";
+import Pack from "../../models/packModel";
+import { ItemCategoryModel } from "../../models/itemCategory";
 
 export const editGlobalItemAsDuplicateService = async (itemId, packId, name, weight, quantity, unit, type) => {
     let category = await ItemCategoryModel.findOne({

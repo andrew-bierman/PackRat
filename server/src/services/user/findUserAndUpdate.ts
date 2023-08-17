@@ -1,4 +1,4 @@
-import User from '../../models/userModel.ts';
+import User from '../../models/userModel';
 
 export async function findUserAndUpdate(email: string, data: string,datatype): Promise<any> {
     try {

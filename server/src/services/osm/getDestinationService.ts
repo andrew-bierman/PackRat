@@ -1,5 +1,5 @@
-import Way from "../../models/osm/wayModel.ts";
-import Node from "../../models/osm/nodeModel.ts";
+import Way from "../../models/osm/wayModel";
+import Node from "../../models/osm/nodeModel";
 
 export const getDestinationService = async (id) => {
     let destination = await Way.findById(id);

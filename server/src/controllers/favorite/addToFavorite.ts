@@ -1,6 +1,6 @@
-import User from "../../models/userModel.ts";
-import Pack from "../../models/packModel.ts";
-import { addToFavoriteService } from "../../services/favorite/favorite.service.ts";
+import User from "../../models/userModel";
+import Pack from "../../models/packModel";
+import { addToFavoriteService } from "../../services/favorite/favorite.service";
 
 /**
  * Adds or removes a pack from a user's favorites list and updates the corresponding pack's favorited_by and favorites_count fields.

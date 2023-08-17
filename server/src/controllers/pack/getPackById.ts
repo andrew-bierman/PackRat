@@ -1,4 +1,4 @@
-import { getPackByIdService } from "../../services/pack/pack.service.ts";
+import { getPackByIdService } from "../../services/pack/pack.service";
 
 /**
  * Retrieves a pack by its ID and returns it as a JSON response.

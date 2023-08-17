@@ -1,4 +1,4 @@
-import { getPacksService } from "../../services/pack/pack.service.ts";
+import { getPacksService } from "../../services/pack/pack.service";
 
 /**
  * Retrieves packs associated with a specific owner.

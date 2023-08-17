@@ -1,2 +1,2 @@
-export * from './getWeather.ts'
-export * from './getWeatherWeek.ts'
+export * from './getWeather'
+export * from './getWeatherWeek'

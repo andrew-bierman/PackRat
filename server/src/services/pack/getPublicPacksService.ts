@@ -1,4 +1,4 @@
-import Pack from "../../models/packModel.ts";
+import Pack from "../../models/packModel";
 
 export async function getPublicPacksService(queryBy: string) {
   try {

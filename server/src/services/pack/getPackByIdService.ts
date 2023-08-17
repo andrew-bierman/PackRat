@@ -1,4 +1,4 @@
-import Pack from "../../models/packModel.ts";
+import Pack from "../../models/packModel";
 import mongoose from "mongoose";
 
 export const getPackByIdService = async (packId) => {

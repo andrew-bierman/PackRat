@@ -1,5 +1,5 @@
-import User from "../../models/userModel.ts";
-import Pack from "../../models/packModel.ts";
+import User from "../../models/userModel";
+import Pack from "../../models/packModel";
 
 export const addToFavoriteService = async (packId, userId) => {
     const exists = await User.find(

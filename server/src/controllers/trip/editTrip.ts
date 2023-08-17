@@ -1,4 +1,4 @@
-import Trip from "../../models/tripModel.ts";
+import Trip from "../../models/tripModel";
 
 /**
  * Edits a trip by updating the trip details.

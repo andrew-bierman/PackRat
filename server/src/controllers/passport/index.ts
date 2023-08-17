@@ -1,3 +1,3 @@
-export * from './signInGoogle.ts'
-export * from './signInLocal.ts'
-export * from './signUpLocal.ts'
+export * from './signInGoogle'
+export * from './signInLocal'
+export * from './signUpLocal'
