@@ -24,13 +24,11 @@ import { useEffect } from 'react';
 import { Link, useRouter } from 'expo-router';
 // import { signInWithGoogle } from "../auth/firebase";
 // import { signInWithGoogle } from "../auth/firebase";
-import { useForm } from 'react-hook-form';
-import { StyleSheet } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { InputText, InputTextRules } from '~/components/InputText';
-import { Regex } from '~/utils/regex';
 import { signIn, signInWithGoogle } from '../store/authStore';
+import { StyleSheet } from 'react-native';
 import { InformUser } from '../utils/ToastUtils';
+import UseTheme from '../hooks/useTheme';
 
 // const defaultStyle = {
 //   version: 8,
@@ -66,11 +64,10 @@ import { InformUser } from '../utils/ToastUtils';
 WebBrowser.maybeCompleteAuthSession();
 
 export default function Login() {
-  const {
-    control,
-    handleSubmit,
-    formState: { isValid },
-  } = useForm();
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const demoUser = {
     email: 'email52@email.com',
@@ -91,7 +88,7 @@ export default function Login() {
       placement: 'top-right',
       duration: 3000,
       style: {
-        backgroundColor: 'green',
+        backgroundColor: currentTheme.colors.textPrimary,
       },
     });
     router.push('/');
@@ -101,7 +98,7 @@ export default function Login() {
       title: 'Wrong-password',
       duration: 3000,
       placement: 'top-right',
-      style: { backgroundColor: 'red' },
+      style: { backgroundColor: currentTheme.colors.error },
     });
   }
 
@@ -347,7 +344,11 @@ export default function Login() {
                 onPress={async () => await promptAsync()}
                 colorScheme={'red'}
                 startIcon={
-                  <FontAwesome name="google" size={18} color="white" />
+                  <FontAwesome
+                    name="google"
+                    size={18}
+                    color={currentTheme.colors.white}
+                  />
                 }
               >
                 Sign in with Google

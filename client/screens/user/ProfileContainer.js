@@ -7,12 +7,12 @@ import {
   VStack,
   Image,
   HStack,
-  Button,
 } from 'native-base';
 import { Platform, StyleSheet } from 'react-native';
-import UserDataContainer from '../../components/user/UserDataContainer';
+import UserDataContainer from './UserDataContainer';
 import { useAuth } from '../../auth/provider';
 import { theme } from '../../theme';
+import UseTheme from '../../hooks/useTheme';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 // import useGetPacks from "../../hooks/useGetPacks";
 import { useDispatch, useSelector } from 'react-redux';
@@ -54,6 +54,8 @@ const Header = ({
   favoritesCount,
   isCurrentUser,
 }) => {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
   const profileImage = user?.profileImage ?? null;
   const userRealName = user?.name ?? null;
   const userEmail = user?.email ?? null;
@@ -63,62 +65,59 @@ const Header = ({
     : `@${userEmailSplitFirstHalf}`;
 
   return (
-    <Box w={['100%', '100%', '70%', '50%']} style={styles.infoSection}>
-      <HStack w="100%" alignItems="center" spacing={5}>
-        {isCurrentUser && (
-          <Box alignSelf="flex-start" ml="auto">
-            <SettingsButton />
-          </Box>
+    <Box w={['100%', '100%', '70%', '50%']} style={styles().infoSection}>
+      <Box style={styles().userInfo}>
+        {profileImage ? (
+          <Image
+            source={{ uri: user?.profileImage }}
+            alt="Profile Image"
+            borderRadius={50}
+            size={100}
+            style={{ width: 100, height: 100, borderRadius: 50 }}
+          />
+        ) : (
+          <MaterialCommunityIcons
+            name="account-circle"
+            size={100}
+            color={currentTheme.colors.cardIconColor}
+            style={{
+              width: 100,
+              height: 100,
+              borderRadius: 50,
+              alignSelf: 'center',
+            }}
+          />
         )}
-        <VStack alignItems="center" flex={1}>
-          <Box style={styles.userInfo}>
-            {profileImage ? (
-              <Image
-                source={{ uri: user?.profileImage }}
-                alt="Profile Image"
-                borderRadius={50}
-                size={100}
-                style={{ width: 100, height: 100, borderRadius: 50 }}
-              />
-            ) : (
-              <MaterialCommunityIcons
-                name="account-circle"
-                size={100}
-                color="grey"
-                style={{
-                  width: 100,
-                  height: 100,
-                  borderRadius: 50,
-                  alignSelf: 'center',
-                }}
-              />
-            )}
-            <Text style={styles.userName}>{userRealName}</Text>
-            <Text style={styles.userEmail}>{username}</Text>
-          </Box>
-        </VStack>
-        {isCurrentUser && <Box width={45} />}{' '}
-        {/* This empty box is to offset the space taken by the settings button, ensuring the profile details remain centered. */}
-      </HStack>
-      <Stack direction="row" style={styles.card}>
-        <Box style={styles.cardInfo}>
-          <Text>Trips</Text>
-          <Text>{tripsCount}</Text>
+        <Text style={styles().userName} color={currentTheme.colors.textColor}>
+          {userRealName}
+        </Text>
+        <Text style={styles().userEmail} color={currentTheme.colors.textColor}>
+          {username}
+        </Text>
+      </Box>
+      <Stack direction="row" style={styles().card}>
+        <Box style={styles().cardInfo}>
+          <Text color={currentTheme.colors.textColor}>Trips</Text>
+          <Text color={currentTheme.colors.textColor}>{tripsCount}</Text>
         </Box>
-        <Box style={styles.cardInfo}>
-          <Text>Packs</Text>
-          <Text>{packsCount}</Text>
+        <Box style={styles().cardInfo}>
+          <Text color={currentTheme.colors.textColor}>Packs</Text>
+          <Text color={currentTheme.colors.textColor}>{packsCount}</Text>
         </Box>
-        <Box style={styles.cardInfo}>
-          <Text>Favorites</Text>
-          <Text>{favoritesCount}</Text>
+        <Box style={styles().cardInfo}>
+          <Text color={currentTheme.colors.textColor}>Favorites</Text>
+          <Text color={currentTheme.colors.textColor}>{favoritesCount}</Text>
         </Box>
-        <Box style={styles.cardInfo}>
-          <Text>Certified</Text>
+        <Box style={styles().cardInfo}>
+          <Text color={currentTheme.colors.textColor}>Certified</Text>
           <MaterialCommunityIcons
             name="certificate-outline"
             size={24}
-            color={user?.is_certified_guide ? 'green' : 'grey'}
+            color={
+              user?.is_certified_guide
+                ? currentTheme.colors.cardIconColor
+                : currentTheme.colors.textColor
+            }
           />
         </Box>
       </Stack>
@@ -129,7 +128,8 @@ const Header = ({
 
 export default function ProfileContainer({ id = null }) {
   const dispatch = useDispatch();
-
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
   const authUser = useSelector((state) => state.auth.user);
   const userStore = useSelector((state) => state.userStore);
   const authStore = useSelector((state) => state.auth);
@@ -171,7 +171,7 @@ export default function ProfileContainer({ id = null }) {
   return (
     <VStack
       style={[
-        styles.mainContainer,
+        styles().mainContainer,
         Platform.OS == 'web' ? { minHeight: '100vh' } : null,
       ]}
     >
@@ -187,8 +187,8 @@ export default function ProfileContainer({ id = null }) {
       {isLoading ? (
         <Text>Loading....</Text>
       ) : (
-        <Box style={styles.mainContentContainer}>
-          <Box style={styles.userDataContainer}>
+        <Box style={styles().mainContentContainer}>
+          <Box style={styles().userDataContainer}>
             {favoritesData?.length > 0 ? (
               <UserDataContainer
                 data={favoritesData}
@@ -196,13 +196,17 @@ export default function ProfileContainer({ id = null }) {
                 userId={user?._id}
               />
             ) : (
-              <Text fontSize="2xl" fontWeight="bold" color="white">
+              <Text
+                fontSize="2xl"
+                fontWeight="bold"
+                color={currentTheme.colors.textColor}
+              >
                 No favorites yet
               </Text>
             )}
           </Box>
           {Array.isArray(packsData) && packsData.length > 0 && (
-            <Box style={styles.userDataContainer}>
+            <Box style={styles().userDataContainer}>
               <UserDataContainer
                 data={packsData}
                 type="packs"
@@ -210,9 +214,8 @@ export default function ProfileContainer({ id = null }) {
               />
             </Box>
           )}
-
-          {Array.isArray(tripsData) && tripsData.length > 0 && (
-            <Box style={styles.userDataContainer}>
+          {Array.isArray(tripsData?.trips) && tripsData?.trips.length > 0 && (
+            <Box style={styles().userDataContainer}>
               <UserDataContainer
                 data={tripsData}
                 type="trips"
@@ -226,80 +229,84 @@ export default function ProfileContainer({ id = null }) {
   );
 }
 
-const styles = StyleSheet.create({
-  mainContainer: {
-    backgroundColor: theme.colors.background,
-    flex: 1,
-    alignItems: 'center',
-    padding: 20,
-  },
-  infoSection: {
-    flexDirection: 'column',
-    backgroundColor: '#ffffff',
-    alignItems: 'center',
-    borderRadius: 12,
-    marginBottom: 25,
-    padding: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
+const styles = () => {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
+  return StyleSheet.create({
+    mainContainer: {
+      backgroundColor: currentTheme.colors.background,
+      flex: 1,
+      alignItems: 'center',
+      padding: 20,
     },
-    shadowOpacity: 0.18,
-    shadowRadius: 1.0,
-    elevation: 1,
-    justifyContent: 'center',
-  },
-  userInfo: {
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 15,
-  },
-  userName: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  userEmail: {
-    fontSize: 16,
-    color: 'grey',
-    textAlign: 'center',
-  },
-  card: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    width: '100%',
-    padding: 15,
-    borderRadius: 12,
-    backgroundColor: '#f2f3f7',
-    marginVertical: 15,
-  },
-  cardInfo: {
-    alignItems: 'center',
-  },
-  mainContentContainer: {
-    width: '100%',
-    flex: 1,
-  },
-  userDataContainer: {
-    marginBottom: 25,
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  userDataCard: {
-    borderRadius: 15,
-    backgroundColor: 'white',
-    padding: 10,
-    margin: 5,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
+    infoSection: {
+      flexDirection: 'column',
+      backgroundColor: currentTheme.colors.white,
+      alignItems: 'center',
+      borderRadius: 12,
+      marginBottom: 25,
+      padding: 20,
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 1,
+      },
+      shadowOpacity: 0.18,
+      shadowRadius: 1.0,
+      elevation: 1,
+      justifyContent: 'center',
     },
-    shadowOpacity: 0.18,
-    shadowRadius: 1.0,
-    elevation: 1,
-  },
-});
+    userInfo: {
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginBottom: 15,
+    },
+    userName: {
+      fontSize: 20,
+      fontWeight: 'bold',
+      textAlign: 'center',
+    },
+    userEmail: {
+      fontSize: 16,
+      color: currentTheme.colors.textDarkGrey,
+      textAlign: 'center',
+    },
+    card: {
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      width: '100%',
+      padding: 15,
+      borderRadius: 12,
+      backgroundColor: currentTheme.colors.card,
+      marginVertical: 15,
+    },
+    cardInfo: {
+      alignItems: 'center',
+    },
+    mainContentContainer: {
+      width: '100%',
+      flex: 1,
+    },
+    userDataContainer: {
+      marginBottom: 25,
+      width: '100%',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    userDataCard: {
+      borderRadius: 15,
+      backgroundColor: currentTheme.colors.card,
+      padding: 10,
+      margin: 5,
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 1,
+      },
+      shadowOpacity: 0.18,
+      shadowRadius: 1.0,
+      elevation: 1,
+    },
+  });
+};

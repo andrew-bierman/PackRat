@@ -56,7 +56,7 @@ export default function WeatherCard({
       w={['100%', '100%', '100%', '90%']}
       direction={['column', 'column', 'row', 'row']}
       rounded={['sm', 'sm', 'md', 'lg']}
-      style={styles.desktopContainer}
+      style={styles().desktopContainer}
     >
       <Box style={{ flexDirection: 'row', gap: 15, alignItems: 'center' }}>
         <Octicons
@@ -79,7 +79,7 @@ export default function WeatherCard({
         h={['100%', '100%', '100%', '100%']}
         flex={0.5}
         justifyContent={['space-between', 'space-between', 'none', 'none']}
-        style={styles.card}
+        style={styles().card}
       >
         <Box>
           <Text
@@ -127,10 +127,10 @@ export default function WeatherCard({
           w={['100%', '100%', '100%', '100%']}
           h={['0%', '0%', '100%', '100%']}
           flex={0.5}
-          style={styles.card}
+          style={styles().card}
         >
-          <Box style={styles.weatherInfo}>
-            <Box style={styles.iconsSection}>
+          <Box style={styles().weatherInfo}>
+            <Box style={styles().iconsSection}>
               <FontAwesome5
                 name="cloud-rain"
                 size={18}
@@ -147,8 +147,8 @@ export default function WeatherCard({
             </Box>
             <Text>0%</Text>
           </Box>
-          <Box style={styles.weatherInfo}>
-            <Box style={styles.iconsSection}>
+          <Box style={styles().weatherInfo}>
+            <Box style={styles().iconsSection}>
               <Feather
                 name="droplet"
                 size={18}
@@ -165,8 +165,8 @@ export default function WeatherCard({
             </Box>
             <Text>{weatherObject.main.humidity}%</Text>
           </Box>
-          <Box style={styles.weatherInfo}>
-            <Box style={styles.iconsSection}>
+          <Box style={styles().weatherInfo}>
+            <Box style={styles().iconsSection}>
               <Feather
                 name="wind"
                 size={18}
@@ -190,7 +190,7 @@ export default function WeatherCard({
           h={['0%', '0%', '100%', '100%']}
           flex={0.5}
           direction={['column', 'column', 'row', 'row']}
-          style={styles.cardContainer}
+          style={styles().cardContainer}
         >
           {weatherWeek.map((day, i) => {
             const weatherIconUrl = `https://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png`;
@@ -199,7 +199,7 @@ export default function WeatherCard({
               <Stack
                 key={i}
                 direction={['row', 'row', 'column', 'column']}
-                style={styles.weatherCard}
+                style={styles().weatherCard}
               >
                 <Image
                   src={weatherIconUrl}
@@ -222,10 +222,10 @@ export default function WeatherCard({
         flex={0.5}
         justifyContent="space-around"
         backgroundColor={'#eaeaea'}
-        style={styles.card}
+        style={styles().card}
       >
         {restOfWeek.map((day, index) => (
-          <Box key={index} style={styles.weatherInfo}>
+          <Box key={index} style={styles().weatherInfo}>
             <Text>{dayNumToString(day).slice(0, 3)}</Text>
             <Text>{convertToCelsius(weatherWeek[index].main.temp)}</Text>
           </Box>
@@ -235,51 +235,55 @@ export default function WeatherCard({
   );
 }
 
-const styles = StyleSheet.create({
-  desktopContainer: {
-    gap: 15,
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    backgroundColor: theme.colors.card,
-    padding: 22,
-  },
+const styles = () => {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
+  return StyleSheet.create({
+    desktopContainer: {
+      gap: 15,
+      alignItems: 'center',
+      justifyContent: 'space-around',
+      backgroundColor: currentTheme.colors.card,
+      padding: 22,
+    },
 
-  card: {
-    gap: 10,
-    borderColor: '#f1f5f9',
-    borderWidth: 1,
-    padding: 18,
-    borderRadius: 8,
-    shadowColor: 'black',
-  },
+    card: {
+      gap: 10,
+      borderColor: currentTheme.colors.border,
+      borderWidth: 1,
+      padding: 18,
+      borderRadius: 8,
+      shadowColor: 'black',
+    },
 
-  cardContainer: {
-    alignItems: 'flex-start',
-    gap: 8,
-    borderColor: '#f1f5f9',
-    borderWidth: 1,
-    padding: 18,
-    borderRadius: 8,
-    shadowColor: 'black',
-  },
+    cardContainer: {
+      alignItems: 'flex-start',
+      gap: 8,
+      borderColor: currentTheme.colors.border,
+      borderWidth: 1,
+      padding: 18,
+      borderRadius: 8,
+      shadowColor: 'black',
+    },
 
-  weatherInfo: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    gap: 10,
-    flex: 1,
-  },
-  weatherCard: {
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: 10,
-    flex: 1,
-    width: '100%',
-  },
-  iconsSection: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 15,
-  },
-});
+    weatherInfo: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      gap: 10,
+      flex: 1,
+    },
+    weatherCard: {
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      gap: 10,
+      flex: 1,
+      width: '100%',
+    },
+    iconsSection: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 15,
+    },
+  });
+};
