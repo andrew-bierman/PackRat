@@ -4,7 +4,8 @@ import { useDispatch } from "react-redux";
 import { deletePackItem } from "../../store/packsStore";
 import { CustomModal } from "../modal";
 import { deleteGlobalItem } from "../../store/globalItemsStore";
-
+import { isConnected } from "~/utils/netInfo";
+import { InformUser } from "~/utils/ToastUtils";
 export const DeletePackItemModal = ({ itemId, pack, refetch, setRefetch = () => {} }) => {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const dispatch = useDispatch();
@@ -12,10 +13,24 @@ export const DeletePackItemModal = ({ itemId, pack, refetch, setRefetch = () => 
   const closeModalHandler = () => setIsModalOpen(false);
 
   const onTrigger = () => {
-    setIsModalOpen(true);
+    isConnected().then(connected => {
+      if(connected) {
+        setIsModalOpen(true);
+      } else {
+        InformUser({
+          title : "You are not Connected to Internet",
+          placement: "bottom",
+          duration: 2000,
+          style: {
+            backgroundColor: "red",
+          },
+        })
+      }
+    })
   };
 
   const deleteItemHandler = () => {
+    
     if (pack) {
       dispatch(deletePackItem({ itemId, currentPackId: pack["_id"] }));
     } else {

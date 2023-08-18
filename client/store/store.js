@@ -50,7 +50,7 @@ const rootReducer = combineReducers({
 const persistConfig = {
   key: "root",
   storage: AsyncStorage,
-  whitelist: ["auth"], // add reducers to persist here
+  whitelist: ["auth", 'globalItems'], // add reducers to persist here
 };
 
 // create persisted reducer
