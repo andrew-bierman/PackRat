@@ -3,12 +3,14 @@ import { theme } from "../theme";
 import { Stack, Box, Text } from "native-base";
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import { AddPack } from "./pack/AddPack";
-
+import { AddPack, AddPackContainer } from "./pack/AddPack";
+import UseTheme from "../hooks/useTheme";
 import PackContainer from "./pack/PackContainer";
-import WideColumn from "./WideColumn";
+import ScoreContainer from "./ScoreContainer";
 
 export const GearList = () => {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
   return (
     <Stack
       alignSelf="center"
@@ -16,7 +18,7 @@ export const GearList = () => {
       rounded={["none", "none", "md", "lg"]}
       style={{
         flexDirection: "column",
-        backgroundColor: theme.colors.card,
+        backgroundColor: currentTheme.colors.card,
         gap: 15,
         marginVertical: 10,
 
@@ -27,12 +29,12 @@ export const GearList = () => {
         <FontAwesome5
           name="clipboard-check"
           size={20}
-          color={theme.colors.cardIconColor}
+          color={currentTheme.colors.cardIconColor}
         />
         <Text
           style={{
-            color: theme.colors.textPrimary,
-            fontSize: theme.font.size,
+            color: currentTheme.colors.textPrimary,
+            fontSize: currentTheme.font.size,
             paddingVertical: 12,
             fontWeight: 600,
           }}
@@ -40,9 +42,10 @@ export const GearList = () => {
           Gear List
         </Text>
       </Box>
-      <AddPack />
-      <PackContainer />
-      <WideColumn />
+      {/* <AddPack/> */}
+      <AddPackContainer />
+      <PackContainer isCreatingTrip={true} />
+      {/* <ScoreContainer /> */}
     </Stack>
   );
 };

@@ -1,0 +1,50 @@
+{
+  "name": "packrat",
+  "version": "0.0.1",
+  "description": "PackRat is the ultimate adventure planner designed for those who love to explore the great outdoors. Our app helps users plan and organize their trips with ease, whether it's a weekend camping trip, a day hike, or a cross-country road trip.",
+  "main": "index.js",
+  "scripts": {
+    "clean": "rm -rf server/node_modules client/node_modules server/package-lock.json client/package-lock.json",
+    "build": "npm run expo:export",
+    "install:all": "npm install --prefix server && npm install --prefix client && npm install",
+    "setup": "npm run clean && npm run install:all && npm run setup:client && npm run setup:server",
+    "setup:client": "npm --prefix client run setup",
+    "setup:server": "npm --prefix server run setup",
+    "expo:export": "cd client && cp app.example.json app.json && npx expo export --platform web",
+    "start": "npm run start:ts-node --prefix server",
+    "start:prod": "npm run start:prod --prefix server",
+    "dev:client": "npm start --prefix client",
+    "dev:server": "npm start --prefix server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andrew-bierman/PackRat.git"
+  },
+  "keywords": [
+    "outdoors",
+    "hiking",
+    "camping",
+    "road trip",
+    "travel",
+    "adventure",
+    "planner",
+    "packing",
+    "packing list",
+    "packing checklist",
+    "packing planner",
+    "packing organizer",
+    "packing app",
+    "packing checklist app",
+    "packing list app",
+    "packing planner app"
+  ],
+  "author": "Andrew Bierman",
+  "license": "SEE LICENSE IN LICENSE.txt",
+  "bugs": {
+    "url": "https://github.com/andrew-bierman/PackRat/issues"
+  },
+  "homepage": "https://github.com/andrew-bierman/PackRat#readme",
+  "devDependencies": {
+    "expo-cli": "^5.0.2"
+  }
+}
