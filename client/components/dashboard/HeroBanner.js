@@ -59,7 +59,7 @@ const HeroSection = ({ onSelect }) => {
     }
   };
 
-  const user = useSelector((state) => state.auth?.user);
+const user = useSelector((state) => state.auth?.user);
 
   const { name } = user;
   const firstNameOrUser = name.split(" ")[0] ?? "User";
