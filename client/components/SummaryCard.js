@@ -3,7 +3,7 @@ import { Text, StyleSheet } from "react-native";
 import { ItemRow } from "./ItemRow";
 import { theme } from "../theme";
 import { FontAwesome } from "@expo/vector-icons";
-
+import UseTheme from "../hooks/useTheme";
 const dummyData = [
   "First-aid kit",
   "Water bottles",
@@ -12,6 +12,9 @@ const dummyData = [
 ];
 
 export default function SummaryCard() {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
+
   const handleDelete = () => {};
   const handleEdit = () => {};
 
@@ -36,7 +39,7 @@ export default function SummaryCard() {
           style={{ padding: 8, alignSelf: "flex-start" }}
           name="plus-circle"
           size={24}
-          color={theme.colors.cardIconColor}
+          color={currentTheme.colors.cardIconColor}
         />
       </Box>
     </Box>
