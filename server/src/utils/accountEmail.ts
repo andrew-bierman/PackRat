@@ -1,4 +1,4 @@
-import { SEND_GRID_API_KEY, STMP_EMAIL } from "../config.ts";
+import { SEND_GRID_API_KEY, STMP_EMAIL } from "../config";
 
 import sgMail from "@sendgrid/mail";
 

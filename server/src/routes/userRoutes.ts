@@ -13,17 +13,17 @@ import {
   getGoogleAuthURL,
   googleSignin,
   getMe,
-} from "../controllers/user/index.ts";
-import auth from "../middleware/auth.ts";
-import * as validator from "../middleware/validators/index.ts";
+} from "../controllers/user/index";
+import auth from "../middleware/auth";
+import * as validator from "../middleware/validators/index";
 
 import {
   signInLocal,
   signUpLocal,
   signInGoogle,
-} from "../controllers/passport/index.ts";
-import { REDIRECT_URL } from "../config.ts";
-import { emailExists, updatePassword, checkCode } from "../controllers/auth/index.ts";
+} from "../controllers/passport/index";
+import { REDIRECT_URL } from "../config";
+import { emailExists, updatePassword, checkCode } from "../controllers/auth/index";
 
 const router = express.Router();
 

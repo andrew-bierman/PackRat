@@ -1,2 +1,2 @@
-export * from './getAIResponse.ts'
-export * from './getUserChats.ts'
+export * from './getAIResponse'
+export * from './getUserChats'

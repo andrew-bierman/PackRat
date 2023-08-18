@@ -1,4 +1,4 @@
-import { updateDatabaseWithGeoJSONDataFromOverpass } from "./updateDatabaseWithGeoJSONDataFromOverpass.ts";
+import { updateDatabaseWithGeoJSONDataFromOverpass } from "./updateDatabaseWithGeoJSONDataFromOverpass";
 import osmtogeojson from "osmtogeojson";
 import axios from "axios";
 

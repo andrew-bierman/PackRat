@@ -1,4 +1,4 @@
-import { editGlobalItemAsDuplicateService } from "../../services/item/item.service.ts";
+import { editGlobalItemAsDuplicateService } from "../../services/item/item.service";
 
 /**
  * Edit a global item by duplicating it with new changes.

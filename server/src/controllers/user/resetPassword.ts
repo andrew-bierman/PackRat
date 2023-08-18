@@ -1,4 +1,4 @@
-import User from "../../models/userModel.ts";
+import User from "../../models/userModel";
 
 /**
  * Resets the user's password.

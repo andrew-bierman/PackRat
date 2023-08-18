@@ -1,4 +1,4 @@
-import { getPublicTripsService } from "../../services/trip/getPublicTripService.ts";
+import { getPublicTripsService } from "../../services/trip/getPublicTripService";
 
 /**
  * Retrieves public trips based on the given query parameter.

@@ -1,14 +1,14 @@
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
 import bcrypt from "bcrypt";
-import User from "../../models/userModel.ts";
+import User from "../../models/userModel";
 import {
   STMP_EMAIL,
   STMP_PASSWORD,
   CLIENT_URL,
   JWT_SECRET,
   SEND_GRID_API_KEY,
-} from "../../config.ts";
+} from "../../config";
 
 import sgMail from "@sendgrid/mail";
 

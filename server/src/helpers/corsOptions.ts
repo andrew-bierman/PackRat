@@ -1,5 +1,5 @@
-import { isOriginAllowed } from "./isOriginAllowed.ts";
-import {  CORS_METHODS,CORS_ORIGIN } from "../config.ts";
+import { isOriginAllowed } from "./isOriginAllowed";
+import {  CORS_METHODS,CORS_ORIGIN } from "../config";
 
 export const corsOptions = {
     origin: function (origin: string, callback: any) {

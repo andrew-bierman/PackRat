@@ -1,4 +1,4 @@
-import User from "../../models/userModel.ts";
+import User from "../../models/userModel";
 
 /**
  * Retrieves a user by their ID from the database.

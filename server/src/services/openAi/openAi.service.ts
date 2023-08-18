@@ -1,2 +1,2 @@
-export * from './getAIResponseService.ts';
-export * from './getUserChatsService.ts';
+export * from './getAIResponseService';
+export * from './getUserChatsService';

@@ -1,6 +1,6 @@
-import Pack from "../../models/packModel.ts";
+import Pack from "../../models/packModel";
 import mongoose from "mongoose";
-import { calculatePackScore } from "../../utils/scorePack.ts";
+import { calculatePackScore } from "../../utils/scorePack";
 
 export async function scorePackService(packId: string) {
   try {

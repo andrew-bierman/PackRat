@@ -1,5 +1,5 @@
-import User from "../../models/userModel.ts";
-import { addTemplateService } from "../../services/template/template.service.ts";
+import User from "../../models/userModel";
+import { addTemplateService } from "../../services/template/template.service";
 
 /**
  * Adds a template to the database.

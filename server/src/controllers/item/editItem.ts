@@ -1,4 +1,4 @@
-import { editItemService } from "../../services/item/item.service.ts";
+import { editItemService } from "../../services/item/item.service";
 
 export const editItem = async (req, res) => {
   try {

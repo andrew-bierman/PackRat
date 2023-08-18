@@ -1,4 +1,4 @@
-import Item from "../../models/itemModel.ts";
+import Item from "../../models/itemModel";
 
 
 export const deleteGlobalItemService = async (itemId) => {

@@ -1,4 +1,4 @@
-import User from "../models/userModel.js";
+import User from "../models/userModel";
 
 export const loginUser = async ({ email, password, from }: { email: string, password: string, from: string }) => {
   let user:any = [];
