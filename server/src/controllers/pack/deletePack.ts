@@ -1,4 +1,4 @@
-import { deletePackService } from "../../services/pack/pack.service.ts";
+import { deletePackService } from "../../services/pack/pack.service";
 
 /**
  * Deletes a pack.

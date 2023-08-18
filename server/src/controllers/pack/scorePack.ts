@@ -1,5 +1,5 @@
 
-import { scorePackService } from "../../services/pack/pack.service.ts";
+import { scorePackService } from "../../services/pack/pack.service";
 
 /**
  * Scores a pack by calculating its score and updating the pack object in the database.

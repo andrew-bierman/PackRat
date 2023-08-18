@@ -1,7 +1,7 @@
-import Item from "../../models/itemModel.ts";
-import Pack from "../../models/packModel.ts";
-import { ItemCategoryModel } from "../../models/itemCategory.ts";
-import { ItemCategoryEnum } from "../../utils/itemCategory.ts";
+import Item from "../../models/itemModel";
+import Pack from "../../models/packModel";
+import { ItemCategoryModel } from "../../models/itemCategory";
+import { ItemCategoryEnum } from "../../utils/itemCategory";
 
 export const addItemGlobalService = async (name, weight, quantity, unit, type) => {
     let category = null;

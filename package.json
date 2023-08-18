@@ -12,6 +12,7 @@
     "setup:server": "npm --prefix server run setup",
     "expo:export": "cd client && cp app.example.json app.json && npx expo export --platform web",
     "start": "npm run start:ts-node --prefix server",
+    "start:prod": "npm run start:prod --prefix server",
     "dev:client": "npm start --prefix client",
     "dev:server": "npm start --prefix server"
   },

@@ -1,4 +1,4 @@
-import { addTripService } from "../../services/trip/addTripService.ts";
+import { addTripService } from "../../services/trip/addTripService";
 
 /**
  * Adds a trip to the database.

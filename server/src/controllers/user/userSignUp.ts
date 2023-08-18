@@ -1,10 +1,10 @@
-import User from "../../models/userModel.ts";
+import User from "../../models/userModel";
 import bycrypt from "bcrypt";
 import bcrypt from "bcrypt";
-import { sendWelcomeEmail, resetEmail } from "../../utils/accountEmail.ts";
+import { sendWelcomeEmail, resetEmail } from "../../utils/accountEmail";
 import {
     JWT_SECRET,
-} from "../../config.ts";
+} from "../../config";
 
 /**
  * Sign up a user.

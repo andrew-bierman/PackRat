@@ -1,4 +1,4 @@
-import { addPackService } from "../../services/pack/pack.service.ts";
+import { addPackService } from "../../services/pack/pack.service";
 
 /**
  * Adds a new pack to the database.

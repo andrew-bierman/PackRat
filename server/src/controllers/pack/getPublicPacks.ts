@@ -1,4 +1,4 @@
-import { getPublicPacksService } from "../../services/pack/pack.service.ts";
+import { getPublicPacksService } from "../../services/pack/pack.service";
 
 /**
  * Retrieves public packs based on the given query parameter.

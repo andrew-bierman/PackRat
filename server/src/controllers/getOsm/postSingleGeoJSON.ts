@@ -1,4 +1,4 @@
-import { postSingleGeoJSONService } from "../../services/osm/osm.service.ts";
+import { postSingleGeoJSONService } from "../../services/osm/osm.service";
 
 /**
  * Handles the POST request for a single GeoJSON.

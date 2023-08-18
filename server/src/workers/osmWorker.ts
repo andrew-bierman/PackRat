@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
-import Way from '../models/osm/wayModel.js';
-import { findOrCreateMany } from '../utils/osmFunctions/modelHandlers.js';
+import Way from '../models/osm/wayModel';
+import { findOrCreateMany } from '../utils/osmFunctions/modelHandlers';
 
 export async function processJob(job) {
   const features = job.data;

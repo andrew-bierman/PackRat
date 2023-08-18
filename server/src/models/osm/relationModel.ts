@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import myDB from "../dbConnection.ts";
-import { toGeoJSON } from "../../utils/osmFunctions/modelHandlers.ts";
+import myDB from "../dbConnection";
+import { toGeoJSON } from "../../utils/osmFunctions/modelHandlers";
 
 const { Schema } = mongoose;
 

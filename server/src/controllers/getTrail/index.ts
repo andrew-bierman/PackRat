@@ -1,1 +1,1 @@
-export * from './getTrails.ts'
+export * from './getTrails'

@@ -1,5 +1,5 @@
-import Item from "../../models/itemModel.ts";
-import { getItemsService } from "../../services/item/item.service.ts";
+import Item from "../../models/itemModel";
+import { getItemsService } from "../../services/item/item.service";
 
 /**
  * Retrieves a list of items associated with a pack.

@@ -1,4 +1,4 @@
-import Pack from "../../models/packModel.ts";
+import Pack from "../../models/packModel";
 
 export const duplicatePublicPackService = async (packId, ownerId, items) => {
   let pack = await Pack.findById(packId);

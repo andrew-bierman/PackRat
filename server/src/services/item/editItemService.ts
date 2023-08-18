@@ -1,5 +1,5 @@
-import Item from "../../models/itemModel.ts";
-import { ItemCategoryModel } from "../../models/itemCategory.ts";
+import Item from "../../models/itemModel";
+import { ItemCategoryModel } from "../../models/itemCategory";
 
 export const editItemService = async (_id, name, weight, unit, quantity, type) => {
     const category = await ItemCategoryModel.findOne({

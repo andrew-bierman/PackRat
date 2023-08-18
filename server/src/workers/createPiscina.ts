@@ -1,5 +1,5 @@
 import path from "path";
-import { Piscina } from "piscina";
+import Piscina from "piscina";
 
 function createPiscina(relativePath) {
   return new Piscina({

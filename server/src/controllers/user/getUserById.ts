@@ -1,4 +1,4 @@
-import { getUserByIdService } from "../../services/user/getUserByIdService.ts";
+import { getUserByIdService } from "../../services/user/getUserByIdService";
 
 /**
  * Retrieves a user by their ID from the database and returns the user object as a JSON response.

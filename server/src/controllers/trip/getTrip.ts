@@ -1,5 +1,5 @@
-import Trip from "../../models/tripModel.ts";
-import { getTripsService } from "../../services/trip/getTripsService.ts";
+import Trip from "../../models/tripModel";
+import { getTripsService } from "../../services/trip/getTripsService";
 
 /**
  * Retrieves trips belonging to a specific owner.
