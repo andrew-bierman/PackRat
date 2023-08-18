@@ -10,7 +10,6 @@ build/
 local.properties
 *.iml
 *.hprof
-gradle.properties
 
 # Bundle artifacts
 *.jsbundle
