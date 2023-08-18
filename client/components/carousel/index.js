@@ -36,12 +36,11 @@ const Carousel = ({ children, itemWidth }) => {
       }}
     >
       <ScrollButton
-        iconColor={iconColor}
         direction="left"
         onPress={() => scrollToIndex(currentIndex - 1)}
         disabled={currentIndex === 0}
       />
-      
+
       <ScrollView
 
         ref={scrollViewRef}
@@ -61,7 +60,6 @@ const Carousel = ({ children, itemWidth }) => {
         ))}
       </ScrollView>
       <ScrollButton
-        iconColor={iconColor}
         direction="right"
         onPress={() => scrollToIndex(currentIndex + 1)}
         disabled={currentIndex === children.length - 1}
