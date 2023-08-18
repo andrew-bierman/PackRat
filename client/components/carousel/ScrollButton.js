@@ -2,7 +2,7 @@ import React from "react";
 
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-const ScrollButton = ({ direction, onPress, iconColor = 'white' }) => {
+const ScrollButton = ({ direction, onPress }) => {
   return (
     <TouchableOpacity
       activeOpacity={0.8}
@@ -12,6 +12,7 @@ const ScrollButton = ({ direction, onPress, iconColor = 'white' }) => {
       {direction === "left" && <Text style={styles.iconStyles}>&lang;</Text>}
       {direction != "left" && <Text style={styles.iconStyles}>&rang;</Text>}
     </TouchableOpacity>
+  )
 };
 
 const styles = StyleSheet.create({
