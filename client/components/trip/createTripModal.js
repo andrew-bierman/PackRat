@@ -96,9 +96,9 @@ export const SaveTripContainer = ({ dateRange }) => {
     const numNights =
       dateRange.startDate && dateRange.endDate
         ? intervalToDuration({
-            start: dateRange.startDate,
-            end: dateRange.endDate,
-          }).days
+          start: dateRange.startDate,
+          end: dateRange.endDate,
+        }).days
         : "";
     const duration = {
       numberOfNights: numNights,

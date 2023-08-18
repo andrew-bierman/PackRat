@@ -1,3 +1,5 @@
+/** @format */
+
 import { View, StyleSheet, Image, Text } from "react-native";
 
 import { Link } from "expo-router";
@@ -47,7 +49,7 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
           <SVGLogoComponent
             width={isMobile ? 48 : 64}
             height={isMobile ? 48 : 64}
-            fill="#fff"
+            fill='#fff'
           />
         </View>
         <Text
@@ -55,35 +57,34 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
             color: currentTheme.colors.text,
             fontSize: isMobile ? 28 : 48,
             fontWeight: 900,
-          }}
-        >
+          }}>
           PackRat
         </Text>
       </View>
       {isMobile ? (
-        <Link href="/drawer">
+        <Link href='/drawer'>
           <EvilIcons
-            name="navicon"
+            name='navicon'
             size={48}
             color={currentTheme.colors.iconColor}
           />
         </Link>
       ) : (
         <View style={desktopNav}>
-          <Link href="/">
+          <Link href='/'>
             <View style={isMobile ? styles.mobileLink : styles.link}>
               <Entypo
-                name="home"
+                name='home'
                 size={24}
                 color={currentTheme.colors.iconColor}
               />
               <Text>Home</Text>
             </View>
           </Link>
-          <Link href="/feed">
+          <Link href='/feed'>
             <View style={isMobile ? styles.mobileLink : styles.link}>
               <MaterialCommunityIcons
-                name="newspaper-variant"
+                name='newspaper-variant'
                 size={24}
                 color={currentTheme.colors.iconColor}
               />
@@ -91,20 +92,20 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
               <Text>Feed</Text>
             </View>
           </Link>
-          <Link href="/trips">
+          <Link href='/trips'>
             <View style={isMobile ? styles.mobileLink : styles.link}>
               <MaterialCommunityIcons
-                name="routes"
+                name='routes'
                 size={24}
                 color={currentTheme.colors.iconColor}
               />
               <Text>Trips</Text>
             </View>
           </Link>
-          <Link href="/packs">
+          <Link href='/packs'>
             <View style={isMobile ? styles.mobileLink : styles.link}>
               <MaterialIcons
-                name="backpack"
+                name='backpack'
                 size={24}
                 color={currentTheme.colors.iconColor}
               />
@@ -112,20 +113,20 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
               <Text>Packs</Text>
             </View>
           </Link>
-          <Link href="/about">
+          <Link href='/about'>
             <View style={isMobile ? styles.mobileLink : styles.link}>
               <MaterialIcons
-                name="info"
+                name='info'
                 size={24}
                 color={currentTheme.colors.iconColor}
               />
               <Text>About</Text>
             </View>
           </Link>
-          <Link href="profile">
+          <Link href='profile'>
             <View style={isMobile ? styles.mobileLink : styles.link}>
               <FontAwesome
-                name="book"
+                name='book'
                 size={24}
                 color={currentTheme.colors.iconColor}
               />
@@ -134,7 +135,7 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
           </Link>
           <View style={isMobile ? styles.mobileLink : styles.link}>
             <MaterialIcons
-              name="logout"
+              name='logout'
               size={24}
               color={currentTheme.colors.iconColor}
             />
@@ -156,20 +157,19 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
           color: currentTheme.colors.text,
           fontSize: isMobile ? 28 : 48,
           fontWeight: 900,
-        }}
-      >
+        }}>
         PackRat
       </Text>
-      <Link href="/">
+      <Link href='/'>
         <View style={isMobile ? styles.mobileLink : styles.link}>
-          <Entypo name="home" size={24} color={currentTheme.colors.iconColor} />
+          <Entypo name='home' size={24} color={currentTheme.colors.iconColor} />
           <Text>Home</Text>
         </View>
       </Link>
-      <Link href="/sign-in">
+      <Link href='/sign-in'>
         <View style={isMobile ? styles.mobileLink : styles.link}>
           <MaterialIcons
-            name="login"
+            name='login'
             size={24}
             color={currentTheme.colors.iconColor}
           />
