@@ -33,6 +33,7 @@ export default function Items() {
   useEffect(() => {
         isConnected().then(connected => {
           if(connected) {
+            // Not allow to get items unless the offline request will be called
             offlineRequest.length === 0 && dispatch(getItemsGlobal({ limit, page }))
           } else {
             setOffline(true)
