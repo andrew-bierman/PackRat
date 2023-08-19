@@ -1,7 +1,9 @@
 {
   "extends": "@tsconfig/react-native/tsconfig.json",
   "compilerOptions": {
-    "lib": ["es2022"],
+    "lib": [
+      "es2022"
+    ],
     "alwaysStrict": false,
     "strictNullChecks": false,
     "strictBindCallApply": false,
@@ -12,19 +14,46 @@
     "useUnknownInCatchVariables": false,
     "baseUrl": ".",
     "paths": {
-      "~/config/*": ["config/*"],
-      "~/constants/*": ["constants/*"],
-      "~/components/*": ["components/*"],
-      "~/utils/*": ["utils/*"],
-      "~/hooks/*": ["hooks/*"],
-      "~/screens/*": ["screens/*"],
-      "~/theme/*": ["theme/*"],
+      "~/config/*": [
+        "config/*"
+      ],
+      "~/constants/*": [
+        "constants/*"
+      ],
+      "~/components/*": [
+        "components/*"
+      ],
+      "~/utils/*": [
+        "utils/*"
+      ],
+      "~/hooks/*": [
+        "hooks/*"
+      ],
+      "~/screens/*": [
+        "screens/*"
+      ],
+      "~/theme/*": [
+        "theme/*"
+      ]
     },
+    "incremental": true,
+    "jsx": "preserve",
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
   "exclude": [
     "node_modules",
     "babel.config.js",
     "metro.config.js",
     "jest.config.js"
+  ],
+  "include": [
+    "next-env.d.ts",
+    ".next/types/**/*.ts",
+    "**/*.ts",
+    "**/*.tsx"
   ]
 }
