@@ -1,5 +1,5 @@
 import React from "react";
-import { Platform, StyleSheet } from "react-native";
+import { Dimensions, Platform, StyleSheet } from "react-native";
 import { VStack, Box, ScrollView } from "native-base";
 import { theme } from "../../theme";
 import HeroBanner from "../../components/dashboard/HeroBanner";
@@ -7,6 +7,8 @@ import QuickActionsSection from "../../components/dashboard/QuickActionSection";
 import FeedPreview from "../../components/dashboard/FeedPreview";
 import Section from "../../components/dashboard/Section";
 import SectionHeader from "../../components/dashboard/SectionHeader";
+
+const { height, width } = Dimensions.get('window')
 
 const Dashboard = () => {
   return (
@@ -39,15 +41,16 @@ const Dashboard = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexGrow: 1,
     backgroundColor: theme.colors.background,
-    width: "100%",
+    width: width,
+    alignSelf: 'center'
+
   },
   content: {
-    flexGrow: 1,
-    justifyContent: "flex-start",
-    alignItems: "stretch",
-    paddingHorizontal: 20,
+    // flexGrow: 1,
+    // justifyContent: "flex-start",
+    // alignItems: "stretch",
+    // paddingHorizontal: 20,
   },
   cardContainer: {
     flexDirection: "column",

@@ -1,29 +1,35 @@
 import React, { useRef, useState } from "react";
-import { ScrollView, StyleSheet } from "react-native";
+import { ScrollView, StyleSheet, Platform, View, Dimensions } from "react-native";
 import { VStack } from "native-base";
 import ScrollButton from "./ScrollButton";
 
-const Carousel = ({ children, itemWidth }) => {
-  const scrollViewRef = useRef();
-  const [scrollX, setScrollX] = useState(0);
+const { height, width } = Dimensions.get('window')
 
-  const scroll = (direction) => {
-    const delta = direction === "left" ? -itemWidth : itemWidth;
-    const x = scrollX + delta;
-    if (scrollViewRef.current) {
+const Carousel = ({ children = [], itemWidth }) => {
+  const scrollViewRef = useRef();
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const handleScroll = (event) => {
+    const contentOffset = event.nativeEvent.contentOffset;
+    const newIndex = Math.round(contentOffset.x / itemWidth);
+    setCurrentIndex(newIndex);
+  };
+
+  const scrollToIndex = (index) => {
+    if (index >= 0 && index < children.length && scrollViewRef.current) {
       scrollViewRef.current.scrollTo({
-        x,
+        x: (index * (itemWidth + 20)),
         y: 0,
         animated: true,
       });
-      setScrollX(x); // update scrollX here
+      setCurrentIndex(index);
     }
   };
 
   return (
     <VStack
       style={{
-        width: "100%",
+        width: Platform.OS === "web" ? '100%' : width * 0.9,
         justifyContent: "center",
         alignItems: "center",
         flexDirection: "row",
@@ -31,23 +37,32 @@ const Carousel = ({ children, itemWidth }) => {
     >
       <ScrollButton
         direction="left"
-        scrollViewRef={scrollViewRef}
-        onPress={() => scroll("left")}
+        onPress={() => scrollToIndex(currentIndex - 1)}
+        disabled={currentIndex === 0}
       />
+
       <ScrollView
+
         ref={scrollViewRef}
-        horizontal={true}
-        onScroll={(event) => setScrollX(event.nativeEvent.contentOffset.x)}
-        scrollEventThrottle={16}
+        horizontal
+        scrollEnabled={Platform.OS === "web" ? true : false}
+        gestureEnabled={false} // Add this prop
         style={styles.carousel}
         showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{ flexDirection: 'row' }}
+        pagingEnabled
+        onMomentumScrollEnd={handleScroll}
       >
-        {children}
+        {children && children.map((child, index) => (
+          <VStack key={index} style={{ width: itemWidth + 10, marginRight: 10, marginTop: 10, flexDirection: 'row' }}>
+            {child}
+          </VStack>
+        ))}
       </ScrollView>
       <ScrollButton
         direction="right"
-        scrollViewRef={scrollViewRef}
-        onPress={() => scroll("right")}
+        onPress={() => scrollToIndex(currentIndex + 1)}
+        disabled={currentIndex === children?.length - 1}
       />
     </VStack>
   );
@@ -56,7 +71,7 @@ const Carousel = ({ children, itemWidth }) => {
 const styles = StyleSheet.create({
   carousel: {
     flexDirection: "row",
-    width: "100%",
+    width: Platform.OS === 'web' ? "100%" : width * 0.8,
   },
 });
 
