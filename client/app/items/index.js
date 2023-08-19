@@ -27,13 +27,13 @@ export default function Items() {
   const isLoading = useSelector((state) => state.globalItems.isLoading);
   const isError = useSelector((state) => state.globalItems.isError);
   const [offline, setOffline] = useState(false);
-
+  const offlineRequest = useSelector(state => state.offlineRequest.requests)
   
   const dispatch = useDispatch();
   useEffect(() => {
         isConnected().then(connected => {
           if(connected) {
-            dispatch(getItemsGlobal({ limit, page }));
+            offlineRequest.length === 0 && dispatch(getItemsGlobal({ limit, page }))
           } else {
             setOffline(true)
             InformUser({
@@ -46,7 +46,7 @@ export default function Items() {
             })
           }
         })
-  }, [limit, page, refetch]);
+  }, [limit, page, refetch,offlineRequest]);
 
   return (
     <ScrollView>

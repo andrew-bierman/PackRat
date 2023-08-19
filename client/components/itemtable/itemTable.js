@@ -100,7 +100,7 @@ export const ItemsTable = ({
             <Loader />
           ) : (
             data.globalItems.items.map((item, index) => {
-              return <TableItem key={index} itemData={item} />;
+              return <TableItem key={index} itemData={item}  />;
             })
           )}
         </Box>
