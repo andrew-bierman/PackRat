@@ -1,6 +1,7 @@
 import express from "express";
 import * as validator from "../middleware/validators/index";
 import { addToFavorite, getFavoritePacksByUser, getUserFavorites } from "../controllers/favorite/index";
+import middlewareHandler from "../middleware/index";
 
 const router = express.Router();
 
@@ -52,7 +53,7 @@ router.post("/", validator.addToFavorite, addToFavorite);
  *       '500':
  *         description: Error retrieving favorites
  */
-router.get("/user/:userId", getUserFavorites);
+router.get("/user/:userId",[middlewareHandler.auth.verifyUserToken], getUserFavorites);
 
 /**
  * @swagger
@@ -75,6 +76,6 @@ router.get("/user/:userId", getUserFavorites);
  *       '500':
  *         description: Error retrieving favorite packs
  */
-router.get("/user/:userId/packs", getFavoritePacksByUser);
+router.get("/user/:userId/packs", [middlewareHandler.auth.verifyUserToken], getFavoritePacksByUser);
 
 export default router;

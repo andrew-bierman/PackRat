@@ -10,6 +10,7 @@ import {
   duplicatePublicPack,
 } from "../controllers/pack/index";
 import * as validator from "../middleware/validators/index";
+import middlewareHandler from "../middleware";
 
 const router = express.Router();
 
@@ -32,7 +33,7 @@ const router = express.Router();
  *       '500':
  *         description: Error retrieving public packs
  */
-router.get("/", getPublicPacks);
+router.get("/",[middlewareHandler.auth.verifyUserToken], getPublicPacks);
 
 /**
  * @swagger
@@ -55,7 +56,7 @@ router.get("/", getPublicPacks);
  *       '500':
  *         description: Error retrieving packs by owner ID
  */
-router.get("/:ownerId", validator.getPacks, getPacks);
+router.get("/:ownerId",[middlewareHandler.auth.verifyUserToken], validator.getPacks, getPacks);
 
 /**
  * @swagger
@@ -78,7 +79,7 @@ router.get("/:ownerId", validator.getPacks, getPacks);
  *       '500':
  *         description: Error retrieving pack by ID
  */
-router.get("/p/:packId", validator.getPackById, getPackById);
+router.get("/p/:packId",[middlewareHandler.auth.verifyUserToken], validator.getPackById, getPackById);
 
 /**
  * @swagger
@@ -101,7 +102,7 @@ router.get("/p/:packId", validator.getPackById, getPackById);
  *       '500':
  *         description: Error scoring the pack
  */
-router.put("/score/:packId", validator.getPackById, scorePack);
+router.put("/score/:packId",[middlewareHandler.auth.verifyUserToken], validator.getPackById, scorePack);
 
 /**
  * @swagger
@@ -130,7 +131,7 @@ router.put("/score/:packId", validator.getPackById, scorePack);
  *       '500':
  *         description: Error adding the pack
  */
-router.post("/", validator.addPack, addPack);
+router.post("/",[middlewareHandler.auth.verifyUserToken], validator.addPack, addPack);
 
 /**
  * @swagger
@@ -159,7 +160,7 @@ router.post("/", validator.addPack, addPack);
  *       '500':
  *         description: Error editing the pack
  */
-router.put("/", validator.editPack, editPack);
+router.put("/",[middlewareHandler.auth.verifyUserToken], validator.editPack, editPack);
 
 /**
  * @swagger
@@ -184,7 +185,7 @@ router.put("/", validator.editPack, editPack);
  *       '500':
  *         description: Error deleting the pack
  */
-router.delete("/", validator.deletePack, deletePack);
+router.delete("/",[middlewareHandler.auth.verifyUserToken], validator.deletePack, deletePack);
 
 /**
  * @swagger
@@ -209,6 +210,6 @@ router.delete("/", validator.deletePack, deletePack);
  *       '500':
  *         description: Error duplicating the pack
  */
-router.post("/duplicate", validator.duplicatePublicPack, duplicatePublicPack);
+router.post("/duplicate",[middlewareHandler.auth.verifyUserToken], validator.duplicatePublicPack, duplicatePublicPack);
 
 export default router;

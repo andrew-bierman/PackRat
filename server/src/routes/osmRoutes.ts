@@ -9,6 +9,7 @@ import {
   getPhotonDetails,
   getEnhancedPhotonDetails,
 } from "../controllers/getOsm/index";
+import middlewareHandler from "../middleware";
 
 const router = express.Router();
 
@@ -40,7 +41,7 @@ const router = express.Router();
  *       '500':
  *         description: Error retrieving Photon results
  */
-router.get("/photon/search", getPhotonResults);
+router.get("/photon/search",[middlewareHandler.auth.verifyUserToken], getPhotonResults);
 
 /**
  * @swagger
@@ -72,7 +73,7 @@ router.get("/photon/search", getPhotonResults);
  *       500:
  *         description: Error retrieving Trails OSM results
  */
-router.get("/trails", getTrailsOSM);
+router.get("/trails",[middlewareHandler.auth.verifyUserToken], getTrailsOSM);
 
 /**
  * @swagger
@@ -104,7 +105,7 @@ router.get("/trails", getTrailsOSM);
  *       '500':
  *         description: Error retrieving Parks OSM results
  */
-router.get("/parks", getParksOSM);
+router.get("/parks",[middlewareHandler.auth.verifyUserToken], getParksOSM);
 
 /**
  * @swagger
@@ -143,7 +144,7 @@ router.get("/parks", getParksOSM);
  *       '500':
  *         description: Error retrieving Overpass Data
  */
-router.post("/osm", getOsm);
+router.post("/osm",[middlewareHandler.auth.verifyUserToken], getOsm);
 
 /**
  * @swagger
@@ -168,7 +169,7 @@ router.post("/osm", getOsm);
  *       '500':
  *         description: Error processing request
  */
-router.post("/process/geojson", postSingleGeoJSON);
+router.post("/process/geojson",[middlewareHandler.auth.verifyUserToken], postSingleGeoJSON);
 
 /**
  * @swagger
@@ -191,7 +192,7 @@ router.post("/process/geojson", postSingleGeoJSON);
  *       '500':
  *         description: Error retrieving destination
  */
-router.get("/destination/:id", getDestination);
+router.get("/destination/:id",[middlewareHandler.auth.verifyUserToken], getDestination);
 
 /**
  * @swagger

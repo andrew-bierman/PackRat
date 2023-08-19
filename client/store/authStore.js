@@ -23,6 +23,8 @@ export const signUp = createAsyncThunk(
         email,
         password,
       });
+      const token = response.data.user.token;
+      await AsyncStorage.setItem('userToken', token); // Save token in local storage
       return response.data.user;
     } catch (error) {
       console.log("error", error);
@@ -39,6 +41,8 @@ export const signIn = createAsyncThunk(
         email,
         password,
       });
+      const token = response.data.user.token;
+      await AsyncStorage.setItem('userToken', token); // Save token in local storage
       return response.data.user;
     } catch (error) {
       return rejectWithValue(error.response.data.error);
