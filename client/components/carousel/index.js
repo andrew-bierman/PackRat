@@ -5,7 +5,7 @@ import ScrollButton from "./ScrollButton";
 
 const { height, width } = Dimensions.get('window')
 
-const Carousel = ({ children, itemWidth }) => {
+const Carousel = ({ children = [], itemWidth }) => {
   const scrollViewRef = useRef();
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -53,7 +53,7 @@ const Carousel = ({ children, itemWidth }) => {
         pagingEnabled
         onMomentumScrollEnd={handleScroll}
       >
-        {children.map((child, index) => (
+        {children && children.map((child, index) => (
           <VStack key={index} style={{ width: itemWidth + 10, marginRight: 10, marginTop: 10, flexDirection: 'row' }}>
             {child}
           </VStack>
@@ -62,7 +62,7 @@ const Carousel = ({ children, itemWidth }) => {
       <ScrollButton
         direction="right"
         onPress={() => scrollToIndex(currentIndex + 1)}
-        disabled={currentIndex === children.length - 1}
+        disabled={currentIndex === children?.length - 1}
       />
     </VStack>
   );
