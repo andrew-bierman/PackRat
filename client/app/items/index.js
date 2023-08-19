@@ -22,25 +22,20 @@ export default function Items() {
   const [page, setPage] = useState(1);
   // it will be used as a dependency for reloading the data in case of some modifications
   const [refetch, setRefetch] = useState(false);
-  const [internetConnected, setInternetConnected] = useState(false);
-  console.log("🚀 ~ file: index.js:25 ~ Items ~ internetConnected:", internetConnected)
+  
   const data = useSelector((state) => state.globalItems);
   const isLoading = useSelector((state) => state.globalItems.isLoading);
   const isError = useSelector((state) => state.globalItems.isError);
-  // useEffect(() => {
-  //   NetInfo.fetch().then(state => {
-  //     console.log('Connection type', state.type);
-  //     console.log('Is connected?', state.isConnected);
-  //     setInternetConnected(true);
-  //   });
-  // },[]);
+  const [offline, setOffline] = useState(false);
 
+  
   const dispatch = useDispatch();
   useEffect(() => {
         isConnected().then(connected => {
           if(connected) {
             dispatch(getItemsGlobal({ limit, page }));
           } else {
+            setOffline(true)
             InformUser({
               title : "You are not Connected to Internet",
               placement: "bottom",
@@ -122,7 +117,7 @@ export default function Items() {
             page={page}
             setPage={setPage}
             data={data}
-            isLoading={isLoading}
+            isLoading={isLoading && !offline}
             totalPages={data?.globalItems?.totalPages}
             refetch={refetch}
             setRefetch={setRefetch}

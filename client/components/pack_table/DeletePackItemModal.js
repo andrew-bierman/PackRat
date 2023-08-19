@@ -3,9 +3,10 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { useDispatch } from "react-redux";
 import { deletePackItem } from "../../store/packsStore";
 import { CustomModal } from "../modal";
-import { deleteGlobalItem } from "../../store/globalItemsStore";
+import { deleteGlobalItem, deleteItemOffline } from "../../store/globalItemsStore";
 import { isConnected } from "~/utils/netInfo";
 import { InformUser } from "~/utils/ToastUtils";
+import { addOfflineRequest } from '../../store/offlineRequest'
 export const DeletePackItemModal = ({ itemId, pack, refetch, setRefetch = () => {} }) => {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const dispatch = useDispatch();
@@ -13,29 +14,28 @@ export const DeletePackItemModal = ({ itemId, pack, refetch, setRefetch = () => 
   const closeModalHandler = () => setIsModalOpen(false);
 
   const onTrigger = () => {
-    isConnected().then(connected => {
-      if(connected) {
-        setIsModalOpen(true);
-      } else {
-        InformUser({
-          title : "You are not Connected to Internet",
-          placement: "bottom",
-          duration: 2000,
-          style: {
-            backgroundColor: "red",
-          },
-        })
-      }
-    })
+    setIsModalOpen(true);
   };
 
-  const deleteItemHandler = () => {
-    
+  const deleteItemHandler =async () => {
+    const connected = await isConnected();
+    console.log("🚀 ~ file: DeletePackItemModal.js:34 ~ deleteItemHandler ~ connected:", connected)
     if (pack) {
-      dispatch(deletePackItem({ itemId, currentPackId: pack["_id"] }));
+      if(connected) 
+        dispatch(deletePackItem({ itemId, currentPackId: pack["_id"] }));
+      else 
+        console.log('Deleting in offline mode');
     } else {
-      dispatch(deleteGlobalItem(itemId));
-      setRefetch(refetch === true ? false : true);
+      if(connected) {
+        // connected to wifi
+        dispatch(deleteGlobalItem(itemId));
+        setRefetch(refetch === true ? false : true);
+      } else {
+        dispatch(deleteItemOffline(itemId));
+        dispatch(addOfflineRequest({ method : 'deleteItem', data : itemId }))
+        // not connected to wifi
+      }
+      console.log('global item detected');
     }
     setIsModalOpen(false);
   };

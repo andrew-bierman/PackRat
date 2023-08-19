@@ -22,7 +22,7 @@ import destinationReducer from "./destinationStore";
 import chatReducer from "./chatStore";
 import globalItems from "./globalItemsStore";
 import userStore from './userStore';
-
+import offlineRequest from "./offlineRequest";
 // combine reducers
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -44,13 +44,14 @@ const rootReducer = combineReducers({
   globalItems,
   chat: chatReducer,
   userStore,
+  offlineRequest
 });
 
 // configure persist store and whitelist reducers
 const persistConfig = {
   key: "root",
   storage: AsyncStorage,
-  whitelist: ["auth", 'globalItems'], // add reducers to persist here
+  whitelist: ["auth", 'globalItems', 'offlineRequest'], // add reducers to persist here
 };
 
 // create persisted reducer

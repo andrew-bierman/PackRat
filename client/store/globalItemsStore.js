@@ -44,6 +44,7 @@ const itemsAdapter = createEntityAdapter({
   selectId: (item) => item._id, // Assuming the unique identifier field is '_id'
 });
 
+
 const itemsSlice = createSlice({
   name: "globalItems",
   initialState: itemsAdapter.getInitialState({
@@ -51,7 +52,17 @@ const itemsSlice = createSlice({
     isLoading: false,
     error: null,
   }),
-  reducers: {},
+  reducers: {
+    deleteItemOffline : (state, action) => {
+      return {
+        ...state,
+        globalItems: {
+          ...state.globalItems,
+          items : state?.globalItems?.items?.filter(item => item._id !== action.payload),
+        }
+      }
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(addItemsGlobal.pending, (state) => {
@@ -95,5 +106,6 @@ const itemsSlice = createSlice({
       });
   },
 });
+export const { deleteItemOffline } = itemsSlice.actions;
 
 export default itemsSlice.reducer;

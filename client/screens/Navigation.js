@@ -19,7 +19,7 @@ import {
   Entypo,
   Fontisto,
 } from "@expo/vector-icons";
-
+import { isConnected } from "~/utils/netInfo";
 import SVGLogoComponent from "../components/logo";
 import { useSelector, useDispatch } from "react-redux";
 import { signOut } from "../store/authStore";
@@ -27,6 +27,8 @@ import Drawer from "./Drawer";
 import { Link, useRouter, usePathname } from "expo-router";
 import { hexToRGBA } from "../utils/colorFunctions";
 import UseTheme from "../hooks/useTheme";
+import { executeOfflineRequests } from "../store/offlineRequest";
+
 const Navigation = () => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -36,6 +38,18 @@ const Navigation = () => {
   const [isMobileView, setIsMobileView] = useState(
     Dimensions.get("window").width < 1024
   );
+  const offlineRequests = useSelector(state => state.offlineRequest.requests);
+  
+
+  useEffect(() => {
+    isConnected().then(connected => {
+      if(connected) {
+        dispatch(executeOfflineRequests(offlineRequests));
+      } else {
+
+      }
+    })
+  }, [])
 
   const [navBarWidth, setNavBarWidth] = useState(null);
   const [selectedNavItem, setSelectedNavItem] = useState("");
