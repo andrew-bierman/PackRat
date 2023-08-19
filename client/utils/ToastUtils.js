@@ -8,6 +8,7 @@ import { Toast } from "native-base";
  * @param {string} options.title - The title of the toast message.
  * @param {string} [options.placement="top"] - The placement of the toast message. Possible values are "top", "bottom", "left", or "right".
  * @param {number} [options.duration=2000] - The duration in milliseconds for which the toast message should be displayed.
+ * @param {Object} [options.style={backgroundColor: 'green'}] - The style object for the toast message.
  * @returns {void}
  *
  * @example

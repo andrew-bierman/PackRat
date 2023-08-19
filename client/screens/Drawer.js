@@ -1,4 +1,4 @@
-import { View, StyleSheet, Text, TouchableOpacity, Modal } from "react-native";
+import { View, StyleSheet, Text, TouchableOpacity, Modal, SafeAreaView, Platform } from "react-native";
 import { Link } from "expo-router";
 import { theme } from "../theme";
 import { AntDesign, MaterialIcons } from "@expo/vector-icons";
@@ -14,15 +14,26 @@ const Drawer = ({
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     UseTheme();
   const renderNavigationItems = () => {
-    return navigationItems.map((item) => (
-      <TouchableOpacity
-        key={item.href}
-        style={styles.navigationItem}
-        onPress={() => navigateTo(item.href)}
-      >
-        {renderNavigationItem(item)}
-      </TouchableOpacity>
-    ));
+    return (
+      <SafeAreaView>
+        <TouchableOpacity style={styles.closeButton} onPress={toggleDrawer}>
+          <AntDesign
+            name="close"
+            size={24}
+            color={currentTheme.colors.iconColor}
+          />
+        </TouchableOpacity>
+        {navigationItems.map((item) => (
+          <TouchableOpacity
+            key={item.href}
+            style={styles.navigationItem}
+            onPress={() => navigateTo(item.href)}
+          >
+            {renderNavigationItem(item)}
+          </TouchableOpacity>
+        ))}
+      </SafeAreaView>
+    )
   };
 
   return (
@@ -39,13 +50,6 @@ const Drawer = ({
         />
         <View style={styles.drawerContainer}>
           {renderNavigationItems()}
-          <TouchableOpacity style={styles.closeButton} onPress={toggleDrawer}>
-            <AntDesign
-              name="close"
-              size={24}
-              color={currentTheme.colors.iconColor}
-            />
-          </TouchableOpacity>
         </View>
       </View>
     </Modal>
@@ -73,9 +77,8 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
   },
   closeButton: {
-    position: "absolute",
-    top: 16,
-    right: 16,
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end'
   },
 });
 
