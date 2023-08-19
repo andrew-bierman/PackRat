@@ -1,6 +1,6 @@
 import { Middleware } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { showMessage } from 'react-native-flash-message';
+import { InformUser } from '~/utils/ToastUtils';
 import { api } from '~/constants/api';
 
 const apiMiddleware: Middleware = ({ dispatch }) => next => async action => {
@@ -14,41 +14,61 @@ const apiMiddleware: Middleware = ({ dispatch }) => next => async action => {
             if ("code" in error && error.code === "ERR_CANCELED") {
                 return;
             }
-            
-            let message = "Something went wrong";
+
+            let title = "Something went wrong";
             if ("message" in error) {
-                message = error.message;
+                title = error.message;
             }
-            
-            showMessage({
-                message,
-                type: "danger",
+
+            InformUser({
+                title,
+                placement: "top",
+                duration: 3000,
+                style: { backgroundColor: 'red' } // Style for error messages
             });
 
             console.error('ERROR: ', error);
             console.error(error);
-    
+
             // Optionally, dispatch another action here if you want to handle the error globally
-            // dispatch(someErrorAction(message));
+            // dispatch(someErrorAction(title));
             return Promise.reject(error);
         }
     } else if (action.type.endsWith('/fulfilled')) {
         const { payload } = action;
-        if (payload && payload.message) {
-            showMessage({
-                message: payload.message,
-                type: "success",
+        if (payload && (payload.message || payload.msg)) {
+            InformUser({
+                title: payload.message || payload.msg,
+                placement: "bottom",
+                duration: 3000,
+                style: { backgroundColor: 'green' } // Style for success messages
             });
         }
     } else if (action.type.endsWith('/rejected')) {
-        const { payload } = action;
-        if (payload && payload.message) {
-            showMessage({
-                message: payload.message,
-                type: "danger",
+        const { error, payload } = action;
+        if (error && ( error.message || error.msg )) {
+            InformUser({
+                title: error.message || error.msg,
+                placement: "bottom",
+                duration: 3000,
+                style: { backgroundColor: 'red' } // Style for error messages
             });
+        } else if (payload && (payload.message || payload.msg)) {
+            InformUser({
+                title: payload.message || payload.msg,
+                placement: "bottom",
+                duration: 3000,
+                style: { backgroundColor: 'red' } // Style for error messages
+            });
+        } else {
+            InformUser({
+                title: "Something went wrong",
+                placement: "bottom",
+                duration: 3000,
+                style: { backgroundColor: 'red' } // Style for generic error messages
+            })
         }
-        console.error('ERROR: ', payload);
+        console.error('ERROR: ', error);
     }
 
     return next(action);
