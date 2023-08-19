@@ -6,7 +6,7 @@ export const addItemsGlobal = createAsyncThunk(
   "Items/addItemsGlobal",
   async (newItem) => {
     const response = await axios.post(`${api}/item/global`, newItem);
-    return response.data;
+    return response.data || [];
   }
 );
 
@@ -61,6 +61,16 @@ const itemsSlice = createSlice({
           items : state?.globalItems?.items?.filter(item => item._id !== action.payload),
         }
       }
+    },
+    addItemOffline : (state, action) => {
+      console.log(action.payload, 'add item offline');
+      return {
+        ...state,
+        globalItems: {
+          ...state.globalItems,
+          items : [...state.globalItems.items, action.payload],
+        }
+      }
     }
   },
   extraReducers: (builder) => {
@@ -106,6 +116,6 @@ const itemsSlice = createSlice({
       });
   },
 });
-export const { deleteItemOffline } = itemsSlice.actions;
+export const { deleteItemOffline, addItemOffline } = itemsSlice.actions;
 
 export default itemsSlice.reducer;

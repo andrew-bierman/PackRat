@@ -4,10 +4,11 @@ import {
     createEntityAdapter,
   } from "@reduxjs/toolkit";
 import { InformUser } from "../utils/ToastUtils";
-import { deleteGlobalItem } from "./globalItemsStore";
+import { addItemsGlobal, deleteGlobalItem } from "./globalItemsStore";
 
 const items = {
     deleteItem: deleteGlobalItem,
+    addGlobalItem : addItemsGlobal,
   }
 
 const offlineAdaptor = createEntityAdapter();
