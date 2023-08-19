@@ -20,9 +20,10 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { GearList } from "../../components/GearList";
 
-import { SaveTripContainer } from "./createTripModal";
-import TripDateRange from "./TripDateRange";
-import MultiStepForm from "../multi_step";
+import { SaveTripContainer } from "~/components/trip/createTripModal";
+
+import TripDateRange from "~/components/trip/TripDateRange";
+// import MultiStepForm from "../multi_step";
 import { photonDetails } from "../../store/destinationStore";
 import UseTheme from "../../hooks/useTheme";
 export default function Trips() {
@@ -36,7 +37,7 @@ export default function Trips() {
   });
   const dispatch = useDispatch();
   const searchResult = useSelector(state => state.search.selectedSearchResult);
-  console.log("🚀 ~ file: createTrip.js:37 ~ Trips ~ searchResult:", searchResult)
+  // console.log("🚀 ~ file: createTrip.js:37 ~ Trips ~ searchResult:", searchResult)
 
   const weatherObject = useSelector((state) => state.weather.weatherObject);
   const weatherWeek = useSelector((state) => state.weather.weatherWeek);
