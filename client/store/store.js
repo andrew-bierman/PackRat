@@ -2,6 +2,7 @@ import { combineReducers } from "@reduxjs/toolkit";
 import { configureStore } from "@reduxjs/toolkit";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { persistReducer, persistStore } from "redux-persist";
+import apiMessageMiddleware from "./middleware/apiMiddleware";
 
 // all reducers
 import weatherReducer from "./weatherStore";
@@ -64,7 +65,7 @@ const store = configureStore({
         // Ignore these action types
         ignoredActions: ["persist/PERSIST"],
       },
-    }),
+    }).concat(apiMessageMiddleware),
 });
 
 const persistor = persistStore(store);
