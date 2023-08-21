@@ -11,7 +11,7 @@
     "dev": "nodemon",
     "debug": "cross-env NODE_OPTIONS='--inspect-brk' nodemon",
     "build": "NODE_OPTIONS=--max_old_space_size=4096 tsc",
-    "start:prod": "npm run build && node dist/index.js",
+    "start:prod": "node dist/index.js",
     "start:ts-node": "ts-node src/index.ts"
   },
   "author": "Andrew Bierman",
