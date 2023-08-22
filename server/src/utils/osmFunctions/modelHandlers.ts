@@ -15,6 +15,13 @@ import {
   extractIdAndType,
 } from "./dataFormatters";
 
+/**
+ * Generates a new instance in the database from OpenStreetMap (OSM) data.
+ *
+ * @param {any} Model - the database model to create the instance in
+ * @param {any} data - the OSM data to create the instance from
+ * @return {Promise<any>} the newly created instance
+ */
 export async function fromOSM(Model: any, data: any) {
   const { type, id } = extractIdAndType(data.id);
 
@@ -38,6 +45,13 @@ export async function fromOSM(Model: any, data: any) {
   return newInstance;
 }
 
+/**
+ * Generates a new instance of a model from a GeoJSON object.
+ *
+ * @param {any} Model - the model to create an instance of
+ * @param {any} geoJSON - the GeoJSON object to generate the instance from
+ * @return {Promise<any>} the newly created instance
+ */
 export async function fromGeoJSON(Model: any, geoJSON: any) {
   // console.log("fromGeoJSON");
   // console.log("fromGeoJSON geoJSON", geoJSON);
@@ -74,6 +88,13 @@ export async function fromGeoJSON(Model: any, geoJSON: any) {
   return instance;
 }
 
+/**
+ * Converts a Model instance to a GeoJSON object.
+ *
+ * @param {any} Model - the Model class
+ * @param {any} instance - the instance to convert
+ * @return {Promise<any>} the GeoJSON object
+ */
 export async function toGeoJSON(Model: any, instance: any) {
   // console.log("toGeoJSON instance", instance);
 
@@ -127,10 +148,25 @@ const modelMappingFunc = (type: string) => {
   }
 };
 
+/**
+ * Finds an existing model based on the provided id and type.
+ *
+ * @param {any} Model - The model to search for an existing item.
+ * @param {any} id - The id of the item to search for.
+ * @param {string} type - The type of the item to search for.
+ * @return {Promise<any>} A promise that resolves to the found item, or null if not found.
+ */
 export function findExisting(Model: any, id: any, type: string) {
   return Model.findOne({ osm_id: id, osm_type: type });
 }
 
+/**
+ * Updates an instance object using GeoJSON data.
+ *
+ * @param {any} instance - The instance to be updated.
+ * @param {any} geoJSON - The GeoJSON data used to update the instance.
+ * @return {Promise<any>} - The updated instance.
+ */
 export async function updateInstanceFromGeoJSON(instance: any, geoJSON: any) {
   instance.updated_at = geoJSON.properties.timestamp;
   instance.tags = propertiesToTags(geoJSON.properties);
@@ -142,6 +178,13 @@ export async function updateInstanceFromGeoJSON(instance: any, geoJSON: any) {
   return instance;
 }
 
+/**
+ * Creates a new instance based on the given `Model` and `element`.
+ *
+ * @param {any} Model - The model to use for creating the instance.
+ * @param {any} element - The element to create the instance from.
+ * @return {any} The newly created instance.
+ */
 export function createNewInstance(Model: any, element: any) {
   if (isOSMFormat(element)) {
     return fromOSM(Model, element);
@@ -151,6 +194,16 @@ export function createNewInstance(Model: any, element: any) {
   throw new Error("Element is neither in OSM or GeoJSON format.");
 }
 
+/**
+ * Ensures that the given element has an 'id' property in the format 'type/id'.
+ * If the 'id' property is missing and the element has 'properties' and 'osm_id' property,
+ * the 'id' property is created by combining the 'osm_type' and 'osm_id' properties.
+ * If the 'type' property is missing and the element has 'properties' and 'osm_type' property,
+ * the 'type' property is created by copying the value of the 'osm_type' property.
+ *
+ * @param {any} element - The element to ensure the 'id' and 'type' properties for.
+ * @return {any} - The modified element with the 'id' and 'type' properties.
+ */
 export function ensureIdProperty(element: any) {
   if (!element.id && element.properties && element.properties.osm_id) {
     // Create 'id' in the format 'type/id'
@@ -175,6 +228,12 @@ export function ensureIdProperty(element: any) {
   return element;
 }
 
+/**
+ * Ensures the model property of the given element.
+ *
+ * @param {any} element - The element to ensure the model property for.
+ * @return {ModelForElement | undefined} - The model for the element, or undefined if the type is invalid.
+ */
 export function ensureModelProperty(element: any) {
   // Convert the osm_type to lowercase if it's a string
   const osmType =
@@ -189,6 +248,12 @@ export function ensureModelProperty(element: any) {
   return ModelForElement;
 }
 
+/**
+ * Processes an element.
+ *
+ * @param {any} element - The element to be processed.
+ * @return {Promise<any>} The processed element instance.
+ */
 export async function processElement(element: any) {
   // Extract OSM ID and type
   const id = element.id
@@ -218,10 +283,25 @@ export async function processElement(element: any) {
   return instance;
 }
 
+/**
+ * Creates or finds a single instance of a model.
+ *
+ * @param {typeof Way} Model - The model to create or find an instance of.
+ * @param {any} element - The element used to create or find the instance.
+ * @return {Promise<any>} A promise that resolves to the created or found instance.
+ */
 export async function findOrCreateOne(Model = Way, element: any) {
   return processElement(element);
 }
 
+/**
+ * Finds or creates multiple instances of a specified model.
+ *
+ * @param {typeof Way} Model - The model to find or create instances of.
+ * @param {any} data - The data to find or create instances with.
+ * @throws {Error} If the data is not iterable.
+ * @returns {Array<any>} An array of instances that were found or created.
+ */
 export async function findOrCreateMany(Model = Way, data: any) {
   // Check if data is iterable
   if (!Array.isArray(data)) {
