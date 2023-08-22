@@ -6,7 +6,7 @@ const getTokenFromState = (state: any): string | null => {
 };
 
 const bearerTokenMiddleware: Middleware = (api) => (next) => (action) => {
-    if (action.type.includes('/auth')) {
+    if (action.type.includes('auth')) {
         return next(action);
     }
 
