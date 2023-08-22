@@ -45,6 +45,11 @@ export const CustomCard = ({
   const user = useSelector((state) => state.auth.user);
   const userId = user["_id"];
 
+  /**
+   * Handles copying the link to the clipboard and updates the copy state.
+   *
+   * @return {function} A function to clear the timeout for resetting the copy state.
+   */
   const handleCopyLink = () => {
     Clipboard.setString(link);
 

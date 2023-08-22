@@ -3,6 +3,14 @@ import User from "../../models/userModel";
 import Conversation from "../../models/openai/conversationModel";
 import { Configuration, OpenAIApi } from "openai";
 
+/**
+ * Retrieves AI response for a given user input in a conversation.
+ *
+ * @param {string} userId - The ID of the user.
+ * @param {string} conversationId - The ID of the conversation.
+ * @param {string} userInput - The user input in the conversation.
+ * @returns {Object} - The AI response and the updated conversation.
+ */
 export const getAIResponseService = async (userId, conversationId, userInput) => {
   if (!process.env.OPENAI_API_KEY) {
     throw new Error("Failed to get response from AI. OPENAI_API_KEY is not set.");

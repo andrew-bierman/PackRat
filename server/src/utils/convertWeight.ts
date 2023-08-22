@@ -1,5 +1,13 @@
 type WeightUnit = 'g' | 'kg' | 'oz' | 'lb' | 'lbs';
 
+/**
+ * Converts weight from one unit to another.
+ *
+ * @param {number} weight - The weight to be converted.
+ * @param {WeightUnit} fromUnit - The unit to convert from.
+ * @param {WeightUnit} toUnit - The unit to convert to.
+ * @return {number} The converted weight.
+ */
 export const convertWeight = (weight: number, fromUnit: WeightUnit, toUnit: WeightUnit): number => {
   if (typeof weight !== "number" || !fromUnit || !toUnit) {
     return 0; // return 0 if weight is not a number or any of the units are missing

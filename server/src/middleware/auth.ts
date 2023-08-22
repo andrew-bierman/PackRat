@@ -12,6 +12,14 @@ declare global {
   }
 }
 
+/**
+ * Authenticates the user based on the provided token and adds the user information to the request object.
+ *
+ * @param {Request} req - The request object.
+ * @param {Response} res - The response object.
+ * @param {NextFunction} next - The next middleware function.
+ * @return {void} Void.
+ */
 const auth = async (req:Request, res:Response, next:NextFunction) => {
   try {
     const token: any = req.header("Authorization")?.replace("Bearer ", "");

@@ -51,6 +51,11 @@ export default function Register() {
     router.push("/");
   }
 
+  /**
+   * Register a user with the given data.
+   *
+   * @param {object} data - The data object containing the user's name, username, email, and password.
+   */
   const registerUser = (data) => {
     const { name, username, email, password } = data;
     try {

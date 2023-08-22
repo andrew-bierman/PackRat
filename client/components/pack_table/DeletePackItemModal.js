@@ -11,10 +11,22 @@ export const DeletePackItemModal = ({ itemId, pack, refetch, setRefetch = () => 
 
   const closeModalHandler = () => setIsModalOpen(false);
 
+  /**
+   * Sets the value of `isModalOpen` to `true`.
+   *
+   * @param {} 
+   * @return {}
+   */
   const onTrigger = () => {
     setIsModalOpen(true);
   };
 
+  /**
+   * Deletes an item.
+   *
+   * @param {type} paramName - description of parameter
+   * @return {type} description of return value
+   */
   const deleteItemHandler = () => {
     if (pack) {
       dispatch(deletePackItem({ itemId, currentPackId: pack["_id"] }));
