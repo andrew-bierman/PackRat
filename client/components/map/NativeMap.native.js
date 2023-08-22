@@ -186,14 +186,12 @@ function NativeMap({ shape: shapeProp }) {
     console.log(latLong.join(','), 'lat long');
     const scheme = Platform.select({ ios: 'maps://0,0?q=', android: 'geo:0,0?q=' });
     const latLng = latLong.join(',');
-    // console.log('shape?.features[0]?.properties?.name',shape?.features[0]?.properties?.name)
     const label = shape?.features[0]?.properties?.name
     const url = Platform.select({
       ios: `${scheme}${label}@${latLng}`,
       android: `${scheme}${latLng}(${label})`
     });
     Linking.openURL(url);
-
   }
   const element = (
     <View style={mapFullscreen ? fullMapDimension : previewMapStyle}>
