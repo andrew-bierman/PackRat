@@ -23,6 +23,7 @@ import destinationReducer from "./destinationStore";
 import chatReducer from "./chatStore";
 import globalItems from "./globalItemsStore";
 import userStore from './userStore';
+import bearerTokenMiddleware from "./middleware/bearerTokenMiddleware";
 
 // combine reducers
 const rootReducer = combineReducers({
@@ -65,7 +66,11 @@ const store = configureStore({
         // Ignore these action types
         ignoredActions: ["persist/PERSIST"],
       },
-    }).concat(apiMessageMiddleware),
+    })
+    .concat(
+      bearerTokenMiddleware,
+      apiMessageMiddleware
+    ),
 });
 
 const persistor = persistStore(store);
