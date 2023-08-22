@@ -1,27 +1,12 @@
 import { AntDesign } from "@expo/vector-icons";
 import { formatDistanceToNow } from "date-fns";
-
-import {
-  Box,
-  Heading,
-  AspectRatio,
-  Image,
-  Text,
-  Center,
-  HStack,
-  Stack,
-  Switch,
-  Button,
-} from "native-base";
-
-import { changePackStatus } from "../../store/packsStore";
-
-import { useDispatch, useSelector } from "react-redux";
-
+import { Box, Heading, Stack, Text, HStack, Switch } from "native-base";
+import { useDispatch } from "react-redux";
 import { Link } from "expo-router";
-
 import { truncateString } from "../../utils/truncateString";
-import { useEffect } from "react";
+import { StyleSheet } from 'react-native';
+import UseTheme from "~/hooks/useTheme";
+import { changePackStatus } from "../../store/packsStore";
 
 const UserDataCard = ({
   type, // "pack" or "trip"
@@ -72,7 +57,7 @@ const UserDataCard = ({
         borderWidth="1"
         _dark={{
           borderColor: "coolGray.600",
-          backgroundColor: "gray.700",
+          bg: "blue.700",
         }}
         _web={{
           shadow: 2,
@@ -203,6 +188,45 @@ const UserDataCard = ({
       </Box>
     </Box>
   );
+};
+
+
+const useStyles = () => {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } = UseTheme();
+
+  return StyleSheet.create({
+    outerBox: {
+      alignItems: "center",
+      padding: 5,
+    },
+    box: {
+      minHeight: 125,
+      minWidth: 80,
+      borderRadius: 10,
+      overflow: "hidden",
+      borderWidth: 1,
+      backgroundColor: currentTheme.colors.card,
+    },
+    public: {
+      borderLeftColor: "green.500",
+      borderLeftWidth: 10,
+    },
+    private: {
+      borderLeftColor: "red.500",
+      borderLeftWidth: 10,
+    },
+    stack: {
+      padding: 4,
+      space: 3,
+    },
+    linkBox: {
+      alignItems: "center",
+    },
+    viewDetailsText: {
+      color: isDark ? "warmGray.200" : "coolGray.600",
+      fontWeight: "bold",
+    },
+  });
 };
 
 export default UserDataCard;

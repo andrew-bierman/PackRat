@@ -29,9 +29,8 @@ export default function UserDataContainer({ data, type, userId }) {
   return (
     <LargeCard
       customStyle={{
-        // backgroundColor: theme.colors.white,
         // light transparent grey
-        backgroundColor: currentTheme.colors.card,
+        backgroundColor: "rgba(255, 255, 255, 0.1)",
 
       }}
     >

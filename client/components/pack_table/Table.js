@@ -148,7 +148,7 @@ const TableItem = ({
     ];
   }
 
-  /* 
+  /*
   * this _id is passed as pack id but it is a item id which is confusing
   Todo need to change the name for this passing argument and remaining functions which are getting it
    */
@@ -233,8 +233,8 @@ export const TableContainer = ({
   let waterItem;
   let foodItems = [];
   // for calculating the total.
-  /* 
-  Todo better to move this all inside a utility function and pass them variables 
+  /*
+  Todo better to move this all inside a utility function and pass them variables
   */
   data &&
   data
@@ -323,12 +323,6 @@ export const TableContainer = ({
   if (error) return <ErrorMessage message={error} />;
   return (
     <Box style={styles().container}>
-      <ItemPicker
-        currentPack={selectedPack}
-        refetch={refetch}
-        setRefetch={setRefetch}
-      />
-
       {data?.length ? (
         <>
           <Table style={styles().tableStyle} flexArr={flexArr}>
@@ -467,6 +461,6 @@ const styles = () => {
       flex: 1,
     },
   });
-} 
+}
 
 export default TableContainer;

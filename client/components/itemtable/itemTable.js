@@ -193,9 +193,11 @@ const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } = UseTh
       flexDirection: "row",
       height: 60,
       alignItems: "center",
-      backgroundColor: "#FFFFFF",
+      backgroundColor: currentTheme.colors.background,
       borderBottomWidth: 1,
       borderBottomColor: "#D1D5DB",
+
+      color: currentTheme.colors.text,
     },
     infoContainer: {
       flexDirection: "row",

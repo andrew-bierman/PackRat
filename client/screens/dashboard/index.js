@@ -7,8 +7,11 @@ import QuickActionsSection from "../../components/dashboard/QuickActionSection";
 import FeedPreview from "../../components/dashboard/FeedPreview";
 import Section from "../../components/dashboard/Section";
 import SectionHeader from "../../components/dashboard/SectionHeader";
+import UseTheme from "../../hooks/useTheme";
 
 const Dashboard = () => {
+  const styles = useStyles;
+
   return (
     <ScrollView contentContainerStyle={styles.content} horizontal={false}>
       <VStack
@@ -19,10 +22,12 @@ const Dashboard = () => {
       >
         <Box>
           <HeroBanner style={styles.cardContainer} />
+
           <Section>
             <SectionHeader iconName="add-circle-outline" text="Quick Actions" />
             <QuickActionsSection />
           </Section>
+
           <Section>
             <SectionHeader iconName="newspaper-outline" text="Feed" />
             <FeedPreview />
@@ -32,24 +37,29 @@ const Dashboard = () => {
     </ScrollView>
   );
 };
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexGrow: 1,
-    backgroundColor: theme.colors.background,
-    width: "100%",
-  },
-  content: {
-    flexGrow: 1,
-    justifyContent: "flex-start",
-    alignItems: "stretch",
-    paddingHorizontal: 20,
-  },
-  cardContainer: {
-    flexDirection: "column",
-    justifyContent: "space-between",
-    marginBottom: 20,
-    width: "100%",
-  },
-});
+
+const useStyles = () => {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } = UseTheme();
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      flexGrow: 1,
+      backgroundColor: currentTheme.colors.background,
+      width: "100%",
+    },
+    content: {
+      flexGrow: 1,
+      justifyContent: "flex-start",
+      alignItems: "stretch",
+      paddingHorizontal: 20,
+    },
+    cardContainer: {
+      flexDirection: "column",
+      justifyContent: "space-between",
+      marginBottom: 20,
+      width: "100%",
+    },
+  });
+}
+
 export default Dashboard;
