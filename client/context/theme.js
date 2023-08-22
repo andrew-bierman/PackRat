@@ -8,12 +8,24 @@ const initialState = {
   currentTheme: theme,
 };
 const handlers = {
+  /**
+   * Enables dark mode by updating the state object.
+   *
+   * @param {object} state - The current state object.
+   * @return {object} The updated state object with dark mode enabled.
+   */
   ENABLE_DARK_MODE: (state) => ({
     ...state,
     isDark: true,
     isLight: false,
     currentTheme: darkTheme,
   }),
+  /**
+   * Enables light mode by updating the state object.
+   *
+   * @param {object} state - The current state object.
+   * @return {object} The updated state object with light mode enabled.
+   */
   ENABLE_LIGHT_MODE: (state) => ({
     ...state,
     isDark: false,
@@ -32,13 +44,31 @@ const ThemeContext = createContext({
   enableLightMode: () => Promise.resolve(),
 });
 
+/**
+ * Creates a ThemeProvider component that wraps the provided children with a context provider for managing the theme state.
+ *
+ * @param {Object} props - The properties object.
+ * @param {ReactNode} props.children - The children components to be wrapped.
+ * @return {ReactNode} - The wrapped children components.
+ */
 export const ThemeProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  /**
+   * Enable dark mode.
+   *
+   * @return {undefined} No return value.
+   */
   const enableDarkMode = () => {
     console.log("enableDarkMode");
     dispatch({ type: "ENABLE_DARK_MODE" });
   };
+  /**
+   * Enables light mode.
+   *
+   * @param {void} - This function does not take any parameters.
+   * @return {void} - This function does not return any value.
+   */
   const enableLightMode = () => {
     console.log("enableLightMode");
     dispatch({ type: "ENABLE_LIGHT_MODE" });

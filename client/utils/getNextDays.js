@@ -1,3 +1,9 @@
+/**
+ * Generates an array of the next 4 days based on a given day.
+ *
+ * @param {number} day - The current day (0-6, where 0 is Sunday).
+ * @return {number[]} An array of the next 4 days (0-6, where 0 is Sunday).
+ */
 export const getNext4Days = (day) => {
   let daysArr = [];
 

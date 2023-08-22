@@ -11,6 +11,11 @@ export default function AppearanceContainer() {
   const [isEnabled, setIsEnabled] = useState(false);
   const [showKitchenSink, setShowKitchenSink] = useState(true);
 
+  /**
+   * Toggles the switch between dark mode and light mode.
+   *
+   * @return {boolean} The new state of the switch.
+   */
   const toggleSwitch = () => {
     setIsEnabled((prevIsEnabled) => {
       const newState = !prevIsEnabled;

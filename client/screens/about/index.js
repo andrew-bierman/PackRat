@@ -17,12 +17,23 @@ const AboutContent = ({ desktopContainer, isMobile }) => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     UseTheme();
   console.log("isDark, isLight", isDark, isLight);
+  /**
+   * Handles the GitHub link functionality.
+   *
+   * @return {void}
+   */
   const handleGithubLink = () => {
     // Add the URL of your GitHub repo here
     const githubUrl = "https://github.com/andrew-bierman/PackRat";
     Linking.openURL(githubUrl);
   };
 
+  /**
+   * Handle the Discord link.
+   *
+   * @param {none} - This function does not take any parameters.
+   * @return {none} - This function does not return any value.
+   */
   const handleDiscordLink = () => {
     // Add the URL of your Discord server here
     const discordUrl = "https://discord.gg/jFUuYBTXfY";

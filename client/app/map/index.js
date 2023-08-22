@@ -36,14 +36,32 @@ export default function Map() {
 
     const [mapViewLoaded, setMapViewLoaded] = useState(false);
 
+    /**
+     * Handles the layout of the map view.
+     *
+     * @param {type} paramName - description of parameter
+     * @return {type} description of return value
+     */
     function handleMapViewLayout() {
       setMapViewLoaded(true);
     }
 
+    /**
+     * Handles the change in style.
+     *
+     * @param {any} value - The new style value.
+     */
     const handleStyleChange = (value) => {
       setStyle(value);
     };
 
+    /**
+     * Calculates the bounding box of a given shape.
+     *
+     * @param {object} shape - The shape object to calculate the bounds for.
+     * @return {array} An array containing the coordinates of the minimum
+     * and maximum longitude and latitude values of the shape.
+     */
     function getShapeSourceBounds(shape) {
       let minLng = Infinity;
       let maxLng = -Infinity;
@@ -76,6 +94,11 @@ export default function Map() {
 
     const [shapeSourceBounds, setShapeSourceBounds] = useState(null);
 
+/**
+ * Handles the shape source load.
+ *
+ * @return {undefined} No return value.
+ */
     function handleShapeSourceLoad() {
       const shape = {
         type: "FeatureCollection",
@@ -140,6 +163,12 @@ export default function Map() {
     //   }
     // }
 
+    /**
+     * Handles the press event on a shape.
+     *
+     * @param {Object} event - The event object containing information about the press event.
+     * @return {undefined} The function does not return a value.
+     */
     function handleShapePress(event) {
       // Get the ID of the clicked feature
       const featureId = event.features[0].id;
@@ -147,6 +176,7 @@ export default function Map() {
       // Do something with the ID, e.g. display an info window
     }
 
+    
     const handleButtonPress = () => {
       // Add your desired action here
     };

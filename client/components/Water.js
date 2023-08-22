@@ -10,10 +10,21 @@ export default function Water({ currentPack, setWaterItem }) {
   const [waterWeight, setWaterWeight] = useState(0);
   const dispatch = useDispatch();
 
+  /**
+   * Update the water weight.
+   *
+   * @param {type} value - the new value of the water weight
+   * @return {undefined} no return value
+   */
   const handleWaterChange = (value) => {
     setWaterWeight(value);
   };
 
+  /**
+   * Adds water to the pack.
+   *
+   * @return {void} No return value.
+   */
   const addWater = () => {
     const data = {
       name: "Water",

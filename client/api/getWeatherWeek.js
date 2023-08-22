@@ -1,5 +1,12 @@
 import { api } from "../constants/api";
 
+/**
+ * Retrieves the weather forecast for a specific location for the next week.
+ *
+ * @param {number} lat - The latitude of the location.
+ * @param {number} lon - The longitude of the location.
+ * @return {Array} The weather forecast for the next four days.
+ */
 export const getWeatherWeek = async (lat, lon) => {
   let weatherObject = {};
 

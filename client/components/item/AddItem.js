@@ -43,6 +43,11 @@ export const AddItem = ({
     setUnit(initialData?.unit || "");
   }, [initialData]);
 
+  /**
+   * Generate the function comment for the given function body in a markdown code block with the correct language syntax.
+   *
+   * @return {type} description of return value
+   */
   const handleSubmit = () => {
     console.log("initial", initialData);
     if (isEdit) {

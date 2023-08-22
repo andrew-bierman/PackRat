@@ -1,3 +1,7 @@
+/**
+ * Redux store for managing chat-related state.
+ */
+
 import {
   createSlice,
   createAsyncThunk,
@@ -6,10 +10,12 @@ import {
 import axios from "axios";
 import { api } from "../constants/api";
 
-const chatAdapter = createEntityAdapter(
-    {selectId: (chat) => chat._id}
-);
+// Create entity adapter for chats
+const chatAdapter = createEntityAdapter({
+  selectId: (chat) => chat._id,
+});
 
+// Async thunk for getting user chats
 export const getUserChats = createAsyncThunk(
   "chat/getUserChats",
   async (userId) => {
@@ -23,6 +29,7 @@ export const getUserChats = createAsyncThunk(
   }
 );
 
+// Async thunk for getting AI response
 export const getAIResponse = createAsyncThunk(
   "chat/getAIResponse",
   async ({ userId, conversationId, userInput }) => {
@@ -40,6 +47,7 @@ export const getAIResponse = createAsyncThunk(
   }
 );
 
+// Create slice for chat state
 const chatSlice = createSlice({
   name: "chat",
   initialState: chatAdapter.getInitialState({
@@ -76,10 +84,10 @@ const chatSlice = createSlice({
           "state.entities[_id]:",
           state.entities[_id]
         );
-        chatAdapter.upsertOne(state, { // use upsertOne to add new conversation if it doesn't exist
+        chatAdapter.upsertOne(state, {
           id: _id,
           changes: {
-            history: history.split('\n') // assuming history is a string
+            history: history.split("\n"),
           },
         });
         state.loading = false;
@@ -92,6 +100,7 @@ const chatSlice = createSlice({
   },
 });
 
+// Selectors for chat state
 export const {
   selectAll: selectAllConversations,
   selectById: selectConversationById,
