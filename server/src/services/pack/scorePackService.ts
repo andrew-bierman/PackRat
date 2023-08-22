@@ -2,6 +2,13 @@ import Pack from "../../models/packModel";
 import mongoose from "mongoose";
 import { calculatePackScore } from "../../utils/scorePack";
 
+/**
+ * Scores a pack service based on the given packId.
+ *
+ * @param {string} packId - The ID of the pack to be scored.
+ * @return {Promise<Pack>} The updated pack object with scores and grades.
+ * @throws {Error} If unable to score the pack.
+ */
 export async function scorePackService(packId: string) {
   try {
     const objectId = new mongoose.Types.ObjectId(packId);

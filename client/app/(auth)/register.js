@@ -2,6 +2,11 @@ import Register from "../../screens/RegisterScreen";
 import { Platform } from "react-native";
 import { Stack as Header } from "expo-router";
 
+/**
+ * Renders the RegisterContainer component based on the platform.
+ *
+ * @return {ReactNode} The rendered RegisterContainer component.
+ */
 export default function RegisterContainer() {
   return Platform.OS === "web" ? (
     <>

@@ -1,3 +1,9 @@
+/**
+ * Converts a numeric day value to its corresponding string representation.
+ *
+ * @param {number} day - The numeric day value (0-6).
+ * @return {string} The string representation of the day.
+ */
 export const dayNumToString = (day) => {
   switch (day) {
     case 0:

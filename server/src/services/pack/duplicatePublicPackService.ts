@@ -1,5 +1,13 @@
 import Pack from "../../models/packModel";
 
+/**
+ * Duplicates a public pack service.
+ *
+ * @param {string} packId - The ID of the pack to duplicate.
+ * @param {string} ownerId - The ID of the owner of the duplicated pack.
+ * @param {Array} items - The items to be included in the duplicated pack.
+ * @return {Object} - An object containing the duplicated pack.
+ */
 export const duplicatePublicPackService = async (packId, ownerId, items) => {
   let pack = await Pack.findById(packId);
   if (!pack) {

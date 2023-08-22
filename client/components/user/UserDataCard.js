@@ -40,6 +40,13 @@ const UserDataCard = ({
 }) => {
   const dispatch = useDispatch();
 
+  /**
+   * Updates the state at the specified index with the given boolean value.
+   *
+   * @param {number} index - The index of the state to be updated.
+   * @param {boolean} boolState - The boolean value to update the state with.
+   * @return {void} This function does not return a value.
+   */
   const updateState = (index, boolState) => {
     let states = state;
     states = states.map((state, iterator) => {
@@ -48,6 +55,12 @@ const UserDataCard = ({
     setState(states);
   };
 
+  /**
+   * Updates the status of an item at the specified index.
+   *
+   * @param {number} index - The index of the item to update.
+   * @return {void} This function does not return a value.
+   */
   const handleChangeStatus = (index) => {
     updateState(index, true);
     if (type === "pack") {

@@ -21,6 +21,12 @@ export const ItemsTable = ({
 }) => {
   const flexArr = [2, 1, 1, 1, 0.65, 0.65, 0.65];
 
+  /**
+   * Renders a title row component.
+   *
+   * @param {Object} title - The title to be displayed in the row.
+   * @return {Element} The rendered title row component.
+   */
   const TitleRow = ({ title }) => {
     const rowData = [
       <HStack style={styles.mainTitle}>
@@ -56,9 +62,19 @@ export const ItemsTable = ({
     ];
     return <Row data={rowData} style={styles.row} flexArr={flexArr} />;
   };
+  /**
+   * Handles the logic for navigating to the next page.
+   *
+   * @return {undefined} This function doesn't return anything.
+   */
   const handleNextPage = () => {
     setPage(page + 1);
   };
+  /**
+   * Handles the action of going to the previous page.
+   *
+   * @return {undefined} There is no return value.
+   */
   const handlePreviousPage = () => {
     setPage(page - 1);
   };

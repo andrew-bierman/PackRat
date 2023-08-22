@@ -3,6 +3,12 @@ import abbrRegion from "../constants/convertStateToAbbr";
 import axios from "axios";
 import osmtogeojson from "osmtogeojson";
 
+/**
+ * Retrieves parks information for a given state.
+ *
+ * @param {string} state - The abbreviation of the state to retrieve parks for.
+ * @return {Array<string>} An array of park names.
+ */
 export const getParksRapid = async (state) => {
   let parksArray = [];
   const abbrState = abbrRegion(state, "abbr") ?? "";
@@ -25,6 +31,13 @@ export const getParksRapid = async (state) => {
   return parksArray;
 };
 
+/**
+ * Retrieves parks from OpenStreetMap (OSM) based on latitude and longitude coordinates.
+ *
+ * @param {number} lat - The latitude coordinate.
+ * @param {number} lon - The longitude coordinate.
+ * @return {Promise<Object>} The geojson data containing the parks.
+ */
 export const getParksOSM = async (lat, lon) => {
   const radius = 50000; // Search radius in meters
   const query = `
