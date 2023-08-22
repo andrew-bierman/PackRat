@@ -1,5 +1,6 @@
-import osmtogeojson from 'osmtogeojson';
-import axios from 'axios';
+import osmtogeojson from "osmtogeojson";
+import axios from "axios";
+import { InvalidRequestParamsError, RetrievingPhotonDetailsError } from "../../helpers/errors";
 
 /**
  * Retrieves Photon details based on the provided ID and type.
@@ -7,33 +8,31 @@ import axios from 'axios';
  * @param {Object} res - The response object.
  * @return {Promise<void>} The function does not return anything.
  */
-export const getPhotonDetails = async (req, res) => {
-  let { id, type } = req.params;
+export const getPhotonDetails = async (req, res,next) => {
+    let { id, type } = req.params;
 
-  if (!id || !type) {
-    res.status(400).send({ message: 'Invalid request parameters' });
-    return; // Return early to avoid further execution
-  }
+    if (!id || !type) {
+        next(InvalidRequestParamsError);
+    }
 
   type = type.toLowerCase(); // Standardize osm_type to be lowercase
 
-  switch (type) {
-    case 'way':
-    case 'w':
-      type = 'way';
-      break;
-    case 'node':
-    case 'n':
-      type = 'node';
-      break;
-    case 'relation':
-    case 'r':
-      type = 'relation';
-      break;
-    default:
-      res.status(400).send({ message: 'Invalid request parameters' });
-      return; // Return early to avoid further execution
-  }
+    switch (type) {
+        case "way":
+        case "w":
+            type = "way";
+            break;
+        case "node":
+        case "n":
+            type = "node";
+            break;
+        case "relation":
+        case "r":
+            type = "relation";
+            break;
+        default:
+            next(InvalidRequestParamsError);
+    }
 
   const overpassUrl = process.env.OSM_URI;
 
@@ -52,9 +51,8 @@ export const getPhotonDetails = async (req, res) => {
 
     // await updateDatabaseWithGeoJSONDataFromOverpass(geojsonData);
 
-    res.send(geojsonData);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send({ message: 'Error retrieving Photon details' });
-  }
+        res.send(geojsonData);
+    } catch (error) {
+        next(RetrievingPhotonDetailsError)
+    }
 };

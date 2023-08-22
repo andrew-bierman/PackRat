@@ -1,4 +1,5 @@
-import User from '../../models/userModel';
+import { UnableToEditUserError } from "../../helpers/errors";
+import User from "../../models/userModel";
 
 /**
  * Deletes a user from the database.
@@ -6,14 +7,14 @@ import User from '../../models/userModel';
  * @param {Object} res - The response object.
  * @return {Promise} A promise that resolves to the message "user was deleted successfully" if the user is deleted, or rejects with an error message if there is an error.
  */
-export const deleteUser = async (req, res) => {
+export const deleteUser = async (req, res, next) => {
   try {
     const { userId } = req.body;
 
     await User.findOneAndDelete({ _id: userId });
 
-    res.status(200).json({ msg: 'user was deleted successfully' });
+    res.status(200).json({ msg: "user was deleted successfully" });
   } catch (error) {
-    res.status(404).json({ msg: 'Unable to edit user' });
+    next(UnableToEditUserError)
   }
 };

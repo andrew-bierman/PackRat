@@ -9,7 +9,7 @@ import { searchItemsByNameService } from '../../services/item/item.service';
  * @return {Array} An array of items matching the search criteria.
  */
 
-export const searchItemsByName = async (req, res) => {
+export const searchItemsByName = async (req, res,next) => {
   try {
     const { name } = req.query;
 

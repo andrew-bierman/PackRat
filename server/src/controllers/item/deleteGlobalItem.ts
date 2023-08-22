@@ -1,4 +1,5 @@
-import { deleteGlobalItemService } from '../../services/item/item.service';
+import { UnableToDeleteItemError } from "../../helpers/errors";
+import { deleteGlobalItemService } from "../../services/item/item.service";
 
 /**
  * Deletes a global item.
@@ -6,7 +7,7 @@ import { deleteGlobalItemService } from '../../services/item/item.service';
  * @param {Object} res - The response object.
  * @return {Promise<void>} - Returns a promise that resolves to void.
  */
-export const deleteGlobalItem = async (req, res) => {
+export const deleteGlobalItem = async (req, res, next) => {
   try {
     const { itemId } = req.params;
 
@@ -16,7 +17,6 @@ export const deleteGlobalItem = async (req, res) => {
       data: itemDeleted,
     });
   } catch (error) {
-    console.error(error);
-    res.status(404).json({ msg: 'Unable to delete item ' + error.message });
+    next(UnableToDeleteItemError)
   }
 };
