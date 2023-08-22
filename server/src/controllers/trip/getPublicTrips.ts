@@ -1,4 +1,5 @@
-import { getPublicTripsService } from '../../services/trip/getPublicTripService';
+import { TripNotFoundError } from "../../helpers/errors";
+import { getPublicTripsService } from "../../services/trip/getPublicTripService";
 
 /**
  * Retrieves public trips based on the given query parameter.
@@ -6,7 +7,7 @@ import { getPublicTripsService } from '../../services/trip/getPublicTripService'
  * @param {object} res - The response object.
  * @return {object} The public trips as a JSON response.
  */
-export const getPublicTrips = async (req, res) => {
+export const getPublicTrips = async (req, res,next) => {
   try {
     const { queryBy } = req.query;
 
@@ -14,7 +15,6 @@ export const getPublicTrips = async (req, res) => {
 
     res.status(200).json(publicTrips);
   } catch (error) {
-    console.error(error);
-    res.status(404).json({ msg: 'Trips cannot be found' });
+    next(TripNotFoundError);
   }
 };

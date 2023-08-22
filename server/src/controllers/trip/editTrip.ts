@@ -1,4 +1,5 @@
-import Trip from '../../models/tripModel';
+import { UnableToEditTripError } from "../../helpers/errors";
+import Trip from "../../models/tripModel";
 
 /**
  * Edits a trip by updating the trip details.
@@ -6,7 +7,7 @@ import Trip from '../../models/tripModel';
  * @param {Object} res - The response object.
  * @return {Object} The updated trip object.
  */
-export const editTrip = async (req, res) => {
+export const editTrip = async (req, res, next) => {
   try {
     const { _id } = req.body;
 
@@ -16,6 +17,6 @@ export const editTrip = async (req, res) => {
 
     res.status(200).json(newTrip);
   } catch (error) {
-    res.status(404).json({ msg: 'Unable to edit trip' });
+    next(UnableToEditTripError)
   }
 };

@@ -1,4 +1,5 @@
-import { addItemGlobalService } from '../../services/item/item.service';
+import { UnableToAddItemError } from "../../helpers/errors";
+import { addItemGlobalService } from "../../services/item/item.service";
 
 /**
  * Adds an item globally.
@@ -7,7 +8,7 @@ import { addItemGlobalService } from '../../services/item/item.service';
  * @return {object} The added item.
  */
 
-export const addItemGlobal = async (req, res) => {
+export const addItemGlobal = async (req, res, next) => {
   try {
     const { name, weight, quantity, unit, type } = req.body;
 
@@ -24,6 +25,6 @@ export const addItemGlobal = async (req, res) => {
       newItem,
     });
   } catch (error) {
-    res.status(404).json({ msg: 'Unable to add item', error: error.message });
+    next(UnableToAddItemError)
   }
 };

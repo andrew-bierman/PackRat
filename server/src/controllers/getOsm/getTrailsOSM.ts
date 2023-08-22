@@ -1,6 +1,7 @@
-import osmtogeojson from 'osmtogeojson';
-import axios from 'axios';
-import { updateDatabaseWithGeoJSONDataFromOverpass } from './updateDatabaseWithGeoJSONDataFromOverpass';
+import osmtogeojson from "osmtogeojson";
+import axios from "axios";
+import { updateDatabaseWithGeoJSONDataFromOverpass } from "./updateDatabaseWithGeoJSONDataFromOverpass";
+import { InvalidRequestParamsError, RetrievingTrailsOSMError } from "../../helpers/errors";
 
 /**
  * Retrieves trails data from OpenStreetMap (OSM) based on the provided latitude, longitude, and radius.
@@ -8,14 +9,13 @@ import { updateDatabaseWithGeoJSONDataFromOverpass } from './updateDatabaseWithG
  * @param {Object} res - The response object.
  * @return {Promise<void>} - Resolves with the geojsonData of trails retrieved from OSM.
  */
-export const getTrailsOSM = async (req, res) => {
+export const getTrailsOSM = async (req, res,next) => {
   try {
     // set default values for lat, lon, and radius
     const { lat = 45.5231, lon = -122.6765, radius = 50000 } = req.query;
 
     if (!lat || !lon || !radius) {
-      res.status(400).send({ message: 'Invalid request parameters' });
-      return; // Return early to avoid further execution
+      next(InvalidRequestParamsError);
     }
 
     const overpassUrl = process.env.OSM_URI;
@@ -37,7 +37,6 @@ export const getTrailsOSM = async (req, res) => {
 
     res.send(geojsonData);
   } catch (error) {
-    console.error(error);
-    res.status(400).send({ message: 'Error retrieving Trails OSM results' });
+    next(RetrievingTrailsOSMError)
   }
 };
