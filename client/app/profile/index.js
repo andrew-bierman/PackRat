@@ -6,24 +6,26 @@ import { ScrollView } from 'react-native'
 export default function Profile() {
   return (
     <ScrollView>
-      {Platform.OS === "web" ?
-        <>
-          <Header.Screen
-            options={{
-              // https://reactnavigation.org/docs/headers#setting-the-header-title
-              title: "Profile",
-              // http://reactnavigation.org/docs/headers#adjusting-header-styles
+      {
+        Platform.OS === "web" ? (
+          <>
+            <Header.Screen
+              options={{
+                // https://reactnavigation.org/docs/headers#setting-the-header-title
+                title: "Profile",
+                // http://reactnavigation.org/docs/headers#adjusting-header-styles
 
-              // https://reactnavigation.org/docs/headers#replacing-the-title-with-a-custom-component
-            }}
-          />
+                // https://reactnavigation.org/docs/headers#replacing-the-title-with-a-custom-component
+              }}
+            />
+            <ProfileContainer />
+          </>
+        ) : (
           <ProfileContainer />
-        </>
-        :
-        <ProfileContainer />
+        )
         // <ProfileContainerMobile />
       }
     </ScrollView>
-  )
+  );
 
 }

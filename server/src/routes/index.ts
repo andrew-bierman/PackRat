@@ -15,6 +15,7 @@ import passwordResetRoutes from "./passwordResetRoutes";
 import openAiRoutes from "./openAiRoutes";
 import templateRoutes from "./templateRoutes";
 import favoriteRouters from "./favoriteRoutes";
+import mapRoutes from "./mapRoutes";
 
 const router = express.Router();
 
@@ -28,7 +29,7 @@ const csrfProtection = csrf({ cookie: true });
  * @param {Response} res - The response object.
  * @param {NextFunction} next - The next function to call in the middleware chain.
  */
-const logger = (req:Request, res:Response, next:express.NextFunction) => {
+const logger = (req: Request, res: Response, next: express.NextFunction) => {
   console.log(`Incoming ${req.method} ${req.path}`);
   res.on("finish", () => {
     console.log(`Finished ${req.method} ${req.path} ${res.statusCode}`);
@@ -57,6 +58,7 @@ router.use("/openai", openAiRoutes);
 router.use("/template", templateRoutes);
 router.use("/favorite", favoriteRouters);
 router.use("/openai", openAiRoutes);
+router.use("/map", mapRoutes);
 
 // Also listen to /api for backwards compatibility
 router.use("/api/user", userRoutes);
@@ -105,4 +107,3 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 export default router;
-

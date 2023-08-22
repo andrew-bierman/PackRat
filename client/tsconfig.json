@@ -1,7 +1,7 @@
 {
   "extends": "@tsconfig/react-native/tsconfig.json",
   "compilerOptions": {
-    "lib": ["es2022"],
+    "lib": ["esnext"],
     "alwaysStrict": false,
     "strictNullChecks": false,
     "strictBindCallApply": false,
@@ -18,8 +18,8 @@
       "~/utils/*": ["utils/*"],
       "~/hooks/*": ["hooks/*"],
       "~/screens/*": ["screens/*"],
-      "~/theme/*": ["theme/*"],
-    },
+      "~/theme/*": ["theme/*"]
+    }
   },
   "exclude": [
     "node_modules",
