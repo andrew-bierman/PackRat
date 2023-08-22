@@ -341,6 +341,15 @@ const WebMap = ({ shape: shapeProp }) => {
     setMapboxStyle(style);
   };
 
+  const openMaps = () => {
+    const pointLatLong = shape?.features[0]?.geometry?.coordinates
+    const [lng, lat] = pointLatLong;
+    window.open(`https://maps.google.com?q=${lat},${lng}`);
+    // https://www.google.com/maps/@${your_lat},${your_lng},${your_desired_zoom}z
+
+
+  }
+
   const handleGpxDownload = async (
     gpxData,
     filename = shape?.features[0]?.properties?.name ?? "trail",
@@ -415,6 +424,7 @@ const WebMap = ({ shape: shapeProp }) => {
         styles={styles}
         downloadable={downloadable}
         downloading={downloading}
+        navigateToMaps={openMaps}
         onDownload={fetchGpxDownload}
         handleGpxUpload={async () => {
           console.log("clikedd");

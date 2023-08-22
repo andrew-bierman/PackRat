@@ -9,7 +9,7 @@ import {
   Alert,
   Platform,
 } from "react-native";
-import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Entypo, MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";
 
 import { mapboxStyles } from "../../utils/mapFunctions";
 
@@ -24,6 +24,7 @@ const MapButtonsOverlay = ({
   onDownload,
   handleGpxUpload,
   progress,
+  navigateToMaps
 }) => {
   console.log("newwwww");
   const [showStyleOptions, setShowStyleOptions] = useState(false);
@@ -41,12 +42,30 @@ const MapButtonsOverlay = ({
     <>
       {!mapFullscreen ? (
         // Preview map
+        <>
         <TouchableOpacity
           style={[styles.headerBtnView, styles.enterFullScreenBtn]}
           onPress={enableFullScreen}
         >
           <Entypo name="resize-full-screen" size={21} color="grey" />
         </TouchableOpacity>
+        
+
+        <TouchableOpacity
+          style={[styles.headerBtnView,
+            {
+              width: 40,
+              height: 40,
+              position: "absolute",
+              bottom: 10,
+              left: 10,
+            },
+          ]}
+          onPress={navigateToMaps}
+        >
+          <FontAwesome5 name="directions" size={21} color="grey" />
+        </TouchableOpacity>
+        </>
       ) : (
         // Fullscreen map
         <>
