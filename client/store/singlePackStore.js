@@ -10,7 +10,7 @@ import axios from "axios";
 
 import { api } from "../constants/api";
 
-const singlePackAdapter = createEntityAdapter({
+export const singlePackAdapter = createEntityAdapter({
   selectId: (singlePack) => singlePack._id,
 });
 
@@ -47,6 +47,19 @@ export const selectItemsGlobal = createAsyncThunk(
   }
 );
 
+export const updateExistingSinglePack = createAsyncThunk(
+  "packs/updateExistingSinglePack",
+  async (pack) => {
+    return pack;
+  }
+);
+export const addNewSinglePack = createAsyncThunk(
+  "packs/addNewSinglePack",
+  async (pack) => {
+    return pack;
+  }
+);
+
 const singlePackSlice = createSlice({
   name: "singlePack",
   initialState: initialState,
@@ -79,6 +92,34 @@ const singlePackSlice = createSlice({
       .addCase(selectItemsGlobal.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message;
+      })
+      .addCase(updateExistingSinglePack.fulfilled, (state, action) => {
+        const index = state.singlePack.items.findIndex(
+          (x) => x._id === action.payload._id
+        );
+        if (index === -1) return;
+        const data = JSON.parse(JSON.stringify(state.singlePack));
+        data.items[index] = {
+          ...data.items[index],
+          name: action.payload.name,
+          quantity: parseInt(`${action.payload.quantity}`),
+          type: action.payload.type,
+          unit: action.payload.unit,
+          weight: parseInt(`${action.payload.weight}`),
+        };
+
+        state.singlePack = data;
+      })
+      .addCase(addNewSinglePack.fulfilled, (state, action) => {
+        const data = JSON.parse(JSON.stringify(state.singlePack));
+        data.items.push({
+          ...action.payload,
+          category: { name: action.payload.type },
+          quantity: parseInt(`${action.payload.quantity}`),
+          weight: parseInt(`${action.payload.weight}`),
+        });
+
+        state.singlePack = data;
       });
   },
 });

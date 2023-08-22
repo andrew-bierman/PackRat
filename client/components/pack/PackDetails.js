@@ -1,23 +1,19 @@
 import React, { useEffect, useState } from "react";
 
-import PackContainer from "./PackContainer";
-import { DetailsHeader } from "../details/header";
-
 import { useSearchParams } from "expo-router";
+import { fetchUserPacks } from "../../store/packsStore";
 import { TableContainer } from "../pack_table/Table";
-import { fetchUserPacks, selectPackById } from "../../store/packsStore";
 
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { fetchSinglePack } from "../../store/singlePackStore";
 
+import { CLIENT_URL } from "@env";
 import { Box, Text } from "native-base";
-import { DetailsComponent } from "../details";
 import { Dimensions, Platform, StyleSheet } from "react-native";
 import { theme } from "../../theme";
-import { CLIENT_URL } from "@env";
 import ScoreContainer from "../ScoreContainer";
 import ChatContainer from "../chat";
-import { AddItem } from "../item/AddItem";
+import { DetailsComponent } from "../details";
 import { AddItemModal } from "./AddItemModal";
 
 export function PackDetails() {
@@ -30,27 +26,24 @@ export function PackDetails() {
   const { packId } = useSearchParams();
   const link = `${CLIENT_URL}/packs/${packId}`;
   const isLoading = useSelector((state) => state.singlePack.isLoading);
-  const updated = useSelector((state) => state.packs.update);
   const [firstLoad, setFirstLoad] = useState(true);
   const user = useSelector((state) => state.auth.user);
   const userId = user && user._id;
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
+  const data = useSelector((state) => state);
   const currentPack = useSelector((state) => state.singlePack.singlePack);
   const [refetch, setRefetch] = useState(false);
   useEffect(() => {
     if (!packId) return;
-      dispatch(fetchSinglePack(packId));
-      if (userId) dispatch(fetchUserPacks(userId));
-      setFirstLoad(false)
-  }, [dispatch, packId, updated]); // TODO updated is a temporary fix to re-render when pack is update, due to bug in store
+    dispatch(fetchSinglePack(packId));
+    if (userId) dispatch(fetchUserPacks(userId));
+    setFirstLoad(false);
+  }, [dispatch, packId]);
 
   const currentPackId = currentPack && currentPack._id;
 
-
-
   // check if user is owner of pack, and that pack and user exists
   const isOwner = currentPack && user && currentPack.owner_id === user._id;
-
 
   const error = useSelector((state) => state.singlePack.error);
   const isError = error !== null;
@@ -61,7 +54,9 @@ export function PackDetails() {
     <Box
       style={[
         styles.mainContainer,
-        Platform.OS == "web" ? { minHeight: "100vh" } : Dimensions.get('screen').height,
+        Platform.OS == "web"
+          ? { minHeight: "100vh" }
+          : Dimensions.get("screen").height,
       ]}
     >
       {!isError && (
@@ -73,18 +68,14 @@ export function PackDetails() {
             error={error}
             additionalComps={
               <>
-                <TableContainer currentPack={currentPack}
-                 copy={canCopy}
-                  />
-                <Box
-                  style={styles.boxStyle}
-                >
+                <TableContainer currentPack={currentPack} copy={canCopy} />
+
+                <Box style={styles.boxStyle}>
                   <AddItemModal
                     currentPackId={currentPackId}
                     currentPack={currentPack}
                     isAddItemModalOpen={isAddItemModalOpen}
                     setIsAddItemModalOpen={setIsAddItemModalOpen}
-                    setRefetch={() => setRefetch(prev => !prev)}
                   />
                 </Box>
                 <ScoreContainer
@@ -92,9 +83,7 @@ export function PackDetails() {
                   data={currentPack}
                   isOwner={isOwner}
                 />
-                <Box
-                  style={styles.boxStyle}
-                >
+                <Box style={styles.boxStyle}>
                   <ChatContainer />
                 </Box>
               </>
