@@ -15,6 +15,7 @@ import FlashMessage from "react-native-flash-message";
 import Footer from "../components/footer/Footer";
 
 export default function HomeLayout() {
+
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
