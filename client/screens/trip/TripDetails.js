@@ -1,22 +1,22 @@
 import React, { useEffect } from "react";
 
-import { DetailsHeader } from "../details/header";
+import { DetailsHeader } from "../../components/details/header";
 
 import { useSearchParams } from "expo-router";
-import { TableContainer } from "../pack_table/Table";
+import { TableContainer } from "../../components/pack_table/Table";
 import { selectPackById } from "../../store/packsStore";
 
 import { useSelector, useDispatch } from "react-redux";
 import { fetchSingleTrip } from "../../store/singleTripStore";
 
 import { Box, Text, View } from "native-base";
-import { DetailsComponent } from "../details";
+import { DetailsComponent } from "../../components/details";
 import { Platform, StyleSheet } from "react-native";
 import { theme } from "../../theme";
 import { CLIENT_URL } from "@env";
-import ScoreContainer from "../ScoreContainer";
-import WeatherCard from "../WeatherCard";
-import TripCard from "../TripCard";
+import ScoreContainer from "../../components/ScoreContainer";
+import WeatherCard from "../../components/WeatherCard";
+import TripCard from "../../components/TripCard";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { convertPhotonGeoJsonToShape } from "../../utils/mapFunctions";
 import UseTheme from "../../hooks/useTheme";

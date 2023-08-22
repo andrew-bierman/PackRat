@@ -1,4 +1,4 @@
-import CreateTrip from "../../components/trip/createTrip";
+import CreateTrip from "../../screens/trip/createTrip";
 
 import { Platform } from "react-native";
 import { Stack as Header } from "expo-router";
