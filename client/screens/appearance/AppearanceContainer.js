@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import { VStack, Box, Text, Switch } from "native-base";
 import { StyleSheet } from "react-native";
 import UseTheme from "../../hooks/useTheme";
-import { Paragraph, Card, H2,XStack,Button,Image } from 'tamagui'
-import { Card as RNPCard} from 'react-native-paper'
+import { Paragraph, Card, H2, XStack, Button, Image } from "tamagui";
+import { Card as RNPCard } from "react-native-paper";
+import { DialogDemo } from "../../components/dialog"
 
 export default function AppearanceContainer() {
   const { enableDarkMode, enableLightMode, currentTheme, isDark } = UseTheme();
   const [isEnabled, setIsEnabled] = useState(false);
+  const [showKitchenSink, setShowKitchenSink] = useState(true);
 
   const toggleSwitch = () => {
     setIsEnabled((prevIsEnabled) => {
@@ -16,12 +18,11 @@ export default function AppearanceContainer() {
       return newState;
     });
   };
-  
 
   useEffect(() => {
     setIsEnabled(isDark); // synchronize isEnabled with isDark whenever isDark changes
   }, [isDark]);
-  
+
   return (
     <VStack style={styles.mainContainer}>
       <Box style={styles.infoSection}>
@@ -39,36 +40,43 @@ export default function AppearanceContainer() {
           {isEnabled ? "Dark Mode" : "Light Mode"}
         </Text>
         <DemoCard
-        // animation="bouncy"
-        size="$4"
-        width={250}
-        height={300}
-        scale={0.9}
-        hoverStyle={{ scale: 0.925 }}
-        pressStyle={{ scale: 0.875 }}
-      />
-      <Box>
-      <Box alignSelf="center" // bg="primary.500"
-    _text={{
-      fontSize: "md",
-      fontWeight: "medium",
-      color: "amber.100",
-      letterSpacing: "lg"
-    }} p={4} bg={[ "primary.500"]}>
-        This is a Box from Native Base
-      </Box>
-    </Box>;
-    {/* Paper */}
-    <RNPCard >
-      <RNPCard.Title title="React Native Paper Card" />
-
-    </RNPCard>
+          // animation="bouncy"
+          size="$4"
+          width={250}
+          height={300}
+          scale={0.9}
+          hoverStyle={{ scale: 0.925 }}
+          pressStyle={{ scale: 0.875 }}
+        />
+        <Box>
+          <Box
+            alignSelf="center" // bg="primary.500"
+            _text={{
+              fontSize: "md",
+              fontWeight: "medium",
+              color: "amber.100",
+              letterSpacing: "lg",
+            }}
+            p={4}
+            bg={["primary.500"]}
+          >
+            This is a Box from Native Base
+          </Box>
+        </Box>
+        ;{/* Paper */}
+        <RNPCard>
+          <RNPCard.Title title="React Native Paper Card" />
+        </RNPCard>
+        {showKitchenSink && (
+          <Box>
+            <Text>Kitchen Sink</Text>
+            <DialogDemo />
+          </Box>
+        )}
       </Box>
     </VStack>
   );
 }
-
-
 
 export function DemoCard(props) {
   return (
@@ -85,7 +93,7 @@ export function DemoCard(props) {
         
       </Card.Background> */}
     </Card>
-  )
+  );
 }
 const styles = StyleSheet.create({
   mainContainer: {

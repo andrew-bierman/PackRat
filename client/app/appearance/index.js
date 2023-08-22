@@ -1,6 +1,6 @@
 import { Platform } from "react-native";
 import { Stack as Header } from "expo-router";
-import AppearanceContainer from "../../components/appearance/AppearanceContainer";
+import AppearanceContainer from "../../screens/appearance/AppearanceContainer";
 
 export default function Appearance() {
   return Platform.OS === "web" ? (

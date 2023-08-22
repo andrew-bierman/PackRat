@@ -1,5 +1,5 @@
 {
-  "name": "packrat-front",
+  "name": "packrat",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -40,6 +40,8 @@
     "@tamagui/babel-plugin": "^1.52.5",
     "@tamagui/config": "^1.52.4",
     "@tamagui/font-inter": "^1.52.4",
+    "@tamagui/linear-gradient": "^1.52.7",
+    "@tamagui/lucide-icons": "^1.52.7",
     "@tamagui/react-native-media-driver": "^1.52.4",
     "@tamagui/shorthands": "^1.52.4",
     "@tamagui/theme-base": "^1.52.4",
@@ -98,7 +100,7 @@
     "react-responsive": "^9.0.2",
     "redux-persist": "^6.0.0",
     "serve": "^14.2.0",
-    "tamagui": "^1.52.5",
+    "tamagui": "^1.52.7",
     "togpx": "^0.5.4",
     "xmldom": "^0.6.0"
   },

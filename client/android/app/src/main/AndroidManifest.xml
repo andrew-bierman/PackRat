@@ -45,7 +45,7 @@
     />
     <meta-data
       android:name="expo.modules.updates.EXPO_UPDATE_URL"
-      android:value="https://exp.host/@andrewbierman/packrat-front"
+      android:value="https://exp.host/@andrewbierman/packrat"
     />
     <activity
       android:name=".MainActivity"
