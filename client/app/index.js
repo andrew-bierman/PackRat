@@ -12,7 +12,7 @@ import { StyleSheet } from "react-native";
 
 import LandingPage from "../components/landing_page";
 
-import Dashboard from "../components/dashboard";
+import Dashboard from "../screens/dashboard";
 import useTheme from "../hooks/useTheme";
 import { current } from "@reduxjs/toolkit";
 
