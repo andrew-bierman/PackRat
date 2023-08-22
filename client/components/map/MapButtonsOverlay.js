@@ -28,10 +28,21 @@ const MapButtonsOverlay = ({
   console.log("newwwww");
   const [showStyleOptions, setShowStyleOptions] = useState(false);
 
+  /**
+   * Toggles the visibility of the style options.
+   *
+   * @return {undefined} - No return value.
+   */
   const handleStyleOptionPress = () => {
     setShowStyleOptions(!showStyleOptions);
   };
 
+/**
+ * A function to handle the selection of a style.
+ *
+ * @param {type} style - the selected style
+ * @return {type} undefined
+ */
   const handleStyleSelection = (style) => {
     handleChangeMapStyle(style);
     setShowStyleOptions(false);

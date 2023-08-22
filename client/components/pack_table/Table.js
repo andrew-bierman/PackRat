@@ -72,6 +72,12 @@ const TableItem = ({
   const { name, weight, quantity, unit, _id } = itemData;
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  /**
+   * Executes the onTrigger function.
+   *
+   * @param {None} None - No parameters required.
+   * @return {None} No return value.
+   */
   const onTrigger = () => {
     console.log("called");
     setIsEditModalOpen(true);

@@ -34,6 +34,12 @@ const GeoJSONSchema = new Schema({
   },
 });
 
+/**
+ * Saves a single GeoJSON feature.
+ *
+ * @param {object} feature - The GeoJSON feature to be saved.
+ * @return {Promise<object>} The saved GeoJSON feature.
+ */
 GeoJSONSchema.statics.saveOne = async function (feature) {
   const filter = { id: feature.id };
   return await this.findOneAndUpdate(filter, feature, {

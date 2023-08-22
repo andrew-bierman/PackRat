@@ -152,6 +152,12 @@ export default function Login() {
   //   clientId: WEB_CLIENT_ID,
   // });
 
+  /**
+   * Handles the login process.
+   *
+   * @param {Object} data - The data object containing the email and password.
+   * @return {void}
+   */
   const handleLogin = (data) => {
     const { email, password } = data;
     dispatch(signIn({ email, password }));

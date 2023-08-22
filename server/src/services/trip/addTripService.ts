@@ -49,7 +49,13 @@ export const addTripService = async (tripDetails): Promise<string> => {
   }
 };
 
-  // Helper function to create an OSM object (Node or Way) and return its _id
+  /**
+   * Generates a new OSM object based on the provided geoJSON.
+   *
+   * @param {object} geoJSON - The geoJSON object representing the OSM object.
+   * @throws {Error} Throws an error if the geoJSON object is invalid or missing.
+   * @return {object} An object containing the osm_ref and osm_type properties of the newly created OSM object.
+   */
   const createOSMObject = async (geoJSON) => {
     // Check if geoJSON object is valid
     if (!geoJSON || !geoJSON.properties) {

@@ -13,6 +13,11 @@ export const PasswordResetForm = ({ token }) => {
 
   // const { token } = useSearchParams();
 
+/**
+ * Handles the password reset.
+ *
+ * @return {Promise<void>} - A promise that resolves when the password reset is complete.
+ */
   const handlePasswordReset = async () => {
     try {
       setLoading(true);

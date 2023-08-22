@@ -23,6 +23,11 @@ export default function Drawer() {
 
   const user = useSelector((state) => state.auth.user);
 
+  /**
+   * Handles the sign out functionality.
+   *
+   * @return {undefined} No return value.
+   */
   const handleSignOut = () => {
     dispatch(signOut());
   };

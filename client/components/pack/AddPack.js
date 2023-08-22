@@ -28,6 +28,14 @@ export const AddPack = () => {
 
   const isError = error !== null;
 
+
+  /**
+   * Handles the addition of a pack.
+   *
+   * @param {string} name - The name of the pack.
+   * @param {string} owner_id - The ID of the pack's owner.
+   * @return {void}
+   */
   const handleAddPack = () => {
     dispatch(addPack({ name, owner_id: user?._id }));
     setName("");
