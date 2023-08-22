@@ -1,6 +1,7 @@
+import { UnableToEditItemError } from "../../helpers/errors";
 import { editItemService } from "../../services/item/item.service";
 
-export const editItem = async (req, res) => {
+export const editItem = async (req, res,next) => {
   try {
     const { _id, name, weight, unit, quantity, type } = req.body;
 
@@ -8,6 +9,6 @@ export const editItem = async (req, res) => {
 
     res.status(200).json(newItem);
   } catch (error) {
-    res.status(404).json({ msg: "Unable to edit item" });
+    next(UnableToEditItemError)
   }
 };

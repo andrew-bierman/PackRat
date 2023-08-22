@@ -7,7 +7,7 @@ import { postCollectionGeoJSONService } from "../../services/osm/osm.service";
  * @return {Promise<void>} - returns a Promise that resolves to undefined
  */
 export const postCollectionGeoJSON = async (req, res) => {
-  try {
+  
     console.log("in postGeoJSON");
     const geojson = req.body;
 
@@ -18,12 +18,5 @@ export const postCollectionGeoJSON = async (req, res) => {
       data: {
         result,
       },
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(400).json({
-      status: "fail",
-      message: error.message,
-    });
+    })
   }
-};

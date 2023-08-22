@@ -1,3 +1,4 @@
+import { GetResponseFromAIError } from "../../helpers/errors";
 import { getAIResponseService } from "../../services/openAi/openAi.service";
 
 /**
@@ -6,7 +7,7 @@ import { getAIResponseService } from "../../services/openAi/openAi.service";
  * @param {Object} res - The response object.
  * @return {Object} The AI response and updated conversation object.
  */
-export const getAIResponse = async (req, res) => {
+export const getAIResponse = async (req, res,next) => {
   try {
     const { userId, conversationId, userInput } = req.body;
 
@@ -14,8 +15,6 @@ export const getAIResponse = async (req, res) => {
 
     res.json(result);
   } catch (error) {
-    console.error(error);
-    console.error(error.message);
-    res.status(500).json({ error: "Failed to get response from AI." });
+    next(GetResponseFromAIError)
   }
 };

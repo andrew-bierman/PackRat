@@ -1,3 +1,4 @@
+import { UnableToDeleteItemError } from "../../helpers/errors";
 import { deleteItemService } from "../../services/item/item.service";
 
 /**
@@ -7,7 +8,7 @@ import { deleteItemService } from "../../services/item/item.service";
  * @return {Object} The deleted item.
  */
 
-export const deleteItem = async (req, res) => {
+export const deleteItem = async (req, res, next) => {
   try {
     const { itemId, packId } = req.body;
 
@@ -16,6 +17,6 @@ export const deleteItem = async (req, res) => {
     res.status(200).json(itemDeleted);
   } catch (error) {
     console.error(error);
-    res.status(404).json({ msg: "Unable to delete item" + error.message });
+    next(UnableToDeleteItemError)
   }
 };

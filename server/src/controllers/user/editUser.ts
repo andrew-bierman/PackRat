@@ -1,3 +1,4 @@
+import { UnableToEditUserError } from "../../helpers/errors";
 import User from "../../models/userModel";
 
 /**
@@ -8,7 +9,7 @@ import User from "../../models/userModel";
  * @param {Object} res - The response object.
  * @return {Promise} A promise that resolves to the edited user.
  */
-export const editUser = async (req, res) => {
+export const editUser = async (req, res,next) => {
     try {
       const { userId } = req.body;
   
@@ -17,6 +18,6 @@ export const editUser = async (req, res) => {
       }).populate("favorites");
       res.status(200).json(editedUser);
     } catch (error) {
-      res.status(404).json({ msg: "Unable to edit user" });
+      next(UnableToEditUserError)
     }
   };

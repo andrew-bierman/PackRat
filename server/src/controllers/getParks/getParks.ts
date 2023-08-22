@@ -1,4 +1,5 @@
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args as Parameters<typeof fetch>));
+import { RetrievingParksDataError } from "../../helpers/errors";
 import { oneEntity } from "../../utils/oneEntity";
 
 /**
@@ -7,7 +8,7 @@ import { oneEntity } from "../../utils/oneEntity";
  * @param {Object} res - The response object.
  * @return {Promise} A promise that resolves with the park data or an error message.
  */
-export const getParks = async (req, res) => {
+export const getParks = async (req, res,next) => {
   let abbrState = await oneEntity(req.query.abbrState);
 
   const X_RAPIDAPI_KEY = process.env.X_RAPIDAPI_KEY;
@@ -32,6 +33,6 @@ export const getParks = async (req, res) => {
       res.send(json);
     })
     .catch(() =>
-      res.send({ message: "Error retrieving park data from RapidAPI" })
+      next(RetrievingParksDataError)
     );
 };

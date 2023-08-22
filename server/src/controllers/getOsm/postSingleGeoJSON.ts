@@ -7,7 +7,6 @@ import { postSingleGeoJSONService } from "../../services/osm/osm.service";
  * @return {void} - does not return a value
  */
 export const postSingleGeoJSON = async (req, res) => {
-  try {
     console.log("in postSingleGeoJSON");
     const geojson = req.body;
 
@@ -19,11 +18,4 @@ export const postSingleGeoJSON = async (req, res) => {
         result,
       },
     });
-  } catch (error) {
-    console.error(error);
-    res.status(400).json({
-      status: "fail",
-      message: error.message,
-    });
-  }
 };

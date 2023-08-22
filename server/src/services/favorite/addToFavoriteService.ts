@@ -16,4 +16,5 @@ export const addToFavoriteService = async (packId, userId) => {
         await Pack.updateOne({ _id: packId }, { $push: { favorited_by: userId } });
         await Pack.updateOne({ _id: packId }, { $inc: { favorites_count: 1 } });
     }
+    
 };

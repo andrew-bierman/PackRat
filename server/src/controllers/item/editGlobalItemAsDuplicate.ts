@@ -1,3 +1,4 @@
+import { UnableToDeleteItemError } from "../../helpers/errors";
 import { editGlobalItemAsDuplicateService } from "../../services/item/item.service";
 
 /**
@@ -15,7 +16,7 @@ import { editGlobalItemAsDuplicateService } from "../../services/item/item.servi
  * @param {Object} res - The response object.
  * @return {Object} The updated item.
  */
-export const editGlobalItemAsDuplicate = async (req, res) => {
+export const editGlobalItemAsDuplicate = async (req, res,next) => {
   try {
     const { itemId } = req.params;
     const { packId, name, weight, quantity, unit, type } = req.body;
@@ -24,6 +25,6 @@ export const editGlobalItemAsDuplicate = async (req, res) => {
 
     res.status(200).json(newItem);
   } catch (error) {
-    res.status(404).json({ msg: "Items cannot be found" });
+    next(UnableToDeleteItemError)
   }
 };

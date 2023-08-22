@@ -10,6 +10,7 @@ import {
   JWT_SECRET,
 } from "../../config";
 import utilsService from "../../utils/utils.service";
+import { UserAlreadyExistsError } from "../../helpers/errors";
 
 const oauth2Client = new google.auth.OAuth2(
   GOOGLE_CLIENT_ID,
@@ -32,7 +33,7 @@ const getGoogleUserInfo = async (code) => {
    * @param {object} res - The response object.
    * @return {Promise} A promise that resolves to the generated token or an error message.
    */
-  export const googleSignin = async (req, res) => {
+  export const googleSignin = async (req, res,next) => {
     try {
       const code = req.query.code;
       const userInfo = await getGoogleUserInfo(code);
@@ -44,7 +45,7 @@ const getGoogleUserInfo = async (code) => {
       if (!alreadyGoogleSignin) {
         const isLocalLogin = await User.findOne({ email: userInfo.email });
         if (isLocalLogin) {
-          throw new Error("Already user registered on that email address");
+          next(UserAlreadyExistsError);
         }
         const user = new User({
           email: userInfo.email,

@@ -8,7 +8,6 @@ import { sendWelcomeEmail, resetEmail } from "../../utils/accountEmail";
  * @return {Promise<void>} - A promise that resolves when the email is sent.
  */
 export const sentEmail = async (req, res) => {
-    try {
       const { email } = req.body;
   
       const user = await User.findOne({ email: email });
@@ -22,7 +21,4 @@ export const sentEmail = async (req, res) => {
         status: "success",
         statusCode: 200,
       });
-    } catch (err) {
-      res.status(400).send({ message: err.message });
-    }
   };

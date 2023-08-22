@@ -1,3 +1,4 @@
+import { TripNotFoundError } from "../../helpers/errors";
 import { getTripByIdService } from "../../services/trip/getTripByIdService";
 
 /**
@@ -6,7 +7,7 @@ import { getTripByIdService } from "../../services/trip/getTripByIdService";
  * @param {Object} res - The response object.
  * @return {Promise} A promise that resolves to the trip details.
  */
-export const getTripById = async (req, res) => {
+export const getTripById = async (req, res,next) => {
   try {
     const { tripId } = req.params;
 
@@ -14,7 +15,6 @@ export const getTripById = async (req, res) => {
 
     res.status(200).json(tripDetails);
   } catch (error) {
-    console.error(error);
-    res.status(404).json({ msg: "Trip cannot be found" });
+    next(TripNotFoundError)
   }
 };

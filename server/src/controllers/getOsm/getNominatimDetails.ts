@@ -1,4 +1,5 @@
 import axios from "axios";
+import { ErrorProcessingNominatimError, ErrorRetrievingNominatimError, InvalidRequestParamsError } from "../../helpers/errors";
 
 /**
  * Retrieves Nominatim details based on the provided latitude, longitude, or place ID.
@@ -6,7 +7,7 @@ import axios from "axios";
  * @param {Object} res - The response object.
  * @returns {Promise<void>} - Returns nothing.
  */
-export const getNominatimDetails = async (req, res) => {
+export const getNominatimDetails = async (req, res,next) => {
     const { lat, lon, place_id } = req.query;
 
     let nominatimUrl = "";
@@ -16,10 +17,8 @@ export const getNominatimDetails = async (req, res) => {
     } else if (lat && lon) {
         nominatimUrl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`;
     } else {
-        res.status(400).send({ message: "Invalid request parameters" });
-        return; // Return early to avoid further execution
+        next(InvalidRequestParamsError)
     }
-
     try {
         const response = await axios.get(nominatimUrl);
 
@@ -27,10 +26,9 @@ export const getNominatimDetails = async (req, res) => {
             res.send(response.data);
         } else {
             console.log(response.status, response.statusText);
-            res.send({ message: "Error processing Nominatim Data" });
+            next(ErrorProcessingNominatimError)
         }
     } catch (error) {
-        console.error(error);
-        res.status(500).send({ message: "Error retrieving Nominatim Data" });
+        next(ErrorRetrievingNominatimError)
     }
 };

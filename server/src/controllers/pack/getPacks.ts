@@ -1,3 +1,4 @@
+import { PackNotFoundError } from "../../helpers/errors";
 import { getPacksService } from "../../services/pack/pack.service";
 
 /**
@@ -6,7 +7,7 @@ import { getPacksService } from "../../services/pack/pack.service";
  * @param {Object} res - Express response object.
  * @return {Promise} - Array of packs.
  */
-export const getPacks = async (req, res) => {
+export const getPacks = async (req, res,next) => {
   try {
     const { ownerId } = req.params;
 
@@ -14,7 +15,6 @@ export const getPacks = async (req, res) => {
 
     res.status(200).json(packs);
   } catch (error) {
-    console.log("error", error);
-    res.status(404).json({ msg: "Packs cannot be found " + error.message });
+    next(PackNotFoundError)
   }
 };

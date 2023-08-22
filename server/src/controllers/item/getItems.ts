@@ -1,3 +1,4 @@
+import { ItemNotFoundError } from "../../helpers/errors";
 import Item from "../../models/itemModel";
 import { getItemsService } from "../../services/item/item.service";
 
@@ -8,7 +9,7 @@ import { getItemsService } from "../../services/item/item.service";
  * @param {string} req.params.packId - The ID of the pack to retrieve items for.
  * @return {Object} An array of items associated with the pack.
  */
-export const getItems = async (req, res) => {
+export const getItems = async (req, res,next) => {
   try {
     const { packId } = req.params;
 
@@ -16,6 +17,6 @@ export const getItems = async (req, res) => {
 
     res.status(200).json(items);
   } catch (error) {
-    res.status(404).json({ msg: "Items cannot be found" });
+    next(ItemNotFoundError)
   }
 };

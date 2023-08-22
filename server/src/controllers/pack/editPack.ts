@@ -1,3 +1,4 @@
+import { UnableToEditPackError } from "../../helpers/errors";
 import { editPackService } from "../../services/pack/pack.service";
 
 /**
@@ -7,7 +8,7 @@ import { editPackService } from "../../services/pack/pack.service";
  * @return {Object} The updated pack.
  */
 
-export const editPack = async (req, res) => {
+export const editPack = async (req, res,next) => {
   try {
     const { _id } = req.body;
 
@@ -17,6 +18,6 @@ export const editPack = async (req, res) => {
 
     res.status(200).json(newPack);
   } catch (error) {
-    res.status(404).json({ msg: "Unable to edit pack" });
+    next(UnableToEditPackError)
   }
 };

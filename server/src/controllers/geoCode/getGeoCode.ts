@@ -1,4 +1,5 @@
 const fetch = (...args: Parameters<typeof fetch>) => import('node-fetch').then(({default: fetch}) => fetch(...args as Parameters<typeof fetch>));
+import { ErrorFetchingGeoCodeError } from "../../helpers/errors";
 import { oneEntity } from "../../utils/oneEntity";
 
 /**
@@ -9,7 +10,7 @@ import { oneEntity } from "../../utils/oneEntity";
  * @param {Object} res - The response object.
  * @return {Promise<void>} - A promise that resolves when the geocode is retrieved and the response is sent.
  */
-export const getGeoCode = async (req, res) => {
+export const getGeoCode = async (req, res,next) => {
   let addressArray = await oneEntity(req.query.addressArray);
   const transform = addressArray.split(", ").join("%20").split(" ").join("%20");
 
@@ -31,6 +32,6 @@ export const getGeoCode = async (req, res) => {
     .then((result) => {
       res.send(result);
     })
-    .catch(() => res.send({ message: "Error fetching GeoCode" }));
+    .catch(() => next(ErrorFetchingGeoCodeError));
 };
  

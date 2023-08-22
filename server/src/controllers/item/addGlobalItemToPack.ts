@@ -1,3 +1,4 @@
+import { ItemNotFoundError } from "../../helpers/errors";
 import { addGlobalItemToPackService } from "../../services/item/item.service";
 
 /**
@@ -6,7 +7,7 @@ import { addGlobalItemToPackService } from "../../services/item/item.service";
  * @param {Object} res - The response object.
  * @return {Object} The updated item.
  */
-export const addGlobalItemToPack = async (req, res) => {
+export const addGlobalItemToPack = async (req, res, next) => {
   try {
     const { packId } = req.params;
     const { itemId, ownerId } = req.body;
@@ -15,6 +16,6 @@ export const addGlobalItemToPack = async (req, res) => {
 
     res.status(200).json({ message: "successfully updated", data: result });
   } catch (error) {
-    res.status(404).json({ msg: "Items cannot be found" });
+    next(ItemNotFoundError)
   }
 };

@@ -21,7 +21,6 @@ const oauth2Client = new google.auth.OAuth2(
  * @return {object} The Google authentication URL and status.
  */
 export const getGoogleAuthURL = async (req, res) => {
-    try {
       const scopes = [
         "https://www.googleapis.com/auth/userinfo.profile",
         "https://www.googleapis.com/auth/userinfo.email",
@@ -35,8 +34,6 @@ export const getGoogleAuthURL = async (req, res) => {
         status: "success",
         statusCode: 200,
       });
-    } catch (err) {
-      res.status(400).send({ message: err.message });
-    }
+    
   };
   

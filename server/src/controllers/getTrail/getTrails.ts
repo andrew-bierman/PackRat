@@ -1,3 +1,5 @@
+import { RetrievingTrailsDataError } from '../../helpers/errors';
+
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args as Parameters<typeof fetch>));
 /**
  * Retrieves trails based on the provided parameters.
@@ -5,7 +7,7 @@ const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch
  * @param {Object} res - The response object.
  * @return {Promise} A promise that resolves with the retrieved trail data or an error message.
  */
-export const getTrails = async (req, res) => {
+export const getTrails = async (req, res,next) => {
   let radiusParams = 25;
   let activityParams = true;
   let X_RAPIDAPI_KEY = process.env.X_RAPIDAPI_KEY;
@@ -51,6 +53,6 @@ export const getTrails = async (req, res) => {
       res.send(json);
     })
     .catch((_err) => {
-      res.send({ message: "Error retrieving trail data from RapidAPI" });
+      next(RetrievingTrailsDataError);
     });
 };

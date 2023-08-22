@@ -1,3 +1,4 @@
+import { ItemNotFoundError } from "../../helpers/errors";
 import { getItemsGloballyService } from "../../services/item/item.service";
 
 /**
@@ -6,12 +7,12 @@ import { getItemsGloballyService } from "../../services/item/item.service";
  * @param {Object} res - The response object.
  * @return {Object} The items, page, and total pages.
  */
-export const getItemsGlobally = async (req, res) => {
+export const getItemsGlobally = async (req, res,next) => {
   try {
     const result = await getItemsGloballyService(req);
 
     res.status(200).json(result);
   } catch (error) {
-    res.status(404).json({ msg: "Items cannot be found" });
+    next(ItemNotFoundError)
   }
 };

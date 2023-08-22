@@ -1,3 +1,4 @@
+import { UserFavoritesNotFoundError } from "../../helpers/errors";
 import User from "../../models/userModel";
 import { getUserFavoritesService } from "../../services/favorite/favorite.service";
 
@@ -7,16 +8,9 @@ import { getUserFavoritesService } from "../../services/favorite/favorite.servic
  * @param {Object} res - The response object.
  * @returns {Array} An array of favorite items belonging to the user.
  */
-export const getUserFavorites = async (req, res) => {
-  try {
-    const { userId } = req.params;
-
-    const favorites = await getUserFavoritesService(userId);
-
-    if (!favorites) throw new Error("User favorites not found");
-
-    res.status(200).json(favorites);
-  } catch (error) {
-    res.status(404).json({ msg: "User favorites cannot be found" });
-  }
+export const getUserFavorites = async (req, res, next) => {
+  const { userId } = req.params;
+  const favorites = await getUserFavoritesService(userId,next);
+  if (!favorites) next(UserFavoritesNotFoundError);
+  res.status(200).json(favorites);
 };

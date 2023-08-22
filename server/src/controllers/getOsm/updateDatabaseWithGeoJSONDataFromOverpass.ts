@@ -5,7 +5,6 @@
  * @return {Promise} - A Promise that resolves when the update is complete.
  */
 export const updateDatabaseWithGeoJSONDataFromOverpass = async (data) => {
-  try {
     if (!data) {
       throw new Error("No data provided");
     }
@@ -14,7 +13,4 @@ export const updateDatabaseWithGeoJSONDataFromOverpass = async (data) => {
     // const results = await findOrCreateMany(Way, data.features);
 
     // console.log("results", results);
-  } catch (error) {
-    console.error(error);
-  }
 };
