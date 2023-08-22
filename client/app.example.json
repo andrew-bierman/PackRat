@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "packrat-front",
-    "slug": "packrat-front",
+    "name": "packrat",
+    "slug": "packrat",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/packrat-app-icon.png",
