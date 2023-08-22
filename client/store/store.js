@@ -3,6 +3,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { persistReducer, persistStore } from "redux-persist";
 import apiMessageMiddleware from "./middleware/apiMiddleware";
+import CryptoJS from 'crypto-js';
 
 // all reducers
 import weatherReducer from "./weatherStore";
@@ -48,12 +49,25 @@ const rootReducer = combineReducers({
   userStore,
 });
 
-// configure persist store and whitelist reducers
 const persistConfig = {
   key: "root",
   storage: AsyncStorage,
-  whitelist: ["auth"], // add reducers to persist here
+  whitelist: ["auth"],
+  transforms: [
+    {
+      in: (state) => {
+        const encryptedState = CryptoJS.AES.encrypt(JSON.stringify(state), process.env.ENCRYPTION_KEY).toString();
+        return encryptedState;
+      },
+      out: (encryptedState) => {
+        const bytes = CryptoJS.AES.decrypt(encryptedState, process.env.ENCRYPTION_KEY);
+        const decryptedState = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+        return decryptedState;
+      }
+    }
+  ]
 };
+
 
 // create persisted reducer
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -64,13 +78,13 @@ const store = configureStore({
     getDefaultMiddleware({
       serializableCheck: {
         // Ignore these action types
-        ignoredActions: ["persist/PERSIST"],
+        ignoredActions: ["persist/PERSIST", "persist/REHYDRATE"],
       },
     })
-    .concat(
-      bearerTokenMiddleware,
-      apiMessageMiddleware
-    ),
+      .concat(
+        bearerTokenMiddleware,
+        apiMessageMiddleware
+      ),
 });
 
 const persistor = persistStore(store);
