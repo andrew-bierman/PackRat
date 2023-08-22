@@ -47,6 +47,10 @@ const favoritesSlice = createSlice({
   name: "favorites",
   initialState,
   reducers: {},
+  /**
+   * Generates the extra reducers for the given builder.
+   * @param {object} builder - The builder object.
+   */
   extraReducers: (builder) => {
     builder
       .addCase(addFavorite.pending, (state) => {

@@ -49,6 +49,11 @@ export default function Card({
 
   const isFavorite = favorites.some((favorite) => favorite.pack_id === _id);
 
+  /**
+   * Handles adding an item to the user's favorites.
+   *
+   * @return {void}
+   */
   const handleAddToFavorite = () => {
     const data = {
       packId: _id,
@@ -58,6 +63,11 @@ export default function Card({
     dispatch(addFavorite(data));
   };
 
+  /**
+   * Handles the removal of an item from the favorites list.
+   *
+   * @return {void} This function does not return a value.
+   */
   const handleRemoveFromFavorite = () => {
     const favorite = favorites.find(
       (favorite) => favorite.pack_id === _id && favorite.user_id === user._id

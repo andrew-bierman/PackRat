@@ -18,6 +18,13 @@ export const CustomModal = ({
   triggerComponent = null,
   ...rest
 }) => {
+  /**
+   * Closes the modal either by calling the onCancel function or by triggering the onTrigger function with a value of false.
+   *
+   * @param {function} onCancel - The function to be called when the modal is closed by canceling.
+   * @param {function} onTrigger - The function to be called when the modal is closed by triggering.
+   * @return {undefined} This function does not return a value.
+   */
   const closeModal = () => {
     if (onCancel) {
       onCancel();

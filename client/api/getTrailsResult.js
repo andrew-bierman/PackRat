@@ -2,6 +2,12 @@
 import { GEOAPIFY_KEY } from "@env";
 import axios from "axios";
 
+/**
+ * Retrieves the trails result based on the given address array.
+ *
+ * @param {Array} addressArray - An array of addresses.
+ * @return {Array} An array of trail names.
+ */
 export const getTrailsResult = async (addressArray) => {
   let params = {
     q: addressArray,

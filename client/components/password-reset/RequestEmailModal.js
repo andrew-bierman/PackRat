@@ -20,6 +20,11 @@ export const RequestPasswordResetEmailModal = () => {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
 
+  /**
+   * Initiates the password reset process by calling the API.
+   *
+   * @return {Promise<void>} A promise that resolves when the password reset email is sent successfully.
+   */
   const handleResetPasswordEmail = async () => {
     try {
       setLoading(true);
