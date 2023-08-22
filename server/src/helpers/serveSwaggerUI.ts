@@ -4,6 +4,11 @@ import swaggerUi from "swagger-ui-express";
 import specs from "../swaggerOptions";
 import { Request, Response } from 'express';
 
+/**
+ * Serves the Swagger UI for the given app.
+ *
+ * @param {any} app - The app object.
+ */
 export const serveSwaggerUI = (app: any) => {
   if (process.env.NODE_ENV !== "production") {
     app.use("/api-docs", swaggerUi.serve);

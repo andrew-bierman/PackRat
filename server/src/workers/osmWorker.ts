@@ -2,6 +2,12 @@ import mongoose from 'mongoose';
 import Way from '../models/osm/wayModel';
 import { findOrCreateMany } from '../utils/osmFunctions/modelHandlers';
 
+/**
+ * Process a job and return the result.
+ *
+ * @param {Object} job - The job to be processed.
+ * @return {Object} - The result of processing the job.
+ */
 export async function processJob(job) {
   const features = job.data;
   

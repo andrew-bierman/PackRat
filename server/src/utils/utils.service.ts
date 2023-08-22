@@ -1,4 +1,10 @@
 const utilsService = (() => {
+/**
+ * Generates a random password of a specified length.
+ *
+ * @param {number} length - The length of the password. Defaults to 8 if not provided.
+ * @return {string} - The randomly generated password.
+ */
   function generatePassword(length = 8) {
     const charset =
       "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";

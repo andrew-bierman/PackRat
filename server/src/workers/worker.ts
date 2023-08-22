@@ -1,5 +1,11 @@
 // Sample of how we can use worker threads to do some heavy lifting in the background. Using Piscina library.
 
+/**
+ * Executes a heavy task asynchronously and returns the result.
+ *
+ * @param {any} data - The input data for the heavy task.
+ * @return {Promise<any>} - A promise that resolves to the result of the heavy task.
+ */
 async function sample(data) {
   console.log("Starting heavy task");
   const start = Date.now();

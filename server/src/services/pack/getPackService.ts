@@ -1,6 +1,12 @@
 import Pack from "../../models/packModel";
 import mongoose from "mongoose";
 
+/**
+ * Retrieves packs service for a given ownerId.
+ *
+ * @param {string} ownerId - The ID of the owner.
+ * @return {Promise<Array>} An array of packs.
+ */
 export const getPacksService = async (ownerId) => {
   const packs = await Pack.aggregate([
     {
