@@ -1,6 +1,6 @@
 import { UnableToAddItemError } from "../../helpers/errors";
 import { addItemGlobalService } from "../../services/item/item.service";
-import { responseHandler } from "../../helpers/response";
+import { responseHandler } from "../../helpers/responseHandler";
 /**
  * Adds an item globally.
  * @param {object} req - The request object.
