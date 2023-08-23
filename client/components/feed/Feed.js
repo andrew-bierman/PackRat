@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Container,
@@ -15,7 +15,7 @@ import {
   Flex,
 } from "native-base";
 import { AntDesign } from "@expo/vector-icons";
-import { StyleSheet, FlatList, View } from "react-native";
+import { StyleSheet, FlatList, View, Dimensions, Platform, ScrollView } from "react-native";
 import Card from "./FeedCard";
 import DropdownComponent from "../Dropdown";
 import { theme } from "../../theme";
@@ -32,6 +32,9 @@ import {
 import { fetchUserTrips } from "../../store/tripsStore";
 import { useRouter } from "expo-router";
 import { fuseSearch } from "../../utils/fuseSearch";
+import ScrollButton from "../carousel/ScrollButton";
+
+const { height, width } = Dimensions.get('window')
 
 const URL_PATHS = {
   userPacks: "/pack/",
@@ -192,6 +195,26 @@ const Feed = ({ feedType = "public" }) => {
 
     // console.log("data", data);
 
+    const scrollViewRef = useRef();
+    const [currentIndex, setCurrentIndex] = useState(0);
+
+    const handleScroll = (event) => {
+      const contentOffset = event.nativeEvent.contentOffset;
+      const newIndex = Math.round(contentOffset.x / (Platform.OS === 'web' ? 350 : width * 0.7));
+      setCurrentIndex(newIndex);
+    };
+
+    const scrollToIndex = (index) => {
+      if (index >= 0 && index < data.length && scrollViewRef.current) {
+        scrollViewRef.current.scrollTo({
+          x: (index * ((Platform.OS === 'web' ? 350 : width * 0.7))),
+          y: 0,
+          animated: true,
+        });
+        setCurrentIndex(index);
+      }
+    };
+
     const feedSearchFilterComponent = (
       <FeedSearchFilter
         feedType={feedType}
@@ -204,29 +227,58 @@ const Feed = ({ feedType = "public" }) => {
         handleCreateClick={handleCreateClick}
       />
     );
-    return Platform.OS === "web" ? (
-      <View style={styles.cardContainer}>
-        {console.log({data})}
+    return (
+      <View style={{ flex: 1, paddingBottom: 10, }}>
         {feedSearchFilterComponent}
-        {data?.map((item) => (
-          <Card key={item._id} type={item.type} {...item} />
-        ))}
-      </View>
-    ) : (
-      <View style={{ flex: 1, paddingBottom: 10 }}>
-        <FlatList
-          data={data}
-          numColumns={1}
-          keyExtractor={(item) => item._id}
-          renderItem={({ item }) => (
-            <Card key={item._id} type={item.type} {...item} />
+        <View style={{ marginTop: 20, height: 230, flexDirection: 'row', alignItems: 'center' }} >
+          {data?.length === 0 ? <Text style={{ flex: 1, color: 'white', marginLeft: 20, justifyContent: 'center', textAlign: 'center', }}>{ERROR_MESSAGES[feedType]}</Text> : (
+            <>
+              <View style={{ width: Platform.OS === 'web' ? 50 : width * 0.05, alignItems: 'flex-end' }} >
+                <ScrollButton
+                  direction={'left'}
+                  onPress={() => scrollToIndex(currentIndex - 1)}
+                />
+              </View>
+              <ScrollView
+                horizontal
+                ref={scrollViewRef}
+                showsVerticalScrollIndicator={false}
+              >
+                {data?.map((item, index) => {
+                  return (
+                    <View style={styles.card} key={index}>
+                      <Card key={item._id} type={item.type} {...item} />
+                    </View>
+                  )
+                })}
+              </ScrollView>
+
+              {/* <FlatList
+            ref={scrollViewRef}
+            data={data}
+            bounces={false}
+            numColumns={1}
+            horizontal
+            keyExtractor={(item) => item._id}
+            renderItem={({ item }) => (
+              <View style={styles.card} >
+                <Card key={item._id} type={item.type} {...item} />
+              </View>
+            )}
+            ListEmptyComponent={() => <Text>{ERROR_MESSAGES[feedType]}</Text>}
+            showsVerticalScrollIndicator={false}
+          /> */}
+              <View style={{ width: Platform.OS === 'web' ? 50 : width * 0.05, alignSelf: 'center' }} >
+                <ScrollButton
+                  direction={'right'}
+                  onPress={() => scrollToIndex(currentIndex + 1)}
+                />
+              </View>
+            </>
           )}
-          ListHeaderComponent={() => feedSearchFilterComponent}
-          ListEmptyComponent={() => <Text>{ERROR_MESSAGES[feedType]}</Text>}
-          showsVerticalScrollIndicator={false}
-        />
+        </View>
       </View>
-    );
+    )
   };
 
   const handleTogglePack = () => {
@@ -286,6 +338,13 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     justifyContent: "space-around",
     alignItems: "center",
+  },
+  card: {
+    width: Platform.OS === 'web' ? 350 : width * 0.7,
+    height: 220,
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
 });
 

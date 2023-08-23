@@ -10,7 +10,7 @@ import {
   selectFavoriteById,
   selectAllFavorites,
 } from "../../store/favoritesStore";
-import { TouchableOpacity } from "react-native";
+import { Dimensions, Platform, StyleSheet, TouchableOpacity, View } from "react-native";
 import { Link } from "expo-router";
 import { DuplicateIcon } from "../DuplicateIcon/index";
 import { truncateString } from "../../utils/truncateString";
@@ -27,6 +27,8 @@ import {
 } from "native-base";
 
 // import { useAuth } from "../../auth/provider";
+
+const { height, width } = Dimensions.get('window')
 
 export default function Card({
   type,
@@ -48,6 +50,8 @@ export default function Card({
   const dispatch = useDispatch();
 
   const isFavorite = favorites.some((favorite) => favorite.pack_id === _id);
+
+  console.log('total weight', name)
 
   const handleAddToFavorite = () => {
     const data = {
@@ -72,182 +76,172 @@ export default function Card({
   const truncatedDestination = truncateString(destination, 25);
 
   return (
-    <Box alignItems="center" padding="4">
-      <Box
-        minH="125"
-        minW="80"
-        maxW="lg" // add this
-        mx="auto" // add this
-        rounded="lg"
-        overflow="hidden"
-        borderColor="coolGray.200"
-        borderWidth="1"
-        _dark={{
-          borderColor: "coolGray.600",
-          backgroundColor: "gray",
-        }}
-        _web={{
-          shadow: 2,
-          borderWidth: 0,
-        }}
-        _light={{
-          backgroundColor: "gray.50",
-        }}
-      >
-        <Stack p="4" space={10}>
-          <Stack space={2}>
-            <Heading size="md" ml="-1">
+    <View style={styles.packCard} >
+      <Stack p="4" space={10}>
+        <Stack space={2}>
+          <Heading size="md" ml="-1">
+            <Box
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+                width: "100%",
+              }}
+            >
+              <Link href={type === "pack" ? "/pack/" + _id : "/trip/" + _id}>
+                {truncatedName}
+              </Link>
+              {type === "pack" && (
+                <Box
+                  style={{
+                    flexDirection: "row",
+                  }}
+                >
+                  <MaterialIcons name="backpack" size={24} color="gray" />
+                  <Link href={"/pack/" + _id + "?copy=true"}>
+                    <DuplicateIcon />
+                  </Link>
+                </Box>
+              )}
+              {type === "trip" && (
+                <Entypo name="location-pin" size={24} color="gray" />
+              )}
+            </Box>
+          </Heading>
+
+          {type === "pack" && (
+            <Text
+              fontSize="xs"
+              _light={{
+                color: "violet.500",
+              }}
+              _dark={{
+                color: "violet.400",
+              }}
+              fontWeight="500"
+              ml="-0.5"
+              mt="-1"
+            >
+              Total Weight: {total_weight}
+            </Text>
+          )}
+
+          {type === "trip" && (
+            <Text
+              fontSize="xs"
+              _light={{
+                color: "violet.500",
+              }}
+              _dark={{
+                color: "violet.400",
+              }}
+              fontWeight="500"
+              ml="-0.5"
+              mt="-1"
+            >
+              {truncatedDestination}
+            </Text>
+          )}
+        </Stack>
+
+        <HStack alignItems="center" space={4} justifyContent="space-between">
+          <HStack
+            alignItems="center"
+            justifyContent="space-between"
+            width="100%"
+          >
+            <Box
+              style={{
+                flexDirection: "column",
+                alignItems: "flex-start",
+                gap: 10,
+              }}
+            >
+              <Link href={`/profile/${owner_id}`}>
+                <Text>
+                  View {owner?.username ? "@" + owner?.username : "Owner"}
+                </Text>
+              </Link>
               <Box
                 style={{
                   flexDirection: "row",
                   alignItems: "center",
-                  justifyContent: "space-between",
-                  width: "100%",
-                }}
-              >
-                <Link href={type === "pack" ? "/pack/" + _id : "/trip/" + _id}>
-                  {truncatedName}
-                </Link>
-                {type === "pack" && (
-                  <Box
-                    style={{
-                      flexDirection: "row",
-                    }}
-                  >
-                    <MaterialIcons name="backpack" size={24} color="gray" />
-                    <Link href={"/pack/" + _id + "?copy=true"}>
-                      <DuplicateIcon />
-                    </Link>
-                  </Box>
-                )}
-                {type === "trip" && (
-                  <Entypo name="location-pin" size={24} color="gray" />
-                )}
-              </Box>
-            </Heading>
-
-            {type === "pack" && (
-              <Text
-                fontSize="xs"
-                _light={{
-                  color: "violet.500",
-                }}
-                _dark={{
-                  color: "violet.400",
-                }}
-                fontWeight="500"
-                ml="-0.5"
-                mt="-1"
-              >
-                Total Weight: {total_weight}
-              </Text>
-            )}
-
-            {type === "trip" && (
-              <Text
-                fontSize="xs"
-                _light={{
-                  color: "violet.500",
-                }}
-                _dark={{
-                  color: "violet.400",
-                }}
-                fontWeight="500"
-                ml="-0.5"
-                mt="-1"
-              >
-                {truncatedDestination}
-              </Text>
-            )}
-          </Stack>
-
-          <HStack alignItems="center" space={4} justifyContent="space-between">
-            <HStack
-              alignItems="center"
-              justifyContent="space-between"
-              width="100%"
-            >
-              <Box
-                style={{
-                  flexDirection: "column",
-                  alignItems: "flex-start",
                   gap: 10,
                 }}
               >
-                <Link href={`/profile/${owner_id}`}>
-                  <Text>
-                    View {owner?.username ? "@" + owner?.username : "Owner"}
-                  </Text>
-                </Link>
-                <Box
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    gap: 10,
+                <Text
+                  color="coolGray.600"
+                  _dark={{
+                    color: "warmGray.200",
                   }}
+                  fontWeight="400"
+                  flex={1}
                 >
-                  <Text
-                    color="coolGray.600"
-                    _dark={{
-                      color: "warmGray.200",
-                    }}
-                    fontWeight="400"
-                    flex={1}
-                  >
-                    {formatDistanceToNow(
-                      new Date(
-                        !Number.isNaN(new Date(createdAt).getTime())
-                          ? createdAt
-                          : new Date()
-                      ).getTime(),
-                      {
-                        addSuffix: true,
-                      }
-                    ) ?? 0}
-                  </Text>
-                </Box>
+                  {formatDistanceToNow(
+                    new Date(
+                      !Number.isNaN(new Date(createdAt).getTime())
+                        ? createdAt
+                        : new Date()
+                    ).getTime(),
+                    {
+                      addSuffix: true,
+                    }
+                  ) ?? 0}
+                </Text>
               </Box>
+            </Box>
 
+            <Box
+              style={{
+                flexDirection: "column",
+                alignItems: "center",
+                gap: 10,
+              }}
+            >
+              <Text>Favorites</Text>
               <Box
                 style={{
-                  flexDirection: "column",
+                  flexDirection: "row",
                   alignItems: "center",
                   gap: 10,
                 }}
               >
-                <Text>Favorites</Text>
-                <Box
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    gap: 10,
-                  }}
-                >
-                  {user?._id === owner_id ? null : (
-                    <TouchableOpacity onPress={handleAddToFavorite}>
-                      <AntDesign
-                        name="heart"
-                        size={16}
-                        color={isFavorite ? "red" : "grey"}
-                      />
-                    </TouchableOpacity>
-                  )}
+                {user?._id === owner_id ? null : (
+                  <TouchableOpacity onPress={handleAddToFavorite}>
+                    <AntDesign
+                      name="heart"
+                      size={16}
+                      color={isFavorite ? "red" : "grey"}
+                    />
+                  </TouchableOpacity>
+                )}
 
-                  <Text
-                    color="coolGray.600"
-                    _dark={{
-                      color: "warmGray.200",
-                    }}
-                    fontWeight="400"
-                  >
-                    {favorites_count}
-                  </Text>
-                </Box>
+                <Text
+                  color="coolGray.600"
+                  _dark={{
+                    color: "warmGray.200",
+                  }}
+                  fontWeight="400"
+                >
+                  {favorites_count}
+                </Text>
               </Box>
-            </HStack>
+            </Box>
           </HStack>
-        </Stack>
-      </Box>
-    </Box>
+        </HStack>
+      </Stack>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  packCard: {
+    height: 220,
+    width: Platform.OS === 'web' ? 320 : width * 0.68,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+})

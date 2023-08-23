@@ -38,11 +38,9 @@ const Carousel = ({ children, itemWidth }) => {
       <ScrollButton
         direction="left"
         onPress={() => scrollToIndex(currentIndex - 1)}
-        disabled={currentIndex === 0}
       />
 
       <ScrollView
-
         ref={scrollViewRef}
         horizontal
         scrollEnabled={Platform.OS === "web" ? true : false}
@@ -53,7 +51,7 @@ const Carousel = ({ children, itemWidth }) => {
         pagingEnabled
         onMomentumScrollEnd={handleScroll}
       >
-        {children.map((child, index) => (
+        {children?.map((child, index) => (
           <VStack key={index} style={{ width: itemWidth + 10, marginRight: 10, marginTop: 10, flexDirection: 'row' }}>
             {child}
           </VStack>
@@ -62,7 +60,6 @@ const Carousel = ({ children, itemWidth }) => {
       <ScrollButton
         direction="right"
         onPress={() => scrollToIndex(currentIndex + 1)}
-        disabled={currentIndex === children.length - 1}
       />
     </VStack>
   );

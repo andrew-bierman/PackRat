@@ -9,8 +9,16 @@ const ScrollButton = ({ direction, onPress }) => {
       onPress={onPress}
       style={styles.scrollButton}
     >
-      {direction === "left" && <Text style={styles.iconStyles}>&lang;</Text>}
-      {direction != "left" && <Text style={styles.iconStyles}>&rang;</Text>}
+      {direction === "left" &&
+        <Text
+          style={styles.iconStyles}>&lang;
+        </Text>
+      }
+      {direction === "right" &&
+        <Text
+          style={styles.iconStyles}>&rang;
+        </Text>
+      }
     </TouchableOpacity>
   )
 };
