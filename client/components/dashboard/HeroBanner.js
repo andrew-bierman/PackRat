@@ -25,6 +25,12 @@ const HeroSection = ({ onSelect }) => {
   );
   console.log("currentDestination", currentDestination);
 
+  /**
+   * Handles the selection of a search result.
+   *
+   * @param {Object} selectedResult - The selected search result
+   * @return {void} 
+   */
   const handleSearchSelect = async (selectedResult) => {
     try {
       console.log("selectedResult ------->", selectedResult);

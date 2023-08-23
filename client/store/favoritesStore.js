@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
-import axios from "axios";
+import axios from "~/config/axios";
 import { api } from "../constants/api";
 
 export const addFavorite = createAsyncThunk(
@@ -47,6 +47,10 @@ const favoritesSlice = createSlice({
   name: "favorites",
   initialState,
   reducers: {},
+  /**
+   * Generates the extra reducers for the given builder.
+   * @param {object} builder - The builder object.
+   */
   extraReducers: (builder) => {
     builder
       .addCase(addFavorite.pending, (state) => {

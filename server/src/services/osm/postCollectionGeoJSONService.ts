@@ -1,6 +1,13 @@
 import { findOrCreateOne, ensureIdProperty, ensureModelProperty } from "../../utils/osmFunctions/modelHandlers";
 import { isGeoJSONFormat } from "../../utils/osmFunctions/dataFormatters";
 
+/**
+ * Posts a collection of GeoJSON data to the service.
+ *
+ * @param {Object} geojson - The GeoJSON data to be posted.
+ * @throws {Error} Invalid or missing geoJSON.
+ * @return {Promise} A promise that resolves to the newly created instances.
+ */
 export const postCollectionGeoJSONService = async (geojson) => {
     if (!geojson || !isGeoJSONFormat(geojson)) {
       throw new Error("Invalid or missing geoJSON");

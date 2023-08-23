@@ -4,6 +4,11 @@ import path from 'path';
 
 // Use this snippet at the top of your file
 
+/**
+ * A function that tests the queue logic.
+ *
+ * @return {Promise<void>} A promise that resolves when the function finishes.
+ */
 export async function testQueueLogic() {
     const queueName = 'testQueue';
     const workerScriptPath = path.resolve(__dirname, '../workers/mockWorker.ts');

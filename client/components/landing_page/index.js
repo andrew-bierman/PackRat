@@ -57,6 +57,11 @@ const dataArray = [
 const CustomAccordion = ({ title, content, iconName }) => {
   const [expanded, setExpanded] = useState(false);
 
+/**
+ * Toggles the value of 'expanded' and updates the state.
+ *
+ * @return {void} No return value
+ */
   const toggleExpanded = () => {
     setExpanded(!expanded);
   };

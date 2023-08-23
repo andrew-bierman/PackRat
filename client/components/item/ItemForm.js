@@ -3,7 +3,7 @@ import { DropdownComponent } from "../Dropdown";
 import { theme } from "../../theme";
 import { ItemCategoryEnum } from "../../constants/itemCategory";
 import UseTheme from "../../hooks/useTheme";
-const data = ["lbs", "oz", "kg", "g"];
+const data = ["lb", "oz", "kg", "g"];
 
 export const ItemForm = ({
   name,

@@ -33,6 +33,12 @@ const defaultShape = {
   ],
 };
 
+/**
+ * Normalize the coordinates.
+ *
+ * @param {array} coordinates - The coordinates to be normalized.
+ * @return {array} The normalized coordinates.
+ */
 function normalizeCoordinates(coordinates) {
   // check if coordinates are nested, flip them if so
   if (typeof coordinates[0][0] === "number") {
@@ -50,6 +56,12 @@ function normalizeCoordinates(coordinates) {
   return [[coordinates[0], coordinates[1]]];
 }
 
+/**
+ * Converts a Photon GeoJSON object to a Shape object.
+ *
+ * @param {object} photonGeoJson - The Photon GeoJSON object to convert.
+ * @return {object} The converted Shape object.
+ */
 function convertPhotonGeoJsonToShape(photonGeoJson) {
   return {
     type: "FeatureCollection",
@@ -59,6 +71,12 @@ function convertPhotonGeoJsonToShape(photonGeoJson) {
   };
 }
 
+/**
+ * Calculates the minimum and maximum longitude and latitude coordinates of a given shape.
+ *
+ * @param {object} shape - The shape object containing the coordinates.
+ * @return {array} An array representing the minimum and maximum longitude and latitude coordinates.
+ */
 function getShapeSourceBounds(shape) {
   let minLng = Infinity;
   let maxLng = -Infinity;
@@ -88,6 +106,13 @@ function getShapeSourceBounds(shape) {
   ];
 }
 
+/**
+ * Handles the shape source load and calculates the zoom level based on the width and height.
+ *
+ * @param {number} width - The width of the shape.
+ * @param {number} height - The height of the shape.
+ * @return {number|null} The calculated zoom level or null if there are no coordinates.
+ */
 function handleShapeSourceLoad(width, height) {
   if (shape?.features[0]?.geometry?.coordinates?.length > 1) {
     let bounds = getShapeSourceBounds(shape);
@@ -97,16 +122,38 @@ function handleShapeSourceLoad(width, height) {
   return null;
 }
 
+/**
+ * Calculates the latitude in radians.
+ *
+ * @param {number} lat - The latitude in degrees.
+ * @return {number} The latitude in radians.
+ */
 function latRad(lat) {
   var sin = Math.sin((lat * Math.PI) / 180);
   var radX2 = Math.log((1 + sin) / (1 - sin)) / 2;
   return Math.max(Math.min(radX2, Math.PI), -Math.PI) / 2;
 }
 
+/**
+ * Calculates the zoom level of a map based on the size of the map in pixels,
+ * the size of the world in pixels, and a fraction.
+ *
+ * @param {number} mapPx - The size of the map in pixels.
+ * @param {number} worldPx - The size of the world in pixels.
+ * @param {number} fraction - The fraction used for the calculation.
+ * @return {number} The calculated zoom level.
+ */
 function zoom(mapPx, worldPx, fraction) {
   return Math.floor(Math.log(mapPx / worldPx / fraction) / Math.LN2);
 }
 
+/**
+ * Calculates the zoom level for a given map based on the provided bounds and map dimensions.
+ *
+ * @param {Array} bounds - The bounds of the map in the format [south, west, north, east].
+ * @param {Object} mapDim - The dimensions of the map in the format {height: number, width: number}.
+ * @return {number} The calculated zoom level for the map.
+ */
 function calculateZoomLevel(bounds, mapDim) {
   var WORLD_DIM = { height: 256, width: 256 };
   let ne = { lat: bounds[2], lng: bounds[3] };
@@ -123,6 +170,12 @@ function calculateZoomLevel(bounds, mapDim) {
   return latZoom;
 }
 
+/**
+ * Finds the center of a trail based on its shape coordinates.
+ *
+ * @param {object} shape - The shape object containing trail coordinates.
+ * @return {array} The center coordinates of the trail.
+ */
 function findTrailCenter(shape) {
   const trailCoords = shape?.features[0]?.geometry?.coordinates;
 
@@ -159,6 +212,12 @@ function findTrailCenter(shape) {
   return [avgLatitude, avgLongitude];
 }
 
+/**
+ * Process the shape data by transforming LineString features into Points.
+ *
+ * @param {Object} shape - The shape data to be processed.
+ * @return {Object} The processed shape data.
+ */
 const processShapeData = (shape) => {
   let processedShape = { ...shape };
   processedShape.features = [];
@@ -197,6 +256,12 @@ const processShapeData = (shape) => {
   return processedShape;
 };
 
+/**
+ * Ensure the input array is a 2D array.
+ *
+ * @param {Array} arr - The input array.
+ * @return {Array} - The 2D array.
+ */
 const ensure2DArray = (arr) => {
   // If the first element of the array is not an array itself, add an additional array layer
   if (!Array.isArray(arr[0])) {
@@ -218,6 +283,11 @@ const mapboxStyles = [
   },
 ];
 
+/**
+ * Retrieves the current location asynchronously.
+ *
+ * @return {Promise<Location>} The current location object.
+ */
 const getLocation = async () => {
   let { status } = await Location.requestForegroundPermissionsAsync();
 
@@ -231,21 +301,51 @@ const getLocation = async () => {
   return location;
 };
 
+/**
+ * Checks if a shape is downloadable.
+ *
+ * @param {Object} shape - The shape object to check.
+ * @return {boolean} Returns true if the shape is downloadable, false otherwise.
+ */
 const isShapeDownloadable = (shape) => {
   return shape?.features[0]?.geometry?.coordinates?.length > 1;
 };
 
+/**
+ * Checks if the given shape is a point.
+ *
+ * @param {Object} shape - The shape object to be checked.
+ * @return {boolean} Returns true if the shape is a point, otherwise returns false.
+ */
 const isPoint = (shape) => {
   return shape?.features[0]?.geometry?.type === 'Point';
 }
+/**
+ * Checks if the given shape is a LineString.
+ *
+ * @param {Object} shape - The shape object to be checked.
+ * @return {boolean} Returns true if the shape is a LineString, otherwise false.
+ */
 const isLineString = (shape) => {
   return shape?.features[0]?.geometry?.type === 'LineString';
 }
 
+/**
+ * Checks if the given shape is a Polygon or MultiPolygon.
+ *
+ * @param {object} shape - The shape object to be checked.
+ * @return {boolean} Returns true if the shape is a Polygon or MultiPolygon, otherwise returns false.
+ */
 const isPolygonOrMultiPolygon = (shape) => {
   return shape?.features[0]?.geometry?.type === 'MultiPolygon' || shape?.features[0]?.geometry?.type === 'MultiPolygon';
 }
 
+/**
+ * Calculates the bounds of a multipolygon.
+ *
+ * @param {object} multipolygonData - The multipolygon data.
+ * @return {array} The center longitude and latitude of the bounds.
+ */
 const multiPolygonBounds = (multipolygonData) => {
   let coordinates = multipolygonData.geometry.coordinates[0];
   if(multipolygonData.geometry.type === 'MultiPolygon') {

@@ -7,6 +7,12 @@
 // Redundancy and Versatility:
 // Scale: 1-10 (10 being the least redundancy and high versatility)
 
+/**
+ * Calculates the score of essential items in a given pack.
+ *
+ * @param {any} packItems - An array of items in the pack.
+ * @return {number} The score of essential items in the pack.
+ */
 function checkEssentialItems(packItems: any) {
   const essentialItems: any = {
     water: ["water", "hydration"],
@@ -38,12 +44,18 @@ function checkEssentialItems(packItems: any) {
     }
   }
 
-  // Calculate the essential items score
   const essentialItemsScore = (presentItems / totalItems) * 10;
 
   return essentialItemsScore;
 }
 
+/**
+ * Calculates the redundancy score of a given pack.
+ *
+ * @param {any[]} packItems - An array of items in the pack.
+ * @return {number} The redundancy score of the pack.
+ */
+  // Calculate the essential items score
 function checkRedundancy(packItems: any) {
   const redundantItems:any = {
     tools: ["multi-tool", "hammer"],

@@ -33,6 +33,13 @@ export const SearchItem = ({ onSelect, placeholder }) => {
   const user = useSelector((state) => state.auth.user);
   const [showSearchResults, setShowSearchResults] = useState(false);
 
+  /**
+   * Handles the click event when a search result item is clicked.
+   *
+   * @param {Object} item - The search result item that was clicked.
+   * @param {number} index - The index of the search result item in the list.
+   * @return {void} This function does not return a value.
+   */
   const handleSearchResultClick = (item, index) => {
     const ownerId = user["_id"];
     const packId = window.location.pathname.substring("/path/".length);

@@ -71,6 +71,12 @@ const DestinationHeader = ({ geoJSON, selectedSearchResult }) => {
   );
 };
 
+/**
+ * Generates a function comment for the given function body.
+ *
+ * @param {Object} geoJSON - The GeoJSON data.
+ * @return {JSX.Element|null} The WeatherCard component if weatherObject and weatherWeek are truthy, otherwise null.
+ */
 const WeatherData = ({ geoJSON }) => {
 
   const dispatch = useDispatch();
@@ -78,6 +84,11 @@ const WeatherData = ({ geoJSON }) => {
   const weatherWeek = useSelector((state) => state.destination.weatherWeek);
 
   useEffect(() => {
+    /**
+     * Fetches weather data based on the provided geoJSON.
+     * 
+     * @return {Promise<void>} - A Promise that resolves when the weather data is fetched and stored.
+     */
     const fetchWeatherData = async () => {
       if (geoJSON && geoJSON.features) {
         const { coordinates } = geoJSON.features[0].geometry;
