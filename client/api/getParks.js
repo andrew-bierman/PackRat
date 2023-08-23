@@ -1,6 +1,6 @@
 import { api } from "../constants/api";
 import abbrRegion from "../constants/convertStateToAbbr";
-import axios from "axios";
+import axios from "~/config/axios";
 import osmtogeojson from "osmtogeojson";
 
 /**

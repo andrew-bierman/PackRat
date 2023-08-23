@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import axios from "~/config/axios";
 import { api } from "../constants/api";
 
 export const getUser = createAsyncThunk("user/getUser", async (userId) => {
