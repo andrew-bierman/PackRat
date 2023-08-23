@@ -5,7 +5,6 @@ import { persistReducer, persistStore } from "redux-persist";
 
 // middleware
 import apiMessageMiddleware from "./middleware/apiMessageMiddleware";
-import bearerTokenMiddleware from "./middleware/bearerTokenMiddleware";
 
 // all reducers - TODO: move to separate folder
 import weatherReducer from "./weatherStore";
@@ -46,7 +45,6 @@ const rootReducer = combineReducers({
   destination: destinationReducer,
   chat: chatReducer,
   globalItems,
-  chat: chatReducer,
   userStore,
 });
 
