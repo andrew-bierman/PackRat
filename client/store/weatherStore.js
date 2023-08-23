@@ -4,7 +4,7 @@ import { defaultWeekObj } from "../constants/defaultWeekObj";
 
 import { api } from "../constants/api";
 
-import axios from "axios";
+import axios from "~/config/axios";
 
 const weatherAdapter = createEntityAdapter();
 

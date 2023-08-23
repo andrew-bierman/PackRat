@@ -1,6 +1,6 @@
 // import { Geoapify_Key } from "../constants/api";
 import { GEOAPIFY_KEY } from "@env";
-import axios from "axios";
+import axios from "~/config/axios";
 
 /**
  * Retrieves the trails result based on the given address array.
