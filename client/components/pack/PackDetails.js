@@ -8,7 +8,7 @@ import { TableContainer } from "../pack_table/Table";
 import { fetchUserPacks, selectPackById } from "../../store/packsStore";
 
 import { useSelector, useDispatch } from "react-redux";
-import { fetchSinglePack } from "../../store/singlePackStore";
+import { fetchSinglePack, clearSinglePack } from "../../store/singlePackStore";
 
 import { Box, Text } from "native-base";
 import { DetailsComponent } from "../details";
@@ -39,18 +39,16 @@ export function PackDetails() {
   const [refetch, setRefetch] = useState(false);
   useEffect(() => {
     if (!packId) return;
-      dispatch(fetchSinglePack(packId));
-      if (userId) dispatch(fetchUserPacks(userId));
-      setFirstLoad(false)
+    dispatch(fetchSinglePack(packId));
+    return () => {
+      dispatch(clearSinglePack());
+    };
   }, [dispatch, packId, updated]); // TODO updated is a temporary fix to re-render when pack is update, due to bug in store
 
   const currentPackId = currentPack && currentPack._id;
 
-
-
   // check if user is owner of pack, and that pack and user exists
   const isOwner = currentPack && user && currentPack.owner_id === user._id;
-
 
   const error = useSelector((state) => state.singlePack.error);
   const isError = error !== null;
@@ -61,7 +59,9 @@ export function PackDetails() {
     <Box
       style={[
         styles.mainContainer,
-        Platform.OS == "web" ? { minHeight: "100vh" } : Dimensions.get('screen').height,
+        Platform.OS == "web"
+          ? { minHeight: "100vh" }
+          : Dimensions.get("screen").height,
       ]}
     >
       {!isError && (
@@ -73,18 +73,14 @@ export function PackDetails() {
             error={error}
             additionalComps={
               <>
-                <TableContainer currentPack={currentPack}
-                 copy={canCopy}
-                  />
-                <Box
-                  style={styles.boxStyle}
-                >
+                <TableContainer currentPack={currentPack} copy={canCopy} />
+                <Box style={styles.boxStyle}>
                   <AddItemModal
                     currentPackId={currentPackId}
                     currentPack={currentPack}
                     isAddItemModalOpen={isAddItemModalOpen}
                     setIsAddItemModalOpen={setIsAddItemModalOpen}
-                    setRefetch={() => setRefetch(prev => !prev)}
+                    setRefetch={() => setRefetch((prev) => !prev)}
                   />
                 </Box>
                 <ScoreContainer
@@ -92,9 +88,7 @@ export function PackDetails() {
                   data={currentPack}
                   isOwner={isOwner}
                 />
-                <Box
-                  style={styles.boxStyle}
-                >
+                <Box style={styles.boxStyle}>
                   <ChatContainer />
                 </Box>
               </>
