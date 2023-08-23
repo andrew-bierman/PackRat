@@ -1,4 +1,6 @@
-import axios from "axios";
+import axios from "~/config/axios";
+
+// TODO - swap to RTK query
 
 /**
  * Retrieves photon results based on the provided address array.

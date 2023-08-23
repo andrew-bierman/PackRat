@@ -70,7 +70,6 @@ const store = configureStore({
       },
     })
     .concat(
-      bearerTokenMiddleware,
       apiMessageMiddleware
     ),
 });
