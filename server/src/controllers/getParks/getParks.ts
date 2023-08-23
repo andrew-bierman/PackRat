@@ -1,5 +1,6 @@
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args as Parameters<typeof fetch>));
 import { RetrievingParksDataError } from "../../helpers/errors";
+import { responseHandler } from "../../helpers/responseHandler";
 import { oneEntity } from "../../utils/oneEntity";
 
 /**
@@ -30,7 +31,8 @@ export const getParks = async (req, res,next) => {
   await fetch(host, options)
     .then((res) => res.json())
     .then((json) => {
-      res.send(json);
+      res.locals.data = json;
+      responseHandler(res);
     })
     .catch(() =>
       next(RetrievingParksDataError)

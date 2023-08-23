@@ -1,4 +1,5 @@
 import { UnableToDeleteTripError } from "../../helpers/errors";
+import { responseHandler } from "../../helpers/responseHandler";
 import Trip from "../../models/tripModel";
 
 /**
@@ -12,7 +13,8 @@ export const deleteTrip = async (req, res,next) => {
     const { tripId } = req.body;
 
     await Trip.findOneAndDelete({ _id: tripId });
-    res.status(200).json({ msg: "trip was deleted successfully" });
+    res.locals.data = { message: "Trip deleted successfully" };
+    responseHandler(res);
   } catch (error) {
    next(UnableToDeleteTripError)
   }

@@ -1,4 +1,5 @@
 import { TemplateNotFoundError } from "../../helpers/errors";
+import { responseHandler } from "../../helpers/responseHandler";
 import Template from "../../models/templateModel";
 
 /**
@@ -14,7 +15,8 @@ export const deleteTemplate = async (req, res,next) => {
 
     if (template) {
       await template.remove();
-      res.json({ message: "Template removed" });
+      res.locals.data = { message: "Template deleted successfully" };
+      responseHandler(res);
     } else {
       next(TemplateNotFoundError);
     }

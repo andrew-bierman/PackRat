@@ -1,4 +1,5 @@
 import { UnableToDeletePackError } from "../../helpers/errors";
+import { responseHandler } from "../../helpers/responseHandler";
 import { deletePackService } from "../../services/pack/pack.service";
 
 /**
@@ -13,7 +14,8 @@ export const deletePack = async (req, res,next) => {
 
     await deletePackService(packId);
 
-    res.status(200).json({ msg: "pack was deleted successfully" });
+    res.locals.data = {message: "Pack deleted"};
+    responseHandler(res);
   } catch (error) {
     next(UnableToDeletePackError)
   }

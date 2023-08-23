@@ -1,5 +1,6 @@
 
 import { UnableToScorePackError } from "../../helpers/errors";
+import { responseHandler } from "../../helpers/responseHandler";
 import { scorePackService } from "../../services/pack/pack.service";
 
 /**
@@ -16,7 +17,8 @@ export const scorePack = async (req, res,next) => {
 
     console.log("updatedPack", updatedPack);
 
-    res.status(200).json({ msg: "Pack was scored successfully", updatedPack });
+    res.locals.data = { msg: "Pack was scored successfully", updatedPack };
+    responseHandler(res);
   } catch (error) {
     next(UnableToScorePackError)
   }

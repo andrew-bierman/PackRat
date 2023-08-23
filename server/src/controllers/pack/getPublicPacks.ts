@@ -1,4 +1,5 @@
 import { PackNotFoundError } from "../../helpers/errors";
+import { responseHandler } from "../../helpers/responseHandler";
 import { getPublicPacksService } from "../../services/pack/pack.service";
 
 /**
@@ -13,7 +14,8 @@ export const getPublicPacks = async (req, res, next) => {
 
     const publicPacks = await getPublicPacksService(queryBy);
 
-    res.status(200).json(publicPacks);
+    res.locals.data = publicPacks;
+    responseHandler(res);
   } catch (error) {
     next(PackNotFoundError)
   }

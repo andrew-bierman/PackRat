@@ -1,4 +1,5 @@
 import { UserNotFoundError } from "../../helpers/errors";
+import { responseHandler } from "../../helpers/responseHandler";
 import { getUserByIdService } from "../../services/user/getUserByIdService";
 
 /**
@@ -13,7 +14,8 @@ export const getUserById = async (req, res,next) => {
 
     const user = await getUserByIdService(userId);
 
-    res.status(200).json(user);
+    res.locals.data = user;
+    responseHandler(res);
   } catch (error) {
     next(UserNotFoundError)
   }

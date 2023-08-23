@@ -1,4 +1,5 @@
 import { UnableToAddItemError } from "../../helpers/errors";
+import { responseHandler } from "../../helpers/responseHandler";
 import { addItemService } from "../../services/item/item.service";
 
 /**
@@ -13,11 +14,8 @@ export const addItem = async (req, res, next) => {
 
     const result = await addItemService(name, weight, quantity, unit, packId, type, ownerId);
 
-    res.status(200).json({
-      msg: "success",
-      newItem: result.newItem,
-      packId: result.packId,
-    });
+    res.locals.data = {newItem:result.newItem, packId: result.packId};
+    responseHandler(res);
   } catch (error) {
     next(UnableToAddItemError)
   }

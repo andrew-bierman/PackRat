@@ -1,5 +1,6 @@
 const fetch = (...args: Parameters<typeof fetch>) => import('node-fetch').then(({default: fetch}) => fetch(...args as Parameters<typeof fetch>));
 import { ErrorFetchingGeoCodeError } from "../../helpers/errors";
+import { responseHandler } from "../../helpers/responseHandler";
 import { oneEntity } from "../../utils/oneEntity";
 
 /**
@@ -30,7 +31,8 @@ export const getGeoCode = async (req, res,next) => {
   await fetch(url)
     .then((response) => response.json())
     .then((result) => {
-      res.send(result);
+      res.locals.data = result;
+      responseHandler(res);
     })
     .catch(() => next(ErrorFetchingGeoCodeError));
 };

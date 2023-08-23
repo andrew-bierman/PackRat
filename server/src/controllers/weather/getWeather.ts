@@ -1,5 +1,6 @@
 import axios from "axios";
 import { RetrievingWeatherFromOpenWeatherError } from "../../helpers/errors";
+import { responseHandler } from "../../helpers/responseHandler";
 
 /**
  * Retrieves weather data from OpenWeather API based on latitude and longitude.
@@ -25,7 +26,8 @@ export const getWeather = async (req, res,next) => {
 
   try {
     const response = await axios.get(url);
-    res.send(response.data);
+    res.locals.data = response.data;
+    responseHandler(res);
   } catch (error) {
     // send back error message
     next(RetrievingWeatherFromOpenWeatherError)

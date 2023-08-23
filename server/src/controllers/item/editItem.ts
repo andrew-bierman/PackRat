@@ -1,4 +1,5 @@
 import { UnableToEditItemError } from "../../helpers/errors";
+import { responseHandler } from "../../helpers/responseHandler";
 import { editItemService } from "../../services/item/item.service";
 
 export const editItem = async (req, res,next) => {
@@ -7,7 +8,8 @@ export const editItem = async (req, res,next) => {
 
     const newItem = await editItemService(_id, name, weight, unit, quantity, type);
 
-    res.status(200).json(newItem);
+    res.locals.data = newItem;
+    responseHandler(res);
   } catch (error) {
     next(UnableToEditItemError)
   }

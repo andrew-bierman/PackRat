@@ -1,3 +1,4 @@
+import { responseHandler } from "../../helpers/responseHandler";
 import { postSingleGeoJSONService } from "../../services/osm/osm.service";
 
 /**
@@ -11,11 +12,6 @@ export const postSingleGeoJSON = async (req, res) => {
     const geojson = req.body;
 
     const result = await postSingleGeoJSONService(geojson);
-
-    res.status(201).json({
-      status: "success",
-      data: {
-        result,
-      },
-    });
+    res.locals.data = result;
+    responseHandler(res);
 };

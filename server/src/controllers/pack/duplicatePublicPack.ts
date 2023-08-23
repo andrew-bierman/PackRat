@@ -1,4 +1,5 @@
 import { UnableToDuplicatePackError } from "../../helpers/errors";
+import { responseHandler } from "../../helpers/responseHandler";
 import { duplicatePublicPackService } from "../../services/pack/pack.service";
 
 /**
@@ -13,10 +14,11 @@ export const duplicatePublicPack = async (req, res,next) => {
 
     const result = await duplicatePublicPackService(packId, ownerId, items);
 
-    res.status(200).json({
+    res.locals.data = {
       msg: "pack was duplicated successfully",
       data: result.pack,
-    });
+    }
+    responseHandler(res);
   } catch (error) {
     next(UnableToDuplicatePackError)
   }

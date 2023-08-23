@@ -1,3 +1,4 @@
+import { responseHandler } from "../../helpers/responseHandler";
 import { addToFavoriteService } from "../../services/favorite/addToFavoriteService";
 
 /**
@@ -12,6 +13,7 @@ export const addToFavorite = async (req, res) => {
 
     const user = await addToFavoriteService(packId, userId);
 
-    res.status(200).json(user);
+    res.locals.data = user;
+    responseHandler(res);
 
 };

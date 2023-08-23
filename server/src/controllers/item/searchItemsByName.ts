@@ -1,4 +1,5 @@
 import { ItemNotFoundError } from "../../helpers/errors";
+import { responseHandler } from "../../helpers/responseHandler";
 import { searchItemsByNameService } from "../../services/item/item.service";
 
 /**
@@ -16,7 +17,8 @@ export const searchItemsByName = async (req, res,next) => {
 
     const items = await searchItemsByNameService(name);
 
-    res.status(200).json(items);
+    res.locals.data = items;
+    responseHandler(res);
   } catch (error) {
     next(ItemNotFoundError)
   }

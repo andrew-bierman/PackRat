@@ -1,4 +1,5 @@
 import { GetResponseFromAIError } from "../../helpers/errors";
+import { responseHandler } from "../../helpers/responseHandler";
 import { getAIResponseService } from "../../services/openAi/openAi.service";
 
 /**
@@ -13,7 +14,8 @@ export const getAIResponse = async (req, res,next) => {
 
     const result = await getAIResponseService(userId, conversationId, userInput);
 
-    res.json(result);
+    res.locals.data = result;
+    responseHandler(res);
   } catch (error) {
     next(GetResponseFromAIError)
   }

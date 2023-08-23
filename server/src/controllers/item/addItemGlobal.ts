@@ -1,6 +1,6 @@
 import { UnableToAddItemError } from "../../helpers/errors";
 import { addItemGlobalService } from "../../services/item/item.service";
-
+import { responseHandler } from "../../helpers/response";
 /**
  * Adds an item globally.
  * @param {object} req - The request object.
@@ -14,10 +14,8 @@ export const addItemGlobal = async (req, res, next) => {
 
     const newItem = await addItemGlobalService(name, weight, quantity, unit, type);
 
-    res.status(200).json({
-      msg: "success",
-      newItem: newItem,
-    });
+    res.locals.data = newItem;
+    responseHandler(res);
   } catch (error) {
     next(UnableToAddItemError)
   }

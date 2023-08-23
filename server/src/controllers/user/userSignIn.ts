@@ -1,3 +1,4 @@
+import { responseHandler } from "../../helpers/responseHandler";
 import User from "../../models/userModel";
 
 /**
@@ -13,5 +14,6 @@ export const userSignIn = async (req, res) => {
     password: password,
   });
   await user.generateAuthToken();
-  res.status(200).send({ user });
+  res.locals.data = user;
+  responseHandler(res);
 };

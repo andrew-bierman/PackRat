@@ -1,4 +1,5 @@
 import { NoDestinationFoundWithThatIDError } from "../../helpers/errors";
+import { responseHandler } from "../../helpers/responseHandler";
 import { getDestinationService } from "../../services/osm/osm.service";
 
 /**
@@ -16,10 +17,6 @@ export const getDestination = async (req, res, next) => {
     next(NoDestinationFoundWithThatIDError)
   }
 
-  res.status(200).json({
-    status: "success",
-    data: {
-      destination: destination,
-    },
-  });
+  res.locals.data = destination
+  responseHandler(res)
 };

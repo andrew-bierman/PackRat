@@ -1,4 +1,5 @@
 import { PackNotFoundError } from "../../helpers/errors";
+import { responseHandler } from "../../helpers/responseHandler";
 import { getPackByIdService } from "../../services/pack/pack.service";
 
 /**
@@ -13,7 +14,8 @@ export const getPackById = async (req, res,next) => {
 
     const pack = await getPackByIdService(packId);
 
-    res.status(200).json(pack);
+    res.locals.data = pack;
+    responseHandler(res);
   } catch (error) {
     next(PackNotFoundError)
   }

@@ -1,4 +1,5 @@
 import { UnableToEditPackError } from "../../helpers/errors";
+import { responseHandler } from "../../helpers/responseHandler";
 import { editPackService } from "../../services/pack/pack.service";
 
 /**
@@ -16,7 +17,8 @@ export const editPack = async (req, res,next) => {
 
     console.log("newPack", newPack);
 
-    res.status(200).json(newPack);
+    res.locals.data = newPack;
+    responseHandler(res);
   } catch (error) {
     next(UnableToEditPackError)
   }

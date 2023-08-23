@@ -5,6 +5,7 @@ import { sendWelcomeEmail, resetEmail } from "../../utils/accountEmail";
 import {
     JWT_SECRET,
 } from "../../config";
+import { responseHandler } from "../../helpers/responseHandler";
 
 /**
  * Sign up a user.
@@ -21,5 +22,6 @@ export const userSignup = async (req, res) => {
         await user.save();
         await user.generateAuthToken();
         sendWelcomeEmail(user.email, user.name);
-        res.status(201).send({ user });
+        res.locals.data = user;
+        responseHandler(res);
 };

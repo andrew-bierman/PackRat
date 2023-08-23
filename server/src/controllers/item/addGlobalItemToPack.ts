@@ -1,4 +1,5 @@
 import { ItemNotFoundError } from "../../helpers/errors";
+import { responseHandler } from "../../helpers/responseHandler";
 import { addGlobalItemToPackService } from "../../services/item/item.service";
 
 /**
@@ -14,7 +15,8 @@ export const addGlobalItemToPack = async (req, res, next) => {
 
     const result = await addGlobalItemToPackService(packId, itemId, ownerId);
 
-    res.status(200).json({ message: "successfully updated", data: result });
+    res.locals.data = result;
+    responseHandler(res);
   } catch (error) {
     next(ItemNotFoundError)
   }

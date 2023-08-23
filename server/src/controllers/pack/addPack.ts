@@ -1,3 +1,4 @@
+import { responseHandler } from "../../helpers/responseHandler";
 import { addPackService } from "../../services/pack/pack.service";
 
 /**
@@ -9,5 +10,6 @@ import { addPackService } from "../../services/pack/pack.service";
 export const addPack = async (req, res) => {
     const { name, owner_id } = req.body;
     const result = await addPackService(name, owner_id);
-    res.status(200).json({ msg: "success", ...result });
+    res.locals.data = result;
+    responseHandler(res);
 };

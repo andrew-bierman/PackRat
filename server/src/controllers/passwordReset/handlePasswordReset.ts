@@ -11,6 +11,7 @@ import {
 } from "../../config";
 
 import sgMail from "@sendgrid/mail";
+import { responseHandler } from "../../helpers/responseHandler";
 
 sgMail.setApiKey(SEND_GRID_API_KEY);
 
@@ -54,7 +55,8 @@ export const handlePasswordReset = async (req, res) => {
         }
       );
   
-      return res.send({ message: "Password reset successful" });
+      res.locals.data = { message: "Password reset successful" };
+      responseHandler(res);
     } catch (error) {
       console.error("Error resetting password:", error);
       return res

@@ -1,4 +1,5 @@
 import { TripNotFoundError } from "../../helpers/errors";
+import { responseHandler } from "../../helpers/responseHandler";
 import { getTripByIdService } from "../../services/trip/getTripByIdService";
 
 /**
@@ -13,7 +14,8 @@ export const getTripById = async (req, res,next) => {
 
     const tripDetails = await getTripByIdService(tripId);
 
-    res.status(200).json(tripDetails);
+    res.locals.data = tripDetails;
+    responseHandler(res);               
   } catch (error) {
     next(TripNotFoundError)
   }

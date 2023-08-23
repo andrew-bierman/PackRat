@@ -1,3 +1,4 @@
+import { responseHandler } from "../../helpers/responseHandler";
 import { postCollectionGeoJSONService } from "../../services/osm/osm.service";
 
 /**
@@ -13,10 +14,6 @@ export const postCollectionGeoJSON = async (req, res) => {
 
     const result = await postCollectionGeoJSONService(geojson);
 
-    res.status(201).json({
-      status: "success",
-      data: {
-        result,
-      },
-    })
+    res.locals.data = result;
+    responseHandler(res);
   }

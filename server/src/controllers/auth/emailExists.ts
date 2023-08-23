@@ -3,6 +3,7 @@ import smtpTransport from "nodemailer-smtp-transport";
 import User from "../../models/userModel";
 import { findUserAndUpdate, findUserByEmail } from "../../services/user/user.service";
 import { UnableToSendCodeError } from "../../helpers/errors";
+import { responseHandler } from "../../helpers/responseHandler";
 
 /**
  * Check if the provided email exists in the database.
@@ -19,7 +20,7 @@ export const emailExists = async (req, res, next) => {
                 let { newcode } = result1;
                 findUserAndUpdate(email, newcode, "code").then(async (result2: any) => {
                     if (result2.status) {
-                        res.status(200).json({ message: "success" });
+                        responseHandler(res)
                     } else {
                         next(result2)
                     }
@@ -29,7 +30,8 @@ export const emailExists = async (req, res, next) => {
             }
         });
     } else {
-        res.status(200).json({ message: val });
+        res.locals.data = val
+        responseHandler(res)
     }
 };
 

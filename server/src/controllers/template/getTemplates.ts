@@ -1,3 +1,4 @@
+import { responseHandler } from "../../helpers/responseHandler";
 import Template from "../../models/templateModel";
 
 /**
@@ -8,5 +9,6 @@ import Template from "../../models/templateModel";
  */
 export const getTemplates = async (req, res) => {
     const templates = await Template.find({}).populate("createdBy", "username");
-    res.json(templates);
+    res.locals.data = templates;
+    responseHandler(res);
 };

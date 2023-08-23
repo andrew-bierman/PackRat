@@ -1,4 +1,5 @@
 import { FailedToRetrieveUserChats } from "../../helpers/errors";
+import { responseHandler } from "../../helpers/responseHandler";
 import { getUserChatsService } from "../../services/openAi/openAi.service";
 
 
@@ -13,7 +14,8 @@ export const getUserChats = async (req, res,next) => {
 
     const result = await getUserChatsService(userId);
 
-    res.json(result);
+    res.locals.data = result;
+    responseHandler(res);
   } catch (error) {
     next(FailedToRetrieveUserChats)
   }

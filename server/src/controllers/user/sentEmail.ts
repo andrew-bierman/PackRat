@@ -1,3 +1,4 @@
+import { responseHandler } from "../../helpers/responseHandler";
 import User from "../../models/userModel";
 import { sendWelcomeEmail, resetEmail } from "../../utils/accountEmail";
 
@@ -16,9 +17,6 @@ export const sentEmail = async (req, res) => {
       }
       const resetUrl = await user.generateResetToken();
       resetEmail(user.email, resetUrl);
-      res.status(200).send({
-        message: "Reset Token has been sent successfully",
-        status: "success",
-        statusCode: 200,
-      });
+      res.locals.data = { message: "Email sent successfully" };
+      responseHandler(res);
   };

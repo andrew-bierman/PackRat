@@ -1,5 +1,6 @@
 import axios from "axios";
 import { ErrorProcessingNominatimError, ErrorRetrievingNominatimError, InvalidRequestParamsError } from "../../helpers/errors";
+import { responseHandler } from "../../helpers/responseHandler";
 
 /**
  * Retrieves Nominatim details based on the provided latitude, longitude, or place ID.
@@ -23,7 +24,8 @@ export const getNominatimDetails = async (req, res,next) => {
         const response = await axios.get(nominatimUrl);
 
         if (response.status === 200) {
-            res.send(response.data);
+            res.locals.data = response.data
+            responseHandler(res)
         } else {
             console.log(response.status, response.statusText);
             next(ErrorProcessingNominatimError)

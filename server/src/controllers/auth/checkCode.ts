@@ -1,4 +1,5 @@
 import { InvalidCodeError } from "../../helpers/errors";
+import { responseHandler } from "../../helpers/responseHandler";
 import User from "../../models/userModel";
 
 /**
@@ -13,7 +14,7 @@ export const checkCode = async (req: any, res: any, next) => {
     $and: [{ email: email.toLowerCase() }, { code: code }],
   });
   if (user.length) {
-    res.status(200).json({ message: "success" });
+    responseHandler(res)
   } else {
     next(InvalidCodeError)
   }

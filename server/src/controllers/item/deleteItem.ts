@@ -1,4 +1,5 @@
 import { UnableToDeleteItemError } from "../../helpers/errors";
+import { responseHandler } from "../../helpers/responseHandler";
 import { deleteItemService } from "../../services/item/item.service";
 
 /**
@@ -14,7 +15,8 @@ export const deleteItem = async (req, res, next) => {
 
     const itemDeleted = await deleteItemService(itemId, packId);
 
-    res.status(200).json(itemDeleted);
+    res.locals.data = itemDeleted;
+    responseHandler(res);
   } catch (error) {
     console.error(error);
     next(UnableToDeleteItemError)
