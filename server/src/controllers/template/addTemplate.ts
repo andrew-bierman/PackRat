@@ -1,4 +1,5 @@
 import { UserNotFoundError } from "../../helpers/errors";
+import { responseHandler } from "../../helpers/responseHandler";
 import User from "../../models/userModel";
 import { addTemplateService } from "../../services/template/template.service";
 
@@ -19,5 +20,6 @@ export const addTemplate = async (req, res,next) => {
 
     await addTemplateService(type, templateId, isGlobalTemplate, createdBy);
 
-    res.status(201).json({ message: "Template created successfully" });
+    res.locals.data = { message: "Template added successfully" };
+    responseHandler(res);
 };

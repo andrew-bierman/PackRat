@@ -1,4 +1,5 @@
-import { searchItemsByNameService } from '../../services/item/item.service';
+import { ItemNotFoundError } from "../../helpers/errors";
+import { searchItemsByNameService } from "../../services/item/item.service";
 
 /**
  * Searches for items by name.
@@ -17,8 +18,6 @@ export const searchItemsByName = async (req, res,next) => {
 
     res.status(200).json(items);
   } catch (error) {
-    res
-      .status(404)
-      .json({ msg: 'Items cannot be found', 'req.query': req.query });
+    next(ItemNotFoundError)
   }
 };

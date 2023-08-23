@@ -1,5 +1,6 @@
 import axios from "axios";
 import { RetrievingWeatherFromOpenWeatherError } from "../../helpers/errors";
+import { responseHandler } from "../../helpers/responseHandler";
 
 /**
  * Retrieves the weather forecast for the week based on latitude and longitude parameters.
@@ -28,7 +29,8 @@ export const getWeatherWeek = async (req, res,next) => {
   try {
     const response = await axios.get(url);
     // console.log(response.data);
-    res.send(response.data);
+    res.locals.data = response.data;
+    responseHandler(res);
   } catch (error) {
     next(RetrievingWeatherFromOpenWeatherError)
   }

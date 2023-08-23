@@ -1,4 +1,5 @@
 import { UnableToAddTripError } from "../../helpers/errors";
+import { responseHandler } from "../../helpers/responseHandler";
 import { addTripService } from "../../services/trip/addTripService";
 
 /**
@@ -39,7 +40,8 @@ export const addTrip = async (req, res,next) => {
 
     const result = await addTripService(tripDetails);
 
-    res.status(200).json({ msg: result });
+    res.locals.data = result;
+    responseHandler(res);
   } catch (error) {
     next(UnableToAddTripError);
   }

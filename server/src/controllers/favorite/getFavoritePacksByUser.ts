@@ -1,4 +1,5 @@
 import { PackNotFoundError } from "../../helpers/errors";
+import { responseHandler } from "../../helpers/responseHandler";
 import Pack from "../../models/packModel";
 import { getFavoritePacksByUserService } from "../../services/favorite/favorite.service";
 
@@ -12,5 +13,6 @@ export const getFavoritePacksByUser = async (req, res, next) => {
   const { userId } = req.body;
   const packs = await getFavoritePacksByUserService(userId);
   if (!packs) next(PackNotFoundError)
-  res.status(200).json(packs);
+  res.locals.data = packs
+  responseHandler(res)
 };

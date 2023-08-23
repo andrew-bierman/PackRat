@@ -1,6 +1,6 @@
 import { UnableToDeleteItemError } from "../../helpers/errors";
+import { responseHandler } from "../../helpers/responseHandler";
 import { deleteGlobalItemService } from "../../services/item/item.service";
-
 /**
  * Deletes a global item.
  * @param {Object} req - The request object.
@@ -13,9 +13,8 @@ export const deleteGlobalItem = async (req, res, next) => {
 
     const itemDeleted = await deleteGlobalItemService(itemId);
 
-    res.status(200).json({
-      data: itemDeleted,
-    });
+    res.locals.data = itemDeleted;
+    responseHandler(res);
   } catch (error) {
     next(UnableToDeleteItemError)
   }

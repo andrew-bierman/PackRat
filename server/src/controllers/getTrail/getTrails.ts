@@ -1,4 +1,5 @@
 import { RetrievingTrailsDataError } from '../../helpers/errors';
+import { responseHandler } from '../../helpers/responseHandler';
 
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args as Parameters<typeof fetch>));
 /**
@@ -51,7 +52,8 @@ export const getTrails = async (req, res,next) => {
   await fetch(url1, options)
     .then(async (res) => await res.json())
     .then((json) => {
-      res.send(json);
+      res.locals.data = json;
+      responseHandler(res);
     })
     .catch((_err) => {
       next(RetrievingTrailsDataError);

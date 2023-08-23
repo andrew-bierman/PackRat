@@ -1,5 +1,5 @@
 import { UserFavoritesNotFoundError } from "../../helpers/errors";
-import User from "../../models/userModel";
+import { responseHandler } from "../../helpers/responseHandler";
 import { getUserFavoritesService } from "../../services/favorite/favorite.service";
 
 /**
@@ -12,5 +12,6 @@ export const getUserFavorites = async (req, res, next) => {
   const { userId } = req.params;
   const favorites = await getUserFavoritesService(userId,next);
   if (!favorites) next(UserFavoritesNotFoundError);
-  res.status(200).json(favorites);
+  res.locals.data = favorites
+  responseHandler(res)
 };

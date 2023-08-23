@@ -1,6 +1,7 @@
 import osmtogeojson from "osmtogeojson";
 import axios from "axios";
 import { ErrorProcessingRequestError, InvalidRequestParamsError } from "../../helpers/errors";
+import { responseHandler } from "../../helpers/responseHandler";
 
 /**
  * Retrieves enhanced details for a photon based on the given id and type.
@@ -73,9 +74,8 @@ export const getEnhancedPhotonDetails = async (req, res, next) => {
             };
         });
 
-        res.send({
-            photon: geojsonData,
-        });
+        res.locals.data = geojsonData
+        responseHandler(res);
     } else {
         console.log(overpassResponse.status, overpassResponse.statusText);
         console.log(nominatimResponse.status, nominatimResponse.statusText);

@@ -1,4 +1,5 @@
 import { UnableToEditUserError } from "../../helpers/errors";
+import { responseHandler } from "../../helpers/responseHandler";
 import User from "../../models/userModel";
 
 /**
@@ -13,7 +14,8 @@ export const deleteUser = async (req, res, next) => {
 
     await User.findOneAndDelete({ _id: userId });
 
-    res.status(200).json({ msg: "user was deleted successfully" });
+    res.locals.data = { message: "User deleted successfully" };
+    responseHandler(res);
   } catch (error) {
     next(UnableToEditUserError)
   }

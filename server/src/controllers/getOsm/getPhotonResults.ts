@@ -1,5 +1,6 @@
 import axios from "axios";
 import { InvalidRequestParamsError, RetrievingPhotonDetailsError } from "../../helpers/errors";
+import { responseHandler } from "../../helpers/responseHandler";
 
 /**
  * Retrieves Photon results based on a search string.
@@ -41,7 +42,8 @@ export const getPhotonResults = async (req, res, next) => {
 
     const resultsArray = response.data.features;
 
-    res.send(resultsArray);
+    res.locals.data = resultsArray
+    responseHandler(res);
   } catch (error) {
     next(RetrievingPhotonDetailsError)
   }
