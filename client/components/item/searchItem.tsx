@@ -22,15 +22,20 @@ import { useState } from "react";
 import { fetchItemsSearchResults } from "../../store/searchStore";
 import { selectItemsGlobal } from "../../store/singlePackStore";
 
-export const SearchItem = ({ onSelect, placeholder }) => {
+type Props = {
+  onSelect?: () => void;
+  placeholder?: string;
+};
+
+export const SearchItem: React.FC<Props> = ({ onSelect, placeholder }) => {
   const [searchString, setSearchString] = useState("");
   const [isLoadingMobile, setIsLoadingMobile] = useState(false);
   const [selectedSearch, setSelectedSearch] = useState("");
 
   const searchResults =
-    useSelector((state) => state.search.searchResults.items) || [];
+    useSelector((state: any) => state.search.searchResults.items) || [];
 
-  const user = useSelector((state) => state.auth.user);
+  const user = useSelector((state: any) => state.auth.user);
   const [showSearchResults, setShowSearchResults] = useState(false);
 
   /**
@@ -42,6 +47,7 @@ export const SearchItem = ({ onSelect, placeholder }) => {
    */
   const handleSearchResultClick = (item, index) => {
     const ownerId = user["_id"];
+    // @ts-ignore
     const packId = window.location.pathname.substring("/path/".length);
     const selectedItem = item["_id"];
     const data = {
@@ -49,6 +55,7 @@ export const SearchItem = ({ onSelect, placeholder }) => {
       packId,
       selectedItem,
     };
+    // @ts-ignore
     dispatch(selectItemsGlobal(data));
   };
 
@@ -62,6 +69,7 @@ export const SearchItem = ({ onSelect, placeholder }) => {
           <Input
             onChangeText={(text) => {
               setSearchString(text);
+              // @ts-ignore
               dispatch(fetchItemsSearchResults(text));
               setShowSearchResults(true);
             }}
@@ -127,6 +135,7 @@ export const SearchItem = ({ onSelect, placeholder }) => {
                         setShowSearchResults(false);
                         setSearchString("");
                       }}
+                      // @ts-ignore
                       underlayColor="gray.100"
                     >
                       <HStack space={3}>
@@ -191,6 +200,7 @@ export const SearchItem = ({ onSelect, placeholder }) => {
               <Pressable
                 key={`result + ${i}`}
                 onPress={() => handleSearchResultClick(result, i)}
+                // @ts-ignore
                 underlayColor="gray.100"
               >
                 <HStack space={3}>
