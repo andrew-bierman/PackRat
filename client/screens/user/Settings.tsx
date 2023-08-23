@@ -1,14 +1,22 @@
-import { useSelector } from "react-redux";
-import Avatar from "~/components/Avatar";
-import { Ionicons } from "@expo/vector-icons";
-import { XStack, YStack } from "@tamagui/stacks";
-import { H4, H5 } from "@tamagui/text";
-import { Button } from "@tamagui/button";
-import { Label } from "@tamagui/label";
-import { Select } from "@tamagui/select";
-import { Input } from "tamagui";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import * as ImagePicker from "expo-image-picker";
+import { Ionicons } from "@expo/vector-icons";
+import {
+  Input,
+  Separator,
+  Text,
+  Stack,
+  Select,
+  Label,
+  Button,
+  XStack,
+  YStack,
+  H5,
+  H2,
+} from "tamagui";
+
+import Avatar from "~/components/Avatar";
 
 export default function Settings() {
   const [user, setUser] = useState(useSelector((state) => state.auth.user));
@@ -37,18 +45,21 @@ export default function Settings() {
   return (
     <YStack
       space="$3"
-      style={{
-        width: "fit-content",
-        marginLeft: "auto",
-        marginRight: "auto",
-      }}
+      width="fit-content"
+      paddingVertical={20}
+      marginHorizontal="auto"
     >
-      <XStack alignItems="center" space="$2">
-        <Avatar src={user.profileImage} />
-        <YStack>
-          <H4>Profile Picture</H4>
+      <Stack>
+        <H2>Profile</H2>
+        <Separator marginVertical={8} />
+      </Stack>
+      <XStack alignItems="center" space>
+        <Avatar size={90} src={user.profileImage} />
+        <YStack space="$2">
+          <H5 fontWeight="medium">Profile Picture</H5>
           <XStack space="$2" alignItems="flex-end">
             <Button
+              size="$3"
               icon={<Ionicons name="cloud-upload-outline" size={24} />}
               color="white"
               style={{ backgroundColor: "#0284c7" }}
@@ -56,7 +67,9 @@ export default function Settings() {
             >
               Upload
             </Button>
-            <Button onPress={removeProfileImage}>Remove</Button>
+            <Button size="$3" onPress={removeProfileImage}>
+              Remove
+            </Button>
           </XStack>
         </YStack>
       </XStack>
@@ -74,6 +87,10 @@ export default function Settings() {
           <Input id="lastName" value={user.lastName} onChange={handleChange} />
         </YStack>
       </XStack>
+      <YStack>
+        <Label htmlFor="username">Username</Label>
+        <Input id="username" value={user.username} onChange={handleChange} />
+      </YStack>
       <YStack>
         <Label htmlFor="email">Email</Label>
         <Input id="email" value={user.email} onChange={handleChange} />
@@ -104,7 +121,31 @@ export default function Settings() {
         </XStack>
       </YStack>
       <Button color="white" style={{ backgroundColor: "#0284c7" }}>
-        Save
+        Update profile
+      </Button>
+      <Stack marginTop={20} marginBottom={10}>
+        <H2>Change Password</H2>
+        <Separator marginVertical={8} />
+        <Text fontSize={16}>We will email you to verify the change.</Text>
+      </Stack>
+      <YStack>
+        <Label htmlFor="oldPassword">Old password</Label>
+        <Input id="oldPassword" value={user.password} secureTextEntry={true} />
+      </YStack>
+      <YStack>
+        <Label htmlFor="newPassword">New password</Label>
+        <Input id="newPassword" value={user.password} secureTextEntry={true} />
+      </YStack>
+      <YStack>
+        <Label htmlFor="confirmPassword">Confirm new password</Label>
+        <Input
+          id="confirmPassword"
+          value={user.confirmPassword}
+          secureTextEntry={true}
+        />
+      </YStack>
+      <Button color="white" style={{ backgroundColor: "#0284c7" }}>
+        Change password
       </Button>
     </YStack>
   );
