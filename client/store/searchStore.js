@@ -4,7 +4,7 @@ import {
   createEntityAdapter,
 } from "@reduxjs/toolkit";
 import { api } from "../constants/api";
-import axios from "axios";
+import axios from "~/config/axios";
 
 export const fetchPhotonSearchResults = createAsyncThunk(
   "search/fetchPhotonSearchResults",

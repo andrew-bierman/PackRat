@@ -23,7 +23,6 @@ import destinationReducer from "./destinationStore";
 import chatReducer from "./chatStore";
 import globalItems from "./globalItemsStore";
 import userStore from './userStore';
-import bearerTokenMiddleware from "./middleware/bearerTokenMiddleware";
 
 // combine reducers
 const rootReducer = combineReducers({
@@ -68,7 +67,6 @@ const store = configureStore({
       },
     })
     .concat(
-      bearerTokenMiddleware,
       apiMessageMiddleware
     ),
 });

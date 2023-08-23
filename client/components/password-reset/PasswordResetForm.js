@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Button, Input, Text, Toast } from "native-base";
 import { useSearchParams } from "expo-router";
-import axios from "axios";
+import axios from "~/config/axios";
 import { api } from "../../constants/api";
 import { InformUser } from "../../utils/ToastUtils";
 
@@ -16,6 +16,7 @@ export const PasswordResetForm = ({ token }) => {
   const handlePasswordReset = async () => {
     try {
       setLoading(true);
+      // TODO - switch to RTK query
       await axios.post(`${api}/password-reset/${token}`, { password });
       setPassword("");
       setLoading(false);
