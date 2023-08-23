@@ -9,7 +9,7 @@ import { api } from "../../constants/api";
 
 // import { Picker } from '@react-native-picker/picker';
 import { DropdownComponent } from "../Dropdown";
-import axios from "axios";
+import axios from "~/config/axios";
 
 const options = [
   { label: "Yes", value: "true" },
@@ -108,7 +108,7 @@ export const SaveTripContainer = ({ dateRange }) => {
 
     console.log("old rag", search);
 
-    // TODO - fix this, why making call not through redux
+    // TODO - fix this, why making call not through redux. Switch to RTK query at least
     const { data: geoJSON } = await axios.get(
       `${api}/osm/photonDetails/${search.properties.osm_type}/${search.properties.osm_id}`
     );

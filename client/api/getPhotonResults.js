@@ -1,5 +1,6 @@
-import axios from "axios";
+import axios from "~/config/axios";
 
+// TODO - swap to RTK query
 export const getPhotonResults = async (addressArray) => {
   if (!addressArray) return;
 

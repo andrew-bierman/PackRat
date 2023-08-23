@@ -1,4 +1,6 @@
 import { createAsyncThunk, createSlice, createEntityAdapter } from "@reduxjs/toolkit";
+
+// we use the original axios to prevent circular dependency with custom axios instance
 import axios from "axios";
 import { api } from "../constants/api";
 import { Alert } from "react-native";
