@@ -26,8 +26,9 @@ export const fetchSinglePack = createAsyncThunk(
   async (packId) => {
     const response = await axios.get(`${api}/pack/p/${packId}`);
     return response.data;
-  }
+  },
 );
+
 export const selectItemsGlobal = createAsyncThunk(
   "Items/selectItemsGlobal",
   async (item) => {
@@ -44,13 +45,19 @@ export const selectItemsGlobal = createAsyncThunk(
     } catch (error) {
       console.log("error", error.message);
     }
-  }
+  },
 );
 
 const singlePackSlice = createSlice({
   name: "singlePack",
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    clearSinglePack: (state) => {
+      state.singlePack = {};
+      state.isLoading = false;
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchSinglePack.pending, (state) => {
@@ -87,5 +94,6 @@ export const {
   selectById: selectSinglePackById,
   selectAll: selectAllSinglePacks,
 } = singlePackAdapter.getSelectors((state) => state.singlePack);
+export const { clearSinglePack } = singlePackSlice.actions;
 
 export default singlePackSlice.reducer;
