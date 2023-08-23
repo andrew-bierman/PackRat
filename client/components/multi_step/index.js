@@ -54,10 +54,25 @@ const Sidebar = ({ stepsData, currentStep }) => {
   );
 };
 
+/**
+ * Renders a multi-step form component.
+ *
+ * @param {Object[]} steps - An array of steps to be rendered in the form.
+ * @param {number} steps[].component - The component to be rendered for each step.
+ * @param {Object} steps[].props - The props to be passed to the component.
+ *
+ * @return {JSX.Element} The rendered multi-step form component.
+ */
 const MultiStepForm = ({ steps = [] }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [stepsData, setStepsData] = useState({});
 
+  /**
+   * Updates the current step and saves the data of the current step before moving.
+   *
+   * @param {any} newStep - The new step to set as the current step.
+   * @return {undefined} This function does not have a return value.
+   */
   const updateStep = (newStep) => {
     // Save data of the current step before moving
     setStepsData({
@@ -67,12 +82,27 @@ const MultiStepForm = ({ steps = [] }) => {
     setCurrentStep(newStep);
   };
 
+  /**
+   * Executes the next step in the process.
+   *
+   * @return {void} 
+   */
   const nextStep = () => {
     if (currentStep < steps.length - 1) {
       updateStep(currentStep + 1);
     }
   };
 
+/**
+ * Decrements the current step and updates the step if the current step is greater than 0.
+ *
+ * @return {undefined} No return value
+ */
+/**
+ * Decrements the current step and updates the step if the current step is greater than 0.
+ *
+ * @return {undefined} No return value
+ */
   const prevStep = () => {
     if (currentStep > 0) {
       updateStep(currentStep - 1);

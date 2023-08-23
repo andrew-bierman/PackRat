@@ -31,6 +31,12 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
 
   const dispatch = useDispatch();
 
+  /**
+   * Handles the sign out functionality.
+   *
+   * @param {type} paramName - description of parameter
+   * @return {type} description of return value
+   */
   const handleSignOut = () => {
     dispatch(signOut());
   };

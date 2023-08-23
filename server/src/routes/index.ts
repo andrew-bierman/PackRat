@@ -21,6 +21,13 @@ const router = express.Router();
 // Create a CSRF middleware
 const csrfProtection = csrf({ cookie: true });
 
+/**
+ * Logs the incoming request method and path, and logs the finished request method, path, status code, and request body.
+ *
+ * @param {Request} req - The incoming request object.
+ * @param {Response} res - The response object.
+ * @param {NextFunction} next - The next function to call in the middleware chain.
+ */
 const logger = (req:Request, res:Response, next:express.NextFunction) => {
   console.log(`Incoming ${req.method} ${req.path}`);
   res.on("finish", () => {

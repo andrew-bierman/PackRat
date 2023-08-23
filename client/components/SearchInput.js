@@ -72,6 +72,11 @@ export const SearchInput = ({ onSelect, placeholder }) => {
     return () => clearTimeout(timeout);
   }, [searchString, dispatch]);
 
+  /**
+   * Retrieves trails, parks, and weather details based on the selected search result.
+   *
+   * @return {Promise<void>} - A promise that resolves when all data is successfully fetched.
+   */
   const getTrailsParksAndWeatherDetails = async () => {
     if (!selectedSearchResult || Object.keys(selectedSearchResult).length === 0)
       return;
@@ -111,6 +116,13 @@ export const SearchInput = ({ onSelect, placeholder }) => {
     return () => clearTimeout(timeout);
   }, [selectedSearch, selectedSearchResult, dispatch]);
 
+/**
+ * Handles the click event on a search result.
+ *
+ * @param {object} result - The search result object.
+ * @param {number} index - The index of the search result.
+ * @return {undefined} This function does not return anything.
+ */
   const handleSearchResultClick = (result, index) => {
     const {
       properties: { name, osm_id },

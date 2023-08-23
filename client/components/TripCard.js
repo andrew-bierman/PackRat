@@ -37,6 +37,12 @@ export default function TripCard({
     (trail) => trail.properties.name == currentTrail
   );
 
+  /**
+   * Handles the change in value.
+   *
+   * @param {any} value - The new value.
+   * @return {undefined} No return value.
+   */
   const handleValueChange = (value) => {
     console.log("🚀 ~ file: TripCard.js:40 ~ handleValueChange ~ value:", value)
     // Assuming that you have a redux action to set the current trail and park

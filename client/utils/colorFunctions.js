@@ -1,3 +1,9 @@
+/**
+ * Converts a hexadecimal color code to RGB format.
+ *
+ * @param {string} hex - The hexadecimal color code to be converted.
+ * @return {string} - The RGB color code in the format "r,g,b".
+ */
 function hexToRGB(hex) {
   let r = 0,
     g = 0,

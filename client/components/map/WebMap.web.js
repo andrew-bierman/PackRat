@@ -196,6 +196,11 @@ const WebMap = ({ shape: shapeProp }) => {
     // console.log("mapInstance", mapInstance);
   }, [shape]);
 
+  /**
+   * Removes the existing source and layers for the trail-cap and trail from the map instance.
+   *
+   * @param {object} mapInstance - The map instance to remove the layers and source from.
+   */
   const removeTrailLayer = (mapInstance) => {
     // Remove existing source and layers if they exist
     if (mapInstance.getLayer("trail-cap")) {
@@ -215,6 +220,11 @@ const WebMap = ({ shape: shapeProp }) => {
     }
   };
 
+  /**
+   * Adds a trail layer to the given map instance.
+   *
+   * @param {Object} mapInstance - The map instance to add the trail layer to.
+   */
   const addTrailLayer = (mapInstance) => {
     let processedShape = processShapeData(shape);
 
@@ -249,6 +259,12 @@ const WebMap = ({ shape: shapeProp }) => {
   };
 
 
+  /**
+   * Adds points to the map instance.
+   *
+   * @param {type} mapInstance - The map instance to add points to.
+   * @return {type} None
+   */
   const addPoints = (mapInstance) => {
       if(mapInstance) {
         const pointLatLong = shape?.features[0]?.geometry?.coordinates
@@ -261,6 +277,11 @@ const WebMap = ({ shape: shapeProp }) => {
       }
       }
 
+      /**
+       * Adds polygons to the map instance.
+       *
+       * @param {object} mapInstance - The map instance to add the polygons to.
+       */
       const addPolygons = (mapInstance) => {
         if(mapInstance) {
 
@@ -279,6 +300,14 @@ const WebMap = ({ shape: shapeProp }) => {
           mapInstance.setCenter(multiPolygonBounds(shape.features[0]))
         }
       }
+  /**
+   * Fetches the GPX download and handles the download process.
+   * This function sets the state of 'downloading' to true and then tries to fetch the GPX data
+   * using the provided shape and options. After receiving the GPX data, it calls the 'handleGpxDownload'
+   * function to handle the download. If there is an error during the process, it logs the error to the console.
+   *
+   * @return {Promise<void>} A promise that resolves when the GPX download is complete.
+   */
   const fetchGpxDownload = async () => {
     setDownloading(true);
 
@@ -303,11 +332,21 @@ const WebMap = ({ shape: shapeProp }) => {
     }
   };
 
+  /**
+   * Enables full screen mode.
+   *
+   * @return {void} 
+   */
   const enableFullScreen = () => {
     setMapFullscreen(true);
     setShowModal(true);
   };
 
+/**
+ * Disable full screen.
+ *
+ * @return {undefined} No return value.
+ */
   const disableFullScreen = () => {
     setMapFullscreen(false);
     setShowModal(false);
@@ -336,11 +375,25 @@ const WebMap = ({ shape: shapeProp }) => {
     [addTrailLayer, removeTrailLayer]
   );
 
+/**
+ * Updates the map style and mapbox style to the specified style.
+ *
+ * @param {style} style - The style to set for the map and mapbox.
+ * @return {void} This function does not return a value.
+ */
   const handleChangeMapStyle = (style) => {
     setMapStyle(style);
     setMapboxStyle(style);
   };
 
+  /**
+   * Handles the download of a GPX file.
+   *
+   * @param {Object} gpxData - The GPX data to be downloaded.
+   * @param {string} [filename="trail"] - The name of the file to be downloaded.
+   * @param {string} [extension="gpx"] - The extension of the file to be downloaded.
+   * @return {Promise<void>} - A promise that resolves when the download is complete.
+   */
   const handleGpxDownload = async (
     gpxData,
     filename = shape?.features[0]?.properties?.name ?? "trail",
@@ -352,6 +405,11 @@ const WebMap = ({ shape: shapeProp }) => {
     }
   };
 
+  /**
+   * Fetches the user's location and updates the map accordingly.
+   *
+   * @return {Promise<void>} A Promise that resolves when the location is fetched and the map is updated.
+   */
   const fetchLocation = async () => {
     try {
       const location = await getLocation();

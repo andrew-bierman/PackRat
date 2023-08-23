@@ -20,6 +20,9 @@ export const AddItemGlobal = ({
 
   const [categoryType, setCategoryType] = useState("");
 
+  /**
+   * Resets the add form by setting all the input values to an empty string.
+   */
   const resetAddForm = () => {
     setName("");
     setCategoryType("");
@@ -30,6 +33,11 @@ export const AddItemGlobal = ({
 
   // handle updates to initialData
 
+/**
+ * Handles the form submission.
+ *
+ * @return {void}
+ */
   const handleSubmit = () => {
     dispatch(
       addItemsGlobal({
