@@ -60,6 +60,12 @@ const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
     }
   }, [conversation]);
 
+/**
+ * Parses a conversation history string and returns an array of objects representing each message in the conversation.
+ *
+ * @param {string} historyString - The string containing the conversation history.
+ * @return {Array} An array of objects representing each message in the conversation.
+ */
   const parseConversationHistory = (historyString) => {
     const historyArray = historyString.split("\n");
     return historyArray.reduce((accumulator, current) => {
@@ -73,6 +79,11 @@ const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
     }, []);
   };
 
+/**
+ * Handles sending a message.
+ *
+ * @return {Promise<void>} This function returns nothing.
+ */
   const handleSendMessage = async () => {
     await dispatch(
       getAIResponse({ userId: user._id, conversationId, userInput })

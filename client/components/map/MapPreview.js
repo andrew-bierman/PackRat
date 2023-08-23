@@ -7,6 +7,13 @@ import {
 } from "../../utils/mapFunctions";
 import { MAPBOX_ACCESS_TOKEN } from "@env";
 import { isPoint } from "../../utils/mapFunctions";
+
+/**
+ * Renders a preview of a map based on the given shape.
+ *
+ * @param {Object} shape - The shape object describing the map.
+ * @return {Component} The rendered map preview.
+ */
 export default function MapPreview({ shape }) {
   console.log("🚀 ~ file: MapPreview.js:9 ~ MapPreview ~ shape:", JSON.stringify(shape.features[0]))
   const processedShape = processShapeData(shape);

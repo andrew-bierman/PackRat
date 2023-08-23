@@ -5,6 +5,12 @@ import { useSelector } from "react-redux";
 
 import { theme } from "../../theme";
 
+/**
+ * Retrieves the appropriate container style based on the provided type.
+ *
+ * @param {string} type - The type of container style to retrieve.
+ * @return {Object} The container style object.
+ */
 const getContainerStyle = (type) => {
   switch (type) {
     case "search":
@@ -18,6 +24,19 @@ const getContainerStyle = (type) => {
   }
 };
 
+/**
+ * Generate the function comment for the given function body.
+ *
+ * @param {Object} props - The props object containing the function parameters.
+ * @param {string} props.title - The title of the large card.
+ * @param {React.Component} props.Icon - The icon component of the large card.
+ * @param {React.Component} props.ContentComponent - The content component of the large card.
+ * @param {Object} props.contentProps - The props object for the content component.
+ * @param {string} props.type - The type of the large card.
+ * @param {Object} props.customStyle - The custom style object for the large card.
+ * @param {React.Component} props.children - The children components of the large card.
+ * @return {React.Component} The rendered large card component.
+ */
 export default function LargeCard({
   title,
   Icon,

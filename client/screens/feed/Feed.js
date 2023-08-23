@@ -156,6 +156,11 @@ const Feed = ({ feedType = "public" }) => {
     }
   }, [queryString, feedType, ownerId]);
 
+  /**
+   * Renders the data for the feed based on the feed type and search query.
+   *
+   * @return {ReactNode} The rendered feed data.
+   */
   const renderData = () => {
     let data = [];
     if (feedType === "public") {

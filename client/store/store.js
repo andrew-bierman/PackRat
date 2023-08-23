@@ -2,9 +2,12 @@ import { combineReducers } from "@reduxjs/toolkit";
 import { configureStore } from "@reduxjs/toolkit";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { persistReducer, persistStore } from "redux-persist";
-import apiMessageMiddleware from "./middleware/apiMiddleware";
 
-// all reducers
+// middleware
+import apiMessageMiddleware from "./middleware/apiMessageMiddleware";
+import bearerTokenMiddleware from "./middleware/bearerTokenMiddleware";
+
+// all reducers - TODO: move to separate folder
 import weatherReducer from "./weatherStore";
 import dropdownReducer from "./dropdownStore";
 import authReducer from "./authStore";

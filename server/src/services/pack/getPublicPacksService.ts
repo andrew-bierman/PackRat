@@ -1,5 +1,11 @@
 import Pack from "../../models/packModel";
 
+/**
+ * Retrieves public packs based on the provided query parameter.
+ *
+ * @param {string} queryBy - Specifies how the public packs should be sorted.
+ * @return {Promise<any[]>} An array of public packs.
+ */
 export async function getPublicPacksService(queryBy: string) {
   try {
     let publicPacksPipeline: any = [

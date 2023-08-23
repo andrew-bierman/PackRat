@@ -185,6 +185,11 @@ UserSchema.virtual("trips", {
   justOne: false,
 });
 
+/**
+ * Returns a partial representation of the user object, without the password and passwordResetToken fields.
+ *
+ * @returns {Partial<IUser>} A partial representation of the user object.
+ */
 UserSchema.methods.toJSON = function (): Partial<IUser> {
   const user = this;
   const userObject = user.toObject();
