@@ -24,6 +24,7 @@ import { ThreeDotsMenu } from "../ThreeDotsMenu";
 import UseTheme from "../../hooks/useTheme";
 import { InformUser } from "../../utils/ToastUtils";
 import { SearchItem } from "../item/searchItem";
+import Loader from "../Loader";
 
 export const CustomCard = ({
   title,
@@ -41,8 +42,8 @@ export const CustomCard = ({
   const titleRef = useRef(null);
   const dispatch = useDispatch();
   const router = useRouter();
-
-  const user = useSelector((state) => state.auth.user);
+  const isLoading = useSelector((state: any) => state.singlePack.isLoading);
+  const user = useSelector((state: any) => state.auth.user);
   const userId = user["_id"];
 
   /**
@@ -74,11 +75,12 @@ export const CustomCard = ({
         alignSelf="center"
         alignItems={["center", "center", "flex-start", "flex-start"]}
         w={["100%", "100%", "100%", "90%"]}
-        direction={["column", "column", "row", "row"]}
+        flexDirection={["column", "column", "row", "row"]}
         rounded="lg"
         flexGrow={1}
       >
         <SearchItem placeholder={"Search Item"} />
+        {isLoading && <Loader />}
         <VStack space="4" width="100%" divider={<Divider />}>
           <Box
             px="4"
@@ -111,6 +113,7 @@ export const CustomCard = ({
                 </Link>
               </Box>
               {link && (
+                // @ts-ignore
                 <Box
                   flexDir={"row"}
                   style={{
@@ -174,7 +177,7 @@ export const CustomCard = ({
         alignSelf="center"
         alignItems={["center", "center", "flex-start", "flex-start"]}
         w={["100%", "100%", "100%", "90%"]}
-        direction={["column", "column", "row", "row"]}
+        flexDirection={["column", "column", "row", "row"]}
         rounded="lg"
         flexGrow={1}
       >
@@ -192,7 +195,6 @@ export const CustomCard = ({
                 <Link
                   href={`/profile/${data.owner_id && data["owner_id"]._id}`}
                 >
-                  {console.log({ data })}
                   <Text>
                     {user._id === data["owner_id"]
                       ? "Your Profile"
