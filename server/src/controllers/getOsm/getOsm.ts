@@ -1,6 +1,7 @@
 import osmtogeojson from "osmtogeojson";
 import axios from "axios";
 import { ErrorProcessingOverpassError, ErrorRetrievingOverpassError, InvalidRequestParamsError } from "../../helpers/errors";
+import { responseHandler } from "../../helpers/responseHandler";
 
 /**
  * Retrieves OpenStreetMap data based on the provided activity type, start point, and end point.
@@ -61,7 +62,8 @@ export const getOsm = async (req, res, next) => {
     if (response.status === 200) {
       const responseFormat = response.data;
       const geojsonData = osmtogeojson(responseFormat);
-      res.send(geojsonData);
+      res.locals.data = geojsonData;
+      responseHandler(res);
     } else {
       console.log(response.status, response.statusText);
       next(ErrorProcessingOverpassError)

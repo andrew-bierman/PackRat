@@ -7,7 +7,8 @@ import {
   SEND_GRID_API_KEY,
 } from '../../config';
 
-import sgMail from '@sendgrid/mail';
+import sgMail from "@sendgrid/mail";
+import { responseHandler } from "../../helpers/responseHandler";
 
 sgMail.setApiKey(SEND_GRID_API_KEY);
 
@@ -75,11 +76,12 @@ export const requestPasswordResetEmailAndToken = async (req, res) => {
     const resetUrl = `${CLIENT_URL}/password-reset?token=${resetToken}`;
     sendPasswordResetEmail(email, resetUrl);
 
-    return res.send({ message: 'Password reset email sent' });
-  } catch (error) {
-    console.error('Error sending password reset email:', error);
-    return res.status(500).send({ error: 'Internal server error' });
-  }
+        res.locals.data = { message: "Password reset email sent successfully" };
+        responseHandler(res);
+    } catch (error) {
+        console.error("Error sending password reset email:", error);
+        return res.status(500).send({ error: "Internal server error" });
+    }
 };
 
 // Send the password reset email with the reset token included in the URL

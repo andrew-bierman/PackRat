@@ -1,4 +1,5 @@
 import { TemplateNotFoundError } from "../../helpers/errors";
+import { responseHandler } from "../../helpers/responseHandler";
 import Template from "../../models/templateModel";
 
 /**
@@ -15,7 +16,8 @@ export const getTemplateById = async (req, res, next) => {
     "username"
   );
   if (template) {
-    res.json(template);
+    res.locals.data = template;
+    responseHandler(res);
   } else {
     next(TemplateNotFoundError)
   }

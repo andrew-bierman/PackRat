@@ -1,6 +1,7 @@
 import osmtogeojson from "osmtogeojson";
 import axios from "axios";
 import { InvalidRequestParamsError, RetrievingPhotonDetailsError } from "../../helpers/errors";
+import { responseHandler } from "../../helpers/responseHandler";
 
 /**
  * Retrieves Photon details based on the provided ID and type.
@@ -51,7 +52,8 @@ export const getPhotonDetails = async (req, res,next) => {
 
     // await updateDatabaseWithGeoJSONDataFromOverpass(geojsonData);
 
-        res.send(geojsonData);
+        res.locals.data = geojsonData
+        responseHandler(res);
     } catch (error) {
         next(RetrievingPhotonDetailsError)
     }

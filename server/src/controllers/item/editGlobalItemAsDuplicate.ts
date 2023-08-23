@@ -1,5 +1,7 @@
 import { editGlobalItemAsDuplicateService } from "../../services/item/item.service";
 import { UnableToDeleteItemError } from "../../helpers/errors";
+import { responseHandler } from "../../helpers/responseHandler";
+import { editGlobalItemAsDuplicateService } from "../../services/item/item.service";
 
 /**
  * Edit a global item by duplicating it with new changes.
@@ -31,7 +33,8 @@ export const editGlobalItemAsDuplicate = async (req, res,next) => {
       type,
     );
 
-    res.status(200).json(newItem);
+    res.locals.data = newItem;
+    responseHandler(res);
   } catch (error) {
     next(UnableToDeleteItemError)
   }

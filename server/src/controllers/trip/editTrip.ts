@@ -1,4 +1,5 @@
 import { UnableToEditTripError } from "../../helpers/errors";
+import { responseHandler } from "../../helpers/responseHandler";
 import Trip from "../../models/tripModel";
 
 /**
@@ -15,7 +16,8 @@ export const editTrip = async (req, res, next) => {
       returnOriginal: false,
     }).populate('packs');
 
-    res.status(200).json(newTrip);
+    res.locals.data = newTrip;
+    responseHandler(res);
   } catch (error) {
     next(UnableToEditTripError)
   }

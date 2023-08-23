@@ -1,4 +1,5 @@
-import { addToFavoriteService } from '../../services/favorite/addToFavoriteService';
+import { responseHandler } from "../../helpers/responseHandler";
+import { addToFavoriteService } from "../../services/favorite/addToFavoriteService";
 
 /**
  * Adds or removes a pack from a user's favorites list.
@@ -12,6 +13,7 @@ export const addToFavorite = async (req, res) => {
 
     const user = await addToFavoriteService(packId, userId);
 
-    res.status(200).json(user);
+    res.locals.data = user;
+    responseHandler(res);
 
 };

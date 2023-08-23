@@ -10,7 +10,8 @@ import {
   SEND_GRID_API_KEY,
 } from '../../config';
 
-import sgMail from '@sendgrid/mail';
+import sgMail from "@sendgrid/mail";
+import { responseHandler } from "../../helpers/responseHandler";
 
 sgMail.setApiKey(SEND_GRID_API_KEY);
 
@@ -27,16 +28,38 @@ const verifyPasswordResetToken = (token) => {
 };
 
 export const handlePasswordReset = async (req, res) => {
-  try {
-    const { password } = req.body;
-    const { token } = req.params;
-    const email = verifyPasswordResetToken(token);
-    const hashedPassword = bcrypt.hashSync(password, 10); // hash the password
-
-    const user: any = await User.findOne({ email });
-
-    if (!user) {
-      throw new Error('No user found with this email address');
+    try {
+      const { password } = req.body;
+      const { token } = req.params;
+      const email = verifyPasswordResetToken(token);
+      const hashedPassword = bcrypt.hashSync(password, 10); // hash the password
+  
+      const user: any = await User.findOne({ email });
+  
+      if (!user) {
+        throw new Error("No user found with this email address");
+      }
+  
+      if (Date.now() > user.passwordResetTokenExpiration ) {
+        throw new Error("Password reset token has expired");
+      }
+  
+      await User.findOneAndUpdate(
+        { email },
+        {
+          password: hashedPassword,
+          passwordResetToken: null,
+          passwordResetTokenExpiration: null,
+        }
+      );
+  
+      res.locals.data = { message: "Password reset successful" };
+      responseHandler(res);
+    } catch (error) {
+      console.error("Error resetting password:", error);
+      return res
+        .status(500)
+        .send({ error: error.message || "Internal server error" });
     }
 
     if (Date.now() > user.passwordResetTokenExpiration) {

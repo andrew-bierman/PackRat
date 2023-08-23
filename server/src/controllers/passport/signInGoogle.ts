@@ -14,8 +14,9 @@ import {
   SERVER_ROOT_URI,
 } from '../../config';
 
-import { OAuth2Client } from 'google-auth-library';
-import utilsService from '../../utils/utils.service';
+import { OAuth2Client } from "google-auth-library";
+import utilsService from "../../utils/utils.service";
+import { responseHandler } from "../../helpers/responseHandler";
 
 const client = new OAuth2Client(
   GOOGLE_CLIENT_ID,
@@ -96,11 +97,12 @@ export const signInGoogle = async (req, res) => {
 
       sendWelcomeEmail(user.email, user.name);
 
-      res.status(200).send({ user });
-    } else {
-      if (!alreadyGoogleSignin.password) {
-        alreadyGoogleSignin.password = utilsService.randomPasswordGenerator(8);
-      }
+            res.locals.data = { user };
+                responseHandler(res);
+        } else {
+            if (!alreadyGoogleSignin.password) {
+                alreadyGoogleSignin.password = utilsService.randomPasswordGenerator(8);
+            }
 
       alreadyGoogleSignin.googleId = googleId;
 
@@ -108,7 +110,11 @@ export const signInGoogle = async (req, res) => {
 
       await alreadyGoogleSignin.save();
 
-      res.status(200).send({ user: alreadyGoogleSignin });
+            res.locals.data = { user: alreadyGoogleSignin };
+            responseHandler(res);
+        }
+    } catch (err) {
+        res.status(400).send({ message: err.message });
     }
   } catch (err) {
     res.status(400).send({ message: err.message });
