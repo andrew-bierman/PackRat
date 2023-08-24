@@ -187,6 +187,20 @@ const MapButtonsOverlay = ({
               <MaterialCommunityIcons name="map-plus" size={24} color="grey" />
             </TouchableOpacity>
           )}
+          <TouchableOpacity
+          style={[styles.headerBtnView,
+            {
+              width: 40,
+              height: 40,
+              position: "absolute",
+              bottom: 80,
+              left: 10,
+            },
+          ]}
+          onPress={navigateToMaps}
+        >
+          <FontAwesome5 name="directions" size={21} color="grey" />
+        </TouchableOpacity>
 
           {/* Location Button */}
           <TouchableOpacity
