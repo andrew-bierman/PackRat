@@ -1,4 +1,8 @@
-import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
+import {
+  createSlice,
+  createAsyncThunk,
+  createEntityAdapter,
+} from "@reduxjs/toolkit";
 import { defaultWeatherObject } from "../constants/defaultWeatherObj";
 import { defaultWeekObj } from "../constants/defaultWeekObj";
 
@@ -11,11 +15,16 @@ const weatherAdapter = createEntityAdapter();
 const initialState = weatherAdapter.getInitialState({
   weatherObject: defaultWeatherObject,
   weatherWeek: defaultWeekObj,
-})
-
+});
+type FetchWeatherProps = {
+  lat?: number;
+  lon?: number;
+  state?: any;
+};
 export const fetchWeather = createAsyncThunk(
   "weather/fetchWeather",
-  async ({ lat, lon, state }) => {
+  async (args: FetchWeatherProps) => {
+    const { lat, lon, state } = args;
     let params = `?`;
 
     if (lat) params += `lat=${lat}`;
@@ -30,12 +39,14 @@ export const fetchWeather = createAsyncThunk(
     } catch (error) {
       console.error("error:" + error);
     }
-  }
+  },
 );
 
 export const fetchWeatherWeek = createAsyncThunk(
   "weather/fetchWeatherWeek",
-  async ({ lat, lon }) => {
+  async (
+    args:FetchWeatherProps) => {
+    const { lat, lon } = args
     let params = `?`;
 
     if (lat) params += `lat=${lat}`;
@@ -50,7 +61,7 @@ export const fetchWeatherWeek = createAsyncThunk(
     } catch (error) {
       console.error("error:" + error);
     }
-  }
+  },
 );
 
 export const weatherSlice = createSlice({
@@ -74,31 +85,31 @@ export const weatherSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchWeather.pending, (state) => {
+      .addCase(fetchWeather.pending, (state:any) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(fetchWeather.fulfilled, (state, action) => {
+      .addCase(fetchWeather.fulfilled, (state:any, action) => {
         state.weatherObject = action.payload;
         state.isLoading = false;
         state.error = null;
       })
-      .addCase(fetchWeather.rejected, (state, action) => {
+      .addCase(fetchWeather.rejected, (state:any, action) => {
         state.isLoading = false;
         state.error = action.error.message;
       })
 
-      .addCase(fetchWeatherWeek.pending, (state) => {
+      .addCase(fetchWeatherWeek.pending, (state:any) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(fetchWeatherWeek.fulfilled, (state, action) => {
+      .addCase(fetchWeatherWeek.fulfilled, (state:any, action) => {
         const week = action.payload.list.slice(0, 4);
         state.weatherWeek = week;
         state.isLoading = false;
         state.error = null;
       })
-      .addCase(fetchWeatherWeek.rejected, (state, action) => {
+      .addCase(fetchWeatherWeek.rejected, (state:any, action) => {
         state.isLoading = false;
         state.error = action.error.message;
       });
@@ -109,7 +120,7 @@ export const weatherSlice = createSlice({
 export const { add, addWeek } = weatherSlice.actions;
 
 export const { selectAll: selectAllWeathers, selectById: selectWeatherById } =
-  weatherAdapter.getSelectors((state) => state.weather);
+  weatherAdapter.getSelectors((state:any) => state.weather);
 
 export const selectIsLoading = (state) => state.weather.isLoading;
 export const selectError = (state) => state.weather.error;

@@ -1,4 +1,3 @@
-
 import {
   VStack,
   Input,
@@ -18,6 +17,8 @@ import {
 } from "native-base";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 
+import { useRef } from "react";
+
 import { SafeAreaView } from "react-native";
 
 import { Platform } from "react-native";
@@ -30,9 +31,7 @@ import { useState, useEffect } from "react";
 // import { getTrailsResult } from "../api/getTrailsResult";
 // import { getPhotonResults } from "../api/getPhotonResults";
 
-import {
-  fetchTrails,
-} from "../store/trailsStore";
+import { fetchTrails } from "../store/trailsStore";
 
 import { fetchParks } from "../store/parksStore";
 
@@ -41,35 +40,79 @@ import {
   clearSearchResults,
   fetchPhotonSearchResults,
 } from "../store/searchStore";
-import { getTrailsOSM } from "../api/getTrails";
-import { getParksOSM } from "../api/getParks";
 import { fetchWeather, fetchWeatherWeek } from "../store/weatherStore";
+import { RootState, AppDispatch } from "../store/store";
 
-export const SearchInput = ({ onSelect, placeholder }) => {
-  const [searchString, setSearchString] = useState("");
-  const [isLoadingMobile, setIsLoadingMobile] = useState(false);
-  const [selectedSearch, setSelectedSearch] = useState("");
+interface SearchResult {
+  properties: {
+    name: string;
+    osm_id: string;
+    osm_value: string;
+  };
+  geometry: {
+    coordinates: [number, number];
+  };
+}
+interface SearchInputProps {
+  onSelect?: (result: SearchResult) => void;
+  placeholder?: string;
+}
+
+export const SearchInput: React.FC<SearchInputProps> = ({
+  onSelect,
+  placeholder,
+}) => {
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const abortController = useRef(new AbortController());
+
+  const [searchString, setSearchString] = useState<string>("");
+  const [isLoadingMobile, setIsLoadingMobile] = useState<boolean>(false);
+  const [selectedSearch, setSelectedSearch] = useState<string>("");
 
   const searchResults =
-    useSelector((state) => state.search.searchResults) || [];
+    useSelector<RootState, SearchResult[]>(
+      (state: any) => state.search.searchResults,
+    ) || [];
+
+  const isLoading =
+    useSelector<RootState, boolean>((state: any) => state.search.isLoading) ||
+    false;
 
   const selectedSearchResult =
-    useSelector((state) => state.search.selectedSearchResult) || {};
+    useSelector<RootState, SearchResult | null>(
+      (state: any) => state.search.selectedSearchResult,
+    ) || null;
 
-  // const [searchResults, setSearchResults] = useState([]);
-  const [showSearchResults, setShowSearchResults] = useState(false);
+  const [showSearchResults, setShowSearchResults] = useState<boolean>(false);
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    setShowSearchResults(searchString.length > 0);
+    if (!searchString) {
+      setShowSearchResults(false); // Hide search results when search string is empty
+    }
+    if (!searchString) {
+      setShowSearchResults(false); // Hide search results when search string is empty
+    }
+    setShowSearchResults(false);
 
-    const timeout = setTimeout(() => {
-      if (!searchString) return;
+    if (timeoutRef.current !== null) return;
+
+    timeoutRef.current = setTimeout(() => {
+      timeoutRef.current = null;
+
+      if (!searchString || isLoading) return;
+      abortController.current.abort();
       dispatch(fetchPhotonSearchResults(searchString));
+      setShowSearchResults(true);
     }, 2000);
 
-    return () => clearTimeout(timeout);
+    return () => {
+      if (timeoutRef.current !== null) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
+    };
   }, [searchString, dispatch]);
 
   /**
@@ -116,13 +159,13 @@ export const SearchInput = ({ onSelect, placeholder }) => {
     return () => clearTimeout(timeout);
   }, [selectedSearch, selectedSearchResult, dispatch]);
 
-/**
- * Handles the click event on a search result.
- *
- * @param {object} result - The search result object.
- * @param {number} index - The index of the search result.
- * @return {undefined} This function does not return anything.
- */
+  /**
+   * Handles the click event on a search result.
+   *
+   * @param {object} result - The search result object.
+   * @param {number} index - The index of the search result.
+   * @return {undefined} This function does not return anything.
+   */
   const handleSearchResultClick = (result, index) => {
     const {
       properties: { name, osm_id },
@@ -132,7 +175,6 @@ export const SearchInput = ({ onSelect, placeholder }) => {
     setSearchString(name);
     setShowSearchResults(false);
     dispatch(setSelectedSearchResult(result));
-    // dispatch(clearSearchResults());
 
     if (onSelect) {
       onSelect(result);
@@ -164,9 +206,11 @@ export const SearchInput = ({ onSelect, placeholder }) => {
               />
             }
             InputRightElement={
-              showSearchResults && (
+              searchString.length > 0 &&
+              searchResults.length > 0 && (
                 <IconButton
                   mr={2}
+                  disabled={isLoading}
                   icon={
                     <Icon
                       as={<MaterialIcons name="close" />}
@@ -178,6 +222,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
                   onPress={() => {
                     setShowSearchResults(false);
                     setSearchString("");
+                    dispatch(clearSearchResults());
                   }}
                 />
               )
@@ -203,7 +248,9 @@ export const SearchInput = ({ onSelect, placeholder }) => {
                     <Pressable
                       key={`result + ${i}`}
                       onPress={() => handleSearchResultClick(result, i)}
-                      underlayColor="gray.100"
+                      style={({ pressed }) => ({
+                        backgroundColor: pressed ? "gray.100" : "transparent",
+                      })}
                     >
                       <HStack space={3}>
                         <Text fontSize="sm" fontWeight="medium">
@@ -250,7 +297,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
         }
       />
 
-      {showSearchResults && searchResults?.length > 0 && (
+      {!isLoading && (
         <ScrollView
           position="absolute"
           top="100%"
@@ -269,7 +316,9 @@ export const SearchInput = ({ onSelect, placeholder }) => {
               <Pressable
                 key={`result + ${i}`}
                 onPress={() => handleSearchResultClick(result, i)}
-                underlayColor="gray.100"
+                style={({ pressed }) => ({
+                  backgroundColor: pressed ? "gray.100" : "transparent",
+                })}
               >
                 <HStack space={3}>
                   <Text fontSize="sm" fontWeight="medium">

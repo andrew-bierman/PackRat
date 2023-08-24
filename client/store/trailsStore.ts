@@ -1,10 +1,15 @@
 import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
 import axios from "~/config/axios";
 import { api } from "../constants/api";
-
+type FetchTrailsArgs = {
+  lat: number;
+  lon: number;
+  selectedSearch: string;
+};
 export const fetchTrails = createAsyncThunk(
   "trails/fetchTrails",
-  async ({ lat, lon, selectedSearch }) => {
+  async (args:FetchTrailsArgs) => {
+   const { lat, lon, selectedSearch } = args
     let params = `?`;
 
     if (lat) {
@@ -48,13 +53,13 @@ const trailsSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchTrails.pending, (state, action) => {
+      .addCase(fetchTrails.pending, (state:any, action) => {
         state.trailsDetails = [];
         state.trailNames = [];
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(fetchTrails.fulfilled, (state, action) => {
+      .addCase(fetchTrails.fulfilled, (state:any, action) => {
         trailsAdapter.setAll(state, action.payload.trails);
         state.trailNames = action.payload.filteredTrails;
         state.isLoading = false;
@@ -67,6 +72,6 @@ const trailsSlice = createSlice({
   },
 });
 
-export const { selectAll: selectAllTrails } = trailsAdapter.getSelectors((state) => state.trails);
+export const { selectAll: selectAllTrails } = trailsAdapter.getSelectors((state:any) => state.trails);
 
 export default trailsSlice.reducer;

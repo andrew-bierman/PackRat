@@ -24,7 +24,7 @@ import gpxReducer from "./gpxStore";
 import destinationReducer from "./destinationStore";
 import chatReducer from "./chatStore";
 import globalItems from "./globalItemsStore";
-import userStore from './userStore';
+import userStore from "./userStore";
 
 // combine reducers
 const rootReducer = combineReducers({
@@ -47,6 +47,27 @@ const rootReducer = combineReducers({
   globalItems,
   userStore,
 });
+export type RootState = {
+  auth: typeof authReducer,
+  dropdown: typeof dropdownReducer,
+  search: typeof searchReducer,
+  weather: typeof weatherReducer,
+  trails: typeof trailsReducer,
+  parks: typeof parksReducer,
+  items: typeof itemsReducer,
+  packs: typeof packsReducer,
+  trips: typeof tripsReducer,
+  favorites: typeof favoritesReducer,
+  singlePack: typeof singlePackReducer,
+  singleTrip: typeof singleTripReducer,
+  feed: typeof feedReducer,
+  gpx: typeof gpxReducer,
+  destination: typeof destinationReducer,
+  chat: typeof chatReducer,
+  globalItems: typeof globalItems,
+  userStore: typeof userStore,
+};
+
 
 // configure persist store and whitelist reducers
 const persistConfig = {
@@ -61,17 +82,14 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
+  getDefaultMiddleware({
       serializableCheck: {
         // Ignore these action types
         ignoredActions: ["persist/PERSIST"],
       },
-    })
-    .concat(
-      apiMessageMiddleware
-    ),
-});
-
+    }).concat(apiMessageMiddleware),
+  });
+  export type AppDispatch = typeof store.dispatch;
 const persistor = persistStore(store);
 
 export { store, persistor };

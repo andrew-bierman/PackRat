@@ -8,7 +8,7 @@ import axios from "~/config/axios";
 
 export const fetchPhotonSearchResults = createAsyncThunk(
   "search/fetchPhotonSearchResults",
-  async (searchString) => {
+  async (searchString: string) => {
     const url =
       api +
       `/osm/photon/search?searchString=${encodeURIComponent(searchString)}`;
@@ -19,11 +19,11 @@ export const fetchPhotonSearchResults = createAsyncThunk(
     } catch (error) {
       console.error("error:" + error);
     }
-  }
+  },
 );
 export const fetchItemsSearchResults = createAsyncThunk(
   "search/fetchItemsSearchResults",
-  async (searchString) => {
+  async (searchString:string) => {
     const url = api + `/item/global?search=${encodeURIComponent(searchString)}`;
 
     try {
@@ -32,7 +32,7 @@ export const fetchItemsSearchResults = createAsyncThunk(
     } catch (error) {
       console.error("error:" + error);
     }
-  }
+  },
 );
 
 const searchAdapter = createEntityAdapter();
@@ -40,6 +40,7 @@ const searchAdapter = createEntityAdapter();
 const initialState = searchAdapter.getInitialState({
   searchResults: [],
   selectedSearchResult: {},
+  isLoading: false,
 });
 
 const searchSlice = createSlice({
@@ -49,18 +50,26 @@ const searchSlice = createSlice({
     setSelectedSearchResult(state, action) {
       state.selectedSearchResult = action.payload;
     },
+    clearSearchResults(state) {
+      searchAdapter.removeAll(state);
+      state.searchResults = [];
+      state.isLoading = false;
+    },
   },
   extraReducers: (builder) => {
     builder
       .addCase(fetchPhotonSearchResults.pending, (state) => {
         state.searchResults = [];
+        state.isLoading = true;
       })
       .addCase(fetchPhotonSearchResults.fulfilled, (state, action) => {
         searchAdapter.setAll(state, action.payload);
         state.searchResults = action.payload;
+        state.isLoading = false;
       })
       .addCase(fetchPhotonSearchResults.rejected, (state) => {
         state.searchResults = [];
+        state.isLoading = false;
       })
       .addCase(fetchItemsSearchResults.pending, (state) => {
         state.searchResults = [];
@@ -74,5 +83,6 @@ const searchSlice = createSlice({
   },
 });
 
-export const { setSelectedSearchResult } = searchSlice.actions;
+export const { setSelectedSearchResult, clearSearchResults } =
+  searchSlice.actions;
 export default searchSlice.reducer;

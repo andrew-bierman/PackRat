@@ -31,10 +31,10 @@ export default function TripCard({
 
   const currentTrail = useSelector((state) => state.dropdown.currentTrail);
   const currentPark = useSelector((state) => state.dropdown.currentPark);
-  console.log("🚀 ~ file: TripCard.js:34 ~ currentPark:", currentPark)
+
   const trailsDetails = useSelector(selectAllTrails); // updated selector for new trails slice
   const currentShape = trailsDetails.filter(
-    (trail) => trail.properties.name == currentTrail
+    (trail) => trail.properties.name == currentTrail,
   );
 
   /**
@@ -44,7 +44,6 @@ export default function TripCard({
    * @return {undefined} No return value.
    */
   const handleValueChange = (value) => {
-    console.log("🚀 ~ file: TripCard.js:40 ~ handleValueChange ~ value:", value)
     // Assuming that you have a redux action to set the current trail and park
     if (isTrail) {
       dispatch(addTrail(value));
@@ -102,7 +101,6 @@ export default function TripCard({
       ) : (
         // isTrail ?
 
-        
         // <DropdownComponent
         //   {...{
         //     value: currentTrail,
@@ -113,25 +111,34 @@ export default function TripCard({
         //     width: 300,
         //   }}
         // />
-        // : 
-        <View style={{ width : "80%" }} >
-
-        <Carousel iconColor={isDark ? '#fff' : '#000'} itemWidth={150}>
-          {
-            data && data?.map((item) => {
-              let selectedValue = isTrail ? currentTrail : currentPark;
-              return(
-            <Card
-            backgroundColor={item === selectedValue ? theme.colors.background : null}
-             onPress={() => handleValueChange(item)} elevate bordered  margin={2}
-             >
-              <Card.Header padded>
-                <Paragraph color={item === selectedValue ? 'white' : 'black'}>{item}</Paragraph>
-              </Card.Header>
-            </Card>)})
-          }
-        </Carousel>
-         </View>
+        // :
+        <View style={{ width: "80%" }}>
+          <Carousel iconColor={isDark ? "#fff" : "#000"} itemWidth={150}>
+            {data &&
+              data?.map((item) => {
+                let selectedValue = isTrail ? currentTrail : currentPark;
+                return (
+                  <Card
+                    backgroundColor={
+                      item === selectedValue ? theme.colors.background : null
+                    }
+                    onPress={() => handleValueChange(item)}
+                    elevate
+                    bordered
+                    margin={2}
+                  >
+                    <Card.Header padded>
+                      <Paragraph
+                        color={item === selectedValue ? "white" : "black"}
+                      >
+                        {item}
+                      </Paragraph>
+                    </Card.Header>
+                  </Card>
+                );
+              })}
+          </Carousel>
+        </View>
       )}
     </Stack>
   );
