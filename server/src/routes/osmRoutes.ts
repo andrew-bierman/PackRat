@@ -1,4 +1,4 @@
-import express from "express";
+import express from 'express'
 import {
   getDestination,
   getOsm,
@@ -7,10 +7,10 @@ import {
   getTrailsOSM,
   postSingleGeoJSON,
   getPhotonDetails,
-  getEnhancedPhotonDetails,
-} from "../controllers/getOsm/index";
+  getEnhancedPhotonDetails
+} from '../controllers/getOsm/index'
 
-const router = express.Router();
+const router = express.Router()
 
 /**
  * @swagger
@@ -40,7 +40,7 @@ const router = express.Router();
  *       '500':
  *         description: Error retrieving Photon results
  */
-router.get("/photon/search", getPhotonResults);
+router.get('/photon/search', getPhotonResults)
 
 /**
  * @swagger
@@ -72,7 +72,7 @@ router.get("/photon/search", getPhotonResults);
  *       500:
  *         description: Error retrieving Trails OSM results
  */
-router.get("/trails", getTrailsOSM);
+router.get('/trails', getTrailsOSM)
 
 /**
  * @swagger
@@ -104,7 +104,7 @@ router.get("/trails", getTrailsOSM);
  *       '500':
  *         description: Error retrieving Parks OSM results
  */
-router.get("/parks", getParksOSM);
+router.get('/parks', getParksOSM)
 
 /**
  * @swagger
@@ -143,7 +143,7 @@ router.get("/parks", getParksOSM);
  *       '500':
  *         description: Error retrieving Overpass Data
  */
-router.post("/osm", getOsm);
+router.post('/osm', getOsm)
 
 /**
  * @swagger
@@ -168,7 +168,7 @@ router.post("/osm", getOsm);
  *       '500':
  *         description: Error processing request
  */
-router.post("/process/geojson", postSingleGeoJSON);
+router.post('/process/geojson', postSingleGeoJSON)
 
 /**
  * @swagger
@@ -191,7 +191,7 @@ router.post("/process/geojson", postSingleGeoJSON);
  *       '500':
  *         description: Error retrieving destination
  */
-router.get("/destination/:id", getDestination);
+router.get('/destination/:id', getDestination)
 
 /**
  * @swagger
@@ -220,8 +220,7 @@ router.get("/destination/:id", getDestination);
  *       '500':
  *         description: Error retrieving Photon details
  */
-router.get('/photonDetails/:type/:id', getPhotonDetails);
+router.get('/photonDetails/:type/:id', getPhotonDetails)
 // router.get("/photonDetails/:type/:id", getEnhancedPhotonDetails)
 
-
-export default router;
+export default router

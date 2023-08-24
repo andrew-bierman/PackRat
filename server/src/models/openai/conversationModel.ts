@@ -1,22 +1,22 @@
-import mongoose from "mongoose";
-import myDB from "../dbConnection";
+import mongoose from 'mongoose'
+import myDB from '../dbConnection'
 
-const { Schema } = mongoose;
+const { Schema } = mongoose
 
 const ConversationSchema = new Schema(
   {
     userId: {
       type: String,
-      required: true,
+      required: true
     },
     history: {
       type: String,
-      required: true,
-    },
+      required: true
+    }
   },
   { timestamps: true }
-);
+)
 
-const Conversation = myDB.model("Conversation", ConversationSchema);
+const Conversation = myDB.model('Conversation', ConversationSchema)
 
-export default Conversation;
+export default Conversation

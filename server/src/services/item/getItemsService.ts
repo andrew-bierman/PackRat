@@ -1,4 +1,4 @@
-import Item from "../../models/itemModel";
+import Item from '../../models/itemModel'
 
 /**
  * Retrieves items based on the given pack ID.
@@ -7,7 +7,7 @@ import Item from "../../models/itemModel";
  * @return {Promise<Array<Object>>} An array of items.
  */
 export const getItemsService = async (packId) => {
-  const items = await Item.find({ packs: packId });
+  const items = await Item.find({ packs: packId })
 
-  return items;
-};
+  return items
+}

@@ -1,4 +1,4 @@
-import { deleteGlobalItemService } from "../../services/item/item.service";
+import { deleteGlobalItemService } from '../../services/item/item.service'
 
 /**
  * Deletes a global item.
@@ -8,15 +8,15 @@ import { deleteGlobalItemService } from "../../services/item/item.service";
  */
 export const deleteGlobalItem = async (req, res) => {
   try {
-    const { itemId } = req.params;
+    const { itemId } = req.params
 
-    const itemDeleted = await deleteGlobalItemService(itemId);
+    const itemDeleted = await deleteGlobalItemService(itemId)
 
     res.status(200).json({
-      data: itemDeleted,
-    });
+      data: itemDeleted
+    })
   } catch (error) {
-    console.error(error);
-    res.status(404).json({ msg: "Unable to delete item " + error.message });
+    console.error(error)
+    res.status(404).json({ msg: 'Unable to delete item ' + error.message })
   }
-};
+}
