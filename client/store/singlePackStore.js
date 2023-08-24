@@ -72,7 +72,11 @@ const singlePackSlice = createSlice({
         state.error = null;
       })
       .addCase(selectItemsGlobal.fulfilled, (state, action) => {
-        state.singlePack.items.push(action.payload.data);
+        const updatedSinglePack = {
+          ...state.singlePack,
+          items: [...state.singlePack.items, action.payload.data],
+        };
+        state.singlePack = updatedSinglePack;
         state.isLoading = false;
         state.error = null;
       })

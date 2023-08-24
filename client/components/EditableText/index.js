@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { TextInput } from "react-native";
 import { theme } from "../../theme";
 import { useDispatch } from "react-redux";
@@ -13,6 +13,11 @@ export const EditableInput = ({
   titleRef,
 }) => {
   const [headerTitle, setHeaderTitle] = useState(title || "");
+  
+  useEffect(() => {
+    setHeaderTitle(title);
+  }, [title])
+  
   const dispatch = useDispatch();
   return (
     <TextInput

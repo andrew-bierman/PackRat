@@ -42,7 +42,7 @@ export function PackDetails() {
       dispatch(fetchSinglePack(packId));
       if (userId) dispatch(fetchUserPacks(userId));
       setFirstLoad(false)
-  }, [dispatch, packId, updated]); // TODO updated is a temporary fix to re-render when pack is update, due to bug in store
+  }, [dispatch, packId]);
 
   const currentPackId = currentPack && currentPack._id;
 
