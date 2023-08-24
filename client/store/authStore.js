@@ -73,70 +73,79 @@ export const signInWithGoogle = createAsyncThunk(
   }
 );
 
-export const authSlice = createSlice({
+const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(signUp.pending, (state) => {
-        state.loading = true;
-        state.error = null;
+        return { ...state, loading: true, error: null };
       })
       .addCase(signUp.fulfilled, (state, action) => {
-        authAdapter.setAll(state, [action.payload]);
-        state.user = action.payload;
-        state.loading = false;
-        state.error = null;
+        const newState = {
+          ...state,
+          loading: false,
+          error: null,
+          user: action.payload,
+        };
+        authAdapter.setAll(newState, [action.payload]);
+        return newState;
       })
       .addCase(signUp.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
+        return { ...state, loading: false, error: action.payload };
       })
       .addCase(signIn.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-        state.error = null;
+        return { ...state, loading: true, error: null, user: null };
       })
       .addCase(signIn.fulfilled, (state, action) => {
-        authAdapter.setAll(state, [action.payload]);
-        state.user = action.payload;
-        state.loading = false;
-        state.error = null;
+        const newState = {
+          ...state,
+          loading: false,
+          error: null,
+          user: action.payload,
+        };
+        authAdapter.setAll(newState, [action.payload]);
+        return newState;
       })
       .addCase(signIn.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-        state.user = null;
+        return { ...state, loading: false, error: action.payload, user: null };
       })
       .addCase(signOut.pending, (state) => {
-        state.loading = true;
-        state.error = null;
+        return { ...state, loading: true, error: null };
       })
       .addCase(signOut.fulfilled, (state) => {
-        authAdapter.removeAll(state);
-        state.user = null;
-        state.loading = false;
+        const newState = {
+          ...state,
+          loading: false,
+          error: null,
+          user: null,
+        };
+        authAdapter.removeAll(newState);
+        return newState;
       })
       .addCase(signOut.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
+        return { ...state, loading: false, error: action.payload };
       })
       .addCase(signInWithGoogle.pending, (state) => {
-        state.loading = true;
-        state.error = null;
+        return { ...state, loading: true, error: null };
       })
       .addCase(signInWithGoogle.fulfilled, (state, action) => {
-        authAdapter.setAll(state, [action.payload]);
-        state.user = action.payload;
-        state.loading = false;
+        const newState = {
+          ...state,
+          loading: false,
+          error: null,
+          user: action.payload,
+        };
+        authAdapter.setAll(newState, [action.payload]);
+        return newState;
       })
       .addCase(signInWithGoogle.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
+        return { ...state, loading: false, error: action.payload };
       });
   },
 });
+
 export const authReducer = authSlice.reducer;
 export const { selectAll: selectAllUsers, selectById: selectUserById } = authAdapter.getSelectors((state) => state.auth);
 export default authSlice.reducer;
