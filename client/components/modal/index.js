@@ -1,16 +1,16 @@
-import React, { ReactNode } from "react";
-import { Modal as NBModal, Box, Heading, Button } from "native-base";
+import React, { ReactNode } from 'react'
+import { Modal as NBModal, Box, Heading, Button } from 'native-base'
 
 export const CustomModal = ({
   id,
   title,
-  trigger = "Open",
+  trigger = 'Open',
   children,
   onSave,
   onCancel,
-  buttonColor = "primary",
+  buttonColor = 'primary',
   type,
-  size = "lg",
+  size = 'lg',
   footerButtons = [],
   isActive,
   onTrigger,
@@ -27,22 +27,22 @@ export const CustomModal = ({
    */
   const closeModal = () => {
     if (onCancel) {
-      onCancel();
+      onCancel()
     } else {
-      onTrigger(false);
+      onTrigger(false)
     }
-  };
+  }
 
   const triggerElement = triggerComponent || (
     <Button
       top={5}
-      alignSelf={"center"}
-      w={"30%"}
+      alignSelf={'center'}
+      w={'30%'}
       onPress={() => onTrigger(true)}
     >
       {trigger}
     </Button>
-  );
+  )
 
   return (
     <>
@@ -87,5 +87,5 @@ export const CustomModal = ({
         </NBModal.Content>
       </NBModal>
     </>
-  );
-};
+  )
+}

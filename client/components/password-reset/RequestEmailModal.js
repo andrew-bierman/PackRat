@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { StyleSheet, View } from "react-native";
+import React, { useState } from 'react'
+import { StyleSheet, View } from 'react-native'
 import {
   Box,
   Button,
@@ -8,17 +8,17 @@ import {
   Input,
   Text,
   Toast,
-  VStack,
-} from "native-base";
-import { CustomModal } from "../modal";
-import axios from "~/config/axios";
-import { api } from "../../constants/api";
-import { InformUser } from "../../utils/ToastUtils";
+  VStack
+} from 'native-base'
+import { CustomModal } from '../modal'
+import axios from '~/config/axios'
+import { api } from '../../constants/api'
+import { InformUser } from '../../utils/ToastUtils'
 
 export const RequestPasswordResetEmailModal = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [email, setEmail] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(false)
+  const [email, setEmail] = useState('')
+  const [loading, setLoading] = useState(false)
 
   /**
    * Initiates the password reset process by calling the API.
@@ -27,31 +27,31 @@ export const RequestPasswordResetEmailModal = () => {
    */
   const handleResetPasswordEmail = async () => {
     try {
-      setLoading(true);
+      setLoading(true)
       // Call your API to initiate the password reset process
       // Pass the email entered by the user to the API endpoint
       // The API endpoint should send an email with a reset link to the provided email
       // TODO - switch to RTK query
-      await axios.post(`${api}/password-reset`, { email });
-      setLoading(false);
-      setIsOpen(false);
+      await axios.post(`${api}/password-reset`, { email })
+      setLoading(false)
+      setIsOpen(false)
       InformUser({
-        title: "Password reset email sent",
-        style: { backgroundColor: "green" },
-        placement: "top-right",
-        duration: 5000,
-      });
+        title: 'Password reset email sent',
+        style: { backgroundColor: 'green' },
+        placement: 'top-right',
+        duration: 5000
+      })
     } catch (error) {
-      console.log("Error here", error);
-      setLoading(false);
+      console.log('Error here', error)
+      setLoading(false)
       InformUser({
         title: error?.response?.data?.error,
         duration: 7000,
-        placement: "top-right",
-        style: { backgroundColor: "red" },
-      });
+        placement: 'top-right',
+        style: { backgroundColor: 'red' }
+      })
     }
-  };
+  }
 
   return (
     <CustomModal
@@ -61,14 +61,14 @@ export const RequestPasswordResetEmailModal = () => {
       onTrigger={setIsOpen}
       footerButtons={[
         {
-          label: "Send Email",
+          label: 'Send Email',
           onClick: handleResetPasswordEmail,
-          disabled: !email || loading,
+          disabled: !email || loading
         },
         {
-          label: "Cancel",
-          onClick: () => setIsOpen(false),
-        },
+          label: 'Cancel',
+          onClick: () => { setIsOpen(false) }
+        }
       ]}
     >
       <Input
@@ -76,7 +76,7 @@ export const RequestPasswordResetEmailModal = () => {
         autoCapitalize="none"
         keyboardType="email-address"
         value={email}
-        onChangeText={(value) => setEmail(value)}
+        onChangeText={(value) => { setEmail(value) }}
       />
       {/* <Center w="100%">
                 <Box safeArea p="2" py="8" w="90%" maxW="290">
@@ -108,20 +108,20 @@ export const RequestPasswordResetEmailModal = () => {
 
             </Center> */}
     </CustomModal>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    width: "100%",
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%'
   },
   button: {
-    marginTop: 20,
+    marginTop: 20
   },
   resetForm: {
-    marginTop: 20,
-  },
-});
+    marginTop: 20
+  }
+})

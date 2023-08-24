@@ -1,4 +1,4 @@
-import { api } from "../constants/api";
+import { api } from '../constants/api'
 
 /**
  * Retrieves the geocode for a given address array.
@@ -7,13 +7,13 @@ import { api } from "../constants/api";
  * @return {Promise} A promise that resolves with the geocode result.
  */
 export const getGeoCode = async (addressArray) => {
-  let resultReturn;
+  let resultReturn
   await fetch(`${api}/geocode?addressArray=${addressArray}`)
-    .then((response) => response.json())
+    .then(async (response) => await response.json())
     .then((result) => {
-      resultReturn = result;
+      resultReturn = result
     })
-    .catch((error) => console.log("error", error));
+    .catch((error) => { console.log('error', error) })
 
-  return resultReturn;
-};
+  return resultReturn
+}

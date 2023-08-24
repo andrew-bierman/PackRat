@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { VStack, Box, Text, Switch } from "native-base";
-import { StyleSheet } from "react-native";
-import UseTheme from "../../hooks/useTheme";
-import { Paragraph, Card, H2, XStack, Button, Image } from "tamagui";
-import { Card as RNPCard } from "react-native-paper";
-import { DialogDemo } from "../../components/dialog"
+import React, { useEffect, useState } from 'react'
+import { VStack, Box, Text, Switch } from 'native-base'
+import { StyleSheet } from 'react-native'
+import UseTheme from '../../hooks/useTheme'
+import { Paragraph, Card, H2, XStack, Button, Image } from 'tamagui'
+import { Card as RNPCard } from 'react-native-paper'
+import { DialogDemo } from '../../components/dialog'
 
-export default function AppearanceContainer() {
-  const { enableDarkMode, enableLightMode, currentTheme, isDark } = UseTheme();
-  const [isEnabled, setIsEnabled] = useState(false);
-  const [showKitchenSink, setShowKitchenSink] = useState(true);
+export default function AppearanceContainer () {
+  const { enableDarkMode, enableLightMode, currentTheme, isDark } = UseTheme()
+  const [isEnabled, setIsEnabled] = useState(false)
+  const [showKitchenSink, setShowKitchenSink] = useState(true)
 
   /**
    * Toggles the switch between dark mode and light mode.
@@ -18,15 +18,15 @@ export default function AppearanceContainer() {
    */
   const toggleSwitch = () => {
     setIsEnabled((prevIsEnabled) => {
-      const newState = !prevIsEnabled;
-      newState ? enableDarkMode() : enableLightMode();
-      return newState;
-    });
-  };
+      const newState = !prevIsEnabled
+      newState ? enableDarkMode() : enableLightMode()
+      return newState
+    })
+  }
 
   useEffect(() => {
-    setIsEnabled(isDark); // synchronize isEnabled with isDark whenever isDark changes
-  }, [isDark]);
+    setIsEnabled(isDark) // synchronize isEnabled with isDark whenever isDark changes
+  }, [isDark])
 
   return (
     <VStack style={styles.mainContainer}>
@@ -35,14 +35,14 @@ export default function AppearanceContainer() {
           Theme Changer
         </Text>
         <Switch
-          trackColor={{ false: "#767577", true: "#81b0ff" }}
-          thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
+          trackColor={{ false: '#767577', true: '#81b0ff' }}
+          thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
           ios_backgroundColor="#3e3e3e"
           onValueChange={toggleSwitch}
           value={isEnabled}
         />
         <Text style={{ color: currentTheme.colors.drawerIconColor }}>
-          {isEnabled ? "Dark Mode" : "Light Mode"}
+          {isEnabled ? 'Dark Mode' : 'Light Mode'}
         </Text>
         <DemoCard
           // animation="bouncy"
@@ -57,13 +57,13 @@ export default function AppearanceContainer() {
           <Box
             alignSelf="center" // bg="primary.500"
             _text={{
-              fontSize: "md",
-              fontWeight: "medium",
-              color: "amber.100",
-              letterSpacing: "lg",
+              fontSize: 'md',
+              fontWeight: 'medium',
+              color: 'amber.100',
+              letterSpacing: 'lg'
             }}
             p={4}
-            bg={["primary.500"]}
+            bg={['primary.500']}
           >
             This is a Box from Native Base
           </Box>
@@ -80,10 +80,10 @@ export default function AppearanceContainer() {
         )}
       </Box>
     </VStack>
-  );
+  )
 }
 
-export function DemoCard(props) {
+export function DemoCard (props) {
   return (
     <Card elevate size="$4" bordered {...props}>
       <Card.Header padded>
@@ -95,22 +95,22 @@ export function DemoCard(props) {
         <Button borderRadius="$10">Purchase</Button>
       </Card.Footer>
       {/* <Card.Background>
-        
+
       </Card.Background> */}
     </Card>
-  );
+  )
 }
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 25
   },
   infoSection: {
-    flexDirection: "column",
-    alignItems: "center",
+    flexDirection: 'column',
+    alignItems: 'center',
     borderRadius: 12,
-    padding: 20,
-  },
-});
+    padding: 20
+  }
+})

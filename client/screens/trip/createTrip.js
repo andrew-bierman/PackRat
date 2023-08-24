@@ -1,75 +1,73 @@
 import {
   Stack,
   Box,
-  VStack,
-} from "native-base";
-import { ScrollView } from 'react-native'
-import { Stack as Header } from "expo-router";
+  VStack
+} from 'native-base'
+import { ScrollView, Platform, StyleSheet } from 'react-native'
+import { Stack as Header } from 'expo-router'
 
-import { theme } from "../../theme";
-import TripCard from "../../components/TripCard";
-import WeatherCard from "../../components/WeatherCard";
+import { theme } from '../../theme'
+import TripCard from '../../components/TripCard'
+import WeatherCard from '../../components/WeatherCard'
 
-import { FontAwesome } from "@expo/vector-icons";
-import { FontAwesome5 } from "@expo/vector-icons";
-import { Platform, StyleSheet } from "react-native";
+import { FontAwesome, FontAwesome5 } from '@expo/vector-icons'
 
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react'
 
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from 'react-redux'
 
-import { GearList } from "../../components/GearList";
+import { GearList } from '../../components/GearList'
 
-import { SaveTripContainer } from "~/components/trip/createTripModal";
+import { SaveTripContainer } from '~/components/trip/createTripModal'
 
-import TripDateRange from "~/components/trip/TripDateRange";
+import TripDateRange from '~/components/trip/TripDateRange'
 // import MultiStepForm from "../multi_step";
-import { photonDetails } from "../../store/destinationStore";
-import UseTheme from "../../hooks/useTheme";
-export default function Trips() {
+import { photonDetails } from '../../store/destinationStore'
+import UseTheme from '../../hooks/useTheme'
+export default function Trips () {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
-  const [parksData, setParksData] = useState();
-  const [trails, setTrailsData] = useState();
+    UseTheme()
+  const [parksData, setParksData] = useState()
+  const [trails, setTrailsData] = useState()
   const [dateRange, setDateRange] = useState({
     startDate: undefined,
-    endDate: undefined,
-  });
-  const dispatch = useDispatch();
-  const searchResult = useSelector(state => state.search.selectedSearchResult);
+    endDate: undefined
+  })
+  const dispatch = useDispatch()
+  const searchResult = useSelector(state => state.search.selectedSearchResult)
   // console.log("🚀 ~ file: createTrip.js:37 ~ Trips ~ searchResult:", searchResult)
 
-  const weatherObject = useSelector((state) => state.weather.weatherObject);
-  const weatherWeek = useSelector((state) => state.weather.weatherWeek);
+  const weatherObject = useSelector((state) => state.weather.weatherObject)
+  const weatherWeek = useSelector((state) => state.weather.weatherWeek)
 
-  const trailsObject = useSelector((state) => state.trails.trailNames);
-  const parksObject = useSelector((state) => state.parks.parkNames);
+  const trailsObject = useSelector((state) => state.trails.trailNames)
+  const parksObject = useSelector((state) => state.parks.parkNames)
   const photonDetailsStore = useSelector(
     (state) => state.destination.photonDetails
-  );
+  )
   // console.log("🚀 ~ file: createTrip.js:49 ~ Trips ~ photonDetailsStore:", photonDetailsStore)
   useEffect(() => {
-    setTrailsData(trailsObject);
-  }, [trailsObject]);
+    setTrailsData(trailsObject)
+  }, [trailsObject])
 
   useEffect(() => {
-    setParksData(parksObject);
-  }, [parksObject]);
+    setParksData(parksObject)
+  }, [parksObject])
 
   useEffect(() => {
-    if(searchResult?.properties) {
+    if (searchResult?.properties) {
       const matchPhotonFormattingForData = {
         properties: {
           osm_id: searchResult.properties?.osm_id,
-          osm_type: searchResult.properties?.osm_type,
-        },
-      };
-      dispatch(photonDetails(matchPhotonFormattingForData));
+          osm_type: searchResult.properties?.osm_type
+        }
+      }
+      dispatch(photonDetails(matchPhotonFormattingForData))
     }
-  },[searchResult])
+  }, [searchResult])
   const steps = [
     {
-      name: "Step 1",
+      name: 'Step 1',
       component: () => (
         <TripCard
           title="Where are you heading?"
@@ -84,24 +82,24 @@ export default function Trips() {
         />
       ),
       sidebarData: {
-        title: "Where are you heading?",
+        title: 'Where are you heading?',
         Icon: () => (
           <FontAwesome
             name="map"
             size={20}
             color={theme.colors.cardIconColor}
           />
-        ),
-      },
+        )
+      }
     },
     {
-      name: "Step 2",
+      name: 'Step 2',
       component: () => (
         <WeatherCard weatherObject={weatherObject} weatherWeek={weatherWeek} />
-      ),
+      )
     },
     {
-      name: "Step 3",
+      name: 'Step 3',
       component: () => (
         <TripCard
           title="Nearby Trails"
@@ -116,10 +114,10 @@ export default function Trips() {
             />
           )}
         />
-      ),
+      )
     },
     {
-      name: "Step 4",
+      name: 'Step 4',
       component: () => (
         <TripCard
           title="Nearby Parks"
@@ -133,20 +131,20 @@ export default function Trips() {
             />
           )}
         />
-      ),
+      )
     },
     {
-      name: "Step 5",
-      component: GearList,
+      name: 'Step 5',
+      component: GearList
     },
     {
-      name: "Step 6",
+      name: 'Step 6',
       component: () => (
         <TripDateRange dateRange={dateRange} setDateRange={setDateRange} />
-      ),
+      )
     },
     {
-      name: "Step 7",
+      name: 'Step 7',
       component: () => (
         <TripCard
         Icon={() => (
@@ -159,13 +157,13 @@ export default function Trips() {
         title="Map"
         isMap={true}
       />
-      ),
+      )
     },
     {
-      name: "Step 8",
-      component: () => <SaveTripContainer dateRange={dateRange} />,
-    },
-  ];
+      name: 'Step 8',
+      component: () => <SaveTripContainer dateRange={dateRange} />
+    }
+  ]
 
   return (
     <ScrollView
@@ -242,14 +240,14 @@ export default function Trips() {
       {/* <Footer /> */}
     </VStack>
     </ScrollView>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
   mutualStyles: {
     backgroundColor: theme.colors.background,
     flex: 1,
-    flexDirection: "column",
-    height: "100%",
-  },
-});
+    flexDirection: 'column',
+    height: '100%'
+  }
+})

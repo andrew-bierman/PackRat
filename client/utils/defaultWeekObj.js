@@ -10,17 +10,17 @@ export const defaultWeekObj = [
       sea_level: 1017,
       grnd_level: 1014,
       humidity: 75,
-      temp_kf: -0.25,
+      temp_kf: -0.25
     },
     weather: [
-      { id: 803, main: "Clouds", description: "broken clouds", icon: "04d" },
+      { id: 803, main: 'Clouds', description: 'broken clouds', icon: '04d' }
     ],
     clouds: { all: 75 },
     wind: { speed: 2.13, deg: 33, gust: 5.01 },
     visibility: 10000,
     pop: 0,
-    sys: { pod: "d" },
-    dt_txt: "2023-03-12 12:00:00",
+    sys: { pod: 'd' },
+    dt_txt: '2023-03-12 12:00:00'
   },
   {
     dt: 1678633200,
@@ -33,17 +33,17 @@ export const defaultWeekObj = [
       sea_level: 1017,
       grnd_level: 1014,
       humidity: 69,
-      temp_kf: -2.62,
+      temp_kf: -2.62
     },
     weather: [
-      { id: 803, main: "Clouds", description: "broken clouds", icon: "04d" },
+      { id: 803, main: 'Clouds', description: 'broken clouds', icon: '04d' }
     ],
     clouds: { all: 83 },
     wind: { speed: 3.78, deg: 120, gust: 5.14 },
     visibility: 10000,
     pop: 0,
-    sys: { pod: "d" },
-    dt_txt: "2023-03-12 15:00:00",
+    sys: { pod: 'd' },
+    dt_txt: '2023-03-12 15:00:00'
   },
   {
     dt: 1678644000,
@@ -56,18 +56,18 @@ export const defaultWeekObj = [
       sea_level: 1016,
       grnd_level: 1013,
       humidity: 66,
-      temp_kf: -1.69,
+      temp_kf: -1.69
     },
     weather: [
-      { id: 500, main: "Rain", description: "light rain", icon: "10d" },
+      { id: 500, main: 'Rain', description: 'light rain', icon: '10d' }
     ],
     clouds: { all: 92 },
     wind: { speed: 3.78, deg: 190, gust: 5.59 },
     visibility: 10000,
     pop: 0.32,
-    rain: { "3h": 0.13 },
-    sys: { pod: "d" },
-    dt_txt: "2023-03-12 18:00:00",
+    rain: { '3h': 0.13 },
+    sys: { pod: 'd' },
+    dt_txt: '2023-03-12 18:00:00'
   },
   {
     dt: 1678654800,
@@ -80,19 +80,19 @@ export const defaultWeekObj = [
       sea_level: 1015,
       grnd_level: 1012,
       humidity: 97,
-      temp_kf: 0,
+      temp_kf: 0
     },
     weather: [
-      { id: 500, main: "Rain", description: "light rain", icon: "10d" },
+      { id: 500, main: 'Rain', description: 'light rain', icon: '10d' }
     ],
     clouds: { all: 100 },
     wind: { speed: 3.6, deg: 162, gust: 8.75 },
     visibility: 73,
     pop: 1,
-    rain: { "3h": 1.5 },
-    sys: { pod: "d" },
-    dt_txt: "2023-03-12 21:00:00",
-  },
+    rain: { '3h': 1.5 },
+    sys: { pod: 'd' },
+    dt_txt: '2023-03-12 21:00:00'
+  }
   //   {
   //     dt: 1678665600,
   //     main: {
@@ -929,4 +929,4 @@ export const defaultWeekObj = [
   //     sys: { pod: "n" },
   //     dt_txt: "2023-03-17 09:00:00",
   //   },
-];
+]
