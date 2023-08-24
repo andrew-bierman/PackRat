@@ -1,4 +1,4 @@
-import Pack from "../../models/packModel";
+import Pack from '../../models/packModel'
 
 /**
  * Edits a pack in the service.
@@ -12,7 +12,7 @@ export const editPackService = async (packId, packData) => {
     { _id: packId },
     packData,
     { returnOriginal: false }
-  );
+  )
 
-  return updatedPack;
-};
+  return updatedPack
+}

@@ -1,4 +1,4 @@
-import User from "../../models/userModel";
+import User from '../../models/userModel'
 
 /**
  * Retrieves a user by their ID from the database.
@@ -7,7 +7,7 @@ import User from "../../models/userModel";
  */
 export const getUserByIdService = async (userId: string): Promise<object> => {
   try {
-    const user = await User.findById({ _id: userId })
+    const user: any = await User.findById({ _id: userId })
       .populate({
         path: 'packs',
         populate: {
@@ -16,10 +16,10 @@ export const getUserByIdService = async (userId: string): Promise<object> => {
         }
       })
       .populate('favorites')
-      .populate('trips');
+      .populate('trips')
 
-    return user;
+    return user
   } catch (error) {
-    throw new Error("User cannot be found");
+    throw new Error('User cannot be found')
   }
-};
+}
