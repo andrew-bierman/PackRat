@@ -7,26 +7,26 @@
 export const dayNumToString = (day) => {
   switch (day) {
     case 0:
-      day = "Sunday";
-      break;
+      day = 'Sunday'
+      break
     case 1:
-      day = "Monday";
-      break;
+      day = 'Monday'
+      break
     case 2:
-      day = "Tuesday";
-      break;
+      day = 'Tuesday'
+      break
     case 3:
-      day = "Wednesday";
-      break;
+      day = 'Wednesday'
+      break
     case 4:
-      day = "Thursday";
-      break;
+      day = 'Thursday'
+      break
     case 5:
-      day = "Friday";
-      break;
+      day = 'Friday'
+      break
     case 6:
-      day = "Saturday";
+      day = 'Saturday'
   }
 
-  return day;
-};
+  return day
+}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback, useRef } from "react";
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react'
 import {
   View,
   StyleSheet,
@@ -7,43 +7,43 @@ import {
   Dimensions,
   ScrollView,
   Modal,
-  SafeAreaView,
-} from "react-native";
-import { AuthStateListener } from "../../client/auth/AuthStateListener";
-import { theme } from "../theme";
+  SafeAreaView
+} from 'react-native'
+import { AuthStateListener } from '../../client/auth/AuthStateListener'
+import { theme } from '../theme'
 import {
   EvilIcons,
   MaterialCommunityIcons,
   FontAwesome,
   MaterialIcons,
   Entypo,
-  Fontisto,
-} from "@expo/vector-icons";
+  Fontisto
+} from '@expo/vector-icons'
 
-import SVGLogoComponent from "../components/logo";
-import { useSelector, useDispatch } from "react-redux";
-import { signOut } from "../store/authStore";
-import Drawer from "./Drawer";
-import { Link, useRouter, usePathname } from "expo-router";
-import { hexToRGBA } from "../utils/colorFunctions";
-import UseTheme from "../hooks/useTheme";
+import SVGLogoComponent from '../components/logo'
+import { useSelector, useDispatch } from 'react-redux'
+import { signOut } from '../store/authStore'
+import Drawer from './Drawer'
+import { Link, useRouter, usePathname } from 'expo-router'
+import { hexToRGBA } from '../utils/colorFunctions'
+import UseTheme from '../hooks/useTheme'
 const Navigation = () => {
-  const router = useRouter();
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state.auth.user);
+  const router = useRouter()
+  const dispatch = useDispatch()
+  const user = useSelector((state) => state.auth.user)
 
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [isMobileView, setIsMobileView] = useState(
-    Dimensions.get("window").width < 1024
-  );
+    Dimensions.get('window').width < 1024
+  )
 
-  const [navBarWidth, setNavBarWidth] = useState(null);
-  const [selectedNavItem, setSelectedNavItem] = useState("");
-  const firstRender = useRef(true);
-  const [isLoading, setIsLoading] = useState(false); // Loading state
+  const [navBarWidth, setNavBarWidth] = useState(null)
+  const [selectedNavItem, setSelectedNavItem] = useState('')
+  const firstRender = useRef(true)
+  const [isLoading, setIsLoading] = useState(false) // Loading state
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
-  const hoverColor = hexToRGBA(currentTheme.colors.primary, 0.2);
+    UseTheme()
+  const hoverColor = hexToRGBA(currentTheme.colors.primary, 0.2)
 
   /**
    * Toggle the state of the drawer.
@@ -51,165 +51,163 @@ const Navigation = () => {
    * @return {void} No return value.
    */
   const toggleDrawer = () => {
-    setIsDrawerOpen(!isDrawerOpen);
-  };
+    setIsDrawerOpen(!isDrawerOpen)
+  }
 
   const staticNavigationItems = useMemo(
     () => [
       {
-        href: "/",
-        icon: "home",
-        text: "Home",
-        iconSource: Entypo,
+        href: '/',
+        icon: 'home',
+        text: 'Home',
+        iconSource: Entypo
       },
       {
-        href: "/about",
-        icon: "info",
-        text: "About",
-        iconSource: MaterialIcons,
-      },
+        href: '/about',
+        icon: 'info',
+        text: 'About',
+        iconSource: MaterialIcons
+      }
     ],
     []
-  );
+  )
 
   const userNavigationItems = useMemo(
     () =>
       user
         ? [
             {
-              href: "/feed",
-              icon: "newspaper-variant",
-              text: "Feed",
-              iconSource: MaterialCommunityIcons,
+              href: '/feed',
+              icon: 'newspaper-variant',
+              text: 'Feed',
+              iconSource: MaterialCommunityIcons
             },
             {
-              href: "/trips",
-              icon: "routes",
-              text: "Trips",
-              iconSource: MaterialCommunityIcons,
+              href: '/trips',
+              icon: 'routes',
+              text: 'Trips',
+              iconSource: MaterialCommunityIcons
             },
             {
-              href: "/packs",
-              icon: "backpack",
-              text: "Packs",
-              iconSource: MaterialIcons,
+              href: '/packs',
+              icon: 'backpack',
+              text: 'Packs',
+              iconSource: MaterialIcons
             },
-            ...(Platform.OS != "web"
-            ? [
-                {
-                  href: "maps",
-                  icon: "map",
-                  text: "Downloaded Maps",
-                  iconSource: Entypo,
-                },
-              ]
-            : []),
-          {
-            href: "/items",
-            icon: "tent",
-            text: "Items",
-            iconSource: Fontisto,
-          },
+            ...(Platform.OS != 'web'
+              ? [
+                  {
+                    href: 'maps',
+                    icon: 'map',
+                    text: 'Downloaded Maps',
+                    iconSource: Entypo
+                  }
+                ]
+              : []),
             {
-              href: "/profile",
-              icon: "book",
-              text: "Profile",
-              iconSource: FontAwesome,
+              href: '/items',
+              icon: 'tent',
+              text: 'Items',
+              iconSource: Fontisto
             },
             {
-              href: "/appearance",
-              icon: "theme-light-dark",
-              text: "Appearance",
-              iconSource: MaterialCommunityIcons,
+              href: '/profile',
+              icon: 'book',
+              text: 'Profile',
+              iconSource: FontAwesome
             },
             {
-              href: "logout",
-              icon: "logout",
-              text: "Logout",
-              iconSource: MaterialIcons,
+              href: '/appearance',
+              icon: 'theme-light-dark',
+              text: 'Appearance',
+              iconSource: MaterialCommunityIcons
             },
+            {
+              href: 'logout',
+              icon: 'logout',
+              text: 'Logout',
+              iconSource: MaterialIcons
+            }
           ]
         : [
             {
-              href: "sign-in",
-              icon: "login",
-              text: "Login",
-              iconSource: MaterialIcons,
+              href: 'sign-in',
+              icon: 'login',
+              text: 'Login',
+              iconSource: MaterialIcons
             },
             {
-              href: "register",
-              icon: "person-add",
-              text: "Register",
-              iconSource: MaterialIcons,
-            },
+              href: 'register',
+              icon: 'person-add',
+              text: 'Register',
+              iconSource: MaterialIcons
+            }
           ],
     [user]
-  );
+  )
 
-  const navigationItems = [...staticNavigationItems, ...userNavigationItems];
+  const navigationItems = [...staticNavigationItems, ...userNavigationItems]
 
   const navigateTo = useCallback(
     (href) => {
-      if (href === "logout") {
-        dispatch(signOut());
+      if (href === 'logout') {
+        dispatch(signOut())
       } else {
-        setIsDrawerOpen(false);
-        setSelectedNavItem(href);
-        setIsLoading(true); // Start loading
+        setIsDrawerOpen(false)
+        setSelectedNavItem(href)
+        setIsLoading(true) // Start loading
 
         setTimeout(() => {
-          router.push(href);
-          setIsLoading(false); // Stop loading after a delay
-        }, 0); // Adjust the delay as needed
+          router.push(href)
+          setIsLoading(false) // Stop loading after a delay
+        }, 0) // Adjust the delay as needed
       }
     },
     [dispatch, router]
-  );
+  )
 
   useEffect(() => {
     const handleScreenResize = () => {
-      const isMobile = Dimensions.get("window").width < 1300 
-      ||
+      const isMobile = Dimensions.get('window').width < 1300 ||
        (navBarWidth < 1024 && !firstRender) // Adjust these values as needed
-      setIsMobileView(isMobile);
-      // update first render 
+      setIsMobileView(isMobile)
+      // update first render
       if (firstRender.current) {
-        firstRender.current = false;
+        firstRender.current = false
       }
+    }
 
-    };
-
-    const subscription = Dimensions.addEventListener("change", handleScreenResize);
+    const subscription = Dimensions.addEventListener('change', handleScreenResize)
     return () => {
-      subscription.remove(); // Proper event listener cleanup
-    };
-  }, [navBarWidth]); // Add navBarWidth as a dependency to the effect
+      subscription.remove() // Proper event listener cleanup
+    }
+  }, [navBarWidth]) // Add navBarWidth as a dependency to the effect
 
   const renderNavigationItem = useCallback(
     (item, index) => {
-      const { icon, iconSource, text, href } = item;
-      const IconComponent = iconSource || EvilIcons;
-      const pathName = usePathname();
+      const { icon, iconSource, text, href } = item
+      const IconComponent = iconSource || EvilIcons
+      const pathName = usePathname()
 
-      if ((href === "profile" || href === "logout") && !user) {
-        return null; // Do not render the item if the user is not signed in
+      if ((href === 'profile' || href === 'logout') && !user) {
+        return null // Do not render the item if the user is not signed in
       }
 
-      const isCurrentPage = pathName === href; // compare the current route with the href
-      const isSelected = selectedNavItem === href; // check if the item is selected
+      const isCurrentPage = pathName === href // compare the current route with the href
+      const isSelected = selectedNavItem === href // check if the item is selected
 
       const handleItemPress = () => {
-        setSelectedNavItem(href);
-        navigateTo(href);
-      };
+        setSelectedNavItem(href)
+        navigateTo(href)
+      }
 
       return (
         <TouchableOpacity
-          key={item.href + "nav" + index}
+          key={item.href + 'nav' + index}
           style={[
             styles.menuBarItem,
             isCurrentPage && styles.menuBarItemActive, // apply the active style if this is the current page
-            isSelected && styles.menuBarItemSelected, // apply the selected style if this item is selected
+            isSelected && styles.menuBarItemSelected // apply the selected style if this item is selected
           ]}
           onPress={handleItemPress}
           activeOpacity={0.7} // Set the activeOpacity to create a hover effect
@@ -219,38 +217,38 @@ const Navigation = () => {
             size={isMobileView ? 24 : 18}
             color={
               isCurrentPage || isSelected
-              ? currentTheme.colors.iconColor
-              : currentTheme.colors.iconColor
+                ? currentTheme.colors.iconColor
+                : currentTheme.colors.iconColor
             } // change the color if this is the current page or selected item
-            key={item.href + "icon"}
+            key={item.href + 'icon'}
           />
           <Text
             style={[
               styles.menuBarItemText,
               isCurrentPage && styles.menuBarItemTextActive, // apply the active style to the text if this is the current page
-              isSelected && styles.menuBarItemTextSelected, // apply the selected style to the text if this item is selected
+              isSelected && styles.menuBarItemTextSelected // apply the selected style to the text if this item is selected
             ]}
           >
             {text}
           </Text>
         </TouchableOpacity>
-      );
+      )
     },
     [user, selectedNavItem] // add any other dependencies that this function uses
-  );
+  )
 
   return (
     <SafeAreaView style={styles.safeArea}>
       <View
         style={styles.container}
-        onLayout={(event) => setNavBarWidth(event.nativeEvent.layout.width)} // calculate the width of the navbar
+        onLayout={(event) => { setNavBarWidth(event.nativeEvent.layout.width) }} // calculate the width of the navbar
       >
         {user && <AuthStateListener />}
         <View style={styles.header}>
           <TouchableOpacity
-            key={"logo-nav"}
+            key={'logo-nav'}
             style={styles.logoContainer}
-            onPress={() => navigateTo("/")}
+            onPress={() => { navigateTo('/') }}
           >
             <View style={styles.logoWrapper}>
               <SVGLogoComponent
@@ -272,7 +270,7 @@ const Navigation = () => {
                 onPress={toggleDrawer}
               >
                 <EvilIcons
-                  name={isDrawerOpen ? "close" : "navicon"}
+                  name={isDrawerOpen ? 'close' : 'navicon'}
                   size={isMobileView ? 36 : 24}
                   color={currentTheme.colors.iconColor}
                 />
@@ -308,55 +306,55 @@ const Navigation = () => {
         </View>
       </View>
     </SafeAreaView>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   safeArea: {
-    backgroundColor: theme.colors.background,
+    backgroundColor: theme.colors.background
   },
   container: {
-    width: "100%",
+    width: '100%',
     backgroundColor: theme.colors.background,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
   },
   header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     padding: 16,
-    width: "100%",
+    width: '100%'
   },
   logoContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center'
   },
   logoWrapper: {
-    marginHorizontal: 10,
+    marginHorizontal: 10
   },
   logoText: {
     color: theme.colors.text,
     fontSize: 38,
-    fontWeight: "900",
+    fontWeight: '900'
   },
   menuBar: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "flex-end",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
     paddingHorizontal: 16,
-    height: 60,
+    height: 60
   },
   menuBarItem: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 8,
-    paddingHorizontal: 12,
+    paddingHorizontal: 12
   },
   menuBarItemText: {
     color: theme.colors.text,
-    fontSize: 18,
+    fontSize: 18
   },
   drawerContainer: {},
   drawerTrigger: {},
@@ -375,7 +373,7 @@ const styles = StyleSheet.create({
   menuBarItemTextSelected: {
     // Apply styles for the selected item's text
     // ...
-  },
-});
+  }
+})
 
-export default Navigation;
+export default Navigation

@@ -4,8 +4,8 @@
  * @param {number} num - The number to be formatted.
  * @return {string} The formatted number as a string.
  */
-export function formatNumber(num) {
+export function formatNumber (num) {
   if (num != null) {
-    return Number(+num.toFixed(2)).toLocaleString();
+    return Number(+num.toFixed(2)).toLocaleString()
   }
 }

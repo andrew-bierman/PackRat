@@ -1,6 +1,6 @@
-import { X_RAPIDAPI_KEY } from "@env";
-import axios from "~/config/axios";
-import osmtogeojson from "osmtogeojson";
+import { X_RAPIDAPI_KEY } from '@env'
+import axios from '~/config/axios'
+import osmtogeojson from 'osmtogeojson'
 
 /**
  * Retrieves trails data rapidly using the specified location parameters.
@@ -11,39 +11,39 @@ import osmtogeojson from "osmtogeojson";
  * @return {Array} An array of trail names.
  */
 export const getTrailsRapid = async (locationObject, latParams, lonParams) => {
-  let trailsArray = [];
+  let trailsArray = []
 
-  await fetch(api + "/gettrails", {
-    method: "POST",
+  await fetch(api + '/gettrails', {
+    method: 'POST',
     headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify({
       ...locationObject,
       latitude: latParams,
-      longitude: lonParams,
-    }),
+      longitude: lonParams
+    })
   })
-    .then((res) => res.json())
+    .then(async (res) => await res.json())
     .then((json) => {
       Object.values(json).forEach((item) => {
-        trailsArray.push(item);
-      });
+        trailsArray.push(item)
+      })
     })
     .catch((err) => {
-      console.log("message====>" + err.message);
-      console.error("error:" + err);
-    });
+      console.log('message====>' + err.message)
+      console.error('error:' + err)
+    })
 
   if (trailsArray[1] !== undefined) {
-    trailsArray = trailsArray[1]?.map((trail) => trail.name);
+    trailsArray = trailsArray[1]?.map((trail) => trail.name)
   } else {
-    trailsArray = [];
+    trailsArray = []
   }
 
-  return trailsArray;
-};
+  return trailsArray
+}
 
 /**
  * Retrieves trails data from OpenStreetMap (OSM) based on the provided latitude and longitude.
@@ -53,7 +53,7 @@ export const getTrailsRapid = async (locationObject, latParams, lonParams) => {
  * @return {object} The trails data in GeoJSON format.
  */
 export const getTrailsOSM = async (lat, lon) => {
-  const radius = 50000; // Search radius in meters
+  const radius = 50000 // Search radius in meters
   const query = `
   [out:json][timeout:25];
   (
@@ -61,18 +61,18 @@ export const getTrailsOSM = async (lat, lon) => {
   );
   (._;>;);
   out tags geom qt;
-  `;
-  const overpassUrl = "https://overpass-api.de/api/interpreter"; // change to server on merge
+  `
+  const overpassUrl = 'https://overpass-api.de/api/interpreter' // change to server on merge
 
   try {
     const response = await axios.post(overpassUrl, query, {
-      headers: { "Content-Type": "text/plain" },
-    });
+      headers: { 'Content-Type': 'text/plain' }
+    })
     // Convert the response data to GeoJSON format
-    const geojsonData = osmtogeojson(response.data);
+    const geojsonData = osmtogeojson(response.data)
 
-    return geojsonData;
+    return geojsonData
   } catch (error) {
-    console.error("Error fetching trails:", error);
+    console.error('Error fetching trails:', error)
   }
-};
+}

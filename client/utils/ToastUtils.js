@@ -1,4 +1,4 @@
-import { Toast } from "native-base";
+import { Toast } from 'native-base'
 
 /**
  * Show a toast message to inform the user.
@@ -20,9 +20,9 @@ import { Toast } from "native-base";
  */
 export const InformUser = ({ title, placement, duration, style }) => {
   Toast.show({
-    title: title,
-    placement: placement,
-    duration: duration,
-    style: style,
-  });
-};
+    title,
+    placement,
+    duration,
+    style
+  })
+}

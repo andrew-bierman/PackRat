@@ -1,36 +1,36 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "~/config/axios";
-import { api } from "../constants/api";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import axios from '~/config/axios'
+import { api } from '../constants/api'
 
-export const getUser = createAsyncThunk("user/getUser", async (userId) => {
-  const response = await axios.get(`${api}/user/${userId}`);
-  return response.data;
-});
+export const getUser = createAsyncThunk('user/getUser', async (userId) => {
+  const response = await axios.get(`${api}/user/${userId}`)
+  return response.data
+})
 
 const userSlice = createSlice({
-  name: "user",
+  name: 'user',
   initialState: {
     user: {},
     isLoading: false,
-    error: null,
+    error: null
   },
   reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(getUser.pending, (state) => {
-        state.isLoading = true;
-        state.error = null;
+        state.isLoading = true
+        state.error = null
       })
       .addCase(getUser.fulfilled, (state, action) => {
-        state.user = action.payload;
-        state.isLoading = false;
-        state.error = null;
+        state.user = action.payload
+        state.isLoading = false
+        state.error = null
       })
       .addCase(getUser.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.error.message;
-      });
-  },
-});
+        state.isLoading = false
+        state.error = action.error.message
+      })
+  }
+})
 
-export default userSlice.reducer;
+export default userSlice.reducer
