@@ -1,15 +1,15 @@
-import express from "express";
+import express from 'express'
 import {
   getPublicTrips,
   getTrips,
   getTripById,
   addTrip,
   editTrip,
-  deleteTrip,
-} from "../controllers/trip/index";
-import * as validator from "../middleware/validators/index";
+  deleteTrip
+} from '../controllers/trip/index'
+import * as validator from '../middleware/validators/index'
 
-const router = express.Router();
+const router = express.Router()
 
 /**
  * @swagger
@@ -29,7 +29,7 @@ const router = express.Router();
  *       200:
  *         description: Successful response
  */
-router.get("/", getPublicTrips);
+router.get('/', getPublicTrips)
 
 /**
  * @swagger
@@ -48,7 +48,7 @@ router.get("/", getPublicTrips);
  *       200:
  *         description: Successful response
  */
-router.get("/:ownerId", validator.getTrips, getTrips);
+router.get('/:ownerId', validator.getTrips, getTrips)
 
 /**
  * @swagger
@@ -67,7 +67,7 @@ router.get("/:ownerId", validator.getTrips, getTrips);
  *       200:
  *         description: Successful response
  */
-router.get("/t/:tripId", validator.getTripById, getTripById);
+router.get('/t/:tripId', validator.getTripById, getTripById)
 
 /**
  * @swagger
@@ -111,7 +111,7 @@ router.get("/t/:tripId", validator.getTripById, getTripById);
  *       200:
  *         description: Successful response
  */
-router.post("/", validator.addTrip, addTrip);
+router.post('/', validator.addTrip, addTrip)
 
 /**
  * @swagger
@@ -157,7 +157,7 @@ router.post("/", validator.addTrip, addTrip);
  *       200:
  *         description: Successful response
  */
-router.put("/", validator.editTrip, editTrip);
+router.put('/', validator.editTrip, editTrip)
 
 /**
  * @swagger
@@ -179,6 +179,6 @@ router.put("/", validator.editTrip, editTrip);
  *       200:
  *         description: Successful response
  */
-router.delete("/", validator.deleteTrip, deleteTrip);
+router.delete('/', validator.deleteTrip, deleteTrip)
 
-export default router;
+export default router

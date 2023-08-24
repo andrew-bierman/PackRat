@@ -1,5 +1,5 @@
-import path from "path";
-import Piscina from "piscina";
+import path from 'path'
+import Piscina from 'piscina'
 
 /**
  * Creates a Piscina instance with the given relative path.
@@ -7,10 +7,10 @@ import Piscina from "piscina";
  * @param {string} relativePath - The relative path to the file.
  * @return {Piscina} - The newly created Piscina instance.
  */
-function createPiscina(relativePath) {
+function createPiscina (relativePath) {
   return new Piscina({
-    filename: path.resolve(__dirname, relativePath),
-  });
+    filename: path.resolve(__dirname, relativePath)
+  })
 }
 
-export default createPiscina;
+export default createPiscina

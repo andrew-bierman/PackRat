@@ -1,1 +1,1 @@
-export * from "./getGeoCode";
+export * from './getGeoCode'

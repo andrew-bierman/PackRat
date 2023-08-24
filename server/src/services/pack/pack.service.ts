@@ -1,4 +1,4 @@
-export * from './addPackService';
+export * from './addPackService'
 export * from './deletePackService'
 export * from './duplicatePublicPackService'
 export * from './editPackService'
