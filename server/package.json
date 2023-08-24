@@ -6,6 +6,7 @@
   "scripts": {
     "test:generate": "npx openapi-generator url http://localhost:3000/swagger.json -d ./generated -t javascript",
     "test:expect": "mocha 'generated/test/**/*.spec.js'",
+    "test": "ECHO \"No tests yet\"",
     "setup": "npm install",
     "start": "nodemon",
     "dev": "nodemon",
