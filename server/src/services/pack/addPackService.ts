@@ -1,5 +1,12 @@
 import Pack from "../../models/packModel";
 
+/**
+ * Adds a new pack service.
+ *
+ * @param {string} name - The name of the pack.
+ * @param {string} owner_id - The ID of the pack owner.
+ * @return {Object} An object containing the created pack.
+ */
 export const addPackService = async (name, owner_id) => {
   const newPack = {
     name: name,

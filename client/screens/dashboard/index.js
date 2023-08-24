@@ -1,19 +1,16 @@
 import React from "react";
-import { Dimensions, Platform, StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 import { VStack, Box, ScrollView } from "native-base";
 import { theme } from "../../theme";
-import HeroBanner from "./HeroBanner";
-import QuickActionsSection from "./QuickActionSection";
-import FeedPreview from "./FeedPreview";
-import Section from "./Section";
-import SectionHeader from "./SectionHeader";
-
-const { height, width } = Dimensions.get('window')
+import HeroBanner from "../../components/dashboard/HeroBanner";
+import QuickActionsSection from "../../components/dashboard/QuickActionSection";
+import FeedPreview from "../../components/dashboard/FeedPreview";
+import Section from "../../components/dashboard/Section";
+import SectionHeader from "../../components/dashboard/SectionHeader";
 
 const Dashboard = () => {
   return (
     <ScrollView contentContainerStyle={styles.content} horizontal={false}>
-
       <VStack
         style={[
           styles.container,
@@ -22,12 +19,10 @@ const Dashboard = () => {
       >
         <Box>
           <HeroBanner style={styles.cardContainer} />
-
           <Section>
             <SectionHeader iconName="add-circle-outline" text="Quick Actions" />
             <QuickActionsSection />
           </Section>
-
           <Section>
             <SectionHeader iconName="newspaper-outline" text="Feed" />
             <FeedPreview />
@@ -37,20 +32,18 @@ const Dashboard = () => {
     </ScrollView>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexGrow: 1,
     backgroundColor: theme.colors.background,
-    width: width,
-    alignSelf: 'center'
-
+    width: "100%",
   },
   content: {
-    // flexGrow: 1,
-    // justifyContent: "flex-start",
-    // alignItems: "stretch",
-    // paddingHorizontal: 20,
+    flexGrow: 1,
+    justifyContent: "flex-start",
+    alignItems: "stretch",
+    paddingHorizontal: 20,
   },
   cardContainer: {
     flexDirection: "column",
@@ -59,5 +52,4 @@ const styles = StyleSheet.create({
     width: "100%",
   },
 });
-
 export default Dashboard;

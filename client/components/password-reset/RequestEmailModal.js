@@ -11,7 +11,7 @@ import {
   VStack,
 } from "native-base";
 import { CustomModal } from "../modal";
-import axios from "axios";
+import axios from "~/config/axios";
 import { api } from "../../constants/api";
 import { InformUser } from "../../utils/ToastUtils";
 
@@ -20,12 +20,18 @@ export const RequestPasswordResetEmailModal = () => {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
 
+  /**
+   * Initiates the password reset process by calling the API.
+   *
+   * @return {Promise<void>} A promise that resolves when the password reset email is sent successfully.
+   */
   const handleResetPasswordEmail = async () => {
     try {
       setLoading(true);
       // Call your API to initiate the password reset process
       // Pass the email entered by the user to the API endpoint
       // The API endpoint should send an email with a reset link to the provided email
+      // TODO - switch to RTK query
       await axios.post(`${api}/password-reset`, { email });
       setLoading(false);
       setIsOpen(false);
@@ -83,7 +89,7 @@ export const RequestPasswordResetEmailModal = () => {
                         }}
                     >
                         <Text>Reset Password</Text>
-                    </Heading> 
+                    </Heading>
 
                     <VStack space={1} mt="5">
                         <View style={styles.container}>
@@ -95,7 +101,7 @@ export const RequestPasswordResetEmailModal = () => {
                                 disabled={!email || loading}
                             >
                                 <Text>{loading ? 'Loading...' : 'Request Password Reset Email'}</Text>
-                            </Button> 
+                            </Button>
                         </View>
                     </VStack>
                 </Box>

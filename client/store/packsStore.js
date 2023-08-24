@@ -3,7 +3,7 @@ import {
   createAsyncThunk,
   createEntityAdapter,
 } from "@reduxjs/toolkit";
-import axios from "axios";
+import axios from "~/config/axios";
 import { api } from "../constants/api";
 import { Toast } from "native-base";
 import { InformUser } from "../utils/ToastUtils";

@@ -1,7 +1,15 @@
 import { X_RAPIDAPI_KEY } from "@env";
-import axios from "axios";
+import axios from "~/config/axios";
 import osmtogeojson from "osmtogeojson";
 
+/**
+ * Retrieves trails data rapidly using the specified location parameters.
+ *
+ * @param {Object} locationObject - The object containing location data.
+ * @param {number} latParams - The latitude parameters.
+ * @param {number} lonParams - The longitude parameters.
+ * @return {Array} An array of trail names.
+ */
 export const getTrailsRapid = async (locationObject, latParams, lonParams) => {
   let trailsArray = [];
 
@@ -37,6 +45,13 @@ export const getTrailsRapid = async (locationObject, latParams, lonParams) => {
   return trailsArray;
 };
 
+/**
+ * Retrieves trails data from OpenStreetMap (OSM) based on the provided latitude and longitude.
+ *
+ * @param {number} lat - The latitude of the location.
+ * @param {number} lon - The longitude of the location.
+ * @return {object} The trails data in GeoJSON format.
+ */
 export const getTrailsOSM = async (lat, lon) => {
   const radius = 50000; // Search radius in meters
   const query = `

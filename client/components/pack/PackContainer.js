@@ -37,6 +37,12 @@ export default function PackContainer({ isCreatingTrip = false }) {
     }
   }, [dispatch, user?._id, refetch]);
 
+  /**
+   * Handles the packing based on the given value.
+   *
+   * @param {type} val - the value used to select the pack
+   * @return {type} none
+   */
   const handlePack = (val) => {
     const selectedPack = packs.find((pack) => pack.name == val);
 

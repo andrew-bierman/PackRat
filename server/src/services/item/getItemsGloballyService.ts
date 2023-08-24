@@ -1,5 +1,11 @@
 import Item from "../../models/itemModel";
 
+/**
+ * Retrieves globally available items.
+ *
+ * @param {Object} req - The request object.
+ * @return {Object} An object containing items, page, and totalPages.
+ */
 export const getItemsGloballyService = async (req) => {
     const totalItems = await Item.countDocuments({ global: true });
     const limit = Number(req.query.limit) || totalItems;

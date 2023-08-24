@@ -1,4 +1,4 @@
-import Feed from "../../components/feed/Feed";
+import Feed from "../../screens/feed/Feed";
 import { Platform } from "react-native";
 import { Stack as Header } from "expo-router";
 

@@ -9,7 +9,7 @@ import { api } from "../../constants/api";
 
 // import { Picker } from '@react-native-picker/picker';
 import { DropdownComponent } from "../Dropdown";
-import axios from "axios";
+import axios from "~/config/axios";
 
 const options = [
   { label: "Yes", value: "true" },
@@ -45,6 +45,12 @@ const NumberInput = (props) => {
     return sanitizedText;
   };
 
+  /**
+   * Handles the change event of the text input.
+   *
+   * @param {string} text - The text input value.
+   * @return {void}
+   */
   const handleChangeText = (text) => {
     const validatedText = validateNumber(text);
     // Pass the sanitized text back to the parent component
@@ -108,7 +114,7 @@ export const SaveTripContainer = ({ dateRange }) => {
 
     console.log("old rag", search);
 
-    // TODO - fix this, why making call not through redux
+    // TODO - fix this, why making call not through redux. Switch to RTK query at least
     const { data: geoJSON } = await axios.get(
       `${api}/osm/photonDetails/${search.properties.osm_type}/${search.properties.osm_id}`
     );
@@ -134,14 +140,33 @@ export const SaveTripContainer = ({ dateRange }) => {
     setIsSaveModalOpen(!isSaveModalOpen);
   };
 
+  /**
+   * Handles the change in value.
+   *
+   * @param {type} itemValue - the new value of the item
+   * @return {undefined} 
+   */
   const handleValueChange = (itemValue) => {
     setIsPublic(itemValue);
   };
 
+  /**
+   * Renders an item for the Picker component.
+   *
+   * @param {object} item - The item to be rendered.
+   * @return {JSX.Element} The rendered Picker.Item component.
+   */
   const renderItem = ({ item }) => (
     <Picker.Item label={item.label} value={item.value} />
   );
 
+  /**
+   * Returns the layout information for a given item index.
+   *
+   * @param {object} _ - placeholder parameter
+   * @param {number} index - the index of the item
+   * @return {object} - an object containing the layout information
+   */
   const getItemLayout = (_, index) => ({
     length: 30, // height of each item
     offset: 30 * index, // calculate the offset based on item height
