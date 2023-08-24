@@ -1,5 +1,5 @@
 import PackContainer from "../../components/pack/PackContainer";
-import { TripDetails } from "../../components/trip/TripDetails";
+import { TripDetails } from "../../screens/trip/TripDetails";
 import { DetailsComponent } from "../../components/details";
 import { Platform } from "react-native";
 import { Stack as Header } from "expo-router";

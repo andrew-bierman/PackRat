@@ -1,3 +1,10 @@
+/**
+ * Converts a region name or abbreviation to its corresponding abbreviation or name.
+ *
+ * @param {string} input - The region name or abbreviation to convert.
+ * @param {string} to - The conversion direction. Possible values are "abbr" for abbreviation to name conversion and "name" for name to abbreviation conversion.
+ * @return {string} The converted region name or abbreviation.
+ */
 export default function abbrRegion(input, to) {
   var states = [
     ["Alabama", "AL"],

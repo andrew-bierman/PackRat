@@ -72,6 +72,12 @@ const TableItem = ({
   const { name, weight, quantity, unit, _id } = itemData;
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  /**
+   * Executes the onTrigger function.
+   *
+   * @param {None} None - No parameters required.
+   * @return {None} No return value.
+   */
   const onTrigger = () => {
     console.log("called");
     setIsEditModalOpen(true);
@@ -130,6 +136,9 @@ const TableItem = ({
         currentPack={currentPack}
         refetch={refetch}
         setRefetch={setRefetch}
+        onTrigger={onTrigger}
+        isModalOpen={isEditModalOpen}
+        closeModalHandler={closeModalHandler}
       />,
       <DeletePackItemModal
         itemId={_id}
@@ -233,41 +242,49 @@ export const TableContainer = ({
   Todo better to move this all inside a utility function and pass them variables 
   */
   data &&
-    data
-      .filter((item) => !checkedItems.includes(item._id))
-      .forEach((item) => {
-        const categoryName = item.category ? item.category.name : "Undefined";
-        if (!copy) {
-          switch (categoryName) {
-            case ItemCategoryEnum.ESSENTIALS: {
-              totalBaseWeight += convertWeight(
-                item.weight * item.quantity,
-                item.unit,
-                weightUnit
-              );
-              break;
-            }
-            case ItemCategoryEnum.FOOD: {
-              totalFoodWeight += convertWeight(
-                item.weight * item.quantity,
-                item.unit,
-                weightUnit
-              );
-              foodItems.push(item);
-              break;
-            }
-            case ItemCategoryEnum.WATER: {
-              totalWaterWeight += convertWeight(
-                item.weight * item.quantity,
-                item.unit,
-                weightUnit
-              );
-              waterItem = item;
-              break;
-            }
+  data
+    .filter((item) => !checkedItems.includes(item._id))
+    .forEach((item) => {
+      const categoryName = item.category ? item.category.name : "Undefined";
+      const itemWeight = Number(item.weight) || 0; // ensure it's a number
+      const itemQuantity = Number(item.quantity) || 0; // ensure it's a number
+      const itemUnit = item.unit || null;
+
+      console.log("item", item)
+      console.log("itemWeight", itemWeight)
+      console.log("itemQuantity", itemQuantity)
+
+      if (!copy) {
+        switch (categoryName) {
+          case ItemCategoryEnum.ESSENTIALS: {
+            totalBaseWeight += convertWeight(
+              itemWeight * itemQuantity,
+              itemUnit,
+              weightUnit
+            );
+            break;
+          }
+          case ItemCategoryEnum.FOOD: {
+            totalFoodWeight += convertWeight(
+              itemWeight * itemQuantity,
+              itemUnit,
+              weightUnit
+            );
+            foodItems.push(item);
+            break;
+          }
+          case ItemCategoryEnum.WATER: {
+            totalWaterWeight += convertWeight(
+              itemWeight * itemQuantity,
+              itemUnit,
+              weightUnit
+            );
+            waterItem = item;
+            break;
           }
         }
-      });
+      }
+    });
 
   let totalWeight = totalBaseWeight + totalWaterWeight + totalFoodWeight;
 

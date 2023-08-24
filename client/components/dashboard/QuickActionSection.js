@@ -20,6 +20,11 @@ const QuickActionsSection = () => {
     },
   ];
 
+  /**
+   * Handles the selection of an action.
+   *
+   * @param {string} action - The selected action.
+   */
   const handleActionSelect = (action) => {
     if(action === "createPack") {
       router.push("/pack/create");

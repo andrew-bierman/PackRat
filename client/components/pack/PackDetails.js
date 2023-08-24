@@ -36,6 +36,7 @@ export function PackDetails() {
   const userId = user && user._id;
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
   const currentPack = useSelector((state) => state.singlePack.singlePack);
+  const [refetch, setRefetch] = useState(false);
   useEffect(() => {
     if (!packId) return;
       dispatch(fetchSinglePack(packId));

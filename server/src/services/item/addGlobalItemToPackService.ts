@@ -1,6 +1,14 @@
 import Item from "../../models/itemModel";
 import Pack from "../../models/packModel";
 
+/**
+ * Adds a global item to the pack service.
+ *
+ * @param {string} packId - The ID of the pack.
+ * @param {string} itemId - The ID of the item.
+ * @param {string} ownerId - The ID of the owner.
+ * @return {Promise<object>} - A promise that resolves to the added item.
+ */
 export const addGlobalItemToPackService = async (packId, itemId, ownerId) => {
   const item = await Item.findById(itemId).populate("category", "name");
 

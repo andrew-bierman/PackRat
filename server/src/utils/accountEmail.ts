@@ -7,6 +7,13 @@ if(!SEND_GRID_API_KEY){
 }
 sgMail.setApiKey(SEND_GRID_API_KEY);
 
+/**
+ * Sends a welcome email to a user.
+ *
+ * @param {string} email - The email address of the recipient.
+ * @param {string} name - The name of the recipient.
+ * @return {Promise<any>} A promise that resolves with the response from the email server, or rejects with an error.
+ */
 export const sendWelcomeEmail = (email: string, name: string) => {
   sgMail.send({
     to: email,
@@ -26,6 +33,13 @@ export const sendWelcomeEmail = (email: string, name: string) => {
   });
 };
 
+/**
+ * Sends a password reset email to the specified email address.
+ *
+ * @param {string} email - The email address to send the reset email to.
+ * @param {string} resetUrl - The URL to include in the reset email.
+ * @return {Promise<any>} A promise that resolves when the email is sent successfully, or rejects with an error if the email fails to send.
+ */
 export const resetEmail = (email: string, resetUrl: string) => {
   sgMail.send({
     to: email,

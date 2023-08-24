@@ -1,7 +1,12 @@
-import About from "../../components/about";
+import About from "../../screens/about";
 import { Platform, ScrollView, StyleSheet } from "react-native";
 import { Stack as Header } from "expo-router";
 
+/**
+ * Renders the AboutRoute component.
+ *
+ * @return {JSX.Element} The rendered component.
+ */
 export default function AboutRoute() {
   return (
     <ScrollView

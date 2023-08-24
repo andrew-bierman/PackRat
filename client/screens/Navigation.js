@@ -45,6 +45,11 @@ const Navigation = () => {
     UseTheme();
   const hoverColor = hexToRGBA(currentTheme.colors.primary, 0.2);
 
+  /**
+   * Toggle the state of the drawer.
+   *
+   * @return {void} No return value.
+   */
   const toggleDrawer = () => {
     setIsDrawerOpen(!isDrawerOpen);
   };

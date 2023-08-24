@@ -117,7 +117,13 @@ function NativeMap({ shape: shapeProp }) {
     setTrailCenterPoint(findTrailCenter(shape));
   }, [shape]);
 
-  // functions
+
+/**
+ * Retrieves the current position using Geolocation API and updates the location state.
+ *
+ * @param {function} onSucccess - a callback function to be executed on success
+ * @return {undefined} This function does not return anything
+ */
   const getPosition = (onSucccess) => {
     Geolocation.getCurrentPosition(
       (data) => {
@@ -137,6 +143,11 @@ function NativeMap({ shape: shapeProp }) {
     );
   };
 
+  /**
+   * Handles the press event on the map.
+   *
+   * @param {Event} event - The press event object.
+   */
   function onMapPress(event) {
     console.log(event, "eventtt");
     // if (trailCenterPoint) {
@@ -146,6 +157,13 @@ function NativeMap({ shape: shapeProp }) {
     // }
   }
 
+  /**
+   * Handles the download progress of an offline region.
+   *
+   * @param {Object} offlineRegion - The offline region being downloaded.
+   * @param {Object} offlineRegionStatus - The status of the offline region download.
+   * @returns {void}
+   */
   function onDownloadProgress(offlineRegion, offlineRegionStatus) {
     console.log("control there", offlineRegionStatus?.percentage);
     setProgress(offlineRegionStatus.percentage);
@@ -155,9 +173,21 @@ function NativeMap({ shape: shapeProp }) {
       setDownloading(false);
     }
   }
+  /**
+   * A function that serves as an error listener for the offline region.
+   *
+   * @param {Object} offlineRegion - The offline region object.
+   * @param {Object} error - The error object.
+   */
   function errorListener(offlineRegion, error) {
     Alert.alert(error.message);
   }
+  /**
+   * Downloads a file using the provided options.
+   *
+   * @param {object} optionsForDownload - The options for the download.
+   * @return {Promise} A promise that resolves when the download is complete.
+   */
   function onDownload(optionsForDownload) {
     // start download
     offlineManager

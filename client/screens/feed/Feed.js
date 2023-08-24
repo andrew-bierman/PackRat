@@ -16,8 +16,8 @@ import {
 } from "native-base";
 import { AntDesign } from "@expo/vector-icons";
 import { StyleSheet, FlatList, View } from "react-native";
-import Card from "./FeedCard";
-import DropdownComponent from "../Dropdown";
+import Card from "../../components/feed/FeedCard";
+import DropdownComponent from "../../components/Dropdown";
 import { theme } from "../../theme";
 import {
   getPublicPacks,
@@ -156,6 +156,11 @@ const Feed = ({ feedType = "public" }) => {
     }
   }, [queryString, feedType, ownerId]);
 
+  /**
+   * Renders the data for the feed based on the feed type and search query.
+   *
+   * @return {ReactNode} The rendered feed data.
+   */
   const renderData = () => {
     let data = [];
     if (feedType === "public") {
