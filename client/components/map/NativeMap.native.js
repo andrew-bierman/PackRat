@@ -212,10 +212,21 @@ function NativeMap({ shape: shapeProp }) {
   }
 
   const pointLatLong = shape?.features[0]?.geometry?.coordinates;
-  const openMaps = (latLong) => {
-    console.log(latLong.join(','), 'lat long');
+  const { type,coordinates } = shape?.features[0]?.geometry;
+  const openMaps = () => {
+
+    // console.log(latLong.join(','), 'lat long');
+    // console.log(coordinates);
+    // const latLng = coordinates.join(',');
+    let latLng;
+    if(type !== 'Point') {
+      const [firstLatLng] = coordinates;
+      latLng = firstLatLng.join(',');
+    } else {
+      latLng = coordinates.join(',');
+    }
+
     const scheme = Platform.select({ ios: 'maps://0,0?q=', android: 'geo:0,0?q=' });
-    const latLng = latLong.join(',');
     const label = shape?.features[0]?.properties?.name
     const url = Platform.select({
       ios: `${scheme}${label}@${latLng}`,
@@ -270,7 +281,6 @@ function NativeMap({ shape: shapeProp }) {
           id="destination"
           coordinate={pointLatLong}
           onSelected={() => {
-            console.log('selected');
             openMaps(pointLatLong)
           }}
           >
@@ -349,6 +359,7 @@ function NativeMap({ shape: shapeProp }) {
           })
         }
         styles={styles}
+        navigateToMaps={openMaps}
         downloadable={isShapeDownloadable(shape)}
         downloading={downloading}
         shape={shape}

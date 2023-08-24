@@ -387,10 +387,24 @@ const WebMap = ({ shape: shapeProp }) => {
   };
 
   const openMaps = () => {
+
     const pointLatLong = shape?.features[0]?.geometry?.coordinates
-    const [lng, lat] = pointLatLong;
-    window.open(`https://maps.google.com?q=${lat},${lng}`);
-    // https://www.google.com/maps/@${your_lat},${your_lng},${your_desired_zoom}z
+    const { type } = shape.features[0].geometry
+    if(type !== 'Point') {
+      const [latlng] = pointLatLong;
+        window.open(`https://maps.google.com?q=${latlng[1]},${latlng[0]}`);
+    } else {
+      const [lng, lat] = pointLatLong;
+        window.open(`https://maps.google.com?q=${lat},${lng}`);
+    }
+    
+    // console.log()
+    // if(type !== 'Point') {
+    
+    // } else {
+    //   window.open(`https://maps.google.com?q=${lat},${lng}`);
+    // }
+    
 
 
   }
