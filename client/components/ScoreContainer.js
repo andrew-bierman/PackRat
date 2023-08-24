@@ -1,18 +1,18 @@
-import React from "react";
-import { Platform, StyleSheet } from "react-native";
-import { Box, Button, VStack, Text, HStack, View } from "native-base";
-import { theme } from "../theme";
-import { useDispatch } from "react-redux";
-import { scorePack } from "../store/packsStore";
-import { Svg, Circle, Path, G, Text as SvgText } from "react-native-svg";
+import React from 'react'
+import { Platform, StyleSheet } from 'react-native'
+import { Box, Button, VStack, Text, HStack, View } from 'native-base'
+import { theme } from '../theme'
+import { useDispatch } from 'react-redux'
+import { scorePack } from '../store/packsStore'
+import { Svg, Circle, Path, G, Text as SvgText } from 'react-native-svg'
 
 const ScoreProgressChart = ({ score, size = 150, strokeWidth = 10 }) => {
-  if (!score) return null;
+  if (!score) return null
 
-  const radius = (size - strokeWidth) / 2;
-  const circumference = 2 * Math.PI * radius;
-  const progress = score / 100;
-  const progressPath = progress * circumference;
+  const radius = (size - strokeWidth) / 2
+  const circumference = 2 * Math.PI * radius
+  const progress = score / 100
+  const progressPath = progress * circumference
 
   return (
     <View style={styles.container}>
@@ -41,8 +41,8 @@ const ScoreProgressChart = ({ score, size = 150, strokeWidth = 10 }) => {
         <Text style={styles.label}>{score.toFixed(2)}</Text>
       </View>
     </View>
-  );
-};
+  )
+}
 
 //     grades: {
 //   weight: weightGrade,
@@ -51,44 +51,45 @@ const ScoreProgressChart = ({ score, size = 150, strokeWidth = 10 }) => {
 // },
 
 const GradingPieChart = ({ scores, size = 150, strokeWidth = 10 }) => {
-  if (!scores) return null;
+  if (!scores) return null
 
   const { weightScore, essentialItemsScore, redundancyAndVersatilityScore } =
-    scores;
+    scores
 
   // pie chart with 3 sections to represent the 3 grades
   // each section is a circle with a different color
 
-  const radius = 70;
-  const circleCircumference = 2 * Math.PI * radius;
+  const radius = 70
+  const circleCircumference = 2 * Math.PI * radius
 
   const total =
-    weightScore + essentialItemsScore + redundancyAndVersatilityScore;
+    weightScore + essentialItemsScore + redundancyAndVersatilityScore
 
-  const weightPercentage = (weightScore / total) * 100;
-  const essentialItemsPercentage = (essentialItemsScore / total) * 100;
+  const weightPercentage = (weightScore / total) * 100
+  const essentialItemsPercentage = (essentialItemsScore / total) * 100
   const redundancyAndVersatilityPercentage =
-    (redundancyAndVersatilityScore / total) * 100;
+    (redundancyAndVersatilityScore / total) * 100
 
   const weightStrokeDashoffset =
-    circleCircumference - (circleCircumference * weightPercentage) / 100;
+    circleCircumference - (circleCircumference * weightPercentage) / 100
   const essentialItemsStrokeDashoffset =
     circleCircumference -
-    (circleCircumference * essentialItemsPercentage) / 100;
+    (circleCircumference * essentialItemsPercentage) / 100
   const redundancyAndVersatilityStrokeDashoffset =
     circleCircumference -
-    (circleCircumference * redundancyAndVersatilityPercentage) / 100;
+    (circleCircumference * redundancyAndVersatilityPercentage) / 100
 
-  const essentialItemsAngle = (weightScore / total) * 360;
+  const essentialItemsAngle = (weightScore / total) * 360
   const redundancyAndVersatilityAngle =
-    essentialItemsAngle + (essentialItemsScore / total) * 360;
+    essentialItemsAngle + (essentialItemsScore / total) * 360
 
   return (
     <View style={styles.container}>
       <View style={styles.graphWrapper}>
         <Svg height="160" width="160" viewBox="0 0 180 180">
           <G rotation={-90} originX="90" originY="90">
-            {total === 0 ? (
+            {total === 0
+              ? (
               <Circle
                 cx="50%"
                 cy="50%"
@@ -97,7 +98,8 @@ const GradingPieChart = ({ scores, size = 150, strokeWidth = 10 }) => {
                 fill="transparent"
                 strokeWidth="40"
               />
-            ) : (
+                )
+              : (
               <>
                 <Circle
                   cx="50%"
@@ -142,58 +144,58 @@ const GradingPieChart = ({ scores, size = 150, strokeWidth = 10 }) => {
                   strokeLinecap="round"
                 />
               </>
-            )}
+                )}
           </G>
         </Svg>
         <Text style={styles.label}>{total.toFixed(2)}</Text>
       </View>
     </View>
-  );
-};
+  )
+}
 
-export default function ScoreContainer({ type, data, isOwner }) {
-  const dispatch = useDispatch();
+export default function ScoreContainer ({ type, data, isOwner }) {
+  const dispatch = useDispatch()
 
-  const id = data._id;
-  const totalScore = data.totalScore;
-  const grades = data.grades;
-  const scores = data.scores;
+  const id = data._id
+  const totalScore = data.totalScore
+  const grades = data.grades
+  const scores = data.scores
 
-  const isAlreadyScored = totalScore !== null;
+  const isAlreadyScored = totalScore !== null
 
   const textData = {
     pack: {
-      title: isAlreadyScored ? "Pack Score" : "Score this pack!",
-      subheader: "See how this pack matches up with our scoring system!",
+      title: isAlreadyScored ? 'Pack Score' : 'Score this pack!',
+      subheader: 'See how this pack matches up with our scoring system!',
       description:
-        "PackRating is our proprietary scoring system that rates packs based on their weight, essential items, and redundancy and versatility. We worked with experts to create a system that is as objective as possible. The higher the score, the better the pack!",
+        'PackRating is our proprietary scoring system that rates packs based on their weight, essential items, and redundancy and versatility. We worked with experts to create a system that is as objective as possible. The higher the score, the better the pack!'
     },
     trip: {
-      title: isAlreadyScored ? "Trip Score" : "Score this trip!",
-      subheader: "See how this trip matches up with our scoring system!",
+      title: isAlreadyScored ? 'Trip Score' : 'Score this trip!',
+      subheader: 'See how this trip matches up with our scoring system!',
       description:
-        "PackRating is our proprietary scoring system that rates trips based on their weight, essential items, and redundancy and versatility. We worked with experts to create a system that is as objective as possible. The higher the score, the better the trip!",
-    },
-  };
+        'PackRating is our proprietary scoring system that rates trips based on their weight, essential items, and redundancy and versatility. We worked with experts to create a system that is as objective as possible. The higher the score, the better the trip!'
+    }
+  }
 
-  const title = textData[type].title;
-  const subheader = textData[type].subheader;
-  const description = textData[type].description;
+  const title = textData[type].title
+  const subheader = textData[type].subheader
+  const description = textData[type].description
 
   const handleScoreClick = () => {
-    if (type === "pack") {
-      dispatch(scorePack(id));
-    } else if (type === "trip") {
-      dispatch(scoreTrip(id));
+    if (type === 'pack') {
+      dispatch(scorePack(id))
+    } else if (type === 'trip') {
+      dispatch(scoreTrip(id))
     }
-  };
+  }
 
   return (
     <Box style={styles.box}>
       <HStack style={styles.hStack}>
         <VStack style={styles.vStack}>
           <Text style={styles.scoreText}>
-            {isAlreadyScored ? title : "Score this pack!"}
+            {isAlreadyScored ? title : 'Score this pack!'}
           </Text>
           <Text>{subheader}</Text>
           <Text style={{ fontWeight: 300 }}>{description}</Text>
@@ -211,51 +213,51 @@ export default function ScoreContainer({ type, data, isOwner }) {
         )}
       </HStack>
     </Box>
-  );
+  )
 }
 const styles = StyleSheet.create({
   box: {
     paddingHorizontal: 25,
     marginVertical: 15,
     padding: 26,
-    borderColor: "#f1f5f9",
-    borderWidth: 2,
+    borderColor: '#f1f5f9',
+    borderWidth: 2
   },
   hStack: {
-    justifyContent: "space-between",
-    alignItems: "center",
+    justifyContent: 'space-between',
+    alignItems: 'center'
   },
   vStack: {
-    justifyContent: "center",
-    alignItems: "flex-start",
-    width: Platform.OS == "web" ? "60%" : "100%",
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    width: Platform.OS == 'web' ? '60%' : '100%'
   },
   scoreText: {
     color: theme.colors.textPrimary,
     fontSize: 26,
-    fontWeight: "bold",
+    fontWeight: 'bold'
   },
   button: {
     backgroundColor: theme.colors.primary,
     marginTop: 15,
     height: 50,
-    justifyContent: "center",
+    justifyContent: 'center'
   },
 
   // pie
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   graphWrapper: {
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   label: {
-    position: "absolute",
-    textAlign: "center",
-    fontWeight: "700",
-    fontSize: 24,
-  },
-});
+    position: 'absolute',
+    textAlign: 'center',
+    fontWeight: '700',
+    fontSize: 24
+  }
+})

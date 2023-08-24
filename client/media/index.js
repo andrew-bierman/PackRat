@@ -1,4 +1,4 @@
-import { useMediaQuery } from "react-responsive";
+import { useMediaQuery } from 'react-responsive'
 
 /**
  * A function that renders the provided 'children' component only if the device is a desktop.
@@ -7,9 +7,9 @@ import { useMediaQuery } from "react-responsive";
  * @return {React.Element|null} The 'children' component if the device is a desktop, otherwise null.
  */
 export const Desktop = ({ children }) => {
-  const isDesktop = useMediaQuery({ minWidth: 992 });
-  return isDesktop ? children : null;
-};
+  const isDesktop = useMediaQuery({ minWidth: 992 })
+  return isDesktop ? children : null
+}
 /**
  * Generates a function comment for the given function body.
  *
@@ -18,9 +18,9 @@ export const Desktop = ({ children }) => {
  * @return {ReactNode} The children if the device is a tablet, otherwise null.
  */
 export const Tablet = ({ children }) => {
-  const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 991 });
-  return isTablet ? children : null;
-};
+  const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 991 })
+  return isTablet ? children : null
+}
 /**
  * Generate a function comment for the given function body.
  *
@@ -28,9 +28,9 @@ export const Tablet = ({ children }) => {
  * @return {ReactElement | null} - The children if isMobile is true, otherwise null.
  */
 export const Mobile = ({ children }) => {
-  const isMobile = useMediaQuery({ maxWidth: 767 });
-  return isMobile ? children : null;
-};
+  const isMobile = useMediaQuery({ maxWidth: 767 })
+  return isMobile ? children : null
+}
 /**
  * Generate the function comment for the given function body.
  *
@@ -39,6 +39,6 @@ export const Mobile = ({ children }) => {
  * @return {ReactNode} The rendered component.
  */
 const Default = ({ children }) => {
-  const isNotMobile = useMediaQuery({ minWidth: 768 });
-  return isNotMobile ? children : null;
-};
+  const isNotMobile = useMediaQuery({ minWidth: 768 })
+  return isNotMobile ? children : null
+}

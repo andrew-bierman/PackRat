@@ -1,35 +1,35 @@
-import { Link } from "expo-router";
-import { Stack, VStack, Text, Button } from "native-base";
-import { Platform } from "react-native";
-import UserDataCard from "./UserDataCard";
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import LargeCard from "../card/LargeCard";
-import { theme } from "../../theme";
+import { Link } from 'expo-router'
+import { Stack, VStack, Text, Button } from 'native-base'
+import { Platform } from 'react-native'
+import UserDataCard from './UserDataCard'
+import { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import LargeCard from '../card/LargeCard'
+import { theme } from '../../theme'
 
-export default function UserDataContainer({ data, type, userId }) {
+export default function UserDataContainer ({ data, type, userId }) {
   const [dataState, setDataState] = useState(
     data.length > 0 ? Array(data.length).fill(false) : []
-  );
+  )
   useEffect(() => {
-    setDataState(Array(data.length).fill(false));
-  }, [data]);
-  const currentUser = useSelector((state) => state.auth.user);
+    setDataState(Array(data.length).fill(false))
+  }, [data])
+  const currentUser = useSelector((state) => state.auth.user)
 
-  const typeUppercase = type.charAt(0).toUpperCase() + type.slice(1);
+  const typeUppercase = type.charAt(0).toUpperCase() + type.slice(1)
 
-  const typeUppercaseSingular = typeUppercase.slice(0, -1);
+  const typeUppercaseSingular = typeUppercase.slice(0, -1)
 
-  const cardType = type === "packs" ? "pack" : "trip";
+  const cardType = type === 'packs' ? 'pack' : 'trip'
 
-  const differentUser = userId && userId !== currentUser._id;
+  const differentUser = userId && userId !== currentUser._id
 
   return (
     <LargeCard
       customStyle={{
         // backgroundColor: theme.colors.white,
         // light transparent grey
-        backgroundColor: "rgba(255, 255, 255, 0.1)",
+        backgroundColor: 'rgba(255, 255, 255, 0.1)'
 
       }}
     >
@@ -41,7 +41,7 @@ export default function UserDataContainer({ data, type, userId }) {
             : `Your ${typeUppercase}`}
         </Text>
         <Stack
-          direction={["column", "column", "column", "row"]}
+          direction={['column', 'column', 'column', 'row']}
           space={[4, 4, 4, 2]}
           flexWrap="wrap"
           justifyContent="center"
@@ -49,8 +49,9 @@ export default function UserDataContainer({ data, type, userId }) {
           width="100%"
           padding={4}
         >
-          {data && data.length > 0 ? (
-            data?.map((dataItem, index) => (
+          {data && data.length > 0
+            ? (
+                data?.map((dataItem, index) => (
               <UserDataCard
                 key={dataItem._id}
                 {...{ ...dataItem }}
@@ -60,23 +61,26 @@ export default function UserDataContainer({ data, type, userId }) {
                 index={index}
                 differentUser={differentUser}
               />
-            ))
-          ) : currentUser?._id === userId ? (
+                ))
+              )
+            : currentUser?._id === userId
+              ? (
             <Link href="/">
               <Button
                 _text={{
-                  color: "white",
+                  color: 'white'
                 }}
-                w={["100%", "100%", "100%", "auto"]}
+                w={['100%', '100%', '100%', 'auto']}
               >
                 {`Create your first ${typeUppercaseSingular}`}
               </Button>
             </Link>
-          ) : (
+                )
+              : (
             <></>
-          )}
+                )}
         </Stack>
       </VStack>
     </LargeCard>
-  );
+  )
 }

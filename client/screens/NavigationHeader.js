@@ -1,35 +1,31 @@
 /** @format */
 
-import { View, StyleSheet, Image, Text } from "react-native";
+import { View, StyleSheet, Image, Text } from 'react-native'
 
-import { Link } from "expo-router";
+import { Link } from 'expo-router'
 
-import { Desktop, Tablet, Mobile } from "../media";
-import { useAuth } from "../auth/provider";
+import { Desktop, Tablet, Mobile } from '../media'
+import { useAuth } from '../auth/provider'
 
-import { theme } from "../theme";
-import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
-import { FontAwesome } from "@expo/vector-icons";
-import { EvilIcons } from "@expo/vector-icons";
-import { AntDesign } from "@expo/vector-icons";
-import { MaterialIcons } from "@expo/vector-icons";
+import { theme } from '../theme'
+import { Entypo, MaterialCommunityIcons, FontAwesome, EvilIcons, AntDesign, MaterialIcons } from '@expo/vector-icons'
 
-import packratlogo from "../assets/packrat_icon.png";
-import { useState } from "react";
+import packratlogo from '../assets/packrat_icon.png'
+import { useState } from 'react'
 
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from 'react-redux'
 
-import { AuthStateListener } from "../../client/auth/AuthStateListener";
-import { signOut } from "../store/authStore";
-import SVGLogoComponent from "../components/logo";
-import UseTheme from "../hooks/useTheme";
+import { AuthStateListener } from '../../client/auth/AuthStateListener'
+import { signOut } from '../store/authStore'
+import SVGLogoComponent from '../components/logo'
+import UseTheme from '../hooks/useTheme'
 const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+    UseTheme()
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
   // const { signOut, user } = useAuth();
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
   /**
    * Handles the sign out functionality.
@@ -38,20 +34,20 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
    * @return {type} description of return value
    */
   const handleSignOut = () => {
-    dispatch(signOut());
-  };
+    dispatch(signOut())
+  }
 
-  const user = useSelector((state) => state.auth.user);
+  const user = useSelector((state) => state.auth.user)
 
   return user ? (
     <View style={desktopContainer}>
       <AuthStateListener />
-      <View style={{ flexDirection: "row", alignItems: "center", gap: 1 }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 1 }}>
         {/* <Image
           style={isMobile ? styles.smallLogo : styles.logo}
           source={packratlogo}
         /> */}
-        <View style={{ margin: "10px" }}>
+        <View style={{ margin: '10px' }}>
           <SVGLogoComponent
             width={isMobile ? 48 : 64}
             height={isMobile ? 48 : 64}
@@ -62,12 +58,13 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
           style={{
             color: currentTheme.colors.text,
             fontSize: isMobile ? 28 : 48,
-            fontWeight: 900,
+            fontWeight: 900
           }}>
           PackRat
         </Text>
       </View>
-      {isMobile ? (
+      {isMobile
+        ? (
         <Link href='/drawer'>
           <EvilIcons
             name='navicon'
@@ -75,7 +72,8 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
             color={currentTheme.colors.iconColor}
           />
         </Link>
-      ) : (
+          )
+        : (
         <View style={desktopNav}>
           <Link href='/'>
             <View style={isMobile ? styles.mobileLink : styles.link}>
@@ -145,12 +143,12 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
               size={24}
               color={currentTheme.colors.iconColor}
             />
-            <Text style={{ color: "white" }} onPress={() => handleSignOut()}>
+            <Text style={{ color: 'white' }} onPress={() => handleSignOut()}>
               Logout
             </Text>
           </View>
         </View>
-      )}
+          )}
     </View>
   ) : (
     <View style={desktopNav}>
@@ -162,7 +160,7 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
         style={{
           color: currentTheme.colors.text,
           fontSize: isMobile ? 28 : 48,
-          fontWeight: 900,
+          fontWeight: 900
         }}>
         PackRat
       </Text>
@@ -183,12 +181,12 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
         </View>
       </Link>
     </View>
-  );
-};
+  )
+}
 
-export default function Navigation() {
+export default function Navigation () {
   return (
-    <View style={{ width: "100%" }}>
+    <View style={{ width: '100%' }}>
       <Desktop>
         <MutualContent
           desktopContainer={styles.desktopContainer}
@@ -210,78 +208,78 @@ export default function Navigation() {
         />
       </Mobile>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
   mutualStyles: {
     backgroundColor: theme.colors.background,
     flex: 1,
-    flexDirection: "row",
-    height: "100%",
+    flexDirection: 'row',
+    height: '100%'
   },
 
   desktopContainer: {
     backgroundColor: theme.colors.background,
-    width: "100%",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     padding: 16,
-    paddingHorizontal: 90,
+    paddingHorizontal: 90
   },
 
   mobileContainer: {
     backgroundColor: theme.colors.background,
-    width: "100%",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     padding: 25,
-    position: "relative",
+    position: 'relative'
     // height: "300px",
   },
 
   desktopNav: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 15,
     backgroundColor: theme.colors.background,
-    alignItems: "center",
+    alignItems: 'center'
   },
 
   logo: {
     width: 75,
     height: 75,
     marginLeft: 20,
-    marginTop: 10,
+    marginTop: 10
   },
   smallLogo: {
     width: 100,
-    height: 95,
+    height: 95
   },
 
   mobileLink: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 10,
     paddingVertical: 10,
     paddingHorizontal: 15,
-    borderBottomColor: "white",
+    borderBottomColor: 'white',
     borderBottomWidth: 1,
-    width: "100%",
-    color: "white",
+    width: '100%',
+    color: 'white'
   },
 
   link: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 10,
     paddingVertical: 10,
     paddingHorizontal: 15,
-    borderColor: "white",
+    borderColor: 'white',
     borderWidth: 1,
     borderRadius: 6,
-    cursor: "pointer",
-    color: "white",
-  },
-});
+    cursor: 'pointer',
+    color: 'white'
+  }
+})

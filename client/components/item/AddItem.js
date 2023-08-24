@@ -1,10 +1,9 @@
-import { useEffect, useState } from "react";
-import { Box, Input, Button, Text } from "native-base";
-import { useDispatch, useSelector } from "react-redux";
-import { addPackItem, editPackItem } from "../../store/packsStore";
-import { editItemsGlobalAsDuplicate } from "../../store/packsStore";
-import { ItemForm } from "./ItemForm"; // assuming you moved the form related code to a separate component
-import { ItemCategoryEnum } from "../../constants/itemCategory";
+import { useEffect, useState } from 'react'
+import { Box, Input, Button, Text } from 'native-base'
+import { useDispatch, useSelector } from 'react-redux'
+import { addPackItem, editPackItem, editItemsGlobalAsDuplicate } from '../../store/packsStore'
+import { ItemForm } from './ItemForm' // assuming you moved the form related code to a separate component
+import { ItemCategoryEnum } from '../../constants/itemCategory'
 
 export const AddItem = ({
   _id,
@@ -18,30 +17,30 @@ export const AddItem = ({
   closeModalHandler,
   refetch,
   setIsAddItemModalOpen = () => {},
-  setRefetch = () => {},
+  setRefetch = () => {}
 }) => {
-  const dispatch = useDispatch();
-  const isLoading = useSelector((state) => state.packs.isLoading);
+  const dispatch = useDispatch()
+  const isLoading = useSelector((state) => state.packs.isLoading)
 
   // Moved the state up to the parent component
-  const [name, setName] = useState(initialData?.name || "");
-  const [weight, setWeight] = useState(initialData?.weight?.toString() || "");
+  const [name, setName] = useState(initialData?.name || '')
+  const [weight, setWeight] = useState(initialData?.weight?.toString() || '')
   const [quantity, setQuantity] = useState(
-    initialData?.quantity?.toString() || ""
-  );
+    initialData?.quantity?.toString() || ''
+  )
   const [categoryType, setCategoryType] = useState(
-    initialData?.category?.name || ""
-  );
+    initialData?.category?.name || ''
+  )
 
-  const [unit, setUnit] = useState(initialData?.unit || "");
+  const [unit, setUnit] = useState(initialData?.unit || '')
 
   // handle updates to initialData
   useEffect(() => {
-    setName(initialData?.name || "");
-    setWeight(initialData?.weight?.toString() || "");
-    setQuantity(initialData?.quantity?.toString() || "");
-    setUnit(initialData?.unit || "");
-  }, [initialData]);
+    setName(initialData?.name || '')
+    setWeight(initialData?.weight?.toString() || '')
+    setQuantity(initialData?.quantity?.toString() || '')
+    setUnit(initialData?.unit || '')
+  }, [initialData])
 
   /**
    * Generate the function comment for the given function body in a markdown code block with the correct language syntax.
@@ -49,10 +48,10 @@ export const AddItem = ({
    * @return {type} description of return value
    */
   const handleSubmit = () => {
-    console.log("initial", initialData);
+    console.log('initial', initialData)
     if (isEdit) {
       if (packId && initialData.global) {
-        console.log("editing", packId);
+        console.log('editing', packId)
 
         dispatch(
           editItemsGlobalAsDuplicate({
@@ -62,10 +61,10 @@ export const AddItem = ({
             weight,
             quantity,
             unit,
-            type: categoryType,
+            type: categoryType
           })
-        );
-        closeModalHandler();
+        )
+        closeModalHandler()
       } else {
         dispatch(
           editPackItem({
@@ -74,12 +73,12 @@ export const AddItem = ({
             quantity,
             unit,
             type: categoryType,
-            _id: initialData["_id"],
+            _id: initialData._id
           })
-        );
-        setPage(1);
-        closeModalHandler();
-        setRefetch(refetch === true ? false : true);
+        )
+        setPage(1)
+        closeModalHandler()
+        setRefetch(refetch !== true)
       }
     } else {
       dispatch(
@@ -90,13 +89,13 @@ export const AddItem = ({
           type: categoryType,
           unit,
           _id,
-          packId,
+          packId
         })
-      );
-      setIsAddItemModalOpen(false);
-      setRefetch(refetch === true ? false : true);
+      )
+      setIsAddItemModalOpen(false)
+      setRefetch(refetch !== true)
     }
-  };
+  }
 
   return (
     <Box>
@@ -117,5 +116,5 @@ export const AddItem = ({
         currentPack={currentPack}
       />
     </Box>
-  );
-};
+  )
+}

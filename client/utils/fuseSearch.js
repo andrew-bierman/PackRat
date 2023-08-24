@@ -1,11 +1,11 @@
 // fuseSearch.js
-import Fuse from 'fuse.js';
+import Fuse from 'fuse.js'
 
 // Desc: Fuse search function
 export const fuseSearch = (data, searchTerm, keys, options = {}) => {
   const defaultOptions = {
     includeScore: true,
-    includeMatches: true,
+    includeMatches: true
     // isCaseSensitive: false,  // Indicates whether comparisons should be case sensitive
     // shouldSort: true,  // Whether to sort the result list by score
     // includeMatches: false,  // Whether the matches set should be included in each record
@@ -17,16 +17,16 @@ export const fuseSearch = (data, searchTerm, keys, options = {}) => {
     // useExtendedSearch: false,  // Indicates whether the algorithm should use an extended search mode
     // ignoreLocation: false,  // When true, the computation of the location is completely ignored. Boosts performance.
     // ignoreFieldNorm: false,  // When true, the function ignores the `fieldNorm` computed during the indexing stage, and uses a constant norm value of 1
-  };
+  }
 
   const fuse = new Fuse(data, {
     keys,
     ...defaultOptions,
-    ...options,
-  });
+    ...options
+  })
 
-  const results = fuse.search(searchTerm) ?? [];
+  const results = fuse.search(searchTerm) ?? []
 
   // return full search results, not just items
-  return searchTerm ? results : data;
-};
+  return searchTerm ? results : data
+}

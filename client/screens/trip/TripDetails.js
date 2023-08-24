@@ -1,61 +1,61 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react'
 
-import { DetailsHeader } from "../../components/details/header";
+import { DetailsHeader } from '../../components/details/header'
 
-import { useSearchParams } from "expo-router";
-import { TableContainer } from "../../components/pack_table/Table";
-import { selectPackById } from "../../store/packsStore";
+import { useSearchParams } from 'expo-router'
+import { TableContainer } from '../../components/pack_table/Table'
+import { selectPackById } from '../../store/packsStore'
 
-import { useSelector, useDispatch } from "react-redux";
-import { fetchSingleTrip } from "../../store/singleTripStore";
+import { useSelector, useDispatch } from 'react-redux'
+import { fetchSingleTrip } from '../../store/singleTripStore'
 
-import { Box, Text, View } from "native-base";
-import { DetailsComponent } from "../../components/details";
-import { Platform, StyleSheet } from "react-native";
-import { theme } from "../../theme";
-import { CLIENT_URL } from "@env";
-import ScoreContainer from "../../components/ScoreContainer";
-import WeatherCard from "../../components/WeatherCard";
-import TripCard from "../../components/TripCard";
-import { FontAwesome5 } from "@expo/vector-icons";
-import { convertPhotonGeoJsonToShape } from "../../utils/mapFunctions";
-import UseTheme from "../../hooks/useTheme";
-export function TripDetails() {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } = UseTheme();
-  const weatherObject = useSelector((state) => state.weather.weatherObject);
-  const weatherWeek = useSelector((state) => state.weather.weatherWeek);
+import { Box, Text, View } from 'native-base'
+import { DetailsComponent } from '../../components/details'
+import { Platform, StyleSheet } from 'react-native'
+import { theme } from '../../theme'
+import { CLIENT_URL } from '@env'
+import ScoreContainer from '../../components/ScoreContainer'
+import WeatherCard from '../../components/WeatherCard'
+import TripCard from '../../components/TripCard'
+import { FontAwesome5 } from '@expo/vector-icons'
+import { convertPhotonGeoJsonToShape } from '../../utils/mapFunctions'
+import UseTheme from '../../hooks/useTheme'
+export function TripDetails () {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } = UseTheme()
+  const weatherObject = useSelector((state) => state.weather.weatherObject)
+  const weatherWeek = useSelector((state) => state.weather.weatherWeek)
   console.log('trip detail')
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
-  const { tripId } = useSearchParams();
+  const { tripId } = useSearchParams()
   // console.log("🚀 ~ file: TripDetails.js:29 ~ TripDetails ~ tripId:", tripId)
 
-  const link = `${CLIENT_URL}/trip/${tripId}`;
+  const link = `${CLIENT_URL}/trip/${tripId}`
 
   useEffect(() => {
-    if (!tripId) return;
-    dispatch(fetchSingleTrip(tripId));
-  }, [dispatch, tripId]);
-  const states = useSelector((state) => state);
+    if (!tripId) return
+    dispatch(fetchSingleTrip(tripId))
+  }, [dispatch, tripId])
+  const states = useSelector((state) => state)
 
-  const currentTrip = useSelector((state) => state.singleTrip.singleTrip);
+  const currentTrip = useSelector((state) => state.singleTrip.singleTrip)
 
-  const user = useSelector((state) => state.auth.user);
+  const user = useSelector((state) => state.auth.user)
 
   // check if user is owner of pack, and that pack and user exists
-  const isOwner = currentTrip && user && currentTrip.owner_id === user._id;
+  const isOwner = currentTrip && user && currentTrip.owner_id === user._id
 
-  const isLoading = useSelector((state) => state.singleTrip.isLoading);
-  const error = useSelector((state) => state.singleTrip.error);
-  const isError = error !== null;
+  const isLoading = useSelector((state) => state.singleTrip.isLoading)
+  const error = useSelector((state) => state.singleTrip.error)
+  const isError = error !== null
 
-  if (isLoading) return <Text>Loading...</Text>;
+  if (isLoading) return <Text>Loading...</Text>
   // console.log(currentTrip.osm_ref.geoJSON, 'geoJSON');
   return (
     <Box
       style={[
         styles.mainContainer,
-        Platform.OS == "web" ? { minHeight: "100vh" } : null,
+        Platform.OS == 'web' ? { minHeight: '100vh' } : null
       ]}
     >
       {!isError && (
@@ -70,7 +70,7 @@ export function TripDetails() {
                 <View>
                   <TableContainer currentPack={currentTrip?.packs} />
                 </View>
-                <View style={{ marginTop: "5%" }}>
+                <View style={{ marginTop: '5%' }}>
                   <WeatherCard
                     weatherObject={
                       currentTrip?.weather
@@ -99,7 +99,7 @@ export function TripDetails() {
                   }
                 />
                 {/* </View> */}
-                <View style={{ marginTop: "5%" }}>
+                <View style={{ marginTop: '5%' }}>
                   <ScoreContainer
                     type="trip"
                     data={currentTrip}
@@ -113,27 +113,27 @@ export function TripDetails() {
         </>
       )}
     </Box>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
   mainContainer: {
     backgroundColor: theme.colors.background,
-    flexDirection: "column",
+    flexDirection: 'column',
     gap: 15,
     padding: [25, 25, 0, 25], // [top, right, bottom, left
     fontSize: 18,
-    width: "100%",
+    width: '100%'
   },
   packsContainer: {
-    backgroundColor: "green",
-    flexDirection: "column",
-    minHeight: "100vh",
+    backgroundColor: 'green',
+    flexDirection: 'column',
+    minHeight: '100vh',
 
     padding: 25,
-    fontSize: 26,
+    fontSize: 26
   },
   dropdown: {
-    backgroundColor: "white",
-  },
-});
+    backgroundColor: 'white'
+  }
+})
