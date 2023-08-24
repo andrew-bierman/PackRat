@@ -1,9 +1,9 @@
-import React from "react";
-import { Box, Text, Stack } from "native-base";
-import { StyleSheet, Platform } from "react-native";
-import { useSelector } from "react-redux";
+import React from 'react'
+import { Box, Text, Stack } from 'native-base'
+import { StyleSheet, Platform } from 'react-native'
+import { useSelector } from 'react-redux'
 
-import { theme } from "../../theme";
+import { theme } from '../../theme'
 
 /**
  * Retrieves the appropriate container style based on the provided type.
@@ -13,16 +13,16 @@ import { theme } from "../../theme";
  */
 const getContainerStyle = (type) => {
   switch (type) {
-    case "search":
-      return styles.searchContainer;
-    case "map":
-      return styles.mapCard;
-    case "mobile":
-      return styles.containerMobile;
+    case 'search':
+      return styles.searchContainer
+    case 'map':
+      return styles.mapCard
+    case 'mobile':
+      return styles.containerMobile
     default:
-      return styles.mutualStyles;
+      return styles.mutualStyles
   }
-};
+}
 
 /**
  * Generate the function comment for the given function body.
@@ -37,37 +37,37 @@ const getContainerStyle = (type) => {
  * @param {React.Component} props.children - The children components of the large card.
  * @return {React.Component} The rendered large card component.
  */
-export default function LargeCard({
+export default function LargeCard ({
   title,
   Icon,
   ContentComponent,
   contentProps,
   type,
   customStyle,
-  children,
+  children
 }) {
   const currentShape = useSelector(
     (state) => state.search.selectedSearchResult
-  );
+  )
 
-  console.log("currentShape", currentShape);
+  console.log('currentShape', currentShape)
 
-  const containerStyle = customStyle || getContainerStyle(type);
+  const containerStyle = customStyle || getContainerStyle(type)
 
   return (
     <Stack
       alignSelf="center"
-      w={["100%", "100%", "100%", "90%"]}
-      direction={["column", "column", "row", "row"]}
-      rounded={["none", "none", "md", "lg"]}
+      w={['100%', '100%', '100%', '90%']}
+      direction={['column', 'column', 'row', 'row']}
+      rounded={['none', 'none', 'md', 'lg']}
       style={containerStyle}
     >
       <Box
         style={{
-          flexDirection: "row",
+          flexDirection: 'row',
           gap: 15,
-          alignItems: "center",
-          paddingVertical: 15,
+          alignItems: 'center',
+          paddingVertical: 15
         }}
       >
         {Icon ? <Icon /> : null}
@@ -75,7 +75,7 @@ export default function LargeCard({
           style={{
             color: theme.colors.textPrimary,
             fontSize: theme.font.size,
-            fontWeight: 600,
+            fontWeight: 600
           }}
         >
           {title && <Text>{title}</Text>}
@@ -84,7 +84,7 @@ export default function LargeCard({
       {ContentComponent ? <ContentComponent {...contentProps} /> : null}
       {children}
     </Stack>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -92,40 +92,40 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.card,
     flex: 1,
     gap: 45,
-    justifyContent: "space-between",
-    alignItems: "center",
-    textAlign: "center",
-    padding: theme.size.cardPadding,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    textAlign: 'center',
+    padding: theme.size.cardPadding
   },
   containerMobile: {
     backgroundColor: theme.colors.card,
     padding: theme.size.mobilePadding,
-    justifyContent: "space-between",
-    alignItems: "center",
+    justifyContent: 'space-between',
+    alignItems: 'center',
     gap: 25,
     flex: 1,
-    paddingHorizontal: 100,
+    paddingHorizontal: 100
   },
   searchContainer: {
     backgroundColor: theme.colors.card,
     padding: theme.size.mobilePadding,
-    justifyContent: "space-between",
-    alignItems: "center",
+    justifyContent: 'space-between',
+    alignItems: 'center',
     gap: 10,
     flex: 1,
     paddingHorizontal: 60,
     paddingVertical: 70,
-    height: Platform.OS === "web" ? "450px" : "100%",
+    height: Platform.OS === 'web' ? '450px' : '100%'
   },
   mapCard: {
     backgroundColor: theme.colors.card,
-    flexDirection: "column",
-    alignItems: "center",
-    textAlign: "center",
+    flexDirection: 'column',
+    alignItems: 'center',
+    textAlign: 'center',
     padding: theme.size.cardPadding,
     paddingHorizontal: theme.padding.paddingInside,
     marginBottom: 20,
-    height: Platform.OS === "web" ? "650px" : "100%",
-    overflow: "hidden",
-  },
-});
+    height: Platform.OS === 'web' ? '650px' : '100%',
+    overflow: 'hidden'
+  }
+})

@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { View, Text } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
-import { format } from "date-fns";
-import { fetchSinglePack } from "../../store/singlePackStore";
-import { CustomCard } from "../card";
+import React, { useState, useEffect } from 'react'
+import { View, Text } from 'react-native'
+import { useDispatch, useSelector } from 'react-redux'
+import { format } from 'date-fns'
+import { fetchSinglePack } from '../../store/singlePackStore'
+import { CustomCard } from '../card'
 
 export const DetailsComponent = ({ type, data, additionalComps, link }) => {
   const renderDetails = () => {
     switch (type) {
-      case "pack":
+      case 'pack':
         // Add pack-specific logic here
         return (
           <>
@@ -29,8 +29,8 @@ export const DetailsComponent = ({ type, data, additionalComps, link }) => {
               type="pack"
             />
           </>
-        );
-      case "trip":
+        )
+      case 'trip':
         // Add trip-specific logic here
         return (
           <>
@@ -50,19 +50,19 @@ export const DetailsComponent = ({ type, data, additionalComps, link }) => {
                       )}
                       {data.start_date && (
                         <Text>
-                          Start Date:{" "}
-                          {format(new Date(data.start_date), "MM/dd/yyyy")}
+                          Start Date:{' '}
+                          {format(new Date(data.start_date), 'MM/dd/yyyy')}
                         </Text>
                       )}
                       {data.end_date && (
                         <Text>
-                          End Date:{" "}
-                          {format(new Date(data.end_date), "MM/dd/yyyy")}
+                          End Date:{' '}
+                          {format(new Date(data.end_date), 'MM/dd/yyyy')}
                         </Text>
                       )}
                     </>
                   }
-                  {<View style={{ marginTop: "10%" }}>{additionalComps}</View>}
+                  {<View style={{ marginTop: '10%' }}>{additionalComps}</View>}
                 </>
               }
               destination={data?.destination}
@@ -76,8 +76,8 @@ export const DetailsComponent = ({ type, data, additionalComps, link }) => {
               <Text>{data?.details}</Text>
             </View> */}
           </>
-        );
-      case "item":
+        )
+      case 'item':
         // Add item-specific logic here
         return (
           <>
@@ -88,12 +88,12 @@ export const DetailsComponent = ({ type, data, additionalComps, link }) => {
               <Text>{data.description}</Text>
             </View>
           </>
-        );
+        )
       default:
         // Handle unknown types
-        return null;
+        return null
     }
-  };
+  }
 
-  return <View>{renderDetails()}</View>;
-};
+  return <View>{renderDetails()}</View>
+}

@@ -1,12 +1,12 @@
-import { CustomModal } from "../modal";
-import { AddItem } from "../item/AddItem";
+import { CustomModal } from '../modal'
+import { AddItem } from '../item/AddItem'
 
 export const AddItemModal = ({
   currentPackId,
   currentPack,
   isAddItemModalOpen,
   setIsAddItemModalOpen,
-  setRefetch = () => {},
+  setRefetch = () => {}
 }) => {
   return (
     <CustomModal
@@ -16,23 +16,23 @@ export const AddItemModal = ({
       onTrigger={setIsAddItemModalOpen}
       footerButtons={[
         {
-          label: "Save",
-          color: "primary",
-          onClick: () => setIsAddItemModalOpen(false),
+          label: 'Save',
+          color: 'primary',
+          onClick: () => setIsAddItemModalOpen(false)
         },
         {
-          label: "Cancel",
-          color: "danger",
-          onClick: () => setIsAddItemModalOpen(false),
-        },
+          label: 'Cancel',
+          color: 'danger',
+          onClick: () => setIsAddItemModalOpen(false)
+        }
       ]}
     >
       <AddItem
         packId={currentPackId}
         currentPack={currentPack}
         setIsAddItemModalOpen={setIsAddItemModalOpen}
-        setRefetch={() => setRefetch()}
+        setRefetch={() => { setRefetch() }}
       />
     </CustomModal>
-  );
-};
+  )
+}

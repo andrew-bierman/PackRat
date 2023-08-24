@@ -1,9 +1,9 @@
-import { Box, Input, Button, Text, VStack, Radio } from "native-base";
-import { DropdownComponent } from "../Dropdown";
-import { theme } from "../../theme";
-import { ItemCategoryEnum } from "../../constants/itemCategory";
-import UseTheme from "../../hooks/useTheme";
-const data = ["lb", "oz", "kg", "g"];
+import { Box, Input, Button, Text, VStack, Radio } from 'native-base'
+import { DropdownComponent } from '../Dropdown'
+import { theme } from '../../theme'
+import { ItemCategoryEnum } from '../../constants/itemCategory'
+import UseTheme from '../../hooks/useTheme'
+const data = ['lb', 'oz', 'kg', 'g']
 
 export const ItemForm = ({
   name,
@@ -20,9 +20,9 @@ export const ItemForm = ({
   showSubmitButton = true,
   isLoading,
   isEdit,
-  currentPack,
+  currentPack
 }) => {
-  let hasWaterAdded = false;
+  let hasWaterAdded = false
   if (
     currentPack &&
     Array.isArray(currentPack.items) &&
@@ -30,10 +30,10 @@ export const ItemForm = ({
   ) {
     hasWaterAdded = currentPack.items.some(
       (item) => item.category && item.category.name === ItemCategoryEnum.WATER
-    );
+    )
   }
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    UseTheme()
   return (
     <Box>
       <VStack space={2}>
@@ -47,10 +47,10 @@ export const ItemForm = ({
         />
         <Box
           style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-            width: "100%",
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            width: '100%'
           }}
         >
           <Input
@@ -66,7 +66,7 @@ export const ItemForm = ({
               data={data}
               value={unit}
               onValueChange={setUnit}
-              placeholder={"Unit"}
+              placeholder={'Unit'}
               width="100"
             />
           )}
@@ -88,26 +88,26 @@ export const ItemForm = ({
           onChange={(nextVal) => setCategoryType(nextVal)}
         >
           {Object.values(ItemCategoryEnum).map((value, key) => {
-            if (hasWaterAdded && value === ItemCategoryEnum.WATER) return;
+            if (hasWaterAdded && value === ItemCategoryEnum.WATER) return
             return (
               <Radio key={key} value={value} mx="2">
                 {value}
               </Radio>
-            );
+            )
           })}
         </Radio.Group>
         {showSubmitButton && (
           <Button onPress={handleSubmit}>
             <Text style={{ color: currentTheme.colors.text }}>
               {isLoading
-                ? "Loading.."
+                ? 'Loading..'
                 : isEdit == true
-                ? "Edit item"
-                : "Add Item"}
+                  ? 'Edit item'
+                  : 'Add Item'}
             </Text>
           </Button>
         )}
       </VStack>
     </Box>
-  );
-};
+  )
+}
