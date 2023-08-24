@@ -5,15 +5,14 @@
  * @param {any} task - The task associated with the job.
  * @return {Promise<any>} A promise that resolves to the result of processing the job with the task.
  */
-const worker = (job, task) => {
-    console.log(`Processing job ${job} with task ${task}`);
-    // Wrap setTimeout inside a promise
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(`Job ${job} with task ${task} processed`);
-      }, 1000);
-    });
-  };
-  
-  export default worker;
-  
+const worker = async (job, task) => {
+  console.log(`Processing job ${job} with task ${task}`)
+  // Wrap setTimeout inside a promise
+  return await new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(`Job ${job} with task ${task} processed`)
+    }, 1000)
+  })
+}
+
+export default worker

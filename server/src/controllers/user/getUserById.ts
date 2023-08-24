@@ -1,4 +1,4 @@
-import { getUserByIdService } from "../../services/user/getUserByIdService";
+import { getUserByIdService } from '../../services/user/getUserByIdService'
 
 /**
  * Retrieves a user by their ID from the database and returns the user object as a JSON response.
@@ -8,13 +8,13 @@ import { getUserByIdService } from "../../services/user/getUserByIdService";
  */
 export const getUserById = async (req, res) => {
   try {
-    const { userId } = req.params;
+    const { userId } = req.params
 
-    const user = await getUserByIdService(userId);
+    const user = await getUserByIdService(userId)
 
-    res.status(200).json(user);
+    res.status(200).json(user)
   } catch (error) {
-    console.error(error);
-    res.status(404).json({ msg: "User cannot be found" });
+    console.error(error)
+    res.status(404).json({ msg: 'User cannot be found' })
   }
-};
+}
