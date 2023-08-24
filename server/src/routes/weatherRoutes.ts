@@ -1,10 +1,10 @@
-import express from "express";
+import express from 'express'
 import {
   getWeatherWeek,
-  getWeather,
-} from "../controllers/weather/index";
+  getWeather
+} from '../controllers/weather/index'
 
-const router = express.Router();
+const router = express.Router()
 
 /**
  * @swagger
@@ -25,7 +25,7 @@ const router = express.Router();
  *       '500':
  *         description: Error retrieving current weather
  */
-router.get("/", getWeather);
+router.get('/', getWeather)
 
 /**
  * @swagger
@@ -39,6 +39,6 @@ router.get("/", getWeather);
  *       '500':
  *         description: Error retrieving weekly weather forecast
  */
-router.get("/week", getWeatherWeek);
+router.get('/week', getWeatherWeek)
 
-export default router;
+export default router

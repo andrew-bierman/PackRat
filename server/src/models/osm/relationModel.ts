@@ -1,49 +1,49 @@
-import mongoose from "mongoose";
-import myDB from "../dbConnection";
-import { toGeoJSON } from "../../utils/osmFunctions/modelHandlers";
+import mongoose from 'mongoose'
+import myDB from '../dbConnection'
+import { toGeoJSON } from '../../utils/osmFunctions/modelHandlers'
 
-const { Schema } = mongoose;
+const { Schema } = mongoose
 
 const RelationSchema = new Schema(
   {
     osm_id: Number,
-    osm_type: { type: String, default: "relation" },
+    osm_type: { type: String, default: 'relation' },
     tags: Object,
     members: [
       {
-        type: { type: String, enum: ["node", "way", "relation"] },
+        type: { type: String, enum: ['node', 'way', 'relation'] },
         refId: { type: Schema.Types.ObjectId }, // This will store ObjectId of related Node, Way, or Relation
-        role: String,
-      },
+        role: String
+      }
     ],
     geoJSON: Object,
-    updated_at: Date,
+    updated_at: Date
   },
   { timestamps: true }
-);
+)
 
-RelationSchema.pre("save", async function (next) {
-  if (this.osm_type !== "relation") {
-    throw new Error("This is not a relation");
+RelationSchema.pre('save', async function (next) {
+  if (this.osm_type !== 'relation') {
+    throw new Error('This is not a relation')
   }
-  next();
-});
+  next()
+})
 
-RelationSchema.method("toGeoJSON", async function () {
-  console.log("toGeoJSON instance in mongo schema", this);
-  return await toGeoJSON(this.constructor, this);
-});
+RelationSchema.method('toGeoJSON', async function () {
+  console.log('toGeoJSON instance in mongo schema', this)
+  return await toGeoJSON(this.constructor, this)
+})
 
-RelationSchema.method("toJSON", async function () {
-  const { _id, ...object } = this.toObject();
-  object.id = _id.toString();
+RelationSchema.method('toJSON', async function () {
+  const { _id, ...object } = this.toObject()
+  object.id = _id.toString()
   // Asynchronously populate the members (you may need to add your own logic to populate based on type)
-  for (let member of object.members) {
-    member.refId = await mongoose.model(member.type).findById(member.refId);
+  for (const member of object.members) {
+    member.refId = await mongoose.model(member.type).findById(member.refId)
   }
-  return object;
-});
+  return object
+})
 
-const Relation = myDB.model("Relation", RelationSchema);
+const Relation = myDB.model('Relation', RelationSchema)
 
-export default Relation;
+export default Relation

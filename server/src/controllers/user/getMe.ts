@@ -5,10 +5,9 @@
  * @return {object} The user information.
  */
 export const getMe = async (req, res) => {
-    try {
-      res.status(200).send(req.user);
-    } catch (err) {
-      res.status(401).send({ message: err.message });
-    }
-  };
-  
+  try {
+    res.status(200).send(req.user)
+  } catch (err) {
+    res.status(401).send({ message: err.message })
+  }
+}

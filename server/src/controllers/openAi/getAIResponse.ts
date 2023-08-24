@@ -1,4 +1,4 @@
-import { getAIResponseService } from "../../services/openAi/openAi.service";
+import { getAIResponseService } from '../../services/openAi/openAi.service'
 
 /**
  * Retrieves an AI response based on user input and conversation history.
@@ -8,14 +8,14 @@ import { getAIResponseService } from "../../services/openAi/openAi.service";
  */
 export const getAIResponse = async (req, res) => {
   try {
-    const { userId, conversationId, userInput } = req.body;
+    const { userId, conversationId, userInput } = req.body
 
-    const result = await getAIResponseService(userId, conversationId, userInput);
+    const result = await getAIResponseService(userId, conversationId, userInput)
 
-    res.json(result);
+    res.json(result)
   } catch (error) {
-    console.error(error);
-    console.error(error.message);
-    res.status(500).json({ error: "Failed to get response from AI." });
+    console.error(error)
+    console.error(error.message)
+    res.status(500).json({ error: 'Failed to get response from AI.' })
   }
-};
+}

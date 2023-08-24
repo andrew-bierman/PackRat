@@ -1,4 +1,4 @@
-import { editPackService } from "../../services/pack/pack.service";
+import { editPackService } from '../../services/pack/pack.service'
 
 /**
  * Edits a pack in the database.
@@ -9,14 +9,14 @@ import { editPackService } from "../../services/pack/pack.service";
 
 export const editPack = async (req, res) => {
   try {
-    const { _id } = req.body;
+    const { _id } = req.body
 
-    const newPack = await editPackService(_id, req.body);
+    const newPack = await editPackService(_id, req.body)
 
-    console.log("newPack", newPack);
+    console.log('newPack', newPack)
 
-    res.status(200).json(newPack);
+    res.status(200).json(newPack)
   } catch (error) {
-    res.status(404).json({ msg: "Unable to edit pack" });
+    res.status(404).json({ msg: 'Unable to edit pack' })
   }
-};
+}
