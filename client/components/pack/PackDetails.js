@@ -73,7 +73,7 @@ export function PackDetails() {
                     width: "100%",
                   }}
                 >
-                <ChatContainer />
+                  <ChatContainer />
                 </Box>
               </>
             }

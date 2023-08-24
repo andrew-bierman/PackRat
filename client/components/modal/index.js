@@ -10,11 +10,13 @@ export const CustomModal = ({
   onCancel,
   buttonColor = "primary",
   type,
-  size = 'lg',
+  size = "lg",
   footerButtons = [],
   isActive,
   onTrigger,
   buttonText,
+  bodyRef,
+  onLayout,
   triggerComponent = null,
   ...rest
 }) => {
@@ -47,12 +49,12 @@ export const CustomModal = ({
         {...rest}
         placement="center"
       >
-        <NBModal.Content maxWidth="400px">
+        <NBModal.Content maxWidth="600px">
           <NBModal.CloseButton />
           <NBModal.Header>
             <Heading>{title}</Heading>
           </NBModal.Header>
-          <NBModal.Body>
+          <NBModal.Body ref={bodyRef} onLayout={onLayout}>
             <Box>{children}</Box>
           </NBModal.Body>
           <NBModal.Footer>
