@@ -1,2 +1,2 @@
-export * from './getAIResponseService';
-export * from './getUserChatsService';
+export * from './getAIResponseService'
+export * from './getUserChatsService'

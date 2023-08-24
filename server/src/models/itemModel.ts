@@ -1,7 +1,7 @@
-import mongoose from "mongoose";
-import myDB from "./dbConnection";
+import mongoose from 'mongoose'
+import myDB from './dbConnection'
 
-const { Schema } = mongoose;
+const { Schema } = mongoose
 
 const ItemSchema = new Schema(
   {
@@ -11,17 +11,17 @@ const ItemSchema = new Schema(
     unit: { type: String, required: true },
     category: {
       type: Schema.Types.ObjectId,
-      ref: "ItemCategory",
+      ref: 'ItemCategory'
     },
-    owners: [{ type: Schema.Types.ObjectId, ref: "User", default: [] }],
-    packs: [{ type: Schema.Types.ObjectId, ref: "Pack", default: [] }],
+    owners: [{ type: Schema.Types.ObjectId, ref: 'User', default: [] }],
+    packs: [{ type: Schema.Types.ObjectId, ref: 'Pack', default: [] }],
     global: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   },
   { timestamps: true }
-);
+)
 
-const Item = myDB.model("Item", ItemSchema);
-export default Item;
+const Item = myDB.model('Item', ItemSchema)
+export default Item

@@ -1,4 +1,4 @@
-import User from "../models/userModel";
+import User from '../models/userModel'
 
 /**
  * Registers a user with the provided email, password, name, and source.
@@ -13,30 +13,29 @@ import User from "../models/userModel";
  * @returns {Promise<Object>} Returns a Promise that resolves to the registered user.
  */
 export const register = async ({ email, password, name, from }: { email: string, password: string, name: string, from: string }) => {
-  if (from === "UserSignIn") {
+  if (from === 'UserSignIn') {
     if (!email || !password || !name) {
-      throw new Error("All fields must be filled");
+      throw new Error('All fields must be filled')
     }
   }
 
-  if (from === "GoogleSignIn") {
+  if (from === 'GoogleSignIn') {
     if (!email || !name) {
-      throw new Error("All fields must be filled");
+      throw new Error('All fields must be filled')
     }
   }
 
-  if (!(from === "GoogleSignIn" || from === "UserSignIn")) {
-    throw new Error("Something went wrong");
+  if (!(from === 'GoogleSignIn' || from === 'UserSignIn')) {
+    throw new Error('Something went wrong')
   }
 
-  const exist = await User?.findOne({ email });
+  const exist = await User?.findOne({ email })
 
   if (exist) {
-    throw new Error("email already in use");
+    throw new Error('email already in use')
   }
 
   // validation
-
 
   const user = await User.create({
     name,
@@ -45,10 +44,10 @@ export const register = async ({ email, password, name, from }: { email: string,
     is_certified_guide: false,
     favorites: [],
     packs: [],
-    trips: [],
-  });
-  return user;
-};
+    trips: []
+  })
+  return user
+}
 
 /**
  * Validates whether an email address is in the correct format.
@@ -57,6 +56,6 @@ export const register = async ({ email, password, name, from }: { email: string,
  * @return {boolean} Whether the email address is valid or not.
  */
 export const validateEmail = function (email: string) {
-  var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-  return re.test(email);
-};
+  const re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+  return re.test(email)
+}

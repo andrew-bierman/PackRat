@@ -1,4 +1,4 @@
-import Template from "../../models/templateModel";
+import Template from '../../models/templateModel'
 
 /**
  * Retrieves templates from the database and sends them as a JSON response.
@@ -8,9 +8,9 @@ import Template from "../../models/templateModel";
  */
 export const getTemplates = async (req, res) => {
   try {
-    const templates = await Template.find({}).populate("createdBy", "username");
-    res.json(templates);
+    const templates = await Template.find({}).populate('createdBy', 'username')
+    res.json(templates)
   } catch (error) {
-    res.status(500).json({ error: error.toString() });
+    res.status(500).json({ error: error.toString() })
   }
-};
+}
