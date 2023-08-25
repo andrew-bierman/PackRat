@@ -1,4 +1,4 @@
-import { addTripService } from '../../services/trip/addTripService'
+import { addTripService } from '../../services/trip/addTripService';
 
 /**
  * Adds a trip to the database.
@@ -19,8 +19,8 @@ export const addTrip = async (req, res) => {
       geoJSON,
       owner_id,
       packs,
-      is_public
-    } = req.body
+      is_public,
+    } = req.body;
 
     const tripDetails = {
       name,
@@ -33,14 +33,14 @@ export const addTrip = async (req, res) => {
       geoJSON,
       owner_id,
       packs,
-      is_public
-    }
+      is_public,
+    };
 
-    const result = await addTripService(tripDetails)
+    const result = await addTripService(tripDetails);
 
-    res.status(200).json({ msg: result })
+    res.status(200).json({ msg: result });
   } catch (error) {
-    console.error(error)
-    res.status(404).json({ msg: 'Unable to add trip' })
+    console.error(error);
+    res.status(404).json({ msg: 'Unable to add trip' });
   }
-}
+};

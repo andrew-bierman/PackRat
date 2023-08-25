@@ -1,21 +1,21 @@
-import { useRouter, useSegments } from 'expo-router'
-import { useSelector, useDispatch } from 'react-redux'
-import React from 'react'
+import { useRouter, useSegments } from 'expo-router';
+import { useSelector, useDispatch } from 'react-redux';
+import React from 'react';
 
-const AuthContext = React.createContext(null)
+const AuthContext = React.createContext(null);
 
 // This hook can be used to access the user info.
-export function useAuth () {
-  return React.useContext(AuthContext)
+export function useAuth() {
+  return React.useContext(AuthContext);
 }
 
 // This hook will protect the route access based on user authentication.
-function useProtectedRoute (user) {
-  const segments = useSegments()
-  const router = useRouter()
+function useProtectedRoute(user) {
+  const segments = useSegments();
+  const router = useRouter();
 
   React.useEffect(() => {
-    const inAuthGroup = segments[0] === '(auth)'
+    const inAuthGroup = segments[0] === '(auth)';
     // need to add check for approved pages as well
 
     if (
@@ -24,23 +24,21 @@ function useProtectedRoute (user) {
       !inAuthGroup
     ) {
       // Redirect to the sign in page.
-      router.replace('/sign-in')
+      router.replace('/sign-in');
     } else if (user && inAuthGroup) {
       // if user is logged in and the route is protected
       // Redirect away from the sign in page.
-      router.replace('/')
+      router.replace('/');
     }
-  }, [user, segments])
+  }, [user, segments]);
 }
 
-export function AuthProvider ({ children }) {
-  const user = useSelector((state) => state.auth.user)
+export function AuthProvider({ children }) {
+  const user = useSelector((state) => state.auth.user);
 
-  useProtectedRoute(user)
+  useProtectedRoute(user);
 
   return (
-    <AuthContext.Provider value={{ user }}>
-      {children}
-    </AuthContext.Provider>
-  )
+    <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>
+  );
 }

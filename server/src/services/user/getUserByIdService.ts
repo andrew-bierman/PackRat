@@ -1,4 +1,4 @@
-import User from '../../models/userModel'
+import User from '../../models/userModel';
 
 /**
  * Retrieves a user by their ID from the database.
@@ -12,14 +12,14 @@ export const getUserByIdService = async (userId: string): Promise<object> => {
         path: 'packs',
         populate: {
           path: 'items',
-          model: 'Item' // replace 'Item' with your actual Item model name
-        }
+          model: 'Item', // replace 'Item' with your actual Item model name
+        },
       })
       .populate('favorites')
-      .populate('trips')
+      .populate('trips');
 
-    return user
+    return user;
   } catch (error) {
-    throw new Error('User cannot be found')
+    throw new Error('User cannot be found');
   }
-}
+};

@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef, useState, useEffect } from 'react';
 import {
   VStack,
   Box,
@@ -6,24 +6,24 @@ import {
   IconButton,
   Text,
   Menu,
-  ThreeDotsIcon
-} from 'native-base'
+  ThreeDotsIcon,
+} from 'native-base';
 import {
   StyleSheet,
   TouchableOpacity,
   Clipboard,
   TextInput,
-  Pressable
-} from 'react-native'
-import { EditableInput } from '../EditableText'
-import { theme } from '../../theme'
-import { MaterialCommunityIcons } from '@expo/vector-icons'
-import { useDispatch, useSelector } from 'react-redux'
-import { useRouter, Link } from 'expo-router'
-import { ThreeDotsMenu } from '../ThreeDotsMenu'
-import UseTheme from '../../hooks/useTheme'
-import { InformUser } from '../../utils/ToastUtils'
-import { SearchItem } from '../item/searchItem'
+  Pressable,
+} from 'react-native';
+import { EditableInput } from '../EditableText';
+import { theme } from '../../theme';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { useRouter, Link } from 'expo-router';
+import { ThreeDotsMenu } from '../ThreeDotsMenu';
+import UseTheme from '../../hooks/useTheme';
+import { InformUser } from '../../utils/ToastUtils';
+import { SearchItem } from '../item/searchItem';
 
 export const CustomCard = ({
   title,
@@ -32,18 +32,18 @@ export const CustomCard = ({
   link,
   type,
   destination,
-  data
+  data,
 }) => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme()
-  const [isCopied, setIsCopied] = useState(false)
-  const [editTitle, setEditTitle] = useState(false)
-  const titleRef = useRef(null)
-  const dispatch = useDispatch()
-  const router = useRouter()
+    UseTheme();
+  const [isCopied, setIsCopied] = useState(false);
+  const [editTitle, setEditTitle] = useState(false);
+  const titleRef = useRef(null);
+  const dispatch = useDispatch();
+  const router = useRouter();
 
-  const user = useSelector((state) => state.auth.user)
-  const userId = user._id
+  const user = useSelector((state) => state.auth.user);
+  const userId = user._id;
 
   /**
    * Handles copying the link to the clipboard and updates the copy state.
@@ -51,21 +51,23 @@ export const CustomCard = ({
    * @return {function} A function to clear the timeout for resetting the copy state.
    */
   const handleCopyLink = () => {
-    Clipboard.setString(link)
+    Clipboard.setString(link);
 
-    setIsCopied(true)
+    setIsCopied(true);
 
     const resetCopyStateTimeout = setTimeout(() => {
-      setIsCopied(false)
-    }, 2000)
+      setIsCopied(false);
+    }, 2000);
     InformUser({
       title: 'Link copied to clipboard',
       placement: 'bottom',
-      duration: 2000
-    })
+      duration: 2000,
+    });
 
-    return () => { clearTimeout(resetCopyStateTimeout) }
-  }
+    return () => {
+      clearTimeout(resetCopyStateTimeout);
+    };
+  };
 
   if (type === 'pack') {
     return (
@@ -103,9 +105,7 @@ export const CustomCard = ({
                     {user._id === data.owner_id
                       ? 'Your Profile'
                       : `View ${
-                          data.owners?.length
-                            ? data.owners[0].name
-                            : 'Profile'
+                          data.owners?.length ? data.owners[0].name : 'Profile'
                         }`}
                   </Text>
                 </Link>
@@ -115,11 +115,10 @@ export const CustomCard = ({
                   flexDir={'row'}
                   style={{
                     gap: '5px',
-                    alignItems: 'center'
+                    alignItems: 'center',
                   }}
                 >
-                  {isCopied
-                    ? (
+                  {isCopied ? (
                     <Box flexDirection="row" alignItems="center">
                       <MaterialCommunityIcons
                         name="check"
@@ -129,8 +128,7 @@ export const CustomCard = ({
                       />
                       <Text color="green">Copied</Text>
                     </Box>
-                      )
-                    : (
+                  ) : (
                     <Box flexDirection="row" alignItems="center">
                       <MaterialCommunityIcons
                         name="link"
@@ -140,7 +138,7 @@ export const CustomCard = ({
                       />
                       <Text color="black">Copy</Text>
                     </Box>
-                      )}
+                  )}
                   {userId === data.owner_id && (
                     <ThreeDotsMenu
                       data={data}
@@ -156,7 +154,7 @@ export const CustomCard = ({
             px="4"
             style={{
               alignItems: 'center',
-              justifyContent: 'center'
+              justifyContent: 'center',
             }}
           >
             {content}
@@ -166,7 +164,7 @@ export const CustomCard = ({
           </Box>
         </VStack>
       </Box>
-    )
+    );
   }
 
   if (type === 'trip') {
@@ -191,9 +189,7 @@ export const CustomCard = ({
             <Box></Box>
             <Box flexDirection="row" alignItems="center">
               <Box mx="5">
-                <Link
-                  href={`/profile/${data.owner_id?._id}`}
-                >
+                <Link href={`/profile/${data.owner_id?._id}`}>
                   {console.log({ data })}
                   <Text>
                     {user._id === data.owner_id
@@ -208,8 +204,7 @@ export const CustomCard = ({
               </Box>
               {link && (
                 <Box>
-                  {isCopied
-                    ? (
+                  {isCopied ? (
                     <Box flexDirection="row" alignItems="center">
                       <MaterialCommunityIcons
                         name="check"
@@ -219,8 +214,7 @@ export const CustomCard = ({
                       />
                       <Text color="green">Copied</Text>
                     </Box>
-                      )
-                    : (
+                  ) : (
                     <Box flexDirection="row" alignItems="center">
                       <MaterialCommunityIcons
                         name="link"
@@ -230,7 +224,7 @@ export const CustomCard = ({
                       />
                       <Text color="black">Copy</Text>
                     </Box>
-                      )}
+                  )}
                 </Box>
               )}
             </Box>
@@ -240,7 +234,7 @@ export const CustomCard = ({
             pb="4"
             style={{
               alignItems: 'center',
-              justifyContent: 'center'
+              justifyContent: 'center',
             }}
           >
             {content}
@@ -250,9 +244,9 @@ export const CustomCard = ({
           </Box>
         </VStack>
       </Box>
-    )
+    );
   }
-}
+};
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -265,7 +259,7 @@ const styles = StyleSheet.create({
     paddingRight: 25,
     paddingTop: 15,
     paddingBottom: 15,
-    border: '1'
+    border: '1',
   },
   containerMobile: {
     backgroundColor: theme.colors.card,
@@ -273,6 +267,6 @@ const styles = StyleSheet.create({
     gap: 45,
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 15
-  }
-})
+    padding: 15,
+  },
+});

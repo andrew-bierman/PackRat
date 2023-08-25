@@ -1,13 +1,13 @@
-import { Pressable } from 'react-native'
-import React from 'react'
-import { Box, Menu, ThreeDotsIcon } from 'native-base'
-import { useDispatch } from 'react-redux'
-import { deletePack } from '../../store/packsStore'
-import { useRouter } from 'expo-router'
-import { deleteTrip } from '../../store/tripsStore'
+import { Pressable } from 'react-native';
+import React from 'react';
+import { Box, Menu, ThreeDotsIcon } from 'native-base';
+import { useDispatch } from 'react-redux';
+import { deletePack } from '../../store/packsStore';
+import { useRouter } from 'expo-router';
+import { deleteTrip } from '../../store/tripsStore';
 export const ThreeDotsMenu = ({ data, titleRef, setEditTitle }) => {
-  const dispatch = useDispatch()
-  const router = useRouter()
+  const dispatch = useDispatch();
+  const router = useRouter();
   return (
     <Box h="80%" w="90%">
       <Menu
@@ -17,15 +17,15 @@ export const ThreeDotsMenu = ({ data, titleRef, setEditTitle }) => {
             <Pressable accessibilityLabel="More options menu" {...triggerProps}>
               <ThreeDotsIcon />
             </Pressable>
-          )
+          );
         }}
       >
         <Menu.Item
           onPress={() => {
-            setEditTitle(true)
+            setEditTitle(true);
             if (titleRef.current) {
               titleRef.current.style =
-                'font-size:20px !important;font-weight:bold;color: #22c67c; border:1px solid black;'
+                'font-size:20px !important;font-weight:bold;color: #22c67c; border:1px solid black;';
             }
           }}
         >
@@ -36,18 +36,18 @@ export const ThreeDotsMenu = ({ data, titleRef, setEditTitle }) => {
             if (data.type === 'pack') {
               dispatch(
                 deletePack({
-                  id: data._id
-                })
-              )
+                  id: data._id,
+                }),
+              );
             } else {
-              dispatch(deleteTrip(data._id))
+              dispatch(deleteTrip(data._id));
             }
-            router.replace('/feed')
+            router.replace('/feed');
           }}
         >
           Delete
         </Menu.Item>
       </Menu>
     </Box>
-  )
-}
+  );
+};

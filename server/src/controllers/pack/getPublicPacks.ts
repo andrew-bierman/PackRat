@@ -1,4 +1,4 @@
-import { getPublicPacksService } from '../../services/pack/pack.service'
+import { getPublicPacksService } from '../../services/pack/pack.service';
 
 /**
  * Retrieves public packs based on the given query parameter.
@@ -8,12 +8,12 @@ import { getPublicPacksService } from '../../services/pack/pack.service'
  */
 export const getPublicPacks = async (req, res) => {
   try {
-    const { queryBy } = req.query
+    const { queryBy } = req.query;
 
-    const publicPacks = await getPublicPacksService(queryBy)
+    const publicPacks = await getPublicPacksService(queryBy);
 
-    res.status(200).json(publicPacks)
+    res.status(200).json(publicPacks);
   } catch (error) {
-    res.status(404).json({ msg: 'Packs cannot be found' })
+    res.status(404).json({ msg: 'Packs cannot be found' });
   }
-}
+};

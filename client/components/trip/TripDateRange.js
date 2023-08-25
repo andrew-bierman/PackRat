@@ -1,35 +1,35 @@
-import React, { useEffect } from 'react'
-import { Platform, View } from 'react-native'
-import { Stack, Box, Text, Button, HStack } from 'native-base'
-import { FontAwesome5 } from '@expo/vector-icons'
-import { format } from 'date-fns'
+import React, { useEffect } from 'react';
+import { Platform, View } from 'react-native';
+import { Stack, Box, Text, Button, HStack } from 'native-base';
+import { FontAwesome5 } from '@expo/vector-icons';
+import { format } from 'date-fns';
 // import { Button } from 'react-native-paper';
 import {
   DatePickerModal,
   enGB,
-  registerTranslation
-} from 'react-native-paper-dates'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { theme } from '../../theme'
+  registerTranslation,
+} from 'react-native-paper-dates';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { theme } from '../../theme';
 
 const TripDateRange = ({ dateRange, setDateRange }) => {
-  const [open, setOpen] = React.useState(false)
+  const [open, setOpen] = React.useState(false);
 
   const onDismiss = React.useCallback(() => {
-    setOpen(false)
-  }, [setOpen])
+    setOpen(false);
+  }, [setOpen]);
 
   const onConfirm = React.useCallback(
     ({ startDate, endDate }) => {
-      setOpen(false)
-      setDateRange({ startDate, endDate })
+      setOpen(false);
+      setDateRange({ startDate, endDate });
     },
-    [setOpen]
-  )
+    [setOpen],
+  );
 
   useEffect(() => {
-    registerTranslation('en', enGB)
-  }, [])
+    registerTranslation('en', enGB);
+  }, []);
 
   return (
     <Stack
@@ -42,7 +42,7 @@ const TripDateRange = ({ dateRange, setDateRange }) => {
         gap: 2,
         marginVertical: 10,
 
-        alignItems: 'center'
+        alignItems: 'center',
       }}
     >
       <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
@@ -56,7 +56,7 @@ const TripDateRange = ({ dateRange, setDateRange }) => {
             color: theme.colors.textPrimary,
             fontSize: theme.font.size,
             paddingVertical: 12,
-            fontWeight: 600
+            fontWeight: 600,
           }}
         >
           Trip Date Range
@@ -82,7 +82,9 @@ const TripDateRange = ({ dateRange, setDateRange }) => {
 
             <Button
               width={Platform.OS === 'web' ? null : '50%'}
-              onPress={() => { setOpen(true) }}
+              onPress={() => {
+                setOpen(true);
+              }}
             >
               <Text style={{ color: theme.colors.text }}>Pick Date Range</Text>
             </Button>
@@ -101,7 +103,7 @@ const TripDateRange = ({ dateRange, setDateRange }) => {
         </SafeAreaProvider>
       </Box>
     </Stack>
-  )
-}
+  );
+};
 
-export default TripDateRange
+export default TripDateRange;

@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
-import { StatusBar } from 'expo-status-bar'
-import { ImageBackground, Platform, StyleSheet, View } from 'react-native'
+import React, { useState } from 'react';
+import { StatusBar } from 'expo-status-bar';
+import { ImageBackground, Platform, StyleSheet, View } from 'react-native';
 import {
   Container,
   Button,
@@ -9,62 +9,62 @@ import {
   Card,
   Box,
   VStack,
-  HStack
-} from 'native-base'
-import UseTheme from '../../hooks/useTheme'
-import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons'
-import { theme } from '../../theme'
+  HStack,
+} from 'native-base';
+import UseTheme from '../../hooks/useTheme';
+import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { theme } from '../../theme';
 
 const dataArray = [
   {
     title: 'Create and manage trips',
     content:
       'Easily create new trips and manage existing ones by adding details such as dates, locations, and activities.',
-    iconName: 'directions'
+    iconName: 'directions',
   },
   {
     title: 'Map integration with route planning',
     content:
       'PackRat integrates with OpenStreetMap to provide users with accurate maps and directions to their destinations.',
-    iconName: 'map'
+    iconName: 'map',
   },
   {
     title: 'Activity suggestions',
     content:
       'The app suggests popular outdoor activities based on the location and season of the trip.',
-    iconName: 'landscape'
+    iconName: 'landscape',
   },
   {
     title: 'Packing list',
     content:
       'Users can create and manage packing lists for their trips to ensure they have everything they need.',
-    iconName: 'backpack'
+    iconName: 'backpack',
   },
   {
     title: 'Weather forecast',
     content:
       'PackRat provides up-to-date weather forecasts for the trip location to help users prepare accordingly.',
-    iconName: 'wb-sunny'
+    iconName: 'wb-sunny',
   },
   {
     title: 'Save your hikes and packs, and sync between devices',
     content:
       'User authentication ensures privacy and data security, while enabling you to save and sync your hikes and packs between devices.',
-    iconName: 'lock'
-  }
-]
+    iconName: 'lock',
+  },
+];
 
 const CustomAccordion = ({ title, content, iconName }) => {
-  const [expanded, setExpanded] = useState(false)
+  const [expanded, setExpanded] = useState(false);
 
   /**
- * Toggles the value of 'expanded' and updates the state.
- *
- * @return {void} No return value
- */
+   * Toggles the value of 'expanded' and updates the state.
+   *
+   * @return {void} No return value
+   */
   const toggleExpanded = () => {
-    setExpanded(!expanded)
-  }
+    setExpanded(!expanded);
+  };
 
   return (
     <Card style={styles.card}>
@@ -86,12 +86,12 @@ const CustomAccordion = ({ title, content, iconName }) => {
       </View>
       {expanded && <Text style={styles.cardContent}>{content}</Text>}
     </Card>
-  )
-}
+  );
+};
 
 const LandingPage = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme()
+    UseTheme();
   return (
     <VStack style={styles.container}>
       <Box
@@ -99,22 +99,20 @@ const LandingPage = () => {
           alignItems: 'center',
           textAlign: 'center',
           paddingVertical: 18,
-          marginTop: Platform.OS !== 'web' ? 25 : 1
+          marginTop: Platform.OS !== 'web' ? 25 : 1,
         }}
       >
-        {Platform.OS === 'web'
-          ? (
+        {Platform.OS === 'web' ? (
           <Text
             style={{ color: 'white', fontSize: currentTheme.font.headerFont }}
           >
             PackRat
           </Text>
-            )
-          : (
+        ) : (
           <Text style={{ color: 'white', fontSize: 20, fontWeight: 600 }}>
             PackRat
           </Text>
-            )}
+        )}
         <Text style={{ color: 'white', fontSize: 18 }}>
           The Ultimate Travel App
         </Text>
@@ -194,96 +192,96 @@ const LandingPage = () => {
         {/* </ImageBackground> */}
       </Box>
     </VStack>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   mutualStyles: {
     backgroundColor: theme.colors.background,
     flex: 1,
     flexDirection: 'column',
-    height: '100%'
+    height: '100%',
   },
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    width: '100%'
+    width: '100%',
   },
   secondaryContentContainer: {
     flex: 1,
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: theme.colors.background
+    backgroundColor: theme.colors.background,
   },
   appBadges: {
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
     marginVertical: 20,
-    marginBottom: 20
+    marginBottom: 20,
   },
   backgroundImage: {
     flex: 1,
     resizeMode: 'cover',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   contentContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 20
+    paddingHorizontal: 20,
   },
   introText: {
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 20,
-    color: theme.colors.text
+    color: theme.colors.text,
   },
   card: {
     marginBottom: 10,
     width: '100%',
-    backgroundColor: theme.colors.secondaryBlue
+    backgroundColor: theme.colors.secondaryBlue,
   },
   cardHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 20,
-    paddingVertical: 10
+    paddingVertical: 10,
   },
   transparentButton: {
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
   icon: {
     fontSize: 28,
     color: '#34a89a',
-    marginRight: 10
+    marginRight: 10,
   },
   featureText: {
     fontSize: 18,
-    color: theme.colors.text
+    color: theme.colors.text,
   },
   cardContent: {
     paddingHorizontal: 20,
     paddingVertical: 10,
     fontSize: 16,
-    color: theme.colors.text
+    color: theme.colors.text,
   },
   buttonContainer: {
     paddingHorizontal: 20,
-    paddingBottom: 20
+    paddingBottom: 20,
   },
   getStartedButton: {
-    backgroundColor: '#34a89a'
+    backgroundColor: '#34a89a',
   },
   footerText: {
     color: 'white',
     fontSize: 18,
-    fontWeight: 'bold'
-  }
-})
+    fontWeight: 'bold',
+  },
+});
 
-export default LandingPage
+export default LandingPage;

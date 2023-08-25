@@ -1,22 +1,22 @@
-import { Box } from 'native-base'
-import { Text, StyleSheet } from 'react-native'
-import { ItemRow } from './ItemRow'
-import { theme } from '../theme'
-import { FontAwesome } from '@expo/vector-icons'
-import UseTheme from '../hooks/useTheme'
+import { Box } from 'native-base';
+import { Text, StyleSheet } from 'react-native';
+import { ItemRow } from './ItemRow';
+import { theme } from '../theme';
+import { FontAwesome } from '@expo/vector-icons';
+import UseTheme from '../hooks/useTheme';
 const dummyData = [
   'First-aid kit',
   'Water bottles',
   'Tent',
-  'Sleeping bags (2x)'
-]
+  'Sleeping bags (2x)',
+];
 
-export default function SummaryCard () {
+export default function SummaryCard() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme()
+    UseTheme();
 
-  const handleDelete = () => {}
-  const handleEdit = () => {}
+  const handleDelete = () => {};
+  const handleEdit = () => {};
 
   return (
     <Box
@@ -25,7 +25,7 @@ export default function SummaryCard () {
         width: '35%',
         alignSelf: 'center',
 
-        gap: 10
+        gap: 10,
       }}
     >
       <Box>
@@ -43,7 +43,7 @@ export default function SummaryCard () {
         />
       </Box>
     </Box>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: '100%',
     alignItems: 'center',
-    gap: 10
+    gap: 10,
   },
 
   itemContainer: {
@@ -59,6 +59,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: theme.colors.card,
     padding: 5,
-    justifyContent: 'space-between'
-  }
-})
+    justifyContent: 'space-between',
+  },
+});

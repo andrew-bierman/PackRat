@@ -1,4 +1,4 @@
-import { editGlobalItemAsDuplicateService } from '../../services/item/item.service'
+import { editGlobalItemAsDuplicateService } from '../../services/item/item.service';
 
 /**
  * Edit a global item by duplicating it with new changes.
@@ -17,13 +17,21 @@ import { editGlobalItemAsDuplicateService } from '../../services/item/item.servi
  */
 export const editGlobalItemAsDuplicate = async (req, res) => {
   try {
-    const { itemId } = req.params
-    const { packId, name, weight, quantity, unit, type } = req.body
+    const { itemId } = req.params;
+    const { packId, name, weight, quantity, unit, type } = req.body;
 
-    const newItem = await editGlobalItemAsDuplicateService(itemId, packId, name, weight, quantity, unit, type)
+    const newItem = await editGlobalItemAsDuplicateService(
+      itemId,
+      packId,
+      name,
+      weight,
+      quantity,
+      unit,
+      type,
+    );
 
-    res.status(200).json(newItem)
+    res.status(200).json(newItem);
   } catch (error) {
-    res.status(404).json({ msg: 'Items cannot be found' })
+    res.status(404).json({ msg: 'Items cannot be found' });
   }
-}
+};

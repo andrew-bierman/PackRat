@@ -1,14 +1,14 @@
-import { MaterialCommunityIcons } from '@expo/vector-icons'
-import { Button, Input, Text, Box } from 'native-base'
-import React, { useState } from 'react'
-import { StyleSheet } from 'react-native'
-import { ItemCategoryEnum } from '../constants/itemCategory'
-import { useDispatch } from 'react-redux'
-import { addPackItem } from '../store/packsStore'
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Button, Input, Text, Box } from 'native-base';
+import React, { useState } from 'react';
+import { StyleSheet } from 'react-native';
+import { ItemCategoryEnum } from '../constants/itemCategory';
+import { useDispatch } from 'react-redux';
+import { addPackItem } from '../store/packsStore';
 
-export default function Water ({ currentPack, setWaterItem }) {
-  const [waterWeight, setWaterWeight] = useState(0)
-  const dispatch = useDispatch()
+export default function Water({ currentPack, setWaterItem }) {
+  const [waterWeight, setWaterWeight] = useState(0);
+  const dispatch = useDispatch();
 
   /**
    * Update the water weight.
@@ -17,8 +17,8 @@ export default function Water ({ currentPack, setWaterItem }) {
    * @return {undefined} no return value
    */
   const handleWaterChange = (value) => {
-    setWaterWeight(value)
-  }
+    setWaterWeight(value);
+  };
 
   /**
    * Adds water to the pack.
@@ -32,11 +32,11 @@ export default function Water ({ currentPack, setWaterItem }) {
       quantity: '1',
       unit: 'oz',
       packId: currentPack._id,
-      type: ItemCategoryEnum.WATER
-    }
+      type: ItemCategoryEnum.WATER,
+    };
 
-    dispatch(addPackItem(data))
-  }
+    dispatch(addPackItem(data));
+  };
 
   return (
     <Box style={styles.waterContainer}>
@@ -44,7 +44,7 @@ export default function Water ({ currentPack, setWaterItem }) {
         style={{
           display: 'flex',
           flexDirection: 'row',
-          alignItems: 'center'
+          alignItems: 'center',
         }}
       >
         <MaterialCommunityIcons
@@ -68,7 +68,7 @@ export default function Water ({ currentPack, setWaterItem }) {
         Add
       </Button>
     </Box>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -81,6 +81,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     width: '100%',
-    alignSelf: 'center'
-  }
-})
+    alignSelf: 'center',
+  },
+});

@@ -6,7 +6,7 @@
 export const updateDatabaseWithGeoJSONDataFromOverpass = async (data) => {
   try {
     if (!data) {
-      throw new Error('No data provided')
+      throw new Error('No data provided');
     }
 
     // TEMPORARY: Commenting due to performance issues
@@ -14,6 +14,6 @@ export const updateDatabaseWithGeoJSONDataFromOverpass = async (data) => {
 
     // console.log("results", results);
   } catch (error) {
-    console.error(error)
+    console.error(error);
   }
-}
+};

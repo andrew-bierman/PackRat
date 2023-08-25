@@ -1,1 +1,1 @@
-export * from './getTrails'
+export * from './getTrails';

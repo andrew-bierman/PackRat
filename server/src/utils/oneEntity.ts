@@ -7,7 +7,7 @@
  */
 export const oneEntity = async (val: any) => {
   if (!val) {
-    throw new Error('Required')
+    throw new Error('Required');
   }
-  return val
-}
+  return val;
+};

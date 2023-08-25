@@ -1,30 +1,30 @@
-import jwt from 'jsonwebtoken'
-import User from '../../models/userModel'
+import jwt from 'jsonwebtoken';
+import User from '../../models/userModel';
 import {
   STMP_EMAIL,
   CLIENT_URL,
   JWT_SECRET,
-  SEND_GRID_API_KEY
-} from '../../config'
+  SEND_GRID_API_KEY,
+} from '../../config';
 
-import sgMail from '@sendgrid/mail'
+import sgMail from '@sendgrid/mail';
 
-sgMail.setApiKey(SEND_GRID_API_KEY)
+sgMail.setApiKey(SEND_GRID_API_KEY);
 
 // Generate a password reset token that includes the user's email address
 const generatePasswordResetToken = (email) => {
-  const payload = { email }
-  const secret = JWT_SECRET
-  const expiresIn = '1h'
-  return jwt.sign(payload, secret, { expiresIn })
-}
+  const payload = { email };
+  const secret = JWT_SECRET;
+  const expiresIn = '1h';
+  return jwt.sign(payload, secret, { expiresIn });
+};
 
 const sendPasswordResetEmail = async (email, resetUrl) => {
   const mailOptions = {
     to: email,
     from: {
       email: STMP_EMAIL,
-      name: 'PackRat Support'
+      name: 'PackRat Support',
     },
     subject: 'Password Reset',
     // text: `Click the link below to reset your password:\n\n${resetUrl}\n\nIf you did not request to reset your password, please ignore this email.`,
@@ -35,16 +35,16 @@ const sendPasswordResetEmail = async (email, resetUrl) => {
           <a href="${resetUrl}" style="display: inline-block; padding: 8px 16px; background-color: #0070f3; color: #fff; text-decoration: none; border-radius: 4px; margin-bottom: 16px;">Reset Password</a>
           <p>If you did not request to reset your password, please ignore this email.</p>
         </div>
-      `
-  }
+      `,
+  };
 
   try {
-    await sgMail.send(mailOptions)
-    console.log('Password reset email sent successfully')
+    await sgMail.send(mailOptions);
+    console.log('Password reset email sent successfully');
   } catch (error) {
-    console.error('Error sending password reset email:', error)
+    console.error('Error sending password reset email:', error);
   }
-}
+};
 
 /**
  * Sends a password reset email to the user and updates the user's password reset token.
@@ -54,33 +54,33 @@ const sendPasswordResetEmail = async (email, resetUrl) => {
  */
 export const requestPasswordResetEmailAndToken = async (req, res) => {
   try {
-    const { email } = req.body
-    const user = await User.findOne({ email })
+    const { email } = req.body;
+    const user = await User.findOne({ email });
 
     if (!user) {
       return res
         .status(400)
-        .send({ error: 'No user found with this email address' })
+        .send({ error: 'No user found with this email address' });
     }
 
-    const resetToken = generatePasswordResetToken(email)
+    const resetToken = generatePasswordResetToken(email);
     await User.findOneAndUpdate(
       { email },
       {
         passwordResetToken: resetToken,
-        passwordResetTokenExpiration: Date.now() + 24 * 60 * 60 * 1000
-      }
-    )
+        passwordResetTokenExpiration: Date.now() + 24 * 60 * 60 * 1000,
+      },
+    );
 
-    const resetUrl = `${CLIENT_URL}/password-reset?token=${resetToken}`
-    sendPasswordResetEmail(email, resetUrl)
+    const resetUrl = `${CLIENT_URL}/password-reset?token=${resetToken}`;
+    sendPasswordResetEmail(email, resetUrl);
 
-    return res.send({ message: 'Password reset email sent' })
+    return res.send({ message: 'Password reset email sent' });
   } catch (error) {
-    console.error('Error sending password reset email:', error)
-    return res.status(500).send({ error: 'Internal server error' })
+    console.error('Error sending password reset email:', error);
+    return res.status(500).send({ error: 'Internal server error' });
   }
-}
+};
 
 // Send the password reset email with the reset token included in the URL
 // const sendPasswordResetEmail = async (email, resetUrl) => {

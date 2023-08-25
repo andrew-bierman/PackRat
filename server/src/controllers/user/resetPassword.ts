@@ -1,4 +1,4 @@
-import User from '../../models/userModel'
+import User from '../../models/userModel';
 
 /**
  * Resets the user's password.
@@ -8,17 +8,17 @@ import User from '../../models/userModel'
  */
 export const resetPassword = async (req, res) => {
   try {
-    const { resetToken, password } = req.body
+    const { resetToken, password } = req.body;
 
-    const user = await (User as any).validateResetToken(resetToken)
-    user.password = password
-    await user.save()
+    const user = await (User as any).validateResetToken(resetToken);
+    user.password = password;
+    await user.save();
     res.status(200).send({
       message: 'Successfully reset password',
       status: 'success',
-      statusCode: 200
-    })
+      statusCode: 200,
+    });
   } catch (err) {
-    res.status(400).send({ message: err.message })
+    res.status(400).send({ message: err.message });
   }
-}
+};
