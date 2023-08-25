@@ -1,6 +1,6 @@
-import mongoose from 'mongoose'
-import User from '../../models/userModel'
-import Conversation from '../../models/openai/conversationModel'
+import mongoose from 'mongoose';
+import User from '../../models/userModel';
+import Conversation from '../../models/openai/conversationModel';
 
 /**
  * Retrieves the user's chats based on their userId.
@@ -11,15 +11,15 @@ import Conversation from '../../models/openai/conversationModel'
  */
 export const getUserChatsService = async (userId) => {
   if (!mongoose.Types.ObjectId.isValid(userId)) {
-    throw new Error('Invalid userId')
+    throw new Error('Invalid userId');
   }
 
-  const user = await User.findById(userId).exec()
+  const user = await User.findById(userId).exec();
   if (!user) {
-    throw new Error('User not found')
+    throw new Error('User not found');
   }
 
-  const conversations = await Conversation.find({ userId }).exec()
+  const conversations = await Conversation.find({ userId }).exec();
 
-  return { conversations }
-}
+  return { conversations };
+};

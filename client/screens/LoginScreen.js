@@ -5,32 +5,32 @@ import {
   HStack,
   Heading,
   Text,
-  VStack
-} from 'native-base'
+  VStack,
+} from 'native-base';
 
-import { FontAwesome } from '@expo/vector-icons'
+import { FontAwesome } from '@expo/vector-icons';
 // import Mapbox from "@rnmapbox/maps";
 // Mapbox.setAccessToken(
 //   "pk.eyJ1IjoibWlhbi1iaWxhbCIsImEiOiJja3k5YzExdGcwNHY0Mm9tbmo0ajhrOGx5In0.VAkiap76DG7NiKc23A9tcg"
 // );
 
-import { NODE_ENV, WEB_CLIENT_ID } from '@env'
-import * as Google from 'expo-auth-session/providers/google'
-import * as WebBrowser from 'expo-web-browser'
+import { NODE_ENV, WEB_CLIENT_ID } from '@env';
+import * as Google from 'expo-auth-session/providers/google';
+import * as WebBrowser from 'expo-web-browser';
 
-import { useEffect } from 'react'
+import { useEffect } from 'react';
 // import useLogin from "../hooks/useLogin";
 // import { useAuth } from "../auth/provider";
-import { Link, useRouter } from 'expo-router'
+import { Link, useRouter } from 'expo-router';
 // import { signInWithGoogle } from "../auth/firebase";
 // import { signInWithGoogle } from "../auth/firebase";
-import { useForm } from 'react-hook-form'
-import { StyleSheet } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
-import { InputText, InputTextRules } from '~/components/InputText'
-import { Regex } from '~/utils/regex'
-import { signIn, signInWithGoogle } from '../store/authStore'
-import { InformUser } from '../utils/ToastUtils'
+import { useForm } from 'react-hook-form';
+import { StyleSheet } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { InputText, InputTextRules } from '~/components/InputText';
+import { Regex } from '~/utils/regex';
+import { signIn, signInWithGoogle } from '../store/authStore';
+import { InformUser } from '../utils/ToastUtils';
 
 // const defaultStyle = {
 //   version: 8,
@@ -63,70 +63,70 @@ import { InformUser } from '../utils/ToastUtils'
 //   ],
 // };
 
-WebBrowser.maybeCompleteAuthSession()
+WebBrowser.maybeCompleteAuthSession();
 
-export default function Login () {
+export default function Login() {
   const {
     control,
     handleSubmit,
-    formState: { isValid }
-  } = useForm()
+    formState: { isValid },
+  } = useForm();
 
   const demoUser = {
     email: 'email52@email.com',
-    password: '12345678'
-  }
+    password: '12345678',
+  };
 
-  const router = useRouter()
+  const router = useRouter();
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   // const { loginUserWithEmailAndPassword, loginUserWithGoogle } = useLogin();
 
-  const user = useSelector((state) => state.auth.user)
-  const error = useSelector((state) => state.auth.error)
+  const user = useSelector((state) => state.auth.user);
+  const error = useSelector((state) => state.auth.error);
   if (user?._id) {
     InformUser({
       title: 'Login sucessfully',
       placement: 'top-right',
       duration: 3000,
       style: {
-        backgroundColor: 'green'
-      }
-    })
-    router.push('/')
+        backgroundColor: 'green',
+      },
+    });
+    router.push('/');
   }
   if (error) {
     InformUser({
       title: 'Wrong-password',
       duration: 3000,
       placement: 'top-right',
-      style: { backgroundColor: 'red' }
-    })
+      style: { backgroundColor: 'red' },
+    });
   }
 
   // const { loginUserWithEmailAndPassword, loginUserWithGoogle } = useLogin();
 
   // Add Google auth-related variables
   const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
-    clientId: WEB_CLIENT_ID
-  })
+    clientId: WEB_CLIENT_ID,
+  });
 
-  const auth = useSelector((state) => state.auth)
+  const auth = useSelector((state) => state.auth);
 
   // Add useEffect hook to listen for auth state changes
   useEffect(() => {
     if (auth.isLoggedIn) {
       // router.push("/");
     }
-  }, [auth, router])
+  }, [auth, router]);
 
   useEffect(() => {
     if (response?.type === 'success') {
-      const { id_token } = response.params
-      dispatch(signInWithGoogle({ idToken: id_token }))
+      const { id_token } = response.params;
+      dispatch(signInWithGoogle({ idToken: id_token }));
     }
-  }, [response])
+  }, [response]);
 
   // const [email, setEmail] = useState("");
   // const [password, setPassword] = useState("");
@@ -159,9 +159,9 @@ export default function Login () {
    * @return {void}
    */
   const handleLogin = (data) => {
-    const { email, password } = data
-    dispatch(signIn({ email, password }))
-  }
+    const { email, password } = data;
+    dispatch(signIn({ email, password }));
+  };
 
   // useEffect(() => {
   //   if (response?.type === "success") {
@@ -249,7 +249,7 @@ export default function Login () {
             fontWeight="600"
             color="coolGray.800"
             _dark={{
-              color: 'warmGray.50'
+              color: 'warmGray.50',
             }}
           >
             <Text>Welcome</Text>
@@ -257,7 +257,7 @@ export default function Login () {
           <Heading
             mt="1"
             _dark={{
-              color: 'warmGray.200'
+              color: 'warmGray.200',
             }}
             color="coolGray.600"
             fontWeight="medium"
@@ -295,7 +295,7 @@ export default function Login () {
                 fontSize="sm"
                 color="coolGray.600"
                 _dark={{
-                  color: 'warmGray.200'
+                  color: 'warmGray.200',
                 }}
               >
                 I'm a new user.
@@ -305,7 +305,7 @@ export default function Login () {
                   style={{
                     color: '#818cf8',
                     fontWeight: 400,
-                    fontSize: 12
+                    fontSize: 12,
                   }}
                 >
                   Sign Up
@@ -319,7 +319,7 @@ export default function Login () {
                   style={{
                     color: '#818cf8',
                     fontWeight: 400,
-                    fontSize: 12
+                    fontSize: 12,
                   }}
                 >
                   Reset Password?
@@ -331,7 +331,7 @@ export default function Login () {
               <Heading
                 mt="1"
                 _dark={{
-                  color: 'warmGray.200'
+                  color: 'warmGray.200',
                 }}
                 color="coolGray.600"
                 fontWeight="medium"
@@ -362,7 +362,7 @@ export default function Login () {
                   w="100%"
                   disabled={!request}
                   onPress={() => {
-                    dispatch(signIn(demoUser))
+                    dispatch(signIn(demoUser));
                   }}
                   colorScheme={'purple'}
                 >
@@ -375,7 +375,7 @@ export default function Login () {
         </Box>
       </Center>
     </VStack>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -384,10 +384,10 @@ const styles = StyleSheet.create({
     height: 300,
     width: '100%',
     alignItems: 'center',
-    marginVertical: 20
+    marginVertical: 20,
   },
   map: {
     flex: 1,
-    width: '90%'
-  }
-})
+    width: '90%',
+  },
+});

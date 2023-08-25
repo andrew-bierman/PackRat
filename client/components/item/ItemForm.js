@@ -1,9 +1,9 @@
-import { Box, Input, Button, Text, VStack, Radio } from 'native-base'
-import { DropdownComponent } from '../Dropdown'
-import { theme } from '../../theme'
-import { ItemCategoryEnum } from '../../constants/itemCategory'
-import UseTheme from '../../hooks/useTheme'
-const data = ['lb', 'oz', 'kg', 'g']
+import { Box, Input, Button, Text, VStack, Radio } from 'native-base';
+import { DropdownComponent } from '../Dropdown';
+import { theme } from '../../theme';
+import { ItemCategoryEnum } from '../../constants/itemCategory';
+import UseTheme from '../../hooks/useTheme';
+const data = ['lb', 'oz', 'kg', 'g'];
 
 export const ItemForm = ({
   name,
@@ -20,20 +20,20 @@ export const ItemForm = ({
   showSubmitButton = true,
   isLoading,
   isEdit,
-  currentPack
+  currentPack,
 }) => {
-  let hasWaterAdded = false
+  let hasWaterAdded = false;
   if (
     currentPack &&
     Array.isArray(currentPack.items) &&
     currentPack.items.length > 0
   ) {
     hasWaterAdded = currentPack.items.some(
-      (item) => item.category && item.category.name === ItemCategoryEnum.WATER
-    )
+      (item) => item.category && item.category.name === ItemCategoryEnum.WATER,
+    );
   }
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme()
+    UseTheme();
   return (
     <Box>
       <VStack space={2}>
@@ -50,7 +50,7 @@ export const ItemForm = ({
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
-            width: '100%'
+            width: '100%',
           }}
         >
           <Input
@@ -88,12 +88,12 @@ export const ItemForm = ({
           onChange={(nextVal) => setCategoryType(nextVal)}
         >
           {Object.values(ItemCategoryEnum).map((value, key) => {
-            if (hasWaterAdded && value === ItemCategoryEnum.WATER) return
+            if (hasWaterAdded && value === ItemCategoryEnum.WATER) return;
             return (
               <Radio key={key} value={value} mx="2">
                 {value}
               </Radio>
-            )
+            );
           })}
         </Radio.Group>
         {showSubmitButton && (
@@ -102,12 +102,12 @@ export const ItemForm = ({
               {isLoading
                 ? 'Loading..'
                 : isEdit == true
-                  ? 'Edit item'
-                  : 'Add Item'}
+                ? 'Edit item'
+                : 'Add Item'}
             </Text>
           </Button>
         )}
       </VStack>
     </Box>
-  )
-}
+  );
+};

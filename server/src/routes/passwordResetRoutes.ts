@@ -1,12 +1,12 @@
-import express from 'express'
+import express from 'express';
 import {
   requestPasswordResetEmailAndToken,
-  handlePasswordReset
-} from '../controllers/passwordReset/index'
+  handlePasswordReset,
+} from '../controllers/passwordReset/index';
 
-const router = express.Router()
+const router = express.Router();
 
-router.post('/', requestPasswordResetEmailAndToken)
-router.post('/:token', handlePasswordReset)
+router.post('/', requestPasswordResetEmailAndToken);
+router.post('/:token', handlePasswordReset);
 
-export default router
+export default router;

@@ -1,29 +1,29 @@
-import React from 'react'
-import { Box, VStack, Text, Image } from 'native-base'
-import LargeCard from '../card/LargeCard'
-import { SearchInput } from '../SearchInput'
-import { StyleSheet, View } from 'react-native'
-import { theme } from '../../theme'
-import { useSelector, useDispatch } from 'react-redux'
-import Hero from '../hero'
-import { useRouter } from 'expo-router'
+import React from 'react';
+import { Box, VStack, Text, Image } from 'native-base';
+import LargeCard from '../card/LargeCard';
+import { SearchInput } from '../SearchInput';
+import { StyleSheet, View } from 'react-native';
+import { theme } from '../../theme';
+import { useSelector, useDispatch } from 'react-redux';
+import Hero from '../hero';
+import { useRouter } from 'expo-router';
 import {
   photonDetails, // TODO (use geojson)
   processGeoJSON, // TODO (use geojson)
-  setSelectedSearchResult
-} from '../../store/destinationStore'
-import { hexToRGBA } from '../../utils/colorFunctions'
+  setSelectedSearchResult,
+} from '../../store/destinationStore';
+import { hexToRGBA } from '../../utils/colorFunctions';
 
 const HeroSection = ({ onSelect }) => {
-  const dispatch = useDispatch()
-  console.log('heroooo')
+  const dispatch = useDispatch();
+  console.log('heroooo');
 
-  const router = useRouter()
+  const router = useRouter();
 
   const currentDestination = useSelector(
-    (state) => state.destination.currentDestination
-  )
-  console.log('currentDestination', currentDestination)
+    (state) => state.destination.currentDestination,
+  );
+  console.log('currentDestination', currentDestination);
 
   /**
    * Handles the selection of a search result.
@@ -33,48 +33,48 @@ const HeroSection = ({ onSelect }) => {
    */
   const handleSearchSelect = async (selectedResult) => {
     try {
-      console.log('selectedResult ------->', selectedResult)
+      console.log('selectedResult ------->', selectedResult);
 
       // Set the selected search result in the Redux store
-      dispatch(setSelectedSearchResult(selectedResult))
+      dispatch(setSelectedSearchResult(selectedResult));
 
-      const { osm_id, osm_type } = selectedResult.properties
+      const { osm_id, osm_type } = selectedResult.properties;
 
-      const coordinates = selectedResult.geometry.coordinates
+      const coordinates = selectedResult.geometry.coordinates;
 
-      const [lon, lat] = coordinates
+      const [lon, lat] = coordinates;
 
       if (!osm_id || !osm_type) {
         console.error(
-          'No OSM ID or OSM type found in the selected search result'
-        )
+          'No OSM ID or OSM type found in the selected search result',
+        );
       } else {
         router.push({
           pathname: '/destination/query',
           params: {
             type: osm_type,
-            id: osm_id
+            id: osm_id,
             // lat,
             // lon,
-          }
-        })
+          },
+        });
       }
     } catch (error) {
-      console.error('errorrrrrr', error)
+      console.error('errorrrrrr', error);
     }
-  }
+  };
 
-  const user = useSelector((state) => state.auth?.user)
+  const user = useSelector((state) => state.auth?.user);
 
-  const { name } = user
-  const firstNameOrUser = name.split(' ')[0] ?? 'User'
+  const { name } = user;
+  const firstNameOrUser = name.split(' ')[0] ?? 'User';
 
-  const cardBackgroundColor = hexToRGBA(theme.colors.secondaryBlue, 0.5)
+  const cardBackgroundColor = hexToRGBA(theme.colors.secondaryBlue, 0.5);
 
   const bannerText =
     firstNameOrUser !== 'User'
       ? `Let's find a new trail, ${firstNameOrUser}`
-      : "Let's find a new trail"
+      : "Let's find a new trail";
 
   // console.log("cardBackgroundColor", cardBackgroundColor)
 
@@ -85,7 +85,7 @@ const HeroSection = ({ onSelect }) => {
           title: 'N/A',
           subtitle: 'N/A',
           source: require('../../assets/topographical-pattern.png'),
-          alt: 'hero'
+          alt: 'hero',
         }}
       >
         <LargeCard
@@ -95,7 +95,7 @@ const HeroSection = ({ onSelect }) => {
             justifyContent: 'center',
             width: '100%',
             height: '100%',
-            padding: 50
+            padding: 50,
           }}
         >
           <VStack
@@ -103,7 +103,7 @@ const HeroSection = ({ onSelect }) => {
               width: '100%',
               height: '100%',
               alignItems: 'center',
-              justifyContent: 'center'
+              justifyContent: 'center',
             }}
           >
             <Text style={styles.title}>{bannerText}</Text>
@@ -115,8 +115,8 @@ const HeroSection = ({ onSelect }) => {
         </LargeCard>
       </Hero>
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   banner: {
@@ -127,14 +127,14 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     alignItems: 'center',
     justifyContent: 'center',
-    width: '100%'
+    width: '100%',
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
-    color: theme.colors.text
-  }
-})
+    color: theme.colors.text,
+  },
+});
 
-export default HeroSection
+export default HeroSection;

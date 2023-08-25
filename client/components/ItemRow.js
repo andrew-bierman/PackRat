@@ -1,13 +1,13 @@
-import { StyleSheet } from 'react-native'
-import { Box, Container, Text } from 'native-base'
-import Checkbox from 'expo-checkbox'
+import { StyleSheet } from 'react-native';
+import { Box, Container, Text } from 'native-base';
+import Checkbox from 'expo-checkbox';
 
-import { useState } from 'react'
+import { useState } from 'react';
 
-import { FontAwesome } from '@expo/vector-icons'
+import { FontAwesome } from '@expo/vector-icons';
 
 export const ItemRow = ({ packName }) => {
-  const [isChecked, setChecked] = useState(false)
+  const [isChecked, setChecked] = useState(false);
 
   return (
     <Container style={styles.mainContainer}>
@@ -20,7 +20,7 @@ export const ItemRow = ({ packName }) => {
         style={{
           flex: 1,
           // textDecoration: isChecked ? "line-through" : "",
-          color: isChecked ? '#e2e8f0' : 'black'
+          color: isChecked ? '#e2e8f0' : 'black',
         }}
       >
         {packName}
@@ -31,8 +31,8 @@ export const ItemRow = ({ packName }) => {
         <FontAwesome name="trash" size={24} color="black" />
       </Box>
     </Container>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -42,18 +42,18 @@ const styles = StyleSheet.create({
     gap: 10,
     borderBottomColor: 'grey',
     borderBottomWidth: 1,
-    padding: 10
+    padding: 10,
   },
 
   icons: {
     flexDirection: 'row',
     gap: 10,
     alignItems: 'center',
-    cursor: 'pointer'
+    cursor: 'pointer',
   },
 
   checkbox: {
     margin: 8,
-    cursor: 'pointer'
-  }
-})
+    cursor: 'pointer',
+  },
+});

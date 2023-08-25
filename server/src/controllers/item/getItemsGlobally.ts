@@ -1,4 +1,4 @@
-import { getItemsGloballyService } from '../../services/item/item.service'
+import { getItemsGloballyService } from '../../services/item/item.service';
 
 /**
  * Retrieves globally available items.
@@ -8,10 +8,10 @@ import { getItemsGloballyService } from '../../services/item/item.service'
  */
 export const getItemsGlobally = async (req, res) => {
   try {
-    const result = await getItemsGloballyService(req)
+    const result = await getItemsGloballyService(req);
 
-    res.status(200).json(result)
+    res.status(200).json(result);
   } catch (error) {
-    res.status(404).json({ msg: 'Items cannot be found' })
+    res.status(404).json({ msg: 'Items cannot be found' });
   }
-}
+};

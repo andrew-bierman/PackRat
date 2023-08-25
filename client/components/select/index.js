@@ -1,6 +1,6 @@
-import { Check, ChevronDown, ChevronUp } from '@tamagui/lucide-icons'
+import { Check, ChevronDown, ChevronUp } from '@tamagui/lucide-icons';
 
-import { useMemo, useState } from 'react'
+import { useMemo, useState } from 'react';
 
 import {
   Adapt,
@@ -10,12 +10,12 @@ import {
   Sheet,
   XStack,
   YStack,
-  getFontSize
-} from 'tamagui'
+  getFontSize,
+} from 'tamagui';
 
 // import { LinearGradient } from 'tamagui/linear-gradient'
 
-export function SelectDemo () {
+export function SelectDemo() {
   return (
     <YStack space>
       <XStack ai="center" space>
@@ -33,12 +33,12 @@ export function SelectDemo () {
         <SelectDemoItem native />
       </XStack>
     </YStack>
-  )
+  );
 }
 // @ts-nocheck - may need to be at the start of file
 // @ts-expect-error
-export function SelectDemoItem (SelectProps = {}, props) {
-  const [val, setVal] = useState('apple')
+export function SelectDemoItem(SelectProps = {}, props) {
+  const [val, setVal] = useState('apple');
   return (
     <Select id="food" value={val} onValueChange={setVal} {...props}>
       <Select.Trigger width={220} iconAfter={ChevronDown}>
@@ -53,7 +53,7 @@ export function SelectDemoItem (SelectProps = {}, props) {
             type: 'spring',
             damping: 20,
             mass: 1.2,
-            stiffness: 250
+            stiffness: 250,
           }}
         >
           <Sheet.Frame>
@@ -117,10 +117,10 @@ export function SelectDemoItem (SelectProps = {}, props) {
                         {/* <Check size={16} /> */}
                       </Select.ItemIndicator>
                     </Select.Item>
-                  )
+                  );
                 }),
 
-              [items]
+              [items],
             )}
           </Select.Group>
 
@@ -162,7 +162,7 @@ export function SelectDemoItem (SelectProps = {}, props) {
         </Select.ScrollDownButton>
       </Select.Content>
     </Select>
-  )
+  );
 }
 const items = [
   { name: 'Apple' },
@@ -207,5 +207,5 @@ const items = [
 
   { name: 'Jackfruit' },
 
-  { name: 'Durian' }
-]
+  { name: 'Durian' },
+];

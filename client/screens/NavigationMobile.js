@@ -1,20 +1,26 @@
-import { View, StyleSheet, Text, Image } from 'react-native'
-import { Link } from 'expo-router'
+import { View, StyleSheet, Text, Image } from 'react-native';
+import { Link } from 'expo-router';
 
-import { useAuth } from '../auth/provider'
+import { useAuth } from '../auth/provider';
 
-import { theme } from '../theme'
-import { Entypo, FontAwesome, EvilIcons, AntDesign, MaterialIcons } from '@expo/vector-icons'
+import { theme } from '../theme';
+import {
+  Entypo,
+  FontAwesome,
+  EvilIcons,
+  AntDesign,
+  MaterialIcons,
+} from '@expo/vector-icons';
 
-import packratlogo from '../assets/packrat.png'
-import { useState } from 'react'
-import { useSelector } from 'react-redux'
-import UseTheme from '../hooks/useTheme'
-export default function NavigationMobile () {
+import packratlogo from '../assets/packrat.png';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import UseTheme from '../hooks/useTheme';
+export default function NavigationMobile() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme()
+    UseTheme();
   // const { user } = useAuth();
-  const user = useSelector((state) => state.auth.user)
+  const user = useSelector((state) => state.auth.user);
 
   return user ? (
     <View style={styles.mobileContainer}>
@@ -24,7 +30,7 @@ export default function NavigationMobile () {
           style={{
             color: currentTheme.colors.text,
             fontSize: 28,
-            fontWeight: 900
+            fontWeight: 900,
           }}
         >
           PackRat
@@ -47,7 +53,7 @@ export default function NavigationMobile () {
           style={{
             color: currentTheme.colors.text,
             fontSize: 28,
-            fontWeight: 900
+            fontWeight: 900,
           }}
         >
           PackRat
@@ -62,7 +68,7 @@ export default function NavigationMobile () {
         />
       </Link>
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -73,16 +79,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: 40,
-    position: 'relative'
+    position: 'relative',
   },
 
   logo: {
     width: 60,
-    height: 50
+    height: 50,
   },
   smallLogo: {
     width: 100,
-    height: 95
+    height: 95,
   },
 
   link: {
@@ -95,6 +101,6 @@ const styles = StyleSheet.create({
     borderBottomColor: 'white',
     borderBottomWidth: 1,
     width: '100%',
-    color: 'white'
-  }
-})
+    color: 'white',
+  },
+});

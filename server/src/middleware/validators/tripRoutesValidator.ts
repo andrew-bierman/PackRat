@@ -1,18 +1,19 @@
-import { celebrate, Joi, Segments } from 'celebrate'
+import { celebrate, Joi, Segments } from 'celebrate';
 
-export const JoiObjectId = (message = 'valid id') => Joi.string().regex(/^[0-9a-fA-F]{24}$/, message)
+export const JoiObjectId = (message = 'valid id') =>
+  Joi.string().regex(/^[0-9a-fA-F]{24}$/, message);
 
 export const getTrips = celebrate({
   [Segments.BODY]: Joi.object().keys({
-    owner_id: JoiObjectId().required()
-  })
-})
+    owner_id: JoiObjectId().required(),
+  }),
+});
 
 export const getTripById = celebrate({
   [Segments.PARAMS]: Joi.object().keys({
-    tripId: JoiObjectId().required()
-  })
-})
+    tripId: JoiObjectId().required(),
+  }),
+});
 export const addTrip = celebrate({
   [Segments.BODY]: Joi.object().keys({
     name: Joi.string().required(),
@@ -26,9 +27,9 @@ export const addTrip = celebrate({
     geoJSON: Joi.object().required(),
     owner_id: Joi.string().required(),
     packs: Joi.string().required(),
-    is_public: Joi.boolean().required()
-  })
-})
+    is_public: Joi.boolean().required(),
+  }),
+});
 export const editTrip = celebrate({
   [Segments.BODY]: Joi.object().keys({
     _id: JoiObjectId().required(),
@@ -38,11 +39,11 @@ export const editTrip = celebrate({
     start_date: Joi.string(),
     end_date: Joi.string(),
     destination: Joi.string(),
-    is_public: Joi.boolean()
-  })
-})
+    is_public: Joi.boolean(),
+  }),
+});
 export const deleteTrip = celebrate({
   [Segments.BODY]: Joi.object().keys({
-    tripId: JoiObjectId().required()
-  })
-})
+    tripId: JoiObjectId().required(),
+  }),
+});

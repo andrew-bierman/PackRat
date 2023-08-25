@@ -1,18 +1,18 @@
-import { AntDesign, MaterialIcons, Entypo } from '@expo/vector-icons'
-import { formatDistanceToNow } from 'date-fns'
-import { theme } from '../../theme'
+import { AntDesign, MaterialIcons, Entypo } from '@expo/vector-icons';
+import { formatDistanceToNow } from 'date-fns';
+import { theme } from '../../theme';
 // import useAddToFavorite from "../../hooks/useAddToFavorites";
 // import { useAuth } from "../../auth/provider";
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux';
 import {
   addFavorite,
   selectFavoriteById,
-  selectAllFavorites
-} from '../../store/favoritesStore'
-import { TouchableOpacity } from 'react-native'
-import { Link } from 'expo-router'
-import { DuplicateIcon } from '../DuplicateIcon/index'
-import { truncateString } from '../../utils/truncateString'
+  selectAllFavorites,
+} from '../../store/favoritesStore';
+import { TouchableOpacity } from 'react-native';
+import { Link } from 'expo-router';
+import { DuplicateIcon } from '../DuplicateIcon/index';
+import { truncateString } from '../../utils/truncateString';
 
 import {
   Box,
@@ -22,12 +22,12 @@ import {
   Center,
   HStack,
   Stack,
-  Button
-} from 'native-base'
+  Button,
+} from 'native-base';
 
 // import { useAuth } from "../../auth/provider";
 
-export default function Card ({
+export default function Card({
   type,
   _id,
   owner,
@@ -39,14 +39,14 @@ export default function Card ({
   owner_id,
   destination,
   createdAt,
-  owners
+  owners,
 }) {
-  const user = useSelector((state) => state.auth.user)
+  const user = useSelector((state) => state.auth.user);
 
-  const favorites = useSelector(selectAllFavorites)
-  const dispatch = useDispatch()
+  const favorites = useSelector(selectAllFavorites);
+  const dispatch = useDispatch();
 
-  const isFavorite = favorites.some((favorite) => favorite.pack_id === _id)
+  const isFavorite = favorites.some((favorite) => favorite.pack_id === _id);
 
   /**
    * Handles adding an item to the user's favorites.
@@ -56,11 +56,11 @@ export default function Card ({
   const handleAddToFavorite = () => {
     const data = {
       packId: _id,
-      userId: user._id
-    }
+      userId: user._id,
+    };
 
-    dispatch(addFavorite(data))
-  }
+    dispatch(addFavorite(data));
+  };
 
   /**
    * Handles the removal of an item from the favorites list.
@@ -69,16 +69,16 @@ export default function Card ({
    */
   const handleRemoveFromFavorite = () => {
     const favorite = favorites.find(
-      (favorite) => favorite.pack_id === _id && favorite.user_id === user._id
-    )
+      (favorite) => favorite.pack_id === _id && favorite.user_id === user._id,
+    );
     if (favorite) {
-      dispatch(removeFavorite(favorite.id))
+      dispatch(removeFavorite(favorite.id));
     }
-  }
+  };
   // const { addToFavorite } = useAddToFavorite();
 
-  const truncatedName = truncateString(name, 25)
-  const truncatedDestination = truncateString(destination, 25)
+  const truncatedName = truncateString(name, 25);
+  const truncatedDestination = truncateString(destination, 25);
 
   return (
     <Box alignItems="center" padding="4">
@@ -93,14 +93,14 @@ export default function Card ({
         borderWidth="1"
         _dark={{
           borderColor: 'coolGray.600',
-          backgroundColor: 'gray'
+          backgroundColor: 'gray',
         }}
         _web={{
           shadow: 2,
-          borderWidth: 0
+          borderWidth: 0,
         }}
         _light={{
-          backgroundColor: 'gray.50'
+          backgroundColor: 'gray.50',
         }}
       >
         <Stack p="4" space={10}>
@@ -111,7 +111,7 @@ export default function Card ({
                   flexDirection: 'row',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  width: '100%'
+                  width: '100%',
                 }}
               >
                 <Link href={type === 'pack' ? '/pack/' + _id : '/trip/' + _id}>
@@ -120,7 +120,7 @@ export default function Card ({
                 {type === 'pack' && (
                   <Box
                     style={{
-                      flexDirection: 'row'
+                      flexDirection: 'row',
                     }}
                   >
                     <MaterialIcons name="backpack" size={24} color="gray" />
@@ -139,10 +139,10 @@ export default function Card ({
               <Text
                 fontSize="xs"
                 _light={{
-                  color: 'violet.500'
+                  color: 'violet.500',
                 }}
                 _dark={{
-                  color: 'violet.400'
+                  color: 'violet.400',
                 }}
                 fontWeight="500"
                 ml="-0.5"
@@ -156,10 +156,10 @@ export default function Card ({
               <Text
                 fontSize="xs"
                 _light={{
-                  color: 'violet.500'
+                  color: 'violet.500',
                 }}
                 _dark={{
-                  color: 'violet.400'
+                  color: 'violet.400',
                 }}
                 fontWeight="500"
                 ml="-0.5"
@@ -180,7 +180,7 @@ export default function Card ({
                 style={{
                   flexDirection: 'column',
                   alignItems: 'flex-start',
-                  gap: 10
+                  gap: 10,
                 }}
               >
                 <Link href={`/profile/${owner_id}`}>
@@ -192,13 +192,13 @@ export default function Card ({
                   style={{
                     flexDirection: 'row',
                     alignItems: 'center',
-                    gap: 10
+                    gap: 10,
                   }}
                 >
                   <Text
                     color="coolGray.600"
                     _dark={{
-                      color: 'warmGray.200'
+                      color: 'warmGray.200',
                     }}
                     fontWeight="400"
                     flex={1}
@@ -207,11 +207,11 @@ export default function Card ({
                       new Date(
                         !Number.isNaN(new Date(createdAt).getTime())
                           ? createdAt
-                          : new Date()
+                          : new Date(),
                       ).getTime(),
                       {
-                        addSuffix: true
-                      }
+                        addSuffix: true,
+                      },
                     ) ?? 0}
                   </Text>
                 </Box>
@@ -221,7 +221,7 @@ export default function Card ({
                 style={{
                   flexDirection: 'column',
                   alignItems: 'center',
-                  gap: 10
+                  gap: 10,
                 }}
               >
                 <Text>Favorites</Text>
@@ -229,12 +229,10 @@ export default function Card ({
                   style={{
                     flexDirection: 'row',
                     alignItems: 'center',
-                    gap: 10
+                    gap: 10,
                   }}
                 >
-                  {user?._id === owner_id
-                    ? null
-                    : (
+                  {user?._id === owner_id ? null : (
                     <TouchableOpacity onPress={handleAddToFavorite}>
                       <AntDesign
                         name="heart"
@@ -242,12 +240,12 @@ export default function Card ({
                         color={isFavorite ? 'red' : 'grey'}
                       />
                     </TouchableOpacity>
-                      )}
+                  )}
 
                   <Text
                     color="coolGray.600"
                     _dark={{
-                      color: 'warmGray.200'
+                      color: 'warmGray.200',
                     }}
                     fontWeight="400"
                   >
@@ -260,5 +258,5 @@ export default function Card ({
         </Stack>
       </Box>
     </Box>
-  )
+  );
 }

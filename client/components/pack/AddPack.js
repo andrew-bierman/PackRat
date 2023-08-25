@@ -1,30 +1,31 @@
-import { StyleSheet, Platform } from 'react-native'
-import { Box, Input, Button, Text } from 'native-base'
+import { StyleSheet, Platform } from 'react-native';
+import { Box, Input, Button, Text } from 'native-base';
 
 // import useAddPack from "../../hooks/useAddPack";
-import { addPack } from '../../store/packsStore'
-import { theme } from '../../theme'
-import { useState } from 'react'
+import { addPack } from '../../store/packsStore';
+import { theme } from '../../theme';
+import { useState } from 'react';
 // import { useAuth } from "../../auth/provider";
-import { useSelector, useDispatch } from 'react-redux'
-import { CustomModal } from '../modal'
-import UseTheme from '../../hooks/useTheme'
+import { useSelector, useDispatch } from 'react-redux';
+import { CustomModal } from '../modal';
+import UseTheme from '../../hooks/useTheme';
 
 export const AddPack = () => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } = UseTheme()
-  const dispatch = useDispatch()
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
+  const dispatch = useDispatch();
 
-  const [name, setName] = useState('')
+  const [name, setName] = useState('');
 
   // const { addPack } = useAddPack();
   // const { user } = useAuth();
-  const user = useSelector((state) => state.auth.user)
+  const user = useSelector((state) => state.auth.user);
 
-  const isLoading = useSelector((state) => state.packs.isLoading)
+  const isLoading = useSelector((state) => state.packs.isLoading);
 
-  const error = useSelector((state) => state.packs.error)
+  const error = useSelector((state) => state.packs.error);
 
-  const isError = error !== null
+  const isError = error !== null;
 
   /**
    * Handles the addition of a pack.
@@ -34,9 +35,9 @@ export const AddPack = () => {
    * @return {void}
    */
   const handleAddPack = () => {
-    dispatch(addPack({ name, owner_id: user?._id }))
-    setName('')
-  }
+    dispatch(addPack({ name, owner_id: user?._id }));
+    setName('');
+  };
 
   return (
     <Box style={styles.container}>
@@ -46,7 +47,9 @@ export const AddPack = () => {
           variant="outline"
           placeholder="Name"
           value={name}
-          onChangeText={(text) => { setName(text) }}
+          onChangeText={(text) => {
+            setName(text);
+          }}
           width={Platform.OS === 'web' ? '25%' : '100%'}
         />
 
@@ -55,7 +58,7 @@ export const AddPack = () => {
           onPress={() => {
             // addPack.mutate({ name, owner_id: user?._id });
             // setName("");
-            handleAddPack()
+            handleAddPack();
           }}
         >
           <Text style={{ color: currentTheme.colors.text }}>
@@ -66,11 +69,11 @@ export const AddPack = () => {
         {isError && <Text>Pack already exists</Text>}
       </Box>
     </Box>
-  )
-}
+  );
+};
 
 export const AddPackContainer = () => {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <CustomModal
       title="Add Pack"
@@ -80,8 +83,8 @@ export const AddPackContainer = () => {
     >
       <AddPack />
     </CustomModal>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -91,7 +94,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: '100%',
     paddingHorizontal: 18,
-    gap: 20
+    gap: 20,
   },
   desktopStyle: {
     flexDirection: 'row',
@@ -99,7 +102,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 25,
     gap: 5,
-    flex: 1
+    flex: 1,
   },
 
   mobileStyle: {
@@ -108,7 +111,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 25,
-    gap: 25
+    gap: 25,
   },
 
   input: {
@@ -119,7 +122,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     flex: 1,
     width: '100%',
-    paddingVertical: 12
+    paddingVertical: 12,
   },
   btn: {
     backgroundColor: '#22c55e',
@@ -128,6 +131,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     alignItems: 'center',
     color: theme.colors.text,
-    width: '50%'
-  }
-})
+    width: '50%',
+  },
+});

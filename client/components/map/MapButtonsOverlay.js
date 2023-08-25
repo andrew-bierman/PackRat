@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import {
   TouchableOpacity,
   Image,
@@ -7,11 +7,11 @@ import {
   Modal,
   View,
   Alert,
-  Platform
-} from 'react-native'
-import { Entypo, MaterialCommunityIcons } from '@expo/vector-icons'
+  Platform,
+} from 'react-native';
+import { Entypo, MaterialCommunityIcons } from '@expo/vector-icons';
 
-import { mapboxStyles } from '../../utils/mapFunctions'
+import { mapboxStyles } from '../../utils/mapFunctions';
 
 const MapButtonsOverlay = ({
   mapFullscreen,
@@ -23,10 +23,10 @@ const MapButtonsOverlay = ({
   fetchLocation,
   onDownload,
   handleGpxUpload,
-  progress
+  progress,
 }) => {
-  console.log('newwwww')
-  const [showStyleOptions, setShowStyleOptions] = useState(false)
+  console.log('newwwww');
+  const [showStyleOptions, setShowStyleOptions] = useState(false);
 
   /**
    * Toggles the visibility of the style options.
@@ -34,19 +34,19 @@ const MapButtonsOverlay = ({
    * @return {undefined} - No return value.
    */
   const handleStyleOptionPress = () => {
-    setShowStyleOptions(!showStyleOptions)
-  }
+    setShowStyleOptions(!showStyleOptions);
+  };
 
   /**
- * A function to handle the selection of a style.
- *
- * @param {type} style - the selected style
- * @return {type} undefined
- */
+   * A function to handle the selection of a style.
+   *
+   * @param {type} style - the selected style
+   * @return {type} undefined
+   */
   const handleStyleSelection = (style) => {
-    handleChangeMapStyle(style)
-    setShowStyleOptions(false)
-  }
+    handleChangeMapStyle(style);
+    setShowStyleOptions(false);
+  };
 
   return (
     <>
@@ -88,13 +88,13 @@ const MapButtonsOverlay = ({
                 height: 40,
                 position: 'absolute',
                 bottom: 30,
-                left: 10
-              }
+                left: 10,
+              },
             ]}
             onPress={() => {
               Platform.OS == 'web'
                 ? alert('Sorry, currently not implemented')
-                : Alert.alert('Sorry, currently not implemented')
+                : Alert.alert('Sorry, currently not implemented');
             }}
           >
             <MaterialCommunityIcons
@@ -161,7 +161,7 @@ const MapButtonsOverlay = ({
                 right: 10,
                 backgroundColor: 'white',
                 borderRadius: 30,
-                zIndex: 1
+                zIndex: 1,
               }}
               onPress={handleGpxUpload}
             >
@@ -183,8 +183,8 @@ const MapButtonsOverlay = ({
         </>
       )}
     </>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -192,11 +192,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     height: '400px',
     width: '100%',
-    borderRadius: '10px'
+    borderRadius: '10px',
   },
   map: {
     width: '100%',
-    minHeight: '100vh' // Adjust the height to your needs
+    minHeight: '100vh', // Adjust the height to your needs
   },
   stylePicker: {
     // Style Picker Button
@@ -208,26 +208,26 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 20,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
   },
   styleModalContainer: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)'
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   styleModalContent: {
     backgroundColor: 'white',
     borderRadius: 8,
-    padding: 10
+    padding: 10,
   },
   styleOption: {
     paddingVertical: 8,
-    paddingHorizontal: 16
+    paddingHorizontal: 16,
   },
   styleOptionText: {
     fontSize: 16,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   locationButton: {
     alignItems: 'center',
@@ -239,28 +239,28 @@ const styles = StyleSheet.create({
     right: 10,
     backgroundColor: 'white',
     borderRadius: 30,
-    zIndex: 1
+    zIndex: 1,
   },
   headerBtnView: {
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 30,
     marginTop: 30,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
   },
   enterFullScreenBtn: {
     width: 40,
     height: 40,
     position: 'absolute',
     bottom: 10,
-    right: 10
+    right: 10,
   },
   exitFullscreenBtn: {
     width: 40,
     height: 40,
     position: 'absolute',
     top: 10,
-    right: 10
+    right: 10,
   },
   fullScreen: {
     width: Platform.OS == 'web' ? '25%' : '70%',
@@ -273,20 +273,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
-    borderRadius: 20
+    borderRadius: 20,
   },
   downloadIcon: {
     width: 21,
-    height: 21
+    height: 21,
   },
   downloadText: {
     fontSize: 13,
     fontWeight: '500',
-    marginLeft: 8
+    marginLeft: 8,
   },
   modal: {
-    alignItems: 'center'
-  }
-})
+    alignItems: 'center',
+  },
+});
 
-export default MapButtonsOverlay
+export default MapButtonsOverlay;

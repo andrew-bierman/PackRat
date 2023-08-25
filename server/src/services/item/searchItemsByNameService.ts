@@ -1,4 +1,4 @@
-import Item from '../../models/itemModel'
+import Item from '../../models/itemModel';
 
 /**
  * Searches for items by name.
@@ -8,8 +8,8 @@ import Item from '../../models/itemModel'
  */
 export const searchItemsByNameService = async (name) => {
   const items = await Item.find({
-    name: { $regex: `.*${name}.*`, $options: 'i' }
-  })
+    name: { $regex: `.*${name}.*`, $options: 'i' },
+  });
 
-  return items
-}
+  return items;
+};

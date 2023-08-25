@@ -1,4 +1,4 @@
-import { postSingleGeoJSONService } from '../../services/osm/osm.service'
+import { postSingleGeoJSONService } from '../../services/osm/osm.service';
 
 /**
  * Handles the POST request for a single GeoJSON.
@@ -8,22 +8,22 @@ import { postSingleGeoJSONService } from '../../services/osm/osm.service'
  */
 export const postSingleGeoJSON = async (req, res) => {
   try {
-    console.log('in postSingleGeoJSON')
-    const geojson = req.body
+    console.log('in postSingleGeoJSON');
+    const geojson = req.body;
 
-    const result = await postSingleGeoJSONService(geojson)
+    const result = await postSingleGeoJSONService(geojson);
 
     res.status(201).json({
       status: 'success',
       data: {
-        result
-      }
-    })
+        result,
+      },
+    });
   } catch (error) {
-    console.error(error)
+    console.error(error);
     res.status(400).json({
       status: 'fail',
-      message: error.message
-    })
+      message: error.message,
+    });
   }
-}
+};

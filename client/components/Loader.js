@@ -1,5 +1,5 @@
-import React from 'react'
-import { Container, Content, HStack, Heading, Spinner } from 'native-base'
+import React from 'react';
+import { Container, Content, HStack, Heading, Spinner } from 'native-base';
 const Loader = () => {
   return (
     <HStack keyspace={2} marginTop={20} justifyContent="center">
@@ -10,6 +10,6 @@ const Loader = () => {
         Loading{' '}
       </Heading>{' '}
     </HStack>
-  )
-}
-export default Loader
+  );
+};
+export default Loader;

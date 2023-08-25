@@ -1,4 +1,4 @@
-import { addItemService } from '../../services/item/item.service'
+import { addItemService } from '../../services/item/item.service';
 
 /**
  * Adds an item to the database based on the provided request body.
@@ -8,16 +8,24 @@ import { addItemService } from '../../services/item/item.service'
  */
 export const addItem = async (req, res) => {
   try {
-    const { name, weight, quantity, unit, packId, type, ownerId } = req.body
+    const { name, weight, quantity, unit, packId, type, ownerId } = req.body;
 
-    const result = await addItemService(name, weight, quantity, unit, packId, type, ownerId)
+    const result = await addItemService(
+      name,
+      weight,
+      quantity,
+      unit,
+      packId,
+      type,
+      ownerId,
+    );
 
     res.status(200).json({
       msg: 'success',
       newItem: result.newItem,
-      packId: result.packId
-    })
+      packId: result.packId,
+    });
   } catch (error) {
-    res.status(404).json({ msg: 'Unable to add item', error: error.message })
+    res.status(404).json({ msg: 'Unable to add item', error: error.message });
   }
-}
+};

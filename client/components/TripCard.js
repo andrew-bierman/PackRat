@@ -1,19 +1,19 @@
-import { StyleSheet, Platform } from 'react-native'
-import DropdownComponent from './Dropdown'
-import { Box, Text, Stack, View } from 'native-base'
-import { SearchInput } from './SearchInput'
+import { StyleSheet, Platform } from 'react-native';
+import DropdownComponent from './Dropdown';
+import { Box, Text, Stack, View } from 'native-base';
+import { SearchInput } from './SearchInput';
 
-import { theme } from '../theme/index'
+import { theme } from '../theme/index';
 
-import { useSelector, useDispatch } from 'react-redux'
-import { addTrail, addPark } from '../store/dropdownStore'
-import MapContainer from './map/MapContainer'
-import { convertPhotonGeoJsonToShape } from '../utils/mapFunctions'
-import { selectAllTrails } from '../store/trailsStore'
-import UseTheme from '../hooks/useTheme'
-import Carousel from './carousel'
-import { Card, H2, Paragraph } from 'tamagui'
-export default function TripCard ({
+import { useSelector, useDispatch } from 'react-redux';
+import { addTrail, addPark } from '../store/dropdownStore';
+import MapContainer from './map/MapContainer';
+import { convertPhotonGeoJsonToShape } from '../utils/mapFunctions';
+import { selectAllTrails } from '../store/trailsStore';
+import UseTheme from '../hooks/useTheme';
+import Carousel from './carousel';
+import { Card, H2, Paragraph } from 'tamagui';
+export default function TripCard({
   title,
   Icon,
   isMap,
@@ -21,19 +21,19 @@ export default function TripCard ({
   data,
   isSearch,
   isTrail,
-  isPark
+  isPark,
 }) {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme()
-  const dispatch = useDispatch()
+    UseTheme();
+  const dispatch = useDispatch();
 
-  const currentTrail = useSelector((state) => state.dropdown.currentTrail)
-  const currentPark = useSelector((state) => state.dropdown.currentPark)
-  console.log('🚀 ~ file: TripCard.js:34 ~ currentPark:', currentPark)
-  const trailsDetails = useSelector(selectAllTrails) // updated selector for new trails slice
+  const currentTrail = useSelector((state) => state.dropdown.currentTrail);
+  const currentPark = useSelector((state) => state.dropdown.currentPark);
+  console.log('🚀 ~ file: TripCard.js:34 ~ currentPark:', currentPark);
+  const trailsDetails = useSelector(selectAllTrails); // updated selector for new trails slice
   const currentShape = trailsDetails.filter(
-    (trail) => trail.properties.name == currentTrail
-  )
+    (trail) => trail.properties.name == currentTrail,
+  );
 
   /**
    * Handles the change in value.
@@ -42,14 +42,17 @@ export default function TripCard ({
    * @return {undefined} No return value.
    */
   const handleValueChange = (value) => {
-    console.log('🚀 ~ file: TripCard.js:40 ~ handleValueChange ~ value:', value)
+    console.log(
+      '🚀 ~ file: TripCard.js:40 ~ handleValueChange ~ value:',
+      value,
+    );
     // Assuming that you have a redux action to set the current trail and park
     if (isTrail) {
-      dispatch(addTrail(value))
+      dispatch(addTrail(value));
     } else if (isPark) {
-      dispatch(addPark(value))
+      dispatch(addPark(value));
     }
-  }
+  };
 
   return (
     <Stack
@@ -61,10 +64,10 @@ export default function TripCard ({
         isSearch
           ? styles.searchContainer
           : isMap
-            ? styles.mapCard
-            : styles.containerMobile
-              ? styles.containerMobile
-              : styles.mutualStyles
+          ? styles.mapCard
+          : styles.containerMobile
+          ? styles.containerMobile
+          : styles.mutualStyles
       }
     >
       <Box
@@ -72,7 +75,7 @@ export default function TripCard ({
           flexDirection: 'row',
           gap: 15,
           alignItems: 'center',
-          paddingVertical: 15
+          paddingVertical: 15,
         }}
       >
         <Icon />
@@ -80,7 +83,7 @@ export default function TripCard ({
           style={{
             color: currentTheme.colors.textPrimary,
             fontSize: currentTheme.font.size,
-            fontWeight: 600
+            fontWeight: 600,
           }}
         >
           {title}
@@ -98,7 +101,7 @@ export default function TripCard ({
       ) : isSearch ? (
         <SearchInput />
       ) : (
-      // isTrail ?
+        // isTrail ?
 
         // <DropdownComponent
         //   {...{
@@ -111,28 +114,37 @@ export default function TripCard ({
         //   }}
         // />
         // :
-        <View style={{ width: '80%' }} >
-
-        <Carousel iconColor={isDark ? '#fff' : '#000'} itemWidth={150}>
-          {
-            data?.map((item) => {
-              const selectedValue = isTrail ? currentTrail : currentPark
+        <View style={{ width: '80%' }}>
+          <Carousel iconColor={isDark ? '#fff' : '#000'} itemWidth={150}>
+            {data?.map((item) => {
+              const selectedValue = isTrail ? currentTrail : currentPark;
               return (
-            <Card
-            backgroundColor={item === selectedValue ? theme.colors.background : null}
-             onPress={() => { handleValueChange(item) }} elevate bordered margin={2}
-             >
-              <Card.Header padded>
-                <Paragraph color={item === selectedValue ? 'white' : 'black'}>{item}</Paragraph>
-              </Card.Header>
-            </Card>)
-            })
-          }
-        </Carousel>
-         </View>
+                <Card
+                  backgroundColor={
+                    item === selectedValue ? theme.colors.background : null
+                  }
+                  onPress={() => {
+                    handleValueChange(item);
+                  }}
+                  elevate
+                  bordered
+                  margin={2}
+                >
+                  <Card.Header padded>
+                    <Paragraph
+                      color={item === selectedValue ? 'white' : 'black'}
+                    >
+                      {item}
+                    </Paragraph>
+                  </Card.Header>
+                </Card>
+              );
+            })}
+          </Carousel>
+        </View>
       )}
     </Stack>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -143,7 +155,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     textAlign: 'center',
-    padding: theme.size.cardPadding
+    padding: theme.size.cardPadding,
   },
 
   containerMobile: {
@@ -153,7 +165,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 25,
     flex: 1,
-    paddingHorizontal: 100
+    paddingHorizontal: 100,
   },
 
   searchContainer: {
@@ -166,7 +178,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 60,
     paddingVertical: 70,
 
-    height: Platform.OS === 'web' ? '450px' : '100%'
+    height: Platform.OS === 'web' ? '450px' : '100%',
   },
 
   mapCard: {
@@ -183,6 +195,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     // height: 'fit-content'
     height: Platform.OS === 'web' ? '650px' : '100%',
-    overflow: 'hidden'
-  }
-})
+    overflow: 'hidden',
+  },
+});

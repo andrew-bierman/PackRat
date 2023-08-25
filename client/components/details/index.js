@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react'
-import { View, Text } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
-import { format } from 'date-fns'
-import { fetchSinglePack } from '../../store/singlePackStore'
-import { CustomCard } from '../card'
+import React, { useState, useEffect } from 'react';
+import { View, Text } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { format } from 'date-fns';
+import { fetchSinglePack } from '../../store/singlePackStore';
+import { CustomCard } from '../card';
 
 export const DetailsComponent = ({ type, data, additionalComps, link }) => {
   const renderDetails = () => {
@@ -29,7 +29,7 @@ export const DetailsComponent = ({ type, data, additionalComps, link }) => {
               type="pack"
             />
           </>
-        )
+        );
       case 'trip':
         // Add trip-specific logic here
         return (
@@ -76,7 +76,7 @@ export const DetailsComponent = ({ type, data, additionalComps, link }) => {
               <Text>{data?.details}</Text>
             </View> */}
           </>
-        )
+        );
       case 'item':
         // Add item-specific logic here
         return (
@@ -88,12 +88,12 @@ export const DetailsComponent = ({ type, data, additionalComps, link }) => {
               <Text>{data.description}</Text>
             </View>
           </>
-        )
+        );
       default:
         // Handle unknown types
-        return null
+        return null;
     }
-  }
+  };
 
-  return <View>{renderDetails()}</View>
-}
+  return <View>{renderDetails()}</View>;
+};
