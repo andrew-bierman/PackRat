@@ -1,28 +1,20 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-echo "Running pre-push hook"
+# Colors
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NC='\033[0m' # No Color
 
-echo "Running lint-staged"
+echo "🔍 Running pre-push hook"
 
-# lint-staged
-
-if [ $? -eq 0 ]; then
-  echo "Lint-staged passed"
-else
-  echo "Lint-staged failed"
-  exit 1
-fi
-
-echo "Running tests"
-
+# Running tests
+echo "🔄 Running tests..."
 npm run test
 
 if [ $? -eq 0 ]; then
-  echo "Tests passed"
+  echo -e "${GREEN}✅ Tests passed${NC}"
 else
-  echo "Tests failed"
+  echo -e "${RED}❌ Tests failed${NC}"
   exit 1
 fi
-
-
