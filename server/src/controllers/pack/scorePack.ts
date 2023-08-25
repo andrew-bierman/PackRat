@@ -1,5 +1,4 @@
-
-import { scorePackService } from "../../services/pack/pack.service";
+import { scorePackService } from '../../services/pack/pack.service';
 
 /**
  * Scores a pack by calculating its score and updating the pack object in the database.
@@ -13,11 +12,11 @@ export const scorePack = async (req, res) => {
 
     const updatedPack = await scorePackService(packId);
 
-    console.log("updatedPack", updatedPack);
+    console.log('updatedPack', updatedPack);
 
-    res.status(200).json({ msg: "Pack was scored successfully", updatedPack });
+    res.status(200).json({ msg: 'Pack was scored successfully', updatedPack });
   } catch (error) {
-    console.log("error", error);
-    res.status(404).json({ msg: "Unable to score pack", error });
+    console.log('error', error);
+    res.status(404).json({ msg: 'Unable to score pack', error });
   }
 };

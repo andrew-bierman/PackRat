@@ -1,11 +1,11 @@
-import { Image } from "native-base";
+import { Image } from 'native-base';
 import {
   getShapeSourceBounds,
   isLineString,
+  isPoint,
   isPolygonOrMultiPolygon,
   processShapeData,
 } from "../../utils/mapFunctions";
-import { isPoint } from "../../utils/mapFunctions";
 import { api } from "../../constants/api";
 
 /**
@@ -17,21 +17,23 @@ import { api } from "../../constants/api";
 
 export default function MapPreview({ shape }) {
   console.log(
-    "🚀 ~ file: MapPreview.js:9 ~ MapPreview ~ shape:",
-    JSON.stringify(shape.features[0])
+    '🚀 ~ file: MapPreview.js:9 ~ MapPreview ~ shape:',
+    JSON.stringify(shape.features[0]),
   );
   const processedShape = processShapeData(shape);
   const lineProperties = {
-    stroke: "#16b22d",
-    "stroke-width": 4,
-    "stroke-opacity": 1,
+    stroke: '#16b22d',
+    'stroke-width': 4,
+    'stroke-opacity': 1,
   };
   const pointProperties = {
-    "marker-color": "#16b22d",
+    'marker-color': '#16b22d',
   };
-  if (isLineString(shape)) shape.features[0].properties = lineProperties;
+  if (isLineString(shape)) {
+    shape.features[0].properties = lineProperties;
+  }
 
-  const imageShape = { type: "FeatureCollection", features: [] };
+  const imageShape = { type: 'FeatureCollection', features: [] };
   console.log(JSON.stringify(shape.features[0]));
   const polygonObj = {
     ...shape.features[0],
@@ -40,25 +42,25 @@ export default function MapPreview({ shape }) {
       coordinates: [shape.features[0].geometry.coordinates[0]],
     },
   };
-  console.log(JSON.stringify(polygonObj), "polygon obj");
+  console.log(JSON.stringify(polygonObj), 'polygon obj');
   if (isPolygonOrMultiPolygon(shape)) {
     imageShape.features.push([shape.features[0].geometry.coordinates[0]]);
   } else {
     imageShape.features.push(shape.features[0]);
   }
   processedShape.features.forEach((feature) => {
-    if (feature.properties.meta == "end") {
+    if (feature.properties.meta == 'end') {
       feature.properties = pointProperties;
       imageShape.features.push(feature);
     }
   });
 
   const urlEncodedImageShapeGeoJSON = encodeURIComponent(
-    JSON.stringify(imageShape, null, 0)
+    JSON.stringify(imageShape, null, 0),
   );
   console.log(
-    "🚀 ~ file: MapPreview.js:33 ~ MapPreview ~ urlEncodedImageShapeGeoJSON:",
-    imageShape.features
+    '🚀 ~ file: MapPreview.js:33 ~ MapPreview ~ urlEncodedImageShapeGeoJSON:',
+    imageShape.features,
   );
 
   let bounds = getShapeSourceBounds(shape);
@@ -85,8 +87,8 @@ export default function MapPreview({ shape }) {
   ) : (
     <Image
       style={{
-        width: "100%",
-        height: "100%",
+        width: '100%',
+        height: '100%',
       }}
       source={{
         uri: `${mapPreviewEndpoint}/geojson(${urlEncodedImageShapeGeoJSON})/[${bounds.join(

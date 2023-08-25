@@ -1,8 +1,8 @@
-import { Pressable } from "react-native";
-import React from "react";
-import { Box, Menu, ThreeDotsIcon } from "native-base";
-import { useDispatch } from "react-redux";
-import { useRouter } from "expo-router";
+import { Pressable } from 'react-native';
+import React from 'react';
+import { Box, Menu, ThreeDotsIcon } from 'native-base';
+import { useDispatch } from 'react-redux';
+import { useRouter } from 'expo-router';
 export const PackOptions = ({ Edit, Delete, Ignore }) => {
   const dispatch = useDispatch();
   const router = useRouter();
