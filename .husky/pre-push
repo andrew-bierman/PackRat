@@ -1,0 +1,28 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "Running pre-push hook"
+
+echo "Running lint-staged"
+
+# lint-staged
+
+if [ $? -eq 0 ]; then
+  echo "Lint-staged passed"
+else
+  echo "Lint-staged failed"
+  exit 1
+fi
+
+echo "Running tests"
+
+npm run test
+
+if [ $? -eq 0 ]; then
+  echo "Tests passed"
+else
+  echo "Tests failed"
+  exit 1
+fi
+
+
