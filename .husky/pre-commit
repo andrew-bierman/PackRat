@@ -1,14 +1,20 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-echo "Running pre-commit hook"
+# Colors
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NC='\033[0m' # No Color
 
-echo "Running lint-staged"
-lint-staged
+echo "🔍 Running pre-commit hook"
+
+# Running lint-staged
+echo "🔄 Running lint-staged..."
+npx lint-staged
 
 if [ $? -eq 0 ]; then
-  echo "Lint-staged passed"
+  echo -e "${GREEN}✅ Lint-staged passed${NC}"
 else
-  echo "Lint-staged failed"
+  echo -e "${RED}❌ Lint-staged failed${NC}"
   exit 1
 fi
