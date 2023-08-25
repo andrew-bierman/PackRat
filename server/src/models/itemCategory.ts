@@ -1,16 +1,16 @@
-import { Schema, model } from 'mongoose'
-import { ItemCategory } from '../utils/itemCategory'
-import myDB from './dbConnection'
+import { Schema, model } from 'mongoose';
+import { ItemCategory } from '../utils/itemCategory';
+import myDB from './dbConnection';
 const itemCategorySchema = new Schema(
   {
     name: {
       type: String, // it can be either a Way or a Node
-      enum: ItemCategory
-    }
+      enum: ItemCategory,
+    },
   },
   {
-    timestamps: true
-  }
-)
+    timestamps: true,
+  },
+);
 
-export const ItemCategoryModel = myDB.model('ItemCategory', itemCategorySchema)
+export const ItemCategoryModel = myDB.model('ItemCategory', itemCategorySchema);

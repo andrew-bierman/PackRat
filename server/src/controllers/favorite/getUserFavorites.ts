@@ -1,5 +1,5 @@
-import User from '../../models/userModel'
-import { getUserFavoritesService } from '../../services/favorite/favorite.service'
+import User from '../../models/userModel';
+import { getUserFavoritesService } from '../../services/favorite/favorite.service';
 
 /**
  * Retrieves the favorite items of a user.
@@ -9,14 +9,14 @@ import { getUserFavoritesService } from '../../services/favorite/favorite.servic
  */
 export const getUserFavorites = async (req, res) => {
   try {
-    const { userId } = req.params
+    const { userId } = req.params;
 
-    const favorites = await getUserFavoritesService(userId)
+    const favorites = await getUserFavoritesService(userId);
 
-    if (!favorites) throw new Error('User favorites not found')
+    if (!favorites) throw new Error('User favorites not found');
 
-    res.status(200).json(favorites)
+    res.status(200).json(favorites);
   } catch (error) {
-    res.status(404).json({ msg: 'User favorites cannot be found' })
+    res.status(404).json({ msg: 'User favorites cannot be found' });
   }
-}
+};

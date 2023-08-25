@@ -1,34 +1,34 @@
-import { useSelector } from 'react-redux'
+import { useSelector } from 'react-redux';
 
-import { Platform, StyleSheet } from 'react-native'
+import { Platform, StyleSheet } from 'react-native';
 
-import { Stack as Header } from 'expo-router'
+import { Stack as Header } from 'expo-router';
 
-import { darkTheme, theme } from '../theme'
+import { darkTheme, theme } from '../theme';
 
-import { Box } from 'native-base'
+import { Box } from 'native-base';
 
-import LandingPage from '../components/landing_page'
+import LandingPage from '../components/landing_page';
 
-import Dashboard from '../screens/dashboard'
-import useTheme from '../hooks/useTheme'
-import { current } from '@reduxjs/toolkit'
+import Dashboard from '../screens/dashboard';
+import useTheme from '../hooks/useTheme';
+import { current } from '@reduxjs/toolkit';
 
-export default function Index () {
+export default function Index() {
   const {
     enableDarkMode,
     enableLightMode,
     isDark,
     isLight,
-    currentTheme = theme
-  } = useTheme()
+    currentTheme = theme,
+  } = useTheme();
 
-  const user = useSelector((state) => state.auth.user)
+  const user = useSelector((state) => state.auth.user);
 
   const mutualStyles = {
     backgroundColor: currentTheme.colors.background,
-    flex: 1
-  }
+    flex: 1,
+  };
 
   return (
     <>
@@ -36,11 +36,11 @@ export default function Index () {
         <Header.Screen
           options={{
             // https://reactnavigation.org/docs/headers#setting-the-header-title
-            title: 'Home'
+            title: 'Home',
           }}
         />
       ) : null}
       <Box style={mutualStyles}>{!user ? <LandingPage /> : <Dashboard />}</Box>
     </>
-  )
+  );
 }

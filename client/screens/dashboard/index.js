@@ -1,12 +1,12 @@
-import React from 'react'
-import { Platform, StyleSheet } from 'react-native'
-import { VStack, Box, ScrollView } from 'native-base'
-import { theme } from '../../theme'
-import HeroBanner from '../../components/dashboard/HeroBanner'
-import QuickActionsSection from '../../components/dashboard/QuickActionSection'
-import FeedPreview from '../../components/dashboard/FeedPreview'
-import Section from '../../components/dashboard/Section'
-import SectionHeader from '../../components/dashboard/SectionHeader'
+import React from 'react';
+import { Platform, StyleSheet } from 'react-native';
+import { VStack, Box, ScrollView } from 'native-base';
+import { theme } from '../../theme';
+import HeroBanner from '../../components/dashboard/HeroBanner';
+import QuickActionsSection from '../../components/dashboard/QuickActionSection';
+import FeedPreview from '../../components/dashboard/FeedPreview';
+import Section from '../../components/dashboard/Section';
+import SectionHeader from '../../components/dashboard/SectionHeader';
 
 const Dashboard = () => {
   return (
@@ -14,7 +14,7 @@ const Dashboard = () => {
       <VStack
         style={[
           styles.container,
-          Platform.OS === 'web' ? { minHeight: '100vh' } : null
+          Platform.OS === 'web' ? { minHeight: '100vh' } : null,
         ]}
       >
         <Box>
@@ -30,26 +30,26 @@ const Dashboard = () => {
         </Box>
       </VStack>
     </ScrollView>
-  )
-}
+  );
+};
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexGrow: 1,
     backgroundColor: theme.colors.background,
-    width: '100%'
+    width: '100%',
   },
   content: {
     flexGrow: 1,
     justifyContent: 'flex-start',
     alignItems: 'stretch',
-    paddingHorizontal: 20
+    paddingHorizontal: 20,
   },
   cardContainer: {
     flexDirection: 'column',
     justifyContent: 'space-between',
     marginBottom: 20,
-    width: '100%'
-  }
-})
-export default Dashboard
+    width: '100%',
+  },
+});
+export default Dashboard;

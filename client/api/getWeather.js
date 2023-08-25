@@ -1,4 +1,4 @@
-import { api } from '../constants/api'
+import { api } from '../constants/api';
 
 /**
  * Retrieves weather information based on latitude, longitude, and state.
@@ -9,24 +9,24 @@ import { api } from '../constants/api'
  * @return {Object} The weather information object.
  */
 export const getWeather = async (lat, lon, state) => {
-  let weatherObject = {}
+  let weatherObject = {};
 
-  let params = '?'
+  let params = '?';
 
-  if (lat) params += `lat=${lat}`
-  if (lon) params += `&lon=${lon}`
+  if (lat) params += `lat=${lat}`;
+  if (lon) params += `&lon=${lon}`;
 
-  const url = api + '/weather' + params
+  const url = api + '/weather' + params;
 
   await fetch(url)
     .then(async (res) => await res.json())
     .then((json) => {
-      weatherObject = json
+      weatherObject = json;
     })
     .catch((err) => {
-      console.error('error:' + err)
-    })
+      console.error('error:' + err);
+    });
 
-  weatherObject.state = state
-  return weatherObject
-}
+  weatherObject.state = state;
+  return weatherObject;
+};

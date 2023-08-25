@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -6,28 +6,28 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  ScrollView
-} from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
+  ScrollView,
+} from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   getUserChats,
   getAIResponse,
   selectConversationById,
-  selectAllConversations
-} from '../../store/chatStore'
-import { Box, VStack, HStack } from 'native-base'
-import { CustomModal } from '../modal'
+  selectAllConversations,
+} from '../../store/chatStore';
+import { Box, VStack, HStack } from 'native-base';
+import { CustomModal } from '../modal';
 
 const MessageBubble = ({ message }) => {
-  const isAI = message.role === 'ai'
+  const isAI = message.role === 'ai';
   return (
     <View style={isAI ? styles.aiBubble : styles.userBubble}>
       <Text style={isAI ? styles.aiText : styles.userText}>
         {message.content}
       </Text>
     </View>
-  )
-}
+  );
+};
 
 const ChatSelector = ({ conversation, onSelect, isActive }) => (
   <TouchableOpacity
@@ -37,60 +37,60 @@ const ChatSelector = ({ conversation, onSelect, isActive }) => (
   >
     <Text style={styles.chatSelectorText}>{conversation._id}</Text>
   </TouchableOpacity>
-)
+);
 
 const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
-  const dispatch = useDispatch()
-  const user = useSelector((state) => state.auth.user)
-  const [conversationId, setConversationId] = useState(defaultChatId)
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth.user);
+  const [conversationId, setConversationId] = useState(defaultChatId);
   const conversation = useSelector((state) =>
-    selectConversationById(state, conversationId)
-  )
-  const conversations = useSelector((state) => selectAllConversations(state))
-  const [userInput, setUserInput] = useState('')
-  const [parsedMessages, setParsedMessages] = useState([])
+    selectConversationById(state, conversationId),
+  );
+  const conversations = useSelector((state) => selectAllConversations(state));
+  const [userInput, setUserInput] = useState('');
+  const [parsedMessages, setParsedMessages] = useState([]);
 
   useEffect(() => {
-    dispatch(getUserChats(user._id))
-  }, [dispatch, user._id, conversationId])
+    dispatch(getUserChats(user._id));
+  }, [dispatch, user._id, conversationId]);
 
   useEffect(() => {
     if (conversation) {
-      setParsedMessages(parseConversationHistory(conversation.history))
+      setParsedMessages(parseConversationHistory(conversation.history));
     }
-  }, [conversation])
+  }, [conversation]);
 
   /**
- * Parses a conversation history string and returns an array of objects representing each message in the conversation.
- *
- * @param {string} historyString - The string containing the conversation history.
- * @return {Array} An array of objects representing each message in the conversation.
- */
+   * Parses a conversation history string and returns an array of objects representing each message in the conversation.
+   *
+   * @param {string} historyString - The string containing the conversation history.
+   * @return {Array} An array of objects representing each message in the conversation.
+   */
   const parseConversationHistory = (historyString) => {
-    const historyArray = historyString.split('\n')
+    const historyArray = historyString.split('\n');
     return historyArray.reduce((accumulator, current) => {
-      const isAI = current.startsWith('AI:')
-      const content = isAI ? current.substring(3) : current
-      const role = isAI ? 'ai' : 'user'
+      const isAI = current.startsWith('AI:');
+      const content = isAI ? current.substring(3) : current;
+      const role = isAI ? 'ai' : 'user';
       if (content) {
-        accumulator.push({ role, content })
+        accumulator.push({ role, content });
       }
-      return accumulator
-    }, [])
-  }
+      return accumulator;
+    }, []);
+  };
 
   /**
- * Handles sending a message.
- *
- * @return {Promise<void>} This function returns nothing.
- */
+   * Handles sending a message.
+   *
+   * @return {Promise<void>} This function returns nothing.
+   */
   const handleSendMessage = async () => {
     await dispatch(
-      getAIResponse({ userId: user._id, conversationId, userInput })
-    )
-    setUserInput('')
-    dispatch(getUserChats(user._id))
-  }
+      getAIResponse({ userId: user._id, conversationId, userInput }),
+    );
+    setUserInput('');
+    dispatch(getUserChats(user._id));
+  };
 
   return (
     <View style={styles.container}>
@@ -117,8 +117,8 @@ const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
               <TouchableOpacity
                 style={styles.newChatButton}
                 onPress={() => {
-                  setConversationId(null)
-                  setParsedMessages([])
+                  setConversationId(null);
+                  setParsedMessages([]);
                 }}
               >
                 <Text style={styles.newChatButtonText}>New Chat</Text>
@@ -145,12 +145,14 @@ const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
         </TouchableOpacity>
       </View>
     </View>
-  )
-}
+  );
+};
 
 const ChatModalTrigger = () => {
-  const [isOpen, setIsOpen] = useState(false)
-  const handleClose = () => { setIsOpen(false) }
+  const [isOpen, setIsOpen] = useState(false);
+  const handleClose = () => {
+    setIsOpen(false);
+  };
 
   return (
     <Box style={styles.container}>
@@ -164,8 +166,8 @@ const ChatModalTrigger = () => {
         <ChatComponent onClose={handleClose} />
       </CustomModal>
     </Box>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16 },
@@ -178,14 +180,14 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 1,
     borderRadius: 8,
-    paddingHorizontal: 12
+    paddingHorizontal: 12,
   },
   sendButton: {
     backgroundColor: '#3777f0',
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 8,
-    marginLeft: 8
+    marginLeft: 8,
   },
   sendText: { color: 'white' },
   aiBubble: {
@@ -195,7 +197,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 8,
     marginVertical: 4,
-    marginHorizontal: 16
+    marginHorizontal: 16,
   },
   userBubble: {
     alignSelf: 'flex-end',
@@ -204,7 +206,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 8,
     marginVertical: 4,
-    marginHorizontal: 16
+    marginHorizontal: 16,
   },
   aiText: { color: 'white' },
   userText: { color: 'black' },
@@ -212,24 +214,24 @@ const styles = StyleSheet.create({
     backgroundColor: '#e0e0e0',
     padding: 10,
     marginVertical: 5,
-    borderRadius: 5
+    borderRadius: 5,
   },
   chatSelectorText: { fontSize: 16 },
   chatSelectorContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   newChatButton: {
     backgroundColor: '#3777f0',
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 8,
-    marginLeft: 8
+    marginLeft: 8,
   },
   newChatButtonText: {
-    color: 'white'
-  }
-})
+    color: 'white',
+  },
+});
 
-export default ChatModalTrigger
+export default ChatModalTrigger;

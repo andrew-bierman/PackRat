@@ -1,13 +1,13 @@
-import { Text, StyleSheet } from 'react-native'
-import React from 'react'
-import { Table, Row, Cell } from 'react-native-table-component'
-import { theme } from '../../theme'
-import { Box, Button, HStack } from 'native-base'
-import { formatNumber } from '../../utils/formatNumber'
-import { EditPackItemModal } from '../pack_table/EditPackItemModal'
-import { DeletePackItemModal } from '../pack_table/DeletePackItemModal'
-import { PaginationLimit } from '../paginationChooseLimit'
-import Loader from '../Loader'
+import { Text, StyleSheet } from 'react-native';
+import React from 'react';
+import { Table, Row, Cell } from 'react-native-table-component';
+import { theme } from '../../theme';
+import { Box, Button, HStack } from 'native-base';
+import { formatNumber } from '../../utils/formatNumber';
+import { EditPackItemModal } from '../pack_table/EditPackItemModal';
+import { DeletePackItemModal } from '../pack_table/DeletePackItemModal';
+import { PaginationLimit } from '../paginationChooseLimit';
+import Loader from '../Loader';
 export const ItemsTable = ({
   limit,
   setLimit,
@@ -17,9 +17,9 @@ export const ItemsTable = ({
   isLoading,
   totalPages,
   refetch,
-  setRefetch = () => { }
+  setRefetch = () => {},
 }) => {
-  const flexArr = [2, 1, 1, 1, 0.65, 0.65, 0.65]
+  const flexArr = [2, 1, 1, 1, 0.65, 0.65, 0.65];
 
   /**
    * Renders a title row component.
@@ -31,15 +31,15 @@ export const ItemsTable = ({
     const rowData = [
       <HStack style={styles.mainTitle}>
         <Text style={styles.titleText}>{title}</Text>
-      </HStack>
-    ]
+      </HStack>,
+    ];
 
     return (
       <Row data={rowData} style={[styles.title]} textStyle={styles.titleText} />
-    )
-  }
+    );
+  };
   const TableItem = ({ itemData }) => {
-    const { name, weight, category, quantity, unit, _id } = itemData
+    const { name, weight, category, quantity, unit, _id } = itemData;
 
     const rowData = [
       name,
@@ -58,31 +58,31 @@ export const ItemsTable = ({
         itemId={_id}
         refetch={refetch}
         setRefetch={setRefetch}
-      />
-    ]
-    return <Row data={rowData} style={styles.row} flexArr={flexArr} />
-  }
+      />,
+    ];
+    return <Row data={rowData} style={styles.row} flexArr={flexArr} />;
+  };
   /**
    * Handles the logic for navigating to the next page.
    *
    * @return {undefined} This function doesn't return anything.
    */
   const handleNextPage = () => {
-    setPage(page + 1)
-  }
+    setPage(page + 1);
+  };
   /**
    * Handles the action of going to the previous page.
    *
    * @return {undefined} There is no return value.
    */
   const handlePreviousPage = () => {
-    setPage(page - 1)
-  }
+    setPage(page - 1);
+  };
 
   return (
     <Box
       style={{
-        marginTop: '2rem'
+        marginTop: '2rem',
       }}
     >
       <Table
@@ -98,7 +98,7 @@ export const ItemsTable = ({
             'Quantity',
             'Category',
             'Edit',
-            'Delete'
+            'Delete',
           ].map((header, index) => (
             <Cell key={index} data={header} textStyle={styles.headerText} />
           ))}
@@ -107,18 +107,16 @@ export const ItemsTable = ({
         <Box
           style={{
             height: '400px',
-            overflowY: 'scroll'
+            overflowY: 'scroll',
           }}
         >
-          {isLoading
-            ? (
+          {isLoading ? (
             <Loader />
-              )
-            : (
-                data.globalItems.items.map((item, index) => {
-                  return <TableItem key={index} itemData={item} />
-                })
-              )}
+          ) : (
+            data.globalItems.items.map((item, index) => {
+              return <TableItem key={index} itemData={item} />;
+            })
+          )}
         </Box>
       </Table>
       <PaginationLimit limit={limit} setLimit={setLimit} setPage={setPage} />
@@ -131,7 +129,7 @@ export const ItemsTable = ({
             borderRadius: '5px',
             borderColor: page <= 1 ? 'gray' : '#0284c7',
             borderWidth: '1px',
-            borderStyle: 'solid'
+            borderStyle: 'solid',
           }}
           disabled={page <= 1}
           onPress={handlePreviousPage}
@@ -146,7 +144,7 @@ export const ItemsTable = ({
             borderRadius: '5px',
             borderColor: page === totalPages ? 'gray' : '#0284c7',
             borderWidth: '1px',
-            borderStyle: 'solid'
+            borderStyle: 'solid',
           }}
           disabled={page === totalPages}
           onPress={handleNextPage}
@@ -157,52 +155,52 @@ export const ItemsTable = ({
         </Button>
       </Box>
     </Box>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
-    width: '100%'
+    width: '100%',
   },
   tableStyle: {
     width: '100%',
-    paddingHorizontal: 20
+    paddingHorizontal: 20,
   },
   mainTitle: {
     marginTop: 10,
     marginBottom: 10,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   categoryRow: {
     padding: 10,
     borderRadius: 5,
     alignItems: 'center',
-    justifyContent: 'flex-start'
+    justifyContent: 'flex-start',
   },
   title: {
     height: 50,
     backgroundColor: theme.colors.primary,
     borderRadius: 10,
     justifyContent: 'center',
-    paddingLeft: 15
+    paddingLeft: 15,
   },
   titleText: {
     fontWeight: 'bold',
-    color: '#FFFFFF'
+    color: '#FFFFFF',
   },
   head: {
     height: 50,
     borderBottomWidth: 1,
     borderBottomColor: '#D1D5DB',
     borderTopLeftRadius: 10,
-    borderTopRightRadius: 10
+    borderTopRightRadius: 10,
   },
   headerText: {
     fontWeight: 'bold',
-    color: '#000000'
+    color: '#000000',
   },
   row: {
     flexDirection: 'row',
@@ -210,18 +208,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
-    borderBottomColor: '#D1D5DB'
+    borderBottomColor: '#D1D5DB',
   },
   infoContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: 25,
-    backgroundColor: '#F8F8F8'
+    backgroundColor: '#F8F8F8',
   },
   noItemsText: {
     fontWeight: 'bold',
     fontSize: 16,
     marginTop: 20,
-    textAlign: 'center'
-  }
-})
+    textAlign: 'center',
+  },
+});

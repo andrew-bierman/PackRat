@@ -1,4 +1,4 @@
-import { api } from '../constants/api'
+import { api } from '../constants/api';
 
 /**
  * Retrieves the weather forecast for a specific location for the next week.
@@ -8,26 +8,26 @@ import { api } from '../constants/api'
  * @return {Array} The weather forecast for the next four days.
  */
 export const getWeatherWeek = async (lat, lon) => {
-  let weatherObject = {}
+  let weatherObject = {};
 
-  let params = '?'
+  let params = '?';
 
-  const latParams = lat
-  const lonParams = lon
+  const latParams = lat;
+  const lonParams = lon;
 
-  if (latParams) params += `lat=${latParams}`
-  if (lonParams) params += `&lon=${lonParams}`
+  if (latParams) params += `lat=${latParams}`;
+  if (lonParams) params += `&lon=${lonParams}`;
 
-  const url = api + '/weather/week' + params
+  const url = api + '/weather/week' + params;
 
   await fetch(url)
     .then(async (res) => await res.json())
     .then((json) => {
-      weatherObject = json
+      weatherObject = json;
     })
     .catch((err) => {
-      console.log('error:' + err)
-    })
+      console.log('error:' + err);
+    });
 
-  return weatherObject.list.slice(0, 4)
-}
+  return weatherObject.list.slice(0, 4);
+};

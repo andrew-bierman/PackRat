@@ -1,4 +1,4 @@
-import User from '../../models/userModel'
+import User from '../../models/userModel';
 
 /**
  * Deletes a user from the database.
@@ -8,12 +8,12 @@ import User from '../../models/userModel'
  */
 export const deleteUser = async (req, res) => {
   try {
-    const { userId } = req.body
+    const { userId } = req.body;
 
-    await User.findOneAndDelete({ _id: userId })
+    await User.findOneAndDelete({ _id: userId });
 
-    res.status(200).json({ msg: 'user was deleted successfully' })
+    res.status(200).json({ msg: 'user was deleted successfully' });
   } catch (error) {
-    res.status(404).json({ msg: 'Unable to edit user' })
+    res.status(404).json({ msg: 'Unable to edit user' });
   }
-}
+};

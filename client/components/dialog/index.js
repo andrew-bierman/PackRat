@@ -1,7 +1,7 @@
 // import { X } from "@tamagui/lucide-icons";
 
-import { MaterialCommunityIcons } from '@expo/vector-icons'
-import { useState } from 'react'
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useState } from 'react';
 
 import {
   Adapt,
@@ -15,23 +15,23 @@ import {
   TooltipSimple,
   Unspaced,
   XStack,
-  YStack
-} from 'tamagui'
+  YStack,
+} from 'tamagui';
 
-import { SelectDemoItem } from '../select/index.js'
+import { SelectDemoItem } from '../select/index.js';
 
-export function DialogDemo () {
+export function DialogDemo() {
   // return null
-  return <DialogInstance />
+  return <DialogInstance />;
 }
 
-function DialogInstance () {
-  const [open, setOpen] = useState(false)
+function DialogInstance() {
+  const [open, setOpen] = useState(false);
   return (
     <Dialog
       modal
       onOpenChange={(open) => {
-        setOpen(open)
+        setOpen(open);
       }}
     >
       <Dialog.Trigger asChild>
@@ -67,9 +67,9 @@ function DialogInstance () {
             'quick',
             {
               opacity: {
-                overshootClamping: true
-              }
-            }
+                overshootClamping: true,
+              },
+            },
           ]}
           enterStyle={{ x: 0, y: -20, opacity: 0, scale: 0.9 }}
           exitStyle={{ x: 0, y: 10, opacity: 0, scale: 0.95 }}
@@ -130,5 +130,5 @@ function DialogInstance () {
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog>
-  )
+  );
 }

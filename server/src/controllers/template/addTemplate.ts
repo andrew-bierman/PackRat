@@ -1,5 +1,5 @@
-import User from '../../models/userModel'
-import { addTemplateService } from '../../services/template/template.service'
+import User from '../../models/userModel';
+import { addTemplateService } from '../../services/template/template.service';
 
 /**
  * Adds a template to the database.
@@ -9,19 +9,19 @@ import { addTemplateService } from '../../services/template/template.service'
  */
 export const addTemplate = async (req, res) => {
   try {
-    const { type, templateId, isGlobalTemplate, createdBy } = req.body
+    const { type, templateId, isGlobalTemplate, createdBy } = req.body;
 
-    const user = await User.findById(createdBy)
+    const user = await User.findById(createdBy);
 
     if (!user) {
-      res.status(404).json({ message: 'User not found' })
-      return
+      res.status(404).json({ message: 'User not found' });
+      return;
     }
 
-    await addTemplateService(type, templateId, isGlobalTemplate, createdBy)
+    await addTemplateService(type, templateId, isGlobalTemplate, createdBy);
 
-    res.status(201).json({ message: 'Template created successfully' })
+    res.status(201).json({ message: 'Template created successfully' });
   } catch (error) {
-    res.status(500).json({ error: error.toString() })
+    res.status(500).json({ error: error.toString() });
   }
-}
+};

@@ -1,5 +1,5 @@
-import { View, Text, TouchableOpacity } from 'react-native'
-import { TableContainer } from '../Table'
+import { View, Text, TouchableOpacity } from 'react-native';
+import { TableContainer } from '../Table';
 
 export const Inventory = () => {
   return (
@@ -7,5 +7,5 @@ export const Inventory = () => {
       <Text>Inventory</Text>
       {/* <TableContainer /> */}
     </View>
-  )
-}
+  );
+};

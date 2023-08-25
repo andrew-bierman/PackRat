@@ -1,4 +1,4 @@
-import User from '../../models/userModel'
+import User from '../../models/userModel';
 
 /**
  * Edits a user.
@@ -10,13 +10,13 @@ import User from '../../models/userModel'
  */
 export const editUser = async (req, res) => {
   try {
-    const { userId } = req.body
+    const { userId } = req.body;
 
     const editedUser = await User.findOneAndUpdate({ _id: userId }, req.body, {
-      returnOriginal: false
-    }).populate('favorites')
-    res.status(200).json(editedUser)
+      returnOriginal: false,
+    }).populate('favorites');
+    res.status(200).json(editedUser);
   } catch (error) {
-    res.status(404).json({ msg: 'Unable to edit user' })
+    res.status(404).json({ msg: 'Unable to edit user' });
   }
-}
+};

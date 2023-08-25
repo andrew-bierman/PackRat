@@ -1,9 +1,9 @@
-import React from 'react'
-import { Box, Text, Stack } from 'native-base'
-import { StyleSheet, Platform } from 'react-native'
-import { useSelector } from 'react-redux'
+import React from 'react';
+import { Box, Text, Stack } from 'native-base';
+import { StyleSheet, Platform } from 'react-native';
+import { useSelector } from 'react-redux';
 
-import { theme } from '../../theme'
+import { theme } from '../../theme';
 
 /**
  * Retrieves the appropriate container style based on the provided type.
@@ -14,15 +14,15 @@ import { theme } from '../../theme'
 const getContainerStyle = (type) => {
   switch (type) {
     case 'search':
-      return styles.searchContainer
+      return styles.searchContainer;
     case 'map':
-      return styles.mapCard
+      return styles.mapCard;
     case 'mobile':
-      return styles.containerMobile
+      return styles.containerMobile;
     default:
-      return styles.mutualStyles
+      return styles.mutualStyles;
   }
-}
+};
 
 /**
  * Generate the function comment for the given function body.
@@ -37,22 +37,22 @@ const getContainerStyle = (type) => {
  * @param {React.Component} props.children - The children components of the large card.
  * @return {React.Component} The rendered large card component.
  */
-export default function LargeCard ({
+export default function LargeCard({
   title,
   Icon,
   ContentComponent,
   contentProps,
   type,
   customStyle,
-  children
+  children,
 }) {
   const currentShape = useSelector(
-    (state) => state.search.selectedSearchResult
-  )
+    (state) => state.search.selectedSearchResult,
+  );
 
-  console.log('currentShape', currentShape)
+  console.log('currentShape', currentShape);
 
-  const containerStyle = customStyle || getContainerStyle(type)
+  const containerStyle = customStyle || getContainerStyle(type);
 
   return (
     <Stack
@@ -67,7 +67,7 @@ export default function LargeCard ({
           flexDirection: 'row',
           gap: 15,
           alignItems: 'center',
-          paddingVertical: 15
+          paddingVertical: 15,
         }}
       >
         {Icon ? <Icon /> : null}
@@ -75,7 +75,7 @@ export default function LargeCard ({
           style={{
             color: theme.colors.textPrimary,
             fontSize: theme.font.size,
-            fontWeight: 600
+            fontWeight: 600,
           }}
         >
           {title && <Text>{title}</Text>}
@@ -84,7 +84,7 @@ export default function LargeCard ({
       {ContentComponent ? <ContentComponent {...contentProps} /> : null}
       {children}
     </Stack>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     textAlign: 'center',
-    padding: theme.size.cardPadding
+    padding: theme.size.cardPadding,
   },
   containerMobile: {
     backgroundColor: theme.colors.card,
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 25,
     flex: 1,
-    paddingHorizontal: 100
+    paddingHorizontal: 100,
   },
   searchContainer: {
     backgroundColor: theme.colors.card,
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 60,
     paddingVertical: 70,
-    height: Platform.OS === 'web' ? '450px' : '100%'
+    height: Platform.OS === 'web' ? '450px' : '100%',
   },
   mapCard: {
     backgroundColor: theme.colors.card,
@@ -126,6 +126,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: theme.padding.paddingInside,
     marginBottom: 20,
     height: Platform.OS === 'web' ? '650px' : '100%',
-    overflow: 'hidden'
-  }
-})
+    overflow: 'hidden',
+  },
+});

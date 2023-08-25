@@ -1,4 +1,4 @@
-import Template from '../../models/templateModel'
+import Template from '../../models/templateModel';
 
 /**
  * Edits a template.
@@ -9,22 +9,24 @@ import Template from '../../models/templateModel'
 export const editTemplateService = async (
   templateId: string,
   type: string,
-  isGlobalTemplate: boolean
+  isGlobalTemplate: boolean,
 ) => {
   try {
-    const template: any = await Template.findById(templateId)
+    const template: any = await Template.findById(templateId);
 
     if (!template) {
-      throw new Error('Template not found')
+      throw new Error('Template not found');
     }
 
-    template.type = type || template.type
+    template.type = type || template.type;
     template.isGlobalTemplate =
-            isGlobalTemplate !== undefined ? isGlobalTemplate : template.isGlobalTemplate
+      isGlobalTemplate !== undefined
+        ? isGlobalTemplate
+        : template.isGlobalTemplate;
 
-    const updatedTemplate = await template.save()
-    return updatedTemplate
+    const updatedTemplate = await template.save();
+    return updatedTemplate;
   } catch (error) {
-    throw new Error(error.toString())
+    throw new Error(error.toString());
   }
-}
+};
