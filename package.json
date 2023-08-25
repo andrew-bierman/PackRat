@@ -18,6 +18,7 @@
     "start:prod": "npm run start:prod --prefix server",
     "dev:client": "npm start --prefix client",
     "dev:server": "npm start --prefix server",
+    "test": "npm run test:all",
     "test:all": "npm run test:client && npm run test:server",
     "test:client": "npm test --prefix client",
     "test:server": "npm test --prefix server",
@@ -57,7 +58,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged",
+      "pre-commit": "echo 'Running tests...' && npm run test:all && echo 'Linting...' && npm run lint-staged",
       "pre-push": "npm run test:all"
     }
   },
