@@ -1,35 +1,34 @@
 // FeedPreview.js
 
-import React, { useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { Card, Text, HStack, Badge } from 'native-base'
-import { Link } from 'expo-router'
-import { Dimensions, FlatList, StyleSheet, View } from 'react-native'
-import { getPublicPacks, getPublicTrips } from '../../store/feedStore'
-import { theme } from '../../theme'
-import Carousel from '../carousel'
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { Card, Text, HStack, Badge } from 'native-base';
+import { Link } from 'expo-router';
+import { Dimensions, FlatList, StyleSheet, View } from 'react-native';
+import { getPublicPacks, getPublicTrips } from '../../store/feedStore';
+import { theme } from '../../theme';
+import Carousel from '../carousel';
 
-const { height, width } = Dimensions.get('window')
+const { height, width } = Dimensions.get('window');
 
 const FeedPreviewScroll = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getPublicPacks())
-    dispatch(getPublicTrips())
-  }, [])
+    dispatch(getPublicPacks());
+    dispatch(getPublicTrips());
+  }, []);
 
-  const feedData = useSelector((state) => state.feed)
-  const filteredFeedData = feedData.publicTrips.concat(feedData.publicPacks)
+  const feedData = useSelector((state) => state.feed);
+  const filteredFeedData = feedData.publicTrips.concat(feedData.publicPacks);
 
   return (
     <Carousel itemWidth={250}>
       {filteredFeedData.map((item, index) => {
-        const linkStr = `/${item.type}/${item._id}`
-        return linkStr
-          ? (
+        const linkStr = `/${item.type}/${item._id}`;
+        return linkStr ? (
           <Link href={linkStr} key={index}>
-            <View style={styles.cardStyles} key={index} >
+            <View style={styles.cardStyles} key={index}>
               <HStack justifyContent="space-between">
                 <Text style={styles.feedItemTitle}>{item.name}</Text>
                 <Badge colorScheme="info" textTransform={'capitalize'}>
@@ -39,18 +38,17 @@ const FeedPreviewScroll = () => {
               <Text>{item.description}</Text>
             </View>
           </Link>
-            )
-          : null
+        ) : null;
       })}
     </Carousel>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   feedPreview: {
     flexDirection: 'row',
     width: '100%',
-    marginBottom: 20
+    marginBottom: 20,
   },
   cardStyles: {
     height: 100,
@@ -58,8 +56,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.primary,
     borderRadius: 5,
     padding: 20,
-    marginLeft: 10
-
+    marginLeft: 10,
   },
   feedItem: {
     width: 250,
@@ -68,14 +65,14 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderRadius: 5,
     marginHorizontal: 10,
-    padding: 10 // Add padding to create space within the card
+    padding: 10, // Add padding to create space within the card
   },
   feedItemTitle: {
     fontWeight: 'bold',
     fontSize: 16,
     color: theme.colors.text,
-    marginBottom: 5
-  }
-})
+    marginBottom: 5,
+  },
+});
 
-export default FeedPreviewScroll
+export default FeedPreviewScroll;

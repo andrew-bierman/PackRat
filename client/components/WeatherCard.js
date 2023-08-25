@@ -1,23 +1,23 @@
-import { Text, VStack, Box, Image, Stack, HStack } from 'native-base'
+import { Text, VStack, Box, Image, Stack, HStack } from 'native-base';
 
 // utils
-import { getNext4Days } from '../utils/getNextDays'
-import { dayNumToString } from '../utils/dayNumToString'
-import { convertToKmh } from '../utils/convertToKmh'
-import { convertToCelsius } from '../utils/convertToCelsius'
-import UseTheme from '../hooks/useTheme'
+import { getNext4Days } from '../utils/getNextDays';
+import { dayNumToString } from '../utils/dayNumToString';
+import { convertToKmh } from '../utils/convertToKmh';
+import { convertToCelsius } from '../utils/convertToCelsius';
+import UseTheme from '../hooks/useTheme';
 // redux
-import { useSelector } from 'react-redux'
+import { useSelector } from 'react-redux';
 
 // icons
-import { Octicons } from '@expo/vector-icons'
-import { FontAwesome5 } from '@expo/vector-icons'
-import { Feather } from '@expo/vector-icons'
-import { FontAwesome } from '@expo/vector-icons'
+import { Octicons } from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
 
-import { StyleSheet } from 'react-native'
-import { theme } from '../theme'
-import { defaultWeatherObject } from '../constants/defaultWeatherObj'
+import { StyleSheet } from 'react-native';
+import { theme } from '../theme';
+import { defaultWeatherObject } from '../constants/defaultWeatherObj';
 
 const monthArr = [
   'January',
@@ -31,21 +31,24 @@ const monthArr = [
   'September',
   'October',
   'November',
-  'December'
-]
+  'December',
+];
 
-export default function WeatherCard ({ weatherObject = defaultWeatherObject, weatherWeek = [] }) {
+export default function WeatherCard({
+  weatherObject = defaultWeatherObject,
+  weatherWeek = [],
+}) {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme()
-  const date = new Date()
-  const dayOfMonth = date.getDate()
-  const year = date.getFullYear()
-  const day = date.getDay()
+    UseTheme();
+  const date = new Date();
+  const dayOfMonth = date.getDate();
+  const year = date.getFullYear();
+  const day = date.getDay();
 
-  const dateFormatted = `${monthArr[date.getMonth()]} ${dayOfMonth}, ${year}`
-  const restOfWeek = getNext4Days(day)
+  const dateFormatted = `${monthArr[date.getMonth()]} ${dayOfMonth}, ${year}`;
+  const restOfWeek = getNext4Days(day);
 
-  const weatherIconUrl = `https://openweathermap.org/img/wn/${weatherObject.weather[0].icon}@2x.png`
+  const weatherIconUrl = `https://openweathermap.org/img/wn/${weatherObject.weather[0].icon}@2x.png`;
 
   return (
     <Stack
@@ -65,7 +68,7 @@ export default function WeatherCard ({ weatherObject = defaultWeatherObject, wea
           style={{
             color: currentTheme.colors.textPrimary,
             fontSize: 18,
-            fontWeight: 600
+            fontWeight: 600,
           }}
         >
           Weather
@@ -83,7 +86,7 @@ export default function WeatherCard ({ weatherObject = defaultWeatherObject, wea
             style={{
               color: currentTheme.colors.weatherIcon,
               fontSize: 18,
-              fontWeight: 600
+              fontWeight: 600,
             }}
           >
             {dayNumToString(day)}
@@ -108,7 +111,7 @@ export default function WeatherCard ({ weatherObject = defaultWeatherObject, wea
             style={{
               color: currentTheme.colors.weatherIcon,
               fontSize: 18,
-              fontWeight: 600
+              fontWeight: 600,
             }}
           >
             {convertToCelsius(weatherObject.main.temp)}
@@ -136,7 +139,7 @@ export default function WeatherCard ({ weatherObject = defaultWeatherObject, wea
               <Text
                 style={{
                   color: currentTheme.colors.weatherIcon,
-                  fontWeight: 600
+                  fontWeight: 600,
                 }}
               >
                 PRECIPITATION
@@ -154,7 +157,7 @@ export default function WeatherCard ({ weatherObject = defaultWeatherObject, wea
               <Text
                 style={{
                   color: currentTheme.colors.weatherIcon,
-                  fontWeight: 600
+                  fontWeight: 600,
                 }}
               >
                 HUMIDITY
@@ -172,7 +175,7 @@ export default function WeatherCard ({ weatherObject = defaultWeatherObject, wea
               <Text
                 style={{
                   color: currentTheme.colors.weatherIcon,
-                  fontWeight: 600
+                  fontWeight: 600,
                 }}
               >
                 WIND
@@ -190,7 +193,7 @@ export default function WeatherCard ({ weatherObject = defaultWeatherObject, wea
           style={styles.cardContainer}
         >
           {weatherWeek.map((day, i) => {
-            const weatherIconUrl = `https://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png`
+            const weatherIconUrl = `https://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png`;
 
             return (
               <Stack
@@ -208,7 +211,7 @@ export default function WeatherCard ({ weatherObject = defaultWeatherObject, wea
                   {convertToCelsius(day.main.temp)}
                 </Text>
               </Stack>
-            )
+            );
           })}
         </Stack>
       </Box>
@@ -229,7 +232,7 @@ export default function WeatherCard ({ weatherObject = defaultWeatherObject, wea
         ))}
       </Stack>
     </Stack>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -238,7 +241,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-around',
     backgroundColor: theme.colors.card,
-    padding: 22
+    padding: 22,
   },
 
   card: {
@@ -247,7 +250,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 18,
     borderRadius: 8,
-    shadowColor: 'black'
+    shadowColor: 'black',
   },
 
   cardContainer: {
@@ -257,7 +260,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 18,
     borderRadius: 8,
-    shadowColor: 'black'
+    shadowColor: 'black',
   },
 
   weatherInfo: {
@@ -265,18 +268,18 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     gap: 10,
-    flex: 1
+    flex: 1,
   },
   weatherCard: {
     alignItems: 'center',
     justifyContent: 'space-between',
     gap: 10,
     flex: 1,
-    width: '100%'
+    width: '100%',
   },
   iconsSection: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 15
-  }
-})
+    gap: 15,
+  },
+});

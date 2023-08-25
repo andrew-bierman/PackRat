@@ -1,4 +1,4 @@
-import Pack from '../../models/packModel'
+import Pack from '../../models/packModel';
 
 /**
  * Deletes a pack by its ID.
@@ -7,7 +7,7 @@ import Pack from '../../models/packModel'
  * @return {Object} - An object containing a message indicating the success of the deletion.
  */
 export const deletePackService = async (packId) => {
-  await Pack.findOneAndDelete({ _id: packId })
+  await Pack.findOneAndDelete({ _id: packId });
 
-  return { message: 'pack was deleted successfully' }
-}
+  return { message: 'pack was deleted successfully' };
+};

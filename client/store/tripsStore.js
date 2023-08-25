@@ -1,51 +1,51 @@
 import {
   createSlice,
   createAsyncThunk,
-  createEntityAdapter
-} from '@reduxjs/toolkit'
-import axios from '~/config/axios'
-import { api } from '../constants/api'
+  createEntityAdapter,
+} from '@reduxjs/toolkit';
+import axios from '~/config/axios';
+import { api } from '../constants/api';
 
 export const deleteTrip = createAsyncThunk(
   'trips/deleteTrip',
   async (tripId) => {
     const response = await axios.delete(`${api}/trip`, {
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       data: {
-        tripId
-      }
-    })
-    return response.data
-  }
-)
+        tripId,
+      },
+    });
+    return response.data;
+  },
+);
 
 export const fetchUserTrips = createAsyncThunk(
   'trips/fetchUserTrips',
   async (ownerId) => {
-    const response = await axios.get(`${api}/trip/${ownerId}`)
-    return response.data
-  }
-)
+    const response = await axios.get(`${api}/trip/${ownerId}`);
+    return response.data;
+  },
+);
 
 export const addTrip = createAsyncThunk('trips/addTrip', async (newTrip) => {
-  console.log('new trip', newTrip)
-  const response = await axios.post(`${api}/trip/`, newTrip)
-  return response.data
-})
+  console.log('new trip', newTrip);
+  const response = await axios.post(`${api}/trip/`, newTrip);
+  return response.data;
+});
 
 export const editTrip = createAsyncThunk(
   'trips/editTrip',
   async (updatedTrip) => {
-    const response = await axios.put(`${api}/trip/`, updatedTrip)
-    return response.data
-  }
-)
+    const response = await axios.put(`${api}/trip/`, updatedTrip);
+    return response.data;
+  },
+);
 
 const tripsAdapter = createEntityAdapter({
-  selectId: (trip) => trip._id
-})
+  selectId: (trip) => trip._id,
+});
 
 const initialState = tripsAdapter.getInitialState({
   newTrip: {
@@ -56,33 +56,33 @@ const initialState = tripsAdapter.getInitialState({
     destination: '',
     trail: '',
     weather: {},
-    packId: ''
+    packId: '',
   },
   isLoading: false,
-  error: null
-})
+  error: null,
+});
 
 const tripsSlice = createSlice({
   name: 'trips',
   initialState,
   reducers: {
-    updateNewTrip (state, action) {
-      state.newTrip = action.payload
+    updateNewTrip(state, action) {
+      state.newTrip = action.payload;
     },
-    updateNewTripVersatile (state, action) {
-      state.newTrip[action.payload.key] = action.payload.value
+    updateNewTripVersatile(state, action) {
+      state.newTrip[action.payload.key] = action.payload.value;
     },
-    updateNewTripPack (state, action) {
-      console.log('action.payload in updatenewtrippack', action.payload)
-      state.newTrip.packId = action.payload
+    updateNewTripPack(state, action) {
+      console.log('action.payload in updatenewtrippack', action.payload);
+      state.newTrip.packId = action.payload;
     },
-    updateNewTripWeather (state, action) {
-      state.newTrip.weather = action.payload
+    updateNewTripWeather(state, action) {
+      state.newTrip.weather = action.payload;
     },
-    updateNewTripTrail (state, action) {
-      state.newTrip.trail = action.payload
+    updateNewTripTrail(state, action) {
+      state.newTrip.trail = action.payload;
     },
-    resetNewTrip (state) {
+    resetNewTrip(state) {
       state.newTrip = {
         name: '',
         description: '',
@@ -91,66 +91,66 @@ const tripsSlice = createSlice({
         location: '',
         trail: '',
         weather: {},
-        packId: ''
-      }
-    }
+        packId: '',
+      };
+    },
   },
   extraReducers: (builder) => {
     builder
       .addCase(deleteTrip.pending, (state) => {
-        state.isLoading = true
-        state.error = null
+        state.isLoading = true;
+        state.error = null;
       })
       .addCase(deleteTrip.fulfilled, (state, action) => {
-        tripsAdapter.removeOne(state, action.payload._id)
-        state.isLoading = false
-        state.error = null
+        tripsAdapter.removeOne(state, action.payload._id);
+        state.isLoading = false;
+        state.error = null;
       })
       .addCase(deleteTrip.rejected, (state, action) => {
-        state.isLoading = false
-        state.error = action.error.message
+        state.isLoading = false;
+        state.error = action.error.message;
       })
       .addCase(fetchUserTrips.pending, (state) => {
-        state.isLoading = true
-        state.error = null
+        state.isLoading = true;
+        state.error = null;
       })
       .addCase(fetchUserTrips.fulfilled, (state, action) => {
-        tripsAdapter.setAll(state, action.payload)
-        state.isLoading = false
-        state.error = null
+        tripsAdapter.setAll(state, action.payload);
+        state.isLoading = false;
+        state.error = null;
       })
       .addCase(fetchUserTrips.rejected, (state, action) => {
-        state.isLoading = false
-        state.error = action.error.message
+        state.isLoading = false;
+        state.error = action.error.message;
       })
       .addCase(addTrip.pending, (state) => {
-        state.isLoading = true
-        state.error = null
+        state.isLoading = true;
+        state.error = null;
       })
       .addCase(addTrip.fulfilled, (state, action) => {
-        tripsAdapter.addOne(state, action.payload)
-        state.isLoading = false
-        state.error = null
+        tripsAdapter.addOne(state, action.payload);
+        state.isLoading = false;
+        state.error = null;
       })
       .addCase(addTrip.rejected, (state, action) => {
-        state.isLoading = false
-        state.error = action.error.message
+        state.isLoading = false;
+        state.error = action.error.message;
       })
       .addCase(editTrip.pending, (state) => {
-        state.isLoading = true
-        state.error = null
+        state.isLoading = true;
+        state.error = null;
       })
       .addCase(editTrip.fulfilled, (state, action) => {
-        tripsAdapter.upsertOne(state, action.payload)
-        state.isLoading = false
-        state.error = null
+        tripsAdapter.upsertOne(state, action.payload);
+        state.isLoading = false;
+        state.error = null;
       })
       .addCase(editTrip.rejected, (state, action) => {
-        state.isLoading = false
-        state.error = action.error.message
-      })
-  }
-})
+        state.isLoading = false;
+        state.error = action.error.message;
+      });
+  },
+});
 
 export const {
   updateNewTrip,
@@ -158,13 +158,13 @@ export const {
   updateNewTripPack,
   updateNewTripWeather,
   updateNewTripTrail,
-  resetNewTrip
-} = tripsSlice.actions
+  resetNewTrip,
+} = tripsSlice.actions;
 
 export const { selectAll: selectAllTrips, selectById: selectTripById } =
-  tripsAdapter.getSelectors((state) => state.trips)
+  tripsAdapter.getSelectors((state) => state.trips);
 
-export const selectIsLoading = (state) => state.trips.isLoading
-export const selectError = (state) => state.trips.error
+export const selectIsLoading = (state) => state.trips.isLoading;
+export const selectError = (state) => state.trips.error;
 
-export default tripsSlice.reducer
+export default tripsSlice.reducer;

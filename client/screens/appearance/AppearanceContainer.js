@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react'
-import { VStack, Box, Text, Switch } from 'native-base'
-import { StyleSheet } from 'react-native'
-import UseTheme from '../../hooks/useTheme'
-import { Paragraph, Card, H2, XStack, Button, Image } from 'tamagui'
-import { Card as RNPCard } from 'react-native-paper'
-import { DialogDemo } from '../../components/dialog'
+import React, { useEffect, useState } from 'react';
+import { VStack, Box, Text, Switch } from 'native-base';
+import { StyleSheet } from 'react-native';
+import UseTheme from '../../hooks/useTheme';
+import { Paragraph, Card, H2, XStack, Button, Image } from 'tamagui';
+import { Card as RNPCard } from 'react-native-paper';
+import { DialogDemo } from '../../components/dialog';
 
-export default function AppearanceContainer () {
-  const { enableDarkMode, enableLightMode, currentTheme, isDark } = UseTheme()
-  const [isEnabled, setIsEnabled] = useState(false)
-  const [showKitchenSink, setShowKitchenSink] = useState(true)
+export default function AppearanceContainer() {
+  const { enableDarkMode, enableLightMode, currentTheme, isDark } = UseTheme();
+  const [isEnabled, setIsEnabled] = useState(false);
+  const [showKitchenSink, setShowKitchenSink] = useState(true);
 
   /**
    * Toggles the switch between dark mode and light mode.
@@ -18,15 +18,15 @@ export default function AppearanceContainer () {
    */
   const toggleSwitch = () => {
     setIsEnabled((prevIsEnabled) => {
-      const newState = !prevIsEnabled
-      newState ? enableDarkMode() : enableLightMode()
-      return newState
-    })
-  }
+      const newState = !prevIsEnabled;
+      newState ? enableDarkMode() : enableLightMode();
+      return newState;
+    });
+  };
 
   useEffect(() => {
-    setIsEnabled(isDark) // synchronize isEnabled with isDark whenever isDark changes
-  }, [isDark])
+    setIsEnabled(isDark); // synchronize isEnabled with isDark whenever isDark changes
+  }, [isDark]);
 
   return (
     <VStack style={styles.mainContainer}>
@@ -60,7 +60,7 @@ export default function AppearanceContainer () {
               fontSize: 'md',
               fontWeight: 'medium',
               color: 'amber.100',
-              letterSpacing: 'lg'
+              letterSpacing: 'lg',
             }}
             p={4}
             bg={['primary.500']}
@@ -80,10 +80,10 @@ export default function AppearanceContainer () {
         )}
       </Box>
     </VStack>
-  )
+  );
 }
 
-export function DemoCard (props) {
+export function DemoCard(props) {
   return (
     <Card elevate size="$4" bordered {...props}>
       <Card.Header padded>
@@ -98,19 +98,19 @@ export function DemoCard (props) {
 
       </Card.Background> */}
     </Card>
-  )
+  );
 }
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 25
+    padding: 25,
   },
   infoSection: {
     flexDirection: 'column',
     alignItems: 'center',
     borderRadius: 12,
-    padding: 20
-  }
-})
+    padding: 20,
+  },
+});
