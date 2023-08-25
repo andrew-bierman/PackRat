@@ -1,0 +1,14 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "Running pre-commit hook"
+
+echo "Running lint-staged"
+lint-staged
+
+if [ $? -eq 0 ]; then
+  echo "Lint-staged passed"
+else
+  echo "Lint-staged failed"
+  exit 1
+fi

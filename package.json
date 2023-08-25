@@ -56,12 +56,6 @@
       "prettier --write"
     ]
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "echo 'Running tests...' && npm run test:all && echo 'Linting...' && npm run lint-staged",
-      "pre-push": "npm run test:all"
-    }
-  },
   "author": "Andrew Bierman",
   "license": "SEE LICENSE IN LICENSE.txt",
   "bugs": {
