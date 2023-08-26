@@ -10,8 +10,8 @@ import User from '../../models/userModel';
  */
 export const checkCode = async (req: any, res: any, next) => {
   const { email, code } = req.body;
-  let user = await User.find({
-    $and: [{ email: email.toLowerCase() }, { code: code }],
+  const user = await User.find({
+    $and: [{ email: email.toLowerCase() }, { code }],
   });
   if (user.length) {
     responseHandler(res);
