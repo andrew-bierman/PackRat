@@ -9,7 +9,7 @@ import { getTripsService } from '../../services/trip/getTripsService';
  */
 export const getTrips = async (req, res) => {
   try {
-    const { ownerId } = req.packs;
+    const { ownerId } = req.params;
 
     const trips = await getTripsService(ownerId);
 

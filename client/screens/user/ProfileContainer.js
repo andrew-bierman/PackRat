@@ -22,7 +22,7 @@ import {
   selectAllFavorites,
 } from '../../store/favoritesStore';
 import { getUser } from '../../store/userStore';
-import { fetchUserTrips } from '../../store/tripsStore';
+import { fetchUserTrips, selectAllTrips } from '../../store/tripsStore';
 import { useMatchesCurrentUser } from '~/hooks/useMatchesCurrentUser';
 import { useRouter } from 'expo-router';
 
@@ -134,7 +134,7 @@ export default function ProfileContainer({ id = null }) {
   const userStore = useSelector((state) => state.userStore);
   const authStore = useSelector((state) => state.auth);
   const allPacks = useSelector(selectAllPacks);
-  const tripsData = useSelector((state) => state.trips);
+  const tripsData = useSelector(selectAllTrips);
   const allFavorites = useSelector(selectAllFavorites);
 
   id = id ?? authUser?._id;
@@ -210,10 +210,11 @@ export default function ProfileContainer({ id = null }) {
               />
             </Box>
           )}
-          {Array.isArray(tripsData?.trips) && tripsData?.trips.length > 0 && (
+
+          {Array.isArray(tripsData) && tripsData.length > 0 && (
             <Box style={styles.userDataContainer}>
               <UserDataContainer
-                data={tripsData?.trips}
+                data={tripsData}
                 type="trips"
                 userId={user?._id}
               />
