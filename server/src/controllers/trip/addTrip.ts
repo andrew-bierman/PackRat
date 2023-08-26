@@ -1,4 +1,4 @@
-import { addTripService } from "../../services/trip/addTripService";
+import { addTripService } from '../../services/trip/addTripService';
 
 /**
  * Adds a trip to the database.
@@ -41,7 +41,6 @@ export const addTrip = async (req, res) => {
     res.status(200).json({ msg: result });
   } catch (error) {
     console.error(error);
-    res.status(404).json({ msg: "Unable to add trip" });
+    res.status(404).json({ msg: 'Unable to add trip' });
   }
 };
-

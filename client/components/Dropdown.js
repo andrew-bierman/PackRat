@@ -1,4 +1,3 @@
-
 // import React from "react";
 
 // import { View, StyleSheet } from "react-native";
@@ -23,7 +22,7 @@
 //   style,
 // }) => {
 //   // console.log("data in dropdown ------->", data);
-  
+
 //   const items =
 //   data?.map((item, index) => {
 //     let val = item;
@@ -41,7 +40,7 @@
 //     { label: "Item 2", value: "item2" },
 //     { label: "Item 3", value: "item3", selectable: false },
 //   ];
-  
+
 //   return (
 //     <View style={{ ...styles.container, ...style, width: width || "100%" }}>
 //       <DropDownPicker
@@ -117,8 +116,8 @@
 
 // export default DropdownComponent;
 
-import React from "react";
-import { Box, Center, Select, CheckIcon } from "native-base";
+import React from 'react';
+import { Box, Center, Select, CheckIcon } from 'native-base';
 
 export const DropdownComponent = ({
   data,
@@ -132,14 +131,14 @@ export const DropdownComponent = ({
 
   return (
     <Center>
-      <Box style={{...style, width: width || '100%'}}>
+      <Box style={{ ...style, width: width || '100%' }}>
         <Select
           selectedValue={value}
           width="100%"
           accessibilityLabel="Choose Service"
-          placeholder={placeholder || "Select"}
+          placeholder={placeholder || 'Select'}
           _selectedItem={{
-            bg: "teal.600",
+            bg: 'teal.600',
             endIcon: <CheckIcon size="5" />,
           }}
           onValueChange={onValueChange}
@@ -154,11 +153,7 @@ export const DropdownComponent = ({
                   label = item.name;
                 }
                 return (
-                  <Select.Item
-                    key={index}
-                    label={String(label)}
-                    value={val}
-                  />
+                  <Select.Item key={index} label={String(label)} value={val} />
                 );
               })
             : null}
