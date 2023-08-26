@@ -5,6 +5,7 @@ import {
   getFavoritePacksByUser,
   getUserFavorites,
 } from '../controllers/favorite/index';
+import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
 
 const router = express.Router();
 
@@ -33,7 +34,7 @@ const router = express.Router();
  *       '500':
  *         description: Error adding to favorite
  */
-router.post('/', validator.addToFavorite, addToFavorite);
+router.post('/', validator.addToFavorite, tryCatchWrapper(addToFavorite));
 
 /**
  * @swagger
@@ -56,7 +57,7 @@ router.post('/', validator.addToFavorite, addToFavorite);
  *       '500':
  *         description: Error retrieving favorites
  */
-router.get('/user/:userId', getUserFavorites);
+router.get('/user/:userId', tryCatchWrapper(getUserFavorites));
 
 /**
  * @swagger
@@ -79,6 +80,6 @@ router.get('/user/:userId', getUserFavorites);
  *       '500':
  *         description: Error retrieving favorite packs
  */
-router.get('/user/:userId/packs', getFavoritePacksByUser);
+router.get('/user/:userId/packs', tryCatchWrapper(getFavoritePacksByUser));
 
 export default router;

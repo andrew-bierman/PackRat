@@ -1,7 +1,7 @@
 export const defaultWeatherObject = {
   base: 'stations',
   clouds: {
-    all: 100
+    all: 100,
   },
   cod: 200,
   coord: { lon: -77.4343, lat: 37.5385 },
@@ -13,7 +13,7 @@ export const defaultWeatherObject = {
     pressure: 1022,
     temp: 48.61,
     temp_max: 50.65,
-    temp_min: 47.19
+    temp_min: 47.19,
   },
 
   name: 'Virginia',
@@ -23,7 +23,7 @@ export const defaultWeatherObject = {
     id: 2007417,
     sunrise: 1664795210,
     sunset: 1664837428,
-    type: 2
+    type: 2,
   },
 
   timezone: -14400,
@@ -33,12 +33,12 @@ export const defaultWeatherObject = {
       description: 'overcast clouds',
       icon: '04n',
       id: 804,
-      main: 'Clouds'
-    }
+      main: 'Clouds',
+    },
   ],
   wind: {
     speed: 16.11,
     deg: 360,
-    gust: 23.02
-  }
-}
+    gust: 23.02,
+  },
+};

@@ -22,9 +22,12 @@
     "test:all": "npm run test:client && npm run test:server",
     "test:client": "npm test --prefix client",
     "test:server": "npm test --prefix server",
+    "lint": "npm run lint:all",
     "lint:all": "npm run lint:client && npm run lint:server",
     "lint:client": "npm run lint --prefix client",
-    "lint:server": "npm run lint --prefix server"
+    "lint:server": "npm run lint --prefix server",
+    "format": "npm run format:all",
+    "format:all": "prettier --write \"**/*.{js,jsx,ts,tsx}\""
   },
   "repository": {
     "type": "git",
