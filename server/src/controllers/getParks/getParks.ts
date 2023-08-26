@@ -1,10 +1,10 @@
-const fetch = (...args) =>
-  import('node-fetch').then(({ default: fetch }) =>
-    fetch(...(args as Parameters<typeof fetch>)),
-  );
 import { RetrievingParksDataError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { oneEntity } from '../../utils/oneEntity';
+const fetch = async (...args) =>
+  import('node-fetch').then(async ({ default: fetch }) =>
+    fetch(...(args as Parameters<typeof fetch>)),
+  );
 
 /**
  * Retrieves a list of parks based on the specified state code.
@@ -13,7 +13,7 @@ import { oneEntity } from '../../utils/oneEntity';
  * @return {Promise} A promise that resolves with the park data or an error message.
  */
 export const getParks = async (req, res, next) => {
-  let abbrState = await oneEntity(req.query.abbrState);
+  const abbrState = await oneEntity(req.query.abbrState);
 
   const X_RAPIDAPI_KEY = process.env.X_RAPIDAPI_KEY;
   const NPS_API = process.env.NPS_API;

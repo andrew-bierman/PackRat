@@ -1,4 +1,4 @@
-import express, { NextFunction } from 'express';
+import express, { type NextFunction } from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import { isCelebrateError, errors } from 'celebrate';
