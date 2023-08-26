@@ -1,30 +1,34 @@
-import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
-import axios from "axios";
-import { api } from "../constants/api";
+import {
+  createSlice,
+  createAsyncThunk,
+  createEntityAdapter,
+} from '@reduxjs/toolkit';
+import axios from '~/config/axios';
+import { api } from '../constants/api';
 
 const itemsAdapter = createEntityAdapter();
 
 export const deleteItem = createAsyncThunk(
-  "items/deleteItem",
+  'items/deleteItem',
   async (itemId) => {
     const response = await axios.delete(`${api}/item`, {
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       data: {
         itemId,
       },
     });
     return response.data;
-  }
+  },
 );
 
-export const editItem = createAsyncThunk("items/editItem", async (newItem) => {
+export const editItem = createAsyncThunk('items/editItem', async (newItem) => {
   const response = await axios.put(`${api}/item/`, newItem);
   return response.data;
 });
 
-export const getItems = createAsyncThunk("items/getItems", async (packId) => {
+export const getItems = createAsyncThunk('items/getItems', async (packId) => {
   const response = await axios.get(`${api}/item/${packId}`);
   return response.data;
 });
@@ -36,7 +40,7 @@ const initialState = itemsAdapter.getInitialState({
 });
 
 const itemsSlice = createSlice({
-  name: "items",
+  name: 'items',
   initialState,
   reducers: {},
   extraReducers: (builder) => {

@@ -1,4 +1,6 @@
-import { getAIResponseService } from "../../services/openAi/openAi.service";
+import { GetResponseFromAIError } from '../../helpers/errors';
+import { responseHandler } from '../../helpers/responseHandler';
+import { getAIResponseService } from '../../services/openAi/openAi.service';
 
 /**
  * Retrieves an AI response based on user input and conversation history.
@@ -6,16 +8,19 @@ import { getAIResponseService } from "../../services/openAi/openAi.service";
  * @param {Object} res - The response object.
  * @return {Object} The AI response and updated conversation object.
  */
-export const getAIResponse = async (req, res) => {
+export const getAIResponse = async (req, res, next) => {
   try {
     const { userId, conversationId, userInput } = req.body;
 
-    const result = await getAIResponseService(userId, conversationId, userInput);
+    const result = await getAIResponseService(
+      userId,
+      conversationId,
+      userInput,
+    );
 
-    res.json(result);
+    res.locals.data = result;
+    responseHandler(res);
   } catch (error) {
-    console.error(error);
-    console.error(error.message);
-    res.status(500).json({ error: "Failed to get response from AI." });
+    next(GetResponseFromAIError);
   }
 };

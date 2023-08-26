@@ -1,5 +1,10 @@
-const fetch = (...args: Parameters<typeof fetch>) => import('node-fetch').then(({default: fetch}) => fetch(...args as Parameters<typeof fetch>));
-import { oneEntity } from "../../utils/oneEntity";
+import { ErrorFetchingGeoCodeError } from '../../helpers/errors';
+import { responseHandler } from '../../helpers/responseHandler';
+import { oneEntity } from '../../utils/oneEntity';
+const fetch = async (...args: Parameters<typeof fetch>) =>
+  import('node-fetch').then(async ({ default: fetch }) =>
+    fetch(...(args as Parameters<typeof fetch>)),
+  );
 
 /**
  * Retrieves the geocode for a given address array.
@@ -9,14 +14,14 @@ import { oneEntity } from "../../utils/oneEntity";
  * @param {Object} res - The response object.
  * @return {Promise<void>} - A promise that resolves when the geocode is retrieved and the response is sent.
  */
-export const getGeoCode = async (req, res) => {
-  let addressArray = await oneEntity(req.query.addressArray);
-  const transform = addressArray.split(", ").join("%20").split(" ").join("%20");
+export const getGeoCode = async (req, res, next) => {
+  const addressArray = await oneEntity(req.query.addressArray);
+  const transform = addressArray.split(', ').join('%20').split(' ').join('%20');
 
   const GEO_CODE_URL = process.env.GEO_CODE_URL;
   const GEOAPIFY_KEY = process.env.GEOAPIFY_KEY;
 
-  let params = `?`;
+  let params = '?';
 
   if (addressArray) params += `text=${transform}`;
 
@@ -27,10 +32,10 @@ export const getGeoCode = async (req, res) => {
   const url = GEO_CODE_URL + params;
 
   await fetch(url)
-    .then((response) => response.json())
+    .then(async (response) => response.json())
     .then((result) => {
-      res.send(result);
+      res.locals.data = result;
+      responseHandler(res);
     })
-    .catch(() => res.send({ message: "Error fetching GeoCode" }));
+    .catch(() => next(ErrorFetchingGeoCodeError));
 };
- 

@@ -1,5 +1,5 @@
-import React from "react";
-import { Box, Text } from "native-base";
+import React from 'react';
+import { Box, Text } from 'native-base';
 
 export function DetailsHeader({ type, item }) {
   return (

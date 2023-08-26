@@ -1,10 +1,10 @@
-import { StyleSheet } from "react-native";
-import { Box, Container, Text } from "native-base";
-import Checkbox from "expo-checkbox";
+import { StyleSheet } from 'react-native';
+import { Box, Container, Text } from 'native-base';
+import Checkbox from 'expo-checkbox';
 
-import { useState } from "react";
+import { useState } from 'react';
 
-import { FontAwesome } from "@expo/vector-icons";
+import { FontAwesome } from '@expo/vector-icons';
 
 export const ItemRow = ({ packName }) => {
   const [isChecked, setChecked] = useState(false);
@@ -20,7 +20,7 @@ export const ItemRow = ({ packName }) => {
         style={{
           flex: 1,
           // textDecoration: isChecked ? "line-through" : "",
-          color: isChecked ? "#e2e8f0" : "black",
+          color: isChecked ? '#e2e8f0' : 'black',
         }}
       >
         {packName}
@@ -36,24 +36,24 @@ export const ItemRow = ({ packName }) => {
 
 const styles = StyleSheet.create({
   mainContainer: {
-    flexDirection: "row",
-    width: "100%",
-    alignItems: "center",
+    flexDirection: 'row',
+    width: '100%',
+    alignItems: 'center',
     gap: 10,
-    borderBottomColor: "grey",
+    borderBottomColor: 'grey',
     borderBottomWidth: 1,
     padding: 10,
   },
 
   icons: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 10,
-    alignItems: "center",
-    cursor: "pointer",
+    alignItems: 'center',
+    cursor: 'pointer',
   },
 
   checkbox: {
     margin: 8,
-    cursor: "pointer",
+    cursor: 'pointer',
   },
 });

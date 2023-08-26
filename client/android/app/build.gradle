@@ -3,6 +3,8 @@ apply plugin: "com.facebook.react"
 
 import com.android.build.OutputFile
 
+apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")
+
 def projectRoot = rootDir.getAbsoluteFile().getParentFile().getAbsolutePath()
 def expoDebuggableVariants = ['debug']
 // Override `debuggableVariants` for expo-updates debugging

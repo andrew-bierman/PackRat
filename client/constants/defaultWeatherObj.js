@@ -1,5 +1,5 @@
 export const defaultWeatherObject = {
-  base: "stations",
+  base: 'stations',
   clouds: {
     all: 100,
   },
@@ -16,10 +16,10 @@ export const defaultWeatherObject = {
     temp_min: 47.19,
   },
 
-  name: "Virginia",
+  name: 'Virginia',
 
   sys: {
-    country: "US",
+    country: 'US',
     id: 2007417,
     sunrise: 1664795210,
     sunset: 1664837428,
@@ -30,10 +30,10 @@ export const defaultWeatherObject = {
   visibility: 10000,
   weather: [
     {
-      description: "overcast clouds",
-      icon: "04n",
+      description: 'overcast clouds',
+      icon: '04n',
       id: 804,
-      main: "Clouds",
+      main: 'Clouds',
     },
   ],
   wind: {
