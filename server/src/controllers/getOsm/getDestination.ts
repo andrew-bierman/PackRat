@@ -1,4 +1,4 @@
-import { getDestinationService } from "../../services/osm/osm.service";
+import { getDestinationService } from '../../services/osm/osm.service';
 
 /**
  * Retrieves the destination based on the given ID.
@@ -14,20 +14,20 @@ export const getDestination = async (req, res) => {
 
     if (!destination) {
       return res.status(404).json({
-        status: "fail",
-        message: "No destination found with that ID",
+        status: 'fail',
+        message: 'No destination found with that ID',
       });
     }
 
     res.status(200).json({
-      status: "success",
+      status: 'success',
       data: {
-        destination: destination,
+        destination,
       },
     });
   } catch (error) {
     res.status(500).json({
-      status: "error",
+      status: 'error',
       message: error.message,
     });
   }

@@ -6,31 +6,31 @@ import {
   Heading,
   Text,
   VStack,
-} from "native-base";
+} from 'native-base';
 
-import { FontAwesome } from "@expo/vector-icons";
+import { FontAwesome } from '@expo/vector-icons';
 // import Mapbox from "@rnmapbox/maps";
 // Mapbox.setAccessToken(
 //   "pk.eyJ1IjoibWlhbi1iaWxhbCIsImEiOiJja3k5YzExdGcwNHY0Mm9tbmo0ajhrOGx5In0.VAkiap76DG7NiKc23A9tcg"
 // );
 
-import { NODE_ENV, WEB_CLIENT_ID } from "@env";
-import * as Google from "expo-auth-session/providers/google";
-import * as WebBrowser from "expo-web-browser";
+import { NODE_ENV, WEB_CLIENT_ID } from '@env';
+import * as Google from 'expo-auth-session/providers/google';
+import * as WebBrowser from 'expo-web-browser';
 
-import { useEffect } from "react";
+import { useEffect } from 'react';
 // import useLogin from "../hooks/useLogin";
 // import { useAuth } from "../auth/provider";
-import { Link, useRouter } from "expo-router";
+import { Link, useRouter } from 'expo-router';
 // import { signInWithGoogle } from "../auth/firebase";
 // import { signInWithGoogle } from "../auth/firebase";
-import { useForm } from "react-hook-form";
-import { StyleSheet } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
-import { InputText, InputTextRules } from "~/components/InputText";
-import { Regex } from "~/utils/regex";
-import { signIn, signInWithGoogle } from "../store/authStore";
-import { InformUser } from "../utils/ToastUtils";
+import { useForm } from 'react-hook-form';
+import { StyleSheet } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { InputText, InputTextRules } from '~/components/InputText';
+import { Regex } from '~/utils/regex';
+import { signIn, signInWithGoogle } from '../store/authStore';
+import { InformUser } from '../utils/ToastUtils';
 
 // const defaultStyle = {
 //   version: 8,
@@ -73,8 +73,8 @@ export default function Login() {
   } = useForm();
 
   const demoUser = {
-    email: "email52@email.com",
-    password: "12345678",
+    email: 'email52@email.com',
+    password: '12345678',
   };
 
   const router = useRouter();
@@ -87,21 +87,21 @@ export default function Login() {
   const error = useSelector((state) => state.auth.error);
   if (user?._id) {
     InformUser({
-      title: "Login sucessfully",
-      placement: "top-right",
+      title: 'Login sucessfully',
+      placement: 'top-right',
       duration: 3000,
       style: {
-        backgroundColor: "green",
+        backgroundColor: 'green',
       },
     });
-    router.push("/");
+    router.push('/');
   }
   if (error) {
     InformUser({
-      title: "Wrong-password",
+      title: 'Wrong-password',
       duration: 3000,
-      placement: "top-right",
-      style: { backgroundColor: "red" },
+      placement: 'top-right',
+      style: { backgroundColor: 'red' },
     });
   }
 
@@ -122,7 +122,7 @@ export default function Login() {
   }, [auth, router]);
 
   useEffect(() => {
-    if (response?.type === "success") {
+    if (response?.type === 'success') {
       const { id_token } = response.params;
       dispatch(signInWithGoogle({ idToken: id_token }));
     }
@@ -152,6 +152,12 @@ export default function Login() {
   //   clientId: WEB_CLIENT_ID,
   // });
 
+  /**
+   * Handles the login process.
+   *
+   * @param {Object} data - The data object containing the email and password.
+   * @return {void}
+   */
   const handleLogin = (data) => {
     const { email, password } = data;
     dispatch(signIn({ email, password }));
@@ -243,7 +249,7 @@ export default function Login() {
             fontWeight="600"
             color="coolGray.800"
             _dark={{
-              color: "warmGray.50",
+              color: 'warmGray.50',
             }}
           >
             <Text>Welcome</Text>
@@ -251,7 +257,7 @@ export default function Login() {
           <Heading
             mt="1"
             _dark={{
-              color: "warmGray.200",
+              color: 'warmGray.200',
             }}
             color="coolGray.600"
             fontWeight="medium"
@@ -280,7 +286,7 @@ export default function Login() {
               isDisabled={!isValid}
               onPress={handleSubmit(handleLogin)}
               mt="2"
-              colorScheme={"indigo"}
+              colorScheme={'indigo'}
             >
               Sign in
             </Button>
@@ -289,7 +295,7 @@ export default function Login() {
                 fontSize="sm"
                 color="coolGray.600"
                 _dark={{
-                  color: "warmGray.200",
+                  color: 'warmGray.200',
                 }}
               >
                 I'm a new user.
@@ -297,7 +303,7 @@ export default function Login() {
               <Link href="/register">
                 <Text
                   style={{
-                    color: "#818cf8",
+                    color: '#818cf8',
                     fontWeight: 400,
                     fontSize: 12,
                   }}
@@ -311,7 +317,7 @@ export default function Login() {
               <Link href="/password-reset">
                 <Text
                   style={{
-                    color: "#818cf8",
+                    color: '#818cf8',
                     fontWeight: 400,
                     fontSize: 12,
                   }}
@@ -320,12 +326,12 @@ export default function Login() {
                 </Text>
               </Link>
             </HStack>
-            {/* Google Login starts*/}
+            {/* Google Login starts */}
             <HStack mt="6" justifyContent="center">
               <Heading
                 mt="1"
                 _dark={{
-                  color: "warmGray.200",
+                  color: 'warmGray.200',
                 }}
                 color="coolGray.600"
                 fontWeight="medium"
@@ -338,8 +344,8 @@ export default function Login() {
               <Button
                 w="100%"
                 disabled={!request}
-                onPress={() => promptAsync()}
-                colorScheme={"red"}
+                onPress={async () => await promptAsync()}
+                colorScheme={'red'}
                 startIcon={
                   <FontAwesome name="google" size={18} color="white" />
                 }
@@ -350,7 +356,7 @@ export default function Login() {
             {/* Google Login */}
 
             {/* Demo Login for Development start */}
-            {NODE_ENV !== "production" && (
+            {NODE_ENV !== 'production' && (
               <HStack mt="1" justifyContent="center" alignItems="center">
                 <Button
                   w="100%"
@@ -358,7 +364,7 @@ export default function Login() {
                   onPress={() => {
                     dispatch(signIn(demoUser));
                   }}
-                  colorScheme={"purple"}
+                  colorScheme={'purple'}
                 >
                   Demo User
                 </Button>
@@ -376,12 +382,12 @@ const styles = StyleSheet.create({
   container: {
     marginTop: 20,
     height: 300,
-    width: "100%",
-    alignItems: "center",
+    width: '100%',
+    alignItems: 'center',
     marginVertical: 20,
   },
   map: {
     flex: 1,
-    width: "90%",
+    width: '90%',
   },
 });

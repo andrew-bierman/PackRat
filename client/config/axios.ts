@@ -1,43 +1,44 @@
-import Axios from "axios";
-import { showMessage } from "react-native-flash-message";
+import axios from "axios";
 import { api } from "~/constants/api";
+import { store } from "../store/store";
+// import { showMessage } from "react-native-flash-message";
 
-Axios.interceptors.request.use(
-  (config) => {
+// Helper function to get the token
+const getTokenFromState = () => {
+    const state = store.getState();
+    return state?.auth?.user?.token || null;
+};
+
+const requestInterceptor = (config) => {
     config.baseURL = api;
+
+    const token = getTokenFromState();
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+
     return config;
-  },
-  (error) => {
+};
+
+const requestErrorInterceptor = (error) => {
     return Promise.reject(error.response ? error.request : error);
-  }
-);
+};
 
-Axios.interceptors.response.use(
-  async (response) => {
-    return response;
-  },
-  async (error) => {
-    if ("code" in error) {
-      if (error.code === "ERR_CANCELED") {
-        return;
-      }
-    }
+// const responseErrorInterceptor = (error) => {
+//     if ("code" in error && error.code === "ERR_CANCELED") {
+//         return;
+//     }
 
-    if ("message" in error) {
-      showMessage({
-        message: error.message,
-        type: "danger",
-      });
-    } else {
-      showMessage({
-        message: "Something went wrong",
-        type: "danger",
-      });
-    }
+//     const errorMessage = "message" in error ? error.message : "Something went wrong";
+//     showMessage({
+//         message: errorMessage,
+//         type: "danger",
+//     });
 
-    return Promise.reject(error);
-  }
-);
+//     return Promise.reject(error);
+// };
 
-const axios = Axios;
+axios.interceptors.request.use(requestInterceptor, requestErrorInterceptor);
+// axios.interceptors.response.use(undefined, responseErrorInterceptor);
+
 export default axios;
