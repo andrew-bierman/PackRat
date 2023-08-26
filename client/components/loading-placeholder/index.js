@@ -35,9 +35,9 @@ const LoadingPlaceholder = ({
       style={[
         styles.placeholder,
         {
-          width: width,
-          height: height,
-          borderRadius: borderRadius,
+          width,
+          height,
+          borderRadius,
           backgroundColor: color,
           opacity: fadeAnim,
         },
