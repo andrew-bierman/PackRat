@@ -37,9 +37,9 @@ import {
 // get mapbox access token from .env file
 import { MAPBOX_ACCESS_TOKEN } from '@env';
 
-import { theme } from "../../theme";
-import UseTheme from "../../hooks/useTheme";
-import MapButtonsOverlay from "./MapButtonsOverlay";
+import { theme } from '../../theme';
+import UseTheme from '../../hooks/useTheme';
+import MapButtonsOverlay from './MapButtonsOverlay';
 import {
   calculateZoomLevel,
   findTrailCenter,
@@ -391,8 +391,8 @@ function NativeMap({ shape: shapeProp }) {
         fetchLocation={() => {
           getPosition((location) => {
             setTrailCenterPoint([location.latitude, location.longitude]);
-          })
-        }
+          });
+        }}
         styles={styles()}
         downloadable={isShapeDownloadable(shape)}
         downloading={downloading}
@@ -504,14 +504,14 @@ const styles = () => {
   return StyleSheet.create({
     page: {
       flex: 1,
-      flexDirection: "column",
-      justifyContent: "center",
-      alignItems: "center",
-      backgroundColor: "#F5FCFF",
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: '#F5FCFF',
     },
     container: {
       // height: 500,
-      width: "100%",
+      width: '100%',
       backgroundColor: currentTheme.colors.white,
       marginBottom: 20,
       marginBottom: 20,
@@ -521,34 +521,34 @@ const styles = () => {
       flex: 1,
     },
     lineLayer: {
-      lineColor: "#16b22d",
+      lineColor: '#16b22d',
       lineWidth: 4,
       lineOpacity: 1,
     },
     headerView: {
-      position: "absolute",
+      position: 'absolute',
       marginTop: 20,
-      flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "space-evenly",
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-evenly',
       width: 100,
     },
     headerBtnView: {
-      justifyContent: "center",
-      alignItems: "center",
+      justifyContent: 'center',
+      alignItems: 'center',
       borderRadius: 32,
       backgroundColor: currentTheme.colors.white,
     },
     button: {
-      position: "absolute",
+      position: 'absolute',
       bottom: 10,
       right: 10,
       backgroundColor: currentTheme.colors.primary,
       borderRadius: 50,
       width: 45,
       height: 45,
-      justifyContent: "center",
-      alignItems: "center",
+      justifyContent: 'center',
+      alignItems: 'center',
     },
   });
 };

@@ -22,15 +22,26 @@ const Drawer = ({
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     UseTheme();
   const renderNavigationItems = () => {
-    return navigationItems.map((item) => (
-      <TouchableOpacity
-        key={item.href}
-        style={styles().navigationItem}
-        onPress={() => navigateTo(item.href)}
-      >
-        {renderNavigationItem(item)}
-      </TouchableOpacity>
-    ));
+    return (
+      <SafeAreaView>
+        <TouchableOpacity style={styles().closeButton} onPress={toggleDrawer}>
+          <AntDesign
+            name="close"
+            size={24}
+            color={currentTheme.colors.iconColor}
+          />
+        </TouchableOpacity>
+        {navigationItems.map((item) => (
+          <TouchableOpacity
+            key={item.href}
+            style={styles().navigationItem}
+            onPress={() => navigateTo(item.href)}
+          >
+            {renderNavigationItem(item)}
+          </TouchableOpacity>
+        ))}
+      </SafeAreaView>
+    );
   };
 
   return (
@@ -45,16 +56,7 @@ const Drawer = ({
           style={styles().fullScreenTouchable}
           onPress={toggleDrawer}
         />
-        <View style={styles().drawerContainer}>
-          {renderNavigationItems()}
-          <TouchableOpacity style={styles().closeButton} onPress={toggleDrawer}>
-            <AntDesign
-              name="close"
-              size={24}
-              color={currentTheme.colors.iconColor}
-            />
-          </TouchableOpacity>
-        </View>
+        <View style={styles().drawerContainer}>{renderNavigationItems()}</View>
       </View>
     </Modal>
   );

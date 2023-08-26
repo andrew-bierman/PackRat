@@ -12,6 +12,7 @@ import { duplicatePackItem } from '../../store/packsStore';
 import { formatNumber } from '../../utils/formatNumber';
 import { theme } from '../../theme';
 import UseTheme from '../../hooks/useTheme';
+import { PackOptions } from '../PackOptions';
 import CustomButton from '../custombutton';
 import ItemPicker from '../Picker';
 
@@ -372,12 +373,6 @@ export const TableContainer = ({
   if (error) return <ErrorMessage message={error} />;
   return (
     <Box style={styles().container}>
-      <ItemPicker
-        currentPack={selectedPack}
-        refetch={refetch}
-        setRefetch={setRefetch}
-      />
-
       {data?.length ? (
         <>
           <Table style={styles().tableStyle} flexArr={flexArr}>
