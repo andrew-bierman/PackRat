@@ -1,4 +1,5 @@
-import Template from '../../models/templateModel';
+import { TemplateNotFoundError } from "../../helpers/errors";
+import Template from "../../models/templateModel";
 
 /**
  * Deletes a template.
@@ -6,19 +7,16 @@ import Template from '../../models/templateModel';
  * @param {Object} res - The response object.
  * @return {Promise<void>} A Promise that resolves when the template is deleted.
  */
-export const deleteTemplate = async (req, res) => {
+export const deleteTemplate = async (req, res,next) => {
   const { templateId } = req.params;
 
-  try {
     const template: any = await Template.findById(templateId);
 
     if (template) {
       await template.remove();
       res.json({ message: 'Template removed' });
     } else {
-      res.status(404).json({ message: 'Template not found' });
+      next(TemplateNotFoundError);
     }
-  } catch (error) {
-    res.status(500).json({ error: error.toString() });
-  }
+  
 };

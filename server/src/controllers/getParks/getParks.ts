@@ -1,9 +1,7 @@
-import { oneEntity } from '../../utils/oneEntity';
-const fetch = async (...args) =>
-  await import('node-fetch').then(
-    async ({ default: fetch }) =>
-      await fetch(...(args as Parameters<typeof fetch>)),
-  );
+const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args as Parameters<typeof fetch>));
+import { RetrievingParksDataError } from "../../helpers/errors";
+import { responseHandler } from "../../helpers/responseHandler";
+import { oneEntity } from "../../utils/oneEntity";
 
 /**
  * Retrieves a list of parks based on the specified state code.
@@ -11,8 +9,8 @@ const fetch = async (...args) =>
  * @param {Object} res - The response object.
  * @return {Promise} A promise that resolves with the park data or an error message.
  */
-export const getParks = async (req, res) => {
-  const abbrState = await oneEntity(req.query.abbrState);
+export const getParks = async (req, res,next) => {
+  let abbrState = await oneEntity(req.query.abbrState);
 
   const X_RAPIDAPI_KEY = process.env.X_RAPIDAPI_KEY;
   const NPS_API = process.env.NPS_API;
@@ -33,9 +31,10 @@ export const getParks = async (req, res) => {
   await fetch(host, options)
     .then(async (res) => await res.json())
     .then((json) => {
-      res.send(json);
+      res.locals.data = json;
+      responseHandler(res);
     })
     .catch(() =>
-      res.send({ message: 'Error retrieving park data from RapidAPI' }),
+      next(RetrievingParksDataError)
     );
 };

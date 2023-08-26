@@ -1,4 +1,6 @@
-import { addItemService } from '../../services/item/item.service';
+import { UnableToAddItemError } from "../../helpers/errors";
+import { responseHandler } from "../../helpers/responseHandler";
+import { addItemService } from "../../services/item/item.service";
 
 /**
  * Adds an item to the database based on the provided request body.
@@ -6,7 +8,7 @@ import { addItemService } from '../../services/item/item.service';
  * @param {Object} res - The response object.
  * @return {Object} The updated item and pack ID.
  */
-export const addItem = async (req, res) => {
+export const addItem = async (req, res, next) => {
   try {
     const { name, weight, quantity, unit, packId, type, ownerId } = req.body;
 
@@ -20,12 +22,9 @@ export const addItem = async (req, res) => {
       ownerId,
     );
 
-    res.status(200).json({
-      msg: 'success',
-      newItem: result.newItem,
-      packId: result.packId,
-    });
+    res.locals.data = {newItem:result.newItem, packId: result.packId};
+    responseHandler(res);
   } catch (error) {
-    res.status(404).json({ msg: 'Unable to add item', error: error.message });
+    next(UnableToAddItemError)
   }
 };
