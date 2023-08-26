@@ -1,5 +1,5 @@
-import Trip from "../../models/tripModel";
-import { getTripsService } from "../../services/trip/getTripsService";
+import Trip from '../../models/tripModel';
+import { getTripsService } from '../../services/trip/getTripsService';
 
 /**
  * Retrieves trips belonging to a specific owner.
@@ -16,7 +16,6 @@ export const getTrips = async (req, res) => {
     res.status(200).json(trips);
   } catch (error) {
     console.error(error);
-    res.status(404).json({ msg: "Trips cannot be found" });
+    res.status(404).json({ msg: 'Trips cannot be found' });
   }
 };
-  

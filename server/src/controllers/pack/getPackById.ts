@@ -1,4 +1,4 @@
-import { getPackByIdService } from "../../services/pack/pack.service";
+import { getPackByIdService } from '../../services/pack/pack.service';
 
 /**
  * Retrieves a pack by its ID and returns it as a JSON response.
@@ -14,7 +14,7 @@ export const getPackById = async (req, res) => {
 
     res.status(200).json(pack);
   } catch (error) {
-    console.error("getPackById error", error);
-    res.status(404).json({ msg: "Pack cannot be found" });
+    console.error('getPackById error', error);
+    res.status(404).json({ msg: 'Pack cannot be found' });
   }
 };

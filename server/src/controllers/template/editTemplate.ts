@@ -1,5 +1,5 @@
-import Template from "../../models/templateModel";
-import { editTemplateService } from "../../services/template/template.service";
+import Template from '../../models/templateModel';
+import { editTemplateService } from '../../services/template/template.service';
 
 /**
  * Edits a template.
@@ -12,7 +12,11 @@ export const editTemplate = async (req, res) => {
   const { type, isGlobalTemplate } = req.body;
 
   try {
-    const updatedTemplate = await editTemplateService(templateId, type, isGlobalTemplate);
+    const updatedTemplate = await editTemplateService(
+      templateId,
+      type,
+      isGlobalTemplate,
+    );
 
     res.json(updatedTemplate);
   } catch (error) {

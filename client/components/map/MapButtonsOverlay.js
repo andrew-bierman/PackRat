@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   TouchableOpacity,
   Image,
@@ -8,10 +8,10 @@ import {
   View,
   Alert,
   Platform,
-} from "react-native";
-import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
+} from 'react-native';
+import { Entypo, MaterialCommunityIcons } from '@expo/vector-icons';
 
-import { mapboxStyles } from "../../utils/mapFunctions";
+import { mapboxStyles } from '../../utils/mapFunctions';
 
 const MapButtonsOverlay = ({
   mapFullscreen,
@@ -25,13 +25,24 @@ const MapButtonsOverlay = ({
   handleGpxUpload,
   progress,
 }) => {
-  console.log("newwwww");
+  console.log('newwwww');
   const [showStyleOptions, setShowStyleOptions] = useState(false);
 
+  /**
+   * Toggles the visibility of the style options.
+   *
+   * @return {undefined} - No return value.
+   */
   const handleStyleOptionPress = () => {
     setShowStyleOptions(!showStyleOptions);
   };
 
+  /**
+   * A function to handle the selection of a style.
+   *
+   * @param {type} style - the selected style
+   * @return {type} undefined
+   */
   const handleStyleSelection = (style) => {
     handleChangeMapStyle(style);
     setShowStyleOptions(false);
@@ -75,21 +86,21 @@ const MapButtonsOverlay = ({
               {
                 width: 40,
                 height: 40,
-                position: "absolute",
+                position: 'absolute',
                 bottom: 30,
                 left: 10,
               },
             ]}
             onPress={() => {
-              Platform.OS == "web"
-                ? alert("Sorry, currently not implemented")
-                : Alert.alert("Sorry, currently not implemented");
+              Platform.OS == 'web'
+                ? alert('Sorry, currently not implemented')
+                : Alert.alert('Sorry, currently not implemented');
             }}
           >
             <MaterialCommunityIcons
               name="navigation-variant-outline"
               size={25}
-              color={"black"}
+              color={'black'}
             />
           </TouchableOpacity>
 
@@ -126,14 +137,14 @@ const MapButtonsOverlay = ({
             >
               <Image
                 style={styles.downloadIcon}
-                source={require("../../assets/download.svg")}
+                source={require('../../assets/download.svg')}
               />
               <Text style={styles.downloadText}>
                 {downloading
                   ? `Downloading... ${
-                      progress ? Math.floor(progress) + "%" : ""
+                      progress ? Math.floor(progress) + '%' : ''
                     }`
-                  : "Download map"}
+                  : 'Download map'}
               </Text>
             </TouchableOpacity>
           )}
@@ -141,14 +152,14 @@ const MapButtonsOverlay = ({
           {handleGpxUpload && (
             <TouchableOpacity
               style={{
-                alignItems: "center",
-                justifyContent: "center",
+                alignItems: 'center',
+                justifyContent: 'center',
                 width: 40,
                 height: 40,
-                position: "absolute",
+                position: 'absolute',
                 bottom: 80,
                 right: 10,
-                backgroundColor: "white",
+                backgroundColor: 'white',
                 borderRadius: 30,
                 zIndex: 1,
               }}
@@ -177,36 +188,36 @@ const MapButtonsOverlay = ({
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: "center",
-    justifyContent: "center",
-    height: "400px",
-    width: "100%",
-    borderRadius: "10px",
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '400px',
+    width: '100%',
+    borderRadius: '10px',
   },
   map: {
-    width: "100%",
-    minHeight: "100vh", // Adjust the height to your needs
+    width: '100%',
+    minHeight: '100vh', // Adjust the height to your needs
   },
   stylePicker: {
     // Style Picker Button
-    position: "absolute",
+    position: 'absolute',
     top: 10,
     left: 10,
     width: 40,
     height: 40,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     borderRadius: 20,
-    backgroundColor: "white",
+    backgroundColor: 'white',
   },
   styleModalContainer: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   styleModalContent: {
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 8,
     padding: 10,
   },
@@ -216,52 +227,52 @@ const styles = StyleSheet.create({
   },
   styleOptionText: {
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   locationButton: {
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     width: 40,
     height: 40,
-    position: "absolute",
+    position: 'absolute',
     bottom: 30,
     right: 10,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 30,
     zIndex: 1,
   },
   headerBtnView: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     borderRadius: 30,
-    marginTop:30,
-    backgroundColor: "white",
+    marginTop: 30,
+    backgroundColor: 'white',
   },
   enterFullScreenBtn: {
     width: 40,
     height: 40,
-    position: "absolute",
+    position: 'absolute',
     bottom: 10,
     right: 10,
   },
   exitFullscreenBtn: {
     width: 40,
     height: 40,
-    position: "absolute",
+    position: 'absolute',
     top: 10,
     right: 10,
   },
   fullScreen: {
-    width: Platform.OS == "web" ? "25%" : "70%",
+    width: Platform.OS == 'web' ? '25%' : '70%',
     height: 40,
     padding: 10,
-    backgroundColor: "white",
-    position: "absolute",
+    backgroundColor: 'white',
+    position: 'absolute',
     bottom: 30,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    alignSelf: "center",
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
     borderRadius: 20,
   },
   downloadIcon: {
@@ -270,11 +281,11 @@ const styles = StyleSheet.create({
   },
   downloadText: {
     fontSize: 13,
-    fontWeight: "500",
+    fontWeight: '500',
     marginLeft: 8,
   },
   modal: {
-    alignItems: "center",
+    alignItems: 'center',
   },
 });
 

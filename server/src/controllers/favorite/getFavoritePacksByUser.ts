@@ -1,5 +1,5 @@
-import Pack from "../../models/packModel";
-import { getFavoritePacksByUserService } from "../../services/favorite/favorite.service";
+import Pack from '../../models/packModel';
+import { getFavoritePacksByUserService } from '../../services/favorite/favorite.service';
 
 /**
  * Retrieves favorite packs for a user.
@@ -13,10 +13,10 @@ export const getFavoritePacksByUser = async (req, res) => {
 
     const packs = await getFavoritePacksByUserService(userId);
 
-    if (!packs) throw new Error("Packs not found");
+    if (!packs) throw new Error('Packs not found');
 
     res.status(200).json(packs);
   } catch (error) {
-    res.status(404).json({ msg: "Packs cannot be found" });
+    res.status(404).json({ msg: 'Packs cannot be found' });
   }
 };
