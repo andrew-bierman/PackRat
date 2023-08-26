@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import {
-  NativeBaseProvider,
   Container,
   Box,
   Text,
@@ -8,6 +7,7 @@ import {
   VStack,
   Image,
   HStack,
+  Button,
 } from 'native-base';
 import { Platform, StyleSheet } from 'react-native';
 import UserDataContainer from '../../components/user/UserDataContainer';
@@ -23,6 +23,27 @@ import {
 } from '../../store/favoritesStore';
 import { getUser } from '../../store/userStore';
 import { fetchUserTrips } from '../../store/tripsStore';
+import { useMatchesCurrentUser } from '~/hooks/useMatchesCurrentUser';
+import { useRouter } from 'expo-router';
+
+const SettingsButton = () => {
+  const router = useRouter();
+
+  const onSettingsClick = () => {
+    router.push('/profile/settings');
+  };
+
+  return (
+    <Button
+      onPress={onSettingsClick}
+      variant="outline"
+      mb={4}
+      justifyContent={'center'}
+    >
+      <MaterialCommunityIcons name="cog-outline" size={24} color={'grey'} />
+    </Button>
+  );
+};
 
 const Header = ({
   user,
@@ -31,6 +52,7 @@ const Header = ({
   tripsCount,
   packsCount,
   favoritesCount,
+  isCurrentUser,
 }) => {
   const profileImage = user?.profileImage ?? null;
   const userRealName = user?.name ?? null;
@@ -42,31 +64,42 @@ const Header = ({
 
   return (
     <Box w={['100%', '100%', '70%', '50%']} style={styles.infoSection}>
-      <Box style={styles.userInfo}>
-        {profileImage ? (
-          <Image
-            source={{ uri: user?.profileImage }}
-            alt="Profile Image"
-            borderRadius={50}
-            size={100}
-            style={{ width: 100, height: 100, borderRadius: 50 }}
-          />
-        ) : (
-          <MaterialCommunityIcons
-            name="account-circle"
-            size={100}
-            color="grey"
-            style={{
-              width: 100,
-              height: 100,
-              borderRadius: 50,
-              alignSelf: 'center',
-            }}
-          />
+      <HStack w="100%" alignItems="center" spacing={5}>
+        {isCurrentUser && (
+          <Box alignSelf="flex-start" ml="auto">
+            <SettingsButton />
+          </Box>
         )}
-        <Text style={styles.userName}>{userRealName}</Text>
-        <Text style={styles.userEmail}>{username}</Text>
-      </Box>
+        <VStack alignItems="center" flex={1}>
+          <Box style={styles.userInfo}>
+            {profileImage ? (
+              <Image
+                source={{ uri: user?.profileImage }}
+                alt="Profile Image"
+                borderRadius={50}
+                size={100}
+                style={{ width: 100, height: 100, borderRadius: 50 }}
+              />
+            ) : (
+              <MaterialCommunityIcons
+                name="account-circle"
+                size={100}
+                color="grey"
+                style={{
+                  width: 100,
+                  height: 100,
+                  borderRadius: 50,
+                  alignSelf: 'center',
+                }}
+              />
+            )}
+            <Text style={styles.userName}>{userRealName}</Text>
+            <Text style={styles.userEmail}>{username}</Text>
+          </Box>
+        </VStack>
+        {isCurrentUser && <Box width={45} />}{' '}
+        {/* This empty box is to offset the space taken by the settings button, ensuring the profile details remain centered. */}
+      </HStack>
       <Stack direction="row" style={styles.card}>
         <Box style={styles.cardInfo}>
           <Text>Trips</Text>
@@ -104,7 +137,10 @@ export default function ProfileContainer({ id = null }) {
   const tripsData = useSelector((state) => state.trips);
   const allFavorites = useSelector(selectAllFavorites);
 
-  const differentUser = id && id !== authUser._id;
+  id = id ?? authUser?._id;
+
+  const differentUser = id && id !== authUser?._id;
+  const isCurrentUser = useMatchesCurrentUser(id); // TODO: Implement this hook in more components
 
   useEffect(() => {
     if (differentUser) {
@@ -146,6 +182,7 @@ export default function ProfileContainer({ id = null }) {
         tripsCount={tripsCount}
         packsCount={packsCount}
         favoritesCount={favoritesCount}
+        isCurrentUser={isCurrentUser}
       />
       {isLoading ? (
         <Text>Loading....</Text>

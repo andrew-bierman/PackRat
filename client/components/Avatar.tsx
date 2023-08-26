@@ -1,5 +1,5 @@
-import { Image } from "native-base";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Image } from 'native-base';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export default function Avatar({
   src,
@@ -26,7 +26,7 @@ export default function Avatar({
             width: size,
             height: size,
             borderRadius: 50,
-            alignSelf: "center",
+            alignSelf: 'center',
           }}
         />
       )}
