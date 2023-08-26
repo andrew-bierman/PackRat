@@ -11,7 +11,7 @@ import { findUserAndUpdate } from '../../services/user/user.service';
  */
 export const updatePassword = async (req, res, next) => {
   const { email, password } = req.body;
-  let val = await findUserAndUpdate(email, password, 'password');
+  const val = await findUserAndUpdate(email, password, 'password');
   if (val) {
     responseHandler(res);
   } else {
