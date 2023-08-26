@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useMemo, useCallback, useRef } from "react";
+import React, {
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+  useRef,
+} from 'react';
 import {
   View,
   StyleSheet,
@@ -8,9 +14,9 @@ import {
   ScrollView,
   Modal,
   SafeAreaView,
-} from "react-native";
-import { AuthStateListener } from "../../client/auth/AuthStateListener";
-import { theme } from "../theme";
+} from 'react-native';
+import { AuthStateListener } from '../../client/auth/AuthStateListener';
+import { theme } from '../theme';
 import {
   EvilIcons,
   MaterialCommunityIcons,
@@ -18,15 +24,15 @@ import {
   MaterialIcons,
   Entypo,
   Fontisto,
-} from "@expo/vector-icons";
+} from '@expo/vector-icons';
 
-import SVGLogoComponent from "../components/logo";
-import { useSelector, useDispatch } from "react-redux";
-import { signOut } from "../store/authStore";
-import Drawer from "./Drawer";
-import { Link, useRouter, usePathname } from "expo-router";
-import { hexToRGBA } from "../utils/colorFunctions";
-import UseTheme from "../hooks/useTheme";
+import SVGLogoComponent from '../components/logo';
+import { useSelector, useDispatch } from 'react-redux';
+import { signOut } from '../store/authStore';
+import Drawer from './Drawer';
+import { Link, useRouter, usePathname } from 'expo-router';
+import { hexToRGBA } from '../utils/colorFunctions';
+import UseTheme from '../hooks/useTheme';
 const Navigation = () => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -34,17 +40,22 @@ const Navigation = () => {
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isMobileView, setIsMobileView] = useState(
-    Dimensions.get("window").width < 1024
+    Dimensions.get('window').width < 1024,
   );
 
   const [navBarWidth, setNavBarWidth] = useState(null);
-  const [selectedNavItem, setSelectedNavItem] = useState("");
+  const [selectedNavItem, setSelectedNavItem] = useState('');
   const firstRender = useRef(true);
   const [isLoading, setIsLoading] = useState(false); // Loading state
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     UseTheme();
   const hoverColor = hexToRGBA(currentTheme.colors.primary, 0.2);
 
+  /**
+   * Toggle the state of the drawer.
+   *
+   * @return {void} No return value.
+   */
   const toggleDrawer = () => {
     setIsDrawerOpen(!isDrawerOpen);
   };
@@ -52,19 +63,19 @@ const Navigation = () => {
   const staticNavigationItems = useMemo(
     () => [
       {
-        href: "/",
-        icon: "home",
-        text: "Home",
+        href: '/',
+        icon: 'home',
+        text: 'Home',
         iconSource: Entypo,
       },
       {
-        href: "/about",
-        icon: "info",
-        text: "About",
+        href: '/about',
+        icon: 'info',
+        text: 'About',
         iconSource: MaterialIcons,
       },
     ],
-    []
+    [],
   );
 
   const userNavigationItems = useMemo(
@@ -72,80 +83,80 @@ const Navigation = () => {
       user
         ? [
             {
-              href: "/feed",
-              icon: "newspaper-variant",
-              text: "Feed",
+              href: '/feed',
+              icon: 'newspaper-variant',
+              text: 'Feed',
               iconSource: MaterialCommunityIcons,
             },
             {
-              href: "/trips",
-              icon: "routes",
-              text: "Trips",
+              href: '/trips',
+              icon: 'routes',
+              text: 'Trips',
               iconSource: MaterialCommunityIcons,
             },
             {
-              href: "/packs",
-              icon: "backpack",
-              text: "Packs",
+              href: '/packs',
+              icon: 'backpack',
+              text: 'Packs',
               iconSource: MaterialIcons,
             },
-            ...(Platform.OS != "web"
-            ? [
-                {
-                  href: "maps",
-                  icon: "map",
-                  text: "Downloaded Maps",
-                  iconSource: Entypo,
-                },
-              ]
-            : []),
-          {
-            href: "/items",
-            icon: "tent",
-            text: "Items",
-            iconSource: Fontisto,
-          },
+            ...(Platform.OS != 'web'
+              ? [
+                  {
+                    href: 'maps',
+                    icon: 'map',
+                    text: 'Downloaded Maps',
+                    iconSource: Entypo,
+                  },
+                ]
+              : []),
             {
-              href: "/profile",
-              icon: "book",
-              text: "Profile",
+              href: '/items',
+              icon: 'tent',
+              text: 'Items',
+              iconSource: Fontisto,
+            },
+            {
+              href: '/profile',
+              icon: 'book',
+              text: 'Profile',
               iconSource: FontAwesome,
             },
             {
-              href: "/appearance",
-              icon: "theme-light-dark",
-              text: "Appearance",
+              href: '/appearance',
+              icon: 'theme-light-dark',
+              text: 'Appearance',
               iconSource: MaterialCommunityIcons,
             },
             {
-              href: "logout",
-              icon: "logout",
-              text: "Logout",
+              href: 'logout',
+              icon: 'logout',
+              text: 'Logout',
               iconSource: MaterialIcons,
             },
           ]
         : [
             {
-              href: "sign-in",
-              icon: "login",
-              text: "Login",
+              href: 'sign-in',
+              icon: 'login',
+              text: 'Login',
               iconSource: MaterialIcons,
             },
             {
-              href: "register",
-              icon: "person-add",
-              text: "Register",
+              href: 'register',
+              icon: 'person-add',
+              text: 'Register',
               iconSource: MaterialIcons,
             },
           ],
-    [user]
+    [user],
   );
 
   const navigationItems = [...staticNavigationItems, ...userNavigationItems];
 
   const navigateTo = useCallback(
     (href) => {
-      if (href === "logout") {
+      if (href === 'logout') {
         dispatch(signOut());
       } else {
         setIsDrawerOpen(false);
@@ -158,23 +169,25 @@ const Navigation = () => {
         }, 0); // Adjust the delay as needed
       }
     },
-    [dispatch, router]
+    [dispatch, router],
   );
 
   useEffect(() => {
     const handleScreenResize = () => {
-      const isMobile = Dimensions.get("window").width < 1300 
-      ||
-       (navBarWidth < 1024 && !firstRender) // Adjust these values as needed
+      const isMobile =
+        Dimensions.get('window').width < 1300 ||
+        (navBarWidth < 1024 && !firstRender); // Adjust these values as needed
       setIsMobileView(isMobile);
-      // update first render 
+      // update first render
       if (firstRender.current) {
         firstRender.current = false;
       }
-
     };
 
-    const subscription = Dimensions.addEventListener("change", handleScreenResize);
+    const subscription = Dimensions.addEventListener(
+      'change',
+      handleScreenResize,
+    );
     return () => {
       subscription.remove(); // Proper event listener cleanup
     };
@@ -186,7 +199,7 @@ const Navigation = () => {
       const IconComponent = iconSource || EvilIcons;
       const pathName = usePathname();
 
-      if ((href === "profile" || href === "logout") && !user) {
+      if ((href === 'profile' || href === 'logout') && !user) {
         return null; // Do not render the item if the user is not signed in
       }
 
@@ -200,7 +213,7 @@ const Navigation = () => {
 
       return (
         <TouchableOpacity
-          key={item.href + "nav" + index}
+          key={item.href + 'nav' + index}
           style={[
             styles().menuBarItem,
             isCurrentPage && styles().menuBarItemActive, // apply the active style if this is the current page
@@ -214,10 +227,10 @@ const Navigation = () => {
             size={isMobileView ? 24 : 18}
             color={
               isCurrentPage || isSelected
-              ? currentTheme.colors.iconColor
-              : currentTheme.colors.iconColor
+                ? currentTheme.colors.iconColor
+                : currentTheme.colors.iconColor
             } // change the color if this is the current page or selected item
-            key={item.href + "icon"}
+            key={item.href + 'icon'}
           />
           <Text
             style={[
@@ -231,7 +244,7 @@ const Navigation = () => {
         </TouchableOpacity>
       );
     },
-    [user, selectedNavItem] // add any other dependencies that this function uses
+    [user, selectedNavItem], // add any other dependencies that this function uses
   );
 
   return (
@@ -243,9 +256,9 @@ const Navigation = () => {
         {user && <AuthStateListener />}
         <View style={styles().header}>
           <TouchableOpacity
-            key={"logo-nav"}
+            key={'logo-nav'}
             style={styles().logoContainer}
-            onPress={() => navigateTo("/")}
+            onPress={() => navigateTo('/')}
           >
             <View style={styles().logoWrapper}>
               <SVGLogoComponent
@@ -267,7 +280,7 @@ const Navigation = () => {
                 onPress={toggleDrawer}
               >
                 <EvilIcons
-                  name={isDrawerOpen ? "close" : "navicon"}
+                  name={isDrawerOpen ? 'close' : 'navicon'}
                   size={isMobileView ? 36 : 24}
                   color={currentTheme.colors.iconColor}
                 />
@@ -296,7 +309,9 @@ const Navigation = () => {
             //   contentContainerStyle={styles().menuBar}
             // >
             <View style={styles().menuBar}>
-              {navigationItems?.map((item, index) => renderNavigationItem(item, index))}
+              {navigationItems?.map((item, index) =>
+                renderNavigationItem(item, index),
+              )}
             </View>
             // </ScrollView>
           )}
@@ -307,28 +322,29 @@ const Navigation = () => {
 };
 
 const styles = () => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } = UseTheme();
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
   return StyleSheet.create({
     safeArea: {
       backgroundColor: currentTheme.colors.background,
     },
     container: {
-      width: "100%",
+      width: '100%',
       backgroundColor: currentTheme.colors.background,
-      flexDirection: "row",
-      justifyContent: "space-between",
-      alignItems: "center",
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
     },
     header: {
-      flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "space-between",
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
       padding: 16,
-      width: "100%",
+      width: '100%',
     },
     logoContainer: {
-      flexDirection: "row",
-      alignItems: "center",
+      flexDirection: 'row',
+      alignItems: 'center',
     },
     logoWrapper: {
       marginHorizontal: 10,
@@ -336,18 +352,18 @@ const styles = () => {
     logoText: {
       color: theme.colors.text,
       fontSize: 38,
-      fontWeight: "900",
+      fontWeight: '900',
     },
     menuBar: {
-      flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "flex-end",
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'flex-end',
       paddingHorizontal: 16,
       height: 60,
     },
     menuBarItem: {
-      flexDirection: "row",
-      alignItems: "center",
+      flexDirection: 'row',
+      alignItems: 'center',
       gap: 8,
       paddingHorizontal: 12,
     },
@@ -374,6 +390,6 @@ const styles = () => {
       // ...
     },
   });
-} 
+};
 
 export default Navigation;

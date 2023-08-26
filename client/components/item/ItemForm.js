@@ -1,9 +1,9 @@
-import { Box, Input, Button, Text, VStack, Radio } from "native-base";
-import { DropdownComponent } from "../Dropdown";
-import { theme } from "../../theme";
-import { ItemCategoryEnum } from "../../constants/itemCategory";
-import UseTheme from "../../hooks/useTheme";
-const data = ["lbs", "oz", "kg", "g"];
+import { Box, Input, Button, Text, VStack, Radio } from 'native-base';
+import { DropdownComponent } from '../Dropdown';
+import { theme } from '../../theme';
+import { ItemCategoryEnum } from '../../constants/itemCategory';
+import UseTheme from '../../hooks/useTheme';
+const data = ['lb', 'oz', 'kg', 'g'];
 
 export const ItemForm = ({
   name,
@@ -29,7 +29,7 @@ export const ItemForm = ({
     currentPack.items.length > 0
   ) {
     hasWaterAdded = currentPack.items.some(
-      (item) => item.category && item.category.name === ItemCategoryEnum.WATER
+      (item) => item.category && item.category.name === ItemCategoryEnum.WATER,
     );
   }
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
@@ -47,10 +47,10 @@ export const ItemForm = ({
         />
         <Box
           style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-            width: "100%",
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            width: '100%',
           }}
         >
           <Input
@@ -66,7 +66,7 @@ export const ItemForm = ({
               data={data}
               value={unit}
               onValueChange={setUnit}
-              placeholder={"Unit"}
+              placeholder={'Unit'}
               width="100"
             />
           )}
@@ -100,10 +100,10 @@ export const ItemForm = ({
           <Button onPress={handleSubmit}>
             <Text style={{ color: currentTheme.colors.text }}>
               {isLoading
-                ? "Loading.."
+                ? 'Loading..'
                 : isEdit == true
-                ? "Edit item"
-                : "Add Item"}
+                ? 'Edit item'
+                : 'Add Item'}
             </Text>
           </Button>
         )}

@@ -1,11 +1,15 @@
-import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
-import axios from "axios";
-import { api } from "../constants/api";
+import {
+  createSlice,
+  createAsyncThunk,
+  createEntityAdapter,
+} from '@reduxjs/toolkit';
+import axios from '~/config/axios';
+import { api } from '../constants/api';
 
 export const fetchTrails = createAsyncThunk(
-  "trails/fetchTrails",
+  'trails/fetchTrails',
   async ({ lat, lon, selectedSearch }) => {
-    let params = `?`;
+    let params = '?';
 
     if (lat) {
       params += `lat=${lat}`;
@@ -14,7 +18,7 @@ export const fetchTrails = createAsyncThunk(
       params += `&lon=${lon}`;
     }
     const radius = 500;
-    const url = api + "/osm/trails" + params;
+    const url = api + '/osm/trails' + params;
 
     try {
       const response = await axios.get(url);
@@ -23,16 +27,16 @@ export const fetchTrails = createAsyncThunk(
       const filteredTrails = trails
         .filter(
           (trail) =>
-            trail.properties.name && trail.properties.name !== selectedSearch
+            trail.properties.name && trail.properties.name !== selectedSearch,
         )
         .map((trail) => trail.properties.name)
         .slice(0, 25);
 
       return { trails, filteredTrails };
     } catch (error) {
-      console.error("error:" + error);
+      console.error('error:' + error);
     }
-  }
+  },
 );
 
 const trailsAdapter = createEntityAdapter();
@@ -43,7 +47,7 @@ const initialState = trailsAdapter.getInitialState({
 });
 
 const trailsSlice = createSlice({
-  name: "trails",
+  name: 'trails',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -67,6 +71,8 @@ const trailsSlice = createSlice({
   },
 });
 
-export const { selectAll: selectAllTrails } = trailsAdapter.getSelectors((state) => state.trails);
+export const { selectAll: selectAllTrails } = trailsAdapter.getSelectors(
+  (state) => state.trails,
+);
 
 export default trailsSlice.reducer;

@@ -1,3 +1,5 @@
+import { UnableTouUpdatePasswordError } from "../../helpers/errors";
+import { responseHandler } from "../../helpers/responseHandler";
 import User from "../../models/userModel";
 import { findUserAndUpdate } from "../../services/user/user.service";
 
@@ -7,17 +9,12 @@ import { findUserAndUpdate } from "../../services/user/user.service";
  * @param {object} res - The response object.
  * @return {Promise<void>} - A promise that resolves to nothing.
  */
-export const updatePassword = async (req, res) => {
+export const updatePassword = async (req, res,next) => {
     const { email, password } = req.body;
-
-    try {
-        let val = await findUserAndUpdate(email, password,"password");
-        if (val) {
-            res.status(200).json({ message: "success" });
-        } else {
-            res.status(200).json({ message: "Unable to update password" });
-        }
-    } catch (error) {
-        res.status(404).json({ message: "Server Error" });
+    let val = await findUserAndUpdate(email, password, "password");
+    if (val) {
+        responseHandler(res)
+    } else {
+        next(UnableTouUpdatePasswordError)
     }
-};
+}

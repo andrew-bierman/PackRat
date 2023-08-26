@@ -1,43 +1,63 @@
-import Axios from "axios";
-import { showMessage } from "react-native-flash-message";
-import { api } from "~/constants/api";
+import axios from 'axios';
+import { api } from '~/constants/api';
+import { store } from '../store/store';
+import { InformUser } from '~/utils/ToastUtils';
 
-Axios.interceptors.request.use(
-  (config) => {
-    config.baseURL = api;
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error.response ? error.request : error);
+// Helper function to get the token
+const getTokenFromState = () => {
+  const state = store.getState();
+  return state?.auth?.user?.token || null;
+};
+
+const requestInterceptor = (config) => {
+  config.baseURL = api;
+
+  const token = getTokenFromState();
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
   }
-);
 
-Axios.interceptors.response.use(
-  async (response) => {
-    return response;
-  },
-  async (error) => {
-    if ("code" in error) {
-      if (error.code === "ERR_CANCELED") {
-        return;
-      }
-    }
+  return config;
+};
 
-    if ("message" in error) {
-      showMessage({
-        message: error.message,
-        type: "danger",
-      });
-    } else {
-      showMessage({
-        message: "Something went wrong",
-        type: "danger",
-      });
-    }
+const requestErrorInterceptor = (error) => {
+  return Promise.reject(error.response ? error.request : error);
+};
 
-    return Promise.reject(error);
+const responseInterceptor = (response) => {
+  // Check for the custom header
+  const responseMessage = response.headers['x-response-message'];
+
+  if (responseMessage) {
+    InformUser({
+      title: responseMessage,
+      placement: 'bottom',
+      duration: 3000,
+      style: { backgroundColor: response.status === 200 ? 'green' : 'red' },
+    });
   }
-);
 
-const axios = Axios;
+  return response;
+};
+
+const responseErrorInterceptor = (error) => {
+  if ('code' in error && error.code === 'ERR_CANCELED') {
+    return;
+  }
+
+  const errorMessage =
+    'message' in error ? error.message : 'Something went wrong';
+  InformUser({
+    title: errorMessage,
+    placement: 'bottom',
+    duration: 3000,
+    style: { backgroundColor: 'red' },
+  });
+
+  return Promise.reject(error);
+};
+
+axios.interceptors.request.use(requestInterceptor, requestErrorInterceptor);
+axios.interceptors.response.use(responseInterceptor, responseErrorInterceptor);
+
 export default axios;

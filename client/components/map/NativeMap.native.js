@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from 'react';
 import {
   Platform,
   StyleSheet,
@@ -11,17 +11,17 @@ import {
   Modal,
   Alert,
   Linking,
-  Image
-} from "react-native";
-import Geolocation from "@react-native-community/geolocation";
+  Image,
+} from 'react-native';
+import Geolocation from '@react-native-community/geolocation';
 // import { check, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import {
   MaterialCommunityIcons,
   FontAwesome,
   MaterialIcons,
   Entypo,
-} from "@expo/vector-icons";
-import Mapbox, { ShapeSource, offlineManager, Camera } from "@rnmapbox/maps";
+} from '@expo/vector-icons';
+import Mapbox, { ShapeSource, offlineManager, Camera } from '@rnmapbox/maps';
 import {
   Select,
   Center,
@@ -32,14 +32,14 @@ import {
   Actionsheet,
   CheckIcon,
   useToast,
-} from "native-base";
+} from 'native-base';
 
 // get mapbox access token from .env file
-import { MAPBOX_ACCESS_TOKEN } from "@env";
+import { MAPBOX_ACCESS_TOKEN } from '@env';
 
-import { theme } from "../../theme";
-import UseTheme from "../../hooks/useTheme";
-import MapButtonsOverlay from "./MapButtonsOverlay";
+import { theme } from '../../theme';
+import UseTheme from '../../hooks/useTheme';
+import MapButtonsOverlay from './MapButtonsOverlay';
 import {
   calculateZoomLevel,
   findTrailCenter,
@@ -49,28 +49,28 @@ import {
   isPoint,
   isLineString,
   isPolygonOrMultiPolygon,
-  multiPolygonBounds
-} from "../../utils/mapFunctions";
+  multiPolygonBounds,
+} from '../../utils/mapFunctions';
 
-import * as DocumentPicker from "expo-document-picker";
-import * as FileSystem from "expo-file-system";
-import { DOMParser } from "xmldom";
-import { gpx as toGeoJSON } from "@tmcw/togeojson";
-import MapPreview from "./MapPreview";
+import * as DocumentPicker from 'expo-document-picker';
+import * as FileSystem from 'expo-file-system';
+import { DOMParser } from 'xmldom';
+import { gpx as toGeoJSON } from '@tmcw/togeojson';
+import MapPreview from './MapPreview';
 
-Mapbox.setWellKnownTileServer(Platform.OS === "android" ? "Mapbox" : "mapbox");
+Mapbox.setWellKnownTileServer(Platform.OS === 'android' ? 'Mapbox' : 'mapbox');
 Mapbox.setAccessToken(MAPBOX_ACCESS_TOKEN);
 
 // console.log("MAPBOX_ACCESS_TOKEN", MAPBOX_ACCESS_TOKEN, typeof MAPBOX_ACCESS_TOKEN)
 // consts
-const dw = Dimensions.get("screen").width;
-const fullMapDimension = { width: dw, height: "100%" };
+const dw = Dimensions.get('screen').width;
+const fullMapDimension = { width: dw, height: '100%' };
 const previewMapStyle = {
   width: dw * 0.9,
   height: 220,
   borderRadius: 20,
-  overflow: "hidden",
-  alignSelf: "center",
+  overflow: 'hidden',
+  alignSelf: 'center',
 };
 
 // MapView.setConnected(true);
@@ -93,7 +93,7 @@ function NativeMap({ shape: shapeProp }) {
   const [shape, setShape] = useState(shapeProp);
   const [mapName, setMapName] = useState(shape?.features[0]?.properties?.name);
   const [trailCenterPoint, setTrailCenterPoint] = useState(
-    findTrailCenter(shape)
+    findTrailCenter(shape),
   );
 
   const toast = useToast();
@@ -118,7 +118,12 @@ function NativeMap({ shape: shapeProp }) {
     setTrailCenterPoint(findTrailCenter(shape));
   }, [shape]);
 
-  // functions
+  /**
+   * Retrieves the current position using Geolocation API and updates the location state.
+   *
+   * @param {function} onSucccess - a callback function to be executed on success
+   * @return {undefined} This function does not return anything
+   */
   const getPosition = (onSucccess) => {
     Geolocation.getCurrentPosition(
       (data) => {
@@ -128,18 +133,23 @@ function NativeMap({ shape: shapeProp }) {
           latitude: Number(data.coords.latitude),
         });
         setCorrectLocation(true);
-        onSucccess && onSucccess(location);
+        onSucccess?.(location);
       },
       (error) => {
         setCorrectLocation(false);
-        Alert.alert("Something went wrong with location", error.message);
+        Alert.alert('Something went wrong with location', error.message);
       },
-      { enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 }
+      { enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 },
     );
   };
 
+  /**
+   * Handles the press event on the map.
+   *
+   * @param {Event} event - The press event object.
+   */
   function onMapPress(event) {
-    console.log(event, "eventtt");
+    console.log(event, 'eventtt');
     // if (trailCenterPoint) {
     //   mapViewFullScreenRef?.current.setCamera({
     //     centerCoordinate: trailCenterPoint,
@@ -147,19 +157,38 @@ function NativeMap({ shape: shapeProp }) {
     // }
   }
 
+  /**
+   * Handles the download progress of an offline region.
+   *
+   * @param {Object} offlineRegion - The offline region being downloaded.
+   * @param {Object} offlineRegionStatus - The status of the offline region download.
+   * @returns {void}
+   */
   function onDownloadProgress(offlineRegion, offlineRegionStatus) {
-    console.log("control there", offlineRegionStatus?.percentage);
+    console.log('control there', offlineRegionStatus?.percentage);
     setProgress(offlineRegionStatus.percentage);
     setDownloading(true);
     if (offlineRegionStatus.percentage == 100) {
-      Alert.alert("Map download successfully!");
+      Alert.alert('Map download successfully!');
       setDownloading(false);
     }
   }
+  /**
+   * A function that serves as an error listener for the offline region.
+   *
+   * @param {Object} offlineRegion - The offline region object.
+   * @param {Object} error - The error object.
+   */
   function errorListener(offlineRegion, error) {
     Alert.alert(error.message);
   }
-  function onDownload(optionsForDownload) {
+  /**
+   * Downloads a file using the provided options.
+   *
+   * @param {object} optionsForDownload - The options for the download.
+   * @return {Promise} A promise that resolves when the download is complete.
+   */
+  async function onDownload(optionsForDownload) {
     // start download
     offlineManager
       .createPack(optionsForDownload, onDownloadProgress, errorListener)
@@ -175,8 +204,8 @@ function NativeMap({ shape: shapeProp }) {
           width: 18,
           borderRadius: 16,
           borderWidth: 3,
-          borderColor: "white",
-          backgroundColor: "#16b22d",
+          borderColor: 'white',
+          backgroundColor: '#16b22d',
         }}
       ></View>
     );
@@ -185,17 +214,19 @@ function NativeMap({ shape: shapeProp }) {
   const pointLatLong = shape?.features[0]?.geometry?.coordinates;
   const openMaps = (latLong) => {
     console.log(latLong.join(','), 'lat long');
-    const scheme = Platform.select({ ios: 'maps://0,0?q=', android: 'geo:0,0?q=' });
+    const scheme = Platform.select({
+      ios: 'maps://0,0?q=',
+      android: 'geo:0,0?q=',
+    });
     const latLng = latLong.join(',');
     // console.log('shape?.features[0]?.properties?.name',shape?.features[0]?.properties?.name)
-    const label = shape?.features[0]?.properties?.name
+    const label = shape?.features[0]?.properties?.name;
     const url = Platform.select({
       ios: `${scheme}${label}@${latLng}`,
-      android: `${scheme}${latLng}(${label})`
+      android: `${scheme}${latLng}(${label})`,
     });
     Linking.openURL(url);
-
-  }
+  };
   const element = (
     <View style={mapFullscreen ? fullMapDimension : previewMapStyle}>
       <Mapbox.MapView
@@ -208,137 +239,144 @@ function NativeMap({ shape: shapeProp }) {
         scrollEnabled={mapFullscreen}
         zoomEnabled={mapFullscreen}
       >
-
         <Mapbox.Camera
           ref={camera}
           zoomLevel={zoomLevel ? zoomLevel - 0.8 : 10}
-
-          centerCoordinate={isPoint(shape) ? pointLatLong : isPolygonOrMultiPolygon(shape) ? multiPolygonBounds(shape.features[0]) : trailCenterPoint}
-          animationMode={"flyTo"}
+          centerCoordinate={
+            isPoint(shape)
+              ? pointLatLong
+              : isPolygonOrMultiPolygon(shape)
+              ? multiPolygonBounds(shape.features[0])
+              : trailCenterPoint
+          }
+          animationMode={'flyTo'}
           animationDuration={2000}
         />
         {/* // user location */}
         <Mapbox.PointAnnotation
-          id={"1212"}
+          id={'1212'}
           coordinate={[location.longitude, location.latitude]}
         >
           <View
             style={{
-              justifyContent: "center",
-              alignItems: "center",
-              backgroundColor: "transparent",
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: 'transparent',
             }}
           >
             <MaterialCommunityIcons
               name="map-marker"
               size={35}
-              color={"#de0910"}
+              color={'#de0910'}
             />
           </View>
         </Mapbox.PointAnnotation>
         {/* trail */}
-        {
-          isPoint(shape) ?
+        {isPoint(shape) ? (
           <Mapbox.PointAnnotation
-          id="destination"
-          coordinate={pointLatLong}
-          onSelected={() => {
-            console.log('selected');
-            openMaps(pointLatLong)
-          }}
+            id="destination"
+            coordinate={pointLatLong}
+            onSelected={() => {
+              console.log('selected');
+              openMaps(pointLatLong);
+            }}
           >
-           {/* <CircleCapComp /> */}
-          <View >
-           <MaterialCommunityIcons
-              name="map-marker"
-              size={35}
-              color={"#de0910"}
-              />
-        </View>
-
-
-          </Mapbox.PointAnnotation>
-           :
-          isLineString(shape) ?
-          <>
-          <Mapbox.ShapeSource
-          id="source1"
-          lineMetrics={true}
-          shape={shape.features[0]}
-          cluster
-          clusterRadius={80}
-          clusterMaxZoomLevel={14}
-          style={{ zIndex: 1 }}
-        >
-          <Mapbox.LineLayer id="layer1" style={styles().lineLayer} />
-        </Mapbox.ShapeSource>
-        {/* // top location */}
-        {shape?.features[0]?.geometry?.coordinates?.length > 0 && (
-          <Mapbox.PointAnnotation
-            id={"1212"}
-            coordinate={[location.longitude, location.latitude]}
-          >
-            <View
-              style={{
-                justifyContent: "center",
-                alignItems: "center",
-                backgroundColor: "transparent",
-              }}
-            >
+            {/* <CircleCapComp /> */}
+            <View>
               <MaterialCommunityIcons
                 name="map-marker"
                 size={35}
-                color={"#de0910"}
+                color={'#de0910'}
               />
             </View>
           </Mapbox.PointAnnotation>
-        )}
-          </>
-          :
-          <Mapbox.ShapeSource id={'some-feature'} shape={shape.features[0]}>
-                <Mapbox.LineLayer
-                    sourceID="some-feature"
-                    id="some-feature-line"
-                    style={{
-                        lineColor: '#ffffff',
-                        lineWidth: 10,
-                    }}
-                />
-                        <Mapbox.FillLayer id="multipolygonFill" style={{ fillOpacity: 0.5 }} />
-
+        ) : isLineString(shape) ? (
+          <>
+            <Mapbox.ShapeSource
+              id="source1"
+              lineMetrics={true}
+              shape={shape.features[0]}
+              cluster
+              clusterRadius={80}
+              clusterMaxZoomLevel={14}
+              style={{ zIndex: 1 }}
+            >
+              <Mapbox.LineLayer id="layer1" style={styles.lineLayer} />
             </Mapbox.ShapeSource>
-        }
-
+            {/* // top location */}
+            {shape?.features[0]?.geometry?.coordinates?.length > 0 && (
+              <Mapbox.PointAnnotation
+                id={'1212'}
+                coordinate={[location.longitude, location.latitude]}
+              >
+                <View
+                  style={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    backgroundColor: 'transparent',
+                  }}
+                >
+                  <MaterialCommunityIcons
+                    name="map-marker"
+                    size={35}
+                    color={'#de0910'}
+                  />
+                </View>
+              </Mapbox.PointAnnotation>
+            )}
+          </>
+        ) : (
+          <Mapbox.ShapeSource id={'some-feature'} shape={shape.features[0]}>
+            <Mapbox.LineLayer
+              sourceID="some-feature"
+              id="some-feature-line"
+              style={{
+                lineColor: '#ffffff',
+                lineWidth: 10,
+              }}
+            />
+            <Mapbox.FillLayer
+              id="multipolygonFill"
+              style={{ fillOpacity: 0.5 }}
+            />
+          </Mapbox.ShapeSource>
+        )}
       </Mapbox.MapView>
 
       <MapButtonsOverlay
         mapFullscreen={mapFullscreen}
-        enableFullScreen={() => setMapFullscreen(true)}
-        disableFullScreen={() => setMapFullscreen(false)}
+        enableFullScreen={() => {
+          setMapFullscreen(true);
+        }}
+        disableFullScreen={() => {
+          setMapFullscreen(false);
+        }}
         handleChangeMapStyle={setMapStyle}
-        fetchLocation={() =>
+        fetchLocation={() => {
           getPosition((location) => {
             setTrailCenterPoint([location.latitude, location.longitude]);
-          })
-        }
+          });
+        }}
         styles={styles()}
         downloadable={isShapeDownloadable(shape)}
         downloading={downloading}
         shape={shape}
-        onDownload={() => setShowMapNameInputDialog(true)}
+        onDownload={() => {
+          setShowMapNameInputDialog(true);
+        }}
         handleGpxUpload={async () => {
           try {
             const result = await DocumentPicker.getDocumentAsync({
-              type: "*/*",
+              type: '*/*',
             });
-            if (result.type === "success") {
+            if (result.type === 'success') {
               const gpxString = await FileSystem.readAsStringAsync(result.uri);
               const parsedGpx = new DOMParser().parseFromString(gpxString);
               const geojson = toGeoJSON(parsedGpx);
               setShape(geojson);
             }
           } catch (err) {
-            Alert.alert("An error occured");
+            Alert.alert('An error occured');
           }
         }}
         progress={progress}
@@ -360,7 +398,9 @@ function NativeMap({ shape: shapeProp }) {
           </Modal>
           <AlertDialog
             isOpen={showMapNameInputDialog}
-            onClose={() => setShowMapNameInputDialog(false)}
+            onClose={() => {
+              setShowMapNameInputDialog(false);
+            }}
             leastDestructiveRef={cancelRef}
           >
             <AlertDialog.Content>
@@ -370,7 +410,9 @@ function NativeMap({ shape: shapeProp }) {
               </AlertDialog.Header>
               <AlertDialog.Body>
                 <Input
-                  onChangeText={(text) => setMapName(text)}
+                  onChangeText={(text) => {
+                    setMapName(text);
+                  }}
                   value={mapName}
                   mx="3"
                   placeholder="map name"
@@ -382,7 +424,9 @@ function NativeMap({ shape: shapeProp }) {
                   <Button
                     variant="unstyled"
                     colorScheme="coolGray"
-                    onPress={() => setShowMapNameInputDialog(false)}
+                    onPress={() => {
+                      setShowMapNameInputDialog(false);
+                    }}
                     ref={cancelRef}
                   >
                     Cancel
@@ -393,7 +437,7 @@ function NativeMap({ shape: shapeProp }) {
                       setShowMapNameInputDialog(false);
                       const downloadOptions = {
                         name: mapName,
-                        styleURL: "mapbox://styles/mapbox/outdoors-v11",
+                        styleURL: 'mapbox://styles/mapbox/outdoors-v11',
                         bounds: await mapViewRef.current.getVisibleBounds(),
                         minZoom: 0,
                         maxZoom: 8,
@@ -424,14 +468,14 @@ const styles = () => {
   return StyleSheet.create({
     page: {
       flex: 1,
-      flexDirection: "column",
-      justifyContent: "center",
-      alignItems: "center",
-      backgroundColor: "#F5FCFF",
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: '#F5FCFF',
     },
     container: {
       // height: 500,
-      width: "100%",
+      width: '100%',
       backgroundColor: currentTheme.colors.white,
       marginBottom: 20,
       marginBottom: 20,
@@ -441,34 +485,34 @@ const styles = () => {
       flex: 1,
     },
     lineLayer: {
-      lineColor: "#16b22d",
+      lineColor: '#16b22d',
       lineWidth: 4,
       lineOpacity: 1,
     },
     headerView: {
-      position: "absolute",
+      position: 'absolute',
       marginTop: 20,
-      flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "space-evenly",
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-evenly',
       width: 100,
     },
     headerBtnView: {
-      justifyContent: "center",
-      alignItems: "center",
+      justifyContent: 'center',
+      alignItems: 'center',
       borderRadius: 32,
       backgroundColor: currentTheme.colors.white,
     },
     button: {
-      position: "absolute",
+      position: 'absolute',
       bottom: 10,
       right: 10,
       backgroundColor: currentTheme.colors.primary,
       borderRadius: 50,
       width: 45,
       height: 45,
-      justifyContent: "center",
-      alignItems: "center",
+      justifyContent: 'center',
+      alignItems: 'center',
     },
   });
 };

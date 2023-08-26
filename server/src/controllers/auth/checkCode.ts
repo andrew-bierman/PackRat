@@ -1,3 +1,5 @@
+import { InvalidCodeError } from "../../helpers/errors";
+import { responseHandler } from "../../helpers/responseHandler";
 import User from "../../models/userModel";
 
 /**
@@ -6,18 +8,14 @@ import User from "../../models/userModel";
  * @param {Object} res - the response object
  * @return {Promise<void>} - a promise that resolves to void
  */
-export const checkCode = async (req: any, res: any) => {
-    const { email, code } = req.body;
-    try {
-      let user = await User.find({
-        $and: [{ email: email.toLowerCase() }, { code: code }],
-      });
-      if (user.length) {
-        res.status(200).json({ message: "success" });
-      } else {
-        res.status(200).json({ message: "Incorrect code" });
-      }
-    } catch (error) {
-      res.status(404).json({ message: "Server Error" });
-    }
-  };
+export const checkCode = async (req: any, res: any, next) => {
+  const { email, code } = req.body;
+  let user = await User.find({
+    $and: [{ email: email.toLowerCase() }, { code: code }],
+  });
+  if (user.length) {
+    responseHandler(res)
+  } else {
+    next(InvalidCodeError)
+  }
+};

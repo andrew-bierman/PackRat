@@ -1,22 +1,22 @@
-import TripSchema from "./models/tripModel";
-import PackSchema from "./models/packModel";
-import ItemSchema from "./models/itemModel";
-import UserSchema from "./models/userModel";
+import TripSchema from './models/tripModel';
+import PackSchema from './models/packModel';
+import ItemSchema from './models/itemModel';
+import UserSchema from './models/userModel';
 
-import m2s from "mongoose-to-swagger";
-import swaggerJsdoc from "swagger-jsdoc";
-import express from "express";
+import m2s from 'mongoose-to-swagger';
+import swaggerJsdoc from 'swagger-jsdoc';
+import express from 'express';
 
 // import options from "../utils/swaggerOptions.js";
 
 // Swagger options
 const options = {
   definition: {
-    openapi: "3.0.0", // Specify the OpenAPI version
+    openapi: '3.0.0', // Specify the OpenAPI version
     info: {
-      title: "PackRat API", // Specify the title of your API
-      version: "1.0.0", // Specify the version of your API
-      description: "API documentation for the PackRat MERN application",
+      title: 'PackRat API', // Specify the title of your API
+      version: '1.0.0', // Specify the version of your API
+      description: 'API documentation for the PackRat MERN application',
     },
   },
 
@@ -25,7 +25,7 @@ const options = {
     // "./*.js", // this will look for .js files in the current directory
     // "./**/*.js", // this will look for .js files in all subdirectories
 
-    "./routes/*.js",
+    './routes/*.js',
     // "../middleware/validators/*.js",
     // "../models/*.js",
     // "../controllers/*.js",
@@ -33,12 +33,12 @@ const options = {
 
   servers: [
     {
-      url: "http://localhost:3000",
-      description: "Development server",
+      url: 'http://localhost:3000',
+      description: 'Development server',
     },
     {
-      url: " https://26af-182-185-161-23.ngrok-free.app",
-      description: "Production server",
+      url: ' https://26af-182-185-161-23.ngrok-free.app',
+      description: 'Production server',
     },
   ],
 };

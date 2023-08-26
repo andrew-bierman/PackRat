@@ -1,19 +1,19 @@
-import { Modal, Text, View, Image, Dimensions } from "react-native";
-import Mapbox, { offlineManager } from "@rnmapbox/maps";
-import { useEffect, useState } from "react";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import MapButtonsOverlay from "../../components/map/MapButtonsOverlay";
-import { theme } from "../../theme";
+import { Modal, Text, View, Image, Dimensions } from 'react-native';
+import Mapbox, { offlineManager } from '@rnmapbox/maps';
+import { useEffect, useState } from 'react';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import MapButtonsOverlay from '../../components/map/MapButtonsOverlay';
+import { theme } from '../../theme';
 import UseTheme from '../../hooks/useTheme';
-import { StyleSheet } from "react-native";
+import { StyleSheet } from 'react-native';
 import {
   calculateZoomLevel,
   getShapeSourceBounds,
-} from "../../utils/mapFunctions";
+} from '../../utils/mapFunctions';
 
 function CircleCapComp() {
-  
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } = UseTheme();
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
 
   return (
     <View
@@ -30,7 +30,8 @@ function CircleCapComp() {
 }
 
 export default function DownloadedMaps() {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } = UseTheme();
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
   const [offlinePacks, setOfflinePacks] = useState(null);
   const [showMap, setShowMap] = useState(false);
   const [pack, setPack] = useState(null);
@@ -38,7 +39,7 @@ export default function DownloadedMaps() {
   let shape, zoomLevel;
   if (pack != null) {
     shape = pack && JSON.parse(JSON.parse(pack.metadata).shape);
-    const dw = Dimensions.get("screen").width;
+    const dw = Dimensions.get('screen').width;
     const bounds = getShapeSourceBounds(shape);
 
     zoomLevel = calculateZoomLevel(bounds[0].concat(bounds[1]), {
@@ -57,9 +58,9 @@ export default function DownloadedMaps() {
     <View style={{ backgroundColor: currentTheme.colors.background }}>
       <Text
         style={{
-          textAlign: "center",
+          textAlign: 'center',
           fontSize: 20,
-          fontWeight: "bold",
+          fontWeight: 'bold',
           marginBottom: 20,
           color: currentTheme.colors.text,
         }}
@@ -76,8 +77,8 @@ export default function DownloadedMaps() {
                   padding: 20,
                 }}
                 onPress={() => {
-                  console.log("pack object", pack);
-                  console.log("pack metadata", pack.metadata);
+                  console.log('pack object', pack);
+                  console.log('pack metadata', pack.metadata);
                   setPack(pack);
                   setShowMap(true);
                 }}
@@ -85,13 +86,13 @@ export default function DownloadedMaps() {
                 {pack && (
                   <Image
                     style={{
-                      width: "100%",
+                      width: '100%',
                       height: 200,
                       borderRadius: 10,
                     }}
                     source={{
                       uri: `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/${
-                        pack?.bounds[0] + "," + pack?.bounds[1]
+                        pack?.bounds[0] + ',' + pack?.bounds[1]
                       },10,60,60/600x600?access_token=${
                         process.env.MAPBOX_ACCESS_TOKEN
                       }`,
@@ -101,7 +102,7 @@ export default function DownloadedMaps() {
                 <Text
                   style={{
                     fontSize: 16,
-                    fontWeight: "bold",
+                    fontWeight: 'bold',
                     marginTop: 5,
                     color: currentTheme.colors.text,
                   }}
@@ -131,7 +132,7 @@ export default function DownloadedMaps() {
                 (pack.bounds[0][0] + pack.bounds[1][0]) / 2,
                 (pack.bounds[0][1] + pack.bounds[1][1]) / 2,
               ]}
-              animationMode={"flyTo"}
+              animationMode={'flyTo'}
               animationDuration={2000}
             />
             {/* trail */}
@@ -144,12 +145,18 @@ export default function DownloadedMaps() {
               clusterMaxZoomLevel={14}
               style={{ zIndex: 1 }}
             >
-              <Mapbox.LineLayer id="layer1" style={[styles.lineLayer,{lineColor: currentTheme.colors.cardIconColor}]} />
+              <Mapbox.LineLayer
+                id="layer1"
+                style={[
+                  styles.lineLayer,
+                  { lineColor: currentTheme.colors.cardIconColor },
+                ]}
+              />
             </Mapbox.ShapeSource>
             {/* // top location */}
             {shape?.features[0]?.geometry?.coordinates?.length > 0 && (
               <Mapbox.PointAnnotation
-                id={"cicleCap"}
+                id={'cicleCap'}
                 coordinate={
                   shape?.features[0]?.geometry?.coordinates[
                     shape?.features[0]?.geometry?.coordinates?.length - 1
@@ -165,7 +172,9 @@ export default function DownloadedMaps() {
 
           <MapButtonsOverlay
             mapFullscreen={true}
-            disableFullScreen={() => setShowMap(false)}
+            disableFullScreen={() => {
+              setShowMap(false);
+            }}
             downloadable={false}
           />
         </Modal>
