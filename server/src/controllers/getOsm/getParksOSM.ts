@@ -1,6 +1,11 @@
 import { updateDatabaseWithGeoJSONDataFromOverpass } from './updateDatabaseWithGeoJSONDataFromOverpass';
 import osmtogeojson from 'osmtogeojson';
 import axios from 'axios';
+import {
+  ErrorRetrievingParksOSMError,
+  InvalidRequestParamsError,
+} from '../../helpers/errors';
+import { responseHandler } from '../../helpers/responseHandler';
 
 /**
  * Retrieves parks data from OpenStreetMap based on the provided latitude, longitude, and radius.
@@ -8,13 +13,12 @@ import axios from 'axios';
  * @param {Object} res - The response object.
  * @return {Promise} The response object containing the parks data.
  */
-export const getParksOSM = async (req, res) => {
+export const getParksOSM = async (req, res, next) => {
   try {
     const { lat = 45.5231, lon = -122.6765, radius = 50000 } = req.query;
 
     if (!lat || !lon || !radius) {
-      res.status(400).send({ message: 'Invalid request parameters' });
-      return; // Return early to avoid further execution
+      next(InvalidRequestParamsError);
     }
 
     const overpassUrl = process.env.OSM_URI;
@@ -36,10 +40,10 @@ export const getParksOSM = async (req, res) => {
     console.log('geojsonData==============', geojsonData);
 
     updateDatabaseWithGeoJSONDataFromOverpass(geojsonData);
-
-    res.send(geojsonData);
+    res.locals.data = geojsonData;
+    responseHandler(res);
   } catch (error) {
     console.error(error);
-    res.status(400).send({ message: 'Error retrieving Parks OSM results' });
+    next(ErrorRetrievingParksOSMError);
   }
 };

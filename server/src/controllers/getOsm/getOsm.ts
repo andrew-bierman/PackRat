@@ -1,5 +1,11 @@
 import osmtogeojson from 'osmtogeojson';
 import axios from 'axios';
+import {
+  ErrorProcessingOverpassError,
+  ErrorRetrievingOverpassError,
+  InvalidRequestParamsError,
+} from '../../helpers/errors';
+import { responseHandler } from '../../helpers/responseHandler';
 
 /**
  * Retrieves OpenStreetMap data based on the provided activity type, start point, and end point.
@@ -7,7 +13,7 @@ import axios from 'axios';
  * @param {Object} res - The response object used to send the retrieved OpenStreetMap data.
  * @return {Promise<void>} - A promise that resolves when the OpenStreetMap data is successfully retrieved and sent.
  */
-export const getOsm = async (req, res) => {
+export const getOsm = async (req, res, next) => {
   console.log('req', req); // log the request body to see what it looks like
 
   const overpassUrl = process.env.OSM_URI;
@@ -40,7 +46,7 @@ export const getOsm = async (req, res) => {
     const { activityType, startPoint, endPoint } = req.body;
 
     if (!activityType || !startPoint || !endPoint) {
-      throw new Error('Invalid request parameters');
+      next(InvalidRequestParamsError);
     }
 
     const overpassQuery = await formatOverpassQuery(
@@ -60,13 +66,13 @@ export const getOsm = async (req, res) => {
     if (response.status === 200) {
       const responseFormat = response.data;
       const geojsonData = osmtogeojson(responseFormat);
-      res.send(geojsonData);
+      res.locals.data = geojsonData;
+      responseHandler(res);
     } else {
       console.log(response.status, response.statusText);
-      res.send({ message: 'Error processing Overpass Data' });
+      next(ErrorProcessingOverpassError);
     }
   } catch (error) {
-    console.error(error);
-    res.status(500).send({ message: 'Error retrieving Overpass Data' });
+    next(ErrorRetrievingOverpassError);
   }
 };

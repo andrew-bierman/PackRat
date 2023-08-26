@@ -1,16 +1,10 @@
 import jwt from 'jsonwebtoken';
-import nodemailer from 'nodemailer';
 import bcrypt from 'bcrypt';
 import User from '../../models/userModel';
-import {
-  STMP_EMAIL,
-  STMP_PASSWORD,
-  CLIENT_URL,
-  JWT_SECRET,
-  SEND_GRID_API_KEY,
-} from '../../config';
+import { JWT_SECRET, SEND_GRID_API_KEY } from '../../config';
 
 import sgMail from '@sendgrid/mail';
+import { responseHandler } from '../../helpers/responseHandler';
 
 sgMail.setApiKey(SEND_GRID_API_KEY);
 
@@ -33,13 +27,13 @@ export const handlePasswordReset = async (req, res) => {
     const email = verifyPasswordResetToken(token);
     const hashedPassword = bcrypt.hashSync(password, 10); // hash the password
 
-    const user: any = await User.findOne({ email });
+    const user = await User.findOne({ email });
 
     if (!user) {
       throw new Error('No user found with this email address');
     }
 
-    if (Date.now() > user.passwordResetTokenExpiration) {
+    if (Date.now() > user.passwordResetTokenExpiration.getTime()) {
       throw new Error('Password reset token has expired');
     }
 
@@ -52,7 +46,8 @@ export const handlePasswordReset = async (req, res) => {
       },
     );
 
-    return res.send({ message: 'Password reset successful' });
+    res.locals.data = { message: 'Password reset successful' };
+    responseHandler(res);
   } catch (error) {
     console.error('Error resetting password:', error);
     return res

@@ -1,8 +1,9 @@
+import { RetrievingParksDataError } from '../../helpers/errors';
+import { responseHandler } from '../../helpers/responseHandler';
 import { oneEntity } from '../../utils/oneEntity';
 const fetch = async (...args) =>
-  await import('node-fetch').then(
-    async ({ default: fetch }) =>
-      await fetch(...(args as Parameters<typeof fetch>)),
+  import('node-fetch').then(async ({ default: fetch }) =>
+    fetch(...(args as Parameters<typeof fetch>)),
   );
 
 /**
@@ -11,7 +12,7 @@ const fetch = async (...args) =>
  * @param {Object} res - The response object.
  * @return {Promise} A promise that resolves with the park data or an error message.
  */
-export const getParks = async (req, res) => {
+export const getParks = async (req, res, next) => {
   const abbrState = await oneEntity(req.query.abbrState);
 
   const X_RAPIDAPI_KEY = process.env.X_RAPIDAPI_KEY;
@@ -33,9 +34,8 @@ export const getParks = async (req, res) => {
   await fetch(host, options)
     .then(async (res) => await res.json())
     .then((json) => {
-      res.send(json);
+      res.locals.data = json;
+      responseHandler(res);
     })
-    .catch(() =>
-      res.send({ message: 'Error retrieving park data from RapidAPI' }),
-    );
+    .catch(() => next(RetrievingParksDataError));
 };
