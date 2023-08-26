@@ -1,14 +1,6 @@
-import {
-  combineReducers,
-  configureStore,
-  type Middleware,
-} from '@reduxjs/toolkit';
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {
-  persistReducer,
-  persistStore,
-  type PersistConfig,
-} from 'redux-persist';
+import { persistReducer, persistStore, PersistConfig } from 'redux-persist';
 
 // middleware
 import apiMessageMiddleware from './middleware/apiMessageMiddleware';
@@ -32,12 +24,10 @@ import destinationReducer from './destinationStore';
 import chatReducer from './chatStore';
 import globalItems from './globalItemsStore';
 import userStore from './userStore';
+import { Reducer } from 'react';
 
-// Assuming each of the above stores is typed, e.g.,:
-// export default weatherSlice.reducer;
-// export type WeatherState = ReturnType<typeof weatherSlice.reducer>;
-
-const rootReducer = combineReducers({
+// combine reducers
+const rootReducer: Reducer<RootState> = combineReducers({
   auth: authReducer,
   dropdown: dropdownReducer,
   search: searchReducer,
@@ -58,14 +48,35 @@ const rootReducer = combineReducers({
   userStore,
 });
 
-export type RootState = ReturnType<typeof rootReducer>;
+export interface RootState {
+  auth: typeof authReducer;
+  dropdown: typeof dropdownReducer;
+  search: typeof searchReducer;
+  weather: typeof weatherReducer;
+  trails: typeof trailsReducer;
+  parks: typeof parksReducer;
+  items: typeof itemsReducer;
+  packs: typeof packsReducer;
+  trips: typeof tripsReducer;
+  favorites: typeof favoritesReducer;
+  singlePack: typeof singlePackReducer;
+  singleTrip: typeof singleTripReducer;
+  feed: typeof feedReducer;
+  gpx: typeof gpxReducer;
+  destination: typeof destinationReducer;
+  chat: typeof chatReducer;
+  globalItems: typeof globalItems;
+  userStore: typeof userStore;
+}
 
+// configure persist store and whitelist reducers
 const persistConfig: PersistConfig<RootState> = {
   key: 'root',
   storage: AsyncStorage,
   whitelist: ['auth'], // add reducers to persist here
 };
 
+// create persisted reducer
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const store = configureStore({
@@ -78,6 +89,8 @@ const store = configureStore({
       },
     }).concat(apiMessageMiddleware),
 });
+
+export type AppDispatch = typeof store.dispatch;
 
 const persistor = persistStore(store);
 
