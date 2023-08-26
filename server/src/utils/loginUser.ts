@@ -1,4 +1,4 @@
-import User from "../models/userModel";
+import User from '../models/userModel';
 
 /**
  * Logs in a user based on the provided email, password, and source.
@@ -12,33 +12,41 @@ import User from "../models/userModel";
  * @throws {Error} If the email is incorrect.
  * @return {Promise<any>} The logged in user.
  */
-export const loginUser = async ({ email, password, from }: { email: string, password: string, from: string }) => {
-  let user:any = [];
-  if (from === "UserSignIn") {
+export const loginUser = async ({
+  email,
+  password,
+  from,
+}: {
+  email: string;
+  password: string;
+  from: string;
+}) => {
+  let user: any = [];
+  if (from === 'UserSignIn') {
     user = await User.find({
-      $and: [{ email: email.toLowerCase() }, { password: password }],
-    }).select("-password");
+      $and: [{ email: email.toLowerCase() }, { password }],
+    }).select('-password');
 
     if (!email || !password) {
-      throw new Error("All fields must be filled");
+      throw new Error('All fields must be filled');
     }
   }
 
-  if (from === "GoogleSignIn") {
+  if (from === 'GoogleSignIn') {
     user = await User.findOne({ email: email.toLowerCase() }).select(
-      "-password"
+      '-password',
     );
     if (!email) {
-      throw new Error("All fields must be filled");
+      throw new Error('All fields must be filled');
     }
   }
-  //Out of two signin methods.
-  if (!(from === "GoogleSignIn" || from === "UserSignIn")) {
-    throw new Error("Something went wrong");
+  // Out of two signin methods.
+  if (!(from === 'GoogleSignIn' || from === 'UserSignIn')) {
+    throw new Error('Something went wrong');
   }
 
   if (user.length == 0) {
-    throw new Error("Wrong email");
+    throw new Error('Wrong email');
   }
 
   return user;

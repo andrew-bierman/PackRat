@@ -1,43 +1,47 @@
-import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
-import axios from "~/config/axios";
-import { api } from "../constants/api";
+import {
+  createSlice,
+  createAsyncThunk,
+  createEntityAdapter,
+} from '@reduxjs/toolkit';
+import axios from '~/config/axios';
+import { api } from '../constants/api';
 
 export const addItemsGlobal = createAsyncThunk(
-  "Items/addItemsGlobal",
+  'Items/addItemsGlobal',
   async (newItem) => {
     const response = await axios.post(`${api}/item/global`, newItem);
     return response.data;
-  }
+  },
 );
 
 export const getItemsGlobal = createAsyncThunk(
-  "Items/getItemsGlobal",
+  'Items/getItemsGlobal',
   async ({ limit, page }) => {
     try {
       const response = await axios.get(
-        `${api}/item/global?limit=${limit}&page=${page}`
+        `${api}/item/global?limit=${limit}&page=${page}`,
       );
       return response.data;
     } catch (error) {
-      console.log("error", error.message);
+      console.log('error', error.message);
     }
-  }
+  },
 );
 
 export const deleteGlobalItem = createAsyncThunk(
-  "items/deleteGlobalItem",
+  'items/deleteGlobalItem',
   async (item) => {
     const response = await axios.delete(`${api}/item/global/${item}`);
     return response.data;
-  }
+  },
 );
 
 export const editGlobalItem = createAsyncThunk(
-  "items/editGlobalItem",
+  'items/editGlobalItem',
   async (newItem) => {
     const response = await axios.put(`${api}/item/`, newItem);
     return response.data;
-  }
+  },
 );
 
 const itemsAdapter = createEntityAdapter({
@@ -45,7 +49,7 @@ const itemsAdapter = createEntityAdapter({
 });
 
 const itemsSlice = createSlice({
-  name: "globalItems",
+  name: 'globalItems',
   initialState: itemsAdapter.getInitialState({
     globalItems: [],
     isLoading: false,

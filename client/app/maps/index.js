@@ -1,14 +1,13 @@
-import { Modal, Text, View, Image, Dimensions } from "react-native";
-import Mapbox, { offlineManager } from "@rnmapbox/maps";
-import { useEffect, useState } from "react";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import MapButtonsOverlay from "../../components/map/MapButtonsOverlay";
-import { theme } from "../../theme";
-import { StyleSheet } from "react-native";
+import { Modal, Text, View, Image, Dimensions, StyleSheet } from 'react-native';
+import Mapbox, { offlineManager } from '@rnmapbox/maps';
+import { useEffect, useState } from 'react';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import MapButtonsOverlay from '../../components/map/MapButtonsOverlay';
+import { theme } from '../../theme';
 import {
   calculateZoomLevel,
   getShapeSourceBounds,
-} from "../../utils/mapFunctions";
+} from '../../utils/mapFunctions';
 
 function CircleCapComp() {
   return (
@@ -18,8 +17,8 @@ function CircleCapComp() {
         width: 18,
         borderRadius: 16,
         borderWidth: 3,
-        borderColor: "white",
-        backgroundColor: "#16b22d",
+        borderColor: 'white',
+        backgroundColor: '#16b22d',
       }}
     ></View>
   );
@@ -33,7 +32,7 @@ export default function DownloadedMaps() {
   let shape, zoomLevel;
   if (pack != null) {
     shape = pack && JSON.parse(JSON.parse(pack.metadata).shape);
-    const dw = Dimensions.get("screen").width;
+    const dw = Dimensions.get('screen').width;
     const bounds = getShapeSourceBounds(shape);
 
     zoomLevel = calculateZoomLevel(bounds[0].concat(bounds[1]), {
@@ -52,9 +51,9 @@ export default function DownloadedMaps() {
     <View style={{ backgroundColor: theme.colors.background }}>
       <Text
         style={{
-          textAlign: "center",
+          textAlign: 'center',
           fontSize: 20,
-          fontWeight: "bold",
+          fontWeight: 'bold',
           marginBottom: 20,
           color: theme.colors.text,
         }}
@@ -71,8 +70,8 @@ export default function DownloadedMaps() {
                   padding: 20,
                 }}
                 onPress={() => {
-                  console.log("pack object", pack);
-                  console.log("pack metadata", pack.metadata);
+                  console.log('pack object', pack);
+                  console.log('pack metadata', pack.metadata);
                   setPack(pack);
                   setShowMap(true);
                 }}
@@ -80,13 +79,13 @@ export default function DownloadedMaps() {
                 {pack && (
                   <Image
                     style={{
-                      width: "100%",
+                      width: '100%',
                       height: 200,
                       borderRadius: 10,
                     }}
                     source={{
                       uri: `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/${
-                        pack?.bounds[0] + "," + pack?.bounds[1]
+                        pack?.bounds[0] + ',' + pack?.bounds[1]
                       },10,60,60/600x600?access_token=${
                         process.env.MAPBOX_ACCESS_TOKEN
                       }`,
@@ -96,7 +95,7 @@ export default function DownloadedMaps() {
                 <Text
                   style={{
                     fontSize: 16,
-                    fontWeight: "bold",
+                    fontWeight: 'bold',
                     marginTop: 5,
                     color: theme.colors.text,
                   }}
@@ -126,7 +125,7 @@ export default function DownloadedMaps() {
                 (pack.bounds[0][0] + pack.bounds[1][0]) / 2,
                 (pack.bounds[0][1] + pack.bounds[1][1]) / 2,
               ]}
-              animationMode={"flyTo"}
+              animationMode={'flyTo'}
               animationDuration={2000}
             />
             {/* trail */}
@@ -144,7 +143,7 @@ export default function DownloadedMaps() {
             {/* // top location */}
             {shape?.features[0]?.geometry?.coordinates?.length > 0 && (
               <Mapbox.PointAnnotation
-                id={"cicleCap"}
+                id={'cicleCap'}
                 coordinate={
                   shape?.features[0]?.geometry?.coordinates[
                     shape?.features[0]?.geometry?.coordinates?.length - 1
@@ -160,7 +159,9 @@ export default function DownloadedMaps() {
 
           <MapButtonsOverlay
             mapFullscreen={true}
-            disableFullScreen={() => setShowMap(false)}
+            disableFullScreen={() => {
+              setShowMap(false);
+            }}
             downloadable={false}
           />
         </Modal>
@@ -171,7 +172,7 @@ export default function DownloadedMaps() {
 
 const styles = StyleSheet.create({
   lineLayer: {
-    lineColor: "#16b22d",
+    lineColor: '#16b22d',
     lineWidth: 4,
     lineOpacity: 1,
   },
