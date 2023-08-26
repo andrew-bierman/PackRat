@@ -23,6 +23,8 @@ import {
 } from "../../store/favoritesStore";
 import { getUser } from "../../store/userStore";
 import { fetchUserTrips } from "../../store/tripsStore";
+import { Ionicons } from "@expo/vector-icons";
+import { Link } from "expo-router";
 
 const Header = ({
   user,
@@ -39,6 +41,7 @@ const Header = ({
   const username = user?.username
     ? `@${user?.username}`
     : `@${userEmailSplitFirstHalf}`;
+  const [settingsIconIsHovered, setSettingsIconIsHovered] = useState(false);
 
   return (
     <Box w={["100%", "100%", "70%", "50%"]} style={styles.infoSection}>
@@ -90,6 +93,15 @@ const Header = ({
         </Box>
       </Stack>
       {error ? <Text>{error}</Text> : null}
+      <Link href="/profile/settings" style={styles.settingsLink}>
+        <Ionicons
+          name="settings"
+          size={24}
+          color={settingsIconIsHovered ? "#0284c7" : "black"}
+          onMouseEnter={() => setSettingsIconIsHovered(true)}
+          onMouseLeave={() => setSettingsIconIsHovered(false)}
+        />
+      </Link>
     </Box>
   );
 };
@@ -211,6 +223,7 @@ const styles = StyleSheet.create({
     shadowRadius: 1.0,
     elevation: 1,
     justifyContent: "center",
+    position: "relative",
   },
   userInfo: {
     flexDirection: "column",
@@ -264,4 +277,12 @@ const styles = StyleSheet.create({
     shadowRadius: 1.0,
     elevation: 1,
   },
+  settingsLink: {
+    position: "absolute",
+    top: 20,
+    right: 20,
+  },
+  // settingsIcon: {
+
+  // }
 });
