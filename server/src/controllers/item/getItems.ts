@@ -1,5 +1,5 @@
-import Item from "../../models/itemModel";
-import { getItemsService } from "../../services/item/item.service";
+import Item from '../../models/itemModel';
+import { getItemsService } from '../../services/item/item.service';
 
 /**
  * Retrieves a list of items associated with a pack.
@@ -16,6 +16,6 @@ export const getItems = async (req, res) => {
 
     res.status(200).json(items);
   } catch (error) {
-    res.status(404).json({ msg: "Items cannot be found" });
+    res.status(404).json({ msg: 'Items cannot be found' });
   }
 };

@@ -1,11 +1,25 @@
-import mongoose from "mongoose";
-import User from "../../models/userModel";
-import Conversation from "../../models/openai/conversationModel";
-import { Configuration, OpenAIApi } from "openai";
+import mongoose from 'mongoose';
+import User from '../../models/userModel';
+import Conversation from '../../models/openai/conversationModel';
+import { Configuration, OpenAIApi } from 'openai';
 
-export const getAIResponseService = async (userId, conversationId, userInput) => {
+/**
+ * Retrieves AI response for a given user input in a conversation.
+ *
+ * @param {string} userId - The ID of the user.
+ * @param {string} conversationId - The ID of the conversation.
+ * @param {string} userInput - The user input in the conversation.
+ * @returns {Object} - The AI response and the updated conversation.
+ */
+export const getAIResponseService = async (
+  userId,
+  conversationId,
+  userInput,
+) => {
   if (!process.env.OPENAI_API_KEY) {
-    throw new Error("Failed to get response from AI. OPENAI_API_KEY is not set.");
+    throw new Error(
+      'Failed to get response from AI. OPENAI_API_KEY is not set.',
+    );
   }
 
   const configuration = new Configuration({
@@ -15,12 +29,12 @@ export const getAIResponseService = async (userId, conversationId, userInput) =>
   const openai = new OpenAIApi(configuration);
 
   if (!mongoose.Types.ObjectId.isValid(userId)) {
-    throw new Error("Invalid userId");
+    throw new Error('Invalid userId');
   }
 
-  let user = await User.findById(userId).exec();
+  const user = await User.findById(userId).exec();
   if (!user) {
-    throw new Error("User not found");
+    throw new Error('User not found');
   }
 
   let conversation = await Conversation.findOne({
@@ -28,27 +42,27 @@ export const getAIResponseService = async (userId, conversationId, userInput) =>
     _id: conversationId,
   });
 
-  console.log("conversation after find ---->", conversation);
+  console.log('conversation after find ---->', conversation);
 
-  let conversationHistory = conversation ? conversation.history : "";
-  let messages: any[] = conversationHistory
-    ? conversationHistory.split("\n").map((message, i) => ({
-        role: i % 2 === 0 ? "user" : "assistant",
+  let conversationHistory = conversation ? conversation.history : '';
+  const messages: any[] = conversationHistory
+    ? conversationHistory.split('\n').map((message, i) => ({
+        role: i % 2 === 0 ? 'user' : 'assistant',
         content: message,
       }))
     : [
         {
-          role: "system",
+          role: 'system',
           content:
-            "You are a helpful Outdoor Adventure Planning assistant for PackRat. Please assist the user with planning their trip using the following information:",
+            'You are a helpful Outdoor Adventure Planning assistant for PackRat. Please assist the user with planning their trip using the following information:',
         },
       ];
 
-  messages.push({ role: "user", content: userInput });
+  messages.push({ role: 'user', content: userInput });
 
   const response = await openai.createChatCompletion({
-    model: "gpt-3.5-turbo",
-    messages: messages,
+    model: 'gpt-3.5-turbo',
+    messages,
   });
 
   const aiResponse = response.data.choices[0].message.content.trim();

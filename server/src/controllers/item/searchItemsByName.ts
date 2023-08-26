@@ -1,4 +1,4 @@
-import { searchItemsByNameService } from "../../services/item/item.service";
+import { searchItemsByNameService } from '../../services/item/item.service';
 
 /**
  * Searches for items by name.
@@ -19,6 +19,6 @@ export const searchItemsByName = async (req, res) => {
   } catch (error) {
     res
       .status(404)
-      .json({ msg: "Items cannot be found", "req.query": req.query });
+      .json({ msg: 'Items cannot be found', 'req.query': req.query });
   }
 };

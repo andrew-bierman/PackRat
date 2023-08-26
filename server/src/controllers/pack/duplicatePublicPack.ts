@@ -1,4 +1,4 @@
-import { duplicatePublicPackService } from "../../services/pack/pack.service";
+import { duplicatePublicPackService } from '../../services/pack/pack.service';
 
 /**
  * Duplicates a public pack.
@@ -13,10 +13,10 @@ export const duplicatePublicPack = async (req, res) => {
     const result = await duplicatePublicPackService(packId, ownerId, items);
 
     res.status(200).json({
-      msg: "pack was duplicated successfully",
+      msg: 'pack was duplicated successfully',
       data: result.pack,
     });
   } catch (error) {
-    res.status(404).json({ msg: "Unable to duplicate pack" + error });
+    res.status(404).json({ msg: 'Unable to duplicate pack' + error });
   }
 };

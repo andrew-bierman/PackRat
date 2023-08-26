@@ -1,4 +1,4 @@
-import Template from "../../models/templateModel";
+import Template from '../../models/templateModel';
 
 /**
  * Deletes a template.
@@ -14,9 +14,9 @@ export const deleteTemplate = async (req, res) => {
 
     if (template) {
       await template.remove();
-      res.json({ message: "Template removed" });
+      res.json({ message: 'Template removed' });
     } else {
-      res.status(404).json({ message: "Template not found" });
+      res.status(404).json({ message: 'Template not found' });
     }
   } catch (error) {
     res.status(500).json({ error: error.toString() });

@@ -1,4 +1,3 @@
-
 /**
  * Updates the database with GeoJSON data obtained from Overpass.
  * @param {Object} data - The GeoJSON data to be updated in the database.
@@ -7,7 +6,7 @@
 export const updateDatabaseWithGeoJSONDataFromOverpass = async (data) => {
   try {
     if (!data) {
-      throw new Error("No data provided");
+      throw new Error('No data provided');
     }
 
     // TEMPORARY: Commenting due to performance issues

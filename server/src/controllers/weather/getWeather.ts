@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios';
 
 /**
  * Retrieves weather data from OpenWeather API based on latitude and longitude.
@@ -11,10 +11,10 @@ export const getWeather = async (req, res) => {
   const OPENWEATHER_KEY = process.env.OPENWEATHER_KEY;
   const latParams = req.query.lat;
   const lonParams = req.query.lon;
-  const unitParams = "imperial";
+  const unitParams = 'imperial';
   const apiParams = true;
 
-  let params = `?`;
+  let params = '?';
   if (latParams) params += `lat=${latParams}`;
   if (lonParams) params += `&lon=${lonParams}`;
   if (unitParams) params += `&units=${unitParams}`;
@@ -29,7 +29,7 @@ export const getWeather = async (req, res) => {
     // send back error message
     res
       .status(404)
-      .send({ message: "Error retrieving weather data from OpenWeather" });
+      .send({ message: 'Error retrieving weather data from OpenWeather' });
     // res.send({ message: "Error retrieving weather data from OpenWeather" });
   }
 };

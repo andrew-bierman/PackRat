@@ -1,4 +1,4 @@
-import { getPacksService } from "../../services/pack/pack.service";
+import { getPacksService } from '../../services/pack/pack.service';
 
 /**
  * Retrieves packs associated with a specific owner.
@@ -14,7 +14,7 @@ export const getPacks = async (req, res) => {
 
     res.status(200).json(packs);
   } catch (error) {
-    console.log("error", error);
-    res.status(404).json({ msg: "Packs cannot be found " + error.message });
+    console.log('error', error);
+    res.status(404).json({ msg: 'Packs cannot be found ' + error.message });
   }
 };

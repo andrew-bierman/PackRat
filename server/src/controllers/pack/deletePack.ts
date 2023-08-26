@@ -1,4 +1,4 @@
-import { deletePackService } from "../../services/pack/pack.service";
+import { deletePackService } from '../../services/pack/pack.service';
 
 /**
  * Deletes a pack.
@@ -12,8 +12,8 @@ export const deletePack = async (req, res) => {
 
     await deletePackService(packId);
 
-    res.status(200).json({ msg: "pack was deleted successfully" });
+    res.status(200).json({ msg: 'pack was deleted successfully' });
   } catch (error) {
-    res.status(404).json({ msg: "Unable to delete pack" });
+    res.status(404).json({ msg: 'Unable to delete pack' });
   }
 };
