@@ -1,3 +1,5 @@
+import { TripNotFoundError } from '../../helpers/errors';
+import { responseHandler } from '../../helpers/responseHandler';
 import Trip from '../../models/tripModel';
 import { getTripsService } from '../../services/trip/getTripsService';
 
@@ -7,15 +9,15 @@ import { getTripsService } from '../../services/trip/getTripsService';
  * @param {Object} res - The response object.
  * @return {Promise<void>} The trips owned by the specified owner.
  */
-export const getTrips = async (req, res) => {
+export const getTrips = async (req, res, next) => {
   try {
     const { ownerId } = req.params;
 
     const trips = await getTripsService(ownerId);
 
-    res.status(200).json(trips);
+    res.locals.data = trips;
+    responseHandler(res);
   } catch (error) {
-    console.error(error);
-    res.status(404).json({ msg: 'Trips cannot be found' });
+    next(TripNotFoundError);
   }
 };

@@ -3,10 +3,11 @@ import {
   requestPasswordResetEmailAndToken,
   handlePasswordReset,
 } from '../controllers/passwordReset/index';
+import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
 
 const router = express.Router();
 
-router.post('/', requestPasswordResetEmailAndToken);
-router.post('/:token', handlePasswordReset);
+router.post('/', tryCatchWrapper(requestPasswordResetEmailAndToken));
+router.post('/:token', tryCatchWrapper(handlePasswordReset));
 
 export default router;

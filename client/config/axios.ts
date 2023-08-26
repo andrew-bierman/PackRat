@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { api } from '~/constants/api';
 import { store } from '../store/store';
-// import { showMessage } from "react-native-flash-message";
+import { InformUser } from '~/utils/ToastUtils';
 
 // Helper function to get the token
 const getTokenFromState = () => {
@@ -25,21 +25,40 @@ const requestErrorInterceptor = (error) => {
   return Promise.reject(error.response ? error.request : error);
 };
 
-// const responseErrorInterceptor = (error) => {
-//     if ("code" in error && error.code === "ERR_CANCELED") {
-//         return;
-//     }
+const responseInterceptor = (response) => {
+  // Check for the custom header
+  const responseMessage = response.headers['x-response-message'];
 
-//     const errorMessage = "message" in error ? error.message : "Something went wrong";
-//     showMessage({
-//         message: errorMessage,
-//         type: "danger",
-//     });
+  if (responseMessage) {
+    InformUser({
+      title: responseMessage,
+      placement: 'bottom',
+      duration: 3000,
+      style: { backgroundColor: response.status === 200 ? 'green' : 'red' },
+    });
+  }
 
-//     return Promise.reject(error);
-// };
+  return response;
+};
+
+const responseErrorInterceptor = (error) => {
+  if ('code' in error && error.code === 'ERR_CANCELED') {
+    return;
+  }
+
+  const errorMessage =
+    'message' in error ? error.message : 'Something went wrong';
+  InformUser({
+    title: errorMessage,
+    placement: 'bottom',
+    duration: 3000,
+    style: { backgroundColor: 'red' },
+  });
+
+  return Promise.reject(error);
+};
 
 axios.interceptors.request.use(requestInterceptor, requestErrorInterceptor);
-// axios.interceptors.response.use(undefined, responseErrorInterceptor);
+axios.interceptors.response.use(responseInterceptor, responseErrorInterceptor);
 
 export default axios;
