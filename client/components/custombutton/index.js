@@ -1,5 +1,5 @@
-import { Button } from "native-base";
-import React from "react";
+import { Button } from 'native-base';
+import React from 'react';
 
 const CustomButton = ({ text, handler, ...args }) => {
   const { copy } = { ...args };
@@ -8,8 +8,8 @@ const CustomButton = ({ text, handler, ...args }) => {
       {copy && (
         <Button
           style={{
-            width: "20rem",
-            marginHorizontal: "auto",
+            width: '20rem',
+            marginHorizontal: 'auto',
             marginTop: 10,
           }}
           onPress={handler}

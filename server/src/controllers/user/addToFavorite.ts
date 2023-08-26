@@ -1,4 +1,4 @@
-import { addToFavoriteService } from "../../services/favorite/addToFavoriteService";
+import { addToFavoriteService } from '../../services/favorite/addToFavoriteService';
 
 /**
  * Adds or removes a pack from a user's favorites list.

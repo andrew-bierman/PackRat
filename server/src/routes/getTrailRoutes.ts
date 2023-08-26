@@ -1,8 +1,8 @@
-import express from "express";
-import { getTrails } from "../controllers/getTrail/index";
+import express from 'express';
+import { getTrails } from '../controllers/getTrail/index';
 
 const router = express.Router();
 
-router.post("/", getTrails);
+router.post('/', getTrails);
 
 export default router;

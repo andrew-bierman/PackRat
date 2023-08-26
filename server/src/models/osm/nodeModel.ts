@@ -1,9 +1,9 @@
-import mongoose from "mongoose";
-import myDB from "../dbConnection";
+import mongoose from 'mongoose';
+import myDB from '../dbConnection';
 
 const { Schema } = mongoose;
 
-const NodeSchema =new  Schema(
+const NodeSchema = new Schema(
   {
     id: Number, // the OSM ID
     lat: Number, // latitude
@@ -11,11 +11,11 @@ const NodeSchema =new  Schema(
     tags: { type: Map, of: String }, // tags as a map
     updated_at: Date, // last update from OSM
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 // add a to JSON method to the schema
-NodeSchema.method("toJSON", async function () {
+NodeSchema.method('toJSON', async function () {
   const { _id, ...object } = this.toObject();
   object.id = _id.toString();
   return object;
@@ -40,6 +40,6 @@ NodeSchema.statics.findOrCreateMany = async function (ids, nodes) {
   return this.find({ id: { $in: ids } });
 };
 
-const Node = myDB.model("Node", NodeSchema);
+const Node = myDB.model('Node', NodeSchema);
 
 export default Node;
