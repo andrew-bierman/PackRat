@@ -1,27 +1,28 @@
-import axios from "axios";
-import { api } from "~/constants/api";
-import { store } from "../store/store";
+import axios from 'axios';
+import { api } from '~/constants/api';
+import { store } from '../store/store';
 // import { showMessage } from "react-native-flash-message";
 
 // Helper function to get the token
 const getTokenFromState = () => {
-    const state = store.getState();
-    return state?.auth?.user?.token || null;
+  const state = store.getState();
+  //   @ts-ignore
+  return state?.auth?.user?.token || null;
 };
 
 const requestInterceptor = (config) => {
-    config.baseURL = api;
+  config.baseURL = api;
 
-    const token = getTokenFromState();
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-    }
+  const token = getTokenFromState();
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
 
-    return config;
+  return config;
 };
 
 const requestErrorInterceptor = (error) => {
-    return Promise.reject(error.response ? error.request : error);
+  return Promise.reject(error.response ? error.request : error);
 };
 
 // const responseErrorInterceptor = (error) => {
