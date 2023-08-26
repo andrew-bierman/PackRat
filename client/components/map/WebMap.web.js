@@ -388,6 +388,29 @@ const WebMap = ({ shape: shapeProp }) => {
     setMapboxStyle(style);
   };
 
+  const openMaps = () => {
+
+    const pointLatLong = shape?.features[0]?.geometry?.coordinates
+    const { type } = shape.features[0].geometry
+    if(type !== 'Point') {
+      const [latlng] = pointLatLong;
+        window.open(`https://maps.google.com?q=${latlng[1]},${latlng[0]}`);
+    } else {
+      const [lng, lat] = pointLatLong;
+        window.open(`https://maps.google.com?q=${lat},${lng}`);
+    }
+    
+    // console.log()
+    // if(type !== 'Point') {
+    
+    // } else {
+    //   window.open(`https://maps.google.com?q=${lat},${lng}`);
+    // }
+    
+
+
+  }
+
   /**
    * Handles the download of a GPX file.
    *
@@ -482,6 +505,7 @@ const WebMap = ({ shape: shapeProp }) => {
         styles={styles}
         downloadable={downloadable}
         downloading={downloading}
+        navigateToMaps={openMaps}
         onDownload={fetchGpxDownload}
         handleGpxUpload={async () => {
           console.log('clikedd');
