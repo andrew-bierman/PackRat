@@ -1,4 +1,4 @@
-import { Toast } from "native-base";
+import { Toast } from 'native-base';
 
 /**
  * Show a toast message to inform the user.
@@ -8,6 +8,7 @@ import { Toast } from "native-base";
  * @param {string} options.title - The title of the toast message.
  * @param {string} [options.placement="top"] - The placement of the toast message. Possible values are "top", "bottom", "left", or "right".
  * @param {number} [options.duration=2000] - The duration in milliseconds for which the toast message should be displayed.
+ * @param {Object} [options.style={backgroundColor: 'green'}] - The style object for the toast message.
  * @returns {void}
  *
  * @example
@@ -19,9 +20,9 @@ import { Toast } from "native-base";
  */
 export const InformUser = ({ title, placement, duration, style }) => {
   Toast.show({
-    title: title,
-    placement: placement,
-    duration: duration,
-    style: style,
+    title,
+    placement,
+    duration,
+    style,
   });
 };

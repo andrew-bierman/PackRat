@@ -2,45 +2,45 @@ import {
   createSlice,
   createAsyncThunk,
   createEntityAdapter,
-} from "@reduxjs/toolkit";
-import axios from "axios";
-import { api } from "../constants/api";
+} from '@reduxjs/toolkit';
+import axios from '~/config/axios';
+import { api } from '../constants/api';
 
 export const deleteTrip = createAsyncThunk(
-  "trips/deleteTrip",
+  'trips/deleteTrip',
   async (tripId) => {
     const response = await axios.delete(`${api}/trip`, {
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       data: {
         tripId,
       },
     });
     return response.data;
-  }
+  },
 );
 
 export const fetchUserTrips = createAsyncThunk(
-  "trips/fetchUserTrips",
+  'trips/fetchUserTrips',
   async (ownerId) => {
     const response = await axios.get(`${api}/trip/${ownerId}`);
     return response.data;
-  }
+  },
 );
 
-export const addTrip = createAsyncThunk("trips/addTrip", async (newTrip) => {
-  console.log("new trip", newTrip);
+export const addTrip = createAsyncThunk('trips/addTrip', async (newTrip) => {
+  console.log('new trip', newTrip);
   const response = await axios.post(`${api}/trip/`, newTrip);
   return response.data;
 });
 
 export const editTrip = createAsyncThunk(
-  "trips/editTrip",
+  'trips/editTrip',
   async (updatedTrip) => {
     const response = await axios.put(`${api}/trip/`, updatedTrip);
     return response.data;
-  }
+  },
 );
 
 const tripsAdapter = createEntityAdapter({
@@ -49,21 +49,21 @@ const tripsAdapter = createEntityAdapter({
 
 const initialState = tripsAdapter.getInitialState({
   newTrip: {
-    name: "",
-    description: "",
-    startDate: "",
-    endDate: "",
-    destination: "",
-    trail: "",
+    name: '',
+    description: '',
+    startDate: '',
+    endDate: '',
+    destination: '',
+    trail: '',
     weather: {},
-    packId: "",
+    packId: '',
   },
   isLoading: false,
   error: null,
 });
 
 const tripsSlice = createSlice({
-  name: "trips",
+  name: 'trips',
   initialState,
   reducers: {
     updateNewTrip(state, action) {
@@ -73,7 +73,7 @@ const tripsSlice = createSlice({
       state.newTrip[action.payload.key] = action.payload.value;
     },
     updateNewTripPack(state, action) {
-      console.log("action.payload in updatenewtrippack", action.payload);
+      console.log('action.payload in updatenewtrippack', action.payload);
       state.newTrip.packId = action.payload;
     },
     updateNewTripWeather(state, action) {
@@ -84,14 +84,14 @@ const tripsSlice = createSlice({
     },
     resetNewTrip(state) {
       state.newTrip = {
-        name: "",
-        description: "",
-        startDate: "",
-        endDate: "",
-        location: "",
-        trail: "",
+        name: '',
+        description: '',
+        startDate: '',
+        endDate: '',
+        location: '',
+        trail: '',
         weather: {},
-        packId: "",
+        packId: '',
       };
     },
   },
