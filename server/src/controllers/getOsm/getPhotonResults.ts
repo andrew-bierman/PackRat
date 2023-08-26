@@ -1,4 +1,9 @@
 import axios from 'axios';
+import {
+  InvalidRequestParamsError,
+  RetrievingPhotonDetailsError,
+} from '../../helpers/errors';
+import { responseHandler } from '../../helpers/responseHandler';
 
 /**
  * Retrieves Photon results based on a search string.
@@ -6,12 +11,11 @@ import axios from 'axios';
  * @param {object} res - The response object.
  * @return {undefined} There is no explicit return value.
  */
-export const getPhotonResults = async (req, res) => {
+export const getPhotonResults = async (req, res, next) => {
   const { searchString } = req.query;
 
   if (!searchString) {
-    res.status(400).send({ message: 'Invalid request parameters' });
-    return; // Return early to avoid further execution
+    next(InvalidRequestParamsError);
   }
 
   const params = {
@@ -41,9 +45,9 @@ export const getPhotonResults = async (req, res) => {
 
     const resultsArray = response.data.features;
 
-    res.send(resultsArray);
+    res.locals.data = resultsArray;
+    responseHandler(res);
   } catch (error) {
-    console.error(error);
-    res.status(500).send({ message: 'Error retrieving Photon results' });
+    next(RetrievingPhotonDetailsError);
   }
 };

@@ -16,6 +16,7 @@ import {
 
 import { OAuth2Client } from 'google-auth-library';
 import utilsService from '../../utils/utils.service';
+import { responseHandler } from '../../helpers/responseHandler';
 
 const client = new OAuth2Client(
   GOOGLE_CLIENT_ID,
@@ -96,7 +97,8 @@ export const signInGoogle = async (req, res) => {
 
       sendWelcomeEmail(user.email, user.name);
 
-      res.status(200).send({ user });
+      res.locals.data = { user };
+      responseHandler(res);
     } else {
       if (!alreadyGoogleSignin.password) {
         alreadyGoogleSignin.password = utilsService.randomPasswordGenerator(8);
@@ -108,7 +110,8 @@ export const signInGoogle = async (req, res) => {
 
       await alreadyGoogleSignin.save();
 
-      res.status(200).send({ user: alreadyGoogleSignin });
+      res.locals.data = { user: alreadyGoogleSignin };
+      responseHandler(res);
     }
   } catch (err) {
     res.status(400).send({ message: err.message });
