@@ -1,6 +1,6 @@
-import { UnableToEditUserError } from "../../helpers/errors";
-import { responseHandler } from "../../helpers/responseHandler";
-import User from "../../models/userModel";
+import { UnableToEditUserError } from '../../helpers/errors';
+import { responseHandler } from '../../helpers/responseHandler';
+import User from '../../models/userModel';
 
 /**
  * Edits a user.
@@ -10,16 +10,16 @@ import User from "../../models/userModel";
  * @param {Object} res - The response object.
  * @return {Promise} A promise that resolves to the edited user.
  */
-export const editUser = async (req, res,next) => {
-    try {
-      const { userId } = req.body;
-  
-      const editedUser = await User.findOneAndUpdate({ _id: userId }, req.body, {
-        returnOriginal: false,
-      }).populate("favorites");
-        res.locals.data = editedUser;
-        responseHandler(res);
-    } catch (error) {
-      next(UnableToEditUserError)
-    }
-  };
+export const editUser = async (req, res, next) => {
+  try {
+    const { userId } = req.body;
+
+    const editedUser = await User.findOneAndUpdate({ _id: userId }, req.body, {
+      returnOriginal: false,
+    }).populate('favorites');
+    res.locals.data = editedUser;
+    responseHandler(res);
+  } catch (error) {
+    next(UnableToEditUserError);
+  }
+};

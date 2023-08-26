@@ -8,9 +8,9 @@ import {
   getPublicPacks,
   scorePack,
   duplicatePublicPack,
-} from "../controllers/pack/index";
-import * as validator from "../middleware/validators/index";
-import { tryCatchWrapper } from "../helpers/tryCatchWrapper";
+} from '../controllers/pack/index';
+import * as validator from '../middleware/validators/index';
+import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
 
 const router = express.Router();
 
@@ -33,7 +33,7 @@ const router = express.Router();
  *       '500':
  *         description: Error retrieving public packs
  */
-router.get("/",tryCatchWrapper(getPublicPacks));
+router.get('/', tryCatchWrapper(getPublicPacks));
 
 /**
  * @swagger
@@ -56,7 +56,7 @@ router.get("/",tryCatchWrapper(getPublicPacks));
  *       '500':
  *         description: Error retrieving packs by owner ID
  */
-router.get("/:ownerId", validator.getPacks,tryCatchWrapper(getPacks));
+router.get('/:ownerId', validator.getPacks, tryCatchWrapper(getPacks));
 
 /**
  * @swagger
@@ -79,7 +79,7 @@ router.get("/:ownerId", validator.getPacks,tryCatchWrapper(getPacks));
  *       '500':
  *         description: Error retrieving pack by ID
  */
-router.get("/p/:packId", validator.getPackById, tryCatchWrapper(getPackById));
+router.get('/p/:packId', validator.getPackById, tryCatchWrapper(getPackById));
 
 /**
  * @swagger
@@ -102,7 +102,7 @@ router.get("/p/:packId", validator.getPackById, tryCatchWrapper(getPackById));
  *       '500':
  *         description: Error scoring the pack
  */
-router.put("/score/:packId", validator.getPackById,tryCatchWrapper(scorePack));
+router.put('/score/:packId', validator.getPackById, tryCatchWrapper(scorePack));
 
 /**
  * @swagger
@@ -131,7 +131,7 @@ router.put("/score/:packId", validator.getPackById,tryCatchWrapper(scorePack));
  *       '500':
  *         description: Error adding the pack
  */
-router.post("/", validator.addPack, tryCatchWrapper(addPack));
+router.post('/', validator.addPack, tryCatchWrapper(addPack));
 
 /**
  * @swagger
@@ -160,7 +160,7 @@ router.post("/", validator.addPack, tryCatchWrapper(addPack));
  *       '500':
  *         description: Error editing the pack
  */
-router.put("/", validator.editPack, tryCatchWrapper(editPack));
+router.put('/', validator.editPack, tryCatchWrapper(editPack));
 
 /**
  * @swagger
@@ -185,7 +185,7 @@ router.put("/", validator.editPack, tryCatchWrapper(editPack));
  *       '500':
  *         description: Error deleting the pack
  */
-router.delete("/", validator.deletePack, tryCatchWrapper(deletePack));
+router.delete('/', validator.deletePack, tryCatchWrapper(deletePack));
 
 /**
  * @swagger
@@ -210,6 +210,10 @@ router.delete("/", validator.deletePack, tryCatchWrapper(deletePack));
  *       '500':
  *         description: Error duplicating the pack
  */
-router.post("/duplicate", validator.duplicatePublicPack, tryCatchWrapper(duplicatePublicPack));
+router.post(
+  '/duplicate',
+  validator.duplicatePublicPack,
+  tryCatchWrapper(duplicatePublicPack),
+);
 
 export default router;

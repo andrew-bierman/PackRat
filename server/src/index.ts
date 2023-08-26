@@ -1,14 +1,14 @@
-import express, { NextFunction } from "express";
-import mongoose from "mongoose";
-import cors from "cors";
-import { isCelebrateError, errors } from "celebrate";
-import { MONGODB_URI, } from "./config";
-import routes from "./routes/index";
-import bodyParser from "body-parser";
-import { serveSwaggerUI } from "./helpers/serveSwaggerUI";
-import { corsOptions } from "./helpers/corsOptions";
-import { errorHandler } from "./helpers/errorHandler";
- 
+import express, { type NextFunction } from 'express';
+import mongoose from 'mongoose';
+import cors from 'cors';
+import { isCelebrateError, errors } from 'celebrate';
+import { MONGODB_URI } from './config';
+import routes from './routes/index';
+import bodyParser from 'body-parser';
+import { serveSwaggerUI } from './helpers/serveSwaggerUI';
+import { corsOptions } from './helpers/corsOptions';
+import { errorHandler } from './helpers/errorHandler';
+
 // express items
 const app = express();
 

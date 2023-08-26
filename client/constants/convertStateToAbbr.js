@@ -5,7 +5,7 @@
  * @param {string} to - The conversion direction. Possible values are "abbr" for abbreviation to name conversion and "name" for name to abbreviation conversion.
  * @return {string} The converted region name or abbreviation.
  */
-export default function abbrRegion (input, to) {
+export default function abbrRegion(input, to) {
   const states = [
     ['Alabama', 'AL'],
     ['Alaska', 'AK'],
@@ -66,8 +66,8 @@ export default function abbrRegion (input, to) {
     ['Washington', 'WA'],
     ['West Virginia', 'WV'],
     ['Wisconsin', 'WI'],
-    ['Wyoming', 'WY']
-  ]
+    ['Wyoming', 'WY'],
+  ];
 
   // So happy that Canada and the US have distinct abbreviations
   const provinces = [
@@ -83,26 +83,26 @@ export default function abbrRegion (input, to) {
     ['Prince Edward Island', 'PE'],
     ['Quebec', 'QC'],
     ['Saskatchewan', 'SK'],
-    ['Yukon', 'YT']
-  ]
+    ['Yukon', 'YT'],
+  ];
 
-  const regions = states.concat(provinces)
+  const regions = states.concat(provinces);
 
-  let i // Reusable loop variable
+  let i; // Reusable loop variable
   if (to == 'abbr') {
     input = input?.replace(/\w\S*/g, function (txt) {
-      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
-    })
+      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    });
     for (i = 0; i < regions.length; i++) {
       if (regions[i][0] == input) {
-        return regions[i][1]
+        return regions[i][1];
       }
     }
   } else if (to == 'name') {
-    input = input.toUpperCase()
+    input = input.toUpperCase();
     for (i = 0; i < regions.length; i++) {
       if (regions[i][1] == input) {
-        return regions[i][0]
+        return regions[i][0];
       }
     }
   }

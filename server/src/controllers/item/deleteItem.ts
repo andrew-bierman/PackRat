@@ -1,6 +1,6 @@
-import { UnableToDeleteItemError } from "../../helpers/errors";
-import { responseHandler } from "../../helpers/responseHandler";
-import { deleteItemService } from "../../services/item/item.service";
+import { UnableToDeleteItemError } from '../../helpers/errors';
+import { responseHandler } from '../../helpers/responseHandler';
+import { deleteItemService } from '../../services/item/item.service';
 
 /**
  * Deletes an item from the database.
@@ -19,6 +19,6 @@ export const deleteItem = async (req, res, next) => {
     responseHandler(res);
   } catch (error) {
     console.error(error);
-    next(UnableToDeleteItemError)
+    next(UnableToDeleteItemError);
   }
 };

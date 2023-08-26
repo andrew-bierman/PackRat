@@ -4,13 +4,12 @@
  * @return {Promise} A Promise that resolves when the database is updated successfully.
  */
 export const updateDatabaseWithGeoJSONDataFromOverpass = async (data) => {
-      if (!data) {
-        throw new Error("No data provided");
-      }
-  
-      // TEMPORARY: Commenting due to performance issues
-      // const results = await findOrCreateMany(Way, data.features);
-  
-      // console.log("results", results);
-    
-  };
+  if (!data) {
+    throw new Error('No data provided');
+  }
+
+  // TEMPORARY: Commenting due to performance issues
+  // const results = await findOrCreateMany(Way, data.features);
+
+  // console.log("results", results);
+};

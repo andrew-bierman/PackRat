@@ -1,7 +1,10 @@
-import osmtogeojson from "osmtogeojson";
-import axios from "axios";
-import { InvalidRequestParamsError, RetrievingPhotonDetailsError } from "../../helpers/errors";
-import { responseHandler } from "../../helpers/responseHandler";
+import osmtogeojson from 'osmtogeojson';
+import axios from 'axios';
+import {
+  InvalidRequestParamsError,
+  RetrievingPhotonDetailsError,
+} from '../../helpers/errors';
+import { responseHandler } from '../../helpers/responseHandler';
 
 /**
  * Retrieves Photon details based on the provided ID and type.
@@ -9,31 +12,31 @@ import { responseHandler } from "../../helpers/responseHandler";
  * @param {Object} res - The response object.
  * @return {Promise<void>} The function does not return anything.
  */
-export const getPhotonDetails = async (req, res,next) => {
-    let { id, type } = req.params;
+export const getPhotonDetails = async (req, res, next) => {
+  let { id, type } = req.params;
 
-    if (!id || !type) {
-        next(InvalidRequestParamsError);
-    }
+  if (!id || !type) {
+    next(InvalidRequestParamsError);
+  }
 
   type = type.toLowerCase(); // Standardize osm_type to be lowercase
 
-    switch (type) {
-        case "way":
-        case "w":
-            type = "way";
-            break;
-        case "node":
-        case "n":
-            type = "node";
-            break;
-        case "relation":
-        case "r":
-            type = "relation";
-            break;
-        default:
-            next(InvalidRequestParamsError);
-    }
+  switch (type) {
+    case 'way':
+    case 'w':
+      type = 'way';
+      break;
+    case 'node':
+    case 'n':
+      type = 'node';
+      break;
+    case 'relation':
+    case 'r':
+      type = 'relation';
+      break;
+    default:
+      next(InvalidRequestParamsError);
+  }
 
   const overpassUrl = process.env.OSM_URI;
 
@@ -52,9 +55,9 @@ export const getPhotonDetails = async (req, res,next) => {
 
     // await updateDatabaseWithGeoJSONDataFromOverpass(geojsonData);
 
-        res.locals.data = geojsonData
-        responseHandler(res);
-    } catch (error) {
-        next(RetrievingPhotonDetailsError)
-    }
+    res.locals.data = geojsonData;
+    responseHandler(res);
+  } catch (error) {
+    next(RetrievingPhotonDetailsError);
+  }
 };

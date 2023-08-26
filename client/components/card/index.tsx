@@ -24,6 +24,7 @@ import { ThreeDotsMenu } from '../ThreeDotsMenu';
 import UseTheme from '../../hooks/useTheme';
 import { InformUser } from '../../utils/ToastUtils';
 import { SearchItem } from '../item/searchItem';
+import Loader from '../Loader';
 
 export const CustomCard = ({
   title,
@@ -41,9 +42,9 @@ export const CustomCard = ({
   const titleRef = useRef(null);
   const dispatch = useDispatch();
   const router = useRouter();
-
-  const user = useSelector((state) => state.auth.user);
-  const userId = user._id;
+  const isLoading = useSelector((state: any) => state.singlePack.isLoading);
+  const user = useSelector((state: any) => state.auth.user);
+  const userId = user['_id'];
 
   /**
    * Handles copying the link to the clipboard and updates the copy state.
@@ -64,9 +65,7 @@ export const CustomCard = ({
       duration: 2000,
     });
 
-    return () => {
-      clearTimeout(resetCopyStateTimeout);
-    };
+    return () => clearTimeout(resetCopyStateTimeout);
   };
 
   if (type === 'pack') {
@@ -76,11 +75,11 @@ export const CustomCard = ({
         alignSelf="center"
         alignItems={['center', 'center', 'flex-start', 'flex-start']}
         w={['100%', '100%', '100%', '90%']}
-        direction={['column', 'column', 'row', 'row']}
+        flexDirection={['column', 'column', 'row', 'row']}
         rounded="lg"
         flexGrow={1}
       >
-        <SearchItem placeholder={'Search Item'} />
+        {isLoading && <Loader />}
         <VStack space="4" width="100%" divider={<Divider />}>
           <Box
             px="4"
@@ -100,17 +99,20 @@ export const CustomCard = ({
             </Box>
             <Box flexDirection="row" alignItems="center">
               <Box mx="5">
-                <Link href={`/profile/${data.owner_id}`}>
+                <Link href={`/profile/${data['owner_id']}`}>
                   <Text>
-                    {user._id === data.owner_id
+                    {user._id === data['owner_id']
                       ? 'Your Profile'
                       : `View ${
-                          data.owners?.length ? data.owners[0].name : 'Profile'
+                          data.owners && data.owners.length
+                            ? data.owners[0].name
+                            : 'Profile'
                         }`}
                   </Text>
                 </Link>
               </Box>
               {link && (
+                // @ts-ignore
                 <Box
                   flexDir={'row'}
                   style={{
@@ -157,6 +159,15 @@ export const CustomCard = ({
               justifyContent: 'center',
             }}
           >
+            <SearchItem placeholder={'Search Item'} />
+          </Box>
+          <Box
+            px="4"
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
             {content}
           </Box>
           <Box px="4" pb="4">
@@ -174,7 +185,7 @@ export const CustomCard = ({
         alignSelf="center"
         alignItems={['center', 'center', 'flex-start', 'flex-start']}
         w={['100%', '100%', '100%', '90%']}
-        direction={['column', 'column', 'row', 'row']}
+        flexDirection={['column', 'column', 'row', 'row']}
         rounded="lg"
         flexGrow={1}
       >
@@ -189,14 +200,15 @@ export const CustomCard = ({
             <Box></Box>
             <Box flexDirection="row" alignItems="center">
               <Box mx="5">
-                <Link href={`/profile/${data.owner_id?._id}`}>
-                  {console.log({ data })}
+                <Link
+                  href={`/profile/${data.owner_id && data['owner_id']._id}`}
+                >
                   <Text>
-                    {user._id === data.owner_id
+                    {user._id === data['owner_id']
                       ? 'Your Profile'
                       : `View ${
                           data.owner_id
-                            ? '@' + data.owner_id.username
+                            ? '@' + data['owner_id'].username
                             : 'Profile'
                         }`}
                   </Text>

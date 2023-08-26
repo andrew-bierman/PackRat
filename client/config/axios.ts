@@ -6,6 +6,7 @@ import { InformUser } from '~/utils/ToastUtils';
 // Helper function to get the token
 const getTokenFromState = () => {
   const state = store.getState();
+  // @ts-ignore
   return state?.auth?.user?.token || null;
 };
 
