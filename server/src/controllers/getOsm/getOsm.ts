@@ -1,7 +1,11 @@
-import osmtogeojson from "osmtogeojson";
-import axios from "axios";
-import { ErrorProcessingOverpassError, ErrorRetrievingOverpassError, InvalidRequestParamsError } from "../../helpers/errors";
-import { responseHandler } from "../../helpers/responseHandler";
+import osmtogeojson from 'osmtogeojson';
+import axios from 'axios';
+import {
+  ErrorProcessingOverpassError,
+  ErrorRetrievingOverpassError,
+  InvalidRequestParamsError,
+} from '../../helpers/errors';
+import { responseHandler } from '../../helpers/responseHandler';
 
 /**
  * Retrieves OpenStreetMap data based on the provided activity type, start point, and end point.
@@ -10,7 +14,7 @@ import { responseHandler } from "../../helpers/responseHandler";
  * @return {Promise<void>} - A promise that resolves when the OpenStreetMap data is successfully retrieved and sent.
  */
 export const getOsm = async (req, res, next) => {
-  console.log("req", req); // log the request body to see what it looks like
+  console.log('req', req); // log the request body to see what it looks like
 
   const overpassUrl = process.env.OSM_URI;
 
@@ -42,19 +46,19 @@ export const getOsm = async (req, res, next) => {
     const { activityType, startPoint, endPoint } = req.body;
 
     if (!activityType || !startPoint || !endPoint) {
-     next(InvalidRequestParamsError)
+      next(InvalidRequestParamsError);
     }
 
     const overpassQuery = await formatOverpassQuery(
       activityType,
       startPoint,
-      endPoint
+      endPoint,
     );
 
     // console.log("overpassQuery", overpassQuery);
 
     const response = await axios.post(overpassUrl, overpassQuery, {
-      headers: { "Content-Type": "text/plain" },
+      headers: { 'Content-Type': 'text/plain' },
     });
 
     // console.log("response", response);
@@ -66,9 +70,9 @@ export const getOsm = async (req, res, next) => {
       responseHandler(res);
     } else {
       console.log(response.status, response.statusText);
-      next(ErrorProcessingOverpassError)
+      next(ErrorProcessingOverpassError);
     }
   } catch (error) {
-    next(ErrorRetrievingOverpassError)
+    next(ErrorRetrievingOverpassError);
   }
 };

@@ -1,6 +1,6 @@
-import { ItemNotFoundError } from "../../helpers/errors";
-import { responseHandler } from "../../helpers/responseHandler";
-import { getItemByIdService } from "../../services/item/item.service";
+import { ItemNotFoundError } from '../../helpers/errors';
+import { responseHandler } from '../../helpers/responseHandler';
+import { getItemByIdService } from '../../services/item/item.service';
 
 /**
  * Retrieves an item by its ID.
@@ -18,6 +18,6 @@ export const getItemById = async (req, res, next) => {
     res.locals.data = item;
     responseHandler(res);
   } catch (error) {
-    next(ItemNotFoundError)
+    next(ItemNotFoundError);
   }
 };

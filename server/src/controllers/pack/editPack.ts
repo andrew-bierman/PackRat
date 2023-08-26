@@ -1,6 +1,6 @@
-import { UnableToEditPackError } from "../../helpers/errors";
-import { responseHandler } from "../../helpers/responseHandler";
-import { editPackService } from "../../services/pack/pack.service";
+import { UnableToEditPackError } from '../../helpers/errors';
+import { responseHandler } from '../../helpers/responseHandler';
+import { editPackService } from '../../services/pack/pack.service';
 
 /**
  * Edits a pack in the database.
@@ -9,7 +9,7 @@ import { editPackService } from "../../services/pack/pack.service";
  * @return {Object} The updated pack.
  */
 
-export const editPack = async (req, res,next) => {
+export const editPack = async (req, res, next) => {
   try {
     const { _id } = req.body;
 
@@ -20,6 +20,6 @@ export const editPack = async (req, res,next) => {
     res.locals.data = newPack;
     responseHandler(res);
   } catch (error) {
-    next(UnableToEditPackError)
+    next(UnableToEditPackError);
   }
 };

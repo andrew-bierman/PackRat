@@ -1,7 +1,7 @@
-import User from "../../models/userModel";
-import { addToFavoriteService } from "../../services/favorite/favorite.service";
-import { UserNotFoundError } from "../../helpers/errors";
-import { responseHandler } from "../../helpers/responseHandler";
+import User from '../../models/userModel';
+import { addToFavoriteService } from '../../services/favorite/favorite.service';
+import { UserNotFoundError } from '../../helpers/errors';
+import { responseHandler } from '../../helpers/responseHandler';
 
 /**
  * Adds or removes a pack from a user's favorites list and updates the corresponding pack's favorited_by and favorites_count fields.
@@ -12,8 +12,8 @@ import { responseHandler } from "../../helpers/responseHandler";
 export const addToFavorite = async (req, res, next) => {
   const { packId, userId } = req.body;
   await addToFavoriteService(packId, userId);
-  const user = await User.findOne({ _id: userId }).select("-password");
+  const user = await User.findOne({ _id: userId }).select('-password');
   if (!user) next(UserNotFoundError);
   res.locals.data = user;
-  responseHandler(res)
+  responseHandler(res);
 };

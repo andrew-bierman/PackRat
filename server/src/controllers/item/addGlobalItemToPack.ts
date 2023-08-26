@@ -1,6 +1,6 @@
-import { ItemNotFoundError } from "../../helpers/errors";
-import { responseHandler } from "../../helpers/responseHandler";
-import { addGlobalItemToPackService } from "../../services/item/item.service";
+import { ItemNotFoundError } from '../../helpers/errors';
+import { responseHandler } from '../../helpers/responseHandler';
+import { addGlobalItemToPackService } from '../../services/item/item.service';
 
 /**
  * Adds a global item to a pack.
@@ -18,6 +18,6 @@ export const addGlobalItemToPack = async (req, res, next) => {
     res.locals.data = result;
     responseHandler(res);
   } catch (error) {
-    next(ItemNotFoundError)
+    next(ItemNotFoundError);
   }
 };

@@ -1,7 +1,7 @@
-import { PackNotFoundError } from "../../helpers/errors";
-import { responseHandler } from "../../helpers/responseHandler";
-import Pack from "../../models/packModel";
-import { getFavoritePacksByUserService } from "../../services/favorite/favorite.service";
+import { PackNotFoundError } from '../../helpers/errors';
+import { responseHandler } from '../../helpers/responseHandler';
+import Pack from '../../models/packModel';
+import { getFavoritePacksByUserService } from '../../services/favorite/favorite.service';
 
 /**
  * Retrieves favorite packs for a user.
@@ -12,7 +12,7 @@ import { getFavoritePacksByUserService } from "../../services/favorite/favorite.
 export const getFavoritePacksByUser = async (req, res, next) => {
   const { userId } = req.body;
   const packs = await getFavoritePacksByUserService(userId);
-  if (!packs) next(PackNotFoundError)
-  res.locals.data = packs
-  responseHandler(res)
+  if (!packs) next(PackNotFoundError);
+  res.locals.data = packs;
+  responseHandler(res);
 };

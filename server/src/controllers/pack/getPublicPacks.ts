@@ -1,6 +1,6 @@
-import { PackNotFoundError } from "../../helpers/errors";
-import { responseHandler } from "../../helpers/responseHandler";
-import { getPublicPacksService } from "../../services/pack/pack.service";
+import { PackNotFoundError } from '../../helpers/errors';
+import { responseHandler } from '../../helpers/responseHandler';
+import { getPublicPacksService } from '../../services/pack/pack.service';
 
 /**
  * Retrieves public packs based on the given query parameter.
@@ -17,6 +17,6 @@ export const getPublicPacks = async (req, res, next) => {
     res.locals.data = publicPacks;
     responseHandler(res);
   } catch (error) {
-    next(PackNotFoundError)
+    next(PackNotFoundError);
   }
 };

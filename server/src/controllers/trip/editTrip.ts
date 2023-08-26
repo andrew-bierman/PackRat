@@ -1,6 +1,6 @@
-import { UnableToEditTripError } from "../../helpers/errors";
-import { responseHandler } from "../../helpers/responseHandler";
-import Trip from "../../models/tripModel";
+import { UnableToEditTripError } from '../../helpers/errors';
+import { responseHandler } from '../../helpers/responseHandler';
+import Trip from '../../models/tripModel';
 
 /**
  * Edits a trip by updating the trip details.
@@ -19,6 +19,6 @@ export const editTrip = async (req, res, next) => {
     res.locals.data = newTrip;
     responseHandler(res);
   } catch (error) {
-    next(UnableToEditTripError)
+    next(UnableToEditTripError);
   }
 };

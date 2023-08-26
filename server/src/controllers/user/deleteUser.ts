@@ -1,6 +1,6 @@
-import { UnableToEditUserError } from "../../helpers/errors";
-import { responseHandler } from "../../helpers/responseHandler";
-import User from "../../models/userModel";
+import { UnableToEditUserError } from '../../helpers/errors';
+import { responseHandler } from '../../helpers/responseHandler';
+import User from '../../models/userModel';
 
 /**
  * Deletes a user from the database.
@@ -14,9 +14,9 @@ export const deleteUser = async (req, res, next) => {
 
     await User.findOneAndDelete({ _id: userId });
 
-    res.locals.data = { message: "User deleted successfully" };
+    res.locals.data = { message: 'User deleted successfully' };
     responseHandler(res);
   } catch (error) {
-    next(UnableToEditUserError)
+    next(UnableToEditUserError);
   }
 };

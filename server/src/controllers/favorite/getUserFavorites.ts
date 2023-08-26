@@ -1,6 +1,6 @@
-import { UserFavoritesNotFoundError } from "../../helpers/errors";
-import { responseHandler } from "../../helpers/responseHandler";
-import { getUserFavoritesService } from "../../services/favorite/favorite.service";
+import { UserFavoritesNotFoundError } from '../../helpers/errors';
+import { responseHandler } from '../../helpers/responseHandler';
+import { getUserFavoritesService } from '../../services/favorite/favorite.service';
 
 /**
  * Retrieves the favorite items of a user.
@@ -10,8 +10,8 @@ import { getUserFavoritesService } from "../../services/favorite/favorite.servic
  */
 export const getUserFavorites = async (req, res, next) => {
   const { userId } = req.params;
-  const favorites = await getUserFavoritesService(userId,next);
+  const favorites = await getUserFavoritesService(userId, next);
   if (!favorites) next(UserFavoritesNotFoundError);
-  res.locals.data = favorites
-  responseHandler(res)
+  res.locals.data = favorites;
+  responseHandler(res);
 };

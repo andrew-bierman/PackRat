@@ -1,6 +1,6 @@
-import express from "express";
-import { getAIResponse, getUserChats } from "../controllers/openAi/index";
-import { tryCatchWrapper } from "../helpers/tryCatchWrapper";
+import express from 'express';
+import { getAIResponse, getUserChats } from '../controllers/openAi/index';
+import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
 
 const router = express.Router();
 
