@@ -1,5 +1,6 @@
 import Pack from '../../models/packModel';
 import mongoose from 'mongoose';
+import { computeTotalWeightInGrams } from '../../utils/convertWeight';
 
 /**
  * Retrieves packs service for a given ownerId.
@@ -21,6 +22,9 @@ export const getPacksService = async (ownerId) => {
       },
     },
     {
+      $unwind: '$items',
+    },
+    {
       $lookup: {
         from: 'itemcategories',
         localField: 'items.category',
@@ -33,6 +37,7 @@ export const getPacksService = async (ownerId) => {
         category: { $arrayElemAt: ['$items.category.name', 0] },
       },
     },
+    computeTotalWeightInGrams(),
     {
       $group: {
         _id: '$_id',
@@ -47,11 +52,7 @@ export const getPacksService = async (ownerId) => {
         scores: { $first: '$scores' },
         type: { $first: '$type' },
         items: { $push: '$items' },
-        total_weight: {
-          $sum: {
-            $multiply: ['$items.weight', '$items.quantity'],
-          },
-        },
+        total_weight: { $sum: '$item_weight' },
       },
     },
   ]);
