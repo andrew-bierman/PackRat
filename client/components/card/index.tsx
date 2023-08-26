@@ -44,7 +44,7 @@ export const CustomCard = ({
   const router = useRouter();
   const isLoading = useSelector((state: any) => state.singlePack.isLoading);
   const user = useSelector((state: any) => state.auth.user);
-  const userId = user['_id'];
+  const userId = user._id;
 
   /**
    * Handles copying the link to the clipboard and updates the copy state.
@@ -99,9 +99,9 @@ export const CustomCard = ({
             </Box>
             <Box flexDirection="row" alignItems="center">
               <Box mx="5">
-                <Link href={`/profile/${data['owner_id']}`}>
+                <Link href={`/profile/${data.owner_id}`}>
                   <Text>
-                    {user._id === data['owner_id']
+                    {user._id === data.owner_id
                       ? 'Your Profile'
                       : `View ${
                           data.owners && data.owners.length
@@ -112,11 +112,11 @@ export const CustomCard = ({
                 </Link>
               </Box>
               {link && (
-                // @ts-ignore
+                // @ts-expect-error
                 <Box
                   flexDir={'row'}
                   style={{
-                    gap: '5px',
+                    // gap: '5px',
                     alignItems: 'center',
                   }}
                 >
@@ -200,15 +200,13 @@ export const CustomCard = ({
             <Box></Box>
             <Box flexDirection="row" alignItems="center">
               <Box mx="5">
-                <Link
-                  href={`/profile/${data.owner_id && data['owner_id']._id}`}
-                >
+                <Link href={`/profile/${data.owner_id && data.owner_id._id}`}>
                   <Text>
-                    {user._id === data['owner_id']
+                    {user._id === data.owner_id
                       ? 'Your Profile'
                       : `View ${
                           data.owner_id
-                            ? '@' + data['owner_id'].username
+                            ? '@' + data.owner_id.username
                             : 'Profile'
                         }`}
                   </Text>
