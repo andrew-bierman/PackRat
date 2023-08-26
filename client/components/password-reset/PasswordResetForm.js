@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, Input, Text, Toast } from 'native-base';
 import { useSearchParams } from 'expo-router';
-import axios from 'axios';
+import axios from '~/config/axios';
 import UseTheme from '../../hooks/useTheme';
 import { api } from '../../constants/api';
 import { InformUser } from '../../utils/ToastUtils';

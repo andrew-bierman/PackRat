@@ -29,6 +29,9 @@ import { signIn, signInWithGoogle } from '../store/authStore';
 import { StyleSheet } from 'react-native';
 import { InformUser } from '../utils/ToastUtils';
 import UseTheme from '../hooks/useTheme';
+import { useForm } from 'react-hook-form';
+import { InputText, InputTextRules } from '~/components/InputText';
+import { Regex } from '~/utils/regex';
 
 // const defaultStyle = {
 //   version: 8,
@@ -66,8 +69,6 @@ WebBrowser.maybeCompleteAuthSession();
 export default function Login() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     UseTheme();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const {
     control,
     handleSubmit,

@@ -164,33 +164,6 @@ const TableItem = ({
    */
 
   // Here, you can set a default category if item.category is null or undefined
-  const categoryName = category ? category.name : 'Undefined';
-
-  const rowData = [
-    name,
-    `${formatNumber(weight)} ${unit}`,
-    quantity,
-    `${categoryName}`,
-    <EditPackItemModal
-      packId={_id}
-      initialData={itemData}
-      currentPack={currentPack}
-      refetch={refetch}
-      setRefetch={setRefetch}
-    />,
-    <DeletePackItemModal
-      itemId={_id}
-      pack={currentPack}
-      refetch={refetch}
-      setRefetch={setRefetch}
-    />,
-    <IgnoreItemCheckbox
-      itemId={_id}
-      isChecked={checkedItems.includes(_id)}
-      handleCheckboxChange={handleCheckboxChange}
-    />,
-  ];
-
   return <Row data={rowData} style={styles().row} flexArr={flexArr} />;
 };
 

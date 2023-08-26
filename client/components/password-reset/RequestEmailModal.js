@@ -11,7 +11,7 @@ import {
   VStack,
 } from 'native-base';
 import { CustomModal } from '../modal';
-import axios from 'axios';
+import axios from '~/config/axios';
 import { api } from '../../constants/api';
 import { InformUser } from '../../utils/ToastUtils';
 import UseTheme from '../../hooks/useTheme';

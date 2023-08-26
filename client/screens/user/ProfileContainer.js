@@ -7,9 +7,10 @@ import {
   VStack,
   Image,
   HStack,
+  Button,
 } from 'native-base';
 import { Platform, StyleSheet } from 'react-native';
-import UserDataContainer from './UserDataContainer';
+import UserDataContainer from '../../components/user/UserDataContainer';
 import { useAuth } from '../../auth/provider';
 import { theme } from '../../theme';
 import UseTheme from '../../hooks/useTheme';
