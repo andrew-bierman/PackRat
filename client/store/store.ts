@@ -1,6 +1,10 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { persistReducer, persistStore, PersistConfig } from 'redux-persist';
+import {
+  persistReducer,
+  persistStore,
+  type PersistConfig,
+} from 'redux-persist';
 
 // middleware
 import apiMessageMiddleware from './middleware/apiMessageMiddleware';
@@ -24,7 +28,7 @@ import destinationReducer from './destinationStore';
 import chatReducer from './chatStore';
 import globalItems from './globalItemsStore';
 import userStore from './userStore';
-import { Reducer } from 'react';
+import { type Reducer } from 'react';
 
 // combine reducers
 const rootReducer: Reducer<RootState> = combineReducers({
