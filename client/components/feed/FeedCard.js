@@ -1,19 +1,18 @@
-import { AntDesign } from "@expo/vector-icons";
-import { formatDistanceToNow } from "date-fns";
-import { MaterialIcons, Entypo } from "@expo/vector-icons";
-import { theme } from "../../theme";
+import { AntDesign, MaterialIcons, Entypo } from '@expo/vector-icons';
+import { formatDistanceToNow } from 'date-fns';
+import { theme } from '../../theme';
 // import useAddToFavorite from "../../hooks/useAddToFavorites";
 // import { useAuth } from "../../auth/provider";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch } from 'react-redux';
 import {
   addFavorite,
   selectFavoriteById,
   selectAllFavorites,
-} from "../../store/favoritesStore";
-import { TouchableOpacity } from "react-native";
-import { Link } from "expo-router";
-import { DuplicateIcon } from "../DuplicateIcon/index";
-import { truncateString } from "../../utils/truncateString";
+} from '../../store/favoritesStore';
+import { TouchableOpacity } from 'react-native';
+import { Link } from 'expo-router';
+import { DuplicateIcon } from '../DuplicateIcon/index';
+import { truncateString } from '../../utils/truncateString';
 
 import {
   Box,
@@ -24,7 +23,7 @@ import {
   HStack,
   Stack,
   Button,
-} from "native-base";
+} from 'native-base';
 
 // import { useAuth } from "../../auth/provider";
 
@@ -70,7 +69,7 @@ export default function Card({
    */
   const handleRemoveFromFavorite = () => {
     const favorite = favorites.find(
-      (favorite) => favorite.pack_id === _id && favorite.user_id === user._id
+      (favorite) => favorite.pack_id === _id && favorite.user_id === user._id,
     );
     if (favorite) {
       dispatch(removeFavorite(favorite.id));
@@ -93,15 +92,15 @@ export default function Card({
         borderColor="coolGray.200"
         borderWidth="1"
         _dark={{
-          borderColor: "coolGray.600",
-          backgroundColor: "gray",
+          borderColor: 'coolGray.600',
+          backgroundColor: 'gray',
         }}
         _web={{
           shadow: 2,
           borderWidth: 0,
         }}
         _light={{
-          backgroundColor: "gray.50",
+          backgroundColor: 'gray.50',
         }}
       >
         <Stack p="4" space={10}>
@@ -109,41 +108,41 @@ export default function Card({
             <Heading size="md" ml="-1">
               <Box
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  width: "100%",
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  width: '100%',
                 }}
               >
-                <Link href={type === "pack" ? "/pack/" + _id : "/trip/" + _id}>
+                <Link href={type === 'pack' ? '/pack/' + _id : '/trip/' + _id}>
                   {truncatedName}
                 </Link>
-                {type === "pack" && (
+                {type === 'pack' && (
                   <Box
                     style={{
-                      flexDirection: "row",
+                      flexDirection: 'row',
                     }}
                   >
                     <MaterialIcons name="backpack" size={24} color="gray" />
-                    <Link href={"/pack/" + _id + "?copy=true"}>
+                    <Link href={'/pack/' + _id + '?copy=true'}>
                       <DuplicateIcon />
                     </Link>
                   </Box>
                 )}
-                {type === "trip" && (
+                {type === 'trip' && (
                   <Entypo name="location-pin" size={24} color="gray" />
                 )}
               </Box>
             </Heading>
 
-            {type === "pack" && (
+            {type === 'pack' && (
               <Text
                 fontSize="xs"
                 _light={{
-                  color: "violet.500",
+                  color: 'violet.500',
                 }}
                 _dark={{
-                  color: "violet.400",
+                  color: 'violet.400',
                 }}
                 fontWeight="500"
                 ml="-0.5"
@@ -153,14 +152,14 @@ export default function Card({
               </Text>
             )}
 
-            {type === "trip" && (
+            {type === 'trip' && (
               <Text
                 fontSize="xs"
                 _light={{
-                  color: "violet.500",
+                  color: 'violet.500',
                 }}
                 _dark={{
-                  color: "violet.400",
+                  color: 'violet.400',
                 }}
                 fontWeight="500"
                 ml="-0.5"
@@ -179,27 +178,27 @@ export default function Card({
             >
               <Box
                 style={{
-                  flexDirection: "column",
-                  alignItems: "flex-start",
+                  flexDirection: 'column',
+                  alignItems: 'flex-start',
                   gap: 10,
                 }}
               >
                 <Link href={`/profile/${owner_id}`}>
                   <Text>
-                    View {owner?.username ? "@" + owner?.username : "Owner"}
+                    View {owner?.username ? '@' + owner?.username : 'Owner'}
                   </Text>
                 </Link>
                 <Box
                   style={{
-                    flexDirection: "row",
-                    alignItems: "center",
+                    flexDirection: 'row',
+                    alignItems: 'center',
                     gap: 10,
                   }}
                 >
                   <Text
                     color="coolGray.600"
                     _dark={{
-                      color: "warmGray.200",
+                      color: 'warmGray.200',
                     }}
                     fontWeight="400"
                     flex={1}
@@ -208,11 +207,11 @@ export default function Card({
                       new Date(
                         !Number.isNaN(new Date(createdAt).getTime())
                           ? createdAt
-                          : new Date()
+                          : new Date(),
                       ).getTime(),
                       {
                         addSuffix: true,
-                      }
+                      },
                     ) ?? 0}
                   </Text>
                 </Box>
@@ -220,16 +219,16 @@ export default function Card({
 
               <Box
                 style={{
-                  flexDirection: "column",
-                  alignItems: "center",
+                  flexDirection: 'column',
+                  alignItems: 'center',
                   gap: 10,
                 }}
               >
                 <Text>Favorites</Text>
                 <Box
                   style={{
-                    flexDirection: "row",
-                    alignItems: "center",
+                    flexDirection: 'row',
+                    alignItems: 'center',
                     gap: 10,
                   }}
                 >
@@ -238,7 +237,7 @@ export default function Card({
                       <AntDesign
                         name="heart"
                         size={16}
-                        color={isFavorite ? "red" : "grey"}
+                        color={isFavorite ? 'red' : 'grey'}
                       />
                     </TouchableOpacity>
                   )}
@@ -246,7 +245,7 @@ export default function Card({
                   <Text
                     color="coolGray.600"
                     _dark={{
-                      color: "warmGray.200",
+                      color: 'warmGray.200',
                     }}
                     fontWeight="400"
                   >

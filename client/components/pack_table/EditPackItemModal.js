@@ -1,7 +1,7 @@
-import React from "react";
-import { MaterialIcons } from "@expo/vector-icons";
-import { AddItem } from "../item/AddItem";
-import { CustomModal } from "../modal";
+import React from 'react';
+import { MaterialIcons } from '@expo/vector-icons';
+import { AddItem } from '../item/AddItem';
+import { CustomModal } from '../modal';
 
 export const EditPackItemModal = ({
   initialData,
@@ -16,16 +16,16 @@ export const EditPackItemModal = ({
   onTrigger,
   closeModalHandler,
 }) => {
-  let currentPackId = undefined;
+  let currentPackId;
   if (currentPack) {
-    currentPackId = currentPack["_id"];
+    currentPackId = currentPack._id;
   }
 
   const footerButtons = [
     {
-      label: "Cancel",
+      label: 'Cancel',
       onClick: closeModalHandler,
-      color: "danger",
+      color: 'danger',
       disabled: false,
     },
     // add more footer buttons here if needed
@@ -34,7 +34,7 @@ export const EditPackItemModal = ({
   return (
     <CustomModal
       isActive={isModalOpen}
-      title={"Edit Item"}
+      title={'Edit Item'}
       triggerComponent={
         <MaterialIcons
           name="edit"

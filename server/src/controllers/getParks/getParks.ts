@@ -1,5 +1,10 @@
-const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args as Parameters<typeof fetch>));
-import { oneEntity } from "../../utils/oneEntity";
+const fetch = (...args) =>
+  import('node-fetch').then(({ default: fetch }) =>
+    fetch(...(args as Parameters<typeof fetch>)),
+  );
+import { RetrievingParksDataError } from '../../helpers/errors';
+import { responseHandler } from '../../helpers/responseHandler';
+import { oneEntity } from '../../utils/oneEntity';
 
 /**
  * Retrieves a list of parks based on the specified state code.
@@ -7,7 +12,7 @@ import { oneEntity } from "../../utils/oneEntity";
  * @param {Object} res - The response object.
  * @return {Promise} A promise that resolves with the park data or an error message.
  */
-export const getParks = async (req, res) => {
+export const getParks = async (req, res, next) => {
   let abbrState = await oneEntity(req.query.abbrState);
 
   const X_RAPIDAPI_KEY = process.env.X_RAPIDAPI_KEY;
@@ -17,21 +22,20 @@ export const getParks = async (req, res) => {
   const host = `${PARKS_HOST}?stateCode=${abbrState}`;
 
   const options = {
-    method: "GET",
+    method: 'GET',
     headers: {
-      "X-Api-Key": `${NPS_API}`,
-      "X-RapidAPI-Key": `${X_RAPIDAPI_KEY}`,
-      "X-RapidAPI-Host": "jonahtaylor-national-park-service-v1.p.rapidapi.com",
-      "User-Agent": "PackRat",
+      'X-Api-Key': `${NPS_API}`,
+      'X-RapidAPI-Key': `${X_RAPIDAPI_KEY}`,
+      'X-RapidAPI-Host': 'jonahtaylor-national-park-service-v1.p.rapidapi.com',
+      'User-Agent': 'PackRat',
     },
   };
 
   await fetch(host, options)
-    .then((res) => res.json())
+    .then(async (res) => await res.json())
     .then((json) => {
-      res.send(json);
+      res.locals.data = json;
+      responseHandler(res);
     })
-    .catch(() =>
-      res.send({ message: "Error retrieving park data from RapidAPI" })
-    );
+    .catch(() => next(RetrievingParksDataError));
 };

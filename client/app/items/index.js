@@ -1,8 +1,6 @@
-import { View } from "react-native";
-import React, { useEffect, useState } from "react";
-import Items from "../../screens/items";
+import { View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import Items from '../../screens/items';
 export default function ItemsRoute() {
-  return (
-    <Items />
-  );
+  return <Items />;
 }

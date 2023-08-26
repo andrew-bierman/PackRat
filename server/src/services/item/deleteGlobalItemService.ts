@@ -1,5 +1,4 @@
-import Item from "../../models/itemModel";
-
+import Item from '../../models/itemModel';
 
 /**
  * Deletes a global item by its ID.
@@ -8,7 +7,7 @@ import Item from "../../models/itemModel";
  * @return {Promise<Document>} - A promise that resolves to the deleted item.
  */
 export const deleteGlobalItemService = async (itemId) => {
-    const itemDeleted = await Item.findByIdAndDelete(itemId);
-  
-    return itemDeleted;
-  };
+  const itemDeleted = await Item.findByIdAndDelete(itemId);
+
+  return itemDeleted;
+};

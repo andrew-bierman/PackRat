@@ -1,23 +1,23 @@
-import { StyleSheet } from "react-native";
-import { Box, Button, Input, Select, Text } from "native-base";
-import { useEffect, useState } from "react";
+import { StyleSheet } from 'react-native';
+import { Box, Button, Input, Select, Text } from 'native-base';
+import { useEffect, useState } from 'react';
 
-import DropdownComponent from "../Dropdown";
-import useGetPacks from "../../hooks/useGetPacks";
-import { AddItem } from "../item/AddItem";
-import { TableContainer } from "../pack_table/Table";
+import DropdownComponent from '../Dropdown';
+import useGetPacks from '../../hooks/useGetPacks';
+import { AddItem } from '../item/AddItem';
+import { TableContainer } from '../pack_table/Table';
 // import { useAuth } from "../../auth/provider";
-import { useSelector } from "react-redux";
+import { useSelector } from 'react-redux';
 import {
   fetchUserPacks,
   selectPackById,
   selectAllPacks,
-} from "../../store/packsStore";
-import { updateNewTripPack } from "../../store/tripsStore";
-import { useDispatch } from "react-redux";
+} from '../../store/packsStore';
+import { updateNewTripPack } from '../../store/tripsStore';
+import { useDispatch } from 'react-redux';
 
-import { CustomModal } from "../modal";
-import { AddItemModal } from "./AddItemModal";
+import { CustomModal } from '../modal';
+import { AddItemModal } from './AddItemModal';
 
 export default function PackContainer({ isCreatingTrip = false }) {
   const dispatch = useDispatch();
@@ -32,7 +32,7 @@ export default function PackContainer({ isCreatingTrip = false }) {
   const [refetch, setRefetch] = useState(false);
 
   useEffect(() => {
-    if (user && user._id) {
+    if (user?._id) {
       dispatch(fetchUserPacks(user?._id));
     }
   }, [dispatch, user?._id, refetch]);
@@ -53,7 +53,7 @@ export default function PackContainer({ isCreatingTrip = false }) {
     }
   };
   const currentPack = useSelector((state) =>
-    selectPackById(state, currentPackId)
+    selectPackById(state, currentPackId),
   );
 
   const dataValues = packs.map((item) => item?.name) ?? [];
@@ -64,7 +64,7 @@ export default function PackContainer({ isCreatingTrip = false }) {
         data={dataValues}
         value={currentPackId}
         onValueChange={handlePack}
-        placeholder={"Select a Pack"}
+        placeholder={'Select a Pack'}
         width={300}
       />
       {currentPackId && (
@@ -90,10 +90,10 @@ export default function PackContainer({ isCreatingTrip = false }) {
 
 const styles = StyleSheet.create({
   mainContainer: {
-    flexDirection: "column",
-    alignItems: "center",
+    flexDirection: 'column',
+    alignItems: 'center',
     gap: 35,
-    width: "100%",
+    width: '100%',
     padding: 20,
   },
 });

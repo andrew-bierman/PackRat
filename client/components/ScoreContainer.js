@@ -1,10 +1,10 @@
-import React from "react";
-import { Platform, StyleSheet } from "react-native";
-import { Box, Button, VStack, Text, HStack, View } from "native-base";
-import { theme } from "../theme";
-import { useDispatch } from "react-redux";
-import { scorePack } from "../store/packsStore";
-import { Svg, Circle, Path, G, Text as SvgText } from "react-native-svg";
+import React from 'react';
+import { Platform, StyleSheet } from 'react-native';
+import { Box, Button, VStack, Text, HStack, View } from 'native-base';
+import { theme } from '../theme';
+import { useDispatch } from 'react-redux';
+import { scorePack } from '../store/packsStore';
+import { Svg, Circle, Path, G, Text as SvgText } from 'react-native-svg';
 
 const ScoreProgressChart = ({ score, size = 150, strokeWidth = 10 }) => {
   if (!score) return null;
@@ -163,16 +163,16 @@ export default function ScoreContainer({ type, data, isOwner }) {
 
   const textData = {
     pack: {
-      title: isAlreadyScored ? "Pack Score" : "Score this pack!",
-      subheader: "See how this pack matches up with our scoring system!",
+      title: isAlreadyScored ? 'Pack Score' : 'Score this pack!',
+      subheader: 'See how this pack matches up with our scoring system!',
       description:
-        "PackRating is our proprietary scoring system that rates packs based on their weight, essential items, and redundancy and versatility. We worked with experts to create a system that is as objective as possible. The higher the score, the better the pack!",
+        'PackRating is our proprietary scoring system that rates packs based on their weight, essential items, and redundancy and versatility. We worked with experts to create a system that is as objective as possible. The higher the score, the better the pack!',
     },
     trip: {
-      title: isAlreadyScored ? "Trip Score" : "Score this trip!",
-      subheader: "See how this trip matches up with our scoring system!",
+      title: isAlreadyScored ? 'Trip Score' : 'Score this trip!',
+      subheader: 'See how this trip matches up with our scoring system!',
       description:
-        "PackRating is our proprietary scoring system that rates trips based on their weight, essential items, and redundancy and versatility. We worked with experts to create a system that is as objective as possible. The higher the score, the better the trip!",
+        'PackRating is our proprietary scoring system that rates trips based on their weight, essential items, and redundancy and versatility. We worked with experts to create a system that is as objective as possible. The higher the score, the better the trip!',
     },
   };
 
@@ -181,9 +181,9 @@ export default function ScoreContainer({ type, data, isOwner }) {
   const description = textData[type].description;
 
   const handleScoreClick = () => {
-    if (type === "pack") {
+    if (type === 'pack') {
       dispatch(scorePack(id));
-    } else if (type === "trip") {
+    } else if (type === 'trip') {
       dispatch(scoreTrip(id));
     }
   };
@@ -193,7 +193,7 @@ export default function ScoreContainer({ type, data, isOwner }) {
       <HStack style={styles.hStack}>
         <VStack style={styles.vStack}>
           <Text style={styles.scoreText}>
-            {isAlreadyScored ? title : "Score this pack!"}
+            {isAlreadyScored ? title : 'Score this pack!'}
           </Text>
           <Text>{subheader}</Text>
           <Text style={{ fontWeight: 300 }}>{description}</Text>
@@ -218,44 +218,44 @@ const styles = StyleSheet.create({
     paddingHorizontal: 25,
     marginVertical: 15,
     padding: 26,
-    borderColor: "#f1f5f9",
+    borderColor: '#f1f5f9',
     borderWidth: 2,
   },
   hStack: {
-    justifyContent: "space-between",
-    alignItems: "center",
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   vStack: {
-    justifyContent: "center",
-    alignItems: "flex-start",
-    width: Platform.OS == "web" ? "60%" : "100%",
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    width: Platform.OS == 'web' ? '60%' : '100%',
   },
   scoreText: {
     color: theme.colors.textPrimary,
     fontSize: 26,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   button: {
     backgroundColor: theme.colors.primary,
     marginTop: 15,
     height: 50,
-    justifyContent: "center",
+    justifyContent: 'center',
   },
 
   // pie
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   graphWrapper: {
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   label: {
-    position: "absolute",
-    textAlign: "center",
-    fontWeight: "700",
+    position: 'absolute',
+    textAlign: 'center',
+    fontWeight: '700',
     fontSize: 24,
   },
 });
