@@ -9,7 +9,11 @@ import {
   Alert,
   Platform,
 } from 'react-native';
-import { Entypo, MaterialCommunityIcons } from '@expo/vector-icons';
+import {
+  Entypo,
+  MaterialCommunityIcons,
+  FontAwesome5,
+} from '@expo/vector-icons';
 import UseTheme from '../../hooks/useTheme';
 import { mapboxStyles } from '../../utils/mapFunctions';
 
