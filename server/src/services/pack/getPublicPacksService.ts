@@ -1,4 +1,5 @@
 import Pack from '../../models/packModel';
+import { computeTotalWeightInGrams } from '../../utils/convertWeight';
 
 /**
  * Retrieves public packs based on the provided query parameter.
@@ -21,6 +22,12 @@ export async function getPublicPacksService(queryBy: string) {
         },
       },
       {
+        $unwind: {
+          path: '$items',
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
         $lookup: {
           from: 'users',
           localField: 'owner_id',
@@ -28,18 +35,27 @@ export async function getPublicPacksService(queryBy: string) {
           as: 'owner',
         },
       },
+      computeTotalWeightInGrams(),
       {
         $addFields: {
-          total_weight: {
-            $sum: {
-              $map: {
-                input: '$items',
-                as: 'item',
-                in: { $multiply: ['$$item.weight', '$$item.quantity'] },
-              },
-            },
-          },
           owner: { $arrayElemAt: ['$owner', 0] },
+        },
+      },
+      {
+        $group: {
+          _id: '$_id',
+          name: { $first: '$name' },
+          owner_id: { $first: '$owner_id' },
+          is_public: { $first: '$is_public' },
+          favorited_by: { $first: '$favorited_by' },
+          favorites_count: { $first: '$favorites_count' },
+          createdAt: { $first: '$createdAt' },
+          owners: { $first: '$owners' },
+          grades: { $first: '$grades' },
+          scores: { $first: '$scores' },
+          type: { $first: '$type' },
+          items: { $push: '$items' },
+          total_weight: { $sum: '$item_weight' },
         },
       },
     ];

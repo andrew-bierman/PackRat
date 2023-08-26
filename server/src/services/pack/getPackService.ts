@@ -22,7 +22,10 @@ export const getPacksService = async (ownerId) => {
       },
     },
     {
-      $unwind: '$items',
+      $unwind: {
+        path: '$items',
+        preserveNullAndEmptyArrays: true,
+      },
     },
     {
       $lookup: {
