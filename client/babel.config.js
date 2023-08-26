@@ -39,8 +39,8 @@ module.exports = function (api) {
       ],
       [
         '@tamagui/babel-plugin', {
-          components : ['tamagui'],
-          config : './theme/tamagui.config.js'
+          components: ['tamagui'],
+          config: './theme/tamagui.config.js'
         }
       ],
       ['transform-inline-environment-variables', {

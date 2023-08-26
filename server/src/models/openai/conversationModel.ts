@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import myDB from "../dbConnection";
+import mongoose from 'mongoose';
+import myDB from '../dbConnection';
 
 const { Schema } = mongoose;
 
@@ -14,9 +14,9 @@ const ConversationSchema = new Schema(
       required: true,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-const Conversation = myDB.model("Conversation", ConversationSchema);
+const Conversation = myDB.model('Conversation', ConversationSchema);
 
 export default Conversation;

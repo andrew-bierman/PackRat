@@ -1,0 +1,20 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Colors
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NC='\033[0m' # No Color
+
+echo "🔍 Running pre-push hook"
+
+# Running tests
+echo "🔄 Running tests..."
+npm run test
+
+if [ $? -eq 0 ]; then
+  echo -e "${GREEN}✅ Tests passed${NC}"
+else
+  echo -e "${RED}❌ Tests failed${NC}"
+  exit 1
+fi

@@ -1,28 +1,33 @@
-import { View, StyleSheet, Text, Image } from "react-native";
-import { Link } from "expo-router";
+import { View, StyleSheet, Text, Image } from 'react-native';
+import { Link } from 'expo-router';
 import {
   AntDesign,
   Entypo,
   FontAwesome,
   MaterialCommunityIcons,
   MaterialIcons,
-} from "@expo/vector-icons";
-import { theme, darkTheme } from "../../theme";
+} from '@expo/vector-icons';
+import { theme, darkTheme } from '../../theme';
 // import { useAuth } from "../../auth/provider";
-import UseTheme from "../../hooks/useTheme";
-import { signOut } from "../../store/authStore";
+import UseTheme from '../../hooks/useTheme';
+import { signOut } from '../../store/authStore';
 
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function Drawer() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     UseTheme();
-  console.log("isDark, isLight", isDark, isLight);
+  console.log('isDark, isLight', isDark, isLight);
   // const { signOut } = useAuth();
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.auth.user);
 
+  /**
+   * Handles the sign out functionality.
+   *
+   * @return {undefined} No return value.
+   */
   const handleSignOut = () => {
     dispatch(signOut());
   };
@@ -54,7 +59,9 @@ export default function Drawer() {
                   color={currentTheme.colors.drawerIconColor}
                 />
 
-                <Text style={{ color: currentTheme.colors.drawerIconColor }}>Home</Text>
+                <Text style={{ color: currentTheme.colors.drawerIconColor }}>
+                  Home
+                </Text>
               </View>
             </Link>
             <Link href="/trips">
@@ -65,7 +72,9 @@ export default function Drawer() {
                   color={currentTheme.colors.drawerIconColor}
                 />
 
-                <Text style={{ color: currentTheme.colors.drawerIconColor }}>Trips</Text>
+                <Text style={{ color: currentTheme.colors.drawerIconColor }}>
+                  Trips
+                </Text>
               </View>
             </Link>
             <Link href="profile">
@@ -75,7 +84,9 @@ export default function Drawer() {
                   size={24}
                   color={currentTheme.colors.drawerIconColor}
                 />
-                <Text style={{ color: currentTheme.colors.drawerIconColor }}>Profile</Text>
+                <Text style={{ color: currentTheme.colors.drawerIconColor }}>
+                  Profile
+                </Text>
               </View>
             </Link>
             <Link href="appearance">
@@ -85,7 +96,9 @@ export default function Drawer() {
                   size={24}
                   color={currentTheme.colors.drawerIconColor}
                 />
-                <Text style={{ color: currentTheme.colors.drawerIconColor }}>Appearance</Text>
+                <Text style={{ color: currentTheme.colors.drawerIconColor }}>
+                  Appearance
+                </Text>
               </View>
             </Link>
             <Link href="/packs">
@@ -96,7 +109,9 @@ export default function Drawer() {
                   color={currentTheme.colors.drawerIconColor}
                 />
 
-                <Text style={{ color: currentTheme.colors.drawerIconColor }}>Packs</Text>
+                <Text style={{ color: currentTheme.colors.drawerIconColor }}>
+                  Packs
+                </Text>
               </View>
             </Link>
             <Link href="/about">
@@ -107,7 +122,9 @@ export default function Drawer() {
                   color={currentTheme.colors.drawerIconColor}
                 />
 
-                <Text style={{ color: currentTheme.colors.drawerIconColor }}>About</Text>
+                <Text style={{ color: currentTheme.colors.drawerIconColor }}>
+                  About
+                </Text>
               </View>
             </Link>
             <View style={styles().link}>
@@ -133,7 +150,9 @@ export default function Drawer() {
                   size={24}
                   color={currentTheme.colors.drawerIconColor}
                 />
-                <Text style={{ color: currentTheme.colors.drawerIconColor }}>Login</Text>
+                <Text style={{ color: currentTheme.colors.drawerIconColor }}>
+                  Login
+                </Text>
               </View>
             </Link>
             <Link href="/register">
@@ -143,7 +162,9 @@ export default function Drawer() {
                   size={24}
                   color={currentTheme.colors.drawerIconColor}
                 />
-                <Text style={{ color: currentTheme.colors.drawerIconColor }}>Sign Up</Text>
+                <Text style={{ color: currentTheme.colors.drawerIconColor }}>
+                  Sign Up
+                </Text>
               </View>
             </Link>
           </View>
@@ -154,18 +175,19 @@ export default function Drawer() {
 }
 
 const styles = () => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } = UseTheme();
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
   return StyleSheet.create({
     mobileContainer: {
       backgroundColor: currentTheme.colors.background,
-      width: "100%",
-      flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "space-between",
+      width: '100%',
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
       padding: 25,
-      position: "relative",
+      position: 'relative',
     },
-  
+
     logo: {
       width: 60,
       height: 50,
@@ -174,24 +196,24 @@ const styles = () => {
       width: 100,
       height: 95,
     },
-  
+
     link: {
-      flexDirection: "row",
-      alignItems: "center",
+      flexDirection: 'row',
+      alignItems: 'center',
       gap: 15,
       paddingVertical: 20,
       paddingHorizontal: 15,
-      width: "100%",
-      color: "black",
+      width: '100%',
+      color: 'black',
     },
     closeIcon: {
-      flexDirection: "row",
-      alignSelf: "flex-end",
-      justifyContent: "flex-end",
+      flexDirection: 'row',
+      alignSelf: 'flex-end',
+      justifyContent: 'flex-end',
       paddingVertical: 20,
       paddingHorizontal: 25,
-      width: "100%",
-      color: "black",
+      width: '100%',
+      color: 'black',
     },
   });
-}
+};

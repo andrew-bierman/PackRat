@@ -1,19 +1,21 @@
-import { View, StyleSheet, Text, Image } from "react-native";
-import { Link } from "expo-router";
+import { View, StyleSheet, Text, Image } from 'react-native';
+import { Link } from 'expo-router';
 
-import { useAuth } from "../auth/provider";
+import { useAuth } from '../auth/provider';
 
-import { theme } from "../theme";
-import { Entypo } from "@expo/vector-icons";
-import { FontAwesome } from "@expo/vector-icons";
-import { EvilIcons } from "@expo/vector-icons";
-import { AntDesign } from "@expo/vector-icons";
-import { MaterialIcons } from "@expo/vector-icons";
+import { theme } from '../theme';
+import {
+  Entypo,
+  FontAwesome,
+  EvilIcons,
+  AntDesign,
+  MaterialIcons,
+} from '@expo/vector-icons';
 
-import packratlogo from "../assets/packrat.png";
-import { useState } from "react";
-import { useSelector } from "react-redux";
-import UseTheme from "../hooks/useTheme";
+import packratlogo from '../assets/packrat.png';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import UseTheme from '../hooks/useTheme';
 export default function NavigationMobile() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     UseTheme();
@@ -21,8 +23,13 @@ export default function NavigationMobile() {
   const user = useSelector((state) => state.auth.user);
 
   return user ? (
-    <View style={[styles.mobileContainer, { backgroundColor: theme.colors.background,}]}>
-      <View style={{ flexDirection: "row", alignItems: "center", gap: 1 }}>
+    <View
+      style={[
+        styles.mobileContainer,
+        { backgroundColor: theme.colors.background },
+      ]}
+    >
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 1 }}>
         <Image src={String(packratlogo)} alt="logo" />
         <Text
           style={{
@@ -44,8 +51,13 @@ export default function NavigationMobile() {
       </Link>
     </View>
   ) : (
-    <View style={[styles.mobileContainer, { backgroundColor: theme.colors.background,}]}>
-      <View style={{ flexDirection: "row", alignItems: "center", gap: 1 }}>
+    <View
+      style={[
+        styles.mobileContainer,
+        { backgroundColor: theme.colors.background },
+      ]}
+    >
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 1 }}>
         <Image src={String(packratlogo)} alt="logo" />
         <Text
           style={{
@@ -71,12 +83,12 @@ export default function NavigationMobile() {
 
 const styles = StyleSheet.create({
   mobileContainer: {
-    width: "100%",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     padding: 40,
-    position: "relative",
+    position: 'relative',
   },
 
   logo: {
@@ -89,15 +101,15 @@ const styles = StyleSheet.create({
   },
 
   link: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 10,
 
     paddingVertical: 10,
     paddingHorizontal: 15,
-    borderBottomColor: "white",
+    borderBottomColor: 'white',
     borderBottomWidth: 1,
-    width: "100%",
-    color: "white",
+    width: '100%',
+    color: 'white',
   },
 });

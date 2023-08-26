@@ -1,17 +1,23 @@
+/**
+ * Redux store for managing chat-related state.
+ */
+
 import {
   createSlice,
   createAsyncThunk,
   createEntityAdapter,
-} from "@reduxjs/toolkit";
-import axios from "axios";
-import { api } from "../constants/api";
+} from '@reduxjs/toolkit';
+import axios from '~/config/axios';
+import { api } from '../constants/api';
 
-const chatAdapter = createEntityAdapter(
-    {selectId: (chat) => chat._id}
-);
+// Create entity adapter for chats
+const chatAdapter = createEntityAdapter({
+  selectId: (chat) => chat._id,
+});
 
+// Async thunk for getting user chats
 export const getUserChats = createAsyncThunk(
-  "chat/getUserChats",
+  'chat/getUserChats',
   async (userId) => {
     try {
       const response = await axios.get(`${api}/openai/user-chats/${userId}`);
@@ -20,11 +26,12 @@ export const getUserChats = createAsyncThunk(
       console.error(error);
       throw error;
     }
-  }
+  },
 );
 
+// Async thunk for getting AI response
 export const getAIResponse = createAsyncThunk(
-  "chat/getAIResponse",
+  'chat/getAIResponse',
   async ({ userId, conversationId, userInput }) => {
     try {
       const response = await axios.post(`${api}/openai/ai-response`, {
@@ -37,11 +44,12 @@ export const getAIResponse = createAsyncThunk(
       console.error(error);
       throw error;
     }
-  }
+  },
 );
 
+// Create slice for chat state
 const chatSlice = createSlice({
-  name: "chat",
+  name: 'chat',
   initialState: chatAdapter.getInitialState({
     loading: false,
     error: null,
@@ -70,16 +78,13 @@ const chatSlice = createSlice({
       .addCase(getAIResponse.fulfilled, (state, action) => {
         const { aiResponse, conversation } = action.payload;
         const { _id, history } = conversation;
-        console.log("payload:", action.payload);
-        console.log("state.entities:", state.entities);
-        console.log(
-          "state.entities[_id]:",
-          state.entities[_id]
-        );
-        chatAdapter.upsertOne(state, { // use upsertOne to add new conversation if it doesn't exist
+        console.log('payload:', action.payload);
+        console.log('state.entities:', state.entities);
+        console.log('state.entities[_id]:', state.entities[_id]);
+        chatAdapter.upsertOne(state, {
           id: _id,
           changes: {
-            history: history.split('\n') // assuming history is a string
+            history: history.split('\n'),
           },
         });
         state.loading = false;
@@ -92,6 +97,7 @@ const chatSlice = createSlice({
   },
 });
 
+// Selectors for chat state
 export const {
   selectAll: selectAllConversations,
   selectById: selectConversationById,

@@ -1,14 +1,16 @@
 // FeedPreview.js
 
-import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { Card, Text, HStack, Badge } from "native-base";
-import { Link } from "expo-router";
-import { StyleSheet } from "react-native";
-import { getPublicPacks, getPublicTrips } from "../../store/feedStore";
-import { theme } from "../../theme";
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { Card, Text, HStack, Badge } from 'native-base';
+import { Link } from 'expo-router';
+import { Dimensions, FlatList, StyleSheet, View } from 'react-native';
+import { getPublicPacks, getPublicTrips } from '../../store/feedStore';
+import { theme } from '../../theme';
 import UseTheme from '../../hooks/useTheme';
-import Carousel from '../carousel'
+import Carousel from '../carousel';
+
+const { height, width } = Dimensions.get('window');
 
 const FeedPreviewScroll = () => {
   const dispatch = useDispatch();
@@ -25,7 +27,6 @@ const FeedPreviewScroll = () => {
     <Carousel itemWidth={250}>
       {filteredFeedData.map((item, index) => {
         const linkStr = `/${item.type}/${item._id}`;
-
         return linkStr ? (
           <Link href={linkStr} key={`${linkStr}`}>
             <Card key={index} style={styles().feedItem}>
@@ -36,7 +37,7 @@ const FeedPreviewScroll = () => {
                 </Badge>
               </HStack>
               <Text>{item.description}</Text>
-            </Card>
+            </View>
           </Link>
         ) : null;
       })}
@@ -76,4 +77,4 @@ const styles = () => {
   });
 }
 
-export default FeedPreview;
+export default FeedPreviewScroll;

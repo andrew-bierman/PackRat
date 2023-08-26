@@ -1,3 +1,4 @@
+import { UnableToDuplicatePackError } from "../../helpers/errors";
 import { duplicatePublicPackService } from "../../services/pack/pack.service";
 
 /**
@@ -6,17 +7,17 @@ import { duplicatePublicPackService } from "../../services/pack/pack.service";
  * @param {Object} res - the response object
  * @return {Promise} - a promise that resolves with the duplicated pack
  */
-export const duplicatePublicPack = async (req, res) => {
+export const duplicatePublicPack = async (req, res,next) => {
   try {
     const { packId, ownerId, items } = req.body;
 
     const result = await duplicatePublicPackService(packId, ownerId, items);
 
     res.status(200).json({
-      msg: "pack was duplicated successfully",
+      msg: 'pack was duplicated successfully',
       data: result.pack,
     });
   } catch (error) {
-    res.status(404).json({ msg: "Unable to duplicate pack" + error });
+    next(UnableToDuplicatePackError)
   }
 };

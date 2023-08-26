@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -7,20 +7,20 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
-} from "react-native";
-import { useDispatch, useSelector } from "react-redux";
+} from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import UseTheme from '../../hooks/useTheme';
 import {
   getUserChats,
   getAIResponse,
   selectConversationById,
   selectAllConversations,
-} from "../../store/chatStore";
-import { Box, VStack, HStack } from "native-base";
-import { CustomModal } from "../modal";
+} from '../../store/chatStore';
+import { Box, VStack, HStack } from 'native-base';
+import { CustomModal } from '../modal';
 
 const MessageBubble = ({ message }) => {
-  const isAI = message.role === "ai";
+  const isAI = message.role === 'ai';
   return (
     <View style={isAI ? styles().aiBubble : styles().userBubble}>
       <Text style={isAI ? styles().aiText : styles().userText}>
@@ -45,10 +45,10 @@ const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
   const user = useSelector((state) => state.auth.user);
   const [conversationId, setConversationId] = useState(defaultChatId);
   const conversation = useSelector((state) =>
-    selectConversationById(state, conversationId)
+    selectConversationById(state, conversationId),
   );
   const conversations = useSelector((state) => selectAllConversations(state));
-  const [userInput, setUserInput] = useState("");
+  const [userInput, setUserInput] = useState('');
   const [parsedMessages, setParsedMessages] = useState([]);
 
   useEffect(() => {
@@ -61,12 +61,18 @@ const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
     }
   }, [conversation]);
 
+  /**
+   * Parses a conversation history string and returns an array of objects representing each message in the conversation.
+   *
+   * @param {string} historyString - The string containing the conversation history.
+   * @return {Array} An array of objects representing each message in the conversation.
+   */
   const parseConversationHistory = (historyString) => {
-    const historyArray = historyString.split("\n");
+    const historyArray = historyString.split('\n');
     return historyArray.reduce((accumulator, current) => {
-      const isAI = current.startsWith("AI:");
+      const isAI = current.startsWith('AI:');
       const content = isAI ? current.substring(3) : current;
-      const role = isAI ? "ai" : "user";
+      const role = isAI ? 'ai' : 'user';
       if (content) {
         accumulator.push({ role, content });
       }
@@ -74,11 +80,16 @@ const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
     }, []);
   };
 
+  /**
+   * Handles sending a message.
+   *
+   * @return {Promise<void>} This function returns nothing.
+   */
   const handleSendMessage = async () => {
     await dispatch(
-      getAIResponse({ userId: user._id, conversationId, userInput })
+      getAIResponse({ userId: user._id, conversationId, userInput }),
     );
-    setUserInput("");
+    setUserInput('');
     dispatch(getUserChats(user._id));
   };
 
@@ -107,8 +118,8 @@ const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
               <TouchableOpacity
                 style={styles().newChatButton}
                 onPress={() => {
-                  setConversationId(null)
-                  setParsedMessages([])
+                  setConversationId(null);
+                  setParsedMessages([]);
                 }}
               >
                 <Text style={styles().newChatButtonText}>New Chat</Text>
@@ -130,7 +141,10 @@ const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
           value={userInput}
           placeholder="Type a message..."
         />
-        <TouchableOpacity style={styles().sendButton} onPress={handleSendMessage}>
+        <TouchableOpacity
+          style={styles().sendButton}
+          onPress={handleSendMessage}
+        >
           <Text style={styles().sendText}>Send</Text>
         </TouchableOpacity>
       </View>
@@ -140,7 +154,9 @@ const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
 
 const ChatModalTrigger = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const handleClose = () => setIsOpen(false);
+  const handleClose = () => {
+    setIsOpen(false);
+  };
 
   return (
     <Box style={styles().container}>
@@ -158,13 +174,18 @@ const ChatModalTrigger = () => {
 };
 
 const styles = () => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } = UseTheme();
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
 
   return StyleSheet.create({
     container: { flex: 1, padding: 16 },
-    headerText: { fontSize: 24, fontWeight: "bold" },
-    flatList: { flexGrow: 1, justifyContent: "flex-end" },
-    inputContainer: { flexDirection: "row", alignItems: "center", marginTop: 8 },
+    headerText: { fontSize: 24, fontWeight: 'bold' },
+    flatList: { flexGrow: 1, justifyContent: 'flex-end' },
+    inputContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginTop: 8,
+    },
     input: {
       flex: 1,
       height: 40,
@@ -182,7 +203,7 @@ const styles = () => {
     },
     sendText: { color: currentTheme.colors.white },
     aiBubble: {
-      alignSelf: "flex-start",
+      alignSelf: 'flex-start',
       backgroundColor: currentTheme.colors.primary,
       borderRadius: 8,
       paddingHorizontal: 12,
@@ -191,8 +212,8 @@ const styles = () => {
       marginHorizontal: 16,
     },
     userBubble: {
-      alignSelf: "flex-end",
-      backgroundColor: "#e0e0e0",
+      alignSelf: 'flex-end',
+      backgroundColor: '#e0e0e0',
       borderRadius: 8,
       paddingHorizontal: 12,
       paddingVertical: 8,
@@ -200,18 +221,18 @@ const styles = () => {
       marginHorizontal: 16,
     },
     aiText: { color: currentTheme.colors.white },
-    userText: { color: "black" },
+    userText: { color: 'black' },
     chatSelector: {
-      backgroundColor: "#e0e0e0",
+      backgroundColor: '#e0e0e0',
       padding: 10,
       marginVertical: 5,
       borderRadius: 5,
     },
     chatSelectorText: { fontSize: 16 },
     chatSelectorContainer: {
-      flexDirection: "row",
-      justifyContent: "space-between",
-      alignItems: "center",
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
     },
     newChatButton: {
       backgroundColor: currentTheme.colors.background,
@@ -224,6 +245,6 @@ const styles = () => {
       color: currentTheme.colors.white,
     },
   });
-}
+};
 
 export default ChatModalTrigger;

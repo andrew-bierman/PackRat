@@ -1,26 +1,31 @@
-import { View, StyleSheet, Image, Text } from "react-native";
+/** @format */
 
-import { Link } from "expo-router";
+import { View, StyleSheet, Image, Text } from 'react-native';
 
-import { Desktop, Tablet, Mobile } from "../media";
-import { useAuth } from "../auth/provider";
+import { Link } from 'expo-router';
 
-import { theme } from "../theme";
-import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
-import { FontAwesome } from "@expo/vector-icons";
-import { EvilIcons } from "@expo/vector-icons";
-import { AntDesign } from "@expo/vector-icons";
-import { MaterialIcons } from "@expo/vector-icons";
+import { Desktop, Tablet, Mobile } from '../media';
+import { useAuth } from '../auth/provider';
 
-import packratlogo from "../assets/packrat_icon.png";
-import { useState } from "react";
+import { theme } from '../theme';
+import {
+  Entypo,
+  MaterialCommunityIcons,
+  FontAwesome,
+  EvilIcons,
+  AntDesign,
+  MaterialIcons,
+} from '@expo/vector-icons';
 
-import { useDispatch, useSelector } from "react-redux";
+import packratlogo from '../assets/packrat_icon.png';
+import { useState } from 'react';
 
-import { AuthStateListener } from "../../client/auth/AuthStateListener";
-import { signOut } from "../store/authStore";
-import SVGLogoComponent from "../components/logo";
-import UseTheme from "../hooks/useTheme";
+import { useDispatch, useSelector } from 'react-redux';
+
+import { AuthStateListener } from '../../client/auth/AuthStateListener';
+import { signOut } from '../store/authStore';
+import SVGLogoComponent from '../components/logo';
+import UseTheme from '../hooks/useTheme';
 const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     UseTheme();
@@ -29,6 +34,12 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
 
   const dispatch = useDispatch();
 
+  /**
+   * Handles the sign out functionality.
+   *
+   * @param {type} paramName - description of parameter
+   * @return {type} description of return value
+   */
   const handleSignOut = () => {
     dispatch(signOut());
   };
@@ -38,12 +49,12 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
   return user ? (
     <View style={desktopContainer}>
       <AuthStateListener />
-      <View style={{ flexDirection: "row", alignItems: "center", gap: 1 }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 1 }}>
         {/* <Image
           style={isMobile ? styles().smallLogo : styles().logo}
           source={packratlogo}
         /> */}
-        <View style={{ margin: "10px" }}>
+        <View style={{ margin: '10px' }}>
           <SVGLogoComponent
             width={isMobile ? 48 : 64}
             height={isMobile ? 48 : 64}
@@ -138,7 +149,7 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
               size={24}
               color={currentTheme.colors.iconColor}
             />
-            <Text style={{ color: "white" }} onPress={() => handleSignOut()}>
+            <Text style={{ color: 'white' }} onPress={() => handleSignOut()}>
               Logout
             </Text>
           </View>
@@ -182,7 +193,7 @@ const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
 
 export default function Navigation() {
   return (
-    <View style={{ width: "100%" }}>
+    <View style={{ width: '100%' }}>
       <Desktop>
         <MutualContent
           desktopContainer={styles().desktopContainer}
@@ -208,43 +219,44 @@ export default function Navigation() {
 }
 
 const styles = () => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } = UseTheme();
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
   return StyleSheet.create({
     mutualStyles: {
       backgroundColor: currentTheme.colors.background,
       flex: 1,
-      flexDirection: "row",
-      height: "100%",
+      flexDirection: 'row',
+      height: '100%',
     },
-  
+
     desktopContainer: {
       backgroundColor: currentTheme.colors.background,
-      width: "100%",
-      flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "space-between",
+      width: '100%',
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
       padding: 16,
       paddingHorizontal: 90,
     },
-  
+
     mobileContainer: {
       backgroundColor: currentTheme.colors.background,
-      width: "100%",
-      flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "space-between",
+      width: '100%',
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
       padding: 25,
-      position: "relative",
+      position: 'relative',
       // height: "300px",
     },
-  
+
     desktopNav: {
-      flexDirection: "row",
+      flexDirection: 'row',
       gap: 15,
       backgroundColor: currentTheme.colors.background,
-      alignItems: "center",
+      alignItems: 'center',
     },
-  
+
     logo: {
       width: 75,
       height: 75,
@@ -255,30 +267,30 @@ const styles = () => {
       width: 100,
       height: 95,
     },
-  
+
     mobileLink: {
-      flexDirection: "row",
-      alignItems: "center",
+      flexDirection: 'row',
+      alignItems: 'center',
       gap: 10,
       paddingVertical: 10,
       paddingHorizontal: 15,
       borderBottomColor: currentTheme.colors.border,
       borderBottomWidth: 1,
-      width: "100%",
+      width: '100%',
       color: currentTheme.colors.white,
     },
-  
+
     link: {
-      flexDirection: "row",
-      alignItems: "center",
+      flexDirection: 'row',
+      alignItems: 'center',
       gap: 10,
       paddingVertical: 10,
       paddingHorizontal: 15,
       borderColor: currentTheme.colors.border,
       borderWidth: 1,
       borderRadius: 6,
-      cursor: "pointer",
+      cursor: 'pointer',
       color: currentTheme.colors.white,
     },
   });
-} 
+};

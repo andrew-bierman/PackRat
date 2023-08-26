@@ -1,3 +1,5 @@
+import { UnableToEditTripError } from "../../helpers/errors";
+import { responseHandler } from "../../helpers/responseHandler";
 import Trip from "../../models/tripModel";
 
 /**
@@ -6,16 +8,17 @@ import Trip from "../../models/tripModel";
  * @param {Object} res - The response object.
  * @return {Object} The updated trip object.
  */
-export const editTrip = async (req, res) => {
+export const editTrip = async (req, res, next) => {
   try {
     const { _id } = req.body;
 
     const newTrip = await Trip.findOneAndUpdate({ _id }, req.body, {
       returnOriginal: false,
-    }).populate("packs");
+    }).populate('packs');
 
-    res.status(200).json(newTrip);
+    res.locals.data = newTrip;
+    responseHandler(res);
   } catch (error) {
-    res.status(404).json({ msg: "Unable to edit trip" });
+    next(UnableToEditTripError)
   }
 };
