@@ -1,7 +1,6 @@
-import { editGlobalItemAsDuplicateService } from "../../services/item/item.service";
-import { UnableToDeleteItemError } from "../../helpers/errors";
-import { responseHandler } from "../../helpers/responseHandler";
-import { editGlobalItemAsDuplicateService } from "../../services/item/item.service";
+import { editGlobalItemAsDuplicateService } from '../../services/item/item.service';
+import { UnableToDeleteItemError } from '../../helpers/errors';
+import { responseHandler } from '../../helpers/responseHandler';
 
 /**
  * Edit a global item by duplicating it with new changes.
@@ -18,7 +17,7 @@ import { editGlobalItemAsDuplicateService } from "../../services/item/item.servi
  * @param {Object} res - The response object.
  * @return {Object} The updated item.
  */
-export const editGlobalItemAsDuplicate = async (req, res,next) => {
+export const editGlobalItemAsDuplicate = async (req, res, next) => {
   try {
     const { itemId } = req.params;
     const { packId, name, weight, quantity, unit, type } = req.body;
@@ -36,6 +35,6 @@ export const editGlobalItemAsDuplicate = async (req, res,next) => {
     res.locals.data = newItem;
     responseHandler(res);
   } catch (error) {
-    next(UnableToDeleteItemError)
+    next(UnableToDeleteItemError);
   }
 };
