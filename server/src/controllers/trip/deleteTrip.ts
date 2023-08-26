@@ -1,4 +1,4 @@
-import Trip from "../../models/tripModel";
+import Trip from '../../models/tripModel';
 
 /**
  * Deletes a trip from the database.
@@ -11,8 +11,8 @@ export const deleteTrip = async (req, res) => {
     const { tripId } = req.body;
 
     await Trip.findOneAndDelete({ _id: tripId });
-    res.status(200).json({ msg: "trip was deleted successfully" });
+    res.status(200).json({ msg: 'trip was deleted successfully' });
   } catch (error) {
-    res.status(404).json({ msg: "Unable to delete trip" });
+    res.status(404).json({ msg: 'Unable to delete trip' });
   }
 };

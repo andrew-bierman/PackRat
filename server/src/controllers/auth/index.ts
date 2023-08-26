@@ -1,3 +1,3 @@
-export *   from "./checkCode";
-export *  from "./emailExists";
-export * from "./updatePassword";
+export * from './checkCode';
+export * from './emailExists';
+export * from './updatePassword';

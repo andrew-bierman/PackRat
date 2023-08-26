@@ -1,19 +1,24 @@
-import About from "../../screens/about";
-import { Platform, ScrollView, StyleSheet } from "react-native";
-import { Stack as Header } from "expo-router";
+import About from '../../screens/about';
+import { Platform, ScrollView, StyleSheet } from 'react-native';
+import { Stack as Header } from 'expo-router';
 
+/**
+ * Renders the AboutRoute component.
+ *
+ * @return {JSX.Element} The rendered component.
+ */
 export default function AboutRoute() {
   return (
     <ScrollView
       showsHorizontalScrollIndicator={false}
       contentContainerStyle={styles.menuBar}
     >
-      {Platform.OS === "web" ?
+      {Platform.OS === 'web' ? (
         <>
           <Header.Screen
             options={{
               // https://reactnavigation.org/docs/headers#setting-the-header-title
-              title: "About",
+              title: 'About',
               // https://reactnavigation.org/docs/headers#adjusting-header-styles
 
               // https://reactnavigation.org/docs/headers#replacing-the-title-with-a-custom-component
@@ -21,14 +26,15 @@ export default function AboutRoute() {
           />
           <About />
         </>
-        :
-        <About />}
+      ) : (
+        <About />
+      )}
     </ScrollView>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   menuBar: {
-    paddingBottom: 120
+    paddingBottom: 120,
   },
-})
+});

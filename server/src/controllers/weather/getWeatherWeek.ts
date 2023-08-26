@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios';
 
 /**
  * Retrieves the weather forecast for the week based on latitude and longitude parameters.
@@ -11,10 +11,10 @@ export const getWeatherWeek = async (req, res) => {
   const OPENWEATHER_KEY = process.env.OPENWEATHER_KEY;
   const latParams = req.query.lat;
   const lonParams = req.query.lon;
-  const unitParams = "imperial";
+  const unitParams = 'imperial';
   const apiParams = true;
 
-  let params = `?`;
+  let params = '?';
   if (latParams) params += `lat=${latParams}`;
   if (lonParams) params += `&lon=${lonParams}`;
   if (unitParams) params += `&units=${unitParams}`;
@@ -22,7 +22,7 @@ export const getWeatherWeek = async (req, res) => {
 
   const url = root + params;
 
-  console.log("url", url);
+  console.log('url', url);
 
   try {
     const response = await axios.get(url);
@@ -30,7 +30,7 @@ export const getWeatherWeek = async (req, res) => {
     res.send(response.data);
   } catch (error) {
     res.status(404).send({
-      message: "Error retrieving weather data from OpenWeather",
+      message: 'Error retrieving weather data from OpenWeather',
       error,
     });
   }

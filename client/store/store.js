@@ -1,29 +1,29 @@
-import { combineReducers } from "@reduxjs/toolkit";
-import { configureStore } from "@reduxjs/toolkit";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { persistReducer, persistStore } from "redux-persist";
-import apiMessageMiddleware from "./middleware/apiMiddleware";
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { persistReducer, persistStore } from 'redux-persist';
 
-// all reducers
-import weatherReducer from "./weatherStore";
-import dropdownReducer from "./dropdownStore";
-import authReducer from "./authStore";
-import trailsReducer from "./trailsStore";
-import searchReducer from "./searchStore";
-import parksReducer from "./parksStore";
-import itemsReducer from "./itemsStore";
-import packsReducer from "./packsStore";
-import favoritesReducer from "./favoritesStore";
-import feedReducer from "./feedStore";
-import singlePackReducer from "./singlePackStore";
-import singleTripReducer from "./singleTripStore";
-import tripsReducer from "./tripsStore";
-import gpxReducer from "./gpxStore";
-import destinationReducer from "./destinationStore";
-import chatReducer from "./chatStore";
-import globalItems from "./globalItemsStore";
+// middleware
+import apiMessageMiddleware from './middleware/apiMessageMiddleware';
+
+// all reducers - TODO: move to separate folder
+import weatherReducer from './weatherStore';
+import dropdownReducer from './dropdownStore';
+import authReducer from './authStore';
+import trailsReducer from './trailsStore';
+import searchReducer from './searchStore';
+import parksReducer from './parksStore';
+import itemsReducer from './itemsStore';
+import packsReducer from './packsStore';
+import favoritesReducer from './favoritesStore';
+import feedReducer from './feedStore';
+import singlePackReducer from './singlePackStore';
+import singleTripReducer from './singleTripStore';
+import tripsReducer from './tripsStore';
+import gpxReducer from './gpxStore';
+import destinationReducer from './destinationStore';
+import chatReducer from './chatStore';
+import globalItems from './globalItemsStore';
 import userStore from './userStore';
-import bearerTokenMiddleware from "./middleware/bearerTokenMiddleware";
 
 // combine reducers
 const rootReducer = combineReducers({
@@ -44,15 +44,14 @@ const rootReducer = combineReducers({
   destination: destinationReducer,
   chat: chatReducer,
   globalItems,
-  chat: chatReducer,
   userStore,
 });
 
 // configure persist store and whitelist reducers
 const persistConfig = {
-  key: "root",
+  key: 'root',
   storage: AsyncStorage,
-  whitelist: ["auth"], // add reducers to persist here
+  whitelist: ['auth'], // add reducers to persist here
 };
 
 // create persisted reducer
@@ -64,13 +63,9 @@ const store = configureStore({
     getDefaultMiddleware({
       serializableCheck: {
         // Ignore these action types
-        ignoredActions: ["persist/PERSIST"],
+        ignoredActions: ['persist/PERSIST'],
       },
-    })
-    .concat(
-      bearerTokenMiddleware,
-      apiMessageMiddleware
-    ),
+    }).concat(apiMessageMiddleware),
 });
 
 const persistor = persistStore(store);
