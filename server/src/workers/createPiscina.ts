@@ -1,5 +1,5 @@
-import path from "path";
-import Piscina from "piscina";
+import path from 'path';
+import Piscina from 'piscina';
 
 /**
  * Creates a Piscina instance with the given relative path.

@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect } from 'react';
 import {
   VStack,
   Box,
@@ -7,23 +7,24 @@ import {
   Text,
   Menu,
   ThreeDotsIcon,
-} from "native-base";
+} from 'native-base';
 import {
   StyleSheet,
   TouchableOpacity,
   Clipboard,
   TextInput,
   Pressable,
-} from "react-native";
-import { EditableInput } from "../EditableText";
-import { theme } from "../../theme";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useDispatch, useSelector } from "react-redux";
-import { useRouter, Link } from "expo-router";
-import { ThreeDotsMenu } from "../ThreeDotsMenu";
-import UseTheme from "../../hooks/useTheme";
-import { InformUser } from "../../utils/ToastUtils";
-import { SearchItem } from "../item/searchItem";
+} from 'react-native';
+import { EditableInput } from '../EditableText';
+import { theme } from '../../theme';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { useRouter, Link } from 'expo-router';
+import { ThreeDotsMenu } from '../ThreeDotsMenu';
+import UseTheme from '../../hooks/useTheme';
+import { InformUser } from '../../utils/ToastUtils';
+import { SearchItem } from '../item/searchItem';
+import Loader from '../Loader';
 
 export const CustomCard = ({
   title,
@@ -41,9 +42,9 @@ export const CustomCard = ({
   const titleRef = useRef(null);
   const dispatch = useDispatch();
   const router = useRouter();
-
-  const user = useSelector((state) => state.auth.user);
-  const userId = user["_id"];
+  const isLoading = useSelector((state: any) => state.singlePack.isLoading);
+  const user = useSelector((state: any) => state.auth.user);
+  const userId = user['_id'];
 
   /**
    * Handles copying the link to the clipboard and updates the copy state.
@@ -59,26 +60,26 @@ export const CustomCard = ({
       setIsCopied(false);
     }, 2000);
     InformUser({
-      title: "Link copied to clipboard",
-      placement: "bottom",
+      title: 'Link copied to clipboard',
+      placement: 'bottom',
       duration: 2000,
     });
 
     return () => clearTimeout(resetCopyStateTimeout);
   };
 
-  if (type === "pack") {
+  if (type === 'pack') {
     return (
       <Box
         style={styles.mainContainer}
         alignSelf="center"
-        alignItems={["center", "center", "flex-start", "flex-start"]}
-        w={["100%", "100%", "100%", "90%"]}
-        direction={["column", "column", "row", "row"]}
+        alignItems={['center', 'center', 'flex-start', 'flex-start']}
+        w={['100%', '100%', '100%', '90%']}
+        flexDirection={['column', 'column', 'row', 'row']}
         rounded="lg"
         flexGrow={1}
       >
-        <SearchItem placeholder={"Search Item"} />
+        {isLoading && <Loader />}
         <VStack space="4" width="100%" divider={<Divider />}>
           <Box
             px="4"
@@ -98,24 +99,25 @@ export const CustomCard = ({
             </Box>
             <Box flexDirection="row" alignItems="center">
               <Box mx="5">
-                <Link href={`/profile/${data["owner_id"]}`}>
+                <Link href={`/profile/${data['owner_id']}`}>
                   <Text>
-                    {user._id === data["owner_id"]
-                      ? "Your Profile"
+                    {user._id === data['owner_id']
+                      ? 'Your Profile'
                       : `View ${
                           data.owners && data.owners.length
                             ? data.owners[0].name
-                            : "Profile"
+                            : 'Profile'
                         }`}
                   </Text>
                 </Link>
               </Box>
               {link && (
+                // @ts-ignore
                 <Box
-                  flexDir={"row"}
+                  flexDir={'row'}
                   style={{
-                    gap: "5px",
-                    alignItems: "center",
+                    gap: '5px',
+                    alignItems: 'center',
                   }}
                 >
                   {isCopied ? (
@@ -153,8 +155,17 @@ export const CustomCard = ({
           <Box
             px="4"
             style={{
-              alignItems: "center",
-              justifyContent: "center",
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <SearchItem placeholder={'Search Item'} />
+          </Box>
+          <Box
+            px="4"
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
           >
             {content}
@@ -167,14 +178,14 @@ export const CustomCard = ({
     );
   }
 
-  if (type === "trip") {
+  if (type === 'trip') {
     return (
       <Box
         style={styles.mainContainer}
         alignSelf="center"
-        alignItems={["center", "center", "flex-start", "flex-start"]}
-        w={["100%", "100%", "100%", "90%"]}
-        direction={["column", "column", "row", "row"]}
+        alignItems={['center', 'center', 'flex-start', 'flex-start']}
+        w={['100%', '100%', '100%', '90%']}
+        flexDirection={['column', 'column', 'row', 'row']}
         rounded="lg"
         flexGrow={1}
       >
@@ -190,16 +201,15 @@ export const CustomCard = ({
             <Box flexDirection="row" alignItems="center">
               <Box mx="5">
                 <Link
-                  href={`/profile/${data.owner_id && data["owner_id"]._id}`}
+                  href={`/profile/${data.owner_id && data['owner_id']._id}`}
                 >
-                  {console.log({ data })}
                   <Text>
-                    {user._id === data["owner_id"]
-                      ? "Your Profile"
+                    {user._id === data['owner_id']
+                      ? 'Your Profile'
                       : `View ${
                           data.owner_id
-                            ? "@" + data["owner_id"].username
-                            : "Profile"
+                            ? '@' + data['owner_id'].username
+                            : 'Profile'
                         }`}
                   </Text>
                 </Link>
@@ -235,8 +245,8 @@ export const CustomCard = ({
             px="4"
             pb="4"
             style={{
-              alignItems: "center",
-              justifyContent: "center",
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
           >
             {content}
@@ -255,20 +265,20 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.card,
     flex: 1,
     gap: 45,
-    justifyContent: "space-between",
-    alignItems: "center",
+    justifyContent: 'space-between',
+    alignItems: 'center',
     paddingLeft: 25,
     paddingRight: 25,
     paddingTop: 15,
     paddingBottom: 15,
-    border: "1",
+    border: '1',
   },
   containerMobile: {
     backgroundColor: theme.colors.card,
     flex: 1,
     gap: 45,
-    justifyContent: "space-between",
-    alignItems: "center",
+    justifyContent: 'space-between',
+    alignItems: 'center',
     padding: 15,
   },
 });

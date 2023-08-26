@@ -1,4 +1,4 @@
-import { useMediaQuery } from "react-responsive";
+import { useMediaQuery } from 'react-responsive';
 
 /**
  * A function that renders the provided 'children' component only if the device is a desktop.

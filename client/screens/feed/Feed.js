@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   Container,
   Box,
@@ -13,40 +13,40 @@ import {
   Divider,
   Center,
   Flex,
-} from "native-base";
-import { AntDesign } from "@expo/vector-icons";
-import { StyleSheet, FlatList, View } from "react-native";
-import Card from "../../components/feed/FeedCard";
-import DropdownComponent from "../../components/Dropdown";
-import { theme } from "../../theme";
+} from 'native-base';
+import { AntDesign } from '@expo/vector-icons';
+import { StyleSheet, FlatList, View } from 'react-native';
+import Card from '../../components/feed/FeedCard';
+import DropdownComponent from '../../components/Dropdown';
+import { theme } from '../../theme';
 import {
   getPublicPacks,
   getPublicTrips,
   getFavoritePacks,
-} from "../../store/feedStore";
+} from '../../store/feedStore';
 import {
   changePackStatus,
   fetchUserPacks,
   selectAllPacks,
-} from "../../store/packsStore";
-import { fetchUserTrips } from "../../store/tripsStore";
-import { useRouter } from "expo-router";
-import { fuseSearch } from "../../utils/fuseSearch";
+} from '../../store/packsStore';
+import { fetchUserTrips } from '../../store/tripsStore';
+import { useRouter } from 'expo-router';
+import { fuseSearch } from '../../utils/fuseSearch';
 
 const URL_PATHS = {
-  userPacks: "/pack/",
-  favoritePacks: "/pack/",
-  userTrips: "/trip/",
+  userPacks: '/pack/',
+  favoritePacks: '/pack/',
+  userTrips: '/trip/',
 };
 
 const ERROR_MESSAGES = {
-  public: "No Public Feed Data Available",
-  userPacks: "No User Packs Available",
-  favoritePacks: "No Favorite Packs Available",
-  userTrips: "No User Trips Available",
+  public: 'No Public Feed Data Available',
+  userPacks: 'No User Packs Available',
+  favoritePacks: 'No Favorite Packs Available',
+  userTrips: 'No User Trips Available',
 };
 
-const dataValues = ["Favorite", "Most Recent"];
+const dataValues = ['Favorite', 'Most Recent'];
 
 const FeedSearchFilter = ({
   feedType,
@@ -65,7 +65,7 @@ const FeedSearchFilter = ({
           <Input
             w="80%"
             variant="outline"
-            placeholder={`Search ${feedType ? feedType : "Feed"}`}
+            placeholder={`Search ${feedType || 'Feed'}`}
             onChangeText={setSearchQuery}
           />
           <IconButton
@@ -80,11 +80,11 @@ const FeedSearchFilter = ({
         flexDirection="row"
         justifyContent="space-between"
         alignItems="center"
-        flexWrap={"wrap"}
+        flexWrap={'wrap'}
         padding={2}
         margin={2}
       >
-        {feedType === "public" && (
+        {feedType === 'public' && (
           <HStack space={3} alignItems="center">
             <Text fontSize="lg" fontWeight="bold">
               Packs
@@ -117,7 +117,7 @@ const FeedSearchFilter = ({
             width={150}
           />
         </HStack>
-        {(feedType === "userPacks" || feedType === "userTrips") && (
+        {(feedType === 'userPacks' || feedType === 'userTrips') && (
           <Button onPress={handleCreateClick}>Create</Button>
         )}
       </Center>
@@ -126,15 +126,15 @@ const FeedSearchFilter = ({
   );
 };
 
-const Feed = ({ feedType = "public" }) => {
+const Feed = ({ feedType = 'public' }) => {
   const router = useRouter();
 
-  const [queryString, setQueryString] = useState("");
+  const [queryString, setQueryString] = useState('');
   const [selectedTypes, setSelectedTypes] = useState({
     pack: true,
     trip: false,
   });
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
 
   const dispatch = useDispatch();
   const ownerId = useSelector((state) => state.auth.user?._id);
@@ -144,14 +144,14 @@ const Feed = ({ feedType = "public" }) => {
   const userTripsData = useSelector((state) => state.trips.userTrips);
 
   useEffect(() => {
-    if (feedType === "public") {
+    if (feedType === 'public') {
       dispatch(getPublicPacks(queryString));
       dispatch(getPublicTrips(queryString));
-    } else if (feedType === "userPacks" && ownerId) {
+    } else if (feedType === 'userPacks' && ownerId) {
       dispatch(fetchUserPacks(ownerId));
-    } else if (feedType === "userTrips" && ownerId) {
+    } else if (feedType === 'userTrips' && ownerId) {
       dispatch(fetchUserTrips(ownerId));
-    } else if (feedType === "favoritePacks") {
+    } else if (feedType === 'favoritePacks') {
       dispatch(getFavoritePacks());
     }
   }, [queryString, feedType, ownerId]);
@@ -163,24 +163,24 @@ const Feed = ({ feedType = "public" }) => {
    */
   const renderData = () => {
     let data = [];
-    if (feedType === "public") {
+    if (feedType === 'public') {
       if (selectedTypes?.pack) {
         data = [...data, ...publicPacksData];
       }
       if (selectedTypes?.trip) {
         data = [...data, ...publicTripsData];
       }
-    } else if (feedType === "userPacks") {
+    } else if (feedType === 'userPacks') {
       data = userPacksData;
-    } else if (feedType === "userTrips") {
+    } else if (feedType === 'userTrips') {
       data = userTripsData;
-    } else if (feedType === "favoritePacks") {
+    } else if (feedType === 'favoritePacks') {
       data = userPacksData.filter((pack) => pack.isFavorite);
     }
 
     // Fuse search
-    let keys = ["name", "items.name", "items.category"];
-    let options = {
+    const keys = ['name', 'items.name', 'items.category'];
+    const options = {
       // your options
       threshold: 0.42,
       location: 0,
@@ -189,7 +189,7 @@ const Feed = ({ feedType = "public" }) => {
       minMatchCharLength: 1,
     };
 
-    let results = fuseSearch(data, searchQuery, keys, options);
+    const results = fuseSearch(data, searchQuery, keys, options);
 
     // Convert fuse results back into the format we want
     // if searchQuery is empty, use the original data
@@ -209,9 +209,9 @@ const Feed = ({ feedType = "public" }) => {
         handleCreateClick={handleCreateClick}
       />
     );
-    return Platform.OS === "web" ? (
+    return Platform.OS === 'web' ? (
       <View style={styles.cardContainer}>
-        {console.log({data})}
+        {console.log({ data })}
         {feedSearchFilterComponent}
         {data?.map((item) => (
           <Card key={item._id} type={item.type} {...item} />
@@ -253,7 +253,7 @@ const Feed = ({ feedType = "public" }) => {
   };
 
   const urlPath = URL_PATHS[feedType];
-  const createUrlPath = URL_PATHS[feedType] + "create";
+  const createUrlPath = URL_PATHS[feedType] + 'create';
   const errorText = ERROR_MESSAGES[feedType];
 
   const handleCreateClick = () => {
@@ -275,22 +275,22 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.white,
     padding: 15,
     fontSize: 18,
-    width: "100%",
+    width: '100%',
     borderRadius: 10,
   },
   searchContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     marginBottom: 10,
     padding: 10,
     borderRadius: 5,
   },
   cardContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-around",
-    alignItems: "center",
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+    alignItems: 'center',
   },
 });
 

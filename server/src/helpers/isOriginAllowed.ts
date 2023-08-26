@@ -16,7 +16,9 @@ export const isOriginAllowed = (origin: string, allowedOrigin: string) => {
   const allowedPattern = allowedOriginDomain.replace(/\./g, '\\.');
 
   // Construct the final regex using the patterns.
-  const allowedOriginRegex = new RegExp(`^(${packratMasterPattern}|${packratPrPattern}|${packratDevPrPattern}|${allowedPattern})$`);
+  const allowedOriginRegex = new RegExp(
+    `^(${packratMasterPattern}|${packratPrPattern}|${packratDevPrPattern}|${allowedPattern})$`,
+  );
 
   return allowedOriginRegex.test(originDomain);
 };

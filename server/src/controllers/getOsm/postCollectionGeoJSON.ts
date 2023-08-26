@@ -1,4 +1,5 @@
-import { postCollectionGeoJSONService } from "../../services/osm/osm.service";
+import { responseHandler } from '../../helpers/responseHandler';
+import { postCollectionGeoJSONService } from '../../services/osm/osm.service';
 
 /**
  * Handles the POST request for collection GeoJSON.
@@ -7,23 +8,11 @@ import { postCollectionGeoJSONService } from "../../services/osm/osm.service";
  * @return {Promise<void>} - returns a Promise that resolves to undefined
  */
 export const postCollectionGeoJSON = async (req, res) => {
-  try {
-    console.log("in postGeoJSON");
-    const geojson = req.body;
+  console.log('in postGeoJSON');
+  const geojson = req.body;
 
-    const result = await postCollectionGeoJSONService(geojson);
+  const result = await postCollectionGeoJSONService(geojson);
 
-    res.status(201).json({
-      status: "success",
-      data: {
-        result,
-      },
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(400).json({
-      status: "fail",
-      message: error.message,
-    });
-  }
+  res.locals.data = result;
+  responseHandler(res);
 };

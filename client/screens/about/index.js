@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   View,
   StyleSheet,
@@ -6,17 +6,17 @@ import {
   Image,
   Platform,
   TouchableOpacity,
-} from "react-native";
-import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
-import { darkTheme, theme } from "../../theme";
-import { Desktop, Mobile, Tablet } from "../../media";
-import { Button, HStack } from "native-base";
-import * as Linking from "expo-linking";
-import UseTheme from "../../hooks/useTheme";
+} from 'react-native';
+import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
+import { darkTheme, theme } from '../../theme';
+import { Desktop, Mobile, Tablet } from '../../media';
+import { Button, HStack } from 'native-base';
+import * as Linking from 'expo-linking';
+import UseTheme from '../../hooks/useTheme';
 const AboutContent = ({ desktopContainer, isMobile }) => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     UseTheme();
-  console.log("isDark, isLight", isDark, isLight);
+  console.log('isDark, isLight', isDark, isLight);
   /**
    * Handles the GitHub link functionality.
    *
@@ -24,7 +24,7 @@ const AboutContent = ({ desktopContainer, isMobile }) => {
    */
   const handleGithubLink = () => {
     // Add the URL of your GitHub repo here
-    const githubUrl = "https://github.com/andrew-bierman/PackRat";
+    const githubUrl = 'https://github.com/andrew-bierman/PackRat';
     Linking.openURL(githubUrl);
   };
 
@@ -36,7 +36,7 @@ const AboutContent = ({ desktopContainer, isMobile }) => {
    */
   const handleDiscordLink = () => {
     // Add the URL of your Discord server here
-    const discordUrl = "https://discord.gg/jFUuYBTXfY";
+    const discordUrl = 'https://discord.gg/jFUuYBTXfY';
     Linking.openURL(discordUrl);
   };
 
@@ -173,7 +173,7 @@ const AboutContent = ({ desktopContainer, isMobile }) => {
 export default function About() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     UseTheme();
-  return Platform.OS === "web" ? (
+  return Platform.OS === 'web' ? (
     <View style={[isDark ? styles.containerDark : styles.container]}>
       <Desktop>
         <AboutContent desktopContainer={styles.webLogoContainer} />
@@ -203,38 +203,38 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: theme.colors.background,
     padding: 20,
-    alignItems: "center",
+    alignItems: 'center',
   },
   containerDark: {
     flex: 1,
     backgroundColor: darkTheme.colors.background,
     padding: 20,
-    alignItems: "center",
+    alignItems: 'center',
   },
   headerContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 20,
-    justifyContent: "center",
+    justifyContent: 'center',
   },
   header: {
     fontSize: 24,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: theme.colors.text,
     marginRight: 10,
   },
   headerDark: {
     fontSize: 24,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: darkTheme.colors.text,
     marginRight: 10,
   },
 
   buttonContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    width: "100%",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
     marginBottom: 20,
     marginTop: 20,
     marginLeft: 0,
@@ -242,24 +242,24 @@ const styles = StyleSheet.create({
   },
 
   githubButton: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     // backgroundColor: theme.colors.primary,
     margin: 5,
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 4,
-    backgroundColor: "#24292E",
+    backgroundColor: '#24292E',
   },
   discordButton: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     // backgroundColor: theme.colors.primary,
     margin: 5,
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 4,
-    backgroundColor: "#7289DA",
+    backgroundColor: '#7289DA',
   },
   githubIcon: {
     fontSize: 24,
@@ -288,7 +288,7 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
     // fontFamily: "sans-serif",
     color: theme.colors.text,
-    textAlign: "center",
+    textAlign: 'center',
     marginBottom: 20,
   },
   textDark: {
@@ -297,32 +297,32 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
     // fontFamily: "sans-serif",
     color: darkTheme.colors.text,
-    textAlign: "center",
+    textAlign: 'center',
     marginBottom: 20,
   },
   logoContainer: {
-    width: "50%",
-    height: "auto",
+    width: '50%',
+    height: 'auto',
   },
   webLogoContainer: {
-    width: "25%",
-    height: "auto",
-    alignSelf: "center",
-    justifyContent: "center",
+    width: '25%',
+    height: 'auto',
+    alignSelf: 'center',
+    justifyContent: 'center',
   },
   mobileContainer: {
-    width: "50%",
-    height: "auto",
-    alignSelf: "center",
+    width: '50%',
+    height: 'auto',
+    alignSelf: 'center',
   },
   mobileLogo: {
     width: 160,
     height: 150,
-    alignSelf: "center",
+    alignSelf: 'center',
   },
   logo: {
-    width: "100%",
-    height: "auto",
-    alignSelf: "center",
+    width: '100%',
+    height: 'auto',
+    alignSelf: 'center',
   },
 });
