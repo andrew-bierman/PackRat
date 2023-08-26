@@ -1,6 +1,14 @@
-import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import {
+  combineReducers,
+  configureStore,
+  type Middleware,
+} from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { persistReducer, persistStore } from 'redux-persist';
+import {
+  persistReducer,
+  persistStore,
+  type PersistConfig,
+} from 'redux-persist';
 
 // middleware
 import apiMessageMiddleware from './middleware/apiMessageMiddleware';
@@ -25,7 +33,10 @@ import chatReducer from './chatStore';
 import globalItems from './globalItemsStore';
 import userStore from './userStore';
 
-// combine reducers
+// Assuming each of the above stores is typed, e.g.,:
+// export default weatherSlice.reducer;
+// export type WeatherState = ReturnType<typeof weatherSlice.reducer>;
+
 const rootReducer = combineReducers({
   auth: authReducer,
   dropdown: dropdownReducer,
@@ -47,14 +58,14 @@ const rootReducer = combineReducers({
   userStore,
 });
 
-// configure persist store and whitelist reducers
-const persistConfig = {
+export type RootState = ReturnType<typeof rootReducer>;
+
+const persistConfig: PersistConfig<RootState> = {
   key: 'root',
   storage: AsyncStorage,
   whitelist: ['auth'], // add reducers to persist here
 };
 
-// create persisted reducer
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const store = configureStore({
