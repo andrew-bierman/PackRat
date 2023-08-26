@@ -1,10 +1,10 @@
-import * as React from "react";
-import Svg, { Defs, G, Path } from "react-native-svg";
+import * as React from 'react';
+import Svg, { Defs, G, Path } from 'react-native-svg';
 
 const SVGLogoComponent = ({
   width = 963.619,
   height = 1082.069,
-  fill = "fff",
+  fill = 'fff',
   ...props
 }) => {
   // need to figure out how to get the dynamic viewbox and transform to work
@@ -14,7 +14,7 @@ const SVGLogoComponent = ({
   //   const translateX = -viewBoxWidth / 2;
   //   const translateY = -viewBoxHeight / 2;
 
-//   console.log("fill", fill);
+  //   console.log("fill", fill);
 
   return (
     <Svg

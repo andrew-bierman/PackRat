@@ -1,4 +1,4 @@
-import { getItemByIdService } from "../../services/item/item.service";
+import { getItemByIdService } from '../../services/item/item.service';
 
 /**
  * Retrieves an item by its ID.
@@ -15,6 +15,6 @@ export const getItemById = async (req, res) => {
 
     res.status(200).json(item);
   } catch (error) {
-    res.status(404).json({ msg: "Item cannot be found" });
+    res.status(404).json({ msg: 'Item cannot be found' });
   }
 };

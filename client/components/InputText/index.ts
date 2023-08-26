@@ -1,2 +1,2 @@
-export * from "./component";
-export * from "./InputTextRules";
+export * from './component';
+export * from './InputTextRules';

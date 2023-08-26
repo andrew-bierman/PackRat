@@ -1,4 +1,4 @@
-import { addGlobalItemToPackService } from "../../services/item/item.service";
+import { addGlobalItemToPackService } from '../../services/item/item.service';
 
 /**
  * Adds a global item to a pack.
@@ -13,8 +13,8 @@ export const addGlobalItemToPack = async (req, res) => {
 
     const result = await addGlobalItemToPackService(packId, itemId, ownerId);
 
-    res.status(200).json({ message: "successfully updated", data: result });
+    res.status(200).json({ message: 'successfully updated', data: result });
   } catch (error) {
-    res.status(404).json({ msg: "Items cannot be found" });
+    res.status(404).json({ msg: 'Items cannot be found' });
   }
 };

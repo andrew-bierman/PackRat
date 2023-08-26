@@ -1,4 +1,4 @@
-import { deleteItemService } from "../../services/item/item.service";
+import { deleteItemService } from '../../services/item/item.service';
 
 /**
  * Deletes an item from the database.
@@ -16,6 +16,6 @@ export const deleteItem = async (req, res) => {
     res.status(200).json(itemDeleted);
   } catch (error) {
     console.error(error);
-    res.status(404).json({ msg: "Unable to delete item" + error.message });
+    res.status(404).json({ msg: 'Unable to delete item' + error.message });
   }
 };

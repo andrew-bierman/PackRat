@@ -1,20 +1,18 @@
-import { useSelector } from "react-redux";
+import { useSelector } from 'react-redux';
 
-import { Platform } from "react-native";
+import { Platform, StyleSheet } from 'react-native';
 
-import { Stack as Header } from "expo-router";
+import { Stack as Header } from 'expo-router';
 
-import { darkTheme, theme } from "../theme";
+import { darkTheme, theme } from '../theme';
 
-import { Box } from "native-base";
+import { Box } from 'native-base';
 
-import { StyleSheet } from "react-native";
+import LandingPage from '../components/landing_page';
 
-import LandingPage from "../components/landing_page";
-
-import Dashboard from "../components/dashboard";
-import useTheme from "../hooks/useTheme";
-import { current } from "@reduxjs/toolkit";
+import Dashboard from '../screens/dashboard';
+import useTheme from '../hooks/useTheme';
+import { current } from '@reduxjs/toolkit';
 
 export default function Index() {
   const {
@@ -34,11 +32,11 @@ export default function Index() {
 
   return (
     <>
-      {Platform.OS === "web" ? (
+      {Platform.OS === 'web' ? (
         <Header.Screen
           options={{
             // https://reactnavigation.org/docs/headers#setting-the-header-title
-            title: "Home",
+            title: 'Home',
           }}
         />
       ) : null}

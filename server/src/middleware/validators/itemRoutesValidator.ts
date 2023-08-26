@@ -1,6 +1,12 @@
-import { celebrate, Joi, Segments } from "celebrate";
+import { celebrate, Joi, Segments } from 'celebrate';
 
-export const JoiObjectId = (message = "valid id") =>
+/**
+ * Creates a Joi validation rule for MongoDB ObjectIds.
+ *
+ * @param {string} [message="valid id"] - The error message to display if the validation fails.
+ * @return {Joi.StringSchema} - The Joi validation rule for MongoDB ObjectIds.
+ */
+export const JoiObjectId = (message = 'valid id') =>
   Joi.string().regex(/^[0-9a-fA-F]{24}$/, message);
 
 export const getItems = celebrate({

@@ -1,17 +1,23 @@
-import Pack from "../../models/packModel";
+import Pack from '../../models/packModel';
 
+/**
+ * Retrieves public packs based on the provided query parameter.
+ *
+ * @param {string} queryBy - Specifies how the public packs should be sorted.
+ * @return {Promise<any[]>} An array of public packs.
+ */
 export async function getPublicPacksService(queryBy: string) {
   try {
-    let publicPacksPipeline: any = [
+    const publicPacksPipeline: any = [
       {
         $match: { is_public: true },
       },
       {
         $lookup: {
-          from: "items",
-          localField: "_id",
-          foreignField: "packs",
-          as: "items",
+          from: 'items',
+          localField: '_id',
+          foreignField: 'packs',
+          as: 'items',
         },
       },
       {
@@ -27,9 +33,9 @@ export async function getPublicPacksService(queryBy: string) {
           total_weight: {
             $sum: {
               $map: {
-                input: "$items",
-                as: "item",
-                in: { $multiply: ["$$item.weight", "$$item.quantity"] },
+                input: '$items',
+                as: 'item',
+                in: { $multiply: ['$$item.weight', '$$item.quantity'] },
               },
             },
           },
@@ -38,7 +44,7 @@ export async function getPublicPacksService(queryBy: string) {
       },
     ];
 
-    if (queryBy === "Favorite") {
+    if (queryBy === 'Favorite') {
       publicPacksPipeline.push({ $sort: { favorites_count: -1 } });
     } else {
       publicPacksPipeline.push({ $sort: { _id: -1 } });
@@ -48,6 +54,6 @@ export async function getPublicPacksService(queryBy: string) {
 
     return publicPacks;
   } catch (error) {
-    throw new Error("Packs cannot be found: " + error.message);
+    throw new Error('Packs cannot be found: ' + error.message);
   }
 }
