@@ -66,39 +66,46 @@ const Header = ({
 
   return (
     <Box w={['100%', '100%', '70%', '50%']} style={styles().infoSection}>
-      <Box style={styles().userInfo}>
-        {profileImage ? (
-          <Image
-            source={{ uri: user?.profileImage }}
-            alt="Profile Image"
-            borderRadius={50}
-            size={100}
-            style={{ width: 100, height: 100, borderRadius: 50 }}
-          />
-        ) : (
-          <MaterialCommunityIcons
-            name="account-circle"
-            size={100}
-            color={currentTheme.colors.cardIconColor}
-            style={{
-              width: 100,
-              height: 100,
-              borderRadius: 50,
-              alignSelf: 'center',
-            }}
-          />
+      <HStack w="100%" alignItems="center" spacing={5}>
+        {isCurrentUser && (
+          <Box alignSelf="flex-start" ml="auto">
+            <SettingsButton />
+          </Box>
         )}
-        <Text style={styles().userName} color={currentTheme.colors.textColor}>
-          {userRealName}
-        </Text>
-        <Text style={styles().userEmail} color={currentTheme.colors.textColor}>
-          {username}
-        </Text>
-      </Box>
+        <VStack alignItems="center" flex={1}>
+          <Box style={styles().userInfo}>
+            {profileImage ? (
+              <Image
+                source={{ uri: user?.profileImage }}
+                alt="Profile Image"
+                borderRadius={50}
+                size={100}
+                style={{ width: 100, height: 100, borderRadius: 50 }}
+              />
+            ) : (
+              <MaterialCommunityIcons
+                name="account-circle"
+                size={100}
+                color="grey"
+                style={{
+                  width: 100,
+                  height: 100,
+                  borderRadius: 50,
+                  alignSelf: 'center',
+                }}
+              />
+            )}
+            <Text style={styles().userName}>{userRealName}</Text>
+            <Text style={styles().userEmail}>{username}</Text>
+          </Box>
+        </VStack>
+        {isCurrentUser && <Box width={45} />}{' '}
+        {/* This empty box is to offset the space taken by the settings button, ensuring the profile details remain centered. */}
+      </HStack>
       <Stack direction="row" style={styles().card}>
         <Box style={styles().cardInfo}>
-          <Text color={currentTheme.colors.textColor}>Trips</Text>
-          <Text color={currentTheme.colors.textColor}>{tripsCount}</Text>
+          <Text>Trips</Text>
+          <Text>{tripsCount}</Text>
         </Box>
         <Box style={styles().cardInfo}>
           <Text color={currentTheme.colors.textColor}>Packs</Text>

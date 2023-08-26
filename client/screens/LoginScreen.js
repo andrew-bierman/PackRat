@@ -68,6 +68,11 @@ export default function Login() {
     UseTheme();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const {
+    control,
+    handleSubmit,
+    formState: { isValid },
+  } = useForm();
 
   const demoUser = {
     email: 'email52@email.com',
