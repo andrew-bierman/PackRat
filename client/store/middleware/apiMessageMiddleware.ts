@@ -39,6 +39,7 @@ const apiMiddleware: Middleware =
       }
     } else if (action.type.endsWith('/fulfilled')) {
       const { payload } = action;
+
       if (payload && (payload.message || payload.msg)) {
         InformUser({
           title: payload.message || payload.msg,

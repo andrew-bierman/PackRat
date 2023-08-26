@@ -1,4 +1,6 @@
-import { getPackByIdService } from '../../services/pack/pack.service';
+import { PackNotFoundError } from "../../helpers/errors";
+import { responseHandler } from "../../helpers/responseHandler";
+import { getPackByIdService } from "../../services/pack/pack.service";
 
 /**
  * Retrieves a pack by its ID and returns it as a JSON response.
@@ -6,15 +8,15 @@ import { getPackByIdService } from '../../services/pack/pack.service';
  * @param {Object} res - The response object.
  * @return {Object} The pack object as a JSON response.
  */
-export const getPackById = async (req, res) => {
+export const getPackById = async (req, res,next) => {
   try {
     const { packId } = req.params;
 
     const pack = await getPackByIdService(packId);
 
-    res.status(200).json(pack);
+    res.locals.data = pack;
+    responseHandler(res);
   } catch (error) {
-    console.error('getPackById error', error);
-    res.status(404).json({ msg: 'Pack cannot be found' });
+    next(PackNotFoundError)
   }
 };
