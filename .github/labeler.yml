@@ -26,15 +26,16 @@ AnyChange:
 
 # Workflow configuration starts here
 
-name: Labeler
-on: [pull_request_target]
+name: Pull request labeler
+on: [ pull_request_target ]
 
 jobs:
-  build:
-
+  triage:
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: read
+      pull-requests: write
     steps:
-    - uses: srvaroa/labeler@master
-      env:
-        GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+      - uses: actions/labeler@v4
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
