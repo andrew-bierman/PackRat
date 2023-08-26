@@ -1,36 +1,37 @@
-import React from "react";
-import { Ionicons } from "@expo/vector-icons";
-import { Icon, Button } from "native-base";
-import { StyleSheet, View } from "react-native";
+import React from 'react';
 
-const ScrollButton = ({ direction, onPress, iconColor = 'white' }) => {
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+
+const ScrollButton = ({ direction, onPress }) => {
   return (
-    <View style={styles.container}>
-      <Button onPress={onPress} style={styles.scrollButton}>
-        <Icon
-          as={Ionicons}
-          name={direction === "left" ? "chevron-back" : "chevron-forward"}
-          size="md"
-          color={iconColor}
-        />
-      </Button>
-    </View>
+    <TouchableOpacity
+      activeOpacity={0.8}
+      onPress={onPress}
+      style={styles.scrollButton}
+    >
+      {direction === 'left' && <Text style={styles.iconStyles}>&lang;</Text>}
+      {direction != 'left' && <Text style={styles.iconStyles}>&rang;</Text>}
+    </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "row",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   scrollButton: {
-    backgroundColor: "transparent",
-    zIndex: 1,
-    // height: "100%",
-    // width: "10%",
-    justifyContent: "center",
-    alignItems: "center",
+    height: 30,
+    width: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  iconStyles: {
+    alignSelf: 'center',
+    color: 'white',
+    textAlign: 'center',
+    fontWeight: '600',
+    fontSize: 20,
   },
 });
 

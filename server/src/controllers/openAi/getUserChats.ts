@@ -1,5 +1,4 @@
-import { getUserChatsService } from "../../services/openAi/openAi.service";
-
+import { getUserChatsService } from '../../services/openAi/openAi.service';
 
 /**
  * Retrieves the chats of a user.
@@ -15,6 +14,6 @@ export const getUserChats = async (req, res) => {
     res.json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Failed to retrieve user chats." });
+    res.status(500).json({ error: 'Failed to retrieve user chats.' });
   }
 };

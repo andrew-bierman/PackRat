@@ -1,4 +1,4 @@
-import Trip from "../../models/tripModel";
+import Trip from '../../models/tripModel';
 
 /**
  * Edits a trip by updating the trip details.
@@ -12,10 +12,10 @@ export const editTrip = async (req, res) => {
 
     const newTrip = await Trip.findOneAndUpdate({ _id }, req.body, {
       returnOriginal: false,
-    }).populate("packs");
+    }).populate('packs');
 
     res.status(200).json(newTrip);
   } catch (error) {
-    res.status(404).json({ msg: "Unable to edit trip" });
+    res.status(404).json({ msg: 'Unable to edit trip' });
   }
 };

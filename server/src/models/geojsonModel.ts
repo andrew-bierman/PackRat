@@ -1,6 +1,6 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
+import myDB from './dbConnection';
 const { Schema } = mongoose;
-import myDB from "./dbConnection";
 
 const GeoJSONSchema = new Schema({
   type: {
@@ -18,12 +18,12 @@ const GeoJSONSchema = new Schema({
     type: {
       type: String,
       enum: [
-        "Point",
-        "LineString",
-        "Polygon",
-        "MultiPoint",
-        "MultiPolygon",
-        "MultiLineString",
+        'Point',
+        'LineString',
+        'Polygon',
+        'MultiPoint',
+        'MultiPolygon',
+        'MultiLineString',
       ],
       required: true,
     },
@@ -34,6 +34,12 @@ const GeoJSONSchema = new Schema({
   },
 });
 
+/**
+ * Saves a single GeoJSON feature.
+ *
+ * @param {object} feature - The GeoJSON feature to be saved.
+ * @return {Promise<object>} The saved GeoJSON feature.
+ */
 GeoJSONSchema.statics.saveOne = async function (feature) {
   const filter = { id: feature.id };
   return await this.findOneAndUpdate(filter, feature, {
@@ -43,9 +49,11 @@ GeoJSONSchema.statics.saveOne = async function (feature) {
 };
 
 GeoJSONSchema.statics.saveMany = async function (features) {
-  return await Promise.all(features.map((feature: any) => (this as any).saveOne(feature)));
+  return await Promise.all(
+    features.map((feature: any) => (this as any).saveOne(feature)),
+  );
 };
 
-const GeoJSON = myDB.model("GeoJSON", GeoJSONSchema);
+const GeoJSON = myDB.model('GeoJSON', GeoJSONSchema);
 
 export default GeoJSON;

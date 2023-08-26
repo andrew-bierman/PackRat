@@ -1,8 +1,8 @@
-import { FormControl, Input } from "native-base";
-import React, { forwardRef, useImperativeHandle, useRef } from "react";
-import { Controller, useForm } from "react-hook-form";
-import { TextInput } from "react-native";
-import { InputTextProps, InputTextRef } from "./props";
+import { FormControl, Input } from 'native-base';
+import React, { forwardRef, useImperativeHandle, useRef } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { type TextInput } from 'react-native';
+import { type InputTextProps, type InputTextRef } from './props';
 
 export const InputText: React.ForwardRefExoticComponent<InputTextProps> =
   forwardRef<InputTextRef, InputTextProps>((props, ref) => {
@@ -12,9 +12,9 @@ export const InputText: React.ForwardRefExoticComponent<InputTextProps> =
       isDisabled = false,
       autoFocus = false,
       maxLength,
-      name = "input",
+      name = 'input',
       rules = { required: false },
-      keyboardType = "default",
+      keyboardType = 'default',
       secureTextEntry = false,
       ...rest
     } = props;
@@ -23,6 +23,10 @@ export const InputText: React.ForwardRefExoticComponent<InputTextProps> =
 
     const inputRef = useRef<TextInput>(null);
     useImperativeHandle(ref, () => ({
+      /**
+       * Focuses on the input element.
+       * @return {void}
+       */
       focus: () => {
         if (inputRef.current) {
           inputRef.current.focus();
@@ -46,7 +50,7 @@ export const InputText: React.ForwardRefExoticComponent<InputTextProps> =
           fieldState: { error },
         }) => (
           <>
-            <FormControl isInvalid={error ? true : false}>
+            <FormControl isInvalid={!!error}>
               {label && <FormControl.Label>{label}</FormControl.Label>}
               <Input
                 value={value}
@@ -55,14 +59,14 @@ export const InputText: React.ForwardRefExoticComponent<InputTextProps> =
                 underlineColorAndroid="transparent"
                 allowFontScaling={false}
                 autoComplete={
-                  keyboardType === "email-address" ? "email" : undefined
+                  keyboardType === 'email-address' ? 'email' : undefined
                 }
                 textContentType={
-                  keyboardType === "email-address" ? "emailAddress" : undefined
+                  keyboardType === 'email-address' ? 'emailAddress' : undefined
                 }
                 autoCorrect={false}
                 autoCapitalize={
-                  keyboardType === "email-address" ? "none" : "sentences"
+                  keyboardType === 'email-address' ? 'none' : 'sentences'
                 }
                 editable={!isDisabled}
                 keyboardType={keyboardType}
@@ -77,10 +81,10 @@ export const InputText: React.ForwardRefExoticComponent<InputTextProps> =
               {error && (
                 <FormControl.ErrorMessage
                   _text={{
-                    fontSize: "xs",
+                    fontSize: 'xs',
                   }}
                 >
-                  {error.message || "Error"}
+                  {error.message || 'Error'}
                 </FormControl.ErrorMessage>
               )}
             </FormControl>
