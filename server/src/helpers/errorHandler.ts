@@ -1,4 +1,4 @@
-import express from 'express';
+import type express from 'express';
 import { ERRORS } from './errorClasses';
 
 /**
@@ -18,7 +18,7 @@ export function errorHandler(
 
   // Check for new class-based errors
   if (error.errorType) {
-    const mappedError = ERRORS[error.errorType] || ERRORS['AppError'];
+    const mappedError = ERRORS[error.errorType] || ERRORS.AppError;
     if (mappedError) {
       res
         .status(mappedError.statusCode)
@@ -36,7 +36,7 @@ export function errorHandler(
   }
 
   // Default case
-  const AppError = ERRORS['AppError'];
+  const AppError = ERRORS.AppError;
   res
     .status(AppError.statusCode)
     .json({ error: AppError.message, code: AppError.statusCode });

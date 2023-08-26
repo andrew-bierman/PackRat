@@ -16,11 +16,11 @@ import { responseHandler } from '../../helpers/responseHandler';
  */
 export const emailExists = async (req, res, next) => {
   const { email } = req.body;
-  let val = await findUserByEmail(email);
+  const val = await findUserByEmail(email);
   if (val) {
     sendEmailNotice(email).then(async (result1: any) => {
       if (result1.status) {
-        let { newcode } = result1;
+        const { newcode } = result1;
         findUserAndUpdate(email, newcode, 'code').then(async (result2: any) => {
           if (result2.status) {
             responseHandler(res);

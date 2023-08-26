@@ -9,8 +9,8 @@ import User from '../../models/userModel';
 export const userSignIn = async (req, res) => {
   const { email, password } = req.body;
   const user: any = await (User as any).findByCredentials({
-    email: email,
-    password: password,
+    email,
+    password,
   });
   await user.generateAuthToken();
   res.status(200).send({ user });
