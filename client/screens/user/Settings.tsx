@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { useSelector } from "react-redux";
-import * as ImagePicker from "expo-image-picker";
-import { Ionicons } from "@expo/vector-icons";
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import * as ImagePicker from 'expo-image-picker';
+import { Ionicons } from '@expo/vector-icons';
 import {
   Input,
   Separator,
@@ -14,9 +14,9 @@ import {
   YStack,
   H5,
   H2,
-} from "tamagui";
+} from 'tamagui';
 
-import Avatar from "~/components/Avatar";
+import Avatar from '~/components/Avatar';
 
 export default function Settings() {
   const [user, setUser] = useState(useSelector((state) => state.auth.user));
@@ -26,7 +26,7 @@ export default function Settings() {
   };
 
   const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
+    const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [4, 3],
@@ -34,12 +34,12 @@ export default function Settings() {
     });
 
     if (!result.canceled) {
-      handleChange({ target: { id: "profileImage", value: result.uri } });
+      handleChange({ target: { id: 'profileImage', value: result.uri } });
     }
   };
 
   const removeProfileImage = () => {
-    handleChange({ target: { id: "profileImage", value: null } });
+    handleChange({ target: { id: 'profileImage', value: null } });
   };
 
   return (
@@ -62,7 +62,7 @@ export default function Settings() {
               size="$3"
               icon={<Ionicons name="cloud-upload-outline" size={24} />}
               color="white"
-              style={{ backgroundColor: "#0284c7" }}
+              style={{ backgroundColor: '#0284c7' }}
               onPress={pickImage}
             >
               Upload
@@ -101,26 +101,26 @@ export default function Settings() {
           <YStack space="$2" flexGrow={1}>
             <Label>Weather: </Label>
             <CustomSelect
-              items={["celsius", "fahrenheit"]}
+              items={['celsius', 'fahrenheit']}
               value={user.preferredWeatherUnit}
               onChange={(value) =>
-                handleChange({ target: { id: "preferredWeather", value } })
+                handleChange({ target: { id: 'preferredWeather', value } })
               }
             />
           </YStack>
           <YStack space="$2" flexGrow={1}>
             <Label>Weight: </Label>
             <CustomSelect
-              items={["lb", "oz", "kg", "g"]}
+              items={['lb', 'oz', 'kg', 'g']}
               value={user.preferredWeatherUnit}
               onChange={(value) =>
-                handleChange({ target: { id: "preferredWeight", value } })
+                handleChange({ target: { id: 'preferredWeight', value } })
               }
             />
           </YStack>
         </XStack>
       </YStack>
-      <Button color="white" style={{ backgroundColor: "#0284c7" }}>
+      <Button color="white" style={{ backgroundColor: '#0284c7' }}>
         Update profile
       </Button>
       <Stack marginTop={20} marginBottom={10}>
@@ -144,7 +144,7 @@ export default function Settings() {
           secureTextEntry={true}
         />
       </YStack>
-      <Button color="white" style={{ backgroundColor: "#0284c7" }}>
+      <Button color="white" style={{ backgroundColor: '#0284c7' }}>
         Change password
       </Button>
     </YStack>
