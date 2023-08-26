@@ -1,8 +1,8 @@
-import { UnableToEditItemError } from "../../helpers/errors";
-import { responseHandler } from "../../helpers/responseHandler";
-import { editItemService } from "../../services/item/item.service";
+import { UnableToEditItemError } from '../../helpers/errors';
+import { responseHandler } from '../../helpers/responseHandler';
+import { editItemService } from '../../services/item/item.service';
 
-export const editItem = async (req, res,next) => {
+export const editItem = async (req, res, next) => {
   try {
     const { _id, name, weight, unit, quantity, type } = req.body;
 
@@ -18,6 +18,6 @@ export const editItem = async (req, res,next) => {
     res.locals.data = newItem;
     responseHandler(res);
   } catch (error) {
-    next(UnableToEditItemError)
+    next(UnableToEditItemError);
   }
 };

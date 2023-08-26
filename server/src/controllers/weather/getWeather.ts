@@ -1,6 +1,6 @@
-import axios from "axios";
-import { RetrievingWeatherFromOpenWeatherError } from "../../helpers/errors";
-import { responseHandler } from "../../helpers/responseHandler";
+import axios from 'axios';
+import { RetrievingWeatherFromOpenWeatherError } from '../../helpers/errors';
+import { responseHandler } from '../../helpers/responseHandler';
 
 /**
  * Retrieves weather data from OpenWeather API based on latitude and longitude.
@@ -8,7 +8,7 @@ import { responseHandler } from "../../helpers/responseHandler";
  * @param {Object} res - The response object.
  * @return {Object} The weather data retrieved from OpenWeather API.
  */
-export const getWeather = async (req, res,next) => {
+export const getWeather = async (req, res, next) => {
   const root = process.env.WEATHER_URL;
   const OPENWEATHER_KEY = process.env.OPENWEATHER_KEY;
   const latParams = req.query.lat;
@@ -30,6 +30,6 @@ export const getWeather = async (req, res,next) => {
     responseHandler(res);
   } catch (error) {
     // send back error message
-    next(RetrievingWeatherFromOpenWeatherError)
+    next(RetrievingWeatherFromOpenWeatherError);
   }
 };

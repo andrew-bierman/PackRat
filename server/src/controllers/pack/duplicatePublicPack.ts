@@ -1,5 +1,5 @@
-import { UnableToDuplicatePackError } from "../../helpers/errors";
-import { duplicatePublicPackService } from "../../services/pack/pack.service";
+import { UnableToDuplicatePackError } from '../../helpers/errors';
+import { duplicatePublicPackService } from '../../services/pack/pack.service';
 
 /**
  * Duplicates a public pack.
@@ -7,7 +7,7 @@ import { duplicatePublicPackService } from "../../services/pack/pack.service";
  * @param {Object} res - the response object
  * @return {Promise} - a promise that resolves with the duplicated pack
  */
-export const duplicatePublicPack = async (req, res,next) => {
+export const duplicatePublicPack = async (req, res, next) => {
   try {
     const { packId, ownerId, items } = req.body;
 
@@ -18,6 +18,6 @@ export const duplicatePublicPack = async (req, res,next) => {
       data: result.pack,
     });
   } catch (error) {
-    next(UnableToDuplicatePackError)
+    next(UnableToDuplicatePackError);
   }
 };

@@ -8,8 +8,8 @@ import {
   postSingleGeoJSON,
   getPhotonDetails,
   getEnhancedPhotonDetails,
-} from "../controllers/getOsm/index";
-import { tryCatchWrapper } from "../helpers/tryCatchWrapper";
+} from '../controllers/getOsm/index';
+import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
 
 const router = express.Router();
 
@@ -41,7 +41,7 @@ const router = express.Router();
  *       '500':
  *         description: Error retrieving Photon results
  */
-router.get("/photon/search", tryCatchWrapper(getPhotonResults));
+router.get('/photon/search', tryCatchWrapper(getPhotonResults));
 
 /**
  * @swagger
@@ -73,7 +73,7 @@ router.get("/photon/search", tryCatchWrapper(getPhotonResults));
  *       500:
  *         description: Error retrieving Trails OSM results
  */
-router.get("/trails", tryCatchWrapper(getTrailsOSM));
+router.get('/trails', tryCatchWrapper(getTrailsOSM));
 
 /**
  * @swagger
@@ -105,7 +105,7 @@ router.get("/trails", tryCatchWrapper(getTrailsOSM));
  *       '500':
  *         description: Error retrieving Parks OSM results
  */
-router.get("/parks", tryCatchWrapper(getParksOSM));
+router.get('/parks', tryCatchWrapper(getParksOSM));
 
 /**
  * @swagger
@@ -144,7 +144,7 @@ router.get("/parks", tryCatchWrapper(getParksOSM));
  *       '500':
  *         description: Error retrieving Overpass Data
  */
-router.post("/osm", tryCatchWrapper(getOsm));
+router.post('/osm', tryCatchWrapper(getOsm));
 
 /**
  * @swagger
@@ -169,7 +169,7 @@ router.post("/osm", tryCatchWrapper(getOsm));
  *       '500':
  *         description: Error processing request
  */
-router.post("/process/geojson",tryCatchWrapper(postSingleGeoJSON));
+router.post('/process/geojson', tryCatchWrapper(postSingleGeoJSON));
 
 /**
  * @swagger
@@ -192,7 +192,7 @@ router.post("/process/geojson",tryCatchWrapper(postSingleGeoJSON));
  *       '500':
  *         description: Error retrieving destination
  */
-router.get("/destination/:id", tryCatchWrapper(getDestination));
+router.get('/destination/:id', tryCatchWrapper(getDestination));
 
 /**
  * @swagger

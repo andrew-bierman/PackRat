@@ -1,6 +1,6 @@
-import { TemplateNotFoundError } from "../../helpers/errors";
-import { responseHandler } from "../../helpers/responseHandler";
-import Template from "../../models/templateModel";
+import { TemplateNotFoundError } from '../../helpers/errors';
+import { responseHandler } from '../../helpers/responseHandler';
+import Template from '../../models/templateModel';
 
 /**
  * Retrieves a template by its ID.
@@ -12,14 +12,13 @@ export const getTemplateById = async (req, res, next) => {
   const { templateId } = req.params;
 
   const template = await Template.findById(templateId).populate(
-    "createdBy",
-    "username"
+    'createdBy',
+    'username',
   );
   if (template) {
     res.locals.data = template;
     responseHandler(res);
   } else {
-    next(TemplateNotFoundError)
+    next(TemplateNotFoundError);
   }
-
 };

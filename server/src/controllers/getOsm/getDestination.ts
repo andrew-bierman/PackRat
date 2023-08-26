@@ -1,6 +1,6 @@
-import { NoDestinationFoundWithThatIDError } from "../../helpers/errors";
-import { responseHandler } from "../../helpers/responseHandler";
-import { getDestinationService } from "../../services/osm/osm.service";
+import { NoDestinationFoundWithThatIDError } from '../../helpers/errors';
+import { responseHandler } from '../../helpers/responseHandler';
+import { getDestinationService } from '../../services/osm/osm.service';
 
 /**
  * Retrieves the destination based on the given ID.
@@ -14,9 +14,9 @@ export const getDestination = async (req, res, next) => {
   const destination = await getDestinationService(id);
 
   if (!destination) {
-    next(NoDestinationFoundWithThatIDError)
+    next(NoDestinationFoundWithThatIDError);
   }
 
-  res.locals.data = destination
-  responseHandler(res)
+  res.locals.data = destination;
+  responseHandler(res);
 };

@@ -7,7 +7,7 @@ import { addPackService } from '../../services/pack/pack.service';
  * @return {Promise} A promise that resolves to the created pack.
  */
 export const addPack = async (req, res) => {
-    const { name, owner_id } = req.body;
-    const result = await addPackService(name, owner_id);
-    res.status(200).json({ msg: "success", ...result });
+  const { name, owner_id } = req.body;
+  const result = await addPackService(name, owner_id);
+  res.status(200).json({ msg: 'success', ...result });
 };

@@ -1,8 +1,11 @@
-import osmtogeojson from "osmtogeojson";
-import axios from "axios";
-import { updateDatabaseWithGeoJSONDataFromOverpass } from "./updateDatabaseWithGeoJSONDataFromOverpass";
-import { InvalidRequestParamsError, RetrievingTrailsOSMError } from "../../helpers/errors";
-import { responseHandler } from "../../helpers/responseHandler";
+import osmtogeojson from 'osmtogeojson';
+import axios from 'axios';
+import { updateDatabaseWithGeoJSONDataFromOverpass } from './updateDatabaseWithGeoJSONDataFromOverpass';
+import {
+  InvalidRequestParamsError,
+  RetrievingTrailsOSMError,
+} from '../../helpers/errors';
+import { responseHandler } from '../../helpers/responseHandler';
 
 /**
  * Retrieves trails data from OpenStreetMap (OSM) based on the provided latitude, longitude, and radius.
@@ -10,7 +13,7 @@ import { responseHandler } from "../../helpers/responseHandler";
  * @param {Object} res - The response object.
  * @return {Promise<void>} - Resolves with the geojsonData of trails retrieved from OSM.
  */
-export const getTrailsOSM = async (req, res,next) => {
+export const getTrailsOSM = async (req, res, next) => {
   try {
     // set default values for lat, lon, and radius
     const { lat = 45.5231, lon = -122.6765, radius = 50000 } = req.query;
@@ -36,9 +39,9 @@ export const getTrailsOSM = async (req, res,next) => {
 
     updateDatabaseWithGeoJSONDataFromOverpass(geojsonData);
 
-    res.locals.data = geojsonData
+    res.locals.data = geojsonData;
     responseHandler(res);
   } catch (error) {
-    next(RetrievingTrailsOSMError)
+    next(RetrievingTrailsOSMError);
   }
 };

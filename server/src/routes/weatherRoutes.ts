@@ -1,9 +1,6 @@
-import express from "express";
-import {
-  getWeatherWeek,
-  getWeather,
-} from "../controllers/weather/index";
-import { tryCatchWrapper } from "../helpers/tryCatchWrapper";
+import express from 'express';
+import { getWeatherWeek, getWeather } from '../controllers/weather/index';
+import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
 
 const router = express.Router();
 
@@ -26,7 +23,7 @@ const router = express.Router();
  *       '500':
  *         description: Error retrieving current weather
  */
-router.get("/", tryCatchWrapper(getWeather));
+router.get('/', tryCatchWrapper(getWeather));
 
 /**
  * @swagger
@@ -40,6 +37,6 @@ router.get("/", tryCatchWrapper(getWeather));
  *       '500':
  *         description: Error retrieving weekly weather forecast
  */
-router.get("/week", tryCatchWrapper(getWeatherWeek));
+router.get('/week', tryCatchWrapper(getWeatherWeek));
 
 export default router;

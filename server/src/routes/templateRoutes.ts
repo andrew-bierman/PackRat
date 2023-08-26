@@ -5,9 +5,9 @@ import {
   addTemplate,
   editTemplate,
   deleteTemplate,
-} from "../controllers/template/index";
-import { isAdmin } from "../middleware/isAdmin"; // Assuming this is your middleware file
-import { tryCatchWrapper } from "../helpers/tryCatchWrapper";
+} from '../controllers/template/index';
+import { isAdmin } from '../middleware/isAdmin'; // Assuming this is your middleware file
+import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
 
 // import * as validator from "../middleware/validators/index.js";
 
@@ -41,7 +41,7 @@ const router = express.Router();
  *       '500':
  *         description: Error retrieving templates
  */
-router.get("/", tryCatchWrapper(getTemplates));
+router.get('/', tryCatchWrapper(getTemplates));
 
 /**
  * @swagger
@@ -64,7 +64,7 @@ router.get("/", tryCatchWrapper(getTemplates));
  *       '500':
  *         description: Error retrieving template by ID
  */
-router.get("/:templateId",  tryCatchWrapper(getTemplateById));
+router.get('/:templateId', tryCatchWrapper(getTemplateById));
 
 /**
  * @swagger
@@ -95,7 +95,7 @@ router.get("/:templateId",  tryCatchWrapper(getTemplateById));
  *       '500':
  *         description: Error adding the template
  */
-router.post("/", isAdmin,  tryCatchWrapper(addTemplate));
+router.post('/', isAdmin, tryCatchWrapper(addTemplate));
 
 /**
  * @swagger
@@ -129,7 +129,7 @@ router.post("/", isAdmin,  tryCatchWrapper(addTemplate));
  *       '500':
  *         description: Error editing the template
  */
-router.put("/:templateId", isAdmin,  tryCatchWrapper(editTemplate));
+router.put('/:templateId', isAdmin, tryCatchWrapper(editTemplate));
 
 /**
  * @swagger
@@ -152,10 +152,6 @@ router.put("/:templateId", isAdmin,  tryCatchWrapper(editTemplate));
  *       '500':
  *         description: Error deleting the template
  */
-router.delete(
-  "/:templateId",
-  isAdmin,
-  tryCatchWrapper(deleteTemplate)
-);
+router.delete('/:templateId', isAdmin, tryCatchWrapper(deleteTemplate));
 
 export default router;
