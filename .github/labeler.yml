@@ -1,0 +1,42 @@
+# Add 'repo' label to any root file changes
+repo:
+  - '*'
+
+# Add 'test' label to any change to *.spec.ts and *.spec.js files within the entire repository
+test:
+  - '**/*.spec.ts'
+  - '**/*.spec.js'
+
+# Add 'frontend' label to any change in the 'client' directory
+frontend:
+  - 'client/**/*.{ts,js}'
+  - any: ['client/**/*.ts', 'client/**/*.js']
+    all: ['!client/src/main.ts', '!client/src/main.js']
+
+# Add 'backend' label to any change in the 'server' directory
+backend:
+  - 'server/**/*.{ts,js}'
+
+# Add the 'AnyChange' label to any changes within the entire repository
+AnyChange:
+  - '**'
+  - '**/.*'
+  - '**/.*/**'
+  - '**/.*/**/.*'
+
+# Workflow configuration starts here
+
+name: Pull request labeler
+on: [ pull_request_target ]
+
+jobs:
+  triage:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/labeler@v4
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          

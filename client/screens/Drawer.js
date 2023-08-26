@@ -1,8 +1,16 @@
-import { View, StyleSheet, Text, TouchableOpacity, Modal, SafeAreaView, Platform } from "react-native";
-import { Link } from "expo-router";
-import { theme } from "../theme";
-import { AntDesign, MaterialIcons } from "@expo/vector-icons";
-import UseTheme from "../hooks/useTheme";
+import {
+  View,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  Modal,
+  SafeAreaView,
+  Platform,
+} from 'react-native';
+import { Link } from 'expo-router';
+import { theme } from '../theme';
+import { AntDesign, MaterialIcons } from '@expo/vector-icons';
+import UseTheme from '../hooks/useTheme';
 const Drawer = ({
   isDrawerOpen,
   toggleDrawer,
@@ -33,7 +41,7 @@ const Drawer = ({
           </TouchableOpacity>
         ))}
       </SafeAreaView>
-    )
+    );
   };
 
   return (
@@ -48,9 +56,7 @@ const Drawer = ({
           style={styles.fullScreenTouchable}
           onPress={toggleDrawer}
         />
-        <View style={styles.drawerContainer}>
-          {renderNavigationItems()}
-        </View>
+        <View style={styles.drawerContainer}>{renderNavigationItems()}</View>
       </View>
     </Modal>
   );
@@ -59,26 +65,26 @@ const Drawer = ({
 const styles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
-    flexDirection: "row",
-    backgroundColor: "rgba(0,0,0,0.5)",
+    flexDirection: 'row',
+    backgroundColor: 'rgba(0,0,0,0.5)',
   },
   fullScreenTouchable: {
     flex: 1,
   },
   drawerContainer: {
     backgroundColor: theme.colors.background,
-    width: "70%",
-    height: "100%",
+    width: '70%',
+    height: '100%',
     padding: 16,
   },
   navigationItem: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingVertical: 8,
   },
   closeButton: {
     justifyContent: 'flex-end',
-    alignItems: 'flex-end'
+    alignItems: 'flex-end',
   },
 });
 

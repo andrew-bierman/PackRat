@@ -1,5 +1,5 @@
-import Item from "../../models/itemModel";
-import { ItemCategoryModel } from "../../models/itemCategory";
+import Item from '../../models/itemModel';
+import { ItemCategoryModel } from '../../models/itemCategory';
 
 /**
  * Edit an item in the service.
@@ -12,25 +12,31 @@ import { ItemCategoryModel } from "../../models/itemCategory";
  * @param {string} type - the new type of the item
  * @return {Promise<object>} - the edited item
  */
-export const editItemService = async (_id, name, weight, unit, quantity, type) => {
-    const category = await ItemCategoryModel.findOne({
-      name: type,
-    });
-  
-    const newItem = await Item.findOneAndUpdate(
-      { _id },
-      {
-        name,
-        weight,
-        unit,
-        quantity,
-        category: category.id,
-      },
-      {
-        returnOriginal: false,
-      }
-    ).populate("category", "name");
-  
-    return newItem;
-  };
-  
+export const editItemService = async (
+  _id,
+  name,
+  weight,
+  unit,
+  quantity,
+  type,
+) => {
+  const category = await ItemCategoryModel.findOne({
+    name: type,
+  });
+
+  const newItem = await Item.findOneAndUpdate(
+    { _id },
+    {
+      name,
+      weight,
+      unit,
+      quantity,
+      category: category.id,
+    },
+    {
+      returnOriginal: false,
+    },
+  ).populate('category', 'name');
+
+  return newItem;
+};

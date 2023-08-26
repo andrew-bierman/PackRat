@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { Svg, Line, Circle } from "react-native-svg";
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Svg, Line, Circle } from 'react-native-svg';
 
 const ProgressBar = ({ steps, currentStep }) => {
   const percentage = ((currentStep + 1) / steps.length) * 100;
@@ -23,7 +23,7 @@ const ProgressBar = ({ steps, currentStep }) => {
             cx={`${(i / (steps.length - 1)) * 100}%`}
             cy="15"
             r="10"
-            fill={i <= currentStep ? "green" : "grey"}
+            fill={i <= currentStep ? 'green' : 'grey'}
           />
         ))}
       </Svg>
@@ -35,13 +35,13 @@ const Sidebar = ({ stepsData, currentStep }) => {
   // Get the data for the current step and all previous steps
   const displayData = Object.values(stepsData).slice(0, currentStep + 1);
 
-  if (!displayData.length) return null;
+  if (displayData.length === 0) return null;
 
   return (
     <View style={styles.sidebar}>
       {/* Display your data here */}
       {displayData.map((data, index) => {
-        if(!data) return null;
+        if (!data) return null;
         const { title, subtext } = data;
         return (
           <View key={index}>
@@ -85,7 +85,7 @@ const MultiStepForm = ({ steps = [] }) => {
   /**
    * Executes the next step in the process.
    *
-   * @return {void} 
+   * @return {void}
    */
   const nextStep = () => {
     if (currentStep < steps.length - 1) {
@@ -93,16 +93,16 @@ const MultiStepForm = ({ steps = [] }) => {
     }
   };
 
-/**
- * Decrements the current step and updates the step if the current step is greater than 0.
- *
- * @return {undefined} No return value
- */
-/**
- * Decrements the current step and updates the step if the current step is greater than 0.
- *
- * @return {undefined} No return value
- */
+  /**
+   * Decrements the current step and updates the step if the current step is greater than 0.
+   *
+   * @return {undefined} No return value
+   */
+  /**
+   * Decrements the current step and updates the step if the current step is greater than 0.
+   *
+   * @return {undefined} No return value
+   */
   const prevStep = () => {
     if (currentStep > 0) {
       updateStep(currentStep - 1);
@@ -140,36 +140,36 @@ const styles = StyleSheet.create({
   container: {
     // flex: 1,
     height: '800px',
-    backgroundColor: "#F5F5F5",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: '#F5F5F5',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   progressBar: {
-    width: "100%",
+    width: '100%',
     marginBottom: 20,
   },
   svg: {
-    width: "100%",
+    width: '100%',
     height: 50,
   },
   buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     margin: 20,
-    width: "60%",
+    width: '60%',
   },
   button: {
     padding: 15,
-    backgroundColor: "#007AFF",
-    color: "white",
+    backgroundColor: '#007AFF',
+    color: 'white',
     borderRadius: 20,
     width: 100,
-    textAlign: "center",
+    textAlign: 'center',
   },
   sidebar: {
-    width: "20%", // adjust as necessary
+    width: '20%', // adjust as necessary
     padding: 10,
-    backgroundColor: "#f5f5f5", // adjust as necessary
+    backgroundColor: '#f5f5f5', // adjust as necessary
   },
 });
 

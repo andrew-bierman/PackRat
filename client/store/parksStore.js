@@ -1,11 +1,15 @@
-import { createSlice, createAsyncThunk, createEntityAdapter } from '@reduxjs/toolkit';
+import {
+  createSlice,
+  createAsyncThunk,
+  createEntityAdapter,
+} from '@reduxjs/toolkit';
 import { api } from '../constants/api';
 import axios from 'axios';
 
 export const fetchParks = createAsyncThunk(
   'parks/fetchParks',
   async ({ lat, lon, selectedSearch }) => {
-    let params = `?`;
+    let params = '?';
 
     if (lat) params += `lat=${lat}`;
     if (lon) params += `&lon=${lon}`;
@@ -17,7 +21,10 @@ export const fetchParks = createAsyncThunk(
       const parks = response.data.features;
 
       const filteredParks = parks
-        .filter((park) => park.properties.name && park.properties.name !== selectedSearch)
+        .filter(
+          (park) =>
+            park.properties.name && park.properties.name !== selectedSearch,
+        )
         .map((park) => park.properties.name)
         .slice(0, 25);
 
@@ -25,7 +32,7 @@ export const fetchParks = createAsyncThunk(
     } catch (error) {
       console.error('error:' + error);
     }
-  }
+  },
 );
 
 const parksAdapter = createEntityAdapter();

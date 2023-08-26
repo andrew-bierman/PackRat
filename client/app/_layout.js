@@ -1,21 +1,20 @@
-import { Slot } from "expo-router";
+import { Slot } from 'expo-router';
 
-import { Platform, View } from "react-native";
+import { Platform, View } from 'react-native';
 
-import Navigation from "../screens/Navigation";
+import Navigation from '../screens/Navigation';
 
-import { Provider } from "react-redux";
-import { PersistGate } from "redux-persist/integration/react";
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 
-import { store, persistor } from "../store/store";
+import { store, persistor } from '../store/store';
 
-import { AuthProvider } from "../context/auth";
-import { ThemeProvider } from "../context/theme";
-import FlashMessage from "react-native-flash-message";
-import Footer from "../components/footer/Footer";
+import { AuthProvider } from '../context/auth';
+import { ThemeProvider } from '../context/theme';
+import FlashMessage from 'react-native-flash-message';
+import Footer from '../components/footer/Footer';
 
 export default function HomeLayout() {
-
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
@@ -24,7 +23,7 @@ export default function HomeLayout() {
             <FlashMessage position="top" />
             <Navigation />
             <Slot />
-            {Platform.OS === "web" ? <Footer /> : null}
+            {Platform.OS === 'web' ? <Footer /> : null}
           </ThemeProvider>
         </AuthProvider>
       </PersistGate>
