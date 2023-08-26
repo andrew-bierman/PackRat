@@ -16,8 +16,8 @@ import {
 } from 'native-base';
 import { AntDesign } from '@expo/vector-icons';
 import { StyleSheet, FlatList, View } from 'react-native';
-import Card from './FeedCard';
-import DropdownComponent from '../Dropdown';
+import Card from '../../components/feed/FeedCard';
+import DropdownComponent from '../../components/Dropdown';
 import { theme } from '../../theme';
 import UseTheme from '../../hooks/useTheme';
 import {
