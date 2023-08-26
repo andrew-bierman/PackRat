@@ -13,9 +13,8 @@ export const resetPassword = async (req, res) => {
   user.password = password;
   await user.save();
   res.status(200).send({
-    message: "Successfully reset password",
-    status: "success",
+    message: 'Successfully reset password',
+    status: 'success',
     statusCode: 200,
   });
 };
-

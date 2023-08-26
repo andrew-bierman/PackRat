@@ -1,6 +1,6 @@
-import { UnableToAddItemError } from "../../helpers/errors";
-import { addItemGlobalService } from "../../services/item/item.service";
-import { responseHandler } from "../../helpers/responseHandler";
+import { UnableToAddItemError } from '../../helpers/errors';
+import { addItemGlobalService } from '../../services/item/item.service';
+import { responseHandler } from '../../helpers/responseHandler';
 /**
  * Adds an item globally.
  * @param {object} req - The request object.
@@ -23,6 +23,6 @@ export const addItemGlobal = async (req, res, next) => {
     res.locals.data = newItem;
     responseHandler(res);
   } catch (error) {
-    next(UnableToAddItemError)
+    next(UnableToAddItemError);
   }
 };

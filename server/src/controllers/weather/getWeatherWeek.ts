@@ -1,6 +1,6 @@
-import axios from "axios";
-import { RetrievingWeatherFromOpenWeatherError } from "../../helpers/errors";
-import { responseHandler } from "../../helpers/responseHandler";
+import axios from 'axios';
+import { RetrievingWeatherFromOpenWeatherError } from '../../helpers/errors';
+import { responseHandler } from '../../helpers/responseHandler';
 
 /**
  * Retrieves the weather forecast for the week based on latitude and longitude parameters.
@@ -8,7 +8,7 @@ import { responseHandler } from "../../helpers/responseHandler";
  * @param {Object} res - the response object
  * @return {Promise<Object>} the weather data for the week
  */
-export const getWeatherWeek = async (req, res,next) => {
+export const getWeatherWeek = async (req, res, next) => {
   const root = process.env.WEATHER_WEEK_URL;
   const OPENWEATHER_KEY = process.env.OPENWEATHER_KEY;
   const latParams = req.query.lat;
@@ -32,6 +32,6 @@ export const getWeatherWeek = async (req, res,next) => {
     res.locals.data = response.data;
     responseHandler(res);
   } catch (error) {
-    next(RetrievingWeatherFromOpenWeatherError)
+    next(RetrievingWeatherFromOpenWeatherError);
   }
 };

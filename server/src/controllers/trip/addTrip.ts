@@ -1,6 +1,6 @@
-import { UnableToAddTripError } from "../../helpers/errors";
-import { responseHandler } from "../../helpers/responseHandler";
-import { addTripService } from "../../services/trip/addTripService";
+import { UnableToAddTripError } from '../../helpers/errors';
+import { responseHandler } from '../../helpers/responseHandler';
+import { addTripService } from '../../services/trip/addTripService';
 
 /**
  * Adds a trip to the database.
@@ -8,7 +8,7 @@ import { addTripService } from "../../services/trip/addTripService";
  * @param {Object} res - The response object.
  * @return {Promise} A promise that resolves to a success message or rejects with an error message.
  */
-export const addTrip = async (req, res,next) => {
+export const addTrip = async (req, res, next) => {
   try {
     const {
       name,
