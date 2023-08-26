@@ -1,29 +1,40 @@
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Button, Input, Text, Box } from "native-base";
-import React, { useState } from "react";
-import { StyleSheet } from "react-native";
-import { ItemCategoryEnum } from "../constants/itemCategory";
-import { useDispatch } from "react-redux";
-import { addPackItem } from "../store/packsStore";
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Button, Input, Text, Box } from 'native-base';
+import React, { useState } from 'react';
+import { StyleSheet } from 'react-native';
+import { ItemCategoryEnum } from '../constants/itemCategory';
+import { useDispatch } from 'react-redux';
+import { addPackItem } from '../store/packsStore';
 
 export default function Water({ currentPack, setWaterItem }) {
   const [waterWeight, setWaterWeight] = useState(0);
   const dispatch = useDispatch();
 
+  /**
+   * Update the water weight.
+   *
+   * @param {type} value - the new value of the water weight
+   * @return {undefined} no return value
+   */
   const handleWaterChange = (value) => {
     setWaterWeight(value);
   };
 
+  /**
+   * Adds water to the pack.
+   *
+   * @return {void} No return value.
+   */
   const addWater = () => {
     const data = {
-      name: "Water",
+      name: 'Water',
       weight: waterWeight,
-      quantity: "1",
-      unit: "oz",
-      packId: currentPack["_id"],
+      quantity: '1',
+      unit: 'oz',
+      packId: currentPack._id,
       type: ItemCategoryEnum.WATER,
     };
-    
+
     dispatch(addPackItem(data));
   };
 
@@ -31,9 +42,9 @@ export default function Water({ currentPack, setWaterItem }) {
     <Box style={styles.waterContainer}>
       <Box
         style={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
         }}
       >
         <MaterialCommunityIcons
@@ -44,7 +55,7 @@ export default function Water({ currentPack, setWaterItem }) {
         />
         <Text style={{ marginRight: 20 }}>Water:</Text>
         <Input
-          style={{ flex: 1, placeholderTextColor: "#000" }}
+          style={{ flex: 1, placeholderTextColor: '#000' }}
           keyboardType="numeric"
           type="number"
           placeholder="Enter water"
@@ -53,7 +64,7 @@ export default function Water({ currentPack, setWaterItem }) {
         />
         <Text style={{ marginLeft: 20 }}>(Oz)</Text>
       </Box>
-      <Button style={{ width: "8rem" }} onPress={addWater}>
+      <Button style={{ width: '8rem' }} onPress={addWater}>
         Add
       </Button>
     </Box>
@@ -62,14 +73,14 @@ export default function Water({ currentPack, setWaterItem }) {
 
 const styles = StyleSheet.create({
   waterContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     marginTop: 30,
-    justifyContent: "space-between",
-    backgroundColor: "#78B7BB",
+    justifyContent: 'space-between',
+    backgroundColor: '#78B7BB',
     borderRadius: 5,
     padding: 10,
-    width: "100%",
-    alignSelf: "center",
+    width: '100%',
+    alignSelf: 'center',
   },
 });

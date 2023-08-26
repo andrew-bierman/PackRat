@@ -1,4 +1,4 @@
-import { getPublicTripsService } from "../../services/trip/getPublicTripService";
+import { getPublicTripsService } from '../../services/trip/getPublicTripService';
 
 /**
  * Retrieves public trips based on the given query parameter.
@@ -15,6 +15,6 @@ export const getPublicTrips = async (req, res) => {
     res.status(200).json(publicTrips);
   } catch (error) {
     console.error(error);
-    res.status(404).json({ msg: "Trips cannot be found" });
+    res.status(404).json({ msg: 'Trips cannot be found' });
   }
 };

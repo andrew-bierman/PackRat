@@ -1,6 +1,6 @@
-import User from "../../models/userModel";
-import Pack from "../../models/packModel";
-import { addToFavoriteService } from "../../services/favorite/favorite.service";
+import User from '../../models/userModel';
+import Pack from '../../models/packModel';
+import { addToFavoriteService } from '../../services/favorite/favorite.service';
 
 /**
  * Adds or removes a pack from a user's favorites list and updates the corresponding pack's favorited_by and favorites_count fields.
@@ -14,7 +14,7 @@ export const addToFavorite = async (req, res) => {
 
     await addToFavoriteService(packId, userId);
 
-    const user = await User.findOne({ _id: userId }).select("-password");
+    const user = await User.findOne({ _id: userId }).select('-password');
 
     return res.status(200).json(user);
   } catch (error) {

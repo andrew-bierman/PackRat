@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import {
   NativeBaseProvider,
   Container,
@@ -8,21 +8,21 @@ import {
   VStack,
   Image,
   HStack,
-} from "native-base";
-import { Platform, StyleSheet } from "react-native";
-import UserDataContainer from "./UserDataContainer";
-import { useAuth } from "../../auth/provider";
-import { theme } from "../../theme";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+} from 'native-base';
+import { Platform, StyleSheet } from 'react-native';
+import UserDataContainer from '../../components/user/UserDataContainer';
+import { useAuth } from '../../auth/provider';
+import { theme } from '../../theme';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 // import useGetPacks from "../../hooks/useGetPacks";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchUserPacks, selectAllPacks } from "../../store/packsStore";
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchUserPacks, selectAllPacks } from '../../store/packsStore';
 import {
   fetchUserFavorites,
   selectAllFavorites,
-} from "../../store/favoritesStore";
-import { getUser } from "../../store/userStore";
-import { fetchUserTrips } from "../../store/tripsStore";
+} from '../../store/favoritesStore';
+import { getUser } from '../../store/userStore';
+import { fetchUserTrips } from '../../store/tripsStore';
 
 const Header = ({
   user,
@@ -35,13 +35,13 @@ const Header = ({
   const profileImage = user?.profileImage ?? null;
   const userRealName = user?.name ?? null;
   const userEmail = user?.email ?? null;
-  const userEmailSplitFirstHalf = userEmail?.split("@")[0] ?? null;
+  const userEmailSplitFirstHalf = userEmail?.split('@')[0] ?? null;
   const username = user?.username
     ? `@${user?.username}`
     : `@${userEmailSplitFirstHalf}`;
 
   return (
-    <Box w={["100%", "100%", "70%", "50%"]} style={styles.infoSection}>
+    <Box w={['100%', '100%', '70%', '50%']} style={styles.infoSection}>
       <Box style={styles.userInfo}>
         {profileImage ? (
           <Image
@@ -60,7 +60,7 @@ const Header = ({
               width: 100,
               height: 100,
               borderRadius: 50,
-              alignSelf: "center",
+              alignSelf: 'center',
             }}
           />
         )}
@@ -85,7 +85,7 @@ const Header = ({
           <MaterialCommunityIcons
             name="certificate-outline"
             size={24}
-            color={user?.is_certified_guide ? "green" : "grey"}
+            color={user?.is_certified_guide ? 'green' : 'grey'}
           />
         </Box>
       </Stack>
@@ -136,7 +136,7 @@ export default function ProfileContainer({ id = null }) {
     <VStack
       style={[
         styles.mainContainer,
-        Platform.OS == "web" ? { minHeight: "100vh" } : null,
+        Platform.OS == 'web' ? { minHeight: '100vh' } : null,
       ]}
     >
       <Header
@@ -192,17 +192,17 @@ const styles = StyleSheet.create({
   mainContainer: {
     backgroundColor: theme.colors.background,
     flex: 1,
-    alignItems: "center",
+    alignItems: 'center',
     padding: 20,
   },
   infoSection: {
-    flexDirection: "column",
-    backgroundColor: "#ffffff",
-    alignItems: "center",
+    flexDirection: 'column',
+    backgroundColor: '#ffffff',
+    alignItems: 'center',
     borderRadius: 12,
     marginBottom: 25,
     padding: 20,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 1,
@@ -210,52 +210,52 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.18,
     shadowRadius: 1.0,
     elevation: 1,
-    justifyContent: "center",
+    justifyContent: 'center',
   },
   userInfo: {
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
     marginBottom: 15,
   },
   userName: {
     fontSize: 20,
-    fontWeight: "bold",
-    textAlign: "center",
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   userEmail: {
     fontSize: 16,
-    color: "grey",
-    textAlign: "center",
+    color: 'grey',
+    textAlign: 'center',
   },
   card: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    width: "100%",
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    width: '100%',
     padding: 15,
     borderRadius: 12,
-    backgroundColor: "#f2f3f7",
+    backgroundColor: '#f2f3f7',
     marginVertical: 15,
   },
   cardInfo: {
-    alignItems: "center",
+    alignItems: 'center',
   },
   mainContentContainer: {
-    width: "100%",
+    width: '100%',
     flex: 1,
   },
   userDataContainer: {
     marginBottom: 25,
-    width: "100%",
-    justifyContent: "center",
-    alignItems: "center",
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   userDataCard: {
     borderRadius: 15,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     padding: 10,
     margin: 5,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 1,
