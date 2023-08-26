@@ -8,9 +8,9 @@ import {
   REDIRECT_URL,
   UI_ROOT_URI,
   JWT_SECRET,
-} from "../../config";
-import utilsService from "../../utils/utils.service";
-import { UserAlreadyExistsError } from "../../helpers/errors";
+} from '../../config';
+import utilsService from '../../utils/utils.service';
+import { UserAlreadyExistsError } from '../../helpers/errors';
 
 const oauth2Client = new google.auth.OAuth2(
   GOOGLE_CLIENT_ID,
@@ -33,57 +33,36 @@ const getGoogleUserInfo = async (code) => {
  * @param {object} res - The response object.
  * @return {Promise} A promise that resolves to the generated token or an error message.
  */
-export const googleSignin = async (req, res) => {
+export const googleSignin = async (req, res, next) => {
   try {
     const code = req.query.code;
     const userInfo = await getGoogleUserInfo(code);
 
-    const alreadyGoogleSignin: any = await User.findOne({
+    const alreadyGoogleSignin = await User.findOne({
       email: userInfo.email,
+      name: userInfo.name,
+      password: utilsService.randomPasswordGenerator(8),
       googleId: userInfo.id,
     });
-    return googleUser;
-  };
-  
-  /**
-   * Authenticates a user using Google Sign-In.
-   * @param {object} req - The request object containing the query code.
-   * @param {object} res - The response object.
-   * @return {Promise} A promise that resolves to the generated token or an error message.
-   */
-  export const googleSignin = async (req, res,next) => {
-    try {
-      const code = req.query.code;
-      const userInfo = await getGoogleUserInfo(code);
-  
-      const alreadyGoogleSignin = await User.findOne({
+    if (!alreadyGoogleSignin) {
+      const isLocalLogin = await User.findOne({ email: userInfo.email });
+      if (isLocalLogin) {
+        next(UserAlreadyExistsError);
+      }
+      const user = new User({
         email: userInfo.email,
         name: userInfo.name,
         password: utilsService.randomPasswordGenerator(8),
         googleId: userInfo.id,
       });
-      if (!alreadyGoogleSignin) {
-        const isLocalLogin = await User.findOne({ email: userInfo.email });
-        if (isLocalLogin) {
-          next(UserAlreadyExistsError);
-        }
-        const user = new User({
-          email: userInfo.email,
-          name: userInfo.name,
-          password: utilsService.randomPasswordGenerator(8),
-          googleId: userInfo.id,
-        });
-        await user.save();
-        await user.generateAuthToken();
-        sendWelcomeEmail(user.email, user.name);
-        res.redirect(`${UI_ROOT_URI}?token=${user.token}`);
-      } else {
-        alreadyGoogleSignin.googleId = userInfo.id;
-        await alreadyGoogleSignin.generateAuthToken();
-        res.redirect(`${UI_ROOT_URI}?token=${alreadyGoogleSignin.token}`);
-      }
-    } catch (err) {
-      res.status(400).send({ message: err.message });
+      await user.save();
+      await user.generateAuthToken();
+      sendWelcomeEmail(user.email, user.name);
+      res.redirect(`${UI_ROOT_URI}?token=${user.token}`);
+    } else {
+      alreadyGoogleSignin.googleId = userInfo.id;
+      await alreadyGoogleSignin.generateAuthToken();
+      res.redirect(`${UI_ROOT_URI}?token=${alreadyGoogleSignin.token}`);
     }
   } catch (err) {
     res.status(400).send({ message: err.message });

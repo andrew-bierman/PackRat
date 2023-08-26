@@ -1,9 +1,12 @@
-import nodemailer from "nodemailer";
-import smtpTransport from "nodemailer-smtp-transport";
-import User from "../../models/userModel";
-import { findUserAndUpdate, findUserByEmail } from "../../services/user/user.service";
-import { UnableToSendCodeError } from "../../helpers/errors";
-import { responseHandler } from "../../helpers/responseHandler";
+import nodemailer from 'nodemailer';
+import smtpTransport from 'nodemailer-smtp-transport';
+import User from '../../models/userModel';
+import {
+  findUserAndUpdate,
+  findUserByEmail,
+} from '../../services/user/user.service';
+import { UnableToSendCodeError } from '../../helpers/errors';
+import { responseHandler } from '../../helpers/responseHandler';
 
 /**
  * Check if the provided email exists in the database.
@@ -12,29 +15,26 @@ import { responseHandler } from "../../helpers/responseHandler";
  * @return {Promise<void>} - A promise that resolves to nothing.
  */
 export const emailExists = async (req, res, next) => {
-    const { email } = req.body;
-    let val = await findUserByEmail(email);
-    if (val) {
-        sendEmailNotice(email).then(async (result1: any) => {
-            if (result1.status) {
-                let { newcode } = result1;
-                findUserAndUpdate(email, newcode, "code").then(async (result2: any) => {
-                    if (result2.status) {
-                        responseHandler(res)
-                    } else {
-                        next(result2)
-                    }
-                })
-            } else {
-                next(UnableToSendCodeError)
-            }
+  const { email } = req.body;
+  let val = await findUserByEmail(email);
+  if (val) {
+    sendEmailNotice(email).then(async (result1: any) => {
+      if (result1.status) {
+        let { newcode } = result1;
+        findUserAndUpdate(email, newcode, 'code').then(async (result2: any) => {
+          if (result2.status) {
+            responseHandler(res);
+          } else {
+            next(result2);
+          }
         });
-    } else {
-        res.locals.data = val
-        responseHandler(res)
-    }
-  } catch (error) {
-    res.status(404).json({ message: 'Server Error' });
+      } else {
+        next(UnableToSendCodeError);
+      }
+    });
+  } else {
+    res.locals.data = val;
+    responseHandler(res);
   }
 };
 
