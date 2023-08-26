@@ -211,28 +211,21 @@ function NativeMap({ shape: shapeProp }) {
   }
 
   const pointLatLong = shape?.features[0]?.geometry?.coordinates;
-
-  const { type, coordinates } = shape?.features[0]?.geometry;
-  const openMaps = () => {
-
-    let latLng;
-    if(type !== 'Point') {
-      const [firstLatLng] = coordinates;
-      latLng = firstLatLng.join(',');
-    } else {
-      latLng = coordinates.join(',');
-    }
-
-    const scheme = Platform.select({ ios: 'maps://0,0?q=', android: 'geo:0,0?q=' });
-    const label = shape?.features[0]?.properties?.name
-    
+  const openMaps = (latLong) => {
+    console.log(latLong.join(','), 'lat long');
+    const scheme = Platform.select({
+      ios: 'maps://0,0?q=',
+      android: 'geo:0,0?q=',
+    });
+    const latLng = latLong.join(',');
+    // console.log('shape?.features[0]?.properties?.name',shape?.features[0]?.properties?.name)
+    const label = shape?.features[0]?.properties?.name;
     const url = Platform.select({
       ios: `${scheme}${label}@${latLng}`,
       android: `${scheme}${latLng}(${label})`,
     });
     Linking.openURL(url);
   };
-
   const element = (
     <View style={mapFullscreen ? fullMapDimension : previewMapStyle}>
       <Mapbox.MapView
@@ -280,42 +273,12 @@ function NativeMap({ shape: shapeProp }) {
         {/* trail */}
         {isPoint(shape) ? (
           <Mapbox.PointAnnotation
-          id="destination"
-          coordinate={pointLatLong}
-          onSelected={() => {
-            openMaps(pointLatLong)
-          }}
-          >
-           {/* <CircleCapComp /> */}
-          <View >
-           <MaterialCommunityIcons
-              name="map-marker"
-              size={35}
-              color={"#de0910"}
-              />
-        </View>
-
-
-          </Mapbox.PointAnnotation>
-           :
-          isLineString(shape) ?
-          <>
-          <Mapbox.ShapeSource
-          id="source1"
-          lineMetrics={true}
-          shape={shape.features[0]}
-          cluster
-          clusterRadius={80}
-          clusterMaxZoomLevel={14}
-          style={{ zIndex: 1 }}
-        >
-          <Mapbox.LineLayer id="layer1" style={styles.lineLayer} />
-        </Mapbox.ShapeSource>
-        {/* // top location */}
-        {shape?.features[0]?.geometry?.coordinates?.length > 0 && (
-          <Mapbox.PointAnnotation
-            id={"1212"}
-            coordinate={[location.longitude, location.latitude]}
+            id="destination"
+            coordinate={pointLatLong}
+            onSelected={() => {
+              console.log('selected');
+              openMaps(pointLatLong);
+            }}
           >
             {/* <CircleCapComp /> */}
             <View>
@@ -394,7 +357,6 @@ function NativeMap({ shape: shapeProp }) {
           });
         }}
         styles={styles}
-        navigateToMaps={openMaps}
         downloadable={isShapeDownloadable(shape)}
         downloading={downloading}
         shape={shape}

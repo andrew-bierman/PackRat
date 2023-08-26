@@ -1,15 +1,20 @@
-import { Modal, Text, View, Image, Dimensions, StyleSheet } from 'react-native';
+import { Modal, Text, View, Image, Dimensions } from 'react-native';
 import Mapbox, { offlineManager } from '@rnmapbox/maps';
 import { useEffect, useState } from 'react';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import MapButtonsOverlay from '../../components/map/MapButtonsOverlay';
 import { theme } from '../../theme';
+import UseTheme from '../../hooks/useTheme';
+import { StyleSheet } from 'react-native';
 import {
   calculateZoomLevel,
   getShapeSourceBounds,
 } from '../../utils/mapFunctions';
 
 function CircleCapComp() {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
+
   return (
     <View
       style={{
@@ -17,14 +22,16 @@ function CircleCapComp() {
         width: 18,
         borderRadius: 16,
         borderWidth: 3,
-        borderColor: 'white',
-        backgroundColor: '#16b22d',
+        borderColor: currentTheme.colors.white,
+        backgroundColor: currentTheme.colors.cardIconColor,
       }}
     ></View>
   );
 }
 
 export default function DownloadedMaps() {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
   const [offlinePacks, setOfflinePacks] = useState(null);
   const [showMap, setShowMap] = useState(false);
   const [pack, setPack] = useState(null);
@@ -48,14 +55,14 @@ export default function DownloadedMaps() {
   }, []);
 
   return (
-    <View style={{ backgroundColor: theme.colors.background }}>
+    <View style={{ backgroundColor: currentTheme.colors.background }}>
       <Text
         style={{
           textAlign: 'center',
           fontSize: 20,
           fontWeight: 'bold',
           marginBottom: 20,
-          color: theme.colors.text,
+          color: currentTheme.colors.text,
         }}
       >
         Downloaded Maps
@@ -97,7 +104,7 @@ export default function DownloadedMaps() {
                     fontSize: 16,
                     fontWeight: 'bold',
                     marginTop: 5,
-                    color: theme.colors.text,
+                    color: currentTheme.colors.text,
                   }}
                 >
                   {metadata.name}
@@ -138,7 +145,13 @@ export default function DownloadedMaps() {
               clusterMaxZoomLevel={14}
               style={{ zIndex: 1 }}
             >
-              <Mapbox.LineLayer id="layer1" style={styles.lineLayer} />
+              <Mapbox.LineLayer
+                id="layer1"
+                style={[
+                  styles.lineLayer,
+                  { lineColor: currentTheme.colors.cardIconColor },
+                ]}
+              />
             </Mapbox.ShapeSource>
             {/* // top location */}
             {shape?.features[0]?.geometry?.coordinates?.length > 0 && (
@@ -172,7 +185,6 @@ export default function DownloadedMaps() {
 
 const styles = StyleSheet.create({
   lineLayer: {
-    lineColor: '#16b22d',
     lineWidth: 4,
     lineOpacity: 1,
   },

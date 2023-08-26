@@ -19,6 +19,7 @@ import { StyleSheet, FlatList, View } from 'react-native';
 import Card from '../../components/feed/FeedCard';
 import DropdownComponent from '../../components/Dropdown';
 import { theme } from '../../theme';
+import UseTheme from '../../hooks/useTheme';
 import {
   getPublicPacks,
   getPublicTrips,
@@ -58,9 +59,11 @@ const FeedSearchFilter = ({
   setSearchQuery,
   handleCreateClick,
 }) => {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
   return (
-    <View style={styles.filterContainer}>
-      <Box style={styles.searchContainer}>
+    <View style={styles().filterContainer}>
+      <Box style={styles().searchContainer}>
         <HStack space={3}>
           <Input
             w="80%"
@@ -69,7 +72,13 @@ const FeedSearchFilter = ({
             onChangeText={setSearchQuery}
           />
           <IconButton
-            icon={<AntDesign name="search1" size={24} color="gray" />}
+            icon={
+              <AntDesign
+                name="search1"
+                size={24}
+                color={currentTheme.colors.cardIconColor}
+              />
+            }
             variant="ghost"
           />
         </HStack>
@@ -86,7 +95,11 @@ const FeedSearchFilter = ({
       >
         {feedType === 'public' && (
           <HStack space={3} alignItems="center">
-            <Text fontSize="lg" fontWeight="bold">
+            <Text
+              fontSize="lg"
+              fontWeight="bold"
+              color={currentTheme.colors.text}
+            >
               Packs
             </Text>
             <Switch
@@ -94,7 +107,11 @@ const FeedSearchFilter = ({
               isChecked={selectedTypes.pack}
               onToggle={handleTogglePack}
             />
-            <Text fontSize="lg" fontWeight="bold">
+            <Text
+              fontSize="lg"
+              fontWeight="bold"
+              color={currentTheme.colors.text}
+            >
               Trips
             </Text>
             <Switch
@@ -105,7 +122,11 @@ const FeedSearchFilter = ({
           </HStack>
         )}
         <HStack space={3} alignItems="center">
-          <Text fontSize="lg" fontWeight="bold">
+          <Text
+            fontSize="lg"
+            fontWeight="bold"
+            color={currentTheme.colors.text}
+          >
             Sort By:
           </Text>
           <DropdownComponent
@@ -113,7 +134,7 @@ const FeedSearchFilter = ({
             data={dataValues}
             onValueChange={handleSortChange}
             placeholder="Sort By"
-            style={styles.dropdown}
+            style={styles().dropdown}
             width={150}
           />
         </HStack>
@@ -210,7 +231,7 @@ const Feed = ({ feedType = 'public' }) => {
       />
     );
     return Platform.OS === 'web' ? (
-      <View style={styles.cardContainer}>
+      <View style={styles().cardContainer}>
         {console.log({ data })}
         {feedSearchFilterComponent}
         {data?.map((item) => (
@@ -261,37 +282,41 @@ const Feed = ({ feedType = 'public' }) => {
     router.push(createUrlPath);
   };
 
-  return <Box style={styles.mainContainer}>{renderData()}</Box>;
+  return <Box style={styles().mainContainer}>{renderData()}</Box>;
 };
 
-const styles = StyleSheet.create({
-  mainContainer: {
-    flex: 1,
-    backgroundColor: theme.colors.background,
-    fontSize: 18,
-    padding: 15,
-  },
-  filterContainer: {
-    backgroundColor: theme.colors.white,
-    padding: 15,
-    fontSize: 18,
-    width: '100%',
-    borderRadius: 10,
-  },
-  searchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 10,
-    padding: 10,
-    borderRadius: 5,
-  },
-  cardContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-  },
-});
+const styles = () => {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
+  return StyleSheet.create({
+    mainContainer: {
+      flex: 1,
+      backgroundColor: currentTheme.colors.background,
+      fontSize: 18,
+      padding: 15,
+    },
+    filterContainer: {
+      backgroundColor: currentTheme.colors.card,
+      padding: 15,
+      fontSize: 18,
+      width: '100%',
+      borderRadius: 10,
+    },
+    searchContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginBottom: 10,
+      padding: 10,
+      borderRadius: 5,
+    },
+    cardContainer: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      justifyContent: 'space-around',
+      alignItems: 'center',
+    },
+  });
+};
 
 export default Feed;

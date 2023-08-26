@@ -4,20 +4,21 @@ import LargeCard from '../card/LargeCard';
 import { SearchInput } from '../SearchInput';
 import { StyleSheet, View } from 'react-native';
 import { theme } from '../../theme';
+import UseTheme from '../../hooks/useTheme';
 import { useSelector, useDispatch } from 'react-redux';
 import Hero from '../hero';
 import { useRouter } from 'expo-router';
 import {
-  photonDetails, // TODO (use geojson)
-  processGeoJSON, // TODO (use geojson)
+  photonDetails,
+  processGeoJSON,
   setSelectedSearchResult,
 } from '../../store/destinationStore';
 import { hexToRGBA } from '../../utils/colorFunctions';
 
 const HeroSection = ({ onSelect }) => {
   const dispatch = useDispatch();
-  console.log('heroooo');
-
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
   const router = useRouter();
 
   const currentDestination = useSelector(
@@ -69,7 +70,7 @@ const HeroSection = ({ onSelect }) => {
   const { name } = user;
   const firstNameOrUser = name.split(' ')[0] ?? 'User';
 
-  const cardBackgroundColor = hexToRGBA(theme.colors.secondaryBlue, 0.5);
+  const cardBackgroundColor = hexToRGBA(currentTheme.colors.secondaryBlue, 0.5);
 
   const bannerText =
     firstNameOrUser !== 'User'
@@ -79,7 +80,7 @@ const HeroSection = ({ onSelect }) => {
   // console.log("cardBackgroundColor", cardBackgroundColor)
 
   return (
-    <View style={styles.banner}>
+    <View style={styles().banner}>
       <Hero
         imageDetails={{
           title: 'N/A',
@@ -90,7 +91,8 @@ const HeroSection = ({ onSelect }) => {
       >
         <LargeCard
           customStyle={{
-            backgroundColor: cardBackgroundColor || theme.colors.secondaryBlue,
+            backgroundColor:
+              cardBackgroundColor || currentTheme.colors.secondaryBlue,
             alignItems: 'center',
             justifyContent: 'center',
             width: '100%',
@@ -106,7 +108,7 @@ const HeroSection = ({ onSelect }) => {
               justifyContent: 'center',
             }}
           >
-            <Text style={styles.title}>{bannerText}</Text>
+            <Text style={styles().title}>{bannerText}</Text>
             <SearchInput
               onSelect={handleSearchSelect}
               placeholder={'Search by park, city, or trail'}
@@ -118,23 +120,27 @@ const HeroSection = ({ onSelect }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  banner: {
-    flex: 1,
-    backgroundRepeat: 'repeat',
-    backgroundSize: 'cover',
-    // overflow: "hidden",
-    marginBottom: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    color: theme.colors.text,
-  },
-});
+const styles = () => {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
+  return StyleSheet.create({
+    banner: {
+      flex: 1,
+      backgroundRepeat: 'repeat',
+      backgroundSize: 'cover',
+      // overflow: "hidden",
+      marginBottom: 20,
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: '100%',
+    },
+    title: {
+      fontSize: 24,
+      fontWeight: 'bold',
+      marginBottom: 20,
+      color: currentTheme.colors.text,
+    },
+  });
+};
 
 export default HeroSection;
