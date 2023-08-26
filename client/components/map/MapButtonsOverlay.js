@@ -24,6 +24,7 @@ const MapButtonsOverlay = ({
   onDownload,
   handleGpxUpload,
   progress,
+  navigateToMaps,
 }) => {
   console.log('newwwww');
   const [showStyleOptions, setShowStyleOptions] = useState(false);
@@ -48,12 +49,30 @@ const MapButtonsOverlay = ({
     <>
       {!mapFullscreen ? (
         // Preview map
-        <TouchableOpacity
-          style={[styles().headerBtnView, styles().enterFullScreenBtn]}
-          onPress={enableFullScreen}
-        >
-          <Entypo name="resize-full-screen" size={21} color="grey" />
-        </TouchableOpacity>
+        <>
+          <TouchableOpacity
+            style={[styles().headerBtnView, styles().enterFullScreenBtn]}
+            onPress={enableFullScreen}
+          >
+            <Entypo name="resize-full-screen" size={21} color="grey" />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[
+              styles.headerBtnView,
+              {
+                width: 40,
+                height: 40,
+                position: 'absolute',
+                bottom: 10,
+                left: 10,
+              },
+            ]}
+            onPress={navigateToMaps}
+          >
+            <FontAwesome5 name="directions" size={21} color="grey" />
+          </TouchableOpacity>
+        </>
       ) : (
         // Fullscreen map
         <>
@@ -164,6 +183,21 @@ const MapButtonsOverlay = ({
               <MaterialCommunityIcons name="map-plus" size={24} color="grey" />
             </TouchableOpacity>
           )}
+          <TouchableOpacity
+            style={[
+              styles.headerBtnView,
+              {
+                width: 40,
+                height: 40,
+                position: 'absolute',
+                bottom: 80,
+                left: 10,
+              },
+            ]}
+            onPress={navigateToMaps}
+          >
+            <FontAwesome5 name="directions" size={21} color="grey" />
+          </TouchableOpacity>
 
           {/* Location Button */}
           <TouchableOpacity
