@@ -1,4 +1,4 @@
-import { postCollectionGeoJSONService } from "../../services/osm/osm.service";
+import { postCollectionGeoJSONService } from '../../services/osm/osm.service';
 
 /**
  * Handles the POST request for collection GeoJSON.
@@ -8,13 +8,13 @@ import { postCollectionGeoJSONService } from "../../services/osm/osm.service";
  */
 export const postCollectionGeoJSON = async (req, res) => {
   try {
-    console.log("in postGeoJSON");
+    console.log('in postGeoJSON');
     const geojson = req.body;
 
     const result = await postCollectionGeoJSONService(geojson);
 
     res.status(201).json({
-      status: "success",
+      status: 'success',
       data: {
         result,
       },
@@ -22,7 +22,7 @@ export const postCollectionGeoJSON = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(400).json({
-      status: "fail",
+      status: 'fail',
       message: error.message,
     });
   }

@@ -1,4 +1,4 @@
-import Trip from "../../models/tripModel";
+import Trip from '../../models/tripModel';
 
 /**
  * Retrieves trips belonging to a specific owner.
@@ -7,11 +7,11 @@ import Trip from "../../models/tripModel";
  */
 export const getTripsService = async (ownerId: string): Promise<object[]> => {
   try {
-    const trips = await Trip.find({ owner_id: ownerId }).populate("packs");
+    const trips = await Trip.find({ owner_id: ownerId }).populate('packs');
 
     return trips;
   } catch (error) {
     console.error(error);
-    throw new Error("Trips cannot be found");
+    throw new Error('Trips cannot be found');
   }
 };
