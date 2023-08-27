@@ -2,12 +2,12 @@ import {
   createSlice,
   createAsyncThunk,
   createEntityAdapter,
-} from "@reduxjs/toolkit";
-import { api } from "../constants/api";
-import axios from "~/config/axios";
+} from '@reduxjs/toolkit';
+import { api } from '../constants/api';
+import axios from '~/config/axios';
 
 export const fetchPhotonSearchResults = createAsyncThunk(
-  "search/fetchPhotonSearchResults",
+  'search/fetchPhotonSearchResults',
   async (searchString) => {
     const url =
       api +
@@ -17,12 +17,12 @@ export const fetchPhotonSearchResults = createAsyncThunk(
       const response = await axios.get(url);
       return response.data;
     } catch (error) {
-      console.error("error:" + error);
+      console.error('error:' + error);
     }
-  }
+  },
 );
 export const fetchItemsSearchResults = createAsyncThunk(
-  "search/fetchItemsSearchResults",
+  'search/fetchItemsSearchResults',
   async (searchString) => {
     const url = api + `/item/global?search=${encodeURIComponent(searchString)}`;
 
@@ -30,9 +30,9 @@ export const fetchItemsSearchResults = createAsyncThunk(
       const response = await axios.get(url);
       return response.data;
     } catch (error) {
-      console.error("error:" + error);
+      console.error('error:' + error);
     }
-  }
+  },
 );
 
 const searchAdapter = createEntityAdapter();
@@ -43,7 +43,7 @@ const initialState = searchAdapter.getInitialState({
 });
 
 const searchSlice = createSlice({
-  name: "search",
+  name: 'search',
   initialState,
   reducers: {
     setSelectedSearchResult(state, action) {

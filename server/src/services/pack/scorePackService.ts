@@ -1,6 +1,6 @@
-import Pack from '../../models/packModel'
-import mongoose from 'mongoose'
-import { calculatePackScore } from '../../utils/scorePack'
+import Pack from '../../models/packModel';
+import mongoose from 'mongoose';
+import { calculatePackScore } from '../../utils/scorePack';
 
 /**
  * Scores a pack service based on the given packId.
@@ -9,23 +9,23 @@ import { calculatePackScore } from '../../utils/scorePack'
  * @return {Promise<Pack>} The updated pack object with scores and grades.
  * @throws {Error} If unable to score the pack.
  */
-export async function scorePackService (packId: string) {
+export async function scorePackService(packId: string) {
   try {
-    const objectId = new mongoose.Types.ObjectId(packId)
-    const packData = await Pack.findById(objectId).populate('items')
+    const objectId = new mongoose.Types.ObjectId(packId);
+    const packData = await Pack.findById(objectId).populate('items');
 
-    const packScore = calculatePackScore(packData)
+    const packScore = calculatePackScore(packData);
 
-    const { scores, grades } = packScore
+    const { scores, grades } = packScore;
 
     const updatedPack = await Pack.findByIdAndUpdate(
       { _id: packId },
       { scores, grades },
-      { returnOriginal: false }
-    )
+      { returnOriginal: false },
+    );
 
-    return updatedPack
+    return updatedPack;
   } catch (error) {
-    throw new Error('Unable to score pack: ' + error.message)
+    throw new Error('Unable to score pack: ' + error.message);
   }
 }

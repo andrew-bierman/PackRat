@@ -1,7 +1,7 @@
 // import { X } from "@tamagui/lucide-icons";
 
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useState } from "react";
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useState } from 'react';
 
 import {
   Adapt,
@@ -16,9 +16,9 @@ import {
   Unspaced,
   XStack,
   YStack,
-} from "tamagui";
+} from 'tamagui';
 
-import { SelectDemoItem } from "../select/index.js";
+import { SelectDemoItem } from '../select/index.js';
 
 export function DialogDemo() {
   // return null
@@ -62,9 +62,9 @@ function DialogInstance() {
           bordered
           elevate
           key="content"
-          animateOnly={["transform", "opacity"]}
+          animateOnly={['transform', 'opacity']}
           animation={[
-            "quick",
+            'quick',
             {
               opacity: {
                 overshootClamping: true,

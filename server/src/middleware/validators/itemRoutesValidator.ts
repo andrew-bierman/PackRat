@@ -1,4 +1,4 @@
-import { celebrate, Joi, Segments } from 'celebrate'
+import { celebrate, Joi, Segments } from 'celebrate';
 
 /**
  * Creates a Joi validation rule for MongoDB ObjectIds.
@@ -7,18 +7,18 @@ import { celebrate, Joi, Segments } from 'celebrate'
  * @return {Joi.StringSchema} - The Joi validation rule for MongoDB ObjectIds.
  */
 export const JoiObjectId = (message = 'valid id') =>
-  Joi.string().regex(/^[0-9a-fA-F]{24}$/, message)
+  Joi.string().regex(/^[0-9a-fA-F]{24}$/, message);
 
 export const getItems = celebrate({
   [Segments.PARAMS]: Joi.object().keys({
-    packId: JoiObjectId().required()
-  })
-})
+    packId: JoiObjectId().required(),
+  }),
+});
 export const getItemById = celebrate({
   [Segments.BODY]: Joi.object().keys({
-    _id: JoiObjectId().required()
-  })
-})
+    _id: JoiObjectId().required(),
+  }),
+});
 export const addItem = celebrate({
   [Segments.BODY]: Joi.object().keys({
     name: Joi.string().required(),
@@ -26,9 +26,9 @@ export const addItem = celebrate({
     quantity: Joi.string().required(),
     unit: Joi.string().required(),
     packId: JoiObjectId().required(),
-    type: Joi.string().optional()
-  })
-})
+    type: Joi.string().optional(),
+  }),
+});
 export const editItem = celebrate({
   [Segments.BODY]: Joi.object().keys({
     _id: JoiObjectId().required(),
@@ -36,15 +36,15 @@ export const editItem = celebrate({
     weight: Joi.string(),
     quantity: Joi.string(),
     unit: Joi.string(),
-    type: Joi.string()
-  })
-})
+    type: Joi.string(),
+  }),
+});
 export const deleteItem = celebrate({
   [Segments.BODY]: Joi.object().keys({
     itemId: JoiObjectId().required(),
-    packId: JoiObjectId()
-  })
-})
+    packId: JoiObjectId(),
+  }),
+});
 
 export const addItemGlobal = celebrate({
   [Segments.BODY]: Joi.object().keys({
@@ -52,6 +52,6 @@ export const addItemGlobal = celebrate({
     weight: Joi.string().required(),
     quantity: Joi.string().required(),
     unit: Joi.string().required(),
-    type: Joi.string().optional()
-  })
-})
+    type: Joi.string().optional(),
+  }),
+});

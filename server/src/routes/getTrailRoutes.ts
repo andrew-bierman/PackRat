@@ -1,8 +1,9 @@
-import express from 'express'
-import { getTrails } from '../controllers/getTrail/index'
+import express from 'express';
+import { getTrails } from '../controllers/getTrail/index';
+import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
 
-const router = express.Router()
+const router = express.Router();
 
-router.post('/', getTrails)
+router.post('/', tryCatchWrapper(getTrails));
 
-export default router
+export default router;

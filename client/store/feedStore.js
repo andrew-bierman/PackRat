@@ -2,9 +2,9 @@ import {
   createSlice,
   createAsyncThunk,
   createEntityAdapter,
-} from "@reduxjs/toolkit";
-import { api } from "../constants/api";
-import axios from "~/config/axios"
+} from '@reduxjs/toolkit';
+import { api } from '../constants/api';
+import axios from '~/config/axios';
 
 // Define the adapter for packs and trips
 const feedAdapter = createEntityAdapter({
@@ -20,28 +20,28 @@ const initialState = feedAdapter.getInitialState({
 });
 
 export const getPublicPacks = createAsyncThunk(
-  "feed/getPublicPacks",
+  'feed/getPublicPacks',
   async (queryBy) => {
     const response = await axios.get(
-      `${api}/pack/?queryBy=${queryBy || "Favorite"}`,
+      `${api}/pack/?queryBy=${queryBy || 'Favorite'}`,
     );
     return response.data;
   },
 );
 
 export const getPublicTrips = createAsyncThunk(
-  "feed/getPublicTrips",
+  'feed/getPublicTrips',
   async (queryBy) => {
     const response = await axios.get(
-      `${api}/trip/?queryBy=${queryBy || "Favorite"}`,
+      `${api}/trip/?queryBy=${queryBy || 'Favorite'}`,
     );
     return response.data;
   },
 );
 
 const feedSlice = createSlice({
-  name: "feed",
-  initialState: initialState,
+  name: 'feed',
+  initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
@@ -54,7 +54,7 @@ const feedSlice = createSlice({
         state.publicPacks = action.payload.map((pack) => {
           return {
             ...pack,
-            type: "pack",
+            type: 'pack',
           };
         });
         state.isLoading = false;
@@ -73,7 +73,7 @@ const feedSlice = createSlice({
         state.publicTrips = action.payload.map((trip) => {
           return {
             ...trip,
-            type: "trip",
+            type: 'trip',
           };
         });
         state.isLoading = false;

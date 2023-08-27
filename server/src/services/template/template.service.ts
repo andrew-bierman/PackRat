@@ -1,2 +1,2 @@
-export * from './addTemplateService'
-export * from './editTemplateService'
+export * from './addTemplateService';
+export * from './editTemplateService';

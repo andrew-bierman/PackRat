@@ -1,5 +1,5 @@
-import mongoose from 'mongoose'
+import mongoose from 'mongoose';
 
-const myDB = mongoose.connection.useDb('packratdb')
+const myDB = mongoose.connection.useDb('packratdb');
 
-export default myDB
+export default myDB;

@@ -1,4 +1,10 @@
-import axios from 'axios'
+import axios from 'axios';
+import {
+  ErrorProcessingNominatimError,
+  ErrorRetrievingNominatimError,
+  InvalidRequestParamsError,
+} from '../../helpers/errors';
+import { responseHandler } from '../../helpers/responseHandler';
 
 /**
  * Retrieves Nominatim details based on the provided latitude, longitude, or place ID.
@@ -6,31 +12,29 @@ import axios from 'axios'
  * @param {Object} res - The response object.
  * @returns {Promise<void>} - Returns nothing.
  */
-export const getNominatimDetails = async (req, res) => {
-  const { lat, lon, place_id } = req.query
+export const getNominatimDetails = async (req, res, next) => {
+  const { lat, lon, place_id } = req.query;
 
-  let nominatimUrl = ''
+  let nominatimUrl = '';
 
   if (place_id) {
-    nominatimUrl = `https://nominatim.openstreetmap.org/lookup?format=json&osm_ids=${place_id}&addressdetails=1`
+    nominatimUrl = `https://nominatim.openstreetmap.org/lookup?format=json&osm_ids=${place_id}&addressdetails=1`;
   } else if (lat && lon) {
-    nominatimUrl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`
+    nominatimUrl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`;
   } else {
-    res.status(400).send({ message: 'Invalid request parameters' })
-    return // Return early to avoid further execution
+    next(InvalidRequestParamsError);
   }
-
   try {
-    const response = await axios.get(nominatimUrl)
+    const response = await axios.get(nominatimUrl);
 
     if (response.status === 200) {
-      res.send(response.data)
+      res.locals.data = response.data;
+      responseHandler(res);
     } else {
-      console.log(response.status, response.statusText)
-      res.send({ message: 'Error processing Nominatim Data' })
+      console.log(response.status, response.statusText);
+      next(ErrorProcessingNominatimError);
     }
   } catch (error) {
-    console.error(error)
-    res.status(500).send({ message: 'Error retrieving Nominatim Data' })
+    next(ErrorRetrievingNominatimError);
   }
-}
+};

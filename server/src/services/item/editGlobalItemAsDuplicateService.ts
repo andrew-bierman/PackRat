@@ -1,6 +1,6 @@
-import Item from '../../models/itemModel'
-import Pack from '../../models/packModel'
-import { ItemCategoryModel } from '../../models/itemCategory'
+import Item from '../../models/itemModel';
+import Pack from '../../models/packModel';
+import { ItemCategoryModel } from '../../models/itemCategory';
 
 /**
  * Edits a global item by creating a duplicate item in a specific pack.
@@ -14,10 +14,18 @@ import { ItemCategoryModel } from '../../models/itemCategory'
  * @param {string} type - The type/category of the duplicate item.
  * @return {Promise<object>} The newly created duplicate item.
  */
-export const editGlobalItemAsDuplicateService = async (itemId, packId, name, weight, quantity, unit, type) => {
+export const editGlobalItemAsDuplicateService = async (
+  itemId,
+  packId,
+  name,
+  weight,
+  quantity,
+  unit,
+  type,
+) => {
   const category = await ItemCategoryModel.findOne({
-    name: type
-  })
+    name: type,
+  });
 
   let newItem = await Item.create({
     name,
@@ -26,28 +34,25 @@ export const editGlobalItemAsDuplicateService = async (itemId, packId, name, wei
     quantity,
     category: category._id,
     global: false,
-    packs: [packId]
-  })
+    packs: [packId],
+  });
 
-  newItem = await Item.findById(newItem._id).populate('category', 'name')
+  newItem = await Item.findById(newItem._id).populate('category', 'name');
 
-  await Pack.updateOne(
-    { _id: packId },
-    { $addToSet: { items: newItem._id } }
-  )
+  await Pack.updateOne({ _id: packId }, { $addToSet: { items: newItem._id } });
 
-  await Pack.updateOne({ _id: packId }, { $pull: { items: itemId } })
+  await Pack.updateOne({ _id: packId }, { $pull: { items: itemId } });
 
   await Item.updateOne(
     {
-      _id: itemId
+      _id: itemId,
     },
     {
       $pull: {
-        packs: packId
-      }
-    }
-  )
+        packs: packId,
+      },
+    },
+  );
 
-  return newItem
-}
+  return newItem;
+};

@@ -1,4 +1,4 @@
-import Pack from '../../models/packModel'
+import Pack from '../../models/packModel';
 
 /**
  * Duplicates a public pack service.
@@ -9,9 +9,9 @@ import Pack from '../../models/packModel'
  * @return {Object} - An object containing the duplicated pack.
  */
 export const duplicatePublicPackService = async (packId, ownerId, items) => {
-  let pack = await Pack.findById(packId)
+  let pack = await Pack.findById(packId);
   if (!pack) {
-    throw new Error('Pack not found')
+    throw new Error('Pack not found');
   }
 
   pack = await Pack.create({
@@ -25,8 +25,8 @@ export const duplicatePublicPackService = async (packId, ownerId, items) => {
     owners: [...pack.owners, ownerId],
     grades: { ...pack.grades },
     scores: { ...pack.scores },
-    type: pack.type
-  })
+    type: pack.type,
+  });
 
-  return { pack }
-}
+  return { pack };
+};
