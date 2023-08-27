@@ -67,24 +67,24 @@ const CustomAccordion = ({ title, content, iconName }) => {
   };
 
   return (
-    <Card style={styles.card}>
-      <View style={styles.cardHeader}>
-        <MaterialIcons name={iconName} style={styles.icon} />
+    <Card style={styles().card}>
+      <View style={styles().cardHeader}>
+        <MaterialIcons name={iconName} style={styles().icon} />
         <View style={{ flex: 1 }}>
-          <Text style={styles.featureText}>{title}</Text>
+          <Text style={styles().featureText}>{title}</Text>
         </View>
         <Button
           transparent
-          style={styles.transparentButton}
+          style={styles().transparentButton}
           onPress={toggleExpanded}
         >
           <MaterialIcons
             name={expanded ? 'keyboard-arrow-down' : 'keyboard-arrow-up'}
-            style={styles.icon}
+            style={styles().icon}
           />
         </Button>
       </View>
-      {expanded && <Text style={styles.cardContent}>{content}</Text>}
+      {expanded && <Text style={styles().cardContent}>{content}</Text>}
     </Card>
   );
 };
@@ -93,7 +93,7 @@ const LandingPage = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     UseTheme();
   return (
-    <VStack style={styles.container}>
+    <VStack style={styles().container}>
       <Box
         style={{
           alignItems: 'center',
@@ -117,21 +117,21 @@ const LandingPage = () => {
           The Ultimate Travel App
         </Text>
       </Box>
-      <Box style={styles.secondaryContentContainer}>
+      <Box style={styles().secondaryContentContainer}>
         {/* <ImageBackground
           source={require("../../assets/background-image.png")}
-          style={styles.backgroundImage}
+          style={styles().backgroundImage}
         > */}
-        <View style={styles.overlay} />
-        <Container style={styles.contentContainer}>
-          <Text style={styles.introText}>
+        <View style={styles().overlay} />
+        <Container style={styles().contentContainer}>
+          <Text style={styles().introText}>
             PackRat is the ultimate adventure planner designed for those who
             love to explore the great outdoors. Plan and organize your trips
             with ease, whether it's a weekend camping trip, a day hike, or a
             cross-country road trip.
           </Text>
           {Platform.OS === 'web' && (
-            <View style={styles.appBadges}>
+            <View style={styles().appBadges}>
               <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                 <Button title="App Store" style={{ marginRight: 10 }}>
                   <HStack space={2} alignItems="center">
@@ -177,15 +177,15 @@ const LandingPage = () => {
             ))}
           </View>
         </Container>
-        <Container style={styles.buttonContainer}>
+        <Container style={styles().buttonContainer}>
           <Button
             full
-            style={styles.getStartedButton}
+            style={styles().getStartedButton}
             onPress={() => {
               /* Add navigation to the sign in screen */
             }}
           >
-            <Text style={styles.footerText}>Get Started</Text>
+            <Text style={styles().footerText}>Get Started</Text>
           </Button>
         </Container>
         <StatusBar style="auto" />
@@ -195,93 +195,97 @@ const LandingPage = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  mutualStyles: {
-    backgroundColor: theme.colors.background,
-    flex: 1,
-    flexDirection: 'column',
-    height: '100%',
-  },
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-  },
-  secondaryContentContainer: {
-    flex: 1,
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: theme.colors.background,
-  },
-  appBadges: {
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginVertical: 20,
-    marginBottom: 20,
-  },
-  backgroundImage: {
-    flex: 1,
-    resizeMode: 'cover',
-    justifyContent: 'center',
-  },
-  contentContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-  },
-  introText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 20,
-    color: theme.colors.text,
-  },
-  card: {
-    marginBottom: 10,
-    width: '100%',
-    backgroundColor: theme.colors.secondaryBlue,
-  },
-  cardHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-  },
-  transparentButton: {
-    backgroundColor: 'transparent',
-  },
-  icon: {
-    fontSize: 28,
-    color: '#34a89a',
-    marginRight: 10,
-  },
-  featureText: {
-    fontSize: 18,
-    color: theme.colors.text,
-  },
-  cardContent: {
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    fontSize: 16,
-    color: theme.colors.text,
-  },
-  buttonContainer: {
-    paddingHorizontal: 20,
-    paddingBottom: 20,
-  },
-  getStartedButton: {
-    backgroundColor: '#34a89a',
-  },
-  footerText: {
-    color: 'white',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-});
+const styles = () => {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
+  return StyleSheet.create({
+    mutualStyles: {
+      backgroundColor: currentTheme.colors.background,
+      flex: 1,
+      flexDirection: 'column',
+      height: '100%',
+    },
+    container: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      width: '100%',
+    },
+    secondaryContentContainer: {
+      flex: 1,
+      width: '100%',
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: currentTheme.colors.background,
+    },
+    appBadges: {
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginVertical: 20,
+      marginBottom: 20,
+    },
+    backgroundImage: {
+      flex: 1,
+      resizeMode: 'cover',
+      justifyContent: 'center',
+    },
+    contentContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      paddingHorizontal: 20,
+    },
+    introText: {
+      fontSize: 24,
+      fontWeight: 'bold',
+      textAlign: 'center',
+      marginBottom: 20,
+      color: currentTheme.colors.text,
+    },
+    card: {
+      marginBottom: 10,
+      width: '100%',
+      backgroundColor: currentTheme.colors.secondaryBlue,
+    },
+    cardHeader: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      paddingHorizontal: 20,
+      paddingVertical: 10,
+    },
+    transparentButton: {
+      backgroundColor: 'transparent',
+    },
+    icon: {
+      fontSize: 28,
+      color: '#34a89a',
+      marginRight: 10,
+    },
+    featureText: {
+      fontSize: 18,
+      color: currentTheme.colors.text,
+    },
+    cardContent: {
+      paddingHorizontal: 20,
+      paddingVertical: 10,
+      fontSize: 16,
+      color: currentTheme.colors.text,
+    },
+    buttonContainer: {
+      paddingHorizontal: 20,
+      paddingBottom: 20,
+    },
+    getStartedButton: {
+      backgroundColor: '#34a89a',
+    },
+    footerText: {
+      color: currentTheme.colors.text,
+      fontSize: 18,
+      fontWeight: 'bold',
+    },
+  });
+};
 
 export default LandingPage;

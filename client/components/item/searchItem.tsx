@@ -22,10 +22,10 @@ import { useState } from 'react';
 import { fetchItemsSearchResults } from '../../store/searchStore';
 import { selectItemsGlobal } from '../../store/singlePackStore';
 
-type Props = {
+interface Props {
   onSelect?: () => void;
   placeholder?: string;
-};
+}
 
 export const SearchItem: React.FC<Props> = ({ onSelect, placeholder }) => {
   const [searchString, setSearchString] = useState('');
@@ -46,16 +46,16 @@ export const SearchItem: React.FC<Props> = ({ onSelect, placeholder }) => {
    * @return {void} This function does not return a value.
    */
   const handleSearchResultClick = (item, index) => {
-    const ownerId = user['_id'];
-    // @ts-ignore
+    const ownerId = user._id;
+    // @ts-expect-error
     const packId = window.location.pathname.substring('/path/'.length);
-    const selectedItem = item['_id'];
+    const selectedItem = item._id;
     const data = {
       ownerId,
       packId,
       selectedItem,
     };
-    // @ts-ignore
+    // @ts-expect-error
     dispatch(selectItemsGlobal(data));
   };
 
@@ -69,7 +69,7 @@ export const SearchItem: React.FC<Props> = ({ onSelect, placeholder }) => {
           <Input
             onChangeText={(text) => {
               setSearchString(text);
-              // @ts-ignore
+              // @ts-expect-error
               dispatch(fetchItemsSearchResults(text));
               setShowSearchResults(true);
             }}
@@ -135,7 +135,7 @@ export const SearchItem: React.FC<Props> = ({ onSelect, placeholder }) => {
                         setShowSearchResults(false);
                         setSearchString('');
                       }}
-                      // @ts-ignore
+                      // @ts-expect-error
                       underlayColor="gray.100"
                     >
                       <HStack space={3}>
@@ -200,7 +200,7 @@ export const SearchItem: React.FC<Props> = ({ onSelect, placeholder }) => {
               <Pressable
                 key={`result + ${i}`}
                 onPress={() => handleSearchResultClick(result, i)}
-                // @ts-ignore
+                // @ts-expect-error
                 underlayColor="gray.100"
               >
                 <HStack space={3}>
