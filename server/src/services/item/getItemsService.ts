@@ -1,4 +1,4 @@
-import Item from "../../models/itemModel";
+import Item from '../../models/itemModel';
 
 /**
  * Retrieves items based on the given pack ID.

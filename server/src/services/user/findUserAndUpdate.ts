@@ -9,21 +9,25 @@ import User from '../../models/userModel';
  * @return {Promise<any>} - A promise that resolves to the updated user object if successful,
  * or a string indicating the reason for failure.
  */
-export async function findUserAndUpdate(email: string, data: string,datatype): Promise<any> {
-    try {
-        let val = await User.findOneAndUpdate(
-            { email: email.toLowerCase() },
-            { datatype: data },
-            {
-                returnOriginal: false,
-            }
-        );
-        if (val.id) {
-            return true
-        } else {
-            return "Unable to send"
-        }
-    } catch (error) {
-        return "Server Error"
+export async function findUserAndUpdate(
+  email: string,
+  data: string,
+  datatype,
+): Promise<any> {
+  try {
+    const val = await User.findOneAndUpdate(
+      { email: email.toLowerCase() },
+      { datatype: data },
+      {
+        returnOriginal: false,
+      },
+    );
+    if (val.id) {
+      return true;
+    } else {
+      return 'Unable to send';
     }
+  } catch (error) {
+    return 'Server Error';
+  }
 }

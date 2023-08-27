@@ -1,37 +1,41 @@
-import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
-import axios from "axios";
-import { api } from "../constants/api";
+import {
+  createSlice,
+  createAsyncThunk,
+  createEntityAdapter,
+} from '@reduxjs/toolkit';
+import axios from '~/config/axios';
+import { api } from '../constants/api';
 
 export const addFavorite = createAsyncThunk(
-  "favorites/addFavorite",
+  'favorites/addFavorite',
   async (newFavorite) => {
     const response = await axios.post(`${api}/favorite`, newFavorite);
     return response.data;
-  }
+  },
 );
 
 export const fetchFavorites = createAsyncThunk(
-  "favorites/fetchFavorites",
+  'favorites/fetchFavorites',
   async () => {
     const response = await axios.get(`${api}/favorite`);
     return response.data;
-  }
+  },
 );
 
 export const fetchUserFavorites = createAsyncThunk(
-  "favorites/fetchUserFavorites",
+  'favorites/fetchUserFavorites',
   async (userId) => {
     const response = await axios.get(`${api}/favorite/user/${userId}`);
     return response.data;
-  }
+  },
 );
 
 export const fetchFavoritePacks = createAsyncThunk(
-  "favorites/fetchFavoritePacks",
+  'favorites/fetchFavoritePacks',
   async (userId) => {
     const response = await axios.get(`${api}/favorite/user/${userId}/packs`);
     return response.data;
-  }
+  },
 );
 
 const favoritesAdapter = createEntityAdapter();
@@ -44,7 +48,7 @@ const initialState = favoritesAdapter.getInitialState({
 });
 
 const favoritesSlice = createSlice({
-  name: "favorites",
+  name: 'favorites',
   initialState,
   reducers: {},
   /**
@@ -108,10 +112,8 @@ const favoritesSlice = createSlice({
   },
 });
 
-export const {
-  selectAll: selectAllFavorites,
-  selectById: selectFavoriteById,
-} = favoritesAdapter.getSelectors((state) => state.favorites);
+export const { selectAll: selectAllFavorites, selectById: selectFavoriteById } =
+  favoritesAdapter.getSelectors((state) => state.favorites);
 
 export const {
   selectAll: selectAllFavoritePacks,

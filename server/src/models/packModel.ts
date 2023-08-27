@@ -1,26 +1,26 @@
-import mongoose from "mongoose";
-import Item from "./itemModel";
-import myDB from "./dbConnection";
-import { convertWeight } from "../utils/convertWeight";
+import mongoose from 'mongoose';
+import Item from './itemModel';
+import myDB from './dbConnection';
+import { convertWeight } from '../utils/convertWeight';
 
 const { Schema } = mongoose;
 
 const PackSchema = new Schema(
   {
     name: { type: String, required: true },
-    items: [{ type: Schema.Types.ObjectId, ref: "Item" }],
-    owner_id: { type: Schema.Types.ObjectId, ref: "User" },
+    items: [{ type: Schema.Types.ObjectId, ref: 'Item' }],
+    owner_id: { type: Schema.Types.ObjectId, ref: 'User' },
     is_public: { type: Boolean },
-    favorited_by: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    favorited_by: [{ type: Schema.Types.ObjectId, ref: 'User' }],
     favorites_count: { type: Number },
     createdAt: String,
-    owners: [{ type: Schema.Types.ObjectId, ref: "User", default: [] }],
+    owners: [{ type: Schema.Types.ObjectId, ref: 'User', default: [] }],
     grades: {
       type: Object,
       default: {
-        weight: "",
-        essentialItems: "",
-        redundancyAndVersatility: "",
+        weight: '',
+        essentialItems: '',
+        redundancyAndVersatility: '',
       },
     },
     scores: {
@@ -31,12 +31,12 @@ const PackSchema = new Schema(
         redundancyAndVersatilityScore: 0,
       },
     },
-    type: { type: String, default: "pack" },
+    type: { type: String, default: 'pack' },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-PackSchema.virtual("total_weight").get(function () {
+PackSchema.virtual('total_weight').get(function () {
   if (this.items && this.items.length > 0 && this.items[0] instanceof Item) {
     return this.items.reduce((total, item: any) => {
       // Convert each item's weight to grams
@@ -48,16 +48,19 @@ PackSchema.virtual("total_weight").get(function () {
   }
 });
 
-PackSchema.virtual("totalScore").get(function () {
+PackSchema.virtual('totalScore').get(function () {
   const scoresArray: number[] = Object.values(this.scores);
-  const sum: number = scoresArray.reduce((total: number, score: number) => total + score, 0);
+  const sum: number = scoresArray.reduce(
+    (total: number, score: number) => total + score,
+    0,
+  );
   const average: number = scoresArray.length > 0 ? sum / scoresArray.length : 0;
 
   return Math.round(average * 100) / 100;
 });
 
-PackSchema.set("toObject", { virtuals: true });
-PackSchema.set("toJSON", { virtuals: true });
+PackSchema.set('toObject', { virtuals: true });
+PackSchema.set('toJSON', { virtuals: true });
 
-const Pack = myDB.model("Pack", PackSchema);
+const Pack = myDB.model('Pack', PackSchema);
 export default Pack;

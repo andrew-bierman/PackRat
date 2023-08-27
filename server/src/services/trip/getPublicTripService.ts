@@ -1,22 +1,24 @@
-import Trip from "../../models/tripModel";
+import Trip from '../../models/tripModel';
 
 /**
  * Retrieves public trips based on the given query parameter.
  * @param {string} queryBy - The query parameter to sort the trips.
  * @return {Promise<object[]>} The public trips.
  */
-export const getPublicTripsService = async (queryBy: string): Promise<object[]> => {
+export const getPublicTripsService = async (
+  queryBy: string,
+): Promise<object[]> => {
   try {
-    let publicTripsPipeline: any[] = [
+    const publicTripsPipeline: any[] = [
       {
         $match: { is_public: true },
       },
       {
         $lookup: {
-          from: "packs", // name of the foreign collection
-          localField: "_id",
-          foreignField: "trips",
-          as: "packs",
+          from: 'packs', // name of the foreign collection
+          localField: '_id',
+          foreignField: 'trips',
+          as: 'packs',
         },
       },
       {
@@ -34,7 +36,7 @@ export const getPublicTripsService = async (queryBy: string): Promise<object[]> 
       },
     ];
 
-    if (queryBy === "Favorite") {
+    if (queryBy === 'Favorite') {
       publicTripsPipeline.push({ $sort: { favorites_count: -1 } });
     } else {
       publicTripsPipeline.push({ $sort: { _id: -1 } });
@@ -45,6 +47,6 @@ export const getPublicTripsService = async (queryBy: string): Promise<object[]> 
     return publicTrips;
   } catch (error) {
     console.error(error);
-    throw new Error("Trips cannot be found");
+    throw new Error('Trips cannot be found');
   }
 };

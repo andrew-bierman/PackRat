@@ -1,4 +1,4 @@
-import Trip from "../../models/tripModel";
+import Trip from '../../models/tripModel';
 
 /**
  * Retrieves a trip by its ID and returns the trip details.
@@ -16,6 +16,6 @@ export const getTripByIdService = async (tripId: string): Promise<object> => {
     return { ...trip._doc };
   } catch (error) {
     console.error(error);
-    throw new Error("Trip cannot be found");
+    throw new Error('Trip cannot be found');
   }
 };

@@ -1,4 +1,6 @@
-import axios from "axios";
+import axios from '~/config/axios';
+
+// TODO - swap to RTK query
 
 /**
  * Retrieves photon results based on the provided address array.
@@ -9,9 +11,9 @@ import axios from "axios";
 export const getPhotonResults = async (addressArray) => {
   if (!addressArray) return;
 
-  let params = {
+  const params = {
     q: addressArray,
-    osm_tag: ["highway:footway", "highway:cycleway", "place"],
+    osm_tag: ['highway:footway', 'highway:cycleway', 'place'],
     // osm_tag: "highway:footway",
     // osm_tag: "highway:cycleway",
     // osm_tag: "place",
@@ -21,12 +23,12 @@ export const getPhotonResults = async (addressArray) => {
     .flatMap(([key, values]) =>
       Array.isArray(values)
         ? values.map((val) => `${key}=${val}`)
-        : `${key}=${values}`
+        : `${key}=${values}`,
     )
-    .join("&");
+    .join('&');
 
   const response = await axios.get(
-    `https://photon.komoot.io/api/?${queryString}`
+    `https://photon.komoot.io/api/?${queryString}`,
   );
 
   //   const trailsArray = response.data.features.map((_item) => _item?.properties?.name);
