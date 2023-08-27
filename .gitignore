@@ -12,7 +12,7 @@ client.zip
 *.zip
 .vscode
 *.DS_Store
-package-lock.json
+# package-lock.json
 serviceAccountKey.json
 google-services.json
 
