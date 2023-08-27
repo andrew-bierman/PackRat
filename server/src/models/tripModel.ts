@@ -1,8 +1,8 @@
-import mongoose from "mongoose";
+import mongoose,{Schema} from "mongoose";
 import myDB from "./dbConnection";
 import autopopulate from "mongoose-autopopulate";
+import GeoJSON from './geojsonModel'
 
-const { Schema } = mongoose;
 
 const TripSchema = new Schema(
   {
@@ -17,7 +17,7 @@ const TripSchema = new Schema(
       type: [
         {
           type: Schema.Types.ObjectId,
-          ref: "GeoJSON",
+          ref: GeoJSON,
           autopopulate: true,
         },
       ],
