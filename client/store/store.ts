@@ -28,6 +28,7 @@ import destinationReducer from './destinationStore';
 import chatReducer from './chatStore';
 import globalItems from './globalItemsStore';
 import userStore from './userStore';
+import offlineQueue from './offlineQueue';
 import { type Reducer } from 'react';
 
 // combine reducers
@@ -50,6 +51,7 @@ const rootReducer: Reducer<RootState> = combineReducers({
   chat: chatReducer,
   globalItems,
   userStore,
+  offlineQueue,
 });
 
 export interface RootState {
@@ -71,13 +73,14 @@ export interface RootState {
   chat: typeof chatReducer;
   globalItems: typeof globalItems;
   userStore: typeof userStore;
+  offlineQueue: typeof offlineQueue;
 }
 
 // configure persist store and whitelist reducers
 const persistConfig: PersistConfig<RootState> = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: ['auth'], // add reducers to persist here
+  whitelist: ['auth', 'globalItems', 'offlineQueue'], // add reducers to persist here
 };
 
 // create persisted reducer

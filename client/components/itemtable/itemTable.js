@@ -39,13 +39,13 @@ export const ItemsTable = ({
     );
   };
   const TableItem = ({ itemData }) => {
-    const { name, weight, category, quantity, unit, _id } = itemData;
+    const { name, weight, category, quantity, unit, _id, type } = itemData;
 
     const rowData = [
       name,
       `${formatNumber(weight)} ${unit}`,
       quantity,
-      `${category?.name}`,
+      `${category?.name || type}`,
       <EditPackItemModal
         initialData={itemData}
         editAsDuplicate={false}

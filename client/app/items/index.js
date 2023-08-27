@@ -12,7 +12,8 @@ import { ItemsTable } from '../../components/itemtable/itemTable';
 import { useDispatch, useSelector } from 'react-redux';
 import { getItemsGlobal } from '../../store/globalItemsStore';
 import { Stack as Header } from 'expo-router';
-
+import { executeOfflineRequests } from '../../store/offlineQueue';
+// import { checkNetworkConnected } from '~/utils/netInfo';
 export default function Items() {
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
   // pagination index limit
@@ -28,11 +29,16 @@ export default function Items() {
 
   const isLoading = useSelector((state) => state.globalItems.isLoading);
   const isError = useSelector((state) => state.globalItems.isError);
-
+  const { isConnected, requests } = useSelector((state) => state.offlineQueue);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getItemsGlobal({ limit, page }));
-  }, [limit, page, refetch]);
+    if(isConnected) {
+      dispatch(executeOfflineRequests(requests))
+    }
+  },[])
+  useEffect(() => {
+    if (isConnected && requests.length == 0) dispatch(getItemsGlobal({ limit, page }));
+  }, [limit, page, refetch, isConnected]);
 
   return (
     <ScrollView>
