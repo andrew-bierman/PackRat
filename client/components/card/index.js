@@ -186,7 +186,7 @@ export const CustomCard = ({
             justifyContent="space-between"
             alignItems="center"
           >
-            <Box></Box>
+            <Box>{title}</Box>
             <Box flexDirection="row" alignItems="center">
               <Box mx="5">
                 <Link
