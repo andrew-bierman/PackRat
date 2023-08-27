@@ -11,8 +11,11 @@ import {
 } from 'react-native-paper-dates';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { theme } from '../../theme';
+import UseTheme from '../../hooks/useTheme';
 
 const TripDateRange = ({ dateRange, setDateRange }) => {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
   const [open, setOpen] = React.useState(false);
 
   const onDismiss = React.useCallback(() => {
@@ -38,7 +41,7 @@ const TripDateRange = ({ dateRange, setDateRange }) => {
       rounded={['none', 'none', 'md', 'lg']}
       style={{
         flexDirection: 'column',
-        backgroundColor: theme.colors.card,
+        backgroundColor: currentTheme.colors.card,
         gap: 2,
         marginVertical: 10,
 
@@ -49,12 +52,12 @@ const TripDateRange = ({ dateRange, setDateRange }) => {
         <FontAwesome5
           name="calendar"
           size={20}
-          color={theme.colors.cardIconColor}
+          color={currentTheme.colors.cardIconColor}
         />
         <Text
           style={{
-            color: theme.colors.textPrimary,
-            fontSize: theme.font.size,
+            color: currentTheme.colors.textPrimary,
+            fontSize: currentTheme.font.size,
             paddingVertical: 12,
             fontWeight: 600,
           }}
@@ -86,7 +89,9 @@ const TripDateRange = ({ dateRange, setDateRange }) => {
                 setOpen(true);
               }}
             >
-              <Text style={{ color: theme.colors.text }}>Pick Date Range</Text>
+              <Text style={{ color: currentTheme.colors.text }}>
+                Pick Date Range
+              </Text>
             </Button>
             <DatePickerModal
               locale="en"

@@ -2,6 +2,7 @@ import React from 'react';
 import { Platform, StyleSheet } from 'react-native';
 import { Box, Button, VStack, Text, HStack, View } from 'native-base';
 import { theme } from '../theme';
+import UseTheme from '../hooks/useTheme';
 import { useDispatch } from 'react-redux';
 import { scorePack } from '../store/packsStore';
 import { Svg, Circle, Path, G, Text as SvgText } from 'react-native-svg';
@@ -15,8 +16,8 @@ const ScoreProgressChart = ({ score, size = 150, strokeWidth = 10 }) => {
   const progressPath = progress * circumference;
 
   return (
-    <View style={styles.container}>
-      <View style={styles.graphWrapper}>
+    <View style={styles().container}>
+      <View style={styles().graphWrapper}>
         <Svg width={size} height={size}>
           <Circle
             cx={size / 2}
@@ -38,7 +39,7 @@ const ScoreProgressChart = ({ score, size = 150, strokeWidth = 10 }) => {
             fill="transparent"
           />
         </Svg>
-        <Text style={styles.label}>{score.toFixed(2)}</Text>
+        <Text style={styles().label}>{score.toFixed(2)}</Text>
       </View>
     </View>
   );
@@ -84,8 +85,8 @@ const GradingPieChart = ({ scores, size = 150, strokeWidth = 10 }) => {
     essentialItemsAngle + (essentialItemsScore / total) * 360;
 
   return (
-    <View style={styles.container}>
-      <View style={styles.graphWrapper}>
+    <View style={styles().container}>
+      <View style={styles().graphWrapper}>
         <Svg height="160" width="160" viewBox="0 0 180 180">
           <G rotation={-90} originX="90" originY="90">
             {total === 0 ? (
@@ -145,7 +146,7 @@ const GradingPieChart = ({ scores, size = 150, strokeWidth = 10 }) => {
             )}
           </G>
         </Svg>
-        <Text style={styles.label}>{total.toFixed(2)}</Text>
+        <Text style={styles().label}>{total.toFixed(2)}</Text>
       </View>
     </View>
   );
@@ -153,7 +154,8 @@ const GradingPieChart = ({ scores, size = 150, strokeWidth = 10 }) => {
 
 export default function ScoreContainer({ type, data, isOwner }) {
   const dispatch = useDispatch();
-
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
   const id = data._id;
   const totalScore = data.totalScore;
   const grades = data.grades;
@@ -189,16 +191,16 @@ export default function ScoreContainer({ type, data, isOwner }) {
   };
 
   return (
-    <Box style={styles.box}>
-      <HStack style={styles.hStack}>
-        <VStack style={styles.vStack}>
-          <Text style={styles.scoreText}>
+    <Box style={styles().box}>
+      <HStack style={styles().hStack}>
+        <VStack style={styles().vStack}>
+          <Text style={styles().scoreText}>
             {isAlreadyScored ? title : 'Score this pack!'}
           </Text>
           <Text>{subheader}</Text>
           <Text style={{ fontWeight: 300 }}>{description}</Text>
           {isOwner && (
-            <Button style={styles.button} onPress={handleScoreClick}>
+            <Button style={styles().button} onPress={handleScoreClick}>
               <Text>Calculate Score</Text>
             </Button>
           )}
@@ -213,49 +215,53 @@ export default function ScoreContainer({ type, data, isOwner }) {
     </Box>
   );
 }
-const styles = StyleSheet.create({
-  box: {
-    paddingHorizontal: 25,
-    marginVertical: 15,
-    padding: 26,
-    borderColor: '#f1f5f9',
-    borderWidth: 2,
-  },
-  hStack: {
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  vStack: {
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-    width: Platform.OS == 'web' ? '60%' : '100%',
-  },
-  scoreText: {
-    color: theme.colors.textPrimary,
-    fontSize: 26,
-    fontWeight: 'bold',
-  },
-  button: {
-    backgroundColor: theme.colors.primary,
-    marginTop: 15,
-    height: 50,
-    justifyContent: 'center',
-  },
+const styles = () => {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
+  return StyleSheet.create({
+    box: {
+      paddingHorizontal: 25,
+      marginVertical: 15,
+      padding: 26,
+      borderColor: currentTheme.colors.border,
+      borderWidth: 2,
+    },
+    hStack: {
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    },
+    vStack: {
+      justifyContent: 'center',
+      alignItems: 'flex-start',
+      width: Platform.OS == 'web' ? '60%' : '100%',
+    },
+    scoreText: {
+      color: currentTheme.colors.textPrimary,
+      fontSize: 26,
+      fontWeight: 'bold',
+    },
+    button: {
+      backgroundColor: currentTheme.colors.primary,
+      marginTop: 15,
+      height: 50,
+      justifyContent: 'center',
+    },
 
-  // pie
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  graphWrapper: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  label: {
-    position: 'absolute',
-    textAlign: 'center',
-    fontWeight: '700',
-    fontSize: 24,
-  },
-});
+    // pie
+    container: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    graphWrapper: {
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    label: {
+      position: 'absolute',
+      textAlign: 'center',
+      fontWeight: '700',
+      fontSize: 24,
+    },
+  });
+};

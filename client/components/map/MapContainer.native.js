@@ -3,17 +3,24 @@ import React from 'react';
 import { View, StyleSheet, Platform } from 'react-native';
 import { isObjectEmpty } from '../../utils/isObjectEmpty';
 import { defaultShape } from '../../utils/mapFunctions';
-
+import UseTheme from '../../hooks/useTheme';
 import NativeMap from './NativeMap';
 
 export function MapContainer({ shape }) {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
   if (isObjectEmpty(shape)) {
     shape = defaultShape;
   }
 
   if (Platform.OS === 'android' || Platform.OS === 'ios') {
     return (
-      <View style={[styles.nativeContainer]}>
+      <View
+        style={[
+          styles.nativeContainer,
+          { backgroundColor: currentTheme.colors.white },
+        ]}
+      >
         <NativeMap shape={shape} />
       </View>
     );
@@ -33,7 +40,6 @@ const styles = StyleSheet.create({
   nativeContainer: {
     // height: 500,
     width: '100%',
-    backgroundColor: 'white',
     marginBottom: 20,
     marginBottom: 20,
     paddingHorizontal: 5,
