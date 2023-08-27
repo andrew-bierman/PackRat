@@ -1,4 +1,4 @@
-import express from "express";
+import express from 'express';
 import {
   getUsers,
   getUserById,
@@ -13,17 +13,22 @@ import {
   getGoogleAuthURL,
   googleSignin,
   getMe,
-} from "../controllers/user/index";
-import auth from "../middleware/auth";
-import * as validator from "../middleware/validators/index";
+} from '../controllers/user/index';
+import auth from '../middleware/auth';
+import * as validator from '../middleware/validators/index';
 
 import {
   signInLocal,
   signUpLocal,
   signInGoogle,
-} from "../controllers/passport/index";
-import { REDIRECT_URL } from "../config";
-import { emailExists, updatePassword, checkCode } from "../controllers/auth/index";
+} from '../controllers/passport/index';
+import { REDIRECT_URL } from '../config';
+import {
+  emailExists,
+  updatePassword,
+  checkCode,
+} from '../controllers/auth/index';
+import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
 
 const router = express.Router();
 
@@ -46,7 +51,7 @@ const router = express.Router();
  *       '500':
  *         description: Error retrieving users
  */
-router.get("/", getUsers);
+router.get('/', tryCatchWrapper(getUsers));
 
 /**
  * @swagger
@@ -69,7 +74,7 @@ router.get("/", getUsers);
  *       '500':
  *         description: Error retrieving the user
  */
-router.get("/:userId", validator.getUserById, getUserById);
+router.get('/:userId', validator.getUserById, tryCatchWrapper(getUserById));
 
 // router.post("/", addUser);
 
@@ -98,7 +103,7 @@ router.get("/:userId", validator.getUserById, getUserById);
  *       '500':
  *         description: Error signing in
  */
-router.post("/signin", validator.userSignIn, userSignIn);
+router.post('/signin', validator.userSignIn, tryCatchWrapper(userSignIn));
 
 /**
  * @swagger
@@ -127,7 +132,7 @@ router.post("/signin", validator.userSignIn, userSignIn);
  *       '500':
  *         description: Error signing up
  */
-router.post("/signup", validator.userSignUp, userSignup);
+router.post('/signup', validator.userSignUp, tryCatchWrapper(userSignup));
 
 /**
  * @swagger
@@ -152,7 +157,11 @@ router.post("/signup", validator.userSignUp, userSignup);
  *       '500':
  *         description: Error sending the email
  */
-router.post("/reset-password-email", validator.sentEmail, sentEmail);
+router.post(
+  '/reset-password-email',
+  validator.sentEmail,
+  tryCatchWrapper(sentEmail),
+);
 
 /**
  * @swagger
@@ -179,7 +188,11 @@ router.post("/reset-password-email", validator.sentEmail, sentEmail);
  *       '500':
  *         description: Error resetting the password
  */
-router.post("/reset-password", validator.resetPassword, resetPassword);
+router.post(
+  '/reset-password',
+  validator.resetPassword,
+  tryCatchWrapper(resetPassword),
+);
 
 /**
  * @swagger
@@ -197,7 +210,7 @@ router.post("/reset-password", validator.resetPassword, resetPassword);
  *       '500':
  *         description: Error retrieving user information
  */
-router.get("/me/info", auth, getMe);
+router.get('/me/info', auth, tryCatchWrapper(getMe));
 
 /**
  * @swagger
@@ -211,9 +224,9 @@ router.get("/me/info", auth, getMe);
  *       '500':
  *         description: Error retrieving Google authentication URL
  */
-router.get("/google/url", getGoogleAuthURL);
+router.get('/google/url', tryCatchWrapper(getGoogleAuthURL));
 
-router.get(`/${REDIRECT_URL}`, googleSignin);
+router.get(`/${REDIRECT_URL}`, tryCatchWrapper(googleSignin));
 
 /**
  * @swagger
@@ -238,7 +251,7 @@ router.get(`/${REDIRECT_URL}`, googleSignin);
  *       '500':
  *         description: Error signing in with Google
  */
-router.post("/google", signInGoogle);
+router.post('/google', tryCatchWrapper(signInGoogle));
 
 /**
  * @swagger
@@ -263,7 +276,7 @@ router.post("/google", signInGoogle);
  *       '500':
  *         description: Error editing the user
  */
-router.put("/", validator.editUser, editUser);
+router.put('/', validator.editUser, tryCatchWrapper(editUser));
 
 /**
  * @swagger
@@ -288,10 +301,18 @@ router.put("/", validator.editUser, editUser);
  *       '500':
  *         description: Error deleting the user
  */
-router.delete("/", validator.deleteUser, deleteUser);
+router.delete('/', validator.deleteUser, tryCatchWrapper(deleteUser));
 
-router.post("/checkcode", validator.checkCode, checkCode);
-router.post("/updatepassword", validator.updatePassword, updatePassword);
-router.post("/emailexists", validator.emailExists, emailExists);
+router.post('/checkcode', validator.checkCode, tryCatchWrapper(checkCode));
+router.post(
+  '/updatepassword',
+  validator.updatePassword,
+  tryCatchWrapper(updatePassword),
+);
+router.post(
+  '/emailexists',
+  validator.emailExists,
+  tryCatchWrapper(emailExists),
+);
 
 export default router;

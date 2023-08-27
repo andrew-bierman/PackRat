@@ -1,4 +1,6 @@
-import User from "../../models/userModel";
+import { UserNotFoundError } from '../../helpers/errors';
+import { responseHandler } from '../../helpers/responseHandler';
+import User from '../../models/userModel';
 
 // Middleware to check if user is authenticated
 // export const isAuthenticated = async (req, res, next) => {
@@ -18,12 +20,13 @@ import User from "../../models/userModel";
  * @param {Object} res - The response object.
  * @return {Promise} The JSON response containing the users.
  */
-export const getUsers = async (req, res) => {
+export const getUsers = async (req, res, next) => {
   try {
-    const users = await User.find({}).populate("packs trips");
+    const users = await User.find({}).populate('packs trips');
 
-    res.status(200).json(users);
+    res.locals.data = users;
+    responseHandler(res);
   } catch (error) {
-    res.status(404).json({ msg: "Users cannot be found" });
+    next(UserNotFoundError);
   }
 };

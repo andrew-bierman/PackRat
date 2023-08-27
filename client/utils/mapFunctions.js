@@ -1,14 +1,14 @@
-import * as Location from "expo-location";
-import * as FileSystem from "expo-file-system";
-import { Platform } from "react-native";
+import * as Location from 'expo-location';
+import * as FileSystem from 'expo-file-system';
+import { Platform } from 'react-native';
 
 const defaultShape = {
-  type: "FeatureCollection",
+  type: 'FeatureCollection',
   features: [
     {
-      type: "Feature",
+      type: 'Feature',
       geometry: {
-        type: "LineString",
+        type: 'LineString',
         coordinates: [
           [-77.044211, 38.852924],
           [-77.045659, 38.860158],
@@ -41,7 +41,7 @@ const defaultShape = {
  */
 function normalizeCoordinates(coordinates) {
   // check if coordinates are nested, flip them if so
-  if (typeof coordinates[0][0] === "number") {
+  if (typeof coordinates[0][0] === 'number') {
     // If first value is greater than 90, it's likely in the format of (longitude, latitude)
     if (coordinates[0][0] > 90) {
       return coordinates.map((coordinate) => [coordinate[1], coordinate[0]]);
@@ -64,10 +64,8 @@ function normalizeCoordinates(coordinates) {
  */
 function convertPhotonGeoJsonToShape(photonGeoJson) {
   return {
-    type: "FeatureCollection",
-    features: [
-      photonGeoJson
-    ],
+    type: 'FeatureCollection',
+    features: [photonGeoJson],
   };
 }
 
@@ -129,8 +127,8 @@ function handleShapeSourceLoad(width, height) {
  * @return {number} The latitude in radians.
  */
 function latRad(lat) {
-  var sin = Math.sin((lat * Math.PI) / 180);
-  var radX2 = Math.log((1 + sin) / (1 - sin)) / 2;
+  const sin = Math.sin((lat * Math.PI) / 180);
+  const radX2 = Math.log((1 + sin) / (1 - sin)) / 2;
   return Math.max(Math.min(radX2, Math.PI), -Math.PI) / 2;
 }
 
@@ -155,17 +153,17 @@ function zoom(mapPx, worldPx, fraction) {
  * @return {number} The calculated zoom level for the map.
  */
 function calculateZoomLevel(bounds, mapDim) {
-  var WORLD_DIM = { height: 256, width: 256 };
-  let ne = { lat: bounds[2], lng: bounds[3] };
-  let sw = { lat: bounds[0], lng: bounds[1] };
+  const WORLD_DIM = { height: 256, width: 256 };
+  const ne = { lat: bounds[2], lng: bounds[3] };
+  const sw = { lat: bounds[0], lng: bounds[1] };
 
-  var latFraction = (latRad(ne.lat) - latRad(sw.lat)) / Math.PI;
+  const latFraction = (latRad(ne.lat) - latRad(sw.lat)) / Math.PI;
 
-  var lngDiff = ne.lng - sw.lng;
-  var lngFraction = (lngDiff < 0 ? lngDiff + 360 : lngDiff) / 360;
+  const lngDiff = ne.lng - sw.lng;
+  const lngFraction = (lngDiff < 0 ? lngDiff + 360 : lngDiff) / 360;
 
-  var latZoom = zoom(mapDim.height, WORLD_DIM.height, latFraction);
-  var lngZoom = zoom(mapDim.width, WORLD_DIM.width, lngFraction);
+  const latZoom = zoom(mapDim.height, WORLD_DIM.height, latFraction);
+  const lngZoom = zoom(mapDim.width, WORLD_DIM.width, lngFraction);
 
   return latZoom;
 }
@@ -179,8 +177,8 @@ function calculateZoomLevel(bounds, mapDim) {
 function findTrailCenter(shape) {
   const trailCoords = shape?.features[0]?.geometry?.coordinates;
 
-  console.log("trailCoords", trailCoords);
-  console.log("trailCoords.length", trailCoords.length);
+  console.log('trailCoords', trailCoords);
+  console.log('trailCoords.length', trailCoords.length);
 
   let latitudes;
   let longitudes;
@@ -188,8 +186,8 @@ function findTrailCenter(shape) {
   // Handle the case where there's only one pair of coordinates
   if (trailCoords.length === 1) {
     console.log(
-      "Single coordinate found, using as trail center.",
-      trailCoords[0]
+      'Single coordinate found, using as trail center.',
+      trailCoords[0],
     );
     return trailCoords[0];
   }
@@ -205,9 +203,10 @@ function findTrailCenter(shape) {
   }
 
   const avgLatitude = latitudes.reduce((a, b) => a + b, 0) / latitudes.length;
-  const avgLongitude = longitudes.reduce((a, b) => a + b, 0) / longitudes.length;
+  const avgLongitude =
+    longitudes.reduce((a, b) => a + b, 0) / longitudes.length;
 
-  console.log("trailCords return", [avgLatitude, avgLongitude]);
+  console.log('trailCords return', [avgLatitude, avgLongitude]);
 
   return [avgLatitude, avgLongitude];
 }
@@ -219,28 +218,28 @@ function findTrailCenter(shape) {
  * @return {Object} The processed shape data.
  */
 const processShapeData = (shape) => {
-  let processedShape = { ...shape };
+  const processedShape = { ...shape };
   processedShape.features = [];
 
   shape.features.forEach((feature) => {
-    if (feature.geometry.type === "LineString") {
+    if (feature.geometry.type === 'LineString') {
       // Make sure coordinates are in the correct format
       feature.geometry.coordinates = ensure2DArray(
-        feature.geometry.coordinates
+        feature.geometry.coordinates,
       );
 
-      let points = feature.geometry.coordinates.map((coord, index) => {
+      const points = feature.geometry.coordinates.map((coord, index) => {
         return {
-          type: "Feature",
+          type: 'Feature',
           properties: {
             // Add a `meta` property to the first and last points
             meta:
               index === 0 || index === feature.geometry.coordinates.length - 1
-                ? "end"
-                : "middle",
+                ? 'end'
+                : 'middle',
           },
           geometry: {
-            type: "Point",
+            type: 'Point',
             coordinates: coord,
           },
         };
@@ -272,14 +271,14 @@ const ensure2DArray = (arr) => {
 };
 
 const mapboxStyles = [
-  { label: "Outdoors", style: "mapbox://styles/mapbox/outdoors-v11" },
-  { label: "Street", style: "mapbox://styles/mapbox/streets-v11" },
-  { label: "Light", style: "mapbox://styles/mapbox/light-v10" },
-  { label: "Dark", style: "mapbox://styles/mapbox/dark-v10" },
-  { label: "Satellite", style: "mapbox://styles/mapbox/satellite-v9" },
+  { label: 'Outdoors', style: 'mapbox://styles/mapbox/outdoors-v11' },
+  { label: 'Street', style: 'mapbox://styles/mapbox/streets-v11' },
+  { label: 'Light', style: 'mapbox://styles/mapbox/light-v10' },
+  { label: 'Dark', style: 'mapbox://styles/mapbox/dark-v10' },
+  { label: 'Satellite', style: 'mapbox://styles/mapbox/satellite-v9' },
   {
-    label: "Satellite Street",
-    style: "mapbox://styles/mapbox/satellite-streets-v11",
+    label: 'Satellite Street',
+    style: 'mapbox://styles/mapbox/satellite-streets-v11',
   },
 ];
 
@@ -289,14 +288,14 @@ const mapboxStyles = [
  * @return {Promise<Location>} The current location object.
  */
 const getLocation = async () => {
-  let { status } = await Location.requestForegroundPermissionsAsync();
+  const { status } = await Location.requestForegroundPermissionsAsync();
 
-  if (status !== "granted") {
-    alert("Permission to access location was denied");
+  if (status !== 'granted') {
+    alert('Permission to access location was denied');
     return;
   }
 
-  let location = await Location.getCurrentPositionAsync({});
+  const location = await Location.getCurrentPositionAsync({});
 
   return location;
 };
@@ -319,7 +318,7 @@ const isShapeDownloadable = (shape) => {
  */
 const isPoint = (shape) => {
   return shape?.features[0]?.geometry?.type === 'Point';
-}
+};
 /**
  * Checks if the given shape is a LineString.
  *
@@ -328,7 +327,7 @@ const isPoint = (shape) => {
  */
 const isLineString = (shape) => {
   return shape?.features[0]?.geometry?.type === 'LineString';
-}
+};
 
 /**
  * Checks if the given shape is a Polygon or MultiPolygon.
@@ -337,8 +336,11 @@ const isLineString = (shape) => {
  * @return {boolean} Returns true if the shape is a Polygon or MultiPolygon, otherwise returns false.
  */
 const isPolygonOrMultiPolygon = (shape) => {
-  return shape?.features[0]?.geometry?.type === 'MultiPolygon' || shape?.features[0]?.geometry?.type === 'MultiPolygon';
-}
+  return (
+    shape?.features[0]?.geometry?.type === 'MultiPolygon' ||
+    shape?.features[0]?.geometry?.type === 'MultiPolygon'
+  );
+};
 
 /**
  * Calculates the bounds of a multipolygon.
@@ -348,7 +350,7 @@ const isPolygonOrMultiPolygon = (shape) => {
  */
 const multiPolygonBounds = (multipolygonData) => {
   let coordinates = multipolygonData.geometry.coordinates[0];
-  if(multipolygonData.geometry.type === 'MultiPolygon') {
+  if (multipolygonData.geometry.type === 'MultiPolygon') {
     coordinates = coordinates[0];
   }
   let minX = Infinity;
@@ -366,8 +368,8 @@ const multiPolygonBounds = (multipolygonData) => {
   const centerLng = (minX + maxX) / 2;
   const centerLat = (minY + maxY) / 2;
   console.log(centerLat, centerLng, 'center lng lat');
-  return [centerLng, centerLat]
-}
+  return [centerLng, centerLat];
+};
 
 export {
   defaultShape,
@@ -385,5 +387,5 @@ export {
   isPoint,
   isLineString,
   isPolygonOrMultiPolygon,
-  multiPolygonBounds
+  multiPolygonBounds,
 };

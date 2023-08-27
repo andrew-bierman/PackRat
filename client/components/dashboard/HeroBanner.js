@@ -1,57 +1,57 @@
-import React from "react";
-import { Box, VStack, Text, Image } from "native-base";
-import LargeCard from "../card/LargeCard";
-import { SearchInput } from "../SearchInput";
-import { StyleSheet, View } from "react-native";
-import { theme } from "../../theme";
-import { useSelector, useDispatch } from "react-redux";
-import Hero from "../hero";
-import { useRouter } from "expo-router";
+import React from 'react';
+import { Box, VStack, Text, Image } from 'native-base';
+import LargeCard from '../card/LargeCard';
+import { SearchInput } from '../SearchInput';
+import { StyleSheet, View } from 'react-native';
+import { theme } from '../../theme';
+import UseTheme from '../../hooks/useTheme';
+import { useSelector, useDispatch } from 'react-redux';
+import Hero from '../hero';
+import { useRouter } from 'expo-router';
 import {
-  photonDetails, // TODO (use geojson)
-  processGeoJSON, // TODO (use geojson)
+  photonDetails,
+  processGeoJSON,
   setSelectedSearchResult,
-} from "../../store/destinationStore";
-import { hexToRGBA } from "../../utils/colorFunctions";
+} from '../../store/destinationStore';
+import { hexToRGBA } from '../../utils/colorFunctions';
 
 const HeroSection = ({ onSelect }) => {
   const dispatch = useDispatch();
-  console.log("heroooo");
-
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
   const router = useRouter();
 
   const currentDestination = useSelector(
-    (state) => state.destination.currentDestination
+    (state) => state.destination.currentDestination,
   );
-  console.log("currentDestination", currentDestination);
+  console.log('currentDestination', currentDestination);
 
   /**
    * Handles the selection of a search result.
    *
    * @param {Object} selectedResult - The selected search result
-   * @return {void} 
+   * @return {void}
    */
   const handleSearchSelect = async (selectedResult) => {
     try {
-      console.log("selectedResult ------->", selectedResult);
+      console.log('selectedResult ------->', selectedResult);
 
       // Set the selected search result in the Redux store
       dispatch(setSelectedSearchResult(selectedResult));
 
       const { osm_id, osm_type } = selectedResult.properties;
 
-      const coordinates= selectedResult.geometry.coordinates;
+      const coordinates = selectedResult.geometry.coordinates;
 
       const [lon, lat] = coordinates;
 
       if (!osm_id || !osm_type) {
         console.error(
-          "No OSM ID or OSM type found in the selected search result"
+          'No OSM ID or OSM type found in the selected search result',
         );
-        return;
       } else {
         router.push({
-          pathname: `/destination/query`,
+          pathname: '/destination/query',
           params: {
             type: osm_type,
             id: osm_id,
@@ -61,56 +61,57 @@ const HeroSection = ({ onSelect }) => {
         });
       }
     } catch (error) {
-      console.error("errorrrrrr", error);
+      console.error('errorrrrrr', error);
     }
   };
 
-const user = useSelector((state) => state.auth?.user);
+  const user = useSelector((state) => state.auth?.user);
 
   const { name } = user;
-  const firstNameOrUser = name.split(" ")[0] ?? "User";
+  const firstNameOrUser = name.split(' ')[0] ?? 'User';
 
-  const cardBackgroundColor = hexToRGBA(theme.colors.secondaryBlue, 0.5);
+  const cardBackgroundColor = hexToRGBA(currentTheme.colors.secondaryBlue, 0.5);
 
   const bannerText =
-    firstNameOrUser !== "User"
+    firstNameOrUser !== 'User'
       ? `Let's find a new trail, ${firstNameOrUser}`
       : "Let's find a new trail";
 
   // console.log("cardBackgroundColor", cardBackgroundColor)
 
   return (
-    <View style={styles.banner}>
+    <View style={styles().banner}>
       <Hero
         imageDetails={{
-          title: "N/A",
-          subtitle: "N/A",
-          source: require("../../assets/topographical-pattern.png"),
-          alt: "hero",
+          title: 'N/A',
+          subtitle: 'N/A',
+          source: require('../../assets/topographical-pattern.png'),
+          alt: 'hero',
         }}
       >
         <LargeCard
           customStyle={{
-            backgroundColor: cardBackgroundColor || theme.colors.secondaryBlue,
-            alignItems: "center",
-            justifyContent: "center",
-            width: "100%",
-            height: "100%",
+            backgroundColor:
+              cardBackgroundColor || currentTheme.colors.secondaryBlue,
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '100%',
+            height: '100%',
             padding: 50,
           }}
         >
           <VStack
             style={{
-              width: "100%",
-              height: "100%",
-              alignItems: "center",
-              justifyContent: "center",
+              width: '100%',
+              height: '100%',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
           >
-            <Text style={styles.title}>{bannerText}</Text>
+            <Text style={styles().title}>{bannerText}</Text>
             <SearchInput
               onSelect={handleSearchSelect}
-              placeholder={"Search by park, city, or trail"}
+              placeholder={'Search by park, city, or trail'}
             />
           </VStack>
         </LargeCard>
@@ -119,23 +120,27 @@ const user = useSelector((state) => state.auth?.user);
   );
 };
 
-const styles = StyleSheet.create({
-  banner: {
-    flex: 1,
-    backgroundRepeat: "repeat",
-    backgroundSize: "cover",
-    // overflow: "hidden",
-    marginBottom: 20,
-    alignItems: "center",
-    justifyContent: "center",
-    width: "100%",
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-    color: theme.colors.text,
-  },
-});
+const styles = () => {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
+  return StyleSheet.create({
+    banner: {
+      flex: 1,
+      backgroundRepeat: 'repeat',
+      backgroundSize: 'cover',
+      // overflow: "hidden",
+      marginBottom: 20,
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: '100%',
+    },
+    title: {
+      fontSize: 24,
+      fontWeight: 'bold',
+      marginBottom: 20,
+      color: currentTheme.colors.text,
+    },
+  });
+};
 
 export default HeroSection;

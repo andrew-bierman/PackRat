@@ -1,10 +1,9 @@
-import mongoose, { Schema, Document, Model } from "mongoose";
-import myDB from "./dbConnection";
-import bycrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import { JWT_SECRET, CLIENT_URL } from "../config";
-import validator from "validator";
-
+import mongoose, { Schema, type Document, type Model } from 'mongoose';
+import myDB from './dbConnection';
+import bycrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import { JWT_SECRET, CLIENT_URL } from '../config';
+import validator from 'validator';
 
 export interface IUser extends Document {
   name: string;
@@ -17,14 +16,14 @@ export interface IUser extends Document {
   favorites: any;
   passwordResetToken?: string;
   passwordResetTokenExpiration?: Date;
-  role: "user" | "admin";
+  role: 'user' | 'admin';
   username: string;
   profilePicture?: string;
   generateAuthToken: () => Promise<string>;
   generateResetToken: () => Promise<string>;
 }
 
-const UserSchema: Schema<IUser> = new Schema(
+const UserSchema = new Schema<IUser>(
   {
     name: { type: String, required: true },
     password: {
@@ -33,8 +32,9 @@ const UserSchema: Schema<IUser> = new Schema(
       minLength: 7,
       required: true,
       validate(value: string) {
-        if (value.search(/password/i) !== -1)
+        if (value.search(/password/i) !== -1) {
           throw new Error("The password cannot contain the word 'password'");
+        }
       },
     },
     email: {
@@ -44,7 +44,7 @@ const UserSchema: Schema<IUser> = new Schema(
       unique: true,
       required: true,
       validate(value: string) {
-        if (!validator.isEmail(value)) throw new Error("Email is invalid");
+        if (!validator.isEmail(value)) throw new Error('Email is invalid');
       },
     },
     token: {
@@ -54,15 +54,15 @@ const UserSchema: Schema<IUser> = new Schema(
     googleId: { type: String },
     code: { type: String },
     is_certified_guide: { type: Boolean },
-    favorites: [{ type: Schema.Types.ObjectId, ref: "Pack" }],
+    favorites: [{ type: Schema.Types.ObjectId, ref: 'Pack' }],
     // trips: [{ type: Schema.Types.ObjectId, ref: "Trip" }],
     // packs: [{ type: Schema.Types.ObjectId, ref: "Pack" }],
     passwordResetToken: { type: String },
     passwordResetTokenExpiration: { type: Date },
     role: {
       type: String,
-      enum: ["user", "admin"],
-      default: "user",
+      enum: ['user', 'admin'],
+      default: 'user',
     },
     username: {
       type: String,
@@ -71,8 +71,9 @@ const UserSchema: Schema<IUser> = new Schema(
       unique: true,
       required: true,
       validate(value: string) {
-        if (!validator.isAlphanumeric(value))
-          throw new Error("Username is invalid");
+        if (!validator.isAlphanumeric(value)) {
+          throw new Error('Username is invalid');
+        }
       },
     },
     profilePicture: {
@@ -83,7 +84,7 @@ const UserSchema: Schema<IUser> = new Schema(
     timestamps: true,
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
-  }
+  },
 );
 
 UserSchema.statics.findByCredentials = async function ({
@@ -95,40 +96,44 @@ UserSchema.statics.findByCredentials = async function ({
 }): Promise<IUser> {
   const user = await User.findOne({ email });
 
-  if (!user) throw new Error("Unable to login");
+  if (!user) throw new Error('Unable to login');
 
   const isMatch = await bycrypt.compare(password, user.password);
 
-  if (!isMatch) throw new Error("Unable to login");
+  if (!isMatch) throw new Error('Unable to login');
 
   return user;
 };
 
-UserSchema.statics.alreadyLogin = async function (email: string): Promise<void> {
+UserSchema.statics.alreadyLogin = async function (
+  email: string,
+): Promise<void> {
   const user = await User.findOne({ email });
-  if (user) throw new Error("Already email registered");
+  if (user) throw new Error('Already email registered');
 };
 
 UserSchema.statics.validateResetToken = async function (
-  token: string
+  token: string,
 ): Promise<IUser> {
-  if(!JWT_SECRET) throw new Error("JWT_SECRET is not defined");
-  const decoded: any = jwt.verify(token, JWT_SECRET)
+  if (!JWT_SECRET) throw new Error('JWT_SECRET is not defined');
+  const decoded: any = jwt.verify(token, JWT_SECRET);
   const user = await User.findOne({
     _id: decoded._id,
     passwordResetToken: token,
   });
 
-  if (!user) throw new Error("User not Found");
+  if (!user) throw new Error('User not Found');
 
   return user;
 };
 
-UserSchema.pre<IUser>("save", async function (next) {
+UserSchema.pre<IUser>('save', async function (next) {
   const user = this;
 
   if (!user.username) {
-    let generatedUsername = user.email ? user.email.split("@")[0] : "packratuser";
+    let generatedUsername = user.email
+      ? user.email.split('@')[0]
+      : 'packratuser';
 
     const exists = await User.exists({ username: generatedUsername });
 
@@ -146,9 +151,9 @@ UserSchema.pre<IUser>("save", async function (next) {
 
 UserSchema.methods.generateAuthToken = async function (): Promise<string> {
   const user = this;
-  if(!JWT_SECRET) throw new Error("JWT_SECRET is not defined");
+  if (!JWT_SECRET) throw new Error('JWT_SECRET is not defined');
   const token = await jwt.sign({ _id: user._id.toString() }, JWT_SECRET, {
-    expiresIn: "7 days",
+    expiresIn: '7 days',
   });
   user.token = token;
   await user.save();
@@ -158,30 +163,30 @@ UserSchema.methods.generateAuthToken = async function (): Promise<string> {
 UserSchema.methods.generateResetToken = async function (): Promise<string> {
   const user = this;
   if (user.passwordResetToken) {
-    if(!JWT_SECRET) throw new Error("JWT_SECRET is not defined");
-    const decoded:any = jwt.verify(user.passwordResetToken, JWT_SECRET)
+    if (!JWT_SECRET) throw new Error('JWT_SECRET is not defined');
+    const decoded: any = jwt.verify(user.passwordResetToken, JWT_SECRET);
     if (decoded._id) return user.passwordResetToken;
   }
-  if(!JWT_SECRET) throw new Error("JWT_SECRET is not defined");
+  if (!JWT_SECRET) throw new Error('JWT_SECRET is not defined');
   const resetToken = await jwt.sign({ _id: user._id.toString() }, JWT_SECRET, {
-    expiresIn: "12h",
+    expiresIn: '12h',
   });
   user.passwordResetToken = resetToken;
   await user.save();
   return `${CLIENT_URL}/password-reset?token=${resetToken}`;
 };
 
-UserSchema.virtual("packs", {
-  ref: "Pack",
-  localField: "_id",
-  foreignField: "owner_id",
+UserSchema.virtual('packs', {
+  ref: 'Pack',
+  localField: '_id',
+  foreignField: 'owner_id',
   justOne: false,
 });
 
-UserSchema.virtual("trips", {
-  ref: "Trip",
-  localField: "_id",
-  foreignField: "owner_id",
+UserSchema.virtual('trips', {
+  ref: 'Trip',
+  localField: '_id',
+  foreignField: 'owner_id',
   justOne: false,
 });
 
@@ -200,6 +205,6 @@ UserSchema.methods.toJSON = function (): Partial<IUser> {
   return userObject;
 };
 
-const User: Model<IUser> = myDB.model<IUser>("User", UserSchema);
+const User: Model<IUser> = myDB.model<IUser>('User', UserSchema);
 
 export default User;

@@ -1,4 +1,4 @@
-import Item from "../../models/itemModel";
+import Item from '../../models/itemModel';
 
 /**
  * Retrieves an item from the database by its ID.
@@ -7,7 +7,7 @@ import Item from "../../models/itemModel";
  * @return {Promise<Object>} The retrieved item.
  */
 export const getItemByIdService = async (_id) => {
-    const item = await Item.findById({ _id });
-  
-    return item;
-  };
+  const item = await Item.findById({ _id });
+
+  return item;
+};
