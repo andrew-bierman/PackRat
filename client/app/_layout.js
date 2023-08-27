@@ -13,8 +13,17 @@ import { AuthProvider } from '../context/auth';
 import { ThemeProvider } from '../context/theme';
 import FlashMessage from 'react-native-flash-message';
 import Footer from '../components/footer/Footer';
+import { useEffect } from 'react';
+import { setNetworkStatus } from '../store/offlineQueue';
+import { checkNetworkConnected } from '~/utils/netInfo';
 
 export default function HomeLayout() {
+  useEffect(() => {
+    checkNetworkConnected.then((res) => {
+      console.log('line 23 ', res);
+      store.dispatch(setNetworkStatus(res));
+    });
+  }, []);
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
