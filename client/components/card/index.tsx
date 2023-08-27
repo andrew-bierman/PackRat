@@ -44,7 +44,7 @@ export const CustomCard = ({
   const router = useRouter();
   const isLoading = useSelector((state: any) => state.singlePack.isLoading);
   const user = useSelector((state: any) => state.auth.user);
-  const userId = user['_id'];
+  const userId = user._id;
 
   /**
    * Handles copying the link to the clipboard and updates the copy state.
@@ -71,7 +71,7 @@ export const CustomCard = ({
   if (type === 'pack') {
     return (
       <Box
-        style={styles.mainContainer}
+        style={styles().mainContainer}
         alignSelf="center"
         alignItems={['center', 'center', 'flex-start', 'flex-start']}
         w={['100%', '100%', '100%', '90%']}
@@ -99,9 +99,9 @@ export const CustomCard = ({
             </Box>
             <Box flexDirection="row" alignItems="center">
               <Box mx="5">
-                <Link href={`/profile/${data['owner_id']}`}>
+                <Link href={`/profile/${data.owner_id}`}>
                   <Text>
-                    {user._id === data['owner_id']
+                    {user._id === data.owner_id
                       ? 'Your Profile'
                       : `View ${
                           data.owners && data.owners.length
@@ -112,11 +112,11 @@ export const CustomCard = ({
                 </Link>
               </Box>
               {link && (
-                // @ts-ignore
+                // @ts-expect-error
                 <Box
                   flexDir={'row'}
                   style={{
-                    gap: '5px',
+                    // gap: '5px',
                     alignItems: 'center',
                   }}
                 >
@@ -181,7 +181,7 @@ export const CustomCard = ({
   if (type === 'trip') {
     return (
       <Box
-        style={styles.mainContainer}
+        style={styles().mainContainer}
         alignSelf="center"
         alignItems={['center', 'center', 'flex-start', 'flex-start']}
         w={['100%', '100%', '100%', '90%']}
@@ -200,15 +200,13 @@ export const CustomCard = ({
             <Box></Box>
             <Box flexDirection="row" alignItems="center">
               <Box mx="5">
-                <Link
-                  href={`/profile/${data.owner_id && data['owner_id']._id}`}
-                >
+                <Link href={`/profile/${data.owner_id && data.owner_id._id}`}>
                   <Text>
-                    {user._id === data['owner_id']
+                    {user._id === data.owner_id
                       ? 'Your Profile'
                       : `View ${
                           data.owner_id
-                            ? '@' + data['owner_id'].username
+                            ? '@' + data.owner_id.username
                             : 'Profile'
                         }`}
                   </Text>
@@ -260,25 +258,29 @@ export const CustomCard = ({
   }
 };
 
-const styles = StyleSheet.create({
-  mainContainer: {
-    backgroundColor: theme.colors.card,
-    flex: 1,
-    gap: 45,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingLeft: 25,
-    paddingRight: 25,
-    paddingTop: 15,
-    paddingBottom: 15,
-    border: '1',
-  },
-  containerMobile: {
-    backgroundColor: theme.colors.card,
-    flex: 1,
-    gap: 45,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 15,
-  },
-});
+const styles = () => {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
+  return StyleSheet.create({
+    mainContainer: {
+      backgroundColor: currentTheme.colors.card,
+      flex: 1,
+      gap: 45,
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      paddingLeft: 25,
+      paddingRight: 25,
+      paddingTop: 15,
+      paddingBottom: 15,
+      border: '1',
+    },
+    containerMobile: {
+      backgroundColor: currentTheme.colors.card,
+      flex: 1,
+      gap: 45,
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      padding: 15,
+    },
+  });
+};
