@@ -63,10 +63,10 @@ export default function TripCard({
         isSearch
           ? styles.searchContainer
           : isMap
-          ? styles.mapCard
-          : styles.containerMobile
-          ? styles.containerMobile
-          : styles.mutualStyles
+            ? styles.mapCard
+            : styles.containerMobile
+              ? styles.containerMobile
+              : styles.mutualStyles
       }
     >
       <Box
@@ -102,7 +102,7 @@ export default function TripCard({
       ) : (
         // isTrail ?
 
-        
+
         // <DropdownComponent
         //   {...{
         //     value: currentTrail,
@@ -113,25 +113,26 @@ export default function TripCard({
         //     width: 300,
         //   }}
         // />
-        // : 
-        <View style={{ width : "80%" }} >
+        // :
+        <View style={{ width: "80%" }} >
 
-        <Carousel iconColor={isDark ? '#fff' : '#000'} itemWidth={150}>
-          {
-            data && data?.map((item) => {
-              let selectedValue = isTrail ? currentTrail : currentPark;
-              return(
-            <Card
-            backgroundColor={item === selectedValue ? theme.colors.background : null}
-             onPress={() => handleValueChange(item)} elevate bordered  margin={2}
-             >
-              <Card.Header padded>
-                <Paragraph color={item === selectedValue ? 'white' : 'black'}>{item}</Paragraph>
-              </Card.Header>
-            </Card>)})
-          }
-        </Carousel>
-         </View>
+          <Carousel iconColor={isDark ? '#fff' : '#000'} itemWidth={150}>
+            {
+              data && data?.map((item) => {
+                let selectedValue = isTrail ? currentTrail : currentPark;
+                return (
+                  <Card
+                    backgroundColor={item === selectedValue ? theme.colors.background : null}
+                    onPress={() => handleValueChange(item)} elevate bordered margin={2}
+                  >
+                    <Card.Header padded>
+                      <Paragraph color={item === selectedValue ? 'white' : 'black'}>{item}</Paragraph>
+                    </Card.Header>
+                  </Card>)
+              })
+            }
+          </Carousel>
+        </View>
       )}
     </Stack>
   );

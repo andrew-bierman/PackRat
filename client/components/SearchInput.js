@@ -116,13 +116,13 @@ export const SearchInput = ({ onSelect, placeholder }) => {
     return () => clearTimeout(timeout);
   }, [selectedSearch, selectedSearchResult, dispatch]);
 
-/**
- * Handles the click event on a search result.
- *
- * @param {object} result - The search result object.
- * @param {number} index - The index of the search result.
- * @return {undefined} This function does not return anything.
- */
+  /**
+   * Handles the click event on a search result.
+   *
+   * @param {object} result - The search result object.
+   * @param {number} index - The index of the search result.
+   * @return {undefined} This function does not return anything.
+   */
   const handleSearchResultClick = (result, index) => {
     const {
       properties: { name, osm_id },
