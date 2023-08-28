@@ -12,10 +12,10 @@ import { darkTheme, theme } from '../../theme';
 import { Desktop, Mobile, Tablet } from '../../media';
 import { Button, HStack } from 'native-base';
 import * as Linking from 'expo-linking';
-import UseTheme from '../../hooks/useTheme';
+import useTheme from '../../hooks/useTheme';
 const AboutContent = ({ desktopContainer, isMobile }) => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   console.log('isDark, isLight', isDark, isLight);
   const handleGithubLink = () => {
     // Add the URL of your GitHub repo here
@@ -171,7 +171,7 @@ const AboutContent = ({ desktopContainer, isMobile }) => {
 
 export default function About() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   return Platform.OS === 'web' ? (
     <View style={[isDark ? styles().containerDark : styles().container]}>
       <Desktop>
@@ -199,7 +199,7 @@ export default function About() {
 
 const styles = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   return StyleSheet.create({
     container: {
       flex: 1,
