@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint . --fix",
+    "lint": "npx eslint . --fix",
     "start-web": "TAMAGUI_TARGET=web expo start -c",
     "start-native": "TAMAGUI_TARGET=native expo start -c",
     "start": "npm run lint && expo start --dev-client -c",
