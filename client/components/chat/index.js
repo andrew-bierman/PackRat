@@ -9,7 +9,7 @@ import {
   ScrollView,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import UseTheme from '../../hooks/useTheme';
+import useTheme from '../../hooks/useTheme';
 import {
   getUserChats,
   getAIResponse,
@@ -175,7 +175,7 @@ const ChatModalTrigger = () => {
 
 const styles = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
 
   return StyleSheet.create({
     container: { flex: 1, padding: 16 },

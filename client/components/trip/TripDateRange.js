@@ -11,11 +11,11 @@ import {
 } from 'react-native-paper-dates';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { theme } from '../../theme';
-import UseTheme from '../../hooks/useTheme';
+import useTheme from '../../hooks/useTheme';
 
 const TripDateRange = ({ dateRange, setDateRange }) => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   const [open, setOpen] = React.useState(false);
 
   const onDismiss = React.useCallback(() => {

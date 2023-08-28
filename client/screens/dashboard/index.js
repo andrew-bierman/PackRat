@@ -2,23 +2,26 @@ import React from 'react';
 import { Platform, StyleSheet } from 'react-native';
 import { VStack, Box, ScrollView } from 'native-base';
 import { theme } from '../../theme';
-import UseTheme from '../../hooks/useTheme';
+import useTheme from '../../hooks/useTheme';
 import HeroBanner from '../../components/dashboard/HeroBanner';
 import QuickActionsSection from '../../components/dashboard/QuickActionSection';
 import FeedPreview from '../../components/dashboard/FeedPreview';
 import Section from '../../components/dashboard/Section';
 import SectionHeader from '../../components/dashboard/SectionHeader';
+
 const Dashboard = () => {
+  const styles = customStyles();
+
   return (
-    <ScrollView contentContainerStyle={styles().content} horizontal={false}>
+    <ScrollView contentContainerStyle={styles.content} horizontal={false}>
       <VStack
         style={[
-          styles().container,
+          styles.container,
           Platform.OS === 'web' ? { minHeight: '100vh' } : null,
         ]}
       >
         <Box>
-          <HeroBanner style={styles().cardContainer} />
+          <HeroBanner style={styles.cardContainer} />
 
           <Section>
             <SectionHeader iconName="add-circle-outline" text="Quick Actions" />
@@ -34,9 +37,9 @@ const Dashboard = () => {
   );
 };
 
-const styles = () => {
+const customStyles = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   return StyleSheet.create({
     container: {
       flex: 1,
