@@ -62,7 +62,8 @@
     "swagger-ui-express": "^4.6.3",
     "typescript": "^5.2.2",
     "uuid": "^9.0.0",
-    "validator": "^13.9.0"
+    "validator": "^13.9.0",
+    "zod": "^3.22.2"
   },
   "devDependencies": {
     "@openapitools/openapi-generator-cli": "^2.7.0",
