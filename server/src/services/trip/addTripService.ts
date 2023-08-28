@@ -3,7 +3,6 @@ import Node from '../../models/osm/nodeModel';
 import Way from '../../models/osm/wayModel';
 import Relation from '../../models/osm/relationModel';
 import GeoJSON from '../../models/geojsonModel';
-import { responseHandler } from '../../helpers/responseHandler';
 
 /**
  * Adds a trip to the database.
@@ -27,12 +26,12 @@ export const addTripService = async (tripDetails): Promise<string> => {
     } = tripDetails;
 
     // Save all the Features from the FeatureCollection
-    // @ts-expect-error
+    // @ts-ignore
     const savedGeoJSONs = await GeoJSON.saveMany(geoJSON.features);
 
     const geojsonIds = savedGeoJSONs.map((feature) => feature._id);
 
-    console.log('geojsonIds', geojsonIds);
+    // console.log('geojsonIds', geojsonIds);
 
     const newTrip = await Trip.create({
       name,
@@ -48,27 +47,12 @@ export const addTripService = async (tripDetails): Promise<string> => {
       is_public,
     });
 
+    // @ts-ignore
     return { message: 'Trip added successfully', trip: newTrip };
   } catch (error) {
     console.error(error);
     throw new Error('Unable to add trip');
   }
-};
-
-/**
- * Generates a new GeoJSON object based on the provided geoJSON.
- * @param {object} geoJSON - The geoJSON object representing the GeoJSON object.
- * @throws {Error} Throws an error if the geoJSON object is invalid or missing.
- * @return {object} An object containing the geojson_ref and geojson_type properties of the newly created GeoJSON object.
- */
-const createGeoJSONObject = async (geoJSON) => {
-  // Check if geoJSON object is valid
-  if (!geoJSON?.properties) {
-    throw new Error('Invalid or missing geoJSON');
-  }
-
-  // Access the GeoJSON type directly from geoJSON properties
-  const geojsonType = geoJSON.properties.type;
 };
 
 /**
