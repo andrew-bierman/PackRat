@@ -2,37 +2,42 @@ import mongoose from 'mongoose';
 import myDB from './dbConnection';
 const { Schema } = mongoose;
 
-const GeoJSONSchema = new Schema({
-  type: {
-    type: String,
-    match: /^Feature$/,
-    required: true,
-  },
-  id: {
-    type: String,
-    required: true,
-    match: /^(way|node|relation)\/\d+$/,
-  },
-  properties: Object,
-  geometry: {
+const GeoJSONSchema = new Schema(
+  {
     type: {
       type: String,
-      enum: [
-        'Point',
-        'LineString',
-        'Polygon',
-        'MultiPoint',
-        'MultiPolygon',
-        'MultiLineString',
-      ],
+      match: /^Feature$/,
       required: true,
     },
-    coordinates: {
-      type: [mongoose.Schema.Types.Mixed],
+    id: {
+      type: String,
       required: true,
+      match: /^(way|node|relation)\/\d+$/,
+    },
+    properties: Object,
+    geometry: {
+      type: {
+        type: String,
+        enum: [
+          'Point',
+          'LineString',
+          'Polygon',
+          'MultiPoint',
+          'MultiPolygon',
+          'MultiLineString',
+        ],
+        required: true,
+      },
+      coordinates: {
+        type: [mongoose.Schema.Types.Mixed],
+        required: true,
+      },
     },
   },
-});
+  {
+    timestamps: true,
+  },
+);
 
 /**
  * Saves a single GeoJSON feature.
