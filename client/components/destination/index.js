@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { Container, Text } from 'native-base';
 import { useRouter, useSearchParams } from 'expo-router';
-import UseTheme from '../../hooks/useTheme';
+import useTheme from '../../hooks/useTheme';
 import { theme } from '../../theme';
 import { useDispatch, useSelector } from 'react-redux';
 import MapContainer from '../map/MapContainer';
@@ -126,7 +126,7 @@ export const DestinationPage = () => {
   console.log('destination page');
   const router = useRouter();
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   const dispatch = useDispatch();
 
   const { destinationId, id, type, lat, lon } = useSearchParams();
@@ -196,7 +196,7 @@ export const DestinationPage = () => {
 
 const styles = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   return StyleSheet.create({
     container: {
       flex: 1,

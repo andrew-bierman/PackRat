@@ -3,7 +3,7 @@ import { Text, StyleSheet } from 'react-native';
 import { ItemRow } from './ItemRow';
 import { theme } from '../theme';
 import { FontAwesome } from '@expo/vector-icons';
-import UseTheme from '../hooks/useTheme';
+import useTheme from '../hooks/useTheme';
 const dummyData = [
   'First-aid kit',
   'Water bottles',
@@ -13,7 +13,7 @@ const dummyData = [
 
 export default function SummaryCard() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
 
   const handleDelete = () => {};
   const handleEdit = () => {};
@@ -48,7 +48,7 @@ export default function SummaryCard() {
 
 const styles = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   return StyleSheet.create({
     mainContainer: {
       flexDirection: 'row',

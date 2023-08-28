@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import MapButtonsOverlay from '../../components/map/MapButtonsOverlay';
 import { theme } from '../../theme';
-import UseTheme from '../../hooks/useTheme';
+import useTheme from '../../hooks/useTheme';
 import { StyleSheet } from 'react-native';
 import {
   calculateZoomLevel,
@@ -13,7 +13,7 @@ import {
 
 function CircleCapComp() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
 
   return (
     <View
@@ -31,7 +31,7 @@ function CircleCapComp() {
 
 export default function DownloadedMaps() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   const [offlinePacks, setOfflinePacks] = useState(null);
   const [showMap, setShowMap] = useState(false);
   const [pack, setPack] = useState(null);

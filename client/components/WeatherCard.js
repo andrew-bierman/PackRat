@@ -5,7 +5,7 @@ import { getNext4Days } from '../utils/getNextDays';
 import { dayNumToString } from '../utils/dayNumToString';
 import { convertToKmh } from '../utils/convertToKmh';
 import { convertToCelsius } from '../utils/convertToCelsius';
-import UseTheme from '../hooks/useTheme';
+import useTheme from '../hooks/useTheme';
 // redux
 import { useSelector } from 'react-redux';
 
@@ -39,7 +39,7 @@ export default function WeatherCard({
   weatherWeek = [],
 }) {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   const date = new Date();
   const dayOfMonth = date.getDate();
   const year = date.getFullYear();
@@ -237,7 +237,7 @@ export default function WeatherCard({
 
 const styles = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   return StyleSheet.create({
     desktopContainer: {
       gap: 15,

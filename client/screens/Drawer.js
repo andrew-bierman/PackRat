@@ -10,7 +10,7 @@ import {
 import { Link } from 'expo-router';
 import { theme } from '../theme';
 import { AntDesign, MaterialIcons } from '@expo/vector-icons';
-import UseTheme from '../hooks/useTheme';
+import useTheme from '../hooks/useTheme';
 const Drawer = ({
   isDrawerOpen,
   toggleDrawer,
@@ -20,7 +20,7 @@ const Drawer = ({
   renderNavigationItem,
 }) => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   const renderNavigationItems = () => {
     return (
       <SafeAreaView>
@@ -64,7 +64,7 @@ const Drawer = ({
 
 const styles = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   return StyleSheet.create({
     modalOverlay: {
       flex: 1,

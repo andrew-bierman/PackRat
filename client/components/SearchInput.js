@@ -16,7 +16,7 @@ import {
   Pressable,
 } from 'native-base';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
-import UseTheme from '../hooks/useTheme';
+import useTheme from '../hooks/useTheme';
 import { SafeAreaView } from 'react-native';
 
 import { Platform } from 'react-native';
@@ -48,7 +48,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
   const [selectedSearch, setSelectedSearch] = useState('');
 
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   const searchResults =
     useSelector((state) => state.search.searchResults) || [];
 

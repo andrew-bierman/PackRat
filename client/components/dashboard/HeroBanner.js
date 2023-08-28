@@ -4,7 +4,7 @@ import LargeCard from '../card/LargeCard';
 import { SearchInput } from '../SearchInput';
 import { StyleSheet, View } from 'react-native';
 import { theme } from '../../theme';
-import UseTheme from '../../hooks/useTheme';
+import useTheme from '../../hooks/useTheme';
 import { useSelector, useDispatch } from 'react-redux';
 import Hero from '../hero';
 import { useRouter } from 'expo-router';
@@ -18,7 +18,7 @@ import { hexToRGBA } from '../../utils/colorFunctions';
 const HeroSection = ({ onSelect }) => {
   const dispatch = useDispatch();
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   const router = useRouter();
 
   const currentDestination = useSelector(
@@ -122,7 +122,7 @@ const HeroSection = ({ onSelect }) => {
 
 const styles = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   return StyleSheet.create({
     banner: {
       flex: 1,

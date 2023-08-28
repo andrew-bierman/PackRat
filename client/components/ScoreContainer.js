@@ -2,7 +2,7 @@ import React from 'react';
 import { Platform, StyleSheet } from 'react-native';
 import { Box, Button, VStack, Text, HStack, View } from 'native-base';
 import { theme } from '../theme';
-import UseTheme from '../hooks/useTheme';
+import useTheme from '../hooks/useTheme';
 import { useDispatch } from 'react-redux';
 import { scorePack } from '../store/packsStore';
 import { Svg, Circle, Path, G, Text as SvgText } from 'react-native-svg';
@@ -155,7 +155,7 @@ const GradingPieChart = ({ scores, size = 150, strokeWidth = 10 }) => {
 export default function ScoreContainer({ type, data, isOwner }) {
   const dispatch = useDispatch();
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   const id = data._id;
   const totalScore = data.totalScore;
   const grades = data.grades;
@@ -217,7 +217,7 @@ export default function ScoreContainer({ type, data, isOwner }) {
 }
 const styles = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   return StyleSheet.create({
     box: {
       paddingHorizontal: 25,

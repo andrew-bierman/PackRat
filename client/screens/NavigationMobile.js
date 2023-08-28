@@ -15,10 +15,10 @@ import {
 import packratlogo from '../assets/packrat.png';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import UseTheme from '../hooks/useTheme';
+import useTheme from '../hooks/useTheme';
 export default function NavigationMobile() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   // const { user } = useAuth();
   const user = useSelector((state) => state.auth.user);
 

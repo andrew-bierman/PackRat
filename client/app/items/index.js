@@ -4,7 +4,7 @@ import { Box, Button, ScrollView } from 'native-base';
 import { StyleSheet, Platform } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { theme } from '../../theme';
-import UseTheme from '../../hooks/useTheme';
+import useTheme from '../../hooks/useTheme';
 import { Tooltip } from 'native-base';
 import { CustomModal } from '../../components/modal';
 import { AddItemGlobal } from '../../components/item/AddItemGlobal';
@@ -24,7 +24,7 @@ export default function Items() {
   const [refetch, setRefetch] = useState(false);
 
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   const data = useSelector((state) => state.globalItems);
 
   const isLoading = useSelector((state) => state.globalItems.isLoading);
@@ -32,12 +32,13 @@ export default function Items() {
   const { isConnected, requests } = useSelector((state) => state.offlineQueue);
   const dispatch = useDispatch();
   useEffect(() => {
-    if(isConnected) {
-      dispatch(executeOfflineRequests(requests))
+    if (isConnected) {
+      dispatch(executeOfflineRequests(requests));
     }
-  },[])
+  }, []);
   useEffect(() => {
-    if (isConnected && requests.length == 0) dispatch(getItemsGlobal({ limit, page }));
+    if (isConnected && requests.length == 0)
+      dispatch(getItemsGlobal({ limit, page }));
   }, [limit, page, refetch, isConnected]);
 
   return (
@@ -121,7 +122,7 @@ export default function Items() {
 }
 const styles = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   return StyleSheet.create({
     button: {
       backgroundColor: currentTheme.colors.background,
