@@ -15,7 +15,7 @@ import Footer from '../components/footer/Footer';
 import { useEffect } from 'react';
 import { setNetworkStatus } from '../store/offlineQueue';
 import { checkNetworkConnected } from '~/utils/netInfo';
-import Progress from '../components/progress';
+
 import Header from '../screens/header';
 
 export default function HomeLayout() {

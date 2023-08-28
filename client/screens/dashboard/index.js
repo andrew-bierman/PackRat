@@ -8,11 +8,12 @@ import QuickActionsSection from '../../components/dashboard/QuickActionSection';
 import FeedPreview from '../../components/dashboard/FeedPreview';
 import Section from '../../components/dashboard/Section';
 import SectionHeader from '../../components/dashboard/SectionHeader';
-
 const Dashboard = () => {
   const styles = customStyles();
 
   return (
+    <>
+
     <ScrollView contentContainerStyle={styles.content} horizontal={false}>
       <VStack
         style={[
@@ -34,6 +35,7 @@ const Dashboard = () => {
         </Box>
       </VStack>
     </ScrollView>
+    </>
   );
 };
 
