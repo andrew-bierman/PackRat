@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Text, Stack } from 'native-base';
 import { StyleSheet, Platform } from 'react-native';
 import { useSelector } from 'react-redux';
-import UseTheme from '../../hooks/useTheme';
+import useTheme from '../../hooks/useTheme';
 
 import { theme } from '../../theme';
 
@@ -53,7 +53,7 @@ export default function LargeCard({
 
   console.log('currentShape', currentShape);
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   const containerStyle = customStyle || getContainerStyle(type);
 
   return (
@@ -91,7 +91,7 @@ export default function LargeCard({
 
 const styles = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
 
   return StyleSheet.create({
     mutualStyles: {

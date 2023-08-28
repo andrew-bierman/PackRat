@@ -7,7 +7,7 @@ import { Link } from 'expo-router';
 import { Dimensions, FlatList, StyleSheet, View } from 'react-native';
 import { getPublicPacks, getPublicTrips } from '../../store/feedStore';
 import { theme } from '../../theme';
-import UseTheme from '../../hooks/useTheme';
+import useTheme from '../../hooks/useTheme';
 import Carousel from '../carousel';
 
 const { height, width } = Dimensions.get('window');
@@ -51,7 +51,7 @@ const FeedPreview = () => {
 
 const styles = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   return StyleSheet.create({
     feedPreview: {
       flexDirection: 'row',

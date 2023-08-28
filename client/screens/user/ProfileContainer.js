@@ -13,7 +13,7 @@ import { Platform, StyleSheet } from 'react-native';
 import UserDataContainer from '../../components/user/UserDataContainer';
 import { useAuth } from '../../auth/provider';
 import { theme } from '../../theme';
-import UseTheme from '../../hooks/useTheme';
+import useTheme from '../../hooks/useTheme';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 // import useGetPacks from "../../hooks/useGetPacks";
 import { useDispatch, useSelector } from 'react-redux';
@@ -56,7 +56,7 @@ const Header = ({
   isCurrentUser,
 }) => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   const profileImage = user?.profileImage ?? null;
   const userRealName = user?.name ?? null;
   const userEmail = user?.email ?? null;
@@ -137,7 +137,7 @@ const Header = ({
 export default function ProfileContainer({ id = null }) {
   const dispatch = useDispatch();
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   const authUser = useSelector((state) => state.auth.user);
   const userStore = useSelector((state) => state.userStore);
   const authStore = useSelector((state) => state.auth);
@@ -239,7 +239,7 @@ export default function ProfileContainer({ id = null }) {
 
 const styles = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   return StyleSheet.create({
     mainContainer: {
       backgroundColor: currentTheme.colors.background,

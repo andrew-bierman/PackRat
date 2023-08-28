@@ -8,11 +8,11 @@ import { useState } from 'react';
 // import { useAuth } from "../../auth/provider";
 import { useSelector, useDispatch } from 'react-redux';
 import { CustomModal } from '../modal';
-import UseTheme from '../../hooks/useTheme';
+import useTheme from '../../hooks/useTheme';
 
 export const AddPack = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   const dispatch = useDispatch();
 
   const [name, setName] = useState('');
@@ -88,7 +88,7 @@ export const AddPackContainer = () => {
 
 const styles = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   return StyleSheet.create({
     container: {
       flexDirection: 'column',
