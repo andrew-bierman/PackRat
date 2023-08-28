@@ -26,7 +26,7 @@ export const addTripService = async (tripDetails): Promise<string> => {
     } = tripDetails;
 
     // Save all the Features from the FeatureCollection
-    // @ts-ignore
+    // @ts-expect-error - getting typescript error here
     const savedGeoJSONs = await GeoJSON.saveMany(geoJSON.features);
 
     const geojsonIds = savedGeoJSONs.map((feature) => feature._id);
@@ -47,7 +47,7 @@ export const addTripService = async (tripDetails): Promise<string> => {
       is_public,
     });
 
-    // @ts-ignore
+    // @ts-expect-error - getting typescript error here
     return { message: 'Trip added successfully', trip: newTrip };
   } catch (error) {
     console.error(error);
