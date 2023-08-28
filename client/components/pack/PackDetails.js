@@ -9,7 +9,7 @@ import { fetchUserPacks, selectPackById } from '../../store/packsStore';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchSinglePack } from '../../store/singlePackStore';
-import UseTheme from '../../hooks/useTheme';
+import useTheme from '../../hooks/useTheme';
 import { Box, Text } from 'native-base';
 import { DetailsComponent } from '../details';
 import { Dimensions, Platform, StyleSheet } from 'react-native';
@@ -104,7 +104,7 @@ export function PackDetails() {
 
 const styles = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   return StyleSheet.create({
     mainContainer: {
       backgroundColor: currentTheme.colors.background,

@@ -14,7 +14,7 @@ import {
   MaterialCommunityIcons,
   FontAwesome5,
 } from '@expo/vector-icons';
-import UseTheme from '../../hooks/useTheme';
+import useTheme from '../../hooks/useTheme';
 import { mapboxStyles } from '../../utils/mapFunctions';
 
 const MapButtonsOverlay = ({
@@ -33,7 +33,7 @@ const MapButtonsOverlay = ({
   console.log('newwwww');
   const [showStyleOptions, setShowStyleOptions] = useState(false);
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   const handleStyleOptionPress = () => {
     setShowStyleOptions(!showStyleOptions);
   };
@@ -222,7 +222,7 @@ const MapButtonsOverlay = ({
 
 const styles = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   return StyleSheet.create({
     container: {
       alignItems: 'center',

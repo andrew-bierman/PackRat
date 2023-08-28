@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Svg, Line, Circle } from 'react-native-svg';
-import UseTheme from '../../hooks/useTheme';
+import useTheme from '../../hooks/useTheme';
 
 const ProgressBar = ({ steps, currentStep }) => {
   const percentage = ((currentStep + 1) / steps.length) * 100;
@@ -139,7 +139,7 @@ const MultiStepForm = ({ steps = [] }) => {
 
 const styles = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   return StyleSheet.create({
     container: {
       // flex: 1,

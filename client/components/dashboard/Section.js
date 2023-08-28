@@ -2,7 +2,7 @@ import { View, StyleSheet } from 'react-native';
 import { Card } from 'native-base';
 import React from 'react';
 import { theme } from '../../theme';
-import UseTheme from '../../hooks/useTheme';
+import useTheme from '../../hooks/useTheme';
 
 const Section = ({ children, onPress }) => {
   return (
@@ -14,7 +14,7 @@ const Section = ({ children, onPress }) => {
 
 const styles = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   return StyleSheet.create({
     section: {
       marginBottom: 20,

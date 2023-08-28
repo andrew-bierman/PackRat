@@ -25,10 +25,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AuthStateListener } from '../../client/auth/AuthStateListener';
 import { signOut } from '../store/authStore';
 import SVGLogoComponent from '../components/logo';
-import UseTheme from '../hooks/useTheme';
+import useTheme from '../hooks/useTheme';
 const MutualContent = ({ desktopContainer, desktopNav, isMobile }) => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   // const { signOut, user } = useAuth();
 
@@ -220,7 +220,7 @@ export default function Navigation() {
 
 const styles = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   return StyleSheet.create({
     mutualStyles: {
       backgroundColor: currentTheme.colors.background,
