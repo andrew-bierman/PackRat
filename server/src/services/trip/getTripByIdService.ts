@@ -1,4 +1,4 @@
-import Trip from '../../models/tripModel'
+import Trip from '../../models/tripModel';
 
 /**
  * Retrieves a trip by its ID and returns the trip details.
@@ -7,15 +7,29 @@ import Trip from '../../models/tripModel'
  */
 export const getTripByIdService = async (tripId: string): Promise<object> => {
   try {
-    const trip: any = await Trip.findById(tripId).populate('osm_ref').populate({ path: 'owner_id' })
+    const trip: any = await Trip.findById(tripId).populate({
+      path: 'owner_id',
+    });
 
     // If you need to populate additional fields, you can chain more populate methods here
     // .populate({ path: "osm_ref", populate: { path: "nodes" }})
     // .populate({ path: "packs", populate: { path: "items" } })
 
-    return { ...trip._doc, osm_ref: await trip.osm_ref.toJSON() }
+    // console.log('trip', trip);
+
+    const tripObject = trip.toObject();
+    tripObject.geojson = {
+      type: 'FeatureCollection',
+      features: tripObject.geojson,
+    };
+
+    // console.log('tripObject', tripObject);
+
+    // return { ...trip._doc };
+
+    return tripObject;
   } catch (error) {
-    console.error(error)
-    throw new Error('Trip cannot be found')
+    console.error(error);
+    throw new Error('Trip cannot be found');
   }
-}
+};

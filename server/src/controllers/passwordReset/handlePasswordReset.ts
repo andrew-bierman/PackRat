@@ -1,46 +1,40 @@
-import jwt from 'jsonwebtoken'
-import nodemailer from 'nodemailer'
-import bcrypt from 'bcrypt'
-import User from '../../models/userModel'
-import {
-  STMP_EMAIL,
-  STMP_PASSWORD,
-  CLIENT_URL,
-  JWT_SECRET,
-  SEND_GRID_API_KEY
-} from '../../config'
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
+import User from '../../models/userModel';
+import { JWT_SECRET, SEND_GRID_API_KEY } from '../../config';
 
-import sgMail from '@sendgrid/mail'
+import sgMail from '@sendgrid/mail';
+import { responseHandler } from '../../helpers/responseHandler';
 
-sgMail.setApiKey(SEND_GRID_API_KEY)
+sgMail.setApiKey(SEND_GRID_API_KEY);
 
 // Verify a password reset token and return the user's email address
 const verifyPasswordResetToken = (token) => {
-  const secret = JWT_SECRET
+  const secret = JWT_SECRET;
   try {
-    const decoded: any = jwt.verify(token, secret)
-    return decoded.email
+    const decoded: any = jwt.verify(token, secret);
+    return decoded.email;
   } catch (error) {
-    console.error('Error verifying password reset token:', error)
-    return null
+    console.error('Error verifying password reset token:', error);
+    return null;
   }
-}
+};
 
 export const handlePasswordReset = async (req, res) => {
   try {
-    const { password } = req.body
-    const { token } = req.params
-    const email = verifyPasswordResetToken(token)
-    const hashedPassword = bcrypt.hashSync(password, 10) // hash the password
+    const { password } = req.body;
+    const { token } = req.params;
+    const email = verifyPasswordResetToken(token);
+    const hashedPassword = bcrypt.hashSync(password, 10); // hash the password
 
-    const user: any = await User.findOne({ email })
+    const user = await User.findOne({ email });
 
     if (!user) {
-      throw new Error('No user found with this email address')
+      throw new Error('No user found with this email address');
     }
 
-    if (Date.now() > user.passwordResetTokenExpiration) {
-      throw new Error('Password reset token has expired')
+    if (Date.now() > user.passwordResetTokenExpiration.getTime()) {
+      throw new Error('Password reset token has expired');
     }
 
     await User.findOneAndUpdate(
@@ -48,15 +42,16 @@ export const handlePasswordReset = async (req, res) => {
       {
         password: hashedPassword,
         passwordResetToken: null,
-        passwordResetTokenExpiration: null
-      }
-    )
+        passwordResetTokenExpiration: null,
+      },
+    );
 
-    return res.send({ message: 'Password reset successful' })
+    res.locals.data = { message: 'Password reset successful' };
+    responseHandler(res);
   } catch (error) {
-    console.error('Error resetting password:', error)
+    console.error('Error resetting password:', error);
     return res
       .status(500)
-      .send({ error: error.message || 'Internal server error' })
+      .send({ error: error.message || 'Internal server error' });
   }
-}
+};

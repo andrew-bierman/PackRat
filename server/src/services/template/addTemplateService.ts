@@ -1,5 +1,5 @@
-import Template from '../../models/templateModel'
-import User from '../../models/userModel'
+import Template from '../../models/templateModel';
+import User from '../../models/userModel';
 
 /**
  * Adds a template to the database.
@@ -13,24 +13,24 @@ export const addTemplateService = async (
   type: string,
   templateId: string,
   isGlobalTemplate: boolean,
-  createdBy: string
+  createdBy: string,
 ): Promise<void> => {
   try {
-    const user = await User.findById(createdBy)
+    const user = await User.findById(createdBy);
 
     if (!user) {
-      throw new Error('User not found')
+      throw new Error('User not found');
     }
 
     const template = new Template({
       type,
       templateId,
       isGlobalTemplate,
-      createdBy
-    })
+      createdBy,
+    });
 
-    await template.save()
+    await template.save();
   } catch (error) {
-    throw new Error(error.toString())
+    throw new Error(error.toString());
   }
-}
+};

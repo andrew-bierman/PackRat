@@ -2,12 +2,12 @@ import {
   createSlice,
   createAsyncThunk,
   createEntityAdapter,
-} from "@reduxjs/toolkit";
-import axios from "~/config/axios";
-import { api } from "../constants/api";
-import { Toast } from "native-base";
-import { InformUser } from "../utils/ToastUtils";
-export const addPack = createAsyncThunk("packs/addPack", async (newPack) => {
+} from '@reduxjs/toolkit';
+import axios from '~/config/axios';
+import { api } from '../constants/api';
+import { Toast } from 'native-base';
+import { InformUser } from '../utils/ToastUtils';
+export const addPack = createAsyncThunk('packs/addPack', async (newPack) => {
   // console.log(newPack, "this is new pack")
   const response = await axios.post(`${api}/pack/`, newPack);
   // console.log(response.data, 'this is response from server');
@@ -15,12 +15,12 @@ export const addPack = createAsyncThunk("packs/addPack", async (newPack) => {
 });
 
 export const deletePackItem = createAsyncThunk(
-  "items/deletePackItem",
+  'items/deletePackItem',
   async (item) => {
-    console.log("item", item);
+    console.log('item', item);
     const response = await axios.delete(`${api}/item`, {
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       data: {
         itemId: item.itemId,
@@ -28,37 +28,37 @@ export const deletePackItem = createAsyncThunk(
       },
     });
     return response.data;
-  }
+  },
 );
 
 export const changePackStatus = createAsyncThunk(
-  "packs/changePackStatus",
+  'packs/changePackStatus',
   async (updatedPack) => {
     const response = await axios.put(`${api}/pack`, updatedPack);
     return response.data;
-  }
+  },
 );
 
 export const fetchUserPacks = createAsyncThunk(
-  "packs/fetchUserPacks",
+  'packs/fetchUserPacks',
   async (ownerId) => {
     const response = await axios.get(`${api}/pack/${ownerId}`);
     return response.data;
-  }
+  },
 );
 
 export const addPackItem = createAsyncThunk(
-  "items/addPackItem",
+  'items/addPackItem',
   async (newItem) => {
     // console.log("calling apis");
     const response = await axios.post(`${api}/item/`, newItem);
 
     return response.data;
-  }
+  },
 );
 
 export const duplicatePackItem = createAsyncThunk(
-  "items/duplicatePackItem",
+  'items/duplicatePackItem',
   async (newItem) => {
     const response = await axios.post(`${api}/pack/duplicate`, {
       packId: newItem.packId,
@@ -66,26 +66,26 @@ export const duplicatePackItem = createAsyncThunk(
       items: newItem.items,
     });
     return response.data;
-  }
+  },
 );
 
-export const scorePack = createAsyncThunk("packs/scorePack", async (packId) => {
+export const scorePack = createAsyncThunk('packs/scorePack', async (packId) => {
   const response = await axios.put(`${api}/pack/score/${packId}`);
   return response.data;
 });
 
 export const editPackItem = createAsyncThunk(
-  "items/editPackItem",
+  'items/editPackItem',
   async (newItem) => {
     console.log(newItem, 'new Item here');
     const response = await axios.put(`${api}/item/`, newItem);
     console.log(response.data, 'new item response');
     return response.data;
-  }
+  },
 );
 
 export const editItemsGlobalAsDuplicate = createAsyncThunk(
-  "Items/editItemsGlobalAsDuplicate",
+  'Items/editItemsGlobalAsDuplicate',
   async (item) => {
     const { itemId, packId, name, weight, quantity, unit, type } = item;
     const response = await axios.put(`${api}/item/global/${itemId}`, {
@@ -97,23 +97,23 @@ export const editItemsGlobalAsDuplicate = createAsyncThunk(
       type,
     });
     return response.data;
-  }
+  },
 );
 
-export const updatePack = createAsyncThunk("packs/updatePack", async (pack) => {
+export const updatePack = createAsyncThunk('packs/updatePack', async (pack) => {
   const response = await axios.put(`${api}/pack`, {
-    _id: pack["_id"],
+    _id: pack._id,
     name: pack.name,
     is_public: pack.is_public,
   });
   return response.data;
 });
 
-export const deletePack = createAsyncThunk("packs/deletePack", async (pack) => {
+export const deletePack = createAsyncThunk('packs/deletePack', async (pack) => {
   const response = await axios.delete(`${api}/pack`, {
     data: { packId: pack.id },
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
   });
   return response.data;
@@ -128,11 +128,11 @@ const initialState = packsAdapter.getInitialState({
   isLoading: false,
   error: null,
   isOpenEditModal: false,
-  update : false,
+  update: false,
 });
 
 const packsSlice = createSlice({
-  name: "packs",
+  name: 'packs',
   initialState,
   reducers: {
     openModal: (state) => {
@@ -211,25 +211,24 @@ const packsSlice = createSlice({
       .addCase(editPackItem.pending, (state) => {
         state.isLoading = true;
         state.error = null;
-
       })
       .addCase(editPackItem.fulfilled, (state, action) => {
         const newItem = action.payload;
         const packIds = newItem.packs; // packIds is an array of pack Ids
 
         packIds.forEach((packId) => {
-          console.log("packid", packId);
+          console.log('packid', packId);
           // loop through each packId
           const existingPack = state.entities[packId];
-          console.log("existingPack", existingPack);
+          console.log('existingPack', existingPack);
           if (!existingPack) {
             return;
           }
 
           const updatedItems = existingPack.items.map((item) =>
-            item._id === newItem._id ? newItem : item
+            item._id === newItem._id ? newItem : item,
           );
-          console.log("updatediTEMS", updatedItems);
+          console.log('updatediTEMS', updatedItems);
 
           packsAdapter.updateOne(state, {
             id: packId,
@@ -255,13 +254,13 @@ const packsSlice = createSlice({
       .addCase(deletePackItem.fulfilled, (state, action) => {
         const { itemId, currentPackId } = action.meta.arg;
 
-        let existing = state.entities[currentPackId];
+        const existing = state.entities[currentPackId];
         if (!existing) {
           return;
         }
 
         const updatedItems = existing.items.filter(
-          (item) => item._id !== itemId
+          (item) => item._id !== itemId,
         );
 
         packsAdapter.updateOne(state, {
@@ -290,7 +289,6 @@ const packsSlice = createSlice({
         });
         state.isLoading = false;
         state.error = null;
-
       })
       .addCase(scorePack.rejected, (state, action) => {
         state.isLoading = false;
@@ -309,9 +307,9 @@ const packsSlice = createSlice({
           return;
         }
         const updatedItems = existingPack.items.map((item) =>
-          item._id === itemId ? action.payload : item
+          item._id === itemId ? action.payload : item,
         );
-        console.log("updated items", updatedItems);
+        console.log('updated items', updatedItems);
 
         packsAdapter.updateOne(state, {
           id: packId,
@@ -344,11 +342,11 @@ const packsSlice = createSlice({
         state.isLoading = false;
         state.error = null;
         InformUser({
-          title: "Pack has been succesfully updated",
-          placement: "bottom",
+          title: 'Pack has been succesfully updated',
+          placement: 'bottom',
           duration: 2000,
           style: {
-            backgroundColor: "green",
+            backgroundColor: 'green',
           },
         });
       })
@@ -356,11 +354,11 @@ const packsSlice = createSlice({
         state.isLoading = false;
         state.error = action.error.message;
         InformUser({
-          title: "Error while Updating pack",
-          placement: "bottom",
+          title: 'Error while Updating pack',
+          placement: 'bottom',
           duration: 2000,
           style: {
-            backgroundColor: "red",
+            backgroundColor: 'red',
           },
         });
       })
@@ -371,7 +369,7 @@ const packsSlice = createSlice({
       .addCase(deletePack.fulfilled, (state, action) => {
         state.isLoading = false;
         state.error = null;
-        console.log("here fyl");
+        console.log('here fyl');
       })
       .addCase(deletePack.rejected, (state, action) => {
         state.isLoading = false;

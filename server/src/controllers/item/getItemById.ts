@@ -1,4 +1,6 @@
-import { getItemByIdService } from '../../services/item/item.service'
+import { ItemNotFoundError } from '../../helpers/errors';
+import { responseHandler } from '../../helpers/responseHandler';
+import { getItemByIdService } from '../../services/item/item.service';
 
 /**
  * Retrieves an item by its ID.
@@ -7,14 +9,15 @@ import { getItemByIdService } from '../../services/item/item.service'
  * @param {string} req.body._id - The ID of the item to retrieve.
  * @return {Object} The retrieved item.
  */
-export const getItemById = async (req, res) => {
+export const getItemById = async (req, res, next) => {
   try {
-    const { _id } = req.body
+    const { _id } = req.body;
 
-    const item = await getItemByIdService(_id)
+    const item = await getItemByIdService(_id);
 
-    res.status(200).json(item)
+    res.locals.data = item;
+    responseHandler(res);
   } catch (error) {
-    res.status(404).json({ msg: 'Item cannot be found' })
+    next(ItemNotFoundError);
   }
-}
+};

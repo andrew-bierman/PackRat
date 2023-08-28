@@ -2,12 +2,13 @@
   "name": "packrat",
   "version": "0.0.1",
   "description": "PackRat is the ultimate adventure planner designed for those who love to explore the great outdoors. Our app helps users plan and organize their trips with ease, whether it's a weekend camping trip, a day hike, or a cross-country road trip.",
+  "private": true,
   "main": "index.js",
   "scripts": {
     "clean": "rm -rf server/node_modules client/node_modules server/package-lock.json client/package-lock.json",
     "build:prod": "npm run install:all && npm run build:expo && npm run build:tsc",
     "build:expo": "npm run expo:export",
-    "build:tsc": "cd server && npm run build",
+    "build:tsc": "npm run build --prefix server",
     "install:all": "npm install --prefix server && npm install --prefix client && npm install",
     "setup": "npm run clean && npm run install:all && npm run setup:client && npm run setup:server",
     "setup:client": "npm --prefix client run setup",
@@ -16,7 +17,17 @@
     "start": "npm run start:ts-node --prefix server",
     "start:prod": "npm run start:prod --prefix server",
     "dev:client": "npm start --prefix client",
-    "dev:server": "npm start --prefix server"
+    "dev:server": "npm start --prefix server",
+    "test": "npm run test:all",
+    "test:all": "npm run test:client && npm run test:server",
+    "test:client": "npm test --prefix client",
+    "test:server": "npm test --prefix server",
+    "lint": "npm run lint:all",
+    "lint:all": "npm run lint:client && npm run lint:server",
+    "lint:client": "npm run lint --prefix client",
+    "lint:server": "npm run lint --prefix server",
+    "format": "npm run format:all",
+    "format:all": "prettier --write \"**/*.{js,jsx,ts,tsx}\""
   },
   "repository": {
     "type": "git",
@@ -40,6 +51,16 @@
     "packing list app",
     "packing planner app"
   ],
+  "lint-staged": {
+    "client/**/*.{js,jsx,ts,tsx}": [
+      "cd client && eslint --fix",
+      "prettier --write"
+    ],
+    "server/**/*.{js,ts}": [
+      "cd server && eslint --fix",
+      "prettier --write"
+    ]
+  },
   "author": "Andrew Bierman",
   "license": "SEE LICENSE IN LICENSE.txt",
   "bugs": {
@@ -47,6 +68,8 @@
   },
   "homepage": "https://github.com/andrew-bierman/PackRat#readme",
   "devDependencies": {
-    "expo-cli": "^5.0.2"
+    "expo-cli": "^5.0.2",
+    "husky": "^8.0.0",
+    "lint-staged": "^14.0.1"
   }
 }

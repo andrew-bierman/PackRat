@@ -16,8 +16,8 @@ const { height, width } = Dimensions.get('window')
 const isWeb = Platform.OS === 'web'
 
 const options = [
-  { label: "Yes", value: "true" },
-  { label: "For me only", value: "false" },
+  { label: 'Yes', value: 'true' },
+  { label: 'For me only', value: 'false' },
 ];
 
 const NumberInput = (props) => {
@@ -25,24 +25,24 @@ const NumberInput = (props) => {
 
   // Custom validation function to enforce positive numbers only
   const validateNumber = (text) => {
-    const sanitizedText = text.replace(/[^0-9-]/g, ""); // Allow only numbers and minus sign
+    const sanitizedText = text.replace(/[^0-9-]/g, ''); // Allow only numbers and minus sign
 
-    if (sanitizedText === "") {
-      return "";
+    if (sanitizedText === '') {
+      return '';
     }
 
     const number = parseInt(sanitizedText, 10);
 
     if (isNaN(number) || number < 0) {
       // Check for NaN and negative numbers
-      return "";
+      return '';
     }
 
-    if (typeof min !== "undefined" && number < min) {
+    if (typeof min !== 'undefined' && number < min) {
       return min.toString();
     }
 
-    if (typeof max !== "undefined" && number > max) {
+    if (typeof max !== 'undefined' && number > max) {
       return max.toString();
     }
 
@@ -58,7 +58,7 @@ const NumberInput = (props) => {
   const handleChangeText = (text) => {
     const validatedText = validateNumber(text);
     // Pass the sanitized text back to the parent component
-    otherProps.onChangeText && otherProps.onChangeText(validatedText);
+    otherProps.onChangeText?.(validatedText);
   };
 
   return (
@@ -79,48 +79,48 @@ export const SaveTripContainer = ({ dateRange }) => {
   const user = useSelector((state) => state.auth.user);
   const packId = useSelector((state) => state.trips.newTrip.packId);
 
-  console.log("- note for me", packId);
-  console.log("search in save trip container ->", search);
-  console.log("selected in dateRange ->", dateRange);
+  console.log('- note for me', packId);
+  console.log('search in save trip container ->', search);
+  console.log('selected in dateRange ->', dateRange);
 
   // defining dispatch
   const dispatch = useDispatch();
 
   // trip info states value
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
   // const [numberOfNights, setNumberOfNights] = useState("");
   // const [startDate, setStartDate] = useState("");
   // const [endDate, setEndDate] = useState("");
-  const [isPublic, setIsPublic] = useState("");
+  const [isPublic, setIsPublic] = useState('');
 
   // create trip
   const handleCreateTrip = async () => {
     // duration object
     const startDate = dateRange.startDate
-      ? format(dateRange.startDate, "MM/dd/yyyy")
-      : "";
+      ? format(dateRange.startDate, 'MM/dd/yyyy')
+      : '';
     const endDate = dateRange.endDate
-      ? format(dateRange.endDate, "MM/dd/yyyy")
-      : "";
+      ? format(dateRange.endDate, 'MM/dd/yyyy')
+      : '';
     const numNights =
       dateRange.startDate && dateRange.endDate
         ? intervalToDuration({
-          start: dateRange.startDate,
-          end: dateRange.endDate,
-        }).days
-        : "";
+            start: dateRange.startDate,
+            end: dateRange.endDate,
+          }).days
+        : '';
     const duration = {
       numberOfNights: numNights,
       startDate,
       endDate,
     };
 
-    console.log("old rag", search);
+    console.log('old rag', search);
 
     // TODO - fix this, why making call not through redux. Switch to RTK query at least
     const { data: geoJSON } = await axios.get(
-      `${api}/osm/photonDetails/${search.properties.osm_type}/${search.properties.osm_id}`
+      `${api}/osm/photonDetails/${search.properties.osm_type}/${search.properties.osm_id}`,
     );
     // main object
     const data = {
@@ -139,7 +139,7 @@ export const SaveTripContainer = ({ dateRange }) => {
     };
 
     // creating a trip
-    console.log("create trip data ->", data);
+    console.log('create trip data ->', data);
     dispatch(addTrip(data));
     setIsSaveModalOpen(!isSaveModalOpen);
   };
@@ -148,7 +148,7 @@ export const SaveTripContainer = ({ dateRange }) => {
    * Handles the change in value.
    *
    * @param {type} itemValue - the new value of the item
-   * @return {undefined} 
+   * @return {undefined}
    */
   const handleValueChange = (itemValue) => {
     setIsPublic(itemValue);

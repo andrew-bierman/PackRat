@@ -1,26 +1,26 @@
-import mongoose, { Schema, type Document, type Model } from 'mongoose'
-import myDB from './dbConnection'
-import bycrypt from 'bcrypt'
-import jwt from 'jsonwebtoken'
-import { JWT_SECRET, CLIENT_URL } from '../config'
-import validator from 'validator'
+import mongoose, { Schema, type Document, type Model } from 'mongoose';
+import myDB from './dbConnection';
+import bycrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import { JWT_SECRET, CLIENT_URL } from '../config';
+import validator from 'validator';
 
 export interface IUser extends Document {
-  name: string
-  password: string
-  email: string
-  token: string
-  googleId?: string
-  code?: string
-  is_certified_guide?: boolean
-  favorites: any
-  passwordResetToken?: string
-  passwordResetTokenExpiration?: Date
-  role: 'user' | 'admin'
-  username: string
-  profilePicture?: string
-  generateAuthToken: () => Promise<string>
-  generateResetToken: () => Promise<string>
+  name: string;
+  password: string;
+  email: string;
+  token: string;
+  googleId?: string;
+  code?: string;
+  is_certified_guide?: boolean;
+  favorites: any;
+  passwordResetToken?: string;
+  passwordResetTokenExpiration?: Date;
+  role: 'user' | 'admin';
+  username: string;
+  profilePicture?: string;
+  generateAuthToken: () => Promise<string>;
+  generateResetToken: () => Promise<string>;
 }
 
 const UserSchema = new Schema<IUser>(
@@ -31,9 +31,11 @@ const UserSchema = new Schema<IUser>(
       trim: true,
       minLength: 7,
       required: true,
-      validate (value: string) {
-        if (value.search(/password/i) !== -1) { throw new Error("The password cannot contain the word 'password'") }
-      }
+      validate(value: string) {
+        if (value.search(/password/i) !== -1) {
+          throw new Error("The password cannot contain the word 'password'");
+        }
+      },
     },
     email: {
       type: String,
@@ -41,13 +43,13 @@ const UserSchema = new Schema<IUser>(
       lowercase: true,
       unique: true,
       required: true,
-      validate (value: string) {
-        if (!validator.isEmail(value)) throw new Error('Email is invalid')
-      }
+      validate(value: string) {
+        if (!validator.isEmail(value)) throw new Error('Email is invalid');
+      },
     },
     token: {
       type: String,
-      trim: true
+      trim: true,
     },
     googleId: { type: String },
     code: { type: String },
@@ -60,7 +62,7 @@ const UserSchema = new Schema<IUser>(
     role: {
       type: String,
       enum: ['user', 'admin'],
-      default: 'user'
+      default: 'user',
     },
     username: {
       type: String,
@@ -68,119 +70,125 @@ const UserSchema = new Schema<IUser>(
       lowercase: true,
       unique: true,
       required: true,
-      validate (value: string) {
-        if (!validator.isAlphanumeric(value)) { throw new Error('Username is invalid') }
-      }
+      validate(value: string) {
+        if (!validator.isAlphanumeric(value)) {
+          throw new Error('Username is invalid');
+        }
+      },
     },
     profilePicture: {
-      type: String
-    }
+      type: String,
+    },
   },
   {
     timestamps: true,
     toJSON: { virtuals: true },
-    toObject: { virtuals: true }
-  }
-)
+    toObject: { virtuals: true },
+  },
+);
 
 UserSchema.statics.findByCredentials = async function ({
   email,
-  password
+  password,
 }: {
-  email: string
-  password: string
+  email: string;
+  password: string;
 }): Promise<IUser> {
-  const user = await User.findOne({ email })
+  const user = await User.findOne({ email });
 
-  if (!user) throw new Error('Unable to login')
+  if (!user) throw new Error('Unable to login');
 
-  const isMatch = await bycrypt.compare(password, user.password)
+  const isMatch = await bycrypt.compare(password, user.password);
 
-  if (!isMatch) throw new Error('Unable to login')
+  if (!isMatch) throw new Error('Unable to login');
 
-  return user
-}
+  return user;
+};
 
-UserSchema.statics.alreadyLogin = async function (email: string): Promise<void> {
-  const user = await User.findOne({ email })
-  if (user) throw new Error('Already email registered')
-}
+UserSchema.statics.alreadyLogin = async function (
+  email: string,
+): Promise<void> {
+  const user = await User.findOne({ email });
+  if (user) throw new Error('Already email registered');
+};
 
 UserSchema.statics.validateResetToken = async function (
-  token: string
+  token: string,
 ): Promise<IUser> {
-  if (!JWT_SECRET) throw new Error('JWT_SECRET is not defined')
-  const decoded: any = jwt.verify(token, JWT_SECRET)
+  if (!JWT_SECRET) throw new Error('JWT_SECRET is not defined');
+  const decoded: any = jwt.verify(token, JWT_SECRET);
   const user = await User.findOne({
     _id: decoded._id,
-    passwordResetToken: token
-  })
+    passwordResetToken: token,
+  });
 
-  if (!user) throw new Error('User not Found')
+  if (!user) throw new Error('User not Found');
 
-  return user
-}
+  return user;
+};
 
 UserSchema.pre<IUser>('save', async function (next) {
-  const user = this
+  const user = this;
 
   if (!user.username) {
-    let generatedUsername = user.email ? user.email.split('@')[0] : 'packratuser'
+    let generatedUsername = user.email
+      ? user.email.split('@')[0]
+      : 'packratuser';
 
-    const exists = await User.exists({ username: generatedUsername })
+    const exists = await User.exists({ username: generatedUsername });
 
-    let counter = 1
+    let counter = 1;
     while (exists) {
-      generatedUsername = `${generatedUsername}${counter}`
-      counter++
+      generatedUsername = `${generatedUsername}${counter}`;
+      counter++;
     }
 
-    user.username = generatedUsername
+    user.username = generatedUsername;
   }
 
-  next()
-})
+  next();
+});
 
 UserSchema.methods.generateAuthToken = async function (): Promise<string> {
-  const user = this
-  if (!JWT_SECRET) throw new Error('JWT_SECRET is not defined')
+  const user = this;
+  if (!JWT_SECRET) throw new Error('JWT_SECRET is not defined');
   const token = await jwt.sign({ _id: user._id.toString() }, JWT_SECRET, {
-    expiresIn: '7 days'
-  })
-  user.token = token
-  await user.save()
-  return token
-}
+    expiresIn: '7 days',
+  });
+  user.token = token;
+  await user.save();
+  return token;
+};
 
 UserSchema.methods.generateResetToken = async function (): Promise<string> {
-  const user = this
+  const user = this;
   if (user.passwordResetToken) {
-    if (!JWT_SECRET) throw new Error('JWT_SECRET is not defined')
-    const decoded: any = jwt.verify(user.passwordResetToken, JWT_SECRET)
-    if (decoded._id) return user.passwordResetToken
+    if (!JWT_SECRET) throw new Error('JWT_SECRET is not defined');
+    const decoded: any = jwt.verify(user.passwordResetToken, JWT_SECRET);
+    if (decoded._id) return user.passwordResetToken;
   }
-  if (!JWT_SECRET) throw new Error('JWT_SECRET is not defined')
+  if (!JWT_SECRET) throw new Error('JWT_SECRET is not defined');
   const resetToken = await jwt.sign({ _id: user._id.toString() }, JWT_SECRET, {
-    expiresIn: '12h'
-  })
-  user.passwordResetToken = resetToken
-  await user.save()
-  return `${CLIENT_URL}/password-reset?token=${resetToken}`
-}
+    expiresIn: '12h',
+  });
+  user.passwordResetToken = resetToken;
+  await user.save();
+  return `${CLIENT_URL}/password-reset?token=${resetToken}`;
+};
 
 UserSchema.virtual('packs', {
   ref: 'Pack',
   localField: '_id',
   foreignField: 'owner_id',
-  justOne: false
-})
+  justOne: false,
+});
 
 UserSchema.virtual('trips', {
   ref: 'Trip',
   localField: '_id',
   foreignField: 'owner_id',
-  justOne: false
-})
+  justOne: false,
+});
 
 /**
  * Returns a partial representation of the user object, without the password and passwordResetToken fields.
@@ -188,15 +196,15 @@ UserSchema.virtual('trips', {
  * @returns {Partial<IUser>} A partial representation of the user object.
  */
 UserSchema.methods.toJSON = function (): Partial<IUser> {
-  const user = this
-  const userObject = user.toObject()
+  const user = this;
+  const userObject = user.toObject();
 
-  delete userObject.password
-  delete userObject.passwordResetToken
+  delete userObject.password;
+  delete userObject.passwordResetToken;
 
-  return userObject
-}
+  return userObject;
+};
 
-const User: Model<IUser> = myDB.model<IUser>('User', UserSchema)
+const User: Model<IUser> = myDB.model<IUser>('User', UserSchema);
 
-export default User
+export default User;

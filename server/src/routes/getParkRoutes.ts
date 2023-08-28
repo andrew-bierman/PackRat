@@ -1,8 +1,9 @@
-import express from 'express'
-import { getParks } from '../controllers/getParks/index'
+import express from 'express';
+import { getParks } from '../controllers/getParks/index';
+import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/', getParks)
+router.get('/', tryCatchWrapper(getParks));
 
-export default router
+export default router;

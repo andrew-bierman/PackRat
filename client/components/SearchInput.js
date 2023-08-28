@@ -1,4 +1,3 @@
-
 import {
   VStack,
   Input,
@@ -15,41 +14,41 @@ import {
   List,
   View,
   Pressable,
-} from "native-base";
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+} from 'native-base';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
+import useTheme from '../hooks/useTheme';
+import { SafeAreaView } from 'react-native';
 
-import { SafeAreaView } from "react-native";
-
-import { Platform } from "react-native";
+import { Platform } from 'react-native';
 
 // redux
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from 'react-redux';
 
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 
 // import { getTrailsResult } from "../api/getTrailsResult";
 // import { getPhotonResults } from "../api/getPhotonResults";
 
-import {
-  fetchTrails,
-} from "../store/trailsStore";
+import { fetchTrails } from '../store/trailsStore';
 
-import { fetchParks } from "../store/parksStore";
+import { fetchParks } from '../store/parksStore';
 
 import {
   setSelectedSearchResult,
   clearSearchResults,
   fetchPhotonSearchResults,
-} from "../store/searchStore";
-import { getTrailsOSM } from "../api/getTrails";
-import { getParksOSM } from "../api/getParks";
-import { fetchWeather, fetchWeatherWeek } from "../store/weatherStore";
+} from '../store/searchStore';
+import { getTrailsOSM } from '../api/getTrails';
+import { getParksOSM } from '../api/getParks';
+import { fetchWeather, fetchWeatherWeek } from '../store/weatherStore';
 
 export const SearchInput = ({ onSelect, placeholder }) => {
-  const [searchString, setSearchString] = useState("");
+  const [searchString, setSearchString] = useState('');
   const [isLoadingMobile, setIsLoadingMobile] = useState(false);
-  const [selectedSearch, setSelectedSearch] = useState("");
+  const [selectedSearch, setSelectedSearch] = useState('');
 
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    useTheme();
   const searchResults =
     useSelector((state) => state.search.searchResults) || [];
 
@@ -69,7 +68,9 @@ export const SearchInput = ({ onSelect, placeholder }) => {
       dispatch(fetchPhotonSearchResults(searchString));
     }, 2000);
 
-    return () => clearTimeout(timeout);
+    return () => {
+      clearTimeout(timeout);
+    };
   }, [searchString, dispatch]);
 
   /**
@@ -78,8 +79,12 @@ export const SearchInput = ({ onSelect, placeholder }) => {
    * @return {Promise<void>} - A promise that resolves when all data is successfully fetched.
    */
   const getTrailsParksAndWeatherDetails = async () => {
-    if (!selectedSearchResult || Object.keys(selectedSearchResult).length === 0)
+    if (
+      !selectedSearchResult ||
+      Object.keys(selectedSearchResult).length === 0
+    ) {
       return;
+    }
 
     setIsLoadingMobile(true);
 
@@ -113,7 +118,9 @@ export const SearchInput = ({ onSelect, placeholder }) => {
     //   console.log("selectedSearchResult", selectedSearchResult);
     // }, 1000);
 
-    return () => clearTimeout(timeout);
+    return () => {
+      clearTimeout(timeout);
+    };
   }, [selectedSearch, selectedSearchResult, dispatch]);
 
   /**
@@ -139,21 +146,23 @@ export const SearchInput = ({ onSelect, placeholder }) => {
     }
   };
 
-  return Platform.OS === "web" ? (
+  return Platform.OS === 'web' ? (
     <VStack my="4" space={5} w="100%" maxW="300px">
       {/* ... */}
       <VStack w="100%" space={5} alignSelf="center">
         <Box position="relative" height="auto">
           <Input
-            onChangeText={(text) => setSearchString(text)}
-            placeholder={placeholder ?? "Search"}
+            onChangeText={(text) => {
+              setSearchString(text);
+            }}
+            placeholder={placeholder ?? 'Search'}
             width="100%"
             borderRadius="4"
             py="3"
             px="1"
             value={searchString}
             fontSize="14"
-            backgroundColor={"white"}
+            backgroundColor={currentTheme.colors.white}
             InputLeftElement={
               <Icon
                 m="2"
@@ -177,13 +186,13 @@ export const SearchInput = ({ onSelect, placeholder }) => {
                   }
                   onPress={() => {
                     setShowSearchResults(false);
-                    setSearchString("");
+                    setSearchString('');
                   }}
                 />
               )
             }
           />
-          <View style={{ position: "relative" }}>
+          <View style={{ position: 'relative' }}>
             {showSearchResults && searchResults?.length > 0 && (
               <ScrollView
                 position="absolute"
@@ -194,7 +203,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
                 borderWidth={1}
                 borderColor="gray.200"
                 borderRadius={12}
-                backgroundColor="white"
+                backgroundColor={currentTheme.colors.white}
                 showsVerticalScrollIndicator={false}
                 zIndex={10}
               >
@@ -202,7 +211,9 @@ export const SearchInput = ({ onSelect, placeholder }) => {
                   {searchResults.map((result, i) => (
                     <Pressable
                       key={`result + ${i}`}
-                      onPress={() => handleSearchResultClick(result, i)}
+                      onPress={() => {
+                        handleSearchResultClick(result, i);
+                      }}
                       underlayColor="gray.100"
                     >
                       <HStack space={3}>
@@ -212,7 +223,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
                         <Text
                           fontSize="sm"
                           color="gray.500"
-                          textTransform={"capitalize"}
+                          textTransform={'capitalize'}
                         >
                           {result.properties.osm_value}
                         </Text>
@@ -231,7 +242,9 @@ export const SearchInput = ({ onSelect, placeholder }) => {
   ) : (
     <VStack w="100%" space={5} alignSelf="center">
       <Input
-        onChangeText={(text) => setSearchString(text)}
+        onChangeText={(text) => {
+          setSearchString(text);
+        }}
         placeholder="Search"
         width="100%"
         borderRadius="4"
@@ -260,7 +273,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
           borderWidth={1}
           borderColor="gray.200"
           borderRadius={12}
-          backgroundColor="white"
+          backgroundColor={currentTheme.colors.white}
           showsVerticalScrollIndicator={false}
           zIndex={10}
         >
@@ -268,7 +281,9 @@ export const SearchInput = ({ onSelect, placeholder }) => {
             {searchResults.map((result, i) => (
               <Pressable
                 key={`result + ${i}`}
-                onPress={() => handleSearchResultClick(result, i)}
+                onPress={() => {
+                  handleSearchResultClick(result, i);
+                }}
                 underlayColor="gray.100"
               >
                 <HStack space={3}>
@@ -278,7 +293,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
                   <Text
                     fontSize="sm"
                     color="gray.500"
-                    textTransform={"capitalize"}
+                    textTransform={'capitalize'}
                   >
                     {result.properties.osm_value}
                   </Text>

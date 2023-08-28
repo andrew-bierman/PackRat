@@ -1,4 +1,4 @@
-import express from 'express'
+import express from 'express';
 import {
   getItems,
   getItemById,
@@ -10,11 +10,12 @@ import {
   getItemsGlobally,
   addGlobalItemToPack,
   editGlobalItemAsDuplicate,
-  deleteGlobalItem
-} from '../controllers/item/index'
-import * as validator from '../middleware/validators/index'
+  deleteGlobalItem,
+} from '../controllers/item/index';
+import * as validator from '../middleware/validators/index';
+import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
 
-const router = express.Router()
+const router = express.Router();
 
 /**
  * @swagger
@@ -40,7 +41,7 @@ const router = express.Router()
  *      200:
  *        description: Successful response
  */
-router.get('/packItems/:packId', validator.getItems, getItems)
+router.get('/packItems/:packId', validator.getItems, tryCatchWrapper(getItems));
 
 /**
  * @swagger
@@ -59,7 +60,7 @@ router.get('/packItems/:packId', validator.getItems, getItems)
  *      200:
  *        description: Successful response
  */
-router.get('/i/:packId', validator.getItemById, getItemById)
+router.get('/i/:packId', validator.getItemById, tryCatchWrapper(getItemById));
 
 /**
  * @swagger
@@ -78,7 +79,7 @@ router.get('/i/:packId', validator.getItemById, getItemById)
  *       200:
  *         description: Successful response
  */
-router.get('/search', searchItemsByName)
+router.get('/search', tryCatchWrapper(searchItemsByName));
 
 /**
  * @swagger
@@ -108,7 +109,7 @@ router.get('/search', searchItemsByName)
  *      200:
  *        description: Successful response
  */
-router.post('/', validator.addItem, addItem)
+router.post('/', validator.addItem, tryCatchWrapper(addItem));
 
 /**
  * @swagger
@@ -138,7 +139,7 @@ router.post('/', validator.addItem, addItem)
  *      200:
  *        description: Successful response
  */
-router.put('/', validator.editItem, editItem)
+router.put('/', validator.editItem, tryCatchWrapper(editItem));
 
 /**
  * @swagger
@@ -160,7 +161,7 @@ router.put('/', validator.editItem, editItem)
  *      200:
  *        description: Successful response
  */
-router.delete('/', validator.deleteItem, deleteItem)
+router.delete('/', validator.deleteItem, tryCatchWrapper(deleteItem));
 
 /**
  * @swagger
@@ -190,7 +191,7 @@ router.delete('/', validator.deleteItem, deleteItem)
  *      200:
  *        description: Successful response
  */
-router.post('/global', validator.addItemGlobal, addItemGlobal)
+router.post('/global', validator.addItemGlobal, tryCatchWrapper(addItemGlobal));
 
 /**
  * @swagger
@@ -205,7 +206,7 @@ router.post('/global', validator.addItemGlobal, addItemGlobal)
  *      200:
  *        description: Successful response
  */
-router.get('/global', getItemsGlobally)
+router.get('/global', tryCatchWrapper(getItemsGlobally));
 
 /**
  * @swagger
@@ -220,7 +221,7 @@ router.get('/global', getItemsGlobally)
  *      200:
  *        description: Successful response
  */
-router.post('/global/select/:packId', addGlobalItemToPack)
+router.post('/global/select/:packId', tryCatchWrapper(addGlobalItemToPack));
 /**
  * @swagger
  * /item/:
@@ -234,7 +235,7 @@ router.post('/global/select/:packId', addGlobalItemToPack)
  *      200:
  *        description: Successful response
  */
-router.put('/global/:itemId', editGlobalItemAsDuplicate)
+router.put('/global/:itemId', tryCatchWrapper(editGlobalItemAsDuplicate));
 
 /**
  * @swagger
@@ -256,6 +257,6 @@ router.put('/global/:itemId', editGlobalItemAsDuplicate)
  *      200:
  *        description: Successful response
  */
-router.delete('/global/:itemId', deleteGlobalItem)
+router.delete('/global/:itemId', tryCatchWrapper(deleteGlobalItem));
 
-export default router
+export default router;

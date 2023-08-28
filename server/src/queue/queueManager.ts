@@ -1,11 +1,11 @@
-import Queue from 'bull'
-import Piscina from 'piscina'
-import { fileURLToPath } from 'url'
-import path from 'path'
+import Queue from 'bull';
+import Piscina from 'piscina';
+import { fileURLToPath } from 'url';
+import path from 'path';
 
 class QueueManager {
-  constructor () {
-    (this as any).queues = {}
+  constructor() {
+    (this as any).queues = {};
   }
 
   /**
@@ -15,28 +15,28 @@ class QueueManager {
    * @param {string} workerScriptPath - The path to the worker script.
    * @return {Queue} The newly created queue.
    */
-  createQueue (queueName, workerScriptPath) {
+  createQueue(queueName, workerScriptPath) {
     // Get the directory name of the current ES module file (queueManager.js)
 
     // Resolve the worker script path relative to the current file
-    const resolvedWorkerScriptPath = path.resolve(__dirname, workerScriptPath)
+    const resolvedWorkerScriptPath = path.resolve(__dirname, workerScriptPath);
 
     const piscina = new Piscina({
-      filename: resolvedWorkerScriptPath
-    })
+      filename: resolvedWorkerScriptPath,
+    });
 
-    const newQueue = new Queue(queueName)
+    const newQueue = new Queue(queueName);
     newQueue.process(async (job) => {
       // Run the worker task with the job's task as data
-      return await piscina.runTask(job.data.task)
+      return await piscina.runTask(job.data.task);
     });
-    (this as any).queues[queueName] = { queue: newQueue, piscina }
-    return newQueue
+    (this as any).queues[queueName] = { queue: newQueue, piscina };
+    return newQueue;
   }
 
-  getQueue (queueName) {
-    return (this as any).queues[queueName]
+  getQueue(queueName) {
+    return (this as any).queues[queueName];
   }
 }
 
-export const queueManager = new QueueManager()
+export const queueManager = new QueueManager();

@@ -1,4 +1,6 @@
-import { getUserByIdService } from '../../services/user/getUserByIdService'
+import { UserNotFoundError } from '../../helpers/errors';
+import { responseHandler } from '../../helpers/responseHandler';
+import { getUserByIdService } from '../../services/user/getUserByIdService';
 
 /**
  * Retrieves a user by their ID from the database and returns the user object as a JSON response.
@@ -6,15 +8,15 @@ import { getUserByIdService } from '../../services/user/getUserByIdService'
  * @param {Object} res - The response object.
  * @return {Object} The user object as a JSON response.
  */
-export const getUserById = async (req, res) => {
+export const getUserById = async (req, res, next) => {
   try {
-    const { userId } = req.params
+    const { userId } = req.params;
 
-    const user = await getUserByIdService(userId)
+    const user = await getUserByIdService(userId);
 
-    res.status(200).json(user)
+    res.locals.data = user;
+    responseHandler(res);
   } catch (error) {
-    console.error(error)
-    res.status(404).json({ msg: 'User cannot be found' })
+    next(UserNotFoundError);
   }
-}
+};

@@ -1,4 +1,5 @@
-import { searchItemsByNameService } from '../../services/item/item.service'
+import { ItemNotFoundError } from '../../helpers/errors';
+import { searchItemsByNameService } from '../../services/item/item.service';
 
 /**
  * Searches for items by name.
@@ -9,16 +10,14 @@ import { searchItemsByNameService } from '../../services/item/item.service'
  * @return {Array} An array of items matching the search criteria.
  */
 
-export const searchItemsByName = async (req, res) => {
+export const searchItemsByName = async (req, res, next) => {
   try {
-    const { name } = req.query
+    const { name } = req.query;
 
-    const items = await searchItemsByNameService(name)
+    const items = await searchItemsByNameService(name);
 
-    res.status(200).json(items)
+    res.status(200).json(items);
   } catch (error) {
-    res
-      .status(404)
-      .json({ msg: 'Items cannot be found', 'req.query': req.query })
+    next(ItemNotFoundError);
   }
-}
+};

@@ -1,20 +1,31 @@
-import React from "react";
-import { MaterialIcons } from "@expo/vector-icons";
-import { useDispatch } from "react-redux";
-import { deletePackItem } from "../../store/packsStore";
-import { CustomModal } from "../modal";
-import { deleteGlobalItem } from "../../store/globalItemsStore";
+import React from 'react';
+import { MaterialIcons } from '@expo/vector-icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { deletePackItem } from '../../store/packsStore';
+import { CustomModal } from '../modal';
+import {
+  deleteGlobalItem,
+  deleteItemOffline,
+} from '../../store/globalItemsStore';
+import { addOfflineRequest } from '../../store/offlineQueue';
 
-export const DeletePackItemModal = ({ itemId, pack, refetch, setRefetch = () => {} }) => {
+export const DeletePackItemModal = ({
+  itemId,
+  pack,
+  refetch,
+  setRefetch = () => {},
+}) => {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const dispatch = useDispatch();
-
-  const closeModalHandler = () => setIsModalOpen(false);
+  const { isConnected } = useSelector((state) => state.offlineQueue);
+  const closeModalHandler = () => {
+    setIsModalOpen(false);
+  };
 
   /**
    * Sets the value of `isModalOpen` to `true`.
    *
-   * @param {} 
+   * @param {}
    * @return {}
    */
   const onTrigger = () => {
@@ -29,25 +40,30 @@ export const DeletePackItemModal = ({ itemId, pack, refetch, setRefetch = () => 
    */
   const deleteItemHandler = () => {
     if (pack) {
-      dispatch(deletePackItem({ itemId, currentPackId: pack["_id"] }));
+      dispatch(deletePackItem({ itemId, currentPackId: pack._id }));
     } else {
-      dispatch(deleteGlobalItem(itemId));
-      setRefetch(refetch === true ? false : true);
+      if (isConnected) {
+        dispatch(deleteGlobalItem(itemId));
+        setRefetch(refetch !== true);
+      } else {
+        dispatch(deleteItemOffline(itemId));
+        dispatch(addOfflineRequest({ method: 'deleteItem', data: itemId }));
+      }
     }
     setIsModalOpen(false);
   };
 
   const footerButtons = [
     {
-      label: "Cancel",
+      label: 'Cancel',
       onClick: closeModalHandler,
-      color: "gray",
+      color: 'gray',
       disabled: false,
     },
     {
-      label: "Delete",
+      label: 'Delete',
       onClick: deleteItemHandler,
-      color: "danger",
+      color: 'danger',
       disabled: false,
     },
   ];
@@ -55,7 +71,7 @@ export const DeletePackItemModal = ({ itemId, pack, refetch, setRefetch = () => 
   return (
     <CustomModal
       isActive={isModalOpen}
-      title={"Delete Item"}
+      title={'Delete Item'}
       triggerComponent={
         <MaterialIcons
           name="delete"
