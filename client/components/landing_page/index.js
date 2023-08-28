@@ -11,7 +11,7 @@ import {
   VStack,
   HStack,
 } from 'native-base';
-import UseTheme from '../../hooks/useTheme';
+import useTheme from '../../hooks/useTheme';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { theme } from '../../theme';
 
@@ -91,7 +91,7 @@ const CustomAccordion = ({ title, content, iconName }) => {
 
 const LandingPage = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   return (
     <VStack style={styles().container}>
       <Box
@@ -197,7 +197,7 @@ const LandingPage = () => {
 
 const styles = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   return StyleSheet.create({
     mutualStyles: {
       backgroundColor: currentTheme.colors.background,

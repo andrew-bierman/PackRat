@@ -19,7 +19,7 @@ import { StyleSheet, FlatList, View } from 'react-native';
 import Card from '../../components/feed/FeedCard';
 import DropdownComponent from '../../components/Dropdown';
 import { theme } from '../../theme';
-import UseTheme from '../../hooks/useTheme';
+import useTheme from '../../hooks/useTheme';
 import {
   getPublicPacks,
   getPublicTrips,
@@ -60,7 +60,7 @@ const FeedSearchFilter = ({
   handleCreateClick,
 }) => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   return (
     <View style={styles().filterContainer}>
       <Box style={styles().searchContainer}>
@@ -287,7 +287,7 @@ const Feed = ({ feedType = 'public' }) => {
 
 const styles = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   return StyleSheet.create({
     mainContainer: {
       flex: 1,

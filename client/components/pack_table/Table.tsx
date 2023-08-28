@@ -11,7 +11,7 @@ import { DeletePackItemModal } from './DeletePackItemModal';
 import { duplicatePackItem } from '../../store/packsStore';
 import { formatNumber } from '../../utils/formatNumber';
 import { theme } from '../../theme';
-import UseTheme from '../../hooks/useTheme';
+import useTheme from '../../hooks/useTheme';
 import { PackOptions } from '../PackOptions';
 import CustomButton from '../custombutton';
 import ItemPicker from '../Picker';
@@ -169,7 +169,7 @@ const TableItem = ({
 
 const CategoryRow = ({ category }) => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   const categoryIcons = {
     [ItemCategoryEnum.ESSENTIALS]: 'check-square',
     [ItemCategoryEnum.FOOD]: 'coffee',
@@ -422,7 +422,7 @@ export const TableContainer = ({
 // Styles
 const styles = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   return StyleSheet.create({
     container: {
       flex: 1,

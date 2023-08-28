@@ -14,11 +14,11 @@ import { CustomModal } from '../modal';
 import axios from '~/config/axios';
 import { api } from '../../constants/api';
 import { InformUser } from '../../utils/ToastUtils';
-import UseTheme from '../../hooks/useTheme';
+import useTheme from '../../hooks/useTheme';
 
 export const RequestPasswordResetEmailModal = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   const [isOpen, setIsOpen] = useState(false);
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);

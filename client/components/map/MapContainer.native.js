@@ -3,12 +3,12 @@ import React from 'react';
 import { View, StyleSheet, Platform } from 'react-native';
 import { isObjectEmpty } from '../../utils/isObjectEmpty';
 import { defaultShape } from '../../utils/mapFunctions';
-import UseTheme from '../../hooks/useTheme';
+import useTheme from '../../hooks/useTheme';
 import NativeMap from './NativeMap';
 
 export function MapContainer({ shape }) {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   if (isObjectEmpty(shape)) {
     shape = defaultShape;
   }

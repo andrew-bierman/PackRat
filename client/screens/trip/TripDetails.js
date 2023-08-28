@@ -19,10 +19,10 @@ import WeatherCard from '../../components/WeatherCard';
 import TripCard from '../../components/TripCard';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { convertPhotonGeoJsonToShape } from '../../utils/mapFunctions';
-import UseTheme from '../../hooks/useTheme';
+import useTheme from '../../hooks/useTheme';
 export function TripDetails() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   const weatherObject = useSelector((state) => state.weather.weatherObject);
   const weatherWeek = useSelector((state) => state.weather.weatherWeek);
   console.log('trip detail');
@@ -119,7 +119,7 @@ export function TripDetails() {
 
 const styles = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   return StyleSheet.create({
     mainContainer: {
       backgroundColor: currentTheme.colors.background,

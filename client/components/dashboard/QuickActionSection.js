@@ -2,7 +2,7 @@ import { HStack } from 'native-base';
 import QuickActionButton from './QuickActionButton';
 import { StyleSheet } from 'react-native';
 import { theme } from '../../theme';
-import UseTheme from '../../hooks/useTheme';
+import useTheme from '../../hooks/useTheme';
 import { useRouter } from 'expo-router';
 
 const QuickActionsSection = () => {
@@ -52,7 +52,7 @@ const QuickActionsSection = () => {
 
 const styles = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   return StyleSheet.create({
     section: {
       marginBottom: 20,

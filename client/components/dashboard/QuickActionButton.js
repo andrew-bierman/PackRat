@@ -4,7 +4,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { StyleSheet } from 'react-native';
 import React from 'react';
 import { theme } from '../../theme';
-import UseTheme from '../../hooks/useTheme';
+import useTheme from '../../hooks/useTheme';
 
 const QuickActionButton = ({ onPress, iconName, text }) => (
   <TouchableOpacity onPress={onPress} style={styles().container}>
@@ -22,7 +22,7 @@ const QuickActionButton = ({ onPress, iconName, text }) => (
 
 const styles = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   return StyleSheet.create({
     container: {
       // flex: 1,

@@ -6,11 +6,11 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import LargeCard from '../card/LargeCard';
 import { theme } from '../../theme';
-import UseTheme from '../../hooks/useTheme';
+import useTheme from '../../hooks/useTheme';
 
 export default function UserDataContainer({ data, type, userId }) {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   const [dataState, setDataState] = useState(
     data.length > 0 ? Array(data.length).fill(false) : [],
   );
