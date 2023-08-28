@@ -25,11 +25,13 @@ import { SaveTripContainer } from '~/components/trip/createTripModal';
 import TripDateRange from '~/components/trip/TripDateRange';
 // import MultiStepForm from "../multi_step";
 import { photonDetails } from '../../store/destinationStore';
+
 import UseTheme from '../../hooks/useTheme';
 import MultiStepForm from '~/components/multi_step';
+
 export default function Trips() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   const [parksData, setParksData] = useState();
   const [trails, setTrailsData] = useState();
   const [dateRange, setDateRange] = useState({

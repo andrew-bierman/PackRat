@@ -11,7 +11,7 @@ import {
 } from '../theme';
 
 const ThirdPartyProviders = ({ children, isDark = false }) => {
-  // const { isDark } = UseTheme()
+  // const { isDark } = useTheme()
   return (
     <TamaguiProvider config={config}>
       <TamaguiTheme name={isDark ? 'dark' : 'light'}>

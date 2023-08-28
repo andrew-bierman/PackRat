@@ -24,13 +24,13 @@ import { Link } from 'expo-router';
 import { useSelector, useDispatch } from 'react-redux';
 import { signUp } from '../store/authStore';
 import { InformUser } from '../utils/ToastUtils';
-import UseTheme from '../hooks/useTheme';
+import useTheme from '../hooks/useTheme';
 import { useForm } from 'react-hook-form';
 import { InputText, InputTextRules } from '~/components/InputText';
 
 export default function Register() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   const dispatch = useDispatch();
 
   const {

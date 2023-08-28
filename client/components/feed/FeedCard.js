@@ -2,7 +2,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { formatDistanceToNow } from 'date-fns';
 import { MaterialIcons, Entypo } from '@expo/vector-icons';
 import { theme } from '../../theme';
-import UseTheme from '../../hooks/useTheme';
+import useTheme from '../../hooks/useTheme';
 // import useAddToFavorite from "../../hooks/useAddToFavorites";
 // import { useAuth } from "../../auth/provider";
 import { useSelector, useDispatch } from 'react-redux';
@@ -45,7 +45,7 @@ export default function Card({
 }) {
   const user = useSelector((state) => state.auth.user);
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   const favorites = useSelector(selectAllFavorites);
   const dispatch = useDispatch();
 
@@ -122,29 +122,33 @@ export default function Card({
                     {truncatedName}
                   </Text>
                 </Link>
-                {type === 'pack' && (
-                  <Box
-                    style={{
-                      flexDirection: 'row',
-                    }}
-                  >
-                    <MaterialIcons
-                      name="backpack"
+                <HStack alignItems="center" justifyContent="center" space={2}>
+                  {type === 'pack' && (
+                    <Box
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        gap: 5,
+                        // border: '1px solid #ccc',
+                      }}
+                    >
+                      <MaterialIcons
+                        name="backpack"
+                        size={24}
+                        color={currentTheme.colors.cardIconColor}
+                      />
+                      <DuplicateIcon link={`/pack/${_id}?copy=true`} />
+                    </Box>
+                  )}
+                  {type === 'trip' && (
+                    <Entypo
+                      name="location-pin"
                       size={24}
                       color={currentTheme.colors.cardIconColor}
                     />
-                    <Link href={'/pack/' + _id + '?copy=true'}>
-                      <DuplicateIcon />
-                    </Link>
-                  </Box>
-                )}
-                {type === 'trip' && (
-                  <Entypo
-                    name="location-pin"
-                    size={24}
-                    color={currentTheme.colors.cardIconColor}
-                  />
-                )}
+                  )}
+                </HStack>
               </Box>
             </Heading>
 

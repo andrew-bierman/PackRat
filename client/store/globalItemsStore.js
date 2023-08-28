@@ -55,7 +55,29 @@ const itemsSlice = createSlice({
     isLoading: false,
     error: null,
   }),
-  reducers: {},
+  reducers: {
+    deleteItemOffline: (state, action) => {
+      return {
+        ...state,
+        globalItems: {
+          ...state.globalItems,
+          items: state?.globalItems?.items?.filter(
+            (item) => item._id !== action.payload,
+          ),
+        },
+      };
+    },
+    addItemOffline: (state, action) => {
+      console.log(action.payload, 'add item offline');
+      return {
+        ...state,
+        globalItems: {
+          ...state.globalItems,
+          items: [...state.globalItems.items, action.payload],
+        },
+      };
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(addItemsGlobal.pending, (state) => {
@@ -89,7 +111,7 @@ const itemsSlice = createSlice({
         state.error = null;
       })
       .addCase(deleteGlobalItem.fulfilled, (state, action) => {
-        itemsAdapter.removeOne(state, action.payload.data._id);
+        itemsAdapter.removeOne(state, action.payload._id);
         state.isLoading = false;
         state.error = null;
       })
@@ -99,5 +121,7 @@ const itemsSlice = createSlice({
       });
   },
 });
+
+export const { deleteItemOffline, addItemOffline } = itemsSlice.actions;
 
 export default itemsSlice.reducer;

@@ -9,14 +9,14 @@ import {
 } from '@expo/vector-icons';
 import { theme, darkTheme } from '../../theme';
 // import { useAuth } from "../../auth/provider";
-import UseTheme from '../../hooks/useTheme';
+import useTheme from '../../hooks/useTheme';
 import { signOut } from '../../store/authStore';
 
 import { useDispatch, useSelector } from 'react-redux';
 
 export default function Drawer() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   console.log('isDark, isLight', isDark, isLight);
   // const { signOut } = useAuth();
   const dispatch = useDispatch();
@@ -176,7 +176,7 @@ export default function Drawer() {
 
 const styles = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   return StyleSheet.create({
     mobileContainer: {
       backgroundColor: currentTheme.colors.background,

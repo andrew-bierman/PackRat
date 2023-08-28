@@ -29,10 +29,11 @@ import {
 import SVGLogoComponent from '../components/logo';
 import { useSelector, useDispatch } from 'react-redux';
 import { signOut } from '../store/authStore';
+
 import Drawer from './Drawer';
 import { Link, useRouter, usePathname } from 'expo-router';
 import { hexToRGBA } from '../utils/colorFunctions';
-import UseTheme from '../hooks/useTheme';
+import useTheme from '../hooks/useTheme';
 const Navigation = () => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -48,7 +49,7 @@ const Navigation = () => {
   const firstRender = useRef(true);
   const [isLoading, setIsLoading] = useState(false); // Loading state
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   const hoverColor = hexToRGBA(currentTheme.colors.primary, 0.2);
 
   /**
@@ -151,7 +152,7 @@ const Navigation = () => {
           ],
     [user],
   );
-
+  useEffect(() => {}, []);
   const navigationItems = [...staticNavigationItems, ...userNavigationItems];
 
   const navigateTo = useCallback(
@@ -323,7 +324,7 @@ const Navigation = () => {
 
 const styles = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   return StyleSheet.create({
     safeArea: {
       backgroundColor: currentTheme.colors.background,

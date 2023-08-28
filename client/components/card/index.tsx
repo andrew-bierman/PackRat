@@ -21,7 +21,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter, Link } from 'expo-router';
 import { ThreeDotsMenu } from '../ThreeDotsMenu';
-import UseTheme from '../../hooks/useTheme';
+import useTheme from '../../hooks/useTheme';
 import { InformUser } from '../../utils/ToastUtils';
 import { SearchItem } from '../item/searchItem';
 import Loader from '../Loader';
@@ -36,7 +36,7 @@ export const CustomCard = ({
   data,
 }) => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   const [isCopied, setIsCopied] = useState(false);
   const [editTitle, setEditTitle] = useState(false);
   const titleRef = useRef(null);
@@ -197,7 +197,7 @@ export const CustomCard = ({
             justifyContent="space-between"
             alignItems="center"
           >
-            <Box></Box>
+            <Box>{title}</Box>
             <Box flexDirection="row" alignItems="center">
               <Box mx="5">
                 <Link href={`/profile/${data.owner_id && data.owner_id._id}`}>
@@ -260,7 +260,7 @@ export const CustomCard = ({
 
 const styles = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   return StyleSheet.create({
     mainContainer: {
       backgroundColor: currentTheme.colors.card,

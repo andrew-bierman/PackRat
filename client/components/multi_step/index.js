@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 
 import { Svg, Line, Circle } from 'react-native-svg';
-import UseTheme from '../../hooks/useTheme';
+import useTheme from '../../hooks/useTheme';
 
 const { height, width } = Dimensions.get('window');
 

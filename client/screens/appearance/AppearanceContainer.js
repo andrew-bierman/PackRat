@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { VStack, Box, Text, Switch } from 'native-base';
 import { StyleSheet } from 'react-native';
-import UseTheme from '../../hooks/useTheme';
+import useTheme from '../../hooks/useTheme';
 import { Paragraph, Card, H2, XStack, Button, Image } from 'tamagui';
 import { Card as RNPCard } from 'react-native-paper';
 import { DialogDemo } from '../../components/dialog';
 
 export default function AppearanceContainer() {
-  const { enableDarkMode, enableLightMode, currentTheme, isDark } = UseTheme();
+  const { enableDarkMode, enableLightMode, currentTheme, isDark } = useTheme();
   const [isEnabled, setIsEnabled] = useState(false);
   const [showKitchenSink, setShowKitchenSink] = useState(true);
 

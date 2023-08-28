@@ -2,7 +2,7 @@ import { Text, StyleSheet } from 'react-native';
 import React from 'react';
 import { Table, Row, Cell } from 'react-native-table-component';
 import { theme } from '../../theme';
-import UseTheme from '../../hooks/useTheme';
+import useTheme from '../../hooks/useTheme';
 import { Box, Button, HStack } from 'native-base';
 import { formatNumber } from '../../utils/formatNumber';
 import { EditPackItemModal } from '../pack_table/EditPackItemModal';
@@ -22,7 +22,7 @@ export const ItemsTable = ({
 }) => {
   const flexArr = [2, 1, 1, 1, 0.65, 0.65, 0.65];
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   const TitleRow = ({ title }) => {
     const rowData = [
       <HStack style={styles().mainTitle}>
@@ -39,13 +39,13 @@ export const ItemsTable = ({
     );
   };
   const TableItem = ({ itemData }) => {
-    const { name, weight, category, quantity, unit, _id } = itemData;
+    const { name, weight, category, quantity, unit, _id, type } = itemData;
 
     const rowData = [
       name,
       `${formatNumber(weight)} ${unit}`,
       quantity,
-      `${category?.name}`,
+      `${category?.name || type}`,
       <EditPackItemModal
         initialData={itemData}
         editAsDuplicate={false}
@@ -160,7 +160,7 @@ export const ItemsTable = ({
 
 const styles = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   return StyleSheet.create({
     container: {
       flex: 1,

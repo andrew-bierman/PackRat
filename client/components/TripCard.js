@@ -10,7 +10,7 @@ import { addTrail, addPark } from '../store/dropdownStore';
 import MapContainer from './map/MapContainer';
 import { convertPhotonGeoJsonToShape } from '../utils/mapFunctions';
 import { selectAllTrails } from '../store/trailsStore';
-import UseTheme from '../hooks/useTheme';
+import useTheme from '../hooks/useTheme';
 import Carousel from './carousel';
 import { Card, H2, Paragraph } from 'tamagui';
 export default function TripCard({
@@ -25,7 +25,7 @@ export default function TripCard({
 }) {
   const dispatch = useDispatch();
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
 
   const currentTrail = useSelector((state) => state.dropdown.currentTrail);
   const currentPark = useSelector((state) => state.dropdown.currentPark);
@@ -148,7 +148,7 @@ export default function TripCard({
 
 const styles = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   return StyleSheet.create({
     mutualStyles: {
       backgroundColor: currentTheme.colors.card,
