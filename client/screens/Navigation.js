@@ -29,6 +29,7 @@ import {
 import SVGLogoComponent from '../components/logo';
 import { useSelector, useDispatch } from 'react-redux';
 import { signOut } from '../store/authStore';
+
 import Drawer from './Drawer';
 import { Link, useRouter, usePathname } from 'expo-router';
 import { hexToRGBA } from '../utils/colorFunctions';
@@ -151,7 +152,7 @@ const Navigation = () => {
           ],
     [user],
   );
-
+  useEffect(() => {}, []);
   const navigationItems = [...staticNavigationItems, ...userNavigationItems];
 
   const navigateTo = useCallback(

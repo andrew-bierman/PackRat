@@ -8,7 +8,6 @@ import QuickActionsSection from '../../components/dashboard/QuickActionSection';
 import FeedPreview from '../../components/dashboard/FeedPreview';
 import Section from '../../components/dashboard/Section';
 import SectionHeader from '../../components/dashboard/SectionHeader';
-
 const Dashboard = () => {
   return (
     <ScrollView contentContainerStyle={styles().content} horizontal={false}>
