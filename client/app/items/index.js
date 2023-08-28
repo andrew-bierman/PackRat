@@ -47,6 +47,7 @@ export default function Items() {
             title="Add a global Item"
             trigger="Add Item"
             isActive={isAddItemModalOpen}
+            onTrigger={setIsAddItemModalOpen}
             triggerComponent={
               <View
                 style={{

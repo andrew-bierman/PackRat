@@ -1,5 +1,8 @@
-import React, { ReactNode } from 'react';
-import { Modal as NBModal, Box, Heading, Button } from 'native-base';
+import React from 'react';
+import { Button } from 'native-base';
+import { X } from '@tamagui/lucide-icons';
+
+import { Button as TgButton, Dialog, XStack } from 'tamagui';
 
 export const CustomModal = ({
   id,
@@ -33,7 +36,14 @@ export const CustomModal = ({
     }
   };
 
-  const triggerElement = triggerComponent || (
+  const triggerElement = triggerComponent ? (
+    <Button
+      onPress={() => onTrigger(true)}
+      style={{ backgroundColor: 'transparent' }}
+    >
+      {triggerComponent}
+    </Button>
+  ) : (
     <Button
       top={5}
       alignSelf={'center'}
@@ -45,24 +55,45 @@ export const CustomModal = ({
   );
 
   return (
-    <>
-      {triggerElement}
-      <NBModal
-        isOpen={isActive}
-        onClose={closeModal}
-        size={size}
-        {...rest}
-        placement="center"
-      >
-        <NBModal.Content maxWidth="400px">
-          <NBModal.CloseButton />
-          <NBModal.Header>
-            <Heading>{title}</Heading>
-          </NBModal.Header>
-          <NBModal.Body>
-            <Box>{children}</Box>
-          </NBModal.Body>
-          <NBModal.Footer>
+    <Dialog
+      modal
+      open={isActive}
+      onOpenChange={(open) => {
+        onTrigger(open);
+      }}
+    >
+      <Dialog.Trigger asChild>{triggerElement}</Dialog.Trigger>
+      <Dialog.Portal>
+        <Dialog.Overlay
+          key="overlay"
+          animation="quick"
+          opacity={0.5}
+          enterStyle={{ opacity: 0 }}
+          exitStyle={{ opacity: 0 }}
+          minWidth={'400px'}
+        />
+
+        <Dialog.Content
+          bordered
+          elevate
+          key="content"
+          animateOnly={['transform', 'opacity']}
+          animation={[
+            'quick',
+            {
+              opacity: {
+                overshootClamping: true,
+              },
+            },
+          ]}
+          enterStyle={{ x: 0, y: -20, opacity: 0, scale: 0.9 }}
+          exitStyle={{ x: 0, y: 10, opacity: 0, scale: 0.95 }}
+          gap="$4"
+        >
+          <Dialog.Title>{title}</Dialog.Title>
+          <Dialog.Description>{children}</Dialog.Description>
+
+          <XStack alignSelf="flex-end" gap="$4">
             {footerButtons.map((button, index) => (
               <Button
                 key={index}
@@ -73,19 +104,31 @@ export const CustomModal = ({
                 {button.label}
               </Button>
             ))}
-          </NBModal.Footer>
+          </XStack>
+
           {buttonText && (
-            <NBModal.Footer>
+            <XStack alignSelf="flex-end" gap="$4">
               <Button colorScheme={buttonColor} onPress={onSave}>
                 {buttonText}
               </Button>
               <Button onPress={closeModal} ml="auto">
                 Cancel
               </Button>
-            </NBModal.Footer>
+            </XStack>
           )}
-        </NBModal.Content>
-      </NBModal>
-    </>
+
+          <Dialog.Close asChild>
+            <TgButton
+              position="absolute"
+              top="$3"
+              right="$3"
+              size="$2"
+              circular
+              icon={X}
+            />
+          </Dialog.Close>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog>
   );
 };

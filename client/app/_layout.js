@@ -13,20 +13,23 @@ import { AuthProvider } from '../context/auth';
 import { ThemeProvider } from '../context/theme';
 import FlashMessage from 'react-native-flash-message';
 import Footer from '../components/footer/Footer';
+import { NativeBaseProvider } from 'native-base';
 
 export default function HomeLayout() {
   return (
     <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <AuthProvider>
-          <ThemeProvider>
-            <FlashMessage position="top" />
-            <Navigation />
-            <Slot />
-            {Platform.OS === 'web' ? <Footer /> : null}
-          </ThemeProvider>
-        </AuthProvider>
-      </PersistGate>
+      <NativeBaseProvider>
+        <PersistGate loading={null} persistor={persistor}>
+          <AuthProvider>
+            <ThemeProvider>
+              <FlashMessage position="top" />
+              <Navigation />
+              <Slot />
+              {Platform.OS === 'web' ? <Footer /> : null}
+            </ThemeProvider>
+          </AuthProvider>
+        </PersistGate>
+      </NativeBaseProvider>
     </Provider>
   );
 }
