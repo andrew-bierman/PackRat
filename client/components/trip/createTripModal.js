@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Platform, View } from "react-native";
+import { Dimensions, Platform, ScrollView, StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 import { CustomModal } from "../modal";
 import { Input, VStack, HStack, Text, Select } from "native-base";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,6 +10,10 @@ import { api } from "../../constants/api";
 // import { Picker } from '@react-native-picker/picker';
 import { DropdownComponent } from "../Dropdown";
 import axios from "~/config/axios";
+import { theme } from "~/theme/index";
+
+const { height, width } = Dimensions.get('window')
+const isWeb = Platform.OS === 'web'
 
 const options = [
   { label: "Yes", value: "true" },
@@ -174,38 +178,42 @@ export const SaveTripContainer = ({ dateRange }) => {
   });
 
   return (
-    <CustomModal
-      title="Save Trip"
-      trigger="Save Trip"
-      isActive={isSaveModalOpen}
-      onTrigger={() => setIsSaveModalOpen(!isSaveModalOpen)}
-      footerButtons={[
-        {
-          label: "Save",
-          onClick: handleCreateTrip,
-        },
-      ]}
+    <View
+      style={styles.saveTripContainer}
+    // title="Save Trip"
+    // trigger="Save Trip"
+    // isActive={isSaveModalOpen}
+    // onTrigger={() => setIsSaveModalOpen(!isSaveModalOpen)}
+    // footerButtons={[
+    //   {
+    //     label: "Save",
+    //     onClick: handleCreateTrip,
+    //   },
+    // ]}
     >
-      <VStack>
+      <TextInput
+        placeholder="Trip Name"
+        onChange={(text) => setName(text)}
+        style={[styles.inputField, { marginBottom: 10, flex: 1, }]}
+      />
+      <TextInput
+        placeholder="Trip Description"
+        mt={4}
+        multiline
+        onChange={(text) => setDescription(text)}
+        style={[styles.inputField, { height: 100 }]}
+      />
+      <>
+        {/*
+        <Text mt={4}>Duration</Text>
         <Input
-          placeholder="Trip Name"
-          onChange={(event) => setName(event.target.value)}
+          placeholder="Number of nights"
+          min={0}
+          max={100}
+          onChange={(event) => setNumberOfNights(event.target.value)}
         />
-        <Input
-          placeholder="Trip Description"
-          mt={4}
-          onChange={(event) => setDescription(event.target.value)}
-        />
-        <>
-          {/* <Text mt={4}>Duration</Text>
-          <Input
-            placeholder="Number of nights"
-            min={0}
-            max={100}
-            onChange={(event) => setNumberOfNights(event.target.value)}
-          />
 
-          <HStack mt={4}>
+        <HStack mt={4}>
 
             <Input placeholder="Trip Start Date" onChange={event => setStartDate(event.target.value)} />
             <Input placeholder="Trip End Date" onChange={event => setEndDate(event.target.value)} ml={4} />
@@ -234,17 +242,17 @@ export const SaveTripContainer = ({ dateRange }) => {
             />
           </HStack> */}
 
-          <DropdownComponent
-            onValueChange={(itemValue) =>
-              setIsPublic(itemValue == "Yes" ? true : false)
-            }
-            data={["Yes", "For me only"]}
-            value={isPublic}
-            placeholder="Is Public"
-            style={{ marginTop: 4, marginBottom: 4 }}
-            width={150}
-          />
-          {/* <Select
+        <DropdownComponent
+          onValueChange={(itemValue) =>
+            setIsPublic(itemValue == "Yes" ? true : false)
+          }
+          data={["Yes", "For me only"]}
+          value={isPublic}
+          placeholder="Is Public"
+          style={{ marginTop: 4, marginBottom: 4 }}
+          width={150}
+        />
+        {/* <Select
             minWidth="full"
             placeholder="Is Public"
             mt={4}
@@ -255,49 +263,74 @@ export const SaveTripContainer = ({ dateRange }) => {
             <Select.Item label="For me only" value="false" />
 
           </Select> */}
-        </>
-        <>
-          <Text>Trip Weather</Text>
+      </>
+      <>
+        <Text>Trip Weather</Text>
+        <Text>
+          Temparature - {weatherObject?.main?.temp}, Humidity -{" "}
+          {weatherObject?.main?.humidity}
+        </Text>
+      </>
+      <HStack>
+        <Text>Pack</Text>
+        <Text>`Selected Pack Name`</Text>
+      </HStack>
+      <HStack>
+        <Text>Trip Location - </Text>
+        <Text>{search?.properties?.name}</Text>
+      </HStack>
+      <HStack>
+        <Text>Selected Trail - </Text>
+        <Text>{dropdown?.currentTrail}</Text>
+      </HStack>
+      <HStack>
+        <Text>Selected Date Range - </Text>
+        <Text>
+          {dateRange.startDate
+            ? format(dateRange.startDate, "MM/dd/yyyy")
+            : ""}{" "}
+          - {dateRange.endDate ? format(dateRange.endDate, "MM/dd/yyyy") : ""}
+        </Text>
+      </HStack>
+      <HStack>
+        <Text>Duration {`(Number of nights) - `} </Text>
+        {dateRange.startDate && dateRange.endDate && (
           <Text>
-            Temparature - {weatherObject?.main?.temp}, Humidity -{" "}
-            {weatherObject?.main?.humidity}
+            {
+              intervalToDuration({
+                start: dateRange.startDate,
+                end: dateRange.endDate,
+              }).days
+            }
           </Text>
-        </>
-        <HStack>
-          <Text>Pack</Text>
-          <Text>`Selected Pack Name`</Text>
-        </HStack>
-        <HStack>
-          <Text>Trip Location - </Text>
-          <Text>{search?.properties?.name}</Text>
-        </HStack>
-        <HStack>
-          <Text>Selected Trail - </Text>
-          <Text>{dropdown?.currentTrail}</Text>
-        </HStack>
-        <HStack>
-          <Text>Selected Date Range - </Text>
-          <Text>
-            {dateRange.startDate
-              ? format(dateRange.startDate, "MM/dd/yyyy")
-              : ""}{" "}
-            - {dateRange.endDate ? format(dateRange.endDate, "MM/dd/yyyy") : ""}
-          </Text>
-        </HStack>
-        <HStack>
-          <Text>Duration {`(Number of nights) - `} </Text>
-          {dateRange.startDate && dateRange.endDate && (
-            <Text>
-              {
-                intervalToDuration({
-                  start: dateRange.startDate,
-                  end: dateRange.endDate,
-                }).days
-              }
-            </Text>
-          )}
-        </HStack>
-      </VStack>
-    </CustomModal>
+        )}
+      </HStack>
+      <View>
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() => { handleCreateTrip() }}
+          style={{ marginTop: 20, width: isWeb ? 500 : width * 0.8, backgroundColor: theme.colors.background, borderRadius: 10, }}
+        >
+          <Text style={{ textAlign: 'center', color: 'white', fontSize: 20, padding: 15, }}>Save Trip</Text>
+        </TouchableOpacity>
+      </View>
+    </View >
   );
 };
+
+const styles = StyleSheet.create({
+  saveTripContainer: {
+    flex: 1,
+    marginTop: 20,
+    width: isWeb ? '60%' : width,
+    justifyContent: 'center',
+    alignSelf: 'center',
+    alignItems: 'center'
+  },
+  inputField: {
+    width: isWeb ? 400 : width * 0.6,
+    padding: 10,
+    borderColor: '#c7c7c7',
+    borderWidth: 1
+  },
+})

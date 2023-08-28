@@ -80,50 +80,50 @@ export const darkTheme = {
 
 export const nativeBaseLightTheme = extendTheme({
   colors: {
-    primary : {
-      500 : theme.colors.background,
+    primary: {
+      500: theme.colors.background,
     },
-    amber : {
-      100 : theme.colors.text
+    amber: {
+      100: theme.colors.text
     }
   }
 })
-export const nativeBaseDarkTheme =  extendTheme({
+export const nativeBaseDarkTheme = extendTheme({
   colors: {
-    primary : {
-      500 : darkTheme.colors.background,
+    primary: {
+      500: darkTheme.colors.background,
     },
-    amber : {
-      100 : darkTheme.colors.text
+    amber: {
+      100: darkTheme.colors.text
     }
   }
 })
 
 
 
-export const lightThemePaper =  {
+export const lightThemePaper = {
   ...DefaultTheme,
-  'colors' : {
+  'colors': {
     ...DefaultTheme.colors,
-    'primary' : theme.colors.primary,
-    'onSurface' : theme.colors.text,
-    'elevation' : {
+    'primary': theme.colors.primary,
+    'onSurface': theme.colors.text,
+    'elevation': {
       ...DefaultTheme.colors.elevation,
-      'level1' : theme.colors.background,
+      'level1': theme.colors.background,
     }
   }
 }
 
 
-export const darkPaperTheme =  {
+export const darkPaperTheme = {
   ...DefaultTheme,
-  'colors' : {
+  'colors': {
     ...DefaultTheme.colors,
-    'primary' : darkTheme.colors.primary,
-    'onSurface' : darkTheme.colors.text,
-    'elevation' : {
+    'primary': darkTheme.colors.primary,
+    'onSurface': darkTheme.colors.text,
+    'elevation': {
       ...DefaultTheme.colors.elevation,
-      'level1' : darkTheme.colors.background,
+      'level1': darkTheme.colors.background,
     }
   }
 }

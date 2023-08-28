@@ -151,13 +151,6 @@ const MultiStepForm = ({ steps = [] }) => {
 					{steps.map((item, index) => {
 						return (
 							<View
-								// activeOpacity={0.8}
-								// onPress={() => {
-								// 	updateStep(index);
-								// 	if (Platform.OS === 'ios' || Platform.OS === 'android') {
-								// 		scrollToItem(index);
-								// 	}
-								// }}
 								style={[styles.stepperButtons, { backgroundColor: currentStep >= index ? 'rgba(0,0,0,0.1)' : 'white', }]}
 							>
 								<View style={{ height: '100%', width: '90%', justifyContent: 'space-around' }} >
@@ -194,13 +187,16 @@ const MultiStepForm = ({ steps = [] }) => {
 				>
 					<Text style={styles.buttonsText}>Previous</Text>
 				</TouchableOpacity>
-				<TouchableOpacity
-					onPress={nextStep}
-					disabled={currentStep === steps.length - 1}
-					style={styles.button}
-				>
-					<Text style={styles.buttonsText}>{currentStep === steps.length - 1 ? 'Save' : 'Next'}</Text>
-				</TouchableOpacity>
+				{currentStep != steps.length - 1 ? (
+					<TouchableOpacity
+						onPress={nextStep}
+						disabled={currentStep === steps.length - 1}
+						style={styles.button}
+					>
+						<Text style={styles.buttonsText}>{currentStep === steps.length - 1 ? 'Save' : 'Next'}</Text>
+					</TouchableOpacity>
+
+				) : <></>}
 			</View>
 		</View >
 	);
