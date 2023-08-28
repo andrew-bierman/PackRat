@@ -111,7 +111,6 @@ const itemsSlice = createSlice({
         state.error = null;
       })
       .addCase(deleteGlobalItem.fulfilled, (state, action) => {
-        console.log(action.payload)
         itemsAdapter.removeOne(state, action.payload._id);
         state.isLoading = false;
         state.error = null;

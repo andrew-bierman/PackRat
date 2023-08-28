@@ -29,6 +29,7 @@ import chatReducer from './chatStore';
 import globalItems from './globalItemsStore';
 import userStore from './userStore';
 import offlineQueue from './offlineQueue';
+import progressReducer from './progressStore';
 import { type Reducer } from 'react';
 
 // combine reducers
@@ -52,6 +53,7 @@ const rootReducer: Reducer<RootState> = combineReducers({
   globalItems,
   userStore,
   offlineQueue,
+  progress: progressReducer,
 });
 
 export interface RootState {
