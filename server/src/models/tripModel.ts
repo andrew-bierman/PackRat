@@ -1,8 +1,7 @@
-import mongoose,{Schema} from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 import myDB from './dbConnection';
 import autopopulate from 'mongoose-autopopulate';
 import GeoJSON from './geojsonModel';
-
 
 const TripSchema = new Schema(
   {
