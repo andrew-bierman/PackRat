@@ -122,29 +122,33 @@ export default function Card({
                     {truncatedName}
                   </Text>
                 </Link>
-                {type === 'pack' && (
-                  <Box
-                    style={{
-                      flexDirection: 'row',
-                    }}
-                  >
-                    <MaterialIcons
-                      name="backpack"
+                <HStack alignItems="center" justifyContent="center" space={2}>
+                  {type === 'pack' && (
+                    <Box
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        gap: 5,
+                        // border: '1px solid #ccc',
+                      }}
+                    >
+                      <MaterialIcons
+                        name="backpack"
+                        size={24}
+                        color={currentTheme.colors.cardIconColor}
+                      />
+                      <DuplicateIcon link={`/pack/${_id}?copy=true`} />
+                    </Box>
+                  )}
+                  {type === 'trip' && (
+                    <Entypo
+                      name="location-pin"
                       size={24}
                       color={currentTheme.colors.cardIconColor}
                     />
-                    <Link href={'/pack/' + _id + '?copy=true'}>
-                      <DuplicateIcon />
-                    </Link>
-                  </Box>
-                )}
-                {type === 'trip' && (
-                  <Entypo
-                    name="location-pin"
-                    size={24}
-                    color={currentTheme.colors.cardIconColor}
-                  />
-                )}
+                  )}
+                </HStack>
               </Box>
             </Heading>
 
