@@ -197,7 +197,7 @@ export const CustomCard = ({
             justifyContent="space-between"
             alignItems="center"
           >
-            <Box></Box>
+            <Box>{title}</Box>
             <Box flexDirection="row" alignItems="center">
               <Box mx="5">
                 <Link href={`/profile/${data.owner_id && data.owner_id._id}`}>
