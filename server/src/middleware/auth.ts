@@ -1,7 +1,7 @@
-import User, { IUser } from '../models/userModel';
-import jwt, { JwtPayload } from 'jsonwebtoken';
+import User, { type IUser } from '../models/userModel';
+import jwt, { type JwtPayload } from 'jsonwebtoken';
 import { JWT_SECRET } from '../config';
-import { Request, Response, NextFunction } from 'express';
+import { type Request, type Response, type NextFunction } from 'express';
 import { z, ZodError } from 'zod';
 import { TokenSchema } from './validators/authTokenValidator';
 
@@ -48,7 +48,7 @@ const verifyToken = (token: string): JwtPayload => {
 const findUser = async (decoded: JwtPayload, token: string): Promise<IUser> => {
   const user: IUser | null = await User.findOne({
     _id: decoded._id,
-    token: token,
+    token,
   });
   if (!user) throw new Error('User associated with this token not found.');
   return user;

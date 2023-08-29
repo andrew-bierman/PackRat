@@ -1,5 +1,5 @@
-import { Request, Response, NextFunction } from 'express';
-import { IUser } from '../models/userModel';
+import { type Request, type Response, type NextFunction } from 'express';
+import { type IUser } from '../models/userModel';
 import { RoleSchema } from './validators/roleValidator';
 import { ZodError } from 'zod';
 
