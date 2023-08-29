@@ -11,6 +11,8 @@ import {
 } from '../controllers/pack/index';
 import * as validator from '../middleware/validators/index';
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
+import authMiddleware from '../middleware/auth';
+import checkRole from '../middleware/checkRole';
 
 const router = express.Router();
 
@@ -33,7 +35,12 @@ const router = express.Router();
  *       '500':
  *         description: Error retrieving public packs
  */
-router.get('/', tryCatchWrapper(getPublicPacks));
+router.get(
+  '/',
+  authMiddleware,
+  checkRole(['user', 'admin']),
+  tryCatchWrapper(getPublicPacks),
+);
 
 /**
  * @swagger
