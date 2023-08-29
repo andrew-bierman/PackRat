@@ -18,6 +18,7 @@ export const userSignUp = celebrate({
     name: Joi.string().required(),
     email: Joi.string().required(),
     password: Joi.string().required(),
+    username :  Joi.string().required()
   }),
 });
 export const userSignIn = celebrate({
