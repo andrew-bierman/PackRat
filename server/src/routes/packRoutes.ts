@@ -11,7 +11,7 @@ import {
 } from '../controllers/pack/index';
 import * as validator from '../middleware/validators/index';
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
-import authMiddleware from '../middleware/auth';
+import authTokenMiddleware from '../middleware/auth';
 import checkRole from '../middleware/checkRole';
 
 const router = express.Router();
@@ -37,7 +37,7 @@ const router = express.Router();
  */
 router.get(
   '/',
-  authMiddleware,
+  authTokenMiddleware,
   checkRole(['user', 'admin']),
   tryCatchWrapper(getPublicPacks),
 );
@@ -63,7 +63,13 @@ router.get(
  *       '500':
  *         description: Error retrieving packs by owner ID
  */
-router.get('/:ownerId', validator.getPacks, tryCatchWrapper(getPacks));
+router.get(
+  '/:ownerId',
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
+  validator.getPacks,
+  tryCatchWrapper(getPacks),
+);
 
 /**
  * @swagger
@@ -86,7 +92,13 @@ router.get('/:ownerId', validator.getPacks, tryCatchWrapper(getPacks));
  *       '500':
  *         description: Error retrieving pack by ID
  */
-router.get('/p/:packId', validator.getPackById, tryCatchWrapper(getPackById));
+router.get(
+  '/p/:packId',
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
+  validator.getPackById,
+  tryCatchWrapper(getPackById),
+);
 
 /**
  * @swagger
@@ -109,7 +121,13 @@ router.get('/p/:packId', validator.getPackById, tryCatchWrapper(getPackById));
  *       '500':
  *         description: Error scoring the pack
  */
-router.put('/score/:packId', validator.getPackById, tryCatchWrapper(scorePack));
+router.put(
+  '/score/:packId',
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
+  validator.getPackById,
+  tryCatchWrapper(scorePack),
+);
 
 /**
  * @swagger
@@ -138,7 +156,13 @@ router.put('/score/:packId', validator.getPackById, tryCatchWrapper(scorePack));
  *       '500':
  *         description: Error adding the pack
  */
-router.post('/', validator.addPack, tryCatchWrapper(addPack));
+router.post(
+  '/',
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
+  validator.addPack,
+  tryCatchWrapper(addPack),
+);
 
 /**
  * @swagger
@@ -167,7 +191,13 @@ router.post('/', validator.addPack, tryCatchWrapper(addPack));
  *       '500':
  *         description: Error editing the pack
  */
-router.put('/', validator.editPack, tryCatchWrapper(editPack));
+router.put(
+  '/',
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
+  validator.editPack,
+  tryCatchWrapper(editPack),
+);
 
 /**
  * @swagger
@@ -192,7 +222,13 @@ router.put('/', validator.editPack, tryCatchWrapper(editPack));
  *       '500':
  *         description: Error deleting the pack
  */
-router.delete('/', validator.deletePack, tryCatchWrapper(deletePack));
+router.delete(
+  '/',
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
+  validator.deletePack,
+  tryCatchWrapper(deletePack),
+);
 
 /**
  * @swagger
@@ -219,6 +255,8 @@ router.delete('/', validator.deletePack, tryCatchWrapper(deletePack));
  */
 router.post(
   '/duplicate',
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
   validator.duplicatePublicPack,
   tryCatchWrapper(duplicatePublicPack),
 );
