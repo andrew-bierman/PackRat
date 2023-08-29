@@ -1,6 +1,6 @@
-import { createContext, useReducer } from "react";
-import { theme, darkTheme } from "../theme";
-import ThirdPartyThemeProviders from "./ThirdPartyThemeProviders";
+import { createContext, useReducer } from 'react';
+import { theme, darkTheme } from '../theme';
+import ThirdPartyThemeProviders from './ThirdPartyThemeProviders';
 
 const initialState = {
   isDark: false,
@@ -39,9 +39,13 @@ const reducer = (state, action) => {
 };
 const ThemeContext = createContext({
   ...initialState,
-  platform: "JWT",
-  enableDarkMode: () => Promise.resolve(),
-  enableLightMode: () => Promise.resolve(),
+  platform: 'JWT',
+  enableDarkMode: async () => {
+    await Promise.resolve();
+  },
+  enableLightMode: async () => {
+    await Promise.resolve();
+  },
 });
 
 /**
@@ -60,8 +64,8 @@ export const ThemeProvider = ({ children }) => {
    * @return {undefined} No return value.
    */
   const enableDarkMode = () => {
-    console.log("enableDarkMode");
-    dispatch({ type: "ENABLE_DARK_MODE" });
+    console.log('enableDarkMode');
+    dispatch({ type: 'ENABLE_DARK_MODE' });
   };
   /**
    * Enables light mode.
@@ -70,8 +74,8 @@ export const ThemeProvider = ({ children }) => {
    * @return {void} - This function does not return any value.
    */
   const enableLightMode = () => {
-    console.log("enableLightMode");
-    dispatch({ type: "ENABLE_LIGHT_MODE" });
+    console.log('enableLightMode');
+    dispatch({ type: 'ENABLE_LIGHT_MODE' });
   };
 
   const key = `themeContext + isDark=${state.isDark} + isLight=${state.isLight}`;

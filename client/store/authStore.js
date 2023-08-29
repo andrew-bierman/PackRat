@@ -1,9 +1,13 @@
-import { createAsyncThunk, createSlice, createEntityAdapter } from "@reduxjs/toolkit";
+import {
+  createAsyncThunk,
+  createSlice,
+  createEntityAdapter,
+} from '@reduxjs/toolkit';
 
 // we use the original axios to prevent circular dependency with custom axios instance
-import axios from "axios";
-import { api } from "../constants/api";
-import { Alert } from "react-native";
+import axios from 'axios';
+import { api } from '../constants/api';
+import { Alert } from 'react-native';
 
 const authAdapter = createEntityAdapter();
 
@@ -15,26 +19,26 @@ const initialState = authAdapter.getInitialState({
 
 // Thunks for async actions
 export const signUp = createAsyncThunk(
-  "auth/signUp",
+  'auth/signUp',
   async ({ name, username, email, password }, { rejectWithValue }) => {
     try {
       // Add check for unique username here.
       const response = await axios.post(`${api}/user/signup`, {
         name,
-        username,  // add username
+        username, // add username
         email,
         password,
       });
       return response.data.user;
     } catch (error) {
-      console.log("error", error);
+      console.log('error', error);
       return rejectWithValue(error.response.data.error);
     }
-  }
+  },
 );
 
 export const signIn = createAsyncThunk(
-  "auth/signIn",
+  'auth/signIn',
   async ({ email, password }, { rejectWithValue }) => {
     try {
       const response = await axios.post(`${api}/user/signin`, {
@@ -45,21 +49,21 @@ export const signIn = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.response.data.error);
     }
-  }
+  },
 );
 
-export const signOut = createAsyncThunk("auth/signOut", async () => {
+export const signOut = createAsyncThunk('auth/signOut', async () => {
   try {
     // Perform any sign-out operations here
     return null;
   } catch (error) {
     console.log(error.message);
-    return rejectWithValue("Sign-out failed");
+    return rejectWithValue('Sign-out failed');
   }
 });
 
 export const signInWithGoogle = createAsyncThunk(
-  "auth/signInWithGoogle",
+  'auth/signInWithGoogle',
   async ({ idToken }, { rejectWithValue }) => {
     try {
       const response = await axios.post(`${api}/user/google`, {
@@ -70,11 +74,11 @@ export const signInWithGoogle = createAsyncThunk(
       console.log('error.response.data.error', error.response.data.error);
       return rejectWithValue(error);
     }
-  }
+  },
 );
 
 export const authSlice = createSlice({
-  name: "auth",
+  name: 'auth',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -138,5 +142,6 @@ export const authSlice = createSlice({
   },
 });
 export const authReducer = authSlice.reducer;
-export const { selectAll: selectAllUsers, selectById: selectUserById } = authAdapter.getSelectors((state) => state.auth);
+export const { selectAll: selectAllUsers, selectById: selectUserById } =
+  authAdapter.getSelectors((state) => state.auth);
 export default authSlice.reducer;

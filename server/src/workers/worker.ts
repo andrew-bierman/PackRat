@@ -6,30 +6,30 @@
  * @param {any} data - The input data for the heavy task.
  * @return {Promise<any>} - A promise that resolves to the result of the heavy task.
  */
-async function sample(data) {
-  console.log("Starting heavy task");
+function sample(data) {
+  console.log('Starting heavy task');
   const start = Date.now();
 
   try {
     // Simulate heavy task:
-    const sortedData = heavyTask(data);
+    const sortedData: any = heavyTask(data);
 
-    console.log("Heavy task completed");
+    console.log('Heavy task completed');
     const end = Date.now();
 
     console.log(`Execution time: ${end - start} ms`);
 
     return {
-      status: "done",
+      status: 'done',
       data: {
-        message: "Hello from worker thread",
+        message: 'Hello from worker thread',
         sortedData,
       },
     };
   } catch (err) {
-    console.log("Error during heavy task");
+    console.log('Error during heavy task');
     return {
-      status: "error",
+      status: 'error',
       errorMessage: err.message,
       errorStack: err.stack,
     };

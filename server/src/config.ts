@@ -1,5 +1,5 @@
 // require('dotenv').config();
-import { config } from "dotenv";
+import { config } from 'dotenv';
 
 config();
 
@@ -34,7 +34,7 @@ export const SEND_GRID_API_KEY = process.env.SEND_GRID_API_KEY;
 export const SERVER_ROOT_URI = process.env.SERVER_ROOT_URI;
 export const UI_ROOT_URI = process.env.CLIENT_URL;
 
-export const REDIRECT_URL = "auth/google";
+export const REDIRECT_URL = 'auth/google';
 
 export const CORS_ORIGIN = process.env.CORS_ORIGIN;
-export const CORS_METHODS = ['GET','POST','PUT','DELETE','PATCH']
+export const CORS_METHODS = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'];

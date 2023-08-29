@@ -1,4 +1,4 @@
-import Pack from "../../models/packModel";
+import Pack from '../../models/packModel';
 
 /**
  * Adds a new pack service.
@@ -9,8 +9,8 @@ import Pack from "../../models/packModel";
  */
 export const addPackService = async (name, owner_id) => {
   const newPack = {
-    name: name,
-    owner_id: owner_id,
+    name,
+    owner_id,
     items: [],
     is_public: false,
     favorited_by: [],
@@ -19,9 +19,9 @@ export const addPackService = async (name, owner_id) => {
     owners: [owner_id],
   };
 
-  console.log("newPack", newPack);
+  console.log('newPack', newPack);
 
-  const exists = await Pack.find({ name: name });
+  const exists = await Pack.find({ name });
 
   const createdPack = await Pack.create(newPack);
 

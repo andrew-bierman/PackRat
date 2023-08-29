@@ -1,2 +1,2 @@
-export * from './getWeather'
-export * from './getWeatherWeek'
+export * from './getWeather';
+export * from './getWeatherWeek';
