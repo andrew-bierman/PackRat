@@ -20,6 +20,7 @@ export const ItemsTable = ({
   refetch,
   setRefetch = () => {},
 }) => {
+  console.log('limit', limit, 'page', page, 'totalPages', totalPages);
   const flexArr = [2, 1, 1, 1, 0.65, 0.65, 0.65];
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
@@ -127,14 +128,14 @@ export const ItemsTable = ({
             width: '4px',
             backgroundColor: 'transparent',
             borderRadius: '5px',
-            borderColor: page <= 1 ? 'gray' : '#0284c7',
+            borderColor: page < 2 ? 'gray' : '#0284c7',
             borderWidth: '1px',
             borderStyle: 'solid',
           }}
-          disabled={page <= 1}
+          disabled={page < 2}
           onPress={handlePreviousPage}
         >
-          <Text style={{ color: page <= 1 ? 'gray' : '#0284c7' }}>{'<'}</Text>
+          <Text style={{ color: page < 2 ? 'gray' : '#0284c7' }}>{'<'}</Text>
         </Button>
         <Button
           style={{
