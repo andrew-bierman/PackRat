@@ -1,4 +1,8 @@
-import { createSlice, createAsyncThunk, createEntityAdapter } from '@reduxjs/toolkit';
+import {
+  createSlice,
+  createAsyncThunk,
+  createEntityAdapter,
+} from '@reduxjs/toolkit';
 import axios from 'axios';
 import { api } from '../constants/api';
 
@@ -11,7 +15,7 @@ export const convertGeoJSONToGPX = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.message);
     }
-  }
+  },
 );
 
 const gpxAdapter = createEntityAdapter();

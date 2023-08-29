@@ -1,6 +1,6 @@
-import { Schema, model } from "mongoose";
-import { ItemCategory } from "../utils/itemCategory";
-import myDB from "./dbConnection";
+import { Schema, model } from 'mongoose';
+import { ItemCategory } from '../utils/itemCategory';
+import myDB from './dbConnection';
 const itemCategorySchema = new Schema(
   {
     name: {
@@ -10,7 +10,7 @@ const itemCategorySchema = new Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
-export const ItemCategoryModel = myDB.model("ItemCategory", itemCategorySchema);
+export const ItemCategoryModel = myDB.model('ItemCategory', itemCategorySchema);

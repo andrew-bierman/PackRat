@@ -1,5 +1,3 @@
-
-
 /**
  * Creates an instance from the given coordinates.
  *
@@ -7,9 +5,12 @@
  * @param {[number, number]} [lon, lat] - The longitude and latitude coordinates.
  * @return {Promise<string>} The ID of the created instance.
  */
-export async function createInstanceFromCoordinates(Model: any, [lon, lat]: [number, number]) {
-  if (typeof lon !== "number" || typeof lat !== "number") {
-    console.error("Invalid coordinate format");
+export async function createInstanceFromCoordinates(
+  Model: any,
+  [lon, lat]: [number, number],
+) {
+  if (typeof lon !== 'number' || typeof lat !== 'number') {
+    console.error('Invalid coordinate format');
     return null;
   }
 
@@ -27,7 +28,7 @@ export async function createInstanceFromCoordinates(Model: any, [lon, lat]: [num
  */
 export async function coordinatesToInstances(Model: any, coordinates: any) {
   if (!Array.isArray(coordinates)) {
-    console.error("Coordinates is not an array");
+    console.error('Coordinates is not an array');
     return [];
   }
 
@@ -39,18 +40,24 @@ export async function coordinatesToInstances(Model: any, coordinates: any) {
 
   if (!isNestedArray) {
     // Check if we have coordinates or an id
-    if (typeof coordinates[0] === "number") {
-      return [await createInstanceFromCoordinates(Model, coordinates as [number, number])];
+    if (typeof coordinates[0] === 'number') {
+      return [
+        await createInstanceFromCoordinates(
+          Model,
+          coordinates as [number, number],
+        ),
+      ];
     } else {
       return coordinates;
     }
   }
 
-  if (typeof coordinates[0][0] === "number") {
+  if (typeof coordinates[0][0] === 'number') {
     return await Promise.all(
-      coordinates.map((coordinate) =>
-        createInstanceFromCoordinates(Model, coordinate)
-      )
+      coordinates.map(
+        async (coordinate) =>
+          await createInstanceFromCoordinates(Model, coordinate),
+      ),
     );
   } else {
     return coordinates;
@@ -69,16 +76,16 @@ export async function handleGeometry(Model: any, geometry: any) {
   // console.log("handleGeometry geometry", geometry);
 
   if (!geometry || !Array.isArray(geometry.coordinates)) {
-    console.error("geometry is undefined or not an array");
+    console.error('geometry is undefined or not an array');
     return [];
   }
 
   const nodes = [];
 
-  if (geometry.type === "Point") {
+  if (geometry.type === 'Point') {
     const instance = await createInstanceFromCoordinates(
       Model,
-      geometry.coordinates
+      geometry.coordinates,
     );
     nodes.push(instance._id);
   } else {
@@ -102,13 +109,13 @@ export function handleGeoJSONGeometry(geometry: any) {
   // console.log("handleGeometry geometry", geometry);
 
   if (!geometry || !Array.isArray(geometry.coordinates)) {
-    console.error("geometry is undefined or not an array");
+    console.error('geometry is undefined or not an array');
     return [];
   }
 
   const nodes = [];
 
-  if (geometry.type === "Point") {
+  if (geometry.type === 'Point') {
     nodes.push(geometry.coordinates);
   } else {
     for (const coords of geometry.coordinates) {

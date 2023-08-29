@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 const ScrollButton = ({ direction, onPress }) => {
   return (
@@ -9,29 +9,29 @@ const ScrollButton = ({ direction, onPress }) => {
       onPress={onPress}
       style={styles.scrollButton}
     >
-      {direction === "left" && <Text style={styles.iconStyles}>&lang;</Text>}
-      {direction != "left" && <Text style={styles.iconStyles}>&rang;</Text>}
+      {direction === 'left' && <Text style={styles.iconStyles}>&lang;</Text>}
+      {direction != 'left' && <Text style={styles.iconStyles}>&rang;</Text>}
     </TouchableOpacity>
-  )
+  );
 };
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   scrollButton: {
     height: 30,
     width: 30,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   iconStyles: {
     alignSelf: 'center',
     color: 'white',
     textAlign: 'center',
     fontWeight: '600',
-    fontSize: 20
+    fontSize: 20,
   },
 });
 

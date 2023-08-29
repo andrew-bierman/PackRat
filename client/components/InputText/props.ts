@@ -1,14 +1,14 @@
-import { IInputProps } from "native-base";
-import React from "react";
-import { UseControllerProps } from "react-hook-form";
-import { KeyboardTypeOptions } from "react-native";
+import { type IInputProps } from 'native-base';
+import type React from 'react';
+import { type UseControllerProps } from 'react-hook-form';
+import { type KeyboardTypeOptions } from 'react-native';
 
-export type InputTextRef = {
+export interface InputTextRef {
   /**
    * When called, will focus inputText component
    */
   focus: () => void;
-};
+}
 
 export type InputTextProps = {
   /**
@@ -53,8 +53,8 @@ export type InputTextProps = {
    */
   secureTextEntry?: boolean | undefined;
 
-  control?: UseControllerProps["control"];
-  name?: UseControllerProps["name"];
-  rules?: UseControllerProps["rules"];
+  control?: UseControllerProps['control'];
+  name?: UseControllerProps['name'];
+  rules?: UseControllerProps['rules'];
 } & IInputProps &
   React.RefAttributes<InputTextRef>;

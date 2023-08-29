@@ -19,7 +19,7 @@ export async function processJob(job: any, queueName: string, task: string) {
 
   const { queue } = queueData;
 
-  console.log(`Adding job ${job} with task ${task} to queue ${queueName}`)
+  console.log(`Adding job ${job} with task ${task} to queue ${queueName}`);
 
   // Add the job and task to the queue
   await queue.add({ job, task });

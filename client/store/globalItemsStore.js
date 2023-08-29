@@ -1,43 +1,47 @@
-import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
-import axios from "~/config/axios";
-import { api } from "../constants/api";
+import {
+  createSlice,
+  createAsyncThunk,
+  createEntityAdapter,
+} from '@reduxjs/toolkit';
+import axios from '~/config/axios';
+import { api } from '../constants/api';
 
 export const addItemsGlobal = createAsyncThunk(
-  "Items/addItemsGlobal",
+  'Items/addItemsGlobal',
   async (newItem) => {
     const response = await axios.post(`${api}/item/global`, newItem);
     return response.data;
-  }
+  },
 );
 
 export const getItemsGlobal = createAsyncThunk(
-  "Items/getItemsGlobal",
+  'Items/getItemsGlobal',
   async ({ limit, page }) => {
     try {
       const response = await axios.get(
-        `${api}/item/global?limit=${limit}&page=${page}`
+        `${api}/item/global?limit=${limit}&page=${page}`,
       );
       return response.data;
     } catch (error) {
-      console.log("error", error.message);
+      console.log('error', error.message);
     }
-  }
+  },
 );
 
 export const deleteGlobalItem = createAsyncThunk(
-  "items/deleteGlobalItem",
+  'items/deleteGlobalItem',
   async (item) => {
     const response = await axios.delete(`${api}/item/global/${item}`);
     return response.data;
-  }
+  },
 );
 
 export const editGlobalItem = createAsyncThunk(
-  "items/editGlobalItem",
+  'items/editGlobalItem',
   async (newItem) => {
     const response = await axios.put(`${api}/item/`, newItem);
     return response.data;
-  }
+  },
 );
 
 const itemsAdapter = createEntityAdapter({
@@ -45,13 +49,35 @@ const itemsAdapter = createEntityAdapter({
 });
 
 const itemsSlice = createSlice({
-  name: "globalItems",
+  name: 'globalItems',
   initialState: itemsAdapter.getInitialState({
     globalItems: [],
     isLoading: false,
     error: null,
   }),
-  reducers: {},
+  reducers: {
+    deleteItemOffline: (state, action) => {
+      return {
+        ...state,
+        globalItems: {
+          ...state.globalItems,
+          items: state?.globalItems?.items?.filter(
+            (item) => item._id !== action.payload,
+          ),
+        },
+      };
+    },
+    addItemOffline: (state, action) => {
+      console.log(action.payload, 'add item offline');
+      return {
+        ...state,
+        globalItems: {
+          ...state.globalItems,
+          items: [...state.globalItems.items, action.payload],
+        },
+      };
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(addItemsGlobal.pending, (state) => {
@@ -85,7 +111,7 @@ const itemsSlice = createSlice({
         state.error = null;
       })
       .addCase(deleteGlobalItem.fulfilled, (state, action) => {
-        itemsAdapter.removeOne(state, action.payload.data._id);
+        itemsAdapter.removeOne(state, action.payload._id);
         state.isLoading = false;
         state.error = null;
       })
@@ -95,5 +121,7 @@ const itemsSlice = createSlice({
       });
   },
 });
+
+export const { deleteItemOffline, addItemOffline } = itemsSlice.actions;
 
 export default itemsSlice.reducer;

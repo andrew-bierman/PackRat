@@ -1,4 +1,4 @@
-import Item from "../models/itemModel";
+import Item from '../models/itemModel';
 
 /**
  * Validates the item data and creates a new item.
@@ -20,7 +20,7 @@ export const itemValidation = async ({
   packId,
 }: any) => {
   if (!name || !weight || !quantity || !unit || !packId) {
-    throw new Error("All fields must be filled");
+    throw new Error('All fields must be filled');
   }
 
   const item = await Item.create({

@@ -1,4 +1,7 @@
-import { getPacksService } from "../../services/pack/pack.service";
+import { PackNotFoundError } from '../../helpers/errors';
+import { responseHandler } from '../../helpers/responseHandler';
+import { getPacksService } from '../../services/pack/pack.service';
+import { buildMessage } from '../../helpers/buildMessage';
 
 /**
  * Retrieves packs associated with a specific owner.
@@ -6,15 +9,17 @@ import { getPacksService } from "../../services/pack/pack.service";
  * @param {Object} res - Express response object.
  * @return {Promise} - Array of packs.
  */
-export const getPacks = async (req, res) => {
+export const getPacks = async (req, res, next) => {
   try {
     const { ownerId } = req.params;
 
     const packs = await getPacksService(ownerId);
 
-    res.status(200).json(packs);
+    res.locals.data = packs;
+
+    const message = 'Packs retrieved successfully';
+    responseHandler(res, message);
   } catch (error) {
-    console.log("error", error);
-    res.status(404).json({ msg: "Packs cannot be found " + error.message });
+    next(PackNotFoundError);
   }
 };

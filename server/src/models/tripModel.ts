@@ -1,8 +1,7 @@
-import mongoose from "mongoose";
-import myDB from "./dbConnection";
-import autopopulate from "mongoose-autopopulate";
-
-const { Schema } = mongoose;
+import mongoose, { Schema } from 'mongoose';
+import myDB from './dbConnection';
+import autopopulate from 'mongoose-autopopulate';
+import GeoJSON from './geojsonModel';
 
 const TripSchema = new Schema(
   {
@@ -17,30 +16,30 @@ const TripSchema = new Schema(
       type: [
         {
           type: Schema.Types.ObjectId,
-          ref: "GeoJSON",
+          ref: GeoJSON,
           autopopulate: true,
         },
       ],
       required: true,
     },
-    owner_id: { type: Schema.Types.ObjectId, ref: "User" },
-    packs: { type: Schema.Types.ObjectId, ref: "Pack" },
+    owner_id: { type: Schema.Types.ObjectId, ref: 'User' },
+    packs: { type: Schema.Types.ObjectId, ref: 'Pack' },
     is_public: { type: Boolean },
-    type: { type: String, default: "trip" },
+    type: { type: String, default: 'trip' },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 TripSchema.plugin(autopopulate);
 
-TripSchema.set("toJSON", {
+TripSchema.set('toJSON', {
   transform: (document, returnedObject) => {
     returnedObject.geojson = {
-      type: "FeatureCollection",
+      type: 'FeatureCollection',
       features: returnedObject.geojson,
     };
   },
 });
 
-const Trip = myDB.model("Trip", TripSchema);
+const Trip = myDB.model('Trip', TripSchema);
 export default Trip;

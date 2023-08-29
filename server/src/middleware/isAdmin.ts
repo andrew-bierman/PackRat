@@ -1,4 +1,4 @@
-import { NextFunction, Request,Response } from "express";
+import { type NextFunction, type Request, type Response } from 'express';
 
 /**
  * Checks if the user making the request is an admin.
@@ -10,11 +10,11 @@ import { NextFunction, Request,Response } from "express";
  */
 export function isAdmin(req: Request, res: Response, next: NextFunction) {
   // Your user object might be different. This is just a sample.
-  if (req.user && req.user.role === "admin") {
+  if (req.user && req.user.role === 'admin') {
     next(); // pass control to the next handler
   } else {
     res.status(403).send({
-      message: "Admin access is required to perform this action",
+      message: 'Admin access is required to perform this action',
     });
   }
 }

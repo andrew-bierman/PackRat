@@ -4,11 +4,11 @@ import {
   createSlice,
   createAsyncThunk,
   createEntityAdapter,
-} from "@reduxjs/toolkit";
+} from '@reduxjs/toolkit';
 
-import axios from "~/config/axios";
+import axios from '~/config/axios';
 
-import { api } from "../constants/api";
+import { api } from '../constants/api';
 
 const singlePackAdapter = createEntityAdapter({
   selectId: (singlePack) => singlePack._id,
@@ -22,7 +22,7 @@ const initialState = singlePackAdapter.getInitialState({
 });
 
 export const fetchSinglePack = createAsyncThunk(
-  "packs/fetchSinglePack",
+  'packs/fetchSinglePack',
   async (packId) => {
     const response = await axios.get(`${api}/pack/p/${packId}`);
     return response.data;
@@ -30,7 +30,7 @@ export const fetchSinglePack = createAsyncThunk(
 );
 
 export const selectItemsGlobal = createAsyncThunk(
-  "Items/selectItemsGlobal",
+  'Items/selectItemsGlobal',
   async (item) => {
     try {
       const itemId = item.selectedItem;
@@ -38,26 +38,20 @@ export const selectItemsGlobal = createAsyncThunk(
       const packId = item.packId;
 
       const response = await axios.post(`${api}/item/global/select/${packId}`, {
-        itemId: itemId,
-        ownerId: ownerId,
+        itemId,
+        ownerId,
       });
       return response.data;
     } catch (error) {
-      console.log("error", error.message);
+      console.log('error', error.message);
     }
   },
 );
 
 const singlePackSlice = createSlice({
-  name: "singlePack",
+  name: 'singlePack',
   initialState: initialState,
-  reducers: {
-    clearSinglePack: (state) => {
-      state.singlePack = {};
-      state.isLoading = false;
-      state.error = null;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchSinglePack.pending, (state) => {
