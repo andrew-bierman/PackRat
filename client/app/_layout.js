@@ -15,6 +15,7 @@ import Footer from '../components/footer/Footer';
 import { useEffect } from 'react';
 import { setNetworkStatus } from '../store/offlineQueue';
 import { checkNetworkConnected } from '~/utils/netInfo';
+import { NativeBaseProvider } from 'native-base';
 
 import Header from '../screens/header';
 
@@ -28,15 +29,17 @@ export default function HomeLayout() {
   }, []);
   return (
     <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <AuthProvider>
-          <ThemeProvider>
-            <Header />
-            <Slot />
-            {Platform.OS === 'web' ? <Footer /> : null}
-          </ThemeProvider>
-        </AuthProvider>
-      </PersistGate>
+      <NativeBaseProvider>
+        <PersistGate loading={null} persistor={persistor}>
+          <AuthProvider>
+            <ThemeProvider>
+              <Header />
+              <Slot />
+              {Platform.OS === 'web' ? <Footer /> : null}
+            </ThemeProvider>
+          </AuthProvider>
+        </PersistGate>
+      </NativeBaseProvider>
     </Provider>
   );
 }
