@@ -14,105 +14,59 @@ import {
   List,
   View,
   Pressable,
-} from "native-base";
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+} from 'native-base';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 
-import { useRef } from "react";
+import { SafeAreaView } from 'react-native';
 
-import { SafeAreaView } from "react-native";
-
-import { Platform } from "react-native";
+import { Platform } from 'react-native';
 
 // redux
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from 'react-redux';
 
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 
 // import { getTrailsResult } from "../api/getTrailsResult";
 // import { getPhotonResults } from "../api/getPhotonResults";
 
-import { fetchTrails } from "../store/trailsStore";
+import { fetchTrails } from '../store/trailsStore';
 
-import { fetchParks } from "../store/parksStore";
+import { fetchParks } from '../store/parksStore';
 
 import {
   setSelectedSearchResult,
   clearSearchResults,
   fetchPhotonSearchResults,
-} from "../store/searchStore";
-import { fetchWeather, fetchWeatherWeek } from "../store/weatherStore";
-import { RootState, AppDispatch } from "../store/store";
+} from '../store/searchStore';
+import { getTrailsOSM } from '../api/getTrails';
+import { getParksOSM } from '../api/getParks';
+import { fetchWeather, fetchWeatherWeek } from '../store/weatherStore';
 
-interface SearchResult {
-  properties: {
-    name: string;
-    osm_id: string;
-    osm_value: string;
-  };
-  geometry: {
-    coordinates: [number, number];
-  };
-}
-interface SearchInputProps {
-  onSelect?: (result: SearchResult) => void;
-  placeholder?: string;
-}
-
-export const SearchInput: React.FC<SearchInputProps> = ({
-  onSelect,
-  placeholder,
-}) => {
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const abortController = useRef(new AbortController());
-
-  const [searchString, setSearchString] = useState<string>("");
-  const [isLoadingMobile, setIsLoadingMobile] = useState<boolean>(false);
-  const [selectedSearch, setSelectedSearch] = useState<string>("");
+export const SearchInput = ({ onSelect, placeholder }) => {
+  const [searchString, setSearchString] = useState('');
+  const [isLoadingMobile, setIsLoadingMobile] = useState(false);
+  const [selectedSearch, setSelectedSearch] = useState('');
 
   const searchResults =
-    useSelector<RootState, SearchResult[]>(
-      (state: any) => state.search.searchResults,
-    ) || [];
-
-  const isLoading =
-    useSelector<RootState, boolean>((state: any) => state.search.isLoading) ||
-    false;
+    useSelector((state) => state.search.searchResults) || [];
 
   const selectedSearchResult =
-    useSelector<RootState, SearchResult | null>(
-      (state: any) => state.search.selectedSearchResult,
-    ) || null;
+    useSelector((state) => state.search.selectedSearchResult) || {};
 
-  const [showSearchResults, setShowSearchResults] = useState<boolean>(false);
+  // const [searchResults, setSearchResults] = useState([]);
+  const [showSearchResults, setShowSearchResults] = useState(false);
 
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!searchString) {
-      setShowSearchResults(false); // Hide search results when search string is empty
-    }
-    if (!searchString) {
-      setShowSearchResults(false); // Hide search results when search string is empty
-    }
-    setShowSearchResults(false);
+    setShowSearchResults(searchString.length > 0);
 
-    if (timeoutRef.current !== null) return;
-
-    timeoutRef.current = setTimeout(() => {
-      timeoutRef.current = null;
-
-      if (!searchString || isLoading) return;
-      abortController.current.abort();
+    const timeout = setTimeout(() => {
+      if (!searchString) return;
       dispatch(fetchPhotonSearchResults(searchString));
-      setShowSearchResults(true);
     }, 2000);
 
-    return () => {
-      if (timeoutRef.current !== null) {
-        clearTimeout(timeoutRef.current);
-        timeoutRef.current = null;
-      }
-    };
+    return () => clearTimeout(timeout);
   }, [searchString, dispatch]);
 
   /**
@@ -175,27 +129,28 @@ export const SearchInput: React.FC<SearchInputProps> = ({
     setSearchString(name);
     setShowSearchResults(false);
     dispatch(setSelectedSearchResult(result));
+    // dispatch(clearSearchResults());
 
     if (onSelect) {
       onSelect(result);
     }
   };
 
-  return Platform.OS === "web" ? (
+  return Platform.OS === 'web' ? (
     <VStack my="4" space={5} w="100%" maxW="300px">
       {/* ... */}
       <VStack w="100%" space={5} alignSelf="center">
         <Box position="relative" height="auto">
           <Input
             onChangeText={(text) => setSearchString(text)}
-            placeholder={placeholder ?? "Search"}
+            placeholder={placeholder ?? 'Search'}
             width="100%"
             borderRadius="4"
             py="3"
             px="1"
             value={searchString}
             fontSize="14"
-            backgroundColor={"white"}
+            backgroundColor={'white'}
             InputLeftElement={
               <Icon
                 m="2"
@@ -206,11 +161,9 @@ export const SearchInput: React.FC<SearchInputProps> = ({
               />
             }
             InputRightElement={
-              searchString.length > 0 &&
-              searchResults.length > 0 && (
+              showSearchResults && (
                 <IconButton
                   mr={2}
-                  disabled={isLoading}
                   icon={
                     <Icon
                       as={<MaterialIcons name="close" />}
@@ -221,14 +174,13 @@ export const SearchInput: React.FC<SearchInputProps> = ({
                   }
                   onPress={() => {
                     setShowSearchResults(false);
-                    setSearchString("");
-                    dispatch(clearSearchResults());
+                    setSearchString('');
                   }}
                 />
               )
             }
           />
-          <View style={{ position: "relative" }}>
+          <View style={{ position: 'relative' }}>
             {showSearchResults && searchResults?.length > 0 && (
               <ScrollView
                 position="absolute"
@@ -248,9 +200,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({
                     <Pressable
                       key={`result + ${i}`}
                       onPress={() => handleSearchResultClick(result, i)}
-                      style={({ pressed }) => ({
-                        backgroundColor: pressed ? "gray.100" : "transparent",
-                      })}
+                      underlayColor="gray.100"
                     >
                       <HStack space={3}>
                         <Text fontSize="sm" fontWeight="medium">
@@ -259,7 +209,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({
                         <Text
                           fontSize="sm"
                           color="gray.500"
-                          textTransform={"capitalize"}
+                          textTransform={'capitalize'}
                         >
                           {result.properties.osm_value}
                         </Text>
@@ -297,7 +247,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({
         }
       />
 
-      {!isLoading && (
+      {showSearchResults && searchResults?.length > 0 && (
         <ScrollView
           position="absolute"
           top="100%"
@@ -316,9 +266,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({
               <Pressable
                 key={`result + ${i}`}
                 onPress={() => handleSearchResultClick(result, i)}
-                style={({ pressed }) => ({
-                  backgroundColor: pressed ? "gray.100" : "transparent",
-                })}
+                underlayColor="gray.100"
               >
                 <HStack space={3}>
                   <Text fontSize="sm" fontWeight="medium">
@@ -327,7 +275,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({
                   <Text
                     fontSize="sm"
                     color="gray.500"
-                    textTransform={"capitalize"}
+                    textTransform={'capitalize'}
                   >
                     {result.properties.osm_value}
                   </Text>

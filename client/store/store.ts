@@ -1,33 +1,39 @@
-import { combineReducers } from "@reduxjs/toolkit";
-import { configureStore } from "@reduxjs/toolkit";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { persistReducer, persistStore } from "redux-persist";
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+  persistReducer,
+  persistStore,
+  type PersistConfig,
+} from 'redux-persist';
 
 // middleware
-import apiMessageMiddleware from "./middleware/apiMessageMiddleware";
+import apiMessageMiddleware from './middleware/apiMessageMiddleware';
 
 // all reducers - TODO: move to separate folder
-import weatherReducer from "./weatherStore";
-import dropdownReducer from "./dropdownStore";
-import authReducer from "./authStore";
-import trailsReducer from "./trailsStore";
-import searchReducer from "./searchStore";
-import parksReducer from "./parksStore";
-import itemsReducer from "./itemsStore";
-import packsReducer from "./packsStore";
-import favoritesReducer from "./favoritesStore";
-import feedReducer from "./feedStore";
-import singlePackReducer from "./singlePackStore";
-import singleTripReducer from "./singleTripStore";
-import tripsReducer from "./tripsStore";
-import gpxReducer from "./gpxStore";
-import destinationReducer from "./destinationStore";
-import chatReducer from "./chatStore";
-import globalItems from "./globalItemsStore";
-import userStore from "./userStore";
+import weatherReducer from './weatherStore';
+import dropdownReducer from './dropdownStore';
+import authReducer from './authStore';
+import trailsReducer from './trailsStore';
+import searchReducer from './searchStore';
+import parksReducer from './parksStore';
+import itemsReducer from './itemsStore';
+import packsReducer from './packsStore';
+import favoritesReducer from './favoritesStore';
+import feedReducer from './feedStore';
+import singlePackReducer from './singlePackStore';
+import singleTripReducer from './singleTripStore';
+import tripsReducer from './tripsStore';
+import gpxReducer from './gpxStore';
+import destinationReducer from './destinationStore';
+import chatReducer from './chatStore';
+import globalItems from './globalItemsStore';
+import userStore from './userStore';
+import offlineQueue from './offlineQueue';
+import progressReducer from './progressStore';
+import { type Reducer } from 'react';
 
 // combine reducers
-const rootReducer = combineReducers({
+const rootReducer: Reducer<RootState> = combineReducers({
   auth: authReducer,
   dropdown: dropdownReducer,
   search: searchReducer,
@@ -46,34 +52,37 @@ const rootReducer = combineReducers({
   chat: chatReducer,
   globalItems,
   userStore,
+  offlineQueue,
+  progress: progressReducer,
 });
-export type RootState = {
-  auth: typeof authReducer,
-  dropdown: typeof dropdownReducer,
-  search: typeof searchReducer,
-  weather: typeof weatherReducer,
-  trails: typeof trailsReducer,
-  parks: typeof parksReducer,
-  items: typeof itemsReducer,
-  packs: typeof packsReducer,
-  trips: typeof tripsReducer,
-  favorites: typeof favoritesReducer,
-  singlePack: typeof singlePackReducer,
-  singleTrip: typeof singleTripReducer,
-  feed: typeof feedReducer,
-  gpx: typeof gpxReducer,
-  destination: typeof destinationReducer,
-  chat: typeof chatReducer,
-  globalItems: typeof globalItems,
-  userStore: typeof userStore,
-};
 
+export interface RootState {
+  auth: typeof authReducer;
+  dropdown: typeof dropdownReducer;
+  search: typeof searchReducer;
+  weather: typeof weatherReducer;
+  trails: typeof trailsReducer;
+  parks: typeof parksReducer;
+  items: typeof itemsReducer;
+  packs: typeof packsReducer;
+  trips: typeof tripsReducer;
+  favorites: typeof favoritesReducer;
+  singlePack: typeof singlePackReducer;
+  singleTrip: typeof singleTripReducer;
+  feed: typeof feedReducer;
+  gpx: typeof gpxReducer;
+  destination: typeof destinationReducer;
+  chat: typeof chatReducer;
+  globalItems: typeof globalItems;
+  userStore: typeof userStore;
+  offlineQueue: typeof offlineQueue;
+}
 
 // configure persist store and whitelist reducers
-const persistConfig = {
-  key: "root",
+const persistConfig: PersistConfig<RootState> = {
+  key: 'root',
   storage: AsyncStorage,
-  whitelist: ["auth"], // add reducers to persist here
+  whitelist: ['auth', 'globalItems', 'offlineQueue'], // add reducers to persist here
 };
 
 // create persisted reducer
@@ -82,14 +91,16 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
-  getDefaultMiddleware({
+    getDefaultMiddleware({
       serializableCheck: {
         // Ignore these action types
-        ignoredActions: ["persist/PERSIST"],
+        ignoredActions: ['persist/PERSIST'],
       },
     }).concat(apiMessageMiddleware),
-  });
-  export type AppDispatch = typeof store.dispatch;
+});
+
+export type AppDispatch = typeof store.dispatch;
+
 const persistor = persistStore(store);
 
 export { store, persistor };

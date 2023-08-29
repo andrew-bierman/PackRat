@@ -2,12 +2,12 @@ import {
   createSlice,
   createAsyncThunk,
   createEntityAdapter,
-} from "@reduxjs/toolkit";
-import axios from "~/config/axios";
-import { api } from "../constants/api";
+} from '@reduxjs/toolkit';
+import axios from '~/config/axios';
+import { api } from '../constants/api';
 
 export const processGeoJSON = createAsyncThunk(
-  "destination/processGeoJSON",
+  'destination/processGeoJSON',
   async (data, { rejectWithValue }) => {
     try {
       // Make a POST request to the `${api}/osm/process/geojson` endpoint
@@ -19,15 +19,17 @@ export const processGeoJSON = createAsyncThunk(
       // Handle errors by returning the error response data using `rejectWithValue`
       return rejectWithValue(err.response.data);
     }
-  }
+  },
 );
 
 export const getDestination = createAsyncThunk(
-  "destination/getDestination",
+  'destination/getDestination',
   async (destinationId, { rejectWithValue }) => {
     try {
       // Make a GET request to the `${api}/osm/destination/${destinationId}` endpoint
-      const response = await axios.get(`${api}/osm/destination/${destinationId}`);
+      const response = await axios.get(
+        `${api}/osm/destination/${destinationId}`,
+      );
 
       // Return the response data
       return response.data;
@@ -35,11 +37,11 @@ export const getDestination = createAsyncThunk(
       // Handle errors by returning the error response data using `rejectWithValue`
       return rejectWithValue(err.response.data);
     }
-  }
+  },
 );
 
 export const photonDetails = createAsyncThunk(
-  "destination/photonDetails",
+  'destination/photonDetails',
   async (data, { rejectWithValue }) => {
     try {
       // Extract `osm_id` and `osm_type` from the `properties` object in `data`
@@ -48,11 +50,13 @@ export const photonDetails = createAsyncThunk(
 
       // Check if `osm_id` or `osm_type` is missing
       if (!osm_id || !osm_type) {
-        return rejectWithValue("Invalid request parameters");
+        return rejectWithValue('Invalid request parameters');
       }
 
       // Make a GET request to the `${api}/osm/photonDetails/${osm_type}/${osm_id}` endpoint
-      const response = await axios.get(`${api}/osm/photonDetails/${osm_type}/${osm_id}`);
+      const response = await axios.get(
+        `${api}/osm/photonDetails/${osm_type}/${osm_id}`,
+      );
 
       // Return the response data
       return response.data;
@@ -60,7 +64,7 @@ export const photonDetails = createAsyncThunk(
       // Handle errors by returning the error response data using `rejectWithValue`
       return rejectWithValue(err.response.data);
     }
-  }
+  },
 );
 
 // Create an entity adapter for the destination data
@@ -68,7 +72,7 @@ const destinationAdapter = createEntityAdapter();
 
 // Create a slice for the destination state
 const destinationSlice = createSlice({
-  name: "destination",
+  name: 'destination',
   initialState: destinationAdapter.getInitialState({
     // Initialize the state with default values
     data: null,
@@ -77,7 +81,7 @@ const destinationSlice = createSlice({
     selectedSearchResult: null,
     weatherObject: null,
     weatherWeek: null,
-    status: "idle",
+    status: 'idle',
     error: null,
   }),
   reducers: {
@@ -99,46 +103,46 @@ const destinationSlice = createSlice({
       state.weatherWeek = action.payload;
     },
   },
-  
+
   extraReducers: (builder) => {
     builder
       .addCase(processGeoJSON.pending, (state) => {
-        state.status = "loading";
+        state.status = 'loading';
       })
       .addCase(processGeoJSON.fulfilled, (state, action) => {
-        state.status = "succeeded";
+        state.status = 'succeeded';
         destinationAdapter.upsertOne(
           state.currentDestination,
-          action.payload.data.newInstance
+          action.payload.data.newInstance,
         );
       })
       .addCase(processGeoJSON.rejected, (state, action) => {
-        state.status = "failed";
+        state.status = 'failed';
         state.error = action.error.message;
       })
       .addCase(getDestination.pending, (state) => {
-        state.status = "loading";
+        state.status = 'loading';
       })
       .addCase(getDestination.fulfilled, (state, action) => {
-        state.status = "succeeded";
+        state.status = 'succeeded';
         destinationAdapter.upsertOne(
           state.currentDestination,
-          action.payload.data.destination
+          action.payload.data.destination,
         );
       })
       .addCase(getDestination.rejected, (state, action) => {
-        state.status = "failed";
+        state.status = 'failed';
         state.error = action.error.message;
       })
       .addCase(photonDetails.pending, (state) => {
-        state.status = "loading";
+        state.status = 'loading';
       })
       .addCase(photonDetails.fulfilled, (state, action) => {
-        state.status = "succeeded";
+        state.status = 'succeeded';
         state.photonDetails = action.payload; // assign data directly to state field
       })
       .addCase(photonDetails.rejected, (state, action) => {
-        state.status = "failed";
+        state.status = 'failed';
         state.error = action.error.message;
       });
   },

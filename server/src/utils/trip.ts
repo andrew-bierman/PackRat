@@ -1,4 +1,4 @@
-import Trip from "../models/tripModel";
+import Trip from '../models/tripModel';
 
 /**
  * Validates the trip data before creating a new trip.
@@ -37,7 +37,7 @@ export const tripValidation = async ({
     !packs ||
     !is_public
   ) {
-    throw new Error("All fields must be filled");
+    throw new Error('All fields must be filled');
   }
 
   const trip = await Trip.create({

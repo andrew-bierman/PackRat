@@ -5,5 +5,5 @@
  * @return {boolean} - True if the object is empty, false otherwise.
  */
 export function isObjectEmpty(obj) {
-    return Object.keys(obj).length === 0;
+  return Object.keys(obj).length === 0;
 }
