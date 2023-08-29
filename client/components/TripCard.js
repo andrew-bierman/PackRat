@@ -101,21 +101,8 @@ export default function TripCard({
       ) : isSearch ? (
         <SearchInput />
       ) : (
-        // isTrail ?
-
-        // <DropdownComponent
-        //   {...{
-        //     value: currentTrail,
-        //     data,
-        //     placeholder:"Select Trail",
-        //     isTrail,
-        //     onValueChange: handleValueChange,
-        //     width: 300,
-        //   }}
-        // />
-        // :
         <View style={{ width: '80%' }}>
-          <Carousel iconColor={isDark ? '#fff' : '#000'} itemWidth={150}>
+          <Carousel iconColor={isDark ? '#fff' : '#000'}>
             {data?.map((item) => {
               const selectedValue = isTrail ? currentTrail : currentPark;
               return (
