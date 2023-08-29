@@ -28,6 +28,7 @@ export const fetchSinglePack = createAsyncThunk(
     return response.data;
   },
 );
+
 export const selectItemsGlobal = createAsyncThunk(
   'Items/selectItemsGlobal',
   async (item) => {
@@ -49,7 +50,7 @@ export const selectItemsGlobal = createAsyncThunk(
 
 const singlePackSlice = createSlice({
   name: 'singlePack',
-  initialState,
+  initialState: initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
@@ -87,5 +88,6 @@ export const {
   selectById: selectSinglePackById,
   selectAll: selectAllSinglePacks,
 } = singlePackAdapter.getSelectors((state) => state.singlePack);
+export const { clearSinglePack } = singlePackSlice.actions;
 
 export default singlePackSlice.reducer;
