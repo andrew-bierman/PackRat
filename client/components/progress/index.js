@@ -1,47 +1,49 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-// import { Button, Progress } from 'tamagui';
-import { ProgressBar } from 'react-native-paper';
-import {
-  setCurrentProgress,
-  setTargetProgress,
-  resetProgress,
-} from '../../store/progressStore';
+import { useSelector } from 'react-redux';
+import { Progress } from 'native-base';
 import useTheme from '~/hooks/useTheme';
 
 const ProgressBarComponent = () => {
-  const { isDark, isLight, currentTheme } = useTheme();
-  const dispatch = useDispatch();
+  const { currentTheme } = useTheme();
   const reduxTargetValue = useSelector((state) => state.progress.targetValue);
-
-  // Using local state for immediate UI feedback.
   const [localCurrentValue, setLocalCurrentValue] = useState(0);
+  const [operationId, setOperationId] = useState(0);
 
   useEffect(() => {
-    if (localCurrentValue !== reduxTargetValue) {
-      const intervalId = setInterval(() => {
-        const step = (reduxTargetValue - localCurrentValue) * 0.05;
-        const newValue = localCurrentValue + step;
-        setLocalCurrentValue(newValue);
+    // Generate a new operation ID
+    const newOperationId = Math.random();
+    setOperationId(newOperationId);
 
-        // If the difference between target and current is negligible, set current to target
-        if (Math.abs(reduxTargetValue - localCurrentValue) < 1) {
-          setLocalCurrentValue(reduxTargetValue);
-          clearInterval(intervalId);
-        }
-      }, 0); // Reduced the interval for faster updates
+    // Reset local current value to start new progress
+    setLocalCurrentValue(0);
 
-      return () => clearInterval(intervalId);
+    function incrementProgress() {
+      if (
+        localCurrentValue < reduxTargetValue &&
+        operationId === newOperationId
+      ) {
+        setLocalCurrentValue((prevValue) => prevValue + 1);
+      }
     }
-  }, [localCurrentValue, reduxTargetValue]);
+
+    // Start the increment
+    incrementProgress();
+  }, [reduxTargetValue]);
+
+  useEffect(() => {
+    if (localCurrentValue < reduxTargetValue && operationId !== 0) {
+      setLocalCurrentValue((prevValue) => prevValue + 1);
+    }
+  }, [localCurrentValue, reduxTargetValue, operationId]);
 
   return (
-    <ProgressBar
-      progress={localCurrentValue}
-      style={{
-        backgroundColor: currentTheme.colors.background,
-        borderRadius: 0,
-      }}
+    <Progress
+      value={localCurrentValue}
+      colorScheme="success"
+      size="sm"
+      w="100%"
+      borderRadius={0}
+      bg={currentTheme.colors.background}
     />
   );
 };
