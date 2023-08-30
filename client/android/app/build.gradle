@@ -123,9 +123,9 @@ packagingOptions {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace 'com.andrewbierman.packratfront'
+    namespace 'com.andrewbierman.packrat'
     defaultConfig {
-        applicationId 'com.andrewbierman.packratfront'
+        applicationId 'com.andrewbierman.packrat'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

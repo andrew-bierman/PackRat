@@ -10,6 +10,8 @@ import {
   getEnhancedPhotonDetails,
 } from '../controllers/getOsm/index';
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
+import authTokenMiddleware from '../middleware/auth';
+import checkRole from '../middleware/checkRole';
 
 const router = express.Router();
 
@@ -41,7 +43,12 @@ const router = express.Router();
  *       '500':
  *         description: Error retrieving Photon results
  */
-router.get('/photon/search', tryCatchWrapper(getPhotonResults));
+router.get(
+  '/photon/search',
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
+  tryCatchWrapper(getPhotonResults),
+);
 
 /**
  * @swagger
@@ -73,7 +80,12 @@ router.get('/photon/search', tryCatchWrapper(getPhotonResults));
  *       500:
  *         description: Error retrieving Trails OSM results
  */
-router.get('/trails', tryCatchWrapper(getTrailsOSM));
+router.get(
+  '/trails',
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
+  tryCatchWrapper(getTrailsOSM),
+);
 
 /**
  * @swagger
@@ -105,7 +117,12 @@ router.get('/trails', tryCatchWrapper(getTrailsOSM));
  *       '500':
  *         description: Error retrieving Parks OSM results
  */
-router.get('/parks', tryCatchWrapper(getParksOSM));
+router.get(
+  '/parks',
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
+  tryCatchWrapper(getParksOSM),
+);
 
 /**
  * @swagger
@@ -144,7 +161,12 @@ router.get('/parks', tryCatchWrapper(getParksOSM));
  *       '500':
  *         description: Error retrieving Overpass Data
  */
-router.post('/osm', tryCatchWrapper(getOsm));
+router.post(
+  '/osm',
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
+  tryCatchWrapper(getOsm),
+);
 
 /**
  * @swagger
@@ -169,7 +191,12 @@ router.post('/osm', tryCatchWrapper(getOsm));
  *       '500':
  *         description: Error processing request
  */
-router.post('/process/geojson', tryCatchWrapper(postSingleGeoJSON));
+router.post(
+  '/process/geojson',
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
+  tryCatchWrapper(postSingleGeoJSON),
+);
 
 /**
  * @swagger
@@ -192,7 +219,12 @@ router.post('/process/geojson', tryCatchWrapper(postSingleGeoJSON));
  *       '500':
  *         description: Error retrieving destination
  */
-router.get('/destination/:id', tryCatchWrapper(getDestination));
+router.get(
+  '/destination/:id',
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
+  tryCatchWrapper(getDestination),
+);
 
 /**
  * @swagger
@@ -221,7 +253,12 @@ router.get('/destination/:id', tryCatchWrapper(getDestination));
  *       '500':
  *         description: Error retrieving Photon details
  */
-router.get('/photonDetails/:type/:id', tryCatchWrapper(getPhotonDetails));
+router.get(
+  '/photonDetails/:type/:id',
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
+  tryCatchWrapper(getPhotonDetails),
+);
 // router.get("/photonDetails/:type/:id", getEnhancedPhotonDetails)
 
 export default router;

@@ -10,7 +10,7 @@ import { InformUser } from '../utils/ToastUtils';
 export const addPack = createAsyncThunk('packs/addPack', async (newPack) => {
   // console.log(newPack, "this is new pack")
   const response = await axios.post(`${api}/pack/`, newPack);
-  // console.log(response.data, 'this is response from server');
+
   return response.data;
 });
 

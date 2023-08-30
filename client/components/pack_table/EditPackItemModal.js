@@ -2,6 +2,7 @@ import React from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 import { AddItem } from '../item/AddItem';
 import { CustomModal } from '../modal';
+import { Box } from 'native-base';
 
 export const EditPackItemModal = ({
   initialData,
@@ -32,33 +33,28 @@ export const EditPackItemModal = ({
   ];
 
   return (
-    <CustomModal
-      isActive={isModalOpen}
-      title={'Edit Item'}
-      triggerComponent={
-        <MaterialIcons
-          name="edit"
-          size={20}
-          color="black"
-          onPress={onTrigger}
+    <Box>
+      <CustomModal
+        isActive={isModalOpen}
+        title={'Edit Item'}
+        triggerComponent={<MaterialIcons name="edit" size={20} color="black" />}
+        onTrigger={onTrigger}
+        footerButtons={footerButtons}
+        onCancel={closeModalHandler}
+      >
+        <AddItem
+          _id={packId}
+          packId={currentPackId}
+          isEdit={true}
+          initialData={initialData}
+          editAsDuplicate={editAsDuplicate}
+          setPage={setPage}
+          page={page}
+          closeModalHandler={closeModalHandler}
+          setRefetch={setRefetch}
+          refetch={refetch}
         />
-      }
-      onTrigger={onTrigger}
-      footerButtons={footerButtons}
-      onCancel={closeModalHandler}
-    >
-      <AddItem
-        _id={packId}
-        packId={currentPackId}
-        isEdit={true}
-        initialData={initialData}
-        editAsDuplicate={editAsDuplicate}
-        setPage={setPage}
-        page={page}
-        closeModalHandler={closeModalHandler}
-        setRefetch={setRefetch}
-        refetch={refetch}
-      />
-    </CustomModal>
+      </CustomModal>
+    </Box>
   );
 };
