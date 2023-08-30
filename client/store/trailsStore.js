@@ -5,6 +5,7 @@ import {
 } from '@reduxjs/toolkit';
 import axios from '~/config/axios';
 import { api } from '../constants/api';
+import { trpc } from '../trpc';
 
 export const fetchTrails = createAsyncThunk(
   'trails/fetchTrails',
@@ -21,9 +22,11 @@ export const fetchTrails = createAsyncThunk(
     const url = api + '/osm/trails' + params;
 
     try {
-      const response = await axios.get(url);
-      const trails = response.data.features;
+      // const response = await axios.get(url);
+      // const trails = response.data.features;
 
+      const response = await trpc.getTrailsOSM.query({ lat, lon, radius });
+      const trails = response.features;
       const filteredTrails = trails
         .filter(
           (trail) =>

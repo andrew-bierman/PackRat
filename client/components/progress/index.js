@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 // import { Button, Progress } from 'tamagui';
-import { ProgressBar } from 'react-native-paper'
+import { ProgressBar } from 'react-native-paper';
 import {
   setCurrentProgress,
   setTargetProgress,
@@ -39,12 +39,10 @@ const ProgressBarComponent = () => {
     <ProgressBar
       progress={localCurrentValue}
       style={{
-        backgroundColor:currentTheme.colors.background,
+        backgroundColor: currentTheme.colors.background,
         borderRadius: 0,
       }}
-  
     />
-    
   );
 };
 
