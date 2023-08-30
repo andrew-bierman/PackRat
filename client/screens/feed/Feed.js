@@ -216,8 +216,6 @@ const Feed = ({ feedType = 'public' }) => {
     // if searchQuery is empty, use the original data
     data = searchQuery ? results.map((result) => result.item) : data;
 
-    // console.log("data", data);
-
     const feedSearchFilterComponent = (
       <FeedSearchFilter
         feedType={feedType}
