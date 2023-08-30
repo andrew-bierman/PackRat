@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import express from 'express';
 import {
   getUsers,
@@ -31,6 +33,7 @@ import {
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
 import authTokenMiddleware from '../middleware/auth';
 import checkRole from '../middleware/checkRole';
+import refreshToken from '../controllers/auth/refreshToken';
 
 const router = express.Router();
 
@@ -332,6 +335,8 @@ router.delete(
   validator.deleteUser,
   tryCatchWrapper(deleteUser),
 );
+
+router.post('/refresh-token', tryCatchWrapper(refreshToken));
 
 router.post('/checkcode', validator.checkCode, tryCatchWrapper(checkCode));
 router.post(

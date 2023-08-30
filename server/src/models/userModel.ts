@@ -10,6 +10,7 @@ export interface IUser extends Document {
   password: string;
   email: string;
   token: string;
+  refreshToken: string;
   googleId?: string;
   code?: string;
   is_certified_guide?: boolean;
@@ -48,6 +49,10 @@ const UserSchema = new Schema<IUser>(
       },
     },
     token: {
+      type: String,
+      trim: true,
+    },
+    refreshToken: {
       type: String,
       trim: true,
     },
@@ -149,15 +154,31 @@ UserSchema.pre<IUser>('save', async function (next) {
   next();
 });
 
-UserSchema.methods.generateAuthToken = async function (): Promise<string> {
+UserSchema.methods.generateAuthToken = async function (): Promise<{
+  accessToken: string;
+  refreshToken: string;
+}> {
   const user = this;
   if (!JWT_SECRET) throw new Error('JWT_SECRET is not defined');
-  const token = await jwt.sign({ _id: user._id.toString() }, JWT_SECRET, {
-    expiresIn: '7 days',
+
+  const accessToken = await jwt.sign({ _id: user._id.toString() }, JWT_SECRET, {
+    expiresIn: '1h', // short-lived access token
   });
-  user.token = token;
+
+  const refreshToken = await jwt.sign(
+    { _id: user._id.toString(), type: 'refresh' },
+    JWT_SECRET,
+    {
+      expiresIn: '7 days', // long-lived refresh token
+    },
+  );
+
+  user.token = accessToken;
+  user.refreshToken = refreshToken;
+
   await user.save();
-  return token;
+
+  return { accessToken, refreshToken };
 };
 
 UserSchema.methods.generateResetToken = async function (): Promise<string> {
