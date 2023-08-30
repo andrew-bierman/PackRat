@@ -26,6 +26,6 @@ export const getDestination = async (req, res, next) => {
 export function getDestinationRoute() {
   return publicProcedure.input(z.object({ id: z.string() })).query(async (opts) => {
     const { id } = opts.input;
-    return await getDestinationService(id);
+    return getDestinationService(id);
   })
 }

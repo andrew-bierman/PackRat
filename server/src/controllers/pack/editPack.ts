@@ -29,6 +29,6 @@ export const editPack = async (req, res, next) => {
 export function editPackRoute() {
   return publicProcedure.input(validator.editPack).mutation(async (opts) => {
     const { _id } = opts.input;
-    return await editPackService(_id, opts.input);
+    return editPackService(_id, opts.input);
   });
 }
