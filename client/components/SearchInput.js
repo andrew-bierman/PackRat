@@ -139,7 +139,6 @@ export const SearchInput = ({ onSelect, placeholder }) => {
     setSearchString(name);
     setShowSearchResults(false);
     dispatch(setSelectedSearchResult(result));
-    // dispatch(clearSearchResults());
 
     if (onSelect) {
       onSelect(result);
@@ -173,22 +172,17 @@ export const SearchInput = ({ onSelect, placeholder }) => {
               />
             }
             InputRightElement={
-              showSearchResults && (
-                <IconButton
-                  mr={2}
-                  icon={
-                    <Icon
-                      as={<MaterialIcons name="close" />}
-                      m="0"
-                      size="4"
-                      color="gray.400"
-                    />
-                  }
+              searchString && (
+                <Button
                   onPress={() => {
                     setShowSearchResults(false);
                     setSearchString('');
+                    dispatch(clearSearchResults());
                   }}
-                />
+                  backgroundColor={'transparent'}
+                >
+                  <MaterialIcons name="close" />
+                </Button>
               )
             }
           />
