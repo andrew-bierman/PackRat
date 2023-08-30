@@ -29,7 +29,6 @@ export function TripDetails() {
   const dispatch = useDispatch();
 
   const { tripId } = useSearchParams();
-  // console.log("🚀 ~ file: TripDetails.js:29 ~ TripDetails ~ tripId:", tripId)
 
   const link = `${CLIENT_URL}/trip/${tripId}`;
 
