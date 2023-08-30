@@ -14,6 +14,8 @@ import {
 } from '../controllers/item/index';
 import * as validator from '../middleware/validators/index';
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
+import authTokenMiddleware from '../middleware/auth';
+import checkRole from '../middleware/checkRole';
 
 const router = express.Router();
 
@@ -41,7 +43,13 @@ const router = express.Router();
  *      200:
  *        description: Successful response
  */
-router.get('/packItems/:packId', validator.getItems, tryCatchWrapper(getItems));
+router.get(
+  '/packItems/:packId',
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
+  validator.getItems,
+  tryCatchWrapper(getItems),
+);
 
 /**
  * @swagger
@@ -60,7 +68,13 @@ router.get('/packItems/:packId', validator.getItems, tryCatchWrapper(getItems));
  *      200:
  *        description: Successful response
  */
-router.get('/i/:packId', validator.getItemById, tryCatchWrapper(getItemById));
+router.get(
+  '/i/:packId',
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
+  validator.getItemById,
+  tryCatchWrapper(getItemById),
+);
 
 /**
  * @swagger
@@ -79,7 +93,12 @@ router.get('/i/:packId', validator.getItemById, tryCatchWrapper(getItemById));
  *       200:
  *         description: Successful response
  */
-router.get('/search', tryCatchWrapper(searchItemsByName));
+router.get(
+  '/search',
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
+  tryCatchWrapper(searchItemsByName),
+);
 
 /**
  * @swagger
@@ -109,7 +128,13 @@ router.get('/search', tryCatchWrapper(searchItemsByName));
  *      200:
  *        description: Successful response
  */
-router.post('/', validator.addItem, tryCatchWrapper(addItem));
+router.post(
+  '/',
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
+  validator.addItem,
+  tryCatchWrapper(addItem),
+);
 
 /**
  * @swagger
@@ -139,7 +164,13 @@ router.post('/', validator.addItem, tryCatchWrapper(addItem));
  *      200:
  *        description: Successful response
  */
-router.put('/', validator.editItem, tryCatchWrapper(editItem));
+router.put(
+  '/',
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
+  validator.editItem,
+  tryCatchWrapper(editItem),
+);
 
 /**
  * @swagger
@@ -161,7 +192,13 @@ router.put('/', validator.editItem, tryCatchWrapper(editItem));
  *      200:
  *        description: Successful response
  */
-router.delete('/', validator.deleteItem, tryCatchWrapper(deleteItem));
+router.delete(
+  '/',
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
+  validator.deleteItem,
+  tryCatchWrapper(deleteItem),
+);
 
 /**
  * @swagger
@@ -191,7 +228,13 @@ router.delete('/', validator.deleteItem, tryCatchWrapper(deleteItem));
  *      200:
  *        description: Successful response
  */
-router.post('/global', validator.addItemGlobal, tryCatchWrapper(addItemGlobal));
+router.post(
+  '/global',
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
+  validator.addItemGlobal,
+  tryCatchWrapper(addItemGlobal),
+);
 
 /**
  * @swagger
@@ -206,7 +249,12 @@ router.post('/global', validator.addItemGlobal, tryCatchWrapper(addItemGlobal));
  *      200:
  *        description: Successful response
  */
-router.get('/global', tryCatchWrapper(getItemsGlobally));
+router.get(
+  '/global',
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
+  tryCatchWrapper(getItemsGlobally),
+);
 
 /**
  * @swagger
@@ -221,7 +269,12 @@ router.get('/global', tryCatchWrapper(getItemsGlobally));
  *      200:
  *        description: Successful response
  */
-router.post('/global/select/:packId', tryCatchWrapper(addGlobalItemToPack));
+router.post(
+  '/global/select/:packId',
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
+  tryCatchWrapper(addGlobalItemToPack),
+);
 /**
  * @swagger
  * /item/:
@@ -235,7 +288,12 @@ router.post('/global/select/:packId', tryCatchWrapper(addGlobalItemToPack));
  *      200:
  *        description: Successful response
  */
-router.put('/global/:itemId', tryCatchWrapper(editGlobalItemAsDuplicate));
+router.put(
+  '/global/:itemId',
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
+  tryCatchWrapper(editGlobalItemAsDuplicate),
+);
 
 /**
  * @swagger
@@ -257,6 +315,11 @@ router.put('/global/:itemId', tryCatchWrapper(editGlobalItemAsDuplicate));
  *      200:
  *        description: Successful response
  */
-router.delete('/global/:itemId', tryCatchWrapper(deleteGlobalItem));
+router.delete(
+  '/global/:itemId',
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
+  tryCatchWrapper(deleteGlobalItem),
+);
 
 export default router;
