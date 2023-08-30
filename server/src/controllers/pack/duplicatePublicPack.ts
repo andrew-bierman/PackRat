@@ -1,6 +1,7 @@
 import { UnableToDuplicatePackError } from '../../helpers/errors';
 import { duplicatePublicPackService } from '../../services/pack/pack.service';
-
+import * as validator from '../../middleware/validators/index';
+import { publicProcedure } from '../../trpc';
 /**
  * Duplicates a public pack.
  * @param {Object} req - the request object
@@ -21,3 +22,10 @@ export const duplicatePublicPack = async (req, res, next) => {
     next(UnableToDuplicatePackError);
   }
 };
+
+export function duplicatePublicPackRoute() {
+  return publicProcedure.input(validator.duplicatePublicPack).mutation(async (opts) => {
+    const { packId, ownerId, items } = opts.input;
+    return duplicatePublicPackService(packId, ownerId, items);
+  });
+}

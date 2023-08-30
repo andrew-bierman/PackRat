@@ -1,5 +1,6 @@
+import { publicProcedure } from '../../trpc';
 import User from '../../models/userModel';
-
+import * as validator from '../../middleware/validators/index';
 /**
  * Resets the user's password.
  * @param {Object} req - The request object.
@@ -18,3 +19,14 @@ export const resetPassword = async (req, res) => {
     statusCode: 200,
   });
 };
+
+export function resetPasswordRoute() {
+  return publicProcedure
+    .input(validator.resetPassword).mutation(async (opts) => {
+      const { resetToken, password } = opts.input;
+      const user = await (User as any).validateResetToken(resetToken);
+      user.password = password;
+      await user.save();
+      return "Successfully reset password";
+    })
+}

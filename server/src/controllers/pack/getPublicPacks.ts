@@ -1,6 +1,8 @@
+import { publicProcedure } from '../../trpc';
 import { PackNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { getPublicPacksService } from '../../services/pack/pack.service';
+import { z } from 'zod';
 
 /**
  * Retrieves public packs based on the given query parameter.
@@ -21,3 +23,10 @@ export const getPublicPacks = async (req, res, next) => {
     next(PackNotFoundError);
   }
 };
+
+export function getPublicPacksRoute() {
+  return publicProcedure.input(z.object({ queryBy: z.string() })).query(async (opts) => {
+    const { queryBy } = opts.input;
+    return getPublicPacksService(queryBy);
+  });
+}

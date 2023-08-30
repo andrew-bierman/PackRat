@@ -2,6 +2,8 @@ import User, { type IUser } from '../models/userModel';
 import jwt, { type JwtPayload } from 'jsonwebtoken';
 import { JWT_SECRET } from '../config';
 import { type Request, type Response, type NextFunction } from 'express';
+import { middleware } from '../trpc';
+import { TRPCError } from '@trpc/server';
 import { z, ZodError } from 'zod';
 import { TokenSchema } from './validators/authTokenValidator';
 
@@ -13,6 +15,25 @@ declare global {
     }
   }
 }
+
+// export const authMiddleware = middleware(async (opts) => {
+//   const ctx = opts.ctx;
+//   try {
+//     const token: any = ctx.input.header('Authorization')?.replace('Bearer ', '');
+//     const decoded: any = jwt.verify(token, JWT_SECRET ?? '');
+//     const user: any = await User.findOne({
+//       _id: decoded._id,
+//       token,
+//     });
+//     if (!user) throw new Error();
+//     ctx.set('token', token);
+//     ctx.set('user', user);
+//     return opts.next() // Call the next middleware or procedure
+//   } catch (err) {
+//     console.error(err);
+//     throw new TRPCError({ code: 'UNAUTHORIZED' });
+//   }
+// });
 
 /**
  * Extracts the token from the request header.

@@ -11,6 +11,9 @@ import helmet from 'helmet';
 import compression from 'compression';
 import morgan from 'morgan';
 import { limiter } from './helpers/limiter';
+import * as trpcExpress from "@trpc/server/adapters/express";
+import { inferAsyncReturnType, initTRPC } from "@trpc/server";
+import { appRouter } from './routes/trpcRouter';
 
 const app = express();
 
@@ -54,7 +57,22 @@ app.use(
     next(err);
   },
 );
+const createContext = ({
+  req,
+  res,
+}: trpcExpress.CreateExpressContextOptions) => ({ req, res });
 
+export type Context = inferAsyncReturnType<typeof createContext>;
+
+app.use(
+  "/api/trpc",
+  trpcExpress.createExpressMiddleware({
+    router: appRouter,
+    createContext,
+  })
+);
+
+// Celebrate middleware to return validation errors
 // Middleware provided by Celebrate to format and return validation errors to the client.
 app.use(errors());
 

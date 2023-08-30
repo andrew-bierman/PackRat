@@ -17,7 +17,8 @@ import {
 import { OAuth2Client } from 'google-auth-library';
 import utilsService from '../../utils/utils.service';
 import { responseHandler } from '../../helpers/responseHandler';
-
+import { publicProcedure } from '../../trpc';
+import z from 'zod';
 const client = new OAuth2Client(
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
@@ -129,3 +130,54 @@ passport.deserializeUser((id, done) => {
     done(err, user);
   });
 });
+
+export function googleSigninRoute() {
+  return publicProcedure.input(z.object({ idToken: z.string().nonempty() })).query(async (opts) => {
+    const { idToken } = opts.input;
+
+    const decodedToken: any = jwt.decode(idToken);
+    if (!decodedToken) {
+      throw new Error('Invalid ID token');
+    }
+
+    const { email, name, sub: googleId } = decodedToken;
+
+    const alreadyGoogleSignin = await User.findOne({ email, googleId });
+    if (!alreadyGoogleSignin) {
+      const isLocalLogin = await User.findOne({ email });
+
+      if (isLocalLogin) {
+        throw new Error('Already user registered on that email address');
+      }
+
+      const randomPassword = utilsService.randomPasswordGenerator(8);
+      // const randomPassword = '1234abcdefg5678';
+
+      const user = new User({
+        email,
+        name,
+        password: randomPassword,
+        googleId,
+      });
+
+      await user.save(); // save the user without callback
+
+      await user.generateAuthToken();
+
+      sendWelcomeEmail(user.email, user.name);
+      return user
+    } else {
+      if (!alreadyGoogleSignin.password) {
+        alreadyGoogleSignin.password = utilsService.randomPasswordGenerator(8);
+      }
+
+      alreadyGoogleSignin.googleId = googleId;
+
+      await alreadyGoogleSignin.generateAuthToken();
+
+      await alreadyGoogleSignin.save();
+
+      return { user: alreadyGoogleSignin };
+    }
+  })
+}

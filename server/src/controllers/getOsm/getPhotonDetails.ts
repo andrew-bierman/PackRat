@@ -5,6 +5,8 @@ import {
   RetrievingPhotonDetailsError,
 } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
+import { z } from 'zod';
+import { publicProcedure } from '../../trpc';
 
 /**
  * Retrieves Photon details based on the provided ID and type.
@@ -61,3 +63,46 @@ export const getPhotonDetails = async (req, res, next) => {
     next(RetrievingPhotonDetailsError);
   }
 };
+
+
+export function getPhotonDetailsRoute() {
+  return publicProcedure.input(z.object({ id: z.string(), type: z.string() })).query(async (opts) => {
+    let { id, type } = opts.input;
+
+    type = type.toLowerCase(); // Standardize osm_type to be lowercase
+
+    switch (type) {
+      case 'way':
+      case 'w':
+        type = 'way';
+        break;
+      case 'node':
+      case 'n':
+        type = 'node';
+        break;
+      case 'relation':
+      case 'r':
+        type = 'relation';
+        break;
+      default:
+        break
+    }
+
+    const overpassUrl = process.env.OSM_URI;
+
+    const overpassQuery = `[out:json][timeout:25];${type}(${id});(._;>;);out body;`;
+
+    console.log('overpassQuery', overpassQuery);
+    const response = await axios.post(overpassUrl, overpassQuery, {
+      headers: { 'Content-Type': 'text/plain' },
+    });
+
+    // console.log("response", response);
+
+    const geojsonData = osmtogeojson(response.data);
+
+    // await updateDatabaseWithGeoJSONDataFromOverpass(geojsonData);
+
+    return geojsonData
+  })
+}
