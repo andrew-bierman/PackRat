@@ -20,12 +20,12 @@ import Header from '../screens/header';
 
 export default function HomeLayout() {
   // TODO - move this to a separate provider + redux store
-  useEffect(() => {
-    checkNetworkConnected.then((res) => {
-      // console.log('line 23 ', res);
-      store.dispatch(setNetworkStatus(res));
-    });
-  }, []);
+  // useEffect(() => {
+  //   checkNetworkConnected.then((res) => {
+  //     // console.log('line 23 ', res);
+  //     store.dispatch(setNetworkStatus(res));
+  //   });
+  // }, []);
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
