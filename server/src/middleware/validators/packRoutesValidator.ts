@@ -1,11 +1,11 @@
 import { z } from 'zod';
 
-const JoiObjectId = (message: any = 'valid id'): z.ZodString =>
+export const JoiObjectId = (message: any = "valid id"): z.ZodString =>
   z.string().regex(/^[0-9a-fA-F]{24}$/, { message });
+
 
 export const getPacks = z.object({
   ownerId: JoiObjectId(),
-  queryBy: z.string().optional(),
 });
 
 export const getPackById = z.object({

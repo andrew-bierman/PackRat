@@ -32,6 +32,6 @@ export function addGlobalItemToPackRoute() {
     ownerId: z.string(),
   })).query(async (opts) => {
     const { packId, itemId, ownerId } = opts.input;
-    return await addGlobalItemToPackService(packId, itemId, ownerId);
+    return addGlobalItemToPackService(packId, itemId, ownerId);
   })
 }
