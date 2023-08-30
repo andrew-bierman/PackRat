@@ -1,7 +1,8 @@
 import { UnableToDeleteItemError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { deleteItemService } from '../../services/item/item.service';
-
+import * as validator from '../../middleware/validators/index';
+import { publicProcedure } from '../../trpc';
 /**
  * Deletes an item from the database.
  * @param {Object} req - The request object.
@@ -22,3 +23,11 @@ export const deleteItem = async (req, res, next) => {
     next(UnableToDeleteItemError);
   }
 };
+
+export function deleteItemRoute() {
+  return publicProcedure.input(validator.deleteItem)
+    .mutation(async (opts) => {
+      const { itemId, packId } = opts.input;
+      return deleteItemService(itemId, packId);
+    });
+}

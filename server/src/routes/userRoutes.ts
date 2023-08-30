@@ -29,6 +29,7 @@ import {
   checkCode,
 } from '../controllers/auth/index';
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
+import { zodParser } from '../middleware/validators/zodParser';
 
 const router = express.Router();
 
@@ -74,7 +75,7 @@ router.get('/', tryCatchWrapper(getUsers));
  *       '500':
  *         description: Error retrieving the user
  */
-router.get('/:userId', validator.getUserById, tryCatchWrapper(getUserById));
+router.get('/:userId', (req, res) => zodParser(validator.getUserById, req.body), tryCatchWrapper(getUserById));
 
 // router.post("/", addUser);
 
@@ -103,7 +104,7 @@ router.get('/:userId', validator.getUserById, tryCatchWrapper(getUserById));
  *       '500':
  *         description: Error signing in
  */
-router.post('/signin', validator.userSignIn, tryCatchWrapper(userSignIn));
+router.post('/signin', (req, res) => zodParser(validator.userSignIn, req.body), tryCatchWrapper(userSignIn));
 
 /**
  * @swagger
@@ -132,7 +133,7 @@ router.post('/signin', validator.userSignIn, tryCatchWrapper(userSignIn));
  *       '500':
  *         description: Error signing up
  */
-router.post('/signup', validator.userSignUp, tryCatchWrapper(userSignup));
+router.post('/signup', (req, res) => zodParser(validator.userSignUp, req.body), tryCatchWrapper(userSignup));
 
 /**
  * @swagger
@@ -159,7 +160,7 @@ router.post('/signup', validator.userSignUp, tryCatchWrapper(userSignup));
  */
 router.post(
   '/reset-password-email',
-  validator.sentEmail,
+  (req, res) => zodParser(validator.sentEmail, req.body),
   tryCatchWrapper(sentEmail),
 );
 
@@ -190,7 +191,7 @@ router.post(
  */
 router.post(
   '/reset-password',
-  validator.resetPassword,
+  (req, res) => zodParser(validator.checkCode, req.body),
   tryCatchWrapper(resetPassword),
 );
 
@@ -276,7 +277,7 @@ router.post('/google', tryCatchWrapper(signInGoogle));
  *       '500':
  *         description: Error editing the user
  */
-router.put('/', validator.editUser, tryCatchWrapper(editUser));
+router.put('/', (req, res) => zodParser(validator.editUser, req.body), tryCatchWrapper(editUser));
 
 /**
  * @swagger
@@ -301,17 +302,17 @@ router.put('/', validator.editUser, tryCatchWrapper(editUser));
  *       '500':
  *         description: Error deleting the user
  */
-router.delete('/', validator.deleteUser, tryCatchWrapper(deleteUser));
+router.delete('/', (req, res) => zodParser(validator.deleteUser, req.body), tryCatchWrapper(deleteUser));
 
-router.post('/checkcode', validator.checkCode, tryCatchWrapper(checkCode));
+router.post('/checkcode', (req, res) => zodParser(validator.checkCode, req.body), tryCatchWrapper(checkCode));
 router.post(
   '/updatepassword',
-  validator.updatePassword,
+  (req, res) => zodParser(validator.updatePassword, req.body),
   tryCatchWrapper(updatePassword),
 );
 router.post(
   '/emailexists',
-  validator.emailExists,
+  (req, res) => zodParser(validator.emailExists, req.body),
   tryCatchWrapper(emailExists),
 );
 

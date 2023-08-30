@@ -3,7 +3,8 @@ import bycrypt from 'bcrypt';
 import bcrypt from 'bcrypt';
 import { sendWelcomeEmail, resetEmail } from '../../utils/accountEmail';
 import { JWT_SECRET } from '../../config';
-
+import { publicProcedure } from '../../trpc';
+import * as validator from '../../middleware/validators/index';
 /**
  * Sign up a user.
  * @param {Object} req - The request object.
@@ -21,3 +22,19 @@ export const userSignup = async (req, res) => {
   sendWelcomeEmail(user.email, user.name);
   res.status(201).send({ user });
 };
+
+export function signUpRoute() {
+  return publicProcedure
+    .input(validator.userSignUp)
+    .mutation(async (opts) => {
+      let { email, password } = opts.input
+      await (User as any).alreadyLogin(email);
+      const salt = await bcrypt.genSalt(parseInt(JWT_SECRET));
+      password = await bycrypt.hash(password, salt);
+      const user = new User(opts.input);
+      await user.save();
+      await user.generateAuthToken();
+      sendWelcomeEmail(user.email, user.name);
+      return user
+    });
+}

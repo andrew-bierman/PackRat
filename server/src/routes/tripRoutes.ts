@@ -9,6 +9,7 @@ import {
 } from '../controllers/trip/index';
 import * as validator from '../middleware/validators/index';
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
+import { zodParser } from '../middleware/validators/zodParser';
 
 const router = express.Router();
 
@@ -49,7 +50,7 @@ router.get('/', tryCatchWrapper(getPublicTrips));
  *       200:
  *         description: Successful response
  */
-router.get('/:ownerId', validator.getTrips, tryCatchWrapper(getTrips));
+router.get('/:ownerId', (req, res) => zodParser(validator.getTrips, req.body), tryCatchWrapper(getTrips));
 
 /**
  * @swagger
@@ -68,7 +69,7 @@ router.get('/:ownerId', validator.getTrips, tryCatchWrapper(getTrips));
  *       200:
  *         description: Successful response
  */
-router.get('/t/:tripId', validator.getTripById, tryCatchWrapper(getTripById));
+router.get('/t/:tripId', (req, res) => zodParser(validator.getTripById, req.body), tryCatchWrapper(getTripById));
 
 /**
  * @swagger
@@ -112,7 +113,7 @@ router.get('/t/:tripId', validator.getTripById, tryCatchWrapper(getTripById));
  *       200:
  *         description: Successful response
  */
-router.post('/', validator.addTrip, tryCatchWrapper(addTrip));
+router.post('/', (req, res) => zodParser(validator.addTrip, req.body), tryCatchWrapper(addTrip));
 
 /**
  * @swagger
@@ -158,7 +159,7 @@ router.post('/', validator.addTrip, tryCatchWrapper(addTrip));
  *       200:
  *         description: Successful response
  */
-router.put('/', validator.editTrip, tryCatchWrapper(editTrip));
+router.put('/', (req, res) => zodParser(validator.editTrip, req.body), tryCatchWrapper(editTrip));
 
 /**
  * @swagger
@@ -180,6 +181,6 @@ router.put('/', validator.editTrip, tryCatchWrapper(editTrip));
  *       200:
  *         description: Successful response
  */
-router.delete('/', validator.deleteTrip, tryCatchWrapper(deleteTrip));
+router.delete('/', (req, res) => zodParser(validator.deleteTrip, req.body), tryCatchWrapper(deleteTrip));
 
 export default router;

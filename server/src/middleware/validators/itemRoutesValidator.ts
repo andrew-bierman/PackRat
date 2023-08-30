@@ -1,8 +1,6 @@
 import { z } from "zod";
 import { Request } from "express";
 
-type ZodParserFunction = (schema: z.ZodSchema<any>, input: any) => any;
-
 /**
  * Creates a Zod validation rule for MongoDB ObjectIds.
  *
@@ -12,73 +10,42 @@ type ZodParserFunction = (schema: z.ZodSchema<any>, input: any) => any;
 export const JoiObjectId = (message = "valid id") =>
   z.string().regex(/^[0-9a-fA-F]{24}$/, { message });
 
-const zodParser: ZodParserFunction = (schema, input) => schema.parse(input);
+export const getItems = z.object({
+  packId: JoiObjectId(),
+});
 
-export const getItems = (req: Request) => {
-  zodParser(
-    z.object({
-      packId: JoiObjectId(),
-    }),
-    req.params
-  );
-};
+export const getItemById = z.object({
+  _id: JoiObjectId(),
+});
 
-export const getItemById = (req: Request) => {
-  zodParser(
-    z.object({
-      _id: JoiObjectId(),
-    }),
-    req.body
-  );
-};
+export const addItem = z.object({
+  name: z.string().nonempty(),
+  weight: z.string().nonempty(),
+  quantity: z.string().nonempty(),
+  unit: z.string().nonempty(),
+  packId: JoiObjectId(),
+  type: z.string().optional(),
+  ownerId:z.string().optional(),
+});
 
-export const addItem = (req: Request) => {
-  zodParser(
-    z.object({
-      name: z.string().nonempty(),
-      weight: z.string().nonempty(),
-      quantity: z.string().nonempty(),
-      unit: z.string().nonempty(),
-      packId: JoiObjectId(),
-      type: z.string().optional(),
-    }),
-    req.body
-  );
-};
+export const editItem = z.object({
+  _id: JoiObjectId(),
+  name: z.string().nonempty(),
+  weight: z.string().nonempty(),
+  quantity: z.string().nonempty(),
+  unit: z.string().nonempty(),
+  type: z.string(),
+});
 
-export const editItem = (req: Request) => {
-  zodParser(
-    z.object({
-      _id: JoiObjectId(),
-      name: z.string().nonempty(),
-      weight: z.string().nonempty(),
-      quantity: z.string().nonempty(),
-      unit: z.string().nonempty(),
-      type: z.string(),
-    }),
-    req.body
-  );
-};
+export const deleteItem = z.object({
+  itemId: JoiObjectId().nonempty(),
+  packId: JoiObjectId().nonempty(),
+});
 
-export const deleteItem = (req: Request) => {
-  zodParser(
-    z.object({
-      itemId: JoiObjectId().nonempty(),
-      packId: JoiObjectId().nonempty(),
-    }),
-    req.body
-  );
-};
-
-export const addItemGlobal = (req: Request) => {
-  zodParser(
-    z.object({
-      name: z.string().nonempty(),
-      weight: z.string().nonempty(),
-      quantity: z.string().nonempty(),
-      unit: z.string().nonempty(),
-      type: z.string().optional(),
-    }),
-    req.body
-  );
-};
+export const addItemGlobal = z.object({
+  name: z.string().nonempty(),
+  weight: z.string().nonempty(),
+  quantity: z.string().nonempty(),
+  unit: z.string().nonempty(),
+  type: z.string().optional(),
+});

@@ -1,3 +1,4 @@
+import { publicProcedure } from '../../trpc';
 import { ItemNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { getItemsGloballyService } from '../../services/item/item.service';
@@ -18,3 +19,9 @@ export const getItemsGlobally = async (req, res, next) => {
     next(ItemNotFoundError);
   }
 };
+
+export function getItemsGloballyRoute() {
+  return publicProcedure.query(async (opts) => {
+    return getItemsGloballyService(opts.input);
+  })
+}

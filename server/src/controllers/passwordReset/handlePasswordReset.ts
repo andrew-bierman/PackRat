@@ -5,6 +5,8 @@ import { JWT_SECRET, SEND_GRID_API_KEY } from '../../config';
 
 import sgMail from '@sendgrid/mail';
 import { responseHandler } from '../../helpers/responseHandler';
+import { z } from 'zod';
+import { publicProcedure } from '../../trpc';
 
 sgMail.setApiKey(SEND_GRID_API_KEY);
 
@@ -55,3 +57,21 @@ export const handlePasswordReset = async (req, res) => {
       .send({ error: error.message || 'Internal server error' });
   }
 };
+
+export function handlePasswordResetRoute() {
+  return publicProcedure
+    .input(z.object({ token: z.string() }))
+    .mutation(async (opts) => {
+      const { token } = opts.input;
+      const email = verifyPasswordResetToken(token);
+      const user = await User.findOne({ email });
+
+      if (!user) {
+        return { error: 'No user found with this email address' };
+      }
+
+      if (Date.now() > user.passwordResetTokenExpiration.getTime()) {
+        return { error: 'Password reset token has expired' };
+      }
+    });
+}

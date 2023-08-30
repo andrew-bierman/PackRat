@@ -14,6 +14,7 @@ import {
 } from '../controllers/item/index';
 import * as validator from '../middleware/validators/index';
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
+import { zodParser } from '../middleware/validators/zodParser';
 
 const router = express.Router();
 
@@ -41,7 +42,7 @@ const router = express.Router();
  *      200:
  *        description: Successful response
  */
-router.get('/packItems/:packId', validator.getItems, tryCatchWrapper(getItems));
+router.get('/packItems/:packId', (req, res) => zodParser(validator.getItems, req.body), tryCatchWrapper(getItems));
 
 /**
  * @swagger
@@ -60,7 +61,7 @@ router.get('/packItems/:packId', validator.getItems, tryCatchWrapper(getItems));
  *      200:
  *        description: Successful response
  */
-router.get('/i/:packId', validator.getItemById, tryCatchWrapper(getItemById));
+router.get('/i/:packId', (req, res) => zodParser(validator.getItemById, req.body), tryCatchWrapper(getItemById));
 
 /**
  * @swagger
@@ -109,7 +110,7 @@ router.get('/search', tryCatchWrapper(searchItemsByName));
  *      200:
  *        description: Successful response
  */
-router.post('/', validator.addItem, tryCatchWrapper(addItem));
+router.post('/', (req, res) => zodParser(validator.addItem, req.body), tryCatchWrapper(addItem));
 
 /**
  * @swagger
@@ -139,7 +140,7 @@ router.post('/', validator.addItem, tryCatchWrapper(addItem));
  *      200:
  *        description: Successful response
  */
-router.put('/', validator.editItem, tryCatchWrapper(editItem));
+router.put('/', (req, res) => zodParser(validator.editItem, req.body), tryCatchWrapper(editItem));
 
 /**
  * @swagger
@@ -161,7 +162,7 @@ router.put('/', validator.editItem, tryCatchWrapper(editItem));
  *      200:
  *        description: Successful response
  */
-router.delete('/', validator.deleteItem, tryCatchWrapper(deleteItem));
+router.delete('/', (req, res) => zodParser(validator.deleteItem, req.body), tryCatchWrapper(deleteItem));
 
 /**
  * @swagger
@@ -191,7 +192,7 @@ router.delete('/', validator.deleteItem, tryCatchWrapper(deleteItem));
  *      200:
  *        description: Successful response
  */
-router.post('/global', validator.addItemGlobal, tryCatchWrapper(addItemGlobal));
+router.post('/global', (req, res) => zodParser(validator.addItemGlobal, req.body), tryCatchWrapper(addItemGlobal));
 
 /**
  * @swagger

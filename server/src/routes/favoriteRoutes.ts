@@ -6,6 +6,7 @@ import {
   getUserFavorites,
 } from '../controllers/favorite/index';
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
+import { zodParser } from '../middleware/validators/zodParser';
 
 const router = express.Router();
 
@@ -34,7 +35,7 @@ const router = express.Router();
  *       '500':
  *         description: Error adding to favorite
  */
-router.post('/', validator.addToFavorite, tryCatchWrapper(addToFavorite));
+router.post('/', (req, res) => zodParser(validator.addToFavorite, req.body), tryCatchWrapper(addToFavorite));
 
 /**
  * @swagger
