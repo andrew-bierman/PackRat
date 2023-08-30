@@ -8,6 +8,8 @@ import {
 import axios from 'axios';
 import { api } from '../constants/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Alert } from 'react-native';
+import { trpc } from '../trpc';
 
 const authAdapter = createEntityAdapter();
 
@@ -31,6 +33,14 @@ export const signUp = createAsyncThunk(
       });
       await AsyncStorage.setItem('authToken', response.data.user.token);
       return response.data.user;
+      // const response = await axios.post(`${api}/user/signup`, {
+      //   name,
+      //   username, // add username
+      //   email,
+      //   password,
+      // });
+      // return response.data.user;
+      return await trpc.signUp.mutate({ name, username, email, password });
     } catch (error) {
       console.log('error', error);
       return rejectWithValue(error.response.data.error);
@@ -48,6 +58,13 @@ export const signIn = createAsyncThunk(
       });
       await AsyncStorage.setItem('authToken', response.data.user.token);
       return response.data.user;
+      // const response = await axios.post(`${api}/user/signin`, {
+      //   email,
+      //   password,
+      // });
+      // return response.data.user;
+      const response = await trpc.signIn.mutate({ email, password });
+      return response;
     } catch (error) {
       return rejectWithValue(error.response.data.error);
     }
@@ -75,6 +92,11 @@ export const signInWithGoogle = createAsyncThunk(
 
       await AsyncStorage.setItem('authToken', response.data.user.token);
       return response.data.user;
+      // const response = await axios.post(`${api}/user/google`, {
+      //   idToken,
+      // });
+      // return response.data.user;
+      return await trpc.googleSignin.query({ idToken });
     } catch (error) {
       console.log('error.response.data.error', error.response.data.error);
       return rejectWithValue(error);

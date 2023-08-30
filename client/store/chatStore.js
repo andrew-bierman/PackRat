@@ -9,6 +9,7 @@ import {
 } from '@reduxjs/toolkit';
 import axios from '~/config/axios';
 import { api } from '../constants/api';
+import { trpc } from '../trpc';
 
 // Create entity adapter for chats
 const chatAdapter = createEntityAdapter({
@@ -20,8 +21,9 @@ export const getUserChats = createAsyncThunk(
   'chat/getUserChats',
   async (userId) => {
     try {
-      const response = await axios.get(`${api}/openai/user-chats/${userId}`);
-      return response.data;
+      // const response = await axios.get(`${api}/openai/user-chats/${userId}`);
+      // return response.data;
+      return await trpc.getUserChats.query({ userId });
     } catch (error) {
       console.error(error);
       throw error;
@@ -34,12 +36,17 @@ export const getAIResponse = createAsyncThunk(
   'chat/getAIResponse',
   async ({ userId, conversationId, userInput }) => {
     try {
-      const response = await axios.post(`${api}/openai/ai-response`, {
+      // const response = await axios.post(`${api}/openai/ai-response`, {
+      //   userId,
+      //   conversationId,
+      //   userInput,
+      // });
+      // return response.data;
+      return await trpc.getAIResponse.query({
         userId,
         conversationId,
         userInput,
       });
-      return response.data;
     } catch (error) {
       console.error(error);
       throw error;
