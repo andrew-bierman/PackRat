@@ -1,4 +1,4 @@
-package com.andrewbierman.packratfront;
+package com.andrewbierman.packrat;
 
 import android.app.Application;
 import android.content.res.Configuration;
