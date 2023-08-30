@@ -7,7 +7,8 @@ import {
 } from '../../services/user/user.service';
 import { UnableToSendCodeError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
-
+import { publicProcedure } from '../../trpc';
+import * as validator from '../../middleware/validators/index';
 /**
  * Check if the provided email exists in the database.
  * @param {object} req - The request object.
@@ -72,4 +73,27 @@ async function sendEmailNotice(email) {
       }
     });
   });
+}
+
+export function emailExistsRoute() {
+  return publicProcedure
+    .input(validator.emailExists)
+    .mutation(async (opts) => {
+      const { email } = opts.input;
+      const val = await findUserByEmail(email);
+      if (val) {
+        sendEmailNotice(email).then(async (result1: any) => {
+          if (result1.status) {
+            const { newcode } = result1;
+            findUserAndUpdate(email, newcode, 'code').then(async (result2: any) => {
+              if (result2.status) {
+                return result2
+              }
+            });
+          }
+        });
+      } else {
+        return val
+      }
+    });
 }

@@ -21,6 +21,8 @@
   "license": "ISC",
   "dependencies": {
     "@sendgrid/mail": "^7.7.0",
+    "@trpc/client": "^10.38.0",
+    "@trpc/server": "^10.38.0",
     "@types/bcrypt": "^5.0.0",
     "@types/cors": "^2.8.13",
     "@types/csurf": "^1.11.2",

@@ -13,6 +13,7 @@ import * as validator from '../middleware/validators/index';
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
 import authTokenMiddleware from '../middleware/auth';
 import checkRole from '../middleware/checkRole';
+import { zodParser } from '../middleware/validators/zodParser';
 
 const router = express.Router();
 
@@ -63,13 +64,7 @@ router.get(
  *       '500':
  *         description: Error retrieving packs by owner ID
  */
-router.get(
-  '/:ownerId',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
-  validator.getPacks,
-  tryCatchWrapper(getPacks),
-);
+router.get('/:ownerId', (req, res) => zodParser(validator.getPacks, req.body), tryCatchWrapper(getPacks));
 
 /**
  * @swagger
@@ -92,13 +87,7 @@ router.get(
  *       '500':
  *         description: Error retrieving pack by ID
  */
-router.get(
-  '/p/:packId',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
-  validator.getPackById,
-  tryCatchWrapper(getPackById),
-);
+router.get('/p/:packId', (req, res) => zodParser(validator.getPackById, req.body), tryCatchWrapper(getPackById));
 
 /**
  * @swagger
@@ -121,13 +110,7 @@ router.get(
  *       '500':
  *         description: Error scoring the pack
  */
-router.put(
-  '/score/:packId',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
-  validator.getPackById,
-  tryCatchWrapper(scorePack),
-);
+router.put('/score/:packId', (req, res) => zodParser(validator.getPackById, req.body), tryCatchWrapper(scorePack));
 
 /**
  * @swagger
@@ -156,13 +139,7 @@ router.put(
  *       '500':
  *         description: Error adding the pack
  */
-router.post(
-  '/',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
-  validator.addPack,
-  tryCatchWrapper(addPack),
-);
+router.post('/', (req, res) => zodParser(validator.addPack, req.body), tryCatchWrapper(addPack));
 
 /**
  * @swagger
@@ -191,13 +168,7 @@ router.post(
  *       '500':
  *         description: Error editing the pack
  */
-router.put(
-  '/',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
-  validator.editPack,
-  tryCatchWrapper(editPack),
-);
+router.put('/', (req, res) => zodParser(validator.editPack, req.body), tryCatchWrapper(editPack));
 
 /**
  * @swagger
@@ -222,13 +193,7 @@ router.put(
  *       '500':
  *         description: Error deleting the pack
  */
-router.delete(
-  '/',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
-  validator.deletePack,
-  tryCatchWrapper(deletePack),
-);
+router.delete('/', (req, res) => zodParser(validator.deletePack, req.body), tryCatchWrapper(deletePack));
 
 /**
  * @swagger
@@ -255,9 +220,7 @@ router.delete(
  */
 router.post(
   '/duplicate',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
-  validator.duplicatePublicPack,
+  (req, res) => zodParser(validator.duplicatePublicPack, req.body),
   tryCatchWrapper(duplicatePublicPack),
 );
 

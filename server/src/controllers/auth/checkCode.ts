@@ -1,7 +1,8 @@
+import { publicProcedure } from '../../trpc';
 import { InvalidCodeError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import User from '../../models/userModel';
-
+import * as validator from '../../middleware/validators/index';
 /**
  * Checks the provided code against the user's email in the database.
  * @param {Object} req - the request object
@@ -19,3 +20,15 @@ export const checkCode = async (req: any, res: any, next) => {
     next(InvalidCodeError);
   }
 };
+
+export function checkCodeRoute() {
+  return publicProcedure
+    .input(validator.checkCode)
+    .mutation(async (opts) => {
+      const { email, code } = opts.input;
+      const user = await User.find({
+        $and: [{ email: email.toLowerCase() }, { code }],
+      });
+      return user;
+    });
+}

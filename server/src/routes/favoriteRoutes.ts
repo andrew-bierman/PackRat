@@ -8,6 +8,7 @@ import {
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
 import authTokenMiddleware from '../middleware/auth';
 import checkRole from '../middleware/checkRole';
+import { zodParser } from '../middleware/validators/zodParser';
 
 const router = express.Router();
 
@@ -36,13 +37,7 @@ const router = express.Router();
  *       '500':
  *         description: Error adding to favorite
  */
-router.post(
-  '/',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
-  validator.addToFavorite,
-  tryCatchWrapper(addToFavorite),
-);
+router.post('/', (req, res) => zodParser(validator.addToFavorite, req.body), tryCatchWrapper(addToFavorite));
 
 /**
  * @swagger

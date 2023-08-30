@@ -1,9 +1,11 @@
+import { publicProcedure } from '../../trpc';
 import { UnableTouUpdatePasswordError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import User from '../../models/userModel';
 import { findUserAndUpdate } from '../../services/user/user.service';
 import bcrypt from 'bcrypt';
 import { JWT_SECRET } from '../../config';
+import * as validator from '../../middleware/validators/index';
 
 /**
  * Updates the password for a user.
@@ -38,3 +40,13 @@ export const updatePassword = async (req, res, next) => {
     next(UnableTouUpdatePasswordError);
   }
 };
+
+export function updatePasswordRoute() {
+  return publicProcedure
+    .input(validator.updatePassword)
+    .mutation(async (opts) => {
+      const { email, password } = opts.input;
+      const val = await findUserAndUpdate(email, password, 'password');
+      return val;
+    });
+}

@@ -1,108 +1,158 @@
-import { celebrate, Joi, Segments } from 'celebrate';
+import { z } from "zod";
+import { Request } from 'express'
 
-export const JoiObjectId = (message = 'valid id') =>
-  Joi.string().regex(/^[0-9a-fA-F]{24}$/, message);
+export const JoiObjectId = z.string().regex(/^[0-9a-fA-F]{24}$/g);
 
-export const _testuserSignIn = celebrate({
-  [Segments.BODY]: Joi.object().keys({
-    name: Joi.string().required(),
-    age: Joi.number().integer(),
-    role: Joi.string().default('admin'),
-  }),
-  [Segments.QUERY]: {
-    token: Joi.string().token().required(),
-  },
+export const _testuserSignIn = z.object({
+    name: z.string().min(1).nonempty(),
+    age: z.number().int().nonnegative(),
+    role: z.string().default("admin")
 });
-export const userSignUp = celebrate({
-  [Segments.BODY]: Joi.object().keys({
-    name: Joi.string().required(),
-    email: Joi.string().required(),
-    password: Joi.string().required(),
-    username :  Joi.string().required()
-  }),
+
+export const userSignUp = (req: Request) => zodParser(z.object({
+    name: z.string().min(1).nonempty(),
+    email: z.string().email().nonempty(),
+    password: z.string().nonempty(),
+    username: z.string().nonempty()
+}), req.body)
+
+export const userSignIn = (req: Request) => zodParser(z.object({
+    email: z.string().email().nonempty(),
+    password: z.string().nonempty(),
+}), req.body)
+
+export const getUserById = (req: Request) => zodParser(z.object({
+    userId: JoiObjectId(),
+}), req.params)
+
+export const sentEmail = (req: Request) => zodParser(z.object({
+    email: z.string().email().nonempty(),
+}), req.body)
+
+export const resetPassword = (req: Request) => zodParser(z.object({
+    resetToken: z.string().nonempty(),
+    password: z.string().nonempty(),
+}), req.body)
+
+export const addToFavorite = (req: Request) => zodParser(z.object({
+    packId: JoiObjectId(),
+    userId: JoiObjectId(),
+}), req.body)
+
+export const editUser = (req: Request) => zodParser(z.object({
+    userId: JoiObjectId(),
+}), req.body)
+
+export const deleteUser = (req: Request) => zodParser(z.object({
+    userId: JoiObjectId(),
+}), req.body)
+
+export const linkFirebaseAuth = (req: Request) => zodParser(
+    z.object({
+        firebaseAuthToken: z.string().nonempty(),
+    }), req.body)
+
+export const createMongoDBUser = (req: Request) => zodParser(z.object({
+    email: z.string().email().nonempty(),
+    name: z.string().min(1).nonempty(),
+    password: z.string().nonempty(),
+}), req.body)
+
+export const getFirebaseUserByEmail = (req: Request) => zodParser(z.object({
+    email: z.string().email().nonempty(),
+}), req.body)
+
+export const login = (req: Request) => zodParser(z.object({
+    email: z.string().email().nonempty(),
+    password: z.string().nonempty(),
+}), req.body)
+
+export const checkCode = (req: Request) => zodParser(
+    z.object({
+        email: z.string().email().nonempty(),
+        code: z.string().nonempty(),
+    }),
+    req.body
+)
+
+export const emailExists = (req: Request) => zodParser(z.object({
+    email: z.string().email().nonempty(),
+}), req.body)
+
+export const updatePassword = (req: Request) => zodParser(z.object({
+    email: z.string().email().nonempty(),
+    password: z.string().nonempty(),
+}), req.body);
+
+function zodParser(schema: ZodSchema, input: any) {
+    schema.parse(input)
+}
+export const userSignUp = z.object({
+    name: z.string().min(1).nonempty(),
+    email: z.string().email().nonempty(),
+    password: z.string().nonempty(),
 });
-export const userSignIn = celebrate({
-  [Segments.BODY]: Joi.object().keys({
-    email: Joi.string().required(),
-    password: Joi.string().required(),
-  }),
+
+export const userSignIn = z.object({
+    email: z.string().email().nonempty(),
+    password: z.string().nonempty(),
 });
-export const getUserById = celebrate({
-  [Segments.PARAMS]: Joi.object().keys({
-    userId: JoiObjectId().required(),
-  }),
+
+export const getUserById = z.object({
+    userId: JoiObjectId.nonempty(),
 });
-export const sentEmail = celebrate({
-  [Segments.BODY]: Joi.object().keys({
-    email: Joi.string().required(),
-  }),
+
+export const sentEmail = z.object({
+    email: z.string().email().nonempty(),
 });
-export const resetPassword = celebrate({
-  [Segments.BODY]: Joi.object().keys({
-    resetToken: Joi.string().required(),
-    password: Joi.string().required(),
-  }),
+
+export const resetPassword = z.object({
+    resetToken: z.string().nonempty(),
+    password: z.string().nonempty(),
 });
-export const addToFavorite = celebrate({
-  [Segments.BODY]: Joi.object().keys({
-    packId: JoiObjectId().required(),
-    userId: JoiObjectId().required(),
-  }),
+
+export const addToFavorite = z.object({
+    packId: JoiObjectId.nonempty(),
+    userId: JoiObjectId.nonempty(),
 });
-export const editUser = celebrate({
-  [Segments.BODY]: Joi.object().keys({
-    userId: JoiObjectId().required(),
-    email: Joi.string(),
-    name: Joi.string(),
-    username: Joi.string(),
-    profileImage: Joi.string(),
-    preferredWeather: Joi.string(),
-    preferredWeight : Joi.string(),
-  }),
+
+export const editUser = z.object({
+    userId: JoiObjectId.nonempty(),
 });
-export const deleteUser = celebrate({
-  [Segments.BODY]: Joi.object().keys({
-    userId: JoiObjectId().required(),
-  }),
+
+export const deleteUser = z.object({
+    userId: JoiObjectId.nonempty(),
 });
-export const linkFirebaseAuth = celebrate({
-  [Segments.BODY]: Joi.object().keys({
-    firebaseAuthToken: Joi.string().required(),
-  }),
+
+export const linkFirebaseAuth = z.object({
+    firebaseAuthToken: z.string().nonempty(),
 });
-export const createMongoDBUser = celebrate({
-  [Segments.BODY]: Joi.object().keys({
-    email: Joi.string().required(),
-    name: Joi.string().required(),
-    password: Joi.string().required(),
-  }),
+
+export const createMongoDBUser = z.object({
+    email: z.string().email().nonempty(),
+    name: z.string().min(1).nonempty(),
+    password: z.string().nonempty(),
 });
-export const getFirebaseUserByEmail = celebrate({
-  [Segments.BODY]: Joi.object().keys({
-    email: Joi.string().required(),
-  }),
+
+export const getFirebaseUserByEmail = z.object({
+    email: z.string().email().nonempty(),
 });
-export const login = celebrate({
-  [Segments.BODY]: Joi.object().keys({
-    email: Joi.string().required(),
-    password: Joi.string().required(),
-  }),
+
+export const login = z.object({
+    email: z.string().email().nonempty(),
+    password: z.string().nonempty(),
 });
-export const checkCode = celebrate({
-  [Segments.BODY]: Joi.object().keys({
-    email: Joi.string().required(),
-    code: Joi.string().required(),
-  }),
+
+export const checkCode = z.object({
+    email: z.string().email().nonempty(),
+    code: z.string().nonempty(),
 });
-export const emailExists = celebrate({
-  [Segments.BODY]: Joi.object().keys({
-    email: Joi.string().required(),
-  }),
+
+export const emailExists = z.object({
+    email: z.string().email().nonempty(),
 });
-export const updatePassword = celebrate({
-  [Segments.BODY]: Joi.object().keys({
-    email: Joi.string().required(),
-    oldPassword: Joi.string().required(),
-    newPassword: Joi.string().required(),
-  }),
+
+export const updatePassword = z.object({
+    email: z.string().email().nonempty(),
+    password: z.string().nonempty(),
 });
