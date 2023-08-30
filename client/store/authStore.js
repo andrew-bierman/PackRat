@@ -8,6 +8,7 @@ import {
 import axios from 'axios';
 import { api } from '../constants/api';
 import { Alert } from 'react-native';
+import { trpc } from '../trpc';
 
 const authAdapter = createEntityAdapter();
 
@@ -23,13 +24,14 @@ export const signUp = createAsyncThunk(
   async ({ name, username, email, password }, { rejectWithValue }) => {
     try {
       // Add check for unique username here.
-      const response = await axios.post(`${api}/user/signup`, {
-        name,
-        username, // add username
-        email,
-        password,
-      });
-      return response.data.user;
+      // const response = await axios.post(`${api}/user/signup`, {
+      //   name,
+      //   username, // add username
+      //   email,
+      //   password,
+      // });
+      // return response.data.user;
+      return await trpc.signUp.mutate({ name, username, email, password });
     } catch (error) {
       console.log('error', error);
       return rejectWithValue(error.response.data.error);
@@ -41,11 +43,13 @@ export const signIn = createAsyncThunk(
   'auth/signIn',
   async ({ email, password }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${api}/user/signin`, {
-        email,
-        password,
-      });
-      return response.data.user;
+      // const response = await axios.post(`${api}/user/signin`, {
+      //   email,
+      //   password,
+      // });
+      // return response.data.user;
+      const response = await trpc.signIn.mutate({ email, password });
+      return response;
     } catch (error) {
       return rejectWithValue(error.response.data.error);
     }
@@ -66,10 +70,11 @@ export const signInWithGoogle = createAsyncThunk(
   'auth/signInWithGoogle',
   async ({ idToken }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${api}/user/google`, {
-        idToken,
-      });
-      return response.data.user;
+      // const response = await axios.post(`${api}/user/google`, {
+      //   idToken,
+      // });
+      // return response.data.user;
+      return await trpc.googleSignin.query({ idToken });
     } catch (error) {
       console.log('error.response.data.error', error.response.data.error);
       return rejectWithValue(error);

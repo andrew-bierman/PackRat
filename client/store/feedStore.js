@@ -5,6 +5,7 @@ import {
 } from '@reduxjs/toolkit';
 import { api } from '../constants/api';
 import axios from '~/config/axios';
+import { trpc } from '../trpc';
 
 // Define the adapter for packs and trips
 const feedAdapter = createEntityAdapter({
@@ -22,20 +23,24 @@ const initialState = feedAdapter.getInitialState({
 export const getPublicPacks = createAsyncThunk(
   'feed/getPublicPacks',
   async (queryBy) => {
-    const response = await axios.get(
-      `${api}/pack/?queryBy=${queryBy || 'Favorite'}`,
-    );
-    return response.data;
+    // const response = await axios.get(
+    //   `${api}/pack/?queryBy=${queryBy || 'Favorite'}`,
+    // );
+    // return response.data;
+    return (await trpc.getPublicPacks.query({ queryBy: queryBy ?? 'Favorite' }));
   },
 );
 
 export const getPublicTrips = createAsyncThunk(
   'feed/getPublicTrips',
   async (queryBy) => {
-    const response = await axios.get(
-      `${api}/trip/?queryBy=${queryBy || 'Favorite'}`,
-    );
-    return response.data;
+    // const response = await axios.get(
+    //   `${api}/trip/?queryBy=${queryBy || 'Favorite'}`,
+    // );
+    // return response.data;
+    return await trpc.getPublicTripsRoute.query({
+      queryBy: queryBy ?? 'Favorite',
+    });
   },
 );
 

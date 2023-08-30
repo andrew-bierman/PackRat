@@ -1,10 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from '~/config/axios';
 import { api } from '../constants/api';
+import { trpc } from '../trpc';
 
 export const getUser = createAsyncThunk('user/getUser', async (userId) => {
-  const response = await axios.get(`${api}/user/${userId}`);
-  return response.data;
+  // const response = await axios.get(`${api}/user/${userId}`);
+  // return response.data;
+  return await trpc.getUserById.mutate({ userId });
 });
 
 const userSlice = createSlice({

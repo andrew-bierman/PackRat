@@ -5,41 +5,47 @@ import {
 } from '@reduxjs/toolkit';
 import axios from '~/config/axios';
 import { api } from '../constants/api';
+import { trpc } from '../trpc';
 
 export const deleteTrip = createAsyncThunk(
   'trips/deleteTrip',
   async (tripId) => {
-    const response = await axios.delete(`${api}/trip`, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      data: {
-        tripId,
-      },
-    });
-    return response.data;
+    // const response = await axios.delete(`${api}/trip`, {
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   data: {
+    //     tripId,
+    //   },
+    // });
+    // return response.data;
+    return await trpc.deleteTrip.mutate({ tripId });
   },
 );
 
 export const fetchUserTrips = createAsyncThunk(
   'trips/fetchUserTrips',
   async (ownerId) => {
-    const response = await axios.get(`${api}/trip/${ownerId}`);
-    return response.data;
+    // const response = await axios.get(`${api}/trip/${ownerId}`);
+    // return response.data;
+    console.log(await trpc.getTrips.query({ owner_id }))
+    return await trpc.getTrips.query({ owner_id });
   },
 );
 
 export const addTrip = createAsyncThunk('trips/addTrip', async (newTrip) => {
   console.log('new trip', newTrip);
-  const response = await axios.post(`${api}/trip/`, newTrip);
-  return response.data;
+  // const response = await axios.post(`${api}/trip/`, newTrip);
+  // return response.data;
+  return await trpc.addTrip.mutate(newTrip);
 });
 
 export const editTrip = createAsyncThunk(
   'trips/editTrip',
   async (updatedTrip) => {
-    const response = await axios.put(`${api}/trip/`, updatedTrip);
-    return response.data;
+    // const response = await axios.put(`${api}/trip/`, updatedTrip);
+    // return response.data;
+    return await trpc.editTrip.mutate(updatedTrip);
   },
 );
 
