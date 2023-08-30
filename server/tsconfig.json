@@ -15,6 +15,12 @@
     "moduleResolution": "Node",
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
+    "baseUrl": ".",
+    "paths":{
+      "@trpc":["trpc"],
+      "trpc":["../src/routes/index"]
+    },
+    "declaration": true
   },
   "exclude": [
     "node_modules",

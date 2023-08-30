@@ -1,8 +1,9 @@
+import { publicProcedure } from '../../trpc';
 import { UnableTouUpdatePasswordError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import User from '../../models/userModel';
 import { findUserAndUpdate } from '../../services/user/user.service';
-
+import * as validator from '../../middleware/validators/index';
 /**
  * Updates the password for a user.
  * @param {object} req - The request object.
@@ -18,3 +19,13 @@ export const updatePassword = async (req, res, next) => {
     next(UnableTouUpdatePasswordError);
   }
 };
+
+export function updatePasswordRoute() {
+  return publicProcedure
+    .input(validator.updatePassword)
+    .mutation(async (opts) => {
+      const { email, password } = opts.input;
+      const val = await findUserAndUpdate(email, password, 'password');
+      return val;
+    });
+}

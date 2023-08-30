@@ -8,6 +8,9 @@ import bodyParser from 'body-parser';
 import { serveSwaggerUI } from './helpers/serveSwaggerUI';
 import { corsOptions } from './helpers/corsOptions';
 import { errorHandler } from './helpers/errorHandler';
+import * as trpcExpress from "@trpc/server/adapters/express";
+import { inferAsyncReturnType, initTRPC } from "@trpc/server";
+import { appRouter } from './routes/trpcRouter';
 
 // express items
 const app = express();
@@ -40,6 +43,20 @@ app.use(
     next(err);
   },
 );
+const createContext = ({
+  req,
+  res,
+}: trpcExpress.CreateExpressContextOptions) => ({ req, res });
+
+export type Context = inferAsyncReturnType<typeof createContext>;
+
+app.use(
+  "/api/trpc",
+  trpcExpress.createExpressMiddleware({
+    router: appRouter,
+    createContext,
+  })
+);
 
 // Celebrate middleware to return validation errors
 app.use(errors());
@@ -56,8 +73,8 @@ const port = process.env.PORT || 3000;
 
 // enter your ipaddress for the second param
 app.listen(port, () =>
-  // console.log("listening on ipaddress")
-  {
-    console.log(`listening on port ${port}`);
-  },
+// console.log("listening on ipaddress")
+{
+  console.log(`listening on port ${port}`);
+},
 );

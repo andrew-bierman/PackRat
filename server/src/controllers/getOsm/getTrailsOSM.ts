@@ -6,6 +6,8 @@ import {
   RetrievingTrailsOSMError,
 } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
+import { publicProcedure } from '../../trpc';
+import { z } from 'zod';
 
 /**
  * Retrieves trails data from OpenStreetMap (OSM) based on the provided latitude, longitude, and radius.
@@ -45,3 +47,42 @@ export const getTrailsOSM = async (req, res, next) => {
     next(RetrievingTrailsOSMError);
   }
 };
+
+export function getTrailsOSMRoute() {
+  return publicProcedure.input(z.object({ lat: z.number(), lon: z.number(), radius: z.number() })).query(async (opts) => {
+    const { lat, lon, radius } = opts.input;
+    const params = {
+      lat,
+      lon,
+      radius,
+    };
+    const queryString = Object.entries(params)
+      .flatMap(([key, values]) =>
+        Array.isArray(values)
+          ? values.map((val) => `${key}=${val}`)
+          : `${key}=${values}`,
+      )
+      .join('&');
+
+    console.log('queryString----', queryString);
+
+    const overpassUrl = process.env.OSM_URI;
+
+    const overpassQuery = `
+      [out:json][timeout:25];
+      (
+        way["highway"~"footway"]["name"](around:${radius},${lat},${lon});
+      );
+      out tags geom qt;
+      `;
+
+    const response = await axios.post(overpassUrl, overpassQuery, {
+      headers: { 'Content-Type': 'text/plain' },
+    });
+    const geojsonData = osmtogeojson(response.data);
+
+    updateDatabaseWithGeoJSONDataFromOverpass(geojsonData);
+
+    return geojsonData;
+  });
+}
