@@ -23,7 +23,6 @@ export const deletePack = async (req, res, next) => {
 export function deletePackRoute() {
   return publicProcedure.input(validator.deletePack).mutation(async (opts) => {
     const { packId } = opts.input;
-    await deletePackService(packId);
-    return { msg: 'pack was deleted successfully' };
+    return deletePackService(packId);
   });
 }
