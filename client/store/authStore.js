@@ -3,7 +3,7 @@ import {
   createSlice,
   createEntityAdapter,
 } from '@reduxjs/toolkit';
-
+import { authApi } from './authApi';
 // we use the original axios to prevent circular dependency with custom axios instance
 import axios from 'axios';
 import { api } from '../constants/api';
@@ -18,64 +18,65 @@ const initialState = authAdapter.getInitialState({
 });
 
 // Thunks for async actions
-export const signUp = createAsyncThunk(
-  'auth/signUp',
-  async ({ name, username, email, password }, { rejectWithValue }) => {
-    try {
-      // Add check for unique username here.
-      const response = await axios.post(`${api}/user/signup`, {
-        name,
-        username, // add username
-        email,
-        password,
-      });
-      return response.data.user;
-    } catch (error) {
-      console.log('error', error);
-      return rejectWithValue(error.response.data.error);
-    }
-  },
-);
+// export const signUp = createAsyncThunk(
+//   'auth/signUp',
+//   async ({ name, username, email, password }, { rejectWithValue }) => {
+//     try {
+//       // Add check for unique username here.
+//       const response = await axios.post(`${api}/user/signup`, {
+//         name,
+//         username, // add username
+//         email,
+//         password,
+//       });
+//       return response.data.user;
+//     } catch (error) {
+//       console.log('error', error);
+//       return rejectWithValue(error.response.data.error);
+//     }
+//   },
+// );
 
-export const signIn = createAsyncThunk(
-  'auth/signIn',
-  async ({ email, password }, { rejectWithValue }) => {
-    try {
-      const response = await axios.post(`${api}/user/signin`, {
-        email,
-        password,
-      });
-      return response.data.user;
-    } catch (error) {
-      return rejectWithValue(error.response.data.error);
-    }
-  },
-);
+// export const signIn = createAsyncThunk(
+//   'auth/signIn',
+//   async ({ email, password }, { rejectWithValue }) => {
+//     try {
+//       const response = await axios.post(`${api}/user/signin`, {
+//         email,
+//         password,
+//       });
+//       return response.data.user;
+//     } catch (error) {
+//       return rejectWithValue(error.response.data.error);
+//     }
+//   },
+// );
 
 export const signOut = createAsyncThunk('auth/signOut', async () => {
   try {
     // Perform any sign-out operations here
-    return null;
+    return {
+    };
   } catch (error) {
     console.log(error.message);
     return rejectWithValue('Sign-out failed');
   }
 });
 
-export const signInWithGoogle = createAsyncThunk(
-  'auth/signInWithGoogle',
-  async ({ idToken }, { rejectWithValue }) => {
-    try {
-      const response = await axios.post(`${api}/user/google`, {
-        idToken,
-      });
-      return response.data.user;
-    } catch (error) {
-      console.log('error.response.data.error', error.response.data.error);
-      return rejectWithValue(error);
-    }
-  },
-);
+// export const signInWithGoogle = createAsyncThunk(
+//   'auth/signInWithGoogle',
+//   async ({ idToken }, { rejectWithValue }) => {
+//     try {
+//       const response = await axios.post(`${api}/user/google`, {
+//         idToken,
+//       });
+//       return response.data.user;
+//     } catch (error) {
+//       console.log('error.response.data.error', error.response.data.error);
+//       return rejectWithValue(error);
+//     }
+//   },
+// );
 
 export const authSlice = createSlice({
   name: 'auth',
@@ -83,59 +84,60 @@ export const authSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(signUp.pending, (state) => {
+    .addCase(signOut.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    })
+    .addCase(signOut.fulfilled, (state) => {
+      // authAdapter.removeAll(state);
+      state.user = null;
+      state.loading = false;
+    })
+    .addCase(signOut.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    })
+      .addMatcher(authApi.endpoints.signUp.matchPending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(signUp.fulfilled, (state, action) => {
+      .addMatcher(authApi.endpoints.signUp.matchFulfilled, (state, action) => {
         authAdapter.setAll(state, [action.payload]);
         state.user = action.payload;
         state.loading = false;
         state.error = null;
       })
-      .addCase(signUp.rejected, (state, action) => {
+      .addMatcher(authApi.endpoints.signUp.matchRejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
-      .addCase(signIn.pending, (state) => {
+      .addMatcher(authApi.endpoints.signIn.matchPending, (state) => {
         state.loading = true;
         state.error = null;
         state.error = null;
       })
-      .addCase(signIn.fulfilled, (state, action) => {
+      .addMatcher(authApi.endpoints.signIn.matchFulfilled, (state, action) => {
         authAdapter.setAll(state, [action.payload]);
         state.user = action.payload;
         state.loading = false;
         state.error = null;
       })
-      .addCase(signIn.rejected, (state, action) => {
+      .addMatcher(authApi.endpoints.signIn.matchRejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
         state.user = null;
       })
-      .addCase(signOut.pending, (state) => {
+     
+      .addMatcher(authApi.endpoints.signInWithGoogle.matchPending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(signOut.fulfilled, (state) => {
-        authAdapter.removeAll(state);
-        state.user = null;
-        state.loading = false;
-      })
-      .addCase(signOut.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
-      .addCase(signInWithGoogle.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(signInWithGoogle.fulfilled, (state, action) => {
+      .addMatcher(authApi.endpoints.signInWithGoogle.matchFulfilled, (state, action) => {
         authAdapter.setAll(state, [action.payload]);
         state.user = action.payload;
         state.loading = false;
       })
-      .addCase(signInWithGoogle.rejected, (state, action) => {
+      .addMatcher(authApi.endpoints.signInWithGoogle.matchRejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

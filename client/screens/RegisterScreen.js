@@ -22,17 +22,18 @@ import { useRouter } from 'expo-router';
 // import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { Link } from 'expo-router';
 import { useSelector, useDispatch } from 'react-redux';
-import { signUp } from '../store/authStore';
+// import { signUp } from '../store/authStore';
 import { InformUser } from '../utils/ToastUtils';
 import useTheme from '../hooks/useTheme';
 import { useForm } from 'react-hook-form';
 import { InputText, InputTextRules } from '~/components/InputText';
-
+import { useSignUpMutation } from '../store/authApi';
 export default function Register() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const dispatch = useDispatch();
-
+  const [ signUp, results] = useSignUpMutation()
+  console.log(results);
   const {
     control,
     handleSubmit,
@@ -67,7 +68,8 @@ export default function Register() {
         alert('Username should be alphanumeric');
         return;
       }
-      dispatch(signUp({ name, username, email, password }));
+      signUp({ name, username, email, password });
+      // dispatch(signUp());
     } catch (e) {
       console.log('Error', e);
     }

@@ -13,28 +13,30 @@ const Dashboard = () => {
 
   return (
     <>
+      <ScrollView contentContainerStyle={styles.content} horizontal={false}>
+        <VStack
+          style={[
+            styles.container,
+            Platform.OS === 'web' ? { minHeight: '100vh' } : null,
+          ]}
+        >
+          <Box>
+            <HeroBanner style={styles.cardContainer} />
 
-    <ScrollView contentContainerStyle={styles.content} horizontal={false}>
-      <VStack
-        style={[
-          styles.container,
-          Platform.OS === 'web' ? { minHeight: '100vh' } : null,
-        ]}
-      >
-        <Box>
-          <HeroBanner style={styles.cardContainer} />
-
-          <Section>
-            <SectionHeader iconName="add-circle-outline" text="Quick Actions" />
-            <QuickActionsSection />
-          </Section>
-          <Section>
-            <SectionHeader iconName="newspaper-outline" text="Feed" />
-            <FeedPreview />
-          </Section>
-        </Box>
-      </VStack>
-    </ScrollView>
+            <Section>
+              <SectionHeader
+                iconName="add-circle-outline"
+                text="Quick Actions"
+              />
+              <QuickActionsSection />
+            </Section>
+            <Section>
+              <SectionHeader iconName="newspaper-outline" text="Feed" />
+              <FeedPreview />
+            </Section>
+          </Box>
+        </VStack>
+      </ScrollView>
     </>
   );
 };

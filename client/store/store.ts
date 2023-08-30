@@ -1,4 +1,8 @@
-import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import {
+  combineReducers,
+  configureStore,
+
+} from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   persistReducer,
@@ -31,7 +35,7 @@ import userStore from './userStore';
 import offlineQueue from './offlineQueue';
 import progressReducer from './progressStore';
 import { type Reducer } from 'react';
-
+import { authApi } from './authApi';
 // combine reducers
 const rootReducer: Reducer<RootState> = combineReducers({
   auth: authReducer,
@@ -54,6 +58,7 @@ const rootReducer: Reducer<RootState> = combineReducers({
   userStore,
   offlineQueue,
   progress: progressReducer,
+  [authApi.reducerPath]: authApi.reducer,
 });
 
 export interface RootState {
@@ -87,16 +92,23 @@ const persistConfig: PersistConfig<RootState> = {
 
 // create persisted reducer
 const persistedReducer = persistReducer(persistConfig, rootReducer);
-
+const getMiddleWare = (getDefaultMiddleware) => {
+const middleware = [
+  ...getDefaultMiddleware({
+    serializableCheck: {
+      // Ignore these action types
+      ignoredActions: ['persist/PERSIST'],
+    },
+  }), // Default middleware included in Redux Toolkit
+  authApi.middleware,
+  apiMessageMiddleware,
+];
+return middleware;
+}
 const store = configureStore({
   reducer: persistedReducer,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: {
-        // Ignore these action types
-        ignoredActions: ['persist/PERSIST'],
-      },
-    }).concat(apiMessageMiddleware),
+
+  middleware: (dm) => getMiddleWare(dm),
 });
 
 export type AppDispatch = typeof store.dispatch;

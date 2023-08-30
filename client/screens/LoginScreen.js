@@ -25,7 +25,8 @@ import { Link, useRouter } from 'expo-router';
 // import { signInWithGoogle } from "../auth/firebase";
 // import { signInWithGoogle } from "../auth/firebase";
 import { useDispatch, useSelector } from 'react-redux';
-import { signIn, signInWithGoogle } from '../store/authStore';
+import { useSignInWithGoogleMutation } from '../store/authApi';
+// signIn,
 import { StyleSheet } from 'react-native';
 import { InformUser } from '../utils/ToastUtils';
 import useTheme from '../hooks/useTheme';
@@ -33,6 +34,7 @@ import { useForm } from 'react-hook-form';
 import { InputText, InputTextRules } from '~/components/InputText';
 import { Regex } from '~/utils/regex';
 
+import { useSignInMutation } from '../store/authApi';
 // const defaultStyle = {
 //   version: 8,
 //   name: "Land",
@@ -67,6 +69,7 @@ import { Regex } from '~/utils/regex';
 WebBrowser.maybeCompleteAuthSession();
 
 export default function Login() {
+  const [ signInWithGoogle, results ] = useSignInWithGoogleMutation()
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const {
@@ -74,7 +77,8 @@ export default function Login() {
     handleSubmit,
     formState: { isValid },
   } = useForm();
-
+  const [signIn, { data, isLoading, status }] = useSignInMutation();
+  // console.log("🚀 ~ file: LoginScreen.js:80 ~ Login ~ result:", result)
   const demoUser = {
     email: 'email52@email.com',
     password: '12345678',
@@ -86,27 +90,43 @@ export default function Login() {
 
   // const { loginUserWithEmailAndPassword, loginUserWithGoogle } = useLogin();
 
-  const user = useSelector((state) => state.auth.user);
-  const error = useSelector((state) => state.auth.error);
-  if (user?._id) {
-    InformUser({
-      title: 'Login sucessfully',
-      placement: 'top-right',
-      duration: 3000,
-      style: {
-        backgroundColor: currentTheme.colors.textPrimary,
-      },
-    });
-    router.push('/');
-  }
-  if (error) {
-    InformUser({
-      title: 'Wrong-password',
-      duration: 3000,
-      placement: 'top-right',
-      style: { backgroundColor: currentTheme.colors.error },
-    });
-  }
+  useEffect(() => {
+    if (!(status === 'uninitialized')) {
+      if (data.user._id) {
+        InformUser({
+          title: 'Login sucessfully',
+          placement: 'top-right',
+          duration: 3000,
+          style: {
+            backgroundColor: currentTheme.colors.textPrimary,
+          },
+        });
+        console.log('here')
+        router.push('/');
+      }
+    }
+  }, [data]);
+  // const user = useSelector((state) => state.auth.user);
+  // const error = useSelector((state) => state.auth.error);
+  // if (user?._id) {
+  //   InformUser({
+  //     title: 'Login sucessfully',
+  //     placement: 'top-right',
+  //     duration: 3000,
+  //     style: {
+  //       backgroundColor: currentTheme.colors.textPrimary,
+  //     },
+  //   });
+  //   router.push('/');
+  // }
+  // if (error) {
+  //   InformUser({
+  //     title: 'Wrong-password',
+  //     duration: 3000,
+  //     placement: 'top-right',
+  //     style: { backgroundColor: currentTheme.colors.error },
+  //   });
+  // }
 
   // const { loginUserWithEmailAndPassword, loginUserWithGoogle } = useLogin();
 
@@ -127,7 +147,7 @@ export default function Login() {
   useEffect(() => {
     if (response?.type === 'success') {
       const { id_token } = response.params;
-      dispatch(signInWithGoogle({ idToken: id_token }));
+      signInWithGoogle({ idToken: id_token });
     }
   }, [response]);
 
@@ -163,7 +183,7 @@ export default function Login() {
    */
   const handleLogin = (data) => {
     const { email, password } = data;
-    dispatch(signIn({ email, password }));
+    signIn({ email, password });
   };
 
   // useEffect(() => {
@@ -369,7 +389,8 @@ export default function Login() {
                   w="100%"
                   disabled={!request}
                   onPress={() => {
-                    dispatch(signIn(demoUser));
+                    signIn(demoUser);
+                    // dispatch(signIn(demoUser));
                   }}
                   colorScheme={'purple'}
                 >
