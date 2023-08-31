@@ -72,16 +72,10 @@ export const DeletePackItemModal = ({
     <CustomModal
       isActive={isModalOpen}
       title={'Delete Item'}
-      triggerComponent={
-        <MaterialIcons
-          name="delete"
-          size={20}
-          color="black"
-          onPress={onTrigger}
-        />
-      }
+      triggerComponent={<MaterialIcons name="delete" size={20} color="black" />}
       footerButtons={footerButtons}
       onCancel={closeModalHandler}
+      onTrigger={onTrigger}
     >
       Are you sure you want to delete this item?
     </CustomModal>

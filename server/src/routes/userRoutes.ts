@@ -29,6 +29,8 @@ import {
   checkCode,
 } from '../controllers/auth/index';
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
+import authTokenMiddleware from '../middleware/auth';
+import checkRole from '../middleware/checkRole';
 
 const router = express.Router();
 
@@ -51,7 +53,12 @@ const router = express.Router();
  *       '500':
  *         description: Error retrieving users
  */
-router.get('/', tryCatchWrapper(getUsers));
+router.get(
+  '/',
+  authTokenMiddleware,
+  checkRole(['admin']),
+  tryCatchWrapper(getUsers),
+);
 
 /**
  * @swagger
@@ -74,7 +81,13 @@ router.get('/', tryCatchWrapper(getUsers));
  *       '500':
  *         description: Error retrieving the user
  */
-router.get('/:userId', validator.getUserById, tryCatchWrapper(getUserById));
+router.get(
+  '/:userId',
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
+  validator.getUserById,
+  tryCatchWrapper(getUserById),
+);
 
 // router.post("/", addUser);
 
@@ -210,7 +223,12 @@ router.post(
  *       '500':
  *         description: Error retrieving user information
  */
-router.get('/me/info', auth, tryCatchWrapper(getMe));
+router.get(
+  '/me/info',
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
+  tryCatchWrapper(getMe),
+);
 
 /**
  * @swagger
@@ -276,7 +294,13 @@ router.post('/google', tryCatchWrapper(signInGoogle));
  *       '500':
  *         description: Error editing the user
  */
-router.put('/', validator.editUser, tryCatchWrapper(editUser));
+router.put(
+  '/',
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
+  validator.editUser,
+  tryCatchWrapper(editUser),
+);
 
 /**
  * @swagger
@@ -301,7 +325,13 @@ router.put('/', validator.editUser, tryCatchWrapper(editUser));
  *       '500':
  *         description: Error deleting the user
  */
-router.delete('/', validator.deleteUser, tryCatchWrapper(deleteUser));
+router.delete(
+  '/',
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
+  validator.deleteUser,
+  tryCatchWrapper(deleteUser),
+);
 
 router.post('/checkcode', validator.checkCode, tryCatchWrapper(checkCode));
 router.post(
