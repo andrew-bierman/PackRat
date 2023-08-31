@@ -6,7 +6,7 @@
     "lint": "eslint . --fix",
     "start-web": "TAMAGUI_TARGET=web expo start -c",
     "start-native": "TAMAGUI_TARGET=native expo start -c",
-    "start": "npm run lint && expo start --dev-client -c",
+    "start": "expo start --dev-client -c",
     "android": "TAMAGUI_TARGET=native expo run:android",
     "ios": "TAMAGUI_TARGET=native expo run:ios",
     "web": " expo start --web",
