@@ -9,7 +9,7 @@ import { fetchUserPacks, selectPackById } from '../../store/packsStore';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchSinglePack } from '../../store/singlePackStore';
-import useTheme from '../../hooks/useTheme';
+
 import { Box, Text } from 'native-base';
 import { DetailsComponent } from '../details';
 import { Dimensions, Platform, StyleSheet } from 'react-native';
@@ -44,7 +44,7 @@ export function PackDetails() {
     setFirstLoad(false);
   }, [dispatch, packId, updated]); // TODO updated is a temporary fix to re-render when pack is update, due to bug in store
 
-  const currentPackId = currentPack?._id;
+  const currentPackId = currentPack && currentPack._id;
 
   // check if user is owner of pack, and that pack and user exists
   const isOwner = currentPack && user && currentPack.owner_id === user._id;
@@ -79,9 +79,7 @@ export function PackDetails() {
                     currentPack={currentPack}
                     isAddItemModalOpen={isAddItemModalOpen}
                     setIsAddItemModalOpen={setIsAddItemModalOpen}
-                    setRefetch={() => {
-                      setRefetch((prev) => !prev);
-                    }}
+                    setRefetch={() => setRefetch((prev) => !prev)}
                   />
                 </Box>
                 <ScoreContainer

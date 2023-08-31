@@ -4,29 +4,43 @@ import cors from 'cors';
 import { isCelebrateError, errors } from 'celebrate';
 import { MONGODB_URI } from './config';
 import routes from './routes/index';
-import bodyParser from 'body-parser';
 import { serveSwaggerUI } from './helpers/serveSwaggerUI';
 import { corsOptions } from './helpers/corsOptions';
 import { errorHandler } from './helpers/errorHandler';
+import helmet from 'helmet';
+import compression from 'compression';
+import morgan from 'morgan';
+import { limiter } from './helpers/limiter';
 
-// express items
 const app = express();
 
+// Apply security-related HTTP headers.
+app.use(helmet());
+
+// Apply gzip compression to improve response times.
+app.use(compression());
+
+// Log HTTP requests.
+app.use(morgan('tiny'));
+
+// Apply rate limiting to prevent brute-force attacks.
+app.use(limiter);
+
+// Applying CORS middleware with provided options, if any.
 if (corsOptions) {
   app.use(cors(corsOptions as any));
 }
-app.use(bodyParser.json({ limit: '50mb' }));
-// app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
-// const connectionString = " your connection string";
-const connectionString = MONGODB_URI ?? '';
+// Parse incoming JSON bodies. Limit set to prevent large payloads.
+app.use(express.json({ limit: '50mb' }));
 
-// use routes
+// Register the main API routes.
 app.use(routes);
-// Serve the Swagger UI at /api-docs for api documentation, only in development
+
+// Serve the Swagger UI for API documentation, ideally only in development environments. Available at /api-docs.
 serveSwaggerUI(app);
 
-// middleware to log Celebrate validation errors
+// Middleware to capture and log Celebrate validation errors.
 app.use(
   (
     err: Error,
@@ -41,23 +55,27 @@ app.use(
   },
 );
 
-// Celebrate middleware to return validation errors
+// Middleware provided by Celebrate to format and return validation errors to the client.
 app.use(errors());
 
-// custom error handler function
+// Custom error handling middleware.
 app.use(errorHandler);
 
-// connect to mongodb
-mongoose.connect(connectionString).then(() => {
-  console.log('connected');
-});
+// Attempting to connect to MongoDB.
+const connectionString = MONGODB_URI ?? '';
+mongoose
+  .connect(connectionString)
+  .then(() => {
+    console.log('MongoDB connected successfully.');
+  })
+  .catch((err) => {
+    console.error('Failed to connect to MongoDB:', err);
+  });
 
+// Determine the port from the environment or default to 3000 if none is provided.
 const port = process.env.PORT || 3000;
 
-// enter your ipaddress for the second param
-app.listen(port, () =>
-  // console.log("listening on ipaddress")
-  {
-    console.log(`listening on port ${port}`);
-  },
-);
+// Start the Express server.
+app.listen(port, () => {
+  console.log(`Server is running and listening on port ${port}.`);
+});
