@@ -1,21 +1,21 @@
-import { View, StyleSheet } from 'react-native';
+import { View } from 'react-native';
 import { Card } from 'native-base';
 import React from 'react';
 import { theme } from '../../theme';
 import useTheme from '../../hooks/useTheme';
 
 const Section = ({ children, onPress }) => {
+  const styles = useCustomStyles(loadStyles);
   return (
-    <View style={styles().section} onPress={onPress}>
-      <Card style={styles().card}>{children}</Card>
+    <View style={styles.section} onPress={onPress}>
+      <Card style={styles.card}>{children}</Card>
     </View>
   );
 };
 
-const styles = () => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    useTheme();
-  return StyleSheet.create({
+const loadStyles = (theme) => {
+  const { currentTheme } = theme;
+  return {
     section: {
       marginBottom: 20,
       paddingHorizontal: 20, // Added padding here.
@@ -27,6 +27,6 @@ const styles = () => {
       paddingVertical: 20,
       backgroundColor: currentTheme.colors.secondaryBlue,
     },
-  });
+  };
 };
 export default Section;

@@ -33,6 +33,7 @@ import {
 import { fetchUserTrips } from '../../store/tripsStore';
 import { useRouter } from 'expo-router';
 import { fuseSearch } from '../../utils/fuseSearch';
+import useCustomStyles from '~/hooks/useCustomStyles';
 
 const URL_PATHS = {
   userPacks: '/pack/',
@@ -61,9 +62,10 @@ const FeedSearchFilter = ({
 }) => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
+  const styles = useCustomStyles(loadStyles);
   return (
-    <View style={styles().filterContainer}>
-      <Box style={styles().searchContainer}>
+    <View style={styles.filterContainer}>
+      <Box style={styles.searchContainer}>
         <HStack space={3}>
           <Input
             w="80%"
@@ -134,7 +136,7 @@ const FeedSearchFilter = ({
             data={dataValues}
             onValueChange={handleSortChange}
             placeholder="Sort By"
-            style={styles().dropdown}
+            style={styles.dropdown}
             width={150}
           />
         </HStack>
@@ -163,6 +165,8 @@ const Feed = ({ feedType = 'public' }) => {
   const userPacksData = useSelector(selectAllPacks);
   const publicTripsData = useSelector((state) => state.feed.publicTrips);
   const userTripsData = useSelector((state) => state.trips.userTrips);
+
+  const styles = useCustomStyles(loadStyles);
 
   useEffect(() => {
     if (feedType === 'public') {
@@ -229,7 +233,7 @@ const Feed = ({ feedType = 'public' }) => {
       />
     );
     return Platform.OS === 'web' ? (
-      <View style={styles().cardContainer}>
+      <View style={styles.cardContainer}>
         {console.log({ data })}
         {feedSearchFilterComponent}
         {data?.map((item) => (
@@ -280,13 +284,12 @@ const Feed = ({ feedType = 'public' }) => {
     router.push(createUrlPath);
   };
 
-  return <Box style={styles().mainContainer}>{renderData()}</Box>;
+  return <Box style={styles.mainContainer}>{renderData()}</Box>;
 };
 
-const styles = () => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    useTheme();
-  return StyleSheet.create({
+const loadStyles = (theme) => {
+  const { currentTheme } = theme;
+  return {
     mainContainer: {
       flex: 1,
       backgroundColor: currentTheme.colors.background,
@@ -314,7 +317,7 @@ const styles = () => {
       justifyContent: 'space-around',
       alignItems: 'center',
     },
-  });
+  };
 };
 
 export default Feed;
