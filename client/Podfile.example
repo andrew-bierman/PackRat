@@ -41,7 +41,7 @@ end
 $RNMapboxMapsImpl = 'mapbox'
 $RNMapboxMapsDownloadToken = 'MAPBOX_DOWNLOADS_TOKEN_FROM_ENV'
 # @generated end @rnmapbox/maps-rnmapboxmapsimpl
-target 'packratfront' do
+target 'packrat' do
   use_expo_modules!
   config = use_native_modules!
 
