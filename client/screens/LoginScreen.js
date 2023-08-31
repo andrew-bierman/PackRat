@@ -69,7 +69,7 @@ import { useSignInMutation } from '../store/authApi';
 WebBrowser.maybeCompleteAuthSession();
 
 export default function Login() {
-  const [ signInWithGoogle, results ] = useSignInWithGoogleMutation()
+  const [signInWithGoogle, results] = useSignInWithGoogleMutation();
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const {
@@ -78,7 +78,7 @@ export default function Login() {
     formState: { isValid },
   } = useForm();
   const [signIn, { data, isLoading, status }] = useSignInMutation();
-  // console.log("🚀 ~ file: LoginScreen.js:80 ~ Login ~ result:", result)
+  console.log("🚀 ~ file: LoginScreen.js:80 ~ Login ~ result:", data)
   const demoUser = {
     email: 'email52@email.com',
     password: '12345678',
@@ -92,7 +92,7 @@ export default function Login() {
 
   useEffect(() => {
     if (!(status === 'uninitialized')) {
-      if (data.user._id) {
+      if (data._id) {
         InformUser({
           title: 'Login sucessfully',
           placement: 'top-right',
@@ -101,7 +101,7 @@ export default function Login() {
             backgroundColor: currentTheme.colors.textPrimary,
           },
         });
-        console.log('here')
+        console.log('here');
         router.push('/');
       }
     }
