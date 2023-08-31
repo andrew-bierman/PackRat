@@ -13,17 +13,17 @@ import {
 const ThirdPartyProviders = ({ children, isDark = false }) => {
   // const { isDark } = useTheme()
   return (
-    <TamaguiProvider config={config}>
-      <TamaguiTheme name={isDark ? 'dark' : 'light'}>
-        <RNPaperThemeProvider theme={isDark ? darkPaperTheme : lightThemePaper}>
-          <NativeBaseProvider
-            theme={isDark ? nativeBaseDarkTheme : nativeBaseLightTheme}
-          >
+    <NativeBaseProvider
+      theme={isDark ? nativeBaseDarkTheme : nativeBaseLightTheme}
+    >
+      <TamaguiProvider config={config}>
+        <TamaguiTheme name={isDark ? 'dark' : 'light'}>
+          <RNPaperThemeProvider theme={darkPaperTheme}>
             {children}
-          </NativeBaseProvider>
-        </RNPaperThemeProvider>
-      </TamaguiTheme>
-    </TamaguiProvider>
+          </RNPaperThemeProvider>
+        </TamaguiTheme>
+      </TamaguiProvider>
+    </NativeBaseProvider>
   );
 };
 
