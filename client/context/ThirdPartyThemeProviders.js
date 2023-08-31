@@ -18,9 +18,7 @@ const ThirdPartyProviders = ({ children, isDark = false }) => {
     >
       <TamaguiProvider config={config}>
         <TamaguiTheme name={isDark ? 'dark' : 'light'}>
-          <RNPaperThemeProvider
-            theme={isDark ? darkPaperTheme : lightThemePaper}
-          >
+          <RNPaperThemeProvider theme={darkPaperTheme}>
             {children}
           </RNPaperThemeProvider>
         </TamaguiTheme>
