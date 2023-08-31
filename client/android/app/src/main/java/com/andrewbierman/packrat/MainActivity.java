@@ -1,4 +1,4 @@
-package com.andrewbierman.packratfront;
+package com.andrewbierman.packrat;
 
 import android.os.Build;
 import android.os.Bundle;

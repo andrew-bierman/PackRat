@@ -22,7 +22,7 @@ export default function HomeLayout() {
   // TODO - move this to a separate provider + redux store
   useEffect(() => {
     checkNetworkConnected.then((res) => {
-      // console.log('line 23 ', res);
+      console.log('line 23 ', res);
       store.dispatch(setNetworkStatus(res));
     });
   }, []);
