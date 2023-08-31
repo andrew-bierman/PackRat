@@ -1,4 +1,4 @@
-import { Text, StyleSheet } from 'react-native';
+import { Text } from 'react-native';
 import React from 'react';
 import { Table, Row, Cell } from 'react-native-table-component';
 import { theme } from '../../theme';
@@ -9,6 +9,8 @@ import { EditPackItemModal } from '../pack_table/EditPackItemModal';
 import { DeletePackItemModal } from '../pack_table/DeletePackItemModal';
 import { PaginationLimit } from '../paginationChooseLimit';
 import Loader from '../Loader';
+import useCustomStyles from '~/hooks/useCustomStyles';
+
 export const ItemsTable = ({
   limit,
   setLimit,
@@ -23,19 +25,16 @@ export const ItemsTable = ({
   const flexArr = [2, 1, 1, 1, 0.65, 0.65, 0.65];
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
+  const styles = useCustomStyles(loadStyles);
   const TitleRow = ({ title }) => {
     const rowData = [
-      <HStack style={styles().mainTitle}>
-        <Text style={styles().titleText}>{title}</Text>
+      <HStack style={styles.mainTitle}>
+        <Text style={styles.titleText}>{title}</Text>
       </HStack>,
     ];
 
     return (
-      <Row
-        data={rowData}
-        style={[styles().title]}
-        textStyle={styles().titleText}
-      />
+      <Row data={rowData} style={[styles.title]} textStyle={styles.titleText} />
     );
   };
   const TableItem = ({ itemData }) => {
@@ -60,7 +59,7 @@ export const ItemsTable = ({
         setRefetch={setRefetch}
       />,
     ];
-    return <Row data={rowData} style={styles().row} flexArr={flexArr} />;
+    return <Row data={rowData} style={styles.row} flexArr={flexArr} />;
   };
   /**
    * Handles the logic for navigating to the next page.
@@ -86,7 +85,7 @@ export const ItemsTable = ({
       }}
     >
       <Table
-        style={styles().tableStyle}
+        style={styles.tableStyle}
         borderStyle={{ borderColor: 'transparent' }}
       >
         <TitleRow title="Global Items List" />
@@ -100,9 +99,9 @@ export const ItemsTable = ({
             'Edit',
             'Delete',
           ].map((header, index) => (
-            <Cell key={index} data={header} textStyle={styles().headerText} />
+            <Cell key={index} data={header} textStyle={styles.headerText} />
           ))}
-          style={styles().head}
+          style={styles.head}
         />
         <Box
           style={{
@@ -158,10 +157,9 @@ export const ItemsTable = ({
   );
 };
 
-const styles = () => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    useTheme();
-  return StyleSheet.create({
+const loadStyles = (theme) => {
+  const { currentTheme } = theme;
+  return {
     container: {
       flex: 1,
       padding: 10,
@@ -225,5 +223,5 @@ const styles = () => {
       marginTop: 20,
       textAlign: 'center',
     },
-  });
+  };
 };

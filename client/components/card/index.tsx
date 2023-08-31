@@ -9,7 +9,6 @@ import {
   ThreeDotsIcon,
 } from 'native-base';
 import {
-  StyleSheet,
   TouchableOpacity,
   Clipboard,
   TextInput,
@@ -25,6 +24,7 @@ import useTheme from '../../hooks/useTheme';
 import { InformUser } from '../../utils/ToastUtils';
 import { SearchItem } from '../item/searchItem';
 import Loader from '../Loader';
+import useCustomStyles from '~/hooks/useCustomStyles';
 
 export const CustomCard = ({
   title,
@@ -37,6 +37,7 @@ export const CustomCard = ({
 }) => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
+  const styles = useCustomStyles(loadStyles);
   const [isCopied, setIsCopied] = useState(false);
   const [editTitle, setEditTitle] = useState(false);
   const titleRef = useRef(null);
@@ -71,7 +72,7 @@ export const CustomCard = ({
   if (type === 'pack') {
     return (
       <Box
-        style={styles().mainContainer}
+        style={styles.mainContainer}
         alignSelf="center"
         alignItems={['center', 'center', 'flex-start', 'flex-start']}
         w={['100%', '100%', '100%', '90%']}
@@ -181,7 +182,7 @@ export const CustomCard = ({
   if (type === 'trip') {
     return (
       <Box
-        style={styles().mainContainer}
+        style={styles.mainContainer}
         alignSelf="center"
         alignItems={['center', 'center', 'flex-start', 'flex-start']}
         w={['100%', '100%', '100%', '90%']}
@@ -258,10 +259,9 @@ export const CustomCard = ({
   }
 };
 
-const styles = () => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    useTheme();
-  return StyleSheet.create({
+const loadStyles = (theme) => {
+  const { currentTheme } = theme;
+  return {
     mainContainer: {
       backgroundColor: currentTheme.colors.card,
       flex: 1,
@@ -282,5 +282,5 @@ const styles = () => {
       alignItems: 'center',
       padding: 15,
     },
-  });
+  };
 };

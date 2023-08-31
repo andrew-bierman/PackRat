@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, VStack, Text, Image } from 'native-base';
 import LargeCard from '../card/LargeCard';
 import { SearchInput } from '../SearchInput';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { theme } from '../../theme';
 import useTheme from '../../hooks/useTheme';
 import { useSelector, useDispatch } from 'react-redux';
@@ -19,6 +19,7 @@ const HeroSection = ({ onSelect }) => {
   const dispatch = useDispatch();
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
+  const styles = useCustomStyles(loadStyles);
   const router = useRouter();
 
   const currentDestination = useSelector(
@@ -80,7 +81,7 @@ const HeroSection = ({ onSelect }) => {
   // console.log("cardBackgroundColor", cardBackgroundColor)
 
   return (
-    <View style={styles().banner}>
+    <View style={styles.banner}>
       <Hero
         imageDetails={{
           title: 'N/A',
@@ -108,7 +109,7 @@ const HeroSection = ({ onSelect }) => {
               justifyContent: 'center',
             }}
           >
-            <Text style={styles().title}>{bannerText}</Text>
+            <Text style={styles.title}>{bannerText}</Text>
             <SearchInput
               onSelect={handleSearchSelect}
               placeholder={'Search by park, city, or trail'}
@@ -120,15 +121,13 @@ const HeroSection = ({ onSelect }) => {
   );
 };
 
-const styles = () => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    useTheme();
-  return StyleSheet.create({
+const loadStyles = (theme) => {
+  const { currentTheme } = theme;
+  return {
     banner: {
       flex: 1,
       backgroundRepeat: 'repeat',
       backgroundSize: 'cover',
-      // overflow: "hidden",
       marginBottom: 20,
       alignItems: 'center',
       justifyContent: 'center',
@@ -140,7 +139,7 @@ const styles = () => {
       marginBottom: 20,
       color: currentTheme.colors.text,
     },
-  });
+  };
 };
 
 export default HeroSection;
