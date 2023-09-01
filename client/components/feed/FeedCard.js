@@ -26,6 +26,7 @@ import {
   Stack,
   Button,
 } from 'native-base';
+import { formatNumber } from '~/utils/formatNumber';
 
 // import { useAuth } from "../../auth/provider";
 
@@ -82,6 +83,7 @@ export default function Card({
 
   const truncatedName = truncateString(name, 25);
   const truncatedDestination = truncateString(destination, 25);
+  const formattedWeight = formatNumber(total_weight); // TODO convert to user preference once implemented
 
   return (
     <Box alignItems="center" padding="4">
@@ -165,7 +167,7 @@ export default function Card({
                 ml="-0.5"
                 mt="-1"
               >
-                Total Weight: {total_weight}
+                Total Weight: {formattedWeight}
               </Text>
             )}
 
