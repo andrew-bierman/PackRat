@@ -6,7 +6,6 @@ import { Card, Text, HStack, Badge } from 'native-base';
 import { Link } from 'expo-router';
 import { Dimensions, FlatList, View } from 'react-native';
 import { getPublicPacks, getPublicTrips } from '../../store/feedStore';
-import { theme } from '../../theme';
 import useTheme from '../../hooks/useTheme';
 import Carousel from '../carousel';
 import useCustomStyles from '~/hooks/useCustomStyles';
@@ -51,7 +50,7 @@ const FeedPreview = () => {
   return <FeedPreviewScroll />;
 };
 
-const loadStyles = (theme) => {
+const loadStyles = (theme, appTheme) => {
   const { currentTheme } = theme;
   return {
     feedPreview: {
@@ -62,7 +61,7 @@ const loadStyles = (theme) => {
     cardStyles: {
       height: 100,
       width: 250,
-      backgroundColor: theme.colors.primary,
+      backgroundColor: appTheme.colors.primary,
       borderRadius: 5,
       padding: 20,
       marginLeft: 10,

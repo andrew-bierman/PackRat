@@ -3,7 +3,6 @@ import { Box, Input, Button, Text } from 'native-base';
 
 // import useAddPack from "../../hooks/useAddPack";
 import { addPack } from '../../store/packsStore';
-import { theme } from '../../theme';
 import { useState } from 'react';
 // import { useAuth } from "../../auth/provider";
 import { useSelector, useDispatch } from 'react-redux';
@@ -89,7 +88,7 @@ export const AddPackContainer = () => {
   );
 };
 
-const loadStyles = (theme) => {
+const loadStyles = (theme, appTheme) => {
   const { currentTheme } = theme;
   return {
     container: {
@@ -135,7 +134,7 @@ const loadStyles = (theme) => {
       paddingVertical: 15,
       textAlign: 'center',
       alignItems: 'center',
-      color: theme.colors.text,
+      color: appTheme.colors.text,
       width: '50%',
     },
   };

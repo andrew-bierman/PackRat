@@ -3,6 +3,7 @@ import { Card } from 'native-base';
 import React from 'react';
 import { theme } from '../../theme';
 import useTheme from '../../hooks/useTheme';
+import useCustomStyles from '~/hooks/useCustomStyles';
 
 const Section = ({ children, onPress }) => {
   const styles = useCustomStyles(loadStyles);

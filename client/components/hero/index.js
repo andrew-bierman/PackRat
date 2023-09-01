@@ -4,6 +4,7 @@ import LargeCard from '../card/LargeCard';
 import { Platform, View } from 'react-native';
 import { theme } from '../../theme';
 import { isObjectEmpty } from '../../utils/isObjectEmpty';
+import useCustomStyles from '~/hooks/useCustomStyles';
 
 const Hero = ({ children, imageDetails }) => {
   if (isObjectEmpty(imageDetails || {})) {
@@ -16,6 +17,7 @@ const Hero = ({ children, imageDetails }) => {
   }
 
   const { title, subtitle, source, alt } = imageDetails;
+  const styles = useCustomStyles(loadStyles);
 
   return (
     <View
