@@ -23,14 +23,12 @@ export const addToFavoriteService = async (
         { _id: packId },
         { $pull: { favorited_by: userId } },
       );
-      await Pack.updateOne({ _id: packId }, { $inc: { favorites_count: -1 } });
     } else {
       await User.updateOne({ _id: userId }, { $push: { favorites: packId } });
       await Pack.updateOne(
         { _id: packId },
         { $push: { favorited_by: userId } },
       );
-      await Pack.updateOne({ _id: packId }, { $inc: { favorites_count: 1 } });
     }
 
     const user = await User.findOne({ _id: userId }).select('-password');
