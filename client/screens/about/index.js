@@ -164,6 +164,7 @@ const AboutContent = ({ desktopContainer, isMobile }) => {
 export default function About() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
+  const styles = useCustomStyles(loadStyles);
   return Platform.OS === 'web' ? (
     <View style={[isDark ? styles.containerDark : styles.container]}>
       <Desktop>
