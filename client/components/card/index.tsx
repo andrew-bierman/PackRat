@@ -272,6 +272,7 @@ const loadStyles = (theme) => {
       paddingRight: 25,
       paddingTop: 15,
       paddingBottom: 15,
+      marginBottom: 20,
       border: '1',
     },
     containerMobile: {
