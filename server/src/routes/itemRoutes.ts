@@ -44,7 +44,7 @@ const router = express.Router();
  *      200:
  *        description: Successful response
  */
-router.get('/packItems/:packId', (req, res) => zodParser(validator.getItems, req.body), tryCatchWrapper(getItems));
+router.get('/packItems/:packId', (req, res, next) => zodParser(validator.getItems, req.body, next), tryCatchWrapper(getItems));
 
 /**
  * @swagger
@@ -63,7 +63,7 @@ router.get('/packItems/:packId', (req, res) => zodParser(validator.getItems, req
  *      200:
  *        description: Successful response
  */
-router.get('/i/:packId', (req, res) => zodParser(validator.getItemById, req.body), tryCatchWrapper(getItemById));
+router.get('/i/:packId', (req, res, next) => zodParser(validator.getItemById, req.body, next), tryCatchWrapper(getItemById));
 
 /**
  * @swagger
@@ -117,7 +117,7 @@ router.get(
  *      200:
  *        description: Successful response
  */
-router.post('/', (req, res) => zodParser(validator.addItem, req.body), tryCatchWrapper(addItem));
+router.post('/', (req, res, next) => zodParser(validator.addItem, req.body, next), tryCatchWrapper(addItem));
 
 /**
  * @swagger
@@ -147,7 +147,7 @@ router.post('/', (req, res) => zodParser(validator.addItem, req.body), tryCatchW
  *      200:
  *        description: Successful response
  */
-router.put('/', (req, res) => zodParser(validator.editItem, req.body), tryCatchWrapper(editItem));
+router.put('/', (req, res, next) => zodParser(validator.editItem, req.body, next), tryCatchWrapper(editItem));
 
 /**
  * @swagger
@@ -169,7 +169,7 @@ router.put('/', (req, res) => zodParser(validator.editItem, req.body), tryCatchW
  *      200:
  *        description: Successful response
  */
-router.delete('/', (req, res) => zodParser(validator.deleteItem, req.body), tryCatchWrapper(deleteItem));
+router.delete('/', (req, res,next) => zodParser(validator.deleteItem, req.body, next), tryCatchWrapper(deleteItem));
 
 /**
  * @swagger
@@ -199,7 +199,7 @@ router.delete('/', (req, res) => zodParser(validator.deleteItem, req.body), tryC
  *      200:
  *        description: Successful response
  */
-router.post('/global', (req, res) => zodParser(validator.addItemGlobal, req.body), tryCatchWrapper(addItemGlobal));
+router.post('/global', (req, res, next) => zodParser(validator.addItemGlobal, req.body, next), tryCatchWrapper(addItemGlobal));
 
 /**
  * @swagger
