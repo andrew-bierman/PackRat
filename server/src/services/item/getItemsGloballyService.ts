@@ -6,7 +6,7 @@ import Item from '../../models/itemModel';
  * @param {Object} req - The request object.
  * @return {Object} An object containing items, page, and totalPages.
  */
-export const getItemsGloballyService = async (reqlimit, reqpage) => {
+export const getItemsGloballyService = async (reqlimit: any, reqpage: any) => {
   const totalItems = await Item.countDocuments({ global: true });
   const limit = Number(reqlimit) || totalItems;
   const totalPages = Math.ceil(totalItems / limit);
