@@ -50,7 +50,7 @@ router.get('/', tryCatchWrapper(getPublicTrips));
  *       200:
  *         description: Successful response
  */
-router.get('/:ownerId', (req, res) => zodParser(validator.getTrips, req.body), tryCatchWrapper(getTrips));
+router.get('/:ownerId', (req, res,next) => zodParser(validator.getTrips, req.params,next), tryCatchWrapper(getTrips));
 
 /**
  * @swagger
@@ -69,7 +69,7 @@ router.get('/:ownerId', (req, res) => zodParser(validator.getTrips, req.body), t
  *       200:
  *         description: Successful response
  */
-router.get('/t/:tripId', (req, res) => zodParser(validator.getTripById, req.body), tryCatchWrapper(getTripById));
+router.get('/t/:tripId', (req, res,next) => zodParser(validator.getTripById, req.params,next), tryCatchWrapper(getTripById));
 
 /**
  * @swagger
@@ -113,7 +113,7 @@ router.get('/t/:tripId', (req, res) => zodParser(validator.getTripById, req.body
  *       200:
  *         description: Successful response
  */
-router.post('/', (req, res) => zodParser(validator.addTrip, req.body), tryCatchWrapper(addTrip));
+router.post('/', (req, res,next) => zodParser(validator.addTrip, req.body,next), tryCatchWrapper(addTrip));
 
 /**
  * @swagger
@@ -159,7 +159,7 @@ router.post('/', (req, res) => zodParser(validator.addTrip, req.body), tryCatchW
  *       200:
  *         description: Successful response
  */
-router.put('/', (req, res) => zodParser(validator.editTrip, req.body), tryCatchWrapper(editTrip));
+router.put('/', (req, res,next) => zodParser(validator.editTrip, req.body,next), tryCatchWrapper(editTrip));
 
 /**
  * @swagger
@@ -181,6 +181,6 @@ router.put('/', (req, res) => zodParser(validator.editTrip, req.body), tryCatchW
  *       200:
  *         description: Successful response
  */
-router.delete('/', (req, res) => zodParser(validator.deleteTrip, req.body), tryCatchWrapper(deleteTrip));
+router.delete('/', (req, res,next) => zodParser(validator.deleteTrip, req.body,next), tryCatchWrapper(deleteTrip));
 
 export default router;

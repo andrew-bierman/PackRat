@@ -12,7 +12,7 @@ import { z } from 'zod';
  */
 export const getItemsGlobally = async (req, res, next) => {
   try {
-    const result = await getItemsGloballyService(req.query.limit,req.query.page);
+    const result = await getItemsGloballyService(req.query.limit, req.query.page);
 
     res.locals.data = result;
     responseHandler(res);
@@ -22,7 +22,7 @@ export const getItemsGlobally = async (req, res, next) => {
 };
 
 export function getItemsGloballyRoute() {
-  return publicProcedure.query(async (opts) => {
-    return getItemsGloballyService(opts.input);
+  return publicProcedure.input(z.object({ limit: z.number(), page: z.number() })).query(async (opts) => {
+    return getItemsGloballyService(opts.input.limit, opts.input.page);
   })
 }

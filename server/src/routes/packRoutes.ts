@@ -57,7 +57,7 @@ router.get('/', tryCatchWrapper(getPublicPacks));
  *       '500':
  *         description: Error retrieving packs by owner ID
  */
-router.get('/:ownerId', (req, res) => zodParser(validator.getPacks, req.body), tryCatchWrapper(getPacks));
+router.get('/:ownerId', (req, res,next) => zodParser(validator.getPacks, req.params,next), tryCatchWrapper(getPacks));
 
 /**
  * @swagger
@@ -80,7 +80,7 @@ router.get('/:ownerId', (req, res) => zodParser(validator.getPacks, req.body), t
  *       '500':
  *         description: Error retrieving pack by ID
  */
-router.get('/p/:packId', (req, res) => zodParser(validator.getPackById, req.body), tryCatchWrapper(getPackById));
+router.get('/p/:packId', (req, res,next) => zodParser(validator.getPackById, req.params,next), tryCatchWrapper(getPackById));
 
 /**
  * @swagger
@@ -103,7 +103,7 @@ router.get('/p/:packId', (req, res) => zodParser(validator.getPackById, req.body
  *       '500':
  *         description: Error scoring the pack
  */
-router.put('/score/:packId', (req, res) => zodParser(validator.getPackById, req.body), tryCatchWrapper(scorePack));
+router.put('/score/:packId', (req, res,next) => zodParser(validator.getPackById, req.params,next), tryCatchWrapper(scorePack));
 
 /**
  * @swagger
@@ -132,7 +132,7 @@ router.put('/score/:packId', (req, res) => zodParser(validator.getPackById, req.
  *       '500':
  *         description: Error adding the pack
  */
-router.post('/', (req, res) => zodParser(validator.addPack, req.body), tryCatchWrapper(addPack));
+router.post('/', (req, res,next) => zodParser(validator.addPack, req.body,next), tryCatchWrapper(addPack));
 
 /**
  * @swagger
@@ -161,7 +161,7 @@ router.post('/', (req, res) => zodParser(validator.addPack, req.body), tryCatchW
  *       '500':
  *         description: Error editing the pack
  */
-router.put('/', (req, res) => zodParser(validator.editPack, req.body), tryCatchWrapper(editPack));
+router.put('/', (req, res,next) => zodParser(validator.editPack, req.body,next), tryCatchWrapper(editPack));
 
 /**
  * @swagger
@@ -186,7 +186,7 @@ router.put('/', (req, res) => zodParser(validator.editPack, req.body), tryCatchW
  *       '500':
  *         description: Error deleting the pack
  */
-router.delete('/', (req, res) => zodParser(validator.deletePack, req.body), tryCatchWrapper(deletePack));
+router.delete('/', (req, res,next) => zodParser(validator.deletePack, req.body,next), tryCatchWrapper(deletePack));
 
 /**
  * @swagger
@@ -213,7 +213,7 @@ router.delete('/', (req, res) => zodParser(validator.deletePack, req.body), tryC
  */
 router.post(
   '/duplicate',
-  (req, res) => zodParser(validator.duplicatePublicPack, req.body),
+  (req, res,next) => zodParser(validator.duplicatePublicPack, req.body,next),
   tryCatchWrapper(duplicatePublicPack),
 );
 
