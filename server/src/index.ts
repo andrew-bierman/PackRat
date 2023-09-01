@@ -15,7 +15,7 @@ import { limiter } from './helpers/limiter';
 const app = express();
 
 // Apply security-related HTTP headers.
-app.use(helmet({ crossOriginResourcePolicy: false }));
+// app.use(helmet({ crossOriginResourcePolicy: false }));
 
 // Apply gzip compression to improve response times.
 app.use(compression());
