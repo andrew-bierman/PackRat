@@ -4,8 +4,9 @@ import myDB from './dbConnection';
 const itemCategorySchema = new Schema(
   {
     name: {
-      type: String, // it can be either a Way or a Node
-      enum: ItemCategory,
+      type:String
+      // type: String, // it can be either a Way or a Node
+      // enum: ItemCategory,
     },
   },
   {

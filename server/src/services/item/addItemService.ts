@@ -39,7 +39,7 @@ export const addItemService = async (
         quantity,
         unit,
         packs: [packId],
-        category: category._id,
+        category: type,
       });
 
       break;
@@ -50,7 +50,7 @@ export const addItemService = async (
       });
 
       const existingWaterItem = await Item.findOne({
-        category: category._id,
+        category: type,
         packs: packId,
       });
 
@@ -65,7 +65,7 @@ export const addItemService = async (
           quantity: 1,
           unit,
           packs: [packId],
-          category: category._id,
+          category: type,
         });
       }
 
@@ -82,7 +82,7 @@ export const addItemService = async (
         quantity,
         unit,
         packs: [packId],
-        category: category._id,
+        category: type,
       });
 
       break;
@@ -98,7 +98,7 @@ export const addItemService = async (
       },
     },
     { new: true },
-  ).populate('category');
+  )
 
   return { newItem: updatedItem, packId };
 };

@@ -34,7 +34,7 @@ export const addItemGlobalService = async (
         weight,
         quantity,
         unit,
-        category: category._id,
+        category: type,
         global: true,
       });
 
@@ -52,7 +52,7 @@ export const addItemGlobalService = async (
         weight,
         quantity: 1,
         unit,
-        category: category._id,
+        category: type,
         global: true,
       });
 
@@ -70,11 +70,11 @@ export const addItemGlobalService = async (
         weight,
         quantity,
         unit,
-        category: category._id,
+        category: type,
         global: true,
       });
 
-      newItem = await Item.findById(newItem.id).populate('category', 'name');
+      newItem = await Item.findById(newItem.id)
 
       break;
     }
