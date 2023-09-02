@@ -85,6 +85,7 @@ const itemsSlice = createSlice({
         state.error = null;
       })
       .addCase(addItemsGlobal.fulfilled, (state, action) => {
+        itemsAdapter.addOne(state, { ...action.payload });
         state.isLoading = false;
         state.error = null;
       })
