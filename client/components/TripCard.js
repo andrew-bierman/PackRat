@@ -1,4 +1,4 @@
-import { StyleSheet, Platform } from 'react-native';
+import { Platform } from 'react-native';
 import DropdownComponent from './Dropdown';
 import { Box, Text, Stack, View } from 'native-base';
 import { SearchInput } from './SearchInput';
@@ -13,6 +13,8 @@ import { selectAllTrails } from '../store/trailsStore';
 import useTheme from '../hooks/useTheme';
 import Carousel from './carousel';
 import { Card, H2, Paragraph } from 'tamagui';
+import useCustomStyles from '~/hooks/useCustomStyles';
+
 export default function TripCard({
   title,
   Icon,
@@ -24,8 +26,8 @@ export default function TripCard({
   isPark,
 }) {
   const dispatch = useDispatch();
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    useTheme();
+  const { isDark, currentTheme } = useTheme();
+  const styles = useCustomStyles(loadStyles);
 
   const currentTrail = useSelector((state) => state.dropdown.currentTrail);
   const currentPark = useSelector((state) => state.dropdown.currentPark);
@@ -62,12 +64,12 @@ export default function TripCard({
       rounded={['none', 'none', 'md', 'lg']}
       style={
         isSearch
-          ? styles().searchContainer
+          ? styles.searchContainer
           : isMap
-          ? styles().mapCard
-          : styles().containerMobile
-          ? styles().containerMobile
-          : styles().mutualStyles
+          ? styles.mapCard
+          : styles.containerMobile
+          ? styles.containerMobile
+          : styles.mutualStyles
       }
     >
       <Box
@@ -101,21 +103,8 @@ export default function TripCard({
       ) : isSearch ? (
         <SearchInput />
       ) : (
-        // isTrail ?
-
-        // <DropdownComponent
-        //   {...{
-        //     value: currentTrail,
-        //     data,
-        //     placeholder:"Select Trail",
-        //     isTrail,
-        //     onValueChange: handleValueChange,
-        //     width: 300,
-        //   }}
-        // />
-        // :
         <View style={{ width: '80%' }}>
-          <Carousel iconColor={isDark ? '#fff' : '#000'} itemWidth={150}>
+          <Carousel iconColor={isDark ? '#fff' : '#000'}>
             {data?.map((item) => {
               const selectedValue = isTrail ? currentTrail : currentPark;
               return (
@@ -147,10 +136,9 @@ export default function TripCard({
   );
 }
 
-const styles = () => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    useTheme();
-  return StyleSheet.create({
+const loadStyles = (theme) => {
+  const { currentTheme } = theme;
+  return {
     mutualStyles: {
       backgroundColor: currentTheme.colors.card,
       flex: 1,
@@ -160,7 +148,6 @@ const styles = () => {
       textAlign: 'center',
       padding: currentTheme.size.cardPadding,
     },
-
     containerMobile: {
       backgroundColor: currentTheme.colors.card,
       padding: currentTheme.size.mobilePadding,
@@ -170,7 +157,6 @@ const styles = () => {
       flex: 1,
       paddingHorizontal: 100,
     },
-
     searchContainer: {
       backgroundColor: currentTheme.colors.card,
       padding: currentTheme.size.mobilePadding,
@@ -180,25 +166,18 @@ const styles = () => {
       flex: 1,
       paddingHorizontal: 60,
       paddingVertical: 70,
-
       height: Platform.OS === 'web' ? '450px' : '100%',
     },
-
     mapCard: {
       backgroundColor: currentTheme.colors.card,
-      // flex: 2,
-
       flexDirection: 'column',
-      // gap: 45,
-      // justifyContent: "center",
       alignItems: 'center',
       textAlign: 'center',
       padding: currentTheme.size.cardPadding,
       paddingHorizontal: currentTheme.padding.paddingInside,
       marginBottom: 20,
-      // height: 'fit-content'
       height: Platform.OS === 'web' ? '650px' : '100%',
       overflow: 'hidden',
     },
-  });
+  };
 };

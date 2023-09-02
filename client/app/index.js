@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 
-import { Platform, StyleSheet } from 'react-native';
+import { Platform } from 'react-native';
 
 import { Stack as Header } from 'expo-router';
 
