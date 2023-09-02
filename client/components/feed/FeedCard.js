@@ -50,10 +50,10 @@ export default function Card({
   const favorites = useSelector(selectAllFavorites);
   const dispatch = useDispatch();
 
-  const isFavorite = favorites.some((favorite) => favorite.pack_id === _id);
-  // const isFavorite = favorited_by.includes(user._id);
-  console.log('isFavorite', isFavorite);
-  console.log('favorites', favorites);
+  // const isFavorite = favorites.some((favorite) => favorite.pack_id === _id);
+  const isFavorite =
+    favorited_by.includes(user._id) ||
+    favorited_by.forEach((obj) => obj._id === user._id);
 
   /**
    * Handles adding an item to the user's favorites.
