@@ -1,8 +1,10 @@
 import React from 'react';
 
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
+import useCustomStyles from '~/hooks/useCustomStyles';
 
 const ScrollButton = ({ direction, onPress }) => {
+  const styles = useCustomStyles(loadStyles);
   return (
     <TouchableOpacity
       activeOpacity={0.8}
@@ -15,7 +17,7 @@ const ScrollButton = ({ direction, onPress }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const loadStyles = () => ({
   container: {
     justifyContent: 'center',
     alignItems: 'center',

@@ -20,9 +20,11 @@ import TripCard from '../../components/TripCard';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { convertPhotonGeoJsonToShape } from '../../utils/mapFunctions';
 import useTheme from '../../hooks/useTheme';
+import useCustomStyles from '~/hooks/useCustomStyles';
 export function TripDetails() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
+  const styles = useCustomStyles(loadStyles);
   const weatherObject = useSelector((state) => state.weather.weatherObject);
   const weatherWeek = useSelector((state) => state.weather.weatherWeek);
   console.log('trip detail');
@@ -54,7 +56,7 @@ export function TripDetails() {
   return (
     <Box
       style={[
-        styles().mainContainer,
+        styles.mainContainer,
         Platform.OS == 'web' ? { minHeight: '100vh' } : null,
       ]}
     >
@@ -116,10 +118,9 @@ export function TripDetails() {
   );
 }
 
-const styles = () => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    useTheme();
-  return StyleSheet.create({
+const loadStyles = (theme) => {
+  const { currentTheme } = theme;
+  return {
     mainContainer: {
       backgroundColor: currentTheme.colors.background,
       flexDirection: 'column',
@@ -139,5 +140,5 @@ const styles = () => {
     dropdown: {
       backgroundColor: currentTheme.colors.white,
     },
-  });
+  };
 };

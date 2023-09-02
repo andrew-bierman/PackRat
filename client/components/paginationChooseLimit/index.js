@@ -1,8 +1,10 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text } from 'react-native';
 import React, { useState } from 'react';
 import { Select } from 'native-base';
+import useCustomStyles from '~/hooks/useCustomStyles';
 
 export const PaginationLimit = ({ limit, setLimit, setPage }) => {
+  const styles = useCustomStyles(loadStyles);
   return (
     <View style={styles.selectContainer}>
       <Select
@@ -21,7 +23,7 @@ export const PaginationLimit = ({ limit, setLimit, setPage }) => {
     </View>
   );
 };
-const styles = StyleSheet.create({
+const loadStyles = () => ({
   selectContainer: {
     width: '15rem',
     marginLeft: 'auto',

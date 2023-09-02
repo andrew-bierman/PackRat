@@ -8,8 +8,9 @@ import QuickActionsSection from '../../components/dashboard/QuickActionSection';
 import FeedPreview from '../../components/dashboard/FeedPreview';
 import Section from '../../components/dashboard/Section';
 import SectionHeader from '../../components/dashboard/SectionHeader';
+import useCustomStyles from '~/hooks/useCustomStyles';
 const Dashboard = () => {
-  const styles = customStyles();
+  const styles = useCustomStyles(loadStyles);
 
   return (
     <>
@@ -41,10 +42,9 @@ const Dashboard = () => {
   );
 };
 
-const customStyles = () => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    useTheme();
-  return StyleSheet.create({
+const loadStyles = (theme) => {
+  const { currentTheme } = theme;
+  return {
     container: {
       flex: 1,
       flexGrow: 1,
@@ -63,7 +63,7 @@ const customStyles = () => {
       marginBottom: 20,
       width: '100%',
     },
-  });
+  };
 };
 
 export default Dashboard;

@@ -12,13 +12,14 @@ import { fetchSinglePack } from '../../store/singlePackStore';
 
 import { Box, Text } from 'native-base';
 import { DetailsComponent } from '../details';
-import { Dimensions, Platform, StyleSheet } from 'react-native';
+import { Dimensions, Platform } from 'react-native';
 import { theme } from '../../theme';
 import { CLIENT_URL } from '@env';
 import ScoreContainer from '../ScoreContainer';
 import ChatContainer from '../chat';
 import { AddItem } from '../item/AddItem';
 import { AddItemModal } from './AddItemModal';
+import useCustomStyles from '~/hooks/useCustomStyles';
 
 export function PackDetails() {
   const searchParams = new URLSearchParams(window.location.search);
@@ -43,7 +44,7 @@ export function PackDetails() {
     if (userId) dispatch(fetchUserPacks(userId));
     setFirstLoad(false);
   }, [dispatch, packId, updated]); // TODO updated is a temporary fix to re-render when pack is update, due to bug in store
-
+  const styles = useCustomStyles(loadStyles);
   const currentPackId = currentPack && currentPack._id;
 
   // check if user is owner of pack, and that pack and user exists
@@ -100,10 +101,9 @@ export function PackDetails() {
   );
 }
 
-const styles = () => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    useTheme();
-  return StyleSheet.create({
+const loadStyles = (theme) => {
+  const { currentTheme } = theme;
+  return {
     mainContainer: {
       backgroundColor: currentTheme.colors.background,
       flexDirection: 'column',
@@ -127,5 +127,5 @@ const styles = () => {
       width: '100%',
       minHeight: 100,
     },
-  });
+  };
 };

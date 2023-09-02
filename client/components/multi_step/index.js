@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { Svg, Line, Circle } from 'react-native-svg';
 import useTheme from '../../hooks/useTheme';
+import useCustomStyles from '~/hooks/useCustomStyles';
 
 const ProgressBar = ({ steps, currentStep }) => {
   const percentage = ((currentStep + 1) / steps.length) * 100;
+  const styles = useCustomStyles(loadStyles);
 
   return (
-    <View style={styles().progressBar}>
-      <Svg style={styles().svg}>
+    <View style={styles.progressBar}>
+      <Svg style={styles.svg}>
         <Line x1="0" y1="15" x2="100%" y2="15" stroke="grey" strokeWidth="10" />
         <Line
           x1="0"
@@ -35,11 +37,12 @@ const ProgressBar = ({ steps, currentStep }) => {
 const Sidebar = ({ stepsData, currentStep }) => {
   // Get the data for the current step and all previous steps
   const displayData = Object.values(stepsData).slice(0, currentStep + 1);
+  const styles = useCustomStyles(loadStyles);
 
   if (displayData.length === 0) return null;
 
   return (
-    <View style={styles().sidebar}>
+    <View style={styles.sidebar}>
       {/* Display your data here */}
       {displayData.map((data, index) => {
         if (!data) return null;
@@ -67,6 +70,7 @@ const Sidebar = ({ stepsData, currentStep }) => {
 const MultiStepForm = ({ steps = [] }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [stepsData, setStepsData] = useState({});
+  const styles = useCustomStyles(loadStyles);
 
   /**
    * Updates the current step and saves the data of the current step before moving.
@@ -115,32 +119,31 @@ const MultiStepForm = ({ steps = [] }) => {
   if (!steps.length) return null;
 
   return (
-    <View style={styles().container}>
+    <View style={styles.container}>
       <ProgressBar steps={steps} currentStep={currentStep} />
 
       <Sidebar stepsData={stepsData} currentStep={currentStep} />
 
       {CurrentComponent && <CurrentComponent {...props} />}
 
-      <View style={styles().buttonContainer}>
+      <View style={styles.buttonContainer}>
         <TouchableOpacity onPress={prevStep} disabled={currentStep === 0}>
-          <Text style={styles().button}>Previous</Text>
+          <Text style={styles.button}>Previous</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={nextStep}
           disabled={currentStep === steps.length - 1}
         >
-          <Text style={styles().button}>Next</Text>
+          <Text style={styles.button}>Next</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 };
 
-const styles = () => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    useTheme();
-  return StyleSheet.create({
+const loadStyles = (theme) => {
+  const { currentTheme } = theme;
+  return {
     container: {
       // flex: 1,
       height: '800px',
@@ -175,7 +178,7 @@ const styles = () => {
       padding: 10,
       backgroundColor: currentTheme.colors.white, // adjust as necessary
     },
-  });
+  };
 };
 
 export default MultiStepForm;

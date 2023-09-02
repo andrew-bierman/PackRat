@@ -5,11 +5,13 @@ import useTheme from '../../hooks/useTheme';
 import { Paragraph, Card, H2, XStack, Button, Image } from 'tamagui';
 import { Card as RNPCard } from 'react-native-paper';
 import { DialogDemo } from '../../components/dialog';
+import useCustomStyles from '~/hooks/useCustomStyles';
 
 export default function AppearanceContainer() {
   const { enableDarkMode, enableLightMode, currentTheme, isDark } = useTheme();
   const [isEnabled, setIsEnabled] = useState(false);
   const [showKitchenSink, setShowKitchenSink] = useState(true);
+  const styles = useCustomStyles(loadStyles);
 
   /**
    * Toggles the switch between dark mode and light mode.
@@ -100,7 +102,7 @@ export function DemoCard(props) {
     </Card>
   );
 }
-const styles = StyleSheet.create({
+const loadStyles = () => ({
   mainContainer: {
     flex: 1,
     alignItems: 'center',
