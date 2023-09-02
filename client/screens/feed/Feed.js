@@ -33,6 +33,7 @@ import {
 import { fetchUserTrips } from '../../store/tripsStore';
 import { useRouter } from 'expo-router';
 import { fuseSearch } from '../../utils/fuseSearch';
+import { fetchUserFavorites } from '../../store/favoritesStore';
 
 const URL_PATHS = {
   userPacks: '/pack/',
@@ -98,7 +99,7 @@ const FeedSearchFilter = ({
             <Text
               fontSize="lg"
               fontWeight="bold"
-              color={currentTheme.colors.text}
+              color={currentTheme.colors.textColor}
             >
               Packs
             </Text>
@@ -110,7 +111,7 @@ const FeedSearchFilter = ({
             <Text
               fontSize="lg"
               fontWeight="bold"
-              color={currentTheme.colors.text}
+              color={currentTheme.colors.textColor}
             >
               Trips
             </Text>
@@ -125,7 +126,7 @@ const FeedSearchFilter = ({
           <Text
             fontSize="lg"
             fontWeight="bold"
-            color={currentTheme.colors.text}
+            color={currentTheme.colors.textColor}
           >
             Sort By:
           </Text>
@@ -168,6 +169,7 @@ const Feed = ({ feedType = 'public' }) => {
     if (feedType === 'public') {
       dispatch(getPublicPacks(queryString));
       dispatch(getPublicTrips(queryString));
+      dispatch(fetchUserFavorites(ownerId));
     } else if (feedType === 'userPacks' && ownerId) {
       dispatch(fetchUserPacks(ownerId));
     } else if (feedType === 'userTrips' && ownerId) {
