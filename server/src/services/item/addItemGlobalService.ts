@@ -79,6 +79,7 @@ export const addItemGlobalService = async (
       break;
     }
   }
-
+  console.log(newItem);
+  
   return newItem;
 };

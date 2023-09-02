@@ -31,12 +31,12 @@ export const editItemService = async (
       weight,
       unit,
       quantity,
-      category: category.id,
+      category: type,
     },
     {
       returnOriginal: false,
     },
-  ).populate('category', 'name');
+  )
 
   return newItem;
 };

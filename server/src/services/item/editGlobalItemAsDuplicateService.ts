@@ -32,12 +32,12 @@ export const editGlobalItemAsDuplicateService = async (
     weight,
     unit,
     quantity,
-    category: category._id,
+    category: type,
     global: false,
     packs: [packId],
   });
 
-  newItem = await Item.findById(newItem._id).populate('category', 'name');
+  newItem = await Item.findById(newItem._id)
 
   await Pack.updateOne({ _id: packId }, { $addToSet: { items: newItem._id } });
 

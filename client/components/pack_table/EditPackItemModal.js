@@ -12,11 +12,19 @@ export const EditPackItemModal = ({
   page,
   setRefetch = () => {},
   refetch,
-  isModalOpen,
-  onTrigger,
-  closeModalHandler,
 }) => {
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+
+  const closeModalHandler = () => {
+    setIsModalOpen(false);
+  };
+
+  const onTrigger = () => {
+    setIsModalOpen(true);
+  };
+
   let currentPackId;
+  
   if (currentPack) {
     currentPackId = currentPack._id;
   }
