@@ -18,14 +18,14 @@ export const addTripService = async (tripDetails): Promise<string> => {
       start_date,
       end_date,
       destination,
-      geoJSON,
+      // geoJSON,
       owner_id,
       packs,
       is_public,
     } = tripDetails;
 
     // Create the OSM object and get its _id
-    const { osm_ref, osm_type } = await createOSMObject(geoJSON);
+    // const { osm_ref, osm_type } = await createOSMObject(geoJSON);
 
     await Trip.create({
       name,
@@ -35,8 +35,8 @@ export const addTripService = async (tripDetails): Promise<string> => {
       start_date,
       end_date,
       destination,
-      osm_ref,
-      osm_type,
+      // osm_ref,
+      // osm_type,
       owner_id,
       packs,
       is_public,

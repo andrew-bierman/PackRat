@@ -18,11 +18,12 @@ export const addTrip = async (req, res, next) => {
       start_date,
       end_date,
       destination,
-      geoJSON,
+      // geoJSON,
       owner_id,
       packs,
       is_public,
     } = req.body;
+
 
     const tripDetails = {
       name,
@@ -32,7 +33,7 @@ export const addTrip = async (req, res, next) => {
       start_date,
       end_date,
       destination,
-      geoJSON,
+      // geoJSON,
       owner_id,
       packs,
       is_public,
