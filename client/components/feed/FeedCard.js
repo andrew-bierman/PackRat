@@ -51,6 +51,9 @@ export default function Card({
   const dispatch = useDispatch();
 
   const isFavorite = favorites.some((favorite) => favorite.pack_id === _id);
+  // const isFavorite = favorited_by.includes(user._id);
+  console.log('isFavorite', isFavorite);
+  console.log('favorites', favorites);
 
   /**
    * Handles adding an item to the user's favorites.
@@ -256,9 +259,14 @@ export default function Card({
                       <AntDesign
                         name="heart"
                         size={16}
+                        // color={
+                        //   isFavorite
+                        //     ? `${currentTheme.colors.error}`
+                        //     : `${currentTheme.colors.cardIconColor}`
+                        // }
                         color={
                           isFavorite
-                            ? `${currentTheme.colors.error}`
+                            ? 'red'
                             : `${currentTheme.colors.cardIconColor}`
                         }
                       />
@@ -272,7 +280,7 @@ export default function Card({
                     }}
                     fontWeight="400"
                   >
-                    {favorites_count}
+                    {favorites_count > 0 ? favorites_count : 0}
                   </Text>
                 </Box>
               </Box>
