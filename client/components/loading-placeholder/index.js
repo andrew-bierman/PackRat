@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { View, StyleSheet, Animated } from 'react-native';
+import { View, Animated } from 'react-native';
 
 const LoadingPlaceholder = ({
   width = '100%',
@@ -8,6 +8,7 @@ const LoadingPlaceholder = ({
   color = '#CCC',
 }) => {
   const fadeAnim = useRef(new Animated.Value(0.5)).current; // Initial value for opacity
+  const styles = useCustomStyles(loadStyles);
 
   useEffect(() => {
     const fadeIn = Animated.timing(fadeAnim, {
@@ -46,7 +47,7 @@ const LoadingPlaceholder = ({
   );
 };
 
-const styles = StyleSheet.create({
+const loadStyles = () => ({
   placeholder: {
     marginVertical: 4,
   },

@@ -8,14 +8,15 @@ import {
   Platform,
   Dimensions,
 } from 'react-native';
-
 import { Svg, Line, Circle } from 'react-native-svg';
 import useTheme from '../../hooks/useTheme';
+import useCustomStyles from '~/hooks/useCustomStyles';
 
 const { height, width } = Dimensions.get('window');
 
 const ProgressBar = ({ steps, currentStep }) => {
   const percentage = ((currentStep + 1) / steps.length) * 100;
+  const styles = useCustomStyles(loadStyles);
 
   return (
     <View
@@ -60,6 +61,7 @@ const ProgressBar = ({ steps, currentStep }) => {
 const Sidebar = ({ stepsData, currentStep }) => {
   // Get the data for the current step and all previous steps
   const displayData = Object.values(stepsData).slice(0, currentStep + 1);
+  const styles = useCustomStyles(loadStyles);
 
   if (!displayData.length) return null;
 
@@ -92,6 +94,7 @@ const Sidebar = ({ stepsData, currentStep }) => {
 const MultiStepForm = ({ steps = [] }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [stepsData, setStepsData] = useState({});
+  const styles = useCustomStyles(loadStyles);
 
   const scrollViewRef = useRef(null);
 

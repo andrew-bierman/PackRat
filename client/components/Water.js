@@ -1,14 +1,15 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Button, Input, Text, Box } from 'native-base';
 import React, { useState } from 'react';
-import { StyleSheet } from 'react-native';
 import { ItemCategoryEnum } from '../constants/itemCategory';
 import { useDispatch } from 'react-redux';
 import { addPackItem } from '../store/packsStore';
+import useCustomStyles from '~/hooks/useCustomStyles';
 
 export default function Water({ currentPack, setWaterItem }) {
   const [waterWeight, setWaterWeight] = useState(0);
   const dispatch = useDispatch();
+  const styles = useCustomStyles(loadStyles);
 
   /**
    * Update the water weight.
@@ -71,7 +72,7 @@ export default function Water({ currentPack, setWaterItem }) {
   );
 }
 
-const styles = StyleSheet.create({
+const loadStyles = () => ({
   waterContainer: {
     flexDirection: 'row',
     alignItems: 'center',
