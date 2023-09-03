@@ -187,21 +187,18 @@ const CategoryRow = ({ category }) => {
   };
 
   const rowData = [
-    <HStack style={styles().categoryRow}>
+    <HStack>
       <Feather
         name={categoryIcons[category]}
         size={16}
-        color={currentTheme.colors.white}
       />
-      <Text style={styles().titleText}> {category}</Text>
+      <Text> {category}</Text>
     </HStack>,
   ];
 
   return (
     <Row
       data={rowData}
-      style={[styles().title]}
-      textStyle={styles().titleText}
     />
   );
 };
@@ -443,8 +440,6 @@ const styles = () => {
     categoryRow: {
       padding: 10,
       borderRadius: 5,
-      alignItems: 'center',
-      justifyContent: 'flex-start',
     },
     title: {
       height: 50,
