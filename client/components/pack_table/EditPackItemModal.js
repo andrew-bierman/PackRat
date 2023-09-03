@@ -24,7 +24,7 @@ export const EditPackItemModal = ({
   };
 
   let currentPackId;
-  
+
   if (currentPack) {
     currentPackId = currentPack._id;
   }

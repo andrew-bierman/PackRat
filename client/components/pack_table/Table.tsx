@@ -71,7 +71,7 @@ const TableItem = ({
   refetch,
   setRefetch = () => {},
 }) => {
-  const { name, weight, quantity, unit, _id } = itemData;
+  const { name, weight, quantity, category, unit, _id } = itemData;
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   /**
@@ -98,6 +98,7 @@ const TableItem = ({
       name,
       `${formatNumber(weight)} ${unit}`,
       quantity,
+      <CategoryRow category={category} />,
       <PackOptions
         Edit={
           <EditPackItemModal
@@ -134,6 +135,7 @@ const TableItem = ({
       name,
       `${formatNumber(weight)} ${unit}`,
       quantity,
+      <CategoryRow category={category} />,
       <EditPackItemModal
         packId={_id}
         initialData={itemData}
@@ -374,7 +376,6 @@ export const TableContainer = ({
               keyExtractor={([category, items]) => category}
               renderItem={({ item: [category, items] }) => (
                 <>
-                  <CategoryRow category={category} />
                   <FlatList
                     data={items}
                     keyExtractor={(item, index) => item._id}
@@ -394,7 +395,6 @@ export const TableContainer = ({
               )}
             />
           </Table>
-          <CustomButton text="Copy" handler={handleDuplicate} copy={copy} />
           <TotalWeightBox
             label="Base Weight"
             weight={totalBaseWeight}
@@ -415,6 +415,7 @@ export const TableContainer = ({
         <Text style={styles().noItemsText}>Add your First Item</Text>
       )}
       <WeightUnitDropdown value={weightUnit} onChange={setWeightUnit} />
+      <CustomButton text="Copy" handler={handleDuplicate} copy={copy} />
     </Box>
   );
 };

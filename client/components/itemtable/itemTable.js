@@ -38,6 +38,7 @@ export const ItemsTable = ({
       />
     );
   };
+  
   const TableItem = ({ itemData }) => {
     const { name, weight, category, quantity, unit, _id } = itemData;
 
