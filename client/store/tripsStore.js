@@ -43,6 +43,14 @@ export const editTrip = createAsyncThunk(
   },
 );
 
+export const scroreTrip = createAsyncThunk(
+  'trips/scoreTrip',
+  async (tripId) => {
+    const response = await axios.put(`${api}/trip/score/${tripId}`);
+    return response.data;
+  },
+);
+
 const tripsAdapter = createEntityAdapter({
   selectId: (trip) => trip._id,
 });
@@ -146,6 +154,22 @@ const tripsSlice = createSlice({
         state.error = null;
       })
       .addCase(editTrip.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message;
+      })
+      .addCase(scroreTrip.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(scroreTrip.fulfilled, (state, action) => {
+        packsAdapter.updateOne(state, {
+          id: action.payload.UpdatedTrip._id,
+          changes: action.payload.UpdatedTrip,
+        });
+        state.isLoading = false;
+        state.error = null;
+      })
+      .addCase(scroreTrip.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message;
       });

@@ -6,6 +6,7 @@ import {
   addTrip,
   editTrip,
   deleteTrip,
+  scoreTrip
 } from '../controllers/trip/index';
 import * as validator from '../middleware/validators/index';
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
@@ -189,6 +190,35 @@ router.put(
   checkRole(['user', 'admin']),
   validator.editTrip,
   tryCatchWrapper(editTrip),
+);
+
+/**
+ * @swagger
+ * /trip/score/{tripId}:
+ *   put:
+ *     summary: Score a trip
+ *     tags: [Trips]
+ *     parameters:
+ *       - in: path
+ *         name: tripId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the trip
+ *     responses:
+ *       '200':
+ *         description: Successful response after scoring the trip
+ *       '400':
+ *         description: Invalid request parameters
+ *       '500':
+ *         description: Error scoring the trip
+ */
+router.put(
+  '/score/:tripId',
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
+  validator.getTripById,
+  tryCatchWrapper(scoreTrip),
 );
 
 /**

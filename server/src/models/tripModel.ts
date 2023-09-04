@@ -22,6 +22,22 @@ const TripSchema = new Schema(
       ],
       required: true,
     },
+    grades: {
+      type: Object,
+      default: {
+        weather: '',
+        essentialItems: '',
+        redundancyAndVersatility: '',
+      },
+    },
+    scores: {
+      type: Object,
+      default: {
+        weatherScore: 0,
+        essentialItemsScore: 0,
+        redundancyAndVersatilityScore: 0,
+      },
+    },
     owner_id: { type: Schema.Types.ObjectId, ref: 'User' },
     packs: { type: Schema.Types.ObjectId, ref: 'Pack' },
     is_public: { type: Boolean },
