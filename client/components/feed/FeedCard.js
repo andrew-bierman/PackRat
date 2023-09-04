@@ -84,7 +84,12 @@ export default function Card({
   const truncatedName = truncateString(name, 25);
   const truncatedDestination = truncateString(destination, 25);
   const formattedWeight = formatNumber(total_weight); // TODO convert to user preference once implemented
-  const { numberOfNights } = JSON.parse(duration);
+
+  let numberOfNights;
+
+  if (duration) numberOfNights = JSON.parse(duration).numberOfNights;
+
+  console.log('night', numberOfNights);
 
   return (
     <Box alignItems="center" padding="4">
