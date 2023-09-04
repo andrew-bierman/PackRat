@@ -14,7 +14,7 @@
     "resolveJsonModule": true,
     "moduleResolution": "Node",
     "allowSyntheticDefaultImports": true,
-    "sourceMap": true
+    "sourceMap": true,
   },
   "exclude": [
     "node_modules",

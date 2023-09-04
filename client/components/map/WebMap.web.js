@@ -4,10 +4,10 @@ import React, {
   useEffect,
   useCallback,
   useMemo,
-} from "react";
-import mapboxgl, { Marker } from "mapbox-gl";
-import { MAPBOX_ACCESS_TOKEN } from "@env";
-import { useSelector, useDispatch } from "react-redux";
+} from 'react';
+import mapboxgl, { Marker } from 'mapbox-gl';
+import { MAPBOX_ACCESS_TOKEN } from '@env';
+import { useSelector, useDispatch } from 'react-redux';
 
 import {
   Platform,
@@ -19,7 +19,7 @@ import {
   Image,
   Modal,
   Alert,
-} from "react-native";
+} from 'react-native';
 import {
   getShapeSourceBounds,
   calculateZoomLevel,
@@ -30,43 +30,42 @@ import {
   isShapeDownloadable,
   isPoint,
   isPolygonOrMultiPolygon,
-  multiPolygonBounds
-} from "../../utils/mapFunctions";
-import MapButtonsOverlay from "./MapButtonsOverlay";
-import { saveFile } from "../../utils/fileSaver/fileSaver";
-import * as DocumentPicker from "expo-document-picker";
-import togpx from "togpx";
-import { gpx as toGeoJSON } from "@tmcw/togeojson";
-import { DOMParser } from "xmldom";
-import MapPreview from "./MapPreview";
+  multiPolygonBounds,
+} from '../../utils/mapFunctions';
+import MapButtonsOverlay from './MapButtonsOverlay';
+import { saveFile } from '../../utils/fileSaver/fileSaver';
+import * as DocumentPicker from 'expo-document-picker';
+import togpx from 'togpx';
+import { gpx as toGeoJSON } from '@tmcw/togeojson';
+import { DOMParser } from 'xmldom';
+import MapPreview from './MapPreview';
 
 // import 'mapbox-gl/dist/mapbox-gl.css'
 
 mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
-const DESTINATION = 'destination'
-const TRIP= 'trip';
+const DESTINATION = 'destination';
+const TRIP = 'trip';
 const WebMap = ({ shape: shapeProp }) => {
-
   useEffect(() => {
     // temporary solution to fix mapbox-gl-js missing css error
-    if (Platform.OS === "web") {
+    if (Platform.OS === 'web') {
       // inject mapbox css into head
-      const link = document.createElement("link");
-      link.href = "https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css";
-      link.rel = "stylesheet";
+      const link = document.createElement('link');
+      link.href = 'https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css';
+      link.rel = 'stylesheet';
       document.head.appendChild(link);
 
       // inject mapbox js into head
-      const script = document.createElement("script");
-      script.src = "https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js";
+      const script = document.createElement('script');
+      script.src = 'https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js';
       script.async = true;
       document.head.appendChild(script);
     }
   }, []);
 
   const [shape, setShape] = useState(shapeProp);
-  console.log("WebMap shape", shape);
+  console.log('WebMap shape', shape);
 
   const mapContainer = useRef(null);
   const map = useRef(null);
@@ -74,8 +73,8 @@ const WebMap = ({ shape: shapeProp }) => {
   const [lat, setLat] = useState(38.9072);
 
   // consts
-  const dw = Dimensions.get("screen").width;
-  const dh = Dimensions.get("screen").height;
+  const dw = Dimensions.get('screen').width;
+  const dh = Dimensions.get('screen').height;
   const fullMapDiemention = useMemo(() => ({ width: dw, height: 360 }), [dw]);
   const previewMapDiemension = { width: dw * 0.9, height: 220 };
 
@@ -112,7 +111,7 @@ const WebMap = ({ shape: shapeProp }) => {
 
       const latZoom = calculateZoomLevel(bounds, mapDim);
       const trailCenter = findTrailCenter(shape);
-      console.log("trailCenter in useEffect", trailCenter);
+      console.log('trailCenter in useEffect', trailCenter);
 
       zoomLevelRef.current = latZoom;
       trailCenterPointRef.current = trailCenter;
@@ -122,7 +121,10 @@ const WebMap = ({ shape: shapeProp }) => {
   }, [shape, fullMapDiemention]);
 
   useEffect(() => {
-    console.log(!mapFullscreen || !isPolygonOrMultiPolygon(shape), 'is polygon or not')
+    console.log(
+      !mapFullscreen || !isPolygonOrMultiPolygon(shape),
+      'is polygon or not',
+    );
     if (!mapFullscreen && !isPolygonOrMultiPolygon(shape)) return;
     const mapInstance = new mapboxgl.Map({
       container: mapContainer.current,
@@ -138,29 +140,29 @@ const WebMap = ({ shape: shapeProp }) => {
       interactive: mapFullscreen,
     });
 
-    mapInstance.on("load", () => {
-      if(isPoint(shape)) {
+    mapInstance.on('load', () => {
+      if (isPoint(shape)) {
         addPoints(mapInstance);
-      } else if(isPolygonOrMultiPolygon(shape)) {
-        console.log('it is polygon')
+      } else if (isPolygonOrMultiPolygon(shape)) {
+        console.log('it is polygon');
         addPolygons(mapInstance);
       } else {
         addTrailLayer(mapInstance);
       }
       if (mapFullscreen && showUserLocation) {
         mapInstance.addLayer({
-          id: "user-location",
-          type: "circle",
+          id: 'user-location',
+          type: 'circle',
           source: {
-            type: "geojson",
+            type: 'geojson',
             data: {
-              type: "Point",
+              type: 'Point',
               coordinates: [lng, lat],
             },
           },
           paint: {
-            "circle-radius": 8,
-            "circle-color": "#3388ff",
+            'circle-radius': 8,
+            'circle-color': '#3388ff',
           },
         });
       }
@@ -169,7 +171,7 @@ const WebMap = ({ shape: shapeProp }) => {
       //   .setLngLat([lng, lat])
       //   .addTo(mapInstance);
 
-      mapInstance.on("move", () => {
+      mapInstance.on('move', () => {
         const { lng, lat } = mapInstance.getCenter();
         setLng(lng.toFixed(4));
         setLat(lat.toFixed(4));
@@ -181,113 +183,141 @@ const WebMap = ({ shape: shapeProp }) => {
   }, [mapFullscreen]);
 
   useEffect(() => {
-    if(map.current && isPoint(shape)) {
+    if (map.current && isPoint(shape)) {
       addPoints(map.current);
-    }
-    else if (map.current && shape.features[0].geometry.type !== 'Point') {
+    } else if (map.current && shape.features[0].geometry.type !== 'Point') {
       removeTrailLayer(map.current);
       addTrailLayer(map.current);
       map.current.setCenter(trailCenterPointRef.current);
       map.current.setZoom(zoomLevelRef.current);
     }
 
-    console.log("trailCenterPointRef.current", trailCenterPointRef.current);
+    console.log('trailCenterPointRef.current', trailCenterPointRef.current);
 
     // console.log("mapInstance", mapInstance);
   }, [shape]);
 
+  /**
+   * Removes the existing source and layers for the trail-cap and trail from the map instance.
+   *
+   * @param {object} mapInstance - The map instance to remove the layers and source from.
+   */
   const removeTrailLayer = (mapInstance) => {
     // Remove existing source and layers if they exist
-    if (mapInstance.getLayer("trail-cap")) {
-      mapInstance.removeLayer("trail-cap");
+    if (mapInstance.getLayer('trail-cap')) {
+      mapInstance.removeLayer('trail-cap');
     }
 
-    if (mapInstance.getSource("trail-cap")) {
-      mapInstance.removeSource("trail-cap");
+    if (mapInstance.getSource('trail-cap')) {
+      mapInstance.removeSource('trail-cap');
     }
 
-    if (mapInstance.getLayer("trail")) {
-      mapInstance.removeLayer("trail");
+    if (mapInstance.getLayer('trail')) {
+      mapInstance.removeLayer('trail');
     }
 
-    if (mapInstance.getSource("trail")) {
-      mapInstance.removeSource("trail");
+    if (mapInstance.getSource('trail')) {
+      mapInstance.removeSource('trail');
     }
   };
 
+  /**
+   * Adds a trail layer to the given map instance.
+   *
+   * @param {Object} mapInstance - The map instance to add the trail layer to.
+   */
   const addTrailLayer = (mapInstance) => {
-    let processedShape = processShapeData(shape);
+    const processedShape = processShapeData(shape);
 
     // Add new source and layers
-    mapInstance.addSource("trail", {
-      type: "geojson",
-      data: processedShape ? processedShape : shape,
+    mapInstance.addSource('trail', {
+      type: 'geojson',
+      data: processedShape || shape,
     });
 
     mapInstance.addLayer({
-      id: "trail",
-      type: "line",
-      source: "trail",
+      id: 'trail',
+      type: 'line',
+      source: 'trail',
       paint: {
-        "line-color": "#16b22d",
-        "line-width": 4,
-        "line-opacity": 1,
+        'line-color': '#16b22d',
+        'line-width': 4,
+        'line-opacity': 1,
       },
     });
 
     // Add circle cap to the line ends
     mapInstance.addLayer({
-      id: "trail-cap",
-      type: "circle",
-      source: "trail",
+      id: 'trail-cap',
+      type: 'circle',
+      source: 'trail',
       paint: {
-        "circle-radius": 6,
-        "circle-color": "#16b22d",
+        'circle-radius': 6,
+        'circle-color': '#16b22d',
       },
-      filter: ["==", "meta", "end"],
+      filter: ['==', 'meta', 'end'],
     });
   };
 
-
+  /**
+   * Adds points to the map instance.
+   *
+   * @param {type} mapInstance - The map instance to add points to.
+   * @return {type} None
+   */
   const addPoints = (mapInstance) => {
-      if(mapInstance) {
-        const pointLatLong = shape?.features[0]?.geometry?.coordinates
-        const [lng, lat] = pointLatLong;
-        const marker = new mapboxgl.Marker().setLngLat([lng,lat]).addTo(mapInstance);
-        marker.getElement().addEventListener('click', () => {
-          window.open(`https://maps.google.com?q=${lat},${lng}`);
-        });
-        mapInstance.setCenter(pointLatLong);
-      }
-      }
+    if (mapInstance) {
+      const pointLatLong = shape?.features[0]?.geometry?.coordinates;
+      const [lng, lat] = pointLatLong;
+      const marker = new mapboxgl.Marker()
+        .setLngLat([lng, lat])
+        .addTo(mapInstance);
+      marker.getElement().addEventListener('click', () => {
+        window.open(`https://maps.google.com?q=${lat},${lng}`);
+      });
+      mapInstance.setCenter(pointLatLong);
+    }
+  };
 
-      const addPolygons = (mapInstance) => {
-        if(mapInstance) {
-
-          mapInstance.addLayer({
-            id: 'polygon-layer',
-            type: 'fill',
-            source: {
-              type: 'geojson',
-              data : shape.features[0],
-            },
-            paint : {
-              'fill-color' : "#3388ff",
-              'fill-opacity': 0.3,
-            }
-          })
-          mapInstance.setCenter(multiPolygonBounds(shape.features[0]))
-        }
-      }
+  /**
+   * Adds polygons to the map instance.
+   *
+   * @param {object} mapInstance - The map instance to add the polygons to.
+   */
+  const addPolygons = (mapInstance) => {
+    if (mapInstance) {
+      mapInstance.addLayer({
+        id: 'polygon-layer',
+        type: 'fill',
+        source: {
+          type: 'geojson',
+          data: shape.features[0],
+        },
+        paint: {
+          'fill-color': '#3388ff',
+          'fill-opacity': 0.3,
+        },
+      });
+      mapInstance.setCenter(multiPolygonBounds(shape.features[0]));
+    }
+  };
+  /**
+   * Fetches the GPX download and handles the download process.
+   * This function sets the state of 'downloading' to true and then tries to fetch the GPX data
+   * using the provided shape and options. After receiving the GPX data, it calls the 'handleGpxDownload'
+   * function to handle the download. If there is an error during the process, it logs the error to the console.
+   *
+   * @return {Promise<void>} A promise that resolves when the GPX download is complete.
+   */
   const fetchGpxDownload = async () => {
     setDownloading(true);
 
     try {
       const options = {
-        creator: "PackRat", // Hardcoded creator option
+        creator: 'PackRat', // Hardcoded creator option
         metadata: {
-          name: shape.name || "", // Extract name from geoJSON (if available)
-          desc: shape.description || "", // Extract description from geoJSON (if available)
+          name: shape.name || '', // Extract name from geoJSON (if available)
+          desc: shape.description || '', // Extract description from geoJSON (if available)
         },
         //   featureTitle: (properties) => properties.name || "", // Extract feature title from properties (if available)
         //   featureDescription: (properties) => properties.description || "", // Extract feature description from properties (if available)
@@ -298,16 +328,26 @@ const WebMap = ({ shape: shapeProp }) => {
 
       setDownloading(false);
     } catch (error) {
-      console.log("error", error);
+      console.log('error', error);
       setDownloading(false);
     }
   };
 
+  /**
+   * Enables full screen mode.
+   *
+   * @return {void}
+   */
   const enableFullScreen = () => {
     setMapFullscreen(true);
     setShowModal(true);
   };
 
+  /**
+   * Disable full screen.
+   *
+   * @return {undefined} No return value.
+   */
   const disableFullScreen = () => {
     setMapFullscreen(false);
     setShowModal(false);
@@ -323,35 +363,74 @@ const WebMap = ({ shape: shapeProp }) => {
         map.current.setStyle(style);
 
         // Step 3: add the sources, layers, etc. back once the style has loaded
-        if(isPoint(shape)) {
-          map.current.on('style.load', () => addPoints(map.current))
-        } else if(isPolygonOrMultiPolygon) {
+        if (isPoint(shape)) {
+          map.current.on('style.load', () => addPoints(map.current));
+        } else if (isPolygonOrMultiPolygon) {
           // Add Polygon
-        }
-        else {
-          map.current.on("style.load", () => addTrailLayer(map.current));
+        } else {
+          map.current.on('style.load', () => {
+            addTrailLayer(map.current);
+          });
         }
       }
     },
-    [addTrailLayer, removeTrailLayer]
+    [addTrailLayer, removeTrailLayer],
   );
 
+  /**
+   * Updates the map style and mapbox style to the specified style.
+   *
+   * @param {style} style - The style to set for the map and mapbox.
+   * @return {void} This function does not return a value.
+   */
   const handleChangeMapStyle = (style) => {
     setMapStyle(style);
     setMapboxStyle(style);
   };
 
+  const openMaps = () => {
+    const pointLatLong = shape?.features[0]?.geometry?.coordinates;
+    const { type } = shape.features[0].geometry;
+    if (type !== 'Point') {
+      const [latlng] = pointLatLong;
+      window.open(`https://maps.google.com?q=${latlng[1]},${latlng[0]}`);
+    } else {
+      const [lng, lat] = pointLatLong;
+      window.open(`https://maps.google.com?q=${lat},${lng}`);
+    }
+
+    // console.log()
+    // if(type !== 'Point') {
+
+    // } else {
+    //   window.open(`https://maps.google.com?q=${lat},${lng}`);
+    // }
+  };
+
+  /**
+   * Handles the download of a GPX file.
+   *
+   * @param {Object} gpxData - The GPX data to be downloaded.
+   * @param {string} [filename="trail"] - The name of the file to be downloaded.
+   * @param {string} [extension="gpx"] - The extension of the file to be downloaded.
+   * @return {Promise<void>} - A promise that resolves when the download is complete.
+   */
   const handleGpxDownload = async (
     gpxData,
-    filename = shape?.features[0]?.properties?.name ?? "trail",
-    extension = "gpx"
+    filename = shape?.features[0]?.properties?.name ?? 'trail',
+    extension = 'gpx',
   ) => {
     if (gpxData) {
-      const type = "application/gpx+xml";
+      const type = 'application/gpx+xml';
       await saveFile(gpxData, filename, extension, type);
     }
   };
 
+  /**
+   * Fetches the user's location and updates the map accordingly.
+   *
+   * @return {Promise<void>} A Promise that resolves when the location is fetched and the map is updated.
+   */
   const fetchLocation = async () => {
     try {
       const location = await getLocation();
@@ -369,40 +448,47 @@ const WebMap = ({ shape: shapeProp }) => {
           });
 
           // Remove existing user location layer if it exists
-          if (map.current.getLayer("user-location")) {
-            map.current.removeLayer("user-location");
+          if (map.current.getLayer('user-location')) {
+            map.current.removeLayer('user-location');
           }
-          if (map.current.getSource("user-location")) {
-            map.current.removeSource("user-location");
+          if (map.current.getSource('user-location')) {
+            map.current.removeSource('user-location');
           }
 
           // Add new user location layer
           map.current.addLayer({
-            id: "user-location",
-            type: "circle",
+            id: 'user-location',
+            type: 'circle',
             source: {
-              type: "geojson",
+              type: 'geojson',
               data: {
-                type: "Point",
+                type: 'Point',
                 coordinates: [userLng, userLat],
               },
             },
             paint: {
-              "circle-radius": 8,
-              "circle-color": "#3388ff",
+              'circle-radius': 8,
+              'circle-color': '#3388ff',
             },
           });
         }
       }
     } catch (error) {
-      console.log("error", error);
+      console.log('error', error);
     }
   };
-  console.log(isPolygonOrMultiPolygon(shape) || showModal, 'polygon or not')
+  console.log(isPolygonOrMultiPolygon(shape) || showModal, 'polygon or not');
   const element = (
-    <View style={[styles.container, { height: showModal ? "100%" : "400px" }]}>
+    <View style={[styles.container, { height: showModal ? '100%' : '400px' }]}>
       {showModal || isPolygonOrMultiPolygon(shape) ? (
-        <View key="map" ref={mapContainer} style={{...styles.map, height: isPolygonOrMultiPolygon(shape) ? 200 : '100vh'}} />
+        <View
+          key="map"
+          ref={mapContainer}
+          style={{
+            ...styles.map,
+            height: isPolygonOrMultiPolygon(shape) ? 200 : '100vh',
+          }}
+        />
       ) : (
         <MapPreview shape={shape} />
       )}
@@ -415,23 +501,24 @@ const WebMap = ({ shape: shapeProp }) => {
         styles={styles}
         downloadable={downloadable}
         downloading={downloading}
+        navigateToMaps={openMaps}
         onDownload={fetchGpxDownload}
         handleGpxUpload={async () => {
-          console.log("clikedd");
+          console.log('clikedd');
           try {
             const result = await DocumentPicker.getDocumentAsync({
-              type: "application/gpx+xml",
+              type: 'application/gpx+xml',
             });
-            console.log("result", result);
-            if (result.type === "success") {
-              const base64Gpx = result.uri.split(",")[1];
+            console.log('result', result);
+            if (result.type === 'success') {
+              const base64Gpx = result.uri.split(',')[1];
               const gpxString = atob(base64Gpx);
               const parsedGpx = new DOMParser().parseFromString(gpxString);
               const geojson = toGeoJSON(parsedGpx);
               setShape(geojson);
             }
           } catch (err) {
-            Alert.alert("An error occured");
+            Alert.alert('An error occured');
           }
         }}
         shape={shape}
@@ -440,7 +527,7 @@ const WebMap = ({ shape: shapeProp }) => {
   );
 
   return showModal ? (
-    <Modal animationType={"fade"} transparent={false} visible={true}>
+    <Modal animationType={'fade'} transparent={false} visible={true}>
       {element}
     </Modal>
   ) : (
@@ -450,17 +537,17 @@ const WebMap = ({ shape: shapeProp }) => {
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: "center",
-    justifyContent: "center",
-    width: "100%",
-    borderRadius: "10px",
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    borderRadius: '10px',
   },
   map: {
-    width: "100%",
-    minHeight: "100vh", // Adjust the height to your needs
+    width: '100%',
+    minHeight: '100vh', // Adjust the height to your needs
   },
   modal: {
-    alignItems: "center",
+    alignItems: 'center',
   },
 });
 

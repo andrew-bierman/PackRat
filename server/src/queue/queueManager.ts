@@ -8,6 +8,13 @@ class QueueManager {
     (this as any).queues = {};
   }
 
+  /**
+   * Creates a new queue with the specified name and worker script path.
+   *
+   * @param {string} queueName - The name of the queue.
+   * @param {string} workerScriptPath - The path to the worker script.
+   * @return {Queue} The newly created queue.
+   */
   createQueue(queueName, workerScriptPath) {
     // Get the directory name of the current ES module file (queueManager.js)
 

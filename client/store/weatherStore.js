@@ -1,60 +1,64 @@
-import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
-import { defaultWeatherObject } from "../constants/defaultWeatherObj";
-import { defaultWeekObj } from "../constants/defaultWeekObj";
+import {
+  createSlice,
+  createAsyncThunk,
+  createEntityAdapter,
+} from '@reduxjs/toolkit';
+import { defaultWeatherObject } from '../constants/defaultWeatherObj';
+import { defaultWeekObj } from '../constants/defaultWeekObj';
 
-import { api } from "../constants/api";
+import { api } from '../constants/api';
 
-import axios from "axios";
+import axios from '~/config/axios';
 
 const weatherAdapter = createEntityAdapter();
 
 const initialState = weatherAdapter.getInitialState({
   weatherObject: defaultWeatherObject,
   weatherWeek: defaultWeekObj,
-})
+});
 
 export const fetchWeather = createAsyncThunk(
-  "weather/fetchWeather",
+  'weather/fetchWeather',
   async ({ lat, lon, state }) => {
-    let params = `?`;
+    let params = '?';
 
     if (lat) params += `lat=${lat}`;
     if (lon) params += `&lon=${lon}`;
 
-    const url = api + "/weather" + params;
+    const url = api + '/weather' + params;
 
     try {
       const response = await axios.get(url);
       // console.log('response', response)
       return response.data;
     } catch (error) {
-      console.error("error:" + error);
+      console.error('error:' + error);
     }
-  }
+  },
 );
 
 export const fetchWeatherWeek = createAsyncThunk(
-  "weather/fetchWeatherWeek",
+  'weather/fetchWeatherWeek',
   async ({ lat, lon }) => {
-    let params = `?`;
+    let params = '?';
 
     if (lat) params += `lat=${lat}`;
     if (lon) params += `&lon=${lon}`;
 
-    const url = api + "/weather/week" + params;
+    const url = api + '/weather/week' + params;
 
     try {
       const response = await axios.get(url);
       // console.log('response', response)
       return response.data;
     } catch (error) {
-      console.error("error:" + error);
+      console.error('error:' + error);
     }
-  }
+  },
 );
 
 export const weatherSlice = createSlice({
-  name: "weather",
+  name: 'weather',
   initialState,
   reducers: {
     add: (state, action) => {

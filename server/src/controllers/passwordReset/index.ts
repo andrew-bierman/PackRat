@@ -1,2 +1,2 @@
-export * from './handlePasswordReset'
-export * from './requestPasswordReset'
+export * from './handlePasswordReset';
+export * from './requestPasswordReset';

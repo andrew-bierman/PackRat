@@ -1,30 +1,31 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
 
-import { DetailsHeader } from "../details/header";
+import { DetailsHeader } from '../../components/details/header';
 
-import { useSearchParams } from "expo-router";
-import { TableContainer } from "../pack_table/Table";
-import { selectPackById } from "../../store/packsStore";
+import { useSearchParams } from 'expo-router';
+import { TableContainer } from '../../components/pack_table/Table';
+import { selectPackById } from '../../store/packsStore';
 
-import { useSelector, useDispatch } from "react-redux";
-import { fetchSingleTrip } from "../../store/singleTripStore";
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchSingleTrip } from '../../store/singleTripStore';
 
-import { Box, Text, View } from "native-base";
-import { DetailsComponent } from "../details";
-import { Platform, StyleSheet } from "react-native";
-import { theme } from "../../theme";
-import { CLIENT_URL } from "@env";
-import ScoreContainer from "../ScoreContainer";
-import WeatherCard from "../WeatherCard";
-import TripCard from "../TripCard";
-import { FontAwesome5 } from "@expo/vector-icons";
-import { convertPhotonGeoJsonToShape } from "../../utils/mapFunctions";
-import UseTheme from "../../hooks/useTheme";
+import { Box, Text, View } from 'native-base';
+import { DetailsComponent } from '../../components/details';
+import { Platform, StyleSheet } from 'react-native';
+import { theme } from '../../theme';
+import { CLIENT_URL } from '@env';
+import ScoreContainer from '../../components/ScoreContainer';
+import WeatherCard from '../../components/WeatherCard';
+import TripCard from '../../components/TripCard';
+import { FontAwesome5 } from '@expo/vector-icons';
+import { convertPhotonGeoJsonToShape } from '../../utils/mapFunctions';
+import UseTheme from '../../hooks/useTheme';
 export function TripDetails() {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } = UseTheme();
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
   const weatherObject = useSelector((state) => state.weather.weatherObject);
   const weatherWeek = useSelector((state) => state.weather.weatherWeek);
-  console.log('trip detail')
+  console.log('trip detail');
   const dispatch = useDispatch();
 
   const { tripId } = useSearchParams();
@@ -54,8 +55,8 @@ export function TripDetails() {
   return (
     <Box
       style={[
-        styles.mainContainer,
-        Platform.OS == "web" ? { minHeight: "100vh" } : null,
+        styles().mainContainer,
+        Platform.OS == 'web' ? { minHeight: '100vh' } : null,
       ]}
     >
       {!isError && (
@@ -70,7 +71,7 @@ export function TripDetails() {
                 <View>
                   <TableContainer currentPack={currentTrip?.packs} />
                 </View>
-                <View style={{ marginTop: "5%" }}>
+                <View style={{ marginTop: '5%' }}>
                   <WeatherCard
                     weatherObject={
                       currentTrip?.weather
@@ -99,7 +100,7 @@ export function TripDetails() {
                   }
                 />
                 {/* </View> */}
-                <View style={{ marginTop: "5%" }}>
+                <View style={{ marginTop: '5%' }}>
                   <ScoreContainer
                     type="trip"
                     data={currentTrip}
@@ -116,24 +117,28 @@ export function TripDetails() {
   );
 }
 
-const styles = StyleSheet.create({
-  mainContainer: {
-    backgroundColor: theme.colors.background,
-    flexDirection: "column",
-    gap: 15,
-    padding: [25, 25, 0, 25], // [top, right, bottom, left
-    fontSize: 18,
-    width: "100%",
-  },
-  packsContainer: {
-    backgroundColor: "green",
-    flexDirection: "column",
-    minHeight: "100vh",
+const styles = () => {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
+  return StyleSheet.create({
+    mainContainer: {
+      backgroundColor: currentTheme.colors.background,
+      flexDirection: 'column',
+      gap: 15,
+      padding: [25, 25, 0, 25], // [top, right, bottom, left
+      fontSize: 18,
+      width: '100%',
+    },
+    packsContainer: {
+      backgroundColor: currentTheme.colors.cardIconColor,
+      flexDirection: 'column',
+      minHeight: '100vh',
 
-    padding: 25,
-    fontSize: 26,
-  },
-  dropdown: {
-    backgroundColor: "white",
-  },
-});
+      padding: 25,
+      fontSize: 26,
+    },
+    dropdown: {
+      backgroundColor: currentTheme.colors.white,
+    },
+  });
+};

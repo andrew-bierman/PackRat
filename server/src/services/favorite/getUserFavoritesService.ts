@@ -1,10 +1,9 @@
-import User from "../../models/userModel";
-import Pack from "../../models/packModel";
+import User from '../../models/userModel';
+import Pack from '../../models/packModel';
+import { UserNotFoundError } from '../../helpers/errors';
 
-export const getUserFavoritesService = async (userId) => {
-    const user = await User.findById({ _id: userId }).populate("favorites");
-
-    if (!user) return null;
-
-    return user.favorites;
+export const getUserFavoritesService = async (userId, next) => {
+  const user = await User.findById({ _id: userId }).populate('favorites');
+  if (!user) next(UserNotFoundError);
+  return user.favorites;
 };

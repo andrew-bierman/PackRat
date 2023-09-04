@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from 'react';
 import {
   Platform,
   StyleSheet,
@@ -6,16 +6,16 @@ import {
   View,
   Picker,
   TouchableOpacity,
-} from "react-native";
+} from 'react-native';
 
-import Mapbox from "@rnmapbox/maps";
-import { Select, Center, Box, CheckIcon } from "native-base";
+import Mapbox from '@rnmapbox/maps';
+import { Select, Center, Box, CheckIcon } from 'native-base';
 
 // get mapbox access token from .env file
-import { MAPBOX_ACCESS_TOKEN } from "@env";
-import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
-import { theme } from "../../theme";
-import UseTheme from "../../hooks/useTheme";
+import { MAPBOX_ACCESS_TOKEN } from '@env';
+import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
+import { theme } from '../../theme';
+import UseTheme from '../../hooks/useTheme';
 Mapbox.setAccessToken(MAPBOX_ACCESS_TOKEN);
 
 export default function Map() {
@@ -26,7 +26,7 @@ export default function Map() {
     const mapViewRef = useRef(null);
 
     const [style, setStyle] = React.useState(
-      "mapbox://styles/mapbox/outdoors-v11"
+      'mapbox://styles/mapbox/outdoors-v11',
     );
 
     useEffect(() => {}, []);
@@ -36,14 +36,32 @@ export default function Map() {
 
     const [mapViewLoaded, setMapViewLoaded] = useState(false);
 
+    /**
+     * Handles the layout of the map view.
+     *
+     * @param {type} paramName - description of parameter
+     * @return {type} description of return value
+     */
     function handleMapViewLayout() {
       setMapViewLoaded(true);
     }
 
+    /**
+     * Handles the change in style.
+     *
+     * @param {any} value - The new style value.
+     */
     const handleStyleChange = (value) => {
       setStyle(value);
     };
 
+    /**
+     * Calculates the bounding box of a given shape.
+     *
+     * @param {object} shape - The shape object to calculate the bounds for.
+     * @return {array} An array containing the coordinates of the minimum
+     * and maximum longitude and latitude values of the shape.
+     */
     function getShapeSourceBounds(shape) {
       let minLng = Infinity;
       let maxLng = -Infinity;
@@ -76,14 +94,19 @@ export default function Map() {
 
     const [shapeSourceBounds, setShapeSourceBounds] = useState(null);
 
+    /**
+     * Handles the shape source load.
+     *
+     * @return {undefined} No return value.
+     */
     function handleShapeSourceLoad() {
       const shape = {
-        type: "FeatureCollection",
+        type: 'FeatureCollection',
         features: [
           {
-            type: "Feature",
+            type: 'Feature',
             geometry: {
-              type: "LineString",
+              type: 'LineString',
               coordinates: [
                 [-77.044211, 38.852924],
                 [-77.045659, 38.860158],
@@ -123,7 +146,7 @@ export default function Map() {
         centerCoordinate: mapViewRef.current.getCenter(),
         zoomLevel: Math.min(
           mapViewRef.current.zoomLevel,
-          mapViewRef.current.getZoomForBounds(bounds, { padding: 50 })
+          mapViewRef.current.getZoomForBounds(bounds, { padding: 50 }),
         ),
       });
     }
@@ -140,6 +163,12 @@ export default function Map() {
     //   }
     // }
 
+    /**
+     * Handles the press event on a shape.
+     *
+     * @param {Object} event - The event object containing information about the press event.
+     * @return {undefined} The function does not return a value.
+     */
     function handleShapePress(event) {
       // Get the ID of the clicked feature
       const featureId = event.features[0].id;
@@ -152,7 +181,7 @@ export default function Map() {
     };
 
     return (
-      <View style={{ flex: 1, borderRadius: 30, overflow: "hidden" }}>
+      <View style={{ flex: 1, borderRadius: 30, overflow: 'hidden' }}>
         {/* <Select selectedValue={style} minWidth="200" accessibilityLabel="Choose Service" placeholder="Choose Service" _selectedItem={{
               bg: "teal.600",
               endIcon: <CheckIcon size="5" />
@@ -187,16 +216,16 @@ export default function Map() {
           <Mapbox.PointAnnotation
             coordinate={[-77.044211, 38.852924]}
             id="pt-ann"
-            title={"this is a point annotation"}
+            title={'this is a point annotation'}
           ></Mapbox.PointAnnotation>
 
           <Mapbox.MarkerView
-            id={"test-marker"}
+            id={'test-marker'}
             coordinate={[-77.044211, 38.852924]}
           >
             <Mapbox.PointAnnotation
-              id={"test-marker-pointer"}
-              title={"this is a marker view"}
+              id={'test-marker-pointer'}
+              title={'this is a marker view'}
               coordinate={[-77.044211, 38.852924]}
             />
           </Mapbox.MarkerView>
@@ -205,9 +234,9 @@ export default function Map() {
             id="source1"
             lineMetrics={true}
             shape={{
-              type: "Feature",
+              type: 'Feature',
               geometry: {
-                type: "LineString",
+                type: 'LineString',
                 coordinates: [
                   [-77.044211, 38.852924],
                   [-77.045659, 38.860158],
@@ -252,7 +281,7 @@ export default function Map() {
       <View
         style={{
           flex: 1,
-          backgroundColor: "white",
+          backgroundColor: currentTheme.colors.white,
         }}
       >
         <CustomizedMap />
