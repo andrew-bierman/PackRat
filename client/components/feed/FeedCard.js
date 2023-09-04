@@ -89,8 +89,6 @@ export default function Card({
 
   if (duration) numberOfNights = JSON.parse(duration).numberOfNights;
 
-  console.log('night', numberOfNights);
-
   return (
     <Box alignItems="center" padding="4">
       <Box
