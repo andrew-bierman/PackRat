@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import { isCelebrateError, errors } from 'celebrate';
 import { MONGODB_URI } from './config';
-import routes from './routes/index';
+import routes, { appRouter } from './routes/index';
 import { serveSwaggerUI } from './helpers/serveSwaggerUI';
 import { corsOptions } from './helpers/corsOptions';
 import { errorHandler } from './helpers/errorHandler';
@@ -11,9 +11,11 @@ import helmet from 'helmet';
 import compression from 'compression';
 import morgan from 'morgan';
 import { limiter } from './helpers/limiter';
-
+import  { initTRPC } from '@trpc/server'
+import { createExpressMiddleware } from '@trpc/server/adapters/express'
+import { publicProcedure, trpcRouter } from './trpc';
+import { userRouter } from './routes/userRoutes';
 const app = express();
-
 // Apply security-related HTTP headers.
 app.use(helmet());
 
@@ -31,11 +33,15 @@ if (corsOptions) {
   app.use(cors(corsOptions as any));
 }
 
+app.use('/trpc', createExpressMiddleware({
+  router: appRouter,
+
+}))
 // Parse incoming JSON bodies. Limit set to prevent large payloads.
 app.use(express.json({ limit: '50mb' }));
 
 // Register the main API routes.
-app.use(routes);
+// app.use(routes);
 
 // Serve the Swagger UI for API documentation, ideally only in development environments. Available at /api-docs.
 serveSwaggerUI(app);

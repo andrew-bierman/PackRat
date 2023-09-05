@@ -13,7 +13,7 @@ export const authApi = createApi({
   endpoints: (build) => ({
     signUp: build.mutation<any, any>({
       query: (patch) => ({
-        url: '/user/signup',
+        url: 'trpc/userRouter.signup',
         method: 'POST',
         body: patch,
       }),

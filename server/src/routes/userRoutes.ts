@@ -13,6 +13,7 @@ import {
   getGoogleAuthURL,
   googleSignin,
   getMe,
+  trpcSignIn,
 } from '../controllers/user/index';
 import auth from '../middleware/auth';
 import * as validator from '../middleware/validators/index';
@@ -31,6 +32,19 @@ import {
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
 import authTokenMiddleware from '../middleware/auth';
 import checkRole from '../middleware/checkRole';
+import { trpcRouter, publicProcedure } from '../trpc';
+import { z }  from 'zod'
+
+
+export const userRouter = trpcRouter({
+  signup: publicProcedure.input(z.object({
+    email: z.string().email().nonempty(),
+    password: z.string().nonempty(),
+  })).mutation(async opts => {
+    const { input } = opts;
+    return await trpcSignIn(input);
+  })
+})
 
 const router = express.Router();
 
