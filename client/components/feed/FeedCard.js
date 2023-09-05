@@ -2,7 +2,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { formatDistanceToNow } from 'date-fns';
 import { MaterialIcons, Entypo } from '@expo/vector-icons';
 import { theme } from '../../theme';
-import UseTheme from '../../hooks/useTheme';
+import useTheme from '../../hooks/useTheme';
 // import useAddToFavorite from "../../hooks/useAddToFavorites";
 // import { useAuth } from "../../auth/provider";
 import { useSelector, useDispatch } from 'react-redux';
@@ -26,6 +26,7 @@ import {
   Stack,
   Button,
 } from 'native-base';
+import { formatNumber } from '~/utils/formatNumber';
 
 // import { useAuth } from "../../auth/provider";
 
@@ -45,11 +46,14 @@ export default function Card({
 }) {
   const user = useSelector((state) => state.auth.user);
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   const favorites = useSelector(selectAllFavorites);
   const dispatch = useDispatch();
 
-  const isFavorite = favorites.some((favorite) => favorite.pack_id === _id);
+  // const isFavorite = favorites.some((favorite) => favorite.pack_id === _id);
+  const isFavorite =
+    favorited_by.includes(user._id) ||
+    favorited_by.forEach((obj) => obj._id === user._id);
 
   /**
    * Handles adding an item to the user's favorites.
@@ -82,6 +86,7 @@ export default function Card({
 
   const truncatedName = truncateString(name, 25);
   const truncatedDestination = truncateString(destination, 25);
+  const formattedWeight = formatNumber(total_weight); // TODO convert to user preference once implemented
 
   return (
     <Box alignItems="center" padding="4">
@@ -122,29 +127,33 @@ export default function Card({
                     {truncatedName}
                   </Text>
                 </Link>
-                {type === 'pack' && (
-                  <Box
-                    style={{
-                      flexDirection: 'row',
-                    }}
-                  >
-                    <MaterialIcons
-                      name="backpack"
+                <HStack alignItems="center" justifyContent="center" space={2}>
+                  {type === 'pack' && (
+                    <Box
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        gap: 5,
+                        // border: '1px solid #ccc',
+                      }}
+                    >
+                      <MaterialIcons
+                        name="backpack"
+                        size={24}
+                        color={currentTheme.colors.cardIconColor}
+                      />
+                      <DuplicateIcon link={`/pack/${_id}?copy=true`} />
+                    </Box>
+                  )}
+                  {type === 'trip' && (
+                    <Entypo
+                      name="location-pin"
                       size={24}
                       color={currentTheme.colors.cardIconColor}
                     />
-                    <Link href={'/pack/' + _id + '?copy=true'}>
-                      <DuplicateIcon />
-                    </Link>
-                  </Box>
-                )}
-                {type === 'trip' && (
-                  <Entypo
-                    name="location-pin"
-                    size={24}
-                    color={currentTheme.colors.cardIconColor}
-                  />
-                )}
+                  )}
+                </HStack>
               </Box>
             </Heading>
 
@@ -161,7 +170,7 @@ export default function Card({
                 ml="-0.5"
                 mt="-1"
               >
-                Total Weight: {total_weight}
+                Total Weight: {formattedWeight}
               </Text>
             )}
 
@@ -250,9 +259,14 @@ export default function Card({
                       <AntDesign
                         name="heart"
                         size={16}
+                        // color={
+                        //   isFavorite
+                        //     ? `${currentTheme.colors.error}`
+                        //     : `${currentTheme.colors.cardIconColor}`
+                        // }
                         color={
                           isFavorite
-                            ? `${currentTheme.colors.error}`
+                            ? 'red'
                             : `${currentTheme.colors.cardIconColor}`
                         }
                       />
@@ -266,7 +280,7 @@ export default function Card({
                     }}
                     fontWeight="400"
                   >
-                    {favorites_count}
+                    {favorites_count > 0 ? favorites_count : 0}
                   </Text>
                 </Box>
               </Box>

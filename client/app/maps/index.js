@@ -4,16 +4,15 @@ import { useEffect, useState } from 'react';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import MapButtonsOverlay from '../../components/map/MapButtonsOverlay';
 import { theme } from '../../theme';
-import UseTheme from '../../hooks/useTheme';
-import { StyleSheet } from 'react-native';
+import useTheme from '../../hooks/useTheme';
 import {
   calculateZoomLevel,
   getShapeSourceBounds,
 } from '../../utils/mapFunctions';
+import useCustomStyles from '~/hooks/useCustomStyles';
 
 function CircleCapComp() {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+  const { currentTheme } = useTheme();
 
   return (
     <View
@@ -30,8 +29,8 @@ function CircleCapComp() {
 }
 
 export default function DownloadedMaps() {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+  const { currentTheme } = useTheme();
+  const styles = useCustomStyles(loadStyles);
   const [offlinePacks, setOfflinePacks] = useState(null);
   const [showMap, setShowMap] = useState(false);
   const [pack, setPack] = useState(null);
@@ -183,7 +182,7 @@ export default function DownloadedMaps() {
   );
 }
 
-const styles = StyleSheet.create({
+const loadStyles = () => ({
   lineLayer: {
     lineWidth: 4,
     lineOpacity: 1,

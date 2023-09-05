@@ -5,7 +5,7 @@ import { getNext4Days } from '../utils/getNextDays';
 import { dayNumToString } from '../utils/dayNumToString';
 import { convertToKmh } from '../utils/convertToKmh';
 import { convertToCelsius } from '../utils/convertToCelsius';
-import UseTheme from '../hooks/useTheme';
+import useTheme from '../hooks/useTheme';
 // redux
 import { useSelector } from 'react-redux';
 
@@ -15,9 +15,9 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 
-import { StyleSheet } from 'react-native';
 import { theme } from '../theme';
 import { defaultWeatherObject } from '../constants/defaultWeatherObj';
+import useCustomStyles from '~/hooks/useCustomStyles';
 
 const monthArr = [
   'January',
@@ -39,7 +39,9 @@ export default function WeatherCard({
   weatherWeek = [],
 }) {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
+
+  const styles = useCustomStyles(loadStyles);
   const date = new Date();
   const dayOfMonth = date.getDate();
   const year = date.getFullYear();
@@ -56,7 +58,7 @@ export default function WeatherCard({
       w={['100%', '100%', '100%', '90%']}
       direction={['column', 'column', 'row', 'row']}
       rounded={['sm', 'sm', 'md', 'lg']}
-      style={styles().desktopContainer}
+      style={styles.desktopContainer}
     >
       <Box style={{ flexDirection: 'row', gap: 15, alignItems: 'center' }}>
         <Octicons
@@ -79,7 +81,7 @@ export default function WeatherCard({
         h={['100%', '100%', '100%', '100%']}
         flex={0.5}
         justifyContent={['space-between', 'space-between', 'none', 'none']}
-        style={styles().card}
+        style={styles.card}
       >
         <Box>
           <Text
@@ -127,10 +129,10 @@ export default function WeatherCard({
           w={['100%', '100%', '100%', '100%']}
           h={['0%', '0%', '100%', '100%']}
           flex={0.5}
-          style={styles().card}
+          style={styles.card}
         >
-          <Box style={styles().weatherInfo}>
-            <Box style={styles().iconsSection}>
+          <Box style={styles.weatherInfo}>
+            <Box style={styles.iconsSection}>
               <FontAwesome5
                 name="cloud-rain"
                 size={18}
@@ -147,8 +149,8 @@ export default function WeatherCard({
             </Box>
             <Text>0%</Text>
           </Box>
-          <Box style={styles().weatherInfo}>
-            <Box style={styles().iconsSection}>
+          <Box style={styles.weatherInfo}>
+            <Box style={styles.iconsSection}>
               <Feather
                 name="droplet"
                 size={18}
@@ -165,8 +167,8 @@ export default function WeatherCard({
             </Box>
             <Text>{weatherObject.main.humidity}%</Text>
           </Box>
-          <Box style={styles().weatherInfo}>
-            <Box style={styles().iconsSection}>
+          <Box style={styles.weatherInfo}>
+            <Box style={styles.iconsSection}>
               <Feather
                 name="wind"
                 size={18}
@@ -190,7 +192,7 @@ export default function WeatherCard({
           h={['0%', '0%', '100%', '100%']}
           flex={0.5}
           direction={['column', 'column', 'row', 'row']}
-          style={styles().cardContainer}
+          style={styles.cardContainer}
         >
           {weatherWeek.map((day, i) => {
             const weatherIconUrl = `https://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png`;
@@ -199,7 +201,7 @@ export default function WeatherCard({
               <Stack
                 key={i}
                 direction={['row', 'row', 'column', 'column']}
-                style={styles().weatherCard}
+                style={styles.weatherCard}
               >
                 <Image
                   src={weatherIconUrl}
@@ -222,10 +224,10 @@ export default function WeatherCard({
         flex={0.5}
         justifyContent="space-around"
         backgroundColor={'#eaeaea'}
-        style={styles().card}
+        style={styles.card}
       >
         {restOfWeek.map((day, index) => (
-          <Box key={index} style={styles().weatherInfo}>
+          <Box key={index} style={styles.weatherInfo}>
             <Text>{dayNumToString(day).slice(0, 3)}</Text>
             <Text>{convertToCelsius(weatherWeek[index].main.temp)}</Text>
           </Box>
@@ -235,10 +237,9 @@ export default function WeatherCard({
   );
 }
 
-const styles = () => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
-  return StyleSheet.create({
+const loadStyles = (theme) => {
+  const { currentTheme } = theme;
+  return {
     desktopContainer: {
       gap: 15,
       alignItems: 'center',
@@ -285,5 +286,5 @@ const styles = () => {
       alignItems: 'center',
       gap: 15,
     },
-  });
+  };
 };

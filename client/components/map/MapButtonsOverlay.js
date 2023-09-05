@@ -3,7 +3,6 @@ import {
   TouchableOpacity,
   Image,
   Text,
-  StyleSheet,
   Modal,
   View,
   Alert,
@@ -14,8 +13,9 @@ import {
   MaterialCommunityIcons,
   FontAwesome5,
 } from '@expo/vector-icons';
-import UseTheme from '../../hooks/useTheme';
+import useTheme from '../../hooks/useTheme';
 import { mapboxStyles } from '../../utils/mapFunctions';
+import useCustomStyles from '~/hooks/useCustomStyles';
 
 const MapButtonsOverlay = ({
   mapFullscreen,
@@ -33,7 +33,8 @@ const MapButtonsOverlay = ({
   console.log('newwwww');
   const [showStyleOptions, setShowStyleOptions] = useState(false);
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
+  const styles = useCustomStyles(loadStyles);
   const handleStyleOptionPress = () => {
     setShowStyleOptions(!showStyleOptions);
   };
@@ -55,7 +56,7 @@ const MapButtonsOverlay = ({
         // Preview map
         <>
           <TouchableOpacity
-            style={[styles().headerBtnView, styles().enterFullScreenBtn]}
+            style={[styles.headerBtnView, styles.enterFullScreenBtn]}
             onPress={enableFullScreen}
           >
             <Entypo name="resize-full-screen" size={21} color="grey" />
@@ -81,7 +82,7 @@ const MapButtonsOverlay = ({
         // Fullscreen map
         <>
           <TouchableOpacity
-            style={[styles().headerBtnView, styles().exitFullscreenBtn]}
+            style={[styles.headerBtnView, styles.exitFullscreenBtn]}
             onPress={disableFullScreen}
           >
             <Entypo name="circle-with-cross" size={21} color="grey" />
@@ -89,7 +90,7 @@ const MapButtonsOverlay = ({
 
           {/* Style Picker Button */}
           <TouchableOpacity
-            style={[styles().headerBtnView, styles().stylePicker]}
+            style={[styles.headerBtnView, styles.stylePicker]}
             onPress={handleStyleOptionPress}
           >
             <MaterialCommunityIcons
@@ -101,7 +102,7 @@ const MapButtonsOverlay = ({
 
           <TouchableOpacity
             style={[
-              styles().headerBtnView,
+              styles.headerBtnView,
               {
                 width: 40,
                 height: 40,
@@ -130,17 +131,17 @@ const MapButtonsOverlay = ({
             visible={showStyleOptions}
           >
             <TouchableOpacity
-              style={styles().styleModalContainer}
+              style={styles.styleModalContainer}
               onPress={handleStyleOptionPress}
             >
-              <View style={styles().styleModalContent}>
+              <View style={styles.styleModalContent}>
                 {mapboxStyles.map((item, index) => (
                   <TouchableOpacity
                     key={index}
-                    style={styles().styleOption}
+                    style={styles.styleOption}
                     onPress={() => handleStyleSelection(item.style)}
                   >
-                    <Text style={styles().styleOptionText}>{item.label}</Text>
+                    <Text style={styles.styleOptionText}>{item.label}</Text>
                   </TouchableOpacity>
                 ))}
               </View>
@@ -150,15 +151,15 @@ const MapButtonsOverlay = ({
           {/* Download Button */}
           {downloadable && (
             <TouchableOpacity
-              style={[styles().headerBtnView, styles().fullScreen]}
+              style={[styles.headerBtnView, styles.fullScreen]}
               onPress={onDownload}
               disabled={downloading}
             >
               <Image
-                style={styles().downloadIcon}
+                style={styles.downloadIcon}
                 source={require('../../assets/download.svg')}
               />
-              <Text style={styles().downloadText}>
+              <Text style={styles.downloadText}>
                 {downloading
                   ? `Downloading... ${
                       progress ? Math.floor(progress) + '%' : ''
@@ -205,7 +206,7 @@ const MapButtonsOverlay = ({
 
           {/* Location Button */}
           <TouchableOpacity
-            style={styles().locationButton}
+            style={styles.locationButton}
             onPress={fetchLocation}
           >
             <MaterialCommunityIcons
@@ -220,10 +221,9 @@ const MapButtonsOverlay = ({
   );
 };
 
-const styles = () => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
-  return StyleSheet.create({
+const loadStyles = (theme) => {
+  const { currentTheme } = theme;
+  return {
     container: {
       alignItems: 'center',
       justifyContent: 'center',
@@ -324,7 +324,7 @@ const styles = () => {
     modal: {
       alignItems: 'center',
     },
-  });
+  };
 };
 
 export default MapButtonsOverlay;

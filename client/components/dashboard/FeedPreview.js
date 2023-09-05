@@ -4,16 +4,17 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Card, Text, HStack, Badge } from 'native-base';
 import { Link } from 'expo-router';
-import { Dimensions, FlatList, StyleSheet, View } from 'react-native';
+import { Dimensions, FlatList, View } from 'react-native';
 import { getPublicPacks, getPublicTrips } from '../../store/feedStore';
-import { theme } from '../../theme';
-import UseTheme from '../../hooks/useTheme';
+import useTheme from '../../hooks/useTheme';
 import Carousel from '../carousel';
+import useCustomStyles from '~/hooks/useCustomStyles';
 
 const { height, width } = Dimensions.get('window');
 
 const FeedPreviewScroll = () => {
   const dispatch = useDispatch();
+  const styles = useCustomStyles(loadStyles);
 
   useEffect(() => {
     dispatch(getPublicPacks());
@@ -29,9 +30,9 @@ const FeedPreviewScroll = () => {
         const linkStr = `/${item.type}/${item._id}`;
         return linkStr ? (
           <Link href={linkStr} key={`${linkStr}`}>
-            <View style={styles().cardStyles} key={index}>
+            <View style={styles.cardStyles} key={index}>
               <HStack justifyContent="space-between">
-                <Text style={styles().feedItemTitle}>{item.name}</Text>
+                <Text style={styles.feedItemTitle}>{item.name}</Text>
                 <Badge colorScheme="info" textTransform={'capitalize'}>
                   {item.type}
                 </Badge>
@@ -49,10 +50,9 @@ const FeedPreview = () => {
   return <FeedPreviewScroll />;
 };
 
-const styles = () => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
-  return StyleSheet.create({
+const loadStyles = (theme, appTheme) => {
+  const { currentTheme } = theme;
+  return {
     feedPreview: {
       flexDirection: 'row',
       width: '100%',
@@ -61,7 +61,7 @@ const styles = () => {
     cardStyles: {
       height: 100,
       width: 250,
-      backgroundColor: theme.colors.primary,
+      backgroundColor: appTheme.colors.primary,
       borderRadius: 5,
       padding: 20,
       marginLeft: 10,
@@ -82,7 +82,7 @@ const styles = () => {
       color: currentTheme.colors.text,
       marginBottom: 5,
     },
-  });
+  };
 };
 
 export default FeedPreviewScroll;

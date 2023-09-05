@@ -1,18 +1,20 @@
-import { StyleSheet, Platform } from 'react-native';
+import { Platform } from 'react-native';
 import { Box, Input, Button, Text } from 'native-base';
 
 // import useAddPack from "../../hooks/useAddPack";
 import { addPack } from '../../store/packsStore';
-import { theme } from '../../theme';
 import { useState } from 'react';
 // import { useAuth } from "../../auth/provider";
 import { useSelector, useDispatch } from 'react-redux';
 import { CustomModal } from '../modal';
-import UseTheme from '../../hooks/useTheme';
+import useTheme from '../../hooks/useTheme';
+import useCustomStyles from '~/hooks/useCustomStyles';
 
 export const AddPack = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
+  const styles = useCustomStyles(loadStyles);
+
   const dispatch = useDispatch();
 
   const [name, setName] = useState('');
@@ -86,10 +88,9 @@ export const AddPackContainer = () => {
   );
 };
 
-const styles = () => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
-  return StyleSheet.create({
+const loadStyles = (theme, appTheme) => {
+  const { currentTheme } = theme;
+  return {
     container: {
       flexDirection: 'column',
       alignItems: 'center',
@@ -133,8 +134,8 @@ const styles = () => {
       paddingVertical: 15,
       textAlign: 'center',
       alignItems: 'center',
-      color: theme.colors.text,
+      color: appTheme.colors.text,
       width: '50%',
     },
-  });
+  };
 };

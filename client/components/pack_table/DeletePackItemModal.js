@@ -1,9 +1,13 @@
 import React from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { deletePackItem } from '../../store/packsStore';
 import { CustomModal } from '../modal';
-import { deleteGlobalItem } from '../../store/globalItemsStore';
+import {
+  deleteGlobalItem,
+  deleteItemOffline,
+} from '../../store/globalItemsStore';
+import { addOfflineRequest } from '../../store/offlineQueue';
 
 export const DeletePackItemModal = ({
   itemId,
@@ -13,7 +17,7 @@ export const DeletePackItemModal = ({
 }) => {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const dispatch = useDispatch();
-
+  const { isConnected } = useSelector((state) => state.offlineQueue);
   const closeModalHandler = () => {
     setIsModalOpen(false);
   };
@@ -38,8 +42,13 @@ export const DeletePackItemModal = ({
     if (pack) {
       dispatch(deletePackItem({ itemId, currentPackId: pack._id }));
     } else {
-      dispatch(deleteGlobalItem(itemId));
-      setRefetch(refetch !== true);
+      if (isConnected) {
+        dispatch(deleteGlobalItem(itemId));
+        setRefetch(refetch !== true);
+      } else {
+        dispatch(deleteItemOffline(itemId));
+        dispatch(addOfflineRequest({ method: 'deleteItem', data: itemId }));
+      }
     }
     setIsModalOpen(false);
   };
@@ -63,16 +72,10 @@ export const DeletePackItemModal = ({
     <CustomModal
       isActive={isModalOpen}
       title={'Delete Item'}
-      triggerComponent={
-        <MaterialIcons
-          name="delete"
-          size={20}
-          color="black"
-          onPress={onTrigger}
-        />
-      }
+      triggerComponent={<MaterialIcons name="delete" size={20} color="black" />}
       footerButtons={footerButtons}
       onCancel={closeModalHandler}
+      onTrigger={onTrigger}
     >
       Are you sure you want to delete this item?
     </CustomModal>

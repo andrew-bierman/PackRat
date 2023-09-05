@@ -5,11 +5,10 @@ import {
   FlatList,
   TextInput,
   TouchableOpacity,
-  StyleSheet,
   ScrollView,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import UseTheme from '../../hooks/useTheme';
+import useTheme from '../../hooks/useTheme';
 import {
   getUserChats,
   getAIResponse,
@@ -18,27 +17,32 @@ import {
 } from '../../store/chatStore';
 import { Box, VStack, HStack } from 'native-base';
 import { CustomModal } from '../modal';
+import useCustomStyles from '~/hooks/useCustomStyles';
 
 const MessageBubble = ({ message }) => {
+  const styles = useCustomStyles(loadStyles);
   const isAI = message.role === 'ai';
   return (
-    <View style={isAI ? styles().aiBubble : styles().userBubble}>
-      <Text style={isAI ? styles().aiText : styles().userText}>
+    <View style={isAI ? styles.aiBubble : styles.userBubble}>
+      <Text style={isAI ? styles.aiText : styles.userText}>
         {message.content}
       </Text>
     </View>
   );
 };
 
-const ChatSelector = ({ conversation, onSelect, isActive }) => (
-  <TouchableOpacity
-    key={conversation._id}
-    onPress={() => onSelect(conversation._id)}
-    style={[styles().chatSelector, isActive && styles().activeChatSelector]}
-  >
-    <Text style={styles().chatSelectorText}>{conversation._id}</Text>
-  </TouchableOpacity>
-);
+const ChatSelector = ({ conversation, onSelect, isActive }) => {
+  const styles = useCustomStyles(loadStyles);
+  return (
+    <TouchableOpacity
+      key={conversation._id}
+      onPress={() => onSelect(conversation._id)}
+      style={[styles.chatSelector, isActive && styles.activeChatSelector]}
+    >
+      <Text style={styles.chatSelectorText}>{conversation._id}</Text>
+    </TouchableOpacity>
+  );
+};
 
 const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
   const dispatch = useDispatch();
@@ -50,6 +54,7 @@ const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
   const conversations = useSelector((state) => selectAllConversations(state));
   const [userInput, setUserInput] = useState('');
   const [parsedMessages, setParsedMessages] = useState([]);
+  const styles = useCustomStyles(loadStyles);
 
   useEffect(() => {
     dispatch(getUserChats(user._id));
@@ -94,7 +99,7 @@ const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
   };
 
   return (
-    <View style={styles().container}>
+    <View style={styles.container}>
       <VStack space={2} alignItems="center">
         {showChatSelector && (
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -113,16 +118,16 @@ const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
                   />
                 )}
                 keyExtractor={(item) => item._id}
-                contentContainerStyle={styles().flatList}
+                contentContainerStyle={styles.flatList}
               />
               <TouchableOpacity
-                style={styles().newChatButton}
+                style={styles.newChatButton}
                 onPress={() => {
                   setConversationId(null);
                   setParsedMessages([]);
                 }}
               >
-                <Text style={styles().newChatButtonText}>New Chat</Text>
+                <Text style={styles.newChatButtonText}>New Chat</Text>
               </TouchableOpacity>
             </Box>
           </ScrollView>
@@ -132,20 +137,17 @@ const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
         data={parsedMessages}
         renderItem={({ item }) => <MessageBubble message={item} />}
         keyExtractor={(item, index) => index.toString()}
-        contentContainerStyle={styles().flatList}
+        contentContainerStyle={styles.flatList}
       />
-      <View style={styles().inputContainer}>
+      <View style={styles.inputContainer}>
         <TextInput
-          style={styles().input}
+          style={styles.input}
           onChangeText={setUserInput}
           value={userInput}
           placeholder="Type a message..."
         />
-        <TouchableOpacity
-          style={styles().sendButton}
-          onPress={handleSendMessage}
-        >
-          <Text style={styles().sendText}>Send</Text>
+        <TouchableOpacity style={styles.sendButton} onPress={handleSendMessage}>
+          <Text style={styles.sendText}>Send</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -157,9 +159,10 @@ const ChatModalTrigger = () => {
   const handleClose = () => {
     setIsOpen(false);
   };
+  const styles = useCustomStyles(loadStyles);
 
   return (
-    <Box style={styles().container}>
+    <Box style={styles.container}>
       <CustomModal
         title="Chat"
         trigger="Open Chat"
@@ -173,11 +176,10 @@ const ChatModalTrigger = () => {
   );
 };
 
-const styles = () => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+const loadStyles = (theme) => {
+  const { currentTheme } = theme;
 
-  return StyleSheet.create({
+  return {
     container: { flex: 1, padding: 16 },
     headerText: { fontSize: 24, fontWeight: 'bold' },
     flatList: { flexGrow: 1, justifyContent: 'flex-end' },
@@ -244,7 +246,7 @@ const styles = () => {
     newChatButtonText: {
       color: currentTheme.colors.white,
     },
-  });
+  };
 };
 
 export default ChatModalTrigger;
