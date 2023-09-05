@@ -25,7 +25,7 @@ import { Link, useRouter } from 'expo-router';
 // import { signInWithGoogle } from "../auth/firebase";
 // import { signInWithGoogle } from "../auth/firebase";
 import { useDispatch, useSelector } from 'react-redux';
-import { useSignInWithGoogleMutation } from '../store/authApi';
+import { useSignInWithGoogleMutation,useSignInMutation } from '../store/authApi';
 // signIn,
 import { StyleSheet } from 'react-native';
 import { InformUser } from '../utils/ToastUtils';
@@ -33,8 +33,8 @@ import useTheme from '../hooks/useTheme';
 import { useForm } from 'react-hook-form';
 import { InputText, InputTextRules } from '~/components/InputText';
 import { Regex } from '~/utils/regex';
+import useCustomStyles from '~/hooks/useCustomStyles';
 
-import { useSignInMutation } from '../store/authApi';
 // const defaultStyle = {
 //   version: 8,
 //   name: "Land",
@@ -72,6 +72,7 @@ export default function Login() {
   const [signInWithGoogle, results] = useSignInWithGoogleMutation();
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
+  const styles = useCustomStyles(loadStyles);
   const {
     control,
     handleSubmit,
@@ -406,7 +407,7 @@ export default function Login() {
   );
 }
 
-const styles = StyleSheet.create({
+const loadStyles = () => ({
   container: {
     marginTop: 20,
     height: 300,

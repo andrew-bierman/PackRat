@@ -26,6 +26,7 @@ import {
   Stack,
   Button,
 } from 'native-base';
+import { formatNumber } from '~/utils/formatNumber';
 
 // import { useAuth } from "../../auth/provider";
 
@@ -49,7 +50,10 @@ export default function Card({
   const favorites = useSelector(selectAllFavorites);
   const dispatch = useDispatch();
 
-  const isFavorite = favorites.some((favorite) => favorite.pack_id === _id);
+  // const isFavorite = favorites.some((favorite) => favorite.pack_id === _id);
+  const isFavorite =
+    favorited_by.includes(user._id) ||
+    favorited_by.forEach((obj) => obj._id === user._id);
 
   /**
    * Handles adding an item to the user's favorites.
@@ -82,6 +86,7 @@ export default function Card({
 
   const truncatedName = truncateString(name, 25);
   const truncatedDestination = truncateString(destination, 25);
+  const formattedWeight = formatNumber(total_weight); // TODO convert to user preference once implemented
 
   return (
     <Box alignItems="center" padding="4">
@@ -165,7 +170,7 @@ export default function Card({
                 ml="-0.5"
                 mt="-1"
               >
-                Total Weight: {total_weight}
+                Total Weight: {formattedWeight}
               </Text>
             )}
 
@@ -254,9 +259,14 @@ export default function Card({
                       <AntDesign
                         name="heart"
                         size={16}
+                        // color={
+                        //   isFavorite
+                        //     ? `${currentTheme.colors.error}`
+                        //     : `${currentTheme.colors.cardIconColor}`
+                        // }
                         color={
                           isFavorite
-                            ? `${currentTheme.colors.error}`
+                            ? 'red'
                             : `${currentTheme.colors.cardIconColor}`
                         }
                       />
@@ -270,7 +280,7 @@ export default function Card({
                     }}
                     fontWeight="400"
                   >
-                    {favorites_count}
+                    {favorites_count > 0 ? favorites_count : 0}
                   </Text>
                 </Box>
               </Box>

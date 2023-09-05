@@ -7,7 +7,7 @@ import { authApi } from './authApi';
 // we use the original axios to prevent circular dependency with custom axios instance
 import axios from 'axios';
 import { api } from '../constants/api';
-import { Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const authAdapter = createEntityAdapter();
 
@@ -55,8 +55,8 @@ const initialState = authAdapter.getInitialState({
 export const signOut = createAsyncThunk('auth/signOut', async () => {
   try {
     // Perform any sign-out operations here
-    return {
-    };
+    await AsyncStorage.removeItem('authToken');
+    return null;
   } catch (error) {
     console.log(error.message);
     return rejectWithValue('Sign-out failed');
