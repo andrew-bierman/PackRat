@@ -20,7 +20,6 @@ export const duplicatePublicPackService = async (packId, ownerId, items) => {
     owner_id: pack.owner_id,
     is_public: false,
     favorited_by: pack.favorited_by,
-    favorites_count: pack.favorites_count,
     createdAt: new Date().toISOString(),
     owners: [...pack.owners, ownerId],
     grades: { ...pack.grades },

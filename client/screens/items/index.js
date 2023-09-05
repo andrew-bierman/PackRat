@@ -1,4 +1,4 @@
-import { View, StyleSheet, Platform } from 'react-native';
+import { View, Platform } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { Box, Button, ScrollView, Tooltip } from 'native-base';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getItemsGlobal } from '../../store/globalItemsStore';
 import { Stack as Header } from 'expo-router';
 import { executeOfflineRequests } from '../../store/offlineQueue';
+import useCustomStyles from '~/hooks/useCustomStyles';
 // import { checkNetworkConnected } from '~/utils/netInfo';
 
 export default function Items() {
@@ -21,6 +22,7 @@ export default function Items() {
 
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     UseTheme();
+  const styles = useCustomStyles(loadStyles);
   const data = useSelector((state) => state.globalItems);
   const isLoading = useSelector((state) => state.globalItems.isLoading);
   const isError = useSelector((state) => state.globalItems.isError);
@@ -46,11 +48,12 @@ export default function Items() {
           title: 'Items',
         }}
       />
-      <Box style={styles().container}>
+      <Box style={styles.container}>
         <CustomModal
           title="Add a global Item"
           trigger="Add Item"
           isActive={isAddItemModalOpen}
+          onTrigger={setIsAddItemModalOpen}
           triggerComponent={
             <View
               style={{
@@ -62,7 +65,7 @@ export default function Items() {
               }}
             >
               <Button
-                style={styles().button}
+                style={styles.button}
                 onPress={() => {
                   setIsAddItemModalOpen(true);
                 }}
@@ -116,11 +119,10 @@ export default function Items() {
   );
 }
 
-const styles = () => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+const loadStyles = (theme) => {
+  const { currentTheme } = theme;
 
-  return StyleSheet.create({
+  return {
     container: {
       backgroundColor: currentTheme.colors.background,
       flexDirection: 'column',
@@ -133,5 +135,5 @@ const styles = () => {
       alignItems: 'center',
       textAlign: 'center',
     },
-  });
+  };
 };

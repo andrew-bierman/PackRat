@@ -2,6 +2,7 @@
 
 buildscript {
     ext {
+        RNMapboxMapsImpl = "mapbox"
         buildToolsVersion = findProperty('android.buildToolsVersion') ?: '33.0.0'
         minSdkVersion = Integer.parseInt(findProperty('android.minSdkVersion') ?: '21')
         compileSdkVersion = Integer.parseInt(findProperty('android.compileSdkVersion') ?: '33')

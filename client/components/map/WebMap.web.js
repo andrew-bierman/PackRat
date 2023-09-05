@@ -11,7 +11,6 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import {
   Platform,
-  StyleSheet,
   Text,
   View,
   TouchableOpacity,
@@ -39,6 +38,7 @@ import togpx from 'togpx';
 import { gpx as toGeoJSON } from '@tmcw/togeojson';
 import { DOMParser } from 'xmldom';
 import MapPreview from './MapPreview';
+import useCustomStyles from '~/hooks/useCustomStyles';
 
 // import 'mapbox-gl/dist/mapbox-gl.css'
 
@@ -96,6 +96,7 @@ const WebMap = ({ shape: shapeProp }) => {
   // download variables
   const dispatch = useDispatch();
   const [downloadable, setDownloadable] = useState(false);
+  const styles = useCustomStyles(loadStyles);
 
   useEffect(() => {
     // update the shape state when a new shapeProp gets passed
@@ -535,7 +536,7 @@ const WebMap = ({ shape: shapeProp }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const loadStyles = () => ({
   container: {
     alignItems: 'center',
     justifyContent: 'center',

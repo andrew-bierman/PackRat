@@ -98,7 +98,9 @@ const TripDateRange = ({ dateRange, setDateRange }) => {
               label="Select Date"
               mode="range"
               visible={open}
-              validRange={{ startDate: new Date() }}
+              validRange={{
+                startDate: new Date(),
+              }}
               onDismiss={onDismiss}
               startDate={dateRange?.startDate}
               endDate={dateRange?.endDate}

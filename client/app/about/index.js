@@ -1,6 +1,7 @@
 import About from '../../screens/about';
-import { Platform, ScrollView, StyleSheet } from 'react-native';
+import { Platform, ScrollView } from 'react-native';
 import { Stack as Header } from 'expo-router';
+import useCustomStyles from '~/hooks/useCustomStyles';
 
 /**
  * Renders the AboutRoute component.
@@ -8,6 +9,7 @@ import { Stack as Header } from 'expo-router';
  * @return {JSX.Element} The rendered component.
  */
 export default function AboutRoute() {
+  const styles = useCustomStyles(loadStyles);
   return (
     <ScrollView
       showsHorizontalScrollIndicator={false}
@@ -33,7 +35,7 @@ export default function AboutRoute() {
   );
 }
 
-const styles = StyleSheet.create({
+const loadStyles = () => ({
   menuBar: {
     paddingBottom: 120,
   },
