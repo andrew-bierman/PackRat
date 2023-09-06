@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { Container, Text } from 'native-base';
 import { useRouter, useSearchParams } from 'expo-router';
 import useTheme from '../../hooks/useTheme';
@@ -23,8 +23,10 @@ import {
   setWeatherWeek,
 } from '../../store/destinationStore';
 import { fetchWeather, fetchWeatherWeek } from '../../store/weatherStore';
+import useCustomStyles from '~/hooks/useCustomStyles';
 
 const DestinationHeader = ({ geoJSON, selectedSearchResult }) => {
+  const styles = useCustomStyles(loadStyles);
   const properties = {
     ...geoJSON?.features[0]?.properties,
     ...selectedSearchResult?.properties,
@@ -52,18 +54,18 @@ const DestinationHeader = ({ geoJSON, selectedSearchResult }) => {
   }, {});
 
   return (
-    <View style={styles().headerContainer}>
-      <Text style={styles().headerText}>
+    <View style={styles.headerContainer}>
+      <Text style={styles.headerText}>
         {name !== 'N/A' ? name : 'Destination'}
       </Text>
-      <Text style={styles().headerSubText}>
+      <Text style={styles.headerSubText}>
         {county !== 'N/A' && `${county}, `}
         {state !== 'N/A' && `${state}, `}
         {country !== 'N/A' ? country : ''}
       </Text>
-      <View style={styles().languageContainer}>
+      <View style={styles.languageContainer}>
         {Object.entries(languageNames).map(([key, value]) => (
-          <Text key={key} style={styles().languageText}>
+          <Text key={key} style={styles.languageText}>
             {`${key.split(':')[1].toUpperCase()}: ${value}`}
           </Text>
         ))}
@@ -127,6 +129,7 @@ export const DestinationPage = () => {
   const router = useRouter();
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
+  const styles = useCustomStyles(loadStyles);
   const dispatch = useDispatch();
 
   const { destinationId, id, type, lat, lon } = useSearchParams();
@@ -170,7 +173,7 @@ export const DestinationPage = () => {
 
   return (
     <ScrollView>
-      <View style={styles().container}>
+      <View style={styles.container}>
         <DestinationHeader
           geoJSON={geoJSON}
           selectedSearchResult={selectedSearchResult}
@@ -194,10 +197,9 @@ export const DestinationPage = () => {
   );
 };
 
-const styles = () => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    useTheme();
-  return StyleSheet.create({
+const loadStyles = (theme) => {
+  const { currentTheme } = theme;
+  return {
     container: {
       flex: 1,
       justifyContent: 'flex-start',
@@ -236,5 +238,5 @@ const styles = () => {
       marginRight: 10,
       marginBottom: 5, // Add margin to provide spacing between the language texts
     },
-  });
+  };
 };

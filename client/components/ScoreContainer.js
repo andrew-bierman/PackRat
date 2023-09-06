@@ -1,14 +1,16 @@
 import React from 'react';
-import { Platform, StyleSheet } from 'react-native';
+import { Platform } from 'react-native';
 import { Box, Button, VStack, Text, HStack, View } from 'native-base';
 import { theme } from '../theme';
 import useTheme from '../hooks/useTheme';
 import { useDispatch } from 'react-redux';
 import { scorePack } from '../store/packsStore';
 import { Svg, Circle, Path, G, Text as SvgText } from 'react-native-svg';
+import useCustomStyles from '~/hooks/useCustomStyles';
 
 const ScoreProgressChart = ({ score, size = 150, strokeWidth = 10 }) => {
   if (!score) return null;
+  const styles = useCustomStyles(loadStyles);
 
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
@@ -16,8 +18,8 @@ const ScoreProgressChart = ({ score, size = 150, strokeWidth = 10 }) => {
   const progressPath = progress * circumference;
 
   return (
-    <View style={styles().container}>
-      <View style={styles().graphWrapper}>
+    <View style={styles.container}>
+      <View style={styles.graphWrapper}>
         <Svg width={size} height={size}>
           <Circle
             cx={size / 2}
@@ -39,7 +41,7 @@ const ScoreProgressChart = ({ score, size = 150, strokeWidth = 10 }) => {
             fill="transparent"
           />
         </Svg>
-        <Text style={styles().label}>{score.toFixed(2)}</Text>
+        <Text style={styles.label}>{score.toFixed(2)}</Text>
       </View>
     </View>
   );
@@ -56,6 +58,7 @@ const GradingPieChart = ({ scores, size = 150, strokeWidth = 10 }) => {
 
   const { weightScore, essentialItemsScore, redundancyAndVersatilityScore } =
     scores;
+  const styles = useCustomStyles(loadStyles);
 
   // pie chart with 3 sections to represent the 3 grades
   // each section is a circle with a different color
@@ -85,8 +88,8 @@ const GradingPieChart = ({ scores, size = 150, strokeWidth = 10 }) => {
     essentialItemsAngle + (essentialItemsScore / total) * 360;
 
   return (
-    <View style={styles().container}>
-      <View style={styles().graphWrapper}>
+    <View style={styles.container}>
+      <View style={styles.graphWrapper}>
         <Svg height="160" width="160" viewBox="0 0 180 180">
           <G rotation={-90} originX="90" originY="90">
             {total === 0 ? (
@@ -146,7 +149,7 @@ const GradingPieChart = ({ scores, size = 150, strokeWidth = 10 }) => {
             )}
           </G>
         </Svg>
-        <Text style={styles().label}>{total.toFixed(2)}</Text>
+        <Text style={styles.label}>{total.toFixed(2)}</Text>
       </View>
     </View>
   );
@@ -156,6 +159,7 @@ export default function ScoreContainer({ type, data, isOwner }) {
   const dispatch = useDispatch();
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
+  const styles = useCustomStyles(loadStyles);
   const id = data._id;
   const totalScore = data.totalScore;
   const grades = data.grades;
@@ -191,16 +195,16 @@ export default function ScoreContainer({ type, data, isOwner }) {
   };
 
   return (
-    <Box style={styles().box}>
-      <HStack style={styles().hStack}>
-        <VStack style={styles().vStack}>
-          <Text style={styles().scoreText}>
+    <Box style={styles.box}>
+      <HStack style={styles.hStack}>
+        <VStack style={styles.vStack}>
+          <Text style={styles.scoreText}>
             {isAlreadyScored ? title : 'Score this pack!'}
           </Text>
           <Text>{subheader}</Text>
           <Text style={{ fontWeight: 300 }}>{description}</Text>
           {isOwner && (
-            <Button style={styles().button} onPress={handleScoreClick}>
+            <Button style={styles.button} onPress={handleScoreClick}>
               <Text>Calculate Score</Text>
             </Button>
           )}
@@ -215,10 +219,9 @@ export default function ScoreContainer({ type, data, isOwner }) {
     </Box>
   );
 }
-const styles = () => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    useTheme();
-  return StyleSheet.create({
+const loadStyles = (theme) => {
+  const { currentTheme } = theme;
+  return {
     box: {
       paddingHorizontal: 25,
       marginVertical: 15,
@@ -246,8 +249,6 @@ const styles = () => {
       height: 50,
       justifyContent: 'center',
     },
-
-    // pie
     container: {
       flex: 1,
       justifyContent: 'center',
@@ -263,5 +264,5 @@ const styles = () => {
       fontWeight: '700',
       fontSize: 24,
     },
-  });
+  };
 };
