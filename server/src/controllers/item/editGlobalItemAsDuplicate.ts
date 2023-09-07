@@ -53,7 +53,7 @@ export function editGlobalItemAsDuplicateRoute() {
   }))
     .mutation(async (opts) => {
       const { itemId, packId, name, weight, quantity, unit, type } = opts.input;
-      return editGlobalItemAsDuplicateService(
+      return await editGlobalItemAsDuplicateService(
         itemId,
         packId,
         name,

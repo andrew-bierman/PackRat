@@ -56,7 +56,7 @@ export const fetchUserPacks = createAsyncThunk(
   async (ownerId) => {
     // const response = await axios.get(`${api}/pack/${ownerId}`);
     // return response.data;
-    return (await trpc.getPacks.query({ ownerId })).packs;
+    return (await trpc.getPacks.query({ ownerId }))?.packs;
   },
 );
 

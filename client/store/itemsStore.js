@@ -28,7 +28,7 @@ export const deleteItem = createAsyncThunk(
 export const editItem = createAsyncThunk('items/editItem', async (newItem) => {
   // const response = await axios.put(`${api}/item/`, newItem);
   // return response.data;
-  return awaittrpc.editItem.mutate({
+  return await trpc.editItem.mutate({
     _id: newItem._id,
     name: newItem.name,
     quantity: newItem.quantity,
