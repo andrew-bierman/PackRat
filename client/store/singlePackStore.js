@@ -50,7 +50,7 @@ export const selectItemsGlobal = createAsyncThunk(
 
 const singlePackSlice = createSlice({
   name: 'singlePack',
-  initialState: initialState,
+  initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { ImageBackground, Platform, StyleSheet, View } from 'react-native';
+import { ImageBackground, Platform, View } from 'react-native';
 import {
   Container,
   Button,
@@ -14,6 +14,7 @@ import {
 import useTheme from '../../hooks/useTheme';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { theme } from '../../theme';
+import useCustomStyles from '~/hooks/useCustomStyles';
 
 const dataArray = [
   {
@@ -56,6 +57,7 @@ const dataArray = [
 
 const CustomAccordion = ({ title, content, iconName }) => {
   const [expanded, setExpanded] = useState(false);
+  const styles = useCustomStyles(loadStyles);
 
   /**
    * Toggles the value of 'expanded' and updates the state.
@@ -67,24 +69,24 @@ const CustomAccordion = ({ title, content, iconName }) => {
   };
 
   return (
-    <Card style={styles().card}>
-      <View style={styles().cardHeader}>
-        <MaterialIcons name={iconName} style={styles().icon} />
+    <Card style={styles.card}>
+      <View style={styles.cardHeader}>
+        <MaterialIcons name={iconName} style={styles.icon} />
         <View style={{ flex: 1 }}>
-          <Text style={styles().featureText}>{title}</Text>
+          <Text style={styles.featureText}>{title}</Text>
         </View>
         <Button
           transparent
-          style={styles().transparentButton}
+          style={styles.transparentButton}
           onPress={toggleExpanded}
         >
           <MaterialIcons
             name={expanded ? 'keyboard-arrow-down' : 'keyboard-arrow-up'}
-            style={styles().icon}
+            style={styles.icon}
           />
         </Button>
       </View>
-      {expanded && <Text style={styles().cardContent}>{content}</Text>}
+      {expanded && <Text style={styles.cardContent}>{content}</Text>}
     </Card>
   );
 };
@@ -92,8 +94,9 @@ const CustomAccordion = ({ title, content, iconName }) => {
 const LandingPage = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
+  const styles = useCustomStyles(loadStyles);
   return (
-    <VStack style={styles().container}>
+    <VStack style={styles.container}>
       <Box
         style={{
           alignItems: 'center',
@@ -117,21 +120,21 @@ const LandingPage = () => {
           The Ultimate Travel App
         </Text>
       </Box>
-      <Box style={styles().secondaryContentContainer}>
+      <Box style={styles.secondaryContentContainer}>
         {/* <ImageBackground
           source={require("../../assets/background-image.png")}
-          style={styles().backgroundImage}
+          style={styles.backgroundImage}
         > */}
-        <View style={styles().overlay} />
-        <Container style={styles().contentContainer}>
-          <Text style={styles().introText}>
+        <View style={styles.overlay} />
+        <Container style={styles.contentContainer}>
+          <Text style={styles.introText}>
             PackRat is the ultimate adventure planner designed for those who
             love to explore the great outdoors. Plan and organize your trips
             with ease, whether it's a weekend camping trip, a day hike, or a
             cross-country road trip.
           </Text>
           {Platform.OS === 'web' && (
-            <View style={styles().appBadges}>
+            <View style={styles.appBadges}>
               <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                 <Button title="App Store" style={{ marginRight: 10 }}>
                   <HStack space={2} alignItems="center">
@@ -177,15 +180,15 @@ const LandingPage = () => {
             ))}
           </View>
         </Container>
-        <Container style={styles().buttonContainer}>
+        <Container style={styles.buttonContainer}>
           <Button
             full
-            style={styles().getStartedButton}
+            style={styles.getStartedButton}
             onPress={() => {
               /* Add navigation to the sign in screen */
             }}
           >
-            <Text style={styles().footerText}>Get Started</Text>
+            <Text style={styles.footerText}>Get Started</Text>
           </Button>
         </Container>
         <StatusBar style="auto" />
@@ -195,10 +198,9 @@ const LandingPage = () => {
   );
 };
 
-const styles = () => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    useTheme();
-  return StyleSheet.create({
+const loadStyles = (theme) => {
+  const { currentTheme } = theme;
+  return {
     mutualStyles: {
       backgroundColor: currentTheme.colors.background,
       flex: 1,
@@ -285,7 +287,7 @@ const styles = () => {
       fontSize: 18,
       fontWeight: 'bold',
     },
-  });
+  };
 };
 
 export default LandingPage;

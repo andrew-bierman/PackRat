@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import {
   Platform,
-  StyleSheet,
   Text,
   View,
   Picker,
@@ -56,6 +55,7 @@ import * as FileSystem from 'expo-file-system';
 import { DOMParser } from 'xmldom';
 import { gpx as toGeoJSON } from '@tmcw/togeojson';
 import MapPreview from './MapPreview';
+import useCustomStyles from '~/hooks/useCustomStyles';
 
 Mapbox.setWellKnownTileServer(Platform.OS === 'android' ? 'Mapbox' : 'mapbox');
 Mapbox.setAccessToken(MAPBOX_ACCESS_TOKEN);
@@ -96,6 +96,7 @@ function NativeMap({ shape: shapeProp }) {
   );
 
   const toast = useToast();
+  const styles = useCustomStyles(loadStyles);
 
   // consts
   let bounds = getShapeSourceBounds(shape);
@@ -461,7 +462,7 @@ function NativeMap({ shape: shapeProp }) {
   );
 }
 
-const styles = StyleSheet.create({
+const loadStyles = () => ({
   page: {
     flex: 1,
     flexDirection: 'column',

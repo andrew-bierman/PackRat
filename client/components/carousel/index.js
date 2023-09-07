@@ -1,19 +1,15 @@
 import React, { useRef, useState } from 'react';
-import {
-  ScrollView,
-  StyleSheet,
-  Platform,
-  View,
-  Dimensions,
-} from 'react-native';
+import { ScrollView, Platform, Dimensions } from 'react-native';
 import { VStack } from 'native-base';
 import ScrollButton from './ScrollButton';
+import useCustomStyles from '~/hooks/useCustomStyles';
 
 const { height, width } = Dimensions.get('window');
 
 const Carousel = ({ children = [], itemWidth }) => {
   const scrollViewRef = useRef();
   const [currentIndex, setCurrentIndex] = useState(0);
+  const styles = useCustomStyles(loadStyles);
 
   /**
    * Handles the scroll event.
@@ -96,7 +92,7 @@ const Carousel = ({ children = [], itemWidth }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const loadStyles = () => ({
   carousel: {
     flexDirection: 'row',
     width: Platform.OS === 'web' ? '100%' : width * 0.8,
