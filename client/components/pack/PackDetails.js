@@ -41,7 +41,7 @@ export function PackDetails() {
   useEffect(() => {
     if (!packId) return;
     dispatch(fetchSinglePack(packId));
-    if (userId) dispatch(fetchUserPacks(userId));
+    if (userId) dispatch(fetchUserPacks({ ownerId: userId }));
     setFirstLoad(false);
   }, [dispatch, packId, updated]); // TODO updated is a temporary fix to re-render when pack is update, due to bug in store
   const styles = useCustomStyles(loadStyles);
