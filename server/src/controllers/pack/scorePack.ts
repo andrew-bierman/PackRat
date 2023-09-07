@@ -25,6 +25,6 @@ export const scorePack = async (req, res, next) => {
 export function scorePackRoute() {
   return publicProcedure.input(validator.getPackById).mutation(async (opts) => {
     const { packId } = opts.input;
-    return scorePackService(packId);
+    return await scorePackService(packId);
   });
 }

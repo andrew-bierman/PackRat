@@ -20,7 +20,7 @@ export const fetchParks = createAsyncThunk(
     try {
       // const response = await axios.get(url);
       // const parks = response.data.features;
-      const parks = await trpc.getParksOSM.query(params);
+      const parks = (await trpc.getParksOSM.query(params)).features;
       const filteredParks = parks
         .filter(
           (park) =>
