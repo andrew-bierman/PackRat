@@ -16,7 +16,7 @@ const initialState = authAdapter.getInitialState({
   user: null,
   loading: false,
   error: null,
-});
+}); 
 
 // Thunks for async actions
 export const signUp = createAsyncThunk(
@@ -74,7 +74,8 @@ export const signInWithGoogle = createAsyncThunk(
       //   idToken,
       // });
       // return response.data.user;
-      return await trpc.googleSignin.query({ idToken });
+      const response = await trpc.googleSignin.query({ idToken });
+      return response?.user
     } catch (error) {
       console.log('error.response.data.error', error.response.data.error);
       return rejectWithValue(error);

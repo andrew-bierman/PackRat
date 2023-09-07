@@ -29,6 +29,7 @@ export const getPacks = async (req, res, next) => {
 export function getPacksRoute() {
   return publicProcedure.input(validator.getPacks).query(async (opts) => {
     const { ownerId } = opts.input;
-    return { packs: await getPacksService(ownerId), message: "Packs retrieved successfully" }
+    const packs = await getPacksService(ownerId)
+    return { packs, message: "Packs retrieved successfully" }
   })
 }

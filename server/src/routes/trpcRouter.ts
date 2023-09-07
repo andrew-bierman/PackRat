@@ -60,7 +60,7 @@ import {
 
 export const appRouter = trpcRouter({
     // user routes
-    getUserById: getUserByIdRoute(),
+    getUserById: getUserByIdRoute(), 
     signIn: userSignInRoute(),
     signUp: signUpRoute(),
     resetPassword: resetPasswordRoute(),

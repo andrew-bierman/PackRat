@@ -26,6 +26,6 @@ export const getPublicPacks = async (req, res, next) => {
 export function getPublicPacksRoute() {
   return publicProcedure.input(z.object({ queryBy: z.string() })).query(async (opts) => {
     const { queryBy } = opts.input;
-    return getPublicPacksService(queryBy);
+    return await getPublicPacksService(queryBy);
   });
 }

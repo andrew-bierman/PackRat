@@ -28,6 +28,6 @@ export function editItemRoute() {
   return publicProcedure.input(validator.editItem)
     .mutation(async (opts) => {
       const { _id, name, weight, unit, quantity, type } = opts.input;
-      return editItemService(_id, name, weight, unit, quantity, type);
+      return await editItemService(_id, name, weight, unit, quantity, type);
     });
 }
