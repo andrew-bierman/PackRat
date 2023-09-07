@@ -49,7 +49,15 @@ const ERROR_MESSAGES = {
   userTrips: 'No User Trips Available',
 };
 
-const dataValues = ['Favorite', 'Most Recent'];
+const dataValues = [
+  'Favorite',
+  'Most Recent',
+  'Lightest',
+  'Heaviest',
+  'Most Items',
+  'Fewest Items',
+  'Oldest',
+];
 
 const FeedSearchFilter = ({
   feedType,
@@ -175,7 +183,7 @@ const Feed = ({ feedType = 'public' }) => {
       dispatch(getPublicTrips(queryString));
       dispatch(fetchUserFavorites(ownerId));
     } else if (feedType === 'userPacks' && ownerId) {
-      dispatch(fetchUserPacks(ownerId));
+      dispatch(fetchUserPacks({ ownerId, queryString }));
     } else if (feedType === 'userTrips' && ownerId) {
       dispatch(fetchUserTrips(ownerId));
     } else if (feedType === 'favoritePacks') {

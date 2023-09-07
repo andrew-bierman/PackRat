@@ -12,8 +12,9 @@ import { buildMessage } from '../../helpers/buildMessage';
 export const getPacks = async (req, res, next) => {
   try {
     const { ownerId } = req.params;
+    const { queryBy } = req.query;
 
-    const packs = await getPacksService(ownerId);
+    const packs = await getPacksService(ownerId, queryBy);
 
     res.locals.data = packs;
 

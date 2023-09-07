@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
 import {
@@ -15,14 +15,21 @@ import {
   H5,
   H2,
 } from 'tamagui';
-
 import Avatar from '~/components/Avatar';
+import { editUser, updatePassword } from '../../store/authStore';
 
 export default function Settings() {
   const [user, setUser] = useState(useSelector((state) => state.auth.user));
+  const dispatch = useDispatch();
+
+  const [passwords, setPasswords] = useState<any>({});
 
   const handleChange = ({ target }) => {
     setUser((prev) => ({ ...prev, [target.id]: target.value }));
+  };
+
+  const handlePasswordsChange = ({ target }) => {
+    setPasswords((prev) => ({ ...prev, [target.id]: target.value }));
   };
 
   const pickImage = async () => {
@@ -40,6 +47,37 @@ export default function Settings() {
 
   const removeProfileImage = () => {
     handleChange({ target: { id: 'profileImage', value: null } });
+  };
+
+  const handleEditUser = () => {
+    const {
+      _id,
+      email,
+      name,
+      username,
+      profileImage,
+      preferredWeather,
+      preferredWeight,
+    } = user;
+
+    dispatch(
+      editUser({
+        userId: _id,
+        email,
+        name,
+        username,
+        profileImage,
+        preferredWeather,
+        preferredWeight,
+      }),
+    );
+  };
+
+  const handleUpdatePassword = () => {
+    const { email } = user;
+    const { oldPassword, newPassword, confirmPassword } = passwords;
+    if (newPassword !== confirmPassword) return;
+    dispatch(updatePassword({ email, oldPassword, newPassword }));
   };
 
   return (
@@ -75,22 +113,15 @@ export default function Settings() {
       </XStack>
       <XStack space="$3">
         <YStack>
-          <Label htmlFor="firstName">First Name</Label>
-          <Input
-            id="firstName"
-            value={user.firstName}
-            onChange={handleChange}
-          />
+          <Label htmlFor="firstName">Name</Label>
+          <Input id="name" value={user.name} onChange={handleChange} />
         </YStack>
         <YStack>
-          <Label htmlFor="lastName">Last Name</Label>
-          <Input id="lastName" value={user.lastName} onChange={handleChange} />
+          <Label htmlFor="username">Username</Label>
+          <Input id="username" value={user.username} onChange={handleChange} />
         </YStack>
       </XStack>
-      <YStack>
-        <Label htmlFor="username">Username</Label>
-        <Input id="username" value={user.username} onChange={handleChange} />
-      </YStack>
+
       <YStack>
         <Label htmlFor="email">Email</Label>
         <Input id="email" value={user.email} onChange={handleChange} />
@@ -102,7 +133,7 @@ export default function Settings() {
             <Label>Weather: </Label>
             <CustomSelect
               items={['celsius', 'fahrenheit']}
-              value={user.preferredWeatherUnit}
+              value={user.preferredWeather}
               onChange={(value) =>
                 handleChange({ target: { id: 'preferredWeather', value } })
               }
@@ -112,7 +143,7 @@ export default function Settings() {
             <Label>Weight: </Label>
             <CustomSelect
               items={['lb', 'oz', 'kg', 'g']}
-              value={user.preferredWeatherUnit}
+              value={user.preferredWeight}
               onChange={(value) =>
                 handleChange({ target: { id: 'preferredWeight', value } })
               }
@@ -120,7 +151,11 @@ export default function Settings() {
           </YStack>
         </XStack>
       </YStack>
-      <Button color="white" style={{ backgroundColor: '#0284c7' }}>
+      <Button
+        color="white"
+        style={{ backgroundColor: '#0284c7' }}
+        onPress={handleEditUser}
+      >
         Update profile
       </Button>
       <Stack marginTop={20} marginBottom={10}>
@@ -130,21 +165,36 @@ export default function Settings() {
       </Stack>
       <YStack>
         <Label htmlFor="oldPassword">Old password</Label>
-        <Input id="oldPassword" value={user.password} secureTextEntry={true} />
+        <Input
+          id="oldPassword"
+          value={passwords.oldPassword}
+          secureTextEntry={true}
+          onChange={handlePasswordsChange}
+        />
       </YStack>
       <YStack>
         <Label htmlFor="newPassword">New password</Label>
-        <Input id="newPassword" value={user.password} secureTextEntry={true} />
+        <Input
+          id="newPassword"
+          value={passwords.newPassword}
+          secureTextEntry={true}
+          onChange={handlePasswordsChange}
+        />
       </YStack>
       <YStack>
         <Label htmlFor="confirmPassword">Confirm new password</Label>
         <Input
           id="confirmPassword"
-          value={user.confirmPassword}
+          value={passwords.confirmPassword}
           secureTextEntry={true}
+          onChange={handlePasswordsChange}
         />
       </YStack>
-      <Button color="white" style={{ backgroundColor: '#0284c7' }}>
+      <Button
+        color="white"
+        style={{ backgroundColor: '#0284c7' }}
+        onPress={handleUpdatePassword}
+      >
         Change password
       </Button>
     </YStack>
