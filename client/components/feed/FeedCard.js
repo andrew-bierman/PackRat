@@ -57,6 +57,11 @@ export default function Card({
         favorited_by.forEach((obj) => obj._id === user._id)
       : null;
 
+  /**
+   * Handles adding an item to the user's favorites.
+   *
+   * @return {void}
+   */
   const handleAddToFavorite = () => {
     const data = {
       packId: _id,
