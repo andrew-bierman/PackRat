@@ -80,6 +80,19 @@ export const signInWithGoogle = createAsyncThunk(
   },
 );
 
+export const editUser = createAsyncThunk('auth/editUser', async (user) => {
+  const response = await axios.put(`${api}/user/`, user);
+  return response.data;
+});
+
+export const updatePassword = createAsyncThunk(
+  'auth/updatePassword',
+  async (user) => {
+    const response = await axios.post(`${api}/user/updatepassword`, user);
+    return response.data;
+  },
+);
+
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -141,6 +154,33 @@ export const authSlice = createSlice({
       .addCase(signInWithGoogle.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(editUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(editUser.fulfilled, (state, action) => {
+        authAdapter.setAll(state, [action.payload]);
+        state.user = action.payload;
+
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(editUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(updatePassword.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updatePassword.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(updatePassword.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
       });
   },
 });

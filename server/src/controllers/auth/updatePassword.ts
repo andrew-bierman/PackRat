@@ -2,6 +2,8 @@ import { UnableTouUpdatePasswordError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import User from '../../models/userModel';
 import { findUserAndUpdate } from '../../services/user/user.service';
+import bcrypt from 'bcrypt';
+import { JWT_SECRET } from '../../config';
 
 /**
  * Updates the password for a user.
@@ -10,11 +12,29 @@ import { findUserAndUpdate } from '../../services/user/user.service';
  * @return {Promise<void>} - A promise that resolves to nothing.
  */
 export const updatePassword = async (req, res, next) => {
-  const { email, password } = req.body;
-  const val = await findUserAndUpdate(email, password, 'password');
-  if (val) {
-    responseHandler(res);
-  } else {
+  try {
+    let { email, oldPassword, newPassword } = req.body;
+
+    const user = await User.findOne({ email });
+
+    if (!user) throw new Error('Unable to verify');
+
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+
+    if (!isMatch) throw new Error('Incorrect password');
+
+    const salt = await bcrypt.genSalt(parseInt(JWT_SECRET));
+
+    newPassword = await bcrypt.hash(newPassword, salt);
+
+    const val = await findUserAndUpdate(email, newPassword, 'password');
+
+    if (val) {
+      responseHandler(res);
+    } else {
+      next(UnableTouUpdatePasswordError);
+    }
+  } catch (error) {
     next(UnableTouUpdatePasswordError);
   }
 };

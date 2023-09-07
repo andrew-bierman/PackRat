@@ -157,7 +157,7 @@ export default function ProfileContainer({ id = null }) {
     if (differentUser) {
       dispatch(getUser(id));
     } else {
-      dispatch(fetchUserPacks(authUser?._id));
+      dispatch(fetchUserPacks({ ownerId: authUser?._id }));
       dispatch(fetchUserFavorites(authUser?._id));
       dispatch(fetchUserTrips(authUser?._id));
     }
