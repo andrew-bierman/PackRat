@@ -5,8 +5,8 @@ const SORT_OPTIONS = {
   Favorite: { favorites_count: -1 },
   Lightest: { total_weight: 1 },
   Heaviest: { total_weight: -1 },
-  'Most Items': { 'items.length': -1 },
-  'Fewest Items': { 'items.length': 1 },
+  'Most Items': { items_count: -1 },
+  'Fewest Items': { items_count: 1 },
   Oldest: { createdAt: 1 },
   'Most Recent': { updatedAt: -1 },
   'Highest Score': { 'scores.totalScore': -1 },
@@ -76,6 +76,7 @@ export async function getPublicPacksService(queryBy: string = null) {
           type: { $first: '$type' },
           items: { $push: '$items' },
           total_weight: { $sum: '$item_weight' },
+          items_count: {$sum : 1}
         },
       },
     ];
