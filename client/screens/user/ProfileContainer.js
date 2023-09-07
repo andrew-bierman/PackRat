@@ -172,7 +172,7 @@ export default function ProfileContainer({ id = null }) {
   const packsData = differentUser ? user?.packs : allPacks;
   const favoritesData = differentUser ? user?.favorites : allFavorites;
 
-  const tripsCount = tripsData?.trips?.length ?? 0;
+  const tripsCount = tripsData?.length ?? 0;
   const packsCount = packsData?.length ?? 0;
   const favoritesCount = favoritesData?.length ?? 0;
   const isCertified = user?.isCertified ?? false;
@@ -225,7 +225,7 @@ export default function ProfileContainer({ id = null }) {
               />
             </Box>
           )}
-          {Array.isArray(tripsData?.trips) && tripsData?.trips.length > 0 && (
+          {Array.isArray(tripsData) && tripsData?.length > 0 && (
             <Box style={styles.userDataContainer}>
               <UserDataContainer
                 data={tripsData}
