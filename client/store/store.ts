@@ -30,6 +30,7 @@ import globalItems from './globalItemsStore';
 import userStore from './userStore';
 import offlineQueue from './offlineQueue';
 import progressReducer from './progressStore';
+import mapsReducer  from './mapsStore';
 import { type Reducer } from 'react';
 
 // combine reducers
@@ -42,6 +43,7 @@ const rootReducer: Reducer<RootState> = combineReducers({
   parks: parksReducer,
   items: itemsReducer,
   packs: packsReducer,
+  maps : mapsReducer,
   trips: tripsReducer,
   favorites: favoritesReducer,
   singlePack: singlePackReducer,
@@ -66,6 +68,7 @@ export interface RootState {
   items: typeof itemsReducer;
   packs: typeof packsReducer;
   trips: typeof tripsReducer;
+  maps: typeof mapsReducer;
   favorites: typeof favoritesReducer;
   singlePack: typeof singlePackReducer;
   singleTrip: typeof singleTripReducer;

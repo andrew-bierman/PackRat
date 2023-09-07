@@ -189,3 +189,16 @@ export const UnableToEditUserError = {
   statusCode: 500,
   message: 'Unable to edit user',
 };
+export const MapNotFoundError = { statusCode: 404, message: 'Map not found' };
+export const UnableToAddMapError = {
+  statusCode: 500,
+  message: 'Unable to add map',
+};
+export const UnableToDeleteMapError = {
+  statusCode: 500,
+  message: 'Unable to delete map',
+};
+export const UnableToEditMapError = {
+  statusCode: 500,
+  message: 'Unable to edit map',
+};
