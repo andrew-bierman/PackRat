@@ -25,6 +25,6 @@ export const getPackById = async (req, res, next) => {
 export function getPackByIdRoute() {
   return publicProcedure.input(validator.getPackById).query(async (opts) => {
     const { packId } = opts.input;
-    return getPackByIdService(packId);
+    return await getPackByIdService(packId);
   });
 }

@@ -26,6 +26,7 @@ export const duplicatePublicPack = async (req, res, next) => {
 export function duplicatePublicPackRoute() {
   return publicProcedure.input(validator.duplicatePublicPack).mutation(async (opts) => {
     const { packId, ownerId, items } = opts.input;
-    return duplicatePublicPackService(packId, ownerId, items);
+    const result = await duplicatePublicPackService(packId, ownerId, items);
+    return result.pack;
   });
 }
