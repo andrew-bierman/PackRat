@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import {
   Box,
   Button,
@@ -16,10 +16,12 @@ import { PasswordResetForm } from './PasswordResetForm';
 import { CustomModal } from '../modal';
 import { useSearchParams } from 'expo-router';
 import { RequestPasswordResetEmailModal } from './RequestEmailModal';
+import useCustomStyles from '~/hooks/useCustomStyles';
 
 export const RequestPasswordReset = () => {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
+  const styles = useCustomStyles(loadStyles);
 
   //   get token from url using expo router
   const { token } = useSearchParams();
@@ -37,7 +39,7 @@ export const RequestPasswordReset = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const loadStyles = () => ({
   container: {
     flex: 1,
     alignItems: 'center',

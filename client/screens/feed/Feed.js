@@ -33,6 +33,8 @@ import {
 import { fetchUserTrips } from '../../store/tripsStore';
 import { useRouter } from 'expo-router';
 import { fuseSearch } from '../../utils/fuseSearch';
+import { fetchUserFavorites } from '../../store/favoritesStore';
+import useCustomStyles from '~/hooks/useCustomStyles';
 
 const URL_PATHS = {
   userPacks: '/pack/',
@@ -69,9 +71,10 @@ const FeedSearchFilter = ({
 }) => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
+  const styles = useCustomStyles(loadStyles);
   return (
-    <View style={styles().filterContainer}>
-      <Box style={styles().searchContainer}>
+    <View style={styles.filterContainer}>
+      <Box style={styles.searchContainer}>
         <HStack space={3}>
           <Input
             w="80%"
@@ -106,7 +109,7 @@ const FeedSearchFilter = ({
             <Text
               fontSize="lg"
               fontWeight="bold"
-              color={currentTheme.colors.text}
+              color={currentTheme.colors.textColor}
             >
               Packs
             </Text>
@@ -118,7 +121,7 @@ const FeedSearchFilter = ({
             <Text
               fontSize="lg"
               fontWeight="bold"
-              color={currentTheme.colors.text}
+              color={currentTheme.colors.textColor}
             >
               Trips
             </Text>
@@ -133,7 +136,7 @@ const FeedSearchFilter = ({
           <Text
             fontSize="lg"
             fontWeight="bold"
-            color={currentTheme.colors.text}
+            color={currentTheme.colors.textColor}
           >
             Sort By:
           </Text>
@@ -142,7 +145,7 @@ const FeedSearchFilter = ({
             data={dataValues}
             onValueChange={handleSortChange}
             placeholder="Sort By"
-            style={styles().dropdown}
+            style={styles.dropdown}
             width={150}
           />
         </HStack>
@@ -172,10 +175,13 @@ const Feed = ({ feedType = 'public' }) => {
   const publicTripsData = useSelector((state) => state.feed.publicTrips);
   const userTripsData = useSelector((state) => state.trips.userTrips);
 
+  const styles = useCustomStyles(loadStyles);
+
   useEffect(() => {
     if (feedType === 'public') {
       dispatch(getPublicPacks(queryString));
       dispatch(getPublicTrips(queryString));
+      dispatch(fetchUserFavorites(ownerId));
     } else if (feedType === 'userPacks' && ownerId) {
       dispatch(fetchUserPacks({ ownerId, queryString }));
     } else if (feedType === 'userTrips' && ownerId) {
@@ -237,7 +243,7 @@ const Feed = ({ feedType = 'public' }) => {
       />
     );
     return Platform.OS === 'web' ? (
-      <View style={styles().cardContainer}>
+      <View style={styles.cardContainer}>
         {console.log({ data })}
         {feedSearchFilterComponent}
         {data?.map((item) => (
@@ -288,13 +294,12 @@ const Feed = ({ feedType = 'public' }) => {
     router.push(createUrlPath);
   };
 
-  return <Box style={styles().mainContainer}>{renderData()}</Box>;
+  return <Box style={styles.mainContainer}>{renderData()}</Box>;
 };
 
-const styles = () => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    useTheme();
-  return StyleSheet.create({
+const loadStyles = (theme) => {
+  const { currentTheme } = theme;
+  return {
     mainContainer: {
       flex: 1,
       backgroundColor: currentTheme.colors.background,
@@ -322,7 +327,7 @@ const styles = () => {
       justifyContent: 'space-around',
       alignItems: 'center',
     },
-  });
+  };
 };
 
 export default Feed;
