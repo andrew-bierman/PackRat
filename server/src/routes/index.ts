@@ -2,7 +2,7 @@ import express, { type Request, type Response } from 'express';
 import path from 'path';
 import csrf from 'csurf';
 
-import userRoutes from './userRoutes';
+import userRoutes, { userRouter } from './userRoutes';
 import packRoutes from './packRoutes';
 import itemRoutes from './itemRoutes';
 import tripRoutes from './tripRoutes';
@@ -15,12 +15,18 @@ import passwordResetRoutes from './passwordResetRoutes';
 import openAiRoutes from './openAiRoutes';
 import templateRoutes from './templateRoutes';
 import favoriteRouters from './favoriteRoutes';
+import { publicProcedure, trpcRouter } from '../trpc';
 
 const router = express.Router();
 
 // Create a CSRF middleware
 const csrfProtection = csrf({ cookie: true });
+export  const appRouter = trpcRouter({
+  userRouter : userRouter,
+  greeting : publicProcedure.query(( ) => "Hi")
+})
 
+export type AppRouter = typeof appRouter;
 /**
  * Logs the incoming request method and path, and logs the finished request method, path, status code, and request body.
  *

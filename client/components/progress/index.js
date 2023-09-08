@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Progress } from 'native-base';
+
 import useTheme from '~/hooks/useTheme';
 
 const ProgressBarComponent = () => {
