@@ -72,6 +72,8 @@ export const signInWithGoogle = createAsyncThunk(
       const response = await axios.post(`${api}/user/google`, {
         idToken,
       });
+
+      await AsyncStorage.setItem('authToken', response.data.user.token);
       return response.data.user;
     } catch (error) {
       console.log('error.response.data.error', error.response.data.error);
