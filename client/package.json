@@ -20,7 +20,11 @@
     "copy:gradle": "cp gradle.properties.example gradle.properties",
     "copy:pod": "cp Podfile.example Podfile",
     "move:gradle": "mv gradle.properties android/gradle.properties",
-    "move:pod": "mv Podfile ios/Podfile"
+    "move:pod": "mv Podfile ios/Podfile",
+    "install:ios": "cd ios && pod install",
+    "install:android": "cd android && ./gradlew clean",
+    "build:android": "cd android && ./gradlew assembleRelease",
+    "build:ios": "cd ios && xcodebuild -workspace packrat.xcworkspace -scheme packrat -configuration Release -archivePath packrat.xcarchive archive",
   },
   "dependencies": {
     "@babel/runtime": "^7.21.0",

@@ -1,32 +1,58 @@
-name: android-build-apk
-on:
-    push:
-      branches: [ "main", "dev", "andrew_testing" ]
-    pull_request:
-      branches: [ "main", "dev", "andrew_testing" ]
+name: React Native CI/CD
 
+on:
+  push:
+    branches: [ "main", "dev", "andrew_testing" ]
+  pull_request:
+    branches: [ "main", "dev", "andrew_testing" ]
 
 jobs:
-  install-and-test:
+  android_build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Install npm dependencies
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14' # Use your preferred Node.js version
+
+      - name: Install npm dependencies for Monorepo and Client
         run: |
           npm install
-  build-android:
-    needs: install-and-test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Install npm dependencies
-        run: |
-          npm install
-      - name: Build Android Release
-        run: |
-          cd android && ./gradlew assembleRelease
+          npm run install:all
+
+      - name: Lint Client
+        run: npm run lint:client
+
+      - name: Test Client
+        run: npm run test:client
+
+      - name: Build Client
+        run: npm run build:client:android
+
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
         with:
           name: app-release.apk
           path: android/app/build/outputs/apk/release/
+
+  ios_build:
+    runs-on: macOS-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install iOS dependencies
+        run: npm run install:client:ios
+
+      - name: Lint Client
+        run: npm run lint:client
+
+      - name: Test Client
+        run: npm run test:client
+
+      - name: Build Client
+        run: npm run build:client:ios
+
