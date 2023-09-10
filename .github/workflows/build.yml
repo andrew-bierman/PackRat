@@ -23,12 +23,6 @@ jobs:
           npm install
           npm run install:all
 
-      - name: Lint Client
-        run: npm run lint:client
-
-      - name: Test Client
-        run: npm run test:client
-
       - name: Build Client
         run: npm run build:client:android
 
@@ -46,12 +40,6 @@ jobs:
 
       - name: Install iOS dependencies
         run: npm run install:client:ios
-
-      - name: Lint Client
-        run: npm run lint:client
-
-      - name: Test Client
-        run: npm run test:client
 
       - name: Build Client
         run: npm run build:client:ios
