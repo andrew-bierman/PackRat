@@ -183,7 +183,7 @@ export const UnableToEditTripError = {
 };
 export const UnableToScoreTripError = {
   statusCode: 500,
-  message: 'Unable to trip pack',
+  message: 'Unable to score trip',
 };
 export const RetrievingWeatherFromOpenWeatherError = {
   statusCode: 500,

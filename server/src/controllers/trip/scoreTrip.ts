@@ -11,10 +11,11 @@ export const scoreTrip = async (req, res, next) => {
     try {
 
         const { tripId } = req.params;
+   
 
         const UpdatedTrip = await scoreTripService(tripId)
 
-        res.status(200).json({ msg: 'Pack was scored successfully',UpdatedTrip });
+        res.status(200).json({ msg: 'Trip was scored successfully',UpdatedTrip });
         
     } catch (error) {
         next(UnableToScoreTripError);

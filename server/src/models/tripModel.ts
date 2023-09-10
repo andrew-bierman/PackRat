@@ -57,5 +57,16 @@ TripSchema.set('toJSON', {
   },
 });
 
+TripSchema.virtual('totalScore').get(function () {
+  const scoresArray: number[] = Object.values(this.scores);
+  const sum: number = scoresArray.reduce(
+    (total: number, score: number) => total + score,
+    0,
+  );
+  const average: number = scoresArray.length > 0 ? sum / scoresArray.length : 0;
+
+  return Math.round(average * 100) / 100;
+});
+
 const Trip = myDB.model('Trip', TripSchema);
 export default Trip;

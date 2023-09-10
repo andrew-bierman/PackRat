@@ -24,7 +24,18 @@ type ScoreResult = {
 
 function scoreWeather(trip: Trip): number {
   let score = 0;
-  const temp = trip.weather.main.temp;
+  let data: any = trip.weather;
+
+  let temp;
+
+  if (trip) {
+    data = JSON.parse(data);
+    temp = data?.main?.temp;
+  } else {
+    temp = 0
+  }
+
+ 
 
   if (temp >= 60 && temp <= 80) {
     score = 10;
@@ -37,18 +48,20 @@ function scoreWeather(trip: Trip): number {
   return score;
 }
 
-function scoreEssentialItems(trip: Trip): number {
-  return checkEssentialItems(trip.pack.items);
+function scoreEssentialItems(items: any[]): number {
+  return checkEssentialItems(items);
 }
 
-function scoreRedundancyAndVersatility(trip: Trip): number {
-  return checkItemRedundancy(trip.pack.items);
+function scoreRedundancyAndVersatility(items: any[]): number {
+  return checkItemRedundancy(items);
 }
 
-export function calculateTripScore(trip: any): ScoreResult {
+export function calculateTripScore(trip: any, items: any): ScoreResult {
   const weatherScore = scoreWeather(trip);
-  const essentialItemsScore = scoreEssentialItems(trip);
-  const redundancyAndVersatilityScore = scoreRedundancyAndVersatility(trip);
+
+  const essentialItemsScore = scoreEssentialItems(items);
+
+  const redundancyAndVersatilityScore = scoreRedundancyAndVersatility(items);
 
   // Calculate a combined total score
   const totalScore =
