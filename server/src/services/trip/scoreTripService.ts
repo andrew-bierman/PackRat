@@ -1,14 +1,13 @@
 import mongoose from 'mongoose';
 import Trip from '../../models/tripModel';
-import { calculateTripScore } from '../../utils/scoreTrip';
-
+import { calculateTripScore } from '../../utils/score/scoreTrip';
 
 export async function scoreTripService(tripId: string) {
   try {
-      const objectId = new mongoose.Types.ObjectId(tripId);
-      const tripData = await Trip.findById(objectId)
+    const objectId = new mongoose.Types.ObjectId(tripId);
+    const tripData = await Trip.findById(objectId);
 
-      const tripScore = calculateTripScore(tripData)
+    const tripScore = calculateTripScore(tripData);
 
     //   const { scores, grades } = tripScore;
 
@@ -17,13 +16,9 @@ export async function scoreTripService(tripId: string) {
     //     { scores, grades },
     //     { returnOriginal: false },
     //   );
-  
+
     //   return updatedPack;
-
-
   } catch (error) {
     throw new Error('Unable to score trip: ' + error.message);
   }
 }
-
-

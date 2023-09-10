@@ -1,6 +1,6 @@
 import Pack from '../../models/packModel';
 import mongoose from 'mongoose';
-import { calculatePackScore } from '../../utils/scorePack';
+import { calculatePackScore } from '../../utils/score/scorePack';
 
 /**
  * Scores a pack service based on the given packId.

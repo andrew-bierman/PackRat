@@ -21,6 +21,8 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { convertPhotonGeoJsonToShape } from '../../utils/mapFunctions';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from '~/hooks/useCustomStyles';
+import { useMatchesCurrentUser } from '../../hooks/useMatchesCurrentUser';
+
 export function TripDetails() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
@@ -45,7 +47,8 @@ export function TripDetails() {
   const user = useSelector((state) => state.auth.user);
 
   // check if user is owner of pack, and that pack and user exists
-  const isOwner = currentTrip && user && currentTrip.owner_id === user._id;
+  // const isOwner = currentTrip && user && currentTrip.owner_id === user._id;
+  const isOwner = useMatchesCurrentUser(currentTrip?.owner_id) || true;
 
   const isLoading = useSelector((state) => state.singleTrip.isLoading);
   const error = useSelector((state) => state.singleTrip.error);
