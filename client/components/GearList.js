@@ -1,4 +1,4 @@
-import { RStack, RText } from '../packratui';
+import { RStack, RText } from '../packrat-ui';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { AddPackContainer } from './pack/AddPack';
 import useTheme from '../hooks/useTheme';
@@ -46,6 +46,7 @@ export const GearList = () => {
               paddingVertical: 12,
               fontWeight: 600,
             }}
+            fontFamily="$body"
           >
             Gear List
           </RText>

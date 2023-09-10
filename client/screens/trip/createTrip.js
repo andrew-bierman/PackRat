@@ -1,4 +1,4 @@
-import { RStack } from '../../packratui';
+import { RStack } from '../../packrat-ui';
 import { ScrollView } from 'react-native';
 import { theme } from '../../theme';
 import TripCard from '../../components/TripCard';
