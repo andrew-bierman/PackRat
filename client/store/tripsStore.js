@@ -28,7 +28,7 @@ export const fetchUserTrips = createAsyncThunk(
   async (ownerId) => {
     // const response = await axios.get(`${api}/trip/${ownerId}`);
     // return response.data;
-    return await trpc.getTrips.query({ owner_id });
+    return await trpc.getTrips.query({ owner_id: ownerId });
   },
 );
 
