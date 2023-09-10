@@ -6,6 +6,7 @@ export const JoiObjectId = (message: any = 'valid id'): z.ZodString =>
 
 export const getPacks = z.object({
   ownerId: JoiObjectId(),
+  queryBy: z.string().optional(),
 });
 
 export const getPackById = z.object({

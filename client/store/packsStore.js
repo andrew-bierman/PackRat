@@ -53,7 +53,8 @@ export const fetchUserPacks = createAsyncThunk(
     //   `${api}/pack/${ownerId}/?queryBy=${queryString || 'Most Recent'}`,
     // );
     // return response.data;
-    return (await trpc.getPacks.query({ ownerId }))?.packs;
+    return (await trpc.getPacks.query({ ownerId, queryBy: queryString }))
+      ?.packs;
   },
 );
 
