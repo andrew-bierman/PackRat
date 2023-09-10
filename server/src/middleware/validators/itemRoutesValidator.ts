@@ -18,7 +18,7 @@ export const addItem = z.object({
   unit: z.string().nonempty(),
   packId: JoiObjectId(),
   type: z.string().optional(),
-  ownerId:z.string().optional(),
+  ownerId: z.string().optional(),
 });
 
 export const editItem = z.object({
