@@ -34,7 +34,7 @@ export default function PackContainer({ isCreatingTrip = false }) {
 
   useEffect(() => {
     if (user?._id) {
-      dispatch(fetchUserPacks(user?._id));
+      dispatch(fetchUserPacks({ ownerId: user?._id }));
     }
   }, [dispatch, user?._id, refetch]);
 

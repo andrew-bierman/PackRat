@@ -22,7 +22,7 @@ import { useRouter } from 'expo-router';
 // import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { Link } from 'expo-router';
 import { useSelector, useDispatch } from 'react-redux';
-import { signUp } from '../store/authStore';
+import { signInWithGoogle, signUp } from '../store/authStore';
 import { InformUser } from '../utils/ToastUtils';
 import useTheme from '../hooks/useTheme';
 import { useForm } from 'react-hook-form';
@@ -39,7 +39,6 @@ export default function Register() {
     formState: { isValid },
   } = useForm();
 
-  // const { signupWithEmail } = useRegister();
   const router = useRouter();
 
   const user = useSelector((state) => state.auth.user);
@@ -53,6 +52,10 @@ export default function Register() {
     });
     router.push('/');
   }
+
+  const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
+    clientId: WEB_CLIENT_ID,
+  });
 
   /**
    * Register a user with the given data.
@@ -72,6 +75,21 @@ export default function Register() {
       console.log('Error', e);
     }
   };
+
+  const auth = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (auth.isLoggedIn) {
+      // router.push("/");
+    }
+  }, [auth, router]);
+
+  useEffect(() => {
+    if (response?.type === 'success') {
+      const { id_token } = response.params;
+      dispatch(signInWithGoogle({ idToken: id_token }));
+    }
+  }, [response]);
 
   return (
     <Center w="100%">
@@ -178,27 +196,7 @@ export default function Register() {
             <Button
               w="100%"
               mt="2"
-              onPress={() => {
-                // promptAsync();
-                signInWithGoogle()
-                  .then(async (res) => {
-                    const { email, name } = res;
-                    if (email && name) {
-                      addUser.mutate({
-                        name,
-                        email,
-                        password: '',
-                        from: 'GoogleSignIn',
-                      });
-                      router.push('/sign-in');
-                    } else {
-                      console.log('Email and Name empty');
-                    }
-                  })
-                  .catch((err) => {
-                    console.log(err);
-                  });
-              }}
+              onPress={async () => await promptAsync()}
               colorScheme={'red'}
               startIcon={
                 <FontAwesome
