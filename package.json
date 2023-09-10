@@ -33,6 +33,11 @@
     "type": "git",
     "url": "git+https://github.com/andrew-bierman/PackRat.git"
   },
+  "workspaces": [
+    "client",
+    "server",
+    "packages/*"
+  ],
   "keywords": [
     "outdoors",
     "hiking",

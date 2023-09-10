@@ -18,7 +18,7 @@
     "baseUrl": ".",
     "paths":{
       "@trpc":["trpc"],
-      "trpc":["../src/routes/index"]
+      "trpc":["../src/routes/index"],
     },
     "declaration": true
   },

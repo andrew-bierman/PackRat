@@ -20,6 +20,7 @@
   "author": "Andrew Bierman",
   "license": "ISC",
   "dependencies": {
+    "@packrat/packages": "file:../packages",
     "@sendgrid/mail": "^7.7.0",
     "@trpc/client": "^10.38.0",
     "@trpc/server": "^10.38.0",
