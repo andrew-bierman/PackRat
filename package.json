@@ -15,6 +15,7 @@
     "install:ci:client": "npm ci --prefix client",
     "install:ci:server": "npm ci --prefix server",
     "install:ci": "npm ci && npm run install:ci:all",
+    "install:ci:all": "npm run install:ci:client && npm run install:ci:server",
     "setup": "npm run clean && npm run install:all && npm run setup:client && npm run setup:server",
     "setup:client": "npm --prefix client run setup",
     "setup:server": "npm --prefix server run setup",
