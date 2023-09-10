@@ -1,6 +1,5 @@
 import {
   View,
-  StyleSheet,
   Text,
   TouchableOpacity,
   Modal,
@@ -10,7 +9,8 @@ import {
 import { Link } from 'expo-router';
 import { theme } from '../theme';
 import { AntDesign, MaterialIcons } from '@expo/vector-icons';
-import UseTheme from '../hooks/useTheme';
+import useTheme from '../hooks/useTheme';
+import useCustomStyles from '~/hooks/useCustomStyles';
 const Drawer = ({
   isDrawerOpen,
   toggleDrawer,
@@ -20,11 +20,12 @@ const Drawer = ({
   renderNavigationItem,
 }) => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
+  const styles = useCustomStyles(loadStyles);
   const renderNavigationItems = () => {
     return (
       <SafeAreaView>
-        <TouchableOpacity style={styles().closeButton} onPress={toggleDrawer}>
+        <TouchableOpacity style={styles.closeButton} onPress={toggleDrawer}>
           <AntDesign
             name="close"
             size={24}
@@ -34,7 +35,7 @@ const Drawer = ({
         {navigationItems.map((item) => (
           <TouchableOpacity
             key={item.href}
-            style={styles().navigationItem}
+            style={styles.navigationItem}
             onPress={() => navigateTo(item.href)}
           >
             {renderNavigationItem(item)}
@@ -51,21 +52,20 @@ const Drawer = ({
       animationType="fade"
       onRequestClose={toggleDrawer}
     >
-      <View style={styles().modalOverlay}>
+      <View style={styles.modalOverlay}>
         <TouchableOpacity
-          style={styles().fullScreenTouchable}
+          style={styles.fullScreenTouchable}
           onPress={toggleDrawer}
         />
-        <View style={styles().drawerContainer}>{renderNavigationItems()}</View>
+        <View style={styles.drawerContainer}>{renderNavigationItems()}</View>
       </View>
     </Modal>
   );
 };
 
-const styles = () => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
-  return StyleSheet.create({
+const loadStyles = (theme) => {
+  const { currentTheme } = theme;
+  return {
     modalOverlay: {
       flex: 1,
       flexDirection: 'row',
@@ -90,7 +90,7 @@ const styles = () => {
       top: 16,
       right: 16,
     },
-  });
+  };
 };
 
 export default Drawer;

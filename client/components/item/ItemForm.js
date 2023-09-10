@@ -2,7 +2,7 @@ import { Box, Input, Button, Text, VStack, Radio } from 'native-base';
 import { DropdownComponent } from '../Dropdown';
 import { theme } from '../../theme';
 import { ItemCategoryEnum } from '../../constants/itemCategory';
-import UseTheme from '../../hooks/useTheme';
+import useTheme from '../../hooks/useTheme';
 const data = ['lb', 'oz', 'kg', 'g'];
 
 export const ItemForm = ({
@@ -33,7 +33,7 @@ export const ItemForm = ({
     );
   }
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   return (
     <Box>
       <VStack space={2}>

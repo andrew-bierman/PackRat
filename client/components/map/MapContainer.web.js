@@ -1,15 +1,17 @@
 import React from 'react';
 
-import { View, StyleSheet, Platform } from 'react-native';
+import { View, Platform } from 'react-native';
 
 import WebMap from './WebMap';
 import { isObjectEmpty } from '../../utils/isObjectEmpty';
 import { defaultShape } from '../../utils/mapFunctions';
+import useCustomStyles from '~/hooks/useCustomStyles';
 
 export function MapContainer({ shape }) {
   if (isObjectEmpty(shape)) {
     shape = defaultShape;
   }
+  const styles = useCustomStyles(loadStyles);
 
   if (Platform.OS === 'web') {
     return (
@@ -22,7 +24,7 @@ export function MapContainer({ shape }) {
 
 export default MapContainer;
 
-const styles = StyleSheet.create({
+const loadStyles = () => ({
   webContainer: {
     alignItems: 'center',
     justifyContent: 'center',

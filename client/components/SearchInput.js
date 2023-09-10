@@ -16,7 +16,7 @@ import {
   Pressable,
 } from 'native-base';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
-import UseTheme from '../hooks/useTheme';
+import useTheme from '../hooks/useTheme';
 import { SafeAreaView } from 'react-native';
 
 import { Platform } from 'react-native';
@@ -48,7 +48,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
   const [selectedSearch, setSelectedSearch] = useState('');
 
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   const searchResults =
     useSelector((state) => state.search.searchResults) || [];
 
@@ -139,7 +139,6 @@ export const SearchInput = ({ onSelect, placeholder }) => {
     setSearchString(name);
     setShowSearchResults(false);
     dispatch(setSelectedSearchResult(result));
-    // dispatch(clearSearchResults());
 
     if (onSelect) {
       onSelect(result);
@@ -173,22 +172,17 @@ export const SearchInput = ({ onSelect, placeholder }) => {
               />
             }
             InputRightElement={
-              showSearchResults && (
-                <IconButton
-                  mr={2}
-                  icon={
-                    <Icon
-                      as={<MaterialIcons name="close" />}
-                      m="0"
-                      size="4"
-                      color="gray.400"
-                    />
-                  }
+              searchString && (
+                <Button
                   onPress={() => {
                     setShowSearchResults(false);
                     setSearchString('');
+                    dispatch(clearSearchResults());
                   }}
-                />
+                  backgroundColor={'transparent'}
+                >
+                  <MaterialIcons name="close" />
+                </Button>
               )
             }
           />

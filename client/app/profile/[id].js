@@ -1,10 +1,12 @@
 import { useSearchParams, Stack as Header } from 'expo-router';
-import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Platform } from 'react-native';
+
+import { Platform } from 'react-native';
 import ProfileContainer from '../../screens/user/ProfileContainer';
+import useCustomStyles from '~/hooks/useCustomStyles';
 
 const Profile = () => {
   const { id } = useSearchParams();
+  const styles = useCustomStyles(loadStyles);
 
   return Platform.OS === 'web' ? (
     <>
@@ -20,7 +22,7 @@ const Profile = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const loadStyles = () => ({
   name: {
     fontSize: 20,
     fontWeight: 'bold',

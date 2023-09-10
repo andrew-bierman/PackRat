@@ -4,13 +4,13 @@ import { Stack, Box, Text } from 'native-base';
 import { FontAwesome5 } from '@expo/vector-icons';
 
 import { AddPack, AddPackContainer } from './pack/AddPack';
-import UseTheme from '../hooks/useTheme';
+import useTheme from '../hooks/useTheme';
 import PackContainer from './pack/PackContainer';
 import ScoreContainer from './ScoreContainer';
 
 export const GearList = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   return (
     <Stack
       alignSelf="center"

@@ -1,4 +1,4 @@
-import { View, StyleSheet, Text, Image } from 'react-native';
+import { View, Text, Image } from 'react-native';
 import { Link } from 'expo-router';
 import {
   AntDesign,
@@ -9,14 +9,16 @@ import {
 } from '@expo/vector-icons';
 import { theme, darkTheme } from '../../theme';
 // import { useAuth } from "../../auth/provider";
-import UseTheme from '../../hooks/useTheme';
+import useTheme from '../../hooks/useTheme';
 import { signOut } from '../../store/authStore';
 
 import { useDispatch, useSelector } from 'react-redux';
+import useCustomStyles from '~/hooks/useCustomStyles';
 
 export default function Drawer() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
+  const styles = useCustomStyles(loadStyles);
   console.log('isDark, isLight', isDark, isLight);
   // const { signOut } = useAuth();
   const dispatch = useDispatch();
@@ -40,7 +42,7 @@ export default function Drawer() {
           backgroundColor: currentTheme.colors.white,
         }}
       >
-        <View style={styles().closeIcon}>
+        <View style={styles.closeIcon}>
           <Link href="/">
             <AntDesign
               name="close"
@@ -52,7 +54,7 @@ export default function Drawer() {
         {user ? (
           <>
             <Link href="/">
-              <View style={styles().link}>
+              <View style={styles.link}>
                 <Entypo
                   name="home"
                   size={24}
@@ -65,7 +67,7 @@ export default function Drawer() {
               </View>
             </Link>
             <Link href="/trips">
-              <View style={styles().link}>
+              <View style={styles.link}>
                 <MaterialCommunityIcons
                   name="weather-pouring"
                   size={24}
@@ -78,7 +80,7 @@ export default function Drawer() {
               </View>
             </Link>
             <Link href="profile">
-              <View style={styles().link}>
+              <View style={styles.link}>
                 <FontAwesome
                   name="book"
                   size={24}
@@ -90,7 +92,7 @@ export default function Drawer() {
               </View>
             </Link>
             <Link href="appearance">
-              <View style={styles().link}>
+              <View style={styles.link}>
                 <MaterialCommunityIcons
                   name="theme-light-dark"
                   size={24}
@@ -102,7 +104,7 @@ export default function Drawer() {
               </View>
             </Link>
             <Link href="/packs">
-              <View style={styles().link}>
+              <View style={styles.link}>
                 <MaterialIcons
                   name="backpack"
                   size={24}
@@ -115,7 +117,7 @@ export default function Drawer() {
               </View>
             </Link>
             <Link href="/about">
-              <View style={styles().link}>
+              <View style={styles.link}>
                 <MaterialIcons
                   name="info"
                   size={24}
@@ -127,7 +129,7 @@ export default function Drawer() {
                 </Text>
               </View>
             </Link>
-            <View style={styles().link}>
+            <View style={styles.link}>
               <MaterialIcons
                 name="logout"
                 size={24}
@@ -144,7 +146,7 @@ export default function Drawer() {
         ) : (
           <View>
             <Link href="/sign-in">
-              <View style={styles().link}>
+              <View style={styles.link}>
                 <MaterialIcons
                   name="login"
                   size={24}
@@ -156,7 +158,7 @@ export default function Drawer() {
               </View>
             </Link>
             <Link href="/register">
-              <View style={styles().link}>
+              <View style={styles.link}>
                 <MaterialIcons
                   name="person-add"
                   size={24}
@@ -174,10 +176,9 @@ export default function Drawer() {
   );
 }
 
-const styles = () => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
-  return StyleSheet.create({
+const loadStyles = (theme) => {
+  const { currentTheme } = theme;
+  return {
     mobileContainer: {
       backgroundColor: currentTheme.colors.background,
       width: '100%',
@@ -215,5 +216,5 @@ const styles = () => {
       width: '100%',
       color: 'black',
     },
-  });
+  };
 };
