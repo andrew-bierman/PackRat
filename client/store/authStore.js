@@ -34,7 +34,9 @@ export const signUp = createAsyncThunk(
       //   email,
       //   password,
       // });
+      // await AsyncStorage.setItem('authToken', response.data.user.token);
       // return response.data.user;
+
       return await trpc.signUp.mutate({ name, username, email, password });
     } catch (error) {
       console.log('error', error);
