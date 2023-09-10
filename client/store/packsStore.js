@@ -49,12 +49,9 @@ export const fetchUserPacks = createAsyncThunk(
   'packs/fetchUserPacks',
   async (input) => {
     const { ownerId, queryString } = input;
-    const response = await axios.get(
-      `${api}/pack/${ownerId}/?queryBy=${queryString || 'Most Recent'}`,
-    );
-    return response.data;
-  async (ownerId) => {
-    // const response = await axios.get(`${api}/pack/${ownerId}`);
+    // const response = await axios.get(
+    //   `${api}/pack/${ownerId}/?queryBy=${queryString || 'Most Recent'}`,
+    // );
     // return response.data;
     return (await trpc.getPacks.query({ ownerId }))?.packs;
   },
