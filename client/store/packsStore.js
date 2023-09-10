@@ -41,8 +41,11 @@ export const changePackStatus = createAsyncThunk(
 
 export const fetchUserPacks = createAsyncThunk(
   'packs/fetchUserPacks',
-  async (ownerId) => {
-    const response = await axios.get(`${api}/pack/${ownerId}`);
+  async (input) => {
+    const { ownerId, queryString } = input;
+    const response = await axios.get(
+      `${api}/pack/${ownerId}/?queryBy=${queryString || 'Most Recent'}`,
+    );
     return response.data;
   },
 );
