@@ -1,5 +1,5 @@
 import { Platform } from 'react-native';
-import { RStack, RText, RCard, RParagraph } from '../packratui';
+import { RStack, RText, RCard, RParagraph } from '../packrat-ui';
 import { SearchInput } from './SearchInput';
 import { theme } from '../theme/index';
 import { useSelector, useDispatch } from 'react-redux';
@@ -78,6 +78,7 @@ export default function TripCard({
             fontSize: currentTheme.font.size,
             fontWeight: 600,
           }}
+          fontFamily="$body"
         >
           {title}
         </RText>
