@@ -48,7 +48,7 @@ export function TripDetails() {
 
   // check if user is owner of pack, and that pack and user exists
   // const isOwner = currentTrip && user && currentTrip.owner_id === user._id;
-  const isOwner = useMatchesCurrentUser(currentTrip?.owner_id) || true;
+  const isOwner = useMatchesCurrentUser(currentTrip?.owner_id) || true; // REMOVE TRUE, JUST FOR TESTING
 
   const isLoading = useSelector((state) => state.singleTrip.isLoading);
   const error = useSelector((state) => state.singleTrip.error);
