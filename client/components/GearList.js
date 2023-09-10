@@ -1,4 +1,4 @@
-import { RStack, RText } from '../ratpackui';
+import { RStack, RText } from '../packratui';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { AddPackContainer } from './pack/AddPack';
 import useTheme from '../hooks/useTheme';

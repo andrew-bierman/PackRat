@@ -9,7 +9,7 @@ import {
   View,
   Pressable,
 } from 'native-base';
-import { RStack, RInput, RButton, RText } from '../ratpackui';
+import { RStack, RInput, RButton, RText, RScrollView } from '../packratui';
 import { MaterialIcons } from '@expo/vector-icons';
 import useTheme from '../hooks/useTheme';
 import { Platform } from 'react-native';
@@ -125,8 +125,8 @@ export const SearchInput = ({ onSelect, placeholder }) => {
         >
           <RInput
             style={{
-              paddingLeft: '40px',
-              paddingRight: searchString ?? '55px',
+              paddingLeft: '35px',
+              paddingRight: '55px',
             }}
             placeholder={placeholder ?? 'Search'}
             onChangeText={(text) => {
@@ -159,54 +159,59 @@ export const SearchInput = ({ onSelect, placeholder }) => {
                 right: 1,
                 backgroundColor: 'transparent',
               }}
+              width="50px"
             >
               <MaterialIcons name="close" />
             </RButton>
           )}
         </RStack>
 
-        <View style={{ position: 'relative' }}>
+        <RStack style={{ position: 'relative' }}>
           {showSearchResults && searchResults?.length > 0 && (
-            <ScrollView
+            <RScrollView
               position="absolute"
               top="100%"
               left="0"
               right="0"
-              maxHeight="100"
+              maxHeight={150}
               borderWidth={1}
-              borderColor="gray.200"
               borderRadius={12}
               backgroundColor={currentTheme.colors.white}
               showsVerticalScrollIndicator={false}
-              zIndex={10}
+              zIndex={20000}
             >
-              <List space={2} w="100%">
+              <RStack space={2} w="100%">
                 {searchResults.map((result, i) => (
-                  <Pressable
+                  <RStack
                     key={`result + ${i}`}
                     onPress={() => {
                       handleSearchResultClick(result, i);
                     }}
-                    underlayColor="gray.100"
+                    style={{
+                      cursor: 'pointer',
+                    }}
                   >
-                    <HStack space={3}>
-                      <Text fontSize="sm" fontWeight="medium">
+                    <RStack space={3} flexDirection="row" gap={5} padding={5}>
+                      <RText fontSize="sm" fontWeight="medium">
                         {result.properties.name}
-                      </Text>
-                      <Text
-                        fontSize="sm"
-                        color="gray.500"
-                        textTransform={'capitalize'}
+                      </RText>
+                      <RText
+                        style={{
+                          fontSize: 'sm',
+                          color: 'gray',
+                          opacity: '100',
+                          textTransform: 'capitalize',
+                        }}
                       >
                         {result.properties.osm_value}
-                      </Text>
-                    </HStack>
-                  </Pressable>
+                      </RText>
+                    </RStack>
+                  </RStack>
                 ))}
-              </List>
-            </ScrollView>
+              </RStack>
+            </RScrollView>
           )}
-        </View>
+        </RStack>
       </RStack>
     </RStack>
   ) : isLoadingMobile ? (
