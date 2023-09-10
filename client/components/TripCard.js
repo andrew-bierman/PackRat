@@ -104,31 +104,30 @@ export default function TripCard({
         <SearchInput />
       ) : (
         <View style={{ width: '80%' }}>
-          <Carousel iconColor={isDark ? '#fff' : '#000'}>
-            {data?.map((item) => {
-              const selectedValue = isTrail ? currentTrail : currentPark;
-              return (
-                <Card
-                  backgroundColor={
-                    item === selectedValue ? theme.colors.background : null
-                  }
-                  onPress={() => {
-                    handleValueChange(item);
-                  }}
-                  elevate
-                  bordered
-                  margin={2}
-                >
-                  <Card.Header padded>
-                    <Paragraph
-                      color={item === selectedValue ? 'white' : 'black'}
-                    >
-                      {item}
-                    </Paragraph>
-                  </Card.Header>
-                </Card>
-              );
-            })}
+          <Carousel iconColor={isDark ? '#fff' : '#000'} itemWidth={150}>
+            {data &&
+              data?.map((item) => {
+                let selectedValue = isTrail ? currentTrail : currentPark;
+                return (
+                  <Card
+                    backgroundColor={
+                      item === selectedValue ? theme.colors.background : null
+                    }
+                    onPress={() => handleValueChange(item)}
+                    elevate
+                    bordered
+                    margin={2}
+                  >
+                    <Card.Header padded>
+                      <Paragraph
+                        color={item === selectedValue ? 'white' : 'black'}
+                      >
+                        {item}
+                      </Paragraph>
+                    </Card.Header>
+                  </Card>
+                );
+              })}
           </Carousel>
         </View>
       )}

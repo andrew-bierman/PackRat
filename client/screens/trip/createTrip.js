@@ -1,12 +1,18 @@
 import { Stack, Box, VStack } from 'native-base';
-import { ScrollView, Platform, StyleSheet } from 'react-native';
+import { ScrollView } from 'react-native';
 import { Stack as Header } from 'expo-router';
 
 import { theme } from '../../theme';
 import TripCard from '../../components/TripCard';
 import WeatherCard from '../../components/WeatherCard';
 
-import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
+import {
+  FontAwesome,
+  Octicons,
+  MaterialCommunityIcons,
+} from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons';
+import { Platform, StyleSheet } from 'react-native';
 
 import { useEffect, useState } from 'react';
 
@@ -19,8 +25,8 @@ import { SaveTripContainer } from '~/components/trip/createTripModal';
 import TripDateRange from '~/components/trip/TripDateRange';
 // import MultiStepForm from "../multi_step";
 import { photonDetails } from '../../store/destinationStore';
-import useTheme from '../../hooks/useTheme';
-import useCustomStyles from '~/hooks/useCustomStyles';
+import UseTheme from '../../hooks/useTheme';
+import MultiStepForm from '~/components/multi_step';
 export default function Trips() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
@@ -97,6 +103,16 @@ export default function Trips() {
       component: () => (
         <WeatherCard weatherObject={weatherObject} weatherWeek={weatherWeek} />
       ),
+      sidebarData: {
+        title: 'Weather',
+        Icon: () => (
+          <Octicons
+            name="broadcast"
+            size={20}
+            color={currentTheme.colors.cardIconColor}
+          />
+        ),
+      },
     },
     {
       name: 'Step 3',
@@ -115,6 +131,16 @@ export default function Trips() {
           )}
         />
       ),
+      sidebarData: {
+        title: 'Nearby Trails',
+        Icon: () => (
+          <FontAwesome5
+            name="hiking"
+            size={20}
+            color={currentTheme.colors.cardIconColor}
+          />
+        ),
+      },
     },
     {
       name: 'Step 4',
@@ -132,16 +158,46 @@ export default function Trips() {
           )}
         />
       ),
+      sidebarData: {
+        title: 'Nearby Parks',
+        Icon: () => (
+          <FontAwesome5
+            name="mountain"
+            size={20}
+            color={theme.colors.cardIconColor}
+          />
+        ),
+      },
     },
     {
       name: 'Step 5',
       component: GearList,
+      sidebarData: {
+        title: 'Gear List',
+        Icon: () => (
+          <FontAwesome5
+            name="clipboard-check"
+            size={20}
+            color={currentTheme.colors.cardIconColor}
+          />
+        ),
+      },
     },
     {
       name: 'Step 6',
       component: () => (
         <TripDateRange dateRange={dateRange} setDateRange={setDateRange} />
       ),
+      sidebarData: {
+        title: 'Trip Date Range',
+        Icon: () => (
+          <FontAwesome5
+            name="calendar"
+            size={20}
+            color={theme.colors.cardIconColor}
+          />
+        ),
+      },
     },
     {
       name: 'Step 7',
@@ -158,87 +214,110 @@ export default function Trips() {
           isMap={true}
         />
       ),
+      sidebarData: {
+        title: 'Trip Card',
+        Icon: () => (
+          <FontAwesome5
+            name="route"
+            size={24}
+            color={theme.colors.cardIconColor}
+          />
+        ),
+      },
     },
     {
       name: 'Step 8',
       component: () => <SaveTripContainer dateRange={dateRange} />,
+      sidebarData: {
+        title: 'Save Trip',
+        Icon: () => (
+          <MaterialCommunityIcons
+            name="content-save-move-outline"
+            size={24}
+            color={theme.colors.cardIconColor}
+          />
+        ),
+      },
     },
   ];
 
   return (
-    <ScrollView nestedScrollEnabled={true}>
-      <VStack>
-        {/* <MultiStepForm steps={steps} /> */}
-        <Box style={styles.mutualStyles}>
-          <Stack m={[0, 0, 12, 16]} style={{ gap: 25 }}>
-            <TripCard
-              title="Where are you heading?"
-              isSearch={true}
-              Icon={() => (
-                <FontAwesome
-                  name="map"
-                  size={20}
-                  color={currentTheme.colors.cardIconColor}
-                />
-              )}
-            />
+    <>
+      <MultiStepForm steps={steps} />
+    </>
+    // <ScrollView
+    // 	nestedScrollEnabled={true}>
+    // 	<VStack>
+    // 		<Box style={styles.mutualStyles}>
+    // 			<Stack m={[0, 0, 12, 16]} style={{ gap: 25 }}>
+    // 				<TripCard
+    // 					title="Where are you heading?"
+    // 					isSearch={true}
+    // 					Icon={() => (
+    // 						<FontAwesome
+    // 							name="map"
+    // 							size={20}
+    // 							color={currentTheme.colors.cardIconColor}
+    // 						/>
+    // 					)}
+    // 				/>
 
-            <WeatherCard
-              weatherObject={weatherObject}
-              weatherWeek={weatherWeek}
-            />
+    // 				<WeatherCard
+    // 					weatherObject={weatherObject}
+    // 					weatherWeek={weatherWeek}
+    // 				/>
 
-            <TripCard
-              title="Nearby Trails"
-              value="Trail List"
-              isTrail={true}
-              data={trails || []}
-              Icon={() => (
-                <FontAwesome5
-                  name="hiking"
-                  size={20}
-                  color={currentTheme.colors.cardIconColor}
-                />
-              )}
-            />
+    // 				<TripCard
+    // 					title="Nearby Trails"
+    // 					value="Trail List"
+    // 					isTrail={true}
+    // 					data={trails || []}
+    // 					Icon={() => (
+    // 						<FontAwesome5
+    // 							name="hiking"
+    // 							size={20}
+    // 							color={currentTheme.colors.cardIconColor}
+    // 						/>
+    // 					)}
+    // 				/>
 
-            <TripCard
-              title="Nearby Parks"
-              value="Parks List"
-              isPark={true}
-              data={parksData}
-              Icon={() => (
-                <FontAwesome5
-                  name="mountain"
-                  size={20}
-                  color={currentTheme.colors.cardIconColor}
-                />
-              )}
-            />
-            <GearList />
-            <TripDateRange dateRange={dateRange} setDateRange={setDateRange} />
+    // 				<TripCard
+    // 					title="Nearby Parks"
+    // 					value="Parks List"
+    // 					isPark={true}
+    // 					data={parksData}
+    // 					Icon={() => (
+    // 						<FontAwesome5
+    // 							name="mountain"
+    // 							size={20}
+    // 							color={currentTheme.colors.cardIconColor}
+    // 						/>
+    // 					)}
+    // 				/>
+    // 				<GearList />
+    // 				<TripDateRange dateRange={dateRange} setDateRange={setDateRange} />
 
-            <TripCard
-              Icon={() => (
-                <FontAwesome5
-                  name="route"
-                  size={24}
-                  color={currentTheme.colors.cardIconColor}
-                />
-              )}
-              title="Map"
-              isMap={true}
-              shape={photonDetailsStore}
-            />
-            <Box>
-              <SaveTripContainer dateRange={dateRange} />
-            </Box>
-          </Stack>
-        </Box>
+    // 				<TripCard
+    // 					Icon={() => (
+    // 						<FontAwesome5
+    // 							name="route"
+    // 							size={24}
+    // 							color={currentTheme.colors.cardIconColor}
+    // 						/>
+    // 					)}
+    // 					title="Map"
+    // 					isMap={true}
+    // 					shape={photonDetailsStore}
+    // 				/>
+    // 				<Box>
+    // 					<SaveTripContainer dateRange={dateRange} />
+    // 				</Box>
+    // 			</Stack>
+    // 		</Box>
 
-        {/* <Footer /> */}
-      </VStack>
-    </ScrollView>
+    // 		{/* <Footer /> */}
+    // 	</VStack>
+    // </ScrollView >
   );
 }
 
