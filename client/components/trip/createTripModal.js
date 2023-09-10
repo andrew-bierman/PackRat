@@ -74,6 +74,7 @@ export const SaveTripContainer = ({ dateRange }) => {
   const dropdown = useSelector((state) => state.dropdown);
   const user = useSelector((state) => state.auth.user);
   const packId = useSelector((state) => state.trips.newTrip.packId);
+  const selectedMap = useSelector((state) => state.maps.selectedMap);
 
   console.log('- note for me', packId);
   console.log('search in save trip container ->', search);
@@ -118,6 +119,8 @@ export const SaveTripContainer = ({ dateRange }) => {
     const { data: geoJSON } = await axios.get(
       `${api}/osm/photonDetails/${search.properties.osm_type}/${search.properties.osm_id}`,
     );
+
+    console.log(geoJSON, 'geoJSON');
     // main object
     const data = {
       name,
@@ -125,7 +128,8 @@ export const SaveTripContainer = ({ dateRange }) => {
       start_date: startDate,
       end_date: endDate,
       destination: search.properties.name,
-      geoJSON,
+      geoJSON:
+        selectedMap ?? selectedMap?.geojson ? selectedMap?.geojson : geoJSON,
       // trail: dropdown.currentTrail,
       duration: JSON.stringify(duration),
       weather: JSON.stringify(weatherObject),

@@ -35,7 +35,10 @@ export default function Trips() {
   const searchResult = useSelector(
     (state) => state.search.selectedSearchResult,
   );
-  // console.log("🚀 ~ file: createTrip.js:37 ~ Trips ~ searchResult:", searchResult)
+  // console.log(
+  //   '🚀 ~ file: createTrip.js:37 ~ Trips ~ searchResult:',
+  //   searchResult,
+  // );
 
   const weatherObject = useSelector((state) => state.weather.weatherObject);
   const weatherWeek = useSelector((state) => state.weather.weatherWeek);
@@ -45,7 +48,11 @@ export default function Trips() {
   const photonDetailsStore = useSelector(
     (state) => state.destination.photonDetails,
   );
-  // console.log("🚀 ~ file: createTrip.js:49 ~ Trips ~ photonDetailsStore:", photonDetailsStore)
+
+  // console.log(
+  //   '🚀 ~ file: createTrip.js:49 ~ Trips ~ photonDetailsStore:',
+  //   photonDetailsStore,
+  // );
   useEffect(() => {
     setTrailsData(trailsObject);
   }, [trailsObject]);

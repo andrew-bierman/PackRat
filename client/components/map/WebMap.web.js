@@ -39,6 +39,7 @@ import { gpx as toGeoJSON } from '@tmcw/togeojson';
 import { DOMParser } from 'xmldom';
 import MapPreview from './MapPreview';
 import useCustomStyles from '~/hooks/useCustomStyles';
+import { addUserMap } from '../../store/mapsStore';
 
 // import 'mapbox-gl/dist/mapbox-gl.css'
 
@@ -87,6 +88,8 @@ const WebMap = ({ shape: shapeProp }) => {
   const [downloading, setDownloading] = useState(false);
 
   const [showModal, setShowModal] = useState(false);
+  const [mapName, setMapName] = useState('');
+  const [mapModalisOpen, setMapModalIsOpen] = useState(false);
 
   const [mapStyle, setMapStyle] = useState(mapboxStyles[0].style);
   const [showUserLocation, setShowUserLocation] = useState(false);
@@ -95,6 +98,7 @@ const WebMap = ({ shape: shapeProp }) => {
 
   // download variables
   const dispatch = useDispatch();
+  const ownerId = useSelector((state) => state.auth.user?._id);
   const [downloadable, setDownloadable] = useState(false);
   const styles = useCustomStyles(loadStyles);
 
@@ -504,6 +508,10 @@ const WebMap = ({ shape: shapeProp }) => {
         downloading={downloading}
         navigateToMaps={openMaps}
         onDownload={fetchGpxDownload}
+        setMapName={setMapName}
+        setMapModalIsOpen={setMapModalIsOpen}
+        mapModalisOpen={mapModalisOpen}
+        setShape={setShape}
         handleGpxUpload={async () => {
           console.log('clikedd');
           try {
@@ -516,7 +524,16 @@ const WebMap = ({ shape: shapeProp }) => {
               const gpxString = atob(base64Gpx);
               const parsedGpx = new DOMParser().parseFromString(gpxString);
               const geojson = toGeoJSON(parsedGpx);
+              dispatch(
+                addUserMap({
+                  name: mapName,
+                  geoJSON: geojson,
+                  is_public: false,
+                  owner_id: ownerId,
+                }),
+              );
               setShape(geojson);
+              setMapModalIsOpen(false);
             }
           } catch (err) {
             Alert.alert('An error occured');

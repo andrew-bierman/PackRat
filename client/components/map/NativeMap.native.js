@@ -56,6 +56,7 @@ import { DOMParser } from 'xmldom';
 import { gpx as toGeoJSON } from '@tmcw/togeojson';
 import MapPreview from './MapPreview';
 import useCustomStyles from '~/hooks/useCustomStyles';
+import { addUserMap } from '../../store/mapsStore';
 
 Mapbox.setWellKnownTileServer(Platform.OS === 'android' ? 'Mapbox' : 'mapbox');
 Mapbox.setAccessToken(MAPBOX_ACCESS_TOKEN);
@@ -91,6 +92,9 @@ function NativeMap({ shape: shapeProp }) {
   const [showMapNameInputDialog, setShowMapNameInputDialog] = useState(false);
   const [shape, setShape] = useState(shapeProp);
   const [mapName, setMapName] = useState(shape?.features[0]?.properties?.name);
+  const ownerId = useSelector((state) => state.auth.user?._id);
+  const [uploadMapName, setUploadMapName] = useState('');
+  const [mapModalisOpen, setMapModalIsOpen] = useState(false);
   const [trailCenterPoint, setTrailCenterPoint] = useState(
     findTrailCenter(shape),
   );
@@ -364,6 +368,10 @@ function NativeMap({ shape: shapeProp }) {
         onDownload={() => {
           setShowMapNameInputDialog(true);
         }}
+        setMapName={setUploadMapName}
+        setMapModalIsOpen={setMapModalIsOpen}
+        mapModalisOpen={mapModalisOpen}
+        setShape={setShape}
         handleGpxUpload={async () => {
           try {
             const result = await DocumentPicker.getDocumentAsync({
@@ -373,7 +381,16 @@ function NativeMap({ shape: shapeProp }) {
               const gpxString = await FileSystem.readAsStringAsync(result.uri);
               const parsedGpx = new DOMParser().parseFromString(gpxString);
               const geojson = toGeoJSON(parsedGpx);
+              dispatch(
+                addUserMap({
+                  name: uploadMapName,
+                  geoJSON: geojson,
+                  is_public: false,
+                  owner_id: ownerId,
+                }),
+              );
               setShape(geojson);
+              setMapModalIsOpen(false);
             }
           } catch (err) {
             Alert.alert('An error occured');

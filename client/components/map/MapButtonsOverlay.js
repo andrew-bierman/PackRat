@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   TouchableOpacity,
   Image,
@@ -16,6 +16,9 @@ import {
 import useTheme from '../../hooks/useTheme';
 import { mapboxStyles } from '../../utils/mapFunctions';
 import useCustomStyles from '~/hooks/useCustomStyles';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchUserMaps, updateSelectedMap } from '../../store/mapsStore';
+import { Button, Input } from 'native-base';
 
 const MapButtonsOverlay = ({
   mapFullscreen,
@@ -29,8 +32,15 @@ const MapButtonsOverlay = ({
   handleGpxUpload,
   progress,
   navigateToMaps,
+  setMapName,
+  setMapModalIsOpen,
+  mapModalisOpen,
+  setShape,
 }) => {
   console.log('newwwww');
+  const maps = useSelector((state) => state.maps.maps);
+  const ownerId = useSelector((state) => state.auth.user?._id);
+  const dispatch = useDispatch();
   const [showStyleOptions, setShowStyleOptions] = useState(false);
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
@@ -39,16 +49,20 @@ const MapButtonsOverlay = ({
     setShowStyleOptions(!showStyleOptions);
   };
 
-  /**
-   * A function to handle the selection of a style.
-   *
-   * @param {type} style - the selected style
-   * @return {type} undefined
-   */
   const handleStyleSelection = (style) => {
     handleChangeMapStyle(style);
     setShowStyleOptions(false);
   };
+
+  const handleMapSelection = (item) => {
+    dispatch(updateSelectedMap(item));
+    setShape(item.geojson);
+    setMapModalIsOpen(false);
+  };
+
+  useEffect(() => {
+    if (ownerId) dispatch(fetchUserMaps(ownerId));
+  }, []);
 
   return (
     <>
@@ -169,6 +183,50 @@ const MapButtonsOverlay = ({
             </TouchableOpacity>
           )}
 
+          <Modal
+            animationType="fade"
+            transparent={true}
+            visible={mapModalisOpen}
+          >
+            <TouchableOpacity style={styles.styleModalContainer}>
+              <View style={styles.styleModalContent}>
+                <View>
+                  <Text style={styles.styleOptionHead}>Maps</Text>
+                </View>
+                {maps.length > 0 &&
+                  maps.map((item, index) => (
+                    <TouchableOpacity
+                      key={index}
+                      style={styles.styleOption}
+                      onPress={() => {
+                        handleMapSelection(item);
+                      }}
+                    >
+                      <Text style={styles.styleOptionText}>{item.name}</Text>
+                    </TouchableOpacity>
+                  ))}
+                <View>
+                  <Input
+                    placeholder="map name"
+                    onChange={(e) => setMapName(e.target.value)}
+                  />
+                  <Button
+                    style={{ marginTop: '10px' }}
+                    onPress={handleGpxUpload}
+                  >
+                    Add Map
+                  </Button>
+                  <Button
+                    style={{ marginTop: '10px', backgroundColor: 'red' }}
+                    onPress={() => setMapModalIsOpen(false)}
+                  >
+                    Close
+                  </Button>
+                </View>
+              </View>
+            </TouchableOpacity>
+          </Modal>
+
           {handleGpxUpload && (
             <TouchableOpacity
               style={{
@@ -183,7 +241,7 @@ const MapButtonsOverlay = ({
                 borderRadius: 30,
                 zIndex: 1,
               }}
-              onPress={handleGpxUpload}
+              onPress={() => setMapModalIsOpen(true)}
             >
               <MaterialCommunityIcons name="map-plus" size={24} color="grey" />
             </TouchableOpacity>
@@ -264,6 +322,10 @@ const loadStyles = (theme) => {
     },
     styleOptionText: {
       fontSize: 16,
+      fontWeight: 'bold',
+    },
+    styleOptionHead: {
+      fontSize: 22,
       fontWeight: 'bold',
     },
     locationButton: {
