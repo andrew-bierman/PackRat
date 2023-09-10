@@ -4,7 +4,7 @@ import { getPacksService } from '../../services/pack/pack.service';
 import { buildMessage } from '../../helpers/buildMessage';
 import { publicProcedure } from '../../trpc';
 import { z } from 'zod';
-import * as validator from "../../middleware/validators/index";
+import * as validator from '../../middleware/validators/index';
 /**
  * Retrieves packs associated with a specific owner.
  * @param {Object} req - Express request object.
@@ -29,8 +29,8 @@ export const getPacks = async (req, res, next) => {
 
 export function getPacksRoute() {
   return publicProcedure.input(validator.getPacks).query(async (opts) => {
-    const { ownerId } = opts.input;
-    const packs = await getPacksService(ownerId)
-    return { packs, message: "Packs retrieved successfully" }
-  })
+    const { ownerId, queryBy } = opts.input;
+    const packs = await getPacksService(ownerId, queryBy);
+    return { packs, message: 'Packs retrieved successfully' };
+  });
 }
