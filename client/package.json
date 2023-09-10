@@ -24,7 +24,7 @@
     "install:ios": "cd ios && pod install",
     "install:android": "cd android && ./gradlew clean",
     "build:android": "cd android && ./gradlew assembleRelease",
-    "build:ios": "cd ios && xcodebuild -workspace packrat.xcworkspace -scheme packrat -configuration Release -archivePath packrat.xcarchive archive",
+    "build:ios": "cd ios && xcodebuild -workspace packrat.xcworkspace -scheme packrat -configuration Release -archivePath packrat.xcarchive archive"
   },
   "dependencies": {
     "@babel/runtime": "^7.21.0",
