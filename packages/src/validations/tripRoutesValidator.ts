@@ -40,3 +40,7 @@ export const editTrip = z.object({
 export const deleteTrip = z.object({
   tripId: JoiObjectId().nonempty(),
 });
+
+export const queryTrip = z.object({
+  queryBy: z.string()
+})

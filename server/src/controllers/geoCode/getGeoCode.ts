@@ -2,7 +2,7 @@ import { publicProcedure } from '../../trpc';
 import { ErrorFetchingGeoCodeError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { oneEntity } from '../../utils/oneEntity';
-import { z } from 'zod';
+import * as validators from "../../../../packages/src/validations"
 const fetch = async (...args: Parameters<typeof fetch>) =>
   import('node-fetch').then(async ({ default: fetch }) =>
     fetch(...(args as Parameters<typeof fetch>)),
@@ -43,9 +43,7 @@ export const getGeoCode = async (req, res, next) => {
 };
 
 export function getGeoCodeRoute() {
-  return publicProcedure.input(z.object({
-    addressArray: z.string(),
-  })).query(async (opts) => {
+  return publicProcedure.input(validators.AddressArray).query(async (opts) => {
     const addressArray = await oneEntity(opts.input.addressArray);
 
     const GEO_CODE_URL = process.env.GEO_CODE_URL;

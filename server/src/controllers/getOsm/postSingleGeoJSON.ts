@@ -1,7 +1,7 @@
 import { publicProcedure } from '../../trpc';
 import { responseHandler } from '../../helpers/responseHandler';
 import { postSingleGeoJSONService } from '../../services/osm/osm.service';
-import { z } from 'zod';
+import * as validators from "../../../../packages/src/validations"
 
 /**
  * Handles the POST request for a single GeoJSON.
@@ -19,7 +19,7 @@ export const postSingleGeoJSON = async (req, res) => {
 };
 
 export function postSingleGeoJSONRoute() {
-  return publicProcedure.input(z.object({ geojson: z.any() })).mutation(async (opts) => {
+  return publicProcedure.input(validators.postSingleGeoJSON).mutation(async (opts) => {
     const { geojson } = opts.input;
     return await postSingleGeoJSONService(geojson);
   })

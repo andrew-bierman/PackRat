@@ -1,6 +1,6 @@
 import { type Request, type Response, type NextFunction } from 'express';
 import { type IUser } from '../models/userModel';
-import { RoleSchema } from './validators/roleValidator';
+import { RoleSchema } from '../../../packages/src/validations/roleValidator';
 import { ZodError } from 'zod';
 
 /**

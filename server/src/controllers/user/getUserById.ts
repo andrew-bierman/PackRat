@@ -2,7 +2,7 @@ import { publicProcedure } from '../../trpc';
 import { UserNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { getUserByIdService } from '../../services/user/getUserByIdService';
-import * as validator from '../../middleware/validators/index';
+import * as validator from '../../../../packages/src/validations';
 /**
  * Retrieves a user by their ID from the database and returns the user object as a JSON response.
  * @param {Object} req - The request object.

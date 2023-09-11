@@ -31,3 +31,7 @@ export const duplicatePublicPack = z.object({
   ownerId: JoiObjectId(),
   items: z.array(z.object({})),
 });
+
+export const getPublicPacks = z.object({
+  queryBy: z.string()
+})

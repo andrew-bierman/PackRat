@@ -5,7 +5,7 @@ import { JWT_SECRET, SEND_GRID_API_KEY } from '../../config';
 
 import sgMail from '@sendgrid/mail';
 import { responseHandler } from '../../helpers/responseHandler';
-import { z } from 'zod';
+import * as validators from "../../../../packages/src/validations"
 import { publicProcedure } from '../../trpc';
 
 sgMail.setApiKey(SEND_GRID_API_KEY);
@@ -60,7 +60,7 @@ export const handlePasswordReset = async (req, res) => {
 
 export function handlePasswordResetRoute() {
   return publicProcedure
-    .input(z.object({ token: z.string() }))
+    .input(validators.handlePasswordReset)
     .mutation(async (opts) => {
       const { token } = opts.input;
       const email = verifyPasswordResetToken(token);

@@ -9,6 +9,10 @@ export const getItemById = z.object({
   _id: JoiObjectId(),
 });
 
+export const getItemByName = z.object({
+  name: z.string(),
+});
+
 export const addItem = z.object({
   name: z.string().nonempty(),
   weight: z.string().nonempty(),
@@ -40,3 +44,28 @@ export const addItemGlobal = z.object({
   unit: z.string().nonempty(),
   type: z.string().optional(),
 });
+
+export const addGlobalItemToPack = z.object({
+  packId: z.string(),
+  itemId: z.string(),
+  ownerId: z.string(),
+})
+
+export const deleteGlobalItem = z.object({
+  itemId: z.string(),
+})
+
+export const editGlobalItemAsDuplicate = z.object({
+  itemId: z.string(),
+  packId: z.string(),
+  name: z.string(),
+  weight: z.number(),
+  quantity: z.number(),
+  unit: z.string(),
+  type: z.string(),
+})
+
+export const getItemsGlobally = z.object({
+  limit: z.number(),
+  page: z.number()
+})

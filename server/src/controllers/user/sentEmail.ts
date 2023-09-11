@@ -1,7 +1,7 @@
 import { publicProcedure } from '../../trpc';
 import User from '../../models/userModel';
-import { sendWelcomeEmail, resetEmail } from '../../utils/accountEmail';
-import * as validator from '../../middleware/validators/index';
+import {  resetEmail } from '../../utils/accountEmail';
+import * as validator from '../../../../packages/src/validations';
 /**
  * Sends an email to the specified email address.
  * @param {Object} req - The request object.

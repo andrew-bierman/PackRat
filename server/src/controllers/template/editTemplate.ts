@@ -2,7 +2,7 @@ import { publicProcedure } from '../../trpc';
 import { responseHandler } from '../../helpers/responseHandler';
 import Template from '../../models/templateModel';
 import { editTemplateService } from '../../services/template/template.service';
-import { z } from 'zod';
+import * as validators from "../../../../packages/src/validations"
 
 /**
  * Edits a template.
@@ -24,7 +24,7 @@ export const editTemplate = async (req, res) => {
 
 export function editTemplateRoute() {
   return publicProcedure
-    .input(z.object({ templateId: z.string(), type: z.string(), isGlobalTemplate: z.boolean() }))
+    .input(validators.editTemplate)
     .mutation(async (opts) => {
       const { templateId, type, isGlobalTemplate } = opts.input;
       const updatedTemplate = await editTemplateService(

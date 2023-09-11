@@ -1,9 +1,9 @@
 import User from '../../models/userModel';
 import bcrypt from 'bcrypt';
-import { sendWelcomeEmail, resetEmail } from '../../utils/accountEmail';
+import { sendWelcomeEmail} from '../../utils/accountEmail';
 import { JWT_SECRET } from '../../config';
 import { publicProcedure } from '../../trpc';
-import * as validator from '../../middleware/validators/index';
+import * as validator from '../../../../packages/src/validations';
 /**
  * Sign up a user.
  * @param {Object} req - The request object.

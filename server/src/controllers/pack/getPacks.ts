@@ -3,8 +3,7 @@ import { responseHandler } from '../../helpers/responseHandler';
 import { getPacksService } from '../../services/pack/pack.service';
 import { buildMessage } from '../../helpers/buildMessage';
 import { publicProcedure } from '../../trpc';
-import { z } from 'zod';
-import * as validator from '../../middleware/validators/index';
+import * as validator from '../../../../packages/src/validations';
 /**
  * Retrieves packs associated with a specific owner.
  * @param {Object} req - Express request object.

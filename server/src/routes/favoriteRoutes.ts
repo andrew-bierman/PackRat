@@ -1,5 +1,5 @@
 import express from 'express';
-import * as validator from '../middleware/validators/index';
+import * as validator from '../../../packages/src/validations';
 import {
   addToFavorite,
   getFavoritePacksByUser,
@@ -8,7 +8,7 @@ import {
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
 import authTokenMiddleware from '../middleware/auth';
 import checkRole from '../middleware/checkRole';
-import { zodParser } from '../middleware/validators/zodParser';
+import { zodParser } from '../../../packages/src/validations/zodParser';
 
 const router = express.Router();
 

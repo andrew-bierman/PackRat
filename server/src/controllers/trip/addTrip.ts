@@ -2,7 +2,7 @@ import { publicProcedure } from '../../trpc';
 import { UnableToAddTripError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { addTripService } from '../../services/trip/addTripService';
-import * as validator from '../../middleware/validators/index';
+import * as validator from '../../../../packages/src/validations';
 /**
  * Adds a trip to the database.
  * @param {Object} req - The request object containing the trip details.

@@ -1,7 +1,7 @@
 import { UnableToDeleteItemError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { deleteItemService } from '../../services/item/item.service';
-import * as validator from '../../middleware/validators/index';
+import * as validator from '../../../../packages/src/validations';
 import { publicProcedure } from '../../trpc';
 /**
  * Deletes an item from the database.

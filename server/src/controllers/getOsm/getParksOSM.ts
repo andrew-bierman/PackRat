@@ -7,7 +7,7 @@ import {
 } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { publicProcedure } from '../../trpc';
-import { z } from 'zod';
+import * as validators from "../../../../packages/src/validations"
 
 /**
  * Retrieves parks data from OpenStreetMap based on the provided latitude, longitude, and radius.
@@ -51,7 +51,7 @@ export const getParksOSM = async (req, res, next) => {
 };
 
 export function getParksOSMRoute() {
-  return publicProcedure.input(z.object({ lat: z.number(), lon: z.number(), radius: z.number() })).query(async (opts) => {
+  return publicProcedure.input(validators.getParksOSM).query(async (opts) => {
     const { lat, lon, radius } = opts.input;
     const params = {
       lat,

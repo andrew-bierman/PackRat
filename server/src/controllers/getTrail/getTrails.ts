@@ -1,7 +1,7 @@
 import { publicProcedure } from '../../trpc';
 import { RetrievingTrailsDataError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
-import { z } from 'zod';
+import * as validators from "../../../../packages/src/validations"
 
 const fetch = async (...args) =>
   import('node-fetch').then(async ({ default: fetch }) =>
@@ -67,13 +67,7 @@ export const getTrails = async (req, res, next) => {
 
 
 export function getTrailsRoute() {
-  return publicProcedure.input(z.object({
-    administrative_area_level_1: z.string(),
-    country: z.string(),
-    locality: z.string(),
-    latitude: z.number(),
-    longitude: z.number(),
-  }))
+  return publicProcedure.input(validators.getTrails)
     .mutation(async (opts) => {
       const radiusParams = 25;
       const activityParams = true;

@@ -2,8 +2,7 @@ import { publicProcedure } from '../../trpc';
 import { ItemNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { getItemsGloballyService } from '../../services/item/item.service';
-import { z } from 'zod';
-
+import * as validators from "../../../../packages/src/validations"
 /**
  * Retrieves globally available items.
  * @param {Object} req - The request object.
@@ -22,7 +21,7 @@ export const getItemsGlobally = async (req, res, next) => {
 };
 
 export function getItemsGloballyRoute() {
-  return publicProcedure.input(z.object({ limit: z.number(), page: z.number() })).query(async (opts) => {
+  return publicProcedure.input(validators.getItemsGlobally).query(async (opts) => {
     return await getItemsGloballyService(opts.input.limit, opts.input.page);
   })
 }

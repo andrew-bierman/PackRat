@@ -4,8 +4,8 @@ import { JWT_SECRET } from '../config';
 import { type Request, type Response, type NextFunction } from 'express';
 import { middleware } from '../trpc';
 import { TRPCError } from '@trpc/server';
-import { z, ZodError } from 'zod';
-import { TokenSchema } from './validators/authTokenValidator';
+import {  ZodError } from 'zod';
+import { TokenSchema } from '../../../packages/src/validations/authTokenValidator';
 
 declare global {
   namespace Express {

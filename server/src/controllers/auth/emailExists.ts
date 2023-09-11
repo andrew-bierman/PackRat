@@ -1,6 +1,5 @@
 import nodemailer from 'nodemailer';
 import smtpTransport from 'nodemailer-smtp-transport';
-import User from '../../models/userModel';
 import {
   findUserAndUpdate,
   findUserByEmail,
@@ -8,7 +7,7 @@ import {
 import { UnableToSendCodeError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { publicProcedure } from '../../trpc';
-import * as validator from '../../middleware/validators/index';
+import * as validator from '../../../../packages/src/validations';
 /**
  * Check if the provided email exists in the database.
  * @param {object} req - The request object.

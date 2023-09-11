@@ -2,7 +2,7 @@ import axios from 'axios';
 import { RetrievingWeatherFromOpenWeatherError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { publicProcedure } from '../../trpc';
-import { z } from 'zod';
+import * as validators from "../../../../packages/src/validations"
 
 /**
  * Retrieves the weather forecast for the week based on latitude and longitude parameters.
@@ -39,7 +39,7 @@ export const getWeatherWeek = async (req, res, next) => {
 };
 
 export function getWeatherWeekRoute() {
-  return publicProcedure.input(z.object({ lat: z.number(), lon: z.number() })).query(async (opts) => {
+  return publicProcedure.input(validators.getWeatherWeek).query(async (opts) => {
     const { lat, lon } = opts.input;
     const root = process.env.WEATHER_WEEK_URL;
     const OPENWEATHER_KEY = process.env.OPENWEATHER_KEY;

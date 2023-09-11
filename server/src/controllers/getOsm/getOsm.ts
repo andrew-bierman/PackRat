@@ -7,7 +7,8 @@ import {
 } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { publicProcedure } from '../../trpc';
-import { z } from 'zod';
+import * as validators from "../../../../packages/src/validations"
+
 
 /**
  * Retrieves OpenStreetMap data based on the provided activity type, start point, and end point.
@@ -80,11 +81,7 @@ export const getOsm = async (req, res, next) => {
 };
 
 export function getOsmRoute() {
-  return publicProcedure.input(z.object({
-    activityType: z.string(),
-    startPoint: z.object({ latitude: z.number(), longitude: z.number() }),
-    endPoint: z.object({ latitude: z.number(), longitude: z.number() })
-  }))
+  return publicProcedure.input(validators.getOsm)
     .mutation(async (opts) => {
       const overpassUrl = process.env.OSM_URI;
 

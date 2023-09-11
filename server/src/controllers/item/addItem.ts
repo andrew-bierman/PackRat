@@ -2,7 +2,7 @@ import { publicProcedure } from '../../trpc';
 import { UnableToAddItemError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { addItemService } from '../../services/item/item.service';
-import * as validator from '../../middleware/validators/index';
+import * as validator from '../../../../packages/src/validations';
 
 /**
  * Adds an item to the database based on the provided request body.

@@ -1,7 +1,7 @@
 import { publicProcedure } from '../../trpc';
 import { UnableToScorePackError } from '../../helpers/errors';
 import { scorePackService } from '../../services/pack/pack.service';
-import * as validator from '../../middleware/validators/index';
+import * as validator from '../../../../packages/src/validations';
 /**
  * Scores a pack by calculating its score and updating the pack object in the database.
  * @param {Object} req - The request object containing the packId parameter.

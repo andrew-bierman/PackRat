@@ -5,7 +5,7 @@ import {
 } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { publicProcedure } from '../../trpc';
-import { z } from 'zod';
+import * as validators from "../../../../packages/src/validations"
 
 /**
  * Retrieves Photon results based on a search string.
@@ -55,7 +55,7 @@ export const getPhotonResults = async (req, res, next) => {
 };
 
 export function getPhotonResultsRoute() {
-  return publicProcedure.input(z.object({ searchString: z.string() })).query(async (opts) => {
+  return publicProcedure.input(validators.getPhotonResults).query(async (opts) => {
     const { searchString } = opts.input;
     const params = {
       q: searchString,

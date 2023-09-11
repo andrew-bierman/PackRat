@@ -2,7 +2,7 @@ import { publicProcedure } from '../../trpc';
 import { NoDestinationFoundWithThatIDError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { getDestinationService } from '../../services/osm/osm.service';
-import { z } from 'zod';
+import * as validators from "../../../../packages/src/validations"
 
 /**
  * Retrieves the destination based on the given ID.
@@ -24,7 +24,7 @@ export const getDestination = async (req, res, next) => {
 };
 
 export function getDestinationRoute() {
-  return publicProcedure.input(z.object({ id: z.string() })).query(async (opts) => {
+  return publicProcedure.input(validators.getDestinationByid).query(async (opts) => {
     const { id } = opts.input;
     return await getDestinationService(id);
   })

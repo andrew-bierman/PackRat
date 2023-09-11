@@ -1,5 +1,5 @@
 import { addPackService } from '../../services/pack/pack.service';
-import * as validator from '../../middleware/validators/index';
+import * as validator from '../../../../packages/src/validations';
 import { publicProcedure } from '../../trpc';
 /**
  * Adds a new pack to the database.
