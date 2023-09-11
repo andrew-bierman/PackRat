@@ -1,6 +1,6 @@
 import { Text } from 'tamagui';
 
-const RText = ({ children, style, ...props }) => {
+const PRText = ({ children, style, ...props }) => {
   return (
     <Text style={[style]} fontFamily="$body" {...props}>
       {children}
@@ -8,4 +8,4 @@ const RText = ({ children, style, ...props }) => {
   );
 };
 
-export default RText;
+export default PRText;
