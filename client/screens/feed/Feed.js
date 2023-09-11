@@ -30,7 +30,7 @@ import {
   fetchUserPacks,
   selectAllPacks,
 } from '../../store/packsStore';
-import { fetchUserTrips } from '../../store/tripsStore';
+import { fetchUserTrips, selectAllTrips } from '../../store/tripsStore';
 import { useRouter } from 'expo-router';
 import { fuseSearch } from '../../utils/fuseSearch';
 import { fetchUserFavorites } from '../../store/favoritesStore';
@@ -49,7 +49,15 @@ const ERROR_MESSAGES = {
   userTrips: 'No User Trips Available',
 };
 
-const dataValues = ['Favorite', 'Most Recent'];
+const dataValues = [
+  'Favorite',
+  'Most Recent',
+  'Lightest',
+  'Heaviest',
+  'Most Items',
+  'Fewest Items',
+  'Oldest',
+];
 
 const FeedSearchFilter = ({
   feedType,
@@ -165,7 +173,7 @@ const Feed = ({ feedType = 'public' }) => {
   const publicPacksData = useSelector((state) => state.feed.publicPacks);
   const userPacksData = useSelector(selectAllPacks);
   const publicTripsData = useSelector((state) => state.feed.publicTrips);
-  const userTripsData = useSelector((state) => state.trips.userTrips);
+  const userTripsData = useSelector(selectAllTrips);
 
   const styles = useCustomStyles(loadStyles);
 
@@ -175,7 +183,7 @@ const Feed = ({ feedType = 'public' }) => {
       dispatch(getPublicTrips(queryString));
       dispatch(fetchUserFavorites(ownerId));
     } else if (feedType === 'userPacks' && ownerId) {
-      dispatch(fetchUserPacks(ownerId));
+      dispatch(fetchUserPacks({ ownerId, queryString }));
     } else if (feedType === 'userTrips' && ownerId) {
       dispatch(fetchUserTrips(ownerId));
     } else if (feedType === 'favoritePacks') {
@@ -190,6 +198,7 @@ const Feed = ({ feedType = 'public' }) => {
    */
   const renderData = () => {
     let data = [];
+
     if (feedType === 'public') {
       if (selectedTypes?.pack) {
         data = [...data, ...publicPacksData];
@@ -216,7 +225,10 @@ const Feed = ({ feedType = 'public' }) => {
       minMatchCharLength: 1,
     };
 
-    const results = fuseSearch(data, searchQuery, keys, options);
+    const results =
+      feedType !== 'userTrips'
+        ? fuseSearch(data, searchQuery, keys, options)
+        : data;
 
     // Convert fuse results back into the format we want
     // if searchQuery is empty, use the original data
