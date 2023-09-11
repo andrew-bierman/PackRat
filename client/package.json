@@ -81,7 +81,7 @@
     "osmtogeojson": "^3.0.0-beta.5",
     "react": "18.2.0",
     "react-dom": "^18.2.0",
-    "react-hook-form": "^7.45.4",
+    "react-hook-form": "^7.46.1",
     "react-native": "0.71.8",
     "react-native-dotenv": "^3.4.8",
     "react-native-dropdown-picker": "^5.4.6",
