@@ -14,6 +14,8 @@ import {
 } from '../controllers/item/index';
 import * as validator from '../middleware/validators/index';
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
+import authTokenMiddleware from '../middleware/auth';
+import checkRole from '../middleware/checkRole';
 import { zodParser } from '../middleware/validators/zodParser';
 
 const router = express.Router();
@@ -80,7 +82,12 @@ router.get('/i/:packId', (req, res, next) => zodParser(validator.getItemById, re
  *       200:
  *         description: Successful response
  */
-router.get('/search', tryCatchWrapper(searchItemsByName));
+router.get(
+  '/search',
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
+  tryCatchWrapper(searchItemsByName),
+);
 
 /**
  * @swagger
@@ -207,7 +214,12 @@ router.post('/global', (req, res, next) => zodParser(validator.addItemGlobal, re
  *      200:
  *        description: Successful response
  */
-router.get('/global', tryCatchWrapper(getItemsGlobally));
+router.get(
+  '/global',
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
+  tryCatchWrapper(getItemsGlobally),
+);
 
 /**
  * @swagger
@@ -222,7 +234,12 @@ router.get('/global', tryCatchWrapper(getItemsGlobally));
  *      200:
  *        description: Successful response
  */
-router.post('/global/select/:packId', tryCatchWrapper(addGlobalItemToPack));
+router.post(
+  '/global/select/:packId',
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
+  tryCatchWrapper(addGlobalItemToPack),
+);
 /**
  * @swagger
  * /item/:
@@ -236,7 +253,12 @@ router.post('/global/select/:packId', tryCatchWrapper(addGlobalItemToPack));
  *      200:
  *        description: Successful response
  */
-router.put('/global/:itemId', tryCatchWrapper(editGlobalItemAsDuplicate));
+router.put(
+  '/global/:itemId',
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
+  tryCatchWrapper(editGlobalItemAsDuplicate),
+);
 
 /**
  * @swagger
@@ -258,6 +280,11 @@ router.put('/global/:itemId', tryCatchWrapper(editGlobalItemAsDuplicate));
  *      200:
  *        description: Successful response
  */
-router.delete('/global/:itemId', tryCatchWrapper(deleteGlobalItem));
+router.delete(
+  '/global/:itemId',
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
+  tryCatchWrapper(deleteGlobalItem),
+);
 
 export default router;

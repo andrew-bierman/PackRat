@@ -14,6 +14,7 @@ export const getPublicPacks = async (req, res, next) => {
   try {
     const { queryBy } = req.query;
 
+
     const publicPacks = await getPublicPacksService(queryBy);
 
     res.locals.data = publicPacks;

@@ -14,7 +14,10 @@ export default function Footer() {
         textAlign: 'center',
         backgroundColor: currentTheme.colors.card,
         padding: 15,
+
         alignSelf: 'center',
+        position: 'relative',
+        bottom: 0,
       }}
     >
       <Text

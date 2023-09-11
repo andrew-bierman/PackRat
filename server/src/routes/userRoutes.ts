@@ -29,6 +29,8 @@ import {
   checkCode,
 } from '../controllers/auth/index';
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
+import authTokenMiddleware from '../middleware/auth';
+import checkRole from '../middleware/checkRole';
 import { zodParser } from '../middleware/validators/zodParser';
 
 const router = express.Router();
@@ -52,7 +54,12 @@ const router = express.Router();
  *       '500':
  *         description: Error retrieving users
  */
-router.get('/', tryCatchWrapper(getUsers));
+router.get(
+  '/',
+  authTokenMiddleware,
+  checkRole(['admin']),
+  tryCatchWrapper(getUsers),
+);
 
 /**
  * @swagger
@@ -214,7 +221,12 @@ router.post(
  *       '500':
  *         description: Error retrieving user information
  */
-router.get('/me/info', auth, tryCatchWrapper(getMe));
+router.get(
+  '/me/info',
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
+  tryCatchWrapper(getMe),
+);
 
 /**
  * @swagger

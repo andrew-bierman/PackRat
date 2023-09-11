@@ -6,6 +6,8 @@ import {
   getUserFavorites,
 } from '../controllers/favorite/index';
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
+import authTokenMiddleware from '../middleware/auth';
+import checkRole from '../middleware/checkRole';
 import { zodParser } from '../middleware/validators/zodParser';
 
 const router = express.Router();
@@ -58,7 +60,12 @@ router.post('/', (req, res,next) => zodParser(validator.addToFavorite, req.body,
  *       '500':
  *         description: Error retrieving favorites
  */
-router.get('/user/:userId', tryCatchWrapper(getUserFavorites));
+router.get(
+  '/user/:userId',
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
+  tryCatchWrapper(getUserFavorites),
+);
 
 /**
  * @swagger
@@ -81,6 +88,11 @@ router.get('/user/:userId', tryCatchWrapper(getUserFavorites));
  *       '500':
  *         description: Error retrieving favorite packs
  */
-router.get('/user/:userId/packs', tryCatchWrapper(getFavoritePacksByUser));
+router.get(
+  '/user/:userId/packs',
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
+  tryCatchWrapper(getFavoritePacksByUser),
+);
 
 export default router;

@@ -52,6 +52,10 @@ const searchSlice = createSlice({
     setSelectedSearchResult(state, action) {
       state.selectedSearchResult = action.payload;
     },
+    clearSearchResults(state, action) {
+      state.searchResults = [];
+      state.selectedSearchResult = {};
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -77,5 +81,6 @@ const searchSlice = createSlice({
   },
 });
 
-export const { setSelectedSearchResult } = searchSlice.actions;
+export const { setSelectedSearchResult, clearSearchResults } =
+  searchSlice.actions;
 export default searchSlice.reducer;
