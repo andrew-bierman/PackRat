@@ -52,6 +52,12 @@ export const addToFavorite = celebrate({
 export const editUser = celebrate({
   [Segments.BODY]: Joi.object().keys({
     userId: JoiObjectId().required(),
+    email: Joi.string(),
+    name: Joi.string(),
+    username: Joi.string(),
+    profileImage: Joi.string(),
+    preferredWeather: Joi.string(),
+    preferredWeight : Joi.string(),
   }),
 });
 export const deleteUser = celebrate({
@@ -96,6 +102,7 @@ export const emailExists = celebrate({
 export const updatePassword = celebrate({
   [Segments.BODY]: Joi.object().keys({
     email: Joi.string().required(),
-    password: Joi.string().required(),
+    oldPassword: Joi.string().required(),
+    newPassword: Joi.string().required(),
   }),
 });
