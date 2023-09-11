@@ -1,51 +1,60 @@
-import { theme } from '../theme';
-
-import { Stack, Box, Text } from 'native-base';
+import { RStack, RText } from '../packrat-ui';
 import { FontAwesome5 } from '@expo/vector-icons';
-
-import { AddPack, AddPackContainer } from './pack/AddPack';
+import { AddPackContainer } from './pack/AddPack';
 import useTheme from '../hooks/useTheme';
 import PackContainer from './pack/PackContainer';
-import ScoreContainer from './ScoreContainer';
 
 export const GearList = () => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    useTheme();
+  const { currentTheme } = useTheme();
   return (
-    <Stack
+    <RStack
       alignSelf="center"
-      w={['100%', '100%', '100%', '90%']}
-      rounded={['none', 'none', 'md', 'lg']}
+      $sm={{
+        borderRadius: '6px',
+        width: '100%',
+      }}
+      $gtSm={{
+        borderRadius: '12px',
+        width: '90%',
+      }}
       style={{
         flexDirection: 'column',
         backgroundColor: currentTheme.colors.card,
         gap: 15,
         marginVertical: 10,
-
         alignItems: 'center',
+        padding: 30,
       }}
     >
-      <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-        <FontAwesome5
-          name="clipboard-check"
-          size={20}
-          color={currentTheme.colors.cardIconColor}
-        />
-        <Text
+      <RStack>
+        <RStack
           style={{
-            color: currentTheme.colors.textPrimary,
-            fontSize: currentTheme.font.size,
-            paddingVertical: 12,
-            fontWeight: 600,
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 10,
           }}
         >
-          Gear List
-        </Text>
-      </Box>
-      {/* <AddPack/> */}
+          <FontAwesome5
+            name="clipboard-check"
+            size={20}
+            color={currentTheme.colors.cardIconColor}
+          />
+          <RText
+            style={{
+              color: currentTheme.colors.textPrimary,
+              fontSize: currentTheme.font.size,
+              paddingVertical: 12,
+              fontWeight: 600,
+            }}
+            fontFamily="$body"
+          >
+            Gear List
+          </RText>
+        </RStack>
+      </RStack>
+
       <AddPackContainer />
       <PackContainer isCreatingTrip={true} />
-      {/* <ScoreContainer /> */}
-    </Stack>
+    </RStack>
   );
 };

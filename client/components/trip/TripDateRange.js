@@ -1,21 +1,19 @@
 import React, { useEffect } from 'react';
-import { Platform, View } from 'react-native';
-import { Stack, Box, Text, Button, HStack } from 'native-base';
+import { Platform } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { format } from 'date-fns';
-// import { Button } from 'react-native-paper';
 import {
   DatePickerModal,
   enGB,
   registerTranslation,
 } from 'react-native-paper-dates';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { theme } from '../../theme';
 import useTheme from '../../hooks/useTheme';
+import { Button } from 'native-base';
+import { RStack, RText } from '../../packrat-ui';
 
 const TripDateRange = ({ dateRange, setDateRange }) => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    useTheme();
+  const { currentTheme } = useTheme();
   const [open, setOpen] = React.useState(false);
 
   const onDismiss = React.useCallback(() => {
@@ -35,26 +33,38 @@ const TripDateRange = ({ dateRange, setDateRange }) => {
   }, []);
 
   return (
-    <Stack
+    <RStack
       alignSelf="center"
-      w={['100%', '100%', '100%', '90%']}
-      rounded={['none', 'none', 'md', 'lg']}
+      $sm={{
+        borderRadius: '6px',
+        width: '100%',
+      }}
+      $gtSm={{
+        borderRadius: '12px',
+        width: '90%',
+      }}
       style={{
         flexDirection: 'column',
         backgroundColor: currentTheme.colors.card,
         gap: 2,
         marginVertical: 10,
-
         alignItems: 'center',
       }}
     >
-      <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+      <RStack
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          gap: 10,
+          padding: 30,
+        }}
+      >
         <FontAwesome5
           name="calendar"
           size={20}
           color={currentTheme.colors.cardIconColor}
         />
-        <Text
+        <RText
           style={{
             color: currentTheme.colors.textPrimary,
             fontSize: currentTheme.font.size,
@@ -63,24 +73,24 @@ const TripDateRange = ({ dateRange, setDateRange }) => {
           }}
         >
           Trip Date Range
-        </Text>
-      </Box>
+        </RText>
+      </RStack>
 
-      <Box
+      <RStack
         style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 15 }}
       >
         <SafeAreaProvider>
-          <View
+          <RStack
             style={{ justifyContent: 'center', flex: 1, alignItems: 'center' }}
           >
             {dateRange.startDate && dateRange.endDate && (
-              <HStack style={{ marginBottom: 5 }}>
-                <Text>Selected Date Range - </Text>
-                <Text>
+              <RStack style={{ marginBottom: 5 }}>
+                <RText>Selected Date Range - </RText>
+                <RText>
                   {format(dateRange?.startDate, 'MM/dd/yyyy')} -{' '}
                   {format(dateRange?.endDate, 'MM/dd/yyyy')}
-                </Text>
-              </HStack>
+                </RText>
+              </RStack>
             )}
 
             <Button
@@ -89,9 +99,9 @@ const TripDateRange = ({ dateRange, setDateRange }) => {
                 setOpen(true);
               }}
             >
-              <Text style={{ color: currentTheme.colors.text }}>
+              <RText style={{ color: currentTheme.colors.text }}>
                 Pick Date Range
-              </Text>
+              </RText>
             </Button>
             <DatePickerModal
               locale="en"
@@ -106,10 +116,10 @@ const TripDateRange = ({ dateRange, setDateRange }) => {
               endDate={dateRange?.endDate}
               onConfirm={onConfirm}
             />
-          </View>
+          </RStack>
         </SafeAreaProvider>
-      </Box>
-    </Stack>
+      </RStack>
+    </RStack>
   );
 };
 
