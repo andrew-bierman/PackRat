@@ -1,13 +1,6 @@
-import { z } from "zod";
-import { Request } from "express";
+import { z } from 'zod';
 
-/**
- * Creates a Zod validation rule for MongoDB ObjectIds.
- *
- * @param {string} [message="valid id"] - The error message to display if the validation fails.
- * @return {z.ZodString} - The Zod validation rule for MongoDB ObjectIds.
- */
-export const JoiObjectId = (message = "valid id") =>
+const JoiObjectId = (message: any = 'valid id'): z.ZodString =>
   z.string().regex(/^[0-9a-fA-F]{24}$/, { message });
 
 export const getItems = z.object({
@@ -25,7 +18,7 @@ export const addItem = z.object({
   unit: z.string().nonempty(),
   packId: JoiObjectId(),
   type: z.string().optional(),
-  ownerId:z.string().optional(),
+  ownerId: z.string().optional(),
 });
 
 export const editItem = z.object({

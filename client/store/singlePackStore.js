@@ -30,6 +30,7 @@ export const fetchSinglePack = createAsyncThunk(
     return await trpc.getPackById.query({ packId });
   },
 );
+
 export const selectItemsGlobal = createAsyncThunk(
   'Items/selectItemsGlobal',
   async (item) => {
@@ -90,5 +91,6 @@ export const {
   selectById: selectSinglePackById,
   selectAll: selectAllSinglePacks,
 } = singlePackAdapter.getSelectors((state) => state.singlePack);
+export const { clearSinglePack } = singlePackSlice.actions;
 
 export default singlePackSlice.reducer;

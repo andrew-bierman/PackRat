@@ -1,4 +1,3 @@
-import { StyleSheet } from 'react-native';
 import { Box, Button, Input, Select, Text } from 'native-base';
 import { useEffect, useState } from 'react';
 
@@ -18,6 +17,7 @@ import { useDispatch } from 'react-redux';
 
 import { CustomModal } from '../modal';
 import { AddItemModal } from './AddItemModal';
+import useCustomStyles from '~/hooks/useCustomStyles';
 
 export default function PackContainer({ isCreatingTrip = false }) {
   const dispatch = useDispatch();
@@ -30,10 +30,11 @@ export default function PackContainer({ isCreatingTrip = false }) {
 
   const [currentPackId, setCurrentPackId] = useState(null);
   const [refetch, setRefetch] = useState(false);
+  const styles = useCustomStyles(loadStyles);
 
   useEffect(() => {
     if (user?._id) {
-      dispatch(fetchUserPacks(user?._id));
+      dispatch(fetchUserPacks({ ownerId: user?._id }));
     }
   }, [dispatch, user?._id, refetch]);
 
@@ -88,7 +89,7 @@ export default function PackContainer({ isCreatingTrip = false }) {
   ) : null;
 }
 
-const styles = StyleSheet.create({
+const loadStyles = () => ({
   mainContainer: {
     flexDirection: 'column',
     alignItems: 'center',

@@ -18,7 +18,9 @@ export interface IUser extends Document {
   passwordResetTokenExpiration?: Date;
   role: 'user' | 'admin';
   username: string;
-  profilePicture?: string;
+  profileImage?: string;
+  preferredWeather?: string;
+  preferredWeight?: string;
   generateAuthToken: () => Promise<string>;
   generateResetToken: () => Promise<string>;
 }
@@ -76,9 +78,15 @@ const UserSchema = new Schema<IUser>(
         }
       },
     },
-    profilePicture: {
+    profileImage: {
       type: String,
     },
+    preferredWeather: {
+      type : String,
+    },
+    preferredWeight: {
+      type : String
+    }
   },
   {
     timestamps: true,

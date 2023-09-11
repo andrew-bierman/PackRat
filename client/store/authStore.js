@@ -7,6 +7,7 @@ import {
 // we use the original axios to prevent circular dependency with custom axios instance
 import axios from 'axios';
 import { api } from '../constants/api';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert } from 'react-native';
 import { trpc } from '../trpc';
 
@@ -30,7 +31,9 @@ export const signUp = createAsyncThunk(
       //   email,
       //   password,
       // });
+      // await AsyncStorage.setItem('authToken', response.data.user.token);
       // return response.data.user;
+
       return await trpc.signUp.mutate({ name, username, email, password });
     } catch (error) {
       console.log('error', error);
@@ -47,7 +50,9 @@ export const signIn = createAsyncThunk(
       //   email,
       //   password,
       // });
+      // await AsyncStorage.setItem('authToken', response.data.user.token);
       // return response.data.user;
+
       const response = await trpc.signIn.mutate({ email, password });
       return response;
     } catch (error) {
@@ -59,6 +64,7 @@ export const signIn = createAsyncThunk(
 export const signOut = createAsyncThunk('auth/signOut', async () => {
   try {
     // Perform any sign-out operations here
+    await AsyncStorage.removeItem('authToken');
     return null;
   } catch (error) {
     console.log(error.message);
@@ -73,13 +79,29 @@ export const signInWithGoogle = createAsyncThunk(
       // const response = await axios.post(`${api}/user/google`, {
       //   idToken,
       // });
+
+      // await AsyncStorage.setItem('authToken', response.data.user.token);
       // return response.data.user;
+
       const response = await trpc.googleSignin.query({ idToken });
-      return response?.user
+      return response?.user;
     } catch (error) {
       console.log('error.response.data.error', error.response.data.error);
       return rejectWithValue(error);
     }
+  },
+);
+
+export const editUser = createAsyncThunk('auth/editUser', async (user) => {
+  const response = await axios.put(`${api}/user/`, user);
+  return response.data;
+});
+
+export const updatePassword = createAsyncThunk(
+  'auth/updatePassword',
+  async (user) => {
+    const response = await axios.post(`${api}/user/updatepassword`, user);
+    return response.data;
   },
 );
 
@@ -144,6 +166,33 @@ export const authSlice = createSlice({
       .addCase(signInWithGoogle.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(editUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(editUser.fulfilled, (state, action) => {
+        authAdapter.setAll(state, [action.payload]);
+        state.user = action.payload;
+
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(editUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(updatePassword.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updatePassword.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(updatePassword.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
       });
   },
 });

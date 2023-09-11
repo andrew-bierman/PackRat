@@ -14,7 +14,6 @@ export const addPackService = async (name, owner_id) => {
     items: [],
     is_public: false,
     favorited_by: [],
-    favorites_count: 0,
     createdAt: new Date(),
     owners: [owner_id],
   };

@@ -88,7 +88,7 @@ export const SaveTripContainer = ({ dateRange }) => {
   // const [numberOfNights, setNumberOfNights] = useState("");
   // const [startDate, setStartDate] = useState("");
   // const [endDate, setEndDate] = useState("");
-  const [isPublic, setIsPublic] = useState('');
+  const [isPublic, setIsPublic] = useState(true);
 
   // create trip
   const handleCreateTrip = async () => {

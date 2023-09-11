@@ -9,6 +9,8 @@ import {
 } from '../controllers/trip/index';
 import * as validator from '../middleware/validators/index';
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
+import authTokenMiddleware from '../middleware/auth';
+import checkRole from '../middleware/checkRole';
 import { zodParser } from '../middleware/validators/zodParser';
 
 const router = express.Router();
@@ -31,7 +33,12 @@ const router = express.Router();
  *       200:
  *         description: Successful response
  */
-router.get('/', tryCatchWrapper(getPublicTrips));
+router.get(
+  '/',
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
+  tryCatchWrapper(getPublicTrips),
+);
 
 /**
  * @swagger

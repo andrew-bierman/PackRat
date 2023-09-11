@@ -3,21 +3,31 @@ import { api } from '~/constants/api';
 import { store } from '../store/store';
 import { InformUser } from '~/utils/ToastUtils';
 import { setTargetProgress, resetProgress } from '../store/progressStore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 let activeRequests = new Map();
 
 // Helper function to get the token
-const getTokenFromState = () => {
-  const state = store.getState();
-  // @ts-ignore
-  return state?.auth?.user?.token || null;
+// const getTokenFromState = () => {
+//   const state = store.getState();
+//   // @ts-ignore
+//   return state?.auth?.user?.token || null;
+// };
+const getTokenFromStorage = async () => {
+  try {
+    const token = await AsyncStorage.getItem('authToken');
+    return token;
+  } catch (error) {
+    console.error("Couldn't fetch token from AsyncStorage:", error);
+    return null;
+  }
 };
 
 const generateRequestKey = (config) => `${config.method}-${config.url}`;
 
-const requestInterceptor = (config) => {
+const requestInterceptor = async (config) => {
   config.baseURL = api;
-  const token = getTokenFromState();
+  const token = await getTokenFromStorage();
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }

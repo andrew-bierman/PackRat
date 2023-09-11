@@ -68,6 +68,7 @@ export const signInGoogle = async (req, res) => {
     const { idToken } = req.body;
 
     const decodedToken: any = jwt.decode(idToken);
+
     if (!decodedToken) {
       throw new Error('Invalid ID token');
     }
@@ -83,16 +84,17 @@ export const signInGoogle = async (req, res) => {
       }
 
       const randomPassword = utilsService.randomPasswordGenerator(8);
-      // const randomPassword = '1234abcdefg5678';
+      const username = utilsService.randomUserNameCode(email, 4);
 
       const user = new User({
         email,
         name,
         password: randomPassword,
         googleId,
+        username,
       });
 
-      await user.save(); // save the user without callback
+      await user.save();
 
       await user.generateAuthToken();
 
@@ -107,9 +109,9 @@ export const signInGoogle = async (req, res) => {
 
       alreadyGoogleSignin.googleId = googleId;
 
-      await alreadyGoogleSignin.generateAuthToken();
-
       await alreadyGoogleSignin.save();
+
+      await alreadyGoogleSignin.generateAuthToken();
 
       res.locals.data = { user: alreadyGoogleSignin };
       responseHandler(res);

@@ -5,7 +5,7 @@ import { responseHandler } from '../../helpers/responseHandler';
 import { publicProcedure } from '../../trpc';
 import * as validator from '../../middleware/validators/index';
 /**
- * Adds or removes a pack from a user's favorites list and updates the corresponding pack's favorited_by and favorites_count fields.
+ * Adds or removes a pack from a user's favorites list and updates the corresponding pack's favorited_by array.
  * @param {Object} req - The request object containing the packId and userId properties in the body.
  * @param {Object} res - The response object used to send the HTTP response.
  * @return {Object} The updated user object in the response body.

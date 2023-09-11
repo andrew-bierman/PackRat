@@ -11,7 +11,7 @@ import { trpc } from '../trpc';
 export const addPack = createAsyncThunk('packs/addPack', async (newPack) => {
   // console.log(newPack, "this is new pack")
   const response = await axios.post(`${api}/pack/`, newPack);
-  // console.log(response.data, 'this is response from server');
+
   return response.data;
 });
 
@@ -47,10 +47,14 @@ export const changePackStatus = createAsyncThunk(
 
 export const fetchUserPacks = createAsyncThunk(
   'packs/fetchUserPacks',
-  async (ownerId) => {
-    // const response = await axios.get(`${api}/pack/${ownerId}`);
+  async (input) => {
+    const { ownerId, queryString } = input;
+    // const response = await axios.get(
+    //   `${api}/pack/${ownerId}/?queryBy=${queryString || 'Most Recent'}`,
+    // );
     // return response.data;
-    return (await trpc.getPacks.query({ ownerId }))?.packs;
+    return (await trpc.getPacks.query({ ownerId, queryBy: queryString }))
+      ?.packs;
   },
 );
 

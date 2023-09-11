@@ -2,10 +2,11 @@
 import React from 'react';
 import { Text, HStack } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
-import { StyleSheet } from 'react-native';
 import { theme } from '../../theme';
+import useCustomStyles from '~/hooks/useCustomStyles';
 
 const SectionHeader = ({ iconName, text }) => {
+  const styles = useCustomStyles(loadStyles);
   return (
     <HStack style={styles.hStack}>
       <Ionicons name={iconName} style={styles.icon} />
@@ -14,7 +15,7 @@ const SectionHeader = ({ iconName, text }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const loadStyles = () => ({
   hStack: {
     marginBottom: 10,
     justifyContent: 'space-around', // Updated from "space-between"

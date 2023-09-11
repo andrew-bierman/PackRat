@@ -26,6 +26,7 @@ import {
   Stack,
   Button,
 } from 'native-base';
+import { formatNumber } from '~/utils/formatNumber';
 
 // import { useAuth } from "../../auth/provider";
 
@@ -42,6 +43,7 @@ export default function Card({
   destination,
   createdAt,
   owners,
+  duration,
 }) {
   const user = useSelector((state) => state.auth.user);
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
@@ -49,7 +51,11 @@ export default function Card({
   const favorites = useSelector(selectAllFavorites);
   const dispatch = useDispatch();
 
-  const isFavorite = favorites.some((favorite) => favorite.pack_id === _id);
+  const isFavorite =
+    !type === 'trip'
+      ? favorited_by.includes(user._id) ||
+        favorited_by.forEach((obj) => obj._id === user._id)
+      : null;
 
   /**
    * Handles adding an item to the user's favorites.
@@ -82,6 +88,11 @@ export default function Card({
 
   const truncatedName = truncateString(name, 25);
   const truncatedDestination = truncateString(destination, 25);
+  const formattedWeight = formatNumber(total_weight); // TODO convert to user preference once implemented
+
+  let numberOfNights;
+
+  if (duration) numberOfNights = JSON.parse(duration).numberOfNights;
 
   return (
     <Box alignItems="center" padding="4">
@@ -165,7 +176,7 @@ export default function Card({
                 ml="-0.5"
                 mt="-1"
               >
-                Total Weight: {total_weight}
+                Total Weight: {formattedWeight}
               </Text>
             )}
 
@@ -241,38 +252,58 @@ export default function Card({
                   gap: 10,
                 }}
               >
-                <Text color={currentTheme.colors.textColor}>Favorites</Text>
-                <Box
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    gap: 10,
-                  }}
-                >
-                  {user?._id === owner_id ? null : (
-                    <TouchableOpacity onPress={handleAddToFavorite}>
-                      <AntDesign
-                        name="heart"
-                        size={16}
-                        color={
-                          isFavorite
-                            ? `${currentTheme.colors.error}`
-                            : `${currentTheme.colors.cardIconColor}`
-                        }
-                      />
-                    </TouchableOpacity>
-                  )}
+                {type === 'pack' && (
+                  <Box>
+                    <Text color={currentTheme.colors.textColor}>Favorites</Text>
+                    <Box
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        gap: 10,
+                      }}
+                    >
+                      {user?._id === owner_id ? null : (
+                        <TouchableOpacity onPress={handleAddToFavorite}>
+                          <AntDesign
+                            name="heart"
+                            size={16}
+                            color={
+                              isFavorite
+                                ? 'red'
+                                : `${currentTheme.colors.cardIconColor}`
+                            }
+                          />
+                        </TouchableOpacity>
+                      )}
 
-                  <Text
-                    color={currentTheme.colors.textColor}
-                    _dark={{
-                      color: currentTheme.colors.textColor,
-                    }}
-                    fontWeight="400"
-                  >
-                    {favorites_count}
-                  </Text>
-                </Box>
+                      <Text
+                        color={currentTheme.colors.textColor}
+                        _dark={{
+                          color: currentTheme.colors.textColor,
+                        }}
+                        fontWeight="400"
+                      >
+                        {favorites_count > 0 ? favorites_count : 0}
+                      </Text>
+                    </Box>
+                  </Box>
+                )}
+                {type === 'trip' && (
+                  <Box>
+                    <Text color={currentTheme.colors.textColor}>Nights</Text>
+                    <Text
+                      color={currentTheme.colors.textColor}
+                      _dark={{
+                        color: currentTheme.colors.textColor,
+                      }}
+                      style={{
+                        justifyContent: 'flex-end',
+                      }}
+                    >
+                      {numberOfNights}
+                    </Text>
+                  </Box>
+                )}
               </Box>
             </HStack>
           </HStack>

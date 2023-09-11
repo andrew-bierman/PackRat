@@ -1,10 +1,11 @@
 import React from 'react';
 import { Box, Text, Stack } from 'native-base';
-import { StyleSheet, Platform } from 'react-native';
+import { Platform } from 'react-native';
 import { useSelector } from 'react-redux';
 import useTheme from '../../hooks/useTheme';
 
 import { theme } from '../../theme';
+import useCustomStyles from '~/hooks/useCustomStyles';
 
 /**
  * Retrieves the appropriate container style based on the provided type.
@@ -13,15 +14,16 @@ import { theme } from '../../theme';
  * @return {Object} The container style object.
  */
 const getContainerStyle = (type) => {
+  const styles = useCustomStyles(loadStyles);
   switch (type) {
     case 'search':
-      return styles().searchContainer;
+      return styles.searchContainer;
     case 'map':
-      return styles().mapCard;
+      return styles.mapCard;
     case 'mobile':
-      return styles().containerMobile;
+      return styles.containerMobile;
     default:
-      return styles().mutualStyles;
+      return styles.mutualStyles;
   }
 };
 
@@ -89,11 +91,10 @@ export default function LargeCard({
   );
 }
 
-const styles = () => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    useTheme();
+const loadStyles = (theme) => {
+  const { currentTheme } = theme;
 
-  return StyleSheet.create({
+  return {
     mutualStyles: {
       backgroundColor: currentTheme.colors.card,
       flex: 1,
@@ -134,5 +135,5 @@ const styles = () => {
       height: Platform.OS === 'web' ? '650px' : '100%',
       overflow: 'hidden',
     },
-  });
+  };
 };
