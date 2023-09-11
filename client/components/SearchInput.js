@@ -159,7 +159,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
                 right: 1,
                 backgroundColor: 'transparent',
               }}
-              width="50px"
+              width="10px"
             >
               <MaterialIcons name="close" />
             </RButton>
