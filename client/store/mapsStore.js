@@ -14,7 +14,7 @@ const mapAdapter = createEntityAdapter({
 
 const initialState = mapAdapter.getInitialState({
   maps: [],
-  selectedMap: null,
+  selectedMap: {},
   loading: false,
   error: null,
 });
@@ -63,8 +63,8 @@ export const mapSlice = createSlice({
         state.error = null;
       })
       .addCase(addUserMap.fulfilled, (state, action) => {
-        state.maps = [...state.maps, action.payload];
-        state.selectedMap = action.payload;
+        state.maps = [...state.maps, action.payload.map];
+        state.selectedMap = action.payload.map;
         state.loading = false;
         state.error = null;
       })

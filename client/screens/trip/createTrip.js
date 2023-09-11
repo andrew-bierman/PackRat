@@ -25,6 +25,7 @@ export default function Trips() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
+  const [shape, setShape] = useState({});
   const [parksData, setParksData] = useState();
   const [trails, setTrailsData] = useState();
   const [dateRange, setDateRange] = useState({
@@ -48,6 +49,15 @@ export default function Trips() {
   const photonDetailsStore = useSelector(
     (state) => state.destination.photonDetails,
   );
+  const selectedMap = useSelector((state) => state.maps.selectedMap);
+
+  useEffect(() => {
+    if (photonDetailsStore !== shape) {
+      setShape(photonDetailsStore);
+    } else if (selectedMap.geojson && selectedMap.geojson !== shape) {
+      setShape(selectedMap.geojson);
+    }
+  }, [photonDetailsStore, selectedMap]);
 
   // console.log(
   //   '🚀 ~ file: createTrip.js:49 ~ Trips ~ photonDetailsStore:',
@@ -235,7 +245,7 @@ export default function Trips() {
               )}
               title="Map"
               isMap={true}
-              shape={photonDetailsStore}
+              shape={shape}
             />
             <Box>
               <SaveTripContainer dateRange={dateRange} />

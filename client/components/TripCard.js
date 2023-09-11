@@ -36,7 +36,6 @@ export default function TripCard({
   const currentShape = trailsDetails.filter(
     (trail) => trail.properties.name == currentTrail,
   );
-
   /**
    * Handles the change in value.
    *
