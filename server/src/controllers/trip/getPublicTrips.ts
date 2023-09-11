@@ -2,7 +2,7 @@ import { publicProcedure } from '../../trpc';
 import { TripNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { getPublicTripsService } from '../../services/trip/getPublicTripService';
-import * as validator from '../../../../packages/src/validations';
+import * as validator from '@packrat/packages';
 
 /**
  * Retrieves public trips based on the given query parameter.

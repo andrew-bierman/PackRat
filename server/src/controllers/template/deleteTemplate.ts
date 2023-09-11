@@ -1,7 +1,7 @@
 import { publicProcedure } from '../../trpc';
 import { TemplateNotFoundError } from '../../helpers/errors';
 import Template from '../../models/templateModel';
-import * as validators from "../../../../packages/src/validations"
+import * as validators from "@packrat/packages"
 
 /**
  * Deletes a template.

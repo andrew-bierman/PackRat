@@ -2,7 +2,7 @@ import { publicProcedure } from '../../trpc';
 import { InvalidCodeError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import User from '../../models/userModel';
-import * as validator from '../../../../packages/src/validations';
+import * as validator from '@packrat/packages';
 /**
  * Checks the provided code against the user's email in the database.
  * @param {Object} req - the request object

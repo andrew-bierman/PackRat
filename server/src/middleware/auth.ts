@@ -5,7 +5,7 @@ import { type Request, type Response, type NextFunction } from 'express';
 import { middleware } from '../trpc';
 import { TRPCError } from '@trpc/server';
 import {  ZodError } from 'zod';
-import { TokenSchema } from '../../../packages/src/validations/authTokenValidator';
+import { TokenSchema } from '@packrat/packages';
 
 declare global {
   namespace Express {

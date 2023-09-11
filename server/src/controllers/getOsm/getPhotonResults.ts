@@ -5,7 +5,7 @@ import {
 } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { publicProcedure } from '../../trpc';
-import * as validators from "../../../../packages/src/validations"
+import * as validators from "@packrat/packages"
 
 /**
  * Retrieves Photon results based on a search string.

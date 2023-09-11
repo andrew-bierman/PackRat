@@ -2,7 +2,7 @@ import { publicProcedure } from '../../trpc';
 import { UnableToDeleteItemError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { deleteGlobalItemService } from '../../services/item/item.service';
-import * as validators from "../../../../packages/src/validations"
+import * as validators from "@packrat/packages"
 /**
  * Deletes a global item.
  * @param {Object} req - The request object.

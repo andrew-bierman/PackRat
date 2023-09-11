@@ -2,7 +2,7 @@ import { publicProcedure } from '../../trpc';
 import { UserFavoritesNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { getUserFavoritesService } from '../../services/favorite/favorite.service';
-import * as validator from '../../../../packages/src/validations';
+import * as validator from '@packrat/packages';
 import User from '../../models/userModel';
 
 /**

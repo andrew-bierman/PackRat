@@ -1,6 +1,6 @@
 import { UnableToDuplicatePackError } from '../../helpers/errors';
 import { duplicatePublicPackService } from '../../services/pack/pack.service';
-import * as validator from '../../../../packages/src/validations';
+import * as validator from '@packrat/packages';
 import { publicProcedure } from '../../trpc';
 /**
  * Duplicates a public pack.

@@ -2,7 +2,7 @@ import { publicProcedure } from '../../trpc';
 import { ItemNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { getItemsGloballyService } from '../../services/item/item.service';
-import * as validators from "../../../../packages/src/validations"
+import * as validators from "@packrat/packages"
 /**
  * Retrieves globally available items.
  * @param {Object} req - The request object.

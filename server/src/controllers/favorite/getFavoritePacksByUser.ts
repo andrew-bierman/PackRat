@@ -2,7 +2,7 @@ import { PackNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { getFavoritePacksByUserService } from '../../services/favorite/favorite.service';
 import { publicProcedure } from '../../trpc';
-import * as validator from "../../../../packages/src/validations"
+import * as validator from "@packrat/packages"
 
 /**
  * Retrieves favorite packs for a user.

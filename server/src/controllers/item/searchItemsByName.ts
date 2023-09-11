@@ -1,7 +1,7 @@
 import { publicProcedure } from '../../trpc';
 import { ItemNotFoundError } from '../../helpers/errors';
 import { searchItemsByNameService } from '../../services/item/item.service';
-import * as validator from '../../../../packages/src/validations';
+import * as validator from '@packrat/packages';
 
 
 /**

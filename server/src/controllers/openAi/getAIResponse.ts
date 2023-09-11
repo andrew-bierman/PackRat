@@ -2,7 +2,7 @@ import { publicProcedure } from '../../trpc';
 import { GetResponseFromAIError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { getAIResponseService } from '../../services/openAi/openAi.service';
-import * as validators from "../../../../packages/src/validations"
+import * as validators from "@packrat/packages"
 
 /**
  * Retrieves an AI response based on user input and conversation history.

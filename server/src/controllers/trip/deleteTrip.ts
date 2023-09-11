@@ -1,7 +1,7 @@
 import { publicProcedure } from '../../trpc';
 import { UnableToDeleteTripError } from '../../helpers/errors';
 import Trip from '../../models/tripModel';
-import * as validator from '../../../../packages/src/validations';
+import * as validator from '@packrat/packages';
 /**
  * Deletes a trip from the database.
  * @param {Object} req - The request object.

@@ -1,7 +1,7 @@
 import { editGlobalItemAsDuplicateService } from '../../services/item/item.service';
 import { UnableToDeleteItemError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
-import * as validators from "../../../../packages/src/validations"
+import * as validators from "@packrat/packages"
 import { publicProcedure } from '../../trpc';
 
 /**

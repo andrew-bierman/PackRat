@@ -10,7 +10,7 @@ import {
 import sgMail from '@sendgrid/mail';
 import { responseHandler } from '../../helpers/responseHandler';
 import { publicProcedure } from '../../trpc';
-import * as validator from '../../../../packages/src/validations'
+import * as validator from '@packrat/packages'
 sgMail.setApiKey(SEND_GRID_API_KEY);
 
 // Generate a password reset token that includes the user's email address

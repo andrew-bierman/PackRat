@@ -2,7 +2,7 @@ import { publicProcedure } from '../../trpc';
 import { NoDestinationFoundWithThatIDError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { getDestinationService } from '../../services/osm/osm.service';
-import * as validators from "../../../../packages/src/validations"
+import * as validators from "@packrat/packages"
 
 /**
  * Retrieves the destination based on the given ID.

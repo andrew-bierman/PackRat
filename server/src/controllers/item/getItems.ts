@@ -3,7 +3,7 @@ import { ItemNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import Item from '../../models/itemModel';
 import { getItemsService } from '../../services/item/item.service';
-import * as validator from '../../../../packages/src/validations';
+import * as validator from '@packrat/packages';
 /**
  * Retrieves a list of items associated with a pack.
  * @param {Object} req - The request object.

@@ -1,6 +1,6 @@
 import { UnableToDeletePackError } from '../../helpers/errors';
 import { deletePackService } from '../../services/pack/pack.service';
-import * as validator from '../../../../packages/src/validations';
+import * as validator from '@packrat/packages';
 import { publicProcedure } from '../../trpc';
 /**
  * Deletes a pack.

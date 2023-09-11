@@ -2,7 +2,7 @@ import { publicProcedure } from '../../trpc';
 import { RetrievingParksDataError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { oneEntity } from '../../utils/oneEntity';
-import * as validators from "../../../../packages/src/validations"
+import * as validators from "@packrat/packages"
 const fetch = async (...args) =>
   import('node-fetch').then(async ({ default: fetch }) =>
     fetch(...(args as Parameters<typeof fetch>)),

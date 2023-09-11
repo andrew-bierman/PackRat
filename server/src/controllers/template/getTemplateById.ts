@@ -2,7 +2,7 @@ import { publicProcedure } from '../../trpc';
 import { TemplateNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import Template from '../../models/templateModel';
-import * as validators from "../../../../packages/src/validations"
+import * as validators from "@packrat/packages"
 /**
  * Retrieves a template by its ID.
  * @param {Object} req - The request object.

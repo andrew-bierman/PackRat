@@ -3,7 +3,7 @@ import { responseHandler } from '../../helpers/responseHandler';
 import { getPacksService } from '../../services/pack/pack.service';
 import { buildMessage } from '../../helpers/buildMessage';
 import { publicProcedure } from '../../trpc';
-import * as validator from '../../../../packages/src/validations';
+import * as validator from '@packrat/packages';
 /**
  * Retrieves packs associated with a specific owner.
  * @param {Object} req - Express request object.

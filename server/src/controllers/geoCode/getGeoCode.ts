@@ -2,7 +2,7 @@ import { publicProcedure } from '../../trpc';
 import { ErrorFetchingGeoCodeError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { oneEntity } from '../../utils/oneEntity';
-import * as validators from "../../../../packages/src/validations"
+import * as validators from "@packrat/packages"
 const fetch = async (...args: Parameters<typeof fetch>) =>
   import('node-fetch').then(async ({ default: fetch }) =>
     fetch(...(args as Parameters<typeof fetch>)),

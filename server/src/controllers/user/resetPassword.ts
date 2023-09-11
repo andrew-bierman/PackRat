@@ -1,6 +1,6 @@
 import { publicProcedure } from '../../trpc';
 import User from '../../models/userModel';
-import * as validator from '../../../../packages/src/validations';
+import * as validator from '@packrat/packages';
 /**
  * Resets the user's password.
  * @param {Object} req - The request object.

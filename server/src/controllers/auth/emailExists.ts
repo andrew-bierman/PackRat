@@ -7,7 +7,7 @@ import {
 import { UnableToSendCodeError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { publicProcedure } from '../../trpc';
-import * as validator from '../../../../packages/src/validations';
+import * as validator from '@packrat/packages';
 /**
  * Check if the provided email exists in the database.
  * @param {object} req - The request object.

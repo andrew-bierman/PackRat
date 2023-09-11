@@ -5,7 +5,7 @@ import { JWT_SECRET, SEND_GRID_API_KEY } from '../../config';
 
 import sgMail from '@sendgrid/mail';
 import { responseHandler } from '../../helpers/responseHandler';
-import * as validators from "../../../../packages/src/validations"
+import * as validators from "@packrat/packages"
 import { publicProcedure } from '../../trpc';
 
 sgMail.setApiKey(SEND_GRID_API_KEY);

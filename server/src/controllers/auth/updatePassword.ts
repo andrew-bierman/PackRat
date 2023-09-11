@@ -5,7 +5,7 @@ import User from '../../models/userModel';
 import { findUserAndUpdate } from '../../services/user/user.service';
 import bcrypt from 'bcrypt';
 import { JWT_SECRET } from '../../config';
-import * as validator from '../../../../packages/src/validations';
+import * as validator from '@packrat/packages';
 
 /**
  * Updates the password for a user.

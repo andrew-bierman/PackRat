@@ -12,7 +12,7 @@ import {
   googleSignin,
   getMe,
 } from '../controllers/user/index';
-import * as validator from '../../../packages/src/validations';
+import * as validator from '@packrat/packages';
 import { signInGoogle } from '../controllers/passport/index';
 import { REDIRECT_URL } from '../config';
 import {
@@ -23,7 +23,8 @@ import {
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
 import authTokenMiddleware from '../middleware/auth';
 import checkRole from '../middleware/checkRole';
-import { zodParser } from '../../../packages/src/validations/zodParser';
+
+import { zodParser } from '@packrat/packages';
 
 const router = express.Router();
 

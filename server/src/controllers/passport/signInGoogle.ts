@@ -18,7 +18,7 @@ import { OAuth2Client } from 'google-auth-library';
 import utilsService from '../../utils/utils.service';
 import { responseHandler } from '../../helpers/responseHandler';
 import { publicProcedure } from '../../trpc';
-import * as validators from "../../../../packages/src/validations/authTokenValidator"
+import * as validators from "@packrat/packages"
 const client = new OAuth2Client(
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,

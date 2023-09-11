@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import { sendWelcomeEmail} from '../../utils/accountEmail';
 import { JWT_SECRET } from '../../config';
 import { publicProcedure } from '../../trpc';
-import * as validator from '../../../../packages/src/validations';
+import * as validator from '@packrat/packages';
 /**
  * Sign up a user.
  * @param {Object} req - The request object.

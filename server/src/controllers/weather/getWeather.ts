@@ -2,7 +2,7 @@ import axios from 'axios';
 import { RetrievingWeatherFromOpenWeatherError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { publicProcedure } from '../../trpc';
-import * as validators from "../../../../packages/src/validations"
+import * as validators from "@packrat/packages"
 
 /**
  * Retrieves weather data from OpenWeather API based on latitude and longitude.

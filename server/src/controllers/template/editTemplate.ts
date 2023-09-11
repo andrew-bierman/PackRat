@@ -2,7 +2,7 @@ import { publicProcedure } from '../../trpc';
 import { responseHandler } from '../../helpers/responseHandler';
 import Template from '../../models/templateModel';
 import { editTemplateService } from '../../services/template/template.service';
-import * as validators from "../../../../packages/src/validations"
+import * as validators from "@packrat/packages"
 
 /**
  * Edits a template.
