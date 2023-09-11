@@ -5,8 +5,10 @@ import { theme } from '../theme';
 import useTheme from '../hooks/useTheme';
 import { useDispatch } from 'react-redux';
 import { scorePack } from '../store/packsStore';
+import { scoreTrip } from '../store/tripsStore';
 import { Svg, Circle, Path, G, Text as SvgText } from 'react-native-svg';
 import useCustomStyles from '~/hooks/useCustomStyles';
+import { computeTotalScore } from '~/utils/scores';
 
 const ScoreProgressChart = ({ score, size = 150, strokeWidth = 10 }) => {
   if (!score) return null;
@@ -161,7 +163,7 @@ export default function ScoreContainer({ type, data, isOwner }) {
     useTheme();
   const styles = useCustomStyles(loadStyles);
   const id = data._id;
-  const totalScore = data.totalScore;
+  const totalScore = computeTotalScore(data?.scores);
   const grades = data.grades;
   const scores = data.scores;
 

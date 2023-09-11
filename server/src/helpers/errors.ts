@@ -181,6 +181,10 @@ export const UnableToEditTripError = {
   statusCode: 500,
   message: 'Unable to edit trip',
 };
+export const UnableToScoreTripError = {
+  statusCode: 500,
+  message: 'Unable to score trip',
+};
 export const RetrievingWeatherFromOpenWeatherError = {
   statusCode: 500,
   message: 'Error retrieving weather data',

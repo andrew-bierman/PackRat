@@ -80,9 +80,7 @@ export const scorePack = createAsyncThunk('packs/scorePack', async (packId) => {
 export const editPackItem = createAsyncThunk(
   'items/editPackItem',
   async (newItem) => {
-    console.log(newItem, 'new Item here');
     const response = await axios.put(`${api}/item/`, newItem);
-    console.log(response.data, 'new item response');
     return response.data;
   },
 );

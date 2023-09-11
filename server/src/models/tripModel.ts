@@ -22,6 +22,22 @@ const TripSchema = new Schema(
       ],
       required: true,
     },
+    grades: {
+      type: Object,
+      default: {
+        weather: '',
+        essentialItems: '',
+        redundancyAndVersatility: '',
+      },
+    },
+    scores: {
+      type: Object,
+      default: {
+        weatherScore: 0,
+        essentialItemsScore: 0,
+        redundancyAndVersatilityScore: 0,
+      },
+    },
     owner_id: { type: Schema.Types.ObjectId, ref: 'User' },
     packs: { type: Schema.Types.ObjectId, ref: 'Pack' },
     is_public: { type: Boolean },
@@ -39,6 +55,17 @@ TripSchema.set('toJSON', {
       features: returnedObject.geojson,
     };
   },
+});
+
+TripSchema.virtual('totalScore').get(function () {
+  const scoresArray: number[] = Object.values(this.scores);
+  const sum: number = scoresArray.reduce(
+    (total: number, score: number) => total + score,
+    0,
+  );
+  const average: number = scoresArray.length > 0 ? sum / scoresArray.length : 0;
+
+  return Math.round(average * 100) / 100;
 });
 
 const Trip = myDB.model('Trip', TripSchema);
