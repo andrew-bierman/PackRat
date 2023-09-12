@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux';
 
 import { Platform } from 'react-native';
 
-import { Stack as Header } from 'expo-router';
+import { Stack as Header, useRootNavigation } from 'expo-router';
 
 import { darkTheme, theme } from '../theme';
 
@@ -12,7 +12,7 @@ import LandingPage from '../components/landing_page';
 
 import Dashboard from '../screens/dashboard';
 import useTheme from '../hooks/useTheme';
-import { current } from '@reduxjs/toolkit';
+import { useEffect, useState } from 'react';
 
 export default function Index() {
   const {

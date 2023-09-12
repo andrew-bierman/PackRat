@@ -8,12 +8,14 @@ import { ThemeProvider } from '../context/theme';
 import Footer from '../components/footer/Footer';
 import { NetworkStatusProvider } from '../context/NetworkStatusProvider';
 import Header from '../screens/header';
+import { SessionProvider } from '../context/auth';
 
 export default function HomeLayout() {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <AuthProvider>
+        {/* <AuthProvider> */}
+        <SessionProvider>
           <NetworkStatusProvider>
             <ThemeProvider>
               <Header />
@@ -21,7 +23,8 @@ export default function HomeLayout() {
               {Platform.OS === 'web' ? <Footer /> : null}
             </ThemeProvider>
           </NetworkStatusProvider>
-        </AuthProvider>
+        </SessionProvider>
+        {/* </AuthProvider> */}
       </PersistGate>
     </Provider>
   );

@@ -108,7 +108,14 @@ export const updatePassword = createAsyncThunk(
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {},
+  reducers: {
+    // add reducers here
+    resetState(state) {
+      state.user = null;
+      state.loading = false;
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(signUp.pending, (state) => {
@@ -199,4 +206,7 @@ export const authSlice = createSlice({
 export const authReducer = authSlice.reducer;
 export const { selectAll: selectAllUsers, selectById: selectUserById } =
   authAdapter.getSelectors((state) => state.auth);
+
+export const resetState = authSlice.actions.resetState;
+
 export default authSlice.reducer;
