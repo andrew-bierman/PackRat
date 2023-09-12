@@ -6,6 +6,8 @@ import {
   InvalidRequestParamsError,
 } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
+import { publicProcedure } from '../../trpc';
+import { z } from 'zod';
 
 /**
  * Retrieves OpenStreetMap data based on the provided activity type, start point, and end point.
@@ -76,3 +78,67 @@ export const getOsm = async (req, res, next) => {
     next(ErrorRetrievingOverpassError);
   }
 };
+
+export function getOsmRoute() {
+  return publicProcedure.input(z.object({
+    activityType: z.string(),
+    startPoint: z.object({ latitude: z.number(), longitude: z.number() }),
+    endPoint: z.object({ latitude: z.number(), longitude: z.number() })
+  }))
+    .mutation(async (opts) => {
+      const overpassUrl = process.env.OSM_URI;
+
+      const activityTypeTags = {
+        hiking: '["highway"~"path|footway"]',
+        skiing: '["piste:type"~"downhill|nordic"]',
+        climbing: '["sport"="climbing"]',
+        cycling: '["highway"~"cycleway(:left|:right)?"]',
+        canoeing: '["waterway"~"riverbank|canal|stream"]',
+        horseback_riding: '["highway"="bridleway"]',
+        kayaking: '["waterway"~"riverbank|canal|stream|rapids|waterfall"]',
+        rock_climbing: '["natural"="cliff"]',
+        sailing: '["waterway"~"riverbank|canal|harbour|basin"]',
+      };
+
+      async function formatOverpassQuery(activityType, startPoint, endPoint) {
+        const tagString = activityTypeTags[activityType];
+        const overpassQuery = `[out:json][timeout:25];
+            (
+              way${tagString}(${startPoint.latitude},${startPoint.longitude},${endPoint.latitude},${endPoint.longitude});
+            );
+            (._;>;);
+            out skel qt;`;
+
+        return overpassQuery;
+      }
+
+      try {
+        const { activityType, startPoint, endPoint } = opts.input;
+
+        const overpassQuery = await formatOverpassQuery(
+          activityType,
+          startPoint,
+          endPoint,
+        );
+
+        // console.log("overpassQuery", overpassQuery);
+
+        const response = await axios.post(overpassUrl, overpassQuery, {
+          headers: { 'Content-Type': 'text/plain' },
+        });
+
+        // console.log("response", response);
+
+        if (response.status === 200) {
+          const responseFormat = response.data;
+          const geojsonData = osmtogeojson(responseFormat);
+          return geojsonData;
+        } else {
+          console.log(response.status, response.statusText);
+          throw ErrorProcessingOverpassError;
+        }
+      } catch (error) {
+        throw ErrorRetrievingOverpassError;
+      }
+    });
+}

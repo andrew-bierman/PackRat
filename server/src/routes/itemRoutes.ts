@@ -16,6 +16,7 @@ import * as validator from '../middleware/validators/index';
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
 import authTokenMiddleware from '../middleware/auth';
 import checkRole from '../middleware/checkRole';
+import { zodParser } from '../middleware/validators/zodParser';
 
 const router = express.Router();
 
@@ -43,13 +44,7 @@ const router = express.Router();
  *      200:
  *        description: Successful response
  */
-router.get(
-  '/packItems/:packId',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
-  validator.getItems,
-  tryCatchWrapper(getItems),
-);
+router.get('/packItems/:packId', (req, res, next) => zodParser(validator.getItems, req.body, next), tryCatchWrapper(getItems));
 
 /**
  * @swagger
@@ -68,13 +63,7 @@ router.get(
  *      200:
  *        description: Successful response
  */
-router.get(
-  '/i/:packId',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
-  validator.getItemById,
-  tryCatchWrapper(getItemById),
-);
+router.get('/i/:packId', (req, res, next) => zodParser(validator.getItemById, req.body, next), tryCatchWrapper(getItemById));
 
 /**
  * @swagger
@@ -128,13 +117,7 @@ router.get(
  *      200:
  *        description: Successful response
  */
-router.post(
-  '/',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
-  validator.addItem,
-  tryCatchWrapper(addItem),
-);
+router.post('/', (req, res, next) => zodParser(validator.addItem, req.body, next), tryCatchWrapper(addItem));
 
 /**
  * @swagger
@@ -164,13 +147,7 @@ router.post(
  *      200:
  *        description: Successful response
  */
-router.put(
-  '/',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
-  validator.editItem,
-  tryCatchWrapper(editItem),
-);
+router.put('/', (req, res, next) => zodParser(validator.editItem, req.body, next), tryCatchWrapper(editItem));
 
 /**
  * @swagger
@@ -192,13 +169,7 @@ router.put(
  *      200:
  *        description: Successful response
  */
-router.delete(
-  '/',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
-  validator.deleteItem,
-  tryCatchWrapper(deleteItem),
-);
+router.delete('/', (req, res,next) => zodParser(validator.deleteItem, req.body, next), tryCatchWrapper(deleteItem));
 
 /**
  * @swagger
@@ -228,13 +199,7 @@ router.delete(
  *      200:
  *        description: Successful response
  */
-router.post(
-  '/global',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
-  validator.addItemGlobal,
-  tryCatchWrapper(addItemGlobal),
-);
+router.post('/global', (req, res, next) => zodParser(validator.addItemGlobal, req.body, next), tryCatchWrapper(addItemGlobal));
 
 /**
  * @swagger

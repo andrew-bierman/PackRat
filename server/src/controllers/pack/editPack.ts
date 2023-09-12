@@ -1,6 +1,8 @@
+import { publicProcedure } from '../../trpc';
 import { UnableToEditPackError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { editPackService } from '../../services/pack/pack.service';
+import * as validator from '../../middleware/validators/index';
 
 /**
  * Edits a pack in the database.
@@ -23,3 +25,10 @@ export const editPack = async (req, res, next) => {
     next(UnableToEditPackError);
   }
 };
+
+export function editPackRoute() {
+  return publicProcedure.input(validator.editPack).mutation(async (opts) => {
+    const { _id } = opts.input;
+    return await editPackService(_id, opts.input);
+  });
+}

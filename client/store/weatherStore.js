@@ -9,6 +9,7 @@ import { defaultWeekObj } from '../constants/defaultWeekObj';
 import { api } from '../constants/api';
 
 import axios from '~/config/axios';
+import { trpc } from '../trpc';
 
 const weatherAdapter = createEntityAdapter();
 
@@ -28,9 +29,10 @@ export const fetchWeather = createAsyncThunk(
     const url = api + '/weather' + params;
 
     try {
-      const response = await axios.get(url);
-      // console.log('response', response)
-      return response.data;
+      // const response = await axios.get(url);
+      // // console.log('response', response)
+      // return response.data;
+      return await trpc.getWeather.query({ lat, lon });
     } catch (error) {
       console.error('error:' + error);
     }
@@ -48,9 +50,10 @@ export const fetchWeatherWeek = createAsyncThunk(
     const url = api + '/weather/week' + params;
 
     try {
-      const response = await axios.get(url);
-      // console.log('response', response)
-      return response.data;
+      // const response = await axios.get(url);
+      // // console.log('response', response)
+      // return response.data;
+      return await trpc.getWeatherWeek.query({ lat, lon });
     } catch (error) {
       console.error('error:' + error);
     }

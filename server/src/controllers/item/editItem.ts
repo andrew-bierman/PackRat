@@ -1,6 +1,8 @@
+import { publicProcedure } from '../../trpc';
 import { UnableToEditItemError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { editItemService } from '../../services/item/item.service';
+import * as validator from '../../middleware/validators/index';
 
 export const editItem = async (req, res, next) => {
   try {
@@ -21,3 +23,11 @@ export const editItem = async (req, res, next) => {
     next(UnableToEditItemError);
   }
 };
+
+export function editItemRoute() {
+  return publicProcedure.input(validator.editItem)
+    .mutation(async (opts) => {
+      const { _id, name, weight, unit, quantity, type } = opts.input;
+      return await editItemService(_id, name, weight, unit, quantity, type);
+    });
+}

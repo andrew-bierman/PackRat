@@ -11,6 +11,7 @@ import * as validator from '../middleware/validators/index';
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
 import authTokenMiddleware from '../middleware/auth';
 import checkRole from '../middleware/checkRole';
+import { zodParser } from '../middleware/validators/zodParser';
 
 const router = express.Router();
 
@@ -56,13 +57,7 @@ router.get(
  *       200:
  *         description: Successful response
  */
-router.get(
-  '/:ownerId',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
-  validator.getTrips,
-  tryCatchWrapper(getTrips),
-);
+router.get('/:ownerId', (req, res,next) => zodParser(validator.getTrips, req.params,next), tryCatchWrapper(getTrips));
 
 /**
  * @swagger
@@ -81,13 +76,7 @@ router.get(
  *       200:
  *         description: Successful response
  */
-router.get(
-  '/t/:tripId',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
-  validator.getTripById,
-  tryCatchWrapper(getTripById),
-);
+router.get('/t/:tripId', (req, res,next) => zodParser(validator.getTripById, req.params,next), tryCatchWrapper(getTripById));
 
 /**
  * @swagger
@@ -131,13 +120,7 @@ router.get(
  *       200:
  *         description: Successful response
  */
-router.post(
-  '/',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
-  validator.addTrip,
-  tryCatchWrapper(addTrip),
-);
+router.post('/', (req, res,next) => zodParser(validator.addTrip, req.body,next), tryCatchWrapper(addTrip));
 
 /**
  * @swagger
@@ -183,13 +166,7 @@ router.post(
  *       200:
  *         description: Successful response
  */
-router.put(
-  '/',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
-  validator.editTrip,
-  tryCatchWrapper(editTrip),
-);
+router.put('/', (req, res,next) => zodParser(validator.editTrip, req.body,next), tryCatchWrapper(editTrip));
 
 /**
  * @swagger
@@ -211,12 +188,6 @@ router.put(
  *       200:
  *         description: Successful response
  */
-router.delete(
-  '/',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
-  validator.deleteTrip,
-  tryCatchWrapper(deleteTrip),
-);
+router.delete('/', (req, res,next) => zodParser(validator.deleteTrip, req.body,next), tryCatchWrapper(deleteTrip));
 
 export default router;
