@@ -1,7 +1,13 @@
-import { Modal, Text, View, Image, Dimensions } from 'react-native';
+import {
+  Modal,
+  Text,
+  View,
+  Image,
+  Dimensions,
+  TouchableOpacity,
+} from 'react-native';
 import Mapbox, { offlineManager } from '@rnmapbox/maps';
 import { useEffect, useState } from 'react';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import MapButtonsOverlay from '../../components/map/MapButtonsOverlay';
 import { theme } from '../../theme';
 import useTheme from '../../hooks/useTheme';
