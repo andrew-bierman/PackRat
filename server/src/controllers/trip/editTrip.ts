@@ -2,7 +2,7 @@ import { publicProcedure } from '../../trpc';
 import { UnableToEditTripError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import Trip from '../../models/tripModel';
-import * as validator from '../../middleware/validators/index';
+import * as validator from '@packrat/packages';
 /**
  * Edits a trip by updating the trip details.
  * @param {Object} req - The request object.

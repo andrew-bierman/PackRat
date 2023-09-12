@@ -28,13 +28,16 @@ import {
 
 import SVGLogoComponent from '../components/logo';
 import { useSelector, useDispatch } from 'react-redux';
-import { signOut } from '../store/authStore';
+// import { signOut } from '../store/authStore';
+import { useSession } from '../context/auth';
 
 import Drawer from './Drawer';
 import { Link, useRouter, usePathname } from 'expo-router';
 import { hexToRGBA } from '../utils/colorFunctions';
 import useTheme from '../hooks/useTheme';
 const Navigation = () => {
+  const { signOut } = useSession();
+
   const router = useRouter();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
@@ -158,7 +161,9 @@ const Navigation = () => {
   const navigateTo = useCallback(
     (href) => {
       if (href === 'logout') {
-        dispatch(signOut());
+        // dispatch(signOut());
+        signOut();
+        router.replace('/');
       } else {
         setIsDrawerOpen(false);
         setSelectedNavItem(href);
@@ -194,11 +199,12 @@ const Navigation = () => {
     };
   }, [navBarWidth]); // Add navBarWidth as a dependency to the effect
 
+  const pathName = usePathname();
+
   const renderNavigationItem = useCallback(
     (item, index) => {
       const { icon, iconSource, text, href } = item;
       const IconComponent = iconSource || EvilIcons;
-      const pathName = usePathname();
 
       if ((href === 'profile' || href === 'logout') && !user) {
         return null; // Do not render the item if the user is not signed in

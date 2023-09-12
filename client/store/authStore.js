@@ -17,7 +17,7 @@ const initialState = authAdapter.getInitialState({
   user: null,
   loading: false,
   error: null,
-}); 
+});
 
 // Thunks for async actions
 export const signUp = createAsyncThunk(
@@ -25,6 +25,9 @@ export const signUp = createAsyncThunk(
   async ({ name, username, email, password }, { rejectWithValue }) => {
     try {
       // Add check for unique username here.
+      return await trpc.signUp.mutate({ name, username, email, password });
+      await AsyncStorage.setItem('authToken', response.data.user.token);
+      return response.data.user;
       // const response = await axios.post(`${api}/user/signup`, {
       //   name,
       //   username, // add username
@@ -108,7 +111,14 @@ export const updatePassword = createAsyncThunk(
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {},
+  reducers: {
+    // add reducers here
+    resetState(state) {
+      state.user = null;
+      state.loading = false;
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(signUp.pending, (state) => {
@@ -199,4 +209,7 @@ export const authSlice = createSlice({
 export const authReducer = authSlice.reducer;
 export const { selectAll: selectAllUsers, selectById: selectUserById } =
   authAdapter.getSelectors((state) => state.auth);
+
+export const resetState = authSlice.actions.resetState;
+
 export default authSlice.reducer;

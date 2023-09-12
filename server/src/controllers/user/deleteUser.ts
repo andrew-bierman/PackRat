@@ -2,7 +2,7 @@ import { publicProcedure } from '../../trpc';
 import { UnableToEditUserError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import User from '../../models/userModel';
-import * as validator from '../../middleware/validators/index';
+import * as validator from '@packrat/packages';
 /**
  * Deletes a user from the database.
  * @param {Object} req - The request object containing the user ID.

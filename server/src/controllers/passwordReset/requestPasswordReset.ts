@@ -10,8 +10,7 @@ import {
 import sgMail from '@sendgrid/mail';
 import { responseHandler } from '../../helpers/responseHandler';
 import { publicProcedure } from '../../trpc';
-import * as validator from '../../middleware/validators/index'
-import { z } from 'zod';
+import * as validator from '@packrat/packages'
 sgMail.setApiKey(SEND_GRID_API_KEY);
 
 // Generate a password reset token that includes the user's email address
@@ -88,7 +87,7 @@ export const requestPasswordResetEmailAndToken = async (req, res) => {
 
 export function requestPasswordResetEmailAndTokenRoute() {
   return publicProcedure
-    .input(z.object({ email: z.string() }))
+    .input(validator.sentEmail)
     .mutation(async (opts) => {
       const { email } = opts.input;
       const user = await User.findOne({ email });

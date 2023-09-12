@@ -1,8 +1,8 @@
 import { publicProcedure } from '../../trpc';
 import { ItemNotFoundError } from '../../helpers/errors';
 import { searchItemsByNameService } from '../../services/item/item.service';
-import * as validator from '../../middleware/validators/index';
-import { z } from 'zod';
+import * as validator from '@packrat/packages';
+
 
 /**
  * Searches for items by name.
@@ -26,7 +26,7 @@ export const searchItemsByName = async (req, res, next) => {
 };
 
 export function searchItemsByNameRoute() {
-  return publicProcedure.input(z.object({ name: z.string() }))
+  return publicProcedure.input(validator.getItemByName)
     .query(async (opts) => {
       const { name } = opts.input;
       return searchItemsByNameService(name);

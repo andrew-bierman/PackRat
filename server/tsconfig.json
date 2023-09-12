@@ -8,7 +8,6 @@
     ],
     "allowJs": true,
     "outDir": "dist",
-    "rootDir": "src",
     "strict": false,
     "esModuleInterop": true,
     "resolveJsonModule": true,
@@ -18,7 +17,7 @@
     "baseUrl": ".",
     "paths":{
       "@trpc":["trpc"],
-      "trpc":["../src/routes/index"]
+      "trpc":["../src/routes/index"],
     },
     "declaration": true
   },

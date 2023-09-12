@@ -2,7 +2,7 @@ import { publicProcedure } from '../../trpc';
 import { FailedToRetrieveUserChats } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { getUserChatsService } from '../../services/openAi/openAi.service';
-import { z } from 'zod';
+import * as validators from "@packrat/packages"
 
 /**
  * Retrieves the chats of a user.
@@ -23,7 +23,7 @@ export const getUserChats = async (req, res, next) => {
 };
 
 export function getUserChatsRoute() {
-  return publicProcedure.input(z.object({ userId: z.string() }))
+  return publicProcedure.input(validators.getUserChats)
     .query(async (opts) => {
       const { userId } = opts.input;
       return getUserChatsService(userId);

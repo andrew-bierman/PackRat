@@ -2,7 +2,7 @@ import { publicProcedure } from '../../trpc';
 import { GetResponseFromAIError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { getAIResponseService } from '../../services/openAi/openAi.service';
-import { z } from 'zod';
+import * as validators from "@packrat/packages"
 
 /**
  * Retrieves an AI response based on user input and conversation history.
@@ -28,7 +28,7 @@ export const getAIResponse = async (req, res, next) => {
 };
 
 export function getAIResponseRoute() {
-  return publicProcedure.input(z.object({ userId: z.string(), conversationId: z.string(), userInput: z.string() }))
+  return publicProcedure.input(validators.getAIResponse)
     .query(async (opts) => {
       const { userId, conversationId, userInput } = opts.input;
       return getAIResponseService(userId, conversationId, userInput);
