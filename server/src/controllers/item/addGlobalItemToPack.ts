@@ -1,8 +1,8 @@
-import { publicProcedure } from '../../trpc';
 import { ItemNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { addGlobalItemToPackService } from '../../services/item/item.service';
 import * as validators from "@packrat/packages"
+import { authorizedProcedure } from '../../middleware/authorizedProcedure';
 
 /**
  * Adds a global item to a pack.
@@ -26,7 +26,7 @@ export const addGlobalItemToPack = async (req, res, next) => {
 
 
 export function addGlobalItemToPackRoute() {
-  return publicProcedure.input(validators.addGlobalItemToPack).query(async (opts) => {
+  return authorizedProcedure.input(validators.addGlobalItemToPack).query(async (opts) => {
     const { packId, itemId, ownerId } = opts.input;
     return await addGlobalItemToPackService(packId, itemId, ownerId);
   })

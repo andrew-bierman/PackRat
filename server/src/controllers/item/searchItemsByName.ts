@@ -1,7 +1,7 @@
-import { publicProcedure } from '../../trpc';
 import { ItemNotFoundError } from '../../helpers/errors';
 import { searchItemsByNameService } from '../../services/item/item.service';
 import * as validator from '@packrat/packages';
+import { authorizedProcedure } from '../../middleware/authorizedProcedure';
 
 
 /**
@@ -26,7 +26,7 @@ export const searchItemsByName = async (req, res, next) => {
 };
 
 export function searchItemsByNameRoute() {
-  return publicProcedure.input(validator.getItemByName)
+  return authorizedProcedure.input(validator.getItemByName)
     .query(async (opts) => {
       const { name } = opts.input;
       return searchItemsByNameService(name);

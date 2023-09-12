@@ -2,6 +2,7 @@ import { publicProcedure } from '../../trpc';
 import { UnableToScorePackError } from '../../helpers/errors';
 import { scorePackService } from '../../services/pack/pack.service';
 import * as validator from '@packrat/packages';
+import { authorizedProcedure } from '../../middleware/authorizedProcedure';
 /**
  * Scores a pack by calculating its score and updating the pack object in the database.
  * @param {Object} req - The request object containing the packId parameter.
@@ -23,7 +24,7 @@ export const scorePack = async (req, res, next) => {
 };
 
 export function scorePackRoute() {
-  return publicProcedure.input(validator.getPackById).mutation(async (opts) => {
+  return authorizedProcedure.input(validator.getPackById).mutation(async (opts) => {
     const { packId } = opts.input;
     return await scorePackService(packId);
   });

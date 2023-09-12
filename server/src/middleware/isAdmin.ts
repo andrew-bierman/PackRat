@@ -1,4 +1,7 @@
 import { type NextFunction, type Request, type Response } from 'express';
+import { TRPCError } from '@trpc/server';
+import { middleware, publicProcedure } from '../trpc';
+import { authorizedProcedure } from './authorizedProcedure';
 
 /**
  * Checks if the user making the request is an admin.
@@ -18,3 +21,15 @@ export function isAdmin(req: Request, res: Response, next: NextFunction) {
     });
   }
 }
+
+export const adminProcedure = authorizedProcedure
+  .use(middleware(async (opts) => {
+    if (!opts.ctx.user || opts.ctx.user.role != "admin") {
+      throw new TRPCError({ code: 'UNAUTHORIZED' });
+    }
+    try {
+      return await opts.next();
+    } catch (err) {
+      throw new TRPCError({ code: 'UNAUTHORIZED' });
+    }
+  }));

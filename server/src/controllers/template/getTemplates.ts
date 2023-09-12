@@ -1,5 +1,6 @@
 import { publicProcedure } from '../../trpc';
 import Template from '../../models/templateModel';
+import { authorizedProcedure } from '../../middleware/authorizedProcedure';
 
 /**
  * Retrieves templates from the database and sends them as a JSON response.
@@ -13,7 +14,7 @@ export const getTemplates = async (req, res) => {
 };
 
 export function getTemplatesRoute() {
-  return publicProcedure.query(async (opts) => {
+  return authorizedProcedure.query(async (opts) => {
     const templates = await Template.find({}).populate('createdBy', 'username');
     return templates;
   })

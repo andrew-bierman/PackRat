@@ -1,8 +1,8 @@
-import { publicProcedure } from '../../trpc';
 import { RetrievingParksDataError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { oneEntity } from '../../utils/oneEntity';
 import * as validators from "@packrat/packages"
+import { authorizedProcedure } from '../../middleware/authorizedProcedure';
 const fetch = async (...args) =>
   import('node-fetch').then(async ({ default: fetch }) =>
     fetch(...(args as Parameters<typeof fetch>)),
@@ -43,7 +43,7 @@ export const getParks = async (req, res, next) => {
 };
 
 export function getParksRoute() {
-  return publicProcedure.input(validators.getParks).query(async (opts) => {
+  return authorizedProcedure.input(validators.getParks).query(async (opts) => {
     const abbrState = await oneEntity(opts.input.abbrState);
 
     const X_RAPIDAPI_KEY = process.env.X_RAPIDAPI_KEY;

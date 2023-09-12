@@ -7,6 +7,7 @@ import {
 import { responseHandler } from '../../helpers/responseHandler';
 import * as validators from "@packrat/packages"
 import { publicProcedure } from '../../trpc';
+import { authorizedProcedure } from '../../middleware/authorizedProcedure';
 
 /**
  * Retrieves Photon details based on the provided ID and type.
@@ -66,7 +67,7 @@ export const getPhotonDetails = async (req, res, next) => {
 
 
 export function getPhotonDetailsRoute() {
-  return publicProcedure.input(validators.getPhotonDetails).query(async (opts) => {
+  return authorizedProcedure.input(validators.getPhotonDetails).query(async (opts) => {
     let { id, type } = opts.input;
 
     type = type.toLowerCase(); // Standardize osm_type to be lowercase

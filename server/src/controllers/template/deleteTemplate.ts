@@ -1,7 +1,7 @@
-import { publicProcedure } from '../../trpc';
 import { TemplateNotFoundError } from '../../helpers/errors';
 import Template from '../../models/templateModel';
 import * as validators from "@packrat/packages"
+import { adminProcedure } from '../../middleware/isAdmin';
 
 /**
  * Deletes a template.
@@ -23,7 +23,7 @@ export const deleteTemplate = async (req, res, next) => {
 };
 
 export function deleteTemplateRoute() {
-  return publicProcedure
+  return adminProcedure
     .input(validators.deleteTemplate)
     .mutation(async (opts) => {
       const { templateId } = opts.input;

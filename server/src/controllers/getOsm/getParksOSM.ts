@@ -8,6 +8,7 @@ import {
 import { responseHandler } from '../../helpers/responseHandler';
 import { publicProcedure } from '../../trpc';
 import * as validators from "@packrat/packages"
+import { authorizedProcedure } from '../../middleware/authorizedProcedure';
 
 /**
  * Retrieves parks data from OpenStreetMap based on the provided latitude, longitude, and radius.
@@ -51,7 +52,7 @@ export const getParksOSM = async (req, res, next) => {
 };
 
 export function getParksOSMRoute() {
-  return publicProcedure.input(validators.getParksOSM).query(async (opts) => {
+  return authorizedProcedure.input(validators.getParksOSM).query(async (opts) => {
     const { lat, lon, radius } = opts.input;
     const params = {
       lat,

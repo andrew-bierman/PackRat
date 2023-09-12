@@ -3,6 +3,7 @@ import { FailedToRetrieveUserChats } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { getUserChatsService } from '../../services/openAi/openAi.service';
 import * as validators from "@packrat/packages"
+import { authorizedProcedure } from '../../middleware/authorizedProcedure';
 
 /**
  * Retrieves the chats of a user.
@@ -23,7 +24,7 @@ export const getUserChats = async (req, res, next) => {
 };
 
 export function getUserChatsRoute() {
-  return publicProcedure.input(validators.getUserChats)
+  return authorizedProcedure.input(validators.getUserChats)
     .query(async (opts) => {
       const { userId } = opts.input;
       return getUserChatsService(userId);

@@ -6,6 +6,7 @@ import {
 import { responseHandler } from '../../helpers/responseHandler';
 import { publicProcedure } from '../../trpc';
 import * as validators from "@packrat/packages"
+import { authorizedProcedure } from '../../middleware/authorizedProcedure';
 
 /**
  * Retrieves Photon results based on a search string.
@@ -55,7 +56,7 @@ export const getPhotonResults = async (req, res, next) => {
 };
 
 export function getPhotonResultsRoute() {
-  return publicProcedure.input(validators.getPhotonResults).query(async (opts) => {
+  return authorizedProcedure.input(validators.getPhotonResults).query(async (opts) => {
     const { searchString } = opts.input;
     const params = {
       q: searchString,

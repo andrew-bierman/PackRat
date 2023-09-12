@@ -1,4 +1,4 @@
-import { publicProcedure } from "../../trpc";
+import { authorizedProcedure } from "../../middleware/authorizedProcedure";
 
 /**
  * Retrieves the user information and sends it as a response.
@@ -15,7 +15,7 @@ export const getMe = async (req, res) => {
 };
 
 export function getMeRoute() {
-  return publicProcedure
+  return authorizedProcedure
     .query(async (opts) => {
       return opts.input
     });

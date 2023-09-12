@@ -2,6 +2,7 @@ import { publicProcedure } from '../../trpc';
 import { RetrievingTrailsDataError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import * as validators from "@packrat/packages"
+import { authorizedProcedure } from '../../middleware/authorizedProcedure';
 
 const fetch = async (...args) =>
   import('node-fetch').then(async ({ default: fetch }) =>
@@ -67,7 +68,7 @@ export const getTrails = async (req, res, next) => {
 
 
 export function getTrailsRoute() {
-  return publicProcedure.input(validators.getTrails)
+  return authorizedProcedure.input(validators.getTrails)
     .mutation(async (opts) => {
       const radiusParams = 25;
       const activityParams = true;

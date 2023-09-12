@@ -1,9 +1,9 @@
-import { publicProcedure } from '../../trpc';
 import { UserFavoritesNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { getUserFavoritesService } from '../../services/favorite/favorite.service';
 import * as validator from '@packrat/packages';
 import User from '../../models/userModel';
+import { authorizedProcedure } from '../../middleware/authorizedProcedure';
 
 /**
  * Retrieves the favorite items of a user.
@@ -21,7 +21,7 @@ export const getUserFavorites = async (req, res, next) => {
 
 
 export function getUserFavoritesRoute() {
-  return publicProcedure.input(validator.getUserById).query(async (opts) => {
+  return authorizedProcedure.input(validator.getUserById).query(async (opts) => {
     const { userId } = opts.input;
     const user = await User.findById({ _id: userId }).populate('favorites')
     return user.favorites;

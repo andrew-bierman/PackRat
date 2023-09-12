@@ -1,8 +1,8 @@
-import { publicProcedure } from '../../trpc';
 import { NoDestinationFoundWithThatIDError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { getDestinationService } from '../../services/osm/osm.service';
 import * as validators from "@packrat/packages"
+import { authorizedProcedure } from '../../middleware/authorizedProcedure';
 
 /**
  * Retrieves the destination based on the given ID.
@@ -24,7 +24,7 @@ export const getDestination = async (req, res, next) => {
 };
 
 export function getDestinationRoute() {
-  return publicProcedure.input(validators.getDestinationByid).query(async (opts) => {
+  return authorizedProcedure.input(validators.getDestinationByid).query(async (opts) => {
     const { id } = opts.input;
     return await getDestinationService(id);
   })

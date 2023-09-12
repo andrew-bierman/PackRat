@@ -4,8 +4,11 @@ import { JWT_SECRET } from '../config';
 import { type Request, type Response, type NextFunction } from 'express';
 import { middleware } from '../trpc';
 import { TRPCError } from '@trpc/server';
-import {  ZodError } from 'zod';
+import { ZodError } from 'zod';
 import { TokenSchema } from '@packrat/packages';
+
+import { inferAsyncReturnType } from '@trpc/server';
+import * as trpcExpress from '@trpc/server/adapters/express';
 
 declare global {
   namespace Express {
@@ -112,3 +115,19 @@ const handleError = (err: Error, res: Response) => {
 };
 
 export default auth;
+
+
+export async function createContext({
+  req,
+  res,
+}: trpcExpress.CreateExpressContextOptions) {
+  const token = extractToken(req);
+  const decoded = verifyToken(token);
+  const user = await findUser(decoded, token);
+  return {
+    user,
+    token
+  };
+}
+
+export type Context = inferAsyncReturnType<typeof createContext>;

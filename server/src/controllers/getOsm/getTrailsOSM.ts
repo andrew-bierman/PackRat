@@ -8,6 +8,7 @@ import {
 import { responseHandler } from '../../helpers/responseHandler';
 import { publicProcedure } from '../../trpc';
 import * as validators from "@packrat/packages"
+import { authorizedProcedure } from '../../middleware/authorizedProcedure';
 
 
 /**
@@ -50,7 +51,7 @@ export const getTrailsOSM = async (req, res, next) => {
 };
 
 export function getTrailsOSMRoute() {
-  return publicProcedure.input(validators.getTrailsOSM).query(async (opts) => {
+  return authorizedProcedure.input(validators.getTrailsOSM).query(async (opts) => {
     const { lat, lon, radius } = opts.input;
     const params = {
       lat,

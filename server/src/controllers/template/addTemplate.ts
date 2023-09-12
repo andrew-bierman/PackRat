@@ -1,9 +1,10 @@
-import { publicProcedure } from '../../trpc';
 import { UserNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import User from '../../models/userModel';
 import { addTemplateService } from '../../services/template/template.service';
 import * as validators from "@packrat/packages"
+import { authorizedProcedure } from '../../middleware/authorizedProcedure';
+import { adminProcedure } from '../../middleware/isAdmin';
 
 
 /**
@@ -28,7 +29,7 @@ export const addTemplate = async (req, res, next) => {
 };
 
 export function addTemplateRoute() {
-  return publicProcedure
+  return adminProcedure
     .input(validators.addTemplate)
     .mutation(async (opts) => {
       const { type, templateId, isGlobalTemplate, createdBy } = opts.input;

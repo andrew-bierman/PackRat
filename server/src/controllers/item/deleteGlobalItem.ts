@@ -3,6 +3,7 @@ import { UnableToDeleteItemError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { deleteGlobalItemService } from '../../services/item/item.service';
 import * as validators from "@packrat/packages"
+import { authorizedProcedure } from '../../middleware/authorizedProcedure';
 /**
  * Deletes a global item.
  * @param {Object} req - The request object.
@@ -23,7 +24,7 @@ export const deleteGlobalItem = async (req, res, next) => {
 };
 
 export function deleteGlobalItemRoute() {
-  return publicProcedure.input(validators.deleteGlobalItem)
+  return authorizedProcedure.input(validators.deleteGlobalItem)
     .mutation(async (opts) => {
       const { itemId } = opts.input;
       return await deleteGlobalItemService(itemId);

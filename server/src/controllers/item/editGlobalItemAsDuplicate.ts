@@ -3,6 +3,7 @@ import { UnableToDeleteItemError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import * as validators from "@packrat/packages"
 import { publicProcedure } from '../../trpc';
+import { authorizedProcedure } from '../../middleware/authorizedProcedure';
 
 /**
  * Edit a global item by duplicating it with new changes.
@@ -42,7 +43,7 @@ export const editGlobalItemAsDuplicate = async (req, res, next) => {
 };
 
 export function editGlobalItemAsDuplicateRoute() {
-  return publicProcedure.input(validators.editGlobalItemAsDuplicate)
+  return authorizedProcedure.input(validators.editGlobalItemAsDuplicate)
     .mutation(async (opts) => {
       const { itemId, packId, name, weight, quantity, unit, type } = opts.input;
       return await editGlobalItemAsDuplicateService(

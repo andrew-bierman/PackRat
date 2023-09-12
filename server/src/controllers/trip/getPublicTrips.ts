@@ -3,6 +3,7 @@ import { TripNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { getPublicTripsService } from '../../services/trip/getPublicTripService';
 import * as validator from '@packrat/packages';
+import { authorizedProcedure } from '../../middleware/authorizedProcedure';
 
 /**
  * Retrieves public trips based on the given query parameter.
@@ -24,7 +25,7 @@ export const getPublicTrips = async (req, res, next) => {
 };
 
 export function getPublicTripsRoute() {
-  return publicProcedure.input(validator.queryTrip).query(async (opts) => {
+  return authorizedProcedure.input(validator.queryTrip).query(async (opts) => {
     const { queryBy } = opts.input;
     return await getPublicTripsService(queryBy);
   });

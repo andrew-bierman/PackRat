@@ -8,6 +8,7 @@ import {
 import { responseHandler } from '../../helpers/responseHandler';
 import { publicProcedure } from '../../trpc';
 import * as validators from "@packrat/packages"
+import { authorizedProcedure } from '../../middleware/authorizedProcedure';
 
 
 /**
@@ -81,7 +82,7 @@ export const getOsm = async (req, res, next) => {
 };
 
 export function getOsmRoute() {
-  return publicProcedure.input(validators.getOsm)
+  return authorizedProcedure.input(validators.getOsm)
     .mutation(async (opts) => {
       const overpassUrl = process.env.OSM_URI;
 

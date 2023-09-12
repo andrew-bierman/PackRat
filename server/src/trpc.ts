@@ -1,11 +1,9 @@
-import { TRPCError, initTRPC } from '@trpc/server';
+import { initTRPC } from '@trpc/server';
+import type { Context } from './middleware/auth';
 
-const t = initTRPC.create();
+const t = initTRPC.context<Context>().create();
 
-/**
- * Export reusable router and procedure helpers
- * that can be used throughout the router
- */
 export const router = t.router;
-export const middleware = t.middleware;
 export const publicProcedure = t.procedure;
+export const middleware = t.middleware
+export const mergeRouters = t.mergeRouters

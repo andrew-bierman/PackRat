@@ -2,8 +2,8 @@ import { PackNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { getPacksService } from '../../services/pack/pack.service';
 import { buildMessage } from '../../helpers/buildMessage';
-import { publicProcedure } from '../../trpc';
 import * as validator from '@packrat/packages';
+import { authorizedProcedure } from '../../middleware/authorizedProcedure';
 /**
  * Retrieves packs associated with a specific owner.
  * @param {Object} req - Express request object.
@@ -27,7 +27,7 @@ export const getPacks = async (req, res, next) => {
 };
 
 export function getPacksRoute() {
-  return publicProcedure.input(validator.getPacks).query(async (opts) => {
+  return authorizedProcedure.input(validator.getPacks).query(async (opts) => {
     const { ownerId, queryBy } = opts.input;
     const packs = await getPacksService(ownerId, queryBy);
     return { packs, message: 'Packs retrieved successfully' };

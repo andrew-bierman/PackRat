@@ -1,7 +1,7 @@
-import { publicProcedure } from '../../trpc';
 import { UserNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import User from '../../models/userModel';
+import { authorizedProcedure } from '../../middleware/authorizedProcedure';
 
 // Middleware to check if user is authenticated
 // export const isAuthenticated = async (req, res, next) => {
@@ -33,7 +33,7 @@ export const getUsers = async (req, res, next) => {
 };
 
 export function getUsersRoute() {
-  return publicProcedure.query(async (input) => {
+  return authorizedProcedure.query(async (input) => {
     const users = await User.find({}).populate('packs trips');
     return users;
   })
