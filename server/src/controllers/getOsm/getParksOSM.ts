@@ -6,6 +6,8 @@ import {
   InvalidRequestParamsError,
 } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
+import { publicProcedure } from '../../trpc';
+import { z } from 'zod';
 
 /**
  * Retrieves parks data from OpenStreetMap based on the provided latitude, longitude, and radius.
@@ -47,3 +49,44 @@ export const getParksOSM = async (req, res, next) => {
     next(ErrorRetrievingParksOSMError);
   }
 };
+
+export function getParksOSMRoute() {
+  return publicProcedure.input(z.object({ lat: z.number(), lon: z.number(), radius: z.number() })).query(async (opts) => {
+    const { lat, lon, radius } = opts.input;
+    const params = {
+      lat,
+      lon,
+      radius,
+    };
+    const queryString = Object.entries(params)
+      .flatMap(([key, values]) =>
+        Array.isArray(values)
+          ? values.map((val) => `${key}=${val}`)
+          : `${key}=${values}`,
+      )
+      .join('&');
+
+    console.log('queryString----', queryString);
+
+    const overpassUrl = process.env.OSM_URI;
+
+    const overpassQuery = `
+      [out:json][timeout:25];
+      (
+        way["leisure"~"park|nature_reserve|garden|recreation_ground"](around:${radius},${lat},${lon});
+      );
+      (._;>;);
+      out tags geom qt;
+      `;
+
+    const response = await axios.post(overpassUrl, overpassQuery, {
+      headers: { 'Content-Type': 'text/plain' },
+    });
+    const geojsonData = osmtogeojson(response.data);
+    console.log('geojsonData==============', geojsonData);
+
+    updateDatabaseWithGeoJSONDataFromOverpass(geojsonData);
+    
+    return geojsonData;
+  });
+}

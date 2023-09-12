@@ -1,7 +1,8 @@
+import { publicProcedure } from '../../trpc';
 import { UnableToEditUserError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import User from '../../models/userModel';
-
+import * as validator from '../../middleware/validators/index';
 /**
  * Deletes a user from the database.
  * @param {Object} req - The request object containing the user ID.
@@ -20,3 +21,13 @@ export const deleteUser = async (req, res, next) => {
     next(UnableToEditUserError);
   }
 };
+
+export function deleteUserRoute() {
+  return publicProcedure
+    .input(validator.deleteUser)
+    .mutation(async (opts) => {
+      const { userId } = opts.input;
+      await User.findOneAndDelete({ _id: userId });
+      return "User deleted successfully";
+    });
+}

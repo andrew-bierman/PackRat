@@ -13,6 +13,7 @@ import * as validator from '../middleware/validators/index';
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
 import authTokenMiddleware from '../middleware/auth';
 import checkRole from '../middleware/checkRole';
+import { zodParser } from '../middleware/validators/zodParser';
 
 const router = express.Router();
 
@@ -67,7 +68,7 @@ router.get(
   '/:ownerId',
   authTokenMiddleware,
   checkRole(['user', 'admin']),
-  validator.getPacks,
+  (req, res, next) => zodParser(validator.getPacks, req.params, next),
   tryCatchWrapper(getPacks),
 );
 
@@ -94,9 +95,7 @@ router.get(
  */
 router.get(
   '/p/:packId',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
-  validator.getPackById,
+  (req, res, next) => zodParser(validator.getPackById, req.params, next),
   tryCatchWrapper(getPackById),
 );
 
@@ -123,9 +122,7 @@ router.get(
  */
 router.put(
   '/score/:packId',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
-  validator.getPackById,
+  (req, res, next) => zodParser(validator.getPackById, req.params, next),
   tryCatchWrapper(scorePack),
 );
 
@@ -158,9 +155,7 @@ router.put(
  */
 router.post(
   '/',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
-  validator.addPack,
+  (req, res, next) => zodParser(validator.addPack, req.body, next),
   tryCatchWrapper(addPack),
 );
 
@@ -193,9 +188,7 @@ router.post(
  */
 router.put(
   '/',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
-  validator.editPack,
+  (req, res, next) => zodParser(validator.editPack, req.body, next),
   tryCatchWrapper(editPack),
 );
 
@@ -224,9 +217,7 @@ router.put(
  */
 router.delete(
   '/',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
-  validator.deletePack,
+  (req, res, next) => zodParser(validator.deletePack, req.body, next),
   tryCatchWrapper(deletePack),
 );
 
@@ -255,9 +246,7 @@ router.delete(
  */
 router.post(
   '/duplicate',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
-  validator.duplicatePublicPack,
+  (req, res, next) => zodParser(validator.duplicatePublicPack, req.body, next),
   tryCatchWrapper(duplicatePublicPack),
 );
 

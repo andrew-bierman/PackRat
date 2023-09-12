@@ -1,6 +1,8 @@
+import { publicProcedure } from '../../trpc';
 import { ErrorFetchingGeoCodeError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { oneEntity } from '../../utils/oneEntity';
+import { z } from 'zod';
 const fetch = async (...args: Parameters<typeof fetch>) =>
   import('node-fetch').then(async ({ default: fetch }) =>
     fetch(...(args as Parameters<typeof fetch>)),
@@ -39,3 +41,32 @@ export const getGeoCode = async (req, res, next) => {
     })
     .catch(() => next(ErrorFetchingGeoCodeError));
 };
+
+export function getGeoCodeRoute() {
+  return publicProcedure.input(z.object({
+    addressArray: z.string(),
+  })).query(async (opts) => {
+    const addressArray = await oneEntity(opts.input.addressArray);
+
+    const GEO_CODE_URL = process.env.GEO_CODE_URL;
+    const GEOAPIFY_KEY = process.env.GEOAPIFY_KEY;
+
+    let params = '?';
+
+    if (addressArray) params += `text=${addressArray}`;
+
+    const api_key = `&apiKey=${GEOAPIFY_KEY}`;
+
+    params += api_key;
+
+    const url = GEO_CODE_URL + params;
+
+    await fetch(url)
+      .then(async (response) => response.json())
+      .then((result) => {
+        return result
+      })
+      .catch(() => { throw ErrorFetchingGeoCodeError });
+
+  });
+}

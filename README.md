@@ -251,6 +251,9 @@ docker run -p 19000:19000 packrat-client
 docker run -p 3000:3000 packrat-server
 ```
 
+## How backend API's are setup
+Please refer to README.md inside server folder.
+
 ## Contributing 🤝
 
 Contributions to PackRat are welcome! To contribute, follow these steps:

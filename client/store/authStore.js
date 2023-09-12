@@ -8,6 +8,8 @@ import {
 import axios from 'axios';
 import { api } from '../constants/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Alert } from 'react-native';
+import { trpc } from '../trpc';
 
 const authAdapter = createEntityAdapter();
 
@@ -15,7 +17,7 @@ const initialState = authAdapter.getInitialState({
   user: null,
   loading: false,
   error: null,
-});
+}); 
 
 // Thunks for async actions
 export const signUp = createAsyncThunk(
@@ -23,14 +25,16 @@ export const signUp = createAsyncThunk(
   async ({ name, username, email, password }, { rejectWithValue }) => {
     try {
       // Add check for unique username here.
-      const response = await axios.post(`${api}/user/signup`, {
-        name,
-        username, // add username
-        email,
-        password,
-      });
-      await AsyncStorage.setItem('authToken', response.data.user.token);
-      return response.data.user;
+      // const response = await axios.post(`${api}/user/signup`, {
+      //   name,
+      //   username, // add username
+      //   email,
+      //   password,
+      // });
+      // await AsyncStorage.setItem('authToken', response.data.user.token);
+      // return response.data.user;
+
+      return await trpc.signUp.mutate({ name, username, email, password });
     } catch (error) {
       console.log('error', error);
       return rejectWithValue(error.response.data.error);
@@ -42,12 +46,15 @@ export const signIn = createAsyncThunk(
   'auth/signIn',
   async ({ email, password }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${api}/user/signin`, {
-        email,
-        password,
-      });
-      await AsyncStorage.setItem('authToken', response.data.user.token);
-      return response.data.user;
+      // const response = await axios.post(`${api}/user/signin`, {
+      //   email,
+      //   password,
+      // });
+      // await AsyncStorage.setItem('authToken', response.data.user.token);
+      // return response.data.user;
+
+      const response = await trpc.signIn.mutate({ email, password });
+      return response;
     } catch (error) {
       return rejectWithValue(error.response.data.error);
     }
@@ -69,12 +76,15 @@ export const signInWithGoogle = createAsyncThunk(
   'auth/signInWithGoogle',
   async ({ idToken }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${api}/user/google`, {
-        idToken,
-      });
+      // const response = await axios.post(`${api}/user/google`, {
+      //   idToken,
+      // });
 
-      await AsyncStorage.setItem('authToken', response.data.user.token);
-      return response.data.user;
+      // await AsyncStorage.setItem('authToken', response.data.user.token);
+      // return response.data.user;
+
+      const response = await trpc.googleSignin.query({ idToken });
+      return response?.user;
     } catch (error) {
       console.log('error.response.data.error', error.response.data.error);
       return rejectWithValue(error);

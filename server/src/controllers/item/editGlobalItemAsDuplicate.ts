@@ -1,6 +1,8 @@
 import { editGlobalItemAsDuplicateService } from '../../services/item/item.service';
 import { UnableToDeleteItemError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
+import { z } from 'zod';
+import { publicProcedure } from '../../trpc';
 
 /**
  * Edit a global item by duplicating it with new changes.
@@ -38,3 +40,27 @@ export const editGlobalItemAsDuplicate = async (req, res, next) => {
     next(UnableToDeleteItemError);
   }
 };
+
+export function editGlobalItemAsDuplicateRoute() {
+  return publicProcedure.input(z.object({
+    itemId: z.string(),
+    packId: z.string(),
+    name: z.string(),
+    weight: z.number(),
+    quantity: z.number(),
+    unit: z.string(),
+    type: z.string(),
+  }))
+    .mutation(async (opts) => {
+      const { itemId, packId, name, weight, quantity, unit, type } = opts.input;
+      return await editGlobalItemAsDuplicateService(
+        itemId,
+        packId,
+        name,
+        weight,
+        quantity,
+        unit,
+        type,
+      );
+    })
+}
