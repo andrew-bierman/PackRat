@@ -1,23 +1,17 @@
-import { Text, VStack, Box, Image, Stack, HStack } from 'native-base';
-
-// utils
 import { getNext4Days } from '../utils/getNextDays';
 import { dayNumToString } from '../utils/dayNumToString';
 import { convertToKmh } from '../utils/convertToKmh';
 import { convertToCelsius } from '../utils/convertToCelsius';
 import useTheme from '../hooks/useTheme';
-// redux
-import { useSelector } from 'react-redux';
 
-// icons
 import { Octicons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 
-import { theme } from '../theme';
 import { defaultWeatherObject } from '../constants/defaultWeatherObj';
 import useCustomStyles from '~/hooks/useCustomStyles';
+import { RStack, RText, RImage } from '../packrat-ui';
 
 const monthArr = [
   'January',
@@ -38,8 +32,7 @@ export default function WeatherCard({
   weatherObject = defaultWeatherObject,
   weatherWeek = [],
 }) {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    useTheme();
+  const { currentTheme } = useTheme();
 
   const styles = useCustomStyles(loadStyles);
   const date = new Date();
@@ -53,20 +46,34 @@ export default function WeatherCard({
   const weatherIconUrl = `https://openweathermap.org/img/wn/${weatherObject.weather[0].icon}@2x.png`;
 
   return (
-    <Stack
-      alignSelf="center"
-      w={['100%', '100%', '100%', '90%']}
-      direction={['column', 'column', 'row', 'row']}
-      rounded={['sm', 'sm', 'md', 'lg']}
+    <RStack
+      $sm={{
+        borderRadius: '6px',
+        flexDirection: 'colunm',
+        width: '100%',
+      }}
+      $gtSm={{
+        borderRadius: '12px',
+        flexDirection: 'row',
+        width: '90%',
+      }}
       style={styles.desktopContainer}
     >
-      <Box style={{ flexDirection: 'row', gap: 15, alignItems: 'center' }}>
+      <RStack
+        style={{
+          flexDirection: 'row',
+          gap: 15,
+          alignItems: 'center',
+          alignSelf: 'center',
+        }}
+        flex={0.5}
+      >
         <Octicons
           name="broadcast"
           size={18}
           color={currentTheme.colors.cardIconColor}
         />
-        <Text
+        <RText
           style={{
             color: currentTheme.colors.textPrimary,
             fontSize: 18,
@@ -74,42 +81,44 @@ export default function WeatherCard({
           }}
         >
           Weather
-        </Text>
-      </Box>
-      <Box
-        w={['100%', '100%', '0%', '0%']}
-        h={['100%', '100%', '100%', '100%']}
+        </RText>
+      </RStack>
+      <RStack
+        $sm={{
+          flexDirection: 'colunm',
+          width: '100%',
+          justifyContent: 'space-between',
+        }}
+        $gtSm={{
+          paddingRight: '0px',
+        }}
         flex={0.5}
-        justifyContent={['space-between', 'space-between', 'none', 'none']}
         style={styles.card}
       >
-        <Box>
-          <Text
-            style={{
-              color: currentTheme.colors.weatherIcon,
-              fontSize: 18,
-              fontWeight: 600,
-            }}
-          >
-            {dayNumToString(day)}
-          </Text>
-          <Text>{dateFormatted}</Text>
-          <Box style={{ flexDirection: 'row', gap: 5, alignItems: 'center' }}>
-            <FontAwesome name="map-marker" size={16} color="black" />
-            <Text>{`${weatherObject.name}, ${weatherObject.sys.country}`}</Text>
-          </Box>
-        </Box>
+        <RText
+          style={{
+            color: currentTheme.colors.weatherIcon,
+            fontSize: 18,
+            fontWeight: 600,
+          }}
+        >
+          {dayNumToString(day)}
+        </RText>
+        <RText>{dateFormatted}</RText>
+        <RStack style={{ flexDirection: 'row', gap: 5, alignItems: 'center' }}>
+          <FontAwesome name="map-marker" size={16} color="black" />
+          <RText>{`${weatherObject.name}, ${weatherObject.sys.country}`}</RText>
+        </RStack>
 
-        <Box>
-          <Image
-            src={weatherIconUrl}
-            style={{ width: 62, height: 62 }}
+        <RStack>
+          <RImage
+            source={{ uri: weatherIconUrl, width: 62, height: 62 }}
             alt="weatherIcon"
           />
-        </Box>
+        </RStack>
 
-        <Box>
-          <Text
+        <RStack>
+          <RText
             style={{
               color: currentTheme.colors.weatherIcon,
               fontSize: 18,
@@ -117,123 +126,133 @@ export default function WeatherCard({
             }}
           >
             {convertToCelsius(weatherObject.main.temp)}
-          </Text>
-          <Text style={{ fontWeight: 700 }}>
+          </RText>
+          <RText style={{ fontWeight: 700 }}>
             {weatherObject.weather[0].description}
-          </Text>
-        </Box>
-      </Box>
+          </RText>
+        </RStack>
+      </RStack>
 
-      <Box w={['100%', '100%', '100%', '100%']} flex={1} style={{ gap: 10 }}>
-        <Stack
-          w={['100%', '100%', '100%', '100%']}
-          h={['0%', '0%', '100%', '100%']}
-          flex={0.5}
-          style={styles.card}
-        >
-          <Box style={styles.weatherInfo}>
-            <Box style={styles.iconsSection}>
+      <RStack
+        flex={1}
+        style={{ gap: 10, padding: '0px' }}
+        $sm={{
+          width: '100%',
+        }}
+      >
+        <RStack style={styles.card}>
+          <RStack style={styles.weatherInfo}>
+            <RStack style={styles.iconsSection}>
               <FontAwesome5
                 name="cloud-rain"
                 size={18}
                 color={currentTheme.colors.weatherIcon}
               />
-              <Text
+              <RText
                 style={{
                   color: currentTheme.colors.weatherIcon,
                   fontWeight: 600,
                 }}
               >
                 PRECIPITATION
-              </Text>
-            </Box>
-            <Text>0%</Text>
-          </Box>
-          <Box style={styles.weatherInfo}>
-            <Box style={styles.iconsSection}>
+              </RText>
+            </RStack>
+            <RText>0%</RText>
+          </RStack>
+          <RStack style={styles.weatherInfo}>
+            <RStack style={styles.iconsSection}>
               <Feather
                 name="droplet"
                 size={18}
                 color={currentTheme.colors.weatherIcon}
               />
-              <Text
+              <RText
                 style={{
                   color: currentTheme.colors.weatherIcon,
                   fontWeight: 600,
                 }}
               >
                 HUMIDITY
-              </Text>
-            </Box>
-            <Text>{weatherObject.main.humidity}%</Text>
-          </Box>
-          <Box style={styles.weatherInfo}>
-            <Box style={styles.iconsSection}>
+              </RText>
+            </RStack>
+            <RText>{weatherObject.main.humidity}%</RText>
+          </RStack>
+          <RStack style={styles.weatherInfo}>
+            <RStack style={styles.iconsSection}>
               <Feather
                 name="wind"
                 size={18}
                 color={currentTheme.colors.weatherIcon}
               />
-              <Text
+              <RText
                 style={{
                   color: currentTheme.colors.weatherIcon,
                   fontWeight: 600,
                 }}
               >
                 WIND
-              </Text>
-            </Box>
-            <Text>{convertToKmh(weatherObject.wind.speed)}</Text>
-          </Box>
-        </Stack>
+              </RText>
+            </RStack>
+            <RText>{convertToKmh(weatherObject.wind.speed)}</RText>
+          </RStack>
+        </RStack>
 
-        <Stack
-          w={['100%', '100%', '100%', '100%']}
-          h={['0%', '0%', '100%', '100%']}
+        <RStack
+          $sm={{
+            height: '100%',
+            flexDirection: 'colunm',
+          }}
+          $gtSm={{
+            height: '100%',
+            flexDirection: 'row',
+          }}
           flex={0.5}
-          direction={['column', 'column', 'row', 'row']}
           style={styles.cardContainer}
         >
           {weatherWeek.map((day, i) => {
             const weatherIconUrl = `https://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png`;
 
             return (
-              <Stack
+              <RStack
                 key={i}
-                direction={['row', 'row', 'column', 'column']}
+                $sm={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  width: '100%',
+                }}
                 style={styles.weatherCard}
               >
-                <Image
-                  src={weatherIconUrl}
-                  style={{ width: 52, height: 52 }}
+                <RImage
+                  source={{ uri: weatherIconUrl, width: 52, height: 52 }}
                   alt="waetherIcon"
                 />
-                <Text>{dayNumToString(restOfWeek[i]).slice(0, 3)}</Text>
-                <Text style={{ fontWeight: 700 }}>
+                <RText>{dayNumToString(restOfWeek[i]).slice(0, 3)}</RText>
+                <RText style={{ fontWeight: 700 }}>
                   {convertToCelsius(day.main.temp)}
-                </Text>
-              </Stack>
+                </RText>
+              </RStack>
             );
           })}
-        </Stack>
-      </Box>
+        </RStack>
+      </RStack>
 
-      <Stack
-        w={['100%', '100%', '0%', '0%']}
-        h={['0%', '0%', '100%', '100%']}
-        flex={0.5}
+      <RStack
+        $sm={{
+          width: '100%',
+        }}
+        flex={1}
         justifyContent="space-around"
         backgroundColor={'#eaeaea'}
         style={styles.card}
       >
         {restOfWeek.map((day, index) => (
-          <Box key={index} style={styles.weatherInfo}>
-            <Text>{dayNumToString(day).slice(0, 3)}</Text>
-            <Text>{convertToCelsius(weatherWeek[index].main.temp)}</Text>
-          </Box>
+          <RStack key={index} style={styles.weatherInfo}>
+            <RText>{dayNumToString(day).slice(0, 3)}</RText>
+            <RText>{convertToCelsius(weatherWeek[index].main.temp)}</RText>
+          </RStack>
         ))}
-      </Stack>
-    </Stack>
+      </RStack>
+    </RStack>
   );
 }
 
@@ -245,7 +264,8 @@ const loadStyles = (theme) => {
       alignItems: 'center',
       justifyContent: 'space-around',
       backgroundColor: currentTheme.colors.card,
-      padding: 22,
+      padding: 30,
+      alignSelf: 'center',
     },
 
     card: {
@@ -265,6 +285,7 @@ const loadStyles = (theme) => {
       padding: 18,
       borderRadius: 8,
       shadowColor: 'black',
+      justifyContent: 'space-between',
     },
 
     weatherInfo: {
@@ -272,19 +293,17 @@ const loadStyles = (theme) => {
       justifyContent: 'space-between',
       alignItems: 'center',
       gap: 10,
-      flex: 1,
     },
     weatherCard: {
       alignItems: 'center',
       justifyContent: 'space-between',
       gap: 10,
-      flex: 1,
-      width: '100%',
     },
     iconsSection: {
       flexDirection: 'row',
       alignItems: 'center',
       gap: 15,
+      flex: 1,
     },
   };
 };
