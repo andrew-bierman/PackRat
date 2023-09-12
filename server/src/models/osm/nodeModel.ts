@@ -17,7 +17,7 @@ const NodeSchema = new Schema(
 // add a to JSON method to the schema
 NodeSchema.method('toJSON', async function () {
   const { _id, ...object } = this.toObject();
-  object.id = _id.toString();
+  // object.id = _id.toString();
   return object;
 });
 
