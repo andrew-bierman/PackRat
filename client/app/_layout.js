@@ -16,13 +16,13 @@ export default function HomeLayout() {
       <PersistGate loading={null} persistor={persistor}>
         {/* <AuthProvider> */}
         <SessionProvider>
-          <NetworkStatusProvider>
-            <ThemeProvider>
-              <Header />
-              <Slot />
-              {Platform.OS === 'web' ? <Footer /> : null}
-            </ThemeProvider>
-          </NetworkStatusProvider>
+          {/* <NetworkStatusProvider> */}
+          <ThemeProvider>
+            <Header />
+            <Slot />
+            {Platform.OS === 'web' ? <Footer /> : null}
+          </ThemeProvider>
+          {/* </NetworkStatusProvider> */}
         </SessionProvider>
         {/* </AuthProvider> */}
       </PersistGate>

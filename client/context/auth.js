@@ -116,7 +116,7 @@ export function SessionProvider(props) {
   const dispatch = useDispatch();
 
   const signIn = async (credentials) => {
-    await dispatch(signIn(credentials));
+    dispatch(signIn(credentials));
     setSession('session');
   };
 

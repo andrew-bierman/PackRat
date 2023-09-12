@@ -1,6 +1,7 @@
 import * as SecureStore from 'expo-secure-store';
 import * as React from 'react';
 import { Platform } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type UseStateHook<T> = [[boolean, T | null], (value?: T | null) => void];
 
@@ -13,14 +14,16 @@ function useAsyncState<T>(
   ) as UseStateHook<T>;
 }
 
-let localStorage;
 export async function setStorageItemAsync(key: string, value: string | null) {
   if (Platform.OS === 'web') {
     try {
       if (value === null) {
-        localStorage.removeItem(key);
+        // localStorage.removeItem(key);
+        // await AsyncStorage.removeItem('authToken');
+        console.log('value', value);
       } else {
-        localStorage.setItem(key, value);
+        console.log('value', value);
+        // await AsyncStorage.setItem('authToken', value);
       }
     } catch (e) {
       console.error('Local storage is unavailable:', e);
@@ -39,11 +42,12 @@ export function useStorageState(key: string): UseStateHook<string> {
   const [state, setState] = useAsyncState<string>();
 
   // Get
-  React.useEffect(() => {
+  //   @ts-ignore
+  React.useEffect(async () => {
     if (Platform.OS === 'web') {
       try {
-        if (typeof localStorage !== 'undefined') {
-          setState(localStorage.getItem(key));
+        if (typeof AsyncStorage !== 'undefined') {
+          setState(await AsyncStorage.getItem(key));
         }
       } catch (e) {
         console.error('Local storage is unavailable:', e);
