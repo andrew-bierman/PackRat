@@ -15,8 +15,8 @@ RUN rm -rf node_modules
 RUN npm run clean
 
 # Install all dependencies
-# RUN npm run install:all
-RUN yarn
+RUN npm run install:all
+# RUN yarn
 
 # Build the application for production
 # RUN npm run build:prod
