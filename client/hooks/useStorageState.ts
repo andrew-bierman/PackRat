@@ -43,20 +43,25 @@ export function useStorageState(key: string): UseStateHook<string> {
 
   // Get
   //   @ts-ignore
-  React.useEffect(async () => {
-    if (Platform.OS === 'web') {
-      try {
-        if (typeof AsyncStorage !== 'undefined') {
-          setState(await AsyncStorage.getItem(key));
+  useEffect(() => {
+    const fetchStorageItem = async () => {
+      if (Platform.OS === 'web') {
+        try {
+          if (typeof AsyncStorage !== 'undefined') {
+            const item = await AsyncStorage.getItem(key);
+            setState(item);
+          }
+        } catch (e) {
+          console.error('Local storage is unavailable:', e);
         }
-      } catch (e) {
-        console.error('Local storage is unavailable:', e);
+      } else {
+        SecureStore.getItemAsync(key).then((value) => {
+          setState(value);
+        });
       }
-    } else {
-      SecureStore.getItemAsync(key).then((value) => {
-        setState(value);
-      });
-    }
+    };
+
+    fetchStorageItem();
   }, [key]);
 
   // Set
