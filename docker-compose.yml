@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: client/Dockerfile
     ports:
-      - 19000:19000
+      - 8081:8081
     volumes:
       - ./client:/app/client
       - /app/client/node_modules

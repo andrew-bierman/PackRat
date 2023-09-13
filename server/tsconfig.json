@@ -20,7 +20,8 @@
       "@trpc":["trpc"],
       "trpc":["../src/routes/index"],
     },
-    "declaration": true
+    "declaration": true,
+    "types": []
   },
   "exclude": [
     "node_modules",

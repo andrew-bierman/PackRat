@@ -19,6 +19,7 @@ COPY ./server/package*.json ./
 RUN rm -rf node_modules
 
 # Install server dependencies
+RUN echo "Installing server dependencies..."
 RUN npm install
 
 # Expose port 3000 (or the port you use for the server)
