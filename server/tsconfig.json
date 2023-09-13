@@ -19,6 +19,7 @@
     "paths":{
       "@trpc":["trpc"],
       "trpc":["../src/routes/index"],
+      "@packrat/packages": ["node_modules/@packrat/packages/dist/index.js"]
     },
     "declaration": true,
     "types": []
