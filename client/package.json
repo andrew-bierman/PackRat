@@ -23,6 +23,8 @@
     "move:pod": "mv Podfile ios/Podfile"
   },
   "dependencies": {
+    "@babel/core": "^7.22.15",
+    "@babel/preset-typescript": "^7.22.15",
     "@babel/runtime": "^7.22.15",
     "@expo/match-media": "^0.4.0",
     "@expo/vector-icons": "^13.0.0",
@@ -115,8 +117,6 @@
     "xmldom": "^0.6.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.21.3",
-    "@babel/preset-typescript": "^7.22.5",
     "@tsconfig/react-native": "^3.0.2",
     "@types/jest": "^29.5.3",
     "@types/react": "^18.2.20",

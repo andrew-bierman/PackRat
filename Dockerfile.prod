@@ -15,10 +15,12 @@ RUN rm -rf node_modules
 RUN npm run clean
 
 # Install all dependencies
-RUN npm run install:all
+# RUN npm run install:all
+RUN yarn
 
 # Build the application for production
-RUN npm run build:prod
+# RUN npm run build:prod
+RUN npm run build:expo && npm run build:tsc
 
 # Specify the command to run on container start
 CMD [ "npm", "run", "start:prod" ]
