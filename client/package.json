@@ -6,7 +6,7 @@
     "lint": "eslint . --fix",
     "start-web": "TAMAGUI_TARGET=web expo start -c",
     "start-native": "TAMAGUI_TARGET=native expo start -c",
-    "start": "expo start --dev-client -c",
+    "start": "npx expo start --dev-client -c",
     "android": "TAMAGUI_TARGET=native expo run:android",
     "ios": "TAMAGUI_TARGET=native expo run:ios",
     "web": " expo start --web",
@@ -23,7 +23,7 @@
     "move:pod": "mv Podfile ios/Podfile"
   },
   "dependencies": {
-    "@babel/runtime": "^7.21.0",
+    "@babel/runtime": "^7.22.15",
     "@expo/match-media": "^0.4.0",
     "@expo/vector-icons": "^13.0.0",
     "@expo/webpack-config": "^19.0.0",
