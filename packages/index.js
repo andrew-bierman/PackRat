@@ -1,1 +1,2 @@
-export * from './dist/index.js'
+// CommonJS way
+module.exports = require('./dist/index.js');
