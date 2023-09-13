@@ -1,6 +1,4 @@
-import osmtogeojson from 'osmtogeojson';
-import axios from 'axios';
-import { updateDatabaseWithGeoJSONDataFromOverpass } from './updateDatabaseWithGeoJSONDataFromOverpass';
+import { getTrailsOsmService } from '../../services/osm/getTrailsOSMService';
 import {
   InvalidRequestParamsError,
   RetrievingTrailsOSMError,
@@ -18,30 +16,13 @@ import * as validators from "@packrat/packages"
  */
 export const getTrailsOSM = async (req, res, next) => {
   try {
-    // set default values for lat, lon, and radius
+
     const { lat = 45.5231, lon = -122.6765, radius = 50000 } = req.query;
 
     if (!lat || !lon || !radius) {
       next(InvalidRequestParamsError);
     }
-
-    const overpassUrl = process.env.OSM_URI;
-
-    const overpassQuery = `
-      [out:json][timeout:25];
-      (
-        way["highway"~"footway"]["name"](around:${radius},${lat},${lon});
-      );
-      out tags geom qt;
-      `;
-
-    const response = await axios.post(overpassUrl, overpassQuery, {
-      headers: { 'Content-Type': 'text/plain' },
-    });
-    const geojsonData = osmtogeojson(response.data);
-
-    updateDatabaseWithGeoJSONDataFromOverpass(geojsonData);
-
+    const geojsonData = await getTrailsOsmService(lat, lon, radius);
     res.locals.data = geojsonData;
     responseHandler(res);
   } catch (error) {
@@ -52,38 +33,6 @@ export const getTrailsOSM = async (req, res, next) => {
 export function getTrailsOSMRoute() {
   return publicProcedure.input(validators.getTrailsOSM).query(async (opts) => {
     const { lat, lon, radius } = opts.input;
-    const params = {
-      lat,
-      lon,
-      radius,
-    };
-    const queryString = Object.entries(params)
-      .flatMap(([key, values]) =>
-        Array.isArray(values)
-          ? values.map((val) => `${key}=${val}`)
-          : `${key}=${values}`,
-      )
-      .join('&');
-
-    console.log('queryString----', queryString);
-
-    const overpassUrl = process.env.OSM_URI;
-
-    const overpassQuery = `
-      [out:json][timeout:25];
-      (
-        way["highway"~"footway"]["name"](around:${radius},${lat},${lon});
-      );
-      out tags geom qt;
-      `;
-
-    const response = await axios.post(overpassUrl, overpassQuery, {
-      headers: { 'Content-Type': 'text/plain' },
-    });
-    const geojsonData = osmtogeojson(response.data);
-
-    updateDatabaseWithGeoJSONDataFromOverpass(geojsonData);
-
-    return geojsonData;
+    return await getTrailsOsmService(lat, lon, radius);
   });
 }
