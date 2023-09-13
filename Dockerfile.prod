@@ -10,13 +10,19 @@ COPY package*.json ./
 # Copy the entire project into the container
 COPY . .
 
+# First, install /packages
+RUN npm install --prefix packages
+
+# Then compile /packages
+RUN npm run build:tsc:packages
+
 # Remove existing node_modules
-RUN rm -rf node_modules
-RUN npm run clean
+# RUN rm -rf node_modules
+# RUN npm run clean
 
 # Install all dependencies
-RUN npm run install:all
-# RUN yarn
+# RUN npm run install:all
+RUN yarn
 
 # Build the application for production
 # RUN npm run build:prod

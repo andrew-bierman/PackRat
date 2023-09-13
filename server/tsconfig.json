@@ -19,8 +19,8 @@
     "paths":{
       "@trpc":["trpc"],
       "trpc":["../src/routes/index"],
-      "@packrat/packages": ["packages"],
-      "packages":["../node_modules/@packrat/packages/dist"]
+      // "@packrat/packages": ["packages"],
+      // "packages":["node_modules/@packrat/packages/dist"]
     },
     "declaration": true,
     "types": []
