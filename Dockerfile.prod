@@ -10,6 +10,10 @@ COPY package*.json ./
 # Copy the entire project into the container
 COPY . .
 
+# Remove existing node_modules
+RUN rm -rf node_modules
+RUN npm run clean
+
 # Install all dependencies
 RUN npm run install:all
 
