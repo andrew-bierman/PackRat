@@ -8,7 +8,7 @@
     "clean": "rm -rf node_modules server/node_modules client/node_modules packages/node_modules package-lock.json yarn.lock server/package-lock.json client/package-lock.json packages/package-lock.json server/yarn.lock client/yarn.lock packages/yarn.lock server/dist client/dist packages/dist",
     "build:prod": "npm run install:all && npm run build:expo && npm run build:tsc",
     "build:expo": "npm run expo:export",
-    "build:tsc": "npm run build --prefix server",
+    "build:tsc": "npm run build --prefix server && npm run build --prefix packages",
     "install:all": "npm install --prefix server && npm install --prefix client && npm install --prefix packages && npm install",
     "setup": "npm run clean && npm run install:all && npm run setup:client && npm run setup:server",
     "setup:client": "npm --prefix client run setup",
