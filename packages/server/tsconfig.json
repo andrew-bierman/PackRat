@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "CommonJS",
+    "lib": [
+      "es6",
+      "DOM"
+    ],
+    "allowJs": true,
+    "outDir": "dist",
+    "strict": false,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "moduleResolution": "Node",
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": true,
+    "baseUrl": ".",
+    "paths":{
+      "@trpc":["trpc"],
+      "trpc":["../src/routes/index"],
+    },
+    "declaration": true
+  },
+  "exclude": [
+    "node_modules",
+  ],
+  "include": [
+    "./src/**/*.ts"
+  ]
+}
