@@ -61,7 +61,7 @@ cd PackRat
 
 3. Set up the environment variables for the client and server.
    - If you have access to the development env files, use those. Otherwise, replace the values with your own.
-   - See the `.env.example` files in the `client` and `server` directories for the necessary environment variables. 
+   - See the `.env.example` files in the `client` and `server` directories for the necessary environment variables.
 
 #### Automated Setup 🛠️
 
@@ -86,7 +86,7 @@ cd client
      - Navigate to the android directory. Copy the `gradle.properties.example` file and rename it to `gradle.properties`. Open the file and replace the `MAPBOX_DOWNLOADS_TOKEN_FROM_ENV` value with your own Mapbox downloads token.
      - See the [Mapbox documentation](https://docs.mapbox.com/help/getting-started/access-tokens/) for more information on how to obtain Mapbox API keys and access tokens.
 
-2. Duplicate the `.env.example` file and rename it to `.env`. Open the file and replace the values with your own. 
+2. Duplicate the `.env.example` file and rename it to `.env`. Open the file and replace the values with your own.
    - If you have access to the development env file, skip this step. Otherwise, replace the values with your own.
 
 ```
@@ -143,7 +143,7 @@ cd ../..
 cd server
 ```
 
-10. Duplicate the `.env.example` file and rename it to `.env`. Open the file and replace the values with your own. 
+10. Duplicate the `.env.example` file and rename it to `.env`. Open the file and replace the values with your own.
         - If you have access to the development env file, skip this step. Otherwise, replace the values with your own.
 
 ```
@@ -247,8 +247,15 @@ docker build -t packrat-server server/Dockerfile
 5. To run the images, run the following commands:
 
 ```
-docker run -p 19000:19000 packrat-client
+docker run -p 8081:8081 packrat-client
 docker run -p 3000:3000 packrat-server
+```
+
+6. To test the production build, which exports the frontend as a static build and serves it from the backend, run the following command:
+
+```
+docker build -t packrat-app -f Dockerfile.prod .
+docker run -p 3000:3000 packrat-app
 ```
 
 ## How backend API's are setup
@@ -267,3 +274,4 @@ Contributions to PackRat are welcome! To contribute, follow these steps:
 ## License 📝
 
 PackRat is licensed under the terms of the [GNU General Public License v3.0](LICENSE). See `LICENSE` for more information.
+

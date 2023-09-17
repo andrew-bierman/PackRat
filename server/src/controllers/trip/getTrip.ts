@@ -1,9 +1,8 @@
 import { publicProcedure } from '../../trpc';
 import { TripNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
-import Trip from '../../models/tripModel';
 import { getTripsService } from '../../services/trip/getTripsService';
-import * as validator from '../../middleware/validators/index';
+import * as validator from '@packrat/packages';
 /**
  * Retrieves trips belonging to a specific owner.
  * @param {Object} req - The request object.

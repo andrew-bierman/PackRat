@@ -5,7 +5,7 @@ import {
   RetrievingPhotonDetailsError,
 } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
-import { z } from 'zod';
+import * as validators from "@packrat/packages"
 import { publicProcedure } from '../../trpc';
 
 /**
@@ -66,7 +66,7 @@ export const getPhotonDetails = async (req, res, next) => {
 
 
 export function getPhotonDetailsRoute() {
-  return publicProcedure.input(z.object({ id: z.string(), type: z.string() })).query(async (opts) => {
+  return publicProcedure.input(validators.getPhotonDetails).query(async (opts) => {
     let { id, type } = opts.input;
 
     type = type.toLowerCase(); // Standardize osm_type to be lowercase

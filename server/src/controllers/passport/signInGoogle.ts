@@ -18,7 +18,7 @@ import { OAuth2Client } from 'google-auth-library';
 import utilsService from '../../utils/utils.service';
 import { responseHandler } from '../../helpers/responseHandler';
 import { publicProcedure } from '../../trpc';
-import z from 'zod';
+import * as validators from "@packrat/packages"
 const client = new OAuth2Client(
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
@@ -132,7 +132,7 @@ passport.deserializeUser((id, done) => {
 });
 
 export function googleSigninRoute() {
-  return publicProcedure.input(z.object({ idToken: z.string().nonempty() })).query(async (opts) => {
+  return publicProcedure.input(validators.googleSignin).query(async (opts) => {
     const { idToken } = opts.input;
 
     const decodedToken: any = jwt.decode(idToken);

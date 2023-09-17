@@ -2,7 +2,7 @@ import { publicProcedure } from '../../trpc';
 import { ItemNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { addGlobalItemToPackService } from '../../services/item/item.service';
-import { z } from 'zod';
+import * as validators from "@packrat/packages"
 
 /**
  * Adds a global item to a pack.
@@ -26,11 +26,7 @@ export const addGlobalItemToPack = async (req, res, next) => {
 
 
 export function addGlobalItemToPackRoute() {
-  return publicProcedure.input(z.object({
-    packId: z.string(),
-    itemId: z.string(),
-    ownerId: z.string(),
-  })).query(async (opts) => {
+  return publicProcedure.input(validators.addGlobalItemToPack).query(async (opts) => {
     const { packId, itemId, ownerId } = opts.input;
     return await addGlobalItemToPackService(packId, itemId, ownerId);
   })

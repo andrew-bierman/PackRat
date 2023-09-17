@@ -3,7 +3,7 @@ import { addToFavoriteService } from '../../services/favorite/favorite.service';
 import { UserNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { publicProcedure } from '../../trpc';
-import * as validator from '../../middleware/validators/index';
+import * as validator from '@packrat/packages';
 /**
  * Adds or removes a pack from a user's favorites list and updates the corresponding pack's favorited_by array.
  * @param {Object} req - The request object containing the packId and userId properties in the body.

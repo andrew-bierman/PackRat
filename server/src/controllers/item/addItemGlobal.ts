@@ -2,7 +2,7 @@ import { UnableToAddItemError } from '../../helpers/errors';
 import { addItemGlobalService } from '../../services/item/item.service';
 import { responseHandler } from '../../helpers/responseHandler';
 import { publicProcedure } from '../../trpc';
-import * as validator from '../../middleware/validators/index';
+import * as validator from '@packrat/packages';
 
 /**
  * Adds an item globally.

@@ -7,11 +7,11 @@ import {
   editTrip,
   deleteTrip,
 } from '../controllers/trip/index';
-import * as validator from '../middleware/validators/index';
+import * as validator from '@packrat/packages/';
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
 import authTokenMiddleware from '../middleware/auth';
 import checkRole from '../middleware/checkRole';
-import { zodParser } from '../middleware/validators/zodParser';
+import { zodParser } from '@packrat/packages';
 
 const router = express.Router();
 

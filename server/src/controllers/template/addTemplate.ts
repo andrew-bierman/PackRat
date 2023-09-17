@@ -3,7 +3,8 @@ import { UserNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import User from '../../models/userModel';
 import { addTemplateService } from '../../services/template/template.service';
-import { z } from 'zod';
+import * as validators from "@packrat/packages"
+
 
 /**
  * Adds a template to the database.
@@ -28,7 +29,7 @@ export const addTemplate = async (req, res, next) => {
 
 export function addTemplateRoute() {
   return publicProcedure
-    .input(z.object({ type: z.string(), templateId: z.string(), isGlobalTemplate: z.boolean(), createdBy: z.string() }))
+    .input(validators.addTemplate)
     .mutation(async (opts) => {
       const { type, templateId, isGlobalTemplate, createdBy } = opts.input;
       const user = await User.findById(createdBy);

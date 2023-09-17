@@ -1,7 +1,7 @@
 import { publicProcedure } from '../../trpc';
 import { TemplateNotFoundError } from '../../helpers/errors';
 import Template from '../../models/templateModel';
-import { z } from 'zod';
+import * as validators from "@packrat/packages"
 
 /**
  * Deletes a template.
@@ -24,7 +24,7 @@ export const deleteTemplate = async (req, res, next) => {
 
 export function deleteTemplateRoute() {
   return publicProcedure
-    .input(z.object({ templateId: z.string() }))
+    .input(validators.deleteTemplate)
     .mutation(async (opts) => {
       const { templateId } = opts.input;
       const template: any = await Template.findById(templateId);
