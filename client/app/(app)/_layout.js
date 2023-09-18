@@ -1,8 +1,10 @@
-import { AuthProvider } from 'context/auth';
-import { Redirect, Stack } from 'expo-router';
+import { AuthProvider } from '../../context/auth';
+import { Stack } from 'expo-router';
 
 export default function AppLayout() {
-  <AuthProvider>
-    <Stack />
-  </AuthProvider>;
+  return (
+    <AuthProvider>
+      <Stack />
+    </AuthProvider>
+  );
 }
