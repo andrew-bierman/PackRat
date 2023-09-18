@@ -1,5 +1,5 @@
-import { useRouter, useSegments } from 'expo-router';
-import { useSelector, useDispatch } from 'react-redux';
+import { useRootNavigationState, useRouter, useSegments } from 'expo-router';
+import { useSelector } from 'react-redux';
 import React from 'react';
 
 const AuthContext = React.createContext(null);
@@ -14,23 +14,18 @@ function useProtectedRoute(user) {
   const segments = useSegments();
   const router = useRouter();
 
+  const navigationState = useRootNavigationState();
   React.useEffect(() => {
-    const inAuthGroup = segments[0] === '(auth)';
-    // need to add check for approved pages as well
+    if (navigationState?.key) {
+      const inAuthGroup = segments[0] === '(auth)';
 
-    if (
-      // If the user is not signed in and the initial segment is not anything in the auth group.
-      !user &&
-      !inAuthGroup
-    ) {
-      // Redirect to the sign in page.
-      router.replace('/sign-in');
-    } else if (user && inAuthGroup) {
-      // if user is logged in and the route is protected
-      // Redirect away from the sign in page.
-      router.replace('/');
+      if (!user && !inAuthGroup) {
+        router.replace('/sign-in');
+      } else if (user && inAuthGroup) {
+        router.replace('/');
+      }
     }
-  }, [user, segments]);
+  }, [user, segments, navigationState]);
 }
 
 export function AuthProvider({ children }) {

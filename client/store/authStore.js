@@ -17,7 +17,7 @@ const initialState = authAdapter.getInitialState({
   user: null,
   loading: false,
   error: null,
-}); 
+});
 
 // Thunks for async actions
 export const signUp = createAsyncThunk(
