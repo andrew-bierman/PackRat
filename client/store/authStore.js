@@ -25,9 +25,16 @@ export const signUp = createAsyncThunk(
   async ({ name, username, email, password }, { rejectWithValue }) => {
     try {
       // Add check for unique username here.
-      return await trpc.signUp.mutate({ name, username, email, password });
-      await AsyncStorage.setItem('authToken', response.data.user.token);
-      return response.data.user;
+      const user = await trpc.signUp.mutate({
+        name,
+        username,
+        email,
+        password,
+      });
+      await AsyncStorage.setItem('token', user.token);
+      return user;
+      // await AsyncStorage.setItem('authToken', response.data.user.token);
+      // return response.data.user;
       // const response = await axios.post(`${api}/user/signup`, {
       //   name,
       //   username, // add username
@@ -57,6 +64,7 @@ export const signIn = createAsyncThunk(
       // return response.data.user;
 
       const response = await trpc.signIn.mutate({ email, password });
+      await AsyncStorage.setItem('token', response.token);
       return response;
     } catch (error) {
       return rejectWithValue(error.response.data.error);
@@ -87,6 +95,7 @@ export const signInWithGoogle = createAsyncThunk(
       // return response.data.user;
 
       const response = await trpc.googleSignin.query({ idToken });
+      await AsyncStorage.setItem('token', response.token);
       return response?.user;
     } catch (error) {
       console.log('error.response.data.error', error.response.data.error);
@@ -111,7 +120,14 @@ export const updatePassword = createAsyncThunk(
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {},
+  reducers: {
+    // add reducers here
+    resetState(state) {
+      state.user = null;
+      state.loading = false;
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(signUp.pending, (state) => {
@@ -202,4 +218,7 @@ export const authSlice = createSlice({
 export const authReducer = authSlice.reducer;
 export const { selectAll: selectAllUsers, selectById: selectUserById } =
   authAdapter.getSelectors((state) => state.auth);
+
+export const resetState = authSlice.actions.resetState;
+
 export default authSlice.reducer;
