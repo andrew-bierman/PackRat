@@ -13,7 +13,7 @@ import apiMessageMiddleware from './middleware/apiMessageMiddleware';
 import weatherReducer from './weatherStore';
 import dropdownReducer from './dropdownStore';
 import authReducer from './authStore';
-import trailsReducer from './trailsStore';
+import trailsReducer from "./trailsStore"
 import searchReducer from './searchStore';
 import parksReducer from './parksStore';
 import itemsReducer from './itemsStore';
@@ -38,7 +38,6 @@ const rootReducer: Reducer<RootState> = combineReducers({
   dropdown: dropdownReducer,
   search: searchReducer,
   weather: weatherReducer,
-  trails: trailsReducer,
   parks: parksReducer,
   items: itemsReducer,
   packs: packsReducer,
@@ -54,6 +53,7 @@ const rootReducer: Reducer<RootState> = combineReducers({
   userStore,
   offlineQueue,
   progress: progressReducer,
+  trails : trailsReducer
 });
 
 export interface RootState {
@@ -61,7 +61,6 @@ export interface RootState {
   dropdown: typeof dropdownReducer;
   search: typeof searchReducer;
   weather: typeof weatherReducer;
-  trails: typeof trailsReducer;
   parks: typeof parksReducer;
   items: typeof itemsReducer;
   packs: typeof packsReducer;
@@ -76,6 +75,7 @@ export interface RootState {
   globalItems: typeof globalItems;
   userStore: typeof userStore;
   offlineQueue: typeof offlineQueue;
+  trails: typeof trailsReducer;
 }
 
 // configure persist store and whitelist reducers
