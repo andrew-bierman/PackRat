@@ -38,6 +38,7 @@ const Navigation = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
+  const pathName = usePathname();
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isMobileView, setIsMobileView] = useState(
@@ -198,11 +199,6 @@ const Navigation = () => {
     (item, index) => {
       const { icon, iconSource, text, href } = item;
       const IconComponent = iconSource || EvilIcons;
-      const pathName = usePathname();
-
-      if ((href === 'profile' || href === 'logout') && !user) {
-        return null; // Do not render the item if the user is not signed in
-      }
 
       const isCurrentPage = pathName === href; // compare the current route with the href
       const isSelected = selectedNavItem === href; // check if the item is selected
@@ -211,6 +207,10 @@ const Navigation = () => {
         setSelectedNavItem(href);
         navigateTo(href);
       };
+
+      // if ((href === 'profile' || href === 'logout') && !user) {
+      //   return null; // Do not render the item if the user is not signed in
+      // }
 
       return (
         <TouchableOpacity
