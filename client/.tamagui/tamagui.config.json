@@ -5699,24 +5699,6 @@
                   }
                 }
               },
-              "disabled": {
-                "true": {
-                  "pointerEvents": "none",
-                  "userSelect": "none",
-                  "cursor": "not-allowed",
-                  "hoverStyle": {
-                    "borderColor": "$borderColor",
-                    "backgroundColor": "$background"
-                  },
-                  "pressStyle": {
-                    "borderColor": "$borderColor",
-                    "backgroundColor": "$backgroundColor"
-                  },
-                  "focusStyle": {
-                    "outlineWidth": 0
-                  }
-                }
-              },
               "size": {
                 "...size": "Function"
               }
@@ -5993,24 +5975,6 @@
                     "outlineStyle": "solid",
                     "outlineWidth": 2,
                     "outlineColor": "$borderColorFocus"
-                  }
-                }
-              },
-              "disabled": {
-                "true": {
-                  "pointerEvents": "none",
-                  "userSelect": "none",
-                  "cursor": "not-allowed",
-                  "hoverStyle": {
-                    "borderColor": "$borderColor",
-                    "backgroundColor": "$background"
-                  },
-                  "pressStyle": {
-                    "borderColor": "$borderColor",
-                    "backgroundColor": "$backgroundColor"
-                  },
-                  "focusStyle": {
-                    "outlineWidth": 0
                   }
                 }
               },

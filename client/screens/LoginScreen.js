@@ -18,7 +18,7 @@ import { NODE_ENV, WEB_CLIENT_ID } from '@env';
 import * as Google from 'expo-auth-session/providers/google';
 import * as WebBrowser from 'expo-web-browser';
 
-import { useEffect } from 'react';
+import { useEffect,useState } from 'react';
 // import useLogin from "../hooks/useLogin";
 // import { useAuth } from "../auth/provider";
 import { Link, useRouter } from 'expo-router';
@@ -33,7 +33,7 @@ import { useForm } from 'react-hook-form';
 import { InputText, InputTextRules } from '~/components/InputText';
 import { Regex } from '~/utils/regex';
 import useCustomStyles from '~/hooks/useCustomStyles';
-
+import { userSignIn } from '@packrat/packages'
 // const defaultStyle = {
 //   version: 8,
 //   name: "Land",
@@ -90,6 +90,7 @@ export default function Login() {
 
   const user = useSelector((state) => state.auth.user);
   const error = useSelector((state) => state.auth.error);
+  const [formErrors, setFormErrors] = useState({});
 
   // if (user?._id) {
   //   InformUser({
@@ -109,6 +110,17 @@ export default function Login() {
       placement: 'top-right',
       style: { backgroundColor: currentTheme.colors.error },
     });
+  }
+
+  if(formErrors){
+    Object.entries(formErrors).map(([key, error]) => {
+      InformUser({
+        title: key + ' ' + error,
+        duration: 3000,
+        placement: 'top-right',
+        style: { backgroundColor: currentTheme.colors.error },
+      });
+    })
   }
 
   // const { loginUserWithEmailAndPassword, loginUserWithGoogle } = useLogin();
@@ -165,8 +177,21 @@ export default function Login() {
    * @return {void}
    */
   const handleLogin = (data) => {
-    const { email, password } = data;
-    dispatch(signIn({ email, password }));
+    try {
+      const { email, password } = data;
+      userSignIn.parse({ email});
+      // dispatch(signIn({ email, password }));
+      setFormErrors({});
+    } catch (error) {
+      const errorObject = JSON.parse(error.message);
+      const errors = {};
+      errorObject.forEach((err) => {
+        const path = err.path[0];
+        const message = err.message;
+        errors[path] = message;
+      });
+      setFormErrors(errors);
+    }
   };
 
   // useEffect(() => {

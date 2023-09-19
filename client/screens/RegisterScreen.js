@@ -27,6 +27,7 @@ import { InformUser } from '../utils/ToastUtils';
 import useTheme from '../hooks/useTheme';
 import { useForm } from 'react-hook-form';
 import { InputText, InputTextRules } from '~/components/InputText';
+import { userSignUp } from '@packrat/packages'
 
 export default function Register() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
@@ -152,7 +153,7 @@ export default function Register() {
             // onPress={() => registerUser()}
             mt="2"
             colorScheme="indigo"
-            // disabled={!email || !password || !name}
+          // disabled={!email || !password || !name}
           >
             {'Sign up'}
           </Button>
