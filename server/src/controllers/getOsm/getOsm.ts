@@ -7,8 +7,9 @@ import {
 } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { publicProcedure } from '../../trpc';
-import * as validators from "@packrat/packages"
+import * as validators from '@packrat/packages';
 import { getOsmService } from '../../services/osm/getOsmService';
+import { z } from 'zod';
 
 /**
  * Retrieves OpenStreetMap data based on the provided activity type, start point, and end point.
@@ -29,11 +30,14 @@ export const getOsm = async (req, res, next) => {
 };
 
 export function getOsmRoute() {
-  return publicProcedure.input(z.object({
-    activityType: z.string(),
-    startPoint: z.object({ latitude: z.number(), longitude: z.number() }),
-    endPoint: z.object({ latitude: z.number(), longitude: z.number() })
-  }))
+  return publicProcedure
+    .input(
+      z.object({
+        activityType: z.string(),
+        startPoint: z.object({ latitude: z.number(), longitude: z.number() }),
+        endPoint: z.object({ latitude: z.number(), longitude: z.number() }),
+      }),
+    )
     .mutation(async (opts) => {
       try {
         const { activityType, startPoint, endPoint } = opts.input;
