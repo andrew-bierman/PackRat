@@ -33,6 +33,7 @@ import { useForm } from 'react-hook-form';
 import { InputText, InputTextRules } from '~/components/InputText';
 import { Regex } from '~/utils/regex';
 import useCustomStyles from '~/hooks/useCustomStyles';
+import { useSession } from '../context/auth';
 
 // const defaultStyle = {
 //   version: 8,
@@ -70,6 +71,7 @@ WebBrowser.maybeCompleteAuthSession();
 export default function Login() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
+  const { sessionSignIn } = useSession();
   const styles = useCustomStyles(loadStyles);
   const {
     control,
@@ -130,7 +132,11 @@ export default function Login() {
   useEffect(() => {
     if (response?.type === 'success') {
       const { id_token } = response.params;
-      dispatch(signInWithGoogle({ idToken: id_token }));
+      dispatch(signInWithGoogle({ idToken: id_token })).then(({ payload }) => {
+        if (payload.token) {
+          sessionSignIn(payload);
+        }
+      });
     }
   }, [response]);
 
@@ -166,7 +172,11 @@ export default function Login() {
    */
   const handleLogin = (data) => {
     const { email, password } = data;
-    dispatch(signIn({ email, password }));
+    dispatch(signIn({ email, password })).then(({ payload }) => {
+      if (payload.token) {
+        sessionSignIn(payload);
+      }
+    });
   };
 
   // useEffect(() => {

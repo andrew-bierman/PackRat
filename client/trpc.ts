@@ -9,9 +9,9 @@ export const trpc = createTRPCProxyClient<AppRouter>({
     httpBatchLink({
       url: `${api}/trpc`,
       async headers() {
-        const accessToken = localStorage.getItem('token') ?? '';
+        const { token } = localStorage.getItem('session') ?? '';
         return {
-          authorization: accessToken ? `Bearer ${accessToken}` : '',
+          authorization: token ? `Bearer ${token}` : '',
         };
       },
     }),
