@@ -5,11 +5,14 @@
   "private": true,
   "main": "index.js",
   "scripts": {
-    "clean": "rm -rf server/node_modules client/node_modules server/package-lock.json client/package-lock.json",
+    "clean": "rm -rf node_modules server/node_modules client/node_modules packages/node_modules package-lock.json yarn.lock server/package-lock.json client/package-lock.json packages/package-lock.json server/yarn.lock client/yarn.lock packages/yarn.lock server/dist client/dist packages/dist",
     "build:prod": "npm run install:all && npm run build:expo && npm run build:tsc",
+    "build:prod:docker": "docker build -t packrat-app -f Dockerfile.prod .",
     "build:expo": "npm run expo:export",
-    "build:tsc": "npm run build --prefix server",
-    "install:all": "npm install --prefix server && npm install --prefix client && npm install",
+    "build:tsc": "npm run build:tsc:packages && npm run build:tsc:server",
+    "build:tsc:packages": "npm run build --prefix packages",
+    "build:tsc:server": "npm run build --prefix server",
+    "install:all": "npm install --prefix server && npm install --prefix client && npm install --prefix packages && npm install",
     "setup": "npm run clean && npm run install:all && npm run setup:client && npm run setup:server",
     "setup:client": "npm --prefix client run setup",
     "setup:server": "npm --prefix server run setup",
@@ -68,7 +71,6 @@
   },
   "homepage": "https://github.com/andrew-bierman/PackRat#readme",
   "devDependencies": {
-    "expo-cli": "^5.0.2",
     "husky": "^8.0.0",
     "lint-staged": "^14.0.1"
   }
