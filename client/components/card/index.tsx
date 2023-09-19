@@ -76,11 +76,12 @@ export const CustomCard = ({
         alignSelf="center"
         alignItems={['center', 'center', 'flex-start', 'flex-start']}
         w={['100%', '100%', '100%', '90%']}
-        flexDirection={['column', 'column', 'row', 'row']}
+        flexDirection={['column', 'column', 'column', 'column']}
         rounded="lg"
         flexGrow={1}
       >
         {isLoading && <Loader />}
+
         <VStack space="4" width="100%" divider={<Divider />}>
           <Box
             px="4"
@@ -113,7 +114,6 @@ export const CustomCard = ({
                 </Link>
               </Box>
               {link && (
-                // @ts-expect-error
                 <Box
                   flexDir={'row'}
                   style={{
