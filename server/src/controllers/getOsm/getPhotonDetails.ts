@@ -27,10 +27,13 @@ export const getPhotonDetails = async (req, res, next) => {
   }
 };
 
-
 export function getPhotonDetailsRoute() {
-  return publicProcedure.input(z.object({ id: z.string(), type: z.string() })).query(async (opts) => {
-    let { id, type } = opts.input;
-    return await getPhotonDetailsService(id, type);
-  })
+  return publicProcedure
+    .input(
+      z.object({ id: z.union([z.string(), z.number()]), type: z.string() }),
+    )
+    .query(async (opts) => {
+      let { id, type } = opts.input;
+      return await getPhotonDetailsService(id, type);
+    });
 }

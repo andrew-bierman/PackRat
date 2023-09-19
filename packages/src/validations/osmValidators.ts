@@ -15,7 +15,7 @@ export const getParksOSM = z.object({
 });
 
 export const getPhotonDetails = z.object({
-    id: z.string(),
+    id: z.union([z.string(), z.number()]),
     type: z.string()
 });
 
