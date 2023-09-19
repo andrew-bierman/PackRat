@@ -72,6 +72,7 @@
   "homepage": "https://github.com/andrew-bierman/PackRat#readme",
   "devDependencies": {
     "husky": "^8.0.0",
-    "lint-staged": "^14.0.1"
+    "lint-staged": "^14.0.1",
+    "typescript": "^5.2.2"
   }
 }
