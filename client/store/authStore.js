@@ -31,7 +31,6 @@ export const signUp = createAsyncThunk(
         email,
         password,
       });
-      await AsyncStorage.setItem('token', user.token);
       return user;
       // await AsyncStorage.setItem('authToken', response.data.user.token);
       // return response.data.user;
@@ -64,7 +63,6 @@ export const signIn = createAsyncThunk(
       // return response.data.user;
 
       const response = await trpc.signIn.mutate({ email, password });
-      await AsyncStorage.setItem('token', response.token);
       return response;
     } catch (error) {
       return rejectWithValue(error.response.data.error);
@@ -95,7 +93,6 @@ export const signInWithGoogle = createAsyncThunk(
       // return response.data.user;
 
       const response = await trpc.googleSignin.query({ idToken });
-      await AsyncStorage.setItem('token', response.token);
       return response?.user;
     } catch (error) {
       console.log('error.response.data.error', error.response.data.error);
