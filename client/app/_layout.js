@@ -23,7 +23,7 @@ export default function HomeLayout() {
           <FlashMessage position="top" />
           <Navigation />
           <Slot />
-          {Platform.OS === 'web' ? <Footer /> : null}
+          {/* {Platform.OS === 'web' ? <Footer /> : null} */}
         </ThemeProvider>
         {/* </AuthProvider> */}
       </PersistGate>
