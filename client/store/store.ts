@@ -13,7 +13,6 @@ import apiMessageMiddleware from './middleware/apiMessageMiddleware';
 import weatherReducer from './weatherStore';
 import dropdownReducer from './dropdownStore';
 import authReducer from './authStore';
-import trailsReducer from "./trailsStore"
 import searchReducer from './searchStore';
 import parksReducer from './parksStore';
 import itemsReducer from './itemsStore';
@@ -30,6 +29,8 @@ import globalItems from './globalItemsStore';
 import userStore from './userStore';
 import offlineQueue from './offlineQueue';
 import progressReducer from './progressStore';
+import trailsReducer from './trailsStore';
+import trailReducer from './trailStore';
 import { type Reducer } from 'react';
 
 // combine reducers
@@ -53,7 +54,8 @@ const rootReducer: Reducer<RootState> = combineReducers({
   userStore,
   offlineQueue,
   progress: progressReducer,
-  trails : trailsReducer
+  trails: trailsReducer,
+  trail: trailReducer,
 });
 
 export interface RootState {
@@ -75,7 +77,9 @@ export interface RootState {
   globalItems: typeof globalItems;
   userStore: typeof userStore;
   offlineQueue: typeof offlineQueue;
+  progress: typeof progressReducer;
   trails: typeof trailsReducer;
+  trail: typeof trailReducer;
 }
 
 // configure persist store and whitelist reducers

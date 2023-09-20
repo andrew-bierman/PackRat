@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { addTrail, addPark } from '../store/dropdownStore';
 import MapContainer from './map/MapContainer';
 import { convertPhotonGeoJsonToShape } from '../utils/mapFunctions';
-import { selectAllTrails } from '../store/trailsStore';
+import { selectAllTrails } from '../store/trailStore';
 import useTheme from '../hooks/useTheme';
 import Carousel from './carousel';
 import useCustomStyles from '~/hooks/useCustomStyles';

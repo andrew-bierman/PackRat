@@ -14,6 +14,7 @@ import TripDateRange from '~/components/trip/TripDateRange';
 import { photonDetails } from '../../store/destinationStore';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from '~/hooks/useCustomStyles';
+import { State } from 'react-native-gesture-handler';
 
 export default function Trips() {
   const { currentTheme } = useTheme();
@@ -32,7 +33,7 @@ export default function Trips() {
   const weatherObject = useSelector((state) => state.weather.weatherObject);
   const weatherWeek = useSelector((state) => state.weather.weatherWeek);
 
-  const trailsObject = useSelector((state) => state.trails.trailNames);
+  const trailsObject = useSelector((state) => state.trail.trailNames);
   const parksObject = useSelector((state) => state.parks.parkNames);
   const photonDetailsStore = useSelector(
     (state) => state.destination.photonDetails,
