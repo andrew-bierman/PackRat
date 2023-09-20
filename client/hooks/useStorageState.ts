@@ -1,6 +1,5 @@
-import * as SecureStore from 'expo-secure-store';
 import * as React from 'react';
-import { Platform } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type UseStateHook<T> = [[boolean, T | null], (value?: T | null) => void];
 
@@ -9,27 +8,19 @@ function useAsyncState<T>(
 ): UseStateHook<T> {
   return React.useReducer(
     (state: [boolean, T | null], action: T | null = null) => [false, action],
-    initialValue
+    initialValue,
   ) as UseStateHook<T>;
 }
 
 export async function setStorageItemAsync(key: string, value: string | null) {
-  if (Platform.OS === 'web') {
-    try {
-      if (value === null) {
-        localStorage.removeItem(key);
-      } else {
-        localStorage.setItem(key, value);
-      }
-    } catch (e) {
-      console.error('Local storage is unavailable:', e);
-    }
-  } else {
+  try {
     if (value == null) {
-      await SecureStore.deleteItemAsync(key);
+      await AsyncStorage.removeItem(key);
     } else {
-      await SecureStore.setItemAsync(key, value);
+      await AsyncStorage.setItem(key, JSON.stringify(value));
     }
+  } catch (e) {
+    console.error('Local storage is unavailable:', e);
   }
 }
 
@@ -39,18 +30,17 @@ export function useStorageState(key: string): UseStateHook<string> {
 
   // Get
   React.useEffect(() => {
-    if (Platform.OS === 'web') {
-      try {
-        if (typeof localStorage !== 'undefined') {
-          setState(localStorage.getItem(key));
-        }
-      } catch (e) {
-        console.error('Local storage is unavailable:', e);
-      }
-    } else {
-      SecureStore.getItemAsync(key).then(value => {
-        setState(value);
-      });
+
+    const getUser = async () => {
+      const user = await AsyncStorage.getItem(key)
+      if (!user) return
+      setState(JSON.parse(user));
+    }
+
+    try {
+      getUser()
+    } catch (e) {
+      console.error('Local storage is unavailable:', e);
     }
   }, [key]);
 
@@ -61,7 +51,7 @@ export function useStorageState(key: string): UseStateHook<string> {
         setState(value);
       });
     },
-    [key]
+    [key],
   );
 
   return [state, setValue];
