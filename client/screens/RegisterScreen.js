@@ -28,6 +28,7 @@ import useTheme from '../hooks/useTheme';
 import { useForm } from 'react-hook-form';
 import { InputText, InputTextRules } from '~/components/InputText';
 import { userSignUp } from '@packrat/packages'
+import ReusableForm from '../packrat-ui/form';
 
 export default function Register() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
@@ -117,46 +118,17 @@ export default function Register() {
           Sign up to continue!
         </Heading>
         <VStack space={3} mt="5">
-          <InputText
-            label="Name"
-            control={control}
-            name="name"
-            rules={InputTextRules.name}
+          <ReusableForm
+            fields={[
+              { name: 'name', label: 'Name', type: 'text', },
+              { name: 'email', label: 'Email ID', type: 'email', },
+              { name: 'username', label: 'Username', type: 'text', },
+              { name: 'password', label: 'Password', type: 'password', },
+            ]}
+            schema={userSignUp}
+            submitText="Sign up"
+            onSubmit={registerUser}
           />
-
-          <InputText
-            label="Email ID"
-            keyboardType="email-address"
-            control={control}
-            name="email"
-            rules={InputTextRules.email}
-          />
-
-          <InputText
-            control={control}
-            label="Username"
-            name="username"
-            rules={InputTextRules.username}
-          />
-
-          <InputText
-            label="Password"
-            secureTextEntry
-            control={control}
-            name="password"
-            rules={InputTextRules.password}
-          />
-
-          <Button
-            isDisabled={!isValid}
-            onPress={handleSubmit(registerUser)}
-            // onPress={() => registerUser()}
-            mt="2"
-            colorScheme="indigo"
-          // disabled={!email || !password || !name}
-          >
-            {'Sign up'}
-          </Button>
           <HStack mt="6" justifyContent="center">
             <Text
               fontSize="sm"
