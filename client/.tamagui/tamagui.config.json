@@ -7450,7 +7450,7 @@
           "staticConfig": {
             "acceptsClassName": true,
             "defaultProps": {
-              "alignItems": "stretch"
+              "display": "flex"
             },
             "validStyles": {
               "enterStyle": true,

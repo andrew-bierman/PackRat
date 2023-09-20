@@ -1,0 +1,33 @@
+# Use an official bun runtime as the parent image
+FROM oven/bun:latest
+
+# Set the working directory in the container
+WORKDIR /usr/src/app
+
+# Set PACKAGE_MANAGER environment variable to "bun"
+ENV PACKAGE_MANAGER=bun
+
+# Copy the main package.json and package-lock.json
+COPY package*.json ./
+
+# Copy the entire project into the container
+COPY . .
+
+# First, install /packages using bun's npm replacement
+RUN cd packages && bun run install
+
+# Then compile /packages
+RUN bun run build:tsc:packages
+
+# Optionally remove existing node_modules if you don't want them
+RUN rm -rf node_modules
+RUN bun run clean
+
+# Install all dependencies
+RUN bun run install:all
+
+# Build the application for production
+RUN bun run build:expo && bun run build:tsc
+
+# Specify the command to run on container start
+CMD [ "bun", "run", "start:prod" ]
