@@ -74,6 +74,7 @@ export default function Register() {
       }
       dispatch(signUp({ name, username, email, password })).then(
         ({ payload }) => {
+          if (!payload) return;
           if (payload.token) {
             sessionSignIn(payload);
           }
@@ -96,6 +97,7 @@ export default function Register() {
     if (response?.type === 'success') {
       const { id_token } = response.params;
       dispatch(signInWithGoogle({ idToken: id_token })).then(({ payload }) => {
+        if (!payload) return;
         if (payload.token) {
           sessionSignIn(payload);
         }

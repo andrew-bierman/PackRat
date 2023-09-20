@@ -5,9 +5,9 @@ import { api } from './constants/api';
 
 console.log('api', api);
 
-const getUser = async (key) => {
+const getUser = async (key : string) => {
   const user = await AsyncStorage.getItem(key)
-  if (!user) return
+  if (!user) return ''
   return JSON.parse(user)
 }
 
