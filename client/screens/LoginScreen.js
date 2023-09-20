@@ -133,6 +133,7 @@ export default function Login() {
     if (response?.type === 'success') {
       const { id_token } = response.params;
       dispatch(signInWithGoogle({ idToken: id_token })).then(({ payload }) => {
+        if (!payload) return;
         if (payload.token) {
           sessionSignIn(payload);
         }
@@ -173,6 +174,7 @@ export default function Login() {
   const handleLogin = (data) => {
     const { email, password } = data;
     dispatch(signIn({ email, password })).then(({ payload }) => {
+      if (!payload) return;
       if (payload.token) {
         sessionSignIn(payload);
       }
