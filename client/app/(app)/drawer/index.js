@@ -13,10 +13,12 @@ import UseTheme from '../../../hooks/useTheme';
 import { signOut } from '../../../store/authStore';
 
 import { useDispatch, useSelector } from 'react-redux';
+import { useSession } from '../../../context/auth';
 
 export default function Drawer() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     UseTheme();
+  const { sessionSignOut } = useSession();
   console.log('isDark, isLight', isDark, isLight);
   // const { signOut } = useAuth();
   const dispatch = useDispatch();
@@ -30,6 +32,7 @@ export default function Drawer() {
    */
   const handleSignOut = () => {
     dispatch(signOut());
+    sessionSignOut();
   };
 
   return (

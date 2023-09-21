@@ -9,10 +9,6 @@ import {
 } from 'native-base';
 
 import { FontAwesome } from '@expo/vector-icons';
-// import Mapbox from "@rnmapbox/maps";
-// Mapbox.setAccessToken(
-//   "pk.eyJ1IjoibWlhbi1iaWxhbCIsImEiOiJja3k5YzExdGcwNHY0Mm9tbmo0ajhrOGx5In0.VAkiap76DG7NiKc23A9tcg"
-// );
 
 import { NODE_ENV, WEB_CLIENT_ID } from '@env';
 import * as Google from 'expo-auth-session/providers/google';
@@ -35,42 +31,14 @@ import { Regex } from '~/utils/regex';
 import useCustomStyles from '~/hooks/useCustomStyles';
 import { userSignIn } from '@packrat/packages'
 import ReusableForm from '../packrat-ui/form';
-// const defaultStyle = {
-//   version: 8,
-//   name: "Land",
-//   sources: {
-//     map: {
-//       type: "raster",
-//       tiles: ["https://a.tile.openstreetmap.org/{z}/{x}/{y}.png"],
-//       tileSize: 256,
-//       minzoom: 1,
-//       maxzoom: 19,
-//     },
-//   },
-//   layers: [
-//     {
-//       id: "background",
-//       type: "background",
-//       paint: {
-//         "background-color": "#f2efea",
-//       },
-//     },
-//     {
-//       id: "map",
-//       type: "raster",
-//       source: "map",
-//       paint: {
-//         "raster-fade-duration": 100,
-//       },
-//     },
-//   ],
-// };
+import { useSession } from '../context/auth';
 
 WebBrowser.maybeCompleteAuthSession();
 
 export default function Login() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
+  const { sessionSignIn } = useSession();
   const styles = useCustomStyles(loadStyles);
   const {
     control,
@@ -143,7 +111,12 @@ export default function Login() {
   useEffect(() => {
     if (response?.type === 'success') {
       const { id_token } = response.params;
-      dispatch(signInWithGoogle({ idToken: id_token }));
+      dispatch(signInWithGoogle({ idToken: id_token })).then(({ payload }) => {
+        if (!payload) return;
+        if (payload.token) {
+          sessionSignIn(payload.token);
+        }
+      });
     }
   }, [response]);
 
@@ -180,7 +153,12 @@ export default function Login() {
   const handleLogin = (data) => {
     try {
       const { email, password } = data;
-      dispatch(signIn({ email, password }));
+      dispatch(signIn({ email, password })).then(({ payload }) => {
+        if (!payload) return;
+        if (payload.token) {
+          sessionSignIn(payload.token);
+        }
+      });
     } catch (error) {
       // const errorObject = JSON.parse(error.message);
       // const errors = {};
@@ -382,9 +360,7 @@ export default function Login() {
                 <Button
                   w="100%"
                   disabled={!request}
-                  onPress={() => {
-                    dispatch(signIn(demoUser));
-                  }}
+                  onPress={() => handleLogin(demoUser)}
                   colorScheme={'purple'}
                 >
                   Demo User

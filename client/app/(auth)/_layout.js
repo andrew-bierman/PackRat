@@ -1,10 +1,8 @@
-import { AuthProvider } from '../../context/auth';
 import { Stack } from 'expo-router';
+import { useProtectedRoute, useSession } from '../../context/auth';
 
 export default function AppLayout() {
-  return (
-    <AuthProvider>
-      <Stack />
-    </AuthProvider>
-  );
+  const { session } = useSession();
+  useProtectedRoute(session);
+  return <Stack />;
 }
