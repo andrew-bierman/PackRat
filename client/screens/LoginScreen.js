@@ -100,7 +100,7 @@ export default function Login() {
       dispatch(signInWithGoogle({ idToken: id_token })).then(({ payload }) => {
         if (!payload) return;
         if (payload.token) {
-          sessionSignIn(payload);
+          sessionSignIn(payload.token);
         }
       });
     }
@@ -141,7 +141,7 @@ export default function Login() {
     dispatch(signIn({ email, password })).then(({ payload }) => {
       if (!payload) return;
       if (payload.token) {
-        sessionSignIn(payload);
+        sessionSignIn(payload.token);
       }
     });
   };

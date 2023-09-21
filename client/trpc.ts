@@ -5,18 +5,18 @@ import { api } from './constants/api';
 
 console.log('api', api);
 
-const getUser = async (key : string) => {
-  const user = await AsyncStorage.getItem(key)
-  if (!user) return ''
-  return JSON.parse(user)
-}
+const getToken = async (key: string) => {
+  const token = await AsyncStorage.getItem(key);
+  if (!token) return '';
+  return token;
+};
 
 export const trpc = createTRPCProxyClient<AppRouter>({
   links: [
     httpBatchLink({
       url: `${api}/trpc`,
       async headers() {
-        const { token } = await getUser('session')
+        const token = await getToken('session');
         return {
           authorization: token ? `Bearer ${token}` : '',
         };
