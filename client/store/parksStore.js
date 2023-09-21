@@ -16,11 +16,13 @@ export const fetchParks = createAsyncThunk(
     if (lon) params += `&lon=${lon}`;
 
     const url = api + '/osm/parks' + params;
+    const radius = 500;
 
     try {
       // const response = await axios.get(url);
       // const parks = response.data.features;
-      const parks = (await trpc.getParksOSM.query(params)).features;
+      const response = await trpc.getParksOSM.query({ lat, lon, radius });
+      const parks = response.features;
       const filteredParks = parks
         .filter(
           (park) =>
