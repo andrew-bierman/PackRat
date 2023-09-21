@@ -9,10 +9,6 @@ import {
 } from 'native-base';
 
 import { FontAwesome } from '@expo/vector-icons';
-// import Mapbox from "@rnmapbox/maps";
-// Mapbox.setAccessToken(
-//   "pk.eyJ1IjoibWlhbi1iaWxhbCIsImEiOiJja3k5YzExdGcwNHY0Mm9tbmo0ajhrOGx5In0.VAkiap76DG7NiKc23A9tcg"
-// );
 
 import { NODE_ENV, WEB_CLIENT_ID } from '@env';
 import * as Google from 'expo-auth-session/providers/google';
@@ -34,37 +30,6 @@ import { InputText, InputTextRules } from '~/components/InputText';
 import { Regex } from '~/utils/regex';
 import useCustomStyles from '~/hooks/useCustomStyles';
 import { useSession } from '../context/auth';
-
-// const defaultStyle = {
-//   version: 8,
-//   name: "Land",
-//   sources: {
-//     map: {
-//       type: "raster",
-//       tiles: ["https://a.tile.openstreetmap.org/{z}/{x}/{y}.png"],
-//       tileSize: 256,
-//       minzoom: 1,
-//       maxzoom: 19,
-//     },
-//   },
-//   layers: [
-//     {
-//       id: "background",
-//       type: "background",
-//       paint: {
-//         "background-color": "#f2efea",
-//       },
-//     },
-//     {
-//       id: "map",
-//       type: "raster",
-//       source: "map",
-//       paint: {
-//         "raster-fade-duration": 100,
-//       },
-//     },
-//   ],
-// };
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -383,9 +348,7 @@ export default function Login() {
                 <Button
                   w="100%"
                   disabled={!request}
-                  onPress={() => {
-                    dispatch(signIn(demoUser));
-                  }}
+                  onPress={() => handleLogin(demoUser)}
                   colorScheme={'purple'}
                 >
                   Demo User
