@@ -76,7 +76,7 @@ export default function Register() {
         ({ payload }) => {
           if (!payload) return;
           if (payload.token) {
-            sessionSignIn(payload);
+            sessionSignIn(payload.token);
           }
         },
       );
@@ -99,7 +99,7 @@ export default function Register() {
       dispatch(signInWithGoogle({ idToken: id_token })).then(({ payload }) => {
         if (!payload) return;
         if (payload.token) {
-          sessionSignIn(payload);
+          sessionSignIn(payload.token);
         }
       });
     }
