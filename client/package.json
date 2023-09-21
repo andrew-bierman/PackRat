@@ -30,6 +30,8 @@
     "@fortawesome/fontawesome-svg-core": "^6.3.0",
     "@fortawesome/free-solid-svg-icons": "^6.3.0",
     "@fortawesome/react-fontawesome": "^0.2.0",
+    "@hookform/resolvers": "^3.3.1",
+    "@packrat/packages": "file:../packages/packrat-packages-0.0.1.tgz",
     "@react-native-async-storage/async-storage": "1.18.2",
     "@react-native-community/geolocation": "^3.0.6",
     "@react-native-community/netinfo": "9.3.10",
