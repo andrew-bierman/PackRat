@@ -25,7 +25,8 @@ export const fetchTrails = createAsyncThunk(
       // const response = await axios.get(url);
       // const trails = response.data.features;
 
-      const response = (await trpc.getTrailsOSM.query({ lat, lon, radius })).features;
+      const response = (await trpc.getTrailsOSM.query({ lat, lon, radius }))
+        .features;
       const trails = response.features;
       const filteredTrails = trails
         .filter(
@@ -47,6 +48,9 @@ const trailsAdapter = createEntityAdapter();
 const initialState = trailsAdapter.getInitialState({
   isLoading: false,
   error: null,
+  trailsDetails: [],
+  trailNames: [],
+  trails: [],
 });
 
 const trailsSlice = createSlice({
