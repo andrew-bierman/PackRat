@@ -13,7 +13,8 @@ import apiMessageMiddleware from './middleware/apiMessageMiddleware';
 import weatherReducer from './weatherStore';
 import dropdownReducer from './dropdownStore';
 import authReducer from './authStore';
-import trailsReducer from "./trailsStore"
+import trailsReducer from './trailsStore';
+import trailsReducer2 from './trailsStore_copy'; // TODO: remove. This was super hacky fix for trailsReducer not working. No idea why it's not working.
 import searchReducer from './searchStore';
 import parksReducer from './parksStore';
 import itemsReducer from './itemsStore';
@@ -53,7 +54,8 @@ const rootReducer: Reducer<RootState> = combineReducers({
   userStore,
   offlineQueue,
   progress: progressReducer,
-  trails : trailsReducer
+  // trails : trailsReducer
+  trails: trailsReducer2, // TODO: remove. This was super hacky fix for trailsReducer not working. No idea why it's not working.
 });
 
 export interface RootState {
@@ -75,6 +77,7 @@ export interface RootState {
   globalItems: typeof globalItems;
   userStore: typeof userStore;
   offlineQueue: typeof offlineQueue;
+  progress: typeof progressReducer;
   trails: typeof trailsReducer;
 }
 
