@@ -1,5 +1,3 @@
-import osmtogeojson from 'osmtogeojson';
-import axios from 'axios';
 import {
   InvalidRequestParamsError,
   RetrievingPhotonDetailsError,
@@ -7,6 +5,7 @@ import {
 import { responseHandler } from '../../helpers/responseHandler';
 import { z } from 'zod';
 import { publicProcedure } from '../../trpc';
+import { getPhotonDetailsService } from '../../services/osm/getPhotonDetailsService';
 
 /**
  * Retrieves Photon details based on the provided ID and type.
@@ -16,93 +15,25 @@ import { publicProcedure } from '../../trpc';
  */
 export const getPhotonDetails = async (req, res, next) => {
   let { id, type } = req.params;
-
   if (!id || !type) {
     next(InvalidRequestParamsError);
   }
-
-  type = type.toLowerCase(); // Standardize osm_type to be lowercase
-
-  switch (type) {
-    case 'way':
-    case 'w':
-      type = 'way';
-      break;
-    case 'node':
-    case 'n':
-      type = 'node';
-      break;
-    case 'relation':
-    case 'r':
-      type = 'relation';
-      break;
-    default:
-      next(InvalidRequestParamsError);
-  }
-
-  const overpassUrl = process.env.OSM_URI;
-
-  const overpassQuery = `[out:json][timeout:25];${type}(${id});(._;>;);out body;`;
-
-  console.log('overpassQuery', overpassQuery);
-
   try {
-    const response = await axios.post(overpassUrl, overpassQuery, {
-      headers: { 'Content-Type': 'text/plain' },
-    });
-
-    // console.log("response", response);
-
-    const geojsonData = osmtogeojson(response.data);
-
-    // await updateDatabaseWithGeoJSONDataFromOverpass(geojsonData);
-
-    res.locals.data = geojsonData;
+    const result = await getPhotonDetailsService(id, type);
+    res.locals.data = result;
     responseHandler(res);
   } catch (error) {
     next(RetrievingPhotonDetailsError);
   }
 };
 
-
 export function getPhotonDetailsRoute() {
-  return publicProcedure.input(z.object({ id: z.string(), type: z.string() })).query(async (opts) => {
-    let { id, type } = opts.input;
-
-    type = type.toLowerCase(); // Standardize osm_type to be lowercase
-
-    switch (type) {
-      case 'way':
-      case 'w':
-        type = 'way';
-        break;
-      case 'node':
-      case 'n':
-        type = 'node';
-        break;
-      case 'relation':
-      case 'r':
-        type = 'relation';
-        break;
-      default:
-        break
-    }
-
-    const overpassUrl = process.env.OSM_URI;
-
-    const overpassQuery = `[out:json][timeout:25];${type}(${id});(._;>;);out body;`;
-
-    console.log('overpassQuery', overpassQuery);
-    const response = await axios.post(overpassUrl, overpassQuery, {
-      headers: { 'Content-Type': 'text/plain' },
+  return publicProcedure
+    .input(
+      z.object({ id: z.union([z.string(), z.number()]), type: z.string() }),
+    )
+    .query(async (opts) => {
+      let { id, type } = opts.input;
+      return await getPhotonDetailsService(id, type);
     });
-
-    // console.log("response", response);
-
-    const geojsonData = osmtogeojson(response.data);
-
-    // await updateDatabaseWithGeoJSONDataFromOverpass(geojsonData);
-
-    return geojsonData
-  })
 }
