@@ -10,9 +10,7 @@ import { InformUser } from '../utils/ToastUtils';
 import { trpc } from '../trpc';
 export const addPack = createAsyncThunk('packs/addPack', async (newPack) => {
   // console.log(newPack, "this is new pack")
-  const response = await axios.post(`${api}/pack/`, newPack);
-
-  return response.data;
+  return await trpc.addPack.mutate(newPack);
 });
 
 export const deletePackItem = createAsyncThunk(
