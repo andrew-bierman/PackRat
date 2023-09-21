@@ -30,6 +30,7 @@
     "@fortawesome/fontawesome-svg-core": "^6.3.0",
     "@fortawesome/free-solid-svg-icons": "^6.3.0",
     "@fortawesome/react-fontawesome": "^0.2.0",
+    "@hookform/resolvers": "^3.3.1",
     "@react-native-async-storage/async-storage": "1.18.2",
     "@react-native-community/geolocation": "^3.0.6",
     "@react-native-community/netinfo": "9.3.10",
@@ -111,7 +112,8 @@
     "server": "^1.0.38",
     "tamagui": "^1.52.7",
     "togpx": "^0.5.4",
-    "xmldom": "^0.6.0"
+    "xmldom": "^0.6.0",
+    "zod": "^3.22.2"
   },
   "devDependencies": {
     "@babel/core": "^7.21.3",
