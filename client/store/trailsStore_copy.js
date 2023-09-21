@@ -10,6 +10,7 @@ import { trpc } from '../trpc';
 export const fetchTrails = createAsyncThunk(
   'trails/fetchTrails',
   async ({ lat, lon, selectedSearch }) => {
+    // return null
     let params = '?';
 
     if (lat) {
