@@ -17,12 +17,16 @@ import {
 } from 'tamagui';
 import Avatar from '~/components/Avatar';
 import { editUser, updatePassword } from '../../store/authStore';
+import { InformUser } from '~/utils/ToastUtils';
+import useTheme from '~/hooks/useTheme';
+import { editUser as editUserValidations, updatePassword as updatePasswordValidations } from '@packrat/packages'
 
 export default function Settings() {
-  const [user, setUser] = useState(useSelector((state) => state.auth.user));
+  const [user, setUser] = useState(useSelector((state: any) => state.auth.user));
   const dispatch = useDispatch();
-
+  const { currentTheme } = useTheme();
   const [passwords, setPasswords] = useState<any>({});
+  const [formErrors, setFormErrors] = useState({});
 
   const handleChange = ({ target }) => {
     setUser((prev) => ({ ...prev, [target.id]: target.value }));
@@ -59,26 +63,64 @@ export default function Settings() {
       preferredWeather,
       preferredWeight,
     } = user;
-
-    dispatch(
-      editUser({
-        userId: _id,
-        email,
-        name,
-        username,
-        profileImage,
-        preferredWeather,
-        preferredWeight,
-      }),
-    );
+    try {
+      editUserValidations.parse({ userId: _id });
+      dispatch(
+        editUser(
+          {
+            userId: _id,
+            email,
+            name,
+            username,
+            profileImage,
+            preferredWeather,
+            preferredWeight,
+          }
+        ),
+      );
+      setFormErrors({});
+    } catch (error) {
+      const errorObject = JSON.parse(error.message);
+      const errors = {};
+      errorObject.forEach((err) => {
+        const path = err.path[0];
+        const message = err.message;
+        errors[path] = message;
+      });
+      setFormErrors(errors);
+    }
   };
 
   const handleUpdatePassword = () => {
     const { email } = user;
     const { oldPassword, newPassword, confirmPassword } = passwords;
     if (newPassword !== confirmPassword) return;
-    dispatch(updatePassword({ email, oldPassword, newPassword }));
+    try {
+      updatePasswordValidations.parse({ email, password: newPassword });
+      dispatch(updatePassword({ email, oldPassword, newPassword }));
+      setFormErrors({});
+    } catch (error) {
+      const errorObject = JSON.parse(error.message);
+      const errors = {};
+      errorObject.forEach((err) => {
+        const path = err.path[0];
+        const message = err.message;
+        errors[path] = message;
+      });
+      setFormErrors(errors);
+    }
   };
+
+  if (formErrors) {
+    Object.entries(formErrors).map(([key, error]) => {
+      InformUser({
+        title: key + ' ' + error,
+        duration: 3000,
+        placement: 'top-right',
+        style: { backgroundColor: currentTheme.colors.error },
+      });
+    })
+  }
 
   return (
     <YStack
