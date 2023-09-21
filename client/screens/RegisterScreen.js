@@ -27,10 +27,12 @@ import { InformUser } from '../utils/ToastUtils';
 import useTheme from '../hooks/useTheme';
 import { useForm } from 'react-hook-form';
 import { InputText, InputTextRules } from '~/components/InputText';
+import { useSession } from '../context/auth';
 
 export default function Register() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
+  const { sessionSignIn } = useSession();
   const dispatch = useDispatch();
 
   const {
@@ -70,7 +72,14 @@ export default function Register() {
         alert('Username should be alphanumeric');
         return;
       }
-      dispatch(signUp({ name, username, email, password }));
+      dispatch(signUp({ name, username, email, password })).then(
+        ({ payload }) => {
+          if (!payload) return;
+          if (payload.token) {
+            sessionSignIn(payload.token);
+          }
+        },
+      );
     } catch (e) {
       console.log('Error', e);
     }
@@ -87,7 +96,12 @@ export default function Register() {
   useEffect(() => {
     if (response?.type === 'success') {
       const { id_token } = response.params;
-      dispatch(signInWithGoogle({ idToken: id_token }));
+      dispatch(signInWithGoogle({ idToken: id_token })).then(({ payload }) => {
+        if (!payload) return;
+        if (payload.token) {
+          sessionSignIn(payload.token);
+        }
+      });
     }
   }, [response]);
 
