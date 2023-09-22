@@ -9,11 +9,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import { CustomModal } from '../modal';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from '~/hooks/useCustomStyles';
+import {addPack as addPackValidation} from '@packrat/packages'
+import { InformUser } from '~/utils/ToastUtils';
 
 export const AddPack = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
+  const [formErrors, setFormErrors] = useState({});
 
   const dispatch = useDispatch();
 
@@ -37,9 +40,34 @@ export const AddPack = () => {
    * @return {void}
    */
   const handleAddPack = () => {
-    dispatch(addPack({ name, owner_id: user?._id }));
-    setName('');
+    try {
+      addPackValidation.parse({ name, owner_id: user?._id });
+      dispatch(addPack({ name, owner_id: user?._id }));
+      setName('');
+      setFormErrors({});
+    } catch (error) {
+      const errorObject = JSON.parse(error.message);
+      const errors = {};
+      errorObject.forEach((err) => {
+        const path = err.path[0];
+        const message = err.message;
+        errors[path] = message;
+      });
+      setFormErrors(errors);
+    }
+
   };
+
+  if (formErrors) {
+    Object.entries(formErrors).map(([key, error]) => {
+      InformUser({
+        title: key + ' ' + error,
+        duration: 3000,
+        placement: 'top-right',
+        style: { backgroundColor: currentTheme.colors.error },
+      });
+    })
+  }
 
   return (
     <Box style={styles.container}>

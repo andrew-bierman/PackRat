@@ -21,7 +21,9 @@ import { useState } from 'react';
 
 import { fetchItemsSearchResults } from '../../store/searchStore';
 import { selectItemsGlobal } from '../../store/singlePackStore';
-
+import { InformUser } from '~/utils/ToastUtils';
+import useTheme from '~/hooks/useTheme';
+import {addGlobalItemToPack} from '@packrat/packages'
 interface Props {
   onSelect?: () => void;
   placeholder?: string;
@@ -31,6 +33,8 @@ export const SearchItem: React.FC<Props> = ({ onSelect, placeholder }) => {
   const [searchString, setSearchString] = useState('');
   const [isLoadingMobile, setIsLoadingMobile] = useState(false);
   const [selectedSearch, setSelectedSearch] = useState('');
+  const [formErrors, setFormErrors] = useState({});
+  const { currentTheme } = useTheme();
 
   const searchResults =
     useSelector((state: any) => state.search.searchResults.items) || [];
@@ -55,9 +59,32 @@ export const SearchItem: React.FC<Props> = ({ onSelect, placeholder }) => {
       packId,
       selectedItem,
     };
-    // @ts-expect-error
-    dispatch(selectItemsGlobal(data));
+    try {
+      addGlobalItemToPack.parse(data);
+      // @ts-expect-error
+      dispatch(selectItemsGlobal(data));
+    } catch (error) {
+      const errorObject = JSON.parse(error.message);
+      const errors = {};
+      errorObject.forEach((err) => {
+        const path = err.path[0];
+        const message = err.message;
+        errors[path] = message;
+      });
+      setFormErrors(errors);
+    }
   };
+
+  if (formErrors) {
+    Object.entries(formErrors).map(([key, error]) => {
+      InformUser({
+        title: key + ' ' + error,
+        duration: 3000,
+        placement: 'top-right',
+        style: { backgroundColor: currentTheme.colors.error },
+      });
+    })
+  }
 
   const dispatch = useDispatch();
 

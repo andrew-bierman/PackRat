@@ -25,7 +25,7 @@ export default function Settings() {
   const [user, setUser] = useState(useSelector((state: any) => state.auth.user));
   const dispatch = useDispatch();
   const { currentTheme } = useTheme();
-  const [passwords, setPasswords] = useState<any>({});
+  const [passwords, setPasswords] = useState<any>({}); 
   const [formErrors, setFormErrors] = useState({});
 
   const handleChange = ({ target }) => {
