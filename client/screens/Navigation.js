@@ -34,11 +34,14 @@ import Drawer from './Drawer';
 import { Link, useRouter, usePathname } from 'expo-router';
 import { hexToRGBA } from '../utils/colorFunctions';
 import useTheme from '../hooks/useTheme';
+import { useSession } from '../context/auth';
+
 const Navigation = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
   const pathName = usePathname();
+  const { sessionSignOut } = useSession();
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isMobileView, setIsMobileView] = useState(
@@ -160,6 +163,7 @@ const Navigation = () => {
     (href) => {
       if (href === 'logout') {
         dispatch(signOut());
+        sessionSignOut();
       } else {
         setIsDrawerOpen(false);
         setSelectedNavItem(href);
