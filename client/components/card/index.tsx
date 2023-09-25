@@ -76,12 +76,10 @@ export const CustomCard = ({
         alignSelf="center"
         alignItems={['center', 'center', 'flex-start', 'flex-start']}
         w={['100%', '100%', '100%', '90%']}
-        flexDirection={['column', 'column', 'column', 'column']}
+        flexDirection={['column', 'column', 'row', 'row']}
         rounded="lg"
         flexGrow={1}
       >
-        {isLoading && <Loader />}
-
         <VStack space="4" width="100%" divider={<Divider />}>
           <Box
             px="4"
@@ -97,6 +95,7 @@ export const CustomCard = ({
                 editTitle={editTitle}
                 setEditTitle={setEditTitle}
                 titleRef={titleRef}
+                loading={isLoading}
               />
             </Box>
             <Box flexDirection="row" alignItems="center">
