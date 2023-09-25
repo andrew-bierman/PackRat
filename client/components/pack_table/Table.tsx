@@ -16,6 +16,7 @@ import { PackOptions } from '../PackOptions';
 import CustomButton from '../custombutton';
 import ItemPicker from '../Picker';
 import useCustomStyles from '~/hooks/useCustomStyles';
+import { TableLoader } from '../skeleton';
 
 const WeightUnitDropdown = ({ value, onChange }) => {
   return (
@@ -339,7 +340,7 @@ export const TableContainer = ({
   }
   console.log(heading);
 
-  if (isLoading) return <Loading />;
+  if (!data?.length) return <TableLoader />;
   if (error) return <ErrorMessage message={error} />;
   return (
     <Box style={styles.container}>
