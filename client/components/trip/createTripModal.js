@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { format, intervalToDuration } from 'date-fns';
 import { addTrip } from '../../store/tripsStore';
 import { api } from '../../constants/api';
+import { trpc } from '../../trpc';
 
 // import { Picker } from '@react-native-picker/picker';
 import { DropdownComponent } from '../Dropdown';
@@ -114,11 +115,11 @@ export const SaveTripContainer = ({ dateRange }) => {
 
     console.log('old rag', search);
 
-    // TODO - fix this, why making call not through redux. Switch to RTK query at least
-    const { data: geoJSON } = await axios.get(
-      `${api}/osm/photonDetails/${search.properties.osm_type}/${search.properties.osm_id}`,
-    );
-    // main object
+    const geoJSON = await trpc.getPhotonDetails.query({
+      id: search.properties.osm_id,
+      type: search.properties.osm_type,
+    });
+
     const data = {
       name,
       description,
