@@ -3,14 +3,13 @@ import {
   createAsyncThunk,
   createEntityAdapter,
 } from '@reduxjs/toolkit';
-// import axios from '~/config/axios';
+import axios from '~/config/axios';
 import { api } from '../constants/api';
 import { trpc } from '../trpc';
 
 export const fetchTrails = createAsyncThunk(
   'trails/fetchTrails',
   async ({ lat, lon, selectedSearch }) => {
-    // return null
     let params = '?';
 
     if (lat) {
@@ -57,20 +56,7 @@ const initialState = trailsAdapter.getInitialState({
 const trailsSlice = createSlice({
   name: 'trails',
   initialState,
-  reducers: {
-    setTrails: (state, action) => {
-      state.trails = action.payload;
-    },
-    setFilteredTrails: (state, action) => {
-      state.trailNames = action.payload;
-    },
-    setError: (state, action) => {
-      state.error = action.payload;
-    },
-    setLoading: (state, action) => {
-      state.isLoading = action.payload;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchTrails.pending, (state, action) => {
@@ -92,13 +78,8 @@ const trailsSlice = createSlice({
   },
 });
 
-export const {
-  selectAll: selectAllTrails,
-  selectById: selectTrailsById,
-  selectIds: selectTrailsIds,
-} = trailsAdapter.getSelectors((state) => state.trails);
-
-export const { setTrails, setFilteredTrails, setError, setLoading } =
-  trailsSlice.actions;
+export const { selectAll: selectAllTrails } = trailsAdapter.getSelectors(
+  (state) => state.trails,
+);
 
 export default trailsSlice.reducer;
