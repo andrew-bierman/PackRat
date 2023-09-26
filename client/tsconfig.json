@@ -20,8 +20,12 @@
       "~/screens/*": ["screens/*"],
       "~/theme/*": ["theme/*"],
       "@trpc": ["../server/src/routes/index"]
-    },
+    }
   },
+  "include": [
+    // include on ts and tsx files
+    "./**/*.tsx"
+  ],
   "exclude": [
     "node_modules",
     "babel.config.js",
