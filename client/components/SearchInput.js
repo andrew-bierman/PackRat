@@ -24,6 +24,8 @@ import {
 } from '../store/searchStore';
 import { fetchWeather, fetchWeatherWeek } from '../store/weatherStore';
 import useCustomStyles from '~/hooks/useCustomStyles';
+import useTrails from '~/hooks/trails/useTrails';
+import { setFilteredTrails, setTrails } from '~/store/trailsStore_copy'; // REMOVE
 
 export const SearchInput = ({ onSelect, placeholder }) => {
   const [searchString, setSearchString] = useState('');
@@ -76,8 +78,21 @@ export const SearchInput = ({ onSelect, placeholder }) => {
     }
 
     try {
+      const { data, filteredTrails, error, isLoading } = useTrails({
+        lat,
+        lon,
+        selectedSearch,
+      });
+
+      dispatch(setTrails(data));
+      dispatch(setFilteredTrails(filteredTrails));
+
+      console.log('data:', data);
+      console.log('error:', error);
+      console.log('isLoading:', isLoading);
+
       await Promise.all([
-        dispatch(fetchTrails({ lat, lon, selectedSearch })),
+        // dispatch(fetchTrails({ lat, lon, selectedSearch })),
         dispatch(fetchParks({ lat, lon, selectedSearch })),
         dispatch(fetchWeather({ lat, lon })),
         dispatch(fetchWeatherWeek({ lat, lon })),
