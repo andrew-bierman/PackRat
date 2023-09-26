@@ -1,6 +1,7 @@
 import Register from '../../screens/RegisterScreen';
 import { Platform } from 'react-native';
-import { Stack as Header } from 'expo-router';
+import { Stack } from 'expo-router';
+import Head from 'expo-router/head';
 
 /**
  * Renders the RegisterContainer component based on the platform.
@@ -8,9 +9,13 @@ import { Stack as Header } from 'expo-router';
  * @return {ReactNode} The rendered RegisterContainer component.
  */
 export default function RegisterContainer() {
-  return Platform.OS === 'web' ? (
+  return (
     <>
-      <Header.Screen
+      <Head>
+        <title>Register</title>
+        <meta name="description" content="Register" />
+      </Head>
+      <Stack.Screen
         options={{
           // https://reactnavigation.org/docs/headers#setting-the-header-title
           title: 'Register',
@@ -21,7 +26,5 @@ export default function RegisterContainer() {
       />
       <Register />
     </>
-  ) : (
-    <Register />
   );
 }
