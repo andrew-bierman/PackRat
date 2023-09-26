@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux';
 
 import { Platform, StyleSheet } from 'react-native';
 
-import { Stack as Header } from 'expo-router';
+import { Stack } from 'expo-router';
 
 import { darkTheme, theme } from '../theme';
 
@@ -13,6 +13,7 @@ import LandingPage from '../components/landing_page';
 import Dashboard from '../screens/dashboard';
 import useTheme from '../hooks/useTheme';
 import { current } from '@reduxjs/toolkit';
+import Head from 'expo-router/head';
 
 export default function Index() {
   const {
@@ -32,14 +33,16 @@ export default function Index() {
 
   return (
     <>
-      {Platform.OS === 'web' ? (
-        <Header.Screen
-          options={{
-            // https://reactnavigation.org/docs/headers#setting-the-header-title
-            title: 'Home',
-          }}
-        />
-      ) : null}
+      <Head>
+        <title>PackRat</title>
+      </Head>
+      <Stack.Screen
+        options={{
+          // https://reactnavigation.org/docs/headers#setting-the-header-title
+          title: 'Home',
+          name: 'Home',
+        }}
+      />
       <Box style={mutualStyles}>{!user ? <LandingPage /> : <Dashboard />}</Box>
     </>
   );
