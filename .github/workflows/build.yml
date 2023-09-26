@@ -4,7 +4,7 @@ on:
     branches: [ "**" ]
   pull_request:
     branches: [ "**" ]
-    
+
 jobs:
   install-and-test:
     runs-on: ubuntu-latest
@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Install npm dependencies
         run: |
-          npm install
+          npm run install:all
   build-android:
     needs: install-and-test
     runs-on: ubuntu-latest
@@ -23,7 +23,7 @@ jobs:
           npm install
       - name: Build Android Release
         run: |
-          cd android && ./gradlew assembleRelease
+          cd client/android && ./gradlew assembleRelease
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
         with:
