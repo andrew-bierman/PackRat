@@ -14,6 +14,7 @@ import {
   YStack,
   H5,
   H2,
+  ScrollView,
 } from 'tamagui';
 import Avatar from '~/components/Avatar';
 import { editUser, updatePassword } from '../../store/authStore';
@@ -81,123 +82,129 @@ export default function Settings() {
   };
 
   return (
-    <YStack
-      space="$3"
-      width="fit-content"
-      paddingVertical={20}
-      marginHorizontal="auto"
-    >
-      <Stack>
-        <H2>Profile</H2>
-        <Separator marginVertical={8} />
-      </Stack>
-      <XStack alignItems="center" space>
-        <Avatar size={90} src={user.profileImage} />
-        <YStack space="$2">
-          <H5 fontWeight="medium">Profile Picture</H5>
-          <XStack space="$2" alignItems="flex-end">
-            <Button
-              size="$3"
-              icon={<Ionicons name="cloud-upload-outline" size={24} />}
-              color="white"
-              style={{ backgroundColor: '#0284c7' }}
-              onPress={pickImage}
-            >
-              Upload
-            </Button>
-            <Button size="$3" onPress={removeProfileImage}>
-              Remove
-            </Button>
-          </XStack>
-        </YStack>
-      </XStack>
-      <XStack space="$3">
-        <YStack>
-          <Label htmlFor="firstName">Name</Label>
-          <Input id="name" value={user.name} onChange={handleChange} />
-        </YStack>
-        <YStack>
-          <Label htmlFor="username">Username</Label>
-          <Input id="username" value={user.username} onChange={handleChange} />
-        </YStack>
-      </XStack>
-
-      <YStack>
-        <Label htmlFor="email">Email</Label>
-        <Input id="email" value={user.email} onChange={handleChange} />
-      </YStack>
-      <YStack>
-        <H5>Preferred units</H5>
-        <XStack space>
-          <YStack space="$2" flexGrow={1}>
-            <Label>Weather: </Label>
-            <CustomSelect
-              items={['celsius', 'fahrenheit']}
-              value={user.preferredWeather}
-              onChange={(value) =>
-                handleChange({ target: { id: 'preferredWeather', value } })
-              }
-            />
+    <ScrollView>
+      <YStack
+        space="$3"
+        width="fit-content"
+        paddingVertical={20}
+        marginHorizontal="auto"
+      >
+        <Stack>
+          <H2>Profile</H2>
+          <Separator marginVertical={8} />
+        </Stack>
+        <XStack alignItems="center" space>
+          <Avatar size={90} src={user.profileImage} />
+          <YStack space="$2">
+            <H5 fontWeight="medium">Profile Picture</H5>
+            <XStack space="$2" alignItems="flex-end">
+              <Button
+                size="$3"
+                icon={<Ionicons name="cloud-upload-outline" size={24} />}
+                color="white"
+                style={{ backgroundColor: '#0284c7' }}
+                onPress={pickImage}
+              >
+                Upload
+              </Button>
+              <Button size="$3" onPress={removeProfileImage}>
+                Remove
+              </Button>
+            </XStack>
           </YStack>
-          <YStack space="$2" flexGrow={1}>
-            <Label>Weight: </Label>
-            <CustomSelect
-              items={['lb', 'oz', 'kg', 'g']}
-              value={user.preferredWeight}
-              onChange={(value) =>
-                handleChange({ target: { id: 'preferredWeight', value } })
-              }
+        </XStack>
+        <XStack space="$3">
+          <YStack>
+            <Label htmlFor="firstName">Name</Label>
+            <Input id="name" value={user.name} onChange={handleChange} />
+          </YStack>
+          <YStack>
+            <Label htmlFor="username">Username</Label>
+            <Input
+              id="username"
+              value={user.username}
+              onChange={handleChange}
             />
           </YStack>
         </XStack>
+
+        <YStack>
+          <Label htmlFor="email">Email</Label>
+          <Input id="email" value={user.email} onChange={handleChange} />
+        </YStack>
+        <YStack>
+          <H5>Preferred units</H5>
+          <XStack space>
+            <YStack space="$2" flexGrow={1}>
+              <Label>Weather: </Label>
+              <CustomSelect
+                items={['celsius', 'fahrenheit']}
+                value={user.preferredWeather}
+                onChange={(value) =>
+                  handleChange({ target: { id: 'preferredWeather', value } })
+                }
+              />
+            </YStack>
+            <YStack space="$2" flexGrow={1}>
+              <Label>Weight: </Label>
+              <CustomSelect
+                items={['lb', 'oz', 'kg', 'g']}
+                value={user.preferredWeight}
+                onChange={(value) =>
+                  handleChange({ target: { id: 'preferredWeight', value } })
+                }
+              />
+            </YStack>
+          </XStack>
+        </YStack>
+        <Button
+          color="white"
+          style={{ backgroundColor: '#0284c7' }}
+          onPress={handleEditUser}
+        >
+          Update profile
+        </Button>
+        <Stack marginTop={20} marginBottom={10}>
+          <H2>Change Password</H2>
+          <Separator marginVertical={8} />
+          <Text fontSize={16}>We will email you to verify the change.</Text>
+        </Stack>
+        <YStack>
+          <Label htmlFor="oldPassword">Old password</Label>
+          <Input
+            id="oldPassword"
+            value={passwords.oldPassword}
+            secureTextEntry={true}
+            onChange={handlePasswordsChange}
+          />
+        </YStack>
+        <YStack>
+          <Label htmlFor="newPassword">New password</Label>
+          <Input
+            id="newPassword"
+            value={passwords.newPassword}
+            secureTextEntry={true}
+            onChange={handlePasswordsChange}
+          />
+        </YStack>
+        <YStack>
+          <Label htmlFor="confirmPassword">Confirm new password</Label>
+          <Input
+            id="confirmPassword"
+            value={passwords.confirmPassword}
+            secureTextEntry={true}
+            onChange={handlePasswordsChange}
+          />
+        </YStack>
+        <Button
+          color="white"
+          style={{ backgroundColor: '#0284c7' }}
+          onPress={handleUpdatePassword}
+        >
+          Change password
+        </Button>
       </YStack>
-      <Button
-        color="white"
-        style={{ backgroundColor: '#0284c7' }}
-        onPress={handleEditUser}
-      >
-        Update profile
-      </Button>
-      <Stack marginTop={20} marginBottom={10}>
-        <H2>Change Password</H2>
-        <Separator marginVertical={8} />
-        <Text fontSize={16}>We will email you to verify the change.</Text>
-      </Stack>
-      <YStack>
-        <Label htmlFor="oldPassword">Old password</Label>
-        <Input
-          id="oldPassword"
-          value={passwords.oldPassword}
-          secureTextEntry={true}
-          onChange={handlePasswordsChange}
-        />
-      </YStack>
-      <YStack>
-        <Label htmlFor="newPassword">New password</Label>
-        <Input
-          id="newPassword"
-          value={passwords.newPassword}
-          secureTextEntry={true}
-          onChange={handlePasswordsChange}
-        />
-      </YStack>
-      <YStack>
-        <Label htmlFor="confirmPassword">Confirm new password</Label>
-        <Input
-          id="confirmPassword"
-          value={passwords.confirmPassword}
-          secureTextEntry={true}
-          onChange={handlePasswordsChange}
-        />
-      </YStack>
-      <Button
-        color="white"
-        style={{ backgroundColor: '#0284c7' }}
-        onPress={handleUpdatePassword}
-      >
-        Change password
-      </Button>
-    </YStack>
+    </ScrollView>
   );
 }
 

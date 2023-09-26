@@ -2,24 +2,27 @@ import PackContainer from '../../../components/pack/PackContainer';
 import { TripDetails } from '../../../screens/trip/TripDetails';
 import { DetailsComponent } from '../../../components/details';
 import { Platform } from 'react-native';
-import { Stack as Header } from 'expo-router';
+import { Stack } from 'expo-router';
+import Head from 'expo-router/head';
 
 export default function Trip() {
-  return Platform.OS === 'web' ? (
+  return (
     <>
-      <Header.Screen
+      <Head>
+        <title>Trip</title>
+        <meta name="description" content="Trip" />
+      </Head>
+      <Stack.Screen
         options={{
           // https://reactnavigation.org/docs/headers#setting-the-header-title
           title: 'Trip',
+          name: 'Trip',
           // https://reactnavigation.org/docs/headers#adjusting-header-styles
 
           // https://reactnavigation.org/docs/headers#replacing-the-title-with-a-custom-component
         }}
       />
-      {/* <DetailsComponent type='pack'/> */}
       <TripDetails />
     </>
-  ) : (
-    <></>
   );
 }
