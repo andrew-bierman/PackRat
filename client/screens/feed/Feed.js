@@ -15,7 +15,7 @@ import {
   Flex,
 } from 'native-base';
 import { AntDesign } from '@expo/vector-icons';
-import { StyleSheet, FlatList, View } from 'react-native';
+import { StyleSheet, FlatList, View, ScrollView } from 'react-native';
 import Card from '../../components/feed/FeedCard';
 import DropdownComponent from '../../components/Dropdown';
 import { theme } from '../../theme';
@@ -247,13 +247,18 @@ const Feed = ({ feedType = 'public' }) => {
       />
     );
     return Platform.OS === 'web' ? (
-      <View style={styles.cardContainer}>
-        {console.log({ data })}
-        {feedSearchFilterComponent}
-        {data?.map((item) => (
-          <Card key={item._id} type={item.type} {...item} />
-        ))}
-      </View>
+      <ScrollView
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{ flex: 1, paddingBottom: 10 }}
+      >
+        <View style={styles.cardContainer}>
+          {console.log({ data })}
+          {feedSearchFilterComponent}
+          {data?.map((item) => (
+            <Card key={item._id} type={item.type} {...item} />
+          ))}
+        </View>
+      </ScrollView>
     ) : (
       <View style={{ flex: 1, paddingBottom: 10 }}>
         <FlatList
