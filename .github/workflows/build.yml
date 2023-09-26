@@ -1,8 +1,10 @@
 name: android-build-apk
 on:
   push:
-    branches:
-      - master, dev, andrew_testing, feat/native-build-github-action
+    branches: [ "**" ]
+  pull_request:
+    branches: [ "**" ]
+    
 jobs:
   install-and-test:
     runs-on: ubuntu-latest
