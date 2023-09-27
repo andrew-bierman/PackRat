@@ -15,6 +15,8 @@ export const editItem = async (req, res, next) => {
       type,
     );
 
+    console.log(newItem)
+
     res.locals.data = newItem;
     responseHandler(res);
   } catch (error) {

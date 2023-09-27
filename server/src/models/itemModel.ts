@@ -10,9 +10,9 @@ const ItemSchema = new Schema(
     quantity: { type: Number, required: true },
     unit: { type: String, required: true },
     category: {
-      type: String
-      // type: Schema.Types.ObjectId,
-      // ref: 'ItemCategory',
+      // type: String
+      type: Schema.Types.ObjectId,
+      ref: 'ItemCategory',
     },
     owners: [{ type: Schema.Types.ObjectId, ref: 'User', default: [] }],
     packs: [{ type: Schema.Types.ObjectId, ref: 'Pack', default: [] }],

@@ -135,7 +135,7 @@ const TableItem = ({
       name,
       `${formatNumber(weight)} ${unit}`,
       quantity,
-      <CategoryRow category={category} />,
+      <CategoryRow category={category.name} />,
       <EditPackItemModal
         packId={_id}
         initialData={itemData}

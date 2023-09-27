@@ -31,7 +31,7 @@ export const editItemService = async (
       weight,
       unit,
       quantity,
-      category: type,
+      category,
     },
     {
       returnOriginal: false,

@@ -29,6 +29,10 @@ export const addItemService = async (
 
   switch (type) {
     case ItemCategoryEnum.FOOD: {
+    // let newCategory = await ItemCategoryModel.create({
+    //     name: type,
+    //   });
+
       category = await ItemCategoryModel.findOne({
         name: ItemCategoryEnum.FOOD,
       });
@@ -39,18 +43,22 @@ export const addItemService = async (
         quantity,
         unit,
         packs: [packId],
-        category: type,
+        category: category,
       });
 
       break;
     }
     case ItemCategoryEnum.WATER: {
+      // let newCategory = await ItemCategoryModel.create({
+      //   name: type,
+      // });
+
       category = await ItemCategoryModel.findOne({
         name: ItemCategoryEnum.WATER,
       });
 
       const existingWaterItem = await Item.findOne({
-        category: type,
+        category: category,
         packs: packId,
       });
 
@@ -65,16 +73,21 @@ export const addItemService = async (
           quantity: 1,
           unit,
           packs: [packId],
-          category: type,
+          category: category,
         });
       }
 
       break;
     }
     default: {
+      // let newCategory = await ItemCategoryModel.create({
+      //   name: type,
+      // });
+
       category = await ItemCategoryModel.findOne({
         name: ItemCategoryEnum.ESSENTIALS,
       });
+      console.log(category)
 
       newItem = await Item.create({
         name,
@@ -82,7 +95,7 @@ export const addItemService = async (
         quantity,
         unit,
         packs: [packId],
-        category: type,
+        category: category,
       });
 
       break;
@@ -98,7 +111,9 @@ export const addItemService = async (
       },
     },
     { new: true },
-  )
+  ).populate('category')
+console.log(updatedItem);
+
 
   return { newItem: updatedItem, packId };
 };
