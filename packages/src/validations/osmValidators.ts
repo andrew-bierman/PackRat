@@ -11,7 +11,7 @@ export const getOsm = z.object({
 export const getParksOSM = z.object({
   lat: z.number(),
   lon: z.number(),
-  radius: z.number(),
+  radius: z.number().optional(),
 });
 
 export const getPhotonDetails = z.object({
@@ -26,7 +26,7 @@ export const getPhotonResults = z.object({
 export const getTrailsOSM = z.object({
     lat: z.number(),
     lon: z.number(),
-    radius: z.number()
+    radius: z.number().optional()
 })
 
 

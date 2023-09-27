@@ -1,5 +1,5 @@
 import { Platform } from 'react-native';
-import { Box, Input, Button, Text } from 'native-base';
+import { Box, Input, Button, Text, Select, CheckIcon } from 'native-base';
 
 // import useAddPack from "../../hooks/useAddPack";
 import { addPack } from '../../store/packsStore';
@@ -18,6 +18,7 @@ export const AddPack = () => {
   const dispatch = useDispatch();
 
   const [name, setName] = useState('');
+  const [isPublic, setIsPublic] = useState(false);
 
   // const { addPack } = useAddPack();
   // const { user } = useAuth();
@@ -37,8 +38,14 @@ export const AddPack = () => {
    * @return {void}
    */
   const handleAddPack = () => {
-    dispatch(addPack({ name, owner_id: user?._id }));
+    dispatch(addPack({ name, owner_id: user?._id, is_public: isPublic }));
     setName('');
+  };
+
+  const data = ['Yes', 'For me only'];
+
+  const handleonValueChange = (itemValue) => {
+    setIsPublic(itemValue == 'Yes');
   };
 
   return (
@@ -54,12 +61,35 @@ export const AddPack = () => {
           }}
           width={Platform.OS === 'web' ? '25%' : '100%'}
         />
+        <Select
+          selectedValue={isPublic}
+          width="100%"
+          accessibilityLabel="Choose Service"
+          placeholder={'Is Public'}
+          _selectedItem={{
+            bg: 'teal.600',
+            endIcon: <CheckIcon size="5" />,
+          }}
+          onValueChange={handleonValueChange}
+        >
+          {data
+            ? data?.map((item, index) => {
+                let val = item;
+                let label = item;
+                if (typeof item === 'object' && item !== null) {
+                  val = item.id || item._id || item.name;
+                  label = item.name;
+                }
+                return (
+                  <Select.Item key={index} label={String(label)} value={val} />
+                );
+              })
+            : null}
+        </Select>
 
         <Button
           width={Platform.OS === 'web' ? null : '50%'}
           onPress={() => {
-            // addPack.mutate({ name, owner_id: user?._id });
-            // setName("");
             handleAddPack();
           }}
         >
