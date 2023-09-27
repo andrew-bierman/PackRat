@@ -10,7 +10,7 @@ import Pack from '../../models/packModel';
  * @return {Promise<object>} - A promise that resolves to the added item.
  */
 export const addGlobalItemToPackService = async (packId, itemId, ownerId) => {
-  const item = await Item.findById(itemId).populate('category', 'name');
+  const item = await Item.findById(itemId).populate('category');
 
   await Pack.updateOne({ _id: packId }, { $addToSet: { items: item._id } });
 

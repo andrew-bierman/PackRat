@@ -46,7 +46,7 @@ export const ItemsTable = ({
       name,
       `${formatNumber(weight)} ${unit}`,
       quantity,
-      `${category}`,
+      `${category.name}`,
       <EditPackItemModal
         initialData={itemData}
         editAsDuplicate={false}
