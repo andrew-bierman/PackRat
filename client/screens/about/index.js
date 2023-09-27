@@ -1,5 +1,12 @@
 import React from 'react';
-import { View, Text, Image, Platform, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  Platform,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
 import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 import { darkTheme, theme } from '../../theme';
 import { Desktop, Mobile, Tablet } from '../../media';
@@ -166,23 +173,28 @@ export default function About() {
     useTheme();
   const styles = useCustomStyles(loadStyles);
   return Platform.OS === 'web' ? (
-    <View style={[isDark ? styles.containerDark : styles.container]}>
-      <Desktop>
-        <AboutContent desktopContainer={styles.webLogoContainer} />
-      </Desktop>
-      <Tablet>
-        <AboutContent
-          desktopContainer={styles.mobileContainer}
-          isMobile={true}
-        />
-      </Tablet>
-      <Mobile>
-        <AboutContent
-          desktopContainer={styles.mobileContainer}
-          isMobile={true}
-        />
-      </Mobile>
-    </View>
+    <ScrollView
+      showsHorizontalScrollIndicator={false}
+      contentContainerStyle={styles.menuBar}
+    >
+      <View style={[isDark ? styles.containerDark : styles.container]}>
+        <Desktop>
+          <AboutContent desktopContainer={styles.webLogoContainer} />
+        </Desktop>
+        <Tablet>
+          <AboutContent
+            desktopContainer={styles.mobileContainer}
+            isMobile={true}
+          />
+        </Tablet>
+        <Mobile>
+          <AboutContent
+            desktopContainer={styles.mobileContainer}
+            isMobile={true}
+          />
+        </Mobile>
+      </View>
+    </ScrollView>
   ) : (
     <View style={[isDark ? styles.containerDark : styles.container]}>
       <AboutContent desktopContainer={styles.logoContainer} isMobile={true} />

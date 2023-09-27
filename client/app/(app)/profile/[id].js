@@ -1,4 +1,4 @@
-import { useSearchParams, Stack as Header } from 'expo-router';
+import { useSearchParams, Stack } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Platform } from 'react-native';
 import ProfileContainer from '../../../screens/user/ProfileContainer';
@@ -6,17 +6,20 @@ import ProfileContainer from '../../../screens/user/ProfileContainer';
 const Profile = () => {
   const { id } = useSearchParams();
 
-  return Platform.OS === 'web' ? (
+  return (
     <>
-      <Header.Screen
+      <Head>
+        <title>{`${id}'s Profile`}</title>
+        <meta name="description" content={`${id}'s Profile`} />
+      </Head>
+      <Stack.Screen
         options={{
           title: `${id}'s Profile`,
+          name: `${id}'s Profile`,
         }}
       />
       <ProfileContainer id={id} />
     </>
-  ) : (
-    <ProfileContainer id={id} />
   );
 };
 
