@@ -33,9 +33,6 @@ export const fetchUserTrips = createAsyncThunk(
 );
 
 export const addTrip = createAsyncThunk('trips/addTrip', async (newTrip) => {
-  console.log('new trip', newTrip);
-  // const response = await axios.post(`${api}/trip/`, newTrip);
-  // return response.data;
   return await trpc.addTrip.mutate(newTrip);
 });
 
