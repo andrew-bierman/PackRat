@@ -1141,8 +1141,9 @@
               "unstyled": false
             },
             "componentName": "Input",
-            "isReactNative": false,
-            "isText": false,
+            "isReactNative": true,
+            "isText": true,
+            "acceptsClassName": true,
             "isStyledHOC": false,
             "neverFlatten": true,
             "isHOC": true
@@ -1185,10 +1186,10 @@
               "unstyled": false
             },
             "componentName": "Input",
-            "isReactNative": false,
-            "isText": false,
-            "isStyledHOC": false,
-            "neverFlatten": true
+            "isReactNative": true,
+            "isText": true,
+            "acceptsClassName": true,
+            "isStyledHOC": false
           }
         },
         "Main": {
@@ -2289,8 +2290,8 @@
               "unstyled": false
             },
             "componentName": "TextArea",
-            "isReactNative": false,
-            "isText": false,
+            "isReactNative": true,
+            "isText": true,
             "acceptsClassName": true,
             "isStyledHOC": false,
             "neverFlatten": true,
@@ -2337,11 +2338,10 @@
               "unstyled": false
             },
             "componentName": "TextArea",
-            "isReactNative": false,
-            "isText": false,
+            "isReactNative": true,
+            "isText": true,
             "acceptsClassName": true,
-            "isStyledHOC": false,
-            "neverFlatten": true
+            "isStyledHOC": false
           }
         },
         "View": {
@@ -8001,8 +8001,11 @@
               }
             },
             "componentName": "Image",
-            "isReactNative": false,
+            "isReactNative": true,
             "isText": false,
+            "acceptsClassName": true,
+            "isInput": false,
+            "inlineProps": {},
             "isStyledHOC": false,
             "neverFlatten": true,
             "isHOC": true
@@ -11696,10 +11699,11 @@
               "scrollEnabled": true
             },
             "componentName": "ScrollView",
-            "isReactNative": false,
+            "isReactNative": true,
             "isText": false,
-            "isStyledHOC": false,
-            "neverFlatten": true
+            "acceptsClassName": true,
+            "isInput": false,
+            "isStyledHOC": false
           }
         },
         "SelectGroupFrame": {
