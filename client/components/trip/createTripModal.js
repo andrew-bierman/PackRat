@@ -10,6 +10,9 @@ import { api } from '../../constants/api';
 // import { Picker } from '@react-native-picker/picker';
 import { DropdownComponent } from '../Dropdown';
 import axios from '~/config/axios';
+import { ReusableForm, RStack } from '../../packrat-ui';
+import { addTrip as addTripValidations } from '@packrat/packages';
+import { InformUser } from '~/utils/ToastUtils';
 
 const options = [
   { label: 'Yes', value: 'true' },
@@ -78,6 +81,31 @@ export const SaveTripContainer = ({ dateRange }) => {
   console.log('- note for me', packId);
   console.log('search in save trip container ->', search);
   console.log('selected in dateRange ->', dateRange);
+
+  const createTripValues = async (name, description, isPublic) => {
+    try {
+      // TODO - fix this, why making call not through redux. Switch to RTK query at least
+      const { data: geoJSON } = await axios.get(
+        `${api}/osm/photonDetails/${search.properties.osm_type}/${search.properties.osm_id}`,
+      );
+      return {
+        name,
+        description,
+        start_date: startDate,
+        end_date: endDate,
+        destination: search.properties.name,
+        geoJSON,
+        // trail: dropdown.currentTrail,
+        duration: JSON.stringify(duration),
+        weather: JSON.stringify(weatherObject),
+        owner_id: user?._id,
+        packs: packId,
+        is_public: isPublic === 'Yes',
+      };
+    } catch (error) {
+      console.log('err', error);
+    }
+  };
 
   // defining dispatch
   const dispatch = useDispatch();
@@ -179,16 +207,84 @@ export const SaveTripContainer = ({ dateRange }) => {
       trigger="Save Trip"
       isActive={isSaveModalOpen}
       onTrigger={() => {
+        if (!search.properties) {
+          InformUser({
+            title: 'Incomplete data',
+            placement: 'top',
+            duration: 3000,
+            style: { backgroundColor: 'red' }, // Style for error messages
+          });
+          return;
+        }
         setIsSaveModalOpen(!isSaveModalOpen);
       }}
-      footerButtons={[
-        {
-          label: 'Save',
-          onClick: handleCreateTrip,
-        },
-      ]}
     >
-      <VStack>
+      <ReusableForm
+        fields={[
+          { name: 'name', label: 'Name', type: 'text' },
+          {
+            name: 'description',
+            label: 'Description',
+            type: 'text',
+          },
+          {
+            name: 'isPublic',
+            label: 'Public',
+            inputComponent: 'select',
+            items: ['Yes', 'For me only'],
+          },
+        ]}
+        defaultValues={() => createTripValues('', '', 'Yes')}
+        schema={addTripValidations}
+        submitText="Save"
+        onSubmit={() => {}}
+      >
+        <RStack>
+          <>
+            <Text>Trip Weather</Text>
+            <Text>
+              Temparature - {weatherObject?.main?.temp}, Humidity -{' '}
+              {weatherObject?.main?.humidity}
+            </Text>
+          </>
+          <HStack>
+            <Text>Pack</Text>
+            <Text>`Selected Pack Name`</Text>
+          </HStack>
+          <HStack>
+            <Text>Trip Location - </Text>
+            <Text>{search?.properties?.name}</Text>
+          </HStack>
+          <HStack>
+            <Text>Selected Trail - </Text>
+            <Text>{dropdown?.currentTrail}</Text>
+          </HStack>
+          <HStack>
+            <Text>Selected Date Range - </Text>
+            <Text>
+              {dateRange.startDate
+                ? format(dateRange.startDate, 'MM/dd/yyyy')
+                : ''}{' '}
+              -{' '}
+              {dateRange.endDate ? format(dateRange.endDate, 'MM/dd/yyyy') : ''}
+            </Text>
+          </HStack>
+          <HStack>
+            <Text>Duration {'(Number of nights) - '} </Text>
+            {dateRange.startDate && dateRange.endDate && (
+              <Text>
+                {
+                  intervalToDuration({
+                    start: dateRange.startDate,
+                    end: dateRange.endDate,
+                  }).days
+                }
+              </Text>
+            )}
+          </HStack>
+        </RStack>
+      </ReusableForm>
+      {/* <VStack>
         <Input
           placeholder="Trip Name"
           onChange={(event) => {
@@ -201,9 +297,9 @@ export const SaveTripContainer = ({ dateRange }) => {
           onChange={(event) => {
             setDescription(event.target.value);
           }}
-        />
-        <>
-          {/* <Text mt={4}>Duration</Text>
+        /> */}
+      <>
+        {/* <Text mt={4}>Duration</Text>
           <Input
             placeholder="Number of nights"
             min={0}
@@ -240,17 +336,7 @@ export const SaveTripContainer = ({ dateRange }) => {
             />
           </HStack> */}
 
-          <DropdownComponent
-            onValueChange={(itemValue) => {
-              setIsPublic(itemValue == 'Yes');
-            }}
-            data={['Yes', 'For me only']}
-            value={isPublic}
-            placeholder="Is Public"
-            style={{ marginTop: 4, marginBottom: 4 }}
-            width={150}
-          />
-          {/* <Select
+        {/* <Select
             minWidth="full"
             placeholder="Is Public"
             mt={4}
@@ -261,49 +347,8 @@ export const SaveTripContainer = ({ dateRange }) => {
             <Select.Item label="For me only" value="false" />
 
           </Select> */}
-        </>
-        <>
-          <Text>Trip Weather</Text>
-          <Text>
-            Temparature - {weatherObject?.main?.temp}, Humidity -{' '}
-            {weatherObject?.main?.humidity}
-          </Text>
-        </>
-        <HStack>
-          <Text>Pack</Text>
-          <Text>`Selected Pack Name`</Text>
-        </HStack>
-        <HStack>
-          <Text>Trip Location - </Text>
-          <Text>{search?.properties?.name}</Text>
-        </HStack>
-        <HStack>
-          <Text>Selected Trail - </Text>
-          <Text>{dropdown?.currentTrail}</Text>
-        </HStack>
-        <HStack>
-          <Text>Selected Date Range - </Text>
-          <Text>
-            {dateRange.startDate
-              ? format(dateRange.startDate, 'MM/dd/yyyy')
-              : ''}{' '}
-            - {dateRange.endDate ? format(dateRange.endDate, 'MM/dd/yyyy') : ''}
-          </Text>
-        </HStack>
-        <HStack>
-          <Text>Duration {'(Number of nights) - '} </Text>
-          {dateRange.startDate && dateRange.endDate && (
-            <Text>
-              {
-                intervalToDuration({
-                  start: dateRange.startDate,
-                  end: dateRange.endDate,
-                }).days
-              }
-            </Text>
-          )}
-        </HStack>
-      </VStack>
+      </>
+      {/* </VStack> */}
     </CustomModal>
   );
 };

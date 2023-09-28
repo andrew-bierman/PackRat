@@ -29,7 +29,7 @@ import { useForm } from 'react-hook-form';
 import { InputText, InputTextRules } from '~/components/InputText';
 import { Regex } from '~/utils/regex';
 import useCustomStyles from '~/hooks/useCustomStyles';
-import { userSignIn } from '@packrat/packages'
+import { userSignIn } from '@packrat/packages';
 import ReusableForm from '../packrat-ui/form';
 import { useSession } from '../context/auth';
 
@@ -89,7 +89,7 @@ export default function Login() {
         placement: 'top-right',
         style: { backgroundColor: currentTheme.colors.error },
       });
-    })
+    });
   }
 
   // const { loginUserWithEmailAndPassword, loginUserWithGoogle } = useLogin();
@@ -278,8 +278,8 @@ export default function Login() {
           <VStack space={3} mt="5">
             <ReusableForm
               fields={[
-                { name: 'email', label: 'Email ID', type: 'email', },
-                { name: 'password', label: 'Password', type: 'password', },
+                { name: 'email', label: 'Email ID', type: 'email' },
+                { name: 'password', label: 'Password', type: 'password' },
               ]}
               schema={userSignIn}
               submitText="Sign in"

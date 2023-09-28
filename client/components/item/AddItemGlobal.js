@@ -5,11 +5,11 @@ import { addItemsGlobal, addItemOffline } from '../../store/globalItemsStore';
 import { addOfflineRequest } from '../../store/offlineQueue';
 import { ItemForm } from './ItemForm'; // assuming you moved the form related code to a separate component
 import { InformUser } from '~/utils/ToastUtils';
-import { addItemGlobal } from '@packrat/packages'
+import { addItemGlobal } from '@packrat/packages';
 
 export const AddItemGlobal = ({
   setIsAddItemModalOpen,
-  setRefetch = () => { },
+  setRefetch = () => {},
   refetch,
 }) => {
   const dispatch = useDispatch();
@@ -51,7 +51,13 @@ export const AddItemGlobal = ({
       dispatch(addOfflineRequest({ method: 'addGlobalItem', data: item }));
     } else {
       try {
-        addItemGlobal.parse({ name, weight, quantity, type: categoryType, unit });
+        addItemGlobal.parse({
+          name,
+          weight,
+          quantity,
+          type: categoryType,
+          unit,
+        });
         dispatch(
           addItemsGlobal({
             name,
@@ -86,7 +92,7 @@ export const AddItemGlobal = ({
         placement: 'top-right',
         style: { backgroundColor: currentTheme.colors.error },
       });
-    })
+    });
   }
 
   return (
