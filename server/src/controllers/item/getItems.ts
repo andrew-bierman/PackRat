@@ -4,6 +4,7 @@ import { responseHandler } from '../../helpers/responseHandler';
 import Item from '../../models/itemModel';
 import { getItemsService } from '../../services/item/item.service';
 import * as validator from '../../middleware/validators/index';
+import { TRPCError } from '@trpc/server';
 /**
  * Retrieves a list of items associated with a pack.
  * @param {Object} req - The request object.
@@ -27,7 +28,11 @@ export const getItems = async (req, res, next) => {
 export function getItemsRoute() {
   return publicProcedure.input(validator.getItems)
     .query(async (opts) => {
-      const { packId } = opts.input;
-      return await getItemsService(packId);
+      try {
+        const { packId } = opts.input;
+        return await getItemsService(packId);
+      } catch (error) {
+        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: ItemNotFoundError.message });
+      }
     });
 }

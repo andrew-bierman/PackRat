@@ -6,6 +6,7 @@ import { responseHandler } from '../../helpers/responseHandler';
 import { z } from 'zod';
 import { publicProcedure } from '../../trpc';
 import { getPhotonDetailsService } from '../../services/osm/getPhotonDetailsService';
+import { TRPCError } from '@trpc/server';
 
 /**
  * Retrieves Photon details based on the provided ID and type.
@@ -33,7 +34,11 @@ export function getPhotonDetailsRoute() {
       z.object({ id: z.union([z.string(), z.number()]), type: z.string() }),
     )
     .query(async (opts) => {
-      let { id, type } = opts.input;
-      return await getPhotonDetailsService(id, type);
+      try {
+        let { id, type } = opts.input;
+        return await getPhotonDetailsService(id, type);
+      } catch (error) {
+        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: RetrievingPhotonDetailsError.message });
+      }
     });
 }

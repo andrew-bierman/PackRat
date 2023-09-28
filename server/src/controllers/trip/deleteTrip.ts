@@ -2,6 +2,7 @@ import { publicProcedure } from '../../trpc';
 import { UnableToDeleteTripError } from '../../helpers/errors';
 import Trip from '../../models/tripModel';
 import * as validator from '../../middleware/validators/index';
+import { TRPCError } from '@trpc/server';
 /**
  * Deletes a trip from the database.
  * @param {Object} req - The request object.
@@ -21,8 +22,12 @@ export const deleteTrip = async (req, res, next) => {
 
 export function deleteTripRoute() {
   return publicProcedure.input(validator.deleteTrip).mutation(async (opts) => {
-    const { tripId } = opts.input;
-    await Trip.findOneAndDelete({ _id: tripId });
-    return "trip was deleted successfully";
+    try {
+      const { tripId } = opts.input;
+      await Trip.findOneAndDelete({ _id: tripId });
+      return "trip was deleted successfully";
+    } catch (error) {
+      throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: error.message });
+    }
   })
 }

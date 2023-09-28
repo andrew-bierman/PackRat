@@ -4,6 +4,7 @@ import { responseHandler } from '../../helpers/responseHandler';
 import Trip from '../../models/tripModel';
 import { getTripsService } from '../../services/trip/getTripsService';
 import * as validator from '../../middleware/validators/index';
+import { TRPCError } from '@trpc/server';
 /**
  * Retrieves trips belonging to a specific owner.
  * @param {Object} req - The request object.
@@ -25,7 +26,11 @@ export const getTrips = async (req, res, next) => {
 
 export function getTripsRoute() {
   return publicProcedure.input(validator.getTrips).query(async (opts) => {
-    const { owner_id } = opts.input;
-    return await getTripsService(owner_id);
+    try {
+      const { owner_id } = opts.input;
+      return await getTripsService(owner_id);
+    } catch (error) {
+      throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: error.message });
+    }
   })
 }

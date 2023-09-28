@@ -7,6 +7,7 @@ import sgMail from '@sendgrid/mail';
 import { responseHandler } from '../../helpers/responseHandler';
 import { z } from 'zod';
 import { publicProcedure } from '../../trpc';
+import { TRPCError } from '@trpc/server';
 
 sgMail.setApiKey(SEND_GRID_API_KEY);
 
@@ -67,11 +68,12 @@ export function handlePasswordResetRoute() {
       const user = await User.findOne({ email });
 
       if (!user) {
-        return { error: 'No user found with this email address' };
+        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'No user found with this email address' });
       }
 
       if (Date.now() > user.passwordResetTokenExpiration.getTime()) {
-        return { error: 'Password reset token has expired' };
+        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Password reset token has expired' });
       }
+      return "Password reset successful";
     });
 }

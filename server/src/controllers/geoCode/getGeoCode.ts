@@ -1,9 +1,10 @@
 import { publicProcedure } from '../../trpc';
-import { ErrorFetchingGeoCodeError } from '../../helpers/errors';
+import { ErrorFetchingGeoCodeError, InternalServerError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { oneEntity } from '../../utils/oneEntity';
 import * as validators from "@packrat/packages"
 import { geoCodeService } from '../../services/geocode/geoCodeService';
+import { TRPCError } from '@trpc/server';
 
 const fetch = async (...args: Parameters<typeof fetch>) =>
   import('node-fetch').then(async ({ default: fetch }) =>
@@ -31,7 +32,14 @@ export const getGeoCode = async (req, res, next) => {
 
 export function getGeoCodeRoute() {
   return publicProcedure.input(validators.AddressArray).query(async (opts) => {
-    const result: any = await geoCodeService(opts.input);
-    return result.message === "ok" ? result.result : ErrorFetchingGeoCodeError
+    try {
+      const result: any = await geoCodeService(opts.input);
+      if (result.message === "ok") {
+        return result.result
+      }
+      throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: ErrorFetchingGeoCodeError.message });
+    } catch (error) {
+      throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: InternalServerError.message });
+    }
   });
 }

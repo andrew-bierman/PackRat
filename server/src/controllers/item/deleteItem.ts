@@ -3,6 +3,7 @@ import { responseHandler } from '../../helpers/responseHandler';
 import { deleteItemService } from '../../services/item/item.service';
 import * as validator from '../../middleware/validators/index';
 import { publicProcedure } from '../../trpc';
+import { TRPCError } from '@trpc/server';
 /**
  * Deletes an item from the database.
  * @param {Object} req - The request object.
@@ -27,7 +28,11 @@ export const deleteItem = async (req, res, next) => {
 export function deleteItemRoute() {
   return publicProcedure.input(validator.deleteItem)
     .mutation(async (opts) => {
-      const { itemId, packId } = opts.input;
-      return await deleteItemService(itemId, packId);
+      try {
+        const { itemId, packId } = opts.input;
+        return await deleteItemService(itemId, packId);
+      } catch (error) {
+        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: UnableToDeleteItemError.message });
+      }
     });
 }

@@ -3,6 +3,7 @@ import { ItemNotFoundError } from '../../helpers/errors';
 import { searchItemsByNameService } from '../../services/item/item.service';
 import * as validator from '../../middleware/validators/index';
 import { z } from 'zod';
+import { TRPCError } from '@trpc/server';
 
 /**
  * Searches for items by name.
@@ -28,7 +29,11 @@ export const searchItemsByName = async (req, res, next) => {
 export function searchItemsByNameRoute() {
   return publicProcedure.input(z.object({ name: z.string() }))
     .query(async (opts) => {
-      const { name } = opts.input;
-      return searchItemsByNameService(name);
+      try {
+        const { name } = opts.input;
+        return searchItemsByNameService(name);
+      } catch (error) {
+        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: ItemNotFoundError.message });
+      }
     });
 }

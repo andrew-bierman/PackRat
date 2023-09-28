@@ -8,6 +8,7 @@ import {
   JWT_SECRET,
 } from '../../config';
 import { publicProcedure } from '../../trpc';
+import { TRPCError } from '@trpc/server';
 
 const oauth2Client = new google.auth.OAuth2(
   GOOGLE_CLIENT_ID,
@@ -43,14 +44,18 @@ export function getGoogleAuthURLRoute() {
     'https://www.googleapis.com/auth/userinfo.email',
   ];
   return publicProcedure.query(async (opts) => {
-    return {
-      googleUrl: oauth2Client.generateAuthUrl({
-        access_type: 'offline',
-        prompt: 'consent',
-        scope: scopes,
-      }),
-      status: 'success',
-      statusCode: 200,
+    try {
+      return {
+        googleUrl: oauth2Client.generateAuthUrl({
+          access_type: 'offline',
+          prompt: 'consent',
+          scope: scopes,
+        }),
+        status: 'success',
+        statusCode: 200,
+      }
+    } catch (error) {
+      throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: error.message });
     }
   });
 }

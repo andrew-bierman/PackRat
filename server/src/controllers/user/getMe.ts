@@ -1,3 +1,4 @@
+import { TRPCError } from "@trpc/server";
 import { publicProcedure } from "../../trpc";
 
 /**
@@ -17,6 +18,10 @@ export const getMe = async (req, res) => {
 export function getMeRoute() {
   return publicProcedure
     .query(async (opts) => {
-      return opts.input
+      try {
+        return opts.input
+      } catch (error) {
+        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: error.message });
+      }
     });
 }

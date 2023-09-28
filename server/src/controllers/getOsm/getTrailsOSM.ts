@@ -6,6 +6,7 @@ import {
 import { responseHandler } from '../../helpers/responseHandler';
 import { publicProcedure } from '../../trpc';
 import * as validators from '@packrat/packages';
+import { TRPCError } from '@trpc/server';
 
 /**
  * Retrieves trails data from OpenStreetMap (OSM) based on the provided latitude, longitude, and radius.
@@ -31,8 +32,11 @@ export const getTrailsOSM = async (req, res, next) => {
 
 export function getTrailsOSMRoute() {
   return publicProcedure.input(validators.getTrailsOSM).query(async (opts) => {
-    const { lat = 45.5231, lon = -122.6765, radius = 50000 } = opts.input;
-    
-    return await getTrailsOsmService(lat, lon, radius);
+    try {
+      const { lat = 45.5231, lon = -122.6765, radius = 50000 } = opts.input;
+      return await getTrailsOsmService(lat, lon, radius);
+    } catch (error) {
+      throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: RetrievingTrailsOSMError.message });
+    }
   });
 }

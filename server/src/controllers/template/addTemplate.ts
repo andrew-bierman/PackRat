@@ -1,9 +1,10 @@
 import { publicProcedure } from '../../trpc';
-import { UserNotFoundError } from '../../helpers/errors';
+import { InternalServerError, UserNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import User from '../../models/userModel';
 import { addTemplateService } from '../../services/template/template.service';
 import { z } from 'zod';
+import { TRPCError } from '@trpc/server';
 
 /**
  * Adds a template to the database.
@@ -30,12 +31,16 @@ export function addTemplateRoute() {
   return publicProcedure
     .input(z.object({ type: z.string(), templateId: z.string(), isGlobalTemplate: z.boolean(), createdBy: z.string() }))
     .mutation(async (opts) => {
-      const { type, templateId, isGlobalTemplate, createdBy } = opts.input;
-      const user = await User.findById(createdBy);
-      if (!user) {
-        throw new Error(UserNotFoundError.message);
+      try {
+        const { type, templateId, isGlobalTemplate, createdBy } = opts.input;
+        const user = await User.findById(createdBy);
+        if (!user) {
+          throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: UserNotFoundError.message });
+        }
+        await addTemplateService(type, templateId, isGlobalTemplate, createdBy);
+        return { message: 'Template added successfully' };
+      } catch (error) {
+        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: InternalServerError.message });
       }
-      await addTemplateService(type, templateId, isGlobalTemplate, createdBy);
-      return { message: 'Template added successfully' };
     });
 }

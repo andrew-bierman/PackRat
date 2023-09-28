@@ -3,6 +3,7 @@ import { ItemNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { getItemByIdService } from '../../services/item/item.service';
 import * as validator from '../../middleware/validators/index';
+import { TRPCError } from '@trpc/server';
 
 /**
  * Retrieves an item by its ID.
@@ -27,7 +28,11 @@ export const getItemById = async (req, res, next) => {
 export function getItemByIdRoute() {
   return publicProcedure.input(validator.getItemById)
     .query(async (opts) => {
-      const { _id } = opts.input;
-      return getItemByIdService(_id);
+      try {
+        const { _id } = opts.input;
+        return getItemByIdService(_id);
+      } catch (error) {
+        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: ItemNotFoundError.message });
+      }
     });
 }

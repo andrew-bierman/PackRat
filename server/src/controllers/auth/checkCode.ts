@@ -1,8 +1,9 @@
 import { publicProcedure } from '../../trpc';
-import { InvalidCodeError } from '../../helpers/errors';
+import { InternalServerError, InvalidCodeError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import * as validator from '@packrat/packages';
 import { checkCodeService } from '../../services/user/checkCodeService';
+import { TRPCError } from '@trpc/server';
 /**
  * Checks the provided code against the user's email in the database.
  * @param {Object} req - the request object
@@ -22,6 +23,14 @@ export function checkCodeRoute() {
   return publicProcedure
     .input(validator.checkCode)
     .mutation(async (opts) => {
-      return await checkCodeService(opts.input);
+      try {
+        const user = await checkCodeService(opts.input);
+        if (user.length) {
+          return user
+        }
+        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: InvalidCodeError.message });
+      } catch (error) {
+        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: InternalServerError.message });
+      }
     });
 }

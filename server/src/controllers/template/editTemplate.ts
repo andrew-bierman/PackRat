@@ -3,6 +3,8 @@ import { responseHandler } from '../../helpers/responseHandler';
 import Template from '../../models/templateModel';
 import { editTemplateService } from '../../services/template/template.service';
 import { z } from 'zod';
+import { TRPCError } from '@trpc/server';
+import { InternalServerError } from '../../helpers/errors';
 
 /**
  * Edits a template.
@@ -26,12 +28,16 @@ export function editTemplateRoute() {
   return publicProcedure
     .input(z.object({ templateId: z.string(), type: z.string(), isGlobalTemplate: z.boolean() }))
     .mutation(async (opts) => {
-      const { templateId, type, isGlobalTemplate } = opts.input;
-      const updatedTemplate = await editTemplateService(
-        templateId,
-        type,
-        isGlobalTemplate,
-      );
-      return updatedTemplate;
+      try {
+        const { templateId, type, isGlobalTemplate } = opts.input;
+        const updatedTemplate = await editTemplateService(
+          templateId,
+          type,
+          isGlobalTemplate,
+        );
+        return updatedTemplate;
+      } catch (error) {
+        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: InternalServerError.message });
+      }
     });
 }

@@ -3,6 +3,7 @@ import { UnableToEditUserError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import User from '../../models/userModel';
 import * as validator from '../../middleware/validators/index';
+import { TRPCError } from '@trpc/server';
 /**
  * Edits a user.
  * @param {Object} req - The request object.
@@ -29,10 +30,14 @@ export function editUserRoute() {
   return publicProcedure
     .input(validator.editUser)
     .mutation(async (opts) => {
-      const { userId } = opts.input;
-      const editedUser = await User.findOneAndUpdate({ _id: userId }, opts.input, {
-        returnOriginal: false,
-      }).populate('favorites');
-      return editedUser;
+      try {
+        const { userId } = opts.input;
+        const editedUser = await User.findOneAndUpdate({ _id: userId }, opts.input, {
+          returnOriginal: false,
+        }).populate('favorites');
+        return editedUser;
+      } catch (error) {
+        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: error.message });
+      }
     });
 }
