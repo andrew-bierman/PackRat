@@ -19,11 +19,12 @@ export const getUserFavorites = async (req, res, next) => {
   responseHandler(res);
 };
 
-
 export function getUserFavoritesRoute() {
-  return publicProcedure.input(z.object({ userId: z.string() })).query(async (opts) => {
-    const { userId } = opts.input;
-    const user = await User.findById({ _id: userId }).populate('favorites')
-    return user.favorites;
-  });
-};
+  return publicProcedure
+    .input(z.object({ userId: z.string() }))
+    .query(async (opts) => {
+      const { userId } = opts.input;
+      const user = await User.findById({ _id: userId }).populate('favorites');
+      return user.favorites;
+    });
+}

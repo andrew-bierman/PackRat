@@ -50,7 +50,8 @@ export const addTrip = async (req, res, next) => {
 
 export function addTripRoute() {
   return publicProcedure.input(validator.addTrip).mutation(async (opts) => {
-    const { name,
+    const {
+      name,
       description,
       duration,
       weather,
@@ -60,7 +61,8 @@ export function addTripRoute() {
       geoJSON,
       owner_id,
       packs,
-      is_public } = opts.input;
+      is_public,
+    } = opts.input;
     const tripDetails = {
       name,
       description,
@@ -73,7 +75,7 @@ export function addTripRoute() {
       owner_id,
       packs,
       is_public,
-    }
+    };
     return await addTripService(tripDetails);
-  })
+  });
 }

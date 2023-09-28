@@ -26,13 +26,15 @@ export const editUser = async (req, res, next) => {
 };
 
 export function editUserRoute() {
-  return publicProcedure
-    .input(validator.editUser)
-    .mutation(async (opts) => {
-      const { userId } = opts.input;
-      const editedUser = await User.findOneAndUpdate({ _id: userId }, opts.input, {
+  return publicProcedure.input(validator.editUser).mutation(async (opts) => {
+    const { userId } = opts.input;
+    const editedUser = await User.findOneAndUpdate(
+      { _id: userId },
+      opts.input,
+      {
         returnOriginal: false,
-      }).populate('favorites');
-      return editedUser;
-    });
+      },
+    ).populate('favorites');
+    return editedUser;
+  });
 }

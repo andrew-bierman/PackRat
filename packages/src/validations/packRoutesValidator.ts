@@ -33,5 +33,5 @@ export const duplicatePublicPack = z.object({
 });
 
 export const getPublicPacks = z.object({
-  queryBy: z.string()
-})
+  queryBy: z.string(),
+});

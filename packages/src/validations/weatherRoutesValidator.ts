@@ -1,11 +1,11 @@
 import { z } from 'zod';
 
 export const getWeatherWeek = z.object({
-    lat: z.number(),
-    lon: z.number()
-})
+  lat: z.number(),
+  lon: z.number(),
+});
 
-export const getWeather = z.object({ 
-    lat: z.number(),
-    lon: z.number()
-})
+export const getWeather = z.object({
+  lat: z.number(),
+  lon: z.number(),
+});

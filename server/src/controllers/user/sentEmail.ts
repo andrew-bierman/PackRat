@@ -29,15 +29,14 @@ export const sentEmail = async (req, res) => {
 };
 
 export function sentEmailRoute() {
-  return publicProcedure
-    .input(validator.sentEmail).query(async (opts) => {
-      const { email } = opts.input;
-      const user = await User.findOne({ email });
-      if (!user) {
-        throw new Error('User not found');
-      }
-      const resetUrl = await user.generateResetToken();
-      resetEmail(user.email, resetUrl);
-      return "Reset Token has been sent successfully";
-    })
+  return publicProcedure.input(validator.sentEmail).query(async (opts) => {
+    const { email } = opts.input;
+    const user = await User.findOne({ email });
+    if (!user) {
+      throw new Error('User not found');
+    }
+    const resetUrl = await user.generateResetToken();
+    resetEmail(user.email, resetUrl);
+    return 'Reset Token has been sent successfully';
+  });
 }
