@@ -15,21 +15,20 @@ export const getParksOSM = z.object({
 });
 
 export const getPhotonDetails = z.object({
-    id: z.union([z.string(), z.number()]),
-    type: z.string()
+  id: z.union([z.string(), z.number()]),
+  type: z.string(),
 });
 
 export const getPhotonResults = z.object({
-    searchString: z.string()
-})
+  searchString: z.string(),
+});
 
 export const getTrailsOSM = z.object({
-    lat: z.number(),
-    lon: z.number(),
-    radius: z.number().optional()
-})
-
+  lat: z.number(),
+  lon: z.number(),
+  radius: z.number().optional(),
+});
 
 export const postSingleGeoJSON = z.object({
-    geojson: z.any()
-})
+  geojson: z.any(),
+});

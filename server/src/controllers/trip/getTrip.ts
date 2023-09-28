@@ -27,5 +27,5 @@ export function getTripsRoute() {
   return publicProcedure.input(validator.getTrips).query(async (opts) => {
     const { owner_id } = opts.input;
     return await getTripsService(owner_id);
-  })
+  });
 }

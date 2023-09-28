@@ -37,7 +37,11 @@ const router = express.Router();
  *       '500':
  *         description: Error adding to favorite
  */
-router.post('/', (req, res,next) => zodParser(validator.addToFavorite, req.body,next), tryCatchWrapper(addToFavorite));
+router.post(
+  '/',
+  (req, res, next) => zodParser(validator.addToFavorite, req.body, next),
+  tryCatchWrapper(addToFavorite),
+);
 
 /**
  * @swagger

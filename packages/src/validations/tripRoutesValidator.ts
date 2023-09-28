@@ -1,7 +1,7 @@
-import { z } from "zod";
-import { Request } from "express";
+import { z } from 'zod';
+import { Request } from 'express';
 
-export const JoiObjectId = (message = "valid id") =>
+export const JoiObjectId = (message = 'valid id') =>
   z.string().regex(/^[0-9a-fA-F]{24}$/g, { message });
 
 export const getTrips = z.object({
@@ -42,5 +42,5 @@ export const deleteTrip = z.object({
 });
 
 export const queryTrip = z.object({
-  queryBy: z.string()
-})
+  queryBy: z.string(),
+});

@@ -22,9 +22,11 @@ export const getWeather = async (req, res, next) => {
 };
 
 export function getWeatherRoute() {
-  return publicProcedure.input(z.object({ lat: z.number(), lon: z.number() })).query(async (opts) => {
-    const { lat, lon } = opts.input;
-    const response = await getWeatherService(lat, lon);
-    return response.data;
-  })
+  return publicProcedure
+    .input(z.object({ lat: z.number(), lon: z.number() }))
+    .query(async (opts) => {
+      const { lat, lon } = opts.input;
+      const response = await getWeatherService(lat, lon);
+      return response.data;
+    });
 }

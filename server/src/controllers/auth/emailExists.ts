@@ -28,9 +28,7 @@ export const emailExists = async (req, res, next) => {
 };
 
 export function emailExistsRoute() {
-  return publicProcedure
-    .input(validator.emailExists)
-    .mutation(async (opts) => {
-      return await emailExistsService(opts.input);
-    });
+  return publicProcedure.input(validator.emailExists).mutation(async (opts) => {
+    return await emailExistsService(opts.input);
+  });
 }
