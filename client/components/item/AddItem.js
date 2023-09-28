@@ -51,53 +51,35 @@ export const AddItem = ({
    *
    * @return {type} description of return value
    */
-  const handleSubmit = () => {
-    console.log('initial', initialData);
+  const handleSubmit = (data) => {
+    console.log('initial', data);
     if (isEdit) {
       if (packId && initialData.global) {
+        try {
+          dispatch(editItemsGlobalAsDuplicate(data));
+          closeModalHandler();
+        } catch (error) {
+          console.log(error);
+        }
         console.log('editing', packId);
-
-        dispatch(
-          editItemsGlobalAsDuplicate({
-            itemId: _id,
-            packId,
-            name,
-            weight,
-            quantity,
-            unit,
-            type: categoryType,
-          }),
-        );
-        closeModalHandler();
       } else {
-        dispatch(
-          editPackItem({
-            name,
-            weight,
-            quantity,
-            unit,
-            type: categoryType,
-            _id: initialData._id,
-          }),
-        );
-        setPage(1);
-        closeModalHandler();
-        setRefetch(refetch !== true);
+        try {
+          dispatch(editPackItem(data));
+          setPage(1);
+          closeModalHandler();
+          setRefetch(refetch !== true);
+        } catch (error) {
+          console.log(error);
+        }
       }
     } else {
-      dispatch(
-        addPackItem({
-          name,
-          weight,
-          quantity,
-          type: categoryType,
-          unit,
-          _id,
-          packId,
-        }),
-      );
-      setIsAddItemModalOpen(false);
-      setRefetch(refetch !== true);
+      try {
+        dispatch(addPackItem(data));
+        setIsAddItemModalOpen(false);
+        setRefetch(refetch !== true);
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
@@ -118,6 +100,8 @@ export const AddItem = ({
         categoryType={categoryType}
         setCategoryType={setCategoryType}
         currentPack={currentPack}
+        _id={_id}
+        packId={packId}
       />
     </Box>
   );

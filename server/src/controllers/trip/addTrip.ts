@@ -61,6 +61,7 @@ export function addTripRoute() {
       owner_id,
       packs,
       is_public } = opts.input;
+
     const tripDetails = {
       name,
       description,

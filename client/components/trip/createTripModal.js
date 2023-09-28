@@ -85,23 +85,38 @@ export const SaveTripContainer = ({ dateRange }) => {
 
   const createTripValues = async (name, description, isPublic) => {
     try {
-      // TODO - fix this, why making call not through redux. Switch to RTK query at least
-      const { data: geoJSON } = await axios.get(
-        `${api}/osm/photonDetails/${search.properties.osm_type}/${search.properties.osm_id}`,
-      );
+      const startDate = dateRange.startDate
+        ? format(dateRange.startDate, 'MM/dd/yyyy')
+        : '';
+      const endDate = dateRange.endDate
+        ? format(dateRange.endDate, 'MM/dd/yyyy')
+        : '';
+      const numNights =
+        dateRange.startDate && dateRange.endDate
+          ? intervalToDuration({
+              start: dateRange.startDate,
+              end: dateRange.endDate,
+            }).days
+          : '';
+      const duration = {
+        numberOfNights: numNights,
+        startDate,
+        endDate,
+      };
+
       return {
         name,
         description,
         start_date: startDate,
         end_date: endDate,
         destination: search.properties.name,
-        geoJSON,
+        geoJSON: {},
         // trail: dropdown.currentTrail,
         duration: JSON.stringify(duration),
         weather: JSON.stringify(weatherObject),
         owner_id: user?._id,
         packs: packId,
-        is_public: isPublic === 'Yes',
+        is_public: isPublic,
       };
     } catch (error) {
       console.log('err', error);
@@ -120,53 +135,19 @@ export const SaveTripContainer = ({ dateRange }) => {
   const [isPublic, setIsPublic] = useState(true);
 
   // create trip
-  const handleCreateTrip = async () => {
-    // duration object
-    const startDate = dateRange.startDate
-      ? format(dateRange.startDate, 'MM/dd/yyyy')
-      : '';
-    const endDate = dateRange.endDate
-      ? format(dateRange.endDate, 'MM/dd/yyyy')
-      : '';
-    const numNights =
-      dateRange.startDate && dateRange.endDate
-        ? intervalToDuration({
-            start: dateRange.startDate,
-            end: dateRange.endDate,
-          }).days
-        : '';
-    const duration = {
-      numberOfNights: numNights,
-      startDate,
-      endDate,
-    };
-
-    console.log('old rag', search);
-
-    const geoJSON = await trpc.getPhotonDetails.query({
-      id: search.properties.osm_id,
-      type: search.properties.osm_type,
-    });
-
-    const data = {
-      name,
-      description,
-      start_date: startDate,
-      end_date: endDate,
-      destination: search.properties.name,
-      geoJSON,
-      // trail: dropdown.currentTrail,
-      duration: JSON.stringify(duration),
-      weather: JSON.stringify(weatherObject),
-      owner_id: user?._id,
-      packs: packId,
-      is_public: isPublic,
-    };
-
-    // creating a trip
-    console.log('create trip data ->', data);
-    dispatch(addTrip(data));
-    setIsSaveModalOpen(!isSaveModalOpen);
+  const handleCreateTrip = async (data) => {
+    try {
+      const { geoJSON, ...others } = data;
+      const geojson = await trpc.getPhotonDetails.query({
+        id: search.properties.osm_id,
+        type: search.properties.osm_type,
+      });
+      console.log('create trip data ->', { geoJSON: geojson, ...others });
+      dispatch(addTrip({ geoJSON: geojson, ...others }));
+      setIsSaveModalOpen(!isSaveModalOpen);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   /**
@@ -230,16 +211,17 @@ export const SaveTripContainer = ({ dateRange }) => {
             type: 'text',
           },
           {
-            name: 'isPublic',
+            name: 'is_public',
             label: 'Public',
             inputComponent: 'select',
             items: ['Yes', 'For me only'],
+            booleanStrings: true,
           },
         ]}
-        defaultValues={() => createTripValues('', '', 'Yes')}
+        defaultValues={() => createTripValues('', '', true)}
         schema={addTripValidations}
         submitText="Save"
-        onSubmit={() => {}}
+        onSubmit={handleCreateTrip}
       >
         <RStack>
           <>

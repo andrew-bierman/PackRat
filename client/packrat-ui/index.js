@@ -8,6 +8,7 @@ import RImage from './RImage';
 import RScrollView from './RScrollview';
 import RCustomSelect from './CustomSelect';
 import ReusableForm from './form';
+import RCustomRadio from './CustomRadio';
 
 export {
   RStack,
@@ -20,4 +21,5 @@ export {
   RScrollView,
   RCustomSelect,
   ReusableForm,
+  RCustomRadio,
 };

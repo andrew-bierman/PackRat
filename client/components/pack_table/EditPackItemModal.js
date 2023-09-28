@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 import { AddItem } from '../item/AddItem';
 import { CustomModal } from '../modal';
@@ -17,20 +17,9 @@ export const EditPackItemModal = ({
   onTrigger,
   closeModalHandler,
 }) => {
-  let currentPackId;
-  if (currentPack) {
-    currentPackId = currentPack._id;
-  }
-
-  const footerButtons = [
-    {
-      label: 'Cancel',
-      onClick: closeModalHandler,
-      color: 'danger',
-      disabled: false,
-    },
-    // add more footer buttons here if needed
-  ];
+  const [currentPackId, setCurrentPackId] = useState(
+    currentPack ? currentPack._id : undefined,
+  );
 
   return (
     <Box>
@@ -39,7 +28,6 @@ export const EditPackItemModal = ({
         title={'Edit Item'}
         triggerComponent={<MaterialIcons name="edit" size={20} color="black" />}
         onTrigger={onTrigger}
-        footerButtons={footerButtons}
         onCancel={closeModalHandler}
       >
         <AddItem
@@ -50,6 +38,7 @@ export const EditPackItemModal = ({
           editAsDuplicate={editAsDuplicate}
           setPage={setPage}
           page={page}
+          currentPack={currentPack}
           closeModalHandler={closeModalHandler}
           setRefetch={setRefetch}
           refetch={refetch}

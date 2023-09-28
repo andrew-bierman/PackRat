@@ -11,6 +11,7 @@ import { Form, Input, Text, TextArea, Label, XStack, YStack } from 'tamagui';
 import { Button, VStack } from 'native-base';
 import { InputText } from '~/components/InputText';
 import CustomSelect from '../CustomSelect';
+import CustomRadio from '../CustomRadio';
 
 function RenderInput({ field, fieldProps, control }) {
   const commonProps = {
@@ -24,6 +25,9 @@ function RenderInput({ field, fieldProps, control }) {
     id: field.name,
     label: field.placeholder,
     control,
+    booleanStrings: field.booleanStrings,
+    'aria-labelledby': field['aria-labelledby'],
+    hasWaterAdded: field.hasWaterAdded,
   };
 
   switch (field.inputComponent) {
@@ -32,6 +36,10 @@ function RenderInput({ field, fieldProps, control }) {
     case 'select': {
       const { ref, ...props } = commonProps;
       return <CustomSelect items={field.items} props={props} />;
+    }
+    case 'radio': {
+      const { ref, ...props } = commonProps;
+      return <CustomRadio items={field.items} props={props} />;
     }
 
     default:
@@ -80,12 +88,14 @@ const ReusableForm = forwardRef((props, ref) => {
 
   useEffect(() => {
     const subscription = watch((data) => {
-      const { success } = schema.safeParse(data);
-      if (!success) {
-        trigger();
-      } else {
+      console.log('data', data);
+      try {
+        schema.parse(data);
         clearErrors();
         setIsValidated(false);
+      } catch (error) {
+        // console.log('here is error', error);
+        trigger();
       }
     });
     return () => subscription.unsubscribe();
@@ -127,20 +137,22 @@ const ReusableForm = forwardRef((props, ref) => {
         </XStack>
       ))}
       {children}
-      <Form.Trigger asChild>
-        <VStack alignItems={'center'}>
-          <Button
-            mt="2"
-            colorScheme={'indigo'}
-            alignContent={'center'}
-            type="submit"
-            onPress={handleSubmit(onSubmit)}
-            disabled={isValidated}
-          >
-            {submitText}
-          </Button>
-        </VStack>
-      </Form.Trigger>
+      {onSubmit && (
+        <Form.Trigger asChild>
+          <VStack alignItems={'center'}>
+            <Button
+              mt="2"
+              colorScheme={'indigo'}
+              alignContent={'center'}
+              type="submit"
+              onPress={handleSubmit(onSubmit)}
+              // disabled={isValidated}
+            >
+              {submitText}
+            </Button>
+          </VStack>
+        </Form.Trigger>
+      )}
     </Form>
   );
 });

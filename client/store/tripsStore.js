@@ -32,9 +32,45 @@ export const fetchUserTrips = createAsyncThunk(
   },
 );
 
-export const addTrip = createAsyncThunk('trips/addTrip', async (newTrip) => {
-  return await trpc.addTrip.mutate(newTrip);
-});
+export const addTrip = createAsyncThunk(
+  'trips/addTrip',
+  async (
+    {
+      name,
+      description,
+      start_date,
+      end_date,
+      destination,
+      geoJSON,
+      duration,
+      weather,
+      owner_id,
+      packs,
+      is_public,
+    },
+    { rejectWithValue },
+  ) => {
+    try {
+      const response = await trpc.addTrip.mutate({
+        name,
+        description,
+        start_date,
+        end_date,
+        destination,
+        geoJSON,
+        duration,
+        weather,
+        owner_id,
+        packs,
+        is_public,
+      });
+      return response;
+    } catch (error) {
+      console.log('error.response.data.error', error.response.data.error);
+      return rejectWithValue(error);
+    }
+  },
+);
 
 export const editTrip = createAsyncThunk(
   'trips/editTrip',

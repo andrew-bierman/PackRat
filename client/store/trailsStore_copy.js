@@ -20,12 +20,13 @@ export const fetchTrails = createAsyncThunk(
     }
 
     const url = api + '/osm/trails' + params;
+    const radius = 500;
 
     try {
       // const response = await axios.get(url);
       // const trails = response.data.features;
 
-      const response = await trpc.getTrailsOSM.query({ lat, lon });
+      const response = await trpc.getTrailsOSM.query({ lat, lon, radius });
 
       const trails = response.features;
 
