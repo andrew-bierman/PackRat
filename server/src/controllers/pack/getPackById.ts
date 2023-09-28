@@ -3,6 +3,7 @@ import { PackNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { getPackByIdService } from '../../services/pack/pack.service';
 import * as validator from "../../middleware/validators/index";
+import { TRPCError } from '@trpc/server';
 /**
  * Retrieves a pack by its ID and returns it as a JSON response.
  * @param {Object} req - The request object.
@@ -24,7 +25,11 @@ export const getPackById = async (req, res, next) => {
 
 export function getPackByIdRoute() {
   return publicProcedure.input(validator.getPackById).query(async (opts) => {
-    const { packId } = opts.input;
-    return await getPackByIdService(packId);
+    try {
+      const { packId } = opts.input;
+      return await getPackByIdService(packId);
+    } catch (error) {
+      throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: PackNotFoundError.message });
+    }
   });
 }

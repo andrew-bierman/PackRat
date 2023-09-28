@@ -3,6 +3,7 @@ import { ItemNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { getItemsGloballyService } from '../../services/item/item.service';
 import { z } from 'zod';
+import { TRPCError } from '@trpc/server';
 
 /**
  * Retrieves globally available items.
@@ -23,6 +24,10 @@ export const getItemsGlobally = async (req, res, next) => {
 
 export function getItemsGloballyRoute() {
   return publicProcedure.input(z.object({ limit: z.number(), page: z.number() })).query(async (opts) => {
-    return await getItemsGloballyService(opts.input.limit, opts.input.page);
+    try {
+      return await getItemsGloballyService(opts.input.limit, opts.input.page);
+    } catch (error) {
+      throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: ItemNotFoundError.message });
+    }
   })
 }

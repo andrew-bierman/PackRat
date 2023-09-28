@@ -12,6 +12,8 @@ import { responseHandler } from '../../helpers/responseHandler';
 import { publicProcedure } from '../../trpc';
 import * as validator from '../../middleware/validators/index'
 import { z } from 'zod';
+import { InternalServerError } from '../../helpers/errors';
+import { TRPCError } from '@trpc/server';
 sgMail.setApiKey(SEND_GRID_API_KEY);
 
 // Generate a password reset token that includes the user's email address
@@ -90,22 +92,26 @@ export function requestPasswordResetEmailAndTokenRoute() {
   return publicProcedure
     .input(z.object({ email: z.string() }))
     .mutation(async (opts) => {
-      const { email } = opts.input;
-      const user = await User.findOne({ email });
-      if (!user) {
-        return { error: 'No user found with this email address' };
-      }
-      const resetToken = generatePasswordResetToken(email);
-      await User.findOneAndUpdate(
-        { email },
-        {
-          passwordResetToken: resetToken,
-          passwordResetTokenExpiration: Date.now() + 24 * 60 * 60 * 1000,
+      try {
+        const { email } = opts.input;
+        const user = await User.findOne({ email });
+        if (!user) {
+          return { error: 'No user found with this email address' };
         }
-      )
-      const resetUrl = `${CLIENT_URL}/password-reset?token=${resetToken}`;
-      sendPasswordResetEmail(email, resetUrl);
-      return { message: 'Password reset email sent successfully' };
+        const resetToken = generatePasswordResetToken(email);
+        await User.findOneAndUpdate(
+          { email },
+          {
+            passwordResetToken: resetToken,
+            passwordResetTokenExpiration: Date.now() + 24 * 60 * 60 * 1000,
+          }
+        )
+        const resetUrl = `${CLIENT_URL}/password-reset?token=${resetToken}`;
+        sendPasswordResetEmail(email, resetUrl);
+        return { message: 'Password reset email sent successfully' };
+      } catch (error) {
+        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: InternalServerError.message });
+      }
     });
 }
 

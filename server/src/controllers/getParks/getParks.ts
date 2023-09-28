@@ -2,6 +2,7 @@ import { publicProcedure } from '../../trpc';
 import { responseHandler } from '../../helpers/responseHandler';
 import * as validators from "@packrat/packages"
 import { getParksService } from '../../services/parks/getParksService';
+import { TRPCError } from '@trpc/server';
 
 const fetch = async (...args) =>
   import('node-fetch').then(async ({ default: fetch }) =>
@@ -22,6 +23,10 @@ export const getParks = async (req, res, next) => {
 
 export function getParksRoute() {
   return publicProcedure.input(validators.getParks).query(async (opts) => {
-    return await getParksService(opts.input.abbrState);
+    try {
+      return await getParksService(opts.input.abbrState);
+    } catch (error) {
+      throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: error.message });
+    }
   })
 }

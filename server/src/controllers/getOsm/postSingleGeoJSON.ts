@@ -2,6 +2,8 @@ import { publicProcedure } from '../../trpc';
 import { responseHandler } from '../../helpers/responseHandler';
 import { postSingleGeoJSONService } from '../../services/osm/osm.service';
 import { z } from 'zod';
+import { TRPCError } from '@trpc/server';
+import { InternalServerError } from '../../helpers/errors';
 
 /**
  * Handles the POST request for a single GeoJSON.
@@ -20,7 +22,11 @@ export const postSingleGeoJSON = async (req, res) => {
 
 export function postSingleGeoJSONRoute() {
   return publicProcedure.input(z.object({ geojson: z.any() })).mutation(async (opts) => {
-    const { geojson } = opts.input;
-    return await postSingleGeoJSONService(geojson);
+    try {
+      const { geojson } = opts.input;
+      return await postSingleGeoJSONService(geojson);
+    } catch (error) {
+      throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: InternalServerError.message });
+    }
   })
 }

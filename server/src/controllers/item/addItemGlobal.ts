@@ -3,6 +3,7 @@ import { addItemGlobalService } from '../../services/item/item.service';
 import { responseHandler } from '../../helpers/responseHandler';
 import { publicProcedure } from '../../trpc';
 import * as validator from '../../middleware/validators/index';
+import { TRPCError } from '@trpc/server';
 
 /**
  * Adds an item globally.
@@ -33,7 +34,11 @@ export const addItemGlobal = async (req, res, next) => {
 export function addItemGlobalRoute() {
   return publicProcedure.input(validator.addItemGlobal)
     .mutation(async (opts) => {
-      const { name, weight, quantity, unit, type } = opts.input;
-      return await addItemGlobalService(name, weight, quantity, unit, type);
+      try {
+        const { name, weight, quantity, unit, type } = opts.input;
+        return await addItemGlobalService(name, weight, quantity, unit, type);
+      } catch (error) {
+        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: UnableToAddItemError.message });
+      }
     });
 }

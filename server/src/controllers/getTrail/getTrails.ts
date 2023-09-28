@@ -3,6 +3,7 @@ import { responseHandler } from '../../helpers/responseHandler';
 import * as validators from '@packrat/packages';
 import { getTrailsService } from '../../services/trails/getTrailsService';
 import { z } from 'zod';
+import { TRPCError } from '@trpc/server';
 
 const fetch = async (...args) =>
   import('node-fetch').then(async ({ default: fetch }) =>
@@ -58,14 +59,18 @@ export function getTrailsRoute() {
         latitude,
         longitude,
       } = opts.input;
-      return await getTrailsService(
-        administrative_area_level_1,
-        country,
-        locality,
-        latitude,
-        longitude,
-        radiusParams,
-        activityParams,
-      );
+      try {
+        return await getTrailsService(
+          administrative_area_level_1,
+          country,
+          locality,
+          latitude,
+          longitude,
+          radiusParams,
+          activityParams,
+        );
+      } catch (error) {
+        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: error.message });
+      }
     });
 }

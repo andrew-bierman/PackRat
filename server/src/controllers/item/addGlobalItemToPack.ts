@@ -3,6 +3,7 @@ import { ItemNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { addGlobalItemToPackService } from '../../services/item/item.service';
 import { z } from 'zod';
+import { TRPCError } from '@trpc/server';
 
 /**
  * Adds a global item to a pack.
@@ -31,7 +32,11 @@ export function addGlobalItemToPackRoute() {
     itemId: z.string(),
     ownerId: z.string(),
   })).query(async (opts) => {
-    const { packId, itemId, ownerId } = opts.input;
-    return await addGlobalItemToPackService(packId, itemId, ownerId);
+    try {
+      const { packId, itemId, ownerId } = opts.input;
+      return await addGlobalItemToPackService(packId, itemId, ownerId);
+    } catch (error) {
+      throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: ItemNotFoundError.message });
+    }
   })
 }

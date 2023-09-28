@@ -3,6 +3,7 @@ import { UnableToAddTripError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { addTripService } from '../../services/trip/addTripService';
 import * as validator from '../../middleware/validators/index';
+import { TRPCError } from '@trpc/server';
 /**
  * Adds a trip to the database.
  * @param {Object} req - The request object containing the trip details.
@@ -50,30 +51,10 @@ export const addTrip = async (req, res, next) => {
 
 export function addTripRoute() {
   return publicProcedure.input(validator.addTrip).mutation(async (opts) => {
-    const { name,
-      description,
-      duration,
-      weather,
-      start_date,
-      end_date,
-      destination,
-      geoJSON,
-      owner_id,
-      packs,
-      is_public } = opts.input;
-    const tripDetails = {
-      name,
-      description,
-      duration,
-      weather,
-      start_date,
-      end_date,
-      destination,
-      geoJSON,
-      owner_id,
-      packs,
-      is_public,
+    try {
+      return await addTripService(opts.input);
+    } catch (error) {
+      throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: error.message });
     }
-    return await addTripService(tripDetails);
   })
 }

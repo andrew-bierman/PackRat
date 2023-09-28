@@ -1,10 +1,11 @@
 import { publicProcedure } from '../../trpc';
-import { UserFavoritesNotFoundError } from '../../helpers/errors';
+import { InternalServerError, UserFavoritesNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { getUserFavoritesService } from '../../services/favorite/favorite.service';
 import * as validator from '../../middleware/validators/index';
 import User from '../../models/userModel';
 import { z } from 'zod';
+import { TRPCError } from '@trpc/server';
 /**
  * Retrieves the favorite items of a user.
  * @param {Object} req - The request object.
@@ -22,8 +23,13 @@ export const getUserFavorites = async (req, res, next) => {
 
 export function getUserFavoritesRoute() {
   return publicProcedure.input(z.object({ userId: z.string() })).query(async (opts) => {
-    const { userId } = opts.input;
-    const user = await User.findById({ _id: userId }).populate('favorites')
-    return user.favorites;
+    try {
+      const { userId } = opts.input;
+      const user = await User.findById({ _id: userId }).populate('favorites')
+      if (!user.favorites) throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: UserFavoritesNotFoundError.message });
+      return user.favorites;
+    } catch (error) {
+      throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: InternalServerError.message });
+    }
   });
 };

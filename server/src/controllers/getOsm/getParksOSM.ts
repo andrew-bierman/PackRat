@@ -7,6 +7,7 @@ import { responseHandler } from '../../helpers/responseHandler';
 import { publicProcedure } from '../../trpc';
 import { z } from 'zod';
 import * as validators from '@packrat/packages';
+import { TRPCError } from '@trpc/server';
 
 /**
  * Retrieves parks data from OpenStreetMap based on the provided latitude, longitude, and radius.
@@ -32,7 +33,12 @@ export const getParksOSM = async (req, res, next) => {
 
 export function getParksOSMRoute() {
   return publicProcedure.input(validators.getParksOSM).query(async (opts) => {
-    const { lat = 45.5231, lon = -122.6765, radius = 50000 } = opts.input;
-    return await getParksOSMService(lat, lon, radius);
+    try {
+      const { lat = 45.5231, lon = -122.6765, radius = 50000 } = opts.input;
+      const result = await getParksOSMService(lat, lon, radius);
+      return result
+    } catch (error) {
+      throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: ErrorRetrievingParksOSMError.message });
+    }
   });
 }

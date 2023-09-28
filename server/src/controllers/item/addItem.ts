@@ -3,6 +3,7 @@ import { UnableToAddItemError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { addItemService } from '../../services/item/item.service';
 import * as validator from '../../middleware/validators/index';
+import { TRPCError } from '@trpc/server';
 
 /**
  * Adds an item to the database based on the provided request body.
@@ -34,8 +35,12 @@ export const addItem = async (req, res, next) => {
 export function addItemRoute() {
   return publicProcedure.input(validator.addItem)
     .mutation(async (opts) => {
-      const { name, weight, quantity, unit, packId, type, ownerId } = opts.input;
-      const result = await addItemService(name, weight, quantity, unit, packId, type, ownerId);
-      return { newItem: result.newItem, packId: result.packId };
+      try {
+        const { name, weight, quantity, unit, packId, type, ownerId } = opts.input;
+        const result = await addItemService(name, weight, quantity, unit, packId, type, ownerId);
+        return { newItem: result.newItem, packId: result.packId };
+      } catch (error) {
+        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: UnableToAddItemError.message });
+      }
     });
 }

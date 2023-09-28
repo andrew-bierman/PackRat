@@ -3,6 +3,7 @@ import { TripNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { getTripByIdService } from '../../services/trip/getTripByIdService';
 import * as validator from '../../middleware/validators/index';
+import { TRPCError } from '@trpc/server';
 /**
  * Retrieves a trip by its ID and returns the trip details.
  * @param {Object} req - The request object.
@@ -24,7 +25,11 @@ export const getTripById = async (req, res, next) => {
 
 export function getTripByIdRoute() {
   return publicProcedure.input(validator.getTripById).query(async (opts) => {
-    const { tripId } = opts.input;
-    return await getTripByIdService(tripId);
+    try {
+      const { tripId } = opts.input;
+      return await getTripByIdService(tripId);
+    } catch (error) {
+      throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: error.message });
+    }
   })
 }

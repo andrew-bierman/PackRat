@@ -3,6 +3,7 @@ import { UnableToDeleteItemError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { deleteGlobalItemService } from '../../services/item/item.service';
 import { z } from 'zod';
+import { TRPCError } from '@trpc/server';
 /**
  * Deletes a global item.
  * @param {Object} req - The request object.
@@ -27,7 +28,11 @@ export function deleteGlobalItemRoute() {
     itemId: z.string(),
   }))
     .mutation(async (opts) => {
-      const { itemId } = opts.input;
-      return await deleteGlobalItemService(itemId);
+      try {
+        const { itemId } = opts.input;
+        return await deleteGlobalItemService(itemId);
+      } catch (error) {
+        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: UnableToDeleteItemError.message });
+      }
     });
 }

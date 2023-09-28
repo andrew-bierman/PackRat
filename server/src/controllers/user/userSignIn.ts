@@ -1,6 +1,7 @@
 import { publicProcedure } from '../../trpc';
 import User from '../../models/userModel';
 import * as validator from '../../middleware/validators/index';
+import { TRPCError } from '@trpc/server';
 /**
  * Sign in a user.
  * @param {Object} req - The request object.
@@ -20,9 +21,13 @@ export const userSignIn = async (req, res) => {
 export function userSignInRoute() {
     return publicProcedure
         .input(validator.userSignIn).mutation(async (opts) => {
-            const { input } = opts
-            const user: any = await (User as any).findByCredentials(input);
-            await user.generateAuthToken();
-            return user
+            try {
+                const { input } = opts
+                const user: any = await (User as any).findByCredentials(input);
+                await user.generateAuthToken();
+                return user
+            } catch (error) {
+                throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: error.message });
+            }
         })
 }

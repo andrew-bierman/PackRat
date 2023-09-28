@@ -3,6 +3,7 @@ import { FailedToRetrieveUserChats } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { getUserChatsService } from '../../services/openAi/openAi.service';
 import { z } from 'zod';
+import { TRPCError } from '@trpc/server';
 
 /**
  * Retrieves the chats of a user.
@@ -25,7 +26,11 @@ export const getUserChats = async (req, res, next) => {
 export function getUserChatsRoute() {
   return publicProcedure.input(z.object({ userId: z.string() }))
     .query(async (opts) => {
-      const { userId } = opts.input;
-      return getUserChatsService(userId);
+      try {
+        const { userId } = opts.input;
+        return getUserChatsService(userId);
+      } catch (error) {
+        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: FailedToRetrieveUserChats.message });
+      }
     });
 }

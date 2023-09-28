@@ -3,6 +3,7 @@ import { UnableToDeleteItemError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { z } from 'zod';
 import { publicProcedure } from '../../trpc';
+import { TRPCError } from '@trpc/server';
 
 /**
  * Edit a global item by duplicating it with new changes.
@@ -52,15 +53,19 @@ export function editGlobalItemAsDuplicateRoute() {
     type: z.string(),
   }))
     .mutation(async (opts) => {
-      const { itemId, packId, name, weight, quantity, unit, type } = opts.input;
-      return await editGlobalItemAsDuplicateService(
-        itemId,
-        packId,
-        name,
-        weight,
-        quantity,
-        unit,
-        type,
-      );
+      try {
+        const { itemId, packId, name, weight, quantity, unit, type } = opts.input;
+        return await editGlobalItemAsDuplicateService(
+          itemId,
+          packId,
+          name,
+          weight,
+          quantity,
+          unit,
+          type,
+        );
+      } catch (error) {
+        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: UnableToDeleteItemError.message });
+      }
     })
 }

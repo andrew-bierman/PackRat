@@ -1,11 +1,12 @@
 import { publicProcedure } from '../../trpc';
-import { UnableTouUpdatePasswordError } from '../../helpers/errors';
+import { InternalServerError, UnableTouUpdatePasswordError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import User from '../../models/userModel';
 import { findUserAndUpdate } from '../../services/user/user.service';
 import bcrypt from 'bcrypt';
 import { JWT_SECRET } from '../../config';
 import * as validator from '../../middleware/validators/index';
+import { TRPCError } from '@trpc/server';
 
 /**
  * Updates the password for a user.
@@ -45,8 +46,15 @@ export function updatePasswordRoute() {
   return publicProcedure
     .input(validator.updatePassword)
     .mutation(async (opts) => {
-      const { email, password } = opts.input;
-      const val = await findUserAndUpdate(email, password, 'password');
-      return val;
+      try {
+        const { email, password } = opts.input;
+        const val = await findUserAndUpdate(email, password, 'password');
+        if (val) {
+          return val
+        }
+        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: UnableTouUpdatePasswordError.message });
+      } catch (error) {
+        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: InternalServerError.message });
+      }
     });
 }

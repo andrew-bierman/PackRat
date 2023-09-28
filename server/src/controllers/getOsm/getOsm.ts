@@ -10,6 +10,7 @@ import { publicProcedure } from '../../trpc';
 import * as validators from '@packrat/packages';
 import { getOsmService } from '../../services/osm/getOsmService';
 import { z } from 'zod';
+import { TRPCError } from '@trpc/server';
 
 /**
  * Retrieves OpenStreetMap data based on the provided activity type, start point, and end point.
@@ -43,7 +44,7 @@ export function getOsmRoute() {
         const { activityType, startPoint, endPoint } = opts.input;
         return await getOsmService({ activityType, startPoint, endPoint });
       } catch (error) {
-        throw ErrorRetrievingOverpassError;
+        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: ErrorRetrievingOverpassError.message });
       }
     });
 }

@@ -4,6 +4,7 @@ import { responseHandler } from '../../helpers/responseHandler';
 import { getPublicTripsService } from '../../services/trip/getPublicTripService';
 import * as validator from '../../middleware/validators';
 import { z } from 'zod';
+import { TRPCError } from '@trpc/server';
 /**
  * Retrieves public trips based on the given query parameter.
  * @param {object} req - The request object.
@@ -25,7 +26,11 @@ export const getPublicTrips = async (req, res, next) => {
 
 export function getPublicTripsRoute() {
   return publicProcedure.input(z.object({ queryBy: z.string() })).query(async (opts) => {
-    const { queryBy } = opts.input;
-    return await getPublicTripsService(queryBy);
+    try {
+      const { queryBy } = opts.input;
+      return await getPublicTripsService(queryBy);
+    } catch (error) {
+      throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: error.message });
+    }
   });
 }

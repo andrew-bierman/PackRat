@@ -1,7 +1,8 @@
 import { publicProcedure } from '../../trpc';
-import { TemplateNotFoundError } from '../../helpers/errors';
+import { InternalServerError, TemplateNotFoundError } from '../../helpers/errors';
 import Template from '../../models/templateModel';
 import { z } from 'zod';
+import { TRPCError } from '@trpc/server';
 
 /**
  * Deletes a template.
@@ -26,13 +27,17 @@ export function deleteTemplateRoute() {
   return publicProcedure
     .input(z.object({ templateId: z.string() }))
     .mutation(async (opts) => {
-      const { templateId } = opts.input;
-      const template: any = await Template.findById(templateId);
-      if (template) {
-        await template.remove();
-        return { message: 'Template removed' };
-      } else {
-        throw new Error(TemplateNotFoundError.message);
+      try {
+        const { templateId } = opts.input;
+        const template: any = await Template.findById(templateId);
+        if (template) {
+          await template.remove();
+          return { message: 'Template removed' };
+        } else {
+          throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: TemplateNotFoundError.message });
+        }
+      } catch (error) {
+        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: InternalServerError.message });
       }
     });
 }

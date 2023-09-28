@@ -1,6 +1,8 @@
 import { addPackService } from '../../services/pack/pack.service';
 import * as validator from '../../middleware/validators/index';
 import { publicProcedure } from '../../trpc';
+import { InternalServerError } from '../../helpers/errors';
+import { TRPCError } from '@trpc/server';
 /**
  * Adds a new pack to the database.
  * @param {Object} req - The HTTP request object.
@@ -15,7 +17,11 @@ export const addPack = async (req, res) => {
 
 export function addPackRoute() {
   return publicProcedure.input(validator.addPack).mutation(async (opts) => {
-    const { name, owner_id } = opts.input;
-    return addPackService(name, owner_id);
+    try {
+      const { name, owner_id } = opts.input;
+      return addPackService(name, owner_id);
+    } catch (error) {
+      throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: InternalServerError.message });
+    }
   });
 }

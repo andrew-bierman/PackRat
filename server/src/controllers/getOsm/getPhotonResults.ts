@@ -7,6 +7,7 @@ import { responseHandler } from '../../helpers/responseHandler';
 import { publicProcedure } from '../../trpc';
 import { z } from 'zod';
 import * as validators from '@packrat/packages';
+import { TRPCError } from '@trpc/server';
 
 /**
  * Retrieves Photon results based on a search string.
@@ -32,7 +33,11 @@ export function getPhotonResultsRoute() {
   return publicProcedure
     .input(validators.getPhotonResults)
     .query(async (opts) => {
-      const response = await getPhotonResultsService(opts.input.searchString);
-      return response.data.features;
+      try {
+        const response = await getPhotonResultsService(opts.input.searchString);
+        return response.data.features;
+      } catch (error) {
+        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: RetrievingPhotonDetailsError.message });
+      }
     });
 }

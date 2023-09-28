@@ -1,6 +1,7 @@
 import { publicProcedure } from '../../trpc';
 import User from '../../models/userModel';
 import * as validator from '../../middleware/validators/index';
+import { TRPCError } from '@trpc/server';
 /**
  * Resets the user's password.
  * @param {Object} req - The request object.
@@ -23,10 +24,14 @@ export const resetPassword = async (req, res) => {
 export function resetPasswordRoute() {
   return publicProcedure
     .input(validator.resetPassword).mutation(async (opts) => {
-      const { resetToken, password } = opts.input;
-      const user = await (User as any).validateResetToken(resetToken);
-      user.password = password;
-      await user.save();
-      return "Successfully reset password";
+      try {
+        const { resetToken, password } = opts.input;
+        const user = await (User as any).validateResetToken(resetToken);
+        user.password = password;
+        await user.save();
+        return "Successfully reset password";
+      } catch (error) {
+        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: error.message });
+      }
     })
 }
