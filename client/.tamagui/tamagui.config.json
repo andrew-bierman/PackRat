@@ -16505,8 +16505,7 @@
             "defaultProps": {
               "alignItems": "stretch",
               "flexDirection": "column",
-              "unstyled": false,
-              "tag": "button"
+              "unstyled": false
             },
             "validStyles": {
               "enterStyle": true,
@@ -16655,14 +16654,13 @@
                 "false": {
                   "size": "$true",
                   "borderRadius": 1000,
-                  "borderWidth": 2,
-                  "borderColor": "transparent",
                   "backgroundColor": "$background",
+                  "borderWidth": 2,
+                  "borderColor": "$background",
                   "focusStyle": {
-                    "borderColor": "$borderColorFocus",
                     "outlineColor": "$borderColorFocus",
                     "outlineStyle": "solid",
-                    "outlineWidth": 1
+                    "outlineWidth": 2
                   }
                 }
               },
@@ -16694,8 +16692,7 @@
             "defaultProps": {
               "alignItems": "stretch",
               "flexDirection": "column",
-              "unstyled": false,
-              "tag": "button"
+              "unstyled": false
             },
             "validStyles": {
               "enterStyle": true,
@@ -16844,14 +16841,13 @@
                 "false": {
                   "size": "$true",
                   "borderRadius": 1000,
-                  "borderWidth": 2,
-                  "borderColor": "transparent",
                   "backgroundColor": "$background",
+                  "borderWidth": 2,
+                  "borderColor": "$background",
                   "focusStyle": {
-                    "borderColor": "$borderColorFocus",
                     "outlineColor": "$borderColorFocus",
                     "outlineStyle": "solid",
-                    "outlineWidth": 1
+                    "outlineWidth": 2
                   }
                 }
               },
@@ -17123,6 +17119,9 @@
                   "backgroundColor": "$background",
                   "borderRadius": 1000
                 }
+              },
+              "checked": {
+                "true": {}
               },
               "size": {
                 "...size": "Function"
