@@ -10,7 +10,6 @@ import { trpc } from '../trpc';
 export const fetchTrails = createAsyncThunk(
   'trails/fetchTrails',
   async ({ lat, lon, selectedSearch }) => {
-    // return null
     let params = '?';
 
     if (lat) {
@@ -19,16 +18,17 @@ export const fetchTrails = createAsyncThunk(
     if (lon) {
       params += `&lon=${lon}`;
     }
-    const radius = 500;
+
     const url = api + '/osm/trails' + params;
 
     try {
       // const response = await axios.get(url);
       // const trails = response.data.features;
 
-      const response = (await trpc.getTrailsOSM.query({ lat, lon, radius }))
-        .features;
+      const response = await trpc.getTrailsOSM.query({ lat, lon });
+
       const trails = response.features;
+
       const filteredTrails = trails
         .filter(
           (trail) =>

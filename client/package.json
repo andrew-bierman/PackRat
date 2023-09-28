@@ -114,7 +114,8 @@
     "server": "^1.0.38",
     "tamagui": "^1.52.7",
     "togpx": "^0.5.4",
-    "xmldom": "^0.6.0"
+    "xmldom": "^0.6.0",
+    "zod": "^3.22.2"
   },
   "devDependencies": {
     "@babel/core": "^7.21.3",

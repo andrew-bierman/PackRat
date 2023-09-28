@@ -1,4 +1,7 @@
 import { useRootNavigationState, useRouter, useSegments } from 'expo-router';
+
+import React, { useEffect } from 'react';
+import { useStorageState } from '../hooks/useStorageState';
 // import { useSelector } from 'react-redux';
 // import React from 'react';
 
@@ -27,9 +30,6 @@ export function useProtectedRoute(user) {
     }
   }, [user, segments, navigationState]);
 }
-
-import React, { useEffect } from 'react';
-import { useStorageState } from '../hooks/useStorageState';
 
 const AuthContext = React.createContext(null);
 

@@ -9,7 +9,7 @@ import {
   HStack,
   Button,
 } from 'native-base';
-import { Platform, StyleSheet } from 'react-native';
+import { Platform, StyleSheet, ScrollView } from 'react-native';
 import UserDataContainer from '../../components/user/UserDataContainer';
 import { useAuth } from '../../auth/provider';
 import { theme } from '../../theme';
@@ -180,63 +180,65 @@ export default function ProfileContainer({ id = null }) {
   if (isLoading) return <Text>Loading...</Text>;
 
   return (
-    <VStack
-      style={[
-        styles.mainContainer,
-        Platform.OS == 'web' ? { minHeight: '100vh' } : null,
-      ]}
-    >
-      <Header
-        user={user}
-        isLoading={isLoading}
-        error={error}
-        tripsCount={tripsCount}
-        packsCount={packsCount}
-        favoritesCount={favoritesCount}
-        isCurrentUser={isCurrentUser}
-      />
-      {isLoading ? (
-        <Text>Loading....</Text>
-      ) : (
-        <Box style={styles.mainContentContainer}>
-          <Box style={styles.userDataContainer}>
-            {favoritesData?.length > 0 ? (
-              <UserDataContainer
-                data={favoritesData}
-                type="favorites"
-                userId={user?._id}
-              />
-            ) : (
-              <Text
-                fontSize="2xl"
-                fontWeight="bold"
-                color={currentTheme.colors.textColor}
-              >
-                No favorites yet
-              </Text>
+    <ScrollView>
+      <VStack
+        style={[
+          styles.mainContainer,
+          Platform.OS == 'web' ? { minHeight: '100vh' } : null,
+        ]}
+      >
+        <Header
+          user={user}
+          isLoading={isLoading}
+          error={error}
+          tripsCount={tripsCount}
+          packsCount={packsCount}
+          favoritesCount={favoritesCount}
+          isCurrentUser={isCurrentUser}
+        />
+        {isLoading ? (
+          <Text>Loading....</Text>
+        ) : (
+          <Box style={styles.mainContentContainer}>
+            <Box style={styles.userDataContainer}>
+              {favoritesData?.length > 0 ? (
+                <UserDataContainer
+                  data={favoritesData}
+                  type="favorites"
+                  userId={user?._id}
+                />
+              ) : (
+                <Text
+                  fontSize="2xl"
+                  fontWeight="bold"
+                  color={currentTheme.colors.textColor}
+                >
+                  No favorites yet
+                </Text>
+              )}
+            </Box>
+            {Array.isArray(packsData) && packsData.length > 0 && (
+              <Box style={styles.userDataContainer}>
+                <UserDataContainer
+                  data={packsData}
+                  type="packs"
+                  userId={user?._id}
+                />
+              </Box>
+            )}
+            {Array.isArray(tripsData) && tripsData?.length > 0 && (
+              <Box style={styles.userDataContainer}>
+                <UserDataContainer
+                  data={tripsData}
+                  type="trips"
+                  userId={user?._id}
+                />
+              </Box>
             )}
           </Box>
-          {Array.isArray(packsData) && packsData.length > 0 && (
-            <Box style={styles.userDataContainer}>
-              <UserDataContainer
-                data={packsData}
-                type="packs"
-                userId={user?._id}
-              />
-            </Box>
-          )}
-          {Array.isArray(tripsData) && tripsData?.length > 0 && (
-            <Box style={styles.userDataContainer}>
-              <UserDataContainer
-                data={tripsData}
-                type="trips"
-                userId={user?._id}
-              />
-            </Box>
-          )}
-        </Box>
-      )}
-    </VStack>
+        )}
+      </VStack>
+    </ScrollView>
   );
 }
 

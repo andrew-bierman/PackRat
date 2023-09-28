@@ -13,7 +13,7 @@ import apiMessageMiddleware from './middleware/apiMessageMiddleware';
 import weatherReducer from './weatherStore';
 import dropdownReducer from './dropdownStore';
 import authReducer from './authStore';
-import trailsReducer from './trailsStore';
+// import trailsReducer from './trailsStore';
 import trailsReducer2 from './trailsStore_copy'; // TODO: remove. This was super hacky fix for trailsReducer not working. No idea why it's not working.
 import searchReducer from './searchStore';
 import parksReducer from './parksStore';
@@ -78,7 +78,7 @@ export interface RootState {
   userStore: typeof userStore;
   offlineQueue: typeof offlineQueue;
   progress: typeof progressReducer;
-  trails: typeof trailsReducer;
+  trails: typeof trailsReducer2;
 }
 
 // configure persist store and whitelist reducers

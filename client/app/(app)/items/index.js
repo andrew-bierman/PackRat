@@ -11,7 +11,8 @@ import { AddItemGlobal } from '../../../components/item/AddItemGlobal';
 import { ItemsTable } from '../../../components/itemtable/itemTable';
 import { useDispatch, useSelector } from 'react-redux';
 import { getItemsGlobal } from '../../../store/globalItemsStore';
-import { Stack as Header } from 'expo-router';
+import { Stack } from 'expo-router';
+import Head from 'expo-router/head';
 
 export default function Items() {
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
@@ -36,9 +37,13 @@ export default function Items() {
 
   return (
     <ScrollView>
-      <Header.Screen
+      <Head>
+        <title>Items</title>
+      </Head>
+      <Stack.Screen
         options={{
           title: 'Items',
+          name: 'Items',
         }}
       />
       <Box>
