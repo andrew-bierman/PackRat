@@ -207,6 +207,7 @@ export const SaveTripContainer = ({ dateRange }) => {
       trigger="Save Trip"
       isActive={isSaveModalOpen}
       onTrigger={() => {
+        // Last stop
         if (!search.properties) {
           InformUser({
             title: 'Incomplete data',
