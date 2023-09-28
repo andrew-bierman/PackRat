@@ -52,6 +52,7 @@
     "@tamagui/theme-base": "^1.52.4",
     "@tamagui/themes": "^1.52.4",
     "@tanstack/react-query": "^4.27.0",
+    "@tanstack/react-query-devtools": "^4.35.3",
     "@tmcw/togeojson": "^5.7.0",
     "@trpc/client": "^10.38.0",
     "@trpc/react-query": "^10.38.0",

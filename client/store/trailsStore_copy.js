@@ -58,9 +58,7 @@ const trailsSlice = createSlice({
   name: 'trails',
   initialState,
   reducers: {
-    setTrails: (state, action) => {
-      state.trails = action.payload;
-    },
+    setTrails: trailsAdapter.setAll,
     setFilteredTrails: (state, action) => {
       state.trailNames = action.payload;
     },

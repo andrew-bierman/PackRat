@@ -13,18 +13,21 @@ import { SessionProvider } from '../context/auth';
 import { ThemeProvider } from '../context/theme';
 import FlashMessage from 'react-native-flash-message';
 import Footer from '../components/footer/Footer';
+import { TrpcQueryProvider } from '../context/tRPC';
 
 export default function HomeLayout() {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <SessionProvider>
-          <ThemeProvider>
-            <FlashMessage position="top" />
-            <Navigation />
-            <Slot />
-            {/* {Platform.OS === 'web' ? <Footer /> : null} */}
-          </ThemeProvider>
+          <TrpcQueryProvider>
+            <ThemeProvider>
+              <FlashMessage position="top" />
+              <Navigation />
+              <Slot />
+              {/* {Platform.OS === 'web' ? <Footer /> : null} */}
+            </ThemeProvider>
+          </TrpcQueryProvider>
         </SessionProvider>
       </PersistGate>
     </Provider>

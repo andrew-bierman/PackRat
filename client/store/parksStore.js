@@ -46,7 +46,12 @@ const parksSlice = createSlice({
     isLoading: false,
     error: null,
   }),
-  reducers: {},
+  reducers: {
+    setParks: parksAdapter.setAll,
+    setParkNames: (state, action) => {
+      state.parkNames = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchParks.pending, (state, action) => {
@@ -65,5 +70,7 @@ const parksSlice = createSlice({
       });
   },
 });
+
+export const { setParks, setParkNames } = parksSlice.actions;
 
 export default parksSlice.reducer;
