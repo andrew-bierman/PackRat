@@ -13,7 +13,7 @@ export const emailExists = async (req, res, next) => {
   const { email } = req.body;
   try {
     const result = await emailExistsService({ email });
-    if (result && result.status) {
+    if (result?.status) {
       responseHandler(res);
     } else {
       next(result);

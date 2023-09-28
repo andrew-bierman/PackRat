@@ -26,6 +26,7 @@ export async function getParksService(abbrStates) {
       return json;
     })
     .catch(() => {
-      throw RetrievingParksDataError;
+      // throw RetrievingParksDataError;
+      return RetrievingParksDataError;
     });
 }

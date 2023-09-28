@@ -47,6 +47,7 @@ export async function getTrailsService(
       return json;
     })
     .catch((_err) => {
-      throw RetrievingTrailsDataError;
+      // throw RetrievingTrailsDataError;
+      return RetrievingTrailsDataError;
     });
 }

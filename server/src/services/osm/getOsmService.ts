@@ -24,10 +24,12 @@ export const getOsmService = async ({ activityType, startPoint, endPoint }) => {
       const geojsonData = osmtogeojson(responseFormat);
       return geojsonData;
     } else {
-      throw ErrorProcessingOverpassError;
+      // throw ErrorProcessingOverpassError;
+      return ErrorProcessingOverpassError;
     }
   } catch (error) {
-    throw ErrorRetrievingOverpassError;
+    // throw ErrorRetrievingOverpassError;
+    return ErrorRetrievingOverpassError;
   }
 };
 

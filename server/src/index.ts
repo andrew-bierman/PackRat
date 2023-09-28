@@ -12,7 +12,7 @@ import compression from 'compression';
 import morgan from 'morgan';
 import { limiter } from './helpers/limiter';
 import * as trpcExpress from '@trpc/server/adapters/express';
-import { inferAsyncReturnType, initTRPC } from '@trpc/server';
+import { type inferAsyncReturnType, initTRPC } from '@trpc/server';
 import { appRouter } from './routes/trpcRouter';
 
 const app = express();

@@ -26,7 +26,8 @@ export function addToFavoriteRoute() {
       const { packId, userId } = opts.input;
       await addToFavoriteService(packId, userId);
       const user = await User.findOne({ _id: userId }).select('-password');
-      if (!user) throw UserNotFoundError;
+      // if (!user) throw UserNotFoundError;
+      if (!user) return UserNotFoundError;
       return user;
     });
 }
