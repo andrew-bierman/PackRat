@@ -2,19 +2,24 @@
   "name": "packrat",
   "version": "1.0.0",
   "main": "index.js",
+  "workspaces": [
+    "packages/*",
+    "client",
+    "server"
+  ],
   "scripts": {
     "lint": "eslint . --fix",
     "start-web": "TAMAGUI_TARGET=web npx expo start -c",
     "start-native": "TAMAGUI_TARGET=native npx expo start -c",
-    "start": "npx expo start --dev-client -c",
+    "start": "EXPO_USE_METRO_WORKSPACE_ROOT=1 npx expo start --dev-client -c",
     "android": "TAMAGUI_TARGET=native npx expo run:android",
     "ios": "TAMAGUI_TARGET=native npx expo run:ios",
     "web": "npx expo start --web",
     "test": "ECHO \"No tests yet\"",
-    "setup": "npm run setup:copy && npm run setup:keyreplace && npm run setup:move",
-    "setup:copy": "npm run copy:env && npm run copy:app && npm run copy:gradle && npm run copy:pod",
+    "setup": "yarn setup:copy && yarn setup:keyreplace && yarn setup:move",
+    "setup:copy": "yarn copy:env && yarn copy:app && yarn copy:gradle && yarn copy:pod",
     "setup:keyreplace": "node setup.js",
-    "setup:move": "npm run move:gradle && npm run move:pod",
+    "setup:move": "yarn move:gradle && yarn move:pod",
     "copy:env": "test -f .env && echo '.env already exists, skipping copy' || (echo 'Copying .env.example to .env' && cp .env.example .env)",
     "copy:app": "cp app.example.json app.json",
     "copy:gradle": "cp gradle.properties.example gradle.properties",
@@ -23,6 +28,7 @@
     "move:pod": "mv Podfile ios/Podfile"
   },
   "dependencies": {
+    "@packrat/packages": "*",
     "@babel/runtime": "^7.21.0",
     "@expo/match-media": "^0.4.0",
     "@expo/vector-icons": "^13.0.0",
