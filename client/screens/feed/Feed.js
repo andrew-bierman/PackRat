@@ -1,19 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Box, Text, IconButton } from 'native-base';
 import {
-  Container,
-  Box,
-  Text,
-  HStack,
-  Stack,
-  Switch,
-  Button,
-  Input,
-  IconButton,
-  Divider,
-  Center,
-  Flex,
-} from 'native-base';
+  RButton,
+  RCard,
+  RInput,
+  RScrollView,
+  RSeperator,
+  RStack,
+  RSwitch,
+  RText,
+  RXStack,
+} from '../../packrat-ui';
 import { AntDesign } from '@expo/vector-icons';
 import { StyleSheet, FlatList, View, ScrollView } from 'react-native';
 import Card from '../../components/feed/FeedCard';
@@ -73,29 +71,26 @@ const FeedSearchFilter = ({
     useTheme();
   const styles = useCustomStyles(loadStyles);
   return (
-    <View style={styles.filterContainer}>
-      <Box style={styles.searchContainer}>
-        <HStack space={3}>
-          <Input
+    <RStack style={styles.filterContainer}>
+      <RStack style={styles.searchContainer}>
+        <RXStack space={3}>
+          <RInput
             w="80%"
             variant="outline"
             placeholder={`Search ${feedType || 'Feed'}`}
             onChangeText={setSearchQuery}
           />
-          <IconButton
-            icon={
-              <AntDesign
-                name="search1"
-                size={24}
-                color={currentTheme.colors.cardIconColor}
-              />
-            }
-            variant="ghost"
-          />
-        </HStack>
-      </Box>
-      <Divider my={3} />
-      <Center
+          <RStack height={'100%'} marginLeft={'$4'} alignSelf="center">
+            <AntDesign
+              name="search1"
+              size={24}
+              color={currentTheme.colors.cardIconColor}
+            />
+          </RStack>
+        </RXStack>
+      </RStack>
+      <RSeperator marginVertical={15} />
+      <RStack
         space={3}
         flexDirection="row"
         justifyContent="space-between"
@@ -105,41 +100,47 @@ const FeedSearchFilter = ({
         margin={2}
       >
         {feedType === 'public' && (
-          <HStack space={3} alignItems="center">
-            <Text
+          <RXStack space={15} alignItems="center">
+            <RText
               fontSize="lg"
               fontWeight="bold"
               color={currentTheme.colors.textColor}
             >
               Packs
-            </Text>
-            <Switch
-              size="lg"
-              isChecked={selectedTypes.pack}
-              onToggle={handleTogglePack}
-            />
-            <Text
+            </RText>
+            <RSwitch
+              size={'$3'}
+              defaultChecked={selectedTypes.pack}
+              onCheckedChange={handleTogglePack}
+              style={{ backgroundColor: currentTheme.colors.background }}
+            >
+              <RSwitch.Thumb animation="bouncy" />
+            </RSwitch>
+            <RText
               fontSize="lg"
               fontWeight="bold"
               color={currentTheme.colors.textColor}
             >
               Trips
-            </Text>
-            <Switch
-              size="lg"
-              isChecked={selectedTypes.trip}
-              onToggle={handleToggleTrip}
-            />
-          </HStack>
+            </RText>
+            <RSwitch
+              size={'$3'}
+              defaultChecked={selectedTypes.trip}
+              onCheckedChange={handleToggleTrip}
+              style={{ backgroundColor: currentTheme.colors.background }}
+            >
+              <RSwitch.Thumb animation="quick" />
+            </RSwitch>
+          </RXStack>
         )}
-        <HStack space={3} alignItems="center">
-          <Text
+        <RXStack space={15} alignItems="center">
+          <RText
             fontSize="lg"
             fontWeight="bold"
             color={currentTheme.colors.textColor}
           >
             Sort By:
-          </Text>
+          </RText>
           <DropdownComponent
             value={queryString}
             data={dataValues}
@@ -148,13 +149,13 @@ const FeedSearchFilter = ({
             style={styles.dropdown}
             width={150}
           />
-        </HStack>
+        </RXStack>
         {(feedType === 'userPacks' || feedType === 'userTrips') && (
-          <Button onPress={handleCreateClick}>Create</Button>
+          <RButton onPress={handleCreateClick}>Create</RButton>
         )}
-      </Center>
-      <Divider my={3} />
-    </View>
+      </RStack>
+      <RSeperator marginVertical={15} />
+    </RStack>
   );
 };
 
@@ -247,18 +248,18 @@ const Feed = ({ feedType = 'public' }) => {
       />
     );
     return Platform.OS === 'web' ? (
-      <ScrollView
+      <RScrollView
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ flex: 1, paddingBottom: 10 }}
       >
-        <View style={styles.cardContainer}>
+        <RStack style={styles.cardContainer}>
           {console.log({ data })}
           {feedSearchFilterComponent}
           {data?.map((item) => (
             <Card key={item._id} type={item.type} {...item} />
           ))}
-        </View>
-      </ScrollView>
+        </RStack>
+      </RScrollView>
     ) : (
       <View style={{ flex: 1, paddingBottom: 10 }}>
         <FlatList
