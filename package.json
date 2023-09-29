@@ -11,7 +11,7 @@
   ],
   "scripts": {
     "clean": "rm -rf node_modules server/node_modules client/node_modules packages/node_modules package-lock.json yarn.lock server/package-lock.json client/package-lock.json packages/package-lock.json server/yarn.lock client/yarn.lock packages/yarn.lock server/dist client/dist packages/dist",
-    "build:prod": "yarn && yarn copy:env:all && yarn build:tsc && yarn build:expo",
+    "build:prod": "yarn && yarn build:tsc && yarn build:expo",
     "build:prod:docker": "docker build -t packrat-app -f Dockerfile.prod .",
     "build:expo": "yarn expo:export",
     "build:tsc": "yarn build:tsc:server",
