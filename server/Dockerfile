@@ -22,7 +22,7 @@ RUN rm -rf node_modules
 RUN yarn
 
 # Expose port 3000 (or the port you use for the server)
-EXPOSE 3001
+EXPOSE 3000
 
 # Start the server with nodemon for live editing
-CMD ["npm", "start"]
+CMD ["yarn", "start"]
