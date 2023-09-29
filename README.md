@@ -34,7 +34,7 @@ PackRat consists of two main components: a client and a server. Follow the steps
 ### Dependencies
 
 - [Node.js](https://nodejs.org/en/)
-- [NPM](https://www.npmjs.com/get-npm)
+- [Yarn](https://classic.yarnpkg.com/en/docs/install)
 - [Expo CLI](https://docs.expo.io/workflow/expo-cli/)
 - [React Native CLI](https://reactnative.dev/docs/environment-setup)
 
@@ -156,7 +156,7 @@ cp .env.example .env
 cd ..
 ```
 
-### NPM Setup
+### Yarn Setup
 
 Recommended to open two terminal windows.
 
@@ -177,7 +177,7 @@ yarn
 3. Start the server.
 
 ```
-npm start
+yarn start
 ```
 
 #### Client
@@ -197,7 +197,7 @@ yarn
 3. Start the Expo server.
 
 ```
-npm start
+yarn start
 ```
 
 4. Here you will be able to run the app on an iOS or Android simulator (or on your own device), or on the web. See the [Expo documentation](https://docs.expo.io/get-started/installation/) for more information on how to set up your development environment.

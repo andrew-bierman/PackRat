@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Install npm dependencies
+      - name: Install yarn dependencies
         run: |
           yarn install:all
   build-android:
@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Install npm dependencies
+      - name: Install yarn dependencies
         run: |
           yarn install:all
       - name: Build Android Release
