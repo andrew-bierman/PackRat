@@ -24,9 +24,9 @@
     "setup": "yarn clean && yarn install:all && yarn setup:client && yarn setup:server",
     "setup:client": "cd client && yarn setup",
     "setup:server": "cd server && yarn setup",
-    "expo:export": "cd client && cp app.example.json app.json && npx expo export --platform web",
+    "expo:export": "cross-env cd client && cp app.example.json app.json && npx expo export --platform web",
     "start": "cd server && yarn start:ts-node",
-    "start:prod": "cd server && yarn start:prod",
+    "start:prod": "cross-env cd server && yarn start:prod",
     "start:prod:ts-node": "cd server && yarn start:ts-node",
     "dev:client": "cd client && yarn start",
     "dev:server": "cd server && yarn start",
@@ -91,7 +91,10 @@
   },
   "packageManager": "yarn@3.6.3",
   "dependencies": {
+    "@manypkg/cli": "^0.21.0",
     "check-dependency-version-consistency": "^4.1.0",
+    "cross-env": "^7.0.3",
+    "dotenv-cli": "^7.3.0",
     "typescript": "^5.2.2"
   }
 }
