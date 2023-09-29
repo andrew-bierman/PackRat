@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Install yarn dependencies
         run: |
-          yarn install:all
+          yarn install
   build-android:
     needs: install-and-test
     runs-on: ubuntu-latest
@@ -20,7 +20,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Install yarn dependencies
         run: |
-          yarn install:all
+          yarn install
       - name: Build Android Release
         run: |
           cd client/android && ./gradlew assembleRelease
