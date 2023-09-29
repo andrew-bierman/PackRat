@@ -19,7 +19,7 @@ COPY ./client/package*.json ./
 RUN rm -rf node_modules
 
 # Install client dependencies
-RUN npm install
+RUN yarn
 
 # Expose port for the client
 EXPOSE 19000
