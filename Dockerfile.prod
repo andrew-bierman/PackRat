@@ -30,5 +30,5 @@ RUN yarn build:prod
 # RUN yarn build:tsc:server
 
 # Specify the command to run on container start
-# CMD [ "yarn", "run", "start:prod" ]
-CMD [ "yarn", "run", "start:prod:ts-node" ]
+CMD [ "yarn", "run", "start:prod" ]
+# CMD [ "yarn", "run", "start:prod:ts-node" ]
