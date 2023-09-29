@@ -14,7 +14,7 @@
     "build:prod": "yarn && yarn build:tsc && yarn build:expo",
     "build:prod:docker": "docker build -t packrat-app -f Dockerfile.prod .",
     "build:expo": "yarn expo:export",
-    "build:tsc": "yarn build:tsc:packages && yarn build:tsc:server",
+    "build:tsc": "yarn build:tsc:server",
     "build:tsc:packages": "cd packages/validations && yarn build",
     "build:tsc:server": "cd server && yarn build",
     "install:all": "yarn install:packages && yarn install:client && yarn install:server",
@@ -39,7 +39,13 @@
     "lint:client": "cd client && yarn lint",
     "lint:server": "cd server && yarn lint",
     "format": "yarn format:all",
-    "format:all": "prettier --write \"**/*.{js,jsx,ts,tsx}\""
+    "format:all": "prettier --write \"**/*.{js,jsx,ts,tsx}\"",
+    "fix": "manypkg fix",
+    "postinstall": "yarn build",
+    "build": "yarn workspaces foreach --exclude next-app run build",
+    "upgrade:tamagui": "yarn up '*tamagui*'@latest '@tamagui/*'@latest react-native-web-lite@latest",
+    "upgrade:tamagui:canary": "yarn up '*tamagui*'@canary '@tamagui/*'@canary react-native-web-lite@canary",
+    "check-deps": "check-dependency-version-consistency ."
   },
   "repository": {
     "type": "git",
@@ -81,7 +87,11 @@
   "homepage": "https://github.com/andrew-bierman/PackRat#readme",
   "devDependencies": {
     "husky": "^8.0.0",
-    "lint-staged": "^14.0.1",
+    "lint-staged": "^14.0.1"
+  },
+  "packageManager": "yarn@3.6.3",
+  "dependencies": {
+    "check-dependency-version-consistency": "^4.1.0",
     "typescript": "^5.2.2"
   }
 }
