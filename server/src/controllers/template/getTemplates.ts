@@ -16,5 +16,5 @@ export function getTemplatesRoute() {
   return publicProcedure.query(async (opts) => {
     const templates = await Template.find({}).populate('createdBy', 'username');
     return templates;
-  })
+  });
 }

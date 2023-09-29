@@ -31,7 +31,8 @@ export const addItemGlobal = async (req, res, next) => {
 };
 
 export function addItemGlobalRoute() {
-  return publicProcedure.input(validator.addItemGlobal)
+  return publicProcedure
+    .input(validator.addItemGlobal)
     .mutation(async (opts) => {
       const { name, weight, quantity, unit, type } = opts.input;
       return await addItemGlobalService(name, weight, quantity, unit, type);

@@ -8,5 +8,5 @@ export const getAIResponse = z.object({
 });
 
 export const getUserChats = z.object({
-    userId: z.string()
-})
+  userId: z.string(),
+});

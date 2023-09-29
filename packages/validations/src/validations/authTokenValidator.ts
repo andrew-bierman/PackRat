@@ -5,6 +5,5 @@ export const TokenSchema = z.object({
 });
 
 export const googleSignin = z.object({
-  idToken: z.string().nonempty()
-})
-
+  idToken: z.string().nonempty(),
+});

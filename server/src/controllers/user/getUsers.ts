@@ -36,5 +36,5 @@ export function getUsersRoute() {
   return publicProcedure.query(async (input) => {
     const users = await User.find({}).populate('packs trips');
     return users;
-  })
+  });
 }
