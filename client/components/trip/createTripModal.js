@@ -218,7 +218,7 @@ export const SaveTripContainer = ({ dateRange }) => {
             booleanStrings: true,
           },
         ]}
-        defaultValues={() => createTripValues('', '', true)}
+        defaultValues={async () => createTripValues('', '', true)}
         schema={addTripValidations}
         submitText="Save"
         onSubmit={handleCreateTrip}

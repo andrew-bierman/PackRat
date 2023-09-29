@@ -23,7 +23,7 @@ import { fetchItemsSearchResults } from '../../store/searchStore';
 import { selectItemsGlobal } from '../../store/singlePackStore';
 import { InformUser } from '~/utils/ToastUtils';
 import useTheme from '~/hooks/useTheme';
-import {addGlobalItemToPack} from '@packrat/packages'
+import { addGlobalItemToPack } from '@packrat/packages';
 interface Props {
   onSelect?: () => void;
   placeholder?: string;
@@ -83,7 +83,7 @@ export const SearchItem: React.FC<Props> = ({ onSelect, placeholder }) => {
         placement: 'top-right',
         style: { backgroundColor: currentTheme.colors.error },
       });
-    })
+    });
   }
 
   const dispatch = useDispatch();

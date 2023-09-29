@@ -9,11 +9,10 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, Input, Text, TextArea, Label, XStack, YStack } from 'tamagui';
 import { Button, VStack } from 'native-base';
-import { InputText } from '~/components/InputText';
 import CustomSelect from '../CustomSelect';
 import CustomRadio from '../CustomRadio';
 
-function RenderInput({ field, fieldProps, control }) {
+function RenderInput({ field, fieldProps, control, error }) {
   const commonProps = {
     ...fieldProps,
     placeholder: field.placeholder,
@@ -27,32 +26,41 @@ function RenderInput({ field, fieldProps, control }) {
     control,
     booleanStrings: field.booleanStrings,
     'aria-labelledby': field['aria-labelledby'],
-    hasWaterAdded: field.hasWaterAdded,
+    baseEssential: field.baseEssential,
   };
 
-  switch (field.inputComponent) {
-    case 'textarea':
-      return <TextArea {...commonProps} rows={field.numberOfLines} />;
-    case 'select': {
-      const { ref, ...props } = commonProps;
-      return <CustomSelect items={field.items} props={props} />;
-    }
-    case 'radio': {
-      const { ref, ...props } = commonProps;
-      return <CustomRadio items={field.items} props={props} />;
-    }
-
-    default:
-      if (field.inputType === 'password') {
-        return <Input {...commonProps} type="password" />;
+  const RenderInputType = () => {
+    switch (field.inputComponent) {
+      case 'textarea':
+        return <TextArea {...commonProps} rows={field.numberOfLines} />;
+      case 'select': {
+        const { ref, ...props } = commonProps;
+        return <CustomSelect items={field.items} props={props} />;
       }
-      return <InputText {...commonProps} />;
-  }
-}
+      case 'radio': {
+        const { ref, ...props } = commonProps;
+        return <CustomRadio items={field.items} props={props} />;
+      }
 
-function RenderError({ error, fieldError }) {
-  if (!error && !fieldError) return null;
-  return <Text color="danger">{error || fieldError}</Text>;
+      default:
+        const { booleanStrings, ...props } = commonProps;
+        if (field.inputType === 'password') {
+          return <Input {...props} type="password" />;
+        }
+        return <Input {...props} />;
+    }
+  };
+
+  return (
+    <YStack>
+      {RenderInputType()}
+      {error && (
+        <Text color="red" fontSize={'$1'}>
+          {error.message || 'Error'}
+        </Text>
+      )}
+    </YStack>
+  );
 }
 
 function RenderHelperText({ text }) {
@@ -82,19 +90,17 @@ const ReusableForm = forwardRef((props, ref) => {
     inputRefs.current[name]?.focus();
   };
 
-  useImperativeHandle(ref, () => ({
-    focus: focusInput,
-  }));
+  // useImperativeHandle(ref, () => ({
+  //   focus: focusInput,
+  // }));
 
   useEffect(() => {
     const subscription = watch((data) => {
-      console.log('data', data);
       try {
         schema.parse(data);
         clearErrors();
         setIsValidated(false);
       } catch (error) {
-        // console.log('here is error', error);
         trigger();
       }
     });
@@ -121,10 +127,11 @@ const ReusableForm = forwardRef((props, ref) => {
             <Controller
               name={field.name}
               control={control}
-              render={({ field: fieldProps }) => (
+              render={({ field: fieldProps, fieldState: { error } }) => (
                 <RenderInput
                   field={field}
                   control={control}
+                  error={error}
                   fieldProps={{
                     ...fieldProps,
                     ref: (el) => (inputRefs.current[field.name] = el),

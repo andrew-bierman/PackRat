@@ -1,7 +1,7 @@
 import { Label, RadioGroup, SizeTokens, XStack, YStack } from 'tamagui';
 
 function CustomRadio({ props, items }) {
-  const { value, hasWaterAdded, ...others } = props;
+  const { value, baseEssential, ...others } = props;
   return (
     <RadioGroup defaultValue={value} {...others}>
       {items.map((item, i) => (
@@ -9,7 +9,7 @@ function CustomRadio({ props, items }) {
           <RadioGroupItemWithLabel
             value={item}
             label={item}
-            hasWaterAdded={hasWaterAdded}
+            baseEssential={baseEssential}
           />
         </YStack>
       ))}
@@ -17,8 +17,8 @@ function CustomRadio({ props, items }) {
   );
 }
 
-function RadioGroupItemWithLabel({ value, label, hasWaterAdded }) {
-  if (hasWaterAdded && value === 'Water') return;
+function RadioGroupItemWithLabel({ value, label, baseEssential }) {
+  if (baseEssential && value === 'Water') return;
   const id = `radiogroup-${value}`;
   return (
     <XStack alignItems="center">

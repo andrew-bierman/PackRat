@@ -15,7 +15,7 @@ export default CustomSelect = ({ props, items }) => {
               <Select.Item
                 index={i}
                 key={item}
-                value={!booleanStrings ? item : value === 'yes' ? true : false}
+                value={!booleanStrings ? item : value === 'yes'}
               >
                 <Select.ItemText>{item.toUpperCase()}</Select.ItemText>
               </Select.Item>

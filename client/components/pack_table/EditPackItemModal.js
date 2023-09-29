@@ -28,7 +28,6 @@ export const EditPackItemModal = ({
         title={'Edit Item'}
         triggerComponent={<MaterialIcons name="edit" size={20} color="black" />}
         onTrigger={onTrigger}
-        onCancel={closeModalHandler}
       >
         <AddItem
           _id={packId}

@@ -28,13 +28,13 @@ export const ItemForm = ({
   const user = useSelector((state) => state.auth.user);
   const userId = user._id;
   const schema = isEdit ? editItemValidations : addItemValidations;
-  let hasWaterAdded = false;
+  let baseEssential = false;
   if (
     currentPack &&
     Array.isArray(currentPack.items) &&
     currentPack.items.length > 0
   ) {
-    hasWaterAdded = currentPack.items.some(
+    baseEssential = currentPack.items.some(
       (item) => item.category && item.category.name === ItemCategoryEnum.WATER,
     );
   }
@@ -68,14 +68,14 @@ export const ItemForm = ({
             inputComponent: 'radio',
             items: Object.values(ItemCategoryEnum),
             accessibilityLabel: 'category for the type of item',
-            hasWaterAdded: hasWaterAdded,
+            baseEssential,
           },
         ]}
         defaultValues={{
           name,
           weight,
-          unit: unit ? unit : data[2],
-          type: categoryType ? categoryType : 'Water',
+          unit: unit || data[2],
+          type: categoryType || 'Water',
           quantity,
           packId,
           userId,

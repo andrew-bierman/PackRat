@@ -27,7 +27,7 @@ import { InformUser } from '../utils/ToastUtils';
 import useTheme from '../hooks/useTheme';
 import { useForm } from 'react-hook-form';
 import { InputText, InputTextRules } from '~/components/InputText';
-import { userSignUp } from '@packrat/packages'
+import { userSignUp } from '@packrat/packages';
 import ReusableForm from '../packrat-ui/form';
 import { useSession } from '../context/auth';
 
@@ -134,10 +134,10 @@ export default function Register() {
         <VStack space={3} mt="5">
           <ReusableForm
             fields={[
-              { name: 'name', label: 'Name', type: 'text', },
-              { name: 'email', label: 'Email ID', type: 'email', },
-              { name: 'username', label: 'Username', type: 'text', },
-              { name: 'password', label: 'Password', type: 'password', },
+              { name: 'name', label: 'Name', type: 'text' },
+              { name: 'email', label: 'Email ID', type: 'email' },
+              { name: 'username', label: 'Username', type: 'text' },
+              { name: 'password', label: 'Password', type: 'password' },
             ]}
             schema={userSignUp}
             submitText="Sign up"
