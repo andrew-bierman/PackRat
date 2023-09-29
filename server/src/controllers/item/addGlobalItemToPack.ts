@@ -24,14 +24,17 @@ export const addGlobalItemToPack = async (req, res, next) => {
   }
 };
 
-
 export function addGlobalItemToPackRoute() {
-  return publicProcedure.input(z.object({
-    packId: z.string(),
-    itemId: z.string(),
-    ownerId: z.string(),
-  })).query(async (opts) => {
-    const { packId, itemId, ownerId } = opts.input;
-    return await addGlobalItemToPackService(packId, itemId, ownerId);
-  })
+  return publicProcedure
+    .input(
+      z.object({
+        packId: z.string(),
+        itemId: z.string(),
+        ownerId: z.string(),
+      }),
+    )
+    .query(async (opts) => {
+      const { packId, itemId, ownerId } = opts.input;
+      return await addGlobalItemToPackService(packId, itemId, ownerId);
+    });
 }
