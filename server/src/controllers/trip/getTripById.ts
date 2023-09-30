@@ -26,5 +26,5 @@ export function getTripByIdRoute() {
   return publicProcedure.input(validator.getTripById).query(async (opts) => {
     const { tripId } = opts.input;
     return await getTripByIdService(tripId);
-  })
+  });
 }

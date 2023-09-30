@@ -14,7 +14,7 @@ import { getPhotonDetailsService } from '../../services/osm/getPhotonDetailsServ
  * @return {Promise<void>} The function does not return anything.
  */
 export const getPhotonDetails = async (req, res, next) => {
-  let { id, type } = req.params;
+  const { id, type } = req.params;
   if (!id || !type) {
     next(InvalidRequestParamsError);
   }
@@ -33,7 +33,7 @@ export function getPhotonDetailsRoute() {
       z.object({ id: z.union([z.string(), z.number()]), type: z.string() }),
     )
     .query(async (opts) => {
-      let { id, type } = opts.input;
+      const { id, type } = opts.input;
       return await getPhotonDetailsService(id, type);
     });
 }

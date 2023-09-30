@@ -30,5 +30,5 @@ export function editTripRoute() {
     return await Trip.findOneAndUpdate({ _id }, opts.input, {
       returnOriginal: false,
     }).populate('packs');
-  })
+  });
 }

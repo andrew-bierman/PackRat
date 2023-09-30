@@ -26,7 +26,8 @@ export const searchItemsByName = async (req, res, next) => {
 };
 
 export function searchItemsByNameRoute() {
-  return publicProcedure.input(z.object({ name: z.string() }))
+  return publicProcedure
+    .input(z.object({ name: z.string() }))
     .query(async (opts) => {
       const { name } = opts.input;
       return searchItemsByNameService(name);
