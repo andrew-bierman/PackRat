@@ -15,7 +15,6 @@ import * as validators from '@packrat/packages';
  */
 export const getTrailsOSM = async (req, res, next) => {
   try {
-
     const { lat = 45.5231, lon = -122.6765, radius = 50000 } = req.query;
 
     if (!lat || !lon || !radius) {
@@ -32,7 +31,7 @@ export const getTrailsOSM = async (req, res, next) => {
 export function getTrailsOSMRoute() {
   return publicProcedure.input(validators.getTrailsOSM).query(async (opts) => {
     const { lat = 45.5231, lon = -122.6765, radius = 50000 } = opts.input;
-    
+
     return await getTrailsOsmService(lat, lon, radius);
   });
 }

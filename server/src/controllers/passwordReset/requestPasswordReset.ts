@@ -10,7 +10,7 @@ import {
 import sgMail from '@sendgrid/mail';
 import { responseHandler } from '../../helpers/responseHandler';
 import { publicProcedure } from '../../trpc';
-import * as validator from '../../middleware/validators/index'
+import * as validator from '../../middleware/validators/index';
 import { z } from 'zod';
 sgMail.setApiKey(SEND_GRID_API_KEY);
 
@@ -101,8 +101,8 @@ export function requestPasswordResetEmailAndTokenRoute() {
         {
           passwordResetToken: resetToken,
           passwordResetTokenExpiration: Date.now() + 24 * 60 * 60 * 1000,
-        }
-      )
+        },
+      );
       const resetUrl = `${CLIENT_URL}/password-reset?token=${resetToken}`;
       sendPasswordResetEmail(email, resetUrl);
       return { message: 'Password reset email sent successfully' };
