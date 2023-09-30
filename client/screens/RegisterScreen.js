@@ -179,6 +179,7 @@ export default function Register() {
               Or
             </Heading>
           </HStack>
+          {/* Google register */}
           <HStack mt="1" justifyContent="center" alignItems="center">
             <Button
               w="100%"

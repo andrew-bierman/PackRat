@@ -12,7 +12,7 @@ import User from '../../models/userModel';
 export async function findUserAndUpdate(
   email: string,
   data: string,
-  datatype : any,
+  datatype: any,
 ): Promise<any> {
   try {
     const val = await User.findOneAndUpdate(

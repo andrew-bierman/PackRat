@@ -23,9 +23,12 @@ export const deleteGlobalItem = async (req, res, next) => {
 };
 
 export function deleteGlobalItemRoute() {
-  return publicProcedure.input(z.object({
-    itemId: z.string(),
-  }))
+  return publicProcedure
+    .input(
+      z.object({
+        itemId: z.string(),
+      }),
+    )
     .mutation(async (opts) => {
       const { itemId } = opts.input;
       return await deleteGlobalItemService(itemId);

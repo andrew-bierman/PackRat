@@ -22,11 +22,12 @@ export const resetPassword = async (req, res) => {
 
 export function resetPasswordRoute() {
   return publicProcedure
-    .input(validator.resetPassword).mutation(async (opts) => {
+    .input(validator.resetPassword)
+    .mutation(async (opts) => {
       const { resetToken, password } = opts.input;
       const user = await (User as any).validateResetToken(resetToken);
       user.password = password;
       await user.save();
-      return "Successfully reset password";
-    })
+      return 'Successfully reset password';
+    });
 }

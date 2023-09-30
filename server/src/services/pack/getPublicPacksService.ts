@@ -76,7 +76,7 @@ export async function getPublicPacksService(queryBy: string = null) {
           type: { $first: '$type' },
           items: { $push: '$items' },
           total_weight: { $sum: '$item_weight' },
-          items_count: {$sum : 1}
+          items_count: { $sum: 1 },
         },
       },
     ];
