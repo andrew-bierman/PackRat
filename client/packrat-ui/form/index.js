@@ -27,7 +27,10 @@ function RenderInput({ field, fieldProps, control, error }) {
     booleanStrings: field.booleanStrings,
     'aria-labelledby': field['aria-labelledby'],
     baseEssential: field.baseEssential,
+    allowFontScaling: false,
   };
+
+  console.log('props', commonProps);
 
   const RenderInputType = () => {
     switch (field.inputComponent) {
@@ -43,7 +46,14 @@ function RenderInput({ field, fieldProps, control, error }) {
       }
 
       default:
-        const { booleanStrings, ...props } = commonProps;
+        const [isFocused, setIsFocused] = useState(false);
+        const { booleanStrings, ...props } = {
+          ...commonProps,
+          borderColor: error && !isFocused ? 'red' : undefined,
+          onBlur: () => setIsFocused(false),
+          onFocus: () => setIsFocused(true),
+        };
+
         if (field.inputType === 'password') {
           return <Input {...props} type="password" />;
         }
@@ -55,7 +65,7 @@ function RenderInput({ field, fieldProps, control, error }) {
     <YStack>
       {RenderInputType()}
       {error && (
-        <Text color="red" fontSize={'$1'}>
+        <Text color="red" fontSize={'10px'}>
           {error.message || 'Error'}
         </Text>
       )}
@@ -90,10 +100,6 @@ const ReusableForm = forwardRef((props, ref) => {
     inputRefs.current[name]?.focus();
   };
 
-  // useImperativeHandle(ref, () => ({
-  //   focus: focusInput,
-  // }));
-
   useEffect(() => {
     const subscription = watch((data) => {
       try {
@@ -108,7 +114,7 @@ const ReusableForm = forwardRef((props, ref) => {
   }, [watch]);
 
   return (
-    <Form onSubmit={() => handleSubmit(onSubmit)}>
+    <Form onSubmit={() => handleSubmit(onSubmit)} minWidth={'300px'}>
       {fields.map((field) => (
         <XStack overflow="hidden" key={field.name} flexDirection="column">
           {field.label && (
@@ -123,7 +129,7 @@ const ReusableForm = forwardRef((props, ref) => {
               {field.label}
             </Label>
           )}
-          <YStack space="$1">
+          <YStack space="$1" padding={'1px'}>
             <Controller
               name={field.name}
               control={control}
@@ -153,7 +159,7 @@ const ReusableForm = forwardRef((props, ref) => {
               alignContent={'center'}
               type="submit"
               onPress={handleSubmit(onSubmit)}
-              // disabled={isValidated}
+              disabled={isValidated}
             >
               {submitText}
             </Button>

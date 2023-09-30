@@ -80,6 +80,13 @@ const TableItem = ({
   const closeModalHandler = () => {
     setIsEditModalOpen(false);
   };
+
+  /**
+   * Executes the onTrigger function.
+   *
+   * @param {None} None - No parameters required.
+   * @return {None} No return value.
+   */
   const onTrigger = () => {
     console.log('called');
     setIsEditModalOpen(true);

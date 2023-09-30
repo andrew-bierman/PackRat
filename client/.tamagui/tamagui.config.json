@@ -1141,9 +1141,8 @@
               "unstyled": false
             },
             "componentName": "Input",
-            "isReactNative": true,
-            "isText": true,
-            "acceptsClassName": true,
+            "isReactNative": false,
+            "isText": false,
             "isStyledHOC": false,
             "neverFlatten": true,
             "isHOC": true
@@ -1186,10 +1185,10 @@
               "unstyled": false
             },
             "componentName": "Input",
-            "isReactNative": true,
-            "isText": true,
-            "acceptsClassName": true,
-            "isStyledHOC": false
+            "isReactNative": false,
+            "isText": false,
+            "isStyledHOC": false,
+            "neverFlatten": true
           }
         },
         "Main": {
@@ -1768,7 +1767,7 @@
             },
             "variants": {
               "size": {
-                "...": "Function"
+                "...size": "Function"
               },
               "flex": {
                 "true": {
@@ -2290,8 +2289,8 @@
               "unstyled": false
             },
             "componentName": "TextArea",
-            "isReactNative": true,
-            "isText": true,
+            "isReactNative": false,
+            "isText": false,
             "acceptsClassName": true,
             "isStyledHOC": false,
             "neverFlatten": true,
@@ -2338,10 +2337,11 @@
               "unstyled": false
             },
             "componentName": "TextArea",
-            "isReactNative": true,
-            "isText": true,
+            "isReactNative": false,
+            "isText": false,
             "acceptsClassName": true,
-            "isStyledHOC": false
+            "isStyledHOC": false,
+            "neverFlatten": true
           }
         },
         "View": {
@@ -3317,8 +3317,7 @@
                 }
               },
               "size": {
-                "...size": "Function",
-                ":number": "Function"
+                "...size": "Function"
               }
             },
             "componentName": "Avatar",
@@ -7858,11 +7857,8 @@
               }
             },
             "componentName": "Image",
-            "isReactNative": true,
+            "isReactNative": false,
             "isText": false,
-            "acceptsClassName": true,
-            "isInput": false,
-            "inlineProps": {},
             "isStyledHOC": false,
             "neverFlatten": true,
             "isHOC": true
@@ -11556,11 +11552,10 @@
               "scrollEnabled": true
             },
             "componentName": "ScrollView",
-            "isReactNative": true,
+            "isReactNative": false,
             "isText": false,
-            "acceptsClassName": true,
-            "isInput": false,
-            "isStyledHOC": false
+            "isStyledHOC": false,
+            "neverFlatten": true
           }
         },
         "SelectGroupFrame": {
@@ -12636,8 +12631,7 @@
                 }
               },
               "size": {
-                "...size": "Function",
-                ":number": "Function"
+                "...size": "Function"
               }
             },
             "componentName": "Square",
@@ -12889,8 +12883,7 @@
                 }
               },
               "size": {
-                "...size": "Function",
-                ":number": "Function"
+                "...size": "Function"
               }
             },
             "componentName": "Circle",
@@ -16368,7 +16361,8 @@
             "defaultProps": {
               "alignItems": "stretch",
               "flexDirection": "column",
-              "unstyled": false
+              "unstyled": false,
+              "tag": "button"
             },
             "validStyles": {
               "enterStyle": true,
@@ -16517,13 +16511,14 @@
                 "false": {
                   "size": "$true",
                   "borderRadius": 1000,
-                  "backgroundColor": "$background",
                   "borderWidth": 2,
-                  "borderColor": "$background",
+                  "borderColor": "transparent",
+                  "backgroundColor": "$background",
                   "focusStyle": {
+                    "borderColor": "$borderColorFocus",
                     "outlineColor": "$borderColorFocus",
                     "outlineStyle": "solid",
-                    "outlineWidth": 2
+                    "outlineWidth": 1
                   }
                 }
               },
@@ -16555,7 +16550,8 @@
             "defaultProps": {
               "alignItems": "stretch",
               "flexDirection": "column",
-              "unstyled": false
+              "unstyled": false,
+              "tag": "button"
             },
             "validStyles": {
               "enterStyle": true,
@@ -16704,13 +16700,14 @@
                 "false": {
                   "size": "$true",
                   "borderRadius": 1000,
-                  "backgroundColor": "$background",
                   "borderWidth": 2,
-                  "borderColor": "$background",
+                  "borderColor": "transparent",
+                  "backgroundColor": "$background",
                   "focusStyle": {
+                    "borderColor": "$borderColorFocus",
                     "outlineColor": "$borderColorFocus",
                     "outlineStyle": "solid",
-                    "outlineWidth": 2
+                    "outlineWidth": 1
                   }
                 }
               },
@@ -16982,9 +16979,6 @@
                   "backgroundColor": "$background",
                   "borderRadius": 1000
                 }
-              },
-              "checked": {
-                "true": {}
               },
               "size": {
                 "...size": "Function"
@@ -19034,6 +19028,170 @@
   ],
   "nameToPaths": {},
   "tamaguiConfig": {
+    "groupNames": [],
+    "settings": {},
+    "onlyAllowShorthands": false,
+    "fontLanguages": [],
+    "animations": {
+      "isReactNative": true,
+      "animations": {
+        "bouncy": {
+          "type": "spring",
+          "damping": 10,
+          "mass": 0.9,
+          "stiffness": 100
+        },
+        "lazy": {
+          "type": "spring",
+          "damping": 20,
+          "stiffness": 60
+        },
+        "quick": {
+          "type": "spring",
+          "damping": 20,
+          "mass": 1.2,
+          "stiffness": 250
+        }
+      },
+      "View": "Component",
+      "Text": "Component",
+      "useAnimatedNumber": "Function",
+      "useAnimatedNumberReaction": "Function",
+      "useAnimatedNumberStyle": "Function",
+      "usePresence": "Function",
+      "useAnimations": "Function"
+    },
+    "media": {
+      "xs": {
+        "maxWidth": 660
+      },
+      "sm": {
+        "maxWidth": 800
+      },
+      "md": {
+        "maxWidth": 1020
+      },
+      "lg": {
+        "maxWidth": 1280
+      },
+      "xl": {
+        "maxWidth": 1420
+      },
+      "xxl": {
+        "maxWidth": 1600
+      },
+      "gtXs": {
+        "minWidth": 661
+      },
+      "gtSm": {
+        "minWidth": 801
+      },
+      "gtMd": {
+        "minWidth": 1021
+      },
+      "gtLg": {
+        "minWidth": 1281
+      },
+      "short": {
+        "maxHeight": 820
+      },
+      "tall": {
+        "minHeight": 820
+      },
+      "hoverNone": {
+        "hover": "none"
+      },
+      "pointerCoarse": {
+        "pointer": "coarse"
+      }
+    },
+    "defaultTheme": "dark",
+    "shouldAddPrefersColorThemes": false,
+    "themeClassNameOnRoot": false,
+    "shorthands": {
+      "ussel": "userSelect",
+      "cur": "cursor",
+      "pe": "pointerEvents",
+      "col": "color",
+      "ff": "fontFamily",
+      "fos": "fontSize",
+      "fost": "fontStyle",
+      "fow": "fontWeight",
+      "ls": "letterSpacing",
+      "lh": "lineHeight",
+      "ta": "textAlign",
+      "tt": "textTransform",
+      "ww": "wordWrap",
+      "ac": "alignContent",
+      "ai": "alignItems",
+      "als": "alignSelf",
+      "b": "bottom",
+      "bc": "backgroundColor",
+      "bg": "backgroundColor",
+      "bbc": "borderBottomColor",
+      "bblr": "borderBottomLeftRadius",
+      "bbrr": "borderBottomRightRadius",
+      "bbw": "borderBottomWidth",
+      "blc": "borderLeftColor",
+      "blw": "borderLeftWidth",
+      "boc": "borderColor",
+      "br": "borderRadius",
+      "bs": "borderStyle",
+      "brw": "borderRightWidth",
+      "brc": "borderRightColor",
+      "btc": "borderTopColor",
+      "btlr": "borderTopLeftRadius",
+      "btrr": "borderTopRightRadius",
+      "btw": "borderTopWidth",
+      "bw": "borderWidth",
+      "dsp": "display",
+      "f": "flex",
+      "fb": "flexBasis",
+      "fd": "flexDirection",
+      "fg": "flexGrow",
+      "fs": "flexShrink",
+      "fw": "flexWrap",
+      "h": "height",
+      "jc": "justifyContent",
+      "l": "left",
+      "m": "margin",
+      "mah": "maxHeight",
+      "maw": "maxWidth",
+      "mb": "marginBottom",
+      "mih": "minHeight",
+      "miw": "minWidth",
+      "ml": "marginLeft",
+      "mr": "marginRight",
+      "mt": "marginTop",
+      "mx": "marginHorizontal",
+      "my": "marginVertical",
+      "o": "opacity",
+      "ov": "overflow",
+      "p": "padding",
+      "pb": "paddingBottom",
+      "pl": "paddingLeft",
+      "pos": "position",
+      "pr": "paddingRight",
+      "pt": "paddingTop",
+      "px": "paddingHorizontal",
+      "py": "paddingVertical",
+      "r": "right",
+      "shac": "shadowColor",
+      "shar": "shadowRadius",
+      "shof": "shadowOffset",
+      "shop": "shadowOpacity",
+      "t": "top",
+      "w": "width",
+      "zi": "zIndex",
+      "bls": "borderLeftStyle",
+      "brs": "borderRightStyle",
+      "bts": "borderTopStyle",
+      "bbs": "borderBottomStyle",
+      "bxs": "boxSizing",
+      "bxsh": "boxShadow",
+      "ox": "overflowX",
+      "oy": "overflowY"
+    },
     "fonts": {
       "inter": {
         "family": "Inter, Helvetica, Arial, sans-serif",
@@ -19200,170 +19358,6 @@
           }
         }
       }
-    },
-    "groupNames": [],
-    "settings": {},
-    "onlyAllowShorthands": false,
-    "fontLanguages": [],
-    "animations": {
-      "isReactNative": true,
-      "animations": {
-        "bouncy": {
-          "type": "spring",
-          "damping": 10,
-          "mass": 0.9,
-          "stiffness": 100
-        },
-        "lazy": {
-          "type": "spring",
-          "damping": 20,
-          "stiffness": 60
-        },
-        "quick": {
-          "type": "spring",
-          "damping": 20,
-          "mass": 1.2,
-          "stiffness": 250
-        }
-      },
-      "View": "Component",
-      "Text": "Component",
-      "useAnimatedNumber": "Function",
-      "useAnimatedNumberReaction": "Function",
-      "useAnimatedNumberStyle": "Function",
-      "usePresence": "Function",
-      "useAnimations": "Function"
-    },
-    "media": {
-      "xs": {
-        "maxWidth": 660
-      },
-      "sm": {
-        "maxWidth": 800
-      },
-      "md": {
-        "maxWidth": 1020
-      },
-      "lg": {
-        "maxWidth": 1280
-      },
-      "xl": {
-        "maxWidth": 1420
-      },
-      "xxl": {
-        "maxWidth": 1600
-      },
-      "gtXs": {
-        "minWidth": 661
-      },
-      "gtSm": {
-        "minWidth": 801
-      },
-      "gtMd": {
-        "minWidth": 1021
-      },
-      "gtLg": {
-        "minWidth": 1281
-      },
-      "short": {
-        "maxHeight": 820
-      },
-      "tall": {
-        "minHeight": 820
-      },
-      "hoverNone": {
-        "hover": "none"
-      },
-      "pointerCoarse": {
-        "pointer": "coarse"
-      }
-    },
-    "defaultTheme": "dark",
-    "shouldAddPrefersColorThemes": false,
-    "themeClassNameOnRoot": false,
-    "shorthands": {
-      "ussel": "userSelect",
-      "cur": "cursor",
-      "pe": "pointerEvents",
-      "col": "color",
-      "ff": "fontFamily",
-      "fos": "fontSize",
-      "fost": "fontStyle",
-      "fow": "fontWeight",
-      "ls": "letterSpacing",
-      "lh": "lineHeight",
-      "ta": "textAlign",
-      "tt": "textTransform",
-      "ww": "wordWrap",
-      "ac": "alignContent",
-      "ai": "alignItems",
-      "als": "alignSelf",
-      "b": "bottom",
-      "bc": "backgroundColor",
-      "bg": "backgroundColor",
-      "bbc": "borderBottomColor",
-      "bblr": "borderBottomLeftRadius",
-      "bbrr": "borderBottomRightRadius",
-      "bbw": "borderBottomWidth",
-      "blc": "borderLeftColor",
-      "blw": "borderLeftWidth",
-      "boc": "borderColor",
-      "br": "borderRadius",
-      "bs": "borderStyle",
-      "brw": "borderRightWidth",
-      "brc": "borderRightColor",
-      "btc": "borderTopColor",
-      "btlr": "borderTopLeftRadius",
-      "btrr": "borderTopRightRadius",
-      "btw": "borderTopWidth",
-      "bw": "borderWidth",
-      "dsp": "display",
-      "f": "flex",
-      "fb": "flexBasis",
-      "fd": "flexDirection",
-      "fg": "flexGrow",
-      "fs": "flexShrink",
-      "fw": "flexWrap",
-      "h": "height",
-      "jc": "justifyContent",
-      "l": "left",
-      "m": "margin",
-      "mah": "maxHeight",
-      "maw": "maxWidth",
-      "mb": "marginBottom",
-      "mih": "minHeight",
-      "miw": "minWidth",
-      "ml": "marginLeft",
-      "mr": "marginRight",
-      "mt": "marginTop",
-      "mx": "marginHorizontal",
-      "my": "marginVertical",
-      "o": "opacity",
-      "ov": "overflow",
-      "p": "padding",
-      "pb": "paddingBottom",
-      "pl": "paddingLeft",
-      "pos": "position",
-      "pr": "paddingRight",
-      "pt": "paddingTop",
-      "px": "paddingHorizontal",
-      "py": "paddingVertical",
-      "r": "right",
-      "shac": "shadowColor",
-      "shar": "shadowRadius",
-      "shof": "shadowOffset",
-      "shop": "shadowOpacity",
-      "t": "top",
-      "w": "width",
-      "zi": "zIndex",
-      "bls": "borderLeftStyle",
-      "brs": "borderRightStyle",
-      "bts": "borderTopStyle",
-      "bbs": "borderBottomStyle",
-      "bxs": "boxSizing",
-      "bxsh": "boxShadow",
-      "ox": "overflowX",
-      "oy": "overflowY"
     },
     "themes": {
       "dark": {

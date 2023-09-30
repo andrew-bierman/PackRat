@@ -75,17 +75,6 @@ export const SearchItem: React.FC<Props> = ({ onSelect, placeholder }) => {
     }
   };
 
-  if (formErrors) {
-    Object.entries(formErrors).map(([key, error]) => {
-      InformUser({
-        title: key + ' ' + error,
-        duration: 3000,
-        placement: 'top-right',
-        style: { backgroundColor: currentTheme.colors.error },
-      });
-    });
-  }
-
   const dispatch = useDispatch();
 
   return Platform.OS === 'web' ? (

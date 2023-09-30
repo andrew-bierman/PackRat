@@ -53,33 +53,24 @@ export const AddItem = ({
    */
   const handleSubmit = (data) => {
     console.log('initial', data);
-    if (isEdit) {
-      if (packId && initialData.global) {
-        try {
+    try {
+      if (isEdit) {
+        if (packId && initialData.global) {
           dispatch(editItemsGlobalAsDuplicate(data));
           closeModalHandler();
-        } catch (error) {
-          console.log(error);
-        }
-        console.log('editing', packId);
-      } else {
-        try {
+        } else {
           dispatch(editPackItem(data));
           setPage(1);
           closeModalHandler();
           setRefetch(refetch !== true);
-        } catch (error) {
-          console.log(error);
         }
-      }
-    } else {
-      try {
+      } else {
         dispatch(addPackItem(data));
         setIsAddItemModalOpen(false);
         setRefetch(refetch !== true);
-      } catch (error) {
-        console.log(error);
       }
+    } catch (error) {
+      console.log(error);
     }
   };
 
