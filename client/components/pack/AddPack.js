@@ -1,5 +1,5 @@
 import { Platform } from 'react-native';
-import { Box, Input, Button, Text } from 'native-base';
+import { Box, Input, Button, Text ,Select, CheckIcon } from 'native-base';
 
 // import useAddPack from "../../hooks/useAddPack";
 import { addPack } from '../../store/packsStore';
@@ -9,15 +9,16 @@ import { useSelector, useDispatch } from 'react-redux';
 import { CustomModal } from '../modal';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from '~/hooks/useCustomStyles';
-import {addPack as addPackValidation} from '@packrat/packages'
+import { addPack as addPackValidation } from '@packrat/packages'
 import { InformUser } from '~/utils/ToastUtils';
+import ReusableForm from '../../packrat-ui/form';
 
 export const AddPack = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
   const [formErrors, setFormErrors] = useState({});
-
+  const [isPublic, setIsPublic] = useState(false);
   const dispatch = useDispatch();
 
   const [name, setName] = useState('');
@@ -39,23 +40,28 @@ export const AddPack = () => {
    * @param {string} owner_id - The ID of the pack's owner.
    * @return {void}
    */
-  const handleAddPack = () => {
+  const handleAddPack = (data) => {
     try {
-      addPackValidation.parse({ name, owner_id: user?._id });
-      dispatch(addPack({ name, owner_id: user?._id }));
+      const { name } = data;
+      addPackValidation.parse({ name, owner_id: user?._id, is_public: isPublic  });
+      dispatch(addPack({ name, owner_id: user?._id, is_public: isPublic }));
       setName('');
       setFormErrors({});
     } catch (error) {
-      const errorObject = JSON.parse(error.message);
+      const errorObject = JSON.parse(error?.message);
       const errors = {};
       errorObject.forEach((err) => {
         const path = err.path[0];
         const message = err.message;
         errors[path] = message;
       });
+      console.log(error);
       setFormErrors(errors);
     }
+  };
 
+  const handleonValueChange = (itemValue) => {
+    setIsPublic(itemValue == 'Yes');
   };
 
   if (formErrors) {
@@ -69,33 +75,45 @@ export const AddPack = () => {
     })
   }
 
+  const data = ['Yes', 'For me only'];
+
   return (
     <Box style={styles.container}>
       <Box style={styles.mobileStyle}>
-        <Input
-          size="lg"
-          variant="outline"
-          placeholder="Name"
-          value={name}
-          onChangeText={(text) => {
-            setName(text);
+        <Select
+          selectedValue={isPublic}
+          width="100%"
+          accessibilityLabel="Choose Service"
+          placeholder={'Is Public'}
+          _selectedItem={{
+            bg: 'teal.600',
+            endIcon: <CheckIcon size="5" />,
           }}
-          width={Platform.OS === 'web' ? '25%' : '100%'}
-        />
-
-        <Button
-          width={Platform.OS === 'web' ? null : '50%'}
-          onPress={() => {
-            // addPack.mutate({ name, owner_id: user?._id });
-            // setName("");
-            handleAddPack();
-          }}
+          onValueChange={handleonValueChange}
         >
-          <Text style={{ color: currentTheme.colors.text }}>
-            {isLoading ? 'Loading...' : 'Add Pack'}
-          </Text>
-        </Button>
-
+          {data
+            ? data?.map((item, index) => {
+              let val = item;
+              let label = item;
+              if (typeof item === 'object' && item !== null) {
+                val = item.id || item._id || item.name;
+                label = item.name;
+              }
+              return (
+                <Select.Item key={index} label={String(label)} value={val} />
+              );
+            })
+            : null}
+        </Select>
+        <ReusableForm
+          fields={[
+            { name: 'name', type: 'text', label: 'Name' },
+          ]}
+          schema={addPackValidation}
+          submitText="Add Pack"
+          onSubmit={handleAddPack}
+          stripProperties={['owner_id', 'is_public']}
+        />
         {isError && <Text>Pack already exists</Text>}
       </Box>
     </Box>

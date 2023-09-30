@@ -52,13 +52,25 @@ function RenderHelperText({ text }) {
 }
 
 const ReusableForm = forwardRef((props, ref) => {
-    const { fields, schema, onSubmit, submitText } = props;
+    const { fields, schema, onSubmit, submitText, stripProperties = [], } = props;
+
+    const includedProperties = Object.keys(schema.shape).filter(
+        (property) => !stripProperties.includes(property)
+      );
+    
+      const includedSchema = z.object(
+        includedProperties.reduce((acc, property) => {
+          acc[property] = schema.shape[property];
+          return acc;
+        }, {})
+      );
+
     const {
         control,
         handleSubmit,
         formState: { errors },
     } = useForm({
-        resolver: zodResolver(schema),
+        resolver: zodResolver(includedSchema),
     });
 
     const inputRefs = useRef({});
@@ -71,8 +83,9 @@ const ReusableForm = forwardRef((props, ref) => {
         focus: focusInput,
     }));
 
+
     return (
-        <Form onSubmit={()=>handleSubmit(onSubmit)}>
+        <Form onSubmit={handleSubmit(onSubmit)}>
             {fields.map((field) => (
                 <XStack
                     overflow="hidden"
@@ -102,6 +115,12 @@ const ReusableForm = forwardRef((props, ref) => {
                                 />
                             )}
                         />
+                        {errors && errors[field.name] && (
+                            <RenderError
+                                error={field.errorMessage}
+                                fieldError={errors[field.name]?.message}
+                            />
+                        )}
                         <RenderHelperText text={field.helperText} />
                     </YStack>
                 </XStack>
