@@ -24,8 +24,10 @@ export const getPublicTrips = async (req, res, next) => {
 };
 
 export function getPublicTripsRoute() {
-  return publicProcedure.input(z.object({ queryBy: z.string() })).query(async (opts) => {
-    const { queryBy } = opts.input;
-    return await getPublicTripsService(queryBy);
-  });
+  return publicProcedure
+    .input(z.object({ queryBy: z.string() }))
+    .query(async (opts) => {
+      const { queryBy } = opts.input;
+      return await getPublicTripsService(queryBy);
+    });
 }

@@ -2,7 +2,7 @@ import { publicProcedure } from '../../trpc';
 import { ErrorFetchingGeoCodeError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { oneEntity } from '../../utils/oneEntity';
-import * as validators from "@packrat/packages"
+import * as validators from '@packrat/packages';
 import { geoCodeService } from '../../services/geocode/geoCodeService';
 
 const fetch = async (...args: Parameters<typeof fetch>) =>
@@ -20,11 +20,10 @@ const fetch = async (...args: Parameters<typeof fetch>) =>
  */
 export const getGeoCode = async (req, res, next) => {
   const result: any = await geoCodeService(req.query);
-  if (result.message === "ok") {
-    res.locals.data = result.result
+  if (result.message === 'ok') {
+    res.locals.data = result.result;
     responseHandler(res);
-  }
-  else {
+  } else {
     next(ErrorFetchingGeoCodeError);
   }
 };
@@ -32,6 +31,6 @@ export const getGeoCode = async (req, res, next) => {
 export function getGeoCodeRoute() {
   return publicProcedure.input(validators.AddressArray).query(async (opts) => {
     const result: any = await geoCodeService(opts.input);
-    return result.message === "ok" ? result.result : ErrorFetchingGeoCodeError
+    return result.message === 'ok' ? result.result : ErrorFetchingGeoCodeError;
   });
 }

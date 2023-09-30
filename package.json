@@ -75,11 +75,11 @@
   ],
   "lint-staged": {
     "client/**/*.{js,jsx,ts,tsx}": [
-      "cd client && eslint --fix",
+      "cd client && yarn run lint",
       "prettier --write"
     ],
     "server/**/*.{js,ts}": [
-      "cd server && eslint --fix",
+      "cd server && yarn run lint",
       "prettier --write"
     ]
   },

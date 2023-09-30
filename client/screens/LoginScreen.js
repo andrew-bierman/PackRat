@@ -327,7 +327,7 @@ export default function Login() {
             </HStack>
 
             {/* Google Login */}
-            { enableGoogleLogin && (
+            {enableGoogleLogin && (
               <HStack mt="1" justifyContent="center" alignItems="center">
                 <Button
                   w="100%"
@@ -345,7 +345,7 @@ export default function Login() {
                   Sign in with Google
                 </Button>
               </HStack>
-            )               }
+            )}
 
             {/* Demo Login for Development start */}
             {NODE_ENV !== 'production' && (

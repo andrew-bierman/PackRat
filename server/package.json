@@ -15,7 +15,7 @@
     "start": "nodemon",
     "test:expect": "mocha 'generated/test/**/*.spec.js'",
     "test:generate": "npx openapi-generator url http://localhost:3000/swagger.json -d ./generated -t javascript",
-    "test": "ECHO \"No tests yet\""
+    "test": "echo \"No tests yet\""
   },
   "author": "Andrew Bierman",
   "license": "ISC",
