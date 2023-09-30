@@ -25,9 +25,8 @@ export const deleteItem = async (req, res, next) => {
 };
 
 export function deleteItemRoute() {
-  return publicProcedure.input(validator.deleteItem)
-    .mutation(async (opts) => {
-      const { itemId, packId } = opts.input;
-      return await deleteItemService(itemId, packId);
-    });
+  return publicProcedure.input(validator.deleteItem).mutation(async (opts) => {
+    const { itemId, packId } = opts.input;
+    return await deleteItemService(itemId, packId);
+  });
 }

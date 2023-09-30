@@ -25,9 +25,8 @@ export const getItems = async (req, res, next) => {
 };
 
 export function getItemsRoute() {
-  return publicProcedure.input(validator.getItems)
-    .query(async (opts) => {
-      const { packId } = opts.input;
-      return await getItemsService(packId);
-    });
+  return publicProcedure.input(validator.getItems).query(async (opts) => {
+    const { packId } = opts.input;
+    return await getItemsService(packId);
+  });
 }

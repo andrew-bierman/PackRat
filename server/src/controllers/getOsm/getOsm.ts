@@ -43,7 +43,8 @@ export function getOsmRoute() {
         const { activityType, startPoint, endPoint } = opts.input;
         return await getOsmService({ activityType, startPoint, endPoint });
       } catch (error) {
-        throw ErrorRetrievingOverpassError;
+        // throw ErrorRetrievingOverpassError;
+        return ErrorRetrievingOverpassError;
       }
     });
 }
