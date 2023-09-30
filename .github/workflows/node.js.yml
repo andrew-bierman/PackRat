@@ -15,6 +15,7 @@ jobs:
     runs-on: ubuntu-latest
 
     strategy:
+      fail-fast: false  # This ensures that all versions are tested even if one fails.
       matrix:
         node-version: [14.x, 16.x, 18.x, 20.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
@@ -25,9 +26,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
+
       - name: Install dependencies
-        # run: yarn install --frozen-lockfile
-        run: yarn install
+        run: yarn install --frozen-lockfile
 
       - name: Lint code
         run: yarn lint
