@@ -25,9 +25,8 @@ export const editItem = async (req, res, next) => {
 };
 
 export function editItemRoute() {
-  return publicProcedure.input(validator.editItem)
-    .mutation(async (opts) => {
-      const { _id, name, weight, unit, quantity, type } = opts.input;
-      return await editItemService(_id, name, weight, unit, quantity, type);
-    });
+  return publicProcedure.input(validator.editItem).mutation(async (opts) => {
+    const { _id, name, weight, unit, quantity, type } = opts.input;
+    return await editItemService(_id, name, weight, unit, quantity, type);
+  });
 }

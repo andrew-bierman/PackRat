@@ -19,8 +19,10 @@ export const postSingleGeoJSON = async (req, res) => {
 };
 
 export function postSingleGeoJSONRoute() {
-  return publicProcedure.input(z.object({ geojson: z.any() })).mutation(async (opts) => {
-    const { geojson } = opts.input;
-    return await postSingleGeoJSONService(geojson);
-  })
+  return publicProcedure
+    .input(z.object({ geojson: z.any() }))
+    .mutation(async (opts) => {
+      const { geojson } = opts.input;
+      return await postSingleGeoJSONService(geojson);
+    });
 }

@@ -32,10 +32,17 @@ export const addItem = async (req, res, next) => {
 };
 
 export function addItemRoute() {
-  return publicProcedure.input(validator.addItem)
-    .mutation(async (opts) => {
-      const { name, weight, quantity, unit, packId, type, ownerId } = opts.input;
-      const result = await addItemService(name, weight, quantity, unit, packId, type, ownerId);
-      return { newItem: result.newItem, packId: result.packId };
-    });
+  return publicProcedure.input(validator.addItem).mutation(async (opts) => {
+    const { name, weight, quantity, unit, packId, type, ownerId } = opts.input;
+    const result = await addItemService(
+      name,
+      weight,
+      quantity,
+      unit,
+      packId,
+      type,
+      ownerId,
+    );
+    return { newItem: result.newItem, packId: result.packId };
+  });
 }

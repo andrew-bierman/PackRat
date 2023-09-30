@@ -25,12 +25,14 @@ export const getTemplateById = async (req, res, next) => {
 };
 
 export function getTemplateByIdRoute() {
- return publicProcedure.input(z.object({ templateId: z.string() })).query(async (opts) => {
-    const { templateId } = opts.input;
-    const template = await Template.findById(templateId).populate(
-      'createdBy',
-      'username',
-    );
-    return template
-  })
+  return publicProcedure
+    .input(z.object({ templateId: z.string() }))
+    .query(async (opts) => {
+      const { templateId } = opts.input;
+      const template = await Template.findById(templateId).populate(
+        'createdBy',
+        'username',
+      );
+      return template;
+    });
 }

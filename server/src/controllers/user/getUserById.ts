@@ -23,10 +23,8 @@ export const getUserById = async (req, res, next) => {
 };
 
 export function getUserByIdRoute() {
-  return publicProcedure.
-    input(validator.getUserById).mutation(async (opts) => {
-      const { input } = opts
-      return await getUserByIdService(input.userId);
-    })
+  return publicProcedure.input(validator.getUserById).mutation(async (opts) => {
+    const { input } = opts;
+    return await getUserByIdService(input.userId);
+  });
 }
-

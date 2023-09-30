@@ -1,36 +1,55 @@
 {
-  "name": "packrat",
+  "name": "packrat-world",
   "version": "0.0.1",
   "description": "PackRat is the ultimate adventure planner designed for those who love to explore the great outdoors. Our app helps users plan and organize their trips with ease, whether it's a weekend camping trip, a day hike, or a cross-country road trip.",
   "private": true,
   "main": "index.js",
+  "workspaces": [
+    "packages/*",
+    "client",
+    "server"
+  ],
   "scripts": {
     "clean": "rm -rf node_modules server/node_modules client/node_modules packages/node_modules package-lock.json yarn.lock server/package-lock.json client/package-lock.json packages/package-lock.json server/yarn.lock client/yarn.lock packages/yarn.lock server/dist client/dist packages/dist",
-    "build:prod": "npm run install:all && npm run build:tsc && npm run build:expo",
+    "build:prod": "yarn && yarn build:tsc && yarn build:expo",
     "build:prod:docker": "docker build -t packrat-app -f Dockerfile.prod .",
-    "build:expo": "npm run expo:export",
-    "build:tsc": "npm run build:tsc:packages && npm run build:tsc:server",
-    "build:tsc:packages": "npm run build --prefix packages",
-    "build:tsc:server": "npm run build --prefix server",
-    "install:all": "npm install --prefix server && npm install --prefix client && npm install --prefix packages && npm install",
-    "setup": "npm run clean && npm run install:all && npm run setup:client && npm run setup:server",
-    "setup:client": "npm --prefix client run setup",
-    "setup:server": "npm --prefix server run setup",
+    "build:expo": "yarn expo:export",
+    "build:tsc": "yarn build:tsc:server",
+    "build:tsc:packages": "cd packages/validations && yarn build",
+    "build:tsc:server": "cd server && yarn build",
+    "install:all": "yarn install:packages && yarn install:client && yarn install:server",
+    "install:client": "cd client && yarn",
+    "install:server": "cd server && yarn",
+    "install:packages": "cd packages && yarn",
+    "setup": "yarn clean && yarn install:all && yarn setup:client && yarn setup:server",
+    "setup:client": "cd client && yarn setup",
+    "setup:server": "cd server && yarn setup",
     "expo:export": "cd client && cp app.example.json app.json && npx expo export --platform web",
-    "start": "npm run start:ts-node --prefix server",
-    "start:prod": "npm run start:prod --prefix server",
-    "dev:client": "npm start --prefix client",
-    "dev:server": "npm start --prefix server",
-    "test": "npm run test:all",
-    "test:all": "npm run test:client && npm run test:server",
-    "test:client": "npm test --prefix client",
-    "test:server": "npm test --prefix server",
-    "lint": "npm run lint:all",
-    "lint:all": "npm run lint:client && npm run lint:server",
-    "lint:client": "npm run lint --prefix client",
-    "lint:server": "npm run lint --prefix server",
-    "format": "npm run format:all",
-    "format:all": "prettier --write \"**/*.{js,jsx,ts,tsx}\""
+    "start": "cd server && yarn start:ts-node",
+    "start:prod": "cd server && yarn start:prod",
+    "start:prod:ts-node": "cd server && yarn start:ts-node",
+    "dev:client": "cd client && yarn start",
+    "dev:server": "cd server && yarn start",
+    "test": "yarn test:all",
+    "test:all": "yarn test:client && yarn test:server",
+    "test:client": "cd client && yarn test",
+    "test:server": "cd server && yarn test",
+    "lint": "yarn lint:all",
+    "lint:all": "yarn lint:client && yarn lint:server",
+    "lint:client": "cd client && yarn lint",
+    "lint:server": "cd server && yarn lint",
+    "format": "yarn format:all",
+    "format:all": "prettier --write \"**/*.{js,jsx,ts,tsx}\"",
+    "fix": "manypkg fix",
+    "postinstall": "yarn build",
+    "build": "yarn workspaces foreach --exclude next-app run build",
+    "upgrade:tamagui": "yarn up '*tamagui*'@latest '@tamagui/*'@latest react-native-web-lite@latest",
+    "upgrade:tamagui:canary": "yarn up '*tamagui*'@canary '@tamagui/*'@canary react-native-web-lite@canary",
+    "check-deps": "check-dependency-version-consistency .",
+    "copy:env:client": "cp .env client/.env",
+    "copy:env:server": "cp .env server/.env",
+    "copy:env:packages": "cp .env packages/.env",
+    "copy:env:all": "yarn copy:env:client && yarn copy:env:server && yarn copy:env:packages"
   },
   "repository": {
     "type": "git",
@@ -56,11 +75,11 @@
   ],
   "lint-staged": {
     "client/**/*.{js,jsx,ts,tsx}": [
-      "cd client && eslint --fix",
+      "cd client && yarn run lint",
       "prettier --write"
     ],
     "server/**/*.{js,ts}": [
-      "cd server && eslint --fix",
+      "cd server && yarn run lint",
       "prettier --write"
     ]
   },
@@ -72,7 +91,14 @@
   "homepage": "https://github.com/andrew-bierman/PackRat#readme",
   "devDependencies": {
     "husky": "^8.0.0",
-    "lint-staged": "^14.0.1",
+    "lint-staged": "^14.0.1"
+  },
+  "packageManager": "yarn@3.6.3",
+  "dependencies": {
+    "@manypkg/cli": "^0.21.0",
+    "check-dependency-version-consistency": "^4.1.0",
+    "cross-env": "^7.0.3",
+    "dotenv-cli": "^7.3.0",
     "typescript": "^5.2.2"
   }
 }
