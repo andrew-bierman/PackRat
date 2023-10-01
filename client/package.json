@@ -2,11 +2,6 @@
   "name": "packrat",
   "version": "1.0.0",
   "main": "index.js",
-  "workspaces": [
-    "packages/*",
-    "client",
-    "server"
-  ],
   "scripts": {
     "lint": "eslint . --fix",
     "start-web": "TAMAGUI_TARGET=web npx expo start -c",
