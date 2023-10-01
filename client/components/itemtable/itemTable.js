@@ -112,7 +112,7 @@ export const ItemsTable = ({
           {isLoading ? (
             <Loader />
           ) : (
-            data.globalItems.items.map((item, index) => {
+            data.items.map((item, index) => {
               return <TableItem key={index} itemData={item} />;
             })
           )}

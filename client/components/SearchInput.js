@@ -18,7 +18,7 @@ import { useState, useEffect } from 'react';
 import { fetchTrails } from '../store/trailsStore';
 import { fetchParks } from '../store/parksStore';
 import {
-  setSelectedSearchResult,
+  // setSelectedSearchResult,
   clearSearchResults,
   fetchPhotonSearchResults,
 } from '../store/searchStore';
@@ -27,30 +27,35 @@ import useCustomStyles from '~/hooks/useCustomStyles';
 import { setFilteredTrails, setTrails } from '~/store/trailsStore_copy'; // REMOVE
 import useTrails from '~/hooks/trails';
 import useParks from '~/hooks/parks';
+import { usePhotonDetail } from '~/hooks/photonDetail';
+import { useFetchWeather } from '~/hooks/weather';
 
 export const SearchInput = ({ onSelect, placeholder }) => {
   const [searchString, setSearchString] = useState('');
   const [isLoadingMobile, setIsLoadingMobile] = useState(false);
   const [selectedSearch, setSelectedSearch] = useState('');
-
+  const [showSearchResults, setShowSearchResults] = useState(false);
+  
+  const { refetch, data, isError, isLoading } = usePhotonDetail(searchString,showSearchResults);
+  
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles());
+  const [selectedSearchResult, setSelectedSearchResult] = useState({});
   const searchResults =
     useSelector((state) => state.search.searchResults) || [];
 
-  const selectedSearchResult =
-    useSelector((state) => state.search.selectedSearchResult) || {};
+  // const selectedSearchResult =
+  //   useSelector((state) => state.search.selectedSearchResult) || {};
 
-  const [showSearchResults, setShowSearchResults] = useState(false);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     setShowSearchResults(searchString.length > 0);
-
     const timeout = setTimeout(() => {
       if (!searchString) return;
-      dispatch(fetchPhotonSearchResults(searchString));
+      refetch();
+      // dispatch(fetchPhotonSearchResults(searchString));
     }, 2000);
 
     return () => {
@@ -59,6 +64,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
   }, [searchString, dispatch]);
 
   const getTrailsParksAndWeatherDetails = async () => {
+    console.log(selectedSearchResult, 'selected search result')
     if (
       !selectedSearchResult ||
       Object.keys(selectedSearchResult).length === 0
@@ -76,8 +82,9 @@ export const SearchInput = ({ onSelect, placeholder }) => {
     if (!lat || !lon) {
       setIsLoadingMobile(false);
       return;
+    } else {
+      setLatLng({ lat, lon })
     }
-
     const {
       data: parksData,
       error: parksError,
@@ -104,13 +111,14 @@ export const SearchInput = ({ onSelect, placeholder }) => {
       console.log('data:', data);
       console.log('error:', error);
       console.log('isLoading:', isLoading);
-
-      await Promise.all([
-        // dispatch(fetchTrails({ lat, lon, selectedSearch })),
-        // dispatch(fetchParks({ lat, lon, selectedSearch })),
-        dispatch(fetchWeather({ lat, lon })),
-        dispatch(fetchWeatherWeek({ lat, lon })),
-      ]);
+      
+      
+      // await Promise.all([
+      //   // dispatch(fetchTrails({ lat, lon, selectedSearch })),
+      //   // dispatch(fetchParks({ lat, lon, selectedSearch })),
+      //   dispatch(fetchWeather({ lat, lon })),
+      //   dispatch(fetchWeatherWeek({ lat, lon })),
+      // ]);
     } catch (error) {
       console.error(error);
     }
@@ -119,6 +127,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
   };
 
   useEffect(() => {
+    console.log('why not here?')
     const timeout = setTimeout(getTrailsParksAndWeatherDetails, 1000);
 
     return () => {
@@ -130,11 +139,13 @@ export const SearchInput = ({ onSelect, placeholder }) => {
     const {
       properties: { name, osm_id },
     } = result;
-
+    console.log(result, 'line 136');
     setSelectedSearch(name);
     setSearchString(name);
     setShowSearchResults(false);
-    dispatch(setSelectedSearchResult(result));
+    setSelectedSearchResult(result);
+
+    // dispatch(setSelectedSearchResult(result));
 
     if (onSelect) {
       onSelect(result);
@@ -196,7 +207,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
         </RStack>
 
         <RStack style={{ position: 'relative' }}>
-          {showSearchResults && searchResults?.length > 0 && (
+          {data && data?.length > 0 && (
             <RScrollView
               position="absolute"
               top="100%"
@@ -210,7 +221,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
               zIndex={20000}
             >
               <RStack space={2} w="100%">
-                {searchResults.map((result, i) => (
+                {data.map((result, i) => (
                   <RStack
                     key={`result + ${i}`}
                     onPress={() => {
@@ -269,7 +280,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
         }
       />
 
-      {showSearchResults && searchResults?.length > 0 && (
+      {showSearchResults && data?.length > 0 && (
         <ScrollView
           position="absolute"
           top="100%"
@@ -284,7 +295,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
           zIndex={10}
         >
           <List space={2} w="100%">
-            {searchResults.map((result, i) => (
+            {data.map((result, i) => (
               <Pressable
                 key={`result + ${i}`}
                 onPress={() => {

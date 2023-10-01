@@ -9,7 +9,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { CustomModal } from '../modal';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from '~/hooks/useCustomStyles';
-import { useAddNewPack } from '~/hooks/feed';
+import { useAddNewPack } from '~/hooks/packs';
+
 export const AddPack = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
