@@ -14,10 +14,13 @@ import { SessionProvider } from '../context/auth';
 import { ThemeProvider } from '../context/theme';
 import FlashMessage from 'react-native-flash-message';
 import Footer from '../components/footer/Footer';
+
 import { queryTrpc, getToken } from '../trpc';
 import { httpBatchLink } from '@trpc/client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { api } from '~/constants/api';
+
+import { TrpcQueryProvider } from '../context/tRPC';
 
 export default function HomeLayout() {
   const queryClient = new QueryClient()

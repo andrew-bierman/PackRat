@@ -28,5 +28,9 @@ export const trpc = createTRPCProxyClient<AppRouter>({
   transformer: undefined,
 });
 
+
 // export const reactTrpc = createTRPCReact<AppRouter>();
 export const queryTrpc = createTRPCReact<AppRouter>();
+
+// import { trpc } from './context/tRPC';
+// export { trpc }
