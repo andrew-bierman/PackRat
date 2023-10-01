@@ -8287,15 +8287,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/match-sorter-utils@npm:^8.7.0":
-  version: 8.8.4
-  resolution: "@tanstack/match-sorter-utils@npm:8.8.4"
-  dependencies:
-    remove-accents: 0.4.2
-  checksum: d005f500754f52ef94966cbbe4217f26e7e3c07291faa2578b06bca9a5abe01689569994c37a1d01c6e783addf5ffbb28fa82eba7961d36eabf43ec43d1e496b
-  languageName: node
-  linkType: hard
-
 "@tanstack/query-core@npm:4.35.3":
   version: 4.35.3
   resolution: "@tanstack/query-core@npm:4.35.3"
@@ -8303,22 +8294,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/react-query-devtools@npm:^4.35.3":
-  version: 4.35.3
-  resolution: "@tanstack/react-query-devtools@npm:4.35.3"
-  dependencies:
-    "@tanstack/match-sorter-utils": ^8.7.0
-    superjson: ^1.10.0
-    use-sync-external-store: ^1.2.0
-  peerDependencies:
-    "@tanstack/react-query": ^4.35.3
-    react: ^16.8.0 || ^17.0.0 || ^18.0.0
-    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: 59495f9dabdb13efa780444de9b4c89cc34528109da1fe993f2f710a63959a73acb250f50c6a120d11d0e34006582f9913a448c8f62a0a2d0e9f72a733129d7a
-  languageName: node
-  linkType: hard
-
-"@tanstack/react-query@npm:^4.35.3":
+"@tanstack/react-query@npm:^4.27.0":
   version: 4.35.3
   resolution: "@tanstack/react-query@npm:4.35.3"
   dependencies:
@@ -8390,7 +8366,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@trpc/client@npm:^10.38.0, @trpc/client@npm:^10.38.4":
+"@trpc/client@npm:^10.38.0":
   version: 10.38.5
   resolution: "@trpc/client@npm:10.38.5"
   peerDependencies:
@@ -8399,20 +8375,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@trpc/react-query@npm:^10.38.4":
-  version: 10.38.5
-  resolution: "@trpc/react-query@npm:10.38.5"
-  peerDependencies:
-    "@tanstack/react-query": ^4.18.0
-    "@trpc/client": 10.38.5
-    "@trpc/server": 10.38.5
-    react: ">=16.8.0"
-    react-dom: ">=16.8.0"
-  checksum: 7341f2e5cdb19a5fe30fe1d34a0ca4f28e648521f187a64a38911ea096411832014804e044bae79fa3056ce74f736ec281b7014c9695254191a032f12c09cd24
-  languageName: node
-  linkType: hard
-
-"@trpc/server@npm:^10.38.0, @trpc/server@npm:^10.38.4":
+"@trpc/server@npm:^10.38.0":
   version: 10.38.5
   resolution: "@trpc/server@npm:10.38.5"
   checksum: 15a6fc41de59bb954950d230d6793228c7b347a7f0cb87f793e9c92099d64a6106992e3cac4cab2c29f3c7655d5a8f9162efce0be1f25e7e6276df55e80146b2
@@ -11988,15 +11951,6 @@ __metadata:
   version: 0.5.0
   resolution: "cookie@npm:0.5.0"
   checksum: 1f4bd2ca5765f8c9689a7e8954183f5332139eb72b6ff783d8947032ec1fdf43109852c178e21a953a30c0dd42257828185be01b49d1eb1a67fd054ca588a180
-  languageName: node
-  linkType: hard
-
-"copy-anything@npm:^3.0.2":
-  version: 3.0.5
-  resolution: "copy-anything@npm:3.0.5"
-  dependencies:
-    is-what: ^4.1.8
-  checksum: d39f6601c16b7cbd81cdb1c1f40f2bf0f2ca0297601cf7bfbb4ef1d85374a6a89c559502329f5bada36604464df17623e111fe19a9bb0c3f6b1c92fe2cbe972f
   languageName: node
   linkType: hard
 
@@ -16832,13 +16786,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-what@npm:^4.1.8":
-  version: 4.1.15
-  resolution: "is-what@npm:4.1.15"
-  checksum: fe27f6cd4af41be59a60caf46ec09e3071bcc69b9b12a7c871c90f54360edb6d0bc7240cb944a251fb0afa3d35635d1cecea9e70709876b368a8285128d70a89
-  languageName: node
-  linkType: hard
-
 "is-wsl@npm:^1.1.0":
   version: 1.1.0
   resolution: "is-wsl@npm:1.1.0"
@@ -21021,12 +20968,10 @@ __metadata:
     "@tamagui/shorthands": ^1.52.4
     "@tamagui/theme-base": ^1.52.4
     "@tamagui/themes": ^1.52.4
-    "@tanstack/react-query": ^4.35.3
-    "@tanstack/react-query-devtools": ^4.35.3
+    "@tanstack/react-query": ^4.27.0
     "@tmcw/togeojson": ^5.7.0
-    "@trpc/client": ^10.38.4
-    "@trpc/react-query": ^10.38.4
-    "@trpc/server": ^10.38.4
+    "@trpc/client": ^10.38.0
+    "@trpc/server": ^10.38.0
     "@tsconfig/react-native": ^3.0.2
     "@types/jest": ^29.5.3
     "@types/react": ^18.2.20
@@ -21097,7 +21042,7 @@ __metadata:
     react-responsive: ^9.0.2
     redux-persist: ^6.0.0
     serve: ^14.2.0
-    server: "*"
+    server: ^1.0.0
     tamagui: ^1.52.7
     togpx: ^0.5.4
     typescript: ^5.2.2
@@ -23215,13 +23160,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"remove-accents@npm:0.4.2":
-  version: 0.4.2
-  resolution: "remove-accents@npm:0.4.2"
-  checksum: 84a6988555dea24115e2d1954db99509588d43fe55a1590f0b5894802776f7b488b3151c37ceb9e4f4b646f26b80b7325dcea2fae58bc3865df146e1fa606711
-  languageName: node
-  linkType: hard
-
 "remove-trailing-slash@npm:^0.1.0":
   version: 0.1.1
   resolution: "remove-trailing-slash@npm:0.1.1"
@@ -23957,7 +23895,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"server@*, server@workspace:server":
+"server@^1.0.0, server@workspace:server":
   version: 0.0.0-use.local
   resolution: "server@workspace:server"
   dependencies:
@@ -24988,15 +24926,6 @@ __metadata:
   dependencies:
     kdbush: ^4.0.2
   checksum: 39d141f768a511efa53260252f9dab9a2ce0228b334e55482c8d3019e151932f05e1a9a0252d681737651b13c741c665542a6ddb40ec27de96159ea7ad41f7f4
-  languageName: node
-  linkType: hard
-
-"superjson@npm:^1.10.0":
-  version: 1.13.3
-  resolution: "superjson@npm:1.13.3"
-  dependencies:
-    copy-anything: ^3.0.2
-  checksum: f5aeb010f24163cb871a4bc402d9164112201c059afc247a75b03131c274aea6eec9cf08be9e4a9465fe4961689009a011584528531d52f7cc91c077e07e5c75
   languageName: node
   linkType: hard
 
