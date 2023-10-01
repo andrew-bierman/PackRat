@@ -61,6 +61,7 @@
     "@tmcw/togeojson": "^5.7.0",
     "@trpc/client": "^10.38.0",
     "@trpc/server": "^10.38.0",
+    "app": "*",
     "axios": "^1.4.0",
     "babel-plugin-transform-inline-environment-variables": "^0.4.4",
     "date-fns": "^2.29.3",
