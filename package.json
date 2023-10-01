@@ -93,6 +93,10 @@
     "husky": "^8.0.0",
     "lint-staged": "^14.0.1"
   },
+  "engines": {
+    "node": ">=16.13.0",
+    "yarn": ">=3.6.3"
+  },
   "packageManager": "yarn@3.6.3",
   "dependencies": {
     "@manypkg/cli": "^0.21.0",

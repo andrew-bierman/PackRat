@@ -1,27 +1,21 @@
 import { queryTrpc } from '../../trpc';
 
 export const useUserPacks = (ownerId, queryString) => {
-  let data = [];
-  let isLoading = true;
+  // If ownerId is not provided, don’t run the query.
+  const enabled = !!ownerId;
 
-  if (!ownerId) return { data, error: null, isLoading: false };
+  // Leverage the query hook provided by tRPC
+  const { data, error, isLoading, refetch } = queryTrpc.getPacks.useQuery(
+    { ownerId, queryBy: queryString },
+    {
+      enabled, // This query will run only if 'enabled' is true.
+      refetchOnWindowFocus: false,
+      keepPreviousData: true,
+    },
+  );
 
-  try {
-    const userPacks = queryTrpc.getPacks.useQuery(
-      { ownerId, queryBy: queryString },
-      {
-        refetchOnWindowFocus: false,
-        keepPreviousData: true,
-      },
-    );
+  // Extract packs or set an empty array if data is undefined.
+  const packs = data?.packs || [];
 
-    isLoading = userPacks?.status !== 'success';
-
-    if (userPacks?.status === 'success') data = userPacks.data.packs;
-  } catch (error) {
-    console.error(error);
-    return { data: null, error, isLoading };
-  }
-
-  return { data, error: null, isLoading };
+  return { data: packs, error, isLoading, refetch };
 };
