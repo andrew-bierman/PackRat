@@ -1,19 +1,18 @@
-import React, { useRef, forwardRef, useImperativeHandle } from 'react';
+import React, {
+  useRef,
+  forwardRef,
+  useImperativeHandle,
+  useEffect,
+  useState,
+} from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  Form,
-  Input,
-  Text,
-  Button,
-  TextArea,
-  Label,
-  XStack,
-  YStack,
-} from 'tamagui';
-import * as z from 'zod';
+import { Form, Input, Text, TextArea, Label, XStack, YStack } from 'tamagui';
+import { Button, VStack } from 'native-base';
+import CustomSelect from '../CustomSelect';
+import CustomRadio from '../CustomRadio';
 
-function RenderInput({ field, fieldProps }) {
+function RenderInput({ field, fieldProps, control, error }) {
   const commonProps = {
     ...fieldProps,
     placeholder: field.placeholder,
@@ -23,22 +22,55 @@ function RenderInput({ field, fieldProps }) {
     autoCapitalize: field.autoCapitalize,
     autoFocus: field.autoFocus,
     id: field.name,
+    label: field.placeholder,
+    control,
+    booleanStrings: field.booleanStrings,
+    'aria-labelledby': field['aria-labelledby'],
+    baseEssential: field.baseEssential,
+    allowFontScaling: false,
   };
 
-  switch (field.inputComponent) {
-    case 'textarea':
-      return <TextArea {...commonProps} rows={field.numberOfLines} />;
-    default:
-      if (field.inputType === 'password') {
-        return <Input {...commonProps} type="password" />;
-      }
-      return <Input {...commonProps} />;
-  }
-}
+  console.log('props', commonProps);
 
-function RenderError({ error, fieldError }) {
-  if (!error && !fieldError) return null;
-  return <Text color="danger">{error || fieldError}</Text>;
+  const RenderInputType = () => {
+    switch (field.inputComponent) {
+      case 'textarea':
+        return <TextArea {...commonProps} rows={field.numberOfLines} />;
+      case 'select': {
+        const { ref, ...props } = commonProps;
+        return <CustomSelect items={field.items} props={props} />;
+      }
+      case 'radio': {
+        const { ref, ...props } = commonProps;
+        return <CustomRadio items={field.items} props={props} />;
+      }
+
+      default:
+        const [isFocused, setIsFocused] = useState(false);
+        const { booleanStrings, ...props } = {
+          ...commonProps,
+          borderColor: error && !isFocused ? 'red' : undefined,
+          onBlur: () => setIsFocused(false),
+          onFocus: () => setIsFocused(true),
+        };
+
+        if (field.inputType === 'password') {
+          return <Input {...props} type="password" />;
+        }
+        return <Input {...props} />;
+    }
+  };
+
+  return (
+    <YStack>
+      {RenderInputType()}
+      {error && (
+        <Text color="red" fontSize={'10px'}>
+          {error.message || 'Error'}
+        </Text>
+      )}
+    </YStack>
+  );
 }
 
 function RenderHelperText({ text }) {
@@ -47,12 +79,18 @@ function RenderHelperText({ text }) {
 }
 
 const ReusableForm = forwardRef((props, ref) => {
-  const { fields, schema, onSubmit } = props;
+  const [isValidated, setIsValidated] = useState(true);
+  const { fields, schema, onSubmit, submitText, defaultValues, children } =
+    props;
   const {
     control,
     handleSubmit,
+    trigger,
+    clearErrors,
     formState: { errors },
+    watch,
   } = useForm({
+    defaultValues: defaultValues ?? defaultValues,
     resolver: zodResolver(schema),
   });
 
@@ -62,28 +100,44 @@ const ReusableForm = forwardRef((props, ref) => {
     inputRefs.current[name]?.focus();
   };
 
-  useImperativeHandle(ref, () => ({
-    focus: focusInput,
-  }));
+  useEffect(() => {
+    const subscription = watch((data) => {
+      try {
+        schema.parse(data);
+        clearErrors();
+        setIsValidated(false);
+      } catch (error) {
+        trigger();
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [watch]);
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
+    <Form onSubmit={() => handleSubmit(onSubmit)} minWidth={'300px'}>
       {fields.map((field) => (
-        <XStack
-          overflow="hidden"
-          space="$2"
-          margin="$3"
-          padding="$2"
-          key={field.name}
-        >
-          {field.label && <Label htmlFor={field.name}>{field.label}</Label>}
-          <YStack space="$1">
+        <XStack overflow="hidden" key={field.name} flexDirection="column">
+          {field.label && (
+            <Label
+              htmlFor={field.name}
+              color="gray"
+              fontSize={15}
+              _dark={{
+                color: 'warmGray.200',
+              }}
+            >
+              {field.label}
+            </Label>
+          )}
+          <YStack space="$1" padding={'1px'}>
             <Controller
               name={field.name}
               control={control}
-              render={({ field: fieldProps }) => (
+              render={({ field: fieldProps, fieldState: { error } }) => (
                 <RenderInput
                   field={field}
+                  control={control}
+                  error={error}
                   fieldProps={{
                     ...fieldProps,
                     ref: (el) => (inputRefs.current[field.name] = el),
@@ -91,17 +145,27 @@ const ReusableForm = forwardRef((props, ref) => {
                 />
               )}
             />
-            <RenderError
-              error={field.errorMessage}
-              fieldError={errors[field.name]?.message}
-            />
             <RenderHelperText text={field.helperText} />
           </YStack>
         </XStack>
       ))}
-      <Form.Trigger asChild>
-        <Button>Submit</Button>
-      </Form.Trigger>
+      {children}
+      {onSubmit && (
+        <Form.Trigger asChild>
+          <VStack alignItems={'center'}>
+            <Button
+              mt="2"
+              colorScheme={'indigo'}
+              alignContent={'center'}
+              type="submit"
+              onPress={handleSubmit(onSubmit)}
+              disabled={isValidated}
+            >
+              {submitText}
+            </Button>
+          </VStack>
+        </Form.Trigger>
+      )}
     </Form>
   );
 });

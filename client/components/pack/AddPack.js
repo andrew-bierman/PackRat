@@ -9,11 +9,15 @@ import { useSelector, useDispatch } from 'react-redux';
 import { CustomModal } from '../modal';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from '~/hooks/useCustomStyles';
+import { addPack as addPackValidation } from '@packrat/packages';
+import { InformUser } from '~/utils/ToastUtils';
+import { ReusableForm } from '../../packrat-ui';
 
 export const AddPack = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
+  const [formErrors, setFormErrors] = useState({});
 
   const dispatch = useDispatch();
 
@@ -37,10 +41,25 @@ export const AddPack = () => {
    * @param {string} owner_id - The ID of the pack's owner.
    * @return {void}
    */
-  const handleAddPack = () => {
-    dispatch(addPack({ name, owner_id: user?._id, is_public: isPublic }));
-    setName('');
+  const handleAddPack = (data) => {
+    try {
+      dispatch(addPack(data));
+      setName('');
+    } catch (error) {
+      console.log(error);
+    }
   };
+
+  if (formErrors) {
+    Object.entries(formErrors).map(([key, error]) => {
+      InformUser({
+        title: key + ' ' + error,
+        duration: 3000,
+        placement: 'top-right',
+        style: { backgroundColor: currentTheme.colors.error },
+      });
+    });
+  }
 
   const data = ['Yes', 'For me only'];
 
@@ -50,56 +69,24 @@ export const AddPack = () => {
 
   return (
     <Box style={styles.container}>
-      <Box style={styles.mobileStyle}>
-        <Input
-          size="lg"
-          variant="outline"
-          placeholder="Name"
-          value={name}
-          onChangeText={(text) => {
-            setName(text);
-          }}
-          width={Platform.OS === 'web' ? '25%' : '100%'}
-        />
-        <Select
-          selectedValue={isPublic}
-          width="100%"
-          accessibilityLabel="Choose Service"
-          placeholder={'Is Public'}
-          _selectedItem={{
-            bg: 'teal.600',
-            endIcon: <CheckIcon size="5" />,
-          }}
-          onValueChange={handleonValueChange}
-        >
-          {data
-            ? data?.map((item, index) => {
-                let val = item;
-                let label = item;
-                if (typeof item === 'object' && item !== null) {
-                  val = item.id || item._id || item.name;
-                  label = item.name;
-                }
-                return (
-                  <Select.Item key={index} label={String(label)} value={val} />
-                );
-              })
-            : null}
-        </Select>
+      <ReusableForm
+        fields={[
+          { name: 'name', label: 'Name', type: 'text' },
+          {
+            name: 'is_public',
+            label: 'Public',
+            inputComponent: 'select',
+            items: data,
+            booleanStrings: true,
+          },
+        ]}
+        defaultValues={{ owner_id: user?._id, is_public: true }}
+        schema={addPackValidation}
+        submitText={isLoading ? 'Loading...' : 'Add Pack'}
+        onSubmit={handleAddPack}
+      />
 
-        <Button
-          width={Platform.OS === 'web' ? null : '50%'}
-          onPress={() => {
-            handleAddPack();
-          }}
-        >
-          <Text style={{ color: currentTheme.colors.text }}>
-            {isLoading ? 'Loading...' : 'Add Pack'}
-          </Text>
-        </Button>
-
-        {isError && <Text>Pack already exists</Text>}
-      </Box>
+      {isError && <Text>Pack already exists</Text>}
     </Box>
   );
 };

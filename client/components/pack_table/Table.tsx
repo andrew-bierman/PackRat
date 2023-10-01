@@ -76,6 +76,11 @@ const TableItem = ({
   const { name, weight, quantity, unit, _id } = itemData;
   const styles = useCustomStyles(loadStyles);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+  const closeModalHandler = () => {
+    setIsEditModalOpen(false);
+  };
+
   /**
    * Executes the onTrigger function.
    *
@@ -85,9 +90,6 @@ const TableItem = ({
   const onTrigger = () => {
     console.log('called');
     setIsEditModalOpen(true);
-  };
-  const closeModalHandler = () => {
-    setIsEditModalOpen(false);
   };
 
   let rowData = [];
@@ -108,7 +110,7 @@ const TableItem = ({
             currentPack={currentPack}
             refetch={refetch}
             setRefetch={setRefetch}
-            onTrigger={onTrigger}
+            onTrigger={setIsEditModalOpen}
             isModalOpen={isEditModalOpen}
             closeModalHandler={closeModalHandler}
           />
@@ -142,7 +144,7 @@ const TableItem = ({
         currentPack={currentPack}
         refetch={refetch}
         setRefetch={setRefetch}
-        onTrigger={onTrigger}
+        onTrigger={setIsEditModalOpen}
         isModalOpen={isEditModalOpen}
         closeModalHandler={closeModalHandler}
       />,

@@ -14,7 +14,7 @@ import { NODE_ENV, WEB_CLIENT_ID } from '@env';
 import * as Google from 'expo-auth-session/providers/google';
 import * as WebBrowser from 'expo-web-browser';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 // import useLogin from "../hooks/useLogin";
 // import { useAuth } from "../auth/provider";
 import { Link, useRouter } from 'expo-router';
@@ -29,6 +29,8 @@ import { useForm } from 'react-hook-form';
 import { InputText, InputTextRules } from '~/components/InputText';
 import { Regex } from '~/utils/regex';
 import useCustomStyles from '~/hooks/useCustomStyles';
+import { userSignIn } from '@packrat/packages';
+import ReusableForm from '../packrat-ui/form';
 import { useSession } from '../context/auth';
 
 WebBrowser.maybeCompleteAuthSession();
@@ -59,6 +61,7 @@ export default function Login() {
 
   const user = useSelector((state) => state.auth.user);
   const error = useSelector((state) => state.auth.error);
+  const [formErrors, setFormErrors] = useState({});
 
   // if (user?._id) {
   //   InformUser({
@@ -77,6 +80,17 @@ export default function Login() {
       duration: 3000,
       placement: 'top-right',
       style: { backgroundColor: currentTheme.colors.error },
+    });
+  }
+
+  if (formErrors) {
+    Object.entries(formErrors).map(([key, error]) => {
+      InformUser({
+        title: key + ' ' + error,
+        duration: 3000,
+        placement: 'top-right',
+        style: { backgroundColor: currentTheme.colors.error },
+      });
     });
   }
 
@@ -139,13 +153,25 @@ export default function Login() {
    * @return {void}
    */
   const handleLogin = (data) => {
-    const { email, password } = data;
-    dispatch(signIn({ email, password })).then(({ payload }) => {
-      if (!payload) return;
-      if (payload.token) {
-        sessionSignIn(payload.token);
-      }
-    });
+    try {
+      const { email, password } = data;
+      dispatch(signIn({ email, password })).then(({ payload }) => {
+        if (!payload) return;
+        if (payload.token) {
+          sessionSignIn(payload.token);
+        }
+      });
+    } catch (error) {
+      // const errorObject = JSON.parse(error.message);
+      // const errors = {};
+      // errorObject.forEach((err) => {
+      //   const path = err.path[0];
+      //   const message = err.message;
+      //   errors[path] = message;
+      // });
+      // setFormErrors(errors);
+      console.log(error);
+    }
   };
 
   // useEffect(() => {
@@ -252,29 +278,15 @@ export default function Login() {
           </Heading>
 
           <VStack space={3} mt="5">
-            <InputText
-              label="Email ID"
-              keyboardType="email-address"
-              control={control}
-              name="email"
-              rules={InputTextRules.email}
+            <ReusableForm
+              fields={[
+                { name: 'email', label: 'Email ID', type: 'email' },
+                { name: 'password', label: 'Password', type: 'password' },
+              ]}
+              schema={userSignIn}
+              submitText="Sign in"
+              onSubmit={handleLogin}
             />
-            <InputText
-              label="Password"
-              secureTextEntry
-              control={control}
-              name="password"
-              rules={InputTextRules.password}
-            />
-
-            <Button
-              isDisabled={!isValid}
-              onPress={handleSubmit(handleLogin)}
-              mt="2"
-              colorScheme={'indigo'}
-            >
-              Sign in
-            </Button>
             <HStack mt="6" justifyContent="center">
               <Text
                 fontSize="sm"

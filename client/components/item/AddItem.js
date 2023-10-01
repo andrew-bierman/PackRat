@@ -51,53 +51,26 @@ export const AddItem = ({
    *
    * @return {type} description of return value
    */
-  const handleSubmit = () => {
-    console.log('initial', initialData);
-    if (isEdit) {
-      if (packId && initialData.global) {
-        console.log('editing', packId);
-
-        dispatch(
-          editItemsGlobalAsDuplicate({
-            itemId: _id,
-            packId,
-            name,
-            weight,
-            quantity,
-            unit,
-            type: categoryType,
-          }),
-        );
-        closeModalHandler();
+  const handleSubmit = (data) => {
+    console.log('initial', data);
+    try {
+      if (isEdit) {
+        if (packId && initialData.global) {
+          dispatch(editItemsGlobalAsDuplicate(data));
+          closeModalHandler();
+        } else {
+          dispatch(editPackItem(data));
+          setPage(1);
+          closeModalHandler();
+          setRefetch(refetch !== true);
+        }
       } else {
-        dispatch(
-          editPackItem({
-            name,
-            weight,
-            quantity,
-            unit,
-            type: categoryType,
-            _id: initialData._id,
-          }),
-        );
-        setPage(1);
-        closeModalHandler();
+        dispatch(addPackItem(data));
+        setIsAddItemModalOpen(false);
         setRefetch(refetch !== true);
       }
-    } else {
-      dispatch(
-        addPackItem({
-          name,
-          weight,
-          quantity,
-          type: categoryType,
-          unit,
-          _id,
-          packId,
-        }),
-      );
-      setIsAddItemModalOpen(false);
-      setRefetch(refetch !== true);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -118,6 +91,8 @@ export const AddItem = ({
         categoryType={categoryType}
         setCategoryType={setCategoryType}
         currentPack={currentPack}
+        _id={_id}
+        packId={packId}
       />
     </Box>
   );

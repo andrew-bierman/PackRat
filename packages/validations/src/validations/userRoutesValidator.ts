@@ -5,13 +5,13 @@ const JoiObjectId = z.string().regex(/^[0-9a-fA-F]{24}$/g);
 export const userSignUp = z.object({
   name: z.string().min(1).nonempty(),
   email: z.string().email().nonempty(),
-  password: z.string().nonempty(),
+  password: z.string().min(3).nonempty(),
   username: z.string().nonempty(),
 });
 
 export const userSignIn = z.object({
   email: z.string().email().nonempty(),
-  password: z.string().nonempty(),
+  password: z.string().min(3).nonempty(),
 });
 
 export const getUserById = z.object({
@@ -34,6 +34,12 @@ export const addToFavorite = z.object({
 
 export const editUser = z.object({
   userId: JoiObjectId.nonempty(),
+  email: z.string().email().nonempty(),
+  name: z.string().nonempty(),
+  username: z.string().nonempty(),
+  profileImage: z.string().optional(),
+  preferredWeather: z.string().optional(),
+  preferredWeight : z.string().optional(),
 });
 
 export const deleteUser = z.object({
@@ -71,4 +77,6 @@ export const emailExists = z.object({
 export const updatePassword = z.object({
   email: z.string().email().nonempty(),
   password: z.string().nonempty(),
+  oldPassword: z.string().nonempty(),
+  confirmPassword: z.string().nonempty(),
 });

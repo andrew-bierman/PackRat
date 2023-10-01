@@ -20,7 +20,7 @@ export const addTrip = z.object({
   start_date: z.string().nonempty(),
   end_date: z.string().nonempty(),
   destination: z.string().nonempty(),
-  geoJSON: z.object({}),
+  geoJSON: z.any(),
   owner_id: JoiObjectId().nonempty(),
   packs: z.string().nonempty(),
   is_public: z.boolean(),

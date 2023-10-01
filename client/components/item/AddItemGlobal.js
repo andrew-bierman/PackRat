@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addItemsGlobal, addItemOffline } from '../../store/globalItemsStore';
 import { addOfflineRequest } from '../../store/offlineQueue';
 import { ItemForm } from './ItemForm'; // assuming you moved the form related code to a separate component
+import { InformUser } from '~/utils/ToastUtils';
+import { addItemGlobal } from '@packrat/packages';
 
 export const AddItemGlobal = ({
   setIsAddItemModalOpen,
@@ -17,6 +19,8 @@ export const AddItemGlobal = ({
   const [weight, setWeight] = useState('');
   const [quantity, setQuantity] = useState('');
   const [unit, setUnit] = useState('');
+  const [formErrors, setFormErrors] = useState({});
+  const { currentTheme } = useTheme();
 
   const [categoryType, setCategoryType] = useState('');
 
@@ -46,21 +50,50 @@ export const AddItemGlobal = ({
       dispatch(addItemOffline({ ...item, weight: Number(item.weight) }));
       dispatch(addOfflineRequest({ method: 'addGlobalItem', data: item }));
     } else {
-      dispatch(
-        addItemsGlobal({
+      try {
+        addItemGlobal.parse({
           name,
           weight,
           quantity,
           type: categoryType,
           unit,
-        }),
-      );
-      setRefetch(refetch !== true);
+        });
+        dispatch(
+          addItemsGlobal({
+            name,
+            weight,
+            quantity,
+            type: categoryType,
+            unit,
+          }),
+        );
+        setRefetch(refetch !== true);
+      } catch (error) {
+        const errorObject = JSON.parse(error.message);
+        const errors = {};
+        errorObject.forEach((err) => {
+          const path = err.path[0];
+          const message = err.message;
+          errors[path] = message;
+        });
+        setFormErrors(errors);
+      }
     }
 
     resetAddForm();
     setIsAddItemModalOpen(false);
   };
+
+  if (formErrors) {
+    Object.entries(formErrors).map(([key, error]) => {
+      InformUser({
+        title: key + ' ' + error,
+        duration: 3000,
+        placement: 'top-right',
+        style: { backgroundColor: currentTheme.colors.error },
+      });
+    });
+  }
 
   return (
     <Box>

@@ -43,7 +43,7 @@ export const signUp = createAsyncThunk(
       // await AsyncStorage.setItem('authToken', response.data.user.token);
       // return response.data.user;
 
-      return await trpc.signUp.mutate({ name, username, email, password });
+      // return await trpc.signUp.mutate({ name, username, email, password });
     } catch (error) {
       console.log('error', error);
       return rejectWithValue(error.response.data.error);
@@ -101,16 +101,52 @@ export const signInWithGoogle = createAsyncThunk(
   },
 );
 
-export const editUser = createAsyncThunk('auth/editUser', async (user) => {
-  const response = await axios.put(`${api}/user/`, user);
-  return response.data;
-});
+export const editUser = createAsyncThunk(
+  'auth/editUser',
+  async (
+    {
+      userId,
+      email,
+      name,
+      username,
+      profileImage,
+      preferredWeather,
+      preferredWeight,
+    },
+    { rejectWithValue },
+  ) => {
+    try {
+      const response = await trpc.editUser.mutate({
+        userId,
+        email,
+        name,
+        username,
+        profileImage,
+        preferredWeather,
+        preferredWeight,
+      });
+      return response;
+    } catch (error) {
+      console.log('error.response.data.error', error.response.data.error);
+      return rejectWithValue(error);
+    }
+  },
+);
 
 export const updatePassword = createAsyncThunk(
   'auth/updatePassword',
-  async (user) => {
-    const response = await axios.post(`${api}/user/updatepassword`, user);
-    return response.data;
+  async ({ email, oldPassword, password }, { rejectWithValue }) => {
+    try {
+      const response = await trpc.updatePassword.mutate({
+        email,
+        oldPassword,
+        password,
+      });
+      return response;
+    } catch (error) {
+      console.log('error.response.data.error', error.response.data.error);
+      return rejectWithValue(error);
+    }
   },
 );
 

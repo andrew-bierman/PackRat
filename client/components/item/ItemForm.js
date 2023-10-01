@@ -3,111 +3,91 @@ import { DropdownComponent } from '../Dropdown';
 import { theme } from '../../theme';
 import { ItemCategoryEnum } from '../../constants/itemCategory';
 import useTheme from '../../hooks/useTheme';
+import { ReusableForm } from '../../packrat-ui';
+import {
+  editItem as editItemValidations,
+  addItem as addItemValidations,
+} from '@packrat/packages';
+import { useSelector } from 'react-redux';
 const data = ['lb', 'oz', 'kg', 'g'];
 
 export const ItemForm = ({
   name,
-  setName,
   weight,
-  setWeight,
   quantity,
-  setQuantity,
   unit,
-  setUnit,
   categoryType,
-  setCategoryType,
   handleSubmit,
   showSubmitButton = true,
   isLoading,
   isEdit,
   currentPack,
+  packId,
+  _id,
 }) => {
-  let hasWaterAdded = false;
+  const user = useSelector((state) => state.auth.user);
+  const userId = user._id;
+  const schema = isEdit ? editItemValidations : addItemValidations;
+  let baseEssential = false;
   if (
     currentPack &&
     Array.isArray(currentPack.items) &&
     currentPack.items.length > 0
   ) {
-    hasWaterAdded = currentPack.items.some(
+    baseEssential = currentPack.items.some(
       (item) => item.category && item.category.name === ItemCategoryEnum.WATER,
     );
   }
+
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   return (
     <Box>
-      <VStack space={2}>
-        <Input
-          size="lg"
-          value={name}
-          variant="outline"
-          placeholder="Item Name"
-          onChangeText={(text) => setName(text)}
-          width="100%"
-        />
-        <Box
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            width: '100%',
-          }}
-        >
-          <Input
-            size="lg"
-            value={weight}
-            variant="outline"
-            placeholder="Weight"
-            onChangeText={(text) => setWeight(text)}
-            flex={1}
-          />
-          {data && (
-            <DropdownComponent
-              data={data}
-              value={unit}
-              onValueChange={setUnit}
-              placeholder={'Unit'}
-              width="100"
-            />
-          )}
-        </Box>
-
-        <Input
-          size="lg"
-          value={quantity}
-          variant="outline"
-          placeholder="Quantity"
-          onChangeText={(text) => setQuantity(text)}
-          width="100%"
-          type="text"
-        />
-        <Radio.Group
-          value={categoryType}
-          name="category"
-          accessibilityLabel="category for the type of item"
-          onChange={(nextVal) => setCategoryType(nextVal)}
-        >
-          {Object.values(ItemCategoryEnum).map((value, key) => {
-            if (hasWaterAdded && value === ItemCategoryEnum.WATER) return;
-            return (
-              <Radio key={key} value={value} mx="2">
-                {value}
-              </Radio>
-            );
-          })}
-        </Radio.Group>
-        {showSubmitButton && (
-          <Button onPress={handleSubmit}>
-            <Text style={{ color: currentTheme.colors.text }}>
-              {isLoading
-                ? 'Loading..'
-                : isEdit == true
-                ? 'Edit item'
-                : 'Add Item'}
-            </Text>
-          </Button>
-        )}
-      </VStack>
+      <ReusableForm
+        fields={[
+          { name: 'name', label: 'Item Name', type: 'text' },
+          {
+            name: 'weight',
+            label: 'Weight',
+            type: 'text',
+          },
+          {
+            name: 'quantity',
+            label: 'Quantity',
+            type: 'text',
+          },
+          {
+            name: 'unit',
+            label: 'Unit',
+            inputComponent: 'select',
+            items: data,
+          },
+          {
+            name: 'type',
+            label: 'Category',
+            inputComponent: 'radio',
+            items: Object.values(ItemCategoryEnum),
+            accessibilityLabel: 'category for the type of item',
+            baseEssential,
+          },
+        ]}
+        defaultValues={{
+          name,
+          weight,
+          unit: unit || data[2],
+          type: categoryType || 'Water',
+          quantity,
+          packId,
+          userId,
+          _id,
+          ownerId: userId,
+        }}
+        schema={schema}
+        submitText={
+          isLoading ? 'Loading..' : isEdit == true ? 'Edit item' : 'Add Item'
+        }
+        onSubmit={showSubmitButton ? handleSubmit : null}
+      />
     </Box>
   );
 };

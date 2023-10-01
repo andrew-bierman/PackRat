@@ -23,10 +23,6 @@ export const InputText: React.ForwardRefExoticComponent<InputTextProps> =
 
     const inputRef = useRef<TextInput>(null);
     useImperativeHandle(ref, () => ({
-      /**
-       * Focuses on the input element.
-       * @return {void}
-       */
       focus: () => {
         if (inputRef.current) {
           inputRef.current.focus();
