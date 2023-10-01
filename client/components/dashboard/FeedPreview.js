@@ -9,6 +9,7 @@ import { getPublicPacks, getPublicTrips } from '../../store/feedStore';
 import useTheme from '../../hooks/useTheme';
 import Carousel from '../carousel';
 import useCustomStyles from '~/hooks/useCustomStyles';
+import { useFeed } from '~/hooks/feed';
 
 const { height, width } = Dimensions.get('window');
 
@@ -16,17 +17,25 @@ const FeedPreviewScroll = () => {
   const dispatch = useDispatch();
   const styles = useCustomStyles(loadStyles);
 
-  useEffect(() => {
-    dispatch(getPublicPacks());
-    dispatch(getPublicTrips());
-  }, []);
+  // useEffect(() => {
+  //   dispatch(getPublicPacks());
+  //   dispatch(getPublicTrips());
+  // }, []);
 
-  const feedData = useSelector((state) => state.feed);
-  const filteredFeedData = feedData.publicTrips.concat(feedData.publicPacks);
+  const {
+    data: feedData,
+    error,
+    isLoading,
+  } = useFeed(
+    // queryString = 'Most Recent',
+    // ownerId,
+    (feedType = 'public'),
+    (selectedTypes = { pack: true, trip: true }),
+  );
 
   return (
     <Carousel itemWidth={250}>
-      {filteredFeedData.map((item, index) => {
+      {feedData?.map((item, index) => {
         const linkStr = `/${item.type}/${item._id}`;
         return linkStr ? (
           <Link href={linkStr} key={`${linkStr}`}>

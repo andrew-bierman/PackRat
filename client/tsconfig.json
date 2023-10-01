@@ -15,6 +15,7 @@
       "~/config/*": ["config/*"],
       "~/constants/*": ["constants/*"],
       "~/components/*": ["components/*"],
+      "~/context/*": ["context/*"],
       "~/utils/*": ["utils/*"],
       "~/hooks/*": ["hooks/*"],
       "~/screens/*": ["screens/*"],
