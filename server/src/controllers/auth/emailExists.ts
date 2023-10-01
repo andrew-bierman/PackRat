@@ -13,7 +13,7 @@ export const emailExists = async (req, res, next) => {
   const { email } = req.body;
   try {
     const result = await emailExistsService({ email });
-    if (result && result.status) {
+    if (result?.status) {
       responseHandler(res);
     } else {
       next(result);
@@ -28,9 +28,7 @@ export const emailExists = async (req, res, next) => {
 };
 
 export function emailExistsRoute() {
-  return publicProcedure
-    .input(validator.emailExists)
-    .mutation(async (opts) => {
-      return await emailExistsService(opts.input);
-    });
+  return publicProcedure.input(validator.emailExists).mutation(async (opts) => {
+    return await emailExistsService(opts.input);
+  });
 }

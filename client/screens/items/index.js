@@ -9,7 +9,7 @@ import { AddItemGlobal } from '../../components/item/AddItemGlobal';
 import { ItemsTable } from '../../components/itemtable/itemTable';
 import { useDispatch, useSelector } from 'react-redux';
 import { getItemsGlobal } from '../../store/globalItemsStore';
-import { Stack as Header } from 'expo-router';
+import { Stack } from 'expo-router';
 import { executeOfflineRequests } from '../../store/offlineQueue';
 import useCustomStyles from '~/hooks/useCustomStyles';
 // import { checkNetworkConnected } from '~/utils/netInfo';
@@ -43,7 +43,7 @@ export default function Items() {
 
   return (
     <ScrollView>
-      <Header.Screen
+      <Stack.Screen
         options={{
           title: 'Items',
         }}

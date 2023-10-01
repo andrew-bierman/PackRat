@@ -49,11 +49,11 @@ export const addGlobalItemToPack = z.object({
   packId: z.string(),
   itemId: z.string(),
   ownerId: z.string(),
-})
+});
 
 export const deleteGlobalItem = z.object({
   itemId: z.string(),
-})
+});
 
 export const editGlobalItemAsDuplicate = z.object({
   itemId: z.string(),
@@ -63,9 +63,9 @@ export const editGlobalItemAsDuplicate = z.object({
   quantity: z.number(),
   unit: z.string(),
   type: z.string(),
-})
+});
 
 export const getItemsGlobally = z.object({
   limit: z.number(),
-  page: z.number()
-})
+  page: z.number(),
+});

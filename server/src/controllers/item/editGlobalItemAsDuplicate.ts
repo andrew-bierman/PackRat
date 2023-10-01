@@ -42,15 +42,18 @@ export const editGlobalItemAsDuplicate = async (req, res, next) => {
 };
 
 export function editGlobalItemAsDuplicateRoute() {
-  return publicProcedure.input(z.object({
-    itemId: z.string(),
-    packId: z.string(),
-    name: z.string(),
-    weight: z.number(),
-    quantity: z.number(),
-    unit: z.string(),
-    type: z.string(),
-  }))
+  return publicProcedure
+    .input(
+      z.object({
+        itemId: z.string(),
+        packId: z.string(),
+        name: z.string(),
+        weight: z.number(),
+        quantity: z.number(),
+        unit: z.string(),
+        type: z.string(),
+      }),
+    )
     .mutation(async (opts) => {
       const { itemId, packId, name, weight, quantity, unit, type } = opts.input;
       return await editGlobalItemAsDuplicateService(
@@ -62,5 +65,5 @@ export function editGlobalItemAsDuplicateRoute() {
         unit,
         type,
       );
-    })
+    });
 }
