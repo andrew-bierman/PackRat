@@ -21,7 +21,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { convertPhotonGeoJsonToShape } from '../../utils/mapFunctions';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from '~/hooks/useCustomStyles';
-import { fetchSingleTrip } from '~/hooks/trip';
+import { useFetchSingleTrip } from '~/hooks/trips';
 export function TripDetails() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
@@ -33,9 +33,14 @@ export function TripDetails() {
 
   const { tripId } = useSearchParams();
   // console.log("🚀 ~ file: TripDetails.js:34 ~ TripDetails ~ tripId:", tripId)
-  const { data, isLoading, error, refetch, isOwner, isError } = fetchSingleTrip(tripId);
-  console.log("🚀 ~ file: TripDetails.js:37 ~ TripDetails ~ data:", data, isLoading);
-  
+  const { data, isLoading, error, refetch, isOwner, isError } =
+    useFetchSingleTrip(tripId);
+  console.log(
+    '🚀 ~ file: TripDetails.js:37 ~ TripDetails ~ data:',
+    data,
+    isLoading,
+  );
+
   const link = `${CLIENT_URL}/trip/${tripId}`;
 
   // useEffect(() => {
@@ -79,41 +84,34 @@ export function TripDetails() {
                 <View style={{ marginTop: '5%' }}>
                   <WeatherCard
                     weatherObject={
-                      data?.weather
-                        ? JSON?.parse(data?.weather)
-                        : weatherObject
+                      data?.weather ? JSON?.parse(data?.weather) : weatherObject
                     }
                     weatherWeek={weatherWeek}
                   />
                 </View>
                 {/* <View style={{marginTop:'5%', backgroundColor:'red'}}> */}
-                {
-                  data?.geojson?.features.length &&
-                <TripCard
-                  Icon={() => (
-                    <FontAwesome5
-                      name="route"
-                      size={24}
-                      color={currentTheme.colors.cardIconColor}
-                    />
-                  )}
-                  title="Map"
-                  isMap={true}
-                  shape={data.geojson}
-                  cords={
-                    data?.weather
-                      ? JSON?.parse(data?.weather)?.coord
-                      : weatherObject?.coord
-                  }
-                />
-                }
+                {data?.geojson?.features.length && (
+                  <TripCard
+                    Icon={() => (
+                      <FontAwesome5
+                        name="route"
+                        size={24}
+                        color={currentTheme.colors.cardIconColor}
+                      />
+                    )}
+                    title="Map"
+                    isMap={true}
+                    shape={data.geojson}
+                    cords={
+                      data?.weather
+                        ? JSON?.parse(data?.weather)?.coord
+                        : weatherObject?.coord
+                    }
+                  />
+                )}
                 {/* </View> */}
                 <View style={{ marginTop: '5%' }}>
-                  <ScoreContainer
-                    type="trip"
-                    data={data}
-                    isOwner={isOwner}
-                  />
+                  <ScoreContainer type="trip" data={data} isOwner={isOwner} />
                 </View>
               </>
             }
