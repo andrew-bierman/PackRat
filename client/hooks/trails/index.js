@@ -1,5 +1,5 @@
 // import { useDispatch } from 'react-redux';
-import { trpc } from '../../trpc';
+import { queryTrpc } from '../../trpc';
 // import { trpc } from '../../context/tRPC';
 import { setTrails, setFilteredTrails } from '../../store/trailsStore_copy'; // Importing the actions
 import { store } from '../../store/store';
@@ -14,9 +14,7 @@ async function useTrails({ lat, lon, selectedSearch, radius = 1000 }) {
   // }); // Assumed to be a valid hook from tRPC.
 
   // SWAP FOR TRPC react query
-  let error;
-  const isLoading = false;
-  const data = await trpc.getTrailsOSM.query({
+  const { data, isLoading, error } = await queryTrpc.getTrailsOSM.useQuery({
     lat,
     lon,
     radius,

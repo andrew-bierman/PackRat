@@ -1,7 +1,7 @@
 import { Slot } from 'expo-router';
 import { useState } from 'react';
 import { Platform, View } from 'react-native';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 import Navigation from '../screens/Navigation';
 
@@ -23,26 +23,26 @@ import { api } from '~/constants/api';
 import { TrpcQueryProvider } from '../context/tRPC';
 
 export default function HomeLayout() {
-  const queryClient = new QueryClient()
-  
+  const queryClient = new QueryClient();
+
   const trpcClient = queryTrpc.createClient({
     links: [
-            httpBatchLink({
-              url: `${api}/trpc`,
-              async headers() {
-                const token = await getToken('session');
-                return {
-                  authorization: token ? `Bearer ${token}` : '',
-                };
-              },
-            }),
-          ],
-  })
+      httpBatchLink({
+        url: `${api}/trpc`,
+        async headers() {
+          const token = await getToken('session');
+          return {
+            authorization: token ? `Bearer ${token}` : '',
+          };
+        },
+      }),
+    ],
+  });
 
   return (
-      <Provider store={store}>
-            <queryTrpc.Provider client={trpcClient} queryClient={queryClient}>
-      <QueryClientProvider client={queryClient}>
+    <Provider store={store}>
+      <queryTrpc.Provider client={trpcClient} queryClient={queryClient}>
+        <QueryClientProvider client={queryClient}>
           <PersistGate loading={null} persistor={persistor}>
             <SessionProvider>
               <ThemeProvider>
@@ -54,8 +54,8 @@ export default function HomeLayout() {
             </SessionProvider>
           </PersistGate>
           <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
+        </QueryClientProvider>
       </queryTrpc.Provider>
-        </Provider>
+    </Provider>
   );
 }
