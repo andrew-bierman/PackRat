@@ -15,7 +15,7 @@ export const getPublicTripsService = async (
       },
       {
         $lookup: {
-          from: 'packs', // name of the foreign collection
+          from: 'packs',
           localField: '_id',
           foreignField: 'trips',
           as: 'packs',
@@ -23,7 +23,7 @@ export const getPublicTripsService = async (
       },
       {
         $lookup: {
-          from: 'users', // Replace 'users' with the actual name of your 'User' collection
+          from: 'users',
           localField: 'owner_id',
           foreignField: '_id',
           as: 'owner',
@@ -32,6 +32,23 @@ export const getPublicTripsService = async (
       {
         $addFields: {
           owner: { $arrayElemAt: ['$owner', 0] },
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          description: 1,
+          duration: 1,
+          weather: 1,
+          start_date: 1,
+          end_date: 1,
+          destination: 1,
+          'owner._id': 1,
+          'owner.username': 1,
+          'packs._id': 1,
+          createdAt: 1,
+          updatedAt: 1,
         },
       },
     ];
