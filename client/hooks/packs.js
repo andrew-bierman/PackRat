@@ -20,13 +20,14 @@ export const usePacks =  (queryString, ownerId, feedType, selectedTypes) => {
             if(selectedTypes.pack) {
                 if(publicPacks?.status === 'success') {
                     data = [...data, ...publicPacks?.data?.map(item => ({ ...item, type: 'pack' }))];
-                    isLoading = false
+                    isLoading = publicPacks?.isLoading
                 }
             } 
-            if(selectedTypes.trip) {
+            if(selectedTypes?.trip) {
                 if(publicTrips?.status === 'success')
-                    data = [...data, ...publicTrips?.map(item => ({ ...item,  type: 'trip'}))]
-                    isLoading = false
+                    console.log(JSON.stringify(publicTrips));
+                    data = [...data, ...publicTrips?.data?.map(item => ({ ...item,  type: 'trip'}))]
+                    isLoading = publicTrips.isLoading
             }
             break;
         case ('userPacks'):

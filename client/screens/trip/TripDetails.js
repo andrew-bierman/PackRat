@@ -7,7 +7,7 @@ import { TableContainer } from '../../components/pack_table/Table';
 import { selectPackById } from '../../store/packsStore';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchSingleTrip } from '../../store/singleTripStore';
+// import { fetchSingleTrip } from '../../store/singleTripStore';
 
 import { Box, Text, View } from 'native-base';
 import { DetailsComponent } from '../../components/details';
@@ -21,6 +21,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { convertPhotonGeoJsonToShape } from '../../utils/mapFunctions';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from '~/hooks/useCustomStyles';
+import { fetchSingleTrip } from '~/hooks/trip';
 export function TripDetails() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
@@ -31,25 +32,28 @@ export function TripDetails() {
   const dispatch = useDispatch();
 
   const { tripId } = useSearchParams();
-
+  // console.log("🚀 ~ file: TripDetails.js:34 ~ TripDetails ~ tripId:", tripId)
+  const { data, isLoading, error, refetch, isOwner, isError } = fetchSingleTrip(tripId);
+  console.log("🚀 ~ file: TripDetails.js:37 ~ TripDetails ~ data:", data, isLoading);
+  
   const link = `${CLIENT_URL}/trip/${tripId}`;
 
-  useEffect(() => {
-    if (!tripId) return;
-    dispatch(fetchSingleTrip(tripId));
-  }, [dispatch, tripId]);
+  // useEffect(() => {
+  //   if (!tripId) return;
+  //   dispatch(fetchSingleTrip(tripId));
+  // }, [dispatch, tripId]);
   const states = useSelector((state) => state);
 
   const currentTrip = useSelector((state) => state.singleTrip.singleTrip);
 
-  const user = useSelector((state) => state.auth.user);
+  // const user = useSelector((state) => state.auth.user);
 
   // check if user is owner of pack, and that pack and user exists
-  const isOwner = currentTrip && user && currentTrip.owner_id === user._id;
+  // const isOwner = currentTrip && user && currentTrip.owner_id === user._id;
 
-  const isLoading = useSelector((state) => state.singleTrip.isLoading);
-  const error = useSelector((state) => state.singleTrip.error);
-  const isError = error !== null;
+  // const isLoading = useSelector((state) => state.singleTrip.isLoading);
+  // const error = useSelector((state) => state.singleTrip.error);
+  // const isError = error !== null;
 
   if (isLoading) return <Text>Loading...</Text>;
   // console.log(currentTrip.osm_ref.geoJSON, 'geoJSON');
@@ -64,25 +68,27 @@ export function TripDetails() {
         <>
           <DetailsComponent
             type="trip"
-            data={currentTrip}
+            data={data}
             isLoading={isLoading}
             error={error}
             additionalComps={
               <>
                 <View>
-                  <TableContainer currentPack={currentTrip?.packs} />
+                  <TableContainer currentPack={data?.packs} />
                 </View>
                 <View style={{ marginTop: '5%' }}>
                   <WeatherCard
                     weatherObject={
-                      currentTrip?.weather
-                        ? JSON?.parse(currentTrip?.weather)
+                      data?.weather
+                        ? JSON?.parse(data?.weather)
                         : weatherObject
                     }
                     weatherWeek={weatherWeek}
                   />
                 </View>
                 {/* <View style={{marginTop:'5%', backgroundColor:'red'}}> */}
+                {
+                  data?.geojson?.features.length &&
                 <TripCard
                   Icon={() => (
                     <FontAwesome5
@@ -93,18 +99,19 @@ export function TripDetails() {
                   )}
                   title="Map"
                   isMap={true}
-                  shape={currentTrip.geojson}
+                  shape={data.geojson}
                   cords={
-                    currentTrip?.weather
-                      ? JSON?.parse(currentTrip?.weather)?.coord
+                    data?.weather
+                      ? JSON?.parse(data?.weather)?.coord
                       : weatherObject?.coord
                   }
                 />
+                }
                 {/* </View> */}
                 <View style={{ marginTop: '5%' }}>
                   <ScoreContainer
                     type="trip"
-                    data={currentTrip}
+                    data={data}
                     isOwner={isOwner}
                   />
                 </View>

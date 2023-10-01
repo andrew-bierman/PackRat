@@ -39,7 +39,7 @@ const HeroSection = ({ onSelect }) => {
       console.log('selectedResult ------->', selectedResult);
 
       // Set the selected search result in the Redux store
-      dispatch(setSelectedSearchResult(selectedResult));
+      // dispatch(setSelectedSearchResult(selectedResult));
 
       const { osm_id, osm_type } = selectedResult.properties;
 
