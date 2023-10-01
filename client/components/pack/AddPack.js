@@ -9,7 +9,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { CustomModal } from '../modal';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from '~/hooks/useCustomStyles';
-import { useAddNewPack } from '~/hooks/packs';
+import { useAddNewPack } from '~/hooks/feed';
 export const AddPack = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
@@ -29,7 +29,7 @@ export const AddPack = () => {
   const error = useSelector((state) => state.packs.error);
 
   const isError = error !== null;
-  const { mutation } = useAddNewPack()
+  const { mutation } = useAddNewPack();
   /**
    * Handles the addition of a pack.
    *
