@@ -28,7 +28,14 @@ export const getAIResponse = async (req, res, next) => {
 };
 
 export function getAIResponseRoute() {
-  return publicProcedure.input(z.object({ userId: z.string(), conversationId: z.string(), userInput: z.string() }))
+  return publicProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+        conversationId: z.string(),
+        userInput: z.string(),
+      }),
+    )
     .query(async (opts) => {
       const { userId, conversationId, userInput } = opts.input;
       return getAIResponseService(userId, conversationId, userInput);

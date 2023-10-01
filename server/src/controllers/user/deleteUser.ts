@@ -23,11 +23,9 @@ export const deleteUser = async (req, res, next) => {
 };
 
 export function deleteUserRoute() {
-  return publicProcedure
-    .input(validator.deleteUser)
-    .mutation(async (opts) => {
-      const { userId } = opts.input;
-      await User.findOneAndDelete({ _id: userId });
-      return "User deleted successfully";
-    });
+  return publicProcedure.input(validator.deleteUser).mutation(async (opts) => {
+    const { userId } = opts.input;
+    await User.findOneAndDelete({ _id: userId });
+    return 'User deleted successfully';
+  });
 }

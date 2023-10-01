@@ -20,11 +20,14 @@ export const addToFavorite = async (req, res, next) => {
 };
 
 export function addToFavoriteRoute() {
-  return publicProcedure.input(validator.addToFavorite).mutation(async (opts) => {
-    const { packId, userId } = opts.input;
-    await addToFavoriteService(packId, userId);
-    const user = await User.findOne({ _id: userId }).select('-password');
-    if (!user) throw UserNotFoundError
-    return user;
-  });
-};
+  return publicProcedure
+    .input(validator.addToFavorite)
+    .mutation(async (opts) => {
+      const { packId, userId } = opts.input;
+      await addToFavoriteService(packId, userId);
+      const user = await User.findOne({ _id: userId }).select('-password');
+      // if (!user) throw UserNotFoundError;
+      if (!user) return UserNotFoundError;
+      return user;
+    });
+}
