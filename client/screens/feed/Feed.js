@@ -35,8 +35,8 @@ import { useRouter } from 'expo-router';
 import { fuseSearch } from '../../utils/fuseSearch';
 import { fetchUserFavorites } from '../../store/favoritesStore';
 import useCustomStyles from '~/hooks/useCustomStyles';
-import { queryTrpc, trpc  } from '../../trpc'
-import { usePacks } from '~/hooks/packs';
+import { queryTrpc, trpc } from '../../trpc';
+import { useFeed } from '~/hooks/feed';
 const URL_PATHS = {
   userPacks: '/pack/',
   favoritePacks: '/pack/',
@@ -177,12 +177,18 @@ const Feed = ({ feedType = 'public' }) => {
   const userTripsData = useSelector(selectAllTrips);
 
   const styles = useCustomStyles(loadStyles);
-  const data = usePacks(queryString, ownerId, feedType, selectedTypes);
-  console.log("🚀 ~ file: Feed.js:180 ~ Feed ~ feedData:", data);
+  const { data, error, isLoading } = useFeed(
+    queryString,
+    ownerId,
+    feedType,
+    selectedTypes,
+  );
+
+  console.log('🚀 ~ file: Feed.js:180 ~ Feed ~ feedData:', data);
   // useEffect(() => {
   //   if (feedType === 'public') {
   //     dispatch(getPublicPacks(queryString));
-      // dispatch(getPublicTrips(queryString));
+  // dispatch(getPublicTrips(queryString));
   //     dispatch(fetchUserFavorites(ownerId));
   //   } else if (feedType === 'userPacks' && ownerId) {
   //     dispatch(fetchUserPacks({ ownerId, queryString }));
@@ -192,7 +198,7 @@ const Feed = ({ feedType = 'public' }) => {
   //     dispatch(getFavoritePacks());
   //   }
   // }, [queryString, feedType, ownerId]);
-  
+
   /**
    * Renders the data for the feed based on the feed type and search query.
    *
@@ -200,7 +206,7 @@ const Feed = ({ feedType = 'public' }) => {
    */
   const renderData = () => {
     let arrayData = data;
-    
+
     // if (feedType === 'public') {
     //   if (selectedTypes?.pack) {
     //     data = [...data, ...publicPacksData];
@@ -228,10 +234,10 @@ const Feed = ({ feedType = 'public' }) => {
     };
 
     const results =
-    feedType !== 'userTrips'
-    ? fuseSearch(arrayData, searchQuery, keys, options)
-    : data;
-    console.log("🚀 ~ file: Feed.js:231 ~ renderData ~ results:", results)
+      feedType !== 'userTrips'
+        ? fuseSearch(arrayData, searchQuery, keys, options)
+        : data;
+    console.log('🚀 ~ file: Feed.js:231 ~ renderData ~ results:', results);
 
     // Convert fuse results back into the format we want
     // if searchQuery is empty, use the original data

@@ -1,5 +1,5 @@
 // useParks.js
-import { trpc } from '../../trpc';
+import { queryTrpc } from '../../trpc';
 import { store } from '../../store/store';
 import { setParks, setParkNames } from '../../store/parksStore';
 
@@ -11,10 +11,7 @@ async function useParks({ lat, lon, selectedSearch, radius = 1000 }) {
   //   selectedSearch,
   // })
 
-  let error;
-  const isLoading = false;
-
-  const data = await trpc.getParksOSM.query({
+  const { data, error, isLoading } = await queryTrpc.getParksOSM.query({
     lat,
     lon,
     selectedSearch,

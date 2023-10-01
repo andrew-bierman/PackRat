@@ -5,8 +5,6 @@ import { api } from './constants/api';
 import { createTRPCReact } from '@trpc/react-query';
 console.log('api', api);
 
-
-
 export const getToken = async (key: string) => {
   const token = await AsyncStorage.getItem(key);
   if (!token) return '';
@@ -27,7 +25,6 @@ export const trpc = createTRPCProxyClient<AppRouter>({
   ],
   transformer: undefined,
 });
-
 
 // export const reactTrpc = createTRPCReact<AppRouter>();
 export const queryTrpc = createTRPCReact<AppRouter>();
