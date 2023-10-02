@@ -6,10 +6,18 @@ import { useDispatch } from 'react-redux';
 import { addPackItem } from '../store/packsStore';
 import useCustomStyles from '~/hooks/useCustomStyles';
 
+import { useMutation } from '~/hooks/useMutation';
+import { PACKQUERYS, PACKREDUCERS } from '~/hooks/packs';
+
 export default function Water({ currentPack, setWaterItem }) {
   const [waterWeight, setWaterWeight] = useState(0);
   const dispatch = useDispatch();
   const styles = useCustomStyles(loadStyles);
+
+  const { mutation, onSuccesMutation } = useMutation(
+    PACKQUERYS.addItem,
+    PACKREDUCERS.addItem,
+  );
 
   /**
    * Update the water weight.
@@ -36,7 +44,9 @@ export default function Water({ currentPack, setWaterItem }) {
       type: ItemCategoryEnum.WATER,
     };
 
-    dispatch(addPackItem(data));
+    mutation.mutate(data, {
+      onSuccess: (data) => onSuccesMutation(data),
+    });
   };
 
   return (

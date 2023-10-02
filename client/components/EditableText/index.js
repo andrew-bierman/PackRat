@@ -4,6 +4,8 @@ import { theme } from '../../theme';
 import { useDispatch } from 'react-redux';
 import { updatePack } from '../../store/packsStore';
 import { editTrip } from '../../store/tripsStore';
+import { PACKQUERYS, PACKREDUCERS } from '~/hooks/packs';
+import { useMutation } from '~/hooks/useMutation';
 
 export const EditableInput = ({
   data,
@@ -14,6 +16,10 @@ export const EditableInput = ({
 }) => {
   const [headerTitle, setHeaderTitle] = useState(title || '');
   const dispatch = useDispatch();
+  const { mutation, onSuccesMutation } = useMutation(
+    PACKQUERYS.editItem,
+    PACKREDUCERS.updatePack,
+  );
   return (
     <TextInput
       style={{
@@ -37,7 +43,10 @@ export const EditableInput = ({
           setEditTitle(false);
           titleRef.current.style =
             'font-size:20px !important;font-weight:bold;color: #22c67c;';
-
+          mutation.mutate(packDetails, {
+            onSuccess: (data) =>
+              onSuccesMutation({ ...data, itemId, packId: pack._id }),
+          });
           dispatch(updatePack(packDetails));
         } else {
           const tripDetails = {

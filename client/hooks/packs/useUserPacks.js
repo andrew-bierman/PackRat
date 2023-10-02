@@ -21,7 +21,7 @@ export const useUserPacks = (ownerId, queryString) => {
   // Extract packs or set an empty array if data is undefined.
   const packs = data?.packs || [];
 
-  if (packs && !isSet) {
+  if (packs && !isLoading && !isSet) {
     store.dispatch(setUserPacks(packs));
     setIsSet(true);
   }

@@ -2,21 +2,19 @@ import { queryTrpc } from '../../trpc';
 import { store } from '../../store/store';
 import { deleteItemsGlobalReducer } from '../../store/globalItemsStore';
 
-const useDeleteGlobalItems = (item) => {
-  const { data, isLoading, error, refetch } = queryTrpc.deleteGlobalItem
-    .useMutation()
-    .mutate(
-      { itemId: item },
-      {
-        enabled: !!item,
-      },
-    );
+const useDeleteGlobalItems = () => {
+  const mutation = queryTrpc.deleteGlobalItem.useMutation();
+  // .mutate(
+  //   { itemId: item },
+  //   {
+  //     enabled: !!item,
+  //   },
+  // );
 
-  if (!error) {
-    store.dispatch(deleteItemsGlobalReducer(data));
-  }
+  const onSuccesMutation = (data) =>
+    store.dispatch(deletePackItemReducer(data));
 
-  return { data, error, isLoading, refetch };
+  return { mutation, deleteItemsGlobalReducer };
 };
 
 export default useDeleteGlobalItems;

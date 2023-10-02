@@ -173,11 +173,13 @@ const packsSlice = createSlice({
     closeModal: (state) => {
       state.isOpenEditModal = false;
     },
-    setUserPacks: packsAdapter.setAll,
+    setUserPacks: (state, action) => {
+      packsAdapter.setAll(state, action.payload);
+    },
     deletePackItemReducer: (state, action) => {
-      const { itemId, currentPackId } = action.meta.arg;
+      const { itemId, packId } = action.payload;
 
-      const existing = state.entities[currentPackId];
+      const existing = state.entities[packId];
       if (!existing) {
         return;
       }
@@ -185,8 +187,83 @@ const packsSlice = createSlice({
       const updatedItems = existing.items.filter((item) => item._id !== itemId);
 
       packsAdapter.updateOne(state, {
-        id: currentPackId,
+        id: packId,
         changes: { items: updatedItems },
+      });
+    },
+    addPackReducer: (state, action) => {
+      packsAdapter.addOne(state, action.payload.createdPack);
+    },
+    changePackStatusReducer: (state, action) => {
+      packsAdapter.updateOne(state, {
+        id: action.payload._id,
+        changes: action.payload,
+      });
+    },
+    addPackItemReducer: (state, action) => {
+      const existingPack = state.entities[action.payload.packId];
+      if (existingPack) {
+        packsAdapter.updateOne(state, {
+          id: action.payload.packId,
+          changes: { items: [...existingPack.items, action.payload.newItem] },
+        });
+      }
+    },
+    scorePackReducer: (state, action) => {
+      packsAdapter.updateOne(state, {
+        id: action.payload._id,
+        changes: action.updatedPack,
+      });
+    },
+    editGlobalItemAsDuplicateReducer: (state, action) => {
+      const { itemId, packId } = action.payload;
+      const existingPack = state.entities[packId];
+
+      if (!existingPack) {
+        return;
+      }
+      const updatedItems = existingPack.items.map((item) =>
+        item._id === itemId ? action.payload : item,
+      );
+      console.log('updated items', updatedItems);
+
+      packsAdapter.updateOne(state, {
+        id: packId,
+        changes: { items: updatedItems },
+      });
+    },
+    editPackItemReducer: (state, action) => {
+      const newItem = action.payload;
+      const packIds = newItem.packs; // packIds is an array of pack Ids
+
+      packIds.forEach((packId) => {
+        console.log('packid', packId);
+        // loop through each packId
+        const existingPack = state.entities[packId];
+        console.log('existingPack', existingPack);
+        if (!existingPack) {
+          return;
+        }
+
+        const updatedItems = existingPack.items.map((item) =>
+          item._id === newItem._id ? newItem : item,
+        );
+        console.log('updatediTEMS', updatedItems);
+
+        packsAdapter.updateOne(state, {
+          id: packId,
+          changes: { items: updatedItems },
+        });
+      });
+    },
+    updatePackReducer: (state, action) => {
+      InformUser({
+        title: 'Pack has been succesfully updated',
+        placement: 'bottom',
+        duration: 2000,
+        style: {
+          backgroundColor: 'green',
+        },
       });
     },
   },
@@ -432,7 +509,18 @@ export const { selectAll: selectAllPacks, selectById: selectPackById } =
 export const selectIsLoading = (state) => state.packs.isLoading;
 export const selectError = (state) => state.packs.error;
 
-export const { openModal, closeModal, setUserPacks, deletePackItemReducer } =
-  packsSlice.actions;
+export const {
+  openModal,
+  closeModal,
+  setUserPacks,
+  deletePackItemReducer,
+  addPackReducer,
+  changePackStatusReducer,
+  addPackItemReducer,
+  scorePackReducer,
+  editPackItemReducer,
+  editGlobalItemAsDuplicateReducer,
+  updatePackReducer,
+} = packsSlice.actions;
 
 export default packsSlice.reducer;

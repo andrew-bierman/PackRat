@@ -16,6 +16,8 @@ import { PackOptions } from '../PackOptions';
 import CustomButton from '../custombutton';
 import ItemPicker from '../Picker';
 import useCustomStyles from '~/hooks/useCustomStyles';
+import { useMutation } from '~/hooks/useMutation';
+import { PACKQUERYS } from '~/hooks/packs';
 
 const WeightUnitDropdown = ({ value, onChange }) => {
   return (
@@ -225,6 +227,7 @@ export const TableContainer = ({
 }) => {
   const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
+  const { mutation } = useMutation(PACKQUERYS.duplicatePublicPack);
   const styles = useCustomStyles(loadStyles);
   let ids = [];
   if (currentPack?.items) {
@@ -238,7 +241,7 @@ export const TableContainer = ({
       ownerId: user._id,
       items: checkedItems,
     };
-    dispatch(duplicatePackItem(data));
+    mutation.mutate(data);
   };
 
   const [weightUnit, setWeightUnit] = useState('g');

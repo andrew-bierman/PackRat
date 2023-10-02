@@ -23,6 +23,9 @@ import { Link } from 'expo-router';
 import { truncateString } from '../../utils/truncateString';
 import { useEffect } from 'react';
 
+import { useMutation } from '~/hooks/useMutation';
+import { PACKQUERYS, PACKREDUCERS } from '~/hooks/packs';
+
 const UserDataCard = ({
   type, // "pack" or "trip"
   destination,
@@ -39,6 +42,10 @@ const UserDataCard = ({
   differentUser,
 }) => {
   const dispatch = useDispatch();
+  const { mutation, onSuccesMutation } = useMutation(
+    PACKQUERYS.editPack,
+    PACKREDUCERS.editPack,
+  );
 
   /**
    * Updates the state at the specified index with the given boolean value.
@@ -64,7 +71,12 @@ const UserDataCard = ({
   const handleChangeStatus = (index) => {
     updateState(index, true);
     if (type === 'pack') {
-      dispatch(changePackStatus({ _id, is_public: !is_public }));
+      mutation.mutate(
+        { _id, is_public: !is_public },
+        {
+          onSuccess: (data) => onSuccesMutation(data),
+        },
+      );
     } else if (type === 'trip') {
     }
   };
