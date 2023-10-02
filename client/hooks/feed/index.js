@@ -2,7 +2,12 @@ import { usePublicFeed } from './publicFeed';
 import { useUserPacks } from './../packs';
 import { useUserTrips } from './../trips';
 
-export const useFeed = (queryString, ownerId, feedType, selectedTypes) => {
+export const useFeed = (
+  queryString = 'Most Recent',
+  ownerId = null,
+  feedType = 'public',
+  selectedTypes = { pack: true, trip: true },
+) => {
   switch (feedType) {
     case 'public':
       return usePublicFeed(queryString, selectedTypes);
