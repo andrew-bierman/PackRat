@@ -160,6 +160,15 @@ cd ..
 
 Recommended to open two terminal windows.
 
+#### Root
+
+1.  From the main`PackRat` directory.
+
+```
+yarn install
+```
+
+
 #### Server
 
 1. Navigate to the `server` directory.
@@ -168,13 +177,7 @@ Recommended to open two terminal windows.
 cd server
 ```
 
-2. Install dependencies for the server.
-
-```
-yarn
-```
-
-3. Start the server.
+2. Start the server.
 
 ```
 yarn start
@@ -188,13 +191,7 @@ yarn start
 cd client
 ```
 
-2. Install dependencies for the client.
-
-```
-yarn
-```
-
-3. Start the Expo server.
+2. Start the Expo server.
 
 ```
 yarn start
@@ -222,7 +219,7 @@ docker-compose build
 docker-compose up
 ```
 
-2. Navigate to `http://localhost:19000/` to view the app. The server will be running on `http://localhost:3000/`.
+2. Navigate to `http://localhost:8081/` to view the app. The server will be running on `http://localhost:3000/`.
 3. If you encounter errors with edits to files not automatically applying, try running the following commands:
 
 ```
@@ -247,7 +244,7 @@ docker build -t packrat-server server/Dockerfile
 5. To run the images, run the following commands:
 
 ```
-docker run -p 19000:19000 packrat-client
+docker run -p 8081:8081 packrat-client
 docker run -p 3000:3000 packrat-server
 ```
 
