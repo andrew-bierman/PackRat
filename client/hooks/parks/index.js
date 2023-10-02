@@ -3,19 +3,23 @@ import { queryTrpc } from '../../trpc';
 import { store } from '../../store/store';
 import { setParks, setParkNames } from '../../store/parksStore';
 
-async function useParks({ lat, lon, selectedSearch, radius = 1000 }) {
+function useParks({ latLng, selectedSearch, radius = 1000 }) {
   console.log('useParks -------------');
   // const { data, error, isLoading } = await trpc.getParksOSM.query({
   //   lat,
   //   lon,
   //   selectedSearch,
   // })
-
-  const { data, error, isLoading } = await queryTrpc.getParksOSM.query({
+  const { lat, lon } = latLng;
+  const isEnabled = Boolean(lat && lon)
+  const { data, error, isLoading } =  queryTrpc.getParksOSM.useQuery({
     lat,
     lon,
     selectedSearch,
     radius,
+  }, { 
+    enabled: isEnabled,
+    refetchOnWindowFocus: false,
   });
 
   console.log('------------------------------------');
@@ -25,18 +29,25 @@ async function useParks({ lat, lon, selectedSearch, radius = 1000 }) {
   if (data) {
     const parks = data.features;
     const filteredParks = parks
-      .filter(
+    .filter(
         (park) =>
-          park.properties.name && park.properties.name !== selectedSearch,
+          park.properties.name 
+          // && park.properties.name !== selectedSearch,
       )
       .map((park) => park.properties.name)
       .slice(0, 25);
+      
+      console.log("🚀 ~ file: index.js:32 ~ useParks ~ filteredParks:", filteredParks)
+    // store.dispatch(setParks(parks));
+    // store.dispatch(setParkNames(filteredParks));
+    return { data, error, isLoading,parks, filteredParks };
+  } 
+  return { 
+    isLoading,
+    data,
+    error,
+   }
 
-    store.dispatch(setParks(parks));
-    store.dispatch(setParkNames(filteredParks));
-  }
-
-  return { data, error, isLoading };
 }
 
 export default useParks;

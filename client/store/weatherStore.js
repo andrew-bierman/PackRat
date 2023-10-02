@@ -16,6 +16,8 @@ const weatherAdapter = createEntityAdapter();
 const initialState = weatherAdapter.getInitialState({
   weatherObject: defaultWeatherObject,
   weatherWeek: defaultWeekObj,
+  latLng : {},
+  selectedSearch : ''
 });
 
 export const fetchWeather = createAsyncThunk(
@@ -78,6 +80,13 @@ export const weatherSlice = createSlice({
       // immutable state based off those changes
       state.weatherWeek = action.payload;
     },
+    setLatLng: (state, action) => {
+      console.log("🚀 ~ file: weatherStore.js:83 ~ action:", action)
+      state.latLng = action.payload
+    },
+    setSearchResult : (state, action) => {
+      state.selectedSearch = action.payload;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -113,7 +122,7 @@ export const weatherSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { add, addWeek } = weatherSlice.actions;
+export const { add, addWeek, setLatLng,setSearchResult } = weatherSlice.actions;
 
 export const { selectAll: selectAllWeathers, selectById: selectWeatherById } =
   weatherAdapter.getSelectors((state) => state.weather);

@@ -83,11 +83,12 @@ const DestinationHeader = ({ geoJSON, selectedSearchResult }) => {
  */
 const WeatherData = ({ geoJSON }) => {
   const dispatch = useDispatch();
-  const weatherObject = useSelector((state) => state.destination.weatherObject);
-  const weatherWeek = useSelector((state) => state.destination.weatherWeek);
+  // const weatherObject = useSelector((state) => state.destination.weatherObject);
+  // const weatherWeek = useSelector((state) => state.destination.weatherWeek);
   const [latLng, setLatLng] = useState({});
-  const { data: weatherData } = useFetchWeather(latLng);
-  const { data: weatherWeekData } = useFetchWeatherWeak(latLng)
+  const { data: weatherObject } = useFetchWeather(latLng);
+  const { data: weatherWeek } = useFetchWeatherWeak(latLng)
+  console.log("🚀 ~ file: index.js:90 ~ WeatherData ~ weatherObject:", weatherObject,weatherWeek)
   
   useEffect(() => {
     /**
@@ -126,6 +127,7 @@ const WeatherData = ({ geoJSON }) => {
   }, [geoJSON]);
 
   return weatherObject && weatherWeek ? (
+    // null
     <WeatherCard weatherObject={weatherObject} weatherWeek={weatherWeek} />
   ) : null;
 };
