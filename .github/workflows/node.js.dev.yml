@@ -31,7 +31,7 @@ jobs:
         cat yarn.lock
 
     - name: Set Yarn Version to Berry
-      run: yarn set version from sources && yarn config set -H enableImmutableInstalls false
+      run: yarn set version berry
 
     #   run: yarn policies set-version
 
