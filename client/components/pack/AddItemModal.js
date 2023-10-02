@@ -14,6 +14,18 @@ export const AddItemModal = ({
       trigger="Add Item"
       isActive={isAddItemModalOpen}
       onTrigger={setIsAddItemModalOpen}
+      footerButtons={[
+        {
+          label: 'Save',
+          color: 'primary',
+          onClick: () => setIsAddItemModalOpen(false),
+        },
+        {
+          label: 'Cancel',
+          color: 'danger',
+          onClick: () => setIsAddItemModalOpen(false),
+        },
+      ]}
     >
       <AddItem
         packId={currentPackId}

@@ -17,6 +17,15 @@ export const EditPackItemModal = ({
   onTrigger,
   closeModalHandler,
 }) => {
+  const footerButtons = [
+    {
+      label: 'Cancel',
+      onClick: closeModalHandler,
+      color: 'danger',
+      disabled: false,
+    },
+    // add more footer buttons here if needed
+  ];
   const [currentPackId, setCurrentPackId] = useState(
     currentPack ? currentPack._id : undefined,
   );
@@ -28,6 +37,8 @@ export const EditPackItemModal = ({
         title={'Edit Item'}
         triggerComponent={<MaterialIcons name="edit" size={20} color="black" />}
         onTrigger={onTrigger}
+        footerButtons={footerButtons}
+        onCancel={closeModalHandler}
       >
         <AddItem
           _id={packId}
