@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Box, Text, IconButton } from 'native-base';
+import { Switch } from 'native-base';
 import {
   RButton,
-  RCard,
   RInput,
   RScrollView,
   RSeperator,
   RStack,
-  RSwitch,
   RText,
   RXStack,
 } from '../../packrat-ui';
@@ -108,14 +106,11 @@ const FeedSearchFilter = ({
             >
               Packs
             </RText>
-            <RSwitch
-              size={'$3'}
-              defaultChecked={selectedTypes.pack}
-              onCheckedChange={handleTogglePack}
-              style={{ backgroundColor: currentTheme.colors.background }}
-            >
-              <RSwitch.Thumb animation="bouncy" />
-            </RSwitch>
+            <Switch
+              size="lg"
+              isChecked={selectedTypes.pack}
+              onToggle={handleTogglePack}
+            />
             <RText
               fontSize="lg"
               fontWeight="bold"
@@ -123,14 +118,11 @@ const FeedSearchFilter = ({
             >
               Trips
             </RText>
-            <RSwitch
-              size={'$3'}
-              defaultChecked={selectedTypes.trip}
-              onCheckedChange={handleToggleTrip}
-              style={{ backgroundColor: currentTheme.colors.background }}
-            >
-              <RSwitch.Thumb animation="quick" />
-            </RSwitch>
+            <Switch
+              size="lg"
+              isChecked={selectedTypes.trip}
+              onToggle={handleToggleTrip}
+            />
           </RXStack>
         )}
         <RXStack space={15} alignItems="center">
@@ -270,7 +262,7 @@ const Feed = ({ feedType = 'public' }) => {
             <Card key={item._id} type={item.type} {...item} />
           )}
           ListHeaderComponent={() => feedSearchFilterComponent}
-          ListEmptyComponent={() => <Text>{ERROR_MESSAGES[feedType]}</Text>}
+          ListEmptyComponent={() => <RText>{ERROR_MESSAGES[feedType]}</RText>}
           showsVerticalScrollIndicator={false}
         />
       </View>
@@ -304,7 +296,7 @@ const Feed = ({ feedType = 'public' }) => {
     router.push(createUrlPath);
   };
 
-  return <Box style={styles.mainContainer}>{renderData()}</Box>;
+  return <RStack style={styles.mainContainer}>{renderData()}</RStack>;
 };
 
 const loadStyles = (theme) => {
