@@ -173,6 +173,22 @@ const packsSlice = createSlice({
     closeModal: (state) => {
       state.isOpenEditModal = false;
     },
+    setUserPacks: packsAdapter.setAll,
+    deletePackItemReducer: (state, action) => {
+      const { itemId, currentPackId } = action.meta.arg;
+
+      const existing = state.entities[currentPackId];
+      if (!existing) {
+        return;
+      }
+
+      const updatedItems = existing.items.filter((item) => item._id !== itemId);
+
+      packsAdapter.updateOne(state, {
+        id: currentPackId,
+        changes: { items: updatedItems },
+      });
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -416,6 +432,7 @@ export const { selectAll: selectAllPacks, selectById: selectPackById } =
 export const selectIsLoading = (state) => state.packs.isLoading;
 export const selectError = (state) => state.packs.error;
 
-export const { openModal, closeModal } = packsSlice.actions;
+export const { openModal, closeModal, setUserPacks, deletePackItemReducer } =
+  packsSlice.actions;
 
 export default packsSlice.reducer;

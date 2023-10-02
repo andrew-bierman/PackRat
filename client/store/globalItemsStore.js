@@ -76,6 +76,14 @@ const itemsSlice = createSlice({
     error: null,
   }),
   reducers: {
+    setGlobalItems: itemsAdapter.setAll,
+    addItemsGlobalReducer: (state, action) => {
+      itemsAdapter.addOne(state, { ...action.payload });
+    },
+    deleteItemsGlobalReducer: (state, action) => {
+      itemsAdapter.removeOne(state, action.payload._id);
+    },
+
     deleteItemOffline: (state, action) => {
       return {
         ...state,
@@ -143,6 +151,12 @@ const itemsSlice = createSlice({
   },
 });
 
-export const { deleteItemOffline, addItemOffline } = itemsSlice.actions;
+export const {
+  deleteItemOffline,
+  addItemOffline,
+  setGlobalItems,
+  addItemsGlobalReducer,
+  deleteItemsGlobalReducer,
+} = itemsSlice.actions;
 
 export default itemsSlice.reducer;

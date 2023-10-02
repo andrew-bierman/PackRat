@@ -12,6 +12,7 @@ import { getItemsGlobal } from '../../store/globalItemsStore';
 import { Stack } from 'expo-router';
 import { executeOfflineRequests } from '../../store/offlineQueue';
 import useCustomStyles from '~/hooks/useCustomStyles';
+import useGetGlobalItems from '~/hooks/globalItems/useGetGlobalItems';
 // import { checkNetworkConnected } from '~/utils/netInfo';
 
 export default function Items() {
@@ -37,8 +38,7 @@ export default function Items() {
   }, []);
 
   useEffect(() => {
-    if (isConnected && requests.length == 0)
-      dispatch(getItemsGlobal({ limit, page }));
+    if (isConnected && requests.length == 0) useGetGlobalItems({ limit, page });
   }, [limit, page, refetch, isConnected]);
 
   return (
