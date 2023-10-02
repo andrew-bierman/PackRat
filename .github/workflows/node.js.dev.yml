@@ -28,6 +28,7 @@ jobs:
 
     - name: Install dependencies and Setup
       run: |
+        yarn set version berry
         yarn install --frozen-lockfile
         yarn setup
 
