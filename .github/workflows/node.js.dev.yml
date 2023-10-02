@@ -39,7 +39,7 @@ jobs:
       run: yarn install
 
     - name: Run setup
-      run: yarn install && yarn setup
+      run: yarn install --verbose && yarn setup
 
 
     - name: Clean Cache and Reinstall
