@@ -30,7 +30,8 @@ jobs:
         cat yarn.lock
 
     - name: Set Yarn Version to Berry
-      run: yarn set version from sources
+      run: yarn set version from sources && yarn config set -H enableImmutableInstalls false
+
     #   run: yarn policies set-version
 
     - name: Install dependencies and Setup
