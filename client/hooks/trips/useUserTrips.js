@@ -15,7 +15,7 @@ export const useUserTrips = (ownerId) => {
   );
 
   // Extract trips or set an empty array if data is undefined.
-  const trips = data?.trips || [];
+  // const trips = data?.trips || [];
 
-  return { data: trips, error, isLoading, refetch };
+  return { data, error, isLoading, refetch };
 };
