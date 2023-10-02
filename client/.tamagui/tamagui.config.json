@@ -8,7 +8,6 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "color": "$color",
               "display": "flex",
               "suppressHighlighting": true,
               "unstyled": false,
@@ -29,7 +28,8 @@
               },
               "unstyled": {
                 "false": {
-                  "size": "$true"
+                  "size": "$true",
+                  "color": "$color"
                 }
               },
               "size": "Function",
@@ -479,7 +479,6 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "color": "$color",
               "display": "flex",
               "suppressHighlighting": true,
               "opacity": 0,
@@ -800,7 +799,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "horizontal": {
                 "true": {
@@ -1142,7 +1142,7 @@
             },
             "componentName": "Input",
             "isReactNative": true,
-            "isText": true,
+            "isText": false,
             "acceptsClassName": true,
             "isStyledHOC": false,
             "neverFlatten": true,
@@ -1187,7 +1187,7 @@
             },
             "componentName": "Input",
             "isReactNative": true,
-            "isText": true,
+            "isText": false,
             "acceptsClassName": true,
             "isStyledHOC": false
           }
@@ -1937,7 +1937,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               }
             },
             "isReactNative": false,
@@ -2090,7 +2091,6 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "color": "$color",
               "display": "flex",
               "suppressHighlighting": true
             },
@@ -2291,7 +2291,7 @@
             },
             "componentName": "TextArea",
             "isReactNative": true,
-            "isText": true,
+            "isText": false,
             "acceptsClassName": true,
             "isStyledHOC": false,
             "neverFlatten": true,
@@ -2339,7 +2339,7 @@
             },
             "componentName": "TextArea",
             "isReactNative": true,
-            "isText": true,
+            "isText": false,
             "acceptsClassName": true,
             "isStyledHOC": false
           }
@@ -2631,7 +2631,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -2902,7 +2903,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               }
             },
             "componentName": "AvatarFallback",
@@ -3064,7 +3066,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               }
             },
             "componentName": "AvatarFallback",
@@ -3224,7 +3227,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -3479,7 +3483,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -3783,7 +3788,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -3939,7 +3945,6 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "color": "$color",
               "display": "flex",
               "suppressHighlighting": true,
               "unstyled": false,
@@ -3959,12 +3964,12 @@
               "unstyled": {
                 "false": {
                   "size": "$true",
+                  "color": "$color",
                   "userSelect": "none",
                   "cursor": "pointer",
                   "flexGrow": 0,
                   "flexShrink": 1,
-                  "ellipse": true,
-                  "color": "$color"
+                  "ellipse": true
                 }
               },
               "size": "Function",
@@ -4273,7 +4278,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -4536,7 +4542,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -4796,7 +4803,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -5060,7 +5068,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -5323,7 +5332,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -5587,7 +5597,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -5884,7 +5895,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -6337,7 +6349,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -6604,7 +6617,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -6873,7 +6887,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -7140,7 +7155,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "unstyled": {
                 "false": {
@@ -7884,7 +7900,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -7978,8 +7995,7 @@
               },
               "unstyled": {
                 "false": {
-                  "size": "$true",
-                  "y": 0
+                  "size": "$true"
                 }
               },
               "size": "Function"
@@ -8005,8 +8021,6 @@
             "isReactNative": true,
             "isText": false,
             "acceptsClassName": true,
-            "isInput": false,
-            "inlineProps": {},
             "isStyledHOC": false,
             "neverFlatten": true,
             "isHOC": true
@@ -8017,7 +8031,6 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "color": "$color",
               "display": "flex",
               "suppressHighlighting": true,
               "unstyled": false,
@@ -8213,7 +8226,6 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "color": "$color",
               "display": "flex",
               "suppressHighlighting": true,
               "unstyled": false,
@@ -8552,7 +8564,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -8835,7 +8848,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -8971,7 +8985,6 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "color": "$color",
               "display": "flex",
               "suppressHighlighting": true,
               "unstyled": false,
@@ -9162,7 +9175,6 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "color": "$color",
               "display": "flex",
               "suppressHighlighting": true,
               "unstyled": false,
@@ -9349,7 +9361,6 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "color": "$color",
               "display": "flex",
               "suppressHighlighting": true,
               "unstyled": false,
@@ -9677,7 +9688,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -9940,7 +9952,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               }
             },
             "isReactNative": false,
@@ -10099,7 +10112,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "unstyled": {
                 "false": {
@@ -10269,7 +10283,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -10531,7 +10546,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -10794,7 +10810,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -11055,7 +11072,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -11315,7 +11333,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -11572,7 +11591,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -11703,7 +11723,6 @@
             "isReactNative": true,
             "isText": false,
             "acceptsClassName": true,
-            "isInput": false,
             "isStyledHOC": false
           }
         },
@@ -11856,7 +11875,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               }
             },
             "componentName": "SelectGroup",
@@ -12015,7 +12035,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               }
             },
             "componentName": "SelectIcon",
@@ -12030,7 +12051,6 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "color": "$color",
               "display": "flex",
               "suppressHighlighting": true,
               "unstyled": false,
@@ -12050,8 +12070,8 @@
               "unstyled": {
                 "false": {
                   "size": "$true",
-                  "userSelect": "none",
                   "color": "$color",
+                  "userSelect": "none",
                   "ellipse": true
                 }
               },
@@ -12687,7 +12707,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -12940,7 +12961,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -13192,7 +13214,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "unstyled": {
                 "false": {
@@ -13364,7 +13387,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "open": {
                 "true": {
@@ -13548,7 +13572,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -13818,7 +13843,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "open": {
                 "true": {
@@ -14002,7 +14028,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -14271,7 +14298,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "orientation": {
                 "horizontal": {},
@@ -14432,7 +14460,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "orientation": {
                 "horizontal": {},
@@ -14594,7 +14623,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -14861,7 +14891,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -15127,7 +15158,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "orientation": {
                 "horizontal": {},
@@ -15291,7 +15323,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "orientation": {
                 "horizontal": {},
@@ -15467,7 +15500,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -15733,7 +15767,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               }
             },
             "isReactNative": false,
@@ -15889,7 +15924,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               }
             },
             "isReactNative": false,
@@ -16046,7 +16082,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               }
             },
             "isReactNative": false,
@@ -16204,7 +16241,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "unstyled": {
                 "true": {
@@ -16408,7 +16446,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -16655,7 +16694,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "unstyled": {
                 "false": {
@@ -16842,7 +16882,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "unstyled": {
                 "false": {
@@ -17028,7 +17069,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -17293,7 +17335,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "unstyled": {
                 "true": {
@@ -17356,7 +17399,6 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "color": "$color",
               "display": "flex",
               "suppressHighlighting": true,
               "unstyled": false,
@@ -17375,7 +17417,8 @@
               },
               "unstyled": {
                 "false": {
-                  "size": "$true"
+                  "size": "$true",
+                  "color": "$color"
                 }
               },
               "size": "Function",
@@ -17538,13 +17581,13 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "color": "$color",
               "display": "flex",
               "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$body",
               "tag": "p",
               "userSelect": "auto",
+              "color": "$color",
               "size": "$true"
             },
             "inlineWhenUnflattened": {},
@@ -17560,7 +17603,8 @@
               },
               "unstyled": {
                 "false": {
-                  "size": "$true"
+                  "size": "$true",
+                  "color": "$color"
                 }
               },
               "size": "Function",
@@ -17720,13 +17764,13 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "color": "$color",
               "display": "flex",
               "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$heading",
               "tag": "h1",
               "userSelect": "auto",
+              "color": "$color",
               "size": "$10",
               "accessibilityRole": "header",
               "margin": 0
@@ -17744,7 +17788,8 @@
               },
               "unstyled": {
                 "false": {
-                  "size": "$true"
+                  "size": "$true",
+                  "color": "$color"
                 }
               },
               "size": "Function",
@@ -17904,13 +17949,13 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "color": "$color",
               "display": "flex",
               "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$heading",
               "tag": "h2",
               "userSelect": "auto",
+              "color": "$color",
               "size": "$9",
               "accessibilityRole": "header",
               "margin": 0
@@ -17928,7 +17973,8 @@
               },
               "unstyled": {
                 "false": {
-                  "size": "$true"
+                  "size": "$true",
+                  "color": "$color"
                 }
               },
               "size": "Function",
@@ -18088,13 +18134,13 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "color": "$color",
               "display": "flex",
               "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$heading",
               "tag": "h3",
               "userSelect": "auto",
+              "color": "$color",
               "size": "$8",
               "accessibilityRole": "header",
               "margin": 0
@@ -18112,7 +18158,8 @@
               },
               "unstyled": {
                 "false": {
-                  "size": "$true"
+                  "size": "$true",
+                  "color": "$color"
                 }
               },
               "size": "Function",
@@ -18272,13 +18319,13 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "color": "$color",
               "display": "flex",
               "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$heading",
               "tag": "h4",
               "userSelect": "auto",
+              "color": "$color",
               "size": "$7",
               "accessibilityRole": "header",
               "margin": 0
@@ -18296,7 +18343,8 @@
               },
               "unstyled": {
                 "false": {
-                  "size": "$true"
+                  "size": "$true",
+                  "color": "$color"
                 }
               },
               "size": "Function",
@@ -18456,13 +18504,13 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "color": "$color",
               "display": "flex",
               "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$heading",
               "tag": "h5",
               "userSelect": "auto",
+              "color": "$color",
               "size": "$6",
               "accessibilityRole": "header",
               "margin": 0
@@ -18480,7 +18528,8 @@
               },
               "unstyled": {
                 "false": {
-                  "size": "$true"
+                  "size": "$true",
+                  "color": "$color"
                 }
               },
               "size": "Function",
@@ -18640,13 +18689,13 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "color": "$color",
               "display": "flex",
               "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$heading",
               "tag": "h6",
               "userSelect": "auto",
+              "color": "$color",
               "size": "$5",
               "accessibilityRole": "header",
               "margin": 0
@@ -18664,7 +18713,8 @@
               },
               "unstyled": {
                 "false": {
-                  "size": "$true"
+                  "size": "$true",
+                  "color": "$color"
                 }
               },
               "size": "Function",
@@ -18824,13 +18874,13 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "color": "$color",
               "display": "flex",
               "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$heading",
               "tag": "span",
               "userSelect": "auto",
+              "color": "$color",
               "size": "$8",
               "accessibilityRole": "header",
               "margin": 0
@@ -18848,7 +18898,8 @@
               },
               "unstyled": {
                 "false": {
-                  "size": "$true"
+                  "size": "$true",
+                  "color": "$color"
                 }
               },
               "size": "Function",
@@ -19345,7 +19396,6 @@
         }
       }
     },
-    "groupNames": [],
     "settings": {},
     "onlyAllowShorthands": false,
     "fontLanguages": [],
