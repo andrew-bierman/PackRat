@@ -1,27 +1,21 @@
 import { queryTrpc } from '../../trpc';
 
 export const useUserTrips = (ownerId) => {
-  let data = [];
-  let isLoading = true;
+  // If ownerId is not provided, don’t run the query.
+  const enabled = !!ownerId;
 
-  if (!ownerId) return { data, error: null, isLoading: false };
+  // Leverage the query hook provided by tRPC
+  const { data, error, isLoading, refetch } = queryTrpc.getTrips.useQuery(
+    { owner_id: ownerId },
+    {
+      enabled, // This query will run only if 'enabled' is true.
+      refetchOnWindowFocus: false,
+      keepPreviousData: true,
+    },
+  );
 
-  try {
-    const userTrips = queryTrpc.getTrips.useQuery(
-      { owner_id: ownerId },
-      {
-        refetchOnWindowFocus: false,
-        keepPreviousData: true,
-      },
-    );
+  // Extract trips or set an empty array if data is undefined.
+  const trips = data?.trips || [];
 
-    isLoading = userTrips?.status !== 'success';
-
-    if (userTrips?.status === 'success') data = userTrips.data;
-  } catch (error) {
-    console.error(error);
-    return { data: null, error, isLoading };
-  }
-
-  return { data, error: null, isLoading };
+  return { data: trips, error, isLoading, refetch };
 };

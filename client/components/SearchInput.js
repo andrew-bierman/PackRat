@@ -35,9 +35,12 @@ export const SearchInput = ({ onSelect, placeholder }) => {
   const [isLoadingMobile, setIsLoadingMobile] = useState(false);
   const [selectedSearch, setSelectedSearch] = useState('');
   const [showSearchResults, setShowSearchResults] = useState(false);
-  
-  const { refetch, data, isError, isLoading } = usePhotonDetail(searchString,showSearchResults);
-  
+
+  const { refetch, data, isError, isLoading } = usePhotonDetail(
+    searchString,
+    showSearchResults,
+  );
+
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles());
   const [selectedSearchResult, setSelectedSearchResult] = useState({});
@@ -46,7 +49,6 @@ export const SearchInput = ({ onSelect, placeholder }) => {
 
   // const selectedSearchResult =
   //   useSelector((state) => state.search.selectedSearchResult) || {};
-
 
   const dispatch = useDispatch();
 
@@ -64,7 +66,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
   }, [searchString, dispatch]);
 
   const getTrailsParksAndWeatherDetails = async () => {
-    console.log(selectedSearchResult, 'selected search result')
+    console.log(selectedSearchResult, 'selected search result');
     if (
       !selectedSearchResult ||
       Object.keys(selectedSearchResult).length === 0
@@ -83,7 +85,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
       setIsLoadingMobile(false);
       return;
     } else {
-      setLatLng({ lat, lon })
+      setLatLng({ lat, lon });
     }
     const {
       data: parksData,
@@ -111,8 +113,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
       console.log('data:', data);
       console.log('error:', error);
       console.log('isLoading:', isLoading);
-      
-      
+
       // await Promise.all([
       //   // dispatch(fetchTrails({ lat, lon, selectedSearch })),
       //   // dispatch(fetchParks({ lat, lon, selectedSearch })),
@@ -127,7 +128,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
   };
 
   useEffect(() => {
-    console.log('why not here?')
+    console.log('why not here?');
     const timeout = setTimeout(getTrailsParksAndWeatherDetails, 1000);
 
     return () => {

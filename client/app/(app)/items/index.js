@@ -27,17 +27,19 @@ export default function Items() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     UseTheme();
 
-
-  const { data, isLoading, isError, refetch } = useFetchGlobalItems(limit, page);
-  console.log("🚀 ~ file: index.js:32 ~ Items ~ data:", data)
+  const { data, isLoading, isError, refetch } = useFetchGlobalItems(
+    limit,
+    page,
+  );
+  console.log('🚀 ~ file: index.js:32 ~ Items ~ data:', data);
   // const data = useSelector((state) => state.globalItems);
 
   // const isLoading = useSelector((state) => state.globalItems.isLoading);
   // const isError = useSelector((state) => state.globalItems.isError);
-  
+
   const dispatch = useDispatch();
   // useEffect(() => {
-    // dispatch(getItemsGlobal({ limit, page }));
+  // dispatch(getItemsGlobal({ limit, page }));
   // }, [limit, page]);
 
   return (
@@ -100,7 +102,7 @@ export default function Items() {
             onCancel={setIsAddItemModalOpen}
           >
             <AddItemGlobal
-              setRefetch={() => refetch()}
+              setRefetch={async () => refetch()}
               // refetch={refetch}
               setIsAddItemModalOpen={setIsAddItemModalOpen}
             />
@@ -116,7 +118,7 @@ export default function Items() {
             isLoading={isLoading}
             totalPages={data?.totalPages}
             refetch={refetch}
-            setRefetch={() => refetch()}
+            setRefetch={async () => refetch()}
           />
         ) : null}
       </Box>

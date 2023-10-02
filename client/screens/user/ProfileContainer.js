@@ -27,6 +27,9 @@ import { fetchUserTrips, selectAllTrips } from '../../store/tripsStore';
 import { useMatchesCurrentUser } from '~/hooks/useMatchesCurrentUser';
 import { useRouter } from 'expo-router';
 import useCustomStyles from '~/hooks/useCustomStyles';
+import { useUserPacks } from '~/hooks/packs';
+import { useFetchUserFavorites } from '~/hooks/favorites';
+import { useUserTrips } from '~/hooks/trips';
 
 const SettingsButton = () => {
   const router = useRouter();
@@ -141,27 +144,47 @@ export default function ProfileContainer({ id = null }) {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
+
   const authUser = useSelector((state) => state.auth.user);
   const userStore = useSelector((state) => state.userStore);
   const authStore = useSelector((state) => state.auth);
-  const allPacks = useSelector(selectAllPacks);
-  const tripsData = useSelector(selectAllTrips);
-  const allFavorites = useSelector(selectAllFavorites);
+
+  // const allPacks = useSelector(selectAllPacks);
+  // const tripsData = useSelector(selectAllTrips);
+  // const allFavorites = useSelector(selectAllFavorites);
 
   id = id ?? authUser?._id;
 
   const differentUser = id && id !== authUser?._id;
   const isCurrentUser = useMatchesCurrentUser(id); // TODO: Implement this hook in more components
 
-  useEffect(() => {
-    if (differentUser) {
-      dispatch(getUser(id));
-    } else {
-      dispatch(fetchUserPacks({ ownerId: authUser?._id }));
-      dispatch(fetchUserFavorites(authUser?._id));
-      dispatch(fetchUserTrips(authUser?._id));
-    }
-  }, [dispatch, id, authUser, differentUser]);
+  const {
+    data: allPacks,
+    isLoading: allPacksLoading,
+    error: allPacksError,
+  } = useUserPacks((ownerId = authUser?._id));
+
+  const {
+    data: tripsData,
+    isLoading: tripsIsLoading,
+    error: tripsError,
+  } = useUserTrips((ownerId = authUser?._id));
+
+  const {
+    data: allFavorites,
+    isLoading: allFavoritesLoading,
+    error: allFavoritesError,
+  } = useFetchUserFavorites((ownerId = authUser?._id));
+
+  // useEffect(() => {
+  //   if (differentUser) {
+  //     dispatch(getUser(id));
+  //   } else {
+  //     dispatch(fetchUserPacks({ ownerId: authUser?._id }));
+  //     dispatch(fetchUserFavorites(authUser?._id));
+  //     dispatch(fetchUserTrips(authUser?._id));
+  //   }
+  // }, [dispatch, id, authUser, differentUser]);
 
   const user = differentUser ? userStore.user : authUser;
 

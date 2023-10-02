@@ -1,4 +1,4 @@
-import React, { useEffect,useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { Container, Text } from 'native-base';
 import { useRouter, useSearchParams } from 'expo-router';
@@ -87,8 +87,8 @@ const WeatherData = ({ geoJSON }) => {
   const weatherWeek = useSelector((state) => state.destination.weatherWeek);
   const [latLng, setLatLng] = useState({});
   const { data: weatherData } = useFetchWeather(latLng);
-  const { data: weatherWeekData } = useFetchWeatherWeak(latLng)
-  
+  const { data: weatherWeekData } = useFetchWeatherWeak(latLng);
+
   useEffect(() => {
     /**
      * Fetches weather data based on the provided geoJSON.
