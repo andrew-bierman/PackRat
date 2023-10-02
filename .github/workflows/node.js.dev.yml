@@ -24,18 +24,20 @@ jobs:
         node-version: ${{ matrix.node-version }}
 
     - name: Set Yarn Version to Berry
-      run: yarn set version berry
-
-    - name: Install dependencies and Setup
-      run: |
-        yarn install --immutable
-        yarn setup
+      run: yarn policies set-version
 
     - name: Debug Information
       run: |
         yarn -v
         cat .yarnrc.yml
         cat yarn.lock
+
+    - name: Install dependencies and Setup
+      run: |
+        yarn install --immutable
+        yarn setup
+
+
 
     - name: Clean Cache and Reinstall
       run: |
