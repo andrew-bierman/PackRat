@@ -82,11 +82,11 @@ const UserSchema = new Schema<IUser>(
       type: String,
     },
     preferredWeather: {
-      type : String,
+      type: String,
     },
     preferredWeight: {
-      type : String
-    }
+      type: String,
+    },
   },
   {
     timestamps: true,

@@ -23,7 +23,8 @@ export const getUserChats = async (req, res, next) => {
 };
 
 export function getUserChatsRoute() {
-  return publicProcedure.input(z.object({ userId: z.string() }))
+  return publicProcedure
+    .input(z.object({ userId: z.string() }))
     .query(async (opts) => {
       const { userId } = opts.input;
       return getUserChatsService(userId);

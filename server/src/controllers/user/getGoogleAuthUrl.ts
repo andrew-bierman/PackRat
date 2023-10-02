@@ -51,6 +51,6 @@ export function getGoogleAuthURLRoute() {
       }),
       status: 'success',
       statusCode: 200,
-    }
+    };
   });
 }
