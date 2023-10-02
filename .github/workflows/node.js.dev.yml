@@ -35,7 +35,7 @@ jobs:
 
     - name: Install dependencies and Setup
       run: |
-        yarn install --immutable
+        yarn install
         yarn setup
 
 
