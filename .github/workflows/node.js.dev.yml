@@ -30,6 +30,11 @@ jobs:
         cat .yarnrc.yml
         cat yarn.lock
 
+    - name: ⚙️ Enable Corepack
+      run: |
+        corepack enable
+        echo "corepack enabled"
+
     - name: Set Yarn Version to Berry
       run: yarn set version berry
 
