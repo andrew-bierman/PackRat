@@ -43,8 +43,7 @@ jobs:
         yarn -v
         yarn info packrat-world@workspace:.
         yarn workspaces list --json
-        yarn workspaces info --json
-        
+
     - name: Run setup
       run: which yarn && yarn install && yarn setup
 
