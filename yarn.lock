@@ -21456,15 +21456,15 @@ __metadata:
   linkType: hard
 
 "react-native-google-places-autocomplete@npm:^2.5.1":
-  version: 2.5.4
-  resolution: "react-native-google-places-autocomplete@npm:2.5.4"
+  version: 2.5.5
+  resolution: "react-native-google-places-autocomplete@npm:2.5.5"
   dependencies:
     lodash.debounce: ^4.0.8
     prop-types: ^15.7.2
     qs: ~6.9.1
   peerDependencies:
     react-native: ">= 0.59"
-  checksum: 4303a829a4a18f5bf2ba94e1259b720c9add6202bd3ee20b744bbb22003f27206fd0520589ea20977e22caa46c270d34edc9674a22982974d559edfe1cfe5baa
+  checksum: 85ca0ea0a5f1337b455ab18b73aa9208e80dc3d91721d90ee21f0ea365686ca5c9e4b3ea05a60a69784ee4417ac3d1ef326cc1241433aaeb457a939a60a6adf6
   languageName: node
   linkType: hard
 
