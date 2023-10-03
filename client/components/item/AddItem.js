@@ -8,6 +8,8 @@ import {
 } from '../../store/packsStore';
 import { ItemForm } from './ItemForm'; // assuming you moved the form related code to a separate component
 import { ItemCategoryEnum } from '../../constants/itemCategory';
+import { useAddPackItem } from '~/hooks/packs/useAddPackItem';
+import { add } from 'date-fns';
 
 export const AddItem = ({
   _id,
@@ -37,6 +39,11 @@ export const AddItem = ({
   );
 
   const [unit, setUnit] = useState(initialData?.unit || '');
+
+  const { mutation: addPackItemMutation } = useAddPackItem(
+    packId,
+    (ownerId = currentPack?.owner_id),
+  );
 
   // handle updates to initialData
   useEffect(() => {
@@ -85,17 +92,26 @@ export const AddItem = ({
         setRefetch(refetch !== true);
       }
     } else {
-      dispatch(
-        addPackItem({
-          name,
-          weight,
-          quantity,
-          type: categoryType,
-          unit,
-          _id,
-          packId,
-        }),
-      );
+      // dispatch(
+      //   addPackItem({
+      //     name,
+      //     weight,
+      //     quantity,
+      //     type: categoryType,
+      //     unit,
+      //     _id,
+      //     packId,
+      //   }),
+      // );
+      addPackItemMutation.mutate({
+        name,
+        weight,
+        quantity,
+        type: categoryType,
+        unit,
+        _id,
+        packId,
+      });
       setIsAddItemModalOpen(false);
       setRefetch(refetch !== true);
     }

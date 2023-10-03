@@ -8,7 +8,7 @@ export const useFetchSinglePack = (packId) => {
       { packId },
       {
         enabled: !!packId, // to ensure the query runs only when packId is available
-        refetchOnWindowFocus: false,
+        refetchOnWindowFocus: true,
         keepPreviousData: true,
       },
     );

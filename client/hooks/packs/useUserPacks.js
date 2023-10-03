@@ -9,7 +9,7 @@ export const useUserPacks = (ownerId, queryString) => {
     { ownerId, queryBy: queryString },
     {
       enabled, // This query will run only if 'enabled' is true.
-      refetchOnWindowFocus: false,
+      refetchOnWindowFocus: true,
       keepPreviousData: true,
     },
   );
