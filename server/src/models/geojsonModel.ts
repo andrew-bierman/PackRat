@@ -39,6 +39,9 @@ const GeoJSONSchema = new Schema(
   },
 );
 
+// Adding an index to the 'id' field
+GeoJSONSchema.index({ id: 1 }, { unique: true });
+
 /**
  * Saves a single GeoJSON feature.
  *

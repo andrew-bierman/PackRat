@@ -65,5 +65,13 @@ PackSchema.virtual('totalScore').get(function () {
 PackSchema.set('toObject', { virtuals: true });
 PackSchema.set('toJSON', { virtuals: true });
 
+// Adding indexes
+PackSchema.index({ owner_id: 1 }); // Index for owner_id field
+PackSchema.index({ is_public: 1 }); // Index for is_public field
+PackSchema.index({ favorited_by: 1 }); // Index for favorited_by field
+
+// If you frequently query by name, you can also add an index for the 'name' field
+PackSchema.index({ name: 1 });
+
 const Pack = myDB.model('Pack', PackSchema);
 export default Pack;

@@ -213,6 +213,11 @@ UserSchema.methods.toJSON = function (): Partial<IUser> {
   return userObject;
 };
 
+UserSchema.index({ packs: 1, trips: 1 });
+UserSchema.index({ _id: 1 });
+UserSchema.index({ code: 1 });
+UserSchema.index({ email: 1 });
+
 const User: Model<IUser> = myDB.model<IUser>('User', UserSchema);
 
 export default User;

@@ -23,5 +23,11 @@ const ItemSchema = new Schema(
   { timestamps: true },
 );
 
+// Adding indexes
+ItemSchema.index({ name: 1 }); 
+ItemSchema.index({ weight: 1 }); 
+ItemSchema.index({ unit: 1 }); 
+ItemSchema.index({ category: 1 }); 
+
 const Item = myDB.model('Item', ItemSchema);
 export default Item;

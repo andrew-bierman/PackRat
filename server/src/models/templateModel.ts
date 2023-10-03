@@ -16,6 +16,9 @@ const TemplateSchema = new Schema(
   },
   { timestamps: true },
 );
+TemplateSchema.index({ type: 1 });
+TemplateSchema.index({ templateId: 1 });
+TemplateSchema.index({ createdBy: 1 });
 
 const Template = myDB.model('Template', TemplateSchema);
 

@@ -13,4 +13,6 @@ const itemCategorySchema = new Schema(
   },
 );
 
+itemCategorySchema.index({ name: 1 });
+
 export const ItemCategoryModel = myDB.model('ItemCategory', itemCategorySchema);
