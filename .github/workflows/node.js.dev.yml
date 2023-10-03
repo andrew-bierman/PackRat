@@ -57,7 +57,11 @@ jobs:
         yarn plugin import workspace-tools
         yarn plugin import interactive-tools
         yarn install
-        yarn setup
+        cp client/.env.example client/.env
+        cp client/app.json.example client/app.json
+        cp server/.env.example server/.env
+
+# yarn setup
 
 
     # - name: Clean Cache and Reinstall
