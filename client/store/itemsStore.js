@@ -53,7 +53,15 @@ const initialState = itemsAdapter.getInitialState({
 const itemsSlice = createSlice({
   name: 'items',
   initialState,
-  reducers: {},
+  reducers: {
+    setItems: itemsAdapter.setAll,
+    deleteItemReducer: (state, action) => {
+      itemsAdapter.removeOne(state, action.payload.id);
+    },
+    editItemReducer: (state, action) => {
+      itemsAdapter.upsertOne(state, action.payload);
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(deleteItem.pending, (state) => {
@@ -97,5 +105,8 @@ const itemsSlice = createSlice({
       });
   },
 });
+
+export const { setItems, editItemReducer, deleteItemReducer } =
+  itemsSlice.actions;
 
 export default itemsSlice.reducer;

@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addItemsGlobal, addItemOffline } from '../../store/globalItemsStore';
 import { addOfflineRequest } from '../../store/offlineQueue';
 import { ItemForm } from './ItemForm'; // assuming you moved the form related code to a separate component
+import useAddGlobalItems from '~/hooks/globalItems/useAddGlobalItems';
 
 export const AddItemGlobal = ({
   setIsAddItemModalOpen,
@@ -46,15 +47,14 @@ export const AddItemGlobal = ({
       dispatch(addItemOffline({ ...item, weight: Number(item.weight) }));
       dispatch(addOfflineRequest({ method: 'addGlobalItem', data: item }));
     } else {
-      dispatch(
-        addItemsGlobal({
-          name,
-          weight,
-          quantity,
-          type: categoryType,
-          unit,
-        }),
-      );
+      useAddGlobalItems({
+        name,
+        weight,
+        quantity,
+        type: categoryType,
+        unit,
+      });
+
       setRefetch(refetch !== true);
     }
 

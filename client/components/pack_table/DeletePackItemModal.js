@@ -8,6 +8,9 @@ import {
   deleteItemOffline,
 } from '../../store/globalItemsStore';
 import { addOfflineRequest } from '../../store/offlineQueue';
+import useDeleteGlobalItems from '~/hooks/globalItems/useDeleteGlobalItems';
+import { PACKQUERYS, PACKREDUCERS, useDeletePackItem } from '~/hooks/packs';
+import { useMutation } from '~/hooks/useMutation';
 
 export const DeletePackItemModal = ({
   itemId,
@@ -21,6 +24,16 @@ export const DeletePackItemModal = ({
   const closeModalHandler = () => {
     setIsModalOpen(false);
   };
+
+  const { mutation: deletePackItemMutation, onSuccesMutation } = useMutation(
+    PACKQUERYS.deleteItem,
+    PACKREDUCERS.deleteItem,
+  );
+
+  const {
+    mutation: deleteGlobalItemsMutation,
+    onSuccesMutation: deleteGlobalItemsonSuccesMutation,
+  } = useDeleteGlobalItems();
 
   /**
    * Sets the value of `isModalOpen` to `true`.
@@ -40,10 +53,22 @@ export const DeletePackItemModal = ({
    */
   const deleteItemHandler = () => {
     if (pack) {
-      dispatch(deletePackItem({ itemId, currentPackId: pack._id }));
+      deletePackItemMutation.mutate(
+        { itemId, packId: pack._id },
+        {
+          onSuccess: (data) =>
+            onSuccesMutation({ ...data, itemId, packId: pack._id }),
+        },
+      );
     } else {
       if (isConnected) {
-        dispatch(deleteGlobalItem(itemId));
+        deleteGlobalItemsMutation.mutate(
+          { itemId: item },
+          {
+            onSuccess: (data) => deleteGlobalItemsonSuccesMutation(data),
+          },
+        );
+
         setRefetch(refetch !== true);
       } else {
         dispatch(deleteItemOffline(itemId));

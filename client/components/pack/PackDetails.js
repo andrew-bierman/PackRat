@@ -43,6 +43,7 @@ export function PackDetails() {
 
   const { data: userPacks, isLoading: isUserPacksLoading } =
     useUserPacks(userId);
+
   const {
     data: currentPack,
     isLoading,

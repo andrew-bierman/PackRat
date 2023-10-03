@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getItemsGlobal } from '../../../store/globalItemsStore';
 import { Stack } from 'expo-router';
 import Head from 'expo-router/head';
-import { useFetchGlobalItems } from '~/hooks/globalItems';
+import useGetGlobalItems from '~/hooks/globalItems/useGetGlobalItems';
 
 export default function Items() {
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
@@ -27,10 +27,7 @@ export default function Items() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     UseTheme();
 
-  const { data, isLoading, isError, refetch } = useFetchGlobalItems(
-    limit,
-    page,
-  );
+  const { data, isLoading, isError, refetch } = useGetGlobalItems(limit, page);
   console.log('🚀 ~ file: index.js:32 ~ Items ~ data:', data);
   // const data = useSelector((state) => state.globalItems);
 

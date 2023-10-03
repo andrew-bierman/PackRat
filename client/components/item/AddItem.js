@@ -1,13 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Box, Input, Button, Text } from 'native-base';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  addPackItem,
-  editPackItem,
-  editItemsGlobalAsDuplicate,
-} from '../../store/packsStore';
 import { ItemForm } from './ItemForm'; // assuming you moved the form related code to a separate component
 import { ItemCategoryEnum } from '../../constants/itemCategory';
+import { PACKQUERYS, PACKREDUCERS } from '~/hooks/packs';
 
 export const AddItem = ({
   _id,
@@ -24,6 +20,24 @@ export const AddItem = ({
   setRefetch = () => {},
 }) => {
   const dispatch = useDispatch();
+  const {
+    mutation: editItemsGlobalAsDuplicateMutation,
+    onSuccesMutation: editItemsGlobalAsDuplicateOnSuccessMutation,
+  } = useMutation(
+    PACKQUERYS.editGlobalItemAsDuplicate,
+    PACKREDUCERS.editGlobalItemAsDuplicate,
+  );
+
+  const {
+    mutation: editItemsMutation,
+    onSuccesMutation: editItemsOnSuccessMutation,
+  } = useMutation(PACKQUERYS.editItem, PACKREDUCERS.editItem);
+
+  const {
+    mutation: addPackItemsMutation,
+    onSuccesMutation: addPackItemsOnSuccessMutation,
+  } = useMutation(PACKQUERYS.addItem, PACKREDUCERS.addItem);
+
   const isLoading = useSelector((state) => state.packs.isLoading);
 
   // Moved the state up to the parent component
@@ -56,9 +70,8 @@ export const AddItem = ({
     if (isEdit) {
       if (packId && initialData.global) {
         console.log('editing', packId);
-
-        dispatch(
-          editItemsGlobalAsDuplicate({
+        editItemsGlobalAsDuplicateMutation.mutate(
+          {
             itemId: _id,
             packId,
             name,
@@ -66,27 +79,39 @@ export const AddItem = ({
             quantity,
             unit,
             type: categoryType,
-          }),
+          },
+          {
+            onSuccess: (data) =>
+              editItemsGlobalAsDuplicateOnSuccessMutation({
+                ...data,
+                itemId: _id,
+                packId: pack._id,
+              }),
+          },
         );
         closeModalHandler();
       } else {
-        dispatch(
-          editPackItem({
+        editItemsMutation.mutate(
+          {
             name,
             weight,
             quantity,
             unit,
             type: categoryType,
             _id: initialData._id,
-          }),
+          },
+          {
+            onSuccess: (data) => editItemsOnSuccessMutation(data),
+          },
         );
+
         setPage(1);
         closeModalHandler();
         setRefetch(refetch !== true);
       }
     } else {
-      dispatch(
-        addPackItem({
+      addPackItemsMutation.mutate(
+        {
           name,
           weight,
           quantity,
@@ -94,7 +119,10 @@ export const AddItem = ({
           unit,
           _id,
           packId,
-        }),
+        },
+        {
+          onSuccess: (data) => addPackItemsOnSuccessMutation(data),
+        },
       );
       setIsAddItemModalOpen(false);
       setRefetch(refetch !== true);
