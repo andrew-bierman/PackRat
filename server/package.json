@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "private": true,
   "scripts": {
     "build": "NODE_OPTIONS=--max_old_space_size=4096 tsc",
     "debug": "cross-env NODE_OPTIONS='--inspect-brk' nodemon",
