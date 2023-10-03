@@ -57,9 +57,10 @@ jobs:
         yarn plugin import workspace-tools
         yarn plugin import interactive-tools
         yarn install
-        cp client/.env.example client/.env
-        cp client/app.json.example client/app.json
-        cp server/.env.example server/.env
+
+# cp client/.env.example client/.env
+# cp client/app.json.example client/app.json
+# cp server/.env.example server/.env
 
 # yarn setup
 
