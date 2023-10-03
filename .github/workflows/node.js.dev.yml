@@ -45,7 +45,14 @@ jobs:
         yarn workspaces list --json
 
     - name: Run setup
-      run: which yarn && yarn install && yarn setup
+      run: |
+        yarn -v
+        which yarn
+        yarn set version stable
+        yarn plugin import workspace-tools
+        yarn plugin import interactive-tools
+        yarn install
+        yarn setup
 
 
     # - name: Clean Cache and Reinstall
