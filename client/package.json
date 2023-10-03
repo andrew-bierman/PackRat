@@ -110,7 +110,7 @@
     "react-responsive": "^9.0.2",
     "redux-persist": "^6.0.0",
     "serve": "^14.2.0",
-    "server": "^1.0.0",
+    "server": "*",
     "tamagui": "^1.52.7",
     "togpx": "^0.5.4",
     "xmldom": "^0.6.0",
