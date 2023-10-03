@@ -21,7 +21,7 @@
     "install:client": "cd client && yarn",
     "install:server": "cd server && yarn",
     "install:packages": "cd packages && yarn",
-    "setup": "yarn clean && yarn install:all && yarn setup:client && yarn setup:server",
+    "setup": "yarn clean && yarn && yarn install:all && yarn setup:client && yarn setup:server",
     "setup:client": "cd client && yarn setup",
     "setup:server": "cd server && yarn setup",
     "expo:export": "cd client && cp app.example.json app.json && npx expo export --platform web",
