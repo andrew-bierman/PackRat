@@ -19989,7 +19989,7 @@ __metadata:
     react-responsive: ^9.0.2
     redux-persist: ^6.0.0
     serve: ^14.2.0
-    server: ^1.0.0
+    server: "*"
     tamagui: ^1.52.7
     togpx: ^0.5.4
     typescript: ^5.2.2
@@ -22840,7 +22840,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"server@^1.0.0, server@workspace:server":
+"server@*, server@workspace:server":
   version: 0.0.0-use.local
   resolution: "server@workspace:server"
   dependencies:
