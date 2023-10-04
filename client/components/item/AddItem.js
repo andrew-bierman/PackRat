@@ -40,10 +40,10 @@ export const AddItem = ({
 
   const [unit, setUnit] = useState(initialData?.unit || '');
 
-  const { mutation: addPackItemMutation } = useAddPackItem(
-    packId,
-    (ownerId = currentPack?.owner_id),
-  );
+  const {
+    // mutation: addPackItemMutation
+    addPackItem: addPackItemMutation,
+  } = useAddPackItem(packId, (ownerId = currentPack?.owner_id));
 
   // handle updates to initialData
   useEffect(() => {
@@ -103,7 +103,8 @@ export const AddItem = ({
       //     packId,
       //   }),
       // );
-      addPackItemMutation.mutate({
+      // addPackItemMutation.mutate({
+      addPackItemMutation({
         name,
         weight,
         quantity,
