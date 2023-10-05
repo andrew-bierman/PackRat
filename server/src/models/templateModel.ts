@@ -16,9 +16,9 @@ const TemplateSchema = new Schema(
   },
   { timestamps: true },
 );
-TemplateSchema.index({ type: 1 });
-TemplateSchema.index({ templateId: 1 });
-TemplateSchema.index({ createdBy: 1 });
+
+TemplateSchema.index({ location: '2d' }); 
+TemplateSchema.index({ geojsonField: '2dsphere' }); 
 
 const Template = myDB.model('Template', TemplateSchema);
 

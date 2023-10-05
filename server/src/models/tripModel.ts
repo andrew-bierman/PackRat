@@ -41,11 +41,7 @@ TripSchema.set('toJSON', {
   },
 });
 
-TripSchema.index({ owner_id: 1 });
-TripSchema.index({ is_public: 1 });
-TripSchema.index({ packs: 1 });
-TripSchema.index({ type: 1 });
-
+TripSchema.index({ geojson: '2dsphere' });
 
 const Trip = myDB.model('Trip', TripSchema);
 export default Trip;

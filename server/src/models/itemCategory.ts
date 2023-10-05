@@ -14,5 +14,6 @@ const itemCategorySchema = new Schema(
 );
 
 itemCategorySchema.index({ name: 1 });
+itemCategorySchema.index({ location: '2dsphere' });
 
 export const ItemCategoryModel = myDB.model('ItemCategory', itemCategorySchema);
