@@ -29,9 +29,9 @@ jobs:
 #    - name: Install EAS CLI
 #      run: yarn global add eas-cli
 
-    - name: Configure build
-      working-directory: ./client
-      run: npx eas build:configure
+#    - name: Configure build
+#      working-directory: ./client
+#      run: npx eas build:configure
 
     # If you need additional setup or configurations, add them here
 
