@@ -4995,12 +4995,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/netinfo@npm:9.3.10":
-  version: 9.3.10
-  resolution: "@react-native-community/netinfo@npm:9.3.10"
+"@react-native-community/netinfo@npm:^9.4.1":
+  version: 9.4.1
+  resolution: "@react-native-community/netinfo@npm:9.4.1"
   peerDependencies:
     react-native: ">=0.59"
-  checksum: b3d79a61de0b08d6174616facda21cdac35a07a8d63b7d1830212862eef208c204dec90d74b29e85a6e60adc89ea5b7adf19c612c39073cc8ad4050440b1085b
+  checksum: cf6471a50a5282f858797cda7531c61ac3d94de2e1c379b14a11f6b049f582606dae55a041dd900c56b01faf69eb5cfef9b4e84b0ea7f02de52804aa5a6e22df
   languageName: node
   linkType: hard
 
@@ -7244,10 +7244,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tanstack/query-async-storage-persister@npm:^4.35.7":
+  version: 4.35.7
+  resolution: "@tanstack/query-async-storage-persister@npm:4.35.7"
+  dependencies:
+    "@tanstack/query-persist-client-core": 4.35.7
+  checksum: 7823719800e2d1dfbcdf9af6d257b1a50a8aaa03ecf4963d77c4736721b1d3519788f75031c3439e70c3977574d0664ebfb4825f8eb44b88b70a894fe5116f4c
+  languageName: node
+  linkType: hard
+
 "@tanstack/query-core@npm:4.35.7":
   version: 4.35.7
   resolution: "@tanstack/query-core@npm:4.35.7"
   checksum: b82600ee0b2cea085eb6065d36bf944f4fff72b3fa575b5aa55590498fa431f951c5557a4e7ee36ae5b5de5fd5856cb841b974ff6f78cf773199f0f8c860b6c8
+  languageName: node
+  linkType: hard
+
+"@tanstack/query-persist-client-core@npm:4.35.7":
+  version: 4.35.7
+  resolution: "@tanstack/query-persist-client-core@npm:4.35.7"
+  dependencies:
+    "@tanstack/query-core": 4.35.7
+  checksum: 9a5a5b4a32285c11a7776f6d7fc5b256a0fd218e1e7f8d9ea120e2ac60addab58e573f225d472ed82754a1678aa1de3d6514a99698d5e7c9c3a396037077bf9c
   languageName: node
   linkType: hard
 
@@ -7263,6 +7281,17 @@ __metadata:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
   checksum: 319eb9b643ba5179382cee2dda8ecae4afcdf740a17b435540e7c3bd1e573a52782c119effa11139fef496e3087a30227243b07d18684e8d447a8d9eeec0d38c
+  languageName: node
+  linkType: hard
+
+"@tanstack/react-query-persist-client@npm:^4.35.7":
+  version: 4.35.7
+  resolution: "@tanstack/react-query-persist-client@npm:4.35.7"
+  dependencies:
+    "@tanstack/query-persist-client-core": 4.35.7
+  peerDependencies:
+    "@tanstack/react-query": ^4.35.7
+  checksum: efc61333950a6d06ef7a7b0f09e919542fb7c60fda438703f5f4ec49961b15a6d1c1c6d2d5b6708db521c1af9175689c02e646678e50f606fb64977d17b77cb1
   languageName: node
   linkType: hard
 
@@ -10103,9 +10132,9 @@ __metadata:
   linkType: hard
 
 "caniuse-lite@npm:^1.0.0, caniuse-lite@npm:^1.0.30001541":
-  version: 1.0.30001542
-  resolution: "caniuse-lite@npm:1.0.30001542"
-  checksum: 6cf20e2e1fd4c14f98a3cc73df650903bb5fc896c5b7416ada10c3e2c17e905e3d5688e5a201bfc0eebdf2e3d19e1825e21ad03e4d06f2d50f6b1c9f4b837f98
+  version: 1.0.30001543
+  resolution: "caniuse-lite@npm:1.0.30001543"
+  checksum: 1a65c8b0b93913b6241c7d66e1e1f3ea0f194f7e140eefe500512641c2eb4df285991ec9869a1ba2856ea6f6d21e9f3d7bcd91971b5fb1721e3fa0390feec6f1
   languageName: node
   linkType: hard
 
@@ -11997,9 +12026,9 @@ __metadata:
   linkType: hard
 
 "electron-to-chromium@npm:^1.4.535":
-  version: 1.4.539
-  resolution: "electron-to-chromium@npm:1.4.539"
-  checksum: 52ca93d1fdff453f780c35e946ab4c04d4c54ab0e526b2b3a75b7674c33d95bf4ff5325de4406b3881b6f1e5ecac8f82f68d8566f3d99cc2e16a16533a83a9a5
+  version: 1.4.540
+  resolution: "electron-to-chromium@npm:1.4.540"
+  checksum: 78a48690a5cca3f89544d4e33a11e3101adb0b220da64078f67e167b396cbcd85044853cb88a9453444796599fe157c190ca5ebd00e9daf668ed5a9df3d0bba8
   languageName: node
   linkType: hard
 
@@ -14642,11 +14671,9 @@ __metadata:
   linkType: hard
 
 "has@npm:^1.0.3":
-  version: 1.0.3
-  resolution: "has@npm:1.0.3"
-  dependencies:
-    function-bind: ^1.1.1
-  checksum: b9ad53d53be4af90ce5d1c38331e712522417d017d5ef1ebd0507e07c2fbad8686fffb8e12ddecd4c39ca9b9b47431afbb975b8abf7f3c3b82c98e9aad052792
+  version: 1.0.4
+  resolution: "has@npm:1.0.4"
+  checksum: 8a11ba062e0627c9578a1d08285401e39f1d071a9692ddf793199070edb5648b21c774dd733e2a181edd635bf6862731885f476f4ccf67c998d7a5ff7cef2550
   languageName: node
   linkType: hard
 
@@ -19962,7 +19989,7 @@ __metadata:
     "@packrat/packages": "*"
     "@react-native-async-storage/async-storage": 1.18.2
     "@react-native-community/geolocation": ^3.0.6
-    "@react-native-community/netinfo": 9.3.10
+    "@react-native-community/netinfo": ^9.4.1
     "@react-native-google-signin/google-signin": ^9.0.2
     "@react-native-picker/picker": 2.4.10
     "@react-navigation/native": ^6.1.6
@@ -19980,8 +20007,10 @@ __metadata:
     "@tamagui/shorthands": ^1.52.4
     "@tamagui/theme-base": ^1.52.4
     "@tamagui/themes": ^1.52.4
+    "@tanstack/query-async-storage-persister": ^4.35.7
     "@tanstack/react-query": ^4.35.3
     "@tanstack/react-query-devtools": ^4.35.3
+    "@tanstack/react-query-persist-client": ^4.35.7
     "@tmcw/togeojson": ^5.7.0
     "@trpc/client": ^10.38.4
     "@trpc/react-query": ^10.38.4
@@ -20041,7 +20070,7 @@ __metadata:
     react-native-flash-message: ^0.4.2
     react-native-gesture-handler: ~2.12.0
     react-native-google-places-autocomplete: ^2.5.1
-    react-native-paper: ^5.9.1
+    react-native-paper: ^5.10.6
     react-native-paper-dates: ^0.18.12
     react-native-picker-select: ^8.0.4
     react-native-safe-area-context: 4.6.3
@@ -21357,12 +21386,12 @@ __metadata:
   linkType: hard
 
 "react-devtools-core@npm:^4.27.2":
-  version: 4.28.0
-  resolution: "react-devtools-core@npm:4.28.0"
+  version: 4.28.4
+  resolution: "react-devtools-core@npm:4.28.4"
   dependencies:
     shell-quote: ^1.6.1
     ws: ^7
-  checksum: a5be506a35ca027ba283f0efa7c0c9a818bd8b9b38b77081960423cc038b9f3ab3014970ed9cdd451b72a949bc279399daedb65931e8a44def0fb49c0a69f0a7
+  checksum: 2381f8eed956a030a89e9efff7f224beb59d593ef802b8594d69916e1f7a5e200d26371abe1bcc7a7646afa376d0ca57ccb283f8a33ddc73069fc06f86452927
   languageName: node
   linkType: hard
 
@@ -21511,15 +21540,15 @@ __metadata:
   linkType: hard
 
 "react-native-google-places-autocomplete@npm:^2.5.1":
-  version: 2.5.4
-  resolution: "react-native-google-places-autocomplete@npm:2.5.4"
+  version: 2.5.5
+  resolution: "react-native-google-places-autocomplete@npm:2.5.5"
   dependencies:
     lodash.debounce: ^4.0.8
     prop-types: ^15.7.2
     qs: ~6.9.1
   peerDependencies:
     react-native: ">= 0.59"
-  checksum: 4303a829a4a18f5bf2ba94e1259b720c9add6202bd3ee20b744bbb22003f27206fd0520589ea20977e22caa46c270d34edc9674a22982974d559edfe1cfe5baa
+  checksum: 85ca0ea0a5f1337b455ab18b73aa9208e80dc3d91721d90ee21f0ea365686ca5c9e4b3ea05a60a69784ee4417ac3d1ef326cc1241433aaeb457a939a60a6adf6
   languageName: node
   linkType: hard
 
@@ -21546,7 +21575,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-paper@npm:^5.9.1":
+"react-native-paper@npm:^5.10.6":
   version: 5.10.6
   resolution: "react-native-paper@npm:5.10.6"
   dependencies:
@@ -24300,8 +24329,8 @@ __metadata:
   linkType: hard
 
 "terser@npm:^5.10.0, terser@npm:^5.15.0, terser@npm:^5.16.8":
-  version: 5.20.0
-  resolution: "terser@npm:5.20.0"
+  version: 5.21.0
+  resolution: "terser@npm:5.21.0"
   dependencies:
     "@jridgewell/source-map": ^0.3.3
     acorn: ^8.8.2
@@ -24309,7 +24338,7 @@ __metadata:
     source-map-support: ~0.5.20
   bin:
     terser: bin/terser
-  checksum: 251d1b62d7c651ace29f997cf336ff5d5f8e30c65c8698ab7b831764d9e012ab0640895cb609906fb939a5bdf5143d73b5781c5c8c67b9216c77ce92dafdc0bc
+  checksum: 130f1567af1ffa4ddb067651bb284a01b45b5c83e82b3a072a5ff94b0b00ac35090f89c8714631a4a45972f65187bc149fc7144380611f437e1e3d9e174b136b
   languageName: node
   linkType: hard
 
@@ -26120,9 +26149,9 @@ __metadata:
   linkType: hard
 
 "zod@npm:^3.22.2":
-  version: 3.22.2
-  resolution: "zod@npm:3.22.2"
-  checksum: 231e2180c8eabb56e88680d80baff5cf6cbe6d64df3c44c50ebe52f73081ecd0229b1c7215b9552537f537a36d9e36afac2737ddd86dc14e3519bdbc777e82b9
+  version: 3.22.3
+  resolution: "zod@npm:3.22.3"
+  checksum: 65b05139be337078a70700b05942ab7f2ef5f11abe194df14ef257fac4e5c383476a4dc290731842996bd57fc8d5bf38e5a4c907fe8cdf8b15477f8da5bfcc00
   languageName: node
   linkType: hard
 

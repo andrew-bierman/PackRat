@@ -1,5 +1,5 @@
 import { Slot } from 'expo-router';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Platform, View } from 'react-native';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
@@ -22,8 +22,27 @@ import { api } from '~/constants/api';
 
 import { TrpcQueryProvider } from '../context/tRPC';
 
+// Move this to its own context
+import { onlineManager } from '@tanstack/react-query';
+import NetInfo from '@react-native-community/netinfo';
+import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister';
+import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 export default function HomeLayout() {
   const queryClient = new QueryClient();
+
+  const persister = createAsyncStoragePersister({
+    storage: AsyncStorage,
+    throttleTime: 3000,
+  });
+
+  useEffect(() => {
+    return NetInfo.addEventListener((state) => {
+      const status = !!state.isConnected;
+      onlineManager.setOnline(status);
+    });
+  }, []);
 
   const trpcClient = queryTrpc.createClient({
     links: [
@@ -41,21 +60,31 @@ export default function HomeLayout() {
 
   return (
     <Provider store={store}>
-      <queryTrpc.Provider client={trpcClient} queryClient={queryClient}>
-        <QueryClientProvider client={queryClient}>
-          <PersistGate loading={null} persistor={persistor}>
-            <SessionProvider>
-              <ThemeProvider>
-                <FlashMessage position="top" />
-                <Navigation />
-                <Slot />
-                {/* {Platform.OS === 'web' ? <Footer /> : null} */}
-              </ThemeProvider>
-            </SessionProvider>
-          </PersistGate>
-          <ReactQueryDevtools initialIsOpen={false} />
-        </QueryClientProvider>
-      </queryTrpc.Provider>
+      <PersistQueryClientProvider
+        onSuccess={() =>
+          queryClient
+            .resumePausedMutations()
+            .then(() => queryClient.invalidateQueries())
+        }
+        persistOptions={{ persister }}
+        client={queryClient}
+      >
+        <queryTrpc.Provider client={trpcClient} queryClient={queryClient}>
+          <QueryClientProvider client={queryClient}>
+            <PersistGate loading={null} persistor={persistor}>
+              <SessionProvider>
+                <ThemeProvider>
+                  <FlashMessage position="top" />
+                  <Navigation />
+                  <Slot />
+                  {/* {Platform.OS === 'web' ? <Footer /> : null} */}
+                </ThemeProvider>
+              </SessionProvider>
+            </PersistGate>
+            <ReactQueryDevtools initialIsOpen={false} />
+          </QueryClientProvider>
+        </queryTrpc.Provider>
+      </PersistQueryClientProvider>
     </Provider>
   );
 }
