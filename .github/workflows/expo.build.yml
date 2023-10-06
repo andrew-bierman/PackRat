@@ -22,23 +22,23 @@ jobs:
     - name: Set up Yarn
       run: yarn
 
-    - name: Install dependencies
-      working-directory: ./client
-      run: yarn install
-
-    - name: Install EAS CLI
-      run: yarn global add eas-cli
+#    - name: Install dependencies
+#      working-directory: ./client
+#      run: yarn install
+    
+#    - name: Install EAS CLI
+#      run: yarn global add eas-cli
 
     - name: Configure build
       working-directory: ./client
-      run: eas build:configure
+      run: npx eas build:configure
 
     # If you need additional setup or configurations, add them here
 
     - name: Run Local Build for Android
       working-directory: ./client
-      run: eas build --platform android --local
+      run: npx eas build --platform android --local
 
     - name: Run Local Build for iOS
       working-directory: ./client
-      run: eas build --platform ios --local
+      run: npx eas build --platform ios --local
