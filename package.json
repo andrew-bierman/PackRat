@@ -5,9 +5,9 @@
   "private": true,
   "main": "index.js",
   "workspaces": [
-    "packages/*",
     "client",
-    "server"
+    "server",
+    "packages/*"
   ],
   "scripts": {
     "clean": "rm -rf node_modules server/node_modules client/node_modules packages/node_modules package-lock.json yarn.lock server/package-lock.json client/package-lock.json packages/package-lock.json server/yarn.lock client/yarn.lock packages/yarn.lock server/dist client/dist packages/dist",
@@ -21,7 +21,7 @@
     "install:client": "cd client && yarn",
     "install:server": "cd server && yarn",
     "install:packages": "cd packages && yarn",
-    "setup": "yarn clean && yarn install:all && yarn setup:client && yarn setup:server",
+    "setup": "yarn && yarn setup:client && yarn setup:server",
     "setup:client": "cd client && yarn setup",
     "setup:server": "cd server && yarn setup",
     "expo:export": "cd client && cp app.example.json app.json && npx expo export --platform web",
@@ -41,8 +41,9 @@
     "format": "yarn format:all",
     "format:all": "prettier --write \"**/*.{js,jsx,ts,tsx}\"",
     "fix": "manypkg fix",
+    "preinstall": "npx only-allow yarn",
     "postinstall": "yarn build",
-    "build": "yarn workspaces foreach --exclude next-app run build",
+    "build": "yarn workspaces foreach run build",
     "upgrade:tamagui": "yarn up '*tamagui*'@latest '@tamagui/*'@latest react-native-web-lite@latest",
     "upgrade:tamagui:canary": "yarn up '*tamagui*'@canary '@tamagui/*'@canary react-native-web-lite@canary",
     "check-deps": "check-dependency-version-consistency .",
@@ -89,16 +90,14 @@
     "url": "https://github.com/andrew-bierman/PackRat/issues"
   },
   "homepage": "https://github.com/andrew-bierman/PackRat#readme",
-  "devDependencies": {
-    "husky": "^8.0.0",
-    "lint-staged": "^14.0.1"
-  },
   "packageManager": "yarn@3.6.3",
   "dependencies": {
     "@manypkg/cli": "^0.21.0",
     "check-dependency-version-consistency": "^4.1.0",
     "cross-env": "^7.0.3",
     "dotenv-cli": "^7.3.0",
+    "husky": "^8.0.0",
+    "lint-staged": "^14.0.1",
     "typescript": "^5.2.2"
   }
 }

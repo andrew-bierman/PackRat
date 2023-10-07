@@ -30,6 +30,11 @@ jobs:
         cat .yarnrc.yml
         cat yarn.lock
 
+    - name: ⚙️ Enable Corepack
+      run: |
+        corepack enable
+        echo "corepack enabled"
+
     - name: Set Yarn Version to Berry
       run: yarn set version berry
 
@@ -45,8 +50,19 @@ jobs:
         yarn workspaces list --json
 
     - name: Run setup
-      run: which yarn && yarn install && yarn setup
+      run: |
+        yarn -v
+        which yarn
+        yarn set version stable
+        yarn plugin import workspace-tools
+        yarn plugin import interactive-tools
+        yarn install
 
+# cp client/.env.example client/.env
+# cp client/app.json.example client/app.json
+# cp server/.env.example server/.env
+
+# yarn setup
 
     # - name: Clean Cache and Reinstall
     #   run: |
