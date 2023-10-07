@@ -13,9 +13,13 @@ import { SessionProvider } from '../context/auth';
 import { ThemeProvider } from '../context/theme';
 import FlashMessage from 'react-native-flash-message';
 import Footer from '../components/footer/Footer';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { queryClient } from '~/constants/queryClient';
+
 
 export default function HomeLayout() {
   return (
+    <QueryClientProvider client={queryClient}>
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <SessionProvider>
@@ -28,5 +32,6 @@ export default function HomeLayout() {
         </SessionProvider>
       </PersistGate>
     </Provider>
+    </QueryClientProvider>
   );
 }

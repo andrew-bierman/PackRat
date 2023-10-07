@@ -32,6 +32,8 @@ export default function PackContainer({ isCreatingTrip = false }) {
   const [refetch, setRefetch] = useState(false);
   const styles = useCustomStyles(loadStyles);
 
+
+
   useEffect(() => {
     if (user?._id) {
       dispatch(fetchUserPacks({ ownerId: user?._id }));

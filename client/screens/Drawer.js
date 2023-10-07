@@ -11,6 +11,8 @@ import { theme } from '../theme';
 import { AntDesign, MaterialIcons } from '@expo/vector-icons';
 import useTheme from '../hooks/useTheme';
 import useCustomStyles from '~/hooks/useCustomStyles';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { queryClient } from '~/constants/queryClient';
 const Drawer = ({
   isDrawerOpen,
   toggleDrawer,
@@ -46,6 +48,8 @@ const Drawer = ({
   };
 
   return (
+
+    
     <Modal
       visible={isDrawerOpen}
       transparent={true}
@@ -60,6 +64,7 @@ const Drawer = ({
         <View style={styles.drawerContainer}>{renderNavigationItems()}</View>
       </View>
     </Modal>
+ 
   );
 };
 

@@ -9,6 +9,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { CustomModal } from '../modal';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from '~/hooks/useCustomStyles';
+import { useMutation } from '@tanstack/react-query';
+import useAddPack from '~/hooks/useAddPack';
 
 export const AddPack = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
@@ -37,17 +39,21 @@ export const AddPack = () => {
    * @param {string} owner_id - The ID of the pack's owner.
    * @return {void}
    */
+
+  const mutation=useAddPack()
   const handleAddPack = () => {
-    dispatch(addPack({ name, owner_id: user?._id, is_public: isPublic }));
+    mutation.addPack.mutate({ name, owner_id: user?._id, is_public: isPublic })
+    console.log('added')
     setName('');
   };
+
+
 
   const data = ['Yes', 'For me only'];
 
   const handleonValueChange = (itemValue) => {
     setIsPublic(itemValue == 'Yes');
   };
-
   return (
     <Box style={styles.container}>
       <Box style={styles.mobileStyle}>

@@ -8,7 +8,6 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "display": "flex",
               "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$body",
@@ -479,11 +478,11 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "display": "flex",
               "suppressHighlighting": true,
               "opacity": 0,
               "lineHeight": 0,
               "height": 0,
+              "display": "flex",
               "fontSize": 200,
               "children": "wwwwwwwwwwwwwwwwwww",
               "hoverStyle": {
@@ -2091,7 +2090,6 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "display": "flex",
               "suppressHighlighting": true
             },
             "inlineWhenUnflattened": {},
@@ -3945,7 +3943,6 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "display": "flex",
               "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$body"
@@ -8031,7 +8028,6 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "display": "flex",
               "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$body",
@@ -8226,7 +8222,6 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "display": "flex",
               "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$body",
@@ -8985,7 +8980,6 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "display": "flex",
               "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$body"
@@ -9175,7 +9169,6 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "display": "flex",
               "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$body"
@@ -9361,7 +9354,6 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "display": "flex",
               "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$body"
@@ -12051,7 +12043,6 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "display": "flex",
               "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$body"
@@ -17399,7 +17390,6 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "display": "flex",
               "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$body"
@@ -17581,7 +17571,6 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "display": "flex",
               "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$body",
@@ -17764,7 +17753,6 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "display": "flex",
               "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$heading",
@@ -17949,7 +17937,6 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "display": "flex",
               "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$heading",
@@ -18134,7 +18121,6 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "display": "flex",
               "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$heading",
@@ -18319,7 +18305,6 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "display": "flex",
               "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$heading",
@@ -18504,7 +18489,6 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "display": "flex",
               "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$heading",
@@ -18689,7 +18673,6 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "display": "flex",
               "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$heading",
@@ -18874,7 +18857,6 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "display": "flex",
               "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$heading",
