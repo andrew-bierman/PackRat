@@ -12,9 +12,13 @@ import { z } from 'zod';
  */
 export const getPublicPacks = async (req, res, next) => {
   try {
-    const { queryBy } = req.query;
+    const { queryBy, pageNo, recordsPerPage } = req.query;
 
-    const publicPacks = await getPublicPacksService(queryBy);
+    const publicPacks = await getPublicPacksService(
+      queryBy,
+      pageNo,
+      recordsPerPage,
+    );
 
     res.locals.data = publicPacks;
     responseHandler(res);
@@ -25,9 +29,15 @@ export const getPublicPacks = async (req, res, next) => {
 
 export function getPublicPacksRoute() {
   return publicProcedure
-    .input(z.object({ queryBy: z.string() }))
+    .input(
+      z.object({
+        queryBy: z.string(),
+        pageNo: z.number().optional(),
+        recordsPerPage: z.number().optional(),
+      }),
+    )
     .query(async (opts) => {
-      const { queryBy } = opts.input;
-      return await getPublicPacksService(queryBy);
+      const { queryBy, pageNo, recordsPerPage } = opts.input;
+      return await getPublicPacksService(queryBy, pageNo, recordsPerPage);
     });
 }
