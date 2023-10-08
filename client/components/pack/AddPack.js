@@ -39,7 +39,7 @@ export const AddPack = () => {
    * @return {void}
    */
   const handleAddPack = () => {
-    dispatch(addPack({ name, owner_id: user?._id, is_public: isPublic }));
+    mutation.mutate({ name, owner_id: user?._id, is_public: isPublic })
     setName('');
   };
 
