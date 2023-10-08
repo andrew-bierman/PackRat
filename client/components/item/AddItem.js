@@ -42,8 +42,8 @@ export const AddItem = ({
 
   const {
     // mutation: addPackItemMutation
-    addPackItem: addPackItemMutation,
-  } = useAddPackItem(packId, (ownerId = currentPack?.owner_id));
+    addPackItem,
+  } = useAddPackItem();
 
   // handle updates to initialData
   useEffect(() => {
@@ -92,19 +92,7 @@ export const AddItem = ({
         setRefetch(refetch !== true);
       }
     } else {
-      // dispatch(
-      //   addPackItem({
-      //     name,
-      //     weight,
-      //     quantity,
-      //     type: categoryType,
-      //     unit,
-      //     _id,
-      //     packId,
-      //   }),
-      // );
-      // addPackItemMutation.mutate({
-      addPackItemMutation({
+      addPackItem({
         name,
         weight,
         quantity,
@@ -113,8 +101,9 @@ export const AddItem = ({
         _id,
         packId,
       });
-      setIsAddItemModalOpen(false);
-      setRefetch(refetch !== true);
+     
+      // setIsAddItemModalOpen(false);
+      // setRefetch(refetch !== true);
     }
   };
 
