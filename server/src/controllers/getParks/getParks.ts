@@ -1,6 +1,6 @@
 import { publicProcedure } from '../../trpc';
 import { responseHandler } from '../../helpers/responseHandler';
-import * as validators from "@packrat/packages"
+import * as validators from '@packrat/packages';
 import { getParksService } from '../../services/parks/getParksService';
 
 const fetch = async (...args) =>
@@ -23,5 +23,5 @@ export const getParks = async (req, res, next) => {
 export function getParksRoute() {
   return publicProcedure.input(validators.getParks).query(async (opts) => {
     return await getParksService(opts.input.abbrState);
-  })
+  });
 }

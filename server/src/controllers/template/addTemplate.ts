@@ -28,7 +28,14 @@ export const addTemplate = async (req, res, next) => {
 
 export function addTemplateRoute() {
   return publicProcedure
-    .input(z.object({ type: z.string(), templateId: z.string(), isGlobalTemplate: z.boolean(), createdBy: z.string() }))
+    .input(
+      z.object({
+        type: z.string(),
+        templateId: z.string(),
+        isGlobalTemplate: z.boolean(),
+        createdBy: z.string(),
+      }),
+    )
     .mutation(async (opts) => {
       const { type, templateId, isGlobalTemplate, createdBy } = opts.input;
       const user = await User.findById(createdBy);

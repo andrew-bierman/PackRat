@@ -77,22 +77,18 @@ export const getPacksService = async (ownerId, queryBy: string = null) => {
           type: { $first: '$type' },
           items: { $push: '$items' },
           total_weight: { $sum: '$item_weight' },
-          items_count: {$sum : 1}
+          items_count: { $sum: 1 },
         },
       },
-    ]
-
+    ];
 
     const sortCriteria = SORT_OPTIONS[queryBy] || DEFAULT_SORT;
     userPacksPipeline.push({ $sort: sortCriteria });
 
-
     const packs = await Pack.aggregate(userPacksPipeline);
 
-
-    return packs 
+    return packs;
   } catch (error) {
     throw new Error('Packs cannot be found: ' + error.message);
   }
-
 };

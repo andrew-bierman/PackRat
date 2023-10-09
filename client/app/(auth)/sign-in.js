@@ -1,6 +1,7 @@
 import Login from '../../screens/LoginScreen';
 import { Platform } from 'react-native';
-import { Stack as Header } from 'expo-router';
+import { Stack } from 'expo-router';
+import Head from 'expo-router/head';
 
 /**
  * Renders the SignIn component.
@@ -8,9 +9,9 @@ import { Stack as Header } from 'expo-router';
  * @return {JSX.Element} The rendered component.
  */
 export default function SignIn() {
-  return Platform.OS === 'web' ? (
+  return (
     <>
-      <Header.Screen
+      <Stack.Screen
         options={{
           // https://reactnavigation.org/docs/headers#setting-the-header-title
           title: 'Login',
@@ -21,7 +22,5 @@ export default function SignIn() {
       />
       <Login />
     </>
-  ) : (
-    <Login />
   );
 }

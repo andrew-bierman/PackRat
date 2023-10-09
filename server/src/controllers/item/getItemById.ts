@@ -25,9 +25,8 @@ export const getItemById = async (req, res, next) => {
 };
 
 export function getItemByIdRoute() {
-  return publicProcedure.input(validator.getItemById)
-    .query(async (opts) => {
-      const { _id } = opts.input;
-      return getItemByIdService(_id);
-    });
+  return publicProcedure.input(validator.getItemById).query(async (opts) => {
+    const { _id } = opts.input;
+    return getItemByIdService(_id);
+  });
 }

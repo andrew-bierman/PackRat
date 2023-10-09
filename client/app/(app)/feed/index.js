@@ -1,11 +1,15 @@
 import Feed from '../../../screens/feed/Feed';
 import { Platform } from 'react-native';
-import { Stack as Header } from 'expo-router';
+import { Stack } from 'expo-router';
+import Head from 'expo-router/head';
 
 export default function FeedNav() {
-  return Platform.OS === 'web' ? (
+  return (
     <>
-      <Header.Screen
+      <Head>
+        <title>Feed</title>
+      </Head>
+      <Stack.Screen
         options={{
           // https://reactnavigation.org/docs/headers#setting-the-header-title
           title: 'Feed',
@@ -16,7 +20,5 @@ export default function FeedNav() {
       />
       <Feed />
     </>
-  ) : (
-    <Feed />
   );
 }
