@@ -27,7 +27,7 @@ export const getPublicPacks = createAsyncThunk(
     //   `${api}/pack/?queryBy=${queryBy || 'Favorite'}`,
     // );
     // return response.data;
-    return (await trpc.getPublicPacks.query({ queryBy: queryBy ?? 'Favorite' }));
+    return await trpc.getPublicPacks.query({ queryBy: queryBy ?? 'Favorite' });
   },
 );
 

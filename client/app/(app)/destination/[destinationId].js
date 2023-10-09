@@ -1,12 +1,16 @@
 import { Platform } from 'react-native';
 import { DestinationPage } from '../../../components/destination';
 // import DestinationPage from "../../components/destination";
-import { Stack as Header } from 'expo-router';
+import { Stack } from 'expo-router';
+import Head from 'expo-router/head';
 
 export default function Destination() {
-  return Platform.OS === 'web' ? (
+  return (
     <>
-      <Header.Screen
+      <Head>
+        <title>Destination</title>
+      </Head>
+      <Stack.Screen
         options={{
           // https://reactnavigation.org/docs/headers#setting-the-header-title
           title: 'Destination',
@@ -17,10 +21,7 @@ export default function Destination() {
           // https://reactnavigation.org/docs/headers#replacing-the-title-with-a-custom-component
         }}
       />
-
       <DestinationPage />
     </>
-  ) : (
-    <DestinationPage />
   );
 }

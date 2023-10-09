@@ -49,6 +49,8 @@ export default function Login() {
     password: '12345678',
   };
 
+  const enableGoogleLogin = WEB_CLIENT_ID && WEB_CLIENT_ID !== '';
+
   const router = useRouter();
 
   const dispatch = useDispatch();
@@ -82,7 +84,7 @@ export default function Login() {
 
   // Add Google auth-related variables
   const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
-    clientId: WEB_CLIENT_ID,
+    clientId: WEB_CLIENT_ID || 'default',
   });
 
   const auth = useSelector((state) => state.auth);
@@ -323,24 +325,27 @@ export default function Login() {
                 Or
               </Heading>
             </HStack>
-            <HStack mt="1" justifyContent="center" alignItems="center">
-              <Button
-                w="100%"
-                disabled={!request}
-                onPress={async () => await promptAsync()}
-                colorScheme={'red'}
-                startIcon={
-                  <FontAwesome
-                    name="google"
-                    size={18}
-                    color={currentTheme.colors.white}
-                  />
-                }
-              >
-                Sign in with Google
-              </Button>
-            </HStack>
+
             {/* Google Login */}
+            {enableGoogleLogin && (
+              <HStack mt="1" justifyContent="center" alignItems="center">
+                <Button
+                  w="100%"
+                  disabled={!request}
+                  onPress={async () => await promptAsync()}
+                  colorScheme={'red'}
+                  startIcon={
+                    <FontAwesome
+                      name="google"
+                      size={18}
+                      color={currentTheme.colors.white}
+                    />
+                  }
+                >
+                  Sign in with Google
+                </Button>
+              </HStack>
+            )}
 
             {/* Demo Login for Development start */}
             {NODE_ENV !== 'production' && (

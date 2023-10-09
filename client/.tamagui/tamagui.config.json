@@ -6,8 +6,38 @@
         "Spacer": {
           "staticConfig": {
             "acceptsClassName": true,
-            "memo": true,
-            "componentName": "Spacer",
+            "isText": true,
+            "defaultProps": {
+              "color": "$color",
+              "display": "flex",
+              "suppressHighlighting": true,
+              "unstyled": false,
+              "fontFamily": "$body",
+              "tag": "a",
+              "accessibilityRole": "link"
+            },
+            "inlineWhenUnflattened": {},
+            "variants": {
+              "ellipsizeMode": {
+                "...": "Function"
+              },
+              "ellipse": {
+                "true": {
+                  "numberOfLines": 1,
+                  "lineBreakMode": "clip"
+                }
+              },
+              "unstyled": {
+                "false": {
+                  "size": "$true"
+                }
+              },
+              "size": "Function",
+              "fontFamily": {
+                "...": "Function"
+              }
+            },
+            "deoptProps": {},
             "validStyles": {
               "enterStyle": true,
               "exitStyle": true,
@@ -156,21 +186,1408 @@
             },
             "defaultProps": {
               "alignItems": "stretch",
+              "tag": "article",
+              "flexDirection": "column"
+            },
+            "validStyles": {
+              "enterStyle": true,
+              "exitStyle": true,
+              "hoverStyle": true,
+              "pressStyle": true,
+              "focusStyle": true,
+              "backfaceVisibility": true,
+              "borderBottomEndRadius": true,
+              "borderBottomStartRadius": true,
+              "borderBottomWidth": true,
+              "borderLeftWidth": true,
+              "borderRightWidth": true,
+              "borderStyle": true,
+              "borderTopEndRadius": true,
+              "borderTopStartRadius": true,
+              "borderTopWidth": true,
+              "borderWidth": true,
+              "transform": true,
+              "alignContent": true,
+              "alignItems": true,
+              "alignSelf": true,
+              "borderEndWidth": true,
+              "borderStartWidth": true,
+              "bottom": true,
+              "display": true,
+              "end": true,
+              "flexBasis": true,
+              "flexDirection": true,
+              "flexWrap": true,
+              "gap": true,
+              "columnGap": true,
+              "rowGap": true,
+              "justifyContent": true,
+              "left": true,
+              "margin": true,
+              "marginBottom": true,
+              "marginEnd": true,
+              "marginHorizontal": true,
+              "marginLeft": true,
+              "marginRight": true,
+              "marginStart": true,
+              "marginTop": true,
+              "marginVertical": true,
+              "overflow": true,
+              "padding": true,
+              "paddingBottom": true,
+              "paddingEnd": true,
+              "paddingHorizontal": true,
+              "paddingLeft": true,
+              "paddingRight": true,
+              "paddingStart": true,
+              "paddingTop": true,
+              "paddingVertical": true,
+              "position": true,
+              "right": true,
+              "start": true,
+              "top": true,
+              "direction": true,
+              "shadowOffset": true,
+              "shadowRadius": true,
+              "backgroundColor": true,
+              "borderColor": true,
+              "borderBottomColor": true,
+              "borderTopColor": true,
+              "borderLeftColor": true,
+              "borderRightColor": true,
+              "borderEndColor": true,
+              "borderStartColor": true,
+              "shadowColor": true,
+              "color": true,
+              "placeholderTextColor": true,
+              "textDecorationColor": true,
+              "textShadowColor": true,
+              "borderRadius": true,
+              "borderTopLeftRadius": true,
+              "borderTopRightRadius": true,
+              "borderBottomLeftRadius": true,
+              "borderBottomRightRadius": true,
+              "width": true,
+              "height": true,
+              "minWidth": true,
+              "minHeight": true,
+              "maxWidth": true,
+              "maxHeight": true,
+              "x": true,
+              "y": true,
+              "scale": true,
+              "perspective": true,
+              "scaleX": true,
+              "scaleY": true,
+              "skewX": true,
+              "skewY": true,
+              "matrix": true,
+              "rotate": true,
+              "rotateY": true,
+              "rotateX": true,
+              "rotateZ": true,
+              "WebkitLineClamp": true,
+              "animationIterationCount": true,
+              "aspectRatio": true,
+              "borderImageOutset": true,
+              "borderImageSlice": true,
+              "borderImageWidth": true,
+              "columnCount": true,
+              "flex": true,
+              "flexGrow": true,
+              "flexOrder": true,
+              "flexPositive": true,
+              "flexShrink": true,
+              "flexNegative": true,
+              "fontWeight": true,
+              "gridRow": true,
+              "gridRowEnd": true,
+              "gridRowGap": true,
+              "gridRowStart": true,
+              "gridColumn": true,
+              "gridColumnEnd": true,
+              "gridColumnGap": true,
+              "gridColumnStart": true,
+              "lineClamp": true,
+              "opacity": true,
+              "order": true,
+              "orphans": true,
+              "tabSize": true,
+              "widows": true,
+              "zIndex": true,
+              "zoom": true,
+              "scaleZ": true,
+              "shadowOpacity": true
+            },
+            "componentName": "Article",
+            "isReactNative": false,
+            "isText": false,
+            "isStyledHOC": false
+          }
+        },
+        "Aside": {
+          "staticConfig": {
+            "acceptsClassName": true,
+            "defaultProps": {
+              "alignItems": "stretch",
+              "tag": "aside",
+              "flexDirection": "column"
+            },
+            "validStyles": {
+              "enterStyle": true,
+              "exitStyle": true,
+              "hoverStyle": true,
+              "pressStyle": true,
+              "focusStyle": true,
+              "backfaceVisibility": true,
+              "borderBottomEndRadius": true,
+              "borderBottomStartRadius": true,
+              "borderBottomWidth": true,
+              "borderLeftWidth": true,
+              "borderRightWidth": true,
+              "borderStyle": true,
+              "borderTopEndRadius": true,
+              "borderTopStartRadius": true,
+              "borderTopWidth": true,
+              "borderWidth": true,
+              "transform": true,
+              "alignContent": true,
+              "alignItems": true,
+              "alignSelf": true,
+              "borderEndWidth": true,
+              "borderStartWidth": true,
+              "bottom": true,
+              "display": true,
+              "end": true,
+              "flexBasis": true,
+              "flexDirection": true,
+              "flexWrap": true,
+              "gap": true,
+              "columnGap": true,
+              "rowGap": true,
+              "justifyContent": true,
+              "left": true,
+              "margin": true,
+              "marginBottom": true,
+              "marginEnd": true,
+              "marginHorizontal": true,
+              "marginLeft": true,
+              "marginRight": true,
+              "marginStart": true,
+              "marginTop": true,
+              "marginVertical": true,
+              "overflow": true,
+              "padding": true,
+              "paddingBottom": true,
+              "paddingEnd": true,
+              "paddingHorizontal": true,
+              "paddingLeft": true,
+              "paddingRight": true,
+              "paddingStart": true,
+              "paddingTop": true,
+              "paddingVertical": true,
+              "position": true,
+              "right": true,
+              "start": true,
+              "top": true,
+              "direction": true,
+              "shadowOffset": true,
+              "shadowRadius": true,
+              "backgroundColor": true,
+              "borderColor": true,
+              "borderBottomColor": true,
+              "borderTopColor": true,
+              "borderLeftColor": true,
+              "borderRightColor": true,
+              "borderEndColor": true,
+              "borderStartColor": true,
+              "shadowColor": true,
+              "color": true,
+              "placeholderTextColor": true,
+              "textDecorationColor": true,
+              "textShadowColor": true,
+              "borderRadius": true,
+              "borderTopLeftRadius": true,
+              "borderTopRightRadius": true,
+              "borderBottomLeftRadius": true,
+              "borderBottomRightRadius": true,
+              "width": true,
+              "height": true,
+              "minWidth": true,
+              "minHeight": true,
+              "maxWidth": true,
+              "maxHeight": true,
+              "x": true,
+              "y": true,
+              "scale": true,
+              "perspective": true,
+              "scaleX": true,
+              "scaleY": true,
+              "skewX": true,
+              "skewY": true,
+              "matrix": true,
+              "rotate": true,
+              "rotateY": true,
+              "rotateX": true,
+              "rotateZ": true,
+              "WebkitLineClamp": true,
+              "animationIterationCount": true,
+              "aspectRatio": true,
+              "borderImageOutset": true,
+              "borderImageSlice": true,
+              "borderImageWidth": true,
+              "columnCount": true,
+              "flex": true,
+              "flexGrow": true,
+              "flexOrder": true,
+              "flexPositive": true,
+              "flexShrink": true,
+              "flexNegative": true,
+              "fontWeight": true,
+              "gridRow": true,
+              "gridRowEnd": true,
+              "gridRowGap": true,
+              "gridRowStart": true,
+              "gridColumn": true,
+              "gridColumnEnd": true,
+              "gridColumnGap": true,
+              "gridColumnStart": true,
+              "lineClamp": true,
+              "opacity": true,
+              "order": true,
+              "orphans": true,
+              "tabSize": true,
+              "widows": true,
+              "zIndex": true,
+              "zoom": true,
+              "scaleZ": true,
+              "shadowOpacity": true
+            },
+            "componentName": "Aside",
+            "isReactNative": false,
+            "isText": false,
+            "isStyledHOC": false
+          }
+        },
+        "EnsureFlexed": {
+          "staticConfig": {
+            "acceptsClassName": true,
+            "isText": true,
+            "defaultProps": {
+              "color": "$color",
               "display": "flex",
               "flexDirection": "column",
-              "flexBasis": "auto",
-              "boxSizing": "border-box",
-              "position": "relative",
-              "minHeight": 0,
-              "minWidth": 0,
-              "flexShrink": 0,
+              "tag": "fieldset"
+            },
+            "validStyles": {
+              "enterStyle": true,
+              "exitStyle": true,
+              "hoverStyle": true,
+              "pressStyle": true,
+              "focusStyle": true,
+              "backfaceVisibility": true,
+              "borderBottomEndRadius": true,
+              "borderBottomStartRadius": true,
+              "borderBottomWidth": true,
+              "borderLeftWidth": true,
+              "borderRightWidth": true,
+              "borderStyle": true,
+              "borderTopEndRadius": true,
+              "borderTopStartRadius": true,
+              "borderTopWidth": true,
+              "borderWidth": true,
+              "transform": true,
+              "alignContent": true,
+              "alignItems": true,
+              "alignSelf": true,
+              "borderEndWidth": true,
+              "borderStartWidth": true,
+              "bottom": true,
+              "display": true,
+              "end": true,
+              "flexBasis": true,
+              "flexDirection": true,
+              "flexWrap": true,
+              "gap": true,
+              "columnGap": true,
+              "rowGap": true,
+              "justifyContent": true,
+              "left": true,
+              "margin": true,
+              "marginBottom": true,
+              "marginEnd": true,
+              "marginHorizontal": true,
+              "marginLeft": true,
+              "marginRight": true,
+              "marginStart": true,
+              "marginTop": true,
+              "marginVertical": true,
+              "overflow": true,
+              "padding": true,
+              "paddingBottom": true,
+              "paddingEnd": true,
+              "paddingHorizontal": true,
+              "paddingLeft": true,
+              "paddingRight": true,
+              "paddingStart": true,
+              "paddingTop": true,
+              "paddingVertical": true,
+              "position": true,
+              "right": true,
+              "start": true,
+              "top": true,
+              "direction": true,
+              "shadowOffset": true,
+              "shadowRadius": true,
+              "backgroundColor": true,
+              "borderColor": true,
+              "borderBottomColor": true,
+              "borderTopColor": true,
+              "borderLeftColor": true,
+              "borderRightColor": true,
+              "borderEndColor": true,
+              "borderStartColor": true,
+              "shadowColor": true,
+              "color": true,
+              "placeholderTextColor": true,
+              "textDecorationColor": true,
+              "textShadowColor": true,
+              "borderRadius": true,
+              "borderTopLeftRadius": true,
+              "borderTopRightRadius": true,
+              "borderBottomLeftRadius": true,
+              "borderBottomRightRadius": true,
+              "width": true,
+              "height": true,
+              "minWidth": true,
+              "minHeight": true,
+              "maxWidth": true,
+              "maxHeight": true,
+              "x": true,
+              "y": true,
+              "scale": true,
+              "perspective": true,
+              "scaleX": true,
+              "scaleY": true,
+              "skewX": true,
+              "skewY": true,
+              "matrix": true,
+              "rotate": true,
+              "rotateY": true,
+              "rotateX": true,
+              "rotateZ": true,
+              "WebkitLineClamp": true,
+              "animationIterationCount": true,
+              "aspectRatio": true,
+              "borderImageOutset": true,
+              "borderImageSlice": true,
+              "borderImageWidth": true,
+              "columnCount": true,
+              "flex": true,
+              "flexGrow": true,
+              "flexOrder": true,
+              "flexPositive": true,
+              "flexShrink": true,
+              "flexNegative": true,
+              "fontWeight": true,
+              "gridRow": true,
+              "gridRowEnd": true,
+              "gridRowGap": true,
+              "gridRowStart": true,
+              "gridColumn": true,
+              "gridColumnEnd": true,
+              "gridColumnGap": true,
+              "gridColumnStart": true,
+              "lineClamp": true,
+              "opacity": true,
+              "order": true,
+              "orphans": true,
+              "tabSize": true,
+              "widows": true,
+              "zIndex": true,
+              "zoom": true,
+              "scaleZ": true,
+              "shadowOpacity": true
+            },
+            "variants": {
+              "fullscreen": {
+                "true": {
+                  "position": "absolute",
+                  "top": 0,
+                  "left": 0,
+                  "right": 0,
+                  "bottom": 0
+                }
+              },
+              "elevation": {
+                "...size": "Function"
+              },
+              "horizontal": {
+                "true": {
+                  "flexDirection": "row",
+                  "alignItems": "center"
+                }
+              }
+            },
+            "componentName": "Fieldset",
+            "isReactNative": false,
+            "isText": false,
+            "isStyledHOC": false
+          }
+        },
+        "Footer": {
+          "staticConfig": {
+            "acceptsClassName": true,
+            "defaultProps": {
+              "alignItems": "stretch",
+              "tag": "footer",
+              "flexDirection": "column"
+            },
+            "validStyles": {
+              "enterStyle": true,
+              "exitStyle": true,
+              "hoverStyle": true,
+              "pressStyle": true,
+              "focusStyle": true,
+              "backfaceVisibility": true,
+              "borderBottomEndRadius": true,
+              "borderBottomStartRadius": true,
+              "borderBottomWidth": true,
+              "borderLeftWidth": true,
+              "borderRightWidth": true,
+              "borderStyle": true,
+              "borderTopEndRadius": true,
+              "borderTopStartRadius": true,
+              "borderTopWidth": true,
+              "borderWidth": true,
+              "transform": true,
+              "alignContent": true,
+              "alignItems": true,
+              "alignSelf": true,
+              "borderEndWidth": true,
+              "borderStartWidth": true,
+              "bottom": true,
+              "display": true,
+              "end": true,
+              "flexBasis": true,
+              "flexDirection": true,
+              "flexWrap": true,
+              "gap": true,
+              "columnGap": true,
+              "rowGap": true,
+              "justifyContent": true,
+              "left": true,
+              "margin": true,
+              "marginBottom": true,
+              "marginEnd": true,
+              "marginHorizontal": true,
+              "marginLeft": true,
+              "marginRight": true,
+              "marginStart": true,
+              "marginTop": true,
+              "marginVertical": true,
+              "overflow": true,
+              "padding": true,
+              "paddingBottom": true,
+              "paddingEnd": true,
+              "paddingHorizontal": true,
+              "paddingLeft": true,
+              "paddingRight": true,
+              "paddingStart": true,
+              "paddingTop": true,
+              "paddingVertical": true,
+              "position": true,
+              "right": true,
+              "start": true,
+              "top": true,
+              "direction": true,
+              "shadowOffset": true,
+              "shadowRadius": true,
+              "backgroundColor": true,
+              "borderColor": true,
+              "borderBottomColor": true,
+              "borderTopColor": true,
+              "borderLeftColor": true,
+              "borderRightColor": true,
+              "borderEndColor": true,
+              "borderStartColor": true,
+              "shadowColor": true,
+              "color": true,
+              "placeholderTextColor": true,
+              "textDecorationColor": true,
+              "textShadowColor": true,
+              "borderRadius": true,
+              "borderTopLeftRadius": true,
+              "borderTopRightRadius": true,
+              "borderBottomLeftRadius": true,
+              "borderBottomRightRadius": true,
+              "width": true,
+              "height": true,
+              "minWidth": true,
+              "minHeight": true,
+              "maxWidth": true,
+              "maxHeight": true,
+              "x": true,
+              "y": true,
+              "scale": true,
+              "perspective": true,
+              "scaleX": true,
+              "scaleY": true,
+              "skewX": true,
+              "skewY": true,
+              "matrix": true,
+              "rotate": true,
+              "rotateY": true,
+              "rotateX": true,
+              "rotateZ": true,
+              "WebkitLineClamp": true,
+              "animationIterationCount": true,
+              "aspectRatio": true,
+              "borderImageOutset": true,
+              "borderImageSlice": true,
+              "borderImageWidth": true,
+              "columnCount": true,
+              "flex": true,
+              "flexGrow": true,
+              "flexOrder": true,
+              "flexPositive": true,
+              "flexShrink": true,
+              "flexNegative": true,
+              "fontWeight": true,
+              "gridRow": true,
+              "gridRowEnd": true,
+              "gridRowGap": true,
+              "gridRowStart": true,
+              "gridColumn": true,
+              "gridColumnEnd": true,
+              "gridColumnGap": true,
+              "gridColumnStart": true,
+              "lineClamp": true,
+              "opacity": true,
+              "order": true,
+              "orphans": true,
+              "tabSize": true,
+              "widows": true,
+              "zIndex": true,
+              "zoom": true,
+              "scaleZ": true,
+              "shadowOpacity": true
+            },
+            "componentName": "Footer",
+            "isReactNative": false,
+            "isText": false,
+            "isStyledHOC": false
+          }
+        },
+        "Header": {
+          "staticConfig": {
+            "acceptsClassName": true,
+            "defaultProps": {
+              "alignItems": "stretch",
+              "tag": "header",
+              "accessibilityRole": "header",
+              "flexDirection": "column"
+            },
+            "validStyles": {
+              "enterStyle": true,
+              "exitStyle": true,
+              "hoverStyle": true,
+              "pressStyle": true,
+              "focusStyle": true,
+              "backfaceVisibility": true,
+              "borderBottomEndRadius": true,
+              "borderBottomStartRadius": true,
+              "borderBottomWidth": true,
+              "borderLeftWidth": true,
+              "borderRightWidth": true,
+              "borderStyle": true,
+              "borderTopEndRadius": true,
+              "borderTopStartRadius": true,
+              "borderTopWidth": true,
+              "borderWidth": true,
+              "transform": true,
+              "alignContent": true,
+              "alignItems": true,
+              "alignSelf": true,
+              "borderEndWidth": true,
+              "borderStartWidth": true,
+              "bottom": true,
+              "display": true,
+              "end": true,
+              "flexBasis": true,
+              "flexDirection": true,
+              "flexWrap": true,
+              "gap": true,
+              "columnGap": true,
+              "rowGap": true,
+              "justifyContent": true,
+              "left": true,
+              "margin": true,
+              "marginBottom": true,
+              "marginEnd": true,
+              "marginHorizontal": true,
+              "marginLeft": true,
+              "marginRight": true,
+              "marginStart": true,
+              "marginTop": true,
+              "marginVertical": true,
+              "overflow": true,
+              "padding": true,
+              "paddingBottom": true,
+              "paddingEnd": true,
+              "paddingHorizontal": true,
+              "paddingLeft": true,
+              "paddingRight": true,
+              "paddingStart": true,
+              "paddingTop": true,
+              "paddingVertical": true,
+              "position": true,
+              "right": true,
+              "start": true,
+              "top": true,
+              "direction": true,
+              "shadowOffset": true,
+              "shadowRadius": true,
+              "backgroundColor": true,
+              "borderColor": true,
+              "borderBottomColor": true,
+              "borderTopColor": true,
+              "borderLeftColor": true,
+              "borderRightColor": true,
+              "borderEndColor": true,
+              "borderStartColor": true,
+              "shadowColor": true,
+              "color": true,
+              "placeholderTextColor": true,
+              "textDecorationColor": true,
+              "textShadowColor": true,
+              "borderRadius": true,
+              "borderTopLeftRadius": true,
+              "borderTopRightRadius": true,
+              "borderBottomLeftRadius": true,
+              "borderBottomRightRadius": true,
+              "width": true,
+              "height": true,
+              "minWidth": true,
+              "minHeight": true,
+              "maxWidth": true,
+              "maxHeight": true,
+              "x": true,
+              "y": true,
+              "scale": true,
+              "perspective": true,
+              "scaleX": true,
+              "scaleY": true,
+              "skewX": true,
+              "skewY": true,
+              "matrix": true,
+              "rotate": true,
+              "rotateY": true,
+              "rotateX": true,
+              "rotateZ": true,
+              "WebkitLineClamp": true,
+              "animationIterationCount": true,
+              "aspectRatio": true,
+              "borderImageOutset": true,
+              "borderImageSlice": true,
+              "borderImageWidth": true,
+              "columnCount": true,
+              "flex": true,
+              "flexGrow": true,
+              "flexOrder": true,
+              "flexPositive": true,
+              "flexShrink": true,
+              "flexNegative": true,
+              "fontWeight": true,
+              "gridRow": true,
+              "gridRowEnd": true,
+              "gridRowGap": true,
+              "gridRowStart": true,
+              "gridColumn": true,
+              "gridColumnEnd": true,
+              "gridColumnGap": true,
+              "gridColumnStart": true,
+              "lineClamp": true,
+              "opacity": true,
+              "order": true,
+              "orphans": true,
+              "tabSize": true,
+              "widows": true,
+              "zIndex": true,
+              "zoom": true,
+              "scaleZ": true,
+              "shadowOpacity": true
+            },
+            "componentName": "Header",
+            "isReactNative": false,
+            "isText": false,
+            "isStyledHOC": false
+          }
+        },
+        "Input": {
+          "staticConfig": {
+            "isInput": true,
+            "variants": {
+              "unstyled": {
+                "false": {
+                  "size": "$true",
+                  "fontFamily": "$body",
+                  "borderWidth": 1,
+                  "outlineWidth": 0,
+                  "color": "$color",
+                  "focusable": true,
+                  "borderColor": "$borderColor",
+                  "backgroundColor": "$background",
+                  "minWidth": 0,
+                  "hoverStyle": {
+                    "borderColor": "$borderColorHover"
+                  },
+                  "focusStyle": {
+                    "outlineColor": "$borderColorFocus",
+                    "outlineWidth": 2,
+                    "outlineStyle": "solid",
+                    "borderColor": "$borderColorFocus"
+                  }
+                }
+              },
+              "size": {
+                "...size": "Function"
+              }
+            },
+            "defaultProps": {
+              "unstyled": false
+            },
+            "defaultVariants": {
+              "unstyled": false
+            },
+            "componentName": "Input",
+            "isReactNative": false,
+            "isText": false,
+            "isStyledHOC": false,
+            "neverFlatten": true,
+            "isHOC": true
+          }
+        },
+        "InputFrame": {
+          "staticConfig": {
+            "isInput": true,
+            "variants": {
+              "unstyled": {
+                "false": {
+                  "size": "$true",
+                  "fontFamily": "$body",
+                  "borderWidth": 1,
+                  "outlineWidth": 0,
+                  "color": "$color",
+                  "focusable": true,
+                  "borderColor": "$borderColor",
+                  "backgroundColor": "$background",
+                  "minWidth": 0,
+                  "hoverStyle": {
+                    "borderColor": "$borderColorHover"
+                  },
+                  "focusStyle": {
+                    "outlineColor": "$borderColorFocus",
+                    "outlineWidth": 2,
+                    "outlineStyle": "solid",
+                    "borderColor": "$borderColorFocus"
+                  }
+                }
+              },
+              "size": {
+                "...size": "Function"
+              }
+            },
+            "defaultProps": {
+              "unstyled": false
+            },
+            "defaultVariants": {
+              "unstyled": false
+            },
+            "componentName": "Input",
+            "isReactNative": false,
+            "isText": false,
+            "isStyledHOC": false,
+            "neverFlatten": true
+          }
+        },
+        "Main": {
+          "staticConfig": {
+            "acceptsClassName": true,
+            "defaultProps": {
+              "alignItems": "stretch",
+              "tag": "main",
+              "flexDirection": "column"
+            },
+            "validStyles": {
+              "enterStyle": true,
+              "exitStyle": true,
+              "hoverStyle": true,
+              "pressStyle": true,
+              "focusStyle": true,
+              "backfaceVisibility": true,
+              "borderBottomEndRadius": true,
+              "borderBottomStartRadius": true,
+              "borderBottomWidth": true,
+              "borderLeftWidth": true,
+              "borderRightWidth": true,
+              "borderStyle": true,
+              "borderTopEndRadius": true,
+              "borderTopStartRadius": true,
+              "borderTopWidth": true,
+              "borderWidth": true,
+              "transform": true,
+              "alignContent": true,
+              "alignItems": true,
+              "alignSelf": true,
+              "borderEndWidth": true,
+              "borderStartWidth": true,
+              "bottom": true,
+              "display": true,
+              "end": true,
+              "flexBasis": true,
+              "flexDirection": true,
+              "flexWrap": true,
+              "gap": true,
+              "columnGap": true,
+              "rowGap": true,
+              "justifyContent": true,
+              "left": true,
+              "margin": true,
+              "marginBottom": true,
+              "marginEnd": true,
+              "marginHorizontal": true,
+              "marginLeft": true,
+              "marginRight": true,
+              "marginStart": true,
+              "marginTop": true,
+              "marginVertical": true,
+              "overflow": true,
+              "padding": true,
+              "paddingBottom": true,
+              "paddingEnd": true,
+              "paddingHorizontal": true,
+              "paddingLeft": true,
+              "paddingRight": true,
+              "paddingStart": true,
+              "paddingTop": true,
+              "paddingVertical": true,
+              "position": true,
+              "right": true,
+              "start": true,
+              "top": true,
+              "direction": true,
+              "shadowOffset": true,
+              "shadowRadius": true,
+              "backgroundColor": true,
+              "borderColor": true,
+              "borderBottomColor": true,
+              "borderTopColor": true,
+              "borderLeftColor": true,
+              "borderRightColor": true,
+              "borderEndColor": true,
+              "borderStartColor": true,
+              "shadowColor": true,
+              "color": true,
+              "placeholderTextColor": true,
+              "textDecorationColor": true,
+              "textShadowColor": true,
+              "borderRadius": true,
+              "borderTopLeftRadius": true,
+              "borderTopRightRadius": true,
+              "borderBottomLeftRadius": true,
+              "borderBottomRightRadius": true,
+              "width": true,
+              "height": true,
+              "minWidth": true,
+              "minHeight": true,
+              "maxWidth": true,
+              "maxHeight": true,
+              "x": true,
+              "y": true,
+              "scale": true,
+              "perspective": true,
+              "scaleX": true,
+              "scaleY": true,
+              "skewX": true,
+              "skewY": true,
+              "matrix": true,
+              "rotate": true,
+              "rotateY": true,
+              "rotateX": true,
+              "rotateZ": true,
+              "WebkitLineClamp": true,
+              "animationIterationCount": true,
+              "aspectRatio": true,
+              "borderImageOutset": true,
+              "borderImageSlice": true,
+              "borderImageWidth": true,
+              "columnCount": true,
+              "flex": true,
+              "flexGrow": true,
+              "flexOrder": true,
+              "flexPositive": true,
+              "flexShrink": true,
+              "flexNegative": true,
+              "fontWeight": true,
+              "gridRow": true,
+              "gridRowEnd": true,
+              "gridRowGap": true,
+              "gridRowStart": true,
+              "gridColumn": true,
+              "gridColumnEnd": true,
+              "gridColumnGap": true,
+              "gridColumnStart": true,
+              "lineClamp": true,
+              "opacity": true,
+              "order": true,
+              "orphans": true,
+              "tabSize": true,
+              "widows": true,
+              "zIndex": true,
+              "zoom": true,
+              "scaleZ": true,
+              "shadowOpacity": true
+            },
+            "componentName": "Main",
+            "isReactNative": false,
+            "isText": false,
+            "isStyledHOC": false
+          }
+        },
+        "Nav": {
+          "staticConfig": {
+            "acceptsClassName": true,
+            "defaultProps": {
+              "alignItems": "stretch",
+              "tag": "nav",
+              "flexDirection": "column"
+            },
+            "validStyles": {
+              "enterStyle": true,
+              "exitStyle": true,
+              "hoverStyle": true,
+              "pressStyle": true,
+              "focusStyle": true,
+              "backfaceVisibility": true,
+              "borderBottomEndRadius": true,
+              "borderBottomStartRadius": true,
+              "borderBottomWidth": true,
+              "borderLeftWidth": true,
+              "borderRightWidth": true,
+              "borderStyle": true,
+              "borderTopEndRadius": true,
+              "borderTopStartRadius": true,
+              "borderTopWidth": true,
+              "borderWidth": true,
+              "transform": true,
+              "alignContent": true,
+              "alignItems": true,
+              "alignSelf": true,
+              "borderEndWidth": true,
+              "borderStartWidth": true,
+              "bottom": true,
+              "display": true,
+              "end": true,
+              "flexBasis": true,
+              "flexDirection": true,
+              "flexWrap": true,
+              "gap": true,
+              "columnGap": true,
+              "rowGap": true,
+              "justifyContent": true,
+              "left": true,
+              "margin": true,
+              "marginBottom": true,
+              "marginEnd": true,
+              "marginHorizontal": true,
+              "marginLeft": true,
+              "marginRight": true,
+              "marginStart": true,
+              "marginTop": true,
+              "marginVertical": true,
+              "overflow": true,
+              "padding": true,
+              "paddingBottom": true,
+              "paddingEnd": true,
+              "paddingHorizontal": true,
+              "paddingLeft": true,
+              "paddingRight": true,
+              "paddingStart": true,
+              "paddingTop": true,
+              "paddingVertical": true,
+              "position": true,
+              "right": true,
+              "start": true,
+              "top": true,
+              "direction": true,
+              "shadowOffset": true,
+              "shadowRadius": true,
+              "backgroundColor": true,
+              "borderColor": true,
+              "borderBottomColor": true,
+              "borderTopColor": true,
+              "borderLeftColor": true,
+              "borderRightColor": true,
+              "borderEndColor": true,
+              "borderStartColor": true,
+              "shadowColor": true,
+              "color": true,
+              "placeholderTextColor": true,
+              "textDecorationColor": true,
+              "textShadowColor": true,
+              "borderRadius": true,
+              "borderTopLeftRadius": true,
+              "borderTopRightRadius": true,
+              "borderBottomLeftRadius": true,
+              "borderBottomRightRadius": true,
+              "width": true,
+              "height": true,
+              "minWidth": true,
+              "minHeight": true,
+              "maxWidth": true,
+              "maxHeight": true,
+              "x": true,
+              "y": true,
+              "scale": true,
+              "perspective": true,
+              "scaleX": true,
+              "scaleY": true,
+              "skewX": true,
+              "skewY": true,
+              "matrix": true,
+              "rotate": true,
+              "rotateY": true,
+              "rotateX": true,
+              "rotateZ": true,
+              "WebkitLineClamp": true,
+              "animationIterationCount": true,
+              "aspectRatio": true,
+              "borderImageOutset": true,
+              "borderImageSlice": true,
+              "borderImageWidth": true,
+              "columnCount": true,
+              "flex": true,
+              "flexGrow": true,
+              "flexOrder": true,
+              "flexPositive": true,
+              "flexShrink": true,
+              "flexNegative": true,
+              "fontWeight": true,
+              "gridRow": true,
+              "gridRowEnd": true,
+              "gridRowGap": true,
+              "gridRowStart": true,
+              "gridColumn": true,
+              "gridColumnEnd": true,
+              "gridColumnGap": true,
+              "gridColumnStart": true,
+              "lineClamp": true,
+              "opacity": true,
+              "order": true,
+              "orphans": true,
+              "tabSize": true,
+              "widows": true,
+              "zIndex": true,
+              "zoom": true,
+              "scaleZ": true,
+              "shadowOpacity": true
+            },
+            "componentName": "Nav",
+            "isReactNative": false,
+            "isText": false,
+            "isStyledHOC": false
+          }
+        },
+        "Section": {
+          "staticConfig": {
+            "acceptsClassName": true,
+            "defaultProps": {
+              "alignItems": "stretch",
+              "tag": "section",
+              "flexDirection": "column",
+              "accessibilityRole": "summary"
+            },
+            "validStyles": {
+              "enterStyle": true,
+              "exitStyle": true,
+              "hoverStyle": true,
+              "pressStyle": true,
+              "focusStyle": true,
+              "backfaceVisibility": true,
+              "borderBottomEndRadius": true,
+              "borderBottomStartRadius": true,
+              "borderBottomWidth": true,
+              "borderLeftWidth": true,
+              "borderRightWidth": true,
+              "borderStyle": true,
+              "borderTopEndRadius": true,
+              "borderTopStartRadius": true,
+              "borderTopWidth": true,
+              "borderWidth": true,
+              "transform": true,
+              "alignContent": true,
+              "alignItems": true,
+              "alignSelf": true,
+              "borderEndWidth": true,
+              "borderStartWidth": true,
+              "bottom": true,
+              "display": true,
+              "end": true,
+              "flexBasis": true,
+              "flexDirection": true,
+              "flexWrap": true,
+              "gap": true,
+              "columnGap": true,
+              "rowGap": true,
+              "justifyContent": true,
+              "left": true,
+              "margin": true,
+              "marginBottom": true,
+              "marginEnd": true,
+              "marginHorizontal": true,
+              "marginLeft": true,
+              "marginRight": true,
+              "marginStart": true,
+              "marginTop": true,
+              "marginVertical": true,
+              "overflow": true,
+              "padding": true,
+              "paddingBottom": true,
+              "paddingEnd": true,
+              "paddingHorizontal": true,
+              "paddingLeft": true,
+              "paddingRight": true,
+              "paddingStart": true,
+              "paddingTop": true,
+              "paddingVertical": true,
+              "position": true,
+              "right": true,
+              "start": true,
+              "top": true,
+              "direction": true,
+              "shadowOffset": true,
+              "shadowRadius": true,
+              "backgroundColor": true,
+              "borderColor": true,
+              "borderBottomColor": true,
+              "borderTopColor": true,
+              "borderLeftColor": true,
+              "borderRightColor": true,
+              "borderEndColor": true,
+              "borderStartColor": true,
+              "shadowColor": true,
+              "color": true,
+              "placeholderTextColor": true,
+              "textDecorationColor": true,
+              "textShadowColor": true,
+              "borderRadius": true,
+              "borderTopLeftRadius": true,
+              "borderTopRightRadius": true,
+              "borderBottomLeftRadius": true,
+              "borderBottomRightRadius": true,
+              "width": true,
+              "height": true,
+              "minWidth": true,
+              "minHeight": true,
+              "maxWidth": true,
+              "maxHeight": true,
+              "x": true,
+              "y": true,
+              "scale": true,
+              "perspective": true,
+              "scaleX": true,
+              "scaleY": true,
+              "skewX": true,
+              "skewY": true,
+              "matrix": true,
+              "rotate": true,
+              "rotateY": true,
+              "rotateX": true,
+              "rotateZ": true,
+              "WebkitLineClamp": true,
+              "animationIterationCount": true,
+              "aspectRatio": true,
+              "borderImageOutset": true,
+              "borderImageSlice": true,
+              "borderImageWidth": true,
+              "columnCount": true,
+              "flex": true,
+              "flexGrow": true,
+              "flexOrder": true,
+              "flexPositive": true,
+              "flexShrink": true,
+              "flexNegative": true,
+              "fontWeight": true,
+              "gridRow": true,
+              "gridRowEnd": true,
+              "gridRowGap": true,
+              "gridRowStart": true,
+              "gridColumn": true,
+              "gridColumnEnd": true,
+              "gridColumnGap": true,
+              "gridColumnStart": true,
+              "lineClamp": true,
+              "opacity": true,
+              "order": true,
+              "orphans": true,
+              "tabSize": true,
+              "widows": true,
+              "zIndex": true,
+              "zoom": true,
+              "scaleZ": true,
+              "shadowOpacity": true
+            },
+            "componentName": "Section",
+            "isReactNative": false,
+            "isText": false,
+            "isStyledHOC": false
+          }
+        },
+        "Spacer": {
+          "staticConfig": {
+            "acceptsClassName": true,
+            "memo": true,
+            "componentName": "Spacer",
+            "validStyles": {
+              "enterStyle": true,
+              "exitStyle": true,
+              "hoverStyle": true,
+              "pressStyle": true,
+              "focusStyle": true,
+              "backfaceVisibility": true,
+              "borderBottomEndRadius": true,
+              "borderBottomStartRadius": true,
+              "borderBottomWidth": true,
+              "borderLeftWidth": true,
+              "borderRightWidth": true,
+              "borderStyle": true,
+              "borderTopEndRadius": true,
+              "borderTopStartRadius": true,
+              "borderTopWidth": true,
+              "borderWidth": true,
+              "transform": true,
+              "alignContent": true,
+              "alignItems": true,
+              "alignSelf": true,
+              "borderEndWidth": true,
+              "borderStartWidth": true,
+              "bottom": true,
+              "display": true,
+              "end": true,
+              "flexBasis": true,
+              "flexDirection": true,
+              "flexWrap": true,
+              "gap": true,
+              "columnGap": true,
+              "rowGap": true,
+              "justifyContent": true,
+              "left": true,
+              "margin": true,
+              "marginBottom": true,
+              "marginEnd": true,
+              "marginHorizontal": true,
+              "marginLeft": true,
+              "marginRight": true,
+              "marginStart": true,
+              "marginTop": true,
+              "marginVertical": true,
+              "overflow": true,
+              "padding": true,
+              "paddingBottom": true,
+              "paddingEnd": true,
+              "paddingHorizontal": true,
+              "paddingLeft": true,
+              "paddingRight": true,
+              "paddingStart": true,
+              "paddingTop": true,
+              "paddingVertical": true,
+              "position": true,
+              "right": true,
+              "start": true,
+              "top": true,
+              "direction": true,
+              "shadowOffset": true,
+              "shadowRadius": true,
+              "backgroundColor": true,
+              "borderColor": true,
+              "borderBottomColor": true,
+              "borderTopColor": true,
+              "borderLeftColor": true,
+              "borderRightColor": true,
+              "borderEndColor": true,
+              "borderStartColor": true,
+              "shadowColor": true,
+              "color": true,
+              "placeholderTextColor": true,
+              "textDecorationColor": true,
+              "textShadowColor": true,
+              "borderRadius": true,
+              "borderTopLeftRadius": true,
+              "borderTopRightRadius": true,
+              "borderBottomLeftRadius": true,
+              "borderBottomRightRadius": true,
+              "width": true,
+              "height": true,
+              "minWidth": true,
+              "minHeight": true,
+              "maxWidth": true,
+              "maxHeight": true,
+              "x": true,
+              "y": true,
+              "scale": true,
+              "perspective": true,
+              "scaleX": true,
+              "scaleY": true,
+              "skewX": true,
+              "skewY": true,
+              "matrix": true,
+              "rotate": true,
+              "rotateY": true,
+              "rotateX": true,
+              "rotateZ": true,
+              "WebkitLineClamp": true,
+              "animationIterationCount": true,
+              "aspectRatio": true,
+              "borderImageOutset": true,
+              "borderImageSlice": true,
+              "borderImageWidth": true,
+              "columnCount": true,
+              "flex": true,
+              "flexGrow": true,
+              "flexOrder": true,
+              "flexPositive": true,
+              "flexShrink": true,
+              "flexNegative": true,
+              "fontWeight": true,
+              "gridRow": true,
+              "gridRowEnd": true,
+              "gridRowGap": true,
+              "gridRowStart": true,
+              "gridColumn": true,
+              "gridColumnEnd": true,
+              "gridColumnGap": true,
+              "gridColumnStart": true,
+              "lineClamp": true,
+              "opacity": true,
+              "order": true,
+              "orphans": true,
+              "tabSize": true,
+              "widows": true,
+              "zIndex": true,
+              "zoom": true,
+              "scaleZ": true,
+              "shadowOpacity": true
+            },
+            "defaultProps": {
+              "alignItems": "stretch",
               "tag": "span",
               "size": true,
               "pointerEvents": "none"
             },
             "variants": {
               "size": {
-                "...size": "Function"
+                "...": "Function"
               },
               "flex": {
                 "true": {
@@ -334,22 +1751,164 @@
               "zIndex": true,
               "zoom": true,
               "scaleZ": true,
-              "shadowOpacity": true,
-              "borderBottomStyle": true,
-              "borderTopStyle": true,
-              "borderLeftStyle": true,
-              "borderRightStyle": true,
-              "overflowX": true,
-              "overflowY": true,
-              "userSelect": true,
-              "cursor": true,
-              "contain": true,
-              "pointerEvents": true,
-              "boxSizing": true,
-              "boxShadow": true,
-              "outlineStyle": true,
-              "outlineOffset": true,
-              "outlineWidth": true
+              "shadowOpacity": true
+            },
+            "variants": {
+              "fullscreen": {
+                "true": {
+                  "position": "absolute",
+                  "top": 0,
+                  "left": 0,
+                  "right": 0,
+                  "bottom": 0
+                }
+              },
+              "elevation": {
+                "...size": "Function"
+              }
+            },
+            "isReactNative": false,
+            "isText": false,
+            "isStyledHOC": false,
+            "neverFlatten": true,
+            "isHOC": true
+          }
+        },
+        "Stack": {
+          "staticConfig": {
+            "acceptsClassName": true,
+            "defaultProps": {
+              "alignItems": "stretch"
+            },
+            "validStyles": {
+              "enterStyle": true,
+              "exitStyle": true,
+              "hoverStyle": true,
+              "pressStyle": true,
+              "focusStyle": true,
+              "backfaceVisibility": true,
+              "borderBottomEndRadius": true,
+              "borderBottomStartRadius": true,
+              "borderBottomWidth": true,
+              "borderLeftWidth": true,
+              "borderRightWidth": true,
+              "borderStyle": true,
+              "borderTopEndRadius": true,
+              "borderTopStartRadius": true,
+              "borderTopWidth": true,
+              "borderWidth": true,
+              "transform": true,
+              "alignContent": true,
+              "alignItems": true,
+              "alignSelf": true,
+              "borderEndWidth": true,
+              "borderStartWidth": true,
+              "bottom": true,
+              "display": true,
+              "end": true,
+              "flexBasis": true,
+              "flexDirection": true,
+              "flexWrap": true,
+              "gap": true,
+              "columnGap": true,
+              "rowGap": true,
+              "justifyContent": true,
+              "left": true,
+              "margin": true,
+              "marginBottom": true,
+              "marginEnd": true,
+              "marginHorizontal": true,
+              "marginLeft": true,
+              "marginRight": true,
+              "marginStart": true,
+              "marginTop": true,
+              "marginVertical": true,
+              "overflow": true,
+              "padding": true,
+              "paddingBottom": true,
+              "paddingEnd": true,
+              "paddingHorizontal": true,
+              "paddingLeft": true,
+              "paddingRight": true,
+              "paddingStart": true,
+              "paddingTop": true,
+              "paddingVertical": true,
+              "position": true,
+              "right": true,
+              "start": true,
+              "top": true,
+              "direction": true,
+              "shadowOffset": true,
+              "shadowRadius": true,
+              "backgroundColor": true,
+              "borderColor": true,
+              "borderBottomColor": true,
+              "borderTopColor": true,
+              "borderLeftColor": true,
+              "borderRightColor": true,
+              "borderEndColor": true,
+              "borderStartColor": true,
+              "shadowColor": true,
+              "color": true,
+              "placeholderTextColor": true,
+              "textDecorationColor": true,
+              "textShadowColor": true,
+              "borderRadius": true,
+              "borderTopLeftRadius": true,
+              "borderTopRightRadius": true,
+              "borderBottomLeftRadius": true,
+              "borderBottomRightRadius": true,
+              "width": true,
+              "height": true,
+              "minWidth": true,
+              "minHeight": true,
+              "maxWidth": true,
+              "maxHeight": true,
+              "x": true,
+              "y": true,
+              "scale": true,
+              "perspective": true,
+              "scaleX": true,
+              "scaleY": true,
+              "skewX": true,
+              "skewY": true,
+              "matrix": true,
+              "rotate": true,
+              "rotateY": true,
+              "rotateX": true,
+              "rotateZ": true,
+              "WebkitLineClamp": true,
+              "animationIterationCount": true,
+              "aspectRatio": true,
+              "borderImageOutset": true,
+              "borderImageSlice": true,
+              "borderImageWidth": true,
+              "columnCount": true,
+              "flex": true,
+              "flexGrow": true,
+              "flexOrder": true,
+              "flexPositive": true,
+              "flexShrink": true,
+              "flexNegative": true,
+              "fontWeight": true,
+              "gridRow": true,
+              "gridRowEnd": true,
+              "gridRowGap": true,
+              "gridRowStart": true,
+              "gridColumn": true,
+              "gridColumnEnd": true,
+              "gridColumnGap": true,
+              "gridColumnStart": true,
+              "lineClamp": true,
+              "opacity": true,
+              "order": true,
+              "orphans": true,
+              "tabSize": true,
+              "widows": true,
+              "zIndex": true,
+              "zoom": true,
+              "scaleZ": true,
+              "shadowOpacity": true
             }
           }
         },
@@ -359,10 +1918,8 @@
             "isText": true,
             "defaultProps": {
               "color": "$color",
-              "display": "inline",
-              "boxSizing": "border-box",
-              "wordWrap": "break-word",
-              "margin": 0
+              "display": "flex",
+              "suppressHighlighting": true
             },
             "inlineWhenUnflattened": {},
             "variants": {
@@ -553,14 +2110,103 @@
               "textDecorationLine": true,
               "textDecorationStyle": true,
               "textShadowOffset": true,
-              "textShadowRadius": true,
-              "whiteSpace": true,
-              "wordWrap": true,
-              "textOverflow": true,
-              "textDecorationDistance": true,
-              "selectable": true,
-              "WebkitBoxOrient": true
+              "textShadowRadius": true
             }
+          }
+        },
+        "TextArea": {
+          "staticConfig": {
+            "isInput": true,
+            "variants": {
+              "unstyled": {
+                "false": {
+                  "size": "$true",
+                  "fontFamily": "$body",
+                  "borderWidth": 1,
+                  "outlineWidth": 0,
+                  "color": "$color",
+                  "focusable": true,
+                  "borderColor": "$borderColor",
+                  "backgroundColor": "$background",
+                  "minWidth": 0,
+                  "hoverStyle": {
+                    "borderColor": "$borderColorHover"
+                  },
+                  "focusStyle": {
+                    "outlineColor": "$borderColorFocus",
+                    "outlineWidth": 2,
+                    "outlineStyle": "solid",
+                    "borderColor": "$borderColorFocus"
+                  },
+                  "height": "auto"
+                }
+              },
+              "size": {
+                "...size": "Function"
+              }
+            },
+            "defaultProps": {
+              "unstyled": false,
+              "multiline": true,
+              "whiteSpace": "pre-wrap"
+            },
+            "defaultVariants": {
+              "unstyled": false
+            },
+            "componentName": "TextArea",
+            "isReactNative": false,
+            "isText": false,
+            "acceptsClassName": true,
+            "isStyledHOC": false,
+            "neverFlatten": true,
+            "isHOC": true
+          }
+        },
+        "TextAreaFrame": {
+          "staticConfig": {
+            "isInput": true,
+            "variants": {
+              "unstyled": {
+                "false": {
+                  "size": "$true",
+                  "fontFamily": "$body",
+                  "borderWidth": 1,
+                  "outlineWidth": 0,
+                  "color": "$color",
+                  "focusable": true,
+                  "borderColor": "$borderColor",
+                  "backgroundColor": "$background",
+                  "minWidth": 0,
+                  "hoverStyle": {
+                    "borderColor": "$borderColorHover"
+                  },
+                  "focusStyle": {
+                    "outlineColor": "$borderColorFocus",
+                    "outlineWidth": 2,
+                    "outlineStyle": "solid",
+                    "borderColor": "$borderColorFocus"
+                  },
+                  "height": "auto"
+                }
+              },
+              "size": {
+                "...size": "Function"
+              }
+            },
+            "defaultProps": {
+              "unstyled": false,
+              "multiline": true,
+              "whiteSpace": "pre-wrap"
+            },
+            "defaultVariants": {
+              "unstyled": false
+            },
+            "componentName": "TextArea",
+            "isReactNative": false,
+            "isText": false,
+            "acceptsClassName": true,
+            "isStyledHOC": false,
+            "neverFlatten": true
           }
         },
         "View": {
@@ -886,7 +2532,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -1179,7 +2826,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               }
             },
             "componentName": "AvatarFallback",
@@ -1363,7 +3011,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               }
             },
             "componentName": "AvatarFallback",
@@ -1545,7 +3194,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -1638,7 +3288,8 @@
                 }
               },
               "size": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               }
             },
             "componentName": "Avatar",
@@ -1822,7 +3473,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -2149,7 +3801,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -2306,10 +3959,8 @@
             "isText": true,
             "defaultProps": {
               "color": "$color",
-              "display": "inline",
-              "boxSizing": "border-box",
-              "wordWrap": "break-word",
-              "margin": 0,
+              "display": "flex",
+              "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$body"
             },
@@ -2348,12 +3999,12 @@
               "unstyled": {
                 "false": {
                   "size": "$true",
+                  "color": "$color",
                   "userSelect": "none",
                   "cursor": "pointer",
                   "flexGrow": 0,
                   "flexShrink": 1,
-                  "ellipse": true,
-                  "color": "$color"
+                  "ellipse": true
                 }
               },
               "size": "Function",
@@ -2707,7 +4358,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -2993,7 +4645,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -3276,7 +4929,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -3563,7 +5217,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -3849,7 +5504,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -4136,7 +5792,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -4435,7 +6092,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -4905,7 +6563,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -5195,7 +6854,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -5487,7 +7147,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -5777,7 +7438,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "unstyled": {
                 "false": {
@@ -5796,6 +7458,150 @@
             "isReactNative": false,
             "isText": false,
             "isStyledHOC": false
+          }
+        },
+        "DialogTrigger": {
+          "staticConfig": {
+            "acceptsClassName": true,
+            "defaultProps": {
+              "display": "flex"
+            },
+            "validStyles": {
+              "enterStyle": true,
+              "exitStyle": true,
+              "hoverStyle": true,
+              "pressStyle": true,
+              "focusStyle": true,
+              "backfaceVisibility": true,
+              "borderBottomEndRadius": true,
+              "borderBottomStartRadius": true,
+              "borderBottomWidth": true,
+              "borderLeftWidth": true,
+              "borderRightWidth": true,
+              "borderStyle": true,
+              "borderTopEndRadius": true,
+              "borderTopStartRadius": true,
+              "borderTopWidth": true,
+              "borderWidth": true,
+              "transform": true,
+              "alignContent": true,
+              "alignItems": true,
+              "alignSelf": true,
+              "borderEndWidth": true,
+              "borderStartWidth": true,
+              "bottom": true,
+              "display": true,
+              "end": true,
+              "flexBasis": true,
+              "flexDirection": true,
+              "flexWrap": true,
+              "gap": true,
+              "columnGap": true,
+              "rowGap": true,
+              "justifyContent": true,
+              "left": true,
+              "margin": true,
+              "marginBottom": true,
+              "marginEnd": true,
+              "marginHorizontal": true,
+              "marginLeft": true,
+              "marginRight": true,
+              "marginStart": true,
+              "marginTop": true,
+              "marginVertical": true,
+              "overflow": true,
+              "padding": true,
+              "paddingBottom": true,
+              "paddingEnd": true,
+              "paddingHorizontal": true,
+              "paddingLeft": true,
+              "paddingRight": true,
+              "paddingStart": true,
+              "paddingTop": true,
+              "paddingVertical": true,
+              "position": true,
+              "right": true,
+              "start": true,
+              "top": true,
+              "direction": true,
+              "shadowOffset": true,
+              "shadowRadius": true,
+              "backgroundColor": true,
+              "borderColor": true,
+              "borderBottomColor": true,
+              "borderTopColor": true,
+              "borderLeftColor": true,
+              "borderRightColor": true,
+              "borderEndColor": true,
+              "borderStartColor": true,
+              "shadowColor": true,
+              "color": true,
+              "placeholderTextColor": true,
+              "textDecorationColor": true,
+              "textShadowColor": true,
+              "borderRadius": true,
+              "borderTopLeftRadius": true,
+              "borderTopRightRadius": true,
+              "borderBottomLeftRadius": true,
+              "borderBottomRightRadius": true,
+              "width": true,
+              "height": true,
+              "minWidth": true,
+              "minHeight": true,
+              "maxWidth": true,
+              "maxHeight": true,
+              "x": true,
+              "y": true,
+              "scale": true,
+              "perspective": true,
+              "scaleX": true,
+              "scaleY": true,
+              "skewX": true,
+              "skewY": true,
+              "matrix": true,
+              "rotate": true,
+              "rotateY": true,
+              "rotateX": true,
+              "rotateZ": true,
+              "WebkitLineClamp": true,
+              "animationIterationCount": true,
+              "aspectRatio": true,
+              "borderImageOutset": true,
+              "borderImageSlice": true,
+              "borderImageWidth": true,
+              "columnCount": true,
+              "flex": true,
+              "flexGrow": true,
+              "flexOrder": true,
+              "flexPositive": true,
+              "flexShrink": true,
+              "flexNegative": true,
+              "fontWeight": true,
+              "gridRow": true,
+              "gridRowEnd": true,
+              "gridRowGap": true,
+              "gridRowStart": true,
+              "gridColumn": true,
+              "gridColumnEnd": true,
+              "gridColumnGap": true,
+              "gridColumnStart": true,
+              "lineClamp": true,
+              "opacity": true,
+              "order": true,
+              "orphans": true,
+              "tabSize": true,
+              "widows": true,
+              "zIndex": true,
+              "zoom": true,
+              "scaleZ": true,
+              "shadowOpacity": true
+            },
+            "componentName": "DialogTrigger",
+            "isReactNative": false,
+            "isText": false,
+            "isStyledHOC": false,
+            "neverFlatten": true,
+            "isHOC": true
           }
         },
         "Form": {
@@ -6138,15 +7944,7 @@
           "staticConfig": {
             "acceptsClassName": true,
             "defaultProps": {
-              "alignItems": "stretch",
-              "display": "flex",
-              "flexDirection": "column",
-              "flexBasis": "auto",
-              "boxSizing": "border-box",
-              "position": "relative",
-              "minHeight": 0,
-              "minWidth": 0,
-              "flexShrink": 0
+              "alignItems": "stretch"
             },
             "validStyles": {
               "enterStyle": true,
@@ -6474,7 +8272,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -6569,8 +8368,7 @@
               "unstyled": {
                 "false": {
                   "size": "$true",
-                  "y": 0,
-                  "backgroundColor": "$background"
+                  "y": 0
                 }
               },
               "size": "Function"
@@ -6595,9 +8393,6 @@
             "componentName": "Image",
             "isReactNative": true,
             "isText": false,
-            "acceptsClassName": true,
-            "isInput": false,
-            "inlineProps": {},
             "isStyledHOC": false,
             "neverFlatten": true,
             "isHOC": true
@@ -6609,10 +8404,8 @@
             "isText": true,
             "defaultProps": {
               "color": "$color",
-              "display": "inline",
-              "boxSizing": "border-box",
-              "wordWrap": "break-word",
-              "margin": 0,
+              "display": "flex",
+              "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$body",
               "tag": "label"
@@ -6850,10 +8643,8 @@
             "isText": true,
             "defaultProps": {
               "color": "$color",
-              "display": "inline",
-              "boxSizing": "border-box",
-              "wordWrap": "break-word",
-              "margin": 0,
+              "display": "flex",
+              "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$body",
               "tag": "label"
@@ -7256,7 +9047,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -7562,7 +9354,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -7699,10 +9492,8 @@
             "isText": true,
             "defaultProps": {
               "color": "$color",
-              "display": "inline",
-              "boxSizing": "border-box",
-              "wordWrap": "break-word",
-              "margin": 0,
+              "display": "flex",
+              "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$body"
             },
@@ -7935,10 +9726,8 @@
             "isText": true,
             "defaultProps": {
               "color": "$color",
-              "display": "inline",
-              "boxSizing": "border-box",
-              "wordWrap": "break-word",
-              "margin": 0,
+              "display": "flex",
+              "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$body"
             },
@@ -8167,10 +9956,8 @@
             "isText": true,
             "defaultProps": {
               "color": "$color",
-              "display": "inline",
-              "boxSizing": "border-box",
-              "wordWrap": "break-word",
-              "margin": 0,
+              "display": "flex",
+              "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$body"
             },
@@ -8562,7 +10349,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -8848,7 +10636,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               }
             },
             "isReactNative": false,
@@ -9030,7 +10819,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "unstyled": {
                 "false": {
@@ -9223,7 +11013,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -9508,7 +11299,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -9794,7 +11586,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -10078,7 +11871,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -10361,7 +12155,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -10641,7 +12436,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -10771,9 +12567,8 @@
             "componentName": "ScrollView",
             "isReactNative": true,
             "isText": false,
-            "acceptsClassName": true,
-            "isInput": false,
-            "isStyledHOC": false
+            "isStyledHOC": false,
+            "neverFlatten": true
           }
         },
         "SelectGroupFrame": {
@@ -10948,7 +12743,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               }
             },
             "componentName": "SelectGroup",
@@ -11130,7 +12926,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               }
             },
             "componentName": "SelectIcon",
@@ -11146,10 +12943,8 @@
             "isText": true,
             "defaultProps": {
               "color": "$color",
-              "display": "inline",
-              "boxSizing": "border-box",
-              "wordWrap": "break-word",
-              "margin": 0,
+              "display": "flex",
+              "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$body"
             },
@@ -11188,8 +12983,8 @@
               "unstyled": {
                 "false": {
                   "size": "$true",
-                  "userSelect": "none",
                   "color": "$color",
+                  "userSelect": "none",
                   "ellipse": true
                 }
               },
@@ -11916,7 +13711,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -12009,7 +13805,8 @@
                 }
               },
               "size": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               }
             },
             "componentName": "Square",
@@ -12191,7 +13988,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -12284,7 +14082,8 @@
                 }
               },
               "size": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               }
             },
             "componentName": "Circle",
@@ -12465,7 +14264,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "unstyled": {
                 "false": {
@@ -12660,7 +14460,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "open": {
                 "true": {
@@ -12867,7 +14668,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -13160,7 +14962,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "open": {
                 "true": {
@@ -13367,7 +15170,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -13659,7 +15463,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "orientation": {
                 "horizontal": {},
@@ -13842,7 +15647,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "orientation": {
                 "horizontal": {},
@@ -14027,7 +15833,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -14317,7 +16124,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -14605,7 +16413,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "orientation": {
                 "horizontal": {},
@@ -14791,7 +16600,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "orientation": {
                 "horizontal": {},
@@ -14990,7 +16800,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -15279,7 +17090,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               }
             },
             "isReactNative": false,
@@ -15458,7 +17270,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               }
             },
             "isReactNative": false,
@@ -15637,7 +17450,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               }
             },
             "isReactNative": false,
@@ -15818,7 +17632,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "unstyled": {
                 "true": {
@@ -16045,7 +17860,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -16148,14 +17964,7 @@
             "acceptsClassName": true,
             "defaultProps": {
               "alignItems": "stretch",
-              "display": "flex",
-              "flexDirection": "row",
-              "flexBasis": "auto",
-              "boxSizing": "border-box",
-              "position": "relative",
-              "minHeight": 0,
-              "minWidth": 0,
-              "flexShrink": 0,
+              "flexDirection": "column",
               "unstyled": false,
               "tag": "button"
             },
@@ -16316,20 +18125,20 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "unstyled": {
                 "false": {
                   "size": "$true",
                   "borderRadius": 1000,
-                  "borderWidth": 2,
-                  "borderColor": "transparent",
                   "backgroundColor": "$background",
+                  "borderWidth": 2,
+                  "borderColor": "$background",
                   "focusStyle": {
-                    "borderColor": "$borderColorFocus",
                     "outlineColor": "$borderColorFocus",
                     "outlineStyle": "solid",
-                    "outlineWidth": 1
+                    "outlineWidth": 2
                   }
                 }
               },
@@ -16354,14 +18163,7 @@
             "acceptsClassName": true,
             "defaultProps": {
               "alignItems": "stretch",
-              "display": "flex",
-              "flexDirection": "row",
-              "flexBasis": "auto",
-              "boxSizing": "border-box",
-              "position": "relative",
-              "minHeight": 0,
-              "minWidth": 0,
-              "flexShrink": 0,
+              "flexDirection": "column",
               "unstyled": false,
               "tag": "button"
             },
@@ -16522,20 +18324,20 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "unstyled": {
                 "false": {
                   "size": "$true",
                   "borderRadius": 1000,
-                  "borderWidth": 2,
-                  "borderColor": "transparent",
                   "backgroundColor": "$background",
+                  "borderWidth": 2,
+                  "borderColor": "$background",
                   "focusStyle": {
-                    "borderColor": "$borderColorFocus",
                     "outlineColor": "$borderColorFocus",
                     "outlineStyle": "solid",
-                    "outlineWidth": 1
+                    "outlineWidth": 2
                   }
                 }
               },
@@ -16724,7 +18526,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "backgrounded": {
                 "true": {
@@ -16822,6 +18625,9 @@
                   "backgroundColor": "$background",
                   "borderRadius": 1000
                 }
+              },
+              "checked": {
+                "true": {}
               },
               "size": {
                 "...size": "Function"
@@ -17293,7 +19099,8 @@
                 }
               },
               "elevation": {
-                "...size": "Function"
+                "...size": "Function",
+                ":number": "Function"
               },
               "unstyled": {
                 "true": {
@@ -17357,10 +19164,8 @@
             "isText": true,
             "defaultProps": {
               "color": "$color",
-              "display": "inline",
-              "boxSizing": "border-box",
-              "wordWrap": "break-word",
-              "margin": 0,
+              "display": "flex",
+              "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$body"
             },
@@ -17398,7 +19203,8 @@
               },
               "unstyled": {
                 "false": {
-                  "size": "$true"
+                  "size": "$true",
+                  "color": "$color"
                 }
               },
               "size": "Function",
@@ -17584,14 +19390,13 @@
             "isText": true,
             "defaultProps": {
               "color": "$color",
-              "display": "inline",
-              "boxSizing": "border-box",
-              "wordWrap": "break-word",
-              "margin": 0,
+              "display": "flex",
+              "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$body",
               "tag": "p",
               "userSelect": "auto",
+              "color": "$color",
               "size": "$true"
             },
             "inlineWhenUnflattened": {},
@@ -17628,7 +19433,8 @@
               },
               "unstyled": {
                 "false": {
-                  "size": "$true"
+                  "size": "$true",
+                  "color": "$color"
                 }
               },
               "size": "Function",
@@ -17811,14 +19617,13 @@
             "isText": true,
             "defaultProps": {
               "color": "$color",
-              "display": "inline",
-              "boxSizing": "border-box",
-              "wordWrap": "break-word",
-              "margin": 0,
+              "display": "flex",
+              "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$heading",
               "tag": "h1",
               "userSelect": "auto",
+              "color": "$color",
               "size": "$10",
               "accessibilityRole": "header"
             },
@@ -17856,7 +19661,8 @@
               },
               "unstyled": {
                 "false": {
-                  "size": "$true"
+                  "size": "$true",
+                  "color": "$color"
                 }
               },
               "size": "Function",
@@ -18039,14 +19845,13 @@
             "isText": true,
             "defaultProps": {
               "color": "$color",
-              "display": "inline",
-              "boxSizing": "border-box",
-              "wordWrap": "break-word",
-              "margin": 0,
+              "display": "flex",
+              "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$heading",
               "tag": "h2",
               "userSelect": "auto",
+              "color": "$color",
               "size": "$9",
               "accessibilityRole": "header"
             },
@@ -18084,7 +19889,8 @@
               },
               "unstyled": {
                 "false": {
-                  "size": "$true"
+                  "size": "$true",
+                  "color": "$color"
                 }
               },
               "size": "Function",
@@ -18267,14 +20073,13 @@
             "isText": true,
             "defaultProps": {
               "color": "$color",
-              "display": "inline",
-              "boxSizing": "border-box",
-              "wordWrap": "break-word",
-              "margin": 0,
+              "display": "flex",
+              "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$heading",
               "tag": "h3",
               "userSelect": "auto",
+              "color": "$color",
               "size": "$8",
               "accessibilityRole": "header"
             },
@@ -18312,7 +20117,8 @@
               },
               "unstyled": {
                 "false": {
-                  "size": "$true"
+                  "size": "$true",
+                  "color": "$color"
                 }
               },
               "size": "Function",
@@ -18495,14 +20301,13 @@
             "isText": true,
             "defaultProps": {
               "color": "$color",
-              "display": "inline",
-              "boxSizing": "border-box",
-              "wordWrap": "break-word",
-              "margin": 0,
+              "display": "flex",
+              "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$heading",
               "tag": "h4",
               "userSelect": "auto",
+              "color": "$color",
               "size": "$7",
               "accessibilityRole": "header"
             },
@@ -18540,7 +20345,8 @@
               },
               "unstyled": {
                 "false": {
-                  "size": "$true"
+                  "size": "$true",
+                  "color": "$color"
                 }
               },
               "size": "Function",
@@ -18723,14 +20529,13 @@
             "isText": true,
             "defaultProps": {
               "color": "$color",
-              "display": "inline",
-              "boxSizing": "border-box",
-              "wordWrap": "break-word",
-              "margin": 0,
+              "display": "flex",
+              "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$heading",
               "tag": "h5",
               "userSelect": "auto",
+              "color": "$color",
               "size": "$6",
               "accessibilityRole": "header"
             },
@@ -18768,7 +20573,8 @@
               },
               "unstyled": {
                 "false": {
-                  "size": "$true"
+                  "size": "$true",
+                  "color": "$color"
                 }
               },
               "size": "Function",
@@ -18951,14 +20757,13 @@
             "isText": true,
             "defaultProps": {
               "color": "$color",
-              "display": "inline",
-              "boxSizing": "border-box",
-              "wordWrap": "break-word",
-              "margin": 0,
+              "display": "flex",
+              "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$heading",
               "tag": "h6",
               "userSelect": "auto",
+              "color": "$color",
               "size": "$5",
               "accessibilityRole": "header"
             },
@@ -18996,7 +20801,8 @@
               },
               "unstyled": {
                 "false": {
-                  "size": "$true"
+                  "size": "$true",
+                  "color": "$color"
                 }
               },
               "size": "Function",
@@ -19179,14 +20985,13 @@
             "isText": true,
             "defaultProps": {
               "color": "$color",
-              "display": "inline",
-              "boxSizing": "border-box",
-              "wordWrap": "break-word",
-              "margin": 0,
+              "display": "flex",
+              "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$heading",
               "tag": "span",
               "userSelect": "auto",
+              "color": "$color",
               "size": "$8",
               "accessibilityRole": "header"
             },
@@ -19224,7 +21029,8 @@
               },
               "unstyled": {
                 "false": {
-                  "size": "$true"
+                  "size": "$true",
+                  "color": "$color"
                 }
               },
               "size": "Function",
@@ -21770,6 +23576,7 @@
   ],
   "nameToPaths": {},
   "tamaguiConfig": {
+    "groupNames": [],
     "settings": {},
     "onlyAllowShorthands": false,
     "fontLanguages": [],
@@ -22099,6 +23906,169 @@
           }
         }
       }
+    },
+    "settings": {},
+    "onlyAllowShorthands": false,
+    "fontLanguages": [],
+    "animations": {
+      "isReactNative": true,
+      "animations": {
+        "bouncy": {
+          "type": "spring",
+          "damping": 10,
+          "mass": 0.9,
+          "stiffness": 100
+        },
+        "lazy": {
+          "type": "spring",
+          "damping": 20,
+          "stiffness": 60
+        },
+        "quick": {
+          "type": "spring",
+          "damping": 20,
+          "mass": 1.2,
+          "stiffness": 250
+        }
+      },
+      "View": "Component",
+      "Text": "Component",
+      "useAnimatedNumber": "Function",
+      "useAnimatedNumberReaction": "Function",
+      "useAnimatedNumberStyle": "Function",
+      "usePresence": "Function",
+      "useAnimations": "Function"
+    },
+    "media": {
+      "xs": {
+        "maxWidth": 660
+      },
+      "sm": {
+        "maxWidth": 800
+      },
+      "md": {
+        "maxWidth": 1020
+      },
+      "lg": {
+        "maxWidth": 1280
+      },
+      "xl": {
+        "maxWidth": 1420
+      },
+      "xxl": {
+        "maxWidth": 1600
+      },
+      "gtXs": {
+        "minWidth": 661
+      },
+      "gtSm": {
+        "minWidth": 801
+      },
+      "gtMd": {
+        "minWidth": 1021
+      },
+      "gtLg": {
+        "minWidth": 1281
+      },
+      "short": {
+        "maxHeight": 820
+      },
+      "tall": {
+        "minHeight": 820
+      },
+      "hoverNone": {
+        "hover": "none"
+      },
+      "pointerCoarse": {
+        "pointer": "coarse"
+      }
+    },
+    "defaultTheme": "dark",
+    "shouldAddPrefersColorThemes": false,
+    "themeClassNameOnRoot": false,
+    "shorthands": {
+      "ussel": "userSelect",
+      "cur": "cursor",
+      "pe": "pointerEvents",
+      "col": "color",
+      "ff": "fontFamily",
+      "fos": "fontSize",
+      "fost": "fontStyle",
+      "fow": "fontWeight",
+      "ls": "letterSpacing",
+      "lh": "lineHeight",
+      "ta": "textAlign",
+      "tt": "textTransform",
+      "ww": "wordWrap",
+      "ac": "alignContent",
+      "ai": "alignItems",
+      "als": "alignSelf",
+      "b": "bottom",
+      "bc": "backgroundColor",
+      "bg": "backgroundColor",
+      "bbc": "borderBottomColor",
+      "bblr": "borderBottomLeftRadius",
+      "bbrr": "borderBottomRightRadius",
+      "bbw": "borderBottomWidth",
+      "blc": "borderLeftColor",
+      "blw": "borderLeftWidth",
+      "boc": "borderColor",
+      "br": "borderRadius",
+      "bs": "borderStyle",
+      "brw": "borderRightWidth",
+      "brc": "borderRightColor",
+      "btc": "borderTopColor",
+      "btlr": "borderTopLeftRadius",
+      "btrr": "borderTopRightRadius",
+      "btw": "borderTopWidth",
+      "bw": "borderWidth",
+      "dsp": "display",
+      "f": "flex",
+      "fb": "flexBasis",
+      "fd": "flexDirection",
+      "fg": "flexGrow",
+      "fs": "flexShrink",
+      "fw": "flexWrap",
+      "h": "height",
+      "jc": "justifyContent",
+      "l": "left",
+      "m": "margin",
+      "mah": "maxHeight",
+      "maw": "maxWidth",
+      "mb": "marginBottom",
+      "mih": "minHeight",
+      "miw": "minWidth",
+      "ml": "marginLeft",
+      "mr": "marginRight",
+      "mt": "marginTop",
+      "mx": "marginHorizontal",
+      "my": "marginVertical",
+      "o": "opacity",
+      "ov": "overflow",
+      "p": "padding",
+      "pb": "paddingBottom",
+      "pl": "paddingLeft",
+      "pos": "position",
+      "pr": "paddingRight",
+      "pt": "paddingTop",
+      "px": "paddingHorizontal",
+      "py": "paddingVertical",
+      "r": "right",
+      "shac": "shadowColor",
+      "shar": "shadowRadius",
+      "shof": "shadowOffset",
+      "shop": "shadowOpacity",
+      "t": "top",
+      "w": "width",
+      "zi": "zIndex",
+      "bls": "borderLeftStyle",
+      "brs": "borderRightStyle",
+      "bts": "borderTopStyle",
+      "bbs": "borderBottomStyle",
+      "bxs": "boxSizing",
+      "bxsh": "boxShadow",
+      "ox": "overflowX",
+      "oy": "overflowY"
     },
     "themes": {
       "dark": {

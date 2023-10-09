@@ -49,7 +49,7 @@ export default function WeatherCard({
     <RStack
       $sm={{
         borderRadius: '6px',
-        flexDirection: 'colunm',
+        flexDirection: 'column',
         width: '100%',
       }}
       $gtSm={{
@@ -57,6 +57,8 @@ export default function WeatherCard({
         flexDirection: 'row',
         width: '90%',
       }}
+      flexDirection="row"
+      flexWrap="wrap"
       style={styles.desktopContainer}
     >
       <RStack
@@ -66,6 +68,8 @@ export default function WeatherCard({
           alignItems: 'center',
           alignSelf: 'center',
         }}
+        flexDirection="row"
+        flexWrap="wrap"
         flex={0.5}
       >
         <Octicons
@@ -85,7 +89,7 @@ export default function WeatherCard({
       </RStack>
       <RStack
         $sm={{
-          flexDirection: 'colunm',
+          flexDirection: 'column',
           width: '100%',
           justifyContent: 'space-between',
         }}
@@ -105,14 +109,24 @@ export default function WeatherCard({
           {dayNumToString(day)}
         </RText>
         <RText>{dateFormatted}</RText>
-        <RStack style={{ flexDirection: 'row', gap: 5, alignItems: 'center' }}>
+        <RStack
+          style={{
+            flexDirection: 'row',
+            gap: 5,
+            alignItems: 'center',
+          }}
+        >
           <FontAwesome name="map-marker" size={16} color="black" />
           <RText>{`${weatherObject.name}, ${weatherObject.sys.country}`}</RText>
         </RStack>
 
         <RStack>
           <RImage
-            source={{ uri: weatherIconUrl, width: 62, height: 62 }}
+            source={{
+              uri: weatherIconUrl,
+              width: 62,
+              height: 62,
+            }}
             alt="weatherIcon"
           />
         </RStack>
@@ -200,12 +214,14 @@ export default function WeatherCard({
         <RStack
           $sm={{
             height: '100%',
-            flexDirection: 'colunm',
+            flexDirection: 'column',
           }}
           $gtSm={{
             height: '100%',
             flexDirection: 'row',
           }}
+          flexDirection="row"
+          flexWrap="wrap"
           flex={0.5}
           style={styles.cardContainer}
         >
@@ -223,7 +239,11 @@ export default function WeatherCard({
                 style={styles.weatherCard}
               >
                 <RImage
-                  source={{ uri: weatherIconUrl, width: 52, height: 52 }}
+                  source={{
+                    uri: weatherIconUrl,
+                    width: 52,
+                    height: 52,
+                  }}
                   alt="waetherIcon"
                 />
                 <RText>{dayNumToString(restOfWeek[i]).slice(0, 3)}</RText>

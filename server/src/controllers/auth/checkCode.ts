@@ -19,9 +19,7 @@ export const checkCode = async (req: any, res: any, next) => {
 };
 
 export function checkCodeRoute() {
-  return publicProcedure
-    .input(validator.checkCode)
-    .mutation(async (opts) => {
-      return await checkCodeService(opts.input);
-    });
+  return publicProcedure.input(validator.checkCode).mutation(async (opts) => {
+    return await checkCodeService(opts.input);
+  });
 }

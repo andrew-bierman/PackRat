@@ -23,6 +23,6 @@ export function deleteTripRoute() {
   return publicProcedure.input(validator.deleteTrip).mutation(async (opts) => {
     const { tripId } = opts.input;
     await Trip.findOneAndDelete({ _id: tripId });
-    return "trip was deleted successfully";
-  })
+    return 'trip was deleted successfully';
+  });
 }

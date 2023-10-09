@@ -132,52 +132,55 @@ passport.deserializeUser((id, done) => {
 });
 
 export function googleSigninRoute() {
-  return publicProcedure.input(z.object({ idToken: z.string().nonempty() })).query(async (opts) => {
-    const { idToken } = opts.input;
+  return publicProcedure
+    .input(z.object({ idToken: z.string().nonempty() }))
+    .query(async (opts) => {
+      const { idToken } = opts.input;
 
-    const decodedToken: any = jwt.decode(idToken);
-    if (!decodedToken) {
-      throw new Error('Invalid ID token');
-    }
-
-    const { email, name, sub: googleId } = decodedToken;
-
-    const alreadyGoogleSignin = await User.findOne({ email, googleId });
-    if (!alreadyGoogleSignin) {
-      const isLocalLogin = await User.findOne({ email });
-
-      if (isLocalLogin) {
-        throw new Error('Already user registered on that email address');
+      const decodedToken: any = jwt.decode(idToken);
+      if (!decodedToken) {
+        throw new Error('Invalid ID token');
       }
 
-      const randomPassword = utilsService.randomPasswordGenerator(8);
-      // const randomPassword = '1234abcdefg5678';
+      const { email, name, sub: googleId } = decodedToken;
 
-      const user = new User({
-        email,
-        name,
-        password: randomPassword,
-        googleId,
-      });
+      const alreadyGoogleSignin = await User.findOne({ email, googleId });
+      if (!alreadyGoogleSignin) {
+        const isLocalLogin = await User.findOne({ email });
 
-      await user.save(); // save the user without callback
+        if (isLocalLogin) {
+          throw new Error('Already user registered on that email address');
+        }
 
-      await user.generateAuthToken();
+        const randomPassword = utilsService.randomPasswordGenerator(8);
+        // const randomPassword = '1234abcdefg5678';
 
-      sendWelcomeEmail(user.email, user.name);
-      return user
-    } else {
-      if (!alreadyGoogleSignin.password) {
-        alreadyGoogleSignin.password = utilsService.randomPasswordGenerator(8);
+        const user = new User({
+          email,
+          name,
+          password: randomPassword,
+          googleId,
+        });
+
+        await user.save(); // save the user without callback
+
+        await user.generateAuthToken();
+
+        sendWelcomeEmail(user.email, user.name);
+        return user;
+      } else {
+        if (!alreadyGoogleSignin.password) {
+          alreadyGoogleSignin.password =
+            utilsService.randomPasswordGenerator(8);
+        }
+
+        alreadyGoogleSignin.googleId = googleId;
+
+        await alreadyGoogleSignin.generateAuthToken();
+
+        await alreadyGoogleSignin.save();
+
+        return { user: alreadyGoogleSignin };
       }
-
-      alreadyGoogleSignin.googleId = googleId;
-
-      await alreadyGoogleSignin.generateAuthToken();
-
-      await alreadyGoogleSignin.save();
-
-      return { user: alreadyGoogleSignin };
-    }
-  })
+    });
 }
