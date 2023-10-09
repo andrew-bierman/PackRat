@@ -14,13 +14,13 @@ export const getPublicPacks = async (req, res, next) => {
   try {
     const { queryBy, pageNo, recordsPerPage } = req.query;
 
-    const publicPacks = await getPublicPacksService(
-      queryBy,
-      pageNo,
-      recordsPerPage,
-    );
+    const { publicPacks, page_no, records_per_page, totalRecords }: any =
+      await getPublicPacksService(queryBy, pageNo, recordsPerPage);
 
     res.locals.data = publicPacks;
+    res.locals.pageNo = page_no;
+    res.locals.recordsPerPage = records_per_page;
+    res.locals.totalRecords = totalRecords;
     responseHandler(res);
   } catch (error) {
     next(PackNotFoundError);

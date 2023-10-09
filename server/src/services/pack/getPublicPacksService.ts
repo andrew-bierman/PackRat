@@ -92,11 +92,17 @@ export async function getPublicPacksService(
     pageNo = pageNo ? +pageNo : 1;
     recordsPerPage = recordsPerPage ? +recordsPerPage : RECORDS_PER_PAGE;
 
+    const totalRecords = await Pack.aggregate(publicPacksPipeline);
     const publicPacks = await Pack.aggregate(publicPacksPipeline)
       .skip((pageNo - 1) * recordsPerPage)
       .limit(recordsPerPage);
 
-    return publicPacks;
+    return {
+      publicPacks,
+      totalRecords: totalRecords.length,
+      page_no: pageNo,
+      records_per_page: recordsPerPage,
+    };
   } catch (error) {
     throw new Error('Packs cannot be found: ' + error.message);
   }

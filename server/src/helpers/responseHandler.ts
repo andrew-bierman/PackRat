@@ -1,4 +1,5 @@
 import type express from 'express';
+import { RECORDS_PER_PAGE } from 'src/utils/constant';
 
 export function responseHandler(
   res: express.Response,
@@ -13,5 +14,10 @@ export function responseHandler(
 
   console.log('message', message);
 
-  return res.status(200).json(data);
+  return res.status(200).json({
+    data,
+    pageNo: res.locals?.pageNo || 1,
+    recordsPerPage: res.locals?.recordsPerPage || RECORDS_PER_PAGE,
+    totalRecords: res.locals?.totalRecords || 0,
+  });
 }

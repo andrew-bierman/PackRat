@@ -10,7 +10,7 @@ export const getPublicTripsService = async (
   queryBy: string,
   pageNo: number,
   recordsPerPage: number,
-): Promise<object[]> => {
+): Promise<object> => {
   try {
     const publicTripsPipeline: any[] = [
       {
@@ -65,11 +65,18 @@ export const getPublicTripsService = async (
     pageNo = pageNo ? +pageNo : 1;
     recordsPerPage = recordsPerPage ? +recordsPerPage : RECORDS_PER_PAGE;
 
+    const totalRecords = await Trip.count();    
+
     const publicTrips = await Trip.aggregate(publicTripsPipeline)
       .skip((pageNo - 1) * recordsPerPage)
       .limit(recordsPerPage);
 
-    return publicTrips;
+    return {
+      publicTrips,
+      totalRecords,
+      page_no: pageNo,
+      records_per_page: recordsPerPage,
+    };
   } catch (error) {
     console.error(error);
     throw new Error('Trips cannot be found');

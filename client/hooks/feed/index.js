@@ -7,10 +7,11 @@ export const useFeed = (
   ownerId = null,
   feedType = 'public',
   selectedTypes = { pack: true, trip: true },
+  pageNo,
 ) => {
   switch (feedType) {
     case 'public':
-      return usePublicFeed(queryString, selectedTypes);
+      return usePublicFeed(queryString, selectedTypes, pageNo);
     case 'userPacks':
       return useUserPacks(ownerId, queryString);
     case 'userTrips':

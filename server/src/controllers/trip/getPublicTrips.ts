@@ -14,13 +14,13 @@ export const getPublicTrips = async (req, res, next) => {
   try {
     const { queryBy, pageNo, recordsPerPage } = req.query;
 
-    const publicTrips = await getPublicTripsService(
-      queryBy,
-      pageNo,
-      recordsPerPage,
-    );
+    const { publicTrips, page_no, records_per_page, totalRecords }: any =
+      await getPublicTripsService(queryBy, pageNo, recordsPerPage);
 
     res.locals.data = publicTrips;
+    res.locals.pageNo = page_no;
+    res.locals.recordsPerPage = records_per_page;
+    res.locals.totalRecords = totalRecords;
     responseHandler(res);
   } catch (error) {
     next(TripNotFoundError);
