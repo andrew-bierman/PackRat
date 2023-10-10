@@ -4,7 +4,7 @@ import { queryTrpc } from '../../trpc';
 import { setTrails, setFilteredTrails } from '../../store/trailsStore_copy'; // Importing the actions
 import { store } from '../../store/store';
 
-async function useTrails({ lat, lon, selectedSearch, radius = 1000 }) {
+function useTrails({ latLng, selectedSearch, radius = 1000 }) {
   // const dispatch = useDispatch();
   // const { data, error, isLoading } = await trpc.getTrailsOSM.query({
   //   lat,
@@ -12,21 +12,28 @@ async function useTrails({ lat, lon, selectedSearch, radius = 1000 }) {
   //   radius,
   //   selectedSearch,
   // }); // Assumed to be a valid hook from tRPC.
-
+  const { lat, lon } = latLng;
+  const isEnabled = Boolean(lat && lon);
   // SWAP FOR TRPC react query
-  const { data, isLoading, error } = await queryTrpc.getTrailsOSM.useQuery({
-    lat,
-    lon,
-    radius,
-    selectedSearch,
-  });
+  const { data, isLoading, error } = queryTrpc.getTrailsOSM.useQuery(
+    {
+      lat,
+      lon,
+      radius,
+      selectedSearch,
+    },
+    {
+      enabled: isEnabled,
+    },
+  );
 
   console.log(data, 'data!!!!!!!');
 
   // React.useEffect(() => {
+  let filteredTrails = [];
   if (data) {
     const trails = data.features;
-    const filteredTrails = trails
+    filteredTrails = trails
       .filter(
         (trail) =>
           trail.properties.name && trail.properties.name !== selectedSearch,
@@ -35,12 +42,11 @@ async function useTrails({ lat, lon, selectedSearch, radius = 1000 }) {
       .slice(0, 25);
 
     // Dispatching directly using the imported store
-    store.dispatch(setTrails(trails));
-    store.dispatch(setFilteredTrails(filteredTrails));
+    // store.dispatch(setTrails(trails));
+    // store.dispatch(setFilteredTrails(filteredTrails));
   }
   // }, [data, dispatch, selectedSearch]);
-
-  return { data, error, isLoading };
+  return { data, error, isLoading, filteredTrails, trails: data?.features };
 }
 
 export default useTrails;

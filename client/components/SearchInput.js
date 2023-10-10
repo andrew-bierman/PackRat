@@ -22,18 +22,24 @@ import {
   clearSearchResults,
   fetchPhotonSearchResults,
 } from '../store/searchStore';
-import { fetchWeather, fetchWeatherWeek } from '../store/weatherStore';
+import {
+  fetchWeather,
+  fetchWeatherWeek,
+  setLatLng,
+  setSearchResult,
+} from '../store/weatherStore';
 import useCustomStyles from '~/hooks/useCustomStyles';
 import { setFilteredTrails, setTrails } from '~/store/trailsStore_copy'; // REMOVE
 import useTrails from '~/hooks/trails';
 import useParks from '~/hooks/parks';
 import { usePhotonDetail } from '~/hooks/photonDetail';
-import { useFetchWeather } from '~/hooks/weather';
+import { useFetchWeather, useFetchWeatherWeak } from '~/hooks/weather';
 
 export const SearchInput = ({ onSelect, placeholder }) => {
   const [searchString, setSearchString] = useState('');
   const [isLoadingMobile, setIsLoadingMobile] = useState(false);
-  const [selectedSearch, setSelectedSearch] = useState('');
+  const { selectedSearch } = useSelector((state) => state.weather);
+  // const [selectedSearch, setSelectedSearch] = useState('');
   const [showSearchResults, setShowSearchResults] = useState(false);
 
   const { refetch, data, isError, isLoading } = usePhotonDetail(
@@ -46,6 +52,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
   const [selectedSearchResult, setSelectedSearchResult] = useState({});
   const searchResults =
     useSelector((state) => state.search.searchResults) || [];
+  // const [latLng,setLatLng] = useState({});
 
   // const selectedSearchResult =
   //   useSelector((state) => state.search.selectedSearchResult) || {};
@@ -85,35 +92,16 @@ export const SearchInput = ({ onSelect, placeholder }) => {
       setIsLoadingMobile(false);
       return;
     } else {
-      setLatLng({ lat, lon });
+      dispatch(setLatLng({ lat, lon }));
     }
-    const {
-      data: parksData,
-      error: parksError,
-      isLoading: parksLoading,
-    } = await useParks({
-      lat,
-      lon,
-      selectedSearch,
-    });
 
     try {
-      const { data, filteredTrails, error, isLoading } = await useTrails({
-        lat,
-        lon,
-        selectedSearch,
-      });
-
-      console.log('before parksData:', parksData);
-
-      console.log('after parksData:', parksData);
-
-      console.log('parksData:', parksData);
-
-      console.log('data:', data);
-      console.log('error:', error);
-      console.log('isLoading:', isLoading);
-
+      // console.log('before parksData:', parksData);
+      // console.log('after parksData:', parksData);
+      // console.log('parksData:', parksData);
+      // console.log('data:', data);
+      // console.log('error:', error);
+      // console.log('isLoading:', isLoading);
       // await Promise.all([
       //   // dispatch(fetchTrails({ lat, lon, selectedSearch })),
       //   // dispatch(fetchParks({ lat, lon, selectedSearch })),
@@ -140,8 +128,8 @@ export const SearchInput = ({ onSelect, placeholder }) => {
     const {
       properties: { name, osm_id },
     } = result;
-    console.log(result, 'line 136');
-    setSelectedSearch(name);
+    // console.log(result, 'line 136');
+    dispatch(setSearchResult(name));
     setSearchString(name);
     setShowSearchResults(false);
     setSelectedSearchResult(result);
