@@ -10,6 +10,7 @@ import { ItemForm } from './ItemForm'; // assuming you moved the form related co
 import { ItemCategoryEnum } from '../../constants/itemCategory';
 import { useAddPackItem } from '~/hooks/packs/useAddPackItem';
 import { add } from 'date-fns';
+import {useEditPackItem} from '~/hooks/packs/useEditPackItem';
 
 export const AddItem = ({
   _id,
@@ -42,8 +43,13 @@ export const AddItem = ({
 
   const {
     // mutation: addPackItemMutation
-    addPackItem: addPackItemMutation,
-  } = useAddPackItem(packId, (ownerId = currentPack?.owner_id));
+    addPackItem,
+  } = useAddPackItem();
+
+  const {
+    // mutation: addPackItemMutation
+    editPackItem,
+  } = useEditPackItem();
 
   // handle updates to initialData
   useEffect(() => {
@@ -58,53 +64,60 @@ export const AddItem = ({
    *
    * @return {type} description of return value
    */
+  console.log(categoryType)
   const handleSubmit = () => {
     console.log('initial', initialData);
     if (isEdit) {
       if (packId && initialData.global) {
         console.log('editing', packId);
 
-        dispatch(
-          editItemsGlobalAsDuplicate({
-            itemId: _id,
-            packId,
-            name,
-            weight,
-            quantity,
-            unit,
-            type: categoryType,
-          }),
-        );
+        // dispatch(
+        //   editItemsGlobalAsDuplicate({
+        //     itemId: _id,
+        //     packId,
+        //     name,
+        //     weight,
+        //     quantity,
+        //     unit,
+        //     type: categoryType,
+        //   }),
+        // );
+        editPackItem({
+          name,
+          weight,
+          quantity,
+          unit,
+          type: categoryType,
+          _id,
+          packId,
+        })
         closeModalHandler();
       } else {
-        dispatch(
-          editPackItem({
-            name,
-            weight,
-            quantity,
-            unit,
-            type: categoryType,
-            _id: initialData._id,
-          }),
-        );
+        editPackItem({
+          name,
+          weight,
+          quantity,
+          unit,
+          type: categoryType,
+          _id,
+          packId,
+        })
+        // dispatch(
+        //   editPackItem({
+        //     name,
+        //     weight,
+        //     quantity,
+        //     unit,
+        //     type: categoryType,
+        //     _id: initialData._id,
+        //   }),
+        // );
         setPage(1);
         closeModalHandler();
         setRefetch(refetch !== true);
       }
     } else {
-      // dispatch(
-      //   addPackItem({
-      //     name,
-      //     weight,
-      //     quantity,
-      //     type: categoryType,
-      //     unit,
-      //     _id,
-      //     packId,
-      //   }),
-      // );
-      // addPackItemMutation.mutate({
-      addPackItemMutation({
+      addPackItem({
         name,
         weight,
         quantity,
@@ -113,8 +126,9 @@ export const AddItem = ({
         _id,
         packId,
       });
-      setIsAddItemModalOpen(false);
-      setRefetch(refetch !== true);
+     
+      // setIsAddItemModalOpen(false);
+      // setRefetch(refetch !== true);
     }
   };
 

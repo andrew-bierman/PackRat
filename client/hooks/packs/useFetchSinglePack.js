@@ -12,7 +12,6 @@ export const useFetchSinglePack = (packId) => {
         keepPreviousData: true,
       },
     );
-
   const isOwner = data && user && data.owner_id === user._id;
 
   return { refetch, data, error, isLoading, isOwner, isError };
