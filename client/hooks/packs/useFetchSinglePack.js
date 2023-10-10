@@ -10,6 +10,8 @@ export const useFetchSinglePack = (packId) => {
         enabled: !!packId, // to ensure the query runs only when packId is available
         refetchOnWindowFocus: true,
         keepPreviousData: true,
+        staleTime: Infinity,
+        cacheTime: Infinity,
       },
     );
   const isOwner = data && user && data.owner_id === user._id;

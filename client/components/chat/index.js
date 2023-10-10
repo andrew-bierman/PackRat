@@ -9,15 +9,16 @@ import {
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import useTheme from '../../hooks/useTheme';
-import {
-  getUserChats,
-  getAIResponse,
-  selectConversationById,
-  selectAllConversations,
-} from '../../store/chatStore';
+// import {
+//   getUserChats,
+//   getAIResponse,
+//   selectConversationById,
+//   selectAllConversations,
+// } from '../../store/chatStore';
 import { Box, VStack, HStack } from 'native-base';
 import { CustomModal } from '../modal';
 import useCustomStyles from '~/hooks/useCustomStyles';
+import { useGetUserChats, useGetAIResponse } from '~/hooks/chat';
 
 const MessageBubble = ({ message }) => {
   const styles = useCustomStyles(loadStyles);
@@ -48,23 +49,39 @@ const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
   const [conversationId, setConversationId] = useState(defaultChatId);
-  const conversation = useSelector((state) =>
-    selectConversationById(state, conversationId),
-  );
-  const conversations = useSelector((state) => selectAllConversations(state));
+  // const conversation = useSelector((state) =>
+  //   selectConversationById(state, conversationId),
+  // );
+  // const conversations = useSelector((state) => selectAllConversations(state));
   const [userInput, setUserInput] = useState('');
   const [parsedMessages, setParsedMessages] = useState([]);
   const styles = useCustomStyles(loadStyles);
 
-  useEffect(() => {
-    dispatch(getUserChats(user._id));
-  }, [dispatch, user._id, conversationId]);
+  // useEffect(() => {
+  //   dispatch(getUserChats(user._id));
+  // }, [dispatch, user._id, conversationId]);
 
-  useEffect(() => {
-    if (conversation) {
-      setParsedMessages(parseConversationHistory(conversation.history));
-    }
-  }, [conversation]);
+  // useEffect(() => {
+  //   if (conversation) {
+  //     setParsedMessages(parseConversationHistory(conversation.history));
+  //   }
+  // }, [conversation]);
+
+  const {
+    data,
+    isLoading: chatsLoading,
+    isError: chatsError,
+  } = useGetUserChats(user._id);
+  const conversations = data?.conversations;
+  const {
+    requestAIResponse,
+    data: aiResponse,
+    isLoading: aiLoading,
+    isError: aiError,
+  } = useGetAIResponse({ userId: user._id, conversationId, userInput });
+
+  const conversation =
+    conversations && conversations?.find((chat) => chat._id === conversationId);
 
   /**
    * Parses a conversation history string and returns an array of objects representing each message in the conversation.
@@ -94,6 +111,7 @@ const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
     await dispatch(
       getAIResponse({ userId: user._id, conversationId, userInput }),
     );
+
     setUserInput('');
     dispatch(getUserChats(user._id));
   };
