@@ -1,5 +1,3 @@
-import { getQueryKey } from '@trpc/react-query';
-import { queryClient } from '~/constants/queryClient';
 import { queryTrpc } from '../../trpc';
 
 
@@ -57,5 +55,11 @@ const utils=queryTrpc.useContext()
       },
     }
   );
-  return { mutation };
+  return {
+    mutation, 
+    addNewPack:mutation.mutate,
+    isLoading: mutation.isLoading,
+    isError: mutation.isError,
+    error: mutation.error
+  };
 };
