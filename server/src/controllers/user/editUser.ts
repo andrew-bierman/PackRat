@@ -1,7 +1,8 @@
+import { publicProcedure } from '../../trpc';
 import { UnableToEditUserError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import User from '../../models/userModel';
-
+import * as validator from '../../middleware/validators/index';
 /**
  * Edits a user.
  * @param {Object} req - The request object.
@@ -23,3 +24,17 @@ export const editUser = async (req, res, next) => {
     next(UnableToEditUserError);
   }
 };
+
+export function editUserRoute() {
+  return publicProcedure.input(validator.editUser).mutation(async (opts) => {
+    const { userId } = opts.input;
+    const editedUser = await User.findOneAndUpdate(
+      { _id: userId },
+      opts.input,
+      {
+        returnOriginal: false,
+      },
+    ).populate('favorites');
+    return editedUser;
+  });
+}

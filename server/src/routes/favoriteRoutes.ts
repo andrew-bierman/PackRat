@@ -8,6 +8,7 @@ import {
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
 import authTokenMiddleware from '../middleware/auth';
 import checkRole from '../middleware/checkRole';
+import { zodParser } from '../middleware/validators/zodParser';
 
 const router = express.Router();
 
@@ -38,9 +39,7 @@ const router = express.Router();
  */
 router.post(
   '/',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
-  validator.addToFavorite,
+  (req, res, next) => zodParser(validator.addToFavorite, req.body, next),
   tryCatchWrapper(addToFavorite),
 );
 

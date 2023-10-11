@@ -1,9 +1,11 @@
 import { Box } from 'native-base';
-import { Text, StyleSheet } from 'react-native';
+import { Text } from 'react-native';
 import { ItemRow } from './ItemRow';
 import { theme } from '../theme';
 import { FontAwesome } from '@expo/vector-icons';
 import useTheme from '../hooks/useTheme';
+import useCustomStyles from '~/hooks/useCustomStyles';
+
 const dummyData = [
   'First-aid kit',
   'Water bottles',
@@ -14,6 +16,7 @@ const dummyData = [
 export default function SummaryCard() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
+  const styles = useCustomStyles(loadStyles);
 
   const handleDelete = () => {};
   const handleEdit = () => {};
@@ -31,7 +34,7 @@ export default function SummaryCard() {
       <Box>
         <Text>Image here</Text>
       </Box>
-      <Box style={styles().itemContainer}>
+      <Box style={styles.itemContainer}>
         {dummyData.map((data, id) => (
           <ItemRow key={id} packName={data} />
         ))}
@@ -46,10 +49,9 @@ export default function SummaryCard() {
   );
 }
 
-const styles = () => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    useTheme();
-  return StyleSheet.create({
+const loadStyles = (theme) => {
+  const { currentTheme } = theme;
+  return {
     mainContainer: {
       flexDirection: 'row',
       width: '100%',
@@ -64,5 +66,5 @@ const styles = () => {
       padding: 5,
       justifyContent: 'space-between',
     },
-  });
+  };
 };

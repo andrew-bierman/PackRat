@@ -11,11 +11,14 @@ import helmet from 'helmet';
 import compression from 'compression';
 import morgan from 'morgan';
 import { limiter } from './helpers/limiter';
+import * as trpcExpress from '@trpc/server/adapters/express';
+import { type inferAsyncReturnType, initTRPC } from '@trpc/server';
+import { appRouter } from './routes/trpcRouter';
 
 const app = express();
 
 // Apply security-related HTTP headers.
-app.use(helmet());
+// app.use(helmet({ crossOriginResourcePolicy: false }));
 
 // Apply gzip compression to improve response times.
 app.use(compression());
@@ -24,7 +27,7 @@ app.use(compression());
 app.use(morgan('tiny'));
 
 // Apply rate limiting to prevent brute-force attacks.
-app.use(limiter);
+// app.use(limiter);
 
 // Applying CORS middleware with provided options, if any.
 if (corsOptions) {
@@ -54,7 +57,22 @@ app.use(
     next(err);
   },
 );
+const createContext = ({
+  req,
+  res,
+}: trpcExpress.CreateExpressContextOptions) => ({ req, res });
 
+export type Context = inferAsyncReturnType<typeof createContext>;
+
+app.use(
+  '/api/trpc',
+  trpcExpress.createExpressMiddleware({
+    router: appRouter,
+    createContext,
+  }),
+);
+
+// Celebrate middleware to return validation errors
 // Middleware provided by Celebrate to format and return validation errors to the client.
 app.use(errors());
 

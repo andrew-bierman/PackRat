@@ -1,6 +1,9 @@
 import { UnableToAddItemError } from '../../helpers/errors';
 import { addItemGlobalService } from '../../services/item/item.service';
 import { responseHandler } from '../../helpers/responseHandler';
+import { publicProcedure } from '../../trpc';
+import * as validator from '../../middleware/validators/index';
+
 /**
  * Adds an item globally.
  * @param {object} req - The request object.
@@ -26,3 +29,12 @@ export const addItemGlobal = async (req, res, next) => {
     next(UnableToAddItemError);
   }
 };
+
+export function addItemGlobalRoute() {
+  return publicProcedure
+    .input(validator.addItemGlobal)
+    .mutation(async (opts) => {
+      const { name, weight, quantity, unit, type } = opts.input;
+      return await addItemGlobalService(name, weight, quantity, unit, type);
+    });
+}

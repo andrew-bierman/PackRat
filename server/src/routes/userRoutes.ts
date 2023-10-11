@@ -31,6 +31,7 @@ import {
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
 import authTokenMiddleware from '../middleware/auth';
 import checkRole from '../middleware/checkRole';
+import { zodParser } from '../middleware/validators/zodParser';
 
 const router = express.Router();
 
@@ -83,9 +84,10 @@ router.get(
  */
 router.get(
   '/:userId',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
-  validator.getUserById,
+  (req, res, next) => {
+    zodParser(validator.getUserById, req.params, next);
+    next();
+  },
   tryCatchWrapper(getUserById),
 );
 
@@ -116,7 +118,11 @@ router.get(
  *       '500':
  *         description: Error signing in
  */
-router.post('/signin', validator.userSignIn, tryCatchWrapper(userSignIn));
+router.post(
+  '/signin',
+  (req, res, next) => zodParser(validator.userSignIn, req.body, next),
+  tryCatchWrapper(userSignIn),
+);
 
 /**
  * @swagger
@@ -145,7 +151,11 @@ router.post('/signin', validator.userSignIn, tryCatchWrapper(userSignIn));
  *       '500':
  *         description: Error signing up
  */
-router.post('/signup', validator.userSignUp, tryCatchWrapper(userSignup));
+router.post(
+  '/signup',
+  (req, res, next) => zodParser(validator.userSignUp, req.body, next),
+  tryCatchWrapper(userSignup),
+);
 
 /**
  * @swagger
@@ -172,7 +182,7 @@ router.post('/signup', validator.userSignUp, tryCatchWrapper(userSignup));
  */
 router.post(
   '/reset-password-email',
-  validator.sentEmail,
+  (req, res, next) => zodParser(validator.sentEmail, req.body, next),
   tryCatchWrapper(sentEmail),
 );
 
@@ -203,7 +213,7 @@ router.post(
  */
 router.post(
   '/reset-password',
-  validator.resetPassword,
+  (req, res, next) => zodParser(validator.checkCode, req.body, next),
   tryCatchWrapper(resetPassword),
 );
 
@@ -296,9 +306,7 @@ router.post('/google', tryCatchWrapper(signInGoogle));
  */
 router.put(
   '/',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
-  validator.editUser,
+  (req, res, next) => zodParser(validator.editUser, req.body, next),
   tryCatchWrapper(editUser),
 );
 
@@ -327,21 +335,23 @@ router.put(
  */
 router.delete(
   '/',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
-  validator.deleteUser,
+  (req, res, next) => zodParser(validator.deleteUser, req.body, next),
   tryCatchWrapper(deleteUser),
 );
 
-router.post('/checkcode', validator.checkCode, tryCatchWrapper(checkCode));
+router.post(
+  '/checkcode',
+  (req, res, next) => zodParser(validator.checkCode, req.body, next),
+  tryCatchWrapper(checkCode),
+);
 router.post(
   '/updatepassword',
-  validator.updatePassword,
+  (req, res, next) => zodParser(validator.updatePassword, req.body, next),
   tryCatchWrapper(updatePassword),
 );
 router.post(
   '/emailexists',
-  validator.emailExists,
+  (req, res, next) => zodParser(validator.emailExists, req.body, next),
   tryCatchWrapper(emailExists),
 );
 

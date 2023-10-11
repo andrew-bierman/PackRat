@@ -1,0 +1,86 @@
+name: Node.js CI for Development Environment
+
+on:
+  push:
+    branches: [ "**" ] # adjust this to the branches you want to run CI on
+  pull_request:
+    branches: [ "**" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [16.x, 18.x, 20.x] # Adjust these versions as per your requirements.
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Debug Information
+      run: |
+        yarn -v
+        ls .yarn/releases/yarn-3.6.3.cjs
+        cat .yarnrc.yml
+        cat yarn.lock
+
+    - name: ⚙️ Enable Corepack
+      run: |
+        corepack enable
+        echo "corepack enabled"
+
+    - name: Set Yarn Version to Berry
+      run: yarn set version berry
+
+    #   run: yarn policies set-version
+
+    - name: Install dependencies
+      run: yarn install
+
+    - name: Debug more
+      run: |
+        yarn -v
+        yarn info packrat-world@workspace:.
+        yarn workspaces list --json
+
+    - name: Run setup
+      run: |
+        yarn -v
+        which yarn
+        yarn set version stable
+        yarn plugin import workspace-tools
+        yarn plugin import interactive-tools
+        yarn install
+
+# cp client/.env.example client/.env
+# cp client/app.json.example client/app.json
+# cp server/.env.example server/.env
+
+# yarn setup
+
+    # - name: Clean Cache and Reinstall
+    #   run: |
+    #     yarn cache clean
+    #     yarn install --immutable
+
+    - name: Start Server in Background
+      run: |
+        cd server
+        yarn start &
+
+    - name: Start Client in Background
+      run: |
+        cd client
+        yarn web &
+
+    - name: Wait for a while
+      run: sleep 60  # wait for 60 seconds to let servers start
+
+    - name: Kill Background Jobs
+      run: kill $(jobs -p) || true

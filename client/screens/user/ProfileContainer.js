@@ -9,7 +9,7 @@ import {
   HStack,
   Button,
 } from 'native-base';
-import { Platform, StyleSheet } from 'react-native';
+import { Platform, StyleSheet, ScrollView } from 'react-native';
 import UserDataContainer from '../../components/user/UserDataContainer';
 import { useAuth } from '../../auth/provider';
 import { theme } from '../../theme';
@@ -26,6 +26,7 @@ import { getUser } from '../../store/userStore';
 import { fetchUserTrips, selectAllTrips } from '../../store/tripsStore';
 import { useMatchesCurrentUser } from '~/hooks/useMatchesCurrentUser';
 import { useRouter } from 'expo-router';
+import useCustomStyles from '~/hooks/useCustomStyles';
 
 const SettingsButton = () => {
   const router = useRouter();
@@ -57,6 +58,7 @@ const Header = ({
 }) => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
+  const styles = useCustomStyles(loadStyles);
   const profileImage = user?.profileImage ?? null;
   const userRealName = user?.name ?? null;
   const userEmail = user?.email ?? null;
@@ -66,7 +68,7 @@ const Header = ({
     : `@${userEmailSplitFirstHalf}`;
 
   return (
-    <Box w={['100%', '100%', '70%', '50%']} style={styles().infoSection}>
+    <Box w={['100%', '100%', '70%', '50%']} style={styles.infoSection}>
       <HStack w="100%" alignItems="center" spacing={5}>
         {isCurrentUser && (
           <Box alignSelf="flex-start" ml="auto">
@@ -74,7 +76,7 @@ const Header = ({
           </Box>
         )}
         <VStack alignItems="center" flex={1}>
-          <Box style={styles().userInfo}>
+          <Box style={styles.userInfo}>
             {profileImage ? (
               <Image
                 source={{ uri: user?.profileImage }}
@@ -96,27 +98,27 @@ const Header = ({
                 }}
               />
             )}
-            <Text style={styles().userName}>{userRealName}</Text>
-            <Text style={styles().userEmail}>{username}</Text>
+            <Text style={styles.userName}>{userRealName}</Text>
+            <Text style={styles.userEmail}>{username}</Text>
           </Box>
         </VStack>
         {isCurrentUser && <Box width={45} />}{' '}
         {/* This empty box is to offset the space taken by the settings button, ensuring the profile details remain centered. */}
       </HStack>
-      <Stack direction="row" style={styles().card}>
-        <Box style={styles().cardInfo}>
+      <Stack direction="row" style={styles.card}>
+        <Box style={styles.cardInfo}>
           <Text>Trips</Text>
           <Text>{tripsCount}</Text>
         </Box>
-        <Box style={styles().cardInfo}>
+        <Box style={styles.cardInfo}>
           <Text color={currentTheme.colors.textColor}>Packs</Text>
           <Text color={currentTheme.colors.textColor}>{packsCount}</Text>
         </Box>
-        <Box style={styles().cardInfo}>
+        <Box style={styles.cardInfo}>
           <Text color={currentTheme.colors.textColor}>Favorites</Text>
           <Text color={currentTheme.colors.textColor}>{favoritesCount}</Text>
         </Box>
-        <Box style={styles().cardInfo}>
+        <Box style={styles.cardInfo}>
           <Text color={currentTheme.colors.textColor}>Certified</Text>
           <MaterialCommunityIcons
             name="certificate-outline"
@@ -138,6 +140,7 @@ export default function ProfileContainer({ id = null }) {
   const dispatch = useDispatch();
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
+  const styles = useCustomStyles(loadStyles);
   const authUser = useSelector((state) => state.auth.user);
   const userStore = useSelector((state) => state.userStore);
   const authStore = useSelector((state) => state.auth);
@@ -154,7 +157,7 @@ export default function ProfileContainer({ id = null }) {
     if (differentUser) {
       dispatch(getUser(id));
     } else {
-      dispatch(fetchUserPacks(authUser?._id));
+      dispatch(fetchUserPacks({ ownerId: authUser?._id }));
       dispatch(fetchUserFavorites(authUser?._id));
       dispatch(fetchUserTrips(authUser?._id));
     }
@@ -169,7 +172,7 @@ export default function ProfileContainer({ id = null }) {
   const packsData = differentUser ? user?.packs : allPacks;
   const favoritesData = differentUser ? user?.favorites : allFavorites;
 
-  const tripsCount = tripsData?.trips?.length ?? 0;
+  const tripsCount = tripsData?.length ?? 0;
   const packsCount = packsData?.length ?? 0;
   const favoritesCount = favoritesData?.length ?? 0;
   const isCertified = user?.isCertified ?? false;
@@ -177,70 +180,71 @@ export default function ProfileContainer({ id = null }) {
   if (isLoading) return <Text>Loading...</Text>;
 
   return (
-    <VStack
-      style={[
-        styles().mainContainer,
-        Platform.OS == 'web' ? { minHeight: '100vh' } : null,
-      ]}
-    >
-      <Header
-        user={user}
-        isLoading={isLoading}
-        error={error}
-        tripsCount={tripsCount}
-        packsCount={packsCount}
-        favoritesCount={favoritesCount}
-        isCurrentUser={isCurrentUser}
-      />
-      {isLoading ? (
-        <Text>Loading....</Text>
-      ) : (
-        <Box style={styles().mainContentContainer}>
-          <Box style={styles().userDataContainer}>
-            {favoritesData?.length > 0 ? (
-              <UserDataContainer
-                data={favoritesData}
-                type="favorites"
-                userId={user?._id}
-              />
-            ) : (
-              <Text
-                fontSize="2xl"
-                fontWeight="bold"
-                color={currentTheme.colors.textColor}
-              >
-                No favorites yet
-              </Text>
+    <ScrollView>
+      <VStack
+        style={[
+          styles.mainContainer,
+          Platform.OS == 'web' ? { minHeight: '100vh' } : null,
+        ]}
+      >
+        <Header
+          user={user}
+          isLoading={isLoading}
+          error={error}
+          tripsCount={tripsCount}
+          packsCount={packsCount}
+          favoritesCount={favoritesCount}
+          isCurrentUser={isCurrentUser}
+        />
+        {isLoading ? (
+          <Text>Loading....</Text>
+        ) : (
+          <Box style={styles.mainContentContainer}>
+            <Box style={styles.userDataContainer}>
+              {favoritesData?.length > 0 ? (
+                <UserDataContainer
+                  data={favoritesData}
+                  type="favorites"
+                  userId={user?._id}
+                />
+              ) : (
+                <Text
+                  fontSize="2xl"
+                  fontWeight="bold"
+                  color={currentTheme.colors.textColor}
+                >
+                  No favorites yet
+                </Text>
+              )}
+            </Box>
+            {Array.isArray(packsData) && packsData.length > 0 && (
+              <Box style={styles.userDataContainer}>
+                <UserDataContainer
+                  data={packsData}
+                  type="packs"
+                  userId={user?._id}
+                />
+              </Box>
+            )}
+            {Array.isArray(tripsData) && tripsData?.length > 0 && (
+              <Box style={styles.userDataContainer}>
+                <UserDataContainer
+                  data={tripsData}
+                  type="trips"
+                  userId={user?._id}
+                />
+              </Box>
             )}
           </Box>
-          {Array.isArray(packsData) && packsData.length > 0 && (
-            <Box style={styles().userDataContainer}>
-              <UserDataContainer
-                data={packsData}
-                type="packs"
-                userId={user?._id}
-              />
-            </Box>
-          )}
-          {Array.isArray(tripsData?.trips) && tripsData?.trips.length > 0 && (
-            <Box style={styles().userDataContainer}>
-              <UserDataContainer
-                data={tripsData}
-                type="trips"
-                userId={user?._id}
-              />
-            </Box>
-          )}
-        </Box>
-      )}
-    </VStack>
+        )}
+      </VStack>
+    </ScrollView>
   );
 }
 
-const styles = () => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    useTheme();
-  return StyleSheet.create({
+const loadStyles = (theme) => {
+  const { currentTheme } = theme;
+  return {
     mainContainer: {
       backgroundColor: currentTheme.colors.background,
       flex: 1,
@@ -316,5 +320,5 @@ const styles = () => {
       shadowRadius: 1.0,
       elevation: 1,
     },
-  });
+  };
 };

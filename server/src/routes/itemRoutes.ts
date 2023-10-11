@@ -16,6 +16,7 @@ import * as validator from '../middleware/validators/index';
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
 import authTokenMiddleware from '../middleware/auth';
 import checkRole from '../middleware/checkRole';
+import { zodParser } from '../middleware/validators/zodParser';
 
 const router = express.Router();
 
@@ -45,9 +46,7 @@ const router = express.Router();
  */
 router.get(
   '/packItems/:packId',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
-  validator.getItems,
+  (req, res, next) => zodParser(validator.getItems, req.body, next),
   tryCatchWrapper(getItems),
 );
 
@@ -70,9 +69,7 @@ router.get(
  */
 router.get(
   '/i/:packId',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
-  validator.getItemById,
+  (req, res, next) => zodParser(validator.getItemById, req.body, next),
   tryCatchWrapper(getItemById),
 );
 
@@ -130,9 +127,7 @@ router.get(
  */
 router.post(
   '/',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
-  validator.addItem,
+  (req, res, next) => zodParser(validator.addItem, req.body, next),
   tryCatchWrapper(addItem),
 );
 
@@ -166,9 +161,7 @@ router.post(
  */
 router.put(
   '/',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
-  validator.editItem,
+  (req, res, next) => zodParser(validator.editItem, req.body, next),
   tryCatchWrapper(editItem),
 );
 
@@ -194,9 +187,7 @@ router.put(
  */
 router.delete(
   '/',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
-  validator.deleteItem,
+  (req, res, next) => zodParser(validator.deleteItem, req.body, next),
   tryCatchWrapper(deleteItem),
 );
 
@@ -230,9 +221,7 @@ router.delete(
  */
 router.post(
   '/global',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
-  validator.addItemGlobal,
+  (req, res, next) => zodParser(validator.addItemGlobal, req.body, next),
   tryCatchWrapper(addItemGlobal),
 );
 
