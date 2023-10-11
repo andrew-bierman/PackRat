@@ -5,13 +5,17 @@ export const useEditPackItem = () => {
 
   const mutation = queryTrpc.editItem.useMutation({
     onMutate: async (editedItem) => {
-      const previousPack = utils.getPackById.getData({ packId: editedItem.packId });
-      console.log( editedItem.packId)
-      console.log( editedItem._id)
-      const itemIndex = previousPack.items.findIndex(item => item._id === editedItem._id);
-      
+      const previousPack = utils.getPackById.getData({
+        packId: editedItem.packId,
+      });
+      console.log(editedItem.packId);
+      console.log(editedItem._id);
+      const itemIndex = previousPack.items.findIndex(
+        (item) => item._id === editedItem._id,
+      );
+
       if (itemIndex === -1) {
-        throw new Error("Item not found in the pack.");
+        throw new Error('Item not found in the pack.');
       }
       const newQueryData = {
         ...previousPack,
@@ -35,16 +39,19 @@ export const useEditPackItem = () => {
       };
     },
     onError: (err, editedItem, context) => {
-      console.log("Error");
+      console.log('Error');
       console.log(err);
 
       if (context.previousPack) {
         // Restore the previous pack data in case of an error
-        utils.getPackById.setData({ packId: editedItem.packId }, context.previousPack);
+        utils.getPackById.setData(
+          { packId: editedItem.packId },
+          context.previousPack,
+        );
       }
     },
     onSuccess: (result) => {
-      console.log(result)
+      console.log(result);
       // Invalidate relevant queries after a successful edit
       utils.getPackById.invalidate({ packId: result._id });
     },

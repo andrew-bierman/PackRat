@@ -69,13 +69,15 @@ export const CustomCard = ({
     return () => clearTimeout(resetCopyStateTimeout);
   };
 
+  if (!data) return null;
+
   if (type === 'pack') {
     return (
       <Box
         style={styles.mainContainer}
         alignSelf="center"
-        alignItems={['center' , 'center' , 'flex-start' , 'flex-start']}
-        w={['100%' , '100%' , '100%' , '90%']}
+        alignItems={['center', 'center', 'flex-start', 'flex-start']}
+        w={['100%', '100%', '100%', '90%']}
         flexDirection={['column', 'column', 'row', 'row']}
         rounded="lg"
         flexGrow={1}

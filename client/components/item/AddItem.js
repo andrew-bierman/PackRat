@@ -10,7 +10,7 @@ import { ItemForm } from './ItemForm'; // assuming you moved the form related co
 import { ItemCategoryEnum } from '../../constants/itemCategory';
 import { useAddPackItem } from '~/hooks/packs/useAddPackItem';
 import { add } from 'date-fns';
-import {useEditPackItem} from '~/hooks/packs/useEditPackItem';
+import { useEditPackItem } from '~/hooks/packs/useEditPackItem';
 
 export const AddItem = ({
   _id,
@@ -64,7 +64,7 @@ export const AddItem = ({
    *
    * @return {type} description of return value
    */
-  console.log(categoryType)
+  console.log(categoryType);
   const handleSubmit = () => {
     console.log('initial', initialData);
     if (isEdit) {
@@ -90,7 +90,7 @@ export const AddItem = ({
           type: categoryType,
           _id,
           packId,
-        })
+        });
         closeModalHandler();
       } else {
         editPackItem({
@@ -101,7 +101,7 @@ export const AddItem = ({
           type: categoryType,
           _id,
           packId,
-        })
+        });
         // dispatch(
         //   editPackItem({
         //     name,
@@ -126,7 +126,7 @@ export const AddItem = ({
         _id,
         packId,
       });
-     
+
       // setIsAddItemModalOpen(false);
       // setRefetch(refetch !== true);
     }
