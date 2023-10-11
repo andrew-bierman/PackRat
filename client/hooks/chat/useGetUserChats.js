@@ -1,7 +1,14 @@
 import { queryTrpc } from '../../trpc';
 
 export function useGetUserChats(userId) {
-  const query = queryTrpc.getUserChats.useQuery({ userId });
+  const query = queryTrpc.getUserChats.useQuery(
+    { userId },
+    {
+      enabled: !!userId,
+      refetchOnWindowFocus: false,
+      keepPreviousData: true,
+    },
+  );
 
   const SelectById = (id) => {
     return query.data?.find((chat) => chat._id === id);

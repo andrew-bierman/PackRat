@@ -1,20 +1,57 @@
 import { queryTrpc } from '../../trpc';
 
-export function useGetAIResponse({ userId, conversationId, userInput }) {
-  const query = queryTrpc.getAIResponse.useQuery(
-    {
+export function useGetAIResponse() {
+  const utils = queryTrpc.useContext();
+  const mutation = queryTrpc.getAIResponse.useMutation({
+    // onMutate: async ({ userId, conversationId, userInput }) => {
+    //   const previousConversation = queryTrpc.getConversationById.getData({
+    //     conversationId,
+    //   });
+    //   const newQueryData = {
+    //     ...previousConversation,
+    //     messages: [
+    //       ...previousConversation.messages,
+    //       {
+    //         message: userInput,
+    //         sender: userId,
+    //         _id: Date.now().toString(),
+    //       },
+    //     ],
+    //   };
+    //   queryTrpc.getConversationById.setData(
+    //     { conversationId },
+    //     newQueryData,
+    //   );
+    //   return {
+    //     previousConversation,
+    //   };
+    // },
+    // onError: (err, { userId, conversationId, userInput }, context) => {
+    //   console.log('Error');
+    //   console.log(err);
+    //   if (context.previousConversation) {
+    //     queryTrpc.getConversationById.setData(
+    //       { conversationId },
+    //       context.previousConversation,
+    //     );
+    //   }
+    // },
+    onSuccess: () => {
+      //   queryTrpc.getUserChats.invalidate();
+      utils.invalidate();
+    },
+  });
+
+  const getAIResponse = async ({ userId, conversationId, userInput }) => {
+    return mutation.mutate({
       userId,
       conversationId,
       userInput,
-    },
-    {
-      enabled: !!userInput && !!conversationId && !!userId,
-      refetchOnWindowFocus: true,
-      keepPreviousData: true,
-    },
-  );
+    });
+  };
 
   return {
-    ...query,
+    getAIResponse,
+    ...mutation,
   };
 }

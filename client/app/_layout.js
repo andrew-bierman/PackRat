@@ -61,10 +61,10 @@ export default function HomeLayout() {
   return (
     <Provider store={store}>
       <PersistQueryClientProvider
-        onSuccess={() =>
+        onSuccess={async () =>
           queryClient
             .resumePausedMutations()
-            .then(() => queryClient.invalidateQueries())
+            .then(async () => queryClient.invalidateQueries())
         }
         persistOptions={{ persister }}
         client={queryClient}
