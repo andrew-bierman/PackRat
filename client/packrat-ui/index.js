@@ -6,6 +6,7 @@ import RInput from './RInput';
 import RButton from './RButton';
 import RImage from './RImage';
 import RScrollView from './RScrollview';
+import TSkeleton from './Skeleton';
 
 export {
   RStack,
@@ -16,4 +17,5 @@ export {
   RButton,
   RImage,
   RScrollView,
+  TSkeleton
 };
