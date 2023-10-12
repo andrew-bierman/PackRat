@@ -4995,12 +4995,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/netinfo@npm:9.3.10":
-  version: 9.3.10
-  resolution: "@react-native-community/netinfo@npm:9.3.10"
+"@react-native-community/netinfo@npm:^9.4.1":
+  version: 9.4.1
+  resolution: "@react-native-community/netinfo@npm:9.4.1"
   peerDependencies:
     react-native: ">=0.59"
-  checksum: b3d79a61de0b08d6174616facda21cdac35a07a8d63b7d1830212862eef208c204dec90d74b29e85a6e60adc89ea5b7adf19c612c39073cc8ad4050440b1085b
+  checksum: cf6471a50a5282f858797cda7531c61ac3d94de2e1c379b14a11f6b049f582606dae55a041dd900c56b01faf69eb5cfef9b4e84b0ea7f02de52804aa5a6e22df
   languageName: node
   linkType: hard
 
@@ -7235,6 +7235,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tanstack/match-sorter-utils@npm:^8.7.0":
+  version: 8.8.4
+  resolution: "@tanstack/match-sorter-utils@npm:8.8.4"
+  dependencies:
+    remove-accents: 0.4.2
+  checksum: d005f500754f52ef94966cbbe4217f26e7e3c07291faa2578b06bca9a5abe01689569994c37a1d01c6e783addf5ffbb28fa82eba7961d36eabf43ec43d1e496b
+  languageName: node
+  linkType: hard
+
+"@tanstack/query-async-storage-persister@npm:^4.35.7":
+  version: 4.35.7
+  resolution: "@tanstack/query-async-storage-persister@npm:4.35.7"
+  dependencies:
+    "@tanstack/query-persist-client-core": 4.35.7
+  checksum: 7823719800e2d1dfbcdf9af6d257b1a50a8aaa03ecf4963d77c4736721b1d3519788f75031c3439e70c3977574d0664ebfb4825f8eb44b88b70a894fe5116f4c
+  languageName: node
+  linkType: hard
+
 "@tanstack/query-core@npm:4.35.7":
   version: 4.35.7
   resolution: "@tanstack/query-core@npm:4.35.7"
@@ -7242,7 +7260,42 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/react-query@npm:^4.27.0":
+"@tanstack/query-persist-client-core@npm:4.35.7":
+  version: 4.35.7
+  resolution: "@tanstack/query-persist-client-core@npm:4.35.7"
+  dependencies:
+    "@tanstack/query-core": 4.35.7
+  checksum: 9a5a5b4a32285c11a7776f6d7fc5b256a0fd218e1e7f8d9ea120e2ac60addab58e573f225d472ed82754a1678aa1de3d6514a99698d5e7c9c3a396037077bf9c
+  languageName: node
+  linkType: hard
+
+"@tanstack/react-query-devtools@npm:^4.35.3":
+  version: 4.35.7
+  resolution: "@tanstack/react-query-devtools@npm:4.35.7"
+  dependencies:
+    "@tanstack/match-sorter-utils": ^8.7.0
+    superjson: ^1.10.0
+    use-sync-external-store: ^1.2.0
+  peerDependencies:
+    "@tanstack/react-query": ^4.35.7
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+  checksum: 319eb9b643ba5179382cee2dda8ecae4afcdf740a17b435540e7c3bd1e573a52782c119effa11139fef496e3087a30227243b07d18684e8d447a8d9eeec0d38c
+  languageName: node
+  linkType: hard
+
+"@tanstack/react-query-persist-client@npm:^4.35.7":
+  version: 4.35.7
+  resolution: "@tanstack/react-query-persist-client@npm:4.35.7"
+  dependencies:
+    "@tanstack/query-persist-client-core": 4.35.7
+  peerDependencies:
+    "@tanstack/react-query": ^4.35.7
+  checksum: efc61333950a6d06ef7a7b0f09e919542fb7c60fda438703f5f4ec49961b15a6d1c1c6d2d5b6708db521c1af9175689c02e646678e50f606fb64977d17b77cb1
+  languageName: node
+  linkType: hard
+
+"@tanstack/react-query@npm:^4.35.3":
   version: 4.35.7
   resolution: "@tanstack/react-query@npm:4.35.7"
   dependencies:
@@ -7277,7 +7330,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@trpc/client@npm:^10.38.0":
+"@trpc/client@npm:^10.38.0, @trpc/client@npm:^10.38.4":
   version: 10.38.5
   resolution: "@trpc/client@npm:10.38.5"
   peerDependencies:
@@ -7286,7 +7339,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@trpc/server@npm:^10.38.0":
+"@trpc/react-query@npm:^10.38.4":
+  version: 10.38.5
+  resolution: "@trpc/react-query@npm:10.38.5"
+  peerDependencies:
+    "@tanstack/react-query": ^4.18.0
+    "@trpc/client": 10.38.5
+    "@trpc/server": 10.38.5
+    react: ">=16.8.0"
+    react-dom: ">=16.8.0"
+  checksum: 7341f2e5cdb19a5fe30fe1d34a0ca4f28e648521f187a64a38911ea096411832014804e044bae79fa3056ce74f736ec281b7014c9695254191a032f12c09cd24
+  languageName: node
+  linkType: hard
+
+"@trpc/server@npm:^10.38.0, @trpc/server@npm:^10.38.4":
   version: 10.38.5
   resolution: "@trpc/server@npm:10.38.5"
   checksum: 15a6fc41de59bb954950d230d6793228c7b347a7f0cb87f793e9c92099d64a6106992e3cac4cab2c29f3c7655d5a8f9162efce0be1f25e7e6276df55e80146b2
@@ -10865,6 +10931,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"copy-anything@npm:^3.0.2":
+  version: 3.0.5
+  resolution: "copy-anything@npm:3.0.5"
+  dependencies:
+    is-what: ^4.1.8
+  checksum: d39f6601c16b7cbd81cdb1c1f40f2bf0f2ca0297601cf7bfbb4ef1d85374a6a89c559502329f5bada36604464df17623e111fe19a9bb0c3f6b1c92fe2cbe972f
+  languageName: node
+  linkType: hard
+
 "copy-webpack-plugin@npm:^10.2.0":
   version: 10.2.4
   resolution: "copy-webpack-plugin@npm:10.2.4"
@@ -11951,9 +12026,9 @@ __metadata:
   linkType: hard
 
 "electron-to-chromium@npm:^1.4.535":
-  version: 1.4.539
-  resolution: "electron-to-chromium@npm:1.4.539"
-  checksum: 52ca93d1fdff453f780c35e946ab4c04d4c54ab0e526b2b3a75b7674c33d95bf4ff5325de4406b3881b6f1e5ecac8f82f68d8566f3d99cc2e16a16533a83a9a5
+  version: 1.4.540
+  resolution: "electron-to-chromium@npm:1.4.540"
+  checksum: 78a48690a5cca3f89544d4e33a11e3101adb0b220da64078f67e167b396cbcd85044853cb88a9453444796599fe157c190ca5ebd00e9daf668ed5a9df3d0bba8
   languageName: node
   linkType: hard
 
@@ -14596,11 +14671,9 @@ __metadata:
   linkType: hard
 
 "has@npm:^1.0.3":
-  version: 1.0.3
-  resolution: "has@npm:1.0.3"
-  dependencies:
-    function-bind: ^1.1.1
-  checksum: b9ad53d53be4af90ce5d1c38331e712522417d017d5ef1ebd0507e07c2fbad8686fffb8e12ddecd4c39ca9b9b47431afbb975b8abf7f3c3b82c98e9aad052792
+  version: 1.0.4
+  resolution: "has@npm:1.0.4"
+  checksum: 8a11ba062e0627c9578a1d08285401e39f1d071a9692ddf793199070edb5648b21c774dd733e2a181edd635bf6862731885f476f4ccf67c998d7a5ff7cef2550
   languageName: node
   linkType: hard
 
@@ -15731,6 +15804,13 @@ __metadata:
     call-bind: ^1.0.2
     get-intrinsic: ^1.1.1
   checksum: 5d8698d1fa599a0635d7ca85be9c26d547b317ed8fd83fc75f03efbe75d50001b5eececb1e9971de85fcde84f69ae6f8346bc92d20d55d46201d328e4c74a367
+  languageName: node
+  linkType: hard
+
+"is-what@npm:^4.1.8":
+  version: 4.1.15
+  resolution: "is-what@npm:4.1.15"
+  checksum: fe27f6cd4af41be59a60caf46ec09e3071bcc69b9b12a7c871c90f54360edb6d0bc7240cb944a251fb0afa3d35635d1cecea9e70709876b368a8285128d70a89
   languageName: node
   linkType: hard
 
@@ -19909,7 +19989,7 @@ __metadata:
     "@packrat/packages": "*"
     "@react-native-async-storage/async-storage": 1.18.2
     "@react-native-community/geolocation": ^3.0.6
-    "@react-native-community/netinfo": 9.3.10
+    "@react-native-community/netinfo": ^9.4.1
     "@react-native-google-signin/google-signin": ^9.0.2
     "@react-native-picker/picker": 2.4.10
     "@react-navigation/native": ^6.1.6
@@ -19927,10 +20007,14 @@ __metadata:
     "@tamagui/shorthands": ^1.52.4
     "@tamagui/theme-base": ^1.52.4
     "@tamagui/themes": ^1.52.4
-    "@tanstack/react-query": ^4.27.0
+    "@tanstack/query-async-storage-persister": ^4.35.7
+    "@tanstack/react-query": ^4.35.3
+    "@tanstack/react-query-devtools": ^4.35.3
+    "@tanstack/react-query-persist-client": ^4.35.7
     "@tmcw/togeojson": ^5.7.0
-    "@trpc/client": ^10.38.0
-    "@trpc/server": ^10.38.0
+    "@trpc/client": ^10.38.4
+    "@trpc/react-query": ^10.38.4
+    "@trpc/server": ^10.38.4
     "@tsconfig/react-native": ^3.0.2
     "@types/jest": ^29.5.3
     "@types/react": ^18.2.20
@@ -19986,7 +20070,7 @@ __metadata:
     react-native-flash-message: ^0.4.2
     react-native-gesture-handler: ~2.12.0
     react-native-google-places-autocomplete: ^2.5.1
-    react-native-paper: ^5.9.1
+    react-native-paper: ^5.10.6
     react-native-paper-dates: ^0.18.12
     react-native-picker-select: ^8.0.4
     react-native-safe-area-context: 4.6.3
@@ -21302,12 +21386,12 @@ __metadata:
   linkType: hard
 
 "react-devtools-core@npm:^4.27.2":
-  version: 4.28.0
-  resolution: "react-devtools-core@npm:4.28.0"
+  version: 4.28.4
+  resolution: "react-devtools-core@npm:4.28.4"
   dependencies:
     shell-quote: ^1.6.1
     ws: ^7
-  checksum: a5be506a35ca027ba283f0efa7c0c9a818bd8b9b38b77081960423cc038b9f3ab3014970ed9cdd451b72a949bc279399daedb65931e8a44def0fb49c0a69f0a7
+  checksum: 2381f8eed956a030a89e9efff7f224beb59d593ef802b8594d69916e1f7a5e200d26371abe1bcc7a7646afa376d0ca57ccb283f8a33ddc73069fc06f86452927
   languageName: node
   linkType: hard
 
@@ -21491,7 +21575,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-paper@npm:^5.9.1":
+"react-native-paper@npm:^5.10.6":
   version: 5.10.6
   resolution: "react-native-paper@npm:5.10.6"
   dependencies:
@@ -22114,6 +22198,13 @@ __metadata:
   version: 0.2.7
   resolution: "relateurl@npm:0.2.7"
   checksum: 5891e792eae1dfc3da91c6fda76d6c3de0333a60aa5ad848982ebb6dccaa06e86385fb1235a1582c680a3d445d31be01c6bfc0804ebbcab5aaf53fa856fde6b6
+  languageName: node
+  linkType: hard
+
+"remove-accents@npm:0.4.2":
+  version: 0.4.2
+  resolution: "remove-accents@npm:0.4.2"
+  checksum: 84a6988555dea24115e2d1954db99509588d43fe55a1590f0b5894802776f7b488b3151c37ceb9e4f4b646f26b80b7325dcea2fae58bc3865df146e1fa606711
   languageName: node
   linkType: hard
 
@@ -23893,6 +23984,15 @@ __metadata:
   dependencies:
     kdbush: ^4.0.2
   checksum: 39d141f768a511efa53260252f9dab9a2ce0228b334e55482c8d3019e151932f05e1a9a0252d681737651b13c741c665542a6ddb40ec27de96159ea7ad41f7f4
+  languageName: node
+  linkType: hard
+
+"superjson@npm:^1.10.0":
+  version: 1.13.3
+  resolution: "superjson@npm:1.13.3"
+  dependencies:
+    copy-anything: ^3.0.2
+  checksum: f5aeb010f24163cb871a4bc402d9164112201c059afc247a75b03131c274aea6eec9cf08be9e4a9465fe4961689009a011584528531d52f7cc91c077e07e5c75
   languageName: node
   linkType: hard
 
@@ -26049,9 +26149,9 @@ __metadata:
   linkType: hard
 
 "zod@npm:^3.22.2":
-  version: 3.22.2
-  resolution: "zod@npm:3.22.2"
-  checksum: 231e2180c8eabb56e88680d80baff5cf6cbe6d64df3c44c50ebe52f73081ecd0229b1c7215b9552537f537a36d9e36afac2737ddd86dc14e3519bdbc777e82b9
+  version: 3.22.3
+  resolution: "zod@npm:3.22.3"
+  checksum: 65b05139be337078a70700b05942ab7f2ef5f11abe194df14ef257fac4e5c383476a4dc290731842996bd57fc8d5bf38e5a4c907fe8cdf8b15477f8da5bfcc00
   languageName: node
   linkType: hard
 

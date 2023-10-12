@@ -9,16 +9,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { GearList } from '../../components/GearList';
 import { SaveTripContainer } from '~/components/trip/createTripModal';
 import TripDateRange from '~/components/trip/TripDateRange';
-
+import { useFetchWeather, useFetchWeatherWeak } from '~/hooks/weather';
 // import MultiStepForm from "../multi_step";
 import { photonDetails } from '../../store/destinationStore';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from '~/hooks/useCustomStyles';
-
+import useParks from '~/hooks/parks';
+import useTrails from '~/hooks/trails';
 export default function Trips() {
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
-  const [parksData, setParksData] = useState();
+  // const [parksData, setParksData] = useState();
   const [trails, setTrailsData] = useState();
   const [dateRange, setDateRange] = useState({
     startDate: undefined,
@@ -29,22 +30,50 @@ export default function Trips() {
     (state) => state.search.selectedSearchResult,
   );
 
-  const weatherObject = useSelector((state) => state.weather.weatherObject);
-  const weatherWeek = useSelector((state) => state.weather.weatherWeek);
-
+  // const weatherObject = useSelector((state) => state.weather.weatherObject);
+  // const weatherWeek = useSelector((state) => state.weather.weatherWeek);
+  const { latLng, selectedSearch } = useSelector((state) => state.weather);
   const trailsObject = useSelector((state) => state.trails.trailNames);
   const parksObject = useSelector((state) => state.parks.parkNames);
   const photonDetailsStore = useSelector(
     (state) => state.destination.photonDetails,
   );
 
-  useEffect(() => {
-    setTrailsData(trailsObject);
-  }, [trailsObject]);
+  console.log(
+    '🚀 ~ file: createTrip.js:41 ~ Trips ~ selectedSearch:',
+    selectedSearch,
+  );
+  const {
+    data: weatherData,
+    isLoading: weatherLoading,
+    isError: weatherError,
+  } = useFetchWeather(latLng);
+  const {
+    data: weatherWeekData,
+    isLoading: weekWeatherLoading,
+    isError: weekWeatherError,
+  } = useFetchWeatherWeak(latLng);
+  const {
+    data: parks,
+    error: parksError,
+    isLoading: parksLoading,
+    filteredParks: parksData,
+  } = useParks({
+    latLng,
+    selectedSearch,
+  });
+  console.log('filtered parks', parksData, parksError);
+  const { data, filteredTrails, error, isLoading } = useTrails({
+    latLng,
+    selectedSearch,
+  });
+  // useEffect(() => {
+  //   setTrailsData(trailsObject);
+  // }, [trailsObject]);
 
-  useEffect(() => {
-    setParksData(parksObject);
-  }, [parksObject]);
+  // useEffect(() => {
+  // setParksData(parksObject);
+  // }, [parksObject]);
 
   useEffect(() => {
     if (searchResult?.properties) {
@@ -174,16 +203,20 @@ export default function Trips() {
               />
             )}
           />
-
-          <WeatherCard
-            weatherObject={weatherObject}
-            weatherWeek={weatherWeek}
-          />
+          {!weekWeatherError &&
+            !weatherError &&
+            !weatherLoading &&
+            !weekWeatherLoading && (
+              <WeatherCard
+                weatherObject={weatherData}
+                weatherWeek={weatherWeekData}
+              />
+            )}
           <TripCard
             title="Nearby Trails"
             value="Trail List"
             isTrail={true}
-            data={trails || []}
+            data={filteredTrails || []}
             Icon={() => (
               <FontAwesome5
                 name="hiking"

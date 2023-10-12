@@ -265,9 +265,9 @@ export const TableContainer = ({
       const itemQuantity = Number(item.quantity) || 0; // ensure it's a number
       const itemUnit = item.unit || null;
 
-      console.log('item', item);
-      console.log('itemWeight', itemWeight);
-      console.log('itemQuantity', itemQuantity);
+      // console.log('item', item);
+      // console.log('itemWeight', itemWeight);
+      // console.log('itemQuantity', itemQuantity);
 
       if (!copy) {
         switch (categoryName) {

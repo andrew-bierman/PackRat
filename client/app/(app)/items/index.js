@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getItemsGlobal } from '../../../store/globalItemsStore';
 import { Stack } from 'expo-router';
 import Head from 'expo-router/head';
+import { useFetchGlobalItems } from '~/hooks/globalItems';
 
 export default function Items() {
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
@@ -21,19 +22,25 @@ export default function Items() {
   // page number for pagination
   const [page, setPage] = useState(1);
   // it will be used as a dependency for reloading the data in case of some modifications
-  const [refetch, setRefetch] = useState(false);
+  // const [refetch, setRefetch] = useState(false);
 
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     UseTheme();
-  const data = useSelector((state) => state.globalItems);
 
-  const isLoading = useSelector((state) => state.globalItems.isLoading);
-  const isError = useSelector((state) => state.globalItems.isError);
+  const { data, isLoading, isError, refetch } = useFetchGlobalItems(
+    limit,
+    page,
+  );
+  console.log('🚀 ~ file: index.js:32 ~ Items ~ data:', data);
+  // const data = useSelector((state) => state.globalItems);
+
+  // const isLoading = useSelector((state) => state.globalItems.isLoading);
+  // const isError = useSelector((state) => state.globalItems.isError);
 
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getItemsGlobal({ limit, page }));
-  }, [limit, page, refetch]);
+  // useEffect(() => {
+  // dispatch(getItemsGlobal({ limit, page }));
+  // }, [limit, page]);
 
   return (
     <ScrollView>
@@ -95,13 +102,13 @@ export default function Items() {
             onCancel={setIsAddItemModalOpen}
           >
             <AddItemGlobal
-              setRefetch={setRefetch}
-              refetch={refetch}
+              setRefetch={async () => refetch()}
+              // refetch={refetch}
               setIsAddItemModalOpen={setIsAddItemModalOpen}
             />
           </CustomModal>
         </>
-        {!isError && Array.isArray(data.globalItems.items) ? (
+        {!isError ? (
           <ItemsTable
             limit={limit}
             setLimit={setLimit}
@@ -109,9 +116,9 @@ export default function Items() {
             setPage={setPage}
             data={data}
             isLoading={isLoading}
-            totalPages={data?.globalItems?.totalPages}
+            totalPages={data?.totalPages}
             refetch={refetch}
-            setRefetch={setRefetch}
+            setRefetch={async () => refetch()}
           />
         ) : null}
       </Box>

@@ -9,8 +9,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { CustomModal } from '../modal';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from '~/hooks/useCustomStyles';
-import { useMutation } from '@tanstack/react-query';
-import useAddPack from '~/hooks/useAddPack';
+
+import { useAddNewPack } from '~/hooks/packs';
 
 export const AddPack = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
@@ -31,7 +31,7 @@ export const AddPack = () => {
   const error = useSelector((state) => state.packs.error);
 
   const isError = error !== null;
-
+  const { addNewPack } = useAddNewPack();
   /**
    * Handles the addition of a pack.
    *
@@ -42,8 +42,7 @@ export const AddPack = () => {
 
   const mutation=useAddPack()
   const handleAddPack = () => {
-    mutation.addPack.mutate({ name, owner_id: user?._id, is_public: isPublic })
-    console.log('added')
+    addNewPack({ name, owner_id: user?._id, is_public: isPublic })
     setName('');
   };
 

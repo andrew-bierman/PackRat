@@ -6,6 +6,67 @@ With PackRat, you can create and manage trips, discover new destinations, and st
 
 So pack your bags, grab your friends, and get ready for your next adventure with PackRat!
 
+**Build & CI:**
+![Node.js CI](https://github.com/andrew-bierman/PackRat/actions/workflows/node.js.yml/badge.svg)
+![Node.js CI for Dev Environment](https://github.com/andrew-bierman/PackRat/actions/workflows/node.js.dev.yml/badge.svg)
+![Docker Image CI](https://github.com/andrew-bierman/PackRat/actions/workflows/docker.node.yml/badge.svg)
+![android-build-apk](https://github.com/andrew-bierman/PackRat/actions/workflows/build.yml/badge.svg)
+
+**Repository Info:**
+![GitHub tag](https://img.shields.io/github/tag/andrew-bierman/PackRat?include_prereleases=&sort=semver&color=blue)
+![License](https://img.shields.io/badge/License-GNU-blue)
+![issues - PackRat](https://img.shields.io/github/issues/andrew-bierman/PackRat)
+
+<div align="center">
+
+[![View Beta Site](https://img.shields.io/badge/View%20Beta%20Site-%20-brightgreen)](https://packrat.world)
+
+</div>
+
+
+## Table of Contents
+
+- [PackRat 🎒](#packrat-)
+  - [Table of Contents](#table-of-contents)
+  - [Overview 🌐](#overview-)
+  - [Documentation 📚](#documentation-)
+  - [Features 🚀](#features-)
+  - [Technologies used 💻](#technologies-used-)
+  - [Local installation 📲](#local-installation-)
+    - [Dependencies](#dependencies)
+    - [Environment Setup](#environment-setup)
+      - [Automated Setup 🛠️](#automated-setup-️)
+      - [Manual Setup 📝](#manual-setup-)
+    - [Yarn Setup](#yarn-setup)
+      - [Root](#root)
+      - [Server](#server)
+      - [Client](#client)
+  - [Docker Installation 🐳](#docker-installation-)
+    - [Dependencies](#dependencies-1)
+    - [Installation](#installation)
+  - [How backend API's are setup](#how-backend-apis-are-setup)
+  - [Contributing 🤝](#contributing-)
+  - [License 📝](#license-)
+
+## Overview 🌐
+
+With **PackRat**, you can:
+- Create and manage trips.
+- Discover new destinations.
+- Stay informed with up-to-date weather forecasts.
+- Access accurate maps and directions with our integration to Mapbox.
+- Get suggestions for popular outdoor activities based on your trip's location and season.
+
+So pack your bags, grab your friends, and get ready for your next adventure with **PackRat**!
+
+## Documentation 📚
+
+<div align="center">
+
+[![view - Documentation](https://img.shields.io/badge/view-Documentation-blue?style=for-the-badge)](/docs/ "Go to project documentation")
+
+</div>
+
 ## Features 🚀
 
 - Create and manage trips: users can create new trips and manage existing ones by adding details such as dates, locations, and activities.

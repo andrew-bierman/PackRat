@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { Container, Text } from 'native-base';
 import { useRouter, useSearchParams } from 'expo-router';
@@ -24,6 +24,7 @@ import {
 } from '../../store/destinationStore';
 import { fetchWeather, fetchWeatherWeek } from '../../store/weatherStore';
 import useCustomStyles from '~/hooks/useCustomStyles';
+import { useFetchWeather, useFetchWeatherWeak } from '~/hooks/weather';
 
 const DestinationHeader = ({ geoJSON, selectedSearchResult }) => {
   const styles = useCustomStyles(loadStyles);
@@ -84,6 +85,9 @@ const WeatherData = ({ geoJSON }) => {
   const dispatch = useDispatch();
   const weatherObject = useSelector((state) => state.destination.weatherObject);
   const weatherWeek = useSelector((state) => state.destination.weatherWeek);
+  const [latLng, setLatLng] = useState({});
+  const { data: weatherData } = useFetchWeather(latLng);
+  const { data: weatherWeekData } = useFetchWeatherWeak(latLng);
 
   useEffect(() => {
     /**
@@ -105,11 +109,13 @@ const WeatherData = ({ geoJSON }) => {
         }
 
         if (lat && lon) {
+          setLatLng({ lat, lon });
           try {
-            const weatherObjRes = await dispatch(fetchWeather({ lat, lon }));
-            const weatherWkRes = await dispatch(fetchWeatherWeek({ lat, lon }));
-            dispatch(setWeatherObject(weatherObjRes.payload));
-            dispatch(setWeatherWeek(weatherWkRes.payload.list.slice(0, 4)));
+            // console.log(lat, lon)
+            // const weatherObjRes = await dispatch(fetchWeather({ lat, lon }));
+            // const weatherWkRes = await dispatch(fetchWeatherWeek({ lat, lon }));
+            // dispatch(setWeatherObject(weatherObjRes.payload));
+            // dispatch(setWeatherWeek(weatherWkRes.payload.list.slice(0, 4)));
           } catch (err) {
             console.error(err);
           }
