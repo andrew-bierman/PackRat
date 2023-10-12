@@ -14,9 +14,6 @@ import { SessionProvider } from '../context/auth';
 import { ThemeProvider } from '../context/theme';
 import FlashMessage from 'react-native-flash-message';
 import Footer from '../components/footer/Footer';
-import { QueryClientProvider } from '@tanstack/react-query';
-import { queryClient } from '~/constants/queryClient';
-
 
 import { queryTrpc, getToken } from '../trpc';
 import { httpBatchLink } from '@trpc/client';
@@ -62,7 +59,6 @@ export default function HomeLayout() {
   });
 
   return (
-    <QueryClientProvider client={queryClient}>
     <Provider store={store}>
       <PersistQueryClientProvider
         onSuccess={async () =>
@@ -90,6 +86,5 @@ export default function HomeLayout() {
         </queryTrpc.Provider>
       </PersistQueryClientProvider>
     </Provider>
-    </QueryClientProvider>
   );
 }
