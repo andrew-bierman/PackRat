@@ -39,10 +39,10 @@ export const DeletePackItemModal = ({
    * @param {type} paramName - description of parameter
    * @return {type} description of return value
    */
-  const {deletePackItem} =useDeletePackItem()
+  const { deletePackItem } = useDeletePackItem();
   const deleteItemHandler = () => {
     if (pack) {
-      deletePackItem({ itemId, packId: pack._id })
+      deletePackItem({ itemId, packId: pack._id });
     } else {
       if (isConnected) {
         dispatch(deleteGlobalItem(itemId));

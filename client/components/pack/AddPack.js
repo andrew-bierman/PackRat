@@ -39,7 +39,7 @@ export const AddPack = () => {
    * @return {void}
    */
   const handleAddPack = () => {
-    addNewPack({ name, owner_id: user?._id, is_public: isPublic })
+    addNewPack({ name, owner_id: user?._id, is_public: isPublic });
     setName('');
   };
 

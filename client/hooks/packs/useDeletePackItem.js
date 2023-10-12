@@ -4,18 +4,23 @@ export const useDeletePackItem = () => {
   const utils = queryTrpc.useContext();
   const mutation = queryTrpc.deleteItem.useMutation({
     onMutate: async (deleteItem) => {
-      console.log(deleteItem)
-      const previousPack = utils.getPackById.getData({ packId: deleteItem.packId });
-      const itemIndex = previousPack.items.findIndex(item => item._id === deleteItem.itemId);
+      console.log(deleteItem);
+      const previousPack = utils.getPackById.getData({
+        packId: deleteItem.packId,
+      });
+      const itemIndex = previousPack.items.findIndex(
+        (item) => item._id === deleteItem.itemId,
+      );
       if (itemIndex === -1) {
-        throw new Error("Item not found in the pack.");
+        // throw new Error('Item not found in the pack.');
+        return;
       }
       const newQueryData = {
         ...previousPack,
         items: previousPack.items.filter((item, index) => {
-            return index !== itemIndex
+          return index !== itemIndex;
         }),
-        validatorPack:deleteItem.packId 
+        validatorPack: deleteItem.packId,
       };
       utils.getPackById.setData({ packId: deleteItem.packId }, newQueryData);
 
@@ -25,14 +30,17 @@ export const useDeletePackItem = () => {
     },
     onError: (err, deleteItem, context) => {
       if (context.previousPack) {
-        utils.getPackById.setData({ packId: deleteItem.packId}, context.previousPack);
+        utils.getPackById.setData(
+          { packId: deleteItem.packId },
+          context.previousPack,
+        );
       }
     },
     onSuccess: (result) => {
       utils.getPackById.invalidate();
     },
   });
-  
+
   return {
     mutation,
     deletePackItem: mutation.mutate,
