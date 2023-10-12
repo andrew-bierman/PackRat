@@ -16,7 +16,13 @@ import {
   Spinner,
 } from 'native-base';
 import { AntDesign } from '@expo/vector-icons';
-import { StyleSheet, FlatList, View, ScrollView } from 'react-native';
+import {
+  StyleSheet,
+  FlatList,
+  View,
+  ScrollView,
+  RefreshControl,
+} from 'react-native';
 import Card from '../../components/feed/FeedCard';
 import DropdownComponent from '../../components/Dropdown';
 import { theme } from '../../theme';
@@ -171,14 +177,17 @@ const Feed = ({ feedType = 'public' }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [pageNo, setPageNo] = useState(1);
 
+  const [refreshing, setRefreshing] = useState(false);
+
   const dispatch = useDispatch();
   const ownerId = useSelector((state) => state.auth.user?._id);
-  const publicPacksData = useSelector((state) => state.feed.publicPacks);
-  const userPacksData = useSelector(selectAllPacks);
-  const publicTripsData = useSelector((state) => state.feed.publicTrips);
-  const userTripsData = useSelector(selectAllTrips);
+  // const publicPacksData = useSelector((state) => state.feed.publicPacks);
+  // const userPacksData = useSelector(selectAllPacks);
+  // const publicTripsData = useSelector((state) => state.feed.publicTrips);
+  // const userTripsData = useSelector(selectAllTrips);
 
   const styles = useCustomStyles(loadStyles);
+
   const { data, error, isLoading, totalPages } = useFeed(
     queryString,
     ownerId,
@@ -186,6 +195,12 @@ const Feed = ({ feedType = 'public' }) => {
     selectedTypes,
     pageNo,
   );
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    refetch();
+    setRefreshing(false);
+  };
 
   console.log('🚀 ~ file: Feed.js:180 ~ Feed ~ feedData:', data);
   // useEffect(() => {
@@ -268,6 +283,9 @@ const Feed = ({ feedType = 'public' }) => {
       <ScrollView
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ flex: 1, paddingBottom: 10 }}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       >
         {isLoading ? (
           <Spinner
@@ -315,6 +333,9 @@ const Feed = ({ feedType = 'public' }) => {
           ListHeaderComponent={() => feedSearchFilterComponent}
           ListEmptyComponent={() => <Text>{ERROR_MESSAGES[feedType]}</Text>}
           showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
         />
       </View>
     );

@@ -13,6 +13,6 @@ export const useFetchWeatherWeak = (latLng) => {
         keepPreviousData: true,
       },
     );
-  const isOwner = data && user && data.owner_id === user._id;
-  return { refetch, data, error, isLoading, isOwner, isError };
+
+  return { refetch, data: data?.list?.slice(0, 4), error, isLoading, isError };
 };

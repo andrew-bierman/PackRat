@@ -8,6 +8,7 @@ import {
   deleteItemOffline,
 } from '../../store/globalItemsStore';
 import { addOfflineRequest } from '../../store/offlineQueue';
+import { useDeletePackItem } from '~/hooks/packs/useDeletePackItem';
 
 export const DeletePackItemModal = ({
   itemId,
@@ -38,9 +39,10 @@ export const DeletePackItemModal = ({
    * @param {type} paramName - description of parameter
    * @return {type} description of return value
    */
+  const { deletePackItem } = useDeletePackItem();
   const deleteItemHandler = () => {
     if (pack) {
-      dispatch(deletePackItem({ itemId, currentPackId: pack._id }));
+      deletePackItem({ itemId, packId: pack._id });
     } else {
       if (isConnected) {
         dispatch(deleteGlobalItem(itemId));

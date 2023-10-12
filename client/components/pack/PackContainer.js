@@ -2,7 +2,7 @@ import { Box, Button, Input, Select, Text } from 'native-base';
 import { useEffect, useState } from 'react';
 
 import DropdownComponent from '../Dropdown';
-import useGetPacks from '../../hooks/useGetPacks';
+// import useGetPacks from '../../hooks/useGetPacks';
 import { AddItem } from '../item/AddItem';
 import { TableContainer } from '../pack_table/Table';
 // import { useAuth } from "../../auth/provider";
@@ -39,6 +39,7 @@ export default function PackContainer({ isCreatingTrip = false }) {
   //   }
   // }, [dispatch, user?._id, refetch]);
 
+  // TODO - improve refetch logic. Should be handled entirely by the hook
   const {
     data: packs,
     error,
