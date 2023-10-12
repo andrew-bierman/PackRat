@@ -12,8 +12,9 @@ export const useDeletePackItem = () => {
         (item) => item._id === deleteItem.itemId,
       );
       if (itemIndex === -1) {
-        // throw new Error('Item not found in the pack.');
-        return;
+        return {
+          previousPack,
+        };
       }
       const newQueryData = {
         ...previousPack,
@@ -29,6 +30,8 @@ export const useDeletePackItem = () => {
       };
     },
     onError: (err, deleteItem, context) => {
+      console.log('Error');
+      console.log(err);
       if (context.previousPack) {
         utils.getPackById.setData(
           { packId: deleteItem.packId },
