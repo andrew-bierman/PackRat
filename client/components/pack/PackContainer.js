@@ -39,6 +39,7 @@ export default function PackContainer({ isCreatingTrip = false }) {
   //   }
   // }, [dispatch, user?._id, refetch]);
 
+  // TODO - improve refetch logic 
   const {
     data: packs,
     error,

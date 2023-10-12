@@ -11,6 +11,7 @@ import { theme } from '../theme';
 import { AntDesign, MaterialIcons } from '@expo/vector-icons';
 import useTheme from '../hooks/useTheme';
 import useCustomStyles from '~/hooks/useCustomStyles';
+
 const Drawer = ({
   isDrawerOpen,
   toggleDrawer,

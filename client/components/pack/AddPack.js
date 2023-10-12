@@ -9,6 +9,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { CustomModal } from '../modal';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from '~/hooks/useCustomStyles';
+
 import { useAddNewPack } from '~/hooks/packs';
 
 export const AddPack = () => {
@@ -38,17 +39,20 @@ export const AddPack = () => {
    * @param {string} owner_id - The ID of the pack's owner.
    * @return {void}
    */
+
+  const mutation=useAddPack()
   const handleAddPack = () => {
     addNewPack({ name, owner_id: user?._id, is_public: isPublic })
     setName('');
   };
+
+
 
   const data = ['Yes', 'For me only'];
 
   const handleonValueChange = (itemValue) => {
     setIsPublic(itemValue == 'Yes');
   };
-
   return (
     <Box style={styles.container}>
       <Box style={styles.mobileStyle}>

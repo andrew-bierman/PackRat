@@ -35,8 +35,11 @@ import { useRouter } from 'expo-router';
 import { fuseSearch } from '../../utils/fuseSearch';
 import { fetchUserFavorites } from '../../store/favoritesStore';
 import useCustomStyles from '~/hooks/useCustomStyles';
-import { queryTrpc, trpc } from '../../trpc';
+
+import useGetPacks from '~/hooks/useGetPacks';
+
 import { useFeed } from '~/hooks/feed';
+
 const URL_PATHS = {
   userPacks: '/pack/',
   favoritePacks: '/pack/',
@@ -176,6 +179,13 @@ const Feed = ({ feedType = 'public' }) => {
   const publicTripsData = useSelector((state) => state.feed.publicTrips);
   const userTripsData = useSelector(selectAllTrips);
 
+  const getPacksData=useGetPacks({ ownerId, queryString })
+  if(! getPacksData.isLoading){
+    console.log("data")
+    console.log( getPacksData)
+  }
+
+
   const styles = useCustomStyles(loadStyles);
   const { data, error, isLoading } = useFeed(
     queryString,
@@ -263,10 +273,13 @@ const Feed = ({ feedType = 'public' }) => {
         <View style={styles.cardContainer}>
           {/* {console.log({ data })} */}
           {feedSearchFilterComponent}
-          {data?.map((item) => (
+          
+          {!getPacksData.isLoading && getPacksData.data.packs.map((item) => (
             <Card key={item._id} type={item.type} {...item} />
           ))}
         </View>
+        
+
       </ScrollView>
     ) : (
       <View style={{ flex: 1, paddingBottom: 10 }}>
