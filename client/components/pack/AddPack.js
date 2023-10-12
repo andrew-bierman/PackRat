@@ -30,7 +30,7 @@ export const AddPack = () => {
   const error = useSelector((state) => state.packs.error);
 
   const isError = error !== null;
-  const { mutation } = useAddNewPack();
+  const { addNewPack } = useAddNewPack();
   /**
    * Handles the addition of a pack.
    *
@@ -39,7 +39,7 @@ export const AddPack = () => {
    * @return {void}
    */
   const handleAddPack = () => {
-    mutation.mutate({ name, owner_id: user?._id, is_public: isPublic });
+    addNewPack({ name, owner_id: user?._id, is_public: isPublic })
     setName('');
   };
 
