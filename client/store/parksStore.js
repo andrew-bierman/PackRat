@@ -5,6 +5,7 @@ import {
 } from '@reduxjs/toolkit';
 import { api } from '../constants/api';
 import axios from 'axios';
+import { trpc } from '../trpc';
 
 export const fetchParks = createAsyncThunk(
   'parks/fetchParks',
@@ -17,9 +18,10 @@ export const fetchParks = createAsyncThunk(
     const url = api + '/osm/parks' + params;
 
     try {
-      const response = await axios.get(url);
-      const parks = response.data.features;
-
+      // const response = await axios.get(url);
+      // const parks = response.data.features;
+      const response = await trpc.getParksOSM.query({ lat, lon });
+      const parks = response.features;
       const filteredParks = parks
         .filter(
           (park) =>

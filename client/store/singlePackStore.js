@@ -9,6 +9,7 @@ import {
 import axios from '~/config/axios';
 
 import { api } from '../constants/api';
+import { trpc } from '../trpc';
 
 const singlePackAdapter = createEntityAdapter({
   selectId: (singlePack) => singlePack._id,
@@ -24,10 +25,12 @@ const initialState = singlePackAdapter.getInitialState({
 export const fetchSinglePack = createAsyncThunk(
   'packs/fetchSinglePack',
   async (packId) => {
-    const response = await axios.get(`${api}/pack/p/${packId}`);
-    return response.data;
+    // const response = await axios.get(`${api}/pack/p/${packId}`);
+    // return response.data;
+    return await trpc.getPackById.query({ packId });
   },
 );
+
 export const selectItemsGlobal = createAsyncThunk(
   'Items/selectItemsGlobal',
   async (item) => {
@@ -36,11 +39,12 @@ export const selectItemsGlobal = createAsyncThunk(
       const ownerId = item.ownerId;
       const packId = item.packId;
 
-      const response = await axios.post(`${api}/item/global/select/${packId}`, {
-        itemId,
-        ownerId,
-      });
-      return response.data;
+      // const response = await axios.post(`${api}/item/global/select/${packId}`, {
+      //   itemId,
+      //   ownerId,
+      // });
+      // return response.data;
+      return await trpc.addGlobalItemToPack.query({ itemId, ownerId, packId });
     } catch (error) {
       console.log('error', error.message);
     }
@@ -87,5 +91,6 @@ export const {
   selectById: selectSinglePackById,
   selectAll: selectAllSinglePacks,
 } = singlePackAdapter.getSelectors((state) => state.singlePack);
+export const { clearSinglePack } = singlePackSlice.actions;
 
 export default singlePackSlice.reducer;

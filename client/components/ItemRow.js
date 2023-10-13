@@ -1,14 +1,14 @@
-import { StyleSheet } from 'react-native';
 import { Box, Container, Text } from 'native-base';
 import Checkbox from 'expo-checkbox';
 
 import { useState } from 'react';
 
 import { FontAwesome } from '@expo/vector-icons';
+import useCustomStyles from '~/hooks/useCustomStyles';
 
 export const ItemRow = ({ packName }) => {
   const [isChecked, setChecked] = useState(false);
-
+  const styles = useCustomStyles(loadStyles);
   return (
     <Container style={styles.mainContainer}>
       <Checkbox
@@ -34,7 +34,7 @@ export const ItemRow = ({ packName }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const loadStyles = () => ({
   mainContainer: {
     flexDirection: 'row',
     width: '100%',

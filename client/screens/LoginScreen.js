@@ -9,10 +9,6 @@ import {
 } from 'native-base';
 
 import { FontAwesome } from '@expo/vector-icons';
-// import Mapbox from "@rnmapbox/maps";
-// Mapbox.setAccessToken(
-//   "pk.eyJ1IjoibWlhbi1iaWxhbCIsImEiOiJja3k5YzExdGcwNHY0Mm9tbmo0ajhrOGx5In0.VAkiap76DG7NiKc23A9tcg"
-// );
 
 import { NODE_ENV, WEB_CLIENT_ID } from '@env';
 import * as Google from 'expo-auth-session/providers/google';
@@ -26,49 +22,22 @@ import { Link, useRouter } from 'expo-router';
 // import { signInWithGoogle } from "../auth/firebase";
 import { useDispatch, useSelector } from 'react-redux';
 import { signIn, signInWithGoogle } from '../store/authStore';
-import { StyleSheet } from 'react-native';
+
 import { InformUser } from '../utils/ToastUtils';
-import UseTheme from '../hooks/useTheme';
+import useTheme from '../hooks/useTheme';
 import { useForm } from 'react-hook-form';
 import { InputText, InputTextRules } from '~/components/InputText';
 import { Regex } from '~/utils/regex';
-
-// const defaultStyle = {
-//   version: 8,
-//   name: "Land",
-//   sources: {
-//     map: {
-//       type: "raster",
-//       tiles: ["https://a.tile.openstreetmap.org/{z}/{x}/{y}.png"],
-//       tileSize: 256,
-//       minzoom: 1,
-//       maxzoom: 19,
-//     },
-//   },
-//   layers: [
-//     {
-//       id: "background",
-//       type: "background",
-//       paint: {
-//         "background-color": "#f2efea",
-//       },
-//     },
-//     {
-//       id: "map",
-//       type: "raster",
-//       source: "map",
-//       paint: {
-//         "raster-fade-duration": 100,
-//       },
-//     },
-//   ],
-// };
+import useCustomStyles from '~/hooks/useCustomStyles';
+import { useSession } from '../context/auth';
 
 WebBrowser.maybeCompleteAuthSession();
 
 export default function Login() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
+  const { sessionSignIn } = useSession();
+  const styles = useCustomStyles(loadStyles);
   const {
     control,
     handleSubmit,
@@ -80,6 +49,8 @@ export default function Login() {
     password: '12345678',
   };
 
+  const enableGoogleLogin = WEB_CLIENT_ID && WEB_CLIENT_ID !== '';
+
   const router = useRouter();
 
   const dispatch = useDispatch();
@@ -88,17 +59,18 @@ export default function Login() {
 
   const user = useSelector((state) => state.auth.user);
   const error = useSelector((state) => state.auth.error);
-  if (user?._id) {
-    InformUser({
-      title: 'Login sucessfully',
-      placement: 'top-right',
-      duration: 3000,
-      style: {
-        backgroundColor: currentTheme.colors.textPrimary,
-      },
-    });
-    router.push('/');
-  }
+
+  // if (user?._id) {
+  //   InformUser({
+  //     title: 'Login sucessfully',
+  //     placement: 'top-right',
+  //     duration: 3000,
+  //     style: {
+  //       backgroundColor: currentTheme.colors.textPrimary,
+  //     },
+  //   });
+  //   router.push('/');
+  // }
   if (error) {
     InformUser({
       title: 'Wrong-password',
@@ -112,7 +84,7 @@ export default function Login() {
 
   // Add Google auth-related variables
   const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
-    clientId: WEB_CLIENT_ID,
+    clientId: WEB_CLIENT_ID || 'default',
   });
 
   const auth = useSelector((state) => state.auth);
@@ -127,7 +99,12 @@ export default function Login() {
   useEffect(() => {
     if (response?.type === 'success') {
       const { id_token } = response.params;
-      dispatch(signInWithGoogle({ idToken: id_token }));
+      dispatch(signInWithGoogle({ idToken: id_token })).then(({ payload }) => {
+        if (!payload) return;
+        if (payload.token) {
+          sessionSignIn(payload.token);
+        }
+      });
     }
   }, [response]);
 
@@ -163,7 +140,12 @@ export default function Login() {
    */
   const handleLogin = (data) => {
     const { email, password } = data;
-    dispatch(signIn({ email, password }));
+    dispatch(signIn({ email, password })).then(({ payload }) => {
+      if (!payload) return;
+      if (payload.token) {
+        sessionSignIn(payload.token);
+      }
+    });
   };
 
   // useEffect(() => {
@@ -343,24 +325,27 @@ export default function Login() {
                 Or
               </Heading>
             </HStack>
-            <HStack mt="1" justifyContent="center" alignItems="center">
-              <Button
-                w="100%"
-                disabled={!request}
-                onPress={async () => await promptAsync()}
-                colorScheme={'red'}
-                startIcon={
-                  <FontAwesome
-                    name="google"
-                    size={18}
-                    color={currentTheme.colors.white}
-                  />
-                }
-              >
-                Sign in with Google
-              </Button>
-            </HStack>
+
             {/* Google Login */}
+            {enableGoogleLogin && (
+              <HStack mt="1" justifyContent="center" alignItems="center">
+                <Button
+                  w="100%"
+                  disabled={!request}
+                  onPress={async () => await promptAsync()}
+                  colorScheme={'red'}
+                  startIcon={
+                    <FontAwesome
+                      name="google"
+                      size={18}
+                      color={currentTheme.colors.white}
+                    />
+                  }
+                >
+                  Sign in with Google
+                </Button>
+              </HStack>
+            )}
 
             {/* Demo Login for Development start */}
             {NODE_ENV !== 'production' && (
@@ -368,9 +353,7 @@ export default function Login() {
                 <Button
                   w="100%"
                   disabled={!request}
-                  onPress={() => {
-                    dispatch(signIn(demoUser));
-                  }}
+                  onPress={() => handleLogin(demoUser)}
                   colorScheme={'purple'}
                 >
                   Demo User
@@ -385,7 +368,7 @@ export default function Login() {
   );
 }
 
-const styles = StyleSheet.create({
+const loadStyles = () => ({
   container: {
     marginTop: 20,
     height: 300,

@@ -70,6 +70,7 @@ module.exports = {
     'operator-linebreak': 'off',
     '@typescript-eslint/await-thenable': 'off',
     '@typescript-eslint/prefer-optional-chain': 'off',
+    '@typescript-eslint/return-await': 'off',
   },
   settings: {
     react: {

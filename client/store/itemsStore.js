@@ -5,32 +5,43 @@ import {
 } from '@reduxjs/toolkit';
 import axios from '~/config/axios';
 import { api } from '../constants/api';
+import { trpc } from '../trpc';
 
 const itemsAdapter = createEntityAdapter();
 
 export const deleteItem = createAsyncThunk(
   'items/deleteItem',
   async (itemId) => {
-    const response = await axios.delete(`${api}/item`, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      data: {
-        itemId,
-      },
-    });
-    return response.data;
+    // const response = await axios.delete(`${api}/item`, {
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   data: {
+    //     itemId,
+    //   },
+    // });
+    // return response.data;
+    return await trpc.deleteItem.mutate({ itemId });
   },
 );
 
 export const editItem = createAsyncThunk('items/editItem', async (newItem) => {
-  const response = await axios.put(`${api}/item/`, newItem);
-  return response.data;
+  // const response = await axios.put(`${api}/item/`, newItem);
+  // return response.data;
+  return await trpc.editItem.mutate({
+    _id: newItem._id,
+    name: newItem.name,
+    quantity: newItem.quantity,
+    type: newItem.type,
+    weight: newItem.weight,
+    unit: newItem.unit,
+  });
 });
 
 export const getItems = createAsyncThunk('items/getItems', async (packId) => {
-  const response = await axios.get(`${api}/item/${packId}`);
-  return response.data;
+  // const response = await axios.get(`${api}/item/${packId}`);
+  // return response.data;
+  return await trpc.getItems.query({ packId });
 });
 
 const initialState = itemsAdapter.getInitialState({

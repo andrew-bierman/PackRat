@@ -29,14 +29,19 @@ import {
 import SVGLogoComponent from '../components/logo';
 import { useSelector, useDispatch } from 'react-redux';
 import { signOut } from '../store/authStore';
+
 import Drawer from './Drawer';
 import { Link, useRouter, usePathname } from 'expo-router';
 import { hexToRGBA } from '../utils/colorFunctions';
-import UseTheme from '../hooks/useTheme';
+import useTheme from '../hooks/useTheme';
+import { useSession } from '../context/auth';
+
 const Navigation = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
+  const pathName = usePathname();
+  const { sessionSignOut } = useSession();
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isMobileView, setIsMobileView] = useState(
@@ -48,7 +53,7 @@ const Navigation = () => {
   const firstRender = useRef(true);
   const [isLoading, setIsLoading] = useState(false); // Loading state
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   const hoverColor = hexToRGBA(currentTheme.colors.primary, 0.2);
 
   /**
@@ -151,13 +156,14 @@ const Navigation = () => {
           ],
     [user],
   );
-
+  useEffect(() => {}, []);
   const navigationItems = [...staticNavigationItems, ...userNavigationItems];
 
   const navigateTo = useCallback(
     (href) => {
       if (href === 'logout') {
         dispatch(signOut());
+        sessionSignOut();
       } else {
         setIsDrawerOpen(false);
         setSelectedNavItem(href);
@@ -197,11 +203,6 @@ const Navigation = () => {
     (item, index) => {
       const { icon, iconSource, text, href } = item;
       const IconComponent = iconSource || EvilIcons;
-      const pathName = usePathname();
-
-      if ((href === 'profile' || href === 'logout') && !user) {
-        return null; // Do not render the item if the user is not signed in
-      }
 
       const isCurrentPage = pathName === href; // compare the current route with the href
       const isSelected = selectedNavItem === href; // check if the item is selected
@@ -210,6 +211,10 @@ const Navigation = () => {
         setSelectedNavItem(href);
         navigateTo(href);
       };
+
+      // if ((href === 'profile' || href === 'logout') && !user) {
+      //   return null; // Do not render the item if the user is not signed in
+      // }
 
       return (
         <TouchableOpacity
@@ -323,7 +328,7 @@ const Navigation = () => {
 
 const styles = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   return StyleSheet.create({
     safeArea: {
       backgroundColor: currentTheme.colors.background,

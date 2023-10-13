@@ -1,4 +1,4 @@
-import { FlatList, Platform, StyleSheet } from 'react-native';
+import { FlatList, Platform } from 'react-native';
 import { Table, Row, Cell, TableWrapper } from 'react-native-table-component';
 import { Feather } from '@expo/vector-icons';
 import { Select, Checkbox, Box, Text, HStack, Button } from 'native-base';
@@ -11,10 +11,11 @@ import { DeletePackItemModal } from './DeletePackItemModal';
 import { duplicatePackItem } from '../../store/packsStore';
 import { formatNumber } from '../../utils/formatNumber';
 import { theme } from '../../theme';
-import UseTheme from '../../hooks/useTheme';
+import useTheme from '../../hooks/useTheme';
 import { PackOptions } from '../PackOptions';
 import CustomButton from '../custombutton';
-import ItemPicker from '../Picker';
+import useCustomStyles from '~/hooks/useCustomStyles';
+import {TSkeleton} from '../../packrat-ui';
 
 const WeightUnitDropdown = ({ value, onChange }) => {
   return (
@@ -33,8 +34,9 @@ const WeightUnitDropdown = ({ value, onChange }) => {
 };
 
 const TotalWeightBox = ({ label, weight, unit }) => {
+  const styles = useCustomStyles(loadStyles);
   return (
-    <Box style={styles().totalWeightBox}>
+    <Box style={styles.totalWeightBox}>
       <Text>{label}</Text>
       <Text>{`${formatNumber(weight)} (${unit})`}</Text>
     </Box>
@@ -50,6 +52,7 @@ const IgnoreItemCheckbox = ({ itemId, isChecked, handleCheckboxChange }) => (
   >
     <Checkbox
       key={itemId}
+      value='Ignore Item'
       isChecked={isChecked}
       onChange={() => handleCheckboxChange(itemId)}
       aria-label="Ignore item"
@@ -57,7 +60,6 @@ const IgnoreItemCheckbox = ({ itemId, isChecked, handleCheckboxChange }) => (
   </Box>
 );
 
-const Loading = () => <Text>Loading....</Text>;
 
 const ErrorMessage = ({ message }) => <Text>{message}</Text>;
 
@@ -72,7 +74,7 @@ const TableItem = ({
   setRefetch = () => {},
 }) => {
   const { name, weight, quantity, unit, _id } = itemData;
-
+  const styles = useCustomStyles(loadStyles);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   /**
    * Executes the onTrigger function.
@@ -81,7 +83,6 @@ const TableItem = ({
    * @return {None} No return value.
    */
   const onTrigger = () => {
-    console.log('called');
     setIsEditModalOpen(true);
   };
   const closeModalHandler = () => {
@@ -164,12 +165,13 @@ const TableItem = ({
    */
 
   // Here, you can set a default category if item.category is null or undefined
-  return <Row data={rowData} style={styles().row} flexArr={flexArr} />;
+  return <Row data={rowData} style={styles.row} flexArr={flexArr} />;
 };
 
 const CategoryRow = ({ category }) => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
+  const styles = useCustomStyles(loadStyles);
   const categoryIcons = {
     [ItemCategoryEnum.ESSENTIALS]: 'check-square',
     [ItemCategoryEnum.FOOD]: 'coffee',
@@ -185,38 +187,31 @@ const CategoryRow = ({ category }) => {
   };
 
   const rowData = [
-    <HStack style={styles().categoryRow}>
+    <HStack style={styles.categoryRow}>
       <Feather
         name={categoryIcons[category]}
         size={16}
         color={currentTheme.colors.white}
       />
-      <Text style={styles().titleText}> {category}</Text>
+      <Text style={styles.titleText}> {category}</Text>
     </HStack>,
   ];
 
   return (
-    <Row
-      data={rowData}
-      style={[styles().title]}
-      textStyle={styles().titleText}
-    />
+    <Row data={rowData} style={[styles.title]} textStyle={styles.titleText} />
   );
 };
 
 const TitleRow = ({ title }) => {
+  const styles = useCustomStyles(loadStyles);
   const rowData = [
-    <HStack style={styles().mainTitle}>
-      <Text style={styles().titleText}>{title}</Text>
+    <HStack style={styles.mainTitle}>
+      <Text style={styles.titleText}>{title}</Text>
     </HStack>,
   ];
 
   return (
-    <Row
-      data={rowData}
-      style={[styles().title]}
-      textStyle={styles().titleText}
-    />
+    <Row data={rowData} style={[styles.title]} textStyle={styles.titleText} />
   );
 };
 
@@ -229,6 +224,7 @@ export const TableContainer = ({
 }) => {
   const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
+  const styles = useCustomStyles(loadStyles);
   let ids = [];
   if (currentPack?.items) {
     ids = copy ? currentPack.items.map((item) => item._id) : [];
@@ -245,11 +241,10 @@ export const TableContainer = ({
   };
 
   const [weightUnit, setWeightUnit] = useState('g');
-  const isLoading = useSelector((state) => state.items.isLoading);
-  const error = useSelector((state) => state.items.error);
-  console.log('c', currentPack);
-  const data = currentPack?.items;
+  const isLoading = useSelector((state:any) => state.packs.isLoading);
 
+  const error = useSelector((state:any) => state.items.error);
+  const data = currentPack?.items;
   let totalFoodWeight = 0;
   let totalWaterWeight = 0;
   let totalBaseWeight = 0;
@@ -268,9 +263,6 @@ export const TableContainer = ({
       const itemQuantity = Number(item.quantity) || 0; // ensure it's a number
       const itemUnit = item.unit || null;
 
-      console.log('item', item);
-      console.log('itemWeight', itemWeight);
-      console.log('itemQuantity', itemQuantity);
 
       if (!copy) {
         switch (categoryName) {
@@ -340,15 +332,13 @@ export const TableContainer = ({
     flexArr = [1, 1, 1, 1];
     heading = ['Item Name', 'Weight', 'Quantity', 'Options'];
   }
-  console.log(heading);
-
-  if (isLoading) return <Loading />;
+  if (isLoading) return <TSkeleton />;
   if (error) return <ErrorMessage message={error} />;
   return (
-    <Box style={styles().container}>
+    <Box style={styles.container}>
       {data?.length ? (
         <>
-          <Table style={styles().tableStyle} flexArr={flexArr}>
+          <Table style={styles.tableStyle} flexArr={flexArr}>
             <TitleRow title="Pack List" />
             <Row
               flexArr={flexArr}
@@ -361,13 +351,9 @@ export const TableContainer = ({
                 'Delete',
                 `${copy ? 'Copy' : 'Ignore'}`,
               ].map((header, index) => (
-                <Cell
-                  key={index}
-                  data={header}
-                  textStyle={styles().headerText}
-                />
+                <Cell key={index} data={header} textStyle={styles.headerText} />
               ))}
-              style={styles().head}
+              style={styles.head}
             />
             <FlatList
               data={Object.entries(groupedData)}
@@ -412,18 +398,16 @@ export const TableContainer = ({
           />
         </>
       ) : (
-        <Text style={styles().noItemsText}>Add your First Item</Text>
+        <Text style={styles.noItemsText}>Add your First Item</Text>
       )}
       <WeightUnitDropdown value={weightUnit} onChange={setWeightUnit} />
     </Box>
   );
 };
 
-// Styles
-const styles = () => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
-  return StyleSheet.create({
+const loadStyles = (theme) => {
+  const { currentTheme } = theme;
+  return {
     container: {
       flex: 1,
       padding: 10,
@@ -496,7 +480,7 @@ const styles = () => {
       marginVertical: 30,
       flex: 1,
     },
-  });
+  };
 };
 
 export default TableContainer;

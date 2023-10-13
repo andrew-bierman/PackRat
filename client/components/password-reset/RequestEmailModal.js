@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import {
   Box,
   Button,
@@ -14,11 +14,13 @@ import { CustomModal } from '../modal';
 import axios from '~/config/axios';
 import { api } from '../../constants/api';
 import { InformUser } from '../../utils/ToastUtils';
-import UseTheme from '../../hooks/useTheme';
+import useTheme from '../../hooks/useTheme';
+import useCustomStyles from '~/hooks/useCustomStyles';
 
 export const RequestPasswordResetEmailModal = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
+  const styles = useCustomStyles(loadStyles);
   const [isOpen, setIsOpen] = useState(false);
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
@@ -118,7 +120,7 @@ export const RequestPasswordResetEmailModal = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const loadStyles = () => ({
   container: {
     flex: 1,
     alignItems: 'center',
