@@ -55,9 +55,9 @@ const sendPasswordResetEmail = async (email, resetUrl) => {
  * @param {Object} res - The HTTP response object.
  * @return {Object} The HTTP response object with a success message or an error message.
  */
-export const requestPasswordResetEmailAndToken = async (req, res) => {
+export const requestPasswordResetEmailAndToken = async (c) => {
   try {
-    const { email } = req.body;
+    const { email } = c.req.json();
     const user = await User.findOne({ email });
 
     if (!user) {
@@ -79,10 +79,10 @@ export const requestPasswordResetEmailAndToken = async (req, res) => {
     sendPasswordResetEmail(email, resetUrl);
 
     res.locals.data = { message: 'Password reset email sent successfully' };
-    responseHandler(res);
+    responseHandler(c);
   } catch (error) {
     console.error('Error sending password reset email:', error);
-    return res.status(500).send({ error: 'Internal server error' });
+    return c.status(500).send({ error: 'Internal server error' });
   }
 };
 

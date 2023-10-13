@@ -8,13 +8,13 @@ import { publicProcedure } from '../../trpc';
  * @param {Object} res - the response object
  * @return {Promise} - a promise that resolves with the duplicated pack
  */
-export const duplicatePublicPack = async (req, res, next) => {
+export const duplicatePublicPack = async (c, next) => {
   try {
-    const { packId, ownerId, items } = req.body;
+    const { packId, ownerId, items } = c.req.json();
 
     const result = await duplicatePublicPackService(packId, ownerId, items);
 
-    res.status(200).json({
+    c.status(200).json({
       msg: 'pack was duplicated successfully',
       data: result.pack,
     });

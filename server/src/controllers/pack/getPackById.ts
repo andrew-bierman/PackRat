@@ -9,14 +9,14 @@ import * as validator from '../../middleware/validators/index';
  * @param {Object} res - The response object.
  * @return {Object} The pack object as a JSON response.
  */
-export const getPackById = async (req, res, next) => {
+export const getPackById = async (c, next) => {
   try {
-    const { packId } = req.params;
+    const { packId } = c.req.param();
 
     const pack = await getPackByIdService(packId);
 
     res.locals.data = pack;
-    responseHandler(res);
+    responseHandler(c);
   } catch (error) {
     next(PackNotFoundError);
   }

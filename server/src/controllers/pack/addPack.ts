@@ -7,10 +7,10 @@ import { publicProcedure } from '../../trpc';
  * @param {Object} res - The HTTP response object.
  * @return {Promise} A promise that resolves to the created pack.
  */
-export const addPack = async (req, res) => {
-  const { name, owner_id } = req.body;
+export const addPack = async (c) => {
+  const { name, owner_id } = c.req.json();
   const result = await addPackService(name, owner_id);
-  res.status(200).json({ msg: 'success', ...result });
+  c.status(200).json({ msg: 'success', ...result });
 };
 
 export function addPackRoute() {

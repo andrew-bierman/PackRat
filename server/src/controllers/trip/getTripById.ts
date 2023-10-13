@@ -9,14 +9,14 @@ import * as validator from '../../middleware/validators/index';
  * @param {Object} res - The response object.
  * @return {Promise} A promise that resolves to the trip details.
  */
-export const getTripById = async (req, res, next) => {
+export const getTripById = async (c, next) => {
   try {
-    const { tripId } = req.params;
+    const { tripId } = c.req.param();
 
     const tripDetails = await getTripByIdService(tripId);
 
     res.locals.data = tripDetails;
-    responseHandler(res);
+    responseHandler(c);
   } catch (error) {
     next(TripNotFoundError);
   }

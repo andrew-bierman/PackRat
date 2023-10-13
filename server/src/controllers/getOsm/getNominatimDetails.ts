@@ -12,7 +12,7 @@ import { responseHandler } from '../../helpers/responseHandler';
  * @param {Object} res - The response object.
  * @returns {Promise<void>} - Returns nothing.
  */
-export const getNominatimDetails = async (req, res, next) => {
+export const getNominatimDetails = async (c, next) => {
   const { lat, lon, place_id } = req.query;
 
   let nominatimUrl = '';
@@ -29,7 +29,7 @@ export const getNominatimDetails = async (req, res, next) => {
 
     if (response.status === 200) {
       res.locals.data = response.data;
-      responseHandler(res);
+      responseHandler(c);
     } else {
       console.log(response.status, response.statusText);
       next(ErrorProcessingNominatimError);

@@ -7,13 +7,13 @@ import * as validator from '../../middleware/validators/index';
  * @param {Object} res - The response object.
  * @return {Promise<void>} A promise that resolves when the password is successfully reset.
  */
-export const resetPassword = async (req, res) => {
-  const { resetToken, password } = req.body;
+export const resetPassword = async (c) => {
+  const { resetToken, password } = c.req.json();
 
   const user = await (User as any).validateResetToken(resetToken);
   user.password = password;
   await user.save();
-  res.status(200).send({
+  c.status(200).send({
     message: 'Successfully reset password',
     status: 'success',
     statusCode: 200,

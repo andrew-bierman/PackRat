@@ -10,14 +10,14 @@ import { z } from 'zod';
  * @param {Object} res - the response object
  * @return {Promise} - a promise that resolves with the retrieved public packs
  */
-export const getPublicPacks = async (req, res, next) => {
+export const getPublicPacks = async (c, next) => {
   try {
     const { queryBy } = req.query;
 
     const publicPacks = await getPublicPacksService(queryBy);
 
     res.locals.data = publicPacks;
-    responseHandler(res);
+    responseHandler(c);
   } catch (error) {
     next(PackNotFoundError);
   }

@@ -11,17 +11,17 @@ import * as validator from '../../middleware/validators/index';
  * @param {Object} res - Express response object.
  * @return {Promise} - Array of packs.
  */
-export const getPacks = async (req, res, next) => {
+export const getPacks = async (c, next) => {
   try {
-    const { ownerId } = req.params;
-    const { queryBy } = req.query;
+    const { ownerId } = c.req.param();
+    const { queryBy } = c.req.query;
 
     const packs = await getPacksService(ownerId, queryBy);
 
-    res.locals.data = packs;
+    c.res.locals.data = packs;
 
     const message = 'Packs retrieved successfully';
-    responseHandler(res, message);
+    responseHandler(c, message, next);
   } catch (error) {
     next(PackNotFoundError);
   }

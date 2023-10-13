@@ -10,8 +10,8 @@ import { z } from 'zod';
  * @param {object} res - The response object.
  * @return {object} The retrieved destination.
  */
-export const getDestination = async (req, res, next) => {
-  const id = req.params.id;
+export const getDestination = async (c, next) => {
+  const id = c.req.param().id;
 
   const destination = await getDestinationService(id);
 
@@ -20,7 +20,7 @@ export const getDestination = async (req, res, next) => {
   }
 
   res.locals.data = destination;
-  responseHandler(res);
+  responseHandler(c);
 };
 
 export function getDestinationRoute() {

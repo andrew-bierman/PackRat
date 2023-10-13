@@ -15,7 +15,10 @@ import templateRoutes from './templateRoutes';
 import favoriteRouters from './favoriteRoutes';
 import userRoutes from './userRoutes';
 
-const router = express.Router();
+import { Hono } from 'hono';
+import { logger } from 'hono/logger';
+
+const router = new Hono();
 
 // Create a CSRF middleware
 const csrfProtection = csrf({ cookie: true });
@@ -27,80 +30,80 @@ const csrfProtection = csrf({ cookie: true });
  * @param {Response} res - The response object.
  * @param {NextFunction} next - The next function to call in the middleware chain.
  */
-const logger = (req: Request, res: Response, next: express.NextFunction) => {
-  console.log(`Incoming ${req.method} ${req.path}`);
-  res.on('finish', () => {
-    console.log(`Finished ${req.method} ${req.path} ${res.statusCode}`);
-    console.log(`Body ${req.body}`);
-  });
-  next();
-};
+// const logger = (req: Request, res: Response, next: express.NextFunction) => {
+//   console.log(`Incoming ${req.method} ${req.path}`);
+//   res.on('finish', () => {
+//     console.log(`Finished ${req.method} ${req.path} ${c.statusCode}`);
+//     console.log(`Body ${c.req.json()}`);
+//   });
+//   next();
+// };
 
 // use logger middleware in development
 if (process.env.NODE_ENV !== 'production') {
-  router.use(logger);
+  router.use(logger());
 }
 
 // use routes
-router.use('/user', userRoutes);
-router.use('/pack', packRoutes);
-router.use('/item', itemRoutes);
-router.use('/trip', tripRoutes);
-router.use('/weather', weatherRoutes);
-router.use('/geocode', geoCodeRoutes);
-router.use('/getparks', getParkRoutes);
-router.use('/gettrails', getTrailRoutes);
-router.use('/osm', osmRoutes);
-router.use('/password-reset', passwordResetRoutes);
-router.use('/openai', openAiRoutes);
-router.use('/template', templateRoutes);
-router.use('/favorite', favoriteRouters);
-router.use('/openai', openAiRoutes);
+router.route('/user', userRoutes);
+router.route('/pack', packRoutes);
+router.route('/item', itemRoutes);
+router.route('/trip', tripRoutes);
+router.route('/weather', weatherRoutes);
+router.route('/geocode', geoCodeRoutes);
+router.route('/getparks', getParkRoutes);
+router.route('/gettrails', getTrailRoutes);
+router.route('/osm', osmRoutes);
+router.route('/password-reset', passwordResetRoutes);
+router.route('/openai', openAiRoutes);
+router.route('/template', templateRoutes);
+router.route('/favorite', favoriteRouters);
+router.route('/openai', openAiRoutes);
 
 // Also listen to /api for backwards compatibility
-router.use('/api/user', userRoutes);
-router.use('/api/pack', packRoutes);
-router.use('/api/item', itemRoutes);
-router.use('/api/trip', tripRoutes);
-router.use('/api/weather', weatherRoutes);
-router.use('/api/geocode', geoCodeRoutes);
-router.use('/api/getparks', getParkRoutes);
-router.use('/api/gettrails', getTrailRoutes);
-router.use('/api/osm', osmRoutes);
-router.use('/api/password-reset', passwordResetRoutes);
-router.use('/api/openai', openAiRoutes);
-router.use('/api/template', templateRoutes);
-router.use('/api/favorite', favoriteRouters);
-router.use('/api/openai', openAiRoutes);
+router.route('/api/user', userRoutes);
+router.route('/api/pack', packRoutes);
+router.route('/api/item', itemRoutes);
+router.route('/api/trip', tripRoutes);
+router.route('/api/weather', weatherRoutes);
+router.route('/api/geocode', geoCodeRoutes);
+router.route('/api/getparks', getParkRoutes);
+router.route('/api/gettrails', getTrailRoutes);
+router.route('/api/osm', osmRoutes);
+router.route('/api/password-reset', passwordResetRoutes);
+router.route('/api/openai', openAiRoutes);
+router.route('/api/template', templateRoutes);
+router.route('/api/favorite', favoriteRouters);
+router.route('/api/openai', openAiRoutes);
 
-// Static routes for serving the React Native Web app
-if (process.env.NODE_ENV === 'production') {
-  const __dirname = path.resolve();
+// // Static routes for serving the React Native Web app
+// if (process.env.NODE_ENV === 'production') {
+//   const __dirname = path.resolve();
 
-  // Serve the client's index.html file at the root route
-  router.get('/', (req, res) => {
-    // Attach the CSRF token cookie to the response
-    // res.cookie("XSRF-TOKEN", req.csrfToken());
+//   // Serve the client's index.html file at the root route
+//   router.get('/', (c) => {
+//     // Attach the CSRF token cookie to the response
+//     // res.cookie("XSRF-TOKEN", req.csrfToken());
 
-    res.sendFile(path.resolve(__dirname, '../client', 'dist', 'index.html'));
-  });
+//     res.sendFile(path.resolve(__dirname, '../client', 'dist', 'index.html'));
+//   });
 
-  // Serve the static assets from the client's dist app
-  router.use(express.static(path.join(__dirname, '../client/dist')));
+//   // Serve the static assets from the client's dist app
+//   router.use(express.static(path.join(__dirname, '../client/dist')));
 
-  // Serve the client's index.html file at all other routes NOT starting with /api
-  router.get(/^(?!\/?api).*/, (req, res) => {
-    // res.cookie("XSRF-TOKEN", req.csrfToken());
-    res.sendFile(path.resolve(__dirname, '../client', 'dist', 'index.html'));
-  });
-}
+//   // Serve the client's index.html file at all other routes NOT starting with /api
+//   router.get(/^(?!\/?api).*/, (c) => {
+//     // res.cookie("XSRF-TOKEN", req.csrfToken());
+//     res.sendFile(path.resolve(__dirname, '../client', 'dist', 'index.html'));
+//   });
+// }
 
 // Attach the CSRF token to a specific route in development
-if (process.env.NODE_ENV !== 'production') {
-  router.get('/api/csrf/restore', (req, res) => {
-    // res.cookie("XSRF-TOKEN", req.csrfToken());
-    res.status(201).json({});
-  });
-}
+// if (process.env.NODE_ENV !== 'production') {
+//   router.get('/api/csrf/restore', (c) => {
+//     // res.cookie("XSRF-TOKEN", req.csrfToken());
+//     c.status(201).json({});
+//   });
+// }
 
 export default router;

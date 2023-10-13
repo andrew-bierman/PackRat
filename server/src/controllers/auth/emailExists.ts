@@ -9,12 +9,12 @@ import { emailExistsService } from '../../services/user/emailExistsService';
  * @param {object} res - The response object.
  * @return {Promise<void>} - A promise that resolves to nothing.
  */
-export const emailExists = async (req, res, next) => {
-  const { email } = req.body;
+export const emailExists = async (c, next) => {
+  const { email } = c.req.json();
   try {
     const result = await emailExistsService({ email });
     if (result?.status) {
-      responseHandler(res);
+      responseHandler(c);
     } else {
       next(result);
     }

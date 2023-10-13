@@ -13,7 +13,9 @@ import authTokenMiddleware from '../middleware/auth';
 import checkRole from '../middleware/checkRole';
 import { zodParser } from '../middleware/validators/zodParser';
 
-const router = express.Router();
+import { Hono } from 'hono';
+
+const router = new Hono();
 
 /**
  * @swagger
@@ -59,7 +61,7 @@ router.get(
  */
 router.get(
   '/:ownerId',
-  (req, res, next) => zodParser(validator.getTrips, req.params, next),
+  (c, next) => zodParser(validator.getTrips, c.req.param(), next),
   tryCatchWrapper(getTrips),
 );
 
@@ -82,7 +84,7 @@ router.get(
  */
 router.get(
   '/t/:tripId',
-  (req, res, next) => zodParser(validator.getTripById, req.params, next),
+  (c, next) => zodParser(validator.getTripById, c.req.param(), next),
   tryCatchWrapper(getTripById),
 );
 
@@ -130,7 +132,7 @@ router.get(
  */
 router.post(
   '/',
-  (req, res, next) => zodParser(validator.addTrip, req.body, next),
+  (c, next) => zodParser(validator.addTrip, c.req.json(), next),
   tryCatchWrapper(addTrip),
 );
 
@@ -180,7 +182,7 @@ router.post(
  */
 router.put(
   '/',
-  (req, res, next) => zodParser(validator.editTrip, req.body, next),
+  (c, next) => zodParser(validator.editTrip, c.req.json(), next),
   tryCatchWrapper(editTrip),
 );
 
@@ -206,7 +208,7 @@ router.put(
  */
 router.delete(
   '/',
-  (req, res, next) => zodParser(validator.deleteTrip, req.body, next),
+  (c, next) => zodParser(validator.deleteTrip, c.req.json(), next),
   tryCatchWrapper(deleteTrip),
 );
 

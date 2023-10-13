@@ -21,12 +21,12 @@ const oauth2Client = new google.auth.OAuth2(
  * @param {object} res - The response object.
  * @return {object} The Google authentication URL and status.
  */
-export const getGoogleAuthURL = async (req, res) => {
+export const getGoogleAuthURL = async (c) => {
   const scopes = [
     'https://www.googleapis.com/auth/userinfo.profile',
     'https://www.googleapis.com/auth/userinfo.email',
   ];
-  return res.status(200).send({
+  return c.status(200).send({
     googleUrl: oauth2Client.generateAuthUrl({
       access_type: 'offline',
       prompt: 'consent',

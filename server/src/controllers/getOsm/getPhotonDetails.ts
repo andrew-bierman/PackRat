@@ -13,15 +13,15 @@ import { getPhotonDetailsService } from '../../services/osm/getPhotonDetailsServ
  * @param {Object} res - The response object.
  * @return {Promise<void>} The function does not return anything.
  */
-export const getPhotonDetails = async (req, res, next) => {
-  const { id, type } = req.params;
+export const getPhotonDetails = async (c, next) => {
+  const { id, type } = c.req.param();
   if (!id || !type) {
     next(InvalidRequestParamsError);
   }
   try {
     const result = await getPhotonDetailsService(id, type);
     res.locals.data = result;
-    responseHandler(res);
+    responseHandler(c);
   } catch (error) {
     next(RetrievingPhotonDetailsError);
   }

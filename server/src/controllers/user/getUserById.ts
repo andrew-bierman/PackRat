@@ -9,14 +9,14 @@ import * as validator from '../../middleware/validators/index';
  * @param {Object} res - The response object.
  * @return {Object} The user object as a JSON response.
  */
-export const getUserById = async (req, res, next) => {
+export const getUserById = async (c, next) => {
   try {
-    const { userId } = req.params;
+    const { userId } = c.req.param();
 
     const user = await getUserByIdService(userId);
 
     res.locals.data = user;
-    responseHandler(res);
+    responseHandler(c);
   } catch (error) {
     next(UserNotFoundError);
   }

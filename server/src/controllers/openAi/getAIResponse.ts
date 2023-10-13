@@ -10,9 +10,9 @@ import { z } from 'zod';
  * @param {Object} res - The response object.
  * @return {Object} The AI response and updated conversation object.
  */
-export const getAIResponse = async (req, res, next) => {
+export const getAIResponse = async (c, next) => {
   try {
-    const { userId, conversationId, userInput } = req.body;
+    const { userId, conversationId, userInput } = c.req.json();
 
     const result = await getAIResponseService(
       userId,
@@ -21,7 +21,7 @@ export const getAIResponse = async (req, res, next) => {
     );
 
     res.locals.data = result;
-    responseHandler(res);
+    responseHandler(c);
   } catch (error) {
     next(GetResponseFromAIError);
   }

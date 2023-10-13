@@ -9,8 +9,8 @@ import { z } from 'zod';
  * @param {Object} res - The response object.
  * @return {Promise} A promise that resolves with the template or rejects with an error.
  */
-export const getTemplateById = async (req, res, next) => {
-  const { templateId } = req.params;
+export const getTemplateById = async (c, next) => {
+  const { templateId } = c.req.param();
 
   const template = await Template.findById(templateId).populate(
     'createdBy',
@@ -18,7 +18,7 @@ export const getTemplateById = async (req, res, next) => {
   );
   if (template) {
     res.locals.data = template;
-    responseHandler(res);
+    responseHandler(c);
   } else {
     next(TemplateNotFoundError);
   }

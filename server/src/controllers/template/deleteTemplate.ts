@@ -9,8 +9,8 @@ import { z } from 'zod';
  * @param {Object} res - The response object.
  * @return {Promise<void>} A Promise that resolves when the template is deleted.
  */
-export const deleteTemplate = async (req, res, next) => {
-  const { templateId } = req.params;
+export const deleteTemplate = async (c, next) => {
+  const { templateId } = c.req.param();
 
   const template: any = await Template.findById(templateId);
 

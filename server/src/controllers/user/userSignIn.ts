@@ -7,14 +7,14 @@ import * as validator from '../../middleware/validators/index';
  * @param {Object} res - The response object.
  * @return {Object} The user object.
  */
-export const userSignIn = async (req, res) => {
-  const { email, password } = req.body;
+export const userSignIn = async (c) => {
+  const { email, password } = c.req.json();
   const user: any = await (User as any).findByCredentials({
     email,
     password,
   });
   await user.generateAuthToken();
-  res.status(200).send({ user });
+  c.status(200).send({ user });
 };
 
 export function userSignInRoute() {

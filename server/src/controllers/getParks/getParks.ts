@@ -14,10 +14,10 @@ const fetch = async (...args) =>
  * @param {Object} res - The response object.
  * @return {Promise} A promise that resolves with the park data or an error message.
  */
-export const getParks = async (req, res, next) => {
+export const getParks = async (c, next) => {
   const json = await getParksService(req.query.abbrState);
   res.locals.data = json;
-  responseHandler(res);
+  responseHandler(c);
 };
 
 export function getParksRoute() {

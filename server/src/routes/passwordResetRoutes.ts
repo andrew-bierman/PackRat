@@ -5,7 +5,9 @@ import {
 } from '../controllers/passwordReset/index';
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
 
-const router = express.Router();
+import { Hono } from 'hono';
+
+const router = new Hono();
 
 router.post('/', tryCatchWrapper(requestPasswordResetEmailAndToken));
 router.post('/:token', tryCatchWrapper(handlePasswordReset));

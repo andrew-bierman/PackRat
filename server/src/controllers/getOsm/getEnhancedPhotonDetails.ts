@@ -12,8 +12,8 @@ import { responseHandler } from '../../helpers/responseHandler';
  * @param {object} res - The response object.
  * @return {Promise} A promise that resolves to the enhanced photon details.
  */
-export const getEnhancedPhotonDetails = async (req, res, next) => {
-  let { id, type } = req.params;
+export const getEnhancedPhotonDetails = async (c, next) => {
+  let { id, type } = c.req.param();
 
   if (!id || !type) {
     next(InvalidRequestParamsError);
@@ -78,7 +78,7 @@ export const getEnhancedPhotonDetails = async (req, res, next) => {
     });
 
     res.locals.data = geojsonData;
-    responseHandler(res);
+    responseHandler(c);
   } else {
     console.log(overpassResponse.status, overpassResponse.statusText);
     console.log(nominatimResponse.status, nominatimResponse.statusText);

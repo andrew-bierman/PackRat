@@ -8,17 +8,17 @@ import * as validator from '../../middleware/validators/index';
  * Retrieves a list of items associated with a pack.
  * @param {Object} req - The request object.
  * @param {Object} res - The response object.
- * @param {string} req.params.packId - The ID of the pack to retrieve items for.
+ * @param {string} c.req.param().packId - The ID of the pack to retrieve items for.
  * @return {Object} An array of items associated with the pack.
  */
-export const getItems = async (req, res, next) => {
+export const getItems = async (c, next) => {
   try {
-    const { packId } = req.params;
+    const { packId } = c.req.param();
 
     const items = await getItemsService(packId);
 
     res.locals.data = items;
-    responseHandler(res);
+    responseHandler(c);
   } catch (error) {
     next(ItemNotFoundError);
   }

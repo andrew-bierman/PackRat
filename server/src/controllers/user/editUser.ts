@@ -6,20 +6,24 @@ import * as validator from '../../middleware/validators/index';
 /**
  * Edits a user.
  * @param {Object} req - The request object.
- * @param {Object} req.body - The body of the request.
- * @param {string} req.body.userId - The ID of the user to edit.
+ * @param {Object} c.req.json() - The body of the request.
+ * @param {string} c.req.json().userId - The ID of the user to edit.
  * @param {Object} res - The response object.
  * @return {Promise} A promise that resolves to the edited user.
  */
-export const editUser = async (req, res, next) => {
+export const editUser = async (c, next) => {
   try {
-    const { userId } = req.body;
+    const { userId } = c.req.json();
 
-    const editedUser = await User.findOneAndUpdate({ _id: userId }, req.body, {
-      returnOriginal: false,
-    }).populate('favorites');
+    const editedUser = await User.findOneAndUpdate(
+      { _id: userId },
+      c.req.json(),
+      {
+        returnOriginal: false,
+      },
+    ).populate('favorites');
     res.locals.data = editedUser;
-    responseHandler(res);
+    responseHandler(c);
   } catch (error) {
     next(UnableToEditUserError);
   }

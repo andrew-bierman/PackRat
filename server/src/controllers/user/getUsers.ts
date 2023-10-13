@@ -4,14 +4,14 @@ import { responseHandler } from '../../helpers/responseHandler';
 import User from '../../models/userModel';
 
 // Middleware to check if user is authenticated
-// export const isAuthenticated = async (req, res, next) => {
+// export const isAuthenticated = async (c, next) => {
 //   const token = req.headers.authorization.split(" ")[1];
 //   try {
 //     const decodedToken = await firebaseAdmin.auth().verifyIdToken(token);
 //     req.userData = decodedToken;
 //     next();
 //   } catch (error) {
-//     res.status(401).json({ error: "Unauthorized" });
+//     c.status(401).json({ error: "Unauthorized" });
 //   }
 // };
 
@@ -21,12 +21,12 @@ import User from '../../models/userModel';
  * @param {Object} res - The response object.
  * @return {Promise} The JSON response containing the users.
  */
-export const getUsers = async (req, res, next) => {
+export const getUsers = async (c, next) => {
   try {
     const users = await User.find({}).populate('packs trips');
 
     res.locals.data = users;
-    responseHandler(res);
+    responseHandler(c);
   } catch (error) {
     next(UserNotFoundError);
   }

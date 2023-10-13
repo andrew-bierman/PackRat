@@ -15,7 +15,9 @@ import authTokenMiddleware from '../middleware/auth';
 import checkRole from '../middleware/checkRole';
 import { zodParser } from '../middleware/validators/zodParser';
 
-const router = express.Router();
+import { Hono } from 'hono';
+
+const router = new Hono();
 
 /**
  * @swagger
@@ -68,7 +70,7 @@ router.get(
   '/:ownerId',
   authTokenMiddleware,
   checkRole(['user', 'admin']),
-  (req, res, next) => zodParser(validator.getPacks, req.params, next),
+  (c, next) => zodParser(validator.getPacks, c.req.param(), next),
   tryCatchWrapper(getPacks),
 );
 
@@ -95,7 +97,7 @@ router.get(
  */
 router.get(
   '/p/:packId',
-  (req, res, next) => zodParser(validator.getPackById, req.params, next),
+  (c, next) => zodParser(validator.getPackById, c.req.param(), next),
   tryCatchWrapper(getPackById),
 );
 
@@ -122,7 +124,7 @@ router.get(
  */
 router.put(
   '/score/:packId',
-  (req, res, next) => zodParser(validator.getPackById, req.params, next),
+  (c, next) => zodParser(validator.getPackById, c.req.param(), next),
   tryCatchWrapper(scorePack),
 );
 
@@ -155,7 +157,7 @@ router.put(
  */
 router.post(
   '/',
-  (req, res, next) => zodParser(validator.addPack, req.body, next),
+  (c, next) => zodParser(validator.addPack, c.req.json(), next),
   tryCatchWrapper(addPack),
 );
 
@@ -188,7 +190,7 @@ router.post(
  */
 router.put(
   '/',
-  (req, res, next) => zodParser(validator.editPack, req.body, next),
+  (c, next) => zodParser(validator.editPack, c.req.json(), next),
   tryCatchWrapper(editPack),
 );
 
@@ -217,7 +219,7 @@ router.put(
  */
 router.delete(
   '/',
-  (req, res, next) => zodParser(validator.deletePack, req.body, next),
+  (c, next) => zodParser(validator.deletePack, c.req.json(), next),
   tryCatchWrapper(deletePack),
 );
 
@@ -246,7 +248,7 @@ router.delete(
  */
 router.post(
   '/duplicate',
-  (req, res, next) => zodParser(validator.duplicatePublicPack, req.body, next),
+  (c, next) => zodParser(validator.duplicatePublicPack, c.req.json(), next),
   tryCatchWrapper(duplicatePublicPack),
 );
 

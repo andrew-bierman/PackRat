@@ -10,14 +10,14 @@ import { publicProcedure } from '../../trpc';
  * @return {Object} The deleted item.
  */
 
-export const deleteItem = async (req, res, next) => {
+export const deleteItem = async (c, next) => {
   try {
-    const { itemId, packId } = req.body;
+    const { itemId, packId } = c.req.json();
 
     const itemDeleted = await deleteItemService(itemId, packId);
 
     res.locals.data = itemDeleted;
-    responseHandler(res);
+    responseHandler(c);
   } catch (error) {
     console.error(error);
     next(UnableToDeleteItemError);

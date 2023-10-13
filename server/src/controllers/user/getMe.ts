@@ -6,11 +6,11 @@ import { publicProcedure } from '../../trpc';
  * @param {object} res - The response object.
  * @return {object} The user information.
  */
-export const getMe = async (req, res) => {
+export const getMe = async (c) => {
   try {
-    res.status(200).send(req.user);
+    c.status(200).send(req.user);
   } catch (err) {
-    res.status(401).send({ message: err.message });
+    c.status(401).send({ message: err.message });
   }
 };
 

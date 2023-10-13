@@ -4,9 +4,9 @@ import { responseHandler } from '../../helpers/responseHandler';
 import { editItemService } from '../../services/item/item.service';
 import * as validator from '../../middleware/validators/index';
 
-export const editItem = async (req, res, next) => {
+export const editItem = async (c, next) => {
   try {
-    const { _id, name, weight, unit, quantity, type } = req.body;
+    const { _id, name, weight, unit, quantity, type } = c.req.json();
 
     const newItem = await editItemService(
       _id,
@@ -18,7 +18,7 @@ export const editItem = async (req, res, next) => {
     );
 
     res.locals.data = newItem;
-    responseHandler(res);
+    responseHandler(c);
   } catch (error) {
     next(UnableToEditItemError);
   }

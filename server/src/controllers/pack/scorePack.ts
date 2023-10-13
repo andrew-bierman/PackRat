@@ -8,15 +8,15 @@ import * as validator from '../../middleware/validators/index';
  * @param {Object} res - The response object used to send the response.
  * @return {Promise} A promise that resolves to the updated pack object or an error message.
  */
-export const scorePack = async (req, res, next) => {
+export const scorePack = async (c, next) => {
   try {
-    const { packId } = req.params;
+    const { packId } = c.req.param();
 
     const updatedPack = await scorePackService(packId);
 
     console.log('updatedPack', updatedPack);
 
-    res.status(200).json({ msg: 'Pack was scored successfully', updatedPack });
+    c.status(200).json({ msg: 'Pack was scored successfully', updatedPack });
   } catch (error) {
     next(UnableToScorePackError);
   }

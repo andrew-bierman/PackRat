@@ -18,11 +18,11 @@ const fetch = async (...args: Parameters<typeof fetch>) =>
  * @param {Object} res - The response object.
  * @return {Promise<void>} - A promise that resolves when the geocode is retrieved and the response is sent.
  */
-export const getGeoCode = async (req, res, next) => {
+export const getGeoCode = async (c, next) => {
   const result: any = await geoCodeService(req.query);
   if (result.message === 'ok') {
     res.locals.data = result.result;
-    responseHandler(res);
+    responseHandler(c);
   } else {
     next(ErrorFetchingGeoCodeError);
   }

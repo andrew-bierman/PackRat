@@ -42,8 +42,8 @@ passport.use(
  * @param {Function} next - The next middleware function.
  * @return {Promise} A promise that resolves to the response object.
  */
-export const signInLocal = async (req, res, next) => {
-  const { email, password } = req.body;
+export const signInLocal = async (c, next) => {
+  const { email, password } = c.req.json();
 
   try {
     // Authenticate the user
@@ -53,7 +53,7 @@ export const signInLocal = async (req, res, next) => {
       }
 
       if (!user) {
-        return res.status(400).json({ error: info.message });
+        return c.status(400).json({ error: info.message });
       }
 
       // Log the user in
@@ -66,9 +66,9 @@ export const signInLocal = async (req, res, next) => {
           .status(200)
           .json({ message: 'User signed in successfully', user });
       });
-    })(req, res, next);
+    })(c, next);
   } catch (error) {
-    return res.status(400).json({ error: error.message });
+    return c.status(400).json({ error: error.message });
   }
 };
 

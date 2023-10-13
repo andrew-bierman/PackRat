@@ -7,22 +7,22 @@ import { publicProcedure } from '../../trpc';
 /**
  * Edit a global item by duplicating it with new changes.
  * @param {Object} req - The request object.
- * @param {Object} req.params - The parameters object.
- * @param {string} req.params.itemId - The ID of the item to edit.
- * @param {Object} req.body - The request body object.
- * @param {string} req.body.packId - The ID of the pack.
- * @param {string} req.body.name - The name of the item.
- * @param {number} req.body.weight - The weight of the item.
- * @param {number} req.body.quantity - The quantity of the item.
- * @param {string} req.body.unit - The unit of the item.
- * @param {string} req.body.type - The type of the item.
+ * @param {Object} c.req.param() - The parameters object.
+ * @param {string} c.req.param().itemId - The ID of the item to edit.
+ * @param {Object} c.req.json() - The request body object.
+ * @param {string} c.req.json().packId - The ID of the pack.
+ * @param {string} c.req.json().name - The name of the item.
+ * @param {number} c.req.json().weight - The weight of the item.
+ * @param {number} c.req.json().quantity - The quantity of the item.
+ * @param {string} c.req.json().unit - The unit of the item.
+ * @param {string} c.req.json().type - The type of the item.
  * @param {Object} res - The response object.
  * @return {Object} The updated item.
  */
-export const editGlobalItemAsDuplicate = async (req, res, next) => {
+export const editGlobalItemAsDuplicate = async (c, next) => {
   try {
-    const { itemId } = req.params;
-    const { packId, name, weight, quantity, unit, type } = req.body;
+    const { itemId } = c.req.param();
+    const { packId, name, weight, quantity, unit, type } = c.req.json();
 
     const newItem = await editGlobalItemAsDuplicateService(
       itemId,
@@ -35,7 +35,7 @@ export const editGlobalItemAsDuplicate = async (req, res, next) => {
     );
 
     res.locals.data = newItem;
-    responseHandler(res);
+    responseHandler(c);
   } catch (error) {
     next(UnableToDeleteItemError);
   }

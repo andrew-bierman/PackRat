@@ -7,7 +7,7 @@ import Template from '../../models/templateModel';
  * @param {Object} res - The response object.
  * @return {Object} - The templates retrieved from the database.
  */
-export const getTemplates = async (req, res) => {
+export const getTemplates = async (c) => {
   const templates = await Template.find({}).populate('createdBy', 'username');
   res.json(templates);
 };

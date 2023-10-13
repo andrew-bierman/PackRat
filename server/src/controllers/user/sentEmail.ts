@@ -8,9 +8,9 @@ import * as validator from '../../middleware/validators/index';
  * @param {Object} res - The response object.
  * @return {Promise<void>} - A promise that resolves when the email is sent.
  */
-export const sentEmail = async (req, res) => {
+export const sentEmail = async (c) => {
   try {
-    const { email } = req.body;
+    const { email } = c.req.json();
 
     const user = await User.findOne({ email });
     if (!user) {
@@ -18,13 +18,13 @@ export const sentEmail = async (req, res) => {
     }
     const resetUrl = await user.generateResetToken();
     resetEmail(user.email, resetUrl);
-    res.status(200).send({
+    c.status(200).send({
       message: 'Reset Token has been sent successfully',
       status: 'success',
       statusCode: 200,
     });
   } catch (err) {
-    res.status(400).send({ message: err.message });
+    c.status(400).send({ message: err.message });
   }
 };
 

@@ -10,14 +10,14 @@ import * as validator from '../../middleware/validators/index';
  * @param {Object} res - The response object.
  * @return {Promise<void>} The trips owned by the specified owner.
  */
-export const getTrips = async (req, res, next) => {
+export const getTrips = async (c, next) => {
   try {
-    const { ownerId } = req.params;
+    const { ownerId } = c.req.param();
 
     const trips = await getTripsService(ownerId);
 
     res.locals.data = trips;
-    responseHandler(res);
+    responseHandler(c);
   } catch (error) {
     next(TripNotFoundError);
   }

@@ -11,9 +11,9 @@ import * as validator from '../../middleware/validators/index';
  * @return {object} The added item.
  */
 
-export const addItemGlobal = async (req, res, next) => {
+export const addItemGlobal = async (c, next) => {
   try {
-    const { name, weight, quantity, unit, type } = req.body;
+    const { name, weight, quantity, unit, type } = c.req.json();
 
     const newItem = await addItemGlobalService(
       name,
@@ -24,7 +24,7 @@ export const addItemGlobal = async (req, res, next) => {
     );
 
     res.locals.data = newItem;
-    responseHandler(res);
+    responseHandler(c);
   } catch (error) {
     next(UnableToAddItemError);
   }

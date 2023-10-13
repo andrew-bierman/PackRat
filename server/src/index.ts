@@ -1,6 +1,6 @@
 import express, { type NextFunction } from 'express';
 import mongoose from 'mongoose';
-import cors from 'cors';
+// import cors from 'cors';
 import { isCelebrateError, errors } from 'celebrate';
 import { MONGODB_URI } from './config';
 import routes from './routes/index';
@@ -14,8 +14,66 @@ import { limiter } from './helpers/limiter';
 import * as trpcExpress from '@trpc/server/adapters/express';
 import { type inferAsyncReturnType, initTRPC } from '@trpc/server';
 import { appRouter } from './routes/trpcRouter';
+// import { createContext } from './middleware/createContext';
 
-const app = express();
+import { serve } from '@hono/node-server';
+import { Hono } from 'hono';
+import { trpcServer } from '@hono/trpc-server';
+import { cors } from 'hono/cors';
+import { prettyJSON } from 'hono/pretty-json';
+
+const app = new Hono();
+
+console.log('Starting server...');
+
+app.use('*', prettyJSON()); // With options: prettyJSON({ space: 4 })
+
+// app.route('*', routes)
+
+app.get('/', (c) => c.text('Hello Node.js!'));
+
+// Setup CORS for the frontend
+// app.use(cors())
+
+// export type Context = inferAsyncReturnType<typeof createContext>;
+
+// Setup TRPC server with context
+app.use('/api/trpc/*', async (c, next) => {
+  const middleware = trpcServer({
+    router: appRouter,
+    onError({ error }) {
+      console.error(error);
+    },
+    // createContext: (opts) =>
+    //   createContext({
+    //     ...opts,
+    //     SOME_KEY: c.env.SOME_KEY,
+    //   }),
+  });
+  return await middleware(c, next);
+});
+
+app.onError((err, c) => {
+  console.error(`${err}`);
+  return c.text('Custom Error Message', 500);
+});
+
+// Determine the port from the environment or default to 3000 if none is provided.
+const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
+
+serve(
+  {
+    ...app,
+    port,
+  },
+  (info) => {
+    console.log(`Server is running and listening on port ${info.port}.`);
+  },
+);
+
+/*
+
+// const app = express();
 
 // Apply security-related HTTP headers.
 // app.use(helmet({ crossOriginResourcePolicy: false }));
@@ -60,7 +118,7 @@ app.use(
 const createContext = ({
   req,
   res,
-}: trpcExpress.CreateExpressContextOptions) => ({ req, res });
+}: trpcExpress.CreateExpressContextOptions) => ({ c });
 
 export type Context = inferAsyncReturnType<typeof createContext>;
 
@@ -90,10 +148,12 @@ mongoose
     console.error('Failed to connect to MongoDB:', err);
   });
 
-// Determine the port from the environment or default to 3000 if none is provided.
-const port = process.env.PORT || 3000;
+
+
+
+  */
 
 // Start the Express server.
-app.listen(port, () => {
-  console.log(`Server is running and listening on port ${port}.`);
-});
+// app.listen(port, () => {
+//   console.log(`Server is running and listening on port ${port}.`);
+// });

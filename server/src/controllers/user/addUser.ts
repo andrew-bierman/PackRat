@@ -1,6 +1,6 @@
-// export const addUser = async (req, res) => {
+// export const addUser = async (c) => {
 //   try {
-//     const { email, password } = req.body;
+//     const { email, password } = c.req.json();
 
 //     // Create user in Firebase Auth
 //     const userRecord = await firebase.auth().createUser({
@@ -17,8 +17,8 @@
 //     });
 //     await newUser.save();
 
-//     res.status(200).json({ message: 'Successfully signed up' });
+//     c.status(200).json({ message: 'Successfully signed up' });
 //   } catch (error) {
-//     res.status(400).json({ error: error.message });
+//     c.status(400).json({ error: error.message });
 //   }
 // };

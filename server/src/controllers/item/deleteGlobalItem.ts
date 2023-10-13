@@ -9,14 +9,14 @@ import { z } from 'zod';
  * @param {Object} res - The response object.
  * @return {Promise<void>} - Returns a promise that resolves to void.
  */
-export const deleteGlobalItem = async (req, res, next) => {
+export const deleteGlobalItem = async (c, next) => {
   try {
-    const { itemId } = req.params;
+    const { itemId } = c.req.param();
 
     const itemDeleted = await deleteGlobalItemService(itemId);
 
     res.locals.data = itemDeleted;
-    responseHandler(res);
+    responseHandler(c);
   } catch (error) {
     next(UnableToDeleteItemError);
   }

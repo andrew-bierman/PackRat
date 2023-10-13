@@ -10,7 +10,7 @@ import { z } from 'zod';
  * @param {Object} res - The response object.
  * @return {Object} The items, page, and total pages.
  */
-export const getItemsGlobally = async (req, res, next) => {
+export const getItemsGlobally = async (c, next) => {
   try {
     const result = await getItemsGloballyService(
       req.query.limit,
@@ -18,7 +18,7 @@ export const getItemsGlobally = async (req, res, next) => {
     );
 
     res.locals.data = result;
-    responseHandler(res);
+    responseHandler(c);
   } catch (error) {
     next(ItemNotFoundError);
   }

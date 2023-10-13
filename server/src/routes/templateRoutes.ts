@@ -22,7 +22,9 @@ import checkRole from '../middleware/checkRole';
 //   deleteTemplate: (req,res,next) => next(),
 // };
 
-const router = express.Router();
+import { Hono } from 'hono';
+
+const router = new Hono();
 
 /**
  * @swagger

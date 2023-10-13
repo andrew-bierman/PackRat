@@ -8,13 +8,13 @@ import { publicProcedure } from '../../trpc';
  * @param {Object} res - The response object.
  * @return {Promise} A promise that resolves with the deletion result.
  */
-export const deletePack = async (req, res, next) => {
+export const deletePack = async (c, next) => {
   try {
-    const { packId } = req.body;
+    const { packId } = c.req.json();
 
     await deletePackService(packId);
 
-    res.status(200).json({ msg: 'pack was deleted successfully' });
+    c.status(200).json({ msg: 'pack was deleted successfully' });
   } catch (error) {
     next(UnableToDeletePackError);
   }

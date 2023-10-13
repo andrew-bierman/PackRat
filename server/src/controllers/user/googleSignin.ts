@@ -33,7 +33,7 @@ const getGoogleUserInfo = async (code) => {
  * @param {object} res - The response object.
  * @return {Promise} A promise that resolves to the generated token or an error message.
  */
-export const googleSignin = async (req, res, next) => {
+export const googleSignin = async (c, next) => {
   try {
     const code = req.query.code;
     const userInfo = await getGoogleUserInfo(code);
@@ -65,6 +65,6 @@ export const googleSignin = async (req, res, next) => {
       res.redirect(`${UI_ROOT_URI}?token=${alreadyGoogleSignin.token}`);
     }
   } catch (err) {
-    res.status(400).send({ message: err.message });
+    c.status(400).send({ message: err.message });
   }
 };

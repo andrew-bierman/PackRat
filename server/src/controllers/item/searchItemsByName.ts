@@ -13,13 +13,13 @@ import { z } from 'zod';
  * @return {Array} An array of items matching the search criteria.
  */
 
-export const searchItemsByName = async (req, res, next) => {
+export const searchItemsByName = async (c, next) => {
   try {
     const { name } = req.query;
 
     const items = await searchItemsByNameService(name);
 
-    res.status(200).json(items);
+    c.status(200).json(items);
   } catch (error) {
     next(ItemNotFoundError);
   }

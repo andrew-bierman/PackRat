@@ -18,7 +18,9 @@ import authTokenMiddleware from '../middleware/auth';
 import checkRole from '../middleware/checkRole';
 import { zodParser } from '../middleware/validators/zodParser';
 
-const router = express.Router();
+import { Hono } from 'hono';
+
+const router = new Hono();
 
 /**
  * @swagger
@@ -46,7 +48,7 @@ const router = express.Router();
  */
 router.get(
   '/packItems/:packId',
-  (req, res, next) => zodParser(validator.getItems, req.body, next),
+  (c, next) => zodParser(validator.getItems, c.req.json(), next),
   tryCatchWrapper(getItems),
 );
 
@@ -69,7 +71,7 @@ router.get(
  */
 router.get(
   '/i/:packId',
-  (req, res, next) => zodParser(validator.getItemById, req.body, next),
+  (c, next) => zodParser(validator.getItemById, c.req.json(), next),
   tryCatchWrapper(getItemById),
 );
 
@@ -127,7 +129,7 @@ router.get(
  */
 router.post(
   '/',
-  (req, res, next) => zodParser(validator.addItem, req.body, next),
+  (c, next) => zodParser(validator.addItem, c.req.json(), next),
   tryCatchWrapper(addItem),
 );
 
@@ -161,7 +163,7 @@ router.post(
  */
 router.put(
   '/',
-  (req, res, next) => zodParser(validator.editItem, req.body, next),
+  (c, next) => zodParser(validator.editItem, c.req.json(), next),
   tryCatchWrapper(editItem),
 );
 
@@ -187,7 +189,7 @@ router.put(
  */
 router.delete(
   '/',
-  (req, res, next) => zodParser(validator.deleteItem, req.body, next),
+  (c, next) => zodParser(validator.deleteItem, c.req.json(), next),
   tryCatchWrapper(deleteItem),
 );
 
@@ -221,7 +223,7 @@ router.delete(
  */
 router.post(
   '/global',
-  (req, res, next) => zodParser(validator.addItemGlobal, req.body, next),
+  (c, next) => zodParser(validator.addItemGlobal, c.req.json(), next),
   tryCatchWrapper(addItemGlobal),
 );
 

@@ -10,9 +10,10 @@ import * as validator from '../../middleware/validators/index';
  * @param {Object} res - The response object.
  * @return {Object} The updated item and pack ID.
  */
-export const addItem = async (req, res, next) => {
+export const addItem = async (c, next) => {
   try {
-    const { name, weight, quantity, unit, packId, type, ownerId } = req.body;
+    const { name, weight, quantity, unit, packId, type, ownerId } =
+      c.req.json();
 
     const result = await addItemService(
       name,
@@ -25,7 +26,7 @@ export const addItem = async (req, res, next) => {
     );
 
     res.locals.data = { newItem: result.newItem, packId: result.packId };
-    responseHandler(res);
+    responseHandler(c);
   } catch (error) {
     next(UnableToAddItemError);
   }

@@ -25,7 +25,7 @@ export const serveSwaggerUI = (app: any) => {
           name: category,
         });
       });
-      res.status(200).send('Seeding done');
+      c.status(200).send('Seeding done');
     });
   }
 };

@@ -8,17 +8,17 @@ import * as validator from '../../middleware/validators/index';
  * Retrieves an item by its ID.
  * @param {Object} req - The request object.
  * @param {Object} res - The response object.
- * @param {string} req.body._id - The ID of the item to retrieve.
+ * @param {string} c.req.json()._id - The ID of the item to retrieve.
  * @return {Object} The retrieved item.
  */
-export const getItemById = async (req, res, next) => {
+export const getItemById = async (c, next) => {
   try {
-    const { _id } = req.body;
+    const { _id } = c.req.json();
 
     const item = await getItemByIdService(_id);
 
     res.locals.data = item;
-    responseHandler(res);
+    responseHandler(c);
   } catch (error) {
     next(ItemNotFoundError);
   }

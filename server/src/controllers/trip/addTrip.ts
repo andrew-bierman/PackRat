@@ -9,7 +9,7 @@ import * as validator from '../../middleware/validators/index';
  * @param {Object} res - The response object.
  * @return {Promise} A promise that resolves to a success message or rejects with an error message.
  */
-export const addTrip = async (req, res, next) => {
+export const addTrip = async (c, next) => {
   try {
     const {
       name,
@@ -23,7 +23,7 @@ export const addTrip = async (req, res, next) => {
       owner_id,
       packs,
       is_public,
-    } = req.body;
+    } = c.req.json();
 
     const tripDetails = {
       name,
@@ -42,7 +42,7 @@ export const addTrip = async (req, res, next) => {
     const result = await addTripService(tripDetails);
 
     res.locals.data = result;
-    responseHandler(res);
+    responseHandler(c);
   } catch (error) {
     next(UnableToAddTripError);
   }

@@ -22,10 +22,10 @@ const verifyPasswordResetToken = (token) => {
   }
 };
 
-export const handlePasswordReset = async (req, res) => {
+export const handlePasswordReset = async (c) => {
   try {
-    const { password } = req.body;
-    const { token } = req.params;
+    const { password } = c.req.json();
+    const { token } = c.req.param();
     const email = verifyPasswordResetToken(token);
     const hashedPassword = bcrypt.hashSync(password, 10); // hash the password
 
@@ -49,7 +49,7 @@ export const handlePasswordReset = async (req, res) => {
     );
 
     res.locals.data = { message: 'Password reset successful' };
-    responseHandler(res);
+    responseHandler(c);
   } catch (error) {
     console.error('Error resetting password:', error);
     return res

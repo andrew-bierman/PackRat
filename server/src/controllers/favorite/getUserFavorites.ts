@@ -11,12 +11,12 @@ import { z } from 'zod';
  * @param {Object} res - The response object.
  * @returns {Array} An array of favorite items belonging to the user.
  */
-export const getUserFavorites = async (req, res, next) => {
-  const { userId } = req.params;
+export const getUserFavorites = async (c, next) => {
+  const { userId } = c.req.param();
   const favorites = await getUserFavoritesService(userId, next);
   if (!favorites) next(UserFavoritesNotFoundError);
   res.locals.data = favorites;
-  responseHandler(res);
+  responseHandler(c);
 };
 
 export function getUserFavoritesRoute() {

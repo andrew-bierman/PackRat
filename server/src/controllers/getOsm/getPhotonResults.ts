@@ -14,7 +14,7 @@ import * as validators from '@packrat/packages';
  * @param {object} res - The response object.
  * @return {undefined} There is no explicit return value.
  */
-export const getPhotonResults = async (req, res, next) => {
+export const getPhotonResults = async (c, next) => {
   const { searchString } = req.query;
   if (!searchString) {
     next(InvalidRequestParamsError);
@@ -22,7 +22,7 @@ export const getPhotonResults = async (req, res, next) => {
   try {
     const resultsArray = await getPhotonResultsService(searchString);
     res.locals.data = resultsArray.data.features;
-    responseHandler(res);
+    responseHandler(c);
   } catch (error) {
     next(RetrievingPhotonDetailsError);
   }

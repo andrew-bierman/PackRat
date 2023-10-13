@@ -14,7 +14,7 @@ import * as validators from '@packrat/packages';
  * @param {Object} res - The response object.
  * @return {Promise} The response object containing the parks data.
  */
-export const getParksOSM = async (req, res, next) => {
+export const getParksOSM = async (c, next) => {
   try {
     const { lat = 45.5231, lon = -122.6765, radius = 50000 } = req.query;
 
@@ -23,7 +23,7 @@ export const getParksOSM = async (req, res, next) => {
     }
     const result = await getParksOSMService(lat, lon, radius);
     res.locals.data = result;
-    responseHandler(res);
+    responseHandler(c);
   } catch (error) {
     console.error(error);
     next(ErrorRetrievingParksOSMError);

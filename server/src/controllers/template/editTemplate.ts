@@ -10,16 +10,16 @@ import { z } from 'zod';
  * @param {Object} res - The response object.
  * @return {Promise<void>} - A promise that resolves when the template is edited.
  */
-export const editTemplate = async (req, res) => {
-  const { templateId } = req.params;
-  const { type, isGlobalTemplate } = req.body;
+export const editTemplate = async (c) => {
+  const { templateId } = c.req.param();
+  const { type, isGlobalTemplate } = c.req.json();
   const updatedTemplate = await editTemplateService(
     templateId,
     type,
     isGlobalTemplate,
   );
   res.locals.data = updatedTemplate;
-  responseHandler(res);
+  responseHandler(c);
 };
 
 export function editTemplateRoute() {

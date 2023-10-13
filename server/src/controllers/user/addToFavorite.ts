@@ -7,11 +7,11 @@ import { addToFavoriteService } from '../../services/favorite/addToFavoriteServi
  * @param {Object} res - The response object.
  * @return {Object} The updated user object.
  */
-export const addToFavorite = async (req, res) => {
-  const { packId, userId } = req.body;
+export const addToFavorite = async (c) => {
+  const { packId, userId } = c.req.json();
 
   const user = await addToFavoriteService(packId, userId);
 
   res.locals.data = user;
-  responseHandler(res);
+  responseHandler(c);
 };

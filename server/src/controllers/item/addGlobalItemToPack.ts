@@ -10,15 +10,15 @@ import { z } from 'zod';
  * @param {Object} res - The response object.
  * @return {Object} The updated item.
  */
-export const addGlobalItemToPack = async (req, res, next) => {
+export const addGlobalItemToPack = async (c, next) => {
   try {
-    const { packId } = req.params;
-    const { itemId, ownerId } = req.body;
+    const { packId } = c.req.param();
+    const { itemId, ownerId } = c.req.json();
 
     const result = await addGlobalItemToPackService(packId, itemId, ownerId);
 
     res.locals.data = result;
-    responseHandler(res);
+    responseHandler(c);
   } catch (error) {
     next(ItemNotFoundError);
   }

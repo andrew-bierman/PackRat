@@ -10,9 +10,9 @@ import { checkCodeService } from '../../services/user/checkCodeService';
  * @return {Promise<void>} - a promise that resolves to void
  */
 export const checkCode = async (req: any, res: any, next) => {
-  const user = await checkCodeService(req.body);
+  const user = await checkCodeService(c.req.json());
   if (user.length) {
-    responseHandler(res);
+    responseHandler(c);
   } else {
     next(InvalidCodeError);
   }

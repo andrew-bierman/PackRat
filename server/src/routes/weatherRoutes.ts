@@ -2,7 +2,9 @@ import express from 'express';
 import { getWeatherWeek, getWeather } from '../controllers/weather/index';
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
 
-const router = express.Router();
+import { Hono } from 'hono';
+
+const router = new Hono();
 
 /**
  * @swagger

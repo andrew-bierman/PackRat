@@ -11,8 +11,8 @@ import { z } from 'zod';
  * @param {Object} res - The response object.
  * @return {Promise<void>} The created template.
  */
-export const addTemplate = async (req, res, next) => {
-  const { type, templateId, isGlobalTemplate, createdBy } = req.body;
+export const addTemplate = async (c, next) => {
+  const { type, templateId, isGlobalTemplate, createdBy } = c.req.json();
 
   const user = await User.findById(createdBy);
 
@@ -23,7 +23,7 @@ export const addTemplate = async (req, res, next) => {
   await addTemplateService(type, templateId, isGlobalTemplate, createdBy);
 
   res.locals.data = { message: 'Template added successfully' };
-  responseHandler(res);
+  responseHandler(c);
 };
 
 export function addTemplateRoute() {

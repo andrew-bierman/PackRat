@@ -9,13 +9,13 @@ import { z } from 'zod';
  * @param {Object} res - the response object
  * @return {void} - does not return a value
  */
-export const postSingleGeoJSON = async (req, res) => {
+export const postSingleGeoJSON = async (c) => {
   console.log('in postSingleGeoJSON');
-  const geojson = req.body;
+  const geojson = c.req.json();
 
   const result = await postSingleGeoJSONService(geojson);
   res.locals.data = result;
-  responseHandler(res);
+  responseHandler(c);
 };
 
 export function postSingleGeoJSONRoute() {

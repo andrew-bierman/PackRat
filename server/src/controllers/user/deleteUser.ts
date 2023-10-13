@@ -9,14 +9,14 @@ import * as validator from '../../middleware/validators/index';
  * @param {Object} res - The response object.
  * @return {Promise} A promise that resolves to the message "user was deleted successfully" if the user is deleted, or rejects with an error message if there is an error.
  */
-export const deleteUser = async (req, res, next) => {
+export const deleteUser = async (c, next) => {
   try {
-    const { userId } = req.body;
+    const { userId } = c.req.json();
 
     await User.findOneAndDelete({ _id: userId });
 
     res.locals.data = { message: 'User deleted successfully' };
-    responseHandler(res);
+    responseHandler(c);
   } catch (error) {
     next(UnableToEditUserError);
   }

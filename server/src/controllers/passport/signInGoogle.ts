@@ -58,14 +58,14 @@ passport.use(
 /**
  * Sign in with Google.
  * @param {Object} req - The request object.
- * @param {Object} req.body - The request body.
- * @param {string} req.body.idToken - The Google ID token.
+ * @param {Object} c.req.json() - The request body.
+ * @param {string} c.req.json().idToken - The Google ID token.
  * @param {Object} res - The response object.
  * @return {Promise<void>} The function does not return anything.
  */
-export const signInGoogle = async (req, res) => {
+export const signInGoogle = async (c) => {
   try {
-    const { idToken } = req.body;
+    const { idToken } = c.req.json();
 
     const decodedToken: any = jwt.decode(idToken);
 
@@ -101,7 +101,7 @@ export const signInGoogle = async (req, res) => {
       sendWelcomeEmail(user.email, user.name);
 
       res.locals.data = { user };
-      responseHandler(res);
+      responseHandler(c);
     } else {
       if (!alreadyGoogleSignin.password) {
         alreadyGoogleSignin.password = utilsService.randomPasswordGenerator(8);
@@ -114,10 +114,10 @@ export const signInGoogle = async (req, res) => {
       await alreadyGoogleSignin.generateAuthToken();
 
       res.locals.data = { user: alreadyGoogleSignin };
-      responseHandler(res);
+      responseHandler(c);
     }
   } catch (err) {
-    res.status(400).send({ message: err.message });
+    c.status(400).send({ message: err.message });
   }
 };
 

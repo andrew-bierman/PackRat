@@ -9,16 +9,16 @@ import * as validator from '../../middleware/validators/index';
  * @param {Object} res - The response object.
  * @return {Object} The updated trip object.
  */
-export const editTrip = async (req, res, next) => {
+export const editTrip = async (c, next) => {
   try {
-    const { _id } = req.body;
+    const { _id } = c.req.json();
 
-    const newTrip = await Trip.findOneAndUpdate({ _id }, req.body, {
+    const newTrip = await Trip.findOneAndUpdate({ _id }, c.req.json(), {
       returnOriginal: false,
     }).populate('packs');
 
     res.locals.data = newTrip;
-    responseHandler(res);
+    responseHandler(c);
   } catch (error) {
     next(UnableToEditTripError);
   }

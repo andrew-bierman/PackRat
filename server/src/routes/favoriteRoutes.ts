@@ -10,7 +10,9 @@ import authTokenMiddleware from '../middleware/auth';
 import checkRole from '../middleware/checkRole';
 import { zodParser } from '../middleware/validators/zodParser';
 
-const router = express.Router();
+import { Hono } from 'hono';
+
+const router = new Hono();
 
 /**
  * @swagger
@@ -39,7 +41,7 @@ const router = express.Router();
  */
 router.post(
   '/',
-  (req, res, next) => zodParser(validator.addToFavorite, req.body, next),
+  (c, next) => zodParser(validator.addToFavorite, c.req.json(), next),
   tryCatchWrapper(addToFavorite),
 );
 

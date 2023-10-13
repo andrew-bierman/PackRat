@@ -17,13 +17,13 @@ import { z } from 'zod';
  * @param {Object} res - The response object used to send the retrieved OpenStreetMap data.
  * @return {Promise<void>} - A promise that resolves when the OpenStreetMap data is successfully retrieved and sent.
  */
-export const getOsm = async (req, res, next) => {
+export const getOsm = async (c, next) => {
   console.log('req', req); // log the request body to see what it looks like
   try {
-    const { activityType, startPoint, endPoint } = req.body;
+    const { activityType, startPoint, endPoint } = c.req.json();
     const result = await getOsmService({ activityType, startPoint, endPoint });
     res.locals.data = result;
-    responseHandler(res);
+    responseHandler(c);
   } catch (error) {
     next(ErrorRetrievingOverpassError);
   }

@@ -10,11 +10,11 @@ import { z } from 'zod';
  * @param {Object} res - The response object.
  * @return {Object} The weather data retrieved from OpenWeather API.
  */
-export const getWeather = async (req, res, next) => {
+export const getWeather = async (c, next) => {
   try {
     const response = await getWeatherService(req.query.lat, req.query.lon);
     res.locals.data = response.data;
-    responseHandler(res);
+    responseHandler(c);
   } catch (error) {
     // send back error message
     next(RetrievingWeatherFromOpenWeatherError);

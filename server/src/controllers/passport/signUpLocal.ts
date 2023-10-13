@@ -42,14 +42,14 @@ passport.use(
  * @param {function} next - The next function.
  * @return {Promise} A promise that resolves to nothing.
  */
-export const signUpLocal = async (req, res, next) => {
-  const { email, password, name } = req.body;
+export const signUpLocal = async (c, next) => {
+  const { email, password, name } = c.req.json();
 
   try {
     const existingUser = await User.findOne({ email });
 
     if (existingUser) {
-      return res.status(400).json({ error: 'Email already in use' });
+      return c.status(400).json({ error: 'Email already in use' });
     }
 
     // Hash the password
@@ -71,7 +71,7 @@ export const signUpLocal = async (req, res, next) => {
       }
 
       if (!user) {
-        return res.status(400).json({ error: info.message });
+        return c.status(400).json({ error: info.message });
       }
 
       // Log the user in
@@ -84,9 +84,9 @@ export const signUpLocal = async (req, res, next) => {
           .status(201)
           .json({ message: 'User created successfully', user: newUser });
       });
-    })(req, res, next);
+    })(c, next);
   } catch (error) {
-    return res.status(400).json({ error: error.message });
+    return c.status(400).json({ error: error.message });
   }
 };
 

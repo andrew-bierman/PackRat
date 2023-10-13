@@ -4,7 +4,9 @@ import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
 import authTokenMiddleware from '../middleware/auth';
 import checkRole from '../middleware/checkRole';
 
-const router = express.Router();
+import { Hono } from 'hono';
+
+const router = new Hono();
 
 router.post(
   '/',

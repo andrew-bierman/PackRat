@@ -14,7 +14,7 @@ const fetch = async (...args) =>
  * @param {Object} res - The response object.
  * @return {Promise} A promise that resolves with the retrieved trail data or an error message.
  */
-export const getTrails = async (req, res, next) => {
+export const getTrails = async (c, next) => {
   const radiusParams = 25;
   const activityParams = true;
   const {
@@ -23,7 +23,7 @@ export const getTrails = async (req, res, next) => {
     locality,
     latitude,
     longitude,
-  } = req.body;
+  } = c.req.json();
   const response = await getTrailsService(
     administrative_area_level_1,
     country,
@@ -34,7 +34,7 @@ export const getTrails = async (req, res, next) => {
     activityParams,
   );
   res.locals.data = response;
-  responseHandler(res);
+  responseHandler(c);
 };
 
 export function getTrailsRoute() {

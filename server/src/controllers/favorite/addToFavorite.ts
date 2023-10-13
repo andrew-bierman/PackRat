@@ -10,13 +10,13 @@ import * as validator from '../../middleware/validators/index';
  * @param {Object} res - The response object used to send the HTTP response.
  * @return {Object} The updated user object in the response body.
  */
-export const addToFavorite = async (req, res, next) => {
-  const { packId, userId } = req.body;
+export const addToFavorite = async (c, next) => {
+  const { packId, userId } = c.req.json();
   await addToFavoriteService(packId, userId);
   const user = await User.findOne({ _id: userId }).select('-password');
   if (!user) next(UserNotFoundError);
   res.locals.data = user;
-  responseHandler(res);
+  responseHandler(c);
 };
 
 export function addToFavoriteRoute() {

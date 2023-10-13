@@ -10,16 +10,16 @@ import * as validator from '../../middleware/validators/index';
  * @param {Object} res - The response object.
  * @return {Promise<void>} The promise that resolves when the user is signed up.
  */
-export const userSignup = async (req, res) => {
-  const { email } = req.body;
+export const userSignup = async (c) => {
+  const { email } = c.req.json();
   await (User as any).alreadyLogin(email);
   const salt = await bcrypt.genSalt(parseInt(JWT_SECRET));
-  req.body.password = await bcrypt.hash(req.body.password, salt);
-  const user = new User(req.body);
+  c.req.json().password = await bcrypt.hash(c.req.json().password, salt);
+  const user = new User(c.req.json());
   await user.save();
   await user.generateAuthToken();
   sendWelcomeEmail(user.email, user.name);
-  res.status(201).send({ user });
+  c.status(201).send({ user });
 };
 
 export function signUpRoute() {

@@ -13,9 +13,9 @@ import * as validator from '../../middleware/validators/index';
  * @param {object} res - The response object.
  * @return {Promise<void>} - A promise that resolves to nothing.
  */
-export const updatePassword = async (req, res, next) => {
+export const updatePassword = async (c, next) => {
   try {
-    let { email, oldPassword, newPassword } = req.body;
+    let { email, oldPassword, newPassword } = c.req.json();
 
     const user = await User.findOne({ email });
 
@@ -32,7 +32,7 @@ export const updatePassword = async (req, res, next) => {
     const val = await findUserAndUpdate(email, newPassword, 'password');
 
     if (val) {
-      responseHandler(res);
+      responseHandler(c);
     } else {
       next(UnableTouUpdatePasswordError);
     }

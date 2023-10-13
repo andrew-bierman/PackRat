@@ -11,16 +11,16 @@ import * as validator from '../../middleware/validators/index';
  * @return {Object} The updated pack.
  */
 
-export const editPack = async (req, res, next) => {
+export const editPack = async (c, next) => {
   try {
-    const { _id } = req.body;
+    const { _id } = c.req.json();
 
-    const newPack = await editPackService(_id, req.body);
+    const newPack = await editPackService(_id, c.req.json());
 
     console.log('newPack', newPack);
 
     res.locals.data = newPack;
-    responseHandler(res);
+    responseHandler(c);
   } catch (error) {
     next(UnableToEditPackError);
   }

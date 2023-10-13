@@ -11,12 +11,12 @@ import { publicProcedure } from '../../trpc';
  * @param {Object} res - The response object.
  * @return {Promise} - The favorite packs of the user.
  */
-export const getFavoritePacksByUser = async (req, res, next) => {
-  const { userId } = req.body;
+export const getFavoritePacksByUser = async (c, next) => {
+  const { userId } = c.req.json();
   const packs = await getFavoritePacksByUserService(userId);
   if (!packs) next(PackNotFoundError);
   res.locals.data = packs;
-  responseHandler(res);
+  responseHandler(c);
 };
 
 export function getFavoritePacksByUserRoute() {

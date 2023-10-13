@@ -10,11 +10,11 @@ import { z } from 'zod';
  * @param {Object} res - the response object
  * @return {Promise<Object>} the weather data for the week
  */
-export const getWeatherWeek = async (req, res, next) => {
+export const getWeatherWeek = async (c, next) => {
   try {
     const response = await getWeatherWeekService(req.query.lat, req.query.lon);
     res.locals.data = response.data;
-    responseHandler(res);
+    responseHandler(c);
   } catch (error) {
     next(RetrievingWeatherFromOpenWeatherError);
   }

@@ -13,7 +13,7 @@ import * as validators from '@packrat/packages';
  * @param {Object} res - The response object.
  * @return {Promise<void>} - Resolves with the geojsonData of trails retrieved from OSM.
  */
-export const getTrailsOSM = async (req, res, next) => {
+export const getTrailsOSM = async (c, next) => {
   try {
     const { lat = 45.5231, lon = -122.6765, radius = 50000 } = req.query;
 
@@ -22,7 +22,7 @@ export const getTrailsOSM = async (req, res, next) => {
     }
     const geojsonData = await getTrailsOsmService(lat, lon, radius);
     res.locals.data = geojsonData;
-    responseHandler(res);
+    responseHandler(c);
   } catch (error) {
     next(RetrievingTrailsOSMError);
   }

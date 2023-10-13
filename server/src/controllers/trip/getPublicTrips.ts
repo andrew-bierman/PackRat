@@ -10,14 +10,14 @@ import { z } from 'zod';
  * @param {object} res - The response object.
  * @return {object} The public trips as a JSON response.
  */
-export const getPublicTrips = async (req, res, next) => {
+export const getPublicTrips = async (c, next) => {
   try {
     const { queryBy } = req.query;
 
     const publicTrips = await getPublicTripsService(queryBy);
 
     res.locals.data = publicTrips;
-    responseHandler(res);
+    responseHandler(c);
   } catch (error) {
     next(TripNotFoundError);
   }

@@ -1,7 +1,7 @@
 export function tryCatchWrapper(fn) {
-  return async (req, res, next) => {
+  return async (c, next) => {
     try {
-      await fn(req, res, next);
+      await fn(c, next);
     } catch (error) {
       next(error);
     }

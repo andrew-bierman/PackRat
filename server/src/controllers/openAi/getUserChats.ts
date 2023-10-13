@@ -6,17 +6,17 @@ import { z } from 'zod';
 
 /**
  * Retrieves the chats of a user.
- * @param {string} req.params.userId - The ID of the user.
+ * @param {string} c.req.param().userId - The ID of the user.
  * @returns {object} The conversations of the user.
  */
-export const getUserChats = async (req, res, next) => {
+export const getUserChats = async (c, next) => {
   try {
-    const { userId } = req.params;
+    const { userId } = c.req.param();
 
     const result = await getUserChatsService(userId);
 
     res.locals.data = result;
-    responseHandler(res);
+    responseHandler(c);
   } catch (error) {
     next(FailedToRetrieveUserChats);
   }
