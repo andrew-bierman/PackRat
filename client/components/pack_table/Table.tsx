@@ -14,8 +14,8 @@ import { theme } from '../../theme';
 import useTheme from '../../hooks/useTheme';
 import { PackOptions } from '../PackOptions';
 import CustomButton from '../custombutton';
-import ItemPicker from '../Picker';
 import useCustomStyles from '~/hooks/useCustomStyles';
+import {TSkeleton} from '../../packrat-ui';
 
 const WeightUnitDropdown = ({ value, onChange }) => {
   return (
@@ -52,6 +52,7 @@ const IgnoreItemCheckbox = ({ itemId, isChecked, handleCheckboxChange }) => (
   >
     <Checkbox
       key={itemId}
+      value='Ignore Item'
       isChecked={isChecked}
       onChange={() => handleCheckboxChange(itemId)}
       aria-label="Ignore item"
@@ -59,7 +60,6 @@ const IgnoreItemCheckbox = ({ itemId, isChecked, handleCheckboxChange }) => (
   </Box>
 );
 
-const Loading = () => <Text>Loading....</Text>;
 
 const ErrorMessage = ({ message }) => <Text>{message}</Text>;
 
@@ -83,7 +83,6 @@ const TableItem = ({
    * @return {None} No return value.
    */
   const onTrigger = () => {
-    console.log('called');
     setIsEditModalOpen(true);
   };
   const closeModalHandler = () => {
@@ -242,11 +241,10 @@ export const TableContainer = ({
   };
 
   const [weightUnit, setWeightUnit] = useState('g');
-  const isLoading = useSelector((state) => state.items.isLoading);
-  const error = useSelector((state) => state.items.error);
-  console.log('c', currentPack);
-  const data = currentPack?.items;
+  const isLoading = useSelector((state:any) => state.packs.isLoading);
 
+  const error = useSelector((state:any) => state.items.error);
+  const data = currentPack?.items;
   let totalFoodWeight = 0;
   let totalWaterWeight = 0;
   let totalBaseWeight = 0;
@@ -265,9 +263,6 @@ export const TableContainer = ({
       const itemQuantity = Number(item.quantity) || 0; // ensure it's a number
       const itemUnit = item.unit || null;
 
-      console.log('item', item);
-      console.log('itemWeight', itemWeight);
-      console.log('itemQuantity', itemQuantity);
 
       if (!copy) {
         switch (categoryName) {
@@ -337,9 +332,7 @@ export const TableContainer = ({
     flexArr = [1, 1, 1, 1];
     heading = ['Item Name', 'Weight', 'Quantity', 'Options'];
   }
-  console.log(heading);
-
-  if (isLoading) return <Loading />;
+  if (isLoading) return <TSkeleton />;
   if (error) return <ErrorMessage message={error} />;
   return (
     <Box style={styles.container}>
