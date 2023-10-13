@@ -1,6 +1,3 @@
-/**
- * Redux store for managing chat-related state.
- */
 
 import {
   createSlice,
