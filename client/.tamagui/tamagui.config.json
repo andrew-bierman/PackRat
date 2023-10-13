@@ -8,7 +8,6 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "display": "flex",
               "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$body",
@@ -479,11 +478,11 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "display": "flex",
               "suppressHighlighting": true,
               "opacity": 0,
               "lineHeight": 0,
               "height": 0,
+              "display": "flex",
               "fontSize": 200,
               "children": "wwwwwwwwwwwwwwwwwww",
               "hoverStyle": {
@@ -1106,7 +1105,6 @@
         },
         "Input": {
           "staticConfig": {
-            "isInput": true,
             "variants": {
               "unstyled": {
                 "false": {
@@ -1151,7 +1149,6 @@
         },
         "InputFrame": {
           "staticConfig": {
-            "isInput": true,
             "variants": {
               "unstyled": {
                 "false": {
@@ -2091,8 +2088,8 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "display": "flex",
-              "suppressHighlighting": true
+              "suppressHighlighting": true,
+              "unstyled": false
             },
             "inlineWhenUnflattened": {},
             "variants": {
@@ -2103,6 +2100,11 @@
                 "true": {
                   "numberOfLines": 1,
                   "lineBreakMode": "clip"
+                }
+              },
+              "unstyled": {
+                "false": {
+                  "color": "$color"
                 }
               }
             },
@@ -2247,12 +2249,16 @@
               "textDecorationStyle": true,
               "textShadowOffset": true,
               "textShadowRadius": true
-            }
+            },
+            "defaultVariants": {
+              "unstyled": false
+            },
+            "isReactNative": false,
+            "isStyledHOC": false
           }
         },
         "TextArea": {
           "staticConfig": {
-            "isInput": true,
             "variants": {
               "unstyled": {
                 "false": {
@@ -2300,7 +2306,6 @@
         },
         "TextAreaFrame": {
           "staticConfig": {
-            "isInput": true,
             "variants": {
               "unstyled": {
                 "false": {
@@ -3945,7 +3950,6 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "display": "flex",
               "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$body"
@@ -8031,7 +8035,6 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "display": "flex",
               "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$body",
@@ -8226,7 +8229,6 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "display": "flex",
               "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$body",
@@ -8985,7 +8987,6 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "display": "flex",
               "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$body"
@@ -9175,7 +9176,6 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "display": "flex",
               "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$body"
@@ -9361,7 +9361,6 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "display": "flex",
               "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$body"
@@ -12051,7 +12050,6 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "display": "flex",
               "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$body"
@@ -17399,7 +17397,6 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "display": "flex",
               "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$body"
@@ -17581,7 +17578,6 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "display": "flex",
               "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$body",
@@ -17764,7 +17760,6 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "display": "flex",
               "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$heading",
@@ -17949,7 +17944,6 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "display": "flex",
               "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$heading",
@@ -18134,7 +18128,6 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "display": "flex",
               "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$heading",
@@ -18319,7 +18312,6 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "display": "flex",
               "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$heading",
@@ -18504,7 +18496,6 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "display": "flex",
               "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$heading",
@@ -18689,7 +18680,6 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "display": "flex",
               "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$heading",
@@ -18874,7 +18864,6 @@
             "acceptsClassName": true,
             "isText": true,
             "defaultProps": {
-              "display": "flex",
               "suppressHighlighting": true,
               "unstyled": false,
               "fontFamily": "$heading",
