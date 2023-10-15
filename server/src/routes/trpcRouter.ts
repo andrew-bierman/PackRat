@@ -80,8 +80,23 @@ import {
   getFavoritePacksByUserRoute,
   getUserFavoritesRoute,
 } from '../controllers/favorite';
+import { publicProcedure } from '../trpc';
+import { z } from 'zod';
 
 export const appRouter = trpcRouter({
+  // Test route. Example of how to use trpc with openapi.
+  sayHello: publicProcedure
+    .meta({
+      /* 👉 */ description: 'Testing',
+      openapi: { method: 'GET', path: '/say-hello' },
+    })
+    .input(
+      z.object({ name: z.string().describe('The name to say hello too.') }),
+    )
+    .output(z.object({ greeting: z.string() }))
+    .query(({ input }) => {
+      return { greeting: `Hello ${input.name}!` };
+    }),
   // user routes
   getUserById: getUserByIdRoute(),
   signIn: userSignInRoute(),

@@ -4,7 +4,6 @@ import cors from 'cors';
 import { isCelebrateError, errors } from 'celebrate';
 import { MONGODB_URI } from './config';
 import routes from './routes/index';
-import { serveSwaggerUI } from './helpers/serveSwaggerUI';
 import { corsOptions } from './helpers/corsOptions';
 import { errorHandler } from './helpers/errorHandler';
 import helmet from 'helmet';
@@ -14,6 +13,9 @@ import { limiter } from './helpers/limiter';
 import * as trpcExpress from '@trpc/server/adapters/express';
 import { type inferAsyncReturnType, initTRPC } from '@trpc/server';
 import { appRouter } from './routes/trpcRouter';
+import { createOpenApiExpressMiddleware } from 'trpc-openapi';
+import { serveDocs } from './helpers/serveDocs';
+import { logFormat } from './helpers/logFormat';
 
 const app = express();
 
@@ -23,8 +25,9 @@ const app = express();
 // Apply gzip compression to improve response times.
 app.use(compression());
 
+// app.use(pino)
 // Log HTTP requests.
-app.use(morgan('tiny'));
+app.use(morgan(logFormat));
 
 // Apply rate limiting to prevent brute-force attacks.
 // app.use(limiter);
@@ -40,8 +43,8 @@ app.use(express.json({ limit: '50mb' }));
 // Register the main API routes.
 app.use(routes);
 
-// Serve the Swagger UI for API documentation, ideally only in development environments. Available at /api-docs.
-serveSwaggerUI(app);
+// Serve the documentation landing page. This contains links to the Swagger UI and tRPC Panel. Available at /docs.
+// serveDocs(app, appRouter);
 
 // Middleware to capture and log Celebrate validation errors.
 app.use(
@@ -71,6 +74,8 @@ app.use(
     createContext,
   }),
 );
+
+app.use('/api', createOpenApiExpressMiddleware({ router: appRouter }));
 
 // Celebrate middleware to return validation errors
 // Middleware provided by Celebrate to format and return validation errors to the client.

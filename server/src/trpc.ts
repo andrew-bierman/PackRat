@@ -1,6 +1,10 @@
 import { TRPCError, initTRPC } from '@trpc/server';
+import { OpenApiMeta } from 'trpc-openapi';
+import { TRPCPanelMeta } from 'trpc-panel';
 
-const t = initTRPC.create();
+type CombinedMeta = OpenApiMeta & TRPCPanelMeta;
+
+const t = initTRPC.meta<CombinedMeta>().create(); /* 👈 */
 
 /**
  * Export reusable router and procedure helpers
