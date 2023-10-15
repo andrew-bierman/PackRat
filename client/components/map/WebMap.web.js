@@ -128,60 +128,64 @@ const WebMap = ({ shape: shapeProp }) => {
     );
     if (!mapFullscreen && !isPolygonOrMultiPolygon(shape)) return;
     if (!lng || !lat) return;
-    const mapInstance = new mapboxgl.Map({
-      container: mapContainer.current,
-      style: mapStyle,
-      // center: [lng, lat],
-      center:
-        trailCenterPointRef.current &&
-        !isNaN(trailCenterPointRef.current[0]) &&
-        !isNaN(trailCenterPointRef.current[1])
-          ? trailCenterPointRef.current
-          : [lng, lat],
-      zoom: zoomLevelRef.current ? zoomLevelRef.current : zoomLevel,
-      interactive: mapFullscreen,
-    });
-
-    mapInstance.on('load', () => {
-      if (isPoint(shape)) {
-        addPoints(mapInstance);
-      } else if (isPolygonOrMultiPolygon(shape)) {
-        console.log('it is polygon');
-        addPolygons(mapInstance);
-      } else {
-        addTrailLayer(mapInstance);
-      }
-      if (mapFullscreen && showUserLocation) {
-        mapInstance.addLayer({
-          id: 'user-location',
-          type: 'circle',
-          source: {
-            type: 'geojson',
-            data: {
-              type: 'Point',
-              coordinates: [lng, lat],
-            },
-          },
-          paint: {
-            'circle-radius': 8,
-            'circle-color': '#3388ff',
-          },
-        });
-      }
-
-      // const marker = new mapboxgl.Marker()
-      //   .setLngLat([lng, lat])
-      //   .addTo(mapInstance);
-
-      mapInstance.on('move', () => {
-        const { lng, lat } = mapInstance.getCenter();
-        setLng(lng.toFixed(4));
-        setLat(lat.toFixed(4));
-        setZoomLevel(mapInstance.getZoom().toFixed(2));
+    try {
+      const mapInstance = new mapboxgl.Map({
+        container: mapContainer.current,
+        style: mapStyle,
+        // center: [lng, lat],
+        center:
+          trailCenterPointRef.current &&
+          !isNaN(trailCenterPointRef.current[0]) &&
+          !isNaN(trailCenterPointRef.current[1])
+            ? trailCenterPointRef.current
+            : [lng, lat],
+        zoom: zoomLevelRef.current ? zoomLevelRef.current : zoomLevel,
+        interactive: mapFullscreen,
       });
 
-      map.current = mapInstance;
-    });
+      mapInstance.on('load', () => {
+        if (isPoint(shape)) {
+          addPoints(mapInstance);
+        } else if (isPolygonOrMultiPolygon(shape)) {
+          console.log('it is polygon');
+          addPolygons(mapInstance);
+        } else {
+          addTrailLayer(mapInstance);
+        }
+        if (mapFullscreen && showUserLocation) {
+          mapInstance.addLayer({
+            id: 'user-location',
+            type: 'circle',
+            source: {
+              type: 'geojson',
+              data: {
+                type: 'Point',
+                coordinates: [lng, lat],
+              },
+            },
+            paint: {
+              'circle-radius': 8,
+              'circle-color': '#3388ff',
+            },
+          });
+        }
+
+        // const marker = new mapboxgl.Marker()
+        //   .setLngLat([lng, lat])
+        //   .addTo(mapInstance);
+
+        mapInstance.on('move', () => {
+          const { lng, lat } = mapInstance.getCenter();
+          setLng(lng.toFixed(4));
+          setLat(lat.toFixed(4));
+          setZoomLevel(mapInstance.getZoom().toFixed(2));
+        });
+
+        map.current = mapInstance;
+      });
+    } catch (error) {
+      console.error(error);
+    }
   }, [mapFullscreen]);
 
   useEffect(() => {
@@ -270,15 +274,18 @@ const WebMap = ({ shape: shapeProp }) => {
   const addPoints = (mapInstance) => {
     if (mapInstance) {
       const pointLatLong = shape?.features[0]?.geometry?.coordinates;
-      const [lng, lat] = pointLatLong;
-      if (!lng || !lat) return;
-      const marker = new mapboxgl.Marker()
-        .setLngLat([lng, lat])
-        .addTo(mapInstance);
-      marker.getElement().addEventListener('click', () => {
-        window.open(`https://maps.google.com?q=${lat},${lng}`);
-      });
-      mapInstance.setCenter(pointLatLong);
+      if (pointLatLong && !isNaN(pointLatLong[0]) && !isNaN(pointLatLong[1])) {
+        const [lng, lat] = pointLatLong;
+        const marker = new mapboxgl.Marker()
+          .setLngLat([lng, lat])
+          .addTo(mapInstance);
+        marker.getElement().addEventListener('click', () => {
+          window.open(`https://maps.google.com?q=${lat},${lng}`);
+        });
+        mapInstance.setCenter(pointLatLong);
+      } else {
+        console.error('Invalid coordinates.');
+      }
     }
   };
 
