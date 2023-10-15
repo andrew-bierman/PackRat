@@ -47,22 +47,22 @@ mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 const DESTINATION = 'destination';
 const TRIP = 'trip';
 const WebMap = ({ shape: shapeProp }) => {
-  useEffect(() => {
-    // temporary solution to fix mapbox-gl-js missing css error
-    if (Platform.OS === 'web') {
-      // inject mapbox css into head
-      const link = document.createElement('link');
-      link.href = 'https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css';
-      link.rel = 'stylesheet';
-      document.head.appendChild(link);
+  // useEffect(() => {
+  //   // temporary solution to fix mapbox-gl-js missing css error
+  //   if (Platform.OS === 'web') {
+  //     // inject mapbox css into head
+  //     const link = document.createElement('link');
+  //     link.href = 'https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css';
+  //     link.rel = 'stylesheet';
+  //     document.head.appendChild(link);
 
-      // inject mapbox js into head
-      const script = document.createElement('script');
-      script.src = 'https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js';
-      script.async = true;
-      document.head.appendChild(script);
-    }
-  }, []);
+  //     // inject mapbox js into head
+  //     const script = document.createElement('script');
+  //     script.src = 'https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js';
+  //     script.async = true;
+  //     document.head.appendChild(script);
+  //   }
+  // }, []);
 
   const [shape, setShape] = useState(shapeProp);
   console.log('WebMap shape', shape);
@@ -127,6 +127,7 @@ const WebMap = ({ shape: shapeProp }) => {
       'is polygon or not',
     );
     if (!mapFullscreen && !isPolygonOrMultiPolygon(shape)) return;
+    if (!lng || !lat) return;
     const mapInstance = new mapboxgl.Map({
       container: mapContainer.current,
       style: mapStyle,
@@ -270,6 +271,7 @@ const WebMap = ({ shape: shapeProp }) => {
     if (mapInstance) {
       const pointLatLong = shape?.features[0]?.geometry?.coordinates;
       const [lng, lat] = pointLatLong;
+      if (!lng || !lat) return;
       const marker = new mapboxgl.Marker()
         .setLngLat([lng, lat])
         .addTo(mapInstance);

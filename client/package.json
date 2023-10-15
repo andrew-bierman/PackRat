@@ -81,7 +81,7 @@
     "file-saver": "^2.0.5",
     "firebase": "^9.19.1",
     "fuse.js": "^6.6.2",
-    "mapbox-gl": "^2.13.0",
+    "mapbox-gl": "1.13.3",
     "native-base": "^3.4.28",
     "normalize-css-color": "^1.0.2",
     "osmtogeojson": "^3.0.0-beta.5",
