@@ -8,8 +8,29 @@ import LargeCard from '../card/LargeCard';
 import { theme } from '../../theme';
 import useTheme from '../../hooks/useTheme';
 import { hexToRGBA } from '~/utils/colorFunctions';
+import { Box, Skeleton } from 'native-base';
 
-export default function UserDataContainer({ data, type, userId }) {
+// Skeleton version of the UserDataCard component
+const SkeletonUserDataCard = () => {
+  return (
+    <Box alignItems="center" padding="5">
+      <Skeleton
+        minH="125"
+        minW="80"
+        width={'100px'}
+        rounded="lg"
+        opacity={0.5}
+      ></Skeleton>
+    </Box>
+  );
+};
+
+export default function UserDataContainer({
+  data = [],
+  type,
+  userId,
+  isLoading,
+}) {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const [dataState, setDataState] = useState(
@@ -27,6 +48,27 @@ export default function UserDataContainer({ data, type, userId }) {
   const cardType = type === 'packs' ? 'pack' : 'trip';
 
   const differentUser = userId && userId !== currentUser._id;
+
+  // Map function to render multiple skeleton cards
+  const skeletonCards = [...Array(3)].map((_, idx) => (
+    <SkeletonUserDataCard key={idx} />
+  ));
+
+  if (isLoading) {
+    return (
+      <Stack
+        direction={['column', 'column', 'column', 'row']}
+        space={[4, 4, 4, 2]}
+        flexWrap="wrap"
+        justifyContent="center"
+        alignItems="center"
+        width="100%"
+        padding={4}
+      >
+        {skeletonCards}
+      </Stack>
+    );
+  }
 
   return (
     <LargeCard
@@ -57,7 +99,9 @@ export default function UserDataContainer({ data, type, userId }) {
           width="100%"
           padding={4}
         >
-          {data && data.length > 0 ? (
+          {isLoading ? (
+            skeletonCards
+          ) : data && data.length > 0 ? (
             data?.map((dataItem, index) => (
               <UserDataCard
                 key={dataItem._id}
