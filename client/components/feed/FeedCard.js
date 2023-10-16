@@ -27,6 +27,7 @@ import {
   Button,
 } from 'native-base';
 import { formatNumber } from '~/utils/formatNumber';
+import { useAddFavorite } from '~/hooks/favorites/useAddFavorite';
 
 // import { useAuth } from "../../auth/provider";
 
@@ -50,6 +51,7 @@ export default function Card({
     useTheme();
   const favorites = useSelector(selectAllFavorites);
   const dispatch = useDispatch();
+  const {addFavorite} = useAddFavorite()
 
   const isFavorite =
     type !== 'trip' &&
@@ -66,8 +68,9 @@ export default function Card({
       packId: _id,
       userId: user._id,
     };
-
-    dispatch(addFavorite(data));
+    console.log(data)
+    addFavorite(data)
+    // dispatch(addFavorite(data));
   };
 
   /**
