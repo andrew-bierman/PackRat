@@ -19,7 +19,7 @@ export const fuseSearch = (data, searchTerm, keys, options = {}) => {
     // ignoreFieldNorm: false,  // When true, the function ignores the `fieldNorm` computed during the indexing stage, and uses a constant norm value of 1
   };
 
-  const fuse = new Fuse(data, {
+  const fuse = new Fuse(data || [], {
     keys,
     ...defaultOptions,
     ...options,

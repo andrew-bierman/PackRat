@@ -26,7 +26,11 @@ const DEFAULT_SORT = { createdAt: -1 };
  * @param {string} queryBy - Specifies how the public packs should be sorted.
  * @return {Promise<any[]>} An array of public packs.
  */
-export async function getPublicPacksService(queryBy: string = null) {
+export async function getPublicPacksService(
+  queryBy: string = null,
+  page: number = 1,
+  limit: number = 10,
+) {
   try {
     const publicPacksPipeline: any = [
       {
@@ -82,7 +86,15 @@ export async function getPublicPacksService(queryBy: string = null) {
     ];
 
     const sortCriteria = SORT_OPTIONS[queryBy] || DEFAULT_SORT;
+
     publicPacksPipeline.push({ $sort: sortCriteria });
+
+    if (page !== null) {
+      publicPacksPipeline.push(
+        { $skip: (page - 1) * limit },
+        { $limit: limit },
+      );
+    }
 
     const publicPacks = await Pack.aggregate(publicPacksPipeline);
 

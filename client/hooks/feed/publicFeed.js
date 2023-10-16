@@ -9,9 +9,10 @@ export const usePublicFeed = (queryString, selectedTypes) => {
       keepPreviousData: true,
       staleTime: 1000 * 60, // 1 min
       cacheTime: 1000 * 60 * 5, // 5 min
+      getNextPageParam: (lastPage, allPages) => allPages.length + 1,
     };
 
-    const publicPacks = queryTrpc.getPublicPacks.useQuery(
+    const publicPacks = queryTrpc.getPublicPacks.useInfiniteQuery(
       { queryBy: queryString ?? 'Favorite' },
       {
         ...queryOptions,
@@ -22,7 +23,7 @@ export const usePublicFeed = (queryString, selectedTypes) => {
       },
     );
 
-    const publicTrips = queryTrpc.getPublicTripsRoute.useQuery(
+    const publicTrips = queryTrpc.getPublicTripsRoute.useInfiniteQuery(
       { queryBy: queryString ?? 'Favorite' },
       {
         ...queryOptions,
@@ -36,13 +37,17 @@ export const usePublicFeed = (queryString, selectedTypes) => {
     if (selectedTypes.pack && publicPacks?.status === 'success')
       data = [
         ...data,
-        ...publicPacks.data.map((item) => ({ ...item, type: 'pack' })),
+        ...publicPacks?.data?.map((item) => ({ ...item, type: 'pack' })),
+        ...publicPacks.pages.flat().map((item) => ({ ...item, type: 'pack' })),
       ];
 
     if (selectedTypes.trip && publicTrips?.status === 'success')
       data = [
         ...data,
-        ...publicTrips.data.map((item) => ({ ...item, type: 'trip' })),
+        ...publicTrips?.data?.map((item) => ({ ...item, type: 'trip' })),
+        ...publicTrips?.pages
+          ?.flat()
+          .map((item) => ({ ...item, type: 'trip' })),
       ];
   } catch (error) {
     console.error(error);
