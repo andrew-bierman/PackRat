@@ -14,6 +14,7 @@ export const addToFavorite = async (req, res, next) => {
   const { packId, userId } = req.body;
   await addToFavoriteService(packId, userId);
   const user = await User.findOne({ _id: userId }).select('-password');
+
   if (!user) next(UserNotFoundError);
   res.locals.data = user;
   responseHandler(res);
@@ -28,6 +29,7 @@ export function addToFavoriteRoute() {
       const user = await User.findOne({ _id: userId }).select('-password');
       // if (!user) throw UserNotFoundError;
       if (!user) return UserNotFoundError;
+     
       return user;
     });
 }

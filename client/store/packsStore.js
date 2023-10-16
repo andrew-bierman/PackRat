@@ -37,9 +37,11 @@ export const deletePackItem = createAsyncThunk(
 export const changePackStatus = createAsyncThunk(
   'packs/changePackStatus',
   async (updatedPack) => {
+    console.log("Update pack")
+    console.log(updatedPack)
     // const response = await axios.put(`${api}/pack`, updatedPack);
     // return response.data;
-    return await trpc.editPack.mutate(updatePack);
+    return await trpc.editPack.mutate(updatedPack);
   },
 );
 

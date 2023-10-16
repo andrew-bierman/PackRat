@@ -8,6 +8,8 @@ export const useFeed = (
   feedType = 'public',
   selectedTypes = { pack: true, trip: true },
 ) => {
+  console.log("feed Type")
+  console.log(feedType)
   switch (feedType) {
     case 'public':
       return usePublicFeed(queryString, selectedTypes);

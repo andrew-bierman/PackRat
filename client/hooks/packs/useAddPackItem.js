@@ -32,8 +32,8 @@ export const useAddPackItem = () => {
       }
     },
     onError: (err, newItem, context) => {
-      console.log("Error")
-      console.log(err)
+      console.log('Error');
+      console.log( newItem);
       if (context.previousPack) {
         utils.getPackById.setData({packId:newItem.packId},context.previousPack) 
       }

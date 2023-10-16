@@ -13,6 +13,7 @@ export const addToFavoriteService = async (packId, userId) => {
     { favorites: { $in: [packId] } },
     { _id: userId },
   );
+  console.log(exists)
 
   if (exists.length > 0) {
     await User.updateOne({ _id: userId }, { $pull: { favorites: packId } });

@@ -52,10 +52,9 @@ export default function Card({
   const dispatch = useDispatch();
 
   const isFavorite =
-    !type === 'trip'
-      ? favorited_by.includes(user._id) ||
-        favorited_by.forEach((obj) => obj._id === user._id)
-      : null;
+    type !== 'trip' &&
+    (favorited_by?.includes(user?._id) ||
+      favorited_by.some((obj) => obj?._id === user?._id)) ;
 
   /**
    * Handles adding an item to the user's favorites.
@@ -283,7 +282,7 @@ export default function Card({
                         }}
                         fontWeight="400"
                       >
-                        {favorites_count > 0 ? favorites_count : 0}
+                        {favorited_by.length > 0 ? favorited_by.length : 0}
                       </Text>
                     </Box>
                   </Box>

@@ -22,11 +22,13 @@ import { Link } from 'expo-router';
 
 import { truncateString } from '../../utils/truncateString';
 import { useEffect } from 'react';
+import {useChangePackItem} from '../../hooks/packs/useChangeStatus'
 
 const UserDataCard = ({
   type, // "pack" or "trip"
   destination,
   _id,
+  owner_id,
   name,
   total_weight,
   is_public,
@@ -39,7 +41,7 @@ const UserDataCard = ({
   differentUser,
 }) => {
   const dispatch = useDispatch();
-
+  const { changeStatusPackItem} =useChangePackItem()
   /**
    * Updates the state at the specified index with the given boolean value.
    *
@@ -64,7 +66,9 @@ const UserDataCard = ({
   const handleChangeStatus = (index) => {
     updateState(index, true);
     if (type === 'pack') {
-      dispatch(changePackStatus({ _id, is_public: !is_public }));
+      console.log(_id)
+      changeStatusPackItem({ _id, is_public: !is_public,name, owner_id })
+      // dispatch(changePackStatus({ _id, is_public: !is_public,name }));
     } else if (type === 'trip') {
     }
   };

@@ -21,6 +21,7 @@ export const addPack = z.object({
 export const editPack = z.object({
   _id: JoiObjectId(),
   name: z.string().nonempty(),
+  owner_id: JoiObjectId(),
   is_public: z.boolean(),
 });
 

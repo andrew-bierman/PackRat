@@ -7,6 +7,7 @@ import { format, intervalToDuration } from 'date-fns';
 import { addTrip } from '../../store/tripsStore';
 import { api } from '../../constants/api';
 import { trpc } from '../../trpc';
+import {useAddTrips} from '../../hooks/trips/useAddTrips'
 
 // import { Picker } from '@react-native-picker/picker';
 import { DropdownComponent } from '../Dropdown';
@@ -82,6 +83,7 @@ export const SaveTripContainer = ({ dateRange }) => {
 
   // defining dispatch
   const dispatch = useDispatch();
+  const { addNewTrip} =useAddTrips()
 
   // trip info states value
   const [name, setName] = useState('');
@@ -137,7 +139,8 @@ export const SaveTripContainer = ({ dateRange }) => {
 
     // creating a trip
     console.log('create trip data ->', data);
-    dispatch(addTrip(data));
+    addNewTrip(data)
+    // dispatch(addTrip(data));
     setIsSaveModalOpen(!isSaveModalOpen);
   };
 

@@ -73,6 +73,7 @@ const FeedSearchFilter = ({
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
+
   return (
     <View style={styles.filterContainer}>
       <Box style={styles.searchContainer}>
@@ -168,6 +169,8 @@ const Feed = ({ feedType = 'public' }) => {
     trip: false,
   });
   const [searchQuery, setSearchQuery] = useState('');
+  const [Data,setData]=useState(data)
+  const [refreshing, setRefreshing] = useState(false);
 
   const dispatch = useDispatch();
   const ownerId = useSelector((state) => state.auth.user?._id);
@@ -184,7 +187,15 @@ const Feed = ({ feedType = 'public' }) => {
     selectedTypes,
   );
 
+  const onRefresh = () => {
+    setRefreshing(true);
+    refetch();
+    setRefreshing(false);
+  };
+
+
   console.log('🚀 ~ file: Feed.js:180 ~ Feed ~ feedData:', data);
+
   // useEffect(() => {
   //   if (feedType === 'public') {
   //     dispatch(getPublicPacks(queryString));
@@ -206,6 +217,7 @@ const Feed = ({ feedType = 'public' }) => {
    */
   const renderData = () => {
     let arrayData = data;
+
 
     // if (feedType === 'public') {
     //   if (selectedTypes?.pack) {
@@ -241,7 +253,8 @@ const Feed = ({ feedType = 'public' }) => {
 
     // Convert fuse results back into the format we want
     // if searchQuery is empty, use the original data
-    arrayData = searchQuery ? results.map((result) => result.item) : data;
+    arrayData = searchQuery ? results.map((result) => result.item) : data || [];
+
 
     const feedSearchFilterComponent = (
       <FeedSearchFilter
@@ -263,15 +276,15 @@ const Feed = ({ feedType = 'public' }) => {
         <View style={styles.cardContainer}>
           {/* {console.log({ data })} */}
           {feedSearchFilterComponent}
-          {data?.map((item) => (
-            <Card key={item._id} type={item.type} {...item} />
+          {arrayData?.map((item) => (
+            <Card key={item?._id} type={item?.type} {...item} />
           ))}
         </View>
       </ScrollView>
     ) : (
       <View style={{ flex: 1, paddingBottom: 10 }}>
         <FlatList
-          data={data}
+          data={arrayData}
           numColumns={1}
           keyExtractor={(item) => item._id}
           renderItem={({ item }) => (
@@ -286,6 +299,7 @@ const Feed = ({ feedType = 'public' }) => {
   };
 
   const handleTogglePack = () => {
+
     setSelectedTypes((prevState) => ({
       ...prevState,
       pack: !prevState.pack,

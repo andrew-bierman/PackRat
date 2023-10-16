@@ -1,5 +1,3 @@
-import { getQueryKey } from '@trpc/react-query';
-import { queryClient } from '~/constants/queryClient';
 import { queryTrpc } from '../../trpc';
 
 
@@ -20,13 +18,10 @@ export const useUserPacks = (ownerId, queryString) => {
     },
     
   );
-utils.getPacks.setData({
-  ownerId,
-  queryBy:queryString
-})
 
   // Extract packs or set an empty array if data is undefined.
   const packs = data?.packs || [];
+ 
 
   return { data: packs, error, isLoading, refetch };
 };

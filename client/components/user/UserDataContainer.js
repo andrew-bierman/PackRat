@@ -61,6 +61,7 @@ export default function UserDataContainer({ data, type, userId }) {
             data?.map((dataItem, index) => (
               <UserDataCard
                 key={dataItem._id}
+                owner_id={dataItem.owner_id}
                 {...{ ...dataItem }}
                 type={cardType}
                 state={dataState}
