@@ -286,7 +286,7 @@ export default function Card({
                         }}
                         fontWeight="400"
                       >
-                        {favorites_count > 0 ? favorites_count : 0}
+                        { favorited_by.length > 0 ?  favorited_by.length : 0}
                       </Text>
                     </Box>
                   </Box>

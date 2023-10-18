@@ -15,13 +15,7 @@ import {
   Flex,
 } from 'native-base';
 import { AntDesign } from '@expo/vector-icons';
-import {
-  StyleSheet,
-  FlatList,
-  View,
-  ScrollView,
-  RefreshControl,
-} from 'react-native';
+import { StyleSheet, FlatList, View, ScrollView } from 'react-native';
 import Card from '../../components/feed/FeedCard';
 import DropdownComponent from '../../components/Dropdown';
 import { theme } from '../../theme';
@@ -79,6 +73,7 @@ const FeedSearchFilter = ({
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
+
   return (
     <View style={styles.filterContainer}>
       <Box style={styles.searchContainer}>
@@ -174,18 +169,18 @@ const Feed = ({ feedType = 'public' }) => {
     trip: false,
   });
   const [searchQuery, setSearchQuery] = useState('');
-
+  const [Data,setData]=useState(data)
   const [refreshing, setRefreshing] = useState(false);
 
   const dispatch = useDispatch();
   const ownerId = useSelector((state) => state.auth.user?._id);
-  // const publicPacksData = useSelector((state) => state.feed.publicPacks);
-  // const userPacksData = useSelector(selectAllPacks);
-  // const publicTripsData = useSelector((state) => state.feed.publicTrips);
-  // const userTripsData = useSelector(selectAllTrips);
+  const publicPacksData = useSelector((state) => state.feed.publicPacks);
+  const userPacksData = useSelector(selectAllPacks);
+  const publicTripsData = useSelector((state) => state.feed.publicTrips);
+  const userTripsData = useSelector(selectAllTrips);
 
   const styles = useCustomStyles(loadStyles);
-  const { data, error, isLoading, refetch } = useFeed(
+  const { data, error, isLoading } = useFeed(
     queryString,
     ownerId,
     feedType,
@@ -198,7 +193,9 @@ const Feed = ({ feedType = 'public' }) => {
     setRefreshing(false);
   };
 
+
   console.log('🚀 ~ file: Feed.js:180 ~ Feed ~ feedData:', data);
+
   // useEffect(() => {
   //   if (feedType === 'public') {
   //     dispatch(getPublicPacks(queryString));
@@ -220,6 +217,7 @@ const Feed = ({ feedType = 'public' }) => {
    */
   const renderData = () => {
     let arrayData = data;
+
 
     // if (feedType === 'public') {
     //   if (selectedTypes?.pack) {
@@ -255,7 +253,8 @@ const Feed = ({ feedType = 'public' }) => {
 
     // Convert fuse results back into the format we want
     // if searchQuery is empty, use the original data
-    arrayData = searchQuery ? results.map((result) => result.item) : data;
+    arrayData = searchQuery ? results.map((result) => result.item) : data || [];
+
 
     const feedSearchFilterComponent = (
       <FeedSearchFilter
@@ -273,22 +272,19 @@ const Feed = ({ feedType = 'public' }) => {
       <ScrollView
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ flex: 1, paddingBottom: 10 }}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
       >
         <View style={styles.cardContainer}>
           {/* {console.log({ data })} */}
           {feedSearchFilterComponent}
-          {data?.map((item) => (
-            <Card key={item._id} type={item.type} {...item} />
+          {arrayData?.map((item) => (
+            <Card key={item?._id} type={item?.type} {...item} />
           ))}
         </View>
       </ScrollView>
     ) : (
       <View style={{ flex: 1, paddingBottom: 10 }}>
         <FlatList
-          data={data}
+          data={arrayData}
           numColumns={1}
           keyExtractor={(item) => item._id}
           renderItem={({ item }) => (
@@ -297,15 +293,13 @@ const Feed = ({ feedType = 'public' }) => {
           ListHeaderComponent={() => feedSearchFilterComponent}
           ListEmptyComponent={() => <Text>{ERROR_MESSAGES[feedType]}</Text>}
           showsVerticalScrollIndicator={false}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }
         />
       </View>
     );
   };
 
   const handleTogglePack = () => {
+
     setSelectedTypes((prevState) => ({
       ...prevState,
       pack: !prevState.pack,

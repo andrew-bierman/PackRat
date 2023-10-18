@@ -9,12 +9,14 @@ import Pack from '../../models/packModel';
  * @return {Promise<void>} A promise that resolves when the operation is complete.
  */
 export const addToFavoriteService = async (packId, userId) => {
-  const exists = await User.find(
-    { favorites: { $in: [packId] } },
-    { _id: userId },
-  );
+  const exists = await User.findOne({
+    _id: userId,
+    favorites: { $in: [packId] }
+  });
+  console.log("exists")
+  console.log(exists)
 
-  if (exists.length > 0) {
+  if (exists) {
     await User.updateOne({ _id: userId }, { $pull: { favorites: packId } });
     await Pack.updateOne({ _id: packId }, { $pull: { favorited_by: userId } });
   } else {
