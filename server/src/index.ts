@@ -1,18 +1,18 @@
-import express, { type NextFunction } from 'express';
-import mongoose from 'mongoose';
-// import cors from 'cors';
-import { isCelebrateError, errors } from 'celebrate';
-import { MONGODB_URI } from './config';
-import routes from './routes/index';
-import { serveSwaggerUI } from './helpers/serveSwaggerUI';
-import { corsOptions } from './helpers/corsOptions';
-import { errorHandler } from './helpers/errorHandler';
-import helmet from 'helmet';
-import compression from 'compression';
-import morgan from 'morgan';
-import { limiter } from './helpers/limiter';
-import * as trpcExpress from '@trpc/server/adapters/express';
-import { type inferAsyncReturnType, initTRPC } from '@trpc/server';
+// import express, { type NextFunction } from 'express';
+// import mongoose from 'mongoose';
+// // import cors from 'cors';
+// import { isCelebrateError, errors } from 'celebrate';
+// import { MONGODB_URI } from './config';
+// import routes from './routes/index';
+// import { serveSwaggerUI } from './helpers/serveSwaggerUI';
+// import { corsOptions } from './helpers/corsOptions';
+// import { errorHandler } from './helpers/errorHandler';
+// import helmet from 'helmet';
+// import compression from 'compression';
+// import morgan from 'morgan';
+// import { limiter } from './helpers/limiter';
+// import * as trpcExpress from '@trpc/server/adapters/express';
+// import { type inferAsyncReturnType, initTRPC } from '@trpc/server';
 import { appRouter } from './routes/trpcRouter';
 
 import { Hono } from 'hono';
@@ -27,6 +27,7 @@ import type { AnyRouter } from '@trpc/server';
 import type { FetchHandlerRequestOptions } from '@trpc/server/adapters/fetch';
 import { fetchRequestHandler } from '@trpc/server/adapters/fetch';
 import type { MiddlewareHandler } from 'hono';
+import { renderTrpcPanel } from 'trpc-panel';
 
 type tRPCOptions = Omit<
   FetchHandlerRequestOptions<AnyRouter>,
@@ -50,6 +51,8 @@ export const trpcServer = ({
 
 const app = new Hono();
 
+app.use(logger());
+
 console.log('Starting server...');
 
 // app.use('*', prettyJSON()) // With options: prettyJSON({ space: 4 })
@@ -60,10 +63,9 @@ app.get('/', (c) => c.text('Hello Node.js!'));
 
 // Setup CORS for the frontend
 app.use(
-  '*',
+  '/api/trpc',
   cors({
     origin: '*',
-    allowMethods: ['GET', 'POST', 'OPTIONS', 'PUT', 'PATCH', 'DELETE'],
   }),
 );
 
@@ -84,6 +86,12 @@ app.use('/api/trpc/*', async (c, next) => {
     //   }),
   });
   return await middleware(c, next);
+});
+
+app.use('/panel', async (ctx, next) => {
+  return ctx.render(
+    renderTrpcPanel(appRouter, { url: 'http://localhost:3000/api/trpc' }),
+  );
 });
 
 app.onError((err, c) => {

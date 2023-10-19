@@ -7294,7 +7294,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@trpc/client@npm:^10.38.0":
+"@trpc/client@npm:^10.38.5":
   version: 10.40.0
   resolution: "@trpc/client@npm:10.40.0"
   peerDependencies:
@@ -7303,7 +7303,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@trpc/server@npm:^10.38.0":
+"@trpc/server@npm:^10.38.5":
   version: 10.40.0
   resolution: "@trpc/server@npm:10.40.0"
   checksum: 343d765002573b7f0d800de76b9d649de4245174454198ecd39fe7b98db07f09e6aadfcaab2f2654780826e996f1b28abe82b55965dce91f80b666e5864d17da
@@ -10877,6 +10877,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"copy-anything@npm:^3.0.2":
+  version: 3.0.5
+  resolution: "copy-anything@npm:3.0.5"
+  dependencies:
+    is-what: ^4.1.8
+  checksum: d39f6601c16b7cbd81cdb1c1f40f2bf0f2ca0297601cf7bfbb4ef1d85374a6a89c559502329f5bada36604464df17623e111fe19a9bb0c3f6b1c92fe2cbe972f
+  languageName: node
+  linkType: hard
+
 "copy-webpack-plugin@npm:^10.2.0":
   version: 10.2.4
   resolution: "copy-webpack-plugin@npm:10.2.4"
@@ -13958,6 +13967,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"fuzzysort@npm:^2.0.4":
+  version: 2.0.4
+  resolution: "fuzzysort@npm:2.0.4"
+  checksum: 5c498ec452ffc75c4368c52a7c4a490fc4d4129d94eab5f892d7e69d91ee3057259d9ab6924f14cca21f5731e7d91912e6c01669b40ef9b2165924e4b8e65fb5
+  languageName: node
+  linkType: hard
+
 "gauge@npm:^3.0.0":
   version: 3.0.2
   resolution: "gauge@npm:3.0.2"
@@ -14689,10 +14705,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hono@npm:^3.7.6":
-  version: 3.7.6
-  resolution: "hono@npm:3.7.6"
-  checksum: 2d0baba703245858f93ce67e11efb5fe62c4b3ccb4bfac69235586a4ae3c3252af57827e404c79c65cd8eae9458ba08d77d8c5d3a6e4cffcf62359f3961223a1
+"hono@npm:^3.8.0":
+  version: 3.8.0
+  resolution: "hono@npm:3.8.0"
+  checksum: 3b184010e49d1ae472099fb7576fe103d28416e5fa2ff8d9a664a759473f06947877b34be805778bdd71a5394ec2af8cb5d361eb0804e2a368503892ad952502
   languageName: node
   linkType: hard
 
@@ -15748,6 +15764,13 @@ __metadata:
     call-bind: ^1.0.2
     get-intrinsic: ^1.1.1
   checksum: 5d8698d1fa599a0635d7ca85be9c26d547b317ed8fd83fc75f03efbe75d50001b5eececb1e9971de85fcde84f69ae6f8346bc92d20d55d46201d328e4c74a367
+  languageName: node
+  linkType: hard
+
+"is-what@npm:^4.1.8":
+  version: 4.1.15
+  resolution: "is-what@npm:4.1.15"
+  checksum: fe27f6cd4af41be59a60caf46ec09e3071bcc69b9b12a7c871c90f54360edb6d0bc7240cb944a251fb0afa3d35635d1cecea9e70709876b368a8285128d70a89
   languageName: node
   linkType: hard
 
@@ -19946,8 +19969,8 @@ __metadata:
     "@tamagui/themes": ^1.52.4
     "@tanstack/react-query": ^4.27.0
     "@tmcw/togeojson": ^5.7.0
-    "@trpc/client": ^10.38.0
-    "@trpc/server": ^10.38.0
+    "@trpc/client": ^10.38.5
+    "@trpc/server": ^10.38.5
     "@tsconfig/react-native": ^3.0.2
     "@types/jest": ^29.5.3
     "@types/node": ^20.8.3
@@ -20268,6 +20291,16 @@ __metadata:
   version: 4.0.0
   resolution: "path-type@npm:4.0.0"
   checksum: 5b1e2daa247062061325b8fdbfd1fb56dde0a448fb1455453276ea18c60685bdad23a445dc148cf87bc216be1573357509b7d4060494a6fd768c7efad833ee45
+  languageName: node
+  linkType: hard
+
+"path@npm:^0.12.7":
+  version: 0.12.7
+  resolution: "path@npm:0.12.7"
+  dependencies:
+    process: ^0.11.1
+    util: ^0.10.3
+  checksum: 5dedb71e78fc008fcba797defc0b4e1cf06c1f18e0a631e03ba5bb505136f587ff017afc14f9a3d481cbe77aeedff7dc0c1d2ce4d820c1ebf3c4281ca49423a1
   languageName: node
   linkType: hard
 
@@ -20903,6 +20936,13 @@ __metadata:
   version: 2.0.1
   resolution: "process-nextick-args@npm:2.0.1"
   checksum: 1d38588e520dab7cea67cbbe2efdd86a10cc7a074c09657635e34f035277b59fbb57d09d8638346bf7090f8e8ebc070c96fa5fd183b777fff4f5edff5e9466cf
+  languageName: node
+  linkType: hard
+
+"process@npm:^0.11.1":
+  version: 0.11.10
+  resolution: "process@npm:0.11.10"
+  checksum: bfcce49814f7d172a6e6a14d5fa3ac92cc3d0c3b9feb1279774708a719e19acd673995226351a082a9ae99978254e320ccda4240ddc474ba31a76c79491ca7c3
   languageName: node
   linkType: hard
 
@@ -22879,8 +22919,8 @@ __metadata:
     "@openapitools/openapi-generator-cli": ^2.7.0
     "@packrat/packages": "*"
     "@sendgrid/mail": ^7.7.0
-    "@trpc/client": ^10.38.0
-    "@trpc/server": ^10.38.0
+    "@trpc/client": ^10.38.5
+    "@trpc/server": ^10.38.5
     "@types/bcrypt": ^5.0.0
     "@types/cors": ^2.8.13
     "@types/csurf": ^1.11.2
@@ -22915,7 +22955,7 @@ __metadata:
     google-auth-library: ^8.8.0
     googleapis: ^118.0.0
     helmet: ^7.0.0
-    hono: ^3.7.6
+    hono: ^3.8.0
     i: ^0.3.7
     jest: ^29.6.2
     joi: ^17.9.2
@@ -22938,8 +22978,10 @@ __metadata:
     passport-local: ^1.0.0
     piscina: ^4.0.0
     prettier: ^3.0.2
+    superjson: ^2.0.0
     swagger-jsdoc: ^6.2.8
     swagger-ui-express: ^4.6.3
+    trpc-panel: ^1.3.4
     ts-node: ^10.9.1
     typescript: ^5.2.2
     uuid: ^9.0.0
@@ -23917,6 +23959,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"superjson@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "superjson@npm:2.0.0"
+  dependencies:
+    copy-anything: ^3.0.2
+  checksum: 03a3d4f9bb67556b79de7cfccdd7c59b6761d40c4dccd0c94d08acb6ac7fd6db009d12a82b09f6e4f86cca2e4276be06c79a322463c8bc7aa05abcfa317ba2a6
+  languageName: node
+  linkType: hard
+
 "supports-color@npm:8.1.1, supports-color@npm:^8.0.0, supports-color@npm:^8.1.0":
   version: 8.1.1
   resolution: "supports-color@npm:8.1.1"
@@ -24515,6 +24566,21 @@ __metadata:
   bin:
     tree-kill: cli.js
   checksum: 49117f5f410d19c84b0464d29afb9642c863bc5ba40fcb9a245d474c6d5cc64d1b177a6e6713129eb346b40aebb9d4631d967517f9fbe8251c35b21b13cd96c7
+  languageName: node
+  linkType: hard
+
+"trpc-panel@npm:^1.3.4":
+  version: 1.3.4
+  resolution: "trpc-panel@npm:1.3.4"
+  dependencies:
+    fuzzysort: ^2.0.4
+    path: ^0.12.7
+    url: ^0.11.0
+    zod-to-json-schema: ^3.20.0
+  peerDependencies:
+    "@trpc/server": ^10.0.0
+    zod: ^3.19.1
+  checksum: 930b7015ce77dfd1f4ea5d04bdfdf335a9b2f65852113383a57fa519f9d8fa39883f7c8a0404c9f78fab0cc678206a7a2ba7b3e31af4a67a158b7ce3d8c2a874
   languageName: node
   linkType: hard
 
@@ -25166,6 +25232,15 @@ __metadata:
   version: 1.0.2
   resolution: "util-deprecate@npm:1.0.2"
   checksum: 474acf1146cb2701fe3b074892217553dfcf9a031280919ba1b8d651a068c9b15d863b7303cb15bd00a862b498e6cf4ad7b4a08fb134edd5a6f7641681cb54a2
+  languageName: node
+  linkType: hard
+
+"util@npm:^0.10.3":
+  version: 0.10.4
+  resolution: "util@npm:0.10.4"
+  dependencies:
+    inherits: 2.0.3
+  checksum: 913f9a90d05a60e91f91af01b8bd37e06bca4cc02d7b49e01089f9d5b78be2fffd61fb1a41b517de7238c5fc7337fa939c62d1fb4eb82e014894c7bee6637aaf
   languageName: node
   linkType: hard
 
@@ -26073,6 +26148,15 @@ __metadata:
   bin:
     z-schema: bin/z-schema
   checksum: 8a1d66817ae4384dc3f63311f0cccaadd95cc9640eaade5fd3fbf91aa80d6bb82fb95d9b9171fa82ac371a0155b32b7f5f77bbe84dabaca611b66f74c628f0b8
+  languageName: node
+  linkType: hard
+
+"zod-to-json-schema@npm:^3.20.0":
+  version: 3.21.4
+  resolution: "zod-to-json-schema@npm:3.21.4"
+  peerDependencies:
+    zod: ^3.21.4
+  checksum: 899c1f461fb6547c0b08a265c82040c250be9b88d3f408f2f3ff77a418fdfad7549077e589d418fccb312c1f6d555c3c7217b199cc9072762e1fab20716dd2a6
   languageName: node
   linkType: hard
 

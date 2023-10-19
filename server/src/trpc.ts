@@ -1,6 +1,22 @@
 import { TRPCError, initTRPC } from '@trpc/server';
+import { inferAsyncReturnType } from '@trpc/server';
+import superJson from 'superjson';
 
-const t = initTRPC.create();
+const createContext = async ({ req, res }) => {
+  return {
+    req,
+    res,
+  };
+};
+
+export type Context = inferAsyncReturnType<typeof createContext>;
+
+const t = initTRPC.context<Context>().create({
+  // transformer: superJson,
+  errorFormatter({ shape }) {
+    return shape;
+  },
+});
 
 /**
  * Export reusable router and procedure helpers
