@@ -28,9 +28,9 @@ jobs:
     - name: Set up Yarn
       run: yarn
 
-    - name: 🚀 Build app
-      working-directory: ./client
-      run: eas build --non-interactive --platform all --local
+    # - name: 🚀 Build app
+    #   working-directory: ./client
+    #   run: eas build --non-interactive --platform all --local
 
 #    - name: Install dependencies
 #      working-directory: ./client
@@ -47,8 +47,8 @@ jobs:
 
     - name: Run Local Build for Android
       working-directory: ./client
-      run: npx eas build --platform android --local
+      run: eas build --platform android --local
 
     - name: Run Local Build for iOS
       working-directory: ./client
-      run: npx eas build --platform ios --local
+      run: eas build --platform ios --local
