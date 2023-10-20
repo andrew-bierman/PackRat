@@ -7,10 +7,12 @@ import Head from 'expo-router/head';
 export default function Trip() {
   return (
     <>
-      <Head>
-        <title>Create Trip</title>
-        <meta name="description" content="Create Trip" />
-      </Head>
+      {Platform.OS === 'web' && (
+        <Head>
+          <title>Create Trip</title>
+          <meta name="description" content="Create Trip" />
+        </Head>
+      )}
       <Stack.Screen
         options={{
           // https://reactnavigation.org/docs/headers#setting-the-header-title
