@@ -6,9 +6,11 @@ import Head from 'expo-router/head';
 export default function FeedNav() {
   return (
     <>
-      <Head>
-        <title>Feed</title>
-      </Head>
+      {Platform.OS === 'web' && (
+        <Head>
+          <title>Feed</title>
+        </Head>
+      )}
       <Stack.Screen
         options={{
           // https://reactnavigation.org/docs/headers#setting-the-header-title
