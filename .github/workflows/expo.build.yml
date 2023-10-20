@@ -19,8 +19,17 @@ jobs:
       with:
         node-version: '20' # Use the version you prefer
 
+    - name: 🏗 Setup EAS
+      uses: expo/expo-github-action@v8
+      with:
+        eas-version: latest
+        token: ${{ secrets.EXPO_TOKEN }}
+
     - name: Set up Yarn
       run: yarn
+
+    - name: 🚀 Build app
+      run: eas build --non-interactive
 
 #    - name: Install dependencies
 #      working-directory: ./client
