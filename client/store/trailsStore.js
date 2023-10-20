@@ -3,9 +3,6 @@ import {
   createAsyncThunk,
   createEntityAdapter,
 } from '@reduxjs/toolkit';
-import axios from '~/config/axios';
-import { api } from '../constants/api';
-import { trpc } from '../trpc';
 import { fetchTrails } from './trailsStore_copy';
 
 export { fetchTrails };

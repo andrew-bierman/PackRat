@@ -5,9 +5,7 @@ import {
 } from '@reduxjs/toolkit';
 import { defaultWeatherObject } from '../constants/defaultWeatherObj';
 import { defaultWeekObj } from '../constants/defaultWeekObj';
-
 import { api } from '../constants/api';
-
 import axios from '~/config/axios';
 import { trpc } from '../trpc';
 

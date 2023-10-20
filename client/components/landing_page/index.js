@@ -5,11 +5,13 @@ import {
   Container,
   Button,
   Icon,
+  Center,
   Text,
   Card,
   Box,
   VStack,
   HStack,
+  ScrollView,
 } from 'native-base';
 import useTheme from '../../hooks/useTheme';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
@@ -96,31 +98,28 @@ const LandingPage = () => {
     useTheme();
   const styles = useCustomStyles(loadStyles);
   return (
-    <VStack style={styles.container}>
+    <ScrollView>
       <Box
         style={{
           alignItems: 'center',
           textAlign: 'center',
-          paddingVertical: 18,
-          marginTop: Platform.OS !== 'web' ? 25 : 1,
+          paddingVertical: 10,
+          marginTop: Platform.OS !== 'web' ? 15 : 1,
         }}
       >
-        {Platform.OS === 'web' ? (
-          <Text
-            style={{ color: 'white', fontSize: currentTheme.font.headerFont }}
-          >
-            PackRat
-          </Text>
-        ) : (
-          <Text style={{ color: 'white', fontSize: 20, fontWeight: 600 }}>
-            PackRat
-          </Text>
-        )}
-        <Text style={{ color: 'white', fontSize: 18 }}>
+        <Text
+          style={{
+            color: 'white',
+            fontSize: Platform.OS === 'web' ? currentTheme.font.headerFont : 20,
+          }}
+        >
+          PackRat
+        </Text>
+        <Text style={{ color: 'white', fontSize: 16 }}>
           The Ultimate Travel App
         </Text>
       </Box>
-      <Box style={styles.secondaryContentContainer}>
+      <View style={styles.secondaryContentContainer}>
         {/* <ImageBackground
           source={require("../../assets/background-image.png")}
           style={styles.backgroundImage}
@@ -193,8 +192,8 @@ const LandingPage = () => {
         </Container>
         <StatusBar style="auto" />
         {/* </ImageBackground> */}
-      </Box>
-    </VStack>
+      </View>
+    </ScrollView>
   );
 };
 
@@ -210,12 +209,13 @@ const loadStyles = (theme) => {
     container: {
       flex: 1,
       justifyContent: 'center',
+      flexDirection: 'column',
       alignItems: 'center',
       width: '100%',
+      backgroundColor: 'yellow',
     },
     secondaryContentContainer: {
       flex: 1,
-      width: '100%',
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: currentTheme.colors.background,
@@ -234,28 +234,30 @@ const loadStyles = (theme) => {
     },
     contentContainer: {
       flex: 1,
+      width: '100%',
       justifyContent: 'center',
       alignItems: 'center',
-      paddingHorizontal: 20,
     },
     introText: {
-      fontSize: 24,
+      fontSize: 14,
       fontWeight: 'bold',
       textAlign: 'center',
+      width: '100%',
       marginBottom: 20,
       color: currentTheme.colors.text,
     },
     card: {
       marginBottom: 10,
-      width: '100%',
+      minWidth: '95%',
+      alignSelf: 'center',
       backgroundColor: currentTheme.colors.secondaryBlue,
     },
     cardHeader: {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      paddingHorizontal: 20,
-      paddingVertical: 10,
+      paddingHorizontal: 10,
+      paddingVertical: 5,
     },
     transparentButton: {
       backgroundColor: 'transparent',
@@ -266,13 +268,13 @@ const loadStyles = (theme) => {
       marginRight: 10,
     },
     featureText: {
-      fontSize: 18,
+      fontSize: 13,
       color: currentTheme.colors.text,
     },
     cardContent: {
-      paddingHorizontal: 20,
-      paddingVertical: 10,
-      fontSize: 16,
+      paddingHorizontal: 10,
+      paddingVertical: 5,
+      fontSize: 13,
       color: currentTheme.colors.text,
     },
     buttonContainer: {

@@ -7,8 +7,6 @@ import {
   createAsyncThunk,
   createEntityAdapter,
 } from '@reduxjs/toolkit';
-import axios from '~/config/axios';
-import { api } from '../constants/api';
 import { trpc } from '../trpc';
 
 // Create entity adapter for chats
