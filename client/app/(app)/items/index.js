@@ -37,9 +37,11 @@ export default function Items() {
 
   return (
     <ScrollView>
-      <Head>
-        <title>Items</title>
-      </Head>
+      {Platform.OS === 'web' && (
+        <Head>
+          <title>Items</title>
+        </Head>
+      )}
       <Stack.Screen
         options={{
           title: 'Items',
