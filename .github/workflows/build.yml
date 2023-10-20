@@ -13,9 +13,6 @@ jobs:
       - name: Install yarn dependencies
         run: |
           yarn install
-      - name: Modify gradle.properties
-        run: |
-          cd client && yarn run copy:gradle
   build-android:
     needs: install-and-test
     runs-on: ubuntu-latest
