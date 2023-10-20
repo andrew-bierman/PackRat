@@ -17,7 +17,7 @@
     "setup:move": "yarn move:gradle && yarn move:pod",
     "copy:env": "test -f .env && echo '.env already exists, skipping copy' || (echo 'Copying .env.example to .env' && cp .env.example .env)",
     "copy:app": "cp app.example.json app.json",
-    "copy:gradle": "cp gradle.properties.example gradle.properties",
+    "copy:gradle": "cp gradle.properties.example android/gradle.properties",
     "copy:pod": "cp Podfile.example Podfile",
     "move:gradle": "mv gradle.properties android/gradle.properties",
     "move:pod": "mv Podfile ios/Podfile"

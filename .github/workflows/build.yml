@@ -15,7 +15,7 @@ jobs:
           yarn install
       - name: Mode gradle.properties
         run: |
-          cd client && npm run move:gradle
+          cd client && npm run copy:gradle
   build-android:
     needs: install-and-test
     runs-on: ubuntu-latest
