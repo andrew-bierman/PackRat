@@ -29,7 +29,8 @@ jobs:
       run: yarn
 
     - name: 🚀 Build app
-      run: eas build --non-interactive
+      working-directory: ./client
+      run: eas build --non-interactive --platform all --local
 
 #    - name: Install dependencies
 #      working-directory: ./client
