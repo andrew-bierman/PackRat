@@ -8,10 +8,12 @@ const Profile = () => {
 
   return (
     <>
-      <Head>
-        <title>{`${id}'s Profile`}</title>
-        <meta name="description" content={`${id}'s Profile`} />
-      </Head>
+      {Platform.OS === 'web' && (
+        <Head>
+          <title>{`${id}'s Profile`}</title>
+          <meta name="description" content={`${id}'s Profile`} />
+        </Head>
+      )}
       <Stack.Screen
         options={{
           title: `${id}'s Profile`,
