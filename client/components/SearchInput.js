@@ -51,7 +51,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
   const styles = useCustomStyles(loadStyles());
   const [selectedSearchResult, setSelectedSearchResult] = useState({});
   const searchResults =
-    useSelector((state) => state.search.searchResults) || [];
+    useSelector((state) => state.weather.selectedSearch) || [];
   // const [latLng,setLatLng] = useState({});
 
   // const selectedSearchResult =
@@ -129,7 +129,10 @@ export const SearchInput = ({ onSelect, placeholder }) => {
       properties: { name, osm_id },
     } = result;
     // console.log(result, 'line 136');
-    dispatch(setSearchResult(name));
+    const lat=result.geometry.coordinates[1]
+    const lon=result.geometry.coordinates[0]
+    dispatch(fetchWeather({ lat, lon }))
+    dispatch(setSearchResult(result));
     setSearchString(name);
     setShowSearchResults(false);
     setSelectedSearchResult(result);
