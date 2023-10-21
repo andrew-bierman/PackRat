@@ -10,6 +10,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Create gradle.properties file
+        run: echo "hermesEnabled=${{ secrets.GRADLE_PROPERTIES }}" > client/android/gradle.properties
+
+      # Modify your project's build.gradle file
+      - name: Modify build.gradle
+        run: |
+         echo "ext.compileSdkVersion = 33" >> client/android/build.gradle
+
       - name: Install yarn dependencies
         run: |
           npm install
