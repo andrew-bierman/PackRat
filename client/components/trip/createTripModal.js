@@ -145,7 +145,7 @@ export const SaveTripContainer =({ dateRange }) => {
     // creating a trip
     console.log('create trip data ->', data);
     AddNewTrip(data)
-    // setIsSaveModalOpen(!isSaveModalOpen);
+    setIsSaveModalOpen(!isSaveModalOpen);
   };
 
   /**
