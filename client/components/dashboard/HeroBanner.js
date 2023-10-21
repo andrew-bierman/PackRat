@@ -3,7 +3,6 @@ import { Box, VStack, Text, Image } from 'native-base';
 import LargeCard from '../card/LargeCard';
 import { SearchInput } from '../SearchInput';
 import { View } from 'react-native';
-import { theme } from '../../theme';
 import useTheme from '../../hooks/useTheme';
 import { useSelector, useDispatch } from 'react-redux';
 import Hero from '../hero';
@@ -87,7 +86,7 @@ const HeroSection = ({ onSelect }) => {
         imageDetails={{
           title: 'N/A',
           subtitle: 'N/A',
-          source: require('../../assets/topographical-pattern.png'),
+          source: require('../../assets/topographical-pattern-1.png'),
           alt: 'hero',
         }}
       >
