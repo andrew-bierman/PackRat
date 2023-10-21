@@ -11,6 +11,7 @@ import { trpc } from '../../trpc';
 // import { Picker } from '@react-native-picker/picker';
 import { DropdownComponent } from '../Dropdown';
 import axios from '~/config/axios';
+import { useAddNewTrip } from '~/hooks/trips/useAddTrips';
 
 const options = [
   { label: 'Yes', value: 'true' },
@@ -68,17 +69,23 @@ const NumberInput = (props) => {
   );
 };
 
-export const SaveTripContainer = ({ dateRange }) => {
+export const SaveTripContainer =({ dateRange }) => {
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
   const weatherObject = useSelector((state) => state.weather.weatherObject);
-  const search = useSelector((state) => state.search.selectedSearchResult);
+  const search = useSelector((state) => state.weather.selectedSearch);
   const dropdown = useSelector((state) => state.dropdown);
   const user = useSelector((state) => state.auth.user);
   const packId = useSelector((state) => state.trips.newTrip.packId);
+  const {AddNewTrip}=useAddNewTrip()
+ 
 
   console.log('- note for me', packId);
   console.log('search in save trip container ->', search);
   console.log('selected in dateRange ->', dateRange);
+
+  console.log("Weather-object")
+  console.log( weatherObject)
+
 
   // defining dispatch
   const dispatch = useDispatch();
@@ -115,18 +122,18 @@ export const SaveTripContainer = ({ dateRange }) => {
 
     console.log('old rag', search);
 
-    const geoJSON = await trpc.getPhotonDetails.query({
+    const geoJSONObject = await trpc.getPhotonDetails.query({
       id: search.properties.osm_id,
       type: search.properties.osm_type,
     });
-
+    
     const data = {
       name,
       description,
       start_date: startDate,
       end_date: endDate,
       destination: search.properties.name,
-      geoJSON,
+      geoJSON:JSON.stringify(geoJSONObject),
       // trail: dropdown.currentTrail,
       duration: JSON.stringify(duration),
       weather: JSON.stringify(weatherObject),
@@ -137,8 +144,8 @@ export const SaveTripContainer = ({ dateRange }) => {
 
     // creating a trip
     console.log('create trip data ->', data);
-    dispatch(addTrip(data));
-    setIsSaveModalOpen(!isSaveModalOpen);
+    AddNewTrip(data)
+    // setIsSaveModalOpen(!isSaveModalOpen);
   };
 
   /**
