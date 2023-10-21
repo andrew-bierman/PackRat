@@ -23,12 +23,12 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
-    - name: Debug Information
-      run: |
-        npm -v
-        ls .yarn/releases/yarn-3.6.3.cjs
-        cat .yarnrc.yml
-        cat yarn.lock
+    # - name: Debug Information
+    #   run: |
+    #     npm -v
+    #     ls .yarn/releases/yarn-3.6.3.cjs
+    #     cat .yarnrc.yml
+    #     # cat yarn.lock
 
     - name: ⚙️ Enable Corepack
       run: |
