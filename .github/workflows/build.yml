@@ -17,7 +17,7 @@ jobs:
           node-version: '16'
 
       - name: Create gradle.properties file
-        run: echo "hermesEnabled=${{ secrets.GRADLE_PROPERTIES }}" > client/android/gradle.properties
+        run: echo "hermesEnabled=true" > client/android/gradle.properties
 
       # Modify your project's build.gradle file
       - name: Modify build.gradle
