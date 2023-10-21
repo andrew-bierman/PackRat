@@ -66,9 +66,11 @@ export default function PackContainer({ isCreatingTrip = false }) {
       dispatch(updateNewTripPack(selectedPack?._id));
     }
   };
-  const currentPack = useSelector((state) =>
-    selectPackById(state, currentPackId),
-  );
+  // const currentPack = useSelector((state) =>
+  //   selectPackById(state, currentPackId),
+  // );
+
+  const currentPack = packs.find((pack) => pack._id == currentPackId);
 
   const dataValues = packs.map((item) => item?.name) ?? [];
 
