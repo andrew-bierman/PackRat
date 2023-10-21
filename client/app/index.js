@@ -33,9 +33,11 @@ export default function Index() {
 
   return (
     <>
-      <Head>
-        <title>PackRat</title>
-      </Head>
+      {Platform.OS === 'web' && (
+        <Head>
+          <title>PackRat</title>
+        </Head>
+      )}
       <Stack.Screen
         options={{
           // https://reactnavigation.org/docs/headers#setting-the-header-title

@@ -82,7 +82,6 @@ export const CustomCard = ({
         rounded="lg"
         flexGrow={1}
       >
-        {isLoading && <Loader />}
         <VStack space="4" width="100%" divider={<Divider />}>
           <Box
             px="4"
@@ -98,6 +97,7 @@ export const CustomCard = ({
                 editTitle={editTitle}
                 setEditTitle={setEditTitle}
                 titleRef={titleRef}
+                loading={isLoading}
               />
             </Box>
             <Box flexDirection="row" alignItems="center">
@@ -115,7 +115,6 @@ export const CustomCard = ({
                 </Link>
               </Box>
               {link && (
-                // @ts-expect-error
                 <Box
                   flexDir={'row'}
                   style={{
