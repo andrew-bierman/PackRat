@@ -63,6 +63,7 @@ export function addTripRoute() {
       packs,
       is_public,
     } = opts.input;
+    const data=JSON.parse(geoJSON)
     const tripDetails = {
       name,
       description,
@@ -71,7 +72,7 @@ export function addTripRoute() {
       start_date,
       end_date,
       destination,
-      geoJSON,
+      geoJSON:data,
       owner_id,
       packs,
       is_public,
