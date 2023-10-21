@@ -6,9 +6,11 @@ import AppearanceContainer from '../../../screens/appearance/AppearanceContainer
 export default function Appearance() {
   return (
     <>
-      <Head>
-        <title>Appearance</title>
-      </Head>
+      {Platform.OS === 'web' && (
+        <Head>
+          <title>Appearance</title>
+        </Head>
+      )}
       <Stack.Screen
         options={{
           // https://reactnavigation.org/docs/headers#setting-the-header-title
