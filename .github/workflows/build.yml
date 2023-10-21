@@ -23,6 +23,7 @@ jobs:
       - name: Modify build.gradle
         run: |
          echo "ext.compileSdkVersion = 33" >> client/android/build.gradle
+         
 
       - name: Install yarn dependencies
         run: |
