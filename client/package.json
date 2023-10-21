@@ -114,6 +114,7 @@
     "redux-persist": "^6.0.0",
     "serve": "^14.2.0",
     "server": "*",
+    "superjson": "1.10.0",
     "tamagui": "^1.52.7",
     "togpx": "^0.5.4",
     "uuid": "3.4.0",

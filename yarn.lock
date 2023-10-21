@@ -14802,9 +14802,9 @@ __metadata:
   linkType: hard
 
 "hono@npm:^3.8.0":
-  version: 3.8.1
-  resolution: "hono@npm:3.8.1"
-  checksum: 0aa9b72d037f01b1e56404a805191a71ab8affcce360c0a07b02ee6d93ca63bb2fd4aad51847e9c7f8748c0084b78872cd02b3d921f1217a1e3153613cc5ddac
+  version: 3.8.2
+  resolution: "hono@npm:3.8.2"
+  checksum: ebf6b60a82f8046729baf0284e502ddf20689bc2198292564ac760327347639f80b7ddf6a9694d2cb311d17c754c2bb4934d6783e8537d85a3ace706c908c2c7
   languageName: node
   linkType: hard
 
@@ -20044,6 +20044,7 @@ __metadata:
     redux-persist: ^6.0.0
     serve: ^14.2.0
     server: "*"
+    superjson: 1.10.0
     tamagui: ^1.52.7
     togpx: ^0.5.4
     typescript: ^5.2.2
@@ -23957,6 +23958,15 @@ __metadata:
   dependencies:
     kdbush: ^3.0.0
   checksum: 69863238870093b96617135884721b6343746e14f396b2d67d6b55c52c362ec0516c5e386aa21815e75a9cef2054e831ac34023d0d8b600091d28cea0794f027
+  languageName: node
+  linkType: hard
+
+"superjson@npm:1.10.0":
+  version: 1.10.0
+  resolution: "superjson@npm:1.10.0"
+  dependencies:
+    copy-anything: ^3.0.2
+  checksum: e5156c89aac1f47e85a0d62c79ae15a0918a6b906c27026f41ab6191c6ccd1a6204245d286a9db7491b7954044b2ef7d52f2e5d5050a7f70e163883d02036fa3
   languageName: node
   linkType: hard
 
