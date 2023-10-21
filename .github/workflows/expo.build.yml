@@ -26,7 +26,7 @@ jobs:
         token: ${{ secrets.EXPO_TOKEN }}
 
     - name: Set up Yarn
-      run: yarn
+      run: npm install
 
     # - name: 🚀 Build app
     #   working-directory: ./client

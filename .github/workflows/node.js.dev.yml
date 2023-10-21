@@ -25,7 +25,7 @@ jobs:
 
     - name: Debug Information
       run: |
-        yarn -v
+        npm -v
         ls .yarn/releases/yarn-3.6.3.cjs
         cat .yarnrc.yml
         cat yarn.lock
@@ -35,28 +35,24 @@ jobs:
         corepack enable
         echo "corepack enabled"
 
-    - name: Set Yarn Version to Berry
-      run: yarn set version berry
+  #  - name: Set Yarn Version to Berry
+    #  run: yarn set version berry
 
     #   run: yarn policies set-version
 
     - name: Install dependencies
-      run: yarn install
+      run: npm install
 
     - name: Debug more
       run: |
-        yarn -v
-        yarn info packrat-world@workspace:.
-        yarn workspaces list --json
+        npm -v
+     #   yarn info packrat-world@workspace:.
+     #   yarn workspaces list --json
 
     - name: Run setup
       run: |
-        yarn -v
-        which yarn
-        yarn set version stable
-        yarn plugin import workspace-tools
-        yarn plugin import interactive-tools
-        yarn install
+        npm -v
+        npm install
 
 # cp client/.env.example client/.env
 # cp client/app.json.example client/app.json
@@ -72,12 +68,12 @@ jobs:
     - name: Start Server in Background
       run: |
         cd server
-        yarn start &
+        npm run start &
 
     - name: Start Client in Background
       run: |
         cd client
-        yarn web &
+        npm run web &
 
     - name: Wait for a while
       run: sleep 60  # wait for 60 seconds to let servers start
