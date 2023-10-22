@@ -1,19 +1,22 @@
 import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { ImageBackground, Platform, StyleSheet, View } from 'react-native';
+import { ImageBackground, Platform, View } from 'react-native';
 import {
   Container,
   Button,
   Icon,
+  Center,
   Text,
   Card,
   Box,
   VStack,
   HStack,
+  ScrollView,
 } from 'native-base';
-import UseTheme from '../../hooks/useTheme';
+import useTheme from '../../hooks/useTheme';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { theme } from '../../theme';
+import useCustomStyles from '~/hooks/useCustomStyles';
 
 const dataArray = [
   {
@@ -56,6 +59,7 @@ const dataArray = [
 
 const CustomAccordion = ({ title, content, iconName }) => {
   const [expanded, setExpanded] = useState(false);
+  const styles = useCustomStyles(loadStyles);
 
   /**
    * Toggles the value of 'expanded' and updates the state.
@@ -67,71 +71,69 @@ const CustomAccordion = ({ title, content, iconName }) => {
   };
 
   return (
-    <Card style={styles().card}>
-      <View style={styles().cardHeader}>
-        <MaterialIcons name={iconName} style={styles().icon} />
+    <Card style={styles.card}>
+      <View style={styles.cardHeader}>
+        <MaterialIcons name={iconName} style={styles.icon} />
         <View style={{ flex: 1 }}>
-          <Text style={styles().featureText}>{title}</Text>
+          <Text style={styles.featureText}>{title}</Text>
         </View>
         <Button
           transparent
-          style={styles().transparentButton}
+          style={styles.transparentButton}
           onPress={toggleExpanded}
         >
           <MaterialIcons
             name={expanded ? 'keyboard-arrow-down' : 'keyboard-arrow-up'}
-            style={styles().icon}
+            style={styles.icon}
           />
         </Button>
       </View>
-      {expanded && <Text style={styles().cardContent}>{content}</Text>}
+      {expanded && <Text style={styles.cardContent}>{content}</Text>}
     </Card>
   );
 };
 
 const LandingPage = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
+  const styles = useCustomStyles(loadStyles);
   return (
-    <VStack style={styles().container}>
+    <ScrollView>
       <Box
         style={{
           alignItems: 'center',
           textAlign: 'center',
-          paddingVertical: 18,
-          marginTop: Platform.OS !== 'web' ? 25 : 1,
+          paddingVertical: 10,
+          marginTop: Platform.OS !== 'web' ? 15 : 1,
         }}
       >
-        {Platform.OS === 'web' ? (
-          <Text
-            style={{ color: 'white', fontSize: currentTheme.font.headerFont }}
-          >
-            PackRat
-          </Text>
-        ) : (
-          <Text style={{ color: 'white', fontSize: 20, fontWeight: 600 }}>
-            PackRat
-          </Text>
-        )}
-        <Text style={{ color: 'white', fontSize: 18 }}>
+        <Text
+          style={{
+            color: 'white',
+            fontSize: Platform.OS === 'web' ? currentTheme.font.headerFont : 20,
+          }}
+        >
+          PackRat
+        </Text>
+        <Text style={{ color: 'white', fontSize: 16 }}>
           The Ultimate Travel App
         </Text>
       </Box>
-      <Box style={styles().secondaryContentContainer}>
+      <View style={styles.secondaryContentContainer}>
         {/* <ImageBackground
           source={require("../../assets/background-image.png")}
-          style={styles().backgroundImage}
+          style={styles.backgroundImage}
         > */}
-        <View style={styles().overlay} />
-        <Container style={styles().contentContainer}>
-          <Text style={styles().introText}>
+        <View style={styles.overlay} />
+        <Container style={styles.contentContainer}>
+          <Text style={styles.introText}>
             PackRat is the ultimate adventure planner designed for those who
             love to explore the great outdoors. Plan and organize your trips
             with ease, whether it's a weekend camping trip, a day hike, or a
             cross-country road trip.
           </Text>
           {Platform.OS === 'web' && (
-            <View style={styles().appBadges}>
+            <View style={styles.appBadges}>
               <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                 <Button title="App Store" style={{ marginRight: 10 }}>
                   <HStack space={2} alignItems="center">
@@ -177,28 +179,27 @@ const LandingPage = () => {
             ))}
           </View>
         </Container>
-        <Container style={styles().buttonContainer}>
+        <Container style={styles.buttonContainer}>
           <Button
             full
-            style={styles().getStartedButton}
+            style={styles.getStartedButton}
             onPress={() => {
               /* Add navigation to the sign in screen */
             }}
           >
-            <Text style={styles().footerText}>Get Started</Text>
+            <Text style={styles.footerText}>Get Started</Text>
           </Button>
         </Container>
         <StatusBar style="auto" />
         {/* </ImageBackground> */}
-      </Box>
-    </VStack>
+      </View>
+    </ScrollView>
   );
 };
 
-const styles = () => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
-  return StyleSheet.create({
+const loadStyles = (theme) => {
+  const { currentTheme } = theme;
+  return {
     mutualStyles: {
       backgroundColor: currentTheme.colors.background,
       flex: 1,
@@ -208,12 +209,13 @@ const styles = () => {
     container: {
       flex: 1,
       justifyContent: 'center',
+      flexDirection: 'column',
       alignItems: 'center',
       width: '100%',
+      backgroundColor: 'yellow',
     },
     secondaryContentContainer: {
       flex: 1,
-      width: '100%',
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: currentTheme.colors.background,
@@ -232,28 +234,30 @@ const styles = () => {
     },
     contentContainer: {
       flex: 1,
+      width: '100%',
       justifyContent: 'center',
       alignItems: 'center',
-      paddingHorizontal: 20,
     },
     introText: {
-      fontSize: 24,
+      fontSize: 14,
       fontWeight: 'bold',
       textAlign: 'center',
+      width: '100%',
       marginBottom: 20,
       color: currentTheme.colors.text,
     },
     card: {
       marginBottom: 10,
-      width: '100%',
+      minWidth: '95%',
+      alignSelf: 'center',
       backgroundColor: currentTheme.colors.secondaryBlue,
     },
     cardHeader: {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      paddingHorizontal: 20,
-      paddingVertical: 10,
+      paddingHorizontal: 10,
+      paddingVertical: 5,
     },
     transparentButton: {
       backgroundColor: 'transparent',
@@ -264,13 +268,13 @@ const styles = () => {
       marginRight: 10,
     },
     featureText: {
-      fontSize: 18,
+      fontSize: 13,
       color: currentTheme.colors.text,
     },
     cardContent: {
-      paddingHorizontal: 20,
-      paddingVertical: 10,
-      fontSize: 16,
+      paddingHorizontal: 10,
+      paddingVertical: 5,
+      fontSize: 13,
       color: currentTheme.colors.text,
     },
     buttonContainer: {
@@ -285,7 +289,7 @@ const styles = () => {
       fontSize: 18,
       fontWeight: 'bold',
     },
-  });
+  };
 };
 
 export default LandingPage;

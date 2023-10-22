@@ -34,7 +34,7 @@ PackRat consists of two main components: a client and a server. Follow the steps
 ### Dependencies
 
 - [Node.js](https://nodejs.org/en/)
-- [NPM](https://www.npmjs.com/get-npm)
+- [Yarn](https://classic.yarnpkg.com/en/docs/install)
 - [Expo CLI](https://docs.expo.io/workflow/expo-cli/)
 - [React Native CLI](https://reactnative.dev/docs/environment-setup)
 
@@ -61,13 +61,13 @@ cd PackRat
 
 3. Set up the environment variables for the client and server.
    - If you have access to the development env files, use those. Otherwise, replace the values with your own.
-   - See the `.env.example` files in the `client` and `server` directories for the necessary environment variables. 
+   - See the `.env.example` files in the `client` and `server` directories for the necessary environment variables.
 
 #### Automated Setup 🛠️
 
 1. Run the setup script from the `PackRat` directory.
 ```
-npm run setup
+yarn setup
 ```
 
 #### Manual Setup 📝
@@ -86,7 +86,7 @@ cd client
      - Navigate to the android directory. Copy the `gradle.properties.example` file and rename it to `gradle.properties`. Open the file and replace the `MAPBOX_DOWNLOADS_TOKEN_FROM_ENV` value with your own Mapbox downloads token.
      - See the [Mapbox documentation](https://docs.mapbox.com/help/getting-started/access-tokens/) for more information on how to obtain Mapbox API keys and access tokens.
 
-2. Duplicate the `.env.example` file and rename it to `.env`. Open the file and replace the values with your own. 
+2. Duplicate the `.env.example` file and rename it to `.env`. Open the file and replace the values with your own.
    - If you have access to the development env file, skip this step. Otherwise, replace the values with your own.
 
 ```
@@ -143,7 +143,7 @@ cd ../..
 cd server
 ```
 
-10. Duplicate the `.env.example` file and rename it to `.env`. Open the file and replace the values with your own. 
+10. Duplicate the `.env.example` file and rename it to `.env`. Open the file and replace the values with your own.
         - If you have access to the development env file, skip this step. Otherwise, replace the values with your own.
 
 ```
@@ -156,9 +156,18 @@ cp .env.example .env
 cd ..
 ```
 
-### NPM Setup
+### Yarn Setup
 
 Recommended to open two terminal windows.
+
+#### Root
+
+1.  From the main`PackRat` directory.
+
+```
+yarn install
+```
+
 
 #### Server
 
@@ -168,16 +177,10 @@ Recommended to open two terminal windows.
 cd server
 ```
 
-2. Install dependencies for the server.
+2. Start the server.
 
 ```
-npm install
-```
-
-3. Start the server.
-
-```
-npm start
+yarn start
 ```
 
 #### Client
@@ -188,16 +191,10 @@ npm start
 cd client
 ```
 
-2. Install dependencies for the client.
+2. Start the Expo server.
 
 ```
-npm install
-```
-
-3. Start the Expo server.
-
-```
-npm start
+yarn start
 ```
 
 4. Here you will be able to run the app on an iOS or Android simulator (or on your own device), or on the web. See the [Expo documentation](https://docs.expo.io/get-started/installation/) for more information on how to set up your development environment.
@@ -222,7 +219,7 @@ docker-compose build
 docker-compose up
 ```
 
-2. Navigate to `http://localhost:19000/` to view the app. The server will be running on `http://localhost:3000/`.
+2. Navigate to `http://localhost:8081/` to view the app. The server will be running on `http://localhost:3000/`.
 3. If you encounter errors with edits to files not automatically applying, try running the following commands:
 
 ```
@@ -247,9 +244,12 @@ docker build -t packrat-server server/Dockerfile
 5. To run the images, run the following commands:
 
 ```
-docker run -p 19000:19000 packrat-client
+docker run -p 8081:8081 packrat-client
 docker run -p 3000:3000 packrat-server
 ```
+
+## How backend API's are setup
+Please refer to README.md inside server folder.
 
 ## Contributing 🤝
 

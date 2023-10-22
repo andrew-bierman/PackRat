@@ -1,28 +1,23 @@
-import { Stack, Box, VStack } from 'native-base';
-import { ScrollView, Platform, StyleSheet } from 'react-native';
-import { Stack as Header } from 'expo-router';
-
+import { RStack } from '../../packrat-ui';
+import { ScrollView } from 'react-native';
 import { theme } from '../../theme';
 import TripCard from '../../components/TripCard';
 import WeatherCard from '../../components/WeatherCard';
-
 import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
-
 import { useEffect, useState } from 'react';
-
 import { useDispatch, useSelector } from 'react-redux';
-
 import { GearList } from '../../components/GearList';
-
 import { SaveTripContainer } from '~/components/trip/createTripModal';
-
 import TripDateRange from '~/components/trip/TripDateRange';
+
 // import MultiStepForm from "../multi_step";
 import { photonDetails } from '../../store/destinationStore';
-import UseTheme from '../../hooks/useTheme';
+import useTheme from '../../hooks/useTheme';
+import useCustomStyles from '~/hooks/useCustomStyles';
+
 export default function Trips() {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+  const { currentTheme } = useTheme();
+  const styles = useCustomStyles(loadStyles);
   const [parksData, setParksData] = useState();
   const [trails, setTrailsData] = useState();
   const [dateRange, setDateRange] = useState({
@@ -33,7 +28,6 @@ export default function Trips() {
   const searchResult = useSelector(
     (state) => state.search.selectedSearchResult,
   );
-  // console.log("🚀 ~ file: createTrip.js:37 ~ Trips ~ searchResult:", searchResult)
 
   const weatherObject = useSelector((state) => state.weather.weatherObject);
   const weatherWeek = useSelector((state) => state.weather.weatherWeek);
@@ -43,7 +37,7 @@ export default function Trips() {
   const photonDetailsStore = useSelector(
     (state) => state.destination.photonDetails,
   );
-  // console.log("🚀 ~ file: createTrip.js:49 ~ Trips ~ photonDetailsStore:", photonDetailsStore)
+
   useEffect(() => {
     setTrailsData(trailsObject);
   }, [trailsObject]);
@@ -63,6 +57,7 @@ export default function Trips() {
       dispatch(photonDetails(matchPhotonFormattingForData));
     }
   }, [searchResult]);
+
   const steps = [
     {
       name: 'Step 1',
@@ -165,86 +160,84 @@ export default function Trips() {
 
   return (
     <ScrollView nestedScrollEnabled={true}>
-      <VStack>
+      <RStack style={styles.mutualStyles}>
         {/* <MultiStepForm steps={steps} /> */}
-        <Box style={styles.mutualStyles}>
-          <Stack m={[0, 0, 12, 16]} style={{ gap: 25 }}>
-            <TripCard
-              title="Where are you heading?"
-              isSearch={true}
-              Icon={() => (
-                <FontAwesome
-                  name="map"
-                  size={20}
-                  color={currentTheme.colors.cardIconColor}
-                />
-              )}
-            />
+        <RStack style={styles.container}>
+          <TripCard
+            title="Where are you heading?"
+            isSearch={true}
+            Icon={() => (
+              <FontAwesome
+                name="map"
+                size={20}
+                color={currentTheme.colors.cardIconColor}
+              />
+            )}
+          />
 
-            <WeatherCard
-              weatherObject={weatherObject}
-              weatherWeek={weatherWeek}
-            />
-
-            <TripCard
-              title="Nearby Trails"
-              value="Trail List"
-              isTrail={true}
-              data={trails || []}
-              Icon={() => (
-                <FontAwesome5
-                  name="hiking"
-                  size={20}
-                  color={currentTheme.colors.cardIconColor}
-                />
-              )}
-            />
-
-            <TripCard
-              title="Nearby Parks"
-              value="Parks List"
-              isPark={true}
-              data={parksData}
-              Icon={() => (
-                <FontAwesome5
-                  name="mountain"
-                  size={20}
-                  color={currentTheme.colors.cardIconColor}
-                />
-              )}
-            />
-            <GearList />
-            <TripDateRange dateRange={dateRange} setDateRange={setDateRange} />
-
-            <TripCard
-              Icon={() => (
-                <FontAwesome5
-                  name="route"
-                  size={24}
-                  color={currentTheme.colors.cardIconColor}
-                />
-              )}
-              title="Map"
-              isMap={true}
-              shape={photonDetailsStore}
-            />
-            <Box>
-              <SaveTripContainer dateRange={dateRange} />
-            </Box>
-          </Stack>
-        </Box>
-
-        {/* <Footer /> */}
-      </VStack>
+          <WeatherCard
+            weatherObject={weatherObject}
+            weatherWeek={weatherWeek}
+          />
+          <TripCard
+            title="Nearby Trails"
+            value="Trail List"
+            isTrail={true}
+            data={trails || []}
+            Icon={() => (
+              <FontAwesome5
+                name="hiking"
+                size={20}
+                color={currentTheme.colors.cardIconColor}
+              />
+            )}
+          />
+          <TripCard
+            title="Nearby Parks"
+            value="Parks List"
+            isPark={true}
+            data={parksData}
+            Icon={() => (
+              <FontAwesome5
+                name="mountain"
+                size={20}
+                color={currentTheme.colors.cardIconColor}
+              />
+            )}
+          />
+          <GearList />
+          <TripDateRange dateRange={dateRange} setDateRange={setDateRange} />
+          <TripCard
+            Icon={() => (
+              <FontAwesome5
+                name="route"
+                size={24}
+                color={currentTheme.colors.cardIconColor}
+              />
+            )}
+            title="Map"
+            isMap={true}
+            shape={photonDetailsStore}
+          />
+          <RStack>
+            <SaveTripContainer dateRange={dateRange} />
+          </RStack>
+        </RStack>
+      </RStack>
     </ScrollView>
   );
 }
 
-const styles = StyleSheet.create({
+const loadStyles = () => ({
   mutualStyles: {
     backgroundColor: theme.colors.background,
     flex: 1,
     flexDirection: 'column',
     height: '100%',
+    paddingBottom: 30,
+  },
+  container: {
+    gap: 50,
+    padding: 50,
   },
 });

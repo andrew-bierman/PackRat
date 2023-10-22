@@ -1,6 +1,8 @@
 import express from 'express';
 import { getAIResponse, getUserChats } from '../controllers/openAi/index';
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
+import authTokenMiddleware from '../middleware/auth';
+import checkRole from '../middleware/checkRole';
 
 const router = express.Router();
 
@@ -48,8 +50,18 @@ const router = express.Router();
  *                 aiResponse: "Hello, user!"
  *                 conversationHistory: "User: Hello, AI!\nAI: Hello, user!"
  */
-router.post('/ai-response', tryCatchWrapper(getAIResponse));
+router.post(
+  '/ai-response',
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
+  tryCatchWrapper(getAIResponse),
+);
 
-router.get('/user-chats/:userId', tryCatchWrapper(getUserChats));
+router.get(
+  '/user-chats/:userId',
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
+  tryCatchWrapper(getUserChats),
+);
 
 export default router;

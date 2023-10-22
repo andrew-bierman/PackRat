@@ -1,6 +1,7 @@
+import { publicProcedure } from '../../trpc';
 import { UnableToDeleteTripError } from '../../helpers/errors';
 import Trip from '../../models/tripModel';
-
+import * as validator from '../../middleware/validators/index';
 /**
  * Deletes a trip from the database.
  * @param {Object} req - The request object.
@@ -17,3 +18,11 @@ export const deleteTrip = async (req, res, next) => {
     next(UnableToDeleteTripError);
   }
 };
+
+export function deleteTripRoute() {
+  return publicProcedure.input(validator.deleteTrip).mutation(async (opts) => {
+    const { tripId } = opts.input;
+    await Trip.findOneAndDelete({ _id: tripId });
+    return 'trip was deleted successfully';
+  });
+}

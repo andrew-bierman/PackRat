@@ -6,11 +6,11 @@ import Item from '../../models/itemModel';
  * @param {Object} req - The request object.
  * @return {Object} An object containing items, page, and totalPages.
  */
-export const getItemsGloballyService = async (req) => {
+export const getItemsGloballyService = async (reqlimit: any, reqpage: any) => {
   const totalItems = await Item.countDocuments({ global: true });
-  const limit = Number(req.query.limit) || totalItems;
+  const limit = Number(reqlimit) || totalItems;
   const totalPages = Math.ceil(totalItems / limit);
-  const page = Number(req.query.page) || 1;
+  const page = Number(reqpage) || 1;
   const startIndex = (page - 1) * limit;
 
   const items = await Item.find({ global: true })

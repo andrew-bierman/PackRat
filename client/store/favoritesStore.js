@@ -3,38 +3,44 @@ import {
   createAsyncThunk,
   createEntityAdapter,
 } from '@reduxjs/toolkit';
-import axios from '~/config/axios';
-import { api } from '../constants/api';
+import { trpc } from '../trpc';
 
 export const addFavorite = createAsyncThunk(
   'favorites/addFavorite',
   async (newFavorite) => {
-    const response = await axios.post(`${api}/favorite`, newFavorite);
-    return response.data;
+    // const response = await axios.post(`${api}/favorite`, newFavorite);
+    // return response.data;
+    return await trpc.addToFavorite.mutate({
+      packId: newFavorite.packId,
+      userId: newFavorite.userId,
+    });
   },
 );
 
 export const fetchFavorites = createAsyncThunk(
   'favorites/fetchFavorites',
   async () => {
-    const response = await axios.get(`${api}/favorite`);
-    return response.data;
+    // const response = await axios.get(`${api}/favorite`);
+    // return response.data;
+    return await trpc.addToFavorite.mutate({ packId: '', userId: '' });
   },
 );
 
 export const fetchUserFavorites = createAsyncThunk(
   'favorites/fetchUserFavorites',
   async (userId) => {
-    const response = await axios.get(`${api}/favorite/user/${userId}`);
-    return response.data;
+    // const response = await axios.get(`${api}/favorite/user/${userId}`);
+    // return response.data;
+    return await trpc.getUserFavorites.query({ userId });
   },
 );
 
 export const fetchFavoritePacks = createAsyncThunk(
   'favorites/fetchFavoritePacks',
   async (userId) => {
-    const response = await axios.get(`${api}/favorite/user/${userId}/packs`);
-    return response.data;
+    // const response = await axios.get(`${api}/favorite/user/${userId}/packs`);
+    // return response.data;
+    return await trpc.getFavoritePacksByUser.query({ userId });
   },
 );
 

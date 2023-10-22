@@ -1,47 +1,35 @@
-import { celebrate, Joi, Segments } from 'celebrate';
+import { z } from 'zod';
 
-/**
- * Creates a Joi validation rule for ObjectId strings.
- *
- * @param {string} [message="valid id"] - The validation error message.
- * @return {Joi.Schema} A Joi validation rule for ObjectId strings.
- */
-export const JoiObjectId = (message = 'valid id') =>
-  Joi.string().regex(/^[0-9a-fA-F]{24}$/, message);
+const JoiObjectId = (message: any = 'valid id'): z.ZodString =>
+  z.string().regex(/^[0-9a-fA-F]{24}$/, { message });
 
-export const getPacks = celebrate({
-  [Segments.PARAMS]: Joi.object().keys({
-    ownerId: JoiObjectId().required(),
-  }),
+export const getPacks = z.object({
+  ownerId: JoiObjectId(),
+  queryBy: z.string().optional(),
 });
-export const getPackById = celebrate({
-  [Segments.PARAMS]: Joi.object().keys({
-    packId: JoiObjectId().required(),
-  }),
+
+export const getPackById = z.object({
+  packId: JoiObjectId(),
 });
-export const addPack = celebrate({
-  [Segments.BODY]: Joi.object().keys({
-    name: Joi.string().required(),
-    owner_id: JoiObjectId().required(),
-    is_public: Joi.boolean(),
-  }),
+
+export const addPack = z.object({
+  name: z.string().nonempty(),
+  owner_id: JoiObjectId(),
+  is_public: z.boolean(),
 });
-export const editPack = celebrate({
-  [Segments.BODY]: Joi.object().keys({
-    _id: JoiObjectId().required(),
-    name: Joi.string(),
-    is_public: Joi.boolean(),
-  }),
+
+export const editPack = z.object({
+  _id: JoiObjectId(),
+  name: z.string().nonempty(),
+  is_public: z.boolean(),
 });
-export const deletePack = celebrate({
-  [Segments.BODY]: Joi.object().keys({
-    packId: JoiObjectId().required(),
-  }),
+
+export const deletePack = z.object({
+  packId: JoiObjectId(),
 });
-export const duplicatePublicPack = celebrate({
-  [Segments.BODY]: Joi.object().keys({
-    packId: JoiObjectId().required(),
-    ownerId: JoiObjectId().required(),
-    items: Joi.array().optional(),
-  }),
+
+export const duplicatePublicPack = z.object({
+  packId: JoiObjectId(),
+  ownerId: JoiObjectId(),
+  items: z.array(z.object({})),
 });

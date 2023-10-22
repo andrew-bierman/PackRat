@@ -6,11 +6,12 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import LargeCard from '../card/LargeCard';
 import { theme } from '../../theme';
-import UseTheme from '../../hooks/useTheme';
+import useTheme from '../../hooks/useTheme';
+import { hexToRGBA } from '~/utils/colorFunctions';
 
 export default function UserDataContainer({ data, type, userId }) {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   const [dataState, setDataState] = useState(
     data.length > 0 ? Array(data.length).fill(false) : [],
   );
@@ -32,14 +33,14 @@ export default function UserDataContainer({ data, type, userId }) {
       customStyle={{
         // backgroundColor: theme.colors.white,
         // light transparent grey
-        backgroundColor: currentTheme.colors.card,
+        backgroundColor: hexToRGBA(currentTheme.colors.card, 0.2),
       }}
     >
       <VStack space={5} alignItems="center" flex={1} width="100%" padding={4}>
         <Text
           fontSize="2xl"
           fontWeight="bold"
-          color={currentTheme.colors.white}
+          color={currentTheme.colors.textColor}
           uppercase={true}
         >
           {differentUser

@@ -1,14 +1,16 @@
 import React from 'react';
 
-import { View, StyleSheet, Platform } from 'react-native';
+import { View, Platform } from 'react-native';
 import { isObjectEmpty } from '../../utils/isObjectEmpty';
 import { defaultShape } from '../../utils/mapFunctions';
-import UseTheme from '../../hooks/useTheme';
+import useTheme from '../../hooks/useTheme';
 import NativeMap from './NativeMap';
+import useCustomStyles from '~/hooks/useCustomStyles';
 
 export function MapContainer({ shape }) {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
+  const styles = useCustomStyles(loadStyles);
   if (isObjectEmpty(shape)) {
     shape = defaultShape;
   }
@@ -29,16 +31,14 @@ export function MapContainer({ shape }) {
 
 export default MapContainer;
 
-const styles = StyleSheet.create({
+const loadStyles = () => ({
   webContainer: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    // overflow: "hidden",
     height: 'fit-content',
   },
   nativeContainer: {
-    // height: 500,
     width: '100%',
     marginBottom: 20,
     marginBottom: 20,

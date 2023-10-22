@@ -5,10 +5,7 @@ import {
   createAsyncThunk,
   createEntityAdapter,
 } from '@reduxjs/toolkit';
-
-import axios from '~/config/axios';
-
-import { api } from '../constants/api';
+import { trpc } from '../trpc';
 
 const singleTripAdapter = createEntityAdapter({
   selectId: (singleTrip) => singleTrip._id,
@@ -23,8 +20,9 @@ const initialState = singleTripAdapter.getInitialState({
 export const fetchSingleTrip = createAsyncThunk(
   'trips/fetchSingleTrip',
   async (tripId) => {
-    const response = await axios.get(`${api}/trip/t/${tripId}`);
-    return response.data;
+    // const response = await axios.get(`${api}/trip/t/${tripId}`);
+    // return response.data;
+    return await trpc.getTripById.query({ tripId });
   },
 );
 

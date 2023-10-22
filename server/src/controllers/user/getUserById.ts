@@ -1,7 +1,8 @@
+import { publicProcedure } from '../../trpc';
 import { UserNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { getUserByIdService } from '../../services/user/getUserByIdService';
-
+import * as validator from '../../middleware/validators/index';
 /**
  * Retrieves a user by their ID from the database and returns the user object as a JSON response.
  * @param {Object} req - The request object.
@@ -20,3 +21,10 @@ export const getUserById = async (req, res, next) => {
     next(UserNotFoundError);
   }
 };
+
+export function getUserByIdRoute() {
+  return publicProcedure.input(validator.getUserById).mutation(async (opts) => {
+    const { input } = opts;
+    return await getUserByIdService(input.userId);
+  });
+}

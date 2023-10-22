@@ -3,18 +3,18 @@ import {
   createAsyncThunk,
   createEntityAdapter,
 } from '@reduxjs/toolkit';
-import axios from '~/config/axios';
-import { api } from '../constants/api';
+import { trpc } from '../trpc';
 
 export const processGeoJSON = createAsyncThunk(
   'destination/processGeoJSON',
   async (data, { rejectWithValue }) => {
     try {
-      // Make a POST request to the `${api}/osm/process/geojson` endpoint
-      const response = await axios.post(`${api}/osm/process/geojson`, data);
+      // // Make a POST request to the `${api}/osm/process/geojson` endpoint
+      // const response = await axios.post(`${api}/osm/process/geojson`, data);
 
-      // Return the response data
-      return response.data;
+      // // Return the response data
+      // return response.data;
+      return await trpc.postSingleGeoJSON.mutate({ geojson: data });
     } catch (err) {
       // Handle errors by returning the error response data using `rejectWithValue`
       return rejectWithValue(err.response.data);
@@ -26,13 +26,14 @@ export const getDestination = createAsyncThunk(
   'destination/getDestination',
   async (destinationId, { rejectWithValue }) => {
     try {
-      // Make a GET request to the `${api}/osm/destination/${destinationId}` endpoint
-      const response = await axios.get(
-        `${api}/osm/destination/${destinationId}`,
-      );
+      // // Make a GET request to the `${api}/osm/destination/${destinationId}` endpoint
+      // const response = await axios.get(
+      //   `${api}/osm/destination/${destinationId}`,
+      // );
 
-      // Return the response data
-      return response.data;
+      // // Return the response data
+      // return response.data;
+      return await trpc.getDestination.query({ id: destinationId });
     } catch (err) {
       // Handle errors by returning the error response data using `rejectWithValue`
       return rejectWithValue(err.response.data);
@@ -54,12 +55,13 @@ export const photonDetails = createAsyncThunk(
       }
 
       // Make a GET request to the `${api}/osm/photonDetails/${osm_type}/${osm_id}` endpoint
-      const response = await axios.get(
-        `${api}/osm/photonDetails/${osm_type}/${osm_id}`,
-      );
+      // const response = await axios.get(
+      //   `${api}/osm/photonDetails/${osm_type}/${osm_id}`,
+      // );
 
-      // Return the response data
-      return response.data;
+      // // Return the response data
+      // return response.data;
+      return await trpc.getPhotonDetails.query({ id: osm_id, type: osm_type });
     } catch (err) {
       // Handle errors by returning the error response data using `rejectWithValue`
       return rejectWithValue(err.response.data);

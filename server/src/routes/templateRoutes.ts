@@ -8,6 +8,8 @@ import {
 } from '../controllers/template/index';
 import { isAdmin } from '../middleware/isAdmin'; // Assuming this is your middleware file
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
+import authTokenMiddleware from '../middleware/auth';
+import checkRole from '../middleware/checkRole';
 
 // import * as validator from "../middleware/validators/index.js";
 
@@ -41,7 +43,12 @@ const router = express.Router();
  *       '500':
  *         description: Error retrieving templates
  */
-router.get('/', tryCatchWrapper(getTemplates));
+router.get(
+  '/',
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
+  tryCatchWrapper(getTemplates),
+);
 
 /**
  * @swagger
@@ -64,7 +71,12 @@ router.get('/', tryCatchWrapper(getTemplates));
  *       '500':
  *         description: Error retrieving template by ID
  */
-router.get('/:templateId', tryCatchWrapper(getTemplateById));
+router.get(
+  '/:templateId',
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
+  tryCatchWrapper(getTemplateById),
+);
 
 /**
  * @swagger
@@ -95,7 +107,13 @@ router.get('/:templateId', tryCatchWrapper(getTemplateById));
  *       '500':
  *         description: Error adding the template
  */
-router.post('/', isAdmin, tryCatchWrapper(addTemplate));
+router.post(
+  '/',
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
+  isAdmin,
+  tryCatchWrapper(addTemplate),
+);
 
 /**
  * @swagger
@@ -129,7 +147,13 @@ router.post('/', isAdmin, tryCatchWrapper(addTemplate));
  *       '500':
  *         description: Error editing the template
  */
-router.put('/:templateId', isAdmin, tryCatchWrapper(editTemplate));
+router.put(
+  '/:templateId',
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
+  isAdmin,
+  tryCatchWrapper(editTemplate),
+);
 
 /**
  * @swagger
@@ -152,6 +176,12 @@ router.put('/:templateId', isAdmin, tryCatchWrapper(editTemplate));
  *       '500':
  *         description: Error deleting the template
  */
-router.delete('/:templateId', isAdmin, tryCatchWrapper(deleteTemplate));
+router.delete(
+  '/:templateId',
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
+  isAdmin,
+  tryCatchWrapper(deleteTemplate),
+);
 
 export default router;

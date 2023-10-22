@@ -5,9 +5,9 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "**" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "**" ]
 
 jobs:
   build:
@@ -15,25 +15,26 @@ jobs:
     runs-on: ubuntu-latest
 
     strategy:
+      fail-fast: false  # This ensures that all versions are tested even if one fails.
       matrix:
-        node-version: [14.x, 16.x, 18.x]
+        node-version: [16.x, 18.x, 20.x] # Node.js versions to test against. Removed 14.x as it is EOL + Tamagui errors on it.
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - name: Install dependencies
-      run: npm ci
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
 
-    - name: Lint code
-      run: npm run lint
+      - name: Install dependencies
+        run: npm install --frozen-lockfile
 
-    - name: Run tests
-      run: npm run test
+      - name: Lint code
+        run: npm run lint
 
-    - name: Build
-      run: npm run build:prod
+      - name: Run tests
+        run: npm run test
+
+      - name: Build
+        run: npm run build:prod

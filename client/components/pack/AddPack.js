@@ -1,21 +1,24 @@
-import { StyleSheet, Platform } from 'react-native';
-import { Box, Input, Button, Text } from 'native-base';
+import { Platform } from 'react-native';
+import { Box, Input, Button, Text, Select, CheckIcon } from 'native-base';
 
 // import useAddPack from "../../hooks/useAddPack";
 import { addPack } from '../../store/packsStore';
-import { theme } from '../../theme';
 import { useState } from 'react';
 // import { useAuth } from "../../auth/provider";
 import { useSelector, useDispatch } from 'react-redux';
 import { CustomModal } from '../modal';
-import UseTheme from '../../hooks/useTheme';
+import useTheme from '../../hooks/useTheme';
+import useCustomStyles from '~/hooks/useCustomStyles';
 
 export const AddPack = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
+  const styles = useCustomStyles(loadStyles);
+
   const dispatch = useDispatch();
 
   const [name, setName] = useState('');
+  const [isPublic, setIsPublic] = useState(false);
 
   // const { addPack } = useAddPack();
   // const { user } = useAuth();
@@ -35,8 +38,14 @@ export const AddPack = () => {
    * @return {void}
    */
   const handleAddPack = () => {
-    dispatch(addPack({ name, owner_id: user?._id }));
+    dispatch(addPack({ name, owner_id: user?._id, is_public: isPublic }));
     setName('');
+  };
+
+  const data = ['Yes', 'For me only'];
+
+  const handleonValueChange = (itemValue) => {
+    setIsPublic(itemValue == 'Yes');
   };
 
   return (
@@ -52,12 +61,35 @@ export const AddPack = () => {
           }}
           width={Platform.OS === 'web' ? '25%' : '100%'}
         />
+        <Select
+          selectedValue={isPublic}
+          width="100%"
+          accessibilityLabel="Choose Service"
+          placeholder={'Is Public'}
+          _selectedItem={{
+            bg: 'teal.600',
+            endIcon: <CheckIcon size="5" />,
+          }}
+          onValueChange={handleonValueChange}
+        >
+          {data
+            ? data?.map((item, index) => {
+                let val = item;
+                let label = item;
+                if (typeof item === 'object' && item !== null) {
+                  val = item.id || item._id || item.name;
+                  label = item.name;
+                }
+                return (
+                  <Select.Item key={index} label={String(label)} value={val} />
+                );
+              })
+            : null}
+        </Select>
 
         <Button
           width={Platform.OS === 'web' ? null : '50%'}
           onPress={() => {
-            // addPack.mutate({ name, owner_id: user?._id });
-            // setName("");
             handleAddPack();
           }}
         >
@@ -86,10 +118,9 @@ export const AddPackContainer = () => {
   );
 };
 
-const styles = () => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
-  return StyleSheet.create({
+const loadStyles = (theme, appTheme) => {
+  const { currentTheme } = theme;
+  return {
     container: {
       flexDirection: 'column',
       alignItems: 'center',
@@ -133,8 +164,8 @@ const styles = () => {
       paddingVertical: 15,
       textAlign: 'center',
       alignItems: 'center',
-      color: theme.colors.text,
+      color: appTheme.colors.text,
       width: '50%',
     },
-  });
+  };
 };

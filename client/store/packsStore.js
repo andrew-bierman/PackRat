@@ -3,47 +3,53 @@ import {
   createAsyncThunk,
   createEntityAdapter,
 } from '@reduxjs/toolkit';
-import axios from '~/config/axios';
-import { api } from '../constants/api';
-import { Toast } from 'native-base';
 import { InformUser } from '../utils/ToastUtils';
+import { trpc } from '../trpc';
 export const addPack = createAsyncThunk('packs/addPack', async (newPack) => {
   // console.log(newPack, "this is new pack")
-  const response = await axios.post(`${api}/pack/`, newPack);
-  // console.log(response.data, 'this is response from server');
-  return response.data;
+  return await trpc.addPack.mutate(newPack);
 });
 
 export const deletePackItem = createAsyncThunk(
   'items/deletePackItem',
   async (item) => {
     console.log('item', item);
-    const response = await axios.delete(`${api}/item`, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      data: {
-        itemId: item.itemId,
-        packId: item.currentPackId,
-      },
+    // const response = await axios.delete(`${api}/item`, {
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   data: {
+    //     itemId: item.itemId,
+    //     packId: item.currentPackId,
+    //   },
+    // });
+    // return response.data;
+    return await trpc.deleteItem.mutate({
+      itemId: item.itemId,
+      packId: item.currentPackId,
     });
-    return response.data;
   },
 );
 
 export const changePackStatus = createAsyncThunk(
   'packs/changePackStatus',
   async (updatedPack) => {
-    const response = await axios.put(`${api}/pack`, updatedPack);
-    return response.data;
+    // const response = await axios.put(`${api}/pack`, updatedPack);
+    // return response.data;
+    return await trpc.editPack.mutate(updatePack);
   },
 );
 
 export const fetchUserPacks = createAsyncThunk(
   'packs/fetchUserPacks',
-  async (ownerId) => {
-    const response = await axios.get(`${api}/pack/${ownerId}`);
-    return response.data;
+  async (input) => {
+    const { ownerId, queryString } = input;
+    // const response = await axios.get(
+    //   `${api}/pack/${ownerId}/?queryBy=${queryString || 'Most Recent'}`,
+    // );
+    // return response.data;
+    return (await trpc.getPacks.query({ ownerId, queryBy: queryString }))
+      ?.packs;
   },
 );
 
@@ -51,72 +57,95 @@ export const addPackItem = createAsyncThunk(
   'items/addPackItem',
   async (newItem) => {
     // console.log("calling apis");
-    const response = await axios.post(`${api}/item/`, newItem);
+    // const response = await axios.post(`${api}/item/`, newItem);
 
-    return response.data;
+    // return response.data;
+    return await trpc.addItem.mutate(newItem);
   },
 );
 
 export const duplicatePackItem = createAsyncThunk(
   'items/duplicatePackItem',
   async (newItem) => {
-    const response = await axios.post(`${api}/pack/duplicate`, {
+    // const response = await axios.post(`${api}/pack/duplicate`, {
+    //   packId: newItem.packId,
+    //   ownerId: newItem.ownerId,
+    //   items: newItem.items,
+    // });
+    // return response.data;
+    return await trpc.duplicatePublicPack.mutate({
       packId: newItem.packId,
       ownerId: newItem.ownerId,
       items: newItem.items,
     });
-    return response.data;
   },
 );
 
 export const scorePack = createAsyncThunk('packs/scorePack', async (packId) => {
-  const response = await axios.put(`${api}/pack/score/${packId}`);
-  return response.data;
+  // const response = await axios.put(`${api}/pack/score/${packId}`);
+  // return response.data;
+  return await trpc.scorePack.mutate({ packId });
 });
 
 export const editPackItem = createAsyncThunk(
   'items/editPackItem',
   async (newItem) => {
-    console.log(newItem, 'new Item here');
-    const response = await axios.put(`${api}/item/`, newItem);
-    console.log(response.data, 'new item response');
-    return response.data;
+    // console.log(newItem, 'new Item here');
+    // const response = await axios.put(`${api}/item/`, newItem);
+    // console.log(response.data, 'new item response');
+    // return response.data;
+    return await trpc.editItem.mutate(newItem);
   },
 );
 
 export const editItemsGlobalAsDuplicate = createAsyncThunk(
   'Items/editItemsGlobalAsDuplicate',
   async (item) => {
-    const { itemId, packId, name, weight, quantity, unit, type } = item;
-    const response = await axios.put(`${api}/item/global/${itemId}`, {
-      packId,
-      name,
-      weight,
-      quantity,
-      unit,
-      type,
+    // const { itemId, packId, name, weight, quantity, unit, type } = item;
+    // const response = await axios.put(`${api}/item/global/${itemId}`, {
+    //   packId,
+    //   name,
+    //   weight,
+    //   quantity,
+    //   unit,
+    //   type,
+    // });
+    // return response.data;
+    return await trpc.editGlobalItemAsDuplicate.mutate({
+      itemId: item.itemId,
+      packId: item.packId,
+      name: item.name,
+      weight: item.weight,
+      quantity: item.quantity,
+      unit: item.unit,
+      type: item.type,
     });
-    return response.data;
   },
 );
 
 export const updatePack = createAsyncThunk('packs/updatePack', async (pack) => {
-  const response = await axios.put(`${api}/pack`, {
-    _id: pack._id,
+  // const response = await axios.put(`${api}/pack`, {
+  //   _id: pack._id,
+  //   name: pack.name,
+  //   is_public: pack.is_public,
+  // });
+  // return response.data;
+  return await trpc.editPack.mutate({
+    packId: pack._id,
     name: pack.name,
     is_public: pack.is_public,
   });
-  return response.data;
 });
 
 export const deletePack = createAsyncThunk('packs/deletePack', async (pack) => {
-  const response = await axios.delete(`${api}/pack`, {
-    data: { packId: pack.id },
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-  return response.data;
+  // const response = await axios.delete(`${api}/pack`, {
+  //   data: { packId: pack.id },
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //   },
+  // });
+  // return response.data;
+  return await trpc.deletePack.mutate({ packId: pack._id });
 });
 
 const packsAdapter = createEntityAdapter({

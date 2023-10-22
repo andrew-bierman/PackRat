@@ -4,7 +4,7 @@ import {
   createEntityAdapter,
 } from '@reduxjs/toolkit';
 import { api } from '../constants/api';
-import axios from '~/config/axios';
+import { trpc } from '../trpc';
 
 export const fetchPhotonSearchResults = createAsyncThunk(
   'search/fetchPhotonSearchResults',
@@ -14,8 +14,9 @@ export const fetchPhotonSearchResults = createAsyncThunk(
       `/osm/photon/search?searchString=${encodeURIComponent(searchString)}`;
 
     try {
-      const response = await axios.get(url);
-      return response.data;
+      // const response = await axios.get(url);
+      // return response.data;
+      return await trpc.getPhotonResults.query({ searchString });
     } catch (error) {
       console.error('error:' + error);
     }
@@ -27,8 +28,9 @@ export const fetchItemsSearchResults = createAsyncThunk(
     const url = api + `/item/global?search=${encodeURIComponent(searchString)}`;
 
     try {
-      const response = await axios.get(url);
-      return response.data;
+      // const response = await axios.get(url);
+      // return response.data;
+      return await trpc.getItemsGlobally.query({ searchString });
     } catch (error) {
       console.error('error:' + error);
     }
@@ -48,6 +50,10 @@ const searchSlice = createSlice({
   reducers: {
     setSelectedSearchResult(state, action) {
       state.selectedSearchResult = action.payload;
+    },
+    clearSearchResults(state, action) {
+      state.searchResults = [];
+      state.selectedSearchResult = {};
     },
   },
   extraReducers: (builder) => {
@@ -74,5 +80,6 @@ const searchSlice = createSlice({
   },
 });
 
-export const { setSelectedSearchResult } = searchSlice.actions;
+export const { setSelectedSearchResult, clearSearchResults } =
+  searchSlice.actions;
 export default searchSlice.reducer;

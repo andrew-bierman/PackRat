@@ -9,7 +9,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 
 import { store, persistor } from '../store/store';
 
-import { AuthProvider } from '../context/auth';
+import { SessionProvider } from '../context/auth';
 import { ThemeProvider } from '../context/theme';
 import FlashMessage from 'react-native-flash-message';
 import Footer from '../components/footer/Footer';
@@ -18,14 +18,14 @@ export default function HomeLayout() {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <AuthProvider>
+        <SessionProvider>
           <ThemeProvider>
             <FlashMessage position="top" />
             <Navigation />
             <Slot />
-            {Platform.OS === 'web' ? <Footer /> : null}
+            {/* {Platform.OS === 'web' ? <Footer /> : null} */}
           </ThemeProvider>
-        </AuthProvider>
+        </SessionProvider>
       </PersistGate>
     </Provider>
   );
