@@ -31,7 +31,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
   const [selectedSearch, setSelectedSearch] = useState('');
 
   const { currentTheme } = useTheme();
-  const styles = useCustomStyles(loadStyles());
+  const styles = useCustomStyles(loadStyles);
   const searchResults =
     useSelector((state) => state.search.searchResults) || [];
 
