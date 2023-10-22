@@ -11,7 +11,7 @@
     "ios": "TAMAGUI_TARGET=native npx expo run:ios",
     "web": "npx expo start --web",
     "test": "echo \"No tests yet\"",
-    "setup": "yarn setup:copy && yarn setup:keyreplace && yarn setup:move",
+    "setup": "node setup.js",
     "setup:copy": "yarn copy:env && yarn copy:app && yarn copy:gradle && yarn copy:pod",
     "setup:keyreplace": "node setup.js",
     "setup:move": "yarn move:gradle && yarn move:pod",
