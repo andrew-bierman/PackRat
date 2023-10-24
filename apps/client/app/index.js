@@ -14,7 +14,6 @@ import Dashboard from '../screens/dashboard';
 import useTheme from '../hooks/useTheme';
 import { current } from '@reduxjs/toolkit';
 import Head from 'expo-router/head';
-import Login from '../screens/LoginScreen';
 
 export default function Index() {
   const {
@@ -46,7 +45,6 @@ export default function Index() {
           name: 'Home',
         }}
       />
-      <Login />
       <Box style={mutualStyles}>{!user ? <LandingPage /> : <Dashboard />}</Box>
     </>
   );
