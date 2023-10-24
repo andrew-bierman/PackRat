@@ -15,7 +15,7 @@ config.resolver.sourceExts.push('mjs', 'cjs');
 
 // Find the project and workspace directories
 const projectRoot = __dirname;
-const workspaceRoot = path.resolve(projectRoot, '../'); // Adjust as per your project structure
+const workspaceRoot = path.resolve(projectRoot, '../../'); // Adjust as per your project structure
 
 // Watch all files within the monorepo
 config.watchFolders = [workspaceRoot];
