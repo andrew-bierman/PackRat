@@ -9,9 +9,18 @@ export const useAddNewTrip = () => {
       });
       // Step 1: Define optimistic update
       const optimisticUpdate = {
-        ...newTrip,
+        name:newTrip.name,
+        description:newTrip.description,
+        duration:newTrip.duration,
+        weather:newTrip.weather,
+        start_date:newTrip.start_date,
+        end_date:newTrip.end_date,
+        destination:newTrip.destination,
+        owner_id:newTrip.owner_id,
+        packs:newTrip.packs,
+        is_public:newTrip.is_public,
         type:"trip",
-         geojson:JSON.parse(newTrip.geoJSON),
+        geojson:JSON.parse(newTrip.geoJSON),
         _id: Date.now(),
       };
       console.log('Optimistic update');
