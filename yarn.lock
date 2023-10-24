@@ -23236,9 +23236,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"server@*, server@workspace:server":
+"server@*, server@workspace:packages/server":
   version: 0.0.0-use.local
-  resolution: "server@workspace:server"
+  resolution: "server@workspace:packages/server"
   dependencies:
     "@hono/node-server": ^1.2.0
     "@hono/trpc-server": ^0.1.0
