@@ -10,18 +10,21 @@
     "noImplicitAny": false,
     "noImplicitThis": false,
     "useUnknownInCatchVariables": false,
-    "baseUrl": ".",
-    "paths": {
-      "~/config/*": ["config/*"],
-      "~/constants/*": ["constants/*"],
-      "~/components/*": ["components/*"],
-      "~/utils/*": ["utils/*"],
-      "~/hooks/*": ["hooks/*"],
-      "~/screens/*": ["screens/*"],
-      "~/theme/*": ["theme/*"],
-      "@trpc": ["../server/src/routes/index"]
-    },
+    "baseUrl": "src",
+    // "paths": {
+    //   "~/config/*": ["src/config/*"],
+    //   "~/constants/*": ["src/constants/*"],
+    //   "~/components/*": ["src/components/*"],
+    //   "~/utils/*": ["src/utils/*"],
+    //   "~/hooks/*": ["src/hooks/*"],
+    //   "~/screens/*": ["src/screens/*"],
+    //   "~/theme/*": ["src/theme/*"],
+    //   "@trpc": ["../server/src/routes/index"]
+    // },
   },
+  "include": [
+    "src"
+, "tamagui.config.js"  ],
   "exclude": [
     "node_modules",
     "babel.config.js",

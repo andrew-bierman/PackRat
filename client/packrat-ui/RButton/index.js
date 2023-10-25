@@ -1,5 +1,5 @@
 import { Button } from 'tamagui';
-import useTheme from '~/hooks/useTheme';
+import useTheme from 'hooks/useTheme';
 
 const RButton = (props) => {
   const { currentTheme } = useTheme();
