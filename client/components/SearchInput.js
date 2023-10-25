@@ -29,7 +29,6 @@ export const SearchInput = ({ onSelect, placeholder }) => {
   const [searchString, setSearchString] = useState({ name: '' });
   const [isLoadingMobile, setIsLoadingMobile] = useState(false);
   const [selectedSearch, setSelectedSearch] = useState('');
-
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
   const searchResults =
@@ -45,7 +44,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
   useEffect(() => {
     setShowSearchResults(searchString?.name?.length > 0);
     if (!searchString?.name) return;
-    dispatch(fetchPhotonSearchResults(searchString));
+    dispatch(fetchPhotonSearchResults(searchString?.name));
   }, [searchString?.name, dispatch]);
 
   const getTrailsParksAndWeatherDetails = async () => {
