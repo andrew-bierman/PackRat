@@ -16,7 +16,7 @@ const weatherAdapter = createEntityAdapter();
 const initialState = weatherAdapter.getInitialState({
   weatherObject: defaultWeatherObject,
   weatherWeek: defaultWeekObj,
-  loading: 'idle',
+  isLoading: false,
   error: null,
 });
 
@@ -83,19 +83,19 @@ export const weatherSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchWeather.pending, (state) => {
-        state.loading = 'pending';
+        state.isLoading = true;
       })
       .addCase(fetchWeather.fulfilled, (state, action) => {
         state.weatherObject = action.payload;
-        state.loading = 'fulfilled';
+        state.isLoading = false;
       })
       .addCase(fetchWeather.rejected, (state, action) => {
-        state.loading = 'rejected';
+        state.isLoading = false;
         state.error = action.error.message;
       })
 
       .addCase(fetchWeatherWeek.pending, (state) => {
-        state.loading = 'pending';
+        state.isLoading = true;
       })
       .addCase(fetchWeatherWeek.fulfilled, (state, action) => {
         if (action.payload?.list) {
@@ -104,10 +104,10 @@ export const weatherSlice = createSlice({
         } else {
           state.weatherWeek = defaultWeekObj;
         }
-        state.loading = 'fulfilled';
+        state.isLoading = false;
       })
       .addCase(fetchWeatherWeek.rejected, (state, action) => {
-        state.loading = 'rejected';
+        state.isLoading = false;
         state.error = action.error.message;
       });
   },
