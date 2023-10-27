@@ -44,7 +44,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
   useEffect(() => {
     setShowSearchResults(searchString?.name?.length > 0);
     if (!searchString?.name) return;
-    dispatch(fetchPhotonSearchResults(searchString?.name));
+    dispatch(fetchPhotonSearchResults(searchString.name));
   }, [searchString?.name, dispatch]);
 
   const getTrailsParksAndWeatherDetails = async () => {
@@ -61,7 +61,6 @@ export const SearchInput = ({ onSelect, placeholder }) => {
       geometry: { coordinates },
     } = selectedSearchResult;
     const [lon, lat] = coordinates;
-
     if (!lat || !lon) {
       setIsLoadingMobile(false);
       return;
