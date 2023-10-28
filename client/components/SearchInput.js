@@ -9,7 +9,7 @@ import {
   View,
   Pressable,
 } from 'native-base';
-import { RStack, RInput, RButton, RText, RScrollView } from '../packrat-ui';
+import { RStack, RInput, RButton, RText, RScrollView } from '@packrat/ui';
 import { MaterialIcons } from '@expo/vector-icons';
 import useTheme from '../hooks/useTheme';
 import { Platform } from 'react-native';

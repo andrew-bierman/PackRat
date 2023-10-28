@@ -23,7 +23,7 @@
   "dependencies": {
     "@hono/node-server": "^1.2.0",
     "@hono/trpc-server": "^0.1.0",
-    "@packrat/packages": "*",
+    "@packrat/validations": "*",
     "@sendgrid/mail": "^7.7.0",
     "@trpc/client": "^10.38.5",
     "@trpc/server": "^10.38.5",
