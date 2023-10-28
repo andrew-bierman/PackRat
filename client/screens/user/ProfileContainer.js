@@ -117,7 +117,7 @@ const Header = ({
             )}
           </Box>
         </VStack>
-        {isCurrentUser && !isLoading && <Box width={45} />}{' '}
+        {isCurrentUser && !isLoading && <Box width={45} />}
         {/* This empty box is to offset the space taken by the settings button, ensuring the profile details remain centered. */}
       </HStack>
       <Stack direction="row" style={styles.card}>
