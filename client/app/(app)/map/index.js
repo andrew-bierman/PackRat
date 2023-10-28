@@ -25,10 +25,10 @@ export default function Map() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     UseTheme();
 
+  const styles = useCustomStyles(loadStyles);
+
   // sourcery skip: avoid-function-declarations-in-blocks
   function CustomizedMap() {
-    const styles = useCustomStyles(loadStyles);
-
     const mapViewRef = useRef(null);
 
     const [style, setStyle] = React.useState(
@@ -272,7 +272,7 @@ export default function Map() {
             <MaterialCommunityIcons
               name="arrow-expand"
               size={30}
-              color={currentTheme.colors.text || 'black'}
+              color={currentTheme.colors.text}
             />
           </TouchableOpacity>
         </Mapbox.MapView>
@@ -283,12 +283,7 @@ export default function Map() {
   return (
     <ErrorBoundary>
       <>
-        <View
-          style={{
-            flex: 1,
-            // backgroundColor: currentTheme.colors.white || 'white',
-          }}
-        >
+        <View style={styles.container}>
           <CustomizedMap />
         </View>
       </>
