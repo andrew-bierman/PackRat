@@ -7570,6 +7570,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tamagui/web@npm:1.75.5":
+  version: 1.75.5
+  resolution: "@tamagui/web@npm:1.75.5"
+  dependencies:
+    "@tamagui/compose-refs": 1.75.5
+    "@tamagui/constants": 1.75.5
+    "@tamagui/helpers": 1.75.5
+    "@tamagui/normalize-css-color": 1.75.5
+    "@tamagui/timer": 1.75.5
+    "@tamagui/use-did-finish-ssr": 1.75.5
+    "@tamagui/use-force-update": 1.75.5
+  peerDependencies:
+    react: "*"
+  checksum: ee144defe8381f1b97bf7eb3c513b838825102f7f98ba7981f64c36985af6e456f4f5a827f6d6d5fa9de0d195067483c6afbd025859454827355628dddc790fc
+  languageName: node
+  linkType: hard
+
 "@tanstack/match-sorter-utils@npm:^8.7.0":
   version: 8.8.4
   resolution: "@tanstack/match-sorter-utils@npm:8.8.4"
@@ -7585,23 +7602,6 @@ __metadata:
   dependencies:
     "@tanstack/query-persist-client-core": 4.36.1
   checksum: e21f1cc4c590ae74031fb63f9f5ca97e5069d3e5d7eaf72b02b82e1be0b467ec129caa9bc5189ac61abe0c47955f90fa7d9272314ee392e4c82208d6633fd638
-  languageName: node
-  linkType: hard
-
-"@tamagui/web@npm:1.75.5":
-  version: 1.75.5
-  resolution: "@tamagui/web@npm:1.75.5"
-  dependencies:
-    "@tamagui/compose-refs": 1.75.5
-    "@tamagui/constants": 1.75.5
-    "@tamagui/helpers": 1.75.5
-    "@tamagui/normalize-css-color": 1.75.5
-    "@tamagui/timer": 1.75.5
-    "@tamagui/use-did-finish-ssr": 1.75.5
-    "@tamagui/use-force-update": 1.75.5
-  peerDependencies:
-    react: "*"
-  checksum: ee144defe8381f1b97bf7eb3c513b838825102f7f98ba7981f64c36985af6e456f4f5a827f6d6d5fa9de0d195067483c6afbd025859454827355628dddc790fc
   languageName: node
   linkType: hard
 
@@ -7729,15 +7729,15 @@ __metadata:
   linkType: hard
 
 "@trpc/react-query@npm:^10.38.5":
-  version: 10.41.0
-  resolution: "@trpc/react-query@npm:10.41.0"
+  version: 10.43.0
+  resolution: "@trpc/react-query@npm:10.43.0"
   peerDependencies:
     "@tanstack/react-query": ^4.18.0
-    "@trpc/client": 10.41.0
-    "@trpc/server": 10.41.0
+    "@trpc/client": 10.43.0
+    "@trpc/server": 10.43.0
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
-  checksum: 9459cf4c6d393956ee01d0562ebacf55709dce2c81da153ac43fbbba105079675740853091f93db3be694cc975f5ec357354af02ca1507862577039f33dfa916
+  checksum: bb57c0e771347d6a5d3a7586083fc39152f5f306a3984b37b875336347bf63968e56e354d46ee259027f310d592c8f8b585414abd9f3204570cf984f9d53eca8
   languageName: node
   linkType: hard
 
@@ -10546,9 +10546,9 @@ __metadata:
   linkType: hard
 
 "caniuse-lite@npm:^1.0.0, caniuse-lite@npm:^1.0.30001541":
-  version: 1.0.30001555
-  resolution: "caniuse-lite@npm:1.0.30001555"
-  checksum: 8acd119d1d254d063fc1f5485fe30a824150a37676b404c82164640e49b67a2ff09397232231a0db8ed43fd5d9c087b0bfb97629e48adc488a41d9680a86ed27
+  version: 1.0.30001557
+  resolution: "caniuse-lite@npm:1.0.30001557"
+  checksum: 01db1d5fb207ceee1daeb6968dba66f05143c428705a5a11979879250e3c91dfc805bc9275d5cdefe7d182cedbb88ba0e859bcd9159ada046847ac05dd867318
   languageName: node
   linkType: hard
 
@@ -15171,9 +15171,6 @@ __metadata:
   linkType: hard
 
 "hono@npm:^3.8.0":
-  version: 3.8.2
-  resolution: "hono@npm:3.8.2"
-  checksum: ebf6b60a82f8046729baf0284e502ddf20689bc2198292564ac760327347639f80b7ddf6a9694d2cb311d17c754c2bb4934d6783e8537d85a3ace706c908c2c7
   version: 3.9.0
   resolution: "hono@npm:3.9.0"
   checksum: b22eee9441298ce5b8a4c23e86734eeaf4a154622405880abfebf6bb5ce6b358a5a99c071909fc3ad176c855a57dfd197bd31fc80970d34e9ebfcf2342023288
@@ -20316,13 +20313,11 @@ __metadata:
     "@tamagui/react-native-media-driver": ^1.74.21
     "@tamagui/shorthands": ^1.74.21
     "@tamagui/theme-base": ^1.52.4
-    "@tamagui/themes": ^1.52.4
+    "@tamagui/themes": ^1.74.21
     "@tanstack/query-async-storage-persister": ^4.35.7
     "@tanstack/react-query": ^4.35.3
     "@tanstack/react-query-devtools": ^4.35.3
     "@tanstack/react-query-persist-client": ^4.35.7
-    "@tamagui/themes": ^1.74.21
-    "@tanstack/react-query": ^4.27.0
     "@tmcw/togeojson": ^5.7.0
     "@trpc/client": ^10.38.5
     "@trpc/react-query": ^10.38.5
@@ -20401,7 +20396,6 @@ __metadata:
     serve: ^14.2.0
     server: "*"
     superjson: 1.10.0
-    tamagui: ^1.52.7
     tamagui: ^1.74.21
     togpx: ^0.5.4
     typescript: ^5.2.2
@@ -21890,9 +21884,6 @@ __metadata:
   linkType: hard
 
 "react-native-paper@npm:^5.10.6":
-  version: 5.11.0
-  resolution: "react-native-paper@npm:5.11.0"
-"react-native-paper@npm:^5.9.1":
   version: 5.11.1
   resolution: "react-native-paper@npm:5.11.1"
   dependencies:
