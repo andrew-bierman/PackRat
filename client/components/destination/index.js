@@ -97,9 +97,8 @@ const WeatherData = ({ geoJSON }) => {
 
         // const [lon, lat] = coordinates;
         let lon, lat;
-
         if (coordinates[0] && Array.isArray(coordinates[0])) {
-          [lon, lat] = coordinates[0];
+          [lon, lat] = coordinates[0].flat(2);
         } else {
           [lon, lat] = coordinates;
         }

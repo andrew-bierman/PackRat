@@ -26,10 +26,9 @@ import { fetchWeather, fetchWeatherWeek } from '../store/weatherStore';
 import useCustomStyles from '~/hooks/useCustomStyles';
 
 export const SearchInput = ({ onSelect, placeholder }) => {
-  const [searchString, setSearchString] = useState('');
+  const [searchString, setSearchString] = useState({ name: '' });
   const [isLoadingMobile, setIsLoadingMobile] = useState(false);
   const [selectedSearch, setSelectedSearch] = useState('');
-
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
   const searchResults =
@@ -43,17 +42,10 @@ export const SearchInput = ({ onSelect, placeholder }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    setShowSearchResults(searchString.length > 0);
-
-    const timeout = setTimeout(() => {
-      if (!searchString) return;
-      dispatch(fetchPhotonSearchResults(searchString));
-    }, 2000);
-
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, [searchString, dispatch]);
+    setShowSearchResults(searchString?.name?.length > 0);
+    if (!searchString?.name) return;
+    dispatch(fetchPhotonSearchResults(searchString.name));
+  }, [searchString?.name, dispatch]);
 
   const getTrailsParksAndWeatherDetails = async () => {
     if (
@@ -69,7 +61,6 @@ export const SearchInput = ({ onSelect, placeholder }) => {
       geometry: { coordinates },
     } = selectedSearchResult;
     const [lon, lat] = coordinates;
-
     if (!lat || !lon) {
       setIsLoadingMobile(false);
       return;
@@ -103,7 +94,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
     } = result;
 
     setSelectedSearch(name);
-    setSearchString(name);
+    setSearchString({ ...searchString, name });
     setShowSearchResults(false);
     dispatch(setSelectedSearchResult(result));
 
@@ -130,9 +121,9 @@ export const SearchInput = ({ onSelect, placeholder }) => {
             }}
             placeholder={placeholder ?? 'Search'}
             onChangeText={(text) => {
-              setSearchString(text);
+              setSearchString({ ...searchString, name: text });
             }}
-            value={searchString}
+            value={searchString?.name}
           />
           <MaterialIcons
             name="search"
@@ -147,11 +138,11 @@ export const SearchInput = ({ onSelect, placeholder }) => {
               fontSize: 20,
             }}
           />
-          {searchString && (
+          {searchString?.name && (
             <RButton
               onPress={() => {
                 setShowSearchResults(false);
-                setSearchString('');
+                setSearchString({ ...searchString, name: '' });
                 dispatch(clearSearchResults());
               }}
               style={{
@@ -220,14 +211,14 @@ export const SearchInput = ({ onSelect, placeholder }) => {
     <VStack w="100%" space={5} alignSelf="center">
       <Input
         onChangeText={(text) => {
-          setSearchString(text);
+          setSearchString({ ...searchString, name: text });
         }}
         placeholder="Search"
         width="100%"
         borderRadius="4"
         py="3"
         px="1"
-        value={searchString}
+        value={searchString?.name}
         fontSize="14"
         InputLeftElement={
           <Icon

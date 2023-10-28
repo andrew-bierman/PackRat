@@ -16,6 +16,8 @@ const weatherAdapter = createEntityAdapter();
 const initialState = weatherAdapter.getInitialState({
   weatherObject: defaultWeatherObject,
   weatherWeek: defaultWeekObj,
+  isLoading: false,
+  error: null,
 });
 
 export const fetchWeather = createAsyncThunk(
@@ -46,7 +48,6 @@ export const fetchWeatherWeek = createAsyncThunk(
 
     if (lat) params += `lat=${lat}`;
     if (lon) params += `&lon=${lon}`;
-
     const url = api + '/weather/week' + params;
 
     try {
@@ -83,12 +84,10 @@ export const weatherSlice = createSlice({
     builder
       .addCase(fetchWeather.pending, (state) => {
         state.isLoading = true;
-        state.error = null;
       })
       .addCase(fetchWeather.fulfilled, (state, action) => {
         state.weatherObject = action.payload;
         state.isLoading = false;
-        state.error = null;
       })
       .addCase(fetchWeather.rejected, (state, action) => {
         state.isLoading = false;
@@ -97,13 +96,15 @@ export const weatherSlice = createSlice({
 
       .addCase(fetchWeatherWeek.pending, (state) => {
         state.isLoading = true;
-        state.error = null;
       })
       .addCase(fetchWeatherWeek.fulfilled, (state, action) => {
-        const week = action.payload.list.slice(0, 4);
-        state.weatherWeek = week;
+        if (action.payload?.list) {
+          const week = action.payload.list.slice(0, 4);
+          state.weatherWeek = week;
+        } else {
+          state.weatherWeek = defaultWeekObj;
+        }
         state.isLoading = false;
-        state.error = null;
       })
       .addCase(fetchWeatherWeek.rejected, (state, action) => {
         state.isLoading = false;

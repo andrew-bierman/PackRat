@@ -196,6 +196,7 @@ cd client
 ```
 yarn start
 ```
+node version will be  >= 18.0.0
 
 4. Here you will be able to run the app on an iOS or Android simulator (or on your own device), or on the web. See the [Expo documentation](https://docs.expo.io/get-started/installation/) for more information on how to set up your development environment.
 

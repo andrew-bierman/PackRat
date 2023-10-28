@@ -37,7 +37,6 @@ const HeroSection = ({ onSelect }) => {
   const handleSearchSelect = async (selectedResult) => {
     try {
       console.log('selectedResult ------->', selectedResult);
-
       // Set the selected search result in the Redux store
       dispatch(setSelectedSearchResult(selectedResult));
 
@@ -45,8 +44,7 @@ const HeroSection = ({ onSelect }) => {
 
       const coordinates = selectedResult.geometry.coordinates;
 
-      const [lon, lat] = coordinates;
-
+      // const [lon, lat] = coordinates;
       if (!osm_id || !osm_type) {
         console.error(
           'No OSM ID or OSM type found in the selected search result',
