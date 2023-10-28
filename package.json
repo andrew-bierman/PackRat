@@ -42,7 +42,7 @@
     "fix": "manypkg fix",
     "preinstall": "npx only-allow yarn",
     "postinstall": "yarn build",
-    "build": "yarn workspaces foreach run build",
+    "build": "yarn workspaces foreach -all run build",
     "upgrade:tamagui": "yarn up '*tamagui*'@latest '@tamagui/*'@latest react-native-web-lite@latest",
     "upgrade:tamagui:canary": "yarn up '*tamagui*'@canary '@tamagui/*'@canary react-native-web-lite@canary",
     "check-deps": "check-dependency-version-consistency .",
@@ -53,9 +53,9 @@
   },
   "engines": {
     "node": ">=18.16.1",
-    "yarn": ">=3.6.3"
+    "yarn": ">=4.0.0"
   },
-  "packageManager": "yarn@3.6.3",
+  "packageManager": "yarn@4.0.1",
   "dependencies": {
     "@manypkg/cli": "^0.21.0",
     "check-dependency-version-consistency": "^4.1.0",
