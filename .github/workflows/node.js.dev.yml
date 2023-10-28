@@ -26,7 +26,7 @@ jobs:
     - name: Debug Information
       run: |
         yarn -v
-        ls .yarn/releases/yarn-3.6.3.cjs
+        ls .yarn/releases
         cat .yarnrc.yml
         cat yarn.lock
 
