@@ -16,20 +16,24 @@ import { MAPBOX_ACCESS_TOKEN } from '@env';
 import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 import { theme } from '../../../theme';
 import UseTheme from '../../../hooks/useTheme';
+import ErrorBoundary from '@packrat/ui';
+import { useCustomStyles } from '~/hooks/useCustomStyles';
+
 Mapbox.setAccessToken(MAPBOX_ACCESS_TOKEN);
 
 export default function Map() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     UseTheme();
+
   // sourcery skip: avoid-function-declarations-in-blocks
   function CustomizedMap() {
+    const styles = useCustomStyles(loadStyles);
+
     const mapViewRef = useRef(null);
 
     const [style, setStyle] = React.useState(
       'mapbox://styles/mapbox/outdoors-v11',
     );
-
-    useEffect(() => {}, []);
 
     const [lng, setLng] = useState(103.8519599);
     const [lat, setLat] = useState(1.29027);
@@ -268,7 +272,7 @@ export default function Map() {
             <MaterialCommunityIcons
               name="arrow-expand"
               size={30}
-              color={currentTheme.colors.text}
+              color={currentTheme.colors.text || 'black'}
             />
           </TouchableOpacity>
         </Mapbox.MapView>
@@ -277,17 +281,33 @@ export default function Map() {
   }
 
   return (
-    <>
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: currentTheme.colors.white,
-        }}
-      >
-        <CustomizedMap />
-      </View>
-    </>
+    <ErrorBoundary>
+      <>
+        <View
+          style={{
+            flex: 1,
+            // backgroundColor: currentTheme.colors.white || 'white',
+          }}
+        >
+          <CustomizedMap />
+        </View>
+      </>
+    </ErrorBoundary>
   );
 }
 
-const styles = StyleSheet.create({});
+const loadStyles = (theme) => {
+  const { currentTheme } = theme;
+
+  return {
+    container: {
+      flex: 1,
+      backgroundColor: currentTheme.colors.background,
+    },
+    lineLayer: {
+      lineColor: 'blue',
+      lineWidth: 3,
+      lineOpacity: 0.84,
+    },
+  };
+};

@@ -17,5 +17,5 @@ export {
   RButton,
   RImage,
   RScrollView,
-  TSkeleton
+  TSkeleton,
 };

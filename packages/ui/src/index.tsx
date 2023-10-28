@@ -20,3 +20,5 @@ export * from './Skeleton';
 // export * from './RSlider';
 // export * from './RToast';
 // export * from './RTooltip';
+
+export * from './ErrorBoundary'
