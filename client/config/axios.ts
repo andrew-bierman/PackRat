@@ -1,159 +1,159 @@
 import axios from 'axios';
-import { api } from '~/constants/api';
-import { store } from '../store/store';
-import { InformUser } from '~/utils/ToastUtils';
-import { setTargetProgress, resetProgress } from '../store/progressStore';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+// import { api } from '~/constants/api';
+// import { store } from '../store/store';
+// import { InformUser } from '~/utils/ToastUtils';
+// import { setTargetProgress, resetProgress } from '../store/progressStore';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
 
-let activeRequests = new Map();
+// let activeRequests = new Map();
 
-// Helper function to get the token
-// const getTokenFromState = () => {
-//   const state = store.getState();
-//   // @ts-ignore
-//   return state?.auth?.user?.token || null;
+// // Helper function to get the token
+// // const getTokenFromState = () => {
+// //   const state = store.getState();
+// //   // @ts-ignore
+// //   return state?.auth?.user?.token || null;
+// // };
+// const getTokenFromStorage = async () => {
+//   try {
+//     const token = await AsyncStorage.getItem('authToken');
+//     return token;
+//   } catch (error) {
+//     console.error("Couldn't fetch token from AsyncStorage:", error);
+//     return null;
+//   }
 // };
-const getTokenFromStorage = async () => {
-  try {
-    const token = await AsyncStorage.getItem('authToken');
-    return token;
-  } catch (error) {
-    console.error("Couldn't fetch token from AsyncStorage:", error);
-    return null;
-  }
-};
 
-const generateRequestKey = (config) => `${config.method}-${config.url}`;
+// const generateRequestKey = (config) => `${config.method}-${config.url}`;
 
-const requestInterceptor = async (config) => {
-  config.baseURL = api;
-  const token = await getTokenFromStorage();
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
+// const requestInterceptor = async (config) => {
+//   config.baseURL = api;
+//   const token = await getTokenFromStorage();
+//   if (token) {
+//     config.headers.Authorization = `Bearer ${token}`;
+//   }
 
-  const requestKey = generateRequestKey(config);
+//   const requestKey = generateRequestKey(config);
 
-  config.onUploadProgress = (progressEvent) => {
-    const percentage = Math.round(
-      (progressEvent.loaded * 100) / progressEvent.total,
-    );
-    activeRequests.set(requestKey, percentage);
-    const aggregatedPercentage =
-      Array.from(activeRequests.values()).reduce((acc, val) => acc + val, 0) /
-      activeRequests.size;
-    store.dispatch(setTargetProgress(aggregatedPercentage));
-  };
+//   config.onUploadProgress = (progressEvent) => {
+//     const percentage = Math.round(
+//       (progressEvent.loaded * 100) / progressEvent.total,
+//     );
+//     activeRequests.set(requestKey, percentage);
+//     const aggregatedPercentage =
+//       Array.from(activeRequests.values()).reduce((acc, val) => acc + val, 0) /
+//       activeRequests.size;
+//     store.dispatch(setTargetProgress(aggregatedPercentage));
+//   };
 
-  config.onDownloadProgress = (progressEvent) => {
-    const percentage = Math.round(
-      (progressEvent.loaded * 100) / progressEvent.total,
-    );
-    activeRequests.set(requestKey, percentage);
-    const aggregatedPercentage =
-      Array.from(activeRequests.values()).reduce((acc, val) => acc + val, 0) /
-      activeRequests.size;
-    store.dispatch(setTargetProgress(aggregatedPercentage));
-  };
+//   config.onDownloadProgress = (progressEvent) => {
+//     const percentage = Math.round(
+//       (progressEvent.loaded * 100) / progressEvent.total,
+//     );
+//     activeRequests.set(requestKey, percentage);
+//     const aggregatedPercentage =
+//       Array.from(activeRequests.values()).reduce((acc, val) => acc + val, 0) /
+//       activeRequests.size;
+//     store.dispatch(setTargetProgress(aggregatedPercentage));
+//   };
 
-  return config;
-};
+//   return config;
+// };
 
-const requestErrorInterceptor = (error) => {
-  return Promise.reject(error.response ? error.request : error);
-};
+// const requestErrorInterceptor = (error) => {
+//   return Promise.reject(error.response ? error.request : error);
+// };
 
-const responseInterceptor = (response) => {
-  const requestKey = generateRequestKey(response.config);
-  activeRequests.delete(requestKey);
+// const responseInterceptor = (response) => {
+//   const requestKey = generateRequestKey(response.config);
+//   activeRequests.delete(requestKey);
 
-  if (activeRequests.size === 0) {
-    setTimeout(() => {
-      store.dispatch(resetProgress());
-    }, 3000);
-  }
+//   if (activeRequests.size === 0) {
+//     setTimeout(() => {
+//       store.dispatch(resetProgress());
+//     }, 3000);
+//   }
 
-  const responseMessage = response.headers['x-response-message'];
+//   const responseMessage = response.headers['x-response-message'];
 
-  if (responseMessage) {
-    InformUser({
-      title: responseMessage,
-      placement: 'bottom',
-      duration: 3000,
-      style: { backgroundColor: response.status === 200 ? 'green' : 'red' },
-    });
-  }
+//   if (responseMessage) {
+//     InformUser({
+//       title: responseMessage,
+//       placement: 'bottom',
+//       duration: 3000,
+//       style: { backgroundColor: response.status === 200 ? 'green' : 'red' },
+//     });
+//   }
 
-  return response;
-};
+//   return response;
+// };
 
-// After receiving a response from the server, wait for a short time then reset the progress bar.
-const responseInterceptor2 = (response) => {
-  const responseMessage = response.headers['x-response-message'];
+// // After receiving a response from the server, wait for a short time then reset the progress bar.
+// const responseInterceptor2 = (response) => {
+//   const responseMessage = response.headers['x-response-message'];
 
-  if (responseMessage) {
-    InformUser({
-      title: responseMessage,
-      placement: 'bottom',
-      duration: 3000,
-      style: { backgroundColor: response.status === 200 ? 'green' : 'red' },
-    });
-  }
+//   if (responseMessage) {
+//     InformUser({
+//       title: responseMessage,
+//       placement: 'bottom',
+//       duration: 3000,
+//       style: { backgroundColor: response.status === 200 ? 'green' : 'red' },
+//     });
+//   }
 
-  setTimeout(() => {
-    store.dispatch(resetProgress());
-  }, 3000); // Adjust as needed
+//   setTimeout(() => {
+//     store.dispatch(resetProgress());
+//   }, 3000); // Adjust as needed
 
-  return response;
-};
+//   return response;
+// };
 
-const responseErrorInterceptor = (error) => {
-  const requestKey = generateRequestKey(error.config);
-  activeRequests.delete(requestKey);
+// const responseErrorInterceptor = (error) => {
+//   const requestKey = generateRequestKey(error.config);
+//   activeRequests.delete(requestKey);
 
-  if (activeRequests.size === 0) {
-    setTimeout(() => {
-      store.dispatch(resetProgress());
-    }, 1500);
-  }
+//   if (activeRequests.size === 0) {
+//     setTimeout(() => {
+//       store.dispatch(resetProgress());
+//     }, 1500);
+//   }
 
-  if ('code' in error && error.code === 'ERR_CANCELED')
-    return Promise.reject(error);
+//   if ('code' in error && error.code === 'ERR_CANCELED')
+//     return Promise.reject(error);
 
-  const errorMessage =
-    'message' in error ? error.message : 'Something went wrong';
-  InformUser({
-    title: errorMessage,
-    placement: 'bottom',
-    duration: 3000,
-    style: { backgroundColor: 'red' },
-  });
+//   const errorMessage =
+//     'message' in error ? error.message : 'Something went wrong';
+//   InformUser({
+//     title: errorMessage,
+//     placement: 'bottom',
+//     duration: 3000,
+//     style: { backgroundColor: 'red' },
+//   });
 
-  return Promise.reject(error);
-};
+//   return Promise.reject(error);
+// };
 
-const responseErrorInterceptor2 = (error) => {
-  if ('code' in error && error.code === 'ERR_CANCELED') {
-    return;
-  }
+// const responseErrorInterceptor2 = (error) => {
+//   if ('code' in error && error.code === 'ERR_CANCELED') {
+//     return;
+//   }
 
-  const errorMessage =
-    'message' in error ? error.message : 'Something went wrong';
-  InformUser({
-    title: errorMessage,
-    placement: 'bottom',
-    duration: 3000,
-    style: { backgroundColor: 'red' },
-  });
+//   const errorMessage =
+//     'message' in error ? error.message : 'Something went wrong';
+//   InformUser({
+//     title: errorMessage,
+//     placement: 'bottom',
+//     duration: 3000,
+//     style: { backgroundColor: 'red' },
+//   });
 
-  setTimeout(() => {
-    store.dispatch(resetProgress());
-  }, 1500); // Adjust as needed
+//   setTimeout(() => {
+//     store.dispatch(resetProgress());
+//   }, 1500); // Adjust as needed
 
-  return Promise.reject(error);
-};
+//   return Promise.reject(error);
+// };
 
-axios.interceptors.request.use(requestInterceptor, requestErrorInterceptor);
-axios.interceptors.response.use(responseInterceptor, responseErrorInterceptor);
+// axios.interceptors.request.use(requestInterceptor, requestErrorInterceptor);
+// axios.interceptors.response.use(responseInterceptor, responseErrorInterceptor);
 
 export default axios;

@@ -13276,6 +13276,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"expo-blur@npm:^12.6.0":
+  version: 12.8.0
+  resolution: "expo-blur@npm:12.8.0"
+  peerDependencies:
+    expo: "*"
+  checksum: af890fc3023aa7a714dbe9bd1614acd52c5dc483653888e4b68672d66fddcfeb431f99ea755ff2ac7ce13edde5b279ff2bb1389f6260950b4da756c90b5bc830
+  languageName: node
+  linkType: hard
+
 "expo-checkbox@npm:~2.4.0":
   version: 2.4.0
   resolution: "expo-checkbox@npm:2.4.0"
@@ -20276,6 +20285,7 @@ __metadata:
     expo: 49.0.15
     expo-application: ~5.3.0
     expo-auth-session: ~5.0.2
+    expo-blur: ^12.6.0
     expo-checkbox: ~2.4.0
     expo-constants: ~14.4.2
     expo-crypto: ~12.4.1
