@@ -28,7 +28,6 @@ export default function Items() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     UseTheme();
   const styles = useCustomStyles(loadStyles);
-  const data = useSelector((state) => state.globalItems);
 
   const { data, isLoading, isError, refetch } = useFetchGlobalItems(
     limit,
