@@ -27,7 +27,7 @@ import { fetchUserTrips, selectAllTrips } from '../../store/tripsStore';
 import { useMatchesCurrentUser } from '~/hooks/useMatchesCurrentUser';
 import { useRouter } from 'expo-router';
 import useCustomStyles from '~/hooks/useCustomStyles';
-import { Skeleton } from '../../packrat-ui/Skeleton';
+import { Skeleton } from '@packrat/ui';
 
 const SettingsButton = () => {
   const router = useRouter();
