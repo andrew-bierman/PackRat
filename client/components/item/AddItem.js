@@ -66,30 +66,18 @@ export const AddItem = ({
    */
   console.log(categoryType);
   const handleSubmit = () => {
-    console.log('initial', initialData);
+    let PackId = packId || initialData._id
     if (isEdit) {
-      if (packId && initialData.global) {
-        console.log('editing', packId);
+      
+      if (PackId && initialData.global) {
 
-        // dispatch(
-        //   editItemsGlobalAsDuplicate({
-        //     itemId: _id,
-        //     packId,
-        //     name,
-        //     weight,
-        //     quantity,
-        //     unit,
-        //     type: categoryType,
-        //   }),
-        // );
         editPackItem({
           name,
           weight,
           quantity,
           unit,
           type: categoryType,
-          _id,
-          packId,
+          _id:initialData._id,
         });
         closeModalHandler();
       } else {

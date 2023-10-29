@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getItemsGlobal } from '../../../store/globalItemsStore';
 import { Stack } from 'expo-router';
 import Head from 'expo-router/head';
-import { useFetchGlobalItems } from '~/hooks/globalItems';
+import useCustomStyles from '~/hooks/useCustomStyles';
 
 export default function Items() {
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
@@ -22,25 +22,20 @@ export default function Items() {
   // page number for pagination
   const [page, setPage] = useState(1);
   // it will be used as a dependency for reloading the data in case of some modifications
-  // const [refetch, setRefetch] = useState(false);
+  const [refetch, setRefetch] = useState(false);
 
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     UseTheme();
+  const styles = useCustomStyles(loadStyles);
+  const data = useSelector((state) => state.globalItems);
 
-  const { data, isLoading, isError, refetch } = useFetchGlobalItems(
-    limit,
-    page,
-  );
-  console.log('🚀 ~ file: index.js:32 ~ Items ~ data:', data);
-  // const data = useSelector((state) => state.globalItems);
-
-  // const isLoading = useSelector((state) => state.globalItems.isLoading);
-  // const isError = useSelector((state) => state.globalItems.isError);
+  const isLoading = useSelector((state) => state.globalItems.isLoading);
+  const isError = useSelector((state) => state.globalItems.isError);
 
   const dispatch = useDispatch();
-  // useEffect(() => {
-  // dispatch(getItemsGlobal({ limit, page }));
-  // }, [limit, page]);
+  useEffect(() => {
+    dispatch(getItemsGlobal({ limit, page }));
+  }, [limit, page, refetch]);
 
   return (
     <ScrollView>
@@ -73,7 +68,7 @@ export default function Items() {
               >
                 {' '}
                 <Button
-                  style={styles().button}
+                  style={styles.button}
                   onPress={() => {
                     setIsAddItemModalOpen(true);
                   }}
@@ -104,33 +99,32 @@ export default function Items() {
             onCancel={setIsAddItemModalOpen}
           >
             <AddItemGlobal
-              setRefetch={async () => refetch()}
-              // refetch={refetch}
+              setRefetch={setRefetch}
+              refetch={refetch}
               setIsAddItemModalOpen={setIsAddItemModalOpen}
             />
           </CustomModal>
         </>
-        {!isError ? (
+        {!isError && Array.isArray(data.globalItems.items) ? (
           <ItemsTable
             limit={limit}
             setLimit={setLimit}
             page={page}
             setPage={setPage}
-            data={data}
+            data={data.globalItems.items}
             isLoading={isLoading}
-            totalPages={data?.totalPages}
+            totalPages={data?.globalItems?.totalPages}
             refetch={refetch}
-            setRefetch={async () => refetch()}
+            setRefetch={setRefetch}
           />
         ) : null}
       </Box>
     </ScrollView>
   );
 }
-const styles = () => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
-  return StyleSheet.create({
+const loadStyles = (theme) => {
+  const { currentTheme } = theme;
+  return {
     button: {
       backgroundColor: currentTheme.colors.background,
       color: currentTheme.colors.white,
@@ -139,5 +133,5 @@ const styles = () => {
       alignItems: 'center',
       textAlign: 'center',
     },
-  });
+  };
 };
