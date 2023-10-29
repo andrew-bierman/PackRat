@@ -10,13 +10,11 @@ export const getUserByIdService = async (userId: string): Promise<object> => {
     const user: any = await User.findById({ _id: userId })
       .populate({
         path: 'packs',
-        populate: {
-          path: 'items',
-          model: 'Item', // replace 'Item' with your actual Item model name
-        },
+        select: 'name items',
       })
       .populate('favorites')
-      .populate('trips');
+      .populate('trips')
+      .lean();
 
     return user;
   } catch (error) {

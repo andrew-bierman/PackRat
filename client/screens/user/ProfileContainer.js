@@ -31,6 +31,7 @@ import { Skeleton } from '@packrat/ui';
 import { useUserPacks } from '~/hooks/packs';
 import { useFetchUserFavorites } from '~/hooks/favorites';
 import { useUserTrips } from '~/hooks/trips';
+import { useGetUser } from '~/hooks/user';
 
 const SettingsButton = () => {
   const router = useRouter();
@@ -222,21 +223,21 @@ export default function ProfileContainer({ id = null }) {
     error: allFavoritesError,
   } = useFetchUserFavorites((ownerId = authUser?._id));
 
-  // useEffect(() => {
-  //   if (differentUser) {
-  //     dispatch(getUser(id));
-  //   } else {
-  //     dispatch(fetchUserPacks({ ownerId: authUser?._id }));
-  //     dispatch(fetchUserFavorites(authUser?._id));
-  //     dispatch(fetchUserTrips(authUser?._id));
-  //   }
-  // }, [dispatch, id, authUser, differentUser]);
+  const {
+    data: userData,
+    isLoading: userIsLoading,
+    error: userError,
+  } = useGetUser(id);
 
-  const user = differentUser ? userStore.user : authUser;
+  const user = differentUser ? userData : authUser;
 
-  const isLoading = differentUser ? userStore.loading : authStore.loading;
+  const isLoading = differentUser
+    ? userIsLoading
+    : allPacksLoading || tripsIsLoading || allFavoritesLoading;
 
-  const error = differentUser ? userStore.error : authStore.error;
+  const error = differentUser
+    ? userError
+    : allPacksError || tripsError || allFavoritesError;
 
   const packsData = differentUser ? user?.packs : allPacks;
   const favoritesData = differentUser ? user?.favorites : allFavorites;
