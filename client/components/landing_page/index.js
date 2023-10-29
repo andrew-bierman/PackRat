@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { ImageBackground, Platform, View } from 'react-native';
+import { ImageBackground, ScrollView, Platform, View } from 'react-native';
 import {
   Container,
   Button,
@@ -12,6 +12,7 @@ import {
   HStack,
 } from 'native-base';
 import useTheme from '../../hooks/useTheme';
+import { useRouter } from 'expo-router';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { theme } from '../../theme';
 import useCustomStyles from '~/hooks/useCustomStyles';
@@ -94,112 +95,115 @@ const CustomAccordion = ({ title, content, iconName }) => {
 const LandingPage = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
+  const router = useRouter();
   const styles = useCustomStyles(loadStyles);
+  const isWeb = Platform.OS === 'web';
   return (
-    <VStack style={styles.container}>
-      <Box
-        style={{
-          alignItems: 'center',
-          textAlign: 'center',
-          paddingVertical: 18,
-          marginTop: Platform.OS !== 'web' ? 25 : 1,
-        }}
-      >
-        {Platform.OS === 'web' ? (
-          <Text
-            style={{ color: 'white', fontSize: currentTheme.font.headerFont }}
-          >
-            PackRat
+    <>
+      <VStack style={styles.container}>
+        <Box
+          style={{
+            alignItems: 'center',
+            textAlign: 'center',
+            height: '100%',
+            paddingVertical: isWeb ? 18 : 0,
+            marginTop: isWeb ? 25 : 0,
+          }}
+        >
+          {isWeb && (
+            <Text
+              style={{
+                color: 'white',
+                fontSize: isWeb ? currentTheme.font.headerFont : 16,
+                fontWeight: 600,
+              }}
+            >
+              PackRat
+            </Text>
+          )}
+          <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 18 }}>
+            The Ultimate Travel App
           </Text>
-        ) : (
-          <Text style={{ color: 'white', fontSize: 20, fontWeight: 600 }}>
-            PackRat
-          </Text>
-        )}
-        <Text style={{ color: 'white', fontSize: 18 }}>
-          The Ultimate Travel App
-        </Text>
-      </Box>
-      <Box style={styles.secondaryContentContainer}>
-        {/* <ImageBackground
-          source={require("../../assets/background-image.png")}
-          style={styles.backgroundImage}
-        > */}
-        <View style={styles.overlay} />
-        <Container style={styles.contentContainer}>
-          <Text style={styles.introText}>
-            PackRat is the ultimate adventure planner designed for those who
-            love to explore the great outdoors. Plan and organize your trips
-            with ease, whether it's a weekend camping trip, a day hike, or a
-            cross-country road trip.
-          </Text>
-          {Platform.OS === 'web' && (
-            <View style={styles.appBadges}>
-              <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-                <Button title="App Store" style={{ marginRight: 10 }}>
+          <Container style={styles.contentContainer}>
+            <Text style={styles.introText}>
+              PackRat is the ultimate adventure planner designed for those who
+              love to explore the great outdoors. Plan and organize your trips
+              with ease, whether it's a weekend camping trip, a day hike, or a
+              cross-country road trip.
+            </Text>
+            {Platform.OS === 'web' && (
+              <View style={styles.appBadges}>
+                <View
+                  style={{ flexDirection: 'row', justifyContent: 'center' }}
+                >
+                  <Button title="App Store" style={{ marginRight: 10 }}>
+                    <HStack space={2} alignItems="center">
+                      <MaterialCommunityIcons
+                        name="apple"
+                        size={44}
+                        color="white"
+                      />
+                      <Text style={{ color: 'white' }}>
+                        Download on the App Store
+                      </Text>
+                    </HStack>
+                  </Button>
+                  <Button title="Google Play">
+                    <HStack space={2} alignItems="center">
+                      <MaterialCommunityIcons
+                        name="google-play"
+                        size={44}
+                        color="white"
+                      />
+                      <Text style={{ color: 'white' }}>
+                        Download on Google Play
+                      </Text>
+                    </HStack>
+                  </Button>
+                </View>
+                <Button title="Web" style={{ marginTop: 10, width: '100%' }}>
                   <HStack space={2} alignItems="center">
                     <MaterialCommunityIcons
-                      name="apple"
+                      name="web"
                       size={44}
                       color="white"
                     />
-                    <Text style={{ color: 'white' }}>
-                      Download on the App Store
-                    </Text>
-                  </HStack>
-                </Button>
-                <Button title="Google Play">
-                  <HStack space={2} alignItems="center">
-                    <MaterialCommunityIcons
-                      name="google-play"
-                      size={44}
-                      color="white"
-                    />
-                    <Text style={{ color: 'white' }}>
-                      Download on Google Play
-                    </Text>
+                    <Text style={{ color: 'white' }}>Use on Web</Text>
                   </HStack>
                 </Button>
               </View>
-              <Button title="Web" style={{ marginTop: 10, width: '100%' }}>
-                <HStack space={2} alignItems="center">
-                  <MaterialCommunityIcons name="web" size={44} color="white" />
-                  <Text style={{ color: 'white' }}>Use on Web</Text>
-                </HStack>
-              </Button>
+            )}
+            <View>
+              {dataArray.map((item, index) => (
+                <CustomAccordion
+                  key={index}
+                  title={item.title}
+                  content={item.content}
+                  iconName={item.iconName}
+                />
+              ))}
             </View>
-          )}
-          <View>
-            {dataArray.map((item, index) => (
-              <CustomAccordion
-                key={index}
-                title={item.title}
-                content={item.content}
-                iconName={item.iconName}
-              />
-            ))}
-          </View>
-        </Container>
-        <Container style={styles.buttonContainer}>
+          </Container>
+        </Box>
+        <Box style={styles.buttonContainer}>
           <Button
             full
             style={styles.getStartedButton}
             onPress={() => {
-              /* Add navigation to the sign in screen */
+              router.push('/sign-in');
             }}
           >
             <Text style={styles.footerText}>Get Started</Text>
           </Button>
-        </Container>
-        <StatusBar style="auto" />
-        {/* </ImageBackground> */}
-      </Box>
-    </VStack>
+        </Box>
+      </VStack>
+    </>
   );
 };
 
 const loadStyles = (theme) => {
   const { currentTheme } = theme;
+  const isWeb = Platform.OS === 'web';
   return {
     mutualStyles: {
       backgroundColor: currentTheme.colors.background,
@@ -208,13 +212,16 @@ const loadStyles = (theme) => {
       height: '100%',
     },
     container: {
-      flex: 1,
+      display: 'flex',
+      flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
+      paddingTop: 5,
+      backgroundColor: currentTheme.colors.background,
+      height: '100%',
       width: '100%',
     },
     secondaryContentContainer: {
-      flex: 1,
       width: '100%',
       justifyContent: 'center',
       alignItems: 'center',
@@ -233,54 +240,55 @@ const loadStyles = (theme) => {
       justifyContent: 'center',
     },
     contentContainer: {
-      flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      paddingHorizontal: 20,
     },
     introText: {
-      fontSize: 24,
-      fontWeight: 'bold',
-      textAlign: 'center',
-      marginBottom: 20,
+      fontSize: isWeb ? 24 : 14,
+      textAlign: 'justify',
+      marginVertical: 15,
       color: currentTheme.colors.text,
     },
     card: {
       marginBottom: 10,
-      width: '100%',
+      minWidth: '100%',
       backgroundColor: currentTheme.colors.secondaryBlue,
     },
     cardHeader: {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      paddingHorizontal: 20,
-      paddingVertical: 10,
     },
     transparentButton: {
       backgroundColor: 'transparent',
     },
     icon: {
-      fontSize: 28,
+      fontSize: isWeb ? 28 : 18,
       color: '#34a89a',
       marginRight: 10,
     },
     featureText: {
-      fontSize: 18,
+      fontWeight: 'bold',
+      fontSize: isWeb ? 18 : 14,
       color: currentTheme.colors.text,
     },
     cardContent: {
-      paddingHorizontal: 20,
-      paddingVertical: 10,
-      fontSize: 16,
+      fontSize: isWeb ? 16 : 12,
       color: currentTheme.colors.text,
     },
     buttonContainer: {
-      paddingHorizontal: 20,
-      paddingBottom: 20,
+      position: 'absolute',
+      bottom: 30,
+      width: '100%',
+      alignItems: 'center',
     },
     getStartedButton: {
       backgroundColor: '#34a89a',
+      width: isWeb ? '30%' : '50%',
+      borderRadius: 13,
+      alignSelf: 'center',
+      alignItems: 'center',
+      justifyContent: 'center',
     },
     footerText: {
       color: currentTheme.colors.text,

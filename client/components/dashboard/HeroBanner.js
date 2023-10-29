@@ -70,9 +70,9 @@ const HeroSection = ({ onSelect }) => {
   const user = useSelector((state) => state.auth?.user);
 
   const { name } = user;
-  const firstNameOrUser = name.split(' ')[0] ?? 'User';
+  const firstNameOrUser = (name && name.split(' ')[0]) || 'User';
 
-  const cardBackgroundColor = hexToRGBA(currentTheme.colors.secondaryBlue, 0.5);
+  // const cardBackgroundColor = hexToRGBA(currentTheme.colors.secondaryBlue, 0.5);
 
   const bannerText =
     firstNameOrUser !== 'User'
@@ -93,8 +93,7 @@ const HeroSection = ({ onSelect }) => {
       >
         <LargeCard
           customStyle={{
-            backgroundColor:
-              cardBackgroundColor || currentTheme.colors.secondaryBlue,
+            backgroundColor: currentTheme.colors.secondaryBlue,
             alignItems: 'center',
             justifyContent: 'center',
             width: '100%',

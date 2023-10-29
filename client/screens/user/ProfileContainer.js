@@ -33,7 +33,9 @@ const SettingsButton = () => {
   const router = useRouter();
 
   const onSettingsClick = () => {
-    router.push('/profile/settings');
+    router.push(
+      Platform.OS === 'web' ? '/profile/settings' : '/tabs/profile/user',
+    );
   };
 
   return (

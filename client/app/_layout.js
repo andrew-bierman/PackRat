@@ -21,7 +21,7 @@ export default function HomeLayout() {
         <SessionProvider>
           <ThemeProvider>
             <FlashMessage position="top" />
-            <Navigation />
+            {Platform.OS === 'web' && <Navigation />}
             <Slot />
             {/* {Platform.OS === 'web' ? <Footer /> : null} */}
           </ThemeProvider>
