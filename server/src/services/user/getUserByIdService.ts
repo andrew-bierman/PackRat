@@ -12,8 +12,14 @@ export const getUserByIdService = async (userId: string): Promise<object> => {
         path: 'packs',
         select: 'name items',
       })
-      .populate('favorites')
-      .populate('trips')
+      .populate({
+        path: 'favorites',
+        select: 'name',
+      })
+      .populate({
+        path: 'trips',
+        select: 'name',
+      })
       .lean();
 
     return user;

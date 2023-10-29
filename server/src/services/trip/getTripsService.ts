@@ -7,7 +7,9 @@ import Trip from '../../models/tripModel';
  */
 export const getTripsService = async (ownerId: string): Promise<object[]> => {
   try {
-    const trips = await Trip.find({ owner_id: ownerId }).populate('packs');
+    const trips = await Trip.find({ owner_id: ownerId })
+      .populate('packs')
+      .lean();
 
     return trips;
   } catch (error) {
