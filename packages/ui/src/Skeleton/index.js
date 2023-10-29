@@ -24,4 +24,5 @@ const TableLoader = () => {
     </Center>
   );
 };
+
 export default TableLoader;

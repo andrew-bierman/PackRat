@@ -12,7 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node-version: [16.x, 18.x, 20.x] # Adjust these versions as per your requirements.
+        node-version: [18.x, 20.x, 21.x] # Adjust these versions as per your requirements.
 
     steps:
     - name: Checkout Repository

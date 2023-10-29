@@ -35,6 +35,7 @@ import { Link, useRouter, usePathname } from 'expo-router';
 import { hexToRGBA } from '../utils/colorFunctions';
 import useTheme from '../hooks/useTheme';
 import { useSession } from '../context/auth';
+import useCustomStyles from '~/hooks/useCustomStyles';
 
 const Navigation = () => {
   const router = useRouter();
@@ -55,6 +56,8 @@ const Navigation = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const hoverColor = hexToRGBA(currentTheme.colors.primary, 0.2);
+
+  const styles = useCustomStyles(loadStyles);
 
   /**
    * Toggle the state of the drawer.
@@ -220,9 +223,9 @@ const Navigation = () => {
         <TouchableOpacity
           key={item.href + 'nav' + index}
           style={[
-            styles().menuBarItem,
-            isCurrentPage && styles().menuBarItemActive, // apply the active style if this is the current page
-            isSelected && styles().menuBarItemSelected, // apply the selected style if this item is selected
+            styles.menuBarItem,
+            isCurrentPage && styles.menuBarItemActive, // apply the active style if this is the current page
+            isSelected && styles.menuBarItemSelected, // apply the selected style if this item is selected
           ]}
           onPress={handleItemPress}
           activeOpacity={0.7} // Set the activeOpacity to create a hover effect
@@ -239,9 +242,9 @@ const Navigation = () => {
           />
           <Text
             style={[
-              styles().menuBarItemText,
-              isCurrentPage && styles().menuBarItemTextActive, // apply the active style to the text if this is the current page
-              isSelected && styles().menuBarItemTextSelected, // apply the selected style to the text if this item is selected
+              styles.menuBarItemText,
+              isCurrentPage && styles.menuBarItemTextActive, // apply the active style to the text if this is the current page
+              isSelected && styles.menuBarItemTextSelected, // apply the selected style to the text if this item is selected
             ]}
           >
             {text}
@@ -253,19 +256,19 @@ const Navigation = () => {
   );
 
   return (
-    <SafeAreaView style={styles().safeArea}>
+    <SafeAreaView style={styles.safeArea}>
       <View
-        style={styles().container}
+        style={styles.container}
         onLayout={(event) => setNavBarWidth(event.nativeEvent.layout.width)} // calculate the width of the navbar
       >
         {user && <AuthStateListener />}
-        <View style={styles().header}>
+        <View style={styles.header}>
           <TouchableOpacity
             key={'logo-nav'}
-            style={styles().logoContainer}
+            style={styles.logoContainer}
             onPress={() => navigateTo('/')}
           >
-            <View style={styles().logoWrapper}>
+            <View style={styles.logoWrapper}>
               <SVGLogoComponent
                 // width={isMobileView ? 48 : 64}
                 // height={isMobileView ? 48 : 64}
@@ -274,14 +277,14 @@ const Navigation = () => {
                 fill="#fff"
               />
             </View>
-            <Text style={styles().logoText}>PackRat</Text>
+            <Text style={styles.logoText}>PackRat</Text>
           </TouchableOpacity>
 
           {/* Trigger to open/close the drawer */}
-          <View style={styles().drawerContainer}>
+          <View style={styles.drawerContainer}>
             {!isDrawerOpen && isMobileView && (
               <TouchableOpacity
-                style={styles().drawerTrigger}
+                style={styles.drawerTrigger}
                 onPress={toggleDrawer}
               >
                 <EvilIcons
@@ -311,9 +314,9 @@ const Navigation = () => {
             // <ScrollView
             //   horizontal
             //   showsHorizontalScrollIndicator={false}
-            //   contentContainerStyle={styles().menuBar}
+            //   contentContainerStyle={styles.menuBar}
             // >
-            <View style={styles().menuBar}>
+            <View style={styles.menuBar}>
               {navigationItems?.map((item, index) =>
                 renderNavigationItem(item, index),
               )}
@@ -326,10 +329,10 @@ const Navigation = () => {
   );
 };
 
-const styles = () => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    useTheme();
-  return StyleSheet.create({
+const loadStyles = (theme) => {
+  const { currentTheme } = theme;
+
+  return {
     safeArea: {
       backgroundColor: currentTheme.colors.background,
     },
@@ -355,7 +358,7 @@ const styles = () => {
       marginHorizontal: 10,
     },
     logoText: {
-      color: theme.colors.text,
+      color: currentTheme.colors.text,
       fontSize: 38,
       fontWeight: '900',
     },
@@ -373,7 +376,7 @@ const styles = () => {
       paddingHorizontal: 12,
     },
     menuBarItemText: {
-      color: theme.colors.text,
+      color: currentTheme.colors.text,
       fontSize: 18,
     },
     drawerContainer: {},
@@ -394,7 +397,7 @@ const styles = () => {
       // Apply styles for the selected item's text
       // ...
     },
-  });
+  };
 };
 
 export default Navigation;
