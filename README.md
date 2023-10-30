@@ -255,11 +255,26 @@ Please refer to README.md inside server folder.
 
 Contributions to PackRat are welcome! To contribute, follow these steps:
 
-1. Fork the repository.
-2. Create a new branch for your changes.
+1. Clone this repository.
+2. Create a new branch.
 3. Make your changes and commit them.
-4. Push your changes to your fork.
-5. Create a pull request.
+4. Push your changes to the remote branch.
+5. Open a pull request.
+6. Wait for your pull request to be reviewed and merged.
+7. Celebrate! 🎉
+
+## 👏 Special Thanks
+
+- [React Native Developers](https://twitter.com/reactnative)
+- [OpenStreetMap Developers](https://www.openstreetmap.org/)
+- [RN MapBox Developers](https://github.com/rnmapbox/maps)
+- [Cloudflare Developers](https://twitter.com/CloudflareDev)
+- [Yusuke Wada](https://twitter.com/yusukebe) - Creator of Hono.js
+- [Nate Birdman](https://twitter.com/natebirdman) - Creator of Tamagui
+- [Fernando Rojo](https://twitter.com/fernandotherojo) - Creator of Zeego
+- [Tanner Linsley](https://twitter.com/tannerlinsley) - Creator of TanStack
+- [Expo Developers](https://twitter.com/expo) - Office hours
+- [Shopify Developers](https://twitter.com/ShopifyDevs)
 
 ## License 📝
 
