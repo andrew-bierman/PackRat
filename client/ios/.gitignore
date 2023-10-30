@@ -23,6 +23,8 @@ DerivedData
 project.xcworkspace
 .xcode.env.local
 
+Podfile
+
 # Bundle artifacts
 *.jsbundle
 

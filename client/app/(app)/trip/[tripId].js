@@ -8,12 +8,10 @@ import Head from 'expo-router/head';
 export default function Trip() {
   return (
     <>
-      {Platform.OS === 'web' && (
-        <Head>
-          <title>Trip</title>
-          <meta name="description" content="Trip" />
-        </Head>
-      )}
+      <Head>
+        <title>Trip</title>
+        <meta name="description" content="Trip" />
+      </Head>
       <Stack.Screen
         options={{
           // https://reactnavigation.org/docs/headers#setting-the-header-title

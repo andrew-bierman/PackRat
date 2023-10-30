@@ -7,11 +7,9 @@ import Head from 'expo-router/head';
 export default function Destination() {
   return (
     <>
-      {Platform.OS === 'web' && (
-        <Head>
-          <title>Destination</title>
-        </Head>
-      )}
+      <Head>
+        <title>Destination</title>
+      </Head>
       <Stack.Screen
         options={{
           // https://reactnavigation.org/docs/headers#setting-the-header-title

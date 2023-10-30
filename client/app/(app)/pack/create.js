@@ -6,12 +6,10 @@ import Head from 'expo-router/head';
 export default function Pack() {
   return (
     <>
-      {Platform.OS === 'web' && (
-        <Head>
-          <title>Create Pack</title>
-          <meta name="description" content="Create Pack" />
-        </Head>
-      )}
+      <Head>
+        <title>Create Pack</title>
+        <meta name="description" content="Create Pack" />
+      </Head>
       <Stack.Screen
         options={{
           // https://reactnavigation.org/docs/headers#setting-the-header-title

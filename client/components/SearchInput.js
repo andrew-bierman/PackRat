@@ -9,7 +9,7 @@ import {
   View,
   Pressable,
 } from 'native-base';
-import { RStack, RInput, RButton, RText, RScrollView } from '@packrat/ui';
+import { RStack, RInput, RButton, RText, RScrollView } from '../packrat-ui';
 import { MaterialIcons } from '@expo/vector-icons';
 import useTheme from '../hooks/useTheme';
 import { Platform } from 'react-native';
@@ -31,7 +31,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
   const [selectedSearch, setSelectedSearch] = useState('');
 
   const { currentTheme } = useTheme();
-  const styles = useCustomStyles(loadStyles);
+  const styles = useCustomStyles(loadStyles());
   const searchResults =
     useSelector((state) => state.search.searchResults) || [];
 

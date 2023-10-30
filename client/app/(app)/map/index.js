@@ -16,17 +16,11 @@ import { MAPBOX_ACCESS_TOKEN } from '@env';
 import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 import { theme } from '../../../theme';
 import UseTheme from '../../../hooks/useTheme';
-import ErrorBoundary from '@packrat/ui';
-import { useCustomStyles } from '~/hooks/useCustomStyles';
-
 Mapbox.setAccessToken(MAPBOX_ACCESS_TOKEN);
 
 export default function Map() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     UseTheme();
-
-  const styles = useCustomStyles(loadStyles);
-
   // sourcery skip: avoid-function-declarations-in-blocks
   function CustomizedMap() {
     const mapViewRef = useRef(null);
@@ -34,6 +28,8 @@ export default function Map() {
     const [style, setStyle] = React.useState(
       'mapbox://styles/mapbox/outdoors-v11',
     );
+
+    useEffect(() => {}, []);
 
     const [lng, setLng] = useState(103.8519599);
     const [lat, setLat] = useState(1.29027);
@@ -281,28 +277,17 @@ export default function Map() {
   }
 
   return (
-    <ErrorBoundary>
-      <>
-        <View style={styles.container}>
-          <CustomizedMap />
-        </View>
-      </>
-    </ErrorBoundary>
+    <>
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: currentTheme.colors.white,
+        }}
+      >
+        <CustomizedMap />
+      </View>
+    </>
   );
 }
 
-const loadStyles = (theme) => {
-  const { currentTheme } = theme;
-
-  return {
-    container: {
-      flex: 1,
-      backgroundColor: currentTheme.colors.background,
-    },
-    lineLayer: {
-      lineColor: 'blue',
-      lineWidth: 3,
-      lineOpacity: 0.84,
-    },
-  };
-};
+const styles = StyleSheet.create({});

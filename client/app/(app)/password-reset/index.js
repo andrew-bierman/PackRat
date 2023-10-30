@@ -10,11 +10,9 @@ import Head from 'expo-router/head';
 export default function ResetPasswordRoute() {
   return (
     <>
-      {Platform.OS === 'web' && (
-        <Head>
-          <title>Reset Password</title>
-        </Head>
-      )}
+      <Head>
+        <title>Reset Password</title>
+      </Head>
       <Stack.Screen
         options={{
           // https://reactnavigation.org/docs/headers#setting-the-header-title

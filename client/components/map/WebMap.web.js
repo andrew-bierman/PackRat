@@ -47,22 +47,22 @@ mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 const DESTINATION = 'destination';
 const TRIP = 'trip';
 const WebMap = ({ shape: shapeProp }) => {
-  // useEffect(() => {
-  //   // temporary solution to fix mapbox-gl-js missing css error
-  //   if (Platform.OS === 'web') {
-  //     // inject mapbox css into head
-  //     const link = document.createElement('link');
-  //     link.href = 'https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css';
-  //     link.rel = 'stylesheet';
-  //     document.head.appendChild(link);
+  useEffect(() => {
+    // temporary solution to fix mapbox-gl-js missing css error
+    if (Platform.OS === 'web') {
+      // inject mapbox css into head
+      const link = document.createElement('link');
+      link.href = 'https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css';
+      link.rel = 'stylesheet';
+      document.head.appendChild(link);
 
-  //     // inject mapbox js into head
-  //     const script = document.createElement('script');
-  //     script.src = 'https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js';
-  //     script.async = true;
-  //     document.head.appendChild(script);
-  //   }
-  // }, []);
+      // inject mapbox js into head
+      const script = document.createElement('script');
+      script.src = 'https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js';
+      script.async = true;
+      document.head.appendChild(script);
+    }
+  }, []);
 
   const [shape, setShape] = useState(shapeProp);
   console.log('WebMap shape', shape);
@@ -127,65 +127,60 @@ const WebMap = ({ shape: shapeProp }) => {
       'is polygon or not',
     );
     if (!mapFullscreen && !isPolygonOrMultiPolygon(shape)) return;
-    if (!lng || !lat) return;
-    try {
-      const mapInstance = new mapboxgl.Map({
-        container: mapContainer.current,
-        style: mapStyle,
-        // center: [lng, lat],
-        center:
-          trailCenterPointRef.current &&
-          !isNaN(trailCenterPointRef.current[0]) &&
-          !isNaN(trailCenterPointRef.current[1])
-            ? trailCenterPointRef.current
-            : [lng, lat],
-        zoom: zoomLevelRef.current ? zoomLevelRef.current : zoomLevel,
-        interactive: mapFullscreen,
-      });
+    const mapInstance = new mapboxgl.Map({
+      container: mapContainer.current,
+      style: mapStyle,
+      // center: [lng, lat],
+      center:
+        trailCenterPointRef.current &&
+        !isNaN(trailCenterPointRef.current[0]) &&
+        !isNaN(trailCenterPointRef.current[1])
+          ? trailCenterPointRef.current
+          : [lng, lat],
+      zoom: zoomLevelRef.current ? zoomLevelRef.current : zoomLevel,
+      interactive: mapFullscreen,
+    });
 
-      mapInstance.on('load', () => {
-        if (isPoint(shape)) {
-          addPoints(mapInstance);
-        } else if (isPolygonOrMultiPolygon(shape)) {
-          console.log('it is polygon');
-          addPolygons(mapInstance);
-        } else {
-          addTrailLayer(mapInstance);
-        }
-        if (mapFullscreen && showUserLocation) {
-          mapInstance.addLayer({
-            id: 'user-location',
-            type: 'circle',
-            source: {
-              type: 'geojson',
-              data: {
-                type: 'Point',
-                coordinates: [lng, lat],
-              },
+    mapInstance.on('load', () => {
+      if (isPoint(shape)) {
+        addPoints(mapInstance);
+      } else if (isPolygonOrMultiPolygon(shape)) {
+        console.log('it is polygon');
+        addPolygons(mapInstance);
+      } else {
+        addTrailLayer(mapInstance);
+      }
+      if (mapFullscreen && showUserLocation) {
+        mapInstance.addLayer({
+          id: 'user-location',
+          type: 'circle',
+          source: {
+            type: 'geojson',
+            data: {
+              type: 'Point',
+              coordinates: [lng, lat],
             },
-            paint: {
-              'circle-radius': 8,
-              'circle-color': '#3388ff',
-            },
-          });
-        }
-
-        // const marker = new mapboxgl.Marker()
-        //   .setLngLat([lng, lat])
-        //   .addTo(mapInstance);
-
-        mapInstance.on('move', () => {
-          const { lng, lat } = mapInstance.getCenter();
-          setLng(lng.toFixed(4));
-          setLat(lat.toFixed(4));
-          setZoomLevel(mapInstance.getZoom().toFixed(2));
+          },
+          paint: {
+            'circle-radius': 8,
+            'circle-color': '#3388ff',
+          },
         });
+      }
 
-        map.current = mapInstance;
+      // const marker = new mapboxgl.Marker()
+      //   .setLngLat([lng, lat])
+      //   .addTo(mapInstance);
+
+      mapInstance.on('move', () => {
+        const { lng, lat } = mapInstance.getCenter();
+        setLng(lng.toFixed(4));
+        setLat(lat.toFixed(4));
+        setZoomLevel(mapInstance.getZoom().toFixed(2));
       });
-    } catch (error) {
-      console.error(error);
-    }
+
+      map.current = mapInstance;
+    });
   }, [mapFullscreen]);
 
   useEffect(() => {
@@ -274,18 +269,14 @@ const WebMap = ({ shape: shapeProp }) => {
   const addPoints = (mapInstance) => {
     if (mapInstance) {
       const pointLatLong = shape?.features[0]?.geometry?.coordinates;
-      if (pointLatLong && !isNaN(pointLatLong[0]) && !isNaN(pointLatLong[1])) {
-        const [lng, lat] = pointLatLong;
-        const marker = new mapboxgl.Marker()
-          .setLngLat([lng, lat])
-          .addTo(mapInstance);
-        marker.getElement().addEventListener('click', () => {
-          window.open(`https://maps.google.com?q=${lat},${lng}`);
-        });
-        mapInstance.setCenter(pointLatLong);
-      } else {
-        console.error('Invalid coordinates.');
-      }
+      const [lng, lat] = pointLatLong;
+      const marker = new mapboxgl.Marker()
+        .setLngLat([lng, lat])
+        .addTo(mapInstance);
+      marker.getElement().addEventListener('click', () => {
+        window.open(`https://maps.google.com?q=${lat},${lng}`);
+      });
+      mapInstance.setCenter(pointLatLong);
     }
   };
 

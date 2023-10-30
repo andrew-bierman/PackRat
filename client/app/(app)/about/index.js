@@ -11,12 +11,10 @@ import Head from 'expo-router/head';
 export default function AboutRoute() {
   return (
     <>
-      {Platform.OS === 'web' && (
-        <Head>
-          <title>About</title>
-          <meta name="description" content="About" />
-        </Head>
-      )}
+      <Head>
+        <title>About</title>
+        <meta name="description" content="About" />
+      </Head>
       <Stack.Screen
         options={{
           // https://reactnavigation.org/docs/headers#setting-the-header-title

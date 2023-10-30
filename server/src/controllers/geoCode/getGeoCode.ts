@@ -2,7 +2,7 @@ import { publicProcedure } from '../../trpc';
 import { ErrorFetchingGeoCodeError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { oneEntity } from '../../utils/oneEntity';
-import * as validators from '@packrat/validations';
+import * as validators from '@packrat/packages';
 import { geoCodeService } from '../../services/geocode/geoCodeService';
 
 const fetch = async (...args: Parameters<typeof fetch>) =>

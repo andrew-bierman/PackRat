@@ -135,14 +135,8 @@ const LandingPage = () => {
           </Text>
           {Platform.OS === 'web' && (
             <View style={styles.appBadges}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'center',
-                  flexWrap: 'wrap',
-                }}
-              >
-                <Button title="App Store" style={{ margin: 10 }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                <Button title="App Store" style={{ marginRight: 10 }}>
                   <HStack space={2} alignItems="center">
                     <MaterialCommunityIcons
                       name="apple"
@@ -154,7 +148,7 @@ const LandingPage = () => {
                     </Text>
                   </HStack>
                 </Button>
-                <Button title="Google Play" style={{ margin: 10 }}>
+                <Button title="Google Play">
                   <HStack space={2} alignItems="center">
                     <MaterialCommunityIcons
                       name="google-play"

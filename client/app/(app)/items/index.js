@@ -13,7 +13,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getItemsGlobal } from '../../../store/globalItemsStore';
 import { Stack } from 'expo-router';
 import Head from 'expo-router/head';
-import useCustomStyles from '~/hooks/useCustomStyles';
 
 export default function Items() {
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
@@ -26,7 +25,6 @@ export default function Items() {
 
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     UseTheme();
-  const styles = useCustomStyles(loadStyles);
   const data = useSelector((state) => state.globalItems);
 
   const isLoading = useSelector((state) => state.globalItems.isLoading);
@@ -39,11 +37,9 @@ export default function Items() {
 
   return (
     <ScrollView>
-      {Platform.OS === 'web' && (
-        <Head>
-          <title>Items</title>
-        </Head>
-      )}
+      <Head>
+        <title>Items</title>
+      </Head>
       <Stack.Screen
         options={{
           title: 'Items',
@@ -68,7 +64,7 @@ export default function Items() {
               >
                 {' '}
                 <Button
-                  style={styles.button}
+                  style={styles().button}
                   onPress={() => {
                     setIsAddItemModalOpen(true);
                   }}
@@ -122,9 +118,10 @@ export default function Items() {
     </ScrollView>
   );
 }
-const loadStyles = (theme) => {
-  const { currentTheme } = theme;
-  return {
+const styles = () => {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
+  return StyleSheet.create({
     button: {
       backgroundColor: currentTheme.colors.background,
       color: currentTheme.colors.white,
@@ -133,5 +130,5 @@ const loadStyles = (theme) => {
       alignItems: 'center',
       textAlign: 'center',
     },
-  };
+  });
 };
