@@ -5,17 +5,20 @@ import TripCard from '../../components/TripCard';
 import WeatherCard from '../../components/WeatherCard';
 import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { GearList } from '../../components/GearList';
 import { SaveTripContainer } from '~/components/trip/createTripModal';
 import TripDateRange from '~/components/trip/TripDateRange';
 
 // import MultiStepForm from "../multi_step";
-import { photonDetails } from '../../store/destinationStore';
+import { photonDetails } from '../../hooks/useDestination';
+import useApiCall from '~/hooks/useApiCall';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from '~/hooks/useCustomStyles';
 
 export default function Trips() {
+  const [getPhotonReq, getPhotonLoading, photonDetailsRes] =
+    useApiCall(photonDetails);
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
   const [parksData, setParksData] = useState();
@@ -24,7 +27,7 @@ export default function Trips() {
     startDate: undefined,
     endDate: undefined,
   });
-  const dispatch = useDispatch();
+
   const searchResult = useSelector(
     (state) => state.search.selectedSearchResult,
   );
@@ -34,9 +37,6 @@ export default function Trips() {
 
   const trailsObject = useSelector((state) => state.trails.trailNames);
   const parksObject = useSelector((state) => state.parks.parkNames);
-  const photonDetailsStore = useSelector(
-    (state) => state.destination.photonDetails,
-  );
 
   useEffect(() => {
     setTrailsData(trailsObject);
@@ -54,7 +54,7 @@ export default function Trips() {
           osm_type: searchResult.properties?.osm_type,
         },
       };
-      dispatch(photonDetails(matchPhotonFormattingForData));
+      getPhotonReq(matchPhotonFormattingForData);
     }
   }, [searchResult]);
 
@@ -217,7 +217,7 @@ export default function Trips() {
             )}
             title="Map"
             isMap={true}
-            shape={photonDetailsStore}
+            shape={photonDetailsRes}
           />
           <RStack>
             <SaveTripContainer dateRange={dateRange} />

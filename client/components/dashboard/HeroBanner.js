@@ -8,11 +8,7 @@ import useTheme from '../../hooks/useTheme';
 import { useSelector, useDispatch } from 'react-redux';
 import Hero from '../hero';
 import { useRouter } from 'expo-router';
-import {
-  photonDetails,
-  processGeoJSON,
-  setSelectedSearchResult,
-} from '../../store/destinationStore';
+import { setSelectedSearchResult } from '../../store/destinationStore';
 import { hexToRGBA } from '../../utils/colorFunctions';
 import useCustomStyles from '~/hooks/useCustomStyles';
 
@@ -26,7 +22,6 @@ const HeroSection = ({ onSelect }) => {
   const currentDestination = useSelector(
     (state) => state.destination.currentDestination,
   );
-  console.log('currentDestination', currentDestination);
 
   /**
    * Handles the selection of a search result.

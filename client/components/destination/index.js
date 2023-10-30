@@ -1,27 +1,17 @@
 import React, { useEffect } from 'react';
 import { ScrollView, View } from 'react-native';
-import { Container, Text } from 'native-base';
+import { Text } from 'native-base';
 import { useRouter, useSearchParams } from 'expo-router';
 import useTheme from '../../hooks/useTheme';
-import { theme } from '../../theme';
 import { useDispatch, useSelector } from 'react-redux';
 import MapContainer from '../map/MapContainer';
-import {
-  defaultShape,
-  convertPhotonGeoJsonToShape,
-} from '../../utils/mapFunctions';
-import TripCard from '../TripCard';
+import { defaultShape } from '../../utils/mapFunctions';
 import LargeCard from '../card/LargeCard';
 import WeatherCard from '../WeatherCard';
 import { Ionicons } from '@expo/vector-icons';
-import {
-  processGeoJSON,
-  getDestination,
-  photonDetails,
-  setSelectedSearchResult,
-  setWeatherObject,
-  setWeatherWeek,
-} from '../../store/destinationStore';
+import { setWeatherWeek, setWeatherObject } from '../../store/destinationStore';
+import { photonDetails, getDestination } from '../../hooks/useDestination';
+import useApiCall from '~/hooks/useApiCall';
 import { fetchWeather, fetchWeatherWeek } from '../../store/weatherStore';
 import useCustomStyles from '~/hooks/useCustomStyles';
 
@@ -124,23 +114,15 @@ const WeatherData = ({ geoJSON }) => {
 };
 
 export const DestinationPage = () => {
+  const [getPhotonReq, getPhotonLoading, geoJSON] = useApiCall(photonDetails);
+  const [getDestinationReq, getDestinationLoading, getDestinationRes] =
+    useApiCall(getDestination);
   console.log('destination page');
-  const router = useRouter();
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    useTheme();
+  const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
-  const dispatch = useDispatch();
 
-  const { destinationId, id, type, lat, lon } = useSearchParams();
-  const photonDetailsStore = useSelector(
-    (state) => state.destination.photonDetails,
-  );
+  const { destinationId, id, type } = useSearchParams();
 
-  const currentDestination = {
-    geoJSON: photonDetailsStore,
-  };
-
-  const geoJSON = currentDestination?.geoJSON;
   const selectedSearchResult = useSelector(
     (state) => state.destination.selectedSearchResult,
   );
@@ -154,15 +136,14 @@ export const DestinationPage = () => {
             osm_type: type,
           },
         };
-
-        dispatch(photonDetails(matchPhotonFormattingForData));
+        getPhotonReq(matchPhotonFormattingForData);
       } else if (destinationId && !type && !id && destinationId !== 'query') {
-        dispatch(getDestination(destinationId));
+        getDestinationReq(destinationId);
       }
     }
   }, [destinationId]);
 
-  if (!currentDestination) {
+  if (!geoJSON) {
     return null;
   }
 

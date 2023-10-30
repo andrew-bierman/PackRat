@@ -14,7 +14,6 @@ import Dashboard from '../screens/dashboard';
 import useTheme from '../hooks/useTheme';
 import { current } from '@reduxjs/toolkit';
 import Head from 'expo-router/head';
-
 export default function Index() {
   const {
     enableDarkMode,
