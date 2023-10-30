@@ -1,7 +1,5 @@
 import { Center, Skeleton, VStack } from 'native-base';
 
-export { Skeleton } from 'native-base';
-
 const TableLoader = () => {
   return (
     <Center w="100%">
@@ -24,5 +22,4 @@ const TableLoader = () => {
     </Center>
   );
 };
-
-export default TableLoader;
+export default TableLoader

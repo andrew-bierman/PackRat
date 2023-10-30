@@ -12,7 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node-version: [18.x, 20.x, 21.x] # Adjust these versions as per your requirements.
+        node-version: [16.x, 18.x, 20.x] # Adjust these versions as per your requirements.
 
     steps:
     - name: Checkout Repository
@@ -26,7 +26,7 @@ jobs:
     - name: Debug Information
       run: |
         yarn -v
-        ls .yarn/releases
+        ls .yarn/releases/yarn-3.6.3.cjs
         cat .yarnrc.yml
         cat yarn.lock
 
@@ -54,6 +54,8 @@ jobs:
         yarn -v
         which yarn
         yarn set version stable
+        yarn plugin import workspace-tools
+        yarn plugin import interactive-tools
         yarn install
 
 # cp client/.env.example client/.env

@@ -14,13 +14,10 @@ import { signOut } from '../../../store/authStore';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { useSession } from '../../../context/auth';
-import useCustomStyles from '~/hooks/useCustomStyles';
 
 export default function Drawer() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     UseTheme();
-  const styles = useCustomStyles(loadStyles);
-
   const { sessionSignOut } = useSession();
   console.log('isDark, isLight', isDark, isLight);
   // const { signOut } = useAuth();
@@ -46,7 +43,7 @@ export default function Drawer() {
           backgroundColor: currentTheme.colors.white,
         }}
       >
-        <View style={styles.closeIcon}>
+        <View style={styles().closeIcon}>
           <Link href="/">
             <AntDesign
               name="close"
@@ -58,7 +55,7 @@ export default function Drawer() {
         {user ? (
           <>
             <Link href="/">
-              <View style={styles.link}>
+              <View style={styles().link}>
                 <Entypo
                   name="home"
                   size={24}
@@ -71,7 +68,7 @@ export default function Drawer() {
               </View>
             </Link>
             <Link href="/trips">
-              <View style={styles.link}>
+              <View style={styles().link}>
                 <MaterialCommunityIcons
                   name="weather-pouring"
                   size={24}
@@ -84,7 +81,7 @@ export default function Drawer() {
               </View>
             </Link>
             <Link href="profile">
-              <View style={styles.link}>
+              <View style={styles().link}>
                 <FontAwesome
                   name="book"
                   size={24}
@@ -96,7 +93,7 @@ export default function Drawer() {
               </View>
             </Link>
             <Link href="appearance">
-              <View style={styles.link}>
+              <View style={styles().link}>
                 <MaterialCommunityIcons
                   name="theme-light-dark"
                   size={24}
@@ -108,7 +105,7 @@ export default function Drawer() {
               </View>
             </Link>
             <Link href="/packs">
-              <View style={styles.link}>
+              <View style={styles().link}>
                 <MaterialIcons
                   name="backpack"
                   size={24}
@@ -121,7 +118,7 @@ export default function Drawer() {
               </View>
             </Link>
             <Link href="/about">
-              <View style={styles.link}>
+              <View style={styles().link}>
                 <MaterialIcons
                   name="info"
                   size={24}
@@ -133,7 +130,7 @@ export default function Drawer() {
                 </Text>
               </View>
             </Link>
-            <View style={styles.link}>
+            <View style={styles().link}>
               <MaterialIcons
                 name="logout"
                 size={24}
@@ -150,7 +147,7 @@ export default function Drawer() {
         ) : (
           <View>
             <Link href="/sign-in">
-              <View style={styles.link}>
+              <View style={styles().link}>
                 <MaterialIcons
                   name="login"
                   size={24}
@@ -162,7 +159,7 @@ export default function Drawer() {
               </View>
             </Link>
             <Link href="/register">
-              <View style={styles.link}>
+              <View style={styles().link}>
                 <MaterialIcons
                   name="person-add"
                   size={24}
@@ -180,10 +177,10 @@ export default function Drawer() {
   );
 }
 
-const loadStyles = (theme) => {
-  const { currentTheme } = theme;
-
-  return {
+const styles = () => {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
+  return StyleSheet.create({
     mobileContainer: {
       backgroundColor: currentTheme.colors.background,
       width: '100%',
@@ -221,5 +218,5 @@ const loadStyles = (theme) => {
       width: '100%',
       color: 'black',
     },
-  };
+  });
 };

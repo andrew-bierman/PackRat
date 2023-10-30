@@ -1,7 +1,7 @@
 import { publicProcedure } from '../../trpc';
 import { InvalidCodeError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
-import * as validator from '@packrat/validations';
+import * as validator from '@packrat/packages';
 import { checkCodeService } from '../../services/user/checkCodeService';
 /**
  * Checks the provided code against the user's email in the database.

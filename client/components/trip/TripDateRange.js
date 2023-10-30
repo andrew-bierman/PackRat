@@ -10,7 +10,7 @@ import {
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import useTheme from '../../hooks/useTheme';
 import { Button } from 'native-base';
-import { RStack, RText } from '@packrat/ui';
+import { RStack, RText } from '../../packrat-ui';
 
 const TripDateRange = ({ dateRange, setDateRange }) => {
   const { currentTheme } = useTheme();
