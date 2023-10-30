@@ -11,10 +11,12 @@ import Head from 'expo-router/head';
 export default function RegisterContainer() {
   return (
     <>
-      <Head>
-        <title>Register</title>
-        <meta name="description" content="Register" />
-      </Head>
+      {Platform.OS === 'web' && (
+        <Head>
+          <title>Register</title>
+          <meta name="description" content="Register" />
+        </Head>
+      )}
       <Stack.Screen
         options={{
           // https://reactnavigation.org/docs/headers#setting-the-header-title

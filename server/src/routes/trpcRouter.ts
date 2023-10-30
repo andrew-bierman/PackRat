@@ -1,7 +1,7 @@
 import { getPhotonDetailsRoute } from './../controllers/getOsm/getPhotonDetails';
 
 import { googleSigninRoute } from '../controllers/passport';
-import { router as trpcRouter, publicProcedure } from '../trpc';
+import { router as trpcRouter } from '../trpc';
 
 import {
   userSignInRoute,
@@ -80,27 +80,8 @@ import {
   getFavoritePacksByUserRoute,
   getUserFavoritesRoute,
 } from '../controllers/favorite';
-import { z } from 'zod';
-
-export const helloRouter = trpcRouter({
-  world: publicProcedure.input(z.string()).query(async ({ input }) => {
-    return `Hello ${input}!`;
-  }),
-});
 
 export const appRouter = trpcRouter({
-  // hello: trpcRouter({
-  //   world: publicProcedure.query(() => {
-  //   return 'Hello World';
-  //   }
-  //   ),
-  // }),
-  hello: helloRouter,
-  // hello: publicProcedure
-  // .input(z.string())
-  // .query(async ({ input }) => {
-  //   return `Hello ${input}!`
-  // }),
   // user routes
   getUserById: getUserByIdRoute(),
   signIn: userSignInRoute(),

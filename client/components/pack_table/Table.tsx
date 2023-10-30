@@ -15,7 +15,7 @@ import useTheme from '../../hooks/useTheme';
 import { PackOptions } from '../PackOptions';
 import CustomButton from '../custombutton';
 import useCustomStyles from '~/hooks/useCustomStyles';
-import {TSkeleton} from '../../packrat-ui';
+import { Skeleton } from '@packrat/ui';
 
 const WeightUnitDropdown = ({ value, onChange }) => {
   return (
@@ -52,14 +52,13 @@ const IgnoreItemCheckbox = ({ itemId, isChecked, handleCheckboxChange }) => (
   >
     <Checkbox
       key={itemId}
-      value='Ignore Item'
+      value="Ignore Item"
       isChecked={isChecked}
       onChange={() => handleCheckboxChange(itemId)}
       aria-label="Ignore item"
     />
   </Box>
 );
-
 
 const ErrorMessage = ({ message }) => <Text>{message}</Text>;
 
@@ -241,9 +240,9 @@ export const TableContainer = ({
   };
 
   const [weightUnit, setWeightUnit] = useState('g');
-  const isLoading = useSelector((state:any) => state.packs.isLoading);
+  const isLoading = useSelector((state: any) => state.packs.isLoading);
 
-  const error = useSelector((state:any) => state.items.error);
+  const error = useSelector((state: any) => state.items.error);
   const data = currentPack?.items;
   let totalFoodWeight = 0;
   let totalWaterWeight = 0;
@@ -262,7 +261,6 @@ export const TableContainer = ({
       const itemWeight = Number(item.weight) || 0; // ensure it's a number
       const itemQuantity = Number(item.quantity) || 0; // ensure it's a number
       const itemUnit = item.unit || null;
-
 
       if (!copy) {
         switch (categoryName) {
@@ -332,7 +330,7 @@ export const TableContainer = ({
     flexArr = [1, 1, 1, 1];
     heading = ['Item Name', 'Weight', 'Quantity', 'Options'];
   }
-  if (isLoading) return <TSkeleton />;
+  if (isLoading) return <Skeleton />;
   if (error) return <ErrorMessage message={error} />;
   return (
     <Box style={styles.container}>
