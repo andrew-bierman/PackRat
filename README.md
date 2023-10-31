@@ -174,11 +174,10 @@ node -v
 
 **If you don't have yarn installed:**
 - Run command prompt as an administrator
-- Run
+- Run `(corepack comes along with node js 18+)`
   ```
   corepack enable
   ``` 
- *(corepack comes along with node js 18+)*
 - Run
   ```
   yarn set version stable
