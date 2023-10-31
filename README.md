@@ -167,7 +167,7 @@ node -v
 ```
 
 **If node version < 18.0.0:**
-Update to latest: https://nodejs.org/en/download
+- Update to latest: https://nodejs.org/en/download
 
 **If yarn version >= 4.0.0:**
 - Skip this process
