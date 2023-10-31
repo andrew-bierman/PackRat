@@ -1,20 +1,163 @@
-import express, { type NextFunction } from 'express';
+// import express, { type NextFunction } from 'express';
 import mongoose from 'mongoose';
-import cors from 'cors';
-import { isCelebrateError, errors } from 'celebrate';
+// import cors from 'cors';
+// import { isCelebrateError, errors } from 'celebrate';
 import { MONGODB_URI } from './config';
-import routes from './routes/index';
-import { serveSwaggerUI } from './helpers/serveSwaggerUI';
-import { corsOptions } from './helpers/corsOptions';
-import { errorHandler } from './helpers/errorHandler';
-import helmet from 'helmet';
-import compression from 'compression';
-import morgan from 'morgan';
-import { limiter } from './helpers/limiter';
-import * as trpcExpress from '@trpc/server/adapters/express';
-import { type inferAsyncReturnType, initTRPC } from '@trpc/server';
+// import routes from './routes/index';
+// import { serveSwaggerUI } from './helpers/serveSwaggerUI';
+// import { corsOptions } from './helpers/corsOptions';
+// import { errorHandler } from './helpers/errorHandler';
+// import helmet from 'helmet';
+// import compression from 'compression';
+// import morgan from 'morgan';
+// import { limiter } from './helpers/limiter';
+// import * as trpcExpress from '@trpc/server/adapters/express';
+// import { type inferAsyncReturnType, initTRPC } from '@trpc/server';
+
 import { appRouter } from './routes/trpcRouter';
 
+// import { Hono } from 'hono';
+// import { prettyJSON } from 'hono/pretty-json';
+// import { logger } from 'hono/logger';
+// import { trpcServer } from '@hono/trpc-server'
+// import { env } from 'hono/adapter';
+// import { serve } from '@hono/node-server';
+// import { cors } from 'hono/cors';
+
+import type { AnyRouter } from '@trpc/server';
+import type { FetchHandlerRequestOptions } from '@trpc/server/adapters/fetch';
+import { fetchRequestHandler } from '@trpc/server/adapters/fetch';
+import type { MiddlewareHandler } from 'hono';
+
+import { renderTrpcPanel } from 'trpc-panel';
+import { Elysia } from 'elysia';
+import { compile as c, trpc } from '@elysiajs/trpc';
+import { html } from '@elysiajs/html';
+import { cors } from '@elysiajs/cors';
+import { logger } from '@grotto/logysia';
+import { swagger } from '@elysiajs/swagger';
+
+type tRPCOptions = Omit<
+  FetchHandlerRequestOptions<AnyRouter>,
+  'req' | 'endpoint'
+> &
+  Partial<Pick<FetchHandlerRequestOptions<AnyRouter>, 'endpoint'>>;
+
+export const trpcServer = ({
+  endpoint = '/trpc',
+  ...rest
+}: tRPCOptions): MiddlewareHandler => {
+  return async (c) => {
+    const res = fetchRequestHandler({
+      ...rest,
+      endpoint,
+      req: c.req.raw,
+    });
+    return res;
+  };
+};
+
+const app = new Elysia({ aot: false });
+
+app.use(logger());
+
+app.use(cors());
+
+app.use(html());
+
+app.use(swagger());
+
+app.use(trpc(appRouter, { endpoint: '/api/trpc' }));
+
+app.get('/panel', () => {
+  return renderTrpcPanel(appRouter, { url: 'http://localhost:3000/api/trpc' });
+});
+
+// Attempting to connect to MongoDB.
+const connectionString = MONGODB_URI ?? '';
+mongoose
+  .connect(connectionString)
+  .then(() => {
+    console.log('MongoDB connected successfully.');
+  })
+  .catch((err) => {
+    console.error('Failed to connect to MongoDB:', err);
+  });
+
+app.listen(3000, () => console.log('Listening on port 3000'));
+
+// uncomment for wrangler
+// export default {
+//   fetch: app.fetch,
+// };
+
+export default app;
+
+// HONO SERVER BELOW
+/*
+
+// const app = new Hono();
+
+app.use(logger());
+
+console.log('Starting server...');
+
+// app.use('*', prettyJSON()) // With options: prettyJSON({ space: 4 })
+
+// app.route('*', routes)
+
+app.get('/', (c) => c.text('Hello Node.js!'));
+
+// Setup CORS for the frontend
+app.use(
+  '/api/trpc',
+  cors({
+    origin: '*',
+  }),
+);
+
+// export type Context = inferAsyncReturnType<typeof createContext>;
+
+// Setup TRPC server with context
+app.use('/api/trpc/*', async (c, next) => {
+  console.log('TRPC server middleware');
+  const middleware = trpcServer({
+    router: appRouter,
+    onError({ error }) {
+      console.error(error);
+    },
+    // createContext: (opts) =>
+    //   createContext({
+    //     ...opts,
+    //     SOME_KEY: c.env.SOME_KEY,
+    //   }),
+  });
+  return await middleware(c, next);
+});
+
+app.use('/panel', async (ctx, next) => {
+  return ctx.render(
+    renderTrpcPanel(appRouter, { url: 'http://localhost:3000/api/trpc' }),
+  );
+});
+
+app.onError((err, c) => {
+  console.error(`${err}`);
+  return c.text('Custom Error Message', 500);
+});
+
+// Determine the port from the environment or default to 3000 if none is provided.
+//  const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
+const port = 3000;
+
+serve(app, (info) => {
+  console.log(`Listening on http://localhost:${info.port}`); // Listening on http://localhost:3000
+});
+
+
+
+// EXPRESS SERVER BELOW
+/*
 const app = express();
 
 // Apply security-related HTTP headers.
@@ -97,3 +240,5 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Server is running and listening on port ${port}.`);
 });
+
+*/
