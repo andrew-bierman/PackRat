@@ -27,6 +27,7 @@ import { fetchUserTrips, selectAllTrips } from '../../store/tripsStore';
 import { useMatchesCurrentUser } from '~/hooks/useMatchesCurrentUser';
 import { useRouter } from 'expo-router';
 import useCustomStyles from '~/hooks/useCustomStyles';
+import { Skeleton } from '@packrat/ui';
 
 const SettingsButton = () => {
   const router = useRouter();
@@ -70,68 +71,113 @@ const Header = ({
   return (
     <Box w={['100%', '100%', '70%', '50%']} style={styles.infoSection}>
       <HStack w="100%" alignItems="center" spacing={5}>
-        {isCurrentUser && (
+        {isCurrentUser && !isLoading && (
           <Box alignSelf="flex-start" ml="auto">
             <SettingsButton />
           </Box>
         )}
         <VStack alignItems="center" flex={1}>
           <Box style={styles.userInfo}>
-            {profileImage ? (
-              <Image
-                source={{ uri: user?.profileImage }}
-                alt="Profile Image"
-                borderRadius={50}
-                size={100}
-                style={{ width: 100, height: 100, borderRadius: 50 }}
-              />
+            {isLoading ? (
+              <>
+                <Skeleton rounded="full" size={100} />
+                <Skeleton.Text
+                  mt={4}
+                  width={20}
+                  lines={2}
+                  alignItems="center"
+                />
+              </>
             ) : (
-              <MaterialCommunityIcons
-                name="account-circle"
-                size={100}
-                color="grey"
-                style={{
-                  width: 100,
-                  height: 100,
-                  borderRadius: 50,
-                  alignSelf: 'center',
-                }}
-              />
+              <>
+                {profileImage ? (
+                  <Image
+                    source={{ uri: user?.profileImage }}
+                    alt="Profile Image"
+                    borderRadius={50}
+                    size={100}
+                    style={{ width: 100, height: 100, borderRadius: 50 }}
+                  />
+                ) : (
+                  <MaterialCommunityIcons
+                    name="account-circle"
+                    size={100}
+                    color="grey"
+                    style={{
+                      width: 100,
+                      height: 100,
+                      borderRadius: 50,
+                      alignSelf: 'center',
+                    }}
+                  />
+                )}
+                <Text style={styles.userName}>{userRealName}</Text>
+                <Text style={styles.userEmail}>{username}</Text>
+              </>
             )}
-            <Text style={styles.userName}>{userRealName}</Text>
-            <Text style={styles.userEmail}>{username}</Text>
           </Box>
         </VStack>
-        {isCurrentUser && <Box width={45} />}{' '}
+        {isCurrentUser && !isLoading && <Box width={45} />}{' '}
         {/* This empty box is to offset the space taken by the settings button, ensuring the profile details remain centered. */}
       </HStack>
       <Stack direction="row" style={styles.card}>
-        <Box style={styles.cardInfo}>
-          <Text>Trips</Text>
-          <Text>{tripsCount}</Text>
-        </Box>
-        <Box style={styles.cardInfo}>
-          <Text color={currentTheme.colors.textColor}>Packs</Text>
-          <Text color={currentTheme.colors.textColor}>{packsCount}</Text>
-        </Box>
-        <Box style={styles.cardInfo}>
-          <Text color={currentTheme.colors.textColor}>Favorites</Text>
-          <Text color={currentTheme.colors.textColor}>{favoritesCount}</Text>
-        </Box>
-        <Box style={styles.cardInfo}>
-          <Text color={currentTheme.colors.textColor}>Certified</Text>
-          <MaterialCommunityIcons
-            name="certificate-outline"
-            size={24}
-            color={
-              user?.is_certified_guide
-                ? currentTheme.colors.cardIconColor
-                : currentTheme.colors.textColor
-            }
-          />
-        </Box>
+        {isLoading ? (
+          <>
+            <Skeleton size="20" rounded="full" />
+            <Skeleton size="20" rounded="full" />
+            <Skeleton size="20" rounded="full" />
+            <Skeleton size="20" rounded="full" />
+          </>
+        ) : (
+          <>
+            <Box style={styles.cardInfo}>
+              <Text>Trips</Text>
+              <Text>{tripsCount}</Text>
+            </Box>
+            <Box style={styles.cardInfo}>
+              <Text color={currentTheme.colors.textColor}>Packs</Text>
+              <Text color={currentTheme.colors.textColor}>{packsCount}</Text>
+            </Box>
+            <Box style={styles.cardInfo}>
+              <Text color={currentTheme.colors.textColor}>Favorites</Text>
+              <Text color={currentTheme.colors.textColor}>
+                {favoritesCount}
+              </Text>
+            </Box>
+            <Box style={styles.cardInfo}>
+              <Text color={currentTheme.colors.textColor}>Certified</Text>
+              <MaterialCommunityIcons
+                name="certificate-outline"
+                size={24}
+                color={
+                  user?.is_certified_guide
+                    ? currentTheme.colors.cardIconColor
+                    : currentTheme.colors.textColor
+                }
+              />
+            </Box>
+          </>
+        )}
       </Stack>
       {error ? <Text>{error}</Text> : null}
+    </Box>
+  );
+};
+
+// Skeleton version of the UserDataCard component
+const SkeletonUserDataCard = () => {
+  return (
+    <Box
+      borderRadius={15}
+      backgroundColor="gray.100"
+      p={10}
+      m={5}
+      shadow={1}
+      width="90%"
+    >
+      <Skeleton height={20} width="70%" mb={4} />
+      <Skeleton height={20} width="50%" mb={4} />
+      <Skeleton height={20} width="30%" />
     </Box>
   );
 };
@@ -177,7 +223,7 @@ export default function ProfileContainer({ id = null }) {
   const favoritesCount = favoritesData?.length ?? 0;
   const isCertified = user?.isCertified ?? false;
 
-  if (isLoading) return <Text>Loading...</Text>;
+  // if (isLoading) return <Text>Loading...</Text>;
 
   return (
     <ScrollView>
@@ -196,47 +242,56 @@ export default function ProfileContainer({ id = null }) {
           favoritesCount={favoritesCount}
           isCurrentUser={isCurrentUser}
         />
-        {isLoading ? (
-          <Text>Loading....</Text>
-        ) : (
-          <Box style={styles.mainContentContainer}>
-            <Box style={styles.userDataContainer}>
-              {favoritesData?.length > 0 ? (
-                <UserDataContainer
-                  data={favoritesData}
-                  type="favorites"
-                  userId={user?._id}
-                />
-              ) : (
-                <Text
-                  fontSize="2xl"
-                  fontWeight="bold"
-                  color={currentTheme.colors.textColor}
-                >
-                  No favorites yet
-                </Text>
-              )}
-            </Box>
-            {Array.isArray(packsData) && packsData.length > 0 && (
-              <Box style={styles.userDataContainer}>
-                <UserDataContainer
-                  data={packsData}
-                  type="packs"
-                  userId={user?._id}
-                />
-              </Box>
-            )}
-            {Array.isArray(tripsData) && tripsData?.length > 0 && (
-              <Box style={styles.userDataContainer}>
-                <UserDataContainer
-                  data={tripsData}
-                  type="trips"
-                  userId={user?._id}
-                />
-              </Box>
+        <Box style={styles.mainContentContainer}>
+          <Box style={styles.userDataContainer}>
+            {isLoading && (
+              <UserDataContainer
+                data={[]}
+                type="packs"
+                userId={user?._id}
+                isLoading={isLoading}
+                SkeletonComponent={SkeletonUserDataCard}
+              />
             )}
           </Box>
-        )}
+
+          <Box style={styles.userDataContainer}>
+            {favoritesData?.length > 0 ? (
+              <UserDataContainer
+                data={favoritesData}
+                type="favorites"
+                userId={user?._id}
+                isLoading={isLoading}
+              />
+            ) : (
+              <Text
+                fontSize="2xl"
+                fontWeight="bold"
+                color={currentTheme.colors.textColor}
+              >
+                No favorites yet
+              </Text>
+            )}
+          </Box>
+          {Array.isArray(packsData) && packsData.length > 0 && (
+            <Box style={styles.userDataContainer}>
+              <UserDataContainer
+                data={packsData}
+                type="packs"
+                userId={user?._id}
+              />
+            </Box>
+          )}
+          {Array.isArray(tripsData) && tripsData?.length > 0 && (
+            <Box style={styles.userDataContainer}>
+              <UserDataContainer
+                data={tripsData}
+                type="trips"
+                userId={user?._id}
+              />
+            </Box>
+          )}
+        </Box>
       </VStack>
     </ScrollView>
   );

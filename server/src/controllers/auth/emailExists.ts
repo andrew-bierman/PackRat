@@ -1,7 +1,7 @@
 import { UnableToSendCodeError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { publicProcedure } from '../../trpc';
-import * as validator from '@packrat/packages';
+import * as validator from '@packrat/validations';
 import { emailExistsService } from '../../services/user/emailExistsService';
 /**
  * Check if the provided email exists in the database.

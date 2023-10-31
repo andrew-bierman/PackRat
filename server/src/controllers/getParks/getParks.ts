@@ -1,6 +1,6 @@
 import { publicProcedure } from '../../trpc';
 import { responseHandler } from '../../helpers/responseHandler';
-import * as validators from '@packrat/packages';
+import * as validators from '@packrat/validations';
 import { getParksService } from '../../services/parks/getParksService';
 
 const fetch = async (...args) =>
