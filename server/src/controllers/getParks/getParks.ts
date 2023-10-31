@@ -3,11 +3,6 @@ import { responseHandler } from '../../helpers/responseHandler';
 import * as validators from '@packrat/validations';
 import { getParksService } from '../../services/parks/getParksService';
 
-const fetch = async (...args) =>
-  import('node-fetch').then(async ({ default: fetch }) =>
-    fetch(...(args as Parameters<typeof fetch>)),
-  );
-
 /**
  * Retrieves a list of parks based on the specified state code.
  * @param {Object} req - The request object.
