@@ -158,16 +158,59 @@ cd ..
 
 ### Yarn Setup
 
-Recommended to open two terminal windows.
-
-#### Root
-
-1.  From the main`PackRat` directory.
-
+**Check yarn and node version:**
 ```
-yarn install
+yarn -v
+```
+```
+node -v
 ```
 
+**If node version < 18.0.0:**
+Update to latest: https://nodejs.org/en/download
+
+**If yarn version >= 4.0.0:**
+- Skip this process
+
+**If you don't have yarn installed:**
+- Run command prompt as an administrator
+- Run
+  ```
+  corepack enable
+  ``` 
+ *(corepack comes along with node js 18+)*
+- Run
+  ```
+  yarn set version stable
+  ```
+- Run
+  ```
+  yarn install
+  ```
+- Check yarn version(`yarn -v`): *version >= 4.0.1*
+- Restart your code editor if opened
+
+**If yarn version < 4.0.0:**
+- Make sure you're using Node 18+
+- Go to your windows root path  (`C:\Users\HP)`
+- Delete any `.yarnrc.yml` file and `.yarn` folder
+- Delete `yarn` folder from `C:\Program Files (x86)`
+- Run command prompt as an administrator
+- Run `(corepack comes along with node js 18+)`
+  ```
+  corepack enable
+  ```
+- Go into the project directory `cd Andrew\PackRat`
+- Run
+  ```
+  yarn set version stable
+  ```
+- Run
+  ```
+  yarn install
+  ```
+- Restart your code editor if opened
+- If you any encounter errors, try restarting your system.
 
 #### Server
 
