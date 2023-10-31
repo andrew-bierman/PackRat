@@ -61,7 +61,7 @@ const app = new Elysia({ aot: false });
 
 app.use(logger());
 
-app.use(cors());
+// app.use(cors());
 
 app.use(html());
 
@@ -69,29 +69,29 @@ app.use(swagger());
 
 app.use(trpc(appRouter, { endpoint: '/api/trpc' }));
 
-app.get('/panel', () => {
-  return renderTrpcPanel(appRouter, { url: 'http://localhost:3000/api/trpc' });
-});
+// app.get('/panel', () => {
+//   return renderTrpcPanel(appRouter, { url: 'http://localhost:3000/api/trpc' });
+// });
 
 // Attempting to connect to MongoDB.
-const connectionString = MONGODB_URI ?? '';
-mongoose
-  .connect(connectionString)
-  .then(() => {
-    console.log('MongoDB connected successfully.');
-  })
-  .catch((err) => {
-    console.error('Failed to connect to MongoDB:', err);
-  });
+// const connectionString = MONGODB_URI ?? '';
+// mongoose
+//   .connect(connectionString)
+//   .then(() => {
+//     console.log('MongoDB connected successfully.');
+//   })
+//   .catch((err) => {
+//     console.error('Failed to connect to MongoDB:', err);
+//   });
 
-app.listen(3000, () => console.log('Listening on port 3000'));
+// app.listen(3000, () => console.log('Listening on port 3000'));
 
 // uncomment for wrangler
-// export default {
-//   fetch: app.fetch,
-// };
+export default {
+  fetch: app.fetch,
+};
 
-export default app;
+// export default app;
 
 // HONO SERVER BELOW
 /*
