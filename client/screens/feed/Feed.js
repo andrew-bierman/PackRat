@@ -9,7 +9,7 @@ import {
   RStack,
   RText,
   RXStack,
-} from '../../packrat-ui';
+} from '@packrat/ui';
 import { AntDesign } from '@expo/vector-icons';
 import { StyleSheet, FlatList, View, ScrollView } from 'react-native';
 import Card from '../../components/feed/FeedCard';
@@ -246,7 +246,7 @@ const Feed = ({ feedType = 'public' }) => {
       >
         <RStack style={styles.cardContainer}>
           {console.log({ data })}
-          {feedSearchFilterComponent}
+          {/* {feedSearchFilterComponent} */}
           {data?.map((item) => (
             <Card key={item._id} type={item.type} {...item} />
           ))}

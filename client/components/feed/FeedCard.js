@@ -16,7 +16,7 @@ import { Link } from 'expo-router';
 import { DuplicateIcon } from '../DuplicateIcon/index';
 import { truncateString } from '../../utils/truncateString';
 import { formatNumber } from '~/utils/formatNumber';
-import { RHeader, RStack, RText, RXStack } from '../../packrat-ui';
+import { RHeader, RStack, RText, RXStack } from '@packrat/ui';
 
 // import { useAuth } from "../../auth/provider";
 
