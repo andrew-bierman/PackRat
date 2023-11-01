@@ -4,10 +4,6 @@ import * as validators from '@packrat/validations';
 import { getTrailsService } from '../../services/trails/getTrailsService';
 import { z } from 'zod';
 
-const fetch = async (...args) =>
-  import('node-fetch').then(async ({ default: fetch }) =>
-    fetch(...(args as Parameters<typeof fetch>)),
-  );
 /**
  * Retrieves trails based on the provided parameters.
  * @param {Object} req - The request object containing the parameters.

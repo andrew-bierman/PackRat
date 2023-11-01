@@ -5,11 +5,6 @@ import { oneEntity } from '../../utils/oneEntity';
 import * as validators from '@packrat/validations';
 import { geoCodeService } from '../../services/geocode/geoCodeService';
 
-const fetch = async (...args: Parameters<typeof fetch>) =>
-  import('node-fetch').then(async ({ default: fetch }) =>
-    fetch(...(args as Parameters<typeof fetch>)),
-  );
-
 /**
  * Retrieves the geocode for a given address array.
  * @param {Object} req - The request object.
