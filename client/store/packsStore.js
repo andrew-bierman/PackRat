@@ -104,7 +104,7 @@ export const editPackItem = createAsyncThunk(
 export const editItemsGlobalAsDuplicate = createAsyncThunk(
   'Items/editItemsGlobalAsDuplicate',
   async (item) => {
-    // const { itemId, packId, name, weight, quantity, unit, type } = item;
+    const { itemId, packId, name, weight, quantity, unit, type } = item;
     // const response = await axios.put(`${api}/item/global/${itemId}`, {
     //   packId,
     //   name,
@@ -114,15 +114,7 @@ export const editItemsGlobalAsDuplicate = createAsyncThunk(
     //   type,
     // });
     // return response.data;
-    return await trpc.editGlobalItemAsDuplicate.mutate({
-      itemId: item.itemId,
-      packId: item.packId,
-      name: item.name,
-      weight: item.weight,
-      quantity: item.quantity,
-      unit: item.unit,
-      type: item.type,
-    });
+    return await trpc.editGlobalItemAsDuplicate.mutate({ itemId, packId, name, weight, quantity, unit, type });
   },
 );
 

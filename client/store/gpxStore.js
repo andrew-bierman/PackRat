@@ -5,13 +5,15 @@ import {
 } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { api } from '../constants/api';
+import { trpc } from '../trpc';
 
 export const convertGeoJSONToGPX = createAsyncThunk(
   'gpx/convertGeoJSONToGPX',
   async (geoJSON, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${api}/gpx/geojson`, { geoJSON });
-      return response.data;
+      // const response = await axios.post(`${api}/gpx/geojson`, { geoJSON });
+      // return response.data;
+      return await trpc.convertGeoJSONToGPX.mutate(geoJSON);
     } catch (error) {
       return rejectWithValue(error.message);
     }
