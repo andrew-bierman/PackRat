@@ -246,7 +246,7 @@ const Feed = ({ feedType = 'public' }) => {
       >
         <RStack style={styles.cardContainer}>
           {console.log({ data })}
-          {/* {feedSearchFilterComponent} */}
+          {feedSearchFilterComponent}
           {data?.map((item) => (
             <Card key={item._id} type={item.type} {...item} />
           ))}
