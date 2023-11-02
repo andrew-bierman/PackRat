@@ -21738,6 +21738,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"prisma@npm:^5.5.2":
+  version: 5.5.2
+  resolution: "prisma@npm:5.5.2"
+  dependencies:
+    "@prisma/engines": "npm:5.5.2"
+  bin:
+    prisma: build/index.js
+  checksum: 7c2d7d57e0868c69229b466af8cdedaa7270a93fe69de2413c76a7b0a095e751b47a952fc7bec2e7090dc45aa7c477fda0495d582939f32c07fef99d48382400
+  languageName: node
+  linkType: hard
+
 "process-nextick-args@npm:~2.0.0":
   version: 2.0.1
   resolution: "process-nextick-args@npm:2.0.1"
@@ -23899,6 +23910,8 @@ __metadata:
     passport-local: "npm:^1.0.0"
     piscina: "npm:^4.0.0"
     prettier: "npm:^3.0.2"
+    rollup-plugin-node-polyfills: "npm:^0.2.1"
+    prisma: "npm:^5.5.2"
     prisma: "npm:^5.5.2"
     superjson: "npm:^2.0.0"
     swagger-jsdoc: "npm:^6.2.8"
