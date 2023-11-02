@@ -86,6 +86,7 @@
     "passport-local": "^1.0.0",
     "piscina": "^4.0.0",
     "rollup-plugin-node-polyfills": "^0.2.1",
+    "prisma": "^5.5.2",
     "superjson": "^2.0.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^4.6.3",
