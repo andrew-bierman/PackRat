@@ -7,7 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 //  ███    ███  ██████  ██████  ███████ ██      ███████
 //  ████  ████ ██    ██ ██   ██ ██      ██      ██
 //  ██ ████ ██ ██    ██ ██   ██ █████   ██      ███████
@@ -122,7 +121,9 @@ model Trip {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   v           Int      @map("__v")
   name        String
+  // should be JSON?
   description String
+  // should be JSON?
   duration    String
   weather     String
   start_date  DateTime
@@ -166,8 +167,7 @@ model User {
   preferredWeight              String?
   favourite_ids                String[]  @db.ObjectId
   pack_ids                     String[]  @db.ObjectId
-  item_id String? @db.ObjectId
-
+  item_id                      String?   @db.ObjectId
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -176,7 +176,7 @@ model User {
   packs     Pack[]     @relation(name: "Ownership", fields: [pack_ids], references: [id])
   item      Item?      @relation(fields: [item_id], references: [id])
   templates Template[]
-  trip      Trip?
+  trips     Trip[]
 
   @@index([email], map: "email_1")
   @@index([role], map: "role_1")
@@ -184,14 +184,23 @@ model User {
   @@map("users")
 }
 
+model Conversation {
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  v       Int    @map("__v")
+  userId  String
+  history String
 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("conversations")
+}
 
 //  ████████ ██    ██ ██████  ███████ ███████ 
 //     ██     ██  ██  ██   ██ ██      ██      
 //     ██      ████   ██████  █████   ███████ 
 //     ██       ██    ██      ██           ██ 
 //     ██       ██    ██      ███████ ███████ 
-
 
 type GeoJSONGeometry {
   coordinates Json
@@ -210,14 +219,11 @@ type PacksScores {
   weightScore                   Int @default(0)
 }
 
-
-
 //  ███████ ███    ██ ██    ██ ███    ███ ███████ 
 //  ██      ████   ██ ██    ██ ████  ████ ██      
 //  █████   ██ ██  ██ ██    ██ ██ ████ ██ ███████ 
 //  ██      ██  ██ ██ ██    ██ ██  ██  ██      ██ 
 //  ███████ ██   ████  ██████  ██      ██ ███████ 
-
 
 enum Role {
   user
