@@ -91,7 +91,7 @@ model Pack {
   items       Item[] @relation(fields: [item_ids], references: [id])
   favoritedBy User[] @relation(name: "Favourites", fields: [favourited_by_ids], references: [id])
   owners      User[] @relation(name: "Ownership", fields: [owner_ids], references: [id])
-  trip        Trip?
+  trips       Trip[]
 
   @@index([name], map: "name_1")
   @@index([is_public], map: "is_public_1")
@@ -129,16 +129,16 @@ model Trip {
   start_date  DateTime
   end_date    DateTime
   destination String
-  owner_id    String   @unique @db.ObjectId
+  owner_id    String   @db.ObjectId
   is_public   Boolean?
   type        String   @default("trip")
-  pack_id     String   @unique @db.ObjectId
+  pack_id     String   @db.ObjectId
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  owner User? @relation(fields: [owner_id], references: [id])
-  packs Pack? @relation(fields: [pack_id], references: [id])
+  owner User @relation(fields: [owner_id], references: [id])
+  packs Pack @relation(fields: [pack_id], references: [id])
 
   @@index([destination], map: "destination_1")
   @@index([start_date], map: "start_date_1")
