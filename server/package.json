@@ -16,7 +16,11 @@
     "start": "nodemon",
     "test:expect": "mocha 'generated/test/**/*.spec.js'",
     "test:generate": "npx openapi-generator url http://localhost:3000/swagger.json -d ./generated -t javascript",
-    "test": "echo \"No tests yet\""
+    "test": "echo \"No tests yet\"",
+    "prisma:format": "npx prisma format --schema=src/prisma/schema.prisma",
+    "prisma:generate": "npx prisma generate --schema=src/prisma/schema.prisma",
+    "prisma:validate": "npx prisma validate --schema=src/prisma/schema.prisma",
+    "prisma:pull": "npx prisma db pull --schema=src/prisma/schema.prisma"
   },
   "author": "Andrew Bierman",
   "license": "ISC",
@@ -24,6 +28,7 @@
     "@hono/node-server": "^1.2.0",
     "@hono/trpc-server": "^0.1.0",
     "@packrat/validations": "*",
+    "@prisma/client": "^5.5.2",
     "@sendgrid/mail": "^7.7.0",
     "@trpc/client": "^10.38.5",
     "@trpc/server": "^10.38.5",
@@ -95,6 +100,7 @@
     "mocha": "^10.2.0",
     "openapi-generator": "^0.1.39",
     "prettier": "^3.0.2",
+    "prisma": "^5.5.2",
     "ts-node": "^10.9.1"
   },
   "engines": {
