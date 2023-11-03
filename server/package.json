@@ -16,7 +16,11 @@
     "start": "nodemon",
     "test:expect": "mocha 'generated/test/**/*.spec.js'",
     "test:generate": "npx openapi-generator url http://localhost:3000/swagger.json -d ./generated -t javascript",
-    "test": "echo \"No tests yet\""
+    "test": "echo \"No tests yet\"",
+    "prisma:format": "npx prisma format --schema=src/prisma/schema.prisma",
+    "prisma:generate": "npx prisma generate --schema=src/prisma/schema.prisma",
+    "prisma:validate": "npx prisma validate --schema=src/prisma/schema.prisma",
+    "prisma:pull": "npx prisma db pull --schema=src/prisma/schema.prisma"
   },
   "author": "Andrew Bierman",
   "license": "ISC",
