@@ -5238,8 +5238,8 @@ __metadata:
   linkType: hard
 
 "@react-navigation/native-stack@npm:^6.9.12, @react-navigation/native-stack@npm:~6.9.12":
-  version: 6.9.16
-  resolution: "@react-navigation/native-stack@npm:6.9.16"
+  version: 6.9.17
+  resolution: "@react-navigation/native-stack@npm:6.9.17"
   dependencies:
     "@react-navigation/elements": "npm:^1.3.21"
     warn-once: "npm:^0.1.0"
@@ -5249,7 +5249,7 @@ __metadata:
     react-native: "*"
     react-native-safe-area-context: ">= 3.0.0"
     react-native-screens: ">= 3.0.0"
-  checksum: bb84c71cfec8b5fd7b6d5affcb0bf1c95267f64748414b02a380ba486f6e791a3ac0779fff2d7afaf9f4e473cb6141fd400d6ef0d1c3176567bdde0112384a8b
+  checksum: cbe7161be10d8eba0769fd40909e0402252739a9f0836ba8f21a41155ad2606f04a59955cdbbaac3f9d191bab3988fe5d0a44f4c045ddde9e896a0d53f3cfcd4
   languageName: node
   linkType: hard
 
@@ -12171,9 +12171,9 @@ __metadata:
   linkType: hard
 
 "electron-to-chromium@npm:^1.4.535":
-  version: 1.4.575
-  resolution: "electron-to-chromium@npm:1.4.575"
-  checksum: 168c29acebaa63f22b896c433189af0cb3bbe2b9eda1c2c9a64e74d0b4052dcec2adc838693213e1b6153f707dcb7fbd19d4c7be6781a6375a69c56e0faebbab
+  version: 1.4.576
+  resolution: "electron-to-chromium@npm:1.4.576"
+  checksum: 9db54ffa605dba161392e7b3c8a47493029cbb64801980f3ba4214ce69c22fc8bf4e4aa6c6449c7805a1e7f24c3233f94a955418732ff9d63247d2ecbb079eb6
   languageName: node
   linkType: hard
 
@@ -13928,9 +13928,9 @@ __metadata:
   linkType: hard
 
 "flow-parser@npm:0.*":
-  version: 0.220.0
-  resolution: "flow-parser@npm:0.220.0"
-  checksum: e8c2a234a878150858439bbad85575f176a02447586d6ea0667d46bc9b275a4df05ef581d4cd074b39c4a83ba1a9f2edce4e215bfdceb541aed734c022626675
+  version: 0.220.1
+  resolution: "flow-parser@npm:0.220.1"
+  checksum: 69806a012c3575a552f54761f6630296d593e4e4c58427ed4b98eba2fac67063dbaa30e2d15b3b9df9844e97853f7d1a09295bfd95888e57279e17810d129485
   languageName: node
   linkType: hard
 
