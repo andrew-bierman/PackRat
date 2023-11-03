@@ -14967,7 +14967,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hono@npm:^3.8.0, hono@npm:^3.9.1":
+"hono@npm:^3.9.1":
   version: 3.9.1
   resolution: "hono@npm:3.9.1"
   checksum: 5855daedda5ef8c60e8cdcbc1d51495c594b874736ad12e2055069fa39e3048fb986231a2a0a865e49d2e45a563b98c0adcd44e76acb1499eb92c06650018d6f
@@ -23196,7 +23196,7 @@ __metadata:
     google-auth-library: "npm:^8.8.0"
     googleapis: "npm:^118.0.0"
     helmet: "npm:^7.0.0"
-    hono: "npm:^3.8.0"
+    hono: "npm:^3.9.1"
     i: "npm:^0.3.7"
     jest: "npm:^29.6.2"
     joi: "npm:^17.9.2"
