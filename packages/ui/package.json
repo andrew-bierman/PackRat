@@ -26,6 +26,7 @@
     "@tamagui/toast": "1.74.21",
     "@tanstack/react-table": "^8.10.7",
     "@tanstack/react-virtual": "3.0.0-beta.54",
+    "burnt": "^0.12.1",
     "jotai": "^2.4.3",
     "react": "18.2.0",
     "tamagui": "^1.74.21"
