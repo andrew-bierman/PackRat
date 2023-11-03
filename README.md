@@ -27,6 +27,61 @@ PackRat is built using the following technologies:
 - Redux: a predictable state container for JavaScript apps.
 - Mapbox: a location data platform for mobile and web applications.
 
+## 🗂 Folder layout
+
+The main apps are:
+
+- `expo` (native, web)
+- `next` (ssr web) -- not yet implemented
+
+- `packages` shared packages across apps
+  - `ui` includes your custom UI kit that will be optimized by Tamagui
+  - `app` you'll be importing most files from `app/`
+    - `features` (don't use a `screens` folder. organize by feature.)
+    - `provider` (all the providers that wrap the app, and some no-ops for Web.)
+
+## UI Kit
+
+Note we're following the [design systems guide](https://tamagui.dev/docs/guides/design-systems) and creating our own package for components.
+
+See `packages/ui` named `@my/ui` for how this works.
+
+## 🆕 Add new dependencies
+
+### Pure JS dependencies
+
+If you're installing a JavaScript-only dependency that will be used across platforms, install it in `packages/app`:
+
+```sh
+cd packages/app
+yarn add date-fns
+cd ../..
+yarn
+```
+
+### Native dependencies
+
+If you're installing a library with any native code, you must install it in `expo`:
+
+```sh
+cd apps/expo
+yarn add react-native-reanimated
+cd ..
+yarn
+```
+
+## Update new dependencies
+
+### Pure JS dependencies
+
+```sh
+yarn upgrade-interactive
+```
+
+You can also install the native library inside of `packages/app` if you want to get autoimport for that package inside of the `app` folder. However, you need to be careful and install the _exact_ same version in both packages. If the versions mismatch at all, you'll potentially get terrible bugs. This is a classic monorepo issue. I use `lerna-update-wizard` to help with this (you don't need to use Lerna to use that lib).
+
+You may potentially want to have the native module transpiled for the next app. If you get error messages with `Cannot use import statement outside a module`, you may need to use `transpilePackages` in your `next.config.js` and add the module to the array there.
+
 ## Local installation 📲
 
 PackRat consists of two main components: a client and a server. Follow the steps below to install and run both components.

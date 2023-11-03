@@ -1,0 +1,969 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+type GeojsonsGeometry {
+  /// Multiple data types found: Json: 46.9%, Array(Float): 53.1% out of 1000 sampled entries
+  coordinates Json
+  type        String
+}
+
+type GeojsonsProperties {
+  ISO3166_1                      String? @map("ISO3166-1")
+  ISO3166_1_alpha2               String? @map("ISO3166-1:alpha2")
+  ISO3166_1_alpha3               String? @map("ISO3166-1:alpha3")
+  ISO3166_1_numeric              String? @map("ISO3166-1:numeric")
+  ISO3166_2                      String? @map("ISO3166-2")
+  access                         String?
+  addr_city                      String? @map("addr:city")
+  addr_country                   String? @map("addr:country")
+  addr_housenumber               String? @map("addr:housenumber")
+  addr_place                     String? @map("addr:place")
+  addr_province                  String? @map("addr:province")
+  addr_street                    String? @map("addr:street")
+  addr_suburb                    String? @map("addr:suburb")
+  admin_level                    String?
+  alt_name                       String?
+  alt_name2                      String?
+  alt_name_be                    String? @map("alt_name:be")
+  alt_name_en                    String? @map("alt_name:en")
+  alt_name_eo                    String? @map("alt_name:eo")
+  alt_name_es                    String? @map("alt_name:es")
+  alt_name_fr                    String? @map("alt_name:fr")
+  alt_name_gl                    String? @map("alt_name:gl")
+  alt_name_ko                    String? @map("alt_name:ko")
+  alt_name_lfn                   String? @map("alt_name:lfn")
+  alt_name_ln                    String? @map("alt_name:ln")
+  alt_name_oc                    String? @map("alt_name:oc")
+  alt_name_sr                    String? @map("alt_name:sr")
+  alt_name_ur                    String? @map("alt_name:ur")
+  alt_name_vi                    String? @map("alt_name:vi")
+  alt_name_wo                    String? @map("alt_name:wo")
+  alt_short_name_en              String? @map("alt_short_name:en")
+  alt_short_name_pl              String? @map("alt_short_name:pl")
+  area                           String?
+  attribution                    String?
+  barrier                        String?
+  bicycle                        String?
+  boat                           String?
+  border_status                  String?
+  border_type                    String?
+  boundary                       String?
+  boundary_type                  String?
+  bridge                         String?
+  canoe                          String?
+  capital_city                   String?
+  claimed_by                     String?
+  closure_segment                String?
+  collection                     String?
+  contact_website                String? @map("contact:website")
+  country_code_fips              String?
+  country_code_iso3166_1_alpha_2 String?
+  crossing                       String?
+  crossing_markings              String? @map("crossing:markings")
+  datum                          String?
+  default_language               String?
+  description                    String?
+  disputed_by                    String?
+  dog                            String?
+  dog_conditional                String? @map("dog:conditional")
+  driving_side                   String?
+  ele                            String?
+  fence_type                     String?
+  fixme                          String?
+  flag                           String?
+  floating                       String?
+  foot                           String?
+  footway                        String?
+  format                         String?
+  garden_type                    String? @map("garden:type")
+  gnis_feature_id                String? @map("gnis:feature_id")
+  gnis_state_id                  String? @map("gnis:state_id")
+  highway                        String?
+  historic                       String?
+  horse                          String?
+  id                             String
+  incline                        String?
+  inscription                    String?
+  int_name                       String?
+  int_name_ko                    String? @map("int_name:ko")
+  intermittent                   String?
+  is_in                          String?
+  is_in_country                  String? @map("is_in:country")
+  is_in_country_code             String? @map("is_in:country_code")
+  kerb                           String?
+  layer                          String?
+  left_country                   String? @map("left:country")
+  left_nation                    String? @map("left:nation")
+  leisure                        String?
+  lit                            String?
+  man_made                       String?
+  maritime                       String?
+  marker                         String?
+  motor_vehicle                  String?
+  name                           String?
+  name_ab                        String? @map("name:ab")
+  name_abbreviation              String? @map("name:abbreviation")
+  name_ace                       String? @map("name:ace")
+  name_af                        String? @map("name:af")
+  name_ak                        String? @map("name:ak")
+  name_als                       String? @map("name:als")
+  name_am                        String? @map("name:am")
+  name_an                        String? @map("name:an")
+  name_anc                       String? @map("name:anc")
+  name_ang                       String? @map("name:ang")
+  name_ar                        String? @map("name:ar")
+  name_arc                       String? @map("name:arc")
+  name_arz                       String? @map("name:arz")
+  name_as                        String? @map("name:as")
+  name_ast                       String? @map("name:ast")
+  name_av                        String? @map("name:av")
+  name_ay                        String? @map("name:ay")
+  name_az                        String? @map("name:az")
+  name_az_Arab                   String? @map("name:az-Arab")
+  name_azb                       String? @map("name:azb")
+  name_ba                        String? @map("name:ba")
+  name_bar                       String? @map("name:bar")
+  name_bat_smg                   String? @map("name:bat-smg")
+  name_bcl                       String? @map("name:bcl")
+  name_be                        String? @map("name:be")
+  name_be_tarask                 String? @map("name:be-tarask")
+  name_bg                        String? @map("name:bg")
+  name_bi                        String? @map("name:bi")
+  name_bjn                       String? @map("name:bjn")
+  name_bm                        String? @map("name:bm")
+  name_bn                        String? @map("name:bn")
+  name_bo                        String? @map("name:bo")
+  name_bpy                       String? @map("name:bpy")
+  name_br                        String? @map("name:br")
+  name_bs                        String? @map("name:bs")
+  name_bxr                       String? @map("name:bxr")
+  name_ca                        String? @map("name:ca")
+  name_cbk_zam                   String? @map("name:cbk-zam")
+  name_cdo                       String? @map("name:cdo")
+  name_ce                        String? @map("name:ce")
+  name_ceb                       String? @map("name:ceb")
+  name_chr                       String? @map("name:chr")
+  name_chy                       String? @map("name:chy")
+  name_ckb                       String? @map("name:ckb")
+  name_co                        String? @map("name:co")
+  name_crh                       String? @map("name:crh")
+  name_cs                        String? @map("name:cs")
+  name_csb                       String? @map("name:csb")
+  name_cu                        String? @map("name:cu")
+  name_cv                        String? @map("name:cv")
+  name_cy                        String? @map("name:cy")
+  name_da                        String? @map("name:da")
+  name_de                        String? @map("name:de")
+  name_din                       String? @map("name:din")
+  name_diq                       String? @map("name:diq")
+  name_dsb                       String? @map("name:dsb")
+  name_dv                        String? @map("name:dv")
+  name_dz                        String? @map("name:dz")
+  name_ee                        String? @map("name:ee")
+  name_el                        String? @map("name:el")
+  name_eml                       String? @map("name:eml")
+  name_en                        String? @map("name:en")
+  name_eo                        String? @map("name:eo")
+  name_es                        String? @map("name:es")
+  name_et                        String? @map("name:et")
+  name_etymology_wikidata        String? @map("name:etymology:wikidata")
+  name_eu                        String? @map("name:eu")
+  name_ext                       String? @map("name:ext")
+  name_fa                        String? @map("name:fa")
+  name_ff                        String? @map("name:ff")
+  name_fi                        String? @map("name:fi")
+  name_fo                        String? @map("name:fo")
+  name_fr                        String? @map("name:fr")
+  name_frp                       String? @map("name:frp")
+  name_frr                       String? @map("name:frr")
+  name_fur                       String? @map("name:fur")
+  name_fy                        String? @map("name:fy")
+  name_ga                        String? @map("name:ga")
+  name_gag                       String? @map("name:gag")
+  name_gan                       String? @map("name:gan")
+  name_gd                        String? @map("name:gd")
+  name_gl                        String? @map("name:gl")
+  name_glk                       String? @map("name:glk")
+  name_gn                        String? @map("name:gn")
+  name_gr                        String? @map("name:gr")
+  name_grc                       String? @map("name:grc")
+  name_gu                        String? @map("name:gu")
+  name_gv                        String? @map("name:gv")
+  name_ha                        String? @map("name:ha")
+  name_hak                       String? @map("name:hak")
+  name_haw                       String? @map("name:haw")
+  name_he                        String? @map("name:he")
+  name_hi                        String? @map("name:hi")
+  name_hif                       String? @map("name:hif")
+  name_hr                        String? @map("name:hr")
+  name_hsb                       String? @map("name:hsb")
+  name_ht                        String? @map("name:ht")
+  name_hu                        String? @map("name:hu")
+  name_hy                        String? @map("name:hy")
+  name_ia                        String? @map("name:ia")
+  name_id                        String? @map("name:id")
+  name_ie                        String? @map("name:ie")
+  name_ig                        String? @map("name:ig")
+  name_ii                        String? @map("name:ii")
+  name_ik                        String? @map("name:ik")
+  name_ilo                       String? @map("name:ilo")
+  name_io                        String? @map("name:io")
+  name_is                        String? @map("name:is")
+  name_it                        String? @map("name:it")
+  name_iu                        String? @map("name:iu")
+  name_ja                        String? @map("name:ja")
+  name_jbo                       String? @map("name:jbo")
+  name_jv                        String? @map("name:jv")
+  name_ka                        String? @map("name:ka")
+  name_kaa                       String? @map("name:kaa")
+  name_kab                       String? @map("name:kab")
+  name_kbd                       String? @map("name:kbd")
+  name_kg                        String? @map("name:kg")
+  name_ki                        String? @map("name:ki")
+  name_kk                        String? @map("name:kk")
+  name_kk_Arab                   String? @map("name:kk-Arab")
+  name_kl                        String? @map("name:kl")
+  name_km                        String? @map("name:km")
+  name_kn                        String? @map("name:kn")
+  name_ko                        String? @map("name:ko")
+  name_koi                       String? @map("name:koi")
+  name_krc                       String? @map("name:krc")
+  name_ks                        String? @map("name:ks")
+  name_ksh                       String? @map("name:ksh")
+  name_ku                        String? @map("name:ku")
+  name_kv                        String? @map("name:kv")
+  name_kw                        String? @map("name:kw")
+  name_ky                        String? @map("name:ky")
+  name_la                        String? @map("name:la")
+  name_lad                       String? @map("name:lad")
+  name_lb                        String? @map("name:lb")
+  name_lbe                       String? @map("name:lbe")
+  name_lez                       String? @map("name:lez")
+  name_lfn                       String? @map("name:lfn")
+  name_lg                        String? @map("name:lg")
+  name_li                        String? @map("name:li")
+  name_lij                       String? @map("name:lij")
+  name_lit                       String? @map("name:lit")
+  name_lmo                       String? @map("name:lmo")
+  name_ln                        String? @map("name:ln")
+  name_lo                        String? @map("name:lo")
+  name_lt                        String? @map("name:lt")
+  name_ltg                       String? @map("name:ltg")
+  name_lv                        String? @map("name:lv")
+  name_lzh                       String? @map("name:lzh")
+  name_map_bms                   String? @map("name:map-bms")
+  name_mdf                       String? @map("name:mdf")
+  name_mg                        String? @map("name:mg")
+  name_mhr                       String? @map("name:mhr")
+  name_mi                        String? @map("name:mi")
+  name_mia                       String? @map("name:mia")
+  name_min                       String? @map("name:min")
+  name_mk                        String? @map("name:mk")
+  name_ml                        String? @map("name:ml")
+  name_mn                        String? @map("name:mn")
+  name_mo                        String? @map("name:mo")
+  name_mr                        String? @map("name:mr")
+  name_mrj                       String? @map("name:mrj")
+  name_ms                        String? @map("name:ms")
+  name_mt                        String? @map("name:mt")
+  name_mwl                       String? @map("name:mwl")
+  name_my                        String? @map("name:my")
+  name_myv                       String? @map("name:myv")
+  name_mzn                       String? @map("name:mzn")
+  name_na                        String? @map("name:na")
+  name_nah                       String? @map("name:nah")
+  name_nan                       String? @map("name:nan")
+  name_nap                       String? @map("name:nap")
+  name_nb                        String? @map("name:nb")
+  name_nds                       String? @map("name:nds")
+  name_nds_nl                    String? @map("name:nds-nl")
+  name_ne                        String? @map("name:ne")
+  name_new                       String? @map("name:new")
+  name_nl                        String? @map("name:nl")
+  name_nn                        String? @map("name:nn")
+  name_no                        String? @map("name:no")
+  name_nov                       String? @map("name:nov")
+  name_nrm                       String? @map("name:nrm")
+  name_nso                       String? @map("name:nso")
+  name_nv                        String? @map("name:nv")
+  name_ny                        String? @map("name:ny")
+  name_oc                        String? @map("name:oc")
+  name_om                        String? @map("name:om")
+  name_or                        String? @map("name:or")
+  name_os                        String? @map("name:os")
+  name_pa                        String? @map("name:pa")
+  name_pag                       String? @map("name:pag")
+  name_pam                       String? @map("name:pam")
+  name_pap                       String? @map("name:pap")
+  name_pcd                       String? @map("name:pcd")
+  name_pdc                       String? @map("name:pdc")
+  name_pfl                       String? @map("name:pfl")
+  name_pih                       String? @map("name:pih")
+  name_pl                        String? @map("name:pl")
+  name_pms                       String? @map("name:pms")
+  name_pnb                       String? @map("name:pnb")
+  name_ps                        String? @map("name:ps")
+  name_pt                        String? @map("name:pt")
+  name_qu                        String? @map("name:qu")
+  name_rm                        String? @map("name:rm")
+  name_rn                        String? @map("name:rn")
+  name_ro                        String? @map("name:ro")
+  name_roa_tara                  String? @map("name:roa-tara")
+  name_ru                        String? @map("name:ru")
+  name_rue                       String? @map("name:rue")
+  name_rw                        String? @map("name:rw")
+  name_sa                        String? @map("name:sa")
+  name_sah                       String? @map("name:sah")
+  name_sc                        String? @map("name:sc")
+  name_scn                       String? @map("name:scn")
+  name_sco                       String? @map("name:sco")
+  name_sd                        String? @map("name:sd")
+  name_se                        String? @map("name:se")
+  name_sg                        String? @map("name:sg")
+  name_sh                        String? @map("name:sh")
+  name_short                     String? @map("name:short")
+  name_si                        String? @map("name:si")
+  name_sk                        String? @map("name:sk")
+  name_sl                        String? @map("name:sl")
+  name_sm                        String? @map("name:sm")
+  name_smn                       String? @map("name:smn")
+  name_sms                       String? @map("name:sms")
+  name_sn                        String? @map("name:sn")
+  name_so                        String? @map("name:so")
+  name_sq                        String? @map("name:sq")
+  name_sr                        String? @map("name:sr")
+  name_sr_Latn                   String? @map("name:sr-Latn")
+  name_srn                       String? @map("name:srn")
+  name_ss                        String? @map("name:ss")
+  name_st                        String? @map("name:st")
+  name_stq                       String? @map("name:stq")
+  name_su                        String? @map("name:su")
+  name_sv                        String? @map("name:sv")
+  name_sw                        String? @map("name:sw")
+  name_syc                       String? @map("name:syc")
+  name_szl                       String? @map("name:szl")
+  name_ta                        String? @map("name:ta")
+  name_te                        String? @map("name:te")
+  name_tet                       String? @map("name:tet")
+  name_tg                        String? @map("name:tg")
+  name_th                        String? @map("name:th")
+  name_ti                        String? @map("name:ti")
+  name_tk                        String? @map("name:tk")
+  name_tl                        String? @map("name:tl")
+  name_tn                        String? @map("name:tn")
+  name_to                        String? @map("name:to")
+  name_tok                       String? @map("name:tok")
+  name_tpi                       String? @map("name:tpi")
+  name_tr                        String? @map("name:tr")
+  name_ts                        String? @map("name:ts")
+  name_tt                        String? @map("name:tt")
+  name_tw                        String? @map("name:tw")
+  name_ty                        String? @map("name:ty")
+  name_tzl                       String? @map("name:tzl")
+  name_udm                       String? @map("name:udm")
+  name_ug                        String? @map("name:ug")
+  name_uk                        String? @map("name:uk")
+  name_ur                        String? @map("name:ur")
+  name_uz                        String? @map("name:uz")
+  name_ve                        String? @map("name:ve")
+  name_vec                       String? @map("name:vec")
+  name_vep                       String? @map("name:vep")
+  name_vi                        String? @map("name:vi")
+  name_vls                       String? @map("name:vls")
+  name_vo                        String? @map("name:vo")
+  name_vro                       String? @map("name:vro")
+  name_wa                        String? @map("name:wa")
+  name_war                       String? @map("name:war")
+  name_wo                        String? @map("name:wo")
+  name_wuu                       String? @map("name:wuu")
+  name_xal                       String? @map("name:xal")
+  name_xh                        String? @map("name:xh")
+  name_xmf                       String? @map("name:xmf")
+  name_yi                        String? @map("name:yi")
+  name_yo                        String? @map("name:yo")
+  name_yue                       String? @map("name:yue")
+  name_za                        String? @map("name:za")
+  name_zea                       String? @map("name:zea")
+  name_zh                        String? @map("name:zh")
+  name_zh_Hans                   String? @map("name:zh-Hans")
+  name_zh_Hant                   String? @map("name:zh-Hant")
+  name_zh_pinyin                 String? @map("name:zh_pinyin")
+  name_zu                        String? @map("name:zu")
+  natural                        String?
+  not_official_name_vi           String? @map("not:official_name:vi")
+  note                           String?
+  official_name                  String?
+  official_name_ab               String? @map("official_name:ab")
+  official_name_ace              String? @map("official_name:ace")
+  official_name_af               String? @map("official_name:af")
+  official_name_als              String? @map("official_name:als")
+  official_name_am               String? @map("official_name:am")
+  official_name_an               String? @map("official_name:an")
+  official_name_ang              String? @map("official_name:ang")
+  official_name_ar               String? @map("official_name:ar")
+  official_name_arc              String? @map("official_name:arc")
+  official_name_arz              String? @map("official_name:arz")
+  official_name_ast              String? @map("official_name:ast")
+  official_name_az               String? @map("official_name:az")
+  official_name_bar              String? @map("official_name:bar")
+  official_name_be               String? @map("official_name:be")
+  official_name_bg               String? @map("official_name:bg")
+  official_name_bjn              String? @map("official_name:bjn")
+  official_name_bm               String? @map("official_name:bm")
+  official_name_bn               String? @map("official_name:bn")
+  official_name_bpy              String? @map("official_name:bpy")
+  official_name_br               String? @map("official_name:br")
+  official_name_bs               String? @map("official_name:bs")
+  official_name_ca               String? @map("official_name:ca")
+  official_name_ceb              String? @map("official_name:ceb")
+  official_name_ckb              String? @map("official_name:ckb")
+  official_name_crh              String? @map("official_name:crh")
+  official_name_cs               String? @map("official_name:cs")
+  official_name_cv               String? @map("official_name:cv")
+  official_name_cy               String? @map("official_name:cy")
+  official_name_da               String? @map("official_name:da")
+  official_name_de               String? @map("official_name:de")
+  official_name_din              String? @map("official_name:din")
+  official_name_diq              String? @map("official_name:diq")
+  official_name_dsb              String? @map("official_name:dsb")
+  official_name_el               String? @map("official_name:el")
+  official_name_en               String? @map("official_name:en")
+  official_name_eo               String? @map("official_name:eo")
+  official_name_es               String? @map("official_name:es")
+  official_name_et               String? @map("official_name:et")
+  official_name_eu               String? @map("official_name:eu")
+  official_name_ext              String? @map("official_name:ext")
+  official_name_fa               String? @map("official_name:fa")
+  official_name_fi               String? @map("official_name:fi")
+  official_name_fo               String? @map("official_name:fo")
+  official_name_fr               String? @map("official_name:fr")
+  official_name_frp              String? @map("official_name:frp")
+  official_name_fy               String? @map("official_name:fy")
+  official_name_ga               String? @map("official_name:ga")
+  official_name_gag              String? @map("official_name:gag")
+  official_name_gan              String? @map("official_name:gan")
+  official_name_gd               String? @map("official_name:gd")
+  official_name_gl               String? @map("official_name:gl")
+  official_name_gn               String? @map("official_name:gn")
+  official_name_grc              String? @map("official_name:grc")
+  official_name_gu               String? @map("official_name:gu")
+  official_name_gv               String? @map("official_name:gv")
+  official_name_ha               String? @map("official_name:ha")
+  official_name_he               String? @map("official_name:he")
+  official_name_hi               String? @map("official_name:hi")
+  official_name_hif              String? @map("official_name:hif")
+  official_name_hr               String? @map("official_name:hr")
+  official_name_hsb              String? @map("official_name:hsb")
+  official_name_ht               String? @map("official_name:ht")
+  official_name_hu               String? @map("official_name:hu")
+  official_name_ia               String? @map("official_name:ia")
+  official_name_id               String? @map("official_name:id")
+  official_name_ie               String? @map("official_name:ie")
+  official_name_ilo              String? @map("official_name:ilo")
+  official_name_io               String? @map("official_name:io")
+  official_name_is               String? @map("official_name:is")
+  official_name_it               String? @map("official_name:it")
+  official_name_ja               String? @map("official_name:ja")
+  official_name_jv               String? @map("official_name:jv")
+  official_name_ka               String? @map("official_name:ka")
+  official_name_kaa              String? @map("official_name:kaa")
+  official_name_kbd              String? @map("official_name:kbd")
+  official_name_kg               String? @map("official_name:kg")
+  official_name_kk               String? @map("official_name:kk")
+  official_name_kk_Arab          String? @map("official_name:kk-Arab")
+  official_name_ko               String? @map("official_name:ko")
+  official_name_krc              String? @map("official_name:krc")
+  official_name_ks               String? @map("official_name:ks")
+  official_name_ku               String? @map("official_name:ku")
+  official_name_kv               String? @map("official_name:kv")
+  official_name_ky               String? @map("official_name:ky")
+  official_name_la               String? @map("official_name:la")
+  official_name_lad              String? @map("official_name:lad")
+  official_name_lb               String? @map("official_name:lb")
+  official_name_lmo              String? @map("official_name:lmo")
+  official_name_ln               String? @map("official_name:ln")
+  official_name_lt               String? @map("official_name:lt")
+  official_name_ltg              String? @map("official_name:ltg")
+  official_name_lv               String? @map("official_name:lv")
+  official_name_mdf              String? @map("official_name:mdf")
+  official_name_mk               String? @map("official_name:mk")
+  official_name_ml               String? @map("official_name:ml")
+  official_name_mn               String? @map("official_name:mn")
+  official_name_mr               String? @map("official_name:mr")
+  official_name_ms               String? @map("official_name:ms")
+  official_name_mt               String? @map("official_name:mt")
+  official_name_my               String? @map("official_name:my")
+  official_name_nah              String? @map("official_name:nah")
+  official_name_nan              String? @map("official_name:nan")
+  official_name_nds              String? @map("official_name:nds")
+  official_name_nds_nl           String? @map("official_name:nds-nl")
+  official_name_nl               String? @map("official_name:nl")
+  official_name_nn               String? @map("official_name:nn")
+  official_name_no               String? @map("official_name:no")
+  official_name_nov              String? @map("official_name:nov")
+  official_name_nr               String? @map("official_name:nr")
+  official_name_nso              String? @map("official_name:nso")
+  official_name_nv               String? @map("official_name:nv")
+  official_name_oc               String? @map("official_name:oc")
+  official_name_os               String? @map("official_name:os")
+  official_name_pa               String? @map("official_name:pa")
+  official_name_pam              String? @map("official_name:pam")
+  official_name_pap              String? @map("official_name:pap")
+  official_name_pdc              String? @map("official_name:pdc")
+  official_name_pih              String? @map("official_name:pih")
+  official_name_pl               String? @map("official_name:pl")
+  official_name_pms              String? @map("official_name:pms")
+  official_name_ps               String? @map("official_name:ps")
+  official_name_pt               String? @map("official_name:pt")
+  official_name_qu               String? @map("official_name:qu")
+  official_name_rm               String? @map("official_name:rm")
+  official_name_ro               String? @map("official_name:ro")
+  official_name_ru               String? @map("official_name:ru")
+  official_name_rw               String? @map("official_name:rw")
+  official_name_sah              String? @map("official_name:sah")
+  official_name_sc               String? @map("official_name:sc")
+  official_name_scn              String? @map("official_name:scn")
+  official_name_sco              String? @map("official_name:sco")
+  official_name_se               String? @map("official_name:se")
+  official_name_sg               String? @map("official_name:sg")
+  official_name_sh               String? @map("official_name:sh")
+  official_name_sk               String? @map("official_name:sk")
+  official_name_sl               String? @map("official_name:sl")
+  official_name_so               String? @map("official_name:so")
+  official_name_sq               String? @map("official_name:sq")
+  official_name_sr               String? @map("official_name:sr")
+  official_name_ss               String? @map("official_name:ss")
+  official_name_st               String? @map("official_name:st")
+  official_name_stq              String? @map("official_name:stq")
+  official_name_su               String? @map("official_name:su")
+  official_name_sv               String? @map("official_name:sv")
+  official_name_sw               String? @map("official_name:sw")
+  official_name_syc              String? @map("official_name:syc")
+  official_name_szl              String? @map("official_name:szl")
+  official_name_tg               String? @map("official_name:tg")
+  official_name_th               String? @map("official_name:th")
+  official_name_tk               String? @map("official_name:tk")
+  official_name_tn               String? @map("official_name:tn")
+  official_name_ts               String? @map("official_name:ts")
+  official_name_tt               String? @map("official_name:tt")
+  official_name_ug               String? @map("official_name:ug")
+  official_name_uk               String? @map("official_name:uk")
+  official_name_ur               String? @map("official_name:ur")
+  official_name_uz               String? @map("official_name:uz")
+  official_name_ve               String? @map("official_name:ve")
+  official_name_vec              String? @map("official_name:vec")
+  official_name_vi               String? @map("official_name:vi")
+  official_name_vo               String? @map("official_name:vo")
+  official_name_wa               String? @map("official_name:wa")
+  official_name_war              String? @map("official_name:war")
+  official_name_wo               String? @map("official_name:wo")
+  official_name_xal              String? @map("official_name:xal")
+  official_name_xh               String? @map("official_name:xh")
+  official_name_xmf              String? @map("official_name:xmf")
+  official_name_yi               String? @map("official_name:yi")
+  official_name_yo               String? @map("official_name:yo")
+  official_name_yue              String? @map("official_name:yue")
+  official_name_zea              String? @map("official_name:zea")
+  official_name_zh               String? @map("official_name:zh")
+  official_name_zh_Hans          String? @map("official_name:zh-Hans")
+  official_name_zh_Hant          String? @map("official_name:zh-Hant")
+  official_name_zu               String? @map("official_name:zu")
+  old_name_ar                    String? @map("old_name:ar")
+  old_name_de                    String? @map("old_name:de")
+  old_name_en                    String? @map("old_name:en")
+  old_name_eo                    String? @map("old_name:eo")
+  old_name_es                    String? @map("old_name:es")
+  old_name_ko                    String? @map("old_name:ko")
+  old_name_pl                    String? @map("old_name:pl")
+  old_name_ru                    String? @map("old_name:ru")
+  old_name_vi                    String? @map("old_name:vi")
+  old_short_name_ru              String? @map("old_short_name:ru")
+  operator                       String?
+  place                          String?
+  population                     String?
+  population_date                String? @map("population:date")
+  population_source              String? @map("population:source")
+  ref                            String?
+  ref_USCG                       String? @map("ref:USCG")
+  ref_USPS                       String? @map("ref:USPS")
+  ref_fips                       String? @map("ref:fips")
+  related_law                    String?
+  right_nation                   String? @map("right:nation")
+  sac_scale                      String?
+  seamark_information            String? @map("seamark:information")
+  seamark_landmark_category      String? @map("seamark:landmark:category")
+  seamark_light_character        String? @map("seamark:light:character")
+  seamark_light_colour           String? @map("seamark:light:colour")
+  seamark_light_height           String? @map("seamark:light:height")
+  seamark_light_period           String? @map("seamark:light:period")
+  seamark_light_range            String? @map("seamark:light:range")
+  seamark_light_reference        String? @map("seamark:light:reference")
+  seamark_name                   String? @map("seamark:name")
+  seamark_type                   String? @map("seamark:type")
+  segregated                     String?
+  service                        String?
+  short_name                     String?
+  short_name_ab                  String? @map("short_name:ab")
+  short_name_af                  String? @map("short_name:af")
+  short_name_az                  String? @map("short_name:az")
+  short_name_be                  String? @map("short_name:be")
+  short_name_bg                  String? @map("short_name:bg")
+  short_name_cs                  String? @map("short_name:cs")
+  short_name_cv                  String? @map("short_name:cv")
+  short_name_en                  String? @map("short_name:en")
+  short_name_es                  String? @map("short_name:es")
+  short_name_fr                  String? @map("short_name:fr")
+  short_name_kbd                 String? @map("short_name:kbd")
+  short_name_ko                  String? @map("short_name:ko")
+  short_name_krc                 String? @map("short_name:krc")
+  short_name_kv                  String? @map("short_name:kv")
+  short_name_ky                  String? @map("short_name:ky")
+  short_name_mdf                 String? @map("short_name:mdf")
+  short_name_mn                  String? @map("short_name:mn")
+  short_name_mo                  String? @map("short_name:mo")
+  short_name_nl                  String? @map("short_name:nl")
+  short_name_os                  String? @map("short_name:os")
+  short_name_pl                  String? @map("short_name:pl")
+  short_name_ru                  String? @map("short_name:ru")
+  short_name_sah                 String? @map("short_name:sah")
+  short_name_sl                  String? @map("short_name:sl")
+  short_name_sr                  String? @map("short_name:sr")
+  short_name_sr_Latn             String? @map("short_name:sr-Latn")
+  short_name_tk                  String? @map("short_name:tk")
+  short_name_tr                  String? @map("short_name:tr")
+  short_name_tt                  String? @map("short_name:tt")
+  short_name_uk                  String? @map("short_name:uk")
+  short_name_uz                  String? @map("short_name:uz")
+  short_name_vi                  String? @map("short_name:vi")
+  short_name_zh                  String? @map("short_name:zh")
+  short_name_zh_Hans             String? @map("short_name:zh-Hans")
+  short_name_zh_Hant             String? @map("short_name:zh-Hant")
+  ski                            String?
+  smoothness                     String?
+  snowmobile                     String?
+  source                         String?
+  source_name_br                 String? @map("source:name:br")
+  source_population              String? @map("source:population")
+  source_position                String? @map("source:position")
+  source_short_name              String? @map("source:short_name")
+  source_sqkm                    String? @map("source:sqkm")
+  source_url                     String? @map("source:url")
+  source_ref                     String?
+  sport                          String?
+  sqkm                           String?
+  start_date                     String?
+  stop                           String?
+  surface                        String?
+  survey_point_purpose           String? @map("survey_point:purpose")
+  tidal                          String?
+  tiger_county                   String? @map("tiger:county")
+  tiger_mtfcc                    String? @map("tiger:mtfcc")
+  tiger_zip_left                 String? @map("tiger:zip_left")
+  tiger_zip_right                String? @map("tiger:zip_right")
+  timezone                       String?
+  trail_visibility               String?
+  type                           String?
+  waterway                       String?
+  wdb_source                     String? @map("wdb:source")
+  website                        String?
+  website_source                 String? @map("website:source")
+  wheelchair                     String?
+  width                          String?
+  wikidata                       String?
+  wikipedia                      String?
+}
+
+type PacksGrades {
+  essentialItems           String
+  redundancyAndVersatility String
+  weight                   String
+}
+
+type PacksScores {
+  /// Multiple data types found: Float: 2.2%, Int: 97.8% out of 278 sampled entries
+  essentialItemsScore           Json
+  /// Multiple data types found: Float: 0.4%, Int: 99.6% out of 278 sampled entries
+  redundancyAndVersatilityScore Json
+  weightScore                   Int
+}
+
+type TripsGeoJson {
+  geometry   TripsGeoJsonGeometry
+  properties TripsGeoJsonProperties
+  type       String
+}
+
+type TripsGeoJsonGeometry {
+  coordinates Float[]
+  type        String
+}
+
+type TripsGeoJsonProperties {
+  country     String
+  countrycode String
+  county      String
+  extent      Float[]
+  name        String
+  osm_id      Int
+  osm_key     String
+  osm_type    String
+  osm_value   String
+  type        String
+}
+
+type TripsGrades {
+  essentialItems           Int
+  redundancyAndVersatility Int
+  weather                  Int
+}
+
+type TripsScores {
+  essentialItemsScore           Int
+  redundancyAndVersatilityScore Int
+  weatherScore                  Int
+}
+
+type UsersPacks {
+  /// Field referred in an index, but found no data to define the type.
+  geometry Json?
+}
+
+type UsersTrips {
+  /// Field referred in an index, but found no data to define the type.
+  geometry Json?
+}
+
+model changelog {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  appliedAt DateTime @db.Date
+  fileName  String
+}
+
+model comments {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+}
+
+model conversations {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  v              Int      @map("__v")
+  conversationId String?
+  createdAt      DateTime @db.Date
+  history        String
+  updatedAt      DateTime @db.Date
+  userId         String
+
+  @@index([userId], map: "userId_1")
+}
+
+model geojsons {
+  id         String             @id @default(auto()) @map("_id") @db.ObjectId
+  v          Int                @map("__v")
+  createdAt  DateTime?          @db.Date
+  geometry   GeojsonsGeometry
+  id_        String             @unique(map: "id_1") @map("id")
+  properties GeojsonsProperties
+  type       String
+  updatedAt  DateTime?          @db.Date
+
+  @@index([id], map: "id_1_autocreated")
+  @@index([geometry], map: "geometry_2dsphere")
+}
+
+model itemcategories {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  v         Int       @map("__v")
+  createdAt DateTime? @db.Date
+  /// Field referred in an index, but found no data to define the type.
+  location  Json?
+  name      String
+  updatedAt DateTime? @db.Date
+
+  @@index([name], map: "name_1")
+  @@index([location], map: "location_2dsphere")
+}
+
+model items {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  v         Int       @map("__v")
+  /// Multiple data types found: String: 0.5%, String (ObjectId): 99.5% out of 213 sampled entries
+  category  Json?
+  createdAt DateTime? @db.Date
+  global    Boolean?
+  isFood    Boolean?
+  isWater   Boolean?
+  /// Field referred in an index, but found no data to define the type.
+  location  Json?
+  modified  Boolean?
+  name      String
+  owners    String[]
+  packId    String?   @db.ObjectId
+  /// Multiple data types found: Array(String (ObjectId)): 99.6%, Array(Unknown): 0.4% out of 276 sampled entries
+  packs     Json?
+  quantity  Int
+  unit      String
+  updatedAt DateTime? @db.Date
+  /// Multiple data types found: Float: 0.7%, Int: 99.3% out of 282 sampled entries
+  weight    Json
+
+  @@index([name], map: "name_1")
+  @@index([weight], map: "weight_1")
+  @@index([unit], map: "unit_1")
+  @@index([category], map: "category_1")
+  @@index([location], map: "location_2dsphere")
+}
+
+model maps {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  v         Int      @map("__v")
+  createdAt DateTime @db.Date
+  geojson   String[]
+  is_public Boolean
+  name      String
+  owner_id  String   @db.ObjectId
+  updatedAt DateTime @db.Date
+}
+
+model nodes {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+}
+
+model packs {
+  id              String       @id @default(auto()) @map("_id") @db.ObjectId
+  v               Int          @map("__v")
+  /// Field referred in an index, but found no data to define the type.
+  coordinates     Json?
+  createdAt       String?
+  favorited_by    String[]
+  favorites_count Int?
+  grades          PacksGrades?
+  is_public       Boolean?
+  items           String[]
+  name            String
+  owner_id        String?      @db.ObjectId
+  /// Multiple data types found: Array(String (ObjectId)): 97.8%, Array(Unknown): 2.2% out of 357 sampled entries
+  owners          Json?
+  scores          PacksScores?
+  type            String?
+  updatedAt       DateTime?    @db.Date
+
+  @@index([name], map: "name_1")
+  @@index([owner_id], map: "owner_id_1")
+  @@index([is_public], map: "is_public_1")
+  @@index([favorited_by], map: "favorited_by_1")
+  @@index([coordinates], map: "coordinates_2dsphere")
+}
+
+model relations {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+}
+
+model templates {
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  v                Int      @map("__v")
+  createdAt        DateTime @db.Date
+  createdBy        String   @db.ObjectId
+  /// Field referred in an index, but found no data to define the type.
+  geojsonField     Json?
+  isGlobalTemplate Boolean
+  /// Field referred in an index, but found no data to define the type.
+  location         Json?
+  templateId       String   @db.ObjectId
+  type             String
+  updatedAt        DateTime @db.Date
+
+  @@index([type], map: "type_1")
+  @@index([templateId], map: "templateId_1")
+  @@index([createdBy], map: "createdBy_1")
+  @@index([location], map: "location_2d")
+  @@index([geojsonField], map: "geojsonField_2dsphere")
+}
+
+model trips {
+  id          String        @id @default(auto()) @map("_id") @db.ObjectId
+  v           Int           @map("__v")
+  createdAt   DateTime      @db.Date
+  description String
+  destination String
+  duration    String
+  end_date    DateTime      @db.Date
+  geoJSON     TripsGeoJson?
+  /// Multiple data types found: String (ObjectId): 8.1%, Array(String (ObjectId)): 91.9% out of 50 sampled entries
+  geojson     Json?
+  grades      TripsGrades?
+  is_public   Boolean
+  name        String
+  osm_ref     String?       @db.ObjectId
+  osm_type    String?
+  owner_id    String        @db.ObjectId
+  packs       String        @db.ObjectId
+  scores      TripsScores?
+  start_date  DateTime      @db.Date
+  type        String
+  updatedAt   DateTime      @db.Date
+  weather     String
+
+  @@index([owner_id], map: "owner_id_1")
+  @@index([destination], map: "destination_1")
+  @@index([start_date], map: "start_date_1")
+  @@index([end_date], map: "end_date_1")
+  @@index([is_public], map: "is_public_1")
+  @@index([packs], map: "packs_1")
+  @@index([type], map: "type_1")
+}
+
+model user_logs {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  v         Int?   @map("__v")
+  path      String
+  timestamp Int
+  user_name String
+
+  @@index([user_name], map: "user_name_1")
+}
+
+model users {
+  id                           String    @id @default(auto()) @map("_id") @db.ObjectId
+  v                            Int       @map("__v")
+  /// Field referred in an index, but found no data to define the type.
+  code                         Json?
+  createdAt                    DateTime? @db.Date
+  email                        String
+  favorites                    String[]
+  firebaseUid                  String?
+  googleId                     String?
+  is_certified_guide           Boolean?
+  /// Field referred in an index, but found no data to define the type.
+  location                     Json?
+  name                         String
+  /// Nested objects had no data in the sample dataset to introspect a nested type.
+  packs                        Json?
+  password                     String?
+  passwordResetToken           String?
+  passwordResetTokenExpiration DateTime? @db.Date
+  preferredWeather             String?
+  preferredWeight              String?
+  profileImage                 String?
+  role                         String?
+  token                        String?
+  /// Nested objects had no data in the sample dataset to introspect a nested type.
+  trips                        Json?
+  updatedAt                    DateTime? @db.Date
+  username                     String?   @unique(map: "username_1")
+
+  @@index([email], map: "email_1")
+  @@index([role], map: "role_1")
+  @@index([code], map: "code_1")
+  @@index([packs.geometry], map: "packs.geometry_2dsphere")
+  @@index([trips.geometry], map: "trips.geometry_2dsphere")
+  @@index([location], map: "location_2dsphere")
+}
+
+model ways {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+}
