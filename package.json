@@ -6,8 +6,8 @@
   "workspaces": [
     "server",
     "client",
-    "packages/*",
-    "apps/*"
+    "apps/*",
+    "packages/*"
   ],
   "scripts": {
     "clean": "rm -rf node_modules server/node_modules client/node_modules packages/node_modules package-lock.json yarn.lock server/package-lock.json client/package-lock.json packages/package-lock.json server/yarn.lock client/yarn.lock packages/yarn.lock server/dist client/dist packages/dist",

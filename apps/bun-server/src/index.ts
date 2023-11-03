@@ -6,7 +6,7 @@ import { logger } from 'hono/logger'
 import { prettyJSON } from 'hono/pretty-json'
 import { cors } from 'hono/cors'
 import { renderTrpcPanel } from 'trpc-panel'
-import { appRouter } from 'server/src/routes/trpcRouter';
+// import { appRouter } from 'server/src/routes/trpcRouter';
 // import { html } from '@elysiajs/html';
 
 const elysia = new Elysia()
@@ -22,11 +22,11 @@ const main = new Hono()
     .use('*', prettyJSON()) // With options: prettyJSON({ space: 4 })
     .use(logger())
     .use('*', cors())
-    .use('/panel', async (ctx, next) => {
-        return ctx.render(
-          renderTrpcPanel(appRouter, { url: 'http://localhost:3000/api/trpc' }),
-        );
-      })
+    // .use('/panel', async (ctx, next) => {
+    //     return ctx.render(
+    //       renderTrpcPanel(appRouter, { url: 'http://localhost:3000/api/trpc' }),
+    //     );
+    //   })
     .get('/', (c) => c.text('/Hello from Hono in root!'))
     // .mount('/:wild', api.handle)
     .mount('/workers', workers.fetch)
