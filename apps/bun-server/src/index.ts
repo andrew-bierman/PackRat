@@ -12,7 +12,7 @@ import { renderTrpcPanel } from 'trpc-panel'
 const elysia = new Elysia()
     // .use(html())
     .get('/', () => '/Hello from Elysia!')
-    .get('panel', () => renderTrpcPanel(appRouter, { url: 'http://localhost:3000/api/trpc' }))
+    // .get('panel', () => renderTrpcPanel(appRouter, { url: 'http://localhost:3000/api/trpc' }))
     .listen(8086)
 
 const workers = new Hono()
