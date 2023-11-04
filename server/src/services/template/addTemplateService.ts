@@ -1,6 +1,4 @@
-import Template from '../../models/templateModel';
-import User from '../../models/userModel';
-
+import { prisma } from "../../prisma/index";
 /**
  * Adds a template to the database.
  * @param {string} type - The type of the template.
@@ -16,20 +14,27 @@ export const addTemplateService = async (
   createdBy: string,
 ): Promise<void> => {
   try {
-    const user = await User.findById(createdBy);
-
+    const user = await prisma.user.findUnique({
+      where: {
+        id: createdBy,
+      },
+    });
+    
     if (!user) {
       throw new Error('User not found');
     }
-
-    const template = new Template({
-      type,
-      templateId,
-      isGlobalTemplate,
-      createdBy,
+    
+    const createdTemplate = await prisma.template.create({
+      data : {
+        type,
+        templateId,
+        isGlobalTemplate,
+        createdBy: {
+          connect: { id: createdBy },
+        }as any,
+      } as any ,
     });
-
-    await template.save();
+    
   } catch (error) {
     throw new Error(error.toString());
   }
