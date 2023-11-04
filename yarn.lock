@@ -20927,9 +20927,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next-app-solito@workspace:apps/solito-next":
+"next-app-solito@workspace:apps/next":
   version: 0.0.0-use.local
-  resolution: "next-app-solito@workspace:apps/solito-next"
+  resolution: "next-app-solito@workspace:apps/next"
   dependencies:
     "@expo/next-adapter": "npm:5.0.2"
     "@types/node": "npm:17.0.21"
