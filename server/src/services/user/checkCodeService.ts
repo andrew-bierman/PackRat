@@ -1,7 +1,12 @@
-import User from '../../models/userModel';
+import { prisma } from "../../prisma/index";
 
 export async function checkCodeService({ email, code }: any) {
-  return await User.find({
-    $and: [{ email: email.toLowerCase() }, { code }],
+  const user = await prisma.user.findFirst({
+    where: {
+      email: email.toLowerCase(),
+      code,
+    },
   });
+  
+  return user; // Assuming you want to return the user if found
 }
