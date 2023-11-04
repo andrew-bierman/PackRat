@@ -19,7 +19,7 @@
       "~/hooks/*": ["hooks/*"],
       "~/screens/*": ["screens/*"],
       "~/theme/*": ["theme/*"],
-      "@trpc": ["../api/src/routes/index"]
+      "@trpc": ["../packages/api/src/routes/index"]
     },
   },
   "exclude": [
