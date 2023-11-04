@@ -1,4 +1,5 @@
-import Template from '../../models/templateModel';
+
+import { prisma } from "../../prisma/index";
 
 /**
  * Edits a template.
@@ -12,19 +13,29 @@ export const editTemplateService = async (
   isGlobalTemplate: boolean,
 ) => {
   try {
-    const template: any = await Template.findById(templateId);
-
+    const template = await prisma.template.findUnique({
+      where: {
+        id: templateId,
+      },
+    });
+    
     if (!template) {
       throw new Error('Template not found');
     }
-
-    template.type = type || template.type;
-    template.isGlobalTemplate =
-      isGlobalTemplate !== undefined
-        ? isGlobalTemplate
-        : template.isGlobalTemplate;
-
-    const updatedTemplate = await template.save();
+    
+  
+   
+    const updatedTemplate = await prisma.template.update({
+      where: {
+        id: templateId,
+      },
+      data: {
+        type: type || template.type,
+        isGlobalTemplate:
+          isGlobalTemplate !== undefined ? isGlobalTemplate : template.isGlobalTemplate,
+      },
+    });
+    
     return updatedTemplate;
   } catch (error) {
     throw new Error(error.toString());

@@ -28,6 +28,7 @@
     "@hono/node-server": "^1.2.0",
     "@hono/trpc-server": "^0.1.0",
     "@packrat/validations": "*",
+    "@prisma/client": "^5.5.2",
     "@sendgrid/mail": "^7.7.0",
     "@trpc/client": "^10.38.5",
     "@trpc/server": "^10.38.5",
@@ -100,6 +101,7 @@
     "mocha": "^10.2.0",
     "openapi-generator": "^0.1.39",
     "prettier": "^3.0.2",
+    "prisma": "^5.5.2",
     "ts-node": "^10.9.1"
   },
   "engines": {

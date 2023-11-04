@@ -1,6 +1,4 @@
-import User from '../../models/userModel';
-import Pack from '../../models/packModel';
-
+import { prisma } from "../../prisma/index";
 /**
  * Adds or removes a pack from a user's favorites list.
  * @param {string} packId - The ID of the pack.
@@ -12,29 +10,78 @@ export const addToFavoriteService = async (
   userId: string,
 ): Promise<object> => {
   try {
-    const exists = await User.find(
-      { favorites: { $in: [packId] } },
-      { _id: userId },
-    );
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { id: true, favorites: true },
+    });
 
-    if (exists.length > 0) {
-      await User.updateOne({ _id: userId }, { $pull: { favorites: packId } });
-      await Pack.updateOne(
-        { _id: packId },
-        { $pull: { favorited_by: userId } },
-      );
-    } else {
-      await User.updateOne({ _id: userId }, { $push: { favorites: packId } });
-      await Pack.updateOne(
-        { _id: packId },
-        { $push: { favorited_by: userId } },
-      );
+    if (!user) {
+      throw new Error('User not found');
     }
 
-    const user = await User.findOne({ _id: userId }).select('-password');
+    const isFavorite = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        favorites: {
+          where: {
+            packId, 
+          },
+        },
+      },
+    } as any);
+ 
+    if (isFavorite) {
+      await prisma.user.update({
+        where: { id: userId },
+        data: {
+          favorites: {
+            disconnect: { id: packId },
+          },
+        },
+      } as any);
 
-    return user;
+      await prisma.pack.update({
+        where: { id: packId },
+        data: {
+          favorited_by: {
+            disconnect: { id: userId },
+          },
+        },
+      } as any);
+    } else {
+      await prisma.user.update({
+        where: { id: userId },
+        data: {
+          favorites: {
+            connect: { id: packId },
+          },
+        },
+      } as any);
+
+      await prisma.pack.update({
+        where: { id: packId },
+        data: {
+          favorited_by: {
+            connect: { id: userId },
+          },
+        },
+      }as any);
+    }
+
+    const updatedUser = await prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        username: true, 
+      },
+    });
+
+    return updatedUser;
   } catch (error) {
     throw new Error(error.message);
+  } finally {
+console.log("done")
   }
 };

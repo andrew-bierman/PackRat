@@ -1,5 +1,6 @@
-import User from '../../models/userModel';
+
 import { sendWelcomeEmail, resetEmail } from '../../utils/accountEmail';
+import {prisma} from "../../prisma/index"
 import { google } from 'googleapis';
 import {
   GOOGLE_CLIENT_ID,
@@ -9,6 +10,7 @@ import {
   UI_ROOT_URI,
   JWT_SECRET,
 } from '../../config';
+import { generateAuthToken } from '../../utils/prismaHelpers/user';
 import utilsService from '../../utils/utils.service';
 import { UserAlreadyExistsError } from '../../helpers/errors';
 
@@ -38,30 +40,42 @@ export const googleSignin = async (req, res, next) => {
     const code = req.query.code;
     const userInfo = await getGoogleUserInfo(code);
 
-    const alreadyGoogleSignin = await User.findOne({
-      email: userInfo.email,
-      name: userInfo.name,
-      password: utilsService.randomPasswordGenerator(8),
-      googleId: userInfo.id,
-    });
-    if (!alreadyGoogleSignin) {
-      const isLocalLogin = await User.findOne({ email: userInfo.email });
-      if (isLocalLogin) {
-        next(UserAlreadyExistsError);
-      }
-      const user = new User({
+    const alreadyGoogleSignin = await prisma.user.findFirst({
+      where: {
         email: userInfo.email,
         name: userInfo.name,
         password: utilsService.randomPasswordGenerator(8),
         googleId: userInfo.id,
+      },
+    });
+    
+    if (!alreadyGoogleSignin) {
+      const isLocalLogin = await prisma.user.findFirst({
+        where: {
+          email: userInfo.email,
+        },
       });
-      await user.save();
-      await user.generateAuthToken();
+      
+      if (isLocalLogin) {
+        next(UserAlreadyExistsError);
+      }
+      const generatedPassword = utilsService.randomPasswordGenerator(8);
+
+      const user = await prisma.user.create({
+        data: {
+          email: userInfo.email,
+          name: userInfo.name,
+          password: generatedPassword,
+          googleId: userInfo.id,
+        } as any,
+      });
+      
+      await generateAuthToken(user);
       sendWelcomeEmail(user.email, user.name);
       res.redirect(`${UI_ROOT_URI}?token=${user.token}`);
     } else {
       alreadyGoogleSignin.googleId = userInfo.id;
-      await alreadyGoogleSignin.generateAuthToken();
+      await generateAuthToken(alreadyGoogleSignin);
       res.redirect(`${UI_ROOT_URI}?token=${alreadyGoogleSignin.token}`);
     }
   } catch (err) {
