@@ -10164,6 +10164,7 @@ __metadata:
   dependencies:
     "@elysiajs/html": "npm:^0.7.3"
     "@hono/node-server": "npm:^1.2.0"
+    "@packrat/validations": "npm:*"
     api: "npm:*"
     elysia: "npm:^0.7.21"
     hono: "npm:^3.9.1"
