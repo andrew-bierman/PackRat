@@ -1,5 +1,5 @@
 import { createTRPCProxyClient, httpBatchLink } from '@trpc/client';
-import type { AppRouter } from 'server/src/routes/trpcRouter';
+import type { AppRouter } from 'api/src/routes/trpcRouter';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { api } from './constants/api';
 

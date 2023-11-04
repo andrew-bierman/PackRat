@@ -1971,9 +1971,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/eslintrc@npm:^2.1.2":
-  version: 2.1.2
-  resolution: "@eslint/eslintrc@npm:2.1.2"
+"@eslint/eslintrc@npm:^2.1.3":
+  version: 2.1.3
+  resolution: "@eslint/eslintrc@npm:2.1.3"
   dependencies:
     ajv: "npm:^6.12.4"
     debug: "npm:^4.3.2"
@@ -1984,14 +1984,14 @@ __metadata:
     js-yaml: "npm:^4.1.0"
     minimatch: "npm:^3.1.2"
     strip-json-comments: "npm:^3.1.1"
-  checksum: fa25638f2666cac6810f98ee7d0f4b912f191806467c1b40d72bac759fffef0b3357f12a1869817286837b258e4de3517e0c7408520e156ca860fc53a1fbaed9
+  checksum: 77b70a89232fe702c2f765b5b92970f5e4224b55363b923238b996c66fcd991504f40d3663c0543ae17d6c5049ab9b07ab90b65d7601e6f25e8bcd4caf69ac75
   languageName: node
   linkType: hard
 
-"@eslint/js@npm:8.52.0":
-  version: 8.52.0
-  resolution: "@eslint/js@npm:8.52.0"
-  checksum: 86beff213d0ae4ced203a922b74e2cc4d767d109e7815f985bf648946ba072198977102e32afc9fa04f7825a6de83a831874f6b6675ba0c1d0743ade2dc2d53d
+"@eslint/js@npm:8.53.0":
+  version: 8.53.0
+  resolution: "@eslint/js@npm:8.53.0"
+  checksum: a372d55aa2bbe0d9399acc8de3c892dcfe507fd914d29fde6826ae54a13452619be626aa7eb70b1ec4d4da5302b6ed8e8ac9bf1f830003f15c0ad56c30b4f520
   languageName: node
   linkType: hard
 
@@ -9062,6 +9062,86 @@ __metadata:
   languageName: node
   linkType: hard
 
+"api@npm:*, api@workspace:packages/api":
+  version: 0.0.0-use.local
+  resolution: "api@workspace:packages/api"
+  dependencies:
+    "@hono/node-server": "npm:^1.2.0"
+    "@hono/trpc-server": "npm:^0.1.0"
+    "@openapitools/openapi-generator-cli": "npm:^2.7.0"
+    "@packrat/validations": "npm:*"
+    "@sendgrid/mail": "npm:^7.7.0"
+    "@trpc/client": "npm:^10.38.5"
+    "@trpc/server": "npm:^10.38.5"
+    "@types/bcrypt": "npm:^5.0.0"
+    "@types/cors": "npm:^2.8.13"
+    "@types/csurf": "npm:^1.11.2"
+    "@types/mongoose": "npm:^5.11.97"
+    "@types/node": "npm:^20.8.3"
+    "@types/swagger-jsdoc": "npm:^6.0.1"
+    "@types/swagger-ui-express": "npm:^4.1.3"
+    "@types/validator": "npm:^13.11.1"
+    "@typescript-eslint/eslint-plugin": "npm:^6.4.1"
+    axios: "npm:^1.4.0"
+    bcrypt: "npm:^5.1.0"
+    body-parser: "npm:^1.20.2"
+    bull: "npm:^4.10.4"
+    celebrate: "npm:^15.0.1"
+    compression: "npm:^1.7.4"
+    cors: "npm:^2.8.5"
+    cross-env: "npm:^7.0.3"
+    csurf: "npm:^1.11.0"
+    dotenv: "npm:^16.0.3"
+    eslint: "npm:^8.47.0"
+    eslint-config-prettier: "npm:^9.0.0"
+    eslint-config-standard-with-typescript: "npm:^38.0.0"
+    eslint-plugin-import: "npm:^2.28.1"
+    eslint-plugin-n: "npm:^16.0.2"
+    eslint-plugin-prettier: "npm:^5.0.0"
+    eslint-plugin-promise: "npm:^6.1.1"
+    expect.js: "npm:^0.3.1"
+    express: "npm:^4.18.2"
+    express-rate-limit: "npm:^6.9.0"
+    firebase: "npm:^9.19.1"
+    firebase-admin: "npm:^11.5.0"
+    google-auth-library: "npm:^8.8.0"
+    googleapis: "npm:^118.0.0"
+    helmet: "npm:^7.0.0"
+    hono: "npm:^3.9.1"
+    i: "npm:^0.3.7"
+    jest: "npm:^29.6.2"
+    joi: "npm:^17.9.2"
+    jsonwebtoken: "npm:^9.0.1"
+    migrate-mongo: "npm:^10.0.0"
+    mocha: "npm:^10.2.0"
+    mongoose: "npm:^7.4.0"
+    mongoose-autopopulate: "npm:^1.0.1"
+    mongoose-to-swagger: "npm:^1.4.0"
+    morgan: "npm:^1.10.0"
+    node-fetch: "npm:^3.3.1"
+    nodemailer: "npm:^6.9.1"
+    nodemailer-smtp-transport: "npm:^2.7.4"
+    nodemon: "npm:^3.0.1"
+    openai: "npm:^3.3.0"
+    openapi-generator: "npm:^0.1.39"
+    osmtogeojson: "npm:^3.0.0-beta.5"
+    passport: "npm:^0.6.0"
+    passport-google-oauth20: "npm:^2.0.0"
+    passport-local: "npm:^1.0.0"
+    piscina: "npm:^4.0.0"
+    prettier: "npm:^3.0.2"
+    superjson: "npm:^2.0.0"
+    swagger-jsdoc: "npm:^6.2.8"
+    swagger-ui-express: "npm:^4.6.3"
+    trpc-panel: "npm:^1.3.4"
+    ts-node: "npm:^10.9.1"
+    typescript: "npm:^5.2.2"
+    uuid: "npm:^9.0.0"
+    validator: "npm:^13.9.0"
+    zod: "npm:^3.22.2"
+  languageName: unknown
+  linkType: soft
+
 "appdirsjs@npm:^1.2.4":
   version: 1.2.7
   resolution: "appdirsjs@npm:1.2.7"
@@ -9348,9 +9428,9 @@ __metadata:
   linkType: hard
 
 "async@npm:^3.2.2":
-  version: 3.2.4
-  resolution: "async@npm:3.2.4"
-  checksum: bebb5dc2258c45b83fa1d3be179ae0eb468e1646a62d443c8d60a45e84041b28fccebe1e2d1f234bfc3dcad44e73dcdbf4ba63d98327c9f6556e3dbd47c2ae8b
+  version: 3.2.5
+  resolution: "async@npm:3.2.5"
+  checksum: 323c3615c3f0ab1ac25a6f953296bc0ac3213d5e0f1c0debdb12964e55963af288d570293c11e44f7967af58c06d2a88d0ea588c86ec0fbf62fa98037f604a0f
   languageName: node
   linkType: hard
 
@@ -10084,9 +10164,10 @@ __metadata:
   dependencies:
     "@elysiajs/html": "npm:^0.7.3"
     "@hono/node-server": "npm:^1.2.0"
+    "@packrat/validations": "npm:*"
+    api: "npm:*"
     elysia: "npm:^0.7.21"
     hono: "npm:^3.9.1"
-    server: "npm:*"
     trpc-panel: "npm:^1.3.4"
     typescript: "npm:^5.2.2"
   languageName: unknown
@@ -12835,13 +12916,13 @@ __metadata:
   linkType: hard
 
 "eslint@npm:^8.47.0":
-  version: 8.52.0
-  resolution: "eslint@npm:8.52.0"
+  version: 8.53.0
+  resolution: "eslint@npm:8.53.0"
   dependencies:
     "@eslint-community/eslint-utils": "npm:^4.2.0"
     "@eslint-community/regexpp": "npm:^4.6.1"
-    "@eslint/eslintrc": "npm:^2.1.2"
-    "@eslint/js": "npm:8.52.0"
+    "@eslint/eslintrc": "npm:^2.1.3"
+    "@eslint/js": "npm:8.53.0"
     "@humanwhocodes/config-array": "npm:^0.11.13"
     "@humanwhocodes/module-importer": "npm:^1.0.1"
     "@nodelib/fs.walk": "npm:^1.2.8"
@@ -12878,7 +12959,7 @@ __metadata:
     text-table: "npm:^0.2.0"
   bin:
     eslint: bin/eslint.js
-  checksum: 01784ab15351d749bc95446039ed7acd5124f7cc84acdbf98c7199272eae06212a8f3ea4a9b47e7cc54ab17ca094c3a664bbfc3002c7de27936220e278b5028a
+  checksum: e305a71ce2b9a8631b293266fe53e346c76f28bc8d004af33f10e537cf133db1fb87af3599376e70ed6e0f89a78be10c4f08ddd0c1c9c0c497cd143b4a270420
   languageName: node
   linkType: hard
 
@@ -14968,9 +15049,9 @@ __metadata:
   linkType: hard
 
 "hono@npm:^3.9.1":
-  version: 3.9.1
-  resolution: "hono@npm:3.9.1"
-  checksum: 5855daedda5ef8c60e8cdcbc1d51495c594b874736ad12e2055069fa39e3048fb986231a2a0a865e49d2e45a563b98c0adcd44e76acb1499eb92c06650018d6f
+  version: 3.9.2
+  resolution: "hono@npm:3.9.2"
+  checksum: 9c415c913f2d99bd77c8cdf9870fe66e40f8cadaff7726cd379bebc997c4eeb862756279cb56468fa20475f55c72d207051a0504c42062220c08c1d810930d3a
   languageName: node
   linkType: hard
 
@@ -20215,6 +20296,7 @@ __metadata:
     "@types/react-test-renderer": "npm:^18.0.0"
     "@types/server": "npm:^1.0.5"
     "@typescript-eslint/eslint-plugin": "npm:^6.4.1"
+    api: "npm:*"
     axios: "npm:^1.4.0"
     babel-plugin-transform-inline-environment-variables: "npm:^0.4.4"
     burnt: "npm:^0.12.1"
@@ -20280,7 +20362,6 @@ __metadata:
     react-responsive: "npm:^9.0.2"
     redux-persist: "npm:^6.0.0"
     serve: "npm:^14.2.0"
-    server: "npm:*"
     tamagui: "npm:^1.75.9"
     togpx: "npm:^0.5.4"
     typescript: "npm:^5.2.2"
@@ -23150,86 +23231,6 @@ __metadata:
   checksum: d070aed56ac650e8eaca24675e4c2f1ffb44ffce62f7e14eb9bd2cdc01c57c997bb3c1e2eea5a09a9e4667890e30c04138e57c9db6d713d48ba923c5ab8fe2b5
   languageName: node
   linkType: hard
-
-"server@npm:*, server@workspace:server":
-  version: 0.0.0-use.local
-  resolution: "server@workspace:server"
-  dependencies:
-    "@hono/node-server": "npm:^1.2.0"
-    "@hono/trpc-server": "npm:^0.1.0"
-    "@openapitools/openapi-generator-cli": "npm:^2.7.0"
-    "@packrat/validations": "npm:*"
-    "@sendgrid/mail": "npm:^7.7.0"
-    "@trpc/client": "npm:^10.38.5"
-    "@trpc/server": "npm:^10.38.5"
-    "@types/bcrypt": "npm:^5.0.0"
-    "@types/cors": "npm:^2.8.13"
-    "@types/csurf": "npm:^1.11.2"
-    "@types/mongoose": "npm:^5.11.97"
-    "@types/node": "npm:^20.8.3"
-    "@types/swagger-jsdoc": "npm:^6.0.1"
-    "@types/swagger-ui-express": "npm:^4.1.3"
-    "@types/validator": "npm:^13.11.1"
-    "@typescript-eslint/eslint-plugin": "npm:^6.4.1"
-    axios: "npm:^1.4.0"
-    bcrypt: "npm:^5.1.0"
-    body-parser: "npm:^1.20.2"
-    bull: "npm:^4.10.4"
-    celebrate: "npm:^15.0.1"
-    compression: "npm:^1.7.4"
-    cors: "npm:^2.8.5"
-    cross-env: "npm:^7.0.3"
-    csurf: "npm:^1.11.0"
-    dotenv: "npm:^16.0.3"
-    eslint: "npm:^8.47.0"
-    eslint-config-prettier: "npm:^9.0.0"
-    eslint-config-standard-with-typescript: "npm:^38.0.0"
-    eslint-plugin-import: "npm:^2.28.1"
-    eslint-plugin-n: "npm:^16.0.2"
-    eslint-plugin-prettier: "npm:^5.0.0"
-    eslint-plugin-promise: "npm:^6.1.1"
-    expect.js: "npm:^0.3.1"
-    express: "npm:^4.18.2"
-    express-rate-limit: "npm:^6.9.0"
-    firebase: "npm:^9.19.1"
-    firebase-admin: "npm:^11.5.0"
-    google-auth-library: "npm:^8.8.0"
-    googleapis: "npm:^118.0.0"
-    helmet: "npm:^7.0.0"
-    hono: "npm:^3.9.1"
-    i: "npm:^0.3.7"
-    jest: "npm:^29.6.2"
-    joi: "npm:^17.9.2"
-    jsonwebtoken: "npm:^9.0.1"
-    migrate-mongo: "npm:^10.0.0"
-    mocha: "npm:^10.2.0"
-    mongoose: "npm:^7.4.0"
-    mongoose-autopopulate: "npm:^1.0.1"
-    mongoose-to-swagger: "npm:^1.4.0"
-    morgan: "npm:^1.10.0"
-    node-fetch: "npm:^3.3.1"
-    nodemailer: "npm:^6.9.1"
-    nodemailer-smtp-transport: "npm:^2.7.4"
-    nodemon: "npm:^3.0.1"
-    openai: "npm:^3.3.0"
-    openapi-generator: "npm:^0.1.39"
-    osmtogeojson: "npm:^3.0.0-beta.5"
-    passport: "npm:^0.6.0"
-    passport-google-oauth20: "npm:^2.0.0"
-    passport-local: "npm:^1.0.0"
-    piscina: "npm:^4.0.0"
-    prettier: "npm:^3.0.2"
-    superjson: "npm:^2.0.0"
-    swagger-jsdoc: "npm:^6.2.8"
-    swagger-ui-express: "npm:^4.6.3"
-    trpc-panel: "npm:^1.3.4"
-    ts-node: "npm:^10.9.1"
-    typescript: "npm:^5.2.2"
-    uuid: "npm:^9.0.0"
-    validator: "npm:^13.9.0"
-    zod: "npm:^3.22.2"
-  languageName: unknown
-  linkType: soft
 
 "set-blocking@npm:^2.0.0":
   version: 2.0.0

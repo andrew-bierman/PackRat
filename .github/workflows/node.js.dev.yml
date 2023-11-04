@@ -41,7 +41,7 @@ jobs:
     #   run: yarn policies set-version
 
     - name: Install dependencies
-      run: yarn install
+      run: yarn install --inline-builds
 
     - name: Debug more
       run: |
