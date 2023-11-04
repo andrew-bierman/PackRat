@@ -14,9 +14,9 @@ services:
   server:
     build:
       context: .
-      dockerfile: server/Dockerfile
+      dockerfile: packages/api/Dockerfile
     ports:
       - 3000:3000
     volumes:
-      - ./server:/app/server
-      - /app/server/node_modules
+      - ./packages/api:/app/packages/api
+      - /app/packages/api/node_modules

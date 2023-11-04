@@ -13,7 +13,7 @@
     "@hono/node-server": "^1.2.0",
     "elysia": "^0.7.21",
     "hono": "^3.9.1",
-    "server": "*",
+    "api": "*",
     "trpc-panel": "^1.3.4"
   }
 }
