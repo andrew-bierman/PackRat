@@ -6,6 +6,7 @@ import { middleware } from '../trpc';
 import { TRPCError } from '@trpc/server';
 import { z, ZodError } from 'zod';
 import { TokenSchema } from './validators/authTokenValidator';
+import {prisma} from "../prisma/index"
 
 declare global {
   namespace Express {
@@ -67,9 +68,11 @@ const verifyToken = (token: string): JwtPayload => {
  * @throws {Error} If user is not found.
  */
 const findUser = async (decoded: JwtPayload, token: string): Promise<IUser> => {
-  const user: IUser | null = await User.findOne({
-    _id: decoded._id,
-    token,
+  const user:any = await prisma.user.findUnique({
+    where: {
+      id: decoded._id,
+      token: token,
+    },
   });
   if (!user) throw new Error('User associated with this token not found.');
   return user;

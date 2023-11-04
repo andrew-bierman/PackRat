@@ -1,4 +1,5 @@
-import Trip from '../../models/tripModel';
+// services/tripService.ts
+import { prisma } from "../../prisma/index";
 
 /**
  * Retrieves public trips based on the given query parameter.
@@ -9,59 +10,36 @@ export const getPublicTripsService = async (
   queryBy: string,
 ): Promise<object[]> => {
   try {
-    const publicTripsPipeline: any[] = [
-      {
-        $match: { is_public: true },
-      },
-      {
-        $lookup: {
-          from: 'packs',
-          localField: '_id',
-          foreignField: 'trips',
-          as: 'packs',
+    const trips = await prisma.trip.findMany({
+      where: { is_public: true },
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        duration: true,
+        weather: true,
+        start_date: true,
+        end_date: true,
+        destination: true,
+        owner: {
+          select: {
+            id: true,
+            username: true,
+          },
         },
-      },
-      {
-        $lookup: {
-          from: 'users',
-          localField: 'owner_id',
-          foreignField: '_id',
-          as: 'owner',
+        packs: {
+          select: {
+            id: true,
+          },
         },
+        createdAt: true,
+        updatedAt: true,
       },
-      {
-        $addFields: {
-          owner: { $arrayElemAt: ['$owner', 0] },
-        },
-      },
-      {
-        $project: {
-          _id: 1,
-          name: 1,
-          description: 1,
-          duration: 1,
-          weather: 1,
-          start_date: 1,
-          end_date: 1,
-          destination: 1,
-          'owner._id': 1,
-          'owner.username': 1,
-          'packs._id': 1,
-          createdAt: 1,
-          updatedAt: 1,
-        },
-      },
-    ];
+      orderBy: queryBy === 'Favorite' ? { id: 'desc' } : { id: 'asc' }
 
-    if (queryBy === 'Favorite') {
-      publicTripsPipeline.push({ $sort: { favorites_count: -1 } });
-    } else {
-      publicTripsPipeline.push({ $sort: { _id: -1 } });
-    }
+    } as any);
 
-    const publicTrips = await Trip.aggregate(publicTripsPipeline);
-
-    return publicTrips;
+    return trips;
   } catch (error) {
     console.error(error);
     throw new Error('Trips cannot be found');
