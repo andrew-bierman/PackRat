@@ -8,17 +8,18 @@ export default function Index() {
   const router = useRouter();
   const navigationState = useRootNavigationState();
   const user = useSelector((state) => state.auth.user);
+  if (!navigationState?.key) return null;
   const isWeb = Platform.OS === 'web';
   if (!user) {
-    return (
-      <>
-        {!isWeb && <Navigation />}
-        <LandingPage />
-      </>
-    );
+    return router.replace('/onboarding');
+    // return (
+    //   <>
+    //     {!isWeb && <Navigation />}
+    //     <LandingPage />
+    //   </>
+    // );
   }
   if (user) {
-    if (!navigationState?.key) return null;
     if (isWeb) return router.replace('/home');
     router.replace('/tabs');
   }

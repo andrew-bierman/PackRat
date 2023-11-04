@@ -1,4 +1,6 @@
 import RStack from './RStack';
+import XStack from './XStack';
+import YStack from './YStack';
 import RText from './RText';
 import RCard from './RCard';
 import RParagraph from './Rparagraph';
@@ -10,6 +12,8 @@ import TSkeleton from './Skeleton';
 
 export {
   RStack,
+  XStack,
+  YStack,
   RText,
   RCard,
   RParagraph,
@@ -17,5 +21,5 @@ export {
   RButton,
   RImage,
   RScrollView,
-  TSkeleton
+  TSkeleton,
 };

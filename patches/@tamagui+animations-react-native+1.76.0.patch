@@ -1,0 +1,61 @@
+diff --git a/node_modules/@tamagui/animations-react-native/dist/cjs/createAnimations.js b/node_modules/@tamagui/animations-react-native/dist/cjs/createAnimations.js
+index 0790cc4..acd882a 100644
+--- a/node_modules/@tamagui/animations-react-native/dist/cjs/createAnimations.js
++++ b/node_modules/@tamagui/animations-react-native/dist/cjs/createAnimations.js
+@@ -199,13 +199,13 @@ function createAnimations(animations) {
+             completions.push(promise), runners.push(() => {
+               value.stopAnimation();
+               function getAnimation() {
+-                return import_react_native.Animated[animationConfig.type || "spring"](value, {
++                return import_react_native.Animated[(animationConfig && animationConfig.type || "spring")](value, {
+                   toValue: animateToValue,
+                   useNativeDriver: !import_web.isWeb && !isThereNoNativeStyleKeys,
+                   ...animationConfig
+                 });
+               }
+-              (animationConfig.delay ? import_react_native.Animated.sequence([
++              (animationConfig && animationConfig.delay ? import_react_native.Animated.sequence([
+                 import_react_native.Animated.delay(animationConfig.delay),
+                 getAnimation()
+               ]) : getAnimation()).start(({ finished }) => {
+diff --git a/node_modules/@tamagui/animations-react-native/dist/cjs/createAnimations.native.js b/node_modules/@tamagui/animations-react-native/dist/cjs/createAnimations.native.js
+index b07415b..07685ec 100644
+--- a/node_modules/@tamagui/animations-react-native/dist/cjs/createAnimations.native.js
++++ b/node_modules/@tamagui/animations-react-native/dist/cjs/createAnimations.native.js
+@@ -200,13 +200,13 @@ function createAnimations(animations) {
+             completions.push(promise), runners.push(() => {
+               value.stopAnimation();
+               function getAnimation() {
+-                return import_react_native.Animated[animationConfig.type || "spring"](value, {
++                return import_react_native.Animated[(animationConfig && animationConfig.type || "spring")](value, {
+                   toValue: animateToValue,
+                   useNativeDriver: !import_web.isWeb && !isThereNoNativeStyleKeys,
+                   ...animationConfig
+                 });
+               }
+-              (animationConfig.delay ? import_react_native.Animated.sequence([
++              (animationConfig && animationConfig.delay ? import_react_native.Animated.sequence([
+                 import_react_native.Animated.delay(animationConfig.delay),
+                 getAnimation()
+               ]) : getAnimation()).start(({ finished }) => {
+diff --git a/node_modules/@tamagui/animations-react-native/src/createAnimations.tsx b/node_modules/@tamagui/animations-react-native/src/createAnimations.tsx
+index 8db4cd2..d512f2a 100644
+--- a/node_modules/@tamagui/animations-react-native/src/createAnimations.tsx
++++ b/node_modules/@tamagui/animations-react-native/src/createAnimations.tsx
+@@ -317,14 +317,14 @@ export function createAnimations<A extends AnimationsConfig>(
+               value.stopAnimation()
+ 
+               function getAnimation() {
+-                return Animated[animationConfig.type || 'spring'](value, {
++                return Animated[(animationConfig && animationConfig.type || 'spring')](value, {
+                   toValue: animateToValue,
+                   useNativeDriver: !isWeb && !isThereNoNativeStyleKeys,
+                   ...animationConfig,
+                 })
+               }
+ 
+-              const animation = animationConfig.delay
++              const animation = animationConfig && animationConfig.delay
+                 ? Animated.sequence([
+                     Animated.delay(animationConfig.delay),
+                     getAnimation(),

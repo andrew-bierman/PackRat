@@ -48,7 +48,7 @@ const Drawer = ({
   const navigateTo = useCallback(
     (href) => {
       const isWeb = Platform.OS === 'web';
-      if (href === 'logout') {
+      if (href === '/logout') {
         dispatch(signOut());
         sessionSignOut();
       } else {

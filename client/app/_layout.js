@@ -6,7 +6,10 @@ import Navigation from '../screens/Navigation';
 
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
+// import '@tamagui/core/reset.css';
 
+import { TamaguiProvider } from 'tamagui';
+import tamaguiConfig from '../tamagui.config';
 import { store, persistor } from '../store/store';
 
 import { SessionProvider } from '../context/auth';
@@ -16,17 +19,19 @@ import Footer from '../components/footer/Footer';
 
 export default function HomeLayout() {
   return (
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <SessionProvider>
-          <ThemeProvider>
-            <FlashMessage position="top" />
-            {Platform.OS === 'web' && <Navigation />}
-            <Slot />
-            {/* {Platform.OS === 'web' ? <Footer /> : null} */}
-          </ThemeProvider>
-        </SessionProvider>
-      </PersistGate>
-    </Provider>
+    <TamaguiProvider config={tamaguiConfig}>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <SessionProvider>
+            <ThemeProvider>
+              <FlashMessage position="top" />
+              {Platform.OS === 'web' && <Navigation />}
+              <Slot />
+              {/* {Platform.OS === 'web' ? <Footer /> : null} */}
+            </ThemeProvider>
+          </SessionProvider>
+        </PersistGate>
+      </Provider>
+    </TamaguiProvider>
   );
 }
