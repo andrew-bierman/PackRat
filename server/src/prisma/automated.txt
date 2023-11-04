@@ -879,7 +879,7 @@ model user_logs {
 
 model User {
   id                           String    @id @default(auto()) @map("_id") @db.ObjectId
- 
+  v                            Int       @map("__v")
   /// Field referred in an index, but found no data to define the type.
   code                         Json?
   createdAt                    DateTime? @db.Date
@@ -904,7 +904,7 @@ model User {
   /// Nested objects had no data in the sample dataset to introspect a nested type.
   trips                        Json?
   updatedAt                    DateTime? @db.Date
-  username                     String?   @unique
+  username                     String?   @unique(map: "username_1")
 
   
   @@index([role], map: "role_1")
