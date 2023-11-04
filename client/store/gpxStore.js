@@ -13,7 +13,7 @@ export const convertGeoJSONToGPX = createAsyncThunk(
     try {
       // const response = await axios.post(`${api}/gpx/geojson`, { geoJSON });
       // return response.data;
-      return await trpc.convertGeoJSONToGPX.mutate(geoJSON);
+      return await trpc.postSingleGeoJSON.mutate({ geoJSON });
     } catch (error) {
       return rejectWithValue(error.message);
     }
