@@ -1,5 +1,4 @@
-import Item from '../../models/itemModel';
-
+import { prisma } from '../../prisma/index';
 /**
  * Deletes a global item by its ID.
  *
@@ -7,7 +6,11 @@ import Item from '../../models/itemModel';
  * @return {Promise<Document>} - A promise that resolves to the deleted item.
  */
 export const deleteGlobalItemService = async (itemId) => {
-  const itemDeleted = await Item.findByIdAndDelete(itemId);
+  const itemDeleted = await prisma.item.delete({
+    where: {
+      id: itemId,
+    },
+  });
 
   return itemDeleted;
 };

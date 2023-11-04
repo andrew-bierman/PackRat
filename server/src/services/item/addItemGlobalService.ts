@@ -1,7 +1,6 @@
-import Item from '../../models/itemModel';
-import Pack from '../../models/packModel';
-import { ItemCategoryModel } from '../../models/itemCategory';
+import { never } from 'zod';
 import { ItemCategoryEnum } from '../../utils/itemCategory';
+import { prisma } from '../../prisma/index';
 
 /**
  * Adds an item to the global service.
@@ -25,57 +24,100 @@ export const addItemGlobalService = async (
 
   switch (type) {
     case ItemCategoryEnum.FOOD: {
-      category = await ItemCategoryModel.findOne({
-        name: ItemCategoryEnum.FOOD,
+      const category = await prisma.itemcategories.findFirst({
+        where: {
+          name: ItemCategoryEnum.FOOD,
+        },
       });
 
-      newItem = await Item.create({
-        name,
-        weight,
-        quantity,
-        unit,
-        category: category._id,
-        global: true,
+      let newItem = await prisma.item.create({
+        data: {
+          name,
+          weight,
+          quantity,
+          unit,
+          category: {
+            connect: { id: category.id },
+          },
+          global: true,
+        } as any,
       });
-
-      newItem = await Item.findById(newItem.id).populate('category', 'name');
+      newItem = await prisma.item.findUnique({
+        where: {
+          id: newItem.id,
+        },
+        include: {
+          category: {
+            select: {
+              name: true,
+            },
+          },
+        } as never,
+      });
 
       break;
     }
     case ItemCategoryEnum.WATER: {
-      category = await ItemCategoryModel.findOne({
-        name: ItemCategoryEnum.WATER,
+      const category = await prisma.itemcategories.findFirst({
+        where: {
+          name: ItemCategoryEnum.WATER,
+        },
+      });
+      newItem = await prisma.item.create({
+        data: {
+          name,
+          weight,
+          quantity: 1,
+          unit,
+          categoryId: category.id, // Assuming 'category' is the related model
+          global: true,
+        } as any,
       });
 
-      newItem = await Item.create({
-        name,
-        weight,
-        quantity: 1,
-        unit,
-        category: category._id,
-        global: true,
+      newItem = await prisma.item.findUnique({
+        where: {
+          id: newItem.id,
+        },
+        include: {
+          category: {
+            select: {
+              name: true,
+            },
+          },
+        } as never,
       });
-
-      newItem = await Item.findById(newItem.id).populate('category', 'name');
 
       break;
     }
     default: {
-      category = await ItemCategoryModel.findOne({
-        name: ItemCategoryEnum.ESSENTIALS,
+      category = await prisma.itemcategories.findFirst({
+        where: {
+          name: ItemCategoryEnum.ESSENTIALS,
+        },
       });
 
-      newItem = await Item.create({
-        name,
-        weight,
-        quantity,
-        unit,
-        category: category._id,
-        global: true,
+      newItem = await prisma.item.create({
+        data: {
+          name,
+          weight,
+          quantity,
+          unit,
+          categoryId: category.id,
+          global: true,
+        } as any,
       });
-
-      newItem = await Item.findById(newItem.id).populate('category', 'name');
-
+      newItem = await prisma.item.findUnique({
+        where: {
+          id: newItem.id,
+        },
+        include: {
+          category: {
+            select: {
+              name: true,
+            },
+          },
+        } as never,
+      });
       break;
     }
   }

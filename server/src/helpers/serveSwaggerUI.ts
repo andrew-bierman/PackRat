@@ -2,6 +2,7 @@ import { ItemCategory } from '../utils/itemCategory';
 import { ItemCategoryModel } from '../models/itemCategory';
 import swaggerUi from 'swagger-ui-express';
 import specs from '../swaggerOptions';
+import { prisma } from '../prisma/index';
 import { type Request, type Response } from 'express';
 
 /**
@@ -21,8 +22,10 @@ export const serveSwaggerUI = (app: any) => {
     app.get('/seed/category', (req: Request, res: Response) => {
       console.log('Seeding...');
       ItemCategory.forEach(async (category) => {
-        await ItemCategoryModel.create({
-          name: category,
+        await prisma.itemcategories.create({
+          data: {
+            name: category,
+          } as any,
         });
       });
       res.status(200).send('Seeding done');

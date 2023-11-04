@@ -1,4 +1,4 @@
-import Pack from '../../models/packModel';
+import { prisma } from '../../prisma/index';
 
 /**
  * Adds a new pack service.
@@ -7,6 +7,7 @@ import Pack from '../../models/packModel';
  * @param {string} owner_id - The ID of the pack owner.
  * @return {Object} An object containing the created pack.
  */
+
 export const addPackService = async (name, owner_id) => {
   const newPack = {
     name,
@@ -20,9 +21,22 @@ export const addPackService = async (name, owner_id) => {
 
   console.log('newPack', newPack);
 
-  const exists = await Pack.find({ name });
+  // Check if a pack with the same name already exists
+  const existingPack = await prisma.pack.findFirst({
+    where: {
+      name,
+    },
+  });
 
-  const createdPack = await Pack.create(newPack);
+  if (existingPack) {
+    // A pack with the same name already exists
+    throw new Error('A pack with the same name already exists');
+  }
+
+  // Create the new pack
+  const createdPack = await prisma.pack.create({
+    data: newPack as any,
+  });
 
   return { createdPack };
 };

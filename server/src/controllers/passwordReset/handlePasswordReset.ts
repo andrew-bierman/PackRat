@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import User from '../../models/userModel';
+
 import { JWT_SECRET, SEND_GRID_API_KEY } from '../../config';
 
 import sgMail from '@sendgrid/mail';
@@ -8,6 +8,7 @@ import { responseHandler } from '../../helpers/responseHandler';
 import { z } from 'zod';
 import { publicProcedure } from '../../trpc';
 
+import { prisma } from '../../prisma/index';
 sgMail.setApiKey(SEND_GRID_API_KEY);
 
 // Verify a password reset token and return the user's email address
@@ -29,7 +30,11 @@ export const handlePasswordReset = async (req, res) => {
     const email = verifyPasswordResetToken(token);
     const hashedPassword = bcrypt.hashSync(password, 10); // hash the password
 
-    const user = await User.findOne({ email });
+    const user = await prisma.user.findUnique({
+      where: {
+        email: email,
+      },
+    } as any);
 
     if (!user) {
       throw new Error('No user found with this email address');
@@ -39,14 +44,16 @@ export const handlePasswordReset = async (req, res) => {
       throw new Error('Password reset token has expired');
     }
 
-    await User.findOneAndUpdate(
-      { email },
-      {
+    await prisma.user.update({
+      where: {
+        email: email,
+      },
+      data: {
         password: hashedPassword,
         passwordResetToken: null,
         passwordResetTokenExpiration: null,
       },
-    );
+    } as any);
 
     res.locals.data = { message: 'Password reset successful' };
     responseHandler(res);
@@ -64,7 +71,11 @@ export function handlePasswordResetRoute() {
     .mutation(async (opts) => {
       const { token } = opts.input;
       const email = verifyPasswordResetToken(token);
-      const user = await User.findOne({ email });
+      const user = await prisma.user.findUnique({
+        where: {
+          email: email,
+        },
+      } as any);
 
       if (!user) {
         return { error: 'No user found with this email address' };

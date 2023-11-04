@@ -1,4 +1,4 @@
-import User from '../../models/userModel';
+import { prisma } from '../../prisma/index';
 
 /**
  * Finds a user by their email address.
@@ -8,8 +8,13 @@ import User from '../../models/userModel';
  */
 export async function findUserByEmail(email: string): Promise<any> {
   try {
-    const val = await User.find({ email: email.toLowerCase() });
-    if (val.length > 0) {
+    const user = await prisma.user.findUnique({
+      where: {
+        email: email.toLowerCase(),
+      },
+    } as any);
+
+    if (user) {
       return true;
     } else {
       return 'User not found';

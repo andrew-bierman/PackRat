@@ -1,6 +1,5 @@
-import Pack from '../../models/packModel';
-import mongoose from 'mongoose';
 import { calculatePackScore } from '../../utils/scorePack';
+import { prisma } from '../../prisma/index';
 
 /**
  * Scores a pack service based on the given packId.
@@ -11,21 +10,29 @@ import { calculatePackScore } from '../../utils/scorePack';
  */
 export async function scorePackService(packId: string) {
   try {
-    const objectId = new mongoose.Types.ObjectId(packId);
-    const packData = await Pack.findById(objectId).populate('items');
+    const packData = await prisma.pack.findUnique({
+      where: { id: packId },
+      include: { items: true }, // Assuming you have a relationship defined in your Prisma schema
+    });
+
+    if (!packData) {
+      throw new Error('Pack not found');
+    }
 
     const packScore = calculatePackScore(packData);
 
-    const { scores, grades } = packScore;
-
-    const updatedPack = await Pack.findByIdAndUpdate(
-      { _id: packId },
-      { scores, grades },
-      { returnOriginal: false },
-    );
+    const updatedPack = await prisma.pack.update({
+      where: { id: packId },
+      data: {
+        scores: packScore.scores,
+        grades: packScore.grades,
+      },
+    });
 
     return updatedPack;
   } catch (error) {
     throw new Error('Unable to score pack: ' + error.message);
+  } finally {
+    await prisma.$disconnect(); // Disconnect from the database client
   }
 }

@@ -2,10 +2,12 @@
 
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
-import User from '../../models/userModel';
+
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { sendWelcomeEmail, resetEmail } from '../../utils/accountEmail';
+import { prisma } from '../../prisma/index';
+import { generateAuthToken } from '../../utils/prismaHelpers/user';
 
 import {
   GOOGLE_CLIENT_ID,
@@ -35,8 +37,11 @@ passport.use(
     },
     async (email, password, done) => {
       try {
-        const user = await User.findOne({ email });
-
+        const user = await prisma.user.findUnique({
+          where: {
+            email: email,
+          },
+        } as any);
         if (!user) {
           return done(null, false, { message: 'Incorrect email.' });
         }
@@ -75,9 +80,18 @@ export const signInGoogle = async (req, res) => {
 
     const { email, name, sub: googleId } = decodedToken;
 
-    const alreadyGoogleSignin = await User.findOne({ email, googleId });
+    const alreadyGoogleSignin = await prisma.user.findUnique({
+      where: {
+        email: email,
+        googleId: googleId,
+      },
+    } as any);
     if (!alreadyGoogleSignin) {
-      const isLocalLogin = await User.findOne({ email });
+      const isLocalLogin = await prisma.user.findUnique({
+        where: {
+          email: email,
+        },
+      } as any);
 
       if (isLocalLogin) {
         throw new Error('Already user registered on that email address');
@@ -85,18 +99,17 @@ export const signInGoogle = async (req, res) => {
 
       const randomPassword = utilsService.randomPasswordGenerator(8);
       const username = utilsService.randomUserNameCode(email, 4);
-
-      const user = new User({
-        email,
-        name,
-        password: randomPassword,
-        googleId,
-        username,
+      const user = await prisma.user.create({
+        data: {
+          email,
+          name,
+          password: randomPassword,
+          googleId,
+          username,
+        } as any,
       });
 
-      await user.save();
-
-      await user.generateAuthToken();
+      await generateAuthToken(user);
 
       sendWelcomeEmail(user.email, user.name);
 
@@ -108,10 +121,16 @@ export const signInGoogle = async (req, res) => {
       }
 
       alreadyGoogleSignin.googleId = googleId;
+      await prisma.user.update({
+        where: {
+          email: alreadyGoogleSignin.email,
+        },
+        data: {
+          googleId: googleId,
+        },
+      } as any);
 
-      await alreadyGoogleSignin.save();
-
-      await alreadyGoogleSignin.generateAuthToken();
+      await generateAuthToken(alreadyGoogleSignin);
 
       res.locals.data = { user: alreadyGoogleSignin };
       responseHandler(res);
@@ -126,9 +145,18 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser((id, done) => {
-  User.findById(id, (err, user) => {
-    done(err, user);
-  });
+  prisma.user
+    .findUnique({
+      where: {
+        id: id,
+      },
+    })
+    .then((user) => {
+      done(null, user);
+    })
+    .catch((err) => {
+      done(err, null);
+    });
 });
 
 export function googleSigninRoute() {
@@ -144,27 +172,34 @@ export function googleSigninRoute() {
 
       const { email, name, sub: googleId } = decodedToken;
 
-      const alreadyGoogleSignin = await User.findOne({ email, googleId });
+      const alreadyGoogleSignin = await prisma.user.findUnique({
+        where: {
+          email: email,
+          googleId: googleId,
+        },
+      } as any);
       if (!alreadyGoogleSignin) {
-        const isLocalLogin = await User.findOne({ email });
+        const isLocalLogin = await prisma.user.findUnique({
+          where: {
+            email: email,
+          },
+        } as any);
 
         if (isLocalLogin) {
           throw new Error('Already user registered on that email address');
         }
-
         const randomPassword = utilsService.randomPasswordGenerator(8);
         // const randomPassword = '1234abcdefg5678';
 
-        const user = new User({
-          email,
-          name,
-          password: randomPassword,
-          googleId,
+        const user = await prisma.user.create({
+          data: {
+            email,
+            name,
+            password: randomPassword,
+            googleId,
+          } as any,
         });
-
-        await user.save(); // save the user without callback
-
-        await user.generateAuthToken();
+        await generateAuthToken(user);
 
         sendWelcomeEmail(user.email, user.name);
         return user;
@@ -174,11 +209,16 @@ export function googleSigninRoute() {
             utilsService.randomPasswordGenerator(8);
         }
 
-        alreadyGoogleSignin.googleId = googleId;
-
-        await alreadyGoogleSignin.generateAuthToken();
-
-        await alreadyGoogleSignin.save();
+        await generateAuthToken(alreadyGoogleSignin);
+        await prisma.user.update({
+          where: {
+            email: email,
+            googleId: alreadyGoogleSignin.googleId,
+          },
+          data: {
+            googleId: googleId,
+          },
+        } as any);
 
         return { user: alreadyGoogleSignin };
       }

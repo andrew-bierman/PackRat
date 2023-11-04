@@ -1,9 +1,9 @@
-import User from '../../models/userModel';
 import { addToFavoriteService } from '../../services/favorite/favorite.service';
 import { UserNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { publicProcedure } from '../../trpc';
 import * as validator from '../../middleware/validators/index';
+import { prisma } from '../../prisma/index';
 /**
  * Adds or removes a pack from a user's favorites list and updates the corresponding pack's favorited_by array.
  * @param {Object} req - The request object containing the packId and userId properties in the body.
@@ -13,7 +13,17 @@ import * as validator from '../../middleware/validators/index';
 export const addToFavorite = async (req, res, next) => {
   const { packId, userId } = req.body;
   await addToFavoriteService(packId, userId);
-  const user = await User.findOne({ _id: userId }).select('-password');
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userId, // Assuming userId is the user's ID
+    },
+    select: {
+      // Exclude the 'password' field
+      id: true,
+      email: true,
+      name: true, // Include other fields you want
+    },
+  });
   if (!user) next(UserNotFoundError);
   res.locals.data = user;
   responseHandler(res);
@@ -25,7 +35,18 @@ export function addToFavoriteRoute() {
     .mutation(async (opts) => {
       const { packId, userId } = opts.input;
       await addToFavoriteService(packId, userId);
-      const user = await User.findOne({ _id: userId }).select('-password');
+      const user = await prisma.user.findUnique({
+        where: {
+          id: userId, // Assuming userId is the user's ID
+        },
+        select: {
+          // Exclude the 'password' field
+          id: true,
+          email: true,
+          name: true, // Include other fields you want
+        },
+      });
+
       // if (!user) throw UserNotFoundError;
       if (!user) return UserNotFoundError;
       return user;

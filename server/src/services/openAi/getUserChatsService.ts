@@ -1,6 +1,4 @@
-import mongoose from 'mongoose';
-import User from '../../models/userModel';
-import Conversation from '../../models/openai/conversationModel';
+import { prisma } from '../../prisma/index';
 
 /**
  * Retrieves the user's chats based on their userId.
@@ -10,16 +8,17 @@ import Conversation from '../../models/openai/conversationModel';
  * @throws {Error} If the userId is invalid or if the user is not found.
  */
 export const getUserChatsService = async (userId) => {
-  if (!mongoose.Types.ObjectId.isValid(userId)) {
-    throw new Error('Invalid userId');
-  }
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+  });
 
-  const user = await User.findById(userId).exec();
   if (!user) {
     throw new Error('User not found');
   }
 
-  const conversations = await Conversation.find({ userId }).exec();
+  const conversations = await prisma.conversation.findMany({
+    where: { userId },
+  });
 
   return { conversations };
 };

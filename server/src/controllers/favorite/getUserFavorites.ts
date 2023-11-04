@@ -3,8 +3,9 @@ import { UserFavoritesNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { getUserFavoritesService } from '../../services/favorite/favorite.service';
 import * as validator from '../../middleware/validators/index';
-import User from '../../models/userModel';
+
 import { z } from 'zod';
+import { prisma } from '../../prisma/index';
 /**
  * Retrieves the favorite items of a user.
  * @param {Object} req - The request object.
@@ -24,7 +25,14 @@ export function getUserFavoritesRoute() {
     .input(z.object({ userId: z.string() }))
     .query(async (opts) => {
       const { userId } = opts.input;
-      const user = await User.findById({ _id: userId }).populate('favorites');
+      const user = await prisma.user.findUnique({
+        where: {
+          id: userId, // Assuming userId is the user's ID
+        },
+        include: {
+          favorites: true,
+        },
+      } as any);
       return user.favorites;
     });
 }

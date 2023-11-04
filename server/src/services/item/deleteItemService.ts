@@ -1,6 +1,4 @@
-import Item from '../../models/itemModel';
-import Pack from '../../models/packModel';
-
+import { prisma } from '../../prisma/index';
 /**
  * Deletes an item from the database.
  *
@@ -11,25 +9,46 @@ import Pack from '../../models/packModel';
 export const deleteItemService = async (itemId, packId) => {
   let itemDeleted;
 
-  const item = await Item.findById(itemId);
+  const item = await prisma.item.findUnique({
+    where: {
+      id: itemId,
+    },
+  });
 
   if (item.global) {
-    await Pack.updateOne({ _id: packId }, { $pull: { items: itemId } });
-
-    await Item.updateOne(
-      {
-        _id: itemId,
+    await prisma.pack.update({
+      where: {
+        id: packId,
       },
-      {
-        $pull: {
-          packs: packId,
+      data: {
+        items: {
+          disconnect: { id: itemId },
+        } as any,
+      },
+    });
+
+    await prisma.item.update({
+      where: {
+        id: itemId,
+      },
+      data: {
+        packs: {
+          disconnect: { id: packId },
         },
       },
-    );
+    });
 
-    itemDeleted = await Item.findById(itemId);
+    itemDeleted = await prisma.item.findUnique({
+      where: {
+        id: itemId,
+      },
+    });
   } else {
-    itemDeleted = await Item.findByIdAndDelete({ _id: itemId });
+    itemDeleted = await prisma.item.delete({
+      where: {
+        id: itemId,
+      },
+    });
   }
 
   return itemDeleted;

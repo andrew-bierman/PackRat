@@ -1,4 +1,4 @@
-import Trip from '../../models/tripModel';
+import { prisma } from '../../prisma/index';
 
 /**
  * Retrieves a trip by its ID and returns the trip details.
@@ -7,29 +7,32 @@ import Trip from '../../models/tripModel';
  */
 export const getTripByIdService = async (tripId: string): Promise<object> => {
   try {
-    const trip: any = await Trip.findById(tripId).populate({
-      path: 'owner_id',
+    const trip = await prisma.trip.findUnique({
+      where: { id: tripId },
+      include: { owner: true }, // Assuming 'owner_id' is a foreign key to the 'User' model
     });
 
-    // If you need to populate additional fields, you can chain more populate methods here
-    // .populate({ path: "osm_ref", populate: { path: "nodes" }})
-    // .populate({ path: "packs", populate: { path: "items" } })
+    if (!trip) {
+      throw new Error('Trip cannot be found');
+    }
 
-    // console.log('trip', trip);
-
-    const tripObject = trip.toObject();
-    tripObject.geojson = {
-      type: 'FeatureCollection',
-      features: tripObject.geojson,
+    // Convert the Prisma response to a plain JavaScript object
+    const tripObject = {
+      id: trip.id,
+      name: trip.name, // Replace with the actual fields you have
+      // Add more fields as needed
+      geojson: {
+        type: 'FeatureCollection',
+        features: trip.geojson,
+      },
+      owner: trip.owner, // This will have the owner details if included
     };
-
-    // console.log('tripObject', tripObject);
-
-    // return { ...trip._doc };
 
     return tripObject;
   } catch (error) {
     console.error(error);
     throw new Error('Trip cannot be found');
+  } finally {
+    await prisma.$disconnect(); // Disconnect from the Prisma client
   }
 };

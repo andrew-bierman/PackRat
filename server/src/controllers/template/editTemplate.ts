@@ -1,8 +1,10 @@
 import { publicProcedure } from '../../trpc';
 import { responseHandler } from '../../helpers/responseHandler';
-import Template from '../../models/templateModel';
+
 import { editTemplateService } from '../../services/template/template.service';
 import { z } from 'zod';
+
+import { prisma } from '../../prisma/index';
 
 /**
  * Edits a template.

@@ -1,25 +1,22 @@
-import Pack from '../../models/packModel';
-import mongoose from 'mongoose';
+import { prisma } from '../../prisma/index';
 
-/**
- * Retrieves a pack by its ID from the database.
- *
- * @param {string} packId - The ID of the pack to retrieve.
- * @return {Promise<Object>} - A promise that resolves to the retrieved pack object.
- */
 export const getPackByIdService = async (packId) => {
-  const objectId = new mongoose.Types.ObjectId(packId);
-  const pack = await Pack.findById(objectId)
-    .populate({
-      path: 'items',
-      populate: {
-        path: 'category',
-        select: 'name',
-      },
-    })
-    .populate({
-      path: 'owners',
+  try {
+    const pack = await prisma.item.findUnique({
+      where: { id: packId },
+      include: {
+        category: true, // Include the 'category' relation
+        owners: true, // Include the 'owners' relation
+        packs: true, // Include the 'packs' relation
+      } as never,
     });
 
-  return pack;
+    return pack;
+  } catch (error) {
+    // Handle any potential errors here
+    console.error(error);
+    throw error;
+  } finally {
+    await prisma.$disconnect();
+  }
 };

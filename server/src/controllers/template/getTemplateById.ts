@@ -1,8 +1,10 @@
 import { publicProcedure } from '../../trpc';
 import { TemplateNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
-import Template from '../../models/templateModel';
+
 import { z } from 'zod';
+
+import { prisma } from '../../prisma/index';
 /**
  * Retrieves a template by its ID.
  * @param {Object} req - The request object.
@@ -12,10 +14,18 @@ import { z } from 'zod';
 export const getTemplateById = async (req, res, next) => {
   const { templateId } = req.params;
 
-  const template = await Template.findById(templateId).populate(
-    'createdBy',
-    'username',
-  );
+  const template = await prisma.template.findUnique({
+    where: {
+      id: templateId,
+    },
+    include: {
+      createdBy: {
+        select: {
+          username: true,
+        },
+      },
+    } as never,
+  });
   if (template) {
     res.locals.data = template;
     responseHandler(res);
@@ -29,10 +39,18 @@ export function getTemplateByIdRoute() {
     .input(z.object({ templateId: z.string() }))
     .query(async (opts) => {
       const { templateId } = opts.input;
-      const template = await Template.findById(templateId).populate(
-        'createdBy',
-        'username',
-      );
+      const template = await prisma.template.findUnique({
+        where: {
+          id: templateId,
+        },
+        include: {
+          createdBy: {
+            select: {
+              username: true,
+            },
+          },
+        } as never,
+      });
       return template;
     });
 }

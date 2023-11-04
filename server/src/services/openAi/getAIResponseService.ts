@@ -1,7 +1,5 @@
-import mongoose from 'mongoose';
-import User from '../../models/userModel';
-import Conversation from '../../models/openai/conversationModel';
 import { Configuration, OpenAIApi } from 'openai';
+import { prisma } from '../../prisma/index';
 
 /**
  * Retrieves AI response for a given user input in a conversation.
@@ -28,24 +26,22 @@ export const getAIResponseService = async (
 
   const openai = new OpenAIApi(configuration);
 
-  if (!mongoose.Types.ObjectId.isValid(userId)) {
-    throw new Error('Invalid userId');
-  }
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+  });
 
-  const user = await User.findById(userId).exec();
   if (!user) {
     throw new Error('User not found');
   }
 
-  let conversation = await Conversation.findOne({
-    userId,
-    _id: conversationId,
+  let conversation = await prisma.conversation.findFirst({
+    where: { userId, id: conversationId },
   });
 
   console.log('conversation after find ---->', conversation);
 
   let conversationHistory = conversation ? conversation.history : '';
-  const messages: any[] = conversationHistory
+  const messages = conversationHistory
     ? conversationHistory.split('\n').map((message, i) => ({
         role: i % 2 === 0 ? 'user' : 'assistant',
         content: message,
@@ -63,26 +59,29 @@ export const getAIResponseService = async (
   const response = await openai.createChatCompletion({
     model: 'gpt-3.5-turbo',
     messages,
-  });
+  } as any);
 
   const aiResponse = response.data.choices[0].message.content.trim();
   conversationHistory += `\n${userInput}\nAI: ${aiResponse}`;
 
   if (conversation) {
     // Update existing conversation
-    conversation.history = conversationHistory;
+    await prisma.conversation.update({
+      where: { id: conversationId },
+      data: { history: conversationHistory },
+    });
   } else {
     // Create new conversation
-    conversation = new Conversation({
-      userId,
-      history: conversationHistory,
+    conversation = await prisma.conversation.create({
+      data: {
+        userId,
+        history: conversationHistory,
+      } as any,
     });
   }
 
-  await conversation.save();
-
   return {
     aiResponse,
-    conversation: conversation.toJSON(),
+    conversation: conversation,
   };
 };

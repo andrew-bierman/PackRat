@@ -1,5 +1,4 @@
-import Pack from '../models/packModel';
-
+import { prisma } from 'src/prisma';
 /**
  * Creates a new pack validation.
  *
@@ -31,14 +30,22 @@ export const packValidation = async ({
     throw new Error('All fields must be filled');
   }
 
-  const pack = await Pack.create({
-    name,
-    items,
-    owner_id,
-    is_public,
-    favorited_by,
-    createdAt,
-  });
+  const pack = await prisma.pack.create({
+    data: {
+      name,
+      items: {
+        // Assuming 'items' is an array of item IDs related to the pack
+        connect: items.map((itemId) => ({ id: itemId })),
+      },
+      owner_id,
+      is_public,
+      favorited_by: {
+        // Assuming 'favorited_by' is an array of user IDs related to the pack
+        connect: favorited_by.map((userId) => ({ id: userId })),
+      },
+      createdAt,
+    },
+  } as any);
 
   return pack;
 };

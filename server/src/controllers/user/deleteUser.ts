@@ -1,8 +1,8 @@
 import { publicProcedure } from '../../trpc';
 import { UnableToEditUserError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
-import User from '../../models/userModel';
 import * as validator from '../../middleware/validators/index';
+import { prisma } from '../../prisma/index';
 /**
  * Deletes a user from the database.
  * @param {Object} req - The request object containing the user ID.
@@ -13,7 +13,11 @@ export const deleteUser = async (req, res, next) => {
   try {
     const { userId } = req.body;
 
-    await User.findOneAndDelete({ _id: userId });
+    await prisma.user.delete({
+      where: {
+        id: userId,
+      },
+    });
 
     res.locals.data = { message: 'User deleted successfully' };
     responseHandler(res);
@@ -25,7 +29,11 @@ export const deleteUser = async (req, res, next) => {
 export function deleteUserRoute() {
   return publicProcedure.input(validator.deleteUser).mutation(async (opts) => {
     const { userId } = opts.input;
-    await User.findOneAndDelete({ _id: userId });
+    await prisma.user.delete({
+      where: {
+        id: userId,
+      },
+    });
     return 'User deleted successfully';
   });
 }

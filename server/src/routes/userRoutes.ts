@@ -151,6 +151,7 @@ router.post(
  *       '500':
  *         description: Error signing up
  */
+
 router.post(
   '/signup',
   (req, res, next) => zodParser(validator.userSignUp, req.body, next),

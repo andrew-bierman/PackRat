@@ -1,5 +1,4 @@
-import User from '../models/userModel';
-
+import { prisma } from '../../prisma/index';
 /**
  * Registers a user with the provided email, password, name, and source.
  *
@@ -39,23 +38,26 @@ export const register = async ({
     throw new Error('Something went wrong');
   }
 
-  const exist = await User?.findOne({ email });
+  const existingUser = await prisma.user.findUnique({
+    where: { email },
+  } as any);
 
-  if (exist) {
-    throw new Error('email already in use');
+  if (existingUser) {
+    throw new Error('Email already in use');
   }
 
-  // validation
+  const user = await prisma.user.create({
+    data: {
+      name,
+      password,
+      email,
+      is_certified_guide: false,
+      favorites: [],
+      packs: [],
+      trips: [],
+    },
+  } as any);
 
-  const user = await User.create({
-    name,
-    password,
-    email,
-    is_certified_guide: false,
-    favorites: [],
-    packs: [],
-    trips: [],
-  });
   return user;
 };
 

@@ -1,0 +1,248 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("MONGODB_URI")
+}
+
+model User {
+  id                           String    @id @default(auto()) @map("_id") @db.ObjectId
+  name                         String
+  password                     String
+  email                        String    @unique
+  token                        String?
+  googleId                     String?
+  code                         String?
+
+  is_certified_guide           Boolean?
+  favorites                    UserPack[]
+  packs Pack[]
+  ownedpacks OwnerPack[]
+  templates                     Template[]
+items                           ItemOwner[]
+trips                                 Trip[]
+  passwordResetToken           String?
+  passwordResetTokenExpiration DateTime?
+  role                         UserRole  @default(user)
+  username                     String    @unique
+  profileImage                 String?
+  preferredWeather             String?
+  preferredWeight              String?
+
+  // This field should be auto-generated in Prisma
+  createdAt DateTime @default(now())
+
+  // This field should be auto-generated in Prisma
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+enum UserRole {
+  user
+  admin
+}
+
+model Pack {
+  id     String  @id @default(auto()) @map("_id") @db.ObjectId
+
+
+  items ItemPack[]
+  name String
+  is_public Boolean
+owner User @relation(fields: [owner_id],references: [id])
+owner_id String @db.ObjectId
+owners OwnerPack[]
+  favorited_by UserPack[]
+  createdAt String?
+ trips  TripPack[]
+  grades Grading
+  scores Scoring
+  type String @default("pack")
+
+
+
+  @@map("packs")
+}
+model UserPack {
+  id       String     @id @default(auto()) @map("_id") @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String  @db.ObjectId
+  pack      Pack     @relation(fields: [packId], references: [id])
+  packId    String  @db.ObjectId
+
+  @@unique([userId, packId])
+}
+model OwnerPack {
+  id       String     @id @default(auto()) @map("_id") @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String  @db.ObjectId
+  pack      Pack     @relation(fields: [packId], references: [id])
+  packId    String  @db.ObjectId
+
+  @@unique([userId, packId])
+}
+
+model Trip {
+  id        String       @id @default(auto()) @map("_id") @db.ObjectId// Assuming "_id" is the MongoDB primary key
+  name      String
+  description String
+  duration  String
+  weather   String
+  start_date DateTime
+  end_date   DateTime
+  destination String
+  owner     User        @relation( fields: [owner_id], references: [id])
+  owner_id  String @db.ObjectId
+  packs     TripPack[]
+  is_public Boolean
+  type      String      @default("trip")
+  createdAt DateTime   @map("createdAt")
+  updatedAt DateTime   @map("updatedAt")
+  geojson   GeoJSON[]   
+}
+model TripPack{
+id       String     @id @default(auto()) @map("_id") @db.ObjectId
+ 
+  pack      Pack     @relation(fields: [packId], references: [id])
+  packId    String  @db.ObjectId
+    trip     Trip    @relation(fields: [tripId], references: [id])
+  tripId    String  @db.ObjectId
+
+  @@unique([tripId, packId])
+}
+type Grading {
+    weight String?
+    essentialItems String?
+    redundancyAndVersatility String?
+}
+type  Scoring {
+    weightScore Int @default(0)
+    essentialItemsScore Int @default(0)
+    redundancyAndVersatilityScore Int @default(0)
+}
+model Item {
+    id       String     @id @default(auto()) @map("_id") @db.ObjectId
+    name     String  @db.String
+    weight   Float
+    quantity Int
+    unit     String
+    category ItemCategory @relation(fields: [category_id], references: [id])
+    category_id String @db.ObjectId
+
+    owners ItemOwner[]
+    packs  ItemPack[]
+    global Boolean @default(false)
+
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime @updatedAt @map("updated_at")
+}
+model ItemOwner{
+    id       String     @id @default(auto()) @map("_id") @db.ObjectId
+    item      Item    @relation(fields: [itemId], references: [id])
+  itemId    String  @db.ObjectId
+  owner     User   @relation(fields: [ownerId], references: [id])
+  ownerId    String  @db.ObjectId
+}
+model ItemPack { 
+  id       String     @id @default(auto()) @map("_id") @db.ObjectId
+  item      Item    @relation(fields: [itemId], references: [id])
+  itemId    String  @db.ObjectId
+  pack      Pack     @relation(fields: [packId], references: [id])
+  packId    String  @db.ObjectId
+
+  @@unique([itemId, packId])
+}
+model ItemCategory {
+    id String    @id @default(auto()) @map("_id") @db.ObjectId
+    name String
+    items Item[]
+   
+}
+model GeoJSON {
+  type       String
+ id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  trip Trip @relation(fields: [trip_id],references: [id])
+  trip_id String @db.ObjectId
+  properties Json
+  geometry   Geometry[]
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Geometry {
+  type        String
+  GeoJson GeoJSON @relation(fields: [geo_id], references: [id])
+  geo_id String @id @default(auto()) @map("_id") @db.ObjectId
+  coordinates Json[]
+}
+model Template {
+  id               String     @id @default(auto()) @map("_id") @db.ObjectId
+  type             String
+  templateId       String
+  isGlobalTemplate Boolean   @default(false)
+  createdBy        User?     @relation( fields: [createdById], references: [id])
+  createdById      String?  @db.ObjectId
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+}
+
+model Node {
+  id         String        @id @default(auto()) @map("_id") @db.ObjectId
+  osmId      Int       @unique
+  lat        Float
+  lon        Float
+  way Way @relation(fields: [way_id],references: [id])
+  way_id String @db.ObjectId
+  tags       Json      @db.Json
+  updated_at DateTime  @default(now())
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+}
+// schema.prisma
+model Relation {
+  id         String       @id @default(auto()) @map("_id") @db.ObjectId
+  osmId      String
+  osmType    String    @default("relation")
+
+  tags       Json      @db.Json
+  members    Member[]
+  geoJSON    Json
+  updated_at DateTime  @default(now())
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+}
+
+model Member {
+  id         String       @id @default(auto()) @map("_id") @db.ObjectId
+  type     String
+  refId    Int
+  role     String
+  relation Relation @relation(fields: [relationId], references: [id])
+  relationId String @db.ObjectId
+}
+// schema.prisma
+model Way {
+  id         String       @id @default(auto()) @map("_id") @db.ObjectId
+  osmId      Int
+  osmType    String
+  tags       Json      @db.Json
+  nodes      Node[]    
+  geoJSON    Json
+  updated_at DateTime  @default(now())
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+}
+// schema.prisma
+model Conversation {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId     String    @unique
+  history    String
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+}
+
+
+
