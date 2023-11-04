@@ -13568,15 +13568,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-system-ui@npm:^2.6.0":
-  version: 2.7.0
-  resolution: "expo-system-ui@npm:2.7.0"
+"expo-system-ui@npm:~2.4.0":
+  version: 2.4.0
+  resolution: "expo-system-ui@npm:2.4.0"
   dependencies:
     "@react-native/normalize-color": "npm:^2.0.0"
     debug: "npm:^4.3.2"
   peerDependencies:
     expo: "*"
-  checksum: d48b72d1e089894e1e0fc5c78f60328dbe2a0c7f63ca4d7fdaadd9cea24ef44758a7d78524712a8fe289e4b8d6adf5835b3f6460f1fca59f17c1aab99fe576bb
+  checksum: 8dd61716de0c1b2120c03d488b3265d01329cb8d208243dcf351e872fb41cfc6e471f7d5e0fd5ed2d187e4cb7742a17bf096c72aa31e254a87e68d6b779707e8
   languageName: node
   linkType: hard
 
@@ -20395,6 +20395,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": "npm:^6.4.1"
     axios: "npm:^1.4.0"
     babel-plugin-transform-inline-environment-variables: "npm:^0.4.4"
+    burnt: "npm:^0.12.1"
     date-fns: "npm:^2.29.3"
     dotenv: "npm:^16.0.3"
     eslint: "npm:^8.47.0"
@@ -20424,7 +20425,7 @@ __metadata:
     expo-splash-screen: "npm:~0.20.5"
     expo-standard-web-crypto: "npm:^1.7.0"
     expo-status-bar: "npm:~1.6.0"
-    expo-system-ui: "npm:^2.6.0"
+    expo-system-ui: "npm:~2.4.0"
     expo-web-browser: "npm:~12.3.2"
     file-saver: "npm:^2.0.5"
     firebase: "npm:^9.19.1"

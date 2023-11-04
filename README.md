@@ -201,6 +201,62 @@ yarn start
 
 Note that the client and server are designed to run concurrently in development mode.
 
+
+### Debugging Yarn Environment Setup - Windows
+
+**Check yarn and node version:**
+```
+yarn -v
+```
+```
+node -v
+```
+
+**If node version < 18.0.0:**
+- Update to latest: https://nodejs.org/en/download
+
+**If yarn version >= 4.0.0:**
+- Skip this process
+
+**If you don't have yarn installed:**
+- Run command prompt as an administrator
+- Run `(corepack comes along with node js 18+)`
+  ```
+  corepack enable
+  ```
+- Run
+  ```
+  yarn set version stable
+  ```
+- Run
+  ```
+  yarn install
+  ```
+- Check yarn version(`yarn -v`): *version >= 4.0.1*
+- Restart your code editor if opened
+
+**If yarn version < 4.0.0:**
+- Make sure you're using Node 18+
+- Go to your windows root path  (`C:\Users\HP)`
+- Delete any `.yarnrc.yml` file and `.yarn` folder
+- Delete `yarn` folder from `C:\Program Files (x86)`
+- Run command prompt as an administrator
+- Run `(corepack comes along with node js 18+)`
+  ```
+  corepack enable
+  ```
+- Go into the project directory `cd \PackRat`
+- Run
+  ```
+  yarn set version stable
+  ```
+- Run
+  ```
+  yarn install
+  ```
+- Restart your code editor if opened
+- If you any encounter errors, try restarting your system.
+
 ## Docker Installation 🐳
 
 PackRat can also be installed using Docker. After setting up the development environment, follow the steps below to install and run the app using Docker.
@@ -255,11 +311,26 @@ Please refer to README.md inside server folder.
 
 Contributions to PackRat are welcome! To contribute, follow these steps:
 
-1. Fork the repository.
-2. Create a new branch for your changes.
+1. Clone this repository.
+2. Create a new branch.
 3. Make your changes and commit them.
-4. Push your changes to your fork.
-5. Create a pull request.
+4. Push your changes to the remote branch.
+5. Open a pull request.
+6. Wait for your pull request to be reviewed and merged.
+7. Celebrate! 🎉
+
+## 👏 Special Thanks
+
+- [React Native Developers](https://twitter.com/reactnative)
+- [OpenStreetMap Developers](https://www.openstreetmap.org/)
+- [RN MapBox Developers](https://github.com/rnmapbox/maps)
+- [Cloudflare Developers](https://twitter.com/CloudflareDev)
+- [Yusuke Wada](https://twitter.com/yusukebe) - Creator of Hono.js
+- [Nate Birdman](https://twitter.com/natebirdman) - Creator of Tamagui
+- [Fernando Rojo](https://twitter.com/fernandotherojo) - Creator of Zeego
+- [Tanner Linsley](https://twitter.com/tannerlinsley) - Creator of TanStack
+- [Expo Developers](https://twitter.com/expo) - Office hours
+- [Shopify Developers](https://twitter.com/ShopifyDevs)
 
 ## License 📝
 
