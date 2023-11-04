@@ -6,7 +6,7 @@ import {
 import { responseHandler } from '../../helpers/responseHandler';
 import { publicProcedure } from '../../trpc';
 import { z } from 'zod';
-import * as validators from '@packrat/packages';
+import * as validators from '@packrat/validations';
 
 /**
  * Retrieves Photon results based on a search string.
