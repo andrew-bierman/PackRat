@@ -1,5 +1,25 @@
 {
     "compilerOptions": {
+        "noUncheckedIndexedAccess": true,
+        "paths": {
+          "app/*": ["./packages/app/*"],
+          "@packrat/api/*": ["./packages/api/*"],
+          "@packrat/ui/*": ["./packages/ui/*"]
+        },
+        "plugins": [
+          {
+            "name": "@nderscore/tamagui-typescript-plugin",
+            "pathToApp": "apps/next",
+            "defaultTheme": "light",
+            "colorTileSize": 18,
+            "completionFilters": {
+              "showColorTokens": true,
+              "showTrueTokens": true,
+              "custom": {}
+            }
+          }
+        ],
+      "extends": "expo/tsconfig.base",
       "baseUrl": ".",
       "rootDir": ".",
       "importHelpers": true,

@@ -1,4 +1,4 @@
-import Register from '../../screens/RegisterScreen';
+import Register from 'app/screens/RegisterScreen';
 import { Platform } from 'react-native';
 import { Stack } from 'expo-router';
 import Head from 'expo-router/head';

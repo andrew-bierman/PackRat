@@ -1,7 +1,7 @@
 import { useSearchParams, Stack } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Platform } from 'react-native';
-import ProfileContainer from '../../../screens/user/ProfileContainer';
+import ProfileContainer from 'app/screens/user/ProfileContainer';
 
 const Profile = () => {
   const { id } = useSearchParams();
