@@ -75,11 +75,8 @@ model Pack {
   favourited_by_ids String[]     @db.ObjectId
   createdAt         DateTime?    @default(now())
   updatedAt         DateTime?    @updatedAt
-  favorites_count   Int?
-  total_weight      Float?
-  totalScore        Int?
   items             Item[]       @relation(fields: [item_ids], references: [id])
-  favoritedBy       User[]       @relation(name: "Favourites", fields: [favourited_by_ids], references: [id])
+  favorited_by      User[]       @relation(name: "Favourites", fields: [favourited_by_ids], references: [id])
   owners            User[]       @relation(name: "Ownership", fields: [owner_ids], references: [id])
   trips             Trip[]
 
