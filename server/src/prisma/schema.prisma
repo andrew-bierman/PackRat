@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "mongodb"
-  url      = env("DATABASE_URL")
+  url      = env("MONGODB_URI")
 }
 
 //  ███    ███  ██████  ██████  ███████ ██      ███████
@@ -22,6 +22,8 @@ model GeoJSON {
   geometry   GeoJSONGeometry
   createdAt  DateTime?       @default(now())
   updatedAt  DateTime?       @updatedAt
+  trip_id    String          @db.ObjectId
+  Trip       Trip?           @relation(fields: [trip_id], references: [id])
 
   @@index([id], map: "id_1_autocreated")
   @@map("geojsons")
@@ -73,12 +75,17 @@ model Pack {
   type              String?      @default("pack")
   item_ids          String[]     @db.ObjectId
   favourited_by_ids String[]     @db.ObjectId
-  createdAt         DateTime?    @default(now())
+  createdAt         String?
   updatedAt         DateTime?    @updatedAt
   items             Item[]       @relation(fields: [item_ids], references: [id])
   favorited_by      User[]       @relation(name: "Favourites", fields: [favourited_by_ids], references: [id])
   owners            User[]       @relation(name: "Ownership", fields: [owner_ids], references: [id])
   trips             Trip[]
+
+  // Virtuals
+  total_weight    Float?
+  total_scores    Int?
+  favorites_count Int?
 
   @@index([name], map: "name_1")
   @@index([is_public], map: "is_public_1")
@@ -92,8 +99,8 @@ model Template {
   templateId       String       @db.ObjectId
   isGlobalTemplate Boolean      @default(false)
   createdById      String?      @db.ObjectId
-  createdAt        DateTime     @default(now())
-  updatedAt        DateTime     @updatedAt
+  createdAt        DateTime?    @default(now())
+  updatedAt        DateTime?    @updatedAt
   createdBy        User?        @relation(fields: [createdById], references: [id])
 
   @@index([type], map: "type_1")
@@ -103,8 +110,8 @@ model Template {
 }
 
 model Trip {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  v           Int      @map("__v")
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  v           Int       @map("__v")
   name        String
   description String
   duration    String
@@ -112,14 +119,15 @@ model Trip {
   start_date  DateTime
   end_date    DateTime
   destination String
-  owner_id    String   @db.ObjectId
+  owner_id    String    @db.ObjectId
   is_public   Boolean?
-  type        String   @default("trip")
-  pack_id     String   @db.ObjectId
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  owner       User     @relation(fields: [owner_id], references: [id])
-  packs       Pack     @relation(fields: [pack_id], references: [id])
+  type        String    @default("trip")
+  pack_id     String    @db.ObjectId
+  createdAt   DateTime? @default(now())
+  updatedAt   DateTime? @updatedAt
+  owner       User      @relation(fields: [owner_id], references: [id])
+  packs       Pack      @relation(fields: [pack_id], references: [id])
+  geojson     GeoJSON[]
 
   @@index([destination], map: "destination_1")
   @@index([start_date], map: "start_date_1")
@@ -149,8 +157,8 @@ model User {
   favourite_ids                String[]   @db.ObjectId
   pack_ids                     String[]   @db.ObjectId
   item_id                      String?    @db.ObjectId
-  createdAt                    DateTime   @default(now())
-  updatedAt                    DateTime   @updatedAt
+  createdAt                    DateTime?  @default(now())
+  updatedAt                    DateTime?  @updatedAt
   favorites                    Pack[]     @relation(name: "Favourites", fields: [favourite_ids], references: [id])
   packs                        Pack[]     @relation(name: "Ownership", fields: [pack_ids], references: [id])
   item                         Item?      @relation(fields: [item_id], references: [id])
@@ -164,12 +172,12 @@ model User {
 }
 
 model Conversation {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  v         Int      @map("__v")
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  v         Int       @map("__v")
   userId    String
   history   String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
 
   @@map("conversations")
 }
