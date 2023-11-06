@@ -1,5 +1,4 @@
-import Item from '../../models/itemModel';
-
+import { prisma } from "../../prisma/index";
 /**
  * Searches for items by name.
  *
@@ -7,8 +6,12 @@ import Item from '../../models/itemModel';
  * @return {Promise<Array>} An array of items that match the search criteria.
  */
 export const searchItemsByNameService = async (name) => {
-  const items = await Item.find({
-    name: { $regex: `.*${name}.*`, $options: 'i' },
+  const items = await prisma.item.findMany({
+    where: {
+      name: {
+        contains: name, // Case-insensitive search for name
+      },
+    },
   });
 
   return items;
