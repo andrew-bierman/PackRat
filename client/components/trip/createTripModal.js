@@ -4,7 +4,8 @@ import { CustomModal } from '../modal';
 import { Input, VStack, HStack, Text, Select } from 'native-base';
 import { useDispatch, useSelector } from 'react-redux';
 import { format, intervalToDuration } from 'date-fns';
-import { addTrip } from '../../store/tripsStore';
+// import { addTrip } from '../../store/tripsStore';
+import { useAddTrips } from '~/hooks/trips';
 import { api } from '../../constants/api';
 import { trpc } from '../../trpc';
 
@@ -137,7 +138,8 @@ export const SaveTripContainer = ({ dateRange }) => {
 
     // creating a trip
     console.log('create trip data ->', data);
-    dispatch(addTrip(data));
+    const { isLoading, isError, error } = useAddTrips(data)
+    // dispatch(addTrip(data));
     setIsSaveModalOpen(!isSaveModalOpen);
   };
 

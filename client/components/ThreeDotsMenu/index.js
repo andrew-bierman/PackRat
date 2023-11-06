@@ -4,7 +4,8 @@ import { Box, Menu, ThreeDotsIcon } from 'native-base';
 import { useDispatch } from 'react-redux';
 import { deletePack } from '../../store/packsStore';
 import { useRouter } from 'expo-router';
-import { deleteTrip } from '../../store/tripsStore';
+// import { deleteTrip } from '../../store/tripsStore';
+import { useDeleteTrips } from '~/hooks/trips';
 export const ThreeDotsMenu = ({ data, titleRef, setEditTitle }) => {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -40,7 +41,8 @@ export const ThreeDotsMenu = ({ data, titleRef, setEditTitle }) => {
                 }),
               );
             } else {
-              dispatch(deleteTrip(data._id));
+              useDeleteTrips(data._id)
+              // dispatch(deleteTrip(data._id));
             }
             router.replace('/feed');
           }}

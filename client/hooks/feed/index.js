@@ -1,6 +1,6 @@
 import { usePublicFeed } from './publicFeed';
 import { useUserPacks } from './../packs';
-import { useUserTrips } from './../trips';
+import { useUserTrips } from '../singletrips';
 
 export const useFeed = (
   queryString = 'Most Recent',

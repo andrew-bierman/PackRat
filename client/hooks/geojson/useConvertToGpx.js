@@ -1,7 +1,7 @@
 import { queryTrpc } from '../../trpc';
 
 export const convertGeoJSONToGPX = () => {
-    const utils = queryTrpc.useContext();
+    const utils = queryTrpc.useUtils();
     const mutation = queryTrpc.postSingleGeoJSON.useMutation()
 
     const GeoJSONToGPX = (geoJSON) => {
