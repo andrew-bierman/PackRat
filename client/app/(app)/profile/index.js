@@ -1,4 +1,4 @@
-import ProfileContainer from '../../../screens/user/ProfileContainer';
+import ProfileContainer from 'app/screens/user/ProfileContainer';
 import { Platform, ScrollView } from 'react-native';
 import { Stack } from 'expo-router';
 import Head from 'expo-router/head';

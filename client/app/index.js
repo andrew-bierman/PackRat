@@ -8,9 +8,9 @@ import { darkTheme, theme } from '../theme';
 
 import { Box } from 'native-base';
 
-import LandingPage from '../components/landing_page';
+import LandingPage from 'app/components/landing_page';
 
-import Dashboard from '../screens/dashboard';
+import Dashboard from 'app/screens/dashboard';
 import useTheme from '../hooks/useTheme';
 import { current } from '@reduxjs/toolkit';
 import Head from 'expo-router/head';
