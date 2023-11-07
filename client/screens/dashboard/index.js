@@ -23,7 +23,6 @@ const Dashboard = () => {
         >
           <Box>
             <HeroBanner style={styles.cardContainer} />
-
             <Section>
               <SectionHeader
                 iconName="add-circle-outline"

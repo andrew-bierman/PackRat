@@ -5,7 +5,7 @@ import React, {
   useCallback,
   useRef,
 } from 'react';
-import { Link, Tabs, useRouter, usePathname } from 'expo-router';
+import { Link, Tabs, useRouter, Stack, Slot, usePathname } from 'expo-router';
 import { Home, Plus } from '@tamagui/lucide-icons';
 import {
   EvilIcons,
@@ -38,20 +38,15 @@ import {
 } from 'react-native';
 import useCustomStyles from '~/hooks/useCustomStyles';
 import { useSelector, useDispatch } from 'react-redux';
-import { signOut } from '../../../store/authStore';
-import { darkTheme, theme } from '../../../theme';
-import Drawer from '../../../screens/Drawer';
-import useTheme from '../../../hooks/useTheme';
+import { signOut } from '../../store/authStore';
+import { darkTheme, theme } from '../../theme';
+import Drawer from '../../screens/Drawer';
+import useTheme from '../../hooks/useTheme';
 import { ChevronRight, Cloud, Moon, Star, Sun } from '@tamagui/lucide-icons';
 import { ListItem, Separator, XStack, YGroup } from 'tamagui';
-import { useSession } from '../../../context/auth';
+import { useSession, useProtectedRoute } from '../../context/auth';
 
-export const unstable_settings = {
-  // Ensure any route can link back to `/`
-  initialRouteName: '/tabs',
-};
-
-export default function TabLayout() {
+export default function AppLayout() {
   const {
     enableDarkMode,
     enableLightMode,
@@ -61,12 +56,12 @@ export default function TabLayout() {
   } = useTheme();
   const dispatch = useDispatch();
   const router = useRouter();
+  const { session, sessionSignOut } = useSession();
   const pathName = usePathname();
-  const { sessionSignOut } = useSession();
   const [isCreateModalVisible, setCreateModalVisible] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false); // Loading state
-  const user = useSelector((state) => state.auth.user);
+  const user = useSelector((state: any) => state.auth.user);
   const [selectedNavItem, setSelectedNavItem] = useState('');
   const styles = useCustomStyles(loadStyles);
 
@@ -82,11 +77,19 @@ export default function TabLayout() {
     'about/index',
     'feed/index',
     'items/index',
-    'trips/create',
-    'packs/create',
+    'trip/[tripId]',
+    'trip/create',
+    'pack/create',
+    'pack/[packId]',
+    'destination/[destinationId]',
     'packs/index',
+    'drawer/index',
+    'profile/[id]',
+    'profile/settings/index',
     'appearance/index',
     'maps/index',
+    'map/index',
+    'password-reset/index',
   ];
 
   const staticNavigationItems = useMemo(
@@ -180,10 +183,13 @@ export default function TabLayout() {
           ],
     [user],
   );
-  useEffect(() => {}, []);
+  // useEffect(() => {}, []);
   const navigationItems = [...staticNavigationItems, ...userNavigationItems];
-
-  return (
+  useProtectedRoute(session);
+  // return Platform.OS === 'web' ? <Stack /> : <Slot />;
+  return Platform.OS === 'web' ? (
+    <Stack />
+  ) : (
     <>
       <Tabs
         screenOptions={{
@@ -191,9 +197,9 @@ export default function TabLayout() {
         }}
       >
         <Tabs.Screen
-          name="home-tab"
+          name="home/index"
           options={{
-            href: '/tabs/home-tab',
+            href: '/home',
             title: 'PACKRAT',
             tabBarLabel: 'HOME',
             tabBarIcon: ({ color }) => (
@@ -206,7 +212,7 @@ export default function TabLayout() {
         <Tabs.Screen
           name="trips/index"
           options={{
-            href: '/tabs/trips',
+            href: '/trips',
             title: 'TRIPS',
             tabBarLabel: 'TRIPS',
             tabBarIcon: ({ color }) => (
@@ -249,13 +255,13 @@ export default function TabLayout() {
           }}
         />
         <Tabs.Screen
-          name="profile"
+          name="profile/index"
           options={{
             title: 'Account',
             headerShown: true,
             tabBarLabel: 'ACCOUNT',
             href: {
-              pathname: '/tabs/profile',
+              pathname: '/profile',
             },
             tabBarIcon: ({ color }) => (
               <View style={styles.tabIcon}>
@@ -330,7 +336,7 @@ export default function TabLayout() {
                   title="Packs"
                   subTitle="Packing List"
                   onPress={() => {
-                    router.push('/tabs/packs');
+                    router.push('/packs');
                     toggleModal();
                   }}
                   icon={
@@ -370,7 +376,6 @@ export default function TabLayout() {
     </>
   );
 }
-
 const loadStyles = (theme) => {
   const { currentTheme } = theme;
   return {
@@ -428,7 +433,7 @@ const loadStyles = (theme) => {
 };
 
 function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
+  name: React.ComponentPropsWithoutRef<typeof FontAwesome>['name'];
   color: string;
   size?: number;
 }) {

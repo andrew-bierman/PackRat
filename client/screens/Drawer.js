@@ -6,7 +6,6 @@ import {
   Modal,
   Dimensions,
   SafeAreaView,
-  Platform,
 } from 'react-native';
 import { Link, useRouter, usePathname } from 'expo-router';
 import { useSelector, useDispatch } from 'react-redux';
@@ -47,7 +46,6 @@ const Drawer = ({
 
   const navigateTo = useCallback(
     (href) => {
-      const isWeb = Platform.OS === 'web';
       if (href === '/logout') {
         dispatch(signOut());
         sessionSignOut();
@@ -57,7 +55,7 @@ const Drawer = ({
         setIsLoading(true); // Start loading
         if (!user && href === '/') return;
         setTimeout(() => {
-          router.push(!user || isWeb ? href : `/tabs${href}`);
+          router.push(href);
           setIsLoading(false); // Stop loading after a delay
         }, 0); // Adjust the delay as needed
       }
@@ -143,8 +141,6 @@ const Drawer = ({
   };
 
   useEffect(() => {
-    console.log('========IS MOBILE VIEW ==========', isMobileView);
-
     const handleScreenResize = () => {
       const isMobile =
         Dimensions.get('window').width < 1300 ||
@@ -163,7 +159,7 @@ const Drawer = ({
     return () => {
       subscription.remove(); // Proper event listener cleanup
     };
-  }, [navBarWidth]);
+  }, [isMobileView]);
 
   return (
     <Modal

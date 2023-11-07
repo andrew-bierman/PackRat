@@ -19,9 +19,5 @@ export default function Index() {
     //   </>
     // );
   }
-  if (user) {
-    if (isWeb) return router.replace('/home');
-    router.replace('/tabs');
-  }
-  return null;
+  return router.replace('/home');
 }

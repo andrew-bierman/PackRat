@@ -73,12 +73,6 @@ const Navigation = () => {
         text: 'Home',
         iconSource: Entypo,
       },
-      {
-        href: '/about',
-        icon: 'info',
-        text: 'About',
-        iconSource: MaterialIcons,
-      },
     ],
     [],
   );
@@ -132,6 +126,12 @@ const Navigation = () => {
               icon: 'theme-light-dark',
               text: 'Appearance',
               iconSource: MaterialCommunityIcons,
+            },
+            {
+              href: '/about',
+              icon: 'info',
+              text: 'About',
+              iconSource: MaterialIcons,
             },
             {
               href: 'logout',
