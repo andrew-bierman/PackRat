@@ -83,6 +83,7 @@ export const SaveTripContainer = ({ dateRange }) => {
 
   // defining dispatch
   const dispatch = useDispatch();
+  const { AddTrips } = useAddTrips()
 
   // trip info states value
   const [name, setName] = useState('');
@@ -138,7 +139,7 @@ export const SaveTripContainer = ({ dateRange }) => {
 
     // creating a trip
     console.log('create trip data ->', data);
-    const { isLoading, isError, error } = useAddTrips(data)
+    const { isLoading, isError, error } = AddTrips(data)
     // dispatch(addTrip(data));
     setIsSaveModalOpen(!isSaveModalOpen);
   };

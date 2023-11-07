@@ -9,6 +9,7 @@ import { useDeleteTrips } from '~/hooks/trips';
 export const ThreeDotsMenu = ({ data, titleRef, setEditTitle }) => {
   const dispatch = useDispatch();
   const router = useRouter();
+  const { deleteTrips } = useDeleteTrips()
   return (
     <Box h="80%" w="90%">
       <Menu
@@ -41,7 +42,7 @@ export const ThreeDotsMenu = ({ data, titleRef, setEditTitle }) => {
                 }),
               );
             } else {
-              useDeleteTrips(data._id)
+              deleteTrips(data._id)
               // dispatch(deleteTrip(data._id));
             }
             router.replace('/feed');

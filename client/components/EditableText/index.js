@@ -16,6 +16,7 @@ export const EditableInput = ({
   loading,
 }) => {
   const [headerTitle, setHeaderTitle] = useState('');
+  const { editTrips } = useEditTrips()
   useEffect(() => {
     if (title) {
       setHeaderTitle(title);
@@ -58,7 +59,7 @@ export const EditableInput = ({
             setEditTitle(false);
             titleRef.current.style =
               'font-size:20px !important;font-weight:bold;color: #22c67c;';
-            useEditTrips(tripDetails)
+              editTrips(tripDetails)
             // dispatch(editTrip(tripDetails));
           }
         }}
