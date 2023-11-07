@@ -8,6 +8,10 @@ interface Props {
   itemHeight: number
 }
 
+interface ItemType {
+  item: any;  // Replace `any` with a more specific type if possible
+}
+
 export const VirtualList = ({ data, renderItem, itemHeight }: Props): React.ReactNode => {
   const { top, bottom } = useSafeAreaInsets()
 

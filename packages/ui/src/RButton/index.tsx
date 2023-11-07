@@ -1,7 +1,7 @@
 import { Button } from 'tamagui';
 // import useTheme from '~/hooks/useTheme';
 
-const RButton = (props) => {
+const RButton = (props: any) => {
   // const { currentTheme } = useTheme();
   return (
     // <Button {...props} backgroundColor={currentTheme.colors.secondaryBlue}>

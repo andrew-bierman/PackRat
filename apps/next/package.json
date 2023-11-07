@@ -4,19 +4,26 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build-next": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
     "@expo/next-adapter": "5.0.2",
+    "@tamagui/config": "^1.76.0",
+    "@tamagui/next-theme": "^1.76.0",
     "app": "*",
     "next": "^13.4.19",
     "raf": "^3.4.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-native": "^0.72.6",
+    "react-native-web": "~0.19.6",
     "setimmediate": "^1.0.5"
   },
   "devDependencies": {
-    "@types/node": "17.0.21",
+    "@tamagui/next-plugin": "^1.76.0",
+    "@types/node": "^20.8.3",
     "eslint-config-next": "13.2.0"
   }
 }

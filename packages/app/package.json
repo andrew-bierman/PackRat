@@ -60,7 +60,7 @@
     "babel-plugin-transform-inline-environment-variables": "^0.4.4",
     "burnt": "^0.12.1",
     "date-fns": "^2.29.3",
-    "dotenv": "^16.0.3",
+    "dotenv": "^16.3.1",
     "dripsy": "^4.3.3",
     "eslint-plugin-react-native": "^4.0.0",
     "expo": "49.0.15",
@@ -118,7 +118,7 @@
     "solito": "^4.1.3",
     "tamagui": "^1.76.0",
     "togpx": "^0.5.4",
-    "uuid": "3.4.0",
+    "uuid": "^9.0.0",
     "xmldom": "^0.6.0",
     "zod": "^3.22.2"
   },

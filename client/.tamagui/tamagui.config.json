@@ -20590,7 +20590,9 @@
         }
       }
     },
-    "settings": {},
+    "settings": {
+      "webFontPreload": "auto"
+    },
     "onlyAllowShorthands": false,
     "fontLanguages": [],
     "animations": {

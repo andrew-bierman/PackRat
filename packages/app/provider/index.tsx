@@ -1,5 +1,9 @@
-import { Dripsy } from './dripsy'
+import { CombinedProvider } from './CombinedProvider';
 
 export function Provider({ children }: { children: React.ReactNode }) {
-  return <Dripsy>{children}</Dripsy>
+  return (
+    <CombinedProvider>
+      {children}
+    </CombinedProvider>
+  );
 }

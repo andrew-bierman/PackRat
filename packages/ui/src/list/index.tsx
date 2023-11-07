@@ -13,7 +13,7 @@ export function VirtualList<T>({ data, renderItem, itemHeight }: Props): React.R
 
   // FlashList's API is awkward.
   const render = useCallback(
-    (item) => {
+    (item: any) => {
       return renderItem(item.item)
     },
     [renderItem]

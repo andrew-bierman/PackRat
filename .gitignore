@@ -16,6 +16,8 @@ package-lock.json
 serviceAccountKey.json
 google-services.json
 
+.wrangler
+
 # Logs
 logs
 *.log

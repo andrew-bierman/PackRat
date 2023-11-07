@@ -11,14 +11,34 @@ import {
 } from '../theme';
 import FontLoader from './FontLoader';
 
+
 const ThirdPartyProviders = ({ children, isDark = false }) => {
+
+  const [loaded] = useFonts({
+    Inter: require('@tamagui/font-inter/otf/Inter-Medium.otf'),
+    InterBold: require('@tamagui/font-inter/otf/Inter-Bold.otf'),
+  });
+
+  useEffect(() => {
+    if (loaded) {
+      SplashScreen.hideAsync();
+    }
+  }, [loaded]);
+
+  if (!loaded) return null;
+
   // const { isDark } = useTheme()
   return (
     <FontLoader>
       <NativeBaseProvider
         theme={isDark ? nativeBaseDarkTheme : nativeBaseLightTheme}
       >
-        <TamaguiProvider config={config}>
+        <TamaguiProvider
+          config={config}
+          disableInjectCSS
+          defaultTheme={scheme === 'dark' ? 'dark' : 'light'}
+          {...rest}
+        >
           <TamaguiTheme name={isDark ? 'dark' : 'light'}>
             <RNPaperThemeProvider theme={darkPaperTheme}>
               {children}

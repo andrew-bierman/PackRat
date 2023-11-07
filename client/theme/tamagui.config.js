@@ -60,6 +60,9 @@ const interFont = createFont({
 });
 
 const config = createTamagui({
+  settings: {
+    webFontPreload: 'auto',
+  },
   animations,
   defaultTheme: 'dark',
   shouldAddPrefersColorThemes: false,

@@ -17,7 +17,7 @@
     "clean": "rm -rf dist types node_modules"
   },
   "dependencies": {
-    "@shopify/flash-list": "^1.6.1",
+    "@shopify/flash-list": "^1.6.2",
     "@tamagui/animations-react-native": "^1.76.0",
     "@tamagui/font-inter": "^1.76.0",
     "@tamagui/react-native-media-driver": "^1.76.0",
