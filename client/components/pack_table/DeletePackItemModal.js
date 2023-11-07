@@ -29,10 +29,12 @@ export const DeletePackItemModal = ({
    * @param {}
    * @return {}
    */
-  const onTrigger = () => {
-    setIsModalOpen(true);
+  const onTrigger = (event) => {
+    setIsModalOpen(event);
   };
-
+  const closeTriggerOpen = () => {
+    onTriggerOpen(false);
+  };
   /**
    * Deletes an item.
    *

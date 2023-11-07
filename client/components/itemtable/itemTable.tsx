@@ -10,7 +10,7 @@ import { DeletePackItemModal } from '../pack_table/DeletePackItemModal';
 import { PaginationLimit } from '../paginationChooseLimit';
 import Loader from '../Loader';
 import useCustomStyles from '~/hooks/useCustomStyles';
-import {loadStyles} from './itemsTable.style'
+import { loadStyles } from './itemsTable.style';
 
 export const ItemsTable = ({
   limit,
@@ -119,42 +119,48 @@ export const ItemsTable = ({
           )}
         </Box>
       </Table>
-      <PaginationLimit limit={limit} setLimit={setLimit} setPage={setPage} />
-      <Box style={{ display: 'flex', flexDirection: 'row', margin: 'auto' }}>
-        <Button
-          style={{
-            marginRight: '10px',
-            width: '4px',
-            backgroundColor: 'transparent',
-            borderRadius: '5px',
-            borderColor: page < 2 ? 'gray' : '#0284c7',
-            borderWidth: '1px',
-            borderStyle: 'solid',
-          }}
-          disabled={page < 2}
-          onPress={handlePreviousPage}
-        >
-          <Text style={{ color: page < 2 ? 'gray' : '#0284c7' }}>{'<'}</Text>
-        </Button>
-        <Button
-          style={{
-            marginRight: '10px',
-            width: '4px',
-            backgroundColor: 'transparent',
-            borderRadius: '5px',
-            borderColor: page === totalPages ? 'gray' : '#0284c7',
-            borderWidth: '1px',
-            borderStyle: 'solid',
-          }}
-          disabled={page === totalPages}
-          onPress={handleNextPage}
-        >
-          <div style={{ color: page === totalPages ? 'gray' : '#0284c7' }}>
-            {'>'}
-          </div>
-        </Button>
+      <Box style={loadStyles().paginationWrapper}>
+        <PaginationLimit limit={limit} setLimit={setLimit} setPage={setPage} />
+        <Box style={{ display: 'flex', flexDirection: 'row' }}>
+          <Button
+            style={{
+              marginRight: '10px',
+              width: '4px',
+              backgroundColor: 'transparent',
+              borderRadius: '5px',
+              borderColor: page === 1 ? 'gray' : '#0284c7',
+              borderWidth: '1px',
+              borderStyle: 'solid',
+              pointerEvents: page === 1 ? 'none' : 'auto',
+            }}
+            disabled={page === 1}
+            onPress={handlePreviousPage}
+          >
+            {/* extract the page checking logic and make it generic */}
+            <Text style={{ color: page === 1 ? 'gray' : '#0284c7' }}>
+              {'<'}
+            </Text>
+          </Button>
+          <Button
+            style={{
+              marginRight: '10px',
+              width: '4px',
+              backgroundColor: 'transparent',
+              borderRadius: '5px',
+              borderColor: page === totalPages ? 'gray' : '#0284c7',
+              borderWidth: '1px',
+              borderStyle: 'solid',
+              pointerEvents: page === totalPages ? 'none' : 'auto',
+            }}
+            disabled={page === totalPages}
+            onPress={handleNextPage}
+          >
+            <div style={{ color: page === totalPages ? 'gray' : '#0284c7' }}>
+              {'>'}
+            </div>
+          </Button>
+        </Box>
       </Box>
     </Box>
   );
 };
-

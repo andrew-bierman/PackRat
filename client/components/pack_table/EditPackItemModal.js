@@ -17,21 +17,20 @@ export const EditPackItemModal = ({
   onTrigger,
   closeModalHandler,
 }) => {
-
-  const [modalOpen,setModalOpen]=useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
   let currentPackId;
   if (currentPack) {
     currentPackId = currentPack._id;
   }
 
-  const onTriggerOpen = (newState)=>{
-  
+  const onTriggerOpen = (newState) => {
     setModalOpen(newState);
-   }
-  const closeTriggerOpen  = ()=>{
-    onTriggerOpen(false)
-  }
- const footerCloseHandler = closeModalHandler ? closeModalHandler :closeTriggerOpen 
+  };
+  const closeTriggerOpen = () => {
+    onTriggerOpen(false);
+  };
+  const footerCloseHandler = closeModalHandler ?? closeTriggerOpen;
+
   const footerButtons = [
     {
       label: 'Cancel',
@@ -42,8 +41,6 @@ export const EditPackItemModal = ({
     // add more footer buttons here if needed
   ];
 
-
-
   return (
     <Box>
       <CustomModal
@@ -52,7 +49,7 @@ export const EditPackItemModal = ({
         triggerComponent={<MaterialIcons name="edit" size={20} color="black" />}
         onTrigger={onTrigger || onTriggerOpen}
         footerButtons={footerButtons}
-        onCancel={closeModalHandler }
+        onCancel={closeModalHandler}
       >
         <AddItem
           _id={packId}
