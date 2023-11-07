@@ -7,48 +7,50 @@ on:
     branches: [ "**" ]
 
 jobs:
-  build:
+  build-android:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Install Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '20' # Use the version you prefer
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'
 
-    - name: 🏗 Setup EAS
-      uses: expo/expo-github-action@v8
-      with:
-        eas-version: latest
-        token: ${{ secrets.EXPO_TOKEN }}
+      - name: 🏗 Setup EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
 
-    - name: Set up Yarn
-      run: yarn install
+      - name: Set up Yarn
+        run: yarn install
 
-    # - name: 🚀 Build app
-    #   working-directory: ./client
-    #   run: eas build --non-interactive --platform all --local
+      - name: Run Local Build for Android
+        working-directory: ./client
+        run: eas build --non-interactive --platform android --local
 
-#    - name: Install dependencies
-#      working-directory: ./client
-#      run: yarn install
+  build-ios:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-#    - name: Install EAS CLI
-#      run: yarn global add eas-cli
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'
 
-#    - name: Configure build
-#      working-directory: ./client
-#      run: npx eas build:configure
+      - name: 🏗 Setup EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
 
-    # If you need additional setup or configurations, add them here
+      - name: Set up Yarn
+        run: yarn install
 
-    - name: Run Local Build for Android
-      working-directory: ./client
-      run: eas build --non-interactive --platform android --local --verbose
-
-    - name: Run Local Build for iOS
-      working-directory: ./client
-      run: eas build --non-interactive --platform ios --local --verbose
+      - name: Run Local Build for iOS
+        working-directory: ./client
+        run: eas build --non-interactive --platform ios --local
