@@ -101,12 +101,10 @@ export default function Card({
           <RStack space={10}>
             <RStack>
               <RStack
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  width: '100%',
-                }}
+                flexDirection="row"
+                alignItems="center"
+                justifyContent="space-between"
+                width="100%"
               >
                 <Link href={type === 'pack' ? '/pack/' + _id : '/trip/' + _id}>
                   <RHeader.H2 color={currentTheme.colors.textColor}>
@@ -116,13 +114,10 @@ export default function Card({
                 <RStack alignItems="center" justifyContent="center" space={2}>
                   {type === 'pack' && (
                     <RStack
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        gap: 5,
-                        // border: '1px solid #ccc',
-                      }}
+                      flexDirection="row"
+                      alignItems="center"
+                      justifyContent="space-between"
+                      gap={2}
                     >
                       <MaterialIcons
                         name="backpack"
@@ -175,24 +170,16 @@ export default function Card({
               width="100%"
             >
               <RStack
-                style={{
-                  flexDirection: 'column',
-                  alignItems: 'flex-start',
-                  gap: 14,
-                }}
+                flexDirection="column"
+                alignItems="flex-start"
+                space={'$1'}
               >
                 <Link href={`/profile/${owner_id}`}>
                   <RText color={currentTheme.colors.textColor}>
                     View {owner?.username ? '@' + owner?.username : 'Owner'}
                   </RText>
                 </Link>
-                <RStack
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    gap: 10,
-                  }}
-                >
+                <RStack flexDirection alignItems="center" space={'$2'}>
                   <RText
                     color="grey"
                     fontWeight={'100'}
@@ -213,13 +200,7 @@ export default function Card({
                 </RStack>
               </RStack>
 
-              <RStack
-                style={{
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  gap: 10,
-                }}
-              >
+              <RStack flexDirection="column" alignItems="center" space={'$2'}>
                 {type === 'pack' && (
                   <RStack>
                     <RText
@@ -229,11 +210,9 @@ export default function Card({
                       Favorites
                     </RText>
                     <RStack
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        gap: 10,
-                      }}
+                      flexDirection="row"
+                      alignItems="center"
+                      space={'$2'}
                     >
                       {user?._id === owner_id ? null : (
                         <TouchableOpacity onPress={handleAddToFavorite}>
@@ -270,9 +249,7 @@ export default function Card({
                     <RText
                       color={currentTheme.colors.textColor}
                       fontSize={'$1'}
-                      style={{
-                        justifyContent: 'flex-end',
-                      }}
+                      justifyContent="flex-end"
                     >
                       {numberOfNights}
                     </RText>

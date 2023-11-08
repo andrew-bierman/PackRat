@@ -11,7 +11,13 @@ import {
   RXStack,
 } from '@packrat/ui';
 import { AntDesign } from '@expo/vector-icons';
-import { StyleSheet, FlatList, View, ScrollView } from 'react-native';
+import {
+  StyleSheet,
+  FlatList,
+  View,
+  ScrollView,
+  TextInput,
+} from 'react-native';
 import Card from '../../components/feed/FeedCard';
 import DropdownComponent from '../../components/Dropdown';
 import { theme } from '../../theme';
@@ -62,6 +68,7 @@ const FeedSearchFilter = ({
   handleToggleTrip,
   selectedTypes,
   queryString,
+  searchQuery,
   setSearchQuery,
   handleCreateClick,
 }) => {
@@ -69,8 +76,21 @@ const FeedSearchFilter = ({
     useTheme();
   const styles = useCustomStyles(loadStyles);
   return (
-    <RStack style={styles.filterContainer}>
-      <RStack style={styles.searchContainer}>
+    <RStack
+      backgroundColor={currentTheme.colors.card}
+      padding={15}
+      fontSize={18}
+      width={'100%'}
+      borderRadius={10}
+    >
+      <RStack
+        flexDirection="row"
+        alignItems="center"
+        justifyContent="center"
+        marginBottom={10}
+        padding={10}
+        borderRadius={5}
+      >
         <RXStack space={3}>
           <RInput
             w="80%"
@@ -138,7 +158,6 @@ const FeedSearchFilter = ({
             data={dataValues}
             onValueChange={handleSortChange}
             placeholder="Sort By"
-            style={styles.dropdown}
             width={150}
           />
         </RXStack>
@@ -152,6 +171,9 @@ const FeedSearchFilter = ({
 };
 
 const Feed = ({ feedType = 'public' }) => {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    useTheme();
+
   const router = useRouter();
 
   const [queryString, setQueryString] = useState('');
@@ -235,6 +257,7 @@ const Feed = ({ feedType = 'public' }) => {
         handleToggleTrip={handleToggleTrip}
         selectedTypes={selectedTypes}
         queryString={queryString}
+        searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
         handleCreateClick={handleCreateClick}
       />
@@ -244,11 +267,20 @@ const Feed = ({ feedType = 'public' }) => {
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ flex: 1, paddingBottom: 10 }}
       >
-        <RStack style={styles.cardContainer}>
+        <RStack
+          flexDirection="row"
+          flexWrap="wrap"
+          justifyContent="space-around"
+          alignItems="center"
+        >
           {console.log({ data })}
           {feedSearchFilterComponent}
           {data?.map((item) => (
-            <Card key={item._id} type={item.type} {...item} />
+            <Card
+              key={`${item._id} + ${item.type}`}
+              type={item.type}
+              {...item}
+            />
           ))}
         </RStack>
       </RScrollView>
@@ -296,40 +328,21 @@ const Feed = ({ feedType = 'public' }) => {
     router.push(createUrlPath);
   };
 
-  return <RStack style={styles.mainContainer}>{renderData()}</RStack>;
+  return (
+    <RStack
+      flex={1}
+      backgroundColor={currentTheme.colors.background}
+      fontSize={18}
+      padding={15}
+    >
+      {renderData()}
+    </RStack>
+  );
 };
 
 const loadStyles = (theme) => {
   const { currentTheme } = theme;
-  return {
-    mainContainer: {
-      flex: 1,
-      backgroundColor: currentTheme.colors.background,
-      fontSize: 18,
-      padding: 15,
-    },
-    filterContainer: {
-      backgroundColor: currentTheme.colors.card,
-      padding: 15,
-      fontSize: 18,
-      width: '100%',
-      borderRadius: 10,
-    },
-    searchContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginBottom: 10,
-      padding: 10,
-      borderRadius: 5,
-    },
-    cardContainer: {
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-      justifyContent: 'space-around',
-      alignItems: 'center',
-    },
-  };
+  return {};
 };
 
 export default Feed;
