@@ -23,11 +23,6 @@ const HeroSection = ({ onSelect }) => {
   const styles = useCustomStyles(loadStyles);
   const router = useRouter();
 
-  const currentDestination = useSelector(
-    (state) => state.destination.currentDestination,
-  );
-  console.log('currentDestination', currentDestination);
-
   /**
    * Handles the selection of a search result.
    *
@@ -36,8 +31,6 @@ const HeroSection = ({ onSelect }) => {
    */
   const handleSearchSelect = async (selectedResult) => {
     try {
-      console.log('selectedResult ------->', selectedResult);
-
       // Set the selected search result in the Redux store
       // dispatch(setSelectedSearchResult(selectedResult));
 

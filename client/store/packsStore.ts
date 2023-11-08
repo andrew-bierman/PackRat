@@ -114,7 +114,15 @@ export const editItemsGlobalAsDuplicate = createAsyncThunk(
     //   type,
     // });
     // return response.data;
-    return await trpc.editGlobalItemAsDuplicate.mutate({ itemId, packId, name, weight, quantity, unit, type });
+    return await trpc.editGlobalItemAsDuplicate.mutate({
+      itemId,
+      packId,
+      name,
+      weight,
+      quantity,
+      unit,
+      type,
+    });
   },
 );
 
