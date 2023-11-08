@@ -17,10 +17,27 @@ import { DuplicateIcon } from '../DuplicateIcon/index';
 import { truncateString } from '../../utils/truncateString';
 import { formatNumber } from '~/utils/formatNumber';
 import { RHeader, RStack, RText, RXStack } from '@packrat/ui';
+import { RootState } from 'store/store';
 
 // import { useAuth } from "../../auth/provider";
 
-export default function Card({
+interface CardProps {
+  type: 'pack' | 'trip';
+  _id: string;
+  owner?: { username?: string };
+  name: string;
+  total_weight: number;
+  is_public: boolean;
+  favorited_by: Array<{ _id: string }>;
+  favorites_count: number;
+  owner_id: string;
+  destination?: string;
+  createdAt: string;
+  owners?: Array<{ _id: string; username?: string }>;
+  duration?: string;
+}
+
+const Card: React.FC<CardProps> = ({
   type,
   _id,
   owner,
@@ -34,15 +51,15 @@ export default function Card({
   createdAt,
   owners,
   duration,
-}) {
-  const user = useSelector((state) => state.auth.user);
+}) => {
+  const user = useSelector((state: RootState) => state.auth.user);
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const favorites = useSelector(selectAllFavorites);
   const dispatch = useDispatch();
 
   const isFavorite =
-    !type === 'trip'
+    type !== 'trip'
       ? favorited_by.includes(user._id) ||
         favorited_by.forEach((obj) => obj._id === user._id)
       : null;
@@ -262,4 +279,6 @@ export default function Card({
       </RStack>
     </RStack>
   );
-}
+};
+
+export default Card;

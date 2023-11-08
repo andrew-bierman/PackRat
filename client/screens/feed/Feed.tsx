@@ -61,7 +61,22 @@ const dataValues = [
   'Oldest',
 ];
 
-const FeedSearchFilter = ({
+interface FeedSearchFilterProps {
+  feedType?: string;
+  handleSortChange: (value: string) => void;
+  handleTogglePack: () => void;
+  handleToggleTrip: () => void;
+  selectedTypes: {
+    pack: boolean;
+    trip: boolean;
+  };
+  queryString: string;
+  searchQuery: string;
+  setSearchQuery: (query: string) => void;
+  handleCreateClick: () => void;
+}
+
+const FeedSearchFilter: React.FC<FeedSearchFilterProps> = ({
   feedType,
   handleSortChange,
   handleTogglePack,
@@ -170,7 +185,11 @@ const FeedSearchFilter = ({
   );
 };
 
-const Feed = ({ feedType = 'public' }) => {
+interface FeedProps {
+  feedType?: string;
+}
+
+const Feed: React.FC<FeedProps> = ({ feedType = 'public' }) => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
 
