@@ -11,7 +11,7 @@ import { FontAwesome } from '@expo/vector-icons';
 
 import { defaultWeatherObject } from '../constants/defaultWeatherObj';
 import useCustomStyles from '~/hooks/useCustomStyles';
-import { RStack, RText, RImage } from '../packrat-ui';
+import { RStack, RText, RImage } from '@packrat/ui';
 
 const monthArr = [
   'January',

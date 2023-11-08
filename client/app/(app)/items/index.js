@@ -14,6 +14,7 @@ import { getItemsGlobal } from '../../../store/globalItemsStore';
 import { Stack } from 'expo-router';
 import Head from 'expo-router/head';
 import { useFetchGlobalItems } from '~/hooks/globalItems';
+import useCustomStyles from '~/hooks/useCustomStyles';
 
 export default function Items() {
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
@@ -26,6 +27,7 @@ export default function Items() {
 
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     UseTheme();
+  const styles = useCustomStyles(loadStyles);
 
   const { data, isLoading, isError, refetch } = useFetchGlobalItems(
     limit,
@@ -73,7 +75,7 @@ export default function Items() {
               >
                 {' '}
                 <Button
-                  style={styles().button}
+                  style={styles.button}
                   onPress={() => {
                     setIsAddItemModalOpen(true);
                   }}
@@ -127,10 +129,9 @@ export default function Items() {
     </ScrollView>
   );
 }
-const styles = () => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
-  return StyleSheet.create({
+const loadStyles = (theme) => {
+  const { currentTheme } = theme;
+  return {
     button: {
       backgroundColor: currentTheme.colors.background,
       color: currentTheme.colors.white,
@@ -139,5 +140,5 @@ const styles = () => {
       alignItems: 'center',
       textAlign: 'center',
     },
-  });
+  };
 };
