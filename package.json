@@ -4,8 +4,9 @@
   "description": "PackRat is the ultimate adventure planner designed for those who love to explore the great outdoors. Our app helps users plan and organize their trips with ease, whether it's a weekend camping trip, a day hike, or a cross-country road trip.",
   "private": true,
   "workspaces": [
-    "client",
     "server",
+    "client",
+    "apps/*",
     "packages/*"
   ],
   "scripts": {
@@ -43,13 +44,14 @@
     "preinstall": "npx only-allow yarn",
     "postinstall": "yarn build",
     "build": "yarn workspaces foreach --all run build",
-    "upgrade:tamagui": "yarn up '*tamagui*'@latest '@tamagui/*'@latest react-native-web-lite@latest",
-    "upgrade:tamagui:canary": "yarn up '*tamagui*'@canary '@tamagui/*'@canary react-native-web-lite@canary",
+    "upgrade:tamagui": "yarn up '*tamagui*'@latest '@tamagui/*'@latest",
+    "upgrade:tamagui:canary": "yarn up '*tamagui*'@canary '@tamagui/*'@canary",
     "check-deps": "check-dependency-version-consistency .",
     "copy:env:client": "cp .env client/.env",
     "copy:env:server": "cp .env server/.env",
     "copy:env:packages": "cp .env packages/.env",
-    "copy:env:all": "yarn copy:env:client && yarn copy:env:server && yarn copy:env:packages"
+    "copy:env:all": "yarn copy:env:client && yarn copy:env:server && yarn copy:env:packages",
+    "regen": "yarn install --refresh-lockfile"
   },
   "engines": {
     "node": ">=18.16.1",
