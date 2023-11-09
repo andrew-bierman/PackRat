@@ -1,14 +1,15 @@
-// import { Geoapify_Key } from "../constants/api";
 import { GEOAPIFY_KEY } from '@env';
 import axios from '~/config/axios';
 
 /**
  * Retrieves the trails result based on the given address array.
  *
- * @param {Array} addressArray - An array of addresses.
- * @return {Array} An array of trail names.
+ * @param {string[]} addressArray - An array of addresses.
+ * @return {Promise<string[]>} An array of trail names.
  */
-export const getTrailsResult = async (addressArray) => {
+export const getTrailsResult = async (
+  addressArray: string[],
+): Promise<string[]> => {
   const params = {
     q: addressArray,
     osm_tag: ['highway:footway'],
@@ -25,6 +26,8 @@ export const getTrailsResult = async (addressArray) => {
     `https://photon.komoot.io/api/?${queryString}`,
   );
 
-  trailsArray = response.data.features.map((_item) => _item?.properties?.name);
+  const trailsArray = response.data.features.map(
+    (_item: any) => _item?.properties?.name,
+  );
   return trailsArray;
 };

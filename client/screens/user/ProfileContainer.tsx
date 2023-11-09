@@ -33,7 +33,6 @@ import { useUserPacks } from '~/hooks/packs';
 import { useFetchUserFavorites } from '~/hooks/favorites';
 
 import { useUserTrips } from '~/hooks/singletrips';
-import { Skeleton } from '../../packrat-ui/Skeleton';
 import { useGetUser } from '~/hooks/user';
 
 const SettingsButton = () => {
