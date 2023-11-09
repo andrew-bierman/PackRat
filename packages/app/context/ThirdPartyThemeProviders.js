@@ -9,16 +9,17 @@ import {
   nativeBaseDarkTheme,
   nativeBaseLightTheme,
 } from '../theme';
-import FontLoader from './FontLoader';
+// import FontLoader from './FontLoader';
 
 const ThirdPartyProviders = ({ children, isDark = false }) => {
   // const { isDark } = useTheme()
   return (
-    <FontLoader>
+    // <FontLoader>
       <NativeBaseProvider
         theme={isDark ? nativeBaseDarkTheme : nativeBaseLightTheme}
+        isSsr
       >
-        <TamaguiProvider config={config}>
+        <TamaguiProvider config={config} ssr>
           <TamaguiTheme name={isDark ? 'dark' : 'light'}>
             <RNPaperThemeProvider theme={darkPaperTheme}>
               {children}
@@ -26,7 +27,7 @@ const ThirdPartyProviders = ({ children, isDark = false }) => {
           </TamaguiTheme>
         </TamaguiProvider>
       </NativeBaseProvider>
-    </FontLoader>
+    // </FontLoader>
   );
 };
 

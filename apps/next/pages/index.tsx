@@ -1,14 +1,14 @@
-// import Dashboard from 'app/screens/dashboard'
-// import LandingPage from 'app/components/landing_page';
+// import { HomeScreen } from 'app/features/home/screen'
+import Head from 'next/head'
 
-import { RButton } from '@packrat/ui';
-
-export default function Home() {
-    return (
-        <div>
-            <h1>Home</h1>
-            <p>P tag !</p>
-            {/* <LandingPage /> */}
-        </div>
-    );
+export default function Page() {
+  return (
+    <>
+      <Head>
+        <title>Home</title>
+      </Head>
+      <h1>testing</h1>
+      {/* <HomeScreen /> */}
+    </>
+  )
 }

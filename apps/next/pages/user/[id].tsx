@@ -1,7 +1,13 @@
-export default function UserPage() {
-    return (
-        <div>
-            <h1>User</h1>
-            </div>
-    )
+// import { UserDetailScreen } from 'app/features/user/detail-screen'
+import Head from 'next/head'
+
+export default function Page() {
+  return (
+    <>
+      <Head>
+        <title>User</title>
+      </Head>
+      {/* <UserDetailScreen /> */}
+    </>
+  )
 }

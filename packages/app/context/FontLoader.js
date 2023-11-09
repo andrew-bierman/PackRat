@@ -21,25 +21,26 @@ import {
 } from '@expo/vector-icons';
 
 const FontLoader = ({ children }) => {
+  return children
   const [loaded] = useFonts({
     Inter: require('@tamagui/font-inter/otf/Inter-Medium.otf'),
     InterBold: require('@tamagui/font-inter/otf/Inter-Bold.otf'),
 
     // Cache all icon fonts
-    ...AntDesign.font,
-    ...Entypo.font,
-    ...EvilIcons.font,
-    ...Feather.font,
-    ...FontAwesome.font,
-    ...FontAwesome5.font,
-    ...Fontisto.font,
-    ...Foundation.font,
-    ...Ionicons.font,
-    ...MaterialCommunityIcons.font,
-    ...MaterialIcons.font,
-    ...Octicons.font,
-    ...SimpleLineIcons.font,
-    ...Zocial.font,
+    // ...AntDesign.font,
+    // ...Entypo.font,
+    // ...EvilIcons.font,
+    // ...Feather.font,
+    // ...FontAwesome.font,
+    // ...FontAwesome5.font,
+    // ...Fontisto.font,
+    // ...Foundation.font,
+    // ...Ionicons.font,
+    // ...MaterialCommunityIcons.font,
+    // ...MaterialIcons.font,
+    // ...Octicons.font,
+    // ...SimpleLineIcons.font,
+    // ...Zocial.font,
   });
 
   useEffect(() => {
