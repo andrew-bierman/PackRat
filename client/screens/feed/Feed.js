@@ -13,6 +13,7 @@ import {
   Divider,
   Center,
   Flex,
+  Spinner,
 } from 'native-base';
 import { AntDesign } from '@expo/vector-icons';
 import {
@@ -175,6 +176,7 @@ const Feed = ({ feedType = 'public' }) => {
     trip: false,
   });
   const [searchQuery, setSearchQuery] = useState('');
+  const [pageNo, setPageNo] = useState(1);
 
   const [refreshing, setRefreshing] = useState(false);
 
@@ -186,11 +188,13 @@ const Feed = ({ feedType = 'public' }) => {
   // const userTripsData = useSelector(selectAllTrips);
 
   const styles = useCustomStyles(loadStyles);
-  const { data, error, isLoading, refetch } = useFeed(
+
+  const { data, error, isLoading, totalPages } = useFeed(
     queryString,
     ownerId,
     feedType,
     selectedTypes,
+    pageNo,
   );
 
   const onRefresh = () => {
@@ -258,6 +262,12 @@ const Feed = ({ feedType = 'public' }) => {
     // if searchQuery is empty, use the original data
     arrayData = searchQuery ? results.map((result) => result.item) : data;
 
+    useEffect(() => {
+      if (pageNo >= totalPages) {
+        setPageNo(totalPages <= 0 ? 1 : totalPages);
+      }
+    }, [selectedTypes]);
+
     const feedSearchFilterComponent = (
       <FeedSearchFilter
         feedType={feedType}
@@ -278,13 +288,39 @@ const Feed = ({ feedType = 'public' }) => {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        <View style={styles.cardContainer}>
-          {/* {console.log({ data })} */}
-          {feedSearchFilterComponent}
-          {data?.map((item) => (
-            <Card key={item._id} type={item.type} {...item} />
-          ))}
-        </View>
+        {isLoading ? (
+          <Spinner
+            accessibilityLabel="Loading posts"
+            size="lg"
+            color="emerald.500"
+          />
+        ) : (
+          <View style={styles.cardContainer}>
+            {/* {console.log({ data })} */}
+            {feedSearchFilterComponent}
+            {data?.map((item) => (
+              <Card key={item._id} type={item.type} {...item} />
+            ))}
+          </View>
+        )}
+        {totalPages > 0 && (
+          <View style={styles.paginationContainer}>
+            <Button
+              disabled={pageNo === 1}
+              style={pageNo === 1 && { opacity: 0.5 }}
+              onPress={() => setPageNo(pageNo - 1)}
+            >
+              Previous
+            </Button>
+            <Button
+              disabled={pageNo === totalPages}
+              style={pageNo === totalPages && { opacity: 0.5 }}
+              onPress={() => setPageNo(pageNo + 1)}
+            >
+              Next
+            </Button>
+          </View>
+        )}
       </ScrollView>
     ) : (
       <View style={{ flex: 1, paddingBottom: 10 }}>
@@ -365,6 +401,12 @@ const loadStyles = (theme) => {
       flexWrap: 'wrap',
       justifyContent: 'space-around',
       alignItems: 'center',
+    },
+    paginationContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: 20,
     },
   };
 };

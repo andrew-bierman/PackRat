@@ -12,11 +12,15 @@ import { z } from 'zod';
  */
 export const getPublicTrips = async (req, res, next) => {
   try {
-    const { queryBy } = req.query;
+    const { queryBy, pageNo, recordsPerPage } = req.query;
 
-    const publicTrips = await getPublicTripsService(queryBy);
+    const { publicTrips, page_no, records_per_page, totalRecords }: any =
+      await getPublicTripsService(queryBy, pageNo, recordsPerPage);
 
     res.locals.data = publicTrips;
+    res.locals.pageNo = page_no;
+    res.locals.recordsPerPage = records_per_page;
+    res.locals.totalRecords = totalRecords;
     responseHandler(res);
   } catch (error) {
     next(TripNotFoundError);
@@ -25,9 +29,15 @@ export const getPublicTrips = async (req, res, next) => {
 
 export function getPublicTripsRoute() {
   return publicProcedure
-    .input(z.object({ queryBy: z.string() }))
+    .input(
+      z.object({
+        queryBy: z.string(),
+        pageNo: z.number().optional(),
+        recordsPerPage: z.number().optional(),
+      }),
+    )
     .query(async (opts) => {
-      const { queryBy } = opts.input;
-      return await getPublicTripsService(queryBy);
+      const { queryBy, pageNo, recordsPerPage } = opts.input;
+      return await getPublicTripsService(queryBy, pageNo, recordsPerPage);
     });
 }

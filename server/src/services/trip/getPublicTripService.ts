@@ -1,4 +1,5 @@
 import Trip from '../../models/tripModel';
+import { RECORDS_PER_PAGE } from '../../utils/constant';
 
 /**
  * Retrieves public trips based on the given query parameter.
@@ -7,7 +8,9 @@ import Trip from '../../models/tripModel';
  */
 export const getPublicTripsService = async (
   queryBy: string,
-): Promise<object[]> => {
+  pageNo: number,
+  recordsPerPage: number,
+): Promise<object> => {
   try {
     const publicTripsPipeline: any[] = [
       {
@@ -59,9 +62,21 @@ export const getPublicTripsService = async (
       publicTripsPipeline.push({ $sort: { _id: -1 } });
     }
 
-    const publicTrips = await Trip.aggregate(publicTripsPipeline);
+    pageNo = pageNo ? +pageNo : 1;
+    recordsPerPage = recordsPerPage ? +recordsPerPage : RECORDS_PER_PAGE;
 
-    return publicTrips;
+    const totalRecords = await Trip.count();    
+
+    const publicTrips = await Trip.aggregate(publicTripsPipeline)
+      .skip((pageNo - 1) * recordsPerPage)
+      .limit(recordsPerPage);
+
+    return {
+      publicTrips,
+      totalRecords,
+      page_no: pageNo,
+      records_per_page: recordsPerPage,
+    };
   } catch (error) {
     console.error(error);
     throw new Error('Trips cannot be found');

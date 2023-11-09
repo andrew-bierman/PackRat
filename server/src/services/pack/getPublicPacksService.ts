@@ -1,3 +1,4 @@
+import { RECORDS_PER_PAGE } from '../../utils/constant';
 import Pack from '../../models/packModel';
 import { computeTotalWeightInGrams } from '../../utils/convertWeight';
 
@@ -26,7 +27,11 @@ const DEFAULT_SORT = { createdAt: -1 };
  * @param {string} queryBy - Specifies how the public packs should be sorted.
  * @return {Promise<any[]>} An array of public packs.
  */
-export async function getPublicPacksService(queryBy: string = null) {
+export async function getPublicPacksService(
+  queryBy: string = null,
+  pageNo: number,
+  recordsPerPage: number,
+) {
   try {
     const publicPacksPipeline: any = [
       {
@@ -84,9 +89,20 @@ export async function getPublicPacksService(queryBy: string = null) {
     const sortCriteria = SORT_OPTIONS[queryBy] || DEFAULT_SORT;
     publicPacksPipeline.push({ $sort: sortCriteria });
 
-    const publicPacks = await Pack.aggregate(publicPacksPipeline);
+    pageNo = pageNo ? +pageNo : 1;
+    recordsPerPage = recordsPerPage ? +recordsPerPage : RECORDS_PER_PAGE;
 
-    return publicPacks;
+    const totalRecords = await Pack.aggregate(publicPacksPipeline);
+    const publicPacks = await Pack.aggregate(publicPacksPipeline)
+      .skip((pageNo - 1) * recordsPerPage)
+      .limit(recordsPerPage);
+
+    return {
+      publicPacks,
+      totalRecords: totalRecords.length,
+      page_no: pageNo,
+      records_per_page: recordsPerPage,
+    };
   } catch (error) {
     throw new Error('Packs cannot be found: ' + error.message);
   }
