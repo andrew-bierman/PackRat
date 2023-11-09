@@ -17,8 +17,11 @@ import { MAPBOX_ACCESS_TOKEN } from '@env';
 export default function MapPreview({ shape }) {
   console.log(
     '🚀 ~ file: MapPreview.js:9 ~ MapPreview ~ shape:',
-    JSON.stringify(shape.features[0]),
+    JSON.stringify(shape?.features[0]),
   );
+
+  if (!shape || !shape.features || !shape.features[0]) return null;
+
   const processedShape = processShapeData(shape);
   const lineProperties = {
     stroke: '#16b22d',
@@ -28,26 +31,33 @@ export default function MapPreview({ shape }) {
   const pointProperties = {
     'marker-color': '#16b22d',
   };
+
+  let updatedFeature = shape.features[0]; // Declare updatedFeature here
+
   if (isLineString(shape)) {
-    shape.features[0].properties = lineProperties;
+    updatedFeature = {
+      ...shape.features[0],
+      properties: lineProperties,
+    };
   }
 
   const imageShape = { type: 'FeatureCollection', features: [] };
-  console.log(JSON.stringify(shape.features[0]));
+  console.log(JSON.stringify(updatedFeature));
   const polygonObj = {
-    ...shape.features[0],
+    ...updatedFeature,
     geometry: {
-      type: shape.features[0].geometry.type,
-      coordinates: [shape.features[0].geometry.coordinates[0]],
+      type: updatedFeature.geometry.type,
+      coordinates: [updatedFeature.geometry.coordinates[0]],
     },
   };
   console.log(JSON.stringify(polygonObj), 'polygon obj');
   if (isPolygonOrMultiPolygon(shape)) {
-    imageShape.features.push([shape.features[0].geometry.coordinates[0]]);
+    imageShape.features.push([updatedFeature.geometry.coordinates[0]]);
   } else {
-    imageShape.features.push(shape.features[0]);
+    imageShape.features.push(updatedFeature);
   }
   processedShape.features.forEach((feature) => {
+    if (!feature || !feature.properties) return;
     if (feature.properties.meta == 'end') {
       feature.properties = pointProperties;
       imageShape.features.push(feature);
@@ -68,7 +78,7 @@ export default function MapPreview({ shape }) {
 
   const {
     coordinates: [lng, lat],
-  } = shape.features[0].geometry;
+  } = updatedFeature.geometry || {};
   // console.log("🚀 ~ file: MapPreview.js:39 ~ MapPreview ~ coordinates:", isPoint(shape),MAPBOX_ACCESS_TOKEN)
 
   return isPoint(shape) ? (
