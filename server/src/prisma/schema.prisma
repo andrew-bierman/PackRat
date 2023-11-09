@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "mongodb"
-  url      = env("DATABASE_URL")
+  url      = env("MONGODB_URI")
 }
 
 //  ███    ███  ██████  ██████  ███████ ██      ███████
@@ -13,9 +13,6 @@ datasource db {
 //  ██  ██  ██ ██    ██ ██   ██ ██      ██           ██
 //  ██      ██  ██████  ██████  ███████ ███████ ███████
 
-/// TODO: replicate mongoose static methods
-/// TODO: check prisma capability to regex validate type and id_ fields
-
 model GeoJSON {
   id         String          @id @default(auto()) @map("_id") @db.ObjectId
   v          Int             @map("__v")
@@ -23,38 +20,43 @@ model GeoJSON {
   id_        String          @unique(map: "id_1") @map("id")
   properties Json
   geometry   GeoJSONGeometry
-  createdAt DateTime? @default(now())
-  updatedAt DateTime? @updatedAt
+  createdAt  DateTime?       @default(now())
+  updatedAt  DateTime?       @updatedAt
+  trip_id    String          @db.ObjectId
+  Trip       Trip?           @relation(fields: [trip_id], references: [id])
+
   @@index([id], map: "id_1_autocreated")
   @@map("geojsons")
 }
 
 model ItemCategory {
-  id   String           @id @default(auto()) @map("_id") @db.ObjectId
-  v    Int              @map("__v")
-  name ItemCategoryName
-  createdAt DateTime? @default(now())
-  updatedAt DateTime? @updatedAt
+  id        String           @id @default(auto()) @map("_id") @db.ObjectId
+  v         Int              @map("__v")
+  name      ItemCategoryName
+  createdAt DateTime?        @default(now())
+  updatedAt DateTime?        @updatedAt
   Item      Item[]
+
   @@index([name], map: "name_1")
   @@map("itemcategories")
 }
 
 model Item {
-  id             String   @id @default(auto()) @map("_id") @db.ObjectId
-  v              Int      @map("__v")
+  id             String        @id @default(auto()) @map("_id") @db.ObjectId
+  v              Int           @map("__v")
   name           String
   weight         Float
   quantity       Int
   unit           String
-  global         Boolean  @default(false)
-  pack_ids       String[] @db.ObjectId
-  itemCategoryId String?  @db.ObjectId
-  createdAt DateTime? @default(now())
-  updatedAt DateTime? @updatedAt
-  category ItemCategory? @relation(fields: [itemCategoryId], references: [id])
-  owners   User[]
-  packs    Pack[]        @relation(fields: [pack_ids], references: [id])
+  global         Boolean       @default(false)
+  pack_ids       String[]      @db.ObjectId
+  itemCategoryId String?       @db.ObjectId
+  createdAt      DateTime?     @default(now())
+  updatedAt      DateTime?     @updatedAt
+  category       ItemCategory? @relation(fields: [itemCategoryId], references: [id])
+  owners         User[]
+  packs          Pack[]        @relation(fields: [pack_ids], references: [id])
+
   @@index([name], map: "name_1")
   @@index([weight], map: "weight_1")
   @@index([unit], map: "unit_1")
@@ -73,15 +75,18 @@ model Pack {
   type              String?      @default("pack")
   item_ids          String[]     @db.ObjectId
   favourited_by_ids String[]     @db.ObjectId
-  createdAt DateTime? @default(now())
-  updatedAt DateTime? @updatedAt
-  favorites_count Int?
+  createdAt         String?
+  updatedAt         DateTime?    @updatedAt
+  items             Item[]       @relation(fields: [item_ids], references: [id])
+  favorited_by      User[]       @relation(name: "Favourites", fields: [favourited_by_ids], references: [id])
+  owners            User[]       @relation(name: "Ownership", fields: [owner_ids], references: [id])
+  trips             Trip[]
+
+  // Virtuals
   total_weight    Float?
-  totalScore      Int?
-  items       Item[] @relation(fields: [item_ids], references: [id])
-  favoritedBy User[] @relation(name: "Favourites", fields: [favourited_by_ids], references: [id])
-  owners      User[] @relation(name: "Ownership", fields: [owner_ids], references: [id])
-  trips       Trip[]
+  total_scores    Int?
+  favorites_count Int?
+
   @@index([name], map: "name_1")
   @@index([is_public], map: "is_public_1")
   @@map("packs")
@@ -94,9 +99,10 @@ model Template {
   templateId       String       @db.ObjectId
   isGlobalTemplate Boolean      @default(false)
   createdById      String?      @db.ObjectId
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  createdBy User? @relation(fields: [createdById], references: [id])
+  createdAt        DateTime?    @default(now())
+  updatedAt        DateTime?    @updatedAt
+  createdBy        User?        @relation(fields: [createdById], references: [id])
+
   @@index([type], map: "type_1")
   @@index([templateId], map: "templateId_1")
   @@index([createdById], map: "createdBy_1")
@@ -104,30 +110,25 @@ model Template {
 }
 
 model Trip {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  v           Int      @map("__v")
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  v           Int       @map("__v")
   name        String
-  // should be JSON?
   description String
-  // should be JSON?
-Owner
- andrew-bierman
-
-Just curious - why do you think these should be JSON?
-
   duration    String
   weather     String
   start_date  DateTime
   end_date    DateTime
   destination String
-  owner_id    String   @db.ObjectId
+  owner_id    String    @db.ObjectId
   is_public   Boolean?
-  type        String   @default("trip")
-  pack_id     String   @db.ObjectId
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  owner User @relation(fields: [owner_id], references: [id])
-  packs Pack @relation(fields: [pack_id], references: [id])
+  type        String    @default("trip")
+  pack_id     String    @db.ObjectId
+  createdAt   DateTime? @default(now())
+  updatedAt   DateTime? @updatedAt
+  owner       User      @relation(fields: [owner_id], references: [id])
+  packs       Pack      @relation(fields: [pack_id], references: [id])
+  geojson     GeoJSON[]
+
   @@index([destination], map: "destination_1")
   @@index([start_date], map: "start_date_1")
   @@index([end_date], map: "end_date_1")
@@ -137,8 +138,8 @@ Just curious - why do you think these should be JSON?
 }
 
 model User {
-  id                           String    @id @default(auto()) @map("_id") @db.ObjectId
-  v                            Int       @map("__v")
+  id                           String     @id @default(auto()) @map("_id") @db.ObjectId
+  v                            Int        @map("__v")
   name                         String
   password                     String
   email                        String
@@ -147,22 +148,23 @@ model User {
   googleId                     String?
   is_certified_guide           Boolean?
   passwordResetToken           String?
-  passwordResetTokenExpiration DateTime? @db.Date
-  role                         Role      @default(user)
-  username                     String    @unique(map: "username_1")
+  passwordResetTokenExpiration DateTime?  @db.Date
+  role                         Role       @default(user)
+  username                     String     @unique(map: "username_1")
   profileImage                 String?
   preferredWeather             String?
   preferredWeight              String?
-  favourite_ids                String[]  @db.ObjectId
-  pack_ids                     String[]  @db.ObjectId
-  item_id                      String?   @db.ObjectId
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  favorites Pack[]     @relation(name: "Favourites", fields: [favourite_ids], references: [id])
-  packs     Pack[]     @relation(name: "Ownership", fields: [pack_ids], references: [id])
-  item      Item?      @relation(fields: [item_id], references: [id])
-  templates Template[]
-  trips     Trip[]
+  favourite_ids                String[]   @db.ObjectId
+  pack_ids                     String[]   @db.ObjectId
+  item_id                      String?    @db.ObjectId
+  createdAt                    DateTime?  @default(now())
+  updatedAt                    DateTime?  @updatedAt
+  favorites                    Pack[]     @relation(name: "Favourites", fields: [favourite_ids], references: [id])
+  packs                        Pack[]     @relation(name: "Ownership", fields: [pack_ids], references: [id])
+  item                         Item?      @relation(fields: [item_id], references: [id])
+  templates                    Template[]
+  trips                        Trip[]
+
   @@index([email], map: "email_1")
   @@index([role], map: "role_1")
   @@index([code], map: "code_1")
@@ -170,12 +172,13 @@ model User {
 }
 
 model Conversation {
-  id      String @id @default(auto()) @map("_id") @db.ObjectId
-  v       Int    @map("__v")
-  userId  String
-  history String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  v         Int       @map("__v")
+  userId    String
+  history   String
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+
   @@map("conversations")
 }
 
