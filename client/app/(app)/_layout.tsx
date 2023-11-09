@@ -83,6 +83,7 @@ export default function AppLayout() {
     'pack/[packId]',
     'destination/[destinationId]',
     'packs/index',
+    'filter/index',
     'drawer/index',
     'profile/[id]',
     'profile/settings/index',

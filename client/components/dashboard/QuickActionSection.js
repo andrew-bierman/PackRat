@@ -1,9 +1,7 @@
 import { HStack } from 'native-base';
 import QuickActionButton from './QuickActionButton';
-import useTheme from '../../hooks/useTheme';
 import { useRouter } from 'expo-router';
 import useCustomStyles from '~/hooks/useCustomStyles';
-import { Platform } from 'react-native';
 
 const QuickActionsSection = () => {
   const router = useRouter();
@@ -28,11 +26,10 @@ const QuickActionsSection = () => {
    * @param {string} action - The selected action.
    */
   const handleActionSelect = (action) => {
-    const isWeb = Platform.OS == 'web';
     if (action === 'createPack') {
-      router.push(isWeb ? '/pack/create' : '/tabs/pack/create');
+      router.push('/pack/create');
     } else if (action === 'createTrip') {
-      router.push(isWeb ? '/trip/create' : '/tabs/trip/create');
+      router.push('/trip/create');
     }
   };
 
