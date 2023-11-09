@@ -67,7 +67,7 @@ const DestinationHeader = ({ geoJSON, selectedSearchResult }) => {
       <View style={styles.languageContainer}>
         {Object.entries(languageNames).map(([key, value]) => (
           <Text key={key} style={styles.languageText}>
-            {`${key.split(':')[1].toUpperCase()}: ${value}`}
+            {`${key.split(':')[1].toUpperCase()}: ${JSON.parse(value)}`}
           </Text>
         ))}
       </View>

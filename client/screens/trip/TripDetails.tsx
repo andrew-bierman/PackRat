@@ -21,7 +21,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { convertPhotonGeoJsonToShape } from '../../utils/mapFunctions';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from '~/hooks/useCustomStyles';
-import { useFetchSingleTrip } from '~/hooks/trips';
+import { useFetchSingleTrip } from '~/hooks/singletrips';
 export function TripDetails() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();

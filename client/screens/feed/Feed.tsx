@@ -36,7 +36,8 @@ import {
   fetchUserPacks,
   selectAllPacks,
 } from '../../store/packsStore';
-import { fetchUserTrips, selectAllTrips } from '../../store/tripsStore';
+// import { fetchUserTrips, selectAllTrips } from '../../store/tripsStore';
+import { usefetchTrips } from '~/hooks/trips';
 import { useRouter } from 'expo-router';
 import { fuseSearch } from '../../utils/fuseSearch';
 import { fetchUserFavorites } from '../../store/favoritesStore';

@@ -23,14 +23,16 @@ import {
   selectAllFavorites,
 } from '../../store/favoritesStore';
 import { getUser } from '../../store/userStore';
-import { fetchUserTrips, selectAllTrips } from '../../store/tripsStore';
+// import { fetchUserTrips, selectAllTrips } from '../../store/tripsStore';
+import { usefetchTrips } from '~/hooks/trips';
 import { useMatchesCurrentUser } from '~/hooks/useMatchesCurrentUser';
 import { useRouter } from 'expo-router';
 import useCustomStyles from '~/hooks/useCustomStyles';
 import { Skeleton } from '@packrat/ui';
 import { useUserPacks } from '~/hooks/packs';
 import { useFetchUserFavorites } from '~/hooks/favorites';
-import { useUserTrips } from '~/hooks/trips';
+
+import { useUserTrips } from '~/hooks/singletrips';
 import { useGetUser } from '~/hooks/user';
 
 const SettingsButton = () => {

@@ -38,9 +38,9 @@ export const getParksRapid = async (state) => {
  *
  * @param {number} lat - The latitude coordinate.
  * @param {number} lon - The longitude coordinate.
- * @return {Promise<Object>} The geojson data containing the parks.
+ * @return {Promise<any>} The geojson data containing the parks.
  */
-export const getParksOSM = async (lat, lon) => {
+export const getParksOSM = async (lat: number, lon: number): Promise<any> => {
   const radius = 50000; // Search radius in meters
   const query = `
     [out:json][timeout:25];
@@ -61,5 +61,6 @@ export const getParksOSM = async (lat, lon) => {
     return geojsonData;
   } catch (error) {
     console.error('Error fetching parks:', error);
+    return null; // You may want to handle the error differently, but this is a basic example.
   }
 };
