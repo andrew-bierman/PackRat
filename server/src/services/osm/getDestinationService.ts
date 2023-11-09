@@ -1,4 +1,4 @@
-import { prisma } from "../../prisma/index";
+import { prisma } from '../../prisma';
 /**
  * Retrieves the destination service based on the given ID.
  *

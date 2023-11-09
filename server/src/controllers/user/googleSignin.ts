@@ -1,6 +1,5 @@
-
 import { sendWelcomeEmail, resetEmail } from '../../utils/accountEmail';
-import {prisma} from "../../prisma/index"
+import { prisma } from '../../prisma';
 import { google } from 'googleapis';
 import {
   GOOGLE_CLIENT_ID,
@@ -48,14 +47,14 @@ export const googleSignin = async (req, res, next) => {
         googleId: userInfo.id,
       },
     });
-    
+
     if (!alreadyGoogleSignin) {
       const isLocalLogin = await prisma.user.findFirst({
         where: {
           email: userInfo.email,
         },
       });
-      
+
       if (isLocalLogin) {
         next(UserAlreadyExistsError);
       }
@@ -69,7 +68,7 @@ export const googleSignin = async (req, res, next) => {
           googleId: userInfo.id,
         } as any,
       });
-      
+
       await generateAuthToken(user);
       sendWelcomeEmail(user.email, user.name);
       res.redirect(`${UI_ROOT_URI}?token=${user.token}`);

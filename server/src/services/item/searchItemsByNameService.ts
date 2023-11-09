@@ -1,4 +1,4 @@
-import { prisma } from "../../prisma/index";
+import { prisma } from '../../prisma';
 /**
  * Searches for items by name.
  *

@@ -1,4 +1,4 @@
-import { prisma } from "../../prisma/index";
+import { prisma } from '../../prisma';
 
 export const getPackByIdService = async (packId) => {
   try {
@@ -8,7 +8,7 @@ export const getPackByIdService = async (packId) => {
         category: true, // Include the 'category' relation
         owners: true, // Include the 'owners' relation
         packs: true, // Include the 'packs' relation
-      }as never,
+      },
     });
 
     return pack;

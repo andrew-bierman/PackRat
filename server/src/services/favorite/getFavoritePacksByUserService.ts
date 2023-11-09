@@ -1,4 +1,4 @@
-import { prisma } from "../../prisma/index";
+import { prisma } from '../../prisma';
 
 /**
  * Retrieves the favorite packs associated with a specific user.
@@ -12,8 +12,8 @@ export const getFavoritePacksByUserService = async (userId) => {
       favorited_by: {
         some: {
           id: userId,
-        } ,
-      } as any,
+        },
+      },
     },
   });
 

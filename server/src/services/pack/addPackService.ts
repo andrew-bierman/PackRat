@@ -1,4 +1,4 @@
-import { prisma } from "../../prisma/index";
+import { prisma } from '../../prisma';
 
 /**
  * Adds a new pack service.
@@ -8,16 +8,12 @@ import { prisma } from "../../prisma/index";
  * @return {Object} An object containing the created pack.
  */
 
-
 export const addPackService = async (name, owner_id) => {
   const newPack = {
     name,
     owner_id,
-    items: [],
     is_public: false,
-    favorited_by: [],
-    createdAt: new Date(),
-    owners: [owner_id],
+    createdAt: new Date().toDateString(),
   };
 
   console.log('newPack', newPack);
@@ -36,9 +32,13 @@ export const addPackService = async (name, owner_id) => {
 
   // Create the new pack
   const createdPack = await prisma.pack.create({
-    data: newPack as any,
+    data: {
+      ...newPack,
+      owners: {
+        connect: { id: owner_id },
+      },
+    },
   });
 
   return { createdPack };
 };
-

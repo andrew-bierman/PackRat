@@ -1,4 +1,4 @@
-import { prisma } from "../../prisma/index";
+import { prisma } from '../../prisma';
 /**
  * Adds or removes a pack from the user's favorites list.
  *
@@ -10,6 +10,9 @@ export const addToFavoriteService = async (packId, userId) => {
   const user = await prisma.user.findUnique({
     where: {
       id: userId,
+    },
+    include: {
+      favorites: true,
     },
   });
 
@@ -23,8 +26,8 @@ export const addToFavoriteService = async (packId, userId) => {
         favorites: {
           disconnect: {
             id: packId,
-          } ,
-        } as any,
+          },
+        },
       },
     });
 
@@ -37,7 +40,7 @@ export const addToFavoriteService = async (packId, userId) => {
           disconnect: {
             id: userId,
           },
-        } as any,
+        },
       },
     });
   } else {
@@ -51,7 +54,7 @@ export const addToFavoriteService = async (packId, userId) => {
           connect: {
             id: packId,
           },
-        } as any,
+        },
       },
     });
 
@@ -64,7 +67,7 @@ export const addToFavoriteService = async (packId, userId) => {
           connect: {
             id: userId,
           },
-        } as any,
+        },
       },
     });
   }

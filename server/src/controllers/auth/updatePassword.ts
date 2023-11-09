@@ -1,11 +1,11 @@
 import { publicProcedure } from '../../trpc';
 import { UnableTouUpdatePasswordError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
-import User from '../../models/userModel';
 import { findUserAndUpdate } from '../../services/user/user.service';
 import bcrypt from 'bcrypt';
 import { JWT_SECRET } from '../../config';
 import * as validator from '../../middleware/validators/index';
+import { prisma } from '../../prisma';
 
 /**
  * Updates the password for a user.
@@ -17,7 +17,11 @@ export const updatePassword = async (req, res, next) => {
   try {
     let { email, oldPassword, newPassword } = req.body;
 
-    const user = await User.findOne({ email });
+    const user = await prisma.user.findFirst({
+      where: {
+        email,
+      },
+    });
 
     if (!user) throw new Error('Unable to verify');
 

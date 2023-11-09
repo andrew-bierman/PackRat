@@ -1,9 +1,8 @@
 import { publicProcedure } from '../../trpc';
-import User from '../../models/userModel';
 import * as validator from '../../middleware/validators/index';
 
 import { validateResetToken } from '../../utils/prismaHelpers/user';
-import {prisma} from "../../prisma/index"
+import { prisma } from '../../prisma';
 /**
  * Resets the user's password.
  * @param {Object} req - The request object.
@@ -16,11 +15,11 @@ export const resetPassword = async (req, res) => {
   const user = await validateResetToken(resetToken);
 
   await prisma.user.update({
-    where:{id:user.id},
-        data:{
-        password:password
-        },}
-        )
+    where: { id: user.id },
+    data: {
+      password: password,
+    },
+  });
   res.status(200).send({
     message: 'Successfully reset password',
     status: 'success',
@@ -35,11 +34,11 @@ export function resetPasswordRoute() {
       const { resetToken, password } = opts.input;
       const user = await validateResetToken(resetToken);
       await prisma.user.update({
-        where:{id:user.id},
-            data:{
-            password:password
-            },}
-            )
+        where: { id: user.id },
+        data: {
+          password: password,
+        },
+      });
       return 'Successfully reset password';
     });
 }

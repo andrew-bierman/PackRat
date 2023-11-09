@@ -1,4 +1,4 @@
-import { prisma } from "../../prisma/index";
+import { prisma } from '../../prisma';
 
 const SORT_OPTIONS = {
   Favorite: { favoritesCount: 'desc' },

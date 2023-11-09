@@ -5,7 +5,7 @@ import { getUserFavoritesService } from '../../services/favorite/favorite.servic
 import * as validator from '../../middleware/validators/index';
 
 import { z } from 'zod';
-import { prisma } from "../../prisma/index";
+import { prisma } from '../../prisma';
 /**
  * Retrieves the favorite items of a user.
  * @param {Object} req - The request object.
@@ -25,14 +25,14 @@ export function getUserFavoritesRoute() {
     .input(z.object({ userId: z.string() }))
     .query(async (opts) => {
       const { userId } = opts.input;
-    const user=  await prisma.user.findUnique({
+      const user = await prisma.user.findUnique({
         where: {
           id: userId, // Assuming userId is the user's ID
         },
         include: {
           favorites: true,
         },
-      } as any);
+      });
       return user.favorites;
     });
 }

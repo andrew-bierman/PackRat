@@ -1,4 +1,4 @@
-import { prisma } from "../../prisma/index";
+import { prisma } from '../../prisma';
 
 const SORT_OPTIONS = {
   Favorite: { favoritesCount: 'desc' },
@@ -36,7 +36,7 @@ export const getPacksService = async (ownerId, queryBy = null) => {
         owners: true,
       },
       orderBy: SORT_OPTIONS[queryBy] || DEFAULT_SORT,
-    } as any);
+    });
 
     return packs;
   } catch (error) {

@@ -1,4 +1,4 @@
-import { prisma } from "../../prisma/index";
+import { prisma } from '../../prisma';
 /**
  * Deletes a pack by its ID.
  *
@@ -11,7 +11,6 @@ export const deletePackService = async (packId) => {
       id: packId, // Replace 'id' with the actual primary key field in your model
     },
   });
-  
 
   return { message: 'pack was deleted successfully' };
 };

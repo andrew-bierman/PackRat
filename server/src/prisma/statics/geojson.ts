@@ -10,9 +10,9 @@ async function saveOne(feature: GeoJSON) {
 }
 
 async function saveMany(features: GeoJSON[]) {
-  return prisma.geoJSON.createMany({
-    data: features,
-  });
+  return prisma.$transaction(
+    features.map((feature) => prisma.geoJSON.create({ data: feature })),
+  );
 }
 
 export default { saveOne, saveMany };

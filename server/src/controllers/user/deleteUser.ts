@@ -2,7 +2,7 @@ import { publicProcedure } from '../../trpc';
 import { UnableToEditUserError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import * as validator from '../../middleware/validators/index';
-import {prisma} from "../../prisma/index"
+import { prisma } from '../../prisma';
 /**
  * Deletes a user from the database.
  * @param {Object} req - The request object containing the user ID.
@@ -18,7 +18,7 @@ export const deleteUser = async (req, res, next) => {
         id: userId,
       },
     });
-    
+
     res.locals.data = { message: 'User deleted successfully' };
     responseHandler(res);
   } catch (error) {

@@ -3,7 +3,7 @@ import { Strategy as LocalStrategy } from 'passport-local';
 
 import bcrypt from 'bcrypt';
 
-import {prisma} from "../../prisma/index"
+import { prisma } from '../../prisma';
 
 // Passport Configuration
 // Local Strategy
@@ -15,7 +15,7 @@ passport.use(
     },
     async (email, password, done) => {
       try {
-        const user = await prisma.user.findUnique({ where: { email } as any});
+        const user = await prisma.user.findUnique({ where: { email } });
 
         if (!user) {
           return done(null, false, { message: 'Incorrect email.' });
@@ -31,8 +31,8 @@ passport.use(
       } catch (err) {
         return done(err);
       }
-    }
-  )
+    },
+  ),
 );
 
 /**
@@ -46,7 +46,9 @@ export const signUpLocal = async (req, res, next) => {
   const { email, password, name } = req.body;
 
   try {
-    const existingUser = await prisma.user.findUnique({ where: { email } as any});
+    const existingUser = await prisma.user.findUnique({
+      where: { email },
+    });
 
     if (existingUser) {
       return res.status(400).json({ error: 'Email already in use' });
@@ -62,7 +64,7 @@ export const signUpLocal = async (req, res, next) => {
         password: hashedPassword,
         name,
       },
-    } as any);
+    });
 
     // Authenticate the user
     passport.authenticate('local', (err, user, info) => {

@@ -1,7 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-
-import {prisma} from "../../prisma/index"
+import { prisma } from '../../prisma';
 import {
   STMP_EMAIL,
   CLIENT_URL,
@@ -75,15 +74,15 @@ export const requestPasswordResetEmailAndToken = async (req, res) => {
     const resetToken = generatePasswordResetToken(email);
     const resetTokenExpiration = new Date(Date.now() + 24 * 60 * 60 * 1000);
 
-await prisma.user.update({
-  where: {
-    email: email,
-  },
-  data: {
-    passwordResetToken: resetToken,
-    passwordResetTokenExpiration: resetTokenExpiration,
-  },
-} as any);
+    await prisma.user.update({
+      where: {
+        email: email,
+      },
+      data: {
+        passwordResetToken: resetToken,
+        passwordResetTokenExpiration: resetTokenExpiration,
+      },
+    } as any);
     const resetUrl = `${CLIENT_URL}/password-reset?token=${resetToken}`;
     sendPasswordResetEmail(email, resetUrl);
 
@@ -105,22 +104,22 @@ export function requestPasswordResetEmailAndTokenRoute() {
           email: email,
         },
       } as any);
-  
+
       if (!user) {
         return { error: 'No user found with this email address' };
       }
       const resetToken = generatePasswordResetToken(email);
       const resetTokenExpiration = new Date(Date.now() + 24 * 60 * 60 * 1000);
 
-await prisma.user.update({
-  where: {
-    email: email,
-  },
-  data: {
-    passwordResetToken: resetToken,
-    passwordResetTokenExpiration: resetTokenExpiration,
-  },
-}as any);
+      await prisma.user.update({
+        where: {
+          email: email,
+        },
+        data: {
+          passwordResetToken: resetToken,
+          passwordResetTokenExpiration: resetTokenExpiration,
+        },
+      } as any);
       const resetUrl = `${CLIENT_URL}/password-reset?token=${resetToken}`;
       sendPasswordResetEmail(email, resetUrl);
       return { message: 'Password reset email sent successfully' };

@@ -1,4 +1,4 @@
-import { prisma } from "../../prisma/index";
+import { prisma } from '../../prisma';
 /**
  * Edits a global item by creating a duplicate item in a specific pack.
  *
@@ -20,7 +20,7 @@ export const editGlobalItemAsDuplicateService = async (
   unit,
   type,
 ) => {
-  const category = await prisma.itemcategories.findFirst({
+  const category = await prisma.itemCategory.findFirst({
     where: {
       name: type,
     },
@@ -39,7 +39,7 @@ export const editGlobalItemAsDuplicateService = async (
       packs: {
         connect: { id: packId },
       },
-    } as any,
+    },
   });
 
   newItem = await prisma.item.findUnique({
@@ -48,7 +48,7 @@ export const editGlobalItemAsDuplicateService = async (
     },
     include: {
       category: true,
-    } as never,
+    },
   });
 
   await prisma.pack.update({
@@ -58,28 +58,7 @@ export const editGlobalItemAsDuplicateService = async (
     data: {
       items: {
         connect: { id: newItem.id },
-      } as any,
-    },
-  });
-
-  await prisma.pack.update({
-    where: {
-      id: packId,
-    },
-    data: {
-      items: {
-        disconnect: { id: itemId },
-      } as any,
-    },
-  });
-
-  await prisma.item.update({
-    where: {
-      id: itemId,
-    },
-    data: {
-      packs: {
-        disconnect: { id: packId },
+        disconnect: [{ id: itemId }, { id: packId }],
       },
     },
   });

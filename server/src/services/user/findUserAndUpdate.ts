@@ -1,4 +1,4 @@
-import { prisma } from "../../prisma/index";
+import { prisma } from '../../prisma';
 
 /**
  * A function that finds a user by their email and updates their data.
@@ -12,7 +12,7 @@ import { prisma } from "../../prisma/index";
 export async function findUserAndUpdate(
   email: string,
   data: string,
-  datatype: string
+  datatype: string,
 ): Promise<any> {
   try {
     const user = await prisma.user.update({
@@ -22,7 +22,7 @@ export async function findUserAndUpdate(
       data: {
         [datatype]: data,
       },
-    } as any);
+    });
 
     if (user) {
       return user;

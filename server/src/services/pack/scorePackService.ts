@@ -1,6 +1,5 @@
-
 import { calculatePackScore } from '../../utils/scorePack';
-import { prisma } from "../../prisma/index";
+import { prisma } from '../../prisma';
 
 /**
  * Scores a pack service based on the given packId.

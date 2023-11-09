@@ -1,5 +1,5 @@
 // services/tripService.ts
-import { prisma } from "../../prisma/index";
+import { prisma } from '../../prisma';
 
 /**
  * Retrieves public trips based on the given query parameter.
@@ -35,9 +35,8 @@ export const getPublicTripsService = async (
         createdAt: true,
         updatedAt: true,
       },
-      orderBy: queryBy === 'Favorite' ? { id: 'desc' } : { id: 'asc' }
-
-    } as any);
+      orderBy: queryBy === 'Favorite' ? { id: 'desc' } : { id: 'asc' },
+    });
 
     return trips;
   } catch (error) {

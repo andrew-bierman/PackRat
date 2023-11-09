@@ -1,6 +1,5 @@
 import { publicProcedure } from '../../trpc';
-import User from '../../models/userModel';
-import {prisma} from "../../prisma/index"
+import { prisma } from '../../prisma';
 import { sendWelcomeEmail, resetEmail } from '../../utils/accountEmail';
 import * as validator from '../../middleware/validators/index';
 

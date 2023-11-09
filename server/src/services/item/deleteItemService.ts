@@ -1,4 +1,4 @@
-import { prisma } from "../../prisma/index";
+import { prisma } from '../../prisma';
 /**
  * Deletes an item from the database.
  *
@@ -23,7 +23,7 @@ export const deleteItemService = async (itemId, packId) => {
       data: {
         items: {
           disconnect: { id: itemId },
-        } as any,
+        },
       },
     });
 

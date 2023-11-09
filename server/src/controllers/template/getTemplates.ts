@@ -1,7 +1,6 @@
 import { publicProcedure } from '../../trpc';
 
-
-import {prisma} from "../../prisma/index"
+import { prisma } from '../../prisma';
 /**
  * Retrieves templates from the database and sends them as a JSON response.
  * @param {Object} req - The request object.
@@ -16,8 +15,8 @@ export const getTemplates = async (req, res) => {
           username: true,
         },
       },
-    } as never,
-  } as any);
+    },
+  });
   res.json(templates);
 };
 
@@ -30,8 +29,8 @@ export function getTemplatesRoute() {
             username: true,
           },
         },
-      } 
-    } as any);
+      },
+    });
     return templates;
   });
 }

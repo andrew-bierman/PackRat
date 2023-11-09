@@ -1,4 +1,4 @@
-import { prisma } from "../../prisma/index";
+import { prisma } from '../../prisma';
 /**
  * Duplicates a public pack service.
  *
@@ -12,31 +12,33 @@ export const duplicatePublicPackService = async (packId, ownerId, items) => {
     where: {
       id: packId, // Replace 'id' with the actual primary key field in your model
     },
+    include: {
+      owners: true,
+    },
   });
-  
+
   if (!existingPack) {
     throw new Error('Pack not found');
   }
-  
+
   const newPack = await prisma.pack.create({
     data: {
       name: existingPack.name,
       items,
-      owner_id: existingPack.owner_id,
       is_public: false,
-  
       createdAt: new Date().toISOString(),
-     
       grades: {
         set: { ...existingPack.grades },
       },
       scores: {
         set: { ...existingPack.scores },
       },
+      owners: {
+        connect: existingPack.owners.map((owner) => ({ id: owner.id })),
+      },
       type: existingPack.type,
-    } as any,
+    },
   });
-  
+
   return { pack: newPack };
-  
 };

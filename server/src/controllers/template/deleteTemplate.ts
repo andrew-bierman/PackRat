@@ -1,9 +1,8 @@
 import { publicProcedure } from '../../trpc';
 import { TemplateNotFoundError } from '../../helpers/errors';
-import Template from '../../models/templateModel';
 import { z } from 'zod';
 
-import {prisma} from "../../prisma/index"
+import { prisma } from '../../prisma';
 
 /**
  * Deletes a template.

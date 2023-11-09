@@ -1,4 +1,4 @@
-import { prisma } from "../../prisma/index";
+import { prisma } from '../../prisma';
 export const addTripService = async (tripDetails): Promise<any> => {
   try {
     const {
@@ -16,10 +16,7 @@ export const addTripService = async (tripDetails): Promise<any> => {
     } = tripDetails;
 
     // Save all the Features from the FeatureCollection
-    const savedGeoJSONs: any = await prisma.geojson.createMany({
-      data: geoJSON.features,
-    });
-    
+    const savedGeoJSONs = await prisma.geoJSON.saveMany(geoJSON.features);
 
     const geojsonIds = savedGeoJSONs.map((feature) => feature.id);
 
@@ -35,13 +32,15 @@ export const addTripService = async (tripDetails): Promise<any> => {
         geojson: {
           connect: geojsonIds.map((id) => ({ id })),
         },
-        owner_id,
         packs: {
           connect: packs.map((packId) => ({ id: packId })),
         },
         is_public,
+        owner: {
+          connect: { id: owner_id },
+        },
       },
-    }as any);
+    });
 
     return { message: 'Trip added successfully', trip: newTrip };
   } catch (error) {
@@ -49,6 +48,8 @@ export const addTripService = async (tripDetails): Promise<any> => {
     throw new Error('Unable to add trip');
   }
 };
+
+// This function is un-used now. Trip model does not have osm related properties
 const createOSMObject = async (geoJSON) => {
   if (!geoJSON?.properties) {
     throw new Error('Invalid or missing geoJSON');

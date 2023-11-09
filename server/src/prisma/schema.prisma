@@ -15,7 +15,6 @@ datasource db {
 
 model GeoJSON {
   id         String          @id @default(auto()) @map("_id") @db.ObjectId
-  v          Int             @map("__v")
   type       String
   id_        String          @unique(map: "id_1") @map("id")
   properties Json
@@ -31,7 +30,6 @@ model GeoJSON {
 
 model ItemCategory {
   id        String           @id @default(auto()) @map("_id") @db.ObjectId
-  v         Int              @map("__v")
   name      ItemCategoryName
   createdAt DateTime?        @default(now())
   updatedAt DateTime?        @updatedAt
@@ -43,7 +41,6 @@ model ItemCategory {
 
 model Item {
   id             String        @id @default(auto()) @map("_id") @db.ObjectId
-  v              Int           @map("__v")
   name           String
   weight         Float
   quantity       Int
@@ -65,10 +62,8 @@ model Item {
 
 model Pack {
   id                String       @id @default(auto()) @map("_id") @db.ObjectId
-  v                 Int          @map("__v")
   name              String
   owner_ids         String[]     @db.ObjectId
-  favoritedById     String?      @db.ObjectId
   is_public         Boolean?
   grades            PacksGrades?
   scores            PacksScores?
@@ -94,7 +89,6 @@ model Pack {
 
 model Template {
   id               String       @id @default(auto()) @map("_id") @db.ObjectId
-  v                Int          @map("__v")
   type             TemplateType
   templateId       String       @db.ObjectId
   isGlobalTemplate Boolean      @default(false)
@@ -111,7 +105,6 @@ model Template {
 
 model Trip {
   id          String    @id @default(auto()) @map("_id") @db.ObjectId
-  v           Int       @map("__v")
   name        String
   description String
   duration    String
@@ -139,10 +132,9 @@ model Trip {
 
 model User {
   id                           String     @id @default(auto()) @map("_id") @db.ObjectId
-  v                            Int        @map("__v")
   name                         String
   password                     String
-  email                        String
+  email                        String     @unique
   token                        String?
   code                         String?
   googleId                     String?
@@ -150,7 +142,7 @@ model User {
   passwordResetToken           String?
   passwordResetTokenExpiration DateTime?  @db.Date
   role                         Role       @default(user)
-  username                     String     @unique(map: "username_1")
+  username                     String?    @unique(map: "username_1")
   profileImage                 String?
   preferredWeather             String?
   preferredWeight              String?
@@ -165,7 +157,6 @@ model User {
   templates                    Template[]
   trips                        Trip[]
 
-  @@index([email], map: "email_1")
   @@index([role], map: "role_1")
   @@index([code], map: "code_1")
   @@map("users")
@@ -173,7 +164,6 @@ model User {
 
 model Conversation {
   id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  v         Int       @map("__v")
   userId    String
   history   String
   createdAt DateTime? @default(now())
@@ -182,11 +172,50 @@ model Conversation {
   @@map("conversations")
 }
 
+model Way {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  osm_id     Int
+  osm_type   String
+  tags       Json
+  nodes      Node[]
+  geoJSON    Json
+  createdAt  DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Node {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  lat        Float
+  lon        Float
+  tags       Json
+  createdAt  DateTime @default(now())
+  updated_at DateTime @updatedAt
+  Way        Way?     @relation(fields: [wayId], references: [id])
+  wayId      String?  @db.ObjectId
+}
+
+model Relation {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  osm_id     Int
+  osm_type   String   @default("relation")
+  tags       Json
+  members    Member[]
+  geoJSON    Json
+  createdAt  DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
 //  ████████ ██    ██ ██████  ███████ ███████
 //     ██     ██  ██  ██   ██ ██      ██
 //     ██      ████   ██████  █████   ███████
 //     ██       ██    ██      ██           ██
 //     ██       ██    ██      ███████ ███████
+
+type Member {
+  type  MemberType
+  refId String     @db.ObjectId
+  role  String
+}
 
 type GeoJSONGeometry {
   coordinates Json
@@ -210,6 +239,12 @@ type PacksScores {
 //  █████   ██ ██  ██ ██    ██ ██ ████ ██ ███████
 //  ██      ██  ██ ██ ██    ██ ██  ██  ██      ██
 //  ███████ ██   ████  ██████  ██      ██ ███████
+
+enum MemberType {
+  way
+  node
+  relation
+}
 
 enum Role {
   user

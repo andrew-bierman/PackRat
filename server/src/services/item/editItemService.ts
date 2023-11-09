@@ -1,4 +1,4 @@
-import { prisma } from "../../prisma/index";
+import { prisma } from '../../prisma';
 /**
  * Edit an item in the service.
  *
@@ -18,7 +18,7 @@ export const editItemService = async (
   quantity,
   type,
 ) => {
-  const category = await prisma.itemcategories.findFirst({
+  const category = await prisma.itemCategory.findFirst({
     where: {
       name: type,
     },
@@ -39,7 +39,7 @@ export const editItemService = async (
     },
     include: {
       category: true,
-    } as never,
+    },
   });
 
   return newItem;

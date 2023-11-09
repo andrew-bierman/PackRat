@@ -1,4 +1,4 @@
-import { prisma } from "../../prisma/index";
+import { prisma } from '../../prisma';
 /**
  * Retrieves items based on the given pack ID.
  *
@@ -11,8 +11,8 @@ export const getItemsService = async (packId) => {
       packs: {
         some: {
           id: packId,
-        } ,
-      } as any,
+        },
+      },
     },
   });
 

@@ -1,4 +1,5 @@
-import { prisma } from "../../prisma/index";
+import { ItemCategoryName } from '@prisma/client';
+import { prisma } from '../../prisma';
 import { ItemCategoryEnum } from '../../utils/itemCategory';
 
 /**
@@ -27,9 +28,9 @@ export const addItemService = async (
 
   switch (type) {
     case ItemCategoryEnum.FOOD: {
-      category = await prisma.itemcategories.findFirst({
+      category = await prisma.itemCategory.findFirst({
         where: {
-          name: ItemCategoryEnum.FOOD,
+          name: ItemCategoryName.Food,
         },
       });
 
@@ -45,22 +46,26 @@ export const addItemService = async (
           category: {
             connect: { id: category.id },
           },
-        } as any,
+        },
       });
 
       break;
     }
     case ItemCategoryEnum.WATER: {
-      category = await prisma.itemcategories.findFirst({
+      category = await prisma.itemCategory.findFirst({
         where: {
-          name: ItemCategoryEnum.WATER,
+          name: 'Water',
         },
       });
 
-      const existingWaterItem :any= await prisma.item.findFirst({
+      const existingWaterItem = await prisma.item.findFirst({
         where: {
-          category: { id: category.id } as any,
-          packs: { some: { id: packId } } as any,
+          category: { id: category.id },
+          packs: { some: { id: packId } },
+        },
+        select: {
+          weight: true,
+          id: true,
         },
       });
 
@@ -85,14 +90,14 @@ export const addItemService = async (
             category: {
               connect: { id: category.id },
             },
-          } as any,
+          },
         });
       }
 
       break;
     }
     default: {
-      category = await prisma.itemcategories.findFirst({
+      category = await prisma.itemCategory.findFirst({
         where: {
           name: ItemCategoryEnum.ESSENTIALS,
         },
@@ -110,7 +115,7 @@ export const addItemService = async (
           category: {
             connect: { id: category.id },
           },
-        } as any,
+        },
       });
 
       break;
@@ -122,7 +127,7 @@ export const addItemService = async (
     data: {
       items: {
         connect: { id: newItem.id },
-      } as any,
+      },
     },
   });
 
@@ -131,11 +136,11 @@ export const addItemService = async (
     data: {
       owners: {
         connect: { id: ownerId },
-      } as any,
+      },
     },
     include: {
       category: true,
-    } as never,
+    },
   });
 
   return { newItem: updatedItem, packId };

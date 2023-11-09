@@ -8,7 +8,7 @@ import { responseHandler } from '../../helpers/responseHandler';
 import { z } from 'zod';
 import { publicProcedure } from '../../trpc';
 
-import {prisma} from "../../prisma/index"
+import { prisma } from '../../prisma';
 sgMail.setApiKey(SEND_GRID_API_KEY);
 
 // Verify a password reset token and return the user's email address
@@ -34,7 +34,7 @@ export const handlePasswordReset = async (req, res) => {
       where: {
         email: email,
       },
-    } as any);
+    });
 
     if (!user) {
       throw new Error('No user found with this email address');
@@ -53,7 +53,7 @@ export const handlePasswordReset = async (req, res) => {
         passwordResetToken: null,
         passwordResetTokenExpiration: null,
       },
-    }as any);
+    });
 
     res.locals.data = { message: 'Password reset successful' };
     responseHandler(res);
@@ -75,7 +75,7 @@ export function handlePasswordResetRoute() {
         where: {
           email: email,
         },
-      } as any);
+      });
 
       if (!user) {
         return { error: 'No user found with this email address' };

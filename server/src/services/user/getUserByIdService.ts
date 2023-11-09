@@ -1,4 +1,4 @@
-import { prisma } from "../../prisma/index";
+import { prisma } from '../../prisma';
 
 /**
  * Retrieves a user by their ID from the database.
@@ -14,7 +14,7 @@ export const getUserByIdService = async (userId: string): Promise<object> => {
       include: {
         favorites: true,
       },
-    } as any);
+    });
 
     if (user) {
       return user;
