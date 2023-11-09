@@ -1,5 +1,5 @@
 import { Platform } from 'react-native';
-import { RStack, RText, RCard, RParagraph } from '../packrat-ui';
+import { RStack, RText, RCard, RParagraph } from '@packrat/ui';
 import { SearchInput } from './SearchInput';
 import { theme } from '../theme/index';
 import { useSelector, useDispatch } from 'react-redux';

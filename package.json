@@ -3,10 +3,10 @@
   "version": "0.0.1",
   "description": "PackRat is the ultimate adventure planner designed for those who love to explore the great outdoors. Our app helps users plan and organize their trips with ease, whether it's a weekend camping trip, a day hike, or a cross-country road trip.",
   "private": true,
-  "main": "index.js",
   "workspaces": [
-    "client",
     "server",
+    "client",
+    "apps/*",
     "packages/*"
   ],
   "scripts": {
@@ -43,19 +43,50 @@
     "fix": "manypkg fix",
     "preinstall": "npx only-allow yarn",
     "postinstall": "yarn build",
-    "build": "yarn workspaces foreach run build",
-    "upgrade:tamagui": "yarn up '*tamagui*'@latest '@tamagui/*'@latest react-native-web-lite@latest",
-    "upgrade:tamagui:canary": "yarn up '*tamagui*'@canary '@tamagui/*'@canary react-native-web-lite@canary",
+    "build": "yarn workspaces foreach --all run build",
+    "upgrade:tamagui": "yarn up '*tamagui*'@latest '@tamagui/*'@latest",
+    "upgrade:tamagui:canary": "yarn up '*tamagui*'@canary '@tamagui/*'@canary",
     "check-deps": "check-dependency-version-consistency .",
     "copy:env:client": "cp .env client/.env",
     "copy:env:server": "cp .env server/.env",
     "copy:env:packages": "cp .env packages/.env",
-    "copy:env:all": "yarn copy:env:client && yarn copy:env:server && yarn copy:env:packages"
+    "copy:env:all": "yarn copy:env:client && yarn copy:env:server && yarn copy:env:packages",
+    "regen": "yarn install --refresh-lockfile"
+  },
+  "engines": {
+    "node": ">=18.16.1",
+    "yarn": ">=4.0.0"
+  },
+  "packageManager": "yarn@4.0.1",
+  "dependencies": {
+    "@manypkg/cli": "^0.21.0",
+    "check-dependency-version-consistency": "^4.1.0",
+    "cross-env": "^7.0.3",
+    "dotenv-cli": "^7.3.0",
+    "husky": "^8.0.0",
+    "lint-staged": "^14.0.1",
+    "typescript": "^5.2.2"
+  },
+  "lint-staged": {
+    "client/**/*.{js,jsx,ts,tsx}": [
+      "cd client && yarn run lint",
+      "prettier --write"
+    ],
+    "server/**/*.{js,ts}": [
+      "cd server && yarn run lint",
+      "prettier --write"
+    ]
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/andrew-bierman/PackRat.git"
   },
+  "author": "Andrew Bierman",
+  "license": "SEE LICENSE IN LICENSE.txt",
+  "bugs": {
+    "url": "https://github.com/andrew-bierman/PackRat/issues"
+  },
+  "homepage": "https://github.com/andrew-bierman/PackRat#readme",
   "keywords": [
     "outdoors",
     "hiking",
@@ -73,31 +104,5 @@
     "packing checklist app",
     "packing list app",
     "packing planner app"
-  ],
-  "lint-staged": {
-    "client/**/*.{js,jsx,ts,tsx}": [
-      "cd client && yarn run lint",
-      "prettier --write"
-    ],
-    "server/**/*.{js,ts}": [
-      "cd server && yarn run lint",
-      "prettier --write"
-    ]
-  },
-  "author": "Andrew Bierman",
-  "license": "SEE LICENSE IN LICENSE.txt",
-  "bugs": {
-    "url": "https://github.com/andrew-bierman/PackRat/issues"
-  },
-  "homepage": "https://github.com/andrew-bierman/PackRat#readme",
-  "packageManager": "yarn@3.6.3",
-  "dependencies": {
-    "@manypkg/cli": "^0.21.0",
-    "check-dependency-version-consistency": "^4.1.0",
-    "cross-env": "^7.0.3",
-    "dotenv-cli": "^7.3.0",
-    "husky": "^8.0.0",
-    "lint-staged": "^14.0.1",
-    "typescript": "^5.2.2"
-  }
+  ]
 }

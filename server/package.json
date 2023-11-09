@@ -23,7 +23,7 @@
   "dependencies": {
     "@hono/node-server": "^1.2.0",
     "@hono/trpc-server": "^0.1.0",
-    "@packrat/packages": "*",
+    "@packrat/validations": "*",
     "@sendgrid/mail": "^7.7.0",
     "@trpc/client": "^10.38.5",
     "@trpc/server": "^10.38.5",
@@ -51,7 +51,7 @@
     "google-auth-library": "^8.8.0",
     "googleapis": "^118.0.0",
     "helmet": "^7.0.0",
-    "hono": "^3.8.0",
+    "hono": "^3.9.1",
     "i": "^0.3.7",
     "joi": "^17.9.2",
     "jsonwebtoken": "^9.0.1",
