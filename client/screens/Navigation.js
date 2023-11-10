@@ -29,28 +29,25 @@ import {
 import SVGLogoComponent from '../components/logo';
 import { useSelector, useDispatch } from 'react-redux';
 import { signOut } from '../store/authStore';
-
 import Drawer from './Drawer';
 import { Link, useRouter, usePathname } from 'expo-router';
 import { hexToRGBA } from '../utils/colorFunctions';
 import useTheme from '../hooks/useTheme';
-import { useSession } from '../context/auth';
+
 import useCustomStyles from '~/hooks/useCustomStyles';
 
 const Navigation = () => {
   const router = useRouter();
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state.auth.user);
   const pathName = usePathname();
-  const { sessionSignOut } = useSession();
-
+  const user = useSelector((state) => state.auth.user);
+  const dispatch = useDispatch();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [selectedNavItem, setSelectedNavItem] = useState('');
   const [isMobileView, setIsMobileView] = useState(
     Dimensions.get('window').width < 1024,
   );
 
   const [navBarWidth, setNavBarWidth] = useState(null);
-  const [selectedNavItem, setSelectedNavItem] = useState('');
   const firstRender = useRef(true);
   const [isLoading, setIsLoading] = useState(false); // Loading state
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
@@ -75,12 +72,6 @@ const Navigation = () => {
         icon: 'home',
         text: 'Home',
         iconSource: Entypo,
-      },
-      {
-        href: '/about',
-        icon: 'info',
-        text: 'About',
-        iconSource: MaterialIcons,
       },
     ],
     [],
@@ -111,7 +102,7 @@ const Navigation = () => {
             ...(Platform.OS != 'web'
               ? [
                   {
-                    href: 'maps',
+                    href: '/maps',
                     icon: 'map',
                     text: 'Downloaded Maps',
                     iconSource: Entypo,
@@ -137,6 +128,12 @@ const Navigation = () => {
               iconSource: MaterialCommunityIcons,
             },
             {
+              href: '/about',
+              icon: 'info',
+              text: 'About',
+              iconSource: MaterialIcons,
+            },
+            {
               href: 'logout',
               icon: 'logout',
               text: 'Logout',
@@ -159,7 +156,6 @@ const Navigation = () => {
           ],
     [user],
   );
-  useEffect(() => {}, []);
   const navigationItems = [...staticNavigationItems, ...userNavigationItems];
 
   const navigateTo = useCallback(
@@ -303,11 +299,10 @@ const Navigation = () => {
               transparent={true}
             >
               <Drawer
+                isDrawerOpen={isDrawerOpen}
                 toggleDrawer={toggleDrawer}
-                handleSignOut={() => {}}
                 navigationItems={navigationItems}
-                navigateTo={navigateTo}
-                renderNavigationItem={renderNavigationItem}
+                position="right"
               />
             </Modal>
           ) : (

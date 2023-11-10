@@ -148,9 +148,9 @@ export const ItemsTable = ({
           disabled={page === totalPages}
           onPress={handleNextPage}
         >
-          <div style={{ color: page === totalPages ? 'gray' : '#0284c7' }}>
+          <Text style={{ color: page === totalPages ? 'gray' : '#0284c7' }}>
             {'>'}
-          </div>
+          </Text>
         </Button>
       </Box>
     </Box>
