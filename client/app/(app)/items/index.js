@@ -1,6 +1,7 @@
+import { View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { Box, Button, ScrollView } from 'native-base';
-import { StyleSheet, View, Text, Platform } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { theme } from '../../../theme';
 import UseTheme from '../../../hooks/useTheme';
@@ -65,14 +66,14 @@ export default function Items() {
                   alignItems: 'center',
                 }}
               >
-                <Text> </Text>
+                {' '}
                 <Button
                   style={styles.button}
                   onPress={() => {
                     setIsAddItemModalOpen(true);
                   }}
                 >
-                  <Text>Add Item</Text>
+                  Add Item
                 </Button>
                 {Platform.OS === 'web' ? (
                   <Tooltip

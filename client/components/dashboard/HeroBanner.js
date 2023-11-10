@@ -26,6 +26,7 @@ const HeroSection = ({ onSelect }) => {
   const currentDestination = useSelector(
     (state) => state.destination.currentDestination,
   );
+  console.log('currentDestination', currentDestination);
 
   /**
    * Handles the selection of a search result.
@@ -35,6 +36,8 @@ const HeroSection = ({ onSelect }) => {
    */
   const handleSearchSelect = async (selectedResult) => {
     try {
+      console.log('selectedResult ------->', selectedResult);
+
       // Set the selected search result in the Redux store
       dispatch(setSelectedSearchResult(selectedResult));
 
@@ -66,10 +69,10 @@ const HeroSection = ({ onSelect }) => {
 
   const user = useSelector((state) => state.auth?.user);
 
-  const firstNameOrUser =
-    (user && user.name && user.name.split(' ')[0]) || 'User';
+  const { name } = user;
+  const firstNameOrUser = name.split(' ')[0] ?? 'User';
 
-  // const cardBackgroundColor = hexToRGBA(currentTheme.colors.secondaryBlue, 0.5);
+  const cardBackgroundColor = hexToRGBA(currentTheme.colors.secondaryBlue, 0.5);
 
   const bannerText =
     firstNameOrUser !== 'User'
@@ -90,7 +93,8 @@ const HeroSection = ({ onSelect }) => {
       >
         <LargeCard
           customStyle={{
-            backgroundColor: currentTheme.colors.secondaryBlue,
+            backgroundColor:
+              cardBackgroundColor || currentTheme.colors.secondaryBlue,
             alignItems: 'center',
             justifyContent: 'center',
             width: '100%',
