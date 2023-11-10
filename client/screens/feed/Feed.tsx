@@ -1,21 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Switch } from 'native-base';
 import {
-  Container,
-  Box,
-  Text,
-  HStack,
-  Stack,
-  Switch,
-  Button,
-  Input,
-  IconButton,
-  Divider,
-  Center,
-  Flex,
-} from 'native-base';
+  RButton,
+  RInput,
+  RScrollView,
+  RSeperator,
+  RStack,
+  RText,
+  RXStack,
+} from '@packrat/ui';
 import { AntDesign } from '@expo/vector-icons';
-import { StyleSheet, FlatList, View, ScrollView } from 'react-native';
+import {
+  StyleSheet,
+  FlatList,
+  View,
+  ScrollView,
+  TextInput,
+} from 'react-native';
 import Card from '../../components/feed/FeedCard';
 import DropdownComponent from '../../components/Dropdown';
 import { theme } from '../../theme';
@@ -59,13 +61,29 @@ const dataValues = [
   'Oldest',
 ];
 
-const FeedSearchFilter = ({
+interface FeedSearchFilterProps {
+  feedType?: string;
+  handleSortChange: (value: string) => void;
+  handleTogglePack: () => void;
+  handleToggleTrip: () => void;
+  selectedTypes: {
+    pack: boolean;
+    trip: boolean;
+  };
+  queryString: string;
+  searchQuery: string;
+  setSearchQuery: (query: string) => void;
+  handleCreateClick: () => void;
+}
+
+const FeedSearchFilter: React.FC<FeedSearchFilterProps> = ({
   feedType,
   handleSortChange,
   handleTogglePack,
   handleToggleTrip,
   selectedTypes,
   queryString,
+  searchQuery,
   setSearchQuery,
   handleCreateClick,
 }) => {
@@ -73,29 +91,39 @@ const FeedSearchFilter = ({
     useTheme();
   const styles = useCustomStyles(loadStyles);
   return (
-    <View style={styles.filterContainer}>
-      <Box style={styles.searchContainer}>
-        <HStack space={3}>
-          <Input
+    <RStack
+      backgroundColor={currentTheme.colors.card}
+      padding={15}
+      fontSize={18}
+      width={'100%'}
+      borderRadius={10}
+    >
+      <RStack
+        flexDirection="row"
+        alignItems="center"
+        justifyContent="center"
+        marginBottom={10}
+        padding={10}
+        borderRadius={5}
+      >
+        <RXStack space={3}>
+          <RInput
             w="80%"
             variant="outline"
             placeholder={`Search ${feedType || 'Feed'}`}
             onChangeText={setSearchQuery}
           />
-          <IconButton
-            icon={
-              <AntDesign
-                name="search1"
-                size={24}
-                color={currentTheme.colors.cardIconColor}
-              />
-            }
-            variant="ghost"
-          />
-        </HStack>
-      </Box>
-      <Divider my={3} />
-      <Center
+          <RStack height={'100%'} marginLeft={'$4'} alignSelf="center">
+            <AntDesign
+              name="search1"
+              size={24}
+              color={currentTheme.colors.cardIconColor}
+            />
+          </RStack>
+        </RXStack>
+      </RStack>
+      <RSeperator marginVertical={15} />
+      <RStack
         space={3}
         flexDirection="row"
         justifyContent="space-between"
@@ -105,60 +133,66 @@ const FeedSearchFilter = ({
         margin={2}
       >
         {feedType === 'public' && (
-          <HStack space={3} alignItems="center">
-            <Text
+          <RXStack space={15} alignItems="center">
+            <RText
               fontSize="lg"
               fontWeight="bold"
               color={currentTheme.colors.textColor}
             >
               Packs
-            </Text>
+            </RText>
             <Switch
               size="lg"
               isChecked={selectedTypes.pack}
               onToggle={handleTogglePack}
             />
-            <Text
+            <RText
               fontSize="lg"
               fontWeight="bold"
               color={currentTheme.colors.textColor}
             >
               Trips
-            </Text>
+            </RText>
             <Switch
               size="lg"
               isChecked={selectedTypes.trip}
               onToggle={handleToggleTrip}
             />
-          </HStack>
+          </RXStack>
         )}
-        <HStack space={3} alignItems="center">
-          <Text
+        <RXStack space={15} alignItems="center">
+          <RText
             fontSize="lg"
             fontWeight="bold"
             color={currentTheme.colors.textColor}
           >
             Sort By:
-          </Text>
+          </RText>
           <DropdownComponent
             value={queryString}
             data={dataValues}
             onValueChange={handleSortChange}
             placeholder="Sort By"
-            style={styles.dropdown}
             width={150}
           />
-        </HStack>
+        </RXStack>
         {(feedType === 'userPacks' || feedType === 'userTrips') && (
-          <Button onPress={handleCreateClick}>Create</Button>
+          <RButton onPress={handleCreateClick}>Create</RButton>
         )}
-      </Center>
-      <Divider my={3} />
-    </View>
+      </RStack>
+      <RSeperator marginVertical={15} />
+    </RStack>
   );
 };
 
-const Feed = ({ feedType = 'public' }) => {
+interface FeedProps {
+  feedType?: string;
+}
+
+const Feed: React.FC<FeedProps> = ({ feedType = 'public' }) => {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    useTheme();
+
   const router = useRouter();
 
   const [queryString, setQueryString] = useState('');
@@ -242,23 +276,33 @@ const Feed = ({ feedType = 'public' }) => {
         handleToggleTrip={handleToggleTrip}
         selectedTypes={selectedTypes}
         queryString={queryString}
+        searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
         handleCreateClick={handleCreateClick}
       />
     );
     return Platform.OS === 'web' ? (
-      <ScrollView
+      <RScrollView
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ flex: 1, paddingBottom: 10 }}
       >
-        <View style={styles.cardContainer}>
+        <RStack
+          flexDirection="row"
+          flexWrap="wrap"
+          justifyContent="space-around"
+          alignItems="center"
+        >
           {console.log({ data })}
           {feedSearchFilterComponent}
           {data?.map((item) => (
-            <Card key={item._id} type={item.type} {...item} />
+            <Card
+              key={`${item._id} + ${item.type}`}
+              type={item.type}
+              {...item}
+            />
           ))}
-        </View>
-      </ScrollView>
+        </RStack>
+      </RScrollView>
     ) : (
       <View style={{ flex: 1, paddingBottom: 10 }}>
         <FlatList
@@ -269,7 +313,7 @@ const Feed = ({ feedType = 'public' }) => {
             <Card key={item._id} type={item.type} {...item} />
           )}
           ListHeaderComponent={() => feedSearchFilterComponent}
-          ListEmptyComponent={() => <Text>{ERROR_MESSAGES[feedType]}</Text>}
+          ListEmptyComponent={() => <RText>{ERROR_MESSAGES[feedType]}</RText>}
           showsVerticalScrollIndicator={false}
         />
       </View>
@@ -303,40 +347,21 @@ const Feed = ({ feedType = 'public' }) => {
     router.push(createUrlPath);
   };
 
-  return <Box style={styles.mainContainer}>{renderData()}</Box>;
+  return (
+    <RStack
+      flex={1}
+      backgroundColor={currentTheme.colors.background}
+      fontSize={18}
+      padding={15}
+    >
+      {renderData()}
+    </RStack>
+  );
 };
 
 const loadStyles = (theme) => {
   const { currentTheme } = theme;
-  return {
-    mainContainer: {
-      flex: 1,
-      backgroundColor: currentTheme.colors.background,
-      fontSize: 18,
-      padding: 15,
-    },
-    filterContainer: {
-      backgroundColor: currentTheme.colors.card,
-      padding: 15,
-      fontSize: 18,
-      width: '100%',
-      borderRadius: 10,
-    },
-    searchContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginBottom: 10,
-      padding: 10,
-      borderRadius: 5,
-    },
-    cardContainer: {
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-      justifyContent: 'space-around',
-      alignItems: 'center',
-    },
-  };
+  return {};
 };
 
 export default Feed;

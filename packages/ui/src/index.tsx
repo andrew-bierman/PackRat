@@ -7,6 +7,10 @@ import RButton from './RButton';
 import RImage from './RImage';
 import RScrollView from './RScrollview';
 import TSkeleton from './Skeleton';
+import RXStack from './RXStack';
+import RSeperator from './RSeparator';
+import RSwitch from './RSwitch';
+import RHeader from './RHeader';
 
 export {
   RStack,
@@ -18,6 +22,10 @@ export {
   RImage,
   RScrollView,
   TSkeleton,
+  RXStack,
+  RSeperator,
+  RSwitch,
+  RHeader,
 };
 
 export { config } from './tamagui.config'

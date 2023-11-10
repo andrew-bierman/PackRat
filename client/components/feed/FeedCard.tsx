@@ -15,22 +15,29 @@ import { TouchableOpacity } from 'react-native';
 import { Link } from 'expo-router';
 import { DuplicateIcon } from '../DuplicateIcon/index';
 import { truncateString } from '../../utils/truncateString';
-
-import {
-  Box,
-  Heading,
-  AspectRatio,
-  Text,
-  Center,
-  HStack,
-  Stack,
-  Button,
-} from 'native-base';
 import { formatNumber } from '~/utils/formatNumber';
+import { RHeader, RStack, RText, RXStack } from '@packrat/ui';
+import { RootState } from 'store/store';
 
 // import { useAuth } from "../../auth/provider";
 
-export default function Card({
+interface CardProps {
+  type: 'pack' | 'trip';
+  _id: string;
+  owner?: { username?: string };
+  name: string;
+  total_weight: number;
+  is_public: boolean;
+  favorited_by: Array<{ _id: string }>;
+  favorites_count: number;
+  owner_id: string;
+  destination?: string;
+  createdAt: string;
+  owners?: Array<{ _id: string; username?: string }>;
+  duration?: string;
+}
+
+const Card: React.FC<CardProps> = ({
   type,
   _id,
   owner,
@@ -44,15 +51,15 @@ export default function Card({
   createdAt,
   owners,
   duration,
-}) {
-  const user = useSelector((state) => state.auth.user);
+}) => {
+  const user = useSelector((state: RootState) => state.auth.user);
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const favorites = useSelector(selectAllFavorites);
   const dispatch = useDispatch();
 
   const isFavorite =
-    !type === 'trip'
+    type !== 'trip'
       ? favorited_by.includes(user._id) ||
         favorited_by.forEach((obj) => obj._id === user._id)
       : null;
@@ -95,54 +102,39 @@ export default function Card({
   if (duration) numberOfNights = JSON.parse(duration).numberOfNights;
 
   return (
-    <Box alignItems="center" padding="4">
-      <Box
-        minH="125"
-        minW="80"
-        maxW="lg" // add this
-        mx="auto" // add this
-        rounded="lg"
+    <RStack margin={'$4'} alignItems="center">
+      <RStack
+        minHeight={'150px'}
+        minWidth={'350px'}
+        maxWidth={'400px'} // add this
+        marginVertical={'auto'} // add this
+        borderRadius={'$2'}
         overflow="hidden"
-        borderColor="coolGray.200"
-        borderWidth="1"
-        _dark={{
-          borderColor: `${currentTheme.colors.border}`,
-          backgroundColor: `${currentTheme.colors.card}`,
-        }}
-        _web={{
-          shadow: 2,
-          borderWidth: 0,
-        }}
-        _light={{
-          backgroundColor: `${currentTheme.colors.card}`,
-        }}
+        borderColor={'grey'}
+        borderWidth={'0.5px'}
+        backgroundColor={currentTheme.colors.card}
       >
-        <Stack p="4" space={10}>
-          <Stack space={2}>
-            <Heading size="md" ml="-1">
-              <Box
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  width: '100%',
-                }}
+        <RStack p="$4" space={40}>
+          <RStack space={10}>
+            <RStack>
+              <RStack
+                flexDirection="row"
+                alignItems="center"
+                justifyContent="space-between"
+                width="100%"
               >
                 <Link href={type === 'pack' ? '/pack/' + _id : '/trip/' + _id}>
-                  <Text color={currentTheme.colors.textColor}>
+                  <RHeader.H2 color={currentTheme.colors.textColor}>
                     {truncatedName}
-                  </Text>
+                  </RHeader.H2>
                 </Link>
-                <HStack alignItems="center" justifyContent="center" space={2}>
+                <RStack alignItems="center" justifyContent="center" space={2}>
                   {type === 'pack' && (
-                    <Box
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        gap: 5,
-                        // border: '1px solid #ccc',
-                      }}
+                    <RStack
+                      flexDirection="row"
+                      alignItems="center"
+                      justifyContent="space-between"
+                      gap={2}
                     >
                       <MaterialIcons
                         name="backpack"
@@ -150,7 +142,7 @@ export default function Card({
                         color={currentTheme.colors.cardIconColor}
                       />
                       <DuplicateIcon link={`/pack/${_id}?copy=true`} />
-                    </Box>
+                    </RStack>
                   )}
                   {type === 'trip' && (
                     <Entypo
@@ -159,77 +151,57 @@ export default function Card({
                       color={currentTheme.colors.cardIconColor}
                     />
                   )}
-                </HStack>
-              </Box>
-            </Heading>
+                </RStack>
+              </RStack>
+            </RStack>
 
             {type === 'pack' && (
-              <Text
-                fontSize="xs"
-                _light={{
-                  color: 'violet.500',
-                }}
-                _dark={{
-                  color: 'violet.400',
-                }}
-                fontWeight="500"
+              <RText
+                fontSize={'$1'}
+                color={'purple'}
+                fontWeight={'500'}
                 ml="-0.5"
                 mt="-1"
               >
                 Total Weight: {formattedWeight}
-              </Text>
+              </RText>
             )}
 
             {type === 'trip' && (
-              <Text
-                fontSize="xs"
-                _light={{
-                  color: 'violet.500',
-                }}
-                _dark={{
-                  color: 'violet.400',
-                }}
-                fontWeight="500"
+              <RText
+                fontSize={'$1'}
+                color={'purple'}
+                fontWeight={'500'}
                 ml="-0.5"
                 mt="-1"
               >
                 {truncatedDestination}
-              </Text>
+              </RText>
             )}
-          </Stack>
+          </RStack>
 
-          <HStack alignItems="center" space={4} justifyContent="space-between">
-            <HStack
+          <RStack alignItems="center" space={4} justifyContent="space-between">
+            <RXStack
               alignItems="center"
               justifyContent="space-between"
               width="100%"
             >
-              <Box
-                style={{
-                  flexDirection: 'column',
-                  alignItems: 'flex-start',
-                  gap: 10,
-                }}
+              <RStack
+                flexDirection="column"
+                alignItems="flex-start"
+                space={'$1'}
               >
                 <Link href={`/profile/${owner_id}`}>
-                  <Text color={currentTheme.colors.textColor}>
+                  <RText color={currentTheme.colors.textColor}>
                     View {owner?.username ? '@' + owner?.username : 'Owner'}
-                  </Text>
+                  </RText>
                 </Link>
-                <Box
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    gap: 10,
-                  }}
-                >
-                  <Text
-                    color="coolGray.600"
-                    _dark={{
-                      color: 'warmGray.200',
-                    }}
-                    fontWeight="400"
+                <RStack flexDirection alignItems="center" space={'$2'}>
+                  <RText
+                    color="grey"
+                    fontWeight={'100'}
                     flex={1}
+                    fontSize={'$1'}
                   >
                     {formatDistanceToNow(
                       new Date(
@@ -241,26 +213,23 @@ export default function Card({
                         addSuffix: true,
                       },
                     ) ?? 0}
-                  </Text>
-                </Box>
-              </Box>
+                  </RText>
+                </RStack>
+              </RStack>
 
-              <Box
-                style={{
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  gap: 10,
-                }}
-              >
+              <RStack flexDirection="column" alignItems="center" space={'$2'}>
                 {type === 'pack' && (
-                  <Box>
-                    <Text color={currentTheme.colors.textColor}>Favorites</Text>
-                    <Box
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        gap: 10,
-                      }}
+                  <RStack>
+                    <RText
+                      color={currentTheme.colors.textColor}
+                      fontSize={'$2'}
+                    >
+                      Favorites
+                    </RText>
+                    <RStack
+                      flexDirection="row"
+                      alignItems="center"
+                      space={'$2'}
                     >
                       {user?._id === owner_id ? null : (
                         <TouchableOpacity onPress={handleAddToFavorite}>
@@ -276,39 +245,40 @@ export default function Card({
                         </TouchableOpacity>
                       )}
 
-                      <Text
+                      <RText
                         color={currentTheme.colors.textColor}
-                        _dark={{
-                          color: currentTheme.colors.textColor,
-                        }}
-                        fontWeight="400"
+                        fontWeight={'100'}
+                        fontSize={'$1'}
                       >
                         {favorites_count > 0 ? favorites_count : 0}
-                      </Text>
-                    </Box>
-                  </Box>
+                      </RText>
+                    </RStack>
+                  </RStack>
                 )}
                 {type === 'trip' && (
-                  <Box>
-                    <Text color={currentTheme.colors.textColor}>Nights</Text>
-                    <Text
+                  <RStack>
+                    <RText
                       color={currentTheme.colors.textColor}
-                      _dark={{
-                        color: currentTheme.colors.textColor,
-                      }}
-                      style={{
-                        justifyContent: 'flex-end',
-                      }}
+                      fontSize={'$1'}
+                    >
+                      Nights
+                    </RText>
+                    <RText
+                      color={currentTheme.colors.textColor}
+                      fontSize={'$1'}
+                      justifyContent="flex-end"
                     >
                       {numberOfNights}
-                    </Text>
-                  </Box>
+                    </RText>
+                  </RStack>
                 )}
-              </Box>
-            </HStack>
-          </HStack>
-        </Stack>
-      </Box>
-    </Box>
+              </RStack>
+            </RXStack>
+          </RStack>
+        </RStack>
+      </RStack>
+    </RStack>
   );
-}
+};
+
+export default Card;
