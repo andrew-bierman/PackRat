@@ -1,5 +1,6 @@
 import { HStack } from 'native-base';
 import QuickActionButton from './QuickActionButton';
+import useTheme from '../../hooks/useTheme';
 import { useRouter } from 'expo-router';
 import useCustomStyles from '~/hooks/useCustomStyles';
 

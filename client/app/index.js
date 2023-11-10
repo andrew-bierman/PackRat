@@ -1,23 +1,51 @@
 import { useSelector } from 'react-redux';
-import { useRouter, useRootNavigationState } from 'expo-router';
+
+import { Platform, StyleSheet } from 'react-native';
+
+import { Stack } from 'expo-router';
+
+import { darkTheme, theme } from '../theme';
+
+import { Box } from 'native-base';
+
 import LandingPage from '../components/landing_page';
-import Navigation from '../screens/Navigation';
-import { Platform } from 'react-native';
+
+import Dashboard from '../screens/dashboard';
+import useTheme from '../hooks/useTheme';
+import { current } from '@reduxjs/toolkit';
+import Head from 'expo-router/head';
 
 export default function Index() {
-  const router = useRouter();
-  const navigationState = useRootNavigationState();
+  const {
+    enableDarkMode,
+    enableLightMode,
+    isDark,
+    isLight,
+    currentTheme = theme,
+  } = useTheme();
+
   const user = useSelector((state) => state.auth.user);
-  if (!navigationState?.key) return null;
-  const isWeb = Platform.OS === 'web';
-  if (!user) {
-    return router.replace('/onboarding');
-    // return (
-    //   <>
-    //     {!isWeb && <Navigation />}
-    //     <LandingPage />
-    //   </>
-    // );
-  }
-  return router.replace('/home');
+
+  const mutualStyles = {
+    backgroundColor: currentTheme.colors.background,
+    flex: 1,
+  };
+
+  return (
+    <>
+      {Platform.OS === 'web' && (
+        <Head>
+          <title>PackRat</title>
+        </Head>
+      )}
+      <Stack.Screen
+        options={{
+          // https://reactnavigation.org/docs/headers#setting-the-header-title
+          title: 'Home',
+          name: 'Home',
+        }}
+      />
+      <Box style={mutualStyles}>{!user ? <LandingPage /> : <Dashboard />}</Box>
+    </>
+  );
 }

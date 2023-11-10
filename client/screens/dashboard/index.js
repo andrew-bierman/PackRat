@@ -23,6 +23,7 @@ const Dashboard = () => {
         >
           <Box>
             <HeroBanner style={styles.cardContainer} />
+
             <Section>
               <SectionHeader
                 iconName="add-circle-outline"
@@ -54,7 +55,7 @@ const loadStyles = (theme) => {
       flexGrow: 1,
       justifyContent: 'flex-start',
       alignItems: 'stretch',
-      // paddingHorizontal: 20,
+      paddingHorizontal: 20,
     },
     cardContainer: {
       flexDirection: 'column',
