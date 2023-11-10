@@ -1,6 +1,7 @@
 import { publicProcedure } from '../../trpc';
 import * as validator from '../../middleware/validators/index';
-import {findByCredentials, generateAuthToken} from "../../utils/prismaHelpers/user"
+import { prisma } from '../../prisma';
+import { User } from '../../prisma/methods';
 /**
  * Sign in a user.
  * @param {Object} req - The request object.
@@ -9,19 +10,19 @@ import {findByCredentials, generateAuthToken} from "../../utils/prismaHelpers/us
  */
 export const userSignIn = async (req, res) => {
   const { email, password } = req.body;
-  const user: any = await findByCredentials({
+  const user = await prisma.user.findByCredentials({
     email,
     password,
   });
-  await generateAuthToken(user);
+  await User(user).generateAuthToken();
   res.status(200).send({ user });
 };
 
 export function userSignInRoute() {
   return publicProcedure.input(validator.userSignIn).mutation(async (opts) => {
-    const { input }:any = opts;
-    const user: any = await findByCredentials(input);
-    await generateAuthToken(user);
+    const { input }: any = opts;
+    const user = await prisma.user.findByCredentials(input);
+    await User(user).generateAuthToken();
     return user;
   });
 }

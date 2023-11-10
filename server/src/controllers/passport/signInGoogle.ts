@@ -7,7 +7,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { sendWelcomeEmail, resetEmail } from '../../utils/accountEmail';
 import { prisma } from '../../prisma';
-import { generateAuthToken } from '../../utils/prismaHelpers/user';
+import { User } from '../../prisma/methods';
 
 import {
   GOOGLE_CLIENT_ID,
@@ -109,7 +109,8 @@ export const signInGoogle = async (req, res) => {
         },
       });
 
-      await generateAuthToken(user);
+      const userWithMethods = User(user);
+      await userWithMethods.generateAuthToken();
 
       sendWelcomeEmail(user.email, user.name);
 
@@ -130,7 +131,8 @@ export const signInGoogle = async (req, res) => {
         },
       });
 
-      await generateAuthToken(alreadyGoogleSignin);
+      const userWithMethods = User(alreadyGoogleSignin);
+      await userWithMethods.generateAuthToken();
 
       res.locals.data = { user: alreadyGoogleSignin };
       responseHandler(res);
@@ -199,7 +201,9 @@ export function googleSigninRoute() {
             googleId,
           },
         });
-        await generateAuthToken(user);
+
+        const userWithMethods = User(user);
+        await userWithMethods.generateAuthToken();
 
         sendWelcomeEmail(user.email, user.name);
         return user;
@@ -209,7 +213,9 @@ export function googleSigninRoute() {
             utilsService.randomPasswordGenerator(8);
         }
 
-        await generateAuthToken(alreadyGoogleSignin);
+        const userWithMethods = User(alreadyGoogleSignin);
+        await userWithMethods.generateAuthToken();
+
         await prisma.user.update({
           where: {
             email: email,

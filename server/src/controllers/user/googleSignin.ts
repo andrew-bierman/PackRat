@@ -1,5 +1,6 @@
 import { sendWelcomeEmail, resetEmail } from '../../utils/accountEmail';
 import { prisma } from '../../prisma';
+import { User } from '../../prisma/methods';
 import { google } from 'googleapis';
 import {
   GOOGLE_CLIENT_ID,
@@ -9,7 +10,6 @@ import {
   UI_ROOT_URI,
   JWT_SECRET,
 } from '../../config';
-import { generateAuthToken } from '../../utils/prismaHelpers/user';
 import utilsService from '../../utils/utils.service';
 import { UserAlreadyExistsError } from '../../helpers/errors';
 
@@ -66,15 +66,18 @@ export const googleSignin = async (req, res, next) => {
           name: userInfo.name,
           password: generatedPassword,
           googleId: userInfo.id,
-        } as any,
+        },
       });
 
-      await generateAuthToken(user);
+      const userWithMethods = User(user);
+      await userWithMethods.generateAuthToken();
+
       sendWelcomeEmail(user.email, user.name);
       res.redirect(`${UI_ROOT_URI}?token=${user.token}`);
     } else {
       alreadyGoogleSignin.googleId = userInfo.id;
-      await generateAuthToken(alreadyGoogleSignin);
+      const userWithMethods = User(alreadyGoogleSignin);
+      await userWithMethods.generateAuthToken();
       res.redirect(`${UI_ROOT_URI}?token=${alreadyGoogleSignin.token}`);
     }
   } catch (err) {

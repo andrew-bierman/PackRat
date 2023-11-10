@@ -57,10 +57,12 @@ const User = <T>(prismaUser: T): T & ExtendedUser => {
         expiresIn: '7 days',
       });
       this.token = token;
+      console.log('UPDATTING', this.id, token);
       await prisma.user.update({
         where: { id: this.id },
         data: { token },
       });
+      console.log('UPDATED');
       return token;
     },
     async generateResetToken(): Promise<string> {

@@ -1,7 +1,5 @@
 import { publicProcedure } from '../../trpc';
 import * as validator from '../../middleware/validators/index';
-
-import { validateResetToken } from '../../utils/prismaHelpers/user';
 import { prisma } from '../../prisma';
 /**
  * Resets the user's password.
@@ -12,7 +10,7 @@ import { prisma } from '../../prisma';
 export const resetPassword = async (req, res) => {
   const { resetToken, password } = req.body;
 
-  const user = await validateResetToken(resetToken);
+  const user = await prisma.user.validateResetToken(resetToken);
 
   await prisma.user.update({
     where: { id: user.id },
@@ -32,7 +30,7 @@ export function resetPasswordRoute() {
     .input(validator.resetPassword)
     .mutation(async (opts) => {
       const { resetToken, password } = opts.input;
-      const user = await validateResetToken(resetToken);
+      const user = await prisma.user.validateResetToken(resetToken);
       await prisma.user.update({
         where: { id: user.id },
         data: {

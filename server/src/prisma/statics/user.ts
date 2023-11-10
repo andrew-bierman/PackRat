@@ -4,10 +4,13 @@ import { JWT_SECRET } from '../../config';
 import jwt from 'jsonwebtoken';
 import prisma from '../client';
 
-async function findByCredentials(
-  email: string,
-  password: string,
-): Promise<User> {
+async function findByCredentials({
+  email,
+  password,
+}: {
+  email: string;
+  password: string;
+}): Promise<User> {
   const user = await prisma.user.findFirst({ where: { email } });
 
   if (!user) throw new Error('Unable to login');
