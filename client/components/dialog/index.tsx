@@ -18,7 +18,7 @@ import {
   YStack,
 } from 'tamagui';
 
-import { SelectDemoItem } from '../select/index.js';
+import { SelectDemoItem } from '../select';
 
 export function DialogDemo() {
   // return null
