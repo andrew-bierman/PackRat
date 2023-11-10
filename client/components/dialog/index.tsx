@@ -1,5 +1,5 @@
 // import { X } from "@tamagui/lucide-icons";
-
+import React from 'react';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useState } from 'react';
 
@@ -18,7 +18,7 @@ import {
   YStack,
 } from 'tamagui';
 
-import { SelectDemoItem } from '../select/index.js';
+import { SelectDemoItem } from '../select';
 
 export function DialogDemo() {
   // return null
