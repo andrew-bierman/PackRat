@@ -1,0 +1,19 @@
+ name = "packrat-api"
+ compatibility_date = "2023-10-16"
+ send_metrics = false
+ node_compat = true
+ main = "src/worker.ts"
+ type = "webworker"
+
+ # The necessary secrets are:
+ # - APP_URL - for preventing CORS errors
+ # - JWT_VERIFICATION_KEY - for Supabase @link https://supabase.com
+ #
+ # For local development, you can create a file called .dev.vars and use dotenv syntax.
+ #
+ # For deployed environments, you can use wrangler secrets to set these values.
+ # For example:
+ # Run `echo <VALUE> | wrangler secret put <NAME>` for each of these
+ # Or use the Cloudflare web interface.
+ # @link https://developers.cloudflare.com/workers/platform/environment-variables/#environment-variables-via-the-dashboard
+ #
