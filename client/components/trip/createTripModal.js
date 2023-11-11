@@ -12,6 +12,7 @@ import { trpc } from '../../trpc';
 // import { Picker } from '@react-native-picker/picker';
 import { DropdownComponent } from '../Dropdown';
 import axios from '~/config/axios';
+import { useGetPhotonDetails } from '~/hooks/destination';
 
 const options = [
   { label: 'Yes', value: 'true' },
@@ -116,12 +117,12 @@ export const SaveTripContainer = ({ dateRange }) => {
     };
 
     console.log('old rag', search);
-
-    const geoJSON = await trpc.getPhotonDetails.query({
-      id: search.properties.osm_id,
-      type: search.properties.osm_type,
-    });
-
+    
+    // const geoJSON = await trpc.getPhotonDetails.query({
+    //   id: search.properties.osm_id,
+    //   type: search.properties.osm_type,
+    // });
+    const { geoJSON } = await useGetPhotonDetails(search)
     const data = {
       name,
       description,

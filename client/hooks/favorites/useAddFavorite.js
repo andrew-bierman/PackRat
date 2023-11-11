@@ -1,7 +1,7 @@
 import { queryTrpc } from '../../trpc';
 
 export function useAddFavorite() {
-  const utils = queryTrpc.useContext();
+  const utils = queryTrpc.useUtils();
 
   const mutation = queryTrpc.addToFavorite.useMutation();
 

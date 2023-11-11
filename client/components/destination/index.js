@@ -22,6 +22,7 @@ import {
   setWeatherObject,
   setWeatherWeek,
 } from '../../store/destinationStore';
+import { useGetDestination, useGetPhotonDetails } from '~/hooks/destination';
 import { fetchWeather, fetchWeatherWeek } from '../../store/weatherStore';
 import useCustomStyles from '~/hooks/useCustomStyles';
 import { useFetchWeather, useFetchWeatherWeak } from '~/hooks/weather';
@@ -162,9 +163,10 @@ export const DestinationPage = () => {
           },
         };
 
-        dispatch(photonDetails(matchPhotonFormattingForData));
+        // dispatch(photonDetails(matchPhotonFormattingForData));
+        const { refetch, isLoading, isError, data, error } = useGetPhotonDetails(matchPhotonFormattingForData)
       } else if (destinationId && !type && !id && destinationId !== 'query') {
-        dispatch(getDestination(destinationId));
+        const { refetch, isLoading, isError, data, error } = useGetDestination(destinationId)
       }
     }
   }, [destinationId]);

@@ -1,7 +1,7 @@
 import { queryTrpc } from '../../trpc';
 
 export function useGetAIResponse() {
-  const utils = queryTrpc.useContext();
+  const utils = queryTrpc.useUtils();
   const mutation = queryTrpc.getAIResponse.useMutation({
     // onMutate: async ({ userId, conversationId, userInput }) => {
     //   const previousConversation = queryTrpc.getConversationById.getData({

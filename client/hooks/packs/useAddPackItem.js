@@ -1,7 +1,7 @@
 import { queryTrpc } from '../../trpc';
 
 export const useAddPackItem = () => {
-  const utils = queryTrpc.useContext();
+  const utils = queryTrpc.useUtils();
 
   // Use mutation for adding an item
   const mutation = queryTrpc.addItem.useMutation({

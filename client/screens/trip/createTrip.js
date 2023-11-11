@@ -11,11 +11,12 @@ import { SaveTripContainer } from '~/components/trip/createTripModal';
 import TripDateRange from '~/components/trip/TripDateRange';
 import { useFetchWeather, useFetchWeatherWeak } from '~/hooks/weather';
 // import MultiStepForm from "../multi_step";
-import { photonDetails } from '../../store/destinationStore';
+// import { photonDetails } from '../../store/destinationStore';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from '~/hooks/useCustomStyles';
 import useParks from '~/hooks/parks';
 import useTrails from '~/hooks/trails';
+import { useGetPhotonDetails } from '~/hooks/destination';
 export default function Trips() {
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
@@ -83,7 +84,8 @@ export default function Trips() {
           osm_type: searchResult.properties?.osm_type,
         },
       };
-      dispatch(photonDetails(matchPhotonFormattingForData));
+      useGetPhotonDetails(matchPhotonFormattingForData)
+      // dispatch(photonDetails());
     }
   }, [searchResult]);
 

@@ -1,7 +1,7 @@
 import { queryTrpc } from '../../trpc';
 
 export const useAddNewPack = () => {
-  const utils = queryTrpc.useContext();
+  const utils = queryTrpc.useUtils();
   const mutation = queryTrpc.addPack.useMutation({
     onMutate: async (newPack) => {
       utils.getPacks.cancel({
@@ -23,7 +23,7 @@ export const useAddNewPack = () => {
 
       const newQueryData = {
         ...oldQueryData,
-        packs: [...oldQueryData.packs, optimisticUpdate],
+        packs:  oldQueryData?.packs ? [...oldQueryData.packs, optimisticUpdate] : [optimisticUpdate],
       };
       console.log(newQueryData);
       utils.getPacks.setData(

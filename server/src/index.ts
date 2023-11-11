@@ -79,21 +79,22 @@ app.use(errors());
 // Custom error handling middleware.
 app.use(errorHandler);
 
+// Determine the port from the environment or default to 3000 if none is provided.
+const port = process.env.PORT || 3000;
+
 // Attempting to connect to MongoDB.
 const connectionString = MONGODB_URI ?? '';
+
 mongoose
   .connect(connectionString)
   .then(() => {
-    console.log('MongoDB connected successfully.');
+    // Start the Express server.
+    app.listen(port, () => {
+      console.log(`Connected to Mongodb and listening on port ${port}.`);
+    });
   })
   .catch((err) => {
     console.error('Failed to connect to MongoDB:', err);
   });
 
-// Determine the port from the environment or default to 3000 if none is provided.
-const port = process.env.PORT || 3000;
 
-// Start the Express server.
-app.listen(port, () => {
-  console.log(`Server is running and listening on port ${port}.`);
-});
