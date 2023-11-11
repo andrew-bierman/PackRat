@@ -1,19 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  Container,
-  Box,
-  Text,
-  HStack,
-  Stack,
-  Switch,
-  Button,
-  Input,
-  IconButton,
-  Divider,
-  Center,
-  Flex,
-} from 'native-base';
+import { 
+  RIconButton, 
+  RSwitch, 
+  RText, 
+  RStack, 
+  RInput, 
+  RSeparator,
+  RButton, 
+} from '@packrat/ui';
 import { AntDesign } from '@expo/vector-icons';
 import { StyleSheet, FlatList, View, ScrollView } from 'react-native';
 import Card from '../../components/feed/FeedCard';
@@ -74,15 +69,15 @@ const FeedSearchFilter = ({
   const styles = useCustomStyles(loadStyles);
   return (
     <View style={styles.filterContainer}>
-      <Box style={styles.searchContainer}>
-        <HStack space={3}>
-          <Input
-            w="80%"
-            variant="outline"
+      <View style={styles.searchContainer}>
+        <RStack space={3} style={{flexDirection: 'row', justifyContent: 'center'}}>
+          <RInput
+            size="$30"
             placeholder={`Search ${feedType || 'Feed'}`}
             onChangeText={setSearchQuery}
           />
-          <IconButton
+          <RIconButton
+            backgroundColor="transparent"
             icon={
               <AntDesign
                 name="search1"
@@ -90,56 +85,54 @@ const FeedSearchFilter = ({
                 color={currentTheme.colors.cardIconColor}
               />
             }
-            variant="ghost"
           />
-        </HStack>
-      </Box>
-      <Divider my={3} />
-      <Center
-        space={3}
+        </RStack>
+      </View>
+      <RSeparator />
+      <RStack
+        flex={1}
+        flexWrap="wrap"
         flexDirection="row"
         justifyContent="space-between"
         alignItems="center"
-        flexWrap={'wrap'}
         padding={2}
         margin={2}
       >
         {feedType === 'public' && (
-          <HStack space={3} alignItems="center">
-            <Text
-              fontSize="lg"
+          <RStack style={{flexDirection: 'row', gap: '10px', alignItems: 'center'}}>
+            <RText
+              fontSize={18}
               fontWeight="bold"
               color={currentTheme.colors.textColor}
             >
               Packs
-            </Text>
-            <Switch
-              size="lg"
-              isChecked={selectedTypes.pack}
-              onToggle={handleTogglePack}
+            </RText>
+            <RSwitch
+              size="$1.5"
+              checked={selectedTypes.pack}
+              onCheckedChange={handleTogglePack}
             />
-            <Text
-              fontSize="lg"
+            <RText
+              fontSize={18}
               fontWeight="bold"
               color={currentTheme.colors.textColor}
             >
               Trips
-            </Text>
-            <Switch
-              size="lg"
-              isChecked={selectedTypes.trip}
-              onToggle={handleToggleTrip}
+            </RText>
+            <RSwitch
+              size="$1.5"
+              checked={selectedTypes.trip}
+              onCheckedChange={handleToggleTrip}
             />
-          </HStack>
+          </RStack>
         )}
-        <HStack space={3} alignItems="center">
-          <Text
-            fontSize="lg"
-            fontWeight="bold"
+        <RStack style={{flexDirection: 'row', gap: '10px', alignItems: 'center'}}>
+          <RText
+            fontSize={17}
             color={currentTheme.colors.textColor}
           >
             Sort By:
-          </Text>
+          </RText>
           <DropdownComponent
             value={queryString}
             data={dataValues}
@@ -148,12 +141,12 @@ const FeedSearchFilter = ({
             style={styles.dropdown}
             width={150}
           />
-        </HStack>
+        </RStack>
         {(feedType === 'userPacks' || feedType === 'userTrips') && (
-          <Button onPress={handleCreateClick}>Create</Button>
+          <RButton onPress={handleCreateClick}>Create</RButton>
         )}
-      </Center>
-      <Divider my={3} />
+      </RStack>
+      <RSeparator style={{margin: '10px 0'}}/>
     </View>
   );
 };
@@ -303,7 +296,7 @@ const Feed = ({ feedType = 'public' }) => {
     router.push(createUrlPath);
   };
 
-  return <Box style={styles.mainContainer}>{renderData()}</Box>;
+  return <View style={styles.mainContainer}>{renderData()}</View>;
 };
 
 const loadStyles = (theme) => {

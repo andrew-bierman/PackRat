@@ -7,14 +7,20 @@ import RButton from './RButton';
 import RImage from './RImage';
 import RScrollView from './RScrollview';
 import TSkeleton from './Skeleton';
+import RSwitch from './RSwitch';
+import RIconButton from './RIconButton';
+import RSeparator from './RSeparator'
 
 export {
   RStack,
+  RSeparator,
+  RSwitch,
   RText,
   RCard,
   RParagraph,
   RInput,
   RButton,
+  RIconButton,
   RImage,
   RScrollView,
   TSkeleton,
