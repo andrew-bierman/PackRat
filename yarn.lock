@@ -7293,12 +7293,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tanstack/query-core@npm:5.8.2":
+  version: 5.8.2
+  resolution: "@tanstack/query-core@npm:5.8.2"
+  checksum: 4af516bb9d34c13bc98e9459bd06cf33ce9ebe99afe450f7025b16f7991b5913355daf882ce08a60743170fc10e831f70ec9ef286b00ba0169f608eaf1c20f74
+  languageName: node
+  linkType: hard
+
 "@tanstack/query-persist-client-core@npm:4.36.1":
   version: 4.36.1
   resolution: "@tanstack/query-persist-client-core@npm:4.36.1"
   dependencies:
     "@tanstack/query-core": "npm:4.36.1"
   checksum: b511da36e5648f2680ba168db6ddc3f2e8fadda98431643ff21323726eb45bbf9334dd9e8a37687279526b464a0c8f1762332470f32e2bd8a0e72511878371cf
+  languageName: node
+  linkType: hard
+
+"@tanstack/query-persist-client-core@npm:5.8.2":
+  version: 5.8.2
+  resolution: "@tanstack/query-persist-client-core@npm:5.8.2"
+  dependencies:
+    "@tanstack/query-core": "npm:5.8.2"
+  checksum: 29ab910cd56dfd2eb81570502d4a1dcfa9c8ed3f61450a8390d0dd8dc2650685effb8d780de7a0208e9feb9f5783eaf99e2ae9c702aaeb80cf83443a087b01ac
   languageName: node
   linkType: hard
 
@@ -7317,14 +7333,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/react-query-persist-client@npm:^4.35.7":
-  version: 4.36.1
-  resolution: "@tanstack/react-query-persist-client@npm:4.36.1"
+"@tanstack/react-query-persist-client@npm:^5.8.2":
+  version: 5.8.2
+  resolution: "@tanstack/react-query-persist-client@npm:5.8.2"
   dependencies:
-    "@tanstack/query-persist-client-core": "npm:4.36.1"
+    "@tanstack/query-persist-client-core": "npm:5.8.2"
   peerDependencies:
-    "@tanstack/react-query": ^4.36.1
-  checksum: d6720fba52d98401d593be2f2d0a6e429394581082164c36629937abd788c8d80838749d36dce2b20558efd9cbbfa3131bf0212a187f0bef63811ea160d7b390
+    "@tanstack/react-query": ^5.8.2
+    react: ^18.0.0
+    react-dom: ^18.0.0
+  checksum: 5b9797028cd7b62f990531608092fc309b490ff0e3f581f0370cb5f7e94a7ade671e90c6077f7bc3febd47092f7a32a2c13daf13b3d4dcd07ced6761179638f7
   languageName: node
   linkType: hard
 
@@ -20185,7 +20203,7 @@ __metadata:
     "@tanstack/query-async-storage-persister": "npm:^4.35.7"
     "@tanstack/react-query": "npm:^4.35.3"
     "@tanstack/react-query-devtools": "npm:^4.35.3"
-    "@tanstack/react-query-persist-client": "npm:^4.35.7"
+    "@tanstack/react-query-persist-client": "npm:^5.8.2"
     "@tmcw/togeojson": "npm:^5.7.0"
     "@trpc/client": "npm:^10.38.5"
     "@trpc/react-query": "npm:^10.38.5"
