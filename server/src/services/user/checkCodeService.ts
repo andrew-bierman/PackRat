@@ -1,3 +1,4 @@
+import { User } from '../../prisma/methods';
 import { prisma } from '../../prisma';
 
 export async function checkCodeService({ email, code }: any) {
@@ -8,5 +9,5 @@ export async function checkCodeService({ email, code }: any) {
     },
   });
 
-  return user; // Assuming you want to return the user if found
+  return User(user)?.toJSON(); // Assuming you want to return the user if found
 }

@@ -33,7 +33,6 @@ export const addItemService = async (
           name: ItemCategoryName.Food,
         },
       });
-
       newItem = await prisma.item.create({
         data: {
           name,
@@ -122,12 +121,15 @@ export const addItemService = async (
     }
   }
 
-  await prisma.pack.update({
+  const pack = await prisma.pack.update({
     where: { id: packId },
     data: {
       items: {
         connect: { id: newItem.id },
       },
+    },
+    include: {
+      owners: true,
     },
   });
 
@@ -135,7 +137,7 @@ export const addItemService = async (
     where: { id: newItem.id },
     data: {
       owners: {
-        connect: { id: ownerId },
+        connect: pack.owners.map((owner) => ({ id: owner.id })),
       },
     },
     include: {

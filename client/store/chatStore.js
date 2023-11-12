@@ -13,7 +13,7 @@ import { trpc } from '../trpc';
 
 // Create entity adapter for chats
 const chatAdapter = createEntityAdapter({
-  selectId: (chat) => chat._id,
+  selectId: (chat) => chat.id,
 });
 
 // Async thunk for getting user chats
@@ -84,12 +84,12 @@ const chatSlice = createSlice({
       })
       .addCase(getAIResponse.fulfilled, (state, action) => {
         const { aiResponse, conversation } = action.payload;
-        const { _id, history } = conversation;
+        const { id, history } = conversation;
         console.log('payload:', action.payload);
         console.log('state.entities:', state.entities);
-        console.log('state.entities[_id]:', state.entities[_id]);
+        console.log('state.entities[id]:', state.entities[id]);
         chatAdapter.upsertOne(state, {
-          id: _id,
+          id: id,
           changes: {
             history: history.split('\n'),
           },

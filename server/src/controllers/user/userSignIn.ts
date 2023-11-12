@@ -22,6 +22,7 @@ export function userSignInRoute() {
   return publicProcedure.input(validator.userSignIn).mutation(async (opts) => {
     const { input }: any = opts;
     const user = await prisma.user.findByCredentials(input);
+    console.log()
     await User(user).generateAuthToken();
     return user;
   });

@@ -33,10 +33,10 @@ export default function PackContainer({ isCreatingTrip = false }) {
   const styles = useCustomStyles(loadStyles);
 
   useEffect(() => {
-    if (user?._id) {
-      dispatch(fetchUserPacks({ ownerId: user?._id }));
+    if (user?.id) {
+      dispatch(fetchUserPacks({ ownerId: user?.id }));
     }
-  }, [dispatch, user?._id, refetch]);
+  }, [dispatch, user?.id, refetch]);
 
   /**
    * Handles the packing based on the given value.
@@ -47,10 +47,10 @@ export default function PackContainer({ isCreatingTrip = false }) {
   const handlePack = (val) => {
     const selectedPack = packs.find((pack) => pack.name == val);
 
-    setCurrentPackId(selectedPack?._id);
+    setCurrentPackId(selectedPack?.id);
 
-    if (isCreatingTrip && selectedPack?._id) {
-      dispatch(updateNewTripPack(selectedPack?._id));
+    if (isCreatingTrip && selectedPack?.id) {
+      dispatch(updateNewTripPack(selectedPack?.id));
     }
   };
   const currentPack = useSelector((state) =>

@@ -16,8 +16,6 @@ export const addPackService = async (name, owner_id) => {
     createdAt: new Date().toDateString(),
   };
 
-  console.log('newPack', newPack);
-
   // Check if a pack with the same name already exists
   const existingPack = await prisma.pack.findFirst({
     where: {

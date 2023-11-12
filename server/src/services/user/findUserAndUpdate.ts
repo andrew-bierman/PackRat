@@ -1,3 +1,4 @@
+import { User } from '../../prisma/methods';
 import { prisma } from '../../prisma';
 
 /**
@@ -25,7 +26,7 @@ export async function findUserAndUpdate(
     });
 
     if (user) {
-      return user;
+      return User(user).toJSON();
     } else {
       return false;
     }

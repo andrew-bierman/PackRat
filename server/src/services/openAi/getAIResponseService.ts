@@ -76,7 +76,7 @@ export const getAIResponseService = async (
       data: {
         userId,
         history: conversationHistory,
-      } as any,
+      },
     });
   }
 

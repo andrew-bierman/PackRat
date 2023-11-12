@@ -1,3 +1,4 @@
+import { User } from '../../prisma/methods';
 import { prisma } from '../../prisma';
 
 /**
@@ -17,7 +18,7 @@ export const getUserByIdService = async (userId: string): Promise<object> => {
     });
 
     if (user) {
-      return user;
+      return User(user).toJSON();
     } else {
       throw new Error('User cannot be found');
     }

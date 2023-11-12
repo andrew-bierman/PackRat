@@ -1,4 +1,4 @@
-import {prisma} from "src/prisma"
+import { prisma } from '../prisma';
 /**
  * Logs in a user based on the provided email, password, and source.
  *

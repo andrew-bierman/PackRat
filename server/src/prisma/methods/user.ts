@@ -11,6 +11,7 @@ type ExtendedUser = {
 };
 
 const User = <T>(prismaUser: T): T & ExtendedUser => {
+  if (!prismaUser) return;
   return Object.assign(prismaUser, {
     async save(): Promise<ExtendedUser> {
       const user = this;
@@ -34,7 +35,13 @@ const User = <T>(prismaUser: T): T & ExtendedUser => {
           where: { username: generatedUsername },
         });
       }
-
+      const {
+        save,
+        toJSON,
+        generateAuthToken,
+        generateResetToken,
+        ...userObject
+      } = user;
       const updatedUser = await prisma.user.upsert({
         where: {
           username: generatedUsername,
@@ -42,39 +49,46 @@ const User = <T>(prismaUser: T): T & ExtendedUser => {
         update: {
           username: generatedUsername,
         },
-        create: { ...user, username: generatedUsername },
+        create: { ...userObject, username: generatedUsername },
       });
 
       return User(updatedUser);
     },
     toJSON(): Partial<TUser> {
-      const { password, passwordResetToken, ...userObject } = this;
+      const {
+        password,
+        passwordResetToken,
+        // Remove function properties
+        generateAuthToken,
+        generateResetToken,
+        save,
+        toJSON,
+        ...userObject
+      } = this;
       return userObject;
     },
     async generateAuthToken(): Promise<string> {
       if (!JWT_SECRET) throw new Error('JWT_SECRET is not defined');
-      const token = await jwt.sign({ _id: this.id.toString() }, JWT_SECRET, {
+      const token = await jwt.sign({ id: this.id.toString() }, JWT_SECRET, {
         expiresIn: '7 days',
       });
       this.token = token;
-      console.log('UPDATTING', this.id, token);
       await prisma.user.update({
         where: { id: this.id },
         data: { token },
       });
-      console.log('UPDATED');
       return token;
     },
     async generateResetToken(): Promise<string> {
       if (this.passwordResetToken) {
         if (!JWT_SECRET) throw new Error('JWT_SECRET is not defined');
         const decoded: any = jwt.verify(this.passwordResetToken, JWT_SECRET);
-        if (decoded._id) return this.passwordResetToken;
+        if (decoded.id) return this.passwordResetToken;
       }
 
       if (!JWT_SECRET) throw new Error('JWT_SECRET is not defined');
       const resetToken = await jwt.sign(
-        { _id: this.id.toString() },
+        { id: this.id.toString() },
         JWT_SECRET,
         {
           expiresIn: '12h',

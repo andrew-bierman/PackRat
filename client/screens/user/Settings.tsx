@@ -52,7 +52,7 @@ export default function Settings() {
 
   const handleEditUser = () => {
     const {
-      _id,
+      id,
       email,
       name,
       username,
@@ -63,7 +63,7 @@ export default function Settings() {
 
     dispatch(
       editUser({
-        userId: _id,
+        userId: id,
         email,
         name,
         username,

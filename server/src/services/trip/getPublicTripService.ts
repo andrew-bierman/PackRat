@@ -10,7 +10,7 @@ export const getPublicTripsService = async (
   queryBy: string,
 ): Promise<object[]> => {
   try {
-    const trips = await prisma.trip.findMany({
+    const publicTrips = await prisma.trip.findMany({
       where: { is_public: true },
       select: {
         id: true,
@@ -36,6 +36,14 @@ export const getPublicTripsService = async (
         updatedAt: true,
       },
       orderBy: queryBy === 'Favorite' ? { id: 'desc' } : { id: 'asc' },
+    });
+
+    const trips = publicTrips.map((trip) => {
+      const owner = Array.isArray(trip.owner) ? trip.owner[0] : trip.owner;
+      return {
+        ...trip,
+        owner,
+      };
     });
 
     return trips;

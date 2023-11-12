@@ -36,7 +36,7 @@ async function validateResetToken(token: string): Promise<User> {
 
   const decoded: any = jwt.verify(token, JWT_SECRET);
   const user = await prisma.user.findFirst({
-    where: { id: decoded._id, passwordResetToken: token },
+    where: { id: decoded.id, passwordResetToken: token },
   });
 
   if (!user) throw new Error('User not Found');

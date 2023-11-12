@@ -10,7 +10,7 @@ import { ItemForm } from './ItemForm'; // assuming you moved the form related co
 import { ItemCategoryEnum } from '../../constants/itemCategory';
 
 export const AddItem = ({
-  _id,
+  id,
   isEdit,
   initialData,
   packId,
@@ -59,7 +59,7 @@ export const AddItem = ({
 
         dispatch(
           editItemsGlobalAsDuplicate({
-            itemId: _id,
+            itemId: id,
             packId,
             name,
             weight,
@@ -77,7 +77,7 @@ export const AddItem = ({
             quantity,
             unit,
             type: categoryType,
-            _id: initialData._id,
+            id: initialData.id,
           }),
         );
         setPage(1);
@@ -92,7 +92,7 @@ export const AddItem = ({
           quantity,
           type: categoryType,
           unit,
-          _id,
+          id,
           packId,
         }),
       );

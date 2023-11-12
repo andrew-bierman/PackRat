@@ -2,7 +2,7 @@ import { prisma } from '../../prisma';
 /**
  * Edit an item in the service.
  *
- * @param {string} _id - the ID of the item to be edited
+ * @param {string} id - the ID of the item to be edited
  * @param {string} name - the new name of the item
  * @param {number} weight - the new weight of the item
  * @param {string} unit - the new unit of the item
@@ -11,7 +11,7 @@ import { prisma } from '../../prisma';
  * @return {Promise<object>} - the edited item
  */
 export const editItemService = async (
-  _id,
+  id,
   name,
   weight,
   unit,
@@ -26,7 +26,7 @@ export const editItemService = async (
 
   const newItem = await prisma.item.update({
     where: {
-      id: _id,
+      id: id,
     },
     data: {
       name,

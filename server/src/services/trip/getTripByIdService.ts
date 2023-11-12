@@ -32,7 +32,5 @@ export const getTripByIdService = async (tripId: string): Promise<object> => {
   } catch (error) {
     console.error(error);
     throw new Error('Trip cannot be found');
-  } finally {
-    await prisma.$disconnect(); // Disconnect from the Prisma client
   }
 };

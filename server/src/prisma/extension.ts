@@ -1,5 +1,5 @@
 import basePrismaClient from './client';
-import { userStatics, geojsonStatics } from './statics';
+import { userStatics, geojsonStatics, nodeStatics } from './statics';
 
 const prisma = basePrismaClient.$extends({
   // Model level extensions
@@ -9,6 +9,9 @@ const prisma = basePrismaClient.$extends({
     },
     user: {
       ...userStatics,
+    },
+    node: {
+      ...nodeStatics,
     },
   },
 });

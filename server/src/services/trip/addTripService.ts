@@ -1,4 +1,6 @@
 import { prisma } from '../../prisma';
+import { Trip } from '../../prisma/methods';
+
 export const addTripService = async (tripDetails): Promise<any> => {
   try {
     const {
@@ -42,7 +44,10 @@ export const addTripService = async (tripDetails): Promise<any> => {
       },
     });
 
-    return { message: 'Trip added successfully', trip: newTrip };
+    return {
+      message: 'Trip added successfully',
+      trip: Trip(newTrip)?.toJSON(),
+    };
   } catch (error) {
     console.error(error);
     throw new Error('Unable to add trip');

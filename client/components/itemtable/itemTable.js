@@ -38,7 +38,7 @@ export const ItemsTable = ({
     );
   };
   const TableItem = ({ itemData }) => {
-    const { name, weight, category, quantity, unit, _id, type } = itemData;
+    const { name, weight, category, quantity, unit, id, type } = itemData;
 
     const rowData = [
       name,
@@ -54,7 +54,7 @@ export const ItemsTable = ({
         setRefetch={setRefetch}
       />,
       <DeletePackItemModal
-        itemId={_id}
+        itemId={id}
         refetch={refetch}
         setRefetch={setRefetch}
       />,

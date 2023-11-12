@@ -45,7 +45,7 @@ export default function Register() {
 
   const user = useSelector((state) => state.auth.user);
 
-  if (user?.user?._id) {
+  if (user?.user?.id) {
     InformUser({
       title: user?.message,
       duration: 5000,

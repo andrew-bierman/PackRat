@@ -1,5 +1,4 @@
 import express, { type NextFunction } from 'express';
-import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import { isCelebrateError, errors } from 'celebrate';

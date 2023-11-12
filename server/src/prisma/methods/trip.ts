@@ -5,11 +5,16 @@ type ExtendedTrip = {
 };
 
 const Trip = <T extends TTrip>(prismaTrip: T): T & ExtendedTrip => {
+  if (!prismaTrip) return;
   return Object.assign(prismaTrip, {
     toJSON(): Partial<TTrip> & {
       geojson?: { type: string; features: GeoJSON };
     } {
-      const trip: T & { geojson: GeoJSON } = this as T & { geojson: GeoJSON };
+      const {
+        // destructure methods
+        toJSON,
+        ...trip
+      } = this;
       const { ...tripObject }: Record<string, any> = trip;
       if (!trip.geojson) return tripObject;
       tripObject.geojson = {

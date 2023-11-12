@@ -24,7 +24,6 @@ model GeoJSON {
   trip_id    String          @db.ObjectId
   Trip       Trip?           @relation(fields: [trip_id], references: [id])
 
-  @@index([id], map: "id_1_autocreated")
   @@map("geojsons")
 }
 
@@ -41,11 +40,11 @@ model ItemCategory {
 
 model Item {
   id             String        @id @default(auto()) @map("_id") @db.ObjectId
-  name           String
-  weight         Float
-  quantity       Int
-  unit           String
-  global         Boolean       @default(false)
+  name           String?
+  weight         Float?
+  quantity       Int?
+  unit           String?
+  global         Boolean?      @default(false)
   pack_ids       String[]      @db.ObjectId
   itemCategoryId String?       @db.ObjectId
   createdAt      DateTime?     @default(now())
@@ -62,7 +61,8 @@ model Item {
 
 model Pack {
   id                String       @id @default(auto()) @map("_id") @db.ObjectId
-  name              String
+  name              String?
+  owner_id          String?      @db.ObjectId
   owner_ids         String[]     @db.ObjectId
   is_public         Boolean?
   grades            PacksGrades?
@@ -74,7 +74,8 @@ model Pack {
   updatedAt         DateTime?    @updatedAt
   items             Item[]       @relation(fields: [item_ids], references: [id])
   favorited_by      User[]       @relation(name: "Favourites", fields: [favourited_by_ids], references: [id])
-  owners            User[]       @relation(name: "Ownership", fields: [owner_ids], references: [id])
+  owners            User[]       @relation(name: "Owners", fields: [owner_ids], references: [id])
+  owner             User?        @relation(fields: [owner_id], references: [id])
   trips             Trip[]
 
   // Virtuals
@@ -90,8 +91,8 @@ model Pack {
 model Template {
   id               String       @id @default(auto()) @map("_id") @db.ObjectId
   type             TemplateType
-  templateId       String       @db.ObjectId
-  isGlobalTemplate Boolean      @default(false)
+  templateId       String?      @db.ObjectId
+  isGlobalTemplate Boolean?     @default(false)
   createdById      String?      @db.ObjectId
   createdAt        DateTime?    @default(now())
   updatedAt        DateTime?    @updatedAt
@@ -115,11 +116,11 @@ model Trip {
   owner_id    String    @db.ObjectId
   is_public   Boolean?
   type        String    @default("trip")
-  pack_id     String    @db.ObjectId
+  pack_id     String?   @db.ObjectId
   createdAt   DateTime? @default(now())
   updatedAt   DateTime? @updatedAt
   owner       User      @relation(fields: [owner_id], references: [id])
-  packs       Pack      @relation(fields: [pack_id], references: [id])
+  packs       Pack?     @relation(fields: [pack_id], references: [id])
   geojson     GeoJSON[]
 
   @@index([destination], map: "destination_1")
@@ -152,10 +153,11 @@ model User {
   createdAt                    DateTime?  @default(now())
   updatedAt                    DateTime?  @updatedAt
   favorites                    Pack[]     @relation(name: "Favourites", fields: [favourite_ids], references: [id])
-  packs                        Pack[]     @relation(name: "Ownership", fields: [pack_ids], references: [id])
+  packs                        Pack[]     @relation(name: "Owners", fields: [pack_ids], references: [id])
   item                         Item?      @relation(fields: [item_id], references: [id])
   templates                    Template[]
   trips                        Trip[]
+  Pack                         Pack[]
 
   @@index([role], map: "role_1")
   @@index([code], map: "code_1")
@@ -173,36 +175,44 @@ model Conversation {
 }
 
 model Way {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  osm_id     Int
-  osm_type   String
-  tags       Json
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  osm_id     Int?
+  osm_type   String?   @default("way")
+  tags       Json?
   nodes      Node[]
-  geoJSON    Json
-  createdAt  DateTime @default(now())
-  updated_at DateTime @updatedAt
+  geoJSON    Json?
+  createdAt  DateTime? @default(now())
+  updated_at DateTime? @updatedAt
+
+  @@map("ways")
 }
 
 model Node {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  lat        Float
-  lon        Float
-  tags       Json
-  createdAt  DateTime @default(now())
-  updated_at DateTime @updatedAt
-  Way        Way?     @relation(fields: [wayId], references: [id])
-  wayId      String?  @db.ObjectId
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  osm_id     Int?      @map("id")
+  lat        Float?
+  lon        Float?
+  osm_type   String    @default("node")
+  tags       Json?
+  createdAt  DateTime? @default(now())
+  updated_at DateTime? @updatedAt
+  Way        Way?      @relation(fields: [wayId], references: [id])
+  wayId      String?   @db.ObjectId
+
+  @@map("nodes")
 }
 
 model Relation {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  osm_id     Int
-  osm_type   String   @default("relation")
-  tags       Json
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  osm_id     Int?
+  osm_type   String?   @default("relation")
+  tags       Json?
   members    Member[]
-  geoJSON    Json
-  createdAt  DateTime @default(now())
-  updated_at DateTime @updatedAt
+  geoJSON    Json?
+  createdAt  DateTime? @default(now())
+  updated_at DateTime? @updatedAt
+
+  @@map("relations")
 }
 
 //  ████████ ██    ██ ██████  ███████ ███████
@@ -223,15 +233,15 @@ type GeoJSONGeometry {
 }
 
 type PacksGrades {
-  essentialItems           String @default("")
-  redundancyAndVersatility String @default("")
-  weight                   String @default("")
+  essentialItems           String? @default("")
+  redundancyAndVersatility String? @default("")
+  weight                   String? @default("")
 }
 
 type PacksScores {
-  essentialItemsScore           Int @default(0)
-  redundancyAndVersatilityScore Int @default(0)
-  weightScore                   Int @default(0)
+  essentialItemsScore           Int? @default(0)
+  redundancyAndVersatilityScore Int? @default(0)
+  weightScore                   Int? @default(0)
 }
 
 //  ███████ ███    ██ ██    ██ ███    ███ ███████

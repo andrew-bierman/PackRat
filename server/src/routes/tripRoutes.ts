@@ -148,7 +148,7 @@ router.post(
  *           schema:
  *             type: object
  *             properties:
- *               _id:
+ *               id:
  *                 type: string
  *               name:
  *                 type: string

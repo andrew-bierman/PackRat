@@ -39,7 +39,7 @@ export const EditableInput = ({
         onBlur={() => {
           if (data.type === 'pack') {
             const packDetails = {
-              _id: data._id,
+              id: data.id,
               name: headerTitle,
               is_public: data.is_public,
             };
@@ -50,7 +50,7 @@ export const EditableInput = ({
             dispatch(updatePack(packDetails));
           } else {
             const tripDetails = {
-              _id: data._id,
+              id: data.id,
               name: headerTitle,
               is_public: data.is_public,
             };

@@ -25,7 +25,7 @@ export const addTemplateService = async (
       throw new Error('User not found');
     }
 
-    const createdTemplate = await prisma.template.create({
+    await prisma.template.create({
       data: {
         type,
         templateId,

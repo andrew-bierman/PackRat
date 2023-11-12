@@ -24,7 +24,6 @@ export const duplicatePublicPackService = async (packId, ownerId, items) => {
   const newPack = await prisma.pack.create({
     data: {
       name: existingPack.name,
-      items,
       is_public: false,
       createdAt: new Date().toISOString(),
       grades: {
@@ -35,6 +34,12 @@ export const duplicatePublicPackService = async (packId, ownerId, items) => {
       },
       owners: {
         connect: existingPack.owners.map((owner) => ({ id: owner.id })),
+      },
+      owner: {
+        connect: ownerId,
+      },
+      items: {
+        connect: items,
       },
       type: existingPack.type,
     },

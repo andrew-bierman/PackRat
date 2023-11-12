@@ -1,5 +1,3 @@
-import mongoose from 'mongoose';
-import Way from '../models/osm/wayModel';
 import { findOrCreateMany } from '../utils/osmFunctions/modelHandlers';
 
 /**
@@ -19,7 +17,7 @@ export async function processJob(job) {
       throw new Error('No features provided');
     }
 
-    const results = await findOrCreateMany(Way, features); // TODO (use geojson)
+    const results = await findOrCreateMany(features); // TODO (use geojson)
 
     console.log('results', results);
 
@@ -44,6 +42,6 @@ export async function processJob(job) {
     };
   } finally {
     // Close MongoDB connection when done
-    await mongoose.connection.close();
+    // await mongoose.connection.close();
   }
 }

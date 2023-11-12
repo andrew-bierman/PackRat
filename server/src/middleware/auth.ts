@@ -23,7 +23,7 @@ declare global {
 //     const token: any = ctx.input.header('Authorization')?.replace('Bearer ', '');
 //     const decoded: any = jwt.verify(token, JWT_SECRET ?? '');
 //     const user: any = await User.findOne({
-//       _id: decoded._id,
+//       id: decoded.id,
 //       token,
 //     });
 //     if (!user) throw new Error();
@@ -70,7 +70,7 @@ const verifyToken = (token: string): JwtPayload => {
 const findUser = async (decoded: JwtPayload, token: string): Promise<User> => {
   const user: any = await prisma.user.findUnique({
     where: {
-      id: decoded._id,
+      id: decoded.id,
       token: token,
     },
   });

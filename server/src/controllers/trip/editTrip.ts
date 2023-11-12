@@ -12,9 +12,9 @@ import * as validator from '../../middleware/validators/index';
  */
 export const editTrip = async (req, res, next) => {
   try {
-    const { _id } = req.body;
+    const { id } = req.body;
     const newTrip = await prisma.trip.update({
-      where: { id: _id }, // Assuming _id is the ID of the trip to update
+      where: { id: id }, // Assuming id is the ID of the trip to update
       data: req.body,
       include: {
         packs: true, // Fetch associated packs
@@ -30,10 +30,10 @@ export const editTrip = async (req, res, next) => {
 
 export function editTripRoute() {
   return publicProcedure.input(validator.editTrip).mutation(async (opts) => {
-    const { _id } = opts.input;
+    const { id } = opts.input;
 
     return await prisma.trip.update({
-      where: { id: _id }, // Assuming _id is the ID of the trip to update
+      where: { id: id }, // Assuming id is the ID of the trip to update
       data: opts.input,
       include: {
         packs: true, // Fetch associated packs
