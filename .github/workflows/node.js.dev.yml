@@ -26,7 +26,7 @@ jobs:
     - name: Debug Information
       run: |
         yarn -v
-        ls .yarn/releases/yarn-3.6.3.cjs
+        ls .yarn/releases
         cat .yarnrc.yml
         cat yarn.lock
 
@@ -54,8 +54,6 @@ jobs:
         yarn -v
         which yarn
         yarn set version stable
-        yarn plugin import workspace-tools
-        yarn plugin import interactive-tools
         yarn install
 
 # cp client/.env.example client/.env
