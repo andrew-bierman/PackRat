@@ -15,10 +15,7 @@ import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { onlineManager } from '@tanstack/react-query';
 import NetInfo from '@react-native-community/netinfo';
-import { Slot } from 'expo-router';
-import FlashMessage from 'react-native-flash-message';
-import Navigation from '../screens/Navigation';
-import Footer from '../components/footer/Footer';
+
 import { queryTrpc, getToken } from '../trpc';
 import { httpBatchLink } from '@trpc/client';
 import { api } from '~/constants/api';
