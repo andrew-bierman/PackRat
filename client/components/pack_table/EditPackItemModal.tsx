@@ -11,8 +11,6 @@ export const EditPackItemModal = ({
   editAsDuplicate,
   setPage,
   page,
-  setRefetch = () => {},
-  refetch,
   isModalOpen,
   onTrigger,
   closeModalHandler,
@@ -60,8 +58,6 @@ export const EditPackItemModal = ({
           setPage={setPage}
           page={page}
           closeModalHandler={closeModalHandler || closeTriggerOpen}
-          setRefetch={setRefetch}
-          refetch={refetch}
         />
       </CustomModal>
     </Box>

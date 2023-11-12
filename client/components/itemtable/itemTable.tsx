@@ -20,8 +20,6 @@ export const ItemsTable = ({
   data,
   isLoading,
   totalPages,
-  refetch,
-  setRefetch = () => {},
 }) => {
   const flexArr = [2, 1, 1, 1, 0.65, 0.65, 0.65];
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
@@ -51,14 +49,8 @@ export const ItemsTable = ({
         editAsDuplicate={false}
         setPage={setPage}
         page={page}
-        refetch={refetch}
-        setRefetch={setRefetch}
       />,
-      <DeletePackItemModal
-        itemId={_id}
-        refetch={refetch}
-        setRefetch={setRefetch}
-      />,
+      <DeletePackItemModal itemId={_id} />,
     ];
     return <Row data={rowData} style={styles.row} flexArr={flexArr} />;
   };

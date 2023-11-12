@@ -28,7 +28,7 @@ import NetInfo from '@react-native-community/netinfo';
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { NetworkStatusProvider } from '../context/NetworkStatusProvider';
 export default function HomeLayout() {
   const queryClient = new QueryClient();
 
@@ -74,7 +74,9 @@ export default function HomeLayout() {
             <PersistGate loading={null} persistor={persistor}>
               <SessionProvider>
                 <ThemeProvider>
-                  <FlashMessage position="top" />
+                  <NetworkStatusProvider>
+                    <FlashMessage position="top" />
+                  </NetworkStatusProvider>
                   <Navigation />
                   <Slot />
                   {/* {Platform.OS === 'web' ? <Footer /> : null} */}

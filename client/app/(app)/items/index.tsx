@@ -26,14 +26,11 @@ export default function Items() {
   const [limit, setLimit] = useState(5);
   // page number for pagination
   const [page, setPage] = useState(1);
-  // it will be used as a dependency for reloading the data in case of some modifications
-  const [refetch, setRefetch] = useState(false);
 
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     UseTheme();
 
   const { data, isLoading, isError } = useFetchGlobalItems(limit, page);
-  console.log('data', data);
   return (
     <ScrollView>
       {Platform.OS === 'web' && (
@@ -95,14 +92,10 @@ export default function Items() {
           }
           onCancel={setIsAddItemModalOpen}
         >
-          <AddItemGlobal
-            setRefetch={setRefetch}
-            refetch={refetch}
-            setIsAddItemModalOpen={setIsAddItemModalOpen}
-          />
+          <AddItemGlobal setIsAddItemModalOpen={setIsAddItemModalOpen} />
         </CustomModal>
       </>
-      {!isError && Array.isArray(data.items) ? (
+      {!isError && data && Array.isArray(data.items) ? (
         <ItemsTable
           limit={limit}
           setLimit={setLimit}
@@ -111,8 +104,6 @@ export default function Items() {
           data={data.items}
           isLoading={isLoading}
           totalPages={data?.totalPages}
-          refetch={refetch}
-          setRefetch={setRefetch}
         />
       ) : null}
     </ScrollView>
