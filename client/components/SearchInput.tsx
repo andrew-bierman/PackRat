@@ -18,7 +18,7 @@ import { useState, useEffect } from 'react';
 import { fetchTrails } from '../store/trailsStore';
 import { fetchParks } from '../store/parksStore';
 import {
-  // setSelectedSearchResult,
+  setSelectedSearchResult,
   clearSearchResults,
   fetchPhotonSearchResults,
 } from '../store/searchStore';
@@ -37,6 +37,7 @@ import { useFetchWeather, useFetchWeatherWeak } from '~/hooks/weather';
 
 export const SearchInput = ({ onSelect, placeholder }) => {
   const [searchString, setSearchString] = useState('');
+  console.log("🚀 ~ file: SearchInput.tsx:40 ~ SearchInput ~ searchString:", searchString)
   const [isLoadingMobile, setIsLoadingMobile] = useState(false);
   const { selectedSearch } = useSelector((state) => state.weather);
   // const [selectedSearch, setSelectedSearch] = useState('');
@@ -49,13 +50,13 @@ export const SearchInput = ({ onSelect, placeholder }) => {
 
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles());
-  const [selectedSearchResult, setSelectedSearchResult] = useState({});
-  const searchResults =
-    useSelector((state) => state.search.searchResults) || [];
+  // const [selectedSearchResult, setSelectedSearchResult] = useState({});
+  // const searchResults =
+  //   useSelector((state) => state.search.searchResults) || [];
   // const [latLng,setLatLng] = useState({});
 
-  // const selectedSearchResult =
-  //   useSelector((state) => state.search.selectedSearchResult) || {};
+  const selectedSearchResult = useSelector((state) => state.search.selectedSearchResult) || {};
+  console.log("🚀 ~ file: SearchInput.tsx:59 ~ SearchInput ~ selectedSearchResult:", selectedSearchResult)
 
   const dispatch = useDispatch();
 
@@ -85,9 +86,9 @@ export const SearchInput = ({ onSelect, placeholder }) => {
 
     const {
       geometry: { coordinates },
+      properties,
     } = selectedSearchResult;
     const [lon, lat] = coordinates;
-
     if (!lat || !lon) {
       setIsLoadingMobile(false);
       return;
@@ -115,14 +116,14 @@ export const SearchInput = ({ onSelect, placeholder }) => {
     setIsLoadingMobile(false);
   };
 
-  useEffect(() => {
-    console.log('why not here?');
-    const timeout = setTimeout(getTrailsParksAndWeatherDetails, 1000);
+  // useEffect(() => {
+    
+  //   const timeout = setTimeout(getTrailsParksAndWeatherDetails, 1000);
 
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, [selectedSearch, selectedSearchResult, dispatch]);
+  //   return () => {
+  //     clearTimeout(timeout);
+  //   };
+  // }, [selectedSearch, selectedSearchResult, dispatch]);
 
   const handleSearchResultClick = (result, index) => {
     const {
@@ -132,9 +133,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
     dispatch(setSearchResult(name));
     setSearchString(name);
     setShowSearchResults(false);
-    setSelectedSearchResult(result);
-
-    // dispatch(setSelectedSearchResult(result));
+    dispatch(setSelectedSearchResult(result));
 
     if (onSelect) {
       onSelect(result);
