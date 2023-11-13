@@ -9,13 +9,15 @@ import RScrollView from './RScrollview';
 import TSkeleton from './Skeleton';
 import RSwitch from './RSwitch';
 import RIconButton from './RIconButton';
-import RSeparator from './RSeparator'
+import RSeparator from './RSeparator';
+import RHeading from './RHeading';
 
 export {
   RStack,
   RSeparator,
   RSwitch,
   RText,
+  RHeading,
   RCard,
   RParagraph,
   RInput,
