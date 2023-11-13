@@ -129,6 +129,7 @@ const FeedSearchFilter = ({
         <RStack style={{flexDirection: 'row', gap: '10px', alignItems: 'center'}}>
           <RText
             fontSize={17}
+            fontWeight="bold"
             color={currentTheme.colors.textColor}
           >
             Sort By:
