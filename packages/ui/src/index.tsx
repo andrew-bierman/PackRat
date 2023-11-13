@@ -11,9 +11,11 @@ import RSwitch from './RSwitch';
 import RIconButton from './RIconButton';
 import RSeparator from './RSeparator';
 import RHeading from './RHeading';
+import RSelect from './RSelect';
 
 export {
   RStack,
+  RSelect,
   RSeparator,
   RSwitch,
   RText,
