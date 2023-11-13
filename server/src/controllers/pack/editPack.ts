@@ -13,11 +13,9 @@ import * as validator from '../../middleware/validators/index';
 
 export const editPack = async (req, res, next) => {
   try {
-    const { _id } = req.body;
+    const { id } = req.body;
 
-    const newPack = await editPackService(_id, req.body);
-
-    console.log('newPack', newPack);
+    const newPack = await editPackService(id, req.body);
 
     res.locals.data = newPack;
     responseHandler(res);
@@ -28,7 +26,7 @@ export const editPack = async (req, res, next) => {
 
 export function editPackRoute() {
   return publicProcedure.input(validator.editPack).mutation(async (opts) => {
-    const { _id } = opts.input;
-    return await editPackService(_id, opts.input);
+    const { id } = opts.input;
+    return await editPackService(id, opts.input);
   });
 }

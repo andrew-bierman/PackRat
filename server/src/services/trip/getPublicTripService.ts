@@ -1,5 +1,5 @@
 // services/tripService.ts
-import { prisma } from "../../prisma/index";
+import { prisma } from '../../prisma';
 
 /**
  * Retrieves public trips based on the given query parameter.
@@ -10,7 +10,7 @@ export const getPublicTripsService = async (
   queryBy: string,
 ): Promise<object[]> => {
   try {
-    const trips = await prisma.trip.findMany({
+    const publicTrips = await prisma.trip.findMany({
       where: { is_public: true },
       select: {
         id: true,
@@ -35,9 +35,16 @@ export const getPublicTripsService = async (
         createdAt: true,
         updatedAt: true,
       },
-      orderBy: queryBy === 'Favorite' ? { id: 'desc' } : { id: 'asc' }
+      orderBy: queryBy === 'Favorite' ? { id: 'desc' } : { id: 'asc' },
+    });
 
-    } as any);
+    const trips = publicTrips.map((trip) => {
+      const owner = Array.isArray(trip.owner) ? trip.owner[0] : trip.owner;
+      return {
+        ...trip,
+        owner,
+      };
+    });
 
     return trips;
   } catch (error) {

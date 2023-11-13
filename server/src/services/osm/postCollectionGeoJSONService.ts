@@ -1,7 +1,7 @@
 import {
-  findOrCreateOne,
   ensureIdProperty,
   ensureModelProperty,
+  processElement,
 } from '../../utils/osmFunctions/modelHandlers';
 import { isGeoJSONFormat } from '../../utils/osmFunctions/dataFormatters';
 
@@ -26,16 +26,14 @@ export const postCollectionGeoJSONService = async (geojson) => {
     );
     const newInstances = await Promise.all(
       Models.map(
-        async (Model, index) =>
-          await findOrCreateOne(Model, processedElements[index]),
+        async (_, index) => await processElement(processedElements[index]),
       ),
     );
     return newInstances;
   } else {
     // Handle single feature
     const processedElement = ensureIdProperty(geojson);
-    const Model: any = ensureModelProperty(processedElement);
-    const newInstance = await findOrCreateOne(Model, processedElement);
+    const newInstance = await processElement(processedElement);
     return newInstance;
   }
 };

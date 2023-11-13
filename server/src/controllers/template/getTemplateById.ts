@@ -4,7 +4,7 @@ import { responseHandler } from '../../helpers/responseHandler';
 
 import { z } from 'zod';
 
-import {prisma} from "../../prisma/index"
+import { prisma } from '../../prisma';
 /**
  * Retrieves a template by its ID.
  * @param {Object} req - The request object.

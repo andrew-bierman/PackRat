@@ -1,4 +1,5 @@
-import { prisma } from "../../prisma/index";
+import { User } from '../../prisma/methods';
+import { prisma } from '../../prisma';
 
 /**
  * Retrieves a user by their ID from the database.
@@ -14,10 +15,10 @@ export const getUserByIdService = async (userId: string): Promise<object> => {
       include: {
         favorites: true,
       },
-    } as any);
+    });
 
     if (user) {
-      return user;
+      return User(user).toJSON();
     } else {
       throw new Error('User cannot be found');
     }

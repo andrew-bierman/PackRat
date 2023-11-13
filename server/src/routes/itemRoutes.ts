@@ -145,7 +145,7 @@ router.post(
  *          schema:
  *            type: object
  *            properties:
- *              _id:
+ *              id:
  *                type: string
  *              name:
  *                type: string
@@ -179,7 +179,7 @@ router.put(
  *          schema:
  *            type: object
  *            properties:
- *              _id:
+ *              id:
  *                type: string
  *    responses:
  *      200:
@@ -298,7 +298,7 @@ router.put(
  *          schema:
  *            type: object
  *            properties:
- *              _id:
+ *              id:
  *                type: string
  *    responses:
  *      200:

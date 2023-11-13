@@ -1,6 +1,5 @@
 import express, { type NextFunction } from 'express';
-import mongoose from 'mongoose';
-import bodyParser from "body-parser";
+import bodyParser from 'body-parser';
 import cors from 'cors';
 import { isCelebrateError, errors } from 'celebrate';
 import { MONGODB_URI } from './config';
@@ -15,7 +14,7 @@ import { limiter } from './helpers/limiter';
 import * as trpcExpress from '@trpc/server/adapters/express';
 import { type inferAsyncReturnType, initTRPC } from '@trpc/server';
 import { appRouter } from './routes/trpcRouter';
-import {prisma} from "./prisma/index"
+import { prisma } from './prisma';
 
 const app = express();
 
@@ -38,9 +37,11 @@ if (corsOptions) {
 
 // Parse incoming JSON bodies. Limit set to prevent large payloads.
 app.use(express.json({ limit: '50mb' }));
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+  }),
+);
 app.use(express.urlencoded());
 app.use(bodyParser.json());
 // Register the main API routes.
@@ -89,13 +90,10 @@ app.use(errorHandler);
 const port = process.env.PORT || 3000;
 const startServer = async () => {
   try {
-   
-
     // Test the database connection
     await prisma.$connect();
     console.log('Connected to the database');
 
-  
     app.listen(port, () => {
       console.log(`Server is running on port ${port}`);
     });
@@ -105,5 +103,3 @@ const startServer = async () => {
 };
 
 startServer();
-
-

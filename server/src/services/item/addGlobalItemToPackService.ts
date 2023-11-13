@@ -1,5 +1,4 @@
-
-import { prisma } from "../../prisma/index";
+import { prisma } from '../../prisma';
 /**
  * Adds a global item to the pack service.
  *
@@ -13,26 +12,24 @@ export const addGlobalItemToPackService = async (packId, itemId, ownerId) => {
     where: { id: itemId },
     include: { category: { select: { name: true } } } as never,
   });
-  
+
   await prisma.pack.update({
     where: { id: packId },
     data: {
       items: {
-        connect: { id: item.id } 
-      } as never
-    }
+        connect: { id: item.id },
+      } as never,
+    },
   });
-  
+
   const updatedItem = await prisma.item.update({
     where: { id: item.id },
     data: {
       owners: {
-        connect: { id: ownerId } 
-      } as never
+        connect: { id: ownerId },
+      } as never,
     },
   });
-  
-
 
   return item;
 };

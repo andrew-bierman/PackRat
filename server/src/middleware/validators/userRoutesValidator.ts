@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { Request } from 'express';
+import { Role } from '@prisma/client';
 
 const JoiObjectId = z.string().regex(/^[0-9a-fA-F]{24}$/g);
 
@@ -35,6 +36,28 @@ export const addToFavorite = z.object({
 
 export const editUser = z.object({
   userId: JoiObjectId.nonempty(),
+  name: z.string(),
+  password: z.string(),
+  email: z.string(),
+  token: z.string().optional(),
+  code: z.string().optional(),
+  googleId: z.string().optional(),
+  is_certified_guide: z.boolean().optional(),
+  passwordResetToken: z.string().optional(),
+  passwordResetTokenExpiration: z.date().nullable().optional(),
+  role: z.nativeEnum(Role).optional(),
+  username: z
+    .string()
+    .refine((value) => value.length > 0)
+    .optional(),
+  profileImage: z.string().optional(),
+  preferredWeather: z.string().optional(),
+  preferredWeight: z.string().optional(),
+  favourite_ids: z.array(JoiObjectId.nonempty()).optional(),
+  pack_ids: z.array(JoiObjectId.nonempty()).optional(),
+  item_id: JoiObjectId.nonempty().nullable().optional(),
+  template_ids: z.array(JoiObjectId.nonempty()).optional(),
+  trip_ids: z.array(JoiObjectId.nonempty()).optional()
 });
 
 export const deleteUser = z.object({

@@ -19,7 +19,7 @@ export const EditPackItemModal = ({
 }) => {
   let currentPackId;
   if (currentPack) {
-    currentPackId = currentPack._id;
+    currentPackId = currentPack.id;
   }
 
   const footerButtons = [
@@ -43,7 +43,7 @@ export const EditPackItemModal = ({
         onCancel={closeModalHandler}
       >
         <AddItem
-          _id={packId}
+          id={packId}
           packId={currentPackId}
           isEdit={true}
           initialData={initialData}

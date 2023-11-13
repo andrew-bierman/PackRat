@@ -1,7 +1,7 @@
 import { publicProcedure } from '../../trpc';
 import { UserNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
-import {prisma} from "../../prisma/index"
+import { prisma } from '../../prisma';
 
 // Middleware to check if user is authenticated
 // export const isAuthenticated = async (req, res, next) => {
@@ -23,13 +23,11 @@ import {prisma} from "../../prisma/index"
  */
 export const getUsers = async (req, res, next) => {
   try {
-    const users= await prisma.user.findMany({
+    const users = await prisma.user.findMany({
       include: {
         favorites: true,
-     
       },
-    }as any);
-    
+    });
 
     res.locals.data = users;
     responseHandler(res);
@@ -40,13 +38,11 @@ export const getUsers = async (req, res, next) => {
 
 export function getUsersRoute() {
   return publicProcedure.query(async (input) => {
-    const users= await prisma.user.findMany({
+    const users = await prisma.user.findMany({
       include: {
         favorites: true,
-    
-    
       },
-    } as any);
+    });
     return users;
   });
 }

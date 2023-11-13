@@ -5,7 +5,8 @@ import { responseHandler } from '../../helpers/responseHandler';
 import { addTemplateService } from '../../services/template/template.service';
 import { z } from 'zod';
 
-import {prisma} from "../../prisma/index"
+import { prisma } from '../../prisma';
+import { TemplateType } from '@prisma/client';
 /**
  * Adds a template to the database.
  * @param {Object} req - The request object.
@@ -35,7 +36,7 @@ export function addTemplateRoute() {
   return publicProcedure
     .input(
       z.object({
-        type: z.string(),
+        type: z.nativeEnum(TemplateType),
         templateId: z.string(),
         isGlobalTemplate: z.boolean(),
         createdBy: z.string(),

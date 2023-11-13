@@ -1,10 +1,9 @@
 import { publicProcedure } from '../../trpc';
-import User from '../../models/userModel';
-import {prisma} from "../../prisma/index"
+import { prisma } from '../../prisma';
 import { sendWelcomeEmail, resetEmail } from '../../utils/accountEmail';
 import * as validator from '../../middleware/validators/index';
 
-import { generateResetToken } from '../../utils/prismaHelpers/user';
+import { User } from '../../prisma/methods';
 /**
  * Sends an email to the specified email address.
  * @param {Object} req - The request object.
@@ -15,12 +14,13 @@ export const sentEmail = async (req, res) => {
   try {
     const { email } = req.body;
 
-    const user = await prisma.user.findUnique({ where: { email } } as any);
+    const user = await prisma.user.findUnique({ where: { email } });
+    const userWithMethods = User(user);
     if (!user) {
       throw new Error('User not found');
     }
-    const resetUrl = await generateResetToken(user);
-    resetEmail(user.email, resetUrl);
+    const resetUrl = await userWithMethods.generateResetToken();
+    resetEmail(userWithMethods.email, resetUrl);
     res.status(200).send({
       message: 'Reset Token has been sent successfully',
       status: 'success',
@@ -34,11 +34,12 @@ export const sentEmail = async (req, res) => {
 export function sentEmailRoute() {
   return publicProcedure.input(validator.sentEmail).query(async (opts) => {
     const { email } = opts.input;
-    const user = await prisma.user.findUnique({ where: { email } } as any);
+    const user = await prisma.user.findUnique({ where: { email } });
+    const userWithMethods = User(user);
     if (!user) {
       throw new Error('User not found');
     }
-    const resetUrl = await generateResetToken(user);
+    const resetUrl = await userWithMethods.generateResetToken();
     resetEmail(user.email, resetUrl);
     return 'Reset Token has been sent successfully';
   });

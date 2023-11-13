@@ -1,5 +1,5 @@
-import { prisma } from "../../prisma/index";
-import { UserNotFoundError } from "../../helpers/errors";
+import { prisma } from '../../prisma';
+import { UserNotFoundError } from '../../helpers/errors';
 
 /**
  * Retrieves the favorite packs associated with a specific user.
@@ -7,18 +7,18 @@ import { UserNotFoundError } from "../../helpers/errors";
  * @param {string} userId - The ID of the user.
  * @return {Promise<Array<Pack>>} An array of favorite packs.
  */
-export const getUserFavoritesService = async (userId,next) => {
+export const getUserFavoritesService = async (userId, next) => {
   const user = await prisma.user.findUnique({
     where: {
       id: userId,
     },
     include: {
       favorites: true,
-    } as never,
+    },
   });
 
   if (!user) {
-next(UserNotFoundError) 
+    next(UserNotFoundError);
   }
 
   return user.favorites;

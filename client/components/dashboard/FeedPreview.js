@@ -27,7 +27,7 @@ const FeedPreviewScroll = () => {
   return (
     <Carousel itemWidth={250}>
       {filteredFeedData.map((item, index) => {
-        const linkStr = `/${item.type}/${item._id}`;
+        const linkStr = `/${item.type}/${item.id}`;
         return linkStr ? (
           <Link href={linkStr} key={`${linkStr}`}>
             <View style={styles.cardStyles} key={index}>

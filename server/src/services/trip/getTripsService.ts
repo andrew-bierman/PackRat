@@ -1,4 +1,4 @@
-import { prisma } from "../../prisma/index";
+import { prisma } from '../../prisma';
 /**
  * Retrieves trips belonging to a specific owner.
  * @param {string} ownerId - The ID of the owner.

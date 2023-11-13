@@ -1,6 +1,5 @@
-
 import { calculatePackScore } from '../../utils/scorePack';
-import { prisma } from "../../prisma/index";
+import { prisma } from '../../prisma';
 
 /**
  * Scores a pack service based on the given packId.
@@ -33,7 +32,5 @@ export async function scorePackService(packId: string) {
     return updatedPack;
   } catch (error) {
     throw new Error('Unable to score pack: ' + error.message);
-  } finally {
-    await prisma.$disconnect(); // Disconnect from the database client
   }
 }

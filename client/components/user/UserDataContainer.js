@@ -47,7 +47,7 @@ export default function UserDataContainer({
 
   const cardType = type === 'packs' ? 'pack' : 'trip';
 
-  const differentUser = userId && userId !== currentUser._id;
+  const differentUser = userId && userId !== currentUser.id;
 
   // Map function to render multiple skeleton cards
   const skeletonCards = [...Array(3)].map((_, idx) => (
@@ -104,7 +104,7 @@ export default function UserDataContainer({
           ) : data && data.length > 0 ? (
             data?.map((dataItem, index) => (
               <UserDataCard
-                key={dataItem._id}
+                key={dataItem.id}
                 {...{ ...dataItem }}
                 type={cardType}
                 state={dataState}
@@ -113,7 +113,7 @@ export default function UserDataContainer({
                 differentUser={differentUser}
               />
             ))
-          ) : currentUser?._id === userId ? (
+          ) : currentUser?.id === userId ? (
             <Link href="/">
               <Button
                 _text={{

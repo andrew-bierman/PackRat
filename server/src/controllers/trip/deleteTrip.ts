@@ -2,7 +2,7 @@ import { publicProcedure } from '../../trpc';
 import { UnableToDeleteTripError } from '../../helpers/errors';
 import * as validator from '../../middleware/validators/index';
 
-import {prisma} from "../../prisma/index"
+import { prisma } from '../../prisma';
 /**
  * Deletes a trip from the database.
  * @param {Object} req - The request object.

@@ -1,4 +1,4 @@
-import {prisma} from "src/prisma"
+import { prisma } from '../prisma';
 /**
  * Creates a new pack validation.
  *
@@ -37,7 +37,9 @@ export const packValidation = async ({
         // Assuming 'items' is an array of item IDs related to the pack
         connect: items.map((itemId) => ({ id: itemId })),
       },
-      owner_id,
+      owners: {
+        connect: { id: owner_id },
+      },
       is_public,
       favorited_by: {
         // Assuming 'favorited_by' is an array of user IDs related to the pack
@@ -45,7 +47,7 @@ export const packValidation = async ({
       },
       createdAt,
     },
-  } as any);
+  });
 
   return pack;
 };

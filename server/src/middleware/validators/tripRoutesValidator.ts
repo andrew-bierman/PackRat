@@ -27,7 +27,7 @@ export const addTrip = z.object({
 });
 
 export const editTrip = z.object({
-  _id: JoiObjectId().nonempty(),
+  id: JoiObjectId().nonempty(),
   name: z.string().nonempty(),
   duration: z.string().nonempty(),
   weather: z.string().nonempty(),

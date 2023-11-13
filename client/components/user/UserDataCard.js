@@ -26,7 +26,7 @@ import { useEffect } from 'react';
 const UserDataCard = ({
   type, // "pack" or "trip"
   destination,
-  _id,
+  id,
   name,
   total_weight,
   is_public,
@@ -64,7 +64,7 @@ const UserDataCard = ({
   const handleChangeStatus = (index) => {
     updateState(index, true);
     if (type === 'pack') {
-      dispatch(changePackStatus({ _id, is_public: !is_public }));
+      dispatch(changePackStatus({ id, is_public: !is_public }));
     } else if (type === 'trip') {
     }
   };
@@ -201,7 +201,7 @@ const UserDataCard = ({
           </HStack>
         </Stack>
         <Box alignItems="center">
-          <Link href={`/${type}/${_id}`}>
+          <Link href={`/${type}/${id}`}>
             <Text
               color="coolGray.600"
               _dark={{

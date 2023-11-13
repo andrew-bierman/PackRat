@@ -45,7 +45,7 @@ export const CustomCard = ({
   const router = useRouter();
   const isLoading = useSelector((state: any) => state.singlePack.isLoading);
   const user = useSelector((state: any) => state.auth.user);
-  const userId = user._id;
+  const userId = user.id;
 
   /**
    * Handles copying the link to the clipboard and updates the copy state.
@@ -102,7 +102,7 @@ export const CustomCard = ({
               <Box mx="5">
                 <Link href={`/profile/${data.owner_id}`}>
                   <Text>
-                    {user._id === data.owner_id
+                    {user.id === data.owner_id
                       ? 'Your Profile'
                       : `View ${
                           data.owners && data.owners.length
@@ -200,9 +200,9 @@ export const CustomCard = ({
             <Box>{title}</Box>
             <Box flexDirection="row" alignItems="center">
               <Box mx="5">
-                <Link href={`/profile/${data.owner_id && data.owner_id._id}`}>
+                <Link href={`/profile/${data.owner_id && data.owner_id.id}`}>
                   <Text>
-                    {user._id === data.owner_id
+                    {user.id === data.owner_id
                       ? 'Your Profile'
                       : `View ${
                           data.owner_id

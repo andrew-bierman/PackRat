@@ -1,4 +1,4 @@
-import {prisma} from "../../prisma/index";
+import { prisma } from '../prisma';
 
 /**
  * Validates the trip data before creating a new trip.
@@ -25,7 +25,8 @@ export const tripValidation = async ({
   owner_id,
   packs,
   is_public,
-}: any) => {
+  description,
+}) => {
   if (
     !name ||
     !duration ||
@@ -42,20 +43,23 @@ export const tripValidation = async ({
 
   const trip = await prisma.trip.create({
     data: {
+      description: description ?? '',
       name,
       duration,
       weather,
       start_date,
       end_date,
       destination,
-      owner_id,
       is_public,
       packs: {
         // Assuming 'packs' is an array of pack IDs related to the trip
         connect: packs.map((packId) => ({ id: packId })),
       },
+      owner: {
+        connect: { id: owner_id },
+      },
     },
-  } as any);
+  });
 
   return trip;
 };

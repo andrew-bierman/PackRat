@@ -1,15 +1,15 @@
-
-import { prisma } from "../../prisma/index";
+import { TemplateType } from '@prisma/client';
+import { prisma } from '../../prisma';
 
 /**
  * Edits a template.
  * @param {string} templateId - The ID of the template to edit.
- * @param {string} type - The new type of the template (optional).
+ * @param {TemplateType} type - The new type of the template (optional).
  * @param {boolean} isGlobalTemplate - The new value for isGlobalTemplate (optional).
  */
 export const editTemplateService = async (
   templateId: string,
-  type: string,
+  type: TemplateType,
   isGlobalTemplate: boolean,
 ) => {
   try {
@@ -18,13 +18,11 @@ export const editTemplateService = async (
         id: templateId,
       },
     });
-    
+
     if (!template) {
       throw new Error('Template not found');
     }
-    
-  
-   
+
     const updatedTemplate = await prisma.template.update({
       where: {
         id: templateId,
@@ -32,10 +30,12 @@ export const editTemplateService = async (
       data: {
         type: type || template.type,
         isGlobalTemplate:
-          isGlobalTemplate !== undefined ? isGlobalTemplate : template.isGlobalTemplate,
+          isGlobalTemplate !== undefined
+            ? isGlobalTemplate
+            : template.isGlobalTemplate,
       },
     });
-    
+
     return updatedTemplate;
   } catch (error) {
     throw new Error(error.toString());

@@ -5,7 +5,7 @@ import { Strategy as LocalStrategy } from 'passport-local';
 
 import bcrypt from 'bcrypt';
 
-import {prisma} from "../../prisma/index"
+import { prisma } from '../../prisma';
 
 // Passport Configuration
 // Local Strategy
@@ -21,8 +21,7 @@ passport.use(
           where: {
             email: email,
           },
-        } as any);
-        
+        });
 
         if (!user) {
           return done(null, false, { message: 'Incorrect email.' });
@@ -89,8 +88,7 @@ passport.deserializeUser(async (id, done) => {
       id: id,
     },
   });
-  
+
   // Assuming "done" is a callback function
   done(null, user);
-  
 });

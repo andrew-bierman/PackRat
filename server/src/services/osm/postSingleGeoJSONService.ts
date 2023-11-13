@@ -1,7 +1,6 @@
 import {
-  findOrCreateOne,
   ensureIdProperty,
-  ensureModelProperty,
+  processElement,
 } from '../../utils/osmFunctions/modelHandlers';
 import { isGeoJSONFormat } from '../../utils/osmFunctions/dataFormatters';
 
@@ -18,7 +17,6 @@ export const postSingleGeoJSONService = async (geojson) => {
   }
 
   const processedElement = ensureIdProperty(geojson);
-  const Model: any = ensureModelProperty(processedElement);
-  const newInstance = await findOrCreateOne(Model, processedElement);
+  const newInstance = await processElement(processedElement);
   return newInstance;
 };

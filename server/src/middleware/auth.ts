@@ -1,4 +1,3 @@
-import User, { type IUser } from '../models/userModel';
 import jwt, { type JwtPayload } from 'jsonwebtoken';
 import { JWT_SECRET } from '../config';
 import { type Request, type Response, type NextFunction } from 'express';
@@ -6,7 +5,8 @@ import { middleware } from '../trpc';
 import { TRPCError } from '@trpc/server';
 import { z, ZodError } from 'zod';
 import { TokenSchema } from './validators/authTokenValidator';
-import {prisma} from "../prisma/index"
+import { prisma } from '../prisma';
+import type { User } from '@prisma/client';
 
 declare global {
   namespace Express {
@@ -23,7 +23,7 @@ declare global {
 //     const token: any = ctx.input.header('Authorization')?.replace('Bearer ', '');
 //     const decoded: any = jwt.verify(token, JWT_SECRET ?? '');
 //     const user: any = await User.findOne({
-//       _id: decoded._id,
+//       id: decoded.id,
 //       token,
 //     });
 //     if (!user) throw new Error();
@@ -64,13 +64,13 @@ const verifyToken = (token: string): JwtPayload => {
  * Finds the user based on the verified token.
  * @param {JwtPayload} decoded - The decoded JWT payload.
  * @param {string} token - The JWT token.
- * @returns {Promise<IUser>} - The user associated with the token.
+ * @returns {Promise<User>} - The user associated with the token.
  * @throws {Error} If user is not found.
  */
-const findUser = async (decoded: JwtPayload, token: string): Promise<IUser> => {
-  const user:any = await prisma.user.findUnique({
+const findUser = async (decoded: JwtPayload, token: string): Promise<User> => {
+  const user: any = await prisma.user.findUnique({
     where: {
-      id: decoded._id,
+      id: decoded.id,
       token: token,
     },
   });

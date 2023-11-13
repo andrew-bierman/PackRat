@@ -32,7 +32,7 @@ import { formatNumber } from '~/utils/formatNumber';
 
 export default function Card({
   type,
-  _id,
+  id,
   owner,
   name,
   total_weight,
@@ -53,8 +53,8 @@ export default function Card({
 
   const isFavorite =
     !type === 'trip'
-      ? favorited_by.includes(user._id) ||
-        favorited_by.forEach((obj) => obj._id === user._id)
+      ? favorited_by.includes(user.id) ||
+        favorited_by.forEach((obj) => obj.id === user.id)
       : null;
 
   /**
@@ -64,8 +64,8 @@ export default function Card({
    */
   const handleAddToFavorite = () => {
     const data = {
-      packId: _id,
-      userId: user._id,
+      packId: id,
+      userId: user.id,
     };
 
     dispatch(addFavorite(data));
@@ -78,7 +78,7 @@ export default function Card({
    */
   const handleRemoveFromFavorite = () => {
     const favorite = favorites.find(
-      (favorite) => favorite.pack_id === _id && favorite.user_id === user._id,
+      (favorite) => favorite.pack_id === id && favorite.user_id === user.id,
     );
     if (favorite) {
       dispatch(removeFavorite(favorite.id));
@@ -128,7 +128,7 @@ export default function Card({
                   width: '100%',
                 }}
               >
-                <Link href={type === 'pack' ? '/pack/' + _id : '/trip/' + _id}>
+                <Link href={type === 'pack' ? '/pack/' + id : '/trip/' + id}>
                   <Text color={currentTheme.colors.textColor}>
                     {truncatedName}
                   </Text>
@@ -149,7 +149,7 @@ export default function Card({
                         size={24}
                         color={currentTheme.colors.cardIconColor}
                       />
-                      <DuplicateIcon link={`/pack/${_id}?copy=true`} />
+                      <DuplicateIcon link={`/pack/${id}?copy=true`} />
                     </Box>
                   )}
                   {type === 'trip' && (
@@ -262,7 +262,7 @@ export default function Card({
                         gap: 10,
                       }}
                     >
-                      {user?._id === owner_id ? null : (
+                      {user?.id === owner_id ? null : (
                         <TouchableOpacity onPress={handleAddToFavorite}>
                           <AntDesign
                             name="heart"

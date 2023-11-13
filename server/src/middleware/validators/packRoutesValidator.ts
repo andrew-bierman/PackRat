@@ -19,7 +19,7 @@ export const addPack = z.object({
 });
 
 export const editPack = z.object({
-  _id: JoiObjectId(),
+  id: JoiObjectId(),
   name: z.string().nonempty(),
   is_public: z.boolean(),
 });

@@ -4,7 +4,8 @@ import { responseHandler } from '../../helpers/responseHandler';
 import { editTemplateService } from '../../services/template/template.service';
 import { z } from 'zod';
 
-import {prisma} from "../../prisma/index"
+import { prisma } from '../../prisma';
+import { TemplateType } from '@prisma/client';
 
 /**
  * Edits a template.
@@ -29,7 +30,7 @@ export function editTemplateRoute() {
     .input(
       z.object({
         templateId: z.string(),
-        type: z.string(),
+        type: z.nativeEnum(TemplateType),
         isGlobalTemplate: z.boolean(),
       }),
     )

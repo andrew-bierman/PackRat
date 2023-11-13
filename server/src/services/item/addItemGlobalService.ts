@@ -1,7 +1,6 @@
-
-import { never } from 'zod';
 import { ItemCategoryEnum } from '../../utils/itemCategory';
-import { prisma } from "../../prisma/index";
+import { prisma } from '../../prisma';
+import { ItemCategoryName } from '@prisma/client';
 
 /**
  * Adds an item to the global service.
@@ -25,9 +24,9 @@ export const addItemGlobalService = async (
 
   switch (type) {
     case ItemCategoryEnum.FOOD: {
-      const category = await prisma.itemcategories.findFirst({
+      const category = await prisma.itemCategory.findFirst({
         where: {
-          name: ItemCategoryEnum.FOOD,
+          name: ItemCategoryName.Food,
         },
       });
 
@@ -41,9 +40,9 @@ export const addItemGlobalService = async (
             connect: { id: category.id },
           },
           global: true,
-        } as any,
+        },
       });
-  newItem = await prisma.item.findUnique({
+      newItem = await prisma.item.findUnique({
         where: {
           id: newItem.id,
         },
@@ -53,15 +52,15 @@ export const addItemGlobalService = async (
               name: true,
             },
           },
-        } as never,
+        },
       });
 
       break;
     }
     case ItemCategoryEnum.WATER: {
-      const category = await prisma.itemcategories.findFirst({
+      const category = await prisma.itemCategory.findFirst({
         where: {
-          name: ItemCategoryEnum.WATER,
+          name: ItemCategoryName.Water,
         },
       });
       newItem = await prisma.item.create({
@@ -70,12 +69,14 @@ export const addItemGlobalService = async (
           weight,
           quantity: 1,
           unit,
-          categoryId: category.id, // Assuming 'category' is the related model
+          category: {
+            connect: { id: category.id },
+          },
           global: true,
-        } as any,
+        },
       });
 
-    newItem=  await prisma.item.findUnique({
+      newItem = await prisma.item.findUnique({
         where: {
           id: newItem.id,
         },
@@ -85,16 +86,15 @@ export const addItemGlobalService = async (
               name: true,
             },
           },
-        } as never,
+        },
       });
-      
 
       break;
     }
     default: {
-      category =  await prisma.itemcategories.findFirst({
+      category = await prisma.itemCategory.findFirst({
         where: {
-          name: ItemCategoryEnum.ESSENTIALS,
+          name: ItemCategoryName.Essentials,
         },
       });
 
@@ -104,11 +104,15 @@ export const addItemGlobalService = async (
           weight,
           quantity,
           unit,
-          categoryId: category.id,
+          category: {
+            connect: {
+              id: category.id,
+            },
+          },
           global: true,
-        } as any,
+        },
       });
-      newItem =await prisma.item.findUnique({
+      newItem = await prisma.item.findUnique({
         where: {
           id: newItem.id,
         },
@@ -118,7 +122,7 @@ export const addItemGlobalService = async (
               name: true,
             },
           },
-        } as never,
+        },
       });
       break;
     }

@@ -1,6 +1,5 @@
-
 import { Configuration, OpenAIApi } from 'openai';
-import { prisma } from "../../prisma/index";
+import { prisma } from '../../prisma';
 
 /**
  * Retrieves AI response for a given user input in a conversation.
@@ -10,9 +9,15 @@ import { prisma } from "../../prisma/index";
  * @param {string} userInput - The user input in the conversation.
  * @returns {Object} - The AI response and the updated conversation.
  */
-export const getAIResponseService = async (userId, conversationId, userInput) => {
+export const getAIResponseService = async (
+  userId,
+  conversationId,
+  userInput,
+) => {
   if (!process.env.OPENAI_API_KEY) {
-    throw new Error('Failed to get response from AI. OPENAI_API_KEY is not set.');
+    throw new Error(
+      'Failed to get response from AI. OPENAI_API_KEY is not set.',
+    );
   }
 
   const configuration = new Configuration({
@@ -54,7 +59,7 @@ export const getAIResponseService = async (userId, conversationId, userInput) =>
   const response = await openai.createChatCompletion({
     model: 'gpt-3.5-turbo',
     messages,
-  }as any);
+  } as any);
 
   const aiResponse = response.data.choices[0].message.content.trim();
   conversationHistory += `\n${userInput}\nAI: ${aiResponse}`;
@@ -71,7 +76,7 @@ export const getAIResponseService = async (userId, conversationId, userInput) =>
       data: {
         userId,
         history: conversationHistory,
-      } as any,
+      },
     });
   }
 

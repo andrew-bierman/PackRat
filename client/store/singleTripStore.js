@@ -12,7 +12,7 @@ import { api } from '../constants/api';
 import { trpc } from '../trpc';
 
 const singleTripAdapter = createEntityAdapter({
-  selectId: (singleTrip) => singleTrip._id,
+  selectId: (singleTrip) => singleTrip.id,
 });
 
 const initialState = singleTripAdapter.getInitialState({
@@ -42,8 +42,8 @@ const singleTripSlice = createSlice({
       })
       .addCase(fetchSingleTrip.fulfilled, (state, action) => {
         console.log('fetchSingleTrip.fulfilled', action.payload);
-        singleTripAdapter.setAll(state.singleTrip, action.payload);
-        state.singleTrip = action.payload;
+        singleTripAdapter.setAll(state, {singleTrip: action.payload});
+        state.singleTrip = {...action.payload};
         state.isLoading = false;
         state.error = null;
       })

@@ -1,4 +1,4 @@
-import { prisma } from "../../prisma/index";
+import { prisma } from '../../prisma';
 
 /**
  * Finds a user by their email address.
@@ -12,7 +12,7 @@ export async function findUserByEmail(email: string): Promise<any> {
       where: {
         email: email.toLowerCase(),
       },
-    } as any);
+    });
 
     if (user) {
       return true;

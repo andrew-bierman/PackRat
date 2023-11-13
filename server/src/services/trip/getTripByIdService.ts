@@ -1,4 +1,4 @@
-import { prisma } from "../../prisma/index";
+import { prisma } from '../../prisma';
 
 /**
  * Retrieves a trip by its ID and returns the trip details.
@@ -9,7 +9,7 @@ export const getTripByIdService = async (tripId: string): Promise<object> => {
   try {
     const trip = await prisma.trip.findUnique({
       where: { id: tripId },
-      include: { owner: true }, // Assuming 'owner_id' is a foreign key to the 'User' model
+      include: { owner: true, geojson: true }, // Assuming 'owner_id' is a foreign key to the 'User' model
     });
 
     if (!trip) {
@@ -32,7 +32,5 @@ export const getTripByIdService = async (tripId: string): Promise<object> => {
   } catch (error) {
     console.error(error);
     throw new Error('Trip cannot be found');
-  } finally {
-    await prisma.$disconnect(); // Disconnect from the Prisma client
   }
 };

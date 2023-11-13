@@ -3,12 +3,11 @@
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
 
-
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { sendWelcomeEmail, resetEmail } from '../../utils/accountEmail';
-import { prisma } from "../../prisma/index";
-import { generateAuthToken } from '../../utils/prismaHelpers/user';
+import { prisma } from '../../prisma';
+import { User } from '../../prisma/methods';
 
 import {
   GOOGLE_CLIENT_ID,
@@ -42,7 +41,7 @@ passport.use(
           where: {
             email: email,
           },
-        } as any);
+        });
         if (!user) {
           return done(null, false, { message: 'Incorrect email.' });
         }
@@ -86,13 +85,13 @@ export const signInGoogle = async (req, res) => {
         email: email,
         googleId: googleId,
       },
-    } as any);
+    });
     if (!alreadyGoogleSignin) {
-      const isLocalLogin= await prisma.user.findUnique({
+      const isLocalLogin = await prisma.user.findUnique({
         where: {
           email: email,
         },
-      } as any);
+      });
 
       if (isLocalLogin) {
         throw new Error('Already user registered on that email address');
@@ -107,10 +106,11 @@ export const signInGoogle = async (req, res) => {
           password: randomPassword,
           googleId,
           username,
-        } as any,
+        },
       });
-      
-      await generateAuthToken(user);
+
+      const userWithMethods = User(user);
+      await userWithMethods.generateAuthToken();
 
       sendWelcomeEmail(user.email, user.name);
 
@@ -125,16 +125,14 @@ export const signInGoogle = async (req, res) => {
       await prisma.user.update({
         where: {
           email: alreadyGoogleSignin.email,
-         
         },
         data: {
-          googleId:googleId,
+          googleId: googleId,
         },
-      } as any);
-      
+      });
 
-
-      await generateAuthToken(alreadyGoogleSignin);
+      const userWithMethods = User(alreadyGoogleSignin);
+      await userWithMethods.generateAuthToken();
 
       res.locals.data = { user: alreadyGoogleSignin };
       responseHandler(res);
@@ -150,17 +148,17 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser((id, done) => {
   prisma.user
-  .findUnique({
-    where: {
-      id: id,
-    },
-  })
-  .then((user) => {
-    done(null, user);
-  })
-  .catch((err) => {
-    done(err, null);
-  });
+    .findUnique({
+      where: {
+        id: id,
+      },
+    })
+    .then((user) => {
+      done(null, user);
+    })
+    .catch((err) => {
+      done(err, null);
+    });
 });
 
 export function googleSigninRoute() {
@@ -181,29 +179,31 @@ export function googleSigninRoute() {
           email: email,
           googleId: googleId,
         },
-      } as any);
+      });
       if (!alreadyGoogleSignin) {
         const isLocalLogin = await prisma.user.findUnique({
           where: {
             email: email,
           },
-        } as any);
+        });
 
         if (isLocalLogin) {
           throw new Error('Already user registered on that email address');
         }
         const randomPassword = utilsService.randomPasswordGenerator(8);
         // const randomPassword = '1234abcdefg5678';
-        
-        const user=await prisma.user.create({
+
+        const user = await prisma.user.create({
           data: {
             email,
             name,
             password: randomPassword,
             googleId,
-          }as any,
+          },
         });
-        await generateAuthToken(user);
+
+        const userWithMethods = User(user);
+        await userWithMethods.generateAuthToken();
 
         sendWelcomeEmail(user.email, user.name);
         return user;
@@ -213,8 +213,9 @@ export function googleSigninRoute() {
             utilsService.randomPasswordGenerator(8);
         }
 
+        const userWithMethods = User(alreadyGoogleSignin);
+        await userWithMethods.generateAuthToken();
 
-        await generateAuthToken(alreadyGoogleSignin);
         await prisma.user.update({
           where: {
             email: email,
@@ -223,8 +224,7 @@ export function googleSigninRoute() {
           data: {
             googleId: googleId,
           },
-        } as any);
-
+        });
 
         return { user: alreadyGoogleSignin };
       }

@@ -6,10 +6,10 @@ import * as validator from '../../middleware/validators/index';
 
 export const editItem = async (req, res, next) => {
   try {
-    const { _id, name, weight, unit, quantity, type } = req.body;
+    const { id, name, weight, unit, quantity, type } = req.body;
 
     const newItem = await editItemService(
-      _id,
+      id,
       name,
       weight,
       unit,
@@ -26,7 +26,7 @@ export const editItem = async (req, res, next) => {
 
 export function editItemRoute() {
   return publicProcedure.input(validator.editItem).mutation(async (opts) => {
-    const { _id, name, weight, unit, quantity, type } = opts.input;
-    return await editItemService(_id, name, weight, unit, quantity, type);
+    const { id, name, weight, unit, quantity, type } = opts.input;
+    return await editItemService(id, name, weight, unit, quantity, type);
   });
 }

@@ -72,7 +72,7 @@ const TableItem = ({
   refetch,
   setRefetch = () => {},
 }) => {
-  const { name, weight, quantity, unit, _id } = itemData;
+  const { name, weight, quantity, unit, id } = itemData;
   const styles = useCustomStyles(loadStyles);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   /**
@@ -101,7 +101,7 @@ const TableItem = ({
       <PackOptions
         Edit={
           <EditPackItemModal
-            packId={_id}
+            packId={id}
             initialData={itemData}
             currentPack={currentPack}
             refetch={refetch}
@@ -113,7 +113,7 @@ const TableItem = ({
         }
         Delete={
           <DeletePackItemModal
-            itemId={_id}
+            itemId={id}
             pack={currentPack}
             refetch={refetch}
             setRefetch={setRefetch}
@@ -121,8 +121,8 @@ const TableItem = ({
         }
         Ignore={
           <IgnoreItemCheckbox
-            itemId={_id}
-            isChecked={checkedItems.includes(_id)}
+            itemId={id}
+            isChecked={checkedItems.includes(id)}
             handleCheckboxChange={handleCheckboxChange}
           />
         }
@@ -135,7 +135,7 @@ const TableItem = ({
       `${formatNumber(weight)} ${unit}`,
       quantity,
       <EditPackItemModal
-        packId={_id}
+        packId={id}
         initialData={itemData}
         currentPack={currentPack}
         refetch={refetch}
@@ -145,21 +145,21 @@ const TableItem = ({
         closeModalHandler={closeModalHandler}
       />,
       <DeletePackItemModal
-        itemId={_id}
+        itemId={id}
         pack={currentPack}
         refetch={refetch}
         setRefetch={setRefetch}
       />,
       <IgnoreItemCheckbox
-        itemId={_id}
-        isChecked={checkedItems.includes(_id)}
+        itemId={id}
+        isChecked={checkedItems.includes(id)}
         handleCheckboxChange={handleCheckboxChange}
       />,
     ];
   }
 
   /*
-  * this _id is passed as pack id but it is a item id which is confusing
+  * this id is passed as pack id but it is a item id which is confusing
   Todo need to change the name for this passing argument and remaining functions which are getting it
    */
 
@@ -226,14 +226,14 @@ export const TableContainer = ({
   const styles = useCustomStyles(loadStyles);
   let ids = [];
   if (currentPack?.items) {
-    ids = copy ? currentPack.items.map((item) => item._id) : [];
+    ids = copy ? currentPack.items.map((item) => item.id) : [];
   }
   const [checkedItems, setCheckedItems] = useState([...ids]);
 
   const handleDuplicate = () => {
     const data = {
-      packId: currentPack._id,
-      ownerId: user._id,
+      packId: currentPack.id,
+      ownerId: user.id,
       items: checkedItems,
     };
     dispatch(duplicatePackItem(data));
@@ -255,7 +255,7 @@ export const TableContainer = ({
   Todo better to move this all inside a utility function and pass them variables
   */
   data
-    ?.filter((item) => !checkedItems.includes(item._id))
+    ?.filter((item) => !checkedItems.includes(item.id))
     .forEach((item) => {
       const categoryName = item.category ? item.category.name : 'Undefined';
       const itemWeight = Number(item.weight) || 0; // ensure it's a number
@@ -361,7 +361,7 @@ export const TableContainer = ({
                   <CategoryRow category={category} />
                   <FlatList
                     data={items}
-                    keyExtractor={(item, index) => item._id}
+                    keyExtractor={(item, index) => item.id}
                     renderItem={({ item }) => (
                       <TableItem
                         itemData={item}

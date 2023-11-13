@@ -1,4 +1,4 @@
-import { prisma } from "../../prisma/index";
+import { prisma } from '../../prisma';
 
 /**
  * Retrieves globally available items.
@@ -29,7 +29,7 @@ export const getItemsGloballyService = async (reqlimit, reqpage) => {
           name: true,
         },
       },
-    } as never,
+    },
     skip: startIndex,
     take: limit,
     orderBy: {

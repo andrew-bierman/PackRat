@@ -60,7 +60,7 @@ export default function Login() {
   const user = useSelector((state) => state.auth.user);
   const error = useSelector((state) => state.auth.error);
 
-  // if (user?._id) {
+  // if (user?.id) {
   //   InformUser({
   //     title: 'Login sucessfully',
   //     placement: 'top-right',

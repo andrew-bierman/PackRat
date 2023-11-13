@@ -1,4 +1,5 @@
-import { prisma } from "../../prisma/index";
+import { User } from '../../prisma/methods';
+import { prisma } from '../../prisma';
 
 export async function checkCodeService({ email, code }: any) {
   const user = await prisma.user.findFirst({
@@ -7,6 +8,6 @@ export async function checkCodeService({ email, code }: any) {
       code,
     },
   });
-  
-  return user; // Assuming you want to return the user if found
+
+  return User(user)?.toJSON(); // Assuming you want to return the user if found
 }

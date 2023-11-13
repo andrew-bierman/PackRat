@@ -1,4 +1,4 @@
-import {prisma} from "src/prisma"
+import { prisma } from '../prisma';
 
 /**
  * Validates the item data and creates a new item.
@@ -18,7 +18,7 @@ export const itemValidation = async ({
   quantity,
   unit,
   packId,
-}: any) => {
+}) => {
   if (!name || !weight || !quantity || !unit || !packId) {
     throw new Error('All fields must be filled');
   }
@@ -29,9 +29,11 @@ export const itemValidation = async ({
       weight,
       quantity,
       unit,
-      packId,
+      packs: {
+        connect: { id: packId },
+      },
     },
-  } as any);
+  });
 
   return item;
 };

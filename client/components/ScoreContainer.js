@@ -160,7 +160,7 @@ export default function ScoreContainer({ type, data, isOwner }) {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
-  const id = data._id;
+  const id = data.id;
   const totalScore = data.totalScore;
   const grades = data.grades;
   const scores = data.scores;

@@ -1,4 +1,4 @@
-import { prisma } from "../../prisma/index";
+import { prisma } from '../../prisma';
 /**
  * Adds or removes a pack from a user's favorites list.
  * @param {string} packId - The ID of the pack.
@@ -26,12 +26,12 @@ export const addToFavoriteService = async (
       select: {
         favorites: {
           where: {
-            packId, 
+            id: packId,
           },
         },
       },
-    } as any);
- 
+    });
+
     if (isFavorite) {
       await prisma.user.update({
         where: { id: userId },
@@ -40,7 +40,7 @@ export const addToFavoriteService = async (
             disconnect: { id: packId },
           },
         },
-      } as any);
+      });
 
       await prisma.pack.update({
         where: { id: packId },
@@ -49,7 +49,7 @@ export const addToFavoriteService = async (
             disconnect: { id: userId },
           },
         },
-      } as any);
+      });
     } else {
       await prisma.user.update({
         where: { id: userId },
@@ -58,7 +58,7 @@ export const addToFavoriteService = async (
             connect: { id: packId },
           },
         },
-      } as any);
+      });
 
       await prisma.pack.update({
         where: { id: packId },
@@ -67,14 +67,14 @@ export const addToFavoriteService = async (
             connect: { id: userId },
           },
         },
-      }as any);
+      });
     }
 
     const updatedUser = await prisma.user.findUnique({
       where: { id: userId },
       select: {
         id: true,
-        username: true, 
+        username: true,
       },
     });
 
@@ -82,6 +82,6 @@ export const addToFavoriteService = async (
   } catch (error) {
     throw new Error(error.message);
   } finally {
-console.log("done")
+    console.log('done');
   }
 };
