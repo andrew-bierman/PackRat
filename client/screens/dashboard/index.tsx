@@ -9,35 +9,34 @@ import FeedPreview from '../../components/dashboard/FeedPreview';
 import Section from '../../components/dashboard/Section';
 import SectionHeader from '../../components/dashboard/SectionHeader';
 import useCustomStyles from '~/hooks/useCustomStyles';
+
+//tamagui
+import { RScrollView, YStack, RStack} from '@packrat/ui';
+
 const Dashboard = () => {
   const styles = useCustomStyles(loadStyles);
-
+  
   return (
     <>
-      <ScrollView contentContainerStyle={styles.content} horizontal={false}>
-        <VStack
-          style={[
-            styles.container,
-            Platform.OS === 'web' ? { minHeight: '100vh' } : null,
-          ]}
-        >
-          <Box>
-            <HeroBanner style={styles.cardContainer} />
-
-            <Section>
-              <SectionHeader
-                iconName="add-circle-outline"
-                text="Quick Actions"
-              />
-              <QuickActionsSection />
-            </Section>
-            <Section>
-              <SectionHeader iconName="newspaper-outline" text="Feed" />
-              <FeedPreview />
-            </Section>
-          </Box>
-        </VStack>
-      </ScrollView>
+      <RScrollView contentContainerStyle={styles.content} horizontal={false}>
+        <YStack f={1} fg={1} w='100%' mih={Platform.OS === 'web' ? '100vh' : null}>
+            <RStack>
+              <HeroBanner style={styles.cardContainer} />
+              
+              <Section>
+                <SectionHeader
+                  iconName="add-circle-outline"
+                  text="Quick Actions"
+                />
+                <QuickActionsSection />
+              </Section>
+              <Section>
+                <SectionHeader iconName="newspaper-outline" text="Feed" />
+                <FeedPreview />
+              </Section>
+            </RStack>
+        </YStack>
+      </RScrollView>
     </>
   );
 };

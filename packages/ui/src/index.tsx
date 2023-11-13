@@ -7,6 +7,8 @@ import RButton from './RButton';
 import RImage from './RImage';
 import RScrollView from './RScrollview';
 import TSkeleton from './Skeleton';
+import XStack from './XStack';
+import YStack from './YStack';
 
 export {
   RStack,
@@ -18,6 +20,8 @@ export {
   RImage,
   RScrollView,
   TSkeleton,
+  XStack,
+  YStack
 };
 
 export { config } from './tamagui.config'
@@ -35,6 +39,8 @@ export * from './RButton';
 export * from './RImage';
 export * from './RScrollview';
 export * from './Skeleton';
+export * from './XStack';
+export * from './YStack';
 
 // Future components
 // export * from './RCheckbox';
