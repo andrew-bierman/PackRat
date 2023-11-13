@@ -20,7 +20,8 @@
     "prisma:format": "npx prisma format --schema=src/prisma/schema.prisma",
     "prisma:generate": "npx prisma generate --schema=src/prisma/schema.prisma",
     "prisma:validate": "npx prisma validate --schema=src/prisma/schema.prisma",
-    "prisma:pull": "npx prisma db pull --schema=src/prisma/schema.prisma"
+    "prisma:pull": "npx prisma db pull --schema=src/prisma/schema.prisma",
+    "wrangler:dev": "wrangler dev src/index.ts"
   },
   "author": "Andrew Bierman",
   "license": "ISC",
@@ -63,6 +64,7 @@
     "i": "^0.3.7",
     "joi": "^17.9.2",
     "jsonwebtoken": "^9.0.1",
+    "miniflare": "^3.20231025.1",
     "mock-aws-s3": "^4.0.2",
     "mongoose": "^7.4.0",
     "mongoose-autopopulate": "^1.0.1",
@@ -86,6 +88,7 @@
     "typescript": "^5.2.2",
     "uuid": "^9.0.0",
     "validator": "^13.9.0",
+    "wrangler": "^3.15.0",
     "zod": "^3.22.2"
   },
   "devDependencies": {
