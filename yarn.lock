@@ -1972,8 +1972,8 @@ __metadata:
   linkType: hard
 
 "@eslint/eslintrc@npm:^2.1.2":
-  version: 2.1.2
-  resolution: "@eslint/eslintrc@npm:2.1.2"
+  version: 2.1.3
+  resolution: "@eslint/eslintrc@npm:2.1.3"
   dependencies:
     ajv: "npm:^6.12.4"
     debug: "npm:^4.3.2"
@@ -1984,7 +1984,7 @@ __metadata:
     js-yaml: "npm:^4.1.0"
     minimatch: "npm:^3.1.2"
     strip-json-comments: "npm:^3.1.1"
-  checksum: fa25638f2666cac6810f98ee7d0f4b912f191806467c1b40d72bac759fffef0b3357f12a1869817286837b258e4de3517e0c7408520e156ca860fc53a1fbaed9
+  checksum: 77b70a89232fe702c2f765b5b92970f5e4224b55363b923238b996c66fcd991504f40d3663c0543ae17d6c5049ab9b07ab90b65d7601e6f25e8bcd4caf69ac75
   languageName: node
   linkType: hard
 
@@ -4262,6 +4262,34 @@ __metadata:
     picocolors: "npm:^1.0.0"
     tslib: "npm:^2.6.0"
   checksum: f0b0b305a83bd65fac5637d28ad3e33f19194043e03ceef6b4e13d260bfa2678b73df76dc56ed906469ffe0494d4bd214e6b92ca80684f38547982edf982dd15
+  languageName: node
+  linkType: hard
+
+"@prisma/client@npm:^5.5.2":
+  version: 5.5.2
+  resolution: "@prisma/client@npm:5.5.2"
+  dependencies:
+    "@prisma/engines-version": "npm:5.5.1-1.aebc046ce8b88ebbcb45efe31cbe7d06fd6abc0a"
+  peerDependencies:
+    prisma: "*"
+  peerDependenciesMeta:
+    prisma:
+      optional: true
+  checksum: 652a3a6c1cc5599e804b15bdfaba3a059386c3437e99749974bfb561976dbac01d4b4a3c2360ff1fb8b791aa5c2960a75d90a32215d31e9c1073089964ef01f4
+  languageName: node
+  linkType: hard
+
+"@prisma/engines-version@npm:5.5.1-1.aebc046ce8b88ebbcb45efe31cbe7d06fd6abc0a":
+  version: 5.5.1-1.aebc046ce8b88ebbcb45efe31cbe7d06fd6abc0a
+  resolution: "@prisma/engines-version@npm:5.5.1-1.aebc046ce8b88ebbcb45efe31cbe7d06fd6abc0a"
+  checksum: 4144ba38bf1cde88e447329b927ceb18ccd2248b2072b46977ac18eb32bb41621ff4c46805466a6e7ad16858d713e13bafb018d0307ab49c9bb59b09c51c91b9
+  languageName: node
+  linkType: hard
+
+"@prisma/engines@npm:5.5.2":
+  version: 5.5.2
+  resolution: "@prisma/engines@npm:5.5.2"
+  checksum: 3654c295e39cbb0f5459529140cd1ebedb3832f31221b7505759627885f7763e8430d9fbaed61e988da6e03b6a4905c2f943b4ba4f7cfa4ec829e79a12ff30aa
   languageName: node
   linkType: hard
 
@@ -9348,9 +9376,9 @@ __metadata:
   linkType: hard
 
 "async@npm:^3.2.2":
-  version: 3.2.4
-  resolution: "async@npm:3.2.4"
-  checksum: bebb5dc2258c45b83fa1d3be179ae0eb468e1646a62d443c8d60a45e84041b28fccebe1e2d1f234bfc3dcad44e73dcdbf4ba63d98327c9f6556e3dbd47c2ae8b
+  version: 3.2.5
+  resolution: "async@npm:3.2.5"
+  checksum: 323c3615c3f0ab1ac25a6f953296bc0ac3213d5e0f1c0debdb12964e55963af288d570293c11e44f7967af58c06d2a88d0ea588c86ec0fbf62fa98037f604a0f
   languageName: node
   linkType: hard
 
@@ -21171,6 +21199,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"prisma@npm:^5.5.2":
+  version: 5.5.2
+  resolution: "prisma@npm:5.5.2"
+  dependencies:
+    "@prisma/engines": "npm:5.5.2"
+  bin:
+    prisma: build/index.js
+  checksum: 7c2d7d57e0868c69229b466af8cdedaa7270a93fe69de2413c76a7b0a095e751b47a952fc7bec2e7090dc45aa7c477fda0495d582939f32c07fef99d48382400
+  languageName: node
+  linkType: hard
+
 "proc-log@npm:^3.0.0":
   version: 3.0.0
   resolution: "proc-log@npm:3.0.0"
@@ -23159,6 +23198,7 @@ __metadata:
     "@hono/trpc-server": "npm:^0.1.0"
     "@openapitools/openapi-generator-cli": "npm:^2.7.0"
     "@packrat/validations": "npm:*"
+    "@prisma/client": "npm:^5.5.2"
     "@sendgrid/mail": "npm:^7.7.0"
     "@trpc/client": "npm:^10.38.5"
     "@trpc/server": "npm:^10.38.5"
@@ -23219,6 +23259,7 @@ __metadata:
     passport-local: "npm:^1.0.0"
     piscina: "npm:^4.0.0"
     prettier: "npm:^3.0.2"
+    prisma: "npm:^5.5.2"
     superjson: "npm:^2.0.0"
     swagger-jsdoc: "npm:^6.2.8"
     swagger-ui-express: "npm:^4.6.3"

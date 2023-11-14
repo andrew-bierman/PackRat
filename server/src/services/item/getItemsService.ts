@@ -1,5 +1,4 @@
-import Item from '../../models/itemModel';
-
+import { prisma } from "../../prisma/index";
 /**
  * Retrieves items based on the given pack ID.
  *
@@ -7,7 +6,15 @@ import Item from '../../models/itemModel';
  * @return {Promise<Array<Object>>} An array of items.
  */
 export const getItemsService = async (packId) => {
-  const items = await Item.find({ packs: packId });
+  const items = await prisma.item.findMany({
+    where: {
+      packs: {
+        some: {
+          id: packId,
+        } ,
+      } as any,
+    },
+  });
 
   return items;
 };

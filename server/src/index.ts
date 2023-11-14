@@ -1,5 +1,6 @@
 import express, { type NextFunction } from 'express';
 import mongoose from 'mongoose';
+import bodyParser from "body-parser";
 import cors from 'cors';
 import { isCelebrateError, errors } from 'celebrate';
 import { MONGODB_URI } from './config';
@@ -14,10 +15,11 @@ import { limiter } from './helpers/limiter';
 import * as trpcExpress from '@trpc/server/adapters/express';
 import { type inferAsyncReturnType, initTRPC } from '@trpc/server';
 import { appRouter } from './routes/trpcRouter';
+import {prisma} from "./prisma/index"
 
 const app = express();
 
-// Apply security-related HTTP headers.
+// Apply security.
 // app.use(helmet({ crossOriginResourcePolicy: false }));
 
 // Apply gzip compression to improve response times.
@@ -36,7 +38,11 @@ if (corsOptions) {
 
 // Parse incoming JSON bodies. Limit set to prevent large payloads.
 app.use(express.json({ limit: '50mb' }));
-
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+app.use(express.urlencoded());
+app.use(bodyParser.json());
 // Register the main API routes.
 app.use(routes);
 
@@ -80,20 +86,24 @@ app.use(errors());
 app.use(errorHandler);
 
 // Attempting to connect to MongoDB.
-const connectionString = MONGODB_URI ?? '';
-mongoose
-  .connect(connectionString)
-  .then(() => {
-    console.log('MongoDB connected successfully.');
-  })
-  .catch((err) => {
-    console.error('Failed to connect to MongoDB:', err);
-  });
-
-// Determine the port from the environment or default to 3000 if none is provided.
 const port = process.env.PORT || 3000;
+const startServer = async () => {
+  try {
+   
 
-// Start the Express server.
-app.listen(port, () => {
-  console.log(`Server is running and listening on port ${port}.`);
-});
+    // Test the database connection
+    await prisma.$connect();
+    console.log('Connected to the database');
+
+  
+    app.listen(port, () => {
+      console.log(`Server is running on port ${port}`);
+    });
+  } catch (error) {
+    console.error('Error connecting to the database:', error);
+  }
+};
+
+startServer();
+
+

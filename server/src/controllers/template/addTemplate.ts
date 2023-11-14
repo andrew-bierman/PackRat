@@ -1,10 +1,11 @@
 import { publicProcedure } from '../../trpc';
 import { UserNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
-import User from '../../models/userModel';
+
 import { addTemplateService } from '../../services/template/template.service';
 import { z } from 'zod';
 
+import {prisma} from "../../prisma/index"
 /**
  * Adds a template to the database.
  * @param {Object} req - The request object.
@@ -14,7 +15,11 @@ import { z } from 'zod';
 export const addTemplate = async (req, res, next) => {
   const { type, templateId, isGlobalTemplate, createdBy } = req.body;
 
-  const user = await User.findById(createdBy);
+  const user = await prisma.user.findUnique({
+    where: {
+      id: createdBy,
+    },
+  });
 
   if (!user) {
     next(UserNotFoundError);
@@ -38,7 +43,11 @@ export function addTemplateRoute() {
     )
     .mutation(async (opts) => {
       const { type, templateId, isGlobalTemplate, createdBy } = opts.input;
-      const user = await User.findById(createdBy);
+      const user = await prisma.user.findUnique({
+        where: {
+          id: createdBy,
+        },
+      });
       if (!user) {
         throw new Error(UserNotFoundError.message);
       }

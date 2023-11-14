@@ -1,6 +1,4 @@
-import Item from '../../models/itemModel';
-import Pack from '../../models/packModel';
-import { ItemCategoryModel } from '../../models/itemCategory';
+import { prisma } from "../../prisma/index";
 import { ItemCategoryEnum } from '../../utils/itemCategory';
 
 /**
@@ -29,76 +27,116 @@ export const addItemService = async (
 
   switch (type) {
     case ItemCategoryEnum.FOOD: {
-      category = await ItemCategoryModel.findOne({
-        name: ItemCategoryEnum.FOOD,
+      category = await prisma.itemcategories.findFirst({
+        where: {
+          name: ItemCategoryEnum.FOOD,
+        },
       });
 
-      newItem = await Item.create({
-        name,
-        weight,
-        quantity,
-        unit,
-        packs: [packId],
-        category: category._id,
+      newItem = await prisma.item.create({
+        data: {
+          name,
+          weight,
+          quantity,
+          unit,
+          packs: {
+            connect: { id: packId },
+          },
+          category: {
+            connect: { id: category.id },
+          },
+        } as any,
       });
 
       break;
     }
     case ItemCategoryEnum.WATER: {
-      category = await ItemCategoryModel.findOne({
-        name: ItemCategoryEnum.WATER,
+      category = await prisma.itemcategories.findFirst({
+        where: {
+          name: ItemCategoryEnum.WATER,
+        },
       });
 
-      const existingWaterItem = await Item.findOne({
-        category: category._id,
-        packs: packId,
+      const existingWaterItem :any= await prisma.item.findFirst({
+        where: {
+          category: { id: category.id } as any,
+          packs: { some: { id: packId } } as any,
+        },
       });
 
       if (existingWaterItem) {
-        existingWaterItem.weight += Number(weight); // Ensure weight is treated as a number
-        await existingWaterItem.save();
-        newItem = existingWaterItem;
+        existingWaterItem.weight += Number(weight);
+        newItem = await prisma.item.update({
+          where: { id: existingWaterItem.id },
+          data: {
+            weight: existingWaterItem.weight,
+          },
+        });
       } else {
-        newItem = await Item.create({
-          name,
-          weight,
-          quantity: 1,
-          unit,
-          packs: [packId],
-          category: category._id,
+        newItem = await prisma.item.create({
+          data: {
+            name,
+            weight,
+            quantity: 1,
+            unit,
+            packs: {
+              connect: { id: packId },
+            },
+            category: {
+              connect: { id: category.id },
+            },
+          } as any,
         });
       }
 
       break;
     }
     default: {
-      category = await ItemCategoryModel.findOne({
-        name: ItemCategoryEnum.ESSENTIALS,
+      category = await prisma.itemcategories.findFirst({
+        where: {
+          name: ItemCategoryEnum.ESSENTIALS,
+        },
       });
 
-      newItem = await Item.create({
-        name,
-        weight,
-        quantity,
-        unit,
-        packs: [packId],
-        category: category._id,
+      newItem = await prisma.item.create({
+        data: {
+          name,
+          weight,
+          quantity,
+          unit,
+          packs: {
+            connect: { id: packId },
+          },
+          category: {
+            connect: { id: category.id },
+          },
+        } as any,
       });
 
       break;
     }
   }
-  await Pack.updateOne({ _id: packId }, { $addToSet: { items: newItem._id } });
 
-  const updatedItem = await Item.findByIdAndUpdate(
-    newItem._id,
-    {
-      $addToSet: {
-        owners: ownerId,
-      },
+  await prisma.pack.update({
+    where: { id: packId },
+    data: {
+      items: {
+        connect: { id: newItem.id },
+      } as any,
     },
-    { new: true },
-  ).populate('category');
+  });
+
+  const updatedItem = await prisma.item.update({
+    where: { id: newItem.id },
+    data: {
+      owners: {
+        connect: { id: ownerId },
+      } as any,
+    },
+    include: {
+      category: true,
+    } as never,
+  });
 
   return { newItem: updatedItem, packId };
 };

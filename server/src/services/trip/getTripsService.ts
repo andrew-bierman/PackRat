@@ -1,5 +1,4 @@
-import Trip from '../../models/tripModel';
-
+import { prisma } from "../../prisma/index";
 /**
  * Retrieves trips belonging to a specific owner.
  * @param {string} ownerId - The ID of the owner.
@@ -7,7 +6,12 @@ import Trip from '../../models/tripModel';
  */
 export const getTripsService = async (ownerId: string): Promise<object[]> => {
   try {
-    const trips = await Trip.find({ owner_id: ownerId }).populate('packs');
+    const trips = await prisma.trip.findMany({
+      where: { owner_id: ownerId },
+      include: {
+        packs: true,
+      },
+    });
 
     return trips;
   } catch (error) {

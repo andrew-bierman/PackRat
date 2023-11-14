@@ -1,10 +1,8 @@
-import Item from '../../models/itemModel';
-import { ItemCategoryModel } from '../../models/itemCategory';
-
+import { prisma } from "../../prisma/index";
 /**
  * Edit an item in the service.
  *
- * @param {_id} _id - the ID of the item to be edited
+ * @param {string} _id - the ID of the item to be edited
  * @param {string} name - the new name of the item
  * @param {number} weight - the new weight of the item
  * @param {string} unit - the new unit of the item
@@ -20,23 +18,29 @@ export const editItemService = async (
   quantity,
   type,
 ) => {
-  const category = await ItemCategoryModel.findOne({
-    name: type,
+  const category = await prisma.itemcategories.findFirst({
+    where: {
+      name: type,
+    },
   });
 
-  const newItem = await Item.findOneAndUpdate(
-    { _id },
-    {
+  const newItem = await prisma.item.update({
+    where: {
+      id: _id,
+    },
+    data: {
       name,
       weight,
       unit,
       quantity,
-      category: category.id,
+      category: {
+        connect: { id: category.id },
+      },
     },
-    {
-      returnOriginal: false,
-    },
-  ).populate('category', 'name');
+    include: {
+      category: true,
+    } as never,
+  });
 
   return newItem;
 };

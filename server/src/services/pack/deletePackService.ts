@@ -1,5 +1,4 @@
-import Pack from '../../models/packModel';
-
+import { prisma } from "../../prisma/index";
 /**
  * Deletes a pack by its ID.
  *
@@ -7,7 +6,12 @@ import Pack from '../../models/packModel';
  * @return {Object} - An object containing a message indicating the success of the deletion.
  */
 export const deletePackService = async (packId) => {
-  await Pack.findOneAndDelete({ _id: packId });
+  const pack = await prisma.pack.delete({
+    where: {
+      id: packId, // Replace 'id' with the actual primary key field in your model
+    },
+  });
+  
 
   return { message: 'pack was deleted successfully' };
 };

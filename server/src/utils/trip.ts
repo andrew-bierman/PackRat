@@ -1,4 +1,4 @@
-import Trip from '../models/tripModel';
+import {prisma} from "../../prisma/index";
 
 /**
  * Validates the trip data before creating a new trip.
@@ -40,17 +40,22 @@ export const tripValidation = async ({
     throw new Error('All fields must be filled');
   }
 
-  const trip = await Trip.create({
-    name,
-    duration,
-    weather,
-    start_date,
-    end_date,
-    destination,
-    owner_id,
-    packs,
-    is_public,
-  });
+  const trip = await prisma.trip.create({
+    data: {
+      name,
+      duration,
+      weather,
+      start_date,
+      end_date,
+      destination,
+      owner_id,
+      is_public,
+      packs: {
+        // Assuming 'packs' is an array of pack IDs related to the trip
+        connect: packs.map((packId) => ({ id: packId })),
+      },
+    },
+  } as any);
 
   return trip;
 };

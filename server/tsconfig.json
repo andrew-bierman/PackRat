@@ -1,7 +1,9 @@
 {
   "compilerOptions": {
     "target": "ESNext",
+    "noImplicitAny": false,
     "module": "CommonJS",
+ "noEmitOnError": false,
     "lib": [
       "es6",
       "DOM"
@@ -19,7 +21,8 @@
     "baseUrl": ".",
     "paths":{
       "@trpc":["trpc"],
-      "trpc":["../src/routes/index"]
+      "trpc":["../src/routes/index"],
+      "src":["../src"]
     },
     "declaration": true
   },

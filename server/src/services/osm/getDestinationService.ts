@@ -1,6 +1,4 @@
-import Way from '../../models/osm/wayModel';
-import Node from '../../models/osm/nodeModel';
-
+import { prisma } from "../../prisma/index";
 /**
  * Retrieves the destination service based on the given ID.
  *
@@ -8,12 +6,13 @@ import Node from '../../models/osm/nodeModel';
  * @return {Promise<any>} A promise that resolves to the destination service.
  */
 export const getDestinationService = async (id) => {
-  let destination = await Way.findById(id);
+  const way = await prisma.way.findUnique({ where: { id } });
 
-  // If not found in Way, search in Node
-  if (!destination) {
-    destination = await Node.findById(id);
+  if (way) {
+    return way;
   }
 
-  return destination;
+  const node = await prisma.node.findUnique({ where: { id } });
+
+  return node;
 };

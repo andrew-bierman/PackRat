@@ -1,6 +1,4 @@
-import User from '../../models/userModel';
-import Pack from '../../models/packModel';
-
+import { prisma } from "../../prisma/index";
 /**
  * Adds or removes a pack from the user's favorites list.
  *
@@ -9,16 +7,65 @@ import Pack from '../../models/packModel';
  * @return {Promise<void>} A promise that resolves when the operation is complete.
  */
 export const addToFavoriteService = async (packId, userId) => {
-  const exists = await User.find(
-    { favorites: { $in: [packId] } },
-    { _id: userId },
-  );
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+  });
 
-  if (exists.length > 0) {
-    await User.updateOne({ _id: userId }, { $pull: { favorites: packId } });
-    await Pack.updateOne({ _id: packId }, { $pull: { favorited_by: userId } });
+  if (user.favorites.includes(packId)) {
+    // If the pack is in the user's favorites, remove it.
+    await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        favorites: {
+          disconnect: {
+            id: packId,
+          } ,
+        } as any,
+      },
+    });
+
+    await prisma.pack.update({
+      where: {
+        id: packId,
+      },
+      data: {
+        favorited_by: {
+          disconnect: {
+            id: userId,
+          },
+        } as any,
+      },
+    });
   } else {
-    await User.updateOne({ _id: userId }, { $push: { favorites: packId } });
-    await Pack.updateOne({ _id: packId }, { $push: { favorited_by: userId } });
+    // If the pack is not in the user's favorites, add it.
+    await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        favorites: {
+          connect: {
+            id: packId,
+          },
+        } as any,
+      },
+    });
+
+    await prisma.pack.update({
+      where: {
+        id: packId,
+      },
+      data: {
+        favorited_by: {
+          connect: {
+            id: userId,
+          },
+        } as any,
+      },
+    });
   }
 };
