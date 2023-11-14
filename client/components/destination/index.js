@@ -140,7 +140,7 @@ export const DestinationPage = () => {
   const [photonDetails, setPhotonDetails] = useState(null)
   const [destination, setDestination] = useState(null)
 
-  const { destinationId, id, type, lat, lon } = useSearchParams();
+  const { destinationId, id, type, lat, lon } = useGlobalSearchParams();
   // const photonDetailsStore = useSelector(
   //   (state) => state.destination.photonDetails,
   // );
