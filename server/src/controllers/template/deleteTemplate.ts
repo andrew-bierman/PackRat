@@ -3,6 +3,8 @@ import { TemplateNotFoundError } from '../../helpers/errors';
 import Template from '../../models/templateModel';
 import { z } from 'zod';
 
+import {prisma} from "../../prisma/index"
+
 /**
  * Deletes a template.
  * @param {Object} req - The request object.
@@ -11,11 +13,18 @@ import { z } from 'zod';
  */
 export const deleteTemplate = async (req, res, next) => {
   const { templateId } = req.params;
-
-  const template: any = await Template.findById(templateId);
+  const template = await prisma.template.findUnique({
+    where: {
+      id: templateId,
+    },
+  });
 
   if (template) {
-    await template.remove();
+    await prisma.template.delete({
+      where: {
+        id: templateId,
+      },
+    });
     res.json({ message: 'Template removed' });
   } else {
     next(TemplateNotFoundError);
@@ -27,9 +36,17 @@ export function deleteTemplateRoute() {
     .input(z.object({ templateId: z.string() }))
     .mutation(async (opts) => {
       const { templateId } = opts.input;
-      const template: any = await Template.findById(templateId);
+      const template = await prisma.template.findUnique({
+        where: {
+          id: templateId,
+        },
+      });
       if (template) {
-        await template.remove();
+        await prisma.template.delete({
+          where: {
+            id: templateId,
+          },
+        });
         return { message: 'Template removed' };
       } else {
         throw new Error(TemplateNotFoundError.message);

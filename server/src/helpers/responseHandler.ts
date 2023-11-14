@@ -5,7 +5,7 @@ export function responseHandler(
   message: string = 'Success',
 ) {
   const data = res.locals?.data ?? { message: 'Success' };
-
+console.log(data)
   // Set the custom header
   res.setHeader('X-Response-Message', message);
 

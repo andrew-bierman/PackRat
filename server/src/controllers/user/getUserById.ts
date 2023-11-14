@@ -12,9 +12,9 @@ import * as validator from '../../middleware/validators/index';
 export const getUserById = async (req, res, next) => {
   try {
     const { userId } = req.params;
-
+console.log(req.params)
     const user = await getUserByIdService(userId);
-
+console.log(`the user  from the service is: ${JSON.stringify(user)}`)
     res.locals.data = user;
     responseHandler(res);
   } catch (error) {

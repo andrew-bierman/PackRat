@@ -1,4 +1,4 @@
-import User from '../../models/userModel';
+import { prisma } from "../../prisma/index";
 
 /**
  * Retrieves a user by their ID from the database.
@@ -7,19 +7,22 @@ import User from '../../models/userModel';
  */
 export const getUserByIdService = async (userId: string): Promise<object> => {
   try {
-    const user: any = await User.findById({ _id: userId })
-      .populate({
-        path: 'packs',
-        populate: {
-          path: 'items',
-          model: 'Item', // replace 'Item' with your actual Item model name
-        },
-      })
-      .populate('favorites')
-      .populate('trips');
-
-    return user;
+    console.log(  `the user id is ${userId}`)
+    const user = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      }
+     
+    });
+    if (user) {
+      console.log(`the user exists ${JSON.stringify(user)}`)
+      return user;
+    } else {
+      console.log(`there is no user`)
+      throw new Error('User cannot be found');
+    }
   } catch (error) {
-    throw new Error('User cannot be found');
+    console.log("there was an error" + error.message +JSON.stringify(error))
+    throw new Error('Server Error');
   }
 };

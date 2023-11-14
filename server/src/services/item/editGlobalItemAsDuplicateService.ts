@@ -1,7 +1,4 @@
-import Item from '../../models/itemModel';
-import Pack from '../../models/packModel';
-import { ItemCategoryModel } from '../../models/itemCategory';
-
+import { prisma } from "../../prisma/index";
 /**
  * Edits a global item by creating a duplicate item in a specific pack.
  *
@@ -23,36 +20,69 @@ export const editGlobalItemAsDuplicateService = async (
   unit,
   type,
 ) => {
-  const category = await ItemCategoryModel.findOne({
-    name: type,
-  });
-
-  let newItem = await Item.create({
-    name,
-    weight,
-    unit,
-    quantity,
-    category: category._id,
-    global: false,
-    packs: [packId],
-  });
-
-  newItem = await Item.findById(newItem._id).populate('category', 'name');
-
-  await Pack.updateOne({ _id: packId }, { $addToSet: { items: newItem._id } });
-
-  await Pack.updateOne({ _id: packId }, { $pull: { items: itemId } });
-
-  await Item.updateOne(
-    {
-      _id: itemId,
+  const category = await prisma.itemcategories.findFirst({
+    where: {
+      name: type,
     },
-    {
-      $pull: {
-        packs: packId,
+  });
+
+  let newItem = await prisma.item.create({
+    data: {
+      name,
+      weight,
+      unit,
+      quantity,
+      global: false,
+      category: {
+        connect: { id: category.id },
+      },
+      packs: {
+        connect: { id: packId },
+      },
+    } as any,
+  });
+
+  newItem = await prisma.item.findUnique({
+    where: {
+      id: newItem.id,
+    },
+    include: {
+      category: true,
+    } as never,
+  });
+
+  await prisma.pack.update({
+    where: {
+      id: packId,
+    },
+    data: {
+      items: {
+        connect: { id: newItem.id },
+      } as any,
+    },
+  });
+
+  await prisma.pack.update({
+    where: {
+      id: packId,
+    },
+    data: {
+      items: {
+        disconnect: { id: itemId },
+      } as any,
+    },
+  });
+
+  await prisma.item.update({
+    where: {
+      id: itemId,
+    },
+    data: {
+      packs: {
+        disconnect: { id: packId },
       },
     },
-  );
+  });
 
   return newItem;
 };
