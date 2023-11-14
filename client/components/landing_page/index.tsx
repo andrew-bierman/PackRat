@@ -11,6 +11,9 @@ import {
   VStack,
   HStack,
 } from 'native-base';
+
+import { XStack, YStack, RText, RStack, RButton } from '@packrat/ui';
+
 import useTheme from '../../hooks/useTheme';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { theme } from '../../theme';
@@ -58,6 +61,8 @@ const dataArray = [
 const CustomAccordion = ({ title, content, iconName }) => {
   const [expanded, setExpanded] = useState(false);
   const styles = useCustomStyles(loadStyles);
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    useTheme();
 
   /**
    * Toggles the value of 'expanded' and updates the state.
@@ -70,11 +75,11 @@ const CustomAccordion = ({ title, content, iconName }) => {
 
   return (
     <Card style={styles.card}>
-      <View style={styles.cardHeader}>
+      <XStack ai='center' jc='space-between' px={20} py={10}>
         <MaterialIcons name={iconName} style={styles.icon} />
-        <View style={{ flex: 1 }}>
-          <Text style={styles.featureText}>{title}</Text>
-        </View>
+        <RStack f={1}>
+          <RText fos={18} col={currentTheme.colors.text}>{title}</RText>
+        </RStack>
         <Button
           transparent
           style={styles.transparentButton}
@@ -85,8 +90,8 @@ const CustomAccordion = ({ title, content, iconName }) => {
             style={styles.icon}
           />
         </Button>
-      </View>
-      {expanded && <Text style={styles.cardContent}>{content}</Text>}
+      </XStack>
+      {expanded && <RText fos={16} col={currentTheme.colors.text} px={20} py={10}>{content}</RText>}
     </Card>
   );
 };
@@ -96,86 +101,71 @@ const LandingPage = () => {
     useTheme();
   const styles = useCustomStyles(loadStyles);
   return (
-    <VStack style={styles.container}>
-      <Box
-        style={{
-          alignItems: 'center',
-          textAlign: 'center',
-          paddingVertical: 18,
-          marginTop: Platform.OS !== 'web' ? 25 : 1,
-        }}
-      >
+    <YStack style={styles.container}>
+      <RStack ai='center' py={18} mt={Platform.OS != 'web' ? 25 : 1}>
         {Platform.OS === 'web' ? (
-          <Text
-            style={{ color: 'white', fontSize: currentTheme.font.headerFont }}
-          >
+          <RText style={{ color: 'white', fontSize: currentTheme.font.headerFont }}>
             PackRat
-          </Text>
+          </RText>
         ) : (
-          <Text style={{ color: 'white', fontSize: 20, fontWeight: 600 }}>
+          <RText style={{ color: 'white', fontSize: 20, fontWeight: 600 }}>
             PackRat
-          </Text>
+          </RText>
         )}
-        <Text style={{ color: 'white', fontSize: 18 }}>
+        <RText style={{ color: 'white', fontSize: 18 }}>
           The Ultimate Travel App
-        </Text>
-      </Box>
-      <Box style={styles.secondaryContentContainer}>
+        </RText>
+      </RStack>
+      <RStack style={styles.secondaryContentContainer}>
         {/* <ImageBackground
           source={require("../../assets/background-image.png")}
           style={styles.backgroundImage}
         > */}
-        <View style={styles.overlay} />
+        <RStack style={styles.overlay} />
         <Container style={styles.contentContainer}>
-          <Text style={styles.introText}>
+          <RText style={styles.introText}>
             PackRat is the ultimate adventure planner designed for those who
             love to explore the great outdoors. Plan and organize your trips
             with ease, whether it's a weekend camping trip, a day hike, or a
             cross-country road trip.
-          </Text>
+          </RText>
           {Platform.OS === 'web' && (
-            <View style={styles.appBadges}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'center',
-                  flexWrap: 'wrap',
-                }}
-              >
+            <YStack jc='center' ai='center' my={20} mb={20}>
+              <XStack jc='center' fw='wrap'>
                 <Button title="App Store" style={{ margin: 10 }}>
-                  <HStack space={2} alignItems="center">
+                  <XStack space={2} ai="center">
                     <MaterialCommunityIcons
                       name="apple"
                       size={44}
                       color="white"
                     />
-                    <Text style={{ color: 'white' }}>
+                    <RText col='white'>
                       Download on the App Store
-                    </Text>
-                  </HStack>
+                    </RText>
+                  </XStack>
                 </Button>
                 <Button title="Google Play" style={{ margin: 10 }}>
-                  <HStack space={2} alignItems="center">
+                  <XStack space={2} ai="center">
                     <MaterialCommunityIcons
                       name="google-play"
                       size={44}
                       color="white"
                     />
-                    <Text style={{ color: 'white' }}>
+                    <RText col='white'>
                       Download on Google Play
-                    </Text>
-                  </HStack>
+                    </RText>
+                  </XStack>
                 </Button>
-              </View>
+              </XStack>
               <Button title="Web" style={{ marginTop: 10, width: '100%' }}>
-                <HStack space={2} alignItems="center">
+                <XStack space={2} ai="center">
                   <MaterialCommunityIcons name="web" size={44} color="white" />
-                  <Text style={{ color: 'white' }}>Use on Web</Text>
-                </HStack>
+                  <RText col='white'>Use on Web</RText>
+                </XStack>
               </Button>
-            </View>
+            </YStack>
           )}
-          <View>
+          <RStack>
             {dataArray.map((item, index) => (
               <CustomAccordion
                 key={index}
@@ -184,7 +174,7 @@ const LandingPage = () => {
                 iconName={item.iconName}
               />
             ))}
-          </View>
+          </RStack>
         </Container>
         <Container style={styles.buttonContainer}>
           <Button
@@ -194,13 +184,13 @@ const LandingPage = () => {
               /* Add navigation to the sign in screen */
             }}
           >
-            <Text style={styles.footerText}>Get Started</Text>
+            <RText col={currentTheme.colors.text} fos={18} fw='bold'>Get Started</RText>
           </Button>
         </Container>
         <StatusBar style="auto" />
         {/* </ImageBackground> */}
-      </Box>
-    </VStack>
+      </RStack>
+    </YStack>
   );
 };
 
