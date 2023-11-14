@@ -12,14 +12,29 @@ import RIconButton from './RIconButton';
 import RSeparator from './RSeparator';
 import RHeading from './RHeading';
 import RSelect from './RSelect';
+import RLabel from './RLabel';
+import RH1 from './RH1';
+import RH2 from './RH2';
+import RH3 from './RH3';
+import RH4 from './RH4';
+import RH5 from './RH5';
+import RH6 from './RH6';
+
 
 export {
+  RH1,
+  RH2,
+  RH3,
+  RH4,
+  RH5,
+  RH6,
+  RHeading,
   RStack,
+  RLabel,
   RSelect,
   RSeparator,
   RSwitch,
   RText,
-  RHeading,
   RCard,
   RParagraph,
   RInput,

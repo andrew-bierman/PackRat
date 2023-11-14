@@ -18,6 +18,7 @@ import { fetchUserTrips, selectAllTrips } from '../../store/tripsStore';
 import { useMatchesCurrentUser } from '~/hooks/useMatchesCurrentUser';
 import { useRouter } from 'expo-router';
 import useCustomStyles from '~/hooks/useCustomStyles';
+import Avatar from '../../components/Avatar';
 
 const SettingsButton = () => {
   const router = useRouter();
@@ -88,25 +89,7 @@ const Header = ({
               </>
             ) : (
               <>
-                {profileImage ? (
-                  <RImage
-                    source={{ uri: user?.profileImage }}
-                    alt="Profile Image"
-                    style={{ width: 100, height: 100, borderRadius: 50 }}
-                  />
-                ) : (
-                  <MaterialCommunityIcons
-                    name="account-circle"
-                    size={100}
-                    color="grey"
-                    style={{
-                      width: 100,
-                      height: 100,
-                      borderRadius: 50,
-                      alignSelf: 'center',
-                    }}
-                  />
-                )}
+                <Avatar src={user?.profileImage} />
                 <RText style={{marginTop: "16px",...styles.userName}}>{userRealName}</RText>
                 <RText style={styles.userEmail}>{username}</RText>
               </>
