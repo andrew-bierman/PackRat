@@ -37,7 +37,10 @@ import { useFetchWeather, useFetchWeatherWeak } from '~/hooks/weather';
 
 export const SearchInput = ({ onSelect, placeholder }) => {
   const [searchString, setSearchString] = useState('');
-  console.log("🚀 ~ file: SearchInput.tsx:40 ~ SearchInput ~ searchString:", searchString)
+  console.log(
+    '🚀 ~ file: SearchInput.tsx:40 ~ SearchInput ~ searchString:',
+    searchString,
+  );
   const [isLoadingMobile, setIsLoadingMobile] = useState(false);
   const { selectedSearch } = useSelector((state) => state.weather);
   // const [selectedSearch, setSelectedSearch] = useState('');
@@ -55,8 +58,12 @@ export const SearchInput = ({ onSelect, placeholder }) => {
   //   useSelector((state) => state.search.searchResults) || [];
   // const [latLng,setLatLng] = useState({});
 
-  const selectedSearchResult = useSelector((state) => state.search.selectedSearchResult) || {};
-  console.log("🚀 ~ file: SearchInput.tsx:59 ~ SearchInput ~ selectedSearchResult:", selectedSearchResult)
+  const selectedSearchResult =
+    useSelector((state) => state.search.selectedSearchResult) || {};
+  console.log(
+    '🚀 ~ file: SearchInput.tsx:59 ~ SearchInput ~ selectedSearchResult:',
+    selectedSearchResult,
+  );
 
   const dispatch = useDispatch();
 
@@ -117,7 +124,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
   };
 
   // useEffect(() => {
-    
+
   //   const timeout = setTimeout(getTrailsParksAndWeatherDetails, 1000);
 
   //   return () => {

@@ -21,7 +21,7 @@ export default function TripCard({
   isSearch,
   isTrail,
   isPark,
-  isLoading
+  isLoading,
 }) {
   const dispatch = useDispatch();
   const { isDark, currentTheme } = useTheme();
@@ -86,17 +86,13 @@ export default function TripCard({
         </RText>
       </RStack>
       {isMap ? (
-          isLoading ? 
+        isLoading ? (
           <Text>Loading....</Text>
-          :
-        <MapContainer
-          shape={
-            shape ??
-            (currentShape.length == 0
-              ? {}
-              : shape)
-          }
-        />
+        ) : (
+          <MapContainer
+            shape={shape ?? (currentShape.length == 0 ? {} : shape)}
+          />
+        )
       ) : isSearch ? (
         <SearchInput />
       ) : (

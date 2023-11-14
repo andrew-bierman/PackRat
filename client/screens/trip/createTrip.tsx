@@ -30,27 +30,36 @@ export default function Trips() {
   const searchResult = useSelector(
     (state) => state.search.selectedSearchResult,
   );
-  console.log("🚀 ~ file: createTrip.tsx:32 ~ Trips ~ searchResult:", searchResult)
-  
+  console.log(
+    '🚀 ~ file: createTrip.tsx:32 ~ Trips ~ searchResult:',
+    searchResult,
+  );
+
   // const weatherObject = useSelector((state) => state.weather.weatherObject);
   // const weatherWeek = useSelector((state) => state.weather.weatherWeek);
   // latLng,
-  const {  selectedSearch } = useSelector((state) => state.weather);
+  const { selectedSearch } = useSelector((state) => state.weather);
   const trailsObject = useSelector((state) => state.trails.trailNames);
   const parksObject = useSelector((state) => state.parks.parkNames);
   // const photonDetailsStore = useSelector(
   //   (state) => state.destination.photonDetails,
   // );
-  let latLng = { 
-    lat : undefined,
-    lon : undefined
-   }
-  if(Object.keys(searchResult).length) {
-    const { geometry: { coordinates } } = searchResult
-    console.log("🚀 ~ file: createTrip.tsx:50 ~ Trips ~ geometry:", coordinates, searchResult)
+  const latLng = {
+    lat: undefined,
+    lon: undefined,
+  };
+  if (Object.keys(searchResult).length) {
+    const {
+      geometry: { coordinates },
+    } = searchResult;
+    console.log(
+      '🚀 ~ file: createTrip.tsx:50 ~ Trips ~ geometry:',
+      coordinates,
+      searchResult,
+    );
     const [lon, lat] = coordinates;
-    latLng["lat"] = lat;
-    latLng["lon"] = lon;
+    latLng.lat = lat;
+    latLng.lon = lon;
   }
   // console.log(
   //   '🚀 ~ file: createTrip.js:41 ~ Trips ~ selectedSearch:',
@@ -63,8 +72,16 @@ export default function Trips() {
     isError: weatherError,
   } = useFetchWeather(latLng);
 
-  const { data: photonDetailsStore, isLoading: photonLoading } = usePhotonDetail(searchResult?.properties?.osm_id, searchResult?.properties?.osm_type)
-  console.log("🚀 ~ file: createTrip.tsx:55 ~ Trips ~ photonDetail:", photonDetailsStore,photonLoading)
+  const { data: photonDetailsStore, isLoading: photonLoading } =
+    usePhotonDetail(
+      searchResult?.properties?.osm_id,
+      searchResult?.properties?.osm_type,
+    );
+  console.log(
+    '🚀 ~ file: createTrip.tsx:55 ~ Trips ~ photonDetail:',
+    photonDetailsStore,
+    photonLoading,
+  );
   const {
     data: weatherWeekData,
     isLoading: weekWeatherLoading,
@@ -257,7 +274,7 @@ export default function Trips() {
           />
           <GearList />
           <TripDateRange dateRange={dateRange} setDateRange={setDateRange} />
-          
+
           <TripCard
             Icon={() => (
               <FontAwesome5
