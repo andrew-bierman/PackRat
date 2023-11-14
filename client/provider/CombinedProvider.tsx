@@ -6,19 +6,6 @@ import { SessionProvider } from '../context/auth';
 import { ThemeProvider } from '../context/theme';
 import { store, persistor } from '../store/store';
 
-import { useState, useEffect } from 'react';
-import { onlineManager } from '@tanstack/react-query';
-import NetInfo from '@react-native-community/netinfo';
-import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister';
-import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { NetworkStatusProvider } from '../context/NetworkStatusProvider';
-import { queryTrpc, getToken } from '../trpc';
-import { httpBatchLink } from '@trpc/client';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { api } from '~/constants/api';
-
-
 // Additional imports from the branch
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister';
