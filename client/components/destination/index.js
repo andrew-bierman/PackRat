@@ -134,41 +134,35 @@ const WeatherData = ({ geoJSON }) => {
 export const DestinationPage = () => {
   console.log('destination page');
   const router = useRouter();
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    useTheme();
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
   const dispatch = useDispatch();
+  const [photonDetails, setPhotonDetails] = useState(null)
+  const [destination, setDestination] = useState(null)
 
   const { destinationId, id, type, lat, lon } = useSearchParams();
-  const photonDetailsStore = useSelector(
-    (state) => state.destination.photonDetails,
-  );
+  // const photonDetailsStore = useSelector(
+  //   (state) => state.destination.photonDetails,
+  // );
 
   const currentDestination = {
-    geoJSON: photonDetailsStore,
+    geoJSON: photonDetails,
   };
 
   const geoJSON = currentDestination?.geoJSON;
-  const selectedSearchResult = useSelector(
-    (state) => state.destination.selectedSearchResult,
-  );
+  const selectedSearchResult = destination?.selectedSearchResult;
 
   useEffect(() => {
-    if (destinationId) {
-      if (type && id) {
-        const matchPhotonFormattingForData = {
-          properties: {
-            osm_id: id,
-            osm_type: type,
-          },
-        };
-
-        // dispatch(photonDetails(matchPhotonFormattingForData));
-        const { refetch, isLoading, isError, data, error } = useGetPhotonDetails(matchPhotonFormattingForData)
-      } else if (destinationId && !type && !id && destinationId !== 'query') {
-        const { refetch, isLoading, isError, data, error } = useGetDestination(destinationId)
-      }
-    }
+    const matchPhotonFormattingForData = {
+      properties: {
+        osm_id: id,
+        osm_type: type,
+      },
+    };
+    const PD_RESPONSE = useGetPhotonDetails(matchPhotonFormattingForData)
+    const GD_RESPONSE = useGetDestination(destinationId)
+    setPhotonDetails(PD_RESPONSE)
+    setDestination(GD_RESPONSE)
   }, [destinationId]);
 
   if (!currentDestination) {
@@ -182,24 +176,31 @@ export const DestinationPage = () => {
   return (
     <ScrollView>
       <View style={styles.container}>
-        <DestinationHeader
-          geoJSON={geoJSON}
-          selectedSearchResult={selectedSearchResult}
-        />
-        <LargeCard
-          title="Map"
-          Icon={() => (
-            <Ionicons
-              name="location"
-              size={24}
-              color={currentTheme.colors.textPrimary}
+        {
+          !photonDetails?.isLoading && !photonDetails?.isError &&
+          !destination?.isLoading && !destination?.isError &&
+        (
+          <>
+            <DestinationHeader
+              geoJSON={geoJSON}
+              selectedSearchResult={selectedSearchResult}
             />
-          )}
-          ContentComponent={map}
-          contentProps={{ shape }}
-          type="map"
-        />
-        <WeatherData geoJSON={geoJSON} />
+            <LargeCard
+              title="Map"
+              Icon={() => (
+                <Ionicons
+                  name="location"
+                  size={24}
+                  color={currentTheme.colors.textPrimary}
+                />
+              )}
+              ContentComponent={map}
+              contentProps={{ shape }}
+              type="map"
+            />
+            <WeatherData geoJSON={geoJSON} />
+          </>
+        )}
       </View>
     </ScrollView>
   );

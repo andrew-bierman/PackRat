@@ -36,9 +36,10 @@ export default function Trips() {
   const { latLng, selectedSearch } = useSelector((state) => state.weather);
   const trailsObject = useSelector((state) => state.trails.trailNames);
   const parksObject = useSelector((state) => state.parks.parkNames);
-  const photonDetailsStore = useSelector(
-    (state) => state.destination.photonDetails,
-  );
+  const [photonDetails, setPhotonDetails] = useState(null)
+  // const photonDetailsStore = useSelector(
+  //   (state) => state.destination.photonDetails,
+  // );
 
   console.log(
     '🚀 ~ file: createTrip.js:41 ~ Trips ~ selectedSearch:',
@@ -77,16 +78,14 @@ export default function Trips() {
   // }, [parksObject]);
 
   useEffect(() => {
-    if (searchResult?.properties) {
-      const matchPhotonFormattingForData = {
-        properties: {
-          osm_id: searchResult.properties?.osm_id,
-          osm_type: searchResult.properties?.osm_type,
-        },
-      };
-      useGetPhotonDetails(matchPhotonFormattingForData)
-      // dispatch(photonDetails());
-    }
+    const matchPhotonFormattingForData = {
+      properties: {
+        osm_id: searchResult.properties?.osm_id,
+        osm_type: searchResult.properties?.osm_type,
+      },
+    };
+    PD_RESPONSE = useGetPhotonDetails(matchPhotonFormattingForData)
+    setPhotonDetails(PD_RESPONSE)
   }, [searchResult]);
 
   const steps = [
@@ -242,18 +241,23 @@ export default function Trips() {
           />
           <GearList />
           <TripDateRange dateRange={dateRange} setDateRange={setDateRange} />
-          <TripCard
-            Icon={() => (
-              <FontAwesome5
-                name="route"
-                size={24}
-                color={currentTheme.colors.cardIconColor}
-              />
-            )}
-            title="Map"
-            isMap={true}
-            shape={photonDetailsStore}
-          />
+          {
+            !photonDetails?.IsError && !photonDetails?.isLoading &&
+            (
+            <TripCard
+              Icon={() => (
+                <FontAwesome5
+                  name="route"
+                  size={24}
+                  color={currentTheme.colors.cardIconColor}
+                />
+              )}
+              title="Map"
+              isMap={true}
+              shape={photonDetails}
+            />
+            )
+          }
           <RStack>
             <SaveTripContainer dateRange={dateRange} />
           </RStack>
