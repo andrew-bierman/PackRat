@@ -6,16 +6,14 @@ import { CustomModal } from '../modal';
 import {
   deleteGlobalItem,
   deleteItemOffline,
+  getItemsGlobal,
 } from '../../store/globalItemsStore';
 import { addOfflineRequest } from '../../store/offlineQueue';
 import { useDeletePackItem } from '~/hooks/packs/useDeletePackItem';
+import { queryTrpc, trpc } from '../../trpc';
 
-export const DeletePackItemModal = ({
-  itemId,
-  pack,
-  refetch,
-  setRefetch = () => {},
-}) => {
+export const DeletePackItemModal = ({ itemId, pack }) => {
+  const utils = queryTrpc.useContext();
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const dispatch = useDispatch();
   const { isConnected } = useSelector((state) => state.offlineQueue);
@@ -29,10 +27,12 @@ export const DeletePackItemModal = ({
    * @param {}
    * @return {}
    */
-  const onTrigger = () => {
-    setIsModalOpen(true);
+  const onTrigger = (event) => {
+    setIsModalOpen(event);
   };
-
+  const closeTriggerOpen = () => {
+    onTriggerOpen(false);
+  };
   /**
    * Deletes an item.
    *
@@ -46,7 +46,7 @@ export const DeletePackItemModal = ({
     } else {
       if (isConnected) {
         dispatch(deleteGlobalItem(itemId));
-        setRefetch(refetch !== true);
+        utils.getItemsGlobally.invalidate();
       } else {
         dispatch(deleteItemOffline(itemId));
         dispatch(addOfflineRequest({ method: 'deleteItem', data: itemId }));

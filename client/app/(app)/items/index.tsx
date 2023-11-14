@@ -18,32 +18,19 @@ import useCustomStyles from '~/hooks/useCustomStyles';
 
 export default function Items() {
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
+
+  const onTrigger = (event) => {
+    setIsAddItemModalOpen(event);
+  };
   // pagination index limit
   const [limit, setLimit] = useState(5);
   // page number for pagination
   const [page, setPage] = useState(1);
-  // it will be used as a dependency for reloading the data in case of some modifications
-  // const [refetch, setRefetch] = useState(false);
 
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     UseTheme();
-  const styles = useCustomStyles(loadStyles);
 
-  const { data, isLoading, isError, refetch } = useFetchGlobalItems(
-    limit,
-    page,
-  );
-  console.log('🚀 ~ file: index.js:32 ~ Items ~ data:', data);
-  // const data = useSelector((state) => state.globalItems);
-
-  // const isLoading = useSelector((state) => state.globalItems.isLoading);
-  // const isError = useSelector((state) => state.globalItems.isError);
-
-  const dispatch = useDispatch();
-  // useEffect(() => {
-  // dispatch(getItemsGlobal({ limit, page }));
-  // }, [limit, page]);
-
+  const { data, isLoading, isError } = useFetchGlobalItems(limit, page);
   return (
     <ScrollView>
       {Platform.OS === 'web' && (
@@ -57,86 +44,84 @@ export default function Items() {
           name: 'Items',
         }}
       />
-      <Box>
-        <>
-          <CustomModal
-            title="Add a global Item"
-            trigger="Add Item"
-            isActive={isAddItemModalOpen}
-            triggerComponent={
-              <View
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  marginTop: '2rem',
-                  justifyContent: 'center',
-                  alignItems: 'center',
+      <>
+        <CustomModal
+          title="Add a global Item"
+          trigger="Add Item"
+          isActive={isAddItemModalOpen}
+          onTrigger={onTrigger}
+          triggerComponent={
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                marginTop: '2rem',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              {' '}
+              <Button
+                style={loadStyles().button}
+                onPress={() => {
+                  setIsAddItemModalOpen(true);
                 }}
               >
-                {' '}
-                <Button
-                  style={styles.button}
-                  onPress={() => {
-                    setIsAddItemModalOpen(true);
-                  }}
+                Add Item
+              </Button>
+              {Platform.OS === 'web' ? (
+                <Tooltip
+                  label="Add a global item"
+                  placement="top left"
+                  openDelay={500}
                 >
-                  Add Item
-                </Button>
-                {Platform.OS === 'web' ? (
-                  <Tooltip
-                    label="Add a global item"
-                    placement="top left"
-                    openDelay={500}
+                  <Button
+                    width={8}
+                    height={8}
+                    style={{ backgroundColor: 'none' }}
                   >
-                    <Button
-                      width={8}
-                      height={8}
-                      style={{ backgroundColor: 'none' }}
-                    >
-                      <MaterialIcons
-                        name="info-outline"
-                        size={20}
-                        color={currentTheme.colors.background}
-                      />
-                    </Button>
-                  </Tooltip>
-                ) : null}
-              </View>
-            }
-            onCancel={setIsAddItemModalOpen}
-          >
-            <AddItemGlobal
-              setRefetch={async () => refetch()}
-              // refetch={refetch}
-              setIsAddItemModalOpen={setIsAddItemModalOpen}
-            />
-          </CustomModal>
-        </>
-        {!isError ? (
-          <ItemsTable
-            limit={limit}
-            setLimit={setLimit}
-            page={page}
-            setPage={setPage}
-            data={data}
-            isLoading={isLoading}
-            totalPages={data?.totalPages}
-            refetch={refetch}
-            setRefetch={async () => refetch()}
-          />
-        ) : null}
-      </Box>
+                    <MaterialIcons
+                      name="info-outline"
+                      size={20}
+                      color={currentTheme.colors.background}
+                    />
+                  </Button>
+                </Tooltip>
+              ) : null}
+            </View>
+          }
+          onCancel={setIsAddItemModalOpen}
+        >
+          <AddItemGlobal setIsAddItemModalOpen={setIsAddItemModalOpen} />
+        </CustomModal>
+      </>
+      {!isError && data && Array.isArray(data.items) ? (
+        <ItemsTable
+          limit={limit}
+          setLimit={setLimit}
+          page={page}
+          setPage={setPage}
+          data={data.items}
+          isLoading={isLoading}
+          totalPages={data?.totalPages}
+        />
+      ) : null}
     </ScrollView>
   );
 }
-const loadStyles = (theme) => {
-  const { currentTheme } = theme;
+const loadStyles = () => {
+  const currentTheme = theme;
   return {
+    container: {
+      display: 'flex',
+      justifyContent: 'center',
+      marginTop: '1rem',
+      alignItems: 'center',
+    },
     button: {
       backgroundColor: currentTheme.colors.background,
       color: currentTheme.colors.white,
       width: Platform.OS === 'web' ? '20rem' : '20%',
-      display: 'flex',
       alignItems: 'center',
       textAlign: 'center',
     },

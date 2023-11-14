@@ -1,3 +1,4 @@
+import { util } from 'zod';
 import { queryTrpc } from '../../trpc';
 
 export const useEditPackItem = () => {
@@ -5,15 +6,15 @@ export const useEditPackItem = () => {
 
   const mutation = queryTrpc.editItem.useMutation({
     onMutate: async (editedItem) => {
+      if (!editedItem.packId) {
+        return;
+      }
       const previousPack = utils.getPackById.getData({
         packId: editedItem.packId,
       });
-      console.log(editedItem.packId);
-      console.log(editedItem._id);
       const itemIndex = previousPack.items.findIndex(
         (item) => item._id === editedItem._id,
       );
-
       if (itemIndex === -1) {
         throw new Error('Item not found in the pack.');
       }
@@ -54,6 +55,7 @@ export const useEditPackItem = () => {
       console.log(result);
       // Invalidate relevant queries after a successful edit
       utils.getPackById.invalidate({ packId: result._id });
+      utils.getItemsGlobally.invalidate();
     },
   });
 

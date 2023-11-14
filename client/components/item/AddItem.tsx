@@ -22,9 +22,7 @@ export const AddItem = ({
   setPage = () => {},
   page,
   closeModalHandler,
-  refetch,
   setIsAddItemModalOpen = () => {},
-  setRefetch = () => {},
 }) => {
   const dispatch = useDispatch();
   const isLoading = useSelector((state) => state.packs.isLoading);
@@ -66,30 +64,17 @@ export const AddItem = ({
    */
   console.log(categoryType);
   const handleSubmit = () => {
-    console.log('initial', initialData);
-    if (isEdit) {
-      if (packId && initialData.global) {
-        console.log('editing', packId);
+    const PackId = packId || initialData._id;
 
-        // dispatch(
-        //   editItemsGlobalAsDuplicate({
-        //     itemId: _id,
-        //     packId,
-        //     name,
-        //     weight,
-        //     quantity,
-        //     unit,
-        //     type: categoryType,
-        //   }),
-        // );
+    if (isEdit) {
+      if (PackId && initialData.global) {
         editPackItem({
           name,
           weight,
           quantity,
           unit,
           type: categoryType,
-          _id,
-          packId,
+          _id: initialData._id,
         });
         closeModalHandler();
       } else {
@@ -102,19 +87,8 @@ export const AddItem = ({
           _id,
           packId,
         });
-        // dispatch(
-        //   editPackItem({
-        //     name,
-        //     weight,
-        //     quantity,
-        //     unit,
-        //     type: categoryType,
-        //     _id: initialData._id,
-        //   }),
-        // );
         setPage(1);
         closeModalHandler();
-        setRefetch(refetch !== true);
       }
     } else {
       addPackItem({
@@ -126,9 +100,6 @@ export const AddItem = ({
         _id,
         packId,
       });
-
-      // setIsAddItemModalOpen(false);
-      // setRefetch(refetch !== true);
     }
   };
 

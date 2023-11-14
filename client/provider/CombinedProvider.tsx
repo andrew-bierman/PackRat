@@ -1,11 +1,23 @@
 // src/provider/CombinedProvider.tsx
 
-// Standard imports
 import { Provider as ReduxProvider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { SessionProvider } from '../context/auth';
 import { ThemeProvider } from '../context/theme';
 import { store, persistor } from '../store/store';
+
+import { useState, useEffect } from 'react';
+import { onlineManager } from '@tanstack/react-query';
+import NetInfo from '@react-native-community/netinfo';
+import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister';
+import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { NetworkStatusProvider } from '../context/NetworkStatusProvider';
+import { queryTrpc, getToken } from '../trpc';
+import { httpBatchLink } from '@trpc/client';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { api } from '~/constants/api';
+
 
 // Additional imports from the branch
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -24,10 +36,18 @@ import { useEffect } from 'react';
 export function CombinedProvider({ children }: { children: React.ReactNode }) {
   // Setup for React Query and TRPC
   const queryClient = new QueryClient();
+
   const persister = createAsyncStoragePersister({
     storage: AsyncStorage,
     throttleTime: 3000,
   });
+
+  useEffect(() => {
+    return NetInfo.addEventListener((state) => {
+      const status = !!state.isConnected;
+      onlineManager.setOnline(status);
+    });
+  }, []);
 
   const trpcClient = queryTrpc.createClient({
     links: [
