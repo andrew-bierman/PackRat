@@ -44,7 +44,7 @@ export function SelectItem(props) {
           index={index}
           value={value}
         >
-          <Select.ItemText>{ text }</Select.ItemText>
+          <Select.ItemText>{text.charAt(0).toUpperCase() + text.slice(1)}</Select.ItemText>
           <Select.ItemIndicator marginLeft="auto">
             <Check size={16} />
           </Select.ItemIndicator>
