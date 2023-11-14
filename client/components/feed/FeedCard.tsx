@@ -1,10 +1,7 @@
 import { AntDesign } from '@expo/vector-icons';
 import { formatDistanceToNow } from 'date-fns';
 import { MaterialIcons, Entypo } from '@expo/vector-icons';
-import { theme } from '../../theme';
 import useTheme from '../../hooks/useTheme';
-// import useAddToFavorite from "../../hooks/useAddToFavorites";
-// import { useAuth } from "../../auth/provider";
 import { useSelector, useDispatch } from 'react-redux';
 import {
   addFavorite,
@@ -17,7 +14,6 @@ import { DuplicateIcon } from '../DuplicateIcon/index';
 import { truncateString } from '../../utils/truncateString';
 import { RText, RStack, RHeading } from '@packrat/ui';
 import { formatNumber } from '~/utils/formatNumber';
-// import { useAuth } from "../../auth/provider";
 
 export default function Card({
   type,
@@ -40,8 +36,7 @@ export default function Card({
   const favorites = useSelector(selectAllFavorites);
   const dispatch = useDispatch();
 
-  const isFavorite =
-    !type === 'trip'
+  const isFavorite = !type === 'trip'
       ? favorited_by.includes(user._id) ||
         favorited_by.forEach((obj) => obj._id === user._id)
       : null;
@@ -73,7 +68,6 @@ export default function Card({
       dispatch(removeFavorite(favorite.id));
     }
   };
-  // const { addToFavorite } = useAddToFavorite();
 
   const truncatedName = truncateString(name, 25);
   const truncatedDestination = truncateString(destination, 25);
