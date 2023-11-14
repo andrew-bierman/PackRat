@@ -88,6 +88,61 @@ PackRat is built using the following technologies:
 - Redux: a predictable state container for JavaScript apps.
 - Mapbox: a location data platform for mobile and web applications.
 
+## 🗂 Folder layout
+
+The main apps are:
+
+- `expo` (native, web)
+- `next` (ssr web) -- not yet implemented
+
+- `packages` shared packages across apps
+  - `ui` includes your custom UI kit that will be optimized by Tamagui
+  - `app` you'll be importing most files from `app/`
+    - `features` (don't use a `screens` folder. organize by feature.)
+    - `provider` (all the providers that wrap the app, and some no-ops for Web.)
+
+## UI Kit
+
+Note we're following the [design systems guide](https://tamagui.dev/docs/guides/design-systems) and creating our own package for components.
+
+See `packages/ui` named `@my/ui` for how this works.
+
+## 🆕 Add new dependencies
+
+### Pure JS dependencies
+
+If you're installing a JavaScript-only dependency that will be used across platforms, install it in `packages/app`:
+
+```sh
+cd packages/app
+yarn add date-fns
+cd ../..
+yarn
+```
+
+### Native dependencies
+
+If you're installing a library with any native code, you must install it in `expo`:
+
+```sh
+cd apps/expo
+yarn add react-native-reanimated
+cd ..
+yarn
+```
+
+## Update new dependencies
+
+### Pure JS dependencies
+
+```sh
+yarn upgrade-interactive
+```
+
+You can also install the native library inside of `packages/app` if you want to get autoimport for that package inside of the `app` folder. However, you need to be careful and install the _exact_ same version in both packages. If the versions mismatch at all, you'll potentially get terrible bugs. This is a classic monorepo issue. I use `lerna-update-wizard` to help with this (you don't need to use Lerna to use that lib).
+
+You may potentially want to have the native module transpiled for the next app. If you get error messages with `Cannot use import statement outside a module`, you may need to use `transpilePackages` in your `next.config.js` and add the module to the array there.
+
 ## Local installation 📲
 
 PackRat consists of two main components: a client and a server. Follow the steps below to install and run both components.
@@ -262,6 +317,62 @@ yarn start
 
 Note that the client and server are designed to run concurrently in development mode.
 
+
+### Debugging Yarn Environment Setup - Windows
+
+**Check yarn and node version:**
+```
+yarn -v
+```
+```
+node -v
+```
+
+**If node version < 18.0.0:**
+- Update to latest: https://nodejs.org/en/download
+
+**If yarn version >= 4.0.0:**
+- Skip this process
+
+**If you don't have yarn installed:**
+- Run command prompt as an administrator
+- Run `(corepack comes along with node js 18+)`
+  ```
+  corepack enable
+  ```
+- Run
+  ```
+  yarn set version stable
+  ```
+- Run
+  ```
+  yarn install
+  ```
+- Check yarn version(`yarn -v`): *version >= 4.0.1*
+- Restart your code editor if opened
+
+**If yarn version < 4.0.0:**
+- Make sure you're using Node 18+
+- Go to your windows root path  (`C:\Users\HP)`
+- Delete any `.yarnrc.yml` file and `.yarn` folder
+- Delete `yarn` folder from `C:\Program Files (x86)`
+- Run command prompt as an administrator
+- Run `(corepack comes along with node js 18+)`
+  ```
+  corepack enable
+  ```
+- Go into the project directory `cd \PackRat`
+- Run
+  ```
+  yarn set version stable
+  ```
+- Run
+  ```
+  yarn install
+  ```
+- Restart your code editor if opened
+- If you any encounter errors, try restarting your system.
+
 ## Docker Installation 🐳
 
 PackRat can also be installed using Docker. After setting up the development environment, follow the steps below to install and run the app using Docker.
@@ -316,11 +427,26 @@ Please refer to README.md inside server folder.
 
 Contributions to PackRat are welcome! To contribute, follow these steps:
 
-1. Fork the repository.
-2. Create a new branch for your changes.
+1. Clone this repository.
+2. Create a new branch.
 3. Make your changes and commit them.
-4. Push your changes to your fork.
-5. Create a pull request.
+4. Push your changes to the remote branch.
+5. Open a pull request.
+6. Wait for your pull request to be reviewed and merged.
+7. Celebrate! 🎉
+
+## 👏 Special Thanks
+
+- [React Native Developers](https://twitter.com/reactnative)
+- [OpenStreetMap Developers](https://www.openstreetmap.org/)
+- [RN MapBox Developers](https://github.com/rnmapbox/maps)
+- [Cloudflare Developers](https://twitter.com/CloudflareDev)
+- [Yusuke Wada](https://twitter.com/yusukebe) - Creator of Hono.js
+- [Nate Birdman](https://twitter.com/natebirdman) - Creator of Tamagui
+- [Fernando Rojo](https://twitter.com/fernandotherojo) - Creator of Zeego
+- [Tanner Linsley](https://twitter.com/tannerlinsley) - Creator of TanStack
+- [Expo Developers](https://twitter.com/expo) - Office hours
+- [Shopify Developers](https://twitter.com/ShopifyDevs)
 
 ## License 📝
 

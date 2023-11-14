@@ -1,5 +1,5 @@
-import React, { useRef, forwardRef, useImperativeHandle } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import React, { useRef, forwardRef, useImperativeHandle, FC } from 'react';
+import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Form,
@@ -13,7 +13,28 @@ import {
 } from 'tamagui';
 import * as z from 'zod';
 
-function RenderInput({ field, fieldProps }) {
+interface FieldProps {
+  inputComponent?: string;
+  inputType?: string;
+  placeholder?: string;
+  isDisabled?: boolean;
+  maxLength?: number;
+  autoCorrect?: boolean;
+  autoCapitalize?: string;
+  autoFocus?: boolean;
+  name: string;
+  label?: string;
+  errorMessage?: string;
+  helperText?: string;
+  numberOfLines?: number;
+}
+
+interface RenderInputProps {
+  field: FieldProps;
+  fieldProps: any;
+}
+
+const RenderInput: FC<RenderInputProps> = ({ field, fieldProps }) => {
   const commonProps = {
     ...fieldProps,
     placeholder: field.placeholder,
@@ -34,19 +55,34 @@ function RenderInput({ field, fieldProps }) {
       }
       return <Input {...commonProps} />;
   }
+};
+
+interface RenderErrorProps {
+  error?: string;
+  fieldError?: string;
 }
 
-function RenderError({ error, fieldError }) {
+const RenderError: FC<RenderErrorProps> = ({ error, fieldError }) => {
   if (!error && !fieldError) return null;
   return <Text color="danger">{error || fieldError}</Text>;
+};
+
+interface RenderHelperTextProps {
+  text?: string;
 }
 
-function RenderHelperText({ text }) {
+const RenderHelperText: FC<RenderHelperTextProps> = ({ text }) => {
   if (!text) return null;
   return <Text>{text}</Text>;
+};
+
+interface ReusableFormProps {
+  fields: FieldProps[];
+  schema: z.Schema<any>;
+  onSubmit: SubmitHandler<any>;
 }
 
-const ReusableForm = forwardRef((props, ref) => {
+const ReusableForm = forwardRef<any, ReusableFormProps>((props, ref) => {
   const { fields, schema, onSubmit } = props;
   const {
     control,
@@ -56,9 +92,9 @@ const ReusableForm = forwardRef((props, ref) => {
     resolver: zodResolver(schema),
   });
 
-  const inputRefs = useRef({});
+  const inputRefs = useRef<Record<string, HTMLInputElement | null>>({});
 
-  const focusInput = (name) => {
+  const focusInput = (name: string) => {
     inputRefs.current[name]?.focus();
   };
 
