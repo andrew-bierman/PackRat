@@ -137,33 +137,35 @@ export const DestinationPage = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
   const dispatch = useDispatch();
-  const [photonDetails, setPhotonDetails] = useState(null)
-  const [destination, setDestination] = useState(null)
+  // const [photonDetails, setPhotonDetails] = useState(null)
+  // const [destination, setDestination] = useState(null)
 
-  const { destinationId, id, type, lat, lon } = useGlobalSearchParams();
+  const { destinationId, id, type, lat, lon } = useSearchParams();
+  // console.log(id, destinationId, type, lat, lon)
   // const photonDetailsStore = useSelector(
   //   (state) => state.destination.photonDetails,
   // );
+  const matchPhotonFormattingForData = {
+    properties: {
+      osm_id: id,
+      osm_type: type,
+    },
+  };
+  const photonDetails = useGetPhotonDetails(matchPhotonFormattingForData)
+  const destination = useGetDestination(destinationId)
 
   const currentDestination = {
     geoJSON: photonDetails,
   };
-
+ 
   const geoJSON = currentDestination?.geoJSON;
   const selectedSearchResult = destination?.selectedSearchResult;
 
-  useEffect(() => {
-    const matchPhotonFormattingForData = {
-      properties: {
-        osm_id: id,
-        osm_type: type,
-      },
-    };
-    const PD_RESPONSE = useGetPhotonDetails(matchPhotonFormattingForData)
-    const GD_RESPONSE = useGetDestination(destinationId)
-    setPhotonDetails(PD_RESPONSE)
-    setDestination(GD_RESPONSE)
-  }, [destinationId]);
+
+  // useEffect(() => {
+    
+    
+  // }, [destinationId]);
 
   if (!currentDestination) {
     return null;

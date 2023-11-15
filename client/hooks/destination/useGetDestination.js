@@ -5,12 +5,11 @@ export const useGetDestination = (destinationId) => {
 
     const {refetch, isLoading, isError, data, error } = 
     queryTrpc.getDestination.useQuery(
-            { id: destinationId },
+            { id:destinationId },
             {
                 enabled,
-                keepPreviousData: true,
+                // keepPreviousData: true,
             }
         )
-    
     return {refetch, isLoading, isError, data, error }
 }
