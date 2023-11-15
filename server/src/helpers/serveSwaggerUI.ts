@@ -3,7 +3,7 @@ import swaggerUi from 'swagger-ui-express';
 import specs from '../swaggerOptions';
 import { prisma } from '../prisma';
 import { type Request, type Response } from 'express';
-import { ItemCategoryName } from '@prisma/client';
+import { ItemCategoryName } from '@prisma/client/edge';
 
 /**
  * Serves the Swagger UI for the given app.

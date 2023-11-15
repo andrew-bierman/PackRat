@@ -5,7 +5,7 @@ import { editTemplateService } from '../../services/template/template.service';
 import { z } from 'zod';
 
 import { prisma } from '../../prisma';
-import { TemplateType } from '@prisma/client';
+import { TemplateType } from '@prisma/client/edge';
 
 /**
  * Edits a template.

@@ -1,4 +1,4 @@
-import { TemplateType } from '@prisma/client';
+import { TemplateType } from '@prisma/client/edge';
 import { prisma } from '../../prisma';
 
 /**

@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 
 import { JWT_SECRET, SEND_GRID_API_KEY } from '../../config';
 

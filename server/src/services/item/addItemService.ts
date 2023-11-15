@@ -1,4 +1,4 @@
-import { ItemCategoryName } from '@prisma/client';
+import { ItemCategoryName } from '@prisma/client/edge';
 import { prisma } from '../../prisma';
 import { ItemCategoryEnum } from '../../utils/itemCategory';
 

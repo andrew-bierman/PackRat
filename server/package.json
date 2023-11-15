@@ -18,7 +18,7 @@
     "test:generate": "npx openapi-generator url http://localhost:3000/swagger.json -d ./generated -t javascript",
     "test": "echo \"No tests yet\"",
     "prisma:format": "npx prisma format --schema=src/prisma/schema.prisma",
-    "prisma:generate": "npx prisma generate --schema=src/prisma/schema.prisma",
+    "prisma:generate": "npx prisma generate --schema=src/prisma/schema.prisma --no-engine",
     "prisma:validate": "npx prisma validate --schema=src/prisma/schema.prisma",
     "prisma:pull": "npx prisma db pull --schema=src/prisma/schema.prisma",
     "wrangler:dev": "wrangler dev src/index.ts"
@@ -44,7 +44,7 @@
     "@types/validator": "^13.11.1",
     "aws-sdk": "^2.1494.0",
     "axios": "^1.4.0",
-    "bcrypt": "^5.1.0",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
     "bull": "^4.10.4",
     "celebrate": "^15.0.1",

@@ -6,7 +6,7 @@ import { addTemplateService } from '../../services/template/template.service';
 import { z } from 'zod';
 
 import { prisma } from '../../prisma';
-import { TemplateType } from '@prisma/client';
+import { TemplateType } from '@prisma/client/edge';
 /**
  * Adds a template to the database.
  * @param {Object} req - The request object.

@@ -1,4 +1,4 @@
-import type { TemplateType } from '@prisma/client';
+import type { TemplateType } from '@prisma/client/edge';
 import { prisma } from '../../prisma';
 /**
  * Adds a template to the database.

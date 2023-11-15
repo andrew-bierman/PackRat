@@ -2,7 +2,7 @@ import { publicProcedure } from '../../trpc';
 import { UnableTouUpdatePasswordError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { findUserAndUpdate } from '../../services/user/user.service';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import { JWT_SECRET } from '../../config';
 import * as validator from '../../middleware/validators/index';
 import { prisma } from '../../prisma';

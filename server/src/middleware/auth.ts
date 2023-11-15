@@ -6,7 +6,7 @@ import { TRPCError } from '@trpc/server';
 import { z, ZodError } from 'zod';
 import { TokenSchema } from './validators/authTokenValidator';
 import { prisma } from '../prisma';
-import type { User } from '@prisma/client';
+import type { User } from '@prisma/client/edge';
 
 declare global {
   namespace Express {

@@ -1,6 +1,6 @@
 import { ItemCategoryEnum } from '../../utils/itemCategory';
 import { prisma } from '../../prisma';
-import { ItemCategoryName } from '@prisma/client';
+import { ItemCategoryName } from '@prisma/client/edge';
 
 /**
  * Adds an item to the global service.

@@ -1,4 +1,4 @@
-import type { Way as TWay } from '@prisma/client';
+import type { Way as TWay } from '@prisma/client/edge';
 import prisma from '../client';
 
 type ExtendedWay = {

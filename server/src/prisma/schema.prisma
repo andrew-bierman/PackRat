@@ -3,8 +3,11 @@ generator client {
 }
 
 datasource db {
-  provider = "mongodb"
-  url      = env("MONGODB_URI")
+  provider  = "mongodb"
+  // DB connection string for introspection purposes only
+  directUrl = env("DIRECT_URL")
+  // data proxy url
+  url       = env("DATABASE_URL")
 }
 
 //  ███    ███  ██████  ██████  ███████ ██      ███████

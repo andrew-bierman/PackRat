@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { Request } from 'express';
-import { Role } from '@prisma/client';
+import { Role } from '@prisma/client/edge';
 
 const JoiObjectId = z.string().regex(/^[0-9a-fA-F]{24}$/g);
 
@@ -57,7 +57,7 @@ export const editUser = z.object({
   pack_ids: z.array(JoiObjectId.nonempty()).optional(),
   item_id: JoiObjectId.nonempty().nullable().optional(),
   template_ids: z.array(JoiObjectId.nonempty()).optional(),
-  trip_ids: z.array(JoiObjectId.nonempty()).optional()
+  trip_ids: z.array(JoiObjectId.nonempty()).optional(),
 });
 
 export const deleteUser = z.object({

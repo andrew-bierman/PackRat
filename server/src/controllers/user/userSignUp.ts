@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import { sendWelcomeEmail, resetEmail } from '../../utils/accountEmail';
 import { JWT_SECRET } from '../../config';
 import { publicProcedure } from '../../trpc';

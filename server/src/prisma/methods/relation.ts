@@ -1,4 +1,4 @@
-import type { Relation as TRelation } from '@prisma/client';
+import type { Relation as TRelation } from '@prisma/client/edge';
 import { prisma } from '../extension';
 
 type ExtendedRelation = {

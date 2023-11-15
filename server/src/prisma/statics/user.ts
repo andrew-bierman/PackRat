@@ -1,5 +1,5 @@
-import type { User } from '@prisma/client';
-import bycrypt from 'bcrypt';
+import type { User } from '@prisma/client/edge';
+import bcrypt from 'bcryptjs';
 import { JWT_SECRET } from '../../config';
 import jwt from 'jsonwebtoken';
 import prisma from '../client';
@@ -15,7 +15,7 @@ async function findByCredentials({
 
   if (!user) throw new Error('Unable to login');
 
-  const isMatch = await bycrypt.compare(password, user.password);
+  const isMatch = await bcrypt.compare(password, user.password);
 
   if (!isMatch) throw new Error('Unable to login');
 

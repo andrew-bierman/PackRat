@@ -1,7 +1,7 @@
 import { type Request, type Response, type NextFunction } from 'express';
 import { RoleSchema } from './validators/roleValidator';
 import { ZodError } from 'zod';
-import { type User } from '@prisma/client';
+import { type User } from '@prisma/client/edge';
 
 /**
  * Middleware to check if the user has a certain role.

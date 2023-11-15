@@ -1,4 +1,4 @@
-import type { Trip as TTrip, GeoJSON } from '@prisma/client';
+import type { Trip as TTrip, GeoJSON } from '@prisma/client/edge';
 
 type ExtendedTrip = {
   toJSON: () => Partial<TTrip>;

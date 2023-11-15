@@ -1,15 +1,30 @@
-import { Elysia } from 'elysia';
-import { compile as c, trpc } from '@elysiajs/trpc';
+// import { Elysia } from 'elysia';
+// import { compile as c, trpc } from '@elysiajs/trpc';
 import { appRouter } from './routes/trpcRouter';
 
-const app = new Elysia({ aot: false })
-  .get('/', () => 'Hello World')
-  .use(
-    trpc(appRouter, {
-      endpoint: '/api/trpc',
-    }),
-  )
-  .listen(3000);
+import { fetchRequestHandler } from '@trpc/server/adapters/fetch';
+// import { createContext } from './context';
+// import { appRouter } from './router';
+
+export default {
+  async fetch(request: Request): Promise<Response> {
+    return fetchRequestHandler({
+      endpoint: '/trpc',
+      req: request,
+      router: appRouter,
+      createContext: async (arg) => arg,
+    });
+  },
+};
+
+// const app = new Elysia({ aot: false })
+//   .get('/', () => 'Hello World')
+//   .use(
+//     trpc(appRouter, {
+//       endpoint: '/api/trpc',
+//     }),
+//   )
+//   .listen(3000);
 
 // export default {
 //   fetch: app.fetch,

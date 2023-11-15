@@ -1,4 +1,4 @@
-import type { Node as TNode } from '@prisma/client';
+import type { Node as TNode } from '@prisma/client/edge';
 import prisma from '../client';
 
 type ExtendedNode = {

@@ -91,7 +91,7 @@ export const helloRouter = trpcRouter({
 });
 
 export const helloRouter2 = () => {
-  return publicProcedure.input(z.string()).query(async ({ input }) => {
+  return publicProcedure.query(async ({ input }) => {
     console.log('input', input);
     return `Hello ${input}!`;
   });
@@ -110,20 +110,20 @@ export const appRouter = trpcRouter({
   helloRouter2: helloRouter2(),
 
   // user routes
-  getUserById: getUserByIdRoute(),
-  signIn: userSignInRoute(),
-  signUp: signUpRoute(),
-  resetPassword: resetPasswordRoute(),
-  getGoogleAuthURL: getGoogleAuthURLRoute(),
-  googleSignin: googleSigninRoute(),
-  editUser: editUserRoute(),
-  deleteUser: deleteUserRoute(),
-  getMe: getMeRoute(),
-  emaileExists: emailExistsRoute(),
-  checkCode: checkCodeRoute(),
-  getUsers: getUsersRoute(),
-  resetPasswordEmail: sentEmailRoute(),
-  updatePassword: updatePasswordRoute(),
+  // getUserById: getUserByIdRoute(),
+  // signIn: userSignInRoute(),
+  // signUp: signUpRoute(),
+  // resetPassword: resetPasswordRoute(),
+  // getGoogleAuthURL: getGoogleAuthURLRoute(),
+  // googleSignin: googleSigninRoute(),
+  // editUser: editUserRoute(),
+  // deleteUser: deleteUserRoute(),
+  // getMe: getMeRoute(),
+  // emaileExists: emailExistsRoute(),
+  // checkCode: checkCodeRoute(),
+  // getUsers: getUsersRoute(),
+  // resetPasswordEmail: sentEmailRoute(),
+  // updatePassword: updatePasswordRoute(),
   // weather routes
   getWeather: getWeatherRoute(),
   getWeatherWeek: getWeatherWeekRoute(),
@@ -141,8 +141,8 @@ export const appRouter = trpcRouter({
   editTemplate: editTemplateRoute(),
   deleteTemplate: deleteTemplateRoute(),
   // password reset routes
-  requestPasswordResetEmailAndToken: requestPasswordResetEmailAndTokenRoute(),
-  handlePasswordReset: handlePasswordResetRoute(),
+  // requestPasswordResetEmailAndToken: requestPasswordResetEmailAndTokenRoute(),
+  // handlePasswordReset: handlePasswordResetRoute(),
   // packs routes
   getPublicPacks: getPublicPacksRoute(),
   getPacks: getPacksRoute(),

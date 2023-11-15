@@ -1,4 +1,4 @@
-import type { Item } from '@prisma/client';
+import type { Item } from '@prisma/client/edge';
 import { ItemAlreadyExistsError } from 'src/helpers/errors';
 
 type WeightUnit = 'g' | 'kg' | 'oz' | 'lb' | 'lbs';

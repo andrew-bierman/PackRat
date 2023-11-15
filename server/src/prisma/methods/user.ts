@@ -1,4 +1,4 @@
-import type { User as TUser } from '@prisma/client';
+import type { User as TUser } from '@prisma/client/edge';
 import { CLIENT_URL, JWT_SECRET } from '../../config';
 import jwt from 'jsonwebtoken';
 import prisma from '../client';

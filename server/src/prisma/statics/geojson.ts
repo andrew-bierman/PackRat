@@ -1,4 +1,4 @@
-import { GeoJSON } from '@prisma/client';
+import { GeoJSON } from '@prisma/client/edge';
 import prisma from '../client';
 
 async function saveOne(feature: GeoJSON) {
