@@ -23,7 +23,9 @@ export const useAddNewPack = () => {
 
       const newQueryData = {
         ...oldQueryData,
-        packs:  oldQueryData?.packs ? [...oldQueryData.packs, optimisticUpdate] : [optimisticUpdate],
+        packs: oldQueryData?.packs
+          ? [...oldQueryData.packs, optimisticUpdate]
+          : [optimisticUpdate],
       };
       console.log(newQueryData);
       utils.getPacks.setData(
