@@ -12,7 +12,7 @@ import {
   HStack,
 } from 'native-base';
 
-import { XStack, YStack, RText, RStack, RButton } from '@packrat/ui';
+import { XStack, YStack, RText, RStack, CustomCard, RButton } from '@packrat/ui';
 
 import useTheme from '../../hooks/useTheme';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
@@ -74,8 +74,8 @@ const CustomAccordion = ({ title, content, iconName }) => {
   };
 
   return (
-    <Card style={styles.card}>
-      <XStack ai='center' jc='space-between' px={20} py={10}>
+    <CustomCard landing_page bg={currentTheme.colors.secondaryBlue}>
+      <CustomCard.Header>
         <MaterialIcons name={iconName} style={styles.icon} />
         <RStack f={1}>
           <RText fos={18} col={currentTheme.colors.text}>{title}</RText>
@@ -90,9 +90,9 @@ const CustomAccordion = ({ title, content, iconName }) => {
             style={styles.icon}
           />
         </Button>
-      </XStack>
-      {expanded && <RText fos={16} col={currentTheme.colors.text} px={20} py={10}>{content}</RText>}
-    </Card>
+      </CustomCard.Header>
+      {expanded && <CustomCard.Text col={currentTheme.colors.text}>{content}</CustomCard.Text>}
+    </CustomCard>
   );
 };
 
@@ -122,7 +122,7 @@ const LandingPage = () => {
           style={styles.backgroundImage}
         > */}
         <RStack style={styles.overlay} />
-        <Container style={styles.contentContainer}>
+        <RStack style={styles.contentContainer}>
           <RText style={styles.introText}>
             PackRat is the ultimate adventure planner designed for those who
             love to explore the great outdoors. Plan and organize your trips
@@ -175,8 +175,8 @@ const LandingPage = () => {
               />
             ))}
           </RStack>
-        </Container>
-        <Container style={styles.buttonContainer}>
+        </RStack>
+        <RStack style={styles.buttonContainer}>
           <Button
             full
             style={styles.getStartedButton}
@@ -186,7 +186,7 @@ const LandingPage = () => {
           >
             <RText col={currentTheme.colors.text} fos={18} fw='bold'>Get Started</RText>
           </Button>
-        </Container>
+        </RStack>
         <StatusBar style="auto" />
         {/* </ImageBackground> */}
       </RStack>
