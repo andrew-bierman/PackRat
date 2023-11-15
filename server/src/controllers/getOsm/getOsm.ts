@@ -7,7 +7,7 @@ import {
 } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { publicProcedure } from '../../trpc';
-import * as validators from '@packrat/packages';
+import * as validators from '@packrat/validations';
 import { getOsmService } from '../../services/osm/getOsmService';
 import { z } from 'zod';
 
