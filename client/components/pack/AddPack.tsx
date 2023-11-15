@@ -1,14 +1,14 @@
-import { Platform } from 'react-native';
-import { Box, Input, Button, Text, Select, CheckIcon } from 'native-base';
-
-// import useAddPack from "../../hooks/useAddPack";
+import { Platform, View } from 'react-native';
+import DropdownComponent from '../Dropdown';
+import { RInput, RButton, RText, RLabel } from '@packrat/ui';
 import { addPack } from '../../store/packsStore';
 import { useState } from 'react';
-// import { useAuth } from "../../auth/provider";
 import { useSelector, useDispatch } from 'react-redux';
 import { CustomModal } from '../modal';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from '~/hooks/useCustomStyles';
+// import useAddPack from "../../hooks/useAddPack";
+// import { useAuth } from "../../auth/provider";
 
 export const AddPack = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
@@ -49,11 +49,9 @@ export const AddPack = () => {
   };
 
   return (
-    <Box style={styles.container}>
-      <Box style={styles.mobileStyle}>
-        <Input
-          size="lg"
-          variant="outline"
+    <View style={styles.container}>
+      <View style={styles.mobileStyle}>
+        <RInput
           placeholder="Name"
           value={name}
           onChangeText={(text) => {
@@ -61,46 +59,29 @@ export const AddPack = () => {
           }}
           width={Platform.OS === 'web' ? '25%' : '100%'}
         />
-        <Select
-          selectedValue={isPublic}
-          width="100%"
+        <RLabel>Is Public:</RLabel>
+        <DropdownComponent
+          value={isPublic}
+          onValueChange={handleonValueChange}
+          data={data}
+          width="300px"
           accessibilityLabel="Choose Service"
           placeholder={'Is Public'}
-          _selectedItem={{
-            bg: 'teal.600',
-            endIcon: <CheckIcon size="5" />,
-          }}
-          onValueChange={handleonValueChange}
-        >
-          {data
-            ? data?.map((item, index) => {
-                let val = item;
-                let label = item;
-                if (typeof item === 'object' && item !== null) {
-                  val = item.id || item._id || item.name;
-                  label = item.name;
-                }
-                return (
-                  <Select.Item key={index} label={String(label)} value={val} />
-                );
-              })
-            : null}
-        </Select>
-
-        <Button
+        />
+        <RButton
           width={Platform.OS === 'web' ? null : '50%'}
           onPress={() => {
             handleAddPack();
           }}
         >
-          <Text style={{ color: currentTheme.colors.text }}>
+          <RText style={{ color: currentTheme.colors.text }}>
             {isLoading ? 'Loading...' : 'Add Pack'}
-          </Text>
-        </Button>
+          </RText>
+        </RButton>
 
-        {isError && <Text>Pack already exists</Text>}
-      </Box>
-    </Box>
+        {isError && <RText>Pack already exists</RText>}
+      </View>
+    </View>
   );
 };
 

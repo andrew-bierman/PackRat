@@ -120,22 +120,17 @@ import React from 'react';
 import { View } from 'react-native';
 import { RSelect } from '@packrat/ui';
 
-
 export const DropdownComponent = ({
-  data,
-  value,
-  onValueChange,
-  placeholder,
   width,
-  style,
+  style = {},
+  placeholder,
+  ...props
 }) => {
   return (
     <View style={{ ...style, width: width || '100%' }}>
       <RSelect
-        defaultValue={value || ''}
-        onValueChange={onValueChange}
         placeholder={placeholder || 'Select'}
-        data={data} 
+        {...props}
       />
     </View>
   );

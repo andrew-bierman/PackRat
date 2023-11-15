@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { Check, ChevronDown } from '@tamagui/lucide-icons';
 import {
   Adapt,
@@ -24,15 +24,15 @@ const extractOptionAttributes = (item, index) => {
 }
 
 export function SelectItem(props) {
-  const { onValueChange, data, defaultValue, placeholder, ...forwardedProps } = props;
-  const [val, setVal] = useState(defaultValue);
+  const {
+    value,
+    onValueChange,
+    data,
+    placeholder,
+    ...forwardedProps
+  } = props;
 
-  const handleChange = (newValue) => {
-    setVal(newValue);
-    if (onValueChange) {
-      onValueChange(newValue);
-    }
-  }
+  const handleChange = (newValue) => onValueChange && onValueChange(newValue);
 
   const options = useMemo(() => {
     if (!data) return null;
@@ -54,13 +54,13 @@ export function SelectItem(props) {
 
   return (
     <Select
-      value={val}
+      value={value}
       disablePreventBodyScroll
       onValueChange={handleChange}
       {...forwardedProps}
     >
       <Select.Trigger width={220} iconAfter={ChevronDown}>
-        <Select.Value placeholder={placeholder} />
+        <Select.Value>{placeholder}</Select.Value>
       </Select.Trigger>
       <Adapt when="sm" platform="touch">
         <Sheet
