@@ -1,7 +1,6 @@
-import { FlatList, Platform } from 'react-native';
+import { FlatList, Platform, View } from 'react-native';
 import { Table, Row, Cell, TableWrapper } from 'react-native-table-component';
 import { Feather } from '@expo/vector-icons';
-import { Select, Checkbox, Box, Text, HStack, Button } from 'native-base';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { convertWeight } from '../../utils/convertWeight';
@@ -15,52 +14,49 @@ import useTheme from '../../hooks/useTheme';
 import { PackOptions } from '../PackOptions';
 import CustomButton from '../custombutton';
 import useCustomStyles from '~/hooks/useCustomStyles';
-import { Skeleton } from '@packrat/ui';
+import { Skeleton, RText, RStack, RButton, RCheckbox } from '@packrat/ui';
+import DropdownComponent from '../Dropdown';
 
 const WeightUnitDropdown = ({ value, onChange }) => {
   return (
-    <Select
-      selectedValue={value}
+    <DropdownComponent
+      value={value}
       accessibilityLabel="Select weight unit"
       placeholder="Select weight unit"
       onValueChange={(itemValue) => onChange(itemValue)}
-    >
-      <Select.Item label="Kg Kilogram" value="kg" />
-      <Select.Item label="G Gram" value="g" />
-      <Select.Item label="Lb Pound" value="lb" />
-      <Select.Item label="Oz Ounce" value="oz" />
-    </Select>
+      data={['kg', 'g', 'lb', 'oz']}
+    />
   );
 };
 
 const TotalWeightBox = ({ label, weight, unit }) => {
   const styles = useCustomStyles(loadStyles);
   return (
-    <Box style={styles.totalWeightBox}>
-      <Text>{label}</Text>
-      <Text>{`${formatNumber(weight)} (${unit})`}</Text>
-    </Box>
+    <View style={styles.totalWeightBox}>
+      <RText>{label}</RText>
+      <RText>{`${formatNumber(weight)} (${unit})`}</RText>
+    </View>
   );
 };
 
 const IgnoreItemCheckbox = ({ itemId, isChecked, handleCheckboxChange }) => (
-  <Box
+  <View
     style={{
       justifyContent: 'center',
       alignItems: 'flex-start',
     }}
   >
-    <Checkbox
+    <RCheckbox
       key={itemId}
       value="Ignore Item"
-      isChecked={isChecked}
-      onChange={() => handleCheckboxChange(itemId)}
+      checked={isChecked}
+      onCheckedChange={() => handleCheckboxChange(itemId)}
       aria-label="Ignore item"
     />
-  </Box>
+  </View>
 );
 
-const ErrorMessage = ({ message }) => <Text>{message}</Text>;
+const ErrorMessage = ({ message }) => <RText>{message}</RText>;
 
 const TableItem = ({
   itemData,
@@ -186,14 +182,14 @@ const CategoryRow = ({ category }) => {
   };
 
   const rowData = [
-    <HStack style={styles.categoryRow}>
+    <RStack style={{flexDirection: "row", gap: "8px", ...styles.categoryRow}}>
       <Feather
         name={categoryIcons[category]}
         size={16}
         color={currentTheme.colors.white}
       />
-      <Text style={styles.titleText}> {category}</Text>
-    </HStack>,
+      <RText fontSize="$2" style={styles.titleText}> {category}</RText>
+    </RStack>
   ];
 
   return (
@@ -204,9 +200,9 @@ const CategoryRow = ({ category }) => {
 const TitleRow = ({ title }) => {
   const styles = useCustomStyles(loadStyles);
   const rowData = [
-    <HStack style={styles.mainTitle}>
-      <Text style={styles.titleText}>{title}</Text>
-    </HStack>,
+    <RStack style={{flexDirection: "row", ...styles.mainTitle}}>
+      <RText fontSize="$2" style={styles.titleText}>{title}</RText>
+    </RStack>
   ];
 
   return (
@@ -333,7 +329,7 @@ export const TableContainer = ({
   if (isLoading) return <Skeleton />;
   if (error) return <ErrorMessage message={error} />;
   return (
-    <Box style={styles.container}>
+    <View style={styles.container}>
       {data?.length ? (
         <>
           <Table style={styles.tableStyle} flexArr={flexArr}>
@@ -396,10 +392,10 @@ export const TableContainer = ({
           />
         </>
       ) : (
-        <Text style={styles.noItemsText}>Add your First Item</Text>
+        <RText style={styles.noItemsText}>Add your First Item</RText>
       )}
       <WeightUnitDropdown value={weightUnit} onChange={setWeightUnit} />
-    </Box>
+    </View>
   );
 };
 
@@ -467,7 +463,7 @@ const loadStyles = (theme) => {
     noItemsText: {
       fontWeight: 'bold',
       fontSize: 16,
-      marginTop: 20,
+      margin: 20,
       textAlign: 'center',
     },
     totalWeightBox: {

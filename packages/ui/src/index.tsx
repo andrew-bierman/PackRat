@@ -14,6 +14,7 @@ import RHeading from './RHeading';
 import RSelect from './RSelect';
 import RLabel from './RLabel';
 import RDialog from './RDialog';
+import RCheckbox from './RCheckbox';
 import RH1 from './RH1';
 import RH2 from './RH2';
 import RH3 from './RH3';
@@ -30,6 +31,7 @@ export {
   RH5,
   RH6,
   RHeading,
+  RCheckbox,
   RDialog,
   RStack,
   RLabel,

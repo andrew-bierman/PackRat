@@ -2,7 +2,7 @@ import React from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 import { AddItem } from '../item/AddItem';
 import { CustomModal } from '../modal';
-import { Box } from 'native-base';
+import { View } from 'react-native';
 
 export const EditPackItemModal = ({
   initialData,
@@ -33,7 +33,7 @@ export const EditPackItemModal = ({
   ];
 
   return (
-    <Box>
+    <View>
       <CustomModal
         isActive={isModalOpen}
         title={'Edit Item'}
@@ -55,6 +55,6 @@ export const EditPackItemModal = ({
           refetch={refetch}
         />
       </CustomModal>
-    </Box>
+    </View>
   );
 };
