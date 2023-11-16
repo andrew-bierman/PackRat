@@ -6,19 +6,22 @@ import { theme } from '../../theme';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from '~/hooks/useCustomStyles';
 
+import {RCard, RText } from '@packrat/ui';
+
 const QuickActionButton = ({ onPress, iconName, text }) => {
-  const styles = useCustomStyles(loadStyles);
+  const styles = useCustomStyles(loadStyles); 
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } = useTheme();
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
-      <Card style={styles.card}>
+      <RCard jc='center' ai='center' px={10} py={20} bg={currentTheme.colors.primary}>
         <MaterialIcons
           name={iconName}
           size={24}
           color={theme.colors.iconColor}
           style={styles.icon}
         />
-        <Text style={styles.text}>{text}</Text>
-      </Card>
+        <RText fos={12} col={currentTheme.colors.iconColor}>{text}</RText>
+      </RCard>
     </TouchableOpacity>
   );
 };
@@ -29,19 +32,8 @@ const loadStyles = (theme) => {
     container: {
       marginRight: 10,
     },
-    card: {
-      justifyContent: 'center',
-      alignItems: 'center',
-      paddingHorizontal: 10,
-      paddingVertical: 20,
-      backgroundColor: currentTheme.colors.primary,
-    },
     icon: {
       marginBottom: 10,
-    },
-    text: {
-      fontSize: 12,
-      color: currentTheme.colors.iconColor,
     },
   };
 };

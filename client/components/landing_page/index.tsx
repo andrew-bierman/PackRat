@@ -131,8 +131,8 @@ const LandingPage = () => {
           </RText>
           {Platform.OS === 'web' && (
             <YStack jc='center' ai='center' my={20} mb={20}>
-              <XStack jc='center' fw='wrap'>
-                <Button title="App Store" style={{ margin: 10 }}>
+              <XStack jc='space-between' fw='wrap'>
+                <Button title="App Store" style={{marginRight: 10}}>
                   <XStack space={2} ai="center">
                     <MaterialCommunityIcons
                       name="apple"
@@ -144,7 +144,7 @@ const LandingPage = () => {
                     </RText>
                   </XStack>
                 </Button>
-                <Button title="Google Play" style={{ margin: 10 }}>
+                <Button title="Google Play">
                   <XStack space={2} ai="center">
                     <MaterialCommunityIcons
                       name="google-play"

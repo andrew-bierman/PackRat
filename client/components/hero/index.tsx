@@ -1,10 +1,10 @@
 import React from 'react';
-import { VStack, Text, Image } from 'native-base';
 import LargeCard from '../card/LargeCard';
 import { Platform, View } from 'react-native';
 import { theme } from '../../theme';
 import { isObjectEmpty } from '../../utils/isObjectEmpty';
 import useCustomStyles from '~/hooks/useCustomStyles';
+import { YStack, RImage } from '@packrat/ui';
 
 const Hero = ({ children, imageDetails }) => {
   if (isObjectEmpty(imageDetails || {})) {
@@ -26,8 +26,8 @@ const Hero = ({ children, imageDetails }) => {
         Platform.OS === 'web' ? { height: '310px' } : null,
       ]}
     >
-      <Image source={source} alt={alt} style={styles.heroImage} />
-      <VStack>{children}</VStack>
+      <RImage source={source} alt={alt} style={styles.heroImage} />
+      <YStack>{children}</YStack>
     </View>
   );
 };

@@ -6,6 +6,7 @@ import useTheme from '../../hooks/useTheme';
 
 import { theme } from '../../theme';
 import useCustomStyles from '~/hooks/useCustomStyles';
+import { RStack, XStack, RText } from '@packrat/ui';
 
 /**
  * Retrieves the appropriate container style based on the provided type.
@@ -59,35 +60,22 @@ export default function LargeCard({
   const containerStyle = customStyle || getContainerStyle(type);
 
   return (
-    <Stack
+    <RStack
       alignSelf="center"
       w={['100%', '100%', '100%', '90%']}
       direction={['column', 'column', 'row', 'row']}
       rounded={['none', 'none', 'md', 'lg']}
       style={containerStyle}
     >
-      <Box
-        style={{
-          flexDirection: 'row',
-          gap: 15,
-          alignItems: 'center',
-          paddingVertical: 15,
-        }}
-      >
+      <XStack ai='center' py= {15} gap={15}>
         {Icon ? <Icon /> : null}
-        <Text
-          style={{
-            color: currentTheme.colors.textPrimary,
-            fontSize: currentTheme.font.size,
-            fontWeight: 600,
-          }}
-        >
-          {title && <Text>{title}</Text>}
-        </Text>
-      </Box>
+        <RText c={currentTheme.colors.textPrimary} fos={currentTheme.colors.textPrimary} fow={600}>
+          {title && <RText>{title}</RText>}
+        </RText>
+      </XStack>
       {ContentComponent ? <ContentComponent {...contentProps} /> : null}
       {children}
-    </Stack>
+    </RStack>
   );
 }
 

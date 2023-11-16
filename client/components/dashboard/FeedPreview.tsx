@@ -2,13 +2,13 @@
 
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Card, Text, HStack, Badge } from 'native-base';
 import { Link } from 'expo-router';
 import { Dimensions, FlatList, View } from 'react-native';
 import { getPublicPacks, getPublicTrips } from '../../store/feedStore';
 import useTheme from '../../hooks/useTheme';
 import Carousel from '../carousel';
 import useCustomStyles from '~/hooks/useCustomStyles';
+import { RText, XStack, RBadge } from '@packrat/ui';
 
 const { height, width } = Dimensions.get('window');
 
@@ -31,13 +31,13 @@ const FeedPreviewScroll = () => {
         return linkStr ? (
           <Link href={linkStr} key={`${linkStr}`}>
             <View style={styles.cardStyles} key={index}>
-              <HStack justifyContent="space-between">
-                <Text style={styles.feedItemTitle}>{item.name}</Text>
-                <Badge colorScheme="info" textTransform={'capitalize'}>
+              <XStack jc="space-between">
+                <RText style={styles.feedItemTitle}>{item.name}</RText>
+                <RBadge>
                   {item.type}
-                </Badge>
-              </HStack>
-              <Text>{item.description}</Text>
+                </RBadge>
+              </XStack>
+              <RText style={undefined}>{item.description}</RText>
             </View>
           </Link>
         ) : null;
