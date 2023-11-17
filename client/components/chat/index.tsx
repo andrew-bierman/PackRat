@@ -15,7 +15,7 @@ import {
   selectConversationById,
   selectAllConversations,
 } from '../../store/chatStore';
-import { Box, VStack, HStack } from 'native-base';
+import { RStack } from '@packrat/ui';
 import { CustomModal } from '../modal';
 import useCustomStyles from '~/hooks/useCustomStyles';
 
@@ -100,10 +100,10 @@ const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
 
   return (
     <View style={styles.container}>
-      <VStack space={2} alignItems="center">
+      <RStack style={{alignItems:"center"}}>
         {showChatSelector && (
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <Box
+            <View
               borderRadius="lg"
               borderColor="coolGray.200"
               borderWidth={1}
@@ -129,10 +129,10 @@ const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
               >
                 <Text style={styles.newChatButtonText}>New Chat</Text>
               </TouchableOpacity>
-            </Box>
+            </View>
           </ScrollView>
         )}
-      </VStack>
+      </RStack>
       <FlatList
         data={parsedMessages}
         renderItem={({ item }) => <MessageBubble message={item} />}
@@ -162,7 +162,7 @@ const ChatModalTrigger = () => {
   const styles = useCustomStyles(loadStyles);
 
   return (
-    <Box style={styles.container}>
+    <View style={styles.container}>
       <CustomModal
         title="Chat"
         trigger="Open Chat"
@@ -172,7 +172,7 @@ const ChatModalTrigger = () => {
       >
         <ChatComponent onClose={handleClose} />
       </CustomModal>
-    </Box>
+    </View>
   );
 };
 
