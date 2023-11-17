@@ -8,17 +8,12 @@ import {
   IconButton,
   HStack,
   List,
-  View,
-  Pressable,
 } from 'native-base';
+import { RStack, RInput, RIcon, RText, RScrollView, RIconButton } from '@packrat/ui';
 import { MaterialIcons } from '@expo/vector-icons';
-
-import { Platform } from 'react-native';
-
+import { Platform,  View, Pressable } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-
 import { useState } from 'react';
-
 import { fetchItemsSearchResults } from '../../store/searchStore';
 import { selectItemsGlobal } from '../../store/singlePackStore';
 
@@ -62,58 +57,46 @@ export const SearchItem: React.FC<Props> = ({ onSelect, placeholder }) => {
   const dispatch = useDispatch();
 
   return Platform.OS === 'web' ? (
-    <VStack my="2" space={5} w="100%" maxW="300px">
+    <RStack style={{width:"100%", maxWidth:"300px"}}>
       {/* ... */}
-      <VStack w="100%" space={5} alignSelf="center">
-        <Box position="relative" height="auto">
-          <Input
+      <RStack style={{width: "100%", alignItem: "center"}}>
+        <View style={{position:"relative", height:"auto", flexDirection: "row"}}>
+          <RInput
             onChangeText={(text) => {
               setSearchString(text);
               // @ts-expect-error
-              dispatch(fetchItemsSearchResults(text));
+              //dispatch(fetchItemsSearchResults(text));
               setShowSearchResults(true);
             }}
             placeholder={placeholder ?? 'Type here to search'}
-            width="100%"
-            borderRadius="4"
-            py="3"
-            px="1"
+            style={{
+              width:"100%",
+              borderRadius:"4",
+              padding:"16px 8px",
+              backgroundColor: "white",
+            }}
             value={searchString}
-            fontSize="14"
-            backgroundColor={'white'}
-            InputLeftElement={
-              <Icon
-                m="2"
-                ml="3"
-                size="6"
-                color="gray.400"
-                as={<MaterialIcons name="search" />}
-              />
-            }
-            InputRightElement={
-              showSearchResults && (
-                <IconButton
-                  mr={2}
-                  icon={
-                    <Icon
-                      as={<MaterialIcons name="close" />}
-                      m="0"
-                      size="4"
-                      color="g  
-                      ray.400"
-                    />
-                  }
-                  onPress={() => {
-                    setShowSearchResults(false);
-                    setSearchString('');
-                  }}
-                />
-              )
-            }
+            fontSize={14}
+          />
+          <RIconButton
+            backgroundColor="transparent"
+            icon={showSearchResults 
+              ? (
+                <MaterialIcons name="close" size={24} color="gray"/>
+              ) : (
+                <MaterialIcons name="search" size={24} color="gray"/>
+              )}
+              onPress={ showSearchResults && (
+                () => {
+                  setShowSearchResults(false);
+                  setSearchString('');
+                }) 
+              }
+              disabled={!showSearchResults}
           />
           <View style={{ position: 'relative' }}>
             {showSearchResults && searchResults?.length > 0 && (
-              <ScrollView
+              <RScrollView
                 position="absolute"
                 top="100%"
                 left="0"
@@ -151,13 +134,13 @@ export const SearchItem: React.FC<Props> = ({ onSelect, placeholder }) => {
                     </Pressable>
                   ))}
                 </List>
-              </ScrollView>
+              </RScrollView>
             )}
           </View>
-        </Box>
-      </VStack>
-    </VStack>
-  ) : isLoadingMobile ? (
+        </View>
+      </RStack>
+    </RStack>
+   ) : isLoadingMobile ? (
     <Text>Loading...</Text>
   ) : (
     <VStack w="100%" space={5} alignSelf="center">
@@ -182,7 +165,7 @@ export const SearchItem: React.FC<Props> = ({ onSelect, placeholder }) => {
       />
 
       {showSearchResults && searchResults?.length > 0 && (
-        <ScrollView
+        <RScrollView
           position="absolute"
           top="100%"
           left="0"
@@ -214,7 +197,7 @@ export const SearchItem: React.FC<Props> = ({ onSelect, placeholder }) => {
               </Pressable>
             ))}
           </List>
-        </ScrollView>
+        </RScrollView>
       )}
     </VStack>
   );
