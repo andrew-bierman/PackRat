@@ -47,7 +47,7 @@ const IgnoreItemCheckbox = ({ itemId, isChecked, handleCheckboxChange }) => (
     }}
   >
     <RCheckbox
-      key={itemId}
+      id={itemId}
       value="Ignore Item"
       checked={isChecked}
       onCheckedChange={() => handleCheckboxChange(itemId)}

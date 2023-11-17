@@ -1,13 +1,18 @@
 import { Check } from '@tamagui/lucide-icons'
-import { Checkbox } from 'tamagui'
+import { Checkbox, XStack, Label } from 'tamagui'
 
-const RCheckbox = (props) => {
+const RCheckbox = ({id, value, ...props}) => {
   return (
-    <Checkbox {...props}>
-      <Checkbox.Indicator>
-        <Check />
-      </Checkbox.Indicator>
-    </Checkbox>
+    <XStack space="$2">
+      <Checkbox id={id} {...props}>
+        <Checkbox.Indicator>
+          <Check />
+        </Checkbox.Indicator>
+      </Checkbox>
+      <Label size="$1" htmlFor={id}>
+        {value}
+      </Label>
+    </XStack>
 )}
 
 export default RCheckbox;
