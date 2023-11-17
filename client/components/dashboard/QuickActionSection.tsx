@@ -3,6 +3,7 @@ import QuickActionButton from './QuickActionButton';
 import useTheme from '../../hooks/useTheme';
 import { useRouter } from 'expo-router';
 import useCustomStyles from '~/hooks/useCustomStyles';
+import { XStack } from '@packrat/ui';
 
 const QuickActionsSection = () => {
   const router = useRouter();
@@ -35,7 +36,7 @@ const QuickActionsSection = () => {
   };
 
   return (
-    <HStack style={styles.section}>
+    <XStack mb={20} px={20}>
       {quickActionData.map((action) => (
         <QuickActionButton
           key={action.action}
@@ -46,17 +47,13 @@ const QuickActionsSection = () => {
           text={action.text}
         />
       ))}
-    </HStack>
+    </XStack>
   );
 };
 
 const loadStyles = (theme) => {
   const { currentTheme } = theme;
   return {
-    section: {
-      marginBottom: 20,
-      paddingHorizontal: 20, // Added padding here.
-    },
     card: {
       justifyContent: 'center',
       alignItems: 'center',

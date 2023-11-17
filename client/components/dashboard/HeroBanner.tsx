@@ -1,5 +1,4 @@
 import React from 'react';
-import { Box, VStack, Text, Image } from 'native-base';
 import LargeCard from '../card/LargeCard';
 import { SearchInput } from '../SearchInput';
 import { View } from 'react-native';
@@ -15,6 +14,7 @@ import {
 } from '../../store/destinationStore';
 import { hexToRGBA } from '../../utils/colorFunctions';
 import useCustomStyles from '~/hooks/useCustomStyles';
+import { RText, YStack } from '@packrat/ui';
 
 const HeroSection = ({ onSelect }) => {
   const dispatch = useDispatch();
@@ -102,20 +102,13 @@ const HeroSection = ({ onSelect }) => {
             padding: 50,
           }}
         >
-          <VStack
-            style={{
-              width: '100%',
-              height: '100%',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <Text style={styles.title}>{bannerText}</Text>
+          <YStack w='100%' h='100%' ai='center' jc='center'>
+            <RText style={styles.title}>{bannerText}</RText>
             <SearchInput
               onSelect={handleSearchSelect}
               placeholder={'Search by park, city, or trail'}
             />
-          </VStack>
+          </YStack>
         </LargeCard>
       </Hero>
     </View>

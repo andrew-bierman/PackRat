@@ -4,28 +4,19 @@ import { Text, HStack } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { theme } from '../../theme';
 import useCustomStyles from '~/hooks/useCustomStyles';
+import { RText, XStack } from '@packrat/ui';
 
 const SectionHeader = ({ iconName, text }) => {
   const styles = useCustomStyles(loadStyles);
   return (
-    <HStack style={styles.hStack}>
+    <XStack jc='space-around' ai='center' mb={10}>
       <Ionicons name={iconName} style={styles.icon} />
-      <Text style={styles.text}>{text}</Text>
-    </HStack>
+      <RText fos={20} fow='bold' col={theme.colors.text}>{text}</RText>
+    </XStack>
   );
 };
 
 const loadStyles = () => ({
-  hStack: {
-    marginBottom: 10,
-    justifyContent: 'space-around', // Updated from "space-between"
-    alignItems: 'center',
-  },
-  text: {
-    color: theme.colors.text,
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
   icon: {
     fontSize: 40,
     margin: 10,
