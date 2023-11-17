@@ -72,6 +72,7 @@ export const RequestPasswordResetEmailModal = () => {
         },
         {
           label: 'Cancel',
+          color: '#B22222',
           onClick: () => {
             setIsOpen(false);
           },

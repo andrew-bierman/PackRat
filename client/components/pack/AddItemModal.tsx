@@ -1,5 +1,7 @@
 import { CustomModal } from '../modal';
 import { AddItem } from '../item/AddItem';
+import useTheme from '~/hooks/useTheme';
+
 
 export const AddItemModal = ({
   currentPackId,
@@ -8,6 +10,8 @@ export const AddItemModal = ({
   setIsAddItemModalOpen,
   setRefetch = () => {},
 }) => {
+  const { currentTheme } = useTheme();
+
   return (
     <CustomModal
       title="Add Item"
@@ -17,12 +21,12 @@ export const AddItemModal = ({
       footerButtons={[
         {
           label: 'Save',
-          color: 'primary',
+          color: `${currentTheme.colors.secondaryBlue}`,
           onClick: () => setIsAddItemModalOpen(false),
         },
         {
           label: 'Cancel',
-          color: 'danger',
+          color: '#B22222',
           onClick: () => setIsAddItemModalOpen(false),
         },
       ]}

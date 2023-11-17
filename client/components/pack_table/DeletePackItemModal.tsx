@@ -63,7 +63,7 @@ export const DeletePackItemModal = ({
     {
       label: 'Delete',
       onClick: deleteItemHandler,
-      color: 'danger',
+      color: '#B22222',
       disabled: false,
     },
   ];

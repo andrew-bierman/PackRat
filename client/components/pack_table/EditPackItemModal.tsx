@@ -26,7 +26,7 @@ export const EditPackItemModal = ({
     {
       label: 'Cancel',
       onClick: closeModalHandler,
-      color: 'danger',
+      color: '#B22222',
       disabled: false,
     },
     // add more footer buttons here if needed

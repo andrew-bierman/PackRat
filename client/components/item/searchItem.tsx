@@ -65,7 +65,7 @@ export const SearchItem: React.FC<Props> = ({ onSelect, placeholder }) => {
             onChangeText={(text) => {
               setSearchString(text);
               // @ts-expect-error
-              //dispatch(fetchItemsSearchResults(text));
+              dispatch(fetchItemsSearchResults(text));
               setShowSearchResults(true);
             }}
             placeholder={placeholder ?? 'Type here to search'}
