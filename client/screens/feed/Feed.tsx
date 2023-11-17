@@ -4,11 +4,11 @@ import {
   RIconButton, 
   RSwitch, 
   RText, 
-  RStack, 
-  RInput, 
+  RStack,  
   RSeparator,
   RButton, 
 } from '@packrat/ui';
+import {Input,Text} from "tamagui"
 import { AntDesign } from '@expo/vector-icons';
 import { StyleSheet, FlatList, View, ScrollView } from 'react-native';
 import Card from '../../components/feed/FeedCard';
@@ -71,7 +71,7 @@ const FeedSearchFilter = ({
     <View style={styles.filterContainer}>
       <View style={styles.searchContainer}>
         <RStack space={3} style={{flexDirection: 'row', justifyContent: 'center'}}>
-          <RInput
+          <Input
             size="$30"
             placeholder={`Search ${feedType || 'Feed'}`}
             onChangeText={setSearchQuery}
@@ -100,25 +100,25 @@ const FeedSearchFilter = ({
       >
         {feedType === 'public' && (
           <RStack style={{flexDirection: 'row', gap: '10px', alignItems: 'center'}}>
-            <RText
+            <Text
               fontSize={18}
               fontWeight="bold"
               color={currentTheme.colors.textColor}
             >
               Packs
-            </RText>
+            </Text>
             <RSwitch
               size="$1.5"
               checked={selectedTypes.pack}
               onCheckedChange={handleTogglePack}
             />
-            <RText
+            <Text
               fontSize={18}
               fontWeight="bold"
               color={currentTheme.colors.textColor}
             >
               Trips
-            </RText>
+            </Text>
             <RSwitch
               size="$1.5"
               checked={selectedTypes.trip}
@@ -127,13 +127,13 @@ const FeedSearchFilter = ({
           </RStack>
         )}
         <RStack style={{flexDirection: 'row', gap: '10px', alignItems: 'center'}}>
-          <RText
+          <Text
             fontSize={17}
             fontWeight="bold"
             color={currentTheme.colors.textColor}
           >
             Sort By:
-          </RText>
+          </Text>
           <DropdownComponent
             value={queryString}
             data={dataValues}

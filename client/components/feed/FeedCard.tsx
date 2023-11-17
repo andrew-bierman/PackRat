@@ -12,6 +12,7 @@ import { TouchableOpacity, View } from 'react-native';
 import { Link } from 'expo-router';
 import { DuplicateIcon } from '../DuplicateIcon/index';
 import { truncateString } from '../../utils/truncateString';
+import {Text} from "tamagui"
 import { RText, RStack, RHeading } from '@packrat/ui';
 import { formatNumber } from '~/utils/formatNumber';
 
@@ -102,9 +103,9 @@ export default function Card({
                 }}
               >
                 <Link href={type === 'pack' ? '/pack/' + _id : '/trip/' + _id}>
-                  <RText fontSize={18} color={currentTheme.colors.textColor}>
+                  <Text fontSize={18} color={currentTheme.colors.textColor}>
                     {truncatedName}
-                  </RText>
+                  </Text>
                 </Link>
                 <RStack style={{ flexDirection: 'row', alignItems:"center", justifyContent:"center", gap: "10px"}}>
                   {type === 'pack' && (
@@ -137,7 +138,7 @@ export default function Card({
             </RHeading>
 
             {type === 'pack' && (
-              <RText
+              <Text
                 fontSize="$1"
                 color="mediumpurple"
                 fontWeight="500"
@@ -145,11 +146,11 @@ export default function Card({
                 mt={-1}
               >
                 Total Weight: {formattedWeight}
-              </RText>
+              </Text>
             )}
 
             {type === 'trip' && (
-              <RText
+              <Text
                 fontSize="$1"
                 color="mediumpurple"
                 fontWeight="500"
@@ -157,7 +158,7 @@ export default function Card({
                 mt={-1}
               >
                 {truncatedDestination}
-              </RText>
+              </Text>
             )}
           </RStack>
 
