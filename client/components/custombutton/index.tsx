@@ -1,21 +1,21 @@
-import { Button } from 'native-base';
+import { RButton } from '@packrat/ui';
 import React from 'react';
 
-const CustomButton = ({ text, handler, ...args }) => {
-  const { copy } = { ...args };
+const CustomButton = ({ children, copy, handler, ...args }) => {
   return (
     <>
       {copy && (
-        <Button
+        <RButton
           style={{
-            width: '20rem',
+            width: '300px',
             marginHorizontal: 'auto',
             marginTop: 10,
           }}
           onPress={handler}
+          {...args}
         >
-          {text}
-        </Button>
+          {children}
+        </RButton>
       )}
     </>
   );

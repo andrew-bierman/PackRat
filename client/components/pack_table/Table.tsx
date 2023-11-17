@@ -374,7 +374,7 @@ export const TableContainer = ({
               )}
             />
           </Table>
-          <CustomButton text="Copy" handler={handleDuplicate} copy={copy} />
+          <CustomButton copy={copy} handler={handleDuplicate}>Copy</CustomButton>
           <TotalWeightBox
             label="Base Weight"
             weight={totalBaseWeight}
