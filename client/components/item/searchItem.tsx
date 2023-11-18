@@ -1,19 +1,8 @@
-import {
-  VStack,
-  Input,
-  Icon,
-  Box,
-  Text,
-  ScrollView,
-  IconButton,
-  HStack,
-  List,
-} from 'native-base';
-import { RStack, RInput, RIcon, RText, RScrollView, RIconButton } from '@packrat/ui';
-import { MaterialIcons } from '@expo/vector-icons';
 import { Platform,  View, Pressable } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
+import { RStack, RInput, RText, RScrollView, RIconButton } from '@packrat/ui';
+import { MaterialIcons } from '@expo/vector-icons';
 import { fetchItemsSearchResults } from '../../store/searchStore';
 import { selectItemsGlobal } from '../../store/singlePackStore';
 
@@ -59,7 +48,7 @@ export const SearchItem: React.FC<Props> = ({ onSelect, placeholder }) => {
   return Platform.OS === 'web' ? (
     <RStack style={{width:"100%", maxWidth:"300px"}}>
       {/* ... */}
-      <RStack style={{width: "100%", alignItem: "center"}}>
+      <RStack style={{width: "100%", alignItems: "center"}}>
         <View style={{position:"relative", height:"auto", flexDirection: "row"}}>
           <RInput
             onChangeText={(text) => {
@@ -109,10 +98,11 @@ export const SearchItem: React.FC<Props> = ({ onSelect, placeholder }) => {
                 showsVerticalScrollIndicator={false}
                 zIndex={10}
               >
-                <List space={2} w="100%" zIndex={10}>
+                <View role="list" style={{width:"100%", zIndex:10}}>
                   {searchResults.map((result, i) => (
                     <Pressable
                       key={`result + ${i}`}
+                      role="listitem"
                       onPress={() => {
                         handleSearchResultClick(result, i);
                         setShowSearchResults(false);
@@ -121,19 +111,18 @@ export const SearchItem: React.FC<Props> = ({ onSelect, placeholder }) => {
                       // @ts-expect-error
                       underlayColor="gray.100"
                     >
-                      <HStack space={3}>
-                        <Text fontSize="sm" ml="2" fontWeight="medium">
+                      <RStack  style={{flexDirection: "row"}}>
+                        <RText fontWeight="400">
                           {result.name}
-                        </Text>
-                        <Text
-                          fontSize="sm"
-                          color="gray.500"
+                        </RText>
+                        <RText
+                          color="gray"
                           textTransform={'capitalize'}
-                        ></Text>
-                      </HStack>
+                        ></RText>
+                      </RStack>
                     </Pressable>
                   ))}
-                </List>
+                </View>
               </RScrollView>
             )}
           </View>
@@ -141,27 +130,24 @@ export const SearchItem: React.FC<Props> = ({ onSelect, placeholder }) => {
       </RStack>
     </RStack>
    ) : isLoadingMobile ? (
-    <Text>Loading...</Text>
+    <RText>Loading...</RText>
   ) : (
-    <VStack w="100%" space={5} alignSelf="center">
-      <Input
+    <RStack style={{width:"100%", alignSelf: "center"}}>
+      <RInput
         onChangeText={(text) => setSearchString(text)}
         placeholder="Search"
-        width="100%"
-        borderRadius="4"
-        py="3"
-        px="1"
+        style={{
+          width:"100%",
+          borderRadius:"4",
+          padding:"16px 8px",
+          backgroundColor: "white",
+        }}
         value={searchString}
-        fontSize="14"
-        InputLeftElement={
-          <Icon
-            m="2"
-            ml="3"
-            size="6"
-            color="gray.400"
-            as={<MaterialIcons name="search" />}
-          />
-        }
+        fontSize={14}
+      />
+      <RIconButton
+        backgroundColor="transparent"
+        icon={<MaterialIcons name="search" size={24} color="gray"/>}
       />
 
       {showSearchResults && searchResults?.length > 0 && (
@@ -178,27 +164,26 @@ export const SearchItem: React.FC<Props> = ({ onSelect, placeholder }) => {
           showsVerticalScrollIndicator={false}
           zIndex={10}
         >
-          <List space={2} w="100%">
+          <View role="list" style={{width:"100%", gap: "8px", padding: "8px"}}>
             {searchResults.map((result, i) => (
               <Pressable
                 key={`result + ${i}`}
+                role="listitem"
                 onPress={() => handleSearchResultClick(result, i)}
                 // @ts-expect-error
-                underlayColor="gray.100"
               >
-                <HStack space={3}>
-                  <Text fontSize="sm" fontWeight="medium"></Text>
-                  <Text
-                    fontSize="sm"
-                    color="gray.500"
+                <RStack style={{flexDirection: "row"}}>
+                  <RText fontWeight="400"></RText>
+                  <RText
+                    color="gray"
                     textTransform={'capitalize'}
-                  ></Text>
-                </HStack>
+                  ></RText>
+                </RStack>
               </Pressable>
             ))}
-          </List>
+          </View>
         </RScrollView>
       )}
-    </VStack>
+    </RStack>
   );
 };

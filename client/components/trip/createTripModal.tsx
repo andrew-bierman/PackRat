@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Platform, View } from 'react-native';
 import { CustomModal } from '../modal';
-import { Input, VStack, HStack, Text, Select } from 'native-base';
+import { RInput, RStack, RText } from '@packrat/ui';
 import { useDispatch, useSelector } from 'react-redux';
 import { format, intervalToDuration } from 'date-fns';
 import { addTrip } from '../../store/tripsStore';
@@ -13,7 +13,7 @@ import { DropdownComponent } from '../Dropdown';
 import axios from '~/config/axios';
 
 const options = [
-  { label: 'Yes', value: 'true' },
+  { label: 'Public', value: 'true' },
   { label: 'For me only', value: 'false' },
 ];
 
@@ -59,7 +59,7 @@ const NumberInput = (props) => {
   };
 
   return (
-    <Input
+    <RInput
       {...otherProps}
       value={value}
       keyboardType="numeric"
@@ -189,14 +189,14 @@ export const SaveTripContainer = ({ dateRange }) => {
         },
       ]}
     >
-      <VStack>
-        <Input
+      <RStack>
+        <RInput
           placeholder="Trip Name"
           onChange={(event) => {
             setName(event.target.value);
           }}
         />
-        <Input
+        <RInput
           placeholder="Trip Description"
           mt={4}
           onChange={(event) => {
@@ -243,68 +243,57 @@ export const SaveTripContainer = ({ dateRange }) => {
 
           <DropdownComponent
             onValueChange={(itemValue) => {
-              setIsPublic(itemValue == 'Yes');
+              setIsPublic(itemValue);
             }}
-            data={['Yes', 'For me only']}
+            data={['Public', 'For me only']}
             value={isPublic}
             placeholder="Is Public"
             style={{ marginTop: 4, marginBottom: 4 }}
             width={150}
           />
-          {/* <Select
-            minWidth="full"
-            placeholder="Is Public"
-            mt={4}
-            mb={4}
-            onValueChange={(itemValue) => setIsPublic(itemValue)}
-          >
-            <Select.Item label="Yes" value="true" />
-            <Select.Item label="For me only" value="false" />
-
-          </Select> */}
         </>
         <>
-          <Text>Trip Weather</Text>
-          <Text>
+          <RText>Trip Weather</RText>
+          <RText>
             Temparature - {weatherObject?.main?.temp}, Humidity -{' '}
             {weatherObject?.main?.humidity}
-          </Text>
+          </RText>
         </>
-        <HStack>
-          <Text>Pack</Text>
-          <Text>`Selected Pack Name`</Text>
-        </HStack>
-        <HStack>
-          <Text>Trip Location - </Text>
-          <Text>{search?.properties?.name}</Text>
-        </HStack>
-        <HStack>
-          <Text>Selected Trail - </Text>
-          <Text>{dropdown?.currentTrail}</Text>
-        </HStack>
-        <HStack>
-          <Text>Selected Date Range - </Text>
-          <Text>
+        <RStack style={{flexDirection: "row"}}>
+          <RText>Pack</RText>
+          <RText>`Selected Pack Name`</RText>
+        </RStack>
+        <RStack style={{flexDirection: "row"}}>
+          <RText>Trip Location - </RText>
+          <RText>{search?.properties?.name}</RText>
+        </RStack>
+        <RStack style={{flexDirection: "row"}}>
+          <RText>Selected Trail - </RText>
+          <RText>{dropdown?.currentTrail}</RText>
+        </RStack>
+        <RStack style={{flexDirection: "row"}}>
+          <RText>Selected Date Range - </RText>
+          <RText>
             {dateRange.startDate
               ? format(dateRange.startDate, 'MM/dd/yyyy')
               : ''}{' '}
             - {dateRange.endDate ? format(dateRange.endDate, 'MM/dd/yyyy') : ''}
-          </Text>
-        </HStack>
-        <HStack>
-          <Text>Duration {'(Number of nights) - '} </Text>
+          </RText>
+        </RStack>
+        <RStack style={{flexDirection: "row"}}>
+          <RText>Duration {'(Number of nights) - '} </RText>
           {dateRange.startDate && dateRange.endDate && (
-            <Text>
+            <RText>
               {
                 intervalToDuration({
                   start: dateRange.startDate,
                   end: dateRange.endDate,
                 }).days
               }
-            </Text>
+            </RText>
           )}
-        </HStack>
-      </VStack>
+        </RStack>
+      </RStack>
     </CustomModal>
   );
 };

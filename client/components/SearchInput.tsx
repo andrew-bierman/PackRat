@@ -1,20 +1,9 @@
-import {
-  VStack,
-  Input,
-  Icon,
-  Text,
-  ScrollView,
-  HStack,
-  List,
-  View,
-  Pressable,
-} from 'native-base';
-import { RStack, RInput, RButton, RText, RScrollView } from '@packrat/ui';
-import { MaterialIcons } from '@expo/vector-icons';
-import useTheme from '../hooks/useTheme';
-import { Platform } from 'react-native';
+import { Platform, View, Pressable } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
+import { RStack, RInput, RButton, RText, RScrollView, RIconButton } from '@packrat/ui';
+import { MaterialIcons } from '@expo/vector-icons';
+import useTheme from '../hooks/useTheme';
 import { fetchTrails } from '../store/trailsStore';
 import { fetchParks } from '../store/parksStore';
 import {
@@ -180,10 +169,11 @@ export const SearchInput = ({ onSelect, placeholder }) => {
               showsVerticalScrollIndicator={false}
               zIndex={20000}
             >
-              <RStack space={2} w="100%">
+              <View role="list" style={{width:"100%", gap: "8px", padding: "8px"}}>
                 {searchResults.map((result, i) => (
                   <RStack
                     key={`result + ${i}`}
+                    role="listitem"
                     onPress={() => {
                       handleSearchResultClick(result, i);
                     }}
@@ -191,13 +181,12 @@ export const SearchInput = ({ onSelect, placeholder }) => {
                       cursor: 'pointer',
                     }}
                   >
-                    <RStack space={3} flexDirection="row" gap={5} padding={5}>
-                      <RText fontSize="sm" fontWeight="medium">
+                    <RStack style={{flexDirection:"row"}}>
+                      <RText fontWeight="400">
                         {result.properties.name}
                       </RText>
                       <RText
                         style={{
-                          fontSize: 'sm',
                           color: 'gray',
                           opacity: '100',
                           textTransform: 'capitalize',
@@ -208,7 +197,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
                     </RStack>
                   </RStack>
                 ))}
-              </RStack>
+              </View>
             </RScrollView>
           )}
         </RStack>
@@ -217,31 +206,28 @@ export const SearchInput = ({ onSelect, placeholder }) => {
   ) : isLoadingMobile ? (
     <RText>Loading...</RText>
   ) : (
-    <VStack w="100%" space={5} alignSelf="center">
-      <Input
+    <RStack style={{width:"100%", alignSelf: "center"}}>
+      <RInput
         onChangeText={(text) => {
           setSearchString(text);
         }}
         placeholder="Search"
-        width="100%"
-        borderRadius="4"
-        py="3"
-        px="1"
+        style={{
+          width:"100%",
+          borderRadius:"4",
+          padding:"16px 8px",
+          backgroundColor: "white",
+        }}
         value={searchString}
-        fontSize="14"
-        InputLeftElement={
-          <Icon
-            m="2"
-            ml="3"
-            size="6"
-            color="gray.400"
-            as={<MaterialIcons name="search" />}
-          />
-        }
+        fontSize={14}
+      />
+      <RIconButton
+        backgroundColor="transparent"
+        icon={<MaterialIcons name="search" size={24} color="gray"/>}
       />
 
       {showSearchResults && searchResults?.length > 0 && (
-        <ScrollView
+        <RScrollView
           position="absolute"
           top="100%"
           left="0"
@@ -254,33 +240,32 @@ export const SearchInput = ({ onSelect, placeholder }) => {
           showsVerticalScrollIndicator={false}
           zIndex={10}
         >
-          <List space={2} w="100%">
+          <View role="list" style={{width:"100%"}}>
             {searchResults.map((result, i) => (
               <Pressable
                 key={`result + ${i}`}
+                role="listitem"
                 onPress={() => {
                   handleSearchResultClick(result, i);
                 }}
-                underlayColor="gray.100"
               >
-                <HStack space={3}>
-                  <Text fontSize="sm" fontWeight="medium">
+                <RStack style={{flexDirection: "row"}}>
+                  <RText fontWeight="400">
                     {result.properties.name}
-                  </Text>
-                  <Text
-                    fontSize="sm"
-                    color="gray.500"
+                  </RText>
+                  <RText
+                    color="gray"
                     textTransform={'capitalize'}
                   >
                     {result.properties.osm_value}
-                  </Text>
-                </HStack>
+                  </RText>
+                </RStack>
               </Pressable>
             ))}
-          </List>
-        </ScrollView>
+          </View>
+        </RScrollView>
       )}
-    </VStack>
+    </RStack>
   );
 };
 
