@@ -1,10 +1,8 @@
-// FeedPreview.js
-
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Card, Text, HStack, Badge } from 'native-base';
+import { RText, RStack } from '@packrat/ui';
 import { Link } from 'expo-router';
-import { Dimensions, FlatList, View } from 'react-native';
+import { Dimensions, View } from 'react-native';
 import { getPublicPacks, getPublicTrips } from '../../store/feedStore';
 import useTheme from '../../hooks/useTheme';
 import Carousel from '../carousel';
@@ -31,13 +29,13 @@ const FeedPreviewScroll = () => {
         return linkStr ? (
           <Link href={linkStr} key={`${linkStr}`}>
             <View style={styles.cardStyles} key={index}>
-              <HStack justifyContent="space-between">
-                <Text style={styles.feedItemTitle}>{item.name}</Text>
-                <Badge colorScheme="info" textTransform={'capitalize'}>
+              <RStack style={{flexDirection: "row", justifyContent:"space-between"}}>
+                <RText style={styles.feedItemTitle}>{item.name}</RText>
+                <RText fontSize="$1" style={{backgroundColor:"#F2F1EB", textTransform:"capitalize", padding: "4px 8px", alignSelf: "center", borderRadius: "2px"}}>
                   {item.type}
-                </Badge>
-              </HStack>
-              <Text>{item.description}</Text>
+                </RText>
+              </RStack>
+              <RText>{item.description}</RText>
             </View>
           </Link>
         ) : null;

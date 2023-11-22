@@ -1,6 +1,6 @@
 import React from 'react';
-import { Platform, StyleSheet } from 'react-native';
-import { VStack, Box, ScrollView } from 'native-base';
+import { Platform, View } from 'react-native';
+import { RStack, RScrollView } from '@packrat/ui';
 import { theme } from '../../theme';
 import useTheme from '../../hooks/useTheme';
 import HeroBanner from '../../components/dashboard/HeroBanner';
@@ -14,14 +14,14 @@ const Dashboard = () => {
 
   return (
     <>
-      <ScrollView contentContainerStyle={styles.content} horizontal={false}>
-        <VStack
+      <RScrollView contentContainerStyle={styles.content} horizontal={false}>
+        <RStack
           style={[
             styles.container,
             Platform.OS === 'web' ? { minHeight: '100vh' } : null,
           ]}
         >
-          <Box>
+          <View>
             <HeroBanner style={styles.cardContainer} />
 
             <Section>
@@ -35,9 +35,9 @@ const Dashboard = () => {
               <SectionHeader iconName="newspaper-outline" text="Feed" />
               <FeedPreview />
             </Section>
-          </Box>
-        </VStack>
-      </ScrollView>
+          </View>
+        </RStack>
+      </RScrollView>
     </>
   );
 };

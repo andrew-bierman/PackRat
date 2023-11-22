@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, VStack, Text, Image } from 'native-base';
+import { RStack, RText } from '@packrat/ui';
 import LargeCard from '../card/LargeCard';
 import { SearchInput } from '../SearchInput';
 import { View } from 'react-native';
@@ -102,7 +102,7 @@ const HeroSection = ({ onSelect }) => {
             padding: 50,
           }}
         >
-          <VStack
+          <RStack
             style={{
               width: '100%',
               height: '100%',
@@ -110,12 +110,12 @@ const HeroSection = ({ onSelect }) => {
               justifyContent: 'center',
             }}
           >
-            <Text style={styles.title}>{bannerText}</Text>
+            <RText style={styles.title}>{bannerText}</RText>
             <SearchInput
               onSelect={handleSearchSelect}
               placeholder={'Search by park, city, or trail'}
             />
-          </VStack>
+          </RStack>
         </LargeCard>
       </Hero>
     </View>
