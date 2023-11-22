@@ -15,6 +15,8 @@ import RSelect from './RSelect';
 import RLabel from './RLabel';
 import RCheckbox from './RCheckbox';
 import RRadio from './RRadio';
+import RTooltip from './RTooltip';
+import RSpinner from './RSpinner';
 import RH1 from './RH1';
 import RH2 from './RH2';
 import RH3 from './RH3';
@@ -31,6 +33,8 @@ export {
   RH5,
   RH6,
   RHeading,
+  RSpinner,
+  RTooltip,
   RRadio,
   RCheckbox,
   RStack,

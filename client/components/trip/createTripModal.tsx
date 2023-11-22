@@ -198,7 +198,6 @@ export const SaveTripContainer = ({ dateRange }) => {
         />
         <RInput
           placeholder="Trip Description"
-          mt={4}
           onChange={(event) => {
             setDescription(event.target.value);
           }}

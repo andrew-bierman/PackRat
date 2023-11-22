@@ -1,11 +1,10 @@
 import { View } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { Box, Button, ScrollView } from 'native-base';
 import { StyleSheet, Platform } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { theme } from '../../../theme';
 import UseTheme from '../../../hooks/useTheme';
-import { Tooltip } from 'native-base';
+import { RTooltip, RButton, RScrollView } from '@packrat/ui';
 import { CustomModal } from '../../../components/modal';
 import { AddItemGlobal } from '../../../components/item/AddItemGlobal';
 import { ItemsTable } from '../../../components/itemtable/itemTable';
@@ -38,7 +37,7 @@ export default function Items() {
   }, [limit, page, refetch]);
 
   return (
-    <ScrollView>
+    <RScrollView>
       {Platform.OS === 'web' && (
         <Head>
           <title>Items</title>
@@ -50,7 +49,7 @@ export default function Items() {
           name: 'Items',
         }}
       />
-      <Box>
+      <View>
         <>
           <CustomModal
             title="Add a global Item"
@@ -67,36 +66,27 @@ export default function Items() {
                 }}
               >
                 {' '}
-                <Button
+                <RButton
                   style={styles.button}
                   onPress={() => {
                     setIsAddItemModalOpen(true);
                   }}
                 >
                   Add Item
-                </Button>
+                </RButton>
                 {Platform.OS === 'web' ? (
-                  <Tooltip
-                    label="Add a global item"
-                    placement="top left"
-                    openDelay={500}
-                  >
-                    <Button
-                      width={8}
-                      height={8}
-                      style={{ backgroundColor: 'none' }}
-                    >
-                      <MaterialIcons
-                        name="info-outline"
-                        size={20}
-                        color={currentTheme.colors.background}
-                      />
-                    </Button>
-                  </Tooltip>
+                  <RTooltip
+                    Label="Add a global item"
+                    Icon={<MaterialIcons
+                      name="info-outline"
+                      size={24}
+                      color={currentTheme.colors.background}
+                    />}
+                  />
                 ) : null}
               </View>
             }
-            onCancel={setIsAddItemModalOpen}
+            onTrigger={setIsAddItemModalOpen}
           >
             <AddItemGlobal
               setRefetch={setRefetch}
@@ -118,8 +108,8 @@ export default function Items() {
             setRefetch={setRefetch}
           />
         ) : null}
-      </Box>
-    </ScrollView>
+      </View>
+    </RScrollView>
   );
 }
 const loadStyles = (theme) => {
