@@ -1,4 +1,4 @@
-import { FormControl, Input } from 'native-base';
+import { RInput, RLabel } from '@packrat/ui';
 import React, { forwardRef, useImperativeHandle, useRef } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { type TextInput } from 'react-native';
@@ -50,9 +50,8 @@ export const InputText: React.ForwardRefExoticComponent<InputTextProps> =
           fieldState: { error },
         }) => (
           <>
-            <FormControl isInvalid={!!error}>
-              {label && <FormControl.Label>{label}</FormControl.Label>}
-              <Input
+              <RLabel>{label}</RLabel>
+              <RInput
                 value={value}
                 onChangeText={onChange}
                 onBlur={onBlur}
@@ -78,16 +77,6 @@ export const InputText: React.ForwardRefExoticComponent<InputTextProps> =
                 ref={inputRef}
                 {...rest}
               />
-              {error && (
-                <FormControl.ErrorMessage
-                  _text={{
-                    fontSize: 'xs',
-                  }}
-                >
-                  {error.message || 'Error'}
-                </FormControl.ErrorMessage>
-              )}
-            </FormControl>
           </>
         )}
       />

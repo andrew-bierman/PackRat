@@ -1,4 +1,5 @@
 import RStack from './RStack';
+import RForm from './RForm'
 import RText from './RText';
 import RCard from './RCard';
 import RParagraph from './Rparagraph';
@@ -33,6 +34,7 @@ export {
   RH5,
   RH6,
   RHeading,
+  RForm,
   RSpinner,
   RTooltip,
   RRadio,
