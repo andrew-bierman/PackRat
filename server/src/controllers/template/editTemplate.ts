@@ -4,7 +4,7 @@ import { responseHandler } from '../../helpers/responseHandler';
 import { editTemplateService } from '../../services/template/template.service';
 import { z } from 'zod';
 
-import { prisma } from '../../prisma';
+// import { prisma } from '../../prisma';
 import { TemplateType } from '@prisma/client/edge';
 
 /**
@@ -13,17 +13,17 @@ import { TemplateType } from '@prisma/client/edge';
  * @param {Object} res - The response object.
  * @return {Promise<void>} - A promise that resolves when the template is edited.
  */
-export const editTemplate = async (req, res) => {
-  const { templateId } = req.params;
-  const { type, isGlobalTemplate } = req.body;
-  const updatedTemplate = await editTemplateService(
-    templateId,
-    type,
-    isGlobalTemplate,
-  );
-  res.locals.data = updatedTemplate;
-  responseHandler(res);
-};
+// export const editTemplate = async (req, res) => {
+//   const { templateId } = req.params;
+//   const { type, isGlobalTemplate } = req.body;
+//   const updatedTemplate = await editTemplateService(
+//     templateId,
+//     type,
+//     isGlobalTemplate,
+//   );
+//   res.locals.data = updatedTemplate;
+//   responseHandler(res);
+// };
 
 export function editTemplateRoute() {
   return publicProcedure
@@ -36,7 +36,9 @@ export function editTemplateRoute() {
     )
     .mutation(async (opts) => {
       const { templateId, type, isGlobalTemplate } = opts.input;
+      const { prisma }: any = opts.ctx;
       const updatedTemplate = await editTemplateService(
+        prisma,
         templateId,
         type,
         isGlobalTemplate,

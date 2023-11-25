@@ -1,5 +1,4 @@
 import { sendWelcomeEmail, resetEmail } from '../../utils/accountEmail';
-import { prisma } from '../../prisma';
 import { User } from '../../prisma/methods';
 import { google } from 'googleapis';
 import {

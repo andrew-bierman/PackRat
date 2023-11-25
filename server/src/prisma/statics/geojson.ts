@@ -1,8 +1,7 @@
 import { GeoJSON } from '@prisma/client/edge';
-import prisma from '../client';
 
 async function saveOne(feature: GeoJSON) {
-  return prisma.geoJSON.upsert({
+  return this.upsert({
     where: { id: feature.id },
     update: feature,
     create: feature,
@@ -10,8 +9,8 @@ async function saveOne(feature: GeoJSON) {
 }
 
 async function saveMany(features: GeoJSON[]) {
-  return prisma.$transaction(
-    features.map((feature) => prisma.geoJSON.create({ data: feature })),
+  await Promise.all(
+    features.map((feature) => this.geoJSON.create({ data: feature })),
   );
 }
 

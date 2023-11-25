@@ -1,13 +1,19 @@
-import { prisma } from '../../prisma';
+import { PrismaClient } from '@prisma/client/edge';
+
 /**
  * Duplicates a public pack service.
- *
+ * @param {PrismaClient} prisma - Prisma client.
  * @param {string} packId - The ID of the pack to duplicate.
  * @param {string} ownerId - The ID of the owner of the duplicated pack.
  * @param {Array} items - The items to be included in the duplicated pack.
  * @return {Object} - An object containing the duplicated pack.
  */
-export const duplicatePublicPackService = async (packId, ownerId, items) => {
+export const duplicatePublicPackService = async (
+  prisma: PrismaClient,
+  packId,
+  ownerId,
+  items,
+) => {
   const existingPack = await prisma.pack.findUnique({
     where: {
       id: packId, // Replace 'id' with the actual primary key field in your model

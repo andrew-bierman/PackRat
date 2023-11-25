@@ -1,8 +1,7 @@
-import prisma from '../client';
-
 const findOrCreateMany = async (ids, nodes) => {
+  if (!this) return;
   // Find existing nodes
-  const existingNodes = await prisma.node.findMany({
+  const existingNodes = await this.findMany({
     where: {
       id: {
         in: ids,
@@ -18,13 +17,13 @@ const findOrCreateMany = async (ids, nodes) => {
 
   // Save new nodes
   if (filteredNodes.length > 0) {
-    await prisma.node.createMany({
+    await this.createMany({
       data: filteredNodes,
     });
   }
 
   // Return all nodes
-  return prisma.node.findMany({ where: { id: { in: ids } } });
+  return this.findMany({ where: { id: { in: ids } } });
 };
 
 export default { findOrCreateMany };

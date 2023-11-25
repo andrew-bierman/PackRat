@@ -1,5 +1,4 @@
 import type { Node as TNode } from '@prisma/client/edge';
-import prisma from '../client';
 
 type ExtendedNode = {
   toJSON: () => Partial<TNode>;
@@ -9,7 +8,7 @@ type ExtendedNode = {
 const Node = <T extends TNode>(prismaNode: T): T & ExtendedNode => {
   if (!prismaNode) return;
   return Object.assign(prismaNode, {
-    toJSON(): Partial<TNode> {
+    toJSON(prisma: any): Partial<TNode> {
       const {
         id,
         // destructure methods
@@ -19,7 +18,7 @@ const Node = <T extends TNode>(prismaNode: T): T & ExtendedNode => {
       } = this;
       return nodeObject;
     },
-    async save(): Promise<void> {
+    async save(prisma: any): Promise<void> {
       const {
         // destructure functions
         toJSON,

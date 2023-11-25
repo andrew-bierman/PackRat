@@ -2,7 +2,7 @@ import { publicProcedure } from '../../trpc';
 import { UnableToEditTripError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 
-import { prisma } from '../../prisma';
+// import { prisma } from '../../prisma';
 import * as validator from '../../middleware/validators/index';
 /**
  * Edits a trip by updating the trip details.
@@ -10,27 +10,28 @@ import * as validator from '../../middleware/validators/index';
  * @param {Object} res - The response object.
  * @return {Object} The updated trip object.
  */
-export const editTrip = async (req, res, next) => {
-  try {
-    const { id } = req.body;
-    const newTrip = await prisma.trip.update({
-      where: { id: id }, // Assuming id is the ID of the trip to update
-      data: req.body,
-      include: {
-        packs: true, // Fetch associated packs
-      },
-    });
+// export const editTrip = async (req, res, next) => {
+//   try {
+//     const { id } = req.body;
+//     const newTrip = await prisma.trip.update({
+//       where: { id: id }, // Assuming id is the ID of the trip to update
+//       data: req.body,
+//       include: {
+//         packs: true, // Fetch associated packs
+//       },
+//     });
 
-    res.locals.data = newTrip;
-    responseHandler(res);
-  } catch (error) {
-    next(UnableToEditTripError);
-  }
-};
+//     res.locals.data = newTrip;
+//     responseHandler(res);
+//   } catch (error) {
+//     next(UnableToEditTripError);
+//   }
+// };
 
 export function editTripRoute() {
   return publicProcedure.input(validator.editTrip).mutation(async (opts) => {
     const { id } = opts.input;
+    const { prisma }: any = opts;
 
     return await prisma.trip.update({
       where: { id: id }, // Assuming id is the ID of the trip to update

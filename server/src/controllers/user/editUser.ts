@@ -2,7 +2,6 @@ import { publicProcedure } from '../../trpc';
 import { UnableToEditUserError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import * as validator from '../../middleware/validators/index';
-import { prisma } from '../../prisma';
 /**
  * Edits a user.
  * @param {Object} req - The request object.
@@ -11,26 +10,26 @@ import { prisma } from '../../prisma';
  * @param {Object} res - The response object.
  * @return {Promise} A promise that resolves to the edited user.
  */
-export const editUser = async (req, res, next) => {
-  try {
-    const { userId } = req.body;
+// export const editUser = async (req, res, next) => {
+//   try {
+//     const { userId } = req.body;
 
-    const editedUser = await prisma.user.update({
-      where: {
-        id: userId,
-      },
-      data: req.body,
-      select: {
-        favorites: true,
-      },
-    });
+//     const editedUser = await prisma.user.update({
+//       where: {
+//         id: userId,
+//       },
+//       data: req.body,
+//       select: {
+//         favorites: true,
+//       },
+//     });
 
-    res.locals.data = editedUser;
-    responseHandler(res);
-  } catch (error) {
-    next(UnableToEditUserError);
-  }
-};
+//     res.locals.data = editedUser;
+//     responseHandler(res);
+//   } catch (error) {
+//     next(UnableToEditUserError);
+//   }
+// };
 
 export function editUserRoute() {
   return publicProcedure.input(validator.editUser).mutation(async (opts) => {
@@ -43,6 +42,8 @@ export function editUserRoute() {
       item_id,
       ...rest
     } = opts.input;
+    const { prisma }: any = opts;
+
     const editedUser = await prisma.user.update({
       where: {
         id: userId,

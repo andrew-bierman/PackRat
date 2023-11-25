@@ -3,4 +3,4 @@ node_modules
 .env
 
 # ignore wrangler build
-src/.wrangler
+.wrangler

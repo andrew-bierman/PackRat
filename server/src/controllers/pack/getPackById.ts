@@ -9,22 +9,23 @@ import * as validator from '../../middleware/validators/index';
  * @param {Object} res - The response object.
  * @return {Object} The pack object as a JSON response.
  */
-export const getPackById = async (req, res, next) => {
-  try {
-    const { packId } = req.params;
+// export const getPackById = async (req, res, next) => {
+//   try {
+//     const { packId } = req.params;
 
-    const pack = await getPackByIdService(packId);
+//     const pack = await getPackByIdService(packId);
 
-    res.locals.data = pack;
-    responseHandler(res);
-  } catch (error) {
-    next(PackNotFoundError);
-  }
-};
+//     res.locals.data = pack;
+//     responseHandler(res);
+//   } catch (error) {
+//     next(PackNotFoundError);
+//   }
+// };
 
 export function getPackByIdRoute() {
   return publicProcedure.input(validator.getPackById).query(async (opts) => {
     const { packId } = opts.input;
-    return await getPackByIdService(packId);
+    const { prisma }: any = opts.ctx;
+    return await getPackByIdService(prisma, packId);
   });
 }

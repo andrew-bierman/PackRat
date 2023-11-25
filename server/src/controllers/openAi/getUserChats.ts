@@ -9,24 +9,25 @@ import { z } from 'zod';
  * @param {string} req.params.userId - The ID of the user.
  * @returns {object} The conversations of the user.
  */
-export const getUserChats = async (req, res, next) => {
-  try {
-    const { userId } = req.params;
+// export const getUserChats = async (req, res, next) => {
+//   try {
+//     const { userId } = req.params;
 
-    const result = await getUserChatsService(userId);
+//     const result = await getUserChatsService(userId);
 
-    res.locals.data = result;
-    responseHandler(res);
-  } catch (error) {
-    next(FailedToRetrieveUserChats);
-  }
-};
+//     res.locals.data = result;
+//     responseHandler(res);
+//   } catch (error) {
+//     next(FailedToRetrieveUserChats);
+//   }
+// };
 
 export function getUserChatsRoute() {
   return publicProcedure
     .input(z.object({ userId: z.string() }))
     .query(async (opts) => {
       const { userId } = opts.input;
-      return getUserChatsService(userId);
+      const { prisma }: any = opts.ctx;
+      return getUserChatsService(prisma, userId);
     });
 }

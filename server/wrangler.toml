@@ -2,13 +2,12 @@ name = "packrat-api"
 compatibility_date = "2023-10-16"
 send_metrics = false
 node_compat = true
-main = "index.ts"
-type = "webworker"
+main = "./src/index.ts"
 
-# The necessary secrets are:
-# - APP_URL - for preventing CORS errors
-# - JWT_VERIFICATION_KEY - for Supabase @link https://supabase.com
-#
+[env.dev.vars]
+ASD = "ASD"
+PRISMA_DATA_PROXY_URI = "prisma://aws-us-east-1.prisma-data.com/?api_key=7JWllWgv2hvFIXewiTjpepJGeY6TTd0s8Ntv9ZD_HyhNQppK_08XGGxr1Q2Wjeqx"
+
 # For local development, you can create a file called .dev.vars and use dotenv syntax.
 #
 # For deployed environments, you can use wrangler secrets to set these values.

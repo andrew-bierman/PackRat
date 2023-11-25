@@ -1,12 +1,11 @@
 import type { Relation as TRelation } from '@prisma/client/edge';
-import { prisma } from '../extension';
 
 type ExtendedRelation = {
-  toJSON: () => Partial<TRelation>;
-  save: () => Promise<void>;
+  toJSON: (prisma: any) => Partial<TRelation>;
+  save: (prisma: any) => Promise<void>;
 };
 
-const modelMappingFunc = (type: string) => {
+const modelMappingFunc = (type: string, prisma: any) => {
   switch (type) {
     case 'node':
     case 'Node':
@@ -32,7 +31,7 @@ const Relation = <T extends TRelation>(
 ): T & ExtendedRelation => {
   if (!prismaRelation) return;
   return Object.assign(prismaRelation, {
-    async toJSON(): Promise<Partial<TRelation>> {
+    async toJSON(prisma: any): Promise<Partial<TRelation>> {
       const {
         id,
         // destructure methods
@@ -42,9 +41,8 @@ const Relation = <T extends TRelation>(
       } = this.toObject();
 
       for (const member of relationObject.members) {
-        const Model = modelMappingFunc(member.type);
+        const Model = modelMappingFunc(member.type, prisma);
         if (Model) {
-          // @ts-expect-error Union does not share same signature
           member.refId = await Model.findUnique({
             where: {
               id: member.refId,
@@ -54,7 +52,7 @@ const Relation = <T extends TRelation>(
       }
       return relationObject;
     },
-    async save(): Promise<void> {
+    async save(prisma: any): Promise<void> {
       if (this.osm_type !== 'relation') {
         throw new Error('This is not a relation');
       }

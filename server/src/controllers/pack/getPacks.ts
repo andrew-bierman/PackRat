@@ -11,26 +11,27 @@ import * as validator from '../../middleware/validators/index';
  * @param {Object} res - Express response object.
  * @return {Promise} - Array of packs.
  */
-export const getPacks = async (req, res, next) => {
-  try {
-    const { ownerId } = req.params;
-    const { queryBy } = req.query;
+// export const getPacks = async (req, res, next) => {
+//   try {
+//     const { ownerId } = req.params;
+//     const { queryBy } = req.query;
 
-    const packs = await getPacksService(ownerId, queryBy);
+//     const packs = await getPacksService(ownerId, queryBy);
 
-    res.locals.data = packs;
+//     res.locals.data = packs;
 
-    const message = 'Packs retrieved successfully';
-    responseHandler(res, message);
-  } catch (error) {
-    next(PackNotFoundError);
-  }
-};
+//     const message = 'Packs retrieved successfully';
+//     responseHandler(res, message);
+//   } catch (error) {
+//     next(PackNotFoundError);
+//   }
+// };
 
 export function getPacksRoute() {
   return publicProcedure.input(validator.getPacks).query(async (opts) => {
     const { ownerId, queryBy } = opts.input;
-    const packs = await getPacksService(ownerId, queryBy);
+    const { prisma }: any = opts.ctx;
+    const packs = await getPacksService(prisma, ownerId, queryBy);
     return { packs, message: 'Packs retrieved successfully' };
   });
 }

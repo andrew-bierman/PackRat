@@ -1,3 +1,4 @@
+import { Prisma, PrismaClient } from '@prisma/client/edge';
 import {
   createInstanceFromCoordinates,
   coordinatesToInstances,
@@ -10,9 +11,8 @@ import {
   propertiesToTags,
   extractIdAndType,
 } from './dataFormatters';
-import { prisma } from '../../prisma';
 
-export const modelMappingFunc = (type: string) => {
+export const modelMappingFunc = (prisma: PrismaClient, type: string) => {
   switch (type) {
     case 'node':
     case 'n': // In case 'n' is sent
@@ -33,12 +33,12 @@ export const modelMappingFunc = (type: string) => {
 
 /**
  * Generates a new instance in the database from OpenStreetMap (OSM) data.
- *
+ * @prisma {PrismaClient} prisma - Prisma client.
  * @param {any} Model - the database model to create the instance in
  * @param {any} data - the OSM data to create the instance from
  * @return {Promise<any>} the newly created instance
  */
-export async function fromOSM(Model: any, data: any) {
+export async function fromOSM(prisma: PrismaClient, Model: any, data: any) {
   const { type, id } = extractIdAndType(data.id);
 
   const instanceData: any = {
@@ -63,12 +63,16 @@ export async function fromOSM(Model: any, data: any) {
 
 /**
  * Generates a new instance of a model from a GeoJSON object.
- *
+ * @param {PrismaClient} prisma - Prisma client.
  * @param {any} Model - the model to create an instance of
  * @param {any} geoJSON - the GeoJSON object to generate the instance from
  * @return {Promise<any>} the newly created instance
  */
-export async function fromGeoJSON(Model: any, geoJSON: any) {
+export async function fromGeoJSON(
+  prisma: PrismaClient,
+  Model: any,
+  geoJSON: any,
+) {
   // console.log("fromGeoJSON");
   // console.log("fromGeoJSON geoJSON", geoJSON);
   // console.log("fromGeoJSON Model", Model);
@@ -168,12 +172,16 @@ export function findExisting(Model: any, id: any, type: string) {
 
 /**
  * Updates an instance object using GeoJSON data.
- *
+ * @param {PrismaClient} prisma - Prisma client.
  * @param {any} instance - The instance to be updated.
  * @param {any} geoJSON - The GeoJSON data used to update the instance.
  * @return {Promise<any>} - The updated instance.
  */
-export async function updateInstanceFromGeoJSON(instance: any, geoJSON: any) {
+export async function updateInstanceFromGeoJSON(
+  prisma: PrismaClient,
+  instance: any,
+  geoJSON: any,
+) {
   instance.updated_at = geoJSON.properties.timestamp;
   instance.tags = propertiesToTags(geoJSON.properties);
   instance.nodes = await coordinatesToInstances(
@@ -186,15 +194,20 @@ export async function updateInstanceFromGeoJSON(instance: any, geoJSON: any) {
 
 /**
  * Creates a new instance based on the given `osm_type` and `element`.
+ * @param {PrismaClient} prisma - Prisma client.
  * @param {any} osm_type - The model to use for creating the instance.
  * @param {any} element - The element to create the instance from.
  * @return {any} The newly created instance.
  */
-export async function createNewInstance(Model: any, element: any) {
+export async function createNewInstance(
+  prisma: PrismaClient,
+  Model: any,
+  element: any,
+) {
   if (isOSMFormat(element)) {
     return await fromOSM(Model, element);
   } else if (isGeoJSONFormat(element)) {
-    return await fromGeoJSON(Model, element);
+    return await fromGeoJSON(prisma, Model, element);
   }
   throw new Error('Element is neither in OSM or GeoJSON format.');
 }
@@ -235,17 +248,17 @@ export function ensureIdProperty(element: any) {
 
 /**
  * Ensures the model property of the given element.
- *
+ * @param {PrismaClient} prisma - Prisma client.
  * @param {any} element - The element to ensure the model property for.
  * @return {ModelForElement | undefined} - The model for the element, or undefined if the type is invalid.
  */
-export function ensureModelProperty(element: any) {
+export function ensureModelProperty(prisma: PrismaClient, element: any) {
   // Convert the osm_type to lowercase if it's a string
   const osmType =
     typeof element.properties.osm_type === 'string'
       ? element.properties.osm_type.toLowerCase()
       : element.properties.osm_type;
-  const ModelForElement = modelMappingFunc(osmType);
+  const ModelForElement = modelMappingFunc(prisma, osmType);
   if (!ModelForElement) {
     console.error(`Invalid type: ${element.properties.osm_type}`);
     return;
@@ -255,11 +268,11 @@ export function ensureModelProperty(element: any) {
 
 /**
  * Processes an element.
- *
+ * @param {PrismaClient} prisma - Prisma client.
  * @param {any} element - The element to be processed.
  * @return {Promise<any>} The processed element instance.
  */
-export async function processElement(element: any) {
+export async function processElement(prisma: PrismaClient, element: any) {
   // Extract OSM ID and type
   const id = element.id
     ? Number(element.id.split('/')[1])
@@ -269,7 +282,7 @@ export async function processElement(element: any) {
     : element.properties.osm_type;
 
   // Retrieve corresponding Model
-  const ModelForElement = modelMappingFunc(type);
+  const ModelForElement = modelMappingFunc(prisma, type);
   if (!ModelForElement) {
     console.error(`Invalid type: ${type}`);
     return;
@@ -278,24 +291,24 @@ export async function processElement(element: any) {
   let instance = await findExisting(ModelForElement, id, type);
   if (instance) {
     if (isGeoJSONFormat(element)) {
-      instance = await updateInstanceFromGeoJSON(instance, element);
+      instance = await updateInstanceFromGeoJSON(prisma, instance, element);
       await instance.save();
     }
   } else {
-    instance = await createNewInstance(ModelForElement, element);
+    instance = await createNewInstance(prisma, ModelForElement, element);
   }
   return instance;
 }
 
 /**
  * Finds or creates multiple instances of a specified model.
- *
+ * @param {PrismaClient} prisma - Prisma client.
  * @param {typeof Way} Model - The model to find or create instances of.
  * @param {any} data - The data to find or create instances with.
  * @throws {Error} If the data is not iterable.
  * @returns {Array<any>} An array of instances that were found or created.
  */
-export async function findOrCreateMany(data: any) {
+export async function findOrCreateMany(prisma: PrismaClient, data: any) {
   // Check if data is iterable
   if (!Array.isArray(data)) {
     throw new Error('Data is not iterable, cannot proceed.');
@@ -304,7 +317,7 @@ export async function findOrCreateMany(data: any) {
   const instances = [];
 
   for (const element of data) {
-    const instance = await processElement(element);
+    const instance = await processElement(prisma, element);
     if (instance) {
       instances.push(instance);
     }

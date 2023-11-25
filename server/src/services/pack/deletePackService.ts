@@ -1,11 +1,12 @@
-import { prisma } from '../../prisma';
+import { PrismaClient } from '@prisma/client/edge';
+
 /**
  * Deletes a pack by its ID.
- *
+ * @param {PrismaClient} prisma - Prisma client.
  * @param {string} packId - The ID of the pack to be deleted.
  * @return {Object} - An object containing a message indicating the success of the deletion.
  */
-export const deletePackService = async (packId) => {
+export const deletePackService = async (prisma: PrismaClient, packId) => {
   const pack = await prisma.pack.delete({
     where: {
       id: packId, // Replace 'id' with the actual primary key field in your model

@@ -10,23 +10,24 @@ import { publicProcedure } from '../../trpc';
  * @return {Object} The deleted item.
  */
 
-export const deleteItem = async (req, res, next) => {
-  try {
-    const { itemId, packId } = req.body;
+// export const deleteItem = async (req, res, next) => {
+//   try {
+//     const { itemId, packId } = req.body;
 
-    const itemDeleted = await deleteItemService(itemId, packId);
+//     const itemDeleted = await deleteItemService(itemId, packId);
 
-    res.locals.data = itemDeleted;
-    responseHandler(res);
-  } catch (error) {
-    console.error(error);
-    next(UnableToDeleteItemError);
-  }
-};
+//     res.locals.data = itemDeleted;
+//     responseHandler(res);
+//   } catch (error) {
+//     console.error(error);
+//     next(UnableToDeleteItemError);
+//   }
+// };
 
 export function deleteItemRoute() {
   return publicProcedure.input(validator.deleteItem).mutation(async (opts) => {
     const { itemId, packId } = opts.input;
-    return await deleteItemService(itemId, packId);
+    const { prisma }: any = opts.ctx;
+    return await deleteItemService(prisma, itemId, packId);
   });
 }

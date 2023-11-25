@@ -103,5 +103,8 @@
     "packing checklist app",
     "packing list app",
     "packing planner app"
-  ]
+  ],
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20231025.0"
+  }
 }

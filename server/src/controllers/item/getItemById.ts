@@ -11,22 +11,23 @@ import * as validator from '../../middleware/validators/index';
  * @param {string} req.body.id - The ID of the item to retrieve.
  * @return {Object} The retrieved item.
  */
-export const getItemById = async (req, res, next) => {
-  try {
-    const { id } = req.body;
+// export const getItemById = async (req, res, next) => {
+//   try {
+//     const { id } = req.body;
 
-    const item = await getItemByIdService(id);
+//     const item = await getItemByIdService(id);
 
-    res.locals.data = item;
-    responseHandler(res);
-  } catch (error) {
-    next(ItemNotFoundError);
-  }
-};
+//     res.locals.data = item;
+//     responseHandler(res);
+//   } catch (error) {
+//     next(ItemNotFoundError);
+//   }
+// };
 
 export function getItemByIdRoute() {
   return publicProcedure.input(validator.getItemById).query(async (opts) => {
     const { id } = opts.input;
-    return getItemByIdService(id);
+    const { prisma }: any = opts.ctx;
+    return getItemByIdService(prisma, id);
   });
 }

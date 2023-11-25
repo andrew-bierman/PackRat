@@ -5,7 +5,7 @@ import { responseHandler } from '../../helpers/responseHandler';
 import { addTemplateService } from '../../services/template/template.service';
 import { z } from 'zod';
 
-import { prisma } from '../../prisma';
+// import { prisma } from '../../prisma';
 import { TemplateType } from '@prisma/client/edge';
 /**
  * Adds a template to the database.
@@ -13,24 +13,24 @@ import { TemplateType } from '@prisma/client/edge';
  * @param {Object} res - The response object.
  * @return {Promise<void>} The created template.
  */
-export const addTemplate = async (req, res, next) => {
-  const { type, templateId, isGlobalTemplate, createdBy } = req.body;
+// export const addTemplate = async (req, res, next) => {
+//   const { type, templateId, isGlobalTemplate, createdBy } = req.body;
 
-  const user = await prisma.user.findUnique({
-    where: {
-      id: createdBy,
-    },
-  });
+//   const user = await prisma.user.findUnique({
+//     where: {
+//       id: createdBy,
+//     },
+//   });
 
-  if (!user) {
-    next(UserNotFoundError);
-  }
+//   if (!user) {
+//     next(UserNotFoundError);
+//   }
 
-  await addTemplateService(type, templateId, isGlobalTemplate, createdBy);
+//   await addTemplateService(type, templateId, isGlobalTemplate, createdBy);
 
-  res.locals.data = { message: 'Template added successfully' };
-  responseHandler(res);
-};
+//   res.locals.data = { message: 'Template added successfully' };
+//   responseHandler(res);
+// };
 
 export function addTemplateRoute() {
   return publicProcedure
@@ -44,6 +44,8 @@ export function addTemplateRoute() {
     )
     .mutation(async (opts) => {
       const { type, templateId, isGlobalTemplate, createdBy } = opts.input;
+      const { prisma }: any = opts;
+
       const user = await prisma.user.findUnique({
         where: {
           id: createdBy,
@@ -52,7 +54,13 @@ export function addTemplateRoute() {
       if (!user) {
         throw new Error(UserNotFoundError.message);
       }
-      await addTemplateService(type, templateId, isGlobalTemplate, createdBy);
+      await addTemplateService(
+        prisma,
+        type,
+        templateId,
+        isGlobalTemplate,
+        createdBy,
+      );
       return { message: 'Template added successfully' };
     });
 }

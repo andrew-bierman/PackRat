@@ -1,11 +1,15 @@
-import { prisma } from '../../prisma';
+import { PrismaClient } from '@prisma/client/edge';
 
 /**
  * Retrieves a trip by its ID and returns the trip details.
+ * @param {PrismaClient} prisma - Prisma client.
  * @param {string} tripId - The ID of the trip.
  * @return {Promise<object>} A promise that resolves to the trip details.
  */
-export const getTripByIdService = async (tripId: string): Promise<object> => {
+export const getTripByIdService = async (
+  prisma: PrismaClient,
+  tripId: string,
+): Promise<object> => {
   try {
     const trip = await prisma.trip.findUnique({
       where: { id: tripId },

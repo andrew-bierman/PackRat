@@ -1,13 +1,13 @@
 import type { Trip as TTrip, GeoJSON } from '@prisma/client/edge';
 
 type ExtendedTrip = {
-  toJSON: () => Partial<TTrip>;
+  toJSON: (prisma: any) => Partial<TTrip>;
 };
 
 const Trip = <T extends TTrip>(prismaTrip: T): T & ExtendedTrip => {
   if (!prismaTrip) return;
   return Object.assign(prismaTrip, {
-    toJSON(): Partial<TTrip> & {
+    toJSON(prisma): Partial<TTrip> & {
       geojson?: { type: string; features: GeoJSON };
     } {
       const {

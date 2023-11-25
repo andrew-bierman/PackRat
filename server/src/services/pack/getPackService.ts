@@ -1,4 +1,4 @@
-import { prisma } from '../../prisma';
+import { PrismaClient } from '@prisma/client/edge';
 
 const SORT_OPTIONS = {
   Favorite: { favoritesCount: 'desc' },
@@ -17,7 +17,11 @@ const SORT_OPTIONS = {
 
 const DEFAULT_SORT = { createdAt: 'desc' };
 
-export const getPacksService = async (ownerId, queryBy = null) => {
+export const getPacksService = async (
+  prisma: PrismaClient,
+  ownerId,
+  queryBy = null,
+) => {
   try {
     const packs = await prisma.pack.findMany({
       where: {

@@ -4,10 +4,8 @@ generator client {
 
 datasource db {
   provider  = "mongodb"
-  // DB connection string for introspection purposes only
-  directUrl = env("DIRECT_URL")
-  // data proxy url
-  url       = env("DATABASE_URL")
+  url       = "prisma://aws-us-east-1.prisma-data.com/?api_key=7JWllWgv2hvFIXewiTjpepJGeY6TTd0s8Ntv9ZD_HyhNQppK_08XGGxr1Q2Wjeqx"
+  directUrl = "mongodb+srv://admin:root@packratdb.nrj4a09.mongodb.net/packratdb?retryWrites=true&w=majority"
 }
 
 //  ███    ███  ██████  ██████  ███████ ██      ███████
@@ -37,57 +35,52 @@ model ItemCategory {
   updatedAt DateTime?        @updatedAt
   Item      Item[]
 
-  @@index([name], map: "name_1")
   @@map("itemcategories")
 }
 
 model Item {
-  id             String        @id @default(auto()) @map("_id") @db.ObjectId
-  name           String?
-  weight         Float?
-  quantity       Int?
-  unit           String?
-  global         Boolean?      @default(false)
-  pack_ids       String[]      @db.ObjectId
-  itemCategoryId String?       @db.ObjectId
-  createdAt      DateTime?     @default(now())
-  updatedAt      DateTime?     @updatedAt
-  category       ItemCategory? @relation(fields: [itemCategoryId], references: [id])
-  owners         User[]
-  packs          Pack[]        @relation(fields: [pack_ids], references: [id])
+  id               String        @id @default(auto()) @map("_id") @db.ObjectId
+  name             String?
+  weight           Float?
+  quantity         Int?
+  unit             String?
+  global           Boolean?      @default(false)
+  packs            String[]      @db.ObjectId
+  owners           String[]      @db.ObjectId
+  category         String?       @db.ObjectId
+  createdAt        DateTime?     @default(now())
+  updatedAt        DateTime?     @updatedAt
+  categoryDocument ItemCategory? @relation(fields: [category], references: [id])
+  packDocuments    Pack[]        @relation(fields: [packs], references: [id])
+  ownerDocuments   User[]        @ignore
 
-  @@index([name], map: "name_1")
-  @@index([weight], map: "weight_1")
-  @@index([unit], map: "unit_1")
   @@map("items")
 }
 
 model Pack {
-  id                String       @id @default(auto()) @map("_id") @db.ObjectId
-  name              String?
-  owner_id          String?      @db.ObjectId
-  owner_ids         String[]     @db.ObjectId
-  is_public         Boolean?
-  grades            PacksGrades?
-  scores            PacksScores?
-  type              String?      @default("pack")
-  item_ids          String[]     @db.ObjectId
-  favourited_by_ids String[]     @db.ObjectId
-  createdAt         String?
-  updatedAt         DateTime?    @updatedAt
-  items             Item[]       @relation(fields: [item_ids], references: [id])
-  favorited_by      User[]       @relation(name: "Favourites", fields: [favourited_by_ids], references: [id])
-  owners            User[]       @relation(name: "Owners", fields: [owner_ids], references: [id])
-  owner             User?        @relation(fields: [owner_id], references: [id])
-  trips             Trip[]
+  id                   String       @id @default(auto()) @map("_id") @db.ObjectId
+  name                 String?
+  owner                String?      @db.ObjectId
+  owners               String[]     @db.ObjectId
+  is_public            Boolean?
+  grades               PacksGrades?
+  scores               PacksScores?
+  type                 String?      @default("pack")
+  items                String[]     @db.ObjectId
+  favourited_by        String[]     @db.ObjectId
+  createdAt            String?
+  updatedAt            DateTime?    @updatedAt
+  itemDocuments        Item[]       @relation(fields: [items], references: [id])
+  favoritedByDocuments User[]       @relation(name: "Favourites", fields: [favourited_by], references: [id])
+  ownerDocuments       User[]       @relation(name: "Owners", fields: [owners], references: [id])
+  ownerDocument        User?        @relation(fields: [owner], references: [id])
+  trips                Trip[]
 
   // Virtuals
   total_weight    Float?
   total_scores    Int?
   favorites_count Int?
 
-  @@index([name], map: "name_1")
-  @@index([is_public], map: "is_public_1")
   @@map("packs")
 }
 
@@ -101,9 +94,6 @@ model Template {
   updatedAt        DateTime?    @updatedAt
   createdBy        User?        @relation(fields: [createdById], references: [id])
 
-  @@index([type], map: "type_1")
-  @@index([templateId], map: "templateId_1")
-  @@index([createdById], map: "createdBy_1")
   @@map("templates")
 }
 
@@ -126,11 +116,6 @@ model Trip {
   packs       Pack?     @relation(fields: [pack_id], references: [id])
   geojson     GeoJSON[]
 
-  @@index([destination], map: "destination_1")
-  @@index([start_date], map: "start_date_1")
-  @@index([end_date], map: "end_date_1")
-  @@index([is_public], map: "is_public_1")
-  @@index([type], map: "type_1")
   @@map("trips")
 }
 
@@ -151,19 +136,17 @@ model User {
   preferredWeather             String?
   preferredWeight              String?
   favourite_ids                String[]   @db.ObjectId
-  pack_ids                     String[]   @db.ObjectId
-  item_id                      String?    @db.ObjectId
+  packs                        String[]   @db.ObjectId
+  item                         String?    @db.ObjectId
   createdAt                    DateTime?  @default(now())
   updatedAt                    DateTime?  @updatedAt
   favorites                    Pack[]     @relation(name: "Favourites", fields: [favourite_ids], references: [id])
-  packs                        Pack[]     @relation(name: "Owners", fields: [pack_ids], references: [id])
-  item                         Item?      @relation(fields: [item_id], references: [id])
+  packDocuments                Pack[]     @relation(name: "Owners", fields: [packs], references: [id])
+  itemDocument                 Item?      @relation(fields: [item], references: [id])
   templates                    Template[]
   trips                        Trip[]
   Pack                         Pack[]
 
-  @@index([role], map: "role_1")
-  @@index([code], map: "code_1")
   @@map("users")
 }
 

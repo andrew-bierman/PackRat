@@ -10,19 +10,19 @@ import { z } from 'zod';
  * @param {Object} res - The response object.
  * @return {Object} The updated item.
  */
-export const addGlobalItemToPack = async (req, res, next) => {
-  try {
-    const { packId } = req.params;
-    const { itemId, ownerId } = req.body;
+// export const addGlobalItemToPack = async (req, res, next) => {
+//   try {
+//     const { packId } = req.params;
+//     const { itemId, ownerId } = req.body;
 
-    const result = await addGlobalItemToPackService(packId, itemId, ownerId);
+//     const result = await addGlobalItemToPackService(packId, itemId, ownerId);
 
-    res.locals.data = result;
-    responseHandler(res);
-  } catch (error) {
-    next(ItemNotFoundError);
-  }
-};
+//     res.locals.data = result;
+//     responseHandler(res);
+//   } catch (error) {
+//     next(ItemNotFoundError);
+//   }
+// };
 
 export function addGlobalItemToPackRoute() {
   return publicProcedure
@@ -33,8 +33,9 @@ export function addGlobalItemToPackRoute() {
         ownerId: z.string(),
       }),
     )
-    .query(async (opts) => {
+    .mutation(async (opts) => {
       const { packId, itemId, ownerId } = opts.input;
-      return await addGlobalItemToPackService(packId, itemId, ownerId);
+      const { prisma }: any = opts.ctx;
+      return await addGlobalItemToPackService(prisma, packId, itemId, ownerId);
     });
 }

@@ -26,7 +26,8 @@ export function getWeatherRoute() {
     .input(z.object({ lat: z.number(), lon: z.number() }))
     .query(async (opts) => {
       const { lat, lon } = opts.input;
-      const response = await getWeatherService(lat, lon);
+      const { prisma }: any = opts.ctx;
+      const response = await getWeatherService(prisma, lat, lon);
       return response.data;
     });
 }

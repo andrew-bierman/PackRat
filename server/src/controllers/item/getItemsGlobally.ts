@@ -10,19 +10,19 @@ import { z } from 'zod';
  * @param {Object} res - The response object.
  * @return {Object} The items, page, and total pages.
  */
-export const getItemsGlobally = async (req, res, next) => {
-  try {
-    const result = await getItemsGloballyService(
-      req.query.limit,
-      req.query.page,
-    );
+// export const getItemsGlobally = async (req, res, next) => {
+//   try {
+//     const result = await getItemsGloballyService(
+//       req.query.limit,
+//       req.query.page,
+//     );
 
-    res.locals.data = result;
-    responseHandler(res);
-  } catch (error) {
-    next(ItemNotFoundError);
-  }
-};
+//     res.locals.data = result;
+//     responseHandler(res);
+//   } catch (error) {
+//     next(ItemNotFoundError);
+//   }
+// };
 
 export function getItemsGloballyRoute() {
   return publicProcedure
@@ -34,6 +34,11 @@ export function getItemsGloballyRoute() {
       }),
     )
     .query(async (opts) => {
-      return await getItemsGloballyService(opts.input.limit, opts.input.page);
+      const { prisma }: any = opts.ctx;
+      return await getItemsGloballyService(
+        prisma,
+        opts.input.limit,
+        opts.input.page,
+      );
     });
 }

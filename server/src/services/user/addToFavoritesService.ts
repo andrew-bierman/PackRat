@@ -1,11 +1,14 @@
-import { prisma } from '../../prisma';
+import { PrismaClient } from '@prisma/client/edge';
+
 /**
  * Adds or removes a pack from a user's favorites list.
+ * @param {PrismaClient} prisma - Prisma client.
  * @param {string} packId - The ID of the pack.
  * @param {string} userId - The ID of the user.
  * @return {Promise<object>} The updated user object.
  */
 export const addToFavoriteService = async (
+  prisma: PrismaClient,
   packId: string,
   userId: string,
 ): Promise<object> => {

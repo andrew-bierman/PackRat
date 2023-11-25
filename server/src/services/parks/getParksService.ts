@@ -1,12 +1,17 @@
 import { oneEntity } from '../../utils/oneEntity';
 import { RetrievingParksDataError } from '../../helpers/errors';
 
-export async function getParksService(abbrStates) {
+export async function getParksService({
+  abbrStates,
+  rapidApiKey,
+  npsApi,
+  parksHost,
+}) {
   const abbrState = await oneEntity(abbrStates);
 
-  const X_RAPIDAPI_KEY = process.env.X_RAPIDAPI_KEY;
-  const NPS_API = process.env.NPS_API;
-  const PARKS_HOST = process.env.PARKS_HOST;
+  const X_RAPIDAPI_KEY = rapidApiKey;
+  const NPS_API = npsApi;
+  const PARKS_HOST = parksHost;
 
   const host = `${PARKS_HOST}?stateCode=${abbrState}`;
 

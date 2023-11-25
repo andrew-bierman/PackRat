@@ -1,19 +1,18 @@
 import type { User as TUser } from '@prisma/client/edge';
 import { CLIENT_URL, JWT_SECRET } from '../../config';
 import jwt from 'jsonwebtoken';
-import prisma from '../client';
 
 type ExtendedUser = {
-  save: () => Promise<ExtendedUser>;
-  toJSON: () => Partial<TUser>;
-  generateAuthToken: () => Promise<string>;
-  generateResetToken: () => Promise<string>;
+  save: (prisma: any) => Promise<ExtendedUser>;
+  toJSON: (prisma: any) => Partial<TUser>;
+  generateAuthToken: (prisma: any) => Promise<string>;
+  generateResetToken: (prisma: any) => Promise<string>;
 };
 
 const User = <T>(prismaUser: T): T & ExtendedUser => {
   if (!prismaUser) return;
   return Object.assign(prismaUser, {
-    async save(): Promise<ExtendedUser> {
+    async save(prisma: any): Promise<ExtendedUser> {
       const user = this;
 
       // Return the original user if it already has a username.
@@ -54,7 +53,7 @@ const User = <T>(prismaUser: T): T & ExtendedUser => {
 
       return User(updatedUser);
     },
-    toJSON(): Partial<TUser> {
+    toJSON(prisma: any): Partial<TUser> {
       const {
         password,
         passwordResetToken,
@@ -67,7 +66,7 @@ const User = <T>(prismaUser: T): T & ExtendedUser => {
       } = this;
       return userObject;
     },
-    async generateAuthToken(): Promise<string> {
+    async generateAuthToken(prisma: any): Promise<string> {
       if (!JWT_SECRET) throw new Error('JWT_SECRET is not defined');
       const token = await jwt.sign({ id: this.id.toString() }, JWT_SECRET, {
         expiresIn: '7 days',
@@ -79,7 +78,7 @@ const User = <T>(prismaUser: T): T & ExtendedUser => {
       });
       return token;
     },
-    async generateResetToken(): Promise<string> {
+    async generateResetToken(prisma: any): Promise<string> {
       if (this.passwordResetToken) {
         if (!JWT_SECRET) throw new Error('JWT_SECRET is not defined');
         const decoded: any = jwt.verify(this.passwordResetToken, JWT_SECRET);

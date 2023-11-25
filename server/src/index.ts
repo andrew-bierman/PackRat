@@ -1,37 +1,26 @@
 import { Hono } from 'hono';
-import type { AnyRouter } from '@trpc/server';
-import type { FetchHandlerRequestOptions } from '@trpc/server/adapters/fetch';
-import { fetchRequestHandler } from '@trpc/server/adapters/fetch';
-import type { MiddlewareHandler } from 'hono';
+import { fetchHandler } from 'trpc-playground/handlers/fetch';
+// import { renderTrpcPanel } from 'trpc-panel';
 import { appRouter } from './routes/trpcRouter';
-
-type tRPCOptions = Omit<
-  FetchHandlerRequestOptions<AnyRouter>,
-  'req' | 'endpoint'
-> &
-  Partial<Pick<FetchHandlerRequestOptions<AnyRouter>, 'endpoint'>>;
-
-const trpcServer = ({
-  endpoint = '/trpc',
-  ...rest
-}: tRPCOptions): MiddlewareHandler => {
-  return async (c) => {
-    const res = fetchRequestHandler({
-      ...rest,
-      endpoint,
-      req: c.req.raw,
-    });
-    return res;
-  };
-};
+import { honoTRPCServer } from './trpc/server';
+import { cors } from './middleware';
 
 const app = new Hono();
 
+app.use(cors);
+
 app.use(
-  '/trpc/*',
-  trpcServer({
-    router: appRouter,
-  }),
+  'api/trpc/*',
+  honoTRPCServer({ router: appRouter, endpoint: '/api/trpc' }),
 );
+
+app.use('/trpc-playground', async (c, next) => {
+  const handler = await fetchHandler({
+    router: appRouter,
+    trpcApiEndpoint: '/api/trpc',
+    playgroundEndpoint: '/trpc-playground',
+  });
+  return handler(c.req.raw);
+});
 
 export default app;

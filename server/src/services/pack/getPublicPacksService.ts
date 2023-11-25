@@ -1,4 +1,3 @@
-import { prisma } from '../../prisma';
 import { User } from '../../prisma/methods';
 import {
   computeFavouritesCount,
@@ -40,15 +39,15 @@ const sortPacks = (propertyName, sortOrder) => (packA, packB) => {
   return 0;
 };
 
-const computeVirtualFields = (pack) => {
+const computeVirtualFields = (prisma: any, pack) => {
   const packWithTotalWeight = computeTotalWeight(pack);
   const packWithTotalScore = computeTotalScores(packWithTotalWeight);
   const packWithFavoritesCount = computeFavouritesCount(packWithTotalScore);
   return {
     ...packWithFavoritesCount,
-    favorited_by: pack.favorited_by.map((user) => User(user)?.toJSON()),
-    owners: pack.owners.map((owner) => User(owner)?.toJSON()),
-    owner: User(pack.owner)?.toJSON(),
+    favorited_by: pack.favorited_by.map((user) => User(user)?.toJSON(prisma)),
+    owners: pack.owners.map((owner) => User(owner)?.toJSON(prisma)),
+    owner: User(pack.owner)?.toJSON(prisma),
     items_count: pack.items.length,
   };
 };
@@ -63,7 +62,10 @@ const DEFAULT_SORT = { createdAt: -1 };
  * @param {string} queryBy - Specifies how the public packs should be sorted.
  * @return {Promise<any[]>} An array of public packs.
  */
-export async function getPublicPacksService(queryBy: string = null) {
+export async function getPublicPacksService(
+  prisma: any,
+  queryBy: string = null,
+) {
   try {
     const sortOption = SORT_OPTIONS[queryBy] || DEFAULT_SORT;
     const [[propertyName, sortOrder]] = Object.entries(sortOption);

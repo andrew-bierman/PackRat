@@ -1,27 +1,30 @@
+import { PrismaClient } from '@prisma/client/edge';
 import { Configuration, OpenAIApi } from 'openai';
-import { prisma } from '../../prisma';
+// import { prisma } from '../../prisma';
 
 /**
  * Retrieves AI response for a given user input in a conversation.
- *
+ * @param {PrismaClient} prisma - Prisma client.
  * @param {string} userId - The ID of the user.
  * @param {string} conversationId - The ID of the conversation.
  * @param {string} userInput - The user input in the conversation.
  * @returns {Object} - The AI response and the updated conversation.
  */
 export const getAIResponseService = async (
+  prisma: PrismaClient,
   userId,
   conversationId,
   userInput,
+  openAIAPIKey = null,
 ) => {
-  if (!process.env.OPENAI_API_KEY) {
+  if (!openAIAPIKey) {
     throw new Error(
       'Failed to get response from AI. OPENAI_API_KEY is not set.',
     );
   }
 
   const configuration = new Configuration({
-    apiKey: process.env.OPENAI_API_KEY,
+    apiKey: openAIAPIKey,
   });
 
   const openai = new OpenAIApi(configuration);

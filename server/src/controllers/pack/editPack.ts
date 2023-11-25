@@ -11,22 +11,23 @@ import * as validator from '../../middleware/validators/index';
  * @return {Object} The updated pack.
  */
 
-export const editPack = async (req, res, next) => {
-  try {
-    const { id } = req.body;
+// export const editPack = async (req, res, next) => {
+//   try {
+//     const { id } = req.body;
 
-    const newPack = await editPackService(id, req.body);
+//     const newPack = await editPackService(id, req.body);
 
-    res.locals.data = newPack;
-    responseHandler(res);
-  } catch (error) {
-    next(UnableToEditPackError);
-  }
-};
+//     res.locals.data = newPack;
+//     responseHandler(res);
+//   } catch (error) {
+//     next(UnableToEditPackError);
+//   }
+// };
 
 export function editPackRoute() {
   return publicProcedure.input(validator.editPack).mutation(async (opts) => {
     const { id } = opts.input;
-    return await editPackService(id, opts.input);
+    const { prisma }: any = opts.ctx;
+    return await editPackService(prisma, id, opts.input);
   });
 }

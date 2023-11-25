@@ -10,24 +10,25 @@ import { z } from 'zod';
  * @param {Object} res - the response object
  * @return {Promise} - a promise that resolves with the retrieved public packs
  */
-export const getPublicPacks = async (req, res, next) => {
-  try {
-    const { queryBy } = req.query;
+// export const getPublicPacks = async (req, res, next) => {
+//   try {
+//     const { queryBy } = req.query;
 
-    const publicPacks = await getPublicPacksService(queryBy);
+//     const publicPacks = await getPublicPacksService(queryBy);
 
-    res.locals.data = publicPacks;
-    responseHandler(res);
-  } catch (error) {
-    next(PackNotFoundError);
-  }
-};
+//     res.locals.data = publicPacks;
+//     responseHandler(res);
+//   } catch (error) {
+//     next(PackNotFoundError);
+//   }
+// };
 
 export function getPublicPacksRoute() {
   return publicProcedure
     .input(z.object({ queryBy: z.string() }))
     .query(async (opts) => {
       const { queryBy } = opts.input;
-      return await getPublicPacksService(queryBy);
+      const { prisma }: any = opts.ctx;
+      return await getPublicPacksService(prisma, queryBy);
     });
 }

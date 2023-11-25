@@ -1,9 +1,10 @@
 import { User } from '../../prisma/methods';
-import { prisma } from '../../prisma';
+// import { prisma } from '../../prisma';
+import { PrismaClient } from '@prisma/client/edge';
 
 /**
  * A function that finds a user by their email and updates their data.
- *
+ * @param {PrismaClient} prisma - Prisma client.
  * @param {string} email - The email of the user to be found and updated.
  * @param {string} data - The new data to be assigned to the user.
  * @param {string} datatype - The data type of the user's data.
@@ -11,6 +12,7 @@ import { prisma } from '../../prisma';
  * or a string indicating the reason for failure.
  */
 export async function findUserAndUpdate(
+  prisma: PrismaClient,
   email: string,
   data: string,
   datatype: string,
@@ -26,7 +28,7 @@ export async function findUserAndUpdate(
     });
 
     if (user) {
-      return User(user).toJSON();
+      return User(user).toJSON(prisma);
     } else {
       return false;
     }

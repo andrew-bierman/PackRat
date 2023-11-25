@@ -1,8 +1,6 @@
 import type { User } from '@prisma/client/edge';
 import bcrypt from 'bcryptjs';
-import { JWT_SECRET } from '../../config';
 import jwt from 'jsonwebtoken';
-import prisma from '../client';
 
 async function findByCredentials({
   email,
@@ -11,7 +9,7 @@ async function findByCredentials({
   email: string;
   password: string;
 }): Promise<User> {
-  const user = await prisma.user.findFirst({ where: { email } });
+  const user = await this.findFirst({ where: { email } });
 
   if (!user) throw new Error('Unable to login');
 
@@ -24,18 +22,21 @@ async function findByCredentials({
 
 // should be alreadyRegistered?
 async function alreadyLogin(email: string) {
-  const user = prisma.user.findFirst({
+  const user = this.findFirst({
     where: { email },
   });
 
   if (user) throw new Error('Already email registered');
 }
 
-async function validateResetToken(token: string): Promise<User> {
-  if (!JWT_SECRET) throw new Error('JWT_SECRET is not defined');
+async function validateResetToken(
+  token: string,
+  jwtSecret: string,
+): Promise<User> {
+  if (!jwtSecret) throw new Error('jwtSecret is not defined');
 
-  const decoded: any = jwt.verify(token, JWT_SECRET);
-  const user = await prisma.user.findFirst({
+  const decoded: any = jwt.verify(token, jwtSecret);
+  const user = await this.findFirst({
     where: { id: decoded.id, passwordResetToken: token },
   });
 

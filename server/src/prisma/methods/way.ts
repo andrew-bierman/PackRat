@@ -1,15 +1,14 @@
 import type { Way as TWay } from '@prisma/client/edge';
-import prisma from '../client';
 
 type ExtendedWay = {
-  toJSON: () => Partial<TWay>;
-  save: () => Promise<void>;
+  toJSON: (prisma: any) => Partial<TWay>;
+  save: (prisma: any) => Promise<void>;
 };
 
 const Way = <T extends TWay>(prismaWay: T): T & ExtendedWay => {
   if (!prismaWay) return;
   return Object.assign(prismaWay, {
-    toJSON(): Partial<TWay> {
+    toJSON(prisma: any): Partial<TWay> {
       const {
         id,
         // destructure methods
@@ -19,7 +18,7 @@ const Way = <T extends TWay>(prismaWay: T): T & ExtendedWay => {
       } = this;
       return wayObject;
     },
-    async save(): Promise<void> {
+    async save(prisma: any): Promise<void> {
       if (this.osm_type !== 'way') {
         console.log(
           'ERROR in WaySchema.pre("save"): this.osm_type !== "way"',

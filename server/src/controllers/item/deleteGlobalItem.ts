@@ -9,18 +9,18 @@ import { z } from 'zod';
  * @param {Object} res - The response object.
  * @return {Promise<void>} - Returns a promise that resolves to void.
  */
-export const deleteGlobalItem = async (req, res, next) => {
-  try {
-    const { itemId } = req.params;
+// export const deleteGlobalItem = async (req, res, next) => {
+//   try {
+//     const { itemId } = req.params;
 
-    const itemDeleted = await deleteGlobalItemService(itemId);
+//     const itemDeleted = await deleteGlobalItemService(itemId);
 
-    res.locals.data = itemDeleted;
-    responseHandler(res);
-  } catch (error) {
-    next(UnableToDeleteItemError);
-  }
-};
+//     res.locals.data = itemDeleted;
+//     responseHandler(res);
+//   } catch (error) {
+//     next(UnableToDeleteItemError);
+//   }
+// };
 
 export function deleteGlobalItemRoute() {
   return publicProcedure
@@ -31,6 +31,7 @@ export function deleteGlobalItemRoute() {
     )
     .mutation(async (opts) => {
       const { itemId } = opts.input;
-      return await deleteGlobalItemService(itemId);
+      const { prisma }: any = opts.ctx;
+      return await deleteGlobalItemService(prisma, itemId);
     });
 }

@@ -15,23 +15,24 @@ import { z } from 'zod';
 const JoiObjectId = (message: any = 'valid id'): z.ZodString =>
   z.string().regex(/^[0-9a-fA-F]{24}$/, { message });
 
-export const searchItemsByName = async (req, res, next) => {
-  try {
-    const { name, packId } = req.query;
+// export const searchItemsByName = async (req, res, next) => {
+//   try {
+//     const { name, packId } = req.query;
 
-    const items = await searchItemsByNameService(name, packId);
+//     const items = await searchItemsByNameService(name, packId);
 
-    res.status(200).json(items);
-  } catch (error) {
-    next(ItemNotFoundError);
-  }
-};
+//     res.status(200).json(items);
+//   } catch (error) {
+//     next(ItemNotFoundError);
+//   }
+// };
 
 export function searchItemsByNameRoute() {
   return publicProcedure
     .input(z.object({ name: z.string(), packId: JoiObjectId().optional() }))
     .query(async (opts) => {
       const { name, packId } = opts.input;
-      return searchItemsByNameService(name, packId);
+      const { prisma }: any = opts.ctx;
+      return searchItemsByNameService(prisma, name, packId);
     });
 }

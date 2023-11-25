@@ -9,22 +9,23 @@ import * as validator from '../../middleware/validators/index';
  * @param {Object} res - The response object.
  * @return {Promise} A promise that resolves to the trip details.
  */
-export const getTripById = async (req, res, next) => {
-  try {
-    const { tripId } = req.params;
+// export const getTripById = async (req, res, next) => {
+//   try {
+//     const { tripId } = req.params;
 
-    const tripDetails = await getTripByIdService(tripId);
+//     const tripDetails = await getTripByIdService(tripId);
 
-    res.locals.data = tripDetails;
-    responseHandler(res);
-  } catch (error) {
-    next(TripNotFoundError);
-  }
-};
+//     res.locals.data = tripDetails;
+//     responseHandler(res);
+//   } catch (error) {
+//     next(TripNotFoundError);
+//   }
+// };
 
 export function getTripByIdRoute() {
   return publicProcedure.input(validator.getTripById).query(async (opts) => {
     const { tripId } = opts.input;
-    return await getTripByIdService(tripId);
+    const { prisma }: any = opts.ctx;
+    return await getTripByIdService(prisma, tripId);
   });
 }

@@ -1,14 +1,14 @@
+import { PrismaClient } from '@prisma/client/edge';
 import { calculatePackScore } from '../../utils/scorePack';
-import { prisma } from '../../prisma';
 
 /**
  * Scores a pack service based on the given packId.
- *
+ * @param {PrismaClient} prisma - Prisma client.
  * @param {string} packId - The ID of the pack to be scored.
  * @return {Promise<Pack>} The updated pack object with scores and grades.
  * @throws {Error} If unable to score the pack.
  */
-export async function scorePackService(packId: string) {
+export async function scorePackService(prisma: PrismaClient, packId: string) {
   try {
     const packData = await prisma.pack.findUnique({
       where: { id: packId },

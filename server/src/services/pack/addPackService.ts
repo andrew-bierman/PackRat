@@ -1,14 +1,14 @@
-import { prisma } from '../../prisma';
-
 /**
  * Adds a new pack service.
- *
+ * @param {PrismaClient} prisma - Prisma client.
  * @param {string} name - The name of the pack.
  * @param {string} owner_id - The ID of the pack owner.
  * @return {Object} An object containing the created pack.
  */
 
-export const addPackService = async (name, owner_id) => {
+import { PrismaClient } from '@prisma/client/edge';
+
+export const addPackService = async (prisma: PrismaClient, name, owner_id) => {
   const newPack = {
     name,
     owner_id,

@@ -10,31 +10,33 @@ import * as validator from '../../middleware/validators/index';
  * @param {Object} res - The response object.
  * @return {Object} The updated item and pack ID.
  */
-export const addItem = async (req, res, next) => {
-  try {
-    const { name, weight, quantity, unit, packId, type, ownerId } = req.body;
+// export const addItem = async (req, res, next) => {
+//   try {
+//     const { name, weight, quantity, unit, packId, type, ownerId } = req.body;
 
-    const result = await addItemService(
-      name,
-      weight,
-      quantity,
-      unit,
-      packId,
-      type,
-      ownerId,
-    );
+//     const result = await addItemService(
+//       name,
+//       weight,
+//       quantity,
+//       unit,
+//       packId,
+//       type,
+//       ownerId,
+//     );
 
-    res.locals.data = { newItem: result.newItem, packId: result.packId };
-    responseHandler(res);
-  } catch (error) {
-    next(UnableToAddItemError);
-  }
-};
+//     res.locals.data = { newItem: result.newItem, packId: result.packId };
+//     responseHandler(res);
+//   } catch (error) {
+//     next(UnableToAddItemError);
+//   }
+// };
 
 export function addItemRoute() {
   return publicProcedure.input(validator.addItem).mutation(async (opts) => {
     const { name, weight, quantity, unit, packId, type, ownerId } = opts.input;
+    const { prisma }: any = opts.ctx;
     const result = await addItemService(
+      prisma,
       name,
       weight,
       quantity,

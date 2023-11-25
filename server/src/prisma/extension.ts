@@ -1,19 +1,26 @@
-import basePrismaClient from './client';
+import { PrismaClient } from '@prisma/client/edge';
 import { userStatics, geojsonStatics, nodeStatics } from './statics';
 
-const prisma = basePrismaClient.$extends({
-  // Model level extensions
-  model: {
-    geoJSON: {
-      ...geojsonStatics,
+const getPrismaClient = (dbURL: string) =>
+  new PrismaClient({
+    datasources: {
+      db: {
+        url: String(dbURL),
+      },
     },
-    user: {
-      ...userStatics,
+  }).$extends({
+    // Model level extensions
+    model: {
+      geoJSON: {
+        ...geojsonStatics,
+      },
+      user: {
+        ...userStatics,
+      },
+      node: {
+        ...nodeStatics,
+      },
     },
-    node: {
-      ...nodeStatics,
-    },
-  },
-});
+  });
 
-export { prisma };
+export { getPrismaClient };

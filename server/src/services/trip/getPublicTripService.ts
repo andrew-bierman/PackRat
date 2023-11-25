@@ -1,12 +1,15 @@
 // services/tripService.ts
-import { prisma } from '../../prisma';
+
+import { PrismaClient } from '@prisma/client/edge';
 
 /**
  * Retrieves public trips based on the given query parameter.
+ * @param {PrismaClient} prisma - Prisma client.
  * @param {string} queryBy - The query parameter to sort the trips.
  * @return {Promise<object[]>} The public trips.
  */
 export const getPublicTripsService = async (
+  prisma: PrismaClient,
   queryBy: string,
 ): Promise<object[]> => {
   try {

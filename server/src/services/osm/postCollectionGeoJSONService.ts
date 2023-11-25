@@ -7,12 +7,12 @@ import { isGeoJSONFormat } from '../../utils/osmFunctions/dataFormatters';
 
 /**
  * Posts a collection of GeoJSON data to the service.
- *
+ * @param {Object} prisma - Prisma client.
  * @param {Object} geojson - The GeoJSON data to be posted.
  * @throws {Error} Invalid or missing geoJSON.
  * @return {Promise} A promise that resolves to the newly created instances.
  */
-export const postCollectionGeoJSONService = async (geojson) => {
+export const postCollectionGeoJSONService = async (prisma, geojson) => {
   if (!geojson || !isGeoJSONFormat(geojson)) {
     throw new Error('Invalid or missing geoJSON');
   }
@@ -22,18 +22,19 @@ export const postCollectionGeoJSONService = async (geojson) => {
     const data = geojson.features;
     const processedElements = data.map((element) => ensureIdProperty(element));
     const Models = processedElements.map((element) =>
-      ensureModelProperty(element),
+      ensureModelProperty(prisma, element),
     );
     const newInstances = await Promise.all(
       Models.map(
-        async (_, index) => await processElement(processedElements[index]),
+        async (_, index) =>
+          await processElement(prisma, processedElements[index]),
       ),
     );
     return newInstances;
   } else {
     // Handle single feature
     const processedElement = ensureIdProperty(geojson);
-    const newInstance = await processElement(processedElement);
+    const newInstance = await processElement(prisma, processedElement);
     return newInstance;
   }
 };

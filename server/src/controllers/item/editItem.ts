@@ -4,11 +4,32 @@ import { responseHandler } from '../../helpers/responseHandler';
 import { editItemService } from '../../services/item/item.service';
 import * as validator from '../../middleware/validators/index';
 
-export const editItem = async (req, res, next) => {
-  try {
-    const { id, name, weight, unit, quantity, type } = req.body;
+// export const editItem = async (req, res, next) => {
+//   try {
+//     const { id, name, weight, unit, quantity, type } = req.body;
 
-    const newItem = await editItemService(
+//     const newItem = await editItemService(
+//       id,
+//       name,
+//       weight,
+//       unit,
+//       quantity,
+//       type,
+//     );
+
+//     res.locals.data = newItem;
+//     responseHandler(res);
+//   } catch (error) {
+//     next(UnableToEditItemError);
+//   }
+// };
+
+export function editItemRoute() {
+  return publicProcedure.input(validator.editItem).mutation(async (opts) => {
+    const { id, name, weight, unit, quantity, type } = opts.input;
+    const { prisma }: any = opts.ctx;
+    return await editItemService(
+      prisma,
       id,
       name,
       weight,
@@ -16,17 +37,5 @@ export const editItem = async (req, res, next) => {
       quantity,
       type,
     );
-
-    res.locals.data = newItem;
-    responseHandler(res);
-  } catch (error) {
-    next(UnableToEditItemError);
-  }
-};
-
-export function editItemRoute() {
-  return publicProcedure.input(validator.editItem).mutation(async (opts) => {
-    const { id, name, weight, unit, quantity, type } = opts.input;
-    return await editItemService(id, name, weight, unit, quantity, type);
   });
 }

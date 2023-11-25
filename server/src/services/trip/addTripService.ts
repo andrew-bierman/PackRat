@@ -1,7 +1,10 @@
-import { prisma } from '../../prisma';
+import { PrismaClient } from '@prisma/client/edge';
 import { Trip } from '../../prisma/methods';
 
-export const addTripService = async (tripDetails): Promise<any> => {
+export const addTripService = async (
+  prisma: PrismaClient,
+  tripDetails,
+): Promise<any> => {
   try {
     const {
       name,

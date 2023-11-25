@@ -1,7 +1,6 @@
 import { publicProcedure } from '../../trpc';
 import { UserNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
-import { prisma } from '../../prisma';
 
 // Middleware to check if user is authenticated
 // export const isAuthenticated = async (req, res, next) => {
@@ -21,23 +20,25 @@ import { prisma } from '../../prisma';
  * @param {Object} res - The response object.
  * @return {Promise} The JSON response containing the users.
  */
-export const getUsers = async (req, res, next) => {
-  try {
-    const users = await prisma.user.findMany({
-      include: {
-        favorites: true,
-      },
-    });
+// export const getUsers = async (req, res, next) => {
+//   try {
+//     const users = await prisma.user.findMany({
+//       include: {
+//         favorites: true,
+//       },
+//     });
 
-    res.locals.data = users;
-    responseHandler(res);
-  } catch (error) {
-    next(UserNotFoundError);
-  }
-};
+//     res.locals.data = users;
+//     responseHandler(res);
+//   } catch (error) {
+//     next(UserNotFoundError);
+//   }
+// };
 
 export function getUsersRoute() {
-  return publicProcedure.query(async (input) => {
+  return publicProcedure.query(async (opts) => {
+    const { prisma }: any = opts;
+
     const users = await prisma.user.findMany({
       include: {
         favorites: true,

@@ -1,4 +1,3 @@
-import axios from 'axios';
 import {
   ErrorProcessingNominatimError,
   ErrorRetrievingNominatimError,
@@ -25,10 +24,10 @@ export const getNominatimDetails = async (req, res, next) => {
     next(InvalidRequestParamsError);
   }
   try {
-    const response = await axios.get(nominatimUrl);
+    const response = await fetch(nominatimUrl);
 
-    if (response.status === 200) {
-      res.locals.data = response.data;
+    if (response.ok) {
+      res.locals.data = await response.json();
       responseHandler(res);
     } else {
       console.log(response.status, response.statusText);

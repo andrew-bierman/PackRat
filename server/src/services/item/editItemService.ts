@@ -1,7 +1,10 @@
-import { prisma } from '../../prisma';
+// import { prisma } from '../../prisma';
+
+import { PrismaClient } from '@prisma/client/edge';
+
 /**
  * Edit an item in the service.
- *
+ * @param {PrismaClient} prisma - Prisma client.
  * @param {string} id - the ID of the item to be edited
  * @param {string} name - the new name of the item
  * @param {number} weight - the new weight of the item
@@ -11,6 +14,7 @@ import { prisma } from '../../prisma';
  * @return {Promise<object>} - the edited item
  */
 export const editItemService = async (
+  prisma: PrismaClient,
   id,
   name,
   weight,
@@ -33,12 +37,12 @@ export const editItemService = async (
       weight,
       unit,
       quantity,
-      category: {
+      categoryDocument: {
         connect: { id: category.id },
       },
     },
     include: {
-      category: true,
+      categoryDocument: true,
     },
   });
 

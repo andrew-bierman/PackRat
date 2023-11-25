@@ -1,10 +1,10 @@
-import { ItemCategoryName } from '@prisma/client/edge';
-import { prisma } from '../../prisma';
+import { ItemCategoryName, PrismaClient } from '@prisma/client/edge';
+// import { prisma } from '../../prisma';
 import { ItemCategoryEnum } from '../../utils/itemCategory';
 
 /**
  * Generates a new item and adds it to a pack based on the given parameters.
- *
+ * @param {PrismaClient} prisma - Prisma client.
  * @param {string} name - The name of the item.
  * @param {number} weight - The weight of the item.
  * @param {number} quantity - The quantity of the item.
@@ -15,6 +15,7 @@ import { ItemCategoryEnum } from '../../utils/itemCategory';
  * @return {object} An object containing the newly created item and the pack ID.
  */
 export const addItemService = async (
+  prisma: PrismaClient,
   name,
   weight,
   quantity,
@@ -39,10 +40,10 @@ export const addItemService = async (
           weight,
           quantity,
           unit,
-          packs: {
+          packDocuments: {
             connect: { id: packId },
           },
-          category: {
+          categoryDocument: {
             connect: { id: category.id },
           },
         },
@@ -59,8 +60,8 @@ export const addItemService = async (
 
       const existingWaterItem = await prisma.item.findFirst({
         where: {
-          category: { id: category.id },
-          packs: { some: { id: packId } },
+          category: category.id,
+          packs: { has: packId },
         },
         select: {
           weight: true,
@@ -83,10 +84,10 @@ export const addItemService = async (
             weight,
             quantity: 1,
             unit,
-            packs: {
+            packDocuments: {
               connect: { id: packId },
             },
-            category: {
+            categoryDocument: {
               connect: { id: category.id },
             },
           },
@@ -108,10 +109,10 @@ export const addItemService = async (
           weight,
           quantity,
           unit,
-          packs: {
+          packDocuments: {
             connect: { id: packId },
           },
-          category: {
+          categoryDocument: {
             connect: { id: category.id },
           },
         },
@@ -124,12 +125,9 @@ export const addItemService = async (
   const pack = await prisma.pack.update({
     where: { id: packId },
     data: {
-      items: {
+      itemDocuments: {
         connect: { id: newItem.id },
       },
-    },
-    include: {
-      owners: true,
     },
   });
 
@@ -137,11 +135,11 @@ export const addItemService = async (
     where: { id: newItem.id },
     data: {
       owners: {
-        connect: pack.owners.map((owner) => ({ id: owner.id })),
+        push: pack.owners.map((ownerId) => ownerId),
       },
     },
     include: {
-      category: true,
+      categoryDocument: true,
     },
   });
 

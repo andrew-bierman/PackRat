@@ -1,5 +1,4 @@
 import osmtogeojson from 'osmtogeojson';
-import axios from 'axios';
 import {
   ErrorProcessingOverpassError,
   ErrorRetrievingOverpassError,
@@ -17,17 +16,17 @@ import { z } from 'zod';
  * @param {Object} res - The response object used to send the retrieved OpenStreetMap data.
  * @return {Promise<void>} - A promise that resolves when the OpenStreetMap data is successfully retrieved and sent.
  */
-export const getOsm = async (req, res, next) => {
-  console.log('req', req); // log the request body to see what it looks like
-  try {
-    const { activityType, startPoint, endPoint } = req.body;
-    const result = await getOsmService({ activityType, startPoint, endPoint });
-    res.locals.data = result;
-    responseHandler(res);
-  } catch (error) {
-    next(ErrorRetrievingOverpassError);
-  }
-};
+// export const getOsm = async (req, res, next) => {
+//   console.log('req', req); // log the request body to see what it looks like
+//   try {
+//     const { activityType, startPoint, endPoint } = req.body;
+//     const result = await getOsmService({ activityType, startPoint, endPoint });
+//     res.locals.data = result;
+//     responseHandler(res);
+//   } catch (error) {
+//     next(ErrorRetrievingOverpassError);
+//   }
+// };
 
 export function getOsmRoute() {
   return publicProcedure
@@ -39,9 +38,15 @@ export function getOsmRoute() {
       }),
     )
     .mutation(async (opts) => {
+      const { env }: any = opts.ctx;
       try {
         const { activityType, startPoint, endPoint } = opts.input;
-        return await getOsmService({ activityType, startPoint, endPoint });
+        return await getOsmService({
+          activityType,
+          startPoint,
+          endPoint,
+          osmURI: env.OSM_URI,
+        });
       } catch (error) {
         // throw ErrorRetrievingOverpassError;
         return ErrorRetrievingOverpassError;

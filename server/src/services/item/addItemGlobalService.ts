@@ -1,10 +1,10 @@
 import { ItemCategoryEnum } from '../../utils/itemCategory';
-import { prisma } from '../../prisma';
-import { ItemCategoryName } from '@prisma/client/edge';
+// import { prisma } from '../../prisma';
+import { ItemCategoryName, PrismaClient } from '@prisma/client/edge';
 
 /**
  * Adds an item to the global service.
- *
+ * @param {PrismaClient} prisma - Prisma client.
  * @param {string} name - The name of the item.
  * @param {number} weight - The weight of the item.
  * @param {number} quantity - The quantity of the item.
@@ -13,6 +13,7 @@ import { ItemCategoryName } from '@prisma/client/edge';
  * @return {Promise<Object>} The newly created item.
  */
 export const addItemGlobalService = async (
+  prisma: PrismaClient,
   name,
   weight,
   quantity,
@@ -36,7 +37,7 @@ export const addItemGlobalService = async (
           weight,
           quantity,
           unit,
-          category: {
+          categoryDocument: {
             connect: { id: category.id },
           },
           global: true,
@@ -47,7 +48,7 @@ export const addItemGlobalService = async (
           id: newItem.id,
         },
         include: {
-          category: {
+          categoryDocument: {
             select: {
               name: true,
             },
@@ -69,7 +70,7 @@ export const addItemGlobalService = async (
           weight,
           quantity: 1,
           unit,
-          category: {
+          categoryDocument: {
             connect: { id: category.id },
           },
           global: true,
@@ -81,7 +82,7 @@ export const addItemGlobalService = async (
           id: newItem.id,
         },
         include: {
-          category: {
+          categoryDocument: {
             select: {
               name: true,
             },
@@ -104,7 +105,7 @@ export const addItemGlobalService = async (
           weight,
           quantity,
           unit,
-          category: {
+          categoryDocument: {
             connect: {
               id: category.id,
             },
@@ -117,7 +118,7 @@ export const addItemGlobalService = async (
           id: newItem.id,
         },
         include: {
-          category: {
+          categoryDocument: {
             select: {
               name: true,
             },

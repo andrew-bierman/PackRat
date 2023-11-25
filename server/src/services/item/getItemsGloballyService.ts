@@ -1,14 +1,19 @@
-import { prisma } from '../../prisma';
+import { PrismaClient } from '@prisma/client/edge';
+// import { prisma } from '../../prisma';
 
 /**
  * Retrieves globally available items.
- *
+ * @param {PrismaClient} prisma - Prisma client.
  * @param {Object} req - The request object.
  * @param {number} reqlimit - The limit for the number of items to retrieve.
  * @param {number} reqpage - The page number.
  * @return {Object} An object containing items, page, and totalPages.
  */
-export const getItemsGloballyService = async (reqlimit, reqpage) => {
+export const getItemsGloballyService = async (
+  prisma: PrismaClient,
+  reqlimit,
+  reqpage,
+) => {
   const totalItems = await prisma.item.count({
     where: {
       global: true,
@@ -24,7 +29,7 @@ export const getItemsGloballyService = async (reqlimit, reqpage) => {
       global: true,
     },
     include: {
-      category: {
+      categoryDocument: {
         select: {
           name: true,
         },

@@ -1,7 +1,6 @@
 import { User } from '../../prisma/methods';
-import { prisma } from '../../prisma';
 
-export async function checkCodeService({ email, code }: any) {
+export async function checkCodeService({ prisma, email, code }: any) {
   const user = await prisma.user.findFirst({
     where: {
       email: email.toLowerCase(),

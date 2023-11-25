@@ -1,7 +1,8 @@
-import { prisma } from '../../prisma';
+import { PrismaClient } from '@prisma/client/edge';
+// import { prisma } from '../../prisma';
 /**
  * Edits a global item by creating a duplicate item in a specific pack.
- *
+ * @param {PrismaClient} prisma - Prisma client.
  * @param {string} itemId - The ID of the item to be edited.
  * @param {string} packId - The ID of the pack where the duplicate item will be created.
  * @param {string} name - The name of the duplicate item.
@@ -12,6 +13,7 @@ import { prisma } from '../../prisma';
  * @return {Promise<object>} The newly created duplicate item.
  */
 export const editGlobalItemAsDuplicateService = async (
+  prisma: PrismaClient,
   itemId,
   packId,
   name,
@@ -33,10 +35,10 @@ export const editGlobalItemAsDuplicateService = async (
       unit,
       quantity,
       global: false,
-      category: {
+      categoryDocument: {
         connect: { id: category.id },
       },
-      packs: {
+      packDocuments: {
         connect: { id: packId },
       },
     },
@@ -47,7 +49,7 @@ export const editGlobalItemAsDuplicateService = async (
       id: newItem.id,
     },
     include: {
-      category: true,
+      categoryDocument: true,
     },
   });
 
@@ -56,7 +58,7 @@ export const editGlobalItemAsDuplicateService = async (
       id: packId,
     },
     data: {
-      items: {
+      itemDocuments: {
         connect: { id: newItem.id },
         disconnect: [{ id: itemId }, { id: packId }],
       },

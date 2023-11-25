@@ -1,12 +1,16 @@
+import { PrismaClient } from '@prisma/client/edge';
 import { User } from '../../prisma/methods';
-import { prisma } from '../../prisma';
+// import { prisma } from '../../prisma';
 
 /**
  * Retrieves a user by their ID from the database.
  * @param {string} userId - The ID of the user.
  * @return {Promise<object>} The user object.
  */
-export const getUserByIdService = async (userId: string): Promise<object> => {
+export const getUserByIdService = async (
+  prisma: PrismaClient,
+  userId: string,
+): Promise<object> => {
   try {
     const user = await prisma.user.findUnique({
       where: {
@@ -18,7 +22,7 @@ export const getUserByIdService = async (userId: string): Promise<object> => {
     });
 
     if (user) {
-      return User(user).toJSON();
+      return User(user).toJSON(prisma);
     } else {
       throw new Error('User cannot be found');
     }
