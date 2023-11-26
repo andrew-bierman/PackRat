@@ -128,12 +128,12 @@ export const appRouter = trpcRouter({
   // getWeather: getWeatherRoute(),
   // getWeatherWeek: getWeatherWeekRoute(),
   // trips routes
-  // getPublicTripsRoute: getPublicTripsRoute(),
-  // getTrips: getTripsRoute(),
-  // getTripById: getTripByIdRoute(),
-  // addTrip: addTripRoute(),
-  // editTrip: editTripRoute(),
-  // deleteTrip: deleteTripRoute(),
+  getPublicTripsRoute: getPublicTripsRoute(),
+  getTrips: getTripsRoute(),
+  getTripById: getTripByIdRoute(),
+  addTrip: addTripRoute(),
+  editTrip: editTripRoute(),
+  deleteTrip: deleteTripRoute(),
   // templates routes
   getTemplates: getTemplatesRoute(),
   getTemplateById: getTemplateByIdRoute(),

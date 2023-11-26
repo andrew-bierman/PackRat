@@ -1,15 +1,17 @@
 import type { Trip as TTrip, GeoJSON } from '@prisma/client/edge';
 
 type ExtendedTrip = {
-  toJSON: (prisma: any) => Partial<TTrip>;
+  toJSON: (prisma: any) => Promise<Partial<TTrip>>;
 };
 
 const Trip = <T extends TTrip>(prismaTrip: T): T & ExtendedTrip => {
   if (!prismaTrip) return;
   return Object.assign(prismaTrip, {
-    toJSON(prisma): Partial<TTrip> & {
-      geojson?: { type: string; features: GeoJSON };
-    } {
+    async toJSON(prisma): Promise<
+      Partial<TTrip> & {
+        geojson?: { type: string; features: GeoJSON };
+      }
+    > {
       const {
         // destructure methods
         toJSON,
@@ -17,9 +19,18 @@ const Trip = <T extends TTrip>(prismaTrip: T): T & ExtendedTrip => {
       } = this;
       const { ...tripObject }: Record<string, any> = trip;
       if (!trip.geojson) return tripObject;
+
+      const geojsonIds: string[] = Array.isArray(trip.geojson)
+        ? trip.geojson.map((geojson) => geojson['$oid'])
+        : [trip.geojson['$oid']];
+
+      const geojsonDocuments = await prisma.geoJSON.findMany({
+        where: { id: { in: geojsonIds.filter((id) => !!id) } },
+      });
+
       tripObject.geojson = {
         type: 'FeatureCollection',
-        features: tripObject.geojson,
+        features: geojsonDocuments,
       };
       return tripObject;
     },

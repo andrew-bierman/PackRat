@@ -22,8 +22,6 @@ model GeoJSON {
   geometry   GeoJSONGeometry
   createdAt  DateTime?       @default(now())
   updatedAt  DateTime?       @updatedAt
-  trip_id    String          @db.ObjectId
-  Trip       Trip?           @relation(fields: [trip_id], references: [id])
 
   @@map("geojsons")
 }
@@ -75,7 +73,6 @@ model Pack {
   favoritedByDocuments User[]       @relation(name: "Favourites", fields: [favorited_by], references: [id])
   ownerDocuments       User[]       @relation(name: "Owners", fields: [owners], references: [id])
   ownerDocument        User?        @relation(fields: [owner_id], references: [id])
-  tripDocuments        Trip[]       @ignore
 
   // Virtuals
   total_weight    Float?
@@ -99,23 +96,22 @@ model Template {
 }
 
 model Trip {
-  id          String    @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  description String
-  duration    String
-  weather     String
-  start_date  DateTime
-  end_date    DateTime
-  destination String
-  owner_id    String    @db.ObjectId
-  is_public   Boolean?
-  type        String    @default("trip")
-  pack_id     String?   @db.ObjectId
-  createdAt   DateTime? @default(now())
-  updatedAt   DateTime? @updatedAt
-  owner       User      @relation(fields: [owner_id], references: [id])
-  packs       Pack?     @relation(fields: [pack_id], references: [id])
-  geojson     GeoJSON[]
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  description   String
+  duration      String
+  weather       String
+  start_date    DateTime
+  end_date      DateTime
+  destination   String
+  owner_id      String?   @db.ObjectId
+  is_public     Boolean?
+  type          String?   @default("trip")
+  packs         String?   @db.ObjectId
+  geojson       Json?
+  createdAt     DateTime? @default(now())
+  updatedAt     DateTime? @updatedAt
+  ownerDocument User?     @relation(fields: [owner_id], references: [id])
 
   @@map("trips")
 }

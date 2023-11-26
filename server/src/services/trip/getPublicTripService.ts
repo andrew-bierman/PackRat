@@ -24,28 +24,33 @@ export const getPublicTripsService = async (
         start_date: true,
         end_date: true,
         destination: true,
-        owner: {
+        owner_id: true,
+        ownerDocument: {
           select: {
             id: true,
             username: true,
           },
         },
-        packs: {
-          select: {
-            id: true,
-          },
-        },
+        packs: true,
         createdAt: true,
         updatedAt: true,
       },
       orderBy: queryBy === 'Favorite' ? { id: 'desc' } : { id: 'asc' },
     });
 
+    const allPacks = await prisma.pack.findMany({
+      where: { id: { in: publicTrips.map((trip) => trip.packs) } },
+    });
+
     const trips = publicTrips.map((trip) => {
-      const owner = Array.isArray(trip.owner) ? trip.owner[0] : trip.owner;
+      const ownerDocument = Array.isArray(trip.ownerDocument)
+        ? trip.ownerDocument[0]
+        : trip.ownerDocument;
+      const packDocument = allPacks.find((pack) => pack.id === trip.packs);
       return {
         ...trip,
-        owner,
+        packDocument,
+        ownerDocument,
       };
     });
 

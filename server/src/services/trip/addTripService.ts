@@ -21,7 +21,12 @@ export const addTripService = async (
     } = tripDetails;
 
     // Save all the Features from the FeatureCollection
-    const savedGeoJSONs = await prisma.geoJSON.saveMany(geoJSON.features);
+
+    const savedGeoJSONs = await Promise.all(
+      geoJSON.features.map((feature) =>
+        prisma.geoJSON.create({ data: feature }),
+      ),
+    );
 
     const geojsonIds = savedGeoJSONs.map((feature) => feature.id);
 
@@ -34,22 +39,18 @@ export const addTripService = async (
         start_date,
         end_date,
         destination,
-        geojson: {
-          connect: geojsonIds.map((id) => ({ id })),
-        },
-        packs: {
-          connect: packs.map((packId) => ({ id: packId })),
-        },
+        geojson: geojsonIds.map((id) => ({ $oid: id })),
         is_public,
-        owner: {
+        ownerDocument: {
           connect: { id: owner_id },
         },
+        packs: packs,
       },
     });
 
     return {
       message: 'Trip added successfully',
-      trip: Trip(newTrip)?.toJSON(),
+      trip: await Trip(newTrip)?.toJSON(prisma),
     };
   } catch (error) {
     console.error(error);
@@ -58,37 +59,37 @@ export const addTripService = async (
 };
 
 // This function is un-used now. Trip model does not have osm related properties
-const createOSMObject = async (geoJSON) => {
-  if (!geoJSON?.properties) {
-    throw new Error('Invalid or missing geoJSON');
-  }
+// const createOSMObject = async (geoJSON) => {
+//   if (!geoJSON?.properties) {
+//     throw new Error('Invalid or missing geoJSON');
+//   }
 
-  const osmType = geoJSON.properties.osm_type;
+//   const osmType = geoJSON.properties.osm_type;
 
-  if (osmType !== 'N' && osmType !== 'W' && osmType !== 'R') {
-    throw new Error('Invalid OSM type');
-  }
+//   if (osmType !== 'N' && osmType !== 'W' && osmType !== 'R') {
+//     throw new Error('Invalid OSM type');
+//   }
 
-  let osmModel;
-  if (osmType === 'N') {
-    osmModel = prisma.node;
-  } else if (osmType === 'W') {
-    osmModel = prisma.way;
-  } else if (osmType === 'R') {
-    osmModel = prisma.relation;
-  }
+//   let osmModel;
+//   if (osmType === 'N') {
+//     osmModel = prisma.node;
+//   } else if (osmType === 'W') {
+//     osmModel = prisma.way;
+//   } else if (osmType === 'R') {
+//     osmModel = prisma.relation;
+//   }
 
-  const osmData = await osmModel.create({
-    data: {
-      osm_id: geoJSON.properties.osm_id,
-      osm_type: osmType === 'N' ? 'node' : osmType === 'W' ? 'way' : 'relation',
-      tags: geoJSON.properties,
-      geoJSON,
-    },
-  });
+//   const osmData = await osmModel.create({
+//     data: {
+//       osm_id: geoJSON.properties.osm_id,
+//       osm_type: osmType === 'N' ? 'node' : osmType === 'W' ? 'way' : 'relation',
+//       tags: geoJSON.properties,
+//       geoJSON,
+//     },
+//   });
 
-  return {
-    osm_ref: osmData.id,
-    osm_type: osmType === 'N' ? 'Node' : osmType === 'W' ? 'Way' : 'Relation',
-  };
-};
+//   return {
+//     osm_ref: osmData.id,
+//     osm_type: osmType === 'N' ? 'Node' : osmType === 'W' ? 'Way' : 'Relation',
+//   };
+// };

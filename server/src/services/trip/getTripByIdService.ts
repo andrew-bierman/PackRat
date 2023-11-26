@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client/edge';
+import { Trip } from '../../prisma/methods';
 
 /**
  * Retrieves a trip by its ID and returns the trip details.
@@ -13,26 +14,14 @@ export const getTripByIdService = async (
   try {
     const trip = await prisma.trip.findUnique({
       where: { id: tripId },
-      include: { owner: true, geojson: true }, // Assuming 'owner_id' is a foreign key to the 'User' model
+      include: { ownerDocument: true }, // Assuming 'owner_id' is a foreign key to the 'User' model
     });
 
     if (!trip) {
       throw new Error('Trip cannot be found');
     }
 
-    // Convert the Prisma response to a plain JavaScript object
-    const tripObject = {
-      id: trip.id,
-      name: trip.name, // Replace with the actual fields you have
-      // Add more fields as needed
-      geojson: {
-        type: 'FeatureCollection',
-        features: trip.geojson,
-      },
-      owner: trip.owner, // This will have the owner details if included
-    };
-
-    return tripObject;
+    return Trip(trip).toJSON(prisma);
   } catch (error) {
     console.error(error);
     throw new Error('Trip cannot be found');
