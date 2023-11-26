@@ -32,7 +32,7 @@ export const addTemplateService = async (
         type,
         templateId,
         isGlobalTemplate,
-        createdBy: {
+        createdByDocument: {
           connect: { id: createdBy },
         },
       },

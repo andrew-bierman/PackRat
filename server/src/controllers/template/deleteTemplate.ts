@@ -35,7 +35,7 @@ export function deleteTemplateRoute() {
     .input(z.object({ templateId: z.string() }))
     .mutation(async (opts) => {
       const { templateId } = opts.input;
-      const { prisma }: any = opts;
+      const { prisma }: any = opts.ctx;
 
       const template = await prisma.template.findUnique({
         where: {

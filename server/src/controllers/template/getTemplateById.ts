@@ -39,19 +39,19 @@ export function getTemplateByIdRoute() {
     .input(z.object({ templateId: z.string() }))
     .query(async (opts) => {
       const { templateId } = opts.input;
-      const { prisma }: any = opts;
+      const { prisma }: any = opts.ctx;
 
       const template = await prisma.template.findUnique({
         where: {
           id: templateId,
         },
         include: {
-          createdBy: {
+          createdByDocument: {
             select: {
               username: true,
             },
           },
-        } as never,
+        },
       });
       return template;
     });

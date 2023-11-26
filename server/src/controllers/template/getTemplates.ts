@@ -22,11 +22,11 @@ import { publicProcedure } from '../../trpc';
 
 export function getTemplatesRoute() {
   return publicProcedure.query(async (opts) => {
-    const { prisma }: any = opts;
+    const { prisma }: any = opts.ctx;
 
     const templates = await prisma.template.findMany({
       include: {
-        createdBy: {
+        createdByDocument: {
           select: {
             username: true,
           },

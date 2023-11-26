@@ -135,11 +135,11 @@ export const appRouter = trpcRouter({
   // editTrip: editTripRoute(),
   // deleteTrip: deleteTripRoute(),
   // templates routes
-  // getTemplates: getTemplatesRoute(),
-  // getTemplateById: getTemplateByIdRoute(),
-  // addTemplate: addTemplateRoute(),
-  // editTemplate: editTemplateRoute(),
-  // deleteTemplate: deleteTemplateRoute(),
+  getTemplates: getTemplatesRoute(),
+  getTemplateById: getTemplateByIdRoute(),
+  addTemplate: addTemplateRoute(),
+  editTemplate: editTemplateRoute(),
+  deleteTemplate: deleteTemplateRoute(),
   // password reset routes
   // requestPasswordResetEmailAndToken: requestPasswordResetEmailAndTokenRoute(),
   // handlePasswordReset: handlePasswordResetRoute(),

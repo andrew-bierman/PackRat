@@ -44,7 +44,7 @@ export function addTemplateRoute() {
     )
     .mutation(async (opts) => {
       const { type, templateId, isGlobalTemplate, createdBy } = opts.input;
-      const { prisma }: any = opts;
+      const { prisma }: any = opts.ctx;
 
       const user = await prisma.user.findUnique({
         where: {

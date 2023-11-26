@@ -86,14 +86,14 @@ model Pack {
 }
 
 model Template {
-  id               String       @id @default(auto()) @map("_id") @db.ObjectId
-  type             TemplateType
-  templateId       String?      @db.ObjectId
-  isGlobalTemplate Boolean?     @default(false)
-  createdById      String?      @db.ObjectId
-  createdAt        DateTime?    @default(now())
-  updatedAt        DateTime?    @updatedAt
-  createdBy        User?        @relation(fields: [createdById], references: [id])
+  id                String       @id @default(auto()) @map("_id") @db.ObjectId
+  type              TemplateType
+  templateId        String?      @db.ObjectId
+  isGlobalTemplate  Boolean?     @default(false)
+  createdBy         String?      @db.ObjectId
+  createdAt         DateTime?    @default(now())
+  updatedAt         DateTime?    @updatedAt
+  createdByDocument User?        @relation(fields: [createdBy], references: [id])
 
   @@map("templates")
 }
