@@ -104,11 +104,11 @@ function checkRedundancy(packItems: any) {
 export function calculatePackScore(packData: any) {
   console.log('Calculating pack score...');
   console.log('packData: ', packData);
-  const { items } = packData;
+  const { itemDocuments } = packData;
   // console.log("weight: ", weight);
   // console.log('items: ', items)
 
-  const totalWeight = packData.items.reduce((total: number, item: any) => {
+  const totalWeight = itemDocuments.reduce((total: number, item: any) => {
     if (item.unit === 'lb') {
       return total + item.weight * 16 * item.quantity; // Considering 1 lb equals 16 oz
     } else {
@@ -124,8 +124,8 @@ export function calculatePackScore(packData: any) {
   // Calculate the scores for each factor, using the helper functions defined above
 
   const weightScore = Math.max(11 - Math.floor(totalWeight / 10), 1);
-  const essentialItemsScore = checkEssentialItems(items);
-  const redundancyAndVersatilityScore = checkRedundancy(items);
+  const essentialItemsScore = checkEssentialItems(itemDocuments);
+  const redundancyAndVersatilityScore = checkRedundancy(itemDocuments);
 
   // Calculate the scores for each factor
   // const weightScore = (weight / 10) * 100;

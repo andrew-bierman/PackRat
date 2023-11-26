@@ -19,7 +19,7 @@ export const duplicatePublicPackService = async (
       id: packId, // Replace 'id' with the actual primary key field in your model
     },
     include: {
-      owners: true,
+      ownerDocuments: true,
     },
   });
 
@@ -38,14 +38,14 @@ export const duplicatePublicPackService = async (
       scores: {
         set: { ...existingPack.scores },
       },
-      owners: {
-        connect: existingPack.owners.map((owner) => ({ id: owner.id })),
+      ownerDocuments: {
+        connect: existingPack.owners.map((ownerId) => ({ id: ownerId })),
       },
-      owner: {
-        connect: ownerId,
+      ownerDocument: {
+        connect: { id: ownerId },
       },
-      items: {
-        connect: items,
+      itemDocuments: {
+        connect: items.map((item) => ({ id: item.id })),
       },
       type: existingPack.type,
     },

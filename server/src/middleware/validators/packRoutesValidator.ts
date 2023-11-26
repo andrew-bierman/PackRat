@@ -31,5 +31,5 @@ export const deletePack = z.object({
 export const duplicatePublicPack = z.object({
   packId: JoiObjectId(),
   ownerId: JoiObjectId(),
-  items: z.array(z.object({})),
+  items: z.array(z.record(z.any())),
 });

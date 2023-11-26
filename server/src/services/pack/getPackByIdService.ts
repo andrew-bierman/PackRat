@@ -6,27 +6,36 @@ export const getPackByIdService = async (prisma: PrismaClient, packId) => {
     const pack = await prisma.pack.findFirst({
       where: { id: packId },
       include: {
-        favorited_by: true,
-        items: true,
-        owner: true,
-        owners: true,
-        trips: true,
+        favoritedByDocuments: true,
+        itemDocuments: true,
+        ownerDocument: true,
+        ownerDocuments: true,
+      },
+    });
+
+    const trips = await prisma.trip.findMany({
+      where: {
+        id: {
+          in: pack?.trips.map((tripId) => tripId) ?? [],
+        },
       },
     });
 
     // Parse JSON
-    const owner = User(pack.owner)?.toJSON(prisma);
-    const favorited_by = pack.favorited_by.map(
+    const ownerDocument = User(pack.owner)?.toJSON(prisma);
+    const favoritedByDocuments = pack.favoritedByDocuments.map(
       (user) => User(user)?.toJSON(prisma),
     );
-    const owners = pack.owners.map((user) => User(user)?.toJSON(prisma));
-    const trips = pack.trips.map((trip) => Trip(trip)?.toJSON(prisma));
+    const ownerDocuments = pack.ownerDocuments.map(
+      (user) => User(user)?.toJSON(prisma),
+    );
+    const tripDocuments = trips.map((trip) => Trip(trip)?.toJSON(prisma));
     return {
       ...pack,
-      owner,
-      owners,
-      favorited_by,
-      trips,
+      ownerDocument,
+      ownerDocuments,
+      favoritedByDocuments,
+      tripDocuments,
     };
   } catch (error) {
     // Handle any potential errors here

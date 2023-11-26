@@ -60,8 +60,9 @@ model Item {
 model Pack {
   id                   String       @id @default(auto()) @map("_id") @db.ObjectId
   name                 String?
-  owner                String?      @db.ObjectId
+  owner_id             String?      @db.ObjectId
   owners               String[]     @db.ObjectId
+  trips                String[]     @db.ObjectId
   is_public            Boolean?
   grades               PacksGrades?
   scores               PacksScores?
@@ -73,8 +74,8 @@ model Pack {
   itemDocuments        Item[]       @relation(fields: [items], references: [id])
   favoritedByDocuments User[]       @relation(name: "Favourites", fields: [favourited_by], references: [id])
   ownerDocuments       User[]       @relation(name: "Owners", fields: [owners], references: [id])
-  ownerDocument        User?        @relation(fields: [owner], references: [id])
-  trips                Trip[]
+  ownerDocument        User?        @relation(fields: [owner_id], references: [id])
+  tripDocuments        Trip[]       @ignore
 
   // Virtuals
   total_weight    Float?

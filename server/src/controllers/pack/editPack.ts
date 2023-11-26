@@ -26,8 +26,8 @@ import * as validator from '../../middleware/validators/index';
 
 export function editPackRoute() {
   return publicProcedure.input(validator.editPack).mutation(async (opts) => {
-    const { id } = opts.input;
+    const { id, ...rest } = opts.input;
     const { prisma }: any = opts.ctx;
-    return await editPackService(prisma, id, opts.input);
+    return await editPackService(prisma, id, rest);
   });
 }

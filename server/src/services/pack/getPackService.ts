@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client/edge';
+import { User } from '../../prisma/methods';
 
 const SORT_OPTIONS = {
   Favorite: { favoritesCount: 'desc' },
@@ -25,21 +26,34 @@ export const getPacksService = async (
   try {
     const packs = await prisma.pack.findMany({
       where: {
-        owners: { some: { id: ownerId } },
+        OR: [
+          {
+            owner_id: ownerId,
+          },
+          {
+            owners: { has: ownerId },
+          },
+        ],
       },
       include: {
-        items: {
+        itemDocuments: {
           select: {
-            category: {
+            categoryDocument: {
               select: {
                 name: true,
               },
             },
           },
         },
-        owners: true,
+        ownerDocuments: true,
       },
       orderBy: SORT_OPTIONS[queryBy] || DEFAULT_SORT,
+    });
+
+    packs.forEach((pack) => {
+      pack.ownerDocuments = pack.ownerDocuments?.map(
+        (owner) => User(owner)?.toJSON(prisma),
+      ) as any;
     });
 
     return packs;

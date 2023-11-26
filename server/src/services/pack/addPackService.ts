@@ -32,7 +32,7 @@ export const addPackService = async (prisma: PrismaClient, name, owner_id) => {
   const createdPack = await prisma.pack.create({
     data: {
       ...newPack,
-      owners: {
+      ownerDocuments: {
         connect: { id: owner_id },
       },
     },

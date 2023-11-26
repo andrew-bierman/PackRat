@@ -1,3 +1,4 @@
+import { PrismaClient } from '@prisma/client/edge';
 import { User } from '../../prisma/methods';
 import {
   computeFavouritesCount,
@@ -24,11 +25,11 @@ const sortPacks = (propertyName, sortOrder) => (packA, packB) => {
   const valueA: number =
     propertyName !== 'owners.length'
       ? packA[propertyName]
-      : packA.owners.length;
+      : packA.ownerDocuments.length;
   const valueB: number =
     propertyName !== 'owners.length'
       ? packB[propertyName]
-      : packB.owners.length;
+      : packB.ownerDocuments.length;
 
   if (valueA < valueB) {
     return -1 * Number(sortOrder);
@@ -39,15 +40,19 @@ const sortPacks = (propertyName, sortOrder) => (packA, packB) => {
   return 0;
 };
 
-const computeVirtualFields = (prisma: any, pack) => {
+const computeVirtualFields = (prisma: any) => (pack) => {
   const packWithTotalWeight = computeTotalWeight(pack);
   const packWithTotalScore = computeTotalScores(packWithTotalWeight);
   const packWithFavoritesCount = computeFavouritesCount(packWithTotalScore);
   return {
     ...packWithFavoritesCount,
-    favorited_by: pack.favorited_by.map((user) => User(user)?.toJSON(prisma)),
-    owners: pack.owners.map((owner) => User(owner)?.toJSON(prisma)),
-    owner: User(pack.owner)?.toJSON(prisma),
+    favoritedByDocuments: pack.favoritedByDocuments.map(
+      (user) => User(user)?.toJSON(prisma),
+    ),
+    ownerDocuments: pack.ownerDocuments.map(
+      (owner) => User(owner)?.toJSON(prisma),
+    ),
+    ownerDocument: User(pack.ownerDocument)?.toJSON(prisma),
     items_count: pack.items.length,
   };
 };
@@ -63,7 +68,7 @@ const DEFAULT_SORT = { createdAt: -1 };
  * @return {Promise<any[]>} An array of public packs.
  */
 export async function getPublicPacksService(
-  prisma: any,
+  prisma: PrismaClient,
   queryBy: string = null,
 ) {
   try {
@@ -75,15 +80,17 @@ export async function getPublicPacksService(
         is_public: true,
       },
       include: {
-        favorited_by: true,
-        items: true,
-        owner: true,
-        owners: true,
+        favoritedByDocuments: true,
+        itemDocuments: true,
+        ownerDocument: true,
+        ownerDocuments: true,
       },
     });
-    console.log(publicPacks);
+
+    // console.log('publicPacks', publicPacks[0]);
+
     return publicPacks
-      .map(computeVirtualFields)
+      .map(computeVirtualFields(prisma))
       .sort(sortPacks(propertyName, sortOrder));
   } catch (error) {
     throw new Error('Packs cannot be found: ' + error.message);

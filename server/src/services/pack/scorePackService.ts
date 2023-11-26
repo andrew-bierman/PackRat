@@ -12,7 +12,7 @@ export async function scorePackService(prisma: PrismaClient, packId: string) {
   try {
     const packData = await prisma.pack.findUnique({
       where: { id: packId },
-      include: { items: true }, // Assuming you have a relationship defined in your Prisma schema
+      include: { itemDocuments: true }, // Assuming you have a relationship defined in your Prisma schema
     });
 
     if (!packData) {
