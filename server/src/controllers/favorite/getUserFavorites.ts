@@ -25,7 +25,7 @@ export function getUserFavoritesRoute() {
     .input(z.object({ userId: z.string() }))
     .query(async (opts) => {
       const { userId } = opts.input;
-      const { prisma }: any = opts;
+      const { prisma }: any = opts.ctx;
 
       const user = await prisma.user.findUnique({
         where: {

@@ -68,11 +68,11 @@ model Pack {
   scores               PacksScores?
   type                 String?      @default("pack")
   items                String[]     @db.ObjectId
-  favourited_by        String[]     @db.ObjectId
+  favorited_by         String[]     @db.ObjectId
   createdAt            String?
   updatedAt            DateTime?    @updatedAt
   itemDocuments        Item[]       @relation(fields: [items], references: [id])
-  favoritedByDocuments User[]       @relation(name: "Favourites", fields: [favourited_by], references: [id])
+  favoritedByDocuments User[]       @relation(name: "Favourites", fields: [favorited_by], references: [id])
   ownerDocuments       User[]       @relation(name: "Owners", fields: [owners], references: [id])
   ownerDocument        User?        @relation(fields: [owner_id], references: [id])
   tripDocuments        Trip[]       @ignore

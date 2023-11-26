@@ -182,9 +182,9 @@ export const appRouter = trpcRouter({
   // geo code routes
   // getGeoCode: getGeoCodeRoute(),
   // favorite routes
-  // addToFavorite: addToFavoriteRoute(),
-  // getUserFavorites: getUserFavoritesRoute(),
-  // getFavoritePacksByUser: getFavoritePacksByUserRoute(),
+  addToFavorite: addToFavoriteRoute(),
+  getUserFavorites: getUserFavoritesRoute(),
+  getFavoritePacksByUser: getFavoritePacksByUserRoute(),
 });
 
 export type AppRouter = typeof appRouter;

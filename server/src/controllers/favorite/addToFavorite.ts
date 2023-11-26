@@ -36,7 +36,7 @@ export function addToFavoriteRoute() {
     .input(validator.addToFavorite)
     .mutation(async (opts) => {
       const { packId, userId } = opts.input;
-      const { prisma }: any = opts;
+      const { prisma }: any = opts.ctx;
 
       await addToFavoriteService(prisma, packId, userId);
       const user = await prisma.user.findUnique({

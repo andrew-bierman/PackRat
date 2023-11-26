@@ -24,7 +24,7 @@ export function getFavoritePacksByUserRoute() {
     .input(z.object({ userId: z.string() }))
     .query(async (opts) => {
       const { userId } = opts.input;
-      const { prisma } = opts.ctx;
+      const { prisma }: any = opts.ctx;
       const packs = await getFavoritePacksByUserService(prisma, userId);
       return packs;
     });

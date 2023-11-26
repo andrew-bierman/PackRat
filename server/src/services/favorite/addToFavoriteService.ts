@@ -43,7 +43,7 @@ export const addToFavoriteService = async (
         id: packId,
       },
       data: {
-        favorited_by: {
+        favoritedByDocuments: {
           disconnect: {
             id: userId,
           },
@@ -70,7 +70,7 @@ export const addToFavoriteService = async (
         id: packId,
       },
       data: {
-        favorited_by: {
+        favoritedByDocuments: {
           connect: {
             id: userId,
           },

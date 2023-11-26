@@ -13,9 +13,7 @@ export const getFavoritePacksByUserService = async (
   const packs = await prisma.pack.findMany({
     where: {
       favorited_by: {
-        some: {
-          id: userId,
-        },
+        has: userId,
       },
     },
   });
