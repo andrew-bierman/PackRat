@@ -1,25 +1,10 @@
 import { AntDesign } from '@expo/vector-icons';
 import { formatDistanceToNow } from 'date-fns';
-
-import {
-  Box,
-  Heading,
-  AspectRatio,
-  Image,
-  Text,
-  Center,
-  HStack,
-  Stack,
-  Switch,
-  Button,
-} from 'native-base';
-
+import { View } from 'react-native';
+import { RH2, RText, RStack, RSwitch } from '@packrat/ui';
 import { changePackStatus } from '../../store/packsStore';
-
 import { useDispatch, useSelector } from 'react-redux';
-
 import { Link } from 'expo-router';
-
 import { truncateString } from '../../utils/truncateString';
 import { useEffect } from 'react';
 
@@ -73,100 +58,84 @@ const UserDataCard = ({
   const truncatedDestination = truncateString(destination, 25);
 
   return (
-    <Box alignItems="center" padding="5">
-      <Box
-        minH="125"
-        minW="80"
-        borderLeftColor={is_public ? 'green.500' : 'red.500'}
-        borderLeftWidth="10"
-        rounded="lg"
-        overflow="hidden"
-        borderColor="coolGray.200"
-        borderWidth="1"
-        _dark={{
-          borderColor: 'coolGray.600',
-          backgroundColor: 'gray.700',
-        }}
-        _web={{
-          shadow: 2,
-          borderWidth: 0,
-        }}
-        _light={{
-          backgroundColor: 'gray.50',
+    <View style={{alignItems:"center", padding:"16px"}} >
+      <View
+        style={{
+          minHeight: "150px",
+          minWidth: "300px", 
+          border: '1px solid gray', 
+          borderLeft:`10px solid ${is_public ? 'green' : 'red'}`,
+          borderRadius: "8px",
+          overflow: "hidden",
+          backgroundColor: '#EBEBEB',
         }}
       >
-        <Stack p="4" space={3}>
-          <Stack space={2}>
-            <Heading size="md" ml="-1">
-              <Box
+        <RStack style={{padding:"16px", gap:"16px"}}>
+          <RStack  style={{gap:"8px"}}>
+            <RH2>
+              <View
                 style={{
                   flexDirection: 'row',
                   alignItems: 'center',
                   justifyContent: 'space-between',
                   width: '100%',
                   gap: 10,
+                  fontSize:"16px",
+                  fontWeight: "bold"
                 }}
               >
                 {truncatedName}
                 {state[index] ? (
-                  <Text>Loading....</Text>
+                  <RText style={{fontSize: "16px"}}>Loading....</RText>
                 ) : (
                   <>
                     {!differentUser && (
-                      <Switch
+                      <RSwitch
                         isChecked={is_public}
                         onToggle={() => {
                           handleChangeStatus(index);
                         }}
-                        size="sm"
+                        size="$1.5"
                       />
                     )}
                   </>
                 )}
-              </Box>
-            </Heading>
+              </View>
+            </RH2>
             {type === 'pack' ? (
-              <Text
-                fontSize="xs"
-                _light={{
-                  color: 'violet.500',
+              <RText
+                style={{
+                  fontSize:"12px",
+                  color: "mediumpurple",
+                  marginLeft:"-0.5px",
+                  marginTop:"-3px",
                 }}
-                _dark={{
-                  color: 'violet.400',
-                }}
-                fontWeight="500"
-                ml="-0.5"
-                mt="-1"
               >
                 Total Weight: {total_weight}
-              </Text>
+              </RText>
             ) : (
-              <Text
-                fontSize="xs"
-                _light={{
-                  color: 'violet.500',
+              <RText
+                style={{
+                  fontSize:"12px",
+                  color: "mediumpurple",
+                  marginLeft:"-0.5px",
+                  marginTop:"-3px",
                 }}
-                _dark={{
-                  color: 'violet.400',
-                }}
-                fontWeight="500"
-                ml="-0.5"
-                mt="-1"
               >
                 Destination: {truncatedDestination}
-              </Text>
+              </RText>
             )}
-          </Stack>
+          </RStack>
 
-          <HStack alignItems="center" space={4} justifyContent="space-between">
-            <HStack alignItems="center" width="100%">
-              <Text
-                color="coolGray.600"
-                _dark={{
-                  color: 'warmGray.200',
+          <RStack style={{flexDirection: "row", alignItems:"center", gap: "16px", justifyContent:"space-between"}}>
+            <RStack style={{flexDirection: "row", alignItems:"center", width:"100%"}}>
+              <RText
+                style={{
+                  color:"gray",
+                  fontSize: "12px",
+                  fontWeight: "400",
+                  flex:1
                 }}
-                fontWeight="400"
-                flex={1}
               >
                 {formatDistanceToNow(
                   new Date(
@@ -178,8 +147,8 @@ const UserDataCard = ({
                     addSuffix: true,
                   },
                 ) ?? 0}
-              </Text>
-              <Box
+              </RText>
+              <View
                 style={{
                   flexDirection: 'row',
                   alignItems: 'center',
@@ -187,34 +156,28 @@ const UserDataCard = ({
                 }}
               >
                 <AntDesign name="heart" size={16} color="red" />
-                <Text
-                  color="coolGray.600"
-                  _dark={{
-                    color: 'warmGray.200',
-                  }}
+                <RText
+                  color="gray"
                   fontWeight="400"
                 >
                   {favorites_count}
-                </Text>
-              </Box>
-            </HStack>
-          </HStack>
-        </Stack>
-        <Box alignItems="center">
+                </RText>
+              </View>
+            </RStack>
+          </RStack>
+        </RStack>
+        <View style={{alignItems:"center"}}>
           <Link href={`/${type}/${_id}`}>
-            <Text
-              color="coolGray.600"
-              _dark={{
-                color: 'warmGray.200',
-              }}
+            <RText
+              color="gray"
               fontWeight="bold"
             >
               View Details
-            </Text>
+            </RText>
           </Link>
-        </Box>
-      </Box>
-    </Box>
+        </View>
+      </View>
+    </View>
   );
 };
 
