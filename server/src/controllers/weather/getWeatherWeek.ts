@@ -25,8 +25,7 @@ export function getWeatherWeekRoute() {
     .input(z.object({ lat: z.number(), lon: z.number() }))
     .query(async (opts) => {
       const { lat, lon } = opts.input;
-      const { prisma }: any = opts.ctx;
-      const response = await getWeatherWeekService(prisma, lat, lon);
-      return response.data;
+      const { env }: any = opts.ctx;
+      return getWeatherWeekService(env.WEATHER_URL, env.OPENWEATHER_KEY, lat, lon);
     });
 }

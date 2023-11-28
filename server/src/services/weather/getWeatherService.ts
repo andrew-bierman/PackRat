@@ -1,6 +1,6 @@
-export async function getWeatherService(env, lat, lon) {
-  const root = env.WEATHER_URL;
-  const OPENWEATHER_KEY = env.OPENWEATHER_KEY;
+export async function getWeatherService(weatherUrl, openWeatherKey, lat, lon) {
+  const root = weatherUrl;
+  const OPENWEATHER_KEY = openWeatherKey;
   const latParams = lat;
   const lonParams = lon;
   const unitParams = 'imperial';

@@ -13,7 +13,7 @@ export async function findUserByEmail(
   email: string,
 ): Promise<any> {
   try {
-    const user = await prisma.user.findUnique({
+    const user = await prisma.user.findFirst({
       where: {
         email: email.toLowerCase(),
       },

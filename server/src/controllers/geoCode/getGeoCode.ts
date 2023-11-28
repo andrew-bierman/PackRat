@@ -25,7 +25,9 @@ import { geoCodeService } from '../../services/geocode/geoCodeService';
 
 export function getGeoCodeRoute() {
   return publicProcedure.input(validators.AddressArray).query(async (opts) => {
-    const result: any = await geoCodeService(opts.input);
+    const {addressArray} = opts.input;
+    const { env }: any = opts.ctx;
+    const result: any = await geoCodeService({addressArray, geoCodeUri: env.GEO_CODE_URL, geoapifyKey: env.GEOAPIFY_KEY });
     return result.message === 'ok' ? result.result : ErrorFetchingGeoCodeError;
   });
 }

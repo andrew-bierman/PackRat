@@ -18,12 +18,14 @@ const honoTRPCServer = ({
   return async (honoCTX, next) => {
     const env = honoCTX.env;
     const prisma = getPrismaClient(env.PRISMA_DATA_PROXY_URI as string);
-
+    const user = (honoCTX.req.raw as any).user;
+    
     const trpcContext = {
       prisma,
       env,
+      user
     };
-    console.log('HIIIIIIIII', env);
+    
     const res = fetchRequestHandler({
       ...rest,
       endpoint,

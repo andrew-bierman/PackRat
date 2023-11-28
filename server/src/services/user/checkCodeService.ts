@@ -8,5 +8,5 @@ export async function checkCodeService({ prisma, email, code }: any) {
     },
   });
 
-  return User(user)?.toJSON(); // Assuming you want to return the user if found
+  return User(user)?.toJSON(prisma); // Assuming you want to return the user if found
 }

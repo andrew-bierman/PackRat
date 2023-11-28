@@ -21,7 +21,7 @@
     "prisma:generate": "npx prisma generate --schema=src/prisma/schema.prisma --data-proxy",
     "prisma:validate": "npx prisma validate --schema=src/prisma/schema.prisma",
     "prisma:pull": "npx prisma db pull --schema=src/prisma/schema.prisma",
-    "wrangler:dev": "wrangler dev"
+    "wrangler:dev": "wrangler dev -e dev"
   },
   "author": "Andrew Bierman",
   "license": "ISC",

@@ -1,4 +1,4 @@
-import { Prisma, PrismaClient } from '@prisma/client/edge';
+import { PrismaClient } from '@prisma/client/edge';
 import {
   createInstanceFromCoordinates,
   coordinatesToInstances,
@@ -50,7 +50,7 @@ export async function fromOSM(prisma: PrismaClient, Model: any, data: any) {
 
   // Find or create nodes
   const ids = data.nodes.map((node: any) => node.id);
-  const instances = await prisma.node.findOrCreateMany(ids, data.nodes);
+  const instances = await (prisma.node as any).findOrCreateMany(ids, data.nodes);
 
   // Add nodes to instance
   instanceData.nodes = instances.map((instance: any) => instance._id);
@@ -205,7 +205,7 @@ export async function createNewInstance(
   element: any,
 ) {
   if (isOSMFormat(element)) {
-    return await fromOSM(Model, element);
+    return await fromOSM(prisma, Model, element);
   } else if (isGeoJSONFormat(element)) {
     return await fromGeoJSON(prisma, Model, element);
   }
@@ -292,7 +292,11 @@ export async function processElement(prisma: PrismaClient, element: any) {
   if (instance) {
     if (isGeoJSONFormat(element)) {
       instance = await updateInstanceFromGeoJSON(prisma, instance, element);
-      await instance.save();
+      const {id, ...data} = instance;
+      await (ModelForElement as any).update({
+        where: { id },
+        data,
+      });
     }
   } else {
     instance = await createNewInstance(prisma, ModelForElement, element);

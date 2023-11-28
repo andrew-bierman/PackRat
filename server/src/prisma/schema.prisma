@@ -132,12 +132,12 @@ model User {
   profileImage                 String?
   preferredWeather             String?
   preferredWeight              String?
-  favourite_ids                String[]   @db.ObjectId
+  favorites                    String[]   @db.ObjectId
   packs                        String[]   @db.ObjectId
   item                         String?    @db.ObjectId
   createdAt                    DateTime?  @default(now())
   updatedAt                    DateTime?  @updatedAt
-  favorites                    Pack[]     @relation(name: "Favourites", fields: [favourite_ids], references: [id])
+  favoriteDocuments            Pack[]     @relation(name: "Favourites", fields: [favorites], references: [id])
   packDocuments                Pack[]     @relation(name: "Owners", fields: [packs], references: [id])
   itemDocument                 Item?      @relation(fields: [item], references: [id])
   templates                    Template[]

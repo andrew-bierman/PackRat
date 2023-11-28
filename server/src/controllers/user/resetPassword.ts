@@ -30,9 +30,9 @@ export function resetPasswordRoute() {
     .input(validator.resetPassword)
     .mutation(async (opts) => {
       const { resetToken, password } = opts.input;
-      const { prisma }: any = opts;
-
-      const user = await prisma.user.validateResetToken(resetToken);
+      const { prisma, env }: any = opts.ctx;
+      const JWT_SECRET = env.JWT_SECRET;
+      const user = await prisma.user.validateResetToken(resetToken, JWT_SECRET);
       await prisma.user.update({
         where: { id: user.id },
         data: {

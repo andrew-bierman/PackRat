@@ -73,8 +73,8 @@ export function requestPasswordResetEmailAndTokenRoute() {
     .input(z.object({ email: z.string() }))
     .mutation(async (opts) => {
       const { email } = opts.input;
-      const { prisma, env }: any = opts;
-      const user = await prisma.user.findUnique({
+      const { prisma, env }: any = opts.ctx;
+      const user = await prisma.user.findFirst({
         where: {
           email: email,
         },
@@ -97,7 +97,7 @@ export function requestPasswordResetEmailAndTokenRoute() {
       });
       const resetUrl = `${env.CLIENT_URL}/password-reset?token=${resetToken}`;
 
-      resetEmail(email, resetUrl, env.STMP_EMAIL, env.SEND_GRID_API_KEY);
+      await resetEmail(email, resetUrl, env.STMP_EMAIL, env.SEND_GRID_API_KEY);
       return { message: 'Password reset email sent successfully' };
     });
 }

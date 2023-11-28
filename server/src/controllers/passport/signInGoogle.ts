@@ -9,12 +9,12 @@ import { sendWelcomeEmail, resetEmail } from '../../utils/accountEmail';
 // import { prisma } from '../../prisma';
 import { User } from '../../prisma/methods';
 
-import {
-  GOOGLE_CLIENT_ID,
-  GOOGLE_CLIENT_SECRET,
-  REDIRECT_URL,
-  SERVER_ROOT_URI,
-} from '../../config';
+// import {
+//   GOOGLE_CLIENT_ID,
+//   GOOGLE_CLIENT_SECRET,
+//   REDIRECT_URL,
+//   SERVER_ROOT_URI,
+// } from '../../config';
 
 // import { OAuth2Client } from 'google-auth-library';
 import utilsService from '../../utils/utils.service';
@@ -166,7 +166,7 @@ export function googleSigninRoute() {
     .input(z.object({ idToken: z.string().nonempty() }))
     .query(async (opts) => {
       const { idToken } = opts.input;
-      const { prisma, env }: any = opts;
+      const { prisma, env }: any = opts.ctx;
 
       const decodedToken: any = jwt.decode(idToken);
       if (!decodedToken) {
@@ -175,14 +175,14 @@ export function googleSigninRoute() {
 
       const { email, name, sub: googleId } = decodedToken;
 
-      const alreadyGoogleSignin = await prisma.user.findUnique({
+      const alreadyGoogleSignin = await prisma.user.findFirst({
         where: {
           email: email,
           googleId: googleId,
         },
       });
       if (!alreadyGoogleSignin) {
-        const isLocalLogin = await prisma.user.findUnique({
+        const isLocalLogin = await prisma.user.findFirst({
           where: {
             email: email,
           },
@@ -204,7 +204,7 @@ export function googleSigninRoute() {
         });
 
         const userWithMethods = User(user);
-        await userWithMethods.generateAuthToken(prisma);
+        await userWithMethods.generateAuthToken(prisma, env.JWT_SECRET);
 
         sendWelcomeEmail(
           user.email,
@@ -220,7 +220,7 @@ export function googleSigninRoute() {
         }
 
         const userWithMethods = User(alreadyGoogleSignin);
-        await userWithMethods.generateAuthToken(prisma);
+        await userWithMethods.generateAuthToken(prisma, env.JWT_SECRET);
 
         const updatedUser = await prisma.user.update({
           where: {

@@ -37,7 +37,7 @@ export function getOsmRoute() {
         endPoint: z.object({ latitude: z.number(), longitude: z.number() }),
       }),
     )
-    .mutation(async (opts) => {
+    .query(async (opts) => {
       const { env }: any = opts.ctx;
       try {
         const { activityType, startPoint, endPoint } = opts.input;

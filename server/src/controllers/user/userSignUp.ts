@@ -1,6 +1,5 @@
 import bcrypt from 'bcryptjs';
 import { sendWelcomeEmail, resetEmail } from '../../utils/accountEmail';
-import { JWT_SECRET } from '../../config';
 import { publicProcedure } from '../../trpc';
 import * as validator from '../../middleware/validators/index';
 import { User } from '../../prisma/methods';
@@ -24,9 +23,10 @@ import { User } from '../../prisma/methods';
 export function signUpRoute() {
   return publicProcedure.input(validator.userSignUp).mutation(async (opts) => {
     let { email, password, name, username } = opts.input;
-    const { prisma, env }: any = opts;
+    const { prisma, env }: any = opts.ctx;
     const STMP_EMAIL = env.STMP_EMAIL;
     const SEND_GRID_API_KEY = env.SEND_GRID_API_KEY;
+    const JWT_SECRET = env.JWT_SECRET;
 
     await prisma.user.alreadyLogin(email);
     const salt = await bcrypt.genSalt(parseInt(JWT_SECRET));
@@ -40,7 +40,7 @@ export function signUpRoute() {
       },
     });
     const userWithMethods = User(user);
-    await userWithMethods.generateAuthToken();
+    await userWithMethods.generateAuthToken(prisma, JWT_SECRET);
     sendWelcomeEmail(user.email, user.name, STMP_EMAIL, SEND_GRID_API_KEY);
     return user;
   });

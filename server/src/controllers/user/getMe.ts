@@ -16,6 +16,7 @@ export const getMe = async (req, res) => {
 
 export function getMeRoute() {
   return publicProcedure.query(async (opts) => {
-    return opts.input;
+    const { user } : any = opts.ctx;
+    return user
   });
 }

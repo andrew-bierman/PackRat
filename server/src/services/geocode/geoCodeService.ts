@@ -23,7 +23,12 @@ export async function geoCodeService({
   const url = GEO_CODE_URL + params;
 
   return await fetch(url)
-    .then(async (response) => response.json())
+    .then(async (response) => {
+      if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
     .then((result) => {
       return { message: 'ok', result };
     })

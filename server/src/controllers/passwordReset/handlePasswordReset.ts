@@ -69,9 +69,9 @@ export function handlePasswordResetRoute() {
     .input(z.object({ token: z.string() }))
     .mutation(async (opts) => {
       const { token } = opts.input;
-      const { prisma, env }: any = opts;
+      const { prisma, env }: any = opts.ctx;
       const email = verifyPasswordResetToken(token, env.JWT_SECRET);
-      const user = await prisma.user.findUnique({
+      const user = await prisma.user.findFirst({
         where: {
           email: email,
         },

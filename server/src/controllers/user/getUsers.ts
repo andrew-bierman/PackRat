@@ -37,13 +37,14 @@ import { responseHandler } from '../../helpers/responseHandler';
 
 export function getUsersRoute() {
   return publicProcedure.query(async (opts) => {
-    const { prisma }: any = opts;
+    const { prisma }: any = opts.ctx;
 
     const users = await prisma.user.findMany({
       include: {
         favorites: true,
       },
     });
+    
     return users;
   });
 }

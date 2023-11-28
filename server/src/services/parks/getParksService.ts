@@ -26,10 +26,12 @@ export async function getParksService({
   };
 
   return await fetch(host, options)
-    .then(async (res) => await res.json())
-    .then((json) => {
-      return json;
-    })
+    .then(async (response) => {
+      if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })  
     .catch(() => {
       // throw RetrievingParksDataError;
       return RetrievingParksDataError;

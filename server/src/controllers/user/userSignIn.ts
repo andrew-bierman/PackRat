@@ -19,9 +19,10 @@ import { User } from '../../prisma/methods';
 
 export function userSignInRoute() {
   return publicProcedure.input(validator.userSignIn).mutation(async (opts) => {
-    const { input, prisma }: any = opts;
-    const user = await prisma.user.findByCredentials(input);
-    await User(user)?.generateAuthToken(prisma);
+    const { input }: any = opts;
+    const { prisma, env }: any = opts.ctx
+    const user =  prisma.user.findByCredentials(input);
+    await User(user)?.generateAuthToken(prisma, env.JWT_SECRET);
     return user;
   });
 }

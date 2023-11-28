@@ -1,4 +1,4 @@
-// import { google } from 'googleapis';
+import { google } from 'googleapis';
 // import {
 //   GOOGLE_CLIENT_ID,
 //   GOOGLE_CLIENT_SECRET,
@@ -42,15 +42,23 @@ export function getGoogleAuthURLRoute() {
     'https://www.googleapis.com/auth/userinfo.profile',
     'https://www.googleapis.com/auth/userinfo.email',
   ];
+
+  const scope = scopes.join(' ');
   return publicProcedure.query(async (opts) => {
+    const { env }: any = opts.ctx;
+    const clientId = env.GOOGLE_CLIENT_ID;
+    const clientSecret = env.GOOGLE_CLIENT_SECRET;
+    const redirectUri = `${env.SERVER_ROOT_URI}/user/${env.REDIRECT_URL}`;
+
+    const googleUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}&access_type=offline&prompt=consent&client_secret=${clientSecret}`;
+    const response = await fetch(googleUrl)
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
     return {
-      googleUrl: oauth2Client.generateAuthUrl({
-        access_type: 'offline',
-        prompt: 'consent',
-        scope: scopes,
-      }),
-      status: 'success',
-      statusCode: 200,
+      googleUrl: await response.json(),
+      status: response.ok ? 'success' : 'failure',
+      statusCode: response.status,
     };
   });
 }

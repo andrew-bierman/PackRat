@@ -33,15 +33,17 @@ import { User } from '../../prisma/methods';
 export function sentEmailRoute() {
   return publicProcedure.input(validator.sentEmail).query(async (opts) => {
     const { email } = opts.input;
-    const { prisma, env }: any = opts;
+    const { prisma, env }: any = opts.ctx;
     const STMP_EMAIL = env.STMP_EMAIL;
     const SEND_GRID_API_KEY = env.SEND_GRID_API_KEY;
-    const user = await prisma.user.findUnique({ where: { email } });
+    const JWT_SECRET = env.JWT_SECRET;
+    const CLIENT_URL = env.CLIENT_URL;
+    const user = await prisma.user.findFirst({ where: { email } });
     const userWithMethods = User(user);
     if (!user) {
       throw new Error('User not found');
     }
-    const resetUrl = await userWithMethods.generateResetToken();
+    const resetUrl = await userWithMethods.generateResetToken(prisma, JWT_SECRET, CLIENT_URL);
     resetEmail(user.email, resetUrl, STMP_EMAIL, SEND_GRID_API_KEY);
     return 'Reset Token has been sent successfully';
   });

@@ -29,7 +29,7 @@ import * as validator from '../../middleware/validators/index';
 export function deleteUserRoute() {
   return publicProcedure.input(validator.deleteUser).mutation(async (opts) => {
     const { userId } = opts.input;
-    const { prisma }: any = opts;
+    const { prisma }: any = opts.ctx;
 
     await prisma.user.delete({
       where: {

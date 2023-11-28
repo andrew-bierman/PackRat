@@ -10,7 +10,7 @@ async function findByCredentials({
   password: string;
 }): Promise<User> {
   const user = await this.findFirst({ where: { email } });
-
+  
   if (!user) throw new Error('Unable to login');
 
   const isMatch = await bcrypt.compare(password, user.password);

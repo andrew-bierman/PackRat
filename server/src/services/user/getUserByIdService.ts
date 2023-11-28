@@ -12,7 +12,7 @@ export const getUserByIdService = async (
   userId: string,
 ): Promise<object> => {
   try {
-    const user = await prisma.user.findUnique({
+    const user = await prisma.user.findFirst({
       where: {
         id: userId,
       },
@@ -20,7 +20,7 @@ export const getUserByIdService = async (
         favorites: true,
       },
     });
-
+    
     if (user) {
       return User(user).toJSON(prisma);
     } else {
