@@ -5,7 +5,7 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "build": "webpack",
+    "build": "NODE_OPTIONS=--max_old_space_size=4096 tsc",
     "debug": "cross-env NODE_OPTIONS='--inspect-brk' nodemon",
     "dev": "nodemon",
     "lint": "eslint . --fix --ext .ts",

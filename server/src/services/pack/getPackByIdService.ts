@@ -22,7 +22,7 @@ export const getPackByIdService = async (prisma: PrismaClient, packId) => {
     });
 
     // Parse JSON
-    const ownerDocument = User(pack.owner)?.toJSON(prisma);
+    const ownerDocument = User(pack.ownerDocument)?.toJSON(prisma);
     const favoritedByDocuments = pack.favoritedByDocuments.map(
       (user) => User(user)?.toJSON(prisma),
     );

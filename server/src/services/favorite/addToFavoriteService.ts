@@ -19,18 +19,18 @@ export const addToFavoriteService = async (
       id: userId,
     },
     include: {
-      favorites: true,
+      favoriteDocuments: true,
     },
   });
 
-  if (user.favorites.includes(packId)) {
+  if (user.favoriteDocuments.includes(packId)) {
     // If the pack is in the user's favorites, remove it.
     await prisma.user.update({
       where: {
         id: userId,
       },
       data: {
-        favorites: {
+        favoriteDocuments: {
           disconnect: {
             id: packId,
           },
@@ -57,7 +57,7 @@ export const addToFavoriteService = async (
         id: userId,
       },
       data: {
-        favorites: {
+        favoriteDocuments: {
           connect: {
             id: packId,
           },

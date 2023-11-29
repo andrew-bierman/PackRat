@@ -15,7 +15,7 @@ export const addToFavoriteService = async (
   try {
     const user = await prisma.user.findUnique({
       where: { id: userId },
-      select: { id: true, favorites: true },
+      select: { id: true, favoriteDocuments: true },
     });
 
     if (!user) {
@@ -27,7 +27,7 @@ export const addToFavoriteService = async (
         id: userId,
       },
       select: {
-        favorites: {
+        favoriteDocuments: {
           where: {
             id: packId,
           },
@@ -39,7 +39,7 @@ export const addToFavoriteService = async (
       await prisma.user.update({
         where: { id: userId },
         data: {
-          favorites: {
+          favoriteDocuments: {
             disconnect: { id: packId },
           },
         },
@@ -48,7 +48,7 @@ export const addToFavoriteService = async (
       await prisma.pack.update({
         where: { id: packId },
         data: {
-          favorited_by: {
+          favoritedByDocuments: {
             disconnect: { id: userId },
           },
         },
@@ -57,7 +57,7 @@ export const addToFavoriteService = async (
       await prisma.user.update({
         where: { id: userId },
         data: {
-          favorites: {
+          favoriteDocuments: {
             connect: { id: packId },
           },
         },
@@ -66,7 +66,7 @@ export const addToFavoriteService = async (
       await prisma.pack.update({
         where: { id: packId },
         data: {
-          favorited_by: {
+          favoritedByDocuments: {
             connect: { id: userId },
           },
         },

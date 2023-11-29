@@ -17,10 +17,10 @@ export const getUserByIdService = async (
         id: userId,
       },
       include: {
-        favorites: true,
+        favoriteDocuments: true,
       },
     });
-    
+
     if (user) {
       return User(user).toJSON(prisma);
     } else {
