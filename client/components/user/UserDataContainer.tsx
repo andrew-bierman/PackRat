@@ -1,6 +1,6 @@
 import { Link } from 'expo-router';
 import { Stack, VStack, Text, Button } from 'native-base';
-import { RStack, RText, RButton } from '@packrat/ui';
+import { RStack, RText, RButton, RSkeleton } from '@packrat/ui';
 import { Platform } from 'react-native';
 import UserDataCard from './UserDataCard';
 import { useEffect, useState } from 'react';
@@ -10,19 +10,18 @@ import { theme } from '../../theme';
 import useTheme from '../../hooks/useTheme';
 import { hexToRGBA } from '~/utils/colorFunctions';
 import { View } from 'react-native';
-import { Skeleton } from 'native-base';
 
 // Skeleton version of the UserDataCard component
 const SkeletonUserDataCard = () => {
   return (
     <View style={{alignItems:"center", padding:"5"}} >
-      <Skeleton
-        minH="125"
-        minW="80"
-        width={'100px'}
-        rounded="lg"
-        opacity={0.5}
-      ></Skeleton>
+      <RSkeleton
+        style={{
+          minHeight:"150px",
+          minWidth:"300px"
+        }}
+        
+      ></RSkeleton>
     </View>
   );
 };
@@ -32,6 +31,7 @@ export default function UserDataContainer({
   type,
   userId,
   isLoading,
+  SkeletonComponent
 }) {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
@@ -52,10 +52,11 @@ export default function UserDataContainer({
   const differentUser = userId && userId !== currentUser._id;
 
   // Map function to render multiple skeleton cards
-  const skeletonCards = [...Array(3)].map((_, idx) => (
+  const skeletonCards = SkeletonComponent ? SkeletonComponent : [...Array(3)].map((_, idx) => (
     <SkeletonUserDataCard key={idx} />
   ));
 
+  
   if (isLoading) {
     return (
       <RStack

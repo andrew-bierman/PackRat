@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Platform, StyleSheet, ScrollView, View } from 'react-native';
-import { RIconButton, RStack, RText, RImage, Skeleton } from '@packrat/ui';
+import { RIconButton, RStack, RText, RSkeleton } from '@packrat/ui';
 import UserDataContainer from '../../components/user/UserDataContainer';
 import { useAuth } from '../../auth/provider';
 import { theme } from '../../theme';
@@ -79,12 +79,9 @@ const Header = ({
           <View style={styles.userInfo}>
             {isLoading ? (
               <>
-                <Skeleton rounded="full" size={100} />
-                <Skeleton.Text
-                  mt={4}
-                  width={20}
-                  lines={2}
-                  alignItems="center"
+                <RSkeleton style={{borderRadius: "100%", height: "100px", width: "100px"}} />
+                <RSkeleton
+                  style={{height: "100px", width:"100%", marginTop: "8px", alignItems: "center"}}
                 />
               </>
             ) : (
@@ -102,10 +99,18 @@ const Header = ({
       <RStack style={{flexDirection:"row", ...styles.card}}>
         {isLoading ? (
           <>
-            <Skeleton size="20" rounded="full" />
-            <Skeleton size="20" rounded="full" />
-            <Skeleton size="20" rounded="full" />
-            <Skeleton size="20" rounded="full" />
+            <RSkeleton
+              style={{borderRadius: "100%", width: "50px", height: "50px"}}
+            />
+            <RSkeleton
+              style={{borderRadius: "100%", width: "50px", height: "50px"}}
+            />
+            <RSkeleton
+              style={{borderRadius: "100%", width: "50px", height: "50px"}}
+            />
+            <RSkeleton
+              style={{borderRadius: "100%", width: "50px", height: "50px"}}
+            />
           </>
         ) : (
           <>
@@ -156,9 +161,15 @@ const SkeletonUserDataCard = () => {
         boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
       }}
     >
-      <Skeleton height={20} width="70%" mb={4} />
-      <Skeleton height={20} width="50%" mb={4} />
-      <Skeleton height={20} width="30%" />
+      <RSkeleton
+        style={{marginBottom: "8px", height: "50px", width: "70%"}}
+      />
+      <RSkeleton
+        style={{marginBottom: "8px", height: "50px", width: "50%"}}
+      />
+      <RSkeleton
+        style={{height: "50px", width: "30%"}}
+      />
     </View>
   );
 };

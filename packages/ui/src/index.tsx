@@ -7,7 +7,7 @@ import RInput from './RInput';
 import RButton from './RButton';
 import RImage from './RImage';
 import RScrollView from './RScrollview';
-import TSkeleton from './Skeleton';
+import RSkeleton from './RSkeleton';
 import RSwitch from './RSwitch';
 import RIconButton from './RIconButton';
 import RSeparator from './RSeparator';
@@ -52,7 +52,7 @@ export {
   RIconButton,
   RImage,
   RScrollView,
-  TSkeleton,
+  RSkeleton,
 };
 
 export { config } from './tamagui.config'
@@ -69,7 +69,7 @@ export * from './RInput';
 export * from './RButton';
 export * from './RImage';
 export * from './RScrollview';
-export * from './Skeleton';
+export * from './RSkeleton';
 
 // Future components
 // export * from './RCheckbox';

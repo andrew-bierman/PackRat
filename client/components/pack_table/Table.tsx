@@ -14,7 +14,7 @@ import useTheme from '../../hooks/useTheme';
 import { PackOptions } from '../PackOptions';
 import CustomButton from '../custombutton';
 import useCustomStyles from '~/hooks/useCustomStyles';
-import { Skeleton, RText, RStack, RButton, RCheckbox } from '@packrat/ui';
+import { RSkeleton, RText, RStack, RButton, RCheckbox } from '@packrat/ui';
 import DropdownComponent from '../Dropdown';
 
 const WeightUnitDropdown = ({ value, onChange }) => {
@@ -326,7 +326,7 @@ export const TableContainer = ({
     flexArr = [1, 1, 1, 1];
     heading = ['Item Name', 'Weight', 'Quantity', 'Options'];
   }
-  if (isLoading) return <Skeleton />;
+  if (isLoading) return <RSkeleton />;
   if (error) return <ErrorMessage message={error} />;
   return (
     <View style={styles.container}>

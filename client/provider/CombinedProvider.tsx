@@ -1,5 +1,5 @@
 // src/provider/CombinedProvider.tsx
-
+import { ToastProvider } from '@tamagui/toast';
 import { Provider as ReduxProvider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { SessionProvider } from '../context/auth';
@@ -11,7 +11,9 @@ export function CombinedProvider({ children }: { children: React.ReactNode }) {
     <ReduxProvider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <SessionProvider>
-          <ThemeProvider>{children}</ThemeProvider>
+          <ToastProvider>
+            <ThemeProvider>{children}</ThemeProvider>
+          </ToastProvider>
         </SessionProvider>
       </PersistGate>
     </ReduxProvider>

@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { RStack, RSeparator, RText } from '@packrat/ui';
+import { RStack, RSeparator, RText, useToastController, ToastViewport, NativeToast } from '@packrat/ui';
 import {
   TouchableOpacity,
   Clipboard,
@@ -14,7 +14,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useRouter, Link } from 'expo-router';
 import { ThreeDotsMenu } from '../ThreeDotsMenu';
 import useTheme from '../../hooks/useTheme';
-import { InformUser } from '../../utils/ToastUtils';
 import { SearchItem } from '../item/searchItem';
 import Loader from '../Loader';
 import useCustomStyles from '~/hooks/useCustomStyles';
@@ -39,6 +38,8 @@ export const CustomCard = ({
   const isLoading = useSelector((state: any) => state.singlePack.isLoading);
   const user = useSelector((state: any) => state.auth.user);
   const userId = user._id;
+  const toast = useToastController()
+
 
   /**
    * Handles copying the link to the clipboard and updates the copy state.
@@ -53,11 +54,13 @@ export const CustomCard = ({
     const resetCopyStateTimeout = setTimeout(() => {
       setIsCopied(false);
     }, 2000);
-    InformUser({
-      title: 'Link copied to clipboard',
-      placement: 'bottom',
-      duration: 2000,
-    });
+    //Style in the future
+    toast.show('Link copied to clipboard')
+    // InformUser({
+    //   title: 'Link copied to clipboard',
+    //   placement: 'bottom',
+    //   duration: 2000,
+    // });
 
     return () => clearTimeout(resetCopyStateTimeout);
   };
@@ -152,6 +155,8 @@ export const CustomCard = ({
             {footer}
           </View>
         </RStack>
+        <ToastViewport multipleToasts/>
+        <NativeToast/>
       </View>
     );
   }
