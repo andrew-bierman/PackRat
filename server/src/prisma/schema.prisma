@@ -4,8 +4,8 @@ generator client {
 
 datasource db {
   provider  = "mongodb"
-  url       = "prisma://aws-us-east-1.prisma-data.com/?api_key=7JWllWgv2hvFIXewiTjpepJGeY6TTd0s8Ntv9ZD_HyhNQppK_08XGGxr1Q2Wjeqx"
-  directUrl = "mongodb+srv://admin:root@packratdb.nrj4a09.mongodb.net/packratdb?retryWrites=true&w=majority"
+  url       = env("PRISMA_DATA_PROXY_URI")
+  directUrl = env("MONDODB_URI")
 }
 
 //  ███    ███  ██████  ██████  ███████ ██      ███████
@@ -162,7 +162,7 @@ model Way {
   osm_id     Int?
   osm_type   String?   @default("way")
   tags       Json?
-  nodes      Node[]
+  nodes      String    @db.ObjectId
   geoJSON    Json?
   createdAt  DateTime? @default(now())
   updated_at DateTime? @updatedAt
@@ -179,8 +179,6 @@ model Node {
   tags       Json?
   createdAt  DateTime? @default(now())
   updated_at DateTime? @updatedAt
-  Way        Way?      @relation(fields: [wayId], references: [id])
-  wayId      String?   @db.ObjectId
 
   @@map("nodes")
 }

@@ -1,3 +1,4 @@
+import { Template } from '../../prisma/methods';
 import { publicProcedure } from '../../trpc';
 
 // import { prisma } from '../../prisma';
@@ -33,6 +34,9 @@ export function getTemplatesRoute() {
         },
       },
     });
-    return templates;
+    const jsonTemplates = templates.map(
+      (template) => Template(template)?.toJSON(),
+    );
+    return jsonTemplates;
   });
 }

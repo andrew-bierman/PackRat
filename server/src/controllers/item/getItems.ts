@@ -3,6 +3,7 @@ import { ItemNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { getItemsService } from '../../services/item/item.service';
 import * as validator from '../../middleware/validators/index';
+import { Item } from '../../prisma/methods';
 /**
  * Retrieves a list of items associated with a pack.
  * @param {Object} req - The request object.
@@ -28,6 +29,8 @@ export function getItemsRoute() {
     const { packId } = opts.input;
     const { prisma }: any = opts.ctx;
     console.log({ packId });
-    return await getItemsService(prisma, packId);
+    const items = await getItemsService(prisma, packId);
+    const jsonItems = items.map((item) => Item(item)?.toJSON());
+    return jsonItems;
   });
 }

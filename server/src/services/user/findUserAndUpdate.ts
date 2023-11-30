@@ -28,7 +28,7 @@ export async function findUserAndUpdate(
     });
 
     if (user) {
-      return User(user).toJSON(prisma);
+      return User(user).toJSON();
     } else {
       return false;
     }

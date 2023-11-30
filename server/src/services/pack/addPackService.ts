@@ -38,5 +38,5 @@ export const addPackService = async (prisma: PrismaClient, name, owner_id) => {
     },
   });
 
-  return { createdPack };
+  return createdPack;
 };

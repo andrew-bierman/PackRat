@@ -4,6 +4,7 @@ import { responseHandler } from '../../helpers/responseHandler';
 
 import { getFavoritePacksByUserService } from '../../services/favorite/favorite.service';
 import { publicProcedure } from '../../trpc';
+import { Pack } from '../../prisma/methods';
 
 // /**
 //  * Retrieves favorite packs for a user.
@@ -26,6 +27,7 @@ export function getFavoritePacksByUserRoute() {
       const { userId } = opts.input;
       const { prisma }: any = opts.ctx;
       const packs = await getFavoritePacksByUserService(prisma, userId);
-      return packs;
+      const jsonPacks = packs.map((pack) => Pack(pack)?.toJSON());
+      return jsonPacks;
     });
 }

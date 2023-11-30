@@ -1,6 +1,8 @@
 import { publicProcedure } from '../../trpc';
 import { UserNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
+import { PrismaClient } from '@prisma/client/edge';
+import { User } from '../../prisma/methods';
 
 // Middleware to check if user is authenticated
 // export const isAuthenticated = async (req, res, next) => {
@@ -37,14 +39,15 @@ import { responseHandler } from '../../helpers/responseHandler';
 
 export function getUsersRoute() {
   return publicProcedure.query(async (opts) => {
-    const { prisma }: any = opts.ctx;
+    const prisma: PrismaClient = (opts.ctx as any).prisma;
 
     const users = await prisma.user.findMany({
       include: {
-        favorites: true,
+        favoriteDocuments: true,
       },
     });
-    
-    return users;
+
+    const jsonUsers = users.map((user) => User(user).toJSON());
+    return jsonUsers;
   });
 }

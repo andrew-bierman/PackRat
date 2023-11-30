@@ -3,6 +3,8 @@ import { TemplateNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 
 import { z } from 'zod';
+import { PrismaClient } from '@prisma/client/edge';
+import { Template } from '../../prisma/methods';
 
 // import { prisma } from '../../prisma';
 /**
@@ -39,7 +41,7 @@ export function getTemplateByIdRoute() {
     .input(z.object({ templateId: z.string() }))
     .query(async (opts) => {
       const { templateId } = opts.input;
-      const { prisma }: any = opts.ctx;
+      const prisma: PrismaClient = (opts.ctx as any).prisma;
 
       const template = await prisma.template.findUnique({
         where: {
@@ -53,6 +55,6 @@ export function getTemplateByIdRoute() {
           },
         },
       });
-      return template;
+      return Template(template)?.toJSON();
     });
 }

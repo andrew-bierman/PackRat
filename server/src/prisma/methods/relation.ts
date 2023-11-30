@@ -43,13 +43,24 @@ const Relation = <T extends TRelation>(
       for (const member of relationObject.members) {
         const Model = modelMappingFunc(member.type, prisma);
         if (Model) {
-          member.refId = await Model.findUnique({
+          member.refId = await Model.findFirst({
             where: {
               id: member.refId,
             },
           });
         }
       }
+
+      const documentKeys = Object.keys(relationObject).filter(
+        (key) => key.includes('Document') || key.includes('Documents'),
+      );
+
+      for (const key of documentKeys) {
+        const newKey = key.replace('Document', '').replace('Documents', '');
+        relationObject[newKey] = relationObject[key];
+        delete relationObject[key];
+      }
+
       return relationObject;
     },
     async save(prisma: any): Promise<void> {

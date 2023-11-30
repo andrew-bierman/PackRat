@@ -3,6 +3,7 @@ import { UnableToAddItemError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { addItemService } from '../../services/item/item.service';
 import * as validator from '../../middleware/validators/index';
+import { Item } from '../../prisma/methods';
 
 /**
  * Adds an item to the database based on the provided request body.
@@ -45,6 +46,6 @@ export function addItemRoute() {
       type,
       ownerId,
     );
-    return { newItem: result.newItem, packId: result.packId };
+    return { newItem: Item(result.newItem)?.toJSON(), packId: result.packId };
   });
 }

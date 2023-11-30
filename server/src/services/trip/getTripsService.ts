@@ -20,11 +20,7 @@ export const getTripsService = async (
       where: { id: { in: trips.map((trip) => trip.packs) } },
     });
 
-    const jsonTrips = await Promise.all(
-      trips.map(async (trip) => Trip(trip).toJSON(prisma)),
-    );
-
-    return jsonTrips.map((trip) => {
+    return trips.map((trip) => {
       const packDocument = packDocumnets.find((pack) => pack.id === trip.packs);
       return {
         ...trip,

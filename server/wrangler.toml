@@ -5,7 +5,7 @@ node_compat = true
 main = "./src/index.ts"
 
 [env.dev.vars]
-ASD = "ASD"
+MONGODB_URI = "mongodb+srv://admin:root@packratdb.nrj4a09.mongodb.net/packratdb?retryWrites=true&w=majority"
 PRISMA_DATA_PROXY_URI = "prisma://aws-us-east-1.prisma-data.com/?api_key=7JWllWgv2hvFIXewiTjpepJGeY6TTd0s8Ntv9ZD_HyhNQppK_08XGGxr1Q2Wjeqx"
 
 # For local development, you can create a file called .dev.vars and use dotenv syntax.

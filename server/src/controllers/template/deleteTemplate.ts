@@ -1,6 +1,7 @@
 import { publicProcedure } from '../../trpc';
 import { TemplateNotFoundError } from '../../helpers/errors';
 import { z } from 'zod';
+import { PrismaClient } from '@prisma/client/edge';
 
 // import { prisma } from '../../prisma';
 
@@ -35,7 +36,7 @@ export function deleteTemplateRoute() {
     .input(z.object({ templateId: z.string() }))
     .mutation(async (opts) => {
       const { templateId } = opts.input;
-      const { prisma }: any = opts.ctx;
+      const prisma: PrismaClient = (opts.ctx as any).prisma;
 
       const template = await prisma.template.findUnique({
         where: {

@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client/edge';
-import { User } from '../../prisma/methods';
+import { User, Item } from '../../prisma/methods';
 
 const SORT_OPTIONS = {
   Favorite: { favoritesCount: 'desc' },
@@ -52,7 +52,10 @@ export const getPacksService = async (
 
     packs.forEach((pack) => {
       pack.ownerDocuments = pack.ownerDocuments?.map(
-        (owner) => User(owner)?.toJSON(prisma),
+        (owner) => User(owner)?.toJSON(),
+      ) as any;
+      pack.itemDocuments = pack.itemDocuments?.map(
+        (item) => Item(item as any)?.toJSON(),
       ) as any;
     });
 

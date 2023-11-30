@@ -39,7 +39,7 @@ export function addToFavoriteRoute() {
       const { prisma }: any = opts.ctx;
 
       await addToFavoriteService(prisma, packId, userId);
-      const user = await prisma.user.findUnique({
+      const user = await prisma.user.findFirst({
         where: {
           id: userId, // Assuming userId is the user's ID
         },
@@ -53,6 +53,6 @@ export function addToFavoriteRoute() {
 
       // if (!user) throw UserNotFoundError;
       if (!user) return UserNotFoundError;
-      return User(user).toJSON(prisma);
+      return User(user).toJSON();
     });
 }

@@ -3,6 +3,7 @@ import { PackNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { getPublicPacksService } from '../../services/pack/pack.service';
 import { z } from 'zod';
+import { Pack } from '../../prisma/methods';
 
 /**
  * Retrieves public packs based on the given query parameter.
@@ -29,6 +30,8 @@ export function getPublicPacksRoute() {
     .query(async (opts) => {
       const { queryBy } = opts.input;
       const { prisma }: any = opts.ctx;
-      return await getPublicPacksService(prisma, queryBy);
+      const packs = await getPublicPacksService(prisma, queryBy);
+      const jsonPacks = packs.map((pack) => Pack(pack)?.toJSON());
+      return jsonPacks;
     });
 }

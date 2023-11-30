@@ -3,9 +3,13 @@ import jwt from 'jsonwebtoken';
 
 type ExtendedUser = {
   save: (prisma: any) => Promise<ExtendedUser>;
-  toJSON: (prisma?: any) => Partial<TUser>;
+  toJSON: () => Partial<TUser>;
   generateAuthToken: (prisma: any, jwtSecret: string) => Promise<string>;
-  generateResetToken: (prisma: any, jwtSecret: string, clinetUrl: string) => Promise<string>;
+  generateResetToken: (
+    prisma: any,
+    jwtSecret: string,
+    clinetUrl: string,
+  ) => Promise<string>;
 };
 
 const User = <T>(prismaUser: T): T & ExtendedUser => {
@@ -52,7 +56,7 @@ const User = <T>(prismaUser: T): T & ExtendedUser => {
 
       return User(updatedUser);
     },
-    toJSON(prisma = undefined): Partial<TUser> {
+    toJSON(): Partial<TUser> {
       const {
         password,
         passwordResetToken,
@@ -63,6 +67,17 @@ const User = <T>(prismaUser: T): T & ExtendedUser => {
         toJSON,
         ...userObject
       } = this;
+
+      const documentKeys = Object.keys(userObject).filter(
+        (key) => key.includes('Document') || key.includes('Documents'),
+      );
+
+      for (const key of documentKeys) {
+        const newKey = key.replace('Document', '').replace('Documents', '');
+        userObject[newKey] = userObject[key];
+        delete userObject[key];
+      }
+
       return userObject;
     },
     async generateAuthToken(prisma: any, jwtSecret: string): Promise<string> {
@@ -77,7 +92,11 @@ const User = <T>(prismaUser: T): T & ExtendedUser => {
       });
       return token;
     },
-    async generateResetToken(prisma: any, jwtSecret: string, clinetUrl: string): Promise<string> {
+    async generateResetToken(
+      prisma: any,
+      jwtSecret: string,
+      clinetUrl: string,
+    ): Promise<string> {
       if (this.passwordResetToken) {
         if (!jwtSecret) throw new Error('jwtSecret is not defined');
         const decoded: any = jwt.verify(this.passwordResetToken, jwtSecret);
@@ -85,13 +104,9 @@ const User = <T>(prismaUser: T): T & ExtendedUser => {
       }
 
       if (!jwtSecret) throw new Error('jwtSecret is not defined');
-      const resetToken = await jwt.sign(
-        { id: this.id.toString() },
-        jwtSecret,
-        {
-          expiresIn: '12h',
-        },
-      );
+      const resetToken = await jwt.sign({ id: this.id.toString() }, jwtSecret, {
+        expiresIn: '12h',
+      });
       this.passwordResetToken = resetToken;
       await prisma.user.update({
         where: { id: this.id },

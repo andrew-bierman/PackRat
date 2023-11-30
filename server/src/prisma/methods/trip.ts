@@ -32,6 +32,17 @@ const Trip = <T extends TTrip>(prismaTrip: T): T & ExtendedTrip => {
         type: 'FeatureCollection',
         features: geojsonDocuments,
       };
+
+      const documentKeys = Object.keys(tripObject).filter(
+        (key) => key.includes('Document') || key.includes('Documents'),
+      );
+
+      for (const key of documentKeys) {
+        const newKey = key.replace('Document', '').replace('Documents', '');
+        tripObject[newKey] = tripObject[key];
+        delete tripObject[key];
+      }
+
       return tripObject;
     },
   });

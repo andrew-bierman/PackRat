@@ -1,6 +1,7 @@
 // services/tripService.ts
 
 import { PrismaClient } from '@prisma/client/edge';
+import { Pack, User } from '../../prisma/methods';
 
 /**
  * Retrieves public trips based on the given query parameter.
@@ -49,8 +50,8 @@ export const getPublicTripsService = async (
       const packDocument = allPacks.find((pack) => pack.id === trip.packs);
       return {
         ...trip,
-        packDocument,
-        ownerDocument,
+        packDocument: Pack(packDocument)?.toJSON(),
+        ownerDocument: User(ownerDocument)?.toJSON(),
       };
     });
 

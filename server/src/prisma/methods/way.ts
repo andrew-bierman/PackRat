@@ -1,14 +1,14 @@
 import type { Way as TWay } from '@prisma/client/edge';
 
 type ExtendedWay = {
-  toJSON: (prisma: any) => Partial<TWay>;
+  toJSON: () => Partial<TWay>;
   save: (prisma: any) => Promise<void>;
 };
 
 const Way = <T extends TWay>(prismaWay: T): T & ExtendedWay => {
   if (!prismaWay) return;
   return Object.assign(prismaWay, {
-    toJSON(prisma: any): Partial<TWay> {
+    toJSON(): Partial<TWay> {
       const {
         id,
         // destructure methods

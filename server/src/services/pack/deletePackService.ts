@@ -7,7 +7,7 @@ import { PrismaClient } from '@prisma/client/edge';
  * @return {Object} - An object containing a message indicating the success of the deletion.
  */
 export const deletePackService = async (prisma: PrismaClient, packId) => {
-  const pack = await prisma.pack.delete({
+  await prisma.pack.delete({
     where: {
       id: packId, // Replace 'id' with the actual primary key field in your model
     },

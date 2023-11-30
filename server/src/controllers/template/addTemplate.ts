@@ -6,7 +6,7 @@ import { addTemplateService } from '../../services/template/template.service';
 import { z } from 'zod';
 
 // import { prisma } from '../../prisma';
-import { TemplateType } from '@prisma/client/edge';
+import { PrismaClient, TemplateType } from '@prisma/client/edge';
 /**
  * Adds a template to the database.
  * @param {Object} req - The request object.
@@ -44,7 +44,7 @@ export function addTemplateRoute() {
     )
     .mutation(async (opts) => {
       const { type, templateId, isGlobalTemplate, createdBy } = opts.input;
-      const { prisma }: any = opts.ctx;
+      const prisma: PrismaClient = (opts.ctx as any).prisma;
 
       const user = await prisma.user.findUnique({
         where: {

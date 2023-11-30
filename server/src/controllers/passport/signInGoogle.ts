@@ -232,7 +232,7 @@ export function googleSigninRoute() {
           },
         });
 
-        return { user: User(updatedUser)?.toJSON(prisma) };
+        return { user: User(updatedUser)?.toJSON() };
       }
     });
 }

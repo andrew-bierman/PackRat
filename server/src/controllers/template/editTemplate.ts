@@ -6,6 +6,7 @@ import { z } from 'zod';
 
 // import { prisma } from '../../prisma';
 import { TemplateType } from '@prisma/client/edge';
+import { Template } from '../../prisma/methods';
 
 /**
  * Edits a template.
@@ -43,6 +44,6 @@ export function editTemplateRoute() {
         type,
         isGlobalTemplate,
       );
-      return updatedTemplate;
+      return Template(updatedTemplate)?.toJSON();
     });
 }

@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client/edge';
-import { User } from '../../prisma/methods';
+import { Pack, User } from '../../prisma/methods';
 import {
   computeFavouritesCount,
   computeTotalScores,
@@ -40,19 +40,17 @@ const sortPacks = (propertyName, sortOrder) => (packA, packB) => {
   return 0;
 };
 
-const computeVirtualFields = (prisma: any) => (pack) => {
+const computeVirtualFields = (pack) => {
   const packWithTotalWeight = computeTotalWeight(pack);
   const packWithTotalScore = computeTotalScores(packWithTotalWeight);
   const packWithFavoritesCount = computeFavouritesCount(packWithTotalScore);
   return {
     ...packWithFavoritesCount,
     favoritedByDocuments: pack.favoritedByDocuments.map(
-      (user) => User(user)?.toJSON(prisma),
+      (user) => User(user)?.toJSON(),
     ),
-    ownerDocuments: pack.ownerDocuments.map(
-      (owner) => User(owner)?.toJSON(prisma),
-    ),
-    ownerDocument: User(pack.ownerDocument)?.toJSON(prisma),
+    ownerDocuments: pack.ownerDocuments.map((owner) => User(owner)?.toJSON()),
+    ownerDocument: User(pack.ownerDocument)?.toJSON(),
     items_count: pack.items.length,
   };
 };
@@ -91,7 +89,8 @@ export async function getPublicPacksService(
 
     return publicPacks
       .map(computeVirtualFields(prisma))
-      .sort(sortPacks(propertyName, sortOrder));
+      .sort(sortPacks(propertyName, sortOrder))
+      .map((pack) => Pack(pack as any)?.toJSON());
   } catch (error) {
     throw new Error('Packs cannot be found: ' + error.message);
   }

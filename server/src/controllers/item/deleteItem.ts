@@ -3,6 +3,7 @@ import { responseHandler } from '../../helpers/responseHandler';
 import { deleteItemService } from '../../services/item/item.service';
 import * as validator from '../../middleware/validators/index';
 import { publicProcedure } from '../../trpc';
+import { Item } from '../../prisma/methods';
 /**
  * Deletes an item from the database.
  * @param {Object} req - The request object.
@@ -28,6 +29,7 @@ export function deleteItemRoute() {
   return publicProcedure.input(validator.deleteItem).mutation(async (opts) => {
     const { itemId, packId } = opts.input;
     const { prisma }: any = opts.ctx;
-    return await deleteItemService(prisma, itemId, packId);
+    const item = await deleteItemService(prisma, itemId, packId);
+    return Item(item)?.toJSON();
   });
 }

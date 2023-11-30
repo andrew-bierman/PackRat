@@ -3,6 +3,7 @@ import { UnableToDeleteItemError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { z } from 'zod';
 import { publicProcedure } from '../../trpc';
+import { Item } from '../../prisma/methods';
 
 /**
  * Edit a global item by duplicating it with new changes.
@@ -57,7 +58,7 @@ export function editGlobalItemAsDuplicateRoute() {
     .mutation(async (opts) => {
       const { itemId, packId, name, weight, quantity, unit, type } = opts.input;
       const { prisma }: any = opts.ctx;
-      return await editGlobalItemAsDuplicateService(
+      const item = await editGlobalItemAsDuplicateService(
         prisma,
         itemId,
         packId,
@@ -67,5 +68,7 @@ export function editGlobalItemAsDuplicateRoute() {
         unit,
         type,
       );
+
+      return Item(item)?.toJSON();
     });
 }

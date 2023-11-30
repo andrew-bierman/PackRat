@@ -22,12 +22,12 @@ export const getPackByIdService = async (prisma: PrismaClient, packId) => {
     });
 
     // Parse JSON
-    const ownerDocument = User(pack.ownerDocument)?.toJSON(prisma);
+    const ownerDocument = User(pack.ownerDocument)?.toJSON();
     const favoritedByDocuments = pack.favoritedByDocuments.map(
-      (user) => User(user)?.toJSON(prisma),
+      (user) => User(user)?.toJSON(),
     );
     const ownerDocuments = pack.ownerDocuments.map(
-      (user) => User(user)?.toJSON(prisma),
+      (user) => User(user)?.toJSON(),
     );
     const tripDocuments = trips.map((trip) => Trip(trip)?.toJSON(prisma));
     return {

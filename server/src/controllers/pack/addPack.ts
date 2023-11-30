@@ -1,6 +1,7 @@
 import { addPackService } from '../../services/pack/pack.service';
 import * as validator from '../../middleware/validators/index';
 import { publicProcedure } from '../../trpc';
+import { Pack } from '../../prisma/methods';
 /**
  * Adds a new pack to the database.
  * @param {Object} req - The HTTP request object.
@@ -17,6 +18,7 @@ export function addPackRoute() {
   return publicProcedure.input(validator.addPack).mutation(async (opts) => {
     const { name, owner_id } = opts.input;
     const { prisma }: any = opts.ctx;
-    return addPackService(prisma, name, owner_id);
+    const pack = await addPackService(prisma, name, owner_id);
+    return Pack(pack)?.toJSON();
   });
 }

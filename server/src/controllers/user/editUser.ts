@@ -3,6 +3,7 @@ import { UnableToEditUserError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import * as validator from '../../middleware/validators/index';
 import { PrismaClient } from '@prisma/client/edge';
+import { User } from '../../prisma/methods';
 /**
  * Edits a user.
  * @param {Object} req - The request object.
@@ -43,7 +44,7 @@ export function editUserRoute() {
       item_id,
       ...rest
     } = opts.input;
-    const { prisma }: any = opts.ctx;
+    const prisma: PrismaClient = (opts.ctx as any).prisma;
 
     const editedUser = await prisma.user.update({
       where: {
@@ -60,13 +61,13 @@ export function editUserRoute() {
         templates: {
           connect: template_ids?.map((template) => ({ id: template })),
         },
-        item: { set: item_id } ,
+        item: { set: item_id },
       },
       select: {
         favorites: true,
       },
     });
 
-    return editedUser;
+    return User(editedUser)?.toJSON();
   });
 }

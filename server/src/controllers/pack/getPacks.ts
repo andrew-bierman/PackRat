@@ -5,6 +5,7 @@ import { buildMessage } from '../../helpers/buildMessage';
 import { publicProcedure } from '../../trpc';
 import { z } from 'zod';
 import * as validator from '../../middleware/validators/index';
+import { Pack } from '../../prisma/methods';
 /**
  * Retrieves packs associated with a specific owner.
  * @param {Object} req - Express request object.
@@ -32,6 +33,9 @@ export function getPacksRoute() {
     const { ownerId, queryBy } = opts.input;
     const { prisma }: any = opts.ctx;
     const packs = await getPacksService(prisma, ownerId, queryBy);
-    return { packs, message: 'Packs retrieved successfully' };
+    return {
+      packs: packs.map((pack) => Pack(pack)?.toJSON()),
+      message: 'Packs retrieved successfully',
+    };
   });
 }

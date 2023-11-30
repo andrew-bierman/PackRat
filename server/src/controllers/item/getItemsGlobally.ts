@@ -3,6 +3,7 @@ import { ItemNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { getItemsGloballyService } from '../../services/item/item.service';
 import { z } from 'zod';
+import { Item } from '../../prisma/methods';
 
 /**
  * Retrieves globally available items.
@@ -35,10 +36,14 @@ export function getItemsGloballyRoute() {
     )
     .query(async (opts) => {
       const { prisma }: any = opts.ctx;
-      return await getItemsGloballyService(
+      const result = await getItemsGloballyService(
         prisma,
         opts.input.limit,
         opts.input.page,
       );
+      return {
+        ...result,
+        items: result.items.map((item) => Item(item)?.toJSON()),
+      };
     });
 }

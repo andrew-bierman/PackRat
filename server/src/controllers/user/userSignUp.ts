@@ -42,6 +42,6 @@ export function signUpRoute() {
     const userWithMethods = User(user);
     await userWithMethods.generateAuthToken(prisma, JWT_SECRET);
     sendWelcomeEmail(user.email, user.name, STMP_EMAIL, SEND_GRID_API_KEY);
-    return user;
+    return User(user)?.toJSON();
   });
 }

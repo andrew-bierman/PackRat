@@ -22,7 +22,7 @@ export const getUserByIdService = async (
     });
 
     if (user) {
-      return User(user).toJSON(prisma);
+      return User(user).toJSON();
     } else {
       throw new Error('User cannot be found');
     }
