@@ -29,8 +29,10 @@ export function getTripsRoute() {
     const { owner_id } = opts.input;
     const { prisma }: any = opts.ctx;
     const trips = await getTripsService(prisma, owner_id);
-    const jsonTrips = Promise.all(
+    const jsonTrips = await Promise.all(
       trips.map((trip) => Trip(trip as any).toJSON(prisma)),
     );
+    console.log(jsonTrips);
+    return jsonTrips;
   });
 }

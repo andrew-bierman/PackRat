@@ -14,12 +14,12 @@ const Item = <T extends TItem>(prismaItem: T): T & ExtendedItem => {
         ...itemObject
       } = this;
 
-      const documentKeys = Object.keys(itemObject).filter(
-        (key) => key.includes('Document') || key.includes('Documents'),
+      const documentKeys = Object.keys(itemObject).filter((key) =>
+        key.includes('Document'),
       );
 
       for (const key of documentKeys) {
-        const newKey = key.replace('Document', '').replace('Documents', '');
+        const newKey = key.replace('Document', '');
         itemObject[newKey] = itemObject[key];
         delete itemObject[key];
       }

@@ -50,7 +50,7 @@ export const getPublicTripsService = async (
       const packDocument = allPacks.find((pack) => pack.id === trip.packs);
       return {
         ...trip,
-        packDocument: Pack(packDocument)?.toJSON(),
+        packDocuments: Pack(packDocument)?.toJSON(),
         ownerDocument: User(ownerDocument)?.toJSON(),
       };
     });

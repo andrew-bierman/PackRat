@@ -31,6 +31,8 @@ export function getPublicTripsRoute() {
       const { queryBy } = opts.input;
       const { prisma }: any = opts.ctx;
       const trips = await getPublicTripsService(prisma, queryBy);
-      return Trip(trips as any)?.toJSON(prisma);
+      return await Promise.all(
+        trips.map((trip) => Trip(trip as any)?.toJSON(prisma)),
+      );
     });
 }

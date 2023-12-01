@@ -68,12 +68,12 @@ const User = <T>(prismaUser: T): T & ExtendedUser => {
         ...userObject
       } = this;
 
-      const documentKeys = Object.keys(userObject).filter(
-        (key) => key.includes('Document') || key.includes('Documents'),
+      const documentKeys = Object.keys(userObject).filter((key) =>
+        key.includes('Document'),
       );
 
       for (const key of documentKeys) {
-        const newKey = key.replace('Document', '').replace('Documents', '');
+        const newKey = key.replace('Document', '');
         userObject[newKey] = userObject[key];
         delete userObject[key];
       }

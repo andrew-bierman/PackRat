@@ -17,12 +17,12 @@ const Node = <T extends TNode>(prismaNode: T): T & ExtendedNode => {
         ...nodeObject
       } = this;
 
-      const documentKeys = Object.keys(nodeObject).filter(
-        (key) => key.includes('Document') || key.includes('Documents'),
+      const documentKeys = Object.keys(nodeObject).filter((key) =>
+        key.includes('Document'),
       );
 
       for (const key of documentKeys) {
-        const newKey = key.replace('Document', '').replace('Documents', '');
+        const newKey = key.replace('Document', '');
         nodeObject[newKey] = nodeObject[key];
         delete nodeObject[key];
       }

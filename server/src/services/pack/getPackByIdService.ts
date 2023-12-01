@@ -29,7 +29,9 @@ export const getPackByIdService = async (prisma: PrismaClient, packId) => {
     const ownerDocuments = pack.ownerDocuments.map(
       (user) => User(user)?.toJSON(),
     );
-    const tripDocuments = trips.map((trip) => Trip(trip)?.toJSON(prisma));
+    const tripDocuments = await Promise.all(
+      trips.map((trip) => Trip(trip)?.toJSON(prisma)),
+    );
     return {
       ...pack,
       ownerDocument,

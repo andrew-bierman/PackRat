@@ -41,9 +41,14 @@ const sortPacks = (propertyName, sortOrder) => (packA, packB) => {
 };
 
 const computeVirtualFields = (pack) => {
+  console.log('Begin');
   const packWithTotalWeight = computeTotalWeight(pack);
+  console.log('packWithTotalWeight');
   const packWithTotalScore = computeTotalScores(packWithTotalWeight);
+  console.log('packWithTotalScore');
   const packWithFavoritesCount = computeFavouritesCount(packWithTotalScore);
+  console.log('packWithFavoritesCount');
+
   return {
     ...packWithFavoritesCount,
     favoritedByDocuments: pack.favoritedByDocuments.map(
@@ -88,9 +93,8 @@ export async function getPublicPacksService(
     // console.log('publicPacks', publicPacks[0]);
 
     return publicPacks
-      .map(computeVirtualFields(prisma))
-      .sort(sortPacks(propertyName, sortOrder))
-      .map((pack) => Pack(pack as any)?.toJSON());
+      .map(computeVirtualFields)
+      .sort(sortPacks(propertyName, sortOrder));
   } catch (error) {
     throw new Error('Packs cannot be found: ' + error.message);
   }

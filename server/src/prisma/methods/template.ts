@@ -14,12 +14,12 @@ const Template = <T extends TTemplate>(prismaTemplate: T): T & ExtendedItem => {
         ...templateObject
       } = this;
 
-      const documentKeys = Object.keys(templateObject).filter(
-        (key) => key.includes('Document') || key.includes('Documents'),
+      const documentKeys = Object.keys(templateObject).filter((key) =>
+        key.includes('Document'),
       );
 
       for (const key of documentKeys) {
-        const newKey = key.replace('Document', '').replace('Documents', '');
+        const newKey = key.replace('Document', '');
         templateObject[newKey] = templateObject[key];
         delete templateObject[key];
       }

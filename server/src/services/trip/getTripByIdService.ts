@@ -21,7 +21,7 @@ export const getTripByIdService = async (
       throw new Error('Trip cannot be found');
     }
 
-    return Trip(trip).toJSON(prisma);
+    return await Trip(trip).toJSON(prisma);
   } catch (error) {
     console.error(error);
     throw new Error('Trip cannot be found');

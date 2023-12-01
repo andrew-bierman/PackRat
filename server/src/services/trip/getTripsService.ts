@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client/edge';
-import { Trip } from '../../prisma/methods';
+import { Pack } from '../../prisma/methods';
 
 /**
  * Retrieves trips belonging to a specific owner.
@@ -21,10 +21,12 @@ export const getTripsService = async (
     });
 
     return trips.map((trip) => {
-      const packDocument = packDocumnets.find((pack) => pack.id === trip.packs);
+      const packDocuments = packDocumnets.find(
+        (pack) => pack.id === trip.packs,
+      );
       return {
         ...trip,
-        packDocument,
+        packDocuments: Pack(packDocuments)?.toJSON(),
       };
     });
   } catch (error) {

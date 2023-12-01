@@ -18,27 +18,27 @@ const Trip = <T extends TTrip>(prismaTrip: T): T & ExtendedTrip => {
         ...trip
       } = this;
       const { ...tripObject }: Record<string, any> = trip;
-      if (!trip.geojson) return tripObject;
+      if (trip.geojson) {
+        const geojsonIds: string[] = Array.isArray(trip.geojson)
+          ? trip.geojson.map((geojson) => geojson['$oid'])
+          : [trip.geojson['$oid']];
 
-      const geojsonIds: string[] = Array.isArray(trip.geojson)
-        ? trip.geojson.map((geojson) => geojson['$oid'])
-        : [trip.geojson['$oid']];
+        const geojsonDocuments = await prisma.geoJSON.findMany({
+          where: { id: { in: geojsonIds.filter((id) => !!id) } },
+        });
 
-      const geojsonDocuments = await prisma.geoJSON.findMany({
-        where: { id: { in: geojsonIds.filter((id) => !!id) } },
-      });
+        tripObject.geojson = {
+          type: 'FeatureCollection',
+          features: geojsonDocuments,
+        };
+      }
 
-      tripObject.geojson = {
-        type: 'FeatureCollection',
-        features: geojsonDocuments,
-      };
-
-      const documentKeys = Object.keys(tripObject).filter(
-        (key) => key.includes('Document') || key.includes('Documents'),
+      const documentKeys = Object.keys(tripObject).filter((key) =>
+        key.includes('Document'),
       );
 
       for (const key of documentKeys) {
-        const newKey = key.replace('Document', '').replace('Documents', '');
+        const newKey = key.replace('Document', '');
         tripObject[newKey] = tripObject[key];
         delete tripObject[key];
       }

@@ -14,12 +14,12 @@ const Pack = <T extends TPack>(prismaPack: T): T & ExtendedItem => {
         ...packObject
       } = this;
 
-      const documentKeys = Object.keys(packObject).filter(
-        (key) => key.includes('Document') || key.includes('Documents'),
+      const documentKeys = Object.keys(packObject).filter((key) =>
+        key.includes('Document'),
       );
 
       for (const key of documentKeys) {
-        const newKey = key.replace('Document', '').replace('Documents', '');
+        const newKey = key.replace('Document', '');
         packObject[newKey] = packObject[key];
         delete packObject[key];
       }
