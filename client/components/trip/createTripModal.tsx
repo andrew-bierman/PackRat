@@ -8,6 +8,7 @@ import { format, intervalToDuration } from 'date-fns';
 import { useAddTrips } from '~/hooks/trips';
 import { api } from '../../constants/api';
 import { trpc } from '../../trpc';
+import { useGetPhotonDetails } from '~/hooks/destination';
 
 // import { Picker } from '@react-native-picker/picker';
 import { DropdownComponent } from '../Dropdown';
@@ -115,12 +116,11 @@ export const SaveTripContainer = ({ dateRange }) => {
       endDate,
     };
 
-    console.log('old rag', search);
-
-    const geoJSON = await trpc.getPhotonDetails.query({
-      id: search.properties.osm_id,
-      type: search.properties.osm_type,
-    });
+    // const geoJSON = await trpc.getPhotonDetails.query({
+    //   id: search.properties.osm_id,
+    //   type: search.properties.osm_type,
+    // });
+    const { data: geoJSON } = await useGetPhotonDetails(search);
 
     const data = {
       name,

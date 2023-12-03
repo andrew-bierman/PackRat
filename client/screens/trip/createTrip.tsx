@@ -10,13 +10,13 @@ import { GearList } from '../../components/GearList';
 import { SaveTripContainer } from '~/components/trip/createTripModal';
 import TripDateRange from '~/components/trip/TripDateRange';
 import { useFetchWeather, useFetchWeatherWeak } from '~/hooks/weather';
-import { usePhotonDetail } from '~/hooks/trips/usePhotonDetails';
 // import MultiStepForm from "../multi_step";
-import { photonDetails } from '../../store/destinationStore';
+// import { photonDetails } from '../../store/destinationStore';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from '~/hooks/useCustomStyles';
 import useParks from '~/hooks/parks';
 import useTrails from '~/hooks/trails';
+import { useGetPhotonDetails } from '~/hooks/destination';
 export default function Trips() {
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
@@ -30,63 +30,28 @@ export default function Trips() {
   const searchResult = useSelector(
     (state) => state.search.selectedSearchResult,
   );
-  console.log(
-    '🚀 ~ file: createTrip.tsx:32 ~ Trips ~ searchResult:',
-    searchResult,
-  );
 
-  // const weatherObject = useSelector((state) => state.weather.weatherObject);
-  // const weatherWeek = useSelector((state) => state.weather.weatherWeek);
-  // latLng,
-  const { selectedSearch } = useSelector((state) => state.weather);
-  const trailsObject = useSelector((state) => state.trails.trailNames);
-  const parksObject = useSelector((state) => state.parks.parkNames);
+  const { latLng, selectedSearch } = useSelector((state) => state.weather);
+  const [photonDetails, setPhotonDetails] = useState(null);
   // const photonDetailsStore = useSelector(
   //   (state) => state.destination.photonDetails,
   // );
-  const latLng = {
-    lat: undefined,
-    lon: undefined,
-  };
-  if (Object.keys(searchResult).length) {
-    const {
-      geometry: { coordinates },
-    } = searchResult;
-    console.log(
-      '🚀 ~ file: createTrip.tsx:50 ~ Trips ~ geometry:',
-      coordinates,
-      searchResult,
-    );
-    const [lon, lat] = coordinates;
-    latLng.lat = lat;
-    latLng.lon = lon;
-  }
-  // console.log(
-  //   '🚀 ~ file: createTrip.js:41 ~ Trips ~ selectedSearch:',
-  //   latLng,
-  //   searchResult
-  // );
+  console.log(
+    '🚀 ~ file: createTrip.js:41 ~ Trips ~ selectedSearch:',
+    selectedSearch,
+  );
   const {
     data: weatherData,
     isLoading: weatherLoading,
     isError: weatherError,
   } = useFetchWeather(latLng);
 
-  const { data: photonDetailsStore, isLoading: photonLoading } =
-    usePhotonDetail(
-      searchResult?.properties?.osm_id,
-      searchResult?.properties?.osm_type,
-    );
-  console.log(
-    '🚀 ~ file: createTrip.tsx:55 ~ Trips ~ photonDetail:',
-    photonDetailsStore,
-    photonLoading,
-  );
   const {
     data: weatherWeekData,
     isLoading: weekWeatherLoading,
     isError: weekWeatherError,
   } = useFetchWeatherWeak(latLng);
+
   const {
     data: parks,
     error: parksError,
@@ -96,6 +61,7 @@ export default function Trips() {
     latLng,
     selectedSearch,
   });
+
   console.log('filtered parks', parksData, parksError);
   const { data, filteredTrails, error, isLoading } = useTrails({
     latLng,
@@ -109,17 +75,18 @@ export default function Trips() {
   // setParksData(parksObject);
   // }, [parksObject]);
 
-  // useEffect(() => {
-  //   if (searchResult?.properties) {
-  //     const matchPhotonFormattingForData = {
-  //       properties: {
-  //         osm_id: searchResult.properties?.osm_id,
-  //         osm_type: searchResult.properties?.osm_type,
-  //       },
-  //     };
-  //     dispatch(photonDetails(matchPhotonFormattingForData));
-  //   }
-  // }, [searchResult]);
+  const photonResponse = useGetPhotonDetails({
+    properties: {
+      osm_id: searchResult.properties?.osm_id,
+      osm_type: searchResult.properties?.osm_type,
+    },
+  });
+
+  useEffect(() => {
+    if (photonResponse) {
+      setPhotonDetails(photonResponse);
+    }
+  }, [photonResponse]);
 
   const steps = [
     {
@@ -151,7 +118,10 @@ export default function Trips() {
     {
       name: 'Step 2',
       component: () => (
-        <WeatherCard weatherObject={weatherObject} weatherWeek={weatherWeek} />
+        <WeatherCard
+          weatherObject={weatherData}
+          weatherWeek={weatherWeekData}
+        />
       ),
     },
     {
@@ -274,20 +244,20 @@ export default function Trips() {
           />
           <GearList />
           <TripDateRange dateRange={dateRange} setDateRange={setDateRange} />
-
-          <TripCard
-            Icon={() => (
-              <FontAwesome5
-                name="route"
-                size={24}
-                color={currentTheme.colors.cardIconColor}
-              />
-            )}
-            title="Map"
-            isMap={true}
-            isLoading={photonLoading}
-            shape={photonDetailsStore}
-          />
+          {!photonDetails?.IsError && !photonDetails?.isLoading && (
+            <TripCard
+              Icon={() => (
+                <FontAwesome5
+                  name="route"
+                  size={24}
+                  color={currentTheme.colors.cardIconColor}
+                />
+              )}
+              title="Map"
+              isMap={true}
+              shape={photonDetails}
+            />
+          )}
           <RStack>
             <SaveTripContainer dateRange={dateRange} />
           </RStack>
