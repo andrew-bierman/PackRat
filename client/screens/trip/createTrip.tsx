@@ -32,7 +32,8 @@ export default function Trips() {
   );
 
   const { latLng, selectedSearch } = useSelector((state) => state.weather);
-  const [photonDetails, setPhotonDetails] = useState(null);
+
+  // const [photonDetails, setPhotonDetails] = useState(null);
   // const photonDetailsStore = useSelector(
   //   (state) => state.destination.photonDetails,
   // );
@@ -75,18 +76,12 @@ export default function Trips() {
   // setParksData(parksObject);
   // }, [parksObject]);
 
-  const photonResponse = useGetPhotonDetails({
+  const { data: photonDetails } = useGetPhotonDetails({
     properties: {
       osm_id: searchResult.properties?.osm_id,
       osm_type: searchResult.properties?.osm_type,
     },
   });
-
-  useEffect(() => {
-    if (photonResponse) {
-      setPhotonDetails(photonResponse);
-    }
-  }, [photonResponse]);
 
   const steps = [
     {
