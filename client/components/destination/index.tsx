@@ -25,6 +25,7 @@ import {
 import { fetchWeather, fetchWeatherWeek } from '../../store/weatherStore';
 import useCustomStyles from '~/hooks/useCustomStyles';
 import { useFetchWeather, useFetchWeatherWeak } from '~/hooks/weather';
+import { useGetDestination, useGetPhotonDetails } from '~/hooks/destination';
 
 const DestinationHeader = ({ geoJSON, selectedSearchResult }) => {
   const styles = useCustomStyles(loadStyles);
@@ -65,11 +66,15 @@ const DestinationHeader = ({ geoJSON, selectedSearchResult }) => {
         {country !== 'N/A' ? country : ''}
       </Text>
       <View style={styles.languageContainer}>
-        {Object.entries(languageNames).map(([key, value]) => (
-          <Text key={key} style={styles.languageText}>
-            {`${key.split(':')[1].toUpperCase()}: ${JSON.parse(value)}`}
-          </Text>
-        ))}
+        {Object.entries(languageNames).map(([key, value], index) => {
+          if (index < 3 && typeof value === 'string') {
+            return (
+              <Text key={key} style={styles.languageText}>
+                {`${key.split(':')[1].toUpperCase()}: ${value}`}
+              </Text>
+            );
+          }
+        })}
       </View>
     </View>
   );
@@ -83,10 +88,10 @@ const DestinationHeader = ({ geoJSON, selectedSearchResult }) => {
  */
 const WeatherData = ({ geoJSON }) => {
   const dispatch = useDispatch();
-  const weatherObject = useSelector((state) => state.destination.weatherObject);
-  const weatherWeek = useSelector((state) => state.destination.weatherWeek);
+  // const weatherObject = useSelector((state) => state.destination.weatherObject);
+  // const weatherWeek = useSelector((state) => state.destination.weatherWeek);
   const [latLng, setLatLng] = useState({});
-  const { data: weatherData } = useFetchWeather(latLng);
+  const { data: weatherObjectData } = useFetchWeather(latLng);
   const { data: weatherWeekData } = useFetchWeatherWeak(latLng);
 
   useEffect(() => {
@@ -125,26 +130,38 @@ const WeatherData = ({ geoJSON }) => {
     fetchWeatherData();
   }, [geoJSON]);
 
-  return weatherObject && weatherWeek ? (
-    <WeatherCard weatherObject={weatherObject} weatherWeek={weatherWeek} />
+  return weatherObjectData && weatherWeekData ? (
+    <WeatherCard
+      weatherObject={weatherObjectData}
+      weatherWeek={weatherWeekData}
+    />
   ) : null;
 };
 
 export const DestinationPage = () => {
   console.log('destination page');
   const router = useRouter();
+  const { destinationId, id, type, lat, lon } = useSearchParams();
+  const [destination_id, setDestinationId] = useState(destinationId);
+  const [properties, setProperties] = useState({ osm_id: id, osm_type: type });
+
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
   const dispatch = useDispatch();
 
-  const { destinationId, id, type, lat, lon } = useSearchParams();
-  const photonDetailsStore = useSelector(
-    (state) => state.destination.photonDetails,
+  const matchPhotonFormattingForData = { properties };
+  const { isLoading, isError, data } = useGetPhotonDetails(
+    matchPhotonFormattingForData,
   );
+  useGetDestination({ destination_id, properties });
+
+  // const photonDetailsStore = useSelector(
+  //   (state) => state.destination.photonDetails,
+  // );
 
   const currentDestination = {
-    geoJSON: photonDetailsStore,
+    geoJSON: data,
   };
 
   const geoJSON = currentDestination?.geoJSON;
@@ -153,19 +170,9 @@ export const DestinationPage = () => {
   );
 
   useEffect(() => {
+    setDestinationId(destinationId);
     if (destinationId) {
-      if (type && id) {
-        const matchPhotonFormattingForData = {
-          properties: {
-            osm_id: id,
-            osm_type: type,
-          },
-        };
-
-        dispatch(photonDetails(matchPhotonFormattingForData));
-      } else if (destinationId && !type && !id && destinationId !== 'query') {
-        dispatch(getDestination(destinationId));
-      }
+      setProperties({ osm_id: id, osm_type: type });
     }
   }, [destinationId]);
 
@@ -179,26 +186,28 @@ export const DestinationPage = () => {
 
   return (
     <ScrollView>
-      <View style={styles.container}>
-        <DestinationHeader
-          geoJSON={geoJSON}
-          selectedSearchResult={selectedSearchResult}
-        />
-        <LargeCard
-          title="Map"
-          Icon={() => (
-            <Ionicons
-              name="location"
-              size={24}
-              color={currentTheme.colors.textPrimary}
-            />
-          )}
-          ContentComponent={map}
-          contentProps={{ shape }}
-          type="map"
-        />
-        <WeatherData geoJSON={geoJSON} />
-      </View>
+      {!isLoading && !isError && (
+        <View style={styles.container}>
+          <DestinationHeader
+            geoJSON={geoJSON}
+            selectedSearchResult={selectedSearchResult}
+          />
+          <LargeCard
+            title="Map"
+            Icon={() => (
+              <Ionicons
+                name="location"
+                size={24}
+                color={currentTheme.colors.textPrimary}
+              />
+            )}
+            ContentComponent={map}
+            contentProps={{ shape }}
+            type="map"
+          />
+          <WeatherData geoJSON={geoJSON} />
+        </View>
+      )}
     </ScrollView>
   );
 };
