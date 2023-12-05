@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   Container,
@@ -197,22 +197,24 @@ const Feed = ({ feedType = 'public' }) => {
    * @return {ReactNode} The rendered feed data.
    */
   const renderData = () => {
-    let data = [];
+    const [data, setData] = useState([]);
 
-    if (feedType === 'public') {
-      if (selectedTypes?.pack) {
-        data = [...data, ...publicPacksData];
+    useEffect(() => {
+      if (feedType === 'public') {
+        if (selectedTypes?.pack) {
+          setData((prev) => [...prev, ...publicPacksData]);
+        }
+        if (selectedTypes?.trip) {
+          setData((prev) => [...prev, ...publicTripsData]);
+        }
+      } else if (feedType === 'userPacks') {
+        setData(userPacksData);
+      } else if (feedType === 'userTrips') {
+        setData(userTripsData);
+      } else if (feedType === 'favoritePacks') {
+        setData(userPacksData.filter((pack) => pack.isFavorite));
       }
-      if (selectedTypes?.trip) {
-        data = [...data, ...publicTripsData];
-      }
-    } else if (feedType === 'userPacks') {
-      data = userPacksData;
-    } else if (feedType === 'userTrips') {
-      data = userTripsData;
-    } else if (feedType === 'favoritePacks') {
-      data = userPacksData.filter((pack) => pack.isFavorite);
-    }
+    }, [userPacksData, userTripsData, feedType]);
 
     // Fuse search
     const keys = ['name', 'items.name', 'items.category'];
@@ -225,14 +227,15 @@ const Feed = ({ feedType = 'public' }) => {
       minMatchCharLength: 1,
     };
 
-    const results =
-      feedType !== 'userTrips'
-        ? fuseSearch(data, searchQuery, keys, options)
-        : data;
-
-    // Convert fuse results back into the format we want
-    // if searchQuery is empty, use the original data
-    data = searchQuery ? results.map((result) => result.item) : data;
+    const dataResult = useMemo(() => {
+      if (feedType !== 'userTrips' && searchQuery) {
+        console.log('searchQuery: ', searchQuery);
+        const result = fuseSearch(data, searchQuery, keys, options);
+        return result.map((result) => result.item);
+      } else {
+        return data;
+      }
+    }, [searchQuery, data]);
 
     const feedSearchFilterComponent = (
       <FeedSearchFilter
@@ -252,9 +255,8 @@ const Feed = ({ feedType = 'public' }) => {
         contentContainerStyle={{ flex: 1, paddingBottom: 10 }}
       >
         <View style={styles.cardContainer}>
-          {console.log({ data })}
           {feedSearchFilterComponent}
-          {data?.map((item) => (
+          {dataResult?.map((item) => (
             <Card key={item._id} type={item.type} {...item} />
           ))}
         </View>
@@ -262,7 +264,7 @@ const Feed = ({ feedType = 'public' }) => {
     ) : (
       <View style={{ flex: 1, paddingBottom: 10 }}>
         <FlatList
-          data={data}
+          data={dataResult}
           numColumns={1}
           keyExtractor={(item) => item._id}
           renderItem={({ item }) => (
