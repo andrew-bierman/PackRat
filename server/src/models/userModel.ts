@@ -1,7 +1,7 @@
 import mongoose, { Schema, type Document, type Model } from 'mongoose';
 import myDB from './dbConnection';
 import bycrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+import * as jwt from 'hono/jwt';
 import { JWT_SECRET, CLIENT_URL } from '../config';
 import validator from 'validator';
 
@@ -160,9 +160,7 @@ UserSchema.pre<IUser>('save', async function (next) {
 UserSchema.methods.generateAuthToken = async function (): Promise<string> {
   const user = this;
   if (!JWT_SECRET) throw new Error('JWT_SECRET is not defined');
-  const token = await jwt.sign({ id: user.id.toString() }, JWT_SECRET, {
-    expiresIn: '7 days',
-  });
+  const token = await jwt.sign({ id: user.id.toString() }, JWT_SECRET);
   user.token = token;
   await user.save();
   return token;
@@ -176,9 +174,7 @@ UserSchema.methods.generateResetToken = async function (): Promise<string> {
     if (decoded.id) return user.passwordResetToken;
   }
   if (!JWT_SECRET) throw new Error('JWT_SECRET is not defined');
-  const resetToken = await jwt.sign({ id: user.id.toString() }, JWT_SECRET, {
-    expiresIn: '12h',
-  });
+  const resetToken = await jwt.sign({ id: user.id.toString() }, JWT_SECRET);
   user.passwordResetToken = resetToken;
   await user.save();
   return `${CLIENT_URL}/password-reset?token=${resetToken}`;

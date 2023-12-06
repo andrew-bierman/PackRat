@@ -45,6 +45,7 @@ export const sendWelcomeEmail = async (
     }),
   });
 
+  console.log('sending email');
   if (!response.ok) {
     console.log('Email did not Send');
     throw new Error(`HTTP error! status: ${response.status}`);

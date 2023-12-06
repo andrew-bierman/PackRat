@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken';
+import * as jwt from 'hono/jwt';
 import bcrypt from 'bcryptjs';
 
 // import { JWT_SECRET, SEND_GRID_API_KEY } from '../../config';

@@ -41,13 +41,9 @@ const sortPacks = (propertyName, sortOrder) => (packA, packB) => {
 };
 
 const computeVirtualFields = (pack) => {
-  console.log('Begin');
   const packWithTotalWeight = computeTotalWeight(pack);
-  console.log('packWithTotalWeight');
   const packWithTotalScore = computeTotalScores(packWithTotalWeight);
-  console.log('packWithTotalScore');
   const packWithFavoritesCount = computeFavouritesCount(packWithTotalScore);
-  console.log('packWithFavoritesCount');
 
   return {
     ...packWithFavoritesCount,

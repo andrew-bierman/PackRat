@@ -1,5 +1,5 @@
 import type { User as TUser } from '@prisma/client/edge';
-import jwt from 'jsonwebtoken';
+import * as jwt from 'hono/jwt';
 
 type ExtendedUser = {
   save: (prisma: any) => Promise<ExtendedUser>;
@@ -82,9 +82,7 @@ const User = <T>(prismaUser: T): T & ExtendedUser => {
     },
     async generateAuthToken(prisma: any, jwtSecret: string): Promise<string> {
       if (!jwtSecret) throw new Error('jwtSecret is not defined');
-      const token = await jwt.sign({ id: this.id.toString() }, jwtSecret, {
-        expiresIn: '7 days',
-      });
+      const token = await jwt.sign({ id: this.id.toString() }, jwtSecret);
       this.token = token;
       await prisma.user.update({
         where: { id: this.id },
@@ -104,9 +102,7 @@ const User = <T>(prismaUser: T): T & ExtendedUser => {
       }
 
       if (!jwtSecret) throw new Error('jwtSecret is not defined');
-      const resetToken = await jwt.sign({ id: this.id.toString() }, jwtSecret, {
-        expiresIn: '12h',
-      });
+      const resetToken = await jwt.sign({ id: this.id.toString() }, jwtSecret);
       this.passwordResetToken = resetToken;
       await prisma.user.update({
         where: { id: this.id },

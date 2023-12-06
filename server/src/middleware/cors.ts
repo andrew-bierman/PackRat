@@ -1,6 +1,7 @@
 import { cors } from 'hono/cors';
 
 const corsHandler = (c, next) => {
+  console.log('corsHandler', c.env.CORS_ORIGIN);
   const corsOrigin = String(c.env.CORS_ORIGIN);
 
   const corsMiddlewareHandler = cors({

@@ -1,6 +1,6 @@
 import type { User } from '@prisma/client/edge';
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+import * as jwt from 'hono/jwt';
 
 async function findByCredentials({
   email,
@@ -10,7 +10,7 @@ async function findByCredentials({
   password: string;
 }): Promise<User> {
   const user = await this.findFirst({ where: { email } });
-  
+
   if (!user) throw new Error('Unable to login');
 
   const isMatch = await bcrypt.compare(password, user.password);
@@ -22,7 +22,7 @@ async function findByCredentials({
 
 // should be alreadyRegistered?
 async function alreadyLogin(email: string) {
-  const user = this.findFirst({
+  const user = await this.findFirst({
     where: { email },
   });
 

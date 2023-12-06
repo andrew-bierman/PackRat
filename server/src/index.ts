@@ -3,11 +3,19 @@ import { fetchHandler } from 'trpc-playground/handlers/fetch';
 // import { renderTrpcPanel } from 'trpc-panel';
 import { appRouter } from './routes/trpcRouter';
 import { honoTRPCServer } from './trpc/server';
-import { cors } from './middleware';
+import { cors } from 'hono/cors';
 
 const app = new Hono();
 
-app.use(cors);
+app.use(
+  '*',
+  cors({
+    origin: 'http://localhost:8081',
+    credentials: true,
+    allowHeaders: ['Content-Type', 'Authorization'],
+    allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  }),
+);
 
 app.use(
   'api/trpc/*',

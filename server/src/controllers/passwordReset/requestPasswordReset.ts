@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken';
+import * as jwt from 'hono/jwt';
 
 // import { prisma } from '../../prisma';
 // import {
@@ -19,8 +19,7 @@ import { resetEmail } from '../../utils/accountEmail';
 // Generate a password reset token that includes the user's email address
 const generatePasswordResetToken = (email, secret) => {
   const payload = { email };
-  const expiresIn = '1h';
-  return jwt.sign(payload, secret, { expiresIn });
+  return jwt.sign(payload, secret);
 };
 
 /**

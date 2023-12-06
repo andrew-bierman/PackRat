@@ -4,7 +4,7 @@
 // import { Strategy as LocalStrategy } from 'passport-local';
 
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+import * as jwt from 'hono/jwt';
 import { sendWelcomeEmail, resetEmail } from '../../utils/accountEmail';
 // import { prisma } from '../../prisma';
 import { User } from '../../prisma/methods';
@@ -173,7 +173,9 @@ export function googleSigninRoute() {
         throw new Error('Invalid ID token');
       }
 
-      const { email, name, sub: googleId } = decodedToken;
+      const {
+        payload: { email, name, sub: googleId },
+      } = decodedToken;
 
       const alreadyGoogleSignin = await prisma.user.findFirst({
         where: {
@@ -192,7 +194,7 @@ export function googleSigninRoute() {
           throw new Error('Already user registered on that email address');
         }
         const randomPassword = utilsService.randomPasswordGenerator(8);
-        // const randomPassword = '1234abcdefg5678';
+        const username = utilsService.randomUserNameCode(email, 4);
 
         const user = await prisma.user.create({
           data: {
@@ -200,6 +202,7 @@ export function googleSigninRoute() {
             name,
             password: randomPassword,
             googleId,
+            username,
           },
         });
 
