@@ -22,16 +22,7 @@ const FeedPreviewScroll = () => {
   //   dispatch(getPublicTrips());
   // }, []);
 
-  const {
-    data: feedData,
-    error,
-    isLoading,
-  } = useFeed(
-    // queryString = 'Most Recent',
-    // ownerId,
-    (feedType = 'public'),
-    (selectedTypes = { pack: true, trip: true }),
-  );
+  const { data: feedData, error, isLoading } = useFeed();
 
   return (
     <Carousel itemWidth={250}>
