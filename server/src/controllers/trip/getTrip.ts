@@ -32,7 +32,6 @@ export function getTripsRoute() {
     const jsonTrips = await Promise.all(
       trips.map((trip) => Trip(trip as any).toJSON(prisma)),
     );
-    console.log(jsonTrips);
     return jsonTrips;
   });
 }

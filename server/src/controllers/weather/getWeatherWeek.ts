@@ -26,6 +26,11 @@ export function getWeatherWeekRoute() {
     .query(async (opts) => {
       const { lat, lon } = opts.input;
       const { env }: any = opts.ctx;
-      return getWeatherWeekService(env.WEATHER_URL, env.OPENWEATHER_KEY, lat, lon);
+      return await getWeatherWeekService(
+        env.WEATHER_URL,
+        env.OPENWEATHER_KEY,
+        lat,
+        lon,
+      );
     });
 }

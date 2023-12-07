@@ -38,10 +38,9 @@ export function getUserFavoritesRoute() {
         },
       });
 
-      const jsonFavorites = user.favoriteDocuments.map((favorite) => {
-        Pack(favorite).toJSON();
-      });
-
+      const jsonFavorites = user.favoriteDocuments.map(
+        (favorite) => Pack(favorite)?.toJSON(),
+      );
       return jsonFavorites;
     });
 }

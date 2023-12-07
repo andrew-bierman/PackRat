@@ -1,4 +1,9 @@
 import type { Pack as TPack } from '@prisma/client/edge';
+import {
+  computeFavouritesCount,
+  computeTotalScores,
+  computeTotalWeight,
+} from '../virtuals';
 
 type ExtendedItem = {
   toJSON: () => Partial<TPack>;
@@ -14,17 +19,24 @@ const Pack = <T extends TPack>(prismaPack: T): T & ExtendedItem => {
         ...packObject
       } = this;
 
-      const documentKeys = Object.keys(packObject).filter((key) =>
+      const packWithTotalWeight = computeTotalWeight(packObject);
+      const packWithTotalWeightAndFavouritesCount =
+        computeFavouritesCount(packWithTotalWeight);
+      const packWithComputedFields = computeTotalScores(
+        packWithTotalWeightAndFavouritesCount,
+      );
+
+      const documentKeys = Object.keys(packWithComputedFields).filter((key) =>
         key.includes('Document'),
       );
 
       for (const key of documentKeys) {
         const newKey = key.replace('Document', '');
-        packObject[newKey] = packObject[key];
-        delete packObject[key];
+        packWithComputedFields[newKey] = packWithComputedFields[key];
+        delete packWithComputedFields[key];
       }
 
-      return packObject;
+      return packWithComputedFields;
     },
   });
 };

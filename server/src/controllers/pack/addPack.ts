@@ -18,7 +18,6 @@ export function addPackRoute() {
   return publicProcedure.input(validator.addPack).mutation(async (opts) => {
     const { name, owner_id } = opts.input;
     const { prisma }: any = opts.ctx;
-    const pack = await addPackService(prisma, name, owner_id);
-    return Pack(pack)?.toJSON();
+    return await addPackService(prisma, name, owner_id);
   });
 }

@@ -27,6 +27,11 @@ export function getWeatherRoute() {
     .query(async (opts) => {
       const { lat, lon } = opts.input;
       const { env }: any = opts.ctx;
-      return getWeatherService(env.WEATHER_URL, env.OPENWEATHER_KEY, lat, lon);
+      return await getWeatherService(
+        env.WEATHER_URL,
+        env.OPENWEATHER_KEY,
+        lat,
+        lon,
+      );
     });
 }

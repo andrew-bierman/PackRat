@@ -48,6 +48,7 @@ model Item {
   category         String?       @db.ObjectId
   createdAt        DateTime?     @default(now())
   updatedAt        DateTime?     @updatedAt
+  type             String?
   categoryDocument ItemCategory? @relation(fields: [category], references: [id])
   packDocuments    Pack[]        @relation(fields: [packs], references: [id])
   ownerDocuments   User[]        @ignore
@@ -220,9 +221,9 @@ type PacksGrades {
 }
 
 type PacksScores {
-  essentialItemsScore           Int? @default(0)
-  redundancyAndVersatilityScore Int? @default(0)
-  weightScore                   Int? @default(0)
+  essentialItemsScore           Int @default(0)
+  redundancyAndVersatilityScore Int @default(0)
+  weightScore                   Int @default(0)
 }
 
 //  ███████ ███    ██ ██    ██ ███    ███ ███████

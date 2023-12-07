@@ -24,8 +24,8 @@ export const addItem = z.object({
 export const editItem = z.object({
   id: JoiObjectId(),
   name: z.string().nonempty(),
-  weight: z.number(),
-  quantity: z.number(),
+  weight: z.string(),
+  quantity: z.string(),
   unit: z.string().nonempty(),
   type: z.string(),
 });

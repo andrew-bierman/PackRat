@@ -115,6 +115,7 @@ export const addItemService = async (
           categoryDocument: {
             connect: { id: category.id },
           },
+          type,
         },
       });
 

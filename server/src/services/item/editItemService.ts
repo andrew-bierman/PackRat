@@ -34,12 +34,13 @@ export const editItemService = async (
     },
     data: {
       name,
-      weight,
+      weight: Number(weight),
       unit,
-      quantity,
+      quantity: Number(quantity),
       categoryDocument: {
         connect: { id: category.id },
       },
+      type,
     },
     include: {
       categoryDocument: true,

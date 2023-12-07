@@ -200,14 +200,12 @@ export const CustomCard = ({
             <Box>{title}</Box>
             <Box flexDirection="row" alignItems="center">
               <Box mx="5">
-                <Link href={`/profile/${data.owner_id && data.owner_id.id}`}>
+                <Link href={`/profile/${data.owner_id && data.owner.id}`}>
                   <Text>
                     {user.id === data.owner_id
                       ? 'Your Profile'
                       : `View ${
-                          data.owner_id
-                            ? '@' + data.owner_id.username
-                            : 'Profile'
+                          data.owner_id ? '@' + data.owner.username : 'Profile'
                         }`}
                   </Text>
                 </Link>
