@@ -12,9 +12,9 @@ import { publicProcedure } from '../../trpc';
 // sgMail.setApiKey(SEND_GRID_API_KEY);
 
 // Verify a password reset token and return the user's email address
-const verifyPasswordResetToken = (token, secret) => {
+const verifyPasswordResetToken = async (token, secret) => {
   try {
-    const decoded: any = jwt.verify(token, secret);
+    const decoded: any = await jwt.verify(token, secret);
     return decoded.email;
   } catch (error) {
     console.error('Error verifying password reset token:', error);
@@ -70,7 +70,7 @@ export function handlePasswordResetRoute() {
     .mutation(async (opts) => {
       const { token } = opts.input;
       const { prisma, env }: any = opts.ctx;
-      const email = verifyPasswordResetToken(token, env.JWT_SECRET);
+      const email = await verifyPasswordResetToken(token, env.JWT_SECRET);
       const user = await prisma.user.findFirst({
         where: {
           email: email,

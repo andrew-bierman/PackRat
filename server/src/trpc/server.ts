@@ -2,8 +2,7 @@ import type { AnyRouter } from '@trpc/server';
 import type { FetchHandlerRequestOptions } from '@trpc/server/adapters/fetch';
 import { fetchRequestHandler } from '@trpc/server/adapters/fetch';
 import type { MiddlewareHandler } from 'hono';
-// import { devtoolsLink } from "trpc-client-devtools-link"
-import { getPrismaClient } from '../prisma';
+import { createContext } from './context';
 
 type tRPCOptions = Omit<
   FetchHandlerRequestOptions<AnyRouter>,
@@ -15,26 +14,13 @@ const honoTRPCServer = ({
   endpoint = '/api/trpc',
   ...rest
 }: tRPCOptions): MiddlewareHandler => {
-  return async (honoCTX, next) => {
-    const env = honoCTX.env;
-    const prisma = getPrismaClient(env.PRISMA_DATA_PROXY_URI as string);
-    const user = (honoCTX.req.raw as any).user;
-    
-    const trpcContext = {
-      prisma,
-      env,
-      user
-    };
-    
-    const res = fetchRequestHandler({
+  return async (honoCTX, next) =>
+    fetchRequestHandler({
       ...rest,
       endpoint,
       req: honoCTX.req.raw,
-      createContext: () => trpcContext,
+      createContext: createContext(honoCTX),
     });
-
-    return res;
-  };
 };
 
 export { honoTRPCServer };

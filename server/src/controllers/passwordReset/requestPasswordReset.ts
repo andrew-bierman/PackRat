@@ -82,7 +82,10 @@ export function requestPasswordResetEmailAndTokenRoute() {
       if (!user) {
         return { error: 'No user found with this email address' };
       }
-      const resetToken = generatePasswordResetToken(email, env.JWT_SECRET);
+      const resetToken = await generatePasswordResetToken(
+        email,
+        env.JWT_SECRET,
+      );
       const resetTokenExpiration = new Date(Date.now() + 24 * 60 * 60 * 1000);
 
       await prisma.user.update({
