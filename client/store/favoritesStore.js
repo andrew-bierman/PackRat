@@ -46,8 +46,12 @@ export const fetchFavoritePacks = createAsyncThunk(
   },
 );
 
-const favoritesAdapter = createEntityAdapter();
-const favoritePacksAdapter = createEntityAdapter();
+const favoritesAdapter = createEntityAdapter({
+  selectId: (favorite) => favorite?.id,
+});
+const favoritePacksAdapter = createEntityAdapter({
+  selectId: (favoritePack) => favoritePack?.id,
+});
 
 const initialState = favoritesAdapter.getInitialState({
   isLoading: false,

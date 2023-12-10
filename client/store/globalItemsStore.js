@@ -65,7 +65,7 @@ export const editGlobalItem = createAsyncThunk(
 );
 
 const itemsAdapter = createEntityAdapter({
-  selectId: (item) => item.id, // Assuming the unique identifier field is 'id'
+  selectId: (item) => item?.id,
 });
 
 const itemsSlice = createSlice({

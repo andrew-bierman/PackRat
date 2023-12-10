@@ -9,7 +9,7 @@ import { trpc } from '../trpc';
 
 // Define the adapter for packs and trips
 const feedAdapter = createEntityAdapter({
-  selectId: (entity) => entity.id,
+  selectId: (entity) => entity?.id,
 });
 
 // Define initial entity state
