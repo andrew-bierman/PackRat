@@ -35,7 +35,7 @@ async function validateResetToken(
 ): Promise<User> {
   if (!jwtSecret) throw new Error('jwtSecret is not defined');
 
-  const decoded: any = jwt.verify(token, jwtSecret);
+  const decoded: any = await jwt.verify(token, jwtSecret);
   const user = await this.findFirst({
     where: { id: decoded.id, passwordResetToken: token },
   });

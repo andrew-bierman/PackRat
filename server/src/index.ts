@@ -1,32 +1,49 @@
 import { Hono } from 'hono';
 import { fetchHandler } from 'trpc-playground/handlers/fetch';
-// import { renderTrpcPanel } from 'trpc-panel';
 import { appRouter } from './routes/trpcRouter';
 import { honoTRPCServer } from './trpc/server';
 import { cors } from 'hono/cors';
+import { logger } from 'hono/logger';
+import { compress } from 'hono/compress';
+
+const TRPC_API_ENDPOINT = '/api/trpc';
+const TRPC_PLAYGROUND_ENDPOINT = '/trpc-playground';
 
 const app = new Hono();
 
+//  Setup compression
 app.use(
   '*',
-  cors({
-    origin: 'http://localhost:8081',
-    credentials: true,
-    allowHeaders: ['Content-Type', 'Authorization'],
-    allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  compress({
+    encoding: 'deflate',
   }),
 );
 
-app.use(
-  'api/trpc/*',
-  honoTRPCServer({ router: appRouter, endpoint: '/api/trpc' }),
-);
+//  Setup CORS
+app.use('*', (c, next) => {
+  const CORS_ORIGIN = String(c.env.CORS_ORIGIN);
+  const corsMiddleware = cors({
+    origin: CORS_ORIGIN,
+    credentials: true,
+    allowHeaders: ['Content-Type', 'Authorization'],
+    allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  });
+  return corsMiddleware(c, next);
+});
 
-app.use('/trpc-playground', async (c, next) => {
+// Setup logging
+// tRPC is already logging requests, but you can add your own middleware
+// app.use('*', logger());
+
+//  Setup tRPC server
+app.use(`${TRPC_API_ENDPOINT}/*`, honoTRPCServer({ router: appRouter }));
+
+//  Setup tRPC Playground
+app.use(TRPC_PLAYGROUND_ENDPOINT, async (c, next) => {
   const handler = await fetchHandler({
     router: appRouter,
-    trpcApiEndpoint: '/api/trpc',
-    playgroundEndpoint: '/trpc-playground',
+    trpcApiEndpoint: TRPC_API_ENDPOINT,
+    playgroundEndpoint: TRPC_PLAYGROUND_ENDPOINT,
   });
   return handler(c.req.raw);
 });

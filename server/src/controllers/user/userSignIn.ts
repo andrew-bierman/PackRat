@@ -25,7 +25,6 @@ export function userSignInRoute() {
     // console.log('user', user);
     await User(user)?.generateAuthToken(prisma, env.JWT_SECRET);
     const jsonUser = User(user)?.toJSON();
-    console.log('jsonUser', jsonUser);
     return jsonUser;
   });
 }

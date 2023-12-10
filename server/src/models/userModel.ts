@@ -124,7 +124,7 @@ UserSchema.statics.validateResetToken = async function (
   token: string,
 ): Promise<IUser> {
   if (!JWT_SECRET) throw new Error('JWT_SECRET is not defined');
-  const decoded: any = jwt.verify(token, JWT_SECRET);
+  const decoded: any = await jwt.verify(token, JWT_SECRET);
   const user = await User.findOne({
     id: decoded.id,
     passwordResetToken: token,
@@ -170,7 +170,7 @@ UserSchema.methods.generateResetToken = async function (): Promise<string> {
   const user = this;
   if (user.passwordResetToken) {
     if (!JWT_SECRET) throw new Error('JWT_SECRET is not defined');
-    const decoded: any = jwt.verify(user.passwordResetToken, JWT_SECRET);
+    const decoded: any = await jwt.verify(user.passwordResetToken, JWT_SECRET);
     if (decoded.id) return user.passwordResetToken;
   }
   if (!JWT_SECRET) throw new Error('JWT_SECRET is not defined');

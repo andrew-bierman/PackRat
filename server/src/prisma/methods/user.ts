@@ -97,7 +97,10 @@ const User = <T>(prismaUser: T): T & ExtendedUser => {
     ): Promise<string> {
       if (this.passwordResetToken) {
         if (!jwtSecret) throw new Error('jwtSecret is not defined');
-        const decoded: any = jwt.verify(this.passwordResetToken, jwtSecret);
+        const decoded: any = await jwt.verify(
+          this.passwordResetToken,
+          jwtSecret,
+        );
         if (decoded.id) return this.passwordResetToken;
       }
 
