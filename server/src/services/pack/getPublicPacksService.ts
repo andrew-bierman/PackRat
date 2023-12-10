@@ -79,14 +79,36 @@ export async function getPublicPacksService(
         is_public: true,
       },
       include: {
-        favoritedByDocuments: true,
-        itemDocuments: true,
-        ownerDocument: true,
-        ownerDocuments: true,
+        // favoritedByDocuments: true,
+        // itemDocuments: true,
+        // ownerDocument: true,
+        // ownerDocuments: true,
+        favoritedByDocuments: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        itemDocuments: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        ownerDocument: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        ownerDocuments: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
       },
     });
-
-    // console.log('publicPacks', publicPacks[0]);
 
     return publicPacks
       .map(computeVirtualFields)
