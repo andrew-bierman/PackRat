@@ -152,7 +152,7 @@ export const deletePack = createAsyncThunk('packs/deletePack', async (pack) => {
 });
 
 const packsAdapter = createEntityAdapter({
-  selectId: (pack) => pack.id,
+  selectId: (pack) => pack?.id,
 });
 // console.log("🚀 ~ file: packsStore.js:143 ~ packsAdapter:", packsAdapter)
 

@@ -13,7 +13,7 @@ import { trpc } from '../trpc';
 
 // Create entity adapter for chats
 const chatAdapter = createEntityAdapter({
-  selectId: (chat) => chat.id,
+  selectId: (chat) => chat?.id,
 });
 
 // Async thunk for getting user chats

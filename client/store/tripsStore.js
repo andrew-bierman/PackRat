@@ -46,7 +46,7 @@ export const editTrip = createAsyncThunk(
 );
 
 const tripsAdapter = createEntityAdapter({
-  selectId: (trip) => trip.id,
+  selectId: (trip) => trip?.id,
 });
 
 const initialState = tripsAdapter.getInitialState({
