@@ -21,7 +21,8 @@
     "prisma:generate": "npx prisma generate --schema=src/prisma/schema.prisma --data-proxy",
     "prisma:validate": "npx prisma validate --schema=src/prisma/schema.prisma",
     "prisma:pull": "npx prisma db pull --schema=src/prisma/schema.prisma",
-    "wrangler:dev": "yarn prisma:generate && wrangler dev -e dev"
+    "wrangler:dev": "yarn prisma:generate && wrangler dev -e dev",
+    "preinstall": "yarn run prisma:generate"
   },
   "author": "Andrew Bierman",
   "license": "ISC",
@@ -30,7 +31,8 @@
     "@hono/node-server": "^1.2.0",
     "@hono/trpc-server": "^0.1.0",
     "@packrat/validations": "*",
-    "@prisma/client": "^5.5.2",
+    "@prisma/client": "^5.7.0",
+    "@prisma/extension-accelerate": "^0.6.2",
     "@sendgrid/mail": "^7.7.0",
     "@trpc/client": "^10.38.5",
     "@trpc/server": "^10.38.5",
@@ -79,7 +81,7 @@
     "passport-google-oauth20": "^2.0.0",
     "passport-local": "^1.0.0",
     "piscina": "^4.0.0",
-    "prisma": "^5.5.2",
+    "prisma": "^5.7.0",
     "superjson": "^2.0.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^4.6.3",
@@ -109,7 +111,7 @@
     "mocha": "^10.2.0",
     "openapi-generator": "^0.1.39",
     "prettier": "^3.0.2",
-    "prisma": "^5.5.2",
+    "prisma": "^5.7.0",
     "ts-node": "^10.9.1"
   },
   "engines": {
