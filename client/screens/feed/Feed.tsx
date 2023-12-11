@@ -1,13 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { 
-  RIconButton, 
-  RSwitch, 
-  RText, 
-  RStack, 
-  RInput, 
+import {
+  RIconButton,
+  RSwitch,
+  RText,
+  RStack,
+  RInput,
   RSeparator,
-  RButton, 
+  RButton,
 } from '@packrat/ui';
 import { AntDesign } from '@expo/vector-icons';
 import { StyleSheet, FlatList, View, ScrollView } from 'react-native';
@@ -30,6 +36,7 @@ import { useRouter } from 'expo-router';
 import { fuseSearch } from '../../utils/fuseSearch';
 import { fetchUserFavorites } from '../../store/favoritesStore';
 import useCustomStyles from '~/hooks/useCustomStyles';
+import debounce from 'lodash/debounce';
 
 const URL_PATHS = {
   userPacks: '/pack/',
@@ -64,17 +71,41 @@ const FeedSearchFilter = ({
   setSearchQuery,
   handleCreateClick,
 }) => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    useTheme();
+  const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
+  const inputRef = useRef(null);
+  const onHandleChange = useCallback(
+    (e) => {
+      const value = e.target.value;
+      if (setSearchQuery) setSearchQuery(value);
+    },
+    [setSearchQuery],
+  );
+
+  const debouncedChangeHandler = useMemo(
+    () => debounce(onHandleChange, 250),
+    [onHandleChange],
+  );
+
+  // Stop the invocation of the debounced function after unmounting
+  useEffect(() => {
+    return () => {
+      debouncedChangeHandler.cancel();
+    };
+  }, [debouncedChangeHandler]);
+
   return (
     <View style={styles.filterContainer}>
       <View style={styles.searchContainer}>
-        <RStack space={3} style={{flexDirection: 'row', justifyContent: 'center'}}>
+        <RStack
+          space={3}
+          style={{ flexDirection: 'row', justifyContent: 'center' }}
+        >
           <RInput
             size="$30"
             placeholder={`Search ${feedType || 'Feed'}`}
-            onChangeText={setSearchQuery}
+            onChange={debouncedChangeHandler}
+            ref={inputRef}
           />
           <RIconButton
             backgroundColor="transparent"
@@ -99,7 +130,9 @@ const FeedSearchFilter = ({
         margin={2}
       >
         {feedType === 'public' && (
-          <RStack style={{flexDirection: 'row', gap: '10px', alignItems: 'center'}}>
+          <RStack
+            style={{ flexDirection: 'row', gap: '10px', alignItems: 'center' }}
+          >
             <RText
               fontSize={18}
               fontWeight="bold"
@@ -126,7 +159,9 @@ const FeedSearchFilter = ({
             />
           </RStack>
         )}
-        <RStack style={{flexDirection: 'row', gap: '10px', alignItems: 'center'}}>
+        <RStack
+          style={{ flexDirection: 'row', gap: '10px', alignItems: 'center' }}
+        >
           <RText
             fontSize={17}
             fontWeight="bold"
@@ -147,7 +182,7 @@ const FeedSearchFilter = ({
           <RButton onPress={handleCreateClick}>Create</RButton>
         )}
       </RStack>
-      <RSeparator style={{margin: '10px 0'}}/>
+      <RSeparator style={{ margin: '10px 0' }} />
     </View>
   );
 };
@@ -191,22 +226,24 @@ const Feed = ({ feedType = 'public' }) => {
    * @return {ReactNode} The rendered feed data.
    */
   const renderData = () => {
-    let data = [];
+    const [data, setData] = useState([]);
 
-    if (feedType === 'public') {
-      if (selectedTypes?.pack) {
-        data = [...data, ...publicPacksData];
+    useEffect(() => {
+      if (feedType === 'public') {
+        if (selectedTypes?.pack) {
+          setData([...data, ...publicPacksData]);
+        }
+        if (selectedTypes?.trip) {
+          setData([...data, ...publicTripsData]);
+        }
+      } else if (feedType === 'userPacks') {
+        setData(userPacksData);
+      } else if (feedType === 'userTrips') {
+        setData(userTripsData);
+      } else if (feedType === 'favoritePacks') {
+        setData(userPacksData.filter((pack) => pack.isFavorite));
       }
-      if (selectedTypes?.trip) {
-        data = [...data, ...publicTripsData];
-      }
-    } else if (feedType === 'userPacks') {
-      data = userPacksData;
-    } else if (feedType === 'userTrips') {
-      data = userTripsData;
-    } else if (feedType === 'favoritePacks') {
-      data = userPacksData.filter((pack) => pack.isFavorite);
-    }
+    }, [feedType, userPacksData, selectedTypes, publicTripsData]);
 
     // Fuse search
     const keys = ['name', 'items.name', 'items.category'];
@@ -219,14 +256,16 @@ const Feed = ({ feedType = 'public' }) => {
       minMatchCharLength: 1,
     };
 
-    const results =
-      feedType !== 'userTrips'
-        ? fuseSearch(data, searchQuery, keys, options)
-        : data;
-
     // Convert fuse results back into the format we want
     // if searchQuery is empty, use the original data
-    data = searchQuery ? results.map((result) => result.item) : data;
+
+    const latestData = useMemo(() => {
+      if (!searchQuery || feedType === 'userTrips') {
+        return data;
+      }
+      const results = fuseSearch(data, searchQuery, keys, options);
+      return results.map((result) => result.item);
+    }, [data, searchQuery]);
 
     const feedSearchFilterComponent = (
       <FeedSearchFilter
@@ -246,9 +285,8 @@ const Feed = ({ feedType = 'public' }) => {
         contentContainerStyle={{ flex: 1, paddingBottom: 10 }}
       >
         <View style={styles.cardContainer}>
-          {console.log({ data })}
           {feedSearchFilterComponent}
-          {data?.map((item) => (
+          {latestData?.map((item) => (
             <Card key={item._id} type={item.type} {...item} />
           ))}
         </View>
@@ -256,7 +294,7 @@ const Feed = ({ feedType = 'public' }) => {
     ) : (
       <View style={{ flex: 1, paddingBottom: 10 }}>
         <FlatList
-          data={data}
+          data={latestData}
           numColumns={1}
           keyExtractor={(item) => item._id}
           renderItem={({ item }) => (
