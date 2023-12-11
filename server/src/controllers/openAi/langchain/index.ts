@@ -1,9 +1,10 @@
-import { OpenAI } from "langchain/llms/openai";
 import { ChatOpenAI } from "langchain/chat_models/openai";
 import { AIMessage, HumanMessage, SystemMessage } from "langchain/schema";
-import mongoose from 'mongoose';
-import User from "../../../models/userModel";
 import Conversation from "../../../models/openai/conversationModel";
+import { getPackByIdService } from "../../../services/pack/pack.service";
+import { getTripByIdService } from "../../../services/trip/getTripByIdService";
+import mongoose from "mongoose";
+import User from "src/models/userModel";
 
 const chatModel = new ChatOpenAI({
     openAIApiKey: process.env.OPENAI_API_KEY, // Replace with your OpenAI API key
@@ -11,36 +12,79 @@ const chatModel = new ChatOpenAI({
     maxTokens: 100, // Maximum number of tokens to generate (text output limit)
 });
 
+const prompt = 'You are a helpful Outdoor Adventure Planning assistant for PackRat. Please assist the user with planning their trip using the following information:'
+
 export const getAIResponseService = async (
     userId: string,
     conversationId: string,
     userInput: string,
+    packId?: string,
+    tripId?: string
 ) => {
-    if (!process.env.OPENAI_API_KEY) {
-        throw new Error(
-            'Failed to get response from AI. OPENAI_API_KEY is not set.',
-        );
-    }
+    // validate
+    await Promise.all([checkAPIKey(), validateUser(userId)]);
+    
+    // get additional data if present 
+    const packInfo = await getPackInformation(packId);
+    const tripInfo = await getTripInformation(tripId);
 
-    if (!mongoose.Types.ObjectId.isValid(userId)) {
-        console.log('Invalid userId');
-        throw new Error('Invalid userId');
-    }
-
-    const user = await User.findById(userId).exec();
-    if (!user) {
-        console.log('User not found');
-        throw new Error('User not found');
-    }
-
-    let conversation = await Conversation.findOne({
-        userId,
-        _id: conversationId,
-    });
-    console.log('conversation after find ---->', conversation);
+    // find last conversation if present
+    let conversation = await Conversation.findOne({ userId, _id: conversationId });
     let conversationHistory = conversation ? conversation.history : '';
 
-    const messages = conversationHistory
+    // format the last conversation history 
+    const messages = getConversationHistory(conversationHistory, prompt);
+
+    // build the context aware prompt
+    const contextAwarePrompt = `${tripInfo}\n${packInfo}\nUser Inquiry: ${userInput}`;
+    messages.push(new HumanMessage({ content: contextAwarePrompt }));
+
+    // get response
+    const chatModelResult = await chatModel.predictMessages(messages);
+    const aiResponse = chatModelResult.content.toString().trim();
+    conversationHistory = processConversationHistory(conversationHistory, userInput, aiResponse);
+
+    // save and return the conversation
+    await saveConversationHistory(conversation, conversationHistory, userId);
+    return { aiResponse, conversation: conversation.toJSON() };
+}
+
+function checkAPIKey() {
+    if (!process.env.OPENAI_API_KEY) {
+        throw new Error('OPENAI_API_KEY is not set.');
+    }
+}
+
+async function getPackInformation(packId) {
+    if (!packId) return "";
+    const packData: any = await getPackByIdService(packId);
+    return `Analyze the pack titled '${packData.name}', owned by ${packData.owners.map((owner: any) => owner.name).join(", ")}. 
+    This pack contains items like ${packData.items.map((item: any) => `${item.name} (${item.weight}, ${item.quantity} pcs, category: ${item.category.name})`).join(", ")}. 
+    The pack is ${packData.is_public ? 'public' : 'private'}, favorited by ${packData.favorited_by.length} users, created on ${new Date(packData.createdAt).toLocaleDateString()}. 
+    It is graded as ${packData.grades.weight}, ${packData.grades.essentialItems}, and ${packData.grades.redundancyAndVersatility} in weight, essential items, and redundancy/versatility respectively. 
+    The scores are: weight ${packData.scores.weightScore}, essential items ${packData.scores.essentialItemsScore}, and redundancy/versatility ${packData.scores.redundancyAndVersatilityScore}, 
+    totaling ${packData.totalScore} with a total weight of ${packData.total_weight}g. 
+    Provide feedback for optimization considering safety, comfort, and efficiency.`;
+}
+
+async function getTripInformation(tripId) {
+    if (!tripId) return "";
+
+    const tripData: any = await getTripByIdService(tripId);
+    return `Analyze the trip titled '${tripData.name}', described as '${tripData.description}'. 
+    Duration: ${tripData.duration}, Weather: ${tripData.weather}, from ${new Date(tripData.start_date).toLocaleDateString()} to ${new Date(tripData.end_date).toLocaleDateString()}, 
+    heading to ${tripData.destination}. Destination GeoJSON Details: ${JSON.stringify(tripData.geojson, null, 2)}. 
+    Owned by ${tripData.owner_id.name}, and it's ${tripData.is_public ? 'public' : 'private'}. 
+    Created on ${new Date(tripData.createdAt).toLocaleDateString()}, last updated on ${new Date(tripData.updatedAt).toLocaleDateString()}. 
+    Please provide insights and recommendations for preparation and things to consider for a safe and enjoyable trip.`;
+}
+
+function processConversationHistory(conversationHistory, userInput, aiResponse) {
+    return `${conversationHistory}\n${userInput}\nAI: ${aiResponse}`;
+}
+
+function getConversationHistory(conversationHistory: string, prompt: string) {
+    return conversationHistory
         ? conversationHistory.split('\n').map((message, i) =>
             i % 2 === 0
                 ? new HumanMessage({ content: message })
@@ -48,34 +92,29 @@ export const getAIResponseService = async (
         )
         : [
             new SystemMessage({
-                content:
-                    'You are a helpful Outdoor Adventure Planning assistant for PackRat. Please assist the user with planning their trip using the following information:',
+                content: prompt,
             }),
         ];
+}
 
-    messages.push(new HumanMessage({ content: userInput }));
-
-    const chatModelResult = await chatModel.predictMessages(messages);
-
-    const aiResponse = chatModelResult.content.toString().trim();
-
-    conversationHistory += `\n${userInput}\nAI: ${aiResponse}`;
-
+async function saveConversationHistory(conversation, conversationHistory, userId) {
     if (conversation) {
-        // Update existing conversation
         conversation.history = conversationHistory;
     } else {
-        // Create new conversation
-        conversation = new Conversation({
-            userId,
-            history: conversationHistory,
-        });
+        conversation = new Conversation({ userId, history: conversationHistory });
+    }
+    await conversation.save();
+}
+
+async function validateUser(userId) {
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+        throw new Error('Invalid userId');
     }
 
-    await conversation.save();
+    const user = await User.findById(userId).exec();
+    if (!user) {
+        throw new Error('User not found');
+    }
 
-    return {
-        aiResponse,
-        conversation: conversation.toJSON(),
-    };
+    return user;
 }
