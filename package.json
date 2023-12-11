@@ -60,6 +60,7 @@
   "packageManager": "yarn@4.0.1",
   "dependencies": {
     "@manypkg/cli": "^0.21.0",
+    "@prisma/extension-accelerate": "^0.6.2",
     "check-dependency-version-consistency": "^4.1.0",
     "cross-env": "^7.0.3",
     "dotenv-cli": "^7.3.0",

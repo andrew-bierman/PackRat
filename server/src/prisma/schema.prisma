@@ -3,9 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider  = "mongodb"
-  url       = env("PRISMA_DATA_PROXY_URI")
-  directUrl = env("MONDODB_URI")
+  provider = "mongodb"
+  url      = env("MONDODB_URI")
 }
 
 //  ███    ███  ██████  ██████  ███████ ██      ███████

@@ -3,7 +3,7 @@ import { fetchHandler } from 'trpc-playground/handlers/fetch';
 import { appRouter } from './routes/trpcRouter';
 import { honoTRPCServer } from './trpc/server';
 import { cors } from 'hono/cors';
-import { logger } from 'hono/logger';
+// import { logger } from 'hono/logger';
 import { compress } from 'hono/compress';
 
 const TRPC_API_ENDPOINT = '/api/trpc';

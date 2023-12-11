@@ -4709,6 +4709,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@prisma/extension-accelerate@npm:^0.6.2":
+  version: 0.6.2
+  resolution: "@prisma/extension-accelerate@npm:0.6.2"
+  peerDependencies:
+    "@prisma/client": ">=4.16.1"
+  checksum: 31cbbd709e02759c15e0efc914bbe2283fc11b875b6ad73d30cf5b615ec5009e981a6b3fbc3a1ee685168be0d86675d88df2bbde6ee5bee05b059ff5e3832921
+  languageName: node
+  linkType: hard
+
 "@protobufjs/aspromise@npm:^1.1.1, @protobufjs/aspromise@npm:^1.1.2":
   version: 1.1.2
   resolution: "@protobufjs/aspromise@npm:1.1.2"
@@ -20849,6 +20858,7 @@ __metadata:
   dependencies:
     "@cloudflare/workers-types": "npm:^4.20231025.0"
     "@manypkg/cli": "npm:^0.21.0"
+    "@prisma/extension-accelerate": "npm:^0.6.2"
     check-dependency-version-consistency: "npm:^4.1.0"
     cross-env: "npm:^7.0.3"
     dotenv-cli: "npm:^7.3.0"
