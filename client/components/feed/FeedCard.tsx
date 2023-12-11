@@ -3,11 +3,7 @@ import { formatDistanceToNow } from 'date-fns';
 import { MaterialIcons, Entypo } from '@expo/vector-icons';
 import useTheme from '../../hooks/useTheme';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  addFavorite,
-  selectFavoriteById,
-  selectAllFavorites,
-} from '../../store/favoritesStore';
+import { addFavorite, selectAllFavorites } from '../../store/favoritesStore';
 import { TouchableOpacity, View } from 'react-native';
 import { Link } from 'expo-router';
 import { DuplicateIcon } from '../DuplicateIcon/index';
@@ -16,21 +12,21 @@ import { RText, RStack, RHeading } from '@packrat/ui';
 import { formatNumber } from '~/utils/formatNumber';
 import { useMemo } from 'react';
 
-export default function Card({
-  type,
-  _id,
-  owner,
-  name,
-  total_weight,
-  is_public,
-  favorited_by,
-  favorites_count,
-  owner_id,
-  destination,
-  createdAt,
-  owners,
-  duration,
-}) {
+export default function Card({ item }) {
+  const {
+    type,
+    _id,
+    owner,
+    name,
+    total_weight,
+    favorited_by,
+    favorites_count,
+    owner_id,
+    destination,
+    createdAt,
+    duration,
+  } = item;
+
   const user = useSelector((state) => state.auth.user);
   const { currentTheme } = useTheme();
   const favorites = useSelector(selectAllFavorites);

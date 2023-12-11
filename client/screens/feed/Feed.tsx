@@ -83,7 +83,7 @@ const FeedSearchFilter = ({
   );
 
   const debouncedChangeHandler = useMemo(
-    () => debounce(onHandleChange, 250),
+    () => debounce(onHandleChange, 200),
     [onHandleChange],
   );
 
@@ -286,9 +286,7 @@ const Feed = ({ feedType = 'public' }) => {
       >
         <View style={styles.cardContainer}>
           {feedSearchFilterComponent}
-          {latestData?.map((item) => (
-            <Card key={item._id} type={item.type} {...item} />
-          ))}
+          {latestData?.map((item) => <Card key={item._id} item={item} />)}
         </View>
       </ScrollView>
     ) : (
