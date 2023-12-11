@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@packrat/ui/*": ["../../packages-ui/*"]
+    }
+  },
+  "include": [
+    "src" // Adjust this according to your source code directory
+  ],
+  // Other settings...
+}

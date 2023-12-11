@@ -10,7 +10,19 @@ import {
 import { Desktop, Mobile, Tablet } from '../../media';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from '~/hooks/useCustomStyles';
-import {HeaderText } from '@packrat/ui';
+import {
+  BodyText,
+  ButtonRow,
+  DemoButton,
+  DemoGroup,
+  DemoGroupItem,
+  HeaderText,
+  RCheckbox,
+  RStack,
+  SizableTextComp,
+  ThemedButton,
+} from '@packrat/ui';
+import { Activity, Airplay } from '@tamagui/lucide-icons';
 
 const SandCastlePackrat = ({ desktopContainer, isMobile }) => {
   const { isDark } = useTheme();
@@ -19,7 +31,7 @@ const SandCastlePackrat = ({ desktopContainer, isMobile }) => {
 
   return (
     <View style={desktopContainer}>
-      <HeaderText 
+      <HeaderText
         text="Header Text"
         color="white"
         size={32}
@@ -29,7 +41,49 @@ const SandCastlePackrat = ({ desktopContainer, isMobile }) => {
         fontFamily="Helvetica"
         fontStyle="italic"
         lineHeight={1.5}
-        letterSpacing={1} />
+        letterSpacing={1}
+      />
+      <RCheckbox id={'hey'} value={'Check me'} />
+      <RStack />
+      <BodyText  style={{ color: 'blue', fontSize: 20 }}>HelloWorld</BodyText>
+      <SizableTextComp />
+      <ThemedButton>
+        <DemoButton>Plain</DemoButton>
+        <DemoButton alignSelf="center" icon={Airplay} size="$6">
+          Large
+        </DemoButton>
+
+        <ButtonRow>
+          <DemoButton size="$3" theme="active">
+            Active
+          </DemoButton>
+          <DemoButton size="$3" variant="outlined">
+            Outlined
+          </DemoButton>
+        </ButtonRow>
+
+        <ButtonRow>
+          <DemoButton themeInverse size="$3">
+            Inverse
+          </DemoButton>
+          <DemoButton iconAfter={Activity} size="$3">
+            iconAfter
+          </DemoButton>
+        </ButtonRow>
+
+        <DemoGroup>
+          <DemoGroupItem>
+            <DemoButton width="50%" size="$2" disabled opacity={0.5}>
+              disabled
+            </DemoButton>
+          </DemoGroupItem>
+          <DemoGroupItem>
+            <DemoButton width="50%" size="$2" chromeless>
+              chromeless
+            </DemoButton>
+          </DemoGroupItem>
+        </DemoGroup>
+      </ThemedButton>
     </View>
   );
 };
@@ -42,9 +96,10 @@ export default function SandCastleScreen() {
       showsHorizontalScrollIndicator={false}
       contentContainerStyle={styles.menuBar}
     >
-        <SandCastlePackrat 
+      <SandCastlePackrat
         desktopContainer={styles.containerDark}
-        isMobile={false} />
+        isMobile={false}
+      />
     </ScrollView>
   ) : (
     <View style={[isDark ? styles.containerDark : styles.container]}>

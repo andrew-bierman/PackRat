@@ -24,8 +24,10 @@ import RH3 from './RH3';
 import RH4 from './RH4';
 import RH5 from './RH5';
 import RH6 from './RH6';
+import BodyText from './BodyText';
+import SizableTextComp from './RSizableText';
 import HeaderText from './HeaderText';
-
+import { ThemedButton } from './ThemedButton';
 
 export {
   RH1,
@@ -54,7 +56,10 @@ export {
   RImage,
   RScrollView,
   TSkeleton,
-  HeaderText
+  HeaderText,
+  BodyText,
+  SizableTextComp,
+  ThemedButton
 };
 
 export { config } from './tamagui.config'
@@ -73,7 +78,9 @@ export * from './RImage';
 export * from './RScrollview';
 export * from './Skeleton';
 export * from './HeaderText';
-
+export * from './BodyText';
+export * from './RSizableText';
+export * from './ThemedButton';
 // Future components
 // export * from './RCheckbox';
 // export * from './RSelect';
