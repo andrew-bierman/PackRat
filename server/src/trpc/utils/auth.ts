@@ -1,4 +1,3 @@
-import { TokenSchema } from '@packrat/validations';
 import { PrismaClient, User } from '@prisma/client/edge';
 import { TRPCError } from '@trpc/server';
 import * as jwt from 'hono/jwt';
@@ -28,8 +27,7 @@ const verifyToken = async (
   jwtSecret: string,
 ): Promise<JwtPayload> => {
   const decoded: JwtPayload = await jwt.verify(token, jwtSecret ?? '');
-  const parsedToken = TokenSchema.parse(decoded); // Will throw if invalid
-  return parsedToken;
+  return decoded;
 };
 
 /**
@@ -67,7 +65,7 @@ const extractTokenAndGetUser = async (
   const token = extractToken(req);
   if (!token) return null;
   const decoded = await verifyToken(token, jwtSecret);
-  const user = findUser(prisma, decoded, token);
+  const user = await findUser(prisma, decoded, token);
   return user;
 };
 

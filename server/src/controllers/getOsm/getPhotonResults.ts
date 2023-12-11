@@ -33,6 +33,6 @@ export function getPhotonResultsRoute() {
     .input(validators.getPhotonResults)
     .query(async (opts) => {
       const response = await getPhotonResultsService(opts.input.searchString);
-      return response.data.features;
+      return response.features;
     });
 }

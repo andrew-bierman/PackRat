@@ -1,5 +1,4 @@
 import { TRPCError, initTRPC } from '@trpc/server';
-import { checkRole } from './middlewares';
 import { auth } from './middlewares';
 const t = initTRPC.create();
 

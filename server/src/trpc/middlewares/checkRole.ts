@@ -2,15 +2,15 @@ import { TRPCError } from '@trpc/server';
 import { ZodError } from 'zod';
 import { RoleSchema } from '@packrat/validations';
 import { User } from '@prisma/client/edge';
-import { middleware } from '..';
 
 /**
  * Middleware to check if the user has a certain role.
  * @param {string[]} roles - The roles to check against.
  * @returns {Function} - tRPC middleware function.
  */
-export const checkRole = (roles: string[]) =>
-  middleware(async ({ ctx, next }) => {
+export const checkRole =
+  (roles: string[]) =>
+  async ({ ctx, next }) => {
     const user: User = ctx.user;
 
     try {
@@ -43,6 +43,6 @@ export const checkRole = (roles: string[]) =>
         });
       }
     }
-  });
+  };
 
 export default checkRole;

@@ -80,7 +80,11 @@ import {
   getUserFavoritesRoute,
 } from '../controllers/favorite';
 
-import { router as trpcRouter, publicProcedure } from '../trpc';
+import {
+  router as trpcRouter,
+  publicProcedure,
+  protectedProcedure,
+} from '../trpc';
 import { z } from 'zod';
 
 export const helloRouter = trpcRouter({
@@ -108,7 +112,7 @@ export const appRouter = trpcRouter({
     return 'Hello World';
   }),
   helloRouter2: helloRouter2(),
-
+  protectedHello: protectedProcedure.query(async (opts) => 'Hello World'),
   // user routes
   getUserById: getUserByIdRoute(),
   signIn: userSignInRoute(),
