@@ -64,11 +64,15 @@ const DestinationHeader = ({ geoJSON, selectedSearchResult }) => {
         {country !== 'N/A' ? country : ''}
       </Text>
       <View style={styles.languageContainer}>
-        {Object.entries(languageNames).map(([key, value]) => (
-          <Text key={key} style={styles.languageText}>
-            {`${key.split(':')[1].toUpperCase()}: ${value}`}
-          </Text>
-        ))}
+        {Object.entries(languageNames).map(([key, value], index) => {
+          if (index < 3 && typeof value === 'string') {
+            return (
+              <Text key={key} style={styles.languageText}>
+                {`${key.split(':')[1].toUpperCase()}: ${value}`}
+              </Text>
+            );
+          }
+        })}
       </View>
     </View>
   );

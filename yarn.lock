@@ -20968,7 +20968,7 @@ __metadata:
     react-native-google-places-autocomplete: "npm:^2.5.1"
     react-native-paper: "npm:^5.9.1"
     react-native-paper-dates: "npm:^0.18.12"
-    react-native-safe-area-context: "npm:4.6.3"
+    react-native-safe-area-context: "npm:^4.7.4"
     react-native-screens: "npm:~3.22.0"
     react-native-select-dropdown: "npm:^3.3.4"
     react-native-svg: "npm:13.9.0"
@@ -22559,13 +22559,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-safe-area-context@npm:4.6.3":
-  version: 4.6.3
-  resolution: "react-native-safe-area-context@npm:4.6.3"
+"react-native-safe-area-context@npm:^4.7.4":
+  version: 4.7.4
+  resolution: "react-native-safe-area-context@npm:4.7.4"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: a37d169e5ebee93c67a42a10580ca1180a6fea6c5705be82bc1d5af22eec086245a19f417e86b46e1daf5950ef5779e7daa8b3ca106d441f11d60cf5142b3ab2
+  checksum: 80f4d7a53a1392017d70642e22037abacdb99b191b83541960f18edc9be7f8fabfa99cfec9efd808ed68295d32262ece9771135f8e2af97edc6b095654986722
   languageName: node
   linkType: hard
 

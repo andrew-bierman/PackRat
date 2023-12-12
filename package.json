@@ -51,7 +51,8 @@
     "copy:env:client": "cp .env client/.env",
     "copy:env:server": "cp .env server/.env",
     "copy:env:packages": "cp .env packages/.env",
-    "copy:env:all": "yarn copy:env:client && yarn copy:env:server && yarn copy:env:packages"
+    "copy:env:all": "yarn copy:env:client && yarn copy:env:server && yarn copy:env:packages",
+    "regen": "yarn install --refresh-lockfile"
   },
   "engines": {
     "node": ">=18.16.1",
