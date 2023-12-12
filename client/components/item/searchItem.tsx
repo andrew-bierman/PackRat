@@ -46,10 +46,10 @@ export const SearchItem: React.FC<Props> = ({ onSelect, placeholder }) => {
    * @return {void} This function does not return a value.
    */
   const handleSearchResultClick = (item, index) => {
-    const ownerId = user._id;
+    const ownerId = user.id;
     // @ts-expect-error
     const packId = window.location.pathname.substring('/path/'.length);
-    const selectedItem = item._id;
+    const selectedItem = item.id;
     const data = {
       ownerId,
       packId,
@@ -68,9 +68,10 @@ export const SearchItem: React.FC<Props> = ({ onSelect, placeholder }) => {
         <Box position="relative" height="auto">
           <Input
             onChangeText={(text) => {
+              const packId = window.location.pathname.split('/').pop();
               setSearchString(text);
               // @ts-expect-error
-              dispatch(fetchItemsSearchResults(text));
+              dispatch(fetchItemsSearchResults(text, packId));
               setShowSearchResults(true);
             }}
             placeholder={placeholder ?? 'Type here to search'}

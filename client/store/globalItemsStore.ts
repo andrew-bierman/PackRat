@@ -65,7 +65,7 @@ export const editGlobalItem = createAsyncThunk(
 );
 
 const itemsAdapter = createEntityAdapter({
-  selectId: (item) => item._id, // Assuming the unique identifier field is '_id'
+  selectId: (item) => item?.id,
 });
 
 const itemsSlice = createSlice({
@@ -82,7 +82,7 @@ const itemsSlice = createSlice({
         globalItems: {
           ...state.globalItems,
           items: state?.globalItems?.items?.filter(
-            (item) => item._id !== action.payload,
+            (item) => item.id !== action.payload,
           ),
         },
       };
@@ -132,7 +132,7 @@ const itemsSlice = createSlice({
         state.error = null;
       })
       .addCase(deleteGlobalItem.fulfilled, (state, action) => {
-        itemsAdapter.removeOne(state, action.payload._id);
+        itemsAdapter.removeOne(state, action.payload.id);
         state.isLoading = false;
         state.error = null;
       })

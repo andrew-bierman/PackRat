@@ -1,12 +1,11 @@
-import User from '../models/userModel';
-
+import { prisma } from '../prisma';
 /**
  * Logs in a user based on the provided email, password, and source.
  *
  * @param {Object} params - The parameters for logging in.
  * @param {string} params.email - The user's email.
  * @param {string} params.password - The user's password.
- * @param {string} params.from - The source of the login.
+ * @param {string} params.from - The source of the login (UserSignIn or GoogleSignIn).
  * @throws {Error} If the email or password is missing.
  * @throws {Error} If the source is invalid.
  * @throws {Error} If the email is incorrect.
@@ -21,32 +20,29 @@ export const loginUser = async ({
   password: string;
   from: string;
 }) => {
-  let user: any = [];
-  if (from === 'UserSignIn') {
-    user = await User.find({
-      $and: [{ email: email.toLowerCase() }, { password }],
-    }).select('-password');
-
-    if (!email || !password) {
-      throw new Error('All fields must be filled');
-    }
+  if (!email || !password) {
+    throw new Error('All fields must be filled');
   }
 
-  if (from === 'GoogleSignIn') {
-    user = await User.findOne({ email: email.toLowerCase() }).select(
-      '-password',
-    );
-    if (!email) {
-      throw new Error('All fields must be filled');
-    }
-  }
-  // Out of two signin methods.
-  if (!(from === 'GoogleSignIn' || from === 'UserSignIn')) {
-    throw new Error('Something went wrong');
+  if (!(from === 'UserSignIn' || from === 'GoogleSignIn')) {
+    throw new Error('Invalid source');
   }
 
-  if (user.length == 0) {
-    throw new Error('Wrong email');
+  const user = await prisma.user.findFirst({
+    where: {
+      email: email.toLowerCase(),
+      password: password, // This assumes you have stored the password securely in the database
+    },
+    select: {
+      // Exclude the 'password' field
+      id: true,
+      email: true,
+      // Add other fields you need
+    },
+  });
+
+  if (!user) {
+    throw new Error('Incorrect email or password');
   }
 
   return user;

@@ -36,11 +36,11 @@ export const ThreeDotsMenu = ({ data, titleRef, setEditTitle }) => {
             if (data.type === 'pack') {
               dispatch(
                 deletePack({
-                  id: data._id,
+                  id: data.id,
                 }),
               );
             } else {
-              dispatch(deleteTrip(data._id));
+              dispatch(deleteTrip(data.id));
             }
             router.replace('/feed');
           }}

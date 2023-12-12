@@ -1,25 +1,47 @@
-import Pack from '../../models/packModel';
-import mongoose from 'mongoose';
+import { PrismaClient } from '@prisma/client/edge';
+import { Trip, User } from '../../prisma/methods';
 
-/**
- * Retrieves a pack by its ID from the database.
- *
- * @param {string} packId - The ID of the pack to retrieve.
- * @return {Promise<Object>} - A promise that resolves to the retrieved pack object.
- */
-export const getPackByIdService = async (packId) => {
-  const objectId = new mongoose.Types.ObjectId(packId);
-  const pack = await Pack.findById(objectId)
-    .populate({
-      path: 'items',
-      populate: {
-        path: 'category',
-        select: 'name',
+export const getPackByIdService = async (prisma: PrismaClient, packId) => {
+  try {
+    const pack = await prisma.pack.findFirst({
+      where: { id: packId },
+      include: {
+        favoritedByDocuments: true,
+        itemDocuments: true,
+        ownerDocument: true,
+        ownerDocuments: true,
       },
-    })
-    .populate({
-      path: 'owners',
     });
 
-  return pack;
+    const trips = await prisma.trip.findMany({
+      where: {
+        id: {
+          in: pack?.trips.map((tripId) => tripId) ?? [],
+        },
+      },
+    });
+
+    // Parse JSON
+    const ownerDocument = User(pack.ownerDocument)?.toJSON();
+    const favoritedByDocuments = pack.favoritedByDocuments.map(
+      (user) => User(user)?.toJSON(),
+    );
+    const ownerDocuments = pack.ownerDocuments.map(
+      (user) => User(user)?.toJSON(),
+    );
+    const tripDocuments = await Promise.all(
+      trips.map((trip) => Trip(trip)?.toJSON(prisma)),
+    );
+    return {
+      ...pack,
+      ownerDocument,
+      ownerDocuments,
+      favoritedByDocuments,
+      tripDocuments,
+    };
+  } catch (error) {
+    // Handle any potential errors here
+    console.error(error);
+    throw error;
+  }
 };

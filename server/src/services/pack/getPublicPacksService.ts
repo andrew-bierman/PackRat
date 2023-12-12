@@ -1,5 +1,10 @@
-import Pack from '../../models/packModel';
-import { computeTotalWeightInGrams } from '../../utils/convertWeight';
+import { PrismaClient } from '@prisma/client/edge';
+import { Pack, User } from '../../prisma/methods';
+import {
+  computeFavouritesCount,
+  computeTotalScores,
+  computeTotalWeight,
+} from '../../prisma/virtuals';
 
 const SORT_OPTIONS = {
   Favorite: { favorites_count: -1 },
@@ -9,11 +14,46 @@ const SORT_OPTIONS = {
   'Fewest Items': { items_count: 1 },
   Oldest: { createdAt: 1 },
   'Most Recent': { updatedAt: -1 },
-  'Highest Score': { 'scores.totalScore': -1 },
-  'Lowest Score': { 'scores.totalScore': 1 },
+  'Highest Score': { total_score: -1 },
+  'Lowest Score': { total_score: 1 },
   'A-Z': { name: 1 },
   'Z-A': { name: -1 },
   'Most Owners': { 'owners.length': -1 },
+};
+
+const sortPacks = (propertyName, sortOrder) => (packA, packB) => {
+  const valueA: number =
+    propertyName !== 'owners.length'
+      ? packA[propertyName]
+      : packA.ownerDocuments.length;
+  const valueB: number =
+    propertyName !== 'owners.length'
+      ? packB[propertyName]
+      : packB.ownerDocuments.length;
+
+  if (valueA < valueB) {
+    return -1 * Number(sortOrder);
+  } else if (valueA > valueB) {
+    return 1 * Number(sortOrder);
+  }
+
+  return 0;
+};
+
+const computeVirtualFields = (pack) => {
+  const packWithTotalWeight = computeTotalWeight(pack);
+  const packWithTotalScore = computeTotalScores(packWithTotalWeight);
+  const packWithFavoritesCount = computeFavouritesCount(packWithTotalScore);
+
+  return {
+    ...packWithFavoritesCount,
+    favoritedByDocuments: pack.favoritedByDocuments.map(
+      (user) => User(user)?.toJSON(),
+    ),
+    ownerDocuments: pack.ownerDocuments.map((owner) => User(owner)?.toJSON()),
+    ownerDocument: User(pack.ownerDocument)?.toJSON(),
+    items_count: pack.items.length,
+  };
 };
 
 // Default sorting in case none of the above keys match
@@ -26,67 +66,53 @@ const DEFAULT_SORT = { createdAt: -1 };
  * @param {string} queryBy - Specifies how the public packs should be sorted.
  * @return {Promise<any[]>} An array of public packs.
  */
-export async function getPublicPacksService(queryBy: string = null) {
+export async function getPublicPacksService(
+  prisma: PrismaClient,
+  queryBy: string = null,
+) {
   try {
-    const publicPacksPipeline: any = [
-      {
-        $match: { is_public: true },
-      },
-      {
-        $lookup: {
-          from: 'items',
-          localField: '_id',
-          foreignField: 'packs',
-          as: 'items',
-        },
-      },
-      {
-        $unwind: {
-          path: '$items',
-          preserveNullAndEmptyArrays: true,
-        },
-      },
-      {
-        $lookup: {
-          from: 'users',
-          localField: 'owner_id',
-          foreignField: '_id',
-          as: 'owner',
-        },
-      },
-      computeTotalWeightInGrams(),
-      {
-        $addFields: {
-          owner: { $arrayElemAt: ['$owner', 0] },
-        },
-      },
-      {
-        $group: {
-          _id: '$_id',
-          name: { $first: '$name' },
-          owner_id: { $first: '$owner_id' },
-          is_public: { $first: '$is_public' },
-          favorited_by: { $first: '$favorited_by' },
-          favorites_count: { $first: '$favorites_count' },
-          createdAt: { $first: '$createdAt' },
-          updatedAt: { $first: '$updatedAt' },
-          owners: { $first: '$owners' },
-          grades: { $first: '$grades' },
-          scores: { $first: '$scores' },
-          type: { $first: '$type' },
-          items: { $push: '$items' },
-          total_weight: { $sum: '$item_weight' },
-          items_count: { $sum: 1 },
-        },
-      },
-    ];
+    const sortOption = SORT_OPTIONS[queryBy] || DEFAULT_SORT;
+    const [[propertyName, sortOrder]] = Object.entries(sortOption);
 
-    const sortCriteria = SORT_OPTIONS[queryBy] || DEFAULT_SORT;
-    publicPacksPipeline.push({ $sort: sortCriteria });
+    const publicPacks = await prisma.pack.findMany({
+      where: {
+        is_public: true,
+      },
+      include: {
+        // favoritedByDocuments: true,
+        // itemDocuments: true,
+        // ownerDocument: true,
+        // ownerDocuments: true,
+        favoritedByDocuments: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        itemDocuments: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        ownerDocument: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        ownerDocuments: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
 
-    const publicPacks = await Pack.aggregate(publicPacksPipeline);
-
-    return publicPacks;
+    return publicPacks
+      .map(computeVirtualFields)
+      .sort(sortPacks(propertyName, sortOrder));
   } catch (error) {
     throw new Error('Packs cannot be found: ' + error.message);
   }

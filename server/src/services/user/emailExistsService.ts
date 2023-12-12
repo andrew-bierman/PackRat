@@ -1,21 +1,30 @@
-import nodemailer from 'nodemailer';
-import smtpTransport from 'nodemailer-smtp-transport';
+import { PrismaClient } from '@prisma/client/edge';
 import {
   findUserAndUpdate,
   findUserByEmail,
 } from '../../services/user/user.service';
 
-export async function emailExistsService({ email }: { email?: string }) {
-  const val = await findUserByEmail(email);
+export async function emailExistsService({
+  prisma,
+  email,
+  sendGridApiKey,
+}: {
+  sendGridApiKey: string;
+  prisma: PrismaClient;
+  email?: string;
+}) {
+  const val = await findUserByEmail(prisma, email);
   if (val) {
-    sendEmailNotice(email).then(async (result1: any) => {
+    sendEmailNotice(sendGridApiKey, email).then(async (result1: any) => {
       if (result1.status) {
         const { newcode } = result1;
-        findUserAndUpdate(email, newcode, 'code').then(async (result2: any) => {
-          if (result2.status) {
-            return result2;
-          }
-        });
+        findUserAndUpdate(prisma, email, newcode, 'code').then(
+          async (result2: any) => {
+            if (result2.status) {
+              return result2;
+            }
+          },
+        );
       }
     });
   } else {
@@ -28,33 +37,35 @@ export async function emailExistsService({ email }: { email?: string }) {
  * @param {string} email - The email address to send the notice to.
  * @return {Promise} - A promise that resolves to an object indicating the status of the email sending process.
  */
-async function sendEmailNotice(email) {
-  return await new Promise((resolve, reject) => {
-    const newcode = Math.floor(Math.random() * 999999 + 111111);
-    const transporter = nodemailer.createTransport(
-      smtpTransport({
-        service: 'gmail',
-        host: 'smtp.gmail.com',
-        auth: {
-          user: process.env.EMAIL,
-          pass: process.env.APPPASSWORD,
+async function sendEmailNotice(sendGridApiKey, email) {
+  const newcode = Math.floor(Math.random() * 999999 + 111111);
+
+  const response = await fetch('https://api.sendgrid.com/v3/mail/send', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${sendGridApiKey}`,
+    },
+    body: JSON.stringify({
+      personalizations: [
+        {
+          to: [{ email: email }],
+          subject: 'PackRat verification code',
         },
-      }),
-    );
-
-    const mailOptions = {
-      from: 'Hailemelekot@gmail.com',
-      to: email,
-      subject: 'PackRat verification code',
-      text: 'Your verification code is ' + newcode,
-    };
-
-    transporter.sendMail(mailOptions, function (error, info) {
-      if (error) {
-        resolve({ status: false });
-      } else {
-        resolve({ status: true, newcode });
-      }
-    });
+      ],
+      from: { email: 'Hailemelekot@gmail.com' },
+      content: [
+        {
+          type: 'text/plain',
+          value: 'Your verification code is ' + newcode,
+        },
+      ],
+    }),
   });
+
+  if (!response.ok) {
+    return { status: false };
+  }
+
+  return { status: true, newcode };
 }

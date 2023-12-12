@@ -169,7 +169,7 @@ const Feed = ({ feedType = 'public' }) => {
   const [searchQuery, setSearchQuery] = useState('');
 
   const dispatch = useDispatch();
-  const ownerId = useSelector((state) => state.auth.user?._id);
+  const ownerId = useSelector((state) => state.auth.user?.id);
   const publicPacksData = useSelector((state) => state.feed.publicPacks);
   const userPacksData = useSelector(selectAllPacks);
   const publicTripsData = useSelector((state) => state.feed.publicTrips);
@@ -255,7 +255,7 @@ const Feed = ({ feedType = 'public' }) => {
           {console.log({ data })}
           {feedSearchFilterComponent}
           {data?.map((item) => (
-            <Card key={item._id} type={item.type} {...item} />
+            <Card key={item.id} type={item.type} {...item} />
           ))}
         </View>
       </ScrollView>
@@ -264,9 +264,9 @@ const Feed = ({ feedType = 'public' }) => {
         <FlatList
           data={data}
           numColumns={1}
-          keyExtractor={(item) => item._id}
+          keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
-            <Card key={item._id} type={item.type} {...item} />
+            <Card key={item.id} type={item.type} {...item} />
           )}
           ListHeaderComponent={() => feedSearchFilterComponent}
           ListEmptyComponent={() => <Text>{ERROR_MESSAGES[feedType]}</Text>}

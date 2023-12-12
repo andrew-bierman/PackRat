@@ -194,18 +194,18 @@ export default function ProfileContainer({ id = null }) {
   const tripsData = useSelector(selectAllTrips);
   const allFavorites = useSelector(selectAllFavorites);
 
-  id = id ?? authUser?._id;
+  id = id ?? authUser?.id;
 
-  const differentUser = id && id !== authUser?._id;
+  const differentUser = id && id !== authUser?.id;
   const isCurrentUser = useMatchesCurrentUser(id); // TODO: Implement this hook in more components
 
   useEffect(() => {
     if (differentUser) {
       dispatch(getUser(id));
     } else {
-      dispatch(fetchUserPacks({ ownerId: authUser?._id }));
-      dispatch(fetchUserFavorites(authUser?._id));
-      dispatch(fetchUserTrips(authUser?._id));
+      dispatch(fetchUserPacks({ ownerId: authUser?.id }));
+      dispatch(fetchUserFavorites(authUser?.id));
+      dispatch(fetchUserTrips(authUser?.id));
     }
   }, [dispatch, id, authUser, differentUser]);
 
@@ -248,7 +248,7 @@ export default function ProfileContainer({ id = null }) {
               <UserDataContainer
                 data={[]}
                 type="packs"
-                userId={user?._id}
+                userId={user?.id}
                 isLoading={isLoading}
                 SkeletonComponent={SkeletonUserDataCard}
               />
@@ -260,7 +260,7 @@ export default function ProfileContainer({ id = null }) {
               <UserDataContainer
                 data={favoritesData}
                 type="favorites"
-                userId={user?._id}
+                userId={user?.id}
                 isLoading={isLoading}
               />
             ) : (
@@ -278,7 +278,7 @@ export default function ProfileContainer({ id = null }) {
               <UserDataContainer
                 data={packsData}
                 type="packs"
-                userId={user?._id}
+                userId={user?.id}
               />
             </Box>
           )}
@@ -287,7 +287,7 @@ export default function ProfileContainer({ id = null }) {
               <UserDataContainer
                 data={tripsData}
                 type="trips"
-                userId={user?._id}
+                userId={user?.id}
               />
             </Box>
           )}

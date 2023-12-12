@@ -1,4 +1,15 @@
+import type { Item } from '@prisma/client/edge';
+import { ItemAlreadyExistsError } from 'src/helpers/errors';
+
 type WeightUnit = 'g' | 'kg' | 'oz' | 'lb' | 'lbs';
+
+const units: Record<WeightUnit, number> = {
+  g: 1,
+  kg: 1000,
+  oz: 28.3495,
+  lb: 453.592,
+  lbs: 453.592,
+};
 
 /**
  * Converts weight from one unit to another.
@@ -17,14 +28,6 @@ export const convertWeight = (
     return 0; // return 0 if weight is not a number or any of the units are missing
   }
 
-  const units: Record<WeightUnit, number> = {
-    g: 1,
-    kg: 1000,
-    oz: 28.3495,
-    lb: 453.592,
-    lbs: 453.592,
-  };
-
   const weightInGrams = weight * units[fromUnit];
   const convertedWeight = weightInGrams / units[toUnit];
 
@@ -36,34 +39,7 @@ export const convertWeight = (
  * @return {object} The total weight of a pack in grams.
  *
  */
-export function computeTotalWeightInGrams() {
-  return {
-    $addFields: {
-      item_weight: {
-        $multiply: [
-          {
-            $cond: [
-              { $eq: ['$items.unit', 'kg'] },
-              { $multiply: ['$items.weight', 1000] },
-              {
-                $cond: [
-                  { $eq: ['$items.unit', 'oz'] },
-                  { $multiply: ['$items.weight', 28.3495] },
-                  {
-                    $cond: [
-                      { $in: ['$items.unit', ['lb', 'lbs']] },
-                      { $multiply: ['$items.weight', 453.592] },
-                      // Default to 'g' if none of the conditions match
-                      '$items.weight',
-                    ],
-                  },
-                ],
-              },
-            ],
-          },
-          '$items.quantity',
-        ],
-      },
-    },
-  };
+export function computeTotalWeightInGrams(item: Item) {
+  const unitMultiplier = units[item.unit] ?? units.g;
+  return (item.quantity ?? 0) * (item.weight ?? 0) * unitMultiplier;
 }

@@ -1,10 +1,8 @@
-import Item from '../../models/itemModel';
-import Pack from '../../models/packModel';
-import { ItemCategoryModel } from '../../models/itemCategory';
-
+import { PrismaClient } from '@prisma/client/edge';
+// import { prisma } from '../../prisma';
 /**
  * Edits a global item by creating a duplicate item in a specific pack.
- *
+ * @param {PrismaClient} prisma - Prisma client.
  * @param {string} itemId - The ID of the item to be edited.
  * @param {string} packId - The ID of the pack where the duplicate item will be created.
  * @param {string} name - The name of the duplicate item.
@@ -15,6 +13,7 @@ import { ItemCategoryModel } from '../../models/itemCategory';
  * @return {Promise<object>} The newly created duplicate item.
  */
 export const editGlobalItemAsDuplicateService = async (
+  prisma: PrismaClient,
   itemId,
   packId,
   name,
@@ -23,36 +22,48 @@ export const editGlobalItemAsDuplicateService = async (
   unit,
   type,
 ) => {
-  const category = await ItemCategoryModel.findOne({
-    name: type,
-  });
-
-  let newItem = await Item.create({
-    name,
-    weight,
-    unit,
-    quantity,
-    category: category._id,
-    global: false,
-    packs: [packId],
-  });
-
-  newItem = await Item.findById(newItem._id).populate('category', 'name');
-
-  await Pack.updateOne({ _id: packId }, { $addToSet: { items: newItem._id } });
-
-  await Pack.updateOne({ _id: packId }, { $pull: { items: itemId } });
-
-  await Item.updateOne(
-    {
-      _id: itemId,
+  const category = await prisma.itemCategory.findFirst({
+    where: {
+      name: type,
     },
-    {
-      $pull: {
-        packs: packId,
+  });
+
+  let newItem = await prisma.item.create({
+    data: {
+      name,
+      weight,
+      unit,
+      quantity,
+      global: false,
+      categoryDocument: {
+        connect: { id: category.id },
+      },
+      packDocuments: {
+        connect: { id: packId },
       },
     },
-  );
+  });
+
+  newItem = await prisma.item.findUnique({
+    where: {
+      id: newItem.id,
+    },
+    include: {
+      categoryDocument: true,
+    },
+  });
+
+  await prisma.pack.update({
+    where: {
+      id: packId,
+    },
+    data: {
+      itemDocuments: {
+        connect: { id: newItem.id },
+        disconnect: [{ id: itemId }, { id: packId }],
+      },
+    },
+  });
 
   return newItem;
 };

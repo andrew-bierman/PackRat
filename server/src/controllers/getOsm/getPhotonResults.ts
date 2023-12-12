@@ -14,25 +14,25 @@ import * as validators from '@packrat/validations';
  * @param {object} res - The response object.
  * @return {undefined} There is no explicit return value.
  */
-export const getPhotonResults = async (req, res, next) => {
-  const { searchString } = req.query;
-  if (!searchString) {
-    next(InvalidRequestParamsError);
-  }
-  try {
-    const resultsArray = await getPhotonResultsService(searchString);
-    res.locals.data = resultsArray.data.features;
-    responseHandler(res);
-  } catch (error) {
-    next(RetrievingPhotonDetailsError);
-  }
-};
+// export const getPhotonResults = async (req, res, next) => {
+//   const { searchString } = req.query;
+//   if (!searchString) {
+//     next(InvalidRequestParamsError);
+//   }
+//   try {
+//     const resultsArray = await getPhotonResultsService(searchString);
+//     res.locals.data = resultsArray.data.features;
+//     responseHandler(res);
+//   } catch (error) {
+//     next(RetrievingPhotonDetailsError);
+//   }
+// };
 
 export function getPhotonResultsRoute() {
   return publicProcedure
     .input(validators.getPhotonResults)
     .query(async (opts) => {
       const response = await getPhotonResultsService(opts.input.searchString);
-      return response.data.features;
+      return response.features;
     });
 }

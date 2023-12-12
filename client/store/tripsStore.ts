@@ -46,7 +46,7 @@ export const editTrip = createAsyncThunk(
 );
 
 const tripsAdapter = createEntityAdapter({
-  selectId: (trip) => trip._id,
+  selectId: (trip) => trip?.id,
 });
 
 const initialState = tripsAdapter.getInitialState({
@@ -104,7 +104,7 @@ const tripsSlice = createSlice({
         state.error = null;
       })
       .addCase(deleteTrip.fulfilled, (state, action) => {
-        tripsAdapter.removeOne(state, action.payload._id);
+        tripsAdapter.removeOne(state, action.payload.id);
         state.isLoading = false;
         state.error = null;
       })

@@ -58,7 +58,7 @@ export const ItemForm = ({
             value={weight}
             variant="outline"
             placeholder="Weight"
-            onChangeText={(text) => setWeight(text)}
+            onChangeText={(text) => setWeight(parseFloat(text))}
             flex={1}
           />
           {data && (
@@ -77,7 +77,7 @@ export const ItemForm = ({
           value={quantity}
           variant="outline"
           placeholder="Quantity"
-          onChangeText={(text) => setQuantity(text)}
+          onChangeText={(text) => setQuantity(parseInt(text))}
           width="100%"
           type="text"
         />

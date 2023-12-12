@@ -34,7 +34,7 @@ export function PackDetails() {
   const updated = useSelector((state) => state.packs.update);
   const [firstLoad, setFirstLoad] = useState(true);
   const user = useSelector((state) => state.auth.user);
-  const userId = user?._id;
+  const userId = user?.id;
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
   const currentPack = useSelector((state) => state.singlePack.singlePack);
   const [refetch, setRefetch] = useState(false);
@@ -45,10 +45,10 @@ export function PackDetails() {
     setFirstLoad(false);
   }, [dispatch, packId, updated]); // TODO updated is a temporary fix to re-render when pack is update, due to bug in store
   const styles = useCustomStyles(loadStyles);
-  const currentPackId = currentPack && currentPack._id;
+  const currentPackId = currentPack && currentPack.id;
 
   // check if user is owner of pack, and that pack and user exists
-  const isOwner = currentPack && user && currentPack.owner_id === user._id;
+  const isOwner = currentPack && user && currentPack.owner_id === user.id;
 
   const error = useSelector((state) => state.singlePack.error);
   const isError = error !== null;

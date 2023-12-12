@@ -37,8 +37,9 @@ export const AddPack = () => {
    * @param {string} owner_id - The ID of the pack's owner.
    * @return {void}
    */
+  console.log({user})
   const handleAddPack = () => {
-    dispatch(addPack({ name, owner_id: user?._id, is_public: isPublic }));
+    dispatch(addPack({ name, owner_id: user?.id, is_public: isPublic }));
     setName('');
   };
 
@@ -77,7 +78,7 @@ export const AddPack = () => {
                 let val = item;
                 let label = item;
                 if (typeof item === 'object' && item !== null) {
-                  val = item.id || item._id || item.name;
+                  val = item.id || item.id || item.name;
                   label = item.name;
                 }
                 return (

@@ -1,5 +1,5 @@
 import { TRPCError, initTRPC } from '@trpc/server';
-
+import { auth } from './middlewares';
 const t = initTRPC.create();
 
 /**
@@ -9,3 +9,5 @@ const t = initTRPC.create();
 export const router = t.router;
 export const middleware = t.middleware;
 export const publicProcedure = t.procedure;
+export const protectedProcedure = t.procedure.use(auth);
+// export const protectedProcedure = t.procedure.use;

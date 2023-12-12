@@ -19,7 +19,7 @@ export const addPack = z.object({
 });
 
 export const editPack = z.object({
-  _id: JoiObjectId(),
+  id: JoiObjectId(),
   name: z.string().nonempty(),
   is_public: z.boolean(),
 });
@@ -31,5 +31,5 @@ export const deletePack = z.object({
 export const duplicatePublicPack = z.object({
   packId: JoiObjectId(),
   ownerId: JoiObjectId(),
-  items: z.array(z.object({})),
+  items: z.array(z.record(z.any())),
 });

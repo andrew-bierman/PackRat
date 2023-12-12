@@ -128,13 +128,13 @@ export const editItemsGlobalAsDuplicate = createAsyncThunk(
 
 export const updatePack = createAsyncThunk('packs/updatePack', async (pack) => {
   // const response = await axios.put(`${api}/pack`, {
-  //   _id: pack._id,
+  //   id: pack.id,
   //   name: pack.name,
   //   is_public: pack.is_public,
   // });
   // return response.data;
   return await trpc.editPack.mutate({
-    packId: pack._id,
+    packId: pack.id,
     name: pack.name,
     is_public: pack.is_public,
   });
@@ -148,11 +148,11 @@ export const deletePack = createAsyncThunk('packs/deletePack', async (pack) => {
   //   },
   // });
   // return response.data;
-  return await trpc.deletePack.mutate({ packId: pack._id });
+  return await trpc.deletePack.mutate({ packId: pack.id });
 });
 
 const packsAdapter = createEntityAdapter({
-  selectId: (pack) => pack._id,
+  selectId: (pack) => pack?.id,
 });
 // console.log("🚀 ~ file: packsStore.js:143 ~ packsAdapter:", packsAdapter)
 
@@ -197,7 +197,7 @@ const packsSlice = createSlice({
       })
       .addCase(changePackStatus.fulfilled, (state, action) => {
         packsAdapter.updateOne(state, {
-          id: action.payload._id,
+          id: action.payload.id,
           changes: action.payload,
         });
         state.isLoading = false;
@@ -258,7 +258,7 @@ const packsSlice = createSlice({
           }
 
           const updatedItems = existingPack.items.map((item) =>
-            item._id === newItem._id ? newItem : item,
+            item.id === newItem.id ? newItem : item,
           );
           console.log('updatediTEMS', updatedItems);
 
@@ -292,7 +292,7 @@ const packsSlice = createSlice({
         }
 
         const updatedItems = existing.items.filter(
-          (item) => item._id !== itemId,
+          (item) => item.id !== itemId,
         );
 
         packsAdapter.updateOne(state, {
@@ -316,8 +316,8 @@ const packsSlice = createSlice({
       })
       .addCase(scorePack.fulfilled, (state, action) => {
         packsAdapter.updateOne(state, {
-          id: action.payload.updatedPack._id,
-          changes: action.payload.updatedPack,
+          id: action.payload.id,
+          changes: action.payload,
         });
         state.isLoading = false;
         state.error = null;
@@ -339,7 +339,7 @@ const packsSlice = createSlice({
           return;
         }
         const updatedItems = existingPack.items.map((item) =>
-          item._id === itemId ? action.payload : item,
+          item.id === itemId ? action.payload : item,
         );
         console.log('updated items', updatedItems);
 

@@ -29,11 +29,11 @@ export const editItem = createAsyncThunk('items/editItem', async (newItem) => {
   // const response = await axios.put(`${api}/item/`, newItem);
   // return response.data;
   return await trpc.editItem.mutate({
-    _id: newItem._id,
+    id: newItem.id,
     name: newItem.name,
-    quantity: newItem.quantity,
+    quantity: parseInt(newItem.quantity),
     type: newItem.type,
-    weight: newItem.weight,
+    weight: parseFloat(newItem.weight),
     unit: newItem.unit,
   });
 });

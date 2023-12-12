@@ -14,25 +14,26 @@ import * as validators from '@packrat/validations';
  * @param {Object} res - The response object.
  * @return {Promise} The response object containing the parks data.
  */
-export const getParksOSM = async (req, res, next) => {
-  try {
-    const { lat = 45.5231, lon = -122.6765, radius = 50000 } = req.query;
+// export const getParksOSM = async (req, res, next) => {
+//   try {
+//     const { lat = 45.5231, lon = -122.6765, radius = 50000 } = req.query;
 
-    if (!lat || !lon || !radius) {
-      next(InvalidRequestParamsError);
-    }
-    const result = await getParksOSMService(lat, lon, radius);
-    res.locals.data = result;
-    responseHandler(res);
-  } catch (error) {
-    console.error(error);
-    next(ErrorRetrievingParksOSMError);
-  }
-};
+//     if (!lat || !lon || !radius) {
+//       next(InvalidRequestParamsError);
+//     }
+//     const result = await getParksOSMService(lat, lon, radius);
+//     res.locals.data = result;
+//     responseHandler(res);
+//   } catch (error) {
+//     console.error(error);
+//     next(ErrorRetrievingParksOSMError);
+//   }
+// };
 
 export function getParksOSMRoute() {
   return publicProcedure.input(validators.getParksOSM).query(async (opts) => {
     const { lat = 45.5231, lon = -122.6765, radius = 50000 } = opts.input;
-    return await getParksOSMService(lat, lon, radius);
+    const { env }: any = opts.ctx;
+    return await getParksOSMService(lat, lon, radius, env.OSM_URI);
   });
 }

@@ -1,0 +1,264 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("MONDODB_URI")
+}
+
+//  ███    ███  ██████  ██████  ███████ ██      ███████
+//  ████  ████ ██    ██ ██   ██ ██      ██      ██
+//  ██ ████ ██ ██    ██ ██   ██ █████   ██      ███████
+//  ██  ██  ██ ██    ██ ██   ██ ██      ██           ██
+//  ██      ██  ██████  ██████  ███████ ███████ ███████
+
+model GeoJSON {
+  id         String          @id @default(auto()) @map("_id") @db.ObjectId
+  type       String
+  id_        String          @unique(map: "id_1") @map("id")
+  properties Json
+  geometry   GeoJSONGeometry
+  createdAt  DateTime?       @default(now())
+  updatedAt  DateTime?       @updatedAt
+
+  @@map("geojsons")
+}
+
+model ItemCategory {
+  id        String           @id @default(auto()) @map("_id") @db.ObjectId
+  name      ItemCategoryName
+  createdAt DateTime?        @default(now())
+  updatedAt DateTime?        @updatedAt
+  Item      Item[]
+
+  @@map("itemcategories")
+}
+
+model Item {
+  id               String        @id @default(auto()) @map("_id") @db.ObjectId
+  name             String?
+  weight           Float?
+  quantity         Int?
+  unit             String?
+  global           Boolean?      @default(false)
+  packs            String[]      @db.ObjectId
+  owners           String[]      @db.ObjectId
+  category         String?       @db.ObjectId
+  createdAt        DateTime?     @default(now())
+  updatedAt        DateTime?     @updatedAt
+  type             String?
+  categoryDocument ItemCategory? @relation(fields: [category], references: [id])
+  packDocuments    Pack[]        @relation(fields: [packs], references: [id])
+  ownerDocuments   User[]        @ignore
+
+  @@map("items")
+}
+
+model Pack {
+  id                   String       @id @default(auto()) @map("_id") @db.ObjectId
+  name                 String?
+  owner_id             String?      @db.ObjectId
+  owners               String[]     @db.ObjectId
+  trips                String[]     @db.ObjectId
+  is_public            Boolean?
+  grades               PacksGrades?
+  scores               PacksScores?
+  type                 String?      @default("pack")
+  items                String[]     @db.ObjectId
+  favorited_by         String[]     @db.ObjectId
+  createdAt            String?
+  updatedAt            DateTime?    @updatedAt
+  itemDocuments        Item[]       @relation(fields: [items], references: [id])
+  favoritedByDocuments User[]       @relation(name: "Favourites", fields: [favorited_by], references: [id])
+  ownerDocuments       User[]       @relation(name: "Owners", fields: [owners], references: [id])
+  ownerDocument        User?        @relation(fields: [owner_id], references: [id])
+
+  // Virtuals
+  total_weight    Float?
+  total_scores    Int?
+  favorites_count Int?
+
+  @@map("packs")
+}
+
+model Template {
+  id                String       @id @default(auto()) @map("_id") @db.ObjectId
+  type              TemplateType
+  templateId        String?      @db.ObjectId
+  isGlobalTemplate  Boolean?     @default(false)
+  createdBy         String?      @db.ObjectId
+  createdAt         DateTime?    @default(now())
+  updatedAt         DateTime?    @updatedAt
+  createdByDocument User?        @relation(fields: [createdBy], references: [id])
+
+  @@map("templates")
+}
+
+model Trip {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  description   String
+  duration      String
+  weather       String
+  start_date    DateTime
+  end_date      DateTime
+  destination   String
+  owner_id      String?   @db.ObjectId
+  is_public     Boolean?
+  type          String?   @default("trip")
+  packs         String?   @db.ObjectId
+  geojson       Json?
+  createdAt     DateTime? @default(now())
+  updatedAt     DateTime? @updatedAt
+  ownerDocument User?     @relation(fields: [owner_id], references: [id])
+
+  @@map("trips")
+}
+
+model User {
+  id                           String     @id @default(auto()) @map("_id") @db.ObjectId
+  name                         String
+  password                     String
+  email                        String     @unique
+  token                        String?
+  code                         String?
+  googleId                     String?
+  is_certified_guide           Boolean?
+  passwordResetToken           String?
+  passwordResetTokenExpiration DateTime?  @db.Date
+  role                         Role       @default(user)
+  username                     String?    @unique(map: "username_1")
+  profileImage                 String?
+  preferredWeather             String?
+  preferredWeight              String?
+  favorites                    String[]   @db.ObjectId
+  packs                        String[]   @db.ObjectId
+  item                         String?    @db.ObjectId
+  createdAt                    DateTime?  @default(now())
+  updatedAt                    DateTime?  @updatedAt
+  favoriteDocuments            Pack[]     @relation(name: "Favourites", fields: [favorites], references: [id])
+  packDocuments                Pack[]     @relation(name: "Owners", fields: [packs], references: [id])
+  itemDocument                 Item?      @relation(fields: [item], references: [id])
+  templates                    Template[]
+  trips                        Trip[]
+  Pack                         Pack[]
+
+  @@map("users")
+}
+
+model Conversation {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String
+  history   String
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@map("conversations")
+}
+
+model Way {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  osm_id     Int?
+  osm_type   String?   @default("way")
+  tags       Json?
+  nodes      String    @db.ObjectId
+  geoJSON    Json?
+  createdAt  DateTime? @default(now())
+  updated_at DateTime? @updatedAt
+
+  @@map("ways")
+}
+
+model Node {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  osm_id     Int?      @map("id")
+  lat        Float?
+  lon        Float?
+  osm_type   String    @default("node")
+  tags       Json?
+  createdAt  DateTime? @default(now())
+  updated_at DateTime? @updatedAt
+
+  @@map("nodes")
+}
+
+model Relation {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  osm_id     Int?
+  osm_type   String?   @default("relation")
+  tags       Json?
+  members    Member[]
+  geoJSON    Json?
+  createdAt  DateTime? @default(now())
+  updated_at DateTime? @updatedAt
+
+  @@map("relations")
+}
+
+//  ████████ ██    ██ ██████  ███████ ███████
+//     ██     ██  ██  ██   ██ ██      ██
+//     ██      ████   ██████  █████   ███████
+//     ██       ██    ██      ██           ██
+//     ██       ██    ██      ███████ ███████
+
+type Member {
+  type  MemberType
+  refId String     @db.ObjectId
+  role  String
+}
+
+type GeoJSONGeometry {
+  coordinates Json
+  type        GeoJSONGeometryType
+}
+
+type PacksGrades {
+  essentialItems           String? @default("")
+  redundancyAndVersatility String? @default("")
+  weight                   String? @default("")
+}
+
+type PacksScores {
+  essentialItemsScore           Int @default(0)
+  redundancyAndVersatilityScore Int @default(0)
+  weightScore                   Int @default(0)
+}
+
+//  ███████ ███    ██ ██    ██ ███    ███ ███████
+//  ██      ████   ██ ██    ██ ████  ████ ██
+//  █████   ██ ██  ██ ██    ██ ██ ████ ██ ███████
+//  ██      ██  ██ ██ ██    ██ ██  ██  ██      ██
+//  ███████ ██   ████  ██████  ██      ██ ███████
+
+enum MemberType {
+  way
+  node
+  relation
+}
+
+enum Role {
+  user
+  admin
+}
+
+enum ItemCategoryName {
+  Food
+  Water
+  Essentials
+}
+
+enum TemplateType {
+  pack
+  trip
+  item
+}
+
+enum GeoJSONGeometryType {
+  Point
+  LineString
+  Polygon
+  MultiPoint
+  MultiPolygon
+  MultiLineString
+}

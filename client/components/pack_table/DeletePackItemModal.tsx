@@ -40,7 +40,7 @@ export const DeletePackItemModal = ({
    */
   const deleteItemHandler = () => {
     if (pack) {
-      dispatch(deletePackItem({ itemId, currentPackId: pack._id }));
+      dispatch(deletePackItem({ itemId, currentPackId: pack.id }));
     } else {
       if (isConnected) {
         dispatch(deleteGlobalItem(itemId));

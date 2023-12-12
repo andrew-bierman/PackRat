@@ -1,11 +1,10 @@
-import Item from '../../models/itemModel';
-import Pack from '../../models/packModel';
-import { ItemCategoryModel } from '../../models/itemCategory';
 import { ItemCategoryEnum } from '../../utils/itemCategory';
+// import { prisma } from '../../prisma';
+import { ItemCategoryName, PrismaClient } from '@prisma/client/edge';
 
 /**
  * Adds an item to the global service.
- *
+ * @param {PrismaClient} prisma - Prisma client.
  * @param {string} name - The name of the item.
  * @param {number} weight - The weight of the item.
  * @param {number} quantity - The quantity of the item.
@@ -14,6 +13,7 @@ import { ItemCategoryEnum } from '../../utils/itemCategory';
  * @return {Promise<Object>} The newly created item.
  */
 export const addItemGlobalService = async (
+  prisma: PrismaClient,
   name,
   weight,
   quantity,
@@ -25,57 +25,106 @@ export const addItemGlobalService = async (
 
   switch (type) {
     case ItemCategoryEnum.FOOD: {
-      category = await ItemCategoryModel.findOne({
-        name: ItemCategoryEnum.FOOD,
+      const category = await prisma.itemCategory.findFirst({
+        where: {
+          name: ItemCategoryName.Food,
+        },
       });
 
-      newItem = await Item.create({
-        name,
-        weight,
-        quantity,
-        unit,
-        category: category._id,
-        global: true,
+      let newItem = await prisma.item.create({
+        data: {
+          name,
+          weight,
+          quantity,
+          unit,
+          categoryDocument: {
+            connect: { id: category.id },
+          },
+          global: true,
+        },
       });
-
-      newItem = await Item.findById(newItem.id).populate('category', 'name');
+      newItem = await prisma.item.findUnique({
+        where: {
+          id: newItem.id,
+        },
+        include: {
+          categoryDocument: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      });
 
       break;
     }
     case ItemCategoryEnum.WATER: {
-      category = await ItemCategoryModel.findOne({
-        name: ItemCategoryEnum.WATER,
+      const category = await prisma.itemCategory.findFirst({
+        where: {
+          name: ItemCategoryName.Water,
+        },
+      });
+      newItem = await prisma.item.create({
+        data: {
+          name,
+          weight,
+          quantity: 1,
+          unit,
+          categoryDocument: {
+            connect: { id: category.id },
+          },
+          global: true,
+        },
       });
 
-      newItem = await Item.create({
-        name,
-        weight,
-        quantity: 1,
-        unit,
-        category: category._id,
-        global: true,
+      newItem = await prisma.item.findUnique({
+        where: {
+          id: newItem.id,
+        },
+        include: {
+          categoryDocument: {
+            select: {
+              name: true,
+            },
+          },
+        },
       });
-
-      newItem = await Item.findById(newItem.id).populate('category', 'name');
 
       break;
     }
     default: {
-      category = await ItemCategoryModel.findOne({
-        name: ItemCategoryEnum.ESSENTIALS,
+      category = await prisma.itemCategory.findFirst({
+        where: {
+          name: ItemCategoryName.Essentials,
+        },
       });
 
-      newItem = await Item.create({
-        name,
-        weight,
-        quantity,
-        unit,
-        category: category._id,
-        global: true,
+      newItem = await prisma.item.create({
+        data: {
+          name,
+          weight,
+          quantity,
+          unit,
+          categoryDocument: {
+            connect: {
+              id: category.id,
+            },
+          },
+          global: true,
+        },
       });
-
-      newItem = await Item.findById(newItem.id).populate('category', 'name');
-
+      newItem = await prisma.item.findUnique({
+        where: {
+          id: newItem.id,
+        },
+        include: {
+          categoryDocument: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      });
       break;
     }
   }

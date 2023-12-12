@@ -1,15 +1,20 @@
-import Pack from '../../models/packModel';
+import { PrismaClient } from '@prisma/client/edge';
 
 /**
  * Edits a pack in the service.
- *
- * @param {string} packId - The ID of the pack to be edited.
- * @param {object} packData - The updated data for the pack.
- * @return {object} The updated pack object.
+ * @param {PrismaClient} prisma - Prisma client.
+ * @param {string} packId
+ * @param {object} packData
+ * @return {object}
  */
-export const editPackService = async (packId, packData) => {
-  const updatedPack = await Pack.findOneAndUpdate({ _id: packId }, packData, {
-    returnOriginal: false,
+export const editPackService = async (
+  prisma: PrismaClient,
+  packId,
+  packData,
+) => {
+  const updatedPack = await prisma.pack.update({
+    where: { id: packId },
+    data: packData,
   });
 
   return updatedPack;

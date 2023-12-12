@@ -1,19 +1,19 @@
-import Way from '../../models/osm/wayModel';
-import Node from '../../models/osm/nodeModel';
-
+import { PrismaClient } from '@prisma/client/edge';
+import { Node, Way } from '../../prisma/methods';
 /**
  * Retrieves the destination service based on the given ID.
- *
+ * @param {PrismaClient} prisma - Prisma client.
  * @param {string} id - The ID of the destination service.
  * @return {Promise<any>} A promise that resolves to the destination service.
  */
-export const getDestinationService = async (id) => {
-  let destination = await Way.findById(id);
+export const getDestinationService = async (prisma: PrismaClient, id) => {
+  const way = await prisma.way.findFirst({ where: { id } });
 
-  // If not found in Way, search in Node
-  if (!destination) {
-    destination = await Node.findById(id);
+  if (way) {
+    return Way(way).toJSON();
   }
 
-  return destination;
+  const node = await prisma.node.findFirst({ where: { id } });
+
+  return Node(node)?.toJSON();
 };

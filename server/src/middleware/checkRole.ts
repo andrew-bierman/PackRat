@@ -1,7 +1,7 @@
 import { type Request, type Response, type NextFunction } from 'express';
-import { type IUser } from '../models/userModel';
 import { RoleSchema } from './validators/roleValidator';
 import { ZodError } from 'zod';
+import { type User } from '@prisma/client/edge';
 
 /**
  * Middleware to check if the user has a certain role.
@@ -10,7 +10,7 @@ import { ZodError } from 'zod';
  */
 const checkRole = (roles: string[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
-    const user: IUser = req.user;
+    const user: User = req.user;
 
     try {
       // Make sure all roles are valid.

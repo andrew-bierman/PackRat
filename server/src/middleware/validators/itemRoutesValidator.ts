@@ -8,13 +8,13 @@ export const getItems = z.object({
 });
 
 export const getItemById = z.object({
-  _id: JoiObjectId(),
+  id: JoiObjectId(),
 });
 
 export const addItem = z.object({
   name: z.string().nonempty(),
-  weight: z.string().nonempty(),
-  quantity: z.string().nonempty(),
+  weight: z.number(),
+  quantity: z.number(),
   unit: z.string().nonempty(),
   packId: JoiObjectId(),
   type: z.string().optional(),
@@ -22,10 +22,10 @@ export const addItem = z.object({
 });
 
 export const editItem = z.object({
-  _id: JoiObjectId(),
+  id: JoiObjectId(),
   name: z.string().nonempty(),
-  weight: z.string().nonempty(),
-  quantity: z.string().nonempty(),
+  weight: z.string(),
+  quantity: z.string(),
   unit: z.string().nonempty(),
   type: z.string(),
 });
@@ -37,8 +37,8 @@ export const deleteItem = z.object({
 
 export const addItemGlobal = z.object({
   name: z.string().nonempty(),
-  weight: z.string().nonempty(),
-  quantity: z.string().nonempty(),
+  weight: z.number(),
+  quantity: z.number(),
   unit: z.string().nonempty(),
   type: z.string().optional(),
 });

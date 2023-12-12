@@ -1,8 +1,9 @@
 import { publicProcedure } from '../../trpc';
 import { UnableToEditUserError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
-import User from '../../models/userModel';
 import * as validator from '../../middleware/validators/index';
+import { PrismaClient } from '@prisma/client/edge';
+import { User } from '../../prisma/methods';
 /**
  * Edits a user.
  * @param {Object} req - The request object.
@@ -11,30 +12,62 @@ import * as validator from '../../middleware/validators/index';
  * @param {Object} res - The response object.
  * @return {Promise} A promise that resolves to the edited user.
  */
-export const editUser = async (req, res, next) => {
-  try {
-    const { userId } = req.body;
+// export const editUser = async (req, res, next) => {
+//   try {
+//     const { userId } = req.body;
 
-    const editedUser = await User.findOneAndUpdate({ _id: userId }, req.body, {
-      returnOriginal: false,
-    }).populate('favorites');
-    res.locals.data = editedUser;
-    responseHandler(res);
-  } catch (error) {
-    next(UnableToEditUserError);
-  }
-};
+//     const editedUser = await prisma.user.update({
+//       where: {
+//         id: userId,
+//       },
+//       data: req.body,
+//       select: {
+//         favorites: true,
+//       },
+//     });
+
+//     res.locals.data = editedUser;
+//     responseHandler(res);
+//   } catch (error) {
+//     next(UnableToEditUserError);
+//   }
+// };
 
 export function editUserRoute() {
   return publicProcedure.input(validator.editUser).mutation(async (opts) => {
-    const { userId } = opts.input;
-    const editedUser = await User.findOneAndUpdate(
-      { _id: userId },
-      opts.input,
-      {
-        returnOriginal: false,
+    const {
+      userId,
+      favourite_ids,
+      pack_ids,
+      template_ids,
+      trip_ids,
+      item_id,
+      ...rest
+    } = opts.input;
+    const prisma: PrismaClient = (opts.ctx as any).prisma;
+
+    const editedUser = await prisma.user.update({
+      where: {
+        id: userId,
       },
-    ).populate('favorites');
-    return editedUser;
+      data: {
+        ...rest,
+        favoriteDocuments: {
+          connect: favourite_ids?.map((favourite) => ({ id: favourite })),
+        },
+        packDocuments: {
+          connect: pack_ids?.map((pack) => ({ id: pack })),
+        },
+        templates: {
+          connect: template_ids?.map((template) => ({ id: template })),
+        },
+        item: { set: item_id },
+      },
+      select: {
+        favorites: true,
+      },
+    });
+
+    return User(editedUser)?.toJSON();
   });
 }
