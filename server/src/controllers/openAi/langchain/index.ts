@@ -4,7 +4,7 @@ import Conversation from "../../../models/openai/conversationModel";
 import { getPackByIdService } from "../../../services/pack/pack.service";
 import { getTripByIdService } from "../../../services/trip/getTripByIdService";
 import mongoose from "mongoose";
-import User from "src/models/userModel";
+import User from "../../../models/userModel";
 
 const chatModel = new ChatOpenAI({
     openAIApiKey: process.env.OPENAI_API_KEY, // Replace with your OpenAI API key
@@ -23,7 +23,7 @@ export const getAIResponseService = async (
 ) => {
     // validate
     await Promise.all([checkAPIKey(), validateUser(userId)]);
-    
+
     // get additional data if present 
     const packInfo = await getPackInformation(packId);
     const tripInfo = await getTripInformation(tripId);
@@ -45,13 +45,14 @@ export const getAIResponseService = async (
     conversationHistory = processConversationHistory(conversationHistory, userInput, aiResponse);
 
     // save and return the conversation
-    await saveConversationHistory(conversation, conversationHistory, userId);
-    return { aiResponse, conversation: conversation.toJSON() };
+    conversation = await saveConversationHistory(conversation, conversationHistory, userId);
+    console.log('conversationHistory:', conversation);
+    return { aiResponse, conversation };
 }
 
-function checkAPIKey() {
+export async function checkAPIKey() {
     if (!process.env.OPENAI_API_KEY) {
-        throw new Error('OPENAI_API_KEY is not set.');
+        throw new Error('OPENAI_API_KEY is not set.'); 
     }
 }
 
@@ -104,9 +105,10 @@ async function saveConversationHistory(conversation, conversationHistory, userId
         conversation = new Conversation({ userId, history: conversationHistory });
     }
     await conversation.save();
+    return conversation
 }
 
-async function validateUser(userId) {
+export async function validateUser(userId) {
     if (!mongoose.Types.ObjectId.isValid(userId)) {
         throw new Error('Invalid userId');
     }
