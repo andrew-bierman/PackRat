@@ -22,7 +22,15 @@
     "prisma:validate": "npx prisma validate --schema=src/prisma/schema.prisma",
     "prisma:pull": "npx prisma db pull --schema=src/prisma/schema.prisma",
     "wrangler:dev": "yarn prisma:generate && wrangler dev -e dev",
-    "preinstall": "yarn run prisma:generate"
+    "generate": "drizzle-kit generate:sqlite --schema=./src/db/schema.ts --out=./migrations",
+    "migrate": "wrangler d1 migrations apply production",
+    "migrate:local": "wrangler d1 migrations apply production --local",
+    "seed": "wrangler d1 execute production --file=./seed/seed.sql",
+    "seed:local": "wrangler d1 execute production --local --file=./seed/seed.sql",
+    "studio": "drizzle-kit studio",
+    "deploy": "wrangler deploy --minify src/worker.ts",
+    "postinstall": "yarn generate",
+    "clean": "rm -rf node_modules"
   },
   "author": "Andrew Bierman",
   "license": "ISC",
