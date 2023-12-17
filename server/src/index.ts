@@ -6,10 +6,17 @@ import { cors } from 'hono/cors';
 // import { logger } from 'hono/logger';
 import { compress } from 'hono/compress';
 
+type Bindings = {
+  DB: D1Database;
+  JWT_VERIFICATION_KEY: string;
+  APP_URL: string;
+  CORS_ORIGIN: string;
+};
+
 const TRPC_API_ENDPOINT = '/api/trpc';
 const TRPC_PLAYGROUND_ENDPOINT = '/trpc-playground';
 
-const app = new Hono();
+const app = new Hono<{ Bindings: Bindings }>();
 
 //  Setup compression
 app.use(
