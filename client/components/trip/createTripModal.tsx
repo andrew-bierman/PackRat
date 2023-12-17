@@ -116,18 +116,23 @@ export const SaveTripContainer = ({ dateRange }) => {
       endDate,
     };
 
-    // const geoJSON = await trpc.getPhotonDetails.query({
-    //   id: search.properties.osm_id,
-    //   type: search.properties.osm_type,
+    const geoJSON = await trpc.getPhotonDetails.query({
+      id: search.properties.osm_id,
+      type: search.properties.osm_type,
+    });
+    // const { data: geoJSON } = await useGetPhotonDetails({
+    //   properties: {
+    //     osm_type: 'relation',
+    //     osm_id: 1802227,
+    //   },
     // });
-    const { data: geoJSON } = await useGetPhotonDetails(search);
 
     const data = {
       name,
       description,
       start_date: startDate,
       end_date: endDate,
-      destination: search.properties.name,
+      destination: search?.properties?.name,
       geoJSON,
       // trail: dropdown.currentTrail,
       duration: JSON.stringify(duration),
@@ -139,7 +144,7 @@ export const SaveTripContainer = ({ dateRange }) => {
 
     // creating a trip
     console.log('create trip data ->', data);
-    const { isLoading, isError, error } = AddTrips(data);
+    AddTrips(data);
     // dispatch(addTrip(data));
     setIsSaveModalOpen(!isSaveModalOpen);
   };
