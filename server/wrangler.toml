@@ -4,6 +4,12 @@ send_metrics = false
 node_compat = true
 main = "./src/index.ts"
 
+# [[d1_databases]]
+# binding = "DB"
+# database_name = "<DATABASE_NAME>"
+# database_id = "<unique-ID-for-your-database>"
+# migrations_dir = "migrations"
+
 [env.dev.vars]
 
 # For local development, you can create a file called .dev.vars and use dotenv syntax.
