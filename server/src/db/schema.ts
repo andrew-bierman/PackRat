@@ -4,9 +4,33 @@ import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 
 // User
 export const UserTable = sqliteTable('User', {
-  id: text('id').primaryKey(),
-  email: text('email').notNull(),
-});
+	id: text('id').primaryKey(),
+	name: text("name"),
+	password: text("password"),
+	email: text('email').notNull(),
+	token: text("token"),
+	code: text("code"),
+	googleId: text("google_id"),
+	is_certified_guide: integer("is_certified_guide"),
+	passwordResetToken: text("password_reset_token"),
+	passwordResetTokenExpiration: integer('password_reset_token_expiration', { mode: 'timestamp' }),
+	role: text('role').default("user"),
+	username: text("username"),
+	profileImage: text("profile_image"),
+	preferredWeather: text("preferred_weather"),
+	preferredWeight: text("preferred_weight"),
+	favorites: text("favorites"),
+	packs: text("packs"),
+	items: text("items"),
+	createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`(strftime('%s', 'now'))`),
+	updatedAt: integer('updated_at', { mode: 'timestamp' }),
+	favoriteDocuments: text('pack[]_undefined'),
+	packDocuments: text('pack[]_undefined'),
+	itemDocument: text('item_id)').references(()=> item.id),
+	templates: text('template[]_undefined'),
+	trips: text('trip[]_undefined'),
+	Pack: text('pack[]_undefined'),
+  });
 
 export type User = InferSelectModel<typeof UserTable>;
 export type InsertUser = InferInsertModel<typeof UserTable>;

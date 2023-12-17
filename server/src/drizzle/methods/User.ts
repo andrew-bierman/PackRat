@@ -1,6 +1,5 @@
-import type { User as TUser } from '@prisma/client/edge';
-import * as jwt from 'hono/jwt';
-
+import { User as TUser } from "../../db/schema";
+import * as jwt from 'jsonwebtoken'
 type ExtendedUser = {
   save: (prisma: any) => Promise<ExtendedUser>;
   toJSON: () => Partial<TUser>;

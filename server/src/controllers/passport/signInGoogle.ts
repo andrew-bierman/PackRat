@@ -7,7 +7,7 @@ import bcrypt from 'bcryptjs';
 import * as jwt from 'hono/jwt';
 import { sendWelcomeEmail, resetEmail } from '../../utils/accountEmail';
 // import { prisma } from '../../prisma';
-import { User } from '../../prisma/methods';
+// import { User } from '../../prisma/methods';
 
 // import {
 //   GOOGLE_CLIENT_ID,
