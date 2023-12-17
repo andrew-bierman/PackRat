@@ -7,7 +7,7 @@ import { cors } from 'hono/cors';
 import { compress } from 'hono/compress';
 
 type Bindings = {
-  DB: D1Database;
+  DB: IDBDatabase;
   JWT_VERIFICATION_KEY: string;
   APP_URL: string;
   CORS_ORIGIN: string;
