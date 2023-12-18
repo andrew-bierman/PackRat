@@ -36,8 +36,9 @@ export type User = InferSelectModel<typeof UserTable>;
 export type InsertUser = InferInsertModel<typeof UserTable>;
 export const insertUserSchema = createInsertSchema(UserTable);
 export const selectUserSchema = createSelectSchema(UserTable);
-
-export const geojson = sqliteTable("geojson", {
+export type GeoJSON = InferSelectModel<typeof GeoJSONTable>;
+export type InsertGeoJSON = InferInsertModel<typeof GeoJSONTable>;
+export const GeoJSONTable = sqliteTable("geojson", {
 	id: text('id').primaryKey(),
 	type: text("type"),
 	properties: text('json_undefined'),
@@ -54,8 +55,9 @@ export const itemcategory = sqliteTable("itemcategory", {
 
 	// @@map("itemcategories"): undefined,
 })
-
-export const item = sqliteTable("item", {
+export type Item = InferSelectModel<typeof ItemTable>;
+export type InsertItem = InferInsertModel<typeof ItemTable>;
+export const ItemTable = sqliteTable("item", {
 	id: text('id').primaryKey(),
 	name: text("name"),
 	weight: text('float_undefined'),
@@ -73,8 +75,9 @@ export const item = sqliteTable("item", {
 	ownerDocuments: text('user[]_undefined'),
 	// @@map("items"): undefined,
 })
-
-export const pack = sqliteTable("pack", {
+export type Pack = InferSelectModel<typeof PackTable>;
+export type InsertPack = InferInsertModel<typeof PackTable>;
+export const PackTable = sqliteTable("pack", {
 	id: text('id').primaryKey(),
 	name: text("name"),
 	owner_id: text("owner_id"),
@@ -100,8 +103,9 @@ export const pack = sqliteTable("pack", {
 
 	// @@map("packs"): undefined,
 	})
-
-export const template = sqliteTable("template", {
+	export type Template = InferSelectModel<typeof TemplateTable>;
+	export type InsertTemplate = InferInsertModel<typeof TemplateTable>;
+export const TemplateTable = sqliteTable("template", {
 	id: text('id').primaryKey(),
 	type: text('templatetype_undefined'),
 	templateId: text("template_id"),
@@ -113,8 +117,10 @@ export const template = sqliteTable("template", {
 
 	// @@map("templates"): undefined,
 	})
+export type Trip = InferSelectModel<typeof TripTable>;
+export type InsertTrip = InferInsertModel<typeof TripTable>;
 
-export const trip = sqliteTable("trip", {
+export const TripTable = sqliteTable("trip", {
 	id: text('id').primaryKey(),
 	name: text("name"),
 	description: text("description"),
@@ -175,8 +181,9 @@ export const conversation = sqliteTable("conversation", {
 
 	// @@map("conversations"): undefined,
 	})
-
-export const way = sqliteTable("way", {
+	export type Way = InferSelectModel<typeof WayTable>;
+	export type InsertWay = InferInsertModel<typeof WayTable>;
+export const WayTable = sqliteTable("way", {
 	id: text('id').primaryKey(),
 	osm_id: integer("osm_id"),
 	osm_type: text("osm_type").default("way"),
