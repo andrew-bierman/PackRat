@@ -1,118 +1,76 @@
-import { User as TUser } from "../../db/schema";
 import * as jwt from 'jsonwebtoken'
-type ExtendedUser = {
-  save: (prisma: any) => Promise<ExtendedUser>;
-  toJSON: () => Partial<TUser>;
-  generateAuthToken: (prisma: any, jwtSecret: string) => Promise<string>;
-  generateResetToken: (
-    prisma: any,
-    jwtSecret: string,
-    clinetUrl: string,
-  ) => Promise<string>;
-};
+import { eq } from "drizzle-orm";
+import { createDb, } from "src/db/client";
+import { UserTable } from "src/db/schema";
 
-const User = <T>(prismaUser: T): T & ExtendedUser => {
-  if (!prismaUser) return;
-  return Object.assign(prismaUser, {
-    async save(prisma: any): Promise<ExtendedUser> {
-      const user = this;
+export class User {
+    constructor() {
+    }
+    async save(user) {
+        // Early return if user already has a username
+        if (user.username) {
+            return await this.getUserByUsername(user.username);
+        }
 
-      // Return the original user if it already has a username.
-      if (user.username) return User(user);
+        // Generate a unique username
+        let generatedUsername = this.generateUsernameFromEmail(user.email);
+        while (await this.doesUsernameExist(generatedUsername)) {
+            generatedUsername = this.appendNumberToUsername(generatedUsername);
+        }
 
-      let generatedUsername = user.email
-        ? user.email.split('@')[0]
-        : 'packratuser';
+        // Update and save the user with the new username
+        return await this.updateUserWithNewUsername(user, generatedUsername);
+    }
 
-      let counter = 1;
-      let exists = await prisma.user.findFirst({
-        where: { username: generatedUsername },
-      });
+    async getUserByUsername(username) {
+        return createDb(db).select().from(UserTable).where(eq(UserTable.username, username)).limit(1).get();
+    }
 
-      while (!!exists) {
-        generatedUsername = `${user.email.split('@')[0]}${counter}`;
-        counter++;
-        exists = await prisma.user.findFirst({
-          where: { username: generatedUsername },
-        });
-      }
-      const {
-        save,
-        toJSON,
-        generateAuthToken,
-        generateResetToken,
-        ...userObject
-      } = user;
-      const updatedUser = await prisma.user.upsert({
-        where: {
-          username: generatedUsername,
-        },
-        update: {
-          username: generatedUsername,
-        },
-        create: { ...userObject, username: generatedUsername },
-      });
+    generateUsernameFromEmail(email) {
+        return email ? email.split('@')[0] : 'packratuser';
+    }
 
-      return User(updatedUser);
-    },
-    toJSON(): Partial<TUser> {
-      const {
-        password,
-        passwordResetToken,
-        // Remove function properties
-        generateAuthToken,
-        generateResetToken,
-        save,
-        toJSON,
-        ...userObject
-      } = this;
+    async doesUsernameExist(username) {
+        return createDb(db).select().from(UserTable).where(eq(UserTable.username, username)).limit(1).get();
+    }
 
-      const documentKeys = Object.keys(userObject).filter((key) =>
-        key.includes('Document'),
-      );
+    appendNumberToUsername(username) {
+        const match = username.match(/(\d+)$/);
+        const number = match ? parseInt(match[1], 10) + 1 : 1;
+        return username.replace(/(\d+)?$/, number.toString());
+    }
 
-      for (const key of documentKeys) {
-        const newKey = key.replace('Document', '');
-        userObject[newKey] = userObject[key];
-        delete userObject[key];
-      }
+    async updateUserWithNewUsername(user, username) {
+        const { save, toJSON, generateAuthToken, generateResetToken, ...userObject } = user;
+        return createDb(db).update(UserTable).set({ ...userObject, username: username }).where(eq(UserTable.username, username)).returning().get();
+    }
 
-      return userObject;
-    },
-    async generateAuthToken(prisma: any, jwtSecret: string): Promise<string> {
-      if (!jwtSecret) throw new Error('jwtSecret is not defined');
-      const token = await jwt.sign({ id: this.id.toString() }, jwtSecret);
-      this.token = token;
-      await prisma.user.update({
-        where: { id: this.id },
-        data: { token },
-      });
-      return token;
-    },
-    async generateResetToken(
-      prisma: any,
-      jwtSecret: string,
-      clinetUrl: string,
-    ): Promise<string> {
-      if (this.passwordResetToken) {
+    async generateAuthToken(jwtSecret: string, id: string): Promise<string> {
         if (!jwtSecret) throw new Error('jwtSecret is not defined');
-        const decoded: any = await jwt.verify(
-          this.passwordResetToken,
-          jwtSecret,
-        );
-        if (decoded.id) return this.passwordResetToken;
-      }
+        const token = await jwt.sign({ id }, jwtSecret);
+        await createDb(db).update(UserTable).set({ token }).where(eq(UserTable.id, id)).returning().get();
+        return token;
+    }
 
-      if (!jwtSecret) throw new Error('jwtSecret is not defined');
-      const resetToken = await jwt.sign({ id: this.id.toString() }, jwtSecret);
-      this.passwordResetToken = resetToken;
-      await prisma.user.update({
-        where: { id: this.id },
-        data: { passwordResetToken: resetToken },
-      });
-      return `${clinetUrl}/password-reset?token=${resetToken}`;
-    },
-  });
-};
+    async generateResetToken(
+        jwtSecret: string,
+        clinetUrl: string,
+        id: string,
+        passwordResetToken?: string,
+    ): Promise<string> {
+        if (passwordResetToken) {
+            if (!jwtSecret) throw new Error('jwtSecret is not defined');
+            const decoded: any = await jwt.verify(
+                passwordResetToken,
+                jwtSecret,
+            );
+            if (decoded.id) return passwordResetToken;
+        }
 
-export { User };
+        if (!jwtSecret) throw new Error('jwtSecret is not defined');
+        const resetToken = await jwt.sign({ id: id.toString() }, jwtSecret);
+        passwordResetToken = resetToken;
+        await createDb(db).update(UserTable).set({ passwordResetToken }).where(eq(UserTable.id, id)).returning().get();
+        return `${clinetUrl}/password-reset?token=${resetToken}`;
+    }
+}

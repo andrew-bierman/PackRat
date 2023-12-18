@@ -15,6 +15,13 @@
       "when": 1702791918858,
       "tag": "0001_gifted_silver_fox",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1702796158066,
+      "tag": "0002_jittery_stranger",
+      "breakpoints": true
     }
   ]
 }
