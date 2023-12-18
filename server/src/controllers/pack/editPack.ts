@@ -1,6 +1,9 @@
+import { publicProcedure } from '../../trpc';
 import { UnableToEditPackError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { editPackService } from '../../services/pack/pack.service';
+import * as validator from '../../middleware/validators/index';
+import { Pack } from '../../prisma/methods';
 
 /**
  * Edits a pack in the database.
@@ -9,17 +12,24 @@ import { editPackService } from '../../services/pack/pack.service';
  * @return {Object} The updated pack.
  */
 
-export const editPack = async (req, res, next) => {
-  try {
-    const { _id } = req.body;
+// export const editPack = async (req, res, next) => {
+//   try {
+//     const { id } = req.body;
 
-    const newPack = await editPackService(_id, req.body);
+//     const newPack = await editPackService(id, req.body);
 
-    console.log('newPack', newPack);
+//     res.locals.data = newPack;
+//     responseHandler(res);
+//   } catch (error) {
+//     next(UnableToEditPackError);
+//   }
+// };
 
-    res.locals.data = newPack;
-    responseHandler(res);
-  } catch (error) {
-    next(UnableToEditPackError);
-  }
-};
+export function editPackRoute() {
+  return publicProcedure.input(validator.editPack).mutation(async (opts) => {
+    const { id, ...rest } = opts.input;
+    const { prisma }: any = opts.ctx;
+    const pack = await editPackService(prisma, id, rest);
+    return Pack(pack)?.toJSON();
+  });
+}

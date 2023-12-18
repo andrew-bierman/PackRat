@@ -9,7 +9,6 @@ import {
   ThreeDotsIcon,
 } from 'native-base';
 import {
-  StyleSheet,
   TouchableOpacity,
   Clipboard,
   TextInput,
@@ -21,10 +20,11 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter, Link } from 'expo-router';
 import { ThreeDotsMenu } from '../ThreeDotsMenu';
-import UseTheme from '../../hooks/useTheme';
+import useTheme from '../../hooks/useTheme';
 import { InformUser } from '../../utils/ToastUtils';
 import { SearchItem } from '../item/searchItem';
 import Loader from '../Loader';
+import useCustomStyles from '~/hooks/useCustomStyles';
 
 export const CustomCard = ({
   title,
@@ -36,7 +36,8 @@ export const CustomCard = ({
   data,
 }) => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
+  const styles = useCustomStyles(loadStyles);
   const [isCopied, setIsCopied] = useState(false);
   const [editTitle, setEditTitle] = useState(false);
   const titleRef = useRef(null);
@@ -44,7 +45,7 @@ export const CustomCard = ({
   const router = useRouter();
   const isLoading = useSelector((state: any) => state.singlePack.isLoading);
   const user = useSelector((state: any) => state.auth.user);
-  const userId = user._id;
+  const userId = user.id;
 
   /**
    * Handles copying the link to the clipboard and updates the copy state.
@@ -71,7 +72,7 @@ export const CustomCard = ({
   if (type === 'pack') {
     return (
       <Box
-        style={styles().mainContainer}
+        style={styles.mainContainer}
         alignSelf="center"
         alignItems={['center', 'center', 'flex-start', 'flex-start']}
         w={['100%', '100%', '100%', '90%']}
@@ -79,7 +80,6 @@ export const CustomCard = ({
         rounded="lg"
         flexGrow={1}
       >
-        {isLoading && <Loader />}
         <VStack space="4" width="100%" divider={<Divider />}>
           <Box
             px="4"
@@ -95,13 +95,14 @@ export const CustomCard = ({
                 editTitle={editTitle}
                 setEditTitle={setEditTitle}
                 titleRef={titleRef}
+                loading={isLoading}
               />
             </Box>
             <Box flexDirection="row" alignItems="center">
               <Box mx="5">
                 <Link href={`/profile/${data.owner_id}`}>
                   <Text>
-                    {user._id === data.owner_id
+                    {user.id === data.owner_id
                       ? 'Your Profile'
                       : `View ${
                           data.owners && data.owners.length
@@ -112,7 +113,6 @@ export const CustomCard = ({
                 </Link>
               </Box>
               {link && (
-                // @ts-expect-error
                 <Box
                   flexDir={'row'}
                   style={{
@@ -181,7 +181,7 @@ export const CustomCard = ({
   if (type === 'trip') {
     return (
       <Box
-        style={styles().mainContainer}
+        style={styles.mainContainer}
         alignSelf="center"
         alignItems={['center', 'center', 'flex-start', 'flex-start']}
         w={['100%', '100%', '100%', '90%']}
@@ -197,17 +197,15 @@ export const CustomCard = ({
             justifyContent="space-between"
             alignItems="center"
           >
-            <Box></Box>
+            <Box>{title}</Box>
             <Box flexDirection="row" alignItems="center">
               <Box mx="5">
-                <Link href={`/profile/${data.owner_id && data.owner_id._id}`}>
+                <Link href={`/profile/${data.owner_id && data.owner.id}`}>
                   <Text>
-                    {user._id === data.owner_id
+                    {user.id === data.owner_id
                       ? 'Your Profile'
                       : `View ${
-                          data.owner_id
-                            ? '@' + data.owner_id.username
-                            : 'Profile'
+                          data.owner_id ? '@' + data.owner.username : 'Profile'
                         }`}
                   </Text>
                 </Link>
@@ -258,10 +256,9 @@ export const CustomCard = ({
   }
 };
 
-const styles = () => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
-  return StyleSheet.create({
+const loadStyles = (theme) => {
+  const { currentTheme } = theme;
+  return {
     mainContainer: {
       backgroundColor: currentTheme.colors.card,
       flex: 1,
@@ -272,6 +269,7 @@ const styles = () => {
       paddingRight: 25,
       paddingTop: 15,
       paddingBottom: 15,
+      marginBottom: 20,
       border: '1',
     },
     containerMobile: {
@@ -282,5 +280,5 @@ const styles = () => {
       alignItems: 'center',
       padding: 15,
     },
-  });
+  };
 };

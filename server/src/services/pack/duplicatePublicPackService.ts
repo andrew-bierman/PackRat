@@ -1,32 +1,55 @@
-import Pack from '../../models/packModel';
+import { PrismaClient } from '@prisma/client/edge';
 
 /**
  * Duplicates a public pack service.
- *
+ * @param {PrismaClient} prisma - Prisma client.
  * @param {string} packId - The ID of the pack to duplicate.
  * @param {string} ownerId - The ID of the owner of the duplicated pack.
  * @param {Array} items - The items to be included in the duplicated pack.
  * @return {Object} - An object containing the duplicated pack.
  */
-export const duplicatePublicPackService = async (packId, ownerId, items) => {
-  let pack = await Pack.findById(packId);
-  if (!pack) {
+export const duplicatePublicPackService = async (
+  prisma: PrismaClient,
+  packId,
+  ownerId,
+  items,
+) => {
+  const existingPack = await prisma.pack.findUnique({
+    where: {
+      id: packId, // Replace 'id' with the actual primary key field in your model
+    },
+    include: {
+      ownerDocuments: true,
+    },
+  });
+
+  if (!existingPack) {
     throw new Error('Pack not found');
   }
 
-  pack = await Pack.create({
-    name: pack.name,
-    items,
-    owner_id: pack.owner_id,
-    is_public: false,
-    favorited_by: pack.favorited_by,
-    favorites_count: pack.favorites_count,
-    createdAt: new Date().toISOString(),
-    owners: [...pack.owners, ownerId],
-    grades: { ...pack.grades },
-    scores: { ...pack.scores },
-    type: pack.type,
+  const newPack = await prisma.pack.create({
+    data: {
+      name: existingPack.name,
+      is_public: false,
+      createdAt: new Date().toISOString(),
+      grades: {
+        set: { ...existingPack.grades },
+      },
+      scores: {
+        set: { ...existingPack.scores },
+      },
+      ownerDocuments: {
+        connect: existingPack.owners.map((ownerId) => ({ id: ownerId })),
+      },
+      ownerDocument: {
+        connect: { id: ownerId },
+      },
+      itemDocuments: {
+        connect: items.map((item) => ({ id: item.id })),
+      },
+      type: existingPack.type,
+    },
   });
 
-  return { pack };
+  return { pack: newPack };
 };

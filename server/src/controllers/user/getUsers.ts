@@ -1,6 +1,8 @@
+import { publicProcedure } from '../../trpc';
 import { UserNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
-import User from '../../models/userModel';
+import { PrismaClient } from '@prisma/client/edge';
+import { User } from '../../prisma/methods';
 
 // Middleware to check if user is authenticated
 // export const isAuthenticated = async (req, res, next) => {
@@ -20,13 +22,32 @@ import User from '../../models/userModel';
  * @param {Object} res - The response object.
  * @return {Promise} The JSON response containing the users.
  */
-export const getUsers = async (req, res, next) => {
-  try {
-    const users = await User.find({}).populate('packs trips');
+// export const getUsers = async (req, res, next) => {
+//   try {
+//     const users = await prisma.user.findMany({
+//       include: {
+//         favorites: true,
+//       },
+//     });
 
-    res.locals.data = users;
-    responseHandler(res);
-  } catch (error) {
-    next(UserNotFoundError);
-  }
-};
+//     res.locals.data = users;
+//     responseHandler(res);
+//   } catch (error) {
+//     next(UserNotFoundError);
+//   }
+// };
+
+export function getUsersRoute() {
+  return publicProcedure.query(async (opts) => {
+    const prisma: PrismaClient = (opts.ctx as any).prisma;
+
+    const users = await prisma.user.findMany({
+      include: {
+        favoriteDocuments: true,
+      },
+    });
+
+    const jsonUsers = users.map((user) => User(user).toJSON());
+    return jsonUsers;
+  });
+}

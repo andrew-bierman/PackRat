@@ -19,10 +19,10 @@ COPY ./client/package*.json ./
 RUN rm -rf node_modules
 
 # Install client dependencies
-RUN npm install
+RUN yarn
 
 # Expose port for the client
-EXPOSE 19000
+EXPOSE 8081
 
 # Start the development server with hot-reloading
-CMD ["npm", "run", "web"]
+CMD ["yarn", "run", "web"]

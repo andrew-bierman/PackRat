@@ -1,10 +1,11 @@
-import Item from '../../models/itemModel';
-import { ItemCategoryModel } from '../../models/itemCategory';
+// import { prisma } from '../../prisma';
+
+import { PrismaClient } from '@prisma/client/edge';
 
 /**
  * Edit an item in the service.
- *
- * @param {_id} _id - the ID of the item to be edited
+ * @param {PrismaClient} prisma - Prisma client.
+ * @param {string} id - the ID of the item to be edited
  * @param {string} name - the new name of the item
  * @param {number} weight - the new weight of the item
  * @param {string} unit - the new unit of the item
@@ -13,30 +14,38 @@ import { ItemCategoryModel } from '../../models/itemCategory';
  * @return {Promise<object>} - the edited item
  */
 export const editItemService = async (
-  _id,
+  prisma: PrismaClient,
+  id,
   name,
   weight,
   unit,
   quantity,
   type,
 ) => {
-  const category = await ItemCategoryModel.findOne({
-    name: type,
+  const category = await prisma.itemCategory.findFirst({
+    where: {
+      name: type,
+    },
   });
 
-  const newItem = await Item.findOneAndUpdate(
-    { _id },
-    {
+  const newItem = await prisma.item.update({
+    where: {
+      id: id,
+    },
+    data: {
       name,
-      weight,
+      weight: Number(weight),
       unit,
-      quantity,
-      category: category.id,
+      quantity: Number(quantity),
+      categoryDocument: {
+        connect: { id: category.id },
+      },
+      type,
     },
-    {
-      returnOriginal: false,
+    include: {
+      categoryDocument: true,
     },
-  ).populate('category', 'name');
+  });
 
   return newItem;
 };

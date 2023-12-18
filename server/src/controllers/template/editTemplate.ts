@@ -1,6 +1,12 @@
+import { publicProcedure } from '../../trpc';
 import { responseHandler } from '../../helpers/responseHandler';
-import Template from '../../models/templateModel';
+
 import { editTemplateService } from '../../services/template/template.service';
+import { z } from 'zod';
+
+// import { prisma } from '../../prisma';
+import { TemplateType } from '@prisma/client/edge';
+import { Template } from '../../prisma/methods';
 
 /**
  * Edits a template.
@@ -8,14 +14,36 @@ import { editTemplateService } from '../../services/template/template.service';
  * @param {Object} res - The response object.
  * @return {Promise<void>} - A promise that resolves when the template is edited.
  */
-export const editTemplate = async (req, res) => {
-  const { templateId } = req.params;
-  const { type, isGlobalTemplate } = req.body;
-  const updatedTemplate = await editTemplateService(
-    templateId,
-    type,
-    isGlobalTemplate,
-  );
-  res.locals.data = updatedTemplate;
-  responseHandler(res);
-};
+// export const editTemplate = async (req, res) => {
+//   const { templateId } = req.params;
+//   const { type, isGlobalTemplate } = req.body;
+//   const updatedTemplate = await editTemplateService(
+//     templateId,
+//     type,
+//     isGlobalTemplate,
+//   );
+//   res.locals.data = updatedTemplate;
+//   responseHandler(res);
+// };
+
+export function editTemplateRoute() {
+  return publicProcedure
+    .input(
+      z.object({
+        templateId: z.string(),
+        type: z.nativeEnum(TemplateType),
+        isGlobalTemplate: z.boolean(),
+      }),
+    )
+    .mutation(async (opts) => {
+      const { templateId, type, isGlobalTemplate } = opts.input;
+      const { prisma }: any = opts.ctx;
+      const updatedTemplate = await editTemplateService(
+        prisma,
+        templateId,
+        type,
+        isGlobalTemplate,
+      );
+      return Template(updatedTemplate)?.toJSON();
+    });
+}

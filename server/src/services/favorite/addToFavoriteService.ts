@@ -1,26 +1,81 @@
-import User from '../../models/userModel';
-import Pack from '../../models/packModel';
+// import { prisma } from '../../prisma';
+
+import { PrismaClient } from '@prisma/client/edge';
 
 /**
  * Adds or removes a pack from the user's favorites list.
- *
+ * @param {PrismaClient} prisma - Prisma client.
  * @param {string} packId - The ID of the pack.
  * @param {string} userId - The ID of the user.
  * @return {Promise<void>} A promise that resolves when the operation is complete.
  */
-export const addToFavoriteService = async (packId, userId) => {
-  const exists = await User.find(
-    { favorites: { $in: [packId] } },
-    { _id: userId },
-  );
+export const addToFavoriteService = async (
+  prisma: PrismaClient,
+  packId,
+  userId,
+) => {
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+    include: {
+      favoriteDocuments: true,
+    },
+  });
 
-  if (exists.length > 0) {
-    await User.updateOne({ _id: userId }, { $pull: { favorites: packId } });
-    await Pack.updateOne({ _id: packId }, { $pull: { favorited_by: userId } });
-    await Pack.updateOne({ _id: packId }, { $inc: { favorites_count: -1 } });
+  if (user.favoriteDocuments.includes(packId)) {
+    // If the pack is in the user's favorites, remove it.
+    await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        favoriteDocuments: {
+          disconnect: {
+            id: packId,
+          },
+        },
+      },
+    });
+
+    await prisma.pack.update({
+      where: {
+        id: packId,
+      },
+      data: {
+        favoritedByDocuments: {
+          disconnect: {
+            id: userId,
+          },
+        },
+      },
+    });
   } else {
-    await User.updateOne({ _id: userId }, { $push: { favorites: packId } });
-    await Pack.updateOne({ _id: packId }, { $push: { favorited_by: userId } });
-    await Pack.updateOne({ _id: packId }, { $inc: { favorites_count: 1 } });
+    // If the pack is not in the user's favorites, add it.
+    await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        favoriteDocuments: {
+          connect: {
+            id: packId,
+          },
+        },
+      },
+    });
+
+    await prisma.pack.update({
+      where: {
+        id: packId,
+      },
+      data: {
+        favoritedByDocuments: {
+          connect: {
+            id: userId,
+          },
+        },
+      },
+    });
   }
 };

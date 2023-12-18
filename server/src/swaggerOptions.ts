@@ -5,7 +5,6 @@ import UserSchema from './models/userModel';
 
 import m2s from 'mongoose-to-swagger';
 import swaggerJsdoc from 'swagger-jsdoc';
-import express from 'express';
 
 // import options from "../utils/swaggerOptions.js";
 
@@ -25,7 +24,7 @@ const options = {
     // "./*.js", // this will look for .js files in the current directory
     // "./**/*.js", // this will look for .js files in all subdirectories
 
-    './routes/*.js',
+    './src/routes/*.ts',
     // "../middleware/validators/*.js",
     // "../models/*.js",
     // "../controllers/*.js",
@@ -33,11 +32,11 @@ const options = {
 
   servers: [
     {
-      url: 'http://localhost:3000',
+      url: 'http://localhost:8787',
       description: 'Development server',
     },
     {
-      url: ' https://26af-182-185-161-23.ngrok-free.app',
+      url: 'https://packrat.world/',
       description: 'Production server',
     },
   ],

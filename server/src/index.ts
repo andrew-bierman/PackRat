@@ -1,63 +1,58 @@
-import express, { type NextFunction } from 'express';
-import mongoose from 'mongoose';
-import cors from 'cors';
-import { isCelebrateError, errors } from 'celebrate';
-import { MONGODB_URI } from './config';
-import routes from './routes/index';
-import bodyParser from 'body-parser';
-import { serveSwaggerUI } from './helpers/serveSwaggerUI';
-import { corsOptions } from './helpers/corsOptions';
-import { errorHandler } from './helpers/errorHandler';
+import { Hono } from 'hono';
+import { fetchHandler } from 'trpc-playground/handlers/fetch';
+import { appRouter } from './routes/trpcRouter';
+import { honoTRPCServer } from './trpc/server';
+import { cors } from 'hono/cors';
+// import { logger } from 'hono/logger';
+import { compress } from 'hono/compress';
 
-// express items
-const app = express();
+type Bindings = {
+  DB: IDBDatabase;
+  JWT_VERIFICATION_KEY: string;
+  APP_URL: string;
+  CORS_ORIGIN: string;
+};
 
-if (corsOptions) {
-  app.use(cors(corsOptions as any));
-}
-app.use(bodyParser.json({ limit: '50mb' }));
-// app.use(express.urlencoded({ limit: "50mb", extended: true }));
+const TRPC_API_ENDPOINT = '/api/trpc';
+const TRPC_PLAYGROUND_ENDPOINT = '/trpc-playground';
 
-// const connectionString = " your connection string";
-const connectionString = MONGODB_URI ?? '';
+const app = new Hono<{ Bindings: Bindings }>();
 
-// use routes
-app.use(routes);
-// Serve the Swagger UI at /api-docs for api documentation, only in development
-serveSwaggerUI(app);
-
-// middleware to log Celebrate validation errors
+//  Setup compression
 app.use(
-  (
-    err: Error,
-    req: express.Request,
-    res: express.Response,
-    next: NextFunction,
-  ): void => {
-    if (isCelebrateError(err)) {
-      console.error(err);
-    }
-    next(err);
-  },
+  '*',
+  compress({
+    encoding: 'deflate',
+  }),
 );
 
-// Celebrate middleware to return validation errors
-app.use(errors());
-
-// custom error handler function
-app.use(errorHandler);
-
-// connect to mongodb
-mongoose.connect(connectionString).then(() => {
-  console.log('connected');
+//  Setup CORS
+app.use('*', (c, next) => {
+  const CORS_ORIGIN = String(c.env.CORS_ORIGIN);
+  const corsMiddleware = cors({
+    origin: CORS_ORIGIN,
+    credentials: true,
+    allowHeaders: ['Content-Type', 'Authorization'],
+    allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  });
+  return corsMiddleware(c, next);
 });
 
-const port = process.env.PORT || 3000;
+// Setup logging
+// tRPC is already logging requests, but you can add your own middleware
+// app.use('*', logger());
 
-// enter your ipaddress for the second param
-app.listen(port, () =>
-  // console.log("listening on ipaddress")
-  {
-    console.log(`listening on port ${port}`);
-  },
-);
+//  Setup tRPC server
+app.use(`${TRPC_API_ENDPOINT}/*`, honoTRPCServer({ router: appRouter }));
+
+//  Setup tRPC Playground
+app.use(TRPC_PLAYGROUND_ENDPOINT, async (c, next) => {
+  const handler = await fetchHandler({
+    router: appRouter,
+    trpcApiEndpoint: TRPC_API_ENDPOINT,
+    playgroundEndpoint: TRPC_PLAYGROUND_ENDPOINT,
+  });
+  return handler(c.req.raw);
+});
+
+export default app;

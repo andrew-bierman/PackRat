@@ -1,64 +1,66 @@
-import Pack from '../../models/packModel';
-import mongoose from 'mongoose';
-import { computeTotalWeightInGrams } from '../../utils/convertWeight';
+import { PrismaClient } from '@prisma/client/edge';
+import { User, Item } from '../../prisma/methods';
 
-/**
- * Retrieves packs service for a given ownerId.
- *
- * @param {string} ownerId - The ID of the owner.
- * @return {Promise<Array>} An array of packs.
- */
-export const getPacksService = async (ownerId) => {
-  const packs = await Pack.aggregate([
-    {
-      $match: { owners: new mongoose.Types.ObjectId(ownerId) },
-    },
-    {
-      $lookup: {
-        from: 'items',
-        localField: '_id',
-        foreignField: 'packs',
-        as: 'items',
-      },
-    },
-    {
-      $unwind: {
-        path: '$items',
-        preserveNullAndEmptyArrays: true,
-      },
-    },
-    {
-      $lookup: {
-        from: 'itemcategories',
-        localField: 'items.category',
-        foreignField: '_id',
-        as: 'items.category',
-      },
-    },
-    {
-      $addFields: {
-        category: { $arrayElemAt: ['$items.category.name', 0] },
-      },
-    },
-    computeTotalWeightInGrams(),
-    {
-      $group: {
-        _id: '$_id',
-        name: { $first: '$name' },
-        owner_id: { $first: '$owner_id' },
-        is_public: { $first: '$is_public' },
-        favorited_by: { $first: '$favorited_by' },
-        favorites_count: { $first: '$favorites_count' },
-        createdAt: { $first: '$createdAt' },
-        owners: { $first: '$owners' },
-        grades: { $first: '$grades' },
-        scores: { $first: '$scores' },
-        type: { $first: '$type' },
-        items: { $push: '$items' },
-        total_weight: { $sum: '$item_weight' },
-      },
-    },
-  ]);
+const SORT_OPTIONS = {
+  Favorite: { favoritesCount: 'desc' },
+  Lightest: { totalWeight: 'asc' },
+  Heaviest: { totalWeight: 'desc' },
+  'Most Items': { itemsCount: 'desc' },
+  'Fewest Items': { itemsCount: 'asc' },
+  Oldest: { createdAt: 'asc' },
+  'Most Recent': { updatedAt: 'desc' },
+  'Highest Score': { scores: { totalScore: 'desc' } },
+  'Lowest Score': { scores: { totalScore: 'asc' } },
+  'A-Z': { name: 'asc' },
+  'Z-A': { name: 'desc' },
+  'Most Owners': { owners: 'desc' },
+};
 
-  return packs;
+const DEFAULT_SORT = { createdAt: 'desc' };
+
+export const getPacksService = async (
+  prisma: PrismaClient,
+  ownerId,
+  queryBy = null,
+) => {
+  try {
+    const packs = await prisma.pack.findMany({
+      where: {
+        OR: [
+          {
+            owner_id: ownerId,
+          },
+          {
+            owners: { has: ownerId },
+          },
+        ],
+      },
+      include: {
+        itemDocuments: {
+          select: {
+            categoryDocument: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
+        ownerDocuments: true,
+      },
+      orderBy: SORT_OPTIONS[queryBy] || DEFAULT_SORT,
+    });
+
+    packs.forEach((pack) => {
+      pack.ownerDocuments = pack.ownerDocuments?.map(
+        (owner) => User(owner)?.toJSON(),
+      ) as any;
+      pack.itemDocuments = pack.itemDocuments?.map(
+        (item) => Item(item as any)?.toJSON(),
+      ) as any;
+    });
+
+    return packs;
+  } catch (error) {
+    throw new Error('Packs cannot be found: ' + error.message);
+  }
 };

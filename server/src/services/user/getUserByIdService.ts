@@ -1,25 +1,32 @@
-import User from '../../models/userModel';
+import { PrismaClient } from '@prisma/client/edge';
+import { User } from '../../prisma/methods';
+// import { prisma } from '../../prisma';
 
 /**
  * Retrieves a user by their ID from the database.
  * @param {string} userId - The ID of the user.
  * @return {Promise<object>} The user object.
  */
-export const getUserByIdService = async (userId: string): Promise<object> => {
+export const getUserByIdService = async (
+  prisma: PrismaClient,
+  userId: string,
+): Promise<object> => {
   try {
-    const user: any = await User.findById({ _id: userId })
-      .populate({
-        path: 'packs',
-        populate: {
-          path: 'items',
-          model: 'Item', // replace 'Item' with your actual Item model name
-        },
-      })
-      .populate('favorites')
-      .populate('trips');
+    const user = await prisma.user.findFirst({
+      where: {
+        id: userId,
+      },
+      include: {
+        favoriteDocuments: true,
+      },
+    });
 
-    return user;
+    if (user) {
+      return User(user).toJSON();
+    } else {
+      throw new Error('User cannot be found');
+    }
   } catch (error) {
-    throw new Error('User cannot be found');
+    throw new Error('Server Error');
   }
 };

@@ -1,6 +1,9 @@
 import { editGlobalItemAsDuplicateService } from '../../services/item/item.service';
 import { UnableToDeleteItemError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
+import { z } from 'zod';
+import { publicProcedure } from '../../trpc';
+import { Item } from '../../prisma/methods';
 
 /**
  * Edit a global item by duplicating it with new changes.
@@ -17,24 +20,55 @@ import { responseHandler } from '../../helpers/responseHandler';
  * @param {Object} res - The response object.
  * @return {Object} The updated item.
  */
-export const editGlobalItemAsDuplicate = async (req, res, next) => {
-  try {
-    const { itemId } = req.params;
-    const { packId, name, weight, quantity, unit, type } = req.body;
+// export const editGlobalItemAsDuplicate = async (req, res, next) => {
+//   try {
+//     const { itemId } = req.params;
+//     const { packId, name, weight, quantity, unit, type } = req.body;
 
-    const newItem = await editGlobalItemAsDuplicateService(
-      itemId,
-      packId,
-      name,
-      weight,
-      quantity,
-      unit,
-      type,
-    );
+//     const newItem = await editGlobalItemAsDuplicateService(
+//       itemId,
+//       packId,
+//       name,
+//       weight,
+//       quantity,
+//       unit,
+//       type,
+//     );
 
-    res.locals.data = newItem;
-    responseHandler(res);
-  } catch (error) {
-    next(UnableToDeleteItemError);
-  }
-};
+//     res.locals.data = newItem;
+//     responseHandler(res);
+//   } catch (error) {
+//     next(UnableToDeleteItemError);
+//   }
+// };
+
+export function editGlobalItemAsDuplicateRoute() {
+  return publicProcedure
+    .input(
+      z.object({
+        itemId: z.string(),
+        packId: z.string(),
+        name: z.string(),
+        weight: z.number(),
+        quantity: z.number(),
+        unit: z.string(),
+        type: z.string(),
+      }),
+    )
+    .mutation(async (opts) => {
+      const { itemId, packId, name, weight, quantity, unit, type } = opts.input;
+      const { prisma }: any = opts.ctx;
+      const item = await editGlobalItemAsDuplicateService(
+        prisma,
+        itemId,
+        packId,
+        name,
+        weight,
+        quantity,
+        unit,
+        type,
+      );
+
+      return Item(item)?.toJSON();
+    });
+}

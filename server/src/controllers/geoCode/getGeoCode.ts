@@ -1,41 +1,33 @@
+import { publicProcedure } from '../../trpc';
 import { ErrorFetchingGeoCodeError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { oneEntity } from '../../utils/oneEntity';
-const fetch = async (...args: Parameters<typeof fetch>) =>
-  import('node-fetch').then(async ({ default: fetch }) =>
-    fetch(...(args as Parameters<typeof fetch>)),
-  );
+import * as validators from '@packrat/validations';
+import { geoCodeService } from '../../services/geocode/geoCodeService';
 
-/**
- * Retrieves the geocode for a given address array.
- * @param {Object} req - The request object.
- * @param {Object} req.query - The query parameters.
- * @param {string} req.query.addressArray - The address array to retrieve the geocode for.
- * @param {Object} res - The response object.
- * @return {Promise<void>} - A promise that resolves when the geocode is retrieved and the response is sent.
- */
-export const getGeoCode = async (req, res, next) => {
-  const addressArray = await oneEntity(req.query.addressArray);
-  const transform = addressArray.split(', ').join('%20').split(' ').join('%20');
+// /**
+//  * Retrieves the geocode for a given address array.
+//  * @param {Object} req - The request object.
+//  * @param {Object} req.query - The query parameters.
+//  * @param {string} req.query.addressArray - The address array to retrieve the geocode for.
+//  * @param {Object} res - The response object.
+//  * @return {Promise<void>} - A promise that resolves when the geocode is retrieved and the response is sent.
+//  */
+// export const getGeoCode = async (req, res, next) => {
+//   const result: any = await geoCodeService(req.query);
+//   if (result.message === 'ok') {
+//     res.locals.data = result.result;
+//     responseHandler(res);
+//   } else {
+//     next(ErrorFetchingGeoCodeError);
+//   }
+// };
 
-  const GEO_CODE_URL = process.env.GEO_CODE_URL;
-  const GEOAPIFY_KEY = process.env.GEOAPIFY_KEY;
-
-  let params = '?';
-
-  if (addressArray) params += `text=${transform}`;
-
-  const api_key = `&apiKey=${GEOAPIFY_KEY}`;
-
-  params += api_key;
-
-  const url = GEO_CODE_URL + params;
-
-  await fetch(url)
-    .then(async (response) => response.json())
-    .then((result) => {
-      res.locals.data = result;
-      responseHandler(res);
-    })
-    .catch(() => next(ErrorFetchingGeoCodeError));
-};
+export function getGeoCodeRoute() {
+  return publicProcedure.input(validators.AddressArray).query(async (opts) => {
+    const {addressArray} = opts.input;
+    const { env }: any = opts.ctx;
+    const result: any = await geoCodeService({addressArray, geoCodeUri: env.GEO_CODE_URL, geoapifyKey: env.GEOAPIFY_KEY });
+    return result.message === 'ok' ? result.result : ErrorFetchingGeoCodeError;
+  });
+}

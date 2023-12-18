@@ -12,7 +12,6 @@ const PackSchema = new Schema(
     owner_id: { type: Schema.Types.ObjectId, ref: 'User' },
     is_public: { type: Boolean },
     favorited_by: [{ type: Schema.Types.ObjectId, ref: 'User' }],
-    favorites_count: { type: Number },
     createdAt: String,
     owners: [{ type: Schema.Types.ObjectId, ref: 'User', default: [] }],
     grades: {
@@ -35,6 +34,10 @@ const PackSchema = new Schema(
   },
   { timestamps: true },
 );
+
+PackSchema.virtual('favorites_count').get(function () {
+  return this.favorited_by.length;
+});
 
 PackSchema.virtual('total_weight').get(function () {
   if (this.items && this.items.length > 0 && this.items[0] instanceof Item) {

@@ -1,25 +1,46 @@
-import Item from '../../models/itemModel';
+import { PrismaClient } from '@prisma/client/edge';
+// import { prisma } from '../../prisma';
 
 /**
  * Retrieves globally available items.
- *
+ * @param {PrismaClient} prisma - Prisma client.
  * @param {Object} req - The request object.
+ * @param {number} reqlimit - The limit for the number of items to retrieve.
+ * @param {number} reqpage - The page number.
  * @return {Object} An object containing items, page, and totalPages.
  */
-export const getItemsGloballyService = async (req) => {
-  const totalItems = await Item.countDocuments({ global: true });
-  const limit = Number(req.query.limit) || totalItems;
+export const getItemsGloballyService = async (
+  prisma: PrismaClient,
+  reqlimit,
+  reqpage,
+) => {
+  const totalItems = await prisma.item.count({
+    where: {
+      global: true,
+    },
+  });
+  const limit = Number(reqlimit) || totalItems;
   const totalPages = Math.ceil(totalItems / limit);
-  const page = Number(req.query.page) || 1;
+  const page = Number(reqpage) || 1;
   const startIndex = (page - 1) * limit;
 
-  const items = await Item.find({ global: true })
-    .populate('category', 'name')
-    .skip(startIndex)
-    .limit(limit)
-    .sort({
-      createdAt: -1,
-    });
+  const items = await prisma.item.findMany({
+    where: {
+      global: true,
+    },
+    include: {
+      categoryDocument: {
+        select: {
+          name: true,
+        },
+      },
+    },
+    skip: startIndex,
+    take: limit,
+    orderBy: {
+      createdAt: 'desc',
+    },
+  });
 
   return {
     items,
