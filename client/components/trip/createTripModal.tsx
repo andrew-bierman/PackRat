@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
-import { Platform, View } from 'react-native';
+// import { Platform, View } from 'react-native';
 import { CustomModal } from '../modal';
 import { Input, VStack, HStack, Text, Select } from 'native-base';
 import { useDispatch, useSelector } from 'react-redux';
 import { format, intervalToDuration } from 'date-fns';
 // import { addTrip } from '../../store/tripsStore';
 import { useAddTrips } from '~/hooks/trips';
-import { api } from '../../constants/api';
-import { trpc } from '../../trpc';
+// import { api } from '../../constants/api';
+import { trpc, queryTrpc } from '../../trpc';
 import { useGetPhotonDetails } from '~/hooks/destination';
 
 // import { Picker } from '@react-native-picker/picker';
 import { DropdownComponent } from '../Dropdown';
-import axios from '~/config/axios';
+// import axios from '~/config/axios';
 
 const options = [
   { label: 'Yes', value: 'true' },
@@ -78,12 +78,12 @@ export const SaveTripContainer = ({ dateRange }) => {
   const user = useSelector((state) => state.auth.user);
   const packId = useSelector((state) => state.trips.newTrip.packId);
 
-  console.log('- note for me', packId);
-  console.log('search in save trip container ->', search);
-  console.log('selected in dateRange ->', dateRange);
+  // console.log('- note for me', packId);
+  // console.log('search in save trip container ->', search);
+  // console.log('selected in dateRange ->', dateRange);
 
   // defining dispatch
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const { AddTrips } = useAddTrips();
 
   // trip info states value
@@ -93,8 +93,17 @@ export const SaveTripContainer = ({ dateRange }) => {
   // const [startDate, setStartDate] = useState("");
   // const [endDate, setEndDate] = useState("");
   const [isPublic, setIsPublic] = useState(true);
-
-  // create trip
+  const usePhotonDetailsQuery = () => {
+    const enabled = Boolean(search?.properties?.osm_id && search?.properties?.osm_type);
+    
+    return queryTrpc.getPhotonDetails.useQuery(
+      { id: search?.properties?.osm_id, type: search?.properties?.osm_type },
+      { enabled },
+      );
+    };
+    
+    // create trip
+  const { isLoading : loading , isError: err, data : geoJSON } = usePhotonDetailsQuery()
   const handleCreateTrip = async () => {
     // duration object
     const startDate = dateRange.startDate
@@ -120,7 +129,6 @@ export const SaveTripContainer = ({ dateRange }) => {
     //   id: search.properties.osm_id,
     //   type: search.properties.osm_type,
     // });
-    const { data: geoJSON } = await useGetPhotonDetails(search);
 
     const data = {
       name,
@@ -139,7 +147,7 @@ export const SaveTripContainer = ({ dateRange }) => {
 
     // creating a trip
     console.log('create trip data ->', data);
-    const { isLoading, isError, error } = AddTrips(data);
+    AddTrips(data);
     // dispatch(addTrip(data));
     setIsSaveModalOpen(!isSaveModalOpen);
   };
@@ -311,3 +319,4 @@ export const SaveTripContainer = ({ dateRange }) => {
     </CustomModal>
   );
 };
+

@@ -17,6 +17,7 @@ import useCustomStyles from '~/hooks/useCustomStyles';
 import useParks from '~/hooks/parks';
 import useTrails from '~/hooks/trails';
 import { useGetPhotonDetails } from '~/hooks/destination';
+import { WeatherData } from '../../components/destination';
 export default function Trips() {
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
@@ -253,6 +254,7 @@ export default function Trips() {
               shape={photonDetails}
             />
           )}
+            { photonDetails && <WeatherData geoJSON={photonDetails} />}
           <RStack>
             <SaveTripContainer dateRange={dateRange} />
           </RStack>

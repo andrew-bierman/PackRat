@@ -86,7 +86,7 @@ const DestinationHeader = ({ geoJSON, selectedSearchResult }) => {
  * @param {Object} geoJSON - The GeoJSON data.
  * @return {JSX.Element|null} The WeatherCard component if weatherObject and weatherWeek are truthy, otherwise null.
  */
-const WeatherData = ({ geoJSON }) => {
+export const WeatherData = ({ geoJSON }) => {
   const dispatch = useDispatch();
   // const weatherObject = useSelector((state) => state.destination.weatherObject);
   // const weatherWeek = useSelector((state) => state.destination.weatherWeek);
