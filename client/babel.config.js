@@ -40,8 +40,10 @@ module.exports = function (api) {
       [
         '@tamagui/babel-plugin',
         {
-          components: ['tamagui'],
+          exclude: ['**/node_modules/**'],
+          components: ['@packrat/ui', 'tamagui'],
           config: './theme/tamagui.config.js',
+          logTimings: true,
         },
       ],
       [
