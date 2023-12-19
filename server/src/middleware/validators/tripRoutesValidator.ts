@@ -1,30 +1,25 @@
 import { z } from 'zod';
 import { Request } from 'express';
 
-const featurePropertiesSchema = z.object({
-  name: z.string(),
-  'name:ar': z.string().optional(),
-  'name:bn': z.string().optional(),
-  'name:gu': z.string().optional(),
-  'name:hi': z.string().optional(),
-  'name:kn': z.string().optional(),
-  'name:ml': z.string().optional(),
-  'name:ne': z.string().optional(),
-  'name:ru': z.string().optional(),
-  'name:ta': z.string().optional(),
-  'name:te': z.string().optional(),
-  'name:ur': z.string().optional(),
-  place: z.string(),
-  population: z.string(),
-  wikidata: z.string(),
-  wikipedia: z.string(),
-  id: z.string(),
+const coordinateSchema = z.lazy(() =>
+  z.union([z.number(), z.array(coordinateSchema)]),
+);
+
+const baseGeometrySchema = z.object({
+  type: z.string(),
+  coordinates: coordinateSchema,
 });
 
-const geometrySchema = z.object({
-  type: z.literal('Point'),
-  coordinates: z.tuple([z.number(), z.number()]),
+const geometryCollectionSchema = z.object({
+  type: z.literal('GeometryCollection'),
+  geometries: z.array(baseGeometrySchema),
 });
+
+const geometrySchema = z.union([baseGeometrySchema, geometryCollectionSchema]);
+
+const featurePropertiesSchema = z.record(
+  z.union([z.string(), z.number(), z.boolean()]),
+);
 
 const featureSchema = z.object({
   type: z.literal('Feature'),
