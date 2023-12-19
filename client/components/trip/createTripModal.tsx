@@ -5,7 +5,7 @@ import { Input, VStack, HStack, Text, Select } from 'native-base';
 import { useDispatch, useSelector } from 'react-redux';
 import { format, intervalToDuration } from 'date-fns';
 // import { addTrip } from '../../store/tripsStore';
-import { useAddTrips } from '~/hooks/trips';
+import { useAddTrip } from '~/hooks/trips';
 import { api } from '../../constants/api';
 import { trpc } from '../../trpc';
 import { useGetPhotonDetails } from '~/hooks/destination';
@@ -80,7 +80,7 @@ export const SaveTripContainer = ({ dateRange }) => {
 
   // defining dispatch
   const dispatch = useDispatch();
-  const { AddTrips } = useAddTrips();
+  const { addTrip } = useAddTrip();
 
   // trip info states value
   const [name, setName] = useState('');
@@ -140,7 +140,7 @@ export const SaveTripContainer = ({ dateRange }) => {
 
     // creating a trip
     console.log('create trip data ->', data);
-    AddTrips(data);
+    addTrip(data);
     setIsSaveModalOpen(!isSaveModalOpen);
   };
 
