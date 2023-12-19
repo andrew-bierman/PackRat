@@ -57,8 +57,8 @@ export default function Card({
 
   const isFavorite =
     type !== 'trip' &&
-    (favorited_by.includes(user._id) ||
-      favorited_by.some((obj) => obj._id === user._id));
+    (favorited_by?.includes(user._id) ||
+      favorited_by?.some((obj) => obj._id === user._id));
 
   /**
    * Handles adding an item to the user's favorites.
