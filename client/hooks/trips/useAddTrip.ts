@@ -1,10 +1,10 @@
 import { queryTrpc } from '../../trpc';
 
-export const useAddTrips = () => {
+export const useAddTrip = () => {
   const utils = queryTrpc.useUtils();
   const mutation = queryTrpc.addTrip.useMutation();
 
-  const AddTrips = (newTrip) => {
+  const addTrip = (newTrip) => {
     mutation.mutate(newTrip, {
       onSuccess: () => {
         utils.getTrips.invalidate();
@@ -13,7 +13,7 @@ export const useAddTrips = () => {
   };
 
   return {
-    AddTrips,
+    addTrip,
     ...mutation,
   };
 };
