@@ -91,10 +91,10 @@ export const SaveTripContainer = ({ dateRange }) => {
   const [isPublic, setIsPublic] = useState(true);
 
   const geoJSONData = useGetPhotonDetails({
-    properties: search
+    properties: search?.properties
       ? {
-          osm_id: search.properties.osm_id,
-          osm_type: search.properties.osm_type,
+          osm_id: search?.properties?.osm_id,
+          osm_type: search?.properties?.osm_type,
         }
       : undefined,
   });
