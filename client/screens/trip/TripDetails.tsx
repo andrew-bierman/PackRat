@@ -15,7 +15,7 @@ import { Platform, StyleSheet } from 'react-native';
 import { theme } from '../../theme';
 import { CLIENT_URL } from '@env';
 import ScoreContainer from '../../components/ScoreContainer';
-import WeatherCard from '../../components/WeatherCard';
+import WeatherCard from '../../components/weather/WeatherCard';
 import TripCard from '../../components/TripCard';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { convertPhotonGeoJsonToShape } from '../../utils/mapFunctions';
