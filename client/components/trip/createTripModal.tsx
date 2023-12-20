@@ -1,18 +1,14 @@
 import React, { useState } from 'react';
-// import { Platform, View } from 'react-native';
 import { CustomModal } from '../modal';
 import { Input, VStack, HStack, Text, Select } from 'native-base';
 import { useDispatch, useSelector } from 'react-redux';
 import { format, intervalToDuration } from 'date-fns';
 // import { addTrip } from '../../store/tripsStore';
 import { useAddTrip } from '~/hooks/trips';
-// import { api } from '../../constants/api';
-import { trpc, queryTrpc } from '../../trpc';
 import { useGetPhotonDetails } from '~/hooks/destination';
 
 // import { Picker } from '@react-native-picker/picker';
 import { DropdownComponent } from '../Dropdown';
-// import axios from '~/config/axios';
 
 const options = [
   { label: 'Yes', value: 'true' },
@@ -89,17 +85,6 @@ export const SaveTripContainer = ({ dateRange }) => {
   // const [startDate, setStartDate] = useState("");
   // const [endDate, setEndDate] = useState("");
   const [isPublic, setIsPublic] = useState(true);
-  // const usePhotonDetailsQuery = () => {
-  //   const enabled = Boolean(search?.properties?.osm_id && search?.properties?.osm_type);
-    
-  //   return queryTrpc.getPhotonDetails.useQuery(
-  //     { id: search?.properties?.osm_id, type: search?.properties?.osm_type },
-  //     { enabled },
-  //     );
-  //   };
-    
-  //   // create trip
-  // const { isLoading : loading , isError: err, data : geoJSON } = usePhotonDetailsQuery()
 
   const geoJSONData = useGetPhotonDetails({
     properties: search?.properties
@@ -322,4 +307,3 @@ export const SaveTripContainer = ({ dateRange }) => {
     </CustomModal>
   );
 };
-
