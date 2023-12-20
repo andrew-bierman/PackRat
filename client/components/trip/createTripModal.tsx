@@ -1,18 +1,14 @@
 import React, { useState } from 'react';
-import { Platform, View } from 'react-native';
 import { CustomModal } from '../modal';
 import { Input, VStack, HStack, Text, Select } from 'native-base';
 import { useDispatch, useSelector } from 'react-redux';
 import { format, intervalToDuration } from 'date-fns';
 // import { addTrip } from '../../store/tripsStore';
 import { useAddTrip } from '~/hooks/trips';
-import { api } from '../../constants/api';
-import { trpc } from '../../trpc';
 import { useGetPhotonDetails } from '~/hooks/destination';
 
 // import { Picker } from '@react-native-picker/picker';
 import { DropdownComponent } from '../Dropdown';
-import axios from '~/config/axios';
 
 const options = [
   { label: 'Yes', value: 'true' },

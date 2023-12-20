@@ -2,7 +2,7 @@ import { RStack } from '@packrat/ui';
 import { ScrollView } from 'react-native';
 import { theme } from '../../theme';
 import TripCard from '../../components/TripCard';
-import WeatherCard from '../../components/WeatherCard';
+import WeatherCard from '../../components/weather/WeatherCard';
 import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,6 +17,7 @@ import useCustomStyles from '~/hooks/useCustomStyles';
 import useParks from '~/hooks/parks';
 import useTrails from '~/hooks/trails';
 import { useGetPhotonDetails } from '~/hooks/destination';
+import { WeatherData } from '~/components/weather/WeatherData';
 export default function Trips() {
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
@@ -253,6 +254,7 @@ export default function Trips() {
               shape={photonDetails}
             />
           )}
+          {photonDetails && <WeatherData geoJSON={photonDetails} />}
           <RStack>
             <SaveTripContainer dateRange={dateRange} />
           </RStack>

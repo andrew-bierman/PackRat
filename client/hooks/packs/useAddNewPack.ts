@@ -5,7 +5,7 @@ export const useAddNewPack = () => {
   const mutation = queryTrpc.addPack.useMutation({
     onMutate: async (newPack) => {
       utils.getPacks.cancel({
-        ownerId: newPack.owner_id,
+        ownerId: newPack?.owner_id,
         queryBy: '',
       });
       // Step 1: Define optimistic update
@@ -13,19 +13,16 @@ export const useAddNewPack = () => {
         ...newPack,
         id: Date.now(),
       };
-      console.log('Optimistic update');
-      console.log(newPack);
 
       const oldQueryData = utils.getPacks.getData({
-        ownerId: newPack.owner_id,
+        ownerId: newPack?.owner_id,
         queryBy: '',
       });
 
       const newQueryData = {
         ...oldQueryData,
-        packs: [...oldQueryData.packs, optimisticUpdate],
+        packs:oldQueryData && oldQueryData.packs ? [...oldQueryData?.packs, optimisticUpdate] : [optimisticUpdate],
       };
-      console.log(newQueryData);
       utils.getPacks.setData(
         {
           ownerId: newPack.owner_id,
