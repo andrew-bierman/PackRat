@@ -1,20 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { 
-  RIconButton, 
-  RSwitch, 
-  RText, 
-  RStack,  
-  RSeparator,
-  RButton, 
-} from '@packrat/ui';
-import {Input,Text} from "tamagui"
-import { AntDesign } from '@expo/vector-icons';
-import { StyleSheet, FlatList, View, ScrollView } from 'react-native';
+
+import { Text } from "tamagui"
+import { FlatList, View, ScrollView, Platform } from 'react-native';
 import Card from '../../components/feed/FeedCard';
-import DropdownComponent from '../../components/Dropdown';
-import { theme } from '../../theme';
-import useTheme from '../../hooks/useTheme';
+
 import {
   getPublicPacks,
   getPublicTrips,
@@ -30,6 +20,7 @@ import { useRouter } from 'expo-router';
 import { fuseSearch } from '../../utils/fuseSearch';
 import { fetchUserFavorites } from '../../store/favoritesStore';
 import useCustomStyles from '~/hooks/useCustomStyles';
+import FeedSearchFilter from './FeedSearchFilter';
 
 const URL_PATHS = {
   userPacks: '/pack/',
@@ -44,113 +35,8 @@ const ERROR_MESSAGES = {
   userTrips: 'No User Trips Available',
 };
 
-const dataValues = [
-  'Favorite',
-  'Most Recent',
-  'Lightest',
-  'Heaviest',
-  'Most Items',
-  'Fewest Items',
-  'Oldest',
-];
 
-const FeedSearchFilter = ({
-  feedType,
-  handleSortChange,
-  handleTogglePack,
-  handleToggleTrip,
-  selectedTypes,
-  queryString,
-  setSearchQuery,
-  handleCreateClick,
-}) => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    useTheme();
-  const styles = useCustomStyles(loadStyles);
-  return (
-    <View style={styles.filterContainer}>
-      <View style={styles.searchContainer}>
-        <RStack space={3} style={{flexDirection: 'row', justifyContent: 'center'}}>
-          <Input
-            size="$30"
-            placeholder={`Search ${feedType || 'Feed'}`}
-            onChangeText={setSearchQuery}
-          />
-          <RIconButton
-            backgroundColor="transparent"
-            icon={
-              <AntDesign
-                name="search1"
-                size={24}
-                color={currentTheme.colors.cardIconColor}
-              />
-            }
-          />
-        </RStack>
-      </View>
-      <RSeparator />
-      <RStack
-        flex={1}
-        flexWrap="wrap"
-        flexDirection="row"
-        justifyContent="space-between"
-        alignItems="center"
-        padding={2}
-        margin={2}
-      >
-        {feedType === 'public' && (
-          <RStack style={{flexDirection: 'row', gap: '10px', alignItems: 'center'}}>
-            <Text
-              fontSize={18}
-              fontWeight="bold"
-              color={currentTheme.colors.textColor}
-            >
-              Packs
-            </Text>
-            <RSwitch
-              size="$1.5"
-              checked={selectedTypes.pack}
-              onCheckedChange={handleTogglePack}
-            />
-            <Text
-              fontSize={18}
-              fontWeight="bold"
-              color={currentTheme.colors.textColor}
-            >
-              Trips
-            </Text>
-            <RSwitch
-              size="$1.5"
-              checked={selectedTypes.trip}
-              onCheckedChange={handleToggleTrip}
-            />
-          </RStack>
-        )}
-        <RStack style={{flexDirection: 'row', gap: '10px', alignItems: 'center'}}>
-          <Text
-            fontSize={17}
-            fontWeight="bold"
-            color={currentTheme.colors.textColor}
-          >
-            Sort By:
-          </Text>
-          <DropdownComponent
-            value={queryString}
-            data={dataValues}
-            onValueChange={handleSortChange}
-            placeholder="Sort By"
-            style={styles.dropdown}
-            width={150}
-          />
-        </RStack>
-        {(feedType === 'userPacks' || feedType === 'userTrips') && (
-          <RButton onPress={handleCreateClick}>Create</RButton>
-        )}
-      </RStack>
-      <RSeparator style={{margin: '10px 0'}}/>
-    </View>
-  );
-};
+
 
 const Feed = ({ feedType = 'public' }) => {
   const router = useRouter();
@@ -158,13 +44,17 @@ const Feed = ({ feedType = 'public' }) => {
   const [queryString, setQueryString] = useState('');
   const [selectedTypes, setSelectedTypes] = useState({
     pack: true,
+    // trip: false,
+  });
+  const [selectedTrips, setSelectedTrips] = useState({
     trip: false,
   });
   const [searchQuery, setSearchQuery] = useState('');
 
+
   const dispatch = useDispatch();
-  const ownerId = useSelector((state) => state.auth.user?._id);
-  const publicPacksData = useSelector((state) => state.feed.publicPacks);
+  const ownerId = useSelector((state) => state?.auth.user?._id);
+  const publicPacksData = useSelector((state) => state?.feed.publicPacks);
   const userPacksData = useSelector(selectAllPacks);
   const publicTripsData = useSelector((state) => state.feed.publicTrips);
   const userTripsData = useSelector(selectAllTrips);
@@ -197,7 +87,8 @@ const Feed = ({ feedType = 'public' }) => {
       if (selectedTypes?.pack) {
         data = [...data, ...publicPacksData];
       }
-      if (selectedTypes?.trip) {
+      if (selectedTrips?.trip) {
+        data = []
         data = [...data, ...publicTripsData];
       }
     } else if (feedType === 'userPacks') {
@@ -208,11 +99,11 @@ const Feed = ({ feedType = 'public' }) => {
       data = userPacksData.filter((pack) => pack.isFavorite);
     }
 
+
     // Fuse search
     const keys = ['name', 'items.name', 'items.category'];
     const options = {
-      // your options
-      threshold: 0.42,
+      threshold: 0.4,
       location: 0,
       distance: 100,
       maxPatternLength: 32,
@@ -235,6 +126,7 @@ const Feed = ({ feedType = 'public' }) => {
         handleTogglePack={handleTogglePack}
         handleToggleTrip={handleToggleTrip}
         selectedTypes={selectedTypes}
+        selectedTrips={selectedTrips}
         queryString={queryString}
         setSearchQuery={setSearchQuery}
         handleCreateClick={handleCreateClick}
@@ -246,7 +138,6 @@ const Feed = ({ feedType = 'public' }) => {
         contentContainerStyle={{ flex: 1, paddingBottom: 10 }}
       >
         <View style={styles.cardContainer}>
-          {console.log({ data })}
           {feedSearchFilterComponent}
           {data?.map((item) => (
             <Card key={item._id} type={item.type} {...item} />
@@ -278,7 +169,7 @@ const Feed = ({ feedType = 'public' }) => {
   };
 
   const handleToggleTrip = () => {
-    setSelectedTypes((prevState) => ({
+    setSelectedTrips((prevState) => ({
       ...prevState,
       trip: !prevState.trip,
     }));

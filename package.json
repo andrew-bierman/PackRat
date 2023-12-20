@@ -60,11 +60,13 @@
   "packageManager": "yarn@4.0.1",
   "dependencies": {
     "@manypkg/cli": "^0.21.0",
+    "@tamagui/switch": "^1.79.12",
     "check-dependency-version-consistency": "^4.1.0",
     "cross-env": "^7.0.3",
     "dotenv-cli": "^7.3.0",
     "husky": "^8.0.0",
     "lint-staged": "^14.0.1",
+    "lodash": "^4.17.21",
     "typescript": "^5.2.2"
   },
   "lint-staged": {
