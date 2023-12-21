@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Text } from "tamagui"
+import { Text } from 'tamagui';
 import { FlatList, View, ScrollView, Platform } from 'react-native';
 import Card from '../../components/feed/FeedCard';
 
@@ -35,9 +35,6 @@ const ERROR_MESSAGES = {
   userTrips: 'No User Trips Available',
 };
 
-
-
-
 const Feed = ({ feedType = 'public' }) => {
   const router = useRouter();
 
@@ -52,14 +49,11 @@ const Feed = ({ feedType = 'public' }) => {
   const ownerId = useSelector((state) => state?.auth.user?._id);
   const publicPacksData = useSelector((state) => state?.feed.publicPacks);
 
-  console.log("LOGH***********publicPacksData", publicPacksData)
-
-
   const userPacksData = useSelector(selectAllPacks);
 
   const publicTripsData = useSelector((state) => state.feed.publicTrips);
 
-  console.log("publicTripsData", [...publicTripsData])
+  console.log('publicTripsData', [...publicTripsData]);
 
   const userTripsData = useSelector(selectAllTrips);
 
@@ -99,9 +93,8 @@ const Feed = ({ feedType = 'public' }) => {
     } else if (feedType === 'userTrips') {
       data = userTripsData;
     } else if (feedType === 'favoritePacks') {
-      data = userPacksData.filter((pack) => pack.isFavorite);
+      data = userPacksData?.filter((pack) => pack.isFavorite);
     }
-
 
     // Fuse search
     const keys = ['name', 'items.name', 'items.category'];
@@ -114,13 +107,11 @@ const Feed = ({ feedType = 'public' }) => {
     };
 
     const results =
-      feedType !== 'userTrips'
-        ? fuseSearch(data, searchQuery, keys, options)
-        : data;
+      // feedType == 'userTrips'
+      fuseSearch(data, searchQuery, keys, options);
+    // : data;
 
-    // Convert fuse results back into the format we want
-    // if searchQuery is empty, use the original data
-    data = searchQuery ? results.map((result) => result.item) : data;
+    data = searchQuery ? results?.map((result) => result?.item) : data;
 
     const feedSearchFilterComponent = (
       <FeedSearchFilter
@@ -143,7 +134,9 @@ const Feed = ({ feedType = 'public' }) => {
         <View style={styles.cardContainer}>
           {feedSearchFilterComponent}
           {data?.map((item) => (
-            <Card key={item._id} type={item.type} {...item} />
+            <Card key={item?._id} type={item?.type} {...item}
+
+            />
           ))}
         </View>
       </ScrollView>
@@ -231,7 +224,6 @@ const loadStyles = (theme) => {
 };
 
 export default Feed;
-
 
 // import React, { useEffect, useState } from 'react';
 // import { useDispatch, useSelector } from 'react-redux';
@@ -575,4 +567,3 @@ export default Feed;
 // };
 
 // export default Feed;
-

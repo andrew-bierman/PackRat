@@ -12,7 +12,7 @@ import { TouchableOpacity, View } from 'react-native';
 import { Link } from 'expo-router';
 import { DuplicateIcon } from '../DuplicateIcon/index';
 import { truncateString } from '../../utils/truncateString';
-import {Text} from "tamagui"
+import { Text } from "tamagui"
 import { RText, RStack, RHeading } from '@packrat/ui';
 import { formatNumber } from '~/utils/formatNumber';
 
@@ -37,10 +37,10 @@ export default function Card({
   const favorites = useSelector(selectAllFavorites);
   const dispatch = useDispatch();
 
-  const isFavorite = !type === 'trip'
-      ? favorited_by.includes(user._id) ||
-        favorited_by.forEach((obj) => obj._id === user._id)
-      : null;
+  const isFavorite = type && !type == 'trip'
+    ? favorited_by.includes(user._id) ||
+    favorited_by.forEach((obj) => obj._id === user._id)
+    : null;
 
   /**
    * Handles adding an item to the user's favorites.
@@ -79,20 +79,20 @@ export default function Card({
   if (duration) numberOfNights = JSON.parse(duration).numberOfNights;
 
   return (
-    <View style={{alignItems: "center", padding: "16px"}}>
-      <View style={{ 
-        minHeight: "150px", 
-        minWidth: "300px", 
-        marginVertical: "auto", 
+    <View style={{ alignItems: "center", padding: "16px" }}>
+      <View style={{
+        minHeight: "150px",
+        minWidth: "300px",
+        marginVertical: "auto",
         borderRadius: "15px",
         overflow: "hidden",
         borderColor: "lightgray",
         borderWidth: "1",
-        backgroundColor: `${currentTheme.colors.card}`, 
+        backgroundColor: `${currentTheme.colors.card}`,
       }}
       >
-        <RStack style={{padding: "16px", gap: "50px"}}>
-          <RStack style={{gap: "10px"}}>
+        <RStack style={{ padding: "16px", gap: "50px" }}>
+          <RStack style={{ gap: "10px" }}>
             <RHeading>
               <View
                 style={{
@@ -104,10 +104,10 @@ export default function Card({
               >
                 <Link href={type === 'pack' ? '/pack/' + _id : '/trip/' + _id}>
                   <Text fontSize={18} color={currentTheme.colors.textColor}>
-                    {truncatedName}
+                    {name}
                   </Text>
                 </Link>
-                <RStack style={{ flexDirection: 'row', alignItems:"center", justifyContent:"center", gap: "10px"}}>
+                <RStack style={{ flexDirection: 'row', alignItems: "center", justifyContent: "center", gap: "10px" }}>
                   {type === 'pack' && (
                     <View
                       style={{
@@ -162,8 +162,8 @@ export default function Card({
             )}
           </RStack>
 
-          <RStack style={{alignItems:"center", justifyContent: "space-between"}}>
-            <RStack style={{flexDirection: "row", alignItems:"center", justifyContent: "space-between", width: "100%"}}>
+          <RStack style={{ alignItems: "center", justifyContent: "space-between" }}>
+            <RStack style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
               <View
                 style={{
                   flexDirection: 'column',

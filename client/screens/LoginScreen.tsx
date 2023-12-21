@@ -141,8 +141,11 @@ export default function Login() {
   const handleLogin = (data) => {
     const { email, password } = data;
     dispatch(signIn({ email, password })).then(({ payload }) => {
+      // console.log("12345678")
       if (!payload) return;
       if (payload.token) {
+        console.log("12345678")
+
         sessionSignIn(payload.token);
       }
     });
