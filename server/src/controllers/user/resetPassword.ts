@@ -1,5 +1,7 @@
 import { publicProcedure } from '../../trpc';
 import * as validator from '../../middleware/validators/index';
+import { User } from '../../drizzle/methods/User';
+import * as jwt from 'jsonwebtoken';
 
 /**
  * Resets the user's password.
@@ -30,15 +32,16 @@ export function resetPasswordRoute() {
     .input(validator.resetPassword)
     .mutation(async (opts) => {
       const { resetToken, password } = opts.input;
-      const { prisma, env }: any = opts.ctx;
+      const { env }: any = opts.ctx;
       const JWT_SECRET = env.JWT_SECRET;
-      const user = await prisma.user.validateResetToken(resetToken, JWT_SECRET);
-      await prisma.user.update({
-        where: { id: user.id },
-        data: {
-          password: password,
-        },
-      });
+      const user = new User();
+      const userDoc: any = await jwt.verify(resetToken, JWT_SECRET);
+      if (!userDoc || !userDoc.id) {
+        throw new Error('Invalid token');
+      }
+      await user.update({
+        password: password,
+      }, userDoc.id);
       return 'Successfully reset password';
     });
 }

@@ -2,6 +2,7 @@ import { publicProcedure } from '../../trpc';
 import { UnableToEditUserError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import * as validator from '../../middleware/validators/index';
+import { User } from '../../drizzle/methods/User';
 
 /**
  * Deletes a user from the database.
@@ -29,13 +30,8 @@ import * as validator from '../../middleware/validators/index';
 export function deleteUserRoute() {
   return publicProcedure.input(validator.deleteUser).mutation(async (opts) => {
     const { userId } = opts.input;
-    const { prisma }: any = opts.ctx;
-
-    await prisma.user.delete({
-      where: {
-        id: userId,
-      },
-    });
+    const user = new User();
+    await user.delete(userId);
     return 'User deleted successfully';
   });
 }

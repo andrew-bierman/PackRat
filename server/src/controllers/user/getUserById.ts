@@ -25,7 +25,6 @@ import * as validator from '../../middleware/validators/index';
 export function getUserByIdRoute() {
   return publicProcedure.input(validator.getUserById).mutation(async (opts) => {
     const { input } = opts;
-    const { prisma }: any = opts.ctx;
-    return await getUserByIdService(prisma, input.userId);
+    return await getUserByIdService(input.userId);
   });
 }

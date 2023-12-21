@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client/edge';
-import { User } from '../../prisma/methods';
+import { User } from '../../drizzle/methods/User';
 // import { prisma } from '../../prisma';
 
 /**
@@ -8,21 +8,14 @@ import { User } from '../../prisma/methods';
  * @return {Promise<object>} The user object.
  */
 export const getUserByIdService = async (
-  prisma: PrismaClient,
   userId: string,
 ): Promise<object> => {
   try {
-    const user = await prisma.user.findFirst({
-      where: {
-        id: userId,
-      },
-      include: {
-        favoriteDocuments: true,
-      },
-    });
+    const user = new User();
+    const userDoc = await user.findById(userId);
 
-    if (user) {
-      return User(user).toJSON();
+    if (userDoc) {
+      return userDoc
     } else {
       throw new Error('User cannot be found');
     }

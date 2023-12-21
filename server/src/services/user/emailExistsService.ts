@@ -1,24 +1,21 @@
-import { PrismaClient } from '@prisma/client/edge';
 import {
   findUserAndUpdate,
   findUserByEmail,
 } from '../../services/user/user.service';
 
 export async function emailExistsService({
-  prisma,
   email,
   sendGridApiKey,
 }: {
   sendGridApiKey: string;
-  prisma: PrismaClient;
   email?: string;
 }) {
-  const val = await findUserByEmail(prisma, email);
+  const val = await findUserByEmail(email);
   if (val) {
     sendEmailNotice(sendGridApiKey, email).then(async (result1: any) => {
       if (result1.status) {
         const { newcode } = result1;
-        findUserAndUpdate(prisma, email, newcode, 'code').then(
+        findUserAndUpdate(email, newcode, 'code').then(
           async (result2: any) => {
             if (result2.status) {
               return result2;

@@ -1,12 +1,7 @@
-import { User } from '../../prisma/methods';
-
+import { and, eq } from "drizzle-orm";
+import { User } from "../../drizzle/methods/User";
+import { User as UserTable } from "../../db/schema";
 export async function checkCodeService({ prisma, email, code }: any) {
-  const user = await prisma.user.findFirst({
-    where: {
-      email: email.toLowerCase(),
-      code,
-    },
-  });
-
-  return User(user)?.toJSON(); // Assuming you want to return the user if found
+  const user = await new User().findByEmail(email.toLowerCase(), and(eq(UserTable.email, email.toLowerCase()), eq(UserTable.code, code)));
+  return user;
 }

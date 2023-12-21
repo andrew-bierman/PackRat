@@ -1,6 +1,5 @@
-// import { prisma } from '../../prisma';
 
-import { PrismaClient } from '@prisma/client/edge';
+import { User } from '../../drizzle/methods/User';
 
 /**
  * Finds a user by their email address.
@@ -9,17 +8,13 @@ import { PrismaClient } from '@prisma/client/edge';
  * @return {Promise<any>} The result of the user search. If a user is found, it returns true. If no user is found, it returns "User not found". If an error occurs during the search, it returns "Server Error".
  */
 export async function findUserByEmail(
-  prisma: PrismaClient,
   email: string,
 ): Promise<any> {
   try {
-    const user = await prisma.user.findFirst({
-      where: {
-        email: email.toLowerCase(),
-      },
-    });
+    const user = new User();
+    const userDoc = await user.findByEmail(email.toLowerCase());
 
-    if (user) {
+    if (userDoc) {
       return true;
     } else {
       return 'User not found';

@@ -2,8 +2,9 @@ import { publicProcedure } from '../../trpc';
 import { UserNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { PrismaClient } from '@prisma/client/edge';
-import { User } from '../../prisma/methods';
-
+import { User } from '../../drizzle/methods/User';
+import { eq } from 'drizzle-orm';
+import { User as UserTable } from '../../db/schema';
 // Middleware to check if user is authenticated
 // export const isAuthenticated = async (req, res, next) => {
 //   const token = req.headers.authorization.split(" ")[1];
@@ -39,15 +40,9 @@ import { User } from '../../prisma/methods';
 
 export function getUsersRoute() {
   return publicProcedure.query(async (opts) => {
-    const prisma: PrismaClient = (opts.ctx as any).prisma;
 
-    const users = await prisma.user.findMany({
-      include: {
-        favoriteDocuments: true,
-      },
-    });
+    const users = await new User().findMany(eq(UserTable.favorites, true));
 
-    const jsonUsers = users.map((user) => User(user).toJSON());
-    return jsonUsers;
+    return users
   });
 }

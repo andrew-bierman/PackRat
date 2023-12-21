@@ -18,12 +18,12 @@
     "moduleResolution": "Node",
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
-    "baseUrl": ".",
-    "paths":{
-      "@trpc":["trpc"],
-      "trpc":["../src/routes/index"],
-      "src":["../src"]
-    },
+    // "baseUrl": ".",
+    // "paths":{
+    //   "@trpc":["trpc"],
+    //   "trpc":["../src/routes/index"],
+    //   "src":["../src"]
+    // },
     "declaration": true
   },
   "exclude": [

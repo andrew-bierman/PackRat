@@ -1,9 +1,6 @@
 import { publicProcedure } from '../../trpc';
-import { UnableToEditUserError } from '../../helpers/errors';
-import { responseHandler } from '../../helpers/responseHandler';
 import * as validator from '../../middleware/validators/index';
-import { PrismaClient } from '@prisma/client/edge';
-import { User } from '../../prisma/methods';
+import { User } from '../../drizzle/methods/User';
 /**
  * Edits a user.
  * @param {Object} req - The request object.
@@ -44,30 +41,22 @@ export function editUserRoute() {
       item_id,
       ...rest
     } = opts.input;
-    const prisma: PrismaClient = (opts.ctx as any).prisma;
+    const user = new User();
+    const data = {
+      ...rest,
+      favoriteDocuments: {
+        connect: favourite_ids?.map((favourite) => ({ id: favourite })),
+      },
+      packDocuments: {
+        connect: pack_ids?.map((pack) => ({ id: pack })),
+      },
+      templates: {
+        connect: template_ids?.map((template) => ({ id: template })),
+      },
+      item: { set: item_id },
+    }
+    const editedUser = await user.update(data, userId, null, { favorites: true });
 
-    const editedUser = await prisma.user.update({
-      where: {
-        id: userId,
-      },
-      data: {
-        ...rest,
-        favoriteDocuments: {
-          connect: favourite_ids?.map((favourite) => ({ id: favourite })),
-        },
-        packDocuments: {
-          connect: pack_ids?.map((pack) => ({ id: pack })),
-        },
-        templates: {
-          connect: template_ids?.map((template) => ({ id: template })),
-        },
-        item: { set: item_id },
-      },
-      select: {
-        favorites: true,
-      },
-    });
-
-    return User(editedUser)?.toJSON();
+    return editedUser;
   });
 }

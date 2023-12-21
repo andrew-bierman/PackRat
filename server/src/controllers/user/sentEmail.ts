@@ -1,8 +1,8 @@
 import { publicProcedure } from '../../trpc';
 import { sendWelcomeEmail, resetEmail } from '../../utils/accountEmail';
 import * as validator from '../../middleware/validators/index';
+import { User } from '../../drizzle/methods/User';
 
-import { User } from '../../prisma/methods';
 /**
  * Sends an email to the specified email address.
  * @param {Object} req - The request object.
@@ -38,13 +38,13 @@ export function sentEmailRoute() {
     const SEND_GRID_API_KEY = env.SEND_GRID_API_KEY;
     const JWT_SECRET = env.JWT_SECRET;
     const CLIENT_URL = env.CLIENT_URL;
-    const user = await prisma.user.findFirst({ where: { email } });
-    const userWithMethods = User(user);
-    if (!user) {
+    const user = await new User()
+    const userDoc = await user.findByEmail(email.toLowerCase());
+    if (!userDoc) {
       throw new Error('User not found');
     }
-    const resetUrl = await userWithMethods.generateResetToken(prisma, JWT_SECRET, CLIENT_URL);
-    resetEmail(user.email, resetUrl, STMP_EMAIL, SEND_GRID_API_KEY);
+    const resetUrl = await user.generateResetToken(prisma, JWT_SECRET, CLIENT_URL);
+    resetEmail(userDoc.email, resetUrl, STMP_EMAIL, SEND_GRID_API_KEY);
     return 'Reset Token has been sent successfully';
   });
 }
