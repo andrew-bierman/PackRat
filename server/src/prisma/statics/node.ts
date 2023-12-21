@@ -1,4 +1,4 @@
-const findOrCreateMany = async (ids, nodes) => {
+async function findOrCreateMany(ids, nodes) {
   if (!this) return;
   // Find existing nodes
   const existingNodes = await this.findMany({
