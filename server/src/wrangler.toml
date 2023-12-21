@@ -1,22 +1,9 @@
-name = "packrat-api"
-compatibility_date = "2023-10-16"
-send_metrics = false
+name = "packrat_api"
+main = "src/index.ts"
+compatibility_date = "2022-11-07"
 node_compat = true
-main = "./src/index.ts"
 
-# [[d1_databases]]
-# binding = "DB"
-# database_name = "<DATABASE_NAME>"
-# database_id = "<unique-ID-for-your-database>"
-# migrations_dir = "migrations"
-
-[env.dev.vars]
-
-# For local development, you can create a file called .dev.vars and use dotenv syntax.
-#
-# For deployed environments, you can use wrangler secrets to set these values.
-# For example:
-# Run `echo <VALUE> | wrangler secret put <NAME>` for each of these
-# Or use the Cloudflare web interface.
-# @link https://developers.cloudflare.com/workers/platform/environment-variables/#environment-variables-via-the-dashboard
-#
+[[ d1_databases ]]
+binding = "packrat_db"
+database_name = "packrat_db"
+database_id = "2374ksjbfhsdf93lwsad09234"

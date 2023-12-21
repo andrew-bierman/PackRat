@@ -1,7 +1,7 @@
-import * as jwt from 'jsonwebtoken'
+import * as jwt from 'hono/jwt'
 import { eq } from "drizzle-orm";
-import { createDb, } from "src/db/client";
-import { UserTable } from "src/db/schema";
+import { createDb } from "../../db/client";
+import { User as UserTable } from "../../db/schema";
 
 export class User {
     constructor() {

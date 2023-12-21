@@ -3,7 +3,7 @@ import { integer, real, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 
 // User
-export const UserTable = sqliteTable('User', {
+export const User = sqliteTable('User', {
 	id: text('id').primaryKey(),
 	name: text("name"),
 	password: text("password"),
@@ -24,18 +24,18 @@ export const UserTable = sqliteTable('User', {
 	items: text("items"),
 	createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`(strftime('%s', 'now'))`),
 	updatedAt: integer('updated_at', { mode: 'timestamp' }),
-	favoriteDocuments: text('pack[]_undefined'),
-	packDocuments: text('pack[]_undefined'),
-	itemDocument: text('item_id)').references(()=> item.id),
+	favorite: text('pack[]_undefined'),
+	pack: text('pack[]_undefined'),
+	item: text('item_id)').references(()=> item.id),
 	templates: text('template[]_undefined'),
 	trips: text('trip[]_undefined'),
 	Pack: text('pack[]_undefined'),
   });
 
-export type User = InferSelectModel<typeof UserTable>;
-export type InsertUser = InferInsertModel<typeof UserTable>;
-export const insertUserSchema = createInsertSchema(UserTable);
-export const selectUserSchema = createSelectSchema(UserTable);
+export type User = InferSelectModel<typeof User>;
+export type InsertUser = InferInsertModel<typeof User>;
+export const insertUserSchema = createInsertSchema(User);
+export const selectUserSchema = createSelectSchema(User);
 
 export const geojson = sqliteTable("geojson", {
 	id: text('id').primaryKey(),
@@ -68,9 +68,9 @@ export const item = sqliteTable("item", {
 	createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`(strftime('%s', 'now'))`),
 	updatedAt: integer('created_at', { mode: 'timestamp' }),
 	type: text("type"),
-	categoryDocument: text('itemcategory_id)').references(()=> itemcategory.id),
-	packDocuments: text('pack[]_id)').references(()=> pack.id),
-	ownerDocuments: text('user[]_undefined'),
+	itemCategory: text('itemcategory_id)').references(()=> itemcategory.id),
+	pack: text('pack[]_id)').references(()=> pack.id),
+	owner: text('user[]_undefined'),
 	// @@map("items"): undefined,
 })
 
@@ -88,16 +88,13 @@ export const pack = sqliteTable("pack", {
 	favorited_by: text("favorited_by"),
 	createdAt: text("created_at"),
 	updatedAt: integer('created_at', { mode: 'timestamp' }),
-	itemDocuments: text('item[]_id)').references(()=> item.id),
-	favoritedByDocuments: text('user[]_undefined'),
-	ownerDocuments: text('user[]_undefined'),
-	ownerDocument: text('user_id)').references(()=> UserTable.id),
-
+	item: text('item[]_id)').references(()=> item.id),
+	favoritedBy: text('user[]_undefined'),
+	owner: text('user_id)').references(()=> User.id),
 	//: text('virtuals_undefined'),
 	total_weight: text('float_undefined'),
 	total_scores: integer("total_scores"),
 	favorites_count: integer("favorites_count"),
-
 	// @@map("packs"): undefined,
 	})
 
@@ -106,11 +103,9 @@ export const template = sqliteTable("template", {
 	type: text('templatetype_undefined'),
 	templateId: text("template_id"),
 	isGlobalTemplate: integer("is_global_template").default(0),
-	createdBy: text("created_by"),
 	createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`(strftime('%s', 'now'))`),
 	updatedAt: integer('created_at', { mode: 'timestamp' }),
-	createdByDocument: text('user_id)').references(()=> UserTable.id),
-
+	createdBy: text('user_id)').references(()=> User.id),
 	// @@map("templates"): undefined,
 	})
 
@@ -130,41 +125,10 @@ export const trip = sqliteTable("trip", {
 	geojson: text('json_undefined'),
 	createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`(strftime('%s', 'now'))`),
 	updatedAt: integer('created_at', { mode: 'timestamp' }),
-	ownerDocument: text('user_id)').references(()=> UserTable.id),
+	owner: text('user_id)').references(()=> User.id),
 
 	// @@map("trips"): undefined,
 	})
-
-// export const user = sqliteTable("user", {
-// 	id: text('id').primaryKey(),
-// 	name: text("name"),
-// 	password: text("password"),
-// 	email: text("email"),
-// 	token: text("token"),
-// 	code: text("code"),
-// 	googleId: text("google_id"),
-// 	is_certified_guide: integer("is_certified_guide"),
-// 	passwordResetToken: text("password_reset_token"),
-// 	passwordResetTokenExpiration: integer('created_at', { mode: 'timestamp' }),
-// 	role: text('role_undefined').default("user"),
-// 	username: text("username"),
-// 	profileImage: text("profile_image"),
-// 	preferredWeather: text("preferred_weather"),
-// 	preferredWeight: text("preferred_weight"),
-// 	favorites: text("favorites"),
-// 	packs: text("packs"),
-// 	item: text("item"),
-// 	createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`(strftime('%s', 'now'))`),
-// 	updatedAt: integer('created_at', { mode: 'timestamp' }),
-// 	favoriteDocuments: text('pack[]_undefined'),
-// 	packDocuments: text('pack[]_undefined'),
-// 	itemDocument: text('item_id)').references(()=> item.id),
-// 	templates: text('template[]_undefined'),
-// 	trips: text('trip[]_undefined'),
-// 	Pack: text('pack[]_undefined'),
-
-// 	// @@map("users"): undefined,
-// 	})
 
 export const conversation = sqliteTable("conversation", {
 	id: text('id').primaryKey(),
