@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { CustomModal } from '../modal';
 import { Input, VStack, HStack, Text, Select } from 'native-base';
-import { useDispatch, useSelector } from 'react-redux';
+import {  useSelector } from 'react-redux';
 import { format, intervalToDuration } from 'date-fns';
 // import { addTrip } from '../../store/tripsStore';
 import { useAddTrip } from '~/hooks/trips';
@@ -75,9 +75,7 @@ export const SaveTripContainer = ({ dateRange }) => {
   const packId = useSelector((state) => state.trips.newTrip.packId);
 
   // defining dispatch
-  const dispatch = useDispatch();
   const { addTrip } = useAddTrip();
-
   // trip info states value
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');

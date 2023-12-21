@@ -55,6 +55,7 @@ export const useAddNewPack = () => {
     addNewPack: mutation.mutate,
     isLoading: mutation.isLoading,
     isError: mutation.isError,
+    isSuccess: mutation.isSuccess,
     error: mutation.error,
   };
 };
