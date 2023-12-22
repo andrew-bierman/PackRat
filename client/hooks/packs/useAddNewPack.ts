@@ -46,7 +46,6 @@ export const useAddNewPack = () => {
       );
     },
     onSuccess: (result) => {
-      console.log('Success:', result);
       utils.getPacks.invalidate();
     },
   });
@@ -57,5 +56,6 @@ export const useAddNewPack = () => {
     isError: mutation.isError,
     isSuccess: mutation.isSuccess,
     error: mutation.error,
+    response: mutation.data
   };
 };

@@ -12,7 +12,7 @@ import useCustomStyles from '~/hooks/useCustomStyles';
 import { useAddNewPack } from '~/hooks/packs';
 import { useRouter } from 'expo-router';
 
-export const AddPack = ({isCreatingTrip}) => {
+export const AddPack = ({isCreatingTrip = false}) => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
@@ -27,9 +27,10 @@ export const AddPack = ({isCreatingTrip}) => {
   // const { user } = useAuth();
   const user = useSelector((state) => state.auth.user);
   const isLoading = useSelector((state) => state.packs.isLoading);
-  const { addNewPack,isSuccess,isError } = useAddNewPack();
-    if (isSuccess && !isCreatingTrip ) {
-      router.push('/packs');
+  const { addNewPack,isSuccess,isError,response } = useAddNewPack();
+    if (isSuccess && !isCreatingTrip && response ) {
+       
+      router.push(`/pack/${response.createdPack._id}`);
     }
   /**
    * Handles the addition of a pack.

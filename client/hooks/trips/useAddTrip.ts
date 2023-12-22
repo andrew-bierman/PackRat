@@ -1,16 +1,13 @@
-import { useRouter } from 'expo-router';
 import { queryTrpc } from '../../trpc';
 
 export const useAddTrip = () => {
-  const router = useRouter();
   const utils = queryTrpc.useUtils();
   const mutation = queryTrpc.addTrip.useMutation();
 
   const addTrip = (newTrip) => {
     mutation.mutate(newTrip, {
-      onSuccess: () => {
+      onSuccess: (result) => {
         utils.getTrips.invalidate();
-        router.push('/trips');
       },
     });
 
@@ -18,6 +15,7 @@ export const useAddTrip = () => {
 
   return {
     addTrip,
+    response: mutation.data,
     ...mutation,
   };
 };
