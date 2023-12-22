@@ -3,43 +3,46 @@ import { formatDistanceToNow } from 'date-fns';
 import { MaterialIcons, Entypo } from '@expo/vector-icons';
 import useTheme from '../../hooks/useTheme';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  addFavorite,
-  selectFavoriteById,
-  selectAllFavorites,
-} from '../../store/favoritesStore';
+import { addFavorite, selectAllFavorites } from '../../store/favoritesStore';
 import { TouchableOpacity, View } from 'react-native';
 import { Link } from 'expo-router';
 import { DuplicateIcon } from '../DuplicateIcon/index';
 import { truncateString } from '../../utils/truncateString';
 import { RText, RStack, RHeading } from '@packrat/ui';
 import { formatNumber } from '~/utils/formatNumber';
+import { useMemo } from 'react';
 
-export default function Card({
-  type,
-  _id,
-  owner,
-  name,
-  total_weight,
-  is_public,
-  favorited_by,
-  favorites_count,
-  owner_id,
-  destination,
-  createdAt,
-  owners,
-  duration,
-}) {
+export default function Card({ item }) {
+  const {
+    type,
+    _id,
+    owner,
+    name,
+    total_weight,
+    favorited_by,
+    favorites_count,
+    owner_id,
+    destination,
+    createdAt,
+    duration,
+  } = item;
+
   const user = useSelector((state) => state.auth.user);
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    useTheme();
+  const { currentTheme } = useTheme();
   const favorites = useSelector(selectAllFavorites);
   const dispatch = useDispatch();
 
-  const isFavorite = !type === 'trip'
-      ? favorited_by.includes(user._id) ||
-        favorited_by.forEach((obj) => obj._id === user._id)
-      : null;
+  const isFavorite = useMemo(() => {
+    if (type === 'trip') {
+      return null;
+    }
+
+    const isFavorite =
+      favorited_by.includes(user._id) ||
+      favorited_by.forEach((obj) => obj._id === user._id);
+
+    return isFavorite;
+  }, [favorited_by, user._id, type]);
 
   /**
    * Handles adding an item to the user's favorites.
@@ -77,21 +80,30 @@ export default function Card({
 
   if (duration) numberOfNights = JSON.parse(duration).numberOfNights;
 
+  const distanceToNow = useMemo(() => {
+    return (
+      formatDistanceToNow(new Date(createdAt || new Date()).getTime(), {
+        addSuffix: true,
+      }) ?? 0
+    );
+  }, [createdAt]);
+
   return (
-    <View style={{alignItems: "center", padding: "16px"}}>
-      <View style={{ 
-        minHeight: "150px", 
-        minWidth: "300px", 
-        marginVertical: "auto", 
-        borderRadius: "15px",
-        overflow: "hidden",
-        borderColor: "lightgray",
-        borderWidth: "1",
-        backgroundColor: `${currentTheme.colors.card}`, 
-      }}
+    <View style={{ alignItems: 'center', padding: '16px' }}>
+      <View
+        style={{
+          minHeight: '150px',
+          minWidth: '300px',
+          marginVertical: 'auto',
+          borderRadius: '15px',
+          overflow: 'hidden',
+          borderColor: 'lightgray',
+          borderWidth: '1',
+          backgroundColor: `${currentTheme.colors.card}`,
+        }}
       >
-        <RStack style={{padding: "16px", gap: "50px"}}>
-          <RStack style={{gap: "10px"}}>
+        <RStack style={{ padding: '16px', gap: '50px' }}>
+          <RStack style={{ gap: '10px' }}>
             <RHeading>
               <View
                 style={{
@@ -106,14 +118,21 @@ export default function Card({
                     {truncatedName}
                   </RText>
                 </Link>
-                <RStack style={{ flexDirection: 'row', alignItems:"center", justifyContent:"center", gap: "10px"}}>
+                <RStack
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '10px',
+                  }}
+                >
                   {type === 'pack' && (
                     <View
                       style={{
                         flexDirection: 'row',
                         alignItems: 'center',
                         justifyContent: 'space-between',
-                        gap: "8px",
+                        gap: '8px',
                         // border: '1px solid #ccc',
                       }}
                     >
@@ -161,13 +180,22 @@ export default function Card({
             )}
           </RStack>
 
-          <RStack style={{alignItems:"center", justifyContent: "space-between"}}>
-            <RStack style={{flexDirection: "row", alignItems:"center", justifyContent: "space-between", width: "100%"}}>
+          <RStack
+            style={{ alignItems: 'center', justifyContent: 'space-between' }}
+          >
+            <RStack
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                width: '100%',
+              }}
+            >
               <View
                 style={{
                   flexDirection: 'column',
                   alignItems: 'flex-start',
-                  gap: "8px",
+                  gap: '8px',
                 }}
               >
                 <Link href={`/profile/${owner_id}`}>
@@ -179,25 +207,11 @@ export default function Card({
                   style={{
                     flexDirection: 'row',
                     alignItems: 'center',
-                    gap: "100px",
+                    gap: '100px',
                   }}
                 >
-                  <RText
-                    fontSize="$1"
-                    color="gray"
-                    fontWeight="400"
-                    flex={1}
-                  >
-                    {formatDistanceToNow(
-                      new Date(
-                        !Number.isNaN(new Date(createdAt).getTime())
-                          ? createdAt
-                          : new Date(),
-                      ).getTime(),
-                      {
-                        addSuffix: true,
-                      },
-                    ) ?? 0}
+                  <RText fontSize="$1" color="gray" fontWeight="400" flex={1}>
+                    {distanceToNow}
                   </RText>
                 </View>
               </View>
@@ -210,12 +224,14 @@ export default function Card({
               >
                 {type === 'pack' && (
                   <View>
-                    <RText fontSize="$2" color={currentTheme.colors.textColor}>Favorites</RText>
+                    <RText fontSize="$2" color={currentTheme.colors.textColor}>
+                      Favorites
+                    </RText>
                     <View
                       style={{
                         flexDirection: 'row',
                         alignItems: 'center',
-                        gap: "8px",
+                        gap: '8px',
                       }}
                     >
                       {user?._id === owner_id ? null : (
@@ -244,7 +260,9 @@ export default function Card({
                 )}
                 {type === 'trip' && (
                   <View>
-                    <RText fontSize="$2" color={currentTheme.colors.textColor}>Nights</RText>
+                    <RText fontSize="$2" color={currentTheme.colors.textColor}>
+                      Nights
+                    </RText>
                     <RText
                       fontSize="$2"
                       color={currentTheme.colors.textColor}
