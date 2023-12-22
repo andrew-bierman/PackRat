@@ -39,7 +39,6 @@ const FeedSearchFilter = ({
   handleTogglePack,
   handleToggleTrip,
   selectedTypes,
-  selectedTrips,
   queryString,
   setSearchQuery,
   handleCreateClick,
@@ -114,7 +113,7 @@ const FeedSearchFilter = ({
               id="two-switch"
               size="$1.5"
               width="$4"
-              checked={selectedTrips.trip}
+              checked={selectedTypes.trip}
               onCheckedChange={handleToggleTrip}
             >
               <Switch.Thumb />
