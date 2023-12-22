@@ -25,7 +25,6 @@ export const ItemForm = ({
   let hasWaterAdded = false;
   if (
     currentPack &&
-    Array.isArray(currentPack.items) &&
     currentPack.items.length > 0
   ) {
     hasWaterAdded = currentPack.items.some(
@@ -102,8 +101,8 @@ export const ItemForm = ({
               {isLoading
                 ? 'Loading..'
                 : isEdit == true
-                ? 'Edit item'
-                : 'Add Item'}
+                  ? 'Edit item'
+                  : 'Add Item'}
             </Text>
           </Button>
         )}

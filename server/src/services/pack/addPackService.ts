@@ -18,8 +18,6 @@ export const addPackService = async (name, owner_id) => {
     owners: [owner_id],
   };
 
-  console.log('newPack', newPack);
-
   const exists = await Pack.find({ name });
 
   const createdPack = await Pack.create(newPack);

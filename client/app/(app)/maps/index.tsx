@@ -77,8 +77,6 @@ export default function DownloadedMaps() {
                   padding: 20,
                 }}
                 onPress={() => {
-                  console.log('pack object', pack);
-                  console.log('pack metadata', pack.metadata);
                   setPack(pack);
                   setShowMap(true);
                 }}
@@ -91,11 +89,9 @@ export default function DownloadedMaps() {
                       borderRadius: 10,
                     }}
                     source={{
-                      uri: `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/${
-                        pack?.bounds[0] + ',' + pack?.bounds[1]
-                      },10,60,60/600x600?access_token=${
-                        process.env.MAPBOX_ACCESS_TOKEN
-                      }`,
+                      uri: `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/${pack?.bounds[0] + ',' + pack?.bounds[1]
+                        },10,60,60/600x600?access_token=${process.env.MAPBOX_ACCESS_TOKEN
+                        }`,
                     }}
                   />
                 )}
@@ -159,7 +155,7 @@ export default function DownloadedMaps() {
                 id={'cicleCap'}
                 coordinate={
                   shape?.features[0]?.geometry?.coordinates[
-                    shape?.features[0]?.geometry?.coordinates?.length - 1
+                  shape?.features[0]?.geometry?.coordinates?.length - 1
                   ]
                 }
               >

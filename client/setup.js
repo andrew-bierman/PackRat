@@ -24,9 +24,6 @@ const replaceInFile = (filePath, replaceToken, newValue) => {
       if (err) {
         console.error(`Error writing file ${filePath}:`, err);
       } else {
-        console.log(
-          `Successfully replaced ${replaceToken} in ${filePath} with ${newValue}`,
-        );
       }
     });
   });

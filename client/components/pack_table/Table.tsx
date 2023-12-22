@@ -66,7 +66,7 @@ const TableItem = ({
   flexArr,
   currentPack,
   refetch,
-  setRefetch = () => {},
+  setRefetch = () => { },
 }) => {
   const { name, weight, quantity, unit, _id } = itemData;
   const styles = useCustomStyles(loadStyles);
@@ -182,7 +182,7 @@ const CategoryRow = ({ category }) => {
   };
 
   const rowData = [
-    <RStack style={{flexDirection: "row", gap: "8px", ...styles.categoryRow}}>
+    <RStack style={{ flexDirection: "row", gap: "8px", ...styles.categoryRow }}>
       <Feather
         name={categoryIcons[category]}
         size={16}
@@ -200,7 +200,7 @@ const CategoryRow = ({ category }) => {
 const TitleRow = ({ title }) => {
   const styles = useCustomStyles(loadStyles);
   const rowData = [
-    <RStack style={{flexDirection: "row", ...styles.mainTitle}}>
+    <RStack style={{ flexDirection: "row", ...styles.mainTitle }}>
       <RText fontSize="$2" style={styles.titleText}>{title}</RText>
     </RStack>
   ];
@@ -214,7 +214,7 @@ export const TableContainer = ({
   currentPack,
   selectedPack,
   refetch,
-  setRefetch = () => {},
+  setRefetch = () => { },
   copy,
 }) => {
   const user = useSelector((state) => state.auth.user);
@@ -301,13 +301,21 @@ export const TableContainer = ({
   };
 
   // In your groupedData definition, provide a default category for items without one
+  // const groupedData = data
+  //   ?.filter((fItem) => Array.isArray(fItem.category))
+  //   ?.reduce((acc, item) => {
+  //     const categoryName = item.category ? item.category[0].name : 'Undefined';
+  //     (acc[categoryName] = acc[categoryName] || []).push(item);
+  //     return acc;
+  //   }, {});
+
   const groupedData = data
-    ?.filter((fItem) => !Array.isArray(fItem.category))
     ?.reduce((acc, item) => {
-      const categoryName = item.category ? item.category.name : 'Undefined';
+      const categoryName = item.category.length > 0 ? item.category[0].name : 'Undefined';
       (acc[categoryName] = acc[categoryName] || []).push(item);
       return acc;
     }, {});
+  console.log("groupedData", groupedData)
 
   let flexArr = [2, 1, 1, 1, 0.65, 0.65, 0.65];
   let heading = [

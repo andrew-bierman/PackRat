@@ -16,12 +16,12 @@ export const AddItem = ({
   packId,
   currentPack,
   editAsDuplicate,
-  setPage = () => {},
+  setPage = () => { },
   page,
   closeModalHandler,
   refetch,
-  setIsAddItemModalOpen = () => {},
-  setRefetch = () => {},
+  setIsAddItemModalOpen = () => { },
+  setRefetch = () => { },
 }) => {
   const dispatch = useDispatch();
   const isLoading = useSelector((state) => state.packs.isLoading);
@@ -52,11 +52,8 @@ export const AddItem = ({
    * @return {type} description of return value
    */
   const handleSubmit = () => {
-    console.log('initial', initialData);
     if (isEdit) {
       if (packId && initialData.global) {
-        console.log('editing', packId);
-
         dispatch(
           editItemsGlobalAsDuplicate({
             itemId: _id,

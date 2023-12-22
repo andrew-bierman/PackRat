@@ -31,7 +31,6 @@ export const getNominatimDetails = async (req, res, next) => {
       res.locals.data = response.data;
       responseHandler(res);
     } else {
-      console.log(response.status, response.statusText);
       next(ErrorProcessingNominatimError);
     }
   } catch (error) {

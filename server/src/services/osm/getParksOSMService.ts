@@ -17,7 +17,6 @@ export async function getParksOSMService(lat, lon, radius) {
     headers: { 'Content-Type': 'text/plain' },
   });
   const geojsonData = osmtogeojson(response.data);
-  console.log('geojsonData==============', geojsonData);
 
   updateDatabaseWithGeoJSONDataFromOverpass(geojsonData);
 

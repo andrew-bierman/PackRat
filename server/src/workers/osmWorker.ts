@@ -11,7 +11,6 @@ import { findOrCreateMany } from '../utils/osmFunctions/modelHandlers';
 export async function processJob(job) {
   const features = job.data;
 
-  console.log('Starting heavy task');
   const start = Date.now();
 
   try {
@@ -21,12 +20,7 @@ export async function processJob(job) {
 
     const results = await findOrCreateMany(Way, features); // TODO (use geojson)
 
-    console.log('results', results);
-
-    console.log('Heavy task completed');
     const end = Date.now();
-
-    console.log(`Execution time: ${end - start} ms`);
 
     return {
       status: 'done',

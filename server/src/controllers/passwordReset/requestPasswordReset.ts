@@ -43,7 +43,6 @@ const sendPasswordResetEmail = async (email, resetUrl) => {
 
   try {
     await sgMail.send(mailOptions);
-    console.log('Password reset email sent successfully');
   } catch (error) {
     console.error('Error sending password reset email:', error);
   }

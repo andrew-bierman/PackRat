@@ -26,7 +26,6 @@ export const sendWelcomeEmail = (email: string, name: string) => {
       text: `Welcome to the app, ${name}. Let me know how you get along with the app.`,
     })
     .then((res: any) => {
-      console.log('Email Sent');
       return res;
     })
     .catch((err: any) => {
@@ -61,7 +60,6 @@ export const resetEmail = (email: string, resetUrl: string) => {
       `,
     })
     .then((res) => {
-      console.log('Email Sent');
       return res;
     })
     .catch((err) => {

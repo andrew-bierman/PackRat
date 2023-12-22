@@ -42,8 +42,6 @@ export const getAIResponseService = async (
     _id: conversationId,
   });
 
-  console.log('conversation after find ---->', conversation);
-
   let conversationHistory = conversation ? conversation.history : '';
   const messages: any[] = conversationHistory
     ? conversationHistory.split('\n').map((message, i) => ({

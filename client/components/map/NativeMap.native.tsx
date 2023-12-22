@@ -149,7 +149,6 @@ function NativeMap({ shape: shapeProp }) {
    * @param {Event} event - The press event object.
    */
   function onMapPress(event) {
-    console.log(event, 'eventtt');
     // if (trailCenterPoint) {
     //   mapViewFullScreenRef?.current.setCamera({
     //     centerCoordinate: trailCenterPoint,
@@ -165,7 +164,6 @@ function NativeMap({ shape: shapeProp }) {
    * @returns {void}
    */
   function onDownloadProgress(offlineRegion, offlineRegionStatus) {
-    console.log('control there', offlineRegionStatus?.percentage);
     setProgress(offlineRegionStatus.percentage);
     setDownloading(true);
     if (offlineRegionStatus.percentage == 100) {
@@ -213,7 +211,6 @@ function NativeMap({ shape: shapeProp }) {
 
   const pointLatLong = shape?.features[0]?.geometry?.coordinates;
   const openMaps = (latLong) => {
-    console.log(latLong.join(','), 'lat long');
     const scheme = Platform.select({
       ios: 'maps://0,0?q=',
       android: 'geo:0,0?q=',
@@ -246,8 +243,8 @@ function NativeMap({ shape: shapeProp }) {
             isPoint(shape)
               ? pointLatLong
               : isPolygonOrMultiPolygon(shape)
-              ? multiPolygonBounds(shape.features[0])
-              : trailCenterPoint
+                ? multiPolygonBounds(shape.features[0])
+                : trailCenterPoint
           }
           animationMode={'flyTo'}
           animationDuration={2000}
@@ -392,7 +389,7 @@ function NativeMap({ shape: shapeProp }) {
         <>
           <Modal
             visible={true}
-            // style={{ backgroundColor: "#000", height: "100%" }}
+          // style={{ backgroundColor: "#000", height: "100%" }}
           >
             {element}
           </Modal>

@@ -17,8 +17,6 @@
 import User from '../../models/userModel.js';
 
 export const up = async (db) => {
-  console.log('Adding usernames to existing users...');
-
   const cursor = db.collection('users').find({ username: { $exists: false } });
 
   while (await cursor.hasNext()) {

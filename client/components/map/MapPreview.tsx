@@ -15,10 +15,7 @@ import { MAPBOX_ACCESS_TOKEN } from '@env';
  * @return {Component} The rendered map preview.
  */
 export default function MapPreview({ shape }) {
-  console.log(
-    '🚀 ~ file: MapPreview.js:9 ~ MapPreview ~ shape:',
-    JSON.stringify(shape.features[0]),
-  );
+
   const processedShape = processShapeData(shape);
   const lineProperties = {
     stroke: '#16b22d',
@@ -33,7 +30,6 @@ export default function MapPreview({ shape }) {
   }
 
   const imageShape = { type: 'FeatureCollection', features: [] };
-  console.log(JSON.stringify(shape.features[0]));
   const polygonObj = {
     ...shape.features[0],
     geometry: {
@@ -41,7 +37,6 @@ export default function MapPreview({ shape }) {
       coordinates: [shape.features[0].geometry.coordinates[0]],
     },
   };
-  console.log(JSON.stringify(polygonObj), 'polygon obj');
   if (isPolygonOrMultiPolygon(shape)) {
     imageShape.features.push([shape.features[0].geometry.coordinates[0]]);
   } else {
@@ -57,10 +52,7 @@ export default function MapPreview({ shape }) {
   const urlEncodedImageShapeGeoJSON = encodeURIComponent(
     JSON.stringify(imageShape, null, 0),
   );
-  console.log(
-    '🚀 ~ file: MapPreview.js:33 ~ MapPreview ~ urlEncodedImageShapeGeoJSON:',
-    imageShape.features,
-  );
+
 
   let bounds = getShapeSourceBounds(shape);
   bounds = bounds[0].concat(bounds[1]);

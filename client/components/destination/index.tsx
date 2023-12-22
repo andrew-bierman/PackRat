@@ -129,7 +129,6 @@ const WeatherData = ({ geoJSON }) => {
 };
 
 export const DestinationPage = () => {
-  console.log('destination page');
   const router = useRouter();
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();

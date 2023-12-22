@@ -7,8 +7,6 @@ const apiMiddleware: Middleware =
   ({ dispatch }) =>
   (next) =>
   async (action) => {
-    console.log('action: ', action);
-
     if (action.type.endsWith('/pending')) {
       try {
         const result = await next(action);

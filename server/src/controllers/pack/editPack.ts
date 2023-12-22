@@ -17,8 +17,6 @@ export const editPack = async (req, res, next) => {
 
     const newPack = await editPackService(_id, req.body);
 
-    console.log('newPack', newPack);
-
     res.locals.data = newPack;
     responseHandler(res);
   } catch (error) {

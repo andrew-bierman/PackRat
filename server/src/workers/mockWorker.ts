@@ -6,7 +6,6 @@
  * @return {Promise<any>} A promise that resolves to the result of processing the job with the task.
  */
 const worker = async (job, task) => {
-  console.log(`Processing job ${job} with task ${task}`);
   // Wrap setTimeout inside a promise
   return await new Promise((resolve) => {
     setTimeout(() => {

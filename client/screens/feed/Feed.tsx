@@ -53,7 +53,6 @@ const Feed = ({ feedType = 'public' }) => {
 
   const publicTripsData = useSelector((state) => state.feed.publicTrips);
 
-  console.log('publicTripsData', [...publicTripsData]);
 
   const userTripsData = useSelector(selectAllTrips);
 
@@ -164,12 +163,6 @@ const Feed = ({ feedType = 'public' }) => {
     }));
   };
 
-  // const handleToggleTrip = () => {
-  //   setSelectedTrips((prevState) => ({
-  //     ...prevState,
-  //     trip: !prevState.trip,
-  //   }));
-  // };
   const handleToggleTrip = () => {
     setSelectedTrips(!selectedTrips);
   };

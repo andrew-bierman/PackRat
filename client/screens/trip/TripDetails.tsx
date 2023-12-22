@@ -27,7 +27,6 @@ export function TripDetails() {
   const styles = useCustomStyles(loadStyles);
   const weatherObject = useSelector((state) => state.weather.weatherObject);
   const weatherWeek = useSelector((state) => state.weather.weatherWeek);
-  console.log('trip detail');
   const dispatch = useDispatch();
 
   const { tripId } = useSearchParams();

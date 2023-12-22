@@ -28,10 +28,6 @@ const WaySchema = new Schema(
 WaySchema.pre('save', async function (next) {
   try {
     if (this.osm_type !== 'way') {
-      console.log(
-        'ERROR in WaySchema.pre("save"): this.osm_type !== "way"',
-        this.osm_type,
-      );
       throw new Error('This is not a way');
     }
     next();
@@ -57,7 +53,6 @@ WaySchema.method('toGeoJSON', async function () {
 
 // add a to JSON method to the schema that populates the nodes
 WaySchema.method('toJSON', async function () {
-  console.log('toJSON instance in mongo schema', this);
   const { _id, ...object } = this.toObject();
   // object.id = _id.toString();
   // object.nodes = await this.populate("nodes").execPopulate(); TODO

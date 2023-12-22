@@ -85,9 +85,7 @@ const chatSlice = createSlice({
       .addCase(getAIResponse.fulfilled, (state, action) => {
         const { aiResponse, conversation } = action.payload;
         const { _id, history } = conversation;
-        console.log('payload:', action.payload);
-        console.log('state.entities:', state.entities);
-        console.log('state.entities[_id]:', state.entities[_id]);
+
         chatAdapter.upsertOne(state, {
           id: _id,
           changes: {

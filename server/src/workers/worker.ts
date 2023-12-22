@@ -7,17 +7,13 @@
  * @return {Promise<any>} - A promise that resolves to the result of the heavy task.
  */
 function sample(data) {
-  console.log('Starting heavy task');
   const start = Date.now();
 
   try {
     // Simulate heavy task:
     const sortedData: any = heavyTask(data);
 
-    console.log('Heavy task completed');
     const end = Date.now();
-
-    console.log(`Execution time: ${end - start} ms`);
 
     return {
       status: 'done',

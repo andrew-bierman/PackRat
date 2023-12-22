@@ -76,9 +76,7 @@ export const SaveTripContainer = ({ dateRange }) => {
   const user = useSelector((state) => state.auth.user);
   const packId = useSelector((state) => state.trips.newTrip.packId);
 
-  console.log('- note for me', packId);
-  console.log('search in save trip container ->', search);
-  console.log('selected in dateRange ->', dateRange);
+
 
   // defining dispatch
   const dispatch = useDispatch();
@@ -103,9 +101,9 @@ export const SaveTripContainer = ({ dateRange }) => {
     const numNights =
       dateRange.startDate && dateRange.endDate
         ? intervalToDuration({
-            start: dateRange.startDate,
-            end: dateRange.endDate,
-          }).days
+          start: dateRange.startDate,
+          end: dateRange.endDate,
+        }).days
         : '';
     const duration = {
       numberOfNights: numNights,
@@ -113,7 +111,6 @@ export const SaveTripContainer = ({ dateRange }) => {
       endDate,
     };
 
-    console.log('old rag', search);
 
     const geoJSON = await trpc.getPhotonDetails.query({
       id: search.properties.osm_id,
@@ -136,7 +133,6 @@ export const SaveTripContainer = ({ dateRange }) => {
     };
 
     // creating a trip
-    console.log('create trip data ->', data);
     dispatch(addTrip(data));
     setIsSaveModalOpen(!isSaveModalOpen);
   };

@@ -22,7 +22,6 @@ export default function Drawer() {
   const styles = useCustomStyles(loadStyles);
 
   const { sessionSignOut } = useSession();
-  console.log('isDark, isLight', isDark, isLight);
   // const { signOut } = useAuth();
   const dispatch = useDispatch();
 

@@ -19,7 +19,6 @@ const AboutContent = ({ desktopContainer, isMobile }) => {
     useTheme();
 
   const styles = useCustomStyles(loadStyles);
-  console.log('isDark, isLight', isDark, isLight);
   const handleGithubLink = () => {
     // Add the URL of your GitHub repo here
     const githubUrl = 'https://github.com/andrew-bierman/PackRat';

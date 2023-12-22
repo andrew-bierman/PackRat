@@ -28,6 +28,7 @@ export default function PackContainer({ isCreatingTrip = false }) {
   const newTrip = useSelector((state) => state.trips.newTrip);
 
   const [currentPackId, setCurrentPackId] = useState(null);
+  const [currentPackName, setCurrentPackName] = useState("");
   const [refetch, setRefetch] = useState(false);
   const styles = useCustomStyles(loadStyles);
 
@@ -35,7 +36,7 @@ export default function PackContainer({ isCreatingTrip = false }) {
     if (user?._id) {
       dispatch(fetchUserPacks({ ownerId: user?._id }));
     }
-  }, [dispatch, user?._id, refetch]);
+  }, [dispatch]);
 
   /**
    * Handles the packing based on the given value.
@@ -45,7 +46,7 @@ export default function PackContainer({ isCreatingTrip = false }) {
    */
   const handlePack = (val) => {
     const selectedPack = packs.find((pack) => pack.name == val);
-
+    setCurrentPackName(selectedPack?.name)
     setCurrentPackId(selectedPack?._id);
 
     if (isCreatingTrip && selectedPack?._id) {
@@ -56,13 +57,15 @@ export default function PackContainer({ isCreatingTrip = false }) {
     selectPackById(state, currentPackId),
   );
 
+
   const dataValues = packs.map((item) => item?.name) ?? [];
+  console.log("currentPack-----------", currentPack)
 
   return dataValues?.length > 0 ? (
     <View style={styles.mainContainer}>
       <DropdownComponent
         data={dataValues}
-        value={currentPackId}
+        value={currentPackName}
         onValueChange={handlePack}
         placeholder={'Select a Pack'}
         width={300}

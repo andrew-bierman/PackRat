@@ -11,7 +11,5 @@ export function responseHandler(
 
   res.setHeader('Access-Control-Expose-Headers', 'X-Response-Message');
 
-  console.log('message', message);
-
   return res.status(200).json(data);
 }

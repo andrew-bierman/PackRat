@@ -249,10 +249,8 @@ const packsSlice = createSlice({
         const packIds = newItem.packs; // packIds is an array of pack Ids
 
         packIds.forEach((packId) => {
-          console.log('packid', packId);
           // loop through each packId
           const existingPack = state.entities[packId];
-          console.log('existingPack', existingPack);
           if (!existingPack) {
             return;
           }
@@ -260,7 +258,6 @@ const packsSlice = createSlice({
           const updatedItems = existingPack.items.map((item) =>
             item._id === newItem._id ? newItem : item,
           );
-          console.log('updatediTEMS', updatedItems);
 
           packsAdapter.updateOne(state, {
             id: packId,
@@ -341,7 +338,6 @@ const packsSlice = createSlice({
         const updatedItems = existingPack.items.map((item) =>
           item._id === itemId ? action.payload : item,
         );
-        console.log('updated items', updatedItems);
 
         packsAdapter.updateOne(state, {
           id: packId,
@@ -401,7 +397,6 @@ const packsSlice = createSlice({
       .addCase(deletePack.fulfilled, (state, action) => {
         state.isLoading = false;
         state.error = null;
-        console.log('here fyl');
       })
       .addCase(deletePack.rejected, (state, action) => {
         state.isLoading = false;

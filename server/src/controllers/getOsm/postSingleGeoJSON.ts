@@ -10,7 +10,6 @@ import { z } from 'zod';
  * @return {void} - does not return a value
  */
 export const postSingleGeoJSON = async (req, res) => {
-  console.log('in postSingleGeoJSON');
   const geojson = req.body;
 
   const result = await postSingleGeoJSONService(geojson);

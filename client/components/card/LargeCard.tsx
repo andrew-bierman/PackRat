@@ -53,7 +53,6 @@ export default function LargeCard({
     (state) => state.search.selectedSearchResult,
   );
 
-  console.log('currentShape', currentShape);
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const containerStyle = customStyle || getContainerStyle(type);

@@ -28,11 +28,7 @@ const csrfProtection = csrf({ cookie: true });
  * @param {NextFunction} next - The next function to call in the middleware chain.
  */
 const logger = (req: Request, res: Response, next: express.NextFunction) => {
-  console.log(`Incoming ${req.method} ${req.path}`);
-  res.on('finish', () => {
-    console.log(`Finished ${req.method} ${req.path} ${res.statusCode}`);
-    console.log(`Body ${req.body}`);
-  });
+  res.on('finish', () => {});
   next();
 };
 

@@ -41,7 +41,6 @@ const singleTripSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchSingleTrip.fulfilled, (state, action) => {
-        console.log('fetchSingleTrip.fulfilled', action.payload);
         singleTripAdapter.setAll(state.singleTrip, action.payload);
         state.singleTrip = action.payload;
         state.isLoading = false;

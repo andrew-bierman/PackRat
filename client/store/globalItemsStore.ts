@@ -32,9 +32,7 @@ export const getItemsGlobal = createAsyncThunk(
       // );
       // return response.data;
       return await trpc.getItemsGlobally.query({ limit, page });
-    } catch (error) {
-      console.log('error', error.message);
-    }
+    } catch (error) {}
   },
 );
 
@@ -88,7 +86,6 @@ const itemsSlice = createSlice({
       };
     },
     addItemOffline: (state, action) => {
-      console.log(action.payload, 'add item offline');
       return {
         ...state,
         globalItems: {

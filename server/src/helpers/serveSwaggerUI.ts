@@ -19,7 +19,6 @@ export const serveSwaggerUI = (app: any) => {
     });
 
     app.get('/seed/category', (req: Request, res: Response) => {
-      console.log('Seeding...');
       ItemCategory.forEach(async (category) => {
         await ItemCategoryModel.create({
           name: category,

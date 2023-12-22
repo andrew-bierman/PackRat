@@ -22,7 +22,6 @@ export const executeOfflineRequests = createAsyncThunk(
     data.forEach(async (item: offlineRequestObj) => {
       try {
         const method = items[item.method];
-        console.log(method, 'method');
         await dispatch(method(item.data));
       } catch (err) {
         console.warn(err);
@@ -40,7 +39,6 @@ const offlineSlice = createSlice({
   }),
   reducers: {
     addOfflineRequest: (state, action) => {
-      console.log(action.payload);
       return {
         ...state,
         requests: [...state.requests, action.payload],

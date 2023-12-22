@@ -11,7 +11,7 @@ export const EditPackItemModal = ({
   editAsDuplicate,
   setPage,
   page,
-  setRefetch = () => {},
+  setRefetch = () => { },
   refetch,
   isModalOpen,
   onTrigger,

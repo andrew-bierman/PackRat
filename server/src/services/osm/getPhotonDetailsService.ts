@@ -25,7 +25,6 @@ export async function getPhotonDetailsService(id, type) {
 
   const overpassQuery = `[out:json][timeout:25];${type}(${id});(._;>;);out body;`;
 
-  console.log('overpassQuery', overpassQuery);
   const response = await axios.post(overpassUrl, overpassQuery, {
     headers: { 'Content-Type': 'text/plain' },
   });

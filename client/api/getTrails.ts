@@ -31,10 +31,7 @@ export const getTrailsRapid = async (locationObject, latParams, lonParams) => {
         trailsArray.push(item);
       });
     })
-    .catch((err) => {
-      console.log('message====>' + err.message);
-      console.error('error:' + err);
-    });
+    .catch((err) => {});
 
   if (trailsArray[1] !== undefined) {
     trailsArray = trailsArray[1]?.map((trail) => trail.name);

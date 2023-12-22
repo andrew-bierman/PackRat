@@ -102,8 +102,6 @@ function checkRedundancy(packItems: any) {
 }
 
 export function calculatePackScore(packData: any) {
-  console.log('Calculating pack score...');
-  console.log('packData: ', packData);
   const { items } = packData;
   // console.log("weight: ", weight);
   // console.log('items: ', items)

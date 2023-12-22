@@ -129,7 +129,6 @@ export async function toGeoJSON(Model: any, instance: any) {
 
 // Mapping of types to Models
 const modelMappingFunc = (type: string) => {
-  console.log('modelMappingFunc type', type);
   switch (type) {
     case 'node':
     case 'n': // In case 'n' is sent

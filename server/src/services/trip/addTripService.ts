@@ -94,8 +94,6 @@ const createOSMObject = async (geoJSON) => {
   // Save the OSM object and return its _id
   await osmData.save();
 
-  console.log('osmData', osmData);
-
   return {
     osm_ref: osmData._id,
     osm_type:

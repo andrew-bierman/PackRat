@@ -10,7 +10,7 @@ import {
 
 export default function RSelect(props) {
   return (
-    <SelectItem native {...props}/>
+    <SelectItem native {...props} />
   )
 }
 
@@ -33,6 +33,8 @@ export function SelectItem(props) {
   } = props;
 
   const handleChange = (newValue) => onValueChange && onValueChange(newValue);
+
+  console.log("value, SelectItem", value)
 
   const options = useMemo(() => {
     if (!data) return null;

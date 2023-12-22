@@ -18,12 +18,9 @@ export async function testQueueLogic() {
   const job = 'testJob';
   const task = 'testTask';
 
-  console.log(`Adding job ${job} with task ${task} to queue ${queueName}`);
-
   // Listen for job completed event
   const jobCompletedPromise = new Promise((resolve, reject) => {
     testQueue.on('completed', (job, result) => {
-      console.log(`Job ${job.id} completed with result ${result}`);
       resolve(result);
     });
 
@@ -35,8 +32,6 @@ export async function testQueueLogic() {
 
   // Process job
   await processJob(job, queueName, task);
-
-  console.log(`Job ${job} with task ${task} added to queue ${queueName}`);
 
   // Wait for the job to be completed or failed
   await jobCompletedPromise;

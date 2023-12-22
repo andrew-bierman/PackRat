@@ -18,7 +18,6 @@ import { z } from 'zod';
  * @return {Promise<void>} - A promise that resolves when the OpenStreetMap data is successfully retrieved and sent.
  */
 export const getOsm = async (req, res, next) => {
-  console.log('req', req); // log the request body to see what it looks like
   try {
     const { activityType, startPoint, endPoint } = req.body;
     const result = await getOsmService({ activityType, startPoint, endPoint });

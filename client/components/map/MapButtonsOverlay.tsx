@@ -30,7 +30,6 @@ const MapButtonsOverlay = ({
   progress,
   navigateToMaps,
 }) => {
-  console.log('newwwww');
   const [showStyleOptions, setShowStyleOptions] = useState(false);
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
@@ -161,9 +160,8 @@ const MapButtonsOverlay = ({
               />
               <Text style={styles.downloadText}>
                 {downloading
-                  ? `Downloading... ${
-                      progress ? Math.floor(progress) + '%' : ''
-                    }`
+                  ? `Downloading... ${progress ? Math.floor(progress) + '%' : ''
+                  }`
                   : 'Download map'}
               </Text>
             </TouchableOpacity>

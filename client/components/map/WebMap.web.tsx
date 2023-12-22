@@ -65,7 +65,6 @@ const WebMap = ({ shape: shapeProp }) => {
   // }, []);
 
   const [shape, setShape] = useState(shapeProp);
-  console.log('WebMap shape', shape);
 
   const mapContainer = useRef(null);
   const map = useRef(null);
@@ -112,7 +111,6 @@ const WebMap = ({ shape: shapeProp }) => {
 
       const latZoom = calculateZoomLevel(bounds, mapDim);
       const trailCenter = findTrailCenter(shape);
-      console.log('trailCenter in useEffect', trailCenter);
 
       zoomLevelRef.current = latZoom;
       trailCenterPointRef.current = trailCenter;
@@ -122,10 +120,7 @@ const WebMap = ({ shape: shapeProp }) => {
   }, [shape, fullMapDiemention]);
 
   useEffect(() => {
-    console.log(
-      !mapFullscreen || !isPolygonOrMultiPolygon(shape),
-      'is polygon or not',
-    );
+
     if (!mapFullscreen && !isPolygonOrMultiPolygon(shape)) return;
     if (!lng || !lat) return;
     try {
@@ -135,8 +130,8 @@ const WebMap = ({ shape: shapeProp }) => {
         // center: [lng, lat],
         center:
           trailCenterPointRef.current &&
-          !isNaN(trailCenterPointRef.current[0]) &&
-          !isNaN(trailCenterPointRef.current[1])
+            !isNaN(trailCenterPointRef.current[0]) &&
+            !isNaN(trailCenterPointRef.current[1])
             ? trailCenterPointRef.current
             : [lng, lat],
         zoom: zoomLevelRef.current ? zoomLevelRef.current : zoomLevel,
@@ -147,7 +142,6 @@ const WebMap = ({ shape: shapeProp }) => {
         if (isPoint(shape)) {
           addPoints(mapInstance);
         } else if (isPolygonOrMultiPolygon(shape)) {
-          console.log('it is polygon');
           addPolygons(mapInstance);
         } else {
           addTrailLayer(mapInstance);
@@ -198,7 +192,6 @@ const WebMap = ({ shape: shapeProp }) => {
       map.current.setZoom(zoomLevelRef.current);
     }
 
-    console.log('trailCenterPointRef.current', trailCenterPointRef.current);
 
     // console.log("mapInstance", mapInstance);
   }, [shape]);
@@ -514,12 +507,10 @@ const WebMap = ({ shape: shapeProp }) => {
         navigateToMaps={openMaps}
         onDownload={fetchGpxDownload}
         handleGpxUpload={async () => {
-          console.log('clikedd');
           try {
             const result = await DocumentPicker.getDocumentAsync({
               type: 'application/gpx+xml',
             });
-            console.log('result', result);
             if (result.type === 'success') {
               const base64Gpx = result.uri.split(',')[1];
               const gpxString = atob(base64Gpx);

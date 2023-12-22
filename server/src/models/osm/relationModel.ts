@@ -30,7 +30,6 @@ RelationSchema.pre('save', async function (next) {
 });
 
 RelationSchema.method('toGeoJSON', async function () {
-  console.log('toGeoJSON instance in mongo schema', this);
   return await toGeoJSON(this.constructor, this);
 });
 

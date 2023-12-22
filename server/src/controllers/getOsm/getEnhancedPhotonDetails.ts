@@ -46,8 +46,6 @@ export const getEnhancedPhotonDetails = async (req, res, next) => {
     out body;
     `;
 
-  console.log('overpassQuery', overpassQuery);
-
   const nominatimUrl = `https://nominatim.openstreetmap.org/lookup?format=json&osm_ids=${type[0]}${id}&addressdetails=1`;
 
   const overpassPromise = axios.post(overpassUrl, overpassQuery, {
@@ -67,8 +65,6 @@ export const getEnhancedPhotonDetails = async (req, res, next) => {
     // Assuming nominatimResponse.data is an array of objects
     const nominatimData = nominatimResponse.data;
 
-    console.log('nominatimData', nominatimData);
-
     // Add Nominatim data into each feature properties of the GeoJSON
     geojsonData.features.forEach((feature) => {
       feature.properties = {
@@ -80,8 +76,6 @@ export const getEnhancedPhotonDetails = async (req, res, next) => {
     res.locals.data = geojsonData;
     responseHandler(res);
   } else {
-    console.log(overpassResponse.status, overpassResponse.statusText);
-    console.log(nominatimResponse.status, nominatimResponse.statusText);
     next(ErrorProcessingRequestError);
   }
 };

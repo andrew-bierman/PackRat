@@ -14,8 +14,6 @@ export const scorePack = async (req, res, next) => {
 
     const updatedPack = await scorePackService(packId);
 
-    console.log('updatedPack', updatedPack);
-
     res.status(200).json({ msg: 'Pack was scored successfully', updatedPack });
   } catch (error) {
     next(UnableToScorePackError);

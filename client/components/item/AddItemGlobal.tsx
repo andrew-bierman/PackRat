@@ -7,7 +7,7 @@ import { ItemForm } from './ItemForm'; // assuming you moved the form related co
 
 export const AddItemGlobal = ({
   setIsAddItemModalOpen,
-  setRefetch = () => {},
+  setRefetch = () => { },
   refetch,
 }) => {
   const dispatch = useDispatch();
@@ -39,7 +39,6 @@ export const AddItemGlobal = ({
    * @return {void}
    */
   const handleSubmit = () => {
-    console.log(isConnected, 'is connected');
     if (!isConnected) {
       console.warn('You are offline');
       const item = { name, weight, quantity, type: categoryType, unit };

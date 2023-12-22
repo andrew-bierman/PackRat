@@ -144,7 +144,6 @@ export default function Login() {
       // console.log("12345678")
       if (!payload) return;
       if (payload.token) {
-        console.log("12345678")
 
         sessionSignIn(payload.token);
       }
