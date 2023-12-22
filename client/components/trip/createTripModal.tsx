@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { CustomModal } from '../modal';
 import { Input, VStack, HStack, Text, Select } from 'native-base';
-import { useDispatch, useSelector } from 'react-redux';
+import {  useSelector } from 'react-redux';
+import { useRouter } from 'expo-router';
 import { format, intervalToDuration } from 'date-fns';
 // import { addTrip } from '../../store/tripsStore';
 import { useAddTrip } from '~/hooks/trips';
@@ -9,7 +10,6 @@ import { useGetPhotonDetails } from '~/hooks/destination';
 
 // import { Picker } from '@react-native-picker/picker';
 import { DropdownComponent } from '../Dropdown';
-
 const options = [
   { label: 'Yes', value: 'true' },
   { label: 'For me only', value: 'false' },
@@ -75,15 +75,15 @@ export const SaveTripContainer = ({ dateRange }) => {
   const packId = useSelector((state) => state.trips.newTrip.packId);
 
   // defining dispatch
-  const dispatch = useDispatch();
-  const { addTrip } = useAddTrip();
-
+  const { addTrip,isSuccess, data:response  } = useAddTrip();
+  const router = useRouter();
   // trip info states value
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   // const [numberOfNights, setNumberOfNights] = useState("");
   // const [startDate, setStartDate] = useState("");
   // const [endDate, setEndDate] = useState("");
+
   const [isPublic, setIsPublic] = useState(true);
 
   const geoJSONData = useGetPhotonDetails({
@@ -139,7 +139,9 @@ export const SaveTripContainer = ({ dateRange }) => {
     addTrip(data);
     setIsSaveModalOpen(!isSaveModalOpen);
   };
-
+  if (isSuccess  && response) {
+    router.push(`/trip/${response.trip._id}`);
+  }
   /**
    * Handles the change in value.
    *

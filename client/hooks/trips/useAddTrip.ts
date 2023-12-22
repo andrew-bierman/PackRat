@@ -6,14 +6,16 @@ export const useAddTrip = () => {
 
   const addTrip = (newTrip) => {
     mutation.mutate(newTrip, {
-      onSuccess: () => {
+      onSuccess: (result) => {
         utils.getTrips.invalidate();
       },
     });
+
   };
 
   return {
     addTrip,
+    response: mutation.data,
     ...mutation,
   };
 };
