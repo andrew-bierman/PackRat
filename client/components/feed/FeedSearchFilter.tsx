@@ -2,14 +2,7 @@ import React from 'react';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from '~/hooks/useCustomStyles';
 import { Switch } from 'tamagui';
-import {
-  StyleSheet,
-  FlatList,
-  View,
-  ScrollView,
-  Platform,
-  TextInput,
-} from 'react-native';
+import { View } from 'react-native';
 import {
   RIconButton,
   RSwitch,
@@ -17,8 +10,8 @@ import {
   RStack,
   RSeparator,
   RButton,
+  RInput,
 } from '@packrat/ui';
-import { Input, Text } from 'tamagui';
 import { AntDesign } from '@expo/vector-icons';
 import DropdownComponent from '~/components/Dropdown';
 import { debounce } from 'lodash';
@@ -53,7 +46,7 @@ const FeedSearchFilter = ({
           space={3}
           style={{ flexDirection: 'row', justifyContent: 'center' }}
         >
-          <Input
+          <RInput
             size="$30"
             placeholder={`Search ${feedType || 'Feed'}`}
             // onChangeText={setSearchQuery}
