@@ -140,7 +140,6 @@ export const SaveTripContainer = ({ dateRange }) => {
     setIsSaveModalOpen(!isSaveModalOpen);
   };
   if (isSuccess  && response) {
-    console.log('response ->', response);
     router.push(`/trip/${response.trip._id}`);
   }
   /**

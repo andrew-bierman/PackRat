@@ -31,7 +31,7 @@ export const signUp = createAsyncThunk(
         email,
         password,
       });
-      // return user;
+      return user;
       // await AsyncStorage.setItem('authToken', response.data.user.token);
       // return response.data.user;
       // const response = await axios.post(`${api}/user/signup`, {
@@ -42,8 +42,7 @@ export const signUp = createAsyncThunk(
       // });
       // await AsyncStorage.setItem('authToken', response.data.user.token);
       // return response.data.user;
-
-      return await trpc.signUp.mutate({ name, username, email, password });
+      // return await trpc.signUp.mutate({ name, username, email, password });
     } catch (error) {
       console.log('error', error);
       return rejectWithValue(error.response?.data.error);
