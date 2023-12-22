@@ -7,6 +7,7 @@ import { format, intervalToDuration } from 'date-fns';
 import { addTrip } from '../../store/tripsStore';
 import { api } from '../../constants/api';
 import { trpc } from '../../trpc';
+import { debounce } from "lodash";
 
 // import { Picker } from '@react-native-picker/picker';
 import { DropdownComponent } from '../Dropdown';
@@ -173,6 +174,14 @@ export const SaveTripContainer = ({ dateRange }) => {
     offset: 30 * index, // calculate the offset based on item height
     index,
   });
+  
+  const debouncedName = debounce(async (e) => {
+    setName(e);
+  }, 500);
+
+  const debouncedDescription = debounce(async (e) => {
+    setDescription(e);
+  }, 500);
 
   return (
     <CustomModal
@@ -193,14 +202,14 @@ export const SaveTripContainer = ({ dateRange }) => {
         <Input
           placeholder="Trip Name"
           onChange={(event) => {
-            setName(event.target.value);
+            debouncedName(event.target.value)
           }}
         />
         <Input
           placeholder="Trip Description"
           mt={4}
           onChange={(event) => {
-            setDescription(event.target.value);
+            debouncedDescription(event.target.value)
           }}
         />
         <>

@@ -17,7 +17,7 @@ export const getUserFavoritesService = async (
       id: userId,
     },
     include: {
-      favorites: true,
+      favoriteDocuments: true,
     },
   });
 
