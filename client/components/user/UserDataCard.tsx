@@ -58,20 +58,20 @@ const UserDataCard = ({
   const truncatedDestination = truncateString(destination, 25);
 
   return (
-    <View style={{alignItems:"center", padding:"16px"}} >
+    <View style={{ alignItems: 'center', padding: '16px' }}>
       <View
         style={{
-          minHeight: "150px",
-          minWidth: "300px", 
-          border: '1px solid gray', 
-          borderLeft:`10px solid ${is_public ? 'green' : 'red'}`,
-          borderRadius: "8px",
-          overflow: "hidden",
+          minHeight: '150px',
+          minWidth: '300px',
+          border: '1px solid gray',
+          borderLeft: `10px solid ${is_public ? 'green' : 'red'}`,
+          borderRadius: '8px',
+          overflow: 'hidden',
           backgroundColor: '#EBEBEB',
         }}
       >
-        <RStack style={{padding:"16px", gap:"16px"}}>
-          <RStack  style={{gap:"8px"}}>
+        <RStack style={{ padding: '16px', gap: '16px' }}>
+          <RStack style={{ gap: '8px' }}>
             <RH2>
               <View
                 style={{
@@ -80,13 +80,13 @@ const UserDataCard = ({
                   justifyContent: 'space-between',
                   width: '100%',
                   gap: 10,
-                  fontSize:"16px",
-                  fontWeight: "bold"
+                  fontSize: '16px',
+                  fontWeight: 'bold',
                 }}
               >
                 {truncatedName}
                 {state[index] ? (
-                  <RText style={{fontSize: "16px"}}>Loading....</RText>
+                  <RText style={{ fontSize: '16px' }}>Loading....</RText>
                 ) : (
                   <>
                     {!differentUser && (
@@ -105,10 +105,10 @@ const UserDataCard = ({
             {type === 'pack' ? (
               <RText
                 style={{
-                  fontSize:"12px",
-                  color: "mediumpurple",
-                  marginLeft:"-0.5px",
-                  marginTop:"-3px",
+                  fontSize: '12px',
+                  color: 'mediumpurple',
+                  marginLeft: '-0.5px',
+                  marginTop: '-3px',
                 }}
               >
                 Total Weight: {total_weight}
@@ -116,10 +116,10 @@ const UserDataCard = ({
             ) : (
               <RText
                 style={{
-                  fontSize:"12px",
-                  color: "mediumpurple",
-                  marginLeft:"-0.5px",
-                  marginTop:"-3px",
+                  fontSize: '12px',
+                  color: 'mediumpurple',
+                  marginLeft: '-0.5px',
+                  marginTop: '-3px',
                 }}
               >
                 Destination: {truncatedDestination}
@@ -127,14 +127,27 @@ const UserDataCard = ({
             )}
           </RStack>
 
-          <RStack style={{flexDirection: "row", alignItems:"center", gap: "16px", justifyContent:"space-between"}}>
-            <RStack style={{flexDirection: "row", alignItems:"center", width:"100%"}}>
+          <RStack
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: '16px',
+              justifyContent: 'space-between',
+            }}
+          >
+            <RStack
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                width: '100%',
+              }}
+            >
               <RText
                 style={{
-                  color:"gray",
-                  fontSize: "12px",
-                  fontWeight: "400",
-                  flex:1
+                  color: 'gray',
+                  fontSize: '12px',
+                  fontWeight: '400',
+                  flex: 1,
                 }}
               >
                 {formatDistanceToNow(
@@ -156,22 +169,16 @@ const UserDataCard = ({
                 }}
               >
                 <AntDesign name="heart" size={16} color="red" />
-                <RText
-                  color="gray"
-                  fontWeight="400"
-                >
+                <RText color="gray" fontWeight="400">
                   {favorites_count}
                 </RText>
               </View>
             </RStack>
           </RStack>
         </RStack>
-        <View style={{alignItems:"center"}}>
+        <View style={{ alignItems: 'center' }}>
           <Link href={`/${type}/${_id}`}>
-            <RText
-              color="gray"
-              fontWeight="bold"
-            >
+            <RText color="gray" fontWeight="bold">
               View Details
             </RText>
           </Link>

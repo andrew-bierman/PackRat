@@ -215,25 +215,21 @@ export default function Login() {
 
   return (
     <RStack>
-      <View style={{ width:"100%", alignItems: "center"}}>
-        <View style={{paddingTop: "32px", width: "90%", maxWidth: "290px"}}>
-          <RHeading
-            fontSize={32}
-            color="#212121"
-            fontWeight="semibold"
-          >
+      <View style={{ width: '100%', alignItems: 'center' }}>
+        <View style={{ paddingTop: '32px', width: '90%', maxWidth: '290px' }}>
+          <RHeading fontSize={32} color="#212121" fontWeight="semibold">
             Welcome
           </RHeading>
           <RHeading
             color="grey"
             fontWeight="medium"
             fontSize={14}
-            style={{marginTop:"8px"}}
+            style={{ marginTop: '8px' }}
           >
             Sign in to continue!
           </RHeading>
 
-          <RStack style={{marginTop:"16px", gap: "8px"}}>
+          <RStack style={{ marginTop: '16px', gap: '8px' }}>
             <InputText
               label="Email ID"
               keyboardType="email-address"
@@ -252,16 +248,20 @@ export default function Login() {
             <RButton
               isDisabled={!isValid}
               onPress={handleSubmit(handleLogin)}
-              style={{marginTop: "16px"}}
+              style={{ marginTop: '16px' }}
               backgroundColor="mediumpurple"
             >
               Sign in
             </RButton>
-            <RStack style={{marginTop: "16px", flexDirection: "row", justifyContent:"center", gap: "4px"}}>
-              <RText
-                fontSize={14}
-                color="grey"
-              >
+            <RStack
+              style={{
+                marginTop: '16px',
+                flexDirection: 'row',
+                justifyContent: 'center',
+                gap: '4px',
+              }}
+            >
+              <RText fontSize={14} color="grey">
                 I'm a new user.
               </RText>
               <Link href="/register">
@@ -277,7 +277,7 @@ export default function Login() {
               </Link>
             </RStack>
 
-            <RStack style={{flexDirection: "row", justifyContent:"center" }} >
+            <RStack style={{ flexDirection: 'row', justifyContent: 'center' }}>
               <Link href="/password-reset">
                 <RText
                   style={{
@@ -291,32 +291,41 @@ export default function Login() {
               </Link>
             </RStack>
             {/* Google Login starts */}
-            <RStack style={{marginTop: "8px", flexDirection: "row", justifyContent:"center"}}>
-              <RText
-                color="grey"
-                fontWeight="medium"
-                fontSize={14}
-              >
+            <RStack
+              style={{
+                marginTop: '8px',
+                flexDirection: 'row',
+                justifyContent: 'center',
+              }}
+            >
+              <RText color="grey" fontWeight="medium" fontSize={14}>
                 Or
               </RText>
             </RStack>
 
             {/* Google Login */}
             {enableGoogleLogin && (
-            <RStack style={{marginTop: "8px", flexDirection: "row", justifyContent:"center", alignItems: "center"}}>
-              <RIconButton
-                disabled={!request}  
-                onPress={async () => await promptAsync()}
-                backgroundColor='red'
-                style={{width: "100%", color: "white"}}
-                icon={
-                  <FontAwesome
-                    name="google"
-                    size={16}
-                    color={currentTheme.colors.white}
-                  />
-                }
+              <RStack
+                style={{
+                  marginTop: '8px',
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
               >
+                <RIconButton
+                  disabled={!request}
+                  onPress={async () => await promptAsync()}
+                  backgroundColor="red"
+                  style={{ width: '100%', color: 'white' }}
+                  icon={
+                    <FontAwesome
+                      name="google"
+                      size={16}
+                      color={currentTheme.colors.white}
+                    />
+                  }
+                >
                   Sign in with Google
                 </RIconButton>
               </RStack>
@@ -324,9 +333,15 @@ export default function Login() {
 
             {/* Demo Login for Development start */}
             {NODE_ENV !== 'production' && (
-              <RStack style={{marginTop: "8px", justifyContent:"center", alignItems:"center" }} >
+              <RStack
+                style={{
+                  marginTop: '8px',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
                 <RButton
-                  style={{width: "100%"}}
+                  style={{ width: '100%' }}
                   disabled={!request}
                   onPress={() => handleLogin(demoUser)}
                   backgroundColor="purple"

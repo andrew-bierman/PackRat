@@ -19,7 +19,7 @@ const loadStyles = () => ({
     marginBottom: 10,
     justifyContent: 'space-around', // Updated from "space-between"
     alignItems: 'center',
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   text: {
     color: theme.colors.text,

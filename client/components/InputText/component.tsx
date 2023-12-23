@@ -50,33 +50,33 @@ export const InputText: React.ForwardRefExoticComponent<InputTextProps> =
           fieldState: { error },
         }) => (
           <>
-              <RLabel>{label}</RLabel>
-              <RInput
-                value={value}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                underlineColorAndroid="transparent"
-                allowFontScaling={false}
-                autoComplete={
-                  keyboardType === 'email-address' ? 'email' : undefined
-                }
-                textContentType={
-                  keyboardType === 'email-address' ? 'emailAddress' : undefined
-                }
-                autoCorrect={false}
-                autoCapitalize={
-                  keyboardType === 'email-address' ? 'none' : 'sentences'
-                }
-                editable={!isDisabled}
-                keyboardType={keyboardType}
-                maxLength={maxLength}
-                numberOfLines={1}
-                autoFocus={autoFocus}
-                placeholder={placeholder}
-                secureTextEntry={secureTextEntry}
-                ref={inputRef}
-                {...rest}
-              />
+            <RLabel>{label}</RLabel>
+            <RInput
+              value={value}
+              onChangeText={onChange}
+              onBlur={onBlur}
+              underlineColorAndroid="transparent"
+              allowFontScaling={false}
+              autoComplete={
+                keyboardType === 'email-address' ? 'email' : undefined
+              }
+              textContentType={
+                keyboardType === 'email-address' ? 'emailAddress' : undefined
+              }
+              autoCorrect={false}
+              autoCapitalize={
+                keyboardType === 'email-address' ? 'none' : 'sentences'
+              }
+              editable={!isDisabled}
+              keyboardType={keyboardType}
+              maxLength={maxLength}
+              numberOfLines={1}
+              autoFocus={autoFocus}
+              placeholder={placeholder}
+              secureTextEntry={secureTextEntry}
+              ref={inputRef}
+              {...rest}
+            />
           </>
         )}
       />

@@ -56,12 +56,13 @@ export default function LargeCard({
   const containerStyle = customStyle || getContainerStyle(type);
 
   return (
-    <RStack style={{
-      alignSelf:"center",
-      width: "90%",
-      borderRadius: 8,
-      ...containerStyle
-    }}
+    <RStack
+      style={{
+        alignSelf: 'center',
+        width: '90%',
+        borderRadius: 8,
+        ...containerStyle,
+      }}
     >
       <View
         style={{

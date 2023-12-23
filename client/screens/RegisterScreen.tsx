@@ -94,24 +94,20 @@ export default function Register() {
   }, [response]);
 
   return (
-    <View style={{ width:"100%", alignItems: "center"}}>
-      <View style={{paddingTop: "32px", width: "90%", maxWidth: "290px"}}>
-        <RHeading
-          fontSize={32}
-          color="#212121"
-          fontWeight="semibold"
-        >
+    <View style={{ width: '100%', alignItems: 'center' }}>
+      <View style={{ paddingTop: '32px', width: '90%', maxWidth: '290px' }}>
+        <RHeading fontSize={32} color="#212121" fontWeight="semibold">
           Welcome
         </RHeading>
         <RHeading
           color="grey"
           fontWeight="medium"
           fontSize={14}
-          style={{marginTop:"8px"}}
+          style={{ marginTop: '8px' }}
         >
           Sign up to continue!
         </RHeading>
-        <RStack style={{marginTop:"16px", gap: "8px"}}>
+        <RStack style={{ marginTop: '16px', gap: '8px' }}>
           <InputText
             label="Name"
             control={control}
@@ -146,17 +142,21 @@ export default function Register() {
             isDisabled={!isValid}
             onPress={handleSubmit(registerUser)}
             // onPress={() => registerUser()}
-            style={{marginTop: "16px"}}
+            style={{ marginTop: '16px' }}
             backgroundColor="mediumpurple"
             // disabled={!email || !password || !name}
           >
             {'Sign up'}
           </RButton>
-          <RStack style={{marginTop: "16px", flexDirection: "row", justifyContent:"center", gap: "4px"}}>
-            <RText
-              fontSize={14}
-              color="grey"
-            >
+          <RStack
+            style={{
+              marginTop: '16px',
+              flexDirection: 'row',
+              justifyContent: 'center',
+              gap: '4px',
+            }}
+          >
+            <RText fontSize={14} color="grey">
               Already a User?
             </RText>
             <Link href="/sign-in">
@@ -172,21 +172,30 @@ export default function Register() {
             </Link>
           </RStack>
           {/* Google register */}
-          <RStack style={{marginTop: "8px", flexDirection: "row", justifyContent:"center"}}>
-            <RText
-              color="grey"
-              fontWeight="medium"
-              fontSize={14}
-            >
+          <RStack
+            style={{
+              marginTop: '8px',
+              flexDirection: 'row',
+              justifyContent: 'center',
+            }}
+          >
+            <RText color="grey" fontWeight="medium" fontSize={14}>
               Or
             </RText>
           </RStack>
           {/* Google register */}
-          <RStack style={{marginTop: "8px", flexDirection: "row", justifyContent:"center", alignItems: "center"}}>
+          <RStack
+            style={{
+              marginTop: '8px',
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
             <RIconButton
               onPress={async () => await promptAsync()}
-              backgroundColor='red'
-              style={{width: "100%", color: "white"}}
+              backgroundColor="red"
+              style={{ width: '100%', color: 'white' }}
               icon={
                 <FontAwesome
                   name="google"

@@ -60,7 +60,7 @@ export const CustomCard = ({
     const resetCopyStateTimeout = setTimeout(() => {
       setIsCopied(false);
     }, 2000);
-    //Style in the future
+    // Style in the future
     toast.show('Link copied to clipboard');
     // InformUser({
     //   title: 'Link copied to clipboard',

@@ -182,14 +182,17 @@ const CategoryRow = ({ category }) => {
   };
 
   const rowData = [
-    <RStack style={{flexDirection: "row", gap: "8px", ...styles.categoryRow}}>
+    <RStack style={{ flexDirection: 'row', gap: '8px', ...styles.categoryRow }}>
       <Feather
         name={categoryIcons[category]}
         size={16}
         color={currentTheme.colors.white}
       />
-      <RText fontSize="$2" style={styles.titleText}> {category}</RText>
-    </RStack>
+      <RText fontSize="$2" style={styles.titleText}>
+        {' '}
+        {category}
+      </RText>
+    </RStack>,
   ];
 
   return (
@@ -200,9 +203,11 @@ const CategoryRow = ({ category }) => {
 const TitleRow = ({ title }) => {
   const styles = useCustomStyles(loadStyles);
   const rowData = [
-    <RStack style={{flexDirection: "row", ...styles.mainTitle}}>
-      <RText fontSize="$2" style={styles.titleText}>{title}</RText>
-    </RStack>
+    <RStack style={{ flexDirection: 'row', ...styles.mainTitle }}>
+      <RText fontSize="$2" style={styles.titleText}>
+        {title}
+      </RText>
+    </RStack>,
   ];
 
   return (
@@ -374,7 +379,9 @@ export const TableContainer = ({
               )}
             />
           </Table>
-          <CustomButton copy={copy} handler={handleDuplicate}>Copy</CustomButton>
+          <CustomButton copy={copy} handler={handleDuplicate}>
+            Copy
+          </CustomButton>
           <TotalWeightBox
             label="Base Weight"
             weight={totalBaseWeight}

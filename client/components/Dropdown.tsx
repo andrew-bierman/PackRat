@@ -128,10 +128,7 @@ export const DropdownComponent = ({
 }) => {
   return (
     <View style={{ ...style, width: width || '100%' }}>
-      <RSelect
-        placeholder={placeholder || 'Select'}
-        {...props}
-      />
+      <RSelect placeholder={placeholder || 'Select'} {...props} />
     </View>
   );
 };

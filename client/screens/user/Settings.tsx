@@ -2,7 +2,17 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
-import { RInput, RSeparator, RText, RStack, RButton, RH5, RH2, RScrollView, RLabel } from '@packrat/ui';
+import {
+  RInput,
+  RSeparator,
+  RText,
+  RStack,
+  RButton,
+  RH5,
+  RH2,
+  RScrollView,
+  RLabel,
+} from '@packrat/ui';
 import Avatar from '~/components/Avatar';
 import { editUser, updatePassword } from '../../store/authStore';
 import DropdownComponent from '../../components/Dropdown';
@@ -81,11 +91,15 @@ export default function Settings() {
           <RH2>Profile</RH2>
           <RSeparator marginVertical={8} />
         </RStack>
-        <RStack alignItems="center" space style={{flexDirection: 'row'}}>
+        <RStack alignItems="center" space style={{ flexDirection: 'row' }}>
           <Avatar size={90} src={user.profileImage} />
           <RStack space="$2">
             <RH5 fontWeight="medium">Profile Picture</RH5>
-            <RStack space="$2" alignItems="flex-end" style={{flexDirection: 'row'}}>
+            <RStack
+              space="$2"
+              alignItems="flex-end"
+              style={{ flexDirection: 'row' }}
+            >
               <RButton
                 size="$3"
                 icon={<Ionicons name="cloud-upload-outline" size={24} />}
@@ -95,13 +109,17 @@ export default function Settings() {
               >
                 Upload
               </RButton>
-              <RButton size="$3" onPress={removeProfileImage} style={{backgroundColor:"transparent"}} >
+              <RButton
+                size="$3"
+                onPress={removeProfileImage}
+                style={{ backgroundColor: 'transparent' }}
+              >
                 Remove
               </RButton>
             </RStack>
           </RStack>
         </RStack>
-        <RStack space="$3" style={{flexDirection: 'row'}}>
+        <RStack space="$3" style={{ flexDirection: 'row' }}>
           <RStack space="$2">
             <RLabel htmlFor="firstName">Name</RLabel>
             <RInput id="name" value={user.name} onChange={handleChange} />
@@ -122,7 +140,7 @@ export default function Settings() {
         </RStack>
         <RStack space="$2">
           <RH5>Preferred units</RH5>
-          <RStack space style={{flexDirection: 'row'}}>
+          <RStack space style={{ flexDirection: 'row' }}>
             <RStack space="$2" flexGrow={1}>
               <RLabel>Weather: </RLabel>
               <DropdownComponent

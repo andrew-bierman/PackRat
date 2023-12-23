@@ -38,7 +38,9 @@ export default function Index() {
           name: 'Home',
         }}
       />
-      <View style={mutualStyles}>{!user ? <LandingPage /> : <Dashboard />}</View>
+      <View style={mutualStyles}>
+        {!user ? <LandingPage /> : <Dashboard />}
+      </View>
     </>
   );
 }

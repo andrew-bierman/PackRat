@@ -2,7 +2,6 @@ import { CustomModal } from '../modal';
 import { AddItem } from '../item/AddItem';
 import useTheme from '~/hooks/useTheme';
 
-
 export const AddItemModal = ({
   currentPackId,
   currentPack,
