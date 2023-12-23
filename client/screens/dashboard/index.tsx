@@ -10,9 +10,6 @@ import Section from '../../components/dashboard/Section';
 import SectionHeader from '../../components/dashboard/SectionHeader';
 import useCustomStyles from '~/hooks/useCustomStyles';
 
-// tamagui
-import { RScrollView, YStack, RStack } from '@packrat/ui';
-
 const Dashboard = () => {
   const styles = useCustomStyles(loadStyles);
 

@@ -14,6 +14,7 @@ import { DuplicateIcon } from '../DuplicateIcon/index';
 import { truncateString } from '../../utils/truncateString';
 import { RText, RStack, RHeading } from '@packrat/ui';
 import { formatNumber } from '~/utils/formatNumber';
+import { useAddFavorite } from '~/hooks/favorites';
 
 export default function Card({
   type,

@@ -19,6 +19,8 @@ import { fuseSearch } from '../../utils/fuseSearch';
 import { fetchUserFavorites } from '../../store/favoritesStore';
 import useCustomStyles from '~/hooks/useCustomStyles';
 import FeedSearchFilter from '~/components/feed/FeedSearchFilter';
+import { useFeed } from '~/hooks/feed';
+import { RefreshControl } from 'react-native';
 
 const URL_PATHS = {
   userPacks: '/pack/',
