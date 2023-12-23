@@ -75,10 +75,12 @@ const CustomAccordion = ({ title, content, iconName }) => {
 
   return (
     <Card style={styles.card}>
-      <XStack ai='center' jc='space-between' px={20} py={10}>
+      <XStack ai="center" jc="space-between" px={20} py={10}>
         <MaterialIcons name={iconName} style={styles.icon} />
         <RStack f={1}>
-          <RText fos={18} col={currentTheme.colors.text}>{title}</RText>
+          <RText fos={18} col={currentTheme.colors.text}>
+            {title}
+          </RText>
         </RStack>
         <Button
           transparent
@@ -91,7 +93,11 @@ const CustomAccordion = ({ title, content, iconName }) => {
           />
         </Button>
       </XStack>
-      {expanded && <RText fos={16} col={currentTheme.colors.text} px={20} py={10}>{content}</RText>}
+      {expanded && (
+        <RText fos={16} col={currentTheme.colors.text} px={20} py={10}>
+          {content}
+        </RText>
+      )}
     </Card>
   );
 };
@@ -102,9 +108,11 @@ const LandingPage = () => {
   const styles = useCustomStyles(loadStyles);
   return (
     <YStack style={styles.container}>
-      <RStack ai='center' py={18} mt={Platform.OS != 'web' ? 25 : 1}>
+      <RStack ai="center" py={18} mt={Platform.OS != 'web' ? 25 : 1}>
         {Platform.OS === 'web' ? (
-          <RText style={{ color: 'white', fontSize: currentTheme.font.headerFont }}>
+          <RText
+            style={{ color: 'white', fontSize: currentTheme.font.headerFont }}
+          >
             PackRat
           </RText>
         ) : (
@@ -130,8 +138,8 @@ const LandingPage = () => {
             cross-country road trip.
           </RText>
           {Platform.OS === 'web' && (
-            <YStack jc='center' ai='center' my={20} mb={20}>
-              <XStack jc='center' fw='wrap'>
+            <YStack jc="center" ai="center" my={20} mb={20}>
+              <XStack jc="center" fw="wrap">
                 <Button title="App Store" style={{ margin: 10 }}>
                   <XStack space={2} ai="center">
                     <MaterialCommunityIcons
@@ -139,9 +147,7 @@ const LandingPage = () => {
                       size={44}
                       color="white"
                     />
-                    <RText col='white'>
-                      Download on the App Store
-                    </RText>
+                    <RText col="white">Download on the App Store</RText>
                   </XStack>
                 </Button>
                 <Button title="Google Play" style={{ margin: 10 }}>
@@ -151,16 +157,14 @@ const LandingPage = () => {
                       size={44}
                       color="white"
                     />
-                    <RText col='white'>
-                      Download on Google Play
-                    </RText>
+                    <RText col="white">Download on Google Play</RText>
                   </XStack>
                 </Button>
               </XStack>
               <Button title="Web" style={{ marginTop: 10, width: '100%' }}>
                 <XStack space={2} ai="center">
                   <MaterialCommunityIcons name="web" size={44} color="white" />
-                  <RText col='white'>Use on Web</RText>
+                  <RText col="white">Use on Web</RText>
                 </XStack>
               </Button>
             </YStack>
@@ -184,7 +188,9 @@ const LandingPage = () => {
               /* Add navigation to the sign in screen */
             }}
           >
-            <RText col={currentTheme.colors.text} fos={18} fw='bold'>Get Started</RText>
+            <RText col={currentTheme.colors.text} fos={18} fw="bold">
+              Get Started
+            </RText>
           </Button>
         </Container>
         <StatusBar style="auto" />

@@ -7,7 +7,7 @@ import useTheme from '../../hooks/useTheme';
 // import { useAuth } from "../../auth/provider";
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  addFavorite,
+  // addFavorite,
   selectFavoriteById,
   selectAllFavorites,
 } from '../../store/favoritesStore';
@@ -15,6 +15,7 @@ import { TouchableOpacity } from 'react-native';
 import { Link } from 'expo-router';
 import { DuplicateIcon } from '../DuplicateIcon/index';
 import { truncateString } from '../../utils/truncateString';
+import { useAddFavorite } from '../../hooks/favorites';
 
 import {
   Box,
@@ -48,14 +49,16 @@ export default function Card({
   const user = useSelector((state) => state.auth.user);
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
+
+  const { addFavorite } = useAddFavorite();
+
   const favorites = useSelector(selectAllFavorites);
   const dispatch = useDispatch();
 
   const isFavorite =
-    !type === 'trip'
-      ? favorited_by.includes(user._id) ||
-        favorited_by.forEach((obj) => obj._id === user._id)
-      : null;
+    type !== 'trip' &&
+    (favorited_by?.includes(user._id) ||
+      favorited_by?.some((obj) => obj._id === user._id));
 
   /**
    * Handles adding an item to the user's favorites.
@@ -68,7 +71,8 @@ export default function Card({
       userId: user._id,
     };
 
-    dispatch(addFavorite(data));
+    // dispatch(addFavorite(data));
+    addFavorite(data);
   };
 
   /**
@@ -275,7 +279,6 @@ export default function Card({
                           />
                         </TouchableOpacity>
                       )}
-
                       <Text
                         color={currentTheme.colors.textColor}
                         _dark={{

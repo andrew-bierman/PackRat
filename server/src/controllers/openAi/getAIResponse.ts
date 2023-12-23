@@ -23,7 +23,7 @@ export const getAIResponse = async (req, res, next) => {
     res.locals.data = result;
     responseHandler(res);
   } catch (error) {
-        next(GetResponseFromAIError);
+    next(GetResponseFromAIError);
   }
 };
 
@@ -36,7 +36,7 @@ export function getAIResponseRoute() {
         userInput: z.string(),
       }),
     )
-    .query(async (opts) => {
+    .mutation(async (opts) => {
       const { userId, conversationId, userInput } = opts.input;
       return getAIResponseService(userId, conversationId, userInput);
     });

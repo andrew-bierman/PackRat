@@ -5,7 +5,8 @@ import {
 } from '@reduxjs/toolkit';
 import axios from '~/config/axios';
 import { api } from '../constants/api';
-import { trpc } from '../trpc';
+import { queryTrpc, trpc } from '../trpc';
+import { queryTrip } from '@packrat/validations';
 
 export const addItemsGlobal = createAsyncThunk(
   'Items/addItemsGlobal',
@@ -41,9 +42,7 @@ export const getItemsGlobal = createAsyncThunk(
 export const deleteGlobalItem = createAsyncThunk(
   'items/deleteGlobalItem',
   async (item) => {
-    // const response = await axios.delete(`${api}/item/global/${item}`);
-    // return response.data;
-    return await trpc.deleteGlobalItem.mutate({ itemId: item });
+    await trpc.deleteGlobalItem.mutate({ itemId: item });
   },
 );
 
@@ -132,7 +131,7 @@ const itemsSlice = createSlice({
         state.error = null;
       })
       .addCase(deleteGlobalItem.fulfilled, (state, action) => {
-        itemsAdapter.removeOne(state, action.payload._id);
+        itemsAdapter.removeOne(state, action.meta.arg);
         state.isLoading = false;
         state.error = null;
       })

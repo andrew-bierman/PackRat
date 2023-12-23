@@ -27,7 +27,7 @@ export function signUpRoute() {
     let { email, password } = opts.input;
     await (User as any).alreadyLogin(email);
     const salt = await bcrypt.genSalt(parseInt(JWT_SECRET));
-    opts.input.password= await bcrypt.hash(password, salt);
+    opts.input.password = await bcrypt.hash(password, salt);
     const user = new User(opts.input);
     await user.save();
     await user.generateAuthToken();

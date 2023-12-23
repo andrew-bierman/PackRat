@@ -10,6 +10,7 @@ import { selectAllTrails } from '../store/trailsStore';
 import useTheme from '../hooks/useTheme';
 import Carousel from './carousel';
 import useCustomStyles from '~/hooks/useCustomStyles';
+import { Text } from 'tamagui';
 
 export default function TripCard({
   title,
@@ -20,6 +21,7 @@ export default function TripCard({
   isSearch,
   isTrail,
   isPark,
+  isLoading,
 }) {
   const dispatch = useDispatch();
   const { isDark, currentTheme } = useTheme();
@@ -84,14 +86,13 @@ export default function TripCard({
         </RText>
       </RStack>
       {isMap ? (
-        <MapContainer
-          shape={
-            shape ??
-            (currentShape.length == 0
-              ? {}
-              : convertPhotonGeoJsonToShape(currentShape[0]))
-          }
-        />
+        isLoading ? (
+          <Text>Loading....</Text>
+        ) : (
+          <MapContainer
+            shape={shape ?? (currentShape.length == 0 ? {} : shape)}
+          />
+        )
       ) : isSearch ? (
         <SearchInput />
       ) : (
