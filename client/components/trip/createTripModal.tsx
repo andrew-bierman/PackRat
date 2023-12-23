@@ -13,6 +13,7 @@ import { useGetPhotonDetails } from '~/hooks/destination';
 // import { Picker } from '@react-native-picker/picker';
 import { DropdownComponent } from '../Dropdown';
 import axios from '~/config/axios';
+import {useSearch} from '../../context/searchContext'
 
 const options = [
   { label: 'Yes', value: 'true' },
@@ -74,9 +75,11 @@ type Props = {
   photonData:any
 }
 export const SaveTripContainer:React.FC<Props> = ({ dateRange,photonData }) => {
+
+  const {state} = useSearch();
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
   const weatherObject = useSelector((state) => state.weather.weatherObject);
-  const search = useSelector((state) => state.search.selectedSearchResult);
+  const search = state.selectedSearchResult;
   const dropdown = useSelector((state) => state.dropdown);
   const user = useSelector((state) => state.auth.user);
   const packId = useSelector((state) => state.trips.newTrip.packId);
@@ -119,7 +122,7 @@ export const SaveTripContainer:React.FC<Props> = ({ dateRange,photonData }) => {
       endDate,
     };
 
-
+    console.log('photon',photonData)
     const data = {
       name,
       description,

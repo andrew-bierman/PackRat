@@ -13,12 +13,10 @@ export async function getTrailsOsmService(lat, lon, radius) {
        );
        out tags geom qt;
        `;
-
   const response = await axios.post(overpassUrl, overpassQuery, {
     headers: { 'Content-Type': 'text/plain' },
   });
   const geojsonData = osmtogeojson(response.data);
-
   updateDatabaseWithGeoJSONDataFromOverpass(geojsonData);
 
   return geojsonData;

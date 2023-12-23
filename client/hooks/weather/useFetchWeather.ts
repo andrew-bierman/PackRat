@@ -1,5 +1,4 @@
 import { queryTrpc } from '../../trpc';
-import { store } from '../../store/store';
 
 export const useFetchWeather = (latLng) => {
   const { lat, lon } = latLng;

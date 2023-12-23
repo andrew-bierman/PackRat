@@ -17,7 +17,12 @@ import useCustomStyles from '~/hooks/useCustomStyles';
 import useParks from '~/hooks/parks';
 import useTrails from '~/hooks/trails';
 import { useGetPhotonDetails } from '~/hooks/destination';
+import {useSearch} from '../../context/searchContext'
+
+
 export default function Trips() {
+
+  const {state} = useSearch()
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
   // const [parksData, setParksData] = useState();
@@ -30,25 +35,20 @@ export default function Trips() {
   const searchResult = useSelector(
     (state) => state.search.selectedSearchResult,
   );
+  console.log('state',state.selectedSearchResult)
 
   const weather = useSelector((state) => state.weather);
   const {selectedSearch} = weather;
   const {lon,lat} = weather.weatherObject.coord
-  const latLng = {lon,lat}
-  // const [photonDetails, setPhotonDetails] = useState(null);
-  // const photonDetailsStore = useSelector(
-  //   (state) => state.destination.photonDetails,
-  // );
-  console.log(
-    '🚀 ~ file: createTrip.js:41 ~ Trips ~ selectedSearch:',
-    selectedSearch,
-  );
+
+  const coordinates = state?.selectedSearchResult?.geometry?.coordinates;
+  const latLng = Array.isArray(coordinates) && { lon:coordinates[0],lat:coordinates[1]} || {lon,lat}
+ 
   const {
     data: weatherData,
     isLoading: weatherLoading,
     isError: weatherError,
   } = useFetchWeather(latLng);
-
   const {
     data: weatherWeekData,
     isLoading: weekWeatherLoading,
@@ -67,23 +67,16 @@ export default function Trips() {
     selectedSearch,
   });
 
-  console.log('filtered parks', parksData, parksError);
   const { data, filteredTrails, error, isLoading } = useTrails({
     latLng,
     selectedSearch,
   });
-  // useEffect(() => {
-  //   setTrailsData(trailsObject);
-  // }, [trailsObject]);
 
-  // useEffect(() => {
-  // setParksData(parksObject);
-  // }, [parksObject]);
 
   const { data: photonDetails } = useGetPhotonDetails({
     properties: {
-      osm_id: searchResult.properties?.osm_id,
-      osm_type: searchResult.properties?.osm_type,
+      osm_id: state?.selectedSearchResult?.properties?.osm_id,
+      osm_type: state?.selectedSearchResult?.properties?.osm_type,
     },
   });
  

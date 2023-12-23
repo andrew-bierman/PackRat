@@ -5,6 +5,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { SessionProvider } from '../context/auth';
 import { ThemeProvider } from '../context/theme';
 import { store, persistor } from '../store/store';
+import {SearchProvider} from '../context/searchContext'
 
 // Additional imports from the branch
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -72,7 +73,11 @@ export function CombinedProvider({ children }: { children: React.ReactNode }) {
           <QueryClientProvider client={queryClient}>
             <PersistGate loading={null} persistor={persistor}>
               <SessionProvider>
-                <ThemeProvider>{children}</ThemeProvider>
+                <ThemeProvider>
+                <SearchProvider>
+                {children}
+                </SearchProvider>
+                </ThemeProvider>
               </SessionProvider>
             </PersistGate>
             <ReactQueryDevtools initialIsOpen={false} />
