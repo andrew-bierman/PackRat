@@ -3,7 +3,6 @@ import { ItemNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { addGlobalItemToPackService } from '../../services/item/item.service';
 import { z } from 'zod';
-import { Item } from '../../prisma/methods';
 
 /**
  * Adds a global item to a pack.
@@ -43,6 +42,6 @@ export function addGlobalItemToPackRoute() {
         itemId,
         ownerId,
       );
-      return Item(item)?.toJSON();
+      return item
     });
 }

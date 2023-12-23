@@ -1,6 +1,8 @@
 // import { prisma } from '../../prisma';
 
 import { PrismaClient } from '@prisma/client/edge';
+import { Item } from '../../drizzle/methods/Item';
+import { Pack } from '../../drizzle/methods/Pack';
 
 /**
  * Deletes an item from the database.
@@ -15,26 +17,28 @@ export const deleteItemService = async (
   packId,
 ) => {
   let itemDeleted;
-
-  const item = await prisma.item.findUnique({
+  const itemClass = new Item();
+  const pack = new Pack();
+  const item = await itemClass.findUniqueItem({
     where: {
       id: itemId,
     },
   });
 
   if (item.global) {
-    await prisma.pack.update({
-      where: {
-        id: packId,
-      },
-      data: {
-        itemDocuments: {
-          disconnect: { id: itemId },
-        },
-      },
-    });
-
-    await prisma.item.update({
+    // update here
+    // await pack.update({
+    //   where: {
+    //     id: packId,
+    //   },
+    //   data: {
+    //     itemDocuments: {
+    //       disconnect: { id: itemId },
+    //     },
+    //   },
+    // });
+    // update here
+    await item.update({
       where: {
         id: itemId,
       },
@@ -46,11 +50,7 @@ export const deleteItemService = async (
     });
   }
 
-  itemDeleted = await prisma.item.delete({
-    where: {
-      id: itemId,
-    },
-  });
+  itemDeleted = await itemClass.delete(itemId);
 
   return itemDeleted;
 };

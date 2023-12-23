@@ -1,3 +1,4 @@
+import { Item } from '../../drizzle/methods/Item';
 import { ItemCategoryEnum } from '../../utils/itemCategory';
 // import { prisma } from '../../prisma';
 import { ItemCategoryName, PrismaClient } from '@prisma/client/edge';
@@ -22,6 +23,7 @@ export const addItemGlobalService = async (
 ) => {
   let category = null;
   let newItem = null;
+  const item = new Item();
 
   switch (type) {
     case ItemCategoryEnum.FOOD: {
@@ -31,31 +33,22 @@ export const addItemGlobalService = async (
         },
       });
 
-      let newItem = await prisma.item.create({
-        data: {
-          name,
-          weight,
-          quantity,
-          unit,
-          categoryDocument: {
-            connect: { id: category.id },
-          },
-          global: true,
+      let newItem = await item.create({
+        name,
+        weight,
+        quantity,
+        unit,
+        categoryDocument: {
+          id: category.id,
         },
+        global: true,
       });
-      newItem = await prisma.item.findUnique({
+      newItem = await item.findUniqueItem({
         where: {
           id: newItem.id,
         },
-        include: {
-          categoryDocument: {
-            select: {
-              name: true,
-            },
-          },
-        },
+        with: { categoryDocument: { columns: { name: true } } },
       });
-
       break;
     }
     case ItemCategoryEnum.WATER: {
@@ -64,26 +57,23 @@ export const addItemGlobalService = async (
           name: ItemCategoryName.Water,
         },
       });
-      newItem = await prisma.item.create({
-        data: {
-          name,
-          weight,
-          quantity: 1,
-          unit,
-          categoryDocument: {
-            connect: { id: category.id },
-          },
-          global: true,
+      newItem = await item.create({
+        name,
+        weight,
+        quantity: 1,
+        unit,
+        categoryDocument: {
+          id: category.id,
         },
+        global: true,
       });
-
-      newItem = await prisma.item.findUnique({
+      newItem = await item.findUniqueItem({
         where: {
           id: newItem.id,
         },
-        include: {
+        with: {
           categoryDocument: {
-            select: {
+            columns: {
               name: true,
             },
           },
@@ -99,27 +89,23 @@ export const addItemGlobalService = async (
         },
       });
 
-      newItem = await prisma.item.create({
-        data: {
-          name,
-          weight,
-          quantity,
-          unit,
-          categoryDocument: {
-            connect: {
-              id: category.id,
-            },
-          },
-          global: true,
+      newItem = await item.create({
+        name,
+        weight,
+        quantity,
+        unit,
+        categoryDocument: {
+          id: category.id,
         },
+        global: true,
       });
-      newItem = await prisma.item.findUnique({
+      newItem = await item.findUniqueItem({
         where: {
           id: newItem.id,
         },
-        include: {
+        with: {
           categoryDocument: {
-            select: {
+            columns: {
               name: true,
             },
           },

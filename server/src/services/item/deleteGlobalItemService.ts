@@ -1,6 +1,7 @@
 // import { prisma } from '../../prisma';
 
 import { PrismaClient } from '@prisma/client/edge';
+import { Item } from '../../drizzle/methods/Item';
 
 /**
  * Deletes a global item by its ID.
@@ -9,11 +10,8 @@ import { PrismaClient } from '@prisma/client/edge';
  * @return {Promise<Document>} - A promise that resolves to the deleted item.
  */
 export const deleteGlobalItemService = async (prisma: PrismaClient, itemId) => {
-  const itemDeleted = await prisma.item.delete({
-    where: {
-      id: itemId,
-    },
-  });
+  const item = new Item();
+  const itemDeleted = await item.delete(itemId);
 
   return itemDeleted;
 };
