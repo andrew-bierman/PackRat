@@ -12,30 +12,24 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getItemsGlobal } from '../../../store/globalItemsStore';
 import { Stack } from 'expo-router';
 import Head from 'expo-router/head';
+import { useFetchGlobalItems } from '~/hooks/globalItems';
 import useCustomStyles from '~/hooks/useCustomStyles';
 
 export default function Items() {
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
+
+  const onTrigger = (event) => {
+    setIsAddItemModalOpen(event);
+  };
   // pagination index limit
   const [limit, setLimit] = useState(5);
   // page number for pagination
   const [page, setPage] = useState(1);
-  // it will be used as a dependency for reloading the data in case of some modifications
-  const [refetch, setRefetch] = useState(false);
 
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     UseTheme();
-  const styles = useCustomStyles(loadStyles);
-  const data = useSelector((state) => state.globalItems);
 
-  const isLoading = useSelector((state) => state.globalItems.isLoading);
-  const isError = useSelector((state) => state.globalItems.isError);
-
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getItemsGlobal({ limit, page }));
-  }, [limit, page, refetch]);
-
+  const { data, isLoading, isError } = useFetchGlobalItems(limit, page);
   return (
     <RScrollView>
       {Platform.OS === 'web' && (
@@ -77,11 +71,13 @@ export default function Items() {
                 {Platform.OS === 'web' ? (
                   <RTooltip
                     Label="Add a global item"
-                    Icon={<MaterialIcons
-                      name="info-outline"
-                      size={24}
-                      color={currentTheme.colors.background}
-                    />}
+                    Icon={
+                      <MaterialIcons
+                        name="info-outline"
+                        size={24}
+                        color={currentTheme.colors.background}
+                      />
+                    }
                   />
                 ) : null}
               </View>
@@ -112,14 +108,19 @@ export default function Items() {
     </RScrollView>
   );
 }
-const loadStyles = (theme) => {
-  const { currentTheme } = theme;
+const loadStyles = () => {
+  const currentTheme = theme;
   return {
+    container: {
+      display: 'flex',
+      justifyContent: 'center',
+      marginTop: '1rem',
+      alignItems: 'center',
+    },
     button: {
       backgroundColor: currentTheme.colors.background,
       color: currentTheme.colors.white,
       width: Platform.OS === 'web' ? '20rem' : '20%',
-      display: 'flex',
       alignItems: 'center',
       textAlign: 'center',
     },

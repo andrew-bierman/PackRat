@@ -7,15 +7,16 @@ import { useSelector, useDispatch } from 'react-redux';
 import { CustomModal } from '../modal';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from '~/hooks/useCustomStyles';
-// import useAddPack from "../../hooks/useAddPack";
-// import { useAuth } from "../../auth/provider";
+import { useAddNewPack } from '~/hooks/packs';
+import { useRouter } from 'expo-router';
 
-export const AddPack = () => {
+export const AddPack = ({ isCreatingTrip = false }) => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
 
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const [name, setName] = useState('');
   const [isPublic, setIsPublic] = useState(false);
@@ -23,13 +24,11 @@ export const AddPack = () => {
   // const { addPack } = useAddPack();
   // const { user } = useAuth();
   const user = useSelector((state) => state.auth.user);
-
   const isLoading = useSelector((state) => state.packs.isLoading);
-
-  const error = useSelector((state) => state.packs.error);
-
-  const isError = error !== null;
-
+  const { addNewPack, isSuccess, isError, response } = useAddNewPack();
+  if (isSuccess && !isCreatingTrip && response) {
+    router.push(`/pack/${response.createdPack._id}`);
+  }
   /**
    * Handles the addition of a pack.
    *
@@ -38,7 +37,7 @@ export const AddPack = () => {
    * @return {void}
    */
   const handleAddPack = () => {
-    dispatch(addPack({ name, owner_id: user?._id, is_public: isPublic }));
+    addNewPack({ name, owner_id: user?._id, is_public: isPublic });
     setName('');
   };
 
@@ -85,7 +84,7 @@ export const AddPack = () => {
   );
 };
 
-export const AddPackContainer = () => {
+export const AddPackContainer = ({ isCreatingTrip }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <CustomModal
@@ -94,7 +93,7 @@ export const AddPackContainer = () => {
       isActive={isOpen}
       onTrigger={setIsOpen}
     >
-      <AddPack />
+      <AddPack isCreatingTrip={isCreatingTrip} />
     </CustomModal>
   );
 };

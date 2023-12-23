@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import DropdownComponent from '../Dropdown';
-import useGetPacks from '../../hooks/useGetPacks';
+// import useGetPacks from '../../hooks/useGetPacks';
 import { AddItem } from '../item/AddItem';
 import { TableContainer } from '../pack_table/Table';
 // import { useAuth } from "../../auth/provider";
 import { useSelector } from 'react-redux';
+import { useUserPacks } from '../../hooks/packs/useUserPacks';
 import {
   fetchUserPacks,
   selectPackById,
@@ -17,13 +18,12 @@ import { CustomModal } from '../modal';
 import { AddItemModal } from './AddItemModal';
 import useCustomStyles from '~/hooks/useCustomStyles';
 
-
 export default function PackContainer({ isCreatingTrip = false }) {
   const dispatch = useDispatch();
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
 
   const user = useSelector((state) => state.auth.user);
-  const packs = useSelector(selectAllPacks);
+  // const packs = useSelector(selectAllPacks);
 
   const newTrip = useSelector((state) => state.trips.newTrip);
 
@@ -31,11 +31,23 @@ export default function PackContainer({ isCreatingTrip = false }) {
   const [refetch, setRefetch] = useState(false);
   const styles = useCustomStyles(loadStyles);
 
+  // useEffect(() => {
+  //   if (user?._id) {
+  //     dispatch(fetchUserPacks({ ownerId: user?._id }));
+  //   }
+  // }, [dispatch, user?._id, refetch]);
+
+  // TODO - improve refetch logic. Should be handled entirely by the hook
+  const {
+    data: packs,
+    error,
+    isLoading,
+    refetch: refetchQuery,
+  } = useUserPacks((ownerId = user?._id));
+
   useEffect(() => {
-    if (user?._id) {
-      dispatch(fetchUserPacks({ ownerId: user?._id }));
-    }
-  }, [dispatch, user?._id, refetch]);
+    refetchQuery();
+  }, [refetch]);
 
   /**
    * Handles the packing based on the given value.
@@ -52,9 +64,11 @@ export default function PackContainer({ isCreatingTrip = false }) {
       dispatch(updateNewTripPack(selectedPack?._id));
     }
   };
-  const currentPack = useSelector((state) =>
-    selectPackById(state, currentPackId),
-  );
+  // const currentPack = useSelector((state) =>
+  //   selectPackById(state, currentPackId),
+  // );
+
+  const currentPack = packs.find((pack) => pack._id === currentPackId);
 
   const dataValues = packs.map((item) => item?.name) ?? [];
 

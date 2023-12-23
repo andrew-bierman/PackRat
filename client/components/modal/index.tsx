@@ -22,6 +22,7 @@ export const CustomModal = ({
   ...rest
 }) => {
   /**
+   *
    * Closes the modal either by calling the onCancel function or by triggering the onTrigger function with a value of false.
    *
    * @param {function} onCancel - The function to be called when the modal is closed by canceling.
@@ -35,7 +36,6 @@ export const CustomModal = ({
       onTrigger(false);
     }
   };
-
   const triggerElement = triggerComponent ? (
     <RButton
       onPress={() => onTrigger(true)}
@@ -48,7 +48,6 @@ export const CustomModal = ({
       {trigger}
     </RButton>
   );
-
   if (onTrigger) {
     return (
       <Dialog
@@ -89,25 +88,29 @@ export const CustomModal = ({
             <Dialog.Title>{title}</Dialog.Title>
             <Dialog.Description>{children}</Dialog.Description>
 
-            <RStack style={{alignSelf: "flex-end", flexDirection: "row"}} gap="$4">
+            <RStack
+              style={{ alignSelf: 'flex-end', flexDirection: 'row' }}
+              gap="$4"
+            >
               {footerButtons.map((button, index) => (
                 <RButton
                   key={index}
                   onPress={button.onClick}
                   backgroundColor={button.color}
                   disabled={button.disabled}
-                  color="white"                
-                  >
+                  color="white"
+                >
                   {button.label}
                 </RButton>
               ))}
             </RStack>
 
             {buttonText && (
-              <RStack style={{alignSelf: "flex-end", flexDirection: "row"}} gap="$4">
-                <RButton onPress={onSave} >
-                  {buttonText}
-                </RButton>
+              <RStack
+                style={{ alignSelf: 'flex-end', flexDirection: 'row' }}
+                gap="$4"
+              >
+                <RButton onPress={onSave}>{buttonText}</RButton>
                 <RButton onPress={closeModal} ml="auto">
                   Cancel
                 </RButton>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 import { AddItem } from '../item/AddItem';
 import { CustomModal } from '../modal';
@@ -11,16 +11,23 @@ export const EditPackItemModal = ({
   editAsDuplicate,
   setPage,
   page,
-  setRefetch = () => {},
-  refetch,
   isModalOpen,
   onTrigger,
   closeModalHandler,
 }) => {
+  const [modalOpen, setModalOpen] = useState(false);
   let currentPackId;
   if (currentPack) {
     currentPackId = currentPack._id;
   }
+
+  const onTriggerOpen = (newState) => {
+    setModalOpen(newState);
+  };
+  const closeTriggerOpen = () => {
+    onTriggerOpen(false);
+  };
+  const footerCloseHandler = closeModalHandler ?? closeTriggerOpen;
 
   const footerButtons = [
     {
@@ -35,10 +42,10 @@ export const EditPackItemModal = ({
   return (
     <View>
       <CustomModal
-        isActive={isModalOpen}
+        isActive={isModalOpen || modalOpen}
         title={'Edit Item'}
         triggerComponent={<MaterialIcons name="edit" size={20} color="black" />}
-        onTrigger={onTrigger}
+        onTrigger={onTrigger || onTriggerOpen}
         footerButtons={footerButtons}
         onCancel={closeModalHandler}
       >
@@ -50,9 +57,7 @@ export const EditPackItemModal = ({
           editAsDuplicate={editAsDuplicate}
           setPage={setPage}
           page={page}
-          closeModalHandler={closeModalHandler}
-          setRefetch={setRefetch}
-          refetch={refetch}
+          closeModalHandler={closeModalHandler || closeTriggerOpen}
         />
       </CustomModal>
     </View>

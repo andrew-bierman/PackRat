@@ -24,6 +24,8 @@ import RH3 from './RH3';
 import RH4 from './RH4';
 import RH5 from './RH5';
 import RH6 from './RH6';
+import XStack from './XStack';
+import YStack from './YStack';
 
 
 export {
@@ -53,6 +55,8 @@ export {
   RImage,
   RScrollView,
   RSkeleton,
+  XStack,
+  YStack
 };
 
 export { config } from './tamagui.config'
@@ -69,7 +73,9 @@ export * from './RInput';
 export * from './RButton';
 export * from './RImage';
 export * from './RScrollview';
-export * from './RSkeleton';
+export * from './Skeleton';
+export * from './XStack';
+export * from './YStack';
 
 // Future components
 // export * from './RCheckbox';

@@ -53,7 +53,7 @@ export const GearList = () => {
         </RStack>
       </RStack>
 
-      <AddPackContainer />
+      <AddPackContainer isCreatingTrip={true} />
       <PackContainer isCreatingTrip={true} />
     </RStack>
   );

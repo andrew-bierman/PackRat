@@ -10,6 +10,7 @@ import { DeletePackItemModal } from '../pack_table/DeletePackItemModal';
 import { PaginationLimit } from '../paginationChooseLimit';
 import Loader from '../Loader';
 import useCustomStyles from '~/hooks/useCustomStyles';
+import { loadStyles } from './itemsTable.style';
 
 export const ItemsTable = ({
   limit,
@@ -19,8 +20,6 @@ export const ItemsTable = ({
   data,
   isLoading,
   totalPages,
-  refetch,
-  setRefetch = () => {},
 }) => {
   const flexArr = [2, 1, 1, 1, 0.65, 0.65, 0.65];
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
@@ -28,7 +27,7 @@ export const ItemsTable = ({
   const styles = useCustomStyles(loadStyles);
   const TitleRow = ({ title }) => {
     const rowData = [
-      <RStack style={{flexDirection: "row", ...styles.mainTitle}}>
+      <RStack style={{ flexDirection: 'row', ...styles.mainTitle }}>
         <Text style={styles.titleText}>{title}</Text>
       </RStack>,
     ];
@@ -50,14 +49,8 @@ export const ItemsTable = ({
         editAsDuplicate={false}
         setPage={setPage}
         page={page}
-        refetch={refetch}
-        setRefetch={setRefetch}
       />,
-      <DeletePackItemModal
-        itemId={_id}
-        refetch={refetch}
-        setRefetch={setRefetch}
-      />,
+      <DeletePackItemModal itemId={_id} />,
     ];
     return <Row data={rowData} style={styles.row} flexArr={flexArr} />;
   };
@@ -112,7 +105,7 @@ export const ItemsTable = ({
           {isLoading ? (
             <Loader />
           ) : (
-            data.globalItems.items.map((item, index) => {
+            data.map((item, index) => {
               return <TableItem key={index} itemData={item} />;
             })
           )}
@@ -155,73 +148,4 @@ export const ItemsTable = ({
       </View>
     </View>
   );
-};
-
-const loadStyles = (theme) => {
-  const { currentTheme } = theme;
-  return {
-    container: {
-      flex: 1,
-      padding: 10,
-      width: '100%',
-    },
-    tableStyle: {
-      width: '100%',
-      paddingHorizontal: 20,
-    },
-    mainTitle: {
-      marginTop: 10,
-      marginBottom: 10,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    categoryRow: {
-      padding: 10,
-      borderRadius: 5,
-      alignItems: 'center',
-      justifyContent: 'flex-start',
-    },
-    title: {
-      height: 50,
-      backgroundColor: currentTheme.colors.primary,
-      borderRadius: 10,
-      justifyContent: 'center',
-      paddingLeft: 15,
-    },
-    titleText: {
-      fontWeight: 'bold',
-      color: currentTheme.colors.text,
-    },
-    head: {
-      height: 50,
-      borderBottomWidth: 1,
-      borderBottomColor: '#D1D5DB',
-      borderTopLeftRadius: 10,
-      borderTopRightRadius: 10,
-    },
-    headerText: {
-      fontWeight: 'bold',
-      color: '#000000',
-    },
-    row: {
-      flexDirection: 'row',
-      height: 60,
-      alignItems: 'center',
-      backgroundColor: '#FFFFFF',
-      borderBottomWidth: 1,
-      borderBottomColor: '#D1D5DB',
-    },
-    infoContainer: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      padding: 25,
-      backgroundColor: '#F8F8F8',
-    },
-    noItemsText: {
-      fontWeight: 'bold',
-      fontSize: 16,
-      marginTop: 20,
-      textAlign: 'center',
-    },
-  };
 };

@@ -49,6 +49,8 @@ const dataArray = [
 const CustomAccordion = ({ title, content, iconName }) => {
   const [expanded, setExpanded] = useState(false);
   const styles = useCustomStyles(loadStyles);
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    useTheme();
 
   /**
    * Toggles the value of 'expanded' and updates the state.
@@ -77,11 +79,11 @@ const CustomAccordion = ({ title, content, iconName }) => {
           />
         </RButton>
       </View>
-      {expanded &&
+      {expanded && (
         <RCard.Header>
           <RText style={styles.cardContent}>{content}</RText>
         </RCard.Header>
-      }
+      )}
     </RCard>
   );
 };
@@ -137,8 +139,17 @@ const LandingPage = () => {
                   flexWrap: 'wrap',
                 }}
               >
-                <RButton title="App Store" style={{ margin: 10, padding: "32px" }}>
-                  <RStack style={{flexDirection: "row", alignItems:"center", gap: "8px"}}>
+                <RButton
+                  title="App Store"
+                  style={{ margin: 10, padding: '32px' }}
+                >
+                  <RStack
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      gap: '8px',
+                    }}
+                  >
                     <MaterialCommunityIcons
                       name="apple"
                       size={44}
@@ -149,8 +160,17 @@ const LandingPage = () => {
                     </RText>
                   </RStack>
                 </RButton>
-                <RButton title="Google Play" style={{ margin: 10, padding: "32px" }}>
-                  <RStack style={{flexDirection: "row", alignItems:"center", gap: "8px"}}>
+                <RButton
+                  title="Google Play"
+                  style={{ margin: 10, padding: '32px' }}
+                >
+                  <RStack
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      gap: '8px',
+                    }}
+                  >
                     <MaterialCommunityIcons
                       name="google-play"
                       size={44}
@@ -162,15 +182,24 @@ const LandingPage = () => {
                   </RStack>
                 </RButton>
               </View>
-              <RButton title="Web" style={{ margin: 10, padding: "32px", width: '100%' }}>
-                <RStack style={{flexDirection: "row", alignItems:"center", gap: "8px"}}>
+              <RButton
+                title="Web"
+                style={{ margin: 10, padding: '32px', width: '100%' }}
+              >
+                <RStack
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    gap: '8px',
+                  }}
+                >
                   <MaterialCommunityIcons name="web" size={44} color="white" />
                   <RText style={{ color: 'white' }}>Use on Web</RText>
                 </RStack>
               </RButton>
             </View>
           )}
-          <View>
+          <RStack>
             {dataArray.map((item, index) => (
               <CustomAccordion
                 key={index}
@@ -179,7 +208,7 @@ const LandingPage = () => {
                 iconName={item.iconName}
               />
             ))}
-          </View>
+          </RStack>
         </View>
         <View style={styles.buttonContainer}>
           <RButton
@@ -244,7 +273,7 @@ const loadStyles = (theme) => {
       textAlign: 'center',
       marginBottom: 20,
       color: currentTheme.colors.text,
-      width: "80%",
+      width: '80%',
       lineHeight: 1.5,
     },
     card: {

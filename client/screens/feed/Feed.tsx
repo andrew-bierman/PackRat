@@ -12,7 +12,8 @@ import {
   fetchUserPacks,
   selectAllPacks,
 } from '../../store/packsStore';
-import { fetchUserTrips, selectAllTrips } from '../../store/tripsStore';
+// import { fetchUserTrips, selectAllTrips } from '../../store/tripsStore';
+import { usefetchTrips } from '~/hooks/trips';
 import { useRouter } from 'expo-router';
 import { fuseSearch } from '../../utils/fuseSearch';
 import { fetchUserFavorites } from '../../store/favoritesStore';
@@ -43,31 +44,43 @@ const Feed = ({ feedType = 'public' }) => {
   const [selectedTrips, setSelectedTrips] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
+  const [refreshing, setRefreshing] = useState(false);
+
   const dispatch = useDispatch();
-  const ownerId = useSelector((state) => state?.auth.user?._id);
-  const publicPacksData = useSelector((state) => state?.feed.publicPacks);
-
-  const userPacksData = useSelector(selectAllPacks);
-
-  const publicTripsData = useSelector((state) => state.feed.publicTrips);
-
-  const userTripsData = useSelector(selectAllTrips);
+  const ownerId = useSelector((state) => state.auth.user?._id);
+  // const publicPacksData = useSelector((state) => state.feed.publicPacks);
+  // const userPacksData = useSelector(selectAllPacks);
+  // const publicTripsData = useSelector((state) => state.feed.publicTrips);
+  // const userTripsData = useSelector(selectAllTrips);
 
   const styles = useCustomStyles(loadStyles);
+  const { data, error, isLoading, refetch } = useFeed(
+    queryString,
+    ownerId,
+    feedType,
+    selectedTypes,
+  );
 
-  useEffect(() => {
-    if (feedType === 'public') {
-      dispatch(getPublicPacks(queryString));
-      dispatch(getPublicTrips(queryString));
-      dispatch(fetchUserFavorites(ownerId));
-    } else if (feedType === 'userPacks' && ownerId) {
-      dispatch(fetchUserPacks({ ownerId, queryString }));
-    } else if (feedType === 'userTrips' && ownerId) {
-      dispatch(fetchUserTrips(ownerId));
-    } else if (feedType === 'favoritePacks') {
-      dispatch(getFavoritePacks());
-    }
-  }, [queryString, feedType, ownerId]);
+  const onRefresh = () => {
+    setRefreshing(true);
+    refetch();
+    setRefreshing(false);
+  };
+
+  console.log('🚀 ~ file: Feed.js:180 ~ Feed ~ feedData:', data);
+  // useEffect(() => {
+  //   if (feedType === 'public') {
+  //     dispatch(getPublicPacks(queryString));
+  // dispatch(getPublicTrips(queryString));
+  //     dispatch(fetchUserFavorites(ownerId));
+  //   } else if (feedType === 'userPacks' && ownerId) {
+  //     dispatch(fetchUserPacks({ ownerId, queryString }));
+  //   } else if (feedType === 'userTrips' && ownerId) {
+  //     dispatch(fetchUserTrips(ownerId));
+  //   } else if (feedType === 'favoritePacks') {
+  //     dispatch(getFavoritePacks());
+  //   }
+  // }, [queryString, feedType, ownerId]);
 
   /**
    * Renders the data for the feed based on the feed type and search query.
@@ -75,22 +88,22 @@ const Feed = ({ feedType = 'public' }) => {
    * @return {ReactNode} The rendered feed data.
    */
   const renderData = () => {
-    let data = [];
+    let arrayData = data;
 
-    if (feedType === 'public') {
-      if (selectedTypes?.pack) {
-        data = [...data, ...publicPacksData];
-      }
-      if (selectedTypes?.trip) {
-        data = [...data, ...publicTripsData];
-      }
-    } else if (feedType === 'userPacks') {
-      data = userPacksData;
-    } else if (feedType === 'userTrips') {
-      data = userTripsData;
-    } else if (feedType === 'favoritePacks') {
-      data = userPacksData?.filter((pack) => pack.isFavorite);
-    }
+    // if (feedType === 'public') {
+    //   if (selectedTypes?.pack) {
+    //     data = [...data, ...publicPacksData];
+    //   }
+    //   if (selectedTypes?.trip) {
+    //     data = [...data, ...publicTripsData];
+    //   }
+    // } else if (feedType === 'userPacks') {
+    //   data = userPacksData;
+    // } else if (feedType === 'userTrips') {
+    //   data = userTripsData;
+    // } else if (feedType === 'favoritePacks') {
+    //   data = userPacksData.filter((pack) => pack.isFavorite);
+    // }
 
     // Fuse search
     const keys = ['name', 'items.name', 'items.category'];
@@ -104,12 +117,13 @@ const Feed = ({ feedType = 'public' }) => {
 
     const results =
       feedType !== 'userTrips'
-        ? fuseSearch(data, searchQuery, keys, options)
+        ? fuseSearch(arrayData, searchQuery, keys, options)
         : data;
+    console.log('🚀 ~ file: Feed.js:231 ~ renderData ~ results:', results);
 
     // Convert fuse results back into the format we want
     // if searchQuery is empty, use the original data
-    data = searchQuery ? results.map((result) => result.item) : data;
+    arrayData = searchQuery ? results.map((result) => result.item) : data;
 
     const feedSearchFilterComponent = (
       <FeedSearchFilter
@@ -127,8 +141,12 @@ const Feed = ({ feedType = 'public' }) => {
       <ScrollView
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ flex: 1, paddingBottom: 10 }}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       >
         <View style={styles.cardContainer}>
+          {/* {console.log({ data })} */}
           {feedSearchFilterComponent}
           {data?.map((item) => (
             <Card key={item?._id} type={item?.type} {...item} />
@@ -147,6 +165,9 @@ const Feed = ({ feedType = 'public' }) => {
           ListHeaderComponent={() => feedSearchFilterComponent}
           ListEmptyComponent={() => <RText>{ERROR_MESSAGES[feedType]}</RText>}
           showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
         />
       </View>
     );

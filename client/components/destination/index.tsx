@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { Container, Text } from 'native-base';
 import { useRouter, useSearchParams } from 'expo-router';
@@ -12,7 +12,7 @@ import {
 } from '../../utils/mapFunctions';
 import TripCard from '../TripCard';
 import LargeCard from '../card/LargeCard';
-import WeatherCard from '../WeatherCard';
+import WeatherCard from '../weather/WeatherCard';
 import { Ionicons } from '@expo/vector-icons';
 import {
   processGeoJSON,
@@ -24,6 +24,9 @@ import {
 } from '../../store/destinationStore';
 import { fetchWeather, fetchWeatherWeek } from '../../store/weatherStore';
 import useCustomStyles from '~/hooks/useCustomStyles';
+import { useFetchWeather, useFetchWeatherWeak } from '~/hooks/weather';
+import { useGetDestination, useGetPhotonDetails } from '~/hooks/destination';
+import { WeatherData } from '../weather/WeatherData';
 
 const DestinationHeader = ({ geoJSON, selectedSearchResult }) => {
   const styles = useCustomStyles(loadStyles);
@@ -78,71 +81,30 @@ const DestinationHeader = ({ geoJSON, selectedSearchResult }) => {
   );
 };
 
-/**
- * Generates a function comment for the given function body.
- *
- * @param {Object} geoJSON - The GeoJSON data.
- * @return {JSX.Element|null} The WeatherCard component if weatherObject and weatherWeek are truthy, otherwise null.
- */
-const WeatherData = ({ geoJSON }) => {
-  const dispatch = useDispatch();
-  const weatherObject = useSelector((state) => state.destination.weatherObject);
-  const weatherWeek = useSelector((state) => state.destination.weatherWeek);
-
-  useEffect(() => {
-    /**
-     * Fetches weather data based on the provided geoJSON.
-     *
-     * @return {Promise<void>} - A Promise that resolves when the weather data is fetched and stored.
-     */
-    const fetchWeatherData = async () => {
-      if (geoJSON?.features) {
-        const { coordinates } = geoJSON.features[0].geometry;
-
-        // const [lon, lat] = coordinates;
-        let lon, lat;
-
-        if (coordinates[0] && Array.isArray(coordinates[0])) {
-          [lon, lat] = coordinates[0];
-        } else {
-          [lon, lat] = coordinates;
-        }
-
-        if (lat && lon) {
-          try {
-            const weatherObjRes = await dispatch(fetchWeather({ lat, lon }));
-            const weatherWkRes = await dispatch(fetchWeatherWeek({ lat, lon }));
-            dispatch(setWeatherObject(weatherObjRes.payload));
-            dispatch(setWeatherWeek(weatherWkRes.payload.list.slice(0, 4)));
-          } catch (err) {
-            console.error(err);
-          }
-        }
-      }
-    };
-    fetchWeatherData();
-  }, [geoJSON]);
-
-  return weatherObject && weatherWeek ? (
-    <WeatherCard weatherObject={weatherObject} weatherWeek={weatherWeek} />
-  ) : null;
-};
-
 export const DestinationPage = () => {
   console.log('destination page');
   const router = useRouter();
+  const { destinationId, id, type, lat, lon } = useSearchParams();
+  const [destination_id, setDestinationId] = useState(destinationId);
+  const [properties, setProperties] = useState({ osm_id: id, osm_type: type });
+
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
   const dispatch = useDispatch();
 
-  const { destinationId, id, type, lat, lon } = useSearchParams();
-  const photonDetailsStore = useSelector(
-    (state) => state.destination.photonDetails,
+  const matchPhotonFormattingForData = { properties };
+  const { isLoading, isError, data } = useGetPhotonDetails(
+    matchPhotonFormattingForData,
   );
+  useGetDestination({ destination_id, properties });
+
+  // const photonDetailsStore = useSelector(
+  //   (state) => state.destination.photonDetails,
+  // );
 
   const currentDestination = {
-    geoJSON: photonDetailsStore,
+    geoJSON: data,
   };
 
   const geoJSON = currentDestination?.geoJSON;
@@ -151,19 +113,9 @@ export const DestinationPage = () => {
   );
 
   useEffect(() => {
+    setDestinationId(destinationId);
     if (destinationId) {
-      if (type && id) {
-        const matchPhotonFormattingForData = {
-          properties: {
-            osm_id: id,
-            osm_type: type,
-          },
-        };
-
-        dispatch(photonDetails(matchPhotonFormattingForData));
-      } else if (destinationId && !type && !id && destinationId !== 'query') {
-        dispatch(getDestination(destinationId));
-      }
+      setProperties({ osm_id: id, osm_type: type });
     }
   }, [destinationId]);
 
@@ -177,26 +129,28 @@ export const DestinationPage = () => {
 
   return (
     <ScrollView>
-      <View style={styles.container}>
-        <DestinationHeader
-          geoJSON={geoJSON}
-          selectedSearchResult={selectedSearchResult}
-        />
-        <LargeCard
-          title="Map"
-          Icon={() => (
-            <Ionicons
-              name="location"
-              size={24}
-              color={currentTheme.colors.textPrimary}
-            />
-          )}
-          ContentComponent={map}
-          contentProps={{ shape }}
-          type="map"
-        />
-        <WeatherData geoJSON={geoJSON} />
-      </View>
+      {!isLoading && !isError && (
+        <View style={styles.container}>
+          <DestinationHeader
+            geoJSON={geoJSON}
+            selectedSearchResult={selectedSearchResult}
+          />
+          <LargeCard
+            title="Map"
+            Icon={() => (
+              <Ionicons
+                name="location"
+                size={24}
+                color={currentTheme.colors.textPrimary}
+              />
+            )}
+            ContentComponent={map}
+            contentProps={{ shape }}
+            type="map"
+          />
+          <WeatherData geoJSON={geoJSON} />
+        </View>
+      )}
     </ScrollView>
   );
 };

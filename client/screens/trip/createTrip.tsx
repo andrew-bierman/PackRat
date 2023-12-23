@@ -2,23 +2,26 @@ import { RStack } from '@packrat/ui';
 import { ScrollView } from 'react-native';
 import { theme } from '../../theme';
 import TripCard from '../../components/TripCard';
-import WeatherCard from '../../components/WeatherCard';
+import WeatherCard from '../../components/weather/WeatherCard';
 import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { GearList } from '../../components/GearList';
 import { SaveTripContainer } from '~/components/trip/createTripModal';
 import TripDateRange from '~/components/trip/TripDateRange';
-
+import { useFetchWeather, useFetchWeatherWeak } from '~/hooks/weather';
 // import MultiStepForm from "../multi_step";
-import { photonDetails } from '../../store/destinationStore';
+// import { photonDetails } from '../../store/destinationStore';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from '~/hooks/useCustomStyles';
-
+import useParks from '~/hooks/parks';
+import useTrails from '~/hooks/trails';
+import { useGetPhotonDetails } from '~/hooks/destination';
+import { WeatherData } from '~/components/weather/WeatherData';
 export default function Trips() {
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
-  const [parksData, setParksData] = useState();
+  // const [parksData, setParksData] = useState();
   const [trails, setTrailsData] = useState();
   const [dateRange, setDateRange] = useState({
     startDate: undefined,
@@ -29,34 +32,57 @@ export default function Trips() {
     (state) => state.search.selectedSearchResult,
   );
 
-  const weatherObject = useSelector((state) => state.weather.weatherObject);
-  const weatherWeek = useSelector((state) => state.weather.weatherWeek);
+  const { latLng, selectedSearch } = useSelector((state) => state.weather);
 
-  const trailsObject = useSelector((state) => state.trails.trailNames);
-  const parksObject = useSelector((state) => state.parks.parkNames);
-  const photonDetailsStore = useSelector(
-    (state) => state.destination.photonDetails,
+  // const [photonDetails, setPhotonDetails] = useState(null);
+  // const photonDetailsStore = useSelector(
+  //   (state) => state.destination.photonDetails,
+  // );
+  console.log(
+    '🚀 ~ file: createTrip.js:41 ~ Trips ~ selectedSearch:',
+    selectedSearch,
   );
+  const {
+    data: weatherData,
+    isLoading: weatherLoading,
+    isError: weatherError,
+  } = useFetchWeather(latLng);
 
-  useEffect(() => {
-    setTrailsData(trailsObject);
-  }, [trailsObject]);
+  const {
+    data: weatherWeekData,
+    isLoading: weekWeatherLoading,
+    isError: weekWeatherError,
+  } = useFetchWeatherWeak(latLng);
 
-  useEffect(() => {
-    setParksData(parksObject);
-  }, [parksObject]);
+  const {
+    data: parks,
+    error: parksError,
+    isLoading: parksLoading,
+    filteredParks: parksData,
+  } = useParks({
+    latLng,
+    selectedSearch,
+  });
 
-  useEffect(() => {
-    if (searchResult?.properties) {
-      const matchPhotonFormattingForData = {
-        properties: {
-          osm_id: searchResult.properties?.osm_id,
-          osm_type: searchResult.properties?.osm_type,
-        },
-      };
-      dispatch(photonDetails(matchPhotonFormattingForData));
-    }
-  }, [searchResult]);
+  console.log('filtered parks', parksData, parksError);
+  const { data, filteredTrails, error, isLoading } = useTrails({
+    latLng,
+    selectedSearch,
+  });
+  // useEffect(() => {
+  //   setTrailsData(trailsObject);
+  // }, [trailsObject]);
+
+  // useEffect(() => {
+  // setParksData(parksObject);
+  // }, [parksObject]);
+
+  const { data: photonDetails } = useGetPhotonDetails({
+    properties: {
+      osm_id: searchResult.properties?.osm_id,
+      osm_type: searchResult.properties?.osm_type,
+    },
+  });
 
   const steps = [
     {
@@ -88,7 +114,10 @@ export default function Trips() {
     {
       name: 'Step 2',
       component: () => (
-        <WeatherCard weatherObject={weatherObject} weatherWeek={weatherWeek} />
+        <WeatherCard
+          weatherObject={weatherData}
+          weatherWeek={weatherWeekData}
+        />
       ),
     },
     {
@@ -174,16 +203,20 @@ export default function Trips() {
               />
             )}
           />
-
-          <WeatherCard
-            weatherObject={weatherObject}
-            weatherWeek={weatherWeek}
-          />
+          {!weekWeatherError &&
+            !weatherError &&
+            !weatherLoading &&
+            !weekWeatherLoading && (
+              <WeatherCard
+                weatherObject={weatherData}
+                weatherWeek={weatherWeekData}
+              />
+            )}
           <TripCard
             title="Nearby Trails"
             value="Trail List"
             isTrail={true}
-            data={trails || []}
+            data={filteredTrails || []}
             Icon={() => (
               <FontAwesome5
                 name="hiking"
@@ -207,18 +240,21 @@ export default function Trips() {
           />
           <GearList />
           <TripDateRange dateRange={dateRange} setDateRange={setDateRange} />
-          <TripCard
-            Icon={() => (
-              <FontAwesome5
-                name="route"
-                size={24}
-                color={currentTheme.colors.cardIconColor}
-              />
-            )}
-            title="Map"
-            isMap={true}
-            shape={photonDetailsStore}
-          />
+          {!photonDetails?.IsError && !photonDetails?.isLoading && (
+            <TripCard
+              Icon={() => (
+                <FontAwesome5
+                  name="route"
+                  size={24}
+                  color={currentTheme.colors.cardIconColor}
+                />
+              )}
+              title="Map"
+              isMap={true}
+              shape={photonDetails}
+            />
+          )}
+          {photonDetails && <WeatherData geoJSON={photonDetails} />}
           <RStack>
             <SaveTripContainer dateRange={dateRange} />
           </RStack>

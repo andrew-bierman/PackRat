@@ -16,6 +16,8 @@ import ChatContainer from '../chat';
 import { AddItem } from '../item/AddItem';
 import { AddItemModal } from './AddItemModal';
 import useCustomStyles from '~/hooks/useCustomStyles';
+import { useUserPacks } from '~/hooks/packs/useUserPacks';
+import { useFetchSinglePack } from '../../hooks/packs';
 
 export function PackDetails() {
   const searchParams = new URLSearchParams(window.location.search);
@@ -26,20 +28,35 @@ export function PackDetails() {
 
   const { packId } = useSearchParams();
   const link = `${CLIENT_URL}/packs/${packId}`;
-  const isLoading = useSelector((state) => state.singlePack.isLoading);
   const updated = useSelector((state) => state.packs.update);
   const [firstLoad, setFirstLoad] = useState(true);
   const user = useSelector((state) => state.auth.user);
   const userId = user?._id;
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
-  const currentPack = useSelector((state) => state.singlePack.singlePack);
+  // const isLoading = useSelector((state) => state.singlePack.isLoading);
+  // const currentPack = useSelector((state) => state.singlePack.singlePack);
   const [refetch, setRefetch] = useState(false);
+
+  const { data: userPacks, isLoading: isUserPacksLoading } =
+    useUserPacks(userId);
+  const {
+    data: currentPack,
+    isLoading,
+    refetch: refetchQuery,
+  } = useFetchSinglePack(packId);
+
   useEffect(() => {
-    if (!packId) return;
-    dispatch(fetchSinglePack(packId));
-    if (userId) dispatch(fetchUserPacks({ ownerId: userId }));
-    setFirstLoad(false);
-  }, [dispatch, packId, updated]); // TODO updated is a temporary fix to re-render when pack is update, due to bug in store
+    refetchQuery();
+  }, [refetch, packId, updated]);
+
+  // useEffect(() => {
+  //   if (!packId) return;
+  //   dispatch(fetchSinglePack(packId));
+
+  //   // if (userId) dispatch(fetchUserPacks({ ownerId: userId }));
+  //   setFirstLoad(false);
+  // }, [dispatch, packId, updated]); // TODO updated is a temporary fix to re-render when pack is update, due to bug in store
+
   const styles = useCustomStyles(loadStyles);
   const currentPackId = currentPack && currentPack._id;
 
@@ -59,7 +76,7 @@ export function PackDetails() {
           ? { minHeight: '100vh' }
           : Dimensions.get('screen').height,
       ]}
-    > 
+    >
       {!isError && (
         <>
           <DetailsComponent
@@ -76,6 +93,7 @@ export function PackDetails() {
                     currentPack={currentPack}
                     isAddItemModalOpen={isAddItemModalOpen}
                     setIsAddItemModalOpen={setIsAddItemModalOpen}
+                    // refetch={refetch}
                     setRefetch={() => setRefetch((prev) => !prev)}
                   />
                 </View>
