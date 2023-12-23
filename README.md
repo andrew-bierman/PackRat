@@ -32,6 +32,13 @@ So pack your bags, grab your friends, and get ready for your next adventure with
   - [Documentation 📚](#documentation-)
   - [Features 🚀](#features-)
   - [Technologies used 💻](#technologies-used-)
+  - [🗂 Folder layout](#-folder-layout)
+  - [UI Kit](#ui-kit)
+  - [🆕 Add new dependencies](#-add-new-dependencies)
+    - [Pure JS dependencies](#pure-js-dependencies)
+    - [Native dependencies](#native-dependencies)
+  - [Update new dependencies](#update-new-dependencies)
+    - [Pure JS dependencies](#pure-js-dependencies-1)
   - [Local installation 📲](#local-installation-)
     - [Dependencies](#dependencies)
     - [Environment Setup](#environment-setup)
@@ -41,11 +48,13 @@ So pack your bags, grab your friends, and get ready for your next adventure with
       - [Root](#root)
       - [Server](#server)
       - [Client](#client)
+    - [Debugging Yarn Environment Setup - Windows](#debugging-yarn-environment-setup---windows)
   - [Docker Installation 🐳](#docker-installation-)
     - [Dependencies](#dependencies-1)
     - [Installation](#installation)
   - [How backend API's are setup](#how-backend-apis-are-setup)
   - [Contributing 🤝](#contributing-)
+  - [👏 Special Thanks](#-special-thanks)
   - [License 📝](#license-)
 
 ## Overview 🌐
@@ -348,7 +357,7 @@ node -v
   ```
   yarn install
   ```
-- Check yarn version(`yarn -v`): *version >= 4.0.1*
+- Check yarn version(`yarn -v`): *version >= 4.0.2*
 - Restart your code editor if opened
 
 **If yarn version < 4.0.0:**
