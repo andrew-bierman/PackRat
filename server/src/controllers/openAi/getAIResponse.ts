@@ -1,8 +1,8 @@
 import { publicProcedure } from '../../trpc';
 import { GetResponseFromAIError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
-import { getAIResponseService } from '../../services/openAi/openAi.service';
 import { z } from 'zod';
+import { getAIResponseService } from './langchain';
 
 /**
  * Retrieves an AI response based on user input and conversation history.
@@ -23,7 +23,7 @@ export const getAIResponse = async (req, res, next) => {
     res.locals.data = result;
     responseHandler(res);
   } catch (error) {
-    next(GetResponseFromAIError);
+        next(GetResponseFromAIError);
   }
 };
 
