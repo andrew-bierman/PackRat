@@ -21,7 +21,10 @@ export const useAddNewPack = () => {
 
       const newQueryData = {
         ...oldQueryData,
-        packs:oldQueryData && oldQueryData.packs ? [...oldQueryData?.packs, optimisticUpdate] : [optimisticUpdate],
+        packs:
+          oldQueryData && oldQueryData.packs
+            ? [...oldQueryData?.packs, optimisticUpdate]
+            : [optimisticUpdate],
       };
       utils.getPacks.setData(
         {
@@ -56,6 +59,6 @@ export const useAddNewPack = () => {
     isError: mutation.isError,
     isSuccess: mutation.isSuccess,
     error: mutation.error,
-    response: mutation.data
+    response: mutation.data,
   };
 };

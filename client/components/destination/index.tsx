@@ -26,6 +26,7 @@ import { fetchWeather, fetchWeatherWeek } from '../../store/weatherStore';
 import useCustomStyles from '~/hooks/useCustomStyles';
 import { useFetchWeather, useFetchWeatherWeak } from '~/hooks/weather';
 import { useGetDestination, useGetPhotonDetails } from '~/hooks/destination';
+import { WeatherData } from '../weather/WeatherData';
 
 const DestinationHeader = ({ geoJSON, selectedSearchResult }) => {
   const styles = useCustomStyles(loadStyles);

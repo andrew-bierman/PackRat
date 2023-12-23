@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { CustomModal } from '../modal';
 import { Input, VStack, HStack, Text, Select } from 'native-base';
-import {  useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useRouter } from 'expo-router';
 import { format, intervalToDuration } from 'date-fns';
 // import { addTrip } from '../../store/tripsStore';
@@ -75,7 +75,7 @@ export const SaveTripContainer = ({ dateRange }) => {
   const packId = useSelector((state) => state.trips.newTrip.packId);
 
   // defining dispatch
-  const { addTrip,isSuccess, data:response  } = useAddTrip();
+  const { addTrip, isSuccess, data: response } = useAddTrip();
   const router = useRouter();
   // trip info states value
   const [name, setName] = useState('');
@@ -139,7 +139,7 @@ export const SaveTripContainer = ({ dateRange }) => {
     addTrip(data);
     setIsSaveModalOpen(!isSaveModalOpen);
   };
-  if (isSuccess  && response) {
+  if (isSuccess && response) {
     router.push(`/trip/${response.trip._id}`);
   }
   /**

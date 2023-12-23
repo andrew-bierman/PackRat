@@ -10,7 +10,6 @@ export const useAddTrip = () => {
         utils.getTrips.invalidate();
       },
     });
-
   };
 
   return {

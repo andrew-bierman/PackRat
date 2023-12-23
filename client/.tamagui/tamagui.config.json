@@ -343,7 +343,8 @@
           "staticConfig": {
             "acceptsClassName": true,
             "defaultProps": {
-              "display": "flex"
+              "display": "flex",
+              "flexDirection": "column"
             },
             "validStyles": {
               "enterStyle": true,
@@ -3270,7 +3271,8 @@
           "staticConfig": {
             "acceptsClassName": true,
             "defaultProps": {
-              "display": "flex"
+              "display": "flex",
+              "flexDirection": "column"
             },
             "validStyles": {
               "enterStyle": true,
@@ -7223,6 +7225,7 @@
             "acceptsClassName": true,
             "defaultProps": {
               "display": "flex",
+              "flexDirection": "column",
               "tag": "button"
             },
             "validStyles": {
@@ -8429,7 +8432,8 @@
           "staticConfig": {
             "acceptsClassName": true,
             "defaultProps": {
-              "display": "flex"
+              "display": "flex",
+              "flexDirection": "column"
             },
             "validStyles": {
               "enterStyle": true,
@@ -8912,7 +8916,8 @@
           "staticConfig": {
             "acceptsClassName": true,
             "defaultProps": {
-              "display": "flex"
+              "display": "flex",
+              "flexDirection": "column"
             },
             "validStyles": {
               "enterStyle": true,

@@ -3,7 +3,7 @@ import { Box, Input, Button, Text, Select, CheckIcon } from 'native-base';
 
 // import useAddPack from "../../hooks/useAddPack";
 import { addPack } from '../../store/packsStore';
-import {  useState } from 'react';
+import { useState } from 'react';
 // import { useAuth } from "../../auth/provider";
 import { useSelector, useDispatch } from 'react-redux';
 import { CustomModal } from '../modal';
@@ -12,7 +12,7 @@ import useCustomStyles from '~/hooks/useCustomStyles';
 import { useAddNewPack } from '~/hooks/packs';
 import { useRouter } from 'expo-router';
 
-export const AddPack = ({isCreatingTrip = false}) => {
+export const AddPack = ({ isCreatingTrip = false }) => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
@@ -27,11 +27,10 @@ export const AddPack = ({isCreatingTrip = false}) => {
   // const { user } = useAuth();
   const user = useSelector((state) => state.auth.user);
   const isLoading = useSelector((state) => state.packs.isLoading);
-  const { addNewPack,isSuccess,isError,response } = useAddNewPack();
-    if (isSuccess && !isCreatingTrip && response ) {
-       
-      router.push(`/pack/${response.createdPack._id}`);
-    }
+  const { addNewPack, isSuccess, isError, response } = useAddNewPack();
+  if (isSuccess && !isCreatingTrip && response) {
+    router.push(`/pack/${response.createdPack._id}`);
+  }
   /**
    * Handles the addition of a pack.
    *
@@ -106,7 +105,7 @@ export const AddPack = ({isCreatingTrip = false}) => {
   );
 };
 
-export const AddPackContainer = ({isCreatingTrip}) => {
+export const AddPackContainer = ({ isCreatingTrip }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <CustomModal
@@ -115,7 +114,7 @@ export const AddPackContainer = ({isCreatingTrip}) => {
       isActive={isOpen}
       onTrigger={setIsOpen}
     >
-      <AddPack isCreatingTrip = {isCreatingTrip}   />
+      <AddPack isCreatingTrip={isCreatingTrip} />
     </CustomModal>
   );
 };
