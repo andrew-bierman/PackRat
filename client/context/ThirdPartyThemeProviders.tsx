@@ -10,7 +10,7 @@ import {
   nativeBaseLightTheme,
 } from '../theme';
 import FontLoader from './FontLoader';
-import { setupDev } from '@tamagui/core';
+import { setupDev } from 'tamagui';
 
 const ThirdPartyProviders = ({ children, isDark = false }) => {
   setupDev({
