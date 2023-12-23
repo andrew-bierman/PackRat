@@ -43,7 +43,7 @@ export function ThreeDotsMenu({ data, titleRef, setEditTitle }) {
         ]}
       >
         <Popover.Arrow borderWidth={1} borderColor="$borderColor" />
-          <Popover.Close asChild>        
+        <Popover.Close asChild>
           <YStack space="$1">
             <Button
               onPress={() => {
@@ -56,25 +56,25 @@ export function ThreeDotsMenu({ data, titleRef, setEditTitle }) {
             >
               Edit
             </Button>
-              <Button
-                onPress={() => {
-                  if (data.type === 'pack') {
-                    dispatch(
-                      deletePack({
-                        id: data._id,
-                      }),
-                    );
-                  } else {
-                    dispatch(deleteTrip(data._id));
-                  }
-                  router.replace('/feed');
-                }}
-              >
-                Delete
-              </Button>        
-            </YStack>
-          </Popover.Close>
+            <Button
+              onPress={() => {
+                if (data.type === 'pack') {
+                  dispatch(
+                    deletePack({
+                      id: data._id,
+                    }),
+                  );
+                } else {
+                  dispatch(deleteTrip(data._id));
+                }
+                router.replace('/feed');
+              }}
+            >
+              Delete
+            </Button>
+          </YStack>
+        </Popover.Close>
       </Popover.Content>
     </Popover>
-  )
+  );
 }

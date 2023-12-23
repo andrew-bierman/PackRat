@@ -89,25 +89,29 @@ export const CustomModal = ({
             <Dialog.Title>{title}</Dialog.Title>
             <Dialog.Description>{children}</Dialog.Description>
 
-            <RStack style={{alignSelf: "flex-end", flexDirection: "row"}} gap="$4">
+            <RStack
+              style={{ alignSelf: 'flex-end', flexDirection: 'row' }}
+              gap="$4"
+            >
               {footerButtons.map((button, index) => (
                 <RButton
                   key={index}
                   onPress={button.onClick}
                   backgroundColor={button.color}
                   disabled={button.disabled}
-                  color="white"                
-                  >
+                  color="white"
+                >
                   {button.label}
                 </RButton>
               ))}
             </RStack>
 
             {buttonText && (
-              <RStack style={{alignSelf: "flex-end", flexDirection: "row"}} gap="$4">
-                <RButton onPress={onSave} >
-                  {buttonText}
-                </RButton>
+              <RStack
+                style={{ alignSelf: 'flex-end', flexDirection: 'row' }}
+                gap="$4"
+              >
+                <RButton onPress={onSave}>{buttonText}</RButton>
                 <RButton onPress={closeModal} ml="auto">
                   Cancel
                 </RButton>

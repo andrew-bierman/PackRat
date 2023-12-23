@@ -17,7 +17,6 @@ import { CustomModal } from '../modal';
 import { AddItemModal } from './AddItemModal';
 import useCustomStyles from '~/hooks/useCustomStyles';
 
-
 export default function PackContainer({ isCreatingTrip = false }) {
   const dispatch = useDispatch();
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);

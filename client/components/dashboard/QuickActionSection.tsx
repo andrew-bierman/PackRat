@@ -35,7 +35,7 @@ const QuickActionsSection = () => {
   };
 
   return (
-    <RStack style={{flexDirection: "row", ...styles.section}}>
+    <RStack style={{ flexDirection: 'row', ...styles.section }}>
       {quickActionData.map((action) => (
         <QuickActionButton
           key={action.action}

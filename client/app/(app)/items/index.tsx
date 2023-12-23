@@ -77,11 +77,13 @@ export default function Items() {
                 {Platform.OS === 'web' ? (
                   <RTooltip
                     Label="Add a global item"
-                    Icon={<MaterialIcons
-                      name="info-outline"
-                      size={24}
-                      color={currentTheme.colors.background}
-                    />}
+                    Icon={
+                      <MaterialIcons
+                        name="info-outline"
+                        size={24}
+                        color={currentTheme.colors.background}
+                      />
+                    }
                   />
                 ) : null}
               </View>

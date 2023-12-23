@@ -77,11 +77,11 @@ const CustomAccordion = ({ title, content, iconName }) => {
           />
         </RButton>
       </View>
-      {expanded &&
+      {expanded && (
         <RCard.Header>
           <RText style={styles.cardContent}>{content}</RText>
         </RCard.Header>
-      }
+      )}
     </RCard>
   );
 };
@@ -137,8 +137,17 @@ const LandingPage = () => {
                   flexWrap: 'wrap',
                 }}
               >
-                <RButton title="App Store" style={{ margin: 10, padding: "32px" }}>
-                  <RStack style={{flexDirection: "row", alignItems:"center", gap: "8px"}}>
+                <RButton
+                  title="App Store"
+                  style={{ margin: 10, padding: '32px' }}
+                >
+                  <RStack
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      gap: '8px',
+                    }}
+                  >
                     <MaterialCommunityIcons
                       name="apple"
                       size={44}
@@ -149,8 +158,17 @@ const LandingPage = () => {
                     </RText>
                   </RStack>
                 </RButton>
-                <RButton title="Google Play" style={{ margin: 10, padding: "32px" }}>
-                  <RStack style={{flexDirection: "row", alignItems:"center", gap: "8px"}}>
+                <RButton
+                  title="Google Play"
+                  style={{ margin: 10, padding: '32px' }}
+                >
+                  <RStack
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      gap: '8px',
+                    }}
+                  >
                     <MaterialCommunityIcons
                       name="google-play"
                       size={44}
@@ -162,8 +180,17 @@ const LandingPage = () => {
                   </RStack>
                 </RButton>
               </View>
-              <RButton title="Web" style={{ margin: 10, padding: "32px", width: '100%' }}>
-                <RStack style={{flexDirection: "row", alignItems:"center", gap: "8px"}}>
+              <RButton
+                title="Web"
+                style={{ margin: 10, padding: '32px', width: '100%' }}
+              >
+                <RStack
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    gap: '8px',
+                  }}
+                >
                   <MaterialCommunityIcons name="web" size={44} color="white" />
                   <RText style={{ color: 'white' }}>Use on Web</RText>
                 </RStack>
@@ -244,7 +271,7 @@ const loadStyles = (theme) => {
       textAlign: 'center',
       marginBottom: 20,
       color: currentTheme.colors.text,
-      width: "80%",
+      width: '80%',
       lineHeight: 1.5,
     },
     card: {

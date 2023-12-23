@@ -29,9 +29,23 @@ const FeedPreviewScroll = () => {
         return linkStr ? (
           <Link href={linkStr} key={`${linkStr}`}>
             <View style={styles.cardStyles} key={index}>
-              <RStack style={{flexDirection: "row", justifyContent:"space-between"}}>
+              <RStack
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                }}
+              >
                 <RText style={styles.feedItemTitle}>{item.name}</RText>
-                <RText fontSize="$1" style={{backgroundColor:"#F2F1EB", textTransform:"capitalize", padding: "4px 8px", alignSelf: "center", borderRadius: "2px"}}>
+                <RText
+                  fontSize="$1"
+                  style={{
+                    backgroundColor: '#F2F1EB',
+                    textTransform: 'capitalize',
+                    padding: '4px 8px',
+                    alignSelf: 'center',
+                    borderRadius: '2px',
+                  }}
+                >
                   {item.type}
                 </RText>
               </RStack>

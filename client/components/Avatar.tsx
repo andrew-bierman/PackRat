@@ -25,7 +25,7 @@ export default function Avatar({
           alignSelf: 'center',
         }}
       />
-    )
+    );
   }
 
   return (

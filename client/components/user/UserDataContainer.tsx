@@ -14,13 +14,12 @@ import { View } from 'react-native';
 // Skeleton version of the UserDataCard component
 const SkeletonUserDataCard = () => {
   return (
-    <View style={{alignItems:"center", padding:"5"}} >
+    <View style={{ alignItems: 'center', padding: '5' }}>
       <RSkeleton
         style={{
-          minHeight:"150px",
-          minWidth:"300px"
+          minHeight: '150px',
+          minWidth: '300px',
         }}
-        
       ></RSkeleton>
     </View>
   );
@@ -31,7 +30,7 @@ export default function UserDataContainer({
   type,
   userId,
   isLoading,
-  SkeletonComponent
+  SkeletonComponent,
 }) {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
@@ -52,19 +51,18 @@ export default function UserDataContainer({
   const differentUser = userId && userId !== currentUser._id;
 
   // Map function to render multiple skeleton cards
-  const skeletonCards = SkeletonComponent ? SkeletonComponent : [...Array(3)].map((_, idx) => (
-    <SkeletonUserDataCard key={idx} />
-  ));
+  const skeletonCards =
+    SkeletonComponent ||
+    [...Array(3)].map((_, idx) => <SkeletonUserDataCard key={idx} />);
 
-  
   if (isLoading) {
     return (
       <RStack
         style={{
-          flexWrap: "wrap",
-          justifyContent: "center",
-          alignItems: "center",
-          width: "100%",
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: '100%',
           padding: 4,
         }}
       >
@@ -81,10 +79,22 @@ export default function UserDataContainer({
         backgroundColor: hexToRGBA(currentTheme.colors.card, 0.2),
       }}
     >
-      <RStack style={{gap: "16px", alignItems:"center", flex:1, width:"100%", padding:"24px"}}>
+      <RStack
+        style={{
+          gap: '16px',
+          alignItems: 'center',
+          flex: 1,
+          width: '100%',
+          padding: '24px',
+        }}
+      >
         <RText
           color={currentTheme.colors.textColor}
-          style={{textTransform: "capitalize", fontSize:"24px", fontWeight:"bold"}}
+          style={{
+            textTransform: 'capitalize',
+            fontSize: '24px',
+            fontWeight: 'bold',
+          }}
         >
           {differentUser
             ? // ? `${userId}'s ${typeUppercase}`
@@ -93,10 +103,10 @@ export default function UserDataContainer({
         </RText>
         <RStack
           style={{
-            flexWrap: "wrap",
-            justifyContent: "center",
-            alignItems: "center",
-            width: "100%",
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '100%',
             padding: 4,
           }}
         >
@@ -117,7 +127,7 @@ export default function UserDataContainer({
           ) : currentUser?._id === userId ? (
             <Link href="/">
               <RButton
-                style={{color: currentTheme.colors.white, width: "100%"}}
+                style={{ color: currentTheme.colors.white, width: '100%' }}
               >
                 {`Create your first ${typeUppercaseSingular}`}
               </RButton>

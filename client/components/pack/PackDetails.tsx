@@ -59,7 +59,7 @@ export function PackDetails() {
           ? { minHeight: '100vh' }
           : Dimensions.get('screen').height,
       ]}
-    > 
+    >
       {!isError && (
         <>
           <DetailsComponent

@@ -36,7 +36,8 @@ export default function Card({
   const favorites = useSelector(selectAllFavorites);
   const dispatch = useDispatch();
 
-  const isFavorite = !type === 'trip'
+  const isFavorite =
+    !type === 'trip'
       ? favorited_by.includes(user._id) ||
         favorited_by.forEach((obj) => obj._id === user._id)
       : null;
@@ -78,20 +79,21 @@ export default function Card({
   if (duration) numberOfNights = JSON.parse(duration).numberOfNights;
 
   return (
-    <View style={{alignItems: "center", padding: "16px"}}>
-      <View style={{ 
-        minHeight: "150px", 
-        minWidth: "300px", 
-        marginVertical: "auto", 
-        borderRadius: "15px",
-        overflow: "hidden",
-        borderColor: "lightgray",
-        borderWidth: "1",
-        backgroundColor: `${currentTheme.colors.card}`, 
-      }}
+    <View style={{ alignItems: 'center', padding: '16px' }}>
+      <View
+        style={{
+          minHeight: '150px',
+          minWidth: '300px',
+          marginVertical: 'auto',
+          borderRadius: '15px',
+          overflow: 'hidden',
+          borderColor: 'lightgray',
+          borderWidth: '1',
+          backgroundColor: `${currentTheme.colors.card}`,
+        }}
       >
-        <RStack style={{padding: "16px", gap: "50px"}}>
-          <RStack style={{gap: "10px"}}>
+        <RStack style={{ padding: '16px', gap: '50px' }}>
+          <RStack style={{ gap: '10px' }}>
             <RHeading>
               <View
                 style={{
@@ -106,14 +108,21 @@ export default function Card({
                     {truncatedName}
                   </RText>
                 </Link>
-                <RStack style={{ flexDirection: 'row', alignItems:"center", justifyContent:"center", gap: "10px"}}>
+                <RStack
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '10px',
+                  }}
+                >
                   {type === 'pack' && (
                     <View
                       style={{
                         flexDirection: 'row',
                         alignItems: 'center',
                         justifyContent: 'space-between',
-                        gap: "8px",
+                        gap: '8px',
                         // border: '1px solid #ccc',
                       }}
                     >
@@ -161,13 +170,22 @@ export default function Card({
             )}
           </RStack>
 
-          <RStack style={{alignItems:"center", justifyContent: "space-between"}}>
-            <RStack style={{flexDirection: "row", alignItems:"center", justifyContent: "space-between", width: "100%"}}>
+          <RStack
+            style={{ alignItems: 'center', justifyContent: 'space-between' }}
+          >
+            <RStack
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                width: '100%',
+              }}
+            >
               <View
                 style={{
                   flexDirection: 'column',
                   alignItems: 'flex-start',
-                  gap: "8px",
+                  gap: '8px',
                 }}
               >
                 <Link href={`/profile/${owner_id}`}>
@@ -179,15 +197,10 @@ export default function Card({
                   style={{
                     flexDirection: 'row',
                     alignItems: 'center',
-                    gap: "100px",
+                    gap: '100px',
                   }}
                 >
-                  <RText
-                    fontSize="$1"
-                    color="gray"
-                    fontWeight="400"
-                    flex={1}
-                  >
+                  <RText fontSize="$1" color="gray" fontWeight="400" flex={1}>
                     {formatDistanceToNow(
                       new Date(
                         !Number.isNaN(new Date(createdAt).getTime())
@@ -210,12 +223,14 @@ export default function Card({
               >
                 {type === 'pack' && (
                   <View>
-                    <RText fontSize="$2" color={currentTheme.colors.textColor}>Favorites</RText>
+                    <RText fontSize="$2" color={currentTheme.colors.textColor}>
+                      Favorites
+                    </RText>
                     <View
                       style={{
                         flexDirection: 'row',
                         alignItems: 'center',
-                        gap: "8px",
+                        gap: '8px',
                       }}
                     >
                       {user?._id === owner_id ? null : (
@@ -244,7 +259,9 @@ export default function Card({
                 )}
                 {type === 'trip' && (
                   <View>
-                    <RText fontSize="$2" color={currentTheme.colors.textColor}>Nights</RText>
+                    <RText fontSize="$2" color={currentTheme.colors.textColor}>
+                      Nights
+                    </RText>
                     <RText
                       fontSize="$2"
                       color={currentTheme.colors.textColor}

@@ -11,7 +11,7 @@ const QuickActionButton = ({ onPress, iconName, text }) => {
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
       <RCard elevate style={styles.card}>
-        <RCard.Header padded alignItems='center'>
+        <RCard.Header padded alignItems="center">
           <MaterialIcons
             name={iconName}
             size={24}

@@ -55,5 +55,4 @@ export type InputTextProps = {
   control?: UseControllerProps['control'];
   name?: UseControllerProps['name'];
   rules?: UseControllerProps['rules'];
-} &
-  React.RefAttributes<InputTextRef>;
+} & React.RefAttributes<InputTextRef>;

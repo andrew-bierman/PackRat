@@ -28,7 +28,7 @@ export const ItemsTable = ({
   const styles = useCustomStyles(loadStyles);
   const TitleRow = ({ title }) => {
     const rowData = [
-      <RStack style={{flexDirection: "row", ...styles.mainTitle}}>
+      <RStack style={{ flexDirection: 'row', ...styles.mainTitle }}>
         <Text style={styles.titleText}>{title}</Text>
       </RStack>,
     ];

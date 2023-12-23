@@ -36,13 +36,13 @@ export const ItemForm = ({
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
 
-  const radioOptions = Object
-    .values(ItemCategoryEnum)
-    .filter((value) => !(hasWaterAdded && value === ItemCategoryEnum.WATER));
+  const radioOptions = Object.values(ItemCategoryEnum).filter(
+    (value) => !(hasWaterAdded && value === ItemCategoryEnum.WATER),
+  );
 
   return (
     <View>
-      <RStack style={{gap: "8px"}}>
+      <RStack style={{ gap: '8px' }}>
         <RInput
           value={name}
           placeholder="Item Name"

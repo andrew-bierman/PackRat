@@ -258,19 +258,19 @@ export const SaveTripContainer = ({ dateRange }) => {
             {weatherObject?.main?.humidity}
           </RText>
         </>
-        <RStack style={{flexDirection: "row"}}>
+        <RStack style={{ flexDirection: 'row' }}>
           <RText>Pack</RText>
           <RText>`Selected Pack Name`</RText>
         </RStack>
-        <RStack style={{flexDirection: "row"}}>
+        <RStack style={{ flexDirection: 'row' }}>
           <RText>Trip Location - </RText>
           <RText>{search?.properties?.name}</RText>
         </RStack>
-        <RStack style={{flexDirection: "row"}}>
+        <RStack style={{ flexDirection: 'row' }}>
           <RText>Selected Trail - </RText>
           <RText>{dropdown?.currentTrail}</RText>
         </RStack>
-        <RStack style={{flexDirection: "row"}}>
+        <RStack style={{ flexDirection: 'row' }}>
           <RText>Selected Date Range - </RText>
           <RText>
             {dateRange.startDate
@@ -279,7 +279,7 @@ export const SaveTripContainer = ({ dateRange }) => {
             - {dateRange.endDate ? format(dateRange.endDate, 'MM/dd/yyyy') : ''}
           </RText>
         </RStack>
-        <RStack style={{flexDirection: "row"}}>
+        <RStack style={{ flexDirection: 'row' }}>
           <RText>Duration {'(Number of nights) - '} </RText>
           {dateRange.startDate && dateRange.endDate && (
             <RText>

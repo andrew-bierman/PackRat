@@ -134,10 +134,10 @@ const AboutContent = ({ desktopContainer, isMobile }) => {
         </Text>
       </View>
       <View style={desktopContainer}>
-        <RStack style={{flexDirection: "row"}}>
+        <RStack style={{ flexDirection: 'row' }}>
           <View style={styles.buttonContainer}>
             <RButton style={styles.githubButton} onPress={handleGithubLink}>
-              <RStack style={{flexDirection: "row"}}>
+              <RStack style={{ flexDirection: 'row' }}>
                 <FontAwesome
                   name="github"
                   style={[isDark ? styles.githubIconDark : styles.githubIcon]}

@@ -100,7 +100,7 @@ const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
 
   return (
     <View style={styles.container}>
-      <RStack style={{alignItems:"center"}}>
+      <RStack style={{ alignItems: 'center' }}>
         {showChatSelector && (
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <View

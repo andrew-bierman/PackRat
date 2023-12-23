@@ -31,17 +31,14 @@ const SettingsButton = () => {
     <RIconButton
       onPress={onSettingsClick}
       style={{
-        backgroundColor: "transparent",
-        marginBottom: "16px",
-        justifyContent: "center",
-        border:"1px solid lightgray",
-        borderRadius: "8px",
+        backgroundColor: 'transparent',
+        marginBottom: '16px',
+        justifyContent: 'center',
+        border: '1px solid lightgray',
+        borderRadius: '8px',
       }}
       icon={
-        <MaterialCommunityIcons 
-          name="cog-outline" 
-          size={24} 
-          color={'grey'} />
+        <MaterialCommunityIcons name="cog-outline" size={24} color={'grey'} />
       }
     />
   );
@@ -68,48 +65,63 @@ const Header = ({
     : `@${userEmailSplitFirstHalf}`;
 
   return (
-    <View style={{width: "50%", ...styles.infoSection}}>
-      <RStack style={{flexDirection: "row", width: "100%", alignItems:"center"}}>
+    <View style={{ width: '50%', ...styles.infoSection }}>
+      <RStack
+        style={{ flexDirection: 'row', width: '100%', alignItems: 'center' }}
+      >
         {isCurrentUser && !isLoading && (
-          <View style={{alignSelf: "flex-start", marginLeft: "auto"}}>
+          <View style={{ alignSelf: 'flex-start', marginLeft: 'auto' }}>
             <SettingsButton />
           </View>
         )}
-        <RStack style={{alignItems:"center", flex:"1"}} >
+        <RStack style={{ alignItems: 'center', flex: '1' }}>
           <View style={styles.userInfo}>
             {isLoading ? (
               <>
-                <RSkeleton style={{borderRadius: "100%", height: "100px", width: "100px"}} />
                 <RSkeleton
-                  style={{height: "100px", width:"100%", marginTop: "8px", alignItems: "center"}}
+                  style={{
+                    borderRadius: '100%',
+                    height: '100px',
+                    width: '100px',
+                  }}
+                />
+                <RSkeleton
+                  style={{
+                    height: '100px',
+                    width: '100%',
+                    marginTop: '8px',
+                    alignItems: 'center',
+                  }}
                 />
               </>
             ) : (
               <>
                 <Avatar src={user?.profileImage} />
-                <RText style={{marginTop: "16px",...styles.userName}}>{userRealName}</RText>
+                <RText style={{ marginTop: '16px', ...styles.userName }}>
+                  {userRealName}
+                </RText>
                 <RText style={styles.userEmail}>{username}</RText>
               </>
             )}
           </View>
         </RStack>
-        {isCurrentUser && !isLoading && <View style={{width: 45}}/>}{' '}
+        {isCurrentUser && !isLoading && <View style={{ width: 45 }} />}{' '}
         {/* This empty box is to offset the space taken by the settings button, ensuring the profile details remain centered. */}
       </RStack>
-      <RStack style={{flexDirection:"row", ...styles.card}}>
+      <RStack style={{ flexDirection: 'row', ...styles.card }}>
         {isLoading ? (
           <>
             <RSkeleton
-              style={{borderRadius: "100%", width: "50px", height: "50px"}}
+              style={{ borderRadius: '100%', width: '50px', height: '50px' }}
             />
             <RSkeleton
-              style={{borderRadius: "100%", width: "50px", height: "50px"}}
+              style={{ borderRadius: '100%', width: '50px', height: '50px' }}
             />
             <RSkeleton
-              style={{borderRadius: "100%", width: "50px", height: "50px"}}
+              style={{ borderRadius: '100%', width: '50px', height: '50px' }}
             />
             <RSkeleton
-              style={{borderRadius: "100%", width: "50px", height: "50px"}}
+              style={{ borderRadius: '100%', width: '50px', height: '50px' }}
             />
           </>
         ) : (
@@ -153,8 +165,8 @@ const SkeletonUserDataCard = () => {
   return (
     <View
       style={{
-        borderRadius: 15, 
-        backgroundColor:'lightgray',
+        borderRadius: 15,
+        backgroundColor: 'lightgray',
         padding: 10,
         margin: 5,
         width: '90%',
@@ -162,14 +174,12 @@ const SkeletonUserDataCard = () => {
       }}
     >
       <RSkeleton
-        style={{marginBottom: "8px", height: "50px", width: "70%"}}
+        style={{ marginBottom: '8px', height: '50px', width: '70%' }}
       />
       <RSkeleton
-        style={{marginBottom: "8px", height: "50px", width: "50%"}}
+        style={{ marginBottom: '8px', height: '50px', width: '50%' }}
       />
-      <RSkeleton
-        style={{height: "50px", width: "30%"}}
-      />
+      <RSkeleton style={{ height: '50px', width: '30%' }} />
     </View>
   );
 };
@@ -264,7 +274,6 @@ export default function ProfileContainer({ id = null }) {
                 No favorites yet
               </RText>
             )}
-
           </View>
           {Array.isArray(packsData) && packsData.length > 0 && (
             <View style={styles.userDataContainer}>

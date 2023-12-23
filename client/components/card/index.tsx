@@ -1,5 +1,12 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { RStack, RSeparator, RText, useToastController, ToastViewport, NativeToast } from '@packrat/ui';
+import {
+  RStack,
+  RSeparator,
+  RText,
+  useToastController,
+  ToastViewport,
+  NativeToast,
+} from '@packrat/ui';
 import {
   TouchableOpacity,
   Clipboard,
@@ -38,8 +45,7 @@ export const CustomCard = ({
   const isLoading = useSelector((state: any) => state.singlePack.isLoading);
   const user = useSelector((state: any) => state.auth.user);
   const userId = user._id;
-  const toast = useToastController()
-
+  const toast = useToastController();
 
   /**
    * Handles copying the link to the clipboard and updates the copy state.
@@ -54,8 +60,8 @@ export const CustomCard = ({
     const resetCopyStateTimeout = setTimeout(() => {
       setIsCopied(false);
     }, 2000);
-    //Style in the future
-    toast.show('Link copied to clipboard')
+    // Style in the future
+    toast.show('Link copied to clipboard');
     // InformUser({
     //   title: 'Link copied to clipboard',
     //   placement: 'bottom',
@@ -68,10 +74,22 @@ export const CustomCard = ({
   if (type === 'pack') {
     return (
       <View
-        style={{alignSelf: 'center', borderRadius: '10px', ...styles.mainContainer}}
+        style={{
+          alignSelf: 'center',
+          borderRadius: '10px',
+          ...styles.mainContainer,
+        }}
       >
-        <RStack style={{width: '100%', gap: '30px'}}>
-          <View style={{padding:"15px", paddingBottom: '0px', flexDirection:"row", justifyContent:"space-between", alignItems:"center"}}>
+        <RStack style={{ width: '100%', gap: '30px' }}>
+          <View
+            style={{
+              padding: '15px',
+              paddingBottom: '0px',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
             <View>
               <EditableInput
                 data={data}
@@ -82,8 +100,8 @@ export const CustomCard = ({
                 loading={isLoading}
               />
             </View>
-            <View style={{flexDirection:"row", alignItems:"center"}} >
-              <View style={{marginRight: '20px', marginLeft: '20px'}}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <View style={{ marginRight: '20px', marginLeft: '20px' }}>
                 <Link href={`/profile/${data.owner_id}`}>
                   <RText>
                     {user._id === data.owner_id
@@ -97,9 +115,11 @@ export const CustomCard = ({
                 </Link>
               </View>
               {link && (
-                <View style={{flexDirection: 'row', alignItems: 'center' }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                   {isCopied ? (
-                    <View style={{flexDirection: 'row', alignItems: 'center' }}>
+                    <View
+                      style={{ flexDirection: 'row', alignItems: 'center' }}
+                    >
                       <MaterialCommunityIcons
                         name="check"
                         size={24}
@@ -109,7 +129,9 @@ export const CustomCard = ({
                       <RText color="green">Copied</RText>
                     </View>
                   ) : (
-                    <View style={{flexDirection: 'row', alignItems: 'center' }}>
+                    <View
+                      style={{ flexDirection: 'row', alignItems: 'center' }}
+                    >
                       <MaterialCommunityIcons
                         name="link"
                         size={24}
@@ -131,32 +153,32 @@ export const CustomCard = ({
             </View>
           </View>
           <RSeparator />
-          <View style={{
+          <View
+            style={{
               alignItems: 'center',
               justifyContent: 'center',
               paddingRight: '16px',
-              paddingLeft: '16px'
+              paddingLeft: '16px',
             }}
           >
             <SearchItem placeholder={'Search Item'} />
           </View>
           <RSeparator />
-          <View style={{
+          <View
+            style={{
               alignItems: 'center',
               justifyContent: 'center',
               paddingRight: '16px',
-              paddingLeft: '16px'
+              paddingLeft: '16px',
             }}
           >
             {content}
           </View>
           <RSeparator />
-          <View style={{padding: '16px', paddingTop: '0'}}>
-            {footer}
-          </View>
+          <View style={{ padding: '16px', paddingTop: '0' }}>{footer}</View>
         </RStack>
-        <ToastViewport multipleToasts/>
-        <NativeToast/>
+        <ToastViewport multipleToasts />
+        <NativeToast />
       </View>
     );
   }
@@ -164,13 +186,25 @@ export const CustomCard = ({
   if (type === 'trip') {
     return (
       <View
-        style={{alignSelf: 'center', borderRadius: '10px', ...styles.mainContainer}}
+        style={{
+          alignSelf: 'center',
+          borderRadius: '10px',
+          ...styles.mainContainer,
+        }}
       >
-        <RStack style={{width: '100%', gap: '30px'}}>
-          <View style={{padding:"15px", paddingBottom: '0px', flexDirection:"row", justifyContent:"space-between", alignItems:"center"}}>
+        <RStack style={{ width: '100%', gap: '30px' }}>
+          <View
+            style={{
+              padding: '15px',
+              paddingBottom: '0px',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
             <View>{title}</View>
-            <View style={{flexDirection:"row", alignItems:"center"}} >
-              <View style={{marginRight: '20px', marginLeft: '20px'}}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <View style={{ marginRight: '20px', marginLeft: '20px' }}>
                 <Link href={`/profile/${data.owner_id && data.owner_id._id}`}>
                   <RText>
                     {user._id === data.owner_id
@@ -186,7 +220,9 @@ export const CustomCard = ({
               {link && (
                 <View>
                   {isCopied ? (
-                    <View style={{flexDirection: 'row', alignItems: 'center' }}>
+                    <View
+                      style={{ flexDirection: 'row', alignItems: 'center' }}
+                    >
                       <MaterialCommunityIcons
                         name="check"
                         size={24}
@@ -196,7 +232,9 @@ export const CustomCard = ({
                       <RText color="green">Copied</RText>
                     </View>
                   ) : (
-                    <View style={{flexDirection: 'row', alignItems: 'center' }}>
+                    <View
+                      style={{ flexDirection: 'row', alignItems: 'center' }}
+                    >
                       <MaterialCommunityIcons
                         name="link"
                         size={24}
@@ -211,19 +249,18 @@ export const CustomCard = ({
             </View>
           </View>
           <RSeparator />
-          <View style={{
+          <View
+            style={{
               alignItems: 'center',
               justifyContent: 'center',
               paddingRight: '16px',
-              paddingLeft: '16px'
+              paddingLeft: '16px',
             }}
           >
             {content}
           </View>
           <RSeparator />
-          <View style={{padding: '16px', paddingTop: '0'}}>
-            {footer}
-          </View>
+          <View style={{ padding: '16px', paddingTop: '0' }}>{footer}</View>
         </RStack>
       </View>
     );

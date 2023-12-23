@@ -1,7 +1,14 @@
 import { Platform, View, Pressable } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
-import { RStack, RInput, RButton, RText, RScrollView, RIconButton } from '@packrat/ui';
+import {
+  RStack,
+  RInput,
+  RButton,
+  RText,
+  RScrollView,
+  RIconButton,
+} from '@packrat/ui';
 import { MaterialIcons } from '@expo/vector-icons';
 import useTheme from '../hooks/useTheme';
 import { fetchTrails } from '../store/trailsStore';
@@ -169,7 +176,10 @@ export const SearchInput = ({ onSelect, placeholder }) => {
               showsVerticalScrollIndicator={false}
               zIndex={20000}
             >
-              <View role="list" style={{width:"100%", gap: "8px", padding: "8px"}}>
+              <View
+                role="list"
+                style={{ width: '100%', gap: '8px', padding: '8px' }}
+              >
                 {searchResults.map((result, i) => (
                   <RStack
                     key={`result + ${i}`}
@@ -181,10 +191,8 @@ export const SearchInput = ({ onSelect, placeholder }) => {
                       cursor: 'pointer',
                     }}
                   >
-                    <RStack style={{flexDirection:"row"}}>
-                      <RText fontWeight="400">
-                        {result.properties.name}
-                      </RText>
+                    <RStack style={{ flexDirection: 'row' }}>
+                      <RText fontWeight="400">{result.properties.name}</RText>
                       <RText
                         style={{
                           color: 'gray',
@@ -206,24 +214,24 @@ export const SearchInput = ({ onSelect, placeholder }) => {
   ) : isLoadingMobile ? (
     <RText>Loading...</RText>
   ) : (
-    <RStack style={{width:"100%", alignSelf: "center"}}>
+    <RStack style={{ width: '100%', alignSelf: 'center' }}>
       <RInput
         onChangeText={(text) => {
           setSearchString(text);
         }}
         placeholder="Search"
         style={{
-          width:"100%",
-          borderRadius:"4",
-          padding:"16px 8px",
-          backgroundColor: "white",
+          width: '100%',
+          borderRadius: '4',
+          padding: '16px 8px',
+          backgroundColor: 'white',
         }}
         value={searchString}
         fontSize={14}
       />
       <RIconButton
         backgroundColor="transparent"
-        icon={<MaterialIcons name="search" size={24} color="gray"/>}
+        icon={<MaterialIcons name="search" size={24} color="gray" />}
       />
 
       {showSearchResults && searchResults?.length > 0 && (
@@ -240,7 +248,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
           showsVerticalScrollIndicator={false}
           zIndex={10}
         >
-          <View role="list" style={{width:"100%"}}>
+          <View role="list" style={{ width: '100%' }}>
             {searchResults.map((result, i) => (
               <Pressable
                 key={`result + ${i}`}
@@ -249,14 +257,9 @@ export const SearchInput = ({ onSelect, placeholder }) => {
                   handleSearchResultClick(result, i);
                 }}
               >
-                <RStack style={{flexDirection: "row"}}>
-                  <RText fontWeight="400">
-                    {result.properties.name}
-                  </RText>
-                  <RText
-                    color="gray"
-                    textTransform={'capitalize'}
-                  >
+                <RStack style={{ flexDirection: 'row' }}>
+                  <RText fontWeight="400">{result.properties.name}</RText>
+                  <RText color="gray" textTransform={'capitalize'}>
                     {result.properties.osm_value}
                   </RText>
                 </RStack>
