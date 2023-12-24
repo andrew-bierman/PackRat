@@ -1,5 +1,4 @@
-import { PrismaClient } from '@prisma/client/edge';
-import { User, Item } from '../../prisma/methods';
+import { Pack } from '../../drizzle/methods/Pack';
 
 const SORT_OPTIONS = {
   Favorite: { favoritesCount: 'desc' },
@@ -19,44 +18,29 @@ const SORT_OPTIONS = {
 const DEFAULT_SORT = { createdAt: 'desc' };
 
 export const getPacksService = async (
-  prisma: PrismaClient,
   ownerId,
   queryBy = null,
 ) => {
   try {
-    const packs = await prisma.pack.findMany({
-      where: {
-        OR: [
-          {
-            owner_id: ownerId,
-          },
-          {
-            owners: { has: ownerId },
-          },
-        ],
-      },
-      include: {
+    const packClass = new Pack();
+    const packs = await packClass.findMany({
+      where: (pack, { or, eq }) => or(eq(pack.owner_id, ownerId), pack.owners.has(ownerId)),
+      with: {
         itemDocuments: {
-          select: {
+          columns: {
             categoryDocument: {
-              select: {
-                name: true,
-              },
-            },
-          },
+              columns: { name: true }
+            }
+          }
         },
-        ownerDocuments: true,
+        ownerDocuments: true
       },
-      orderBy: SORT_OPTIONS[queryBy] || DEFAULT_SORT,
+      orderBy: (pack, { asc, desc }) => SORT_OPTIONS[queryBy] ? SORT_OPTIONS[queryBy](pack) : DEFAULT_SORT[pack]
     });
 
     packs.forEach((pack) => {
-      pack.ownerDocuments = pack.ownerDocuments?.map(
-        (owner) => User(owner)?.toJSON(),
-      ) as any;
-      pack.itemDocuments = pack.itemDocuments?.map(
-        (item) => Item(item as any)?.toJSON(),
-      ) as any;
+      pack.ownerDocuments = pack.ownerDocuments
+      pack.itemDocuments = pack.itemDocuments
     });
 
     return packs;

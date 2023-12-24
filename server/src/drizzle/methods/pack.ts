@@ -23,4 +23,9 @@ export class Pack {
         const pack = await createDb(db).query.pack.findFirst(query)
         return pack
     }
+
+    async create(data: any) {
+        return await createDb(db).insert(pack).values(data).returning().get();
+    }
+
 }

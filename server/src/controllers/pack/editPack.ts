@@ -3,7 +3,6 @@ import { UnableToEditPackError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { editPackService } from '../../services/pack/pack.service';
 import * as validator from '../../middleware/validators/index';
-import { Pack } from '../../prisma/methods';
 
 /**
  * Edits a pack in the database.
@@ -28,8 +27,7 @@ import { Pack } from '../../prisma/methods';
 export function editPackRoute() {
   return publicProcedure.input(validator.editPack).mutation(async (opts) => {
     const { id, ...rest } = opts.input;
-    const { prisma }: any = opts.ctx;
-    const pack = await editPackService(prisma, id, rest);
-    return Pack(pack)?.toJSON();
+    const pack = await editPackService(id, rest);
+    return pack
   });
 }

@@ -6,10 +6,11 @@
  * @return {Object} An object containing the created pack.
  */
 
-import { PrismaClient } from '@prisma/client/edge';
-import { Pack } from '../../prisma/methods';
+import { Pack } from "../../drizzle/methods/Pack";
 
-export const addPackService = async (prisma: PrismaClient, name, owner_id) => {
+
+export const addPackService = async (name, owner_id) => {
+  const packClass = new Pack();
   const newPack = {
     name,
     owner_id,
@@ -30,7 +31,7 @@ export const addPackService = async (prisma: PrismaClient, name, owner_id) => {
   };
 
   // Check if a pack with the same name already exists
-  const existingPack = await prisma.pack.findFirst({
+  const existingPack = await packClass.findUniquepack({
     where: {
       name,
     },
@@ -42,14 +43,10 @@ export const addPackService = async (prisma: PrismaClient, name, owner_id) => {
   }
 
   // Create the new pack
-  const createdPack = await prisma.pack.create({
-    data: {
-      ...newPack,
-      ownerDocuments: {
-        connect: { id: owner_id },
-      },
-    },
+  const createdPack = await packClass.create({
+    ...newPack,
+    ownerDocuments: owner_id,
   });
 
-  return { createdPack: Pack(createdPack)?.toJSON() };
+  return { createdPack };
 };

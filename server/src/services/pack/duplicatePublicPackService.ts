@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client/edge';
+import { Pack } from '../../drizzle/methods/Pack';
 
 /**
  * Duplicates a public pack service.
@@ -9,16 +10,16 @@ import { PrismaClient } from '@prisma/client/edge';
  * @return {Object} - An object containing the duplicated pack.
  */
 export const duplicatePublicPackService = async (
-  prisma: PrismaClient,
   packId,
   ownerId,
   items,
 ) => {
-  const existingPack = await prisma.pack.findUnique({
+  const packClass = new Pack();
+  const existingPack = await packClass.findUniquepack({
     where: {
       id: packId, // Replace 'id' with the actual primary key field in your model
     },
-    include: {
+    with: {
       ownerDocuments: true,
     },
   });
@@ -27,7 +28,7 @@ export const duplicatePublicPackService = async (
     throw new Error('Pack not found');
   }
 
-  const newPack = await prisma.pack.create({
+  const newPack = await packClass.create({
     data: {
       name: existingPack.name,
       is_public: false,
@@ -38,15 +39,9 @@ export const duplicatePublicPackService = async (
       scores: {
         set: { ...existingPack.scores },
       },
-      ownerDocuments: {
-        connect: existingPack.owners.map((ownerId) => ({ id: ownerId })),
-      },
-      ownerDocument: {
-        connect: { id: ownerId },
-      },
-      itemDocuments: {
-        connect: items.map((item) => ({ id: item.id })),
-      },
+      ownerDocuments: existingPack.owners.map((ownerId) => ({ id: ownerId })),
+      ownerDocument: ownerId,
+      itemDocuments: items.map((item) => ({ id: item.id })),
       type: existingPack.type,
     },
   });

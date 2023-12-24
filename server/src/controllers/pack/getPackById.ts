@@ -3,7 +3,7 @@ import { PackNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { getPackByIdService } from '../../services/pack/pack.service';
 import * as validator from '../../middleware/validators/index';
-import { Pack } from '../../prisma/methods';
+
 /**
  * Retrieves a pack by its ID and returns it as a JSON response.
  * @param {Object} req - The request object.
@@ -26,8 +26,7 @@ import { Pack } from '../../prisma/methods';
 export function getPackByIdRoute() {
   return publicProcedure.input(validator.getPackById).query(async (opts) => {
     const { packId } = opts.input;
-    const { prisma }: any = opts.ctx;
-    const pack = await getPackByIdService(prisma, packId);
-    return Pack(pack)?.toJSON();
+    const pack = await getPackByIdService(packId);
+    return pack
   });
 }

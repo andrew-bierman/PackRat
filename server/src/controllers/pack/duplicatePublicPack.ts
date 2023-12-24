@@ -2,7 +2,7 @@ import { UnableToDuplicatePackError } from '../../helpers/errors';
 import { duplicatePublicPackService } from '../../services/pack/pack.service';
 import * as validator from '../../middleware/validators/index';
 import { publicProcedure } from '../../trpc';
-import { Pack } from '../../prisma/methods';
+
 /**
  * Duplicates a public pack.
  * @param {Object} req - the request object
@@ -29,13 +29,11 @@ export function duplicatePublicPackRoute() {
     .input(validator.duplicatePublicPack)
     .mutation(async (opts) => {
       const { packId, ownerId, items } = opts.input;
-      const { prisma }: any = opts.ctx;
       const result = await duplicatePublicPackService(
-        prisma,
         packId,
         ownerId,
         items,
       );
-      return Pack(result.pack)?.toJSON();
+      return result
     });
 }
