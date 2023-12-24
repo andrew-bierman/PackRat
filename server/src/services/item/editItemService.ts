@@ -1,6 +1,7 @@
 // import { prisma } from '../../prisma';
 
 import { PrismaClient } from '@prisma/client/edge';
+import { Item } from '../../drizzle/methods/Item';
 
 /**
  * Edit an item in the service.
@@ -22,30 +23,21 @@ export const editItemService = async (
   quantity,
   type,
 ) => {
+  const itemClass = new Item();
   const category = await prisma.itemCategory.findFirst({
     where: {
       name: type,
     },
   });
 
-  const newItem = await prisma.item.update({
-    where: {
-      id: id,
-    },
-    data: {
-      name,
-      weight: Number(weight),
-      unit,
-      quantity: Number(quantity),
-      categoryDocument: {
-        connect: { id: category.id },
-      },
-      type,
-    },
-    include: {
-      categoryDocument: true,
-    },
-  });
+  const newItem = await itemClass.update({
+    name,
+    weight: Number(weight),
+    unit,
+    quantity: Number(quantity),
+    categoryDocument: category.id,
+    type,
+  }, id);
 
   return newItem;
 };

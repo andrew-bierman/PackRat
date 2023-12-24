@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client/edge';
+import { Item } from '../../drizzle/methods/Item';
 // import { prisma } from '../../prisma';
 
 /**
@@ -14,11 +15,8 @@ export const getItemsGloballyService = async (
   reqlimit,
   reqpage,
 ) => {
-  const totalItems = await prisma.item.count({
-    where: {
-      global: true,
-    },
-  });
+  const itemClass = new Item();
+  const totalItems:any = await itemClass.count();
   const limit = Number(reqlimit) || totalItems;
   const totalPages = Math.ceil(totalItems / limit);
   const page = Number(reqpage) || 1;
