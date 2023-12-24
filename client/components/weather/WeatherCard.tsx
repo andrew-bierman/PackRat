@@ -1,15 +1,15 @@
-import { getNext4Days } from '../utils/getNextDays';
-import { dayNumToString } from '../utils/dayNumToString';
-import { convertToKmh } from '../utils/convertToKmh';
-import { convertToCelsius } from '../utils/convertToCelsius';
-import useTheme from '../hooks/useTheme';
+import { getNext4Days } from '../../utils/getNextDays';
+import { dayNumToString } from '../../utils/dayNumToString';
+import { convertToKmh } from '../../utils/convertToKmh';
+import { convertToCelsius } from '../../utils/convertToCelsius';
+import useTheme from '../../hooks/useTheme';
 
 import { Octicons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 
-import { defaultWeatherObject } from '../constants/defaultWeatherObj';
+import { defaultWeatherObject } from '../../constants/defaultWeatherObj';
 import useCustomStyles from '~/hooks/useCustomStyles';
 import { RStack, RText, RImage } from '@packrat/ui';
 

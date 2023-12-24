@@ -29,9 +29,8 @@ export const addTripService = async (tripDetails): Promise<string> => {
     // @ts-expect-error - getting typescript error here
     const savedGeoJSONs = await GeoJSON.saveMany(geoJSON.features);
 
-    const geojsonIds = savedGeoJSONs.map((feature) => feature._id);
+    const geojsonIds = savedGeoJSONs?.map((feature) => feature._id);
 
-    // console.log('geojsonIds', geojsonIds);
 
     const newTrip = await Trip.create({
       name,
