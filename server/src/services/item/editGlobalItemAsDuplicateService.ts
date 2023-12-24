@@ -1,5 +1,6 @@
-import { PrismaClient } from '@prisma/client/edge';
-// import { prisma } from '../../prisma';
+import { Item } from '../../drizzle/methods/Item';
+import { ItemCategory } from '../../drizzle/methods/itemcategory';
+
 /**
  * Edits a global item by creating a duplicate item in a specific pack.
  * @param {PrismaClient} prisma - Prisma client.
@@ -13,7 +14,6 @@ import { PrismaClient } from '@prisma/client/edge';
  * @return {Promise<object>} The newly created duplicate item.
  */
 export const editGlobalItemAsDuplicateService = async (
-  prisma: PrismaClient,
   itemId,
   packId,
   name,
@@ -22,48 +22,45 @@ export const editGlobalItemAsDuplicateService = async (
   unit,
   type,
 ) => {
-  const category = await prisma.itemCategory.findFirst({
+  const itemClass = new Item();
+  const itemCategory = new ItemCategory();
+  const category = await itemCategory.findUniqueItem({
     where: {
       name: type,
     },
   });
 
-  let newItem = await prisma.item.create({
-    data: {
-      name,
-      weight,
-      unit,
-      quantity,
-      global: false,
-      categoryDocument: {
-        connect: { id: category.id },
-      },
-      packDocuments: {
-        connect: { id: packId },
-      },
-    },
+  let newItem = await itemClass.create({
+    name,
+    weight,
+    unit,
+    quantity,
+    global: false,
+    categoryDocument: category.id,
+    packDocuments: packId,
   });
 
-  newItem = await prisma.item.findUnique({
+  newItem = await itemClass.findUniqueItem({
     where: {
       id: newItem.id,
     },
-    include: {
+    with: {
       categoryDocument: true,
     },
   });
-
-  await prisma.pack.update({
-    where: {
-      id: packId,
-    },
-    data: {
-      itemDocuments: {
-        connect: { id: newItem.id },
-        disconnect: [{ id: itemId }, { id: packId }],
-      },
-    },
-  });
+  // TODO update pack
+  // await prisma.pack.update({
+  //   where: {
+  //     id: packId,
+  //   },
+  //   data: {
+  //     itemDocuments: {
+  //       newItem.id
+  //     },
+  //     disconnect: [{ id: itemId }, { id: packId }],
+  //   },
+  // },
+  // });
 
   return newItem;
 };

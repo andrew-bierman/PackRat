@@ -1,6 +1,8 @@
 // import { prisma } from '../../prisma';
 
 import { PrismaClient } from '@prisma/client/edge';
+import { Item } from '../../drizzle/methods/Item';
+import { Pack } from '../../drizzle/methods/Pack';
 
 /**
  * Deletes an item from the database.
@@ -10,47 +12,44 @@ import { PrismaClient } from '@prisma/client/edge';
  * @return {Promise<object>} - The deleted item object.
  */
 export const deleteItemService = async (
-  prisma: PrismaClient,
   itemId,
   packId,
 ) => {
   let itemDeleted;
-
-  const item = await prisma.item.findUnique({
+  const itemClass = new Item();
+  const pack = new Pack();
+  const item = await itemClass.findUniqueItem({
     where: {
       id: itemId,
     },
   });
 
   if (item.global) {
-    await prisma.pack.update({
-      where: {
-        id: packId,
-      },
-      data: {
-        itemDocuments: {
-          disconnect: { id: itemId },
-        },
-      },
-    });
-
-    await prisma.item.update({
-      where: {
-        id: itemId,
-      },
-      data: {
-        packDocuments: {
-          disconnect: { id: packId },
-        },
-      },
-    });
+    // update here
+    // await pack.update({
+    //   where: {
+    //     id: packId,
+    //   },
+    //   data: {
+    //     itemDocuments: {
+    //       disconnect: { id: itemId },
+    //     },
+    //   },
+    // });
+    // update here
+    // await item.update({
+    //   where: {
+    //     id: itemId,
+    //   },
+    //   data: {
+    //     packDocuments: {
+    //       disconnect: { id: packId },
+    //     },
+    //   },
+    // });
   }
 
-  itemDeleted = await prisma.item.delete({
-    where: {
-      id: itemId,
-    },
-  });
+  itemDeleted = await itemClass.delete(itemId);
 
   return itemDeleted;
 };

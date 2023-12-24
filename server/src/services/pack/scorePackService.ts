@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client/edge';
 import { calculatePackScore } from '../../utils/scorePack';
+import { Pack } from '../../drizzle/methods/Pack';
 
 /**
  * Scores a pack service based on the given packId.
@@ -8,11 +9,12 @@ import { calculatePackScore } from '../../utils/scorePack';
  * @return {Promise<Pack>} The updated pack object with scores and grades.
  * @throws {Error} If unable to score the pack.
  */
-export async function scorePackService(prisma: PrismaClient, packId: string) {
+export async function scorePackService(packId: string) {
   try {
-    const packData = await prisma.pack.findUnique({
+    const packClass = new Pack();
+    const packData = await packClass.findUniquepack({
       where: { id: packId },
-      include: { itemDocuments: true }, // Assuming you have a relationship defined in your Prisma schema
+      with: { itemDocuments: true }, // Assuming you have a relationship defined in your Prisma schema
     });
 
     if (!packData) {
@@ -21,13 +23,10 @@ export async function scorePackService(prisma: PrismaClient, packId: string) {
 
     const packScore = calculatePackScore(packData);
 
-    const updatedPack = await prisma.pack.update({
-      where: { id: packId },
-      data: {
-        scores: packScore.scores,
-        grades: packScore.grades,
-      },
-    });
+    const updatedPack = await packClass.update({
+      scores: packScore.scores,
+      grades: packScore.grades,
+    }, packId);
 
     return updatedPack;
   } catch (error) {

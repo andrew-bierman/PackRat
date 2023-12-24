@@ -1,11 +1,12 @@
 import { PrismaClient } from '@prisma/client/edge';
-import { Trip, User } from '../../prisma/methods';
+import { Pack } from '../../drizzle/methods/Pack';
 
-export const getPackByIdService = async (prisma: PrismaClient, packId) => {
+export const getPackByIdService = async (packId) => {
   try {
-    const pack = await prisma.pack.findFirst({
+    const packClass = new Pack();
+    const pack = await packClass.findUniquepack({
       where: { id: packId },
-      include: {
+      with: {
         favoritedByDocuments: true,
         itemDocuments: true,
         ownerDocument: true,
@@ -13,25 +14,20 @@ export const getPackByIdService = async (prisma: PrismaClient, packId) => {
       },
     });
 
-    const trips = await prisma.trip.findMany({
-      where: {
-        id: {
-          in: pack?.trips.map((tripId) => tripId) ?? [],
-        },
-      },
-    });
+    // update this code when trip related code is updated
+    // const trips = await trip.findMany({
+    //   where: {
+    //     id: {
+    //       in: pack?.trips.map((tripId) => tripId) ?? [],
+    //     },
+    //   },
+    // });
 
     // Parse JSON
-    const ownerDocument = User(pack.ownerDocument)?.toJSON();
-    const favoritedByDocuments = pack.favoritedByDocuments.map(
-      (user) => User(user)?.toJSON(),
-    );
-    const ownerDocuments = pack.ownerDocuments.map(
-      (user) => User(user)?.toJSON(),
-    );
-    const tripDocuments = await Promise.all(
-      trips.map((trip) => Trip(trip)?.toJSON(prisma)),
-    );
+    const ownerDocument = pack.ownerDocument;
+    const favoritedByDocuments = pack.favoritedByDocuments
+    const ownerDocuments = pack.ownerDocuments
+    const tripDocuments = trips
     return {
       ...pack,
       ownerDocument,

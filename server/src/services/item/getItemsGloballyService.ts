@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client/edge';
+import { Item } from '../../drizzle/methods/Item';
 // import { prisma } from '../../prisma';
 
 /**
@@ -10,36 +11,26 @@ import { PrismaClient } from '@prisma/client/edge';
  * @return {Object} An object containing items, page, and totalPages.
  */
 export const getItemsGloballyService = async (
-  prisma: PrismaClient,
   reqlimit,
   reqpage,
 ) => {
-  const totalItems = await prisma.item.count({
-    where: {
-      global: true,
-    },
-  });
+  const itemClass = new Item();
+  const totalItems: any = await itemClass.count();
   const limit = Number(reqlimit) || totalItems;
   const totalPages = Math.ceil(totalItems / limit);
   const page = Number(reqpage) || 1;
   const startIndex = (page - 1) * limit;
 
-  const items = await prisma.item.findMany({
-    where: {
-      global: true,
-    },
-    include: {
+  const items = await itemClass.findMany({
+    where: { global: true },
+    with: {
       categoryDocument: {
-        select: {
-          name: true,
-        },
-      },
+        columns: { name: true }
+      }
     },
-    skip: startIndex,
-    take: limit,
-    orderBy: {
-      createdAt: 'desc',
-    },
+    offset: startIndex,
+    limit: limit,
+    orderBy: (item, { desc }) => desc(item.createdAt),
   });
 
   return {

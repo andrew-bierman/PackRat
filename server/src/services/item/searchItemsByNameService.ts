@@ -1,6 +1,7 @@
 // import { prisma } from '../../prisma';
 
 import { PrismaClient } from '@prisma/client/edge';
+import { Item } from '../../drizzle/methods/Item';
 
 /**
  * Searches for items by name.
@@ -10,21 +11,15 @@ import { PrismaClient } from '@prisma/client/edge';
  * @return {Promise<Array>} An array of items that match the search criteria.
  */
 export const searchItemsByNameService = async (
-  prisma: PrismaClient,
   name,
   packId,
 ) => {
-  const items = await prisma.item.findMany({
-    where: {
-      ...(packId && {
-        packs: {
-          has: packId,
-        },
-      }),
-      name: {
-        contains: name, // Case-insensitive search for name
-      },
-    },
+  const itemClass = new Item();
+  const items = await itemClass.findMany({
+    where: (item, { has, ilike }) => ({
+      ...(packId ? { [has]: item.packs, packId } : {}),
+      [ilike]: item.name, name,
+    }),
   });
 
   return items;

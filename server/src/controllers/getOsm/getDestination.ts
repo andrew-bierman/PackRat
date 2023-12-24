@@ -28,7 +28,6 @@ export function getDestinationRoute() {
     .input(z.object({ id: z.string() }))
     .query(async (opts) => {
       const { id } = opts.input;
-      const { prisma }: any = opts.ctx;
-      return await getDestinationService(prisma, id);
+      return await getDestinationService(id);
     });
 }

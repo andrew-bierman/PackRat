@@ -23,7 +23,6 @@ export function postSingleGeoJSONRoute() {
     .input(z.object({ geojson: z.any() }))
     .mutation(async (opts) => {
       const { geojson } = opts.input;
-      const { prisma }: any = opts.ctx;
-      return await postSingleGeoJSONService(prisma, geojson);
+      return await postSingleGeoJSONService(geojson);
     });
 }

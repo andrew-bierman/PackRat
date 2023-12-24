@@ -1,6 +1,6 @@
 import { publicProcedure } from '../../trpc';
 import * as validator from '../../middleware/validators/index';
-import { User } from '../../prisma/methods';
+
 // /**
 //  * Sign in a user.
 //  * @param {Object} req - The request object.

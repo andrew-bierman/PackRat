@@ -3,7 +3,6 @@ import { ItemNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { addGlobalItemToPackService } from '../../services/item/item.service';
 import { z } from 'zod';
-import { Item } from '../../prisma/methods';
 
 /**
  * Adds a global item to a pack.
@@ -36,13 +35,11 @@ export function addGlobalItemToPackRoute() {
     )
     .mutation(async (opts) => {
       const { packId, itemId, ownerId } = opts.input;
-      const { prisma }: any = opts.ctx;
       const item = await addGlobalItemToPackService(
-        prisma,
         packId,
         itemId,
         ownerId,
       );
-      return Item(item)?.toJSON();
+      return item
     });
 }

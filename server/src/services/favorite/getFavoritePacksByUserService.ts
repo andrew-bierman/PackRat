@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client/edge';
+import { Pack } from '../../drizzle/methods/Pack';
 
 /**
  * Retrieves the favorite packs associated with a specific user.
@@ -7,10 +7,10 @@ import { PrismaClient } from '@prisma/client/edge';
  * @return {Promise<Array<Pack>>} An array of favorite packs.
  */
 export const getFavoritePacksByUserService = async (
-  prisma: PrismaClient,
   userId,
 ) => {
-  const packs = await prisma.pack.findMany({
+  const packClass = new Pack();
+  const packs = await packClass.findMany({
     where: {
       favorited_by: {
         has: userId,

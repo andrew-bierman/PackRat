@@ -3,7 +3,7 @@ import { UserNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { publicProcedure } from '../../trpc';
 import * as validator from '../../middleware/validators/index';
-import { User } from '../../prisma/methods';
+import { User } from '../../drizzle/methods/User';
 
 // import { prisma } from '../../prisma';
 /**
@@ -36,10 +36,9 @@ export function addToFavoriteRoute() {
     .input(validator.addToFavorite)
     .mutation(async (opts) => {
       const { packId, userId } = opts.input;
-      const { prisma }: any = opts.ctx;
-
-      await addToFavoriteService(prisma, packId, userId);
-      const user = await prisma.user.findFirst({
+      const userClass = new User();
+      await addToFavoriteService(packId, userId);
+      const user = await userClass.findUnique({
         where: {
           id: userId, // Assuming userId is the user's ID
         },
@@ -53,6 +52,6 @@ export function addToFavoriteRoute() {
 
       // if (!user) throw UserNotFoundError;
       if (!user) return UserNotFoundError;
-      return User(user).toJSON();
+      return user
     });
 }

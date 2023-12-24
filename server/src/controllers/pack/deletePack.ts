@@ -23,8 +23,7 @@ import { publicProcedure } from '../../trpc';
 export function deletePackRoute() {
   return publicProcedure.input(validator.deletePack).mutation(async (opts) => {
     const { packId } = opts.input;
-    const { prisma }: any = opts.ctx;
-    await deletePackService(prisma, packId);
+    await deletePackService( packId);
     return { msg: 'pack was deleted successfully' };
   });
 }

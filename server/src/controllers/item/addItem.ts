@@ -3,7 +3,6 @@ import { UnableToAddItemError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { addItemService } from '../../services/item/item.service';
 import * as validator from '../../middleware/validators/index';
-import { Item } from '../../prisma/methods';
 
 /**
  * Adds an item to the database based on the provided request body.
@@ -35,9 +34,7 @@ import { Item } from '../../prisma/methods';
 export function addItemRoute() {
   return publicProcedure.input(validator.addItem).mutation(async (opts) => {
     const { name, weight, quantity, unit, packId, type, ownerId } = opts.input;
-    const { prisma }: any = opts.ctx;
     const result = await addItemService(
-      prisma,
       name,
       weight,
       quantity,
@@ -46,6 +43,6 @@ export function addItemRoute() {
       type,
       ownerId,
     );
-    return { newItem: Item(result.newItem)?.toJSON(), packId: result.packId };
+    return { newItem: result.newItem, packId: result.packId };
   });
 }

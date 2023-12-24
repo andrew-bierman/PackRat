@@ -1,10 +1,5 @@
-import { PrismaClient } from '@prisma/client/edge';
-import { Pack, User } from '../../prisma/methods';
-import {
-  computeFavouritesCount,
-  computeTotalScores,
-  computeTotalWeight,
-} from '../../prisma/virtuals';
+import { Pack } from '../../drizzle/methods/Pack';
+
 
 const SORT_OPTIONS = {
   Favorite: { favorites_count: -1 },
@@ -47,11 +42,9 @@ const computeVirtualFields = (pack) => {
 
   return {
     ...packWithFavoritesCount,
-    favoritedByDocuments: pack.favoritedByDocuments.map(
-      (user) => User(user)?.toJSON(),
-    ),
-    ownerDocuments: pack.ownerDocuments.map((owner) => User(owner)?.toJSON()),
-    ownerDocument: User(pack.ownerDocument)?.toJSON(),
+    favoritedByDocuments: pack.favoritedByDocuments,
+    ownerDocuments: pack.ownerDocuments,
+    ownerDocument:pack.ownerDocument,
     items_count: pack.items.length,
   };
 };
@@ -67,45 +60,38 @@ const DEFAULT_SORT = { createdAt: -1 };
  * @return {Promise<any[]>} An array of public packs.
  */
 export async function getPublicPacksService(
-  prisma: PrismaClient,
   queryBy: string = null,
 ) {
   try {
     const sortOption = SORT_OPTIONS[queryBy] || DEFAULT_SORT;
     const [[propertyName, sortOrder]] = Object.entries(sortOption);
-
-    const publicPacks = await prisma.pack.findMany({
-      where: {
-        is_public: true,
-      },
-      include: {
-        // favoritedByDocuments: true,
-        // itemDocuments: true,
-        // ownerDocument: true,
-        // ownerDocuments: true,
+    const packClass = new Pack();
+    const publicPacks = await packClass.findMany({
+      where: (pack) => pack.is_public.eq(true),
+      with: {
         favoritedByDocuments: {
-          select: {
+          columns: {
             id: true,
-            name: true,
-          },
+            name: true
+          }
         },
         itemDocuments: {
-          select: {
+          columns: {
             id: true,
-            name: true,
-          },
+            name: true
+          }
         },
         ownerDocument: {
-          select: {
+          columns: {
             id: true,
-            name: true,
-          },
+            name: true
+          }
         },
         ownerDocuments: {
-          select: {
+          columns: {
             id: true,
-            name: true,
-          },
+            name: true
+          }
         },
       },
     });

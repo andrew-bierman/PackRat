@@ -1,8 +1,8 @@
 import { count, eq } from "drizzle-orm";
 import { createDb } from "../../db/client";
-import { item } from "../../db/schema";
+import { itemcategory as item } from "../../db/schema";
 
-export class Item {
+export class ItemCategory {
     async update(data: any, id: string, filter = eq(item.id, id), returning = null) {
         return await createDb(db).update(item).set(data).where(filter).returning(returning).get();
     }
@@ -26,11 +26,6 @@ export class Item {
 
     async create(data: any) {
         return await createDb(db).insert(item).values(data).returning().get();
-    }
-
-    async count(){
-        const totalItems = await createDb(db).select({ count: count() }).from(item).where(eq(item.global, true));
-        return totalItems
     }
 
 }

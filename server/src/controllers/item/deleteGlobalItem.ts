@@ -3,7 +3,7 @@ import { UnableToDeleteItemError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { deleteGlobalItemService } from '../../services/item/item.service';
 import { z } from 'zod';
-import { Item } from '../../prisma/methods';
+
 /**
  * Deletes a global item.
  * @param {Object} req - The request object.
@@ -32,8 +32,7 @@ export function deleteGlobalItemRoute() {
     )
     .mutation(async (opts) => {
       const { itemId } = opts.input;
-      const { prisma }: any = opts.ctx;
-      const item = await deleteGlobalItemService(prisma, itemId);
-      return Item(item)?.toJSON();
+      const item = await deleteGlobalItemService(itemId);
+      return item
     });
 }

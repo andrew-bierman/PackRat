@@ -1,6 +1,7 @@
 // import { prisma } from '../../prisma';
 
 import { PrismaClient } from '@prisma/client/edge';
+import { Item } from '../../drizzle/methods/Item';
 
 /**
  * Retrieves items based on the given pack ID.
@@ -8,14 +9,10 @@ import { PrismaClient } from '@prisma/client/edge';
  * @param {string} packId - The ID of the pack.
  * @return {Promise<Array<Object>>} An array of items.
  */
-export const getItemsService = async (prisma: PrismaClient, packId) => {
-  const items = await prisma.item.findMany({
-    where: {
-      packs: {
-        has: packId,
-      },
-    },
+export const getItemsService = async (packId) => {
+  const itemClass = new Item();
+  const items = await itemClass.findMany({
+    where: (item, { has }) => has(item.packs, packId),
   });
-
   return items;
 };

@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client/edge';
+import { Pack } from '../../drizzle/methods/Pack';
 
 /**
  * Edits a pack in the service.
@@ -8,14 +8,10 @@ import { PrismaClient } from '@prisma/client/edge';
  * @return {object}
  */
 export const editPackService = async (
-  prisma: PrismaClient,
   packId,
   packData,
 ) => {
-  const updatedPack = await prisma.pack.update({
-    where: { id: packId },
-    data: packData,
-  });
-
+  const packClass = new Pack();
+  const updatedPack = await packClass.update(packData, packId);
   return updatedPack;
 };

@@ -1,6 +1,7 @@
+import { Item } from '../../drizzle/methods/Item';
+import { ItemCategory } from '../../drizzle/methods/itemcategory';
 import { ItemCategoryEnum } from '../../utils/itemCategory';
 // import { prisma } from '../../prisma';
-import { ItemCategoryName, PrismaClient } from '@prisma/client/edge';
 
 /**
  * Adds an item to the global service.
@@ -13,7 +14,6 @@ import { ItemCategoryName, PrismaClient } from '@prisma/client/edge';
  * @return {Promise<Object>} The newly created item.
  */
 export const addItemGlobalService = async (
-  prisma: PrismaClient,
   name,
   weight,
   quantity,
@@ -22,68 +22,57 @@ export const addItemGlobalService = async (
 ) => {
   let category = null;
   let newItem = null;
-
+  const item = new Item();
+  const itemCategory = new ItemCategory();
   switch (type) {
     case ItemCategoryEnum.FOOD: {
-      const category = await prisma.itemCategory.findFirst({
+      const category = await itemCategory.findUniqueItem({
         where: {
-          name: ItemCategoryName.Food,
+          name: "Food",
         },
       });
 
-      let newItem = await prisma.item.create({
-        data: {
-          name,
-          weight,
-          quantity,
-          unit,
-          categoryDocument: {
-            connect: { id: category.id },
-          },
-          global: true,
+      let newItem = await item.create({
+        name,
+        weight,
+        quantity,
+        unit,
+        categoryDocument: {
+          id: category.id,
         },
+        global: true,
       });
-      newItem = await prisma.item.findUnique({
+      newItem = await item.findUniqueItem({
         where: {
           id: newItem.id,
         },
-        include: {
-          categoryDocument: {
-            select: {
-              name: true,
-            },
-          },
-        },
+        with: { categoryDocument: { columns: { name: true } } },
       });
-
       break;
     }
     case ItemCategoryEnum.WATER: {
-      const category = await prisma.itemCategory.findFirst({
+      const category = await itemCategory.findUniqueItem({
         where: {
-          name: ItemCategoryName.Water,
+          name: "Water",
         },
       });
-      newItem = await prisma.item.create({
-        data: {
-          name,
-          weight,
-          quantity: 1,
-          unit,
-          categoryDocument: {
-            connect: { id: category.id },
-          },
-          global: true,
+      newItem = await item.create({
+        name,
+        weight,
+        quantity: 1,
+        unit,
+        categoryDocument: {
+          id: category.id,
         },
+        global: true,
       });
-
-      newItem = await prisma.item.findUnique({
+      newItem = await item.findUniqueItem({
         where: {
           id: newItem.id,
         },
-        include: {
+        with: {
           categoryDocument: {
-            select: {
+            columns: {
               name: true,
             },
           },
@@ -93,33 +82,29 @@ export const addItemGlobalService = async (
       break;
     }
     default: {
-      category = await prisma.itemCategory.findFirst({
+      category = await itemCategory.findUniqueItem({
         where: {
-          name: ItemCategoryName.Essentials,
+          name: "Essentials",
         },
       });
 
-      newItem = await prisma.item.create({
-        data: {
-          name,
-          weight,
-          quantity,
-          unit,
-          categoryDocument: {
-            connect: {
-              id: category.id,
-            },
-          },
-          global: true,
+      newItem = await item.create({
+        name,
+        weight,
+        quantity,
+        unit,
+        categoryDocument: {
+          id: category.id,
         },
+        global: true,
       });
-      newItem = await prisma.item.findUnique({
+      newItem = await item.findUniqueItem({
         where: {
           id: newItem.id,
         },
-        include: {
+        with: {
           categoryDocument: {
-            select: {
+            columns: {
               name: true,
             },
           },
