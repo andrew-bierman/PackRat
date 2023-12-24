@@ -1,0 +1,1 @@
+ALTER TABLE `template` DROP COLUMN `created_by`;

@@ -122,13 +122,18 @@ export const trip = sqliteTable("trip", {
 	is_public: integer("is_public"),
 	type: text("type").default("trip"),
 	packs: text("packs"),
-	geojson: text('json_undefined'),
+	geojson: text('geoJson_id').references(()=> geojson.id),
 	createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`(strftime('%s', 'now'))`),
 	updatedAt: integer('created_at', { mode: 'timestamp' }),
 	owner: text('user_id)').references(()=> User.id),
 
 	// @@map("trips"): undefined,
 	})
+export type Trip = InferSelectModel<typeof trip>;
+export type InsertTrip = InferInsertModel<typeof trip>;
+export type UpdateTrip = Partial<InsertTrip> & { id: string };
+export const insertTripSchema = createInsertSchema(trip);
+export const selectTripSchema = createSelectSchema(trip);
 
 export const conversation = sqliteTable("conversation", {
 	id: text('id').primaryKey(),
