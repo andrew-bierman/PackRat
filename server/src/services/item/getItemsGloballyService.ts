@@ -16,28 +16,22 @@ export const getItemsGloballyService = async (
   reqpage,
 ) => {
   const itemClass = new Item();
-  const totalItems:any = await itemClass.count();
+  const totalItems: any = await itemClass.count();
   const limit = Number(reqlimit) || totalItems;
   const totalPages = Math.ceil(totalItems / limit);
   const page = Number(reqpage) || 1;
   const startIndex = (page - 1) * limit;
 
-  const items = await prisma.item.findMany({
-    where: {
-      global: true,
-    },
-    include: {
+  const items = await itemClass.findMany({
+    where: { global: true },
+    with: {
       categoryDocument: {
-        select: {
-          name: true,
-        },
-      },
+        columns: { name: true }
+      }
     },
-    skip: startIndex,
-    take: limit,
-    orderBy: {
-      createdAt: 'desc',
-    },
+    offset: startIndex,
+    limit: limit,
+    orderBy: (item, { desc }) => desc(item.createdAt),
   });
 
   return {
