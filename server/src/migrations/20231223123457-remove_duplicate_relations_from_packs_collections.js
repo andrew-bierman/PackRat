@@ -9,7 +9,7 @@ module.exports = {
     
         // Step 1: Get all packs from the "packs" collection
         const allPacks = await packsCollection.find({}).toArray();
-        console.log({allPacks})
+        
         // Step 2: Loop through each pack and update the "owners", "trips", "items" and  "favorited_by" field
         for (const pack of allPacks) {
             // Remove duplicate ObjectIDs in the "owners" array
