@@ -27,7 +27,6 @@ export function getUserChatsRoute() {
     .input(z.object({ userId: z.string() }))
     .query(async (opts) => {
       const { userId } = opts.input;
-      const { prisma }: any = opts.ctx;
-      return getUserChatsService(prisma, userId);
+      return getUserChatsService(userId);
     });
 }

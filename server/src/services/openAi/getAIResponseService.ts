@@ -1,5 +1,7 @@
 import { PrismaClient } from '@prisma/client/edge';
 import { Configuration, OpenAIApi } from 'openai';
+import { Conversation } from '../../drizzle/methods/Conversation';
+import { User } from '../../drizzle/methods/User';
 // import { prisma } from '../../prisma';
 
 /**
@@ -11,7 +13,6 @@ import { Configuration, OpenAIApi } from 'openai';
  * @returns {Object} - The AI response and the updated conversation.
  */
 export const getAIResponseService = async (
-  prisma: PrismaClient,
   userId,
   conversationId,
   userInput,
@@ -23,13 +24,15 @@ export const getAIResponseService = async (
     );
   }
 
+  const conversationClass = new Conversation();
+  const userClass = new User();
   const configuration = new Configuration({
     apiKey: openAIAPIKey,
   });
 
   const openai = new OpenAIApi(configuration);
 
-  const user = await prisma.user.findUnique({
+  const user = await userClass.findUnique({
     where: { id: userId },
   });
 
@@ -37,7 +40,7 @@ export const getAIResponseService = async (
     throw new Error('User not found');
   }
 
-  let conversation = await prisma.conversation.findFirst({
+  let conversation: any = await conversationClass.findUniqueConversation({
     where: { userId, id: conversationId },
   });
 
@@ -46,16 +49,16 @@ export const getAIResponseService = async (
   let conversationHistory = conversation ? conversation.history : '';
   const messages = conversationHistory
     ? conversationHistory.split('\n').map((message, i) => ({
-        role: i % 2 === 0 ? 'user' : 'assistant',
-        content: message,
-      }))
+      role: i % 2 === 0 ? 'user' : 'assistant',
+      content: message,
+    }))
     : [
-        {
-          role: 'system',
-          content:
-            'You are a helpful Outdoor Adventure Planning assistant for PackRat. Please assist the user with planning their trip using the following information:',
-        },
-      ];
+      {
+        role: 'system',
+        content:
+          'You are a helpful Outdoor Adventure Planning assistant for PackRat. Please assist the user with planning their trip using the following information:',
+      },
+    ];
 
   messages.push({ role: 'user', content: userInput });
 
@@ -69,13 +72,10 @@ export const getAIResponseService = async (
 
   if (conversation) {
     // Update existing conversation
-    await prisma.conversation.update({
-      where: { id: conversationId },
-      data: { history: conversationHistory },
-    });
+    await conversationClass.update({ history: conversationHistory }, conversation.id);
   } else {
     // Create new conversation
-    conversation = await prisma.conversation.create({
+    conversation = await conversationClass.create({
       data: {
         userId,
         history: conversationHistory,

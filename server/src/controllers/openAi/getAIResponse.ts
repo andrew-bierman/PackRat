@@ -38,7 +38,6 @@ export function getAIResponseRoute() {
     )
     .query(async (opts) => {
       const { userId, conversationId, userInput } = opts.input;
-      const { prisma }: any = opts.ctx;
-      return getAIResponseService(prisma, userId, conversationId, userInput);
+      return getAIResponseService(userId, conversationId, userInput);
     });
 }
