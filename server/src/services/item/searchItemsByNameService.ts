@@ -11,7 +11,6 @@ import { Item } from '../../drizzle/methods/Item';
  * @return {Promise<Array>} An array of items that match the search criteria.
  */
 export const searchItemsByNameService = async (
-  prisma: PrismaClient,
   name,
   packId,
 ) => {

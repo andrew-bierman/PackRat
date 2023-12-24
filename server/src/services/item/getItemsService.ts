@@ -9,7 +9,7 @@ import { Item } from '../../drizzle/methods/Item';
  * @param {string} packId - The ID of the pack.
  * @return {Promise<Array<Object>>} An array of items.
  */
-export const getItemsService = async (prisma: PrismaClient, packId) => {
+export const getItemsService = async (packId) => {
   const itemClass = new Item();
   const items = await itemClass.findMany({
     where: (item, { has }) => has(item.packs, packId),

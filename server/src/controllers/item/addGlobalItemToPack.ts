@@ -35,9 +35,7 @@ export function addGlobalItemToPackRoute() {
     )
     .mutation(async (opts) => {
       const { packId, itemId, ownerId } = opts.input;
-      const { prisma }: any = opts.ctx;
       const item = await addGlobalItemToPackService(
-        prisma,
         packId,
         itemId,
         ownerId,

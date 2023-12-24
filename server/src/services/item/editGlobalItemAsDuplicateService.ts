@@ -1,6 +1,6 @@
-import { PrismaClient } from '@prisma/client/edge';
 import { Item } from '../../drizzle/methods/Item';
-// import { prisma } from '../../prisma';
+import { ItemCategory } from '../../drizzle/methods/itemcategory';
+
 /**
  * Edits a global item by creating a duplicate item in a specific pack.
  * @param {PrismaClient} prisma - Prisma client.
@@ -14,7 +14,6 @@ import { Item } from '../../drizzle/methods/Item';
  * @return {Promise<object>} The newly created duplicate item.
  */
 export const editGlobalItemAsDuplicateService = async (
-  prisma: PrismaClient,
   itemId,
   packId,
   name,
@@ -23,8 +22,9 @@ export const editGlobalItemAsDuplicateService = async (
   unit,
   type,
 ) => {
-  const itemClass = new Item
-  const category = await prisma.itemCategory.findFirst({
+  const itemClass = new Item();
+  const itemCategory = new ItemCategory();
+  const category = await itemCategory.findUniqueItem({
     where: {
       name: type,
     },
@@ -48,19 +48,19 @@ export const editGlobalItemAsDuplicateService = async (
       categoryDocument: true,
     },
   });
-// TODO update pack
-  await prisma.pack.update({
-    where: {
-      id: packId,
-    },
-    data: {
-      itemDocuments: {
-        newItem.id
-      },
-      disconnect: [{ id: itemId }, { id: packId }],
-    },
-  },
-  });
+  // TODO update pack
+  // await prisma.pack.update({
+  //   where: {
+  //     id: packId,
+  //   },
+  //   data: {
+  //     itemDocuments: {
+  //       newItem.id
+  //     },
+  //     disconnect: [{ id: itemId }, { id: packId }],
+  //   },
+  // },
+  // });
 
-return newItem;
+  return newItem;
 };

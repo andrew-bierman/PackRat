@@ -3,7 +3,6 @@ import { ItemNotFoundError } from '../../helpers/errors';
 import { searchItemsByNameService } from '../../services/item/item.service';
 import * as validator from '../../middleware/validators/index';
 import { z } from 'zod';
-import { Item } from '../../prisma/methods';
 
 /**
  * Searches for items by name.
@@ -33,9 +32,7 @@ export function searchItemsByNameRoute() {
     .input(z.object({ name: z.string(), packId: JoiObjectId().optional() }))
     .query(async (opts) => {
       const { name, packId } = opts.input;
-      const { prisma }: any = opts.ctx;
-      const items = await searchItemsByNameService(prisma, name, packId);
-      const jsonItems = items.map((item) => Item(item)?.toJSON());
-      return jsonItems;
+      const items = await searchItemsByNameService(name, packId);
+      return items
     });
 }

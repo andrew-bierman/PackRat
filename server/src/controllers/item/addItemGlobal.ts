@@ -1,9 +1,6 @@
-import { UnableToAddItemError } from '../../helpers/errors';
 import { addItemGlobalService } from '../../services/item/item.service';
-import { responseHandler } from '../../helpers/responseHandler';
 import { publicProcedure } from '../../trpc';
 import * as validator from '../../middleware/validators/index';
-import { Item } from '../../prisma/methods';
 
 /**
  * Adds an item globally.
@@ -36,15 +33,13 @@ export function addItemGlobalRoute() {
     .input(validator.addItemGlobal)
     .mutation(async (opts) => {
       const { name, weight, quantity, unit, type } = opts.input;
-      const { prisma }: any = opts.ctx;
       const item = await addItemGlobalService(
-        prisma,
         name,
         weight,
         quantity,
         unit,
         type,
       );
-      return Item(item)?.toJSON();
+      return item
     });
 }

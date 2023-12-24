@@ -12,7 +12,6 @@ import { Pack } from '../../drizzle/methods/Pack';
  * @return {Promise<object>} - The deleted item object.
  */
 export const deleteItemService = async (
-  prisma: PrismaClient,
   itemId,
   packId,
 ) => {
@@ -38,16 +37,16 @@ export const deleteItemService = async (
     //   },
     // });
     // update here
-    await item.update({
-      where: {
-        id: itemId,
-      },
-      data: {
-        packDocuments: {
-          disconnect: { id: packId },
-        },
-      },
-    });
+    // await item.update({
+    //   where: {
+    //     id: itemId,
+    //   },
+    //   data: {
+    //     packDocuments: {
+    //       disconnect: { id: packId },
+    //     },
+    //   },
+    // });
   }
 
   itemDeleted = await itemClass.delete(itemId);

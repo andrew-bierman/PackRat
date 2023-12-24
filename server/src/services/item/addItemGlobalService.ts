@@ -1,7 +1,7 @@
 import { Item } from '../../drizzle/methods/Item';
+import { ItemCategory } from '../../drizzle/methods/itemcategory';
 import { ItemCategoryEnum } from '../../utils/itemCategory';
 // import { prisma } from '../../prisma';
-import { ItemCategoryName, PrismaClient } from '@prisma/client/edge';
 
 /**
  * Adds an item to the global service.
@@ -14,7 +14,6 @@ import { ItemCategoryName, PrismaClient } from '@prisma/client/edge';
  * @return {Promise<Object>} The newly created item.
  */
 export const addItemGlobalService = async (
-  prisma: PrismaClient,
   name,
   weight,
   quantity,
@@ -24,12 +23,12 @@ export const addItemGlobalService = async (
   let category = null;
   let newItem = null;
   const item = new Item();
-
+  const itemCategory = new ItemCategory();
   switch (type) {
     case ItemCategoryEnum.FOOD: {
-      const category = await prisma.itemCategory.findFirst({
+      const category = await itemCategory.findUniqueItem({
         where: {
-          name: ItemCategoryName.Food,
+          name: "Food",
         },
       });
 
@@ -52,9 +51,9 @@ export const addItemGlobalService = async (
       break;
     }
     case ItemCategoryEnum.WATER: {
-      const category = await prisma.itemCategory.findFirst({
+      const category = await itemCategory.findUniqueItem({
         where: {
-          name: ItemCategoryName.Water,
+          name: "Water",
         },
       });
       newItem = await item.create({
@@ -83,9 +82,9 @@ export const addItemGlobalService = async (
       break;
     }
     default: {
-      category = await prisma.itemCategory.findFirst({
+      category = await itemCategory.findUniqueItem({
         where: {
-          name: ItemCategoryName.Essentials,
+          name: "Essentials",
         },
       });
 

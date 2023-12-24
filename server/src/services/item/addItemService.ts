@@ -1,12 +1,12 @@
-import { ItemCategoryName, PrismaClient } from '@prisma/client/edge';
 // import { prisma } from '../../prisma';
 import { ItemCategoryEnum } from '../../utils/itemCategory';
 import { Item } from '../../drizzle/methods/Item';
 import { item as itemTable } from '../../db/schema';
 import { and, eq } from 'drizzle-orm';
+import { ItemCategory } from '../../drizzle/methods/itemcategory';
+import { Pack } from '../../drizzle/methods/Pack';
 /**
  * Generates a new item and adds it to a pack based on the given parameters.
- * @param {PrismaClient} prisma - Prisma client.
  * @param {string} name - The name of the item.
  * @param {number} weight - The weight of the item.
  * @param {number} quantity - The quantity of the item.
@@ -17,7 +17,6 @@ import { and, eq } from 'drizzle-orm';
  * @return {object} An object containing the newly created item and the pack ID.
  */
 export const addItemService = async (
-  prisma: PrismaClient,
   name,
   weight,
   quantity,
@@ -29,11 +28,13 @@ export const addItemService = async (
   let category = null;
   let newItem = null;
   const item = new Item();
+  const packClass = new Pack();
+  const itemCategory = new ItemCategory();
   switch (type) {
     case ItemCategoryEnum.FOOD: {
-      category = await prisma.itemCategory.findFirst({
+      category = await itemCategory.findUniqueItem({
         where: {
-          name: ItemCategoryName.Food,
+          name: "Food",
         },
       });
       newItem = await item.create({
@@ -51,7 +52,7 @@ export const addItemService = async (
       break;
     }
     case ItemCategoryEnum.WATER: {
-      category = await prisma.itemCategory.findFirst({
+      category = await itemCategory.findUniqueItem({
         where: {
           name: 'Water',
         },
@@ -90,24 +91,20 @@ export const addItemService = async (
       break;
     }
     default: {
-      category = await prisma.itemCategory.findFirst({
+      category = await itemCategory.findUniqueItem({
         where: {
           name: ItemCategoryEnum.ESSENTIALS,
         },
       });
 
-      newItem = await prisma.item.create({
+      newItem = await item.create({
         data: {
           name,
           weight,
           quantity,
           unit,
-          packDocuments: {
-            connect: { id: packId },
-          },
-          categoryDocument: {
-            connect: { id: category.id },
-          },
+          packDocuments: packId,
+          categoryDocument: category.id,
           type,
         },
       });
@@ -116,20 +113,15 @@ export const addItemService = async (
     }
   }
 
-  const pack = await prisma.pack.update({
-    where: { id: packId },
-    data: {
-      itemDocuments: {
-        connect: { id: newItem.id },
-      },
-    },
-  });
+  const pack = await packClass.update({
+    itemDocuments: newItem.id,
+  }, packId);
 
   const updatedItem = await item.update({
     owners: {
       push: pack.owners.map((ownerId) => ownerId),
     },
-  },newItem.id, and(eq(itemTable.id, newItem.id)));
+  }, newItem.id, and(eq(itemTable.id, newItem.id)));
 
   return { newItem: updatedItem, packId };
 };

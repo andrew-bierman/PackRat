@@ -11,7 +11,6 @@ import { Item } from '../../drizzle/methods/Item';
  * @return {Object} An object containing items, page, and totalPages.
  */
 export const getItemsGloballyService = async (
-  prisma: PrismaClient,
   reqlimit,
   reqpage,
 ) => {

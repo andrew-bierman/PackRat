@@ -9,7 +9,7 @@ import { Item } from '../../drizzle/methods/Item';
  * @param {string} id - The ID of the item to retrieve.
  * @return {Promise<Object>} The retrieved item.
  */
-export const getItemByIdService = async (prisma: PrismaClient, id) => {
+export const getItemByIdService = async (id) => {
   const itemClass = new Item();
   const item = await itemClass.findUniqueItem({
     where: {

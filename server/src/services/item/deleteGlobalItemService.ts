@@ -9,7 +9,7 @@ import { Item } from '../../drizzle/methods/Item';
  * @param {string} itemId - The ID of the item to be deleted.
  * @return {Promise<Document>} - A promise that resolves to the deleted item.
  */
-export const deleteGlobalItemService = async (prisma: PrismaClient, itemId) => {
+export const deleteGlobalItemService = async (itemId) => {
   const item = new Item();
   const itemDeleted = await item.delete(itemId);
 

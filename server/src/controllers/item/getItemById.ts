@@ -3,7 +3,6 @@ import { ItemNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { getItemByIdService } from '../../services/item/item.service';
 import * as validator from '../../middleware/validators/index';
-import { Item } from '../../prisma/methods';
 
 /**
  * Retrieves an item by its ID.
@@ -28,8 +27,7 @@ import { Item } from '../../prisma/methods';
 export function getItemByIdRoute() {
   return publicProcedure.input(validator.getItemById).query(async (opts) => {
     const { id } = opts.input;
-    const { prisma }: any = opts.ctx;
-    const item = await getItemByIdService(prisma, id);
-    return Item(item)?.toJSON();
+    const item = await getItemByIdService(id);
+    return item
   });
 }
