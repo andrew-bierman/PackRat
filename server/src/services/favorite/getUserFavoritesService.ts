@@ -1,5 +1,5 @@
+import { User } from '../../drizzle/methods/User';
 import { UserNotFoundError } from '../../helpers/errors';
-import { PrismaClient } from '@prisma/client/edge';
 
 /**
  * Retrieves the favorite packs associated with a specific user.
@@ -8,15 +8,15 @@ import { PrismaClient } from '@prisma/client/edge';
  * @return {Promise<Array<Pack>>} An array of favorite packs.
  */
 export const getUserFavoritesService = async (
-  prisma: PrismaClient,
   userId,
   next,
 ) => {
-  const user = await prisma.user.findUnique({
+  const userClass = new User();
+  const user = await userClass.findUnique({
     where: {
       id: userId,
     },
-    include: {
+    with: {
       favorites: true,
     },
   });

@@ -5,8 +5,8 @@ import { getUserFavoritesService } from '../../services/favorite/favorite.servic
 import * as validator from '../../middleware/validators/index';
 
 import { z } from 'zod';
-import { PrismaClient } from '@prisma/client/edge';
-import { Pack } from '../../prisma/methods';
+import { User } from '../../drizzle/methods/User';
+
 // import { prisma } from '../../prisma';
 /**
  * Retrieves the favorite items of a user.
@@ -27,20 +27,15 @@ export function getUserFavoritesRoute() {
     .input(z.object({ userId: z.string() }))
     .query(async (opts) => {
       const { userId } = opts.input;
-      const prisma: PrismaClient = opts.ctx['prisma'];
-
-      const user = await prisma.user.findUnique({
+      const userClass = new User();
+      const user = await userClass.findUnique({
         where: {
-          id: userId, // Assuming userId is the user's ID
+          id: userId,
         },
-        include: {
+        with: {
           favoriteDocuments: true,
         },
       });
-
-      const jsonFavorites = user.favoriteDocuments.map(
-        (favorite) => Pack(favorite)?.toJSON(),
-      );
-      return jsonFavorites;
+      return user.favoriteDocuments
     });
 }

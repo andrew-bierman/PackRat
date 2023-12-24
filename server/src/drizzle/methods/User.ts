@@ -97,4 +97,9 @@ export class User {
         return await createDb(db).select().from(UserTable).where(filter).get();
     }
 
+    async findUnique(query) {
+        const way = await createDb(db).query.User.findFirst(query)
+        return way
+    }
+
 }
