@@ -16,7 +16,6 @@ export async function getPhotonResultsService(searchString) {
         : `${key}=${values}`,
     )
     .join('&');
-
   const response = await axios.get(
     `https://photon.komoot.io/api/?${queryString}`,
   );

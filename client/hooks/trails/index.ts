@@ -1,10 +1,7 @@
-// import { useDispatch } from 'react-redux';
-import { queryTrpc } from '../../trpc';
-// import { trpc } from '../../context/tRPC';
-import { setTrails, setFilteredTrails } from '../../store/trailsStore_copy'; // Importing the actions
-import { store } from '../../store/store';
 
-function useTrails({ latLng, selectedSearch, radius = 1000 }) {
+import { queryTrpc } from '../../trpc';
+
+const useTrails=({ latLng, selectedSearch, radius = 1000 })=> {
   // const dispatch = useDispatch();
   // const { data, error, isLoading } = await trpc.getTrailsOSM.query({
   //   lat,
@@ -27,9 +24,7 @@ function useTrails({ latLng, selectedSearch, radius = 1000 }) {
     },
   );
 
-  console.log(data, 'data!!!!!!!');
 
-  // React.useEffect(() => {
   let filteredTrails = [];
   if (data) {
     const trails = data.features;
@@ -41,11 +36,7 @@ function useTrails({ latLng, selectedSearch, radius = 1000 }) {
       .map((trail) => trail.properties.name)
       .slice(0, 25);
 
-    // Dispatching directly using the imported store
-    // store.dispatch(setTrails(trails));
-    // store.dispatch(setFilteredTrails(filteredTrails));
   }
-  // }, [data, dispatch, selectedSearch]);
   return { data, error, isLoading, filteredTrails, trails: data?.features };
 }
 

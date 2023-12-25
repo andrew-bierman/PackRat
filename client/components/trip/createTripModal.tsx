@@ -10,6 +10,9 @@ import { useGetPhotonDetails } from '~/hooks/destination';
 
 // import { Picker } from '@react-native-picker/picker';
 import { DropdownComponent } from '../Dropdown';
+import axios from '~/config/axios';
+import {useSearch} from '../../context/searchContext'
+
 const options = [
   { label: 'Yes', value: 'true' },
   { label: 'For me only', value: 'false' },
@@ -65,11 +68,16 @@ const NumberInput = (props) => {
     />
   );
 };
+type Props = {
+  dateRange:any,
+  photonData:any
+}
+export const SaveTripContainer:React.FC<Props> = ({ dateRange,photonData }) => {
 
-export const SaveTripContainer = ({ dateRange }) => {
+  const {state} = useSearch();
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
   const weatherObject = useSelector((state) => state.weather.weatherObject);
-  const search = useSelector((state) => state.search.selectedSearchResult);
+  const search = state.selectedSearchResult;
   const dropdown = useSelector((state) => state.dropdown);
   const user = useSelector((state) => state.auth.user);
   const packId = useSelector((state) => state.trips.newTrip.packId);
@@ -117,7 +125,11 @@ export const SaveTripContainer = ({ dateRange }) => {
       endDate,
     };
 
-    const { data: geoJSON } = geoJSONData;
+    // const geoJSON = await trpc.getPhotonDetails.query({
+    //   id: search.properties.osm_id,
+    //   type: search.properties.osm_type,
+    // });
+    const { data: geoJSON } = await useGetPhotonDetails(search);
 
     const data = {
       name,
@@ -125,7 +137,7 @@ export const SaveTripContainer = ({ dateRange }) => {
       start_date: startDate,
       end_date: endDate,
       destination: search?.properties?.name,
-      geoJSON,
+      geoJSON:JSON.stringify(photonData) ,
       // trail: dropdown.currentTrail,
       duration: JSON.stringify(duration),
       weather: JSON.stringify(weatherObject),
@@ -135,8 +147,8 @@ export const SaveTripContainer = ({ dateRange }) => {
     };
 
     // creating a trip
-    console.log('create trip data ->', data);
-    addTrip(data);
+    AddTrips(data);
+    // dispatch(addTrip(data));
     setIsSaveModalOpen(!isSaveModalOpen);
   };
   if (isSuccess && response) {

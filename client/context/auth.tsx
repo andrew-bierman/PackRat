@@ -2,17 +2,8 @@ import { useRootNavigationState, useRouter, useSegments } from 'expo-router';
 
 import React, { useEffect } from 'react';
 import { useStorageState } from '../hooks/useStorageState';
-// import { useSelector } from 'react-redux';
-// import React from 'react';
 
-// const AuthContext = React.createContext(null);
 
-// // This hook can be used to access the user info.
-// export function useAuth() {
-//   return React.useContext(AuthContext);
-// }
-
-// // This hook will protect the route access based on user authentication.
 export function useProtectedRoute(user) {
   const segments = useSegments();
   const router = useRouter();

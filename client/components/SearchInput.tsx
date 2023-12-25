@@ -11,17 +11,13 @@ import {
 } from 'native-base';
 import { RStack, RInput, RButton, RText, RScrollView } from '@packrat/ui';
 import { MaterialIcons } from '@expo/vector-icons';
+import { debounce } from 'lodash';
+
 import useTheme from '../hooks/useTheme';
 import { Platform } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+// import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
-import { fetchTrails } from '../store/trailsStore';
-import { fetchParks } from '../store/parksStore';
-import {
-  setSelectedSearchResult,
-  clearSearchResults,
-  fetchPhotonSearchResults,
-} from '../store/searchStore';
+
 import {
   fetchWeather,
   fetchWeatherWeek,
@@ -30,117 +26,61 @@ import {
 } from '../store/weatherStore';
 import useCustomStyles from '~/hooks/useCustomStyles';
 import { setFilteredTrails, setTrails } from '~/store/trailsStore_copy'; // REMOVE
-import useTrails from '~/hooks/trails';
+import useTrails from '../hooks/trails';
 import useParks from '~/hooks/parks';
 import { usePhotonDetail } from '~/hooks/photonDetail';
 import { useFetchWeather, useFetchWeatherWeak } from '~/hooks/weather';
+import {useSearch} from '../context/searchContext'
 
 export const SearchInput = ({ onSelect, placeholder }) => {
+
+    const debouncedSearch = debounce((query) => {
+    if (query.length > 0) {
+      setShowSearchResults(true);
+    }
+  }, 2000); 
+   useEffect(() => {
+    debouncedSearch(searchString);
+
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [searchString]);
+    const { state, dispatch } = useSearch();
+
   const [searchString, setSearchString] = useState('');
-  console.log(
-    '🚀 ~ file: SearchInput.tsx:40 ~ SearchInput ~ searchString:',
-    searchString,
-  );
+
   const [isLoadingMobile, setIsLoadingMobile] = useState(false);
-  const { selectedSearch } = useSelector((state) => state.weather);
-  // const [selectedSearch, setSelectedSearch] = useState('');
   const [showSearchResults, setShowSearchResults] = useState(false);
 
   const { refetch, data, isError, isLoading } = usePhotonDetail(
     searchString,
-    showSearchResults,
+    true,
   );
+  
+  const searchChangeHandler = (text)=>{
+    setSearchString(text)
+    
+    dispatch({
+      type:"SET_SEARCH_STRING",payload:text
+    })
+  setShowSearchResults(true);
+
+  }
 
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles());
-  // const [selectedSearchResult, setSelectedSearchResult] = useState({});
-  // const searchResults =
-  //   useSelector((state) => state.search.searchResults) || [];
-  // const [latLng,setLatLng] = useState({});
-
-  const selectedSearchResult =
-    useSelector((state) => state.search.selectedSearchResult) || {};
-  console.log(
-    '🚀 ~ file: SearchInput.tsx:59 ~ SearchInput ~ selectedSearchResult:',
-    selectedSearchResult,
-  );
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    setShowSearchResults(searchString.length > 0);
-    const timeout = setTimeout(() => {
-      if (!searchString) return;
-      refetch();
-      // dispatch(fetchPhotonSearchResults(searchString));
-    }, 2000);
-
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, [searchString, dispatch]);
-
-  const getTrailsParksAndWeatherDetails = async () => {
-    console.log(selectedSearchResult, 'selected search result');
-    if (
-      !selectedSearchResult ||
-      Object.keys(selectedSearchResult).length === 0
-    ) {
-      return;
-    }
-
-    setIsLoadingMobile(true);
-
-    const {
-      geometry: { coordinates },
-      properties,
-    } = selectedSearchResult;
-    const [lon, lat] = coordinates;
-    if (!lat || !lon) {
-      setIsLoadingMobile(false);
-      return;
-    } else {
-      dispatch(setLatLng({ lat, lon }));
-    }
-
-    try {
-      // console.log('before parksData:', parksData);
-      // console.log('after parksData:', parksData);
-      // console.log('parksData:', parksData);
-      // console.log('data:', data);
-      // console.log('error:', error);
-      // console.log('isLoading:', isLoading);
-      // await Promise.all([
-      //   // dispatch(fetchTrails({ lat, lon, selectedSearch })),
-      //   // dispatch(fetchParks({ lat, lon, selectedSearch })),
-      //   dispatch(fetchWeather({ lat, lon })),
-      //   dispatch(fetchWeatherWeek({ lat, lon })),
-      // ]);
-    } catch (error) {
-      console.error(error);
-    }
-
-    setIsLoadingMobile(false);
-  };
-
-  // useEffect(() => {
-
-  //   const timeout = setTimeout(getTrailsParksAndWeatherDetails, 1000);
-
-  //   return () => {
-  //     clearTimeout(timeout);
-  //   };
-  // }, [selectedSearch, selectedSearchResult, dispatch]);
 
   const handleSearchResultClick = (result, index) => {
     const {
       properties: { name, osm_id },
     } = result;
-    // console.log(result, 'line 136');
-    dispatch(setSearchResult(name));
+    
     setSearchString(name);
     setShowSearchResults(false);
-    dispatch(setSelectedSearchResult(result));
+     dispatch({
+      type:"SET_SELECTED_SEARCH_RESULT",payload:result
+    })
 
     if (onSelect) {
       onSelect(result);
@@ -164,9 +104,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
               paddingRight: '55px',
             }}
             placeholder={placeholder ?? 'Search'}
-            onChangeText={(text) => {
-              setSearchString(text);
-            }}
+            onChangeText={searchChangeHandler}
             value={searchString}
           />
           <MaterialIcons
@@ -187,7 +125,6 @@ export const SearchInput = ({ onSelect, placeholder }) => {
               onPress={() => {
                 setShowSearchResults(false);
                 setSearchString('');
-                dispatch(clearSearchResults());
               }}
               style={{
                 position: 'absolute',
@@ -216,7 +153,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
               zIndex={20000}
             >
               <RStack space={2} w="100%">
-                {data.map((result, i) => (
+                {showSearchResults && data.map((result, i) => (
                   <RStack
                     key={`result + ${i}`}
                     onPress={() => {

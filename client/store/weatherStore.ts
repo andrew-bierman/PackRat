@@ -81,7 +81,6 @@ export const weatherSlice = createSlice({
       state.weatherWeek = action.payload;
     },
     setLatLng: (state, action) => {
-      console.log('🚀 ~ file: weatherStore.js:83 ~ action:', action);
       state.latLng = action.payload;
     },
     setSearchResult: (state, action) => {
