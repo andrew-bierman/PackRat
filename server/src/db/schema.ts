@@ -1,6 +1,11 @@
-import { InferInsertModel, InferSelectModel, sql } from 'drizzle-orm';
 import {
-  foreignKey,
+  InferInsertModel,
+  InferSelectModel,
+  relations,
+  sql,
+} from 'drizzle-orm';
+import {
+  primaryKey,
   integer,
   real,
   sqliteTable,
@@ -39,29 +44,82 @@ export const user = sqliteTable('user', {
   ),
 });
 
-export const user_favorite_packs = sqliteTable(
+export const userFavoritePacks = sqliteTable(
   'user_favorite_packs',
   {
-    userId: text('user_id'),
-    packId: text('pack_id'),
+    userId: text('user_id').references(() => user.id, { onDelete: 'set null' }),
+    packId: text('pack_id').references(() => pack.id, { onDelete: 'set null' }),
   },
   (table) => {
     return {
-      userReference: foreignKey(() => ({
-        columns: [table.userId],
-        foreignColumns: [user.id],
-        onDelete: 'SET NULL',
-      })),
-      packReference: foreignKey(() => ({
-        columns: [table.packId],
-        foreignColumns: [pack.id],
-        onDelete: 'SET NULL',
-      })),
+      pk: primaryKey({ columns: [table.userId, table.packId] }),
+      pkWithCustomName: primaryKey({
+        name: 'id',
+        columns: [table.userId, table.packId],
+      }),
     };
   },
 );
 
-export const item_category = sqliteTable('item_category', {
+export const userRelations = relations(user, ({ many }) => ({
+  packs: many(pack),
+  favorites: many(userFavoritePacks),
+  items: many(itemOwners),
+  templates: many(template),
+  trips: many(trip),
+}));
+
+export const pack = sqliteTable('pack', {
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => createId()),
+  name: text('name').notNull(),
+  owner_id: text('owner_id').references(() => user.id, {
+    onDelete: 'set null',
+  }),
+  is_public: integer('is_public', { mode: 'boolean' }),
+  grades: text('grades', { mode: 'json' })
+    .$type<Object>()
+    .default(
+      JSON.stringify({
+        weight: '',
+        essentialItems: '',
+        redundancyAndVersatility: '',
+      }),
+    ),
+  scores: text('scores', { mode: 'json' })
+    .$type<Object>()
+    .default(
+      JSON.stringify({
+        weightScore: 0,
+        essentialItemsScore: 0,
+        redundancyAndVersatilityScore: 0,
+      }),
+    ),
+  type: text('type').default('pack'),
+  total_weight: real('total_weight'),
+  total_score: integer('total_score').default(0),
+  favorites_count: integer('favorites_count').default(0),
+  createdAt: integer('created_at', { mode: 'timestamp' }).default(
+    sql`CURRENT_TIMESTAMP`,
+  ),
+  updatedAt: integer('updated_at', { mode: 'timestamp' }).default(
+    sql`CURRENT_TIMESTAMP`,
+  ),
+  // @@map("packs"): undefined,
+});
+
+export const packRelations = relations(pack, ({ one, many }) => ({
+  owner: one(user, {
+    fields: [pack.owner_id],
+    references: [user.id],
+  }),
+  favoritedBy: many(userFavoritePacks),
+  items: many(itemPacks),
+  trips: many(trip),
+}));
+
+export const itemCategory = sqliteTable('item_category', {
   id: text('id')
     .primaryKey()
     .$defaultFn(() => createId()),
@@ -76,250 +134,162 @@ export const item_category = sqliteTable('item_category', {
   // @@map("itemcategories"): undefined,
 });
 
-export const item = sqliteTable(
-  'item',
-  {
-    id: text('id')
-      .primaryKey()
-      .$defaultFn(() => createId()),
-    name: text('name').notNull(),
-    weight: real('weight').notNull(),
-    quantity: integer('quantity').notNull(),
-    unit: text('unit').notNull(),
-    category: text('category'),
-    global: integer('global', { mode: 'boolean' }).default(false),
-    createdAt: integer('created_at', { mode: 'timestamp' }).default(
-      sql`CURRENT_TIMESTAMP`,
-    ),
-    updatedAt: integer('updated_at', { mode: 'timestamp' }).default(
-      sql`CURRENT_TIMESTAMP`,
-    ),
+export const itemCategoryRelations = relations(itemCategory, ({ many }) => ({
+  items: many(item),
+}));
 
-    // @@map("items"): undefined,
-  },
-  (table) => {
-    return {
-      itemCategoryReference: foreignKey(() => ({
-        columns: [table.category],
-        foreignColumns: [item_category.id],
-        onDelete: 'SET NULL',
-      })),
-    };
-  },
-);
+export const item = sqliteTable('item', {
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => createId()),
+  name: text('name').notNull(),
+  weight: real('weight').notNull(),
+  quantity: integer('quantity').notNull(),
+  unit: text('unit').notNull(),
+  category: text('category').references(() => itemCategory.id, {
+    onDelete: 'set null',
+  }),
+  global: integer('global', { mode: 'boolean' }).default(false),
+  createdAt: integer('created_at', { mode: 'timestamp' }).default(
+    sql`CURRENT_TIMESTAMP`,
+  ),
+  updatedAt: integer('updated_at', { mode: 'timestamp' }).default(
+    sql`CURRENT_TIMESTAMP`,
+  ),
 
-export const item_owners = sqliteTable(
+  // @@map("items"): undefined,
+});
+
+export const itemOwners = sqliteTable(
   'item_owners',
   {
-    ownerId: text('ownerId'),
-    itemId: text('itemId'),
+    itemId: text('item_id').references(() => item.id),
+    ownerId: text('owner_id').references(() => user.id),
   },
   (table) => {
     return {
-      ownerReference: foreignKey(() => ({
-        columns: [table.ownerId],
-        foreignColumns: [user.id],
-        onDelete: 'SET NULL',
-      })),
-      itemReference: foreignKey(() => ({
-        columns: [table.itemId],
-        foreignColumns: [item.id],
-        onDelete: 'SET NULL',
-      })),
+      pk: primaryKey({ columns: [table.itemId, table.ownerId] }),
+      pkWithCustomName: primaryKey({
+        name: 'id',
+        columns: [table.itemId, table.ownerId],
+      }),
     };
   },
 );
 
-export const item_packs = sqliteTable(
+export const itemPacks = sqliteTable(
   'item_packs',
   {
-    itemId: text('itemId'),
-    packId: text('packId'),
+    itemId: text('item_id').references(() => item.id),
+    packId: text('pack_id').references(() => pack.id),
   },
   (table) => {
     return {
-      itemReference: foreignKey(() => ({
-        columns: [table.itemId],
-        foreignColumns: [item.id],
-        onDelete: 'SET NULL',
-      })),
-      packReference: foreignKey(() => ({
-        columns: [table.packId],
-        foreignColumns: [pack.id],
-        onDelete: 'SET NULL',
-      })),
+      pk: primaryKey({ columns: [table.itemId, table.packId] }),
+      pkWithCustomName: primaryKey({
+        name: 'id',
+        columns: [table.itemId, table.packId],
+      }),
     };
   },
 );
 
-export const pack = sqliteTable(
-  'pack',
+export const itemRelations = relations(item, ({ one, many }) => ({
+  category: one(itemCategory, {
+    fields: [item.category],
+    references: [itemCategory.id],
+  }),
+  owners: many(itemOwners),
+  packs: many(itemPacks),
+}));
+
+export const template = sqliteTable('template', {
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => createId()),
+  type: text('type', { enum: ['pack', 'trim', 'item'] })
+    .notNull()
+    .default('pack'),
+  templateId: text('template_id').notNull(),
+  isGlobalTemplate: integer('is_global_template', {
+    mode: 'boolean',
+  }).default(false),
+  createdBy: text('created_by').references(() => user.id, {
+    onDelete: 'set null',
+  }),
+  createdAt: integer('created_at', { mode: 'timestamp' }).default(
+    sql`CURRENT_TIMESTAMP`,
+  ),
+  updatedAt: integer('updated_at', { mode: 'timestamp' }).default(
+    sql`CURRENT_TIMESTAMP`,
+  ),
+  // @@map("templates"): undefined,
+});
+
+export const templateRelations = relations(template, ({ one }) => ({
+  createdBy: one(user, {
+    fields: [template.createdBy],
+    references: [user.id],
+  }),
+}));
+
+export const trip = sqliteTable('trip', {
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => createId()),
+  name: text('name').notNull(),
+  description: text('description').notNull(),
+  duration: text('duration').notNull(),
+  weather: text('weather').notNull(),
+  start_date: integer('start_date', { mode: 'timestamp' }).notNull(),
+  end_date: integer('end_date', { mode: 'timestamp' }).notNull(),
+  destination: text('destination').notNull(),
+  owner_id: text('owner_id').references(() => user.id, {
+    onDelete: 'set null',
+  }),
+  packs: text('packs').references(() => pack.id, { onDelete: 'set null' }),
+  is_public: integer('is_public', { mode: 'boolean' }),
+  type: text('type').default('trip'),
+  createdAt: integer('created_at', { mode: 'timestamp' }).default(
+    sql`CURRENT_TIMESTAMP`,
+  ),
+  updatedAt: integer('updated_at', { mode: 'timestamp' }).default(
+    sql`CURRENT_TIMESTAMP`,
+  ),
+
+  // @@map("trips"): undefined,
+});
+
+export const tripGeojsons = sqliteTable(
+  'trip_geojsons',
   {
-    id: text('id')
-      .primaryKey()
-      .$defaultFn(() => createId()),
-    name: text('name').notNull(),
-    owner_id: text('owner_id'),
-    is_public: integer('is_public', { mode: 'boolean' }),
-    grades: text('grades', { mode: 'json' })
-      .$type<Object>()
-      .default(
-        JSON.stringify({
-          weight: '',
-          essentialItems: '',
-          redundancyAndVersatility: '',
-        }),
-      ),
-    scores: text('scores', { mode: 'json' })
-      .$type<Object>()
-      .default(
-        JSON.stringify({
-          weightScore: 0,
-          essentialItemsScore: 0,
-          redundancyAndVersatilityScore: 0,
-        }),
-      ),
-    type: text('type').default('pack'),
-    total_weight: real('total_weight'),
-    total_score: integer('total_score').default(0),
-    favorites_count: integer('favorites_count').default(0),
-    createdAt: integer('created_at', { mode: 'timestamp' }).default(
-      sql`CURRENT_TIMESTAMP`,
-    ),
-    updatedAt: integer('updated_at', { mode: 'timestamp' }).default(
-      sql`CURRENT_TIMESTAMP`,
-    ),
-    // @@map("packs"): undefined,
+    tripId: text('trip_id').references(() => trip.id, { onDelete: 'set null' }),
+    geojsonId: text('geojson_id').references(() => geojson.id, {
+      onDelete: 'set null',
+    }),
   },
   (table) => {
     return {
-      ownerReference: foreignKey(() => ({
-        columns: [table.owner_id],
-        foreignColumns: [user.id],
-        onDelete: 'SET NULL',
-      })),
+      pk: primaryKey({ columns: [table.tripId, table.geojsonId] }),
+      pkWithCustomName: primaryKey({
+        name: 'id',
+        columns: [table.tripId, table.geojsonId],
+      }),
     };
   },
 );
 
-export const pack_owners = sqliteTable(
-  'pack_owners',
-  {
-    ownerId: text('owner_id'),
-    packId: text('pack_id'),
-  },
-  (table) => {
-    return {
-      ownerReference: foreignKey(() => ({
-        columns: [table.ownerId],
-        foreignColumns: [user.id],
-        onDelete: 'SET NULL',
-      })),
-      packReference: foreignKey(() => ({
-        columns: [table.packId],
-        foreignColumns: [pack.id],
-        onDelete: 'SET NULL',
-      })),
-    };
-  },
-);
-
-export const template = sqliteTable(
-  'template',
-  {
-    id: text('id')
-      .primaryKey()
-      .$defaultFn(() => createId()),
-    type: text('type', { enum: ['pack', 'trim', 'item'] })
-      .notNull()
-      .default('pack'),
-    templateId: text('template_id').notNull(),
-    isGlobalTemplate: integer('is_global_template', {
-      mode: 'boolean',
-    }).default(false),
-    createdBy: text('created_by'),
-    createdAt: integer('created_at', { mode: 'timestamp' }).default(
-      sql`CURRENT_TIMESTAMP`,
-    ),
-    updatedAt: integer('updated_at', { mode: 'timestamp' }).default(
-      sql`CURRENT_TIMESTAMP`,
-    ),
-    // @@map("templates"): undefined,
-  },
-  (table) => {
-    return {
-      createdByReference: foreignKey(() => ({
-        columns: [table.createdBy],
-        foreignColumns: [user.id],
-        onDelete: 'SET NULL',
-      })),
-    };
-  },
-);
-
-export const trip = sqliteTable(
-  'trip',
-  {
-    id: text('id')
-      .primaryKey()
-      .$defaultFn(() => createId()),
-    name: text('name').notNull(),
-    description: text('description').notNull(),
-    duration: text('duration').notNull(),
-    weather: text('weather').notNull(),
-    start_date: integer('start_date', { mode: 'timestamp' }).notNull(),
-    end_date: integer('end_date', { mode: 'timestamp' }).notNull(),
-    destination: text('destination').notNull(),
-    owner_id: text('owner_id'),
-    packs: text('packs'),
-    is_public: integer('is_public', { mode: 'boolean' }),
-    type: text('type').default('trip'),
-    createdAt: integer('created_at', { mode: 'timestamp' }).default(
-      sql`CURRENT_TIMESTAMP`,
-    ),
-    updatedAt: integer('updated_at', { mode: 'timestamp' }).default(
-      sql`CURRENT_TIMESTAMP`,
-    ),
-
-    // @@map("trips"): undefined,
-  },
-  (table) => {
-    return {
-      ownerReference: foreignKey(() => ({
-        columns: [table.owner_id],
-        foreignColumns: [user.id],
-        onDelete: 'SET NULL',
-      })),
-      packsReference: foreignKey(() => ({
-        columns: [table.packs],
-        foreignColumns: [pack.id],
-        onDelete: 'SET NULL',
-      })),
-    };
-  },
-);
-
-export const trip_geojson = sqliteTable(
-  'trip_geojson',
-  {
-    tripId: text('trip_id'),
-    geojsonId: text('geojson_id'),
-  },
-  (table) => {
-    return {
-      tripReference: foreignKey(() => ({
-        columns: [table.tripId],
-        foreignColumns: [trip.id],
-        onDelete: 'SET NULL',
-      })),
-      geojsonReference: foreignKey(() => ({
-        columns: [table.geojsonId],
-        foreignColumns: [geojson.id],
-        onDelete: 'SET NULL',
-      })),
-    };
-  },
-);
+export const tripRelations = relations(trip, ({ one, many }) => ({
+  owner: one(user, {
+    fields: [trip.owner_id],
+    references: [user.id],
+  }),
+  packs: one(pack, {
+    fields: [trip.packs],
+    references: [pack.id],
+  }),
+  geojsons: many(tripGeojsons),
+}));
 
 export const conversation = sqliteTable('conversation', {
   id: text('id')
@@ -355,24 +325,23 @@ export const way = sqliteTable('way', {
 export const wayNodes = sqliteTable(
   'way_nodes',
   {
-    wayId: text('way_id'),
-    nodeId: text('node_id'),
+    wayId: text('way_id').references(() => way.id, { onDelete: 'set null' }),
+    nodeId: text('node_id').references(() => node.id, { onDelete: 'set null' }),
   },
   (table) => {
     return {
-      wayReference: foreignKey(() => ({
-        columns: [table.wayId],
-        foreignColumns: [way.id],
-        onDelete: 'SET NULL',
-      })),
-      nodeReference: foreignKey(() => ({
-        columns: [table.nodeId],
-        foreignColumns: [node.id],
-        onDelete: 'SET NULL',
-      })),
+      pk: primaryKey({ columns: [table.wayId, table.nodeId] }),
+      pkWithCustomName: primaryKey({
+        name: 'id',
+        columns: [table.wayId, table.nodeId],
+      }),
     };
   },
 );
+
+export const wayRelations = relations(way, ({ many }) => ({
+  nodes: many(wayNodes),
+}));
 
 export const node = sqliteTable('node', {
   id: text('id')
@@ -388,6 +357,10 @@ export const node = sqliteTable('node', {
   updatedAt: integer('updated_at', { mode: 'timestamp' }),
   // @@map("nodes"): undefined,
 });
+
+export const nodeRelations = relations(node, ({ many }) => ({
+  ways: many(wayNodes),
+}));
 
 export const relation = sqliteTable('relation', {
   id: text('id')
@@ -434,6 +407,10 @@ export const geojson = sqliteTable('geojson', {
     sql`CURRENT_TIMESTAMP`,
   ),
 });
+
+export const geojsonRelations = relations(geojson, ({ many }) => ({
+  trips: many(tripGeojsons),
+}));
 
 export type User = InferSelectModel<typeof user>;
 export type InsertUser = InferInsertModel<typeof user>;
