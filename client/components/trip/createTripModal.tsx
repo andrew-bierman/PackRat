@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
-import { Platform, View } from 'react-native';
 import { CustomModal } from '../modal';
 import { Input, VStack, HStack, Text, Select } from 'native-base';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { useRouter } from 'expo-router';
 import { format, intervalToDuration } from 'date-fns';
 // import { addTrip } from '../../store/tripsStore';
-import { useAddTrips } from '~/hooks/trips';
-import { api } from '../../constants/api';
-import { trpc } from '../../trpc';
+import { useAddTrip } from '~/hooks/trips';
 import { useGetPhotonDetails } from '~/hooks/destination';
 
 // import { Picker } from '@react-native-picker/picker';
@@ -84,21 +82,26 @@ export const SaveTripContainer:React.FC<Props> = ({ dateRange,photonData }) => {
   const user = useSelector((state) => state.auth.user);
   const packId = useSelector((state) => state.trips.newTrip.packId);
 
-  console.log('- note for me', packId);
-  console.log('search in save trip container ->', search);
-  console.log('selected in dateRange ->', dateRange);
-
   // defining dispatch
-  const dispatch = useDispatch();
-  const { AddTrips } = useAddTrips();
-
+  const { addTrip, isSuccess, data: response } = useAddTrip();
+  const router = useRouter();
   // trip info states value
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   // const [numberOfNights, setNumberOfNights] = useState("");
   // const [startDate, setStartDate] = useState("");
   // const [endDate, setEndDate] = useState("");
+
   const [isPublic, setIsPublic] = useState(true);
+
+  const geoJSONData = useGetPhotonDetails({
+    properties: search?.properties
+      ? {
+          osm_id: search?.properties?.osm_id,
+          osm_type: search?.properties?.osm_type,
+        }
+      : undefined,
+  });
 
   // create trip
   const handleCreateTrip = async () => {
@@ -122,13 +125,18 @@ export const SaveTripContainer:React.FC<Props> = ({ dateRange,photonData }) => {
       endDate,
     };
 
-    console.log('photon',photonData)
+    // const geoJSON = await trpc.getPhotonDetails.query({
+    //   id: search.properties.osm_id,
+    //   type: search.properties.osm_type,
+    // });
+    const { data: geoJSON } = await useGetPhotonDetails(search);
+
     const data = {
       name,
       description,
       start_date: startDate,
       end_date: endDate,
-      destination: search.properties.name,
+      destination: search?.properties?.name,
       geoJSON:JSON.stringify(photonData) ,
       // trail: dropdown.currentTrail,
       duration: JSON.stringify(duration),
@@ -143,7 +151,9 @@ export const SaveTripContainer:React.FC<Props> = ({ dateRange,photonData }) => {
     // dispatch(addTrip(data));
     setIsSaveModalOpen(!isSaveModalOpen);
   };
-
+  if (isSuccess && response) {
+    router.push(`/trip/${response.trip._id}`);
+  }
   /**
    * Handles the change in value.
    *

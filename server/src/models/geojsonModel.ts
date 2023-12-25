@@ -53,9 +53,9 @@ GeoJSONSchema.statics.saveOne = async function (feature) {
   });
 };
 
-GeoJSONSchema.statics.saveMany = async function (features) {
+GeoJSONSchema.statics.saveMany = async function (features = []) {
   return await Promise.all(
-    features.map((feature: any) => (this as any).saveOne(feature)),
+    features?.map((feature: any) => (this as any).saveOne(feature)),
   );
 };
 

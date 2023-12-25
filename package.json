@@ -57,7 +57,7 @@
     "node": ">=18.16.1",
     "yarn": ">=4.0.0"
   },
-  "packageManager": "yarn@4.0.1",
+  "packageManager": "yarn@4.0.2",
   "dependencies": {
     "@manypkg/cli": "^0.21.0",
     "check-dependency-version-consistency": "^4.1.0",
