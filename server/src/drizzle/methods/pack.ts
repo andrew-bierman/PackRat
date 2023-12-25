@@ -1,6 +1,7 @@
 import { eq } from "drizzle-orm";
 import { createDb } from "../../db/client";
 import { pack } from "../../db/schema";
+import { convertWeight } from '../../utils/convertWeight';
 
 export class Pack {
     private dbInstance;
@@ -50,4 +51,50 @@ export class Pack {
             .returning()
             .get();
     }
+
+    async computeTotalWeight(pack) {
+        if (pack.itemDocuments && pack.itemDocuments.length > 0) {
+            const totalWeight = pack.itemDocuments.reduce(
+                (total, itemDocument: any) => {
+                    const weightInGrams = convertWeight(
+                        itemDocument.weight,
+                        itemDocument.unit,
+                        'g',
+                    );
+                    return total + weightInGrams * itemDocument.quantity;
+                },
+                0,
+            );
+            return {
+                ...pack,
+                total_weight: totalWeight,
+            };
+        } else {
+            return {
+                ...pack,
+                total_weight: 0,
+            };
+        }
+    };
+
+
+    async computeFavouritesCount(pack) {
+        return {
+            ...pack,
+            favorites_count: pack.favorited_by?.length ?? 0,
+        }
+    }
+
+    async computeTotalScores(pack) {
+        if (!pack.scores) return { ...pack, total_score: 0 };
+
+        const scoresArray: number[] = Object.values(pack.scores);
+        const sum: number = scoresArray.reduce(
+            (total: number, score: number) => total + score,
+            0,
+        );
+        const average: number = scoresArray.length > 0 ? sum / scoresArray.length : 0;
+
+        return { ...pack, total_score: Math.round(average * 100) / 100 };
+    };
 }
