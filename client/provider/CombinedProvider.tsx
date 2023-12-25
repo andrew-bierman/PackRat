@@ -72,7 +72,9 @@ export function CombinedProvider({ children }: { children: React.ReactNode }) {
           <QueryClientProvider client={queryClient}>
             <PersistGate loading={null} persistor={persistor}>
               <SessionProvider>
-                <ThemeProvider>{children}</ThemeProvider>
+                <ToastProvider>
+                  <ThemeProvider>{children}</ThemeProvider>
+                </ToastProvider>
               </SessionProvider>
             </PersistGate>
             <ReactQueryDevtools initialIsOpen={false} />
