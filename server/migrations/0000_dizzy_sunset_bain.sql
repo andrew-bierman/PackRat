@@ -26,7 +26,7 @@ CREATE TABLE `item` (
 	`global` integer DEFAULT false,
 	`created_at` integer DEFAULT CURRENT_TIMESTAMP,
 	`updated_at` integer DEFAULT CURRENT_TIMESTAMP,
-	FOREIGN KEY (`category`) REFERENCES `item_category`(`id`) ON UPDATE no action ON DELETE no action
+	FOREIGN KEY (`category`) REFERENCES `item_category`(`id`) ON UPDATE no action ON DELETE set null
 );
 --> statement-breakpoint
 CREATE TABLE `item_category` (
@@ -37,17 +37,19 @@ CREATE TABLE `item_category` (
 );
 --> statement-breakpoint
 CREATE TABLE `item_owners` (
-	`ownerId` text,
-	`itemId` text,
-	FOREIGN KEY (`ownerId`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action,
-	FOREIGN KEY (`itemId`) REFERENCES `item`(`id`) ON UPDATE no action ON DELETE no action
+	`item_id` text,
+	`owner_id` text,
+	PRIMARY KEY(`item_id`, `owner_id`),
+	FOREIGN KEY (`item_id`) REFERENCES `item`(`id`) ON UPDATE no action ON DELETE set null,
+	FOREIGN KEY (`owner_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE set null
 );
 --> statement-breakpoint
 CREATE TABLE `item_packs` (
-	`itemId` text,
-	`packId` text,
-	FOREIGN KEY (`itemId`) REFERENCES `item`(`id`) ON UPDATE no action ON DELETE no action,
-	FOREIGN KEY (`packId`) REFERENCES `pack`(`id`) ON UPDATE no action ON DELETE no action
+	`item_id` text,
+	`pack_id` text,
+	PRIMARY KEY(`item_id`, `pack_id`),
+	FOREIGN KEY (`item_id`) REFERENCES `item`(`id`) ON UPDATE no action ON DELETE set null,
+	FOREIGN KEY (`pack_id`) REFERENCES `pack`(`id`) ON UPDATE no action ON DELETE set null
 );
 --> statement-breakpoint
 CREATE TABLE `node` (
@@ -73,14 +75,7 @@ CREATE TABLE `pack` (
 	`favorites_count` integer DEFAULT 0,
 	`created_at` integer DEFAULT CURRENT_TIMESTAMP,
 	`updated_at` integer DEFAULT CURRENT_TIMESTAMP,
-	FOREIGN KEY (`owner_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
-);
---> statement-breakpoint
-CREATE TABLE `pack_owners` (
-	`owner_id` text,
-	`pack_id` text,
-	FOREIGN KEY (`owner_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action,
-	FOREIGN KEY (`pack_id`) REFERENCES `pack`(`id`) ON UPDATE no action ON DELETE no action
+	FOREIGN KEY (`owner_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE set null
 );
 --> statement-breakpoint
 CREATE TABLE `relation` (
@@ -102,7 +97,7 @@ CREATE TABLE `template` (
 	`created_by` text,
 	`created_at` integer DEFAULT CURRENT_TIMESTAMP,
 	`updated_at` integer DEFAULT CURRENT_TIMESTAMP,
-	FOREIGN KEY (`created_by`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
+	FOREIGN KEY (`created_by`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE set null
 );
 --> statement-breakpoint
 CREATE TABLE `trip` (
@@ -120,15 +115,16 @@ CREATE TABLE `trip` (
 	`type` text DEFAULT 'trip',
 	`created_at` integer DEFAULT CURRENT_TIMESTAMP,
 	`updated_at` integer DEFAULT CURRENT_TIMESTAMP,
-	FOREIGN KEY (`owner_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action,
-	FOREIGN KEY (`packs`) REFERENCES `pack`(`id`) ON UPDATE no action ON DELETE no action
+	FOREIGN KEY (`owner_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE set null,
+	FOREIGN KEY (`packs`) REFERENCES `pack`(`id`) ON UPDATE no action ON DELETE set null
 );
 --> statement-breakpoint
-CREATE TABLE `trip_geojson` (
+CREATE TABLE `trip_geojsons` (
 	`trip_id` text,
 	`geojson_id` text,
-	FOREIGN KEY (`trip_id`) REFERENCES `trip`(`id`) ON UPDATE no action ON DELETE no action,
-	FOREIGN KEY (`geojson_id`) REFERENCES `geojson`(`id`) ON UPDATE no action ON DELETE no action
+	PRIMARY KEY(`geojson_id`, `trip_id`),
+	FOREIGN KEY (`trip_id`) REFERENCES `trip`(`id`) ON UPDATE no action ON DELETE set null,
+	FOREIGN KEY (`geojson_id`) REFERENCES `geojson`(`id`) ON UPDATE no action ON DELETE set null
 );
 --> statement-breakpoint
 CREATE TABLE `user` (
@@ -153,8 +149,9 @@ CREATE TABLE `user` (
 CREATE TABLE `user_favorite_packs` (
 	`user_id` text,
 	`pack_id` text,
-	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action,
-	FOREIGN KEY (`pack_id`) REFERENCES `pack`(`id`) ON UPDATE no action ON DELETE no action
+	PRIMARY KEY(`pack_id`, `user_id`),
+	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE set null,
+	FOREIGN KEY (`pack_id`) REFERENCES `pack`(`id`) ON UPDATE no action ON DELETE set null
 );
 --> statement-breakpoint
 CREATE TABLE `way` (
@@ -170,8 +167,9 @@ CREATE TABLE `way` (
 CREATE TABLE `way_nodes` (
 	`way_id` text,
 	`node_id` text,
-	FOREIGN KEY (`way_id`) REFERENCES `way`(`id`) ON UPDATE no action ON DELETE no action,
-	FOREIGN KEY (`node_id`) REFERENCES `node`(`id`) ON UPDATE no action ON DELETE no action
+	PRIMARY KEY(`node_id`, `way_id`),
+	FOREIGN KEY (`way_id`) REFERENCES `way`(`id`) ON UPDATE no action ON DELETE set null,
+	FOREIGN KEY (`node_id`) REFERENCES `node`(`id`) ON UPDATE no action ON DELETE set null
 );
 --> statement-breakpoint
 CREATE UNIQUE INDEX `user_email_unique` ON `user` (`email`);--> statement-breakpoint

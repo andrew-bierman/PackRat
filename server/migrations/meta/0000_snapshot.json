@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "15156b9d-4bc9-46e6-8fc7-cf0697c8708a",
+  "id": "0989e9d4-c5a9-4a37-91fb-2420c00af932",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "conversation": {
@@ -192,7 +192,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "set null",
           "onUpdate": "no action"
         }
       },
@@ -241,15 +241,15 @@
     "item_owners": {
       "name": "item_owners",
       "columns": {
-        "ownerId": {
-          "name": "ownerId",
+        "item_id": {
+          "name": "item_id",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         },
-        "itemId": {
-          "name": "itemId",
+        "owner_id": {
+          "name": "owner_id",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
@@ -258,48 +258,56 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "item_owners_ownerId_user_id_fk": {
-          "name": "item_owners_ownerId_user_id_fk",
-          "tableFrom": "item_owners",
-          "tableTo": "user",
-          "columnsFrom": [
-            "ownerId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "item_owners_itemId_item_id_fk": {
-          "name": "item_owners_itemId_item_id_fk",
+        "item_owners_item_id_item_id_fk": {
+          "name": "item_owners_item_id_item_id_fk",
           "tableFrom": "item_owners",
           "tableTo": "item",
           "columnsFrom": [
-            "itemId"
+            "item_id"
           ],
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "item_owners_owner_id_user_id_fk": {
+          "name": "item_owners_owner_id_user_id_fk",
+          "tableFrom": "item_owners",
+          "tableTo": "user",
+          "columnsFrom": [
+            "owner_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {},
+      "compositePrimaryKeys": {
+        "id": {
+          "columns": [
+            "item_id",
+            "owner_id"
+          ],
+          "name": "id"
+        }
+      },
       "uniqueConstraints": {}
     },
     "item_packs": {
       "name": "item_packs",
       "columns": {
-        "itemId": {
-          "name": "itemId",
+        "item_id": {
+          "name": "item_id",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         },
-        "packId": {
-          "name": "packId",
+        "pack_id": {
+          "name": "pack_id",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
@@ -308,34 +316,42 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "item_packs_itemId_item_id_fk": {
-          "name": "item_packs_itemId_item_id_fk",
+        "item_packs_item_id_item_id_fk": {
+          "name": "item_packs_item_id_item_id_fk",
           "tableFrom": "item_packs",
           "tableTo": "item",
           "columnsFrom": [
-            "itemId"
+            "item_id"
           ],
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "set null",
           "onUpdate": "no action"
         },
-        "item_packs_packId_pack_id_fk": {
-          "name": "item_packs_packId_pack_id_fk",
+        "item_packs_pack_id_pack_id_fk": {
+          "name": "item_packs_pack_id_pack_id_fk",
           "tableFrom": "item_packs",
           "tableTo": "pack",
           "columnsFrom": [
-            "packId"
+            "pack_id"
           ],
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "set null",
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {},
+      "compositePrimaryKeys": {
+        "id": {
+          "columns": [
+            "item_id",
+            "pack_id"
+          ],
+          "name": "id"
+        }
+      },
       "uniqueConstraints": {}
     },
     "node": {
@@ -504,57 +520,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "pack_owners": {
-      "name": "pack_owners",
-      "columns": {
-        "owner_id": {
-          "name": "owner_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "pack_id": {
-          "name": "pack_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "pack_owners_owner_id_user_id_fk": {
-          "name": "pack_owners_owner_id_user_id_fk",
-          "tableFrom": "pack_owners",
-          "tableTo": "user",
-          "columnsFrom": [
-            "owner_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "pack_owners_pack_id_pack_id_fk": {
-          "name": "pack_owners_pack_id_pack_id_fk",
-          "tableFrom": "pack_owners",
-          "tableTo": "pack",
-          "columnsFrom": [
-            "pack_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
+          "onDelete": "set null",
           "onUpdate": "no action"
         }
       },
@@ -697,7 +663,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "set null",
           "onUpdate": "no action"
         }
       },
@@ -821,7 +787,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "set null",
           "onUpdate": "no action"
         },
         "trip_packs_pack_id_fk": {
@@ -834,15 +800,15 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "set null",
           "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "trip_geojson": {
-      "name": "trip_geojson",
+    "trip_geojsons": {
+      "name": "trip_geojsons",
       "columns": {
         "trip_id": {
           "name": "trip_id",
@@ -861,9 +827,9 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "trip_geojson_trip_id_trip_id_fk": {
-          "name": "trip_geojson_trip_id_trip_id_fk",
-          "tableFrom": "trip_geojson",
+        "trip_geojsons_trip_id_trip_id_fk": {
+          "name": "trip_geojsons_trip_id_trip_id_fk",
+          "tableFrom": "trip_geojsons",
           "tableTo": "trip",
           "columnsFrom": [
             "trip_id"
@@ -871,12 +837,12 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "set null",
           "onUpdate": "no action"
         },
-        "trip_geojson_geojson_id_geojson_id_fk": {
-          "name": "trip_geojson_geojson_id_geojson_id_fk",
-          "tableFrom": "trip_geojson",
+        "trip_geojsons_geojson_id_geojson_id_fk": {
+          "name": "trip_geojsons_geojson_id_geojson_id_fk",
+          "tableFrom": "trip_geojsons",
           "tableTo": "geojson",
           "columnsFrom": [
             "geojson_id"
@@ -884,11 +850,19 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "set null",
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {},
+      "compositePrimaryKeys": {
+        "id": {
+          "columns": [
+            "geojson_id",
+            "trip_id"
+          ],
+          "name": "id"
+        }
+      },
       "uniqueConstraints": {}
     },
     "user": {
@@ -1059,7 +1033,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "set null",
           "onUpdate": "no action"
         },
         "user_favorite_packs_pack_id_pack_id_fk": {
@@ -1072,11 +1046,19 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "set null",
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {},
+      "compositePrimaryKeys": {
+        "id": {
+          "columns": [
+            "pack_id",
+            "user_id"
+          ],
+          "name": "id"
+        }
+      },
       "uniqueConstraints": {}
     },
     "way": {
@@ -1168,7 +1150,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "set null",
           "onUpdate": "no action"
         },
         "way_nodes_node_id_node_id_fk": {
@@ -1181,11 +1163,19 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "set null",
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {},
+      "compositePrimaryKeys": {
+        "id": {
+          "columns": [
+            "node_id",
+            "way_id"
+          ],
+          "name": "id"
+        }
+      },
       "uniqueConstraints": {}
     }
   },

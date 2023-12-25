@@ -52,7 +52,6 @@ export const userFavoritePacks = sqliteTable(
   },
   (table) => {
     return {
-      pk: primaryKey({ columns: [table.userId, table.packId] }),
       pkWithCustomName: primaryKey({
         name: 'id',
         columns: [table.userId, table.packId],
@@ -163,12 +162,13 @@ export const item = sqliteTable('item', {
 export const itemOwners = sqliteTable(
   'item_owners',
   {
-    itemId: text('item_id').references(() => item.id),
-    ownerId: text('owner_id').references(() => user.id),
+    itemId: text('item_id').references(() => item.id, { onDelete: 'set null' }),
+    ownerId: text('owner_id').references(() => user.id, {
+      onDelete: 'set null',
+    }),
   },
   (table) => {
     return {
-      pk: primaryKey({ columns: [table.itemId, table.ownerId] }),
       pkWithCustomName: primaryKey({
         name: 'id',
         columns: [table.itemId, table.ownerId],
@@ -180,12 +180,11 @@ export const itemOwners = sqliteTable(
 export const itemPacks = sqliteTable(
   'item_packs',
   {
-    itemId: text('item_id').references(() => item.id),
-    packId: text('pack_id').references(() => pack.id),
+    itemId: text('item_id').references(() => item.id, { onDelete: 'set null' }),
+    packId: text('pack_id').references(() => pack.id, { onDelete: 'set null' }),
   },
   (table) => {
     return {
-      pk: primaryKey({ columns: [table.itemId, table.packId] }),
       pkWithCustomName: primaryKey({
         name: 'id',
         columns: [table.itemId, table.packId],
@@ -270,7 +269,6 @@ export const tripGeojsons = sqliteTable(
   },
   (table) => {
     return {
-      pk: primaryKey({ columns: [table.tripId, table.geojsonId] }),
       pkWithCustomName: primaryKey({
         name: 'id',
         columns: [table.tripId, table.geojsonId],
@@ -330,7 +328,6 @@ export const wayNodes = sqliteTable(
   },
   (table) => {
     return {
-      pk: primaryKey({ columns: [table.wayId, table.nodeId] }),
       pkWithCustomName: primaryKey({
         name: 'id',
         columns: [table.wayId, table.nodeId],
