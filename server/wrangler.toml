@@ -4,6 +4,6 @@ compatibility_date = "2022-11-07"
 node_compat = true
 
 [[ d1_databases ]]
-binding = "packrat_db"
-database_name = "packrat_db"
+binding = "production"
+database_name = "production"
 database_id = "2374ksjbfhsdf93lwsad09234"
