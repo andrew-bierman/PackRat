@@ -59,7 +59,6 @@ export default function PackContainer({ isCreatingTrip = false }) {
 
 
   const dataValues = packs.map((item) => item?.name) ?? [];
-  console.log("currentPack-----------", packs)
 
   return dataValues?.length > 0 ? (
     <View style={styles.mainContainer}>

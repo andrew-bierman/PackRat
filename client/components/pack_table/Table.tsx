@@ -309,12 +309,23 @@ export const TableContainer = ({
   //     return acc;
   //   }, {});
 
+
   const groupedData = data
     ?.reduce((acc, item) => {
-      const categoryName = item?.category ? item?.category?.name : 'Undefined';
+      let categoryName = 'Undefined';
+
+      if (item?.category) {
+        if (Array.isArray(item.category)) {
+          categoryName = item.category[0]?.name || 'Undefined';
+        } else if (typeof item.category === 'object') {
+          categoryName = item.category?.name || 'Undefined';
+        }
+      }
+
       (acc[categoryName] = acc[categoryName] || []).push(item);
       return acc;
     }, {});
+
 
   let flexArr = [2, 1, 1, 1, 0.65, 0.65, 0.65];
   let heading = [
