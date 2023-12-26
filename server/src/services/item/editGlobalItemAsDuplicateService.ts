@@ -1,4 +1,5 @@
 import { Item } from '../../drizzle/methods/Item';
+import { ItemPacks } from '../../drizzle/methods/ItemPacks';
 import { ItemCategory } from '../../drizzle/methods/itemcategory';
 
 /**
@@ -24,6 +25,7 @@ export const editGlobalItemAsDuplicateService = async (
 ) => {
   const itemClass = new Item();
   const itemCategory = new ItemCategory();
+  const ItemPacksClass = new ItemPacks();
   const category = await itemCategory.findUniqueItem({
     where: {
       name: type,
@@ -61,6 +63,7 @@ export const editGlobalItemAsDuplicateService = async (
   //   },
   // },
   // });
+  await ItemPacksClass.updateRelation(itemId, newItem.id, packId);
 
   return newItem;
 };

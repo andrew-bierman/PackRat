@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client/edge';
+import { UserFavoritePacks } from '../../drizzle/methods/UserFavoritePacks';
 
 /**
  * Adds or removes a pack from a user's favorites list.
@@ -12,6 +13,7 @@ export const addToFavoriteService = async (
   packId: string,
   userId: string,
 ): Promise<object> => {
+  const userFavoritePacksClass = new UserFavoritePacks();
   try {
     const user = await prisma.user.findUnique({
       where: { id: userId },
@@ -36,41 +38,43 @@ export const addToFavoriteService = async (
     });
 
     if (isFavorite) {
-      await prisma.user.update({
-        where: { id: userId },
-        data: {
-          favoriteDocuments: {
-            disconnect: { id: packId },
-          },
-        },
-      });
+      // await prisma.user.update({
+      //   where: { id: userId },
+      //   data: {
+      //     favoriteDocuments: {
+      //       disconnect: { id: packId },
+      //     },
+      //   },
+      // });
 
-      await prisma.pack.update({
-        where: { id: packId },
-        data: {
-          favoritedByDocuments: {
-            disconnect: { id: userId },
-          },
-        },
-      });
+      // await prisma.pack.update({
+      //   where: { id: packId },
+      //   data: {
+      //     favoritedByDocuments: {
+      //       disconnect: { id: userId },
+      //     },
+      //   },
+      // });
+      await userFavoritePacksClass.delete(userId, packId);
     } else {
-      await prisma.user.update({
-        where: { id: userId },
-        data: {
-          favoriteDocuments: {
-            connect: { id: packId },
-          },
-        },
-      });
+      // await prisma.user.update({
+      //   where: { id: userId },
+      //   data: {
+      //     favoriteDocuments: {
+      //       connect: { id: packId },
+      //     },
+      //   },
+      // });
 
-      await prisma.pack.update({
-        where: { id: packId },
-        data: {
-          favoritedByDocuments: {
-            connect: { id: userId },
-          },
-        },
-      });
+      // await prisma.pack.update({
+      //   where: { id: packId },
+      //   data: {
+      //     favoritedByDocuments: {
+      //       connect: { id: userId },
+      //     },
+      //   },
+      // });
+      await userFavoritePacksClass.create(userId, packId);
     }
 
     const updatedUser = await prisma.user.findUnique({
