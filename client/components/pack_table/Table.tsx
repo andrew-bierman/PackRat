@@ -311,11 +311,10 @@ export const TableContainer = ({
 
   const groupedData = data
     ?.reduce((acc, item) => {
-      const categoryName = item.category.length > 0 ? item.category[0].name : 'Undefined';
+      const categoryName = item?.category ? item?.category?.name : 'Undefined';
       (acc[categoryName] = acc[categoryName] || []).push(item);
       return acc;
     }, {});
-  console.log("groupedData", groupedData)
 
   let flexArr = [2, 1, 1, 1, 0.65, 0.65, 0.65];
   let heading = [
