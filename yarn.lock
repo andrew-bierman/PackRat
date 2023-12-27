@@ -4294,10 +4294,17 @@ __metadata:
   dependencies:
     "@shopify/flash-list": "npm:^1.6.1"
     "@tamagui/animations-react-native": "npm:1.79.14"
+    "@tamagui/babel-plugin": "npm:1.79.14"
     "@tamagui/build": "npm:1.79.14"
+    "@tamagui/config": "npm:1.79.14"
     "@tamagui/font-inter": "npm:1.79.14"
+    "@tamagui/linear-gradient": "npm:1.79.14"
+    "@tamagui/lucide-icons": "npm:1.79.14"
+    "@tamagui/progress": "npm:1.79.14"
     "@tamagui/react-native-media-driver": "npm:1.79.14"
     "@tamagui/shorthands": "npm:1.79.14"
+    "@tamagui/switch": "npm:1.79.14"
+    "@tamagui/theme-base": "npm:1.79.14"
     "@tamagui/themes": "npm:1.79.14"
     "@tamagui/toast": "npm:1.79.14"
     "@tanstack/react-table": "npm:^8.10.7"
@@ -7417,6 +7424,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tanstack/query-core@npm:4.35.3":
+  version: 4.35.3
+  resolution: "@tanstack/query-core@npm:4.35.3"
+  checksum: abb1df8f640ee82b483045ff4dcd49322ffa5c72a7d552097be97b67dba478f40653e9827370caf78436a0864da3b00663441ee3ece242ca38e2b34f95c53fb4
+  languageName: node
+  linkType: hard
+
 "@tanstack/query-core@npm:4.36.1":
   version: 4.36.1
   resolution: "@tanstack/query-core@npm:4.36.1"
@@ -7476,11 +7490,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/react-query@npm:^4.35.3":
-  version: 4.36.1
-  resolution: "@tanstack/react-query@npm:4.36.1"
+"@tanstack/react-query@npm:4.35.3":
+  version: 4.35.3
+  resolution: "@tanstack/react-query@npm:4.35.3"
   dependencies:
-    "@tanstack/query-core": "npm:4.36.1"
+    "@tanstack/query-core": "npm:4.35.3"
     use-sync-external-store: "npm:^1.2.0"
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
@@ -7491,7 +7505,7 @@ __metadata:
       optional: true
     react-native:
       optional: true
-  checksum: 764b860c3ac8d254fc6b07e01054a0f58058644d59626c724b213293fbf1e31c198cbb26e4c32c0d16dcaec0353c0ae19147d9c667675b31f8cea1d64f1ff4ac
+  checksum: ca51c5bac03bdfbdeb467e61cb6470807fde6edb5874f12a9359040604a3d9244e6ede0dff91cd185892cb731a2ddc7f4ce8a434360f28fb38f3a79da00e646d
   languageName: node
   linkType: hard
 
@@ -20833,7 +20847,7 @@ __metadata:
     "@tamagui/theme-base": "npm:1.79.14"
     "@tamagui/themes": "npm:1.79.14"
     "@tanstack/query-async-storage-persister": "npm:^4.35.7"
-    "@tanstack/react-query": "npm:^4.35.3"
+    "@tanstack/react-query": "npm:4.35.3"
     "@tanstack/react-query-devtools": "npm:^4.35.3"
     "@tanstack/react-query-persist-client": "npm:^5.8.2"
     "@tmcw/togeojson": "npm:^5.7.0"
