@@ -171,11 +171,11 @@ dependencies {
         }
     }
 
-    debugImplementation("com.facebook.flipper:flipper:${0.125.0}")
-    debugImplementation("com.facebook.flipper:flipper-network-plugin:${0.125.0}") {
+    debugImplementation("com.facebook.flipper:flipper:0.125.0")
+    debugImplementation("com.facebook.flipper:flipper-network-plugin:0.125.0") {
         exclude group:'com.squareup.okhttp3', module:'okhttp'
     }
-    debugImplementation("com.facebook.flipper:flipper-fresco-plugin:${0.125.0}")
+    debugImplementation("com.facebook.flipper:flipper-fresco-plugin:0.125.0")
 
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
