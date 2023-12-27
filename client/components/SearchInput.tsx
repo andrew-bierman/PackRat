@@ -33,10 +33,7 @@ import { useFetchWeather, useFetchWeatherWeak } from '~/hooks/weather';
 
 export const SearchInput = ({ onSelect, placeholder }) => {
   const [searchString, setSearchString] = useState('');
-  console.log(
-    '🚀 ~ file: SearchInput.tsx:40 ~ SearchInput ~ searchString:',
-    searchString,
-  );
+
   const [isLoadingMobile, setIsLoadingMobile] = useState(false);
   const { selectedSearch } = useSelector((state) => state.weather);
   // const [selectedSearch, setSelectedSearch] = useState('');
@@ -50,16 +47,13 @@ export const SearchInput = ({ onSelect, placeholder }) => {
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles());
   // const [selectedSearchResult, setSelectedSearchResult] = useState({});
-  // const searchResults =
-  //   useSelector((state) => state.search.searchResults) || [];
-  // const [latLng,setLatLng] = useState({});
+  const searchResults =
+    useSelector((state) => state.search.searchResults) || [];
+
+  const [latLng, setLatLng] = useState({});
 
   const selectedSearchResult =
     useSelector((state) => state.search.selectedSearchResult) || {};
-  console.log(
-    '🚀 ~ file: SearchInput.tsx:59 ~ SearchInput ~ selectedSearchResult:',
-    selectedSearchResult,
-  );
 
   const dispatch = useDispatch();
 
@@ -68,7 +62,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
     const timeout = setTimeout(() => {
       if (!searchString) return;
       refetch();
-      // dispatch(fetchPhotonSearchResults(searchString));
+      dispatch(fetchPhotonSearchResults(searchString));
     }, 2000);
 
     return () => {
@@ -100,18 +94,12 @@ export const SearchInput = ({ onSelect, placeholder }) => {
     }
 
     try {
-      // console.log('before parksData:', parksData);
-      // console.log('after parksData:', parksData);
-      // console.log('parksData:', parksData);
-      // console.log('data:', data);
-      // console.log('error:', error);
-      // console.log('isLoading:', isLoading);
-      // await Promise.all([
-      //   // dispatch(fetchTrails({ lat, lon, selectedSearch })),
-      //   // dispatch(fetchParks({ lat, lon, selectedSearch })),
-      //   dispatch(fetchWeather({ lat, lon })),
-      //   dispatch(fetchWeatherWeek({ lat, lon })),
-      // ]);
+      await Promise.all([
+        dispatch(fetchTrails({ lat, lon, selectedSearch })),
+        dispatch(fetchParks({ lat, lon, selectedSearch })),
+        dispatch(fetchWeather({ lat, lon })),
+        dispatch(fetchWeatherWeek({ lat, lon })),
+      ]);
     } catch (error) {
       console.error(error);
     }
@@ -119,14 +107,14 @@ export const SearchInput = ({ onSelect, placeholder }) => {
     setIsLoadingMobile(false);
   };
 
-  // useEffect(() => {
+  useEffect(() => {
 
-  //   const timeout = setTimeout(getTrailsParksAndWeatherDetails, 1000);
+    const timeout = setTimeout(getTrailsParksAndWeatherDetails, 1000);
 
-  //   return () => {
-  //     clearTimeout(timeout);
-  //   };
-  // }, [selectedSearch, selectedSearchResult, dispatch]);
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [selectedSearch, selectedSearchResult, dispatch]);
 
   const handleSearchResultClick = (result, index) => {
     const {
@@ -211,10 +199,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
               showsVerticalScrollIndicator={false}
               zIndex={20000}
             >
-              <View
-                role="list"
-                style={{ width: '100%', gap: '8px', padding: '8px' }}
-              >
+              <RStack space={2} w="100%">
                 {searchResults.map((result, i) => (
                   <RStack
                     key={`result + ${i}`}
@@ -240,10 +225,11 @@ export const SearchInput = ({ onSelect, placeholder }) => {
                     </RStack>
                   </RStack>
                 ))}
-              </View>
+              </RStack>
             </RScrollView>
           )}
         </RStack>
+
       </RStack>
     </RStack>
   ) : isLoadingMobile ? (
