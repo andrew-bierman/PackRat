@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 import { AddItem } from '../item/AddItem';
 import { CustomModal } from '../modal';
-import { Box } from 'native-base';
+import { View } from 'react-native';
 
 export const EditPackItemModal = ({
   initialData,
@@ -11,41 +11,34 @@ export const EditPackItemModal = ({
   editAsDuplicate,
   setPage,
   page,
+  setRefetch = () => {},
+  refetch,
   isModalOpen,
   onTrigger,
   closeModalHandler,
 }) => {
-  const [modalOpen, setModalOpen] = useState(false);
   let currentPackId;
   if (currentPack) {
     currentPackId = currentPack._id;
   }
 
-  const onTriggerOpen = (newState) => {
-    setModalOpen(newState);
-  };
-  const closeTriggerOpen = () => {
-    onTriggerOpen(false);
-  };
-  const footerCloseHandler = closeModalHandler ?? closeTriggerOpen;
-
   const footerButtons = [
     {
       label: 'Cancel',
-      onClick: footerCloseHandler,
-      color: 'danger',
+      onClick: closeModalHandler,
+      color: '#B22222',
       disabled: false,
     },
     // add more footer buttons here if needed
   ];
 
   return (
-    <Box>
+    <View>
       <CustomModal
-        isActive={isModalOpen || modalOpen}
+        isActive={isModalOpen}
         title={'Edit Item'}
         triggerComponent={<MaterialIcons name="edit" size={20} color="black" />}
-        onTrigger={onTrigger || onTriggerOpen}
+        onTrigger={onTrigger}
         footerButtons={footerButtons}
         onCancel={closeModalHandler}
       >
@@ -57,9 +50,11 @@ export const EditPackItemModal = ({
           editAsDuplicate={editAsDuplicate}
           setPage={setPage}
           page={page}
-          closeModalHandler={closeModalHandler || closeTriggerOpen}
+          closeModalHandler={closeModalHandler}
+          setRefetch={setRefetch}
+          refetch={refetch}
         />
       </CustomModal>
-    </Box>
+    </View>
   );
 };

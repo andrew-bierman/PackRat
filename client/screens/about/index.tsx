@@ -10,7 +10,7 @@ import {
 import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 import { darkTheme, theme } from '../../theme';
 import { Desktop, Mobile, Tablet } from '../../media';
-import { Button, HStack } from 'native-base';
+import { RButton, RStack } from '@packrat/ui';
 import * as Linking from 'expo-linking';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from '~/hooks/useCustomStyles';
@@ -134,10 +134,10 @@ const AboutContent = ({ desktopContainer, isMobile }) => {
         </Text>
       </View>
       <View style={desktopContainer}>
-        <HStack>
+        <RStack style={{ flexDirection: 'row' }}>
           <View style={styles.buttonContainer}>
-            <Button style={styles.githubButton} onPress={handleGithubLink}>
-              <HStack>
+            <RButton style={styles.githubButton} onPress={handleGithubLink}>
+              <RStack style={{ flexDirection: 'row' }}>
                 <FontAwesome
                   name="github"
                   style={[isDark ? styles.githubIconDark : styles.githubIcon]}
@@ -147,8 +147,8 @@ const AboutContent = ({ desktopContainer, isMobile }) => {
                 >
                   View on GitHub
                 </Text>
-              </HStack>
-            </Button>
+              </RStack>
+            </RButton>
             {/* <Button
               style={styles.discordButton}
               // onPress={handleDiscordLink}
@@ -162,7 +162,7 @@ const AboutContent = ({ desktopContainer, isMobile }) => {
               </HStack>
             </Button> */}
           </View>
-        </HStack>
+        </RStack>
       </View>
     </View>
   );

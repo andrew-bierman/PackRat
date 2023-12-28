@@ -1,20 +1,16 @@
+import { Platform, View, Pressable } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import {
-  VStack,
-  Input,
-  Icon,
-  Text,
-  ScrollView,
-  HStack,
-  List,
-  View,
-  Pressable,
-} from 'native-base';
-import { RStack, RInput, RButton, RText, RScrollView } from '@packrat/ui';
+  RStack,
+  RInput,
+  RButton,
+  RText,
+  RScrollView,
+  RIconButton,
+} from '@packrat/ui';
 import { MaterialIcons } from '@expo/vector-icons';
 import useTheme from '../hooks/useTheme';
-import { Platform } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import { useState, useEffect } from 'react';
 import { fetchTrails } from '../store/trailsStore';
 import { fetchParks } from '../store/parksStore';
 import {
@@ -22,66 +18,37 @@ import {
   clearSearchResults,
   fetchPhotonSearchResults,
 } from '../store/searchStore';
-import {
-  fetchWeather,
-  fetchWeatherWeek,
-  setLatLng,
-  setSearchResult,
-} from '../store/weatherStore';
+import { fetchWeather, fetchWeatherWeek } from '../store/weatherStore';
 import useCustomStyles from '~/hooks/useCustomStyles';
-import { setFilteredTrails, setTrails } from '~/store/trailsStore_copy'; // REMOVE
-import useTrails from '~/hooks/trails';
-import useParks from '~/hooks/parks';
-import { usePhotonDetail } from '~/hooks/photonDetail';
-import { useFetchWeather, useFetchWeatherWeak } from '~/hooks/weather';
+import { debounce, throttle } from 'lodash';
 
 export const SearchInput = ({ onSelect, placeholder }) => {
   const [searchString, setSearchString] = useState('');
-  console.log(
-    '🚀 ~ file: SearchInput.tsx:40 ~ SearchInput ~ searchString:',
-    searchString,
-  );
   const [isLoadingMobile, setIsLoadingMobile] = useState(false);
-  const { selectedSearch } = useSelector((state) => state.weather);
-  // const [selectedSearch, setSelectedSearch] = useState('');
-  const [showSearchResults, setShowSearchResults] = useState(false);
-
-  const { refetch, data, isError, isLoading } = usePhotonDetail(
-    searchString,
-    showSearchResults,
-  );
+  const [selectedSearch, setSelectedSearch] = useState('');
+  const searchInput = useRef(null);
 
   const { currentTheme } = useTheme();
-  const styles = useCustomStyles(loadStyles());
-  // const [selectedSearchResult, setSelectedSearchResult] = useState({});
-  // const searchResults =
-  //   useSelector((state) => state.search.searchResults) || [];
-  // const [latLng,setLatLng] = useState({});
+  const styles = useCustomStyles(loadStyles);
+  const searchResults =
+    useSelector((state) => state.search.searchResults) || [];
 
   const selectedSearchResult =
     useSelector((state) => state.search.selectedSearchResult) || {};
-  console.log(
-    '🚀 ~ file: SearchInput.tsx:59 ~ SearchInput ~ selectedSearchResult:',
-    selectedSearchResult,
-  );
+
+  const [showSearchResults, setShowSearchResults] = useState(false);
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    setShowSearchResults(searchString.length > 0);
-    const timeout = setTimeout(() => {
-      if (!searchString) return;
-      refetch();
-      // dispatch(fetchPhotonSearchResults(searchString));
-    }, 2000);
-
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, [searchString, dispatch]);
+  const debouncedSearchString = useCallback(
+    debounce(async (e) => {
+      await dispatch(fetchPhotonSearchResults(e));
+      setShowSearchResults(true);
+    }, 1000),
+    [],
+  );
 
   const getTrailsParksAndWeatherDetails = async () => {
-    console.log(selectedSearchResult, 'selected search result');
     if (
       !selectedSearchResult ||
       Object.keys(selectedSearchResult).length === 0
@@ -93,29 +60,21 @@ export const SearchInput = ({ onSelect, placeholder }) => {
 
     const {
       geometry: { coordinates },
-      properties,
     } = selectedSearchResult;
     const [lon, lat] = coordinates;
+
     if (!lat || !lon) {
       setIsLoadingMobile(false);
       return;
-    } else {
-      dispatch(setLatLng({ lat, lon }));
     }
 
     try {
-      // console.log('before parksData:', parksData);
-      // console.log('after parksData:', parksData);
-      // console.log('parksData:', parksData);
-      // console.log('data:', data);
-      // console.log('error:', error);
-      // console.log('isLoading:', isLoading);
-      // await Promise.all([
-      //   // dispatch(fetchTrails({ lat, lon, selectedSearch })),
-      //   // dispatch(fetchParks({ lat, lon, selectedSearch })),
-      //   dispatch(fetchWeather({ lat, lon })),
-      //   dispatch(fetchWeatherWeek({ lat, lon })),
-      // ]);
+      await Promise.all([
+        dispatch(fetchTrails({ lat, lon, selectedSearch })),
+        dispatch(fetchParks({ lat, lon, selectedSearch })),
+        dispatch(fetchWeather({ lat, lon })),
+        dispatch(fetchWeatherWeek({ lat, lon })),
+      ]);
     } catch (error) {
       console.error(error);
     }
@@ -123,21 +82,20 @@ export const SearchInput = ({ onSelect, placeholder }) => {
     setIsLoadingMobile(false);
   };
 
-  // useEffect(() => {
+  useEffect(() => {
+    const timeout = setTimeout(getTrailsParksAndWeatherDetails, 1000);
 
-  //   const timeout = setTimeout(getTrailsParksAndWeatherDetails, 1000);
-
-  //   return () => {
-  //     clearTimeout(timeout);
-  //   };
-  // }, [selectedSearch, selectedSearchResult, dispatch]);
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [selectedSearch, selectedSearchResult, dispatch]);
 
   const handleSearchResultClick = (result, index) => {
     const {
       properties: { name, osm_id },
     } = result;
-    // console.log(result, 'line 136');
-    dispatch(setSearchResult(name));
+
+    setSelectedSearch(name);
     setSearchString(name);
     setShowSearchResults(false);
     dispatch(setSelectedSearchResult(result));
@@ -146,6 +104,13 @@ export const SearchInput = ({ onSelect, placeholder }) => {
       onSelect(result);
     }
   };
+
+  const handleChange = useCallback(
+    (text) => {
+      debouncedSearchString(text);
+    },
+    [debouncedSearchString],
+  );
 
   return Platform.OS === 'web' ? (
     <RStack style={styles.container}>
@@ -159,15 +124,13 @@ export const SearchInput = ({ onSelect, placeholder }) => {
           }}
         >
           <RInput
+            ref={searchInput}
             style={{
               paddingLeft: '35px',
               paddingRight: '55px',
             }}
             placeholder={placeholder ?? 'Search'}
-            onChangeText={(text) => {
-              setSearchString(text);
-            }}
-            value={searchString}
+            onChangeText={handleChange}
           />
           <MaterialIcons
             name="search"
@@ -175,11 +138,12 @@ export const SearchInput = ({ onSelect, placeholder }) => {
               position: 'absolute',
               height: '100%',
               alignSelf: 'center',
-              display: 'flex',
+              display: searchString ? 'none' : 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               width: '40px',
               fontSize: 20,
+              right: 0,
             }}
           />
           {searchString && (
@@ -202,7 +166,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
         </RStack>
 
         <RStack style={{ position: 'relative' }}>
-          {data && data?.length > 0 && (
+          {showSearchResults && searchInput.current?.value != '' && (
             <RScrollView
               position="absolute"
               top="100%"
@@ -215,10 +179,14 @@ export const SearchInput = ({ onSelect, placeholder }) => {
               showsVerticalScrollIndicator={false}
               zIndex={20000}
             >
-              <RStack space={2} w="100%">
-                {data.map((result, i) => (
+              <View
+                role="list"
+                style={{ width: '100%', gap: '8px', padding: '8px' }}
+              >
+                {searchResults.map((result, i) => (
                   <RStack
                     key={`result + ${i}`}
+                    role="listitem"
                     onPress={() => {
                       handleSearchResultClick(result, i);
                     }}
@@ -226,13 +194,10 @@ export const SearchInput = ({ onSelect, placeholder }) => {
                       cursor: 'pointer',
                     }}
                   >
-                    <RStack space={3} flexDirection="row" gap={5} padding={5}>
-                      <RText fontSize="sm" fontWeight="medium">
-                        {result.properties.name}
-                      </RText>
+                    <RStack style={{ flexDirection: 'row' }}>
+                      <RText fontWeight="400">{result.properties.name}</RText>
                       <RText
                         style={{
-                          fontSize: 'sm',
                           color: 'gray',
                           opacity: '100',
                           textTransform: 'capitalize',
@@ -243,7 +208,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
                     </RStack>
                   </RStack>
                 ))}
-              </RStack>
+              </View>
             </RScrollView>
           )}
         </RStack>
@@ -252,31 +217,28 @@ export const SearchInput = ({ onSelect, placeholder }) => {
   ) : isLoadingMobile ? (
     <RText>Loading...</RText>
   ) : (
-    <VStack w="100%" space={5} alignSelf="center">
-      <Input
+    <RStack style={{ width: '100%', alignSelf: 'center' }}>
+      <RInput
         onChangeText={(text) => {
           setSearchString(text);
         }}
         placeholder="Search"
-        width="100%"
-        borderRadius="4"
-        py="3"
-        px="1"
+        style={{
+          width: '100%',
+          borderRadius: '4',
+          padding: '16px 8px',
+          backgroundColor: 'white',
+        }}
         value={searchString}
-        fontSize="14"
-        InputLeftElement={
-          <Icon
-            m="2"
-            ml="3"
-            size="6"
-            color="gray.400"
-            as={<MaterialIcons name="search" />}
-          />
-        }
+        fontSize={14}
+      />
+      <RIconButton
+        backgroundColor="transparent"
+        icon={<MaterialIcons name="search" size={24} color="gray" />}
       />
 
-      {showSearchResults && data?.length > 0 && (
-        <ScrollView
+      {showSearchResults && searchResults?.length > 0 && (
+        <RScrollView
           position="absolute"
           top="100%"
           left="0"
@@ -289,33 +251,27 @@ export const SearchInput = ({ onSelect, placeholder }) => {
           showsVerticalScrollIndicator={false}
           zIndex={10}
         >
-          <List space={2} w="100%">
-            {data.map((result, i) => (
+          <View role="list" style={{ width: '100%' }}>
+            {searchResults.map((result, i) => (
               <Pressable
                 key={`result + ${i}`}
+                role="listitem"
                 onPress={() => {
                   handleSearchResultClick(result, i);
                 }}
-                underlayColor="gray.100"
               >
-                <HStack space={3}>
-                  <Text fontSize="sm" fontWeight="medium">
-                    {result.properties.name}
-                  </Text>
-                  <Text
-                    fontSize="sm"
-                    color="gray.500"
-                    textTransform={'capitalize'}
-                  >
+                <RStack style={{ flexDirection: 'row' }}>
+                  <RText fontWeight="400">{result.properties.name}</RText>
+                  <RText color="gray" textTransform={'capitalize'}>
                     {result.properties.osm_value}
-                  </Text>
-                </HStack>
+                  </RText>
+                </RStack>
               </Pressable>
             ))}
-          </List>
-        </ScrollView>
+          </View>
+        </RScrollView>
       )}
-    </VStack>
+    </RStack>
   );
 };
 

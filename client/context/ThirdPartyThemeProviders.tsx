@@ -10,9 +10,19 @@ import {
   nativeBaseLightTheme,
 } from '../theme';
 import FontLoader from './FontLoader';
+import { setupDev } from '@tamagui/core';
 
 const ThirdPartyProviders = ({ children, isDark = false }) => {
+  setupDev({
+    // can just be true as well for defaulting to key: Alt + delay: 800
+    visualizer: {
+      key: 'Alt',
+      delay: 800,
+    },
+  });
+
   // const { isDark } = useTheme()
+
   return (
     <FontLoader>
       <NativeBaseProvider

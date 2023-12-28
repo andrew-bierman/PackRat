@@ -1,22 +1,10 @@
-import {
-  Box,
-  Heading,
-  VStack,
-  FormControl,
-  Input,
-  Button,
-  Center,
-  HStack,
-  Text,
-  View,
-  Toast,
-} from 'native-base';
-
+import { useState, useEffect } from 'react';
+import { View } from 'react-native';
+import { RHeading, RStack, RButton, RText, RIconButton } from '@packrat/ui';
 import { FontAwesome } from '@expo/vector-icons';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
 import { WEB_CLIENT_ID } from '@env';
-import { useState, useEffect } from 'react';
 // import useRegister from "../hooks/useRegister";
 import { useRouter } from 'expo-router';
 // import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
@@ -106,30 +94,20 @@ export default function Register() {
   }, [response]);
 
   return (
-    <Center w="100%">
-      <Box safeArea p="2" w="90%" maxW="290" py="8">
-        <Heading
-          size="lg"
-          color="coolGray.800"
-          _dark={{
-            color: 'warmGray.50',
-          }}
-          fontWeight="semibold"
-        >
+    <View style={{ width: '100%', alignItems: 'center' }}>
+      <View style={{ paddingTop: '32px', width: '90%', maxWidth: '290px' }}>
+        <RHeading fontSize={32} color="#212121" fontWeight="semibold">
           Welcome
-        </Heading>
-        <Heading
-          mt="1"
-          color="coolGray.600"
-          _dark={{
-            color: 'warmGray.200',
-          }}
+        </RHeading>
+        <RHeading
+          color="grey"
           fontWeight="medium"
-          size="xs"
+          fontSize={14}
+          style={{ marginTop: '8px' }}
         >
           Sign up to continue!
-        </Heading>
-        <VStack space={3} mt="5">
+        </RHeading>
+        <RStack style={{ marginTop: '16px', gap: '8px' }}>
           <InputText
             label="Name"
             control={control}
@@ -160,60 +138,65 @@ export default function Register() {
             rules={InputTextRules.password}
           />
 
-          <Button
+          <RButton
             isDisabled={!isValid}
             onPress={handleSubmit(registerUser)}
             // onPress={() => registerUser()}
-            mt="2"
-            colorScheme="indigo"
+            style={{ marginTop: '16px' }}
+            backgroundColor="mediumpurple"
             // disabled={!email || !password || !name}
           >
             {'Sign up'}
-          </Button>
-          <HStack mt="6" justifyContent="center">
-            <Text
-              fontSize="sm"
-              color="coolGray.600"
-              _dark={{
-                color: 'warmGray.200',
-              }}
-            >
+          </RButton>
+          <RStack
+            style={{
+              marginTop: '16px',
+              flexDirection: 'row',
+              justifyContent: 'center',
+              gap: '4px',
+            }}
+          >
+            <RText fontSize={14} color="grey">
               Already a User?
-            </Text>
+            </RText>
             <Link href="/sign-in">
-              <Text
+              <RText
                 style={{
                   color: '#818cf8',
-                  fontSize: 12,
+                  fontSize: 14,
                   fontWeight: 400,
                 }}
               >
                 Login Here
-              </Text>
+              </RText>
             </Link>
-          </HStack>
+          </RStack>
           {/* Google register */}
-          <HStack mt="1" justifyContent="center">
-            <Heading
-              mt="1"
-              _dark={{
-                color: 'warmGray.200',
-              }}
-              color="coolGray.600"
-              fontWeight="medium"
-              size="xs"
-            >
+          <RStack
+            style={{
+              marginTop: '8px',
+              flexDirection: 'row',
+              justifyContent: 'center',
+            }}
+          >
+            <RText color="grey" fontWeight="medium" fontSize={14}>
               Or
-            </Heading>
-          </HStack>
+            </RText>
+          </RStack>
           {/* Google register */}
-          <HStack mt="1" justifyContent="center" alignItems="center">
-            <Button
-              w="100%"
-              mt="2"
+          <RStack
+            style={{
+              marginTop: '8px',
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <RIconButton
               onPress={async () => await promptAsync()}
-              colorScheme={'red'}
-              startIcon={
+              backgroundColor="red"
+              style={{ width: '100%', color: 'white' }}
+              icon={
                 <FontAwesome
                   name="google"
                   size={16}
@@ -222,12 +205,12 @@ export default function Register() {
               }
             >
               Sign up with Google
-            </Button>
-          </HStack>
+            </RIconButton>
+          </RStack>
           {/* Google register */}
-        </VStack>
-      </Box>
+        </RStack>
+      </View>
       {/* {addUser.isSuccess && router.push("/sign-in")} */}
-    </Center>
+    </View>
   );
 }

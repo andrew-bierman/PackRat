@@ -1,19 +1,9 @@
-import {
-  Box,
-  Button,
-  Center,
-  HStack,
-  Heading,
-  Text,
-  VStack,
-} from 'native-base';
-
+import { View } from 'react-native';
+import { RHeading, RStack, RButton, RText, RIconButton } from '@packrat/ui';
 import { FontAwesome } from '@expo/vector-icons';
-
 import { NODE_ENV, WEB_CLIENT_ID } from '@env';
 import * as Google from 'expo-auth-session/providers/google';
 import * as WebBrowser from 'expo-web-browser';
-
 import { useEffect } from 'react';
 // import useLogin from "../hooks/useLogin";
 // import { useAuth } from "../auth/provider";
@@ -22,7 +12,6 @@ import { Link, useRouter } from 'expo-router';
 // import { signInWithGoogle } from "../auth/firebase";
 import { useDispatch, useSelector } from 'react-redux';
 import { signIn, signInWithGoogle } from '../store/authStore';
-
 import { InformUser } from '../utils/ToastUtils';
 import useTheme from '../hooks/useTheme';
 import { useForm } from 'react-hook-form';
@@ -30,7 +19,6 @@ import { InputText, InputTextRules } from '~/components/InputText';
 import { Regex } from '~/utils/regex';
 import useCustomStyles from '~/hooks/useCustomStyles';
 import { useSession } from '../context/auth';
-
 WebBrowser.maybeCompleteAuthSession();
 
 export default function Login() {
@@ -226,32 +214,22 @@ export default function Login() {
   // }
 
   return (
-    <VStack>
-      <Center w="100%">
-        <Box safeArea p="2" py="8" w="90%" maxW="290">
-          <Heading
-            size="lg"
-            fontWeight="600"
-            color="coolGray.800"
-            _dark={{
-              color: 'warmGray.50',
-            }}
-          >
-            <Text>Welcome</Text>
-          </Heading>
-          <Heading
-            mt="1"
-            _dark={{
-              color: 'warmGray.200',
-            }}
-            color="coolGray.600"
+    <RStack>
+      <View style={{ width: '100%', alignItems: 'center' }}>
+        <View style={{ paddingTop: '32px', width: '90%', maxWidth: '290px' }}>
+          <RHeading fontSize={32} color="#212121" fontWeight="semibold">
+            Welcome
+          </RHeading>
+          <RHeading
+            color="grey"
             fontWeight="medium"
-            size="xs"
+            fontSize={14}
+            style={{ marginTop: '8px' }}
           >
-            Sign in to continue here!
-          </Heading>
+            Sign in to continue!
+          </RHeading>
 
-          <VStack space={3} mt="5">
+          <RStack style={{ marginTop: '16px', gap: '8px' }}>
             <InputText
               label="Email ID"
               keyboardType="email-address"
@@ -267,26 +245,27 @@ export default function Login() {
               rules={InputTextRules.password}
             />
 
-            <Button
+            <RButton
               isDisabled={!isValid}
               onPress={handleSubmit(handleLogin)}
-              mt="2"
-              colorScheme={'indigo'}
+              style={{ marginTop: '16px' }}
+              backgroundColor="mediumpurple"
             >
               Sign in
-            </Button>
-            <HStack mt="6" justifyContent="center">
-              <Text
-                fontSize="sm"
-                color="coolGray.600"
-                _dark={{
-                  color: 'warmGray.200',
-                }}
-              >
+            </RButton>
+            <RStack
+              style={{
+                marginTop: '16px',
+                flexDirection: 'row',
+                justifyContent: 'center',
+                gap: '4px',
+              }}
+            >
+              <RText fontSize={14} color="grey">
                 I'm a new user.
-              </Text>
+              </RText>
               <Link href="/register">
-                <Text
+                <RText
                   style={{
                     color: '#818cf8',
                     fontWeight: 400,
@@ -294,13 +273,13 @@ export default function Login() {
                   }}
                 >
                   Sign Up
-                </Text>
+                </RText>
               </Link>
-            </HStack>
+            </RStack>
 
-            <HStack justifyContent="center">
+            <RStack style={{ flexDirection: 'row', justifyContent: 'center' }}>
               <Link href="/password-reset">
-                <Text
+                <RText
                   style={{
                     color: '#818cf8',
                     fontWeight: 400,
@@ -308,63 +287,74 @@ export default function Login() {
                   }}
                 >
                   Reset Password?
-                </Text>
+                </RText>
               </Link>
-            </HStack>
+            </RStack>
             {/* Google Login starts */}
-            <HStack mt="6" justifyContent="center">
-              <Heading
-                mt="1"
-                _dark={{
-                  color: 'warmGray.200',
-                }}
-                color="coolGray.600"
-                fontWeight="medium"
-                size="xs"
-              >
+            <RStack
+              style={{
+                marginTop: '8px',
+                flexDirection: 'row',
+                justifyContent: 'center',
+              }}
+            >
+              <RText color="grey" fontWeight="medium" fontSize={14}>
                 Or
-              </Heading>
-            </HStack>
+              </RText>
+            </RStack>
 
             {/* Google Login */}
             {enableGoogleLogin && (
-              <HStack mt="1" justifyContent="center" alignItems="center">
-                <Button
-                  w="100%"
+              <RStack
+                style={{
+                  marginTop: '8px',
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <RIconButton
                   disabled={!request}
                   onPress={async () => await promptAsync()}
-                  colorScheme={'red'}
-                  startIcon={
+                  backgroundColor="red"
+                  style={{ width: '100%', color: 'white' }}
+                  icon={
                     <FontAwesome
                       name="google"
-                      size={18}
+                      size={16}
                       color={currentTheme.colors.white}
                     />
                   }
                 >
                   Sign in with Google
-                </Button>
-              </HStack>
+                </RIconButton>
+              </RStack>
             )}
 
             {/* Demo Login for Development start */}
             {NODE_ENV !== 'production' && (
-              <HStack mt="1" justifyContent="center" alignItems="center">
-                <Button
-                  w="100%"
+              <RStack
+                style={{
+                  marginTop: '8px',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <RButton
+                  style={{ width: '100%' }}
                   disabled={!request}
                   onPress={() => handleLogin(demoUser)}
-                  colorScheme={'purple'}
+                  backgroundColor="purple"
                 >
                   Demo User
-                </Button>
-              </HStack>
+                </RButton>
+              </RStack>
             )}
             {/* Demo Login for Development end */}
-          </VStack>
-        </Box>
-      </Center>
-    </VStack>
+          </RStack>
+        </View>
+      </View>
+    </RStack>
   );
 }
 

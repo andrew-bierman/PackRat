@@ -1,15 +1,8 @@
 import { useSelector } from 'react-redux';
-
-import { Platform, StyleSheet } from 'react-native';
-
+import { Platform, StyleSheet, View } from 'react-native';
 import { Stack } from 'expo-router';
-
 import { darkTheme, theme } from '../theme';
-
-import { Box } from 'native-base';
-
 import LandingPage from '../components/landing_page';
-
 import Dashboard from '../screens/dashboard';
 import useTheme from '../hooks/useTheme';
 import { current } from '@reduxjs/toolkit';
@@ -45,7 +38,9 @@ export default function Index() {
           name: 'Home',
         }}
       />
-      <Box style={mutualStyles}>{!user ? <LandingPage /> : <Dashboard />}</Box>
+      <View style={mutualStyles}>
+        {!user ? <LandingPage /> : <Dashboard />}
+      </View>
     </>
   );
 }

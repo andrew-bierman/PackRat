@@ -1,4 +1,5 @@
 import RStack from './RStack';
+import RForm from './RForm'
 import RText from './RText';
 import RCard from './RCard';
 import RParagraph from './Rparagraph';
@@ -6,22 +7,52 @@ import RInput from './RInput';
 import RButton from './RButton';
 import RImage from './RImage';
 import RScrollView from './RScrollview';
-import TSkeleton from './Skeleton';
-import XStack from './XStack';
-import YStack from './YStack';
+import RSkeleton from './RSkeleton';
+import RSwitch from './RSwitch';
+import RIconButton from './RIconButton';
+import RSeparator from './RSeparator';
+import RHeading from './RHeading';
+import RSelect from './RSelect';
+import RLabel from './RLabel';
+import RCheckbox from './RCheckbox';
+import RRadio from './RRadio';
+import RTooltip from './RTooltip';
+import RSpinner from './RSpinner';
+import RH1 from './RH1';
+import RH2 from './RH2';
+import RH3 from './RH3';
+import RH4 from './RH4';
+import RH5 from './RH5';
+import RH6 from './RH6';
+
 
 export {
+  RH1,
+  RH2,
+  RH3,
+  RH4,
+  RH5,
+  RH6,
+  RHeading,
+  RForm,
+  RSpinner,
+  RTooltip,
+  RRadio,
+  RCheckbox,
   RStack,
+  RLabel,
+  RSelect,
+  RSeparator,
+  RSwitch,
   RText,
   RCard,
   RParagraph,
   RInput,
   RButton,
+  RIconButton,
   RImage,
   RScrollView,
-  TSkeleton,
-  XStack,
-  YStack
+  RSkeleton,
 };
 
 export { config } from './tamagui.config'
@@ -38,9 +69,7 @@ export * from './RInput';
 export * from './RButton';
 export * from './RImage';
 export * from './RScrollview';
-export * from './Skeleton';
-export * from './XStack';
-export * from './YStack';
+export * from './RSkeleton';
 
 // Future components
 // export * from './RCheckbox';

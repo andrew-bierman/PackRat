@@ -1,4 +1,4 @@
-import { HStack } from 'native-base';
+import { RStack } from '@packrat/ui';
 import QuickActionButton from './QuickActionButton';
 import useTheme from '../../hooks/useTheme';
 import { useRouter } from 'expo-router';
@@ -35,7 +35,7 @@ const QuickActionsSection = () => {
   };
 
   return (
-    <HStack style={styles.section}>
+    <RStack {...styles.section}>
       {quickActionData.map((action) => (
         <QuickActionButton
           key={action.action}
@@ -46,7 +46,7 @@ const QuickActionsSection = () => {
           text={action.text}
         />
       ))}
-    </HStack>
+    </RStack>
   );
 };
 
@@ -54,6 +54,8 @@ const loadStyles = (theme) => {
   const { currentTheme } = theme;
   return {
     section: {
+      display: 'flex',
+      flexDirection: 'row',
       marginBottom: 20,
       paddingHorizontal: 20, // Added padding here.
     },

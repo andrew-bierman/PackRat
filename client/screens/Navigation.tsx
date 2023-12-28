@@ -15,7 +15,7 @@ import {
   Modal,
   SafeAreaView,
 } from 'react-native';
-import { AuthStateListener } from '../auth/AuthStateListener';
+import { AuthStateListener } from '../../client/auth/AuthStateListener';
 import { theme } from '../theme';
 import {
   EvilIcons,

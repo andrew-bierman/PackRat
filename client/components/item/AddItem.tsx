@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Box, Input, Button, Text } from 'native-base';
+import { View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   addPackItem,
@@ -8,9 +8,6 @@ import {
 } from '../../store/packsStore';
 import { ItemForm } from './ItemForm'; // assuming you moved the form related code to a separate component
 import { ItemCategoryEnum } from '../../constants/itemCategory';
-import { useAddPackItem } from '~/hooks/packs/useAddPackItem';
-import { add } from 'date-fns';
-import { useEditPackItem } from '~/hooks/packs/useEditPackItem';
 
 export const AddItem = ({
   _id,
@@ -22,7 +19,9 @@ export const AddItem = ({
   setPage = () => {},
   page,
   closeModalHandler,
+  refetch,
   setIsAddItemModalOpen = () => {},
+  setRefetch = () => {},
 }) => {
   const dispatch = useDispatch();
   const isLoading = useSelector((state) => state.packs.isLoading);
@@ -39,16 +38,6 @@ export const AddItem = ({
 
   const [unit, setUnit] = useState(initialData?.unit || '');
 
-  const {
-    // mutation: addPackItemMutation
-    addPackItem,
-  } = useAddPackItem();
-
-  const {
-    // mutation: addPackItemMutation
-    editPackItem,
-  } = useEditPackItem();
-
   // handle updates to initialData
   useEffect(() => {
     setName(initialData?.name || '');
@@ -62,49 +51,58 @@ export const AddItem = ({
    *
    * @return {type} description of return value
    */
-  console.log(categoryType);
   const handleSubmit = () => {
-    const PackId = packId || initialData._id;
-
+    console.log('initial', initialData);
     if (isEdit) {
-      if (PackId && initialData.global) {
-        editPackItem({
-          name,
-          weight,
-          quantity,
-          unit,
-          type: categoryType,
-          _id: initialData._id,
-        });
+      if (packId && initialData.global) {
+        console.log('editing', packId);
+
+        dispatch(
+          editItemsGlobalAsDuplicate({
+            itemId: _id,
+            packId,
+            name,
+            weight,
+            quantity,
+            unit,
+            type: categoryType,
+          }),
+        );
         closeModalHandler();
       } else {
-        editPackItem({
+        dispatch(
+          editPackItem({
+            name,
+            weight,
+            quantity,
+            unit,
+            type: categoryType,
+            _id: initialData._id,
+          }),
+        );
+        setPage(1);
+        closeModalHandler();
+        setRefetch(refetch !== true);
+      }
+    } else {
+      dispatch(
+        addPackItem({
           name,
           weight,
           quantity,
-          unit,
           type: categoryType,
+          unit,
           _id,
           packId,
-        });
-        setPage(1);
-        closeModalHandler();
-      }
-    } else {
-      addPackItem({
-        name,
-        weight,
-        quantity,
-        type: categoryType,
-        unit,
-        _id,
-        packId,
-      });
+        }),
+      );
+      setIsAddItemModalOpen(false);
+      setRefetch(refetch !== true);
     }
   };
 
   return (
-    <Box>
+    <View>
       <ItemForm
         name={name}
         setName={setName}
@@ -121,6 +119,6 @@ export const AddItem = ({
         setCategoryType={setCategoryType}
         currentPack={currentPack}
       />
-    </Box>
+    </View>
   );
 };

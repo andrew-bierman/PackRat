@@ -1,6 +1,5 @@
-// SectionHeader.js
 import React from 'react';
-import { Text, HStack } from 'native-base';
+import { RText, RStack } from '@packrat/ui';
 import { Ionicons } from '@expo/vector-icons';
 import { theme } from '../../theme';
 import useCustomStyles from '~/hooks/useCustomStyles';
@@ -8,18 +7,19 @@ import useCustomStyles from '~/hooks/useCustomStyles';
 const SectionHeader = ({ iconName, text }) => {
   const styles = useCustomStyles(loadStyles);
   return (
-    <HStack style={styles.hStack}>
+    <RStack {...styles.rStack}>
       <Ionicons name={iconName} style={styles.icon} />
-      <Text style={styles.text}>{text}</Text>
-    </HStack>
+      <RText {...styles.text}>{text}</RText>
+    </RStack>
   );
 };
 
 const loadStyles = () => ({
-  hStack: {
+  rStack: {
     marginBottom: 10,
     justifyContent: 'space-around', // Updated from "space-between"
     alignItems: 'center',
+    flexDirection: 'row',
   },
   text: {
     color: theme.colors.text,
