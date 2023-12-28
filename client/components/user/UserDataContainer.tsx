@@ -1,5 +1,6 @@
 import { Link } from 'expo-router';
 import { Stack, VStack, Text, Button } from 'native-base';
+import { RStack, RText, RButton, RSkeleton } from '@packrat/ui';
 import { Platform } from 'react-native';
 import UserDataCard from './UserDataCard';
 import { useEffect, useState } from 'react';
@@ -8,20 +9,19 @@ import LargeCard from '../card/LargeCard';
 import { theme } from '../../theme';
 import useTheme from '../../hooks/useTheme';
 import { hexToRGBA } from '~/utils/colorFunctions';
-import { Box, Skeleton } from 'native-base';
+import { View } from 'react-native';
 
 // Skeleton version of the UserDataCard component
 const SkeletonUserDataCard = () => {
   return (
-    <Box alignItems="center" padding="5">
-      <Skeleton
-        minH="125"
-        minW="80"
-        width={'100px'}
-        rounded="lg"
-        opacity={0.5}
-      ></Skeleton>
-    </Box>
+    <View style={{ alignItems: 'center', padding: '5' }}>
+      <RSkeleton
+        style={{
+          minHeight: '150px',
+          minWidth: '300px',
+        }}
+      ></RSkeleton>
+    </View>
   );
 };
 
@@ -30,6 +30,7 @@ export default function UserDataContainer({
   type,
   userId,
   isLoading,
+  SkeletonComponent,
 }) {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
@@ -50,23 +51,23 @@ export default function UserDataContainer({
   const differentUser = userId && userId !== currentUser._id;
 
   // Map function to render multiple skeleton cards
-  const skeletonCards = [...Array(3)].map((_, idx) => (
-    <SkeletonUserDataCard key={idx} />
-  ));
+  const skeletonCards =
+    SkeletonComponent ||
+    [...Array(3)].map((_, idx) => <SkeletonUserDataCard key={idx} />);
 
   if (isLoading) {
     return (
-      <Stack
-        direction={['column', 'column', 'column', 'row']}
-        space={[4, 4, 4, 2]}
-        flexWrap="wrap"
-        justifyContent="center"
-        alignItems="center"
-        width="100%"
-        padding={4}
+      <RStack
+        style={{
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: '100%',
+          padding: 4,
+        }}
       >
         {skeletonCards}
-      </Stack>
+      </RStack>
     );
   }
 
@@ -78,26 +79,36 @@ export default function UserDataContainer({
         backgroundColor: hexToRGBA(currentTheme.colors.card, 0.2),
       }}
     >
-      <VStack space={5} alignItems="center" flex={1} width="100%" padding={4}>
-        <Text
-          fontSize="2xl"
-          fontWeight="bold"
+      <RStack
+        style={{
+          gap: '16px',
+          alignItems: 'center',
+          flex: 1,
+          width: '100%',
+          padding: '24px',
+        }}
+      >
+        <RText
           color={currentTheme.colors.textColor}
-          uppercase={true}
+          style={{
+            textTransform: 'capitalize',
+            fontSize: '24px',
+            fontWeight: 'bold',
+          }}
         >
           {differentUser
             ? // ? `${userId}'s ${typeUppercase}`
               `${typeUppercase}`
             : `Your ${typeUppercase}`}
-        </Text>
-        <Stack
-          direction={['column', 'column', 'column', 'row']}
-          space={[4, 4, 4, 2]}
-          flexWrap="wrap"
-          justifyContent="center"
-          alignItems="center"
-          width="100%"
-          padding={4}
+        </RText>
+        <RStack
+          style={{
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '100%',
+            padding: 4,
+          }}
         >
           {isLoading ? (
             skeletonCards
@@ -115,20 +126,17 @@ export default function UserDataContainer({
             ))
           ) : currentUser?._id === userId ? (
             <Link href="/">
-              <Button
-                _text={{
-                  color: currentTheme.colors.white,
-                }}
-                w={['100%', '100%', '100%', 'auto']}
+              <RButton
+                style={{ color: currentTheme.colors.white, width: '100%' }}
               >
                 {`Create your first ${typeUppercaseSingular}`}
-              </Button>
+              </RButton>
             </Link>
           ) : (
             <></>
           )}
-        </Stack>
-      </VStack>
+        </RStack>
+      </RStack>
     </LargeCard>
   );
 }

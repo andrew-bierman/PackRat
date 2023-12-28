@@ -1,20 +1,11 @@
-// FeedPreview.js
-
-import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { Card, Text, HStack, Badge } from 'native-base';
+import React from 'react';
+import { RText, RStack, YStack } from '@packrat/ui';
 import { Link } from 'expo-router';
-import { Dimensions, FlatList, View } from 'react-native';
-import { getPublicPacks, getPublicTrips } from '../../store/feedStore';
-import useTheme from '../../hooks/useTheme';
 import Carousel from '../carousel';
 import useCustomStyles from '~/hooks/useCustomStyles';
 import { useFeed } from '~/hooks/feed';
 
-const { height, width } = Dimensions.get('window');
-
 const FeedPreviewScroll = () => {
-  const dispatch = useDispatch();
   const styles = useCustomStyles(loadStyles);
 
   // useEffect(() => {
@@ -30,15 +21,22 @@ const FeedPreviewScroll = () => {
         const linkStr = `/${item.type}/${item._id}`;
         return linkStr ? (
           <Link href={linkStr} key={`${linkStr}`}>
-            <View style={styles.cardStyles} key={index}>
-              <HStack justifyContent="space-between">
-                <Text style={styles.feedItemTitle}>{item.name}</Text>
-                <Badge colorScheme="info" textTransform={'capitalize'}>
+            <YStack {...styles.cardStyles} key={index}>
+              <RStack flexDirection="row" justifyContent="space-between">
+                <RText {...styles.feedItemTitle}>{item.name}</RText>
+                <RText
+                  fontSize="$1"
+                  backgroundColor="#F2F1EB"
+                  textTransform="capitalize"
+                  padding="2px"
+                  alignSelf="center"
+                  borderRadius="2px"
+                >
                   {item.type}
-                </Badge>
-              </HStack>
-              <Text>{item.description}</Text>
-            </View>
+                </RText>
+              </RStack>
+              <RText>{item.description}</RText>
+            </YStack>
           </Link>
         ) : null;
       })}

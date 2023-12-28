@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { ScrollView, Platform, Dimensions } from 'react-native';
-import { VStack } from 'native-base';
+import { VirtualList, XStack, YStack } from '@packrat/ui';
+
 import ScrollButton from './ScrollButton';
 import useCustomStyles from '~/hooks/useCustomStyles';
 
@@ -38,14 +39,26 @@ const Carousel = ({ children = [], itemWidth }) => {
     }
   };
 
+  const renderItem = (child) => {
+    return (
+      <YStack
+        key={child._id}
+        width={itemWidth + 10}
+        marginRight={10}
+        marginTop={10}
+        flexDirection="row"
+      >
+        {child}
+      </YStack>
+    );
+  };
+
   return (
-    <VStack
-      style={{
-        width: Platform.OS === 'web' ? '100%' : width * 0.9,
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'row',
-      }}
+    <XStack
+      width={Platform.OS === 'web' ? '100%' : width * 0.9}
+      justifyContent="center"
+      alignItems="center"
+      flexDirection="row"
     >
       <ScrollButton
         direction="left"
@@ -66,20 +79,13 @@ const Carousel = ({ children = [], itemWidth }) => {
         pagingEnabled
         onMomentumScrollEnd={handleScroll}
       >
-        {children &&
-          children.map((child, index) => (
-            <VStack
-              key={index}
-              style={{
-                width: itemWidth + 10,
-                marginRight: 10,
-                marginTop: 10,
-                flexDirection: 'row',
-              }}
-            >
-              {child}
-            </VStack>
-          ))}
+        {children && (
+          <VirtualList
+            data={children}
+            renderItem={renderItem}
+            itemHeight={itemWidth}
+          />
+        )}
       </ScrollView>
       <ScrollButton
         direction="right"
@@ -88,7 +94,7 @@ const Carousel = ({ children = [], itemWidth }) => {
         }}
         disabled={currentIndex === children?.length - 1}
       />
-    </VStack>
+    </XStack>
   );
 };
 

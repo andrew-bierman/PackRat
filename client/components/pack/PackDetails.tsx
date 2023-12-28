@@ -1,18 +1,14 @@
 import React, { useEffect, useState } from 'react';
-
 import PackContainer from './PackContainer';
 import { DetailsHeader } from '../details/header';
-
 import { useSearchParams } from 'expo-router';
 import { TableContainer } from '../pack_table/Table';
 import { fetchUserPacks, selectPackById } from '../../store/packsStore';
-
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchSinglePack } from '../../store/singlePackStore';
-
-import { Box, Text } from 'native-base';
+import { RText } from '@packrat/ui';
 import { DetailsComponent } from '../details';
-import { Dimensions, Platform } from 'react-native';
+import { Dimensions, Platform, View } from 'react-native';
 import { theme } from '../../theme';
 import { CLIENT_URL } from '@env';
 import ScoreContainer from '../ScoreContainer';
@@ -20,8 +16,6 @@ import ChatContainer from '../chat';
 import { AddItem } from '../item/AddItem';
 import { AddItemModal } from './AddItemModal';
 import useCustomStyles from '~/hooks/useCustomStyles';
-import { useUserPacks } from '~/hooks/packs/useUserPacks';
-import { useFetchSinglePack } from '../../hooks/packs';
 
 export function PackDetails() {
   const searchParams = new URLSearchParams(window.location.search);
@@ -32,35 +26,20 @@ export function PackDetails() {
 
   const { packId } = useSearchParams();
   const link = `${CLIENT_URL}/packs/${packId}`;
+  const isLoading = useSelector((state) => state.singlePack.isLoading);
   const updated = useSelector((state) => state.packs.update);
   const [firstLoad, setFirstLoad] = useState(true);
   const user = useSelector((state) => state.auth.user);
   const userId = user?._id;
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
-  // const isLoading = useSelector((state) => state.singlePack.isLoading);
-  // const currentPack = useSelector((state) => state.singlePack.singlePack);
+  const currentPack = useSelector((state) => state.singlePack.singlePack);
   const [refetch, setRefetch] = useState(false);
-
-  const { data: userPacks, isLoading: isUserPacksLoading } =
-    useUserPacks(userId);
-  const {
-    data: currentPack,
-    isLoading,
-    refetch: refetchQuery,
-  } = useFetchSinglePack(packId);
-
   useEffect(() => {
-    refetchQuery();
-  }, [refetch, packId, updated]);
-
-  // useEffect(() => {
-  //   if (!packId) return;
-  //   dispatch(fetchSinglePack(packId));
-
-  //   // if (userId) dispatch(fetchUserPacks({ ownerId: userId }));
-  //   setFirstLoad(false);
-  // }, [dispatch, packId, updated]); // TODO updated is a temporary fix to re-render when pack is update, due to bug in store
-
+    if (!packId) return;
+    dispatch(fetchSinglePack(packId));
+    if (userId) dispatch(fetchUserPacks({ ownerId: userId }));
+    setFirstLoad(false);
+  }, [dispatch, packId, updated]); // TODO updated is a temporary fix to re-render when pack is update, due to bug in store
   const styles = useCustomStyles(loadStyles);
   const currentPackId = currentPack && currentPack._id;
 
@@ -70,10 +49,10 @@ export function PackDetails() {
   const error = useSelector((state) => state.singlePack.error);
   const isError = error !== null;
 
-  if (isLoading && firstLoad) return <Text>Loading...</Text>;
+  if (isLoading && firstLoad) return <RText>Loading...</RText>;
 
   return (
-    <Box
+    <View
       style={[
         styles.mainContainer,
         Platform.OS == 'web'
@@ -91,31 +70,30 @@ export function PackDetails() {
             additionalComps={
               <>
                 <TableContainer currentPack={currentPack} copy={canCopy} />
-                <Box style={styles.boxStyle}>
+                <View style={styles.boxStyle}>
                   <AddItemModal
                     currentPackId={currentPackId}
                     currentPack={currentPack}
                     isAddItemModalOpen={isAddItemModalOpen}
                     setIsAddItemModalOpen={setIsAddItemModalOpen}
-                    // refetch={refetch}
                     setRefetch={() => setRefetch((prev) => !prev)}
                   />
-                </Box>
+                </View>
                 <ScoreContainer
                   type="pack"
                   data={currentPack}
                   isOwner={isOwner}
                 />
-                <Box style={styles.boxStyle}>
+                <View style={styles.boxStyle}>
                   <ChatContainer />
-                </Box>
+                </View>
               </>
             }
             link={link}
           />
         </>
       )}
-    </Box>
+    </View>
   );
 }
 

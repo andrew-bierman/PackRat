@@ -1,4 +1,5 @@
-import { Box, Input, Button, Text, VStack, Radio } from 'native-base';
+import { RInput, RButton, RText, RStack, RRadio } from '@packrat/ui';
+import { View } from 'react-native';
 import { DropdownComponent } from '../Dropdown';
 import { theme } from '../../theme';
 import { ItemCategoryEnum } from '../../constants/itemCategory';
@@ -34,18 +35,21 @@ export const ItemForm = ({
   }
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
+
+  const radioOptions = Object.values(ItemCategoryEnum).filter(
+    (value) => !(hasWaterAdded && value === ItemCategoryEnum.WATER),
+  );
+
   return (
-    <Box>
-      <VStack space={2}>
-        <Input
-          size="lg"
+    <View>
+      <RStack style={{ gap: '8px' }}>
+        <RInput
           value={name}
-          variant="outline"
           placeholder="Item Name"
           onChangeText={(text) => setName(text)}
           width="100%"
         />
-        <Box
+        <View
           style={{
             flexDirection: 'row',
             alignItems: 'center',
@@ -53,10 +57,8 @@ export const ItemForm = ({
             width: '100%',
           }}
         >
-          <Input
-            size="lg"
+          <RInput
             value={weight}
-            variant="outline"
             placeholder="Weight"
             onChangeText={(text) => setWeight(text)}
             flex={1}
@@ -70,44 +72,35 @@ export const ItemForm = ({
               width="100"
             />
           )}
-        </Box>
+        </View>
 
-        <Input
-          size="lg"
+        <RInput
           value={quantity}
-          variant="outline"
           placeholder="Quantity"
           onChangeText={(text) => setQuantity(text)}
           width="100%"
           type="text"
         />
-        <Radio.Group
+        <RRadio
           value={categoryType}
           name="category"
           accessibilityLabel="category for the type of item"
-          onChange={(nextVal) => setCategoryType(nextVal)}
-        >
-          {Object.values(ItemCategoryEnum).map((value, key) => {
-            if (hasWaterAdded && value === ItemCategoryEnum.WATER) return;
-            return (
-              <Radio key={key} value={value} mx="2">
-                {value}
-              </Radio>
-            );
-          })}
-        </Radio.Group>
+          onValueChange={(nextVal) => setCategoryType(nextVal)}
+          data={radioOptions}
+        />
+
         {showSubmitButton && (
-          <Button onPress={handleSubmit}>
-            <Text style={{ color: currentTheme.colors.text }}>
+          <RButton onPress={handleSubmit}>
+            <RText style={{ color: currentTheme.colors.text }}>
               {isLoading
                 ? 'Loading..'
                 : isEdit == true
                 ? 'Edit item'
                 : 'Add Item'}
-            </Text>
-          </Button>
+            </RText>
+          </RButton>
         )}
-      </VStack>
-    </Box>
+      </RStack>
+    </View>
   );
 };

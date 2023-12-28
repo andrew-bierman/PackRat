@@ -7,10 +7,7 @@ import {
   Picker,
   TouchableOpacity,
 } from 'react-native';
-
 import Mapbox from '@rnmapbox/maps';
-import { Select, Center, Box, CheckIcon } from 'native-base';
-
 // get mapbox access token from .env file
 import { MAPBOX_ACCESS_TOKEN } from '@env';
 import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';

@@ -1,6 +1,5 @@
 import React from 'react';
-import { VStack, Text, Image } from 'native-base';
-import LargeCard from '../card/LargeCard';
+import { RStack, RImage } from '@packrat/ui';
 import { Platform, View } from 'react-native';
 import { theme } from '../../theme';
 import { isObjectEmpty } from '../../utils/isObjectEmpty';
@@ -26,8 +25,8 @@ const Hero = ({ children, imageDetails }) => {
         Platform.OS === 'web' ? { height: '310px' } : null,
       ]}
     >
-      <Image source={source} alt={alt} style={styles.heroImage} />
-      <VStack>{children}</VStack>
+      <RImage source={source} alt={alt} style={styles.heroImage} />
+      <RStack>{children}</RStack>
     </View>
   );
 };

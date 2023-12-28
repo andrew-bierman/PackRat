@@ -1,6 +1,5 @@
 import React from 'react';
-import { Platform, StyleSheet } from 'react-native';
-import { VStack, Box, ScrollView } from 'native-base';
+import { Platform, View } from 'react-native';
 import { theme } from '../../theme';
 import useTheme from '../../hooks/useTheme';
 import HeroBanner from '../../components/dashboard/HeroBanner';

@@ -1,13 +1,10 @@
-import { Box, Button, Input, Select, Text } from 'native-base';
 import { useEffect, useState } from 'react';
-
 import DropdownComponent from '../Dropdown';
-// import useGetPacks from '../../hooks/useGetPacks';
+import useGetPacks from '../../hooks/useGetPacks';
 import { AddItem } from '../item/AddItem';
 import { TableContainer } from '../pack_table/Table';
 // import { useAuth } from "../../auth/provider";
 import { useSelector } from 'react-redux';
-import { useUserPacks } from '../../hooks/packs/useUserPacks';
 import {
   fetchUserPacks,
   selectPackById,
@@ -15,7 +12,7 @@ import {
 } from '../../store/packsStore';
 import { updateNewTripPack } from '../../store/tripsStore';
 import { useDispatch } from 'react-redux';
-
+import { View } from 'react-native';
 import { CustomModal } from '../modal';
 import { AddItemModal } from './AddItemModal';
 import useCustomStyles from '~/hooks/useCustomStyles';
@@ -25,7 +22,7 @@ export default function PackContainer({ isCreatingTrip = false }) {
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
 
   const user = useSelector((state) => state.auth.user);
-  // const packs = useSelector(selectAllPacks);
+  const packs = useSelector(selectAllPacks);
 
   const newTrip = useSelector((state) => state.trips.newTrip);
 
@@ -33,23 +30,11 @@ export default function PackContainer({ isCreatingTrip = false }) {
   const [refetch, setRefetch] = useState(false);
   const styles = useCustomStyles(loadStyles);
 
-  // useEffect(() => {
-  //   if (user?._id) {
-  //     dispatch(fetchUserPacks({ ownerId: user?._id }));
-  //   }
-  // }, [dispatch, user?._id, refetch]);
-
-  // TODO - improve refetch logic. Should be handled entirely by the hook
-  const {
-    data: packs,
-    error,
-    isLoading,
-    refetch: refetchQuery,
-  } = useUserPacks((ownerId = user?._id));
-
   useEffect(() => {
-    refetchQuery();
-  }, [refetch]);
+    if (user?._id) {
+      dispatch(fetchUserPacks({ ownerId: user?._id }));
+    }
+  }, [dispatch, user?._id, refetch]);
 
   /**
    * Handles the packing based on the given value.
@@ -66,16 +51,14 @@ export default function PackContainer({ isCreatingTrip = false }) {
       dispatch(updateNewTripPack(selectedPack?._id));
     }
   };
-  // const currentPack = useSelector((state) =>
-  //   selectPackById(state, currentPackId),
-  // );
-
-  const currentPack = packs.find((pack) => pack._id === currentPackId);
+  const currentPack = useSelector((state) =>
+    selectPackById(state, currentPackId),
+  );
 
   const dataValues = packs.map((item) => item?.name) ?? [];
 
   return dataValues?.length > 0 ? (
-    <Box style={styles.mainContainer}>
+    <View style={styles.mainContainer}>
       <DropdownComponent
         data={dataValues}
         value={currentPackId}
@@ -100,7 +83,7 @@ export default function PackContainer({ isCreatingTrip = false }) {
           />
         </>
       )}
-    </Box>
+    </View>
   ) : null;
 }
 

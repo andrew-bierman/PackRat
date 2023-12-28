@@ -9,17 +9,15 @@ import {
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import useTheme from '../../hooks/useTheme';
-// import {
-//   getUserChats,
-//   getAIResponse,
-//   selectConversationById,
-//   selectAllConversations,
-// } from '../../store/chatStore';
-import { Box, VStack, HStack, Select } from 'native-base';
+import {
+  getUserChats,
+  getAIResponse,
+  selectConversationById,
+  selectAllConversations,
+} from '../../store/chatStore';
+import { RStack } from '@packrat/ui';
 import { CustomModal } from '../modal';
 import useCustomStyles from '~/hooks/useCustomStyles';
-import { useGetUserChats, useGetAIResponse } from '~/hooks/chat';
-// import { Select } from "tamagui";
 
 const MessageBubble = ({ message }) => {
   const styles = useCustomStyles(loadStyles);
@@ -50,19 +48,23 @@ const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
   const [conversationId, setConversationId] = useState(defaultChatId);
-  // const conversation = useSelector((state) =>
-  //   selectConversationById(state, conversationId),
-  // );
-  // const conversations = useSelector((state) => selectAllConversations(state));
+  const conversation = useSelector((state) =>
+    selectConversationById(state, conversationId),
+  );
+  const conversations = useSelector((state) => selectAllConversations(state));
   const [userInput, setUserInput] = useState('');
-  // const [parsedMessages, setParsedMessages] = useState([]);
+  const [parsedMessages, setParsedMessages] = useState([]);
   const styles = useCustomStyles(loadStyles);
 
-  const { data: chatsData, refetch } = useGetUserChats(user._id);
+  useEffect(() => {
+    dispatch(getUserChats(user._id));
+  }, [dispatch, user._id, conversationId]);
 
-  const { getAIResponse } = useGetAIResponse();
-
-  const conversations = chatsData?.conversations;
+  useEffect(() => {
+    if (conversation) {
+      setParsedMessages(parseConversationHistory(conversation.history));
+    }
+  }, [conversation]);
 
   /**
    * Parses a conversation history string and returns an array of objects representing each message in the conversation.
@@ -83,79 +85,54 @@ const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
     }, []);
   };
 
-  const conversation = conversations?.find(
-    (chat) => chat._id === conversationId,
-  );
-
-  // Compute parsedMessages directly
-  const parsedMessages = conversation
-    ? parseConversationHistory(conversation.history)
-    : [];
-
-  console.log('parsedMessages:', parsedMessages);
-
   /**
    * Handles sending a message.
    *
    * @return {Promise<void>} This function returns nothing.
    */
   const handleSendMessage = async () => {
-    await getAIResponse({ userId: user._id, conversationId, userInput });
-    refetch();
+    await dispatch(
+      getAIResponse({ userId: user._id, conversationId, userInput }),
+    );
     setUserInput('');
+    dispatch(getUserChats(user._id));
   };
 
   return (
     <View style={styles.container}>
-      <VStack space={2} alignItems="center">
+      <RStack style={{ alignItems: 'center' }}>
         {showChatSelector && (
-          <Select
-            selectedValue={conversationId}
-            minWidth="200px" // Adjust width as needed
-            accessibilityLabel="Select a conversation"
-            placeholder="Select a conversation"
-            onValueChange={(itemValue) => setConversationId(itemValue)}
-            width="200px" // Adjust width as needed
-          >
-            {conversations?.map((conversation) => (
-              <Select.Item
-                key={conversation._id}
-                label={conversation._id}
-                value={conversation._id}
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            <View
+              borderRadius="lg"
+              borderColor="coolGray.200"
+              borderWidth={1}
+              p={3}
+            >
+              <FlatList
+                data={conversations}
+                renderItem={({ item }) => (
+                  <ChatSelector
+                    conversation={item}
+                    onSelect={setConversationId}
+                  />
+                )}
+                keyExtractor={(item) => item._id}
+                contentContainerStyle={styles.flatList}
               />
-            ))}
-          </Select>
-          // <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          //   <Box
-          //     borderRadius="lg"
-          //     borderColor="coolGray.200"
-          //     borderWidth={1}
-          //     p={3}
-          //   >
-          //     <FlatList
-          //       data={conversations}
-          //       renderItem={({ item }) => (
-          //         <ChatSelector
-          //           conversation={item}
-          //           onSelect={setConversationId}
-          //         />
-          //       )}
-          //       keyExtractor={(item) => item._id}
-          //       contentContainerStyle={styles.flatList}
-          //     />
-          //     <TouchableOpacity
-          //       style={styles.newChatButton}
-          //       onPress={() => {
-          //         setConversationId(null);
-          //         setParsedMessages([]);
-          //       }}
-          //     >
-          //       <Text style={styles.newChatButtonText}>New Chat</Text>
-          //     </TouchableOpacity>
-          //   </Box>
-          // </ScrollView>
+              <TouchableOpacity
+                style={styles.newChatButton}
+                onPress={() => {
+                  setConversationId(null);
+                  setParsedMessages([]);
+                }}
+              >
+                <Text style={styles.newChatButtonText}>New Chat</Text>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
         )}
-      </VStack>
+      </RStack>
       <FlatList
         data={parsedMessages}
         renderItem={({ item }) => <MessageBubble message={item} />}
@@ -185,7 +162,7 @@ const ChatModalTrigger = () => {
   const styles = useCustomStyles(loadStyles);
 
   return (
-    <Box style={styles.container}>
+    <View style={styles.container}>
       <CustomModal
         title="Chat"
         trigger="Open Chat"
@@ -195,7 +172,7 @@ const ChatModalTrigger = () => {
       >
         <ChatComponent onClose={handleClose} />
       </CustomModal>
-    </Box>
+    </View>
   );
 };
 
