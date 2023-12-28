@@ -14,6 +14,8 @@ export const EditPackItemModal = ({
   isModalOpen,
   onTrigger,
   closeModalHandler,
+  setRefetch = () => { },
+  refetch,
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
   let currentPackId;
@@ -58,6 +60,8 @@ export const EditPackItemModal = ({
           setPage={setPage}
           page={page}
           closeModalHandler={closeModalHandler || closeTriggerOpen}
+          setRefetch={setRefetch}
+          refetch={refetch}
         />
       </CustomModal>
     </View>

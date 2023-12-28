@@ -12,7 +12,12 @@ import { addOfflineRequest } from '../../store/offlineQueue';
 import { useDeletePackItem } from '~/hooks/packs/useDeletePackItem';
 import { queryTrpc, trpc } from '../../trpc';
 
-export const DeletePackItemModal = ({ itemId, pack }) => {
+export const DeletePackItemModal = ({
+  itemId,
+  pack,
+  refetch,
+  setRefetch = () => { },
+}) => {
   const utils = queryTrpc.useContext();
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const dispatch = useDispatch();
@@ -40,18 +45,25 @@ export const DeletePackItemModal = ({ itemId, pack }) => {
    * @return {type} description of return value
    */
   const { deletePackItem } = useDeletePackItem();
+
+
   const deleteItemHandler = () => {
     if (pack) {
       deletePackItem({ itemId, packId: pack._id });
+      setRefetch(true);
     } else {
       if (isConnected) {
         dispatch(deleteGlobalItem(itemId));
+        setRefetch(true);
         utils.getItemsGlobally.invalidate();
       } else {
         dispatch(deleteItemOffline(itemId));
         dispatch(addOfflineRequest({ method: 'deleteItem', data: itemId }));
+        setRefetch(true);
+
       }
     }
+    // console.log("CLIKCE DELETE BUTTON")
     setIsModalOpen(false);
   };
 

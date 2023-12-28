@@ -7,7 +7,7 @@ export const AddItemModal = ({
   currentPack,
   isAddItemModalOpen,
   setIsAddItemModalOpen,
-  setRefetch = () => {},
+  setRefetch = () => { },
 }) => {
   const { currentTheme } = useTheme();
 

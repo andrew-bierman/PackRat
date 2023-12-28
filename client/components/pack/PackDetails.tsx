@@ -13,7 +13,6 @@ import { theme } from '../../theme';
 import { CLIENT_URL } from '@env';
 import ScoreContainer from '../ScoreContainer';
 import ChatContainer from '../chat';
-import { AddItem } from '../item/AddItem';
 import { AddItemModal } from './AddItemModal';
 import useCustomStyles from '~/hooks/useCustomStyles';
 import { useUserPacks } from '~/hooks/packs/useUserPacks';

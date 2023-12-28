@@ -8,7 +8,6 @@ export const useAddNewPack = () => {
         ownerId: newPack?.owner_id,
         queryBy: '',
       });
-      // Step 1: Define optimistic update
       const optimisticUpdate = {
         ...newPack,
         id: Date.now(),

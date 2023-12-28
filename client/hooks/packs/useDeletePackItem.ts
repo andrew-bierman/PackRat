@@ -4,18 +4,27 @@ export const useDeletePackItem = () => {
   const utils = queryTrpc.useContext();
   const mutation = queryTrpc.deleteItem.useMutation({
     onMutate: async (deleteItem) => {
-      console.log(deleteItem);
       const previousPack = utils.getPackById.getData({
-        packId: deleteItem.packId,
+        packId: deleteItem?.packId,
       });
+
+      // Handle the case where previousPack is undefined
+      if (!previousPack) {
+        return {
+          previousPack: undefined,
+        };
+      }
+
       const itemIndex = previousPack.items.findIndex(
         (item) => item._id === deleteItem.itemId,
       );
+
       if (itemIndex === -1) {
         return {
           previousPack,
         };
       }
+
       const newQueryData = {
         ...previousPack,
         items: previousPack.items.filter((item, index) => {
@@ -23,6 +32,7 @@ export const useDeletePackItem = () => {
         }),
         validatorPack: deleteItem.packId,
       };
+
       utils.getPackById.setData({ packId: deleteItem.packId }, newQueryData);
 
       return {
@@ -32,10 +42,10 @@ export const useDeletePackItem = () => {
     onError: (err, deleteItem, context) => {
       console.log('Error');
       console.log(err);
-      if (context.previousPack) {
-        utils.getPackById.setData(
-          { packId: deleteItem.packId },
-          context.previousPack,
+      if (context?.previousPack) {
+        utils?.getPackById?.setData(
+          { packId: deleteItem?.packId },
+          context?.previousPack,
         );
       }
     },

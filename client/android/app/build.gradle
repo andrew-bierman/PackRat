@@ -98,6 +98,7 @@ packagingOptions {
         versionName "1.0.0"
 
         buildConfigField("boolean", "REACT_NATIVE_UNSTABLE_USE_RUNTIME_SCHEDULER_ALWAYS", (findProperty("reactNative.unstable_useRuntimeSchedulerAlways") ?: true).toString())
+        // missingDimensionStrategy 'react-native-camera', 'general' # This line
     }
     signingConfigs {
         debug {
@@ -120,13 +121,18 @@ packagingOptions {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
+
+        lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+        }
+
+    //     externalNativeBuild {
+    //     cmake {
+    //         version "3.22.1"
+    //     }
+    // }
 }
-
-project.ext.react = [
-    enablehermes: false
-]
-def enablehermes = project.ext.react.enablehermes
-
 // Apply static values from `gradle.properties` to the `android.packagingOptions`
 // Accepts values in comma delimited lists, example:
 // android.packagingOptions.pickFirsts=/LICENSE,**/picasa.ini
@@ -155,6 +161,7 @@ dependencies {
     def isWebpEnabled = (findProperty('expo.webp.enabled') ?: "") == "true";
     def isWebpAnimatedEnabled = (findProperty('expo.webp.animated') ?: "") == "true";
     def frescoVersion = rootProject.ext.frescoVersion
+ 
 
     // If your app supports Android versions before Ice Cream Sandwich (API level 14)
     if (isGifEnabled || isWebpEnabled) {

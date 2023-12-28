@@ -1,5 +1,9 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
+
+def REACT_NATIVE_VERSION = new File(['node', '--print',"JSON.parse(require('fs').readFileSync(require.resolve('react-native/package.json'), 'utf-8')).version"].execute(null, rootDir).text.trim())
+
+
 buildscript {
     ext {
         buildToolsVersion = findProperty('android.buildToolsVersion') ?: '33.0.0'
@@ -13,15 +17,26 @@ buildscript {
         ndkVersion = "23.1.7779620"
     }
     repositories {
+        jcenter()
         google()
         mavenCentral()
+        
     }
+
+
     dependencies {
         classpath('com.android.tools.build:gradle:7.4.2')
         classpath('com.facebook.react:react-native-gradle-plugin')
+        // classpath 'com.android.tools.build:gradle:latest_version'
     }
 }
 
+// allprojects {
+//     configurations.all {
+//         resolutionStrategy {
+//             force "com.facebook.react:react-native:" + REACT_NATIVE_VERSION
+//         }
+//     }}
 allprojects {
     repositories {
         maven {
@@ -32,7 +47,11 @@ allprojects {
             // Android JSC is installed from npm
             url(new File(['node', '--print', "require.resolve('jsc-android/package.json')"].execute(null, rootDir).text.trim(), '../dist'))
         }
-
+        maven {
+            url "$rootDir/../node_modules/react-native/android"
+        }
+     
+        jcenter()
         google()
         mavenCentral()
         maven { url 'https://www.jitpack.io' }
@@ -47,7 +66,7 @@ allprojects {
       authentication { basic(BasicAuthentication) }
       credentials {
         username = 'mapbox'
-        password = project.properties['MAPBOX_DOWNLOADS_TOKEN'] ?: ""
+        password = "sk.eyJ1IjoiYW5kcmV3Ymllcm1hbiIsImEiOiJjbGZkZGV5cGExd2Q1NDJsN3JoM2syc3RoIn0.t5eEVBt8Kz1CJ37NPu0fmw"
       }
     }
   }

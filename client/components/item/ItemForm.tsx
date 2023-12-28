@@ -55,6 +55,7 @@ export const ItemForm = ({
             alignItems: 'center',
             justifyContent: 'space-between',
             width: '100%',
+            marginVertical: "10px"
           }}
         >
           <RInput
@@ -62,6 +63,9 @@ export const ItemForm = ({
             placeholder="Weight"
             onChangeText={(text) => setWeight(text)}
             flex={1}
+            style={{
+              marginRight: "10px"
+            }}
           />
           {data && (
             <DropdownComponent
