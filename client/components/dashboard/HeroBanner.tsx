@@ -80,7 +80,7 @@ const HeroSection = ({ onSelect }) => {
         imageDetails={{
           title: 'N/A',
           subtitle: 'N/A',
-          source: require('../../assets/topographical-pattern.png'),
+          source: require('../../assets/black-pattern.png'),
           alt: 'hero',
         }}
       >
