@@ -112,8 +112,7 @@ const Header = ({
             )}
           </View>
         </RStack>
-        {isCurrentUser && !isLoading && <View style={{ width: 45 }} />}{' '}
-        {/* This empty box is to offset the space taken by the settings button, ensuring the profile details remain centered. */}
+        {isCurrentUser && !isLoading && <View style={{ width: 45 }} />}
       </RStack>
       <RStack style={{ flexDirection: 'row', ...styles.card }}>
         {isLoading ? (
