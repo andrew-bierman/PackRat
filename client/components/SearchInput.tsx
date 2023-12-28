@@ -1,16 +1,20 @@
-import { Platform, View, Pressable } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import { useState, useEffect } from 'react';
 import {
-  RStack,
-  RInput,
-  RButton,
-  RText,
-  RScrollView,
-  RIconButton,
-} from '@packrat/ui';
+  VStack,
+  Input,
+  Icon,
+  Text,
+  ScrollView,
+  HStack,
+  List,
+  View,
+  Pressable,
+} from 'native-base';
+import { RStack, RInput, RButton, RText, RScrollView } from '@packrat/ui';
 import { MaterialIcons } from '@expo/vector-icons';
 import useTheme from '../hooks/useTheme';
+import { Platform } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { useState, useEffect } from 'react';
 import { fetchTrails } from '../store/trailsStore';
 import { fetchParks } from '../store/parksStore';
 import {
@@ -215,7 +219,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
                 role="list"
                 style={{ width: '100%', gap: '8px', padding: '8px' }}
               >
-                {searchResults.map((result, i) => (
+                {data.map((result, i) => (
                   <RStack
                     key={`result + ${i}`}
                     role="listitem"
@@ -269,7 +273,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
         icon={<MaterialIcons name="search" size={24} color="gray" />}
       />
 
-      {showSearchResults && searchResults?.length > 0 && (
+      {showSearchResults && data?.length > 0 && (
         <RScrollView
           position="absolute"
           top="100%"
@@ -284,7 +288,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
           zIndex={10}
         >
           <View role="list" style={{ width: '100%' }}>
-            {searchResults.map((result, i) => (
+            {data.map((result, i) => (
               <Pressable
                 key={`result + ${i}`}
                 role="listitem"
