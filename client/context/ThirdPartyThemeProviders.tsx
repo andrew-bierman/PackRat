@@ -1,5 +1,6 @@
 import React from 'react';
 import { TamaguiProvider, Theme as TamaguiTheme } from 'tamagui';
+import { ToastProvider } from '@tamagui/toast';
 import config from '../theme/tamagui.config';
 import { ThemeProvider as RNPaperThemeProvider } from 'react-native-paper';
 import { NativeBaseProvider } from 'native-base';
@@ -30,9 +31,11 @@ const ThirdPartyProviders = ({ children, isDark = false }) => {
       >
         <TamaguiProvider config={config}>
           <TamaguiTheme name={isDark ? 'dark' : 'light'}>
-            <RNPaperThemeProvider theme={darkPaperTheme}>
-              {children}
-            </RNPaperThemeProvider>
+            <ToastProvider>
+              <RNPaperThemeProvider theme={darkPaperTheme}>
+                {children}
+              </RNPaperThemeProvider>
+            </ToastProvider>
           </TamaguiTheme>
         </TamaguiProvider>
       </NativeBaseProvider>
