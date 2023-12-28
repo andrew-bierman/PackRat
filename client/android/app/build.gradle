@@ -122,6 +122,11 @@ packagingOptions {
     }
 }
 
+project.ext.react = [
+    enablehermes: false
+]
+def enablehermes = project.ext.react.enablehermes
+
 // Apply static values from `gradle.properties` to the `android.packagingOptions`
 // Accepts values in comma delimited lists, example:
 // android.packagingOptions.pickFirsts=/LICENSE,**/picasa.ini
@@ -171,11 +176,11 @@ dependencies {
         }
     }
 
-    debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}")
-    debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {
+    debugImplementation("com.facebook.flipper:flipper:0.125.0")
+    debugImplementation("com.facebook.flipper:flipper-network-plugin:0.125.0") {
         exclude group:'com.squareup.okhttp3', module:'okhttp'
     }
-    debugImplementation("com.facebook.flipper:flipper-fresco-plugin:${FLIPPER_VERSION}")
+    debugImplementation("com.facebook.flipper:flipper-fresco-plugin:0.125.0")
 
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
