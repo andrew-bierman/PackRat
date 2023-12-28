@@ -41,7 +41,7 @@ module.exports = function (api) {
         '@tamagui/babel-plugin',
         {
           exclude: ['**/node_modules/**'],
-          components: ['@packrat/ui', 'tamagui'],
+          // components: ['@packrat/ui', 'tamagui'], // this breaks the stylesheet usage on Tamagui components, but fixes build time errors. TODO: fix this
           config: './theme/tamagui.config.js',
           logTimings: true,
         },
