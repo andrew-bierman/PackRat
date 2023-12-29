@@ -9,6 +9,7 @@ import FeedPreview from '../../components/dashboard/FeedPreview';
 import Section from '../../components/dashboard/Section';
 import SectionHeader from '../../components/dashboard/SectionHeader';
 import useCustomStyles from '~/hooks/useCustomStyles';
+
 const Dashboard = () => {
   const styles = useCustomStyles(loadStyles);
 

@@ -57,10 +57,6 @@ export default function MapPreview({ shape }) {
   const urlEncodedImageShapeGeoJSON = encodeURIComponent(
     JSON.stringify(imageShape, null, 0),
   );
-  console.log(
-    '🚀 ~ file: MapPreview.js:33 ~ MapPreview ~ urlEncodedImageShapeGeoJSON:',
-    imageShape.features,
-  );
 
   let bounds = getShapeSourceBounds(shape);
   bounds = bounds[0].concat(bounds[1]);

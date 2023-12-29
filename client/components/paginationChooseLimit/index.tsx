@@ -29,7 +29,5 @@ export const PaginationLimit = ({ limit, setLimit, setPage }) => {
 const loadStyles = () => ({
   selectContainer: {
     width: '15rem',
-    marginLeft: 'auto',
-    marginRight: '2rem',
   },
 });

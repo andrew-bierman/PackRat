@@ -49,6 +49,8 @@ const dataArray = [
 const CustomAccordion = ({ title, content, iconName }) => {
   const [expanded, setExpanded] = useState(false);
   const styles = useCustomStyles(loadStyles);
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    useTheme();
 
   /**
    * Toggles the value of 'expanded' and updates the state.
@@ -197,7 +199,7 @@ const LandingPage = () => {
               </RButton>
             </View>
           )}
-          <View>
+          <RStack>
             {dataArray.map((item, index) => (
               <CustomAccordion
                 key={index}
@@ -206,7 +208,7 @@ const LandingPage = () => {
                 iconName={item.iconName}
               />
             ))}
-          </View>
+          </RStack>
         </View>
         <View style={styles.buttonContainer}>
           <RButton

@@ -6,9 +6,12 @@ import { deleteTrip } from '../../store/tripsStore';
 import { MoreHorizontal } from '@tamagui/lucide-icons';
 import { Adapt, Button, Popover, YStack } from 'tamagui';
 
+import { useDeleteTrips } from '~/hooks/trips';
+// import { deleteTrip } from '../../store/tripsStore';
 export function ThreeDotsMenu({ data, titleRef, setEditTitle }) {
   const dispatch = useDispatch();
   const router = useRouter();
+  const { deleteTrips } = useDeleteTrips();
   return (
     <Popover size="$5" allowFlip placement="bottom">
       <Popover.Trigger asChild backgroundColor="transparent">

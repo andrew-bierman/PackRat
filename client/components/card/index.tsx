@@ -71,6 +71,8 @@ export const CustomCard = ({
     return () => clearTimeout(resetCopyStateTimeout);
   };
 
+  if (!data) return null;
+
   if (type === 'pack') {
     return (
       <View

@@ -95,8 +95,8 @@ export const ItemForm = ({
               {isLoading
                 ? 'Loading..'
                 : isEdit == true
-                ? 'Edit item'
-                : 'Add Item'}
+                  ? 'Edit item'
+                  : 'Add Item'}
             </RText>
           </RButton>
         )}

@@ -24,10 +24,10 @@ export const userSignup = async (req, res) => {
 
 export function signUpRoute() {
   return publicProcedure.input(validator.userSignUp).mutation(async (opts) => {
-    let { email, password } = opts.input;
+    const { email, password } = opts.input;
     await (User as any).alreadyLogin(email);
     const salt = await bcrypt.genSalt(parseInt(JWT_SECRET));
-    password = await bcrypt.hash(password, salt);
+    opts.input.password = await bcrypt.hash(password, salt);
     const user = new User(opts.input);
     await user.save();
     await user.generateAuthToken();

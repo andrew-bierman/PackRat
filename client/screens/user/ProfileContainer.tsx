@@ -14,11 +14,18 @@ import {
   selectAllFavorites,
 } from '../../store/favoritesStore';
 import { getUser } from '../../store/userStore';
-import { fetchUserTrips, selectAllTrips } from '../../store/tripsStore';
+// import { fetchUserTrips, selectAllTrips } from '../../store/tripsStore';
+import { usefetchTrips } from '~/hooks/trips';
 import { useMatchesCurrentUser } from '~/hooks/useMatchesCurrentUser';
 import { useRouter } from 'expo-router';
 import useCustomStyles from '~/hooks/useCustomStyles';
 import Avatar from '../../components/Avatar';
+import { Skeleton } from '@packrat/ui';
+import { useUserPacks } from '~/hooks/packs';
+import { useFetchUserFavorites } from '~/hooks/favorites';
+
+import { useUserTrips } from '~/hooks/singletrips';
+import { useGetUser } from '~/hooks/user';
 
 const SettingsButton = () => {
   const router = useRouter();
@@ -105,8 +112,7 @@ const Header = ({
             )}
           </View>
         </RStack>
-        {isCurrentUser && !isLoading && <View style={{ width: 45 }} />}{' '}
-        {/* This empty box is to offset the space taken by the settings button, ensuring the profile details remain centered. */}
+        {isCurrentUser && !isLoading && <View style={{ width: 45 }} />}
       </RStack>
       <RStack style={{ flexDirection: 'row', ...styles.card }}>
         {isLoading ? (
@@ -189,33 +195,53 @@ export default function ProfileContainer({ id = null }) {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
+
   const authUser = useSelector((state) => state.auth.user);
   const userStore = useSelector((state) => state.userStore);
   const authStore = useSelector((state) => state.auth);
-  const allPacks = useSelector(selectAllPacks);
-  const tripsData = useSelector(selectAllTrips);
-  const allFavorites = useSelector(selectAllFavorites);
+
+  // const allPacks = useSelector(selectAllPacks);
+  // const tripsData = useSelector(selectAllTrips);
+  // const allFavorites = useSelector(selectAllFavorites);
 
   id = id ?? authUser?._id;
 
   const differentUser = id && id !== authUser?._id;
   const isCurrentUser = useMatchesCurrentUser(id); // TODO: Implement this hook in more components
 
-  useEffect(() => {
-    if (differentUser) {
-      dispatch(getUser(id));
-    } else {
-      dispatch(fetchUserPacks({ ownerId: authUser?._id }));
-      dispatch(fetchUserFavorites(authUser?._id));
-      dispatch(fetchUserTrips(authUser?._id));
-    }
-  }, [dispatch, id, authUser, differentUser]);
+  const {
+    data: allPacks,
+    isLoading: allPacksLoading,
+    error: allPacksError,
+  } = useUserPacks((ownerId = authUser?._id));
 
-  const user = differentUser ? userStore.user : authUser;
+  const {
+    data: tripsData,
+    isLoading: tripsIsLoading,
+    error: tripsError,
+  } = useUserTrips((ownerId = authUser?._id));
 
-  const isLoading = differentUser ? userStore.loading : authStore.loading;
+  const {
+    data: allFavorites,
+    isLoading: allFavoritesLoading,
+    error: allFavoritesError,
+  } = useFetchUserFavorites((ownerId = authUser?._id));
 
-  const error = differentUser ? userStore.error : authStore.error;
+  const {
+    data: userData,
+    isLoading: userIsLoading,
+    error: userError,
+  } = useGetUser(id);
+
+  const user = differentUser ? userData : authUser;
+
+  const isLoading = differentUser
+    ? userIsLoading
+    : allPacksLoading || tripsIsLoading || allFavoritesLoading;
+
+  const error = differentUser
+    ? userError
+    : allPacksError || tripsError || allFavoritesError;
 
   const packsData = differentUser ? user?.packs : allPacks;
   const favoritesData = differentUser ? user?.favorites : allFavorites;

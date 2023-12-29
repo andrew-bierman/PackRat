@@ -84,14 +84,14 @@ const UserDataCard = ({
                   fontWeight: 'bold',
                 }}
               >
-                {truncatedName}
+                <RText style={{ fontSize: '16px' }}>{truncatedName}</RText>
                 {state[index] ? (
                   <RText style={{ fontSize: '16px' }}>Loading....</RText>
                 ) : (
                   <>
                     {!differentUser && (
                       <RSwitch
-                        isChecked={is_public}
+                        checked={is_public}
                         onToggle={() => {
                           handleChangeStatus(index);
                         }}

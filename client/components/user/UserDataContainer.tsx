@@ -3,13 +3,13 @@ import { Stack, VStack, Text, Button } from 'native-base';
 import { RStack, RText, RButton, RSkeleton } from '@packrat/ui';
 import { Platform } from 'react-native';
 import UserDataCard from './UserDataCard';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import LargeCard from '../card/LargeCard';
 import { theme } from '../../theme';
 import useTheme from '../../hooks/useTheme';
 import { hexToRGBA } from '~/utils/colorFunctions';
-import { View } from 'react-native';
+import { View, FlatList } from 'react-native';
 
 // Skeleton version of the UserDataCard component
 const SkeletonUserDataCard = () => {
@@ -113,17 +113,35 @@ export default function UserDataContainer({
           {isLoading ? (
             skeletonCards
           ) : data && data.length > 0 ? (
-            data?.map((dataItem, index) => (
-              <UserDataCard
-                key={dataItem._id}
-                {...{ ...dataItem }}
-                type={cardType}
-                state={dataState}
-                setState={setDataState}
-                index={index}
-                differentUser={differentUser}
-              />
-            ))
+            //   data?.map((dataItem, index) => (
+            //     <UserDataCard
+            //       key={dataItem._id}
+            //       {...{ ...dataItem }}
+            //       type={cardType}
+            //       state={dataState}
+            //       setState={setDataState}
+            //       index={index}
+            //       differentUser={differentUser}
+            //     />
+            //   ))
+            // )
+            <FlatList
+              data={data}
+              renderItem={({ item, index }) => (
+                <UserDataCard
+                  key={item._id}
+                  {...item}
+                  type={cardType}
+                  state={dataState}
+                  setState={setDataState}
+                  index={index}
+                  differentUser={differentUser}
+                />
+              )}
+              keyExtractor={(item) => item._id}
+              maxToRenderPerBatch={2}
+              // Other FlatList props like onEndReached for infinite scrolling
+            />
           ) : currentUser?._id === userId ? (
             <Link href="/">
               <RButton

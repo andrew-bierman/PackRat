@@ -12,30 +12,28 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getItemsGlobal } from '../../../store/globalItemsStore';
 import { Stack } from 'expo-router';
 import Head from 'expo-router/head';
+import { useFetchGlobalItems } from '~/hooks/globalItems';
 import useCustomStyles from '~/hooks/useCustomStyles';
 
 export default function Items() {
+  const styles = useCustomStyles(loadStyles);
+
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
+
+  const onTrigger = (event) => {
+    setIsAddItemModalOpen(event);
+  };
   // pagination index limit
   const [limit, setLimit] = useState(5);
   // page number for pagination
   const [page, setPage] = useState(1);
-  // it will be used as a dependency for reloading the data in case of some modifications
+
   const [refetch, setRefetch] = useState(false);
 
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     UseTheme();
-  const styles = useCustomStyles(loadStyles);
-  const data = useSelector((state) => state.globalItems);
 
-  const isLoading = useSelector((state) => state.globalItems.isLoading);
-  const isError = useSelector((state) => state.globalItems.isError);
-
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getItemsGlobal({ limit, page }));
-  }, [limit, page, refetch]);
-
+  const { data, isLoading, isError } = useFetchGlobalItems(limit, page);
   return (
     <RScrollView>
       {Platform.OS === 'web' && (
@@ -97,7 +95,7 @@ export default function Items() {
             />
           </CustomModal>
         </>
-        {!isError && Array.isArray(data.globalItems.items) ? (
+        {!isError && Array.isArray(data?.globalItems.items) ? (
           <ItemsTable
             limit={limit}
             setLimit={setLimit}
@@ -105,7 +103,7 @@ export default function Items() {
             setPage={setPage}
             data={data}
             isLoading={isLoading}
-            totalPages={data?.globalItems?.totalPages}
+            totalPages={data?.globalItems?.totalPages ?? 0}
             refetch={refetch}
             setRefetch={setRefetch}
           />
@@ -114,14 +112,19 @@ export default function Items() {
     </RScrollView>
   );
 }
-const loadStyles = (theme) => {
-  const { currentTheme } = theme;
+const loadStyles = () => {
+  const currentTheme = theme;
   return {
+    container: {
+      display: 'flex',
+      justifyContent: 'center',
+      marginTop: '1rem',
+      alignItems: 'center',
+    },
     button: {
       backgroundColor: currentTheme.colors.background,
       color: currentTheme.colors.white,
       width: Platform.OS === 'web' ? '20rem' : '20%',
-      display: 'flex',
       alignItems: 'center',
       textAlign: 'center',
     },

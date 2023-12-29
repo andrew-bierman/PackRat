@@ -4,7 +4,7 @@ import { MaterialIcons, Entypo } from '@expo/vector-icons';
 import useTheme from '../../hooks/useTheme';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  addFavorite,
+  // addFavorite,
   selectFavoriteById,
   selectAllFavorites,
 } from '../../store/favoritesStore';
@@ -14,6 +14,7 @@ import { DuplicateIcon } from '../DuplicateIcon/index';
 import { truncateString } from '../../utils/truncateString';
 import { RText, RStack, RHeading } from '@packrat/ui';
 import { formatNumber } from '~/utils/formatNumber';
+import { useAddFavorite } from '~/hooks/favorites';
 
 export default function Card({
   type,
@@ -33,14 +34,16 @@ export default function Card({
   const user = useSelector((state) => state.auth.user);
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
+
+  const { addFavorite } = useAddFavorite();
+
   const favorites = useSelector(selectAllFavorites);
   const dispatch = useDispatch();
 
   const isFavorite =
-    !type === 'trip'
-      ? favorited_by.includes(user._id) ||
-        favorited_by.forEach((obj) => obj._id === user._id)
-      : null;
+    type !== 'trip' &&
+    (favorited_by?.includes(user._id) ||
+      favorited_by?.some((obj) => obj._id === user._id));
 
   /**
    * Handles adding an item to the user's favorites.
@@ -53,7 +56,8 @@ export default function Card({
       userId: user._id,
     };
 
-    dispatch(addFavorite(data));
+    // dispatch(addFavorite(data));
+    addFavorite(data);
   };
 
   /**
