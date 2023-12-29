@@ -155,16 +155,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
           />
           <MaterialIcons
             name="search"
-            style={{
-              position: 'absolute',
-              height: '100%',
-              alignSelf: 'center',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: '40px',
-              fontSize: 20,
-            }}
+            style={styles.search}
           />
           {searchString && (
             <RButton
@@ -178,9 +169,9 @@ export const SearchInput = ({ onSelect, placeholder }) => {
                 right: 1,
                 backgroundColor: 'transparent',
               }}
-              width="10px"
+              width={40}
             >
-              <MaterialIcons name="close" />
+              <MaterialIcons name="close" style={{ fontSize: 20 }} />
             </RButton>
           )}
         </RStack>
@@ -299,4 +290,15 @@ const loadStyles = () => ({
     marginBottom: 15,
     maxWidth: '400px',
   },
+
+  search: {
+    position: 'absolute',
+    left: 10,
+    height: '100%',
+    alignSelf: 'center',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: 20,
+  }
 });
