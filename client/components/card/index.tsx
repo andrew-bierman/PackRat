@@ -179,8 +179,8 @@ export const CustomCard = ({
           <RSeparator />
           <View style={{ padding: '16px', paddingTop: '0' }}>{footer}</View>
         </RStack>
-        <ToastViewport multipleToasts />
-        <NativeToast />
+        {/*         <ToastViewport multipleToasts />
+        <NativeToast /> */}
       </View>
     );
   }
