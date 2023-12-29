@@ -61,7 +61,7 @@ export const CustomCard = ({
       setIsCopied(false);
     }, 2000);
     // Style in the future
-    toast.show('Link copied to clipboard');
+    // toast.show('Link copied to clipboard');
     // InformUser({
     //   title: 'Link copied to clipboard',
     //   placement: 'bottom',
