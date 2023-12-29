@@ -30,9 +30,10 @@ export async function destinationAdvice(month: string, destination: string) {
     return result;
   } catch (error) {
     console.error('Error in DestinationAdvice:', error);
-    return {
+    const errorResponse: Partial<DestinationAdviceResponse> = {
       error: "Sorry, I'm unable to provide travel advice at the moment.",
-    } as DestinationAdviceResponse;
+    };
+    return errorResponse;
   }
 }
 
