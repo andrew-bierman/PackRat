@@ -56,7 +56,8 @@ export default function PackContainer({ isCreatingTrip = false }) {
    * @return {type} none
    */
   const handlePack = (val) => {
-    const selectedPack = packs.find((pack) => pack.name == val);
+    // const selectedPack = packs.find((pack) => pack.name == val);
+    const selectedPack = packs.find((pack) => pack._id == val);
 
     setCurrentPackId(selectedPack?._id);
 
@@ -75,7 +76,7 @@ export default function PackContainer({ isCreatingTrip = false }) {
   return dataValues?.length > 0 ? (
     <View style={styles.mainContainer}>
       <DropdownComponent
-        data={dataValues}
+        data={packs ?? []}
         value={currentPackId}
         onValueChange={handlePack}
         placeholder={'Select a Pack'}
