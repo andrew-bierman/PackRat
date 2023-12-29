@@ -8,7 +8,10 @@ const llm: OpenAI = new OpenAI({
   maxTokens: 150,
 });
 
-export async function destinationAdvice(month: string, destination: string) {
+export async function destinationAdvice(
+  month: string,
+  destination: string,
+): Promise<DestinationAdviceResponse> {
   await checkAPIKey();
   const tripDetails: string = `${destination} in ${month}`;
   const systemMessage: string = `You are a helpful Outdoor Adventure Planning assistant for PackRat. The user is planning a trip to ${tripDetails}.`;
@@ -22,18 +25,49 @@ export async function destinationAdvice(month: string, destination: string) {
       );
     const adviceResults: Array<Record<string, string>> =
       await Promise.all(advicePromises);
+
+    // Initialize DestinationAdviceResponse with default values
+    const initialResponse: DestinationAdviceResponse = {
+      tripAdvice: '',
+      avoidPlaces: '',
+      weatherAdvice: '',
+      placesToVisit: '',
+      costAdvice: '',
+      transportationAdvice: '',
+      packingAdvice: '',
+      activitiesAdvice: '',
+      foodAdvice: '',
+      entertainmentAdvice: '',
+      shoppingAdvice: '',
+      safetyHealthAdvice: '',
+      culturalEtiquette: '',
+      languageAssistance: '',
+      emergencyContacts: '',
+      localTransportOptions: '',
+      visaEntryRequirements: '',
+      culinarySpecialties: '',
+      festivalsEvents: '',
+      accommodationTips: '',
+      localLaws: '',
+      connectivityCommunication: '',
+      ecoFriendlyTravel: '',
+      travelInsurance: '',
+      error: '',
+    };
+
     const result: DestinationAdviceResponse =
       adviceResults.reduce<DestinationAdviceResponse>(
         (acc, current) => ({ ...acc, ...current }),
-        {},
+        initialResponse,
       );
+
     return result;
   } catch (error) {
     console.error('Error in DestinationAdvice:', error);
     const errorResponse: Partial<DestinationAdviceResponse> = {
       error: "Sorry, I'm unable to provide travel advice at the moment.",
     };
-    return errorResponse;
+    return errorResponse as DestinationAdviceResponse;
   }
 }
 
