@@ -31,11 +31,6 @@ export function TripDetails() {
   // console.log("🚀 ~ file: TripDetails.js:34 ~ TripDetails ~ tripId:", tripId)
   const { data, isLoading, error, refetch, isOwner, isError } =
     useFetchSingleTrip(tripId);
-  console.log(
-    '🚀 ~ file: TripDetails.js:37 ~ TripDetails ~ data:',
-    data,
-    isLoading,
-  );
 
   const link = `${CLIENT_URL}/trip/${tripId}`;
 
