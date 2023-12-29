@@ -21,6 +21,7 @@ import useCustomStyles from '~/hooks/useCustomStyles';
 import FeedSearchFilter from '~/components/feed/FeedSearchFilter';
 import { useFeed } from '~/hooks/feed';
 import { RefreshControl } from 'react-native';
+import { RText } from '@packrat/ui';
 
 const URL_PATHS = {
   userPacks: '/pack/',
@@ -139,30 +140,32 @@ const Feed = ({ feedType = 'public' }) => {
         handleCreateClick={handleCreateClick}
       />
     );
-    return Platform.OS === 'web' ? (
-      <ScrollView
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ flex: 1, paddingBottom: 10 }}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-      >
-        <View style={styles.cardContainer}>
-          {/* {console.log({ data })} */}
-          {feedSearchFilterComponent}
-          {data?.map((item) => (
-            <Card key={item?._id} type={item?.type} {...item} />
-          ))}
-        </View>
-      </ScrollView>
-    ) : (
+    // return Platform.OS === 'web' ? (
+    //   <ScrollView
+    //     showsHorizontalScrollIndicator={false}
+    //     contentContainerStyle={{ flex: 1, paddingBottom: 10 }}
+    //     refreshControl={
+    //       <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+    //     }
+    //   >
+    //     <View style={styles.cardContainer}>
+    //       {/* {console.log({ data })} */}
+    //       {feedSearchFilterComponent}
+    //       {data?.map((item) => (
+    //         <Card key={item?._id} type={item?.type} {...item} />
+    //       ))}
+    //     </View>
+    //   </ScrollView>
+    // ) : (
+    return (
       <View style={{ flex: 1, paddingBottom: 10 }}>
         <FlatList
           data={data}
-          numColumns={1}
-          keyExtractor={(item) => item._id}
+          horizontal={false}
+          numColumns={Platform.OS === 'web' ? 4 : 1}
+          keyExtractor={(item) => item?._id + item?.type}
           renderItem={({ item }) => (
-            <Card key={item._id} type={item.type} {...item} />
+            <Card key={item?._id} type={item?.type} {...item} />
           )}
           ListHeaderComponent={() => feedSearchFilterComponent}
           ListEmptyComponent={() => <RText>{ERROR_MESSAGES[feedType]}</RText>}
@@ -170,6 +173,8 @@ const Feed = ({ feedType = 'public' }) => {
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
+          maxToRenderPerBatch={2}
+          contentContainerStyle={{ flex: 1 }}
         />
       </View>
     );
