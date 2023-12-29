@@ -16,6 +16,8 @@ import { useFetchGlobalItems } from '~/hooks/globalItems';
 import useCustomStyles from '~/hooks/useCustomStyles';
 
 export default function Items() {
+  const styles = useCustomStyles(loadStyles);
+
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
 
   const onTrigger = (event) => {
@@ -25,6 +27,8 @@ export default function Items() {
   const [limit, setLimit] = useState(5);
   // page number for pagination
   const [page, setPage] = useState(1);
+
+  const [refetch, setRefetch] = useState(false);
 
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     UseTheme();
@@ -91,7 +95,7 @@ export default function Items() {
             />
           </CustomModal>
         </>
-        {!isError && Array.isArray(data.globalItems.items) ? (
+        {!isError && Array.isArray(data?.globalItems.items) ? (
           <ItemsTable
             limit={limit}
             setLimit={setLimit}
@@ -99,7 +103,7 @@ export default function Items() {
             setPage={setPage}
             data={data}
             isLoading={isLoading}
-            totalPages={data?.globalItems?.totalPages}
+            totalPages={data?.globalItems?.totalPages ?? 0}
             refetch={refetch}
             setRefetch={setRefetch}
           />
