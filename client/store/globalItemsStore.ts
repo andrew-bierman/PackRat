@@ -6,7 +6,6 @@ import {
 import axios from '~/config/axios';
 import { api } from '../constants/api';
 import { queryTrpc, trpc } from '../trpc';
-import { queryTrip } from '@packrat/validations';
 
 export const addItemsGlobal = createAsyncThunk(
   'Items/addItemsGlobal',
