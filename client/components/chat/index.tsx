@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import useTheme from '../../hooks/useTheme';
+import { RStack } from '@packrat/ui';
 // import {
 //   getUserChats,
 //   getAIResponse,
@@ -107,7 +108,7 @@ const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
 
   return (
     <View style={styles.container}>
-      <VStack space={2} alignItems="center">
+      <RStack style={{ alignItems: 'center' }}>
         {showChatSelector && (
           <Select
             selectedValue={conversationId}
@@ -155,7 +156,7 @@ const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
           //   </Box>
           // </ScrollView>
         )}
-      </VStack>
+      </RStack>
       <FlatList
         data={parsedMessages}
         renderItem={({ item }) => <MessageBubble message={item} />}
@@ -185,7 +186,7 @@ const ChatModalTrigger = () => {
   const styles = useCustomStyles(loadStyles);
 
   return (
-    <Box style={styles.container}>
+    <View style={styles.container}>
       <CustomModal
         title="Chat"
         trigger="Open Chat"
@@ -195,7 +196,7 @@ const ChatModalTrigger = () => {
       >
         <ChatComponent onClose={handleClose} />
       </CustomModal>
-    </Box>
+    </View>
   );
 };
 

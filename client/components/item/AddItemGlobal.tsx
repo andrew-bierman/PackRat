@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box } from 'native-base';
+import { View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { addItemsGlobal, addItemOffline } from '../../store/globalItemsStore';
 import { addOfflineRequest } from '../../store/offlineQueue';
@@ -60,7 +60,7 @@ export const AddItemGlobal = ({ setIsAddItemModalOpen }) => {
   };
 
   return (
-    <Box>
+    <View>
       <ItemForm
         name={name}
         setName={setName}
@@ -75,6 +75,6 @@ export const AddItemGlobal = ({ setIsAddItemModalOpen }) => {
         handleSubmit={handleSubmit}
         isLoading={isLoading}
       />
-    </Box>
+    </View>
   );
 };

@@ -31,7 +31,6 @@ export const addTripService = async (tripDetails): Promise<string> => {
 
     const geojsonIds = savedGeoJSONs?.map((feature) => feature._id);
 
-
     const newTrip = await Trip.create({
       name,
       description,

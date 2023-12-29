@@ -1,9 +1,9 @@
-import { Text } from 'react-native';
 import React from 'react';
+import { Text, View } from 'react-native';
 import { Table, Row, Cell } from 'react-native-table-component';
 import { theme } from '../../theme';
 import useTheme from '../../hooks/useTheme';
-import { Box, Button, HStack } from 'native-base';
+import { RButton, RStack } from '@packrat/ui';
 import { formatNumber } from '../../utils/formatNumber';
 import { EditPackItemModal } from '../pack_table/EditPackItemModal';
 import { DeletePackItemModal } from '../pack_table/DeletePackItemModal';
@@ -27,9 +27,9 @@ export const ItemsTable = ({
   const styles = useCustomStyles(loadStyles);
   const TitleRow = ({ title }) => {
     const rowData = [
-      <HStack style={styles.mainTitle}>
+      <RStack style={{ flexDirection: 'row', ...styles.mainTitle }}>
         <Text style={styles.titleText}>{title}</Text>
-      </HStack>,
+      </RStack>,
     ];
 
     return (
@@ -72,7 +72,7 @@ export const ItemsTable = ({
   };
 
   return (
-    <Box
+    <View
       style={{
         marginTop: '2rem',
       }}
@@ -96,7 +96,7 @@ export const ItemsTable = ({
           ))}
           style={styles.head}
         />
-        <Box
+        <View
           style={{
             height: '400px',
             overflowY: 'scroll',
@@ -109,50 +109,43 @@ export const ItemsTable = ({
               return <TableItem key={index} itemData={item} />;
             })
           )}
-        </Box>
+        </View>
       </Table>
-      <Box style={loadStyles().paginationWrapper}>
-        <PaginationLimit limit={limit} setLimit={setLimit} setPage={setPage} />
-        <Box style={{ display: 'flex', flexDirection: 'row' }}>
-          <Button
-            style={{
-              marginRight: '10px',
-              width: '4px',
-              backgroundColor: 'transparent',
-              borderRadius: '5px',
-              borderColor: page === 1 ? 'gray' : '#0284c7',
-              borderWidth: '1px',
-              borderStyle: 'solid',
-              pointerEvents: page === 1 ? 'none' : 'auto',
-            }}
-            disabled={page === 1}
-            onPress={handlePreviousPage}
-          >
-            {/* extract the page checking logic and make it generic */}
-            <Text style={{ color: page === 1 ? 'gray' : '#0284c7' }}>
-              {'<'}
-            </Text>
-          </Button>
-          <Button
-            style={{
-              marginRight: '10px',
-              width: '4px',
-              backgroundColor: 'transparent',
-              borderRadius: '5px',
-              borderColor: page === totalPages ? 'gray' : '#0284c7',
-              borderWidth: '1px',
-              borderStyle: 'solid',
-              pointerEvents: page === totalPages ? 'none' : 'auto',
-            }}
-            disabled={page === totalPages}
-            onPress={handleNextPage}
-          >
-            <div style={{ color: page === totalPages ? 'gray' : '#0284c7' }}>
-              {'>'}
-            </div>
-          </Button>
-        </Box>
-      </Box>
-    </Box>
+      <PaginationLimit limit={limit} setLimit={setLimit} setPage={setPage} />
+      <View style={{ display: 'flex', flexDirection: 'row', margin: 'auto' }}>
+        <RButton
+          style={{
+            marginRight: '10px',
+            width: '4px',
+            backgroundColor: 'transparent',
+            borderRadius: '5px',
+            borderColor: page < 2 ? 'gray' : '#0284c7',
+            borderWidth: '1px',
+            borderStyle: 'solid',
+          }}
+          disabled={page < 2}
+          onPress={handlePreviousPage}
+        >
+          <Text style={{ color: page < 2 ? 'gray' : '#0284c7' }}>{'<'}</Text>
+        </RButton>
+        <RButton
+          style={{
+            marginRight: '10px',
+            width: '4px',
+            backgroundColor: 'transparent',
+            borderRadius: '5px',
+            borderColor: page === totalPages ? 'gray' : '#0284c7',
+            borderWidth: '1px',
+            borderStyle: 'solid',
+          }}
+          disabled={page === totalPages}
+          onPress={handleNextPage}
+        >
+          <View style={{ color: page === totalPages ? 'gray' : '#0284c7' }}>
+            {'>'}
+          </View>
+        </RButton>
+      </View>
+    </View>
   );
 };

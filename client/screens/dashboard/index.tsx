@@ -1,6 +1,6 @@
 import React from 'react';
-import { Platform, StyleSheet } from 'react-native';
-import { VStack, Box, ScrollView } from 'native-base';
+import { Platform, View } from 'react-native';
+import { RStack, RScrollView } from '@packrat/ui';
 import { theme } from '../../theme';
 import useTheme from '../../hooks/useTheme';
 import HeroBanner from '../../components/dashboard/HeroBanner';
@@ -10,22 +10,19 @@ import Section from '../../components/dashboard/Section';
 import SectionHeader from '../../components/dashboard/SectionHeader';
 import useCustomStyles from '~/hooks/useCustomStyles';
 
-// tamagui
-import { RScrollView, YStack, RStack } from '@packrat/ui';
-
 const Dashboard = () => {
   const styles = useCustomStyles(loadStyles);
 
   return (
     <>
       <RScrollView contentContainerStyle={styles.content} horizontal={false}>
-        <YStack
-          f={1}
-          fg={1}
-          w="100%"
-          mih={Platform.OS === 'web' ? '100vh' : null}
+        <RStack
+          style={[
+            styles.container,
+            Platform.OS === 'web' ? { minHeight: '100vh' } : null,
+          ]}
         >
-          <RStack>
+          <View>
             <HeroBanner style={styles.cardContainer} />
 
             <Section>
@@ -39,8 +36,8 @@ const Dashboard = () => {
               <SectionHeader iconName="newspaper-outline" text="Feed" />
               <FeedPreview />
             </Section>
-          </RStack>
-        </YStack>
+          </View>
+        </RStack>
       </RScrollView>
     </>
   );

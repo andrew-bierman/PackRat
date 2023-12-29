@@ -1,18 +1,14 @@
 import React, { useEffect, useState } from 'react';
-
 import PackContainer from './PackContainer';
 import { DetailsHeader } from '../details/header';
-
 import { useSearchParams } from 'expo-router';
 import { TableContainer } from '../pack_table/Table';
 import { fetchUserPacks, selectPackById } from '../../store/packsStore';
-
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchSinglePack } from '../../store/singlePackStore';
-
-import { Box, Text } from 'native-base';
+import { RText } from '@packrat/ui';
 import { DetailsComponent } from '../details';
-import { Dimensions, Platform } from 'react-native';
+import { Dimensions, Platform, View } from 'react-native';
 import { theme } from '../../theme';
 import { CLIENT_URL } from '@env';
 import ScoreContainer from '../ScoreContainer';
@@ -70,10 +66,10 @@ export function PackDetails() {
   const error = useSelector((state) => state.singlePack.error);
   const isError = error !== null;
 
-  if (isLoading && firstLoad) return <Text>Loading...</Text>;
+  if (isLoading && firstLoad) return <RText>Loading...</RText>;
 
   return (
-    <Box
+    <View
       style={[
         styles.mainContainer,
         Platform.OS == 'web'
@@ -91,7 +87,7 @@ export function PackDetails() {
             additionalComps={
               <>
                 <TableContainer currentPack={currentPack} copy={canCopy} />
-                <Box style={styles.boxStyle}>
+                <View style={styles.boxStyle}>
                   <AddItemModal
                     currentPackId={currentPackId}
                     currentPack={currentPack}
@@ -100,22 +96,22 @@ export function PackDetails() {
                     // refetch={refetch}
                     setRefetch={() => setRefetch((prev) => !prev)}
                   />
-                </Box>
+                </View>
                 <ScoreContainer
                   type="pack"
                   data={currentPack}
                   isOwner={isOwner}
                 />
-                <Box style={styles.boxStyle}>
+                <View style={styles.boxStyle}>
                   <ChatContainer />
-                </Box>
+                </View>
               </>
             }
             link={link}
           />
         </>
       )}
-    </Box>
+    </View>
   );
 }
 

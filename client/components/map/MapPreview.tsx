@@ -1,4 +1,4 @@
-import { Image } from 'native-base';
+import { RImage } from '@packrat/ui';
 import {
   getShapeSourceBounds,
   isLineString,
@@ -68,7 +68,7 @@ export default function MapPreview({ shape }) {
   // console.log("🚀 ~ file: MapPreview.js:39 ~ MapPreview ~ coordinates:", isPoint(shape),MAPBOX_ACCESS_TOKEN)
 
   return isPoint(shape) ? (
-    <Image
+    <RImage
       style={{
         width: '100%',
         height: '100%',
@@ -78,7 +78,7 @@ export default function MapPreview({ shape }) {
       }}
     />
   ) : (
-    <Image
+    <RImage
       style={{
         width: '100%',
         height: '100%',

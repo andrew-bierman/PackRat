@@ -1,8 +1,8 @@
 import React from 'react';
-import { Button } from 'native-base';
+import { RButton, RStack } from '@packrat/ui';
 import { X } from '@tamagui/lucide-icons';
 
-import { Button as TgButton, Dialog, XStack } from 'tamagui';
+import { Dialog } from 'tamagui';
 
 export const CustomModal = ({
   id,
@@ -37,16 +37,16 @@ export const CustomModal = ({
     }
   };
   const triggerElement = triggerComponent ? (
-    <Button
+    <RButton
       onPress={() => onTrigger(true)}
       style={{ backgroundColor: 'transparent' }}
     >
       {triggerComponent}
-    </Button>
+    </RButton>
   ) : (
-    <Button top={5} alignSelf={'center'} onPress={() => onTrigger(true)}>
+    <RButton top={5} alignSelf={'center'} onPress={() => onTrigger(true)}>
       {trigger}
-    </Button>
+    </RButton>
   );
   if (onTrigger) {
     return (
@@ -88,33 +88,39 @@ export const CustomModal = ({
             <Dialog.Title>{title}</Dialog.Title>
             <Dialog.Description>{children}</Dialog.Description>
 
-            <XStack alignSelf="flex-end" gap="$4">
+            <RStack
+              style={{ alignSelf: 'flex-end', flexDirection: 'row' }}
+              gap="$4"
+            >
               {footerButtons.map((button, index) => (
-                <Button
+                <RButton
                   key={index}
                   onPress={button.onClick}
-                  colorScheme={button.color}
+                  backgroundColor={button.color}
                   disabled={button.disabled}
+                  color="white"
                 >
                   {button.label}
-                </Button>
+                </RButton>
               ))}
-            </XStack>
+            </RStack>
 
             {buttonText && (
-              <XStack alignSelf="flex-end" gap="$4">
-                <Button colorScheme={buttonColor} onPress={onSave}>
-                  {buttonText}
-                </Button>
-                <Button onPress={closeModal} ml="auto">
+              <RStack
+                style={{ alignSelf: 'flex-end', flexDirection: 'row' }}
+                gap="$4"
+              >
+                <RButton onPress={onSave}>{buttonText}</RButton>
+                <RButton onPress={closeModal} ml="auto">
                   Cancel
-                </Button>
-              </XStack>
+                </RButton>
+              </RStack>
             )}
 
             <Dialog.Close asChild>
-              <TgButton
+              <RButton
                 position="absolute"
+                backgroundColor="transparent"
                 top="$3"
                 right="$3"
                 size="$2"

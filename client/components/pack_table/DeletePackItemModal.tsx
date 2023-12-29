@@ -65,7 +65,7 @@ export const DeletePackItemModal = ({ itemId, pack }) => {
     {
       label: 'Delete',
       onClick: deleteItemHandler,
-      color: 'danger',
+      color: '#B22222',
       disabled: false,
     },
   ];

@@ -1,5 +1,4 @@
-import { Box } from 'native-base';
-import { Text } from 'react-native';
+import { Text, View } from 'react-native';
 import { theme } from '../../theme';
 import useTheme from '../../hooks/useTheme';
 
@@ -8,7 +7,7 @@ export default function Footer() {
     useTheme();
   const year = new Date().getFullYear();
   return (
-    <Box
+    <View
       style={{
         width: '100%',
         textAlign: 'center',
@@ -29,6 +28,6 @@ export default function Footer() {
       >
         Copyright &copy; {year}
       </Text>
-    </Box>
+    </View>
   );
 }

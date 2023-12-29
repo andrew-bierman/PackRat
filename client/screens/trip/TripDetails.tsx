@@ -1,15 +1,11 @@
 import React, { useEffect } from 'react';
-
 import { DetailsHeader } from '../../components/details/header';
-
 import { useSearchParams } from 'expo-router';
 import { TableContainer } from '../../components/pack_table/Table';
 import { selectPackById } from '../../store/packsStore';
-
 import { useSelector, useDispatch } from 'react-redux';
-// import { fetchSingleTrip } from '../../store/singleTripStore';
-
-import { Box, Text, View } from 'native-base';
+import { View } from 'react-native';
+import { RText } from '@packrat/ui';
 import { DetailsComponent } from '../../components/details';
 import { Platform, StyleSheet } from 'react-native';
 import { theme } from '../../theme';
@@ -35,11 +31,6 @@ export function TripDetails() {
   // console.log("🚀 ~ file: TripDetails.js:34 ~ TripDetails ~ tripId:", tripId)
   const { data, isLoading, error, refetch, isOwner, isError } =
     useFetchSingleTrip(tripId);
-  console.log(
-    '🚀 ~ file: TripDetails.js:37 ~ TripDetails ~ data:',
-    data,
-    isLoading,
-  );
 
   const link = `${CLIENT_URL}/trip/${tripId}`;
 
@@ -60,10 +51,10 @@ export function TripDetails() {
   // const error = useSelector((state) => state.singleTrip.error);
   // const isError = error !== null;
 
-  if (isLoading) return <Text>Loading...</Text>;
+  if (isLoading) return <RText>Loading...</RText>;
   // console.log(currentTrip.osm_ref.geoJSON, 'geoJSON');
   return (
-    <Box
+    <View
       style={[
         styles.mainContainer,
         Platform.OS == 'web' ? { minHeight: '100vh' } : null,
@@ -119,7 +110,7 @@ export function TripDetails() {
           />
         </>
       )}
-    </Box>
+    </View>
   );
 }
 

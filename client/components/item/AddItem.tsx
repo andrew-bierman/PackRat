@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Box, Input, Button, Text } from 'native-base';
+import { View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   addPackItem,
@@ -104,7 +104,7 @@ export const AddItem = ({
   };
 
   return (
-    <Box>
+    <View>
       <ItemForm
         name={name}
         setName={setName}
@@ -121,6 +121,6 @@ export const AddItem = ({
         setCategoryType={setCategoryType}
         currentPack={currentPack}
       />
-    </Box>
+    </View>
   );
 };

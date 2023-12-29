@@ -1,6 +1,4 @@
-import { Box, Button, Input, Select, Text } from 'native-base';
 import { useEffect, useState } from 'react';
-
 import DropdownComponent from '../Dropdown';
 // import useGetPacks from '../../hooks/useGetPacks';
 import { AddItem } from '../item/AddItem';
@@ -15,7 +13,7 @@ import {
 } from '../../store/packsStore';
 import { updateNewTripPack } from '../../store/tripsStore';
 import { useDispatch } from 'react-redux';
-
+import { View } from 'react-native';
 import { CustomModal } from '../modal';
 import { AddItemModal } from './AddItemModal';
 import useCustomStyles from '~/hooks/useCustomStyles';
@@ -58,7 +56,8 @@ export default function PackContainer({ isCreatingTrip = false }) {
    * @return {type} none
    */
   const handlePack = (val) => {
-    const selectedPack = packs.find((pack) => pack.name == val);
+    // const selectedPack = packs.find((pack) => pack.name == val);
+    const selectedPack = packs.find((pack) => pack._id == val);
 
     setCurrentPackId(selectedPack?._id);
 
@@ -75,9 +74,9 @@ export default function PackContainer({ isCreatingTrip = false }) {
   const dataValues = packs.map((item) => item?.name) ?? [];
 
   return dataValues?.length > 0 ? (
-    <Box style={styles.mainContainer}>
+    <View style={styles.mainContainer}>
       <DropdownComponent
-        data={dataValues}
+        data={packs ?? []}
         value={currentPackId}
         onValueChange={handlePack}
         placeholder={'Select a Pack'}
@@ -100,7 +99,7 @@ export default function PackContainer({ isCreatingTrip = false }) {
           />
         </>
       )}
-    </Box>
+    </View>
   ) : null;
 }
 

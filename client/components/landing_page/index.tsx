@@ -1,19 +1,7 @@
 import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { ImageBackground, Platform, View } from 'react-native';
-import {
-  Container,
-  Button,
-  Icon,
-  Text,
-  Card,
-  Box,
-  VStack,
-  HStack,
-} from 'native-base';
-
-import { XStack, YStack, RText, RStack, RButton } from '@packrat/ui';
-
+import { RButton, RCard, RText, RStack } from '@packrat/ui';
 import useTheme from '../../hooks/useTheme';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { theme } from '../../theme';
@@ -74,16 +62,14 @@ const CustomAccordion = ({ title, content, iconName }) => {
   };
 
   return (
-    <Card style={styles.card}>
-      <XStack ai="center" jc="space-between" px={20} py={10}>
+    <RCard style={styles.card}>
+      <View style={styles.cardHeader}>
         <MaterialIcons name={iconName} style={styles.icon} />
-        <RStack f={1}>
-          <RText fos={18} col={currentTheme.colors.text}>
-            {title}
-          </RText>
-        </RStack>
-        <Button
-          transparent
+        <View style={{ flex: 1 }}>
+          <RText style={styles.featureText}>{title}</RText>
+        </View>
+        <RButton
+          backgroundColor="transparent"
           style={styles.transparentButton}
           onPress={toggleExpanded}
         >
@@ -91,14 +77,14 @@ const CustomAccordion = ({ title, content, iconName }) => {
             name={expanded ? 'keyboard-arrow-down' : 'keyboard-arrow-up'}
             style={styles.icon}
           />
-        </Button>
-      </XStack>
+        </RButton>
+      </View>
       {expanded && (
-        <RText fos={16} col={currentTheme.colors.text} px={20} py={10}>
-          {content}
-        </RText>
+        <RCard.Header>
+          <RText style={styles.cardContent}>{content}</RText>
+        </RCard.Header>
       )}
-    </Card>
+    </RCard>
   );
 };
 
@@ -107,8 +93,15 @@ const LandingPage = () => {
     useTheme();
   const styles = useCustomStyles(loadStyles);
   return (
-    <YStack style={styles.container}>
-      <RStack ai="center" py={18} mt={Platform.OS != 'web' ? 25 : 1}>
+    <RStack style={styles.container}>
+      <View
+        style={{
+          alignItems: 'center',
+          textAlign: 'center',
+          paddingVertical: 18,
+          marginTop: Platform.OS !== 'web' ? 25 : 1,
+        }}
+      >
         {Platform.OS === 'web' ? (
           <RText
             style={{ color: 'white', fontSize: currentTheme.font.headerFont }}
@@ -123,14 +116,14 @@ const LandingPage = () => {
         <RText style={{ color: 'white', fontSize: 18 }}>
           The Ultimate Travel App
         </RText>
-      </RStack>
-      <RStack style={styles.secondaryContentContainer}>
+      </View>
+      <View style={styles.secondaryContentContainer}>
         {/* <ImageBackground
           source={require("../../assets/background-image.png")}
           style={styles.backgroundImage}
         > */}
-        <RStack style={styles.overlay} />
-        <Container style={styles.contentContainer}>
+        <View style={styles.overlay} />
+        <View style={styles.contentContainer}>
           <RText style={styles.introText}>
             PackRat is the ultimate adventure planner designed for those who
             love to explore the great outdoors. Plan and organize your trips
@@ -138,36 +131,73 @@ const LandingPage = () => {
             cross-country road trip.
           </RText>
           {Platform.OS === 'web' && (
-            <YStack jc="center" ai="center" my={20} mb={20}>
-              <XStack jc="center" fw="wrap">
-                <Button title="App Store" style={{ margin: 10 }}>
-                  <XStack space={2} ai="center">
+            <View style={styles.appBadges}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  flexWrap: 'wrap',
+                }}
+              >
+                <RButton
+                  title="App Store"
+                  style={{ margin: 10, padding: '32px' }}
+                >
+                  <RStack
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      gap: '8px',
+                    }}
+                  >
                     <MaterialCommunityIcons
                       name="apple"
                       size={44}
                       color="white"
                     />
-                    <RText col="white">Download on the App Store</RText>
-                  </XStack>
-                </Button>
-                <Button title="Google Play" style={{ margin: 10 }}>
-                  <XStack space={2} ai="center">
+                    <RText style={{ color: 'white' }}>
+                      Download on the App Store
+                    </RText>
+                  </RStack>
+                </RButton>
+                <RButton
+                  title="Google Play"
+                  style={{ margin: 10, padding: '32px' }}
+                >
+                  <RStack
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      gap: '8px',
+                    }}
+                  >
                     <MaterialCommunityIcons
                       name="google-play"
                       size={44}
                       color="white"
                     />
-                    <RText col="white">Download on Google Play</RText>
-                  </XStack>
-                </Button>
-              </XStack>
-              <Button title="Web" style={{ marginTop: 10, width: '100%' }}>
-                <XStack space={2} ai="center">
+                    <RText style={{ color: 'white' }}>
+                      Download on Google Play
+                    </RText>
+                  </RStack>
+                </RButton>
+              </View>
+              <RButton
+                title="Web"
+                style={{ margin: 10, padding: '32px', width: '100%' }}
+              >
+                <RStack
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    gap: '8px',
+                  }}
+                >
                   <MaterialCommunityIcons name="web" size={44} color="white" />
-                  <RText col="white">Use on Web</RText>
-                </XStack>
-              </Button>
-            </YStack>
+                  <RText style={{ color: 'white' }}>Use on Web</RText>
+                </RStack>
+              </RButton>
+            </View>
           )}
           <RStack>
             {dataArray.map((item, index) => (
@@ -179,24 +209,21 @@ const LandingPage = () => {
               />
             ))}
           </RStack>
-        </Container>
-        <Container style={styles.buttonContainer}>
-          <Button
-            full
+        </View>
+        <View style={styles.buttonContainer}>
+          <RButton
             style={styles.getStartedButton}
             onPress={() => {
               /* Add navigation to the sign in screen */
             }}
           >
-            <RText col={currentTheme.colors.text} fos={18} fw="bold">
-              Get Started
-            </RText>
-          </Button>
-        </Container>
+            <RText style={styles.footerText}>Get Started</RText>
+          </RButton>
+        </View>
         <StatusBar style="auto" />
         {/* </ImageBackground> */}
-      </RStack>
-    </YStack>
+      </View>
+    </RStack>
   );
 };
 
@@ -246,6 +273,8 @@ const loadStyles = (theme) => {
       textAlign: 'center',
       marginBottom: 20,
       color: currentTheme.colors.text,
+      width: '80%',
+      lineHeight: 1.5,
     },
     card: {
       marginBottom: 10,

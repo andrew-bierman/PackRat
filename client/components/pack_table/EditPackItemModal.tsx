@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 import { AddItem } from '../item/AddItem';
 import { CustomModal } from '../modal';
-import { Box } from 'native-base';
+import { View } from 'react-native';
 
 export const EditPackItemModal = ({
   initialData,
@@ -32,15 +32,15 @@ export const EditPackItemModal = ({
   const footerButtons = [
     {
       label: 'Cancel',
-      onClick: footerCloseHandler,
-      color: 'danger',
+      onClick: closeModalHandler,
+      color: '#B22222',
       disabled: false,
     },
     // add more footer buttons here if needed
   ];
 
   return (
-    <Box>
+    <View>
       <CustomModal
         isActive={isModalOpen || modalOpen}
         title={'Edit Item'}
@@ -60,6 +60,6 @@ export const EditPackItemModal = ({
           closeModalHandler={closeModalHandler || closeTriggerOpen}
         />
       </CustomModal>
-    </Box>
+    </View>
   );
 };
