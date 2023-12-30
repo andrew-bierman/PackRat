@@ -1,77 +1,36 @@
-import React, { useRef, useState, useEffect } from 'react';
-import {
-  VStack,
-  Box,
-  Divider,
-  IconButton,
-  Text,
-  Menu,
-  ThreeDotsIcon,
-} from 'native-base';
-import {
-  StyleSheet,
-  TouchableOpacity,
-  Clipboard,
-  TextInput,
-  Pressable,
-} from 'react-native';
-import { EditableInput } from '../EditableText';
-import { theme } from '../../theme';
+import React from 'react';
+import { StyleSheet } from 'react-native';
+import { VStack, Box, Divider, Text } from 'native-base';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useDispatch, useSelector } from 'react-redux';
-import { useRouter, Link } from 'expo-router';
-import { ThreeDotsMenu } from '../ThreeDotsMenu';
+import { Link } from 'expo-router';
+
 import UseTheme from '../../hooks/useTheme';
-import { InformUser } from '../../utils/ToastUtils';
+import { EditableInput } from '../EditableText';
+import { ThreeDotsMenu } from '../ThreeDotsMenu';
 import { SearchItem } from '../item/searchItem';
 import Loader from '../Loader';
+import { useCard } from './useCard';
 
-export const CustomCard = ({
-  title,
-  content,
-  footer,
-  link,
-  type,
-  destination,
-  data,
-}) => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
-  const [isCopied, setIsCopied] = useState(false);
-  const [editTitle, setEditTitle] = useState(false);
-  const titleRef = useRef(null);
-  const dispatch = useDispatch();
-  const router = useRouter();
-  const isLoading = useSelector((state: any) => state.singlePack.isLoading);
-  const user = useSelector((state: any) => state.auth.user);
-  const userId = user._id;
+const { currentTheme } = UseTheme();
 
-  /**
-   * Handles copying the link to the clipboard and updates the copy state.
-   *
-   * @return {function} A function to clear the timeout for resetting the copy state.
-   */
-  const handleCopyLink = () => {
-    Clipboard.setString(link);
-
-    setIsCopied(true);
-
-    const resetCopyStateTimeout = setTimeout(() => {
-      setIsCopied(false);
-    }, 2000);
-    InformUser({
-      title: 'Link copied to clipboard',
-      placement: 'bottom',
-      duration: 2000,
-    });
-
-    return () => clearTimeout(resetCopyStateTimeout);
-  };
+export const CustomCard = ({ title, content, footer, link, type, data }) => {
+  const {
+    isCopied,
+    editTitle,
+    setEditTitle,
+    titleRef,
+    isLoading,
+    user,
+    userId,
+    handleCopyLink,
+  } = useCard({
+    link,
+  });
 
   if (type === 'pack') {
     return (
       <Box
-        style={styles().mainContainer}
+        style={styles.mainContainer}
         alignSelf="center"
         alignItems={['center', 'center', 'flex-start', 'flex-start']}
         w={['100%', '100%', '100%', '90%']}
@@ -112,7 +71,6 @@ export const CustomCard = ({
                 </Link>
               </Box>
               {link && (
-                // @ts-expect-error
                 <Box
                   flexDir={'row'}
                   style={{
@@ -181,7 +139,7 @@ export const CustomCard = ({
   if (type === 'trip') {
     return (
       <Box
-        style={styles().mainContainer}
+        style={styles.mainContainer}
         alignSelf="center"
         alignItems={['center', 'center', 'flex-start', 'flex-start']}
         w={['100%', '100%', '100%', '90%']}
@@ -258,29 +216,25 @@ export const CustomCard = ({
   }
 };
 
-const styles = () => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
-  return StyleSheet.create({
-    mainContainer: {
-      backgroundColor: currentTheme.colors.card,
-      flex: 1,
-      gap: 45,
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      paddingLeft: 25,
-      paddingRight: 25,
-      paddingTop: 15,
-      paddingBottom: 15,
-      border: '1',
-    },
-    containerMobile: {
-      backgroundColor: currentTheme.colors.card,
-      flex: 1,
-      gap: 45,
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      padding: 15,
-    },
-  });
-};
+const styles = StyleSheet.create({
+  mainContainer: {
+    backgroundColor: currentTheme.colors.card,
+    flex: 1,
+    gap: 45,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingLeft: 25,
+    paddingRight: 25,
+    paddingTop: 15,
+    paddingBottom: 15,
+    border: '1',
+  },
+  containerMobile: {
+    backgroundColor: currentTheme.colors.card,
+    flex: 1,
+    gap: 45,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 15,
+  },
+});
