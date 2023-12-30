@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 
-const ScrollButton = ({ direction, onPress }) => {
+export default ScrollButton = ({ direction, onPress }) => {
   return (
     <TouchableOpacity
       activeOpacity={0.8}
@@ -34,5 +34,3 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
 });
-
-export default ScrollButton;

@@ -39,7 +39,7 @@ const getContainerStyle = (type) => {
  * @param {React.Component} props.children - The children components of the large card.
  * @return {React.Component} The rendered large card component.
  */
-export default function LargeCard({
+export default LargeCard = ({
   title,
   Icon,
   ContentComponent,
@@ -47,7 +47,7 @@ export default function LargeCard({
   type,
   customStyle,
   children,
-}) {
+}) => {
   const currentShape = useSelector(
     (state) => state.search.selectedSearchResult,
   );
@@ -86,7 +86,7 @@ export default function LargeCard({
       {children}
     </Stack>
   );
-}
+};
 
 const styles = StyleSheet.create({
   mutualStyles: {
