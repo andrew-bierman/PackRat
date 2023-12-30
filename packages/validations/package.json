@@ -8,7 +8,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "NODE_OPTIONS=--max_old_space_size=4096 tsc",
-    "build:and:install": "yarn build && yarn"
+    "build:and:install": "yarn build && yarn",
+    "postinstall": "yarn build"
   },
   "keywords": [],
   "author": "",
