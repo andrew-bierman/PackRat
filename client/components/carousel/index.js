@@ -1,47 +1,15 @@
-import React, { useRef, useState } from 'react';
-import {
-  ScrollView,
-  StyleSheet,
-  Platform,
-  View,
-  Dimensions,
-} from 'react-native';
+import React from 'react';
+import { ScrollView, StyleSheet, Platform, Dimensions } from 'react-native';
 import { VStack } from 'native-base';
+
 import ScrollButton from './ScrollButton';
+import useCarousel from './useCarousel';
 
-const { height, width } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
-const Carousel = ({ children = [], itemWidth }) => {
-  const scrollViewRef = useRef();
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  /**
-   * Handles the scroll event.
-   *
-   * @param {object} event - The scroll event object.
-   */
-  const handleScroll = (event) => {
-    const contentOffset = event.nativeEvent.contentOffset;
-    const newIndex = Math.round(contentOffset.x / itemWidth);
-    setCurrentIndex(newIndex);
-  };
-
-  /**
-   * Scrolls to the specified index.
-   *
-   * @param {number} index - The index to scroll to.
-   */
-  const scrollToIndex = (index) => {
-    if (index >= 0 && index < children.length && scrollViewRef.current) {
-      scrollViewRef.current.scrollTo({
-        x: index * (itemWidth + 20),
-        y: 0,
-        animated: true,
-      });
-      setCurrentIndex(index);
-    }
-  };
-
+export default Carousel = ({ children = [], itemWidth }) => {
+  const { scrollViewRef, currentIndex, handleScroll, scrollToIndex } =
+    useCarousel(children, itemWidth);
   return (
     <VStack
       style={{
@@ -102,5 +70,3 @@ const styles = StyleSheet.create({
     width: Platform.OS === 'web' ? '100%' : width * 0.8,
   },
 });
-
-export default Carousel;

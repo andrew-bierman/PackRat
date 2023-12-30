@@ -1,10 +1,9 @@
 import React from 'react';
-import { Box, Text, Stack } from 'native-base';
 import { StyleSheet, Platform } from 'react-native';
+import { Box, Text, Stack } from 'native-base';
 import { useSelector } from 'react-redux';
-import UseTheme from '../../hooks/useTheme';
 
-import { theme } from '../../theme';
+import UseTheme from '../../hooks/useTheme';
 
 /**
  * Retrieves the appropriate container style based on the provided type.
@@ -38,7 +37,7 @@ const getContainerStyle = (type) => {
  * @param {React.Component} props.children - The children components of the large card.
  * @return {React.Component} The rendered large card component.
  */
-export default function LargeCard({
+export default LargeCard = ({
   title,
   Icon,
   ContentComponent,
@@ -46,14 +45,13 @@ export default function LargeCard({
   type,
   customStyle,
   children,
-}) {
+}) => {
+  const { currentTheme } = UseTheme();
   const currentShape = useSelector(
     (state) => state.search.selectedSearchResult,
   );
 
   console.log('currentShape', currentShape);
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
   const containerStyle = customStyle || getContainerStyle(type);
 
   return (
@@ -87,11 +85,10 @@ export default function LargeCard({
       {children}
     </Stack>
   );
-}
+};
 
 const styles = () => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+  const { currentTheme } = UseTheme();
 
   return StyleSheet.create({
     mutualStyles: {
