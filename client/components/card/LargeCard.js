@@ -5,8 +5,6 @@ import { useSelector } from 'react-redux';
 
 import UseTheme from '../../hooks/useTheme';
 
-const { currentTheme } = UseTheme();
-
 /**
  * Retrieves the appropriate container style based on the provided type.
  *
@@ -48,6 +46,7 @@ export default LargeCard = ({
   customStyle,
   children,
 }) => {
+  const { currentTheme } = UseTheme();
   const currentShape = useSelector(
     (state) => state.search.selectedSearchResult,
   );
@@ -88,45 +87,49 @@ export default LargeCard = ({
   );
 };
 
-const styles = StyleSheet.create({
-  mutualStyles: {
-    backgroundColor: currentTheme.colors.card,
-    flex: 1,
-    gap: 45,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    textAlign: 'center',
-    padding: currentTheme.size.cardPadding,
-  },
-  containerMobile: {
-    backgroundColor: currentTheme.colors.card,
-    padding: currentTheme.size.mobilePadding,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    gap: 25,
-    flex: 1,
-    paddingHorizontal: 100,
-  },
-  searchContainer: {
-    backgroundColor: currentTheme.colors.card,
-    padding: currentTheme.size.mobilePadding,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    gap: 10,
-    flex: 1,
-    paddingHorizontal: 60,
-    paddingVertical: 70,
-    height: Platform.OS === 'web' ? '450px' : '100%',
-  },
-  mapCard: {
-    backgroundColor: currentTheme.colors.card,
-    flexDirection: 'column',
-    alignItems: 'center',
-    textAlign: 'center',
-    padding: currentTheme.size.cardPadding,
-    paddingHorizontal: currentTheme.padding.paddingInside,
-    marginBottom: 20,
-    height: Platform.OS === 'web' ? '650px' : '100%',
-    overflow: 'hidden',
-  },
-});
+const styles = () => {
+  const { currentTheme } = UseTheme();
+
+  return StyleSheet.create({
+    mutualStyles: {
+      backgroundColor: currentTheme.colors.card,
+      flex: 1,
+      gap: 45,
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      textAlign: 'center',
+      padding: currentTheme.size.cardPadding,
+    },
+    containerMobile: {
+      backgroundColor: currentTheme.colors.card,
+      padding: currentTheme.size.mobilePadding,
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      gap: 25,
+      flex: 1,
+      paddingHorizontal: 100,
+    },
+    searchContainer: {
+      backgroundColor: currentTheme.colors.card,
+      padding: currentTheme.size.mobilePadding,
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      gap: 10,
+      flex: 1,
+      paddingHorizontal: 60,
+      paddingVertical: 70,
+      height: Platform.OS === 'web' ? '450px' : '100%',
+    },
+    mapCard: {
+      backgroundColor: currentTheme.colors.card,
+      flexDirection: 'column',
+      alignItems: 'center',
+      textAlign: 'center',
+      padding: currentTheme.size.cardPadding,
+      paddingHorizontal: currentTheme.padding.paddingInside,
+      marginBottom: 20,
+      height: Platform.OS === 'web' ? '650px' : '100%',
+      overflow: 'hidden',
+    },
+  });
+};

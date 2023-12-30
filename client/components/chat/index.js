@@ -16,7 +16,7 @@ import {
   selectConversationById,
   selectAllConversations,
 } from '../../store/chatStore';
-import { Box, VStack, HStack } from 'native-base';
+import { Box, VStack } from 'native-base';
 import { CustomModal } from '../modal';
 
 const MessageBubble = ({ message }) => {
@@ -174,8 +174,7 @@ const ChatModalTrigger = () => {
 };
 
 const styles = () => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+  const { currentTheme } = UseTheme();
 
   return StyleSheet.create({
     container: { flex: 1, padding: 16 },

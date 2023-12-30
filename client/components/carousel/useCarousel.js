@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 
-export default useCarousel = () => {
+export default useCarousel = (children, itemWidth) => {
   const scrollViewRef = useRef();
   const [currentIndex, setCurrentIndex] = useState(0);
 

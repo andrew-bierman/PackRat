@@ -9,7 +9,7 @@ const { width } = Dimensions.get('window');
 
 export default Carousel = ({ children = [], itemWidth }) => {
   const { scrollViewRef, currentIndex, handleScroll, scrollToIndex } =
-    useCarousel();
+    useCarousel(children, itemWidth);
   return (
     <VStack
       style={{

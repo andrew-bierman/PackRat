@@ -11,8 +11,6 @@ import { SearchItem } from '../item/searchItem';
 import Loader from '../Loader';
 import { useCard } from './useCard';
 
-const { currentTheme } = UseTheme();
-
 export const CustomCard = ({ title, content, footer, link, type, data }) => {
   const {
     isCopied,
@@ -30,7 +28,7 @@ export const CustomCard = ({ title, content, footer, link, type, data }) => {
   if (type === 'pack') {
     return (
       <Box
-        style={styles.mainContainer}
+        style={styles().mainContainer}
         alignSelf="center"
         alignItems={['center', 'center', 'flex-start', 'flex-start']}
         w={['100%', '100%', '100%', '90%']}
@@ -139,7 +137,7 @@ export const CustomCard = ({ title, content, footer, link, type, data }) => {
   if (type === 'trip') {
     return (
       <Box
-        style={styles.mainContainer}
+        style={styles().mainContainer}
         alignSelf="center"
         alignItems={['center', 'center', 'flex-start', 'flex-start']}
         w={['100%', '100%', '100%', '90%']}
@@ -216,25 +214,29 @@ export const CustomCard = ({ title, content, footer, link, type, data }) => {
   }
 };
 
-const styles = StyleSheet.create({
-  mainContainer: {
-    backgroundColor: currentTheme.colors.card,
-    flex: 1,
-    gap: 45,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingLeft: 25,
-    paddingRight: 25,
-    paddingTop: 15,
-    paddingBottom: 15,
-    border: '1',
-  },
-  containerMobile: {
-    backgroundColor: currentTheme.colors.card,
-    flex: 1,
-    gap: 45,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 15,
-  },
-});
+const styles = () => {
+  const { currentTheme } = UseTheme();
+
+  return StyleSheet.create({
+    mainContainer: {
+      backgroundColor: currentTheme.colors.card,
+      flex: 1,
+      gap: 45,
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      paddingLeft: 25,
+      paddingRight: 25,
+      paddingTop: 15,
+      paddingBottom: 15,
+      border: '1',
+    },
+    containerMobile: {
+      backgroundColor: currentTheme.colors.card,
+      flex: 1,
+      gap: 45,
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      padding: 15,
+    },
+  });
+};
