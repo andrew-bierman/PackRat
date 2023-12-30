@@ -36,7 +36,7 @@ RelationSchema.method('toGeoJSON', async function () {
 
 RelationSchema.method('toJSON', async function () {
   const { _id, ...object } = this.toObject();
-  object.id = _id.toString();
+  object.osm_id = Number(_id);
   // Asynchronously populate the members (you may need to add your own logic to populate based on type)
   for (const member of object.members) {
     member.refId = await mongoose.model(member.type).findById(member.refId);
