@@ -79,7 +79,15 @@ jobs:
         yarn web &
 
     - name: Wait for a while
-      run: sleep 60  # wait for 60 seconds to let servers start
+      run: sleep 120  # wait for some time to let the server start
 
-    - name: Kill Background Jobs
+    - name: Kill Background Jobs (Unix)
+      if: matrix.os != 'windows-latest'
       run: kill $(jobs -p) || true
+
+    - name: Kill Background Jobs (Windows)
+      if: matrix.os == 'windows-latest'
+      run: |
+        Get-Job | Stop-Job
+        Get-Job | Remove-Job
+
