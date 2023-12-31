@@ -246,7 +246,7 @@ export default function Login() {
             />
 
             <RButton
-              isDisabled={!isValid}
+              disabled={!isValid}
               onPress={handleSubmit(handleLogin)}
               style={{ marginTop: '16px' }}
               backgroundColor="mediumpurple"
