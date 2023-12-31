@@ -129,6 +129,7 @@
   "devDependencies": {
     "@babel/core": "^7.21.3",
     "@babel/preset-typescript": "^7.22.5",
+    "@tanstack/eslint-plugin-query": "^5.14.6",
     "@tsconfig/react-native": "^3.0.2",
     "@types/jest": "^29.5.3",
     "@types/lodash": "^4.14.202",
