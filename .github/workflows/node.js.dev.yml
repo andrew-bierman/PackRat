@@ -8,11 +8,12 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        node-version: [18.x, 20.x, 21.x] # Adjust these versions as per your requirements.
+        os: [ubuntu-latest, windows-latest, macos-latest] # Operating systems
+        node-version: [18.x, 20.x, 21.x] # Node.js versions
 
     steps:
     - name: Checkout Repository
