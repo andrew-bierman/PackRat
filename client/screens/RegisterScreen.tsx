@@ -139,12 +139,11 @@ export default function Register() {
           />
 
           <RButton
-            isDisabled={!isValid}
+            disabled={!isValid}
             onPress={handleSubmit(registerUser)}
             // onPress={() => registerUser()}
             style={{ marginTop: '16px' }}
             backgroundColor="mediumpurple"
-            // disabled={!email || !password || !name}
           >
             {'Sign up'}
           </RButton>

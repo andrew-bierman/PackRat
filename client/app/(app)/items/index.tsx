@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Platform } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { theme } from '../../../theme';
-import UseTheme from '../../../hooks/useTheme';
+import useTheme from '../../../hooks/useTheme';
 import { RTooltip, RButton, RScrollView } from '@packrat/ui';
 import { CustomModal } from '../../../components/modal';
 import { AddItemGlobal } from '../../../components/item/AddItemGlobal';
@@ -31,7 +31,7 @@ export default function Items() {
   const [refetch, setRefetch] = useState(false);
 
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
 
   const { data, isLoading, isError } = useFetchGlobalItems(limit, page);
   return (

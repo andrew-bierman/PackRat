@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, Button, ScrollView, Tooltip } from 'native-base';
 import { MaterialIcons } from '@expo/vector-icons';
 import { theme } from '../../theme';
-import UseTheme from '../../hooks/useTheme';
+import useTheme from '../../hooks/useTheme';
 import { CustomModal } from '../../components/modal';
 import { AddItemGlobal } from '../../components/item/AddItemGlobal';
 import { ItemsTable } from '../../components/itemtable/itemTable';
@@ -21,7 +21,7 @@ export default function Items() {
   const [refetch, setRefetch] = useState(false);
 
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   const styles = useCustomStyles(loadStyles);
   const data = useSelector((state) => state.globalItems);
   const isLoading = useSelector((state) => state.globalItems.isLoading);

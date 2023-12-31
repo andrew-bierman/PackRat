@@ -1,14 +1,8 @@
-import { Button } from 'tamagui';
-import useTheme from '~/hooks/useTheme';
+import { Button, styled } from 'tamagui';
 
-const RButton = ({children, backgroundColor, ...props}) => {
-  const { currentTheme } = useTheme();
-  const bg = backgroundColor ? backgroundColor : currentTheme.colors.secondaryBlue;
-  return (
-    <Button backgroundColor={bg} color={"white"} {...props}>
-      {children}
-    </Button>
-  );
-};
+const RButton = styled(Button, {
+  backgroundColor: '#0C66A1', // temp fix, we need to set up proper tamagui theme
+  color: 'white',
+})
 
 export default RButton;
