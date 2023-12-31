@@ -12,7 +12,7 @@ import Mapbox from '@rnmapbox/maps';
 import { MAPBOX_ACCESS_TOKEN } from '@env';
 import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 import { theme } from '../../../theme';
-import UseTheme from '../../../hooks/useTheme';
+import useTheme from '../../../hooks/useTheme';
 import ErrorBoundary from '@packrat/ui';
 import { useCustomStyles } from '~/hooks/useCustomStyles';
 
@@ -20,7 +20,7 @@ Mapbox.setAccessToken(MAPBOX_ACCESS_TOKEN);
 
 export default function Map() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
 
   const styles = useCustomStyles(loadStyles);
 

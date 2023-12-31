@@ -9,7 +9,7 @@ import {
 } from '@expo/vector-icons';
 import { theme, darkTheme } from '../../../theme';
 // import { useAuth } from "../../auth/provider";
-import UseTheme from '../../../hooks/useTheme';
+import useTheme from '../../../hooks/useTheme';
 import { signOut } from '../../../store/authStore';
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,7 +18,7 @@ import useCustomStyles from '~/hooks/useCustomStyles';
 
 export default function Drawer() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   const styles = useCustomStyles(loadStyles);
 
   const { sessionSignOut } = useSession();
