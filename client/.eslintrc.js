@@ -6,6 +6,7 @@ module.exports = {
   extends: [
     'standard-with-typescript',
     'plugin:@typescript-eslint/recommended',
+    'plugin:@tanstack/eslint-plugin-query/recommended',
     'prettier',
   ],
   overrides: [

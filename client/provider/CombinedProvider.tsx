@@ -21,7 +21,7 @@ import { useEffect } from 'react';
 
 export function CombinedProvider({ children }: { children: React.ReactNode }) {
   // Setup for React Query and TRPC
-  const queryClient = new QueryClient();
+  const [queryClient] = React.useState(() => new QueryClient());
 
   const persister = createAsyncStoragePersister({
     storage: AsyncStorage,
