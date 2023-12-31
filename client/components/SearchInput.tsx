@@ -12,6 +12,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
     searchString,
     setSearchString,
     showSearchResults,
+    setShowSearchResults,
     data,
     handleSearchResultClick,
     handleClearSearch,
@@ -59,9 +60,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
           {searchString && (
             <RButton
               onPress={() => {
-                setShowSearchResults(false);
-                setSearchString('');
-                dispatch(clearSearchResults());
+                handleClearSearch();
               }}
               style={{
                 position: 'absolute',
