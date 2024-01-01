@@ -179,7 +179,7 @@ export default function About() {
     >
       <View style={[isDark ? styles.containerDark : styles.container]}>
         <Desktop>
-          <AboutContent desktopContainer={styles.webLogoContainer} />
+          <AboutContent desktopContainer={styles.webLogoContainer} isMobile={false}/>
         </Desktop>
         <Tablet>
           <AboutContent
