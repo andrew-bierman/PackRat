@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client/edge';
+import { Node } from '../../drizzle/methods/Node';
 import {
   createInstanceFromCoordinates,
   coordinatesToInstances,
@@ -17,15 +17,15 @@ export const modelMappingFunc = (type: string) => {
     case 'node':
     case 'n': // In case 'n' is sent
     case 'N': // In case 'N' is sent
-      return prisma.node;
+      return 'Node';
     case 'way':
     case 'w': // Map 'W' to Way
     case 'W': // Map 'W' to Way
-      return prisma.way;
+      return 'Way';
     case 'relation':
     case 'r': // In case 'r' is sent
     case 'R': // In case 'R' is sent
-      return prisma.relation;
+      return 'Relation';
     default:
       return null;
   }
@@ -47,10 +47,10 @@ export async function fromOSM(Model: any, data: any) {
     tags: propertiesToTags(data.tags),
     updated_at: data.timestamp,
   };
-
+  const nodeClass = new Node()
   // Find or create nodes
   const ids = data.nodes.map((node: any) => node.id);
-  const instances = await (prisma.node as any).findOrCreateMany(ids, data.nodes);
+  const instances = await nodeClass.create(data.nodes);
 
   // Add nodes to instance
   instanceData.nodes = instances.map((instance: any) => instance._id);
@@ -90,7 +90,7 @@ export async function fromGeoJSON(
 
   // Convert coordinates to nodes
   const nodes = await coordinatesToInstances(
-    prisma.node,
+    Model.node ,
     handleGeoJSONGeometry(geoJSON.geometry),
   );
   let instanceGeoJSON;
@@ -183,7 +183,7 @@ export async function updateInstanceFromGeoJSON(
   instance.updated_at = geoJSON.properties.timestamp;
   instance.tags = propertiesToTags(geoJSON.properties);
   instance.nodes = await coordinatesToInstances(
-    prisma.node,
+    instance.node,
     handleGeoJSONGeometry(geoJSON.geometry),
   );
   instance.geoJSON = geoJSON;

@@ -1,7 +1,6 @@
 // services/tripService.ts
 
-import { PrismaClient } from '@prisma/client/edge';
-import { Pack, User } from '../../prisma/methods';
+import { Trip } from '../../drizzle/methods/trip';
 
 /**
  * Retrieves public trips based on the given query parameter.
@@ -10,13 +9,12 @@ import { Pack, User } from '../../prisma/methods';
  * @return {Promise<object[]>} The public trips.
  */
 export const getPublicTripsService = async (
-  prisma: PrismaClient,
   queryBy: string,
 ): Promise<object[]> => {
   try {
-    const publicTrips = await prisma.trip.findMany({
-      where: { is_public: true },
-      select: {
+    const tripClass = new Trip()
+    const publicTrips = await tripClass.findMany({
+      columns: {
         id: true,
         name: true,
         description: true,
@@ -26,20 +24,22 @@ export const getPublicTripsService = async (
         end_date: true,
         destination: true,
         owner_id: true,
-        ownerDocument: {
-          select: {
-            id: true,
-            username: true,
-          },
-        },
-        packs: true,
         createdAt: true,
         updatedAt: true,
       },
-      orderBy: queryBy === 'Favorite' ? { id: 'desc' } : { id: 'asc' },
+      with: {
+        ownerDocument: {
+          columns: {
+            id: true,
+            username: true,
+          }
+        },
+        packs: true,
+      },
+      where: (trips, { eq }) => eq(trips.is_public, true),
     });
 
-    const allPacks = await prisma.pack.findMany({
+    const allPacks = await tripClass.findMany({
       where: { id: { in: publicTrips.map((trip) => trip.packs) } },
     });
 
@@ -50,8 +50,8 @@ export const getPublicTripsService = async (
       const packDocument = allPacks.find((pack) => pack.id === trip.packs);
       return {
         ...trip,
-        packDocuments: Pack(packDocument)?.toJSON(),
-        ownerDocument: User(ownerDocument)?.toJSON(),
+        packDocuments: packDocument,
+        ownerDocument: ownerDocument,
       };
     });
 

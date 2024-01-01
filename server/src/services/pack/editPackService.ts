@@ -1,4 +1,4 @@
-import { Pack } from '../../drizzle/methods/Pack';
+import { Pack } from '../../drizzle/methods/pack';
 
 /**
  * Edits a pack in the service.

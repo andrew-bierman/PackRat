@@ -1,10 +1,9 @@
-import { PrismaClient } from '@prisma/client/edge';
-import { Pack } from '../../drizzle/methods/Pack';
+import { Pack } from '../../drizzle/methods/pack';
 
 export const getPackByIdService = async (packId) => {
   try {
     const packClass = new Pack();
-    const pack = await packClass.findUniquepack({
+    const pack = await packClass.findUniquePack({
       where: { id: packId },
       with: {
         favoritedByDocuments: true,
@@ -27,13 +26,13 @@ export const getPackByIdService = async (packId) => {
     const ownerDocument = pack.ownerDocument;
     const favoritedByDocuments = pack.favoritedByDocuments
     const ownerDocuments = pack.ownerDocuments
-    const tripDocuments = trips
+    // const tripDocuments = trips
     return {
       ...pack,
       ownerDocument,
       ownerDocuments,
       favoritedByDocuments,
-      tripDocuments,
+      // tripDocuments,
     };
   } catch (error) {
     // Handle any potential errors here

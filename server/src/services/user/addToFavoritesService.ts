@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client/edge';
+import { User } from '../../drizzle/methods/User';
 import { UserFavoritePacks } from '../../drizzle/methods/UserFavoritePacks';
 
 /**
@@ -9,33 +9,23 @@ import { UserFavoritePacks } from '../../drizzle/methods/UserFavoritePacks';
  * @return {Promise<object>} The updated user object.
  */
 export const addToFavoriteService = async (
-  prisma: PrismaClient,
   packId: string,
   userId: string,
 ): Promise<object> => {
   const userFavoritePacksClass = new UserFavoritePacks();
   try {
-    const user = await prisma.user.findUnique({
+    const userClass = new User();
+    const user = await userClass.findUnique({
       where: { id: userId },
-      select: { id: true, favoriteDocuments: true },
+      with: { id: true, favoriteDocuments: true },
     });
 
     if (!user) {
       throw new Error('User not found');
     }
+   
 
-    const isFavorite = await prisma.user.findUnique({
-      where: {
-        id: userId,
-      },
-      select: {
-        favoriteDocuments: {
-          where: {
-            id: packId,
-          },
-        },
-      },
-    });
+    const isFavorite = await userClass.findFavorite(userId, packId);
 
     if (isFavorite) {
       // await prisma.user.update({
@@ -77,9 +67,9 @@ export const addToFavoriteService = async (
       await userFavoritePacksClass.create(userId, packId);
     }
 
-    const updatedUser = await prisma.user.findUnique({
+    const updatedUser = await userClass.findUnique({
       where: { id: userId },
-      select: {
+      with: {
         id: true,
         username: true,
       },

@@ -1,4 +1,4 @@
-import { Pack } from '../../drizzle/methods/Pack';
+import { Pack } from '../../drizzle/methods/pack';
 
 
 const SORT_OPTIONS = {
@@ -36,9 +36,10 @@ const sortPacks = (propertyName, sortOrder) => (packA, packB) => {
 };
 
 const computeVirtualFields = (pack) => {
-  const packWithTotalWeight = computeTotalWeight(pack);
-  const packWithTotalScore = computeTotalScores(packWithTotalWeight);
-  const packWithFavoritesCount = computeFavouritesCount(packWithTotalScore);
+  const packClass = new Pack()
+  const packWithTotalWeight = packClass.computeTotalWeight(pack);
+  const packWithTotalScore = packClass.computeTotalScores(packWithTotalWeight);
+  const packWithFavoritesCount = packClass.computeFavouritesCount(packWithTotalScore);
 
   return {
     ...packWithFavoritesCount,

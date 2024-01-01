@@ -1,5 +1,4 @@
-import { PrismaClient } from '@prisma/client/edge';
-import { Pack } from '../../drizzle/methods/Pack';
+import { Pack } from '../../drizzle/methods/pack';
 
 /**
  * Deletes a pack by its ID.

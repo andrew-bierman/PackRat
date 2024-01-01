@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { User } from "../../drizzle/methods/User";
-import { User as UserTable } from "../../db/schema";
+import { user as UserTable } from "../../db/schema";
 /**
  * A function that finds a user by their email and updates their data.
  * @param {PrismaClient} prisma - Prisma client.

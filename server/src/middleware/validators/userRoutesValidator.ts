@@ -1,6 +1,5 @@
 import { z } from 'zod';
 import { Request } from 'express';
-import { Role } from '@prisma/client/edge';
 
 const JoiObjectId = z.string().regex(/^[0-9a-fA-F]{24}$/g);
 
@@ -29,6 +28,11 @@ export const resetPassword = z.object({
   password: z.string().nonempty(),
 });
 
+enum UserRoles {
+  user = 'user',
+  admin = 'admin',
+}
+
 export const addToFavorite = z.object({
   packId: JoiObjectId.nonempty(),
   userId: JoiObjectId.nonempty(),
@@ -45,7 +49,7 @@ export const editUser = z.object({
   is_certified_guide: z.boolean().optional(),
   passwordResetToken: z.string().optional(),
   passwordResetTokenExpiration: z.date().nullable().optional(),
-  role: z.nativeEnum(Role).optional(),
+  role: z.nativeEnum(UserRoles).optional(),
   username: z
     .string()
     .refine((value) => value.length > 0)

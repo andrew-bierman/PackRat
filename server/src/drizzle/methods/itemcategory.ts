@@ -1,12 +1,13 @@
 import { eq } from "drizzle-orm";
 import { createDb } from "../../db/client";
-import { itemcategory as item } from "../../db/schema";
+import { itemCategory as item } from "../../db/schema";
+import { getDB } from "../../trpc/context";
 
 export class ItemCategory {
     private dbInstance;
 
     constructor() {
-        this.dbInstance = createDb(db);
+        this.dbInstance = createDb(getDB());
     }
 
     async update(data: any, id: string, filter = eq(item.id, id), returning = null) {

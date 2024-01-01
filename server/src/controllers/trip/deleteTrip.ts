@@ -1,6 +1,7 @@
 import { publicProcedure } from '../../trpc';
 import { UnableToDeleteTripError } from '../../helpers/errors';
 import * as validator from '../../middleware/validators/index';
+import { Trip } from '../../drizzle/methods/trip';
 
 // import { prisma } from '../../prisma';
 /**
@@ -25,11 +26,8 @@ import * as validator from '../../middleware/validators/index';
 export function deleteTripRoute() {
   return publicProcedure.input(validator.deleteTrip).mutation(async (opts) => {
     const { tripId } = opts.input;
-    const { prisma }: any = opts.ctx;
-
-    await prisma.trip.delete({
-      where: { id: tripId }, // Assuming tripId is the ID of the trip to delete
-    });
+    const trip = new Trip();
+    await trip.delete(tripId);
     return 'trip was deleted successfully';
   });
 }

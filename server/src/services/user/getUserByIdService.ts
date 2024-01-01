@@ -1,4 +1,3 @@
-import { PrismaClient } from '@prisma/client/edge';
 import { User } from '../../drizzle/methods/User';
 // import { prisma } from '../../prisma';
 

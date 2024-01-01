@@ -25,7 +25,6 @@ import * as validator from '../../middleware/validators/index';
 export function getTripByIdRoute() {
   return publicProcedure.input(validator.getTripById).query(async (opts) => {
     const { tripId } = opts.input;
-    const { prisma }: any = opts.ctx;
-    return await getTripByIdService(prisma, tripId);
+    return await getTripByIdService(tripId);
   });
 }

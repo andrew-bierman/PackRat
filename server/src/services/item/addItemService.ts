@@ -4,7 +4,7 @@ import { Item } from '../../drizzle/methods/Item';
 import { item as itemTable } from '../../db/schema';
 import { and, eq } from 'drizzle-orm';
 import { ItemCategory } from '../../drizzle/methods/itemcategory';
-import { Pack } from '../../drizzle/methods/Pack';
+import { Pack } from '../../drizzle/methods/pack';
 /**
  * Generates a new item and adds it to a pack based on the given parameters.
  * @param {string} name - The name of the item.

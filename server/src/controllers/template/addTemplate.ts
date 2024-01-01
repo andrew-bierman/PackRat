@@ -4,9 +4,9 @@ import { responseHandler } from '../../helpers/responseHandler';
 
 import { addTemplateService } from '../../services/template/template.service';
 import { z } from 'zod';
+import { User } from '../../drizzle/methods/User';
 
 // import { prisma } from '../../prisma';
-import { PrismaClient, TemplateType } from '@prisma/client/edge';
 /**
  * Adds a template to the database.
  * @param {Object} req - The request object.
@@ -36,7 +36,7 @@ export function addTemplateRoute() {
   return publicProcedure
     .input(
       z.object({
-        type: z.nativeEnum(TemplateType),
+        type:z.any(),
         templateId: z.string(),
         isGlobalTemplate: z.boolean(),
         createdBy: z.string(),
@@ -44,9 +44,8 @@ export function addTemplateRoute() {
     )
     .mutation(async (opts) => {
       const { type, templateId, isGlobalTemplate, createdBy } = opts.input;
-      const prisma: PrismaClient = (opts.ctx as any).prisma;
-
-      const user = await prisma.user.findUnique({
+      const userClass = new User();
+      const user = await userClass.findUnique({
         where: {
           id: createdBy,
         },
@@ -55,7 +54,6 @@ export function addTemplateRoute() {
         throw new Error(UserNotFoundError.message);
       }
       await addTemplateService(
-        prisma,
         type,
         templateId,
         isGlobalTemplate,

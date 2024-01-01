@@ -1,4 +1,3 @@
-import { PrismaClient, TemplateType } from '@prisma/client/edge';
 
 /**
  * Edits a template.
@@ -8,9 +7,8 @@ import { PrismaClient, TemplateType } from '@prisma/client/edge';
  * @param {boolean} isGlobalTemplate - The new value for isGlobalTemplate (optional).
  */
 export const editTemplateService = async (
-  prisma: PrismaClient,
   templateId: string,
-  type: TemplateType,
+  type:any,
   isGlobalTemplate: boolean,
 ) => {
   try {

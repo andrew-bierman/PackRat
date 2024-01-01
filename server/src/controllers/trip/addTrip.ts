@@ -63,7 +63,6 @@ export function addTripRoute() {
       packs,
       is_public,
     } = opts.input;
-    const { prisma }: any = opts.ctx;
     const tripDetails = {
       name,
       description,
@@ -78,6 +77,6 @@ export function addTripRoute() {
       is_public,
     };
 
-    return await addTripService(prisma, tripDetails);
+    return await addTripService(tripDetails);
   });
 }

@@ -4,7 +4,8 @@ import { responseHandler } from '../../helpers/responseHandler';
 
 // import { prisma } from '../../prisma';
 import * as validator from '../../middleware/validators/index';
-import { Trip } from '../../prisma/methods';
+import { Trip } from '../../drizzle/methods/trip';
+
 /**
  * Edits a trip by updating the trip details.
  * @param {Object} req - The request object.
@@ -32,13 +33,8 @@ import { Trip } from '../../prisma/methods';
 export function editTripRoute() {
   return publicProcedure.input(validator.editTrip).mutation(async (opts) => {
     const { id, ...rest } = opts.input;
-    const { prisma }: any = opts.ctx;
-
-    const trip = prisma.trip.update({
-      where: { id: id }, // Assuming id is the ID of the trip to update
-      data: rest,
-    });
-
-    return Trip(trip)?.toJSON(prisma);
+    const tripClass = new Trip();
+    const trip = await tripClass.update(rest,id);
+    return trip 
   });
 }

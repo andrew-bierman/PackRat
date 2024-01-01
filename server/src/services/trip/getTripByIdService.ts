@@ -1,5 +1,4 @@
-import { PrismaClient } from '@prisma/client/edge';
-import { Trip } from '../../prisma/methods';
+import { Trip } from "../../drizzle/methods/trip";
 
 /**
  * Retrieves a trip by its ID and returns the trip details.
@@ -8,11 +7,11 @@ import { Trip } from '../../prisma/methods';
  * @return {Promise<object>} A promise that resolves to the trip details.
  */
 export const getTripByIdService = async (
-  prisma: PrismaClient,
   tripId: string,
 ): Promise<object> => {
   try {
-    const trip = await prisma.trip.findUnique({
+    const tripClass = new Trip();
+    const trip = await tripClass.findUnique({
       where: { id: tripId },
       include: { ownerDocument: true }, // Assuming 'owner_id' is a foreign key to the 'User' model
     });
@@ -21,7 +20,7 @@ export const getTripByIdService = async (
       throw new Error('Trip cannot be found');
     }
 
-    return await Trip(trip).toJSON(prisma);
+    return trip;
   } catch (error) {
     console.error(error);
     throw new Error('Trip cannot be found');

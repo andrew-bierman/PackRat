@@ -11,7 +11,7 @@ import getTrailRoutes from './getTrailRoutes';
 import osmRoutes from './osmRoutes';
 import passwordResetRoutes from './passwordResetRoutes';
 import openAiRoutes from './openAiRoutes';
-import templateRoutes from './templateRoutes';
+// import templateRoutes from './templateRoutes';
 import favoriteRouters from './favoriteRoutes';
 import userRoutes from './userRoutes';
 
@@ -53,7 +53,7 @@ router.use('/gettrails', getTrailRoutes);
 router.use('/osm', osmRoutes);
 router.use('/password-reset', passwordResetRoutes);
 router.use('/openai', openAiRoutes);
-router.use('/template', templateRoutes);
+// router.use('/template', templateRoutes);
 router.use('/favorite', favoriteRouters);
 router.use('/openai', openAiRoutes);
 
@@ -69,7 +69,7 @@ router.use('/api/gettrails', getTrailRoutes);
 router.use('/api/osm', osmRoutes);
 router.use('/api/password-reset', passwordResetRoutes);
 router.use('/api/openai', openAiRoutes);
-router.use('/api/template', templateRoutes);
+// router.use('/api/template', templateRoutes);
 router.use('/api/favorite', favoriteRouters);
 router.use('/api/openai', openAiRoutes);
 

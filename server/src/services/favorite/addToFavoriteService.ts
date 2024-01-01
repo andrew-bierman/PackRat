@@ -1,8 +1,7 @@
 // import { prisma } from '../../prisma';
 
-import { PrismaClient } from '@prisma/client/edge';
 import { User } from '../../drizzle/methods/User';
-import { Pack } from '../../drizzle/methods/Pack';
+import { Pack } from '../../drizzle/methods/pack';
 import { UserFavoritePacks } from '../../drizzle/methods/UserFavoritePacks';
 
 /**

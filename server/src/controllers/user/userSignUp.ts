@@ -2,16 +2,16 @@ import bcrypt from 'bcryptjs';
 import { sendWelcomeEmail, resetEmail } from '../../utils/accountEmail';
 import { publicProcedure } from '../../trpc';
 import * as validator from '../../middleware/validators/index';
-import { User } from '../../prisma/methods';
+import { User } from '../../drizzle/methods/User';
 
 // export const userSignup = async (req: Request, res: Response) => {
 //   const { email } = req.body;
 //   console.log(`the request body received is ${JSON.stringify(req.body)}`);
-//   await prisma.user.alreadyLogin(email);
+//   await userClass.alreadyLogin(email);
 //   const salt = await bcrypt.genSalt(parseInt(JWT_SECRET));
 //   req.body.password = await bcrypt.hash(req.body.password, salt);
 
-//   const newUser = await prisma.user.create({
+//   const newUser = await userClass.create({
 //     data: req.body,
 //   });
 //   const userWithMethods = User(newUser);
@@ -23,15 +23,14 @@ import { User } from '../../prisma/methods';
 export function signUpRoute() {
   return publicProcedure.input(validator.userSignUp).mutation(async (opts) => {
     let { email, password, name, username } = opts.input;
-    const { prisma, env }: any = opts.ctx;
+    const { env }: any = opts.ctx;
     const STMP_EMAIL = env.STMP_EMAIL;
     const SEND_GRID_API_KEY = env.SEND_GRID_API_KEY;
     const JWT_SECRET = env.JWT_SECRET;
-
-    await prisma.user.alreadyLogin(email);
+    const userClass = new User();
     const salt = await bcrypt.genSalt(parseInt(JWT_SECRET));
     password = await bcrypt.hash(password, salt);
-    const user = await prisma.user.create({
+    const user = await userClass.create({
       data: {
         email,
         password,
@@ -39,9 +38,8 @@ export function signUpRoute() {
         username,
       },
     });
-    const userWithMethods = User(user);
-    await userWithMethods.generateAuthToken(prisma, JWT_SECRET);
+    await userClass.generateAuthToken(JWT_SECRET, user.id);
     sendWelcomeEmail(user.email, user.name, STMP_EMAIL, SEND_GRID_API_KEY);
-    return User(user)?.toJSON();
+    return user;
   });
 }

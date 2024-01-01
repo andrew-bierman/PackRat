@@ -1,4 +1,4 @@
-import type { PrismaClient, TemplateType } from '@prisma/client/edge';
+import { User } from '../../drizzle/methods/User';
 
 /**
  * Adds a template to the database.
@@ -10,14 +10,14 @@ import type { PrismaClient, TemplateType } from '@prisma/client/edge';
  * @return {Promise<void>} The created template.
  */
 export const addTemplateService = async (
-  prisma: PrismaClient,
-  type: TemplateType,
+  type: any,
   templateId: string,
   isGlobalTemplate: boolean,
   createdBy: string,
 ): Promise<void> => {
   try {
-    const user = await prisma.user.findUnique({
+    const userClass = new User();
+    const user = await userClass.findUnique({
       where: {
         id: createdBy,
       },
@@ -27,7 +27,7 @@ export const addTemplateService = async (
       throw new Error('User not found');
     }
 
-    await prisma.template.create({
+    await user.template.create({
       data: {
         type,
         templateId,

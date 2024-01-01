@@ -1,5 +1,5 @@
-import { Trip, TripGeoJson } from '../../drizzle/methods/Trip';
-import { GeoJSON } from '../../drizzle/methods/GeoJSON';
+import { Trip, TripGeoJson } from "../../drizzle/methods/trip";
+
 
 export const addTripService = async (tripDetails) => {
   try {
@@ -17,14 +17,13 @@ export const addTripService = async (tripDetails) => {
       is_public,
     } = tripDetails;
     //Instanciation
-    const geoJsonInstance = new GeoJSON();
     const tripGeoJson = new TripGeoJson();
     const tripClass = new Trip();
 
     //create geojsons
     const savedGeoJSONs = await Promise.all(
       geoJSON.features.map(async (feature) => {
-        return await geoJsonInstance.create(feature);
+        // return await geoJsonInstance.create(feature); //TODO
       }),
     );
     

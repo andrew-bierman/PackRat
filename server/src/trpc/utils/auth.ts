@@ -1,6 +1,6 @@
-import { PrismaClient, User } from '@prisma/client/edge';
 import { TRPCError } from '@trpc/server';
 import * as jwt from 'hono/jwt';
+import { User } from '../../drizzle/methods/User';
 
 type JwtPayload = Record<string, unknown>;
 
@@ -39,11 +39,11 @@ const verifyToken = async (
  * @throws {Error} If user is not found.
  */
 const findUser = async (
-  prisma: PrismaClient,
   decoded: JwtPayload,
   token: string,
-): Promise<User> => {
-  const user: any = await prisma.user.findUnique({
+) => {
+  const userClass = await new User()
+  const user: any = await userClass.findUnique({
     where: {
       id: decoded.id as string,
       token: token,
@@ -60,12 +60,11 @@ const findUser = async (
 const extractTokenAndGetUser = async (
   req: Request,
   jwtSecret: string,
-  prisma: PrismaClient,
 ) => {
   const token = extractToken(req);
   if (!token) return null;
   const decoded = await verifyToken(token, jwtSecret);
-  const user = await findUser(prisma, decoded, token);
+  const user = await findUser(decoded, token);
   return user;
 };
 

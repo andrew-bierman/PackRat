@@ -1,4 +1,4 @@
-import { Pack } from '../../drizzle/methods/Pack';
+import { Pack } from '../../drizzle/methods/pack';
 
 /**
  * Retrieves the favorite packs associated with a specific user.

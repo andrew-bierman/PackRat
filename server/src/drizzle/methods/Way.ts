@@ -1,12 +1,13 @@
 import { eq } from "drizzle-orm";
 import { createDb } from "../../db/client";
 import { way } from "../../db/schema";
+import { getDB } from "../../trpc/context";
 
 export class Way {
     private dbInstance;
 
     constructor() {
-        this.dbInstance = createDb(db);
+        this.dbInstance = createDb(getDB());
     }
 
     async update(data: any, id: string, filter = eq(way.id, id), returning = null) {

@@ -10,7 +10,7 @@ import { Node } from '../../drizzle/methods/Node';
 export const getDestinationService = async (id) => {
   const wayClass = new Way();
   const nodeClass = new Node();
-  const way = await wayClass.findUniqueway({ where: { id } });
+  const way = await wayClass.findUniqueWay({ where: { id } });
 
   if (way) {
     return way

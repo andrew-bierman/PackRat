@@ -1,5 +1,6 @@
 import { publicProcedure } from '../../trpc';
 import * as validator from '../../middleware/validators/index';
+import { User } from '../../drizzle/methods/User';
 
 // /**
 //  * Sign in a user.
@@ -21,10 +22,10 @@ export function userSignInRoute() {
   return publicProcedure.input(validator.userSignIn).mutation(async (opts) => {
     const { input }: any = opts;
     const { prisma, env }: any = opts.ctx;
-    const user = await prisma.user.findByCredentials(input);
+    const userClass = new User();
+    const user = await userClass.findByCredentials(input.email, input.password);
     // console.log('user', user);
-    await User(user)?.generateAuthToken(prisma, env.JWT_SECRET);
-    const jsonUser = User(user)?.toJSON();
-    return jsonUser;
+    await userClass?.generateAuthToken(prisma, env.JWT_SECRET);
+    return user;
   });
 }

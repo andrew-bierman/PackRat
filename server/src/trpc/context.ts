@@ -1,19 +1,23 @@
 import { Context } from 'hono';
-import { getPrismaClient } from '../prisma';
 import { extractTokenAndGetUser } from './utils/auth';
 
-export const createContext = (honoContext: Context) => async () => {
-  const { env, req } = honoContext;
-  const prisma = getPrismaClient(env.MONGODB_URI as string);
+interface Tcontext extends Context {
+  d1: D1Database
+}
+let DB: D1Database;
+
+export const createContext = (honoContext: Tcontext) => async () => {
+  const { env, req, d1 } = honoContext;
+  DB = d1
   const user = await extractTokenAndGetUser(
     req.raw,
     env.JWT_SECRET,
-    prisma as any,
   );
 
   return {
-    prisma,
     env,
     user,
   };
 };
+
+export const getDB = () => DB

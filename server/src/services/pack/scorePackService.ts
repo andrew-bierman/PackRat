@@ -1,6 +1,5 @@
-import { PrismaClient } from '@prisma/client/edge';
+import { Pack } from '../../drizzle/methods/pack';
 import { calculatePackScore } from '../../utils/scorePack';
-import { Pack } from '../../drizzle/methods/Pack';
 
 /**
  * Scores a pack service based on the given packId.
@@ -12,7 +11,7 @@ import { Pack } from '../../drizzle/methods/Pack';
 export async function scorePackService(packId: string) {
   try {
     const packClass = new Pack();
-    const packData = await packClass.findUniquepack({
+    const packData = await packClass.findUniquePack({
       where: { id: packId },
       with: { itemDocuments: true }, // Assuming you have a relationship defined in your Prisma schema
     });

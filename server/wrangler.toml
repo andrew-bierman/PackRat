@@ -6,4 +6,4 @@ node_compat = true
 [[ d1_databases ]]
 binding = "production"
 database_name = "production"
-database_id = "2374ksjbfhsdf93lwsad09234"
+database_id = "3f9677cd-7dd9-4a2c-92c6-be5dbbf47baa"

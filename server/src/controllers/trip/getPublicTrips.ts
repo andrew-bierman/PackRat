@@ -4,7 +4,7 @@ import { responseHandler } from '../../helpers/responseHandler';
 import { getPublicTripsService } from '../../services/trip/getPublicTripService';
 import * as validator from '../../middleware/validators';
 import { z } from 'zod';
-import { Trip } from '../../prisma/methods';
+
 /**
  * Retrieves public trips based on the given query parameter.
  * @param {object} req - The request object.
@@ -29,10 +29,7 @@ export function getPublicTripsRoute() {
     .input(z.object({ queryBy: z.string() }))
     .query(async (opts) => {
       const { queryBy } = opts.input;
-      const { prisma }: any = opts.ctx;
-      const trips = await getPublicTripsService(prisma, queryBy);
-      return await Promise.all(
-        trips.map((trip) => Trip(trip as any)?.toJSON(prisma)),
-      );
+      const trips = await getPublicTripsService(queryBy);
+      return trips;
     });
 }

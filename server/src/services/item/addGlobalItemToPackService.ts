@@ -1,10 +1,9 @@
 // import { prisma } from '../../prisma';
 
-import { PrismaClient } from '@prisma/client/edge';
 import { Item } from '../../drizzle/methods/Item';
 import { eq } from 'drizzle-orm';
 import { item as itemTable } from "../../db/schema";
-import { Pack } from '../../drizzle/methods/Pack';
+import { Pack } from '../../drizzle/methods/pack';
 import { pack as packTable } from "../../db/schema";
 
 /**

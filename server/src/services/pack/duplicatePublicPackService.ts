@@ -1,5 +1,4 @@
-import { PrismaClient } from '@prisma/client/edge';
-import { Pack } from '../../drizzle/methods/Pack';
+import { Pack } from '../../drizzle/methods/pack';
 
 /**
  * Duplicates a public pack service.
@@ -15,7 +14,7 @@ export const duplicatePublicPackService = async (
   items,
 ) => {
   const packClass = new Pack();
-  const existingPack = await packClass.findUniquepack({
+  const existingPack = await packClass.findUniquePack({
     where: {
       id: packId, // Replace 'id' with the actual primary key field in your model
     },

@@ -1,7 +1,6 @@
 import { publicProcedure } from '../../trpc';
 import { TemplateNotFoundError } from '../../helpers/errors';
 import { z } from 'zod';
-import { PrismaClient } from '@prisma/client/edge';
 
 // import { prisma } from '../../prisma';
 

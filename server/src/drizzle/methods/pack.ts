@@ -2,12 +2,13 @@ import { eq } from "drizzle-orm";
 import { createDb } from "../../db/client";
 import { pack } from "../../db/schema";
 import { convertWeight } from '../../utils/convertWeight';
+import { getDB } from "../../trpc/context";
 
 export class Pack {
     private dbInstance;
 
     constructor() {
-        this.dbInstance = createDb(db);
+        this.dbInstance = createDb(getDB());
     }
 
     async update(data: any, id: string, filter = eq(pack.id, id), returning = null) {

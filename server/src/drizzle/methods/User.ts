@@ -1,13 +1,15 @@
 import * as jwt from 'hono/jwt';
 import { eq } from "drizzle-orm";
 import { createDb } from "../../db/client";
-import { User as UserTable } from "../../db/schema";
+import { user as UserTable, userFavoritePacks } from "../../db/schema";
+import { getDB } from '../../trpc/context';
+import bcrypt from 'bcrypt'
 
 export class User {
     private dbInstance;
 
     constructor() {
-        this.dbInstance = createDb(db);
+        this.dbInstance = createDb(getDB());
     }
 
     async save(user) {
@@ -91,5 +93,20 @@ export class User {
 
     async findUnique(query) {
         return this.dbInstance.query.User.findFirst(query);
+    }
+
+    async findByCredentials(email: string, password: string) {
+        const user = await this.findByEmail(email);
+        if (!user) return null;
+        if (await bcrypt.compare(password, user.password)) {
+            return user;
+        }
+        return null;
+    }
+
+    async findFavorite(userId:string, packId:string) {
+        const subQuery = this.dbInstance.select().from(userFavoritePacks).where(eq(userFavoritePacks.packId, packId)).as('subQuery');
+        const isFavorite = await this.dbInstance.select().from(UserTable).where(eq(UserTable.id, userId)).select({ favoriteDocuments: subQuery });
+        return isFavorite
     }
 }

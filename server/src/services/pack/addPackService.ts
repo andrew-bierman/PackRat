@@ -6,7 +6,7 @@
  * @return {Object} An object containing the created pack.
  */
 
-import { Pack } from "../../drizzle/methods/Pack";
+import { Pack } from "../../drizzle/methods/pack";
 
 
 export const addPackService = async (name, owner_id) => {
@@ -31,7 +31,7 @@ export const addPackService = async (name, owner_id) => {
   };
 
   // Check if a pack with the same name already exists
-  const existingPack = await packClass.findUniquepack({
+  const existingPack = await packClass.findUniquePack({
     where: {
       name,
     },

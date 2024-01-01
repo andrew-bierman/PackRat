@@ -1,6 +1,5 @@
 // import { prisma } from '../../prisma';
 
-import { PrismaClient } from '@prisma/client/edge';
 import { Item } from '../../drizzle/methods/Item';
 import { ItemCategory } from '../../drizzle/methods/itemcategory';
 

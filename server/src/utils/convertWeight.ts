@@ -1,5 +1,4 @@
-import type { Item } from '@prisma/client/edge';
-import { ItemAlreadyExistsError } from 'src/helpers/errors';
+
 
 type WeightUnit = 'g' | 'kg' | 'oz' | 'lb' | 'lbs';
 
@@ -39,7 +38,7 @@ export const convertWeight = (
  * @return {object} The total weight of a pack in grams.
  *
  */
-export function computeTotalWeightInGrams(item: Item) {
+export function computeTotalWeightInGrams(item: any) {
   const unitMultiplier = units[item.unit] ?? units.g;
   return (item.quantity ?? 0) * (item.weight ?? 0) * unitMultiplier;
 }

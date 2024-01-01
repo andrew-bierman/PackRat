@@ -50,8 +50,7 @@ export function updatePasswordRoute() {
     .input(validator.updatePassword)
     .mutation(async (opts) => {
       const { email, password } = opts.input;
-      const { prisma }: any = opts.ctx;
-      const val = await findUserAndUpdate(prisma, email, password, 'password');
+      const val = await findUserAndUpdate( email, password, 'password');
       return val;
     });
 }

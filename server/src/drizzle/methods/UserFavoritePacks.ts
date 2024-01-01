@@ -1,12 +1,13 @@
 import { eq, and } from 'drizzle-orm';
 import { createDb } from '../../db/client';
 import { userFavoritePacks } from '../../db/schema';
+import { getDB } from '../../trpc/context';
 
 export class UserFavoritePacks {
   private dbInstance;
 
   constructor() {
-    this.dbInstance = createDb(db);
+    this.dbInstance = createDb(getDB());
   }
 
   async create(userId: string, packId: string) {

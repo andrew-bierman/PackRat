@@ -21,6 +21,9 @@ import utilsService from '../../utils/utils.service';
 import { responseHandler } from '../../helpers/responseHandler';
 import { publicProcedure } from '../../trpc';
 import z from 'zod';
+import { User } from '../../drizzle/methods/User';
+import { and, eq } from 'drizzle-orm';
+import { user as UserTable } from '../../db/schema';
 // const client = new OAuth2Client(
 //   GOOGLE_CLIENT_ID,
 //   GOOGLE_CLIENT_SECRET,
@@ -166,7 +169,7 @@ export function googleSigninRoute() {
     .input(z.object({ idToken: z.string().nonempty() }))
     .query(async (opts) => {
       const { idToken } = opts.input;
-      const { prisma, env }: any = opts.ctx;
+      const { env }: any = opts.ctx;
 
       const decodedToken: any = jwt.decode(idToken);
       if (!decodedToken) {
@@ -176,15 +179,15 @@ export function googleSigninRoute() {
       const {
         payload: { email, name, sub: googleId },
       } = decodedToken;
-
-      const alreadyGoogleSignin = await prisma.user.findFirst({
+      const userClass = new User()
+      const alreadyGoogleSignin = await userClass.findUnique({
         where: {
           email: email,
           googleId: googleId,
         },
       });
       if (!alreadyGoogleSignin) {
-        const isLocalLogin = await prisma.user.findFirst({
+        const isLocalLogin = await userClass.findUnique({
           where: {
             email: email,
           },
@@ -196,18 +199,14 @@ export function googleSigninRoute() {
         const randomPassword = utilsService.randomPasswordGenerator(8);
         const username = utilsService.randomUserNameCode(email, 4);
 
-        const user = await prisma.user.create({
-          data: {
-            email,
-            name,
-            password: randomPassword,
-            googleId,
-            username,
-          },
+        const user = await userClass.create({
+          email,
+          name,
+          password: randomPassword,
+          googleId,
+          username,
         });
-
-        const userWithMethods = User(user);
-        await userWithMethods.generateAuthToken(prisma, env.JWT_SECRET);
+        await userClass.generateAuthToken(env.JWT_SECRET, user.id);
 
         sendWelcomeEmail(
           user.email,
@@ -222,20 +221,16 @@ export function googleSigninRoute() {
             utilsService.randomPasswordGenerator(8);
         }
 
-        const userWithMethods = User(alreadyGoogleSignin);
-        await userWithMethods.generateAuthToken(prisma, env.JWT_SECRET);
+        await userClass.generateAuthToken(env.JWT_SECRET, alreadyGoogleSignin.id);
 
-        const updatedUser = await prisma.user.update({
-          where: {
-            email: email,
-            googleId: alreadyGoogleSignin.googleId,
-          },
-          data: {
-            googleId: googleId,
-          },
-        });
+        const updatedUser = await userClass.update({
+          googleId: googleId,
+        },
+          alreadyGoogleSignin.id,
+          and(eq(UserTable.googleId, alreadyGoogleSignin.googleId), eq(UserTable.email, alreadyGoogleSignin.email))
+        );
 
-        return { user: User(updatedUser)?.toJSON() };
+        return { user: updatedUser };
       }
     });
 }

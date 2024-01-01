@@ -1,5 +1,5 @@
-import { PrismaClient } from '@prisma/client/edge';
-import { Pack } from '../../prisma/methods';
+import { Pack } from "../../drizzle/methods/pack";
+import { Trip } from "../../drizzle/methods/trip";
 
 /**
  * Retrieves trips belonging to a specific owner.
@@ -8,15 +8,17 @@ import { Pack } from '../../prisma/methods';
  * @return {Promise<object[]>} The trips owned by the specified owner.
  */
 export const getTripsService = async (
-  prisma: PrismaClient,
   ownerId: string,
 ): Promise<object[]> => {
   try {
-    const trips = await prisma.trip.findMany({
+    const tripClass = new Trip();
+    const trips = await tripClass.findMany({
       where: { owner_id: ownerId },
     });
 
-    const packDocumnets = await prisma.pack.findMany({
+    const packClass = new Pack();
+
+    const packDocumnets = await packClass.findMany({
       where: { id: { in: trips.map((trip) => trip.packs) } },
     });
 
@@ -26,7 +28,7 @@ export const getTripsService = async (
       );
       return {
         ...trip,
-        packDocuments: Pack(packDocuments)?.toJSON(),
+        packDocuments: packDocuments,
       };
     });
   } catch (error) {
