@@ -60,10 +60,24 @@ export const userFavoritePacks = sqliteTable(
   },
 );
 
+export const userFavoritePacksRelations = relations(
+  userFavoritePacks,
+  ({ one }) => ({
+    user: one(user, {
+      fields: [userFavoritePacks.userId],
+      references: [user.id],
+    }),
+    pack: one(pack, {
+      fields: [userFavoritePacks.packId],
+      references: [pack.id],
+    }),
+  }),
+);
+
 export const userRelations = relations(user, ({ many }) => ({
   packs: many(pack),
-  favorites: many(userFavoritePacks),
-  items: many(itemOwners),
+  userFavoritePacks: many(userFavoritePacks),
+  itemOwners: many(itemOwners),
   templates: many(template),
   trips: many(trip),
 }));
@@ -113,8 +127,8 @@ export const packRelations = relations(pack, ({ one, many }) => ({
     fields: [pack.owner_id],
     references: [user.id],
   }),
-  favoritedBy: many(userFavoritePacks),
-  items: many(itemPacks),
+  userFavoritePacks: many(userFavoritePacks),
+  itemPacks: many(itemPacks),
   trips: many(trip),
 }));
 
@@ -177,6 +191,17 @@ export const itemOwners = sqliteTable(
   },
 );
 
+export const itemOwnersRelations = relations(itemOwners, ({ one }) => ({
+  item: one(item, {
+    fields: [itemOwners.itemId],
+    references: [item.id],
+  }),
+  owner: one(user, {
+    fields: [itemOwners.ownerId],
+    references: [user.id],
+  }),
+}));
+
 export const itemPacks = sqliteTable(
   'item_packs',
   {
@@ -193,13 +218,25 @@ export const itemPacks = sqliteTable(
   },
 );
 
+export const itemPacksRelations = relations(itemPacks, ({ one }) => ({
+  item: one(item, {
+    fields: [itemPacks.itemId],
+    references: [item.id],
+  }),
+
+  pack: one(pack, {
+    fields: [itemPacks.packId],
+    references: [pack.id],
+  }),
+}));
+
 export const itemRelations = relations(item, ({ one, many }) => ({
   category: one(itemCategory, {
     fields: [item.category],
     references: [itemCategory.id],
   }),
-  owners: many(itemOwners),
-  packs: many(itemPacks),
+  itemOwners: many(itemOwners),
+  itemPacks: many(itemPacks),
 }));
 
 export const template = sqliteTable('template', {
@@ -286,7 +323,8 @@ export const tripRelations = relations(trip, ({ one, many }) => ({
     fields: [trip.packs],
     references: [pack.id],
   }),
-  geojsons: many(tripGeojsons),
+  // geojsons: many(tripGeojsons),
+  tripGeojsons: many(tripGeojsons),
 }));
 
 export const conversation = sqliteTable('conversation', {
@@ -336,8 +374,19 @@ export const wayNodes = sqliteTable(
   },
 );
 
+export const wayNodesRelations = relations(wayNodes, ({ one }) => ({
+  way: one(way, {
+    fields: [wayNodes.wayId],
+    references: [way.id],
+  }),
+  node: one(node, {
+    fields: [wayNodes.nodeId],
+    references: [node.id],
+  }),
+}));
+
 export const wayRelations = relations(way, ({ many }) => ({
-  nodes: many(wayNodes),
+  wayNodes: many(wayNodes),
 }));
 
 export const node = sqliteTable('node', {
@@ -356,7 +405,7 @@ export const node = sqliteTable('node', {
 });
 
 export const nodeRelations = relations(node, ({ many }) => ({
-  ways: many(wayNodes),
+  wayNodes: many(wayNodes),
 }));
 
 export const relation = sqliteTable('relation', {
@@ -406,7 +455,19 @@ export const geojson = sqliteTable('geojson', {
 });
 
 export const geojsonRelations = relations(geojson, ({ many }) => ({
-  trips: many(tripGeojsons),
+  // trips: many(tripGeojsons),
+  tripGeojsons: many(tripGeojsons),
+}));
+
+export const tripGeojsonsRelations = relations(tripGeojsons, ({ one }) => ({
+  trip: one(trip, {
+    fields: [tripGeojsons.tripId],
+    references: [trip.id],
+  }),
+  geojson: one(geojson, {
+    fields: [tripGeojsons.geojsonId],
+    references: [geojson.id],
+  }),
 }));
 
 export type User = InferSelectModel<typeof user>;

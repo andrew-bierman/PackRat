@@ -3,6 +3,7 @@
 import { PrismaClient } from '@prisma/client/edge';
 import { User } from '../../drizzle/methods/User';
 import { Pack } from '../../drizzle/methods/Pack';
+import { UserFavoritePacks } from '../../drizzle/methods/UserFavoritePacks';
 
 /**
  * Adds or removes a pack from the user's favorites list.
@@ -11,17 +12,15 @@ import { Pack } from '../../drizzle/methods/Pack';
  * @param {string} userId - The ID of the user.
  * @return {Promise<void>} A promise that resolves when the operation is complete.
  */
-export const addToFavoriteService = async (
-  packId,
-  userId,
-) => {
+export const addToFavoriteService = async (packId, userId) => {
   const userClass = new User();
   const packClass = new Pack();
+  const userFavoritePacksClass = new UserFavoritePacks();
   const user = await userClass.findUnique({
     where: (users, { eq }) => eq(users.id, userId),
     with: {
-      favoriteDocuments: true
-    }
+      favoriteDocuments: true,
+    },
   });
 
   if (user.favoriteDocuments.includes(packId)) {
@@ -39,7 +38,6 @@ export const addToFavoriteService = async (
     //     },
     //   },
     // });
-
     // await prisma.pack.update({
     //   where: {
     //     id: packId,
@@ -52,14 +50,22 @@ export const addToFavoriteService = async (
     //     },
     //   },
     // });
+    await userFavoritePacksClass.delete(userId, packId);
   } else {
     // If the pack is not in the user's favorites, add it.
-    await userClass.update({
-      favoriteDocuments: packId,
-    }, userId);
+    // await userClass.update(
+    //   {
+    //     favoriteDocuments: packId,
+    //   },
+    //   userId,
+    // );
 
-    await packClass.update({
-      favoritedByDocuments: userId
-    }, packId);
+    // await packClass.update(
+    //   {
+    //     favoritedByDocuments: userId,
+    //   },
+    //   packId,
+    // );
+    await userFavoritePacksClass.create(userId, packId);
   }
 };
