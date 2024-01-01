@@ -14,7 +14,7 @@ import { RButton, RStack } from '@packrat/ui';
 import * as Linking from 'expo-linking';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from '~/hooks/useCustomStyles';
-import { handleGithubLink, handleDiscordLink, aboutSections } from '~/hooks/about/AboutLogic';
+import useAbout from '~/hooks/about/useAbout';
 
 const AboutContent = ({ desktopContainer, isMobile }) => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
@@ -22,6 +22,8 @@ const AboutContent = ({ desktopContainer, isMobile }) => {
 
   const styles = useCustomStyles(loadStyles);
   console.log('isDark, isLight', isDark, isLight);
+
+  const { handleGithubLink, handleDiscordLink, aboutSections} = useAbout();
 
   return (
     <View>
