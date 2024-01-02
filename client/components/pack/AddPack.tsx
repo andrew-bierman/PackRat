@@ -1,52 +1,47 @@
-import { Platform } from 'react-native';
-import { Box, Input, Button, Text, Select, CheckIcon } from 'native-base';
-
-// import useAddPack from "../../hooks/useAddPack";
-import { addPack } from '../../store/packsStore';
-import { useState } from 'react';
-// import { useAuth } from "../../auth/provider";
-import { useSelector, useDispatch } from 'react-redux';
-import { CustomModal } from '../modal';
-import useTheme from '../../hooks/useTheme';
-import useCustomStyles from '~/hooks/useCustomStyles';
-import { useAddNewPack } from '~/hooks/packs';
 import { useRouter } from 'expo-router';
+import { Box, Button, CheckIcon, Input, Select, Text } from 'native-base';
+import { useState } from 'react';
+import { Platform } from 'react-native';
+import { packSelectOptions } from '~/constants/options';
+import { useAddNewPack } from '~/hooks/packs';
+import useCustomStyles from '~/hooks/useCustomStyles';
+import useTheme from '../../hooks/useTheme';
+import { CustomModal } from '../modal';
 
 export const AddPack = ({ isCreatingTrip = false }) => {
+  //Hooks
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
-
-  const dispatch = useDispatch();
   const router = useRouter();
 
-  const [name, setName] = useState('');
-  const [isPublic, setIsPublic] = useState(false);
+  const {
+    addNewPack,
+    isSuccess,
+    isError,
+    response,
+    error,
+    isLoading,
+    name,
+    setIsPublic,
+    setName,
+  } = useAddNewPack();
 
-  // const { addPack } = useAddPack();
-  // const { user } = useAuth();
-  const user = useSelector((state) => state.auth.user);
-  const isLoading = useSelector((state) => state.packs.isLoading);
-  const { addNewPack, isSuccess, isError, response } = useAddNewPack();
+  //routing
   if (isSuccess && !isCreatingTrip && response) {
     router.push(`/pack/${response.createdPack._id}`);
   }
   /**
    * Handles the addition of a pack.
-   *
-   * @param {string} name - The name of the pack.
-   * @param {string} owner_id - The ID of the pack's owner.
    * @return {void}
    */
   const handleAddPack = () => {
-    addNewPack({ name, owner_id: user?._id, is_public: isPublic });
-    setName('');
+    addNewPack();
   };
 
-  const data = ['Yes', 'For me only'];
-
   const handleonValueChange = (itemValue) => {
-    setIsPublic(itemValue == 'Yes');
+    if (itemValue === 'Yes') setIsPublic(true);
+    else setIsPublic(false);
   };
 
   return (
@@ -63,7 +58,6 @@ export const AddPack = ({ isCreatingTrip = false }) => {
           width={Platform.OS === 'web' ? '25%' : '100%'}
         />
         <Select
-          selectedValue={isPublic}
           width="100%"
           accessibilityLabel="Choose Service"
           placeholder={'Is Public'}
@@ -73,19 +67,15 @@ export const AddPack = ({ isCreatingTrip = false }) => {
           }}
           onValueChange={handleonValueChange}
         >
-          {data
-            ? data?.map((item, index) => {
-                let val = item;
-                let label = item;
-                if (typeof item === 'object' && item !== null) {
-                  val = item.id || item._id || item.name;
-                  label = item.name;
-                }
-                return (
-                  <Select.Item key={index} label={String(label)} value={val} />
-                );
-              })
-            : null}
+          {packSelectOptions.map((val, index) => {
+            return (
+              <Select.Item
+                key={index}
+                label={String(val.label)}
+                value={val.value}
+              />
+            );
+          })}
         </Select>
 
         <Button
@@ -99,7 +89,7 @@ export const AddPack = ({ isCreatingTrip = false }) => {
           </Text>
         </Button>
 
-        {isError && <Text>Pack already exists</Text>}
+        {isError && <Text>{error.message}</Text>}
       </Box>
     </Box>
   );
@@ -130,6 +120,7 @@ const loadStyles = (theme, appTheme) => {
       width: '100%',
       paddingHorizontal: 18,
       gap: 20,
+      marginTop: 20,
     },
     desktopStyle: {
       flexDirection: 'row',

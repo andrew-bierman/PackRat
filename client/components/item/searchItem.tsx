@@ -33,8 +33,7 @@ export const SearchItem: React.FC<Props> = ({ onSelect, placeholder }) => {
   const [selectedSearch, setSelectedSearch] = useState('');
 
   const searchResults =
-    useSelector((state: any) => state.search.searchResults.items) || [];
-
+    useSelector((state: any) => state.search.searchResults) || [];
   const user = useSelector((state: any) => state.auth.user);
   const [showSearchResults, setShowSearchResults] = useState(false);
 
@@ -49,7 +48,7 @@ export const SearchItem: React.FC<Props> = ({ onSelect, placeholder }) => {
     const ownerId = user._id;
     // @ts-expect-error
     const packId = window.location.pathname.substring('/path/'.length);
-    const selectedItem = item._id;
+    const selectedItem = item?._id;
     const data = {
       ownerId,
       packId,
@@ -92,6 +91,11 @@ export const SearchItem: React.FC<Props> = ({ onSelect, placeholder }) => {
             }
             InputRightElement={
               showSearchResults && (
+                <Pressable   onPress={() => {
+                  console.log('pressed');
+                  setShowSearchResults(false);
+                  setSearchString('');
+                }}>
                 <IconButton
                   mr={2}
                   icon={
@@ -99,18 +103,16 @@ export const SearchItem: React.FC<Props> = ({ onSelect, placeholder }) => {
                       as={<MaterialIcons name="close" />}
                       m="0"
                       size="4"
-                      color="g  
-                      ray.400"
+                      color="gray.400"
                     />
                   }
-                  onPress={() => {
-                    setShowSearchResults(false);
-                    setSearchString('');
-                  }}
                 />
+                </Pressable>
               )
             }
           />
+        
+            
           <View style={{ position: 'relative' }}>
             {showSearchResults && searchResults?.length > 0 && (
               <ScrollView

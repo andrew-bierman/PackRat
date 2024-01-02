@@ -1,15 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Box, Input, Button, Text } from 'native-base';
+import { Box } from 'native-base';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  addPackItem,
-  editPackItem,
-  editItemsGlobalAsDuplicate,
-} from '../../store/packsStore';
 import { ItemForm } from './ItemForm'; // assuming you moved the form related code to a separate component
-import { ItemCategoryEnum } from '../../constants/itemCategory';
 import { useAddPackItem } from '~/hooks/packs/useAddPackItem';
-import { add } from 'date-fns';
 import { useEditPackItem } from '~/hooks/packs/useEditPackItem';
 
 export const AddItem = ({
@@ -24,8 +17,6 @@ export const AddItem = ({
   closeModalHandler,
   setIsAddItemModalOpen = () => {},
 }) => {
-  const dispatch = useDispatch();
-  const isLoading = useSelector((state) => state.packs.isLoading);
 
   // Moved the state up to the parent component
   const [name, setName] = useState(initialData?.name || '');
@@ -41,11 +32,14 @@ export const AddItem = ({
 
   const {
     // mutation: addPackItemMutation
+    isLoading,
+    isError,
     addPackItem,
   } = useAddPackItem();
 
   const {
     // mutation: addPackItemMutation
+   
     editPackItem,
   } = useEditPackItem();
 
@@ -62,7 +56,6 @@ export const AddItem = ({
    *
    * @return {type} description of return value
    */
-  console.log(categoryType);
   const handleSubmit = () => {
     const PackId = packId || initialData._id;
 
@@ -74,7 +67,7 @@ export const AddItem = ({
           quantity,
           unit,
           type: categoryType,
-          _id: initialData._id,
+          // _id: initialData._id,
         });
         closeModalHandler();
       } else {
@@ -84,8 +77,8 @@ export const AddItem = ({
           quantity,
           unit,
           type: categoryType,
-          _id,
-          packId,
+          // _id,
+          // packId,
         });
         setPage(1);
         closeModalHandler();
@@ -97,8 +90,7 @@ export const AddItem = ({
         quantity,
         type: categoryType,
         unit,
-        _id,
-        packId,
+        packId
       });
     }
   };
