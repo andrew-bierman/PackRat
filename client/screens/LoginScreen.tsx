@@ -30,7 +30,12 @@ export default function Login() {
     control,
     handleSubmit,
     formState: { isValid },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
 
   const demoUser = {
     email: 'email52@email.com',
