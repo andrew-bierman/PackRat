@@ -2,53 +2,55 @@ name: EAS Local Build
 
 on:
   push:
-    branches: [ "**" ]
+    branches: ['**']
   pull_request:
-    branches: [ "**" ]
+    branches: ['**']
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Install Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '20' # Use the version you prefer
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20' # Use the version you prefer
 
-    - name: 🏗 Setup EAS
-      uses: expo/expo-github-action@v8
-      with:
-        eas-version: latest
-        token: ${{ secrets.EXPO_TOKEN }}
+      - name: 🏗 Setup EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
 
-    - name: Set up Yarn
-      run: yarn
+      - name: Set up Yarn
+        run: yarn
 
-    # - name: 🚀 Build app
-    #   working-directory: ./client
-    #   run: eas build --non-interactive --platform all --local
+      # - name: 🚀 Build app
+      #   working-directory: ./client
+      #   run: eas build --non-interactive --platform all --local
 
-#    - name: Install dependencies
-#      working-directory: ./client
-#      run: yarn install
+      #    - name: Install dependencies
+      #      working-directory: ./client
+      #      run: yarn install
 
-#    - name: Install EAS CLI
-#      run: yarn global add eas-cli
+      #    - name: Install EAS CLI
+      #      run: yarn global add eas-cli
 
-#    - name: Configure build
-#      working-directory: ./client
-#      run: npx eas build:configure
+      #    - name: Configure build
+      #      working-directory: ./client
+      #      run: npx eas build:configure
 
-    # If you need additional setup or configurations, add them here
+      # If you need additional setup or configurations, add them here
+      - name: List Contents of Directory
+        run: ls -R /home/runner/work/PackRat/PackRat/android/app/build/outputs/apk/
 
-    - name: Run Local Build for Android
-      working-directory: ./client
-      run: eas build --non-interactive --platform android --local
+      - name: Run Local Build for Android
+        working-directory: ./client
+        run: eas build --non-interactive --platform android --local
 
-    - name: Run Local Build for iOS
-      working-directory: ./client
-      run: eas build --non-interactive --platform ios --local
+      - name: Run Local Build for iOS
+        working-directory: ./client
+        run: eas build --non-interactive --platform ios --local
