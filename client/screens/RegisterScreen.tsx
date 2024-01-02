@@ -27,7 +27,12 @@ export default function Register() {
     control,
     handleSubmit,
     formState: { isValid },
-  } = useForm();
+  } = useForm({defaultValues: {
+    name: '',
+    email: '',
+    username: '',
+    password: '',
+  }});
 
   const router = useRouter();
 
