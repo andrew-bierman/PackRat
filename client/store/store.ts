@@ -13,7 +13,8 @@ import apiMessageMiddleware from './middleware/apiMessageMiddleware';
 import weatherReducer from './weatherStore';
 import dropdownReducer from './dropdownStore';
 import authReducer from './authStore';
-import trailsReducer from './trailsStore';
+// import trailsReducer from './trailsStore';
+import trailsReducer2 from './trailsStore_copy'; // TODO: remove. This was super hacky fix for trailsReducer not working. No idea why it's not working.
 import searchReducer from './searchStore';
 import parksReducer from './parksStore';
 import itemsReducer from './itemsStore';
@@ -28,6 +29,8 @@ import destinationReducer from './destinationStore';
 import chatReducer from './chatStore';
 import globalItems from './globalItemsStore';
 import userStore from './userStore';
+import offlineQueue from './offlineQueue';
+import progressReducer from './progressStore';
 import { type Reducer } from 'react';
 
 // combine reducers
@@ -36,7 +39,6 @@ const rootReducer: Reducer<RootState> = combineReducers({
   dropdown: dropdownReducer,
   search: searchReducer,
   weather: weatherReducer,
-  trails: trailsReducer,
   parks: parksReducer,
   items: itemsReducer,
   packs: packsReducer,
@@ -50,6 +52,10 @@ const rootReducer: Reducer<RootState> = combineReducers({
   chat: chatReducer,
   globalItems,
   userStore,
+  offlineQueue,
+  progress: progressReducer,
+  // trails : trailsReducer
+  trails: trailsReducer2, // TODO: remove. This was super hacky fix for trailsReducer not working. No idea why it's not working.
 });
 
 export interface RootState {
@@ -57,7 +63,6 @@ export interface RootState {
   dropdown: typeof dropdownReducer;
   search: typeof searchReducer;
   weather: typeof weatherReducer;
-  trails: typeof trailsReducer;
   parks: typeof parksReducer;
   items: typeof itemsReducer;
   packs: typeof packsReducer;
@@ -71,13 +76,16 @@ export interface RootState {
   chat: typeof chatReducer;
   globalItems: typeof globalItems;
   userStore: typeof userStore;
+  offlineQueue: typeof offlineQueue;
+  progress: typeof progressReducer;
+  trails: typeof trailsReducer2;
 }
 
 // configure persist store and whitelist reducers
 const persistConfig: PersistConfig<RootState> = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: ['auth'], // add reducers to persist here
+  whitelist: ['auth', 'globalItems', 'offlineQueue'], // add reducers to persist here
 };
 
 // create persisted reducer

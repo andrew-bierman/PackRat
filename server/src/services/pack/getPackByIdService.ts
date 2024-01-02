@@ -19,7 +19,8 @@ export const getPackByIdService = async (packId) => {
     })
     .populate({
       path: 'owners',
-    });
+    })
+    .lean();
 
   return pack;
 };

@@ -12,12 +12,12 @@ import User from '../../models/userModel';
 export async function findUserAndUpdate(
   email: string,
   data: string,
-  datatype,
+  datatype: any,
 ): Promise<any> {
   try {
     const val = await User.findOneAndUpdate(
       { email: email.toLowerCase() },
-      { datatype: data },
+      { [datatype]: data },
       {
         returnOriginal: false,
       },
@@ -25,9 +25,9 @@ export async function findUserAndUpdate(
     if (val.id) {
       return true;
     } else {
-      return 'Unable to send';
+      return false;
     }
   } catch (error) {
-    return 'Server Error';
+    return false;
   }
 }

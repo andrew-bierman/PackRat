@@ -1,3 +1,4 @@
+import { publicProcedure } from '../../trpc';
 import { UserNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import User from '../../models/userModel';
@@ -30,3 +31,10 @@ export const getUsers = async (req, res, next) => {
     next(UserNotFoundError);
   }
 };
+
+export function getUsersRoute() {
+  return publicProcedure.query(async (input) => {
+    const users = await User.find({}).populate('packs trips');
+    return users;
+  });
+}

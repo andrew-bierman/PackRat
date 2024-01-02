@@ -1,4 +1,3 @@
-import { type IInputProps } from 'native-base';
 import type React from 'react';
 import { type UseControllerProps } from 'react-hook-form';
 import { type KeyboardTypeOptions } from 'react-native';
@@ -56,5 +55,4 @@ export type InputTextProps = {
   control?: UseControllerProps['control'];
   name?: UseControllerProps['name'];
   rules?: UseControllerProps['rules'];
-} & IInputProps &
-  React.RefAttributes<InputTextRef>;
+} & React.RefAttributes<InputTextRef>;

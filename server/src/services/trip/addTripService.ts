@@ -2,6 +2,7 @@ import Trip from '../../models/tripModel';
 import Node from '../../models/osm/nodeModel';
 import Way from '../../models/osm/wayModel';
 import Relation from '../../models/osm/relationModel';
+import GeoJSON from '../../models/geojsonModel';
 
 /**
  * Adds a trip to the database.
@@ -18,16 +19,19 @@ export const addTripService = async (tripDetails): Promise<string> => {
       start_date,
       end_date,
       destination,
-      geoJSON,
+      geoJSON, // This should be the FeatureCollection
       owner_id,
       packs,
       is_public,
     } = tripDetails;
 
-    // Create the OSM object and get its _id
-    const { osm_ref, osm_type } = await createOSMObject(geoJSON);
+    // Save all the Features from the FeatureCollection
+    // @ts-expect-error - getting typescript error here
+    const savedGeoJSONs = await GeoJSON.saveMany(geoJSON.features);
 
-    await Trip.create({
+    const geojsonIds = savedGeoJSONs?.map((feature) => feature._id);
+
+    const newTrip = await Trip.create({
       name,
       description,
       duration,
@@ -35,14 +39,14 @@ export const addTripService = async (tripDetails): Promise<string> => {
       start_date,
       end_date,
       destination,
-      osm_ref,
-      osm_type,
+      geojson: geojsonIds, // Reference all saved GeoJSONs' IDs
       owner_id,
       packs,
       is_public,
     });
 
-    return 'success';
+    // @ts-expect-error - getting typescript error here
+    return { message: 'Trip added successfully', trip: newTrip };
   } catch (error) {
     console.error(error);
     throw new Error('Unable to add trip');

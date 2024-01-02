@@ -1,6 +1,7 @@
 import { UnableToDeletePackError } from '../../helpers/errors';
 import { deletePackService } from '../../services/pack/pack.service';
-
+import * as validator from '../../middleware/validators/index';
+import { publicProcedure } from '../../trpc';
 /**
  * Deletes a pack.
  * @param {Object} req - The request object.
@@ -18,3 +19,11 @@ export const deletePack = async (req, res, next) => {
     next(UnableToDeletePackError);
   }
 };
+
+export function deletePackRoute() {
+  return publicProcedure.input(validator.deletePack).mutation(async (opts) => {
+    const { packId } = opts.input;
+    await deletePackService(packId);
+    return { msg: 'pack was deleted successfully' };
+  });
+}

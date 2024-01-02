@@ -1,8 +1,6 @@
 import express, { type Request, type Response } from 'express';
 import path from 'path';
 import csrf from 'csurf';
-
-import userRoutes from './userRoutes';
 import packRoutes from './packRoutes';
 import itemRoutes from './itemRoutes';
 import tripRoutes from './tripRoutes';
@@ -15,6 +13,7 @@ import passwordResetRoutes from './passwordResetRoutes';
 import openAiRoutes from './openAiRoutes';
 import templateRoutes from './templateRoutes';
 import favoriteRouters from './favoriteRoutes';
+import userRoutes from './userRoutes';
 
 const router = express.Router();
 

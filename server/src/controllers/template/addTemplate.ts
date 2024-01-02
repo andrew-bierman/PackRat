@@ -1,7 +1,9 @@
+import { publicProcedure } from '../../trpc';
 import { UserNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import User from '../../models/userModel';
 import { addTemplateService } from '../../services/template/template.service';
+import { z } from 'zod';
 
 /**
  * Adds a template to the database.
@@ -23,3 +25,24 @@ export const addTemplate = async (req, res, next) => {
   res.locals.data = { message: 'Template added successfully' };
   responseHandler(res);
 };
+
+export function addTemplateRoute() {
+  return publicProcedure
+    .input(
+      z.object({
+        type: z.string(),
+        templateId: z.string(),
+        isGlobalTemplate: z.boolean(),
+        createdBy: z.string(),
+      }),
+    )
+    .mutation(async (opts) => {
+      const { type, templateId, isGlobalTemplate, createdBy } = opts.input;
+      const user = await User.findById(createdBy);
+      if (!user) {
+        throw new Error(UserNotFoundError.message);
+      }
+      await addTemplateService(type, templateId, isGlobalTemplate, createdBy);
+      return { message: 'Template added successfully' };
+    });
+}

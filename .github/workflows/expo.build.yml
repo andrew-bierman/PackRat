@@ -1,0 +1,60 @@
+name: EAS Local Build
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    branches: ['**']
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20' # Use the version you prefer
+
+      - name: 🏗 Setup EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Set up Yarn
+        run: yarn
+
+      - name: 🚀 Build app
+        working-directory: ./client
+        run: eas build --non-interactive --platform all --local
+
+      # Optional: Add debug information
+      - name: Debug Information
+        run: |
+          pwd
+          ls -R ./client/android/app/build/outputs/apk/release/
+
+      # Optional: Print environment variables
+      - name: Print Environment Variables
+        run: printenv
+
+      # If you need additional setup or configurations, add them here
+
+      - name: Run Local Build for Android
+        working-directory: ./client
+        run: eas build --non-interactive --platform android --local
+
+      - name: Run Local Build for iOS
+        working-directory: ./client
+        run: eas build --non-interactive --platform ios --local
+
+      # Upload release artifacts
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: release-apk
+          path: ./client/android/app/build/outputs/apk/release/

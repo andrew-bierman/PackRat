@@ -7,6 +7,7 @@ import {
   UI_ROOT_URI,
   JWT_SECRET,
 } from '../../config';
+import { publicProcedure } from '../../trpc';
 
 const oauth2Client = new google.auth.OAuth2(
   GOOGLE_CLIENT_ID,
@@ -35,3 +36,21 @@ export const getGoogleAuthURL = async (req, res) => {
     statusCode: 200,
   });
 };
+
+export function getGoogleAuthURLRoute() {
+  const scopes = [
+    'https://www.googleapis.com/auth/userinfo.profile',
+    'https://www.googleapis.com/auth/userinfo.email',
+  ];
+  return publicProcedure.query(async (opts) => {
+    return {
+      googleUrl: oauth2Client.generateAuthUrl({
+        access_type: 'offline',
+        prompt: 'consent',
+        scope: scopes,
+      }),
+      status: 'success',
+      statusCode: 200,
+    };
+  });
+}
