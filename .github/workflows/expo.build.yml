@@ -28,24 +28,21 @@ jobs:
       - name: Set up Yarn
         run: yarn
 
-      # - name: 🚀 Build app
-      #   working-directory: ./client
-      #   run: eas build --non-interactive --platform all --local
+      - name: 🚀 Build app
+        working-directory: ./client
+        run: eas build --non-interactive --platform all --local
 
-      #    - name: Install dependencies
-      #      working-directory: ./client
-      #      run: yarn install
+      # Optional: Add debug information
+      - name: Debug Information
+        run: |
+          pwd
+          ls -R ./client/android/app/build/outputs/apk/release/
 
-      #    - name: Install EAS CLI
-      #      run: yarn global add eas-cli
-
-      #    - name: Configure build
-      #      working-directory: ./client
-      #      run: npx eas build:configure
+      # Optional: Print environment variables
+      - name: Print Environment Variables
+        run: printenv
 
       # If you need additional setup or configurations, add them here
-      - name: List Contents of Directory
-        run: ls -R /home/runner/work/PackRat/PackRat/android/app/build/outputs/apk/
 
       - name: Run Local Build for Android
         working-directory: ./client
@@ -54,3 +51,10 @@ jobs:
       - name: Run Local Build for iOS
         working-directory: ./client
         run: eas build --non-interactive --platform ios --local
+
+      # Upload release artifacts
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: release-apk
+          path: ./client/android/app/build/outputs/apk/release/
