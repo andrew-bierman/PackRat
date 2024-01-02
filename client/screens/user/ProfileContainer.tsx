@@ -2,30 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Platform, StyleSheet, ScrollView, View } from 'react-native';
 import { RIconButton, RStack, RText, RSkeleton } from '@packrat/ui';
 import UserDataContainer from '../../components/user/UserDataContainer';
-import { useAuth } from '../../auth/provider';
-import { theme } from '../../theme';
 import useTheme from '../../hooks/useTheme';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 // import useGetPacks from "../../hooks/useGetPacks";
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchUserPacks, selectAllPacks } from '../../store/packsStore';
-import {
-  fetchUserFavorites,
-  selectAllFavorites,
-} from '../../store/favoritesStore';
-import { getUser } from '../../store/userStore';
-// import { fetchUserTrips, selectAllTrips } from '../../store/tripsStore';
-import { usefetchTrips } from '~/hooks/trips';
-import { useMatchesCurrentUser } from '~/hooks/useMatchesCurrentUser';
+import { useDispatch } from 'react-redux';
 import { useRouter } from 'expo-router';
 import useCustomStyles from '~/hooks/useCustomStyles';
 import Avatar from '../../components/Avatar';
-import { Skeleton } from '@packrat/ui';
-import { useUserPacks } from '~/hooks/packs';
-import { useFetchUserFavorites } from '~/hooks/favorites';
-
-import { useUserTrips } from '~/hooks/singletrips';
-import { useGetUser } from '~/hooks/user';
+import { useProfile } from '~/hooks/user';
 
 const SettingsButton = () => {
   const router = useRouter();
@@ -191,67 +175,20 @@ const SkeletonUserDataCard = () => {
 };
 
 export default function ProfileContainer({ id = null }) {
-  const dispatch = useDispatch();
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    useTheme();
+  const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
-
-  const authUser = useSelector((state) => state.auth.user);
-  const userStore = useSelector((state) => state.userStore);
-  const authStore = useSelector((state) => state.auth);
-
-  // const allPacks = useSelector(selectAllPacks);
-  // const tripsData = useSelector(selectAllTrips);
-  // const allFavorites = useSelector(selectAllFavorites);
-
-  id = id ?? authUser?._id;
-
-  const differentUser = id && id !== authUser?._id;
-  const isCurrentUser = useMatchesCurrentUser(id); // TODO: Implement this hook in more components
-
   const {
-    data: allPacks,
-    isLoading: allPacksLoading,
-    error: allPacksError,
-  } = useUserPacks((ownerId = authUser?._id));
-
-  const {
-    data: tripsData,
-    isLoading: tripsIsLoading,
-    error: tripsError,
-  } = useUserTrips((ownerId = authUser?._id));
-
-  const {
-    data: allFavorites,
-    isLoading: allFavoritesLoading,
-    error: allFavoritesError,
-  } = useFetchUserFavorites((ownerId = authUser?._id));
-
-  const {
-    data: userData,
-    isLoading: userIsLoading,
-    error: userError,
-  } = useGetUser(id);
-
-  const user = differentUser ? userData : authUser;
-
-  const isLoading = differentUser
-    ? userIsLoading
-    : allPacksLoading || tripsIsLoading || allFavoritesLoading;
-
-  const error = differentUser
-    ? userError
-    : allPacksError || tripsError || allFavoritesError;
-
-  const packsData = differentUser ? user?.packs : allPacks;
-  const favoritesData = differentUser ? user?.favorites : allFavorites;
-
-  const tripsCount = tripsData?.length ?? 0;
-  const packsCount = packsData?.length ?? 0;
-  const favoritesCount = favoritesData?.length ?? 0;
-  const isCertified = user?.isCertified ?? false;
-
-  // if (isLoading) return <Text>Loading...</Text>;
+    user,
+    favoritesList,
+    packsList,
+    tripsList,
+    tripsCount,
+    packsCount,
+    favoritesCount,
+    isLoading,
+    isCurrentUser,
+    error
+  } = useProfile(id);
 
   return (
     <ScrollView>
@@ -284,9 +221,9 @@ export default function ProfileContainer({ id = null }) {
           </View>
 
           <View style={styles.userDataContainer}>
-            {favoritesData?.length > 0 ? (
+            {favoritesList.length > 0 ? (
               <UserDataContainer
-                data={favoritesData}
+                data={favoritesList}
                 type="favorites"
                 userId={user?._id}
                 isLoading={isLoading}
@@ -301,21 +238,21 @@ export default function ProfileContainer({ id = null }) {
               </RText>
             )}
           </View>
-          {Array.isArray(packsData) && packsData.length > 0 && (
+          {packsList.length > 0 && (
             <View style={styles.userDataContainer}>
               <UserDataContainer
-                data={packsData}
+                data={packsList}
                 type="packs"
-                userId={user?._id}
+                userId={user?.id}
               />
             </View>
           )}
-          {Array.isArray(tripsData) && tripsData?.length > 0 && (
+          {tripsList.length > 0 && (
             <View style={styles.userDataContainer}>
               <UserDataContainer
-                data={tripsData}
+                data={tripsList}
                 type="trips"
-                userId={user?._id}
+                userId={user?.id}
               />
             </View>
           )}
