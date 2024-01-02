@@ -12,34 +12,28 @@ import { getItemsGlobal } from '../../store/globalItemsStore';
 import { Stack } from 'expo-router';
 import { executeOfflineRequests } from '../../store/offlineQueue';
 import useCustomStyles from '~/hooks/useCustomStyles';
+import useItems from '~/hooks/items/useItems';
 // import { checkNetworkConnected } from '~/utils/netInfo';
 
 export default function Items() {
-  const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
-  const [limit, setLimit] = useState(5);
-  const [page, setPage] = useState(1);
-  const [refetch, setRefetch] = useState(false);
 
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
+
+  const {
+    isAddItemModalOpen,
+    toggleAddItemModal,
+    data,
+    isLoading,
+    isError,
+    limit,
+    handleLimitChange,
+    page,
+    handlePageChange,
+    refetch,
+    handleRefetch,
+  } = useItems();
   const styles = useCustomStyles(loadStyles);
-  const data = useSelector((state) => state.globalItems);
-  const isLoading = useSelector((state) => state.globalItems.isLoading);
-  const isError = useSelector((state) => state.globalItems.isError);
-  const { isConnected, requests } = useSelector((state) => state.offlineQueue);
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (isConnected) {
-      dispatch(executeOfflineRequests(requests));
-    }
-  }, []);
-
-  useEffect(() => {
-    if (isConnected && requests.length == 0)
-      dispatch(getItemsGlobal({ limit, page }));
-  }, [limit, page, refetch, isConnected]);
 
   return (
     <ScrollView>
@@ -53,7 +47,7 @@ export default function Items() {
           title="Add a global Item"
           trigger="Add Item"
           isActive={isAddItemModalOpen}
-          onTrigger={setIsAddItemModalOpen}
+          onTrigger={toggleAddItemModal}
           triggerComponent={
             <View
               style={{
@@ -66,9 +60,7 @@ export default function Items() {
             >
               <Button
                 style={styles.button}
-                onPress={() => {
-                  setIsAddItemModalOpen(true);
-                }}
+                onPress={toggleAddItemModal}
               >
                 Add Item
               </Button>
@@ -93,25 +85,25 @@ export default function Items() {
               )}
             </View>
           }
-          onCancel={setIsAddItemModalOpen}
+          onCancel={toggleAddItemModal}
         >
           <AddItemGlobal
-            setRefetch={setRefetch}
+            setRefetch={handleRefetch}
             refetch={refetch}
-            setIsAddItemModalOpen={setIsAddItemModalOpen}
+            setIsAddItemModalOpen={toggleAddItemModal}
           />
         </CustomModal>
         {!isError && Array.isArray(data.globalItems.items) && (
           <ItemsTable
             limit={limit}
-            setLimit={setLimit}
+            setLimit={handleLimitChange}
             page={page}
-            setPage={setPage}
+            setPage={handlePageChange}
             data={data}
             isLoading={isLoading}
             totalPages={data?.globalItems?.totalPages}
             refetch={refetch}
-            setRefetch={setRefetch}
+            setRefetch={handleRefetch}
           />
         )}
       </Box>
