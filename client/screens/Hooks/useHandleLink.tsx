@@ -2,12 +2,12 @@ import * as Linking from 'expo-linking';
 
 export const useHandleLink = () => {
   const handleGithubLink = () => {
-    const githubUrl = 'https://github.com/andrew-bierman/PackRat';
+    const githubUrl = 'github url';
     handleLink(githubUrl);
   };
 
   const handleDiscordLink = () => {
-    const discordUrl = 'https://discord.com/';
+    const discordUrl = 'discord url';
     handleLink(discordUrl);
   };
 
