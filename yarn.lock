@@ -12820,7 +12820,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-prettier@npm:^9.0.0":
+"eslint-config-prettier@npm:^9.0.0, eslint-config-prettier@npm:^9.1.0":
   version: 9.1.0
   resolution: "eslint-config-prettier@npm:9.1.0"
   peerDependencies:
@@ -23882,9 +23882,9 @@ __metadata:
     cors: "npm:^2.8.5"
     cross-env: "npm:^7.0.3"
     csurf: "npm:^1.11.0"
-    dotenv: "npm:^16.0.3"
+    dotenv: "npm:^16.3.1"
     eslint: "npm:^8.47.0"
-    eslint-config-prettier: "npm:^9.0.0"
+    eslint-config-prettier: "npm:^9.1.0"
     eslint-config-standard-with-typescript: "npm:^38.0.0"
     eslint-plugin-import: "npm:^2.28.1"
     eslint-plugin-n: "npm:^16.0.2"
