@@ -14,30 +14,15 @@ import { RButton, RStack } from '@packrat/ui';
 import * as Linking from 'expo-linking';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from '~/hooks/useCustomStyles';
+import { useStyles } from '../Hooks/useStyles';
+import { useAppearenceContainerLogic } from '../Hooks/useAppearenceContainerLogic';
+import handleGithubLink from '../Hooks/useHandleLink';
+
 const AboutContent = ({ desktopContainer, isMobile }) => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    useTheme();
+  const { currentTheme, toggleSwitch, isEnabled, isDark } =
+    useAppearenceContainerLogic();
 
-  const styles = useCustomStyles(loadStyles);
-  console.log('isDark, isLight', isDark, isLight);
-  const handleGithubLink = () => {
-    // Add the URL of your GitHub repo here
-    const githubUrl = 'https://github.com/andrew-bierman/PackRat';
-    Linking.openURL(githubUrl);
-  };
-
-  /**
-   * Handle the Discord link.
-   *
-   * @param {none} - This function does not take any parameters.
-   * @return {none} - This function does not return any value.
-   */
-  const handleDiscordLink = () => {
-    // Add the URL of your Discord server here
-    const discordUrl = 'https://discord.gg/jFUuYBTXfY';
-    Linking.openURL(discordUrl);
-  };
-
+  const { styles } = useStyles(loadStyles);
   return (
     <View>
       <View style={styles.textContainer}>

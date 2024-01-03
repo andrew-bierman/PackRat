@@ -2,21 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FlatList, View, ScrollView, Platform } from 'react-native';
 import Card from '../../components/feed/FeedCard';
-import {
-  getPublicPacks,
-  getPublicTrips,
-  getFavoritePacks,
-} from '../../store/feedStore';
-import {
-  changePackStatus,
-  fetchUserPacks,
-  selectAllPacks,
-} from '../../store/packsStore';
-// import { fetchUserTrips, selectAllTrips } from '../../store/tripsStore';
-import { usefetchTrips } from '~/hooks/trips';
+import { useFeedLogic } from '../Hooks/useFeedLogic';
 import { useRouter } from 'expo-router';
 import { fuseSearch } from '../../utils/fuseSearch';
-import { fetchUserFavorites } from '../../store/favoritesStore';
 import useCustomStyles from '~/hooks/useCustomStyles';
 import FeedSearchFilter from '~/components/feed/FeedSearchFilter';
 import { useFeed } from '~/hooks/feed';
@@ -39,12 +27,17 @@ const ERROR_MESSAGES = {
 const Feed = ({ feedType = 'public' }) => {
   const router = useRouter();
 
+  const {
+    handleSortChange,
+    handleTogglePack,
+    handleToggleTrip,
+    handleCreateClick,
+  } = useFeedLogic(feedType);
   const [queryString, setQueryString] = useState('');
   const [selectedTypes, setSelectedTypes] = useState({
     pack: true,
     trip: false,
   });
-  const [selectedTrips, setSelectedTrips] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
   const [refreshing, setRefreshing] = useState(false);
@@ -180,32 +173,9 @@ const Feed = ({ feedType = 'public' }) => {
     );
   };
 
-  const handleTogglePack = () => {
-    setSelectedTypes((prevState) => ({
-      ...prevState,
-      pack: !prevState.pack,
-    }));
-  };
-
-  const handleToggleTrip = () => {
-    setSelectedTypes((prevState) => ({
-      ...prevState,
-      trip: !prevState.trip,
-    }));
-  };
-
-  const handleSortChange = (value) => {
-    setQueryString(value);
-  };
-
   const urlPath = URL_PATHS[feedType];
   const createUrlPath = URL_PATHS[feedType] + 'create';
   const errorText = ERROR_MESSAGES[feedType];
-
-  const handleCreateClick = () => {
-    // handle create click logic
-    router.push(createUrlPath);
-  };
 
   return <View style={styles.mainContainer}>{renderData()}</View>;
 };

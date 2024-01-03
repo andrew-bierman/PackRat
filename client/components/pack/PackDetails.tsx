@@ -21,11 +21,8 @@ import { useFetchSinglePack } from '../../hooks/packs';
 
 export function PackDetails() {
   const searchParams = new URLSearchParams(window.location.search);
-
   const canCopy = searchParams.get('copy');
-
   const dispatch = useDispatch();
-
   const { packId } = useSearchParams();
   const link = `${CLIENT_URL}/packs/${packId}`;
   const updated = useSelector((state) => state.packs.update);

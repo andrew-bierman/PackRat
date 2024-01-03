@@ -9,10 +9,9 @@ import FeedPreview from '../../components/dashboard/FeedPreview';
 import Section from '../../components/dashboard/Section';
 import SectionHeader from '../../components/dashboard/SectionHeader';
 import useCustomStyles from '~/hooks/useCustomStyles';
-
+import { useStyles } from '../Hooks/useStyles';
 const Dashboard = () => {
-  const styles = useCustomStyles(loadStyles);
-
+  const { styles } = useStyles(loadStyles);
   return (
     <>
       <RScrollView contentContainerStyle={styles.content} horizontal={false}>

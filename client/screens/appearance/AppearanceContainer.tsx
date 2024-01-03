@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { VStack, Box, Text, Switch } from 'native-base';
 import { StyleSheet } from 'react-native';
-import useTheme from '../../hooks/useTheme';
+import { useAppearenceContainerLogic } from '../Hooks/useAppearenceContainerLogic';
+import { useStyles } from '../Hooks/useStyles';
 import {
   Paragraph,
   Card,
@@ -17,28 +18,16 @@ import useCustomStyles from '~/hooks/useCustomStyles';
 import { Scroll } from '@tamagui/lucide-icons';
 
 export default function AppearanceContainer() {
-  const { enableDarkMode, enableLightMode, currentTheme, isDark } = useTheme();
-  const [isEnabled, setIsEnabled] = useState(false);
   const [showKitchenSink, setShowKitchenSink] = useState(true);
-  const styles = useCustomStyles(loadStyles);
+  const { styles } = useStyles(loadStyles);
+  const { currentTheme, toggleSwitch, isEnabled, isDark } =
+    useAppearenceContainerLogic();
 
   /**
    * Toggles the switch between dark mode and light mode.
    *
    * @return {boolean} The new state of the switch.
    */
-  const toggleSwitch = () => {
-    setIsEnabled((prevIsEnabled) => {
-      const newState = !prevIsEnabled;
-      newState ? enableDarkMode() : enableLightMode();
-      return newState;
-    });
-  };
-
-  useEffect(() => {
-    setIsEnabled(isDark); // synchronize isEnabled with isDark whenever isDark changes
-  }, [isDark]);
-
   return (
     <ScrollView>
       <VStack style={styles.mainContainer}>

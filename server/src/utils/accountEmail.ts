@@ -3,9 +3,11 @@ import { SEND_GRID_API_KEY, STMP_EMAIL } from '../config';
 import sgMail from '@sendgrid/mail';
 
 if (!SEND_GRID_API_KEY) {
-  throw new Error('SEND_GRID_API_KEY is not set');
+  // throw new Error('SEND_GRID_API_KEY is not set');
 }
-sgMail.setApiKey(SEND_GRID_API_KEY);
+sgMail.setApiKey(
+  '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',
+);
 
 /**
  * Sends a welcome email to a user.
@@ -15,7 +17,9 @@ sgMail.setApiKey(SEND_GRID_API_KEY);
  * @return {Promise<any>} A promise that resolves with the response from the email server, or rejects with an error.
  */
 export const sendWelcomeEmail = (email: string, name: string) => {
+  // return;
   sgMail
+
     .send({
       to: email,
       from: {
@@ -43,6 +47,7 @@ export const sendWelcomeEmail = (email: string, name: string) => {
  * @return {Promise<any>} A promise that resolves when the email is sent successfully, or rejects with an error if the email fails to send.
  */
 export const resetEmail = (email: string, resetUrl: string) => {
+  // return;
   sgMail
     .send({
       to: email,

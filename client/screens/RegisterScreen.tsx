@@ -27,12 +27,14 @@ export default function Register() {
     control,
     handleSubmit,
     formState: { isValid },
-  } = useForm({defaultValues: {
-    name: '',
-    email: '',
-    username: '',
-    password: '',
-  }});
+  } = useForm({
+    defaultValues: {
+      name: '',
+      email: '',
+      username: '',
+      password: '',
+    },
+  });
 
   const router = useRouter();
 
@@ -49,7 +51,8 @@ export default function Register() {
   }
 
   const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
-    clientId: WEB_CLIENT_ID,
+    clientId:
+      '993694750638-876nvl8hfjfv6tqiqc1c4tmubvf8chpp.apps.googleusercontent.com',
   });
 
   /**
