@@ -3,7 +3,7 @@ import { eq } from "drizzle-orm";
 import { createDb } from "../../db/client";
 import { user as UserTable, userFavoritePacks } from "../../db/schema";
 import { getDB } from '../../trpc/context';
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 
 export class User {
     private dbInstance;
@@ -49,7 +49,11 @@ export class User {
     }
 
     async create(user) {
-        return this.dbInstance.insert(UserTable).values(user).returning().get();
+        try {
+            return (await createDb(getDB())).insert(UserTable).values(user).returning().get();
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     async generateAuthToken(jwtSecret: string, id: string): Promise<string> {
@@ -104,7 +108,7 @@ export class User {
         return null;
     }
 
-    async findFavorite(userId:string, packId:string) {
+    async findFavorite(userId: string, packId: string) {
         const subQuery = this.dbInstance.select().from(userFavoritePacks).where(eq(userFavoritePacks.packId, packId)).as('subQuery');
         const isFavorite = await this.dbInstance.select().from(UserTable).where(eq(UserTable.id, userId)).select({ favoriteDocuments: subQuery });
         return isFavorite

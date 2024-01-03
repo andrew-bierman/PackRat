@@ -1,14 +1,11 @@
 import { Context } from 'hono';
 import { extractTokenAndGetUser } from './utils/auth';
 
-interface Tcontext extends Context {
-  d1: D1Database
-}
 let DB: D1Database;
 
-export const createContext = (honoContext: Tcontext) => async () => {
-  const { env, req, d1 } = honoContext;
-  DB = d1
+export const createContext = (honoContext: Context) => async () => {
+  const { env, req} = honoContext;
+  DB = honoContext.env.production
   const user = await extractTokenAndGetUser(
     req.raw,
     env.JWT_SECRET,
