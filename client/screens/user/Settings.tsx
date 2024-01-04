@@ -1,6 +1,3 @@
-import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
 import {
   RInput,
@@ -14,70 +11,20 @@ import {
   RLabel,
 } from '@packrat/ui';
 import Avatar from '~/components/Avatar';
-import { editUser, updatePassword } from '../../store/authStore';
 import DropdownComponent from '../../components/Dropdown';
+import { useProfileSettings } from '~/hooks/user';
 
 export default function Settings() {
-  const [user, setUser] = useState(useSelector((state) => state.auth.user));
-  const dispatch = useDispatch();
-
-  const [passwords, setPasswords] = useState<any>({});
-
-  const handleChange = ({ target }) => {
-    setUser((prev) => ({ ...prev, [target.id]: target.value }));
-  };
-
-  const handlePasswordsChange = ({ target }) => {
-    setPasswords((prev) => ({ ...prev, [target.id]: target.value }));
-  };
-
-  const pickImage = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    if (!result.canceled) {
-      handleChange({ target: { id: 'profileImage', value: result.uri } });
-    }
-  };
-
-  const removeProfileImage = () => {
-    handleChange({ target: { id: 'profileImage', value: null } });
-  };
-
-  const handleEditUser = () => {
-    const {
-      _id,
-      email,
-      name,
-      username,
-      profileImage,
-      preferredWeather,
-      preferredWeight,
-    } = user;
-
-    dispatch(
-      editUser({
-        userId: _id,
-        email,
-        name,
-        username,
-        profileImage,
-        preferredWeather,
-        preferredWeight,
-      }),
-    );
-  };
-
-  const handleUpdatePassword = () => {
-    const { email } = user;
-    const { oldPassword, newPassword, confirmPassword } = passwords;
-    if (newPassword !== confirmPassword) return;
-    dispatch(updatePassword({ email, oldPassword, newPassword }));
-  };
+  const {
+    user,
+    passwords,
+    pickImage,
+    handleChange,
+    handleEditUser,
+    handlePasswordsChange,
+    handleUpdatePassword,
+    removeProfileImage,
+  } = useProfileSettings();
 
   return (
     <RScrollView>
@@ -150,6 +97,7 @@ export default function Settings() {
                   handleChange({ target: { id: 'preferredWeather', value } })
                 }
                 width="100%"
+                placeholder=""
               />
             </RStack>
             <RStack space="$2" flexGrow={1}>
@@ -161,6 +109,7 @@ export default function Settings() {
                   handleChange({ target: { id: 'preferredWeight', value } })
                 }
                 width="100%"
+                placeholder=""
               />
             </RStack>
           </RStack>
