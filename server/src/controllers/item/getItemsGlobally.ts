@@ -15,6 +15,7 @@ export const getItemsGlobally = async (req, res, next) => {
     const result = await getItemsGloballyService(
       req.query.limit,
       req.query.page,
+      req.query.searchString,
     );
     res.locals.data = result;
     responseHandler(res);
@@ -26,8 +27,12 @@ export const getItemsGlobally = async (req, res, next) => {
 export function getItemsGloballyRoute() {
   console.log('Route');
   return publicProcedure
-    .input(z.object({ limit: z.number(), page: z.number() }))
+    .input(z.object({
+      limit: z.number(),
+      page: z.number(),
+      searchString: z.string().optional(),
+    }))
     .query(async (opts) => {
-      return await getItemsGloballyService(opts.input.limit, opts.input.page);
+      return await getItemsGloballyService(opts.input.limit, opts.input.page, opts.input.searchString);
     });
 }

@@ -23,9 +23,6 @@ export default function PackContainer({ isCreatingTrip = false }) {
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
 
   const user = useSelector((state) => state.auth.user);
-  // const packs = useSelector(selectAllPacks);
-
-  const newTrip = useSelector((state) => state.trips.newTrip);
 
   const [currentPackId, setCurrentPackId] = useState(null);
   const [refetch, setRefetch] = useState(false);

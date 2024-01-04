@@ -83,6 +83,8 @@ export const duplicatePackItem = createAsyncThunk(
   },
 );
 
+
+
 export const scorePack = createAsyncThunk('packs/scorePack', async (packId) => {
   // const response = await axios.put(`${api}/pack/score/${packId}`);
   // return response.data;
@@ -315,8 +317,8 @@ const packsSlice = createSlice({
       })
       .addCase(scorePack.fulfilled, (state, action) => {
         packsAdapter.updateOne(state, {
-          id: action.payload.updatedPack._id,
-          changes: action.payload.updatedPack,
+          id: action.payload._id,
+          changes: action.payload,
         });
         state.isLoading = false;
         state.error = null;
