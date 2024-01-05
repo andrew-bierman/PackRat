@@ -34,7 +34,7 @@ import progressReducer from './progressStore';
 import { type Reducer } from 'react';
 
 // combine reducers
-const rootReducer: Reducer<RootState> = combineReducers({
+const rootReducer  = combineReducers({
   auth: authReducer,
   dropdown: dropdownReducer,
   search: searchReducer,
@@ -57,29 +57,8 @@ const rootReducer: Reducer<RootState> = combineReducers({
   // trails : trailsReducer
   trails: trailsReducer2, // TODO: remove. This was super hacky fix for trailsReducer not working. No idea why it's not working.
 });
+export type RootState = ReturnType<typeof rootReducer>
 
-export interface RootState {
-  auth: typeof authReducer;
-  dropdown: typeof dropdownReducer;
-  search: typeof searchReducer;
-  weather: typeof weatherReducer;
-  parks: typeof parksReducer;
-  items: typeof itemsReducer;
-  packs: typeof packsReducer;
-  trips: typeof tripsReducer;
-  favorites: typeof favoritesReducer;
-  singlePack: typeof singlePackReducer;
-  singleTrip: typeof singleTripReducer;
-  feed: typeof feedReducer;
-  gpx: typeof gpxReducer;
-  destination: typeof destinationReducer;
-  chat: typeof chatReducer;
-  globalItems: typeof globalItems;
-  userStore: typeof userStore;
-  offlineQueue: typeof offlineQueue;
-  progress: typeof progressReducer;
-  trails: typeof trailsReducer2;
-}
 
 // configure persist store and whitelist reducers
 const persistConfig: PersistConfig<RootState> = {

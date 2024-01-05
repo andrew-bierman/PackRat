@@ -27,11 +27,10 @@ export const fetchItemsSearchResults = createAsyncThunk(
   'search/fetchItemsSearchResults',
   async (searchString) => {
     const url = api + `/item/global?search=${encodeURIComponent(searchString)}`;
-
     try {
       // const response = await axios.get(url);
       // return response.data;
-      return await trpc.getItemsGlobally.query({ searchString });
+      return await trpc.getItemsGlobally.query({limit:5, page:0, searchString  });
     } catch (error) {
       console.error('error:' + error);
     }
