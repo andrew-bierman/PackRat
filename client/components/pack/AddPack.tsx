@@ -9,42 +9,42 @@ import useTheme from '../../hooks/useTheme';
 import useCustomStyles from '~/hooks/useCustomStyles';
 import { useAddNewPack } from '~/hooks/packs';
 import { useRouter } from 'expo-router';
+import { packSelectOptions } from '~/constants/options';
 
 export const AddPack = ({ isCreatingTrip = false }) => {
+  // Hooks
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
-
-  const dispatch = useDispatch();
   const router = useRouter();
 
-  const [name, setName] = useState('');
-  const [isPublic, setIsPublic] = useState(false);
+  const {
+    addNewPack,
+    isSuccess,
+    isError,
+    response,
+    error,
+    isLoading,
+    name,
+    setIsPublic,
+    setName,
+  } = useAddNewPack();
 
-  // const { addPack } = useAddPack();
-  // const { user } = useAuth();
-  const user = useSelector((state) => state.auth.user);
-  const isLoading = useSelector((state) => state.packs.isLoading);
-  const { addNewPack, isSuccess, isError, response } = useAddNewPack();
+  // routing
   if (isSuccess && !isCreatingTrip && response) {
     router.push(`/pack/${response.createdPack._id}`);
   }
   /**
    * Handles the addition of a pack.
-   *
-   * @param {string} name - The name of the pack.
-   * @param {string} owner_id - The ID of the pack's owner.
    * @return {void}
    */
   const handleAddPack = () => {
-    addNewPack({ name, owner_id: user?._id, is_public: isPublic });
-    setName('');
+    addNewPack();
   };
 
-  const data = ['Yes', 'For me only'];
-
   const handleonValueChange = (itemValue) => {
-    setIsPublic(itemValue == 'Yes');
+    if (itemValue === 'Yes') setIsPublic(true);
+    else setIsPublic(false);
   };
 
   return (
@@ -60,9 +60,9 @@ export const AddPack = ({ isCreatingTrip = false }) => {
         />
         <RLabel>Is Public:</RLabel>
         <DropdownComponent
-          value={isPublic}
+          // value={isPublic}
           onValueChange={handleonValueChange}
-          data={data}
+          data={packSelectOptions}
           width="300px"
           accessibilityLabel="Choose Service"
           placeholder={'Is Public'}
@@ -109,6 +109,7 @@ const loadStyles = (theme, appTheme) => {
       width: '100%',
       paddingHorizontal: 18,
       gap: 20,
+      marginTop: 20,
     },
     desktopStyle: {
       flexDirection: 'row',

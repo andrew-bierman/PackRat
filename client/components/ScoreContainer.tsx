@@ -212,7 +212,7 @@ export default function ScoreContainer({ type, data, isOwner }) {
         {isAlreadyScored && (
           <>
             <ScoreProgressChart score={totalScore} />
-            {/* <GradingPieChart scores={scores} /> */}
+            <GradingPieChart scores={scores} />
           </>
         )}
       </HStack>

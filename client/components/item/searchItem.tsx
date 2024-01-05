@@ -17,8 +17,7 @@ export const SearchItem: React.FC<Props> = ({ onSelect, placeholder }) => {
   const [selectedSearch, setSelectedSearch] = useState('');
 
   const searchResults =
-    useSelector((state: any) => state.search.searchResults.items) || [];
-
+    useSelector((state: any) => state.search.searchResults) || [];
   const user = useSelector((state: any) => state.auth.user);
   const [showSearchResults, setShowSearchResults] = useState(false);
 
@@ -33,7 +32,7 @@ export const SearchItem: React.FC<Props> = ({ onSelect, placeholder }) => {
     const ownerId = user._id;
     // @ts-expect-error
     const packId = window.location.pathname.substring('/path/'.length);
-    const selectedItem = item._id;
+    const selectedItem = item?._id;
     const data = {
       ownerId,
       packId,
@@ -87,6 +86,7 @@ export const SearchItem: React.FC<Props> = ({ onSelect, placeholder }) => {
             }
             disabled={!showSearchResults}
           />
+
           <View style={{ position: 'relative' }}>
             {showSearchResults && searchResults?.length > 0 && (
               <RScrollView

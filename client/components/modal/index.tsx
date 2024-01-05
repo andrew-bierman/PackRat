@@ -4,6 +4,22 @@ import { X } from '@tamagui/lucide-icons';
 
 import { Dialog } from 'tamagui';
 
+interface PropTypes {
+  id?: string;
+  title: string;
+  trigger?: string;
+  children: React.ReactNode;
+  onSave?: () => void;
+  onCancel?: () => void;
+  buttonColor?: string;
+  type?: string;
+  size?: string;
+  footerButtons?: any[];
+  isActive: boolean;
+  onTrigger: (value: boolean) => void;
+  buttonText?: string;
+  triggerComponent?: React.ReactNode;
+}
 export const CustomModal = ({
   id,
   title,
@@ -20,7 +36,7 @@ export const CustomModal = ({
   buttonText,
   triggerComponent = null,
   ...rest
-}) => {
+}: PropTypes) => {
   /**
    *
    * Closes the modal either by calling the onCancel function or by triggering the onTrigger function with a value of false.
