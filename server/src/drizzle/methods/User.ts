@@ -6,10 +6,10 @@ import { getDB } from '../../trpc/context';
 import bcrypt from 'bcryptjs'
 
 export class User {
-    private dbInstance;
 
-    constructor() {
-        this.dbInstance = createDb(getDB());
+    async createInstance() {
+        const dbInstance = await createDb(getDB());
+        return dbInstance
     }
 
     async save(user) {
@@ -26,7 +26,7 @@ export class User {
     }
 
     async getUserByUsername(username) {
-        return this.dbInstance.select().from(UserTable).where(eq(UserTable.username, username)).limit(1).get();
+        return (await this.createInstance()).select().from(UserTable).where(eq(UserTable.username, username)).limit(1).get();
     }
 
     generateUsernameFromEmail(email) {
@@ -34,7 +34,7 @@ export class User {
     }
 
     async doesUsernameExist(username) {
-        const result = await this.dbInstance.select().from(UserTable).where(eq(UserTable.username, username)).limit(1).get();
+        const result: any = await (await this.createInstance()).select().from(UserTable).where(eq(UserTable.username, username)).limit(1).get();
         return result.length > 0;
     }
 
@@ -45,21 +45,22 @@ export class User {
     }
 
     async updateUserWithNewUsername(user, username) {
-        return this.dbInstance.update(UserTable).set({ ...user, username }).where(eq(UserTable.id, user.id)).returning().get();
+        return (await this.createInstance()).update(UserTable).set({ ...user, username }).where(eq(UserTable.id, user.id)).returning().get();
     }
 
     async create(user) {
         try {
-            return (await createDb(getDB())).insert(UserTable).values(user).returning().get();
+            console.log(user)
+            return (await this.createInstance()).insert(UserTable).values(user).returning().get();
         } catch (error) {
-            console.log(error);
+            console.log("Error creating user", error);
         }
     }
 
     async generateAuthToken(jwtSecret: string, id: string): Promise<string> {
         if (!jwtSecret) throw new Error('jwtSecret is not defined');
         const token = await jwt.sign({ id }, jwtSecret);
-        await this.dbInstance.update(UserTable).set({ token }).where(eq(UserTable.id, id)).returning().get();
+        await (await this.createInstance()).update(UserTable).set({ token }).where(eq(UserTable.id, id)).returning().get();
         return token;
     }
 
@@ -71,32 +72,32 @@ export class User {
 
         if (!jwtSecret) throw new Error('jwtSecret is not defined');
         const resetToken = await jwt.sign({ id: id.toString() }, jwtSecret);
-        await this.dbInstance.update(UserTable).set({ passwordResetToken: resetToken }).where(eq(UserTable.id, id)).returning().get();
+        await (await this.createInstance()).update(UserTable).set({ passwordResetToken: resetToken }).where(eq(UserTable.id, id)).returning().get();
         return `${clientUrl}/password-reset?token=${resetToken}`;
     }
 
     async update(data: any, id: string, filter = eq(UserTable.id, id), returning = null) {
-        return this.dbInstance.update(UserTable).set(data).where(filter).returning(returning).get();
+        return (await this.createInstance()).update(UserTable).set(data).where(filter).returning(returning).get();
     }
 
     async delete(id: string, filter = eq(UserTable.id, id)) {
-        return this.dbInstance.delete(UserTable).where(filter).returning().get();
+        return (await this.createInstance()).delete(UserTable).where(filter).returning().get();
     }
 
     async findById(id: string, filter = eq(UserTable.id, id)) {
-        return this.dbInstance.select().from(UserTable).where(filter).limit(1).get();
+        return (await this.createInstance()).select().from(UserTable).where(filter).limit(1).get();
     }
 
     async findByEmail(email: string, filter = eq(UserTable.email, email)) {
-        return this.dbInstance.select().from(UserTable).where(filter).limit(1).get();
+        return (await this.createInstance()).select().from(UserTable).where(filter).limit(1).get();
     }
 
     async findMany(filter = null) {
-        return this.dbInstance.select().from(UserTable).where(filter).get();
+        return (await this.createInstance()).select().from(UserTable).where(filter).get();
     }
 
     async findUnique(query) {
-        return this.dbInstance.query.User.findFirst(query);
+        return (await this.createInstance()).query.user.findFirst(query);
     }
 
     async findByCredentials(email: string, password: string) {
@@ -109,8 +110,8 @@ export class User {
     }
 
     async findFavorite(userId: string, packId: string) {
-        const subQuery = this.dbInstance.select().from(userFavoritePacks).where(eq(userFavoritePacks.packId, packId)).as('subQuery');
-        const isFavorite = await this.dbInstance.select().from(UserTable).where(eq(UserTable.id, userId)).select({ favoriteDocuments: subQuery });
+        const subQuery = (await this.createInstance()).select().from(userFavoritePacks).where(eq(userFavoritePacks.packId, packId)).as('subQuery');
+        const isFavorite = (await (await this.createInstance()).select().from(UserTable).where(eq(UserTable.id, userId)) as any).select({ favoriteDocuments: subQuery });
         return isFavorite
     }
 }

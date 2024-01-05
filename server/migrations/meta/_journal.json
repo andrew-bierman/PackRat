@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1703598263605,
-      "tag": "0000_shallow_king_cobra",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1703598463172,
-      "tag": "0001_shallow_gravity",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1704297982226,
-      "tag": "0002_white_chronomancer",
+      "when": 1704442917369,
+      "tag": "0000_worried_spirit",
       "breakpoints": true
     }
   ]

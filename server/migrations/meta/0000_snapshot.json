@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "900f276b-9cd3-4f14-be4a-fce0904ac9a5",
+  "id": "4784a106-59ed-43a8-9ba4-c823647a0478",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "conversation": {
@@ -673,6 +673,143 @@
     "trip": {
       "name": "trip",
       "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "duration": {
+          "name": "duration",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "weather": {
+          "name": "weather",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "start_date": {
+          "name": "start_date",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "end_date": {
+          "name": "end_date",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "destination": {
+          "name": "destination",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "owner_id": {
+          "name": "owner_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "packs": {
+          "name": "packs",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "is_public": {
+          "name": "is_public",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "type": {
+          "name": "type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'trip'"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "CURRENT_TIMESTAMP"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "trip_owner_id_user_id_fk": {
+          "name": "trip_owner_id_user_id_fk",
+          "tableFrom": "trip",
+          "tableTo": "user",
+          "columnsFrom": [
+            "owner_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "trip_packs_pack_id_fk": {
+          "name": "trip_packs_pack_id_fk",
+          "tableFrom": "trip",
+          "tableTo": "pack",
+          "columnsFrom": [
+            "packs"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "trip_geojsons": {
+      "name": "trip_geojsons",
+      "columns": {
         "trip_id": {
           "name": "trip_id",
           "type": "text",
@@ -690,9 +827,9 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "trip_trip_id_trip_id_fk": {
-          "name": "trip_trip_id_trip_id_fk",
-          "tableFrom": "trip",
+        "trip_geojsons_trip_id_trip_id_fk": {
+          "name": "trip_geojsons_trip_id_trip_id_fk",
+          "tableFrom": "trip_geojsons",
           "tableTo": "trip",
           "columnsFrom": [
             "trip_id"
@@ -703,9 +840,9 @@
           "onDelete": "set null",
           "onUpdate": "no action"
         },
-        "trip_geojson_id_geojson_id_fk": {
-          "name": "trip_geojson_id_geojson_id_fk",
-          "tableFrom": "trip",
+        "trip_geojsons_geojson_id_geojson_id_fk": {
+          "name": "trip_geojsons_geojson_id_geojson_id_fk",
+          "tableFrom": "trip_geojsons",
           "tableTo": "geojson",
           "columnsFrom": [
             "geojson_id"

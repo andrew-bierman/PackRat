@@ -4,20 +4,21 @@ import { itemPacks } from '../../db/schema';
 import { getDB } from '../../trpc/context';
 
 export class ItemPacks {
-  private dbInstance;
 
-  constructor() {
-    this.dbInstance = createDb(getDB());
+  async createInstance() {
+    const dbInstance = await createDb(getDB());
+    return dbInstance
   }
 
+
   async updateRelation(oldItemId: string, newItemId: string, packId: string) {
-    await this.dbInstance
+    await (await this.createInstance())
       .delete(itemPacks)
       .where(
         and(eq(itemPacks.itemId, oldItemId), eq(itemPacks.packId, packId)),
       );
 
-    await this.dbInstance
+    await (await this.createInstance())
       .insert(itemPacks)
       .values({ itemId: newItemId, packId })
       .returning();

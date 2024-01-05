@@ -31,12 +31,10 @@ export function signUpRoute() {
     const salt = await bcrypt.genSalt(parseInt(JWT_SECRET));
     password = await bcrypt.hash(password, salt);
     const user = await userClass.create({
-      data: {
         email,
         password,
         name,
         username,
-      },
     });
     await userClass.generateAuthToken(JWT_SECRET, user.id);
     sendWelcomeEmail(user.email, user.name, STMP_EMAIL, SEND_GRID_API_KEY);

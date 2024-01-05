@@ -1,26 +1,27 @@
 import { eq } from 'drizzle-orm';
 import { createDb } from '../../db/client';
-import { InsertTripGeoJson, InsertTrip, trip as TripTable, tripGeojsons  } from '../../db/schema';
+import { InsertTripGeoJson, InsertTrip, trip as TripTable, tripGeojsons } from '../../db/schema';
 import { getDB } from '../../trpc/context';
 
 export class Trip {
-  private dbInstance;
 
-    constructor() {
-        this.dbInstance = createDb(getDB());
-    }
+  async createInstance() {
+    const dbInstance = await createDb(getDB());
+    return dbInstance
+  }
+
 
   async getTripById(id: string) {
-    return await this.dbInstance
+    return await (await this.createInstance())
       .select()
       .from(TripTable)
       .where(eq(TripTable.id, id))
       .limit(1)
       .get();
   }
-  
+
   async updateTrip(trip: Partial<InsertTrip>) {
-    return await this.dbInstance
+    return await (await this.createInstance())
       .update(TripTable)
       .set(trip)
       .where(eq(TripTable.id, trip.id))
@@ -29,15 +30,15 @@ export class Trip {
   }
 
   async create(trip: InsertTrip) {
-    return await this.dbInstance.insert(TripTable).values(trip).returning().get();
+    return await (await this.createInstance()).insert(TripTable).values(trip).returning().get();
   }
 
   async delete(id: string, filter = eq(TripTable.id, id)) {
-    return await this.dbInstance.delete(TripTable).where(filter).returning().get();
+    return await (await this.createInstance()).delete(TripTable).where(filter).returning().get();
   }
 
   async findById(id: string, filter = eq(TripTable.id, id)) {
-    return await this.dbInstance
+    return await (await this.createInstance())
       .select()
       .from(TripTable)
       .where(filter)
@@ -46,15 +47,15 @@ export class Trip {
   }
 
   async findMany(filter = null) {
-    return await this.dbInstance.select().from(TripTable).where(filter).get();
+    return await (await this.createInstance()).select().from(TripTable).where(filter).get();
   }
 
   async update(data: any, id: string, filter = eq(TripTable.id, id), returning = null) {
-    return this.dbInstance.update(TripTable).set(data).where(filter).returning(returning).get();
+    return (await this.createInstance()).update(TripTable).set(data).where(filter).returning(returning).get();
   }
 
   async findUnique(filter = null) {
-    return await this.dbInstance
+    return await (await this.createInstance())
       .select()
       .from(TripTable)
       .where(filter)
@@ -64,12 +65,11 @@ export class Trip {
 
 }
 export class TripGeoJson {
-  private dbInstance;
-
-    constructor() {
-        this.dbInstance = createDb(getDB());
-    }
+  async createInstance() {
+    const dbInstance = await createDb(getDB());
+    return dbInstance
+  }
   async create(tripGeoJson: InsertTripGeoJson) {
-    return await this.dbInstance.insert(tripGeojsons).values(tripGeoJson).returning().get();
+    return await (await this.createInstance()).insert(tripGeojsons).values(tripGeoJson).returning().get();
   }
 }

@@ -4,21 +4,20 @@ import { userFavoritePacks } from '../../db/schema';
 import { getDB } from '../../trpc/context';
 
 export class UserFavoritePacks {
-  private dbInstance;
-
-  constructor() {
-    this.dbInstance = createDb(getDB());
+  async createInstance() {
+    const dbInstance = await createDb(getDB());
+    return dbInstance
   }
 
   async create(userId: string, packId: string) {
-    return this.dbInstance
+    return (await this.createInstance())
       .insert(userFavoritePacks)
       .values({ userId, packId })
       .returning();
   }
 
   async delete(userId: string, packId: string) {
-    return this.dbInstance
+    return (await this.createInstance())
       .delete(userFavoritePacks)
       .where(
         and(

@@ -4,14 +4,14 @@ import { node } from "../../db/schema";
 import { getDB } from "../../trpc/context";
 
 export class Node {
-    private dbInstance;
-
-    constructor() {
-        this.dbInstance = createDb(getDB());
+    async createInstance() {
+        const dbInstance = await createDb(getDB());
+        return dbInstance
     }
 
+
     async update(data: any, id: string, filter = eq(node.id, id), returning = null) {
-        return this.dbInstance.update(node)
+        return (await this.createInstance()).update(node)
             .set(data)
             .where(filter)
             .returning(returning)
@@ -19,14 +19,14 @@ export class Node {
     }
 
     async delete(id: string, filter = eq(node.id, id)) {
-        return this.dbInstance.delete(node)
+        return (await this.createInstance()).delete(node)
             .where(filter)
             .returning()
             .get();
     }
 
     async findById(id: string, filter = eq(node.id, id)) {
-        return this.dbInstance.select()
+        return (await this.createInstance()).select()
             .from(node)
             .where(filter)
             .limit(1)
@@ -34,18 +34,18 @@ export class Node {
     }
 
     async findMany(filter = null) {
-        return this.dbInstance.select()
+        return (await this.createInstance()).select()
             .from(node)
             .where(filter)
             .get();
     }
 
     async findUniqueNode(query) {
-        return this.dbInstance.query.node.findFirst(query);
+        return (await this.createInstance()).query.node.findFirst(query);
     }
 
     async create(data: any) {
-        return this.dbInstance.insert(node)
+        return (await this.createInstance()).insert(node)
             .values(data)
             .returning()
             .get();

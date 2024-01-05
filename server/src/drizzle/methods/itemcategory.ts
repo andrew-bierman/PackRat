@@ -4,14 +4,14 @@ import { itemCategory as item } from "../../db/schema";
 import { getDB } from "../../trpc/context";
 
 export class ItemCategory {
-    private dbInstance;
-
-    constructor() {
-        this.dbInstance = createDb(getDB());
+    async createInstance() {
+        const dbInstance = await createDb(getDB());
+        return dbInstance
     }
 
+
     async update(data: any, id: string, filter = eq(item.id, id), returning = null) {
-        return this.dbInstance.update(item)
+        return (await this.createInstance()).update(item)
             .set(data)
             .where(filter)
             .returning(returning)
@@ -19,14 +19,14 @@ export class ItemCategory {
     }
 
     async delete(id: string, filter = eq(item.id, id)) {
-        return this.dbInstance.delete(item)
+        return (await this.createInstance()).delete(item)
             .where(filter)
             .returning()
             .get();
     }
 
     async findById(id: string, filter = eq(item.id, id)) {
-        return this.dbInstance.select()
+        return (await this.createInstance()).select()
             .from(item)
             .where(filter)
             .limit(1)
@@ -34,18 +34,18 @@ export class ItemCategory {
     }
 
     async findMany(filter = null) {
-        return this.dbInstance.select()
+        return (await this.createInstance()).select()
             .from(item)
             .where(filter)
             .get();
     }
 
     async findUniqueItem(query) {
-        return this.dbInstance.query.item.findFirst(query);
+        return (await this.createInstance()).query.item.findFirst(query);
     }
 
     async create(data: any) {
-        return this.dbInstance.insert(item)
+        return (await this.createInstance()).insert(item)
             .values(data)
             .returning()
             .get();
