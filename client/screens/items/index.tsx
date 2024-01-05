@@ -101,19 +101,21 @@ export default function Items() {
             setIsAddItemModalOpen={setIsAddItemModalOpen}
           />
         </CustomModal>
-        {!isError && Array.isArray(data.globalItems.items) && (
-          <ItemsTable
-            limit={limit}
-            setLimit={setLimit}
-            page={page}
-            setPage={setPage}
-            data={data}
-            isLoading={isLoading}
-            totalPages={data?.globalItems?.totalPages}
-            refetch={refetch}
-            setRefetch={setRefetch}
-          />
-        )}
+        {!isError &&
+          data.globalItems &&
+          Array.isArray(data.globalItems.items) && (
+            <ItemsTable
+              limit={limit}
+              setLimit={setLimit}
+              page={page}
+              setPage={setPage}
+              data={data}
+              isLoading={isLoading}
+              totalPages={data?.globalItems?.totalPages}
+              refetch={refetch}
+              setRefetch={setRefetch}
+            />
+          )}
       </Box>
     </ScrollView>
   );
