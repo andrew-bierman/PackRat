@@ -12,6 +12,10 @@ echo "🔍 Running pre-push hook"
 echo "🔄 Running tests..."
 yarn test
 
+# Running yarn lint
+echo "🔄 Running yarn lint..."
+yarn lint
+
 if [ $? -eq 0 ]; then
   echo -e "${GREEN}✅ Tests passed${NC}"
 else
