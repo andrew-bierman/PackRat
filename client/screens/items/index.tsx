@@ -101,7 +101,7 @@ export default function Items() {
             setIsAddItemModalOpen={setIsAddItemModalOpen}
           />
         </CustomModal>
-        {!isError && Array.isArray(data.globalItems.items) && (
+        {!isError && data.globalItems && Array.isArray(data.globalItems.items) && (
           <ItemsTable
             limit={limit}
             setLimit={setLimit}
