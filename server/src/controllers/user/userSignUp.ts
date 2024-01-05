@@ -3,7 +3,6 @@ import { sendWelcomeEmail, resetEmail } from '../../utils/accountEmail';
 import { publicProcedure } from '../../trpc';
 import * as validator from '../../middleware/validators/index';
 import { User } from '../../drizzle/methods/User';
-
 // export const userSignup = async (req: Request, res: Response) => {
 //   const { email } = req.body;
 //   console.log(`the request body received is ${JSON.stringify(req.body)}`);
@@ -31,13 +30,16 @@ export function signUpRoute() {
     const salt = await bcrypt.genSalt(parseInt(JWT_SECRET));
     password = await bcrypt.hash(password, salt);
     const user = await userClass.create({
-        email,
-        password,
-        name,
-        username,
+      email,
+      password,
+      name,
+      username,
     });
-    await userClass.generateAuthToken(JWT_SECRET, user.id);
+    const token = await userClass.generateAuthToken(JWT_SECRET, user.id);
     sendWelcomeEmail(user.email, user.name, STMP_EMAIL, SEND_GRID_API_KEY);
-    return user;
+    return {
+      ...user,
+      token
+    };
   });
 }
