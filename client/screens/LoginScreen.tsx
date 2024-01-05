@@ -38,7 +38,7 @@ export default function Login() {
   });
 
   const demoUser = {
-    email: 'email52@email.com',
+    email: 'zoot123@email.com',
     password: '12345678',
   };
 

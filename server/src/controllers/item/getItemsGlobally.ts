@@ -27,12 +27,18 @@ export const getItemsGlobally = async (req, res, next) => {
 export function getItemsGloballyRoute() {
   console.log('Route');
   return publicProcedure
-    .input(z.object({
-      limit: z.number(),
-      page: z.number(),
-      searchString: z.string().optional(),
-    }))
+    .input(
+      z.object({
+        limit: z.number(),
+        page: z.number(),
+        searchString: z.string().optional(),
+      }),
+    )
     .query(async (opts) => {
-      return await getItemsGloballyService(opts.input.limit, opts.input.page, opts.input.searchString);
+      return await getItemsGloballyService(
+        opts.input.limit,
+        opts.input.page,
+        opts.input.searchString,
+      );
     });
 }

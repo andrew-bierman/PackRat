@@ -86,8 +86,7 @@ export const SearchItem: React.FC<Props> = ({ onSelect, placeholder }) => {
             }
             disabled={!showSearchResults}
           />
-        
-            
+
           <View style={{ position: 'relative' }}>
             {showSearchResults && searchResults?.length > 0 && (
               <RScrollView

@@ -1,15 +1,14 @@
-import { useFetchUserFavorites } from "../favorites";
-import { useUserPacks } from "../packs";
-import { useUserTrips } from "../singletrips";
-import { useMatchesCurrentUser } from "../useMatchesCurrentUser";
-import { useAuthUser } from "./useAuthUser";
-import { useGetUser } from "./useGetUser";
+import { useFetchUserFavorites } from '../favorites';
+import { useUserPacks } from '../packs';
+import { useUserTrips } from '../singletrips';
+import { useMatchesCurrentUser } from '../useMatchesCurrentUser';
+import { useAuthUser } from './useAuthUser';
+import { useGetUser } from './useGetUser';
 
 export const useProfile = (id = null) => {
   const authUser = useAuthUser();
 
   const userId = id ?? authUser?._id;
-
 
   const isCurrentUser = useMatchesCurrentUser(userId); // TODO: Implement this hook in more components
 
@@ -65,5 +64,5 @@ export const useProfile = (id = null) => {
     isLoading,
     error,
     isCurrentUser,
-  }
+  };
 };
