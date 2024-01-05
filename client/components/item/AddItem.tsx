@@ -17,7 +17,6 @@ export const AddItem = ({
   closeModalHandler,
   setIsAddItemModalOpen = () => {},
 }) => {
-
   // Moved the state up to the parent component
   const [name, setName] = useState(initialData?.name || '');
   const [weight, setWeight] = useState(initialData?.weight?.toString() || '');
@@ -39,7 +38,7 @@ export const AddItem = ({
 
   const {
     // mutation: addPackItemMutation
-   
+
     editPackItem,
   } = useEditPackItem();
 
@@ -90,7 +89,7 @@ export const AddItem = ({
         quantity,
         type: categoryType,
         unit,
-        packId
+        packId,
       });
     }
   };

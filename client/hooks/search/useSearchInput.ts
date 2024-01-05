@@ -6,14 +6,14 @@ import {
 } from '../../store/searchStore';
 import { setLatLng } from '../../store/weatherStore';
 import { usePhotonDetail } from '~/hooks/photonDetail';
-import { RootState } from 'store/store';
+import { type RootState } from 'store/store';
 
 const useSearchInput = (onSelect) => {
   const [searchString, setSearchString] = useState('');
   const [showSearchResults, setShowSearchResults] = useState(false);
   const [isLoadingMobile, setIsLoadingMobile] = useState(false);
   const selectedSearchResult =
-    useSelector((state:RootState) => state.search.selectedSearchResult) || {};
+    useSelector((state: RootState) => state.search.selectedSearchResult) || {};
 
   const { refetch, data } = usePhotonDetail(searchString, showSearchResults);
 

@@ -187,7 +187,7 @@ export default function ProfileContainer({ id = null }) {
     favoritesCount,
     isLoading,
     isCurrentUser,
-    error
+    error,
   } = useProfile(id);
 
   return (

@@ -83,8 +83,6 @@ export const duplicatePackItem = createAsyncThunk(
   },
 );
 
-
-
 export const scorePack = createAsyncThunk('packs/scorePack', async (packId) => {
   // const response = await axios.put(`${api}/pack/score/${packId}`);
   // return response.data;

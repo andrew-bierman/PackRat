@@ -9,14 +9,14 @@ export const useAddNewPack = () => {
   const utils = queryTrpc.useContext();
   // Use mutation for adding a pack
 
-    const addNewPack = () => { 
-      mutation.mutate({
-        name: name,
-        is_public: isPublic,
-        owner_id: user?._id,
-      });
-     }
- 
+  const addNewPack = () => {
+    mutation.mutate({
+      name,
+      is_public: isPublic,
+      owner_id: user?._id,
+    });
+  };
+
   const mutation = queryTrpc.addPack.useMutation({
     onMutate: async (packData) => {
       utils.getPacks.cancel({
@@ -79,6 +79,6 @@ export const useAddNewPack = () => {
     name,
     isPublic,
     setIsPublic,
-    setName
+    setName,
   };
 };

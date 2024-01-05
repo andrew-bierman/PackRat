@@ -6,8 +6,15 @@ import Item from '../../models/itemModel';
  * @param {Object} req - The request object.
  * @return {Object} An object containing items, page, and totalPages.
  */
-export const getItemsGloballyService = async (reqlimit: any, reqpage: any, searchString:string) => {
-  const totalItems = await Item.countDocuments({ global: true, name: { $regex: searchString, $options: 'i' } });
+export const getItemsGloballyService = async (
+  reqlimit: any,
+  reqpage: any,
+  searchString: string,
+) => {
+  const totalItems = await Item.countDocuments({
+    global: true,
+    name: { $regex: searchString, $options: 'i' },
+  });
   const limit = Number(reqlimit) || totalItems;
   const totalPages = Math.ceil(totalItems / limit);
   const page = Number(reqpage) || 1;

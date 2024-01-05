@@ -1,4 +1,4 @@
-import { useRouter } from "expo-router";
+import { useRouter } from 'expo-router';
 
 const quickActionData = [
   {
@@ -29,5 +29,5 @@ export const useQuickActions = () => {
     }
   };
 
-  return { quickActionData, handleActionSelect }
-}
+  return { quickActionData, handleActionSelect };
+};

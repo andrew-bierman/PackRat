@@ -30,7 +30,11 @@ export const fetchItemsSearchResults = createAsyncThunk(
     try {
       // const response = await axios.get(url);
       // return response.data;
-      return await trpc.getItemsGlobally.query({limit:5, page:0, searchString  });
+      return await trpc.getItemsGlobally.query({
+        limit: 5,
+        page: 0,
+        searchString,
+      });
     } catch (error) {
       console.error('error:' + error);
     }

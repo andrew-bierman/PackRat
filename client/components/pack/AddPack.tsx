@@ -12,7 +12,7 @@ import { useRouter } from 'expo-router';
 import { packSelectOptions } from '~/constants/options';
 
 export const AddPack = ({ isCreatingTrip = false }) => {
-  //Hooks
+  // Hooks
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
@@ -30,7 +30,7 @@ export const AddPack = ({ isCreatingTrip = false }) => {
     setName,
   } = useAddNewPack();
 
-  //routing
+  // routing
   if (isSuccess && !isCreatingTrip && response) {
     router.push(`/pack/${response.createdPack._id}`);
   }

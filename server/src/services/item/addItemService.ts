@@ -35,10 +35,9 @@ export const addItemService = async (
     quantity,
     unit,
     packs: [packId],
-    category: category? category._id : null,
+    category: category ? category._id : null,
   });
 
-   
   await Pack.updateOne({ _id: packId }, { $addToSet: { items: newItem._id } });
 
   const updatedItem = await Item.findByIdAndUpdate(
