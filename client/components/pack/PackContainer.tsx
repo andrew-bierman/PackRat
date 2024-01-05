@@ -74,6 +74,8 @@ export default function PackContainer({ isCreatingTrip = false }) {
     <View style={styles.mainContainer}>
       <DropdownComponent
         data={packs ?? []}
+        textKey={'name'}
+        valueKey={'_id'}
         value={currentPackId}
         onValueChange={handlePack}
         placeholder={'Select a Pack'}
