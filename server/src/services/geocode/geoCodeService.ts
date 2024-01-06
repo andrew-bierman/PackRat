@@ -25,7 +25,7 @@ export async function geoCodeService({
   return await fetch(url)
     .then(async (response) => {
       if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
       return response.json();
     })

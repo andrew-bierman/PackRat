@@ -28,10 +28,10 @@ export async function getParksService({
   return await fetch(host, options)
     .then(async (response) => {
       if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
       return response.json();
-    })  
+    })
     .catch(() => {
       // throw RetrievingParksDataError;
       return RetrievingParksDataError;

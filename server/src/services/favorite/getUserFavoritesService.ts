@@ -7,10 +7,7 @@ import { UserNotFoundError } from '../../helpers/errors';
  * @param {string} userId - The ID of the user.
  * @return {Promise<Array<Pack>>} An array of favorite packs.
  */
-export const getUserFavoritesService = async (
-  userId,
-  next,
-) => {
+export const getUserFavoritesService = async (userId, next) => {
   const userClass = new User();
   const user = await userClass.findUnique({
     where: {

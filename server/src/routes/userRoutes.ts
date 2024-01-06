@@ -158,9 +158,6 @@ router.post(
   tryCatchWrapper(userSignup),
 );
 
-
-
-
 /**
  * @swagger
  * /user/reset-password-email:

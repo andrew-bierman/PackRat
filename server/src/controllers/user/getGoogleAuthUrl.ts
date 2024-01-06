@@ -51,7 +51,7 @@ export function getGoogleAuthURLRoute() {
     const redirectUri = `${env.SERVER_ROOT_URI}/user/${env.REDIRECT_URL}`;
 
     const googleUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}&access_type=offline&prompt=consent&client_secret=${clientSecret}`;
-    const response = await fetch(googleUrl)
+    const response = await fetch(googleUrl);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }

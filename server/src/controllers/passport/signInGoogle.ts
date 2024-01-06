@@ -179,17 +179,17 @@ export function googleSigninRoute() {
       const {
         payload: { email, name, sub: googleId },
       } = decodedToken;
-      const userClass = new User()
+      const userClass = new User();
       const alreadyGoogleSignin = await userClass.findUnique({
         where: {
-          email: email,
-          googleId: googleId,
+          email,
+          googleId,
         },
       });
       if (!alreadyGoogleSignin) {
         const isLocalLogin = await userClass.findUnique({
           where: {
-            email: email,
+            email,
           },
         });
 
@@ -221,13 +221,20 @@ export function googleSigninRoute() {
             utilsService.randomPasswordGenerator(8);
         }
 
-        await userClass.generateAuthToken(env.JWT_SECRET, alreadyGoogleSignin.id);
-
-        const updatedUser = await userClass.update({
-          googleId: googleId,
-        },
+        await userClass.generateAuthToken(
+          env.JWT_SECRET,
           alreadyGoogleSignin.id,
-          and(eq(UserTable.googleId, alreadyGoogleSignin.googleId), eq(UserTable.email, alreadyGoogleSignin.email))
+        );
+
+        const updatedUser = await userClass.update(
+          {
+            googleId,
+          },
+          alreadyGoogleSignin.id,
+          and(
+            eq(UserTable.googleId, alreadyGoogleSignin.googleId),
+            eq(UserTable.email, alreadyGoogleSignin.email),
+          ),
         );
 
         return { user: updatedUser };

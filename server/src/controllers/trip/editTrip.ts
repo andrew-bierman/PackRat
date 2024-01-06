@@ -34,7 +34,7 @@ export function editTripRoute() {
   return publicProcedure.input(validator.editTrip).mutation(async (opts) => {
     const { id, ...rest } = opts.input;
     const tripClass = new Trip();
-    const trip = await tripClass.update(rest,id);
-    return trip 
+    const trip = await tripClass.update(rest, id);
+    return trip;
   });
 }

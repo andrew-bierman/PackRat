@@ -13,10 +13,10 @@ export const getDestinationService = async (id) => {
   const way = await wayClass.findUniqueWay({ where: { id } });
 
   if (way) {
-    return way
+    return way;
   }
 
   const node = await nodeClass.findUniqueNode({ where: { id } });
 
-  return node
+  return node;
 };

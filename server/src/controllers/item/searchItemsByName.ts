@@ -33,6 +33,6 @@ export function searchItemsByNameRoute() {
     .query(async (opts) => {
       const { name, packId } = opts.input;
       const items = await searchItemsByNameService(name, packId);
-      return items
+      return items;
     });
 }

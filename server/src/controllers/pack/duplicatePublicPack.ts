@@ -29,11 +29,7 @@ export function duplicatePublicPackRoute() {
     .input(validator.duplicatePublicPack)
     .mutation(async (opts) => {
       const { packId, ownerId, items } = opts.input;
-      const result = await duplicatePublicPackService(
-        packId,
-        ownerId,
-        items,
-      );
-      return result
+      const result = await duplicatePublicPackService(packId, ownerId, items);
+      return result;
     });
 }

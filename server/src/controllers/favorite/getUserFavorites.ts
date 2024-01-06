@@ -36,6 +36,6 @@ export function getUserFavoritesRoute() {
           favoriteDocuments: true,
         },
       });
-      return user.favoriteDocuments
+      return user.favoriteDocuments;
     });
 }

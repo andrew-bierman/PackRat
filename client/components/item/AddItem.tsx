@@ -56,7 +56,7 @@ export const AddItem = ({
    * @return {type} description of return value
    */
   const handleSubmit = () => {
-    const PackId = packId || initialData._id;
+    const PackId = packId || initialData.id;
 
     if (isEdit) {
       if (PackId && initialData.global) {
@@ -66,7 +66,7 @@ export const AddItem = ({
           quantity,
           unit,
           type: categoryType,
-          // _id: initialData._id,
+          // id: initialData.id,
         });
         closeModalHandler();
       } else {
@@ -76,7 +76,7 @@ export const AddItem = ({
           quantity,
           unit,
           type: categoryType,
-          // _id,
+          // id,
           // packId,
         });
         setPage(1);

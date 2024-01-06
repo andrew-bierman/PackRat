@@ -59,7 +59,7 @@ const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
   // const [parsedMessages, setParsedMessages] = useState([]);
   const styles = useCustomStyles(loadStyles);
 
-  const { data: chatsData, refetch } = useGetUserChats(user._id);
+  const { data: chatsData, refetch } = useGetUserChats(user.id);
 
   const { getAIResponse } = useGetAIResponse();
 
@@ -85,7 +85,7 @@ const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
   };
 
   const conversation = conversations?.find(
-    (chat) => chat._id === conversationId,
+    (chat) => chat.id === conversationId,
   );
 
   // Compute parsedMessages directly
@@ -101,7 +101,7 @@ const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
    * @return {Promise<void>} This function returns nothing.
    */
   const handleSendMessage = async () => {
-    await getAIResponse({ userId: user._id, conversationId, userInput });
+    await getAIResponse({ userId: user.id, conversationId, userInput });
     refetch();
     setUserInput('');
   };
@@ -120,9 +120,9 @@ const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
           >
             {conversations?.map((conversation) => (
               <Select.Item
-                key={conversation._id}
-                label={conversation._id}
-                value={conversation._id}
+                key={conversation.id}
+                label={conversation.id}
+                value={conversation.id}
               />
             ))}
           </Select>
@@ -141,7 +141,7 @@ const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
           //           onSelect={setConversationId}
           //         />
           //       )}
-          //       keyExtractor={(item) => item._id}
+          //       keyExtractor={(item) => item.id}
           //       contentContainerStyle={styles.flatList}
           //     />
           //     <TouchableOpacity

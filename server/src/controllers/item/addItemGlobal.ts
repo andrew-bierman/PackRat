@@ -40,6 +40,6 @@ export function addItemGlobalRoute() {
         unit,
         type,
       );
-      return item
+      return item;
     });
 }

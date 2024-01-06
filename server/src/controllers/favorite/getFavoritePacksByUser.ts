@@ -25,6 +25,6 @@ export function getFavoritePacksByUserRoute() {
     .query(async (opts) => {
       const { userId } = opts.input;
       const packs = await getFavoritePacksByUserService(userId);
-      return packs
+      return packs;
     });
 }

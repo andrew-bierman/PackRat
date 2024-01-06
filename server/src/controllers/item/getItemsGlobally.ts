@@ -41,7 +41,7 @@ export function getItemsGloballyRoute() {
       );
       return {
         ...result,
-        items: result.items
+        items: result.items,
       };
     });
 }

@@ -52,6 +52,6 @@ export function addToFavoriteRoute() {
 
       // if (!user) throw UserNotFoundError;
       if (!user) return UserNotFoundError;
-      return user
+      return user;
     });
 }

@@ -1,6 +1,6 @@
 import {
-  InferInsertModel,
-  InferSelectModel,
+  type InferInsertModel,
+  type InferSelectModel,
   relations,
   sql,
 } from 'drizzle-orm';
@@ -475,7 +475,7 @@ export type InsertUser = InferInsertModel<typeof user>;
 export const insertUserSchema = createInsertSchema(user);
 export const selectUserSchema = createSelectSchema(user);
 
-export type Trip = InferSelectModel<typeof trip>
+export type Trip = InferSelectModel<typeof trip>;
 export type InsertTrip = InferInsertModel<typeof trip>;
 export const insertTripSchema = createInsertSchema(trip);
 export const selectTripSchema = createSelectSchema(trip);
@@ -483,4 +483,4 @@ export const selectTripSchema = createSelectSchema(trip);
 export type TripGeoJson = InferSelectModel<typeof tripGeojsons>;
 export type InsertTripGeoJson = InferInsertModel<typeof tripGeojsons>;
 export const insertTripGeoJsonSchema = createInsertSchema(tripGeojsons);
-export const selectTripGeoJsonSchema = createSelectSchema(tripGeojsons)
+export const selectTripGeoJsonSchema = createSelectSchema(tripGeojsons);

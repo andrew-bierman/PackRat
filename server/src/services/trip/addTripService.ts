@@ -1,5 +1,4 @@
-import { Trip, TripGeoJson } from "../../drizzle/methods/trip";
-
+import { Trip, TripGeoJson } from '../../drizzle/methods/trip';
 
 export const addTripService = async (tripDetails) => {
   try {
@@ -16,21 +15,21 @@ export const addTripService = async (tripDetails) => {
       packs,
       is_public,
     } = tripDetails;
-    //Instanciation
+    // Instanciation
     const tripGeoJson = new TripGeoJson();
     const tripClass = new Trip();
 
-    //create geojsons
+    // create geojsons
     const savedGeoJSONs = await Promise.all(
       geoJSON.features.map(async (feature) => {
         // return await geoJsonInstance.create(feature); //TODO
       }),
     );
-    
-    //extract ids
+
+    // extract ids
     const geojsonIds = savedGeoJSONs.map((feature) => feature.id);
 
-    //Add trip
+    // Add trip
     const newTrip = await tripClass.create({
       name,
       description,
@@ -40,11 +39,11 @@ export const addTripService = async (tripDetails) => {
       end_date,
       destination,
       is_public,
-      owner_id: owner_id,
-      packs: packs,
+      owner_id,
+      packs,
     });
 
-    //Many to many relation
+    // Many to many relation
     await Promise.all(
       geojsonIds.map(async (geojsonId) => {
         await tripGeoJson.create({

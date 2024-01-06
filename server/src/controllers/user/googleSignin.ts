@@ -40,14 +40,15 @@ export const googleSignin = async (req, res, next) => {
     const code = req.query.code;
     const userInfo = await getGoogleUserInfo(code);
     const userDoc = new User();
-    const alreadyGoogleSignin = await userDoc.findById(null,
+    const alreadyGoogleSignin = await userDoc.findById(
+      null,
       and(
         eq(UserTable.googleId, userInfo.id),
         eq(UserTable.email, userInfo.email),
         eq(UserTable.name, userInfo.name),
         eq(UserTable.password, utilsService.randomPasswordGenerator(8)),
-      )
-    )
+      ),
+    );
     if (!alreadyGoogleSignin) {
       const isLocalLogin = await userDoc.findByEmail(userInfo.email);
 

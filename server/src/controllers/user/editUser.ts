@@ -54,8 +54,10 @@ export function editUserRoute() {
         connect: template_ids?.map((template) => ({ id: template })),
       },
       item: { set: item_id },
-    }
-    const editedUser = await user.update(data, userId, null, { favorites: true });
+    };
+    const editedUser = await user.update(data, userId, null, {
+      favorites: true,
+    });
 
     return editedUser;
   });

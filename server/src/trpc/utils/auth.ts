@@ -38,15 +38,12 @@ const verifyToken = async (
  * @returns {Promise<User>} - The user associated with the token.
  * @throws {Error} If user is not found.
  */
-const findUser = async (
-  decoded: JwtPayload,
-  token: string,
-) => {
-  const userClass = await new User()
+const findUser = async (decoded: JwtPayload, token: string) => {
+  const userClass = await new User();
   const user: any = await userClass.findUnique({
     where: {
       id: decoded.id as string,
-      token: token,
+      token,
     },
   });
   if (!user)
@@ -57,10 +54,7 @@ const findUser = async (
   return user;
 };
 
-const extractTokenAndGetUser = async (
-  req: Request,
-  jwtSecret: string,
-) => {
+const extractTokenAndGetUser = async (req: Request, jwtSecret: string) => {
   const token = extractToken(req);
   if (!token) return null;
   const decoded = await verifyToken(token, jwtSecret);

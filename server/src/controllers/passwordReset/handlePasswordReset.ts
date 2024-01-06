@@ -73,7 +73,7 @@ export function handlePasswordResetRoute() {
       const email = await verifyPasswordResetToken(token, env.JWT_SECRET);
       const user = await prisma.user.findFirst({
         where: {
-          email: email,
+          email,
         },
       });
 

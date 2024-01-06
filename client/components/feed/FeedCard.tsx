@@ -42,8 +42,8 @@ export default function Card({
 
   const isFavorite =
     type !== 'trip' &&
-    (favorited_by?.includes(user._id) ||
-      favorited_by?.some((obj) => obj._id === user._id));
+    (favorited_by?.includes(user.id) ||
+      favorited_by?.some((obj) => obj.id === user.id));
 
   /**
    * Handles adding an item to the user's favorites.
@@ -107,7 +107,7 @@ export default function Card({
                   width: '100%',
                 }}
               >
-                <Link href={type === 'pack' ? '/pack/' + _id : '/trip/' + _id}>
+                <Link href={type === 'pack' ? '/pack/' + id : '/trip/' + id}>
                   <RText fontSize={18} color={currentTheme.colors.textColor}>
                     {truncatedName}
                   </RText>
@@ -135,7 +135,7 @@ export default function Card({
                         size={24}
                         color={currentTheme.colors.cardIconColor}
                       />
-                      <DuplicateIcon link={`/pack/${_id}?copy=true`} />
+                      <DuplicateIcon link={`/pack/${id}?copy=true`} />
                     </View>
                   )}
                   {type === 'trip' && (

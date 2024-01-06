@@ -25,11 +25,11 @@ export const getItemsGloballyService = async (
     where: { global: true },
     with: {
       categoryDocument: {
-        columns: { name: true }
-      }
+        columns: { name: true },
+      },
     },
     offset: startIndex,
-    limit: limit,
+    limit,
     orderBy: (item, { desc }) => desc(item.createdAt),
   });
 

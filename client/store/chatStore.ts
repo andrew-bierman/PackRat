@@ -89,7 +89,7 @@ const chatSlice = createSlice({
         console.log('state.entities:', state.entities);
         console.log('state.entities[id]:', state.entities[id]);
         chatAdapter.upsertOne(state, {
-          id: id,
+          id,
           changes: {
             history: history.split('\n'),
           },

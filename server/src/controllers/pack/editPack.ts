@@ -28,6 +28,6 @@ export function editPackRoute() {
   return publicProcedure.input(validator.editPack).mutation(async (opts) => {
     const { id, ...rest } = opts.input;
     const pack = await editPackService(id, rest);
-    return pack
+    return pack;
   });
 }

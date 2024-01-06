@@ -105,7 +105,7 @@ export const CustomCard = ({
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <View style={{ marginRight: '20px', marginLeft: '20px' }}>
                 <Link href={`/profile/${data.owner_id}`}>
-                  <Text>
+                  <RText>
                     {user.id === data.owner_id
                       ? 'Your Profile'
                       : `View ${
@@ -208,8 +208,8 @@ export const CustomCard = ({
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <View style={{ marginRight: '20px', marginLeft: '20px' }}>
                 <Link href={`/profile/${data.owner_id && data.owner.id}`}>
-                    {user.id === data.owner_id
                   <RText>
+                    {user.id === data.owner_id
                       ? 'Your Profile'
                       : `View ${
                           data.owner_id ? '@' + data.owner.username : 'Profile'
@@ -247,20 +247,21 @@ export const CustomCard = ({
                 </View>
               )}
             </View>
+
+            <RSeparator />
+            <View
+              style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+                paddingRight: '16px',
+                paddingLeft: '16px',
+              }}
+            >
+              {content}
+            </View>
+            <RSeparator />
+            <View style={{ padding: '16px', paddingTop: '0' }}>{footer}</View>
           </View>
-          <RSeparator />
-          <View
-            style={{
-              alignItems: 'center',
-              justifyContent: 'center',
-              paddingRight: '16px',
-              paddingLeft: '16px',
-            }}
-          >
-            {content}
-          </View>
-          <RSeparator />
-          <View style={{ padding: '16px', paddingTop: '0' }}>{footer}</View>
         </RStack>
       </View>
     );

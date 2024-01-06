@@ -28,7 +28,7 @@ export const addItemGlobalService = async (
     case ItemCategoryEnum.FOOD: {
       const category = await itemCategory.findUniqueItem({
         where: {
-          name: "Food",
+          name: 'Food',
         },
       });
 
@@ -53,7 +53,7 @@ export const addItemGlobalService = async (
     case ItemCategoryEnum.WATER: {
       const category = await itemCategory.findUniqueItem({
         where: {
-          name: "Water",
+          name: 'Water',
         },
       });
       newItem = await item.create({
@@ -84,7 +84,7 @@ export const addItemGlobalService = async (
     default: {
       category = await itemCategory.findUniqueItem({
         where: {
-          name: "Essentials",
+          name: 'Essentials',
         },
       });
 

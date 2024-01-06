@@ -38,7 +38,7 @@ export const AddPack = ({ isCreatingTrip = false }) => {
    * Handles the addition of a pack.
    * @return {void}
    */
-  console.log({user})
+  console.log({ user });
   const handleAddPack = () => {
     addNewPack();
   };

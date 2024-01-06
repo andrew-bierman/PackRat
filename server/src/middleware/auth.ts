@@ -71,7 +71,7 @@ const findUser = async (decoded: JwtPayload, token: string): Promise<User> => {
   const user: any = await prisma.user.findUnique({
     where: {
       id: decoded.id,
-      token: token,
+      token,
     },
   });
   if (!user) throw new Error('User associated with this token not found.');

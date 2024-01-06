@@ -1,4 +1,3 @@
-
 /**
  * Edits a template.
  * @param {PrismaClient} prisma - Prisma client.
@@ -8,7 +7,7 @@
  */
 export const editTemplateService = async (
   templateId: string,
-  type:any,
+  type: any,
   isGlobalTemplate: boolean,
 ) => {
   try {
