@@ -1,7 +1,7 @@
 import type { AnyRouter } from '@trpc/server';
 import type { FetchHandlerRequestOptions } from '@trpc/server/adapters/fetch';
 import { fetchRequestHandler } from '@trpc/server/adapters/fetch';
-import type { MiddlewareHandler ,Context} from 'hono';
+import type { MiddlewareHandler, Context } from 'hono';
 import { createContext } from './context';
 
 interface ExtendedContext extends Context {
@@ -25,7 +25,7 @@ const honoTRPCServer = ({
       req: honoCTX.req.raw,
       createContext: createContext(honoCTX),
     });
-  }
+  };
 };
 
 export { honoTRPCServer };

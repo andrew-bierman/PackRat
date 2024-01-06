@@ -31,7 +31,7 @@ export const loginUser = async ({
   const user = await prisma.user.findFirst({
     where: {
       email: email.toLowerCase(),
-      password: password, // This assumes you have stored the password securely in the database
+      password, // This assumes you have stored the password securely in the database
     },
     select: {
       // Exclude the 'password' field

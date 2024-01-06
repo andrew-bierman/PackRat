@@ -35,11 +35,7 @@ export function addGlobalItemToPackRoute() {
     )
     .mutation(async (opts) => {
       const { packId, itemId, ownerId } = opts.input;
-      const item = await addGlobalItemToPackService(
-        packId,
-        itemId,
-        ownerId,
-      );
-      return item
+      const item = await addGlobalItemToPackService(packId, itemId, ownerId);
+      return item;
     });
 }

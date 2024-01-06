@@ -49,16 +49,16 @@ export const getAIResponseService = async (
   let conversationHistory = conversation ? conversation.history : '';
   const messages = conversationHistory
     ? conversationHistory.split('\n').map((message, i) => ({
-      role: i % 2 === 0 ? 'user' : 'assistant',
-      content: message,
-    }))
+        role: i % 2 === 0 ? 'user' : 'assistant',
+        content: message,
+      }))
     : [
-      {
-        role: 'system',
-        content:
-          'You are a helpful Outdoor Adventure Planning assistant for PackRat. Please assist the user with planning their trip using the following information:',
-      },
-    ];
+        {
+          role: 'system',
+          content:
+            'You are a helpful Outdoor Adventure Planning assistant for PackRat. Please assist the user with planning their trip using the following information:',
+        },
+      ];
 
   messages.push({ role: 'user', content: userInput });
 
@@ -72,7 +72,10 @@ export const getAIResponseService = async (
 
   if (conversation) {
     // Update existing conversation
-    await conversationClass.update({ history: conversationHistory }, conversation.id);
+    await conversationClass.update(
+      { history: conversationHistory },
+      conversation.id,
+    );
   } else {
     // Create new conversation
     conversation = await conversationClass.create({
@@ -85,6 +88,6 @@ export const getAIResponseService = async (
 
   return {
     aiResponse,
-    conversation: conversation,
+    conversation,
   };
 };

@@ -3,7 +3,7 @@ import { TemplateNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 
 import { z } from 'zod';
-import { PrismaClient } from '@prisma/client/edge';
+import { type PrismaClient } from '@prisma/client/edge';
 import { Template } from '../../prisma/methods';
 
 // import { prisma } from '../../prisma';

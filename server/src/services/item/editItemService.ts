@@ -30,14 +30,17 @@ export const editItemService = async (
     },
   });
 
-  const newItem = await itemClass.update({
-    name,
-    weight: Number(weight),
-    unit,
-    quantity: Number(quantity),
-    categoryDocument: category.id,
-    type,
-  }, id);
+  const newItem = await itemClass.update(
+    {
+      name,
+      weight: Number(weight),
+      unit,
+      quantity: Number(quantity),
+      categoryDocument: category.id,
+      type,
+    },
+    id,
+  );
 
   return newItem;
 };

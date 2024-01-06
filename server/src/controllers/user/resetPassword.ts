@@ -36,12 +36,15 @@ export function resetPasswordRoute() {
       const JWT_SECRET = env.JWT_SECRET;
       const user = new User();
       const userDoc: any = await jwt.verify(resetToken, JWT_SECRET);
-      if (!userDoc || !userDoc.id) {
+      if (!userDoc?.id) {
         throw new Error('Invalid token');
       }
-      await user.update({
-        password: password,
-      }, userDoc.id);
+      await user.update(
+        {
+          password,
+        },
+        userDoc.id,
+      );
       return 'Successfully reset password';
     });
 }

@@ -1,116 +1,26 @@
-import {
-  VStack,
-  Input,
-  Icon,
-  Text,
-  ScrollView,
-  HStack,
-  List,
-  View,
-  Pressable,
-} from 'native-base';
-import { RStack, RInput, RButton, RText, RScrollView } from '@packrat/ui';
-import { MaterialIcons } from '@expo/vector-icons';
-import useTheme from '../hooks/useTheme';
+import React from 'react';
 import { Platform } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import { useState, useEffect } from 'react';
-import { fetchTrails } from '../store/trailsStore';
-import { fetchParks } from '../store/parksStore';
-import {
-  setSelectedSearchResult,
-  clearSearchResults,
-  fetchPhotonSearchResults,
-} from '../store/searchStore';
-import { fetchWeather, fetchWeatherWeek } from '../store/weatherStore';
+import { MaterialIcons } from '@expo/vector-icons';
+import useSearchInput from '~/hooks/search/useSearchInput';
+import useTheme from '~/hooks/useTheme';
 import useCustomStyles from '~/hooks/useCustomStyles';
+import { RStack, RInput, RButton, RText, RScrollView } from '@packrat/ui';
+import { View, Pressable } from 'react-native';
 
 export const SearchInput = ({ onSelect, placeholder }) => {
-  const [searchString, setSearchString] = useState('');
-  const [isLoadingMobile, setIsLoadingMobile] = useState(false);
-  const [selectedSearch, setSelectedSearch] = useState('');
+  const {
+    searchString,
+    setSearchString,
+    showSearchResults,
+    setShowSearchResults,
+    data,
+    handleSearchResultClick,
+    handleClearSearch,
+    isLoadingMobile,
+  } = useSearchInput(onSelect);
 
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
-  const searchResults =
-    useSelector((state) => state.search.searchResults) || [];
-
-  const selectedSearchResult =
-    useSelector((state) => state.search.selectedSearchResult) || {};
-
-  const [showSearchResults, setShowSearchResults] = useState(false);
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    setShowSearchResults(searchString.length > 0);
-
-    const timeout = setTimeout(() => {
-      if (!searchString) return;
-      dispatch(fetchPhotonSearchResults(searchString));
-    }, 2000);
-
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, [searchString, dispatch]);
-
-  const getTrailsParksAndWeatherDetails = async () => {
-    if (
-      !selectedSearchResult ||
-      Object.keys(selectedSearchResult).length === 0
-    ) {
-      return;
-    }
-
-    setIsLoadingMobile(true);
-
-    const {
-      geometry: { coordinates },
-    } = selectedSearchResult;
-    const [lon, lat] = coordinates;
-
-    if (!lat || !lon) {
-      setIsLoadingMobile(false);
-      return;
-    }
-
-    try {
-      await Promise.all([
-        dispatch(fetchTrails({ lat, lon, selectedSearch })),
-        dispatch(fetchParks({ lat, lon, selectedSearch })),
-        dispatch(fetchWeather({ lat, lon })),
-        dispatch(fetchWeatherWeek({ lat, lon })),
-      ]);
-    } catch (error) {
-      console.error(error);
-    }
-
-    setIsLoadingMobile(false);
-  };
-
-  useEffect(() => {
-    const timeout = setTimeout(getTrailsParksAndWeatherDetails, 1000);
-
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, [selectedSearch, selectedSearchResult, dispatch]);
-
-  const handleSearchResultClick = (result, index) => {
-    const {
-      properties: { name, osm_id },
-    } = result;
-
-    setSelectedSearch(name);
-    setSearchString(name);
-    setShowSearchResults(false);
-    dispatch(setSelectedSearchResult(result));
-
-    if (onSelect) {
-      onSelect(result);
-    }
-  };
 
   return Platform.OS === 'web' ? (
     <RStack style={styles.container}>
@@ -150,9 +60,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
           {searchString && (
             <RButton
               onPress={() => {
-                setShowSearchResults(false);
-                setSearchString('');
-                dispatch(clearSearchResults());
+                handleClearSearch();
               }}
               style={{
                 position: 'absolute',
@@ -167,7 +75,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
         </RStack>
 
         <RStack style={{ position: 'relative' }}>
-          {showSearchResults && searchResults?.length > 0 && (
+          {data && data?.length > 0 && (
             <RScrollView
               position="absolute"
               top="100%"
@@ -180,10 +88,14 @@ export const SearchInput = ({ onSelect, placeholder }) => {
               showsVerticalScrollIndicator={false}
               zIndex={20000}
             >
-              <RStack space={2} w="100%">
-                {searchResults.map((result, i) => (
+              <View
+                role="list"
+                style={{ width: '100%', gap: '8px', padding: '8px' }}
+              >
+                {data.map((result, i) => (
                   <RStack
                     key={`result + ${i}`}
+                    role="listitem"
                     onPress={() => {
                       handleSearchResultClick(result, i);
                     }}
@@ -191,13 +103,10 @@ export const SearchInput = ({ onSelect, placeholder }) => {
                       cursor: 'pointer',
                     }}
                   >
-                    <RStack space={3} flexDirection="row" gap={5} padding={5}>
-                      <RText fontSize="sm" fontWeight="medium">
-                        {result.properties.name}
-                      </RText>
+                    <RStack style={{ flexDirection: 'row' }}>
+                      <RText fontWeight="400">{result.properties.name}</RText>
                       <RText
                         style={{
-                          fontSize: 'sm',
                           color: 'gray',
                           opacity: '100',
                           textTransform: 'capitalize',
@@ -208,7 +117,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
                     </RStack>
                   </RStack>
                 ))}
-              </RStack>
+              </View>
             </RScrollView>
           )}
         </RStack>
@@ -217,31 +126,28 @@ export const SearchInput = ({ onSelect, placeholder }) => {
   ) : isLoadingMobile ? (
     <RText>Loading...</RText>
   ) : (
-    <VStack w="100%" space={5} alignSelf="center">
-      <Input
+    <RStack style={{ width: '100%', alignSelf: 'center' }}>
+      <RInput
         onChangeText={(text) => {
           setSearchString(text);
         }}
         placeholder="Search"
-        width="100%"
-        borderRadius="4"
-        py="3"
-        px="1"
+        style={{
+          width: '100%',
+          borderRadius: '4',
+          padding: '16px 8px',
+          backgroundColor: 'white',
+        }}
         value={searchString}
-        fontSize="14"
-        InputLeftElement={
-          <Icon
-            m="2"
-            ml="3"
-            size="6"
-            color="gray.400"
-            as={<MaterialIcons name="search" />}
-          />
-        }
+        fontSize={14}
+      />
+      <RIconButton
+        backgroundColor="transparent"
+        icon={<MaterialIcons name="search" size={24} color="gray" />}
       />
 
-      {showSearchResults && searchResults?.length > 0 && (
-        <ScrollView
+      {showSearchResults && data?.length > 0 && (
+        <RScrollView
           position="absolute"
           top="100%"
           left="0"
@@ -254,33 +160,27 @@ export const SearchInput = ({ onSelect, placeholder }) => {
           showsVerticalScrollIndicator={false}
           zIndex={10}
         >
-          <List space={2} w="100%">
-            {searchResults.map((result, i) => (
+          <View role="list" style={{ width: '100%' }}>
+            {data.map((result, i) => (
               <Pressable
                 key={`result + ${i}`}
+                role="listitem"
                 onPress={() => {
                   handleSearchResultClick(result, i);
                 }}
-                underlayColor="gray.100"
               >
-                <HStack space={3}>
-                  <Text fontSize="sm" fontWeight="medium">
-                    {result.properties.name}
-                  </Text>
-                  <Text
-                    fontSize="sm"
-                    color="gray.500"
-                    textTransform={'capitalize'}
-                  >
+                <RStack style={{ flexDirection: 'row' }}>
+                  <RText fontWeight="400">{result.properties.name}</RText>
+                  <RText color="gray" textTransform={'capitalize'}>
                     {result.properties.osm_value}
-                  </Text>
-                </HStack>
+                  </RText>
+                </RStack>
               </Pressable>
             ))}
-          </List>
-        </ScrollView>
+          </View>
+        </RScrollView>
       )}
-    </VStack>
+    </RStack>
   );
 };
 

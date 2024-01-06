@@ -1,41 +1,14 @@
-import { HStack } from 'native-base';
+import { RStack } from '@packrat/ui';
 import QuickActionButton from './QuickActionButton';
-import useTheme from '../../hooks/useTheme';
-import { useRouter } from 'expo-router';
 import useCustomStyles from '~/hooks/useCustomStyles';
+import { useQuickActions } from '~/hooks/dashboard';
 
 const QuickActionsSection = () => {
-  const router = useRouter();
   const styles = useCustomStyles(loadStyles);
-
-  const quickActionData = [
-    {
-      action: 'createPack',
-      iconName: 'backpack',
-      text: 'Create a Pack',
-    },
-    {
-      action: 'createTrip',
-      iconName: 'navigation',
-      text: 'Create a Trip',
-    },
-  ];
-
-  /**
-   * Handles the selection of an action.
-   *
-   * @param {string} action - The selected action.
-   */
-  const handleActionSelect = (action) => {
-    if (action === 'createPack') {
-      router.push('/pack/create');
-    } else if (action === 'createTrip') {
-      router.push('/trip/create');
-    }
-  };
+  const { handleActionSelect, quickActionData } = useQuickActions();
 
   return (
-    <HStack style={styles.section}>
+    <RStack style={{ flexDirection: 'row', ...styles.section }}>
       {quickActionData.map((action) => (
         <QuickActionButton
           key={action.action}
@@ -46,7 +19,7 @@ const QuickActionsSection = () => {
           text={action.text}
         />
       ))}
-    </HStack>
+    </RStack>
   );
 };
 

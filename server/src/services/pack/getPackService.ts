@@ -39,10 +39,10 @@ export const getPacksService = async (ownerId, queryBy = null) => {
           : DEFAULT_SORT[pack],
     });
 
-    packs.forEach((pack) => {
-      pack.ownerDocuments = pack.ownerDocuments;
-      pack.itemDocuments = pack.itemDocuments;
-    });
+    // packs.forEach((pack) => {
+    //   pack.ownerDocuments = pack.ownerDocuments;
+    //   pack.itemDocuments = pack.itemDocuments;
+    // });
 
     return packs;
   } catch (error) {

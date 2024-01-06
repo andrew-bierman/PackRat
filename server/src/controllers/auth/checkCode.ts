@@ -21,6 +21,6 @@ import { checkCodeService } from '../../services/user/checkCodeService';
 export function checkCodeRoute() {
   return publicProcedure.input(validator.checkCode).mutation(async (opts) => {
     const { email, code } = opts.input;
-    return await checkCodeService({ email, code});
+    return await checkCodeService({ email, code });
   });
 }

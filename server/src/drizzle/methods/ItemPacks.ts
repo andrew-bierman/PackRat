@@ -4,12 +4,10 @@ import { itemPacks } from '../../db/schema';
 import { getDB } from '../../trpc/context';
 
 export class ItemPacks {
-
   async createInstance() {
     const dbInstance = await createDb(getDB());
-    return dbInstance
+    return dbInstance;
   }
-
 
   async updateRelation(oldItemId: string, newItemId: string, packId: string) {
     await (await this.createInstance())

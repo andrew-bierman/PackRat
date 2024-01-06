@@ -40,9 +40,8 @@ import { user as UserTable } from '../../db/schema';
 
 export function getUsersRoute() {
   return publicProcedure.query(async (opts) => {
-
     const users = await new User().findMany(eq(UserTable, true));
 
-    return users
+    return users;
   });
 }

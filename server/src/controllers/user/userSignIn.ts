@@ -28,7 +28,7 @@ export function userSignInRoute() {
     const token = await userClass?.generateAuthToken(env.JWT_SECRET, user.id);
     return {
       ...user,
-      token
-    }
+      token,
+    };
   });
 }

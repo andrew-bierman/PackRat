@@ -12,7 +12,7 @@ export const getItemByIdService = async (id) => {
   const itemClass = new Item();
   const item = await itemClass.findUniqueItem({
     where: {
-      id: id,
+      id,
     },
   });
 

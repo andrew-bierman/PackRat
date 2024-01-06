@@ -1,4 +1,4 @@
-import { Trip } from "../../drizzle/methods/trip";
+import { Trip } from '../../drizzle/methods/trip';
 
 /**
  * Retrieves a trip by its ID and returns the trip details.
@@ -6,9 +6,7 @@ import { Trip } from "../../drizzle/methods/trip";
  * @param {string} tripId - The ID of the trip.
  * @return {Promise<object>} A promise that resolves to the trip details.
  */
-export const getTripByIdService = async (
-  tripId: string,
-): Promise<object> => {
+export const getTripByIdService = async (tripId: string): Promise<object> => {
   try {
     const tripClass = new Trip();
     const trip = await tripClass.findUnique({

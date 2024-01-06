@@ -10,8 +10,9 @@ import { Item } from '../../drizzle/methods/Item';
  * @return {Object} An object containing items, page, and totalPages.
  */
 export const getItemsGloballyService = async (
-  reqlimit,
-  reqpage,
+  reqlimit: any,
+  reqpage: any,
+  searchString: string,
 ) => {
   const itemClass = new Item();
   const totalItems: any = await itemClass.count();
@@ -24,11 +25,11 @@ export const getItemsGloballyService = async (
     where: { global: true },
     with: {
       categoryDocument: {
-        columns: { name: true }
-      }
+        columns: { name: true },
+      },
     },
     offset: startIndex,
-    limit: limit,
+    limit,
     orderBy: (item, { desc }) => desc(item.createdAt),
   });
 

@@ -26,7 +26,7 @@ export const getTripsService = async (ownerId: string): Promise<object[]> => {
       );
       return {
         ...trip,
-        packDocuments: packDocuments,
+        packDocuments,
       };
     });
   } catch (error) {

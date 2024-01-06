@@ -36,7 +36,7 @@ export function addTemplateRoute() {
   return publicProcedure
     .input(
       z.object({
-        type:z.any(),
+        type: z.any(),
         templateId: z.string(),
         isGlobalTemplate: z.boolean(),
         createdBy: z.string(),
@@ -53,12 +53,7 @@ export function addTemplateRoute() {
       if (!user) {
         throw new Error(UserNotFoundError.message);
       }
-      await addTemplateService(
-        type,
-        templateId,
-        isGlobalTemplate,
-        createdBy,
-      );
+      await addTemplateService(type, templateId, isGlobalTemplate, createdBy);
       return { message: 'Template added successfully' };
     });
 }

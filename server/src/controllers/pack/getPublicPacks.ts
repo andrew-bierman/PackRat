@@ -29,6 +29,6 @@ export function getPublicPacksRoute() {
     .query(async (opts) => {
       const { queryBy } = opts.input;
       const packs = await getPublicPacksService(queryBy);
-      return packs
+      return packs;
     });
 }

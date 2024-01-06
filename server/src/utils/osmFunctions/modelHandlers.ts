@@ -47,7 +47,7 @@ export async function fromOSM(Model: any, data: any) {
     tags: propertiesToTags(data.tags),
     updated_at: data.timestamp,
   };
-  const nodeClass = new Node()
+  const nodeClass = new Node();
   // Find or create nodes
   const ids = data.nodes.map((node: any) => node.id);
   const instances = await nodeClass.create(data.nodes);
@@ -68,10 +68,7 @@ export async function fromOSM(Model: any, data: any) {
  * @param {any} geoJSON - the GeoJSON object to generate the instance from
  * @return {Promise<any>} the newly created instance
  */
-export async function fromGeoJSON(
-  Model: any,
-  geoJSON: any,
-) {
+export async function fromGeoJSON(Model: any, geoJSON: any) {
   // console.log("fromGeoJSON");
   // console.log("fromGeoJSON geoJSON", geoJSON);
   // console.log("fromGeoJSON Model", Model);
@@ -90,7 +87,7 @@ export async function fromGeoJSON(
 
   // Convert coordinates to nodes
   const nodes = await coordinatesToInstances(
-    Model.node ,
+    Model.node,
     handleGeoJSONGeometry(geoJSON.geometry),
   );
   let instanceGeoJSON;
@@ -176,10 +173,7 @@ export function findExisting(Model: any, id: any, type: string) {
  * @param {any} geoJSON - The GeoJSON data used to update the instance.
  * @return {Promise<any>} - The updated instance.
  */
-export async function updateInstanceFromGeoJSON(
-  instance: any,
-  geoJSON: any,
-) {
+export async function updateInstanceFromGeoJSON(instance: any, geoJSON: any) {
   instance.updated_at = geoJSON.properties.timestamp;
   instance.tags = propertiesToTags(geoJSON.properties);
   instance.nodes = await coordinatesToInstances(
@@ -197,14 +191,11 @@ export async function updateInstanceFromGeoJSON(
  * @param {any} element - The element to create the instance from.
  * @return {any} The newly created instance.
  */
-export async function createNewInstance(
-  Model: any,
-  element: any,
-) {
+export async function createNewInstance(Model: any, element: any) {
   if (isOSMFormat(element)) {
-    return await fromOSM( Model, element);
+    return await fromOSM(Model, element);
   } else if (isGeoJSONFormat(element)) {
-    return await fromGeoJSON( Model, element);
+    return await fromGeoJSON(Model, element);
   }
   throw new Error('Element is neither in OSM or GeoJSON format.');
 }
@@ -289,7 +280,7 @@ export async function processElement(element: any) {
   if (instance) {
     if (isGeoJSONFormat(element)) {
       instance = await updateInstanceFromGeoJSON(instance, element);
-      const {id, ...data} = instance;
+      const { id, ...data } = instance;
       await (ModelForElement as any).update({
         where: { id },
         data,

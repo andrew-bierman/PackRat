@@ -12,7 +12,7 @@ export const getPublicTripsService = async (
   queryBy: string,
 ): Promise<object[]> => {
   try {
-    const tripClass = new Trip()
+    const tripClass = new Trip();
     const publicTrips = await tripClass.findMany({
       columns: {
         id: true,
@@ -32,7 +32,7 @@ export const getPublicTripsService = async (
           columns: {
             id: true,
             username: true,
-          }
+          },
         },
         packs: true,
       },
@@ -51,7 +51,7 @@ export const getPublicTripsService = async (
       return {
         ...trip,
         packDocuments: packDocument,
-        ownerDocument: ownerDocument,
+        ownerDocument,
       };
     });
 

@@ -39,7 +39,7 @@ export function signUpRoute() {
     sendWelcomeEmail(user.email, user.name, STMP_EMAIL, SEND_GRID_API_KEY);
     return {
       ...user,
-      token
+      token,
     };
   });
 }

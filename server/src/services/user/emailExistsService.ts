@@ -15,13 +15,11 @@ export async function emailExistsService({
     sendEmailNotice(sendGridApiKey, email).then(async (result1: any) => {
       if (result1.status) {
         const { newcode } = result1;
-        findUserAndUpdate(email, newcode, 'code').then(
-          async (result2: any) => {
-            if (result2.status) {
-              return result2;
-            }
-          },
-        );
+        findUserAndUpdate(email, newcode, 'code').then(async (result2: any) => {
+          if (result2.status) {
+            return result2;
+          }
+        });
       }
     });
   } else {
@@ -46,7 +44,7 @@ async function sendEmailNotice(sendGridApiKey, email) {
     body: JSON.stringify({
       personalizations: [
         {
-          to: [{ email: email }],
+          to: [{ email }],
           subject: 'PackRat verification code',
         },
       ],
