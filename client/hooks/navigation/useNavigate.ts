@@ -1,5 +1,5 @@
-import { useRouter } from 'expo-router';
 import { useCallback } from 'react';
+import { useRouter } from './useRouter';
 
 export const useNavigate = () => {
   const router = useRouter();
