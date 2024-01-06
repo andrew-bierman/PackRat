@@ -1,104 +1,53 @@
-import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
 import {
-  Input,
-  Separator,
-  Text,
-  Stack,
-  Select,
-  Label,
-  Button,
-  XStack,
-  YStack,
-  H5,
-  H2,
-  ScrollView,
-} from 'tamagui';
+  RInput,
+  RSeparator,
+  RText,
+  RStack,
+  RButton,
+  RH5,
+  RH2,
+  RScrollView,
+  RLabel,
+} from '@packrat/ui';
 import Avatar from '~/components/Avatar';
-import { editUser, updatePassword } from '../../store/authStore';
+import DropdownComponent from '../../components/Dropdown';
+import { useProfileSettings } from '~/hooks/user';
 
 export default function Settings() {
-  const [user, setUser] = useState(useSelector((state) => state.auth.user));
-  const dispatch = useDispatch();
-
-  const [passwords, setPasswords] = useState<any>({});
-
-  const handleChange = ({ target }) => {
-    setUser((prev) => ({ ...prev, [target.id]: target.value }));
-  };
-
-  const handlePasswordsChange = ({ target }) => {
-    setPasswords((prev) => ({ ...prev, [target.id]: target.value }));
-  };
-
-  const pickImage = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    if (!result.canceled) {
-      handleChange({ target: { id: 'profileImage', value: result.uri } });
-    }
-  };
-
-  const removeProfileImage = () => {
-    handleChange({ target: { id: 'profileImage', value: null } });
-  };
-
-  const handleEditUser = () => {
-    const {
-      id,
-      email,
-      name,
-      username,
-      profileImage,
-      preferredWeather,
-      preferredWeight,
-    } = user;
-
-    dispatch(
-      editUser({
-        userId: id,
-        email,
-        name,
-        username,
-        profileImage,
-        preferredWeather,
-        preferredWeight,
-      }),
-    );
-  };
-
-  const handleUpdatePassword = () => {
-    const { email } = user;
-    const { oldPassword, newPassword, confirmPassword } = passwords;
-    if (newPassword !== confirmPassword) return;
-    dispatch(updatePassword({ email, oldPassword, newPassword }));
-  };
+  const {
+    user,
+    passwords,
+    pickImage,
+    handleChange,
+    handleEditUser,
+    handlePasswordsChange,
+    handleUpdatePassword,
+    removeProfileImage,
+  } = useProfileSettings();
 
   return (
-    <ScrollView>
-      <YStack
+    <RScrollView>
+      <RStack
         space="$3"
         width="fit-content"
         paddingVertical={20}
         marginHorizontal="auto"
       >
-        <Stack>
-          <H2>Profile</H2>
-          <Separator marginVertical={8} />
-        </Stack>
-        <XStack alignItems="center" space>
+        <RStack>
+          <RH2>Profile</RH2>
+          <RSeparator marginVertical={8} />
+        </RStack>
+        <RStack alignItems="center" space style={{ flexDirection: 'row' }}>
           <Avatar size={90} src={user.profileImage} />
-          <YStack space="$2">
-            <H5 fontWeight="medium">Profile Picture</H5>
-            <XStack space="$2" alignItems="flex-end">
-              <Button
+          <RStack space="$2">
+            <RH5 fontWeight="medium">Profile Picture</RH5>
+            <RStack
+              space="$2"
+              alignItems="flex-end"
+              style={{ flexDirection: 'row' }}
+            >
+              <RButton
                 size="$3"
                 icon={<Ionicons name="cloud-upload-outline" size={24} />}
                 color="white"
@@ -106,123 +55,112 @@ export default function Settings() {
                 onPress={pickImage}
               >
                 Upload
-              </Button>
-              <Button size="$3" onPress={removeProfileImage}>
+              </RButton>
+              <RButton
+                size="$3"
+                onPress={removeProfileImage}
+                style={{ backgroundColor: 'transparent' }}
+              >
                 Remove
-              </Button>
-            </XStack>
-          </YStack>
-        </XStack>
-        <XStack space="$3">
-          <YStack>
-            <Label htmlFor="firstName">Name</Label>
-            <Input id="name" value={user.name} onChange={handleChange} />
-          </YStack>
-          <YStack>
-            <Label htmlFor="username">Username</Label>
-            <Input
+              </RButton>
+            </RStack>
+          </RStack>
+        </RStack>
+        <RStack space="$3" style={{ flexDirection: 'row' }}>
+          <RStack space="$2">
+            <RLabel htmlFor="firstName">Name</RLabel>
+            <RInput id="name" value={user.name} onChange={handleChange} />
+          </RStack>
+          <RStack space="$2">
+            <RLabel htmlFor="username">Username</RLabel>
+            <RInput
               id="username"
               value={user.username}
               onChange={handleChange}
             />
-          </YStack>
-        </XStack>
+          </RStack>
+        </RStack>
 
-        <YStack>
-          <Label htmlFor="email">Email</Label>
-          <Input id="email" value={user.email} onChange={handleChange} />
-        </YStack>
-        <YStack>
-          <H5>Preferred units</H5>
-          <XStack space>
-            <YStack space="$2" flexGrow={1}>
-              <Label>Weather: </Label>
-              <CustomSelect
-                items={['celsius', 'fahrenheit']}
+        <RStack space="$2">
+          <RLabel htmlFor="email">Email</RLabel>
+          <RInput id="email" value={user.email} onChange={handleChange} />
+        </RStack>
+        <RStack space="$2">
+          <RH5>Preferred units</RH5>
+          <RStack space style={{ flexDirection: 'row' }}>
+            <RStack space="$2" flexGrow={1}>
+              <RLabel>Weather: </RLabel>
+              <DropdownComponent
+                data={['celsius', 'fahrenheit']}
                 value={user.preferredWeather}
-                onChange={(value) =>
+                onValueChange={(value) =>
                   handleChange({ target: { id: 'preferredWeather', value } })
                 }
+                width="100%"
+                placeholder=""
               />
-            </YStack>
-            <YStack space="$2" flexGrow={1}>
-              <Label>Weight: </Label>
-              <CustomSelect
-                items={['lb', 'oz', 'kg', 'g']}
+            </RStack>
+            <RStack space="$2" flexGrow={1}>
+              <RLabel>Weight: </RLabel>
+              <DropdownComponent
+                data={['lb', 'oz', 'kg', 'g']}
                 value={user.preferredWeight}
-                onChange={(value) =>
+                onValueChange={(value) =>
                   handleChange({ target: { id: 'preferredWeight', value } })
                 }
+                width="100%"
+                placeholder=""
               />
-            </YStack>
-          </XStack>
-        </YStack>
-        <Button
+            </RStack>
+          </RStack>
+        </RStack>
+        <RButton
           color="white"
           style={{ backgroundColor: '#0284c7' }}
           onPress={handleEditUser}
         >
           Update profile
-        </Button>
-        <Stack marginTop={20} marginBottom={10}>
-          <H2>Change Password</H2>
-          <Separator marginVertical={8} />
-          <Text fontSize={16}>We will email you to verify the change.</Text>
-        </Stack>
-        <YStack>
-          <Label htmlFor="oldPassword">Old password</Label>
-          <Input
+        </RButton>
+        <RStack marginTop={20} marginBottom={10}>
+          <RH2>Change Password</RH2>
+          <RSeparator marginVertical={8} />
+          <RText fontSize={16}>We will email you to verify the change.</RText>
+        </RStack>
+        <RStack space="$2">
+          <RLabel htmlFor="oldPassword">Old password</RLabel>
+          <RInput
             id="oldPassword"
             value={passwords.oldPassword}
             secureTextEntry={true}
             onChange={handlePasswordsChange}
           />
-        </YStack>
-        <YStack>
-          <Label htmlFor="newPassword">New password</Label>
-          <Input
+        </RStack>
+        <RStack space="$2">
+          <RLabel htmlFor="newPassword">New password</RLabel>
+          <RInput
             id="newPassword"
             value={passwords.newPassword}
             secureTextEntry={true}
             onChange={handlePasswordsChange}
           />
-        </YStack>
-        <YStack>
-          <Label htmlFor="confirmPassword">Confirm new password</Label>
-          <Input
+        </RStack>
+        <RStack space="$2">
+          <RLabel htmlFor="confirmPassword">Confirm new password</RLabel>
+          <RInput
             id="confirmPassword"
             value={passwords.confirmPassword}
             secureTextEntry={true}
             onChange={handlePasswordsChange}
           />
-        </YStack>
-        <Button
+        </RStack>
+        <RButton
           color="white"
           style={{ backgroundColor: '#0284c7' }}
           onPress={handleUpdatePassword}
         >
           Change password
-        </Button>
-      </YStack>
-    </ScrollView>
+        </RButton>
+      </RStack>
+    </RScrollView>
   );
 }
-
-const CustomSelect = ({ onChange, value, items }) => {
-  return (
-    <Select value={value} onValueChange={onChange}>
-      <Select.Trigger>
-        <Select.Value />
-      </Select.Trigger>
-      <Select.Content>
-        <Select.Viewport>
-          {items.map((item, i) => (
-            <Select.Item index={i} key={item} value={item}>
-              <Select.ItemText>{item.toUpperCase()}</Select.ItemText>
-            </Select.Item>
-          ))}
-        </Select.Viewport>
-      </Select.Content>
-    </Select>
-  );
-};

@@ -1,15 +1,15 @@
 import axios from '~/config/axios';
 
-// TODO - swap to RTK query
-
 /**
  * Retrieves photon results based on the provided address array.
  *
- * @param {Array} addressArray - An array of addresses.
- * @return {Array} An array of photon results.
+ * @param {string[]} addressArray - An array of addresses.
+ * @return {Promise<any[]>} An array of photon results.
  */
-export const getPhotonResults = async (addressArray) => {
-  if (!addressArray) return;
+export const getPhotonResults = async (
+  addressArray: string[],
+): Promise<any[]> => {
+  if (!addressArray) return [];
 
   const params = {
     q: addressArray,
@@ -27,13 +27,15 @@ export const getPhotonResults = async (addressArray) => {
     )
     .join('&');
 
-  const response = await axios.get(
-    `https://photon.komoot.io/api/?${queryString}`,
-  );
+  try {
+    const response = await axios.get(
+      `https://photon.komoot.io/api/?${queryString}`,
+    );
 
-  //   const trailsArray = response.data.features.map((_item) => _item?.properties?.name);
-
-  const resultsArray = response.data.features;
-
-  return resultsArray;
+    const resultsArray = response.data.features;
+    return resultsArray;
+  } catch (error) {
+    console.error('Error fetching photon results:', error);
+    return [];
+  }
 };

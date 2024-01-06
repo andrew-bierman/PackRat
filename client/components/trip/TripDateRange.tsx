@@ -9,8 +9,7 @@ import {
 } from 'react-native-paper-dates';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import useTheme from '../../hooks/useTheme';
-import { Button } from 'native-base';
-import { RStack, RText } from '@packrat/ui';
+import { RStack, RText, RButton } from '@packrat/ui';
 
 const TripDateRange = ({ dateRange, setDateRange }) => {
   const { currentTheme } = useTheme();
@@ -93,7 +92,7 @@ const TripDateRange = ({ dateRange, setDateRange }) => {
               </RStack>
             )}
 
-            <Button
+            <RButton
               width={Platform.OS === 'web' ? null : '50%'}
               onPress={() => {
                 setOpen(true);
@@ -102,7 +101,7 @@ const TripDateRange = ({ dateRange, setDateRange }) => {
               <RText style={{ color: currentTheme.colors.text }}>
                 Pick Date Range
               </RText>
-            </Button>
+            </RButton>
             <DatePickerModal
               locale="en"
               label="Select Date"

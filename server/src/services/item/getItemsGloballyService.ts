@@ -10,8 +10,9 @@ import { Item } from '../../drizzle/methods/Item';
  * @return {Object} An object containing items, page, and totalPages.
  */
 export const getItemsGloballyService = async (
-  reqlimit,
-  reqpage,
+  reqlimit: any,
+  reqpage: any,
+  searchString: string,
 ) => {
   const itemClass = new Item();
   const totalItems: any = await itemClass.count();

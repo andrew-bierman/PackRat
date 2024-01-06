@@ -25,6 +25,7 @@ import { z } from 'zod';
 // };
 
 export function getItemsGloballyRoute() {
+  console.log('Route');
   return publicProcedure
     .input(
       z.object({

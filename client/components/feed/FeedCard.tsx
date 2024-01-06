@@ -1,34 +1,20 @@
 import { AntDesign } from '@expo/vector-icons';
 import { formatDistanceToNow } from 'date-fns';
 import { MaterialIcons, Entypo } from '@expo/vector-icons';
-import { theme } from '../../theme';
 import useTheme from '../../hooks/useTheme';
-// import useAddToFavorite from "../../hooks/useAddToFavorites";
-// import { useAuth } from "../../auth/provider";
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  addFavorite,
+  // addFavorite,
   selectFavoriteById,
   selectAllFavorites,
 } from '../../store/favoritesStore';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import { Link } from 'expo-router';
 import { DuplicateIcon } from '../DuplicateIcon/index';
 import { truncateString } from '../../utils/truncateString';
-
-import {
-  Box,
-  Heading,
-  AspectRatio,
-  Text,
-  Center,
-  HStack,
-  Stack,
-  Button,
-} from 'native-base';
+import { RText, RStack, RHeading } from '@packrat/ui';
 import { formatNumber } from '~/utils/formatNumber';
-
-// import { useAuth } from "../../auth/provider";
+import { useAddFavorite } from '~/hooks/favorites';
 
 export default function Card({
   type,
@@ -48,14 +34,16 @@ export default function Card({
   const user = useSelector((state) => state.auth.user);
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
+
+  const { addFavorite } = useAddFavorite();
+
   const favorites = useSelector(selectAllFavorites);
   const dispatch = useDispatch();
 
   const isFavorite =
-    !type === 'trip'
-      ? favorited_by.includes(user.id) ||
-        favorited_by.forEach((obj) => obj.id === user.id)
-      : null;
+    type !== 'trip' &&
+    (favorited_by?.includes(user._id) ||
+      favorited_by?.some((obj) => obj._id === user._id));
 
   /**
    * Handles adding an item to the user's favorites.
@@ -68,7 +56,8 @@ export default function Card({
       userId: user.id,
     };
 
-    dispatch(addFavorite(data));
+    // dispatch(addFavorite(data));
+    addFavorite(data);
   };
 
   /**
@@ -84,7 +73,6 @@ export default function Card({
       dispatch(removeFavorite(favorite.id));
     }
   };
-  // const { addToFavorite } = useAddToFavorite();
 
   const truncatedName = truncateString(name, 25);
   const truncatedDestination = truncateString(destination, 25);
@@ -95,32 +83,23 @@ export default function Card({
   if (duration) numberOfNights = JSON.parse(duration).numberOfNights;
 
   return (
-    <Box alignItems="center" padding="4">
-      <Box
-        minH="125"
-        minW="80"
-        maxW="lg" // add this
-        mx="auto" // add this
-        rounded="lg"
-        overflow="hidden"
-        borderColor="coolGray.200"
-        borderWidth="1"
-        _dark={{
-          borderColor: `${currentTheme.colors.border}`,
-          backgroundColor: `${currentTheme.colors.card}`,
-        }}
-        _web={{
-          shadow: 2,
-          borderWidth: 0,
-        }}
-        _light={{
+    <View style={{ alignItems: 'center', padding: '16px' }}>
+      <View
+        style={{
+          minHeight: '150px',
+          minWidth: '300px',
+          marginVertical: 'auto',
+          borderRadius: '15px',
+          overflow: 'hidden',
+          borderColor: 'lightgray',
+          borderWidth: '1',
           backgroundColor: `${currentTheme.colors.card}`,
         }}
       >
-        <Stack p="4" space={10}>
-          <Stack space={2}>
-            <Heading size="md" ml="-1">
-              <Box
+        <RStack style={{ padding: '16px', gap: '50px' }}>
+          <RStack style={{ gap: '10px' }}>
+            <RHeading>
+              <View
                 style={{
                   flexDirection: 'row',
                   alignItems: 'center',
@@ -128,19 +107,26 @@ export default function Card({
                   width: '100%',
                 }}
               >
-                <Link href={type === 'pack' ? '/pack/' + id : '/trip/' + id}>
-                  <Text color={currentTheme.colors.textColor}>
+                <Link href={type === 'pack' ? '/pack/' + _id : '/trip/' + _id}>
+                  <RText fontSize={18} color={currentTheme.colors.textColor}>
                     {truncatedName}
-                  </Text>
+                  </RText>
                 </Link>
-                <HStack alignItems="center" justifyContent="center" space={2}>
+                <RStack
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '10px',
+                  }}
+                >
                   {type === 'pack' && (
-                    <Box
+                    <View
                       style={{
                         flexDirection: 'row',
                         alignItems: 'center',
                         justifyContent: 'space-between',
-                        gap: 5,
+                        gap: '8px',
                         // border: '1px solid #ccc',
                       }}
                     >
@@ -149,8 +135,8 @@ export default function Card({
                         size={24}
                         color={currentTheme.colors.cardIconColor}
                       />
-                      <DuplicateIcon link={`/pack/${id}?copy=true`} />
-                    </Box>
+                      <DuplicateIcon link={`/pack/${_id}?copy=true`} />
+                    </View>
                   )}
                   {type === 'trip' && (
                     <Entypo
@@ -159,78 +145,66 @@ export default function Card({
                       color={currentTheme.colors.cardIconColor}
                     />
                   )}
-                </HStack>
-              </Box>
-            </Heading>
+                </RStack>
+              </View>
+            </RHeading>
 
             {type === 'pack' && (
-              <Text
-                fontSize="xs"
-                _light={{
-                  color: 'violet.500',
-                }}
-                _dark={{
-                  color: 'violet.400',
-                }}
+              <RText
+                fontSize="$1"
+                color="mediumpurple"
                 fontWeight="500"
-                ml="-0.5"
-                mt="-1"
+                ml={-0.5}
+                mt={-1}
               >
                 Total Weight: {formattedWeight}
-              </Text>
+              </RText>
             )}
 
             {type === 'trip' && (
-              <Text
-                fontSize="xs"
-                _light={{
-                  color: 'violet.500',
-                }}
-                _dark={{
-                  color: 'violet.400',
-                }}
+              <RText
+                fontSize="$1"
+                color="mediumpurple"
                 fontWeight="500"
-                ml="-0.5"
-                mt="-1"
+                ml={-0.5}
+                mt={-1}
               >
                 {truncatedDestination}
-              </Text>
+              </RText>
             )}
-          </Stack>
+          </RStack>
 
-          <HStack alignItems="center" space={4} justifyContent="space-between">
-            <HStack
-              alignItems="center"
-              justifyContent="space-between"
-              width="100%"
+          <RStack
+            style={{ alignItems: 'center', justifyContent: 'space-between' }}
+          >
+            <RStack
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                width: '100%',
+              }}
             >
-              <Box
+              <View
                 style={{
                   flexDirection: 'column',
                   alignItems: 'flex-start',
-                  gap: 10,
+                  gap: '8px',
                 }}
               >
                 <Link href={`/profile/${owner_id}`}>
-                  <Text color={currentTheme.colors.textColor}>
+                  <RText color={currentTheme.colors.textColor}>
                     View {owner?.username ? '@' + owner?.username : 'Owner'}
-                  </Text>
+                  </RText>
                 </Link>
-                <Box
+                <View
                   style={{
                     flexDirection: 'row',
                     alignItems: 'center',
-                    gap: 10,
+                    gap: '100px',
                   }}
                 >
-                  <Text
-                    color="coolGray.600"
-                    _dark={{
-                      color: 'warmGray.200',
-                    }}
-                    fontWeight="400"
-                    flex={1}
-                  >
+                  <RText fontSize="$1" color="gray" fontWeight="400" flex={1}>
                     {formatDistanceToNow(
                       new Date(
                         !Number.isNaN(new Date(createdAt).getTime())
@@ -241,25 +215,26 @@ export default function Card({
                         addSuffix: true,
                       },
                     ) ?? 0}
-                  </Text>
-                </Box>
-              </Box>
+                  </RText>
+                </View>
+              </View>
 
-              <Box
+              <View
                 style={{
                   flexDirection: 'column',
                   alignItems: 'center',
-                  gap: 10,
                 }}
               >
                 {type === 'pack' && (
-                  <Box>
-                    <Text color={currentTheme.colors.textColor}>Favorites</Text>
-                    <Box
+                  <View>
+                    <RText fontSize="$2" color={currentTheme.colors.textColor}>
+                      Favorites
+                    </RText>
+                    <View
                       style={{
                         flexDirection: 'row',
                         alignItems: 'center',
-                        gap: 10,
+                        gap: '8px',
                       }}
                     >
                       {user?.id === owner_id ? null : (
@@ -276,39 +251,37 @@ export default function Card({
                         </TouchableOpacity>
                       )}
 
-                      <Text
+                      <RText
                         color={currentTheme.colors.textColor}
-                        _dark={{
-                          color: currentTheme.colors.textColor,
-                        }}
+                        fontSize="$2"
                         fontWeight="400"
                       >
                         {favorites_count > 0 ? favorites_count : 0}
-                      </Text>
-                    </Box>
-                  </Box>
+                      </RText>
+                    </View>
+                  </View>
                 )}
                 {type === 'trip' && (
-                  <Box>
-                    <Text color={currentTheme.colors.textColor}>Nights</Text>
-                    <Text
+                  <View>
+                    <RText fontSize="$2" color={currentTheme.colors.textColor}>
+                      Nights
+                    </RText>
+                    <RText
+                      fontSize="$2"
                       color={currentTheme.colors.textColor}
-                      _dark={{
-                        color: currentTheme.colors.textColor,
-                      }}
                       style={{
                         justifyContent: 'flex-end',
                       }}
                     >
                       {numberOfNights}
-                    </Text>
-                  </Box>
+                    </RText>
+                  </View>
                 )}
-              </Box>
-            </HStack>
-          </HStack>
-        </Stack>
-      </Box>
-    </Box>
+              </View>
+            </RStack>
+          </RStack>
+        </RStack>
+      </View>
+    </View>
   );
 }

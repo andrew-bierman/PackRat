@@ -1,4 +1,4 @@
-import { Image } from 'native-base';
+import { RImage } from '@packrat/ui';
 import {
   getShapeSourceBounds,
   isLineString,
@@ -57,10 +57,6 @@ export default function MapPreview({ shape }) {
   const urlEncodedImageShapeGeoJSON = encodeURIComponent(
     JSON.stringify(imageShape, null, 0),
   );
-  console.log(
-    '🚀 ~ file: MapPreview.js:33 ~ MapPreview ~ urlEncodedImageShapeGeoJSON:',
-    imageShape.features,
-  );
 
   let bounds = getShapeSourceBounds(shape);
   bounds = bounds[0].concat(bounds[1]);
@@ -72,7 +68,7 @@ export default function MapPreview({ shape }) {
   // console.log("🚀 ~ file: MapPreview.js:39 ~ MapPreview ~ coordinates:", isPoint(shape),MAPBOX_ACCESS_TOKEN)
 
   return isPoint(shape) ? (
-    <Image
+    <RImage
       style={{
         width: '100%',
         height: '100%',
@@ -82,7 +78,7 @@ export default function MapPreview({ shape }) {
       }}
     />
   ) : (
-    <Image
+    <RImage
       style={{
         width: '100%',
         height: '100%',

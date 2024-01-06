@@ -1,15 +1,5 @@
 import React, { useState } from 'react';
-import { View } from 'react-native';
-import {
-  Box,
-  Button,
-  Center,
-  Heading,
-  Input,
-  Text,
-  Toast,
-  VStack,
-} from 'native-base';
+import { RInput } from '@packrat/ui';
 import { CustomModal } from '../modal';
 import axios from '~/config/axios';
 import { api } from '../../constants/api';
@@ -72,13 +62,14 @@ export const RequestPasswordResetEmailModal = () => {
         },
         {
           label: 'Cancel',
+          color: '#B22222',
           onClick: () => {
             setIsOpen(false);
           },
         },
       ]}
     >
-      <Input
+      <RInput
         placeholder="Email"
         autoCapitalize="none"
         keyboardType="email-address"

@@ -25,96 +25,21 @@ export const addItemService = async (
   type,
   ownerId,
 ) => {
-  let category = null;
   let newItem = null;
-  const item = new Item();
-  const packClass = new Pack();
-  const itemCategory = new ItemCategory();
-  switch (type) {
-    case ItemCategoryEnum.FOOD: {
-      category = await itemCategory.findUniqueItem({
-        where: {
-          name: 'Food',
-        },
-      });
-      newItem = await item.create({
-        name,
-        weight,
-        quantity,
-        unit,
-        packDocuments: {
-          id: packId,
-        },
-        categoryDocument: {
-          id: category.id,
-        },
-      });
-      break;
-    }
-    case ItemCategoryEnum.WATER: {
-      category = await itemCategory.findUniqueItem({
-        where: {
-          name: 'Water',
-        },
-      });
+  const category = await ItemCategoryModel.findOne({
+    name: ItemCategoryEnum[type],
+  });
 
-      const existingWaterItem: any = await item.findUniqueItem({
-        where: {
-          category: category.id,
-          packs: { has: packId },
-        },
-        columns: {
-          weight: true,
-          id: true,
-        },
-      });
+  newItem = await Item.create({
+    name,
+    weight,
+    quantity,
+    unit,
+    packs: [packId],
+    category: category ? category._id : null,
+  });
 
-      if (existingWaterItem) {
-        existingWaterItem.weight += Number(weight);
-        newItem = await item.update(
-          {
-            weight: existingWaterItem.weight,
-          },
-          existingWaterItem.id,
-        );
-      } else {
-        newItem = await item.create({
-          name,
-          weight,
-          quantity: 1,
-          unit,
-          packDocuments: {
-            id: packId,
-          },
-          categoryDocument: {
-            id: category.id,
-          },
-        });
-      }
-      break;
-    }
-    default: {
-      category = await itemCategory.findUniqueItem({
-        where: {
-          name: ItemCategoryEnum.ESSENTIALS,
-        },
-      });
-
-      newItem = await item.create({
-        data: {
-          name,
-          weight,
-          quantity,
-          unit,
-          packDocuments: packId,
-          categoryDocument: category.id,
-          type,
-        },
-      });
-
-      break;
-    }
-  }
+  await Pack.updateOne({ _id: packId }, { $addToSet: { items: newItem._id } });
 
   const pack = await packClass.update(
     {

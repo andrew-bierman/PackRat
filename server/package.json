@@ -79,6 +79,7 @@
     "joi": "^17.9.2",
     "jsonwebtoken": "^9.0.1",
     "mock-aws-s3": "^4.0.2",
+    "langchain": "^0.0.203",
     "mongoose": "^7.4.0",
     "mongoose-autopopulate": "^1.0.1",
     "mongoose-to-swagger": "^1.4.0",

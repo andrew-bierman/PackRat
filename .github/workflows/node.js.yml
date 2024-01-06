@@ -11,14 +11,12 @@ on:
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
-
+    runs-on: ${{ matrix.os }}
     strategy:
-      fail-fast: false  # This ensures that all versions are tested even if one fails.
+      fail-fast: false
       matrix:
-        node-version: [18.x, 20.x] # Node.js versions to test against. Removed 14.x as it is EOL + Tamagui errors on it.
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+        os: [ubuntu-latest, windows-latest, macos-latest] # Operating systems
+        node-version: [18.x, 20.x, 21.x] # Node.js versions
 
     steps:
       - uses: actions/checkout@v3

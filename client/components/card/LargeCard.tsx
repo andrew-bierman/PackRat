@@ -1,9 +1,8 @@
 import React from 'react';
-import { Box, Text, Stack } from 'native-base';
-import { Platform } from 'react-native';
+import { View, Platform } from 'react-native';
+import { RText, RStack } from '@packrat/ui';
 import { useSelector } from 'react-redux';
 import useTheme from '../../hooks/useTheme';
-
 import { theme } from '../../theme';
 import useCustomStyles from '~/hooks/useCustomStyles';
 
@@ -52,21 +51,20 @@ export default function LargeCard({
   const currentShape = useSelector(
     (state) => state.search.selectedSearchResult,
   );
-
-  console.log('currentShape', currentShape);
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const containerStyle = customStyle || getContainerStyle(type);
 
   return (
-    <Stack
-      alignSelf="center"
-      w={['100%', '100%', '100%', '90%']}
-      direction={['column', 'column', 'row', 'row']}
-      rounded={['none', 'none', 'md', 'lg']}
-      style={containerStyle}
+    <RStack
+      style={{
+        alignSelf: 'center',
+        width: '90%',
+        borderRadius: 8,
+        ...containerStyle,
+      }}
     >
-      <Box
+      <View
         style={{
           flexDirection: 'row',
           gap: 15,
@@ -75,19 +73,19 @@ export default function LargeCard({
         }}
       >
         {Icon ? <Icon /> : null}
-        <Text
+        <RText
           style={{
             color: currentTheme.colors.textPrimary,
             fontSize: currentTheme.font.size,
             fontWeight: 600,
           }}
         >
-          {title && <Text>{title}</Text>}
-        </Text>
-      </Box>
+          {title && <RText>{title}</RText>}
+        </RText>
+      </View>
       {ContentComponent ? <ContentComponent {...contentProps} /> : null}
       {children}
-    </Stack>
+    </RStack>
   );
 }
 
