@@ -6,5 +6,5 @@ export const createDb = async(d1: D1Database) => {
 };
 
 export interface Env {
-  production: D1Database;
+  DB: D1Database;
 }
