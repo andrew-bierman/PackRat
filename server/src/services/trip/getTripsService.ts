@@ -1,5 +1,5 @@
-import { Pack } from "../../drizzle/methods/pack";
-import { Trip } from "../../drizzle/methods/trip";
+import { Pack } from '../../drizzle/methods/Pack';
+import { Trip } from '../../drizzle/methods/trip';
 
 /**
  * Retrieves trips belonging to a specific owner.
@@ -7,9 +7,7 @@ import { Trip } from "../../drizzle/methods/trip";
  * @param {string} ownerId - The ID of the owner.
  * @return {Promise<object[]>} The trips owned by the specified owner.
  */
-export const getTripsService = async (
-  ownerId: string,
-): Promise<object[]> => {
+export const getTripsService = async (ownerId: string): Promise<object[]> => {
   try {
     const tripClass = new Trip();
     const trips = await tripClass.findMany({

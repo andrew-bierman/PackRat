@@ -1,4 +1,4 @@
-import { Pack } from '../../drizzle/methods/pack';
+import { Pack } from '../../drizzle/methods/Pack';
 
 /**
  * Duplicates a public pack service.
@@ -8,11 +8,7 @@ import { Pack } from '../../drizzle/methods/pack';
  * @param {Array} items - The items to be included in the duplicated pack.
  * @return {Object} - An object containing the duplicated pack.
  */
-export const duplicatePublicPackService = async (
-  packId,
-  ownerId,
-  items,
-) => {
+export const duplicatePublicPackService = async (packId, ownerId, items) => {
   const packClass = new Pack();
   const existingPack = await packClass.findUniquePack({
     where: {

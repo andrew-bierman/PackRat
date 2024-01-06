@@ -1,7 +1,7 @@
 // import { prisma } from '../../prisma';
 
 import { Item } from '../../drizzle/methods/Item';
-import { Pack } from '../../drizzle/methods/pack';
+import { Pack } from '../../drizzle/methods/Pack';
 import { ItemPacks } from '../../drizzle/methods/ItemPacks';
 
 /**
@@ -14,7 +14,7 @@ import { ItemPacks } from '../../drizzle/methods/ItemPacks';
 export const deleteItemService = async (itemId, packId) => {
   let itemDeleted;
   const itemClass = new Item();
-  const ItemPacksClass:any = new ItemPacks();
+  const ItemPacksClass: any = new ItemPacks();
   const pack = new Pack();
   const item = await itemClass.findUniqueItem({
     where: {

@@ -2,9 +2,9 @@
 
 import { Item } from '../../drizzle/methods/Item';
 import { eq } from 'drizzle-orm';
-import { item as itemTable } from "../../db/schema";
-import { Pack } from '../../drizzle/methods/pack';
-import { pack as packTable } from "../../db/schema";
+import { item as itemTable } from '../../db/schema';
+import { Pack } from '../../drizzle/methods/Pack';
+import { pack as packTable } from '../../db/schema';
 
 /**
  * Adds a global item to the pack service.
@@ -14,33 +14,36 @@ import { pack as packTable } from "../../db/schema";
  * @param {string} ownerId - The ID of the owner.
  * @return {Promise<object>} - A promise that resolves to the added item.
  */
-export const addGlobalItemToPackService = async (
-  packId,
-  itemId,
-  ownerId,
-) => {
-
+export const addGlobalItemToPackService = async (packId, itemId, ownerId) => {
   const item = new Item();
-  const pack = new Pack()
+  const pack = new Pack();
   const itemResult = await item.findUniqueItem({
     where: { id: itemId },
-    with: { categoryDocument: { columns: { name: true } } }
-  })
+    with: { categoryDocument: { columns: { name: true } } },
+  });
 
-  await pack.update({
-    itemDocuments: {
-      connect: { id: itemId }
-    }
-  }, packId, eq(packTable.id, packId));
+  await pack.update(
+    {
+      itemDocuments: {
+        connect: { id: itemId },
+      },
+    },
+    packId,
+    eq(packTable.id, packId),
+  );
 
   const uniqueOwners = [...new Set([...itemResult.owners, ownerId])];
 
-  const updatedItem = await item.update({
-    owners: uniqueOwners,
-    packDocuments: {
-      id: packId,
+  const updatedItem = await item.update(
+    {
+      owners: uniqueOwners,
+      packDocuments: {
+        id: packId,
+      },
     },
-  }, itemId, eq(itemTable.id, itemId));
+    itemId,
+    eq(itemTable.id, itemId),
+  );
 
   return updatedItem;
 };

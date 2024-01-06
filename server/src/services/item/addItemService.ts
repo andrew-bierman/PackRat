@@ -4,7 +4,7 @@ import { Item } from '../../drizzle/methods/Item';
 import { item as itemTable } from '../../db/schema';
 import { and, eq } from 'drizzle-orm';
 import { ItemCategory } from '../../drizzle/methods/itemcategory';
-import { Pack } from '../../drizzle/methods/pack';
+import { Pack } from '../../drizzle/methods/Pack';
 /**
  * Generates a new item and adds it to a pack based on the given parameters.
  * @param {string} name - The name of the item.
@@ -34,7 +34,7 @@ export const addItemService = async (
     case ItemCategoryEnum.FOOD: {
       category = await itemCategory.findUniqueItem({
         where: {
-          name: "Food",
+          name: 'Food',
         },
       });
       newItem = await item.create({
@@ -46,7 +46,7 @@ export const addItemService = async (
           id: packId,
         },
         categoryDocument: {
-          id: category.id
+          id: category.id,
         },
       });
       break;
@@ -71,9 +71,12 @@ export const addItemService = async (
 
       if (existingWaterItem) {
         existingWaterItem.weight += Number(weight);
-        newItem = await item.update({
-          weight: existingWaterItem.weight,
-        }, existingWaterItem.id);
+        newItem = await item.update(
+          {
+            weight: existingWaterItem.weight,
+          },
+          existingWaterItem.id,
+        );
       } else {
         newItem = await item.create({
           name,
@@ -113,15 +116,22 @@ export const addItemService = async (
     }
   }
 
-  const pack = await packClass.update({
-    itemDocuments: newItem.id,
-  }, packId);
-
-  const updatedItem = await item.update({
-    owners: {
-      push: pack.owners.map((ownerId) => ownerId),
+  const pack = await packClass.update(
+    {
+      itemDocuments: newItem.id,
     },
-  }, newItem.id, and(eq(itemTable.id, newItem.id)));
+    packId,
+  );
+
+  const updatedItem = await item.update(
+    {
+      owners: {
+        push: pack.owners.map((ownerId) => ownerId),
+      },
+    },
+    newItem.id,
+    and(eq(itemTable.id, newItem.id)),
+  );
 
   return { newItem: updatedItem, packId };
 };

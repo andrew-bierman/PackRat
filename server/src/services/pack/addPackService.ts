@@ -6,8 +6,7 @@
  * @return {Object} An object containing the created pack.
  */
 
-import { Pack } from "../../drizzle/methods/pack";
-
+import { Pack } from '../../drizzle/methods/Pack';
 
 export const addPackService = async (name, owner_id) => {
   const packClass = new Pack();

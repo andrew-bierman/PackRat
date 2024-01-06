@@ -1,4 +1,4 @@
-import { Pack } from '../../drizzle/methods/pack';
+import { Pack } from '../../drizzle/methods/Pack';
 
 export const getPackByIdService = async (packId) => {
   try {
@@ -24,8 +24,8 @@ export const getPackByIdService = async (packId) => {
 
     // Parse JSON
     const ownerDocument = pack.ownerDocument;
-    const favoritedByDocuments = pack.favoritedByDocuments
-    const ownerDocuments = pack.ownerDocuments
+    const favoritedByDocuments = pack.favoritedByDocuments;
+    const ownerDocuments = pack.ownerDocuments;
     // const tripDocuments = trips
     return {
       ...pack,
