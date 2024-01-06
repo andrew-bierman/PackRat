@@ -29,10 +29,14 @@ export default function Trips() {
   });
   const dispatch = useDispatch();
   const searchResult = useSelector(
-    (state) => state.search.selectedSearchResult,
+    (state: { search?: { selectedSearchResult: any } }) =>
+      state?.search.selectedSearchResult,
   );
 
-  const { latLng, selectedSearch } = useSelector((state) => state.weather);
+  const { latLng, selectedSearch } = useSelector(
+    (state: { weather?: { latLng: any; selectedSearch: any } }) =>
+      state?.weather,
+  );
 
   // const [photonDetails, setPhotonDetails] = useState(null);
   // const photonDetailsStore = useSelector(
@@ -240,7 +244,8 @@ export default function Trips() {
           />
           <GearList />
           <TripDateRange dateRange={dateRange} setDateRange={setDateRange} />
-          {!photonDetails?.IsError && !photonDetails?.isLoading && (
+          {!photonDetails?.['IsError'] && !photonDetails?.['isLoading'] && (
+            // {!photonDetails?.IsError && !photonDetails?.isLoading && (
             <TripCard
               Icon={() => (
                 <FontAwesome5
@@ -252,6 +257,7 @@ export default function Trips() {
               title="Map"
               isMap={true}
               shape={photonDetails}
+              
             />
           )}
           {photonDetails && <WeatherData geoJSON={photonDetails} />}

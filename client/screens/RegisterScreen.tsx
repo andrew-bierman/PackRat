@@ -51,8 +51,7 @@ export default function Register() {
   }
 
   const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
-    clientId:
-      '993694750638-876nvl8hfjfv6tqiqc1c4tmubvf8chpp.apps.googleusercontent.com',
+    clientId: WEB_CLIENT_ID,
   });
 
   /**
