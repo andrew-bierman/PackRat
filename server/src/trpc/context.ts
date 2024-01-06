@@ -5,7 +5,7 @@ let DB: D1Database;
 
 export const createContext = (honoContext: Context) => async () => {
   const { env, req} = honoContext;
-  DB = honoContext.env.production
+  DB = honoContext.env.DB;
   const user = await extractTokenAndGetUser(
     req.raw,
     env.JWT_SECRET,
