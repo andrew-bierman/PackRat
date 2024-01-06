@@ -23,7 +23,7 @@ const AboutContent = ({ desktopContainer, isMobile }) => {
   const styles = useCustomStyles(loadStyles);
   console.log('isDark, isLight', isDark, isLight);
 
-  const { handleGithubLink, handleDiscordLink, aboutSections} = useAbout();
+  const { handleGithubLink, handleDiscordLink, aboutSections } = useAbout();
 
   return (
     <View>
@@ -39,7 +39,6 @@ const AboutContent = ({ desktopContainer, isMobile }) => {
             {section}
           </Text>
         ))}
-
       </View>
       <View style={desktopContainer}>
         <RStack style={{ flexDirection: 'row' }}>
@@ -87,7 +86,10 @@ export default function About() {
     >
       <View style={[isDark ? styles.containerDark : styles.container]}>
         <Desktop>
-          <AboutContent desktopContainer={styles.webLogoContainer} isMobile={false}/>
+          <AboutContent
+            desktopContainer={styles.webLogoContainer}
+            isMobile={false}
+          />
         </Desktop>
         <Tablet>
           <AboutContent

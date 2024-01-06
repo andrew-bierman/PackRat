@@ -93,7 +93,9 @@ export default function Items() {
             setIsAddItemModalOpen={toggleAddItemModal}
           />
         </CustomModal>
-        {!isError && Array.isArray(data.globalItems.items) && (
+        {!isError &&
+          data.globalItems &&
+          Array.isArray(data.globalItems.items) && (
           <ItemsTable
             limit={limit}
             setLimit={handleLimitChange}
@@ -105,7 +107,7 @@ export default function Items() {
             refetch={refetch}
             setRefetch={handleRefetch}
           />
-        )}
+          )}
       </Box>
     </ScrollView>
   );
