@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FlatList, View, ScrollView, Platform } from 'react-native';
 import Card from '../../components/feed/FeedCard';
-import { useFeedLogic } from '../Hooks/useFeedLogic';
+import { useFeedLogic } from '../../hooks/feed/useFeedLogic';
 import { useRouter } from 'expo-router';
 import { fuseSearch } from '../../utils/fuseSearch';
 import useCustomStyles from '~/hooks/useCustomStyles';

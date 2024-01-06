@@ -14,15 +14,15 @@ import { RButton, RStack } from '@packrat/ui';
 import * as Linking from 'expo-linking';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from '~/hooks/useCustomStyles';
-import { useStyles } from '../Hooks/useStyles';
-import { useAppearenceContainerLogic } from '../Hooks/useAppearenceContainerLogic';
-import handleGithubLink from '../Hooks/useHandleLink';
+import { useAppearenceContainerLogic } from '../../hooks/appearence/useAppearenceContainerLogic';
+import {useHandleLink} from '~/hooks/about/useHandleLink';
 
 const AboutContent = ({ desktopContainer, isMobile }) => {
   const { currentTheme, toggleSwitch, isEnabled, isDark } =
     useAppearenceContainerLogic();
+  const { handleGithubLink, handleDiscordLink } = useHandleLink
 
-  const { styles } = useStyles(loadStyles);
+  const styles = useCustomStyles(loadStyles);
   return (
     <View>
       <View style={styles.textContainer}>

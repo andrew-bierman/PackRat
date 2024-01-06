@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { VStack, Box, Text, Switch } from 'native-base';
 import { StyleSheet } from 'react-native';
-import { useAppearenceContainerLogic } from '../Hooks/useAppearenceContainerLogic';
-import { useStyles } from '../Hooks/useStyles';
+import { useAppearenceContainerLogic } from '~/hooks/appearence/useAppearenceContainerLogic';
 import {
   Paragraph,
   Card,
@@ -19,7 +18,7 @@ import { Scroll } from '@tamagui/lucide-icons';
 
 export default function AppearanceContainer() {
   const [showKitchenSink, setShowKitchenSink] = useState(true);
-  const { styles } = useStyles(loadStyles);
+  const styles = useCustomStyles(loadStyles);
   const { currentTheme, toggleSwitch, isEnabled, isDark } =
     useAppearenceContainerLogic();
 
