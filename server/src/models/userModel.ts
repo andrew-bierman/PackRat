@@ -1,6 +1,6 @@
 import mongoose, { Schema, type Document, type Model } from 'mongoose';
 import myDB from './dbConnection';
-import bycrypt from 'bcrypt';
+import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { JWT_SECRET, CLIENT_URL } from '../config';
 import validator from 'validator';
@@ -18,7 +18,9 @@ export interface IUser extends Document {
   passwordResetTokenExpiration?: Date;
   role: 'user' | 'admin';
   username: string;
-  profilePicture?: string;
+  profileImage?: string;
+  preferredWeather?: string;
+  preferredWeight?: string;
   generateAuthToken: () => Promise<string>;
   generateResetToken: () => Promise<string>;
 }
@@ -76,7 +78,13 @@ const UserSchema = new Schema<IUser>(
         }
       },
     },
-    profilePicture: {
+    profileImage: {
+      type: String,
+    },
+    preferredWeather: {
+      type: String,
+    },
+    preferredWeight: {
       type: String,
     },
   },
@@ -95,13 +103,11 @@ UserSchema.statics.findByCredentials = async function ({
   password: string;
 }): Promise<IUser> {
   const user = await User.findOne({ email });
-
   if (!user) throw new Error('Unable to login');
 
-  const isMatch = await bycrypt.compare(password, user.password);
+  const isMatch = await bcrypt.compare(password, user.password);
 
   if (!isMatch) throw new Error('Unable to login');
-
   return user;
 };
 

@@ -1,6 +1,8 @@
+import { publicProcedure } from '../../trpc';
 import { ItemNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { getItemsGloballyService } from '../../services/item/item.service';
+import { z } from 'zod';
 
 /**
  * Retrieves globally available items.
@@ -10,11 +12,33 @@ import { getItemsGloballyService } from '../../services/item/item.service';
  */
 export const getItemsGlobally = async (req, res, next) => {
   try {
-    const result = await getItemsGloballyService(req);
-
+    const result = await getItemsGloballyService(
+      req.query.limit,
+      req.query.page,
+      req.query.searchString,
+    );
     res.locals.data = result;
     responseHandler(res);
   } catch (error) {
     next(ItemNotFoundError);
   }
 };
+
+export function getItemsGloballyRoute() {
+  console.log('Route');
+  return publicProcedure
+    .input(
+      z.object({
+        limit: z.number(),
+        page: z.number(),
+        searchString: z.string().optional(),
+      }),
+    )
+    .query(async (opts) => {
+      return await getItemsGloballyService(
+        opts.input.limit,
+        opts.input.page,
+        opts.input.searchString,
+      );
+    });
+}

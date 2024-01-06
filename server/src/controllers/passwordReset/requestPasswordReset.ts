@@ -9,7 +9,9 @@ import {
 
 import sgMail from '@sendgrid/mail';
 import { responseHandler } from '../../helpers/responseHandler';
-
+import { publicProcedure } from '../../trpc';
+import * as validator from '../../middleware/validators/index';
+import { z } from 'zod';
 sgMail.setApiKey(SEND_GRID_API_KEY);
 
 // Generate a password reset token that includes the user's email address
@@ -83,6 +85,29 @@ export const requestPasswordResetEmailAndToken = async (req, res) => {
     return res.status(500).send({ error: 'Internal server error' });
   }
 };
+
+export function requestPasswordResetEmailAndTokenRoute() {
+  return publicProcedure
+    .input(z.object({ email: z.string() }))
+    .mutation(async (opts) => {
+      const { email } = opts.input;
+      const user = await User.findOne({ email });
+      if (!user) {
+        return { error: 'No user found with this email address' };
+      }
+      const resetToken = generatePasswordResetToken(email);
+      await User.findOneAndUpdate(
+        { email },
+        {
+          passwordResetToken: resetToken,
+          passwordResetTokenExpiration: Date.now() + 24 * 60 * 60 * 1000,
+        },
+      );
+      const resetUrl = `${CLIENT_URL}/password-reset?token=${resetToken}`;
+      sendPasswordResetEmail(email, resetUrl);
+      return { message: 'Password reset email sent successfully' };
+    });
+}
 
 // Send the password reset email with the reset token included in the URL
 // const sendPasswordResetEmail = async (email, resetUrl) => {

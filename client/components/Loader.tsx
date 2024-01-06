@@ -1,15 +1,18 @@
 import React from 'react';
-import { Container, HStack, Heading, Spinner } from 'native-base';
+import { RStack, RHeading, RSpinner } from '@packrat/ui';
 const Loader = () => {
   return (
-    <HStack space={2} marginTop={20} justifyContent="center">
-      {' '}
-      <Spinner accessibilityLabel="Loading posts" />{' '}
-      <Heading color="#0a84ff" fontSize="md">
-        {' '}
-        Loading{' '}
-      </Heading>{' '}
-    </HStack>
+    <RStack
+      style={{
+        flexDirection: 'row',
+        marginTop: 20,
+        justifyContent: 'center',
+        gap: '8px',
+      }}
+    >
+      <RSpinner color="#0a84ff" />
+      <RHeading style={{ color: '#0a84ff', fontSize: '$2' }}>Loading</RHeading>
+    </RStack>
   );
 };
 export default Loader;

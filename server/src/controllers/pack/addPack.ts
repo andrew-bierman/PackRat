@@ -1,5 +1,6 @@
 import { addPackService } from '../../services/pack/pack.service';
-
+import * as validator from '../../middleware/validators/index';
+import { publicProcedure } from '../../trpc';
 /**
  * Adds a new pack to the database.
  * @param {Object} req - The HTTP request object.
@@ -11,3 +12,10 @@ export const addPack = async (req, res) => {
   const result = await addPackService(name, owner_id);
   res.status(200).json({ msg: 'success', ...result });
 };
+
+export function addPackRoute() {
+  return publicProcedure.input(validator.addPack).mutation(async (opts) => {
+    const { name, owner_id } = opts.input;
+    return addPackService(name, owner_id);
+  });
+}

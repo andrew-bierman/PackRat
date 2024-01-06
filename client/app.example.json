@@ -16,14 +16,14 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.andrewbierman.packratfront"
+      "bundleIdentifier": "com.andrewbierman.packrat"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/packrat-app-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.andrewbierman.packratfront"
+      "package": "com.andrewbierman.packrat"
     },
     "web": {
       "favicon": "./assets/favicon.png",
@@ -43,6 +43,13 @@
           "iCloudContainerEnvironment": "Production"
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "9da94b36-90f1-4b3e-830a-b205816809e7"
+      }
+    },
+    "owner": "andrewbierman"
   }
+
 }

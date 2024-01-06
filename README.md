@@ -6,6 +6,76 @@ With PackRat, you can create and manage trips, discover new destinations, and st
 
 So pack your bags, grab your friends, and get ready for your next adventure with PackRat!
 
+**Build & CI:**
+![Node.js CI](https://github.com/andrew-bierman/PackRat/actions/workflows/node.js.yml/badge.svg)
+![Node.js CI for Dev Environment](https://github.com/andrew-bierman/PackRat/actions/workflows/node.js.dev.yml/badge.svg)
+![Docker Image CI](https://github.com/andrew-bierman/PackRat/actions/workflows/docker.node.yml/badge.svg)
+![android-build-apk](https://github.com/andrew-bierman/PackRat/actions/workflows/build.yml/badge.svg)
+
+**Repository Info:**
+![GitHub tag](https://img.shields.io/github/tag/andrew-bierman/PackRat?include_prereleases=&sort=semver&color=blue)
+![License](https://img.shields.io/badge/License-GNU-blue)
+![issues - PackRat](https://img.shields.io/github/issues/andrew-bierman/PackRat)
+
+<div align="center">
+
+[![View Beta Site](https://img.shields.io/badge/View%20Beta%20Site-%20-brightgreen)](https://packrat.world)
+
+</div>
+
+
+## Table of Contents
+
+- [PackRat 🎒](#packrat-)
+  - [Table of Contents](#table-of-contents)
+  - [Overview 🌐](#overview-)
+  - [Documentation 📚](#documentation-)
+  - [Features 🚀](#features-)
+  - [Technologies used 💻](#technologies-used-)
+  - [🗂 Folder layout](#-folder-layout)
+  - [UI Kit](#ui-kit)
+  - [🆕 Add new dependencies](#-add-new-dependencies)
+    - [Pure JS dependencies](#pure-js-dependencies)
+    - [Native dependencies](#native-dependencies)
+  - [Update new dependencies](#update-new-dependencies)
+    - [Pure JS dependencies](#pure-js-dependencies-1)
+  - [Local installation 📲](#local-installation-)
+    - [Dependencies](#dependencies)
+    - [Environment Setup](#environment-setup)
+      - [Automated Setup 🛠️](#automated-setup-️)
+      - [Manual Setup 📝](#manual-setup-)
+    - [Yarn Setup](#yarn-setup)
+      - [Root](#root)
+      - [Server](#server)
+      - [Client](#client)
+    - [Debugging Yarn Environment Setup - Windows](#debugging-yarn-environment-setup---windows)
+  - [Docker Installation 🐳](#docker-installation-)
+    - [Dependencies](#dependencies-1)
+    - [Installation](#installation)
+  - [How backend API's are setup](#how-backend-apis-are-setup)
+  - [Contributing 🤝](#contributing-)
+  - [👏 Special Thanks](#-special-thanks)
+  - [License 📝](#license-)
+
+## Overview 🌐
+
+With **PackRat**, you can:
+- Create and manage trips.
+- Discover new destinations.
+- Stay informed with up-to-date weather forecasts.
+- Access accurate maps and directions with our integration to Mapbox.
+- Get suggestions for popular outdoor activities based on your trip's location and season.
+
+So pack your bags, grab your friends, and get ready for your next adventure with **PackRat**!
+
+## Documentation 📚
+
+<div align="center">
+
+[![view - Documentation](https://img.shields.io/badge/view-Documentation-blue?style=for-the-badge)](/docs/ "Go to project documentation")
+
+</div>
+
 ## Features 🚀
 
 - Create and manage trips: users can create new trips and manage existing ones by adding details such as dates, locations, and activities.
@@ -27,6 +97,61 @@ PackRat is built using the following technologies:
 - Redux: a predictable state container for JavaScript apps.
 - Mapbox: a location data platform for mobile and web applications.
 
+## 🗂 Folder layout
+
+The main apps are:
+
+- `expo` (native, web)
+- `next` (ssr web) -- not yet implemented
+
+- `packages` shared packages across apps
+  - `ui` includes your custom UI kit that will be optimized by Tamagui
+  - `app` you'll be importing most files from `app/`
+    - `features` (don't use a `screens` folder. organize by feature.)
+    - `provider` (all the providers that wrap the app, and some no-ops for Web.)
+
+## UI Kit
+
+Note we're following the [design systems guide](https://tamagui.dev/docs/guides/design-systems) and creating our own package for components.
+
+See `packages/ui` named `@my/ui` for how this works.
+
+## 🆕 Add new dependencies
+
+### Pure JS dependencies
+
+If you're installing a JavaScript-only dependency that will be used across platforms, install it in `packages/app`:
+
+```sh
+cd packages/app
+yarn add date-fns
+cd ../..
+yarn
+```
+
+### Native dependencies
+
+If you're installing a library with any native code, you must install it in `expo`:
+
+```sh
+cd apps/expo
+yarn add react-native-reanimated
+cd ..
+yarn
+```
+
+## Update new dependencies
+
+### Pure JS dependencies
+
+```sh
+yarn upgrade-interactive
+```
+
+You can also install the native library inside of `packages/app` if you want to get autoimport for that package inside of the `app` folder. However, you need to be careful and install the _exact_ same version in both packages. If the versions mismatch at all, you'll potentially get terrible bugs. This is a classic monorepo issue. I use `lerna-update-wizard` to help with this (you don't need to use Lerna to use that lib).
+
+You may potentially want to have the native module transpiled for the next app. If you get error messages with `Cannot use import statement outside a module`, you may need to use `transpilePackages` in your `next.config.js` and add the module to the array there.
+
 ## Local installation 📲
 
 PackRat consists of two main components: a client and a server. Follow the steps below to install and run both components.
@@ -34,7 +159,7 @@ PackRat consists of two main components: a client and a server. Follow the steps
 ### Dependencies
 
 - [Node.js](https://nodejs.org/en/)
-- [NPM](https://www.npmjs.com/get-npm)
+- [Yarn](https://classic.yarnpkg.com/en/docs/install)
 - [Expo CLI](https://docs.expo.io/workflow/expo-cli/)
 - [React Native CLI](https://reactnative.dev/docs/environment-setup)
 
@@ -61,13 +186,13 @@ cd PackRat
 
 3. Set up the environment variables for the client and server.
    - If you have access to the development env files, use those. Otherwise, replace the values with your own.
-   - See the `.env.example` files in the `client` and `server` directories for the necessary environment variables. 
+   - See the `.env.example` files in the `client` and `server` directories for the necessary environment variables.
 
 #### Automated Setup 🛠️
 
 1. Run the setup script from the `PackRat` directory.
 ```
-npm run setup
+yarn setup
 ```
 
 #### Manual Setup 📝
@@ -86,7 +211,7 @@ cd client
      - Navigate to the android directory. Copy the `gradle.properties.example` file and rename it to `gradle.properties`. Open the file and replace the `MAPBOX_DOWNLOADS_TOKEN_FROM_ENV` value with your own Mapbox downloads token.
      - See the [Mapbox documentation](https://docs.mapbox.com/help/getting-started/access-tokens/) for more information on how to obtain Mapbox API keys and access tokens.
 
-2. Duplicate the `.env.example` file and rename it to `.env`. Open the file and replace the values with your own. 
+2. Duplicate the `.env.example` file and rename it to `.env`. Open the file and replace the values with your own.
    - If you have access to the development env file, skip this step. Otherwise, replace the values with your own.
 
 ```
@@ -143,7 +268,7 @@ cd ../..
 cd server
 ```
 
-10. Duplicate the `.env.example` file and rename it to `.env`. Open the file and replace the values with your own. 
+10. Duplicate the `.env.example` file and rename it to `.env`. Open the file and replace the values with your own.
         - If you have access to the development env file, skip this step. Otherwise, replace the values with your own.
 
 ```
@@ -156,9 +281,18 @@ cp .env.example .env
 cd ..
 ```
 
-### NPM Setup
+### Yarn Setup
 
 Recommended to open two terminal windows.
+
+#### Root
+
+1.  From the main`PackRat` directory.
+
+```
+yarn install
+```
+
 
 #### Server
 
@@ -168,16 +302,10 @@ Recommended to open two terminal windows.
 cd server
 ```
 
-2. Install dependencies for the server.
+2. Start the server.
 
 ```
-npm install
-```
-
-3. Start the server.
-
-```
-npm start
+yarn start
 ```
 
 #### Client
@@ -188,21 +316,71 @@ npm start
 cd client
 ```
 
-2. Install dependencies for the client.
+2. Start the Expo server.
 
 ```
-npm install
-```
-
-3. Start the Expo server.
-
-```
-npm start
+yarn start
 ```
 
 4. Here you will be able to run the app on an iOS or Android simulator (or on your own device), or on the web. See the [Expo documentation](https://docs.expo.io/get-started/installation/) for more information on how to set up your development environment.
 
 Note that the client and server are designed to run concurrently in development mode.
+
+
+### Debugging Yarn Environment Setup - Windows
+
+**Check yarn and node version:**
+```
+yarn -v
+```
+```
+node -v
+```
+
+**If node version < 18.0.0:**
+- Update to latest: https://nodejs.org/en/download
+
+**If yarn version >= 4.0.0:**
+- Skip this process
+
+**If you don't have yarn installed:**
+- Run command prompt as an administrator
+- Run `(corepack comes along with node js 18+)`
+  ```
+  corepack enable
+  ```
+- Run
+  ```
+  yarn set version stable
+  ```
+- Run
+  ```
+  yarn install
+  ```
+- Check yarn version(`yarn -v`): *version >= 4.0.2*
+- Restart your code editor if opened
+
+**If yarn version < 4.0.0:**
+- Make sure you're using Node 18+
+- Go to your windows root path  (`C:\Users\HP)`
+- Delete any `.yarnrc.yml` file and `.yarn` folder
+- Delete `yarn` folder from `C:\Program Files (x86)`
+- Run command prompt as an administrator
+- Run `(corepack comes along with node js 18+)`
+  ```
+  corepack enable
+  ```
+- Go into the project directory `cd \PackRat`
+- Run
+  ```
+  yarn set version stable
+  ```
+- Run
+  ```
+  yarn install
+  ```
+- Restart your code editor if opened
+- If you any encounter errors, try restarting your system.
 
 ## Docker Installation 🐳
 
@@ -222,7 +400,7 @@ docker-compose build
 docker-compose up
 ```
 
-2. Navigate to `http://localhost:19000/` to view the app. The server will be running on `http://localhost:3000/`.
+2. Navigate to `http://localhost:8081/` to view the app. The server will be running on `http://localhost:3000/`.
 3. If you encounter errors with edits to files not automatically applying, try running the following commands:
 
 ```
@@ -247,19 +425,37 @@ docker build -t packrat-server server/Dockerfile
 5. To run the images, run the following commands:
 
 ```
-docker run -p 19000:19000 packrat-client
+docker run -p 8081:8081 packrat-client
 docker run -p 3000:3000 packrat-server
 ```
+
+## How backend API's are setup
+Please refer to README.md inside server folder.
 
 ## Contributing 🤝
 
 Contributions to PackRat are welcome! To contribute, follow these steps:
 
-1. Fork the repository.
-2. Create a new branch for your changes.
+1. Clone this repository.
+2. Create a new branch.
 3. Make your changes and commit them.
-4. Push your changes to your fork.
-5. Create a pull request.
+4. Push your changes to the remote branch.
+5. Open a pull request.
+6. Wait for your pull request to be reviewed and merged.
+7. Celebrate! 🎉
+
+## 👏 Special Thanks
+
+- [React Native Developers](https://twitter.com/reactnative)
+- [OpenStreetMap Developers](https://www.openstreetmap.org/)
+- [RN MapBox Developers](https://github.com/rnmapbox/maps)
+- [Cloudflare Developers](https://twitter.com/CloudflareDev)
+- [Yusuke Wada](https://twitter.com/yusukebe) - Creator of Hono.js
+- [Nate Birdman](https://twitter.com/natebirdman) - Creator of Tamagui
+- [Fernando Rojo](https://twitter.com/fernandotherojo) - Creator of Zeego
+- [Tanner Linsley](https://twitter.com/tannerlinsley) - Creator of TanStack
+- [Expo Developers](https://twitter.com/expo) - Office hours
+- [Shopify Developers](https://twitter.com/ShopifyDevs)
 
 ## License 📝
 

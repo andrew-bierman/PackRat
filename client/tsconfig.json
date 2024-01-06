@@ -15,10 +15,12 @@
       "~/config/*": ["config/*"],
       "~/constants/*": ["constants/*"],
       "~/components/*": ["components/*"],
+      "~/context/*": ["context/*"],
       "~/utils/*": ["utils/*"],
       "~/hooks/*": ["hooks/*"],
       "~/screens/*": ["screens/*"],
       "~/theme/*": ["theme/*"],
+      "@trpc": ["../server/src/routes/index"]
     },
   },
   "exclude": [
