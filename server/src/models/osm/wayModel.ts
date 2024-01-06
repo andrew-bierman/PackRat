@@ -59,7 +59,7 @@ WaySchema.method('toGeoJSON', async function () {
 WaySchema.method('toJSON', async function () {
   console.log('toJSON instance in mongo schema', this);
   const { _id, ...object } = this.toObject();
-  object.id = _id.toString();
+  // object.id = _id.toString();
   // object.nodes = await this.populate("nodes").execPopulate(); TODO
   return object;
 });

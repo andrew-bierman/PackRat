@@ -6,6 +6,7 @@ module.exports = {
   extends: [
     'standard-with-typescript',
     'plugin:@typescript-eslint/recommended',
+    'plugin:@tanstack/eslint-plugin-query/recommended',
     'prettier',
   ],
   overrides: [
@@ -70,6 +71,7 @@ module.exports = {
     'operator-linebreak': 'off',
     '@typescript-eslint/await-thenable': 'off',
     '@typescript-eslint/prefer-optional-chain': 'off',
+    '@typescript-eslint/return-await': 'off',
   },
   settings: {
     react: {

@@ -1,6 +1,8 @@
+import { publicProcedure } from '../../trpc';
 import { NoDestinationFoundWithThatIDError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { getDestinationService } from '../../services/osm/osm.service';
+import { z } from 'zod';
 
 /**
  * Retrieves the destination based on the given ID.
@@ -20,3 +22,12 @@ export const getDestination = async (req, res, next) => {
   res.locals.data = destination;
   responseHandler(res);
 };
+
+export function getDestinationRoute() {
+  return publicProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async (opts) => {
+      const { id } = opts.input;
+      return await getDestinationService(id);
+    });
+}

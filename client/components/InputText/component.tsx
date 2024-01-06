@@ -1,4 +1,4 @@
-import { FormControl, Input } from 'native-base';
+import { RInput, RLabel } from '@packrat/ui';
 import React, { forwardRef, useImperativeHandle, useRef } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { type TextInput } from 'react-native';
@@ -50,44 +50,33 @@ export const InputText: React.ForwardRefExoticComponent<InputTextProps> =
           fieldState: { error },
         }) => (
           <>
-            <FormControl isInvalid={!!error}>
-              {label && <FormControl.Label>{label}</FormControl.Label>}
-              <Input
-                value={value}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                underlineColorAndroid="transparent"
-                allowFontScaling={false}
-                autoComplete={
-                  keyboardType === 'email-address' ? 'email' : undefined
-                }
-                textContentType={
-                  keyboardType === 'email-address' ? 'emailAddress' : undefined
-                }
-                autoCorrect={false}
-                autoCapitalize={
-                  keyboardType === 'email-address' ? 'none' : 'sentences'
-                }
-                editable={!isDisabled}
-                keyboardType={keyboardType}
-                maxLength={maxLength}
-                numberOfLines={1}
-                autoFocus={autoFocus}
-                placeholder={placeholder}
-                secureTextEntry={secureTextEntry}
-                ref={inputRef}
-                {...rest}
-              />
-              {error && (
-                <FormControl.ErrorMessage
-                  _text={{
-                    fontSize: 'xs',
-                  }}
-                >
-                  {error.message || 'Error'}
-                </FormControl.ErrorMessage>
-              )}
-            </FormControl>
+            <RLabel>{label}</RLabel>
+            <RInput
+              value={value}
+              onChangeText={onChange}
+              onBlur={onBlur}
+              underlineColorAndroid="transparent"
+              allowFontScaling={false}
+              autoComplete={
+                keyboardType === 'email-address' ? 'email' : undefined
+              }
+              textContentType={
+                keyboardType === 'email-address' ? 'emailAddress' : undefined
+              }
+              autoCorrect={false}
+              autoCapitalize={
+                keyboardType === 'email-address' ? 'none' : 'sentences'
+              }
+              editable={!isDisabled}
+              keyboardType={keyboardType}
+              maxLength={maxLength}
+              numberOfLines={1}
+              autoFocus={autoFocus}
+              placeholder={placeholder}
+              secureTextEntry={secureTextEntry}
+              ref={inputRef}
+              {...rest}
+            />
           </>
         )}
       />

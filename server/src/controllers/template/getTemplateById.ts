@@ -1,7 +1,8 @@
+import { publicProcedure } from '../../trpc';
 import { TemplateNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import Template from '../../models/templateModel';
-
+import { z } from 'zod';
 /**
  * Retrieves a template by its ID.
  * @param {Object} req - The request object.
@@ -22,3 +23,16 @@ export const getTemplateById = async (req, res, next) => {
     next(TemplateNotFoundError);
   }
 };
+
+export function getTemplateByIdRoute() {
+  return publicProcedure
+    .input(z.object({ templateId: z.string() }))
+    .query(async (opts) => {
+      const { templateId } = opts.input;
+      const template = await Template.findById(templateId).populate(
+        'createdBy',
+        'username',
+      );
+      return template;
+    });
+}

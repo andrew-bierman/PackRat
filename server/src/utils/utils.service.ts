@@ -15,8 +15,18 @@ const utilsService = (() => {
     return retVal;
   }
 
+  function generateUsernameCode(email, length = 4) {
+    const charset = '123456789';
+    let retVal = '';
+    for (let i = 0, n = charset.length; i < length; ++i) {
+      retVal += charset.charAt(Math.floor(Math.random() * n));
+    }
+    return email.split('@')[0] + retVal;
+  }
+
   return {
     randomPasswordGenerator: generatePassword,
+    randomUserNameCode: generateUsernameCode,
   };
 })();
 
