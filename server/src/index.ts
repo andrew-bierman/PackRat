@@ -30,7 +30,8 @@ app.use(
 app.use('*', async (c, next) => {
   const CORS_ORIGIN = String(c.env.CORS_ORIGIN);
   const corsMiddleware = cors({
-    origin: CORS_ORIGIN,
+    // origin: CORS_ORIGIN,
+    origin: '*', // temporary
     credentials: true,
     allowHeaders: ['Content-Type', 'Authorization'],
     allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
