@@ -5,14 +5,13 @@ import { convertWeight } from '../../utils/convertWeight';
 import { getDB } from "../../trpc/context";
 
 export class Pack {
-    private dbInstance;
-
-    constructor() {
-        this.dbInstance = createDb(getDB());
+    async createInstance() {
+        const dbInstance = await createDb(getDB());
+        return dbInstance
     }
 
     async update(data: any, id: string, filter = eq(pack.id, id), returning = null) {
-        return this.dbInstance.update(pack)
+        return (await this.createInstance()).update(pack)
             .set(data)
             .where(filter)
             .returning(returning)
@@ -20,14 +19,14 @@ export class Pack {
     }
 
     async delete(id: string, filter = eq(pack.id, id)) {
-        return this.dbInstance.delete(pack)
+        return (await this.createInstance()).delete(pack)
             .where(filter)
             .returning()
             .get();
     }
 
     async findById(id: string, filter = eq(pack.id, id)) {
-        return this.dbInstance.select()
+        return (await this.createInstance()).select()
             .from(pack)
             .where(filter)
             .limit(1)
@@ -35,22 +34,29 @@ export class Pack {
     }
 
     async findMany(filter = null) {
-        return this.dbInstance.select()
+        return (await this.createInstance()).select()
             .from(pack)
             .where(filter)
             .get();
     }
 
     async findUniquePack(query) {
-        // Assuming findFirst is a valid method on the query object for the pack
-        return this.dbInstance.query.pack.findFirst(query);
+        try {
+            return (await this.createInstance()).query.pack.findFirst(query);
+        } catch (error) {
+            console.log("db error", error);
+        }
     }
 
     async create(data: any) {
-        return this.dbInstance.insert(pack)
-            .values(data)
-            .returning()
-            .get();
+        try {
+            return (await this.createInstance()).insert(pack)
+                .values(data)
+                .returning()
+                .get();
+        } catch (error) {
+            console.log("db error", error);
+        }
     }
 
     async computeTotalWeight(pack) {
