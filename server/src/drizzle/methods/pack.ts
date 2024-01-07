@@ -14,7 +14,7 @@ export class Pack {
         return (await this.createInstance()).update(pack)
             .set(data)
             .where(filter)
-            .returning(returning)
+            .returning()
             .get();
     }
 
