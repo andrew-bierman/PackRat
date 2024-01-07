@@ -1,16 +1,13 @@
+import { RCard, RParagraph, RStack, RText } from '@packrat/ui';
 import { Platform } from 'react-native';
-import { RStack, RText, RCard, RParagraph } from '@packrat/ui';
-import { SearchInput } from './SearchInput';
-import { theme } from '../theme/index';
-import { useSelector, useDispatch } from 'react-redux';
-import { addTrail, addPark } from '../store/dropdownStore';
-import MapContainer from './map/MapContainer';
-import { convertPhotonGeoJsonToShape } from '../utils/mapFunctions';
-import { selectAllTrails } from '../store/trailsStore';
-import useTheme from '../hooks/useTheme';
-import Carousel from './carousel';
-import useCustomStyles from '~/hooks/useCustomStyles';
 import { Text } from 'tamagui';
+import { useCardTrip } from '~/hooks/trips/useTripCard';
+import useCustomStyles from '~/hooks/useCustomStyles';
+import useTheme from '../hooks/useTheme';
+import { theme } from '../theme/index';
+import { SearchInput } from './SearchInput';
+import Carousel from './carousel';
+import MapContainer from './map/MapContainer';
 
 export default function TripCard({
   title,
@@ -23,38 +20,26 @@ export default function TripCard({
   isPark,
   isLoading,
 }) {
-  const dispatch = useDispatch();
   const { isDark, currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
-
-  const currentTrail = useSelector((state) => state.dropdown.currentTrail);
-  const currentPark = useSelector((state) => state.dropdown.currentPark);
-  const trailsDetails = useSelector(selectAllTrails); // updated selector for new trails slice
-  const currentShape = trailsDetails.filter(
-    (trail) => trail.properties.name == currentTrail,
-  );
+  const { currentTrail, currentPark, currentShape, addTrailFn } = useCardTrip();
 
   const handleValueChange = (value) => {
-    // Assuming that you have a redux action to set the current trail and park
-    if (isTrail) {
-      dispatch(addTrail(value));
-    } else if (isPark) {
-      dispatch(addPark(value));
-    }
+    addTrailFn(isTrail, isPark, value);
   };
 
   return (
     <RStack
       $sm={{
-        borderRadius: '6px',
-        flexDirection: 'colunm',
+        borderRadius: 6,
+        flexDirection: 'column',
         width: '100%',
       }}
       $gtSm={{
-        borderRadius: '12px',
-        flexDirection: !isMap ?? 'row',
+        borderRadius: 12,
+        flexDirection: !isMap ? 'row' : 'column',
         width: '90%',
-      }}
+      }} 
       style={
         isSearch
           ? styles.searchContainer
@@ -94,7 +79,7 @@ export default function TripCard({
           />
         )
       ) : isSearch ? (
-        <SearchInput />
+        <SearchInput   />
       ) : (
         <RStack style={{ width: '80%' }}>
           <Carousel iconColor={isDark ? '#fff' : '#000'}>
