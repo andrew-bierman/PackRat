@@ -1,25 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  Container,
-  Box,
-  Text,
-  HStack,
-  Stack,
-  Switch,
-  Button,
-  Input,
-  IconButton,
-  Divider,
-  Center,
-  Flex,
-} from 'native-base';
-import { AntDesign } from '@expo/vector-icons';
-import { StyleSheet, FlatList, View, ScrollView } from 'react-native';
+import { FlatList, View, ScrollView, Platform } from 'react-native';
 import Card from '../../components/feed/FeedCard';
-import DropdownComponent from '../../components/Dropdown';
-import { theme } from '../../theme';
-import useTheme from '../../hooks/useTheme';
 import {
   getPublicPacks,
   getPublicTrips,
@@ -30,11 +12,16 @@ import {
   fetchUserPacks,
   selectAllPacks,
 } from '../../store/packsStore';
-import { fetchUserTrips, selectAllTrips } from '../../store/tripsStore';
+// import { fetchUserTrips, selectAllTrips } from '../../store/tripsStore';
+import { usefetchTrips } from '~/hooks/trips';
 import { useRouter } from 'expo-router';
 import { fuseSearch } from '../../utils/fuseSearch';
 import { fetchUserFavorites } from '../../store/favoritesStore';
 import useCustomStyles from '~/hooks/useCustomStyles';
+import FeedSearchFilter from '~/components/feed/FeedSearchFilter';
+import { useFeed } from '~/hooks/feed';
+import { RefreshControl } from 'react-native';
+import { RText } from '@packrat/ui';
 
 const URL_PATHS = {
   userPacks: '/pack/',
@@ -49,115 +36,6 @@ const ERROR_MESSAGES = {
   userTrips: 'No User Trips Available',
 };
 
-const dataValues = [
-  'Favorite',
-  'Most Recent',
-  'Lightest',
-  'Heaviest',
-  'Most Items',
-  'Fewest Items',
-  'Oldest',
-];
-
-const FeedSearchFilter = ({
-  feedType,
-  handleSortChange,
-  handleTogglePack,
-  handleToggleTrip,
-  selectedTypes,
-  queryString,
-  setSearchQuery,
-  handleCreateClick,
-}) => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    useTheme();
-  const styles = useCustomStyles(loadStyles);
-  return (
-    <View style={styles.filterContainer}>
-      <Box style={styles.searchContainer}>
-        <HStack space={3}>
-          <Input
-            w="80%"
-            variant="outline"
-            placeholder={`Search ${feedType || 'Feed'}`}
-            onChangeText={setSearchQuery}
-          />
-          <IconButton
-            icon={
-              <AntDesign
-                name="search1"
-                size={24}
-                color={currentTheme.colors.cardIconColor}
-              />
-            }
-            variant="ghost"
-          />
-        </HStack>
-      </Box>
-      <Divider my={3} />
-      <Center
-        space={3}
-        flexDirection="row"
-        justifyContent="space-between"
-        alignItems="center"
-        flexWrap={'wrap'}
-        padding={2}
-        margin={2}
-      >
-        {feedType === 'public' && (
-          <HStack space={3} alignItems="center">
-            <Text
-              fontSize="lg"
-              fontWeight="bold"
-              color={currentTheme.colors.textColor}
-            >
-              Packs
-            </Text>
-            <Switch
-              size="lg"
-              isChecked={selectedTypes.pack}
-              onToggle={handleTogglePack}
-            />
-            <Text
-              fontSize="lg"
-              fontWeight="bold"
-              color={currentTheme.colors.textColor}
-            >
-              Trips
-            </Text>
-            <Switch
-              size="lg"
-              isChecked={selectedTypes.trip}
-              onToggle={handleToggleTrip}
-            />
-          </HStack>
-        )}
-        <HStack space={3} alignItems="center">
-          <Text
-            fontSize="lg"
-            fontWeight="bold"
-            color={currentTheme.colors.textColor}
-          >
-            Sort By:
-          </Text>
-          <DropdownComponent
-            value={queryString}
-            data={dataValues}
-            onValueChange={handleSortChange}
-            placeholder="Sort By"
-            style={styles.dropdown}
-            width={150}
-          />
-        </HStack>
-        {(feedType === 'userPacks' || feedType === 'userTrips') && (
-          <Button onPress={handleCreateClick}>Create</Button>
-        )}
-      </Center>
-      <Divider my={3} />
-    </View>
-  );
-};
-
 const Feed = ({ feedType = 'public' }) => {
   const router = useRouter();
 
@@ -166,30 +44,46 @@ const Feed = ({ feedType = 'public' }) => {
     pack: true,
     trip: false,
   });
+  const [selectedTrips, setSelectedTrips] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
+  const [refreshing, setRefreshing] = useState(false);
+
   const dispatch = useDispatch();
-  const ownerId = useSelector((state) => state.auth.user?.id);
-  const publicPacksData = useSelector((state) => state.feed.publicPacks);
-  const userPacksData = useSelector(selectAllPacks);
-  const publicTripsData = useSelector((state) => state.feed.publicTrips);
-  const userTripsData = useSelector(selectAllTrips);
+  const ownerId = useSelector((state) => state.auth.user?._id);
+  // const publicPacksData = useSelector((state) => state.feed.publicPacks);
+  // const userPacksData = useSelector(selectAllPacks);
+  // const publicTripsData = useSelector((state) => state.feed.publicTrips);
+  // const userTripsData = useSelector(selectAllTrips);
 
   const styles = useCustomStyles(loadStyles);
+  const { data, error, isLoading, refetch } = useFeed(
+    queryString,
+    ownerId,
+    feedType,
+    selectedTypes,
+  );
 
-  useEffect(() => {
-    if (feedType === 'public') {
-      dispatch(getPublicPacks(queryString));
-      dispatch(getPublicTrips(queryString));
-      dispatch(fetchUserFavorites(ownerId));
-    } else if (feedType === 'userPacks' && ownerId) {
-      dispatch(fetchUserPacks({ ownerId, queryString }));
-    } else if (feedType === 'userTrips' && ownerId) {
-      dispatch(fetchUserTrips(ownerId));
-    } else if (feedType === 'favoritePacks') {
-      dispatch(getFavoritePacks());
-    }
-  }, [queryString, feedType, ownerId]);
+  const onRefresh = () => {
+    setRefreshing(true);
+    refetch();
+    setRefreshing(false);
+  };
+
+  console.log('🚀 ~ file: Feed.js:180 ~ Feed ~ feedData:', data);
+  // useEffect(() => {
+  //   if (feedType === 'public') {
+  //     dispatch(getPublicPacks(queryString));
+  // dispatch(getPublicTrips(queryString));
+  //     dispatch(fetchUserFavorites(ownerId));
+  //   } else if (feedType === 'userPacks' && ownerId) {
+  //     dispatch(fetchUserPacks({ ownerId, queryString }));
+  //   } else if (feedType === 'userTrips' && ownerId) {
+  //     dispatch(fetchUserTrips(ownerId));
+  //   } else if (feedType === 'favoritePacks') {
+  //     dispatch(getFavoritePacks());
+  //   }
+  // }, [queryString, feedType, ownerId]);
 
   /**
    * Renders the data for the feed based on the feed type and search query.
@@ -197,28 +91,27 @@ const Feed = ({ feedType = 'public' }) => {
    * @return {ReactNode} The rendered feed data.
    */
   const renderData = () => {
-    let data = [];
+    let arrayData = data;
 
-    if (feedType === 'public') {
-      if (selectedTypes?.pack) {
-        data = [...data, ...publicPacksData];
-      }
-      if (selectedTypes?.trip) {
-        data = [...data, ...publicTripsData];
-      }
-    } else if (feedType === 'userPacks') {
-      data = userPacksData;
-    } else if (feedType === 'userTrips') {
-      data = userTripsData;
-    } else if (feedType === 'favoritePacks') {
-      data = userPacksData.filter((pack) => pack.isFavorite);
-    }
+    // if (feedType === 'public') {
+    //   if (selectedTypes?.pack) {
+    //     data = [...data, ...publicPacksData];
+    //   }
+    //   if (selectedTypes?.trip) {
+    //     data = [...data, ...publicTripsData];
+    //   }
+    // } else if (feedType === 'userPacks') {
+    //   data = userPacksData;
+    // } else if (feedType === 'userTrips') {
+    //   data = userTripsData;
+    // } else if (feedType === 'favoritePacks') {
+    //   data = userPacksData.filter((pack) => pack.isFavorite);
+    // }
 
     // Fuse search
     const keys = ['name', 'items.name', 'items.category'];
     const options = {
-      // your options
-      threshold: 0.42,
+      threshold: 0.4,
       location: 0,
       distance: 100,
       maxPatternLength: 32,
@@ -227,12 +120,13 @@ const Feed = ({ feedType = 'public' }) => {
 
     const results =
       feedType !== 'userTrips'
-        ? fuseSearch(data, searchQuery, keys, options)
+        ? fuseSearch(arrayData, searchQuery, keys, options)
         : data;
+    console.log('🚀 ~ file: Feed.js:231 ~ renderData ~ results:', results);
 
     // Convert fuse results back into the format we want
     // if searchQuery is empty, use the original data
-    data = searchQuery ? results.map((result) => result.item) : data;
+    arrayData = searchQuery ? results.map((result) => result.item) : data;
 
     const feedSearchFilterComponent = (
       <FeedSearchFilter
@@ -246,31 +140,41 @@ const Feed = ({ feedType = 'public' }) => {
         handleCreateClick={handleCreateClick}
       />
     );
-    return Platform.OS === 'web' ? (
-      <ScrollView
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ flex: 1, paddingBottom: 10 }}
-      >
-        <View style={styles.cardContainer}>
-          {console.log({ data })}
-          {feedSearchFilterComponent}
-          {data?.map((item) => (
-            <Card key={item.id} type={item.type} {...item} />
-          ))}
-        </View>
-      </ScrollView>
-    ) : (
+    // return Platform.OS === 'web' ? (
+    //   <ScrollView
+    //     showsHorizontalScrollIndicator={false}
+    //     contentContainerStyle={{ flex: 1, paddingBottom: 10 }}
+    //     refreshControl={
+    //       <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+    //     }
+    //   >
+    //     <View style={styles.cardContainer}>
+    //       {/* {console.log({ data })} */}
+    //       {feedSearchFilterComponent}
+    //       {data?.map((item) => (
+    //         <Card key={item?._id} type={item?.type} {...item} />
+    //       ))}
+    //     </View>
+    //   </ScrollView>
+    // ) : (
+    return (
       <View style={{ flex: 1, paddingBottom: 10 }}>
         <FlatList
           data={data}
-          numColumns={1}
-          keyExtractor={(item) => item.id}
+          horizontal={false}
+          numColumns={Platform.OS === 'web' ? 4 : 1}
+          keyExtractor={(item) => item?._id + item?.type}
           renderItem={({ item }) => (
-            <Card key={item.id} type={item.type} {...item} />
+            <Card key={item?._id} type={item?.type} {...item} />
           )}
           ListHeaderComponent={() => feedSearchFilterComponent}
-          ListEmptyComponent={() => <Text>{ERROR_MESSAGES[feedType]}</Text>}
+          ListEmptyComponent={() => <RText>{ERROR_MESSAGES[feedType]}</RText>}
           showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+          maxToRenderPerBatch={2}
+          contentContainerStyle={{ flex: 1 }}
         />
       </View>
     );
@@ -303,7 +207,7 @@ const Feed = ({ feedType = 'public' }) => {
     router.push(createUrlPath);
   };
 
-  return <Box style={styles.mainContainer}>{renderData()}</Box>;
+  return <View style={styles.mainContainer}>{renderData()}</View>;
 };
 
 const loadStyles = (theme) => {

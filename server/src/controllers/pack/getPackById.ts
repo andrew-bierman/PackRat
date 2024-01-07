@@ -27,6 +27,6 @@ export function getPackByIdRoute() {
   return publicProcedure.input(validator.getPackById).query(async (opts) => {
     const { packId } = opts.input;
     const pack = await getPackByIdService(packId);
-    return pack
+    return pack;
   });
 }

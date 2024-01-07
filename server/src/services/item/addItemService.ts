@@ -4,7 +4,7 @@ import { Item } from '../../drizzle/methods/Item';
 import { item as itemTable } from '../../db/schema';
 import { and, eq } from 'drizzle-orm';
 import { ItemCategory } from '../../drizzle/methods/itemcategory';
-import { Pack } from '../../drizzle/methods/pack';
+import { Pack } from '../../drizzle/methods/Pack';
 /**
  * Generates a new item and adds it to a pack based on the given parameters.
  * @param {string} name - The name of the item.
@@ -25,103 +25,38 @@ export const addItemService = async (
   type,
   ownerId,
 ) => {
-  let category = null;
   let newItem = null;
-  const item = new Item();
-  const packClass = new Pack();
-  const itemCategory = new ItemCategory();
-  switch (type) {
-    case ItemCategoryEnum.FOOD: {
-      category = await itemCategory.findUniqueItem({
-        where: {
-          name: "Food",
-        },
-      });
-      newItem = await item.create({
-        name,
-        weight,
-        quantity,
-        unit,
-        packDocuments: {
-          id: packId,
-        },
-        categoryDocument: {
-          id: category.id
-        },
-      });
-      break;
-    }
-    case ItemCategoryEnum.WATER: {
-      category = await itemCategory.findUniqueItem({
-        where: {
-          name: 'Water',
-        },
-      });
+  const category = await ItemCategoryModel.findOne({
+    name: ItemCategoryEnum[type],
+  });
 
-      const existingWaterItem: any = await item.findUniqueItem({
-        where: {
-          category: category.id,
-          packs: { has: packId },
-        },
-        columns: {
-          weight: true,
-          id: true,
-        },
-      });
+  newItem = await Item.create({
+    name,
+    weight,
+    quantity,
+    unit,
+    packs: [packId],
+    category: category ? category._id : null,
+  });
 
-      if (existingWaterItem) {
-        existingWaterItem.weight += Number(weight);
-        newItem = await item.update({
-          weight: existingWaterItem.weight,
-        }, existingWaterItem.id);
-      } else {
-        newItem = await item.create({
-          name,
-          weight,
-          quantity: 1,
-          unit,
-          packDocuments: {
-            id: packId,
-          },
-          categoryDocument: {
-            id: category.id,
-          },
-        });
-      }
-      break;
-    }
-    default: {
-      category = await itemCategory.findUniqueItem({
-        where: {
-          name: ItemCategoryEnum.ESSENTIALS,
-        },
-      });
+  await Pack.updateOne({ _id: packId }, { $addToSet: { items: newItem._id } });
 
-      newItem = await item.create({
-        data: {
-          name,
-          weight,
-          quantity,
-          unit,
-          packDocuments: packId,
-          categoryDocument: category.id,
-          type,
-        },
-      });
-
-      break;
-    }
-  }
-
-  const pack = await packClass.update({
-    itemDocuments: newItem.id,
-  }, packId);
-
-  const updatedItem = await item.update({
-    owners: {
-      push: pack.owners.map((ownerId) => ownerId),
+  const pack = await packClass.update(
+    {
+      itemDocuments: newItem.id,
     },
-  }, newItem.id, and(eq(itemTable.id, newItem.id)));
+    packId,
+  );
+
+  const updatedItem = await item.update(
+    {
+      owners: {
+        push: pack.owners.map((ownerId) => ownerId),
+      },
+    },
+    newItem.id,
+    and(eq(itemTable.id, newItem.id)),
+  );
 
   return { newItem: updatedItem, packId };
 };

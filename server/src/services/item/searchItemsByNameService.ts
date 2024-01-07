@@ -9,15 +9,13 @@ import { Item } from '../../drizzle/methods/Item';
  * @param {string} packId - The pack to search in.
  * @return {Promise<Array>} An array of items that match the search criteria.
  */
-export const searchItemsByNameService = async (
-  name,
-  packId,
-) => {
+export const searchItemsByNameService = async (name, packId) => {
   const itemClass = new Item();
   const items = await itemClass.findMany({
     where: (item, { has, ilike }) => ({
       ...(packId ? { [has]: item.packs, packId } : {}),
-      [ilike]: item.name, name,
+      [ilike]: item.name,
+      name,
     }),
   });
 

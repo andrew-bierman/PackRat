@@ -1,18 +1,17 @@
 import { useState } from 'react';
-import { Box } from 'native-base';
+import { View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { addItemsGlobal, addItemOffline } from '../../store/globalItemsStore';
 import { addOfflineRequest } from '../../store/offlineQueue';
+import { queryTrpc } from '../../trpc';
 import { ItemForm } from './ItemForm'; // assuming you moved the form related code to a separate component
 
-export const AddItemGlobal = ({
-  setIsAddItemModalOpen,
-  setRefetch = () => {},
-  refetch,
-}) => {
+export const AddItemGlobal = ({ setIsAddItemModalOpen }) => {
+  const utils = queryTrpc.useContext();
   const dispatch = useDispatch();
   const isLoading = useSelector((state) => state.items.isLoading);
   const { isConnected } = useSelector((state) => state.offlineQueue);
+
   const [name, setName] = useState('');
   const [weight, setWeight] = useState('');
   const [quantity, setQuantity] = useState('');
@@ -39,9 +38,7 @@ export const AddItemGlobal = ({
    * @return {void}
    */
   const handleSubmit = () => {
-    console.log(isConnected, 'is connected');
     if (!isConnected) {
-      console.warn('You are offline');
       const item = { name, weight, quantity, type: categoryType, unit };
       dispatch(addItemOffline({ ...item, weight: Number(item.weight) }));
       dispatch(addOfflineRequest({ method: 'addGlobalItem', data: item }));
@@ -55,15 +52,15 @@ export const AddItemGlobal = ({
           unit,
         }),
       );
-      setRefetch(refetch !== true);
     }
 
     resetAddForm();
     setIsAddItemModalOpen(false);
+    utils.getItemsGlobally.invalidate();
   };
 
   return (
-    <Box>
+    <View>
       <ItemForm
         name={name}
         setName={setName}
@@ -78,6 +75,6 @@ export const AddItemGlobal = ({
         handleSubmit={handleSubmit}
         isLoading={isLoading}
       />
-    </Box>
+    </View>
   );
 };

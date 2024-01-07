@@ -23,7 +23,7 @@ import * as validator from '../../middleware/validators/index';
 // };
 
 export function getUserByIdRoute() {
-  return publicProcedure.input(validator.getUserById).mutation(async (opts) => {
+  return publicProcedure.input(validator.getUserById).query(async (opts) => {
     const { input } = opts;
     return await getUserByIdService(input.userId);
   });

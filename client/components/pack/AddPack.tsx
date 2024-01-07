@@ -1,60 +1,57 @@
-import { Platform } from 'react-native';
-import { Box, Input, Button, Text, Select, CheckIcon } from 'native-base';
-
-// import useAddPack from "../../hooks/useAddPack";
+import { Platform, View } from 'react-native';
+import DropdownComponent from '../Dropdown';
+import { RInput, RButton, RText, RLabel } from '@packrat/ui';
 import { addPack } from '../../store/packsStore';
 import { useState } from 'react';
-// import { useAuth } from "../../auth/provider";
 import { useSelector, useDispatch } from 'react-redux';
 import { CustomModal } from '../modal';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from '~/hooks/useCustomStyles';
+import { useAddNewPack } from '~/hooks/packs';
+import { useRouter } from 'expo-router';
+import { packSelectOptions } from '~/constants/options';
 
-export const AddPack = () => {
+export const AddPack = ({ isCreatingTrip = false }) => {
+  // Hooks
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
+  const router = useRouter();
 
-  const dispatch = useDispatch();
+  const {
+    addNewPack,
+    isSuccess,
+    isError,
+    response,
+    error,
+    isLoading,
+    name,
+    setIsPublic,
+    setName,
+  } = useAddNewPack();
 
-  const [name, setName] = useState('');
-  const [isPublic, setIsPublic] = useState(false);
-
-  // const { addPack } = useAddPack();
-  // const { user } = useAuth();
-  const user = useSelector((state) => state.auth.user);
-
-  const isLoading = useSelector((state) => state.packs.isLoading);
-
-  const error = useSelector((state) => state.packs.error);
-
-  const isError = error !== null;
-
+  // routing
+  if (isSuccess && !isCreatingTrip && response) {
+    router.push(`/pack/${response.createdPack._id}`);
+  }
   /**
    * Handles the addition of a pack.
-   *
-   * @param {string} name - The name of the pack.
-   * @param {string} owner_id - The ID of the pack's owner.
    * @return {void}
    */
-  console.log({user})
+  console.log({ user });
   const handleAddPack = () => {
-    dispatch(addPack({ name, owner_id: user?.id, is_public: isPublic }));
-    setName('');
+    addNewPack();
   };
 
-  const data = ['Yes', 'For me only'];
-
   const handleonValueChange = (itemValue) => {
-    setIsPublic(itemValue == 'Yes');
+    if (itemValue === 'Yes') setIsPublic(true);
+    else setIsPublic(false);
   };
 
   return (
-    <Box style={styles.container}>
-      <Box style={styles.mobileStyle}>
-        <Input
-          size="lg"
-          variant="outline"
+    <View style={styles.container}>
+      <View style={styles.mobileStyle}>
+        <RInput
           placeholder="Name"
           value={name}
           onChangeText={(text) => {
@@ -62,50 +59,33 @@ export const AddPack = () => {
           }}
           width={Platform.OS === 'web' ? '25%' : '100%'}
         />
-        <Select
-          selectedValue={isPublic}
-          width="100%"
+        <RLabel>Is Public:</RLabel>
+        <DropdownComponent
+          // value={isPublic}
+          onValueChange={handleonValueChange}
+          data={packSelectOptions}
+          width="300px"
           accessibilityLabel="Choose Service"
           placeholder={'Is Public'}
-          _selectedItem={{
-            bg: 'teal.600',
-            endIcon: <CheckIcon size="5" />,
-          }}
-          onValueChange={handleonValueChange}
-        >
-          {data
-            ? data?.map((item, index) => {
-                let val = item;
-                let label = item;
-                if (typeof item === 'object' && item !== null) {
-                  val = item.id || item.id || item.name;
-                  label = item.name;
-                }
-                return (
-                  <Select.Item key={index} label={String(label)} value={val} />
-                );
-              })
-            : null}
-        </Select>
-
-        <Button
+        />
+        <RButton
           width={Platform.OS === 'web' ? null : '50%'}
           onPress={() => {
             handleAddPack();
           }}
         >
-          <Text style={{ color: currentTheme.colors.text }}>
+          <RText style={{ color: currentTheme.colors.text }}>
             {isLoading ? 'Loading...' : 'Add Pack'}
-          </Text>
-        </Button>
+          </RText>
+        </RButton>
 
-        {isError && <Text>Pack already exists</Text>}
-      </Box>
-    </Box>
+        {isError && <RText>Pack already exists</RText>}
+      </View>
+    </View>
   );
 };
 
-export const AddPackContainer = () => {
+export const AddPackContainer = ({ isCreatingTrip }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <CustomModal
@@ -114,7 +94,7 @@ export const AddPackContainer = () => {
       isActive={isOpen}
       onTrigger={setIsOpen}
     >
-      <AddPack />
+      <AddPack isCreatingTrip={isCreatingTrip} />
     </CustomModal>
   );
 };
@@ -130,6 +110,7 @@ const loadStyles = (theme, appTheme) => {
       width: '100%',
       paddingHorizontal: 18,
       gap: 20,
+      marginTop: 20,
     },
     desktopStyle: {
       flexDirection: 'row',

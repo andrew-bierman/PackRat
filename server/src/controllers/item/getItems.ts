@@ -29,6 +29,6 @@ export function getItemsRoute() {
     const { packId } = opts.input;
     console.log({ packId });
     const items = await getItemsService(packId);
-    return items
+    return items;
   });
 }

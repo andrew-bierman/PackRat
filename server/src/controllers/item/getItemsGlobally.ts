@@ -25,6 +25,7 @@ import { z } from 'zod';
 // };
 
 export function getItemsGloballyRoute() {
+  console.log('Route');
   return publicProcedure
     .input(
       z.object({
@@ -40,7 +41,7 @@ export function getItemsGloballyRoute() {
       );
       return {
         ...result,
-        items: result.items
+        items: result.items,
       };
     });
 }

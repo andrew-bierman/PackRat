@@ -3,7 +3,8 @@ import { theme } from '../../theme';
 import { TextInput } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { updatePack } from '../../store/packsStore';
-import { editTrip } from '../../store/tripsStore';
+// import { editTrip } from '../../store/tripsStore';
+import { useEditTrips } from '~/hooks/trips';
 import LoadingPlaceholder from '../loading-placeholder';
 
 export const EditableInput = ({
@@ -15,6 +16,7 @@ export const EditableInput = ({
   loading,
 }) => {
   const [headerTitle, setHeaderTitle] = useState('');
+  const { editTrips } = useEditTrips();
   useEffect(() => {
     if (title) {
       setHeaderTitle(title);
@@ -57,8 +59,8 @@ export const EditableInput = ({
             setEditTitle(false);
             titleRef.current.style =
               'font-size:20px !important;font-weight:bold;color: #22c67c;';
-
-            dispatch(editTrip(tripDetails));
+            editTrips(tripDetails);
+            // dispatch(editTrip(tripDetails));
           }
         }}
       />

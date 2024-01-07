@@ -1,4 +1,4 @@
-import { Pack } from '../../drizzle/methods/pack';
+import { Pack } from '../../drizzle/methods/Pack';
 import { calculatePackScore } from '../../utils/scorePack';
 
 /**
@@ -22,10 +22,13 @@ export async function scorePackService(packId: string) {
 
     const packScore = calculatePackScore(packData);
 
-    const updatedPack = await packClass.update({
-      scores: packScore.scores,
-      grades: packScore.grades,
-    }, packId);
+    const updatedPack = await packClass.update(
+      {
+        scores: packScore.scores,
+        grades: packScore.grades,
+      },
+      packId,
+    );
 
     return updatedPack;
   } catch (error) {

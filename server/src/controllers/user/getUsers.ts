@@ -43,6 +43,6 @@ export function getUsersRoute() {
 
     const users = await new User().findMany();
 
-    return users
+    return users;
   });
 }

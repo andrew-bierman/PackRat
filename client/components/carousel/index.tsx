@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { ScrollView, Platform, Dimensions } from 'react-native';
-import { VStack } from 'native-base';
+import { RStack } from '@packrat/ui';
 import ScrollButton from './ScrollButton';
 import useCustomStyles from '~/hooks/useCustomStyles';
 
@@ -39,7 +39,7 @@ const Carousel = ({ children = [], itemWidth }) => {
   };
 
   return (
-    <VStack
+    <RStack
       style={{
         width: Platform.OS === 'web' ? '100%' : width * 0.9,
         justifyContent: 'center',
@@ -68,7 +68,7 @@ const Carousel = ({ children = [], itemWidth }) => {
       >
         {children &&
           children.map((child, index) => (
-            <VStack
+            <RStack
               key={index}
               style={{
                 width: itemWidth + 10,
@@ -78,7 +78,7 @@ const Carousel = ({ children = [], itemWidth }) => {
               }}
             >
               {child}
-            </VStack>
+            </RStack>
           ))}
       </ScrollView>
       <ScrollButton
@@ -88,7 +88,7 @@ const Carousel = ({ children = [], itemWidth }) => {
         }}
         disabled={currentIndex === children?.length - 1}
       />
-    </VStack>
+    </RStack>
   );
 };
 

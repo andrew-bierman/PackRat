@@ -28,6 +28,6 @@ export function getItemByIdRoute() {
   return publicProcedure.input(validator.getItemById).query(async (opts) => {
     const { id } = opts.input;
     const item = await getItemByIdService(id);
-    return item
+    return item;
   });
 }

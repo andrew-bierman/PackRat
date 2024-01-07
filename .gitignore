@@ -17,6 +17,9 @@ package-lock.json
 serviceAccountKey.json
 google-services.json
 
+# Tamagui
+.tamagui
+
 # Logs
 logs
 *.log

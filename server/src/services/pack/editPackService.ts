@@ -1,4 +1,4 @@
-import { Pack } from '../../drizzle/methods/pack';
+import { Pack } from '../../drizzle/methods/Pack';
 
 /**
  * Edits a pack in the service.
@@ -7,10 +7,7 @@ import { Pack } from '../../drizzle/methods/pack';
  * @param {object} packData
  * @return {object}
  */
-export const editPackService = async (
-  packId,
-  packData,
-) => {
+export const editPackService = async (packId, packData) => {
   const packClass = new Pack();
   const updatedPack = await packClass.update(packData, packId);
   return updatedPack;

@@ -31,7 +31,7 @@ export const sendWelcomeEmail = async (
     body: JSON.stringify({
       personalizations: [
         {
-          to: [{ email: email }],
+          to: [{ email }],
           subject: 'Thanks for joining in PackRat!!',
         },
       ],
@@ -79,7 +79,7 @@ export const resetEmail = async (
     body: JSON.stringify({
       personalizations: [
         {
-          to: [{ email: email }],
+          to: [{ email }],
           subject: 'Password Reset',
         },
       ],

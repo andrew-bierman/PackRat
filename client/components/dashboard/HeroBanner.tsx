@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, VStack, Text, Image } from 'native-base';
+import { RStack, RText } from '@packrat/ui';
 import LargeCard from '../card/LargeCard';
 import { SearchInput } from '../SearchInput';
 import { View } from 'react-native';
@@ -23,11 +23,6 @@ const HeroSection = ({ onSelect }) => {
   const styles = useCustomStyles(loadStyles);
   const router = useRouter();
 
-  const currentDestination = useSelector(
-    (state) => state.destination.currentDestination,
-  );
-  console.log('currentDestination', currentDestination);
-
   /**
    * Handles the selection of a search result.
    *
@@ -36,10 +31,8 @@ const HeroSection = ({ onSelect }) => {
    */
   const handleSearchSelect = async (selectedResult) => {
     try {
-      console.log('selectedResult ------->', selectedResult);
-
       // Set the selected search result in the Redux store
-      dispatch(setSelectedSearchResult(selectedResult));
+      // dispatch(setSelectedSearchResult(selectedResult));
 
       const { osm_id, osm_type } = selectedResult.properties;
 
@@ -102,7 +95,7 @@ const HeroSection = ({ onSelect }) => {
             padding: 50,
           }}
         >
-          <VStack
+          <RStack
             style={{
               width: '100%',
               height: '100%',
@@ -110,12 +103,12 @@ const HeroSection = ({ onSelect }) => {
               justifyContent: 'center',
             }}
           >
-            <Text style={styles.title}>{bannerText}</Text>
+            <RText style={styles.title}>{bannerText}</RText>
             <SearchInput
               onSelect={handleSearchSelect}
               placeholder={'Search by park, city, or trail'}
             />
-          </VStack>
+          </RStack>
         </LargeCard>
       </Hero>
     </View>

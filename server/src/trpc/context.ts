@@ -1,15 +1,12 @@
-import { Context } from 'hono';
+import { type Context } from 'hono';
 import { extractTokenAndGetUser } from './utils/auth';
 
 let DB: D1Database;
 
 export const createContext = (honoContext: Context) => async () => {
-  const { env, req} = honoContext;
-  DB = honoContext.env.production
-  const user = await extractTokenAndGetUser(
-    req.raw,
-    env.JWT_SECRET,
-  );
+  const { env, req } = honoContext;
+  DB = honoContext.env.DB;
+  const user = await extractTokenAndGetUser(req.raw, env.JWT_SECRET);
 
   return {
     env,
@@ -17,4 +14,4 @@ export const createContext = (honoContext: Context) => async () => {
   };
 };
 
-export const getDB = () => DB
+export const getDB = () => DB;

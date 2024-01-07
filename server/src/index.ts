@@ -6,12 +6,12 @@ import { cors } from 'hono/cors';
 // import { logger } from 'hono/logger';
 import { compress } from 'hono/compress';
 
-type Bindings = {
+interface Bindings {
   DB: IDBDatabase;
   JWT_VERIFICATION_KEY: string;
   APP_URL: string;
   CORS_ORIGIN: string;
-};
+}
 
 const TRPC_API_ENDPOINT = '/api/trpc';
 const TRPC_PLAYGROUND_ENDPOINT = '/trpc-playground';
@@ -27,10 +27,11 @@ app.use(
 );
 
 //  Setup CORS
-app.use('*', (c, next) => {
+app.use('*', async (c, next) => {
   const CORS_ORIGIN = String(c.env.CORS_ORIGIN);
   const corsMiddleware = cors({
-    origin: CORS_ORIGIN,
+    // origin: CORS_ORIGIN,
+    origin: '*', // temporary
     credentials: true,
     allowHeaders: ['Content-Type', 'Authorization'],
     allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],

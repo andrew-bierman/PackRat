@@ -66,6 +66,6 @@ export function editGlobalItemAsDuplicateRoute() {
         type,
       );
 
-      return item
+      return item;
     });
 }

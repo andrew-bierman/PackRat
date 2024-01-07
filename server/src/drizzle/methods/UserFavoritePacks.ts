@@ -6,7 +6,7 @@ import { getDB } from '../../trpc/context';
 export class UserFavoritePacks {
   async createInstance() {
     const dbInstance = await createDb(getDB());
-    return dbInstance
+    return dbInstance;
   }
 
   async create(userId: string, packId: string) {

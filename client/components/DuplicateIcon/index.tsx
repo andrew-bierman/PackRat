@@ -1,7 +1,6 @@
-import { View, Text, Pressable } from 'react-native';
-import { Box, Button, Menu } from 'native-base';
 import React from 'react';
-import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import { Pressable } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 
 export const DuplicateIcon = ({ link = null }) => {

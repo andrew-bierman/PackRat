@@ -27,14 +27,7 @@ import * as validator from '../../middleware/validators/index';
 export function editItemRoute() {
   return publicProcedure.input(validator.editItem).mutation(async (opts) => {
     const { id, name, weight, unit, quantity, type } = opts.input;
-    const item = await editItemService(
-      id,
-      name,
-      weight,
-      unit,
-      quantity,
-      type,
-    );
-    return item
+    const item = await editItemService(id, name, weight, unit, quantity, type);
+    return item;
   });
 }

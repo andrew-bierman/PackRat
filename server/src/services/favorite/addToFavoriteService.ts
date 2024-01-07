@@ -1,7 +1,7 @@
 // import { prisma } from '../../prisma';
 
 import { User } from '../../drizzle/methods/User';
-import { Pack } from '../../drizzle/methods/pack';
+import { Pack } from '../../drizzle/methods/Pack';
 import { UserFavoritePacks } from '../../drizzle/methods/UserFavoritePacks';
 
 /**

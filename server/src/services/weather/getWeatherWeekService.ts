@@ -1,4 +1,9 @@
-export async function getWeatherWeekService(weatherWeekUrl, openWeatherKey, lat, lon) {
+export async function getWeatherWeekService(
+  weatherWeekUrl,
+  openWeatherKey,
+  lat,
+  lon,
+) {
   const root = weatherWeekUrl;
   const OPENWEATHER_KEY = openWeatherKey;
   const latParams = lat;

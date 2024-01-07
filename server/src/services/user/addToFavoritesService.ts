@@ -23,7 +23,6 @@ export const addToFavoriteService = async (
     if (!user) {
       throw new Error('User not found');
     }
-   
 
     const isFavorite = await userClass.findFavorite(userId, packId);
 

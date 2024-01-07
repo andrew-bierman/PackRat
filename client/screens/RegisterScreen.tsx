@@ -1,23 +1,7 @@
-import {
-  Box,
-  Heading,
-  VStack,
-  FormControl,
-  Input,
-  Button,
-  Center,
-  HStack,
-  Text,
-  View,
-  Toast,
-} from 'native-base';
-
-import { FontAwesome } from '@expo/vector-icons';
-import * as WebBrowser from 'expo-web-browser';
-import * as Google from 'expo-auth-session/providers/google';
-import { WEB_CLIENT_ID } from '@env';
 import { useState, useEffect } from 'react';
-// import useRegister from "../hooks/useRegister";
+import { View } from 'react-native';
+import { RHeading, RStack, RButton, RText, RIconButton } from '@packrat/ui';
+import { FontAwesome } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 // import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { Link } from 'expo-router';
@@ -28,108 +12,36 @@ import useTheme from '../hooks/useTheme';
 import { useForm } from 'react-hook-form';
 import { InputText, InputTextRules } from '~/components/InputText';
 import { useSession } from '../context/auth';
+import { useGoogleAuth } from '~/hooks/login';
+import { useRegisterUser } from '~/hooks/user';
 
 export default function Register() {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    useTheme();
-  const { sessionSignIn } = useSession();
-  const dispatch = useDispatch();
-
+  const { currentTheme } = useTheme();
   const {
-    control,
-    handleSubmit,
-    formState: { isValid },
-  } = useForm();
-
-  const router = useRouter();
-
-  const user = useSelector((state) => state.auth.user);
-
-  if (user?.user?.id) {
-    InformUser({
-      title: user?.message,
-      duration: 5000,
-      placement: 'top-right',
-      style: { backgroundColor: currentTheme.colors.primary },
-    });
-    router.push('/');
-  }
-
-  const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
-    clientId: WEB_CLIENT_ID,
-  });
-
-  /**
-   * Register a user with the given data.
-   *
-   * @param {object} data - The data object containing the user's name, username, email, and password.
-   */
-  const registerUser = (data) => {
-    const { name, username, email, password } = data;
-    try {
-      const alphanumeric = /^[a-zA-Z0-9]+$/;
-      if (!alphanumeric.test(username)) {
-        alert('Username should be alphanumeric');
-        return;
-      }
-      dispatch(signUp({ name, username, email, password })).then(
-        ({ payload }) => {
-          if (!payload) return;
-          if (payload.token) {
-            sessionSignIn(payload.token);
-          }
-        },
-      );
-    } catch (e) {
-      console.log('Error', e);
-    }
-  };
-
-  const auth = useSelector((state) => state.auth);
-
-  useEffect(() => {
-    if (auth.isLoggedIn) {
-      // router.push("/");
-    }
-  }, [auth, router]);
-
-  useEffect(() => {
-    if (response?.type === 'success') {
-      const { id_token } = response.params;
-      dispatch(signInWithGoogle({ idToken: id_token })).then(({ payload }) => {
-        if (!payload) return;
-        if (payload.token) {
-          sessionSignIn(payload.token);
-        }
-      });
-    }
-  }, [response]);
+    registerUser,
+    form: {
+      control,
+      handleSubmit,
+      formState: { isValid },
+    },
+  } = useRegisterUser();
+  const { promptAsync } = useGoogleAuth();
 
   return (
-    <Center w="100%">
-      <Box safeArea p="2" w="90%" maxW="290" py="8">
-        <Heading
-          size="lg"
-          color="coolGray.800"
-          _dark={{
-            color: 'warmGray.50',
-          }}
-          fontWeight="semibold"
-        >
+    <View style={{ width: '100%', alignItems: 'center' }}>
+      <View style={{ paddingTop: '32px', width: '90%', maxWidth: '290px' }}>
+        <RHeading fontSize={32} color="#212121" fontWeight="semibold">
           Welcome
-        </Heading>
-        <Heading
-          mt="1"
-          color="coolGray.600"
-          _dark={{
-            color: 'warmGray.200',
-          }}
+        </RHeading>
+        <RHeading
+          color="grey"
           fontWeight="medium"
-          size="xs"
+          fontSize={14}
+          style={{ marginTop: '8px' }}
         >
           Sign up to continue!
-        </Heading>
-        <VStack space={3} mt="5">
+        </RHeading>
+        <RStack style={{ marginTop: '16px', gap: '8px' }}>
           <InputText
             label="Name"
             control={control}
@@ -160,60 +72,64 @@ export default function Register() {
             rules={InputTextRules.password}
           />
 
-          <Button
-            isDisabled={!isValid}
+          <RButton
+            disabled={!isValid}
             onPress={handleSubmit(registerUser)}
             // onPress={() => registerUser()}
-            mt="2"
-            colorScheme="indigo"
-            // disabled={!email || !password || !name}
+            style={{ marginTop: '16px' }}
+            backgroundColor="mediumpurple"
           >
             {'Sign up'}
-          </Button>
-          <HStack mt="6" justifyContent="center">
-            <Text
-              fontSize="sm"
-              color="coolGray.600"
-              _dark={{
-                color: 'warmGray.200',
-              }}
-            >
+          </RButton>
+          <RStack
+            style={{
+              marginTop: '16px',
+              flexDirection: 'row',
+              justifyContent: 'center',
+              gap: '4px',
+            }}
+          >
+            <RText fontSize={14} color="grey">
               Already a User?
-            </Text>
+            </RText>
             <Link href="/sign-in">
-              <Text
+              <RText
                 style={{
                   color: '#818cf8',
-                  fontSize: 12,
+                  fontSize: 14,
                   fontWeight: 400,
                 }}
               >
                 Login Here
-              </Text>
+              </RText>
             </Link>
-          </HStack>
+          </RStack>
           {/* Google register */}
-          <HStack mt="1" justifyContent="center">
-            <Heading
-              mt="1"
-              _dark={{
-                color: 'warmGray.200',
-              }}
-              color="coolGray.600"
-              fontWeight="medium"
-              size="xs"
-            >
+          <RStack
+            style={{
+              marginTop: '8px',
+              flexDirection: 'row',
+              justifyContent: 'center',
+            }}
+          >
+            <RText color="grey" fontWeight="medium" fontSize={14}>
               Or
-            </Heading>
-          </HStack>
+            </RText>
+          </RStack>
           {/* Google register */}
-          <HStack mt="1" justifyContent="center" alignItems="center">
-            <Button
-              w="100%"
-              mt="2"
+          <RStack
+            style={{
+              marginTop: '8px',
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <RIconButton
               onPress={async () => await promptAsync()}
-              colorScheme={'red'}
-              startIcon={
+              backgroundColor="red"
+              style={{ width: '100%', color: 'white' }}
+              icon={
                 <FontAwesome
                   name="google"
                   size={16}
@@ -222,12 +138,12 @@ export default function Register() {
               }
             >
               Sign up with Google
-            </Button>
-          </HStack>
+            </RIconButton>
+          </RStack>
           {/* Google register */}
-        </VStack>
-      </Box>
+        </RStack>
+      </View>
       {/* {addUser.isSuccess && router.push("/sign-in")} */}
-    </Center>
+    </View>
   );
 }

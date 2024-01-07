@@ -17,7 +17,7 @@ import { resetEmail } from '../../utils/accountEmail';
 // sgMail.setApiKey(SEND_GRID_API_KEY);
 
 // Generate a password reset token that includes the user's email address
-const generatePasswordResetToken = (email, secret) => {
+const generatePasswordResetToken = async (email, secret) => {
   const payload = { email };
   return jwt.sign(payload, secret);
 };
@@ -75,7 +75,7 @@ export function requestPasswordResetEmailAndTokenRoute() {
       const { prisma, env }: any = opts.ctx;
       const user = await prisma.user.findFirst({
         where: {
-          email: email,
+          email,
         },
       });
 
@@ -90,7 +90,7 @@ export function requestPasswordResetEmailAndTokenRoute() {
 
       await prisma.user.update({
         where: {
-          email: email,
+          email,
         },
         data: {
           passwordResetToken: resetToken,

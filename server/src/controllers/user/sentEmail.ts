@@ -38,12 +38,16 @@ export function sentEmailRoute() {
     const SEND_GRID_API_KEY = env.SEND_GRID_API_KEY;
     const JWT_SECRET = env.JWT_SECRET;
     const CLIENT_URL = env.CLIENT_URL;
-    const user = await new User()
+    const user = await new User();
     const userDoc = await user.findByEmail(email.toLowerCase());
     if (!userDoc) {
       throw new Error('User not found');
     }
-    const resetUrl = await user.generateResetToken(prisma, JWT_SECRET, CLIENT_URL);
+    const resetUrl = await user.generateResetToken(
+      prisma,
+      JWT_SECRET,
+      CLIENT_URL,
+    );
     resetEmail(userDoc.email, resetUrl, STMP_EMAIL, SEND_GRID_API_KEY);
     return 'Reset Token has been sent successfully';
   });

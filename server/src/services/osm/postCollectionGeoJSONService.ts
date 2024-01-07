@@ -26,8 +26,7 @@ export const postCollectionGeoJSONService = async (geojson) => {
     );
     const newInstances = await Promise.all(
       Models.map(
-        async (_, index) =>
-          await processElement(processedElements[index]),
+        async (_, index) => await processElement(processedElements[index]),
       ),
     );
     return newInstances;

@@ -1,11 +1,11 @@
 import React from 'react';
-import { Box, Text } from 'native-base';
+import { View, Text } from 'react-native';
 
 export function DetailsHeader({ type, item }) {
   return (
-    <Box>
+    <View>
       <Text>DetailsHeader</Text>
       <Text>{type}</Text>
-    </Box>
+    </View>
   );
 }

@@ -1,5 +1,4 @@
-import { Pack } from '../../drizzle/methods/pack';
-
+import { Pack } from '../../drizzle/methods/Pack';
 
 const SORT_OPTIONS = {
   Favorite: { favorites_count: -1 },
@@ -36,16 +35,17 @@ const sortPacks = (propertyName, sortOrder) => (packA, packB) => {
 };
 
 const computeVirtualFields = (pack) => {
-  const packClass = new Pack()
+  const packClass = new Pack();
   const packWithTotalWeight = packClass.computeTotalWeight(pack);
   const packWithTotalScore = packClass.computeTotalScores(packWithTotalWeight);
-  const packWithFavoritesCount = packClass.computeFavouritesCount(packWithTotalScore);
+  const packWithFavoritesCount =
+    packClass.computeFavouritesCount(packWithTotalScore);
 
   return {
     ...packWithFavoritesCount,
     favoritedByDocuments: pack.favoritedByDocuments,
     ownerDocuments: pack.ownerDocuments,
-    ownerDocument:pack.ownerDocument,
+    ownerDocument: pack.ownerDocument,
     items_count: pack.items.length,
   };
 };
@@ -60,9 +60,7 @@ const DEFAULT_SORT = { createdAt: -1 };
  * @param {string} queryBy - Specifies how the public packs should be sorted.
  * @return {Promise<any[]>} An array of public packs.
  */
-export async function getPublicPacksService(
-  queryBy: string = null,
-) {
+export async function getPublicPacksService(queryBy: string = null) {
   try {
     const sortOption = SORT_OPTIONS[queryBy] || DEFAULT_SORT;
     const [[propertyName, sortOrder]] = Object.entries(sortOption);
@@ -73,26 +71,26 @@ export async function getPublicPacksService(
         favoritedByDocuments: {
           columns: {
             id: true,
-            name: true
-          }
+            name: true,
+          },
         },
         itemDocuments: {
           columns: {
             id: true,
-            name: true
-          }
+            name: true,
+          },
         },
         ownerDocument: {
           columns: {
             id: true,
-            name: true
-          }
+            name: true,
+          },
         },
         ownerDocuments: {
           columns: {
             id: true,
-            name: true
-          }
+            name: true,
+          },
         },
       },
     });

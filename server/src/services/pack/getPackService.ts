@@ -1,4 +1,4 @@
-import { Pack } from '../../drizzle/methods/pack';
+import { Pack } from '../../drizzle/methods/Pack';
 
 const SORT_OPTIONS = {
   Favorite: { favoritesCount: 'desc' },
@@ -17,31 +17,32 @@ const SORT_OPTIONS = {
 
 const DEFAULT_SORT = { createdAt: 'desc' };
 
-export const getPacksService = async (
-  ownerId,
-  queryBy = null,
-) => {
+export const getPacksService = async (ownerId, queryBy = null) => {
   try {
     const packClass = new Pack();
     const packs = await packClass.findMany({
-      where: (pack, { or, eq }) => or(eq(pack.owner_id, ownerId), pack.owners.has(ownerId)),
+      where: (pack, { or, eq }) =>
+        or(eq(pack.owner_id, ownerId), pack.owners.has(ownerId)),
       with: {
         itemDocuments: {
           columns: {
             categoryDocument: {
-              columns: { name: true }
-            }
-          }
+              columns: { name: true },
+            },
+          },
         },
-        ownerDocuments: true
+        ownerDocuments: true,
       },
-      orderBy: (pack, { asc, desc }) => SORT_OPTIONS[queryBy] ? SORT_OPTIONS[queryBy](pack) : DEFAULT_SORT[pack]
+      orderBy: (pack, { asc, desc }) =>
+        SORT_OPTIONS[queryBy]
+          ? SORT_OPTIONS[queryBy](pack)
+          : DEFAULT_SORT[pack],
     });
 
-    packs.forEach((pack) => {
-      pack.ownerDocuments = pack.ownerDocuments
-      pack.itemDocuments = pack.itemDocuments
-    });
+    // packs.forEach((pack) => {
+    //   pack.ownerDocuments = pack.ownerDocuments;
+    //   pack.itemDocuments = pack.itemDocuments;
+    // });
 
     return packs;
   } catch (error) {

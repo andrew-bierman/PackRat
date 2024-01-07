@@ -1,7 +1,7 @@
 import { TRPCError } from '@trpc/server';
 import { ZodError } from 'zod';
 import { RoleSchema } from '@packrat/validations';
-import { User } from '../../db/schema';
+import { type User } from '../../db/schema';
 
 /**
  * Middleware to check if the user has a certain role.
