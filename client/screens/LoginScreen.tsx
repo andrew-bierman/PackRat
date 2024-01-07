@@ -9,7 +9,7 @@ import { InputText, InputTextRules } from '~/components/InputText';
 import { useGoogleAuth, useLogin } from '~/hooks/login';
 
 const demoUser = {
-  email: 'email52@email.com',
+  email: 'zoot3@email.com',
   password: '12345678',
 };
 

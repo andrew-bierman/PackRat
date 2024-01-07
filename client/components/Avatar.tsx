@@ -1,13 +1,13 @@
 import { RImage } from '@packrat/ui';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-
+export type AvatarProps = {
+  src?: string;
+  size?: number;
+};
 export default function Avatar({
   src,
   size = 100,
-}: {
-  src: string;
-  size?: number;
-}) {
+}:AvatarProps ) {
   const style = {
     width: size,
     height: size,
