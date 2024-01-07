@@ -1,43 +1,13 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Button, Input, Text, Box } from 'native-base';
-import React, { useState } from 'react';
-import { ItemCategoryEnum } from '../constants/itemCategory';
-import { useDispatch } from 'react-redux';
-import { addPackItem } from '../store/packsStore';
+import React from 'react';
 import useCustomStyles from '~/hooks/useCustomStyles';
+import { useWater } from '~/hooks/water';
 
 export default function Water({ currentPack, setWaterItem }) {
-  const [waterWeight, setWaterWeight] = useState(0);
-  const dispatch = useDispatch();
+  const { handleWaterChange, addWater, waterWeight } =
+    useWater(currentPack);
   const styles = useCustomStyles(loadStyles);
-
-  /**
-   * Update the water weight.
-   *
-   * @param {type} value - the new value of the water weight
-   * @return {undefined} no return value
-   */
-  const handleWaterChange = (value) => {
-    setWaterWeight(value);
-  };
-
-  /**
-   * Adds water to the pack.
-   *
-   * @return {void} No return value.
-   */
-  const addWater = () => {
-    const data = {
-      name: 'Water',
-      weight: waterWeight,
-      quantity: '1',
-      unit: 'oz',
-      packId: currentPack._id,
-      type: ItemCategoryEnum.WATER,
-    };
-
-    dispatch(addPackItem(data));
-  };
 
   return (
     <Box style={styles.waterContainer}>
