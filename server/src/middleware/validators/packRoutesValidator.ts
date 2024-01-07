@@ -1,35 +1,32 @@
 import { z } from 'zod';
 
-const JoiObjectId = (message: any = 'valid id'): z.ZodString =>
-  z.string().regex(/^[0-9a-fA-F]{24}$/, { message });
-
 export const getPacks = z.object({
-  ownerId: JoiObjectId(),
+  ownerId: z.string().min(1),
   queryBy: z.string().optional(),
 });
 
 export const getPackById = z.object({
-  packId: JoiObjectId(),
+  packId: z.string().min(1),
 });
 
 export const addPack = z.object({
   name: z.string().nonempty(),
-  owner_id: JoiObjectId(),
+  owner_id: z.string().min(1),
   is_public: z.boolean(),
 });
 
 export const editPack = z.object({
-  id: JoiObjectId(),
+  id: z.string().min(1),
   name: z.string().nonempty(),
   is_public: z.boolean(),
 });
 
 export const deletePack = z.object({
-  packId: JoiObjectId(),
+  packId: z.string().min(1),
 });
 
 export const duplicatePublicPack = z.object({
-  packId: JoiObjectId(),
-  ownerId: JoiObjectId(),
+  packId: z.string().min(1),
+  ownerId: z.string().min(1),
   items: z.array(z.record(z.any())),
 });

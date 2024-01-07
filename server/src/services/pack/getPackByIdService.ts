@@ -1,16 +1,12 @@
-import { Pack } from '../../drizzle/methods/pack';
+import { eq } from 'drizzle-orm';
+import { Pack } from '../../drizzle/methods/Pack';
+import { pack as packSchema } from '../../db/schema';
 
 export const getPackByIdService = async (packId) => {
   try {
     const packClass = new Pack();
     const pack = await packClass.findUniquePack({
-      where: { id: packId },
-      with: {
-        favoritedByDocuments: true,
-        itemDocuments: true,
-        ownerDocument: true,
-        ownerDocuments: true,
-      },
+      where: eq(packSchema.id, packId),
     });
 
     // update this code when trip related code is updated
@@ -23,15 +19,15 @@ export const getPackByIdService = async (packId) => {
     // });
 
     // Parse JSON
-    const ownerDocument = pack.ownerDocument;
-    const favoritedByDocuments = pack.favoritedByDocuments
-    const ownerDocuments = pack.ownerDocuments
+    // const ownerDocument = pack.ownerDocument;
+    // const favoritedByDocuments = pack.favoritedByDocuments
+    // const ownerDocuments = pack.ownerDocuments
     // const tripDocuments = trips
     return {
       ...pack,
-      ownerDocument,
-      ownerDocuments,
-      favoritedByDocuments,
+      // ownerDocument,
+      // ownerDocuments,
+      // favoritedByDocuments,
       // tripDocuments,
     };
   } catch (error) {

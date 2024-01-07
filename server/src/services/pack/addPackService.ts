@@ -6,7 +6,9 @@
  * @return {Object} An object containing the created pack.
  */
 
-import { Pack } from "../../drizzle/methods/pack";
+import { eq } from "drizzle-orm";
+import { Pack } from "../../drizzle/methods/Pack";
+import { pack } from "../../db/schema";
 
 
 export const addPackService = async (name, owner_id) => {
@@ -15,28 +17,14 @@ export const addPackService = async (name, owner_id) => {
     name,
     owner_id,
     is_public: false,
-    createdAt: new Date().toDateString(),
-    grades: {
-      essentialItems: '',
-      redundancyAndVersatility: '',
-      weight: '',
-    },
-    scores: {
-      essentialItemsScore: 0,
-      redundancyAndVersatilityScore: 0,
-      weightScore: 0,
-    },
     total_weight: 0,
-    total_scores: 0,
+    total_score: 0,
   };
 
   // Check if a pack with the same name already exists
-  const existingPack = await packClass.findUniquePack({
-    where: {
-      name,
-    },
-  });
+  const existingPack = await packClass.findUniquePack({ where: (eq(pack.name, name)) });
 
+  console.log("existingPack", existingPack);
   if (existingPack) {
     // A pack with the same name already exists
     throw new Error('A pack with the same name already exists');

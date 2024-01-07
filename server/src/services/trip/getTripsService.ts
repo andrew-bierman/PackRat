@@ -1,4 +1,4 @@
-import { Pack } from "../../drizzle/methods/pack";
+import { Pack } from "../../drizzle/methods/Pack";
 import { Trip } from "../../drizzle/methods/trip";
 
 /**

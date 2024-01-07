@@ -1,7 +1,6 @@
 import { z } from 'zod';
 import { Request } from 'express';
 
-const JoiObjectId = z.string().regex(/^[0-9a-fA-F]{24}$/g);
 
 export const userSignUp = z.object({
   name: z.string().min(1).nonempty(),
@@ -16,7 +15,7 @@ export const userSignIn = z.object({
 });
 
 export const getUserById = z.object({
-  userId: JoiObjectId.nonempty(),
+  userId: z.string().nonempty(),
 });
 
 export const sentEmail = z.object({
@@ -34,12 +33,12 @@ enum UserRoles {
 }
 
 export const addToFavorite = z.object({
-  packId: JoiObjectId.nonempty(),
-  userId: JoiObjectId.nonempty(),
+  packId: z.string().nonempty(),
+  userId: z.string().nonempty(),
 });
 
 export const editUser = z.object({
-  userId: JoiObjectId.nonempty(),
+  userId: z.string().nonempty(),
   name: z.string(),
   password: z.string(),
   email: z.string(),
@@ -57,15 +56,15 @@ export const editUser = z.object({
   profileImage: z.string().optional(),
   preferredWeather: z.string().optional(),
   preferredWeight: z.string().optional(),
-  favourite_ids: z.array(JoiObjectId.nonempty()).optional(),
-  pack_ids: z.array(JoiObjectId.nonempty()).optional(),
-  item_id: JoiObjectId.nonempty().nullable().optional(),
-  template_ids: z.array(JoiObjectId.nonempty()).optional(),
-  trip_ids: z.array(JoiObjectId.nonempty()).optional(),
+  favourite_ids: z.array(z.string().nonempty()).optional(),
+  pack_ids: z.array(z.string().nonempty()).optional(),
+  item_id: z.string().nonempty().nullable().optional(),
+  template_ids: z.array(z.string().nonempty()).optional(),
+  trip_ids: z.array(z.string().nonempty()).optional(),
 });
 
 export const deleteUser = z.object({
-  userId: JoiObjectId.nonempty(),
+  userId: z.string().nonempty(),
 });
 
 export const linkFirebaseAuth = z.object({

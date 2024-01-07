@@ -16,7 +16,12 @@ import { publicProcedure } from '../../trpc';
 
 export function addPackRoute() {
   return publicProcedure.input(validator.addPack).mutation(async (opts) => {
-    const { name, owner_id } = opts.input;
-    return await addPackService(name, owner_id);
+    try {
+      const { name, owner_id } = opts.input;
+      return await addPackService(name, owner_id);
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
+    }
   });
 }
