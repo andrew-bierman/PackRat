@@ -1,4 +1,4 @@
-import { Pack } from '../../drizzle/methods/Pack';
+import { Pack } from '../../drizzle/methods/pack';
 
 const SORT_OPTIONS = {
   Favorite: { favoritesCount: 'desc' },

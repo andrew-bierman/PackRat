@@ -1,5 +1,5 @@
 import { eq } from 'drizzle-orm';
-import { Pack } from '../../drizzle/methods/Pack';
+import { Pack } from '../../drizzle/methods/pack';
 import { pack as packSchema } from '../../db/schema';
 
 export const getPackByIdService = async (packId) => {
