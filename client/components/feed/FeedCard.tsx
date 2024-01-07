@@ -1,20 +1,12 @@
 import { AntDesign } from '@expo/vector-icons';
 import { formatDistanceToNow } from 'date-fns';
 import { MaterialIcons, Entypo } from '@expo/vector-icons';
-import useTheme from '../../hooks/useTheme';
-import { useSelector, useDispatch } from 'react-redux';
-import {
-  // addFavorite,
-  selectFavoriteById,
-  selectAllFavorites,
-} from '../../store/favoritesStore';
+
 import { TouchableOpacity, View } from 'react-native';
 import { Link } from 'expo-router';
 import { DuplicateIcon } from '../DuplicateIcon/index';
-import { truncateString } from '../../utils/truncateString';
 import { RText, RStack, RHeading } from '@packrat/ui';
-import { formatNumber } from '~/utils/formatNumber';
-import { useAddFavorite } from '~/hooks/favorites';
+import { useFeedCard } from '~/hooks/feed/feedComponent';
 
 export default function Card({
   type,
@@ -31,56 +23,24 @@ export default function Card({
   owners,
   duration,
 }) {
-  const user = useSelector((state) => state.auth.user);
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    useTheme();
-
-  const { addFavorite } = useAddFavorite();
-
-  const favorites = useSelector(selectAllFavorites);
-  const dispatch = useDispatch();
-
-  const isFavorite =
-    type !== 'trip' &&
-    (favorited_by?.includes(user?._id) ||
-      favorited_by?.some((obj) => obj?._id === user?._id && user?.id));
-
-  /**
-   * Handles adding an item to the user's favorites.
-   *
-   * @return {void}
-   */
-  const handleAddToFavorite = () => {
-    const data = {
-      packId: _id,
-      userId: user._id,
-    };
-
-    // dispatch(addFavorite(data));
-    addFavorite(data);
-  };
-
-  /**
-   * Handles the removal of an item from the favorites list.
-   *
-   * @return {void} This function does not return a value.
-   */
-  const handleRemoveFromFavorite = () => {
-    const favorite = favorites.find(
-      (favorite) => favorite.pack_id === _id && favorite.user_id === user._id,
-    );
-    if (favorite) {
-      dispatch(removeFavorite(favorite.id));
-    }
-  };
-
-  const truncatedName = truncateString(name, 25);
-  const truncatedDestination = truncateString(destination, 25);
-  const formattedWeight = formatNumber(total_weight); // TODO convert to user preference once implemented
-
-  let numberOfNights;
-
-  if (duration) numberOfNights = JSON.parse(duration).numberOfNights;
+  const {
+    currentTheme,
+    numberOfNights,
+    isFavorite,
+    handleAddToFavorite,
+    truncatedName,
+    truncatedDestination,
+    formattedWeight,
+    user,
+  } = useFeedCard({
+    _id,
+    name,
+    destination,
+    total_weight,
+    duration,
+    favorited_by,
+    type,
+  });
 
   return (
     <View style={{ alignItems: 'center', padding: '16px' }}>

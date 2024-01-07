@@ -1,5 +1,4 @@
 import React from 'react';
-import useTheme from '../../hooks/useTheme';
 import useCustomStyles from '~/hooks/useCustomStyles';
 import { Switch } from 'tamagui';
 import { View } from 'react-native';
@@ -14,17 +13,7 @@ import {
 } from '@packrat/ui';
 import { AntDesign } from '@expo/vector-icons';
 import DropdownComponent from '~/components/Dropdown';
-import { debounce } from 'lodash';
-
-const dataValues = [
-  'Favorite',
-  'Most Recent',
-  'Lightest',
-  'Heaviest',
-  'Most Items',
-  'Fewest Items',
-  'Oldest',
-];
+import { useFeedSearchFilter } from '~/hooks/feed/feedComponent';
 
 const FeedSearchFilter = ({
   feedType,
@@ -36,9 +25,11 @@ const FeedSearchFilter = ({
   setSearchQuery,
   handleCreateClick,
 }) => {
-  const { currentTheme } = useTheme();
+  const { currentTheme, debouncedSearch, dataValues } = useFeedSearchFilter({
+    setSearchQuery,
+  });
   const styles = useCustomStyles(loadStyles);
-  const debouncedSearch = debounce((query) => setSearchQuery(query), 500);
+
   return (
     <View style={styles.filterContainer}>
       <View style={styles.searchContainer}>
