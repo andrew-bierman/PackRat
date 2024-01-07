@@ -1,21 +1,36 @@
+import { useState } from 'react';
 import { queryTrpc } from '../../trpc';
+import { useSelector } from 'react-redux';
 
 export const useAddNewPack = () => {
+  const user = useSelector((state) => state.auth.user);
+  const [name, setName] = useState('');
+  const [isPublic, setIsPublic] = useState(false);
   const utils = queryTrpc.useContext();
+  // Use mutation for adding a pack
+
+  const addNewPack = () => {
+    mutation.mutate({
+      name,
+      is_public: isPublic,
+      owner_id: user?._id,
+    });
+  };
+
   const mutation = queryTrpc.addPack.useMutation({
-    onMutate: async (newPack) => {
+    onMutate: async (packData) => {
       utils.getPacks.cancel({
-        ownerId: newPack?.owner_id,
+        ownerId: packData?.owner_id,
         queryBy: '',
       });
       // Step 1: Define optimistic update
       const optimisticUpdate = {
-        ...newPack,
+        ...packData,
         id: Date.now(),
       };
 
       const oldQueryData = utils.getPacks.getData({
-        ownerId: newPack?.owner_id,
+        ownerId: packData?.owner_id,
         queryBy: '',
       });
 
@@ -28,17 +43,18 @@ export const useAddNewPack = () => {
       };
       utils.getPacks.setData(
         {
-          ownerId: newPack.owner_id,
+          ownerId: packData.owner_id,
           queryBy: '',
         },
         (oldQueryData) => newQueryData,
       );
+      setName('');
+      setIsPublic(false);
       return {
         oldQueryData,
       };
     },
     onError: (_error, _pack, context) => {
-      console.log('error');
       console.log(context.oldQueryData);
       utils.getPacks.setData(
         {
@@ -54,11 +70,15 @@ export const useAddNewPack = () => {
   });
   return {
     mutation,
-    addNewPack: mutation.mutate,
+    addNewPack,
     isLoading: mutation.isLoading,
     isError: mutation.isError,
     isSuccess: mutation.isSuccess,
     error: mutation.error,
     response: mutation.data,
+    name,
+    isPublic,
+    setIsPublic,
+    setName,
   };
 };

@@ -18,3 +18,14 @@ else
   echo -e "${RED}❌ Tests failed${NC}"
   exit 1
 fi
+
+# Running yarn lint
+echo "🔄 Running yarn lint..."
+yarn lint
+
+if [ $? -eq 0 ]; then
+  echo -e "${GREEN}✅ Yarn lint passed${NC}"
+else
+  echo -e "${RED}❌ Yarn lint failed${NC}"
+  exit 1
+fi

@@ -14,19 +14,14 @@ import {
 import { Card as RNPCard } from 'react-native-paper';
 import { DialogDemo } from '../../components/dialog';
 import useCustomStyles from '~/hooks/useCustomStyles';
+import useAppearance from '~/hooks/appearance/useAppearance';
 import { Scroll } from '@tamagui/lucide-icons';
 
 export default function AppearanceContainer() {
-  const [showKitchenSink, setShowKitchenSink] = useState(true);
+  const { isEnabled, toggleSwitch, currentTheme } = useAppearance();
+  const [showKitchenSink, setShowKitchenSink] = React.useState(true);
   const styles = useCustomStyles(loadStyles);
-  const { currentTheme, toggleSwitch, isEnabled, isDark } =
-    useAppearenceContainerLogic();
 
-  /**
-   * Toggles the switch between dark mode and light mode.
-   *
-   * @return {boolean} The new state of the switch.
-   */
   return (
     <ScrollView>
       <VStack style={styles.mainContainer}>
