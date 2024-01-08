@@ -1,5 +1,5 @@
 import { Feather } from '@expo/vector-icons';
-import { CustomButton, RCheckbox, RSkeleton, RStack, RText } from '@packrat/ui';
+import { RButton, RCheckbox, RSkeleton, RStack, RText } from '@packrat/ui';
 import { useState } from 'react';
 import { FlatList, Platform, View } from 'react-native';
 import { Cell, Row, Table } from 'react-native-table-component';
@@ -294,7 +294,16 @@ export const TableContainer = ({
             />
           </Table>
           {copy ? (
-            <CustomButton onPress={handleDuplicate}>Copy</CustomButton>
+            <RButton
+              style={{
+                width: '300px',
+                marginHorizontal: 'auto',
+                marginTop: 10,
+              }}
+              onPress={handleDuplicate}
+            >
+              Copy
+            </RButton>
           ) : null}
           <TotalWeightBox
             label="Base Weight"
