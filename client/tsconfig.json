@@ -20,6 +20,7 @@
       "~/hooks/*": ["hooks/*"],
       "~/screens/*": ["screens/*"],
       "~/theme/*": ["theme/*"],
+     "~/store/*": ["store/*"],
       "@trpc": ["../server/src/routes/index"]
     },
   },

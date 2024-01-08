@@ -66,9 +66,9 @@ export default function PackContainer({ isCreatingTrip = false }) {
   //   selectPackById(state, currentPackId),
   // );
 
-  const currentPack = packs.find((pack) => pack._id === currentPackId);
+  const currentPack = packs?.find((pack) => pack._id === currentPackId);
 
-  const dataValues = packs.map((item) => item?.name) ?? [];
+  const dataValues = packs?.map((item) => item?.name) ?? [];
 
   return dataValues?.length > 0 ? (
     <View style={styles.mainContainer}>
