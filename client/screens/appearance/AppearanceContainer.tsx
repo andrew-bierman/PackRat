@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { VStack, Box, Text, Switch } from 'native-base';
 import { StyleSheet } from 'react-native';
-import useTheme from '../../hooks/useTheme';
+import { useAppearenceContainerLogic } from '~/hooks/appearence/useAppearenceContainerLogic';
 import {
   Paragraph,
   Card,

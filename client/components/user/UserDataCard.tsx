@@ -2,11 +2,12 @@ import { AntDesign } from '@expo/vector-icons';
 import { formatDistanceToNow } from 'date-fns';
 import { View } from 'react-native';
 import { RH2, RText, RStack, RSwitch } from '@packrat/ui';
-import { changePackStatus } from '../../store/packsStore';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'expo-router';
 import { truncateString } from '../../utils/truncateString';
 import { useEffect } from 'react';
+import useUserDataCard from '~/hooks/data/useUserDataCard';
 
 const UserDataCard = ({
   type, // "pack" or "trip"
@@ -18,60 +19,35 @@ const UserDataCard = ({
   favorited_by,
   favorites_count,
   createdAt,
-  state,
-  setState,
   index,
   differentUser,
 }) => {
-  const dispatch = useDispatch();
-
-  /**
-   * Updates the state at the specified index with the given boolean value.
-   *
-   * @param {number} index - The index of the state to be updated.
-   * @param {boolean} boolState - The boolean value to update the state with.
-   * @return {void} This function does not return a value.
-   */
-  const updateState = (index, boolState) => {
-    let states = state;
-    states = states.map((state, iterator) => {
-      return iterator === index ? boolState : state;
-    });
-    setState(states);
-  };
-
-  /**
-   * Updates the status of an item at the specified index.
-   *
-   * @param {number} index - The index of the item to update.
-   * @return {void} This function does not return a value.
-   */
-  const handleChangeStatus = (index) => {
-    updateState(index, true);
-    if (type === 'pack') {
-      dispatch(changePackStatus({ _id, is_public: !is_public }));
-    } else if (type === 'trip') {
-    }
-  };
+  const { state, setState, handleChangeStatus } = useUserDataCard(
+    type,
+    _id,
+    is_public,
+    index,
+    differentUser,
+  );
 
   const truncatedName = truncateString(name, 25);
   const truncatedDestination = truncateString(destination, 25);
 
   return (
-    <View style={{ alignItems: 'center', padding: '16px' }}>
+    <View style={{ alignItems: 'center', padding: 16 }}>
       <View
         style={{
-          minHeight: '150px',
-          minWidth: '300px',
-          border: '1px solid gray',
-          borderLeft: `10px solid ${is_public ? 'green' : 'red'}`,
-          borderRadius: '8px',
+          minHeight: 150,
+          minWidth: 300,
+          border: 1, 'solid gray',
+          borderLeft: `10, solid ${is_public ? 'green' : 'red'}`,
+          borderRadius: 8,
           overflow: 'hidden',
           backgroundColor: '#EBEBEB',
         }}
       >
-        <RStack style={{ padding: '16px', gap: '16px' }}>
-          <RStack style={{ gap: '8px' }}>
+        <RStack style={{ padding: 16, gap: 16 }}>
+          <RStack style={{ gap: 8 }}>
             <RH2>
               <View
                 style={{
@@ -80,13 +56,13 @@ const UserDataCard = ({
                   justifyContent: 'space-between',
                   width: '100%',
                   gap: 10,
-                  fontSize: '16px',
-                  fontWeight: 'bold',
+                  // fontSize: 16,
+                  // fontWeight: 'bold',
                 }}
               >
-                <RText style={{ fontSize: '16px' }}>{truncatedName}</RText>
+                <RText style={{ fontSize: '16,' }}>{truncatedName}</RText>
                 {state[index] ? (
-                  <RText style={{ fontSize: '16px' }}>Loading....</RText>
+                  <RText style={{ fontSize: '16,' }}>Loading....</RText>
                 ) : (
                   <>
                     {!differentUser && (
@@ -105,10 +81,10 @@ const UserDataCard = ({
             {type === 'pack' ? (
               <RText
                 style={{
-                  fontSize: '12px',
+                  fontSize: '12,',
                   color: 'mediumpurple',
-                  marginLeft: '-0.5px',
-                  marginTop: '-3px',
+                  marginLeft: '-0.5,',
+                  marginTop: '-3,',
                 }}
               >
                 Total Weight: {total_weight}
@@ -116,10 +92,10 @@ const UserDataCard = ({
             ) : (
               <RText
                 style={{
-                  fontSize: '12px',
+                  fontSize: '12,',
                   color: 'mediumpurple',
-                  marginLeft: '-0.5px',
-                  marginTop: '-3px',
+                  marginLeft: '-0.5,',
+                  marginTop: '-3,',
                 }}
               >
                 Destination: {truncatedDestination}
@@ -131,7 +107,7 @@ const UserDataCard = ({
             style={{
               flexDirection: 'row',
               alignItems: 'center',
-              gap: '16px',
+              gap: '16,',
               justifyContent: 'space-between',
             }}
           >
@@ -145,7 +121,7 @@ const UserDataCard = ({
               <RText
                 style={{
                   color: 'gray',
-                  fontSize: '12px',
+                  fontSize: '12,',
                   fontWeight: '400',
                   flex: 1,
                 }}

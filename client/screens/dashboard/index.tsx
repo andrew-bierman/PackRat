@@ -12,7 +12,6 @@ import useCustomStyles from '~/hooks/useCustomStyles';
 
 const Dashboard = () => {
   const styles = useCustomStyles(loadStyles);
-
   return (
     <>
       <RScrollView contentContainerStyle={styles.content} horizontal={false}>

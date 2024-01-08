@@ -29,10 +29,14 @@ export default function Trips() {
   });
   const dispatch = useDispatch();
   const searchResult = useSelector(
-    (state) => state.search.selectedSearchResult,
+    (state: { search?: { selectedSearchResult: any } }) =>
+      state?.search.selectedSearchResult,
   );
 
-  const { latLng, selectedSearch } = useSelector((state) => state.weather);
+  const { latLng, selectedSearch } = useSelector(
+    (state: { weather?: { latLng: any; selectedSearch: any } }) =>
+      state?.weather,
+  );
 
   // const [photonDetails, setPhotonDetails] = useState(null);
   // const photonDetailsStore = useSelector(
@@ -98,6 +102,12 @@ export default function Trips() {
               color={theme.colors.cardIconColor}
             />
           )}
+          isMap={''}
+          shape={''}
+          data={''}
+          isTrail={''}
+          isPark={''}
+          isLoading={''}
         />
       ),
       sidebarData: {
@@ -125,7 +135,7 @@ export default function Trips() {
       component: () => (
         <TripCard
           title="Nearby Trails"
-          value="Trail List"
+          // value="Trail List"
           isTrail={true}
           data={trails || []}
           Icon={() => (
@@ -135,6 +145,11 @@ export default function Trips() {
               color={theme.colors.cardIconColor}
             />
           )}
+          isMap={''}
+          shape={''}
+          isPark={''}
+          isLoading={''}
+          isSearch={''}
         />
       ),
     },
@@ -143,7 +158,7 @@ export default function Trips() {
       component: () => (
         <TripCard
           title="Nearby Parks"
-          value="Parks List"
+          // value="Parks List"
           data={parksData}
           Icon={() => (
             <FontAwesome5
@@ -152,6 +167,12 @@ export default function Trips() {
               color={theme.colors.cardIconColor}
             />
           )}
+          isMap={true}
+          shape={''}
+          isTrail={''}
+          isPark={''}
+          isLoading={''}
+          isSearch={''}
         />
       ),
     },
@@ -178,6 +199,12 @@ export default function Trips() {
           )}
           title="Map"
           isMap={true}
+          shape={''}
+          data={''}
+          isTrail={''}
+          isPark={''}
+          isLoading={''}
+          isSearch={''}
         />
       ),
     },
@@ -202,6 +229,12 @@ export default function Trips() {
                 color={currentTheme.colors.cardIconColor}
               />
             )}
+            isMap={''}
+            shape={''}
+            data={''}
+            isTrail={''}
+            isPark={''}
+            isLoading={''}
           />
           {!weekWeatherError &&
             !weatherError &&
@@ -214,7 +247,7 @@ export default function Trips() {
             )}
           <TripCard
             title="Nearby Trails"
-            value="Trail List"
+            // value="Trail List"
             isTrail={true}
             data={filteredTrails || []}
             Icon={() => (
@@ -224,10 +257,15 @@ export default function Trips() {
                 color={currentTheme.colors.cardIconColor}
               />
             )}
+            isMap={''}
+            shape={''}
+            isPark={''}
+            isLoading={''}
+            isSearch={''}
           />
           <TripCard
             title="Nearby Parks"
-            value="Parks List"
+            // value="Parks List"
             isPark={true}
             data={parksData}
             Icon={() => (
@@ -237,10 +275,16 @@ export default function Trips() {
                 color={currentTheme.colors.cardIconColor}
               />
             )}
+            isMap={''}
+            shape={''}
+            isTrail={''}
+            isLoading={''}
+            isSearch={''}
           />
           <GearList />
           <TripDateRange dateRange={dateRange} setDateRange={setDateRange} />
-          {!photonDetails?.IsError && !photonDetails?.isLoading && (
+          {!photonDetails?.['IsError'] && !photonDetails?.['isLoading'] && (
+            // {!photonDetails?.IsError && !photonDetails?.isLoading && (
             <TripCard
               Icon={() => (
                 <FontAwesome5
@@ -252,6 +296,11 @@ export default function Trips() {
               title="Map"
               isMap={true}
               shape={photonDetails}
+              data={undefined}
+              isTrail={undefined}
+              isPark={undefined}
+              isLoading={undefined}
+              isSearch={undefined}
             />
           )}
           {photonDetails && <WeatherData geoJSON={photonDetails} />}

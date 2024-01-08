@@ -14,8 +14,7 @@
   "scripts": {
     "build": "tamagui-build",
     "watch": "tamagui-build --watch",
-    "clean": "rm -rf dist types node_modules",
-    "postinstall": "yarn run build"
+    "clean": "rm -rf dist types node_modules"
   },
   "dependencies": {
     "@shopify/flash-list": "^1.6.1",
