@@ -10,7 +10,6 @@ import { RText } from '@packrat/ui';
  * @return {JSX.Element|null} The WeatherCard component if weatherObject and weatherWeek are truthy, otherwise null.
  */
 export const WeatherData = ({ geoJSON }) => {
-
   const { data: weatherObjectData } = useFetchWeather(geoJSON);
   const { data: weatherWeekData } = useFetchWeatherWeak(geoJSON);
 
@@ -19,5 +18,7 @@ export const WeatherData = ({ geoJSON }) => {
       weatherObject={weatherObjectData}
       weatherWeek={weatherWeekData}
     />
-  ) : <RText>No Weather Data</RText>;
+  ) : (
+    <RText>No Weather Data</RText>
+  );
 };

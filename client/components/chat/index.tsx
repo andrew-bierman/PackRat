@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
   FlatList,
   TextInput,
   TouchableOpacity,
-  ScrollView,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import useTheme from '../../hooks/useTheme';
@@ -18,7 +17,7 @@ import { BaseModal, RStack } from '@packrat/ui';
 // } from '../../store/chatStore';
 import { Box, VStack, HStack, Select } from 'native-base';
 import useCustomStyles from '~/hooks/useCustomStyles';
-import { useGetUserChats, useGetAIResponse } from '~/hooks/chat';
+import { useChat } from '~/hooks/chat/useChat';
 // import { Select } from "tamagui";
 
 const MessageBubble = ({ message }) => {
@@ -47,63 +46,16 @@ const ChatSelector = ({ conversation, onSelect, isActive }) => {
 };
 
 const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state.auth.user);
-  const [conversationId, setConversationId] = useState(defaultChatId);
-  // const conversation = useSelector((state) =>
-  //   selectConversationById(state, conversationId),
-  // );
-  // const conversations = useSelector((state) => selectAllConversations(state));
-  const [userInput, setUserInput] = useState('');
-  // const [parsedMessages, setParsedMessages] = useState([]);
   const styles = useCustomStyles(loadStyles);
-
-  const { data: chatsData, refetch } = useGetUserChats(user._id);
-
-  const { getAIResponse } = useGetAIResponse();
-
-  const conversations = chatsData?.conversations;
-
-  /**
-   * Parses a conversation history string and returns an array of objects representing each message in the conversation.
-   *
-   * @param {string} historyString - The string containing the conversation history.
-   * @return {Array} An array of objects representing each message in the conversation.
-   */
-  const parseConversationHistory = (historyString) => {
-    const historyArray = historyString.split('\n');
-    return historyArray.reduce((accumulator, current) => {
-      const isAI = current.startsWith('AI:');
-      const content = isAI ? current.substring(3) : current;
-      const role = isAI ? 'ai' : 'user';
-      if (content) {
-        accumulator.push({ role, content });
-      }
-      return accumulator;
-    }, []);
-  };
-
-  const conversation = conversations?.find(
-    (chat) => chat._id === conversationId,
-  );
-
-  // Compute parsedMessages directly
-  const parsedMessages = conversation
-    ? parseConversationHistory(conversation.history)
-    : [];
-
-  console.log('parsedMessages:', parsedMessages);
-
-  /**
-   * Handles sending a message.
-   *
-   * @return {Promise<void>} This function returns nothing.
-   */
-  const handleSendMessage = async () => {
-    await getAIResponse({ userId: user._id, conversationId, userInput });
-    refetch();
-    setUserInput('');
-  };
+  const {
+    conversations,
+    conversationId,
+    parsedMessages,
+    userInput,
+    handleSendMessage,
+    setUserInput,
+    setConversationId,
+  } = useChat({ defaultChatId });
 
   return (
     <View style={styles.container}>

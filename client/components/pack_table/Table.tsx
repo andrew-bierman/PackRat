@@ -1,5 +1,5 @@
 import { Feather } from '@expo/vector-icons';
-import { BaseModal, RCheckbox, RSkeleton, RStack, RText } from '@packrat/ui';
+import { RCheckbox, RSkeleton, RStack, RText } from '@packrat/ui';
 import { useState } from 'react';
 import { FlatList, Platform, View } from 'react-native';
 import { Cell, Row, Table } from 'react-native-table-component';
