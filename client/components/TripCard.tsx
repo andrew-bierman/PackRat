@@ -39,7 +39,7 @@ export default function TripCard({
         borderRadius: 12,
         flexDirection: !isMap ? 'row' : 'column',
         width: '90%',
-      }} 
+      }}
       style={
         isSearch
           ? styles.searchContainer
@@ -79,7 +79,7 @@ export default function TripCard({
           />
         )
       ) : isSearch ? (
-        <SearchInput   />
+        <SearchInput />
       ) : (
         <RStack style={{ width: '80%' }}>
           <Carousel iconColor={isDark ? '#fff' : '#000'}>
