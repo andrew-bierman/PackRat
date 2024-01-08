@@ -2,7 +2,12 @@ import useTheme from '../../hooks/useTheme';
 import { convertToCelsius } from '../../utils/convertToCelsius';
 import { convertToKmh } from '../../utils/convertToKmh';
 import { dayNumToString } from '../../utils/dayNumToString';
-import { Feather, FontAwesome, FontAwesome5, Octicons } from '@expo/vector-icons';
+import {
+  Feather,
+  FontAwesome,
+  FontAwesome5,
+  Octicons,
+} from '@expo/vector-icons';
 import { RImage, RStack, RText } from '@packrat/ui';
 import useCustomStyles from '~/hooks/useCustomStyles';
 import { useDate } from '~/hooks/weather/useDate';
@@ -12,10 +17,10 @@ export default function WeatherCard({
   weatherObject = defaultWeatherObject,
   weatherWeek = [],
 }) {
-  //Hooks
+  // Hooks
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
-  const { dateFormatted, day,restOfWeek } = useDate();
+  const { dateFormatted, day, restOfWeek } = useDate();
 
   const weatherIconUrl = `https://openweathermap.org/img/wn/${weatherObject.weather[0].icon}@2x.png`;
 

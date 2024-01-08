@@ -50,7 +50,7 @@ const loadStyles = (theme) => {
       flex: 1,
       flexGrow: 1,
       backgroundColor: currentTheme.colors.background,
-    width: '100%',
+      width: '100%',
     },
     content: {
       flexGrow: 1,
