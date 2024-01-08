@@ -1,5 +1,5 @@
 import RStack from './RStack';
-import RForm from './RForm'
+import RForm from './RForm';
 import RText from './RText';
 import RCard from './RCard';
 import RParagraph from './Rparagraph';
@@ -26,7 +26,6 @@ import RH5 from './RH5';
 import RH6 from './RH6';
 import XStack from './XStack';
 import YStack from './YStack';
-
 
 export {
   RH1,
@@ -56,14 +55,16 @@ export {
   RScrollView,
   RSkeleton,
   XStack,
-  YStack
+  YStack,
 };
 
-export { config } from './tamagui.config'
-export * from 'tamagui'
-export * from '@tamagui/toast'
-export * from './toast'
-export * from './list'
+export { config } from './tamagui.config';
+export * from 'tamagui';
+export * from './modal';
+export * from './dialog';
+export * from '@tamagui/toast';
+export * from './toast';
+export * from './list';
 
 export * from './RStack';
 export * from './RText';
@@ -84,4 +85,4 @@ export * from './YStack';
 // export * from './RToast';
 // export * from './RTooltip';
 
-export * from './ErrorBoundary'
+export * from './ErrorBoundary';
