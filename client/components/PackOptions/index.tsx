@@ -12,6 +12,7 @@ export const PackOptions = ({ Edit, Delete, Ignore }) => {
   return (
     <View>
       <CustomModal
+        title=""
         isActive={isMenuOpen}
         onTrigger={setIsMenuOpen}
         triggerComponent={

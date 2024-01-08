@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { FlatList, View, ScrollView, Platform } from 'react-native';
 import Card from '../../components/feed/FeedCard';
 import { useFeedLogic } from '../../hooks/feed/useFeedLogic';
@@ -10,6 +10,8 @@ import FeedSearchFilter from '~/components/feed/FeedSearchFilter';
 import { useFeed } from '~/hooks/feed';
 import { RefreshControl } from 'react-native';
 import { RText } from '@packrat/ui';
+// import { useSelector } from '../../redux/useSelector';/
+import { useSelector } from '../../hooks/redux/useSelector';
 
 const URL_PATHS = {
   userPacks: '/pack/',

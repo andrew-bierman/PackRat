@@ -1,6 +1,6 @@
 import React from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { deletePackItem } from '../../store/packsStore';
 import { CustomModal } from '../modal';
 import {
@@ -11,6 +11,7 @@ import {
 import { addOfflineRequest } from '../../store/offlineQueue';
 import { useDeletePackItem } from '~/hooks/packs/useDeletePackItem';
 import { queryTrpc, trpc } from '../../trpc';
+import { useSelector } from '~/hooks/redux/useSelector';
 
 export const DeletePackItemModal = ({ itemId, pack }) => {
   const utils = queryTrpc.useContext();

@@ -15,11 +15,11 @@ import * as Linking from 'expo-linking';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from '~/hooks/useCustomStyles';
 import useAbout from '~/hooks/about/useAbout';
+import useAppearance from '~/hooks/appearance/useAppearance';
 
 const AboutContent = ({ desktopContainer, isMobile }) => {
-  const { currentTheme, toggleSwitch, isEnabled, isDark } =
-    useAppearenceContainerLogic();
-  const { handleGithubLink, handleDiscordLink } = useHandleLink;
+  const { currentTheme, toggleSwitch, isEnabled, isDark, isLight } =
+    useAppearance();
 
   const styles = useCustomStyles(loadStyles);
   console.log('isDark, isLight', isDark, isLight);
