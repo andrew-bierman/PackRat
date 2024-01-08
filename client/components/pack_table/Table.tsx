@@ -1,8 +1,8 @@
 import { Feather } from '@expo/vector-icons';
-import {  RCheckbox, RSkeleton, RStack, RText } from '@packrat/ui';
+import { RCheckbox, RSkeleton, RStack, RText } from '@packrat/ui';
 import { useState } from 'react';
 import { FlatList, Platform, View } from 'react-native';
-import { Cell, Row, Table,  } from 'react-native-table-component';
+import { Cell, Row, Table } from 'react-native-table-component';
 import { usePackTable } from '~/hooks/packs/usePackTable';
 import useCustomStyles from '~/hooks/useCustomStyles';
 import useTheme from '~/hooks/useTheme';
@@ -164,7 +164,7 @@ const CategoryRow = ({ category }) => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
-  
+
   const rowData = [
     <RStack style={{ flexDirection: 'row', gap: '8px', ...styles.categoryRow }}>
       <Feather
