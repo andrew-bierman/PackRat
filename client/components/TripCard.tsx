@@ -47,12 +47,12 @@ export default function TripCard({
     <RStack
       $sm={{
         borderRadius: '6px',
-        flexDirection: 'colunm',
+        flexDirection: "column",
         width: '100%',
       }}
       $gtSm={{
         borderRadius: '12px',
-        flexDirection: !isMap ?? 'row',
+        {flexDirection: !isMap ?? 'row'},
         width: '90%',
       }}
       style={

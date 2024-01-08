@@ -1,20 +1,19 @@
 import { Box, Container, Text } from 'native-base';
 import Checkbox from 'expo-checkbox';
-
-import { useState } from 'react';
-
 import { FontAwesome } from '@expo/vector-icons';
 import useCustomStyles from '~/hooks/useCustomStyles';
+import { useItemRow } from '~/hooks/itemrow';
 
 export const ItemRow = ({ packName }) => {
-  const [isChecked, setChecked] = useState(false);
+  const {isChecked, handleChange} = useItemRow();
   const styles = useCustomStyles(loadStyles);
+
   return (
     <Container style={styles.mainContainer}>
       <Checkbox
         style={styles.checkbox}
         value={isChecked}
-        onValueChange={setChecked}
+        onValueChange={handleChange}
       />
       <Text
         style={{
