@@ -1,7 +1,5 @@
 import { publicProcedure } from '../../trpc';
 import { UserNotFoundError } from '../../helpers/errors';
-import { responseHandler } from '../../helpers/responseHandler';
-
 import { addTemplateService } from '../../services/template/template.service';
 import { z } from 'zod';
 import { User } from '../../drizzle/methods/User';
@@ -45,11 +43,7 @@ export function addTemplateRoute() {
     .mutation(async (opts) => {
       const { type, templateId, isGlobalTemplate, createdBy } = opts.input;
       const userClass = new User();
-      const user = await userClass.findUnique({
-        where: {
-          id: createdBy,
-        },
-      });
+      const user = await userClass.findById(createdBy);
       if (!user) {
         throw new Error(UserNotFoundError.message);
       }

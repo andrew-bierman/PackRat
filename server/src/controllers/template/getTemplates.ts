@@ -1,4 +1,4 @@
-import { Template } from '../../prisma/methods';
+import { Template } from '../../drizzle/methods/template';
 import { publicProcedure } from '../../trpc';
 
 // import { prisma } from '../../prisma';
@@ -22,21 +22,9 @@ import { publicProcedure } from '../../trpc';
 // };
 
 export function getTemplatesRoute() {
+  const templateClass = new Template();
   return publicProcedure.query(async (opts) => {
-    const { prisma }: any = opts.ctx;
-
-    const templates = await prisma.template.findMany({
-      include: {
-        createdByDocument: {
-          select: {
-            username: true,
-          },
-        },
-      },
-    });
-    const jsonTemplates = templates.map(
-      (template) => Template(template)?.toJSON(),
-    );
-    return jsonTemplates;
+    const templates = await templateClass.findMany();
+    return templates;
   });
 }

@@ -1,3 +1,5 @@
+import { Template } from '../../drizzle/methods/template';
+
 /**
  * Edits a template.
  * @param {PrismaClient} prisma - Prisma client.
@@ -6,34 +8,22 @@
  * @param {boolean} isGlobalTemplate - The new value for isGlobalTemplate (optional).
  */
 export const editTemplateService = async (
+  // prisma: PrismaClient,
   templateId: string,
   type: any,
   isGlobalTemplate: boolean,
 ) => {
   try {
-    const template = await prisma.template.findUnique({
-      where: {
-        id: templateId,
-      },
-    });
-
+    const templateClass = new Template();
+    const template = await templateClass.findUnique(templateId);
     if (!template) {
       throw new Error('Template not found');
     }
-
-    const updatedTemplate = await prisma.template.update({
-      where: {
-        id: templateId,
-      },
-      data: {
-        type: type || template.type,
-        isGlobalTemplate:
-          isGlobalTemplate !== undefined
-            ? isGlobalTemplate
-            : template.isGlobalTemplate,
-      },
+    const updatedTemplate = await templateClass.update({
+      templateId,
+      type,
+      isGlobalTemplate,
     });
-
     return updatedTemplate;
   } catch (error) {
     throw new Error(error.toString());

@@ -1,4 +1,5 @@
 import { User } from '../../drizzle/methods/User';
+import { Template } from '../../drizzle/methods/template';
 
 /**
  * Adds a template to the database.
@@ -17,25 +18,16 @@ export const addTemplateService = async (
 ): Promise<void> => {
   try {
     const userClass = new User();
-    const user = await userClass.findUnique({
-      where: {
-        id: createdBy,
-      },
-    });
-
+    const templateClass = new Template();
+    const user = await userClass.findById(createdBy);
     if (!user) {
-      throw new Error('User not found');
+      throw new Error('User not found!');
     }
-
-    await user.template.create({
-      data: {
-        type,
-        templateId,
-        isGlobalTemplate,
-        createdByDocument: {
-          connect: { id: createdBy },
-        },
-      },
+    await templateClass.create({
+      type,
+      templateId,
+      isGlobalTemplate,
+      createdBy,
     });
   } catch (error) {
     throw new Error(error.toString());
