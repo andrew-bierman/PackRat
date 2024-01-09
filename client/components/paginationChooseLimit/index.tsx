@@ -14,7 +14,6 @@ export const PaginationLimit = ({ limit, setLimit, setPage }) => {
         Choose a value:
       </RLabel>
       <DropdownComponent
-        width=""
         value={limit}
         accessibilityLabel="choose the number of items to be displayed"
         placeholder="Choose a value"

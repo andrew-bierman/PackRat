@@ -102,12 +102,6 @@ export default function Trips() {
               color={theme.colors.cardIconColor}
             />
           )}
-          isMap={''}
-          shape={''}
-          data={''}
-          isTrail={''}
-          isPark={''}
-          isLoading={''}
         />
       ),
       sidebarData: {
@@ -145,11 +139,6 @@ export default function Trips() {
               color={theme.colors.cardIconColor}
             />
           )}
-          isMap={''}
-          shape={''}
-          isPark={''}
-          isLoading={''}
-          isSearch={''}
         />
       ),
     },
@@ -167,12 +156,6 @@ export default function Trips() {
               color={theme.colors.cardIconColor}
             />
           )}
-          isMap={true}
-          shape={''}
-          isTrail={''}
-          isPark={''}
-          isLoading={''}
-          isSearch={''}
         />
       ),
     },
@@ -199,12 +182,6 @@ export default function Trips() {
           )}
           title="Map"
           isMap={true}
-          shape={''}
-          data={''}
-          isTrail={''}
-          isPark={''}
-          isLoading={''}
-          isSearch={''}
         />
       ),
     },
@@ -229,12 +206,6 @@ export default function Trips() {
                 color={currentTheme.colors.cardIconColor}
               />
             )}
-            isMap={''}
-            shape={''}
-            data={''}
-            isTrail={''}
-            isPark={''}
-            isLoading={''}
           />
           {!weekWeatherError &&
             !weatherError &&
@@ -257,11 +228,6 @@ export default function Trips() {
                 color={currentTheme.colors.cardIconColor}
               />
             )}
-            isMap={''}
-            shape={''}
-            isPark={''}
-            isLoading={''}
-            isSearch={''}
           />
           <TripCard
             title="Nearby Parks"
@@ -275,11 +241,6 @@ export default function Trips() {
                 color={currentTheme.colors.cardIconColor}
               />
             )}
-            isMap={''}
-            shape={''}
-            isTrail={''}
-            isLoading={''}
-            isSearch={''}
           />
           <GearList />
           <TripDateRange dateRange={dateRange} setDateRange={setDateRange} />
@@ -296,11 +257,6 @@ export default function Trips() {
               title="Map"
               isMap={true}
               shape={photonDetails}
-              data={undefined}
-              isTrail={undefined}
-              isPark={undefined}
-              isLoading={undefined}
-              isSearch={undefined}
             />
           )}
           {photonDetails && <WeatherData geoJSON={photonDetails} />}
