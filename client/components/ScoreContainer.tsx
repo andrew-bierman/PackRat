@@ -59,7 +59,7 @@ const GradingPieChart = ({ scores, size = 150, strokeWidth = 10 }) => {
   if (!scores) return null;
 
   const styles = useCustomStyles(loadStyles);
-  
+
   // pie chart with 3 sections to represent the 3 grades
   // each section is a circle with a different color
   const {
@@ -155,7 +155,7 @@ export default function ScoreContainer({ type, data, isOwner }) {
     title,
     subheader,
     description,
-  } = useScoreData(type,data);
+  } = useScoreData(type, data);
 
   const handleScoreClick = () => {
     if (type === 'pack') {

@@ -1,5 +1,6 @@
 export const parseCoordinates = (geoJson) => {
-  let lon = 0, lat = 0;
+  let lon = 0;
+  let lat = 0;
 
   const findDeepestArray = (arr) => {
     if (Array.isArray(arr[0])) {
