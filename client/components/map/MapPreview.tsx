@@ -27,7 +27,7 @@ export default function MapPreview({ shape }) {
   };
   const pointProperties = {
     'marker-color': '#16b22d',
-  };
+  };                                                                          
   if (isLineString(shape)) {
     shape.features[0].properties = lineProperties;
   }
