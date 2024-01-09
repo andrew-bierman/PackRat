@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import useTheme from '~/hooks/useTheme';
 
 export default function useProgressBarComponent() {
-  const { currentTheme } = useTheme();
   const reduxTargetValue = useSelector<
     { progress: { targetValue: any; [key: string]: any } },
     number
@@ -38,8 +36,5 @@ export default function useProgressBarComponent() {
     }
   }, [localCurrentValue, reduxTargetValue, operationId]);
 
-  return {
-    localCurrentValue,
-    currentTheme,
-  };
+  return { localCurrentValue };
 }
