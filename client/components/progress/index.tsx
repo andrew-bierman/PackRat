@@ -1,12 +1,12 @@
 import { Progress } from 'native-base';
 import useProgressBarComponent from '~/hooks/progress';
+import useTheme from '~/hooks/useTheme';
 
 const ProgressBarComponent = () => {
 
-  const {
-    localCurrentValue,
-    currentTheme
-  } = useProgressBarComponent()
+  const {currentTheme} = useTheme()
+
+  const {localCurrentValue} = useProgressBarComponent()
 
   
   return (
