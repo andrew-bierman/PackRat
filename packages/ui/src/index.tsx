@@ -4,7 +4,6 @@ import RText from './RText';
 import RCard from './RCard';
 import RParagraph from './Rparagraph';
 import RInput from './RInput';
-import RButton from './RButton';
 import RImage from './RImage';
 import RScrollView from './RScrollview';
 import RSkeleton from './RSkeleton';
@@ -26,6 +25,7 @@ import RH5 from './RH5';
 import RH6 from './RH6';
 import XStack from './XStack';
 import YStack from './YStack';
+export * from './button';
 
 export {
   RH1,
@@ -49,7 +49,6 @@ export {
   RCard,
   RParagraph,
   RInput,
-  RButton,
   RIconButton,
   RImage,
   RScrollView,
@@ -71,7 +70,6 @@ export * from './RText';
 export * from './RCard';
 export * from './Rparagraph';
 export * from './RInput';
-export * from './RButton';
 export * from './RImage';
 export * from './RScrollview';
 export * from './Skeleton';
