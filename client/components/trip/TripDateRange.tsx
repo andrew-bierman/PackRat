@@ -10,26 +10,12 @@ import {
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import useTheme from '../../hooks/useTheme';
 import { RStack, RText, RButton } from '@packrat/ui';
+import useTripDateRange from '~/hooks/trips/useTripDateRange';
 
 const TripDateRange = ({ dateRange, setDateRange }) => {
+
   const { currentTheme } = useTheme();
-  const [open, setOpen] = React.useState(false);
-
-  const onDismiss = React.useCallback(() => {
-    setOpen(false);
-  }, [setOpen]);
-
-  const onConfirm = React.useCallback(
-    ({ startDate, endDate }) => {
-      setOpen(false);
-      setDateRange({ startDate, endDate });
-    },
-    [setOpen],
-  );
-
-  useEffect(() => {
-    registerTranslation('en', enGB);
-  }, []);
+  const { open, setOpen, onDismiss, onConfirm } = useTripDateRange({ setDateRange })
 
   return (
     <RStack

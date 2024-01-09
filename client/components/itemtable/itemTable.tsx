@@ -11,6 +11,7 @@ import { PaginationLimit } from '../paginationChooseLimit';
 import Loader from '../Loader';
 import useCustomStyles from '~/hooks/useCustomStyles';
 import { loadStyles } from './itemsTable.style';
+import { flexArr } from '~/hooks/itemtable';
 
 export const ItemsTable = ({
   limit,
@@ -21,55 +22,13 @@ export const ItemsTable = ({
   isLoading,
   totalPages,
 }) => {
-  const flexArr = [2, 1, 1, 1, 0.65, 0.65, 0.65];
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    useTheme();
   const styles = useCustomStyles(loadStyles);
-  const TitleRow = ({ title }) => {
-    const rowData = [
-      <RStack style={{ flexDirection: 'row', ...styles.mainTitle }}>
-        <Text style={styles.titleText}>{title}</Text>
-      </RStack>,
-    ];
-
-    return (
-      <Row data={rowData} style={[styles.title]} textStyle={styles.titleText} />
-    );
-  };
-  const TableItem = ({ itemData }) => {
-    const { name, weight, category, quantity, unit, _id, type } = itemData;
-
-    const rowData = [
-      name,
-      `${formatNumber(weight)} ${unit}`,
-      quantity,
-      `${category?.name || type}`,
-      <EditPackItemModal
-        initialData={itemData}
-        editAsDuplicate={false}
-        setPage={setPage}
-        page={page}
-      />,
-      <DeletePackItemModal itemId={_id} />,
-    ];
-    return <Row data={rowData} style={styles.row} flexArr={flexArr} />;
-  };
-  /**
-   * Handles the logic for navigating to the next page.
-   *
-   * @return {undefined} This function doesn't return anything.
-   */
-  const handleNextPage = () => {
-    setPage(page + 1);
-  };
-  /**
-   * Handles the action of going to the previous page.
-   *
-   * @return {undefined} There is no return value.
-   */
-  const handlePreviousPage = () => {
-    setPage(page - 1);
-  };
+  const { TitleRow, TableItem, handleNextPage, handlePreviousPage } =
+    useItemsTable({
+      styles,
+      page,
+      setPage
+    });
 
   return (
     <View

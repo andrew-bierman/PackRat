@@ -25,7 +25,7 @@ import {
 import { fetchWeather, fetchWeatherWeek } from '../../store/weatherStore';
 import useCustomStyles from '~/hooks/useCustomStyles';
 import { useFetchWeather, useFetchWeatherWeak } from '~/hooks/weather';
-import { useGetDestination, useGetPhotonDetails } from '~/hooks/destination';
+import { useDestinationPage, useGetDestination, useGetPhotonDetails } from '~/hooks/destination';
 import { WeatherData } from '../weather/WeatherData';
 
 const DestinationHeader = ({ geoJSON, selectedSearchResult }) => {
@@ -82,50 +82,72 @@ const DestinationHeader = ({ geoJSON, selectedSearchResult }) => {
 };
 
 export const DestinationPage = () => {
-  console.log('destination page');
-  const router = useRouter();
-  const { destinationId, id, type, lat, lon } = useSearchParams();
-  const [destination_id, setDestinationId] = useState(destinationId);
-  const [properties, setProperties] = useState({ osm_id: id, osm_type: type });
+  // // console.log('destination page');
+  // const router = useRouter();
+  // const { destinationId, id, type, lat, lon } = useSearchParams();
+  // const [destination_id, setDestinationId] = useState(destinationId);
+  // const [properties, setProperties] = useState({ osm_id: id, osm_type: type });
 
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
-  const matchPhotonFormattingForData = { properties };
-  const { isLoading, isError, data } = useGetPhotonDetails(
-    matchPhotonFormattingForData,
-  );
-  useGetDestination({ destination_id, properties });
+  // const matchPhotonFormattingForData = { properties };
+  // const { isLoading, isError, data } = useGetPhotonDetails(
+  //   matchPhotonFormattingForData,
+  // );
+  // useGetDestination({ destination_id, properties });
 
-  // const photonDetailsStore = useSelector(
-  //   (state) => state.destination.photonDetails,
+  // // const photonDetailsStore = useSelector(
+  // //   (state) => state.destination.photonDetails,
+  // // );
+
+  // const currentDestination = {
+  //   geoJSON: data,
+  // };
+
+  // const geoJSON = currentDestination?.geoJSON;
+  // const selectedSearchResult = useSelector(
+  //   (state) => state.destination.selectedSearchResult,
   // );
 
-  const currentDestination = {
-    geoJSON: data,
-  };
+  // useEffect(() => {
+  //   setDestinationId(destinationId);
+  //   if (destinationId) {
+  //     setProperties({ osm_id: id, osm_type: type });
+  //   }
+  // }, [destinationId]);
 
-  const geoJSON = currentDestination?.geoJSON;
-  const selectedSearchResult = useSelector(
-    (state) => state.destination.selectedSearchResult,
-  );
+  // if (!currentDestination) {
+  //   return null;
+  // }
 
-  useEffect(() => {
-    setDestinationId(destinationId);
-    if (destinationId) {
-      setProperties({ osm_id: id, osm_type: type });
-    }
-  }, [destinationId]);
+  // const shape = geoJSON ?? defaultShape;
 
-  if (!currentDestination) {
-    return null;
-  }
+  // const map = () => <MapContainer shape={shape} />;
 
-  const shape = geoJSON ?? defaultShape;
-
-  const map = () => <MapContainer shape={shape} />;
+  const {
+    destinationId,
+    id,
+    type,
+    lat,
+    lon,
+    destination_id,
+    setDestinationId,
+    properties,
+    setProperties,
+    dispatch,
+    matchPhotonFormattingForData,
+    isLoading,
+    isError,
+    data,
+    currentDestination,
+    geoJSON,
+    selectedSearchResult,
+    shape,
+    map
+  } = useDestinationPage()
 
   return (
     <ScrollView>
