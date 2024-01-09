@@ -3,9 +3,9 @@ export const useScoreProgress = (score, size, strokeWidth) => {
   const circumference = 2 * Math.PI * radius;
   const progress = score / 100;
   const progressPath = progress * circumference;
-  return { 
-    radius, 
-    circumference, 
+  return {
+    radius,
+    circumference,
     progressPath,
   };
 };
