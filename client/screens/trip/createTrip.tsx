@@ -10,7 +10,6 @@ import { GearList } from '../../components/GearList/GearList';
 import { SaveTripContainer } from '~/components/trip/createTripModal';
 import TripDateRange from '~/components/trip/TripDateRange';
 import { useFetchWeather, useFetchWeatherWeak } from '~/hooks/weather';
-// import MultiStepForm from "../multi_step";
 // import { photonDetails } from '../../store/destinationStore';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from '~/hooks/useCustomStyles';
