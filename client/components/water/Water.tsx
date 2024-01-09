@@ -5,8 +5,7 @@ import useCustomStyles from '~/hooks/useCustomStyles';
 import { useWater } from '~/hooks/water';
 
 export default function Water({ currentPack, setWaterItem }) {
-  const { handleWaterChange, addWater, waterWeight } =
-    useWater(currentPack);
+  const { handleWaterChange, addWater, waterWeight } = useWater(currentPack);
   const styles = useCustomStyles(loadStyles);
 
   return (

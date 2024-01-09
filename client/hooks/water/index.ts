@@ -1,1 +1,1 @@
-export * from "./useWater"
+export * from './useWater';

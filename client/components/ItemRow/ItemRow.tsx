@@ -5,7 +5,7 @@ import useCustomStyles from '~/hooks/useCustomStyles';
 import { useItemRow } from '~/hooks/itemrow';
 
 export const ItemRow = ({ packName }) => {
-  const {isChecked, handleChange} = useItemRow();
+  const { isChecked, handleChange } = useItemRow();
   const styles = useCustomStyles(loadStyles);
 
   return (

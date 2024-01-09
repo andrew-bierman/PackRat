@@ -1,1 +1,1 @@
-export * from "./useItemRow"
+export * from './useItemRow';
