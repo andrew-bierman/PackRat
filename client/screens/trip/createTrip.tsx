@@ -6,7 +6,7 @@ import WeatherCard from '../../components/weather/WeatherCard';
 import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { GearList } from '../../components/GearList';
+import { GearList } from '../../components/GearList/GearList';
 import { SaveTripContainer } from '~/components/trip/createTripModal';
 import TripDateRange from '~/components/trip/TripDateRange';
 import { useFetchWeather, useFetchWeatherWeak } from '~/hooks/weather';
