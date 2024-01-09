@@ -1,5 +1,5 @@
-import React, { useContext, useMemo, useState } from 'react';
-import { Dialog } from 'tamagui';
+import React, { useMemo, useState } from 'react';
+import { Button, Dialog } from 'tamagui';
 import { X } from '@tamagui/lucide-icons';
 import RButton from '@packrat/ui/src/RButton';
 import RStack from '@packrat/ui/src/RStack';
@@ -119,7 +119,7 @@ export const BaseModal = ({
             </RStack>
             {footerElement}
             <Dialog.Close asChild>
-              <RButton
+              <Button
                 position="absolute"
                 backgroundColor="transparent"
                 top="$3"
