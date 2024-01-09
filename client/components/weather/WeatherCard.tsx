@@ -1,47 +1,26 @@
-import { getNext4Days } from '../../utils/getNextDays';
-import { dayNumToString } from '../../utils/dayNumToString';
-import { convertToKmh } from '../../utils/convertToKmh';
-import { convertToCelsius } from '../../utils/convertToCelsius';
 import useTheme from '../../hooks/useTheme';
-
-import { Octicons } from '@expo/vector-icons';
-import { FontAwesome5 } from '@expo/vector-icons';
-import { Feather } from '@expo/vector-icons';
-import { FontAwesome } from '@expo/vector-icons';
-
-import { defaultWeatherObject } from '../../constants/defaultWeatherObj';
+import { convertToCelsius } from '../../utils/convertToCelsius';
+import { convertToKmh } from '../../utils/convertToKmh';
+import { dayNumToString } from '../../utils/dayNumToString';
+import {
+  Feather,
+  FontAwesome,
+  FontAwesome5,
+  Octicons,
+} from '@expo/vector-icons';
+import { RImage, RStack, RText } from '@packrat/ui';
 import useCustomStyles from '~/hooks/useCustomStyles';
-import { RStack, RText, RImage } from '@packrat/ui';
-
-const monthArr = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
-];
+import { useDate } from '~/hooks/weather/useDate';
+import { defaultWeatherObject } from '../../constants/defaultWeatherObj';
 
 export default function WeatherCard({
   weatherObject = defaultWeatherObject,
   weatherWeek = [],
 }) {
+  // Hooks
   const { currentTheme } = useTheme();
-
   const styles = useCustomStyles(loadStyles);
-  const date = new Date();
-  const dayOfMonth = date.getDate();
-  const year = date.getFullYear();
-  const day = date.getDay();
-
-  const dateFormatted = `${monthArr[date.getMonth()]} ${dayOfMonth}, ${year}`;
-  const restOfWeek = getNext4Days(day);
+  const { dateFormatted, day, restOfWeek } = useDate();
 
   const weatherIconUrl = `https://openweathermap.org/img/wn/${weatherObject.weather[0].icon}@2x.png`;
 
