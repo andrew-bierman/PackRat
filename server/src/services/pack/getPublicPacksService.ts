@@ -26,7 +26,7 @@ const DEFAULT_SORT = { createdAt: -1 };
  * @param {string} queryBy - Specifies how the public packs should be sorted.
  * @return {Promise<any[]>} An array of public packs.
  */
-export async function getPublicPacksService(queryBy: string = null) {
+export async function getPublicPacksService(queryBy: string = null, page: number, pageSize: number, type: string) {
   try {
     const publicPacksPipeline: any = [
       {
@@ -81,11 +81,17 @@ export async function getPublicPacksService(queryBy: string = null) {
       },
     ];
 
-    const sortCriteria = SORT_OPTIONS[queryBy] || DEFAULT_SORT;
-    publicPacksPipeline.push({ $sort: sortCriteria });
+    if (type === 'pagination') {
+      const skip = (page - 1) * pageSize;
+      publicPacksPipeline.push({ $skip: skip });
+      publicPacksPipeline.push({ $limit: pageSize });
+    } else {
+      const sortCriteria = SORT_OPTIONS[queryBy] || DEFAULT_SORT;
+      publicPacksPipeline.push({ $sort: sortCriteria });
+    }
 
     const publicPacks = await Pack.aggregate(publicPacksPipeline);
-
+    
     return publicPacks;
   } catch (error) {
     throw new Error('Packs cannot be found: ' + error.message);

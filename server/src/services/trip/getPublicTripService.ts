@@ -7,6 +7,9 @@ import Trip from '../../models/tripModel';
  */
 export const getPublicTripsService = async (
   queryBy: string,
+  type: string,
+  page: number,
+  pageSize: number
 ): Promise<object[]> => {
   try {
     const publicTripsPipeline: any[] = [
@@ -55,7 +58,12 @@ export const getPublicTripsService = async (
 
     if (queryBy === 'Favorite') {
       publicTripsPipeline.push({ $sort: { favorites_count: -1 } });
-    } else {
+    } else if (type === 'pagination') {
+      const skip = (page - 1) * pageSize;
+      publicTripsPipeline.push({ $skip: skip });
+      publicTripsPipeline.push({ $limit: pageSize });
+    }
+    else {
       publicTripsPipeline.push({ $sort: { _id: -1 } });
     }
 
