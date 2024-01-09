@@ -1,4 +1,4 @@
-import React, {  useState } from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -40,8 +40,14 @@ const ChatSelector = ({ conversation, onSelect, isActive }) => {
 const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
   const styles = useCustomStyles(loadStyles);
   const {
-      conversations, conversationId, parsedMessages, userInput, handleSendMessage, setUserInput, setConversationId
-  } = useChat({defaultChatId})
+    conversations,
+    conversationId,
+    parsedMessages,
+    userInput,
+    handleSendMessage,
+    setUserInput,
+    setConversationId,
+  } = useChat({ defaultChatId });
 
   return (
     <View style={styles.container}>

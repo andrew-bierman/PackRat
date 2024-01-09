@@ -1,10 +1,9 @@
 import RStack from './RStack';
-import RForm from './RForm'
+import RForm from './RForm';
 import RText from './RText';
 import RCard from './RCard';
 import RParagraph from './Rparagraph';
 import RInput from './RInput';
-import RButton from './RButton';
 import RImage from './RImage';
 import RScrollView from './RScrollview';
 import RSkeleton from './RSkeleton';
@@ -26,7 +25,7 @@ import RH5 from './RH5';
 import RH6 from './RH6';
 import XStack from './XStack';
 import YStack from './YStack';
-
+import RButton from './RButton';
 
 export {
   RH1,
@@ -50,27 +49,26 @@ export {
   RCard,
   RParagraph,
   RInput,
-  RButton,
   RIconButton,
   RImage,
   RScrollView,
   RSkeleton,
   XStack,
-  YStack
+  YStack,
+  RButton,
 };
 
-export { config } from './tamagui.config'
-export * from 'tamagui'
-export * from '@tamagui/toast'
-export * from './toast'
-export * from './list'
+export { config } from './tamagui.config';
+export * from 'tamagui';
+export * from '@tamagui/toast';
+export * from './toast';
+export * from './list';
 
 export * from './RStack';
 export * from './RText';
 export * from './RCard';
 export * from './Rparagraph';
 export * from './RInput';
-export * from './RButton';
 export * from './RImage';
 export * from './RScrollview';
 export * from './Skeleton';
@@ -84,4 +82,4 @@ export * from './YStack';
 // export * from './RToast';
 // export * from './RTooltip';
 
-export * from './ErrorBoundary'
+export * from './ErrorBoundary';
