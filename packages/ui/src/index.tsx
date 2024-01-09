@@ -25,7 +25,7 @@ import RH5 from './RH5';
 import RH6 from './RH6';
 import XStack from './XStack';
 import YStack from './YStack';
-export * from './button';
+import RButton from './RButton';
 
 export {
   RH1,
@@ -55,6 +55,7 @@ export {
   RSkeleton,
   XStack,
   YStack,
+  RButton,
 };
 
 export { config } from './tamagui.config';
