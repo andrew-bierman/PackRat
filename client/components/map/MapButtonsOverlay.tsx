@@ -227,9 +227,9 @@ const loadStyles = (theme) => {
     container: {
       alignItems: 'center',
       justifyContent: 'center',
-      height: '400px',
+      height: 400,
       width: '100%',
-      borderRadius: '10px',
+      borderRadius: 10,
     },
     map: {
       width: '100%',

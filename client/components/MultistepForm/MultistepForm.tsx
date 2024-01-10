@@ -45,7 +45,7 @@ const loadStyles = (theme) => {
 
   return {
     container: {
-      height: '800px',
+      height: 800,
       backgroundColor: currentTheme.colors.white,
       alignItems: 'center',
       justifyContent: 'center',

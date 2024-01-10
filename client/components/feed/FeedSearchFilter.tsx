@@ -76,7 +76,7 @@ const FeedSearchFilter = ({
       >
         {feedType === 'public' && (
           <RStack
-            style={{ flexDirection: 'row', gap: '10px', alignItems: 'center' }}
+            style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}
           >
             <RText
               fontSize={18}
@@ -114,7 +114,7 @@ const FeedSearchFilter = ({
           </RStack>
         )}
         <RStack
-          style={{ flexDirection: 'row', gap: '10px', alignItems: 'center' }}
+          style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}
         >
           <RText
             fontSize={17}
