@@ -27,6 +27,7 @@ export const AddPack = ({ isCreatingTrip = false }) => {
     isLoading,
     name,
     setIsPublic,
+    isPublic,
     setName,
   } = useAddNewPack();
 
@@ -60,7 +61,7 @@ export const AddPack = ({ isCreatingTrip = false }) => {
         />
         <RLabel>Is Public:</RLabel>
         <DropdownComponent
-          // value={isPublic}
+          value={isPublic}
           onValueChange={handleonValueChange}
           data={packSelectOptions}
           width="300px"

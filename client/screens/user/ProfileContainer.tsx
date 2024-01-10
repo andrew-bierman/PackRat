@@ -8,7 +8,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'expo-router';
 import useCustomStyles from '~/hooks/useCustomStyles';
-import Avatar from '../../components/Avatar';
+import Avatar from '../../components/Avatar/Avatar';
 import { useProfile } from '~/hooks/user';
 
 const SettingsButton = () => {
