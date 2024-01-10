@@ -42,11 +42,16 @@ module.exports = {
     },
     ecmaVersion: 'latest',
     sourceType: 'module',
-    project: './tsconfig.json',
+    project: './client/tsconfig.json',
   },
   plugins: ['react', 'react-native', '@typescript-eslint', 'prettier'],
   rules: {
-    'prettier/prettier': 'error',
+    'prettier/prettier': [
+      "error",
+      {
+        endOfLine: 'auto'
+      }
+    ],
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/prefer-nullish-coalescing': 'off',
     '@typescript-eslint/strict-boolean-expressions': 'off',
