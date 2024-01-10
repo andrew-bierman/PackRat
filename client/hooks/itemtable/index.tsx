@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Text } from 'react-native';
 import { Row } from 'react-native-table-component';
 import { RStack } from '@packrat/ui';
@@ -21,7 +21,7 @@ const useItemsTable = ({ styles, page, setPage }) => {
     );
   };
 
-  const TableItem = ({ itemData }) => {
+  const TableItem = useCallback(({ itemData }) => {
     const { name, weight, category, quantity, unit, _id, type } = itemData;
 
     const rowData = [
@@ -50,23 +50,23 @@ const useItemsTable = ({ styles, page, setPage }) => {
       />,
     ];
     return <Row data={rowData} style={styles.row} flexArr={flexArr} />;
-  };
+  }, []);
   /**
    * Handles the logic for navigating to the next page.
    *
    * @return {undefined} This function doesn't return anything.
    */
-  const handleNextPage = () => {
+  const handleNextPage = useCallback(() => {
     setPage(page + 1);
-  };
+  }, [setPage]);
   /**
    * Handles the action of going to the previous page.
    *
    * @return {undefined} There is no return value.
    */
-  const handlePreviousPage = () => {
+  const handlePreviousPage = useCallback(() => {
     setPage(page - 1);
-  };
+  }, [setPage]);
 
   return {
     TitleRow,
