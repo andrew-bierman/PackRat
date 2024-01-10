@@ -2,11 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'expo-router';
 import useTheme from '~/hooks/useTheme';
 import { useDispatch, useSelector } from 'react-redux';
-import MapContainer from '~/components/map/MapContainer';
-import {
-  defaultShape,
-} from '~/utils/mapFunctions';
-import useCustomStyles from '~/hooks/useCustomStyles';
+import MapContainer from '~/components/map/MapContainer.web';
+import { defaultShape } from '~/utils/mapFunctions';
 import { useGetDestination, useGetPhotonDetails } from '~/hooks/destination';
 
 const useDestinationPage = () => {
@@ -16,15 +13,13 @@ const useDestinationPage = () => {
   const [destination_id, setDestinationId] = useState(destinationId);
   const [properties, setProperties] = useState({ osm_id: id, osm_type: type });
 
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    useTheme();
   const dispatch = useDispatch();
 
   const matchPhotonFormattingForData = { properties };
   const { isLoading, isError, data } = useGetPhotonDetails(
     matchPhotonFormattingForData,
   );
-  useGetDestination({ destination_id, properties });
+  useGetDestination({ destinationId: destination_id, properties });
 
   // const photonDetailsStore = useSelector(
   //   (state) => state.destination.photonDetails,
@@ -73,8 +68,8 @@ const useDestinationPage = () => {
     geoJSON,
     selectedSearchResult,
     shape,
-    map
-  }
-}
+    map,
+  };
+};
 
-export {useDestinationPage}
+export { useDestinationPage };
