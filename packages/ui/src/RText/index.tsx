@@ -10,10 +10,12 @@
 
 // export default PRText;
 
-import { Paragraph, styled } from "tamagui";
+import { Paragraph, styled } from 'tamagui';
+import { Text } from 'react-native';
 
 const RText = styled(Paragraph, {
-    fontFamily: "$body",
-    });
+  fontFamily: '$body',
+});
 
-export default RText;
+export default Text;
+// export default RText;
