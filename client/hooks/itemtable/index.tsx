@@ -72,6 +72,6 @@ const useItemsTable = ({ styles, page, setPage }) => {
     handleNextPage,
     handlePreviousPage,
   };
-}
+};
 
-export default useItemsTable
+export default useItemsTable;

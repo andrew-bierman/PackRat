@@ -1,7 +1,7 @@
 import React, { useCallback, useRef, useState } from 'react';
 
 const useCarousel = ({ children = [], itemWidth }) => {
-  const scrollViewRef = useRef<{scrollTo: any}>();
+  const scrollViewRef = useRef<{ scrollTo: any }>();
   const [currentIndex, setCurrentIndex] = useState(0);
 
   /**
@@ -13,30 +13,33 @@ const useCarousel = ({ children = [], itemWidth }) => {
     const contentOffset = event.nativeEvent.contentOffset;
     const newIndex = Math.round(contentOffset.x / itemWidth);
     setCurrentIndex(newIndex);
-  }, [])
+  }, []);
 
   /**
    * Scrolls to the specified index.
    *
    * @param {number} index - The index to scroll to.
    */
-  const scrollToIndex = useCallback( (index: number) => {
-    if (index >= 0 && index < children.length && scrollViewRef.current) {
-      scrollViewRef.current.scrollTo({
-        x: index * (itemWidth + 20),
-        y: 0,
-        animated: true,
-      });
-      setCurrentIndex(index);
-    }
-  }, [scrollViewRef, setCurrentIndex, children]);
+  const scrollToIndex = useCallback(
+    (index: number) => {
+      if (index >= 0 && index < children.length && scrollViewRef.current) {
+        scrollViewRef.current.scrollTo({
+          x: index * (itemWidth + 20),
+          y: 0,
+          animated: true,
+        });
+        setCurrentIndex(index);
+      }
+    },
+    [scrollViewRef, setCurrentIndex, children],
+  );
 
   return {
     scrollViewRef,
     currentIndex,
     handleScroll,
-    scrollToIndex
-  }
-}
+    scrollToIndex,
+  };
+};
 
-export default useCarousel
+export default useCarousel;

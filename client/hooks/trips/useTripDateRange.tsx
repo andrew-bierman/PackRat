@@ -1,11 +1,7 @@
 import React, { useEffect } from 'react';
-import {
-  enGB,
-  registerTranslation,
-} from 'react-native-paper-dates';
+import { enGB, registerTranslation } from 'react-native-paper-dates';
 
 const useTripDateRange = ({ setDateRange }) => {
-
   const [open, setOpen] = React.useState(false);
 
   const onDismiss = React.useCallback(() => {
@@ -28,9 +24,8 @@ const useTripDateRange = ({ setDateRange }) => {
     open,
     setOpen,
     onDismiss,
-    onConfirm
-  }
+    onConfirm,
+  };
+};
 
-}
-
-export default useTripDateRange
+export default useTripDateRange;

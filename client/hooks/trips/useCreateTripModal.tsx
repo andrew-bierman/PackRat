@@ -105,6 +105,6 @@ const useSaveTripContainer = ({ dateRange }) => {
     setIsPublic,
     handleCreateTrip,
   };
-}
+};
 
-export default useSaveTripContainer
+export default useSaveTripContainer;

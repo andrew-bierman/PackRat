@@ -1,7 +1,6 @@
 import { isObjectEmpty } from '../../utils/isObjectEmpty';
 
 const useHero = ({ imageDetails }) => {
-
   if (isObjectEmpty(imageDetails || {})) {
     imageDetails = {
       title: 'N/A',
@@ -10,9 +9,8 @@ const useHero = ({ imageDetails }) => {
       alt: 'hero',
     };
   }
-  
-  return { ...imageDetails }
 
-}
+  return { ...imageDetails };
+};
 
-export default useHero
+export default useHero;
