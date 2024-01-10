@@ -62,12 +62,12 @@ describe('USER', () => {
     expect(result._id.toString()).toEqual(user.id);
   })
 
-  // it('Should can get All user', async() =>{
+  it('Should can get All user', async() =>{
 
-  //   const users = await caller.getUsers()
-  //   expect(users).toBeDefined()
+    const users = await caller.getUsers()
+    expect(users).toBeDefined()
   
-  // }, 160000) // Should can get All user (153143 ms) => need 150000+ timeout
+  }, 160000) // Should can get All user (153143 ms) => need 150000+ timeout
 
   it('Should can edit a user by his ID', async() =>{
 
@@ -114,7 +114,6 @@ describe('USER', () => {
     
   })
 
-
   it('Should can get Google Auth URL', async() =>{
 
     const auth = await caller.getGoogleAuthURL()
@@ -141,6 +140,12 @@ describe('USER', () => {
 
     expect(remove).toEqual('User deleted successfully');
   })
+
+  // TODO getMe
+  // TODO resetPassword
+  // TODO googleSignin
+  // TODO checkCode
+  // TODO resetPasswordEmail
 
 })
 
