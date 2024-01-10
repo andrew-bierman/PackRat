@@ -2,8 +2,8 @@ CREATE TABLE `conversation` (
 	`id` text PRIMARY KEY NOT NULL,
 	`user_id` text NOT NULL,
 	`history` text NOT NULL,
-	`created_at` integer DEFAULT CURRENT_TIMESTAMP,
-	`updated_at` integer DEFAULT CURRENT_TIMESTAMP
+	`created_at` text DEFAULT CURRENT_TIMESTAMP,
+	`updated_at` text DEFAULT CURRENT_TIMESTAMP
 );
 --> statement-breakpoint
 CREATE TABLE `geojson` (
@@ -12,8 +12,8 @@ CREATE TABLE `geojson` (
 	`geo_json_id` text NOT NULL,
 	`properties` text,
 	`geometry` text NOT NULL,
-	`created_at` integer DEFAULT CURRENT_TIMESTAMP,
-	`updated_at` integer DEFAULT CURRENT_TIMESTAMP
+	`created_at` text DEFAULT CURRENT_TIMESTAMP,
+	`updated_at` text DEFAULT CURRENT_TIMESTAMP
 );
 --> statement-breakpoint
 CREATE TABLE `item` (
@@ -24,16 +24,16 @@ CREATE TABLE `item` (
 	`unit` text NOT NULL,
 	`category` text,
 	`global` integer DEFAULT false,
-	`created_at` integer DEFAULT CURRENT_TIMESTAMP,
-	`updated_at` integer DEFAULT CURRENT_TIMESTAMP,
+	`created_at` text DEFAULT CURRENT_TIMESTAMP,
+	`updated_at` text DEFAULT CURRENT_TIMESTAMP,
 	FOREIGN KEY (`category`) REFERENCES `item_category`(`id`) ON UPDATE no action ON DELETE set null
 );
 --> statement-breakpoint
 CREATE TABLE `item_category` (
 	`id` text PRIMARY KEY NOT NULL,
 	`name` text,
-	`created_at` integer DEFAULT CURRENT_TIMESTAMP,
-	`updated_at` integer DEFAULT CURRENT_TIMESTAMP
+	`created_at` text DEFAULT CURRENT_TIMESTAMP,
+	`updated_at` text DEFAULT CURRENT_TIMESTAMP
 );
 --> statement-breakpoint
 CREATE TABLE `item_owners` (
@@ -58,8 +58,8 @@ CREATE TABLE `node` (
 	`lat` real,
 	`lon` real,
 	`tags` text,
-	`created_at` integer DEFAULT CURRENT_TIMESTAMP,
-	`updated_at` integer
+	`created_at` text DEFAULT CURRENT_TIMESTAMP,
+	`updated_at` text DEFAULT CURRENT_TIMESTAMP
 );
 --> statement-breakpoint
 CREATE TABLE `pack` (
@@ -73,8 +73,8 @@ CREATE TABLE `pack` (
 	`total_weight` real,
 	`total_score` integer DEFAULT 0,
 	`favorites_count` integer DEFAULT 0,
-	`created_at` integer DEFAULT CURRENT_TIMESTAMP,
-	`updated_at` integer DEFAULT CURRENT_TIMESTAMP,
+	`created_at` text DEFAULT CURRENT_TIMESTAMP,
+	`updated_at` text DEFAULT CURRENT_TIMESTAMP,
 	FOREIGN KEY (`owner_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE set null
 );
 --> statement-breakpoint
@@ -85,8 +85,8 @@ CREATE TABLE `relation` (
 	`tags` text,
 	`members` text,
 	`geo_json` text,
-	`updated_at` integer,
-	`created_at` integer DEFAULT CURRENT_TIMESTAMP
+	`created_at` text DEFAULT CURRENT_TIMESTAMP,
+	`updated_at` text DEFAULT CURRENT_TIMESTAMP
 );
 --> statement-breakpoint
 CREATE TABLE `template` (
@@ -95,8 +95,8 @@ CREATE TABLE `template` (
 	`template_id` text NOT NULL,
 	`is_global_template` integer DEFAULT false,
 	`created_by` text,
-	`created_at` integer DEFAULT CURRENT_TIMESTAMP,
-	`updated_at` integer DEFAULT CURRENT_TIMESTAMP,
+	`created_at` text DEFAULT CURRENT_TIMESTAMP,
+	`updated_at` text DEFAULT CURRENT_TIMESTAMP,
 	FOREIGN KEY (`created_by`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE set null
 );
 --> statement-breakpoint
@@ -113,8 +113,8 @@ CREATE TABLE `trip` (
 	`packs` text,
 	`is_public` integer,
 	`type` text DEFAULT 'trip',
-	`created_at` integer DEFAULT CURRENT_TIMESTAMP,
-	`updated_at` integer DEFAULT CURRENT_TIMESTAMP,
+	`created_at` text DEFAULT CURRENT_TIMESTAMP,
+	`updated_at` text DEFAULT CURRENT_TIMESTAMP,
 	FOREIGN KEY (`owner_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE set null,
 	FOREIGN KEY (`packs`) REFERENCES `pack`(`id`) ON UPDATE no action ON DELETE set null
 );
@@ -143,7 +143,8 @@ CREATE TABLE `user` (
 	`profile_image` text,
 	`preferred_weather` text,
 	`preferred_weight` text,
-	`created_at` integer DEFAULT CURRENT_TIMESTAMP
+	`created_at` text DEFAULT CURRENT_TIMESTAMP,
+	`updated_at` text DEFAULT CURRENT_TIMESTAMP
 );
 --> statement-breakpoint
 CREATE TABLE `user_favorite_packs` (
@@ -160,8 +161,8 @@ CREATE TABLE `way` (
 	`osm_type` text,
 	`tags` text,
 	`geo_json` text,
-	`created_at` integer DEFAULT CURRENT_TIMESTAMP,
-	`updated_at` integer
+	`created_at` text DEFAULT CURRENT_TIMESTAMP,
+	`updated_at` text DEFAULT CURRENT_TIMESTAMP
 );
 --> statement-breakpoint
 CREATE TABLE `way_nodes` (

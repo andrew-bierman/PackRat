@@ -1,6 +1,7 @@
 import { publicProcedure } from '../../trpc';
 import { TemplateNotFoundError } from '../../helpers/errors';
 import { z } from 'zod';
+import { Template } from '../../drizzle/methods/template';
 
 // import { prisma } from '../../prisma';
 
@@ -31,23 +32,14 @@ import { z } from 'zod';
 // };
 
 export function deleteTemplateRoute() {
+  const templateClass = new Template();
   return publicProcedure
     .input(z.object({ templateId: z.string() }))
     .mutation(async (opts) => {
       const { templateId } = opts.input;
-      const prisma: PrismaClient = (opts.ctx as any).prisma;
-
-      const template = await prisma.template.findUnique({
-        where: {
-          id: templateId,
-        },
-      });
+      const template = await templateClass.findTemplate(templateId);
       if (template) {
-        await prisma.template.delete({
-          where: {
-            id: templateId,
-          },
-        });
+        await templateClass.delete(templateId);
         return { message: 'Template removed' };
       } else {
         throw new Error(TemplateNotFoundError.message);

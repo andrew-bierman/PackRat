@@ -1,10 +1,8 @@
 import { publicProcedure } from '../../trpc';
 import { TemplateNotFoundError } from '../../helpers/errors';
-import { responseHandler } from '../../helpers/responseHandler';
-
+// import { responseHandler } from '../../helpers/responseHandler';
 import { z } from 'zod';
-import { type PrismaClient } from '@prisma/client/edge';
-import { Template } from '../../prisma/methods';
+import { Template } from '../../drizzle/methods/template';
 
 // import { prisma } from '../../prisma';
 /**
@@ -37,24 +35,15 @@ import { Template } from '../../prisma/methods';
 // };
 
 export function getTemplateByIdRoute() {
+  const templateClass = new Template();
   return publicProcedure
     .input(z.object({ templateId: z.string() }))
     .query(async (opts) => {
       const { templateId } = opts.input;
-      const prisma: PrismaClient = (opts.ctx as any).prisma;
-
-      const template = await prisma.template.findUnique({
-        where: {
-          id: templateId,
-        },
-        include: {
-          createdByDocument: {
-            select: {
-              username: true,
-            },
-          },
-        },
-      });
-      return Template(template)?.toJSON();
+      const template = await templateClass.findTemplate(templateId, true);
+      if (!template) {
+        throw new Error(TemplateNotFoundError.message);
+      }
+      return template;
     });
 }

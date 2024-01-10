@@ -36,12 +36,8 @@ export const user = sqliteTable('user', {
   profileImage: text('profile_image'),
   preferredWeather: text('preferred_weather'),
   preferredWeight: text('preferred_weight'),
-  createdAt: integer('created_at', { mode: 'timestamp' }).default(
-    sql`CURRENT_TIMESTAMP`,
-  ),
-  updatedAt: integer('created_at', { mode: 'timestamp' }).default(
-    sql`CURRENT_TIMESTAMP`,
-  ),
+  createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`),
 });
 
 export const userFavoritePacks = sqliteTable(
@@ -113,12 +109,8 @@ export const pack = sqliteTable('pack', {
   total_weight: real('total_weight'),
   total_score: integer('total_score').default(0),
   favorites_count: integer('favorites_count').default(0),
-  createdAt: integer('created_at', { mode: 'timestamp' }).default(
-    sql`CURRENT_TIMESTAMP`,
-  ),
-  updatedAt: integer('updated_at', { mode: 'timestamp' }).default(
-    sql`CURRENT_TIMESTAMP`,
-  ),
+  createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`),
   // @@map("packs"): undefined,
 });
 
@@ -137,13 +129,8 @@ export const itemCategory = sqliteTable('item_category', {
     .primaryKey()
     .$defaultFn(() => createId()),
   name: text('name', { enum: ['Food', 'Water', 'Essentials'] }),
-  createdAt: integer('created_at', { mode: 'timestamp' }).default(
-    sql`CURRENT_TIMESTAMP`,
-  ),
-  updatedAt: integer('updated_at', { mode: 'timestamp' }).default(
-    sql`CURRENT_TIMESTAMP`,
-  ),
-
+  createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`),
   // @@map("itemcategories"): undefined,
 });
 
@@ -163,13 +150,8 @@ export const item = sqliteTable('item', {
     onDelete: 'set null',
   }),
   global: integer('global', { mode: 'boolean' }).default(false),
-  createdAt: integer('created_at', { mode: 'timestamp' }).default(
-    sql`CURRENT_TIMESTAMP`,
-  ),
-  updatedAt: integer('updated_at', { mode: 'timestamp' }).default(
-    sql`CURRENT_TIMESTAMP`,
-  ),
-
+  createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`),
   // @@map("items"): undefined,
 });
 
@@ -253,12 +235,8 @@ export const template = sqliteTable('template', {
   createdBy: text('created_by').references(() => user.id, {
     onDelete: 'set null',
   }),
-  createdAt: integer('created_at', { mode: 'timestamp' }).default(
-    sql`CURRENT_TIMESTAMP`,
-  ),
-  updatedAt: integer('updated_at', { mode: 'timestamp' }).default(
-    sql`CURRENT_TIMESTAMP`,
-  ),
+  createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`),
   // @@map("templates"): undefined,
 });
 
@@ -286,13 +264,8 @@ export const trip = sqliteTable('trip', {
   packs: text('packs').references(() => pack.id, { onDelete: 'set null' }),
   is_public: integer('is_public', { mode: 'boolean' }),
   type: text('type').default('trip'),
-  createdAt: integer('created_at', { mode: 'timestamp' }).default(
-    sql`CURRENT_TIMESTAMP`,
-  ),
-  updatedAt: integer('updated_at', { mode: 'timestamp' }).default(
-    sql`CURRENT_TIMESTAMP`,
-  ),
-
+  createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`),
   // @@map("trips"): undefined,
 });
 
@@ -333,13 +306,8 @@ export const conversation = sqliteTable('conversation', {
     .$defaultFn(() => createId()),
   userId: text('user_id').notNull(),
   history: text('history').notNull(),
-  createdAt: integer('created_at', { mode: 'timestamp' }).default(
-    sql`CURRENT_TIMESTAMP`,
-  ),
-  updatedAt: integer('updated_at', { mode: 'timestamp' }).default(
-    sql`CURRENT_TIMESTAMP`,
-  ),
-
+  createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`),
   // @@map("conversations"): undefined,
 });
 
@@ -351,10 +319,8 @@ export const way = sqliteTable('way', {
   osm_type: text('osm_type'),
   tags: text('tags', { mode: 'json' }).$type<Object>(),
   geoJSON: text('geo_json', { mode: 'json' }).$type<Object>(),
-  createdAt: integer('created_at', { mode: 'timestamp' }).default(
-    sql`CURRENT_TIMESTAMP`,
-  ),
-  updatedAt: integer('updated_at', { mode: 'timestamp' }),
+  createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`),
   // @@map("ways"): undefined,
 });
 
@@ -397,10 +363,8 @@ export const node = sqliteTable('node', {
   lat: real('lat'),
   lon: real('lon'),
   tags: text('tags', { mode: 'json' }).$type<Record<string, string>>(),
-  createdAt: integer('created_at', { mode: 'timestamp' }).default(
-    sql`CURRENT_TIMESTAMP`,
-  ),
-  updatedAt: integer('updated_at', { mode: 'timestamp' }),
+  createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`),
   // @@map("nodes"): undefined,
 });
 
@@ -419,11 +383,8 @@ export const relation = sqliteTable('relation', {
     Array<{ type: string; refId: number; role: string }>
   >(),
   geoJSON: text('geo_json', { mode: 'json' }).$type<Object>(),
-  updatedAt: integer('updated_at', { mode: 'timestamp' }),
-  createdAt: integer('created_at', { mode: 'timestamp' }).default(
-    sql`CURRENT_TIMESTAMP`,
-  ),
-
+  createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`),
   // @@map("relations"): undefined,
 });
 
@@ -446,12 +407,8 @@ export const geojson = sqliteTable('geojson', {
       coordinates: Array<number | number[]>;
     }>()
     .notNull(),
-  createdAt: integer('created_at', { mode: 'timestamp' }).default(
-    sql`CURRENT_TIMESTAMP`,
-  ),
-  updatedAt: integer('updated_at', { mode: 'timestamp' }).default(
-    sql`CURRENT_TIMESTAMP`,
-  ),
+  createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`),
 });
 
 export const geojsonRelations = relations(geojson, ({ many }) => ({
@@ -484,3 +441,8 @@ export type TripGeoJson = InferSelectModel<typeof tripGeojsons>;
 export type InsertTripGeoJson = InferInsertModel<typeof tripGeojsons>;
 export const insertTripGeoJsonSchema = createInsertSchema(tripGeojsons);
 export const selectTripGeoJsonSchema = createSelectSchema(tripGeojsons);
+
+export type Template = InferSelectModel<typeof template>;
+export type InsertTemplate = InferInsertModel<typeof template>;
+export const insertTemplateSchema = createInsertSchema(template);
+export const selectTemplateSchema = createSelectSchema(template);
