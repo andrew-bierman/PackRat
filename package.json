@@ -109,5 +109,9 @@
     "packing checklist app",
     "packing list app",
     "packing planner app"
-  ]
+  ],
+  "devDependencies": {
+    "@babel/preset-env": "^7.23.8",
+    "babel-jest": "^29.7.0"
+  }
 }
