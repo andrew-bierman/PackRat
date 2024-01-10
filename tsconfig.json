@@ -1,0 +1,36 @@
+{
+  // "extends": "@tsconfig/react-native/tsconfig.json",
+  "extends":"expo/tsconfig.base",
+  "compilerOptions": {
+    // "lib": ["es2022"],
+    "alwaysStrict": false,
+    "strictNullChecks": false,
+    "strictBindCallApply": false,
+    "strictFunctionTypes": false,
+    "strictPropertyInitialization": false,
+    "noImplicitAny": false,
+    "noImplicitThis": false,
+    "useUnknownInCatchVariables": false,
+    "noUncheckedIndexedAccess": true,
+    "baseUrl": ".",
+    "paths": {
+      "~/config/*": ["config/*"],
+      "~/constants/*": ["constants/*"],
+      "~/components/*": ["components/*"],
+      "~/context/*": ["context/*"],
+      "~/utils/*": ["utils/*"],
+      "~/hooks/*": ["hooks/*"],
+      "~/screens/*": ["screens/*"],
+      "~/theme/*": ["theme/*"],
+     "~/store/*": ["store/*"],
+      "@trpc": ["../server/src/routes/index"],
+      "app/*": ["./packages/app/*"]
+    },
+  },
+  "exclude": [
+    "node_modules",
+    "babel.config.js",
+    "metro.config.js",
+    "jest.config.js"
+  ]
+}
