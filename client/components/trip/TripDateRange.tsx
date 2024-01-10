@@ -13,9 +13,10 @@ import { RStack, RText, RButton } from '@packrat/ui';
 import useTripDateRange from '~/hooks/trips/useTripDateRange';
 
 const TripDateRange = ({ dateRange, setDateRange }) => {
-
   const { currentTheme } = useTheme();
-  const { open, setOpen, onDismiss, onConfirm } = useTripDateRange({ setDateRange })
+  const { open, setOpen, onDismiss, onConfirm } = useTripDateRange({
+    setDateRange,
+  });
 
   return (
     <RStack

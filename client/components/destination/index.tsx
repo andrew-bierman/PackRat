@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from 'expo-router';
 import useTheme from '../../hooks/useTheme';
 import { theme } from '../../theme';
 import { useDispatch, useSelector } from 'react-redux';
-import MapContainer from '../map/MapContainer';
+// import MapContainer from '../map/MapContainer';
 import {
   defaultShape,
   convertPhotonGeoJsonToShape,
@@ -25,7 +25,11 @@ import {
 import { fetchWeather, fetchWeatherWeek } from '../../store/weatherStore';
 import useCustomStyles from '~/hooks/useCustomStyles';
 import { useFetchWeather, useFetchWeatherWeak } from '~/hooks/weather';
-import { useDestinationPage, useGetDestination, useGetPhotonDetails } from '~/hooks/destination';
+import {
+  useDestinationPage,
+  useGetDestination,
+  useGetPhotonDetails,
+} from '~/hooks/destination';
 import { WeatherData } from '../weather/WeatherData';
 
 const DestinationHeader = ({ geoJSON, selectedSearchResult }) => {
@@ -146,8 +150,8 @@ export const DestinationPage = () => {
     geoJSON,
     selectedSearchResult,
     shape,
-    map
-  } = useDestinationPage()
+    map,
+  } = useDestinationPage();
 
   return (
     <ScrollView>

@@ -8,14 +8,9 @@ import useCarousel from '~/hooks/carousel';
 const { height, width } = Dimensions.get('window');
 
 const Carousel = ({ children = [], itemWidth }) => {
-
   const styles = useCustomStyles(loadStyles);
-  const {
-    scrollViewRef,
-    currentIndex,
-    handleScroll,
-    scrollToIndex
-  } = useCarousel({ children, itemWidth })
+  const { scrollViewRef, currentIndex, handleScroll, scrollToIndex } =
+    useCarousel({ children, itemWidth });
 
   return (
     <RStack

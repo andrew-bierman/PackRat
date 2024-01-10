@@ -7,9 +7,8 @@ import useCustomStyles from '~/hooks/useCustomStyles';
 import useHero from '~/hooks/hero';
 
 const Hero = ({ children, imageDetails }) => {
-
   const styles = useCustomStyles(loadStyles);
-  const { source, alt } = useHero({ imageDetails })
+  const { source, alt } = useHero({ imageDetails });
 
   return (
     <View
