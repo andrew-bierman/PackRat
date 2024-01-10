@@ -11,7 +11,7 @@ export const flexArr = [2, 1, 1, 1, 0.65, 0.65, 0.65];
 const useItemsTable = ({ styles, page, setPage }) => {
   const TitleRow = ({ title }) => {
     const rowData = [
-      <RStack style={{ flexDirection: 'row', ...styles.mainTitle }}>
+      <RStack key={0} style={{ flexDirection: 'row', ...styles.mainTitle }}>
         <Text style={styles.titleText}>{title}</Text>
       </RStack>,
     ];
@@ -30,6 +30,7 @@ const useItemsTable = ({ styles, page, setPage }) => {
       quantity,
       `${category?.name || type}`,
       <EditPackItemModal
+        key={0}
         closeModalHandler
         initialData={itemData}
         editAsDuplicate={false}
@@ -42,6 +43,7 @@ const useItemsTable = ({ styles, page, setPage }) => {
         onTrigger={null} */
       />,
       <DeletePackItemModal
+        key={0}
         itemId={_id}
         /* need to fix these warnings */
         /* pack={null} */
