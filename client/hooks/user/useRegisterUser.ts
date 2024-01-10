@@ -1,9 +1,7 @@
 import { useForm, type UseFormReturn } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
-import * as WebBrowser from 'expo-web-browser';
 import { signUp } from '../../store/authStore';
 import { useSession } from '../../context/auth';
-WebBrowser.maybeCompleteAuthSession();
 
 interface RegisterForm {
   name: string;
