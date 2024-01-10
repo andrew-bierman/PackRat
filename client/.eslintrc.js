@@ -77,6 +77,7 @@ module.exports = {
     '@typescript-eslint/await-thenable': 'off',
     '@typescript-eslint/prefer-optional-chain': 'off',
     '@typescript-eslint/return-await': 'off',
+    'react/prop-types': 0
   },
   settings: {
     react: {
