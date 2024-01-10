@@ -83,8 +83,10 @@
   },
   "devDependencies": {
     "@babel/preset-env": "^7.23.8",
+    "@anatine/zod-mock": "^3.13.3",
     "@faker-js/faker": "^8.3.1",
     "@openapitools/openapi-generator-cli": "^2.7.0",
+    "@types/jest": "^29.5.11",
     "@typescript-eslint/eslint-plugin": "^6.4.1",
     "babel-jest": "^29.7.0",
     "cross-env": "^7.0.3",
@@ -115,6 +117,7 @@
       "<rootDir>/generated/test/?(*.)+(spec|test).[jt]s?(x)",
       "**/__tests__/**/*.[jt]s?(x)",
       "**/?(*.)+(spec|test).[tj]s?(x)"
+
     ],
     "transform": {
       "^.+\\.js$": "babel-jest"

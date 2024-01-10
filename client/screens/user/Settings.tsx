@@ -10,7 +10,7 @@ import {
   RScrollView,
   RLabel,
 } from '@packrat/ui';
-import Avatar from '~/components/Avatar';
+import Avatar from '~/components/Avatar/Avatar';
 import DropdownComponent from '../../components/Dropdown';
 import { useProfileSettings } from '~/hooks/user';
 
