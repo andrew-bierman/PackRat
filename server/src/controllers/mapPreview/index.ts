@@ -7,15 +7,6 @@ import axios from 'axios';
 import { MAPBOX_ACCESS_TOKEN } from '../../config';
 import { MapPreviewError } from '../../helpers/errors';
 
-function safelyConvertToString(val: unknown): string {
-  if (val === null) return 'null';
-  if (typeof val === 'object') {
-    // Handle object conversion. This could be JSON.stringify or a custom method.
-    return JSON.stringify(val);
-  }
-  return String(val); // Fallback for all other types
-}
-
 /**
  *  Responds with map preview image from mapbox api
  *
@@ -32,11 +23,10 @@ export default async function getMapPreview(
   try {
     const queryParams = Object.entries(req.query).reduce(
       (acc, [key, val], i, arr) =>
-        `${acc}${key}=${safelyConvertToString(val)}${
-          i == arr.length - 1 ? '' : '&'
-        }`,
+        `${acc}${key}=${val}${i == arr.length - 1 ? '' : '&'}`,
       '',
     );
+
     const { data } = await axios.get(
       `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/${req.originalUrl
         .replace('/api', '')
@@ -51,6 +41,7 @@ export default async function getMapPreview(
     res.setHeader('Content-Type', 'image/png');
     res.send(data);
   } catch (error) {
+    console.log(error);
     next(MapPreviewError);
   }
 }
