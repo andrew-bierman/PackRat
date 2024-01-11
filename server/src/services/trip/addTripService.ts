@@ -1,58 +1,17 @@
-import { Trip, TripGeoJson } from '../../drizzle/methods/trip';
+import { Trip } from '../../drizzle/methods/trip';
+import { TripGeoJson } from '../../drizzle/methods/TripGeoJson';
 
-export const addTripService = async (tripDetails) => {
+export const addTripService = async (tripData: any, geojson_id: string) => {
   try {
-    const {
-      name,
-      description,
-      duration,
-      weather,
-      start_date,
-      end_date,
-      destination,
-      geoJSON,
-      owner_id,
-      packs,
-      is_public,
-    } = tripDetails;
-    // Instanciation
-    const tripGeoJson = new TripGeoJson();
+    const tripGeoJsonClass = new TripGeoJson();
     const tripClass = new Trip();
+    // Create Trip
+    const newTrip = await tripClass.create(tripData);
 
-    // create geojsons
-    const savedGeoJSONs = await Promise.all(
-      geoJSON.features.map(async (feature) => {
-        // return await geoJsonInstance.create(feature); //TODO
-      }),
-    );
-
-    // extract ids
-    const geojsonIds = savedGeoJSONs.map((feature) => feature.id);
-
-    // Add trip
-    const newTrip = await tripClass.create({
-      name,
-      description,
-      duration,
-      weather,
-      start_date,
-      end_date,
-      destination,
-      is_public,
-      owner_id,
-      packs,
+    await tripGeoJsonClass.create({
+      tripId: newTrip.id,
+      geojsonId: geojson_id,
     });
-
-    // Many to many relation
-    await Promise.all(
-      geojsonIds.map(async (geojsonId) => {
-        await tripGeoJson.create({
-          tripId: newTrip.id,
-          geojsonId,
-        });
-      }),
-    );
-
     return newTrip;
   } catch (error) {
     console.error(error);
@@ -65,7 +24,7 @@ export const addTripService = async (tripDetails) => {
 
 // export const addTripService = async (
 //   prisma: PrismaClient,
-//   tripDetails,
+//   tripData,
 // ): Promise<any> => {
 //   try {
 //     const {
@@ -80,7 +39,7 @@ export const addTripService = async (tripDetails) => {
 //       owner_id,
 //       packs,
 //       is_public,
-//     } = tripDetails;
+//     } = tripData;
 
 //     // Save all the Features from the FeatureCollection
 

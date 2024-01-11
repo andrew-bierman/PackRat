@@ -1,7 +1,4 @@
 import { publicProcedure } from '../../trpc';
-import { TripNotFoundError } from '../../helpers/errors';
-import { responseHandler } from '../../helpers/responseHandler';
-
 import { getTripsService } from '../../services/trip/getTripsService';
 import * as validator from '../../middleware/validators/index';
 
@@ -27,7 +24,6 @@ import * as validator from '../../middleware/validators/index';
 export function getTripsRoute() {
   return publicProcedure.input(validator.getTrips).query(async (opts) => {
     const { owner_id } = opts.input;
-    const { prisma }: any = opts.ctx;
     const trips = await getTripsService(owner_id);
     return trips;
   });

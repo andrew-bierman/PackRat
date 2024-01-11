@@ -32,9 +32,9 @@ import { Trip } from '../../drizzle/methods/trip';
 
 export function editTripRoute() {
   return publicProcedure.input(validator.editTrip).mutation(async (opts) => {
-    const { id, ...rest } = opts.input;
+    const tripData = { ...opts.input };
     const tripClass = new Trip();
-    const trip = await tripClass.update(rest, id);
+    const trip = await tripClass.update(tripData);
     return trip;
   });
 }

@@ -1,6 +1,4 @@
 import { publicProcedure } from '../../trpc';
-import { TripNotFoundError } from '../../helpers/errors';
-import { responseHandler } from '../../helpers/responseHandler';
 import { getTripByIdService } from '../../services/trip/getTripByIdService';
 import * as validator from '../../middleware/validators/index';
 /**

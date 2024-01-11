@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "6755c1ee-7933-4be5-9270-f7b5bed4cb61",
+  "id": "32393893-7d72-4b1f-bfd3-d182774518cd",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "conversation": {
@@ -712,14 +712,14 @@
         },
         "start_date": {
           "name": "start_date",
-          "type": "integer",
+          "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
         "end_date": {
           "name": "end_date",
-          "type": "integer",
+          "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -738,8 +738,8 @@
           "notNull": false,
           "autoincrement": false
         },
-        "packs": {
-          "name": "packs",
+        "packs_id": {
+          "name": "packs_id",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
@@ -792,12 +792,12 @@
           "onDelete": "set null",
           "onUpdate": "no action"
         },
-        "trip_packs_pack_id_fk": {
-          "name": "trip_packs_pack_id_fk",
+        "trip_packs_id_pack_id_fk": {
+          "name": "trip_packs_id_pack_id_fk",
           "tableFrom": "trip",
           "tableTo": "pack",
           "columnsFrom": [
-            "packs"
+            "packs_id"
           ],
           "columnsTo": [
             "id"
