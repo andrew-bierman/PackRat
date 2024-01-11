@@ -6,7 +6,6 @@ import RParagraph from './Rparagraph';
 import RInput from './RInput';
 import RImage from './RImage';
 import RScrollView from './RScrollview';
-import RSkeleton from './RSkeleton';
 import RSwitch from './RSwitch';
 import RIconButton from './RIconButton';
 import RSeparator from './RSeparator';
@@ -25,7 +24,9 @@ import RH5 from './RH5';
 import RH6 from './RH6';
 import XStack from './XStack';
 import YStack from './YStack';
-export * from './button';
+import RButton from './RButton';
+
+export { RSkeleton } from './RSkeleton';
 
 export {
   RH1,
@@ -52,9 +53,9 @@ export {
   RIconButton,
   RImage,
   RScrollView,
-  RSkeleton,
   XStack,
   YStack,
+  RButton,
 };
 
 export { config } from './tamagui.config';
@@ -70,7 +71,6 @@ export * from './Rparagraph';
 export * from './RInput';
 export * from './RImage';
 export * from './RScrollview';
-export * from './Skeleton';
 export * from './XStack';
 export * from './YStack';
 

@@ -1,6 +1,6 @@
 import { Box } from 'native-base';
 import { Text } from 'react-native';
-import { ItemRow } from './ItemRow';
+import { ItemRow } from './ItemRow/ItemRow';
 import { theme } from '../theme';
 import { FontAwesome } from '@expo/vector-icons';
 import useTheme from '../hooks/useTheme';
