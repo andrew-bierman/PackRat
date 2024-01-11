@@ -14,6 +14,7 @@ import openAiRoutes from './openAiRoutes';
 import templateRoutes from './templateRoutes';
 import favoriteRouters from './favoriteRoutes';
 import userRoutes from './userRoutes';
+import mapPreviewRouter from './mapPreviewRouter';
 
 const router = express.Router();
 
@@ -56,6 +57,7 @@ router.use('/openai', openAiRoutes);
 router.use('/template', templateRoutes);
 router.use('/favorite', favoriteRouters);
 router.use('/openai', openAiRoutes);
+router.use('/mapPreview', mapPreviewRouter);
 
 // Also listen to /api for backwards compatibility
 router.use('/api/user', userRoutes);
@@ -72,6 +74,7 @@ router.use('/api/openai', openAiRoutes);
 router.use('/api/template', templateRoutes);
 router.use('/api/favorite', favoriteRouters);
 router.use('/api/openai', openAiRoutes);
+router.use('/api/mapPreview', mapPreviewRouter);
 
 // Static routes for serving the React Native Web app
 if (process.env.NODE_ENV === 'production') {

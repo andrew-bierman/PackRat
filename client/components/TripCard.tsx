@@ -146,7 +146,7 @@ const loadStyles = (theme) => {
       flex: 1,
       paddingHorizontal: 60,
       paddingVertical: 70,
-      height: Platform.OS === 'web' ? '450px' : '100%',
+      height: Platform.OS === 'web' ? 450 : '100%',
       alignSelf: 'center',
     },
     mapCard: {
@@ -157,7 +157,7 @@ const loadStyles = (theme) => {
       padding: currentTheme.size.cardPadding,
       paddingHorizontal: currentTheme.padding.paddingInside,
       marginBottom: 20,
-      height: Platform.OS === 'web' ? '650px' : '100%',
+      height: Platform.OS === 'web' ? 650 : '100%',
       overflow: 'hidden',
       alignSelf: 'center',
     },

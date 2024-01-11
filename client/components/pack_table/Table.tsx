@@ -165,7 +165,7 @@ const CategoryRow = ({ category }) => {
   const styles = useCustomStyles(loadStyles);
 
   const rowData = [
-    <RStack style={{ flexDirection: 'row', gap: '8px', ...styles.categoryRow }}>
+    <RStack style={{ flexDirection: 'row', gap: 8, ...styles.categoryRow }}>
       <Feather
         name={categoryIcons[category]}
         size={16}
@@ -296,7 +296,7 @@ export const TableContainer = ({
           {copy ? (
             <RButton
               style={{
-                width: '300px',
+                width: 300,
                 marginHorizontal: 'auto',
                 marginTop: 10,
               }}

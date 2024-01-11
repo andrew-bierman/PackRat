@@ -6,7 +6,7 @@ import {
   processShapeData,
   isPoint,
 } from '../../utils/mapFunctions';
-import { MAPBOX_ACCESS_TOKEN } from '@env';
+import { api } from "../../constants/api";
 
 /**
  * Renders a preview of a map based on the given shape.
@@ -16,23 +16,23 @@ import { MAPBOX_ACCESS_TOKEN } from '@env';
  */
 export default function MapPreview({ shape }) {
   console.log(
-    '🚀 ~ file: MapPreview.js:9 ~ MapPreview ~ shape:',
+    "🚀 ~ file: MapPreview.js:9 ~ MapPreview ~ shape:",
     JSON.stringify(shape.features[0]),
   );
   const processedShape = processShapeData(shape);
   const lineProperties = {
-    stroke: '#16b22d',
-    'stroke-width': 4,
-    'stroke-opacity': 1,
+    stroke: "#16b22d",
+    "stroke-width": 4,
+    "stroke-opacity": 1,
   };
   const pointProperties = {
-    'marker-color': '#16b22d',
+    "marker-color": "#16b22d",
   };
   if (isLineString(shape)) {
     shape.features[0].properties = lineProperties;
   }
 
-  const imageShape = { type: 'FeatureCollection', features: [] };
+  const imageShape = { type: "FeatureCollection", features: [] };
   console.log(JSON.stringify(shape.features[0]));
   const polygonObj = {
     ...shape.features[0],
@@ -41,14 +41,14 @@ export default function MapPreview({ shape }) {
       coordinates: [shape.features[0].geometry.coordinates[0]],
     },
   };
-  console.log(JSON.stringify(polygonObj), 'polygon obj');
+  console.log(JSON.stringify(polygonObj), "polygon obj");
   if (isPolygonOrMultiPolygon(shape)) {
     imageShape.features.push([shape.features[0].geometry.coordinates[0]]);
   } else {
     imageShape.features.push(shape.features[0]);
   }
   processedShape.features.forEach((feature) => {
-    if (feature.properties.meta == 'end') {
+    if (feature.properties.meta == "end") {
       feature.properties = pointProperties;
       imageShape.features.push(feature);
     }
@@ -67,26 +67,28 @@ export default function MapPreview({ shape }) {
   } = shape.features[0].geometry;
   // console.log("🚀 ~ file: MapPreview.js:39 ~ MapPreview ~ coordinates:", isPoint(shape),MAPBOX_ACCESS_TOKEN)
 
+  const mapPreviewEndpoint = `${api}/mapPreview`;
+
   return isPoint(shape) ? (
     <RImage
       style={{
-        width: '100%',
-        height: '100%',
+        width: "100%",
+        height: "100%",
       }}
       source={{
-        uri: `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/pin-s+db4848(${lng},${lat})/${lng},${lat},8.63,0/900x400?access_token=${MAPBOX_ACCESS_TOKEN}`,
+        uri: `${mapPreviewEndpoint}/pin-s+db4848(${lng},${lat})/${lng},${lat},8.63,0/900x400`,
       }}
     />
   ) : (
     <RImage
       style={{
-        width: '100%',
-        height: '100%',
+        width: "100%",
+        height: "100%",
       }}
       source={{
-        uri: `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/geojson(${urlEncodedImageShapeGeoJSON})/[${bounds.join(
-          ',',
-        )}]/900x400?access_token=${MAPBOX_ACCESS_TOKEN}&padding=50,30,30,30`,
+        uri: `${mapPreviewEndpoint}/geojson(${urlEncodedImageShapeGeoJSON})/[${bounds.join(
+          ",",
+        )}]/900x400?padding=50,30,30,30`,
       }}
     />
   );
