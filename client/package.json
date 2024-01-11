@@ -1,10 +1,6 @@
 {
   "name": "packratnext",
   "private": true,
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
   "devDependencies": {
     "@babel/core": "^7.21.3",
     "@babel/preset-typescript": "^7.22.5",

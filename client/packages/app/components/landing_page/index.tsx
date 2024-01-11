@@ -5,7 +5,7 @@ import { RButton, RCard, RText, RStack } from '@packrat/ui';
 import useTheme from '../../hooks/useTheme';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { theme } from '../../theme';
-import useCustomStyles from '~/hooks/useCustomStyles';
+import useCustomStyles from '../../hooks/useCustomStyles';
 
 const dataArray = [
   {

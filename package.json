@@ -7,7 +7,9 @@
     "server",
     "client",
     "apps/*",
-    "packages/*"
+    "packages/*",
+    "client/apps/*",
+    "client/packages/*"
   ],
   "scripts": {
     "clean": "yarn workspaces foreach --all run clean && rm -rf dist types node_modules yarn.lock",
