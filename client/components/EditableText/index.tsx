@@ -28,7 +28,7 @@ export const EditableInput = ({
       {loading && <LoadingPlaceholder color="#e2e1eb" />}
       <TextInput
         style={{
-          fontSize: '20px',
+          fontSize: 20,
           fontWeight: 'bold',
           color: theme.colors.textPrimary,
         }}

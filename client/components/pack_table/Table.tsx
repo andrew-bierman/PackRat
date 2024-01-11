@@ -1,21 +1,17 @@
-import { FlatList, Platform, View } from 'react-native';
-import { Table, Row, Cell, TableWrapper } from 'react-native-table-component';
 import { Feather } from '@expo/vector-icons';
+import { RButton, RCheckbox, RSkeleton, RStack, RText } from '@packrat/ui';
 import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { convertWeight } from '../../utils/convertWeight';
-import { EditPackItemModal } from './EditPackItemModal';
-import { ItemCategoryEnum } from '../../constants/itemCategory';
-import { DeletePackItemModal } from './DeletePackItemModal';
-import { duplicatePackItem } from '../../store/packsStore';
-import { formatNumber } from '../../utils/formatNumber';
-import { theme } from '../../theme';
-import useTheme from '../../hooks/useTheme';
-import { PackOptions } from '../PackOptions';
-import CustomButton from '../custombutton';
+import { FlatList, Platform, View } from 'react-native';
+import { Cell, Row, Table } from 'react-native-table-component';
+import { usePackTable } from '~/hooks/packs/usePackTable';
 import useCustomStyles from '~/hooks/useCustomStyles';
-import { RSkeleton, RText, RStack, RButton, RCheckbox } from '@packrat/ui';
+import useTheme from '~/hooks/useTheme';
 import DropdownComponent from '../Dropdown';
+import { PackOptions } from '../PackOptions';
+import { DeletePackItemModal } from './DeletePackItemModal';
+import { EditPackItemModal } from './EditPackItemModal';
+import { categoryIcons } from '~/constants/pack/icons';
+import { formatNumber } from '~/utils/formatNumber';
 
 const WeightUnitDropdown = ({ value, onChange }) => {
   return (
@@ -167,22 +163,9 @@ const CategoryRow = ({ category }) => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
-  const categoryIcons = {
-    [ItemCategoryEnum.ESSENTIALS]: 'check-square',
-    [ItemCategoryEnum.FOOD]: 'coffee',
-    [ItemCategoryEnum.WATER]: 'droplet',
-    [ItemCategoryEnum.CLOTHING]: 'tshirt',
-    [ItemCategoryEnum.SHELTER]: 'home',
-    [ItemCategoryEnum.SLEEPING]: 'moon',
-    [ItemCategoryEnum.HYGIENE]: 'smile',
-    [ItemCategoryEnum.TOOLS]: 'tool',
-    [ItemCategoryEnum.MEDICAL]: 'heart',
-    [ItemCategoryEnum.OTHER]: 'more-horizontal',
-    Undefined: 'help-circle', // Choose an appropriate icon for "Undefined" category
-  };
 
   const rowData = [
-    <RStack style={{ flexDirection: 'row', gap: '8px', ...styles.categoryRow }}>
+    <RStack style={{ flexDirection: 'row', gap: 8, ...styles.categoryRow }}>
       <Feather
         name={categoryIcons[category]}
         size={16}
@@ -222,97 +205,28 @@ export const TableContainer = ({
   setRefetch = () => {},
   copy,
 }) => {
-  const user = useSelector((state) => state.auth.user);
-  const dispatch = useDispatch();
   const styles = useCustomStyles(loadStyles);
-  let ids = [];
-  if (currentPack?.items) {
-    ids = copy ? currentPack.items.map((item) => item._id) : [];
-  }
-  const [checkedItems, setCheckedItems] = useState([...ids]);
-
-  const handleDuplicate = () => {
-    const data = {
-      packId: currentPack._id,
-      ownerId: user._id,
-      items: checkedItems,
-    };
-    dispatch(duplicatePackItem(data));
-  };
-
-  const [weightUnit, setWeightUnit] = useState('g');
-  const isLoading = useSelector((state: any) => state.packs.isLoading);
-
-  const error = useSelector((state: any) => state.items.error);
-  const data = currentPack?.items;
-  let totalFoodWeight = 0;
-  let totalWaterWeight = 0;
-  let totalBaseWeight = 0;
-
-  let waterItem;
-  const foodItems = [];
-  // for calculating the total.
-  /*
-  Todo better to move this all inside a utility function and pass them variables
-  */
-  data
-    ?.filter((item) => !checkedItems.includes(item._id))
-    .forEach((item) => {
-      const categoryName = item.category ? item.category.name : 'Undefined';
-      const itemWeight = Number(item.weight) || 0; // ensure it's a number
-      const itemQuantity = Number(item.quantity) || 0; // ensure it's a number
-      const itemUnit = item.unit || null;
-
-      if (!copy) {
-        switch (categoryName) {
-          case ItemCategoryEnum.ESSENTIALS: {
-            totalBaseWeight += convertWeight(
-              itemWeight * itemQuantity,
-              itemUnit,
-              weightUnit,
-            );
-            break;
-          }
-          case ItemCategoryEnum.FOOD: {
-            totalFoodWeight += convertWeight(
-              itemWeight * itemQuantity,
-              itemUnit,
-              weightUnit,
-            );
-            foodItems.push(item);
-            break;
-          }
-          case ItemCategoryEnum.WATER: {
-            totalWaterWeight += convertWeight(
-              itemWeight * itemQuantity,
-              itemUnit,
-              weightUnit,
-            );
-            waterItem = item;
-            break;
-          }
-        }
-      }
-    });
-
-  const totalWeight = totalBaseWeight + totalWaterWeight + totalFoodWeight;
-
-  const handleCheckboxChange = (itemId) => {
-    setCheckedItems((prev) =>
-      prev.includes(itemId)
-        ? prev.filter((id) => id !== itemId)
-        : [...prev, itemId],
-    );
-  };
-
-  // In your groupedData definition, provide a default category for items without one
-  const groupedData = data
-    ?.filter((fItem) => !Array.isArray(fItem.category))
-    ?.reduce((acc, item) => {
-      const categoryName = item.category ? item.category.name : 'Undefined';
-      (acc[categoryName] = acc[categoryName] || []).push(item);
-      return acc;
-    }, {});
+  const {
+    isLoading,
+    error,
+    data,
+    groupedData,
+    checkedItems,
+    handleCheckboxChange,
+    handleDuplicate,
+    totalBaseWeight,
+    totalFoodWeight,
+    totalWaterWeight,
+    totalWeight,
+    weightUnit,
+    setWeightUnit,
+  } = usePackTable({
+    currentPack,
+    selectedPack,
+    refetch,
+    setRefetch,
+    copy,
+  });
 
   let flexArr = [2, 1, 1, 1, 0.65, 0.65, 0.65];
   let heading = [
@@ -331,7 +245,7 @@ export const TableContainer = ({
     flexArr = [1, 1, 1, 1];
     heading = ['Item Name', 'Weight', 'Quantity', 'Options'];
   }
-  if (isLoading) return <RSkeleton />;
+  if (isLoading) return <RSkeleton style={{}} />;
   if (error) return <ErrorMessage message={error} />;
   return (
     <View style={styles.container}>
@@ -379,9 +293,18 @@ export const TableContainer = ({
               )}
             />
           </Table>
-          <CustomButton copy={copy} handler={handleDuplicate}>
-            Copy
-          </CustomButton>
+          {copy ? (
+            <RButton
+              style={{
+                width: 300,
+                marginHorizontal: 'auto',
+                marginTop: 10,
+              }}
+              onPress={handleDuplicate}
+            >
+              Copy
+            </RButton>
+          ) : null}
           <TotalWeightBox
             label="Base Weight"
             weight={totalBaseWeight}

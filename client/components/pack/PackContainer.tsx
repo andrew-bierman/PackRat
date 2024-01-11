@@ -23,9 +23,6 @@ export default function PackContainer({ isCreatingTrip = false }) {
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
 
   const user = useSelector((state) => state.auth.user);
-  // const packs = useSelector(selectAllPacks);
-
-  const newTrip = useSelector((state) => state.trips.newTrip);
 
   const [currentPackId, setCurrentPackId] = useState(null);
   const [refetch, setRefetch] = useState(false);
@@ -69,14 +66,16 @@ export default function PackContainer({ isCreatingTrip = false }) {
   //   selectPackById(state, currentPackId),
   // );
 
-  const currentPack = packs.find((pack) => pack._id === currentPackId);
+  const currentPack = packs?.find((pack) => pack._id === currentPackId);
 
-  const dataValues = packs.map((item) => item?.name) ?? [];
+  const dataValues = packs?.map((item) => item?.name) ?? [];
 
   return dataValues?.length > 0 ? (
     <View style={styles.mainContainer}>
       <DropdownComponent
         data={packs ?? []}
+        textKey={'name'}
+        valueKey={'_id'}
         value={currentPackId}
         onValueChange={handlePack}
         placeholder={'Select a Pack'}

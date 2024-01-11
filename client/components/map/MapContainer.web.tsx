@@ -29,9 +29,9 @@ const loadStyles = () => ({
     alignItems: 'center',
     justifyContent: 'center',
     overflow: 'hidden',
-    marginVertical: '10px',
+    marginVertical: 10,
     width: '100%',
-    height: '400px',
-    borderRadius: '10px',
+    height: 400,
+    borderRadius: 10,
   },
 });

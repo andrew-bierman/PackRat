@@ -17,8 +17,7 @@ export const SearchItem: React.FC<Props> = ({ onSelect, placeholder }) => {
   const [selectedSearch, setSelectedSearch] = useState('');
 
   const searchResults =
-    useSelector((state: any) => state.search.searchResults.items) || [];
-
+    useSelector((state: any) => state.search.searchResults) || [];
   const user = useSelector((state: any) => state.auth.user);
   const [showSearchResults, setShowSearchResults] = useState(false);
 
@@ -33,7 +32,7 @@ export const SearchItem: React.FC<Props> = ({ onSelect, placeholder }) => {
     const ownerId = user._id;
     // @ts-expect-error
     const packId = window.location.pathname.substring('/path/'.length);
-    const selectedItem = item._id;
+    const selectedItem = item?._id;
     const data = {
       ownerId,
       packId,
@@ -46,7 +45,7 @@ export const SearchItem: React.FC<Props> = ({ onSelect, placeholder }) => {
   const dispatch = useDispatch();
 
   return Platform.OS === 'web' ? (
-    <RStack style={{ width: '100%', maxWidth: '300px' }}>
+    <RStack style={{ width: '100%', maxWidth: 300 }}>
       {/* ... */}
       <RStack style={{ width: '100%', alignItems: 'center' }}>
         <View
@@ -60,14 +59,13 @@ export const SearchItem: React.FC<Props> = ({ onSelect, placeholder }) => {
               setShowSearchResults(true);
             }}
             placeholder={placeholder ?? 'Type here to search'}
-            style={{
-              width: '100%',
-              borderRadius: '4',
-              padding: '16px 8px',
-              backgroundColor: 'white',
-            }}
             value={searchString}
             fontSize={14}
+            width={'100%'}
+            borderRadius={4}
+            paddingVertical={16}
+            paddingHorizontal={8}
+            backgroundColor="white"
           />
           <RIconButton
             backgroundColor="transparent"
@@ -87,6 +85,7 @@ export const SearchItem: React.FC<Props> = ({ onSelect, placeholder }) => {
             }
             disabled={!showSearchResults}
           />
+
           <View style={{ position: 'relative' }}>
             {showSearchResults && searchResults?.length > 0 && (
               <RScrollView
@@ -138,14 +137,13 @@ export const SearchItem: React.FC<Props> = ({ onSelect, placeholder }) => {
       <RInput
         onChangeText={(text) => setSearchString(text)}
         placeholder="Search"
-        style={{
-          width: '100%',
-          borderRadius: '4',
-          padding: '16px 8px',
-          backgroundColor: 'white',
-        }}
         value={searchString}
         fontSize={14}
+        width={'100%'}
+        borderRadius={4}
+        paddingVertical={16}
+        paddingHorizontal={8}
+        backgroundColor="white"
       />
       <RIconButton
         backgroundColor="transparent"
@@ -168,14 +166,13 @@ export const SearchItem: React.FC<Props> = ({ onSelect, placeholder }) => {
         >
           <View
             role="list"
-            style={{ width: '100%', gap: '8px', padding: '8px' }}
+            style={{ width: '100%', gap: 8, padding: 8 }}
           >
             {searchResults.map((result, i) => (
               <Pressable
                 key={`result + ${i}`}
                 role="listitem"
                 onPress={() => handleSearchResultClick(result, i)}
-                // @ts-expect-error
               >
                 <RStack style={{ flexDirection: 'row' }}>
                   <RText fontWeight="400"></RText>

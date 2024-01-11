@@ -10,7 +10,7 @@ export const PaginationLimit = ({ limit, setLimit, setPage }) => {
 
   return (
     <View style={styles.selectContainer}>
-      <RLabel style={{ alignSelf: 'center', paddingBottom: '8px' }}>
+      <RLabel style={{ alignSelf: 'center', paddingBottom: 8 }}>
         Choose a value:
       </RLabel>
       <DropdownComponent

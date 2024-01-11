@@ -2,7 +2,7 @@ import { Slot } from 'expo-router';
 
 import { Platform, View } from 'react-native';
 
-import Navigation from '../screens/Navigation';
+import { Navigation } from '../components/navigation';
 
 import { Provider } from '../provider';
 import Footer from '../components/footer/Footer';

@@ -7,15 +7,17 @@ import { useDispatch } from 'react-redux';
 import { scorePack } from '../store/packsStore';
 import { Svg, Circle, Path, G, Text as SvgText } from 'react-native-svg';
 import useCustomStyles from '~/hooks/useCustomStyles';
+import { useGradingPie, useScoreData, useScoreProgress } from '~/hooks/score';
 
 const ScoreProgressChart = ({ score, size = 150, strokeWidth = 10 }) => {
   if (!score) return null;
   const styles = useCustomStyles(loadStyles);
 
-  const radius = (size - strokeWidth) / 2;
-  const circumference = 2 * Math.PI * radius;
-  const progress = score / 100;
-  const progressPath = progress * circumference;
+  const { radius, circumference, progressPath } = useScoreProgress(
+    score,
+    size,
+    strokeWidth,
+  );
 
   return (
     <View style={styles.container}>
@@ -56,36 +58,20 @@ const ScoreProgressChart = ({ score, size = 150, strokeWidth = 10 }) => {
 const GradingPieChart = ({ scores, size = 150, strokeWidth = 10 }) => {
   if (!scores) return null;
 
-  const { weightScore, essentialItemsScore, redundancyAndVersatilityScore } =
-    scores;
   const styles = useCustomStyles(loadStyles);
 
   // pie chart with 3 sections to represent the 3 grades
   // each section is a circle with a different color
-
-  const radius = 70;
-  const circleCircumference = 2 * Math.PI * radius;
-
-  const total =
-    weightScore + essentialItemsScore + redundancyAndVersatilityScore;
-
-  const weightPercentage = (weightScore / total) * 100;
-  const essentialItemsPercentage = (essentialItemsScore / total) * 100;
-  const redundancyAndVersatilityPercentage =
-    (redundancyAndVersatilityScore / total) * 100;
-
-  const weightStrokeDashoffset =
-    circleCircumference - (circleCircumference * weightPercentage) / 100;
-  const essentialItemsStrokeDashoffset =
-    circleCircumference -
-    (circleCircumference * essentialItemsPercentage) / 100;
-  const redundancyAndVersatilityStrokeDashoffset =
-    circleCircumference -
-    (circleCircumference * redundancyAndVersatilityPercentage) / 100;
-
-  const essentialItemsAngle = (weightScore / total) * 360;
-  const redundancyAndVersatilityAngle =
-    essentialItemsAngle + (essentialItemsScore / total) * 360;
+  const {
+    radius,
+    circleCircumference,
+    total,
+    weightStrokeDashoffset,
+    essentialItemsStrokeDashoffset,
+    redundancyAndVersatilityStrokeDashoffset,
+    essentialItemsAngle,
+    redundancyAndVersatilityAngle,
+  } = useGradingPie(scores);
 
   return (
     <View style={styles.container}>
@@ -160,31 +146,16 @@ export default function ScoreContainer({ type, data, isOwner }) {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
-  const id = data._id;
-  const totalScore = data.totalScore;
-  const grades = data.grades;
-  const scores = data.scores;
-
-  const isAlreadyScored = totalScore !== null;
-
-  const textData = {
-    pack: {
-      title: isAlreadyScored ? 'Pack Score' : 'Score this pack!',
-      subheader: 'See how this pack matches up with our scoring system!',
-      description:
-        'PackRating is our proprietary scoring system that rates packs based on their weight, essential items, and redundancy and versatility. We worked with experts to create a system that is as objective as possible. The higher the score, the better the pack!',
-    },
-    trip: {
-      title: isAlreadyScored ? 'Trip Score' : 'Score this trip!',
-      subheader: 'See how this trip matches up with our scoring system!',
-      description:
-        'PackRating is our proprietary scoring system that rates trips based on their weight, essential items, and redundancy and versatility. We worked with experts to create a system that is as objective as possible. The higher the score, the better the trip!',
-    },
-  };
-
-  const title = textData[type].title;
-  const subheader = textData[type].subheader;
-  const description = textData[type].description;
+  const {
+    id,
+    totalScore,
+    grades,
+    scores,
+    isAlreadyScored,
+    title,
+    subheader,
+    description,
+  } = useScoreData(type, data);
 
   const handleScoreClick = () => {
     if (type === 'pack') {
@@ -212,7 +183,7 @@ export default function ScoreContainer({ type, data, isOwner }) {
         {isAlreadyScored && (
           <>
             <ScoreProgressChart score={totalScore} />
-            {/* <GradingPieChart scores={scores} /> */}
+            <GradingPieChart scores={scores} />
           </>
         )}
       </HStack>

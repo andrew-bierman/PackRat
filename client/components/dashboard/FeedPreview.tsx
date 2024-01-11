@@ -41,9 +41,10 @@ const FeedPreviewScroll = () => {
                   style={{
                     backgroundColor: '#F2F1EB',
                     textTransform: 'capitalize',
-                    padding: '4px 8px',
+                    paddingVertical: 4,
+                    paddingHorizontal: 8,
                     alignSelf: 'center',
-                    borderRadius: '2px',
+                    borderRadius: 2,
                   }}
                 >
                   {item.type}
