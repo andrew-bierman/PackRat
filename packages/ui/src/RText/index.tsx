@@ -7,5 +7,5 @@ const RText = styled(Paragraph, {
 });
 
 // This is very temporary fix for issues we have with RText. Speeds up the app just using Text from react-native or native-base. If we use native-base, we can get nearly identical styling to RText, for the time being.
-export default Text;
-// export default RText;
+// export default Text;
+export default RText;
