@@ -10,11 +10,11 @@ export const GearList = () => {
     <RStack
       alignSelf="center"
       $sm={{
-        borderRadius: '6px',
+        borderRadius: 6,
         width: '100%',
       }}
       $gtSm={{
-        borderRadius: '12px',
+        borderRadius: 12,
         width: '90%',
       }}
       style={{

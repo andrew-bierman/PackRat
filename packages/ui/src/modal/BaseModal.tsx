@@ -88,7 +88,7 @@ export const BaseModal = ({
             opacity={0.5}
             enterStyle={{ opacity: 0 }}
             exitStyle={{ opacity: 0 }}
-            minWidth={'400px'}
+            minWidth={400}
           />
 
           <Dialog.Content

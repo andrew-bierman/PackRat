@@ -23,10 +23,10 @@ const SettingsButton = () => {
       onPress={onSettingsClick}
       style={{
         backgroundColor: 'transparent',
-        marginBottom: '16px',
+        marginBottom: 16,
         justifyContent: 'center',
         border: '1px solid lightgray',
-        borderRadius: '8px',
+        borderRadius: 8,
       }}
       icon={
         <MaterialCommunityIcons name="cog-outline" size={24} color={'grey'} />
@@ -72,15 +72,15 @@ const Header = ({
                 <RSkeleton
                   style={{
                     borderRadius: '100%',
-                    height: '100px',
-                    width: '100px',
+                    height: 100,
+                    width: 100,
                   }}
                 />
                 <RSkeleton
                   style={{
-                    height: '100px',
+                    height: 100,
                     width: '100%',
-                    marginTop: '8px',
+                    marginTop: 8,
                     alignItems: 'center',
                   }}
                 />
@@ -88,7 +88,7 @@ const Header = ({
             ) : (
               <>
                 <Avatar src={user?.profileImage} />
-                <RText style={{ marginTop: '16px', ...styles.userName }}>
+                <RText style={{ marginTop: 16, ...styles.userName }}>
                   {userRealName}
                 </RText>
                 <RText style={styles.userEmail}>{username}</RText>
@@ -102,16 +102,16 @@ const Header = ({
         {isLoading ? (
           <>
             <RSkeleton
-              style={{ borderRadius: '100%', width: '50px', height: '50px' }}
+              style={{ borderRadius: '100%', width: 50, height: 50 }}
             />
             <RSkeleton
-              style={{ borderRadius: '100%', width: '50px', height: '50px' }}
+              style={{ borderRadius: '100%', width: 50, height: 50 }}
             />
             <RSkeleton
-              style={{ borderRadius: '100%', width: '50px', height: '50px' }}
+              style={{ borderRadius: '100%', width: 50, height: 50 }}
             />
             <RSkeleton
-              style={{ borderRadius: '100%', width: '50px', height: '50px' }}
+              style={{ borderRadius: '100%', width: 50, height: 50 }}
             />
           </>
         ) : (
@@ -163,13 +163,9 @@ const SkeletonUserDataCard = () => {
         boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
       }}
     >
-      <RSkeleton
-        style={{ marginBottom: '8px', height: '50px', width: '70%' }}
-      />
-      <RSkeleton
-        style={{ marginBottom: '8px', height: '50px', width: '50%' }}
-      />
-      <RSkeleton style={{ height: '50px', width: '30%' }} />
+      <RSkeleton style={{ marginBottom: 8, height: 50, width: '70%' }} />
+      <RSkeleton style={{ marginBottom: 8, height: 50, width: '50%' }} />
+      <RSkeleton style={{ height: 50, width: '30%' }} />
     </View>
   );
 };

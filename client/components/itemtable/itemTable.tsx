@@ -102,7 +102,7 @@ export const ItemsTable = ({
         />
         <View
           style={{
-            height: '400px',
+            height: 400,
             overflowY: 'scroll',
           }}
         >
@@ -119,12 +119,12 @@ export const ItemsTable = ({
       <View style={{ display: 'flex', flexDirection: 'row', margin: 'auto' }}>
         <RButton
           style={{
-            marginRight: '10px',
-            width: '4px',
+            marginRight: 10,
+            width: 4,
             backgroundColor: 'transparent',
-            borderRadius: '5px',
+            borderRadius: 5,
             borderColor: page < 2 ? 'gray' : '#0284c7',
-            borderWidth: '1px',
+            borderWidth: 1,
             borderStyle: 'solid',
           }}
           disabled={page < 2}
@@ -134,12 +134,12 @@ export const ItemsTable = ({
         </RButton>
         <RButton
           style={{
-            marginRight: '10px',
-            width: '4px',
+            marginRight: 10,
+            width: 4,
             backgroundColor: 'transparent',
-            borderRadius: '5px',
+            borderRadius: 5,
             borderColor: page === totalPages ? 'gray' : '#0284c7',
-            borderWidth: '1px',
+            borderWidth: 1,
             borderStyle: 'solid',
           }}
           disabled={page === totalPages}
