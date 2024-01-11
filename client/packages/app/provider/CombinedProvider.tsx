@@ -47,6 +47,7 @@ export function CombinedProvider({ children }: { children: React.ReactNode }) {
                 },
             }),
         ],
+        transformer: undefined
     });
 
     useEffect(() => {
