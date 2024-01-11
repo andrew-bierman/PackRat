@@ -1,10 +1,7 @@
 import { Platform } from 'react-native';
-import {
-  RequestPasswordReset,
-  ResetPassword,
-} from '../../../components/password-reset';
+import { RequestPasswordReset } from 'app/components/password-reset';
 import { Stack } from 'expo-router';
-import { PasswordResetForm } from '../../../components/password-reset/PasswordResetForm';
+import { PasswordResetForm } from 'app/components/password-reset/PasswordResetForm';
 import Head from 'expo-router/head';
 
 export default function ResetPasswordRoute() {

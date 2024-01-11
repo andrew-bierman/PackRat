@@ -7,14 +7,14 @@ import {
   MaterialCommunityIcons,
   MaterialIcons,
 } from '@expo/vector-icons';
-import { theme, darkTheme } from '../../../theme';
+import { theme, darkTheme } from 'app/theme';
 // import { useAuth } from "../../auth/provider";
-import useTheme from '../../../hooks/useTheme';
-import { signOut } from '../../../store/authStore';
+import useTheme from 'app/hooks/useTheme';
+import { signOut } from 'app/store/authStore';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { useSession } from '../../../context/auth';
-import useCustomStyles from '~/hooks/useCustomStyles';
+import { useSession } from 'app/context/auth';
+import useCustomStyles from 'app/hooks/useCustomStyles';
 
 export default function Drawer() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =

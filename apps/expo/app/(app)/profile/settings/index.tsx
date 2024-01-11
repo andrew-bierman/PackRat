@@ -1,6 +1,6 @@
 import { Platform, ScrollView } from 'react-native';
 import { Stack } from 'expo-router';
-import Settings from '../../../../screens/user/Settings';
+import Settings from 'app/screens/user/Settings';
 import Head from 'expo-router/head';
 
 export default function SettingsPage() {

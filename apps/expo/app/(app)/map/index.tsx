@@ -4,17 +4,16 @@ import {
   StyleSheet,
   Text,
   View,
-  Picker,
   TouchableOpacity,
 } from 'react-native';
 import Mapbox from '@rnmapbox/maps';
 // get mapbox access token from .env file
 import { MAPBOX_ACCESS_TOKEN } from '@env';
 import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
-import { theme } from '../../../theme';
-import useTheme from '../../../hooks/useTheme';
+import { theme } from 'app/theme';
+import useTheme from 'app/hooks/useTheme';
 import ErrorBoundary from '@packrat/ui';
-import { useCustomStyles } from '~/hooks/useCustomStyles';
+import { useCustomStyles } from 'app/hooks/useCustomStyles';
 
 Mapbox.setAccessToken(MAPBOX_ACCESS_TOKEN);
 

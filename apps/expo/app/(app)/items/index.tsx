@@ -2,17 +2,17 @@ import { View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Platform } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { theme } from '../../../theme';
-import useTheme from '../../../hooks/useTheme';
+import { theme } from 'app/theme';
+import useTheme from 'app/hooks/useTheme';
 import { RTooltip, RButton, RScrollView, BaseModal } from '@packrat/ui';
-import { AddItemGlobal } from '../../../components/item/AddItemGlobal';
-import { ItemsTable } from '../../../components/itemtable/itemTable';
+import { AddItemGlobal } from 'app/components/item/AddItemGlobal';
+import { ItemsTable } from 'app/components/itemtable/itemTable';
 import { useDispatch, useSelector } from 'react-redux';
-import { getItemsGlobal } from '../../../store/globalItemsStore';
+import { getItemsGlobal } from 'app/store/globalItemsStore';
 import { Stack } from 'expo-router';
 import Head from 'expo-router/head';
-import { useFetchGlobalItems } from '~/hooks/globalItems';
-import useCustomStyles from '~/hooks/useCustomStyles';
+import { useFetchGlobalItems } from 'app/hooks/globalItems';
+import useCustomStyles from 'app/hooks/useCustomStyles';
 
 export default function Items() {
   // pagination index limit

@@ -1,6 +1,6 @@
-import PackContainer from '../../../components/pack/PackContainer';
-import { TripDetails } from '../../../screens/trip/TripDetails';
-import { DetailsComponent } from '../../../components/details';
+import PackContainer from 'app/components/pack/PackContainer';
+import { TripDetails } from 'app/screens/trip/TripDetails';
+import { DetailsComponent } from 'app/components/details';
 import { Platform } from 'react-native';
 import { Stack } from 'expo-router';
 import Head from 'expo-router/head';

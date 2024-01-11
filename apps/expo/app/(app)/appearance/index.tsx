@@ -1,7 +1,7 @@
 import { Platform } from 'react-native';
 import { Stack } from 'expo-router';
 import Head from 'expo-router/head';
-import AppearanceContainer from '../../../screens/appearance/AppearanceContainer';
+import AppearanceContainer from 'app/screens/appearance/AppearanceContainer';
 
 export default function Appearance() {
   return (

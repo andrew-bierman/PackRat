@@ -2,15 +2,15 @@ import { Modal, Text, View, Image, Dimensions } from 'react-native';
 import Mapbox, { offlineManager } from '@rnmapbox/maps';
 import { useEffect, useState } from 'react';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import MapButtonsOverlay from '../../../components/map/MapButtonsOverlay';
-import { theme } from '../../../theme';
-import useTheme from '../../../hooks/useTheme';
+import MapButtonsOverlay from 'app/components/map/MapButtonsOverlay';
+import { theme } from 'app/theme';
+import useTheme from 'app/hooks/useTheme';
 import { StyleSheet } from 'react-native';
 import {
   calculateZoomLevel,
   getShapeSourceBounds,
-} from '../../../utils/mapFunctions';
-import { api } from '../../../constants/api';
+} from 'app/utils/mapFunctions';
+import { api } from 'app/constants/api';
 
 function CircleCapComp() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =

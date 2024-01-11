@@ -1,4 +1,4 @@
-import { AddPack } from '../../../components/pack/AddPack';
+import { AddPack } from 'app/components/pack/AddPack';
 import { Platform } from 'react-native';
 import { Stack } from 'expo-router';
 import Head from 'expo-router/head';
