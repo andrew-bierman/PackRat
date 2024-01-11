@@ -1,4 +1,8 @@
-import express, { NextFunction, Request, Response } from 'express';
+import express, {
+  type NextFunction,
+  type Request,
+  type Response,
+} from 'express';
 import axios from 'axios';
 import { MAPBOX_ACCESS_TOKEN } from '../../config';
 import { MapPreviewError } from '../../helpers/errors';
@@ -11,13 +15,18 @@ import { MapPreviewError } from '../../helpers/errors';
  * @param {NextFunction} next - The next middleware
  * @returns {Promise} - Resolves with the preview image
  */
-export default async function getMapPreview(req: Request, res: Response, next: NextFunction) {
+export default async function getMapPreview(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
   try {
     const queryParams = Object.entries(req.query).reduce(
       (acc, [key, val], i, arr) =>
         `${acc}${key}=${val}${i == arr.length - 1 ? '' : '&'}`,
       '',
     );
+
     const { data } = await axios.get(
       `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/${req.originalUrl
         .replace('/api', '')
@@ -32,6 +41,7 @@ export default async function getMapPreview(req: Request, res: Response, next: N
     res.setHeader('Content-Type', 'image/png');
     res.send(data);
   } catch (error) {
+    console.log(error);
     next(MapPreviewError);
   }
 }

@@ -60,6 +60,8 @@ export {
 
 export { config } from './tamagui.config';
 export * from 'tamagui';
+export * from './modal';
+export * from './dialog';
 export * from '@tamagui/toast';
 export * from './toast';
 export * from './list';

@@ -12,6 +12,7 @@ import { DeletePackItemModal } from './DeletePackItemModal';
 import { EditPackItemModal } from './EditPackItemModal';
 import { categoryIcons } from '~/constants/pack/icons';
 import { formatNumber } from '~/utils/formatNumber';
+import { AddItem } from '../item/AddItem';
 
 const WeightUnitDropdown = ({ value, onChange }) => {
   return (
@@ -92,16 +93,14 @@ const TableItem = ({
       quantity,
       <PackOptions
         Edit={
-          <EditPackItemModal
-            packId={_id}
-            initialData={itemData}
-            currentPack={currentPack}
-            refetch={refetch}
-            setRefetch={setRefetch}
-            onTrigger={onTrigger}
-            isModalOpen={isEditModalOpen}
-            closeModalHandler={closeModalHandler}
-          />
+          <EditPackItemModal>
+            <AddItem
+              _id={_id}
+              packId={_id}
+              isEdit={true}
+              initialData={itemData}
+            />
+          </EditPackItemModal>
         }
         Delete={
           <DeletePackItemModal
@@ -126,16 +125,15 @@ const TableItem = ({
       name,
       `${formatNumber(weight)} ${unit}`,
       quantity,
-      <EditPackItemModal
-        packId={_id}
-        initialData={itemData}
-        currentPack={currentPack}
-        refetch={refetch}
-        setRefetch={setRefetch}
-        onTrigger={onTrigger}
-        isModalOpen={isEditModalOpen}
-        closeModalHandler={closeModalHandler}
-      />,
+      <EditPackItemModal>
+        <AddItem
+          _id={_id}
+          packId={_id}
+          isEdit={true}
+          currentPack={currentPack}
+          initialData={itemData}
+        />
+      </EditPackItemModal>,
       <DeletePackItemModal
         itemId={_id}
         pack={currentPack}

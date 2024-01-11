@@ -4,8 +4,7 @@ import { StyleSheet, Platform } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { theme } from '../../../theme';
 import useTheme from '../../../hooks/useTheme';
-import { RTooltip, RButton, RScrollView } from '@packrat/ui';
-import { CustomModal } from '../../../components/modal';
+import { RTooltip, RButton, RScrollView, BaseModal } from '@packrat/ui';
 import { AddItemGlobal } from '../../../components/item/AddItemGlobal';
 import { ItemsTable } from '../../../components/itemtable/itemTable';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,22 +15,12 @@ import { useFetchGlobalItems } from '~/hooks/globalItems';
 import useCustomStyles from '~/hooks/useCustomStyles';
 
 export default function Items() {
-  const styles = useCustomStyles(loadStyles);
-
-  const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
-
-  const onTrigger = (event) => {
-    setIsAddItemModalOpen(event);
-  };
   // pagination index limit
   const [limit, setLimit] = useState(5);
   // page number for pagination
   const [page, setPage] = useState(1);
 
   const [refetch, setRefetch] = useState(false);
-
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    useTheme();
 
   const { data, isLoading, isError } = useFetchGlobalItems(limit, page);
   return (
@@ -49,51 +38,13 @@ export default function Items() {
       />
       <View>
         <>
-          <CustomModal
+          <BaseModal
             title="Add a global Item"
             trigger="Add Item"
-            isActive={isAddItemModalOpen}
-            triggerComponent={
-              <View
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  marginTop: '2rem',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              >
-                {' '}
-                <RButton
-                  style={styles.button}
-                  onPress={() => {
-                    setIsAddItemModalOpen(true);
-                  }}
-                >
-                  Add Item
-                </RButton>
-                {Platform.OS === 'web' ? (
-                  <RTooltip
-                    Label="Add a global item"
-                    Icon={
-                      <MaterialIcons
-                        name="info-outline"
-                        size={24}
-                        color={currentTheme.colors.background}
-                      />
-                    }
-                  />
-                ) : null}
-              </View>
-            }
-            onTrigger={setIsAddItemModalOpen}
+            triggerComponent={<ModalTriggerButton />}
           >
-            <AddItemGlobal
-              setRefetch={setRefetch}
-              refetch={refetch}
-              setIsAddItemModalOpen={setIsAddItemModalOpen}
-            />
-          </CustomModal>
+            <AddItemGlobal setRefetch={setRefetch} refetch={refetch} />
+          </BaseModal>
         </>
         {!isError &&
         data?.globalItems &&
@@ -131,4 +82,42 @@ const loadStyles = () => {
       textAlign: 'center',
     },
   };
+};
+
+const ModalTriggerButton = ({ setIsModalOpen }) => {
+  const styles = useCustomStyles(loadStyles);
+  const { currentTheme } = useTheme();
+
+  return (
+    <View
+      style={{
+        display: 'flex',
+        flexDirection: 'row',
+        marginTop: '2rem',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
+      <RButton
+        style={styles.button}
+        onPress={() => {
+          setIsModalOpen(true);
+        }}
+      >
+        Add Item
+      </RButton>
+      {Platform.OS === 'web' ? (
+        <RTooltip
+          Label="Add a global item"
+          Icon={
+            <MaterialIcons
+              name="info-outline"
+              size={24}
+              color={currentTheme.colors.background}
+            />
+          }
+        />
+      ) : null}
+    </View>
+  );
 };

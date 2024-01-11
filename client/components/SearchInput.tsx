@@ -4,7 +4,14 @@ import { MaterialIcons } from '@expo/vector-icons';
 import useSearchInput from '~/hooks/search/useSearchInput';
 import useTheme from '~/hooks/useTheme';
 import useCustomStyles from '~/hooks/useCustomStyles';
-import { RStack, RInput, RButton, RText, RScrollView, RIconButton } from '@packrat/ui';
+import {
+  RStack,
+  RInput,
+  RButton,
+  RText,
+  RScrollView,
+  RIconButton,
+} from '@packrat/ui';
 import { View, Pressable } from 'react-native';
 
 export const SearchInput = ({ onSelect, placeholder }) => {
@@ -88,10 +95,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
               showsVerticalScrollIndicator={false}
               zIndex={20000}
             >
-              <View
-                role="list"
-                style={{ width: '100%', gap: 8, padding: 8 }}
-              >
+              <View role="list" style={{ width: '100%', gap: 8, padding: 8 }}>
                 {data.map((result, i) => (
                   <RStack
                     key={`result + ${i}`}

@@ -139,10 +139,7 @@ const LandingPage = () => {
                   flexWrap: 'wrap',
                 }}
               >
-                <RButton
-                  title="App Store"
-                  style={{ margin: 10, padding: 32 }}
-                >
+                <RButton title="App Store" style={{ margin: 10, padding: 32 }}>
                   <RStack
                     style={{
                       flexDirection: 'row',

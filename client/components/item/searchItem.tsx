@@ -164,10 +164,7 @@ export const SearchItem: React.FC<Props> = ({ onSelect, placeholder }) => {
           showsVerticalScrollIndicator={false}
           zIndex={10}
         >
-          <View
-            role="list"
-            style={{ width: '100%', gap: 8, padding: 8 }}
-          >
+          <View role="list" style={{ width: '100%', gap: 8, padding: 8 }}>
             {searchResults.map((result, i) => (
               <Pressable
                 key={`result + ${i}`}

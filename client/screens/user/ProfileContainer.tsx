@@ -163,12 +163,8 @@ const SkeletonUserDataCard = () => {
         boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
       }}
     >
-      <RSkeleton
-        style={{ marginBottom: 8, height: 50, width: '70%' }}
-      />
-      <RSkeleton
-        style={{ marginBottom: 8, height: 50, width: '50%' }}
-      />
+      <RSkeleton style={{ marginBottom: 8, height: 50, width: '70%' }} />
+      <RSkeleton style={{ marginBottom: 8, height: 50, width: '50%' }} />
       <RSkeleton style={{ height: 50, width: '30%' }} />
     </View>
   );

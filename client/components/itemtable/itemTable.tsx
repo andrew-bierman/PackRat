@@ -11,6 +11,7 @@ import { PaginationLimit } from '../paginationChooseLimit';
 import Loader from '../Loader';
 import useCustomStyles from '~/hooks/useCustomStyles';
 import { loadStyles } from './itemsTable.style';
+import { AddItem } from '../item/AddItem';
 
 export const ItemsTable = ({
   limit,
@@ -44,12 +45,15 @@ export const ItemsTable = ({
       `${formatNumber(weight)} ${unit}`,
       quantity,
       `${category?.name || type}`,
-      <EditPackItemModal
-        initialData={itemData}
-        editAsDuplicate={false}
-        setPage={setPage}
-        page={page}
-      />,
+      <EditPackItemModal>
+        <AddItem
+          isEdit={true}
+          initialData={itemData}
+          editAsDuplicate={false}
+          setPage={setPage}
+          page={page}
+        />
+      </EditPackItemModal>,
       <DeletePackItemModal itemId={_id} />,
     ];
     return <Row data={rowData} style={styles.row} flexArr={flexArr} />;

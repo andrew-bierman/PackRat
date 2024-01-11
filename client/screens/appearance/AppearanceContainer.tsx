@@ -12,7 +12,7 @@ import {
   ScrollView,
 } from 'tamagui';
 import { Card as RNPCard } from 'react-native-paper';
-import { DialogDemo } from '../../components/dialog';
+import { DialogDemo } from '../../components/DialogDemo';
 import useCustomStyles from '~/hooks/useCustomStyles';
 import useAppearance from '~/hooks/appearance/useAppearance';
 import { Scroll } from '@tamagui/lucide-icons';

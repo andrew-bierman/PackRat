@@ -77,7 +77,7 @@ export default function LargeCard({
           style={{
             color: currentTheme.colors.textPrimary,
             fontSize: currentTheme.font.size,
-            fontWeight: "600",
+            fontWeight: '600',
           }}
         >
           {title && <RText>{title}</RText>}
