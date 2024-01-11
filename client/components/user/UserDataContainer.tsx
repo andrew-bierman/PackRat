@@ -17,8 +17,8 @@ const SkeletonUserDataCard = () => {
     <View style={{ alignItems: 'center', padding: '5' }}>
       <RSkeleton
         style={{
-          minHeight: '150px',
-          minWidth: '300px',
+          minHeight: 150,
+          minWidth: 300,
         }}
       ></RSkeleton>
     </View>
@@ -81,18 +81,18 @@ export default function UserDataContainer({
     >
       <RStack
         style={{
-          gap: '16px',
+          gap: 16,
           alignItems: 'center',
           flex: 1,
           width: '100%',
-          padding: '24px',
+          padding: 24,
         }}
       >
         <RText
           color={currentTheme.colors.textColor}
           style={{
             textTransform: 'capitalize',
-            fontSize: '24px',
+            fontSize: 24,
             fontWeight: 'bold',
           }}
         >

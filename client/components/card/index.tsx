@@ -78,15 +78,15 @@ export const CustomCard = ({
       <View
         style={{
           alignSelf: 'center',
-          borderRadius: '10px',
+          borderRadius: 10,
           ...styles.mainContainer,
         }}
       >
-        <RStack style={{ width: '100%', gap: '30px' }}>
+        <RStack style={{ width: '100%', gap: 30 }}>
           <View
             style={{
-              padding: '15px',
-              paddingBottom: '0px',
+              padding: 15,
+              paddingBottom: 0,
               flexDirection: 'row',
               justifyContent: 'space-between',
               alignItems: 'center',
@@ -103,7 +103,7 @@ export const CustomCard = ({
               />
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <View style={{ marginRight: '20px', marginLeft: '20px' }}>
+              <View style={{ marginRight: 20, marginLeft: 20 }}>
                 <Link href={`/profile/${data.owner_id}`}>
                   <RText>
                     {user._id === data.owner_id
@@ -159,8 +159,8 @@ export const CustomCard = ({
             style={{
               alignItems: 'center',
               justifyContent: 'center',
-              paddingRight: '16px',
-              paddingLeft: '16px',
+              paddingRight: 16,
+              paddingLeft: 16,
             }}
           >
             <SearchItem placeholder={'Search Item'} />
@@ -170,14 +170,14 @@ export const CustomCard = ({
             style={{
               alignItems: 'center',
               justifyContent: 'center',
-              paddingRight: '16px',
-              paddingLeft: '16px',
+              paddingRight: 16,
+              paddingLeft: 16,
             }}
           >
             {content}
           </View>
           <RSeparator />
-          <View style={{ padding: '16px', paddingTop: '0' }}>{footer}</View>
+          <View style={{ padding: 16, paddingTop: 0 }}>{footer}</View>
         </RStack>
         {/*         <ToastViewport multipleToasts />
         <NativeToast /> */}
@@ -190,15 +190,15 @@ export const CustomCard = ({
       <View
         style={{
           alignSelf: 'center',
-          borderRadius: '10px',
+          borderRadius: 10,
           ...styles.mainContainer,
         }}
       >
-        <RStack style={{ width: '100%', gap: '30px' }}>
+        <RStack style={{ width: '100%', gap: 30 }}>
           <View
             style={{
-              padding: '15px',
-              paddingBottom: '0px',
+              padding: 15,
+              paddingBottom: 0,
               flexDirection: 'row',
               justifyContent: 'space-between',
               alignItems: 'center',
@@ -206,7 +206,7 @@ export const CustomCard = ({
           >
             <View>{title}</View>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <View style={{ marginRight: '20px', marginLeft: '20px' }}>
+              <View style={{ marginRight: 20, marginLeft: 20 }}>
                 <Link href={`/profile/${data.owner_id && data.owner_id._id}`}>
                   <RText>
                     {user._id === data.owner_id
@@ -255,14 +255,14 @@ export const CustomCard = ({
             style={{
               alignItems: 'center',
               justifyContent: 'center',
-              paddingRight: '16px',
-              paddingLeft: '16px',
+              paddingRight: 16,
+              paddingLeft: 16,
             }}
           >
             {content}
           </View>
           <RSeparator />
-          <View style={{ padding: '16px', paddingTop: '0' }}>{footer}</View>
+          <View style={{ padding: 16, paddingTop: 0 }}>{footer}</View>
         </RStack>
       </View>
     );

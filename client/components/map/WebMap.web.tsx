@@ -37,7 +37,7 @@ const WebMap = ({ shape: shapeProp }) => {
   } = useWebMap({ shape: shapeProp });
 
   const element = (
-    <View style={[styles.container, { height: showModal ? '100%' : '400px' }]}>
+    <View style={[styles.container, { height: showModal ? '100%' : 400 }]}>
       {showModal || isPolygonOrMultiPolygon(shape) ? (
         <View
           key="map"
@@ -98,7 +98,7 @@ const loadStyles = () => ({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    borderRadius: '10px',
+    borderRadius: 10,
   },
   map: {
     width: '100%',
