@@ -24,6 +24,7 @@
     "start:prod": "cd server && yarn start:prod",
     "start:prod:ts-node": "cd server && yarn start:ts-node",
     "dev:expo": "cd apps/expo && yarn start",
+    "dev:next": "cd apps/next && yarn dev",
     "dev:server": "cd server && yarn start",
     "test": "yarn test:all",
     "test:all": "yarn test:expo && yarn test:server",
