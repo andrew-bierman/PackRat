@@ -82,15 +82,7 @@ const CustomCard: React.FC<CustomCardProps> = ({
     return (
       <View style={{ alignSelf: 'center', borderRadius: 10, ...styles.mainContainer }}>
          <RStack style={{ width: '100%', gap: '30px' }}>
-          <View
-            style={{
-              padding: '15px',
-              paddingBottom: '0px',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-          >
+          <View style={{ padding: '15px', paddingBottom: '0px', flexDirection: 'row',justifyContent:'space-between', alignItems: 'center'}}>
             <View>
               <EditableInput
                 data={data}
@@ -154,8 +146,7 @@ const CustomCard: React.FC<CustomCardProps> = ({
             </View>
           </View>
           <RSeparator />
-          <View
-            style={{
+          <View style={{
               alignItems: 'center',
               justifyContent: 'center',
               paddingRight: '16px',

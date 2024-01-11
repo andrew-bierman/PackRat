@@ -10,19 +10,39 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import useTheme from '../../hooks/useTheme';
 import { RStack } from '@packrat/ui';
-// import {
-//   getUserChats,
-//   getAIResponse,
-//   selectConversationById,
-//   selectAllConversations,
-// } from '../../store/chatStore';
 import { Box, VStack, HStack, Select } from 'native-base';
 import { CustomModal } from '../modal';
 import useCustomStyles from '~/hooks/useCustomStyles';
 import { useGetUserChats, useGetAIResponse } from '~/hooks/chat';
-// import { Select } from "tamagui";
 
-const MessageBubble = ({ message }) => {
+interface Message {
+  role: 'ai' | 'user';
+  content: string;
+}
+
+interface Conversation {
+  _id: string;
+  history: string;
+}
+
+interface MessageBubbleProps {
+  message: Message;
+}
+
+interface ChatSelectorProps {
+  conversation: Conversation;
+  onSelect: (id: string) => void;
+  isActive: boolean;
+}
+
+interface ChatComponentProps {
+  showChatSelector?: boolean;
+  defaultChatId?: string | null;
+}
+
+interface ChatModalTriggerProps {}
+
+const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
   const styles = useCustomStyles(loadStyles);
   const isAI = message.role === 'ai';
   return (
@@ -34,7 +54,11 @@ const MessageBubble = ({ message }) => {
   );
 };
 
-const ChatSelector = ({ conversation, onSelect, isActive }) => {
+const ChatSelector: React.FC<ChatSelectorProps> = ({
+  conversation,
+  onSelect,
+  isActive,
+}) => {
   const styles = useCustomStyles(loadStyles);
   return (
     <TouchableOpacity
@@ -47,16 +71,16 @@ const ChatSelector = ({ conversation, onSelect, isActive }) => {
   );
 };
 
-const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
+const ChatComponent: React.FC<ChatComponentProps> = ({
+  showChatSelector = true,
+  defaultChatId = null,
+}) => {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.auth.user);
-  const [conversationId, setConversationId] = useState(defaultChatId);
-  // const conversation = useSelector((state) =>
-  //   selectConversationById(state, conversationId),
-  // );
-  // const conversations = useSelector((state) => selectAllConversations(state));
-  const [userInput, setUserInput] = useState('');
-  // const [parsedMessages, setParsedMessages] = useState([]);
+  const user = useSelector((state: any) => state.auth.user);
+  const [conversationId, setConversationId] = useState<string | null>(
+    defaultChatId
+  );
+  const [userInput, setUserInput] = useState<string>('');
   const styles = useCustomStyles(loadStyles);
 
   const { data: chatsData, refetch } = useGetUserChats(user._id);
@@ -65,15 +89,9 @@ const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
 
   const conversations = chatsData?.conversations;
 
-  /**
-   * Parses a conversation history string and returns an array of objects representing each message in the conversation.
-   *
-   * @param {string} historyString - The string containing the conversation history.
-   * @return {Array} An array of objects representing each message in the conversation.
-   */
-  const parseConversationHistory = (historyString) => {
+  const parseConversationHistory = (historyString: string): Message[] => {
     const historyArray = historyString.split('\n');
-    return historyArray.reduce((accumulator, current) => {
+    return historyArray.reduce((accumulator: Message[], current) => {
       const isAI = current.startsWith('AI:');
       const content = isAI ? current.substring(3) : current;
       const role = isAI ? 'ai' : 'user';
@@ -85,22 +103,16 @@ const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
   };
 
   const conversation = conversations?.find(
-    (chat) => chat._id === conversationId,
+    (chat: Conversation) => chat._id === conversationId
   );
 
-  // Compute parsedMessages directly
-  const parsedMessages = conversation
+  const parsedMessages: Message[] = conversation
     ? parseConversationHistory(conversation.history)
     : [];
 
   console.log('parsedMessages:', parsedMessages);
 
-  /**
-   * Handles sending a message.
-   *
-   * @return {Promise<void>} This function returns nothing.
-   */
-  const handleSendMessage = async () => {
+  const handleSendMessage = async (): Promise<void> => {
     await getAIResponse({ userId: user._id, conversationId, userInput });
     refetch();
     setUserInput('');
@@ -112,13 +124,13 @@ const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
         {showChatSelector && (
           <Select
             selectedValue={conversationId}
-            minWidth="200px" // Adjust width as needed
+            minWidth="200px"
             accessibilityLabel="Select a conversation"
             placeholder="Select a conversation"
             onValueChange={(itemValue) => setConversationId(itemValue)}
-            width="200px" // Adjust width as needed
+            width="200px"
           >
-            {conversations?.map((conversation) => (
+            {conversations?.map((conversation: Conversation) => (
               <Select.Item
                 key={conversation._id}
                 label={conversation._id}
@@ -126,35 +138,6 @@ const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
               />
             ))}
           </Select>
-          // <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          //   <Box
-          //     borderRadius="lg"
-          //     borderColor="coolGray.200"
-          //     borderWidth={1}
-          //     p={3}
-          //   >
-          //     <FlatList
-          //       data={conversations}
-          //       renderItem={({ item }) => (
-          //         <ChatSelector
-          //           conversation={item}
-          //           onSelect={setConversationId}
-          //         />
-          //       )}
-          //       keyExtractor={(item) => item._id}
-          //       contentContainerStyle={styles.flatList}
-          //     />
-          //     <TouchableOpacity
-          //       style={styles.newChatButton}
-          //       onPress={() => {
-          //         setConversationId(null);
-          //         setParsedMessages([]);
-          //       }}
-          //     >
-          //       <Text style={styles.newChatButtonText}>New Chat</Text>
-          //     </TouchableOpacity>
-          //   </Box>
-          // </ScrollView>
         )}
       </RStack>
       <FlatList
@@ -170,7 +153,10 @@ const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
           value={userInput}
           placeholder="Type a message..."
         />
-        <TouchableOpacity style={styles.sendButton} onPress={handleSendMessage}>
+        <TouchableOpacity
+          style={styles.sendButton}
+          onPress={handleSendMessage}
+        >
           <Text style={styles.sendText}>Send</Text>
         </TouchableOpacity>
       </View>
@@ -178,7 +164,7 @@ const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
   );
 };
 
-const ChatModalTrigger = () => {
+const ChatModalTrigger: React.FC<ChatModalTriggerProps> = () => {
   const [isOpen, setIsOpen] = useState(false);
   const handleClose = () => {
     setIsOpen(false);
@@ -200,7 +186,7 @@ const ChatModalTrigger = () => {
   );
 };
 
-const loadStyles = (theme) => {
+const loadStyles = (theme: any) => {
   const { currentTheme } = theme;
 
   return {

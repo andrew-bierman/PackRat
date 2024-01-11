@@ -1,10 +1,15 @@
 import React from 'react';
-
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Text, TouchableOpacity, View, StyleProp, TextStyle, TouchableOpacityProps, ViewStyle } from 'react-native';
 import useCustomStyles from '~/hooks/useCustomStyles';
 
-const ScrollButton = ({ direction, onPress }) => {
+interface ScrollButtonProps {
+  direction: 'left' | 'right'; // Define the valid values for direction
+  onPress: () => void; // Define the type for the onPress function
+}
+
+const ScrollButton: React.FC<ScrollButtonProps> = ({ direction, onPress }) => {
   const styles = useCustomStyles(loadStyles);
+  
   return (
     <TouchableOpacity
       activeOpacity={0.8}
@@ -12,12 +17,22 @@ const ScrollButton = ({ direction, onPress }) => {
       style={styles.scrollButton}
     >
       {direction === 'left' && <Text style={styles.iconStyles}>&lang;</Text>}
-      {direction != 'left' && <Text style={styles.iconStyles}>&rang;</Text>}
+      {direction === 'right' && <Text style={styles.iconStyles}>&rang;</Text>}
     </TouchableOpacity>
   );
 };
 
-const loadStyles = () => ({
+// Define the styles type
+interface ScrollButtonStyles {
+  container: ViewStyle;
+  scrollButton: ViewStyle;
+  iconStyles: TextStyle;
+}
+
+// Define the function signature for loadStyles
+type LoadStyles = () => ScrollButtonStyles;
+
+const loadStyles: LoadStyles = () => ({
   container: {
     justifyContent: 'center',
     alignItems: 'center',
