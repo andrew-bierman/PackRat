@@ -23,7 +23,7 @@ export default async function getMapPreview(
   try {
     const queryParams = Object.entries(req.query).reduce(
       (acc, [key, val], i, arr) =>
-        `${acc}${key}=${val}${i == arr.length - 1 ? '' : '&'}`,
+        `${acc}${key}=${val.toString()}${i == arr.length - 1 ? '' : '&'}`,
       '',
     );
     const { data } = await axios.get(
