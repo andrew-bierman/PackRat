@@ -23,6 +23,7 @@
     "move:pod": "mv Podfile ios/Podfile"
   },
   "dependencies": {
+    "app": "*",
     "@babel/runtime": "^7.21.0",
     "@expo/match-media": "^0.4.0",
     "@expo/vector-icons": "^13.0.0",

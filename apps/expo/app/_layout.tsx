@@ -2,10 +2,10 @@ import { Slot } from 'expo-router';
 
 import { Platform, View } from 'react-native';
 
-import { Navigation } from '../components/navigation';
+import { Navigation } from 'app/components/navigation';
 
-import { Provider } from '../provider';
-import Footer from '../components/footer/Footer';
+import { Provider } from 'app/provider';
+import Footer from 'app/components/footer/Footer';
 
 export default function HomeLayout() {
   return (
