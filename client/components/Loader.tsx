@@ -7,7 +7,7 @@ const Loader = () => {
         flexDirection: 'row',
         marginTop: 20,
         justifyContent: 'center',
-        gap: '8px',
+        gap: 8,
       }}
     >
       <RSpinner color="#0a84ff" />

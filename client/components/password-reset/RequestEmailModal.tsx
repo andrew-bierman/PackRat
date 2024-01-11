@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { RInput } from '@packrat/ui';
-import { CustomModal } from '../modal';
+import { BaseModal, RInput } from '@packrat/ui';
 import axios from '~/config/axios';
 import { api } from '../../constants/api';
 import { InformUser } from '../../utils/ToastUtils';
@@ -11,7 +10,6 @@ export const RequestPasswordResetEmailModal = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
-  const [isOpen, setIsOpen] = useState(false);
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -20,7 +18,7 @@ export const RequestPasswordResetEmailModal = () => {
    *
    * @return {Promise<void>} A promise that resolves when the password reset email is sent successfully.
    */
-  const handleResetPasswordEmail = async () => {
+  const handleResetPasswordEmail = async (_, closeModal) => {
     try {
       setLoading(true);
       // Call your API to initiate the password reset process
@@ -29,7 +27,7 @@ export const RequestPasswordResetEmailModal = () => {
       // TODO - switch to RTK query
       await axios.post(`${api}/password-reset`, { email });
       setLoading(false);
-      setIsOpen(false);
+      closeModal();
       InformUser({
         title: 'Password reset email sent',
         style: { backgroundColor: currentTheme.colors.textPrimary },
@@ -49,11 +47,9 @@ export const RequestPasswordResetEmailModal = () => {
   };
 
   return (
-    <CustomModal
+    <BaseModal
       title="Reset Password"
       trigger="Request Password Reset Email"
-      isActive={isOpen}
-      onTrigger={setIsOpen}
       footerButtons={[
         {
           label: 'Send Email',
@@ -63,8 +59,8 @@ export const RequestPasswordResetEmailModal = () => {
         {
           label: 'Cancel',
           color: '#B22222',
-          onClick: () => {
-            setIsOpen(false);
+          onClick: (_, closeModal) => {
+            closeModal();
           },
         },
       ]}
@@ -107,7 +103,7 @@ export const RequestPasswordResetEmailModal = () => {
                 </Box>
 
             </Center> */}
-    </CustomModal>
+    </BaseModal>
   );
 };
 

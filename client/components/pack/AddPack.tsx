@@ -1,10 +1,10 @@
 import { Platform, View } from 'react-native';
 import DropdownComponent from '../Dropdown';
 import { RInput, RButton, RText, RLabel } from '@packrat/ui';
+import { BaseModal } from '@packrat/ui';
 import { addPack } from '../../store/packsStore';
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { CustomModal } from '../modal';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from '~/hooks/useCustomStyles';
 import { useAddNewPack } from '~/hooks/packs';
@@ -86,16 +86,10 @@ export const AddPack = ({ isCreatingTrip = false }) => {
 };
 
 export const AddPackContainer = ({ isCreatingTrip }) => {
-  const [isOpen, setIsOpen] = useState(false);
   return (
-    <CustomModal
-      title="Add Pack"
-      trigger="Add Pack"
-      isActive={isOpen}
-      onTrigger={setIsOpen}
-    >
+    <BaseModal title="Add Pack" trigger="Add Pack">
       <AddPack isCreatingTrip={isCreatingTrip} />
-    </CustomModal>
+    </BaseModal>
   );
 };
 

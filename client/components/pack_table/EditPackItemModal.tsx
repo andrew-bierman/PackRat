@@ -1,38 +1,14 @@
 import React, { useState } from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 import { AddItem } from '../item/AddItem';
-import { CustomModal } from '../modal';
 import { View } from 'react-native';
+import { BaseModal, useModal } from '@packrat/ui';
 
-export const EditPackItemModal = ({
-  initialData,
-  packId,
-  currentPack,
-  editAsDuplicate,
-  setPage,
-  page,
-  isModalOpen,
-  onTrigger,
-  closeModalHandler,
-}) => {
-  const [modalOpen, setModalOpen] = useState(false);
-  let currentPackId;
-  if (currentPack) {
-    currentPackId = currentPack._id;
-  }
-
-  const onTriggerOpen = (newState) => {
-    setModalOpen(newState);
-  };
-  const closeTriggerOpen = () => {
-    onTriggerOpen(false);
-  };
-  const footerCloseHandler = closeModalHandler ?? closeTriggerOpen;
-
+export const EditPackItemModal = ({ children }) => {
   const footerButtons = [
     {
       label: 'Cancel',
-      onClick: closeModalHandler,
+      onClick: (_, closeModal) => closeModal(),
       color: '#B22222',
       disabled: false,
     },
@@ -41,25 +17,24 @@ export const EditPackItemModal = ({
 
   return (
     <View>
-      <CustomModal
-        isActive={isModalOpen || modalOpen}
+      <BaseModal
         title={'Edit Item'}
         triggerComponent={<MaterialIcons name="edit" size={20} color="black" />}
-        onTrigger={onTrigger || onTriggerOpen}
         footerButtons={footerButtons}
-        onCancel={closeModalHandler}
       >
-        <AddItem
-          _id={packId}
-          packId={currentPackId}
-          isEdit={true}
-          initialData={initialData}
-          editAsDuplicate={editAsDuplicate}
-          setPage={setPage}
-          page={page}
-          closeModalHandler={closeModalHandler || closeTriggerOpen}
-        />
-      </CustomModal>
+        {withCloseModalHandler(children)}
+      </BaseModal>
     </View>
+  );
+};
+
+const withCloseModalHandler = (Component) => (props) => {
+  const { setIsModalOpen } = useModal();
+
+  return (
+    <Component
+      {...props}
+      closeModalHandler={setIsModalOpen.bind(null, false)}
+    />
   );
 };

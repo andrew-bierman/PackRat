@@ -6,8 +6,16 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
-import { RStack } from '@packrat/ui';
-import { CustomModal } from '../modal';
+import { useDispatch, useSelector } from 'react-redux';
+import useTheme from '../../hooks/useTheme';
+import { BaseModal, RStack } from '@packrat/ui';
+// import {
+//   getUserChats,
+//   getAIResponse,
+//   selectConversationById,
+//   selectAllConversations,
+// } from '../../store/chatStore';
+import { Box, VStack, HStack, Select } from 'native-base';
 import useCustomStyles from '~/hooks/useCustomStyles';
 import { useChat } from '~/hooks/chat/useChat';
 // import { Select } from "tamagui";
@@ -122,23 +130,13 @@ const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
 };
 
 const ChatModalTrigger = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const handleClose = () => {
-    setIsOpen(false);
-  };
   const styles = useCustomStyles(loadStyles);
 
   return (
     <View style={styles.container}>
-      <CustomModal
-        title="Chat"
-        trigger="Open Chat"
-        isActive={isOpen}
-        onTrigger={setIsOpen}
-        onCancel={handleClose}
-      >
-        <ChatComponent onClose={handleClose} />
-      </CustomModal>
+      <BaseModal title="Chat" trigger="Open Chat">
+        <ChatComponent />
+      </BaseModal>
     </View>
   );
 };
