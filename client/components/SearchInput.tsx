@@ -4,7 +4,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import useSearchInput from '~/hooks/search/useSearchInput';
 import useTheme from '~/hooks/useTheme';
 import useCustomStyles from '~/hooks/useCustomStyles';
-import { RStack, RInput, RButton, RText, RScrollView } from '@packrat/ui';
+import { RStack, RInput, RButton, RText, RScrollView, RIconButton } from '@packrat/ui';
 import { View, Pressable } from 'react-native';
 
 export const SearchInput = ({ onSelect, placeholder }) => {
@@ -35,8 +35,8 @@ export const SearchInput = ({ onSelect, placeholder }) => {
         >
           <RInput
             style={{
-              paddingLeft: '35px',
-              paddingRight: '55px',
+              paddingLeft: 35,
+              paddingRight: 55,
             }}
             placeholder={placeholder ?? 'Search'}
             onChangeText={(text) => {
@@ -53,7 +53,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              width: '40px',
+              width: 40,
               fontSize: 20,
             }}
           />
@@ -90,7 +90,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
             >
               <View
                 role="list"
-                style={{ width: '100%', gap: '8px', padding: '8px' }}
+                style={{ width: '100%', gap: 8, padding: 8 }}
               >
                 {data.map((result, i) => (
                   <RStack
@@ -106,11 +106,9 @@ export const SearchInput = ({ onSelect, placeholder }) => {
                     <RStack style={{ flexDirection: 'row' }}>
                       <RText fontWeight="400">{result.properties.name}</RText>
                       <RText
-                        style={{
-                          color: 'gray',
-                          opacity: '100',
-                          textTransform: 'capitalize',
-                        }}
+                        color={'gray'}
+                        opacity={100}
+                        textTransform={'capitalize'}
                       >
                         {result.properties.osm_value}
                       </RText>
@@ -132,14 +130,12 @@ export const SearchInput = ({ onSelect, placeholder }) => {
           setSearchString(text);
         }}
         placeholder="Search"
-        style={{
-          width: '100%',
-          borderRadius: '4',
-          padding: '16px 8px',
-          backgroundColor: 'white',
-        }}
         value={searchString}
         fontSize={14}
+        width={'100%'}
+        borderRadius={4}
+        paddingVertical={16}
+        backgroundColor="white"
       />
       <RIconButton
         backgroundColor="transparent"
@@ -188,6 +184,6 @@ const loadStyles = () => ({
   container: {
     marginTop: 20,
     marginBottom: 15,
-    maxWidth: '400px',
+    maxWidth: 400,
   },
 });

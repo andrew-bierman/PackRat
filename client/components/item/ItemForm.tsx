@@ -42,7 +42,7 @@ export const ItemForm = ({
 
   return (
     <View>
-      <RStack style={{ gap: '8px' }}>
+      <RStack style={{ gap: 8 }}>
         <RInput
           value={name}
           placeholder="Item Name"

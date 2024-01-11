@@ -83,21 +83,21 @@ export default function Card({
   if (duration) numberOfNights = JSON.parse(duration).numberOfNights;
 
   return (
-    <View style={{ alignItems: 'center', padding: '16px' }}>
+    <View style={{ alignItems: 'center', padding: 16 }}>
       <View
         style={{
-          minHeight: '150px',
-          minWidth: '300px',
+          minHeight: 150,
+          minWidth: 300,
           marginVertical: 'auto',
-          borderRadius: '15px',
+          borderRadius: 15,
           overflow: 'hidden',
           borderColor: 'lightgray',
           borderWidth: '1',
           backgroundColor: `${currentTheme.colors.card}`,
         }}
       >
-        <RStack style={{ padding: '16px', gap: '50px' }}>
-          <RStack style={{ gap: '10px' }}>
+        <RStack style={{ padding: 16, gap: 50 }}>
+          <RStack style={{ gap: 10 }}>
             <RHeading>
               <View
                 style={{
@@ -117,7 +117,7 @@ export default function Card({
                     flexDirection: 'row',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    gap: '10px',
+                    gap: 10,
                   }}
                 >
                   {type === 'pack' && (
@@ -126,7 +126,7 @@ export default function Card({
                         flexDirection: 'row',
                         alignItems: 'center',
                         justifyContent: 'space-between',
-                        gap: '8px',
+                        gap: 8,
                         // border: '1px solid #ccc',
                       }}
                     >
@@ -189,7 +189,7 @@ export default function Card({
                 style={{
                   flexDirection: 'column',
                   alignItems: 'flex-start',
-                  gap: '8px',
+                  gap: 8,
                 }}
               >
                 <Link href={`/profile/${owner_id}`}>
@@ -201,7 +201,7 @@ export default function Card({
                   style={{
                     flexDirection: 'row',
                     alignItems: 'center',
-                    gap: '100px',
+                    gap: 100,
                   }}
                 >
                   <RText fontSize="$1" color="gray" fontWeight="400" flex={1}>
@@ -234,7 +234,7 @@ export default function Card({
                       style={{
                         flexDirection: 'row',
                         alignItems: 'center',
-                        gap: '8px',
+                        gap: 8,
                       }}
                     >
                       {user?._id === owner_id ? null : (
