@@ -31,7 +31,7 @@ interface ChatSelectorProps {
 interface ChatComponentProps {
   showChatSelector?: boolean;
   defaultChatId?: string | null;
-  onClose: () => void; // Add the onClose prop
+  onClose: () => void; 
 }
 
 const MessageBubble: FC<{ message: Message }> = ({ message }) => {
