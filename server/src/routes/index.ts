@@ -85,16 +85,16 @@ if (process.env.NODE_ENV === 'production') {
     // Attach the CSRF token cookie to the response
     // res.cookie("XSRF-TOKEN", req.csrfToken());
 
-    res.sendFile(path.resolve(__dirname, '../client', 'dist', 'index.html'));
+    res.sendFile(path.resolve(__dirname, '../apps/expo', 'dist', 'index.html'));
   });
 
   // Serve the static assets from the client's dist app
-  router.use(express.static(path.join(__dirname, '../client/dist')));
+  router.use(express.static(path.join(__dirname, '../apps/expo/dist')));
 
   // Serve the client's index.html file at all other routes NOT starting with /api
   router.get(/^(?!\/?api).*/, (req, res) => {
     // res.cookie("XSRF-TOKEN", req.csrfToken());
-    res.sendFile(path.resolve(__dirname, '../client', 'dist', 'index.html'));
+    res.sendFile(path.resolve(__dirname, '../apps/expo', 'dist', 'index.html'));
   });
 }
 
