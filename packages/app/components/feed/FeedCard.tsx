@@ -13,8 +13,8 @@ import { Link } from 'expo-router';
 import { DuplicateIcon } from '../DuplicateIcon/index';
 import { truncateString } from '../../utils/truncateString';
 import { RText, RStack, RHeading } from '@packrat/ui';
-import { formatNumber } from '~/utils/formatNumber';
-import { useAddFavorite } from '~/hooks/favorites';
+import { formatNumber } from 'app/utils/formatNumber';
+import { useAddFavorite } from 'app/hooks/favorites';
 
 export default function Card({
   type,

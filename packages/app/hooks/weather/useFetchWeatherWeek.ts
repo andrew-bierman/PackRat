@@ -1,7 +1,7 @@
 import { queryTrpc } from '../../trpc';
 import { store } from '../../store/store';
 import { useEffect, useState } from 'react';
-import { parseCoordinates } from '~/utils/coordinatesParser';
+import { parseCoordinates } from 'app/utils/coordinatesParser';
 
 export const useFetchWeatherWeak = (geoJSON) => {
   const [latLng, setLatLng] = useState({ lat: null, lon: null });

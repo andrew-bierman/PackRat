@@ -3,7 +3,7 @@ import { RCard } from '@packrat/ui';
 import React from 'react';
 import { theme } from '../../theme';
 import useTheme from '../../hooks/useTheme';
-import useCustomStyles from '~/hooks/useCustomStyles';
+import useCustomStyles from 'app/hooks/useCustomStyles';
 
 const Section = ({ children, onPress }) => {
   const styles = useCustomStyles(loadStyles);

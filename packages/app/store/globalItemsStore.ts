@@ -3,7 +3,7 @@ import {
   createAsyncThunk,
   createEntityAdapter,
 } from '@reduxjs/toolkit';
-import axios from '~/config/axios';
+import axios from 'app/config/axios';
 import { api } from '../constants/api';
 import { queryTrpc, trpc } from '../trpc';
 

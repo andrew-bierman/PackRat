@@ -3,7 +3,7 @@ import { RStack, RImage } from '@packrat/ui';
 import { Platform, View } from 'react-native';
 import { theme } from '../../theme';
 import { isObjectEmpty } from '../../utils/isObjectEmpty';
-import useCustomStyles from '~/hooks/useCustomStyles';
+import useCustomStyles from 'app/hooks/useCustomStyles';
 
 const Hero = ({ children, imageDetails }) => {
   if (isObjectEmpty(imageDetails || {})) {

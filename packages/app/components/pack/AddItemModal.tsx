@@ -1,5 +1,5 @@
 import { AddItem } from '../item/AddItem';
-import useTheme from '~/hooks/useTheme';
+import useTheme from 'app/hooks/useTheme';
 import { BaseModal } from '@packrat/ui';
 
 export const AddItemModal = ({

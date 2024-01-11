@@ -5,7 +5,7 @@ import { View, Platform } from 'react-native';
 import WebMap from './WebMap';
 import { isObjectEmpty } from '../../utils/isObjectEmpty';
 import { defaultShape } from '../../utils/mapFunctions';
-import useCustomStyles from '~/hooks/useCustomStyles';
+import useCustomStyles from 'app/hooks/useCustomStyles';
 
 export function MapContainer({ shape }) {
   if (isObjectEmpty(shape)) {

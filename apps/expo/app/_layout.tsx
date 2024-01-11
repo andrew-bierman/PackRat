@@ -11,7 +11,7 @@ export default function HomeLayout() {
   return (
     <Provider>
       <Navigation />
-      {/* <Slot /> */}
+      <Slot />
       {/* {Platform.OS === 'web' ? <Footer /> : null} */}
     </Provider>
   );

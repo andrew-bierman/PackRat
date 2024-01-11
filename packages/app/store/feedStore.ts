@@ -4,7 +4,7 @@ import {
   createEntityAdapter,
 } from '@reduxjs/toolkit';
 import { api } from '../constants/api';
-import axios from '~/config/axios';
+import axios from 'app/config/axios';
 import { trpc } from '../trpc';
 
 // Define the adapter for packs and trips

@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 import LargeCard from '../card/LargeCard';
 import { theme } from '../../theme';
 import useTheme from '../../hooks/useTheme';
-import { hexToRGBA } from '~/utils/colorFunctions';
+import { hexToRGBA } from 'app/utils/colorFunctions';
 import { View, FlatList } from 'react-native';
 
 // Skeleton version of the UserDataCard component

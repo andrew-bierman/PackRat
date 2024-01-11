@@ -13,8 +13,8 @@ import { Desktop, Mobile, Tablet } from '../../media';
 import { RButton, RStack } from '@packrat/ui';
 import * as Linking from 'expo-linking';
 import useTheme from '../../hooks/useTheme';
-import useCustomStyles from '~/hooks/useCustomStyles';
-import useAbout from '~/hooks/about/useAbout';
+import useCustomStyles from 'app/hooks/useCustomStyles';
+import useAbout from 'app/hooks/about/useAbout';
 
 const AboutContent = ({ desktopContainer, isMobile }) => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =

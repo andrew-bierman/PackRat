@@ -1,9 +1,9 @@
 import { useDispatch } from 'react-redux';
 import { useSelector } from '../redux/useSelector';
 import { useState } from 'react';
-import { duplicatePackItem } from '~/store/packsStore';
-import { ItemCategoryEnum } from '~/constants/itemCategory';
-import { convertWeight } from '~/utils/convertWeight';
+import { duplicatePackItem } from 'app/store/packsStore';
+import { ItemCategoryEnum } from 'app/constants/itemCategory';
+import { convertWeight } from 'app/utils/convertWeight';
 
 export const usePackTable = ({
   currentPack,

@@ -2,7 +2,7 @@ import { View } from 'react-native';
 import React, { useState } from 'react';
 import DropdownComponent from '../Dropdown';
 import { RLabel } from '@packrat/ui';
-import useCustomStyles from '~/hooks/useCustomStyles';
+import useCustomStyles from 'app/hooks/useCustomStyles';
 
 export const PaginationLimit = ({ limit, setLimit, setPage }) => {
   const styles = useCustomStyles(loadStyles);

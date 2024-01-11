@@ -8,7 +8,7 @@ import { onlineManager } from '@tanstack/react-query';
 import NetInfo from '@react-native-community/netinfo';
 import { queryTrpc, getToken } from '../../trpc';
 import { httpBatchLink } from '@trpc/client';
-import { api } from '~/constants/api';
+import { api } from 'app/constants/api';
 import { Platform } from 'react-native';
 
 export const TrpcTanstackProvider: React.FC<{ children: React.ReactNode }> = ({

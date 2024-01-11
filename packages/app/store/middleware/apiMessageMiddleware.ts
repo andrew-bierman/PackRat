@@ -1,7 +1,7 @@
 import { type Middleware } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { InformUser } from '~/utils/ToastUtils';
-import { api } from '~/constants/api';
+import { InformUser } from 'app/utils/ToastUtils';
+import { api } from 'app/constants/api';
 
 const apiMiddleware: Middleware =
   ({ dispatch }) =>

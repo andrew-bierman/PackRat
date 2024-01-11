@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'expo-router';
 import { format, intervalToDuration } from 'date-fns';
 // import { addTrip } from '../../store/tripsStore';
-import { useAddTrip } from '~/hooks/trips';
-import { useGetPhotonDetails } from '~/hooks/destination';
+import { useAddTrip } from 'app/hooks/trips';
+import { useGetPhotonDetails } from 'app/hooks/destination';
 
 // import { Picker } from '@react-native-picker/picker';
 import { DropdownComponent } from '../Dropdown';

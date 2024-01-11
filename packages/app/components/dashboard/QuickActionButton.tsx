@@ -4,7 +4,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import React from 'react';
 import { theme } from '../../theme';
 import useTheme from '../../hooks/useTheme';
-import useCustomStyles from '~/hooks/useCustomStyles';
+import useCustomStyles from 'app/hooks/useCustomStyles';
 
 const QuickActionButton = ({ onPress, iconName, text }) => {
   const styles = useCustomStyles(loadStyles);

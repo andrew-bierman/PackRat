@@ -5,7 +5,7 @@ import {
   clearSearchResults,
 } from '../../store/searchStore';
 import { setLatLng } from '../../store/weatherStore';
-import { usePhotonDetail } from '~/hooks/photonDetail';
+import { usePhotonDetail } from 'app/hooks/photonDetail';
 import { type RootState } from 'store/store';
 
 const useSearchInput = (onSelect) => {

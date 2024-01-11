@@ -1,6 +1,6 @@
 import React from 'react';
 import WeatherCard from './WeatherCard';
-import { useFetchWeather, useFetchWeatherWeak } from '~/hooks/weather';
+import { useFetchWeather, useFetchWeatherWeak } from 'app/hooks/weather';
 import { RText } from '@packrat/ui';
 
 /**

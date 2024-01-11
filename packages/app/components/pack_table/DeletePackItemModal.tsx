@@ -8,7 +8,7 @@ import {
   getItemsGlobal,
 } from '../../store/globalItemsStore';
 import { addOfflineRequest } from '../../store/offlineQueue';
-import { useDeletePackItem } from '~/hooks/packs/useDeletePackItem';
+import { useDeletePackItem } from 'app/hooks/packs/useDeletePackItem';
 import { queryTrpc, trpc } from '../../trpc';
 import { BaseModal } from '@packrat/ui';
 

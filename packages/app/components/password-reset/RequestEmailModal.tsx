@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { BaseModal, RInput } from '@packrat/ui';
-import axios from '~/config/axios';
+import axios from 'app/config/axios';
 import { api } from '../../constants/api';
 import { InformUser } from '../../utils/ToastUtils';
 import useTheme from '../../hooks/useTheme';
-import useCustomStyles from '~/hooks/useCustomStyles';
+import useCustomStyles from 'app/hooks/useCustomStyles';
 
 export const RequestPasswordResetEmailModal = () => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =

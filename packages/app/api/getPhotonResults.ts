@@ -1,4 +1,4 @@
-import axios from '~/config/axios';
+import axios from 'app/config/axios';
 
 /**
  * Retrieves photon results based on the provided address array.

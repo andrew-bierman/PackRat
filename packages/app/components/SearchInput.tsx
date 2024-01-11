@@ -1,9 +1,9 @@
 import React from 'react';
 import { Platform } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import useSearchInput from '~/hooks/search/useSearchInput';
-import useTheme from '~/hooks/useTheme';
-import useCustomStyles from '~/hooks/useCustomStyles';
+import useSearchInput from 'app/hooks/search/useSearchInput';
+import useTheme from 'app/hooks/useTheme';
+import useCustomStyles from 'app/hooks/useCustomStyles';
 import {
   RStack,
   RInput,

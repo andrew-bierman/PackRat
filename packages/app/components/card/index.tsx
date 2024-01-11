@@ -23,7 +23,7 @@ import { ThreeDotsMenu } from '../ThreeDotsMenu';
 import useTheme from '../../hooks/useTheme';
 import { SearchItem } from '../item/searchItem';
 import Loader from '../Loader';
-import useCustomStyles from '~/hooks/useCustomStyles';
+import useCustomStyles from 'app/hooks/useCustomStyles';
 
 export const CustomCard = ({
   title,

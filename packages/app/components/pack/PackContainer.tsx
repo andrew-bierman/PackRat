@@ -15,7 +15,7 @@ import { updateNewTripPack } from '../../store/tripsStore';
 import { useDispatch } from 'react-redux';
 import { View } from 'react-native';
 import { AddItemModal } from './AddItemModal';
-import useCustomStyles from '~/hooks/useCustomStyles';
+import useCustomStyles from 'app/hooks/useCustomStyles';
 
 export default function PackContainer({ isCreatingTrip = false }) {
   const dispatch = useDispatch();

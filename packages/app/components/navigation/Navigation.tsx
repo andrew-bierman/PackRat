@@ -3,10 +3,10 @@ import { View, Text, TouchableOpacity, SafeAreaView } from 'react-native';
 import { AuthStateListener } from '../../auth/AuthStateListener';
 import SVGLogoComponent from '../../components/logo';
 import { Drawer } from './Drawer';
-import useCustomStyles from '~/hooks/useCustomStyles';
-import { useIsMobileView } from '~/hooks/common';
-import { useNavigate } from '~/hooks/navigation';
-import { useAuthUser } from '~/hooks/user/useAuthUser';
+import useCustomStyles from 'app/hooks/useCustomStyles';
+import { useIsMobileView } from 'app/hooks/common';
+import { useNavigate } from 'app/hooks/navigation';
+import { useAuthUser } from 'app/hooks/user/useAuthUser';
 import { NavigationList } from './NavigationList';
 
 export const Navigation = () => {

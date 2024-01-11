@@ -9,7 +9,7 @@ import { EditPackItemModal } from '../pack_table/EditPackItemModal';
 import { DeletePackItemModal } from '../pack_table/DeletePackItemModal';
 import { PaginationLimit } from '../paginationChooseLimit';
 import Loader from '../Loader';
-import useCustomStyles from '~/hooks/useCustomStyles';
+import useCustomStyles from 'app/hooks/useCustomStyles';
 import { loadStyles } from './itemsTable.style';
 import { AddItem } from '../item/AddItem';
 

@@ -10,9 +10,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getItemsGlobal } from '../../store/globalItemsStore';
 import { Stack } from 'expo-router';
 import { executeOfflineRequests } from '../../store/offlineQueue';
-import useCustomStyles from '~/hooks/useCustomStyles';
+import useCustomStyles from 'app/hooks/useCustomStyles';
 import { BaseModal } from '@packrat/ui';
-// import { checkNetworkConnected } from '~/utils/netInfo';
+// import { checkNetworkConnected } from 'app/utils/netInfo';
 
 export default function Items() {
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);

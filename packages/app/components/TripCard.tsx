@@ -1,8 +1,8 @@
 import { RCard, RParagraph, RStack, RText } from '@packrat/ui';
 import { Platform } from 'react-native';
 import { Text } from 'tamagui';
-import { useCardTrip } from '~/hooks/trips/useTripCard';
-import useCustomStyles from '~/hooks/useCustomStyles';
+import { useCardTrip } from 'app/hooks/trips/useTripCard';
+import useCustomStyles from 'app/hooks/useCustomStyles';
 import useTheme from '../hooks/useTheme';
 import { theme } from '../theme/index';
 import { SearchInput } from './SearchInput';

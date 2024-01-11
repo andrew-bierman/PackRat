@@ -1,7 +1,7 @@
 import { TouchableOpacity, Text } from 'react-native';
-import { useNavigationItem } from '~/hooks/navigation';
-import useCustomStyles from '~/hooks/useCustomStyles';
-import useTheme from '~/hooks/useTheme';
+import { useNavigationItem } from 'app/hooks/navigation';
+import useCustomStyles from 'app/hooks/useCustomStyles';
+import useTheme from 'app/hooks/useTheme';
 
 export const NavigationItem = ({ item, itemStyle, isMobileView, onSelect }) => {
   const styles = useCustomStyles(loadStyles);

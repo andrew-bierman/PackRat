@@ -3,15 +3,15 @@ import { RButton, RCheckbox, RSkeleton, RStack, RText } from '@packrat/ui';
 import { useState } from 'react';
 import { FlatList, Platform, View } from 'react-native';
 import { Cell, Row, Table } from 'react-native-table-component';
-import { usePackTable } from '~/hooks/packs/usePackTable';
-import useCustomStyles from '~/hooks/useCustomStyles';
-import useTheme from '~/hooks/useTheme';
+import { usePackTable } from 'app/hooks/packs/usePackTable';
+import useCustomStyles from 'app/hooks/useCustomStyles';
+import useTheme from 'app/hooks/useTheme';
 import DropdownComponent from '../Dropdown';
 import { PackOptions } from '../PackOptions';
 import { DeletePackItemModal } from './DeletePackItemModal';
 import { EditPackItemModal } from './EditPackItemModal';
-import { categoryIcons } from '~/constants/pack/icons';
-import { formatNumber } from '~/utils/formatNumber';
+import { categoryIcons } from 'app/constants/pack/icons';
+import { formatNumber } from 'app/utils/formatNumber';
 import { AddItem } from '../item/AddItem';
 
 const WeightUnitDropdown = ({ value, onChange }) => {

@@ -5,7 +5,7 @@ import { PasswordResetForm } from './PasswordResetForm';
 
 import { useSearchParams } from 'expo-router';
 import { RequestPasswordResetEmailModal } from './RequestEmailModal';
-import useCustomStyles from '~/hooks/useCustomStyles';
+import useCustomStyles from 'app/hooks/useCustomStyles';
 
 export const RequestPasswordReset = () => {
   const [email, setEmail] = useState('');

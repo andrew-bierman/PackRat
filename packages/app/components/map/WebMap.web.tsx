@@ -9,8 +9,8 @@ import * as DocumentPicker from 'expo-document-picker';
 import { gpx as toGeoJSON } from '@tmcw/togeojson';
 import { DOMParser } from 'xmldom';
 import MapPreview from './MapPreview';
-import useCustomStyles from '~/hooks/useCustomStyles';
-import { useWebMap } from '~/hooks/map/useWebMap';
+import useCustomStyles from 'app/hooks/useCustomStyles';
+import { useWebMap } from 'app/hooks/map/useWebMap';
 
 // import 'mapbox-gl/dist/mapbox-gl.css'
 

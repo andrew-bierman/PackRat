@@ -15,8 +15,8 @@ import ScoreContainer from '../ScoreContainer';
 import ChatContainer from '../chat';
 import { AddItem } from '../item/AddItem';
 import { AddItemModal } from './AddItemModal';
-import useCustomStyles from '~/hooks/useCustomStyles';
-import { useUserPacks } from '~/hooks/packs/useUserPacks';
+import useCustomStyles from 'app/hooks/useCustomStyles';
+import { useUserPacks } from 'app/hooks/packs/useUserPacks';
 import { useFetchSinglePack } from '../../hooks/packs';
 
 export function PackDetails() {

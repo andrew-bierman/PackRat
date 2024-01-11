@@ -7,9 +7,9 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 // import useGetPacks from "../../hooks/useGetPacks";
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'expo-router';
-import useCustomStyles from '~/hooks/useCustomStyles';
+import useCustomStyles from 'app/hooks/useCustomStyles';
 import Avatar from '../../components/Avatar/Avatar';
-import { useProfile } from '~/hooks/user';
+import { useProfile } from 'app/hooks/user';
 
 const SettingsButton = () => {
   const router = useRouter();

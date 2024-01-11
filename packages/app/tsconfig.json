@@ -12,16 +12,7 @@
     "useUnknownInCatchVariables": false,
     "baseUrl": ".",
     "paths": {
-      "~/config/*": ["config/*"],
-      "~/constants/*": ["constants/*"],
-      "~/components/*": ["components/*"],
-      "~/context/*": ["context/*"],
-      "~/utils/*": ["utils/*"],
-      "~/hooks/*": ["hooks/*"],
-      "~/screens/*": ["screens/*"],
-      "~/theme/*": ["theme/*"],
-     "~/store/*": ["store/*"],
-      "@trpc": ["../server/src/routes/index"]
+      "@trpc": ["../../server/src/routes/index"]
     },
   },
   "exclude": [

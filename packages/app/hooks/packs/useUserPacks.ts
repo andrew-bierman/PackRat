@@ -1,5 +1,5 @@
 import { getQueryKey } from '@trpc/react-query';
-import { queryClient } from '~/constants/queryClient';
+import { queryClient } from 'app/constants/queryClient';
 import { queryTrpc } from '../../trpc';
 
 export const useUserPacks = (ownerId, queryString = '') => {

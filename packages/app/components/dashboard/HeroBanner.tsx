@@ -14,7 +14,7 @@ import {
   setSelectedSearchResult,
 } from '../../store/destinationStore';
 import { hexToRGBA } from '../../utils/colorFunctions';
-import useCustomStyles from '~/hooks/useCustomStyles';
+import useCustomStyles from 'app/hooks/useCustomStyles';
 
 const HeroSection = ({ onSelect }) => {
   const dispatch = useDispatch();

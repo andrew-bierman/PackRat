@@ -9,8 +9,8 @@ import {
   Octicons,
 } from '@expo/vector-icons';
 import { RImage, RStack, RText } from '@packrat/ui';
-import useCustomStyles from '~/hooks/useCustomStyles';
-import { useDate } from '~/hooks/weather/useDate';
+import useCustomStyles from 'app/hooks/useCustomStyles';
+import { useDate } from 'app/hooks/weather/useDate';
 import { defaultWeatherObject } from '../../constants/defaultWeatherObj';
 
 export default function WeatherCard({

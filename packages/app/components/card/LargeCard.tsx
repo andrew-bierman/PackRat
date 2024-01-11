@@ -4,7 +4,7 @@ import { RText, RStack } from '@packrat/ui';
 import { useSelector } from 'react-redux';
 import useTheme from '../../hooks/useTheme';
 import { theme } from '../../theme';
-import useCustomStyles from '~/hooks/useCustomStyles';
+import useCustomStyles from 'app/hooks/useCustomStyles';
 
 /**
  * Retrieves the appropriate container style based on the provided type.

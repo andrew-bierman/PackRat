@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { ItemForm } from './ItemForm'; // assuming you moved the form related code to a separate component
-import { useAddPackItem } from '~/hooks/packs/useAddPackItem';
-import { useEditPackItem } from '~/hooks/packs/useEditPackItem';
+import { useAddPackItem } from 'app/hooks/packs/useAddPackItem';
+import { useEditPackItem } from 'app/hooks/packs/useEditPackItem';
 
 export const AddItem = ({
   _id,

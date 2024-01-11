@@ -1,4 +1,4 @@
-import useCustomStyles from '~/hooks/useCustomStyles';
+import useCustomStyles from 'app/hooks/useCustomStyles';
 import { Svg, Line, Circle } from 'react-native-svg';
 import { View } from 'react-native';
 

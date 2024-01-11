@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
-import useCustomStyles from '~/hooks/useCustomStyles';
+import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useMultiStepForm } from './useMultiStepForm';
 import { ProgressBar } from './ProgressBar';
 import { Sidebar } from './Sidebar';

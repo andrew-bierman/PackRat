@@ -4,7 +4,7 @@ import { TextInput } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { updatePack } from '../../store/packsStore';
 // import { editTrip } from '../../store/tripsStore';
-import { useEditTrips } from '~/hooks/trips';
+import { useEditTrips } from 'app/hooks/trips';
 import LoadingPlaceholder from '../loading-placeholder';
 
 export const EditableInput = ({

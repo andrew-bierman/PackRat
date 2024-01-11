@@ -6,10 +6,10 @@ import { addPack } from '../../store/packsStore';
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import useTheme from '../../hooks/useTheme';
-import useCustomStyles from '~/hooks/useCustomStyles';
-import { useAddNewPack } from '~/hooks/packs';
+import useCustomStyles from 'app/hooks/useCustomStyles';
+import { useAddNewPack } from 'app/hooks/packs';
 import { useRouter } from 'expo-router';
-import { packSelectOptions } from '~/constants/options';
+import { packSelectOptions } from 'app/constants/options';
 
 export const AddPack = ({ isCreatingTrip = false }) => {
   // Hooks

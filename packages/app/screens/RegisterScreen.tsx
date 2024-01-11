@@ -10,10 +10,10 @@ import { signInWithGoogle, signUp } from '../store/authStore';
 import { InformUser } from '../utils/ToastUtils';
 import useTheme from '../hooks/useTheme';
 import { useForm } from 'react-hook-form';
-import { InputText, InputTextRules } from '~/components/InputText';
+import { InputText, InputTextRules } from 'app/components/InputText';
 import { useSession } from '../context/auth';
-import { useGoogleAuth } from '~/hooks/login';
-import { useRegisterUser } from '~/hooks/user';
+import { useGoogleAuth } from 'app/hooks/login';
+import { useRegisterUser } from 'app/hooks/user';
 
 export default function Register() {
   const { currentTheme } = useTheme();

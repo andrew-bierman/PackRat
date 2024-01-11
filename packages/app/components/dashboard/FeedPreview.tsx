@@ -6,8 +6,8 @@ import { Dimensions, View } from 'react-native';
 import { getPublicPacks, getPublicTrips } from '../../store/feedStore';
 import useTheme from '../../hooks/useTheme';
 import Carousel from '../carousel';
-import useCustomStyles from '~/hooks/useCustomStyles';
-import { useFeed } from '~/hooks/feed';
+import useCustomStyles from 'app/hooks/useCustomStyles';
+import { useFeed } from 'app/hooks/feed';
 
 const { height, width } = Dimensions.get('window');
 

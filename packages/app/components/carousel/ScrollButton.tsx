@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Text, TouchableOpacity, View } from 'react-native';
-import useCustomStyles from '~/hooks/useCustomStyles';
+import useCustomStyles from 'app/hooks/useCustomStyles';
 
 const ScrollButton = ({ direction, onPress }) => {
   const styles = useCustomStyles(loadStyles);

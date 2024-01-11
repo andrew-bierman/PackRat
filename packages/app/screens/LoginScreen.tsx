@@ -5,8 +5,8 @@ import { NODE_ENV } from '@env';
 import { Link, usePathname } from 'expo-router';
 import { InformUser } from '../utils/ToastUtils';
 import useTheme from '../hooks/useTheme';
-import { InputText, InputTextRules } from '~/components/InputText';
-import { useGoogleAuth, useLogin } from '~/hooks/login';
+import { InputText, InputTextRules } from 'app/components/InputText';
+import { useGoogleAuth, useLogin } from 'app/hooks/login';
 
 const demoUser = {
   email: 'zoot3@email.com',
