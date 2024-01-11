@@ -4289,21 +4289,21 @@ __metadata:
   resolution: "@packrat/ui@workspace:packages/ui"
   dependencies:
     "@shopify/flash-list": "npm:^1.6.1"
-    "@tamagui/animations-react-native": "npm:^1.84.0"
-    "@tamagui/build": "npm:^1.84.0"
-    "@tamagui/font-inter": "npm:^1.84.0"
-    "@tamagui/progress": "npm:^1.84.0"
-    "@tamagui/react-native-media-driver": "npm:^1.84.0"
-    "@tamagui/shorthands": "npm:^1.84.0"
-    "@tamagui/switch": "npm:^1.84.0"
-    "@tamagui/themes": "npm:^1.84.0"
-    "@tamagui/toast": "npm:^1.84.0"
+    "@tamagui/animations-react-native": "npm:^1.84.1"
+    "@tamagui/build": "npm:^1.84.1"
+    "@tamagui/font-inter": "npm:^1.84.1"
+    "@tamagui/progress": "npm:^1.84.1"
+    "@tamagui/react-native-media-driver": "npm:^1.84.1"
+    "@tamagui/shorthands": "npm:^1.84.1"
+    "@tamagui/switch": "npm:^1.84.1"
+    "@tamagui/themes": "npm:^1.84.1"
+    "@tamagui/toast": "npm:^1.84.1"
     "@tanstack/react-table": "npm:^8.10.7"
     "@tanstack/react-virtual": "npm:3.0.0-beta.54"
     esbuild: "npm:^0.19.5"
     jotai: "npm:^2.4.3"
     react: "npm:18.2.0"
-    tamagui: "npm:^1.84.0"
+    tamagui: "npm:^1.84.1"
   languageName: unknown
   linkType: soft
 
@@ -6118,7 +6118,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/animations-react-native@npm:1.84.1, @tamagui/animations-react-native@npm:^1.84.0":
+"@tamagui/animations-react-native@npm:1.84.1, @tamagui/animations-react-native@npm:^1.84.1":
   version: 1.84.1
   resolution: "@tamagui/animations-react-native@npm:1.84.1"
   dependencies:
@@ -6159,7 +6159,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/babel-plugin@npm:^1.84.0":
+"@tamagui/babel-plugin@npm:^1.84.1":
   version: 1.84.1
   resolution: "@tamagui/babel-plugin@npm:1.84.1"
   dependencies:
@@ -6172,7 +6172,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/build@npm:1.84.1, @tamagui/build@npm:^1.84.0":
+"@tamagui/build@npm:1.84.1, @tamagui/build@npm:^1.84.1":
   version: 1.84.1
   resolution: "@tamagui/build@npm:1.84.1"
   dependencies:
@@ -6314,7 +6314,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/config@npm:^1.84.0":
+"@tamagui/config@npm:^1.84.1":
   version: 1.84.1
   resolution: "@tamagui/config@npm:1.84.1"
   dependencies:
@@ -6468,7 +6468,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/font-inter@npm:1.84.1, @tamagui/font-inter@npm:^1.84.0":
+"@tamagui/font-inter@npm:1.84.1, @tamagui/font-inter@npm:^1.84.1":
   version: 1.84.1
   resolution: "@tamagui/font-inter@npm:1.84.1"
   dependencies:
@@ -6654,7 +6654,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/linear-gradient@npm:1.84.1, @tamagui/linear-gradient@npm:^1.84.0":
+"@tamagui/linear-gradient@npm:1.84.1, @tamagui/linear-gradient@npm:^1.84.1":
   version: 1.84.1
   resolution: "@tamagui/linear-gradient@npm:1.84.1"
   dependencies:
@@ -6684,7 +6684,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/lucide-icons@npm:^1.84.0":
+"@tamagui/lucide-icons@npm:^1.84.1":
   version: 1.84.1
   resolution: "@tamagui/lucide-icons@npm:1.84.1"
   dependencies:
@@ -6777,7 +6777,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/progress@npm:1.84.1, @tamagui/progress@npm:^1.84.0":
+"@tamagui/progress@npm:1.84.1, @tamagui/progress@npm:^1.84.1":
   version: 1.84.1
   resolution: "@tamagui/progress@npm:1.84.1"
   dependencies:
@@ -6823,7 +6823,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/react-native-media-driver@npm:1.84.1, @tamagui/react-native-media-driver@npm:^1.84.0":
+"@tamagui/react-native-media-driver@npm:1.84.1, @tamagui/react-native-media-driver@npm:^1.84.1":
   version: 1.84.1
   resolution: "@tamagui/react-native-media-driver@npm:1.84.1"
   dependencies:
@@ -6978,7 +6978,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/shorthands@npm:1.84.1, @tamagui/shorthands@npm:^1.84.0":
+"@tamagui/shorthands@npm:1.84.1, @tamagui/shorthands@npm:^1.84.1":
   version: 1.84.1
   resolution: "@tamagui/shorthands@npm:1.84.1"
   checksum: ede148be26a3eacd2b5465c7d4b8b603f21e2f2ec36bb408f542752be52fb1d10a4f5ff1892d78846f8ad8c5894c375af2ca172f903b1b6b1906ed2e188fb462
@@ -7063,7 +7063,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/switch@npm:1.84.1, @tamagui/switch@npm:^1.84.0":
+"@tamagui/switch@npm:1.84.1, @tamagui/switch@npm:^1.84.1":
   version: 1.84.1
   resolution: "@tamagui/switch@npm:1.84.1"
   dependencies:
@@ -7119,7 +7119,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/theme-base@npm:^1.84.0":
+"@tamagui/theme-base@npm:^1.84.1":
   version: 1.84.1
   resolution: "@tamagui/theme-base@npm:1.84.1"
   checksum: 17533a0a6958a6bf2157c888903e97b17405bc55edc9e1fd151d1cfd1374d64c4787758dd451da71cb73ef4a662adf87b58829e8d5065d8dfdf0e0206ec9ab87
@@ -7148,7 +7148,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/themes@npm:1.84.1, @tamagui/themes@npm:^1.84.0":
+"@tamagui/themes@npm:1.84.1, @tamagui/themes@npm:^1.84.1":
   version: 1.84.1
   resolution: "@tamagui/themes@npm:1.84.1"
   dependencies:
@@ -7167,7 +7167,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/toast@npm:^1.84.0":
+"@tamagui/toast@npm:^1.84.1":
   version: 1.84.1
   resolution: "@tamagui/toast@npm:1.84.1"
   dependencies:
@@ -9289,18 +9289,18 @@ __metadata:
     "@react-navigation/native-stack": "npm:^6.9.12"
     "@reduxjs/toolkit": "npm:^1.9.3"
     "@rnmapbox/maps": "npm:^10.0.0-beta.79"
-    "@tamagui/animations-react-native": "npm:^1.84.0"
-    "@tamagui/babel-plugin": "npm:^1.84.0"
-    "@tamagui/config": "npm:^1.84.0"
-    "@tamagui/font-inter": "npm:^1.84.0"
-    "@tamagui/linear-gradient": "npm:^1.84.0"
-    "@tamagui/lucide-icons": "npm:^1.84.0"
-    "@tamagui/progress": "npm:^1.84.0"
-    "@tamagui/react-native-media-driver": "npm:^1.84.0"
-    "@tamagui/shorthands": "npm:^1.84.0"
-    "@tamagui/switch": "npm:^1.84.0"
-    "@tamagui/theme-base": "npm:^1.84.0"
-    "@tamagui/themes": "npm:^1.84.0"
+    "@tamagui/animations-react-native": "npm:^1.84.1"
+    "@tamagui/babel-plugin": "npm:^1.84.1"
+    "@tamagui/config": "npm:^1.84.1"
+    "@tamagui/font-inter": "npm:^1.84.1"
+    "@tamagui/linear-gradient": "npm:^1.84.1"
+    "@tamagui/lucide-icons": "npm:^1.84.1"
+    "@tamagui/progress": "npm:^1.84.1"
+    "@tamagui/react-native-media-driver": "npm:^1.84.1"
+    "@tamagui/shorthands": "npm:^1.84.1"
+    "@tamagui/switch": "npm:^1.84.1"
+    "@tamagui/theme-base": "npm:^1.84.1"
+    "@tamagui/themes": "npm:^1.84.1"
     "@tanstack/eslint-plugin-query": "npm:^5.14.6"
     "@tanstack/query-async-storage-persister": "npm:^4.36.1"
     "@tanstack/react-query": "npm:^4.36.1"
@@ -9387,7 +9387,7 @@ __metadata:
     serve: "npm:^14.2.0"
     server: "npm:*"
     superjson: "npm:1.10.0"
-    tamagui: "npm:^1.84.0"
+    tamagui: "npm:^1.84.1"
     togpx: "npm:^0.5.4"
     typescript: "npm:^5.2.2"
     uuid: "npm:3.4.0"
@@ -13427,18 +13427,18 @@ __metadata:
     "@react-navigation/native-stack": "npm:^6.9.12"
     "@reduxjs/toolkit": "npm:^1.9.3"
     "@rnmapbox/maps": "npm:^10.0.0-beta.79"
-    "@tamagui/animations-react-native": "npm:^1.84.0"
-    "@tamagui/babel-plugin": "npm:^1.84.0"
-    "@tamagui/config": "npm:^1.84.0"
-    "@tamagui/font-inter": "npm:^1.84.0"
-    "@tamagui/linear-gradient": "npm:^1.84.0"
-    "@tamagui/lucide-icons": "npm:^1.84.0"
-    "@tamagui/progress": "npm:^1.84.0"
-    "@tamagui/react-native-media-driver": "npm:^1.84.0"
-    "@tamagui/shorthands": "npm:^1.84.0"
-    "@tamagui/switch": "npm:^1.84.0"
-    "@tamagui/theme-base": "npm:^1.84.0"
-    "@tamagui/themes": "npm:^1.84.0"
+    "@tamagui/animations-react-native": "npm:^1.84.1"
+    "@tamagui/babel-plugin": "npm:^1.84.1"
+    "@tamagui/config": "npm:^1.84.1"
+    "@tamagui/font-inter": "npm:^1.84.1"
+    "@tamagui/linear-gradient": "npm:^1.84.1"
+    "@tamagui/lucide-icons": "npm:^1.84.1"
+    "@tamagui/progress": "npm:^1.84.1"
+    "@tamagui/react-native-media-driver": "npm:^1.84.1"
+    "@tamagui/shorthands": "npm:^1.84.1"
+    "@tamagui/switch": "npm:^1.84.1"
+    "@tamagui/theme-base": "npm:^1.84.1"
+    "@tamagui/themes": "npm:^1.84.1"
     "@tanstack/eslint-plugin-query": "npm:^5.14.6"
     "@tanstack/query-async-storage-persister": "npm:^4.36.1"
     "@tanstack/react-query": "npm:^4.36.1"
@@ -13526,7 +13526,7 @@ __metadata:
     serve: "npm:^14.2.0"
     server: "npm:*"
     superjson: "npm:1.10.0"
-    tamagui: "npm:^1.84.0"
+    tamagui: "npm:^1.84.1"
     togpx: "npm:^0.5.4"
     typescript: "npm:^5.2.2"
     uuid: "npm:3.4.0"
@@ -25355,7 +25355,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tamagui@npm:^1.84.0":
+"tamagui@npm:^1.84.1":
   version: 1.84.1
   resolution: "tamagui@npm:1.84.1"
   dependencies:
