@@ -42,11 +42,16 @@ module.exports = {
     },
     ecmaVersion: 'latest',
     sourceType: 'module',
-    project: './tsconfig.json',
+    project: './client/tsconfig.json',
   },
   plugins: ['react', 'react-native', '@typescript-eslint', 'prettier'],
   rules: {
-    'prettier/prettier': 'error',
+    'prettier/prettier': [
+      "error",
+      {
+        endOfLine: 'auto'
+      }
+    ],
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/prefer-nullish-coalescing': 'off',
     '@typescript-eslint/strict-boolean-expressions': 'off',
@@ -72,6 +77,7 @@ module.exports = {
     '@typescript-eslint/await-thenable': 'off',
     '@typescript-eslint/prefer-optional-chain': 'off',
     '@typescript-eslint/return-await': 'off',
+    'react/prop-types': 0
   },
   settings: {
     react: {

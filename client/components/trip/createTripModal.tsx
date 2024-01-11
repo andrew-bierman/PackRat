@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { CustomModal } from '../modal';
 import { RInput, RStack, RText } from '@packrat/ui';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,6 +10,7 @@ import { useGetPhotonDetails } from '~/hooks/destination';
 
 // import { Picker } from '@react-native-picker/picker';
 import { DropdownComponent } from '../Dropdown';
+import useSaveTripContainer from '~/hooks/trips/useCreateTripModal';
 const options = [
   { label: 'Public', value: 'true' },
   { label: 'For me only', value: 'false' },
@@ -67,90 +68,30 @@ const NumberInput = (props) => {
 };
 
 export const SaveTripContainer = ({ dateRange }) => {
-  const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
-  const weatherObject = useSelector((state) => state.weather.weatherObject);
-  const search = useSelector((state) => state.search.selectedSearchResult);
-  const dropdown = useSelector((state) => state.dropdown);
-  const user = useSelector((state) => state.auth.user);
-  const packId = useSelector((state) => state.trips.newTrip.packId);
+  const {
+    isSaveModalOpen,
+    setIsSaveModalOpen,
+    weatherObject,
+    search,
+    dropdown,
+    setName,
+    setDescription,
+    isPublic,
+    setIsPublic,
+    handleCreateTrip,
+  } = useSaveTripContainer({ dateRange });
 
-  // defining dispatch
-  const { addTrip, isSuccess, data: response } = useAddTrip();
-  const router = useRouter();
-  // trip info states value
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  // const [numberOfNights, setNumberOfNights] = useState("");
-  // const [startDate, setStartDate] = useState("");
-  // const [endDate, setEndDate] = useState("");
+  /* -------------not being used yet------------- */
 
-  const [isPublic, setIsPublic] = useState(true);
-
-  const geoJSONData = useGetPhotonDetails({
-    properties: search?.properties
-      ? {
-          osm_id: search?.properties?.osm_id,
-          osm_type: search?.properties?.osm_type,
-        }
-      : undefined,
-  });
-
-  // create trip
-  const handleCreateTrip = async () => {
-    // duration object
-    const startDate = dateRange.startDate
-      ? format(dateRange.startDate, 'MM/dd/yyyy')
-      : '';
-    const endDate = dateRange.endDate
-      ? format(dateRange.endDate, 'MM/dd/yyyy')
-      : '';
-    const numNights =
-      dateRange.startDate && dateRange.endDate
-        ? intervalToDuration({
-            start: dateRange.startDate,
-            end: dateRange.endDate,
-          }).days
-        : '';
-    const duration = {
-      numberOfNights: numNights,
-      startDate,
-      endDate,
-    };
-
-    const { data: geoJSON } = geoJSONData;
-
-    const data = {
-      name,
-      description,
-      start_date: startDate,
-      end_date: endDate,
-      destination: search?.properties?.name,
-      geoJSON,
-      // trail: dropdown.currentTrail,
-      duration: JSON.stringify(duration),
-      weather: JSON.stringify(weatherObject),
-      owner_id: user?._id,
-      packs: packId,
-      is_public: isPublic,
-    };
-
-    // creating a trip
-    console.log('create trip data ->', data);
-    addTrip(data);
-    setIsSaveModalOpen(!isSaveModalOpen);
-  };
-  if (isSuccess && response) {
-    router.push(`/trip/${response.trip._id}`);
-  }
   /**
    * Handles the change in value.
    *
    * @param {type} itemValue - the new value of the item
    * @return {undefined}
    */
-  const handleValueChange = (itemValue) => {
+  /* const handleValueChange = (itemValue) => {
     setIsPublic(itemValue);
-  };
+  }; */
 
   /**
    * Renders an item for the Picker component.
@@ -158,9 +99,9 @@ export const SaveTripContainer = ({ dateRange }) => {
    * @param {object} item - The item to be rendered.
    * @return {JSX.Element} The rendered Picker.Item component.
    */
-  const renderItem = ({ item }) => (
+  /* const renderItem = ({ item }) => (
     <Picker.Item label={item.label} value={item.value} />
-  );
+  ); */
 
   /**
    * Returns the layout information for a given item index.
@@ -169,11 +110,13 @@ export const SaveTripContainer = ({ dateRange }) => {
    * @param {number} index - the index of the item
    * @return {object} - an object containing the layout information
    */
-  const getItemLayout = (_, index) => ({
+  /* const getItemLayout = (_, index) => ({
     length: 30, // height of each item
     offset: 30 * index, // calculate the offset based on item height
     index,
-  });
+  }); */
+
+  /* -------------not being used yet------------- */
 
   return (
     <CustomModal
