@@ -1,6 +1,6 @@
-import { CustomModal } from '../modal';
 import { AddItem } from '../item/AddItem';
 import useTheme from '~/hooks/useTheme';
+import { BaseModal } from '@packrat/ui';
 
 export const AddItemModal = ({
   currentPackId,
@@ -12,32 +12,29 @@ export const AddItemModal = ({
   const { currentTheme } = useTheme();
 
   return (
-    <CustomModal
+    <BaseModal
       title="Add Item"
       trigger="Add Item"
-      isActive={isAddItemModalOpen}
-      onTrigger={setIsAddItemModalOpen}
       footerButtons={[
         {
           label: 'Save',
           color: `${currentTheme.colors.secondaryBlue}`,
-          onClick: () => setIsAddItemModalOpen(false),
+          onClick: (_, closeModal) => closeModal(),
         },
         {
           label: 'Cancel',
           color: '#B22222',
-          onClick: () => setIsAddItemModalOpen(false),
+          onClick: (_, closeModal) => closeModal(),
         },
       ]}
     >
       <AddItem
         packId={currentPackId}
         currentPack={currentPack}
-        setIsAddItemModalOpen={setIsAddItemModalOpen}
         setRefetch={() => {
           setRefetch();
         }}
       />
-    </CustomModal>
+    </BaseModal>
   );
 };

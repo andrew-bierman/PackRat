@@ -14,7 +14,6 @@ import {
 import { updateNewTripPack } from '../../store/tripsStore';
 import { useDispatch } from 'react-redux';
 import { View } from 'react-native';
-import { CustomModal } from '../modal';
 import { AddItemModal } from './AddItemModal';
 import useCustomStyles from '~/hooks/useCustomStyles';
 

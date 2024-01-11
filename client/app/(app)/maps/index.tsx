@@ -10,6 +10,7 @@ import {
   calculateZoomLevel,
   getShapeSourceBounds,
 } from '../../../utils/mapFunctions';
+import { api } from '../../../constants/api';
 
 function CircleCapComp() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
@@ -91,11 +92,9 @@ export default function DownloadedMaps() {
                       borderRadius: 10,
                     }}
                     source={{
-                      uri: `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/${
+                      uri: `${api}/mapPreview/${
                         pack?.bounds[0] + ',' + pack?.bounds[1]
-                      },10,60,60/600x600?access_token=${
-                        process.env.MAPBOX_ACCESS_TOKEN
-                      }`,
+                      },10,60,60/600x600`,
                     }}
                   />
                 )}

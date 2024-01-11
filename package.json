@@ -65,6 +65,7 @@
     "check-dependency-version-consistency": "^4.1.0",
     "cross-env": "^7.0.3",
     "dotenv-cli": "^7.3.0",
+    "eslint": "^8.47.0",
     "husky": "^8.0.0",
     "lint-staged": "^14.0.1",
     "typescript": "^5.2.2"

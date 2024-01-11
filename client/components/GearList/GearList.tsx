@@ -1,8 +1,8 @@
 import { RStack, RText } from '@packrat/ui';
 import { FontAwesome5 } from '@expo/vector-icons';
-import { AddPackContainer } from './pack/AddPack';
-import useTheme from '../hooks/useTheme';
-import PackContainer from './pack/PackContainer';
+import { AddPackContainer } from '../pack/AddPack';
+import useTheme from '../../hooks/useTheme';
+import PackContainer from '../pack/PackContainer';
 
 export const GearList = () => {
   const { currentTheme } = useTheme();
@@ -10,11 +10,11 @@ export const GearList = () => {
     <RStack
       alignSelf="center"
       $sm={{
-        borderRadius: '6px',
+        borderRadius: 6,
         width: '100%',
       }}
       $gtSm={{
-        borderRadius: '12px',
+        borderRadius: 12,
         width: '90%',
       }}
       style={{
@@ -43,7 +43,8 @@ export const GearList = () => {
             style={{
               color: currentTheme.colors.textPrimary,
               fontSize: currentTheme.font.size,
-              paddingVertical: 12,
+              paddingTop: 12,
+              paddingBottom: 12,
               fontWeight: 600,
             }}
             fontFamily="$body"

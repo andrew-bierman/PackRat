@@ -22,7 +22,7 @@ const Hero = ({ children, imageDetails }) => {
     <View
       style={[
         styles.heroContainer,
-        Platform.OS === 'web' ? { height: '310px' } : null,
+        Platform.OS === 'web' ? { height: 310 } : null,
       ]}
     >
       <RImage source={source} alt={alt} style={styles.heroImage} />

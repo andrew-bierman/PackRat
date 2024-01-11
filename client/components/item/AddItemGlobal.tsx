@@ -1,12 +1,13 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { addItemsGlobal, addItemOffline } from '../../store/globalItemsStore';
 import { addOfflineRequest } from '../../store/offlineQueue';
 import { queryTrpc } from '../../trpc';
 import { ItemForm } from './ItemForm'; // assuming you moved the form related code to a separate component
+import { useModal } from '@packrat/ui/src/modal';
 
-export const AddItemGlobal = ({ setIsAddItemModalOpen }) => {
+export const AddItemGlobal = () => {
   const utils = queryTrpc.useContext();
   const dispatch = useDispatch();
   const isLoading = useSelector((state) => state.items.isLoading);
@@ -18,6 +19,7 @@ export const AddItemGlobal = ({ setIsAddItemModalOpen }) => {
   const [unit, setUnit] = useState('');
 
   const [categoryType, setCategoryType] = useState('');
+  const { setIsModalOpen } = useModal();
 
   /**
    * Resets the add form by setting all the input values to an empty string.
@@ -55,8 +57,10 @@ export const AddItemGlobal = ({ setIsAddItemModalOpen }) => {
     }
 
     resetAddForm();
-    setIsAddItemModalOpen(false);
-    utils.getItemsGlobally.invalidate();
+    setIsModalOpen(false);
+    if (utils.getItemsGlobally) {
+      utils.getItemsGlobally.invalidate();
+    }
   };
 
   return (
