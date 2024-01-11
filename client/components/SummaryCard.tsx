@@ -1,14 +1,14 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-import UseTheme from '../hooks/useTheme';
+import useTheme from '../hooks/useTheme';
 import useSummaryCardLogic from '~/hooks/card/useSummaryCardLogic';
 import useCustomStyles from '../hooks/useCustomStyles';
 import { ItemRow } from './ItemRow/ItemRow';
 
 export default function SummaryCard() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    UseTheme();
+    useTheme();
   const { dummyData, handleDelete, handleEdit } = useSummaryCardLogic();
   const styles = useCustomStyles(loadStyles);
 
