@@ -56,7 +56,9 @@ export const AddItemGlobal = ({ setIsAddItemModalOpen }) => {
 
     resetAddForm();
     setIsAddItemModalOpen(false);
-    utils.getItemsGlobally.invalidate();
+    if (utils.getItemsGlobally) {
+      utils.getItemsGlobally.invalidate();
+    }
   };
 
   return (

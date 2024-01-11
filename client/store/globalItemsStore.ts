@@ -86,14 +86,9 @@ const itemsSlice = createSlice({
       };
     },
     addItemOffline: (state, action) => {
-      console.log(action.payload, 'add item offline');
-      return {
-        ...state,
-        globalItems: {
-          ...state.globalItems,
-          items: [...state.globalItems.items, action.payload],
-        },
-      };
+      const newItem = action.payload;
+      const updatedState = itemsAdapter.addOne(state, newItem);
+      return updatedState;
     },
   },
   extraReducers: (builder) => {
@@ -103,7 +98,7 @@ const itemsSlice = createSlice({
         state.error = null;
       })
       .addCase(addItemsGlobal.fulfilled, (state, action) => {
-        itemsAdapter.addOne(state, { ...action.payload });
+        itemsAdapter.addOne(state, action.payload);
         state.isLoading = false;
         state.error = null;
       })
