@@ -119,6 +119,7 @@
     "redux-persist": "^6.0.0",
     "serve": "^14.2.0",
     "server": "*",
+    "solito": "^4.2.0",
     "superjson": "^2.0.0",
     "tamagui": "^1.84.1",
     "togpx": "^0.5.4",
