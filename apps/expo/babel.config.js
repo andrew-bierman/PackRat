@@ -26,15 +26,6 @@ module.exports = function (api) {
         'module-resolver',
         {
           extensions: ['.ios.js', '.android.js', '.js', '.ts', '.tsx', '.json'],
-          alias: {
-            '~/config': './config',
-            '~/constants': './constants',
-            '~/components': ['./components'],
-            '~/utils': ['./utils'],
-            '~/hooks': ['./hooks'],
-            '~/store': ['./store'],
-            '~/theme': ['./theme'],
-          },
         },
       ],
       [
@@ -42,7 +33,7 @@ module.exports = function (api) {
         {
           exclude: ['**/node_modules/**'],
           // components: ['@packrat/ui', 'tamagui'], // this breaks the stylesheet usage on Tamagui components, but fixes build time errors. TODO: fix this
-          config: './theme/tamagui.config.js',
+          config: 'app/theme/tamagui.config.js',
           logTimings: true,
         },
       ],
