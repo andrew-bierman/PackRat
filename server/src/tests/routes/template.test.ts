@@ -82,15 +82,15 @@ describe('Template routes', () => {
   });
 
   //! deleteTemplateRoute contains type issue [template.remove is not a function]
-    describe('Delete template', () => {
-      test('Delete template', async () => {
-        if (template) {
-          const { message } = await caller.deleteTemplate({
-            templateId: template._id.toString(),
-          });
+  describe('Delete template', () => {
+    test('Delete template', async () => {
+      if (template) {
+        const { message } = await caller.deleteTemplate({
+          templateId: template._id.toString(),
+        });
 
-          expect(message).toEqual('Template removed');
-        }
-      });
+        expect(message).toEqual('Template removed');
+      }
     });
+  });
 });

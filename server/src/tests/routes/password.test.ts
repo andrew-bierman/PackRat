@@ -17,7 +17,7 @@ const caller = createCaller({});
 let user: any = generateMock(userSignUp);
 
 describe('Reset password routes', () => {
-  let passwordToBeUpdated = 'Updated@123';
+  const passwordToBeUpdated = 'Updated@123';
   let token;
   describe('Create user', () => {
     test('Create user', async () => {
@@ -37,7 +37,7 @@ describe('Reset password routes', () => {
         expect(response.message).toEqual(
           'Password reset email sent successfully',
         );
-        
+
         expect(response.resetToken).toBeDefined();
 
         token = response.resetToken;
