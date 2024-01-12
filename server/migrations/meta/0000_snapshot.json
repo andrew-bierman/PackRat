@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "32393893-7d72-4b1f-bfd3-d182774518cd",
+  "id": "757abacf-7fd2-45e6-9f7e-4a94e42f92f6",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "conversation": {
@@ -148,8 +148,8 @@
           "notNull": true,
           "autoincrement": false
         },
-        "category": {
-          "name": "category",
+        "category_id": {
+          "name": "category_id",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
@@ -182,12 +182,12 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "item_category_item_category_id_fk": {
-          "name": "item_category_item_category_id_fk",
+        "item_category_id_item_category_id_fk": {
+          "name": "item_category_id_item_category_id_fk",
           "tableFrom": "item",
           "tableTo": "item_category",
           "columnsFrom": [
-            "category"
+            "category_id"
           ],
           "columnsTo": [
             "id"

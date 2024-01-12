@@ -1,6 +1,9 @@
 import { eq } from 'drizzle-orm';
 import { createDb } from '../../db/client';
-import { itemCategory as item } from '../../db/schema';
+import {
+  InsertItemCategory,
+  itemCategory as ItemCategoryTable,
+} from '../../db/schema';
 import { getDB } from '../../trpc/context';
 
 export class ItemCategory {
@@ -9,54 +12,34 @@ export class ItemCategory {
     return dbInstance;
   }
 
-  async update(
-    data: any,
-    id: string,
-    filter = eq(item.id, id),
-    returning = null,
-  ) {
-    return (await this.createInstance())
-      .update(item)
-      .set(data)
-      .where(filter)
-      .returning(returning)
-      .get();
+  async findItemCategory({ id, name }: { id?: string; name?: any }) {
+    try {
+      const filter = id
+        ? eq(ItemCategoryTable.id, id)
+        : eq(ItemCategoryTable.name, name);
+      const itemCategory = (await this.createInstance())
+        .select()
+        .from(ItemCategoryTable)
+        .where(filter)
+        .limit(1)
+        .get();
+      return itemCategory;
+    } catch (error) {
+      console.error(`Failed to find item category: ${error.message}`);
+      return null;
+    }
   }
 
-  async delete(id: string, filter = eq(item.id, id)) {
-    return (await this.createInstance())
-      .delete(item)
-      .where(filter)
-      .returning()
-      .get();
-  }
-
-  async findById(id: string, filter = eq(item.id, id)) {
-    return (await this.createInstance())
-      .select()
-      .from(item)
-      .where(filter)
-      .limit(1)
-      .get();
-  }
-
-  async findMany(filter = null) {
-    return (await this.createInstance())
-      .select()
-      .from(item)
-      .where(filter)
-      .get();
-  }
-
-  async findUniqueItem(query) {
-    return (await this.createInstance()).query.item.findFirst(query);
-  }
-
-  async create(data: any) {
-    return (await this.createInstance())
-      .insert(item)
-      .values(data)
-      .returning()
-      .get();
+  async create(data: InsertItemCategory) {
+    try {
+      const category = (await this.createInstance())
+        .insert(ItemCategoryTable)
+        .values(data)
+        .returning()
+        .get();
+      return category;
+    } catch (error) {
+      throw new Error(`Failed to create item category: ${error.message}`);
+    }
   }
 }

@@ -1,44 +1,44 @@
 import { z } from 'zod';
 
-const JoiObjectId = (message: any = 'valid id'): z.ZodString =>
-  z.string().regex(/^[0-9a-fA-F]{24}$/, { message });
+// const JoiObjectId = (message: any = 'valid id'): z.ZodString =>
+//   z.string().regex(/^[0-9a-fA-F]{24}$/, { message });
 
 export const getItems = z.object({
-  packId: JoiObjectId(),
+  packId: z.string().optional(),
 });
 
 export const getItemById = z.object({
-  id: JoiObjectId(),
+  id: z.string(),
 });
 
 export const addItem = z.object({
-  name: z.string().nonempty(),
+  name: z.string(),
   weight: z.number(),
   quantity: z.number(),
-  unit: z.string().nonempty(),
-  packId: JoiObjectId(),
-  type: z.string().optional(),
-  ownerId: z.string().optional(),
+  unit: z.string(),
+  packId: z.string(),
+  type: z.string(),
+  ownerId: z.string(),
 });
 
 export const editItem = z.object({
-  id: JoiObjectId(),
-  name: z.string().nonempty(),
-  weight: z.string(),
-  quantity: z.string(),
-  unit: z.string().nonempty(),
-  type: z.string(),
+  id: z.string(),
+  name: z.string().optional(),
+  weight: z.number().optional(),
+  quantity: z.number().optional(),
+  unit: z.string().optional(),
+  type: z.string().optional(),
 });
 
 export const deleteItem = z.object({
-  itemId: JoiObjectId().nonempty(),
-  packId: JoiObjectId().nonempty(),
+  itemId: z.string(),
+  packId: z.string().optional(),
 });
 
 export const addItemGlobal = z.object({
-  name: z.string().nonempty(),
+  name: z.string(),
   weight: z.number(),
   quantity: z.number(),
-  unit: z.string().nonempty(),
-  type: z.string().optional(),
+  unit: z.string(),
+  type: z.string(),
 });

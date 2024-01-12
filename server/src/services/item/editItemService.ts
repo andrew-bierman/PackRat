@@ -1,7 +1,9 @@
 // import { prisma } from '../../prisma';
 
+import { type InsertItemCategory } from '../../db/schema';
 import { Item } from '../../drizzle/methods/Item';
 import { ItemCategory } from '../../drizzle/methods/itemcategory';
+import { ItemCategory as categories } from '../../utils/itemCategory';
 
 /**
  * Edit an item in the service.
@@ -15,32 +17,32 @@ import { ItemCategory } from '../../drizzle/methods/itemcategory';
  * @return {Promise<object>} - the edited item
  */
 export const editItemService = async (
-  id,
-  name,
-  weight,
-  unit,
-  quantity,
-  type,
-) => {
+  id: string,
+  name?: string,
+  weight?: number,
+  unit?: string,
+  quantity?: number,
+  type?: string,
+): Promise<object> => {
+  let category: InsertItemCategory | null;
   const itemClass = new Item();
-  const itemCategory = new ItemCategory();
-  const category = await itemCategory.findUniqueItem({
-    where: {
-      name: type,
-    },
+  const itemCategoryClass = new ItemCategory();
+  if (type && !categories.includes(type)) {
+    throw new Error(`Category must be one of: ${categories.join(', ')}`);
+  } else {
+    category = await itemCategoryClass.findItemCategory({ name: type });
+    if (!category) {
+      category = await itemCategoryClass.create({ name: type });
+    }
+  }
+  const item = await itemClass.findItem({ id });
+  const newItem = await itemClass.update(id, {
+    name: name || item.name,
+    weight: weight || item.weight,
+    unit: unit || item.unit,
+    quantity: quantity || item.quantity,
+    categoryId: category.id || item.categoryId,
   });
-
-  const newItem = await itemClass.update(
-    {
-      name,
-      weight: Number(weight),
-      unit,
-      quantity: Number(quantity),
-      categoryDocument: category.id,
-      type,
-    },
-    id,
-  );
 
   return newItem;
 };

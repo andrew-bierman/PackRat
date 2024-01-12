@@ -8,9 +8,10 @@ import { Item } from '../../drizzle/methods/Item';
  * @param {string} itemId - The ID of the item to be deleted.
  * @return {Promise<Document>} - A promise that resolves to the deleted item.
  */
-export const deleteGlobalItemService = async (itemId) => {
-  const item = new Item();
-  const itemDeleted = await item.delete(itemId);
-
-  return itemDeleted;
+export const deleteGlobalItemService = async (
+  itemId: string,
+): Promise<object> => {
+  const itemClass = new Item();
+  await itemClass.delete(itemId);
+  return { message: 'Item deleted successfully' };
 };

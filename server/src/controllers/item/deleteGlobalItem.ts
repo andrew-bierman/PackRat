@@ -1,6 +1,4 @@
 import { publicProcedure } from '../../trpc';
-import { UnableToDeleteItemError } from '../../helpers/errors';
-import { responseHandler } from '../../helpers/responseHandler';
 import { deleteGlobalItemService } from '../../services/item/item.service';
 import { z } from 'zod';
 
@@ -32,7 +30,6 @@ export function deleteGlobalItemRoute() {
     )
     .mutation(async (opts) => {
       const { itemId } = opts.input;
-      const item = await deleteGlobalItemService(itemId);
-      return item;
+      return await deleteGlobalItemService(itemId);
     });
 }

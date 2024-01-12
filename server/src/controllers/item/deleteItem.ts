@@ -1,5 +1,3 @@
-import { UnableToDeleteItemError } from '../../helpers/errors';
-import { responseHandler } from '../../helpers/responseHandler';
 import { deleteItemService } from '../../services/item/item.service';
 import * as validator from '../../middleware/validators/index';
 import { publicProcedure } from '../../trpc';
@@ -28,7 +26,6 @@ import { publicProcedure } from '../../trpc';
 export function deleteItemRoute() {
   return publicProcedure.input(validator.deleteItem).mutation(async (opts) => {
     const { itemId, packId } = opts.input;
-    const item = await deleteItemService(itemId, packId);
-    return item;
+    return await deleteItemService(itemId, packId);
   });
 }

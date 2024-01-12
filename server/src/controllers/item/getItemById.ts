@@ -1,6 +1,4 @@
 import { publicProcedure } from '../../trpc';
-import { ItemNotFoundError } from '../../helpers/errors';
-import { responseHandler } from '../../helpers/responseHandler';
 import { getItemByIdService } from '../../services/item/item.service';
 import * as validator from '../../middleware/validators/index';
 

@@ -1,10 +1,8 @@
 // import { prisma } from '../../prisma';
 
 import { Item } from '../../drizzle/methods/Item';
-import { eq } from 'drizzle-orm';
-import { item as itemTable } from '../../db/schema';
-import { Pack } from '../../drizzle/methods/Pack';
-import { pack as packTable } from '../../db/schema';
+import { ItemPacks } from '../../drizzle/methods/ItemPacks';
+import { ItemOwners } from '../../drizzle/methods/ItemOwners';
 
 /**
  * Adds a global item to the pack service.
@@ -14,36 +12,22 @@ import { pack as packTable } from '../../db/schema';
  * @param {string} ownerId - The ID of the owner.
  * @return {Promise<object>} - A promise that resolves to the added item.
  */
-export const addGlobalItemToPackService = async (packId, itemId, ownerId) => {
-  const item = new Item();
-  const pack = new Pack();
-  const itemResult = await item.findUniqueItem({
-    where: { id: itemId },
-    with: { categoryDocument: { columns: { name: true } } },
+export const addGlobalItemToPackService = async (
+  packId: string,
+  itemId: string,
+  ownerId: string,
+): Promise<object> => {
+  const itemClass = new Item();
+  const itemPacksClass = new ItemPacks();
+  const itemOwnersClass = new ItemOwners();
+  const item = await itemClass.findItem({
+    id: itemId,
+    isGlobal: true,
   });
-
-  await pack.update(
-    {
-      itemDocuments: {
-        connect: { id: itemId },
-      },
-    },
-    packId,
-    eq(packTable.id, packId),
-  );
-
-  const uniqueOwners = [...new Set([...itemResult.owners, ownerId])];
-
-  const updatedItem = await item.update(
-    {
-      owners: uniqueOwners,
-      packDocuments: {
-        id: packId,
-      },
-    },
-    itemId,
-    eq(itemTable.id, itemId),
-  );
-
-  return updatedItem;
+  if (!item) {
+    throw new Error('Global Item does not exist!');
+  }
+  await itemPacksClass.create({ itemId: item.id, packId });
+  await itemOwnersClass.create({ itemId: item.id, ownerId });
+  return item;
 };

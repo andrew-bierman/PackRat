@@ -128,7 +128,7 @@ export const itemCategory = sqliteTable('item_category', {
   id: text('id')
     .primaryKey()
     .$defaultFn(() => createId()),
-  name: text('name', { enum: ['Food', 'Water', 'Essentials'] }),
+  name: text('name', { enum: ['Food', 'Water', 'Essentials'] }).$type<string>(),
   createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
   updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`),
   // @@map("itemcategories"): undefined,
@@ -146,7 +146,7 @@ export const item = sqliteTable('item', {
   weight: real('weight').notNull(),
   quantity: integer('quantity').notNull(),
   unit: text('unit').notNull(),
-  category: text('category').references(() => itemCategory.id, {
+  categoryId: text('category_id').references(() => itemCategory.id, {
     onDelete: 'set null',
   }),
   global: integer('global', { mode: 'boolean' }).default(false),
@@ -214,7 +214,7 @@ export const itemPacksRelations = relations(itemPacks, ({ one }) => ({
 
 export const itemRelations = relations(item, ({ one, many }) => ({
   category: one(itemCategory, {
-    fields: [item.category],
+    fields: [item.categoryId],
     references: [itemCategory.id],
   }),
   itemOwners: many(itemOwners),
@@ -449,27 +449,32 @@ export type InsertTemplate = InferInsertModel<typeof template>;
 export const insertTemplateSchema = createInsertSchema(template);
 export const selectTemplateSchema = createSelectSchema(template);
 
-export type Pack = InferInsertModel<typeof pack>;
+export type Pack = InferSelectModel<typeof pack>;
 export type InsertPack = InferInsertModel<typeof pack>;
 export const insertPackSchema = createInsertSchema(pack);
 export const selectPackSchema = createSelectSchema(pack);
 
-export type Item = InferInsertModel<typeof item>;
+export type ItemCategory = InferSelectModel<typeof itemCategory>;
+export type InsertItemCategory = InferInsertModel<typeof itemCategory>;
+export const insertItemCategorySchema = createInsertSchema(itemCategory);
+export const selectItemCategorySchema = createSelectSchema(itemCategory);
+
+export type Item = InferSelectModel<typeof item>;
 export type InsertItem = InferInsertModel<typeof item>;
 export const insertItemSchema = createInsertSchema(item);
 export const selectItemSchema = createSelectSchema(item);
 
-export type ItemPack = InferInsertModel<typeof itemPacks>;
+export type ItemPack = InferSelectModel<typeof itemPacks>;
 export type InsertItemPack = InferInsertModel<typeof itemPacks>;
 export const insertItemPackSchema = createInsertSchema(itemPacks);
 export const selectItemPackSchema = createSelectSchema(itemPacks);
 
-export type ItemOwner = InferInsertModel<typeof itemOwners>;
+export type ItemOwner = InferSelectModel<typeof itemOwners>;
 export type InsertItemOwner = InferInsertModel<typeof itemOwners>;
 export const insertItemOwnerSchema = createInsertSchema(itemOwners);
 export const selectItemOwnerSchema = createSelectSchema(itemOwners);
 
-export type GeoJson = InferInsertModel<typeof geojson>;
+export type GeoJson = InferSelectModel<typeof geojson>;
 export type InsertGeoJson = InferInsertModel<typeof geojson>;
 export const insertGeoJsonSchema = createInsertSchema(geojson);
 export const selectGeoJsonSchema = createSelectSchema(geojson);

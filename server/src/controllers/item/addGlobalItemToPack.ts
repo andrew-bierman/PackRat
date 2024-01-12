@@ -1,6 +1,4 @@
 import { publicProcedure } from '../../trpc';
-import { ItemNotFoundError } from '../../helpers/errors';
-import { responseHandler } from '../../helpers/responseHandler';
 import { addGlobalItemToPackService } from '../../services/item/item.service';
 import { z } from 'zod';
 

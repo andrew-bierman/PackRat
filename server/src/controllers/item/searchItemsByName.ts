@@ -1,7 +1,5 @@
 import { publicProcedure } from '../../trpc';
-import { ItemNotFoundError } from '../../helpers/errors';
 import { searchItemsByNameService } from '../../services/item/item.service';
-import * as validator from '../../middleware/validators/index';
 import { z } from 'zod';
 
 /**
@@ -29,10 +27,10 @@ const JoiObjectId = (message: any = 'valid id'): z.ZodString =>
 
 export function searchItemsByNameRoute() {
   return publicProcedure
-    .input(z.object({ name: z.string(), packId: JoiObjectId().optional() }))
+    .input(z.object({ name: z.string() }))
     .query(async (opts) => {
-      const { name, packId } = opts.input;
-      const items = await searchItemsByNameService(name, packId);
+      const { name } = opts.input;
+      const items = await searchItemsByNameService(name);
       return items;
     });
 }
