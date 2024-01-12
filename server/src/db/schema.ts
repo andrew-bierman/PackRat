@@ -255,13 +255,15 @@ export const trip = sqliteTable('trip', {
   description: text('description').notNull(),
   duration: text('duration').notNull(),
   weather: text('weather').notNull(),
-  start_date: integer('start_date', { mode: 'timestamp' }).notNull(),
-  end_date: integer('end_date', { mode: 'timestamp' }).notNull(),
+  start_date: text('start_date').notNull(),
+  end_date: text('end_date').notNull(),
   destination: text('destination').notNull(),
   owner_id: text('owner_id').references(() => user.id, {
     onDelete: 'set null',
   }),
-  packs: text('packs').references(() => pack.id, { onDelete: 'set null' }),
+  packs_id: text('packs_id').references(() => pack.id, {
+    onDelete: 'set null',
+  }),
   is_public: integer('is_public', { mode: 'boolean' }),
   type: text('type').default('trip'),
   createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
@@ -293,7 +295,7 @@ export const tripRelations = relations(trip, ({ one, many }) => ({
     references: [user.id],
   }),
   packs: one(pack, {
-    fields: [trip.packs],
+    fields: [trip.packs_id],
     references: [pack.id],
   }),
   // geojsons: many(tripGeojsons),
@@ -446,3 +448,28 @@ export type Template = InferSelectModel<typeof template>;
 export type InsertTemplate = InferInsertModel<typeof template>;
 export const insertTemplateSchema = createInsertSchema(template);
 export const selectTemplateSchema = createSelectSchema(template);
+
+export type Pack = InferInsertModel<typeof pack>;
+export type InsertPack = InferInsertModel<typeof pack>;
+export const insertPackSchema = createInsertSchema(pack);
+export const selectPackSchema = createSelectSchema(pack);
+
+export type Item = InferInsertModel<typeof item>;
+export type InsertItem = InferInsertModel<typeof item>;
+export const insertItemSchema = createInsertSchema(item);
+export const selectItemSchema = createSelectSchema(item);
+
+export type ItemPack = InferInsertModel<typeof itemPacks>;
+export type InsertItemPack = InferInsertModel<typeof itemPacks>;
+export const insertItemPackSchema = createInsertSchema(itemPacks);
+export const selectItemPackSchema = createSelectSchema(itemPacks);
+
+export type ItemOwner = InferInsertModel<typeof itemOwners>;
+export type InsertItemOwner = InferInsertModel<typeof itemOwners>;
+export const insertItemOwnerSchema = createInsertSchema(itemOwners);
+export const selectItemOwnerSchema = createSelectSchema(itemOwners);
+
+export type GeoJson = InferInsertModel<typeof geojson>;
+export type InsertGeoJson = InferInsertModel<typeof geojson>;
+export const insertGeoJsonSchema = createInsertSchema(geojson);
+export const selectGeoJsonSchema = createSelectSchema(geojson);

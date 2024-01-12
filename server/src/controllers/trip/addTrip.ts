@@ -1,6 +1,4 @@
 import { publicProcedure } from '../../trpc';
-import { UnableToAddTripError } from '../../helpers/errors';
-import { responseHandler } from '../../helpers/responseHandler';
 import { addTripService } from '../../services/trip/addTripService';
 import * as validator from '../../middleware/validators/index';
 /**
@@ -50,33 +48,7 @@ import * as validator from '../../middleware/validators/index';
 
 export function addTripRoute() {
   return publicProcedure.input(validator.addTrip).mutation(async (opts) => {
-    const {
-      name,
-      description,
-      duration,
-      weather,
-      start_date,
-      end_date,
-      destination,
-      geoJSON,
-      owner_id,
-      packs,
-      is_public,
-    } = opts.input;
-    const tripDetails = {
-      name,
-      description,
-      duration,
-      weather,
-      start_date,
-      end_date,
-      destination,
-      geoJSON,
-      owner_id,
-      packs,
-      is_public,
-    };
-
-    return await addTripService(tripDetails);
+    const { geojson_id, ...tripData } = opts.input;
+    return await addTripService(tripData, geojson_id);
   });
 }

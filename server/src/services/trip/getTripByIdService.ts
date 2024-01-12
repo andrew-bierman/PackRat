@@ -9,15 +9,10 @@ import { Trip } from '../../drizzle/methods/trip';
 export const getTripByIdService = async (tripId: string): Promise<object> => {
   try {
     const tripClass = new Trip();
-    const trip = await tripClass.findUnique({
-      where: { id: tripId },
-      include: { ownerDocument: true }, // Assuming 'owner_id' is a foreign key to the 'User' model
-    });
-
+    const trip = await tripClass.findById(tripId);
     if (!trip) {
       throw new Error('Trip cannot be found');
     }
-
     return trip;
   } catch (error) {
     console.error(error);

@@ -1,4 +1,3 @@
-import { Pack } from '../../drizzle/methods/Pack';
 import { Trip } from '../../drizzle/methods/trip';
 
 /**
@@ -10,25 +9,8 @@ import { Trip } from '../../drizzle/methods/trip';
 export const getTripsService = async (ownerId: string): Promise<object[]> => {
   try {
     const tripClass = new Trip();
-    const trips = await tripClass.findMany({
-      where: { owner_id: ownerId },
-    });
-
-    const packClass = new Pack();
-
-    const packDocumnets = await packClass.findMany({
-      where: { id: { in: trips.map((trip) => trip.packs) } },
-    });
-
-    return trips.map((trip) => {
-      const packDocuments = packDocumnets.find(
-        (pack) => pack.id === trip.packs,
-      );
-      return {
-        ...trip,
-        packDocuments,
-      };
-    });
+    const trips = await tripClass.findMany(ownerId);
+    return trips;
   } catch (error) {
     console.error(error);
     throw new Error('Trips cannot be found');

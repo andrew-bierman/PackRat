@@ -1,5 +1,4 @@
 import { publicProcedure } from '../../trpc';
-import { UnableToDeleteTripError } from '../../helpers/errors';
 import * as validator from '../../middleware/validators/index';
 import { Trip } from '../../drizzle/methods/trip';
 
@@ -26,8 +25,8 @@ import { Trip } from '../../drizzle/methods/trip';
 export function deleteTripRoute() {
   return publicProcedure.input(validator.deleteTrip).mutation(async (opts) => {
     const { tripId } = opts.input;
-    const trip = new Trip();
-    await trip.delete(tripId);
+    const tripClass = new Trip();
+    await tripClass.delete(tripId);
     return 'trip was deleted successfully';
   });
 }

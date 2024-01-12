@@ -106,17 +106,17 @@ CREATE TABLE `trip` (
 	`description` text NOT NULL,
 	`duration` text NOT NULL,
 	`weather` text NOT NULL,
-	`start_date` integer NOT NULL,
-	`end_date` integer NOT NULL,
+	`start_date` text NOT NULL,
+	`end_date` text NOT NULL,
 	`destination` text NOT NULL,
 	`owner_id` text,
-	`packs` text,
+	`packs_id` text,
 	`is_public` integer,
 	`type` text DEFAULT 'trip',
 	`created_at` text DEFAULT CURRENT_TIMESTAMP,
 	`updated_at` text DEFAULT CURRENT_TIMESTAMP,
 	FOREIGN KEY (`owner_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE set null,
-	FOREIGN KEY (`packs`) REFERENCES `pack`(`id`) ON UPDATE no action ON DELETE set null
+	FOREIGN KEY (`packs_id`) REFERENCES `pack`(`id`) ON UPDATE no action ON DELETE set null
 );
 --> statement-breakpoint
 CREATE TABLE `trip_geojsons` (
