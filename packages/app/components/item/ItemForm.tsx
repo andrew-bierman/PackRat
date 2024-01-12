@@ -1,9 +1,10 @@
 import { RInput, RButton, RText, RStack, RRadio } from '@packrat/ui';
 import { View } from 'react-native';
 import { DropdownComponent } from '../Dropdown';
-import { theme } from '../../theme';
-import { ItemCategoryEnum } from '../../constants/itemCategory';
+// import { theme } from '../../theme';
+// import { ItemCategoryEnum } from '../../constants/itemCategory';
 import useTheme from '../../hooks/useTheme';
+import useItemForm from 'hooks/item/useItemForm';
 const data = ['lb', 'oz', 'kg', 'g'];
 
 export const ItemForm = ({
@@ -23,22 +24,10 @@ export const ItemForm = ({
   isEdit,
   currentPack,
 }) => {
-  let hasWaterAdded = false;
-  if (
-    currentPack &&
-    Array.isArray(currentPack.items) &&
-    currentPack.items.length > 0
-  ) {
-    hasWaterAdded = currentPack.items.some(
-      (item) => item.category && item.category.name === ItemCategoryEnum.WATER,
-    );
-  }
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    useTheme();
-
-  const radioOptions = Object.values(ItemCategoryEnum).filter(
-    (value) => !(hasWaterAdded && value === ItemCategoryEnum.WATER),
-  );
+  const {
+    /* enableDarkMode, enableLightMode, isDark, isLight, */ currentTheme,
+  } = useTheme();
+  const { radioOptions } = useItemForm({ currentPack });
 
   return (
     <View>
