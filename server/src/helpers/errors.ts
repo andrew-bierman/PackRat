@@ -189,3 +189,8 @@ export const UnableToEditUserError = {
   statusCode: 500,
   message: 'Unable to edit user',
 };
+
+export const MapPreviewError = {
+  statusCode: 500,
+  message: 'Error getting map preview',
+};

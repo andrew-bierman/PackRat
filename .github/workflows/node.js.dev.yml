@@ -73,9 +73,9 @@ jobs:
         cd server
         yarn start &
 
-    - name: Start Client in Background
+    - name: Start Expo in Background
       run: |
-        cd client
+        cd apps/expo
         yarn web &
 
     - name: Wait for a while
