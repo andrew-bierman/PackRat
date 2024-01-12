@@ -104,7 +104,8 @@
     "openapi-generator": "^0.1.39",
     "prettier": "^3.0.2",
     "ts-jest": "^29.1.1",
-    "ts-node": "^10.9.1"
+    "ts-node": "^10.9.1",
+    "tsx": "^4.7.0"
   },
   "engines": {
     "node": ">=16.0.0"

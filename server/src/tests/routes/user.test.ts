@@ -195,7 +195,7 @@ describe('User routes', () => {
   });
 
   describe('Google Sing In', () => {
-    //TODO
+    // TODO
   });
 
   describe('Reset user password', () => {
