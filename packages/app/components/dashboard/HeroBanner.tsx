@@ -80,7 +80,7 @@ const HeroSection = ({ onSelect }) => {
         imageDetails={{
           title: 'N/A',
           subtitle: 'N/A',
-          source: require('../../assets/topographical-pattern.png'),
+          source: "https://github.com/andrew-bierman/PackRat/blob/main/apps/expo/assets/topographical-pattern.jpg?raw=true",
           alt: 'hero',
         }}
       >

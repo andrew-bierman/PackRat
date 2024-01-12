@@ -4,7 +4,7 @@ import { Platform, StyleSheet, View,Text } from 'react-native';
 import { Stack } from 'expo-router';
 import { darkTheme, theme } from '../../theme';
 import LandingPage from '../../components/landing_page';
-// import Dashboard from '../../screens/dashboard';
+import Dashboard from '../../screens/dashboard';
 import useTheme from '../../hooks/useTheme';
 import { current } from '@reduxjs/toolkit';
 import Head from 'expo-router/head';
@@ -40,7 +40,7 @@ export default function HomeScreen() {
         }}
       />
       <View style={mutualStyles}>
-        {!user ? <LandingPage /> : <View><Text>dashboard</Text></View>}
+        {!user ? <LandingPage /> : <Dashboard />}
       </View>
     </>
   );
