@@ -1,2 +1,1 @@
-import { useSelect } from './useSelect';
-export { useSelect };
+export * from './useSelect';

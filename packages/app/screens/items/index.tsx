@@ -1,42 +1,32 @@
 import { View, Platform } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Box, Button, ScrollView, Tooltip } from 'native-base';
 import { MaterialIcons } from '@expo/vector-icons';
-import { theme } from '../../theme';
 import useTheme from '../../hooks/useTheme';
 import { AddItemGlobal } from '../../components/item/AddItemGlobal';
 import { ItemsTable } from '../../components/itemtable/itemTable';
-import { useDispatch, useSelector } from 'react-redux';
-import { getItemsGlobal } from '../../store/globalItemsStore';
+
 import { Stack } from 'expo-router';
-import { executeOfflineRequests } from '../../store/offlineQueue';
-import useCustomStyles from 'app/hooks/useCustomStyles';
+import useCustomStyles from 'hooks/useCustomStyles';
 import { BaseModal } from '@packrat/ui';
+import { useItemScreen } from 'hooks/itemrow';
 // import { checkNetworkConnected } from 'app/utils/netInfo';
 
 export default function Items() {
-  const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
-  const [limit, setLimit] = useState(5);
-  const [page, setPage] = useState(1);
-  const [refetch, setRefetch] = useState(false);
   const styles = useCustomStyles(loadStyles);
-  const data = useSelector((state) => state.globalItems);
-  const isLoading = useSelector((state) => state.globalItems.isLoading);
-  const isError = useSelector((state) => state.globalItems.isError);
-  const { isConnected, requests } = useSelector((state) => state.offlineQueue);
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (isConnected) {
-      dispatch(executeOfflineRequests(requests));
-    }
-  }, []);
-
-  useEffect(() => {
-    if (isConnected && requests.length == 0)
-      dispatch(getItemsGlobal({ limit, page }));
-  }, [limit, page, refetch, isConnected]);
+  const {
+    data,
+    isLoading,
+    isError,
+    isAddItemModalOpen,
+    setIsAddItemModalOpen,
+    limit,
+    setLimit,
+    page,
+    setPage,
+    refetch,
+    setRefetch,
+  } = useItemScreen();
 
   return (
     <ScrollView>

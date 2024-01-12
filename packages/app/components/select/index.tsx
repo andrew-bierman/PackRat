@@ -36,7 +36,7 @@ export function SelectDemo() {
   );
 }
 // @ts-nocheck - may need to be at the start of file
-// @ts-expect-error
+
 export function SelectDemoItem(SelectProps = {}, props) {
   const { val, setVal, items } = useSelect();
   return (
