@@ -8,7 +8,7 @@ import { Adapt, Button, Popover, YStack } from 'tamagui';
 
 import { useDeleteTrips } from 'app/hooks/trips';
 // import { deleteTrip } from '../../store/tripsStore';
-export function ThreeDotsMenu({ data, titleRef, setEditTitle }) {
+export function ThreeDotsMenu({ data, setEditTitle }) {
   const dispatch = useDispatch();
   const router = useRouter();
   const { deleteTrips } = useDeleteTrips();
@@ -51,10 +51,6 @@ export function ThreeDotsMenu({ data, titleRef, setEditTitle }) {
             <Button
               onPress={() => {
                 setEditTitle(true);
-                if (titleRef.current) {
-                  titleRef.current.style =
-                    'font-size:20px !important;font-weight:bold;color: #22c67c; border:1px solid black;';
-                }
               }}
             >
               Edit

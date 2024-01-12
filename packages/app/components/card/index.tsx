@@ -6,6 +6,7 @@ import {
   useToastController,
   ToastViewport,
   NativeToast,
+  EditableText,
 } from '@packrat/ui';
 import {
   TouchableOpacity,
@@ -14,7 +15,6 @@ import {
   Pressable,
   View,
 } from 'react-native';
-import { EditableInput } from '../EditableText';
 import { theme } from '../../theme';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
@@ -24,6 +24,8 @@ import useTheme from '../../hooks/useTheme';
 import { SearchItem } from '../item/searchItem';
 import Loader from '../Loader';
 import useCustomStyles from 'app/hooks/useCustomStyles';
+import { useEditTrips } from 'app/hooks/trips';
+import { updatePack } from 'app/store/packsStore';
 
 export const CustomCard = ({
   title,
@@ -37,9 +39,10 @@ export const CustomCard = ({
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
+  // TODO move to custom hook
+  const { editTrips } = useEditTrips();
   const [isCopied, setIsCopied] = useState(false);
   const [editTitle, setEditTitle] = useState(false);
-  const titleRef = useRef(null);
   const dispatch = useDispatch();
   const router = useRouter();
   const isLoading = useSelector((state: any) => state.singlePack.isLoading);
@@ -71,6 +74,28 @@ export const CustomCard = ({
     return () => clearTimeout(resetCopyStateTimeout);
   };
 
+  // TODO move to custom hook
+  const handleSaveTitle = (title) => {
+    console.log({ title });
+    if (data.type === 'pack') {
+      const packDetails = {
+        _id: data._id,
+        name: title,
+        is_public: data.is_public,
+      };
+
+      dispatch(updatePack(packDetails));
+    } else {
+      const tripDetails = {
+        _id: data._id,
+        name: title,
+        is_public: data.is_public,
+      };
+      editTrips(tripDetails);
+    }
+    setEditTitle(false);
+  };
+
   if (!data) return null;
 
   if (type === 'pack') {
@@ -93,13 +118,11 @@ export const CustomCard = ({
             }}
           >
             <View>
-              <EditableInput
-                data={data}
-                title={title}
-                editTitle={editTitle}
-                setEditTitle={setEditTitle}
-                titleRef={titleRef}
-                loading={isLoading}
+              <EditableText
+                isLoading={isLoading}
+                defaultValue={title}
+                isFocused={editTitle}
+                onSave={handleSaveTitle}
               />
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -144,11 +167,7 @@ export const CustomCard = ({
                     </View>
                   )}
                   {userId === data.owner_id && (
-                    <ThreeDotsMenu
-                      data={data}
-                      titleRef={titleRef}
-                      setEditTitle={setEditTitle}
-                    />
+                    <ThreeDotsMenu data={data} setEditTitle={setEditTitle} />
                   )}
                 </View>
               )}
