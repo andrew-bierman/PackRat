@@ -5,11 +5,8 @@
   "private": true,
   "workspaces": [
     "server",
-    "client",
     "apps/*",
-    "packages/*",
-    "client/apps/*",
-    "client/packages/*"
+    "packages/*"
   ],
   "scripts": {
     "clean": "yarn workspaces foreach --all run clean && rm -rf dist types node_modules yarn.lock",
