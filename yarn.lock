@@ -8460,6 +8460,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react-native@npm:^0.72.5":
+  version: 0.72.8
+  resolution: "@types/react-native@npm:0.72.8"
+  dependencies:
+    "@react-native/virtualized-lists": "npm:^0.72.4"
+    "@types/react": "npm:*"
+  checksum: 1029e17b4c2de0a56cc5c67a73459e6ee6e8ffd5f779e6a835889ae9141e4453252832ee3b7c5a7d2fad4f7b79dc7d7f3796ed2cd58855157e1e5ac52e501332
+  languageName: node
+  linkType: hard
+
 "@types/react-test-renderer@npm:^18.0.0":
   version: 18.0.7
   resolution: "@types/react-test-renderer@npm:18.0.7"
@@ -14308,7 +14318,7 @@ __metadata:
     "@types/lodash": "npm:^4.14.202"
     "@types/node": "npm:^20.8.3"
     "@types/react": "npm:^18.2.20"
-    "@types/react-native": "npm:^0.72.5"
+    "@types/react-native": "npm:0.72.6"
     "@types/react-test-renderer": "npm:^18.0.0"
     "@types/server": "npm:^1.0.5"
     "@typescript-eslint/eslint-plugin": "npm:^6.4.1"
@@ -23676,6 +23686,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"randexp@npm:^0.5.3":
+  version: 0.5.3
+  resolution: "randexp@npm:0.5.3"
+  dependencies:
+    drange: "npm:^1.0.2"
+    ret: "npm:^0.2.0"
+  checksum: e67238fe5b0a71b1bfe56b964f59fc10d37c0cb05bf686ec624696897b1c9b3cf7a371f8d3257b7c829a67a2a4a9c2c136c1decdad147bc3f62b2147f5cafb2b
+  languageName: node
+  linkType: hard
+
 "random-bytes@npm:~1.0.0":
   version: 1.0.0
   resolution: "random-bytes@npm:1.0.0"
@@ -27140,6 +27160,39 @@ __metadata:
   version: 0.1.13
   resolution: "ts-interface-checker@npm:0.1.13"
   checksum: 9f7346b9e25bade7a1050c001ec5a4f7023909c0e1644c5a96ae20703a131627f081479e6622a4ecee2177283d0069e651e507bedadd3904fc4010ab28ffce00
+  languageName: node
+  linkType: hard
+
+"ts-jest@npm:^29.1.1":
+  version: 29.1.1
+  resolution: "ts-jest@npm:29.1.1"
+  dependencies:
+    bs-logger: "npm:0.x"
+    fast-json-stable-stringify: "npm:2.x"
+    jest-util: "npm:^29.0.0"
+    json5: "npm:^2.2.3"
+    lodash.memoize: "npm:4.x"
+    make-error: "npm:1.x"
+    semver: "npm:^7.5.3"
+    yargs-parser: "npm:^21.0.1"
+  peerDependencies:
+    "@babel/core": ">=7.0.0-beta.0 <8"
+    "@jest/types": ^29.0.0
+    babel-jest: ^29.0.0
+    jest: ^29.0.0
+    typescript: ">=4.3 <6"
+  peerDependenciesMeta:
+    "@babel/core":
+      optional: true
+    "@jest/types":
+      optional: true
+    babel-jest:
+      optional: true
+    esbuild:
+      optional: true
+  bin:
+    ts-jest: cli.js
+  checksum: 30e8259baba95dd786e64f7c18b864e904598f3ba07911be4d9bd29ca9c3c0024bad4ccf8ec0abd2a2fa14b06622cbbadff1b3be822189c657196442d33ee6ca
   languageName: node
   linkType: hard
 
