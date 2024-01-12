@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { createCaller } from '../../../../../PackRat copy/server/src/routes/trpcRouter';
+import { createCaller } from 'server/src/routes/trpcRouter';
 import { userSignUp } from '@packrat/validations';
 import { generateMock } from '@anatine/zod-mock';
 
