@@ -14,6 +14,7 @@ import openAiRoutes from './openAiRoutes';
 import templateRoutes from './templateRoutes';
 import favoriteRouters from './favoriteRoutes';
 import userRoutes from './userRoutes';
+import mapPreviewRouter from './mapPreviewRouter';
 
 const router = express.Router();
 
@@ -56,6 +57,7 @@ router.use('/openai', openAiRoutes);
 router.use('/template', templateRoutes);
 router.use('/favorite', favoriteRouters);
 router.use('/openai', openAiRoutes);
+router.use('/mapPreview', mapPreviewRouter);
 
 // Also listen to /api for backwards compatibility
 router.use('/api/user', userRoutes);
@@ -72,6 +74,7 @@ router.use('/api/openai', openAiRoutes);
 router.use('/api/template', templateRoutes);
 router.use('/api/favorite', favoriteRouters);
 router.use('/api/openai', openAiRoutes);
+router.use('/api/mapPreview', mapPreviewRouter);
 
 // Static routes for serving the React Native Web app
 if (process.env.NODE_ENV === 'production') {
@@ -82,16 +85,16 @@ if (process.env.NODE_ENV === 'production') {
     // Attach the CSRF token cookie to the response
     // res.cookie("XSRF-TOKEN", req.csrfToken());
 
-    res.sendFile(path.resolve(__dirname, '../client', 'dist', 'index.html'));
+    res.sendFile(path.resolve(__dirname, '../apps/expo', 'dist', 'index.html'));
   });
 
   // Serve the static assets from the client's dist app
-  router.use(express.static(path.join(__dirname, '../client/dist')));
+  router.use(express.static(path.join(__dirname, '../apps/expo/dist')));
 
   // Serve the client's index.html file at all other routes NOT starting with /api
   router.get(/^(?!\/?api).*/, (req, res) => {
     // res.cookie("XSRF-TOKEN", req.csrfToken());
-    res.sendFile(path.resolve(__dirname, '../client', 'dist', 'index.html'));
+    res.sendFile(path.resolve(__dirname, '../apps/expo', 'dist', 'index.html'));
   });
 }
 
