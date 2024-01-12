@@ -60,14 +60,16 @@ const useAddItemGlobal = () => {
       utils.getItemsGlobally.invalidate();
     }
   }, [
-    name,
-    weight,
-    quantity,
     categoryType,
-    unit,
-    setIsModalOpen,
-    utils,
+    dispatch,
     isConnected,
+    name,
+    quantity,
+    resetAddForm,
+    setIsModalOpen,
+    unit,
+    utils.getItemsGlobally,
+    weight,
   ]);
 
   return {

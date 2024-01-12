@@ -33,7 +33,7 @@ const useSearchItem = ({ dispatch }) => {
       // @ts-expect-error
       dispatch(selectItemsGlobal(data));
     },
-    [user],
+    [user, dispatch],
   );
 
   return {

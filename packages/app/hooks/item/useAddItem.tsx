@@ -83,7 +83,21 @@ const useAddItem = ({
         packId,
       });
     }
-  }, [name, weight, quantity, unit, categoryType]);
+  }, [
+    addPackItem,
+    categoryType,
+    closeModalHandler,
+    editPackItem,
+    initialData._id,
+    initialData.global,
+    isEdit,
+    name,
+    packId,
+    quantity,
+    setPage,
+    unit,
+    weight,
+  ]);
 
   return {
     name,
