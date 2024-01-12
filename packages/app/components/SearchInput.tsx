@@ -1,9 +1,9 @@
 import React from 'react';
 import { Platform } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import useSearchInput from 'app/hooks/search/useSearchInput';
-import useTheme from 'app/hooks/useTheme';
-import useCustomStyles from 'app/hooks/useCustomStyles';
+import useSearchInput from 'hooks/search/useSearchInput';
+import useTheme from 'hooks/useTheme';
+import useCustomStyles from 'hooks/useCustomStyles';
 import {
   RStack,
   RInput,
@@ -41,10 +41,8 @@ export const SearchInput = ({ onSelect, placeholder }) => {
           }}
         >
           <RInput
-            style={{
-              paddingLeft: 35,
-              paddingRight: 55,
-            }}
+            paddingLeft="35px"
+            paddingRight="55px"
             placeholder={placeholder ?? 'Search'}
             onChangeText={(text) => {
               setSearchString(text);
@@ -101,7 +99,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
                     key={`result + ${i}`}
                     role="listitem"
                     onPress={() => {
-                      handleSearchResultClick(result, i);
+                      handleSearchResultClick(result);
                     }}
                     style={{
                       cursor: 'pointer',
@@ -134,12 +132,13 @@ export const SearchInput = ({ onSelect, placeholder }) => {
           setSearchString(text);
         }}
         placeholder="Search"
+        width="100%"
+        borderRadius={4}
+        padding="16px 8px"
+        backgroundColor="white"
         value={searchString}
         fontSize={14}
-        width={'100%'}
-        borderRadius={4}
         paddingVertical={16}
-        backgroundColor="white"
       />
       <RIconButton
         backgroundColor="transparent"
@@ -166,7 +165,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
                 key={`result + ${i}`}
                 role="listitem"
                 onPress={() => {
-                  handleSearchResultClick(result, i);
+                  handleSearchResultClick(result);
                 }}
               >
                 <RStack style={{ flexDirection: 'row' }}>
