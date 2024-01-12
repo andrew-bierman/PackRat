@@ -7,6 +7,9 @@ import {
   ToastViewport,
   NativeToast,
   EditableText,
+  ThreeDotsMenu,
+  YStack,
+  Button,
 } from '@packrat/ui';
 import {
   TouchableOpacity,
@@ -19,13 +22,12 @@ import { theme } from '../../theme';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter, Link } from 'expo-router';
-import { ThreeDotsMenu } from '../ThreeDotsMenu';
 import useTheme from '../../hooks/useTheme';
 import { SearchItem } from '../item/searchItem';
 import Loader from '../Loader';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import { useEditTrips } from 'app/hooks/trips';
-import { updatePack } from 'app/store/packsStore';
+import { useEditTrips, deleteTrip } from 'app/hooks/trips';
+import { updatePack, deletePack } from 'app/store/packsStore';
 
 export const CustomCard = ({
   title,
@@ -43,6 +45,7 @@ export const CustomCard = ({
   const { editTrips } = useEditTrips();
   const [isCopied, setIsCopied] = useState(false);
   const [editTitle, setEditTitle] = useState(false);
+  const isEditModeRef = useRef(false);
   const dispatch = useDispatch();
   const router = useRouter();
   const isLoading = useSelector((state: any) => state.singlePack.isLoading);
@@ -94,6 +97,13 @@ export const CustomCard = ({
       editTrips(tripDetails);
     }
     setEditTitle(false);
+  };
+
+  const onOpenChange = (state) => {
+    if (!state && isEditModeRef.current) {
+      isEditModeRef.current = false;
+      setEditTitle(true);
+    }
   };
 
   if (!data) return null;
@@ -167,7 +177,33 @@ export const CustomCard = ({
                     </View>
                   )}
                   {userId === data.owner_id && (
-                    <ThreeDotsMenu data={data} setEditTitle={setEditTitle} />
+                    <ThreeDotsMenu onOpenChange={onOpenChange}>
+                      <YStack space="$1">
+                        <Button
+                          onPress={() => {
+                            isEditModeRef.current = true;
+                          }}
+                        >
+                          Edit
+                        </Button>
+                        <Button
+                          onPress={() => {
+                            if (data.type === 'pack') {
+                              dispatch(
+                                deletePack({
+                                  id: data._id,
+                                }),
+                              );
+                            } else {
+                              dispatch(deleteTrip(data._id));
+                            }
+                            router.replace('/feed');
+                          }}
+                        >
+                          Delete
+                        </Button>
+                      </YStack>
+                    </ThreeDotsMenu>
                   )}
                 </View>
               )}

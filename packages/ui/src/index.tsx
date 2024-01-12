@@ -31,6 +31,7 @@ export { RSkeleton } from './RSkeleton';
 export { LoadingPlaceholder } from './LoadingPlaceholder';
 
 export { EditableText } from './EditableText';
+export { ThreeDotsMenu } from './ThreeDotsMenu';
 
 export {
   RH1,
