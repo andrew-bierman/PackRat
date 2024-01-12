@@ -1,6 +1,6 @@
 // hooks/useCustomStyles.js
 import { StyleSheet } from 'react-native';
-import { useTheme } from 'tamagui';
+import { useTheme } from './useTheme';
 
 export const useCustomStyles = (stylesOrFunctionOrStylesheet) => {
   const currentTheme = useTheme();
