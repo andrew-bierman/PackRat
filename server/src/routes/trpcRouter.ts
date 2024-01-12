@@ -80,6 +80,7 @@ import {
   getFavoritePacksByUserRoute,
   getUserFavoritesRoute,
 } from '../controllers/favorite';
+import { getMapPreviewRoute } from '../controllers/mapPreview';
 
 export const appRouter = trpcRouter({
   // user routes
@@ -158,6 +159,8 @@ export const appRouter = trpcRouter({
   addToFavorite: addToFavoriteRoute(),
   getUserFavorites: getUserFavoritesRoute(),
   getFavoritePacksByUser: getFavoritePacksByUserRoute(),
+  // map preview route
+  getMapPreview: getMapPreviewRoute(),
 });
 
 export type AppRouter = typeof appRouter;
