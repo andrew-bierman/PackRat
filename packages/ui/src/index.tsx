@@ -28,6 +28,8 @@ import RButton from './RButton';
 
 export { RSkeleton } from './RSkeleton';
 
+export { LoadingPlaceholder } from './LoadingPlaceholder';
+
 export {
   RH1,
   RH2,
