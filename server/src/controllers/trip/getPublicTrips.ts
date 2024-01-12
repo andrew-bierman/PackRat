@@ -13,9 +13,9 @@ import { QueryType } from '../../helpers/queryTypeEnum'
  */
 export const getPublicTrips = async (req, res, next) => {
   try {
-    const { queryBy, type, page, pageSize } = req.query;
+    const { queryBy, type, pageSize, cursor } = req.query;
 
-    const publicTrips = await getPublicTripsService(queryBy, type, page, pageSize);
+    const publicTrips = await getPublicTripsService(queryBy, type, pageSize, cursor);
 
     res.locals.data = publicTrips;
     responseHandler(res);
@@ -29,13 +29,13 @@ export function getPublicTripsRoute() {
     .input(z.object({
       queryBy: z.string(),
       type: z.string().optional(),
-      page: z.number().optional(),
       pageSize: z.number().optional(),
+      cursor: z.number().optional()
     }))
     .query(async (opts) => {
 
-      const { queryBy, type = QueryType.Default, page = 1, pageSize = 10 } = opts.input;
+      const { queryBy, type = QueryType.Default, pageSize = 10, cursor = 0 } = opts.input;
       
-      return await getPublicTripsService(queryBy, type, page, pageSize);
+      return await getPublicTripsService(queryBy, type, pageSize,cursor);
     });
 }

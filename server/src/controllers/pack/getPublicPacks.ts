@@ -13,9 +13,9 @@ import { QueryType } from '../../helpers/queryTypeEnum'
  */
 export const getPublicPacks = async (req, res, next) => {
   try {
-    const { queryBy, type, page, pageSize } = req.query;
+    const { queryBy, type, pageSize, cursor } = req.query;
 
-    const publicPacks = await getPublicPacksService(queryBy, type, page, pageSize);
+    const publicPacks = await getPublicPacksService(queryBy, type, pageSize, cursor);
 
     res.locals.data = publicPacks;
     responseHandler(res);
@@ -26,9 +26,9 @@ export const getPublicPacks = async (req, res, next) => {
 
 export function getPublicPacksRoute() {
   return publicProcedure
-    .input(z.object({ queryBy: z.string(), type: z.string().optional(), page: z.number().optional(), pageSize: z.number().optional() }))
+    .input(z.object({ queryBy: z.string(), type: z.string().optional(), pageSize: z.number().optional(), cursor: z.number().optional() }))
     .query(async (opts) => {
-      const { queryBy, type = QueryType.Default, page, pageSize } = opts.input;
-      return await getPublicPacksService(queryBy, page, pageSize, type);
+      const { queryBy, type = QueryType.Default, pageSize, cursor } = opts.input;
+      return await getPublicPacksService(queryBy, pageSize, type, cursor);
     });
 }

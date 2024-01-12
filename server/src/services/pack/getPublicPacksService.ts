@@ -1,5 +1,6 @@
 import Pack from '../../models/packModel';
 import { computeTotalWeightInGrams } from '../../utils/convertWeight';
+import { convertCursorToObjectId } from '../../helpers/objectId'
 
 const SORT_OPTIONS = {
   Favorite: { favorites_count: -1 },
@@ -26,7 +27,7 @@ const DEFAULT_SORT = { createdAt: -1 };
  * @param {string} queryBy - Specifies how the public packs should be sorted.
  * @return {Promise<any[]>} An array of public packs.
  */
-export async function getPublicPacksService(queryBy: string = null, page: number, pageSize: number, type: string) {
+export async function getPublicPacksService(queryBy: string = null, pageSize: number, type: string, cursor: number) {
   try {
     const publicPacksPipeline: any = [
       {
@@ -82,8 +83,12 @@ export async function getPublicPacksService(queryBy: string = null, page: number
     ];
 
     if (type === 'pagination') {
-      const skip = (page - 1) * pageSize;
-      publicPacksPipeline.push({ $skip: skip });
+      const objectIdCursor = convertCursorToObjectId(cursor)
+      publicPacksPipeline.push({
+        $match: {
+          _id: { $gt: objectIdCursor }
+        },
+      });
       publicPacksPipeline.push({ $limit: pageSize });
     } else {
       const sortCriteria = SORT_OPTIONS[queryBy] || DEFAULT_SORT;
@@ -91,7 +96,7 @@ export async function getPublicPacksService(queryBy: string = null, page: number
     }
 
     const publicPacks = await Pack.aggregate(publicPacksPipeline);
-    
+
     return publicPacks;
   } catch (error) {
     throw new Error('Packs cannot be found: ' + error.message);

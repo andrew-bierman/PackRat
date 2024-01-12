@@ -1,4 +1,5 @@
 import Trip from '../../models/tripModel';
+import { convertCursorToObjectId } from '../../helpers/objectId';
 
 /**
  * Retrieves public trips based on the given query parameter.
@@ -8,8 +9,8 @@ import Trip from '../../models/tripModel';
 export const getPublicTripsService = async (
   queryBy: string,
   type: string,
-  page: number,
-  pageSize: number
+  pageSize: number,
+  cursor: number
 ): Promise<object[]> => {
   try {
     const publicTripsPipeline: any[] = [
@@ -59,8 +60,12 @@ export const getPublicTripsService = async (
     if (queryBy === 'Favorite') {
       publicTripsPipeline.push({ $sort: { favorites_count: -1 } });
     } else if (type === 'pagination') {
-      const skip = (page - 1) * pageSize;
-      publicTripsPipeline.push({ $skip: skip });
+      const objectIdCursor = convertCursorToObjectId(cursor)
+      publicTripsPipeline.push({
+        $match: {
+          _id: { $gt: objectIdCursor },
+        },
+      });
       publicTripsPipeline.push({ $limit: pageSize });
     }
     else {
