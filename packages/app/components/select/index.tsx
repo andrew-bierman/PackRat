@@ -1,6 +1,6 @@
-import { Check, ChevronDown, ChevronUp } from '@tamagui/lucide-icons';
+import { ChevronDown, ChevronUp } from '@tamagui/lucide-icons';
 
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 
 import {
   Adapt,
@@ -12,7 +12,7 @@ import {
   YStack,
   getFontSize,
 } from 'tamagui';
-
+import { useSelect } from 'hooks/select';
 // import { LinearGradient } from 'tamagui/linear-gradient'
 
 export function SelectDemo() {
@@ -38,7 +38,7 @@ export function SelectDemo() {
 // @ts-nocheck - may need to be at the start of file
 // @ts-expect-error
 export function SelectDemoItem(SelectProps = {}, props) {
-  const [val, setVal] = useState('apple');
+  const { val, setVal, items } = useSelect();
   return (
     <Select id="food" value={val} onValueChange={setVal} {...props}>
       <Select.Trigger width={220} iconAfter={ChevronDown}>
@@ -164,48 +164,3 @@ export function SelectDemoItem(SelectProps = {}, props) {
     </Select>
   );
 }
-const items = [
-  { name: 'Apple' },
-
-  { name: 'Pear' },
-
-  { name: 'Blackberry' },
-
-  { name: 'Peach' },
-
-  { name: 'Apricot' },
-
-  { name: 'Melon' },
-
-  { name: 'Honeydew' },
-
-  { name: 'Starfruit' },
-
-  { name: 'Blueberry' },
-
-  { name: 'Raspberry' },
-
-  { name: 'Strawberry' },
-
-  { name: 'Mango' },
-
-  { name: 'Pineapple' },
-
-  { name: 'Lime' },
-
-  { name: 'Lemon' },
-
-  { name: 'Coconut' },
-
-  { name: 'Guava' },
-
-  { name: 'Papaya' },
-
-  { name: 'Orange' },
-
-  { name: 'Grape' },
-
-  { name: 'Jackfruit' },
-
-  { name: 'Durian' },
-];

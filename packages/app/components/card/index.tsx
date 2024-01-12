@@ -1,29 +1,15 @@
-import React, { useRef, useState, useEffect } from 'react';
-import {
-  RStack,
-  RSeparator,
-  RText,
-  useToastController,
-  ToastViewport,
-  NativeToast,
-} from '@packrat/ui';
-import {
-  TouchableOpacity,
-  Clipboard,
-  TextInput,
-  Pressable,
-  View,
-} from 'react-native';
+import React from 'react';
+import { RStack, RSeparator, RText } from '@packrat/ui';
+import { View } from 'react-native';
 import { EditableInput } from '../EditableText';
-import { theme } from '../../theme';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useDispatch, useSelector } from 'react-redux';
-import { useRouter, Link } from 'expo-router';
+import { Link } from 'expo-router';
 import { ThreeDotsMenu } from '../ThreeDotsMenu';
-import useTheme from '../../hooks/useTheme';
+
 import { SearchItem } from '../item/searchItem';
-import Loader from '../Loader';
-import useCustomStyles from 'app/hooks/useCustomStyles';
+
+import useCustomStyles from '../../hooks/useCustomStyles';
+import { useCustomCard } from 'hooks/card/useCustomCard';
 
 export const CustomCard = ({
   title,
@@ -34,42 +20,26 @@ export const CustomCard = ({
   destination,
   data,
 }) => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    useTheme();
   const styles = useCustomStyles(loadStyles);
-  const [isCopied, setIsCopied] = useState(false);
-  const [editTitle, setEditTitle] = useState(false);
-  const titleRef = useRef(null);
-  const dispatch = useDispatch();
-  const router = useRouter();
-  const isLoading = useSelector((state: any) => state.singlePack.isLoading);
-  const user = useSelector((state: any) => state.auth.user);
-  const userId = user._id;
-  const toast = useToastController();
-
-  /**
-   * Handles copying the link to the clipboard and updates the copy state.
-   *
-   * @return {function} A function to clear the timeout for resetting the copy state.
-   */
-  const handleCopyLink = () => {
-    Clipboard.setString(link);
-
-    setIsCopied(true);
-
-    const resetCopyStateTimeout = setTimeout(() => {
-      setIsCopied(false);
-    }, 2000);
-    // Style in the future
-    // toast.show('Link copied to clipboard');
-    // InformUser({
-    //   title: 'Link copied to clipboard',
-    //   placement: 'bottom',
-    //   duration: 2000,
-    // });
-
-    return () => clearTimeout(resetCopyStateTimeout);
-  };
+  const {
+    enableDarkMode,
+    enableLightMode,
+    isDark,
+    isLight,
+    currentTheme,
+    isCopied,
+    setIsCopied,
+    editTitle,
+    setEditTitle,
+    titleRef,
+    dispatch,
+    router,
+    isLoading,
+    user,
+    userId,
+    toast,
+    handleCopyLink,
+  } = useCustomCard({ link });
 
   if (!data) return null;
 
