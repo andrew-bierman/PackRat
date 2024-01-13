@@ -9,7 +9,7 @@ import { trpc } from '../trpc';
 
 export const fetchPhotonSearchResults = createAsyncThunk(
   'search/fetchPhotonSearchResults',
-  async (searchString) => {
+  async (searchString: string) => {
     const url =
       api +
       `/osm/photon/search?searchString=${encodeURIComponent(searchString)}`;
@@ -25,7 +25,7 @@ export const fetchPhotonSearchResults = createAsyncThunk(
 );
 export const fetchItemsSearchResults = createAsyncThunk(
   'search/fetchItemsSearchResults',
-  async (searchString) => {
+  async (searchString: string) => {
     const url = api + `/item/global?search=${encodeURIComponent(searchString)}`;
     try {
       // const response = await axios.get(url);
@@ -55,7 +55,7 @@ const searchSlice = createSlice({
     setSelectedSearchResult(state, action) {
       state.selectedSearchResult = action.payload;
     },
-    clearSearchResults(state, action) {
+    clearSearchResults(state) {
       state.searchResults = [];
       state.selectedSearchResult = {};
     },
