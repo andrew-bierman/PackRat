@@ -5,7 +5,7 @@ import { RStack, RInput, RText, RScrollView, RIconButton } from '@packrat/ui';
 import { MaterialIcons } from '@expo/vector-icons';
 import { fetchItemsSearchResults } from '../../store/searchStore';
 import { selectItemsGlobal } from '../../store/singlePackStore';
-import useSearchItem from 'hooks/item/useSearchItem';
+import useSearchItem from 'app/hooks/item/useSearchItem';
 
 interface Props {
   onSelect?: () => void;

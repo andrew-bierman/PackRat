@@ -1,10 +1,10 @@
 import { RInput, RButton, RText, RStack, RRadio } from '@packrat/ui';
 import { View } from 'react-native';
 import { DropdownComponent } from '../Dropdown';
-// import { theme } from '../../theme';
-// import { ItemCategoryEnum } from '../../constants/itemCategory';
+import { theme } from '../../theme';
+import { ItemCategoryEnum } from '../../constants/itemCategory';
 import useTheme from '../../hooks/useTheme';
-import useItemForm from 'hooks/item/useItemForm';
+import useItemForm from 'app/hooks/item/useItemForm';
 const data = ['lb', 'oz', 'kg', 'g'];
 
 export const ItemForm = ({
