@@ -36,19 +36,17 @@ export const SearchItem: React.FC<Props> = ({ onSelect, placeholder }) => {
           style={{ position: 'relative', height: 'auto', flexDirection: 'row' }}
         >
           <RInput
-            onChangeText={(text) => {
+            onChangeText={(text: string) => {
               setSearchString(text);
-              // @ts-expect-error
               dispatch(fetchItemsSearchResults(text));
               setShowSearchResults(true);
             }}
             placeholder={placeholder ?? 'Type here to search'}
             value={searchString}
             fontSize={14}
-            width={'100%'}
+            width="100%"
             borderRadius={4}
-            paddingVertical={16}
-            paddingHorizontal={8}
+            padding="16px 8px"
             backgroundColor="white"
           />
           <RIconButton
@@ -123,10 +121,9 @@ export const SearchItem: React.FC<Props> = ({ onSelect, placeholder }) => {
         placeholder="Search"
         value={searchString}
         fontSize={14}
-        width={'100%'}
+        width="100%"
         borderRadius={4}
-        paddingVertical={16}
-        paddingHorizontal={8}
+        padding="16px 8px"
         backgroundColor="white"
       />
       <RIconButton
