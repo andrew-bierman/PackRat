@@ -1,50 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { BaseModal, RInput } from '@packrat/ui';
-import axios from 'app/config/axios';
-import { api } from '../../constants/api';
-import { InformUser } from '../../utils/ToastUtils';
-import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
+import { useRequestEmailModal } from 'app/hooks/password-reset';
 
 export const RequestPasswordResetEmailModal = () => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    useTheme();
   const styles = useCustomStyles(loadStyles);
-  const [email, setEmail] = useState('');
-  const [loading, setLoading] = useState(false);
-
-  /**
-   * Initiates the password reset process by calling the API.
-   *
-   * @return {Promise<void>} A promise that resolves when the password reset email is sent successfully.
-   */
-  const handleResetPasswordEmail = async (_, closeModal) => {
-    try {
-      setLoading(true);
-      // Call your API to initiate the password reset process
-      // Pass the email entered by the user to the API endpoint
-      // The API endpoint should send an email with a reset link to the provided email
-      // TODO - switch to RTK query
-      await axios.post(`${api}/password-reset`, { email });
-      setLoading(false);
-      closeModal();
-      InformUser({
-        title: 'Password reset email sent',
-        style: { backgroundColor: currentTheme.colors.textPrimary },
-        placement: 'top-right',
-        duration: 5000,
-      });
-    } catch (error) {
-      console.log('Error here', error);
-      setLoading(false);
-      InformUser({
-        title: error?.response?.data?.error,
-        duration: 7000,
-        placement: 'top-right',
-        style: { backgroundColor: currentTheme.colors.error },
-      });
-    }
-  };
+  const { email, setEmail, loading, handleResetPasswordEmail } =
+    useRequestEmailModal();
 
   return (
     <BaseModal
