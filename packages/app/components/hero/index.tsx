@@ -10,7 +10,7 @@ const Hero = ({ children, imageDetails }) => {
     imageDetails = {
       title: 'N/A',
       subtitle: 'N/A',
-      source: require('../../assets/topographical-pattern.jpg'),
+      source: require('app/assets/topographical-pattern.jpg'),
       alt: 'hero',
     };
   }
