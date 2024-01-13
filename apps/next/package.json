@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@expo/next-adapter": "5.0.2",
+    "@tamagui/next-plugin": "^1.84.2",
     "app": "*",
     "next": "^13.4.19",
     "raf": "^3.4.1",

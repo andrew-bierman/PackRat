@@ -12,8 +12,28 @@ module.exports = function (api) {
           path: '.env',
           safe: false,
           allowUndefined: true,
-        },
+        }
       ],
-    ],
+      [
+        '@tamagui/babel-plugin',
+        {
+          exclude: ['**/node_modules/**'],
+          config: './theme/tamagui.config.js',
+          logTimings: true,
+        }
+      ],
+      [
+        'transform-inline-environment-variables',
+        {
+          include: 'TAMAGUI_TARGET',
+        }
+      ],
+      [
+        'module-resolver',
+        {
+          extensions: ['.ios.js', '.android.js', '.js', '.ts', '.tsx', '.json'],
+        }
+      ]
+    ]
   };
 };

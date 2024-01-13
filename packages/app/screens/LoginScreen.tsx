@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { View } from 'react-native';
 import { RHeading, RStack, RButton, RText, RIconButton } from '@packrat/ui';
 import { FontAwesome } from '@expo/vector-icons';
@@ -5,8 +6,8 @@ import { NODE_ENV } from '@env';
 import { Link, usePathname } from 'expo-router';
 import { InformUser } from '../utils/ToastUtils';
 import useTheme from '../hooks/useTheme';
-import { InputText, InputTextRules } from '../../components/InputText';
-import { useGoogleAuth, useLogin } from '../../hooks/login';
+import { InputText, InputTextRules } from '../components/InputText';
+import { useGoogleAuth, useLogin } from '../hooks/login';
 
 const demoUser = {
   email: 'zoot3@email.com',
