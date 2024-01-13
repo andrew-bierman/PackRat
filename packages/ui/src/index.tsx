@@ -58,6 +58,8 @@ export {
   RButton,
 };
 
+export * from './InputText';
+
 export { config } from './tamagui.config';
 export * from 'tamagui';
 export * from './modal';
