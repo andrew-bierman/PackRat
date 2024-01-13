@@ -4,24 +4,21 @@ import { Box, Button, ScrollView, Tooltip } from 'native-base';
 import { MaterialIcons } from '@expo/vector-icons';
 import { theme } from '../../theme';
 import useTheme from '../../hooks/useTheme';
-import { CustomModal } from '../../components/modal';
 import { AddItemGlobal } from '../../components/item/AddItemGlobal';
 import { ItemsTable } from '../../components/itemtable/itemTable';
 import { useDispatch, useSelector } from 'react-redux';
 import { getItemsGlobal } from '../../store/globalItemsStore';
 import { Stack } from 'expo-router';
 import { executeOfflineRequests } from '../../store/offlineQueue';
-import useCustomStyles from '../../hooks/useCustomStyles';
-// import { checkNetworkConnected } from '~/utils/netInfo';
+import useCustomStyles from 'app/hooks/useCustomStyles';
+import { BaseModal } from '@packrat/ui';
+// import { checkNetworkConnected } from 'app/utils/netInfo';
 
 export default function Items() {
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
   const [limit, setLimit] = useState(5);
   const [page, setPage] = useState(1);
   const [refetch, setRefetch] = useState(false);
-
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    useTheme();
   const styles = useCustomStyles(loadStyles);
   const data = useSelector((state) => state.globalItems);
   const isLoading = useSelector((state) => state.globalItems.isLoading);
@@ -49,58 +46,13 @@ export default function Items() {
         }}
       />
       <Box style={styles.container}>
-        <CustomModal
+        <BaseModal
           title="Add a global Item"
           trigger="Add Item"
-          isActive={isAddItemModalOpen}
-          onTrigger={setIsAddItemModalOpen}
-          triggerComponent={
-            <View
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                marginTop: '2rem',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              <Button
-                style={styles.button}
-                onPress={() => {
-                  setIsAddItemModalOpen(true);
-                }}
-              >
-                Add Item
-              </Button>
-              {Platform.OS === 'web' && (
-                <Tooltip
-                  label="Add a global item"
-                  placement="top left"
-                  openDelay={500}
-                >
-                  <Button
-                    width={8}
-                    height={8}
-                    style={{ backgroundColor: 'none' }}
-                  >
-                    <MaterialIcons
-                      name="info-outline"
-                      size={20}
-                      color={currentTheme.colors.background}
-                    />
-                  </Button>
-                </Tooltip>
-              )}
-            </View>
-          }
-          onCancel={setIsAddItemModalOpen}
+          triggerComponent={<ModalTriggerButton />}
         >
-          <AddItemGlobal
-            setRefetch={setRefetch}
-            refetch={refetch}
-            setIsAddItemModalOpen={setIsAddItemModalOpen}
-          />
-        </CustomModal>
+          <AddItemGlobal setRefetch={setRefetch} refetch={refetch} />
+        </BaseModal>
         {!isError &&
           data.globalItems &&
           Array.isArray(data.globalItems.items) && (
@@ -120,6 +72,43 @@ export default function Items() {
     </ScrollView>
   );
 }
+
+const ModalTriggerButton = ({ setIsModalOpen }) => {
+  const { currentTheme } = useTheme();
+  const styles = useCustomStyles(loadStyles);
+
+  return (
+    <View
+      style={{
+        display: 'flex',
+        flexDirection: 'row',
+        marginTop: '2rem',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
+      <Button
+        style={styles.button}
+        onPress={() => {
+          setIsModalOpen(true);
+        }}
+      >
+        Add Item
+      </Button>
+      {Platform.OS === 'web' && (
+        <Tooltip label="Add a global item" placement="top left" openDelay={500}>
+          <Button width={8} height={8} style={{ backgroundColor: 'none' }}>
+            <MaterialIcons
+              name="info-outline"
+              size={20}
+              color={currentTheme.colors.background}
+            />
+          </Button>
+        </Tooltip>
+      )}
+    </View>
+  );
+};
 
 const loadStyles = (theme) => {
   const { currentTheme } = theme;

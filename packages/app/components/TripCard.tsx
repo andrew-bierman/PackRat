@@ -1,8 +1,8 @@
 import { RCard, RParagraph, RStack, RText } from '@packrat/ui';
 import { Platform } from 'react-native';
 import { Text } from 'tamagui';
-import { useCardTrip } from '../hooks/trips/useTripCard';
-import useCustomStyles from '../hooks/useCustomStyles';
+import { useCardTrip } from 'app/hooks/trips/useTripCard';
+import useCustomStyles from 'app/hooks/useCustomStyles';
 import useTheme from '../hooks/useTheme';
 import { theme } from '../theme/index';
 import { SearchInput } from './SearchInput';
@@ -146,7 +146,7 @@ const loadStyles = (theme) => {
       flex: 1,
       paddingHorizontal: 60,
       paddingVertical: 70,
-      height: Platform.OS === 'web' ? '450px' : '100%',
+      height: Platform.OS === 'web' ? 450 : '100%',
       alignSelf: 'center',
     },
     mapCard: {
@@ -157,7 +157,7 @@ const loadStyles = (theme) => {
       padding: currentTheme.size.cardPadding,
       paddingHorizontal: currentTheme.padding.paddingInside,
       marginBottom: 20,
-      height: Platform.OS === 'web' ? '650px' : '100%',
+      height: Platform.OS === 'web' ? 650 : '100%',
       overflow: 'hidden',
       alignSelf: 'center',
     },

@@ -1,4 +1,4 @@
-import useCustomStyles from '../../hooks/useCustomStyles';
+import useCustomStyles from 'app/hooks/useCustomStyles';
 import { View, Text } from 'react-native';
 
 // /TODO: Review this logic.

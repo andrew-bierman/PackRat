@@ -3,11 +3,11 @@ import React, { useState } from 'react';
 import { View } from 'react-native';
 import { Button, Input, Text, Toast } from 'native-base';
 import { useSearchParams } from 'expo-router';
-import axios from '../../config/axios';
+import axios from 'app/config/axios';
 import useTheme from '../../hooks/useTheme';
 import { api } from '../../constants/api';
 import { InformUser } from '../../utils/ToastUtils';
-import useCustomStyles from '../../hooks/useCustomStyles';
+import useCustomStyles from 'app/hooks/useCustomStyles';
 
 export const PasswordResetForm = ({ token }) => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =

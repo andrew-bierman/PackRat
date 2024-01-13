@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { CustomModal } from '../modal';
-import { RInput, RStack, RText } from '@packrat/ui';
+import { BaseModal, RInput, RStack, RText } from '@packrat/ui';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'expo-router';
 import { format, intervalToDuration } from 'date-fns';
 // import { addTrip } from '../../store/tripsStore';
-import { useAddTrip } from '../../hooks/trips';
-import { useGetPhotonDetails } from '../../hooks/destination';
+import { useAddTrip } from 'app/hooks/trips';
+import { useGetPhotonDetails } from 'app/hooks/destination';
 
 // import { Picker } from '@react-native-picker/picker';
 import { DropdownComponent } from '../Dropdown';
@@ -67,7 +66,6 @@ const NumberInput = (props) => {
 };
 
 export const SaveTripContainer = ({ dateRange }) => {
-  const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
   const weatherObject = useSelector((state) => state.weather.weatherObject);
   const search = useSelector((state) => state.search.selectedSearchResult);
   const dropdown = useSelector((state) => state.dropdown);
@@ -96,7 +94,7 @@ export const SaveTripContainer = ({ dateRange }) => {
   });
 
   // create trip
-  const handleCreateTrip = async () => {
+  const handleCreateTrip = async (_, closeModal) => {
     // duration object
     const startDate = dateRange.startDate
       ? format(dateRange.startDate, 'MM/dd/yyyy')
@@ -137,7 +135,7 @@ export const SaveTripContainer = ({ dateRange }) => {
     // creating a trip
     console.log('create trip data ->', data);
     addTrip(data);
-    setIsSaveModalOpen(!isSaveModalOpen);
+    closeModal();
   };
   if (isSuccess && response) {
     router.push(`/trip/${response.trip._id}`);
@@ -176,13 +174,9 @@ export const SaveTripContainer = ({ dateRange }) => {
   });
 
   return (
-    <CustomModal
+    <BaseModal
       title="Save Trip"
       trigger="Save Trip"
-      isActive={isSaveModalOpen}
-      onTrigger={() => {
-        setIsSaveModalOpen(!isSaveModalOpen);
-      }}
       footerButtons={[
         {
           label: 'Save',
@@ -294,6 +288,6 @@ export const SaveTripContainer = ({ dateRange }) => {
           )}
         </RStack>
       </RStack>
-    </CustomModal>
+    </BaseModal>
   );
 };

@@ -1,2 +1,4 @@
-// registerRootComponent happens in "expo-router/entry"
-import 'expo-router/entry'
+import 'expo-router/entry';
+// import { LogBox } from 'react-native';
+// console.disableYellowBox = true;
+// LogBox.ignoreAllLogs();

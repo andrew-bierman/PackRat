@@ -14,8 +14,8 @@ import {
   mapboxStyles,
   multiPolygonBounds,
   processShapeData,
-} from '../../utils/mapFunctions';
-import { saveFile } from '../../utils/fileSaver/fileSaver.web';
+} from 'app/utils/mapFunctions';
+import { saveFile } from 'app/utils/fileSaver/fileSaver.web';
 
 export const useWebMap = ({ shape: shapeProp }) => {
   // useEffect(() => {

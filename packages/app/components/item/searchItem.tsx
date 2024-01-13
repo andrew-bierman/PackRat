@@ -45,28 +45,25 @@ export const SearchItem: React.FC<Props> = ({ onSelect, placeholder }) => {
   const dispatch = useDispatch();
 
   return Platform.OS === 'web' ? (
-    <RStack style={{ width: '100%', maxWidth: '300px' }}>
+    <RStack style={{ width: '100%', maxWidth: 300 }}>
       {/* ... */}
       <RStack style={{ width: '100%', alignItems: 'center' }}>
         <View
           style={{ position: 'relative', height: 'auto', flexDirection: 'row' }}
         >
           <RInput
-            onChangeText={(text) => {
+            onChangeText={(text: string) => {
               setSearchString(text);
-              // @ts-expect-error
               dispatch(fetchItemsSearchResults(text));
               setShowSearchResults(true);
             }}
             placeholder={placeholder ?? 'Type here to search'}
-            style={{
-              width: '100%',
-              borderRadius: '4',
-              padding: '16px 8px',
-              backgroundColor: 'white',
-            }}
             value={searchString}
             fontSize={14}
+            width="100%"
+            borderRadius={4}
+            padding="16px 8px"
+            backgroundColor="white"
           />
           <RIconButton
             backgroundColor="transparent"
@@ -138,14 +135,12 @@ export const SearchItem: React.FC<Props> = ({ onSelect, placeholder }) => {
       <RInput
         onChangeText={(text) => setSearchString(text)}
         placeholder="Search"
-        style={{
-          width: '100%',
-          borderRadius: '4',
-          padding: '16px 8px',
-          backgroundColor: 'white',
-        }}
         value={searchString}
         fontSize={14}
+        width="100%"
+        borderRadius={4}
+        padding="16px 8px"
+        backgroundColor="white"
       />
       <RIconButton
         backgroundColor="transparent"
@@ -166,16 +161,12 @@ export const SearchItem: React.FC<Props> = ({ onSelect, placeholder }) => {
           showsVerticalScrollIndicator={false}
           zIndex={10}
         >
-          <View
-            role="list"
-            style={{ width: '100%', gap: '8px', padding: '8px' }}
-          >
+          <View role="list" style={{ width: '100%', gap: 8, padding: 8 }}>
             {searchResults.map((result, i) => (
               <Pressable
                 key={`result + ${i}`}
                 role="listitem"
                 onPress={() => handleSearchResultClick(result, i)}
-                // @ts-expect-error
               >
                 <RStack style={{ flexDirection: 'row' }}>
                   <RText fontWeight="400"></RText>

@@ -1,3 +1,3 @@
-import { HomeScreen } from 'app/features/home/screen'
-
-export default HomeScreen
+export default function Home() {
+  return <h1>Hello World</h1>;
+}

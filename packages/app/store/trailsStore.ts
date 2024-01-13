@@ -3,10 +3,11 @@ import {
   createAsyncThunk,
   createEntityAdapter,
 } from '@reduxjs/toolkit';
-import axios from '../config/axios';
+import axios from 'app/config/axios';
 import { api } from '../constants/api';
 import { trpc } from '../trpc';
 import { fetchTrails } from './trailsStore_copy';
+import { RootState } from './store';
 
 export { fetchTrails };
 
@@ -82,7 +83,7 @@ const trailsSlice = createSlice({
 });
 
 export const { selectAll: selectAllTrails } = trailsAdapter.getSelectors(
-  (state) => state.trails,
+  (state: RootState) => state.trails,
 );
 
 export default trailsSlice.reducer;

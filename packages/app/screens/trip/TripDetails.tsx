@@ -16,8 +16,8 @@ import TripCard from '../../components/TripCard';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { convertPhotonGeoJsonToShape } from '../../utils/mapFunctions';
 import useTheme from '../../hooks/useTheme';
-import useCustomStyles from '../../hooks/useCustomStyles';
-import { useFetchSingleTrip } from '../../hooks/singletrips';
+import useCustomStyles from 'app/hooks/useCustomStyles';
+import { useFetchSingleTrip } from 'app/hooks/singletrips';
 export function TripDetails() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();

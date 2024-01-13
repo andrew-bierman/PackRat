@@ -31,8 +31,8 @@ import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import { DOMParser } from 'xmldom';
 import { gpx as toGeoJSON } from '@tmcw/togeojson';
-import useCustomStyles from '../../hooks/useCustomStyles';
-import { useNativeMap } from '../../hooks/map/useNativeMap';
+import useCustomStyles from 'app/hooks/useCustomStyles';
+import { useNativeMap } from 'app/hooks/map/useNativeMap';
 
 Mapbox.setWellKnownTileServer(Platform.OS === 'android' ? 'Mapbox' : 'mapbox');
 Mapbox.setAccessToken(MAPBOX_ACCESS_TOKEN);

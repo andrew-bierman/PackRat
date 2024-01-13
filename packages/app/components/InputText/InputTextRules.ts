@@ -1,5 +1,5 @@
 import { type UseControllerProps } from 'react-hook-form';
-import { Regex } from '../../utils/regex';
+import { Regex } from 'app/utils/regex';
 
 type ruleProps = UseControllerProps['rules'];
 

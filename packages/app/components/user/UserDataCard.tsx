@@ -58,20 +58,20 @@ const UserDataCard = ({
   const truncatedDestination = truncateString(destination, 25);
 
   return (
-    <View style={{ alignItems: 'center', padding: '16px' }}>
+    <View style={{ alignItems: 'center', padding: 16 }}>
       <View
         style={{
-          minHeight: '150px',
-          minWidth: '300px',
+          minHeight: 150,
+          minWidth: 300,
           border: '1px solid gray',
           borderLeft: `10px solid ${is_public ? 'green' : 'red'}`,
-          borderRadius: '8px',
+          borderRadius: 8,
           overflow: 'hidden',
           backgroundColor: '#EBEBEB',
         }}
       >
-        <RStack style={{ padding: '16px', gap: '16px' }}>
-          <RStack style={{ gap: '8px' }}>
+        <RStack style={{ padding: 16, gap: 16 }}>
+          <RStack style={{ gap: 8 }}>
             <RH2>
               <View
                 style={{
@@ -80,13 +80,13 @@ const UserDataCard = ({
                   justifyContent: 'space-between',
                   width: '100%',
                   gap: 10,
-                  fontSize: '16px',
+                  fontSize: 16,
                   fontWeight: 'bold',
                 }}
               >
-                <RText style={{ fontSize: '16px' }}>{truncatedName}</RText>
+                <RText style={{ fontSize: 16 }}>{truncatedName}</RText>
                 {state[index] ? (
-                  <RText style={{ fontSize: '16px' }}>Loading....</RText>
+                  <RText style={{ fontSize: 16 }}>Loading....</RText>
                 ) : (
                   <>
                     {!differentUser && (
@@ -105,7 +105,7 @@ const UserDataCard = ({
             {type === 'pack' ? (
               <RText
                 style={{
-                  fontSize: '12px',
+                  fontSize: 12,
                   color: 'mediumpurple',
                   marginLeft: '-0.5px',
                   marginTop: '-3px',
@@ -116,7 +116,7 @@ const UserDataCard = ({
             ) : (
               <RText
                 style={{
-                  fontSize: '12px',
+                  fontSize: 12,
                   color: 'mediumpurple',
                   marginLeft: '-0.5px',
                   marginTop: '-3px',
@@ -131,7 +131,7 @@ const UserDataCard = ({
             style={{
               flexDirection: 'row',
               alignItems: 'center',
-              gap: '16px',
+              gap: 16,
               justifyContent: 'space-between',
             }}
           >
@@ -145,7 +145,7 @@ const UserDataCard = ({
               <RText
                 style={{
                   color: 'gray',
-                  fontSize: '12px',
+                  fontSize: 12,
                   fontWeight: '400',
                   flex: 1,
                 }}

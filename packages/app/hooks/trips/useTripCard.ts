@@ -1,7 +1,7 @@
 import { useDispatch } from 'react-redux';
 import { useSelector } from '../redux/useSelector';
-import { addPark, addTrail } from '../../store/dropdownStore';
-import { selectAllTrails } from '../../store/trailsStore';
+import { addPark, addTrail } from 'app/store/dropdownStore';
+import { selectAllTrails } from 'app/store/trailsStore';
 
 export const useCardTrip = () => {
   const dispatch = useDispatch();

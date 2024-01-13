@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { addPackItem } from 'store/packsStore';
-import { ItemCategoryEnum } from '../../constants/itemCategory';
+import { ItemCategoryEnum } from 'app/constants/itemCategory';
 
 export const useWater = ({ currentPack, setWaterItem }) => {
   const [waterWeight, setWaterWeight] = useState(0);

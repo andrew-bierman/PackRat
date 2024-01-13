@@ -9,8 +9,9 @@ import { EditPackItemModal } from '../pack_table/EditPackItemModal';
 import { DeletePackItemModal } from '../pack_table/DeletePackItemModal';
 import { PaginationLimit } from '../paginationChooseLimit';
 import Loader from '../Loader';
-import useCustomStyles from '../../hooks/useCustomStyles';
+import useCustomStyles from 'app/hooks/useCustomStyles';
 import { loadStyles } from './itemsTable.style';
+import { AddItem } from '../item/AddItem';
 
 export const ItemsTable = ({
   limit,
@@ -44,12 +45,15 @@ export const ItemsTable = ({
       `${formatNumber(weight)} ${unit}`,
       quantity,
       `${category?.name || type}`,
-      <EditPackItemModal
-        initialData={itemData}
-        editAsDuplicate={false}
-        setPage={setPage}
-        page={page}
-      />,
+      <EditPackItemModal>
+        <AddItem
+          isEdit={true}
+          initialData={itemData}
+          editAsDuplicate={false}
+          setPage={setPage}
+          page={page}
+        />
+      </EditPackItemModal>,
       <DeletePackItemModal itemId={_id} />,
     ];
     return <Row data={rowData} style={styles.row} flexArr={flexArr} />;
@@ -98,7 +102,7 @@ export const ItemsTable = ({
         />
         <View
           style={{
-            height: '400px',
+            height: 400,
             overflowY: 'scroll',
           }}
         >
@@ -115,12 +119,12 @@ export const ItemsTable = ({
       <View style={{ display: 'flex', flexDirection: 'row', margin: 'auto' }}>
         <RButton
           style={{
-            marginRight: '10px',
-            width: '4px',
+            marginRight: 10,
+            width: 4,
             backgroundColor: 'transparent',
-            borderRadius: '5px',
+            borderRadius: 5,
             borderColor: page < 2 ? 'gray' : '#0284c7',
-            borderWidth: '1px',
+            borderWidth: 1,
             borderStyle: 'solid',
           }}
           disabled={page < 2}
@@ -130,12 +134,12 @@ export const ItemsTable = ({
         </RButton>
         <RButton
           style={{
-            marginRight: '10px',
-            width: '4px',
+            marginRight: 10,
+            width: 4,
             backgroundColor: 'transparent',
-            borderRadius: '5px',
+            borderRadius: 5,
             borderColor: page === totalPages ? 'gray' : '#0284c7',
-            borderWidth: '1px',
+            borderWidth: 1,
             borderStyle: 'solid',
           }}
           disabled={page === totalPages}

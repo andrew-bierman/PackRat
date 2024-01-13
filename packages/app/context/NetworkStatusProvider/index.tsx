@@ -2,7 +2,7 @@ import React, { createContext, useEffect } from 'react';
 // import { store } from '../store/store';
 import { useDispatch } from 'react-redux';
 import { setNetworkStatus } from '../../store/offlineQueue';
-import { checkNetworkConnected } from '../../utils/netInfo';
+import { checkNetworkConnected } from 'app/utils/netInfo';
 
 const NetworkStatusContext = createContext();
 

@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { api } from '../../constants/api';
+import { api } from 'app/constants/api';
 import { store } from '../store/store';
-import { InformUser } from '../../utils/ToastUtils';
+import { InformUser } from 'app/utils/ToastUtils';
 import { setTargetProgress, resetProgress } from '../store/progressStore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 

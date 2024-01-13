@@ -1,9 +1,9 @@
 import { View, TouchableOpacity, Modal, SafeAreaView } from 'react-native';
 import { AntDesign, EvilIcons } from '@expo/vector-icons';
 import useTheme from '../../hooks/useTheme';
-import useCustomStyles from '../../hooks/useCustomStyles';
+import useCustomStyles from 'app/hooks/useCustomStyles';
 import { NavigationList } from './NavigationList';
-import { useDrawer } from '../../hooks/navigation';
+import { useDrawer } from 'app/hooks/navigation';
 
 export const Drawer = () => {
   const { currentTheme } = useTheme();

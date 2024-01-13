@@ -4,7 +4,7 @@ import { RText, RStack } from '@packrat/ui';
 import { useSelector } from 'react-redux';
 import useTheme from '../../hooks/useTheme';
 import { theme } from '../../theme';
-import useCustomStyles from '../../hooks/useCustomStyles';
+import useCustomStyles from 'app/hooks/useCustomStyles';
 
 /**
  * Retrieves the appropriate container style based on the provided type.
@@ -77,7 +77,7 @@ export default function LargeCard({
           style={{
             color: currentTheme.colors.textPrimary,
             fontSize: currentTheme.font.size,
-            fontWeight: 600,
+            fontWeight: '600',
           }}
         >
           {title && <RText>{title}</RText>}
@@ -120,7 +120,7 @@ const loadStyles = (theme) => {
       flex: 1,
       paddingHorizontal: 60,
       paddingVertical: 70,
-      height: Platform.OS === 'web' ? '450px' : '100%',
+      height: Platform.OS === 'web' ? 450 : '100%',
     },
     mapCard: {
       backgroundColor: currentTheme.colors.card,
@@ -130,7 +130,7 @@ const loadStyles = (theme) => {
       padding: currentTheme.size.cardPadding,
       paddingHorizontal: currentTheme.padding.paddingInside,
       marginBottom: 20,
-      height: Platform.OS === 'web' ? '650px' : '100%',
+      height: Platform.OS === 'web' ? 650 : '100%',
       overflow: 'hidden',
     },
   };

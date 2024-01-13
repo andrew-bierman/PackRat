@@ -14,7 +14,7 @@ import {
   setSelectedSearchResult,
 } from '../../store/destinationStore';
 import { hexToRGBA } from '../../utils/colorFunctions';
-import useCustomStyles from '../../hooks/useCustomStyles';
+import useCustomStyles from 'app/hooks/useCustomStyles';
 
 const HeroSection = ({ onSelect }) => {
   const dispatch = useDispatch();
@@ -80,7 +80,8 @@ const HeroSection = ({ onSelect }) => {
         imageDetails={{
           title: 'N/A',
           subtitle: 'N/A',
-          source: "https://github.com/andrew-bierman/PackRat/blob/main/apps/expo/assets/topographical-pattern.jpg?raw=true",
+          source:
+            'https://github.com/andrew-bierman/PackRat/blob/main/apps/expo/assets/topographical-pattern.jpg?raw=true',
           alt: 'hero',
         }}
       >

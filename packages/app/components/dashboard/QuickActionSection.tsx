@@ -1,7 +1,7 @@
 import { RStack } from '@packrat/ui';
 import QuickActionButton from './QuickActionButton';
-import useCustomStyles from '../../hooks/useCustomStyles';
-import { useQuickActions } from '../../hooks/dashboard';
+import useCustomStyles from 'app/hooks/useCustomStyles';
+import { useQuickActions } from 'app/hooks/dashboard';
 
 const QuickActionsSection = () => {
   const styles = useCustomStyles(loadStyles);

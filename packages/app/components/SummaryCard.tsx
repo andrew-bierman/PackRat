@@ -1,40 +1,28 @@
-import { Box } from 'native-base';
-import { Text } from 'react-native';
-import { ItemRow } from './ItemRow/ItemRow';
-import { theme } from '../theme';
+import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-import useTheme from '../hooks/useTheme';
-import useCustomStyles from '../hooks/useCustomStyles';
-
-const dummyData = [
-  'First-aid kit',
-  'Water bottles',
-  'Tent',
-  'Sleeping bags (2x)',
-];
+import useSummaryCardLogic from 'app/hooks/card/useSummaryCardLogic';
+import useCustomStyles from 'app/hooks/useCustomStyles';
+import useTheme from 'app/hooks/useTheme';
+import { ItemRow } from './ItemRow/ItemRow';
 
 export default function SummaryCard() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
+  const { dummyData, handleDelete, handleEdit } = useSummaryCardLogic();
   const styles = useCustomStyles(loadStyles);
 
-  const handleDelete = () => {};
-  const handleEdit = () => {};
-
   return (
-    <Box
-      style={{
-        marginVertical: 20,
-        width: '35%',
-        alignSelf: 'center',
-
-        gap: 10,
-      }}
+    <View
+      style={[
+        styles.mainContainer,
+        { marginVertical: 20, width: '35%', alignSelf: 'center' },
+      ]}
     >
-      <Box>
+      <View>
         <Text>Image here</Text>
-      </Box>
-      <Box style={styles.itemContainer}>
+      </View>
+      <View style={styles.itemContainer}>
         {dummyData.map((data, id) => (
           <ItemRow key={id} packName={data} />
         ))}
@@ -44,8 +32,8 @@ export default function SummaryCard() {
           size={24}
           color={currentTheme.colors.cardIconColor}
         />
-      </Box>
-    </Box>
+      </View>
+    </View>
   );
 }
 

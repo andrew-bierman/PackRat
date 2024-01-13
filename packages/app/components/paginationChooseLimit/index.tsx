@@ -2,7 +2,7 @@ import { View } from 'react-native';
 import React, { useState } from 'react';
 import DropdownComponent from '../Dropdown';
 import { RLabel } from '@packrat/ui';
-import useCustomStyles from '../../hooks/useCustomStyles';
+import useCustomStyles from 'app/hooks/useCustomStyles';
 
 export const PaginationLimit = ({ limit, setLimit, setPage }) => {
   const styles = useCustomStyles(loadStyles);
@@ -10,7 +10,7 @@ export const PaginationLimit = ({ limit, setLimit, setPage }) => {
 
   return (
     <View style={styles.selectContainer}>
-      <RLabel style={{ alignSelf: 'center', paddingBottom: '8px' }}>
+      <RLabel style={{ alignSelf: 'center', paddingBottom: 8 }}>
         Choose a value:
       </RLabel>
       <DropdownComponent

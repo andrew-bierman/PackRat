@@ -9,8 +9,8 @@ import {
   Octicons,
 } from '@expo/vector-icons';
 import { RImage, RStack, RText } from '@packrat/ui';
-import useCustomStyles from '../../hooks/useCustomStyles';
-import { useDate } from '../../hooks/weather/useDate';
+import useCustomStyles from 'app/hooks/useCustomStyles';
+import { useDate } from 'app/hooks/weather/useDate';
 import { defaultWeatherObject } from '../../constants/defaultWeatherObj';
 
 export default function WeatherCard({
@@ -27,12 +27,12 @@ export default function WeatherCard({
   return (
     <RStack
       $sm={{
-        borderRadius: '6px',
+        borderRadius: 6,
         flexDirection: 'column',
         width: '100%',
       }}
       $gtSm={{
-        borderRadius: '12px',
+        borderRadius: 12,
         flexDirection: 'row',
         width: '90%',
       }}
@@ -73,7 +73,7 @@ export default function WeatherCard({
           justifyContent: 'space-between',
         }}
         $gtSm={{
-          paddingRight: '0px',
+          paddingRight: 0,
         }}
         flex={0.5}
         style={styles.card}
@@ -128,7 +128,7 @@ export default function WeatherCard({
 
       <RStack
         flex={1}
-        style={{ gap: 10, padding: '0px' }}
+        style={{ gap: 10, padding: 0 }}
         $sm={{
           width: '100%',
         }}

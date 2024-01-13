@@ -15,7 +15,7 @@ import {
 } from '@expo/vector-icons';
 import useTheme from '../../hooks/useTheme';
 import { mapboxStyles } from '../../utils/mapFunctions';
-import useCustomStyles from '../../hooks/useCustomStyles';
+import useCustomStyles from 'app/hooks/useCustomStyles';
 
 const MapButtonsOverlay = ({
   mapFullscreen,
@@ -227,9 +227,9 @@ const loadStyles = (theme) => {
     container: {
       alignItems: 'center',
       justifyContent: 'center',
-      height: '400px',
+      height: 400,
       width: '100%',
-      borderRadius: '10px',
+      borderRadius: 10,
     },
     map: {
       width: '100%',

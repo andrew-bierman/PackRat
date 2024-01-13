@@ -1,8 +1,8 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Button, Input, Text, Box } from 'native-base';
 import React from 'react';
-import useCustomStyles from '../../hooks/useCustomStyles';
-import { useWater } from '../../hooks/water';
+import useCustomStyles from 'app/hooks/useCustomStyles';
+import { useWater } from 'app/hooks/water';
 
 export default function Water({ currentPack, setWaterItem }) {
   const { handleWaterChange, addWater, waterWeight } = useWater(currentPack);

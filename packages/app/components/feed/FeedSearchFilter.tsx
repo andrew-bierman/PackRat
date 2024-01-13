@@ -1,6 +1,6 @@
 import React from 'react';
 import useTheme from '../../hooks/useTheme';
-import useCustomStyles from '../../hooks/useCustomStyles';
+import useCustomStyles from 'app/hooks/useCustomStyles';
 import { Switch } from 'tamagui';
 import { View } from 'react-native';
 import {
@@ -13,7 +13,7 @@ import {
   RInput,
 } from '@packrat/ui';
 import { AntDesign } from '@expo/vector-icons';
-import DropdownComponent from '../../components/Dropdown';
+import DropdownComponent from 'app/components/Dropdown';
 import { debounce } from 'lodash';
 
 const dataValues = [
@@ -76,7 +76,7 @@ const FeedSearchFilter = ({
       >
         {feedType === 'public' && (
           <RStack
-            style={{ flexDirection: 'row', gap: '10px', alignItems: 'center' }}
+            style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}
           >
             <RText
               fontSize={18}
@@ -113,9 +113,7 @@ const FeedSearchFilter = ({
             </RSwitch>
           </RStack>
         )}
-        <RStack
-          style={{ flexDirection: 'row', gap: '10px', alignItems: 'center' }}
-        >
+        <RStack style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
           <RText
             fontSize={17}
             fontWeight="bold"

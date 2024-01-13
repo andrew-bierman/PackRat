@@ -6,7 +6,7 @@ import {
   processShapeData,
   isPoint,
 } from '../../utils/mapFunctions';
-import { MAPBOX_ACCESS_TOKEN } from '@env';
+import { api } from '../../constants/api';
 
 /**
  * Renders a preview of a map based on the given shape.
@@ -67,6 +67,8 @@ export default function MapPreview({ shape }) {
   } = shape.features[0].geometry;
   // console.log("🚀 ~ file: MapPreview.js:39 ~ MapPreview ~ coordinates:", isPoint(shape),MAPBOX_ACCESS_TOKEN)
 
+  const mapPreviewEndpoint = `${api}/mapPreview`;
+
   return isPoint(shape) ? (
     <RImage
       style={{
@@ -74,7 +76,7 @@ export default function MapPreview({ shape }) {
         height: '100%',
       }}
       source={{
-        uri: `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/pin-s+db4848(${lng},${lat})/${lng},${lat},8.63,0/900x400?access_token=${MAPBOX_ACCESS_TOKEN}`,
+        uri: `${mapPreviewEndpoint}/pin-s+db4848(${lng},${lat})/${lng},${lat},8.63,0/900x400`,
       }}
     />
   ) : (
@@ -84,9 +86,9 @@ export default function MapPreview({ shape }) {
         height: '100%',
       }}
       source={{
-        uri: `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/geojson(${urlEncodedImageShapeGeoJSON})/[${bounds.join(
+        uri: `${mapPreviewEndpoint}/geojson(${urlEncodedImageShapeGeoJSON})/[${bounds.join(
           ',',
-        )}]/900x400?access_token=${MAPBOX_ACCESS_TOKEN}&padding=50,30,30,30`,
+        )}]/900x400?padding=50,30,30,30`,
       }}
     />
   );

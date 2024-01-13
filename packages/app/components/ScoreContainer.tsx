@@ -6,8 +6,8 @@ import useTheme from '../hooks/useTheme';
 import { useDispatch } from 'react-redux';
 import { scorePack } from '../store/packsStore';
 import { Svg, Circle, Path, G, Text as SvgText } from 'react-native-svg';
-import useCustomStyles from '../hooks/useCustomStyles';
-import { useGradingPie, useScoreData, useScoreProgress } from '../hooks/score';
+import useCustomStyles from 'app/hooks/useCustomStyles';
+import { useGradingPie, useScoreData, useScoreProgress } from 'app/hooks/score';
 
 const ScoreProgressChart = ({ score, size = 150, strokeWidth = 10 }) => {
   if (!score) return null;

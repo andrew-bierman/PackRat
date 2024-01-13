@@ -1,5 +1,5 @@
 import { Navigation } from '../../components/navigation';
-import ProgressBarComponent from '../../components/progress';
+import ProgressBarComponent from 'app/components/progress';
 
 export default function Header() {
   return (

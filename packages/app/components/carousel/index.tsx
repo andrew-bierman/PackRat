@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import { ScrollView, Platform, Dimensions } from 'react-native';
 import { RStack } from '@packrat/ui';
 import ScrollButton from './ScrollButton';
-import useCustomStyles from '../../hooks/useCustomStyles';
+import useCustomStyles from 'app/hooks/useCustomStyles';
 
 const { height, width } = Dimensions.get('window');
 

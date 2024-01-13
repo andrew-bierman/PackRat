@@ -6,7 +6,7 @@ import { deleteTrip } from '../../store/tripsStore';
 import { MoreHorizontal } from '@tamagui/lucide-icons';
 import { Adapt, Button, Popover, YStack } from 'tamagui';
 
-import { useDeleteTrips } from '../../hooks/trips';
+import { useDeleteTrips } from 'app/hooks/trips';
 // import { deleteTrip } from '../../store/tripsStore';
 export function ThreeDotsMenu({ data, titleRef, setEditTitle }) {
   const dispatch = useDispatch();

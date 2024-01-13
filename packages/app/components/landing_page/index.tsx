@@ -5,7 +5,7 @@ import { RButton, RCard, RText, RStack } from '@packrat/ui';
 import useTheme from '../../hooks/useTheme';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { theme } from '../../theme';
-import useCustomStyles from '../../hooks/useCustomStyles';
+import useCustomStyles from 'app/hooks/useCustomStyles';
 
 const dataArray = [
   {
@@ -139,15 +139,12 @@ const LandingPage = () => {
                   flexWrap: 'wrap',
                 }}
               >
-                <RButton
-                  title="App Store"
-                  style={{ margin: 10, padding: '32px' }}
-                >
+                <RButton title="App Store" style={{ margin: 10, padding: 32 }}>
                   <RStack
                     style={{
                       flexDirection: 'row',
                       alignItems: 'center',
-                      gap: '8px',
+                      gap: 8,
                     }}
                   >
                     <MaterialCommunityIcons
@@ -162,13 +159,13 @@ const LandingPage = () => {
                 </RButton>
                 <RButton
                   title="Google Play"
-                  style={{ margin: 10, padding: '32px' }}
+                  style={{ margin: 10, padding: 32 }}
                 >
                   <RStack
                     style={{
                       flexDirection: 'row',
                       alignItems: 'center',
-                      gap: '8px',
+                      gap: 8,
                     }}
                   >
                     <MaterialCommunityIcons
@@ -184,13 +181,13 @@ const LandingPage = () => {
               </View>
               <RButton
                 title="Web"
-                style={{ margin: 10, padding: '32px', width: '100%' }}
+                style={{ margin: 10, padding: 32, width: '100%' }}
               >
                 <RStack
                   style={{
                     flexDirection: 'row',
                     alignItems: 'center',
-                    gap: '8px',
+                    gap: 8,
                   }}
                 >
                   <MaterialCommunityIcons name="web" size={44} color="white" />

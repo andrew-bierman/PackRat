@@ -3,10 +3,9 @@ import { View } from 'react-native';
 import { api } from '../../constants/api';
 import { PasswordResetForm } from './PasswordResetForm';
 
-import { CustomModal } from '../modal';
 import { useSearchParams } from 'expo-router';
 import { RequestPasswordResetEmailModal } from './RequestEmailModal';
-import useCustomStyles from '../../hooks/useCustomStyles';
+import useCustomStyles from 'app/hooks/useCustomStyles';
 
 export const RequestPasswordReset = () => {
   const [email, setEmail] = useState('');

@@ -10,10 +10,10 @@ import { signInWithGoogle, signUp } from '../store/authStore';
 import { InformUser } from '../utils/ToastUtils';
 import useTheme from '../hooks/useTheme';
 import { useForm } from 'react-hook-form';
-import { InputText, InputTextRules } from '../components/InputText';
+import { InputText, InputTextRules } from 'app/components/InputText';
 import { useSession } from '../context/auth';
-import { useGoogleAuth } from '../hooks/login';
-import { useRegisterUser } from '../hooks/user';
+import { useGoogleAuth } from 'app/hooks/login';
+import { useRegisterUser } from 'app/hooks/user';
 
 export default function Register() {
   const { currentTheme } = useTheme();
@@ -29,7 +29,7 @@ export default function Register() {
 
   return (
     <View style={{ width: '100%', alignItems: 'center' }}>
-      <View style={{ paddingTop: '32px', width: '90%', maxWidth: '290px' }}>
+      <View style={{ paddingTop: 32, width: '90%', maxWidth: 290 }}>
         <RHeading fontSize={32} color="#212121" fontWeight="semibold">
           Welcome
         </RHeading>
@@ -37,11 +37,11 @@ export default function Register() {
           color="grey"
           fontWeight="medium"
           fontSize={14}
-          style={{ marginTop: '8px' }}
+          style={{ marginTop: 8 }}
         >
           Sign up to continue!
         </RHeading>
-        <RStack style={{ marginTop: '16px', gap: '8px' }}>
+        <RStack style={{ marginTop: 16, gap: 8 }}>
           <InputText
             label="Name"
             control={control}
@@ -76,17 +76,17 @@ export default function Register() {
             disabled={!isValid}
             onPress={handleSubmit(registerUser)}
             // onPress={() => registerUser()}
-            style={{ marginTop: '16px' }}
+            style={{ marginTop: 16 }}
             backgroundColor="mediumpurple"
           >
             {'Sign up'}
           </RButton>
           <RStack
             style={{
-              marginTop: '16px',
+              marginTop: 16,
               flexDirection: 'row',
               justifyContent: 'center',
-              gap: '4px',
+              gap: 4,
             }}
           >
             <RText fontSize={14} color="grey">
@@ -107,7 +107,7 @@ export default function Register() {
           {/* Google register */}
           <RStack
             style={{
-              marginTop: '8px',
+              marginTop: 8,
               flexDirection: 'row',
               justifyContent: 'center',
             }}
@@ -119,7 +119,7 @@ export default function Register() {
           {/* Google register */}
           <RStack
             style={{
-              marginTop: '8px',
+              marginTop: 8,
               flexDirection: 'row',
               justifyContent: 'center',
               alignItems: 'center',

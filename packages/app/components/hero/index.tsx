@@ -3,14 +3,15 @@ import { RStack, RImage } from '@packrat/ui';
 import { Platform, View } from 'react-native';
 import { theme } from '../../theme';
 import { isObjectEmpty } from '../../utils/isObjectEmpty';
-import useCustomStyles from '../../hooks/useCustomStyles';
+import useCustomStyles from 'app/hooks/useCustomStyles';
 
 const Hero = ({ children, imageDetails }) => {
   if (isObjectEmpty(imageDetails || {})) {
     imageDetails = {
       title: 'N/A',
       subtitle: 'N/A',
-      source: "https://github.com/andrew-bierman/PackRat/blob/main/apps/expo/assets/topographical-pattern.jpg?raw=true",
+      source:
+        'https://github.com/andrew-bierman/PackRat/blob/main/apps/expo/assets/topographical-pattern.jpg?raw=true',
       alt: 'hero',
     };
   }
@@ -22,7 +23,7 @@ const Hero = ({ children, imageDetails }) => {
     <View
       style={[
         styles.heroContainer,
-        Platform.OS === 'web' ? { height: '310px' } : null,
+        Platform.OS === 'web' ? { height: 310 } : null,
       ]}
     >
       <RImage source={source} alt={alt} style={styles.heroImage} />

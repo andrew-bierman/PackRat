@@ -3,7 +3,7 @@ import {
   createAsyncThunk,
   createEntityAdapter,
 } from '@reduxjs/toolkit';
-import axios from '../config/axios';
+import axios from 'app/config/axios';
 import { api } from '../constants/api';
 import { queryTrpc, trpc } from '../trpc';
 
@@ -25,7 +25,7 @@ export const addItemsGlobal = createAsyncThunk(
 
 export const getItemsGlobal = createAsyncThunk(
   'Items/getItemsGlobal',
-  async ({ limit, page }) => {
+  async ({ limit, page }: { limit: number; page: number }) => {
     try {
       // const response = await axios.get(
       //   `${api}/item/global?limit=${limit}&page=${page}`,
@@ -86,14 +86,9 @@ const itemsSlice = createSlice({
       };
     },
     addItemOffline: (state, action) => {
-      console.log(action.payload, 'add item offline');
-      return {
-        ...state,
-        globalItems: {
-          ...state.globalItems,
-          items: [...state.globalItems.items, action.payload],
-        },
-      };
+      const newItem = action.payload;
+      const updatedState = itemsAdapter.addOne(state, newItem);
+      return updatedState;
     },
   },
   extraReducers: (builder) => {
@@ -103,7 +98,7 @@ const itemsSlice = createSlice({
         state.error = null;
       })
       .addCase(addItemsGlobal.fulfilled, (state, action) => {
-        itemsAdapter.addOne(state, { ...action.payload });
+        itemsAdapter.addOne(state, action.payload);
         state.isLoading = false;
         state.error = null;
       })

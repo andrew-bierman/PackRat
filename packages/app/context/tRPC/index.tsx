@@ -4,7 +4,7 @@ import { createTRPCProxyClient, httpBatchLink } from '@trpc/client';
 import { useState } from 'react';
 import * as React from 'react';
 import { createTRPCReact } from '@trpc/react-query';
-import { api } from '../../constants/api';
+import { api } from 'app/constants/api';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 // import { trpc } from '../../trpc';
 

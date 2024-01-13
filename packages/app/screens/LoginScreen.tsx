@@ -5,8 +5,8 @@ import { NODE_ENV } from '@env';
 import { Link, usePathname } from 'expo-router';
 import { InformUser } from '../utils/ToastUtils';
 import useTheme from '../hooks/useTheme';
-import { InputText, InputTextRules } from '../../components/InputText';
-import { useGoogleAuth, useLogin } from '../../hooks/login';
+import { InputText, InputTextRules } from 'app/components/InputText';
+import { useGoogleAuth, useLogin } from 'app/hooks/login';
 
 const demoUser = {
   email: 'zoot3@email.com',
@@ -39,7 +39,7 @@ export default function Login() {
   return (
     <RStack>
       <View style={{ width: '100%', alignItems: 'center' }}>
-        <View style={{ paddingTop: '32px', width: '90%', maxWidth: '290px' }}>
+        <View style={{ paddingTop: 32, width: '90%', maxWidth: 290 }}>
           <RHeading fontSize={32} color="#212121" fontWeight="semibold">
             Welcome
           </RHeading>
@@ -47,12 +47,12 @@ export default function Login() {
             color="grey"
             fontWeight="medium"
             fontSize={14}
-            style={{ marginTop: '8px' }}
+            style={{ marginTop: 8 }}
           >
             Sign in to continue!
           </RHeading>
 
-          <RStack style={{ marginTop: '16px', gap: '8px' }}>
+          <RStack style={{ marginTop: 16, gap: 8 }}>
             <InputText
               label="Email ID"
               keyboardType="email-address"
@@ -71,17 +71,17 @@ export default function Login() {
             <RButton
               disabled={!isValid}
               onPress={handleSubmit(handleLogin)}
-              style={{ marginTop: '16px' }}
+              style={{ marginTop: 16 }}
               backgroundColor="mediumpurple"
             >
               Sign in
             </RButton>
             <RStack
               style={{
-                marginTop: '16px',
+                marginTop: 16,
                 flexDirection: 'row',
                 justifyContent: 'center',
-                gap: '4px',
+                gap: 4,
               }}
             >
               <RText fontSize={14} color="grey">
@@ -116,7 +116,7 @@ export default function Login() {
             {/* Google Login starts */}
             <RStack
               style={{
-                marginTop: '8px',
+                marginTop: 8,
                 flexDirection: 'row',
                 justifyContent: 'center',
               }}
@@ -130,7 +130,7 @@ export default function Login() {
             {enableGoogleLogin && (
               <RStack
                 style={{
-                  marginTop: '8px',
+                  marginTop: 8,
                   flexDirection: 'row',
                   justifyContent: 'center',
                   alignItems: 'center',
@@ -158,7 +158,7 @@ export default function Login() {
             {NODE_ENV !== 'production' && (
               <RStack
                 style={{
-                  marginTop: '8px',
+                  marginTop: 8,
                   justifyContent: 'center',
                   alignItems: 'center',
                 }}

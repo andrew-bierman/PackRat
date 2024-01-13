@@ -13,13 +13,13 @@ import {
   selectAllPacks,
 } from '../../store/packsStore';
 // import { fetchUserTrips, selectAllTrips } from '../../store/tripsStore';
-import { usefetchTrips } from '../../hooks/trips';
+import { usefetchTrips } from 'app/hooks/trips';
 import { useRouter } from 'expo-router';
 import { fuseSearch } from '../../utils/fuseSearch';
 import { fetchUserFavorites } from '../../store/favoritesStore';
-import useCustomStyles from '../../hooks/useCustomStyles';
-import FeedSearchFilter from '../../components/feed/FeedSearchFilter';
-import { useFeed } from '../../hooks/feed';
+import useCustomStyles from 'app/hooks/useCustomStyles';
+import FeedSearchFilter from 'app/components/feed/FeedSearchFilter';
+import { useFeed } from 'app/hooks/feed';
 import { RefreshControl } from 'react-native';
 import { RText } from '@packrat/ui';
 
@@ -122,7 +122,10 @@ const Feed = ({ feedType = 'public' }) => {
       feedType !== 'userTrips'
         ? fuseSearch(arrayData, searchQuery, keys, options)
         : data;
-    console.log('🚀 ../.. file: Feed.js:231 ../.. renderData ../.. results:', results);
+    console.log(
+      '🚀 ../.. file: Feed.js:231 ../.. renderData ../.. results:',
+      results,
+    );
 
     // Convert fuse results back into the format we want
     // if searchQuery is empty, use the original data
