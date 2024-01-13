@@ -1,111 +1,44 @@
 {
-  "name": "packrat-world",
-  "version": "0.0.1",
-  "description": "PackRat is the ultimate adventure planner designed for those who love to explore the great outdoors. Our app helps users plan and organize their trips with ease, whether it's a weekend camping trip, a day hike, or a cross-country road trip.",
+  "name": "packrat-landing",
+  "version": "0.1.0",
   "private": true,
-  "workspaces": [
-    "server",
-    "apps/*",
-    "packages/*"
-  ],
   "scripts": {
-    "clean": "yarn workspaces foreach --all run clean && rm -rf dist types node_modules yarn.lock",
-    "build:prod": "yarn && yarn build:tsc && yarn build:expo",
-    "build:prod:docker": "docker build -t packrat-app -f Dockerfile.prod .",
-    "build:expo": "yarn expo:export",
-    "build:tsc": "yarn build:tsc:packages && yarn build:tsc:server",
-    "build:tsc:packages": "cd packages/validations && yarn build",
-    "build:tsc:server": "cd server && yarn build",
-    "setup": "yarn && yarn setup:expo && yarn setup:server",
-    "setup:expo": "cd apps/expo && yarn setup",
-    "setup:server": "cd server && yarn setup",
-    "expo:export": "cd apps/expo && cp app.example.json app.json && npx expo export --platform web",
-    "start": "node scripts/start.js",
-    "start:prod": "cd server && yarn start:prod",
-    "start:prod:ts-node": "cd server && yarn start:ts-node",
-    "dev:expo": "cd apps/expo && yarn start",
-    "dev:next": "cd apps/next && yarn dev",
-    "dev:server": "cd server && yarn start",
-    "test": "yarn test:all",
-    "test:all": "yarn test:expo && yarn test:server",
-    "test:expo": "cd apps/expo && yarn test",
-    "test:server": "cd server && yarn test",
-    "lint": "yarn lint:all",
-    "lint:all": "yarn lint:expo && yarn lint:server",
-    "lint:expo": "cd apps/expo && yarn lint",
-    "lint:server": "cd server && yarn lint",
-    "format": "yarn format:all",
-    "format:all": "prettier --write \"**/*.{js,jsx,ts,tsx}\"",
-    "fix": "manypkg fix",
-    "preinstall": "npx only-allow yarn",
-    "postinstall": "yarn build-ui && yarn build:validations",
-    "build": "yarn workspaces foreach --all run build",
-    "build-ui": "cd packages/ui && yarn build",
-    "build:validations": "cd packages/validations && yarn build",
-    "upgrade:tamagui": "yarn up '*tamagui*'@latest '@tamagui/*'@latest",
-    "upgrade:tamagui:canary": "yarn up '*tamagui*'@canary '@tamagui/*'@canary",
-    "check-deps": "check-dependency-version-consistency .",
-    "copy:env:expo": "cp .env apps/expo/.env",
-    "copy:env:server": "cp .env server/.env",
-    "copy:env:packages": "cp .env packages/.env",
-    "copy:env:all": "yarn copy:env:expo && yarn copy:env:server && yarn copy:env:packages",
-    "regen": "yarn install --refresh-lockfile"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
-  "engines": {
-    "node": ">=18.16.1",
-    "yarn": ">=4.0.0"
-  },
-  "packageManager": "yarn@4.0.2",
   "dependencies": {
-    "@manypkg/cli": "^0.21.0",
-    "check-dependency-version-consistency": "^4.1.0",
-    "cross-env": "^7.0.3",
-    "dotenv-cli": "^7.3.0",
-    "enquirer": "^2.4.1",
-    "eslint": "^8.47.0",
-    "husky": "^8.0.0",
-    "lint-staged": "^14.0.1",
-    "typescript": "^5.2.2"
+    "@radix-ui/react-accordion": "^1.1.2",
+    "@radix-ui/react-avatar": "^1.0.4",
+    "@radix-ui/react-dropdown-menu": "^2.0.6",
+    "@radix-ui/react-hover-card": "^1.0.7",
+    "@radix-ui/react-icons": "^1.3.0",
+    "@radix-ui/react-label": "^2.0.2",
+    "@radix-ui/react-navigation-menu": "^1.1.4",
+    "@radix-ui/react-slot": "^1.0.2",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.0",
+    "embla-carousel-autoplay": "^8.0.0-rc19",
+    "embla-carousel-react": "^8.0.0-rc19",
+    "lucide-react": "^0.309.0",
+    "next": "14.0.4",
+    "next-themes": "^0.2.1",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-resizable-panels": "^1.0.9",
+    "tailwind-merge": "^2.2.0",
+    "tailwindcss-animate": "^1.0.7"
   },
-  "lint-staged": {
-    "client/**/*.{js,jsx,ts,tsx}": [
-      "cd client && yarn run lint",
-      "prettier --write"
-    ],
-    "server/**/*.{js,ts}": [
-      "cd server && yarn run lint",
-      "prettier --write"
-    ],
-    "**/*.{js,jsx,ts,tsx}": [
-      "prettier --write"
-    ]
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/andrew-bierman/PackRat.git"
-  },
-  "author": "Andrew Bierman",
-  "license": "SEE LICENSE IN LICENSE.txt",
-  "bugs": {
-    "url": "https://github.com/andrew-bierman/PackRat/issues"
-  },
-  "homepage": "https://github.com/andrew-bierman/PackRat#readme",
-  "keywords": [
-    "outdoors",
-    "hiking",
-    "camping",
-    "road trip",
-    "travel",
-    "adventure",
-    "planner",
-    "packing",
-    "packing list",
-    "packing checklist",
-    "packing planner",
-    "packing organizer",
-    "packing app",
-    "packing checklist app",
-    "packing list app",
-    "packing planner app"
-  ]
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "autoprefixer": "^10.0.1",
+    "eslint": "^8",
+    "eslint-config-next": "14.0.4",
+    "postcss": "^8",
+    "tailwindcss": "^3.3.0",
+    "typescript": "^5"
+  }
 }

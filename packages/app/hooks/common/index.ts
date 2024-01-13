@@ -1,1 +1,0 @@
-export { useIsMobileView } from './useIsMobileView';
