@@ -15,6 +15,7 @@ export const RequestPasswordResetEmailModal = () => {
       footerButtons={[
         {
           label: 'Send Email',
+          color: '#818cf8',
           onClick: handleResetPasswordEmail,
           disabled: !email || loading,
         },
