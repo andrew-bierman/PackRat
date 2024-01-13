@@ -1,9 +1,9 @@
 import React from 'react';
 import { Platform } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import useSearchInput from 'hooks/search/useSearchInput';
-import useTheme from 'hooks/useTheme';
-import useCustomStyles from 'hooks/useCustomStyles';
+import useSearchInput from 'app/hooks/search/useSearchInput';
+import useTheme from 'app/hooks/useTheme';
+import useCustomStyles from 'app/hooks/useCustomStyles';
 import {
   RStack,
   RInput,
@@ -41,8 +41,8 @@ export const SearchInput = ({ onSelect, placeholder }) => {
           }}
         >
           <RInput
-            paddingLeft="35px"
-            paddingRight="55px"
+            paddingLeft={35}
+            paddingRight={55}
             placeholder={placeholder ?? 'Search'}
             onChangeText={(text) => {
               setSearchString(text);
@@ -72,7 +72,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
                 right: 1,
                 backgroundColor: 'transparent',
               }}
-              width="10px"
+              width={10}
             >
               <MaterialIcons name="close" />
             </RButton>
@@ -132,13 +132,13 @@ export const SearchInput = ({ onSelect, placeholder }) => {
           setSearchString(text);
         }}
         placeholder="Search"
-        width="100%"
+        width={'100%'}
         borderRadius={4}
-        padding="16px 8px"
         backgroundColor="white"
         value={searchString}
         fontSize={14}
         paddingVertical={16}
+        paddingHorizontal={8}
       />
       <RIconButton
         backgroundColor="transparent"

@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-import useSummaryCardLogic from 'hooks/card/useSummaryCardLogic';
-import useCustomStyles from 'hooks/useCustomStyles';
-import useTheme from 'hooks/useTheme';
+import useSummaryCardLogic from 'app/hooks/card/useSummaryCardLogic';
+import useCustomStyles from 'app/hooks/useCustomStyles';
+import useTheme from 'app/hooks/useTheme';
 import { ItemRow } from './ItemRow/ItemRow';
 
 export default function SummaryCard() {
