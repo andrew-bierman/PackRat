@@ -23,7 +23,7 @@ const FeedPreviewScroll = () => {
   const { data: feedData, error, isLoading } = useFeed();
 
   return (
-    <Carousel itemWidth={250}>
+    <Carousel itemWidth={300}>
       {feedData?.map((item, index) => {
         const linkStr = `/${item.type}/${item._id}`;
         return linkStr ? (
