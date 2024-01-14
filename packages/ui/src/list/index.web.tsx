@@ -1,58 +1,49 @@
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { useVirtualizer } from '@tanstack/react-virtual'
-import { useRef } from 'react'
+import React, { useContext } from 'react';
+import { useVirtualizer } from '@tanstack/react-virtual';
+import { YStack, XStack } from '..';
+import { ListRefContext } from '../../../app/context/ListRef';
 
 interface Props {
-  data: any[]
-  renderItem: (item: any) => React.ReactNode
-  itemHeight: number
+  data: any[];
+  itemWidth: number;
 }
 
-export const VirtualList = ({ data, renderItem, itemHeight }: Props): React.ReactNode => {
-  const { top, bottom } = useSafeAreaInsets()
+export const VirtualList = ({ data, itemWidth }: Props): React.ReactNode => {
+  const ref = useContext(ListRefContext);
 
-  const parentRef = useRef()
   const rowVirtualizer = useVirtualizer({
+    horizontal: true,
     count: data.length,
-    getScrollElement: () => parentRef.current as any,
-    estimateSize: () => itemHeight,
-  })
+    getScrollElement: () => ref.current,
+    estimateSize: () => itemWidth,
+    overscan: 10,
+  });
 
   return (
-    <div
-      ref={parentRef as any}
-      style={{
-        paddingTop: top,
-        paddingBottom: bottom,
-        height: `100%`,
-        overflow: 'auto', // Make it scroll!
-      }}
-    >
-      {/* The large inner element to hold all of the items */}
-      <div
-        style={{
-          height: `${rowVirtualizer.getTotalSize()}px`,
-          width: '100%',
-          position: 'relative',
-        }}
+    <XStack flex={1} ref={ref} width={'1000px'} height={'100px'}>
+      <XStack
+        flex={1}
+        width={`${rowVirtualizer.getTotalSize()}px`}
+        position="relative"
+        height={'100%'}
       >
-        {/* Only the visible items in the virtualizer, manually positioned to be in view */}
-        {rowVirtualizer.getVirtualItems().map((virtualItem) => (
-          <div
-            key={virtualItem.key}
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: '100%',
-              height: `${virtualItem.size}px`,
-              transform: `translateY(${virtualItem.start}px)`,
-            }}
-          >
-            {renderItem(data[virtualItem.index])}
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
+        {rowVirtualizer.getVirtualItems().map((virtualItem) => {
+          return (
+            <YStack
+              key={virtualItem.key}
+              data-index={virtualItem.index}
+              width={`${itemWidth}px`}
+              height="100%"
+              position="absolute"
+              top={0}
+              left={0}
+              transform={`translateX(${virtualItem.start}px)`}
+            >
+              {data[virtualItem.index]}
+            </YStack>
+          );
+        })}
+      </XStack>
+    </XStack>
+  );
+};
