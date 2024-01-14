@@ -1,12 +1,11 @@
 import { createTamagui } from 'tamagui';
 import { createInterFont } from '@tamagui/font-inter';
 import { shorthands } from '@tamagui/shorthands';
-import { tokens } from '@tamagui/themes/v2';
-import { themes } from '@tamagui/themes/v2-themes';
+import { tokens, themes } from '@tamagui/themes/v2';
 import { createMedia } from '@tamagui/react-native-media-driver';
+import { createAnimations } from '@tamagui/animations-react-native';
 
-import { animations } from './animations';
-
+// Define fonts using createInterFont
 const headingFont = createInterFont({
   size: {
     6: 15,
@@ -51,9 +50,31 @@ const bodyFont = createInterFont(
   },
 );
 
+// Define animations
+const animations = createAnimations({
+  bouncy: {
+    type: 'spring',
+    damping: 10,
+    mass: 0.9,
+    stiffness: 100,
+  },
+  lazy: {
+    type: 'spring',
+    damping: 20,
+    stiffness: 60,
+  },
+  quick: {
+    type: 'spring',
+    damping: 20,
+    mass: 1.2,
+    stiffness: 250,
+  },
+});
+
+// Create Tamagui config
 export const config = createTamagui({
+  defaultTheme: 'dark',
   defaultFont: 'body',
-  animations,
   shouldAddPrefersColorThemes: true,
   themeClassNameOnRoot: true,
   onlyAllowShorthands: true,
@@ -83,6 +104,7 @@ export const config = createTamagui({
     hoverNone: { hover: 'none' },
     pointerCoarse: { pointer: 'coarse' },
   }),
+  animations,
 });
 
 // for the compiler to find it
