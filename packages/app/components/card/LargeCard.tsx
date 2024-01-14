@@ -1,30 +1,7 @@
 import React from 'react';
 import { View, Platform } from 'react-native';
 import { RText, RStack } from '@packrat/ui';
-import { useSelector } from 'react-redux';
-import useTheme from '../../hooks/useTheme';
-import { theme } from '../../theme';
-import useCustomStyles from 'app/hooks/useCustomStyles';
-
-/**
- * Retrieves the appropriate container style based on the provided type.
- *
- * @param {string} type - The type of container style to retrieve.
- * @return {Object} The container style object.
- */
-const getContainerStyle = (type) => {
-  const styles = useCustomStyles(loadStyles);
-  switch (type) {
-    case 'search':
-      return styles.searchContainer;
-    case 'map':
-      return styles.mapCard;
-    case 'mobile':
-      return styles.containerMobile;
-    default:
-      return styles.mutualStyles;
-  }
-};
+import { useLargeCard } from 'hooks/card/useLargeCard';
 
 /**
  * Generate the function comment for the given function body.
@@ -48,13 +25,15 @@ export default function LargeCard({
   customStyle,
   children,
 }) {
-  const currentShape = useSelector(
-    (state) => state.search.selectedSearchResult,
-  );
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    useTheme();
-  const containerStyle = customStyle || getContainerStyle(type);
-
+  const {
+    containerStyle,
+    currentShape,
+    enableDarkMode,
+    enableLightMode,
+    isDark,
+    isLight,
+    currentTheme,
+  } = useLargeCard({ customStyle, type, loadStyles });
   return (
     <RStack
       style={{

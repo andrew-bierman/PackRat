@@ -51,7 +51,7 @@ const ERROR_MESSAGES = {
   userTrips: 'No User Trips Available',
 };
 
-export const useFeedScreen = ({ feedType = 'public' }) => {
+export const useFeedScreen = (feedType = 'public') => {
   const router = useRouter();
 
   const [queryString, setQueryString] = useState('');
@@ -175,5 +175,6 @@ export const useFeedScreen = ({ feedType = 'public' }) => {
     errorText,
     queryString,
     data,
+    ERROR_MESSAGES,
   };
 };
