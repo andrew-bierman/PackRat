@@ -69,6 +69,7 @@ const nextConfig = function () {
       'expo-permissions',
       'expo-splash-screen',
       'expo-status-bar',
+      'expo-router',
       'native-base',
       'react-native-svg',
       'react-native-paper',
@@ -104,6 +105,9 @@ const nextConfig = function () {
         use: options.defaultLoaders.babel,
       });
       return config;
+    },
+    env: {
+      API_URL: process.env.API_URL,
     },
   };
 

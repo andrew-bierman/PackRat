@@ -28,6 +28,7 @@
     "vercel": "latest"
   },
   "devDependencies": {
-    "@types/node": "^20.8.3"
+    "@types/node": "^20.8.3",
+    "babel-plugin-module-resolver": "^5.0.0"
   }
 }
