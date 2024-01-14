@@ -1,3 +1,5 @@
+import { H1 } from '@packrat/ui';
+
 export default function Home() {
-  return <h1>Hello World</h1>;
+  return <H1>Hello World!</H1>;
 }
