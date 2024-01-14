@@ -1,4 +1,4 @@
-import React = require('react');
+import React from 'react';
 import { CombinedProvider } from './CombinedProvider';
 
 export function Provider({ children }: { children: React.ReactNode }) {

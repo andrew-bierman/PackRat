@@ -11,6 +11,7 @@
   "dependencies": {
     "@expo/next-adapter": "5.0.2",
     "@tamagui/config": "^1.84.1",
+    "@tamagui/next-plugin": "^1.85.2",
     "@tamagui/next-theme": "^1.84.1",
     "app": "*",
     "next": "^13.5.2",
@@ -22,6 +23,7 @@
     "react-native-web-lite": "^1.84.1",
     "setimmediate": "^1.0.5",
     "tamagui": "^1.84.1",
+    "url-loader": "^4.1.1",
     "vercel": "latest"
   },
   "devDependencies": {

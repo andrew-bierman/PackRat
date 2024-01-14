@@ -29,7 +29,7 @@ const ThirdPartyProviders = ({ children, isDark = false }) => {
       <NativeBaseProvider
         theme={isDark ? nativeBaseDarkTheme : nativeBaseLightTheme}
       >
-        <TamaguiProvider config={config}>
+        <TamaguiProvider config={config} disableRootThemeClass>
           <TamaguiTheme name={isDark ? 'dark' : 'light'}>
             <ToastProvider>
               <RNPaperThemeProvider theme={darkPaperTheme}>

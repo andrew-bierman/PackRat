@@ -24,7 +24,6 @@ const FontLoader = ({ children }) => {
   const [loaded] = useFonts({
     Inter: require('@tamagui/font-inter/otf/Inter-Medium.otf'),
     InterBold: require('@tamagui/font-inter/otf/Inter-Bold.otf'),
-
     // Cache all icon fonts
     ...AntDesign.font,
     ...Entypo.font,
