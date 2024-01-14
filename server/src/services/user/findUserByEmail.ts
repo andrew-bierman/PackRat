@@ -8,15 +8,10 @@ import { User } from '../../drizzle/methods/User';
  */
 export async function findUserByEmail(email: string): Promise<any> {
   try {
-    const user = new User();
-    const userDoc = await user.findByEmail(email.toLowerCase());
-
-    if (userDoc) {
-      return true;
-    } else {
-      return 'User not found';
-    }
+    const userClass = new User();
+    const user = await userClass.findUser({ email });
+    return user ? true : 'User not found';
   } catch (error) {
-    return 'Server Error';
+    throw new Error('Server Error');
   }
 }

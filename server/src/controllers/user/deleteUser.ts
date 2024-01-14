@@ -1,6 +1,4 @@
 import { publicProcedure } from '../../trpc';
-import { UnableToEditUserError } from '../../helpers/errors';
-import { responseHandler } from '../../helpers/responseHandler';
 import * as validator from '../../middleware/validators/index';
 import { User } from '../../drizzle/methods/User';
 

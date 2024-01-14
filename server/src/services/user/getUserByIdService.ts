@@ -8,15 +8,10 @@ import { User } from '../../drizzle/methods/User';
  */
 export const getUserByIdService = async (userId: string): Promise<object> => {
   try {
-    const user = new User();
-    const userDoc = await user.findById(userId);
-
-    if (userDoc) {
-      return userDoc;
-    } else {
-      throw new Error('User cannot be found');
-    }
+    const userClass = new User();
+    const user = await userClass.findUser({ userId });
+    return user;
   } catch (error) {
-    throw new Error('Server Error');
+    throw new Error(error.toString());
   }
 };

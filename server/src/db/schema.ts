@@ -31,7 +31,9 @@ export const user = sqliteTable('user', {
   passwordResetTokenExpiration: integer('password_reset_token_expiration', {
     mode: 'timestamp',
   }),
-  role: text('role', { enum: ['admin', 'user'] }).default('user'),
+  role: text('role', { enum: ['admin', 'user'] })
+    .default('user')
+    .$type<'admin' | 'user'>(),
   username: text('username').notNull().unique(), // Trim + Lowercase + Validation
   profileImage: text('profile_image'),
   preferredWeather: text('preferred_weather'),
@@ -43,7 +45,7 @@ export const user = sqliteTable('user', {
 export const userFavoritePacks = sqliteTable(
   'user_favorite_packs',
   {
-    userId: text('user_id').references(() => user.id, { onDelete: 'set null' }),
+    userId: text('user_id').references(() => user.id, { onDelete: 'cascade' }),
     packId: text('pack_id').references(() => pack.id, { onDelete: 'set null' }),
   },
   (table) => {
@@ -86,7 +88,7 @@ export const pack = sqliteTable('pack', {
   owner_id: text('owner_id').references(() => user.id, {
     onDelete: 'set null',
   }),
-  is_public: integer('is_public', { mode: 'boolean' }),
+  is_public: integer('is_public', { mode: 'boolean' }).default(false),
   grades: text('grades', { mode: 'json' })
     .$type<Object>()
     .default(
@@ -128,7 +130,9 @@ export const itemCategory = sqliteTable('item_category', {
   id: text('id')
     .primaryKey()
     .$defaultFn(() => createId()),
-  name: text('name', { enum: ['Food', 'Water', 'Essentials'] }).$type<string>(),
+  name: text('name', { enum: ['Food', 'Water', 'Essentials'] })
+    .notNull()
+    .$type<'Food' | 'Water' | 'Essentials'>(),
   createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
   updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`),
   // @@map("itemcategories"): undefined,
@@ -160,7 +164,7 @@ export const itemOwners = sqliteTable(
   {
     itemId: text('item_id').references(() => item.id, { onDelete: 'set null' }),
     ownerId: text('owner_id').references(() => user.id, {
-      onDelete: 'set null',
+      onDelete: 'cascade',
     }),
   },
   (table) => {
@@ -227,7 +231,8 @@ export const template = sqliteTable('template', {
     .$defaultFn(() => createId()),
   type: text('type', { enum: ['pack', 'trim', 'item'] })
     .notNull()
-    .default('pack'),
+    .default('pack')
+    .$type<'pack' | 'trim' | 'item'>(),
   templateId: text('template_id').notNull(),
   isGlobalTemplate: integer('is_global_template', {
     mode: 'boolean',
