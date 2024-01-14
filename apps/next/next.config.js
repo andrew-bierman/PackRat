@@ -35,6 +35,7 @@ let nextConfig = {
     'expo-modules-core',
     'expo-asset',
     'expo-font',
+    '@expo/vector-icons',
   ],
   typescript: {
     ignoreBuildErrors: true,
