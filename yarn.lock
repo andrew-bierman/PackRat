@@ -6542,7 +6542,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/core@npm:1.85.2":
+"@tamagui/core@npm:1.85.2, @tamagui/core@npm:^1.85.2":
   version: 1.85.2
   resolution: "@tamagui/core@npm:1.85.2"
   dependencies:
@@ -21342,6 +21342,7 @@ __metadata:
   dependencies:
     "@expo/next-adapter": "npm:5.0.2"
     "@tamagui/config": "npm:^1.85.2"
+    "@tamagui/core": "npm:^1.85.2"
     "@tamagui/next-plugin": "npm:^1.85.2"
     "@tamagui/next-theme": "npm:^1.85.2"
     "@types/node": "npm:^20.8.3"
