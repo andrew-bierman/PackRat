@@ -1,5 +1,4 @@
-import * as React from 'react';
-import ReactDOM from 'react-dom/client';
+import { Box  } from 'tamagui';
 
 import {
   createColumnHelper,
@@ -7,98 +6,61 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
+import "./table.css"
+import { createColumns } from './columnsParser';
+import { DataTable } from './Table';
 
-type Person = {
-      data:string
-};
+function App({data=[{}]}) {
 
-const defaultData: Person[] = [
-{
-      data: 'test'
-}
-];
-
-type DataType = {
-  [key: string]: string | number;
-};
-
-const createColumns = <T extends DataType>(data: T[]) => {
-  const columnHelper = createColumnHelper<T>();
-
-  // Get the keys from the first object in the array
-  const keys = Object?.keys(data[0]);
-  if (keys.length > 0) {
-    // Map over the keys to create columns
-    const columns = keys.map((key) => {
-      return columnHelper.accessor(key as keyof T, {
-        cell: (info) => info.getValue(),
-        footer: (info) => info.column.id,
-      });
-    });
-    return columns;
-  }
-  return [];
-};
-
-// Usage
-const columns = createColumns(defaultData);
-
-function App() {
-  const [data, setData] = React.useState(() => [...defaultData]);
-
+  const columns = createColumns(data);
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    columnResizeMode: "onChange"
   });
 
   return (
     <div className="p-2">
-      <table>
+     <table className="styled-table" style={{ width: table.getTotalSize() }}>
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
-                <th key={header.id}>
+                <th className="styled-th" style={{ width: `${header.getSize()}` }} key={header.id}>
                   {header.isPlaceholder
                     ? null
                     : flexRender(
                         header.column.columnDef.header,
                         header.getContext(),
                       )}
+                  <div
+                    className="styled-resizer"
+                    onMouseDown={header.getResizeHandler()}
+                    onTouchStart={header.getResizeHandler()}
+                  ></div>
                 </th>
               ))}
             </tr>
           ))}
         </thead>
         <tbody>
-          {table.getRowModel().rows.map((row) => (
-            <tr key={row.id}>
+          {table.getRowModel().rows.map((row, i) => (
+            <tr key={row.id} className={i % 2 === 0 ? 'styled-tr' : 'styled-tr-alt'}>
               {row.getVisibleCells().map((cell) => (
-                <td key={cell.id}>
+                <td className="styled-td" key={cell.id}>
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
               ))}
             </tr>
           ))}
         </tbody>
-        <tfoot>
-          {table.getFooterGroups().map((footerGroup) => (
-            <tr key={footerGroup.id}>
-              {footerGroup.headers.map((header) => (
-                <th key={header.id}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.footer,
-                        header.getContext(),
-                      )}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </tfoot>
       </table>
+      <DataTable rows={table.getRowModel().rows.map((_)=>{
+        return _.getVisibleCells().map((cell) => (
+           cell.getValue()
+        ))
+      })}  />
     </div>
   );
 }
