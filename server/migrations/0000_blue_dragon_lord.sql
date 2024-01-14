@@ -22,11 +22,11 @@ CREATE TABLE `item` (
 	`weight` real NOT NULL,
 	`quantity` integer NOT NULL,
 	`unit` text NOT NULL,
-	`category` text,
+	`category_id` text,
 	`global` integer DEFAULT false,
 	`created_at` text DEFAULT CURRENT_TIMESTAMP,
 	`updated_at` text DEFAULT CURRENT_TIMESTAMP,
-	FOREIGN KEY (`category`) REFERENCES `item_category`(`id`) ON UPDATE no action ON DELETE set null
+	FOREIGN KEY (`category_id`) REFERENCES `item_category`(`id`) ON UPDATE no action ON DELETE set null
 );
 --> statement-breakpoint
 CREATE TABLE `item_category` (

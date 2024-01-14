@@ -1,6 +1,4 @@
 import { publicProcedure } from '../../trpc';
-import { UnableToAddItemError } from '../../helpers/errors';
-import { responseHandler } from '../../helpers/responseHandler';
 import { addItemService } from '../../services/item/item.service';
 import * as validator from '../../middleware/validators/index';
 
@@ -43,6 +41,6 @@ export function addItemRoute() {
       type,
       ownerId,
     );
-    return { newItem: result.newItem, packId: result.packId };
+    return result;
   });
 }

@@ -1,7 +1,6 @@
 // import { prisma } from '../../prisma';
 
 import { Item } from '../../drizzle/methods/Item';
-import { Pack } from '../../drizzle/methods/Pack';
 import { ItemPacks } from '../../drizzle/methods/ItemPacks';
 
 /**
@@ -11,17 +10,13 @@ import { ItemPacks } from '../../drizzle/methods/ItemPacks';
  * @param {string} packId - The ID of the pack that the item belongs to.
  * @return {Promise<object>} - The deleted item object.
  */
-export const deleteItemService = async (itemId, packId) => {
-  let itemDeleted;
+export const deleteItemService = async (
+  itemId: string,
+  packId?: string,
+): Promise<object> => {
   const itemClass = new Item();
-  const ItemPacksClass: any = new ItemPacks();
-  const pack = new Pack();
-  const item = await itemClass.findUniqueItem({
-    where: {
-      id: itemId,
-    },
-  });
-
+  const ItemPacksClass = new ItemPacks();
+  const item = await itemClass.findItem({ id: itemId });
   if (item.global) {
     // update here
     // await pack.update({
@@ -45,10 +40,9 @@ export const deleteItemService = async (itemId, packId) => {
     //     },
     //   },
     // });
-    itemDeleted = await ItemPacksClass.delete(itemId, packId);
+    await ItemPacksClass.delete(itemId, packId);
   }
 
-  // itemDeleted = await itemClass.delete(itemId);
-
-  return itemDeleted;
+  await itemClass.delete(itemId);
+  return { message: 'Item deleted successfully' };
 };

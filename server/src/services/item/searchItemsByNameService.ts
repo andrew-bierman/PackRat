@@ -1,6 +1,7 @@
 // import { prisma } from '../../prisma';
 
 import { Item } from '../../drizzle/methods/Item';
+import { type Item as IItem } from '../../db/schema';
 
 /**
  * Searches for items by name.
@@ -9,15 +10,10 @@ import { Item } from '../../drizzle/methods/Item';
  * @param {string} packId - The pack to search in.
  * @return {Promise<Array>} An array of items that match the search criteria.
  */
-export const searchItemsByNameService = async (name, packId) => {
+export const searchItemsByNameService = async (
+  name: string,
+): Promise<Array<IItem>> => {
   const itemClass = new Item();
-  const items = await itemClass.findMany({
-    where: (item, { has, ilike }) => ({
-      ...(packId ? { [has]: item.packs, packId } : {}),
-      [ilike]: item.name,
-      name,
-    }),
-  });
-
+  const items = await itemClass.findItemsByName(name);
   return items;
 };

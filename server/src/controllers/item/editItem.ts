@@ -1,6 +1,4 @@
 import { publicProcedure } from '../../trpc';
-import { UnableToEditItemError } from '../../helpers/errors';
-import { responseHandler } from '../../helpers/responseHandler';
 import { editItemService } from '../../services/item/item.service';
 import * as validator from '../../middleware/validators/index';
 

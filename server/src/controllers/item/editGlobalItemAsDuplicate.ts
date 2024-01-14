@@ -1,6 +1,4 @@
 import { editGlobalItemAsDuplicateService } from '../../services/item/item.service';
-import { UnableToDeleteItemError } from '../../helpers/errors';
-import { responseHandler } from '../../helpers/responseHandler';
 import { z } from 'zod';
 import { publicProcedure } from '../../trpc';
 
@@ -65,7 +63,6 @@ export function editGlobalItemAsDuplicateRoute() {
         unit,
         type,
       );
-
       return item;
     });
 }

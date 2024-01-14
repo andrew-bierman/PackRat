@@ -1,6 +1,8 @@
 import { Item } from '../../drizzle/methods/Item';
 import { ItemPacks } from '../../drizzle/methods/ItemPacks';
 import { ItemCategory } from '../../drizzle/methods/itemcategory';
+import { ItemCategory as categories } from '../../utils/itemCategory';
+import { type InsertItemCategory } from '../../db/schema';
 
 /**
  * Edits a global item by creating a duplicate item in a specific pack.
@@ -15,41 +17,34 @@ import { ItemCategory } from '../../drizzle/methods/itemcategory';
  * @return {Promise<object>} The newly created duplicate item.
  */
 export const editGlobalItemAsDuplicateService = async (
-  itemId,
-  packId,
-  name,
-  weight,
-  quantity,
-  unit,
-  type,
-) => {
+  itemId: string,
+  packId: string,
+  name: string,
+  weight: number,
+  quantity: number,
+  unit: string,
+  type: string,
+): Promise<object> => {
+  let category: InsertItemCategory | null;
+  if (!categories.includes(type)) {
+    throw new Error(`Category must be one of: ${categories.join(', ')}`);
+  }
   const itemClass = new Item();
-  const itemCategory = new ItemCategory();
+  const itemCategoryClass = new ItemCategory();
   const ItemPacksClass = new ItemPacks();
-  const category = await itemCategory.findUniqueItem({
-    where: {
-      name: type,
-    },
-  });
-
-  let newItem = await itemClass.create({
+  category = await itemCategoryClass.findItemCategory({ name: type });
+  if (!category) {
+    category = await itemCategoryClass.create({ name: type });
+  }
+  const newItem = await itemClass.create({
     name,
     weight,
     unit,
     quantity,
     global: false,
-    categoryDocument: category.id,
-    packDocuments: packId,
+    categoryId: category.id,
   });
 
-  newItem = await itemClass.findUniqueItem({
-    where: {
-      id: newItem.id,
-    },
-    with: {
-      categoryDocument: true,
-    },
-  });
   // TODO update pack
   // await prisma.pack.update({
   //   where: {
@@ -63,7 +58,11 @@ export const editGlobalItemAsDuplicateService = async (
   //   },
   // },
   // });
-  await ItemPacksClass.updateRelation(itemId, newItem.id, packId);
+  await ItemPacksClass.updateRelation({
+    oldItemId: itemId,
+    newItemId: newItem.id,
+    packId,
+  });
 
   return newItem;
 };

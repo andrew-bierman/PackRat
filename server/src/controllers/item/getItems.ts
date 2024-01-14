@@ -1,6 +1,4 @@
 import { publicProcedure } from '../../trpc';
-import { ItemNotFoundError } from '../../helpers/errors';
-import { responseHandler } from '../../helpers/responseHandler';
 import { getItemsService } from '../../services/item/item.service';
 import * as validator from '../../middleware/validators/index';
 
@@ -27,7 +25,6 @@ import * as validator from '../../middleware/validators/index';
 export function getItemsRoute() {
   return publicProcedure.input(validator.getItems).query(async (opts) => {
     const { packId } = opts.input;
-    console.log({ packId });
     const items = await getItemsService(packId);
     return items;
   });
