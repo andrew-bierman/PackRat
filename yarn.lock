@@ -15155,7 +15155,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"file-loader@npm:^6.2.0":
+"file-loader@npm:^6.0.0, file-loader@npm:^6.2.0":
   version: 6.2.0
   resolution: "file-loader@npm:6.2.0"
   dependencies:
@@ -21383,6 +21383,7 @@ __metadata:
     "@types/node": "npm:^20.8.3"
     app: "npm:*"
     next: "npm:^13.5.2"
+    next-fonts: "npm:^1.5.1"
     raf: "npm:^3.4.1"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
@@ -21394,6 +21395,18 @@ __metadata:
     vercel: "npm:latest"
   languageName: unknown
   linkType: soft
+
+"next-fonts@npm:^1.5.1":
+  version: 1.5.1
+  resolution: "next-fonts@npm:1.5.1"
+  dependencies:
+    file-loader: "npm:^6.0.0"
+    url-loader: "npm:^4.0.0"
+  peerDependencies:
+    webpack: ^4.0.0 || ^5.0.0
+  checksum: 7ad03b4ef5b6951de4152558209943481c1698d22d8ffa9bf0b089c9c804457deeb9276cf6a0f5f2a62c3ef79714fcb4e5c990268c9a5220cd73e9f8bad7a159
+  languageName: node
+  linkType: hard
 
 "next@npm:^13.5.2":
   version: 13.5.6
@@ -28274,7 +28287,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"url-loader@npm:^4.1.1":
+"url-loader@npm:^4.0.0, url-loader@npm:^4.1.1":
   version: 4.1.1
   resolution: "url-loader@npm:4.1.1"
   dependencies:

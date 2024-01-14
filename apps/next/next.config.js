@@ -1,5 +1,6 @@
 const { withExpo } = require('@expo/next-adapter');
 const { withTamagui } = require('@tamagui/next-plugin');
+const { withFonts } = require('next-fonts');
 const { join } = require('path');
 
 const boolVals = {
@@ -36,6 +37,12 @@ let nextConfig = {
     'expo-asset',
     'expo-font',
     '@expo/vector-icons',
+    'react-native-vector-icons',
+    'expo-linear-gradient',
+    '@tamagui/core',
+    'native-base',
+    'react-native-svg',
+    'react-native-paper',
   ],
   typescript: {
     ignoreBuildErrors: true,
@@ -49,10 +56,28 @@ let nextConfig = {
   experimental: {
     scrollRestoration: true,
   },
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      // Add a rule for loading .ttf files, to handle @expo/vector-icons
+      config.module.rules.push({
+        test: /\.ttf$/,
+        use: {
+          loader: 'file-loader',
+          options: {
+            publicPath: '/_next/static/fonts/',
+            outputPath: 'static/fonts/',
+            name: '[name].[ext]',
+          },
+        },
+      });
+    }
+    return config;
+  },
 };
 
 // Define plugins
 const plugins = [
+  // withFonts,
   withExpo,
   withTamagui({
     config: '../../packages/ui/src/tamagui.config.ts',
