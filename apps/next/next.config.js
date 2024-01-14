@@ -77,9 +77,12 @@ const nextConfig = function () {
           /node_modules\/react-native/,
         ],
         use: options.defaultLoaders.babel,
-      });
+      })
       return config;
     },
+    env: {
+      API_URL: process.env.API_URL,
+    }
   };
 
   for (const plugin of plugins) {

@@ -1,0 +1,14 @@
+{
+    "presets": [
+        "next/babel",
+        "@babel/preset-flow"
+    ],
+    "plugins": [
+        "@babel/plugin-syntax-flow",
+        ["module-resolver", {
+            "alias": {
+                "@env": "./envResolver.ts"
+            }
+        }]
+    ]
+}
