@@ -1,5 +1,6 @@
+"use client"
+
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   persistReducer,
   persistStore,
@@ -59,10 +60,21 @@ const rootReducer = combineReducers({
 });
 export type RootState = ReturnType<typeof rootReducer>;
 
+let storage;
+if (typeof window !== 'undefined') {
+  console.log('Using localStorage in web environment');
+  // Use localStorage in web environment
+  storage = window.localStorage;
+} else {
+  console.log('Using AsyncStorage in React Native environment');
+  // Use AsyncStorage in React Native environment
+  storage = require('@react-native-async-storage/async-storage').default;
+}
+
 // configure persist store and whitelist reducers
 const persistConfig: PersistConfig<RootState> = {
   key: 'root',
-  storage: AsyncStorage,
+  storage,
   whitelist: ['auth', 'globalItems', 'offlineQueue'], // add reducers to persist here
 };
 
