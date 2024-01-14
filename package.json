@@ -69,6 +69,7 @@
   "packageManager": "yarn@4.0.2",
   "dependencies": {
     "@manypkg/cli": "^0.21.0",
+    "@tanstack/react-table": "^8.11.6",
     "check-dependency-version-consistency": "^4.1.0",
     "cross-env": "^7.0.3",
     "dotenv-cli": "^7.3.0",
