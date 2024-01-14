@@ -42,21 +42,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   -ms-overflow-style: scrollbar;
 }
-${customFontCss}
 `;
-
-const fonts = ['Inter-Regular', 'Inter-Bold', 'Inter-Black']
-const customFontCss = fonts
-  .map(
-    (font) => `
-    @font-face {
-        font-family: '${font}';
-        src: url('/font/Inter/${font}.otf');
-    }
-`
-  )
-  .join('\n')
-
 
 export async function getInitialProps({ renderPage }) {
   AppRegistry.registerComponent('Main', () => Main);

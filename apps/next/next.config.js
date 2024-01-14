@@ -53,6 +53,7 @@ const nextConfig = function () {
       'react-native-gesture-handler',
       "@expo/vector-icons",
       "expo-font",
+      "expo-router"
     ],
     experimental: {
       scrollRestoration: true,
@@ -80,9 +81,6 @@ const nextConfig = function () {
       })
       return config;
     },
-    env: {
-      API_URL: process.env.API_URL,
-    }
   };
 
   for (const plugin of plugins) {

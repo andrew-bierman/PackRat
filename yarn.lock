@@ -22198,6 +22198,7 @@ __metadata:
     "@tamagui/next-theme": "npm:^1.84.1"
     "@types/node": "npm:^20.8.3"
     app: "npm:*"
+    babel-plugin-module-resolver: "npm:^5.0.0"
     next: "npm:^13.5.2"
     raf: "npm:^3.4.1"
     react: "npm:^18.2.0"
