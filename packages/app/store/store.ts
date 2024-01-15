@@ -83,17 +83,20 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const store = configureStore({
   reducer: persistedReducer,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: {
-        // Ignore these action types
-        ignoredActions: ['persist/PERSIST'],
-      },
-    }).concat(apiMessageMiddleware),
+  // TODO: add back once next js is working properly
+  // middleware: (getDefaultMiddleware) =>
+  //   getDefaultMiddleware({
+  //     serializableCheck: {
+  //       // Ignore these action types
+  //       ignoredActions: ['persist/PERSIST', 'persist/REHYDRATE'],
+  //     },
+  //   }).concat(apiMessageMiddleware),
 });
 
 export type AppDispatch = typeof store.dispatch;
 
-const persistor = persistStore(store);
+// const persistor = persistStore(store);  // TODO: add back once next js is working properly
 
-export { store, persistor };
+export { store,
+  //  persistor 
+  };

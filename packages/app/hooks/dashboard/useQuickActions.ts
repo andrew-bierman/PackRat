@@ -1,4 +1,4 @@
-import { useRouter } from 'expo-router';
+import { useRouter } from 'solito/router';
 
 const quickActionData = [
   {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { deletePack } from '../../store/packsStore';
-import { useRouter } from 'expo-router';
+import { useRouter } from 'solito/router';
 import { deleteTrip } from '../../store/tripsStore';
 import { MoreHorizontal } from '@tamagui/lucide-icons';
 import { Adapt, Button, Popover, YStack } from 'tamagui';

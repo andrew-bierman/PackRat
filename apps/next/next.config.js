@@ -1,6 +1,8 @@
 const { withExpo } = require('@expo/next-adapter');
 const { withTamagui } = require('@tamagui/next-plugin');
 const { join } = require('path');
+const path = require('path');
+
 const webpack = require('webpack');
 const boolVals = {
   true: true,
@@ -108,6 +110,7 @@ const nextConfig = function () {
       config.resolve.alias = {
         ...config.resolve.alias,
         'react-native': 'react-native-web',
+        'react-native': path.join(__dirname, 'node_modules/react-native'),
       };
       config.resolve.alias['react-native-web/Libraries/Image/AssetRegistry'] = require.resolve('react-native-web/dist/modules/AssetRegistry');
       return config;

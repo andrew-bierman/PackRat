@@ -8,7 +8,7 @@ import { AddItemGlobal } from '../../components/item/AddItemGlobal';
 import { ItemsTable } from '../../components/itemtable/itemTable';
 import { useDispatch, useSelector } from 'react-redux';
 import { getItemsGlobal } from '../../store/globalItemsStore';
-import { Stack } from 'expo-router';
+// import { Stack } from 'expo-router';
 import { executeOfflineRequests } from '../../store/offlineQueue';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { BaseModal } from '@packrat/ui';
@@ -40,11 +40,11 @@ export default function Items() {
 
   return (
     <ScrollView>
-      <Stack.Screen
+      {/* <Stack.Screen
         options={{
           title: 'Items',
         }}
-      />
+      /> */}
       <Box style={styles.container}>
         <BaseModal
           title="Add a global Item"

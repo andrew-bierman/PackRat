@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PackContainer from './PackContainer';
 import { DetailsHeader } from '../details/header';
-import { useSearchParams } from 'expo-router';
+import { useSearchParams } from 'solito/router';
 import { TableContainer } from '../pack_table/Table';
 import { fetchUserPacks, selectPackById } from '../../store/packsStore';
 import { useSelector, useDispatch } from 'react-redux';

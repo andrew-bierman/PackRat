@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { View } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { useRouter } from 'expo-router';
+import { useRouter } from 'solito/router';
 import { RStack, RIconButton, BaseModal } from '@packrat/ui';
 import { Entypo } from '@expo/vector-icons';
 export const PackOptions = ({ Edit, Delete, Ignore }) => {

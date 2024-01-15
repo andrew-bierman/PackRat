@@ -1,4 +1,5 @@
-import { useRootNavigationState, useRouter, useSegments } from 'expo-router';
+// import { useRootNavigationState, useSegments } from 'expo-router';
+import { useRouter } from 'solito/router'
 
 import React, { useEffect } from 'react';
 import { useStorageState } from '../hooks/useStorageState';
@@ -14,21 +15,21 @@ import { useStorageState } from '../hooks/useStorageState';
 
 // // This hook will protect the route access based on user authentication.
 export function useProtectedRoute(user) {
-  const segments = useSegments();
-  const router = useRouter();
+  // const segments = useSegments();
+  // const router = useRouter();
 
-  const navigationState = useRootNavigationState();
-  React.useEffect(() => {
-    if (navigationState?.key) {
-      const inAuthGroup = segments[0] === '(auth)';
+  // const navigationState = useRootNavigationState();
+  // React.useEffect(() => {
+  //   if (navigationState?.key) {
+  //     const inAuthGroup = segments[0] === '(auth)';
 
-      if (!user && !inAuthGroup) {
-        router.replace('/sign-in');
-      } else if (user && inAuthGroup) {
-        router.replace('/');
-      }
-    }
-  }, [user, segments, navigationState]);
+  //     if (!user && !inAuthGroup) {
+  //       router.replace('/sign-in');
+  //     } else if (user && inAuthGroup) {
+  //       router.replace('/');
+  //     }
+  //   }
+  // }, [user, segments, navigationState]);
 }
 
 const AuthContext = React.createContext(null);

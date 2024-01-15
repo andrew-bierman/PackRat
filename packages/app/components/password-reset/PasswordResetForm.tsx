@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
 import { Button, Input, Text, Toast } from 'native-base';
-import { useSearchParams } from 'expo-router';
 import axios from 'app/config/axios';
 import useTheme from '../../hooks/useTheme';
 import { api } from '../../constants/api';

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { BaseModal, RInput, RStack, RText } from '@packrat/ui';
 import { useDispatch, useSelector } from 'react-redux';
-import { useRouter } from 'expo-router';
+import { useRouter } from 'solito/router';
 import { format, intervalToDuration } from 'date-fns';
 // import { addTrip } from '../../store/tripsStore';
 import { useAddTrip } from 'app/hooks/trips';
