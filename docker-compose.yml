@@ -1,3 +1,4 @@
+# Not currently functional due to restructuring of project
 version: "3"
 services:
   client:

@@ -35,3 +35,5 @@ export const REDIRECT_URL = 'auth/google';
 
 export const CORS_ORIGIN = process.env.CORS_ORIGIN;
 export const CORS_METHODS = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'];
+
+export const MAPBOX_ACCESS_TOKEN = process.env.MAPBOX_ACCESS_TOKEN;
