@@ -22,6 +22,33 @@ const generatePasswordResetToken = async (email, secret) => {
   return jwt.sign(payload, secret);
 };
 
+const sendPasswordResetEmail = async (email, resetUrl) => {
+  const mailOptions = {
+    to: email,
+    from: {
+      email: STMP_EMAIL,
+      name: 'PackRat Support',
+    },
+    subject: 'Password Reset',
+    // text: `Click the link below to reset your password:\n\n${resetUrl}\n\nIf you did not request to reset your password, please ignore this email.`,
+    html: `
+        <div style="font-family: Arial, sans-serif; font-size: 14px; line-height: 1.5;">
+          <h2 style="font-size: 18px; font-weight: bold; margin-bottom: 16px;">Password Reset</h2>
+          <p style="margin-bottom: 16px;">Click the link below to reset your password:</p>
+          <a href="${resetUrl}" style="display: inline-block; padding: 8px 16px; background-color: #0070f3; color: #fff; text-decoration: none; border-radius: 4px; margin-bottom: 16px;">Reset Password</a>
+          <p>If you did not request to reset your password, please ignore this email.</p>
+        </div>
+      `,
+  };
+
+  try {
+    await sgMail.send(mailOptions);
+    console.log('Password reset email sent successfully');
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 /**
  * Sends a password reset email to the user and updates the user's password reset token.
  * @param {Object} req - The HTTP request object.
@@ -46,18 +73,8 @@ const generatePasswordResetToken = async (email, secret) => {
 //     const resetToken = generatePasswordResetToken(email);
 //     const resetTokenExpiration = new Date(Date.now() + 24 * 60 * 60 * 1000);
 
-//     await prisma.user.update({
-//       where: {
-//         email: email,
-//       },
-//       data: {
-//         passwordResetToken: resetToken,
-//         passwordResetTokenExpiration: resetTokenExpiration,
-//       },
-//     });
-//     const resetUrl = `${CLIENT_URL}/password-reset?token=${resetToken}`;
-//     resetEmail
-//     // sendPasswordResetEmail(email, resetUrl);
+    const resetUrl = `${CLIENT_URL}/password-reset?token=${resetToken}`;
+    await sendPasswordResetEmail(email, resetUrl);
 
 //     res.locals.data = { message: 'Password reset email sent successfully' };
 //     responseHandler(res);

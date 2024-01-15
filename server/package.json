@@ -128,8 +128,7 @@
     "mocha": "^10.2.0",
     "openapi-generator": "^0.1.39",
     "prettier": "^3.0.2",
-    "prisma": "^5.7.0",
-    "ts-node": "^10.9.1"
+    "ts-node": "^10.9.1",
   },
   "engines": {
     "node": ">=16.0.0"
