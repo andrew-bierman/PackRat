@@ -2,7 +2,7 @@ import * as jwt from 'hono/jwt';
 import { eq, and } from 'drizzle-orm';
 import { createDb } from '../../db/client';
 import {
-  InsertUser,
+  type InsertUser,
   user as UserTable,
   userFavoritePacks,
 } from '../../db/schema';

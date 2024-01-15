@@ -35,7 +35,10 @@ export function resetPasswordRoute() {
       const JWT_SECRET = env.JWT_SECRET;
       const userClass = new User();
       const user = await userClass.validateResetToken(resetToken, JWT_SECRET);
-      const hashedPassword = await hashPassword(JWT_SECRET, validatePassword(password))  
+      const hashedPassword = await hashPassword(
+        JWT_SECRET,
+        validatePassword(password),
+      );
       await userClass.update({ id: user.id, password: hashedPassword });
       return 'Successfully reset password';
     });

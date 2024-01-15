@@ -1,7 +1,12 @@
 import { publicProcedure } from '../../trpc';
 import * as validator from '../../middleware/validators/index';
 import { User } from '../../drizzle/methods/User';
-import {validateEmail, validateUsername, validatePassword, hashPassword} from '../../utils/user'
+import {
+  validateEmail,
+  validateUsername,
+  validatePassword,
+  hashPassword,
+} from '../../utils/user';
 import bcrypt from 'bcryptjs';
 
 /**
@@ -35,23 +40,33 @@ import bcrypt from 'bcryptjs';
 
 export function editUserRoute() {
   return publicProcedure.input(validator.editUser).mutation(async (opts) => {
-    const { id, name, email, code, role, username, profileImage, preferredWeather, preferredWeight} = opts.input;
-    let {password} = opts.input
+    const {
+      id,
+      name,
+      email,
+      code,
+      role,
+      username,
+      profileImage,
+      preferredWeather,
+      preferredWeight,
+    } = opts.input;
+    let { password } = opts.input;
     const { env }: any = opts.ctx;
     const JWT_SECRET = env.JWT_SECRET;
     const userClass = new User();
     if (password) {
-      const validatedPassword = validatePassword(password)
+      const validatedPassword = validatePassword(password);
       password = await hashPassword(JWT_SECRET, validatedPassword);
     }
     const data = {
       id,
-      ...(name && {name}),
-      ...(password && {password}),
-      ...(email && {email: validateEmail(email)}),
+      ...(name && { name }),
+      ...(password && { password }),
+      ...(email && { email: validateEmail(email) }),
       ...(code && { code }),
       ...(role && { role }),
-      ...(username && { username: validateUsername(username) }), 
+      ...(username && { username: validateUsername(username) }),
       ...(profileImage && { profileImage }),
       ...(preferredWeather && { preferredWeather }),
       ...(preferredWeight && { preferredWeight }),
