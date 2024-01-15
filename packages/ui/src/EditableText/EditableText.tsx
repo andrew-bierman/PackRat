@@ -30,7 +30,7 @@ export const EditableText = ({
           fontSize: '20px',
           fontWeight: 'bold',
           // TODO change to theme value: currentTheme.colors.textPrimary
-          color: 'red',
+          // color: 'red',
           pointerEvents: 'auto',
         }}
         ref={inputRef}
