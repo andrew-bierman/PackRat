@@ -2,28 +2,28 @@ import { z } from 'zod';
 import { Request } from 'express';
 
 export const userSignUp = z.object({
-  name: z.string().min(1).nonempty(),
-  email: z.string().email().nonempty(),
-  password: z.string().nonempty(),
-  username: z.string().nonempty(),
+  name: z.string().min(1),
+  email: z.string().email(),
+  password: z.string(),
+  username: z.string(),
 });
 
 export const userSignIn = z.object({
-  email: z.string().email().nonempty(),
-  password: z.string().nonempty(),
+  email: z.string().email(),
+  password: z.string(),
 });
 
 export const getUserById = z.object({
-  userId: z.string().nonempty(),
+  userId: z.string(),
 });
 
 export const sentEmail = z.object({
-  email: z.string().email().nonempty(),
+  email: z.string().email(),
 });
 
 export const resetPassword = z.object({
-  resetToken: z.string().nonempty(),
-  password: z.string().nonempty(),
+  resetToken: z.string(),
+  password: z.string(),
 });
 
 enum UserRoles {
@@ -32,69 +32,56 @@ enum UserRoles {
 }
 
 export const addToFavorite = z.object({
-  packId: z.string().nonempty(),
-  userId: z.string().nonempty(),
+  packId: z.string(),
+  userId: z.string(),
 });
 
 export const editUser = z.object({
-  userId: z.string().nonempty(),
-  name: z.string(),
-  password: z.string(),
-  email: z.string(),
-  token: z.string().optional(),
+  id: z.string(),
+  name: z.string().optional(),
+  password: z.string().optional(),
+  email: z.string().optional(),
   code: z.string().optional(),
-  googleId: z.string().optional(),
-  is_certified_guide: z.boolean().optional(),
-  passwordResetToken: z.string().optional(),
-  passwordResetTokenExpiration: z.date().nullable().optional(),
   role: z.nativeEnum(UserRoles).optional(),
-  username: z
-    .string()
-    .refine((value) => value.length > 0)
-    .optional(),
+  username: z.string().optional(),
   profileImage: z.string().optional(),
   preferredWeather: z.string().optional(),
   preferredWeight: z.string().optional(),
-  favourite_ids: z.array(z.string().nonempty()).optional(),
-  pack_ids: z.array(z.string().nonempty()).optional(),
-  item_id: z.string().nonempty().nullable().optional(),
-  template_ids: z.array(z.string().nonempty()).optional(),
-  trip_ids: z.array(z.string().nonempty()).optional(),
 });
 
 export const deleteUser = z.object({
-  userId: z.string().nonempty(),
+  userId: z.string(),
 });
 
 export const linkFirebaseAuth = z.object({
-  firebaseAuthToken: z.string().nonempty(),
+  firebaseAuthToken: z.string(),
 });
 
 export const createMongoDBUser = z.object({
-  email: z.string().email().nonempty(),
-  name: z.string().min(1).nonempty(),
-  password: z.string().nonempty(),
+  email: z.string().email(),
+  name: z.string().min(1),
+  password: z.string(),
 });
 
 export const getFirebaseUserByEmail = z.object({
-  email: z.string().email().nonempty(),
+  email: z.string().email(),
 });
 
 export const login = z.object({
-  email: z.string().email().nonempty(),
-  password: z.string().nonempty(),
+  email: z.string().email(),
+  password: z.string(),
 });
 
 export const checkCode = z.object({
-  email: z.string().email().nonempty(),
-  code: z.string().nonempty(),
+  email: z.string().email(),
+  code: z.string(),
 });
 
 export const emailExists = z.object({
-  email: z.string().email().nonempty(),
+  email: z.string().email(),
 });
 
 export const updatePassword = z.object({
-  email: z.string().email().nonempty(),
-  password: z.string().nonempty(),
+  email: z.string().email(),
+  password: z.string(),
 });

@@ -1,9 +1,5 @@
 import { publicProcedure } from '../../trpc';
-import { UnableTouUpdatePasswordError } from '../../helpers/errors';
-import { responseHandler } from '../../helpers/responseHandler';
 import { findUserAndUpdate } from '../../services/user/user.service';
-import bcrypt from 'bcryptjs';
-import { JWT_SECRET } from '../../config';
 import * as validator from '../../middleware/validators/index';
 // import { prisma } from '../../prisma';
 
@@ -50,7 +46,7 @@ export function updatePasswordRoute() {
     .input(validator.updatePassword)
     .mutation(async (opts) => {
       const { email, password } = opts.input;
-      const val = await findUserAndUpdate(email, password, 'password');
-      return val;
+      const user = await findUserAndUpdate(email, password, 'password');
+      return user;
     });
 }
