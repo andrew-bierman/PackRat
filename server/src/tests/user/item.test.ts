@@ -102,10 +102,90 @@ describe("ITEM", () => {
     expect(editItem.name).toEqual(`${item.name}edited`)
   })
 
-  // addItemGlobal: addItemGlobalRoute(),
-  // getItemsGlobally: getItemsGloballyRoute(),
-  // addGlobalItemToPack: addGlobalItemToPackRoute(),
-  // editGlobalItemAsDuplicate: editGlobalItemAsDuplicateRoute(),
-  // deleteGlobalItem: deleteGlobalItemRoute(),
 
+})
+
+describe("ITEM GLOBAL", () => {
+  let globalItem
+  let pack
+
+  it("Should can add item Global", async() => {
+    const name = 'global ' + Math.floor(Math.random() * 100)
+    const addGlobalItem = await caller.addItemGlobal({
+      name     : name,
+      weight   : "2",
+      quantity : "2",
+      unit     : 'kg',
+      type     : ItemCategoryEnum.FOOD,
+    })
+    globalItem = addGlobalItem.toJSON()
+    expect(addGlobalItem).toBeDefined();
+  })
+
+  describe("add global item to pack", () => {
+    it("Should can get packs", async() => {
+      const packs = await caller.getPublicPacks({
+        queryBy: 'Favorite',
+      });
+      pack = packs[0]
+      console.log('pack', pack)
+      expect(packs).toBeDefined();
+    })
+
+    it("Should can add global item to pack", async() => {
+      const addGlobalItemToPack = await caller.addGlobalItemToPack({
+        itemId : globalItem._id.toString(),
+        packId : pack._id.toString(),
+        ownerId : pack.owner_id.toString()
+      });
+      // console.log('addGlobalItemToPack', addGlobalItemToPack)
+      expect(addGlobalItemToPack).toBeDefined();
+    })
+
+    it("Should can get globalItem's ownerId and packId", async() => {
+      const getItem = await caller.getItemsGlobally({
+        page : 1,
+        limit : 1,
+        searchString : globalItem.name
+      })
+      expect(getItem.page).toEqual(1);
+      expect(getItem.items).toBeDefined();
+      expect(getItem.items[0].packs[0]._id.toString()).toEqual(pack._id.toString());
+      expect(getItem.items[0].owners[0]._id.toString()).toEqual(pack.owner_id.toString());
+      
+    })
+  })
+
+  it("Should can get item Global", async() => {
+    const getItem = await caller.getItemsGlobally({
+      page : 1,
+      limit : 10,
+      searchString : ""
+    })
+    // console.log('getitem', getItem)
+    expect(getItem.items).toBeDefined();
+    expect(getItem.page).toEqual(1);
+  })
+  
+
+  it("Should can edit global item as duplicate", async() => {
+    const editGlobalItemAsDuplicate = await caller.editGlobalItemAsDuplicate({
+      itemId : globalItem._id.toString(),
+      packId : pack._id.toString(),
+      name     : globalItem.name + "edit",
+      weight   : 3,
+      quantity : 3,
+      unit     : "kg",
+      type     : ItemCategoryEnum.FOOD,
+    })
+    expect(editGlobalItemAsDuplicate.name).toEqual(globalItem.name + "edit");
+  })
+
+  it("Should can delete global item", async() => {
+    const deleteGlobalItem = await caller.deleteGlobalItem({
+      itemId : globalItem._id.toString()
+    })
+    console.log('deleteGlobalItem', deleteGlobalItem)
+    expect(deleteGlobalItem).toBeDefined();
+  })
 })
