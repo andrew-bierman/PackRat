@@ -5,6 +5,8 @@ import { createCaller } from '../../routes/trpcRouter';
 
 beforeEach(async () => {
   process.env.NODE_ENV = 'test';
+  process.env.SEND_GRID_API_KEY="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"
+  
   await mongoose.connect(process.env.MONGODB_URI ?? '');
 });
 
