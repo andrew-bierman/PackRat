@@ -73,8 +73,8 @@ const sendPasswordResetEmail = async (email, resetUrl) => {
 //     const resetToken = generatePasswordResetToken(email);
 //     const resetTokenExpiration = new Date(Date.now() + 24 * 60 * 60 * 1000);
 
-    const resetUrl = `${CLIENT_URL}/password-reset?token=${resetToken}`;
-    await sendPasswordResetEmail(email, resetUrl);
+const resetUrl = `${CLIENT_URL}/password-reset?token=${resetToken}`;
+await sendPasswordResetEmail(email, resetUrl);
 
 //     res.locals.data = { message: 'Password reset email sent successfully' };
 //     responseHandler(res);

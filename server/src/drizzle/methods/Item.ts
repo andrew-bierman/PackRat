@@ -1,6 +1,6 @@
 import { and, count, eq, sql } from 'drizzle-orm';
 import { createDb } from '../../db/client';
-import { InsertItem, item as ItemTable } from '../../db/schema';
+import { type InsertItem, item as ItemTable } from '../../db/schema';
 import { getDB } from '../../trpc/context';
 
 export class Item {

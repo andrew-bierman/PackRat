@@ -1,7 +1,6 @@
 import { z } from 'zod';
 import { Request } from 'express';
 
-
 export const userSignUp = z.object({
   name: z.string().min(1).nonempty(),
   email: z.string().email().nonempty(),

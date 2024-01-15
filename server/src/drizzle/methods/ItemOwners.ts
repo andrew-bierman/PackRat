@@ -1,6 +1,6 @@
 import { createDb } from '../../db/client';
 import {
-  InsertItemOwner,
+  type InsertItemOwner,
   itemOwners as ItemOwnersTable,
 } from '../../db/schema';
 import { getDB } from '../../trpc/context';
