@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "757abacf-7fd2-45e6-9f7e-4a94e42f92f6",
+  "id": "210cb5ca-66c4-40ed-93fb-192b8581fdb2",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "conversation": {
@@ -213,7 +213,7 @@
           "name": "name",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "created_at": {
@@ -281,7 +281,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "set null",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -443,7 +443,8 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": false,
-          "autoincrement": false
+          "autoincrement": false,
+          "default": false
         },
         "grades": {
           "name": "grades",
@@ -1043,7 +1044,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "set null",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         },
         "user_favorite_packs_pack_id_pack_id_fk": {

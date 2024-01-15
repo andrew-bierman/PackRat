@@ -1,6 +1,4 @@
 import { publicProcedure } from '../../trpc';
-import { UserNotFoundError } from '../../helpers/errors';
-import { responseHandler } from '../../helpers/responseHandler';
 import { getUserByIdService } from '../../services/user/getUserByIdService';
 import * as validator from '../../middleware/validators/index';
 /**
@@ -24,7 +22,7 @@ import * as validator from '../../middleware/validators/index';
 
 export function getUserByIdRoute() {
   return publicProcedure.input(validator.getUserById).query(async (opts) => {
-    const { input } = opts;
-    return await getUserByIdService(input.userId);
+    const { userId } = opts.input;
+    return await getUserByIdService(userId);
   });
 }

@@ -1,6 +1,9 @@
 import { publicProcedure } from '../../trpc';
 import * as validator from '../../middleware/validators/index';
 import { User } from '../../drizzle/methods/User';
+import {validateEmail, validateUsername, validatePassword, hashPassword} from '../../utils/user'
+import bcrypt from 'bcryptjs';
+
 /**
  * Edits a user.
  * @param {Object} req - The request object.
@@ -32,33 +35,28 @@ import { User } from '../../drizzle/methods/User';
 
 export function editUserRoute() {
   return publicProcedure.input(validator.editUser).mutation(async (opts) => {
-    const {
-      userId,
-      favourite_ids,
-      pack_ids,
-      template_ids,
-      trip_ids,
-      item_id,
-      ...rest
-    } = opts.input;
-    const user = new User();
+    const { id, name, email, code, role, username, profileImage, preferredWeather, preferredWeight} = opts.input;
+    let {password} = opts.input
+    const { env }: any = opts.ctx;
+    const JWT_SECRET = env.JWT_SECRET;
+    const userClass = new User();
+    if (password) {
+      const validatedPassword = validatePassword(password)
+      password = await hashPassword(JWT_SECRET, validatedPassword);
+    }
     const data = {
-      ...rest,
-      favoriteDocuments: {
-        connect: favourite_ids?.map((favourite) => ({ id: favourite })),
-      },
-      packDocuments: {
-        connect: pack_ids?.map((pack) => ({ id: pack })),
-      },
-      templates: {
-        connect: template_ids?.map((template) => ({ id: template })),
-      },
-      item: { set: item_id },
+      id,
+      ...(name && {name}),
+      ...(password && {password}),
+      ...(email && {email: validateEmail(email)}),
+      ...(code && { code }),
+      ...(role && { role }),
+      ...(username && { username: validateUsername(username) }), 
+      ...(profileImage && { profileImage }),
+      ...(preferredWeather && { preferredWeather }),
+      ...(preferredWeight && { preferredWeight }),
     };
-    const editedUser = await user.update(data, userId, null, {
-      favorites: true,
-    });
-
+    const editedUser = await userClass.update(data);
     return editedUser;
   });
 }

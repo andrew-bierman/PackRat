@@ -25,10 +25,7 @@ export function userSignInRoute() {
     const userClass = new User();
     const user = await userClass.findByCredentials(input.email, input.password);
     // console.log('user', user);
-    const token = await userClass?.generateAuthToken(env.JWT_SECRET, user.id);
-    return {
-      ...user,
-      token,
-    };
+    await userClass.generateAuthToken(env.JWT_SECRET, user.id);
+    return user;
   });
 }

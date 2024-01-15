@@ -1,7 +1,11 @@
 import * as jwt from 'hono/jwt';
-import { eq } from 'drizzle-orm';
+import { eq, and } from 'drizzle-orm';
 import { createDb } from '../../db/client';
-import { user as UserTable, userFavoritePacks } from '../../db/schema';
+import {
+  InsertUser,
+  user as UserTable,
+  userFavoritePacks,
+} from '../../db/schema';
 import { getDB } from '../../trpc/context';
 import bcrypt from 'bcryptjs';
 
@@ -62,29 +66,32 @@ export class User {
       .get();
   }
 
-  async create(user) {
+  async create(user: InsertUser) {
     try {
-      console.log(user);
-      return (await this.createInstance())
+      const createdUser = (await this.createInstance())
         .insert(UserTable)
         .values(user)
         .returning()
         .get();
+      return createdUser;
     } catch (error) {
-      console.log('Error creating user', error);
+      throw new Error(`Failed to create user: ${error.message}`);
     }
   }
 
-  async generateAuthToken(jwtSecret: string, id: string): Promise<string> {
+  async generateAuthToken(jwtSecret: string, id: string) {
     if (!jwtSecret) throw new Error('jwtSecret is not defined');
-    const token = await jwt.sign({ id }, jwtSecret);
-    await (await this.createInstance())
-      .update(UserTable)
-      .set({ token })
-      .where(eq(UserTable.id, id))
-      .returning()
-      .get();
-    return token;
+    try {
+      const token = await jwt.sign({ id }, jwtSecret);
+      const filter = eq(UserTable.id, id);
+      await (await this.createInstance())
+        .update(UserTable)
+        .set({ token })
+        .where(filter);
+      return token;
+    } catch (error) {
+      throw new Error(`Failed to generate token: ${error.message}`);
+    }
   }
 
   async generateResetToken(
@@ -94,80 +101,105 @@ export class User {
     passwordResetToken?: string,
   ): Promise<string> {
     if (passwordResetToken) {
-      const decoded: any = await jwt.verify(passwordResetToken, jwtSecret);
+      const decoded = await jwt.verify(passwordResetToken, jwtSecret);
       if (decoded.id) return passwordResetToken;
     }
 
     if (!jwtSecret) throw new Error('jwtSecret is not defined');
-    const resetToken = await jwt.sign({ id: id.toString() }, jwtSecret);
+    const resetToken = await jwt.sign({ id }, jwtSecret);
+    const filter = eq(UserTable.id, id);
     await (await this.createInstance())
       .update(UserTable)
       .set({ passwordResetToken: resetToken })
-      .where(eq(UserTable.id, id))
+      .where(filter)
       .returning()
       .get();
     return `${clientUrl}/password-reset?token=${resetToken}`;
   }
 
-  async update(
-    data: any,
-    id: string,
-    filter = eq(UserTable.id, id),
-    returning = null,
-  ) {
-    return (await this.createInstance())
-      .update(UserTable)
-      .set(data)
-      .where(filter)
-      .returning(returning)
-      .get();
+  async update(data: Partial<InsertUser>, filter = eq(UserTable.id, data.id)) {
+    try {
+      const updatedUser = (await this.createInstance())
+        .update(UserTable)
+        .set(data)
+        .where(filter)
+        .returning();
+      return updatedUser;
+    } catch (error) {
+      throw new Error(`Failed to update template: ${error.message}`);
+    }
   }
 
   async delete(id: string, filter = eq(UserTable.id, id)) {
-    return (await this.createInstance())
-      .delete(UserTable)
-      .where(filter)
-      .returning()
-      .get();
+    try {
+      return (await this.createInstance())
+        .delete(UserTable)
+        .where(filter)
+        .returning();
+    } catch (error) {
+      throw new Error(`Failed to delete a user: ${error.message}`);
+    }
   }
 
-  async findById(id: string, filter = eq(UserTable.id, id)) {
-    return (await this.createInstance())
-      .select()
-      .from(UserTable)
-      .where(filter)
-      .limit(1)
-      .get();
+  async findMany() {
+    try {
+      const users = (await this.createInstance()).query.user.findMany({});
+      return users;
+    } catch (error) {
+      throw new Error(`Failed to get users: ${error.message}`);
+    }
   }
 
-  async findByEmail(email: string, filter = eq(UserTable.email, email)) {
-    return (await this.createInstance())
-      .select()
-      .from(UserTable)
-      .where(filter)
-      .limit(1)
-      .get();
-  }
+  async findUser({
+    userId,
+    email,
+    code,
+    includeFavorites = false,
+  }: {
+    userId?: string;
+    email?: string;
+    code?: string;
+    includeFavorites?: boolean;
+  }) {
+    try {
+      let filter = null;
+      if (userId) {
+        filter = eq(UserTable.id, userId);
+      } else if (email && code) {
+        filter = and(eq(UserTable.email, email), eq(UserTable.code, code));
+      } else if (email) {
+        filter = eq(UserTable.email, email);
+      }
+      const user = (await this.createInstance()).query.user.findFirst({
+        where: filter,
+        ...(includeFavorites && {
+          with: {
+            userFavoritePacks: {
+              columns: {
+                packId: true,
+              },
+            },
+          },
+        }),
+      });
 
-  async findMany(filter = null) {
-    return (await this.createInstance())
-      .select()
-      .from(UserTable)
-      .where(filter)
-      .get();
-  }
-
-  async findUnique(query) {
-    return (await this.createInstance()).query.user.findFirst(query);
+      return user;
+    } catch (error) {
+      throw new Error(`Failed finding user: ${error.message}`);
+    }
   }
 
   async findByCredentials(email: string, password: string) {
-    const user = await this.findByEmail(email);
-    if (!user) return null;
-    if (await bcrypt.compare(password, user.password)) {
-      return user;
+    try {
+      const user = await this.findUser({ email });
+      if (!user) return null;
+      if (await bcrypt.compare(password, user.password)) {
+        return user;
+      }
+      return null;
+    } catch (error) {
+      throw new Error(`Failed to find user by credentials: ${error.message}`);
     }
-    return null;
   }
 
   async findFavorite(userId: string, packId: string) {
@@ -183,5 +215,28 @@ export class User {
         .where(eq(UserTable.id, userId))) as any
     ).select({ favoriteDocuments: subQuery });
     return isFavorite;
+  }
+
+  async validateResetToken(token: string, jwtSecret: string) {
+    try {
+      if (!jwtSecret) throw new Error('JwtSecret is not defined');
+      const decoded = await jwt.verify(token, jwtSecret);
+      const user = (await this.createInstance())
+        .select()
+        .from(UserTable)
+        .where(
+          and(
+            eq(UserTable.id, decoded.id),
+            eq(UserTable.passwordResetToken, token),
+          ),
+        )
+        .get();
+      if (!user) {
+        throw new Error('User not found');
+      }
+      return user;
+    } catch (error) {
+      throw new Error(`Failed to validate reset token: ${error.message}`);
+    }
   }
 }

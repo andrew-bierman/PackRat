@@ -1,8 +1,10 @@
 import { TRPCError } from '@trpc/server';
-import * as jwt from 'hono/jwt';
 import { User } from '../../drizzle/methods/User';
+import * as jwt from 'hono/jwt';
 
-type JwtPayload = Record<string, unknown>;
+// import * as jwt from 'hono/jwt';
+
+// type JwtPayload = Record<string, unknown>;
 
 /**
  * Extracts the token from the request header.
@@ -22,13 +24,6 @@ const extractToken = (req: Request): string => {
  * @returns {Promise<JwtPayload>} - The decoded JWT payload.
  * @throws {ZodError} If token structure is invalid.
  */
-const verifyToken = async (
-  token: string,
-  jwtSecret: string,
-): Promise<JwtPayload> => {
-  const decoded: JwtPayload = await jwt.verify(token, jwtSecret ?? '');
-  return decoded;
-};
 
 /**
  * Finds the user based on the verified token.
@@ -38,14 +33,11 @@ const verifyToken = async (
  * @returns {Promise<User>} - The user associated with the token.
  * @throws {Error} If user is not found.
  */
-const findUser = async (decoded: JwtPayload, token: string) => {
-  const userClass = await new User();
-  const user: any = await userClass.findUnique({
-    where: {
-      id: decoded.id as string,
-      token,
-    },
-  });
+const findUser = async (token: string, jwtSecret: string) => {
+  const userClass = new User();
+  // const user: any = await userClass.validateResetToken(token, jwtSecret);
+  const decoded = await jwt.verify(token, jwtSecret);
+  const user = await userClass.findUser({ userId: decoded.id });
   if (!user)
     throw new TRPCError({
       code: 'NOT_FOUND',
@@ -57,8 +49,7 @@ const findUser = async (decoded: JwtPayload, token: string) => {
 const extractTokenAndGetUser = async (req: Request, jwtSecret: string) => {
   const token = extractToken(req);
   if (!token) return null;
-  const decoded = await verifyToken(token, jwtSecret);
-  const user = await findUser(decoded, token);
+  const user = await findUser(token, jwtSecret);
   return user;
 };
 

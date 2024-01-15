@@ -1,6 +1,4 @@
-import { eq } from 'drizzle-orm';
 import { User } from '../../drizzle/methods/User';
-import { user as UserTable } from '../../db/schema';
 /**
  * A function that finds a user by their email and updates their data.
  * @param {PrismaClient} prisma - Prisma client.
@@ -16,22 +14,18 @@ export async function findUserAndUpdate(
   datatype: string,
 ): Promise<any> {
   try {
-    const dataToUpdate = {
-      [datatype]: data,
-    };
-    const user = new User();
-    const userDoc = await user.update(
-      dataToUpdate,
-      null,
-      eq(UserTable.email, email.toLowerCase()),
-    );
+    const userClass = new User();
+    const user = await userClass.findUser({ email });
 
-    if (userDoc) {
-      return userDoc;
-    } else {
-      return false;
+    if (!user) {
+      throw new Error('User not found');
     }
+    const updatedUser = await userClass.update({
+      id: user.id,
+      [datatype]: data,
+    });
+    return updatedUser;
   } catch (error) {
-    return false;
+    throw new Error(error.toString());
   }
 }
