@@ -1,13 +1,13 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { useAddFavorite } from 'hooks/favorites';
+import { useAddFavorite } from 'app/hooks/favorites';
 import {
   // addFavorite,
   selectFavoriteById,
   selectAllFavorites,
-} from '../../store/favoritesStore';
+} from 'app/store/favoritesStore';
 import useTheme from '../useTheme';
-import { truncateString } from '../../utils/truncateString';
-import { formatNumber } from 'utils/formatNumber';
+import { truncateString } from 'app/utils/truncateString';
+import { formatNumber } from 'app/utils/formatNumber';
 import { debounce } from 'lodash';
 
 export const useFeedCard = (props) => {

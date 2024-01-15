@@ -12,7 +12,7 @@ import {
   YStack,
   getFontSize,
 } from 'tamagui';
-import { useSelect } from 'hooks/select';
+import { useSelect } from 'app/hooks/select';
 // import { LinearGradient } from 'tamagui/linear-gradient'
 
 export function SelectDemo() {

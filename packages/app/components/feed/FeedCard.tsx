@@ -6,7 +6,7 @@ import { TouchableOpacity, View } from 'react-native';
 import { Link } from 'expo-router';
 import { DuplicateIcon } from '../DuplicateIcon/index';
 import { RText, RStack, RHeading } from '@packrat/ui';
-import { useFeedCard } from 'hooks/feed/feedComponent';
+import { useFeedCard } from 'app/hooks/feed/feedComponent';
 
 export default function Card({
   type,

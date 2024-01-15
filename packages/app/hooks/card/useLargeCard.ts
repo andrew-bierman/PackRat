@@ -1,5 +1,5 @@
-import useCustomStyles from 'hooks/useCustomStyles';
-import useTheme from 'hooks/useTheme';
+import useCustomStyles from 'app/hooks/useCustomStyles';
+import useTheme from 'app/hooks/useTheme';
 import { useSelector } from 'react-redux';
 
 export const useLargeCard = ({ customStyle, type, loadStyles }) => {

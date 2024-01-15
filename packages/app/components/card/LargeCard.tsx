@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Platform } from 'react-native';
 import { RText, RStack } from '@packrat/ui';
-import { useLargeCard } from 'hooks/card/useLargeCard';
+import { useLargeCard } from 'app/hooks/card/useLargeCard';
 
 /**
  * Generate the function comment for the given function body.

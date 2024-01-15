@@ -1,5 +1,5 @@
 import React from 'react';
-import useCustomStyles from 'hooks/useCustomStyles';
+import useCustomStyles from 'app/hooks/useCustomStyles';
 import { Switch } from 'tamagui';
 import { View } from 'react-native';
 import {
@@ -12,8 +12,8 @@ import {
   RInput,
 } from '@packrat/ui';
 import { AntDesign } from '@expo/vector-icons';
-import DropdownComponent from 'components/Dropdown';
-import { useFeedSearchFilter } from 'hooks/feed/feedComponent';
+import DropdownComponent from 'app/components/Dropdown';
+import { useFeedSearchFilter } from 'app/hooks/feed/feedComponent';
 
 const FeedSearchFilter = ({
   feedType,
