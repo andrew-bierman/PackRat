@@ -1,7 +1,7 @@
 const { withExpo } = require('@expo/next-adapter');
 const { withTamagui } = require('@tamagui/next-plugin');
 const { join } = require('path');
-
+const webpack = require('webpack');
 const boolVals = {
   true: true,
   false: false,
@@ -79,7 +79,8 @@ const nextConfig = function () {
       "expo-status-bar",
       "expo-system-ui",
       "expo-web-browser",
-    ],    
+      "@tanstack/react-query"
+    ],
     experimental: {
       scrollRestoration: true,
     },
@@ -104,6 +105,11 @@ const nextConfig = function () {
         ],
         use: options.defaultLoaders.babel,
       });
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        'react-native': 'react-native-web',
+      };
+      config.resolve.alias['react-native-web/Libraries/Image/AssetRegistry'] = require.resolve('react-native-web/dist/modules/AssetRegistry');
       return config;
     },
   };
