@@ -1,8 +1,7 @@
 import { publicProcedure } from '../../trpc';
 import * as validator from '../../middleware/validators/index';
 import { User } from '../../drizzle/methods/User';
-import * as jwt from 'jsonwebtoken';
-
+import { validatePassword, hashPassword } from '../../utils/user';
 /**
  * Resets the user's password.
  * @param {Object} req - The request object.
@@ -34,17 +33,10 @@ export function resetPasswordRoute() {
       const { resetToken, password } = opts.input;
       const { env }: any = opts.ctx;
       const JWT_SECRET = env.JWT_SECRET;
-      const user = new User();
-      const userDoc: any = await jwt.verify(resetToken, JWT_SECRET);
-      if (!userDoc?.id) {
-        throw new Error('Invalid token');
-      }
-      await user.update(
-        {
-          password,
-        },
-        userDoc.id,
-      );
+      const userClass = new User();
+      const user = await userClass.validateResetToken(resetToken, JWT_SECRET);
+      const hashedPassword = await hashPassword(JWT_SECRET, validatePassword(password))  
+      await userClass.update({ id: user.id, password: hashedPassword });
       return 'Successfully reset password';
     });
 }

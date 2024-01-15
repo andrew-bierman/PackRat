@@ -31,7 +31,7 @@ CREATE TABLE `item` (
 --> statement-breakpoint
 CREATE TABLE `item_category` (
 	`id` text PRIMARY KEY NOT NULL,
-	`name` text,
+	`name` text NOT NULL,
 	`created_at` text DEFAULT CURRENT_TIMESTAMP,
 	`updated_at` text DEFAULT CURRENT_TIMESTAMP
 );
@@ -41,7 +41,7 @@ CREATE TABLE `item_owners` (
 	`owner_id` text,
 	PRIMARY KEY(`item_id`, `owner_id`),
 	FOREIGN KEY (`item_id`) REFERENCES `item`(`id`) ON UPDATE no action ON DELETE set null,
-	FOREIGN KEY (`owner_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE set null
+	FOREIGN KEY (`owner_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
 CREATE TABLE `item_packs` (
@@ -66,7 +66,7 @@ CREATE TABLE `pack` (
 	`id` text PRIMARY KEY NOT NULL,
 	`name` text NOT NULL,
 	`owner_id` text,
-	`is_public` integer,
+	`is_public` integer DEFAULT false,
 	`grades` text DEFAULT '{"weight":"","essentialItems":"","redundancyAndVersatility":""}',
 	`scores` text DEFAULT '{"weightScore":0,"essentialItemsScore":0,"redundancyAndVersatilityScore":0}',
 	`type` text DEFAULT 'pack',
@@ -151,7 +151,7 @@ CREATE TABLE `user_favorite_packs` (
 	`user_id` text,
 	`pack_id` text,
 	PRIMARY KEY(`pack_id`, `user_id`),
-	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE set null,
+	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade,
 	FOREIGN KEY (`pack_id`) REFERENCES `pack`(`id`) ON UPDATE no action ON DELETE set null
 );
 --> statement-breakpoint

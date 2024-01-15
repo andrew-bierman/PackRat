@@ -2,8 +2,6 @@ import { publicProcedure } from '../../trpc';
 import { UserNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { User } from '../../drizzle/methods/User';
-import { eq } from 'drizzle-orm';
-import { user as UserTable } from '../../db/schema';
 
 // Middleware to check if user is authenticated
 // export const isAuthenticated = async (req, res, next) => {
@@ -40,9 +38,8 @@ import { user as UserTable } from '../../db/schema';
 
 export function getUsersRoute() {
   return publicProcedure.query(async (opts) => {
-
-    const users = await new User().findMany();
-
+    const userClass = new User();
+    const users = await userClass.findMany();
     return users;
   });
 }
