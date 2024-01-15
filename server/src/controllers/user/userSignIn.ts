@@ -22,6 +22,7 @@ export function userSignInRoute() {
     const { input } = opts;
     const user: any = await (User as any).findByCredentials(input);
     await user.generateAuthToken();
+    console.log(user)
     return user;
   });
 }

@@ -1,5 +1,4 @@
 "use client"
-
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import {
   persistReducer,
@@ -79,23 +78,22 @@ const persistConfig: PersistConfig<RootState> = {
 };
 
 // create persisted reducer
-const persistedReducer = persistReducer(persistConfig, rootReducer);
+// const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const store = configureStore({
-  reducer: persistedReducer,
-  // TODO: add back once next js is working properly
-  // middleware: (getDefaultMiddleware) =>
-  //   getDefaultMiddleware({
-  //     serializableCheck: {
-  //       // Ignore these action types
-  //       ignoredActions: ['persist/PERSIST', 'persist/REHYDRATE'],
-  //     },
-  //   }).concat(apiMessageMiddleware),
+  reducer: rootReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        // Ignore these action types
+        ignoredActions: ['persist/PERSIST'],
+      },
+    }).concat(apiMessageMiddleware),
 });
 
 export type AppDispatch = typeof store.dispatch;
 
-// const persistor = persistStore(store);  // TODO: add back once next js is working properly
+// const persistor = persistStore(store); 
 
 export { store,
   //  persistor 
