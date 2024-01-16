@@ -2,7 +2,7 @@ import { useForm, type UseFormReturn } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import * as WebBrowser from 'expo-web-browser';
 import { signIn } from '../../store/authStore';
-import { useSession } from '../../context/auth';
+import { useSession } from '../../context/Auth/SessionProvider';
 WebBrowser.maybeCompleteAuthSession();
 
 interface UserForm {

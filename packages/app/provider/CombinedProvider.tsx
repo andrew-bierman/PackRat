@@ -1,6 +1,6 @@
-"use client";
+'use client';
 import React from 'react';
-import { SessionProvider } from '../context/auth';
+import { SessionProvider } from '../context/Auth/SessionProvider';
 import { ThemeProvider } from '../context/theme';
 import { TrpcTanstackProvider } from './TrpcTanstackProvider';
 import dynamic from 'next/dynamic';
@@ -17,6 +17,6 @@ export function CombinedProvider({ children }: { children: React.ReactNode }) {
           <ThemeProvider>{children}</ThemeProvider>
         </SessionProvider>
       </TrpcTanstackProvider>
-     </ReduxProvider>
+    </ReduxProvider>
   );
 }
