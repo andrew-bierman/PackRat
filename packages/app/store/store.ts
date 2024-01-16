@@ -32,6 +32,7 @@ import userStore from './userStore';
 import offlineQueue from './offlineQueue';
 import progressReducer from './progressStore';
 import { type Reducer } from 'react';
+import storage from './customStorage';
 
 // combine reducers
 const rootReducer = combineReducers({
@@ -59,29 +60,19 @@ const rootReducer = combineReducers({
 });
 export type RootState = ReturnType<typeof rootReducer>;
 
-let storage;
-if (typeof window !== 'undefined') {
-  console.log('Using localStorage in web environment');
-  // Use localStorage in web environment
-  storage = window.localStorage;
-} else {
-  console.log('Using AsyncStorage in React Native environment');
-  // Use AsyncStorage in React Native environment
-  storage = require('@react-native-async-storage/async-storage').default;
-}
 
 // configure persist store and whitelist reducers
 const persistConfig: PersistConfig<RootState> = {
   key: 'root',
-  storage,
+  storage: storage,
   whitelist: ['auth', 'globalItems', 'offlineQueue'], // add reducers to persist here
 };
 
 // create persisted reducer
-// const persistedReducer = persistReducer(persistConfig, rootReducer);
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const store = configureStore({
-  reducer: rootReducer,
+  reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
@@ -93,8 +84,9 @@ const store = configureStore({
 
 export type AppDispatch = typeof store.dispatch;
 
-// const persistor = persistStore(store); 
+const persistor = persistStore(store);
 
-export { store,
-  //  persistor 
-  };
+export {
+  store,
+  persistor
+};

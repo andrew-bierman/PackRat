@@ -4,7 +4,7 @@ import { Provider as ReduxStoreProvider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import {
   store,
-  // persistor
+  persistor
 } from '../../store/store';
 
 export default function ReduxProvider({
@@ -12,11 +12,11 @@ export default function ReduxProvider({
 }){
   return (
     <ReduxStoreProvider store={store}>
-      {/* <PersistGate loading={null}
+      <PersistGate loading={null}
         persistor={persistor}
-      > */}
+      >
         {children}
-      {/* </PersistGate> */}
+      </PersistGate>
     </ReduxStoreProvider>
   );
 };
