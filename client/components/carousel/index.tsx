@@ -54,7 +54,7 @@ const Carousel: React.FC<CarouselProps> = ({ children = [], itemWidth }) => {
         ref={scrollViewRef}
         horizontal
         scrollEnabled={Platform.OS === 'web'}
-        gestureEnabled={false}
+     //   gestureEnabled={false}
         style={styles.carousel}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ flexDirection: 'row' }}

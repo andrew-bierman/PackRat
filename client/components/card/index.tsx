@@ -1,18 +1,19 @@
 import React, { useRef, useState, useEffect } from 'react';
 import {
-  RStack,
-  RSeparator,
-  RText,
-  useToastController,
-  ToastViewport,
-  NativeToast,
-} from '@packrat/ui';
+  VStack,
+  Box,
+  Divider,
+  IconButton,
+  Text,
+  Menu,
+  ThreeDotsIcon,
+} from 'native-base';
 import {
+  StyleSheet,
   TouchableOpacity,
   Clipboard,
   TextInput,
   Pressable,
-  View,
 } from 'react-native';
 import { EditableInput } from '../EditableText';
 import { theme } from '../../theme';
@@ -20,26 +21,25 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter, Link } from 'expo-router';
 import { ThreeDotsMenu } from '../ThreeDotsMenu';
-import useTheme from '../../hooks/useTheme';
+import UseTheme from '../../hooks/useTheme';
+import { InformUser } from '../../utils/ToastUtils';
 import { SearchItem } from '../item/searchItem';
 import Loader from '../Loader';
-import useCustomStyles from '~/hooks/useCustomStyles';
 
 interface CustomCardProps {
   title: string;
   content: React.ReactNode;
   footer: React.ReactNode;
   link?: string;
-  type: 'pack' | 'trip'; // Assuming type can only be 'pack' or 'trip'
-  destination?: string; // Assuming destination is optional
-  data?: any; // Adjust the type based on the actual structure of data
-}
-
-interface Theme {
-  currentTheme: {
-    colors: {
-      card: string;
+  type: 'pack' | 'trip';
+  destination: string;
+  data: {
+    owner_id: {
+      _id: string;
+      username?: string; // Add this line if 'username' is optional
+      // Add other properties if needed
     };
+    owners?: Array<{ name: string }> | null; // Replace with the actual type of owners
   };
 }
 
@@ -53,20 +53,19 @@ const CustomCard: React.FC<CustomCardProps> = ({
   data,
 }) => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    useTheme();
-  const styles = useCustomStyles(loadStyles);
-  const [isCopied, setIsCopied] = useState<boolean>(false);
-  const [editTitle, setEditTitle] = useState<boolean>(false);
-  const titleRef = useRef<TextInput>(null);
+    UseTheme();
+  const [isCopied, setIsCopied] = useState(false);
+  const [editTitle, setEditTitle] = useState(false);
+  const titleRef = useRef(null);
   const dispatch = useDispatch();
   const router = useRouter();
   const isLoading = useSelector((state: any) => state.singlePack.isLoading);
   const user = useSelector((state: any) => state.auth.user);
-  const userId: string = user._id;
-  const toast = useToastController();
+  const userId = user._id;
 
   const handleCopyLink = () => {
-    Clipboard.setString(link || ''); // Make sure link is not undefined
+    Clipboard.setString(link);
+
     setIsCopied(true);
 
     const resetCopyStateTimeout = setTimeout(() => {
@@ -76,14 +75,27 @@ const CustomCard: React.FC<CustomCardProps> = ({
     return () => clearTimeout(resetCopyStateTimeout);
   };
 
-  if (!data) return null;
-
   if (type === 'pack') {
     return (
-      <View style={{ alignSelf: 'center', borderRadius: 10, ...styles.mainContainer }}>
-         <RStack style={{ width: '100%', gap: '30px' }}>
-          <View style={{ padding: '15px', paddingBottom: '0px', flexDirection: 'row',justifyContent:'space-between', alignItems: 'center'}}>
-            <View>
+      <Box
+        style={styles().mainContainer}
+        alignSelf="center"
+        alignItems={['center', 'center', 'flex-start', 'flex-start']}
+        w={['100%', '100%', '100%', '90%']}
+        flexDirection={['column', 'column', 'row', 'row']}
+        rounded="lg"
+        flexGrow={1}
+      >
+        {isLoading && <Loader />}
+        <VStack space="4" width="100%" divider={<Divider />}>
+          <Box
+            px="4"
+            pt="4"
+            flexDirection="row"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Box>
               <EditableInput
                 data={data}
                 title={title}
@@ -92,11 +104,11 @@ const CustomCard: React.FC<CustomCardProps> = ({
                 titleRef={titleRef}
                 loading={isLoading}
               />
-            </View>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <View style={{ marginRight: '20px', marginLeft: '20px' }}>
+            </Box>
+            <Box flexDirection="row" alignItems="center">
+              <Box mx="5">
                 <Link href={`/profile/${data.owner_id}`}>
-                  <RText>
+                  <Text>
                     {user._id === data.owner_id
                       ? 'Your Profile'
                       : `View ${
@@ -104,35 +116,36 @@ const CustomCard: React.FC<CustomCardProps> = ({
                             ? data.owners[0].name
                             : 'Profile'
                         }`}
-                  </RText>
+                  </Text>
                 </Link>
-              </View>
+              </Box>
               {link && (
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Box
+                  flexDir={'row'}
+                  style={{
+                    alignItems: 'center',
+                  }}
+                >
                   {isCopied ? (
-                    <View
-                      style={{ flexDirection: 'row', alignItems: 'center' }}
-                    >
+                    <Box flexDirection="row" alignItems="center">
                       <MaterialCommunityIcons
                         name="check"
                         size={24}
                         color="green"
                         onPress={handleCopyLink}
                       />
-                      <RText color="green">Copied</RText>
-                    </View>
+                      <Text color="green">Copied</Text>
+                    </Box>
                   ) : (
-                    <View
-                      style={{ flexDirection: 'row', alignItems: 'center' }}
-                    >
+                    <Box flexDirection="row" alignItems="center">
                       <MaterialCommunityIcons
                         name="link"
                         size={24}
                         color="black"
                         onPress={handleCopyLink}
                       />
-                      <RText color="black">Copy</RText>
-                    </View>
+                      <Text color="black">Copy</Text>
+                    </Box>
                   )}
                   {userId === data.owner_id && (
                     <ThreeDotsMenu
@@ -141,56 +154,60 @@ const CustomCard: React.FC<CustomCardProps> = ({
                       setEditTitle={setEditTitle}
                     />
                   )}
-                </View>
+                </Box>
               )}
-            </View>
-          </View>
-          <RSeparator />
-          <View style={{
-              alignItems: 'center',
-              justifyContent: 'center',
-              paddingRight: '16px',
-              paddingLeft: '16px',
-            }}
-          >
-            <SearchItem placeholder={'Search Item'} />
-          </View>
-          <RSeparator />
-          <View
+            </Box>
+          </Box>
+          <Box
+            px="4"
             style={{
               alignItems: 'center',
               justifyContent: 'center',
-              paddingRight: '16px',
-              paddingLeft: '16px',
+            }}
+          >
+            <SearchItem placeholder={'Search Item'} />
+          </Box>
+          <Box
+            px="4"
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
           >
             {content}
-          </View>
-          <RSeparator />
-          <View style={{ padding: '16px', paddingTop: '0' }}>{footer}</View>
-        </RStack>
-      </View>
+          </Box>
+          <Box px="4" pb="4">
+            {footer}
+          </Box>
+        </VStack>
+      </Box>
     );
   }
 
   if (type === 'trip') {
     return (
-      <View style={{ alignSelf: 'center', borderRadius: 10, ...styles.mainContainer }}>
-         <RStack style={{ width: '100%', gap: '30px' }}>
-          <View
-            style={{
-              padding: '15px',
-              paddingBottom: '0px',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
+      <Box
+        style={styles().mainContainer}
+        alignSelf="center"
+        alignItems={['center', 'center', 'flex-start', 'flex-start']}
+        w={['100%', '100%', '100%', '90%']}
+        flexDirection={['column', 'column', 'row', 'row']}
+        rounded="lg"
+        flexGrow={1}
+      >
+        <VStack space="4" width="100%" divider={<Divider />}>
+          <Box
+            px="4"
+            pt="4"
+            flexDirection="row"
+            justifyContent="space-between"
+            alignItems="center"
           >
-            <View>{title}</View>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <View style={{ marginRight: '20px', marginLeft: '20px' }}>
+            <Box></Box>
+            <Box flexDirection="row" alignItems="center">
+              <Box mx="5">
                 <Link href={`/profile/${data.owner_id && data.owner_id._id}`}>
-                  <RText>
+                  <Text>
                     {user._id === data.owner_id
                       ? 'Your Profile'
                       : `View ${
@@ -198,64 +215,59 @@ const CustomCard: React.FC<CustomCardProps> = ({
                             ? '@' + data.owner_id.username
                             : 'Profile'
                         }`}
-                  </RText>
+                  </Text>
                 </Link>
-              </View>
+              </Box>
               {link && (
-                <View>
+                <Box>
                   {isCopied ? (
-                    <View
-                      style={{ flexDirection: 'row', alignItems: 'center' }}
-                    >
+                    <Box flexDirection="row" alignItems="center">
                       <MaterialCommunityIcons
                         name="check"
                         size={24}
                         color="green"
                         onPress={handleCopyLink}
                       />
-                      <RText color="green">Copied</RText>
-                    </View>
+                      <Text color="green">Copied</Text>
+                    </Box>
                   ) : (
-                    <View
-                      style={{ flexDirection: 'row', alignItems: 'center' }}
-                    >
+                    <Box flexDirection="row" alignItems="center">
                       <MaterialCommunityIcons
                         name="link"
                         size={24}
                         color="black"
                         onPress={handleCopyLink}
                       />
-                      <RText color="black">Copy</RText>
-                    </View>
+                      <Text color="black">Copy</Text>
+                    </Box>
                   )}
-                </View>
+                </Box>
               )}
-            </View>
-          </View>
-          <RSeparator />
-          <View
+            </Box>
+          </Box>
+          <Box
+            px="4"
+            pb="4"
             style={{
               alignItems: 'center',
               justifyContent: 'center',
-              paddingRight: '16px',
-              paddingLeft: '16px',
             }}
           >
             {content}
-          </View>
-          <RSeparator />
-          <View style={{ padding: '16px', paddingTop: '0' }}>{footer}</View>
-        </RStack>
-      </View>
+          </Box>
+          <Box px="4" pb="4">
+            {footer}
+          </Box>
+        </VStack>
+      </Box>
     );
   }
-
-  return null; // Handle other types or return null if type is not recognized
 };
 
-const loadStyles = (theme: Theme) => {
-  const { currentTheme } = theme;
-  return {
+const styles = () => {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    UseTheme();
+  return StyleSheet.create({
     mainContainer: {
       backgroundColor: currentTheme.colors.card,
       flex: 1,
@@ -266,8 +278,7 @@ const loadStyles = (theme: Theme) => {
       paddingRight: 25,
       paddingTop: 15,
       paddingBottom: 15,
-      marginBottom: 20,
-      border: 1,
+      border: '1',
     },
     containerMobile: {
       backgroundColor: currentTheme.colors.card,
@@ -277,7 +288,7 @@ const loadStyles = (theme: Theme) => {
       alignItems: 'center',
       padding: 15,
     },
-  };
+  });
 };
 
 export default CustomCard;

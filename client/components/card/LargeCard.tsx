@@ -1,31 +1,31 @@
 import React from 'react';
-import { View, Platform, ViewStyle, TextStyle } from 'react-native';
-import { RText, RStack, Theme } from '@packrat/ui';
+import { Box, Text, Stack } from 'native-base';
+import { RText } from '@packrat/ui';
+import { Platform } from 'react-native';
 import { useSelector } from 'react-redux';
-import useTheme from '../../hooks/useTheme'; // Import Theme type if available
+import useTheme from '../../hooks/useTheme';
+
+import { theme } from '../../theme';
 import useCustomStyles from '~/hooks/useCustomStyles';
 
-// Define the type for the container styles
-interface ContainerStyles {
-  mutualStyles: ViewStyle;
-  containerMobile: ViewStyle;
-  searchContainer: ViewStyle;
-  mapCard: ViewStyle;
-}
-
-// Define the type for the LargeCard props
 interface LargeCardProps {
-  title?: string;
+  title: string;
   Icon?: React.ComponentType<any>;
   ContentComponent?: React.ComponentType<any>;
-  contentProps?: any;
+  contentProps?: object;
   type: 'search' | 'map' | 'mobile';
-  customStyle?: ViewStyle;
+  customStyle?: object;
   children?: React.ReactNode;
 }
 
-// Retrieve the appropriate container style based on the provided type
-const getContainerStyle = (type: LargeCardProps['type'], styles: ContainerStyles) => {
+/**
+ * Retrieves the appropriate container style based on the provided type.
+ *
+ * @param {string} type - The type of container style to retrieve.
+ * @return {Object} The container style object.
+ */
+const getContainerStyle = (type: 'search' | 'map' | 'mobile') => {
+  const styles = useCustomStyles(loadStyles);
   switch (type) {
     case 'search':
       return styles.searchContainer;
@@ -38,28 +38,13 @@ const getContainerStyle = (type: LargeCardProps['type'], styles: ContainerStyles
   }
 };
 
-// Define the type for the styles loaded by the loadStyles function
-interface LoadedStyles {
-  backgroundColor: string;
-  flex?: number;
-  gap?: number;
-  justifyContent?: 'space-between';
-  alignItems?: 'center';
-  textAlign?: 'center';
-  padding: number;
-  paddingHorizontal?: number;
-  paddingVertical?: number;
-  flexDirection?: 'column';
-  marginBottom?: number;
-  height?: number | string;
-  overflow?: 'hidden';
-}
-
-// Define the type for the loadStyles function
-type LoadStylesFunction = (theme: Theme) => ContainerStyles;
-
-// Define the LargeCard component
-export default function LargeCard({
+/**
+ * Generate the function comment for the given function body.
+ *
+ * @param {LargeCardProps} props - The props object containing the function parameters.
+ * @return {React.Component} The rendered large card component.
+ */
+const LargeCard: React.FC<LargeCardProps> = ({
   title,
   Icon,
   ContentComponent,
@@ -67,25 +52,24 @@ export default function LargeCard({
   type,
   customStyle,
   children,
-}: LargeCardProps) {
-  const currentShape = useSelector((state) => state.search.selectedSearchResult);
+}) => {
+  const currentShape = useSelector(
+    (state) => state.search.selectedSearchResult,
+  );
+
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
-  const containerStyles: ContainerStyles = useCustomStyles(loadStyles);
-
-  // Retrieve the appropriate container style based on the provided type
-  const containerStyle = customStyle || getContainerStyle(type, containerStyles);
+  const containerStyle = customStyle || getContainerStyle(type);
 
   return (
-    <RStack
-      style={{
-        alignSelf: 'center',
-        width: '90%',
-        borderRadius: 8,
-        ...containerStyle,
-      }}
+    <Stack
+      alignSelf="center"
+      w={['100%', '100%', '100%', '90%']}
+      direction={['column', 'column', 'row', 'row']}
+      rounded={['none', 'none', 'md', 'lg']}
+      style={containerStyle}
     >
-      <View
+      <Box
         style={{
           flexDirection: 'row',
           gap: 15,
@@ -94,24 +78,22 @@ export default function LargeCard({
         }}
       >
         {Icon ? <Icon /> : null}
-        <RText
-          style={{
+        <RText style={{
             color: currentTheme.colors.textPrimary,
             fontSize: currentTheme.font.size,
             fontWeight: 600,
           }}
         >
-          {title && <RText>{title}</RText>}
+          {title && <Text>{title}</Text>}
         </RText>
-      </View>
+      </Box>
       {ContentComponent ? <ContentComponent {...contentProps} /> : null}
       {children}
-    </RStack>
+    </Stack>
   );
-}
+};
 
-// Define the loadStyles function with appropriate types
-const loadStyles: LoadStylesFunction = (theme) => {
+const loadStyles = (theme: any) => {
   const { currentTheme } = theme;
 
   return {
@@ -142,7 +124,7 @@ const loadStyles: LoadStylesFunction = (theme) => {
       flex: 1,
       paddingHorizontal: 60,
       paddingVertical: 70,
-      height: Platform.OS === 'web' ? 450 : '100%',
+      height: Platform.OS === 'web' ? '450px' : '100%',
     },
     mapCard: {
       backgroundColor: currentTheme.colors.card,
@@ -152,8 +134,10 @@ const loadStyles: LoadStylesFunction = (theme) => {
       padding: currentTheme.size.cardPadding,
       paddingHorizontal: currentTheme.padding.paddingInside,
       marginBottom: 20,
-      height: Platform.OS === 'web' ? 650 : '100%',
+      height: Platform.OS === 'web' ? '650px' : '100%',
       overflow: 'hidden',
     },
   };
 };
+
+export default LargeCard;

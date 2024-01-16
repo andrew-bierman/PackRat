@@ -5,6 +5,7 @@ import useCustomStyles from '~/hooks/useCustomStyles';
 interface ScrollButtonProps {
   direction: 'left' | 'right'; // Define the valid values for direction
   onPress: () => void; // Define the type for the onPress function
+  disabled: boolean;
 }
 
 const ScrollButton: React.FC<ScrollButtonProps> = ({ direction, onPress }) => {
