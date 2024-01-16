@@ -34,6 +34,7 @@
     "@packrat/ui": "*",
     "@packrat/validations": "*",
     "@react-native-async-storage/async-storage": "^1.21.0",
+    "@react-native-community/clipboard": "^1.5.1",
     "@react-native-community/geolocation": "^3.0.6",
     "@react-native-community/netinfo": "^9.4.1",
     "@react-native-google-signin/google-signin": "^9.0.2",
