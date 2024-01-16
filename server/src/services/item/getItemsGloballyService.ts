@@ -9,11 +9,11 @@ import Item from '../../models/itemModel';
 export const getItemsGloballyService = async (
   reqlimit: any,
   reqpage: any,
-  searchString: string,
 ) => {
+  try {
   const totalItems = await Item.countDocuments({
     global: true,
-    name: { $regex: searchString, $options: 'i' },
+    name: { $regex: '', $options: 'i' },
   });
   const limit = Number(reqlimit) || totalItems;
   const totalPages = Math.ceil(totalItems / limit);
@@ -33,4 +33,7 @@ export const getItemsGloballyService = async (
     page,
     totalPages,
   };
+  } catch (error) {
+    console.error("Error counting documents:", error);
+  }
 };
