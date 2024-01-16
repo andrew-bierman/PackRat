@@ -12,7 +12,7 @@ import { type Item as IItem } from '../../db/schema';
  */
 export const searchItemsByNameService = async (
   name: string,
-): Promise<Array<IItem>> => {
+): Promise<IItem[]> => {
   const itemClass = new Item();
   const items = await itemClass.findItemsByName(name);
   return items;

@@ -107,14 +107,27 @@ The main apps are:
 - `packages` shared packages across apps
   - `ui` includes your custom UI kit that will be optimized by Tamagui
   - `app` you'll be importing most files from `app/`
-    - `features` (don't use a `screens` folder. organize by feature.)
+    - `features` (don't use a `screens` folder. organize by feature.) [pending]
     - `provider` (all the providers that wrap the app, and some no-ops for Web.)
+    - `api` - intended to be our services, but tRPC eliminated a lot of this need due to custom hooks. [mostly deprecated]
+    - `assets` - images and branding
+    - `auth` - auth provider and hook, currently set up for expo router auth. Once we have next js config done, will refactor to support next js auth somehow
+    - `components` - built components from our primitive ui elements (root/packages/ui), and custom logic hooks (/hooks)
+    - `config` - axios config, we have almost no axios needs with trpc. Once fully migrated away this will be removed.
+    - `constants` - strings and arrays that don’t change
+    - `context` - all react context stuff
+    - `hooks` - custom hooks for logic and data fetching with trpc
+    - `media` - media query in react native config
+    - `public` - web only assets like favicon
+/store - redux store. TRPC query reduced the need for a lot of these files. Will likely clean up soon.
+/theme - tracks dark and light mode theming logic and tamagui config
+/utils - utility functions that can be reused
 
 ## UI Kit
 
 Note we're following the [design systems guide](https://tamagui.dev/docs/guides/design-systems) and creating our own package for components.
 
-See `packages/ui` named `@my/ui` for how this works.
+See `packages/ui` named `@packrat/ui` for how this works.
 
 ## 🆕 Add new dependencies
 
@@ -186,7 +199,7 @@ cd PackRat
 
 3. Set up the environment variables for the client and server.
    - If you have access to the development env files, use those. Otherwise, replace the values with your own.
-   - See the `.env.example` files in the `client` and `server` directories for the necessary environment variables.
+   - See the `.env.example` files in the `apps/expo` and `server` directories for the necessary environment variables.
 
 #### Automated Setup 🛠️
 
@@ -199,10 +212,10 @@ yarn setup
 
 1. Navigate to the `PackRat` directory if you are not already there.
 
-2. Navigate to the `client` directory.
+2. Navigate to the `apps/expo` directory.
 
 ```
-cd client
+cd apps/expo
 ```
 
 - Note that for the client to run, you need to also make the following changes:

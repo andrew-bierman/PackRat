@@ -1,7 +1,7 @@
 import { eq } from 'drizzle-orm';
 import { createDb } from '../../db/client';
 import {
-  InsertItemCategory,
+  type InsertItemCategory,
   itemCategory as ItemCategoryTable,
 } from '../../db/schema';
 import { getDB } from '../../trpc/context';

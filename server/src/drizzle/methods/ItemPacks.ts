@@ -1,6 +1,9 @@
 import { eq, and } from 'drizzle-orm';
 import { createDb } from '../../db/client';
-import { itemPacks as ItemPacksTable, InsertItemPack } from '../../db/schema';
+import {
+  itemPacks as ItemPacksTable,
+  type InsertItemPack,
+} from '../../db/schema';
 import { getDB } from '../../trpc/context';
 
 export class ItemPacks {

@@ -19,9 +19,11 @@ export const addPackService = async (name, owner_id) => {
   };
 
   // Check if a pack with the same name already exists
-  const existingPack = await packClass.findUniquePack({ where: (eq(pack.name, name)) });
+  const existingPack = await packClass.findUniquePack({
+    where: eq(pack.name, name),
+  });
 
-  console.log("existingPack", existingPack);
+  console.log('existingPack', existingPack);
   if (existingPack) {
     // A pack with the same name already exists
     throw new Error('A pack with the same name already exists');

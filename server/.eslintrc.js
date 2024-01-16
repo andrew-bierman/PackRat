@@ -1,3 +1,5 @@
+const { types } = require('util');
+
 module.exports = {
   env: {
     browser: true,
@@ -148,6 +150,7 @@ module.exports = {
         '@typescript-eslint/no-confusing-void-expression': 'off',
         '@typescript-eslint/ban-types': 'off',
         'no-unmodified-loop-condition': 'off',
+        '@typescript-eslint/no-base-to-string': 'off',
       },
       extends: [
         'plugin:@typescript-eslint/recommended',

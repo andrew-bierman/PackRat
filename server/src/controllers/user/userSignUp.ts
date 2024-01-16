@@ -55,6 +55,6 @@ export function signUpRoute() {
       STMP_EMAIL,
       SEND_GRID_API_KEY,
     );
-    return user
+    return user;
   });
 }
