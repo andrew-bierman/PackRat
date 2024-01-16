@@ -26,7 +26,7 @@ export const Navigation = () => {
             onPress={() => navigate('/')}
           >
             <View style={styles.logoWrapper}>
-              <SVGLogoComponent width={48} height={48} fill="#fff" />
+              <SVGLogoComponent width={48} fill="#fff" />
             </View>
             <Text style={styles.logoText}>PackRat</Text>
           </TouchableOpacity>
