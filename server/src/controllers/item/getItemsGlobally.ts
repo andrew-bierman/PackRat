@@ -15,7 +15,6 @@ export const getItemsGlobally = async (req, res, next) => {
     const result = await getItemsGloballyService(
       req.query.limit,
       req.query.page,
-      req.query.searchString,
     );
     res.locals.data = result;
     responseHandler(res);
@@ -38,7 +37,6 @@ export function getItemsGloballyRoute() {
       return await getItemsGloballyService(
         opts.input.limit,
         opts.input.page,
-        opts.input.searchString,
       );
     });
 }
