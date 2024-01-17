@@ -11,7 +11,6 @@ export const NavigationItem = ({ item, itemStyle, isMobileView, onSelect }) => {
     onSelect,
   );
   const { icon, text } = item;
-
   return (
     <TouchableOpacity
       style={[

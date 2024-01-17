@@ -8,6 +8,8 @@ import { Provider } from 'app/provider';
 import Head from 'next/head';
 import React from 'react';
 import type { SolitoAppProps } from 'solito';
+import { Navigation } from 'app/components/navigation'
+import { PortalProvider } from 'tamagui'
 
 function MyApp({ Component, pageProps }: SolitoAppProps) {
   return (
@@ -22,7 +24,10 @@ function MyApp({ Component, pageProps }: SolitoAppProps) {
       </Head>
       {/* Disabling provider until tamagui + next js config is complete */}
       <Provider>
-        <Component {...pageProps} />
+        <Navigation />
+        <PortalProvider>
+          <Component {...pageProps} />
+        </PortalProvider>
       </Provider>
     </>
   );

@@ -11,24 +11,23 @@ import { Platform } from 'react-native';
 
 export const useNavigationList = () => {
   const user = useAuthUser();
-
   const navigationItems = useMemo(() => {
     const additionalMenuItems = user
       ? logedInMenuItems
       : [
-          {
-            href: 'sign-in',
-            icon: 'login',
-            text: 'Login',
-            iconSource: MaterialIcons,
-          },
-          {
-            href: 'register',
-            icon: 'person-add',
-            text: 'Register',
-            iconSource: MaterialIcons,
-          },
-        ];
+        {
+          href: 'sign-in',
+          icon: 'login',
+          text: 'Login',
+          iconSource: MaterialIcons,
+        },
+        {
+          href: 'register',
+          icon: 'person-add',
+          text: 'Register',
+          iconSource: MaterialIcons,
+        },
+      ];
 
     return [...staticNavigationItems, ...additionalMenuItems];
   }, [user]);
@@ -72,13 +71,13 @@ const logedInMenuItems = [
   },
   ...(Platform.OS != 'web'
     ? [
-        {
-          href: 'maps',
-          icon: 'map',
-          text: 'Downloaded Maps',
-          iconSource: Entypo,
-        },
-      ]
+      {
+        href: 'maps',
+        icon: 'map',
+        text: 'Downloaded Maps',
+        iconSource: Entypo,
+      },
+    ]
     : []),
   {
     href: '/items',

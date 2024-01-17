@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PackContainer from './PackContainer';
 import { DetailsHeader } from '../details/header';
-import { useSearchParams } from 'solito/router';
+import { createParam } from 'solito';
 import { TableContainer } from '../pack_table/Table';
 import { fetchUserPacks, selectPackById } from '../../store/packsStore';
 import { useSelector, useDispatch } from 'react-redux';
@@ -19,10 +19,14 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useUserPacks } from 'app/hooks/packs/useUserPacks';
 import { useFetchSinglePack } from '../../hooks/packs';
 
+
+const { useParam } = createParam();
+
 export function PackDetails() {
   const searchParams = new URLSearchParams(this.location.search);
   const canCopy = searchParams.get('copy');
-  const { packId } = useSearchParams();
+  const [packId] = useParam('id');
+  console.log(packId, 'packId');
   const link = `${CLIENT_URL}/packs/${packId}`;
   const updated = useSelector((state) => state.packs.update);
   const [firstLoad, setFirstLoad] = useState(true);
