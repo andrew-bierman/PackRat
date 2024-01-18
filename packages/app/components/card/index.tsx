@@ -25,7 +25,24 @@ import { SearchItem } from '../item/searchItem';
 import Loader from '../Loader';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 
-export const CustomCard = ({
+interface CustomCardProps {
+  title: string;
+  content: React.ReactNode;
+  footer: React.ReactNode;
+  link?: string;
+  type: 'pack' | 'trip';
+  destination?: string;
+  data: {
+    owner_id: {
+      _id: string;
+      username?: string; // Add this line if 'username' is optional
+      // Add other properties if needed
+    };
+    owners?: Array<{ name: string }> | null; // Replace with the actual type of owners
+  };
+}
+
+const CustomCard: React.FC<CustomCardProps> = ({
   title,
   content,
   footer,
@@ -39,7 +56,7 @@ export const CustomCard = ({
   const styles = useCustomStyles(loadStyles);
   const [isCopied, setIsCopied] = useState(false);
   const [editTitle, setEditTitle] = useState(false);
-  const titleRef = useRef(null);
+  const titleRef = useRef<TextInput>(null); // Ref type added
   const dispatch = useDispatch();
   const router = useRouter();
   const isLoading = useSelector((state: any) => state.singlePack.isLoading);
@@ -60,13 +77,6 @@ export const CustomCard = ({
     const resetCopyStateTimeout = setTimeout(() => {
       setIsCopied(false);
     }, 2000);
-    // Style in the future
-    // toast.show('Link copied to clipboard');
-    // InformUser({
-    //   title: 'Link copied to clipboard',
-    //   placement: 'bottom',
-    //   duration: 2000,
-    // });
 
     return () => clearTimeout(resetCopyStateTimeout);
   };
@@ -179,8 +189,6 @@ export const CustomCard = ({
           <RSeparator />
           <View style={{ padding: 16, paddingTop: 0 }}>{footer}</View>
         </RStack>
-        {/*         <ToastViewport multipleToasts />
-        <NativeToast /> */}
       </View>
     );
   }
@@ -269,7 +277,7 @@ export const CustomCard = ({
   }
 };
 
-const loadStyles = (theme) => {
+const loadStyles = (theme: any) => {
   const { currentTheme } = theme;
   return {
     mainContainer: {
@@ -295,3 +303,5 @@ const loadStyles = (theme) => {
     },
   };
 };
+
+export default CustomCard;

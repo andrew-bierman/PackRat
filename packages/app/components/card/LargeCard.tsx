@@ -6,13 +6,23 @@ import useTheme from '../../hooks/useTheme';
 import { theme } from '../../theme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 
+interface LargeCardProps {
+  title: string;
+  Icon?: React.ComponentType<any>;
+  ContentComponent?: React.ComponentType<any>;
+  contentProps?: object;
+  type: 'search' | 'map' | 'mobile';
+  customStyle?: object;
+  children?: React.ReactNode;
+}
+
 /**
  * Retrieves the appropriate container style based on the provided type.
  *
  * @param {string} type - The type of container style to retrieve.
  * @return {Object} The container style object.
  */
-const getContainerStyle = (type) => {
+const getContainerStyle = (type: 'search' | 'map' | 'mobile') => {
   const styles = useCustomStyles(loadStyles);
   switch (type) {
     case 'search':
@@ -29,17 +39,10 @@ const getContainerStyle = (type) => {
 /**
  * Generate the function comment for the given function body.
  *
- * @param {Object} props - The props object containing the function parameters.
- * @param {string} props.title - The title of the large card.
- * @param {React.Component} props.Icon - The icon component of the large card.
- * @param {React.Component} props.ContentComponent - The content component of the large card.
- * @param {Object} props.contentProps - The props object for the content component.
- * @param {string} props.type - The type of the large card.
- * @param {Object} props.customStyle - The custom style object for the large card.
- * @param {React.Component} props.children - The children components of the large card.
+ * @param {LargeCardProps} props - The props object containing the function parameters.
  * @return {React.Component} The rendered large card component.
  */
-export default function LargeCard({
+const LargeCard: React.FC<LargeCardProps> = ({
   title,
   Icon,
   ContentComponent,
@@ -47,22 +50,23 @@ export default function LargeCard({
   type,
   customStyle,
   children,
-}) {
+}) => {
   const currentShape = useSelector(
     (state) => state.search.selectedSearchResult,
   );
+
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const containerStyle = customStyle || getContainerStyle(type);
 
   return (
     <RStack
-      style={{
-        alignSelf: 'center',
-        width: '90%',
-        borderRadius: 8,
-        ...containerStyle,
-      }}
+    style={{
+      alignSelf: 'center',
+      width: '90%',
+      borderRadius: 8,
+      ...containerStyle,
+    }}
     >
       <View
         style={{
@@ -73,11 +77,10 @@ export default function LargeCard({
         }}
       >
         {Icon ? <Icon /> : null}
-        <RText
-          style={{
+        <RText style={{
             color: currentTheme.colors.textPrimary,
             fontSize: currentTheme.font.size,
-            fontWeight: '600',
+            fontWeight: 600,
           }}
         >
           {title && <RText>{title}</RText>}
@@ -87,9 +90,9 @@ export default function LargeCard({
       {children}
     </RStack>
   );
-}
+};
 
-const loadStyles = (theme) => {
+const loadStyles = (theme: any) => {
   const { currentTheme } = theme;
 
   return {
@@ -120,7 +123,7 @@ const loadStyles = (theme) => {
       flex: 1,
       paddingHorizontal: 60,
       paddingVertical: 70,
-      height: Platform.OS === 'web' ? 450 : '100%',
+      height: Platform.OS === 'web' ? '450px' : '100%',
     },
     mapCard: {
       backgroundColor: currentTheme.colors.card,
@@ -130,8 +133,10 @@ const loadStyles = (theme) => {
       padding: currentTheme.size.cardPadding,
       paddingHorizontal: currentTheme.padding.paddingInside,
       marginBottom: 20,
-      height: Platform.OS === 'web' ? 650 : '100%',
+      height: Platform.OS === 'web' ? '650px' : '100%',
       overflow: 'hidden',
     },
   };
 };
+
+export default LargeCard;

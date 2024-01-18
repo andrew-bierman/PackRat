@@ -1,66 +1,59 @@
 import React from 'react';
+import { View } from 'react-native';
 import { RStack, RText } from '@packrat/ui';
 import LargeCard from '../card/LargeCard';
 import { SearchInput } from '../SearchInput';
-import { View } from 'react-native';
-import { theme } from '../../theme';
 import useTheme from '../../hooks/useTheme';
 import { useSelector, useDispatch } from 'react-redux';
 import Hero from '../hero';
 import { useRouter } from 'expo-router';
-import {
-  photonDetails,
-  processGeoJSON,
-  setSelectedSearchResult,
-} from '../../store/destinationStore';
 import { hexToRGBA } from '../../utils/colorFunctions';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 
-const HeroSection = ({ onSelect }) => {
+interface HeroSectionProps {
+  onSelect: (selectedResult: SearchResult) => void;
+}
+
+interface SearchResult {
+  properties: {
+    osm_id: number;
+    osm_type: string;
+  };
+  geometry: {
+    coordinates: [number, number];
+  };
+}
+
+const HeroSection: React.FC<HeroSectionProps> = ({ onSelect }) => {
   const dispatch = useDispatch();
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
   const router = useRouter();
 
-  /**
-   * Handles the selection of a search result.
-   *
-   * @param {Object} selectedResult - The selected search result
-   * @return {void}
-   */
-  const handleSearchSelect = async (selectedResult) => {
+  const handleSearchSelect = async (selectedResult: SearchResult) => {
     try {
-      // Set the selected search result in the Redux store
-      // dispatch(setSelectedSearchResult(selectedResult));
-
       const { osm_id, osm_type } = selectedResult.properties;
-
       const coordinates = selectedResult.geometry.coordinates;
-
       const [lon, lat] = coordinates;
 
       if (!osm_id || !osm_type) {
-        console.error(
-          'No OSM ID or OSM type found in the selected search result',
-        );
+        console.error('No OSM ID or OSM type found in the selected search result');
       } else {
         router.push({
           pathname: '/destination/query',
           params: {
             type: osm_type,
             id: osm_id,
-            // lat,
-            // lon,
           },
         });
       }
     } catch (error) {
-      console.error('errorrrrrr', error);
+      console.error('Error:', error);
     }
   };
 
-  const user = useSelector((state) => state.auth?.user);
+  const user = useSelector((state: any) => state.auth?.user);
 
   const { name } = user;
   const firstNameOrUser = name.split(' ')[0] ?? 'User';
@@ -68,11 +61,7 @@ const HeroSection = ({ onSelect }) => {
   const cardBackgroundColor = hexToRGBA(currentTheme.colors.secondaryBlue, 0.5);
 
   const bannerText =
-    firstNameOrUser !== 'User'
-      ? `Let's find a new trail, ${firstNameOrUser}`
-      : "Let's find a new trail";
-
-  // console.log("cardBackgroundColor", cardBackgroundColor)
+    firstNameOrUser !== 'User' ? `Let's find a new trail, ${firstNameOrUser}` : "Let's find a new trail";
 
   return (
     <View style={styles.banner}>
@@ -86,15 +75,13 @@ const HeroSection = ({ onSelect }) => {
       >
         <LargeCard
           customStyle={{
-            backgroundColor:
-              cardBackgroundColor || currentTheme.colors.secondaryBlue,
+            backgroundColor: cardBackgroundColor || currentTheme.colors.secondaryBlue,
             alignItems: 'center',
             justifyContent: 'center',
             width: '100%',
             height: '100%',
             padding: 50,
-          }}
-        >
+          }} title={''} type={'search'}>
           <RStack
             style={{
               width: '100%',
@@ -115,7 +102,7 @@ const HeroSection = ({ onSelect }) => {
   );
 };
 
-const loadStyles = (theme) => {
+const loadStyles = (theme: any) => {
   const { currentTheme } = theme;
   return {
     banner: {
