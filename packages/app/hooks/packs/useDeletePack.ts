@@ -1,4 +1,4 @@
-import { useRouter } from 'expo-router';
+import { useRouter } from 'solito/router';
 import { useDispatch } from 'react-redux';
 import { deletePack } from 'app/store/packsStore';
 
