@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Platform } from 'react-native';
 import ProfileContainer from 'app/screens/user/ProfileContainer';
 import { createParam } from 'solito';
+import { AuthWrapper } from 'pages/authWrapper';
 
 const { useParam } = createParam();
 
@@ -30,3 +31,7 @@ const styles = StyleSheet.create({
 });
 
 export default Profile;
+
+Profile.getLayout = function getLayout(page: any) {
+  return <AuthWrapper>{page}</AuthWrapper>;
+};

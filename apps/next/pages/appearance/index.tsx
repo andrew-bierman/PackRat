@@ -1,4 +1,5 @@
 import AppearanceContainer from 'app/screens/appearance/AppearanceContainer';
+import { AuthWrapper } from 'pages/authWrapper';
 
 export default function Appearance() {
   return (
@@ -7,3 +8,7 @@ export default function Appearance() {
     </>
   );
 }
+
+Appearance.getLayout = function getLayout(page: any) {
+  return <AuthWrapper>{page}</AuthWrapper>;
+};

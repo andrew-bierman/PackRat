@@ -12,6 +12,8 @@ import { Navigation } from 'app/components/navigation'
 import { PortalProvider } from 'tamagui'
 
 function MyApp({ Component, pageProps }: SolitoAppProps) {
+  const getLayout = Component.getLayout || ((page) => page);
+
   return (
     <>
       <Head>
@@ -26,7 +28,7 @@ function MyApp({ Component, pageProps }: SolitoAppProps) {
       <Provider>
         <Navigation />
         <PortalProvider>
-          <Component {...pageProps} />
+          {getLayout(<Component {...pageProps} />)}
         </PortalProvider>
       </Provider>
     </>

@@ -1,4 +1,5 @@
 import Settings from 'app/screens/user/Settings';
+import { AuthWrapper } from 'pages/authWrapper';
 
 export default function SettingsPage() {
   return (
@@ -7,3 +8,7 @@ export default function SettingsPage() {
     </>
   );
 }
+
+SettingsPage.getLayout = function getLayout(page: any) {
+  return <AuthWrapper>{page}</AuthWrapper>;
+};

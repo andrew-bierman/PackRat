@@ -1,5 +1,6 @@
 import React from 'react'
 import Feed from 'app/screens/feed/Feed';
+import { AuthWrapper } from 'pages/authWrapper';
 
 function Packs() {
     return (
@@ -8,3 +9,7 @@ function Packs() {
 }
 
 export default Packs
+
+Packs.getLayout = function getLayout(page: any) {
+    return <AuthWrapper>{page}</AuthWrapper>;
+};

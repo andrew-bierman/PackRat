@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as WebBrowser from 'expo-web-browser';
 import { signIn } from '../../store/authStore';
 import { useSession } from '../../context/Auth/SessionProvider';
+import { useRouter } from 'solito/router';
+
 WebBrowser.maybeCompleteAuthSession();
 
 interface UserForm {
@@ -17,6 +19,7 @@ interface UseLoginReturn {
 }
 
 export const useLogin = (): UseLoginReturn => {
+  const router = useRouter();
   const dispatch = useDispatch();
   const { sessionSignIn } = useSession();
   const form = useForm({
@@ -32,6 +35,7 @@ export const useLogin = (): UseLoginReturn => {
     dispatch(signIn({ email, password })).then(({ payload }) => {
       if (!payload) return;
       if (payload.token) {
+        router.push('/');
         sessionSignIn(payload.token);
       }
     });
