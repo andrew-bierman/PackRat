@@ -21,6 +21,7 @@
     "app": "*",
     "babel-preset-expo": "9.5.2",
     "babel-preset-react-native": "^4.0.1",
+    "memoize-one": "^6.0.0",
     "metro-react-native-babel-preset": "^0.77.0",
     "metro-react-native-babel-transformer": "^0.77.0",
     "next": "^13.5.2",

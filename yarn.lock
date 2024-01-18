@@ -22118,6 +22118,7 @@ __metadata:
     babel-plugin-module-resolver: "npm:^5.0.0"
     babel-preset-expo: "npm:9.5.2"
     babel-preset-react-native: "npm:^4.0.1"
+    memoize-one: "npm:^6.0.0"
     metro-react-native-babel-preset: "npm:^0.77.0"
     metro-react-native-babel-transformer: "npm:^0.77.0"
     next: "npm:^13.5.2"
