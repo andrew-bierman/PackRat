@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { Switch } from 'tamagui';
@@ -38,7 +38,7 @@ const FeedSearchFilter = ({
 }) => {
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
-  const debouncedSearch = debounce((query) => setSearchQuery(query), 500);
+  const [search, setSearch] = useState("")
   return (
     <View style={styles.filterContainer}>
       <View style={styles.searchContainer}>
@@ -49,8 +49,13 @@ const FeedSearchFilter = ({
           <RInput
             size="$30"
             placeholder={`Search ${feedType || 'Feed'}`}
-            // onChangeText={setSearchQuery}
-            onChangeText={debouncedSearch}
+            onChangeText={(value) => {
+              setSearch(value)
+              debounce(() => {
+                setSearchQuery(value)
+              }, 500)
+            }}
+            value={search}
           />
           <RIconButton
             backgroundColor="transparent"
