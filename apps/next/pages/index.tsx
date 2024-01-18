@@ -1,3 +1,7 @@
+import { H1 } from '@packrat/ui';
+import About from 'app/screens/about';
+
 export default function Home() {
-  return <h1>Hello World</h1>;
+  // return <H1>Hello World!</H1>;
+  return <About />;
 }

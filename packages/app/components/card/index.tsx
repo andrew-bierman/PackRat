@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useRef, useState, useEffect } from 'react';
 import {
   RStack,
@@ -305,3 +306,6 @@ const loadStyles = (theme: any) => {
 };
 
 export default CustomCard;
+=======
+export { CustomCard } from './CustomCard';
+>>>>>>> f5868ce8d10bce7515b9c63d7187b4f1f13cdf30
