@@ -1,1 +1,0 @@
-export { useProtectedRoute } from '../useProtectedRoute';

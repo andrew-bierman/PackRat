@@ -13,7 +13,7 @@ import useTheme from 'app/hooks/useTheme';
 import { signOut } from 'app/store/authStore';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { useSession } from 'app/context/auth';
+import { useSession } from 'app/context/Auth/SessionProvider';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 
 export default function Drawer() {
