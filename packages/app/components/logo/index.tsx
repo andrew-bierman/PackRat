@@ -1,12 +1,12 @@
 import * as React from 'react';
 import Svg, { Defs, G, Path } from 'react-native-svg';
 
-const SVGLogoComponent = ({
+export default function SVGLogoComponent({
   width = 963.619,
   height = 1082.069,
   fill = 'fff',
   ...props
-}) => {
+}) {
   // need to figure out how to get the dynamic viewbox and transform to work
 
   //   const viewBoxWidth = width;
@@ -16,6 +16,7 @@ const SVGLogoComponent = ({
 
   //   console.log("fill", fill);
 
+  if()
   return (
     <Svg
       width={width}
@@ -32,7 +33,7 @@ const SVGLogoComponent = ({
           fill,
         }}
         transform="translate(-1102.273 -1568.331) scale(6.88952)"
-        // transform={`translate(${translateX} ${translateY})`}
+      // transform={`translate(${translateX} ${translateY})`}
       />
       <Path
         className="st0"
@@ -41,7 +42,7 @@ const SVGLogoComponent = ({
           fill,
         }}
         transform="translate(-1102.273 -1568.331) scale(6.88952)"
-        // transform={`translate(${translateX} ${translateY})`}
+      // transform={`translate(${translateX} ${translateY})`}
       />
       <Path
         className="st0"
@@ -50,7 +51,7 @@ const SVGLogoComponent = ({
           fill,
         }}
         transform="translate(-1102.273 -1568.331) scale(6.88952)"
-        // transform={`translate(${translateX} ${translateY})`}
+      // transform={`translate(${translateX} ${translateY})`}
       />
       <Path
         className="st0"
@@ -59,9 +60,8 @@ const SVGLogoComponent = ({
           fill,
         }}
         transform="translate(-1102.273 -1568.331) scale(6.88952)"
-        // transform={`translate(${translateX} ${translateY})`}
+      // transform={`translate(${translateX} ${translateY})`}
       />
     </Svg>
   );
 };
-export default SVGLogoComponent;

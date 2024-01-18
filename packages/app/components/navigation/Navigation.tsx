@@ -1,13 +1,14 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, SafeAreaView } from 'react-native';
 import { AuthStateListener } from '../../auth/AuthStateListener';
-import SVGLogoComponent from '../../components/logo';
 import { Drawer } from './Drawer';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useIsMobileView } from 'app/hooks/common';
 import { useNavigate } from 'app/hooks/navigation';
 import { useAuthUser } from 'app/hooks/user/useAuthUser';
 import { NavigationList } from './NavigationList';
+import { Button } from 'tamagui';
+import SVGLogoComponent from '../../components/logo';
 
 export const Navigation = () => {
   const user = useAuthUser();
@@ -20,16 +21,18 @@ export const Navigation = () => {
       <View style={styles.container}>
         {user && <AuthStateListener />}
         <View style={styles.header}>
-          <TouchableOpacity
+          <Button
             key={'logo-nav'}
             style={styles.logoContainer}
             onPress={() => navigate('/')}
+            variant='outlined'
           >
-            <View style={styles.logoWrapper}>
+            {/* FIX ME */}
+            {/* <View style={styles.logoWrapper}>
               <SVGLogoComponent width={48} height={48} fill="#fff" />
-            </View>
+            </View> */}
             <Text style={styles.logoText}>PackRat</Text>
-          </TouchableOpacity>
+          </Button>
 
           {isMobileView ? (
             <Drawer />

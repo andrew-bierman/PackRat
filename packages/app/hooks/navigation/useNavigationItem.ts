@@ -15,6 +15,7 @@ export const useNavigationItem = (item, onSelect) => {
   const handleItemPress = () => {
     if (item.href === 'logout') {
       logout();
+      navigate('/');
       return;
     }
     onSelect?.();
