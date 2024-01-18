@@ -36,8 +36,9 @@ interface CustomCardProps {
     owner_id: {
       _id: string;
       username?: string; 
+      
     };
-    owners?: Array<{ name: string }> | null;
+    owners?: Array<{ name: string }> | null; 
   };
 }
 
