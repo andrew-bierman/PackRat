@@ -13,7 +13,7 @@ export const useNavigationItem = (item, onSelect) => {
   const isCurrentPage = true;
 
   const handleItemPress = () => {
-    if (item.href === 'logout') {
+    if (item.href === '/logout') {
       logout();
       navigate('/');
       return;
