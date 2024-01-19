@@ -1,15 +1,15 @@
 import 'raf/polyfill';
 import 'setimmediate';
-import '@tamagui/core/reset.css'
-import '@tamagui/polyfill-dev'
-import '@tamagui/font-inter/css/400.css'
-import 'raf/polyfill'
+import '@tamagui/core/reset.css';
+import '@tamagui/polyfill-dev';
+import '@tamagui/font-inter/css/400.css';
+import 'raf/polyfill';
 import { Provider } from 'app/provider';
 import Head from 'next/head';
 import React from 'react';
 import type { SolitoAppProps } from 'solito';
-import { Navigation } from 'app/components/navigation'
-import { PortalProvider } from 'tamagui'
+import { Navigation } from 'app/components/navigation';
+import { PortalProvider } from 'tamagui';
 
 function MyApp({ Component, pageProps }: SolitoAppProps) {
   const getLayout = Component.getLayout || ((page) => page);
@@ -17,7 +17,7 @@ function MyApp({ Component, pageProps }: SolitoAppProps) {
   return (
     <>
       <Head>
-        <title>Solito Example App</title>
+        <title>PackRat</title>
         <meta
           name="description"
           content="Expo + Next.js with Solito. By Fernando Rojo."
