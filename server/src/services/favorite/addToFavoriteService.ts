@@ -1,7 +1,6 @@
 // import { prisma } from '../../prisma';
 
 import { User } from '../../drizzle/methods/User';
-import { Pack } from '../../drizzle/methods/Pack';
 import { UserFavoritePacks } from '../../drizzle/methods/UserFavoritePacks';
 
 /**
@@ -11,18 +10,17 @@ import { UserFavoritePacks } from '../../drizzle/methods/UserFavoritePacks';
  * @param {string} userId - The ID of the user.
  * @return {Promise<void>} A promise that resolves when the operation is complete.
  */
-export const addToFavoriteService = async (packId, userId) => {
+export const addToFavoriteService = async (
+  packId: string,
+  userId: string,
+): Promise<object> => {
   const userClass = new User();
-  const packClass = new Pack();
   const userFavoritePacksClass = new UserFavoritePacks();
-  const user = await userClass.findUnique({
-    where: (users, { eq }) => eq(users.id, userId),
-    with: {
-      favoriteDocuments: true,
-    },
-  });
-
-  if (user.favoriteDocuments.includes(packId)) {
+  const user = await userClass.findUser({ userId, includeFavorites: true });
+  const packExists = user.userFavoritePacks?.find(
+    (pack: any) => pack.packId === packId,
+  );
+  if (packExists) {
     // If the pack is in the user's favorites, remove it.
     // TODO
     // await user.update({
@@ -50,6 +48,9 @@ export const addToFavoriteService = async (packId, userId) => {
     //   },
     // });
     await userFavoritePacksClass.delete(userId, packId);
+    return {
+      message: "Successfully removed the pack from the user's favorites list",
+    };
   } else {
     // If the pack is not in the user's favorites, add it.
     // await userClass.update(
@@ -66,5 +67,6 @@ export const addToFavoriteService = async (packId, userId) => {
     //   packId,
     // );
     await userFavoritePacksClass.create(userId, packId);
+    return { message: 'Successfully added the pack' };
   }
 };

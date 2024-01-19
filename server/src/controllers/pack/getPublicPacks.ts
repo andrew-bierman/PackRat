@@ -1,6 +1,4 @@
 import { publicProcedure } from '../../trpc';
-import { PackNotFoundError } from '../../helpers/errors';
-import { responseHandler } from '../../helpers/responseHandler';
 import { getPublicPacksService } from '../../services/pack/pack.service';
 import { z } from 'zod';
 

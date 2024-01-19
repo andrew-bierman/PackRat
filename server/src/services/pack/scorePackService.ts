@@ -1,4 +1,4 @@
-import { Pack } from '../../drizzle/methods/Pack';
+import { Pack } from '../../drizzle/methods/pack';
 import { calculatePackScore } from '../../utils/scorePack';
 
 /**
@@ -11,24 +11,22 @@ import { calculatePackScore } from '../../utils/scorePack';
 export async function scorePackService(packId: string) {
   try {
     const packClass = new Pack();
-    const packData = await packClass.findUniquePack({
-      where: { id: packId },
-      with: { itemDocuments: true }, // Assuming you have a relationship defined in your Prisma schema
+    const pack = await packClass.findPack({
+      id: packId,
+      includeRelated: true,
     });
 
-    if (!packData) {
+    if (!pack) {
       throw new Error('Pack not found');
     }
 
-    const packScore = calculatePackScore(packData);
+    const packScore = calculatePackScore(pack);
 
-    const updatedPack = await packClass.update(
-      {
-        scores: packScore.scores,
-        grades: packScore.grades,
-      },
-      packId,
-    );
+    const updatedPack = await packClass.update({
+      id: pack.id,
+      scores: packScore.scores,
+      grades: packScore.grades,
+    });
 
     return updatedPack;
   } catch (error) {

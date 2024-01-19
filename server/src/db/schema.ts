@@ -116,12 +116,44 @@ export const pack = sqliteTable('pack', {
   // @@map("packs"): undefined,
 });
 
+// For a feature yet to be fully implemented
+
+// export const packOwners = sqliteTable(
+//   'pack_owners',
+//   {
+//     packId: text('pack_id').references(() => pack.id, { onDelete: 'set null' }),
+//     ownerId: text('owner_id').references(() => user.id, {
+//       onDelete: 'cascade',
+//     }),
+//   },
+//   (table) => {
+//     return {
+//       pkWithCustomName: primaryKey({
+//         name: 'id',
+//         columns: [table.packId, table.ownerId],
+//       }),
+//     };
+//   },
+// );
+
+// export const packOwnersRelations = relations(packOwners, ({ one }) => ({
+//   pack: one(pack, {
+//     fields: [packOwners.packId],
+//     references: [pack.id],
+//   }),
+//   owner: one(user, {
+//     fields: [packOwners.ownerId],
+//     references: [user.id],
+//   }),
+// }));
+
 export const packRelations = relations(pack, ({ one, many }) => ({
   owner: one(user, {
     fields: [pack.owner_id],
     references: [user.id],
   }),
   userFavoritePacks: many(userFavoritePacks),
+  // packOwners: many(packOwners),
   itemPacks: many(itemPacks),
   trips: many(trip),
 }));

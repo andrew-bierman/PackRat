@@ -10,21 +10,34 @@ export class UserFavoritePacks {
   }
 
   async create(userId: string, packId: string) {
-    return (await this.createInstance())
-      .insert(userFavoritePacks)
-      .values({ userId, packId })
-      .returning();
+    try {
+      const record = (await this.createInstance())
+        .insert(userFavoritePacks)
+        .values({ userId, packId })
+        .returning();
+      return record;
+    } catch (error) {
+      throw new Error(
+        `Failed to create the user favorite pack record: ${error.message}`,
+      );
+    }
   }
 
   async delete(userId: string, packId: string) {
-    return (await this.createInstance())
-      .delete(userFavoritePacks)
-      .where(
-        and(
-          eq(userFavoritePacks.userId, userId),
-          eq(userFavoritePacks.packId, packId),
-        ),
-      )
-      .returning();
+    try {
+      return (await this.createInstance())
+        .delete(userFavoritePacks)
+        .where(
+          and(
+            eq(userFavoritePacks.userId, userId),
+            eq(userFavoritePacks.packId, packId),
+          ),
+        )
+        .returning();
+    } catch (error) {
+      throw new Errro(
+        `Failed to delete the user favorite pack record: ${error.message}`,
+      );
+    }
   }
 }

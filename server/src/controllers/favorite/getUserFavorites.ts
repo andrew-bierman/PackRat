@@ -1,11 +1,6 @@
-import { publicProcedure } from '../../trpc';
-import { UserFavoritesNotFoundError } from '../../helpers/errors';
-import { responseHandler } from '../../helpers/responseHandler';
-import { getUserFavoritesService } from '../../services/favorite/favorite.service';
-import * as validator from '../../middleware/validators/index';
-
 import { z } from 'zod';
-import { User } from '../../drizzle/methods/User';
+import { publicProcedure } from '../../trpc';
+import { getUserFavoritesService } from '../../services/favorite/favorite.service';
 
 // import { prisma } from '../../prisma';
 /**
@@ -27,15 +22,7 @@ export function getUserFavoritesRoute() {
     .input(z.object({ userId: z.string() }))
     .query(async (opts) => {
       const { userId } = opts.input;
-      const userClass = new User();
-      const user = await userClass.findUnique({
-        where: {
-          id: userId,
-        },
-        with: {
-          favoriteDocuments: true,
-        },
-      });
-      return user.favoriteDocuments;
+      const favorites = await getUserFavoritesService(userId);
+      return favorites;
     });
 }

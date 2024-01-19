@@ -1,4 +1,4 @@
-import { Pack } from '../../drizzle/methods/Pack';
+import { Pack } from '../../drizzle/methods/pack';
 
 /**
  * Deletes a pack by its ID.
@@ -6,8 +6,8 @@ import { Pack } from '../../drizzle/methods/Pack';
  * @param {string} packId - The ID of the pack to be deleted.
  * @return {Object} - An object containing a message indicating the success of the deletion.
  */
-export const deletePackService = async (packId) => {
+export const deletePackService = async (packId: string): Promise<object> => {
   const packClass = new Pack();
   await packClass.delete(packId);
-  return { message: 'pack was deleted successfully' };
+  return { message: 'Pack was deleted successfully' };
 };

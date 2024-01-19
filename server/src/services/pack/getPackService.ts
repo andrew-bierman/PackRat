@@ -1,49 +1,22 @@
-import { Pack } from '../../drizzle/methods/Pack';
+import { Pack } from '../../drizzle/methods/pack';
+import { SORT_OPTIONS, DEFAULT_SORT } from '../../utils/pack';
 
-const SORT_OPTIONS = {
-  Favorite: { favoritesCount: 'desc' },
-  Lightest: { totalWeight: 'asc' },
-  Heaviest: { totalWeight: 'desc' },
-  'Most Items': { itemsCount: 'desc' },
-  'Fewest Items': { itemsCount: 'asc' },
-  Oldest: { createdAt: 'asc' },
-  'Most Recent': { updatedAt: 'desc' },
-  'Highest Score': { scores: { totalScore: 'desc' } },
-  'Lowest Score': { scores: { totalScore: 'asc' } },
-  'A-Z': { name: 'asc' },
-  'Z-A': { name: 'desc' },
-  'Most Owners': { owners: 'desc' },
-};
-
-const DEFAULT_SORT = { createdAt: 'desc' };
-
-export const getPacksService = async (ownerId, queryBy = null) => {
+export const getPacksService = async (ownerId: string, queryBy?: string) => {
   try {
+    let packs;
     const packClass = new Pack();
-    const packs = await packClass.findMany({
-      where: (pack, { or, eq }) =>
-        or(eq(pack.owner_id, ownerId), pack.owners.has(ownerId)),
-      with: {
-        itemDocuments: {
-          columns: {
-            categoryDocument: {
-              columns: { name: true },
-            },
-          },
-        },
-        ownerDocuments: true,
-      },
-      orderBy: (pack, { asc, desc }) =>
-        SORT_OPTIONS[queryBy]
-          ? SORT_OPTIONS[queryBy](pack)
-          : DEFAULT_SORT[pack],
-    });
-
-    // packs.forEach((pack) => {
-    //   pack.ownerDocuments = pack.ownerDocuments;
-    //   pack.itemDocuments = pack.itemDocuments;
-    // });
-
+    const sortOption = queryBy ? SORT_OPTIONS[queryBy] : DEFAULT_SORT;
+    const isSortingByItems =
+      queryBy && (queryBy === 'Most Items' || queryBy === 'Fewest Items');
+    if (isSortingByItems) {
+      packs = await packClass.sortPacksByItems({queryBy, ownerId, sortItems: true});
+    } else {
+      packs = await packClass.findMany({
+        sortOption,
+        includeRelated: true,
+        ownerId,
+      });
+    }
     return packs;
   } catch (error) {
     throw new Error('Packs cannot be found: ' + error.message);

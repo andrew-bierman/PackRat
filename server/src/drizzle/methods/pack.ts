@@ -1,6 +1,6 @@
-import { eq } from 'drizzle-orm';
+import { eq, sql, asc, desc } from 'drizzle-orm';
 import { createDb } from '../../db/client';
-import { pack } from '../../db/schema';
+import { type InsertPack, pack as PackTable, itemPacks } from '../../db/schema';
 import { convertWeight } from '../../utils/convertWeight';
 import { getDB } from '../../trpc/context';
 
@@ -10,64 +10,186 @@ export class Pack {
     return dbInstance;
   }
 
-  async update(
-    data: any,
-    id: string,
-    filter = eq(pack.id, id),
-    returning = null,
-  ) {
-    return (await this.createInstance())
-      .update(pack)
-      .set(data)
-      .where(filter)
-      .returning()
-      .get();
-  }
-
-  async delete(id: string, filter = eq(pack.id, id)) {
-    return (await this.createInstance())
-      .delete(pack)
-      .where(filter)
-      .returning()
-      .get();
-  }
-
-  async findById(id: string, filter = eq(pack.id, id)) {
-    return (await this.createInstance())
-      .select()
-      .from(pack)
-      .where(filter)
-      .limit(1)
-      .get();
-  }
-
-  async findMany(filter = null) {
-    return (await this.createInstance())
-      .select()
-      .from(pack)
-      .where(filter)
-      .get();
-  }
-
-  async findUniquePack(query) {
-    try {
-      return (await this.createInstance()).query.pack.findFirst(query);
-    } catch (error) {
-      console.log('db error', error);
+  getRelations({ includeRelated, ownerId = true, completeItems = false }) {
+    if (!includeRelated) {
+      return { with: {} };
     }
+    const withRelations = {
+      ...(ownerId
+        ? { owner: { columns: { id: true, name: true, username: true } } }
+        : {}),
+      userFavoritePacks: { columns: { userId: true } },
+      itemPacks: completeItems
+        ? {
+            columns: {},
+            with: {
+              item: {
+                columns: {
+                  id: true,
+                  name: true,
+                  weight: true,
+                  quantity: true,
+                  unit: true,
+                },
+              },
+            },
+          }
+        : { columns: { itemId: true } },
+      trips: { columns: { id: true, name: true } },
+    };
+    return { with: withRelations };
   }
 
-  async create(data: any) {
+  async create(data: InsertPack) {
     try {
-      return (await this.createInstance())
-        .insert(pack)
+      const pack = (await this.createInstance())
+        .insert(PackTable)
         .values(data)
         .returning()
         .get();
+      return pack;
     } catch (error) {
-      console.log('db error', error);
+      throw new Error(`Failed to create a pack: ${error.message}`);
     }
   }
+
+  async update(data: any, filter = eq(PackTable.id, data.id)) {
+    try {
+      const updatedPack = (await this.createInstance())
+        .update(PackTable)
+        .set(data)
+        .where(filter)
+        .returning()
+        .get();
+      return updatedPack;
+    } catch (error) {
+      throw new Error(`Failed to update pack: ${error.message}`);
+    }
+  }
+
+  async delete(id: string, filter = eq(PackTable.id, id)) {
+    try {
+      const deletedPack = (await this.createInstance())
+        .delete(PackTable)
+        .where(filter)
+        .returning()
+        .get();
+      return deletedPack;
+    } catch (error) {
+      throw new Error(`Failed to delete pack: ${error.message}`);
+    }
+  }
+
+  async findPack({
+    id,
+    name,
+    includeRelated = true,
+  }: {
+    id?: string;
+    name?: string;
+    includeRelated?: boolean;
+  }) {
+    try {
+      const filter = id ? eq(PackTable.id, id) : eq(PackTable.name, name);
+      const relations = this.getRelations({
+        includeRelated,
+        completeItems: true,
+      });
+      const pack = (await this.createInstance()).query.pack.findFirst({
+        where: filter,
+        ...relations,
+      });
+      return pack;
+    } catch (error) {
+      throw new Error(`Failed to find template: ${error.message}`);
+    }
+  }
+
+  getOrderBy({
+    sortOption,
+    sortItems,
+    queryBy,
+  }: {
+    sortOption?: object;
+    sortItems?: boolean;
+    queryBy?: string;
+  }) {
+    try {
+      if (sortItems && queryBy) {
+        const itemOrder = queryBy === 'Most Items' ? 'DESC' : 'ASC';
+        const itemCountQuery = sql`(SELECT COUNT(*) FROM ${itemPacks} WHERE ${itemPacks.packId} = ${PackTable.id})`;
+        return itemOrder === 'ASC' ? asc(itemCountQuery) : desc(itemCountQuery);
+      } else {
+        const [sortField, sortOrder] = Object.entries(sortOption)[0];
+        return (pack: any) =>
+          sortOrder === 'ASC' ? asc(pack[sortField]) : desc(pack[sortField]);
+      }
+    } catch (error) {
+      throw new Error(`Failed to order by records: ${error.message}`);
+    }
+  }
+
+  async findMany(options: any) {
+    try {
+      const {
+        includeRelated = false,
+        sortOption,
+        ownerId,
+        is_public,
+      } = options;
+      const modifiedFilter = ownerId
+        ? eq(PackTable.owner_id, ownerId)
+        : is_public
+          ? eq(PackTable.is_public, is_public)
+          : null;
+      const orderByFunction = this.getOrderBy({ sortOption });
+      const relations = this.getRelations({
+        includeRelated,
+        completeItems: true,
+      });
+      const packs = (await this.createInstance()).query.pack.findMany({
+        ...(modifiedFilter && { where: modifiedFilter }),
+        orderBy: orderByFunction,
+        ...(includeRelated ? relations : {}),
+      });
+      return packs;
+    } catch (error) {
+      throw new Error(`Failed to fetch packs: ${error.message}`);
+    }
+  }
+
+  async sortPacksByItems(options: any) {
+    try {
+      const { queryBy, sortItems, is_public, ownerId } = options;
+      const modifiedFilter = ownerId
+        ? eq(PackTable.owner_id, ownerId)
+        : is_public
+          ? eq(PackTable.is_public, is_public)
+          : null;
+      const orderByFunction: any = this.getOrderBy({ sortItems, queryBy });
+      const sortedPacks = (await this.createInstance())
+        .select()
+        .from(PackTable)
+        .where(modifiedFilter)
+        .orderBy(orderByFunction)
+        .all();
+      return sortedPacks;
+    } catch (error) {
+      throw new Error(`Failed to sort packs by items: ${error.message}`);
+    }
+  }
+
+  // async sortPacksByOwner({
+  //   ownerId,
+  //   queryBy,
+  //   sortOption = DEFAULT_SORT,
+  //   isSortingByItems = false,
+  // }) {
+  //   try {
+  //   } catch (error) {
+  //     throw new Error(`Failed to sort packs by owners: ${error.message}`);
+  //   }
+  // }
 
   async computeTotalWeight(pack) {
     if (pack.itemDocuments && pack.itemDocuments.length > 0) {

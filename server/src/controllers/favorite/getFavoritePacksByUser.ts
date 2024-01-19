@@ -1,7 +1,4 @@
 import { z } from 'zod';
-import { PackNotFoundError } from '../../helpers/errors';
-import { responseHandler } from '../../helpers/responseHandler';
-
 import { getFavoritePacksByUserService } from '../../services/favorite/favorite.service';
 import { publicProcedure } from '../../trpc';
 

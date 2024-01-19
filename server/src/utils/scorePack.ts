@@ -35,7 +35,7 @@ function checkEssentialItems(packItems: any) {
     // Check if the pack contains any item that matches or partially matches any name in the array
     const matchingItem = packItems.find((packItem: any) =>
       essentialItems[item].some((itemName: string) =>
-        packItem.name.toLowerCase().includes(itemName.toLowerCase()),
+        packItem.item.name.toLowerCase().includes(itemName.toLowerCase()),
       ),
     );
 
@@ -70,15 +70,15 @@ function checkRedundancy(packItems: any) {
   let presentRedundantItems = 0;
 
   // Create a set of unique lowercase item names for efficient comparison
-  const uniquePackItems = new Set(
-    packItems.map((item: any) => item.name.toLowerCase()),
-  );
+  // const uniquePackItems = new Set(
+  //   packItems.map((item: any) => item.name.toLowerCase()),
+  // );
 
   for (const item in redundantItems) {
     // Check if the pack contains more than one item that matches or partially matches any name in the array
     const matchingItems = packItems.filter((packItem: any) =>
       redundantItems[item].some((itemName: string) =>
-        packItem.name.toLowerCase().includes(itemName.toLowerCase()),
+        packItem.item.name.toLowerCase().includes(itemName.toLowerCase()),
       ),
     );
 
@@ -104,15 +104,15 @@ function checkRedundancy(packItems: any) {
 export function calculatePackScore(packData: any) {
   console.log('Calculating pack score...');
   console.log('packData: ', packData);
-  const { itemDocuments } = packData;
+  const itemDocuments = packData.itemPacks;
   // console.log("weight: ", weight);
   // console.log('items: ', items)
 
-  const totalWeight = itemDocuments.reduce((total: number, item: any) => {
-    if (item.unit === 'lb') {
-      return total + item.weight * 16 * item.quantity; // Considering 1 lb equals 16 oz
+  const totalWeight = itemDocuments.reduce((total: number, packItem: any) => {
+    if (packItem.item.unit === 'lb') {
+      return total + packItem.item.weight * 16 * packItem.item.quantity; // Considering 1 lb equals 16 oz
     } else {
-      return total + item.weight * item.quantity;
+      return total + packItem.item.weight * packItem.item.quantity;
     }
   }, 0);
 
@@ -153,15 +153,15 @@ export function calculatePackScore(packData: any) {
 
   return {
     totalScore: roundedScore,
-    grades: {
+    grades: JSON.stringify({
       weight: weightGrade,
       essentialItems: essentialItemsGrade,
       redundancyAndVersatility: redundancyAndVersatilityGrade,
-    },
-    scores: {
+    }),
+    scores: JSON.stringify({
       weightScore,
       essentialItemsScore,
       redundancyAndVersatilityScore,
-    },
+    }),
   };
 }

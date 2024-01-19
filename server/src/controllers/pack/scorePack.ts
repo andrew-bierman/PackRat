@@ -1,5 +1,4 @@
 import { publicProcedure } from '../../trpc';
-import { UnableToScorePackError } from '../../helpers/errors';
 import { scorePackService } from '../../services/pack/pack.service';
 import * as validator from '../../middleware/validators/index';
 

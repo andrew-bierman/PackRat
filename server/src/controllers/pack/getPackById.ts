@@ -1,6 +1,4 @@
 import { publicProcedure } from '../../trpc';
-import { PackNotFoundError } from '../../helpers/errors';
-import { responseHandler } from '../../helpers/responseHandler';
 import { getPackByIdService } from '../../services/pack/pack.service';
 import * as validator from '../../middleware/validators/index';
 

@@ -1,4 +1,5 @@
-import { Pack } from '../../drizzle/methods/Pack';
+import { Pack } from '../../drizzle/methods/pack';
+import { DEFAULT_SORT } from '../../utils/pack';
 
 /**
  * Retrieves the favorite packs associated with a specific user.
@@ -6,15 +7,14 @@ import { Pack } from '../../drizzle/methods/Pack';
  * @param {string} userId - The ID of the user.
  * @return {Promise<Array<Pack>>} An array of favorite packs.
  */
-export const getFavoritePacksByUserService = async (userId) => {
+export const getFavoritePacksByUserService = async (userId: string) => {
   const packClass = new Pack();
   const packs = await packClass.findMany({
-    where: {
-      favorited_by: {
-        has: userId,
-      },
-    },
+    includeRelated: true,
+    sortOption: DEFAULT_SORT,
   });
-
-  return packs;
+  const favoritePacks = packs?.filter(
+    (pack: any) => pack.userFavoritePacks[0]?.userId === userId,
+  );
+  return favoritePacks;
 };

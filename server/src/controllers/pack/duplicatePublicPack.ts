@@ -1,4 +1,3 @@
-import { UnableToDuplicatePackError } from '../../helpers/errors';
 import { duplicatePublicPackService } from '../../services/pack/pack.service';
 import * as validator from '../../middleware/validators/index';
 import { publicProcedure } from '../../trpc';

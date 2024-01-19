@@ -1,4 +1,3 @@
-import { UnableToDeletePackError } from '../../helpers/errors';
 import { deletePackService } from '../../services/pack/pack.service';
 import * as validator from '../../middleware/validators/index';
 import { publicProcedure } from '../../trpc';

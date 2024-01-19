@@ -1,13 +1,9 @@
-import { eq } from 'drizzle-orm';
-import { Pack } from '../../drizzle/methods/Pack';
-import { pack as packSchema } from '../../db/schema';
+import { Pack } from '../../drizzle/methods/pack';
 
-export const getPackByIdService = async (packId) => {
+export const getPackByIdService = async (packId: string) => {
   try {
     const packClass = new Pack();
-    const pack = await packClass.findUniquePack({
-      where: eq(packSchema.id, packId),
-    });
+    const pack = await packClass.findPack({ id: packId });
 
     // update this code when trip related code is updated
     // const trips = await trip.findMany({
@@ -23,13 +19,7 @@ export const getPackByIdService = async (packId) => {
     // const favoritedByDocuments = pack.favoritedByDocuments
     // const ownerDocuments = pack.ownerDocuments
     // const tripDocuments = trips
-    return {
-      ...pack,
-      // ownerDocument,
-      // ownerDocuments,
-      // favoritedByDocuments,
-      // tripDocuments,
-    };
+    return pack
   } catch (error) {
     // Handle any potential errors here
     console.error(error);
