@@ -22,6 +22,7 @@
     "build:tsc": "yarn build:tsc:packages && yarn build:tsc:server",
     "build:validations": "cd packages/validations && yarn build",
     "build:web": "cd apps/next && yarn build",
+    "build:next:static": "cd apps/next && yarn build && yarn next export",
     "build": "yarn workspaces foreach --all run build",
     "check-deps": "check-dependency-version-consistency .",
     "check-types": "tsc --noEmit",
