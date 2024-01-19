@@ -18,7 +18,6 @@ import { signInWithGoogle, signUp } from '../store/authStore';
 import { InformUser } from '../utils/ToastUtils';
 import useTheme from '../hooks/useTheme';
 import { useForm } from 'react-hook-form';
-import { InputText, InputTextRules } from 'app/components/InputText';
 import { useSession } from '../context/Auth/SessionProvider';
 import { useGoogleAuth } from 'app/hooks/login';
 import { useRegisterUser } from 'app/hooks/user';
