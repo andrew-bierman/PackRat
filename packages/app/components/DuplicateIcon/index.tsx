@@ -1,7 +1,7 @@
 import React from 'react';
 import { Pressable } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { useRouter } from 'solito/router';
+import { useRouter } from 'app/hooks/router';
 
 export const DuplicateIcon = ({ link = null }) => {
   if (!link) return null;

@@ -1,4 +1,4 @@
-import { useRouter } from 'solito/router';
+import { useRouter } from 'app/hooks/router';
 import { useDispatch } from 'react-redux';
 import { updatePack } from 'app/store/packsStore';
 

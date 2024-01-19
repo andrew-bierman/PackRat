@@ -1,4 +1,4 @@
-import { useRouter as useExpoRouter } from 'solito/router';
+import { useRouter as useExpoRouter } from 'app/hooks/router';
 
 interface HrefObject {
   pathname?: string;

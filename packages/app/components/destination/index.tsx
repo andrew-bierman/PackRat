@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { Container, Text } from 'native-base';
-import {useRouter} from 'solito/router';
+import { useRouter } from 'app/hooks/router';
 import { createParam } from 'solito';
 import useTheme from '../../hooks/useTheme';
 import { theme } from '../../theme';
@@ -29,7 +29,7 @@ import { useFetchWeather, useFetchWeatherWeak } from 'app/hooks/weather';
 import { useGetDestination, useGetPhotonDetails } from 'app/hooks/destination';
 import { WeatherData } from '../weather/WeatherData';
 
-const {useParam} = createParam();
+const { useParam } = createParam();
 
 const DestinationHeader = ({ geoJSON, selectedSearchResult }) => {
   const styles = useCustomStyles(loadStyles);
@@ -87,7 +87,7 @@ const DestinationHeader = ({ geoJSON, selectedSearchResult }) => {
 export const DestinationPage = () => {
   console.log('destination page');
   const router = useRouter();
-  const [destinationId]= useParam('destinationId');
+  const [destinationId] = useParam('destinationId');
   const [id] = useParam('id');
   const [type] = useParam('type');
   const [lat] = useParam('lat');
