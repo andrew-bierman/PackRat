@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import * as WebBrowser from 'expo-web-browser';
 import { signUp } from '../../store/authStore';
 import { useSession } from '../../context/Auth/SessionProvider';
-import { useRouter } from 'solito/router';
+import { useRouter } from 'app/hooks/router';
 
 WebBrowser.maybeCompleteAuthSession();
 

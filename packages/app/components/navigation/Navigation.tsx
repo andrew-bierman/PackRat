@@ -28,6 +28,7 @@ export const Navigation = () => {
             style={styles.logoContainer}
             onPress={() => navigate('/')}
             variant="outlined"
+            chromeless
           >
             {/* FIX ME */}
             <View style={styles.logoWrapper}>

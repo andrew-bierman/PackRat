@@ -1,8 +1,16 @@
 import { useState, useEffect } from 'react';
 import { View } from 'react-native';
-import { RHeading, RStack, RButton, RText, RIconButton } from '@packrat/ui';
+import {
+  RHeading,
+  RStack,
+  RButton,
+  RText,
+  RIconButton,
+  InputText,
+  InputTextRules,
+} from '@packrat/ui';
 import { FontAwesome } from '@expo/vector-icons';
-import { useRouter } from 'solito/router';
+import { useRouter } from 'app/hooks/router';
 // import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { Link } from 'solito/link';
 import { useSelector, useDispatch } from 'react-redux';
@@ -10,7 +18,6 @@ import { signInWithGoogle, signUp } from '../store/authStore';
 import { InformUser } from '../utils/ToastUtils';
 import useTheme from '../hooks/useTheme';
 import { useForm } from 'react-hook-form';
-import { InputText, InputTextRules } from 'app/components/InputText';
 import { useSession } from '../context/Auth/SessionProvider';
 import { useGoogleAuth } from 'app/hooks/login';
 import { useRegisterUser } from 'app/hooks/user';

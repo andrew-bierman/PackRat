@@ -7,7 +7,7 @@ import { theme } from '../../theme';
 import useTheme from '../../hooks/useTheme';
 import { useSelector, useDispatch } from 'react-redux';
 import Hero from '../hero';
-import { useRouter } from 'solito/router';
+import { useRouter } from 'app/hooks/router';
 import {
   photonDetails,
   processGeoJSON,

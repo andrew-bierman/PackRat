@@ -1,4 +1,4 @@
-import { useRouter } from 'solito/router';
+import { useRouter } from 'app/hooks/router';
 
 import React, { useEffect } from 'react';
 import { useStorageState } from 'app/hooks/storage/useStorageState';
