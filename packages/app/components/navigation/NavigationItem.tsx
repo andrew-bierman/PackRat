@@ -19,8 +19,9 @@ export const NavigationItem = ({ item, itemStyle, isMobileView, onSelect }) => {
         isCurrentPage && styles.menuBarItemActive,
         !!itemStyle && itemStyle,
       ]}
-      variant='outlined'
+      variant="outlined"
       onPress={handleItemPress}
+      chromeless
       // activeOpacity={0.7}
     >
       <IconComponent
@@ -53,7 +54,6 @@ const loadStyles = (theme) => {
       alignItems: 'center',
       gap: 8,
       paddingHorizontal: 12,
-
     },
     menuBarItemText: {
       color: currentTheme.colors.text,
