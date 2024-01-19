@@ -175,14 +175,17 @@ export default function Card({
           </RStack>
 
           <RStack
-            style={{ alignItems: 'center', justifyContent: 'space-between' }}
+            style={{
+              // alignItems: 'center',
+              justifyContent: 'space-between'
+            }}
           >
             <RStack
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                width: '100%',
+                // width: '100%',
               }}
             >
               <View
