@@ -1,6 +1,14 @@
 import { useState, useEffect } from 'react';
 import { View } from 'react-native';
-import { RHeading, RStack, RButton, RText, RIconButton } from '@packrat/ui';
+import {
+  RHeading,
+  RStack,
+  RButton,
+  RText,
+  RIconButton,
+  InputText,
+  InputTextRules,
+} from '@packrat/ui';
 import { FontAwesome } from '@expo/vector-icons';
 import { useRouter } from 'solito/router';
 // import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
