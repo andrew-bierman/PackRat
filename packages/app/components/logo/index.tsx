@@ -16,7 +16,6 @@ export default function SVGLogoComponent({
 
   //   console.log("fill", fill);
 
-  if()
   return (
     <Svg
       width={width}
@@ -33,7 +32,7 @@ export default function SVGLogoComponent({
           fill,
         }}
         transform="translate(-1102.273 -1568.331) scale(6.88952)"
-      // transform={`translate(${translateX} ${translateY})`}
+        // transform={`translate(${translateX} ${translateY})`}
       />
       <Path
         className="st0"
@@ -42,7 +41,7 @@ export default function SVGLogoComponent({
           fill,
         }}
         transform="translate(-1102.273 -1568.331) scale(6.88952)"
-      // transform={`translate(${translateX} ${translateY})`}
+        // transform={`translate(${translateX} ${translateY})`}
       />
       <Path
         className="st0"
@@ -51,7 +50,7 @@ export default function SVGLogoComponent({
           fill,
         }}
         transform="translate(-1102.273 -1568.331) scale(6.88952)"
-      // transform={`translate(${translateX} ${translateY})`}
+        // transform={`translate(${translateX} ${translateY})`}
       />
       <Path
         className="st0"
@@ -60,8 +59,8 @@ export default function SVGLogoComponent({
           fill,
         }}
         transform="translate(-1102.273 -1568.331) scale(6.88952)"
-      // transform={`translate(${translateX} ${translateY})`}
+        // transform={`translate(${translateX} ${translateY})`}
       />
     </Svg>
   );
-};
+}
