@@ -9,6 +9,8 @@ import { useAuthUser } from 'app/hooks/user/useAuthUser';
 import { NavigationList } from './NavigationList';
 import { Button } from 'tamagui';
 import SVGLogoComponent from '../../components/logo';
+import { Platform } from 'react-native';
+import { Image } from 'solito/image';
 
 export const Navigation = () => {
   const user = useAuthUser();
@@ -25,12 +27,16 @@ export const Navigation = () => {
             key={'logo-nav'}
             style={styles.logoContainer}
             onPress={() => navigate('/')}
-            variant='outlined'
+            variant="outlined"
           >
             {/* FIX ME */}
-            {/* <View style={styles.logoWrapper}>
-              <SVGLogoComponent width={48} height={48} fill="#fff" />
-            </View> */}
+            <View style={styles.logoWrapper}>
+              {Platform.OS === 'web' ? (
+                <></>
+              ) : (
+                <SVGLogoComponent width={48} height={48} fill="#fff" />
+              )}
+            </View>
             <Text style={styles.logoText}>PackRat</Text>
           </Button>
 
