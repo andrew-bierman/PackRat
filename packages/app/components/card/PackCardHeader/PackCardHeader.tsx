@@ -1,15 +1,14 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 
 import { CustomCardHeader } from '../CustomCardHeader';
 import { useAuthUser } from 'app/hooks/user/useAuthUser';
 import { ThreeDotsMenu, YStack, Button, EditableText } from '@packrat/ui';
-import { useDeletePack } from 'app/hooks/packs';
+import { useDeletePack, useFetchSinglePack } from 'app/hooks/packs';
 import { usePackTitleInput } from './usePackTitleInput';
 
 export const PackCardHeader = ({ data, title, link }) => {
+  const { isLoading } = useFetchSinglePack(data?._id);
   const user = useAuthUser();
-  const isLoading = useSelector((state: any) => state.singlePack.isLoading);
   const handleDeletePack = useDeletePack(data._id);
   const { handleActionsOpenChange, handleEdit, handleSaveTitle, isEditMode } =
     usePackTitleInput(data);
