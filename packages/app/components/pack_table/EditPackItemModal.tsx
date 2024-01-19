@@ -15,6 +15,17 @@ export const EditPackItemModal = ({ children }) => {
     // add more footer buttons here if needed
   ];
 
+  const { setIsModalOpen } = useModal();
+
+  const childrenWithProps = React.Children.map(children, (child) => {
+    if (React.isValidElement(child)) {
+      return React.cloneElement(child, {
+        closeModalHandler: () => setIsModalOpen(false),
+      });
+    }
+    return child;
+  });
+
   return (
     <View>
       <BaseModal
@@ -22,7 +33,7 @@ export const EditPackItemModal = ({ children }) => {
         triggerComponent={<MaterialIcons name="edit" size={20} color="black" />}
         footerButtons={footerButtons}
       >
-        {withCloseModalHandler(children)}
+        {childrenWithProps}
       </BaseModal>
     </View>
   );
