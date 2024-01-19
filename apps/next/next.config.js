@@ -26,13 +26,13 @@ const plugins = [
         return true;
       }
     },
-    excludeReactNativeWebExports: [
-      'Switch',
-      'ProgressBar',
-      'Picker',
-      'CheckBox',
-      'Touchable',
-    ],
+    // excludeReactNativeWebExports: [
+    //   'Switch',
+    //   'ProgressBar',
+    //   'Picker',
+    //   'CheckBox',
+    //   'Touchable',
+    // ],
   }),
   withExpo,
 ];
