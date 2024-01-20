@@ -6,7 +6,30 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 import { TripCardHeader } from './TripCardHeader';
 import { PackCardHeader } from './PackCardHeader';
 
-export const CustomCard = ({ title, content, footer, link, type, data }) => {
+interface CustomCardProps {
+  title: string;
+  content: React.ReactNode;
+  footer: React.ReactNode;
+  link?: string;
+  type: 'pack' | 'trip';
+  destination?: string;
+  data: {
+    owner_id: {
+      _id: string;
+      username?: string;
+    };
+    owners?: Array<{ name: string }> | null;
+  };
+}
+
+export const CustomCard: React.FC<CustomCardProps> = ({
+  title,
+  content,
+  footer,
+  link,
+  type,
+  data,
+}) => {
   const styles = useCustomStyles(loadStyles);
 
   if (!data) return null;
