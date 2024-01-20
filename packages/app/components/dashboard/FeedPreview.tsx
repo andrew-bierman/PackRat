@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RText, RStack } from '@packrat/ui';
-import { Link } from 'expo-router';
 import { Dimensions, View, StyleProp, ViewStyle } from 'react-native';
+import { Link } from 'solito/link';
+import { Dimensions, View } from 'react-native';
 import { getPublicPacks, getPublicTrips } from '../../store/feedStore';
 import useTheme from '../../hooks/useTheme';
 import Carousel from '../carousel';

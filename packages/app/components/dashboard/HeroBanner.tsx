@@ -6,7 +6,13 @@ import { SearchInput } from '../SearchInput';
 import useTheme from '../../hooks/useTheme';
 import { useSelector, useDispatch } from 'react-redux';
 import Hero from '../hero';
-import { useRouter } from 'expo-router';
+import { useRouter } from 'app/hooks/router';
+import { first } from 'lodash';
+import {
+  photonDetails,
+  processGeoJSON,
+  setSelectedSearchResult,
+} from '../../store/destinationStore';
 import { hexToRGBA } from '../../utils/colorFunctions';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 
@@ -55,8 +61,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSelect }) => {
 
   const user = useSelector((state: any) => state.auth?.user);
 
-  const { name } = user;
-  const firstNameOrUser = name.split(' ')[0] ?? 'User';
+  const firstNameOrUser = first(user?.name?.split(' ')) ?? 'User';
 
   const cardBackgroundColor = hexToRGBA(currentTheme.colors.secondaryBlue, 0.5);
 
@@ -69,7 +74,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSelect }) => {
         imageDetails={{
           title: 'N/A',
           subtitle: 'N/A',
-          source: require('app/assets/topographical-pattern.png'),
+          source:
+            'https://github.com/andrew-bierman/PackRat/blob/main/apps/expo/assets/topographical-pattern.jpg?raw=true',
           alt: 'hero',
         }}
       >
