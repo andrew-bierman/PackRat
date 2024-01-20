@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   setSelectedSearchResult,
@@ -7,6 +7,7 @@ import {
 import { setLatLng } from '../../store/weatherStore';
 import { usePhotonDetail } from 'app/hooks/photonDetail';
 import { type RootState } from 'store/store';
+import { debounce, throttle } from 'lodash';
 
 const useSearchInput = (onSelect) => {
   const [searchString, setSearchString] = useState('');
@@ -16,7 +17,8 @@ const useSearchInput = (onSelect) => {
     useSelector((state: RootState) => state.search.selectedSearchResult) || {};
 
   const { refetch, data } = usePhotonDetail(searchString, showSearchResults);
-
+  const [selectedSearch, setSelectedSearch] = useState('');
+  const searchInput = useRef(null);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -32,11 +34,27 @@ const useSearchInput = (onSelect) => {
   const handleSearchResultClick = (result) => {
     dispatch(setSelectedSearchResult(result));
     setSearchString(result.properties.name);
+    setSelectedSearch(result);
     setShowSearchResults(false);
     if (onSelect) {
       onSelect(result);
     }
   };
+  
+  const debouncedSearchString = useCallback(
+    debounce(async (e) => {
+      dispatch(refetch());
+      setShowSearchResults(true);
+    }, 1000),
+    [],
+  );
+
+  const handleChange = useCallback(
+    (text) => {
+      debouncedSearchString(text);
+    },
+    [debouncedSearchString],
+  );
 
   const handleClearSearch = () => {
     setShowSearchResults(false);
@@ -55,6 +73,8 @@ const useSearchInput = (onSelect) => {
     handleSearchResultClick,
     handleClearSearch,
     isLoadingMobile,
+    handleChange,
+    searchInput
   };
 };
 
