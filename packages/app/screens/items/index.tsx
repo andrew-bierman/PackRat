@@ -85,6 +85,7 @@ const ModalTriggerButton = ({ setIsModalOpen }) => {
         marginTop: '2rem',
         justifyContent: 'center',
         alignItems: 'center',
+        height: '50rem'
       }}
     >
       <Button
