@@ -7,7 +7,7 @@ import { theme } from '../../theme';
 import useTheme from '../../hooks/useTheme';
 import { useSelector, useDispatch } from 'react-redux';
 import Hero from '../hero';
-import { useRouter } from 'expo-router';
+import { useRouter } from 'app/hooks/router';
 import { first } from 'lodash';
 import {
   photonDetails,
@@ -80,7 +80,8 @@ const HeroSection = ({ onSelect }) => {
         imageDetails={{
           title: 'N/A',
           subtitle: 'N/A',
-          source: require('app/assets/topographical-pattern.png'),
+          source:
+            'https://github.com/andrew-bierman/PackRat/blob/main/apps/expo/assets/topographical-pattern.jpg?raw=true',
           alt: 'hero',
         }}
       >

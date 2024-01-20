@@ -1,10 +1,11 @@
+'use client';
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   persistReducer,
   persistStore,
   type PersistConfig,
 } from 'redux-persist';
+import { Platform } from 'react-native';
 
 // middleware
 import apiMessageMiddleware from './middleware/apiMessageMiddleware';
@@ -32,6 +33,8 @@ import userStore from './userStore';
 import offlineQueue from './offlineQueue';
 import progressReducer from './progressStore';
 import { type Reducer } from 'react';
+import storage from './customStorage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // combine reducers
 const rootReducer = combineReducers({
@@ -62,7 +65,8 @@ export type RootState = ReturnType<typeof rootReducer>;
 // configure persist store and whitelist reducers
 const persistConfig: PersistConfig<RootState> = {
   key: 'root',
-  storage: AsyncStorage,
+  // storage: storage,
+  storage: Platform.OS === 'web' ? storage : AsyncStorage,
   whitelist: ['auth', 'globalItems', 'offlineQueue'], // add reducers to persist here
 };
 

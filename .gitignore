@@ -17,6 +17,7 @@ serviceAccountKey.json
 google-services.json
 
 # Wrangler
+wrangler.toml
 .wrangler/
 
 # Tamagui

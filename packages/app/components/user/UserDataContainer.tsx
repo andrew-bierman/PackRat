@@ -1,4 +1,4 @@
-import { Link } from 'expo-router';
+import { Link } from 'solito/link';
 import { Stack, VStack, Text, Button } from 'native-base';
 import { RStack, RText, RButton, RSkeleton } from '@packrat/ui';
 import { Platform } from 'react-native';
