@@ -24,6 +24,8 @@ export const SearchInput = ({ onSelect, placeholder }) => {
     handleSearchResultClick,
     handleClearSearch,
     isLoadingMobile,
+    handleChange,
+    searchInput,
   } = useSearchInput(onSelect);
 
   const { currentTheme } = useTheme();
@@ -41,13 +43,11 @@ export const SearchInput = ({ onSelect, placeholder }) => {
           }}
         >
           <RInput
+            ref={searchInput}
             paddingLeft={35}
             paddingRight={55}
             placeholder={placeholder ?? 'Search'}
-            onChangeText={(text) => {
-              setSearchString(text);
-            }}
-            value={searchString}
+            onChangeText={handleChange}
           />
           <MaterialIcons
             name="search"
@@ -55,11 +55,12 @@ export const SearchInput = ({ onSelect, placeholder }) => {
               position: 'absolute',
               height: '100%',
               alignSelf: 'center',
-              display: 'flex',
+              display: searchString ? 'none' : 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               width: 40,
               fontSize: 20,
+              right: 0,
             }}
           />
           {searchString && (
@@ -80,7 +81,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
         </RStack>
 
         <RStack style={{ position: 'relative' }}>
-          {data && data?.length > 0 && (
+          {showSearchResults && searchInput.current?.value != '' && (
             <RScrollView
               position="absolute"
               top="100%"
