@@ -44,13 +44,13 @@ const FeedPreviewScroll: React.FC<FeedPreviewScrollProps> = ({ itemWidth }) => {
                 <RText style={styles.feedItemTitle}>{item.name}</RText>
                 <RText
                   fontSize="$1"
-                  style={{
-                    backgroundColor: '#F2F1EB',
-                    textTransform: 'capitalize',
-                    padding: '4px 8px',
-                    alignSelf: 'center',
-                    borderRadius: '2px',
-                  }}
+                  fontWeight="bold"
+                  backgroundColor={'#F2F1EB'}
+                  textTransform="capitalize"
+                  paddingVertical={4}
+                  paddingHorizontal={8}
+                  alignContent="center"
+                  borderRadius={2}
                 >
                   {item.type}
                 </RText>
