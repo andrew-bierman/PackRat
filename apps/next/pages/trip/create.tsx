@@ -1,5 +1,5 @@
 import CreateTrip from 'app/screens/trip/createTrip';
-import { AuthWrapper } from 'pages/authWrapper';
+import { AuthWrapper } from 'auth/authWrapper';
 
 export default function Trip() {
   return (

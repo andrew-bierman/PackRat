@@ -1,15 +1,13 @@
-import React from 'react'
+import React from 'react';
 import { AddPack } from 'app/components/pack/AddPack';
-import { AuthWrapper } from 'pages/authWrapper';
+import { AuthWrapper } from 'auth/authWrapper';
 
 function CreatePack() {
-    return (
-        <AddPack />
-    )
+  return <AddPack />;
 }
 
-export default CreatePack
+export default CreatePack;
 
 CreatePack.getLayout = function getLayout(page: any) {
-    return <AuthWrapper>{page}</AuthWrapper>;
+  return <AuthWrapper>{page}</AuthWrapper>;
 };

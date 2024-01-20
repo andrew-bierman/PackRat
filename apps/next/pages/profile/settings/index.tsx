@@ -1,5 +1,5 @@
 import Settings from 'app/screens/user/Settings';
-import { AuthWrapper } from 'pages/authWrapper';
+import { AuthWrapper } from 'auth/authWrapper';
 
 export default function SettingsPage() {
   return (

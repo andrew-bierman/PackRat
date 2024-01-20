@@ -1,5 +1,5 @@
 import AppearanceContainer from 'app/screens/appearance/AppearanceContainer';
-import { AuthWrapper } from 'pages/authWrapper';
+import { AuthWrapper } from 'auth/authWrapper';
 
 export default function Appearance() {
   return (

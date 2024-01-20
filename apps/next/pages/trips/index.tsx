@@ -1,5 +1,5 @@
 import Feed from 'app/screens/feed/Feed';
-import { AuthWrapper } from 'pages/authWrapper';
+import { AuthWrapper } from 'auth/authWrapper';
 
 export default function FeedNav() {
   return (

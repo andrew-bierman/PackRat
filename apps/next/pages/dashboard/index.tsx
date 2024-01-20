@@ -1,15 +1,15 @@
 import Dashboard from 'app/screens/Dashboard';
 
-import { AuthWrapper } from 'pages/authWrapper';
+import { AuthWrapper } from 'auth/authWrapper';
 
 export default function DashboardPage() {
-    return (
-        <>
-            <Dashboard />
-        </>
-    )
+  return (
+    <>
+      <Dashboard />
+    </>
+  );
 }
 
 DashboardPage.getLayout = function getLayout(page: any) {
-    return <AuthWrapper>{page}</AuthWrapper>;
+  return <AuthWrapper>{page}</AuthWrapper>;
 };

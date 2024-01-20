@@ -1,5 +1,5 @@
 import { DestinationPage } from 'app/components/destination';
-import { AuthWrapper } from 'pages/authWrapper';
+import { AuthWrapper } from 'auth/authWrapper';
 // import DestinationPage from "../../components/destination";
 
 export default function Destination() {

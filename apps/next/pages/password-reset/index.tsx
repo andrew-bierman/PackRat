@@ -1,5 +1,5 @@
 import { RequestPasswordReset } from 'app/components/password-reset';
-import { AuthWrapper } from 'pages/authWrapper';
+import { AuthWrapper } from 'auth/authWrapper';
 
 export default function ResetPasswordRoute() {
   return (

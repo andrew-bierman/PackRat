@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Platform } from 'react-native';
 import ProfileContainer from 'app/screens/user/ProfileContainer';
 import { createParam } from 'solito';
-import { AuthWrapper } from 'pages/authWrapper';
+import { AuthWrapper } from 'auth/authWrapper';
 
 const { useParam } = createParam();
 
 const Profile = () => {
-  const [id] =useParam('id');
+  const [id] = useParam('id');
 
   return (
     <>
