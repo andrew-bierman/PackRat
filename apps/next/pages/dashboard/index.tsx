@@ -1,4 +1,4 @@
-import Dashboard from 'app/screens/Dashboard';
+import Dashboard from 'app/screens/dashboard';
 
 import { AuthWrapper } from 'auth/authWrapper';
 
