@@ -8,7 +8,7 @@ import { AddItemGlobal } from 'app/components/item/AddItemGlobal';
 import { ItemsTable } from 'app/components/itemtable/itemTable';
 import { useDispatch, useSelector } from 'react-redux';
 import { getItemsGlobal } from 'app/store/globalItemsStore';
-import { Stack } from 'expo-router';
+// import { Stack } from 'expo-router';
 import { executeOfflineRequests } from 'app/store/offlineQueue';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import useItems from 'app/hooks/items/useItems';
@@ -36,11 +36,11 @@ export default function Items() {
 
   return (
     <ScrollView>
-      <Stack.Screen
+      {/* <Stack.Screen
         options={{
           title: 'Items',
         }}
-      />
+      /> */}
       <Box style={styles.container}>
         <BaseModal
           title="Add a global Item"

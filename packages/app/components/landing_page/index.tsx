@@ -1,6 +1,3 @@
 import { LandingPage } from './LandingPage';
 
-export default LandingPage
-
-
-
+export default LandingPage;
