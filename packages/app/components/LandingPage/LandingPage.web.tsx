@@ -13,15 +13,15 @@ export function LandingPage() {
   return (
     <div className="bg-gradient p-2">
       <NavBar />
-      {/* <HeroSection /> */}
-      {/* <Showcase /> */}
-      {/* <Features /> */}
-      {/* <ExtendedFeatures /> */}
-      {/* <Testimonial /> */}
-      {/* <OSS /> */}
-      {/* <FAQ /> */}
-      {/* <GetStarted /> */}
-      {/* <Footer /> */}
+      <HeroSection />
+      <Showcase />
+      <Features />
+      <ExtendedFeatures />
+      <Testimonial />
+      <OSS />
+      <FAQ />
+      <GetStarted />
+      <Footer />
     </div>
   );
 }
