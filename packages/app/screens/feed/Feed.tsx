@@ -171,13 +171,12 @@ const Feed = ({ feedType = 'public' }) => {
             <Card key={item?._id} type={item?.type} {...item} />
           )}
           ListHeaderComponent={() => feedSearchFilterComponent}
-          ListEmptyComponent={() => <RText>{ERROR_MESSAGES[feedType]}</RText>}
+          ListEmptyComponent={() => <RText style={{ textAlign: "center", marginTop: 20 }}>{ERROR_MESSAGES[feedType]}</RText>}
           showsVerticalScrollIndicator={false}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
           maxToRenderPerBatch={2}
-          contentContainerStyle={{ flex: 1 }}
         />
       </View>
     );
