@@ -24009,6 +24009,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "packrat-world@workspace:."
   dependencies:
+    "@babel/runtime": "npm:^7.21.0"
     "@manypkg/cli": "npm:^0.21.0"
     check-dependency-version-consistency: "npm:^4.1.0"
     cross-env: "npm:^7.0.3"
