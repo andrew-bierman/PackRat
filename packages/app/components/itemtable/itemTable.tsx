@@ -13,6 +13,17 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 import { loadStyles } from './itemsTable.style';
 import { AddItem } from '../item/AddItem';
 
+interface ItemsTableProps {
+  limit: number;
+  setLimit: (limit: number) => void;
+  page: number;
+  setPage: (page: number) => void;
+  data: any;
+  isLoading: boolean;
+  totalPages: number;
+  refetch: boolean;
+  setRefetch: () => void;
+}
 export const ItemsTable = ({
   limit,
   setLimit,
@@ -21,7 +32,8 @@ export const ItemsTable = ({
   data,
   isLoading,
   totalPages,
-}) => {
+  refetch,
+}: ItemsTableProps) => {
   const flexArr = [2, 1, 1, 1, 0.65, 0.65, 0.65];
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();

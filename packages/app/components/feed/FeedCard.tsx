@@ -3,7 +3,7 @@ import { formatDistanceToNow } from 'date-fns';
 import { MaterialIcons, Entypo } from '@expo/vector-icons';
 
 import { TouchableOpacity, View } from 'react-native';
-import { Link } from 'expo-router';
+import { Link } from 'solito/link';
 import { DuplicateIcon } from '../DuplicateIcon/index';
 import { RText, RStack, RHeading } from '@packrat/ui';
 import { useFeedCard } from 'app/hooks/feed/feedComponent';
@@ -135,14 +135,17 @@ export default function Card({
           </RStack>
 
           <RStack
-            style={{ alignItems: 'center', justifyContent: 'space-between' }}
+            style={{
+              // alignItems: 'center',
+              justifyContent: 'space-between'
+            }}
           >
             <RStack
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                width: '100%',
+                // width: '100%',
               }}
             >
               <View

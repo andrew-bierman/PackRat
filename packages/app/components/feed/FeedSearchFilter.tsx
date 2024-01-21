@@ -57,7 +57,7 @@ const FeedSearchFilter = ({
       </View>
       <RSeparator />
       <RStack
-        flex={1}
+        // flex={1}
         flexWrap="wrap"
         flexDirection="row"
         justifyContent="space-between"

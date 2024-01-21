@@ -83,7 +83,7 @@ export const useFeedScreen = (feedType = 'public') => {
     refetch();
     setRefreshing(false);
   };
-
+  console.log('🚀 ../.. file: Feed.js:180 ../.. Feed ../.. feedData:', data);
   // useEffect(() => {
   //   if (feedType === 'public') {
   //     dispatch(getPublicPacks(queryString));
@@ -127,11 +127,14 @@ export const useFeedScreen = (feedType = 'public') => {
     feedType !== 'userTrips'
       ? fuseSearch(arrayData, searchQuery, keys, options)
       : data;
-  console.log('🚀 ~ file: Feed.js:231 ~ renderData ~ results:', results);
+  console.log(
+    '🚀 ../.. file: Feed.js:231 ../.. renderData ../.. results:',
+    results,
+  );
+
   // Convert fuse results back into the format we want
   // if searchQuery is empty, use the original data
   arrayData = searchQuery ? results.map((result) => result.item) : data;
-
   const handleTogglePack = () => {
     setSelectedTypes((prevState) => ({
       ...prevState,

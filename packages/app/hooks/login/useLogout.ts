@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux';
-import { useSession } from '../../context/auth';
+import { useSession } from '../../context/Auth/SessionProvider';
 import { signOut } from '../../store/authStore';
 
 export const useLogout = () => {

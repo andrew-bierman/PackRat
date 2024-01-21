@@ -1,7 +1,7 @@
 import React from 'react';
 import { FlatList, View, ScrollView, Platform } from 'react-native';
 import Card from '../../components/feed/FeedCard';
-import useCustomStyles from '../../hooks/useCustomStyles';
+import useCustomStyles from 'app/hooks/useCustomStyles';
 import FeedSearchFilter from 'app/components/feed/FeedSearchFilter';
 import { useFeedScreen } from '../../hooks/feed';
 import { RefreshControl } from 'react-native';

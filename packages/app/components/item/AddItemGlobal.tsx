@@ -7,7 +7,12 @@ import { queryTrpc } from '../../trpc';
 import { ItemForm } from './ItemForm'; // assuming you moved the form related code to a separate component
 import { useModal } from '@packrat/ui/src/modal';
 
-export const AddItemGlobal = () => {
+interface AddItemGlobalProps {
+  setRefetch: () => void;
+  refetch: boolean;
+}
+
+export const AddItemGlobal = (props: AddItemGlobalProps) => {
   const utils = queryTrpc.useContext();
   const dispatch = useDispatch();
   const isLoading = useSelector((state) => state.items.isLoading);

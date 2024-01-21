@@ -1,6 +1,9 @@
 const { withExpo } = require('@expo/next-adapter');
 const { withTamagui } = require('@tamagui/next-plugin');
 const { join } = require('path');
+const path = require('path');
+const webpack = require('webpack');
+const million = require('million/compiler');
 
 const boolVals = {
   true: true,
@@ -9,6 +12,8 @@ const boolVals = {
 const disableExtraction =
   boolVals[process.env.DISABLE_EXTRACTION] ??
   process.env.NODE_ENV === 'development';
+
+const enableMillionJS = true;
 
 const plugins = [
   withTamagui({
@@ -24,13 +29,13 @@ const plugins = [
         return true;
       }
     },
-    excludeReactNativeWebExports: [
-      'Switch',
-      'ProgressBar',
-      'Picker',
-      'CheckBox',
-      'Touchable',
-    ],
+    // excludeReactNativeWebExports: [
+    //   'Switch',
+    //   'ProgressBar',
+    //   'Picker',
+    //   'CheckBox',
+    //   'Touchable',
+    // ],
   }),
   withExpo,
 ];
@@ -79,6 +84,25 @@ const nextConfig = function () {
       'native-base',
       'react-native-svg',
       'react-native-paper',
+      '@react-navigation/native-stack',
+      '@tanstack/query-async-storage-persister',
+      'expo',
+      'expo-application',
+      'expo-auth-session',
+      'expo-checkbox',
+      'expo-crypto',
+      'expo-document-picker',
+      'expo-file-system',
+      'expo-image-picker',
+      'expo-location',
+      'expo-random',
+      'expo-secure-store',
+      'expo-splash-screen',
+      'expo-standard-web-crypto',
+      'expo-status-bar',
+      'expo-system-ui',
+      'expo-web-browser',
+      '@tanstack/react-query',
     ],
     experimental: {
       scrollRestoration: true,
@@ -104,10 +128,14 @@ const nextConfig = function () {
         ],
         use: options.defaultLoaders.babel,
       });
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        'react-native': 'react-native-web',
+        'react-native': path.join(__dirname, 'node_modules/react-native'),
+      };
+      config.resolve.alias['react-native-web/Libraries/Image/AssetRegistry'] =
+        require.resolve('react-native-web/dist/modules/AssetRegistry');
       return config;
-    },
-    env: {
-      API_URL: process.env.API_URL,
     },
   };
 
@@ -116,6 +144,15 @@ const nextConfig = function () {
       ...config,
       ...plugin(config),
     };
+  }
+
+  const millionConfig = {
+    auto: true,
+    mute: false,
+  };
+
+  if (enableMillionJS) {
+    config = million.next(config, millionConfig);
   }
 
   return config;

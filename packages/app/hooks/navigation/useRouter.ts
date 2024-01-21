@@ -1,4 +1,4 @@
-import { useRouter as useExpoRouter } from 'expo-router';
+import { useRouter as useExpoRouter } from 'app/hooks/router';
 
 interface HrefObject {
   pathname?: string;

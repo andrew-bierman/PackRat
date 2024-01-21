@@ -2,60 +2,66 @@ import { View, Platform } from 'react-native';
 import React from 'react';
 import { Box, Button, ScrollView, Tooltip } from 'native-base';
 import { MaterialIcons } from '@expo/vector-icons';
-import useTheme from '../../hooks/useTheme';
-import { AddItemGlobal } from '../../components/item/AddItemGlobal';
-import { ItemsTable } from '../../components/itemtable/itemTable';
-
-import { Stack } from 'expo-router';
-import useCustomStyles from 'hooks/useCustomStyles';
+import { theme } from 'app/theme';
+import useTheme from 'app/hooks/useTheme';
+import { AddItemGlobal } from 'app/components/item/AddItemGlobal';
+import { ItemsTable } from 'app/components/itemtable/itemTable';
+import { useDispatch, useSelector } from 'react-redux';
+import { getItemsGlobal } from 'app/store/globalItemsStore';
+// import { Stack } from 'expo-router';
+import { executeOfflineRequests } from 'app/store/offlineQueue';
+import useCustomStyles from 'app/hooks/useCustomStyles';
+import useItems from 'app/hooks/items/useItems';
 import { BaseModal } from '@packrat/ui';
-import { useItemScreen } from 'hooks/itemrow';
-// import { checkNetworkConnected } from 'app/utils/netInfo';
+// import { checkNetworkConnected } from '~/utils/netInfo';
 
 export default function Items() {
-  const styles = useCustomStyles(loadStyles);
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    useTheme();
+
   const {
+    isAddItemModalOpen,
+    toggleAddItemModal,
     data,
     isLoading,
     isError,
-    isAddItemModalOpen,
-    setIsAddItemModalOpen,
     limit,
-    setLimit,
+    handleLimitChange,
     page,
-    setPage,
+    handlePageChange,
     refetch,
-    setRefetch,
-  } = useItemScreen();
-
+    handleRefetch,
+  } = useItems();
+  const styles = useCustomStyles(loadStyles);
+  const ref = React.useRef(null);
   return (
     <ScrollView>
-      <Stack.Screen
+      {/* <Stack.Screen
         options={{
           title: 'Items',
         }}
-      />
+      /> */}
       <Box style={styles.container}>
         <BaseModal
           title="Add a global Item"
           trigger="Add Item"
           triggerComponent={<ModalTriggerButton />}
         >
-          <AddItemGlobal setRefetch={setRefetch} refetch={refetch} />
+          <AddItemGlobal setRefetch={handleRefetch} refetch={refetch} />
         </BaseModal>
         {!isError &&
           data.globalItems &&
           Array.isArray(data.globalItems.items) && (
             <ItemsTable
               limit={limit}
-              setLimit={setLimit}
+              setLimit={handleLimitChange}
               page={page}
-              setPage={setPage}
+              setPage={handlePageChange}
               data={data}
               isLoading={isLoading}
               totalPages={data?.globalItems?.totalPages}
               refetch={refetch}
-              setRefetch={setRefetch}
+              setRefetch={handleRefetch}
             />
           )}
       </Box>
