@@ -38,7 +38,7 @@ export default function Trips() {
   //   (state) => state.destination.photonDetails,
   // );
   console.log(
-    '🚀 ~ file: createTrip.js:41 ~ Trips ~ selectedSearch:',
+    '🚀 ../.. file: createTrip.js:41 ../.. Trips ../.. selectedSearch:',
     selectedSearch,
   );
   const {

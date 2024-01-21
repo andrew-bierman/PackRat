@@ -2,7 +2,7 @@ import React from 'react';
 import { RText } from '@packrat/ui';
 import { View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Link } from 'expo-router';
+import { Link } from 'solito/link';
 import { useCopyClipboard } from 'app/hooks/common';
 import { useAuthUser } from 'app/hooks/user/useAuthUser';
 

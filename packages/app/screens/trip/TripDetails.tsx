@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { DetailsHeader } from '../../components/details/header';
-import { useSearchParams } from 'expo-router';
+import { createParam } from 'solito';
 import { TableContainer } from '../../components/pack_table/Table';
 import { selectPackById } from '../../store/packsStore';
 import { useSelector, useDispatch } from 'react-redux';
@@ -18,6 +18,9 @@ import { convertPhotonGeoJsonToShape } from '../../utils/mapFunctions';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useFetchSingleTrip } from 'app/hooks/singletrips';
+
+const { useParam } = createParam();
+
 export function TripDetails() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
@@ -26,8 +29,8 @@ export function TripDetails() {
   const weatherWeek = useSelector((state) => state.weather.weatherWeek);
   console.log('trip detail');
   const dispatch = useDispatch();
+  const [tripId] = useParam('tripId');
 
-  const { tripId } = useSearchParams();
   // console.log("🚀 ~ file: TripDetails.js:34 ~ TripDetails ~ tripId:", tripId)
   const { data, isLoading, error, refetch, isOwner, isError } =
     useFetchSingleTrip(tripId);

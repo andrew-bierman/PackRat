@@ -1,7 +1,8 @@
-import { H1 } from '@packrat/ui';
-import About from 'app/screens/about';
+import Dashboard from './dashboard';
+import { useSelector } from 'react-redux';
+import LandingPage from 'app/components/landing_page';
 
 export default function Home() {
-  // return <H1>Hello World!</H1>;
-  return <About />;
+  const user = useSelector((state: any) => state.auth.user);
+  return <>{!user ? <LandingPage /> : <Dashboard />}</>;
 }

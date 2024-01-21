@@ -2,7 +2,9 @@ import { useForm, type UseFormReturn } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import * as WebBrowser from 'expo-web-browser';
 import { signUp } from '../../store/authStore';
-import { useSession } from '../../context/auth';
+import { useSession } from '../../context/Auth/SessionProvider';
+import { useRouter } from 'app/hooks/router';
+
 WebBrowser.maybeCompleteAuthSession();
 
 interface RegisterForm {
@@ -20,6 +22,7 @@ interface UseRegisterUserReturn {
 export const useRegisterUser = (): UseRegisterUserReturn => {
   const dispatch = useDispatch();
   const { sessionSignIn } = useSession();
+  const router = useRouter();
   const form = useForm({
     defaultValues: {
       name: '',
@@ -42,6 +45,7 @@ export const useRegisterUser = (): UseRegisterUserReturn => {
           if (!payload) return;
           if (payload.token) {
             sessionSignIn(payload.token);
+            router.push('/');
           }
         },
       );
