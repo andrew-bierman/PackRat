@@ -12,6 +12,7 @@ import {
 } from '../theme';
 import FontLoader from './FontLoader';
 import { setupDev } from 'tamagui';
+import { NextThemeProvider } from './NextTheme';
 
 const ThirdPartyProviders = ({ children, isDark = false }) => {
   setupDev({
@@ -26,19 +27,21 @@ const ThirdPartyProviders = ({ children, isDark = false }) => {
 
   return (
     <FontLoader>
-      <NativeBaseProvider
-        theme={isDark ? nativeBaseDarkTheme : nativeBaseLightTheme}
-      >
-        <TamaguiProvider config={config} disableRootThemeClass={false}>
-          <TamaguiTheme name={isDark ? 'dark' : 'light'}>
-            <ToastProvider>
-              <RNPaperThemeProvider theme={darkPaperTheme}>
-                {children}
-              </RNPaperThemeProvider>
-            </ToastProvider>
-          </TamaguiTheme>
-        </TamaguiProvider>
-      </NativeBaseProvider>
+      <NextThemeProvider>
+        <NativeBaseProvider
+          theme={isDark ? nativeBaseDarkTheme : nativeBaseLightTheme}
+        >
+          <TamaguiProvider config={config} disableRootThemeClass={false}>
+            <TamaguiTheme name={isDark ? 'dark' : 'light'}>
+              <ToastProvider>
+                <RNPaperThemeProvider theme={darkPaperTheme}>
+                  {children}
+                </RNPaperThemeProvider>
+              </ToastProvider>
+            </TamaguiTheme>
+          </TamaguiProvider>
+        </NativeBaseProvider>
+      </NextThemeProvider>
     </FontLoader>
   );
 };
