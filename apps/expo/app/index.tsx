@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { Platform, StyleSheet, View, Text } from 'react-native';
 import { Stack } from 'expo-router';
 import { darkTheme, theme } from 'app/theme';
-import LandingPage from 'app/components/landing_page';
+import LandingPage from 'app/components/LandingPage';
 import Dashboard from 'app/screens/dashboard';
 import useTheme from 'app/hooks/useTheme';
 import { current } from '@reduxjs/toolkit';
