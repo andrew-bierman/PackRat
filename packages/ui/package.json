@@ -27,7 +27,7 @@
     "@tamagui/switch": "^1.88.0",
     "@tamagui/themes": "^1.88.0",
     "@tamagui/toast": "^1.88.0",
-    "@tanstack/react-table": "^8.10.7",
+    "@tanstack/react-table": "^8.11.6",
     "@tanstack/react-virtual": "3.0.0-beta.54",
     "esbuild": "^0.19.5",
     "jotai": "^2.4.3",
