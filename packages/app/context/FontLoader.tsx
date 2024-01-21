@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useFonts } from 'expo-font';
-import { SplashScreen } from 'expo-router';
+// import { SplashScreen } from 'expo-router';
 
 // Expo vector icons
 import {
@@ -24,7 +24,6 @@ const FontLoader = ({ children }) => {
   const [loaded] = useFonts({
     Inter: require('@tamagui/font-inter/otf/Inter-Medium.otf'),
     InterBold: require('@tamagui/font-inter/otf/Inter-Bold.otf'),
-
     // Cache all icon fonts
     ...AntDesign.font,
     ...Entypo.font,
@@ -44,7 +43,7 @@ const FontLoader = ({ children }) => {
 
   useEffect(() => {
     if (loaded) {
-      SplashScreen.hideAsync();
+      // SplashScreen.hideAsync();
     }
   }, [loaded]);
 

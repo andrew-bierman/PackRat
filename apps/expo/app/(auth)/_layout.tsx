@@ -1,5 +1,6 @@
 import { Stack } from 'expo-router';
-import { useProtectedRoute, useSession } from 'app/context/auth';
+import { useSession } from 'app/context/Auth/SessionProvider';
+import { useProtectedRoute } from 'app/hooks/auth/useProtectedRoute';
 
 export default function AppLayout() {
   const { session } = useSession();

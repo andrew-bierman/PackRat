@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import * as Google from 'expo-auth-session/providers/google';
-import { useSession } from '../../context/auth';
+import { useSession } from '../../context/Auth/SessionProvider';
 import { WEB_CLIENT_ID } from '@env';
 import { signInWithGoogle } from '../../store/authStore';
 

@@ -21,6 +21,7 @@ export const LandingPage = () => {
           textAlign: 'center',
           paddingVertical: 18,
           marginTop: Platform.OS !== 'web' ? 25 : 1,
+          flex: 1,
         }}
       >
         {Platform.OS === 'web' ? (
@@ -159,6 +160,7 @@ const loadStyles = (theme) => {
       justifyContent: 'center',
       alignItems: 'center',
       width: '100%',
+      backgroundColor: currentTheme.colors.background,
     },
     secondaryContentContainer: {
       flex: 1,
@@ -191,8 +193,8 @@ const loadStyles = (theme) => {
       textAlign: 'center',
       marginBottom: 20,
       color: currentTheme.colors.text,
-      width: '80%',
-      lineHeight: 1.5,
+      // width: '80%',
+      // lineHeight: 1.5,
     },
     buttonContainer: {
       paddingHorizontal: 20,
