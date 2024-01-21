@@ -13,23 +13,12 @@ const useSearchInput = (onSelect) => {
   const [searchString, setSearchString] = useState('');
   const [showSearchResults, setShowSearchResults] = useState(false);
   const [isLoadingMobile, setIsLoadingMobile] = useState(false);
-  const selectedSearchResult =
-    useSelector((state: RootState) => state.search.selectedSearchResult) || {};
 
   const { refetch, data } = usePhotonDetail(searchString, showSearchResults);
   const [selectedSearch, setSelectedSearch] = useState('');
   const searchInput = useRef(null);
+
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    setShowSearchResults(searchString.length > 0);
-    const timeout = setTimeout(() => {
-      if (!searchString) return;
-      refetch();
-    }, 2000);
-
-    return () => clearTimeout(timeout);
-  }, [searchString]);
 
   const handleSearchResultClick = (result) => {
     dispatch(setSelectedSearchResult(result));
@@ -43,8 +32,10 @@ const useSearchInput = (onSelect) => {
   
   const debouncedSearchString = useCallback(
     debounce(async (e) => {
-      dispatch(refetch());
-      setShowSearchResults(true);
+      setSearchString(e);
+      refetch().then((res) => {
+        setShowSearchResults(true)
+      })
     }, 1000),
     [],
   );
@@ -56,25 +47,31 @@ const useSearchInput = (onSelect) => {
     [debouncedSearchString],
   );
 
+  const resetSearchInputText = () => {
+    searchInput.current.value = "";
+  }
+
   const handleClearSearch = () => {
     setShowSearchResults(false);
     setSearchString('');
+    resetSearchInputText();
     dispatch(clearSearchResults());
   };
+
 
   return {
     searchString,
     setSearchString,
     showSearchResults,
     setShowSearchResults,
-    selectedSearchResult,
-    setSelectedSearchResult,
     data,
     handleSearchResultClick,
     handleClearSearch,
     isLoadingMobile,
     handleChange,
-    searchInput
+    searchInput,
+    selectedSearch,
+    setSelectedSearch
   };
 };
 

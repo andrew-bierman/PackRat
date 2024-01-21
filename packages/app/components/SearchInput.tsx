@@ -95,7 +95,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
               zIndex={20000}
             >
               <View role="list" style={{ width: '100%', gap: 8, padding: 8 }}>
-                {data.map((result, i) => (
+                {data?.map((result, i) => (
                   <RStack
                     key={`result + ${i}`}
                     role="listitem"
