@@ -4574,6 +4574,14 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@packrat/cli@workspace:packages/cli":
+  version: 0.0.0-use.local
+  resolution: "@packrat/cli@workspace:packages/cli"
+  dependencies:
+    enquirer: "npm:^2.4.1"
+  languageName: unknown
+  linkType: soft
+
 "@packrat/ui@npm:*, @packrat/ui@workspace:packages/ui":
   version: 0.0.0-use.local
   resolution: "@packrat/ui@workspace:packages/ui"
@@ -24001,11 +24009,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "packrat-world@workspace:."
   dependencies:
+    "@babel/runtime": "npm:^7.21.0"
     "@manypkg/cli": "npm:^0.21.0"
     check-dependency-version-consistency: "npm:^4.1.0"
     cross-env: "npm:^7.0.3"
     dotenv-cli: "npm:^7.3.0"
-    enquirer: "npm:^2.4.1"
     eslint: "npm:^8.47.0"
     husky: "npm:^8.0.0"
     lint-staged: "npm:^14.0.1"
