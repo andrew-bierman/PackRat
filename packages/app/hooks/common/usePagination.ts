@@ -1,16 +1,18 @@
 import { useState } from 'react';
 import { DEFAULT_LIMIT, DEFAULT_PAGE } from 'app/constants/pagination';
+import useSearchParams from './useSearchParams';
 
 export const usePagination = () => {
-  const [limit, setLimit] = useState(DEFAULT_LIMIT);
-  const [page, setPage] = useState(DEFAULT_LIMIT);
+  const searchParams = useSearchParams();
+  const limit = searchParams.get('limit');
+  const page = searchParams.get('page');
 
   const handleLimitChange = (newLimit) => {
-    setLimit(newLimit);
+    searchParams.set('limit', newLimit);
   };
 
   const handlePageChange = (newPage) => {
-    setPage(newPage);
+    searchParams.set('page', newPage);
   };
 
   return {
