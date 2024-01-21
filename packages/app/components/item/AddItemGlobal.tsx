@@ -5,7 +5,6 @@ import { ItemForm } from './ItemForm'; // assuming you moved the form related co
 import { useModal } from '@packrat/ui/src/modal';
 import { useAddItem, useItems } from 'app/hooks/items';
 
-// TODO implement offline functionality
 export const AddItemGlobal = () => {
   const { isLoading } = useItems();
 

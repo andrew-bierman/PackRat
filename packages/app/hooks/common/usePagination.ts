@@ -1,16 +1,21 @@
-import { useState } from 'react';
+import { router, useGlobalSearchParams } from 'expo-router';
+import { DEFAULT_LIMIT, DEFAULT_PAGE } from 'app/constants/pagination';
 
 export const usePagination = () => {
-  const [limit, setLimit] = useState(5);
-  const [page, setPage] = useState(1);
+  const { limit, page } = useGlobalSearchParams();
 
   const handleLimitChange = (newLimit) => {
-    setLimit(newLimit);
+    router.setParams({ limit: newLimit });
   };
 
   const handlePageChange = (newPage) => {
-    setPage(newPage);
+    router.setParams({ page: newPage });
   };
 
-  return { handleLimitChange, handlePageChange, limit, page };
+  return {
+    handleLimitChange,
+    handlePageChange,
+    limit: limit ? +limit : DEFAULT_LIMIT,
+    page: page ? +page : DEFAULT_PAGE,
+  };
 };

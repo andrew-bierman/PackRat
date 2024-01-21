@@ -15,6 +15,7 @@ export const AddItem = ({
   setPage = () => {},
   page,
   closeModalHandler,
+  isItemPage,
   setIsAddItemModalOpen = () => {},
 }) => {
   // Moved the state up to the parent component
@@ -40,7 +41,7 @@ export const AddItem = ({
     // mutation: addPackItemMutation
 
     editPackItem,
-  } = useEditPackItem();
+  } = useEditPackItem(isItemPage);
 
   // handle updates to initialData
   useEffect(() => {
