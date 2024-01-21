@@ -1,7 +1,7 @@
 {
   "extends": "@tsconfig/react-native/tsconfig.json",
   "compilerOptions": {
-    "lib": ["es2022"],
+    "lib": ["es2022","DOM"],
     "alwaysStrict": false,
     "strictNullChecks": false,
     "strictBindCallApply": false,
