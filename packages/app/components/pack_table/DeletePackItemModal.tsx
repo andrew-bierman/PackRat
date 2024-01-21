@@ -12,7 +12,17 @@ import { useDeletePackItem } from 'app/hooks/packs/useDeletePackItem';
 import { queryTrpc, trpc } from '../../trpc';
 import { BaseModal } from '@packrat/ui';
 
-export const DeletePackItemModal = ({ itemId, pack }) => {
+interface DeletePackItemModalProps {
+  itemId: string;
+  pack?: any;
+  refetch?: boolean;
+  setRefetch?: () => void;
+}
+
+export const DeletePackItemModal = ({
+  itemId,
+  pack,
+}: DeletePackItemModalProps) => {
   const utils = queryTrpc.useContext();
   const dispatch = useDispatch();
   const { isConnected } = useSelector((state) => state.offlineQueue);

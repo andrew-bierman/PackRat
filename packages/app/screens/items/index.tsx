@@ -1,5 +1,5 @@
 import { View, Platform } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Box, Button, ScrollView, Tooltip } from 'native-base';
 import { MaterialIcons } from '@expo/vector-icons';
 import { theme } from 'app/theme';
@@ -33,7 +33,7 @@ export default function Items() {
     handleRefetch,
   } = useItems();
   const styles = useCustomStyles(loadStyles);
-
+  const ref = React.useRef(null);
   return (
     <ScrollView>
       {/* <Stack.Screen
