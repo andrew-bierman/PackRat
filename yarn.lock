@@ -4611,7 +4611,6 @@ __metadata:
     esbuild: "npm:^0.19.5"
     jotai: "npm:^2.4.3"
     react: "npm:18.2.0"
-    tailwindcss-animate: "npm:^1.0.7"
     tamagui: "npm:^1.88.0"
   languageName: unknown
   linkType: soft
