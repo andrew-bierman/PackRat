@@ -9,7 +9,11 @@ export const getPacksService = async (ownerId: string, queryBy?: string) => {
     const isSortingByItems =
       queryBy && (queryBy === 'Most Items' || queryBy === 'Fewest Items');
     if (isSortingByItems) {
-      packs = await packClass.sortPacksByItems({queryBy, ownerId, sortItems: true});
+      packs = await packClass.sortPacksByItems({
+        queryBy,
+        ownerId,
+        sortItems: true,
+      });
     } else {
       packs = await packClass.findMany({
         sortOption,

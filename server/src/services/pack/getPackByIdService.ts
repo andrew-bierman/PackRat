@@ -19,7 +19,7 @@ export const getPackByIdService = async (packId: string) => {
     // const favoritedByDocuments = pack.favoritedByDocuments
     // const ownerDocuments = pack.ownerDocuments
     // const tripDocuments = trips
-    return pack
+    return pack;
   } catch (error) {
     // Handle any potential errors here
     console.error(error);

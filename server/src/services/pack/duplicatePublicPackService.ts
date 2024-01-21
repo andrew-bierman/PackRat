@@ -12,7 +12,7 @@ import { ItemPacks } from '../../drizzle/methods/ItemPacks';
 export const duplicatePublicPackService = async (
   packId: string,
   ownerId: string,
-  items: Array<any>,
+  items: any[],
 ): Promise<object> => {
   const packClass = new Pack();
   const itemPacksClass = new ItemPacks();

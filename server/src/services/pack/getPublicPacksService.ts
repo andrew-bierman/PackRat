@@ -15,7 +15,11 @@ export async function getPublicPacksService(queryBy?: string) {
     const isSortingByItems =
       queryBy && (queryBy === 'Most Items' || queryBy === 'Fewest Items');
     if (isSortingByItems) {
-      packs = await packClass.sortPacksByItems({queryBy, is_public: true, sortItems: true});
+      packs = await packClass.sortPacksByItems({
+        queryBy,
+        is_public: true,
+        sortItems: true,
+      });
     } else {
       packs = await packClass.findMany({
         sortOption,
