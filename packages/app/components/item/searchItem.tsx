@@ -1,10 +1,11 @@
 import { Platform, View, Pressable } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { RStack, RInput, RText, RScrollView, RIconButton } from '@packrat/ui';
 import { MaterialIcons } from '@expo/vector-icons';
 import { fetchItemsSearchResults } from '../../store/searchStore';
 import { selectItemsGlobal } from '../../store/singlePackStore';
+import useSearchItem from 'app/hooks/item/useSearchItem';
 
 interface Props {
   onSelect?: () => void;
@@ -12,37 +13,20 @@ interface Props {
 }
 
 export const SearchItem: React.FC<Props> = ({ onSelect, placeholder }) => {
-  const [searchString, setSearchString] = useState('');
-  const [isLoadingMobile, setIsLoadingMobile] = useState(false);
-  const [selectedSearch, setSelectedSearch] = useState('');
-
-  const searchResults =
-    useSelector((state: any) => state.search.searchResults) || [];
-  const user = useSelector((state: any) => state.auth.user);
-  const [showSearchResults, setShowSearchResults] = useState(false);
-
-  /**
-   * Handles the click event when a search result item is clicked.
-   *
-   * @param {Object} item - The search result item that was clicked.
-   * @param {number} index - The index of the search result item in the list.
-   * @return {void} This function does not return a value.
-   */
-  const handleSearchResultClick = (item, index) => {
-    const ownerId = user._id;
-    // @ts-expect-error
-    const packId = window.location.pathname.substring('/path/'.length);
-    const selectedItem = item?._id;
-    const data = {
-      ownerId,
-      packId,
-      selectedItem,
-    };
-    // @ts-expect-error
-    dispatch(selectItemsGlobal(data));
-  };
-
   const dispatch = useDispatch();
+  const {
+    searchString,
+    setSearchString,
+    isLoadingMobile,
+    setIsLoadingMobile,
+    selectedSearch,
+    setSelectedSearch,
+    searchResults,
+    user,
+    showSearchResults,
+    setShowSearchResults,
+    handleSearchResultClick,
+  } = useSearchItem({ dispatch });
 
   return Platform.OS === 'web' ? (
     <RStack style={{ width: '100%', maxWidth: 300 }}>

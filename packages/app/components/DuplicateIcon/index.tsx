@@ -1,16 +1,16 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Pressable } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useRouter } from 'app/hooks/router';
 
 export const DuplicateIcon = ({ link = null }) => {
-  if (!link) return null;
-
   const router = useRouter();
 
-  const handlePress = () => {
+  const handlePress = useCallback(() => {
     router.push(link);
-  };
+  }, [router, link]);
+
+  if (!link) return null;
 
   return (
     <Pressable onPress={handlePress}>
