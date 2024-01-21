@@ -7,7 +7,13 @@ import { ThreeDotsMenu, YStack, Button, EditableText } from '@packrat/ui';
 import { useDeletePack } from 'app/hooks/packs';
 import { usePackTitleInput } from './usePackTitleInput';
 
-export const PackCardHeader = ({ data, title, link }) => {
+interface PackCardHeaderProps {
+  data: any;
+  title: string;
+  link: string;
+}
+
+export const PackCardHeader = ({ data, title, link }: PackCardHeaderProps) => {
   const user = useAuthUser();
   const isLoading = useSelector((state: any) => state.singlePack.isLoading);
   const handleDeletePack = useDeletePack(data._id);
