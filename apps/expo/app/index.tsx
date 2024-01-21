@@ -1,5 +1,6 @@
+import * as React from 'react';
 import { useSelector } from 'react-redux';
-import { Platform, StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet, View, Text } from 'react-native';
 import { Stack } from 'expo-router';
 import { darkTheme, theme } from 'app/theme';
 import LandingPage from 'app/components/landing_page';
@@ -8,7 +9,7 @@ import useTheme from 'app/hooks/useTheme';
 import { current } from '@reduxjs/toolkit';
 import Head from 'expo-router/head';
 
-export default function Index() {
+export default function HomeScreen() {
   const {
     enableDarkMode,
     enableLightMode,

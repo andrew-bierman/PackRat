@@ -4,7 +4,7 @@ import { View } from 'react-native';
 import { RH2, RText, RStack, RSwitch } from '@packrat/ui';
 import { changePackStatus } from '../../store/packsStore';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'expo-router';
+import { Link } from 'solito/link';
 import { truncateString } from '../../utils/truncateString';
 import { useEffect } from 'react';
 
