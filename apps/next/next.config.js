@@ -3,6 +3,7 @@ const { withTamagui } = require('@tamagui/next-plugin');
 const { join } = require('path');
 const path = require('path');
 const webpack = require('webpack');
+const million = require('million/compiler');
 
 const boolVals = {
   true: true,
@@ -11,6 +12,8 @@ const boolVals = {
 const disableExtraction =
   boolVals[process.env.DISABLE_EXTRACTION] ??
   process.env.NODE_ENV === 'development';
+
+const enableMillionJS = true;
 
 const plugins = [
   withTamagui({
@@ -141,6 +144,15 @@ const nextConfig = function () {
       ...config,
       ...plugin(config),
     };
+  }
+
+  const millionConfig = {
+    auto: true,
+    mute: false,
+  };
+
+  if (enableMillionJS) {
+    config = million.next(config, millionConfig);
   }
 
   return config;
