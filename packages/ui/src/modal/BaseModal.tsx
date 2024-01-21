@@ -78,10 +78,7 @@ export const BaseModal = ({
     >
       <Dialog.Trigger asChild>{triggerElement}</Dialog.Trigger>
       <Dialog.Portal>
-        <ModalProvider
-          isModalOpen={isModalOpen}
-          setIsModalOpen={setIsModalOpen}
-        >
+       
           <Dialog.Overlay
             key="overlay"
             animation="quick"
@@ -109,7 +106,14 @@ export const BaseModal = ({
             gap="$4"
           >
             <Dialog.Title>{title}</Dialog.Title>
-            <Dialog.Description>{children}</Dialog.Description>
+            <Dialog.Description>
+            <ModalProvider
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+        >
+              {children}
+              </ModalProvider>
+              </Dialog.Description>
 
             <RStack
               style={{ alignSelf: 'flex-end', flexDirection: 'row' }}
@@ -130,7 +134,6 @@ export const BaseModal = ({
               />
             </Dialog.Close>
           </Dialog.Content>
-        </ModalProvider>
       </Dialog.Portal>
     </Dialog>
   );

@@ -33,8 +33,6 @@ export function PackDetails() {
   const user = useSelector((state) => state.auth.user);
   const userId = user?._id;
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
-  // const isLoading = useSelector((state) => state.singlePack.isLoading);
-  // const currentPack = useSelector((state) => state.singlePack.singlePack);
   const [refetch, setRefetch] = useState(false);
 
   const { data: userPacks, isLoading: isUserPacksLoading } =
@@ -42,6 +40,7 @@ export function PackDetails() {
   const {
     data: currentPack,
     isLoading,
+    error,
     refetch: refetchQuery,
   } = useFetchSinglePack(packId);
 
@@ -63,7 +62,6 @@ export function PackDetails() {
   // check if user is owner of pack, and that pack and user exists
   const isOwner = currentPack && user && currentPack.owner_id === user._id;
 
-  const error = useSelector((state) => state.singlePack.error);
   const isError = error !== null;
 
   if (isLoading && firstLoad) return <RText>Loading...</RText>;

@@ -22,7 +22,6 @@ export const executeOfflineRequests = createAsyncThunk(
     data.forEach(async (item: offlineRequestObj) => {
       try {
         const method = items[item.method];
-        console.log(method, 'method');
         await dispatch(method(item.data));
       } catch (err) {
         console.warn(err);
@@ -40,10 +39,15 @@ const offlineSlice = createSlice({
   }),
   reducers: {
     addOfflineRequest: (state, action) => {
-      console.log(action.payload);
       return {
         ...state,
         requests: [...state.requests, action.payload],
+      };
+    },
+    setOfflineRequests: (state, action) => {
+      return {
+        ...state,
+        requests: action.payload,
       };
     },
     setNetworkStatus: (state, action) => {
@@ -60,6 +64,7 @@ const offlineSlice = createSlice({
   },
 });
 
-export const { addOfflineRequest, setNetworkStatus } = offlineSlice.actions;
+export const { addOfflineRequest, setNetworkStatus, setOfflineRequests } =
+  offlineSlice.actions;
 
 export default offlineSlice.reducer;

@@ -18,7 +18,7 @@ export const PaginationLimit = ({ limit, setLimit, setPage }) => {
         accessibilityLabel="choose the number of items to be displayed"
         placeholder="Choose a value"
         onValueChange={(itemValue) => {
-          setLimit(itemValue);
+          setLimit(+itemValue);
           setPage(1);
         }}
         data={data}
