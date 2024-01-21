@@ -1,6 +1,6 @@
 import { createContext, useReducer } from 'react';
 import { theme, darkTheme } from '../theme';
-import ThirdPartyThemeProviders from './ThirdPartyThemeProviders';
+import ThirdPartyThemeProviders from '../provider/ThirdPartyThemeProviders';
 
 const initialState = {
   isDark: false,
