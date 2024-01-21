@@ -148,7 +148,7 @@ const nextConfig = function () {
 
   const millionConfig = {
     auto: true,
-    mute: true,
+    mute: false,
   };
 
   if (enableMillionJS) {
