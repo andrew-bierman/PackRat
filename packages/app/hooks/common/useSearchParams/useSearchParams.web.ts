@@ -1,8 +1,12 @@
-import { useSearchParams, usePathname, useRouter } from 'next/navigation';
+import {
+  useSearchParams as useSearchParamsNext,
+  usePathname,
+  useRouter,
+} from 'next/navigation';
 import { useRef } from 'react';
 
-const useSearchParamsWeb = () => {
-  const searchParams = useSearchParams();
+export const useSearchParams = () => {
+  const searchParams = useSearchParamsNext();
   const pathname = usePathname();
   const router = useRouter();
   const cache = useRef('');
@@ -38,5 +42,3 @@ const saveSearchParamsInstance = (instance) => {
 
   return search ? `?${search}` : '';
 };
-
-export default useSearchParamsWeb;

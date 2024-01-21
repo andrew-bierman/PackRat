@@ -1,7 +1,7 @@
-import { useSearchParams, router } from 'expo-router';
+import { useSearchParams as useSearchParamsExpo, router } from 'expo-router';
 
-const useSearchParamsMob = () => {
-  const searchParams = useSearchParams();
+export const useSearchParams = () => {
+  const searchParams = useSearchParamsExpo();
 
   const get = (key) => {
     return searchParams[key];
@@ -26,5 +26,3 @@ const saveSearchParamsInstance = (instance) => {
 
   return search ? `?${search}` : '';
 };
-
-export default useSearchParamsMob;

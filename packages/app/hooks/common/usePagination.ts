@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { DEFAULT_LIMIT, DEFAULT_PAGE } from 'app/constants/pagination';
-import useSearchParams from './useSearchParams';
+import { useSearchParams } from './useSearchParams';
 
 export const usePagination = () => {
   const searchParams = useSearchParams();
