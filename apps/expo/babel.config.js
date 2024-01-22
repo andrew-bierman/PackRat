@@ -26,6 +26,10 @@ module.exports = function (api) {
       [
         'module-resolver',
         {
+          root: ['./'],
+          alias: {
+            'next/router': './next-router-shim',
+          },
           extensions: ['.ios.js', '.android.js', '.js', '.ts', '.tsx', '.json'],
         },
       ],
