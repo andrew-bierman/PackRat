@@ -14,7 +14,7 @@ import {
 } from '../../store/packsStore';
 // import { fetchUserTrips, selectAllTrips } from '../../store/tripsStore';
 import { usefetchTrips } from 'app/hooks/trips';
-import { useRouter } from 'expo-router';
+import { useRouter } from 'app/hooks/router';
 import { fuseSearch } from '../../utils/fuseSearch';
 import { fetchUserFavorites } from '../../store/favoritesStore';
 import useCustomStyles from 'app/hooks/useCustomStyles';
@@ -70,7 +70,7 @@ const Feed = ({ feedType = 'public' }) => {
     setRefreshing(false);
   };
 
-  console.log('🚀 ~ file: Feed.js:180 ~ Feed ~ feedData:', data);
+  console.log('🚀 ../.. file: Feed.js:180 ../.. Feed ../.. feedData:', data);
   // useEffect(() => {
   //   if (feedType === 'public') {
   //     dispatch(getPublicPacks(queryString));
@@ -122,7 +122,10 @@ const Feed = ({ feedType = 'public' }) => {
       feedType !== 'userTrips'
         ? fuseSearch(arrayData, searchQuery, keys, options)
         : data;
-    console.log('🚀 ~ file: Feed.js:231 ~ renderData ~ results:', results);
+    console.log(
+      '🚀 ../.. file: Feed.js:231 ../.. renderData ../.. results:',
+      results,
+    );
 
     // Convert fuse results back into the format we want
     // if searchQuery is empty, use the original data

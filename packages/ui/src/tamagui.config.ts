@@ -1,11 +1,11 @@
-import { createTamagui } from 'tamagui'
-import { createInterFont } from '@tamagui/font-inter'
-import { shorthands } from '@tamagui/shorthands'
-import { themes, tokens } from '@tamagui/themes'
-import { createMedia } from '@tamagui/react-native-media-driver'
+import { createTamagui } from 'tamagui';
+import { createInterFont } from '@tamagui/font-inter';
+import { shorthands } from '@tamagui/shorthands';
+import { tokens, themes } from '@tamagui/themes/v2';
+import { createMedia } from '@tamagui/react-native-media-driver';
+import { createAnimations } from '@tamagui/animations-react-native';
 
-import { animations } from './animations'
-
+// Define fonts using createInterFont
 const headingFont = createInterFont({
   size: {
     6: 15,
@@ -36,7 +36,7 @@ const headingFont = createInterFont({
   face: {
     700: { normal: 'InterBold' },
   },
-})
+});
 
 const bodyFont = createInterFont(
   {
@@ -47,18 +47,44 @@ const bodyFont = createInterFont(
   {
     sizeSize: (size) => Math.round(size * 1.1),
     sizeLineHeight: (size) => Math.round(size * 1.1 + (size > 20 ? 10 : 10)),
-  }
-)
+  },
+);
 
+// Define animations
+const animations = createAnimations({
+  bouncy: {
+    type: 'spring',
+    damping: 10,
+    mass: 0.9,
+    stiffness: 100,
+  },
+  lazy: {
+    type: 'spring',
+    damping: 20,
+    stiffness: 60,
+  },
+  quick: {
+    type: 'spring',
+    damping: 20,
+    mass: 1.2,
+    stiffness: 250,
+  },
+});
+
+// Create Tamagui config
 export const config = createTamagui({
+  defaultTheme: 'dark',
   defaultFont: 'body',
-  animations,
   shouldAddPrefersColorThemes: true,
   themeClassNameOnRoot: true,
+  onlyAllowShorthands: true,
   shorthands,
   fonts: {
     body: bodyFont,
     heading: headingFont,
+  },
+  settings: {
+    allowedStyleValues: 'somewhat-strict',
   },
   themes,
   tokens,
@@ -78,4 +104,8 @@ export const config = createTamagui({
     hoverNone: { hover: 'none' },
     pointerCoarse: { pointer: 'coarse' },
   }),
-})
+  animations,
+});
+
+// for the compiler to find it
+export default config;

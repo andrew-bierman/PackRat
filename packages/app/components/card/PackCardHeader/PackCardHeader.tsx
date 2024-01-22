@@ -1,0 +1,40 @@
+import React from 'react';
+
+import { CustomCardHeader } from '../CustomCardHeader';
+import { useAuthUser } from 'app/hooks/user/useAuthUser';
+import { ThreeDotsMenu, YStack, Button, EditableText } from '@packrat/ui';
+import { useDeletePack, useFetchSinglePack } from 'app/hooks/packs';
+import { usePackTitleInput } from './usePackTitleInput';
+
+export const PackCardHeader = ({ data, title, link }) => {
+  const { isLoading } = useFetchSinglePack(data?._id);
+  const user = useAuthUser();
+  const handleDeletePack = useDeletePack(data._id);
+  const { handleActionsOpenChange, handleEdit, handleSaveTitle, isEditMode } =
+    usePackTitleInput(data);
+
+  return (
+    <CustomCardHeader
+      data={data}
+      title={
+        <EditableText
+          isLoading={isLoading}
+          defaultValue={title}
+          isFocused={isEditMode}
+          onSave={handleSaveTitle}
+        />
+      }
+      link={link}
+      actionsComponent={
+        user?.id === data.owner_id && (
+          <ThreeDotsMenu onOpenChange={handleActionsOpenChange}>
+            <YStack space="$1">
+              <Button onPress={handleEdit}>Edit</Button>
+              <Button onPress={handleDeletePack}>Delete</Button>
+            </YStack>
+          </ThreeDotsMenu>
+        )
+      }
+    />
+  );
+};

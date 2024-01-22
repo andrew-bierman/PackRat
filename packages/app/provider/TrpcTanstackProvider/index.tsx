@@ -40,6 +40,7 @@ export const TrpcTanstackProvider: React.FC<{ children: React.ReactNode }> = ({
         },
       }),
     ],
+    transformer: undefined,
   });
 
   return (

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PackContainer from './PackContainer';
 import { DetailsHeader } from '../details/header';
-import { useSearchParams } from 'expo-router';
+import { createParam } from 'solito';
 import { TableContainer } from '../pack_table/Table';
 import { fetchUserPacks, selectPackById } from '../../store/packsStore';
 import { useSelector, useDispatch } from 'react-redux';
@@ -19,18 +19,20 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useUserPacks } from 'app/hooks/packs/useUserPacks';
 import { useFetchSinglePack } from '../../hooks/packs';
 
+
+const { useParam } = createParam();
+
 export function PackDetails() {
   const searchParams = new URLSearchParams(this.location.search);
   const canCopy = searchParams.get('copy');
-  const { packId } = useSearchParams();
+  const [packId] = useParam('id');
+  console.log(packId, 'packId');
   const link = `${CLIENT_URL}/packs/${packId}`;
   const updated = useSelector((state) => state.packs.update);
   const [firstLoad, setFirstLoad] = useState(true);
   const user = useSelector((state) => state.auth.user);
   const userId = user?._id;
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
-  // const isLoading = useSelector((state) => state.singlePack.isLoading);
-  // const currentPack = useSelector((state) => state.singlePack.singlePack);
   const [refetch, setRefetch] = useState(false);
 
   const { data: userPacks, isLoading: isUserPacksLoading } =
@@ -38,6 +40,7 @@ export function PackDetails() {
   const {
     data: currentPack,
     isLoading,
+    error,
     refetch: refetchQuery,
   } = useFetchSinglePack(packId);
 
@@ -59,7 +62,6 @@ export function PackDetails() {
   // check if user is owner of pack, and that pack and user exists
   const isOwner = currentPack && user && currentPack.owner_id === user._id;
 
-  const error = useSelector((state) => state.singlePack.error);
   const isError = error !== null;
 
   if (isLoading && firstLoad) return <RText>Loading...</RText>;

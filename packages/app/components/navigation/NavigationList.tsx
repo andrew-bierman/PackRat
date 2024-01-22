@@ -10,7 +10,6 @@ export const NavigationList = ({
 }) => {
   const isMobileView = useIsMobileView();
   const { navigationItems } = useNavigationList();
-
   return (
     <>
       {navigationItems?.map((item) => (

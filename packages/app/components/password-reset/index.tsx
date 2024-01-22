@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { View } from 'react-native';
 import { api } from '../../constants/api';
 import { PasswordResetForm } from './PasswordResetForm';
-
-import { useSearchParams } from 'expo-router';
+import { createParam } from 'solito'
 import { RequestPasswordResetEmailModal } from './RequestEmailModal';
 import useCustomStyles from 'app/hooks/useCustomStyles';
+
+const { useParam } = createParam();
 
 export const RequestPasswordReset = () => {
   const [email, setEmail] = useState('');
@@ -13,7 +14,7 @@ export const RequestPasswordReset = () => {
   const styles = useCustomStyles(loadStyles);
 
   //   get token from url using expo router
-  const { token } = useSearchParams();
+  const [token] = useParam('token');
 
   return (
     <>

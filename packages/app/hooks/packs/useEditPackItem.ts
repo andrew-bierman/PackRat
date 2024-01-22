@@ -1,8 +1,12 @@
 import { util } from 'zod';
 import { queryTrpc } from '../../trpc';
+import { useItemsUpdater } from 'app/hooks/items';
+import { useOfflineQueue } from 'app/hooks/offline';
 
-export const useEditPackItem = () => {
+// TODO refactor pack / items, separate logic
+export const useEditPackItem = (isItemPage) => {
   const utils = queryTrpc.useContext();
+  const updateItems = useItemsUpdater();
 
   const mutation = queryTrpc.editItem.useMutation({
     onMutate: async (editedItem) => {
@@ -52,17 +56,38 @@ export const useEditPackItem = () => {
       }
     },
     onSuccess: (result) => {
-      console.log(result);
       // Invalidate relevant queries after a successful edit
       utils.getPackById.invalidate({ packId: result._id });
       utils.getItemsGlobally.invalidate();
     },
   });
+  const { isConnected, addOfflineRequest } = useOfflineQueue();
+
+  const handleEditPackItem = (newItem) => {
+    if (isConnected) {
+      return mutation.mutate(newItem);
+    }
+
+    addOfflineRequest('editItem', newItem);
+
+    updateItems((prevState = {}) => {
+      const prevItems = Array.isArray(prevState.items) ? prevState.items : [];
+
+      return {
+        ...prevState,
+        items: prevItems.map((item) => {
+          if (item._id !== newItem._id) return item;
+
+          return newItem;
+        }),
+      };
+    });
+  };
 
   // Return the mutate function and other relevant properties
   return {
     mutation,
-    editPackItem: mutation.mutate,
+    editPackItem: isItemPage ? handleEditPackItem : mutation.mutate,
     isLoading: mutation.isLoading,
     isError: mutation.isError,
     error: mutation.error,
