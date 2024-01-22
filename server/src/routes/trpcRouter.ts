@@ -124,7 +124,7 @@ export const appRouter = trpcRouter({
   editUser: editUserRoute(),
   deleteUser: deleteUserRoute(),
   getMe: getMeRoute(),
-  emaileExists: emailExistsRoute(),
+  emailExists: emailExistsRoute(),
   checkCode: checkCodeRoute(),
   getUsers: getUsersRoute(),
   resetPasswordEmail: sentEmailRoute(),

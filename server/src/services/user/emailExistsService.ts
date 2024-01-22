@@ -5,25 +5,28 @@ import {
 
 export async function emailExistsService({
   email,
+  smtpEmail,
   sendGridApiKey,
 }: {
+  email: string;
   sendGridApiKey: string;
-  email?: string;
+  smtpEmail: string;
 }) {
-  const val = await findUserByEmail(email);
-  if (val) {
-    sendEmailNotice(sendGridApiKey, email).then(async (result1: any) => {
-      if (result1.status) {
-        const { newcode } = result1;
-        findUserAndUpdate(email, newcode, 'code').then(async (result2: any) => {
-          if (result2.status) {
-            return result2;
-          }
-        });
+  try {
+    const val = await findUserByEmail(email);
+    if (!val) {
+      throw new Error(val);
+    }
+    const result1 = await sendEmailNotice({ sendGridApiKey, smtpEmail, email });
+    if (result1.status) {
+      const { newcode } = result1;
+      const result2 = await findUserAndUpdate(email, newcode, 'code');
+      if (result2.status) {
+        return result2;
       }
-    });
-  } else {
-    return val;
+    }
+  } catch (error) {
+    throw new Error(error.message);
   }
 }
 
@@ -32,35 +35,48 @@ export async function emailExistsService({
  * @param {string} email - The email address to send the notice to.
  * @return {Promise} - A promise that resolves to an object indicating the status of the email sending process.
  */
-async function sendEmailNotice(sendGridApiKey, email) {
-  const newcode = Math.floor(Math.random() * 999999 + 111111);
-
-  const response = await fetch('https://api.sendgrid.com/v3/mail/send', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${sendGridApiKey}`,
-    },
-    body: JSON.stringify({
+async function sendEmailNotice({
+  email,
+  smtpEmail,
+  sendGridApiKey,
+}: {
+  email: string;
+  sendGridApiKey: string;
+  smtpEmail: string;
+}): Promise<any> {
+  try {
+    const newcode = Math.floor(Math.random() * 999999 + 111111);
+    const emailData = {
       personalizations: [
         {
           to: [{ email }],
           subject: 'PackRat verification code',
         },
       ],
-      from: { email: 'Hailemelekot@gmail.com' },
+      from: {
+        // email: 'Hailemelekot@gmail.com'
+        email: smtpEmail,
+      },
       content: [
         {
           type: 'text/plain',
           value: 'Your verification code is ' + newcode,
         },
       ],
-    }),
-  });
-
-  if (!response.ok) {
-    return { status: false };
+    };
+    const response = await fetch('https://api.sendgrid.com/v3/mail/send', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${sendGridApiKey}`,
+      },
+      body: JSON.stringify(emailData),
+    });
+    if (!response.ok) {
+      return { status: false };
+    }
+    return { status: true, newcode };
+  } catch (error) {
+    console.error('Error sending email notice:', error);
   }
-
-  return { status: true, newcode };
 }

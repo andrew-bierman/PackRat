@@ -24,7 +24,7 @@ export async function findUserAndUpdate(
       id: user.id,
       [datatype]: data,
     });
-    return updatedUser;
+    return { status: true, user: updatedUser };
   } catch (error) {
     throw new Error(error.toString());
   }

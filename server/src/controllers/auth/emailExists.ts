@@ -7,23 +7,6 @@ import { emailExistsService } from '../../services/user/emailExistsService';
  * @param {object} res - The response object.
  * @return {Promise<void>} - A promise that resolves to nothing.
  */
-// export const emailExists = async (req, res, next) => {
-//   const { email } = req.body;
-//   try {
-//     const result = await emailExistsService({ email });
-//     if (result?.status) {
-//       responseHandler(res);
-//     } else {
-//       next(result);
-//     }
-//   } catch (error) {
-//     if (error === UnableToSendCodeError) {
-//       next(error);
-//     } else {
-//       next(error);
-//     }
-//   }
-// };
 
 export function emailExistsRoute() {
   return publicProcedure.input(validator.emailExists).mutation(async (opts) => {
@@ -31,6 +14,7 @@ export function emailExistsRoute() {
     const { env }: any = opts.ctx;
     return await emailExistsService({
       sendGridApiKey: env.SEND_GRID_API_KEY,
+      smtpEmail: env.STMP_EMAIL,
       email,
     });
   });
