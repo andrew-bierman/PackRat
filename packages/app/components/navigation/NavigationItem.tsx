@@ -50,6 +50,7 @@ const loadStyles = (theme) => {
 
   return {
     menuBarItem: {
+      justifyContent: "left",
       flexDirection: 'row',
       alignItems: 'center',
       gap: 8,
