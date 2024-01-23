@@ -15,6 +15,7 @@ import React from 'react';
 import type { SolitoAppProps } from 'solito';
 import { Navigation } from 'app/components/navigation';
 import { PortalProvider } from 'tamagui';
+import '../styles/globals.css';
 
 if (process.env.NODE_ENV === 'production') {
   require('../public/tamagui.css');
@@ -41,26 +42,6 @@ function MyApp({ Component, pageProps }: SolitoAppProps) {
         </PortalProvider>
       </Provider>
     </>
-  );
-}
-
-function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useRootTheme();
-
-  return (
-    <NextThemeProvider
-      onChangeTheme={(next) => {
-        setTheme(next as any);
-      }}
-    >
-      <TamaguiProvider
-        disableRootThemeClass
-        defaultTheme={theme}
-        config={config}
-      >
-        {children}
-      </TamaguiProvider>
-    </NextThemeProvider>
   );
 }
 
