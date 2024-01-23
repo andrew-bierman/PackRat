@@ -11,7 +11,7 @@ import Testimonial from './components/testimonials';
 
 export function LandingPage() {
   return (
-    <div className="bg-gradient p-2">
+    <div className="bg-gradient p-2 text-foreground">
       <NavBar />
       <HeroSection />
       <Showcase />
