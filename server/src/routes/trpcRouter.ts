@@ -166,8 +166,8 @@ export const appRouter = trpcRouter({
   getDestination: getDestinationRoute(),
   getPhotonDetails: getPhotonDetailsRoute(),
   // open ai routes
-  // getAIResponse: getAIResponseRoute(),
-  // getUserChats: getUserChatsRoute(),
+  getAIResponse: getAIResponseRoute(),
+  getUserChats: getUserChatsRoute(),
   // item routes
   getItems: getItemsRoute(),
   getItemById: getItemByIdRoute(),
