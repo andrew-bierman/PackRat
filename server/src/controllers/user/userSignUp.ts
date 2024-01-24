@@ -48,7 +48,6 @@ export function signUpRoute() {
       name,
     });
     await userClass.generateAuthToken(JWT_SECRET, user.id);
-    // Not Working for now
     await sendWelcomeEmail(
       user.email,
       user.name,

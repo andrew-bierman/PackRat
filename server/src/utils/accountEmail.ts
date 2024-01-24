@@ -1,12 +1,3 @@
-// import { SEND_GRID_API_KEY, STMP_EMAIL } from '../config';
-
-// import sgMail from '@sendgrid/mail';
-
-// if (!SEND_GRID_API_KEY) {
-//   throw new Error('SEND_GRID_API_KEY is not set');
-// }
-// sgMail.setApiKey(SEND_GRID_API_KEY);
-
 /**
  * Sends a welcome email to a user.
  *
@@ -21,14 +12,10 @@ export const sendWelcomeEmail = async (
   name: string,
   smtpEmail: string,
   sendGridApiKey: string,
-) => {
-  const response = await fetch('https://api.sendgrid.com/v3/mail/send', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${sendGridApiKey}`,
-    },
-    body: JSON.stringify({
+): Promise<any> => {
+  try {
+    console.log('sending email');
+    const emailData = {
       personalizations: [
         {
           to: [{ email }],
@@ -42,17 +29,27 @@ export const sendWelcomeEmail = async (
           value: `Welcome to the app, ${name}. Let me know how you get along with the app.`,
         },
       ],
-    }),
-  });
+    };
+    const response = await fetch('https://api.sendgrid.com/v3/mail/send', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${sendGridApiKey}`,
+      },
+      body: JSON.stringify(emailData),
+    });
 
-  console.log('sending email');
-  if (!response.ok) {
-    console.log('Email did not Send');
-    throw new Error(`HTTP error! status: ${response.status}`);
+    if (!response.ok) {
+      console.log('Email did not Send');
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    console.log('Email Sent');
+    // const data = await response.json();
+    // return data;
+  } catch (error) {
+    console.error('Error sending email:', error);
   }
-
-  console.log('Email Sent');
-  return await response.json();
 };
 
 /**
@@ -69,14 +66,9 @@ export const resetEmail = async (
   resetUrl: string,
   smtpEmail: string,
   sendGridApiKey: string,
-) => {
-  const response = await fetch('https://api.sendgrid.com/v3/mail/send', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${sendGridApiKey}`,
-    },
-    body: JSON.stringify({
+): Promise<any> => {
+  try {
+    const emailData = {
       personalizations: [
         {
           to: [{ email }],
@@ -88,23 +80,33 @@ export const resetEmail = async (
         {
           type: 'text/html',
           value: `
-          <div style="font-family: Arial, sans-serif; font-size: 14px; line-height: 1.5;">
-            <h2 style="font-size: 18px; font-weight: bold; margin-bottom: 16px;">Password Reset</h2>
-            <p style="margin-bottom: 16px;">Click the link below to reset your password:</p>
-            <a href="${resetUrl}" style="display: inline-block; padding: 8px 16px; background-color: #0070f3; color: #fff; text-decoration: none; border-radius: 4px; margin-bottom: 16px;">Reset Password</a>
-            <p>If you did not request to reset your password, please ignore this email.</p>
-          </div>
-        `,
+        <div style="font-family: Arial, sans-serif; font-size: 14px; line-height: 1.5;">
+          <h2 style="font-size: 18px; font-weight: bold; margin-bottom: 16px;">Password Reset</h2>
+          <p style="margin-bottom: 16px;">Click the link below to reset your password:</p>
+          <a href="${resetUrl}" style="display: inline-block; padding: 8px 16px; background-color: #0070f3; color: #fff; text-decoration: none; border-radius: 4px; margin-bottom: 16px;">Reset Password</a>
+          <p>If you did not request to reset your password, please ignore this email.</p>
+        </div>
+      `,
         },
       ],
-    }),
-  });
+    };
+    const response = await fetch('https://api.sendgrid.com/v3/mail/send', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${sendGridApiKey}`,
+      },
+      body: JSON.stringify(emailData),
+    });
 
-  if (!response.ok) {
-    console.log('Email did not Send');
-    throw new Error(`HTTP error! status: ${response.status}`);
+    if (!response.ok) {
+      console.log('Email did not Send');
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    console.log('Email Sent');
+    // return await response.json();
+  } catch (error) {
+    console.error('Error resetting email:', error);
   }
-
-  console.log('Email Sent');
-  return await response.json();
 };

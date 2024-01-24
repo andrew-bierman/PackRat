@@ -1,88 +1,33 @@
-import * as jwt from 'hono/jwt';
-import bcrypt from 'bcryptjs';
-
-// import { JWT_SECRET, SEND_GRID_API_KEY } from '../../config';
-
-// import sgMail from '@sendgrid/mail';
-import { responseHandler } from '../../helpers/responseHandler';
 import { z } from 'zod';
 import { publicProcedure } from '../../trpc';
-
-// import { prisma } from '../../prisma';
-// sgMail.setApiKey(SEND_GRID_API_KEY);
-
-// Verify a password reset token and return the user's email address
-const verifyPasswordResetToken = async (token, secret) => {
-  try {
-    const decoded: any = await jwt.verify(token, secret);
-    return decoded.email;
-  } catch (error) {
-    console.error('Error verifying password reset token:', error);
-    return null;
-  }
-};
-
-// export const handlePasswordReset = async (req, res) => {
-//   try {
-//     const { password } = req.body;
-//     const { token } = req.params;
-//     const email = verifyPasswordResetToken(token);
-//     const hashedPassword = bcrypt.hashSync(password, 10); // hash the password
-
-//     const user = await prisma.user.findUnique({
-//       where: {
-//         email: email,
-//       },
-//     });
-
-//     if (!user) {
-//       throw new Error('No user found with this email address');
-//     }
-
-//     if (Date.now() > user.passwordResetTokenExpiration.getTime()) {
-//       throw new Error('Password reset token has expired');
-//     }
-
-//     await prisma.user.update({
-//       where: {
-//         email: email,
-//       },
-//       data: {
-//         password: hashedPassword,
-//         passwordResetToken: null,
-//         passwordResetTokenExpiration: null,
-//       },
-//     });
-
-//     res.locals.data = { message: 'Password reset successful' };
-//     responseHandler(res);
-//   } catch (error) {
-//     console.error('Error resetting password:', error);
-//     return res
-//       .status(500)
-//       .send({ error: error.message || 'Internal server error' });
-//   }
-// };
+import { hashPassword, verifyPasswordResetToken } from '../../utils/user';
+import { User } from '../../drizzle/methods/User';
 
 export function handlePasswordResetRoute() {
   return publicProcedure
-    .input(z.object({ token: z.string() }))
+    .input(z.object({ token: z.string(), password: z.string() }))
     .mutation(async (opts) => {
-      const { token } = opts.input;
-      const { prisma, env }: any = opts.ctx;
+      const { token, password } = opts.input;
+      const { env }: any = opts.ctx;
+      const userClass = new User();
       const email = await verifyPasswordResetToken(token, env.JWT_SECRET);
-      const user = await prisma.user.findFirst({
-        where: {
-          email,
-        },
-      });
+      const hashedPassword = await hashPassword(env.JWT_SECRET, password);
+      const user = await userClass.findUser({ email });
 
       if (!user) {
-        return { error: 'No user found with this email address' };
+        throw new Error('No user found with this email address');
       }
 
       if (Date.now() > user.passwordResetTokenExpiration.getTime()) {
         return { error: 'Password reset token has expired' };
       }
+      await userClass.update({
+        id: user.id,
+        password: hashedPassword,
+        passwordResetToken: null,
+        passwordResetTokenExpiration: null,
+      });
+
+      return { message: 'Password reset successful' };
     });
 }

@@ -1,8 +1,6 @@
-import { PrismaClient } from '@prisma/client/edge';
-import { Configuration, OpenAIApi } from 'openai';
+import OpenAI from 'openai';
 import { Conversation } from '../../drizzle/methods/Conversation';
 import { User } from '../../drizzle/methods/User';
-// import { prisma } from '../../prisma';
 
 /**
  * Retrieves AI response for a given user input in a conversation.
@@ -13,11 +11,11 @@ import { User } from '../../drizzle/methods/User';
  * @returns {Object} - The AI response and the updated conversation.
  */
 export const getAIResponseService = async (
-  userId,
-  conversationId,
-  userInput,
+  userId: string,
+  conversationId: string,
+  userInput: string,
   openAIAPIKey = null,
-) => {
+): Promise<object> => {
   if (!openAIAPIKey) {
     throw new Error(
       'Failed to get response from AI. OPENAI_API_KEY is not set.',
@@ -26,29 +24,25 @@ export const getAIResponseService = async (
 
   const conversationClass = new Conversation();
   const userClass = new User();
-  const configuration = new Configuration({
+  const openai = new OpenAI({
     apiKey: openAIAPIKey,
   });
-
-  const openai = new OpenAIApi(configuration);
-
-  const user = await userClass.findUnique({
-    where: { id: userId },
-  });
+  const user = await userClass.findUser({ userId });
 
   if (!user) {
     throw new Error('User not found');
   }
 
-  let conversation: any = await conversationClass.findUniqueConversation({
-    where: { userId, id: conversationId },
-  });
+  let conversation: any = await conversationClass.findConversation(
+    userId,
+    conversationId,
+  );
 
   console.log('conversation after find ---->', conversation);
 
   let conversationHistory = conversation ? conversation.history : '';
   const messages = conversationHistory
-    ? conversationHistory.split('\n').map((message, i) => ({
+    ? conversationHistory.split('\n').map((message: any, i: number) => ({
         role: i % 2 === 0 ? 'user' : 'assistant',
         content: message,
       }))
@@ -62,30 +56,27 @@ export const getAIResponseService = async (
 
   messages.push({ role: 'user', content: userInput });
 
-  const response = await openai.createChatCompletion({
+  const response = await openai.chat.completions.create({
     model: 'gpt-3.5-turbo',
     messages,
-  } as any);
+  });
 
-  const aiResponse = response.data.choices[0].message.content.trim();
+  const aiResponse = response.choices[0].message.content.trim();
   conversationHistory += `\n${userInput}\nAI: ${aiResponse}`;
 
   if (conversation) {
     // Update existing conversation
-    await conversationClass.update(
-      { history: conversationHistory },
-      conversation.id,
-    );
+    await conversationClass.update({
+      history: conversationHistory,
+      id: conversation.id,
+    });
   } else {
     // Create new conversation
     conversation = await conversationClass.create({
-      data: {
-        userId,
-        history: conversationHistory,
-      },
+      userId,
+      history: conversationHistory,
     });
   }
-
   return {
     aiResponse,
     conversation,

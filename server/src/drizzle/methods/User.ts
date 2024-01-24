@@ -108,9 +108,16 @@ export class User {
     if (!jwtSecret) throw new Error('jwtSecret is not defined');
     const resetToken = await jwt.sign({ id }, jwtSecret);
     const filter = eq(UserTable.id, id);
-    await (await this.createInstance())
+    await (
+      await this.createInstance()
+    )
       .update(UserTable)
-      .set({ passwordResetToken: resetToken })
+      .set({
+        passwordResetToken: resetToken,
+        passwordResetTokenExpiration: new Date(
+          Date.now() + 24 * 60 * 60 * 1000,
+        ),
+      })
       .where(filter)
       .returning()
       .get();

@@ -48,8 +48,7 @@ export function sentEmailRoute() {
       CLIENT_URL,
       user.id,
     );
-    // Not working for now
-    resetEmail(user.email, resetUrl, STMP_EMAIL, SEND_GRID_API_KEY);
+    await resetEmail(user.email, resetUrl, STMP_EMAIL, SEND_GRID_API_KEY);
     return 'Reset Token has been sent successfully';
   });
 }
