@@ -12,6 +12,7 @@ import { Stack } from 'expo-router';
 import { executeOfflineRequests } from '../../store/offlineQueue';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { BaseModal } from '@packrat/ui';
+import { RootState } from 'store/store';
 // import { checkNetworkConnected } from 'app/utils/netInfo';
 
 export default function Items() {
@@ -20,10 +21,10 @@ export default function Items() {
   const [page, setPage] = useState(1);
   const [refetch, setRefetch] = useState(false);
   const styles = useCustomStyles(loadStyles);
-  const data = useSelector((state) => state.globalItems);
-  const isLoading = useSelector((state) => state.globalItems.isLoading);
-  const isError = useSelector((state) => state.globalItems.isError);
-  const { isConnected, requests } = useSelector((state) => state.offlineQueue);
+  const data = useSelector((state: RootState) => state.globalItems);
+  const isLoading = useSelector((state: RootState) => state.globalItems.isLoading);
+  const isError = useSelector((state: RootState) => state.globalItems.error);
+  const { isConnected, requests } = useSelector((state: RootState) => state.offlineQueue);
 
   const dispatch = useDispatch();
 
