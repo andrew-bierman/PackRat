@@ -1,5 +1,5 @@
 export const useScoreData = (type, data) => {
-  const id = data._id;
+  const id = data.id;
   const totalScore = data.totalScore;
   const grades = data.grades;
   const scores = data.scores;

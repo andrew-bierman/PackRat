@@ -28,10 +28,10 @@ export default function PackContainer({ isCreatingTrip = false }) {
   const styles = useCustomStyles(loadStyles);
 
   // useEffect(() => {
-  //   if (user?._id) {
-  //     dispatch(fetchUserPacks({ ownerId: user?._id }));
+  //   if (user?.id) {
+  //     dispatch(fetchUserPacks({ ownerId: user?.id }));
   //   }
-  // }, [dispatch, user?._id, refetch]);
+  // }, [dispatch, user?.id, refetch]);
 
   // TODO - improve refetch logic. Should be handled entirely by the hook
   const {
@@ -39,7 +39,7 @@ export default function PackContainer({ isCreatingTrip = false }) {
     error,
     isLoading,
     refetch: refetchQuery,
-  } = useUserPacks((ownerId = user?._id));
+  } = useUserPacks((ownerId = user?.id));
 
   useEffect(() => {
     refetchQuery();
@@ -53,7 +53,7 @@ export default function PackContainer({ isCreatingTrip = false }) {
    */
   const handlePack = (val) => {
     // const selectedPack = packs.find((pack) => pack.name == val);
-    const selectedPack = packs.find((pack) => pack._id == val);
+    const selectedPack = packs.find((pack) => pack.id == val);
 
     setCurrentPackId(selectedPack?.id);
 
@@ -65,7 +65,7 @@ export default function PackContainer({ isCreatingTrip = false }) {
   //   selectPackById(state, currentPackId),
   // );
 
-  const currentPack = packs?.find((pack) => pack._id === currentPackId);
+  const currentPack = packs?.find((pack) => pack.id === currentPackId);
 
   const dataValues = packs?.map((item) => item?.name) ?? [];
 
@@ -74,7 +74,7 @@ export default function PackContainer({ isCreatingTrip = false }) {
       <DropdownComponent
         data={packs ?? []}
         textKey={'name'}
-        valueKey={'_id'}
+        valueKey={'id'}
         value={currentPackId}
         onValueChange={handlePack}
         placeholder={'Select a Pack'}

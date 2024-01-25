@@ -22,8 +22,8 @@ export const useAddPackItem = () => {
             ...newItem,
             owners: [],
             global: false,
-            packs: [newItem._id],
-            _id: Date.now().toString(),
+            packs: [newItem.id],
+            id: Date.now().toString(),
           },
         ],
       };

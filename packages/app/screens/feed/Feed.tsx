@@ -50,7 +50,7 @@ const Feed = ({ feedType = 'public' }) => {
   const [refreshing, setRefreshing] = useState(false);
 
   const dispatch = useDispatch();
-  const ownerId = useSelector((state) => state.auth.user?._id);
+  const ownerId = useSelector((state) => state.auth.user?.id);
   // const publicPacksData = useSelector((state) => state.feed.publicPacks);
   // const userPacksData = useSelector(selectAllPacks);
   // const publicTripsData = useSelector((state) => state.feed.publicTrips);
@@ -155,7 +155,7 @@ const Feed = ({ feedType = 'public' }) => {
     //       {/* {console.log({ data })} */}
     //       {feedSearchFilterComponent}
     //       {data?.map((item) => (
-    //         <Card key={item?._id} type={item?.type} {...item} />
+    //         <Card key={item?.id} type={item?.type} {...item} />
     //       ))}
     //     </View>
     //   </ScrollView>
@@ -166,9 +166,9 @@ const Feed = ({ feedType = 'public' }) => {
           data={data}
           horizontal={false}
           numColumns={Platform.OS === 'web' ? 4 : 1}
-          keyExtractor={(item) => item?._id + item?.type}
+          keyExtractor={(item) => item?.id + item?.type}
           renderItem={({ item }) => (
-            <Card key={item?._id} type={item?.type} {...item} />
+            <Card key={item?.id} type={item?.type} {...item} />
           )}
           ListHeaderComponent={() => feedSearchFilterComponent}
           ListEmptyComponent={() => (

@@ -19,7 +19,7 @@ export const usePackTitleInput = (data) => {
 
   const handleSaveTitle = (title) => {
     const packDetails = {
-      _id: data._id,
+      id: data.id,
       name: title,
       is_public: data.is_public,
     };

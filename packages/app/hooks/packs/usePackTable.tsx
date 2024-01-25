@@ -16,14 +16,14 @@ export const usePackTable = ({
   const dispatch = useDispatch();
   let ids = [];
   if (currentPack?.items) {
-    ids = copy ? currentPack.items.map((item) => item._id) : [];
+    ids = copy ? currentPack.items.map((item) => item.id) : [];
   }
   const [checkedItems, setCheckedItems] = useState([...ids]);
 
   const handleDuplicate = () => {
     const data = {
-      packId: currentPack._id,
-      ownerId: user._id,
+      packId: currentPack.id,
+      ownerId: user.id,
       items: checkedItems,
     };
     dispatch(duplicatePackItem(data));
@@ -45,7 +45,7 @@ export const usePackTable = ({
       Todo better to move this all inside a utility function and pass them variables
       */
   data
-    ?.filter((item) => !checkedItems.includes(item._id))
+    ?.filter((item) => !checkedItems.includes(item.id))
     .forEach((item) => {
       const categoryName = item.category ? item.category.name : 'Undefined';
       const itemWeight = Number(item.weight) || 0; // ensure it's a number

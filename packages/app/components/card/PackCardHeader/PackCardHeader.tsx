@@ -7,9 +7,9 @@ import { useDeletePack, useFetchSinglePack } from 'app/hooks/packs';
 import { usePackTitleInput } from './usePackTitleInput';
 
 export const PackCardHeader = ({ data, title, link }) => {
-  const { isLoading } = useFetchSinglePack(data?._id);
+  const { isLoading } = useFetchSinglePack(data?.id);
   const user = useAuthUser();
-  const handleDeletePack = useDeletePack(data._id);
+  const handleDeletePack = useDeletePack(data.id);
   const { handleActionsOpenChange, handleEdit, handleSaveTitle, isEditMode } =
     usePackTitleInput(data);
 

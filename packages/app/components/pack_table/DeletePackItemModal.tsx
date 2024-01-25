@@ -9,7 +9,7 @@ export const DeletePackItemModal = ({ itemId, pack }) => {
   const { handleDeleteItem } = useDeleteItem();
   const deleteItemHandler = (_, closeModal) => {
     if (pack) {
-      deletePackItem({ itemId, packId: pack._id });
+      deletePackItem({ itemId, packId: pack.id });
     } else {
       handleDeleteItem(itemId);
     }

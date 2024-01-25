@@ -55,7 +55,7 @@ export const ItemsTable = ({
           page={page}
         />
       </EditPackItemModal>,
-      <DeletePackItemModal itemId={_id} />,
+      <DeletePackItemModal itemId={id} />,
     ];
     return <Row data={rowData} style={styles.row} flexArr={flexArr} />;
   };

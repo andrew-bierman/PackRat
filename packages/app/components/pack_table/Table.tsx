@@ -65,7 +65,7 @@ const TableItem = ({
   refetch,
   setRefetch = () => {},
 }) => {
-  const { name, weight, quantity, unit, _id } = itemData;
+  const { name, weight, quantity, unit, id } = itemData;
   const styles = useCustomStyles(loadStyles);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   /**
@@ -94,17 +94,12 @@ const TableItem = ({
       <PackOptions
         Edit={
           <EditPackItemModal>
-            <AddItem
-              _id={_id}
-              packId={_id}
-              isEdit={true}
-              initialData={itemData}
-            />
+            <AddItem id={id} packId={id} isEdit={true} initialData={itemData} />
           </EditPackItemModal>
         }
         Delete={
           <DeletePackItemModal
-            itemId={_id}
+            itemId={id}
             pack={currentPack}
             refetch={refetch}
             setRefetch={setRefetch}
@@ -112,8 +107,8 @@ const TableItem = ({
         }
         Ignore={
           <IgnoreItemCheckbox
-            itemId={_id}
-            isChecked={checkedItems.includes(_id)}
+            itemId={id}
+            isChecked={checkedItems.includes(id)}
             handleCheckboxChange={handleCheckboxChange}
           />
         }
@@ -127,29 +122,29 @@ const TableItem = ({
       quantity,
       <EditPackItemModal>
         <AddItem
-          _id={_id}
-          packId={_id}
+          id={id}
+          packId={id}
           isEdit={true}
           currentPack={currentPack}
           initialData={itemData}
         />
       </EditPackItemModal>,
       <DeletePackItemModal
-        itemId={_id}
+        itemId={id}
         pack={currentPack}
         refetch={refetch}
         setRefetch={setRefetch}
       />,
       <IgnoreItemCheckbox
-        itemId={_id}
-        isChecked={checkedItems.includes(_id)}
+        itemId={id}
+        isChecked={checkedItems.includes(id)}
         handleCheckboxChange={handleCheckboxChange}
       />,
     ];
   }
 
   /*
-  * this _id is passed as pack id but it is a item id which is confusing
+  * this id is passed as pack id but it is a item id which is confusing
   Todo need to change the name for this passing argument and remaining functions which are getting it
    */
 
@@ -274,7 +269,7 @@ export const TableContainer = ({
                   <CategoryRow category={category} />
                   <FlatList
                     data={items}
-                    keyExtractor={(item, index) => item._id}
+                    keyExtractor={(item, index) => item.id}
                     renderItem={({ item }) => (
                       <TableItem
                         itemData={item}

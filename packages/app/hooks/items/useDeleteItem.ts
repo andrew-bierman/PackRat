@@ -31,7 +31,7 @@ export const useDeleteItem = () => {
 
         return {
           ...prevState,
-          items: prevItems.filter(({ _id }) => _id !== itemId),
+          items: prevItems.filter(({ id }) => id !== itemId),
         };
       });
     },

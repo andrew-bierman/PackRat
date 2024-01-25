@@ -36,11 +36,11 @@ const ChatSelector = ({ conversation, onSelect, isActive }) => {
   const styles = useCustomStyles(loadStyles);
   return (
     <TouchableOpacity
-      key={conversation._id}
-      onPress={() => onSelect(conversation._id)}
+      key={conversation.id}
+      onPress={() => onSelect(conversation.id)}
       style={[styles.chatSelector, isActive && styles.activeChatSelector]}
     >
-      <Text style={styles.chatSelectorText}>{conversation._id}</Text>
+      <Text style={styles.chatSelectorText}>{conversation.id}</Text>
     </TouchableOpacity>
   );
 };
@@ -71,9 +71,9 @@ const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
           >
             {conversations?.map((conversation) => (
               <Select.Item
-                key={conversation._id}
-                label={conversation._id}
-                value={conversation._id}
+                key={conversation.id}
+                label={conversation.id}
+                value={conversation.id}
               />
             ))}
           </Select>
@@ -92,7 +92,7 @@ const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
           //           onSelect={setConversationId}
           //         />
           //       )}
-          //       keyExtractor={(item) => item._id}
+          //       keyExtractor={(item) => item.id}
           //       contentContainerStyle={styles.flatList}
           //     />
           //     <TouchableOpacity

@@ -115,7 +115,7 @@ export default function UserDataContainer({
           ) : data && data.length > 0 ? (
             //   data?.map((dataItem, index) => (
             //     <UserDataCard
-            //       key={dataItem._id}
+            //       key={dataItem.id}
             //       {...{ ...dataItem }}
             //       type={cardType}
             //       state={dataState}
@@ -129,7 +129,7 @@ export default function UserDataContainer({
               data={data}
               renderItem={({ item, index }) => (
                 <UserDataCard
-                  key={item._id}
+                  key={item.id}
                   {...item}
                   type={cardType}
                   state={dataState}
@@ -138,11 +138,11 @@ export default function UserDataContainer({
                   differentUser={differentUser}
                 />
               )}
-              keyExtractor={(item) => item._id}
+              keyExtractor={(item) => item.id}
               maxToRenderPerBatch={2}
               // Other FlatList props like onEndReached for infinite scrolling
             />
-          ) : currentUser?._id === userId ? (
+          ) : currentUser?.id === userId ? (
             <Link href="/">
               <RButton
                 style={{ color: currentTheme.colors.white, width: '100%' }}

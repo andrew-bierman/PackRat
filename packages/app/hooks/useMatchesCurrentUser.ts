@@ -12,5 +12,5 @@ export const useMatchesCurrentUser = (ownerId: string): boolean => {
 
   console.log('ownerId', ownerId);
 
-  return currentUserId === ownerId; // Note: I adjusted `_id` to `id` based on your other code
+  return currentUserId === ownerId; // Note: I adjusted `id` to `id` based on your other code
 };

@@ -18,7 +18,7 @@ import { useAddFavorite } from 'app/hooks/favorites';
 
 export default function Card({
   type,
-  _id,
+  id,
   owner,
   name,
   total_weight,
@@ -42,8 +42,8 @@ export default function Card({
 
   const isFavorite =
     type !== 'trip' &&
-    (favorited_by?.includes(user?._id) ||
-      favorited_by?.some((obj) => obj?._id === user?._id && user?.id));
+    (favorited_by?.includes(user?.id) ||
+      favorited_by?.some((obj) => obj?.id === user?.id && user?.id));
 
   /**
    * Handles adding an item to the user's favorites.
@@ -52,8 +52,8 @@ export default function Card({
    */
   const handleAddToFavorite = () => {
     const data = {
-      packId: _id,
-      userId: user._id,
+      packId: id,
+      userId: user.id,
     };
 
     // dispatch(addFavorite(data));
@@ -67,7 +67,7 @@ export default function Card({
    */
   const handleRemoveFromFavorite = () => {
     const favorite = favorites.find(
-      (favorite) => favorite.pack_id === _id && favorite.user_id === user._id,
+      (favorite) => favorite.pack_id === id && favorite.user_id === user.id,
     );
     if (favorite) {
       dispatch(removeFavorite(favorite.id));
@@ -107,7 +107,7 @@ export default function Card({
                   width: '100%',
                 }}
               >
-                <Link href={type === 'pack' ? '/pack/' + _id : '/trip/' + _id}>
+                <Link href={type === 'pack' ? '/pack/' + id : '/trip/' + id}>
                   <RText fontSize={18} color={currentTheme.colors.textColor}>
                     {truncatedName}
                   </RText>
@@ -135,7 +135,7 @@ export default function Card({
                         size={24}
                         color={currentTheme.colors.cardIconColor}
                       />
-                      <DuplicateIcon link={`/pack/${_id}?copy=true`} />
+                      <DuplicateIcon link={`/pack/${id}?copy=true`} />
                     </View>
                   )}
                   {type === 'trip' && (
@@ -240,7 +240,7 @@ export default function Card({
                         gap: 8,
                       }}
                     >
-                      {user?._id === owner_id ? null : (
+                      {user?.id === owner_id ? null : (
                         <TouchableOpacity onPress={handleAddToFavorite}>
                           <AntDesign
                             name="heart"

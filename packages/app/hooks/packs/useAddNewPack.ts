@@ -13,7 +13,7 @@ export const useAddNewPack = () => {
     mutation.mutate({
       name,
       is_public: isPublic,
-      owner_id: user?._id,
+      owner_id: user?.id,
     });
   };
 

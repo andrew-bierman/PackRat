@@ -28,7 +28,7 @@ export const useWater = ({ currentPack, setWaterItem }) => {
       weight: waterWeight,
       quantity: '1',
       unit: 'oz',
-      packId: currentPack._id,
+      packId: currentPack.id,
       type: ItemCategoryEnum.WATER,
     };
 

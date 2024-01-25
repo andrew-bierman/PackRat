@@ -48,7 +48,7 @@ export function TripDetails() {
   // const user = useSelector((state) => state.auth.user);
 
   // check if user is owner of pack, and that pack and user exists
-  // const isOwner = currentTrip && user && currentTrip.owner_id === user._id;
+  // const isOwner = currentTrip && user && currentTrip.owner_id === user.id;
 
   // const isLoading = useSelector((state) => state.singleTrip.isLoading);
   // const error = useSelector((state) => state.singleTrip.error);

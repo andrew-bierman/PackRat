@@ -9,7 +9,7 @@ export const useDeletePackItem = () => {
         packId: deleteItem.packId,
       });
       const itemIndex = previousPack.items.findIndex(
-        (item) => item._id === deleteItem.itemId,
+        (item) => item.id === deleteItem.itemId,
       );
       if (itemIndex === -1) {
         return {

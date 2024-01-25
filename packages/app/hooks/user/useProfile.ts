@@ -8,7 +8,7 @@ import { useGetUser } from './useGetUser';
 export const useProfile = (id = null) => {
   const authUser = useAuthUser();
 
-  const userId = id ?? authUser?._id;
+  const userId = id ?? authUser?.id;
 
   const isCurrentUser = useMatchesCurrentUser(userId); // TODO: Implement this hook in more components
 
@@ -16,19 +16,19 @@ export const useProfile = (id = null) => {
     data: allPacks,
     isLoading: allPacksLoading,
     error: allPacksError,
-  } = useUserPacks((ownerId = authUser?._id)); // TODO: Add enabled as parameter
+  } = useUserPacks((ownerId = authUser?.id)); // TODO: Add enabled as parameter
 
   const {
     data: tripsData,
     isLoading: tripsIsLoading,
     error: tripsError,
-  } = useUserTrips((ownerId = authUser?._id)); // TODO: Add enabled as parameter
+  } = useUserTrips((ownerId = authUser?.id)); // TODO: Add enabled as parameter
 
   const {
     data: allFavorites,
     isLoading: allFavoritesLoading,
     error: allFavoritesError,
-  } = useFetchUserFavorites((ownerId = authUser?._id)); // TODO: Add enabled as parameter
+  } = useFetchUserFavorites((ownerId = authUser?.id)); // TODO: Add enabled as parameter
 
   const {
     data: userData,

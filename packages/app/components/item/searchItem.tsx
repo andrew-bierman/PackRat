@@ -32,7 +32,7 @@ export const SearchItem: React.FC<Props> = ({ onSelect, placeholder }) => {
     const ownerId = user.id;
     // @ts-expect-error
     const packId = window.location.pathname.substring('/path/'.length);
-    const selectedItem = item?._id;
+    const selectedItem = item?.id;
     const data = {
       ownerId,
       packId,

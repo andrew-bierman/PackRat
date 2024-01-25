@@ -315,7 +315,7 @@ const packsSlice = createSlice({
       })
       .addCase(scorePack.fulfilled, (state, action) => {
         packsAdapter.updateOne(state, {
-          id: action.payload._id,
+          id: action.payload.id,
           changes: action.payload,
         });
         state.isLoading = false;

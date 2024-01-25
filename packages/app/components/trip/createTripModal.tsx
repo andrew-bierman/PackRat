@@ -138,7 +138,7 @@ export const SaveTripContainer = ({ dateRange }) => {
     closeModal();
   };
   if (isSuccess && response) {
-    router.push(`/trip/${response.trip._id}`);
+    router.push(`/trip/${response.trip.id}`);
   }
   /**
    * Handles the change in value.
