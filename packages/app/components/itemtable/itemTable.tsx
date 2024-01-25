@@ -48,6 +48,7 @@ export const ItemsTable = ({
       <EditPackItemModal>
         <AddItem
           isEdit={true}
+          isItemPage
           initialData={itemData}
           editAsDuplicate={false}
           setPage={setPage}

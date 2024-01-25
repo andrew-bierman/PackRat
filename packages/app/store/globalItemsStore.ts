@@ -31,7 +31,11 @@ export const getItemsGlobal = createAsyncThunk(
       //   `${api}/item/global?limit=${limit}&page=${page}`,
       // );
       // return response.data;
-      return await trpc.getItemsGlobally.query({ limit, page });
+      return await trpc.getItemsGlobally.query({
+        limit,
+        page,
+        searchString: '',
+      });
     } catch (error) {
       console.log('error', error.message);
     }
