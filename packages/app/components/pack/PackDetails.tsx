@@ -18,15 +18,16 @@ import { AddItemModal } from './AddItemModal';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useUserPacks } from 'app/hooks/packs/useUserPacks';
 import { useFetchSinglePack } from '../../hooks/packs';
+import { RootState } from 'store/store';
 
 export function PackDetails() {
   const searchParams = new URLSearchParams(this.location.search);
   const canCopy = searchParams.get('copy');
   const { packId } = useSearchParams();
   const link = `${CLIENT_URL}/packs/${packId}`;
-  const updated = useSelector((state) => state.packs.update);
+  const updated = useSelector((state: RootState) => state.packs.update);
   const [firstLoad, setFirstLoad] = useState(true);
-  const user = useSelector((state) => state.auth.user);
+  const user = useSelector((state: RootState) => state.auth.user);
   const userId = user?._id;
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
   // const isLoading = useSelector((state) => state.singlePack.isLoading);
@@ -59,7 +60,7 @@ export function PackDetails() {
   // check if user is owner of pack, and that pack and user exists
   const isOwner = currentPack && user && currentPack.owner_id === user._id;
 
-  const error = useSelector((state) => state.singlePack.error);
+  const error = useSelector((state: RootState) => state.singlePack.error);
   const isError = error !== null;
 
   if (isLoading && firstLoad) return <RText>Loading...</RText>;
@@ -82,7 +83,7 @@ export function PackDetails() {
             error={error}
             additionalComps={
               <>
-                <TableContainer currentPack={currentPack} copy={canCopy} />
+                <TableContainer currentPack={currentPack} copy={canCopy} refetch={refetch} />
                 <View style={styles.boxStyle}>
                   <AddItemModal
                     currentPackId={currentPackId}
