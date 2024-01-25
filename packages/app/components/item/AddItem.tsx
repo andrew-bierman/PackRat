@@ -30,6 +30,8 @@ export const AddItem = ({
 
   const [unit, setUnit] = useState(initialData?.unit || '');
 
+  const ownerId = useSelector((state) => state.auth.user.id);
+
   const {
     // mutation: addPackItemMutation
     isLoading,
@@ -86,6 +88,7 @@ export const AddItem = ({
         type: categoryType,
         unit,
         packId,
+        ownerId,
       });
     }
   };
