@@ -4,7 +4,7 @@ import { Text, TouchableOpacity, View } from 'react-native';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 
 interface ScrollButtonProps {
-  direction: "left" | "right";
+  direction: 'left' | 'right';
   onPress: (index: any) => void;
   disabled: boolean;
 }

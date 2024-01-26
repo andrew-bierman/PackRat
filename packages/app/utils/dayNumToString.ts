@@ -8,25 +8,25 @@ export const dayNumToString = (day: number): string => {
   let stringDay: string;
   switch (day) {
     case 0:
-      stringDay =  'Sunday';
+      stringDay = 'Sunday';
       break;
     case 1:
-      stringDay =  'Monday';
+      stringDay = 'Monday';
       break;
     case 2:
-      stringDay =  'Tuesday';
+      stringDay = 'Tuesday';
       break;
     case 3:
-      stringDay =  'Wednesday';
+      stringDay = 'Wednesday';
       break;
     case 4:
-      stringDay =  'Thursday';
+      stringDay = 'Thursday';
       break;
     case 5:
-      stringDay =  'Friday';
+      stringDay = 'Friday';
       break;
     case 6:
-      stringDay =  'Saturday';
+      stringDay = 'Saturday';
   }
 
   return stringDay;

@@ -5,7 +5,7 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useItemRow } from 'app/hooks/itemrow';
 
 interface ItemRowProps {
-  packName: string
+  packName: string;
 }
 
 export const ItemRow = ({ packName }: ItemRowProps) => {

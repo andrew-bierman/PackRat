@@ -1,6 +1,10 @@
 import { queryTrpc } from '../../trpc';
 
-export const useGetPhotonDetails = ({ properties }: {properties: { osm_id: string; osm_type: string }}) => {
+export const useGetPhotonDetails = ({
+  properties,
+}: {
+  properties: { osm_id: string; osm_type: string };
+}) => {
   const { osm_id = null, osm_type = null } = properties || {};
   const enabled = Boolean(osm_id && osm_type);
 
