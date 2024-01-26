@@ -4,7 +4,5 @@ import LandingPage from 'app/components/landing_page';
 
 export default function Home() {
   const user = useSelector((state: any) => state.auth.user);
-  return <>
-    {!user ? <LandingPage /> : <Dashboard />}
-  </>
+  return <>{!user ? <LandingPage /> : <Dashboard />}</>;
 }

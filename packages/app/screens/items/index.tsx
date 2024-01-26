@@ -11,26 +11,23 @@ import { getItemsGlobal } from 'app/store/globalItemsStore';
 // import { Stack } from 'expo-router';
 import { executeOfflineRequests } from 'app/store/offlineQueue';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import useItems from 'app/hooks/items/useItems';
+import { useItems } from 'app/hooks/items/useItems';
 import { BaseModal } from '@packrat/ui';
-// import { checkNetworkConnected } from '~/utils/netInfo';
+import { RootState } from 'store/store';
+// import { checkNetworkConnected } from 'app/utils/netInfo';
 
 export default function Items() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
 
   const {
-    isAddItemModalOpen,
-    toggleAddItemModal,
     data,
-    isLoading,
+    isFetching,
     isError,
     limit,
     handleLimitChange,
     page,
     handlePageChange,
-    refetch,
-    handleRefetch,
   } = useItems();
   const styles = useCustomStyles(loadStyles);
 
@@ -45,25 +42,21 @@ export default function Items() {
         <BaseModal
           title="Add a global Item"
           trigger="Add Item"
-          triggerComponent={<ModalTriggerButton />}
+          // triggerComponent={<ModalTriggerButton />}
         >
-          <AddItemGlobal setRefetch={handleRefetch} refetch={refetch} />
+          <AddItemGlobal />
         </BaseModal>
-        {!isError &&
-          data.globalItems &&
-          Array.isArray(data.globalItems.items) && (
-            <ItemsTable
-              limit={limit}
-              setLimit={handleLimitChange}
-              page={page}
-              setPage={handlePageChange}
-              data={data}
-              isLoading={isLoading}
-              totalPages={data?.globalItems?.totalPages}
-              refetch={refetch}
-              setRefetch={handleRefetch}
-            />
-          )}
+        {!isError && data?.items && Array.isArray(data.items) && (
+          <ItemsTable
+            limit={limit}
+            setLimit={handleLimitChange}
+            page={page}
+            setPage={handlePageChange}
+            data={data.items}
+            isLoading={isFetching}
+            totalPages={data?.totalPages}
+          />
+        )}
       </Box>
     </ScrollView>
   );
@@ -114,6 +107,7 @@ const loadStyles = (theme) => {
       backgroundColor: currentTheme.colors.background,
       flexDirection: 'column',
       flex: 1,
+      paddingTop: 10,
     },
     button: {
       color: currentTheme.colors.white,

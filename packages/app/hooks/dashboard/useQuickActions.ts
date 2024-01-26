@@ -1,6 +1,13 @@
 import { useRouter } from 'app/hooks/router';
+import { MaterialIcons } from '@expo/vector-icons';
 
-const quickActionData = [
+interface IQuickActionData {
+  action: string;
+  iconName: keyof typeof MaterialIcons.glyphMap;
+  text: string;
+}
+
+const quickActionData: IQuickActionData[] = [
   {
     action: 'createPack',
     iconName: 'backpack',

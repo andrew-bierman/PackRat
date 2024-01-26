@@ -1,5 +1,5 @@
 import { useContext } from 'react';
 
-export function useNetworkStatus() {
+export function useNetworkStatusProvider() {
   return useContext(NetworkStatusContext);
 }

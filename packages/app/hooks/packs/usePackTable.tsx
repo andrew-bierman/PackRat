@@ -4,6 +4,9 @@ import { useState } from 'react';
 import { duplicatePackItem } from 'app/store/packsStore';
 import { ItemCategoryEnum } from 'app/constants/itemCategory';
 import { convertWeight } from 'app/utils/convertWeight';
+import { RootState } from 'store/store';
+
+type WeightUnit = 'g' | 'kg' | 'oz' | 'lb' | 'lbs';
 
 export const usePackTable = ({
   currentPack,
@@ -29,10 +32,10 @@ export const usePackTable = ({
     dispatch(duplicatePackItem(data));
   };
 
-  const [weightUnit, setWeightUnit] = useState('g');
-  const isLoading = useSelector((state: any) => state.packs.isLoading);
+  const [weightUnit, setWeightUnit] = useState<WeightUnit>('g');
+  const isLoading = useSelector((state: RootState) => state.packs.isLoading);
 
-  const error = useSelector((state: any) => state.items.error);
+  const error = useSelector((state: RootState) => state.items.error);
   const data = currentPack?.items;
   let totalFoodWeight = 0;
   let totalWaterWeight = 0;
