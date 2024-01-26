@@ -4,7 +4,7 @@
  * @param {number} value - The value to be converted.
  * @return {string} The converted value in kilometers per hour.
  */
-export const convertToKmh = (value) => {
+export const convertToKmh = (value: number): string => {
   const result = value * 3.6;
   return `${Math.floor(Math.round(result))} km/h`;
 };

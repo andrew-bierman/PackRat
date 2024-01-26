@@ -5,7 +5,7 @@
  * @param {number} maxLength - The maximum length of the string.
  * @return {string} The truncated string.
  */
-export const truncateString = (str, maxLength) => {
+export const truncateString = (str: string, maxLength: number): string => {
   if (!str) return '';
 
   if (str.length <= maxLength) {

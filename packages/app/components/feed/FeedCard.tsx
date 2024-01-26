@@ -177,7 +177,7 @@ export default function Card({
           <RStack
             style={{
               // alignItems: 'center',
-              justifyContent: 'space-between'
+              justifyContent: 'space-between',
             }}
           >
             <RStack

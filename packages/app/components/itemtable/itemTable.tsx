@@ -78,7 +78,15 @@ export const ItemsTable = ({
 
   return (
     <ScrollView>
-      <View style={{ flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#fff', marginTop: 20 }}>
+      <View
+        style={{
+          flex: 1,
+          padding: 16,
+          paddingTop: 30,
+          backgroundColor: '#fff',
+          marginTop: 20,
+        }}
+      >
         <ScrollView
           horizontal={true}
           contentContainerStyle={{
@@ -116,7 +124,14 @@ export const ItemsTable = ({
             </ScrollView>
           </Table>
         </ScrollView>
-        <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: 20 }}>
+        <View
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'center',
+            marginTop: 20,
+          }}
+        >
           <RButton
             style={{
               width: 50,
@@ -132,9 +147,7 @@ export const ItemsTable = ({
             <AntDesign
               name="left"
               size={16}
-              color={
-                page < 2 ? 'gray' : 'white'
-              }
+              color={page < 2 ? 'gray' : 'white'}
             />
           </RButton>
           <RButton
@@ -153,9 +166,7 @@ export const ItemsTable = ({
             <AntDesign
               name="right"
               size={16}
-              color={
-                page === totalPages ? 'gray' : 'white'
-              }
+              color={page === totalPages ? 'gray' : 'white'}
             />
           </RButton>
         </View>

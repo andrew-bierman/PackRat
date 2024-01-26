@@ -35,5 +35,8 @@ export const EditPackItemModal = ({ children }) => {
 const withCloseModalHandler = (element) => (props) => {
   const { setIsModalOpen } = useModal();
 
-  return cloneElement(element, {...props, closeModalHandler: () => setIsModalOpen(false)});
+  return cloneElement(element, {
+    ...props,
+    closeModalHandler: () => setIsModalOpen(false),
+  });
 };

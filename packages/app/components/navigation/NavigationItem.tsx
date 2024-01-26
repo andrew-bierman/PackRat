@@ -4,7 +4,30 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 import useTheme from 'app/hooks/useTheme';
 import { Button } from 'tamagui';
 
-export const NavigationItem = ({ item, itemStyle, isMobileView, onSelect }) => {
+interface NavigationItemProps {
+  item: {
+    href: string;
+    icon: string;
+    text: string;
+    iconSource: any;
+    // Possible fix, but doesn't work :|
+    // keyof typeof MaterialCommunityIcons.glyphMap
+    // | typeof FontAwesome.glyphMap
+    // | typeof MaterialIcons.glyphMap
+    // | typeof Entypo.glyphMap
+    // | typeof Fontisto.glyphMap;
+  };
+  itemStyle: string;
+  isMobileView: boolean;
+  onSelect: () => void;
+}
+
+export const NavigationItem = ({
+  item,
+  itemStyle,
+  isMobileView,
+  onSelect,
+}: NavigationItemProps) => {
   const styles = useCustomStyles(loadStyles);
   const { currentTheme } = useTheme();
   const { IconComponent, isCurrentPage, handleItemPress } = useNavigationItem(
@@ -50,7 +73,7 @@ const loadStyles = (theme) => {
 
   return {
     menuBarItem: {
-      justifyContent: "left",
+      justifyContent: 'left',
       flexDirection: 'row',
       alignItems: 'center',
       gap: 8,

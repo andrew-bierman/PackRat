@@ -4,7 +4,7 @@
  * @param {string} hex - The hexadecimal color code to be converted.
  * @return {string} - The RGB color code in the format "r,g,b".
  */
-function hexToRGB(hex) {
+function hexToRGB(hex: string): string {
   let r = 0;
   let g = 0;
   let b = 0;
