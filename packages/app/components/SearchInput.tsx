@@ -44,10 +44,8 @@ export const SearchInput: React.FC<SearchInputProps>  = ({ onSelect, placeholder
           }}
         >
           <RInput
-            style={{
-              paddingLeft: 35,
-              paddingRight: 55,
-            }}
+            paddingLeft={35}
+            paddingRight={55}
             placeholder={placeholder ?? 'Search'}
             onChangeText={(text) => {
               setSearchString(text);
@@ -77,7 +75,7 @@ export const SearchInput: React.FC<SearchInputProps>  = ({ onSelect, placeholder
                 right: 1,
                 backgroundColor: 'transparent',
               }}
-              width="10px"
+              width={10}
             >
               <MaterialIcons name="close" />
             </RButton>
@@ -104,7 +102,7 @@ export const SearchInput: React.FC<SearchInputProps>  = ({ onSelect, placeholder
                     key={`result + ${i}`}
                     role="listitem"
                     onPress={() => {
-                      handleSearchResultClick(result, i);
+                      handleSearchResultClick(result);
                     }}
                     style={{
                       cursor: 'pointer',
@@ -137,12 +135,13 @@ export const SearchInput: React.FC<SearchInputProps>  = ({ onSelect, placeholder
           setSearchString(text);
         }}
         placeholder="Search"
-        value={searchString}
-        fontSize={14}
         width={'100%'}
         borderRadius={4}
-        paddingVertical={16}
         backgroundColor="white"
+        value={searchString}
+        fontSize={14}
+        paddingVertical={16}
+        paddingHorizontal={8}
       />
       <RIconButton
         backgroundColor="transparent"
@@ -169,7 +168,7 @@ export const SearchInput: React.FC<SearchInputProps>  = ({ onSelect, placeholder
                 key={`result + ${i}`}
                 role="listitem"
                 onPress={() => {
-                  handleSearchResultClick(result, i);
+                  handleSearchResultClick(result);
                 }}
               >
                 <RStack style={{ flexDirection: 'row' }}>

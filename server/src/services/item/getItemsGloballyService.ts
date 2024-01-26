@@ -9,8 +9,10 @@ import Item from '../../models/itemModel';
 export const getItemsGloballyService = async (
   reqlimit: any,
   reqpage: any,
-  searchString: string,
+  searchString?: string,
 ) => {
+  // Ensure searchString is a string
+  searchString = typeof searchString === 'string' ? searchString : '';
   const totalItems = await Item.countDocuments({
     global: true,
     name: { $regex: searchString, $options: 'i' },

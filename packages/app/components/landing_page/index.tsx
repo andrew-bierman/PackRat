@@ -6,11 +6,6 @@ import useTheme from '../../hooks/useTheme';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { theme } from '../../theme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-interface CustomAccordionProps {
-  title: string;
-  content: string;
-  iconName: string;
-}
 
 const dataArray = [
   {
@@ -51,7 +46,7 @@ const dataArray = [
   },
 ];
 
-const CustomAccordion: React.FC<CustomAccordionProps> = ({ title, content, iconName }) => {
+const CustomAccordion = ({ title, content, iconName }) => {
   const [expanded, setExpanded] = useState(false);
   const styles = useCustomStyles(loadStyles);
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
@@ -229,8 +224,7 @@ const LandingPage = () => {
   );
 };
 
-
-const loadStyles = (theme: any) => {
+const loadStyles = (theme) => {
   const { currentTheme } = theme;
   return {
     mutualStyles: {

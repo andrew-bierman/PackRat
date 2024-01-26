@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RText, RStack } from '@packrat/ui';
-import { Link } from 'expo-router';
 import { Dimensions, View, StyleProp, ViewStyle } from 'react-native';
+import { Link } from 'solito/link';
 import { getPublicPacks, getPublicTrips } from '../../store/feedStore';
 import useTheme from '../../hooks/useTheme';
 import Carousel from '../carousel';
@@ -44,13 +44,13 @@ const FeedPreviewScroll: React.FC<FeedPreviewScrollProps> = ({ itemWidth }) => {
                 <RText style={styles.feedItemTitle}>{item.name}</RText>
                 <RText
                   fontSize="$1"
-                  style={{
-                    backgroundColor: '#F2F1EB',
-                    textTransform: 'capitalize',
-                    padding: '4px 8px',
-                    alignSelf: 'center',
-                    borderRadius: '2px',
-                  }}
+                  fontWeight="bold"
+                  backgroundColor={'#F2F1EB'}
+                  textTransform="capitalize"
+                  paddingVertical={4}
+                  paddingHorizontal={8}
+                  alignContent="center"
+                  borderRadius={2}
                 >
                   {item.type}
                 </RText>

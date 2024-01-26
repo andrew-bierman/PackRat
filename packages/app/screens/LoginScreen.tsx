@@ -2,10 +2,10 @@ import { View } from 'react-native';
 import { RHeading, RStack, RButton, RText, RIconButton } from '@packrat/ui';
 import { FontAwesome } from '@expo/vector-icons';
 import { NODE_ENV } from '@env';
-import { Link, usePathname } from 'expo-router';
+import { Link } from 'solito/link';
 import { InformUser } from '../utils/ToastUtils';
 import useTheme from '../hooks/useTheme';
-import { InputText, InputTextRules } from 'app/components/InputText';
+import { InputText, InputTextRules } from '@packrat/ui';
 import { useGoogleAuth, useLogin } from 'app/hooks/login';
 interface DemoUser {
   email: string;

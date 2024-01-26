@@ -169,7 +169,7 @@ const MapButtonsOverlay: React.FC<MapButtonsOverlayProps> = ({
             >
               <Image
                 style={styles.downloadIcon}
-                source={require('../../assets/download.svg')}
+                source={require('app/assets/download.svg')}
               />
               <Text style={styles.downloadText}>
                 {downloading

@@ -25,7 +25,7 @@ export const addItemsGlobal = createAsyncThunk(
 
 export const getItemsGlobal = createAsyncThunk(
   'Items/getItemsGlobal',
-  async ({ limit, page }) => {
+  async ({ limit, page }: { limit: number; page: number }) => {
     try {
       // const response = await axios.get(
       //   `${api}/item/global?limit=${limit}&page=${page}`,
