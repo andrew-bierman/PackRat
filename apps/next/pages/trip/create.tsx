@@ -1,6 +1,8 @@
 import CreateTrip from 'app/screens/trip/createTrip';
 import { AuthWrapper } from 'auth/authWrapper';
 
+// export const runtime = 'experimental-edge'
+
 export default function Trip() {
   return (
     <>
