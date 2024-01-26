@@ -41,10 +41,10 @@ export default function Items() {
         <BaseModal
           title="Add a global Item"
           trigger="Add Item"
-          triggerComponent={<ModalTriggerButton />}
+          // triggerComponent={<ModalTriggerButton />}
         >
           <AddItemGlobal />
-        </BaseModal>
+        </BaseModal>  
         {!isError && data?.items && Array.isArray(data.items) && (
           <ItemsTable
             limit={limit}
@@ -106,6 +106,7 @@ const loadStyles = (theme) => {
       backgroundColor: currentTheme.colors.background,
       flexDirection: 'column',
       flex: 1,
+      paddingTop: 10
     },
     button: {
       color: currentTheme.colors.white,
