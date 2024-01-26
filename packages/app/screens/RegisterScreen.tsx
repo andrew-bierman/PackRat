@@ -10,15 +10,15 @@ import {
   InputTextRules,
 } from '@packrat/ui';
 import { FontAwesome } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
+import { useRouter } from 'app/hooks/router';
 // import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { Link } from 'expo-router';
+import { Link } from 'solito/link';
 import { useSelector, useDispatch } from 'react-redux';
 import { signInWithGoogle, signUp } from '../store/authStore';
 import { InformUser } from '../utils/ToastUtils';
 import useTheme from '../hooks/useTheme';
 import { useForm } from 'react-hook-form';
-import { useSession } from '../context/auth';
+import { useSession } from '../context/Auth/SessionProvider';
 import { useGoogleAuth } from 'app/hooks/login';
 import { useRegisterUser } from 'app/hooks/user';
 

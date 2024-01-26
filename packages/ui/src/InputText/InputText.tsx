@@ -1,4 +1,5 @@
-import { RInput, RLabel } from '@packrat/ui';
+import RInput from '../RInput';
+import RLabel from '../RLabel';
 import React, { forwardRef, useImperativeHandle, useRef } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { type TextInput } from 'react-native';

@@ -1,5 +1,5 @@
+import { useRouter } from 'app/hooks/router';
 import { MaterialIcons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
 
 interface IQuickActionData {
   action: string;

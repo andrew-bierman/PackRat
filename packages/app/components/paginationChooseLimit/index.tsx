@@ -10,15 +10,14 @@ export const PaginationLimit = ({ limit, setLimit, setPage }) => {
 
   return (
     <View style={styles.selectContainer}>
-      <RLabel style={{ alignSelf: 'center', paddingBottom: 8 }}>
-        Choose a value:
-      </RLabel>
+      <RLabel style={{ paddingBottom: 8 }}>Choose a value:</RLabel>
       <DropdownComponent
         value={limit}
+        width="100%"
         accessibilityLabel="choose the number of items to be displayed"
         placeholder="Choose a value"
-        onValueChange={(itemValue) => {
-          setLimit(itemValue);
+        onValueChange={(itemValue: string) => {
+          setLimit(+itemValue);
           setPage(1);
         }}
         data={data}
@@ -29,5 +28,8 @@ export const PaginationLimit = ({ limit, setLimit, setPage }) => {
 const loadStyles = () => ({
   selectContainer: {
     width: '15rem',
+    marginLeft: 20,
+    marginBottom: 20,
+    alignSelf: 'left',
   },
 });

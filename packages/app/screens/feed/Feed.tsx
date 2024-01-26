@@ -14,7 +14,7 @@ import {
 } from '../../store/packsStore';
 // import { fetchUserTrips, selectAllTrips } from '../../store/tripsStore';
 import { usefetchTrips } from 'app/hooks/trips';
-import { useRouter } from 'expo-router';
+import { useRouter } from 'app/hooks/router';
 import { fuseSearch } from '../../utils/fuseSearch';
 import { fetchUserFavorites } from '../../store/favoritesStore';
 import useCustomStyles from 'app/hooks/useCustomStyles';
@@ -71,7 +71,7 @@ const Feed = ({ feedType = 'public' }) => {
     setRefreshing(false);
   };
 
-  console.log('🚀 ~ file: Feed.js:180 ~ Feed ~ feedData:', data);
+  console.log('🚀 ../.. file: Feed.js:180 ../.. Feed ../.. feedData:', data);
   // useEffect(() => {
   //   if (feedType === 'public') {
   //     dispatch(getPublicPacks(queryString));
@@ -123,7 +123,10 @@ const Feed = ({ feedType = 'public' }) => {
       feedType !== 'userTrips'
         ? fuseSearch(arrayData, searchQuery, keys, options)
         : data;
-    console.log('🚀 ~ file: Feed.js:231 ~ renderData ~ results:', results);
+    console.log(
+      '🚀 ../.. file: Feed.js:231 ../.. renderData ../.. results:',
+      results,
+    );
 
     // Convert fuse results back into the format we want
     // if searchQuery is empty, use the original data
@@ -169,13 +172,16 @@ const Feed = ({ feedType = 'public' }) => {
             <Card key={item?._id} type={item?.type} {...item} />
           )}
           ListHeaderComponent={() => feedSearchFilterComponent}
-          ListEmptyComponent={() => <RText>{ERROR_MESSAGES[feedType]}</RText>}
+          ListEmptyComponent={() => (
+            <RText style={{ textAlign: 'center', marginTop: 20 }}>
+              {ERROR_MESSAGES[feedType]}
+            </RText>
+          )}
           showsVerticalScrollIndicator={false}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
           maxToRenderPerBatch={2}
-          contentContainerStyle={{ flex: 1 }}
         />
       </View>
     );

@@ -1,0 +1,6 @@
+{
+  "name": "@packrat/cli",
+  "dependencies": {
+    "enquirer": "^2.4.1"
+  }
+}

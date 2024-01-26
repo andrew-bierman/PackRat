@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { Container, Text } from 'native-base';
-import { useGlobalSearchParams, useRouter, useSearchParams } from 'expo-router';
+import { useRouter } from 'app/hooks/router';
+import { createParam } from 'solito';
 import useTheme from '../../hooks/useTheme';
 import { theme } from '../../theme';
 import { useDispatch, useSelector } from 'react-redux';
@@ -28,6 +29,8 @@ import { useFetchWeather, useFetchWeatherWeak } from 'app/hooks/weather';
 import { useGetDestination, useGetPhotonDetails } from 'app/hooks/destination';
 import { WeatherData } from '../weather/WeatherData';
 import { RootState } from 'store/store';
+
+const { useParam } = createParam();
 
 const DestinationHeader = ({ geoJSON, selectedSearchResult }) => {
   const styles = useCustomStyles(loadStyles);
@@ -85,9 +88,16 @@ const DestinationHeader = ({ geoJSON, selectedSearchResult }) => {
 export const DestinationPage = () => {
   console.log('destination page');
   const router = useRouter();
-  const { destinationId, id, type, lat, lon } = useGlobalSearchParams();
+  const [destinationId] = useParam('destinationId');
+  const [id] = useParam('id');
+  const [type] = useParam('type');
+  const [lat] = useParam('lat');
+  const [lon] = useParam('lon');
   const [destination_id, setDestinationId] = useState(destinationId);
-  const [properties, setProperties] = useState<{osm_id: string, osm_type: string}>({ osm_id: id, osm_type: type });
+  const [properties, setProperties] = useState<{
+    osm_id: string;
+    osm_type: string;
+  }>({ osm_id: id, osm_type: type });
 
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
@@ -127,7 +137,7 @@ export const DestinationPage = () => {
   const shape = geoJSON ?? defaultShape;
 
   const map = () => <MapContainer shape={shape} />;
-
+  console.log(geoJSON, selectedSearchResult);
   return (
     <ScrollView>
       {!isLoading && !isError && (

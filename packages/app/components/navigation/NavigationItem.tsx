@@ -1,14 +1,8 @@
-import { TouchableOpacity, Text } from 'react-native';
+import { Text } from 'react-native';
 import { useNavigationItem } from 'app/hooks/navigation';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import useTheme from 'app/hooks/useTheme';
-// import {
-//   MaterialCommunityIcons,
-//   FontAwesome,
-//   MaterialIcons,
-//   Entypo,
-//   Fontisto,
-// } from '@expo/vector-icons';
+import { Button } from 'tamagui';
 
 interface NavigationItemProps {
   item: {
@@ -41,16 +35,17 @@ export const NavigationItem = ({
     onSelect,
   );
   const { icon, text } = item;
-
   return (
-    <TouchableOpacity
+    <Button
       style={[
         styles.menuBarItem,
         isCurrentPage && styles.menuBarItemActive,
         !!itemStyle && itemStyle,
       ]}
+      variant="outlined"
       onPress={handleItemPress}
-      activeOpacity={0.7}
+      chromeless
+      // activeOpacity={0.7}
     >
       <IconComponent
         name={icon}
@@ -69,7 +64,7 @@ export const NavigationItem = ({
       >
         {text}
       </Text>
-    </TouchableOpacity>
+    </Button>
   );
 };
 
@@ -78,6 +73,7 @@ const loadStyles = (theme) => {
 
   return {
     menuBarItem: {
+      justifyContent: 'left',
       flexDirection: 'row',
       alignItems: 'center',
       gap: 8,

@@ -20,7 +20,8 @@ const Hero = ({ children, imageDetails }: HeroProps) => {
     imageDetails = {
       title: 'N/A',
       subtitle: 'N/A',
-      source: require('app/assets/topographical-pattern.jpg'),
+      source:
+        'https://github.com/andrew-bierman/PackRat/blob/main/apps/expo/assets/topographical-pattern.jpg?raw=true',
       alt: 'hero',
     };
   }
