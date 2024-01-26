@@ -22,7 +22,19 @@ import FeedSearchFilter from 'app/components/feed/FeedSearchFilter';
 import { useFeed } from 'app/hooks/feed';
 import { RefreshControl } from 'react-native';
 import { RText } from '@packrat/ui';
+interface FeedItem {
+  _id: string;
+  type: string;
+}
 
+interface SelectedTypes {
+  pack: boolean;
+  trip: boolean;
+}
+
+interface FeedProps {
+  feedType?: string;
+}
 const URL_PATHS = {
   userPacks: '/pack/',
   favoritePacks: '/pack/',
@@ -36,7 +48,7 @@ const ERROR_MESSAGES = {
   userTrips: 'No User Trips Available',
 };
 
-const Feed = ({ feedType = 'public' }) => {
+const Feed: React.FC<FeedProps> = ({ feedType = 'public' }) => {
   const router = useRouter();
 
   const [queryString, setQueryString] = useState('');

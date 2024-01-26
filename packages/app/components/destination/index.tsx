@@ -27,8 +27,14 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useFetchWeather, useFetchWeatherWeak } from 'app/hooks/weather';
 import { useGetDestination, useGetPhotonDetails } from 'app/hooks/destination';
 import { WeatherData } from '../weather/WeatherData';
-
-const DestinationHeader = ({ geoJSON, selectedSearchResult }) => {
+interface DestinationHeaderProps {
+  geoJSON: any; 
+  selectedSearchResult: any; 
+}
+const DestinationHeader: React.FC<DestinationHeaderProps> = ({
+  geoJSON,
+  selectedSearchResult,
+}) => {
   const styles = useCustomStyles(loadStyles);
   const properties = {
     ...geoJSON?.features[0]?.properties,
@@ -155,7 +161,7 @@ export const DestinationPage = () => {
   );
 };
 
-const loadStyles = (theme) => {
+const loadStyles = (theme: any) => {
   const { currentTheme } = theme;
   return {
     container: {

@@ -8,7 +8,17 @@ import { theme } from '../theme/index';
 import { SearchInput } from './SearchInput';
 import Carousel from './carousel';
 import MapContainer from './map/MapContainer';
-
+interface TripCardProps {
+  title: string;
+  Icon: React.FC;
+  isMap: boolean;
+  shape?: any; 
+  data?: string[]; 
+  isSearch: boolean;
+  isTrail: boolean;
+  isPark: boolean;
+  isLoading: boolean;
+}
 export default function TripCard({
   title,
   Icon,
@@ -19,7 +29,7 @@ export default function TripCard({
   isTrail,
   isPark,
   isLoading,
-}) {
+}: TripCardProps) {
   const { isDark, currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
   const { currentTrail, currentPark, currentShape, addTrailFn } = useCardTrip();

@@ -35,10 +35,9 @@ interface CustomCardProps {
   data: {
     owner_id: {
       _id: string;
-      username?: string; // Add this line if 'username' is optional
-      // Add other properties if needed
+      username?: string; 
     };
-    owners?: Array<{ name: string }> | null; // Replace with the actual type of owners
+    owners?: Array<{ name: string }> | null;
   };
 }
 

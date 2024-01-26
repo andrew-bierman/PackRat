@@ -8,7 +8,18 @@ import { Adapt, Button, Popover, YStack } from 'tamagui';
 
 import { useDeleteTrips } from 'app/hooks/trips';
 // import { deleteTrip } from '../../store/tripsStore';
-export function ThreeDotsMenu({ data, titleRef, setEditTitle }) {
+interface ThreeDotsMenuProps {
+  data: {
+    _id: string;
+    type: 'pack' | 'trip'; 
+
+  };
+  titleRef: any; 
+  setEditTitle: (string) => void;
+}
+
+
+export function ThreeDotsMenu({ data, titleRef, setEditTitle }: ThreeDotsMenuProps) {
   const dispatch = useDispatch();
   const router = useRouter();
   const { deleteTrips } = useDeleteTrips();

@@ -5,7 +5,16 @@ import { theme } from '../../theme';
 import { isObjectEmpty } from '../../utils/isObjectEmpty';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 
-const Hero = ({ children, imageDetails }) => {
+interface HeroProps {
+  children: React.ReactNode;
+  imageDetails?: {
+    title: string;
+    subtitle: string;
+    source: any; 
+    alt: string;
+  };
+}
+const Hero: React.FC<HeroProps> = ({ children, imageDetails }) => {
   if (isObjectEmpty(imageDetails || {})) {
     imageDetails = {
       title: 'N/A',

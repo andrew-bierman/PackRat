@@ -11,8 +11,11 @@ import { addOfflineRequest } from '../../store/offlineQueue';
 import { useDeletePackItem } from 'app/hooks/packs/useDeletePackItem';
 import { queryTrpc, trpc } from '../../trpc';
 import { BaseModal } from '@packrat/ui';
-
-export const DeletePackItemModal = ({ itemId, pack }) => {
+interface DeletePackItemModalProps {
+  itemId: string;
+  pack?: { _id: string }; 
+}
+export const DeletePackItemModal: React.FC<DeletePackItemModalProps> = ({ itemId, pack }) => {
   const utils = queryTrpc.useContext();
   const dispatch = useDispatch();
   const { isConnected } = useSelector((state) => state.offlineQueue);

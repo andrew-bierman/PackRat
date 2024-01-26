@@ -6,8 +6,20 @@ import { updatePack } from '../../store/packsStore';
 // import { editTrip } from '../../store/tripsStore';
 import { useEditTrips } from 'app/hooks/trips';
 import LoadingPlaceholder from '../loading-placeholder';
-
-export const EditableInput = ({
+interface EditableInputProps {
+  data: {
+    _id: string;
+    name: string;
+    is_public: boolean;
+    type: string; 
+  };
+  title: string;
+  editTitle: boolean;
+  setEditTitle: any;
+  titleRef: any;
+  loading: boolean;
+}
+export const EditableInput: React.FC<EditableInputProps> = ({
   data,
   title,
   editTitle,

@@ -6,7 +6,13 @@ import { addOfflineRequest } from '../../store/offlineQueue';
 import { queryTrpc } from '../../trpc';
 import { ItemForm } from './ItemForm'; // assuming you moved the form related code to a separate component
 import { useModal } from '@packrat/ui/src/modal';
-
+interface Item {
+  name: string;
+  weight: string;
+  quantity: string;
+  type: string;
+  unit: string;
+}
 export const AddItemGlobal = () => {
   const utils = queryTrpc.useContext();
   const dispatch = useDispatch();

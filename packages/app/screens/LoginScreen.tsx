@@ -7,7 +7,12 @@ import { InformUser } from '../utils/ToastUtils';
 import useTheme from '../hooks/useTheme';
 import { InputText, InputTextRules } from 'app/components/InputText';
 import { useGoogleAuth, useLogin } from 'app/hooks/login';
+interface DemoUser {
+  email: string;
+  password: string;
+}
 
+interface LoginProps {}
 const demoUser = {
   email: 'zoot3@email.com',
   password: '12345678',

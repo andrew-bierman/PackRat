@@ -3,8 +3,10 @@ import Checkbox from 'expo-checkbox';
 import { FontAwesome } from '@expo/vector-icons';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useItemRow } from 'app/hooks/itemrow';
-
-export const ItemRow = ({ packName }) => {
+interface ItemRowProps {
+  packName: string;
+}
+export const ItemRow: React.FC<ItemRowProps> = ({ packName }) => {
   const { isChecked, handleChange } = useItemRow();
   const styles = useCustomStyles(loadStyles);
 

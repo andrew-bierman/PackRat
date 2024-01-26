@@ -4,15 +4,36 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ItemForm } from './ItemForm'; // assuming you moved the form related code to a separate component
 import { useAddPackItem } from 'app/hooks/packs/useAddPackItem';
 import { useEditPackItem } from 'app/hooks/packs/useEditPackItem';
-
-export const AddItem = ({
+interface AddItemProps {
+  _id: string;
+  isEdit: boolean;
+  initialData: {
+    global: string;
+    _id: string;
+    name?: string;
+    weight?: number;
+    quantity?: number;
+    category?: {
+      name: string;
+    };
+    unit?: string;
+  };
+  packId: string;
+  currentPack: any; 
+  editAsDuplicate: any;
+  setPage: (page: number) => void;
+  page: number;
+  closeModalHandler: () => void;
+  setIsAddItemModalOpen: (isOpen: boolean) => void;
+}
+export const AddItem: React.FC<AddItemProps> = ({
   _id,
   isEdit,
   initialData,
   packId,
   currentPack,
   editAsDuplicate,
-  setPage = () => {},
+  setPage = (p0: number) => {},
   page,
   closeModalHandler,
   setIsAddItemModalOpen = () => {},

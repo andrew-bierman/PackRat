@@ -16,8 +16,20 @@ import {
 import useTheme from '../../hooks/useTheme';
 import { mapboxStyles } from '../../utils/mapFunctions';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-
-const MapButtonsOverlay = ({
+interface MapButtonsOverlayProps {
+  mapFullscreen: boolean;
+  enableFullScreen: () => void;
+  disableFullScreen: () => void;
+  handleChangeMapStyle: (style: string) => void;
+  downloadable: boolean;
+  downloading: boolean;
+  fetchLocation: () => void;
+  onDownload: () => void;
+  handleGpxUpload?: () => void;
+  progress?: number;
+  navigateToMaps: () => void;
+}
+const MapButtonsOverlay: React.FC<MapButtonsOverlayProps> = ({
   mapFullscreen,
   enableFullScreen,
   disableFullScreen,

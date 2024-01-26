@@ -60,7 +60,7 @@ export const Drawer = () => {
   );
 };
 
-const loadStyles = (theme) => {
+const loadStyles = (theme: any) => {
   const { currentTheme } = theme;
   return {
     modalOverlay: {

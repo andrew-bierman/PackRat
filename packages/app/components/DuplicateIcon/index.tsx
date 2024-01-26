@@ -2,8 +2,10 @@ import React from 'react';
 import { Pressable } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-
-export const DuplicateIcon = ({ link = null }) => {
+interface DuplicateIconProps {
+  link?: any | null;
+}
+export const DuplicateIcon: React.FC<DuplicateIconProps> = ({ link = null }) => {
   if (!link) return null;
 
   const router = useRouter();

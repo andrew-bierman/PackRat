@@ -1,8 +1,14 @@
 import { AddItem } from '../item/AddItem';
 import useTheme from 'app/hooks/useTheme';
 import { BaseModal } from '@packrat/ui';
-
-export const AddItemModal = ({
+interface AddItemModalProps {
+  currentPackId: string; 
+  currentPack: any;
+  isAddItemModalOpen: boolean;
+  setIsAddItemModalOpen: any;
+  setRefetch?: () => void;
+}
+export const AddItemModal: React.FC<AddItemModalProps> = ({
   currentPackId,
   currentPack,
   isAddItemModalOpen,

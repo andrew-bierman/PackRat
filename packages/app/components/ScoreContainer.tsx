@@ -8,8 +8,12 @@ import { scorePack } from '../store/packsStore';
 import { Svg, Circle, Path, G, Text as SvgText } from 'react-native-svg';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useGradingPie, useScoreData, useScoreProgress } from 'app/hooks/score';
-
-const ScoreProgressChart = ({ score, size = 150, strokeWidth = 10 }) => {
+interface ScoreProgressChartProps {
+  score: number;
+  size?: number;
+  strokeWidth?: number;
+}
+const ScoreProgressChart: React.FC<ScoreProgressChartProps> = ({ score, size = 150, strokeWidth = 10 }) => {
   if (!score) return null;
   const styles = useCustomStyles(loadStyles);
 
@@ -54,8 +58,16 @@ const ScoreProgressChart = ({ score, size = 150, strokeWidth = 10 }) => {
 //   essentialItems: essentialItemsGrade,
 //   redundancyAndVersatility: redundancyAndVersatilityGrade,
 // },
-
-const GradingPieChart = ({ scores, size = 150, strokeWidth = 10 }) => {
+interface GradingPieChartProps {
+  scores: {
+    weight: number;
+    essentialItems: number;
+    redundancyAndVersatility: number;
+  };
+  size?: number;
+  strokeWidth?: number;
+}
+const GradingPieChart: React.FC<GradingPieChartProps> = ({ scores, size = 150, strokeWidth = 10 }) => {
   if (!scores) return null;
 
   const styles = useCustomStyles(loadStyles);
@@ -140,8 +152,16 @@ const GradingPieChart = ({ scores, size = 150, strokeWidth = 10 }) => {
     </View>
   );
 };
-
-export default function ScoreContainer({ type, data, isOwner }) {
+interface ScoreContainerProps {
+  type: 'pack' | 'trip';
+  data: any; 
+  isOwner: boolean;
+}
+export const ScoreContainer: React.FC<ScoreContainerProps> = ({
+  type,
+  data,
+  isOwner,
+}) => {
   const dispatch = useDispatch();
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
@@ -190,7 +210,7 @@ export default function ScoreContainer({ type, data, isOwner }) {
     </Box>
   );
 }
-const loadStyles = (theme) => {
+const loadStyles = (theme: any) => {
   const { currentTheme } = theme;
   return {
     box: {

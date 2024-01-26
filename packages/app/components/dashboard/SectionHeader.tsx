@@ -3,8 +3,11 @@ import { RText, RStack } from '@packrat/ui';
 import { Ionicons } from '@expo/vector-icons';
 import { theme } from '../../theme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-
-const SectionHeader = ({ iconName, text }) => {
+interface SectionHeaderProps {
+  iconName: string;
+  text: string;
+}
+const SectionHeader: React.FC<SectionHeaderProps> = ({ iconName, text }) => {
   const styles = useCustomStyles(loadStyles);
   return (
     <RStack style={styles.rStack}>

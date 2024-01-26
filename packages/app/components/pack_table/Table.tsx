@@ -14,7 +14,55 @@ import { categoryIcons } from 'app/constants/pack/icons';
 import { formatNumber } from 'app/utils/formatNumber';
 import { AddItem } from '../item/AddItem';
 
-const WeightUnitDropdown = ({ value, onChange }) => {
+interface WeightUnitDropdownProps {
+  value: string;
+  onChange: (itemValue: string) => void;
+}
+
+interface TotalWeightBoxProps {
+  label: string;
+  weight: number;
+  unit: string;
+}
+
+interface IgnoreItemCheckboxProps {
+  itemId: string;
+  isChecked: boolean;
+  handleCheckboxChange: (itemId: string) => void;
+}
+
+interface ErrorMessageProps {
+  message: string;
+}
+
+interface TableItemProps {
+  itemData: any;
+  checkedItems: string[];
+  handleCheckboxChange: (itemId: string) => void;
+  index: number;
+  flexArr: number[];
+  currentPack: any; 
+  refetch: () => void;
+  setRefetch: () => void;
+}
+
+interface CategoryRowProps {
+  category: string;
+}
+
+interface TitleRowProps {
+  title: string;
+}
+
+interface TableContainerProps {
+  currentPack: any; 
+  selectedPack: any; 
+  refetch: () => void;
+  setRefetch: () => void;
+  copy: boolean;
+}
+
+const WeightUnitDropdown: React.FC<WeightUnitDropdownProps> = ({ value, onChange }) => {
   return (
     <DropdownComponent
       value={value}
@@ -26,7 +74,7 @@ const WeightUnitDropdown = ({ value, onChange }) => {
   );
 };
 
-const TotalWeightBox = ({ label, weight, unit }) => {
+const TotalWeightBox: React.FC<TotalWeightBoxProps> = ({ label, weight, unit }) => {
   const styles = useCustomStyles(loadStyles);
   return (
     <View style={styles.totalWeightBox}>
@@ -36,7 +84,7 @@ const TotalWeightBox = ({ label, weight, unit }) => {
   );
 };
 
-const IgnoreItemCheckbox = ({ itemId, isChecked, handleCheckboxChange }) => (
+const IgnoreItemCheckbox: React.FC<IgnoreItemCheckboxProps> = ({ itemId, isChecked, handleCheckboxChange }) => (
   <View
     style={{
       justifyContent: 'center',
@@ -55,7 +103,7 @@ const IgnoreItemCheckbox = ({ itemId, isChecked, handleCheckboxChange }) => (
 
 const ErrorMessage = ({ message }) => <RText>{message}</RText>;
 
-const TableItem = ({
+const TableItem: React.FC<TableItemProps> = ({
   itemData,
   checkedItems,
   handleCheckboxChange,
@@ -157,7 +205,7 @@ const TableItem = ({
   return <Row data={rowData} style={styles.row} flexArr={flexArr} />;
 };
 
-const CategoryRow = ({ category }) => {
+const CategoryRow: React.FC<CategoryRowProps> = ({ category }) => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
@@ -181,7 +229,7 @@ const CategoryRow = ({ category }) => {
   );
 };
 
-const TitleRow = ({ title }) => {
+const TitleRow: React.FC<TitleRowProps> = ({ title }) => {
   const styles = useCustomStyles(loadStyles);
   const rowData = [
     <RStack style={{ flexDirection: 'row', ...styles.mainTitle }}>
@@ -196,7 +244,7 @@ const TitleRow = ({ title }) => {
   );
 };
 
-export const TableContainer = ({
+export const TableContainer: React.FC<TableContainerProps> = ({
   currentPack,
   selectedPack,
   refetch,

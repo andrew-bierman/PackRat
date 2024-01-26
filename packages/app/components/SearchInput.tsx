@@ -13,8 +13,11 @@ import {
   RIconButton,
 } from '@packrat/ui';
 import { View, Pressable } from 'react-native';
-
-export const SearchInput = ({ onSelect, placeholder }) => {
+interface SearchInputProps {
+  onSelect: (result: any, index: number) => void;
+  placeholder?: string;
+}
+export const SearchInput: React.FC<SearchInputProps>  = ({ onSelect, placeholder }) => {
   const {
     searchString,
     setSearchString,
