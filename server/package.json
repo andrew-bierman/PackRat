@@ -16,7 +16,6 @@
     "start": "yarn run wrangler:dev",
     "test:expect": "mocha 'generated/test/**/*.spec.js'",
     "test:generate": "npx openapi-generator url http://localhost:3000/swagger.json -d ./generated -t javascript",
-    "test": "echo \"No tests yet\"",
     "prisma:format": "npx prisma format --schema=src/prisma/schema.prisma",
     "prisma:generate": "npx prisma generate --schema=src/prisma/schema.prisma --data-proxy",
     "prisma:validate": "npx prisma validate --schema=src/prisma/schema.prisma",
@@ -32,7 +31,8 @@
     "setup:local": "yarn generate && yarn migrate:local && yarn seed:local",
     "deploy": "wrangler deploy --minify src/worker.ts",
     "postinstall": "yarn generate",
-    "clean": "rm -rf node_modules"
+    "clean": "rm -rf node_modules",
+    "test": "jest"
   },
   "author": "Andrew Bierman",
   "license": "ISC",
@@ -112,8 +112,11 @@
     "zod": "^3.22.2"
   },
   "devDependencies": {
+    "@anatine/zod-mock": "^3.13.3",
+    "@faker-js/faker": "^8.3.1",
     "@openapitools/openapi-generator-cli": "^2.7.0",
-    "@typescript-eslint/eslint-plugin": "^6.17.0",
+    "@types/jest": "^29.5.11",
+    "@typescript-eslint/eslint-plugin": "^6.4.1",
     "cross-env": "^7.0.3",
     "drizzle-kit": "^0.20.6",
     "eslint": "^8.47.0",
@@ -124,12 +127,14 @@
     "eslint-plugin-prettier": "^5.0.0",
     "eslint-plugin-promise": "^6.1.1",
     "expect.js": "^0.3.1",
-    "jest": "^29.6.2",
+    "jest": "^29.7.0",
     "migrate-mongo": "^10.0.0",
+    "miniflare": "^3.20231218.2",
     "mocha": "^10.2.0",
     "openapi-generator": "^0.1.39",
     "prettier": "^3.0.2",
     "prisma": "^5.7.0",
+    "ts-jest": "^29.1.1",
     "ts-node": "^10.9.1",
     "tsx": "^4.7.0"
   },
@@ -137,9 +142,13 @@
     "node": ">=16.0.0"
   },
   "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
     "testMatch": [
       "<rootDir>/generated/test/**/*.[jt]s?(x)",
-      "<rootDir>/generated/test/?(*.)+(spec|test).[jt]s?(x)"
+      "<rootDir>/generated/test/?(*.)+(spec|test).[jt]s?(x)",
+      "**/__tests__/**/*.[jt]s?(x)",
+      "**/?(*.)+(spec|test).[tj]s?(x)"
     ]
   }
 }

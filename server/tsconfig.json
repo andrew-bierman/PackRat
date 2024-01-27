@@ -2,12 +2,9 @@
   "compilerOptions": {
     "target": "ESNext",
     "noImplicitAny": false,
-    "module": "CommonJS",
- "noEmitOnError": false,
-    "lib": [
-      "es6",
-      "DOM"
-    ],
+    "module": "ESNext",
+    "noEmitOnError": false,
+    "lib": ["es6", "DOM"],
     "allowJs": true,
     "outDir": "dist",
     "rootDir": "src",
@@ -26,10 +23,6 @@
     // },
     "declaration": true
   },
-  "exclude": [
-    "node_modules",
-  ],
-  "include": [
-    "./src/**/*.ts"
-, "src/drizzle.config.ts"  ]
+  "exclude": ["node_modules"],
+  "include": ["./src/**/*.ts", "src/drizzle.config.ts"]
 }

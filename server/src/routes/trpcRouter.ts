@@ -1,44 +1,12 @@
 import { getPhotonDetailsRoute } from './../controllers/getOsm/getPhotonDetails';
 
-import { googleSigninRoute } from '../controllers/passport/signInGoogle';
+import { googleSigninRoute } from '../controllers/passport';
 
-import {
-  userSignInRoute,
-  getUsersRoute,
-  getUserByIdRoute,
-  signUpRoute,
-  resetPasswordRoute,
-  getGoogleAuthURLRoute,
-  editUserRoute,
-  deleteUserRoute,
-  getMeRoute,
-  sentEmailRoute,
-} from '../controllers/user';
 import {
   checkCodeRoute,
   emailExistsRoute,
   updatePasswordRoute,
 } from '../controllers/auth';
-import { getWeatherRoute, getWeatherWeekRoute } from '../controllers/weather';
-import {
-  addTripRoute,
-  deleteTripRoute,
-  editTripRoute,
-  getPublicTripsRoute,
-  getTripByIdRoute,
-  getTripsRoute,
-} from '../controllers/trip';
-import {
-  addTemplateRoute,
-  deleteTemplateRoute,
-  editTemplateRoute,
-  getTemplateByIdRoute,
-  getTemplatesRoute,
-} from '../controllers/template';
-import {
-  handlePasswordResetRoute,
-  requestPasswordResetEmailAndTokenRoute,
-} from '../controllers/passwordReset';
 import {
   addPackRoute,
   deletePackRoute,
@@ -49,8 +17,55 @@ import {
   getPublicPacksRoute,
   scorePackRoute,
 } from '../controllers/pack';
+import {
+  handlePasswordResetRoute,
+  requestPasswordResetEmailAndTokenRoute,
+} from '../controllers/passwordReset';
+import {
+  addTemplateRoute,
+  deleteTemplateRoute,
+  editTemplateRoute,
+  getTemplateByIdRoute,
+  getTemplatesRoute,
+} from '../controllers/template';
+import {
+  addTripRoute,
+  deleteTripRoute,
+  editTripRoute,
+  getPublicTripsRoute,
+  getTripByIdRoute,
+  getTripsRoute,
+} from '../controllers/trip';
+import {
+  deleteUserRoute,
+  editUserRoute,
+  getGoogleAuthURLRoute,
+  getMeRoute,
+  getUserByIdRoute,
+  getUsersRoute,
+  resetPasswordRoute,
+  sentEmailRoute,
+  signUpRoute,
+  userSignInRoute,
+} from '../controllers/user';
+import { getWeatherRoute, getWeatherWeekRoute } from '../controllers/weather';
 
-import { getAIResponseRoute, getUserChatsRoute } from '../controllers/openAi';
+import {
+  addToFavoriteRoute,
+  getFavoritePacksByUserRoute,
+  getUserFavoritesRoute,
+} from '../controllers/favorite';
+import { getGeoCodeRoute } from '../controllers/geoCode';
+import {
+  getDestinationRoute,
+  getOsmRoute,
+  getParksOSMRoute,
+  getPhotonResultsRoute,
+  getTrailsOSMRoute,
+  postSingleGeoJSONRoute,
+} from '../controllers/getOsm';
+import { getParksRoute } from '../controllers/getParks';
+import { getTrailsRoute } from '../controllers/getTrail';
 import {
   addGlobalItemToPackRoute,
   addItemGlobalRoute,
@@ -64,29 +79,14 @@ import {
   getItemsRoute,
   searchItemsByNameRoute,
 } from '../controllers/item';
-import { getTrailsRoute } from '../controllers/getTrail';
-import { getParksRoute } from '../controllers/getParks';
-import { getGeoCodeRoute } from '../controllers/geoCode';
-import {
-  addToFavoriteRoute,
-  getFavoritePacksByUserRoute,
-  getUserFavoritesRoute,
-} from '../controllers/favorite';
-import {
-  getDestinationRoute,
-  getOsmRoute,
-  getParksOSMRoute,
-  getPhotonResultsRoute,
-  getTrailsOSMRoute,
-  postSingleGeoJSONRoute,
-} from '../controllers/getOsm';
 
-import {
-  router as trpcRouter,
-  publicProcedure,
-  protectedProcedure,
-} from '../trpc';
 import { z } from 'zod';
+import {
+  createCallerFactory,
+  protectedProcedure,
+  publicProcedure,
+  router as trpcRouter,
+} from '../trpc';
 
 export const helloRouter = trpcRouter({
   world: publicProcedure.input(z.string()).query(async ({ input }) => {
@@ -191,5 +191,7 @@ export const appRouter = trpcRouter({
   getUserFavorites: getUserFavoritesRoute(),
   getFavoritePacksByUser: getFavoritePacksByUserRoute(),
 });
+
+export const createCaller = createCallerFactory(appRouter);
 
 export type AppRouter = typeof appRouter;
