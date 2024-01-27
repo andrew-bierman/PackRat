@@ -5,7 +5,7 @@ export default function loadStyles(theme) {
       backgroundColor: currentTheme.colors.background,
       flexDirection: 'column',
       gap: 15,
-      padding: [25, 25, 0, 25], // [top, right, bottom, left
+      padding: [25, 25, 0, 25],
       fontSize: 18,
       width: '100%',
     },
