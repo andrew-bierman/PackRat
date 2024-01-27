@@ -1,6 +1,8 @@
 import About from 'app/screens/about';
 import { Platform, ScrollView, StyleSheet } from 'react-native';
 
+// export const runtime = 'experimental-edge'
+
 /**
  * Renders the AboutRoute component.
  *
