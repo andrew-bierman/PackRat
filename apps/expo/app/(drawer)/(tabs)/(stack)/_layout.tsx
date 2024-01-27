@@ -1,71 +1,63 @@
+import { Stack } from 'expo-router';
 import React from 'react';
 import { View, Text, SafeAreaView, TouchableOpacity } from 'react-native';
-import { AuthStateListener } from '../../auth/AuthStateListener';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useIsMobileView } from 'app/hooks/common';
 import { useNavigate } from 'app/hooks/navigation';
 import { useAuthUser } from 'app/hooks/user/useAuthUser';
-import { NavigationList } from './NavigationList';
 import { Button } from 'tamagui';
-import SVGLogoComponent from '../../components/logo';
-import { Drawer } from 'expo-router/drawer';
 import { EvilIcons } from '@expo/vector-icons';
-import useTheme from '../../hooks/useTheme';
-import { DrawerContentScrollView } from '@react-navigation/drawer';
+import SVGLogoComponent from 'app/components/logo';
+import { AuthStateListener } from 'app/auth/AuthStateListener';
+import useTheme from 'app/hooks/useTheme';
 
-export const Navigation = () => {
+export default function StackLayout() {
   const user = useAuthUser();
   const isMobileView = useIsMobileView();
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
   const navigate = useNavigate();
-  return isMobileView ? (
-    <Drawer
+  return (
+    <Stack
       screenOptions={{
-        drawerPosition: 'right',
-        drawerType: 'slide',
-        drawerStyle: styles.drawerStyles,
-        headerShown: false,
-      }}
-      drawerContent={(props) => {
-        return (
-          <DrawerContentScrollView {...props}>
-            <NavigationList
-              itemStyle={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                paddingVertical: 8,
-              }}
-            />
-          </DrawerContentScrollView>
-        );
+        headerShown: true,
+        header: ({ navigation }) => (
+          <SafeAreaView style={styles.safeArea}>
+            <View style={styles.container}>
+              {user && <AuthStateListener />}
+              <View style={styles.header}>
+                <Button
+                  key={'logo-nav'}
+                  style={styles.logoContainer}
+                  onPress={() => navigate('/')}
+                  variant="outlined"
+                  chromeless
+                >
+                  <View style={styles.logoWrapper}>
+                    <SVGLogoComponent width={48} height={48} fill="#fff" />
+                  </View>
+                  <Text style={styles.logoText}>PackRat</Text>
+                </Button>
+                <TouchableOpacity
+                  style={styles.drawerTrigger}
+                  onPress={() => {
+                    navigation.toggleDrawer();
+                  }}
+                >
+                  <EvilIcons
+                    name="navicon"
+                    size={36}
+                    color={currentTheme.colors.iconColor}
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+          </SafeAreaView>
+        ),
       }}
     />
-  ) : (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.container}>
-        {user && <AuthStateListener />}
-        <View style={styles.header}>
-          <Button
-            key={'logo-nav'}
-            style={styles.logoContainer}
-            onPress={() => navigate('/')}
-            variant="outlined"
-            chromeless
-          >
-            <View style={styles.logoWrapper}>
-              <></>
-            </View>
-            <Text style={styles.logoText}>PackRat</Text>
-          </Button>
-          <View style={styles.menuBar}>
-            <NavigationList />
-          </View>
-        </View>
-      </View>
-    </SafeAreaView>
   );
-};
+}
 
 const loadStyles = (theme) => {
   const { currentTheme } = theme;

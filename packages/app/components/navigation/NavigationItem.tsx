@@ -1,8 +1,10 @@
-import { Text } from 'react-native';
+/* eslint-disable prettier/prettier */
 import { useNavigationItem } from 'app/hooks/navigation';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import useTheme from 'app/hooks/useTheme';
-import { Button } from 'tamagui';
+import {
+  DrawerItem,
+} from '@react-navigation/drawer';
 
 interface NavigationItemProps {
   item: {
@@ -35,36 +37,32 @@ export const NavigationItem = ({
     onSelect,
   );
   const { icon, text } = item;
+
   return (
-    <Button
+
+    <DrawerItem
+      icon={() => (
+        <IconComponent
+          name={icon}
+          size={isMobileView ? 24 : 18}
+          color={
+            isCurrentPage
+              ? currentTheme.colors.iconColor
+              : currentTheme.colors.iconColor
+          }
+        />
+      )}
+      label={text}
       style={[
-        styles.menuBarItem,
         isCurrentPage && styles.menuBarItemActive,
-        !!itemStyle && itemStyle,
       ]}
-      variant="outlined"
+      labelStyle={[
+        styles.menuBarItemText,
+        isCurrentPage && styles.menuBarItemTextActive,
+        
+      ]}
       onPress={handleItemPress}
-      chromeless
-      // activeOpacity={0.7}
-    >
-      <IconComponent
-        name={icon}
-        size={isMobileView ? 24 : 18}
-        color={
-          isCurrentPage
-            ? currentTheme.colors.iconColor
-            : currentTheme.colors.iconColor
-        }
-      />
-      <Text
-        style={[
-          styles.menuBarItemText,
-          isCurrentPage && styles.menuBarItemTextActive,
-        ]}
-      >
-        {text}
-      </Text>
-    </Button>
+    />
   );
 };
 

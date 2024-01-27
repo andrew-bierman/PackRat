@@ -2,6 +2,8 @@ import React from 'react';
 import Feed from 'app/screens/feed/Feed';
 import { AuthWrapper } from 'auth/authWrapper';
 
+// export const runtime = 'experimental-edge'
+
 function Packs() {
   return <Feed feedType="userPacks" />;
 }

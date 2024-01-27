@@ -1,6 +1,9 @@
 import React from 'react';
 import { PackDetails } from 'app/components/pack/PackDetails';
 import { AuthWrapper } from 'auth/authWrapper';
+
+// export const runtime = 'experimental-edge'
+
 function PackScreen() {
   return (
     <>
