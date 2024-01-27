@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { cloneElement, isValidElement, useMemo, useState } from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 import { AddItem } from '../item/AddItem';
 import { View } from 'react-native';
@@ -15,16 +15,9 @@ export const EditPackItemModal = ({ children }) => {
     // add more footer buttons here if needed
   ];
 
-  const { setIsModalOpen } = useModal();
-
-  const childrenWithProps = React.Children.map(children, (child) => {
-    if (React.isValidElement(child)) {
-      return React.cloneElement(child, {
-        closeModalHandler: () => setIsModalOpen(false),
-      });
-    }
-    return child;
-  });
+  const ModalContent = isValidElement(children)
+    ? withCloseModalHandler(children)
+    : null;
 
   return (
     <View>
@@ -33,19 +26,17 @@ export const EditPackItemModal = ({ children }) => {
         triggerComponent={<MaterialIcons name="edit" size={20} color="black" />}
         footerButtons={footerButtons}
       >
-        {childrenWithProps}
+        <ModalContent />
       </BaseModal>
     </View>
   );
 };
 
-const withCloseModalHandler = (Component) => (props) => {
+const withCloseModalHandler = (element) => (props) => {
   const { setIsModalOpen } = useModal();
 
-  return (
-    <Component
-      {...props}
-      closeModalHandler={setIsModalOpen.bind(null, false)}
-    />
-  );
+  return cloneElement(element, {
+    ...props,
+    closeModalHandler: () => setIsModalOpen(false),
+  });
 };

@@ -11,7 +11,17 @@ interface QuickActionButtonProps {
   text: string;
 }
 
-const QuickActionButton: React.FC<QuickActionButtonProps> = ({ onPress, iconName, text }) => {
+interface QuickActionButtonProps {
+  onPress: () => void;
+  iconName: keyof typeof MaterialIcons.glyphMap;
+  text: string;
+}
+
+const QuickActionButton = ({
+  onPress,
+  iconName,
+  text,
+}: QuickActionButtonProps) => {
   const styles = useCustomStyles(loadStyles);
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>

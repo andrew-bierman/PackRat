@@ -25,6 +25,8 @@ export const loadStyles = () => {
     },
     title: {
       height: 50,
+      width: '80%',
+      alignSelf: 'center',
       backgroundColor: currentTheme.colors.primary,
       borderRadius: 10,
       justifyContent: 'center',

@@ -28,6 +28,7 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useFetchWeather, useFetchWeatherWeak } from 'app/hooks/weather';
 import { useGetDestination, useGetPhotonDetails } from 'app/hooks/destination';
 import { WeatherData } from '../weather/WeatherData';
+import { RootState } from 'store/store';
 
 const DestinationHeader = ({ geoJSON, selectedSearchResult }) => {
   const styles = useCustomStyles(loadStyles);
@@ -91,7 +92,10 @@ export const DestinationPage = () => {
   const [lat] = useParam('lat');
   const [lon] = useParam('lon');
   const [destination_id, setDestinationId] = useState(destinationId);
-  const [properties, setProperties] = useState({ osm_id: id, osm_type: type });
+  const [properties, setProperties] = useState<{
+    osm_id: string;
+    osm_type: string;
+  }>({ osm_id: id, osm_type: type });
 
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
@@ -114,7 +118,7 @@ export const DestinationPage = () => {
 
   const geoJSON = currentDestination?.geoJSON;
   const selectedSearchResult = useSelector(
-    (state) => state.destination.selectedSearchResult,
+    (state: RootState) => state.destination.selectedSearchResult,
   );
 
   useEffect(() => {

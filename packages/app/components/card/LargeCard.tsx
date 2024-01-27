@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import useTheme from '../../hooks/useTheme';
 import { theme } from '../../theme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
+import { RootState } from 'store/store';
 
 interface LargeCardProps {
   title: string;
@@ -52,7 +53,7 @@ const LargeCard: React.FC<LargeCardProps> = ({
   children,
 }) => {
   const currentShape = useSelector(
-    (state) => state.search.selectedSearchResult,
+    (state: RootState) => state.search.selectedSearchResult,
   );
 
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =

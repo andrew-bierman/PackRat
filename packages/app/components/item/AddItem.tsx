@@ -19,7 +19,7 @@ interface AddItemProps {
     unit?: string;
   };
   packId: string;
-  currentPack: any; 
+  currentPack: any;
   editAsDuplicate: any;
   setPage: (page: number) => void;
   page: number;
@@ -33,9 +33,10 @@ export const AddItem: React.FC<AddItemProps> = ({
   packId,
   currentPack,
   editAsDuplicate,
-  setPage = (p0: number) => {},
+  setPage = (page: number) => {}, // temp fix, need props type
   page,
   closeModalHandler,
+  isItemPage,
   setIsAddItemModalOpen = () => {},
 }) => {
   // Moved the state up to the parent component
@@ -61,7 +62,7 @@ export const AddItem: React.FC<AddItemProps> = ({
     // mutation: addPackItemMutation
 
     editPackItem,
-  } = useEditPackItem();
+  } = useEditPackItem(isItemPage);
 
   // handle updates to initialData
   useEffect(() => {
@@ -71,11 +72,6 @@ export const AddItem: React.FC<AddItemProps> = ({
     setUnit(initialData?.unit || '');
   }, [initialData]);
 
-  /**
-   * Generate the function comment for the given function body in a markdown code block with the correct language syntax.
-   *
-   * @return {type} description of return value
-   */
   const handleSubmit = () => {
     const PackId = packId || initialData._id;
 
@@ -87,7 +83,7 @@ export const AddItem: React.FC<AddItemProps> = ({
           quantity,
           unit,
           type: categoryType,
-          // _id: initialData._id,
+          _id: initialData._id,
         });
         closeModalHandler();
       } else {
@@ -97,7 +93,7 @@ export const AddItem: React.FC<AddItemProps> = ({
           quantity,
           unit,
           type: categoryType,
-          // _id,
+          _id,
           // packId,
         });
         setPage(1);

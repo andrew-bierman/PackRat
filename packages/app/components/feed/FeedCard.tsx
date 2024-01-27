@@ -32,7 +32,7 @@ interface CardProps {
   owner_id: string;
   destination: string;
   createdAt: string;
-  owners: Array<{any: any}>;
+  owners: Array<{ any: any }>;
   duration: string;
 }
 
@@ -200,7 +200,7 @@ export default function Card({
           <RStack
             style={{
               // alignItems: 'center',
-              justifyContent: 'space-between'
+              justifyContent: 'space-between',
             }}
           >
             <RStack

@@ -1,6 +1,8 @@
 import { RequestPasswordReset } from 'app/components/password-reset';
 import { AuthWrapper } from 'auth/authWrapper';
 
+// export const runtime = 'experimental-edge'
+
 export default function ResetPasswordRoute() {
   return (
     <>

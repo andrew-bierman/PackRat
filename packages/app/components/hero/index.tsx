@@ -1,20 +1,21 @@
 import React from 'react';
 import { RStack, RImage } from '@packrat/ui';
-import { Platform, View } from 'react-native';
+import { ImageSourcePropType, Platform, View } from 'react-native';
 import { theme } from '../../theme';
 import { isObjectEmpty } from '../../utils/isObjectEmpty';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 
 interface HeroProps {
-  children: React.ReactNode;
-  imageDetails?: {
+  children: React.JSX.Element;
+  imageDetails: {
     title: string;
     subtitle: string;
-    source: any; 
+    source: ImageSourcePropType;
     alt: string;
   };
 }
-const Hero: React.FC<HeroProps> = ({ children, imageDetails }) => {
+
+const Hero = ({ children, imageDetails }: HeroProps) => {
   if (isObjectEmpty(imageDetails || {})) {
     imageDetails = {
       title: 'N/A',

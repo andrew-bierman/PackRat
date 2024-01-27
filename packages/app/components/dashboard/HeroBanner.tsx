@@ -15,6 +15,7 @@ import {
 } from '../../store/destinationStore';
 import { hexToRGBA } from '../../utils/colorFunctions';
 import useCustomStyles from 'app/hooks/useCustomStyles';
+import { RootState } from 'store/store';
 
 interface HeroSectionProps {
   onSelect: (selectedResult: SearchResult) => void;
@@ -44,7 +45,9 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSelect }) => {
       const [lon, lat] = coordinates;
 
       if (!osm_id || !osm_type) {
-        console.error('No OSM ID or OSM type found in the selected search result');
+        console.error(
+          'No OSM ID or OSM type found in the selected search result',
+        );
       } else {
         router.push({
           pathname: '/destination/query',
@@ -59,14 +62,16 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSelect }) => {
     }
   };
 
-  const user = useSelector((state: any) => state.auth?.user);
+  const user = useSelector((state: RootState) => state.auth?.user);
 
   const firstNameOrUser = first(user?.name?.split(' ')) ?? 'User';
 
   const cardBackgroundColor = hexToRGBA(currentTheme.colors.secondaryBlue, 0.5);
 
   const bannerText =
-    firstNameOrUser !== 'User' ? `Let's find a new trail, ${firstNameOrUser}` : "Let's find a new trail";
+    firstNameOrUser !== 'User'
+      ? `Let's find a new trail, ${firstNameOrUser}`
+      : "Let's find a new trail";
 
   return (
     <View style={styles.banner}>
@@ -81,13 +86,17 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSelect }) => {
       >
         <LargeCard
           customStyle={{
-            backgroundColor: cardBackgroundColor || currentTheme.colors.secondaryBlue,
+            backgroundColor:
+              cardBackgroundColor || currentTheme.colors.secondaryBlue,
             alignItems: 'center',
             justifyContent: 'center',
             width: '100%',
             height: '100%',
             padding: 50,
-          }} title={''} type={'search'}>
+          }}
+          title={''}
+          type={'search'}
+        >
           <RStack
             style={{
               width: '100%',

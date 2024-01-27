@@ -3,6 +3,7 @@ import Checkbox from 'expo-checkbox';
 import { FontAwesome } from '@expo/vector-icons';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useItemRow } from 'app/hooks/itemrow';
+
 interface ItemRowProps {
   packName: string;
 }

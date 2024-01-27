@@ -1,12 +1,14 @@
-import React from 'react'
-import LoginScreen from 'app/screens/LoginScreen'
+import React from 'react';
+import LoginScreen from 'app/screens/LoginScreen';
+
+// export const runtime = 'experimental-edge'
 
 function Login() {
   return (
     <div>
-        <LoginScreen />
+      <LoginScreen />
     </div>
-  )
+  );
 }
 
-export default Login
+export default Login;

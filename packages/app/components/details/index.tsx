@@ -5,19 +5,23 @@ import { format } from 'date-fns';
 import { fetchSinglePack } from '../../store/singlePackStore';
 import { CustomCard } from '../card';
 
-interface DetailsComponentProps {
-  type: 'pack' | 'trip' | 'item'; 
-  data: any; 
-  additionalComps?: React.ReactNode; 
-  link?: any; 
+interface DetailsComponent {
+  type: string;
+  data: any; // Need type for this
+  isLoading: boolean;
+  error: Error;
+  additionalComps: React.JSX.Element;
+  link: string;
 }
 
-export const DetailsComponent: React.FC<DetailsComponentProps> = ({
+export const DetailsComponent = ({
   type,
   data,
+  isLoading,
+  error,
   additionalComps,
   link,
-}) => {
+}: DetailsComponent) => {
   const renderDetails = () => {
     switch (type) {
       case 'pack':
@@ -38,6 +42,7 @@ export const DetailsComponent: React.FC<DetailsComponentProps> = ({
                 </>
               }
               footer={data?.details}
+              destination={null}
               type="pack"
             />
           </>

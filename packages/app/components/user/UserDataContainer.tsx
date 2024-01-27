@@ -10,9 +10,11 @@ import { theme } from '../../theme';
 import useTheme from '../../hooks/useTheme';
 import { hexToRGBA } from 'app/utils/colorFunctions';
 import { View, FlatList } from 'react-native';
+import { RootState } from 'store/store';
+
 interface UserDataContainerProps {
   data: any;
-  type: 'packs' | 'trips'; 
+  type: 'packs' | 'trips';
   userId?: string;
   isLoading: boolean;
   SkeletonComponent?: React.ReactElement;
@@ -20,7 +22,7 @@ interface UserDataContainerProps {
 // Skeleton version of the UserDataCard component
 const SkeletonUserDataCard = () => {
   return (
-    <View style={{ alignItems: 'center', padding: '5' }}>
+    <View style={{ alignItems: 'center', padding: 5 }}>
       <RSkeleton
         style={{
           minHeight: 150,
@@ -37,7 +39,7 @@ export default function UserDataContainer({
   userId,
   isLoading,
   SkeletonComponent,
-}: UserDataContainerProps){
+}: UserDataContainerProps) {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const [dataState, setDataState] = useState(
@@ -46,7 +48,7 @@ export default function UserDataContainer({
   useEffect(() => {
     setDataState(Array(data.length).fill(false));
   }, [data]);
-  const currentUser = useSelector((state) => state.auth.user);
+  const currentUser = useSelector((state: RootState) => state.auth.user);
 
   const typeUppercase = type.charAt(0).toUpperCase() + type.slice(1);
 

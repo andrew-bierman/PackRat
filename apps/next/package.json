@@ -7,7 +7,12 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "patch-package"
+    "postinstall": "patch-package",
+    "pages:build": "npx @cloudflare/next-on-pages",
+    "pages:preview": "npm run pages:build && wrangler pages dev .vercel/output/static --compatibility-date=2024-01-17 --compatibility-flag=nodejs_compat",
+    "pages:deploy": "npm run pages:build && wrangler pages deploy .vercel/output/static",
+    "pages:dev": "npx @cloudflare/next-on-pages --watch",
+    "build:cloudflare": "npx @cloudflare/next-on-pages@1"
   },
   "dependencies": {
     "@babel/core": "^7.23.7",
@@ -15,9 +20,9 @@
     "@babel/plugin-transform-react-jsx": "^7.23.4",
     "@expo/next-adapter": "5.0.2",
     "@react-native/assets-registry": "^0.74.0",
-    "@tamagui/config": "^1.88.0",
-    "@tamagui/next-plugin": "^1.88.0",
-    "@tamagui/next-theme": "^1.88.0",
+    "@tamagui/config": "^1.88.13",
+    "@tamagui/next-plugin": "^1.88.13",
+    "@tamagui/next-theme": "^1.88.13",
     "app": "*",
     "babel-preset-expo": "9.5.2",
     "babel-preset-react-native": "^4.0.1",
@@ -31,15 +36,19 @@
     "react-dom": "^18.2.0",
     "react-native-web": "^0.19.10",
     "setimmediate": "^1.0.5",
-    "tamagui": "^1.88.0",
+    "tamagui": "^1.88.13",
     "url-loader": "^4.1.1",
     "vercel": "latest"
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@cloudflare/next-on-pages": "^1.8.5",
+    "@cloudflare/workers-types": "^4.20240117.0",
     "@types/node": "^20.8.3",
     "babel-plugin-module-resolver": "^5.0.0",
+    "eslint-plugin-next-on-pages": "^1.8.5",
     "patch-package": "^8.0.0",
-    "postinstall-postinstall": "^2.1.0"
+    "postinstall-postinstall": "^2.1.0",
+    "wrangler": "3.24.0"
   }
 }
