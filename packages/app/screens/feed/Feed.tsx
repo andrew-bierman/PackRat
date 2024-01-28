@@ -22,6 +22,7 @@ import FeedSearchFilter from 'app/components/feed/FeedSearchFilter';
 import { useFeed } from 'app/hooks/feed';
 import { RefreshControl } from 'react-native';
 import { RText } from '@packrat/ui';
+import { useAuthUser } from 'app/auth/hooks';
 
 const URL_PATHS = {
   userPacks: '/pack/',
@@ -50,7 +51,8 @@ const Feed = ({ feedType = 'public' }) => {
   const [refreshing, setRefreshing] = useState(false);
 
   const dispatch = useDispatch();
-  const ownerId = useSelector((state) => state.auth.user?._id);
+  const user = useAuthUser();
+  const ownerId = user?._id;
   // const publicPacksData = useSelector((state) => state.feed.publicPacks);
   // const userPacksData = useSelector(selectAllPacks);
   // const publicTripsData = useSelector((state) => state.feed.publicTrips);
@@ -171,7 +173,11 @@ const Feed = ({ feedType = 'public' }) => {
             <Card key={item?._id} type={item?.type} {...item} />
           )}
           ListHeaderComponent={() => feedSearchFilterComponent}
-          ListEmptyComponent={() => <RText style={{ textAlign: "center", marginTop: 20 }}>{ERROR_MESSAGES[feedType]}</RText>}
+          ListEmptyComponent={() => (
+            <RText style={{ textAlign: 'center', marginTop: 20 }}>
+              {ERROR_MESSAGES[feedType]}
+            </RText>
+          )}
           showsVerticalScrollIndicator={false}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />

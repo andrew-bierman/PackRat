@@ -9,6 +9,7 @@ import { useGetPhotonDetails } from 'app/hooks/destination';
 
 // import { Picker } from '@react-native-picker/picker';
 import { DropdownComponent } from '../Dropdown';
+import { useAuthUser } from 'app/auth/hooks';
 const options = [
   { label: 'Public', value: 'true' },
   { label: 'For me only', value: 'false' },
@@ -69,7 +70,7 @@ export const SaveTripContainer = ({ dateRange }) => {
   const weatherObject = useSelector((state) => state.weather.weatherObject);
   const search = useSelector((state) => state.search.selectedSearchResult);
   const dropdown = useSelector((state) => state.dropdown);
-  const user = useSelector((state) => state.auth.user);
+  const user = useAuthUser();
   const packId = useSelector((state) => state.trips.newTrip.packId);
 
   // defining dispatch

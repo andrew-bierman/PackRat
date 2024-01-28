@@ -1,9 +1,14 @@
-import { Stack } from 'expo-router';
-import { useSession } from 'app/context/Auth/SessionProvider';
-import { useProtectedRoute } from 'app/hooks/auth/useProtectedRoute';
+import { Redirect, Stack } from 'expo-router';
+import { AuthLoader } from 'app/auth/AuthLoader';
+import { Text } from '@packrat/ui';
 
 export default function AppLayout() {
-  const { session } = useSession();
-  useProtectedRoute(session);
-  return <Stack />;
+  return (
+    <AuthLoader
+      loadingElement={<Text>Loading</Text>}
+      unauthorizedElement={<Redirect href="/sign-in" />}
+    >
+      <Stack />
+    </AuthLoader>
+  );
 }
