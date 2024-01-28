@@ -4,7 +4,11 @@ import { FontAwesome } from '@expo/vector-icons';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useItemRow } from 'app/hooks/itemrow';
 
-export const ItemRow = ({ packName }) => {
+interface ItemRowProps {
+  packName: string;
+}
+
+export const ItemRow = ({ packName }: ItemRowProps) => {
   const { isChecked, handleChange } = useItemRow();
   const styles = useCustomStyles(loadStyles);
 

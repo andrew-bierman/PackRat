@@ -2,6 +2,8 @@ import Dashboard from 'app/screens/dashboard';
 
 import { AuthWrapper } from 'auth/authWrapper';
 
+// export const runtime = 'experimental-edge';
+
 export default function DashboardPage() {
   return (
     <>

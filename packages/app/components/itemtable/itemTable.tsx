@@ -1,7 +1,8 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 import { Table, Row, Cell } from 'react-native-table-component';
 import { theme } from '../../theme';
+import { AntDesign } from '@expo/vector-icons';
 import useTheme from '../../hooks/useTheme';
 import { RButton, RStack } from '@packrat/ui';
 import { formatNumber } from '../../utils/formatNumber';
@@ -12,7 +13,6 @@ import Loader from '../Loader';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { loadStyles } from './itemsTable.style';
 import { AddItem } from '../item/AddItem';
-
 export const ItemsTable = ({
   limit,
   setLimit,
@@ -77,80 +77,101 @@ export const ItemsTable = ({
   };
 
   return (
-    <View
-      style={{
-        marginTop: '2rem',
-      }}
-    >
-      <Table
-        style={styles.tableStyle}
-        borderStyle={{ borderColor: 'transparent' }}
+    <ScrollView>
+      <View
+        style={{
+          flex: 1,
+          padding: 16,
+          paddingTop: 30,
+          backgroundColor: '#fff',
+          marginTop: 20,
+        }}
       >
-        <TitleRow title="Global Items List" />
-        <Row
-          flexArr={flexArr}
-          data={[
-            'Item Name',
-            'Weight',
-            'Quantity',
-            'Category',
-            'Edit',
-            'Delete',
-          ].map((header, index) => (
-            <Cell key={index} data={header} textStyle={styles.headerText} />
-          ))}
-          style={styles.head}
-        />
+        <ScrollView
+          horizontal={true}
+          contentContainerStyle={{
+            flexGrow: 1,
+            justifyContent: 'center',
+          }}
+        >
+          <Table
+            style={styles.tableStyle}
+            borderStyle={{ borderColor: 'transparent' }}
+          >
+            <TitleRow title="Global Items List" />
+            <Row
+              flexArr={flexArr}
+              data={[
+                'Item Name',
+                'Weight',
+                'Quantity',
+                'Category',
+                'Edit',
+                'Delete',
+              ].map((header, index) => (
+                <Cell key={index} data={header} textStyle={styles.headerText} />
+              ))}
+              style={styles.head}
+            />
+            <ScrollView style={{ height: 400 }}>
+              {isLoading ? (
+                <Loader />
+              ) : (
+                data.map((item, index) => {
+                  return <TableItem key={index} itemData={item} />;
+                })
+              )}
+            </ScrollView>
+          </Table>
+        </ScrollView>
         <View
           style={{
-            height: 400,
-            overflowY: 'scroll',
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'center',
+            marginTop: 20,
           }}
         >
-          {isLoading ? (
-            <Loader />
-          ) : (
-            data.map((item, index) => {
-              return <TableItem key={index} itemData={item} />;
-            })
-          )}
+          <RButton
+            style={{
+              width: 50,
+              backgroundColor: '#0284c7',
+              borderRadius: 5,
+              borderColor: page < 2 ? 'gray' : '#0284c7',
+              borderWidth: 1,
+              borderStyle: 'solid',
+            }}
+            disabled={page < 2}
+            onPress={handlePreviousPage}
+          >
+            <AntDesign
+              name="left"
+              size={16}
+              color={page < 2 ? 'gray' : 'white'}
+            />
+          </RButton>
+          <RButton
+            style={{
+              marginLeft: 10,
+              width: 50,
+              backgroundColor: '#0284c7',
+              borderRadius: 5,
+              borderColor: page === totalPages ? 'gray' : 'white',
+              borderWidth: 1,
+              borderStyle: 'solid',
+            }}
+            disabled={page === totalPages}
+            onPress={handleNextPage}
+          >
+            <AntDesign
+              name="right"
+              size={16}
+              color={page === totalPages ? 'gray' : 'white'}
+            />
+          </RButton>
         </View>
-      </Table>
-      <PaginationLimit limit={limit} setLimit={setLimit} setPage={setPage} />
-      <View style={{ display: 'flex', flexDirection: 'row', margin: 'auto' }}>
-        <RButton
-          style={{
-            marginRight: 10,
-            width: 4,
-            backgroundColor: 'transparent',
-            borderRadius: 5,
-            borderColor: page < 2 ? 'gray' : '#0284c7',
-            borderWidth: 1,
-            borderStyle: 'solid',
-          }}
-          disabled={page < 2}
-          onPress={handlePreviousPage}
-        >
-          <Text style={{ color: page < 2 ? 'gray' : '#0284c7' }}>{'<'}</Text>
-        </RButton>
-        <RButton
-          style={{
-            marginRight: 10,
-            width: 4,
-            backgroundColor: 'transparent',
-            borderRadius: 5,
-            borderColor: page === totalPages ? 'gray' : '#0284c7',
-            borderWidth: 1,
-            borderStyle: 'solid',
-          }}
-          disabled={page === totalPages}
-          onPress={handleNextPage}
-        >
-          <View style={{ color: page === totalPages ? 'gray' : '#0284c7' }}>
-            {'>'}
-          </View>
-        </RButton>
       </View>
-    </View>
+      <PaginationLimit limit={limit} setLimit={setLimit} setPage={setPage} />
+    </ScrollView>
   );
 };

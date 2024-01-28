@@ -15,7 +15,7 @@ import { useAuthUser } from 'app/auth/hooks';
 // Skeleton version of the UserDataCard component
 const SkeletonUserDataCard = () => {
   return (
-    <View style={{ alignItems: 'center', padding: '5' }}>
+    <View style={{ alignItems: 'center', padding: 5 }}>
       <RSkeleton
         style={{
           minHeight: 150,
@@ -42,7 +42,6 @@ export default function UserDataContainer({
     setDataState(Array(data.length).fill(false));
   }, [data]);
   const currentUser = useAuthUser();
-
   const typeUppercase = type.charAt(0).toUpperCase() + type.slice(1);
 
   const typeUppercaseSingular = typeUppercase.slice(0, -1);

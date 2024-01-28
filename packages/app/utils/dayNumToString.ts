@@ -4,29 +4,30 @@
  * @param {number} day - The numeric day value (0-6).
  * @return {string} The string representation of the day.
  */
-export const dayNumToString = (day) => {
+export const dayNumToString = (day: number): string => {
+  let stringDay: string;
   switch (day) {
     case 0:
-      day = 'Sunday';
+      stringDay = 'Sunday';
       break;
     case 1:
-      day = 'Monday';
+      stringDay = 'Monday';
       break;
     case 2:
-      day = 'Tuesday';
+      stringDay = 'Tuesday';
       break;
     case 3:
-      day = 'Wednesday';
+      stringDay = 'Wednesday';
       break;
     case 4:
-      day = 'Thursday';
+      stringDay = 'Thursday';
       break;
     case 5:
-      day = 'Friday';
+      stringDay = 'Friday';
       break;
     case 6:
-      day = 'Saturday';
+      stringDay = 'Saturday';
   }
 
-  return day;
+  return stringDay;
 };
