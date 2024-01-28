@@ -17,6 +17,7 @@ import { View } from 'react-native';
 import { AddItemModal } from './AddItemModal';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useSearchParams } from 'app/hooks/common';
+import { useAuthUser } from 'app/auth/hooks';
 
 export default function PackContainer({ isCreatingTrip = false }) {
   const dispatch = useDispatch();
@@ -27,6 +28,9 @@ export default function PackContainer({ isCreatingTrip = false }) {
   const [currentPackId, setCurrentPackId] = useState(
     searchParams.get('packId'),
   );
+  const user = useAuthUser();
+
+  const [currentPackId, setCurrentPackId] = useState(null);
   const [refetch, setRefetch] = useState(false);
   const styles = useCustomStyles(loadStyles);
 

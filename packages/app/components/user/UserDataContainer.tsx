@@ -10,7 +10,7 @@ import { theme } from '../../theme';
 import useTheme from '../../hooks/useTheme';
 import { hexToRGBA } from 'app/utils/colorFunctions';
 import { View, FlatList } from 'react-native';
-import { RootState } from 'store/store';
+import { useAuthUser } from 'app/auth/hooks';
 
 // Skeleton version of the UserDataCard component
 const SkeletonUserDataCard = () => {
@@ -41,7 +41,7 @@ export default function UserDataContainer({
   useEffect(() => {
     setDataState(Array(data.length).fill(false));
   }, [data]);
-  const currentUser = useSelector((state: RootState) => state.auth.user);
+  const currentUser = useAuthUser();
 
   const typeUppercase = type.charAt(0).toUpperCase() + type.slice(1);
 

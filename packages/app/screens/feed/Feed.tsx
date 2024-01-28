@@ -22,7 +22,7 @@ import FeedSearchFilter from 'app/components/feed/FeedSearchFilter';
 import { useFeed } from 'app/hooks/feed';
 import { RefreshControl } from 'react-native';
 import { RText } from '@packrat/ui';
-import { RootState } from 'store/store';
+import { useAuthUser } from 'app/auth/hooks';
 
 const URL_PATHS = {
   userPacks: '/pack/',
@@ -51,7 +51,8 @@ const Feed = ({ feedType = 'public' }) => {
   const [refreshing, setRefreshing] = useState(false);
 
   const dispatch = useDispatch();
-  const ownerId = useSelector((state: RootState) => state.auth.user?._id);
+  const user = useAuthUser();
+  const ownerId = user?._id;
   // const publicPacksData = useSelector((state) => state.feed.publicPacks);
   // const userPacksData = useSelector(selectAllPacks);
   // const publicTripsData = useSelector((state) => state.feed.publicTrips);

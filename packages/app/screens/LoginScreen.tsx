@@ -6,7 +6,7 @@ import { Link } from 'solito/link';
 import { InformUser } from '../utils/ToastUtils';
 import useTheme from '../hooks/useTheme';
 import { InputText, InputTextRules } from '@packrat/ui';
-import { useGoogleAuth, useLogin } from 'app/hooks/login';
+import { useGoogleAuth, useLogin } from 'app/auth/hooks';
 
 const demoUser = {
   email: 'zoot3@email.com',

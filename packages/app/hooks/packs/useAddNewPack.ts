@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { queryTrpc } from '../../trpc';
-import { useSelector } from 'react-redux';
+import { useAuthUser } from 'app/auth/hooks';
 
 export const useAddNewPack = () => {
-  const user = useSelector((state) => state.auth.user);
+  const user = useAuthUser();
   const [name, setName] = useState('');
   const [isPublic, setIsPublic] = useState(false);
   const utils = queryTrpc.useContext();
