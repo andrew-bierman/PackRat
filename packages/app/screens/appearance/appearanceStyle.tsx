@@ -14,4 +14,10 @@ export const loadStyles = () =>
       borderRadius: 12,
       padding: 20,
     },
+    nativeBaseBox: {
+      fontSize: 'md',
+      fontWeight: 'medium',
+      color: 'amber.100',
+      letterSpacing: 'lg',
+    },
   });

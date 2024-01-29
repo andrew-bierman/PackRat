@@ -6,13 +6,12 @@ import useAppearance from 'app/hooks/appearance/useAppearance';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { loadStyles } from './appearanceStyle';
 import DemoCard from './DemoCard';
-import KitchenSink from './KitchenSink';
 import ThemeSwitch from './ThemeSwitch';
-import NativeBaseBox from './NativeBaseBox';
-import PaperCard from './PaperCard';
+import { DialogDemo } from '../../components/DialogDemo';
 
 export default function AppearanceContainer() {
   const { isEnabled, toggleSwitch, currentTheme } = useAppearance();
+  const [showKitchenSink, setShowKitchenSink] = React.useState(true);
   const styles = useCustomStyles(loadStyles);
 
   return (
@@ -24,10 +23,25 @@ export default function AppearanceContainer() {
             toggleSwitch={toggleSwitch}
             currentTheme={currentTheme}
           />
-          <DemoCard isEnabled={isEnabled} />
-          <NativeBaseBox />
-          <PaperCard />
-          <KitchenSink />
+          <DemoCard />
+          <Box
+            alignSelf="center"
+            _text={styles.nativeBaseBox}
+            p={4}
+            bg={['primary.500']}
+          >
+            This is a Box from Native Base
+          </Box>
+          ;{/* Paper */}
+          <RNPCard>
+            <RNPCard.Title title="React Native Paper Card" />
+          </RNPCard>
+          {showKitchenSink && (
+            <Box>
+              <Text>Kitchen Sink</Text>
+              <DialogDemo />
+            </Box>
+          )}
         </Box>
       </VStack>
     </ScrollView>
