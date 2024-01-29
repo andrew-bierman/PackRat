@@ -1,11 +1,7 @@
 import * as React from 'react';
 import Svg, { Defs, G, Path } from 'react-native-svg';
 
-export default function SVGLogoComponent({
-  width = 963.619,
-  fill = 'fff',
-  ...props
-}) {
+function SVGLogoComponent({ width = 963.619, fill = 'fff', ...props }) {
   // need to figure out how to get the dynamic viewbox and transform to work
 
   const height = calculateHeightForGivenWidth(width);
