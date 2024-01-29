@@ -15,7 +15,6 @@
     "build:cloudflare": "npx @cloudflare/next-on-pages@1"
   },
   "dependencies": {
-    "@babel/core": "^7.23.7",
     "@babel/plugin-proposal-private-methods": "^7.18.6",
     "@babel/plugin-transform-react-jsx": "^7.23.4",
     "@expo/next-adapter": "5.0.2",
@@ -41,10 +40,14 @@
     "vercel": "latest"
   },
   "devDependencies": {
+    "@babel/core": "^7.23.9",
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@babel/preset-env": "^7.23.9",
+    "@babel/preset-react": "^7.23.3",
     "@cloudflare/next-on-pages": "^1.8.5",
     "@cloudflare/workers-types": "^4.20240117.0",
     "@types/node": "^20.8.3",
+    "babel-loader": "^9.1.3",
     "babel-plugin-module-resolver": "^5.0.0",
     "eslint-plugin-next-on-pages": "^1.8.5",
     "patch-package": "^8.0.0",
