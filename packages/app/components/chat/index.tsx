@@ -33,6 +33,20 @@ const MessageBubble = ({ message }) => {
   );
 };
 
+interface MessageListProps {
+  messages: any[];
+}
+
+const MessageList = ({ messages }: MessageListProps) => {
+  return (
+    <FlatList
+      data={messages}
+      renderItem={({ item }) => <MessageBubble message={item} />}
+      keyExtractor={(item, index) => index.toString()}
+    />
+  );
+};
+
 const ChatSelector = ({ conversation, onSelect, isActive }) => {
   const styles = useCustomStyles(loadStyles);
   return (
@@ -109,12 +123,7 @@ const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
           // </ScrollView>
         )}
       </RStack>
-      <FlatList
-        data={parsedMessages}
-        renderItem={({ item }) => <MessageBubble message={item} />}
-        keyExtractor={(item, index) => index.toString()}
-        contentContainerStyle={styles.flatList}
-      />
+      <MessageList messages={parsedMessages} />
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
