@@ -1,9 +1,6 @@
 import { View } from 'react-native';
 import { RButton, RCard, RText, RStack } from '@packrat/ui';
-import useTheme from '../../hooks/useTheme';
 import { MaterialIcons } from '@expo/vector-icons';
-import { theme } from '../../theme';
-import { useState } from 'react';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import useAccordionState from './useAccordionState';
 import loadStyles from './landingPageStyles';
