@@ -1,4 +1,5 @@
 import Items from 'app/screens/items';
+import { AuthWrapper } from 'auth/authWrapper';
 
 // export const runtime = 'experimental-edge';
 
@@ -11,5 +12,5 @@ export default function ItemsPage() {
 }
 
 ItemsPage.getLayout = function getLayout(page: any) {
-  return <>{page}</>;
+  return <AuthWrapper>{page}</AuthWrapper>;
 };

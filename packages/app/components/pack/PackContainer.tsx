@@ -16,12 +16,13 @@ import { useDispatch } from 'react-redux';
 import { View } from 'react-native';
 import { AddItemModal } from './AddItemModal';
 import useCustomStyles from 'app/hooks/useCustomStyles';
+import { useAuthUser } from 'app/auth/hooks';
 
 export default function PackContainer({ isCreatingTrip = false }) {
   const dispatch = useDispatch();
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
 
-  const user = useSelector((state) => state.auth.user);
+  const user = useAuthUser();
 
   const [currentPackId, setCurrentPackId] = useState(null);
   const [refetch, setRefetch] = useState(false);

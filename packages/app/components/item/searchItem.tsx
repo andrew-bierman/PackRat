@@ -5,6 +5,7 @@ import { RStack, RInput, RText, RScrollView, RIconButton } from '@packrat/ui';
 import { MaterialIcons } from '@expo/vector-icons';
 import { fetchItemsSearchResults } from '../../store/searchStore';
 import { selectItemsGlobal } from '../../store/singlePackStore';
+import { useAuthUser } from 'app/auth/hooks';
 
 interface Props {
   onSelect?: () => void;
@@ -18,7 +19,7 @@ export const SearchItem: React.FC<Props> = ({ onSelect, placeholder }) => {
 
   const searchResults =
     useSelector((state: any) => state.search.searchResults) || [];
-  const user = useSelector((state: any) => state.auth.user);
+  const user = useAuthUser();
   const [showSearchResults, setShowSearchResults] = useState(false);
 
   /**

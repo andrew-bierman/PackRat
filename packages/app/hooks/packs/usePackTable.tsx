@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { duplicatePackItem } from 'app/store/packsStore';
 import { ItemCategoryEnum } from 'app/constants/itemCategory';
 import { convertWeight } from 'app/utils/convertWeight';
+import { useAuthUser } from 'app/auth/hooks';
 import { RootState } from 'store/store';
 
 type WeightUnit = 'g' | 'kg' | 'oz' | 'lb' | 'lbs';
@@ -15,7 +16,7 @@ export const usePackTable = ({
   setRefetch,
   copy,
 }) => {
-  const user = useSelector((state) => state.auth.user);
+  const user = useAuthUser();
   const dispatch = useDispatch();
   let ids = [];
   if (currentPack?.items) {
