@@ -15500,7 +15500,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^8.47.0":
+"eslint@npm:^8.47.0, eslint@npm:^8.56.0":
   version: 8.56.0
   resolution: "eslint@npm:8.56.0"
   dependencies:
@@ -24325,7 +24325,7 @@ __metadata:
     check-dependency-version-consistency: "npm:^4.1.0"
     cross-env: "npm:^7.0.3"
     dotenv-cli: "npm:^7.3.0"
-    eslint: "npm:^8.47.0"
+    eslint: "npm:^8.56.0"
     husky: "npm:^8.0.0"
     lint-staged: "npm:^14.0.1"
     npm-run-all: "npm:^4.1.5"

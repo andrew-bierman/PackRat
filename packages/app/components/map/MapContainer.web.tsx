@@ -2,11 +2,11 @@ import React from 'react';
 
 import { View, Platform } from 'react-native';
 
-import WebMap from './WebMap';
+import WebMap from './WebMap.web';
 import { isObjectEmpty } from '../../utils/isObjectEmpty';
 import { defaultShape } from '../../utils/mapFunctions';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-
+import loadStyles from './MapStyles';
 export function MapContainer({ shape }) {
   if (isObjectEmpty(shape)) {
     shape = defaultShape;
@@ -15,7 +15,7 @@ export function MapContainer({ shape }) {
 
   if (Platform.OS === 'web') {
     return (
-      <View style={styles.webContainer}>
+      <View style={styles.webContainerWeb}>
         <WebMap shape={shape} />
       </View>
     );
@@ -23,15 +23,3 @@ export function MapContainer({ shape }) {
 }
 
 export default MapContainer;
-
-const loadStyles = () => ({
-  webContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    overflow: 'hidden',
-    marginVertical: 10,
-    width: '100%',
-    height: 400,
-    borderRadius: 10,
-  },
-});

@@ -7,7 +7,7 @@ module.exports = {
     'standard-with-typescript',
     'plugin:@typescript-eslint/recommended',
     'plugin:@tanstack/eslint-plugin-query/recommended',
-    'prettier',
+    'plugin:prettier/recommended',
   ],
   overrides: [
     {
@@ -46,7 +46,7 @@ module.exports = {
   },
   plugins: ['react', 'react-native', '@typescript-eslint', 'prettier'],
   rules: {
-    'prettier/prettier': 'error',
+    'prettier/prettier': ['error', { endOfLine: 'lf' }],
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/prefer-nullish-coalescing': 'off',
     '@typescript-eslint/strict-boolean-expressions': 'off',
