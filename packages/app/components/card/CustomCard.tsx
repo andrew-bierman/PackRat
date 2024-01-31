@@ -1,7 +1,7 @@
 import React from 'react';
 import { RStack, RSeparator } from '@packrat/ui';
 import { View } from 'react-native';
-import { SearchItem } from '../item/searchItem';
+import { SearchItem } from '../item/SearchItem';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { TripCardHeader } from './TripCardHeader';
 import { PackCardHeader } from './PackCardHeader';
@@ -58,7 +58,7 @@ export const CustomCard = ({
                 paddingLeft: 16,
               }}
             >
-              <SearchItem placeholder={'Search Item'} />
+              <SearchItem />
             </View>
             <RSeparator />
           </>

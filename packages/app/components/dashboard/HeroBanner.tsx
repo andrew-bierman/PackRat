@@ -16,7 +16,8 @@ import {
 } from '../../store/destinationStore';
 import { hexToRGBA } from '../../utils/colorFunctions';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import { RootState } from 'store/store';
+import { type RootState } from 'store/store';
+import { PlacesAutocomplete } from 'app/components/PlacesAutocomplete/PlacesAutocomplete';
 
 const HeroSection = ({ onSelect }) => {
   const dispatch = useDispatch();
@@ -31,11 +32,8 @@ const HeroSection = ({ onSelect }) => {
    * @param {Object} selectedResult - The selected search result
    * @return {void}
    */
-  const handleSearchSelect = async (selectedResult) => {
+  const handleSearchSelect = (selectedResult) => {
     try {
-      // Set the selected search result in the Redux store
-      // dispatch(setSelectedSearchResult(selectedResult));
-
       const { osm_id, osm_type } = selectedResult.properties;
 
       const coordinates = selectedResult.geometry.coordinates;
@@ -49,11 +47,10 @@ const HeroSection = ({ onSelect }) => {
       } else {
         router.push({
           pathname: '/destination/query',
-          params: {
+          query: {
             type: osm_type,
             id: osm_id,
-            // lat,
-            // lon,
+            place: JSON.stringify(selectedResult),
           },
         });
       }
@@ -106,7 +103,7 @@ const HeroSection = ({ onSelect }) => {
             }}
           >
             <RText style={styles.title}>{bannerText}</RText>
-            <SearchInput
+            <PlacesAutocomplete
               onSelect={handleSearchSelect}
               placeholder={'Search by park, city, or trail'}
             />

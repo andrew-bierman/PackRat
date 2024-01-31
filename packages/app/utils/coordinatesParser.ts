@@ -12,7 +12,14 @@ export const parseCoordinates = (geoJson) => {
 
   if (geoJson?.features) {
     const { coordinates } = geoJson.features[0].geometry;
-
+    if (coordinates[0]) {
+      const deepestArray = findDeepestArray(coordinates);
+      [lon, lat] = deepestArray;
+    }
+  }
+  // If the geoJson object is a single 'Feature' type
+  else if (geoJson?.type === 'Feature' && geoJson?.geometry?.type === 'Point') {
+    const { coordinates } = geoJson.geometry;
     if (coordinates[0]) {
       const deepestArray = findDeepestArray(coordinates);
       [lon, lat] = deepestArray;

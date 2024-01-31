@@ -5,9 +5,10 @@ import { useCardTrip } from 'app/hooks/trips/useTripCard';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import useTheme from '../hooks/useTheme';
 import { theme } from '../theme/index';
-import { SearchInput } from './SearchInput';
 import Carousel from './carousel';
 import MapContainer from './map/MapContainer';
+import { useGEOLocationSearch } from 'app/hooks/geojson';
+import { PlacesAutocomplete } from './PlacesAutocomplete';
 
 export default function TripCard({
   title,
@@ -16,6 +17,7 @@ export default function TripCard({
   shape,
   data,
   isSearch,
+  searchRef,
   isTrail,
   isPark,
   isLoading,
@@ -23,9 +25,15 @@ export default function TripCard({
   const { isDark, currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
   const { currentTrail, currentPark, currentShape, addTrailFn } = useCardTrip();
+  const [, setGEOLocation] = useGEOLocationSearch();
 
   const handleValueChange = (value) => {
     addTrailFn(isTrail, isPark, value);
+  };
+
+  const handleSelectLocation = (geoJSON) => {
+    setGEOLocation(geoJSON);
+    return '';
   };
 
   return (
@@ -79,7 +87,7 @@ export default function TripCard({
           />
         )
       ) : isSearch ? (
-        <SearchInput />
+        <PlacesAutocomplete ref={searchRef} onSelect={handleSelectLocation} />
       ) : (
         <RStack style={{ width: '80%' }}>
           <Carousel iconColor={isDark ? '#fff' : '#000'}>

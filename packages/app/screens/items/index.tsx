@@ -14,21 +14,15 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useItems } from 'app/hooks/items/useItems';
 import { BaseModal } from '@packrat/ui';
 import { RootState } from 'store/store';
+import { usePagination } from 'app/hooks/common';
 // import { checkNetworkConnected } from 'app/utils/netInfo';
 
 export default function Items() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
 
-  const {
-    data,
-    isFetching,
-    isError,
-    limit,
-    handleLimitChange,
-    page,
-    handlePageChange,
-  } = useItems();
+  const { limit, handleLimitChange, page, handlePageChange } = usePagination();
+  const { data, isFetching, isError } = useItems({ limit, page });
   const styles = useCustomStyles(loadStyles);
 
   return (

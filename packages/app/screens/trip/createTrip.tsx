@@ -4,7 +4,7 @@ import { theme } from '../../theme';
 import TripCard from '../../components/TripCard';
 import WeatherCard from '../../components/weather/WeatherCard';
 import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { GearList } from '../../components/GearList/GearList';
 import { SaveTripContainer } from 'app/components/trip/createTripModal';
@@ -17,6 +17,8 @@ import useParks from 'app/hooks/parks';
 import useTrails from 'app/hooks/trails';
 import { useGetPhotonDetails } from 'app/hooks/destination';
 import { WeatherData } from 'app/components/weather/WeatherData';
+import { useGEOLocationSearch } from 'app/hooks/geojson';
+
 export default function Trips() {
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
@@ -26,21 +28,9 @@ export default function Trips() {
     startDate: undefined,
     endDate: undefined,
   });
-  const dispatch = useDispatch();
-  const searchResult = useSelector(
-    (state) => state.search.selectedSearchResult,
-  );
+  const [{ latLng, osm }] = useGEOLocationSearch();
+  const placesAutoCompleteRef = useRef({});
 
-  const { latLng, selectedSearch } = useSelector((state) => state.weather);
-
-  // const [photonDetails, setPhotonDetails] = useState(null);
-  // const photonDetailsStore = useSelector(
-  //   (state) => state.destination.photonDetails,
-  // );
-  console.log(
-    '🚀 ../.. file: createTrip.js:41 ../.. Trips ../.. selectedSearch:',
-    selectedSearch,
-  );
   const {
     data: weatherData,
     isLoading: weatherLoading,
@@ -60,13 +50,11 @@ export default function Trips() {
     filteredParks: parksData,
   } = useParks({
     latLng,
-    selectedSearch,
   });
 
-  console.log('filtered parks', parksData, parksError);
   const { data, filteredTrails, error, isLoading } = useTrails({
     latLng,
-    selectedSearch,
+    selectedSearch: placesAutoCompleteRef.current.searchString,
   });
   // useEffect(() => {
   //   setTrailsData(trailsObject);
@@ -78,8 +66,8 @@ export default function Trips() {
 
   const { data: photonDetails } = useGetPhotonDetails({
     properties: {
-      osm_id: searchResult.properties?.osm_id,
-      osm_type: searchResult.properties?.osm_type,
+      osm_id: osm?.osmId,
+      osm_type: osm?.osmType,
     },
   });
 
@@ -194,6 +182,7 @@ export default function Trips() {
           <TripCard
             title="Where are you heading?"
             isSearch={true}
+            searchRef={placesAutoCompleteRef}
             Icon={() => (
               <FontAwesome
                 name="map"
