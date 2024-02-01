@@ -11,11 +11,11 @@ export const TabList = ({ onItemSelect = () => {} }) => {
     <XStack
       style={{
         height: 80,
-        backgroundColor: currentTheme.colors.background,
+        backgroundColor: currentTheme.colors.primary,
         width: '100%',
-        borderWidth: 0.5,
-        borderColor: 'gray',
-        justifyContent: 'center',
+        borderWidth: 0.2,
+        borderColor: currentTheme.colors.black,
+        justifyContent: 'space-evenly',
         alignItems: 'center',
       }}
       space="$2"

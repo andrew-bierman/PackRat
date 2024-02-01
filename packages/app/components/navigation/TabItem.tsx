@@ -3,11 +3,14 @@ import { useTabItem } from 'app/hooks/navigation';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import useTheme from 'app/hooks/useTheme';
 import { Text, TouchableOpacity, View } from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
 export const TabItem = ({ item, onSelect }) => {
     const { currentTheme } = useTheme();
+    const { IconComponent, isCurrentPage, handleItemPress } = useTabItem(
+        item,
+        onSelect,
+      );
     const { icon, label, href } = item;
     return (
         <TabButton
@@ -15,6 +18,8 @@ export const TabItem = ({ item, onSelect }) => {
           icon={icon}
           label={label}
           color={currentTheme.colors.iconColor}
+          onPress={handleItemPress}
+          IconComponent={IconComponent}
         />
     );
 };
@@ -24,27 +29,29 @@ export const TabButton = ({
 	icon,
     label,
     color,
-    href
+    href,
+    onPress,
+    IconComponent,
 }: {
-	icon: React.ComponentProps<typeof AntDesign>['name'];
+	icon: string;
     label: string;
     color: string;
     href: string;
+    onPress: any,
+    IconComponent: any
 }) => {
     const navigation = useNavigation();
 
 	return (
         <TouchableOpacity
-            onPress={() => {
-                navigation.navigate(href)
-            }}
+            onPress={onPress}
         style={{ justifyContent: 'center', alignItems: 'center', marginRight: 20 }}>
-            <AntDesign
-                name={icon}
-                size={24}
-                style={{ marginBottom: 5 }}
-                color={color}
-		/>
+        <IconComponent
+          name={icon}
+          size={24}
+          color={color}
+          style={{ marginBottom: 5 }}
+        />
             <Text style={{ color }}>{label}</Text>
         </TouchableOpacity>
 	);

@@ -1,7 +1,6 @@
 import { EvilIcons } from '@expo/vector-icons';
 import { useLogout } from '../login';
 import { useTab } from './useTab';
-
 export const useTabItem = (item, onSelect) => {
   const logout = useLogout();
   const tab = useTab();

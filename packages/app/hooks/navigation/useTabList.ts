@@ -3,6 +3,7 @@ import {
   MaterialCommunityIcons,
   FontAwesome,
   MaterialIcons,
+  AntDesign,
 } from '@expo/vector-icons';
 import { useAuthUser } from '../user/useAuthUser';
 
@@ -35,10 +36,18 @@ const logedInMenuItems = [
     href: '/',
     icon: 'home',
     label: 'Home',
+    iconSource: AntDesign,
   },
   {
     href: '/profile',
     icon: 'profile',
     label: 'Profile',
+    iconSource: AntDesign,
+  },
+  {
+    href: '/feed',
+    icon: 'newspaper-variant-outline',
+    label: 'Feed',
+    iconSource: MaterialCommunityIcons,
   },
 ];
