@@ -103,6 +103,7 @@ const nextConfig = function () {
       'expo-system-ui',
       'expo-web-browser',
       '@tanstack/react-query',
+      'zeego',
     ],
     experimental: {
       scrollRestoration: true,

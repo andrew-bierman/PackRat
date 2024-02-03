@@ -44,10 +44,13 @@ const FontLoader = ({ children }) => {
   useEffect(() => {
     if (loaded) {
       // SplashScreen.hideAsync();
+      console.log('Fonts loaded');
     }
   }, [loaded]);
 
-  if (!loaded) return null;
+  console.log('loaded', loaded);
+
+  // if (!loaded) return null;
 
   return children;
 };

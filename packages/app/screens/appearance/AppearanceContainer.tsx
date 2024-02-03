@@ -16,6 +16,7 @@ import { DialogDemo } from '../../components/DialogDemo';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import useAppearance from 'app/hooks/appearance/useAppearance';
 import { Scroll } from '@tamagui/lucide-icons';
+import Menu, { DropdownMenu } from './ZeegoDemo';
 
 export default function AppearanceContainer() {
   const { isEnabled, toggleSwitch, currentTheme } = useAppearance();
@@ -74,6 +75,7 @@ export default function AppearanceContainer() {
             </Box>
           )}
         </Box>
+        <ZeegoDemo />
       </VStack>
     </ScrollView>
   );
@@ -96,6 +98,11 @@ export function DemoCard(props) {
     </Card>
   );
 }
+
+function ZeegoDemo() {
+  return <Menu />;
+}
+
 const loadStyles = () => ({
   mainContainer: {
     flex: 1,

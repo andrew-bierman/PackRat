@@ -22,7 +22,7 @@ export const useNavigationList = () => {
             iconSource: MaterialIcons,
           },
           {
-            href: 'register',
+            href: '/register',
             icon: 'person-add',
             text: 'Register',
             iconSource: MaterialIcons,
