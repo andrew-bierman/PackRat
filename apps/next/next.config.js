@@ -109,6 +109,7 @@ const nextConfig = function () {
       '@react-navigation/drawer',
       '@bacons/react-views',
       // End remove section
+      'zeego',
     ],
     experimental: {
       scrollRestoration: true,

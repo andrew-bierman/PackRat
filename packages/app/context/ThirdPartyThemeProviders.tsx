@@ -24,6 +24,46 @@ const ThirdPartyProviders = ({ children, isDark = false }) => {
 
   // const { isDark } = useTheme()
 
+  // return <>{children}</>
+
+  return (
+    <FontLoader>
+      <NativeBaseProvider
+        theme={isDark ? nativeBaseDarkTheme : nativeBaseLightTheme}
+      >
+        <TamaguiProvider config={config} disableRootThemeClass={false}>
+          <TamaguiTheme name={isDark ? 'dark' : 'light'}>
+            <ToastProvider>
+              <RNPaperThemeProvider
+                theme={isDark ? darkPaperTheme : lightThemePaper}
+              >
+                {children}
+              </RNPaperThemeProvider>
+            </ToastProvider>
+          </TamaguiTheme>
+        </TamaguiProvider>
+      </NativeBaseProvider>
+    </FontLoader>
+  );
+
+  return (
+    <FontLoader>
+      {/* <NativeBaseProvider
+        theme={isDark ? nativeBaseDarkTheme : nativeBaseLightTheme}
+      > */}
+      <TamaguiProvider config={config} disableRootThemeClass={false}>
+        <TamaguiTheme name={isDark ? 'dark' : 'light'}>
+          <ToastProvider>
+            {/* <RNPaperThemeProvider theme={darkPaperTheme}> */}
+            {children}
+            {/* </RNPaperThemeProvider> */}
+          </ToastProvider>
+        </TamaguiTheme>
+      </TamaguiProvider>
+      {/* </NativeBaseProvider> */}
+    </FontLoader>
+  );
+
   return (
     <FontLoader>
       <NativeBaseProvider

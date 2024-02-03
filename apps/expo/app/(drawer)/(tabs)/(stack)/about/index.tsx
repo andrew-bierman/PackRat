@@ -2,6 +2,7 @@ import About from 'app/screens/about';
 import { Platform, ScrollView, StyleSheet } from 'react-native';
 import { Stack } from 'expo-router';
 import Head from 'expo-router/head';
+import Menu from 'app/screens/appearance/ZeegoDemo';
 
 /**
  * Renders the AboutRoute component.
@@ -27,6 +28,7 @@ export default function AboutRoute() {
           // https://reactnavigation.org/docs/headers#replacing-the-title-with-a-custom-component
         }}
       />
+      <Menu />
       <About />
     </>
   );
