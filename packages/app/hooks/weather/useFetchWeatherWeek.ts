@@ -1,8 +1,8 @@
 import { queryTrpc } from '../../trpc';
 
-export const useFetchWeatherWeak = (latLng) => {
+export const useFetchWeatherWeak = (latLng, isDisabled = false) => {
   const { lat, lon } = latLng;
-  const isEnabled = Boolean(lat && lon);
+  const isEnabled = !isDisabled && Boolean(lat && lon);
   const { refetch, data, error, isLoading, isError } =
     queryTrpc.getWeatherWeek.useQuery(
       { lat, lon },

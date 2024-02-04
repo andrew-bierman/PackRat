@@ -4,7 +4,7 @@ import { theme } from '../../theme';
 import TripCard from '../../components/TripCard';
 import WeatherCard from '../../components/weather/WeatherCard';
 import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { GearList } from '../../components/GearList/GearList';
 import { SaveTripContainer } from 'app/components/trip/createTripModal';
@@ -15,9 +15,13 @@ import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import useParks from 'app/hooks/parks';
 import useTrails from 'app/hooks/trails';
-import { useGetPhotonDetails } from 'app/hooks/destination';
+import {
+  useCurrentDestination,
+  useGetPhotonDetails,
+} from 'app/hooks/destination';
 import { WeatherData } from 'app/components/weather/WeatherData';
 import { useGEOLocationSearch } from 'app/hooks/geojson';
+import { parseCoordinates } from 'app/utils/coordinatesParser';
 
 export default function Trips() {
   const { currentTheme } = useTheme();
@@ -28,8 +32,15 @@ export default function Trips() {
     startDate: undefined,
     endDate: undefined,
   });
-  const [{ latLng, osm }] = useGEOLocationSearch();
+  const [osm] = useGEOLocationSearch();
   const placesAutoCompleteRef = useRef({});
+  const { currentDestination, latLng } = useCurrentDestination();
+  const { data: photonDetails } = useGetPhotonDetails({
+    properties: {
+      osm_id: osm?.osmId,
+      osm_type: osm?.osmType,
+    },
+  });
 
   const {
     data: weatherData,
@@ -54,7 +65,7 @@ export default function Trips() {
 
   const { data, filteredTrails, error, isLoading } = useTrails({
     latLng,
-    selectedSearch: placesAutoCompleteRef.current.searchString,
+    selectedSearch: osm.name,
   });
   // useEffect(() => {
   //   setTrailsData(trailsObject);
@@ -63,13 +74,6 @@ export default function Trips() {
   // useEffect(() => {
   // setParksData(parksObject);
   // }, [parksObject]);
-
-  const { data: photonDetails } = useGetPhotonDetails({
-    properties: {
-      osm_id: osm?.osmId,
-      osm_type: osm?.osmType,
-    },
-  });
 
   const steps = [
     {
@@ -170,7 +174,13 @@ export default function Trips() {
     },
     {
       name: 'Step 8',
-      component: () => <SaveTripContainer dateRange={dateRange} />,
+      component: () => (
+        <SaveTripContainer
+          search={currentDestination}
+          weatherObject={weatherData}
+          dateRange={dateRange}
+        />
+      ),
     },
   ];
 
@@ -242,9 +252,12 @@ export default function Trips() {
               shape={photonDetails}
             />
           )}
-          {photonDetails && <WeatherData geoJSON={photonDetails} />}
           <RStack>
-            <SaveTripContainer dateRange={dateRange} />
+            <SaveTripContainer
+              dateRange={dateRange}
+              search={currentDestination}
+              weatherObject={weatherData}
+            />
           </RStack>
         </RStack>
       </RStack>

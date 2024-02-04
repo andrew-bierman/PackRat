@@ -18,7 +18,7 @@ export const parseCoordinates = (geoJson) => {
     }
   }
   // If the geoJson object is a single 'Feature' type
-  else if (geoJson?.type === 'Feature' && geoJson?.geometry?.type === 'Point') {
+  else if (geoJson?.geometry?.type === 'Point') {
     const { coordinates } = geoJson.geometry;
     if (coordinates[0]) {
       const deepestArray = findDeepestArray(coordinates);

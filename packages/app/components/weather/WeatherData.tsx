@@ -14,6 +14,7 @@ export const WeatherData = ({ geoJSON }) => {
   const latLng = useMemo(() => {
     return parseCoordinates(geoJSON);
   }, [geoJSON]);
+
   const { data: weatherObjectData } = useFetchWeather(latLng);
   const { data: weatherWeekData } = useFetchWeatherWeak(latLng);
 

@@ -17,10 +17,12 @@ import WeatherCard from '../weather/WeatherCard';
 import { Ionicons } from '@expo/vector-icons';
 import { fetchWeather, fetchWeatherWeek } from '../../store/weatherStore';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import { useGetDestination, useGetPhotonDetails } from 'app/hooks/destination';
+import {
+  useCurrentDestination,
+  useGetPhotonDetails,
+} from 'app/hooks/destination';
 import { WeatherData } from '../weather/WeatherData';
-
-const { useParam } = createParam();
+import { useGEOLocationSearch } from 'app/hooks/geojson';
 
 const DestinationHeader = ({ geoJSON, selectedSearchResult }) => {
   const styles = useCustomStyles(loadStyles);
@@ -77,64 +79,26 @@ const DestinationHeader = ({ geoJSON, selectedSearchResult }) => {
 
 // TODO refactor component
 export const DestinationPage = () => {
-  console.log('destination page');
-  const router = useRouter();
-  const [destinationId] = useParam('destinationId');
-  const [id] = useParam('id');
-  const [place] = useParam('place');
-  const [type] = useParam('type');
-  const [destination_id, setDestinationId] = useState(destinationId);
-  const [properties, setProperties] = useState<{
-    osm_id: string;
-    osm_type: string;
-  }>({ osm_id: id, osm_type: type });
-
-  const selectedSearchResult = useMemo(() => {
-    try {
-      const parsedPlace = JSON.parse(place);
-      return parsedPlace;
-    } catch {
-      return undefined;
-    }
-  }, [place]);
-
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
-  const dispatch = useDispatch();
 
-  const matchPhotonFormattingForData = { properties };
-  const { isLoading, isError, data } = useGetPhotonDetails(
-    matchPhotonFormattingForData,
-  );
-  useGetDestination({ destination_id, properties });
-
-  // const photonDetailsStore = useSelector(
-  //   (state) => state.destination.photonDetails,
-  // );
-
-  const currentDestination = {
-    geoJSON: data,
-  };
-
-  const geoJSON = currentDestination?.geoJSON;
-
-  useEffect(() => {
-    setDestinationId(destinationId);
-    if (destinationId) {
-      setProperties({ osm_id: id, osm_type: type });
-    }
-  }, [destinationId]);
-
-  if (!currentDestination) {
-    return null;
-  }
+  const { currentDestination } = useCurrentDestination();
+  const [osm] = useGEOLocationSearch();
+  const {
+    data: geoJSON,
+    isLoading,
+    isError,
+  } = useGetPhotonDetails({
+    properties: {
+      osm_id: osm?.osmId,
+      osm_type: osm?.osmType,
+    },
+  });
 
   const shape = geoJSON ?? defaultShape;
 
   const map = () => <MapContainer shape={shape} />;
-
-  console.log({ isLoading, isError });
 
   return (
     <ScrollView>
@@ -142,7 +106,7 @@ export const DestinationPage = () => {
         <View style={styles.container}>
           <DestinationHeader
             geoJSON={geoJSON}
-            selectedSearchResult={selectedSearchResult}
+            selectedSearchResult={currentDestination}
           />
           <LargeCard
             title="Map"
@@ -157,7 +121,7 @@ export const DestinationPage = () => {
             contentProps={{ shape }}
             type="map"
           />
-          <WeatherData geoJSON={geoJSON} />
+          <WeatherData geoJSON={currentDestination} />
         </View>
       )}
     </ScrollView>

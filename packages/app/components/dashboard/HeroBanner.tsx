@@ -9,11 +9,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import Hero from '../hero';
 import { useRouter } from 'app/hooks/router';
 import { first } from 'lodash';
-import {
-  photonDetails,
-  processGeoJSON,
-  setSelectedSearchResult,
-} from '../../store/destinationStore';
 import { hexToRGBA } from '../../utils/colorFunctions';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { type RootState } from 'store/store';
@@ -34,7 +29,7 @@ const HeroSection = ({ onSelect }) => {
    */
   const handleSearchSelect = (selectedResult) => {
     try {
-      const { osm_id, osm_type } = selectedResult.properties;
+      const { osm_id, osm_type, name } = selectedResult.properties;
 
       const coordinates = selectedResult.geometry.coordinates;
 
@@ -48,9 +43,9 @@ const HeroSection = ({ onSelect }) => {
         router.push({
           pathname: '/destination/query',
           query: {
-            type: osm_type,
-            id: osm_id,
-            place: JSON.stringify(selectedResult),
+            osmType: osm_type,
+            osm_id: osm_id,
+            name,
           },
         });
       }

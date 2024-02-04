@@ -2,37 +2,36 @@ import { useMemo } from 'react';
 import { useSearchParams } from 'app/hooks/common';
 import { parseCoordinates } from 'app/utils/coordinatesParser';
 
-export const useGEOLocationSearch = () => {
+interface GeoSearchParams {
+  osmId?: string;
+  osmType?: string;
+  name?: string;
+}
+
+export const useGEOLocationSearch = (): [
+  GeoSearchParams,
+  (geoJSON: any) => void,
+] => {
   const searchParams = useSearchParams();
-  const lat = searchParams.get('lat');
-  const lon = searchParams.get('lon');
   const osmId = searchParams.get('osmId');
   const osmType = searchParams.get('osmType');
+  const name = searchParams.get('name');
 
   const setGEOLocation = (geoJSON) => {
-    const { lat, lon } = parseCoordinates(geoJSON) || {};
-    const newSearchParams = {};
+    const newSearchParams: GeoSearchParams = {};
 
-    if (!isNaN(lat) && !isNaN(lon)) {
-      newSearchParams.lat = lat;
-      newSearchParams.lon = lon;
-    }
-
-    if (geoJSON?.properties?.osm_id && geoJSON?.properties?.osm_type) {
+    if (geoJSON?.properties?.osm_id && geoJSON.properties.osm_type && geoJSON.properties.name) {
       newSearchParams.osmId = geoJSON.properties.osm_id;
-      searchParams.osmType = geoJSON.properties.osm_type;
+      newSearchParams.osmType = geoJSON.properties.osm_type;
+      newSearchParams.name = geoJSON.properties.name;
     }
 
     searchParams.reset(newSearchParams);
   };
 
-  const latLng = useMemo(() => {
-    return { lat: +lat, lon: +lon };
-  }, [lat, lon, osmType, osmId]);
-
   const osm = useMemo(() => {
-    return { osmType, osmId };
-  }, [osmType, osmId]);
+    return { osmType, osmId, name };
+  }, [osmType, osmId, name]);
 
-  return [{ latLng, osm }, setGEOLocation];
+  return [osm, setGEOLocation];
 };
