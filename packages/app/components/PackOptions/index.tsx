@@ -4,7 +4,12 @@ import { useDispatch } from 'react-redux';
 import { useRouter } from 'app/hooks/router';
 import { RStack, RIconButton, BaseModal } from '@packrat/ui';
 import { Entypo } from '@expo/vector-icons';
-export const PackOptions = ({ Edit, Delete, Ignore }) => {
+interface PackOptionsProps {
+  Edit: React.ReactNode;
+  Delete: React.ReactNode;
+  Ignore: React.ReactNode;
+}
+export const PackOptions: React.FC<PackOptionsProps> = ({ Edit, Delete, Ignore }) => {
   const dispatch = useDispatch();
   const router = useRouter();
   return (

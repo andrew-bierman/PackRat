@@ -5,6 +5,13 @@ import { ItemForm } from './ItemForm'; // assuming you moved the form related co
 import { useModal } from '@packrat/ui';
 import { useAddItem, useItems } from 'app/hooks/items';
 
+interface Item {
+  name: string;
+  weight: string;
+  quantity: string;
+  type: string;
+  unit: string;
+}
 export const AddItemGlobal = () => {
   const { isLoading } = useItems();
 

@@ -12,11 +12,38 @@ import { RImage, RStack, RText } from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useDate } from 'app/hooks/weather/useDate';
 import { defaultWeatherObject } from '../../constants/defaultWeatherObj';
+interface WeatherObject {
+  name: string;
+  sys: {
+    country: string;
+  };
+  weather: {
+    description: any;
+    icon: string;
+  }[];
+  main: {
+    temp: number;
+    humidity: number;
+  };
+  wind: {
+    speed: number;
+  };
+}
 
-export default function WeatherCard({
-  weatherObject = defaultWeatherObject,
-  weatherWeek = [],
-}) {
+interface WeatherDay {
+  weather: {
+    icon: string;
+  }[];
+  main: {
+    temp: number;
+  };
+}
+
+interface WeatherCardProps {
+  weatherObject?: WeatherObject;
+  weatherWeek?: WeatherDay[];
+}
+export default function WeatherCard({ weatherObject = defaultWeatherObject, weatherWeek = [] }: WeatherCardProps) {
   // Hooks
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);

@@ -11,7 +11,16 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import useTheme from '../../hooks/useTheme';
 import { RStack, RText, RButton } from '@packrat/ui';
 
-const TripDateRange = ({ dateRange, setDateRange }) => {
+interface DateRange {
+  startDate: Date | null;
+  endDate: Date | null;
+}
+interface TripDateRangeProps {
+  dateRange: DateRange;
+  setDateRange: (dateRange: DateRange) => void;
+}
+
+const TripDateRange: React.FC<TripDateRangeProps> = ({ dateRange, setDateRange }) => {
   const { currentTheme } = useTheme();
   const [open, setOpen] = React.useState(false);
 

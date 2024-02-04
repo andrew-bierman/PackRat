@@ -13,7 +13,35 @@ import Loader from '../Loader';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { loadStyles } from './itemsTable.style';
 import { AddItem } from '../item/AddItem';
-export const ItemsTable = ({
+interface ItemsTableProps {
+  limit: number;
+  setLimit: (limit: number) => void;
+  page: number;
+  setPage: (page: number) => void;
+  data: YourItemType[];
+  isLoading: boolean;
+  totalPages: number;
+}
+
+interface YourItemType {
+  name: string;
+  weight: number;
+  category?: { name: string };
+  quantity: number;
+  unit: string;
+  _id: string;
+  type: string;
+}
+
+interface TitleRowProps {
+  title: string;
+}
+
+interface TableItemProps {
+  itemData: YourItemType;
+}
+
+export const ItemsTable: React.FC<ItemsTableProps> = ({
   limit,
   setLimit,
   page,
@@ -26,7 +54,7 @@ export const ItemsTable = ({
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
-  const TitleRow = ({ title }) => {
+  const TitleRow: React.FC<TitleRowProps> = ({ title }) => {
     const rowData = [
       <RStack style={{ flexDirection: 'row', ...styles.mainTitle }}>
         <Text style={styles.titleText}>{title}</Text>
@@ -37,7 +65,7 @@ export const ItemsTable = ({
       <Row data={rowData} style={[styles.title]} textStyle={styles.titleText} />
     );
   };
-  const TableItem = ({ itemData }) => {
+  const TableItem: React.FC<TableItemProps> = ({ itemData }) => {
     const { name, weight, category, quantity, unit, _id, type } = itemData;
 
     const rowData = [

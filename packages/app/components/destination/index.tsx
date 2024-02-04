@@ -30,8 +30,6 @@ import { useGetDestination, useGetPhotonDetails } from 'app/hooks/destination';
 import { WeatherData } from '../weather/WeatherData';
 import { RootState } from 'store/store';
 
-const { useParam } = createParam();
-
 const DestinationHeader = ({ geoJSON, selectedSearchResult }) => {
   const styles = useCustomStyles(loadStyles);
   const properties = {
@@ -166,7 +164,7 @@ export const DestinationPage = () => {
   );
 };
 
-const loadStyles = (theme) => {
+const loadStyles = (theme: any) => {
   const { currentTheme } = theme;
   return {
     container: {

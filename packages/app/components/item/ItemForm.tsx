@@ -4,9 +4,33 @@ import { DropdownComponent } from '../Dropdown';
 import { theme } from '../../theme';
 import { ItemCategoryEnum } from '../../constants/itemCategory';
 import useTheme from '../../hooks/useTheme';
+
+interface ItemFormProps {
+  name: string;
+  setName: (text: string) => void;
+  weight: string;
+  setWeight: (text: string) => void;
+  quantity: string;
+  setQuantity: (text: string) => void;
+  unit: string;
+  setUnit: (value: string) => void;
+  categoryType: string;
+  setCategoryType: (value: string) => void;
+  handleSubmit: () => void;
+  showSubmitButton?: boolean;
+  isLoading: boolean;
+  isEdit: boolean;
+  currentPack: {
+    items: Array<{
+      category: {
+        name: string;
+      };
+    }>;
+  } | null;
+}
 const data = ['lb', 'oz', 'kg', 'g'];
 
-export const ItemForm = ({
+export const ItemForm: React.FC<ItemFormProps> = ({
   name,
   setName,
   weight,

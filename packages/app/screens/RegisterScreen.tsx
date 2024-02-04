@@ -22,6 +22,12 @@ import { useSession } from '../context/Auth/SessionProvider';
 import { useGoogleAuth } from 'app/hooks/login';
 import { useRegisterUser } from 'app/hooks/user';
 
+interface FormData {
+  name: string;
+  email: string;
+  username: string;
+  password: string;
+}
 export default function Register() {
   const { currentTheme } = useTheme();
   const {

@@ -15,6 +15,16 @@ import {
 import { AntDesign } from '@expo/vector-icons';
 import DropdownComponent from 'app/components/Dropdown';
 import { debounce } from 'lodash';
+interface FeedSearchFilterProps {
+  feedType: string;
+  handleSortChange: (value: string) => void;
+  handleTogglePack: () => void;
+  handleToggleTrip: () => void;
+  selectedTypes: { pack: boolean; trip: boolean };
+  queryString: string;
+  setSearchQuery: (query: string) => void;
+  handleCreateClick: () => void;
+}
 
 const dataValues = [
   'Favorite',
@@ -26,7 +36,7 @@ const dataValues = [
   'Oldest',
 ];
 
-const FeedSearchFilter = ({
+const FeedSearchFilter: React.FC<FeedSearchFilterProps> = ({
   feedType,
   handleSortChange,
   handleTogglePack,
@@ -139,7 +149,7 @@ const FeedSearchFilter = ({
   );
 };
 
-const loadStyles = (theme) => {
+const loadStyles = (theme: any) => {
   const { currentTheme } = theme;
   return {
     mainContainer: {

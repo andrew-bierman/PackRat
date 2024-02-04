@@ -3,8 +3,11 @@ import { Button, Input, Text, Box } from 'native-base';
 import React from 'react';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useWater } from 'app/hooks/water';
-
-export default function Water({ currentPack, setWaterItem }) {
+interface WaterProps {
+  currentPack: any;
+  setWaterItem: any;
+}
+export const Water: React.FC<WaterProps> = ({ currentPack, setWaterItem }) => {
   const { handleWaterChange, addWater, waterWeight } = useWater(currentPack);
   const styles = useCustomStyles(loadStyles);
 

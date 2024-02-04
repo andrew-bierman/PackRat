@@ -7,8 +7,22 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'solito/link';
 import { truncateString } from '../../utils/truncateString';
 import { useEffect } from 'react';
-
-const UserDataCard = ({
+interface UserDataCardProps {
+  type: 'pack' | 'trip';
+  destination: string;
+  _id: string;
+  name: string;
+  total_weight?: number;
+  is_public: boolean;
+  favorited_by?: string[]; 
+  favorites_count: number;
+  createdAt: string;
+  state: boolean[];
+  setState: React.Dispatch<React.SetStateAction<boolean[]>>;
+  index: number;
+  differentUser: boolean;
+}
+const UserDataCard: React.FC<UserDataCardProps> = ({
   type, // "pack" or "trip"
   destination,
   _id,

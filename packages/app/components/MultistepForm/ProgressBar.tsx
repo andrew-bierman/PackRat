@@ -1,8 +1,11 @@
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { Svg, Line, Circle } from 'react-native-svg';
 import { View } from 'react-native';
-
-export const ProgressBar = ({ steps, currentStep }) => {
+interface ProgressBarProps {
+  steps: any[]; 
+  currentStep: number;
+}
+export const ProgressBar: React.FC<ProgressBarProps> = ({ steps, currentStep }) => {
   const percentage = ((currentStep + 1) / steps.length) * 100;
   const styles = useCustomStyles(loadStyles);
 

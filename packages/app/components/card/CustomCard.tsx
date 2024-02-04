@@ -8,23 +8,28 @@ import { PackCardHeader } from './PackCardHeader';
 
 interface CustomCardProps {
   title: string;
-  content: React.JSX.Element;
-  footer: string;
-  link: string;
-  destination: any;
-  type: string;
-  data: any;
+  content: React.ReactNode;
+  footer: React.ReactNode;
+  link?: string;
+  type: 'pack' | 'trip';
+  destination?: string;
+  data: {
+    owner_id: {
+      _id: string;
+      username?: string;
+    };
+    owners?: Array<{ name: string }> | null;
+  };
 }
 
-export const CustomCard = ({
+export const CustomCard: React.FC<CustomCardProps> = ({
   title,
   content,
   footer,
   link,
-  destination,
   type,
   data,
-}: CustomCardProps) => {
+}) => {
   const styles = useCustomStyles(loadStyles);
 
   if (!data) return null;

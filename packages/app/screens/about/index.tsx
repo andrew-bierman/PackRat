@@ -15,8 +15,11 @@ import * as Linking from 'expo-linking';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import useAbout from 'app/hooks/about/useAbout';
-
-const AboutContent = ({ desktopContainer, isMobile }) => {
+interface AboutContentProps {
+  desktopContainer: any; 
+  isMobile: boolean;
+}
+const AboutContent: React.FC<AboutContentProps> = ({ desktopContainer, isMobile }) => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
 
@@ -112,7 +115,7 @@ export default function About() {
   );
 }
 
-const loadStyles = (theme) => {
+const loadStyles = (theme: any) => {
   const { currentTheme } = theme;
   return {
     container: {

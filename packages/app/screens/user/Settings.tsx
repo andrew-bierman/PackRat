@@ -13,7 +13,11 @@ import {
 import Avatar from 'app/components/Avatar/Avatar';
 import DropdownComponent from '../../components/Dropdown';
 import { useProfileSettings } from 'app/hooks/user';
-
+interface Passwords {
+  oldPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}
 export default function Settings() {
   const {
     user,

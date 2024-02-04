@@ -9,12 +9,28 @@ import { useGetPhotonDetails } from 'app/hooks/destination';
 
 // import { Picker } from '@react-native-picker/picker';
 import { DropdownComponent } from '../Dropdown';
+
+interface SaveTripContainerProps {
+  dateRange: {
+    startDate: Date;
+    endDate: Date;
+  };
+}
+
+interface NumberInputProps {
+  min?: number;
+  max?: number;
+  value: string;
+  onChangeText?: (text: string) => void;
+}
+
+
 const options = [
   { label: 'Public', value: 'true' },
   { label: 'For me only', value: 'false' },
 ];
 
-const NumberInput = (props) => {
+const NumberInput: React.FC<NumberInputProps> = (props) => {
   const { min, max, value, ...otherProps } = props;
 
   // Custom validation function to enforce positive numbers only
@@ -65,7 +81,7 @@ const NumberInput = (props) => {
   );
 };
 
-export const SaveTripContainer = ({ dateRange }) => {
+export const SaveTripContainer: React.FC<SaveTripContainerProps> = ({ dateRange }) => {
   const weatherObject = useSelector((state) => state.weather.weatherObject);
   const search = useSelector((state) => state.search.selectedSearchResult);
   const dropdown = useSelector((state) => state.dropdown);

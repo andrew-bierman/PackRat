@@ -2,7 +2,6 @@ import { Text } from 'react-native';
 import { useNavigationItem } from 'app/hooks/navigation';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import useTheme from 'app/hooks/useTheme';
-import { Button } from 'tamagui';
 
 interface NavigationItemProps {
   item: {
