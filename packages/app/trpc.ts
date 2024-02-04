@@ -2,7 +2,7 @@ import { createTRPCProxyClient, httpBatchLink } from '@trpc/client';
 import type { AppRouter } from 'server/src/routes/trpcRouter';
 import { api } from './constants/api';
 import { createTRPCReact } from '@trpc/react-query';
-import Storage from 'app/utils/storage';
+import { Storage } from 'app/utils/storage';
 
 export const getToken = async () => {
   const token = await Storage.getItem('token');

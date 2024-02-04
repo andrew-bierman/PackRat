@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useReducer } from 'react';
-import Storage, { storageEvents } from 'app/utils/storage';
+import { Storage, storageEvents } from 'app/utils/storage';
 
 type UseStateHook<T> = [[boolean, T | null], (value?: T | null) => void];
 
