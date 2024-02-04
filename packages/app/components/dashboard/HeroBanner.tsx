@@ -44,7 +44,7 @@ const HeroSection = ({ onSelect }) => {
           pathname: '/destination/query',
           query: {
             osmType: osm_type,
-            osm_id: osm_id,
+            osmId: osm_id,
             name,
           },
         });
