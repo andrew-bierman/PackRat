@@ -16,6 +16,7 @@ import {
 import useTheme from '../../hooks/useTheme';
 import { mapboxStyles } from '../../utils/mapFunctions';
 import useCustomStyles from 'app/hooks/useCustomStyles';
+import loadStyles from './MapStyles';
 
 const MapButtonsOverlay = ({
   mapFullscreen,
@@ -219,112 +220,6 @@ const MapButtonsOverlay = ({
       )}
     </>
   );
-};
-
-const loadStyles = (theme) => {
-  const { currentTheme } = theme;
-  return {
-    container: {
-      alignItems: 'center',
-      justifyContent: 'center',
-      height: 400,
-      width: '100%',
-      borderRadius: 10,
-    },
-    map: {
-      width: '100%',
-      minHeight: '100vh', // Adjust the height to your needs
-    },
-    stylePicker: {
-      // Style Picker Button
-      position: 'absolute',
-      top: 10,
-      left: 10,
-      width: 40,
-      height: 40,
-      alignItems: 'center',
-      justifyContent: 'center',
-      borderRadius: 20,
-      backgroundColor: currentTheme.colors.white,
-    },
-    styleModalContainer: {
-      flex: 1,
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    },
-    styleModalContent: {
-      backgroundColor: currentTheme.colors.white,
-      borderRadius: 8,
-      padding: 10,
-    },
-    styleOption: {
-      paddingVertical: 8,
-      paddingHorizontal: 16,
-    },
-    styleOptionText: {
-      fontSize: 16,
-      fontWeight: 'bold',
-    },
-    locationButton: {
-      alignItems: 'center',
-      justifyContent: 'center',
-      width: 40,
-      height: 40,
-      position: 'absolute',
-      bottom: 30,
-      right: 10,
-      backgroundColor: currentTheme.colors.white,
-      borderRadius: 30,
-      zIndex: 1,
-    },
-    headerBtnView: {
-      justifyContent: 'center',
-      alignItems: 'center',
-      borderRadius: 30,
-      marginTop: 30,
-      backgroundColor: currentTheme.colors.white,
-    },
-    enterFullScreenBtn: {
-      width: 40,
-      height: 40,
-      position: 'absolute',
-      bottom: 10,
-      right: 10,
-    },
-    exitFullscreenBtn: {
-      width: 40,
-      height: 40,
-      position: 'absolute',
-      top: 10,
-      right: 10,
-    },
-    fullScreen: {
-      width: Platform.OS == 'web' ? '25%' : '70%',
-      height: 40,
-      padding: 10,
-      backgroundColor: currentTheme.colors.white,
-      position: 'absolute',
-      bottom: 30,
-      flexDirection: 'row',
-      justifyContent: 'center',
-      alignItems: 'center',
-      alignSelf: 'center',
-      borderRadius: 20,
-    },
-    downloadIcon: {
-      width: 21,
-      height: 21,
-    },
-    downloadText: {
-      fontSize: 13,
-      fontWeight: '500',
-      marginLeft: 8,
-    },
-    modal: {
-      alignItems: 'center',
-    },
-  };
 };
 
 export default MapButtonsOverlay;
