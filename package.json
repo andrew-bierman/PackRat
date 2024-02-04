@@ -122,5 +122,10 @@
     "packing checklist app",
     "packing list app",
     "packing planner app"
-  ]
+  ],
+  "devDependencies": {
+    "@babel/core": "^7.23.9",
+    "@babel/preset-react": "^7.23.3",
+    "babel-loader": "^9.1.3"
+  }
 }
