@@ -103,6 +103,10 @@ const nextConfig = function () {
       'expo-system-ui',
       'expo-web-browser',
       '@tanstack/react-query',
+      // Remove when we have a proper solution for this
+      'expo-router',
+      '@react-navigation/drawer',
+      '@bacons/react-views',
     ],
     experimental: {
       scrollRestoration: true,

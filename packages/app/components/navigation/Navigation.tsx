@@ -1,5 +1,11 @@
 import React from 'react';
-import { View, Text, SafeAreaView, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  SafeAreaView,
+  TouchableOpacity,
+  Platform,
+} from 'react-native';
 import { AuthStateListener } from '../../auth/AuthStateListener';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useIsMobileView } from 'app/hooks/common';
@@ -8,10 +14,9 @@ import { useAuthUser } from 'app/hooks/user/useAuthUser';
 import { NavigationList } from './NavigationList';
 import { Button } from 'tamagui';
 import SVGLogoComponent from '../../components/logo';
-import { Drawer } from 'expo-router/drawer';
+import { Drawer } from './Drawer';
 import { EvilIcons } from '@expo/vector-icons';
 import useTheme from '../../hooks/useTheme';
-import { DrawerContentScrollView } from '@react-navigation/drawer';
 
 export const Navigation = () => {
   const user = useAuthUser();
@@ -20,27 +25,18 @@ export const Navigation = () => {
   const styles = useCustomStyles(loadStyles);
   const navigate = useNavigate();
   return isMobileView ? (
-    <Drawer
-      screenOptions={{
-        drawerPosition: 'right',
-        drawerType: 'slide',
-        drawerStyle: styles.drawerStyles,
-        headerShown: false,
-      }}
-      drawerContent={(props) => {
-        return (
-          <DrawerContentScrollView {...props}>
-            <NavigationList
-              itemStyle={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                paddingVertical: 8,
-              }}
-            />
-          </DrawerContentScrollView>
-        );
-      }}
-    />
+    <>
+      {Platform.OS === 'web' ? (
+        <SafeAreaView style={styles.safeArea}>
+          <View style={styles.container}>
+            <Text style={styles.logoText}>PackRat</Text>
+            <Drawer />
+          </View>
+        </SafeAreaView>
+      ) : (
+        <Drawer />
+      )}
+    </>
   ) : (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
@@ -54,7 +50,14 @@ export const Navigation = () => {
             chromeless
           >
             <View style={styles.logoWrapper}>
-              <></>
+              {/* FIX ME */}
+              {Platform.OS === 'web' ? (
+                // <SVGLogoComponent />
+                <></>
+              ) : (
+                // <Text style={styles.logoText}>PackRat</Text>
+                <></>
+              )}
             </View>
             <Text style={styles.logoText}>PackRat</Text>
           </Button>
