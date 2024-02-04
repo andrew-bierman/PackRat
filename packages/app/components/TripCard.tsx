@@ -16,6 +16,7 @@ export default function TripCard({
   isMap,
   shape,
   data,
+  form,
   isSearch,
   searchRef,
   isTrail,
@@ -24,11 +25,11 @@ export default function TripCard({
 }) {
   const { isDark, currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
-  const { currentTrail, currentPark, currentShape, addTrailFn } = useCardTrip();
+  const { currentTrail, currentPark, togglePlace } = form || {};
   const [, setGEOLocation] = useGEOLocationSearch();
 
   const handleValueChange = (value) => {
-    addTrailFn(isTrail, isPark, value);
+    togglePlace(isPark, value);
   };
 
   const handleSelectLocation = (geoJSON) => {
@@ -82,9 +83,7 @@ export default function TripCard({
         isLoading ? (
           <Text>Loading....</Text>
         ) : (
-          <MapContainer
-            shape={shape ?? (currentShape.length == 0 ? {} : shape)}
-          />
+          <MapContainer shape={shape} />
         )
       ) : isSearch ? (
         <PlacesAutocomplete ref={searchRef} onSelect={handleSelectLocation} />

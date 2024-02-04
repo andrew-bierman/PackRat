@@ -28,7 +28,6 @@ export function PackDetails() {
   const [packId] = useParam('id');
   console.log(packId, 'packId');
   const link = `${CLIENT_URL}/packs/${packId}`;
-  const updated = useSelector((state: RootState) => state.packs.update);
   const [firstLoad, setFirstLoad] = useState(true);
   const user = useSelector((state: RootState) => state.auth.user);
   const userId = user?._id;
@@ -43,10 +42,6 @@ export function PackDetails() {
     error,
     refetch: refetchQuery,
   } = useFetchSinglePack(packId);
-
-  useEffect(() => {
-    refetchQuery();
-  }, [refetch, packId, updated]);
 
   // useEffect(() => {
   //   if (!packId) return;
