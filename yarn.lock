@@ -6137,7 +6137,7 @@ __metadata:
     react-native-reanimated: ">= 1.0.0"
     react-native-safe-area-context: ">= 3.0.0"
     react-native-screens: ">= 3.0.0"
-  checksum: e67fa21d6da9b503dbd2133d2fb4ef37a6241ed1cec549b040f024d7924c529c7eaccbd7053805fbad3a9163ff1a9cb0b9ba639f122d982e98a581f5fe28563d
+  checksum: 10/e67fa21d6da9b503dbd2133d2fb4ef37a6241ed1cec549b040f024d7924c529c7eaccbd7053805fbad3a9163ff1a9cb0b9ba639f122d982e98a581f5fe28563d
   languageName: node
   linkType: hard
 
