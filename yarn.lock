@@ -6122,6 +6122,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-navigation/drawer@npm:^6.6.6":
+  version: 6.6.6
+  resolution: "@react-navigation/drawer@npm:6.6.6"
+  dependencies:
+    "@react-navigation/elements": "npm:^1.3.21"
+    color: "npm:^4.2.3"
+    warn-once: "npm:^0.1.0"
+  peerDependencies:
+    "@react-navigation/native": ^6.0.0
+    react: "*"
+    react-native: "*"
+    react-native-gesture-handler: ">= 1.0.0"
+    react-native-reanimated: ">= 1.0.0"
+    react-native-safe-area-context: ">= 3.0.0"
+    react-native-screens: ">= 3.0.0"
+  checksum: 10/e67fa21d6da9b503dbd2133d2fb4ef37a6241ed1cec549b040f024d7924c529c7eaccbd7053805fbad3a9163ff1a9cb0b9ba639f122d982e98a581f5fe28563d
+  languageName: node
+  linkType: hard
+
 "@react-navigation/elements@npm:^1.3.21":
   version: 1.3.21
   resolution: "@react-navigation/elements@npm:1.3.21"
@@ -15970,6 +15989,7 @@ __metadata:
     "@react-native-community/netinfo": "npm:^9.4.1"
     "@react-native-google-signin/google-signin": "npm:^9.0.2"
     "@react-navigation/bottom-tabs": "npm:^6.5.11"
+    "@react-navigation/drawer": "npm:^6.6.6"
     "@react-navigation/native": "npm:^6.1.6"
     "@react-navigation/native-stack": "npm:^6.9.12"
     "@reduxjs/toolkit": "npm:^1.9.3"
