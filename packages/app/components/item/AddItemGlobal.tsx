@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react';
 import { View } from 'react-native';
 
 import { ItemForm } from './ItemForm'; // assuming you moved the form related code to a separate component
-import { useModal } from '@packrat/ui/src/modal';
+import { useModal } from '@packrat/ui';
 import { useAddItem, useItems } from 'app/hooks/items';
 
 export const AddItemGlobal = () => {

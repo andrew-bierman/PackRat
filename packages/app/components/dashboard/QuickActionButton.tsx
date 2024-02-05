@@ -6,7 +6,17 @@ import { theme } from '../../theme';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 
-const QuickActionButton = ({ onPress, iconName, text }) => {
+interface QuickActionButtonProps {
+  onPress: () => void;
+  iconName: keyof typeof MaterialIcons.glyphMap;
+  text: string;
+}
+
+const QuickActionButton = ({
+  onPress,
+  iconName,
+  text,
+}: QuickActionButtonProps) => {
   const styles = useCustomStyles(loadStyles);
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>

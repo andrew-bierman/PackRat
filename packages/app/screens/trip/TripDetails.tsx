@@ -18,6 +18,7 @@ import { convertPhotonGeoJsonToShape } from '../../utils/mapFunctions';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useFetchSingleTrip } from 'app/hooks/singletrips';
+import { RootState } from 'store/store';
 
 const { useParam } = createParam();
 
@@ -25,8 +26,12 @@ export function TripDetails() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
-  const weatherObject = useSelector((state) => state.weather.weatherObject);
-  const weatherWeek = useSelector((state) => state.weather.weatherWeek);
+  const weatherObject = useSelector(
+    (state: RootState) => state.weather.weatherObject,
+  );
+  const weatherWeek = useSelector(
+    (state: RootState) => state.weather.weatherWeek,
+  );
   console.log('trip detail');
   const dispatch = useDispatch();
   const [tripId] = useParam('tripId');
@@ -41,9 +46,11 @@ export function TripDetails() {
   //   if (!tripId) return;
   //   dispatch(fetchSingleTrip(tripId));
   // }, [dispatch, tripId]);
-  const states = useSelector((state) => state);
+  const states = useSelector((state: RootState) => state);
 
-  const currentTrip = useSelector((state) => state.singleTrip.singleTrip);
+  const currentTrip = useSelector(
+    (state: RootState) => state.singleTrip.singleTrip,
+  );
 
   // const user = useSelector((state) => state.auth.user);
 

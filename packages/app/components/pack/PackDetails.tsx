@@ -18,6 +18,7 @@ import { AddItemModal } from './AddItemModal';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useUserPacks } from 'app/hooks/packs/useUserPacks';
 import { useFetchSinglePack } from '../../hooks/packs';
+import { RootState } from 'store/store';
 
 const { useParam } = createParam();
 
@@ -27,9 +28,9 @@ export function PackDetails() {
   const [packId] = useParam('id');
   console.log(packId, 'packId');
   const link = `${CLIENT_URL}/packs/${packId}`;
-  const updated = useSelector((state) => state.packs.update);
+  const updated = useSelector((state: RootState) => state.packs.update);
   const [firstLoad, setFirstLoad] = useState(true);
-  const user = useSelector((state) => state.auth.user);
+  const user = useSelector((state: RootState) => state.auth.user);
   const userId = user?.id;
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
   const [refetch, setRefetch] = useState(false);
@@ -83,7 +84,11 @@ export function PackDetails() {
             error={error}
             additionalComps={
               <>
-                <TableContainer currentPack={currentPack} copy={canCopy} />
+                <TableContainer
+                  currentPack={currentPack}
+                  copy={canCopy}
+                  refetch={refetch}
+                />
                 <View style={styles.boxStyle}>
                   <AddItemModal
                     currentPackId={currentPackId}

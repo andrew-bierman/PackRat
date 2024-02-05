@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import useTheme from '../../hooks/useTheme';
 import { theme } from '../../theme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
+import { RootState } from 'store/store';
 
 /**
  * Retrieves the appropriate container style based on the provided type.
@@ -49,7 +50,7 @@ export default function LargeCard({
   children,
 }) {
   const currentShape = useSelector(
-    (state) => state.search.selectedSearchResult,
+    (state: RootState) => state.search.selectedSearchResult,
   );
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();

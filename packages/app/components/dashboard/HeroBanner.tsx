@@ -16,6 +16,7 @@ import {
 } from '../../store/destinationStore';
 import { hexToRGBA } from '../../utils/colorFunctions';
 import useCustomStyles from 'app/hooks/useCustomStyles';
+import { RootState } from 'store/store';
 
 const HeroSection = ({ onSelect }) => {
   const dispatch = useDispatch();
@@ -61,7 +62,7 @@ const HeroSection = ({ onSelect }) => {
     }
   };
 
-  const user = useSelector((state) => state.auth?.user);
+  const user = useSelector((state: RootState) => state.auth?.user);
 
   const firstNameOrUser = first(user?.name?.split(' ')) ?? 'User';
 

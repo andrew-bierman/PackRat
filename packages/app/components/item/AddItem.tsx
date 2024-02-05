@@ -12,7 +12,7 @@ export const AddItem = ({
   packId,
   currentPack,
   editAsDuplicate,
-  setPage = () => {},
+  setPage = (page: number) => {}, // temp fix, need props type
   page,
   closeModalHandler,
   isItemPage,

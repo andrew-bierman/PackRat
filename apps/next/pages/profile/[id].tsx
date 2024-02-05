@@ -6,6 +6,8 @@ import { AuthWrapper } from 'auth/authWrapper';
 
 const { useParam } = createParam();
 
+// export const runtime = 'experimental-edge'
+
 const Profile = () => {
   const [id] = useParam('id');
 

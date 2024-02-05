@@ -17,6 +17,7 @@
     "build:ios": "cd apps/expo && yarn build:ios",
     "build:prod:docker": "docker build -t packrat-app -f Dockerfile.prod .",
     "build:prod": "yarn && yarn build:tsc && yarn build:next:static",
+    "build:prod:cloudflare-next": "cd apps/next && yarn build:cloudflare",
     "build:tsc:packages": "cd packages/validations && yarn build",
     "build:tsc:server": "cd server && yarn build",
     "build:tsc": "yarn build:tsc:packages && yarn build:tsc:server",
@@ -67,7 +68,7 @@
     "node": ">=18.16.1",
     "yarn": ">=4.0.0"
   },
-  "packageManager": "yarn@4.0.2",
+  "packageManager": "yarn@4.1.0",
   "dependencies": {
     "@babel/runtime": "^7.21.0",
     "@manypkg/cli": "^0.21.0",
