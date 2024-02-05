@@ -1,5 +1,5 @@
 import { useMedia } from 'tamagui';
-import { useScreenWidth } from './useScreenWidth';
+import { useScreenWidth } from '../useScreenWidth';
 
 export const useIsMobileView = () => {
   const media = useMedia();
