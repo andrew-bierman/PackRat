@@ -82,17 +82,22 @@ const loadStyles = (theme) => {
     },
     container: {
       width: '100%',
+      maxWidth: '100%', // Ensure container does not exceed the viewport width
+      flex: 1, // Ensure container can grow to fit content
       backgroundColor: currentTheme.colors.background,
-      flexDirection: 'row',
+      flexDirection: 'row', // Keep flexDirection as row for alignment
       justifyContent: 'space-between',
       alignItems: 'center',
+      flexWrap: 'wrap', // Allow items to wrap
+      height: 60, // Ensure container takes full height of its container
+      padding: 16,
     },
     header: {
-      flexDirection: 'row',
+      flexDirection: 'row', // Keep flexDirection as row for initial alignment
       alignItems: 'center',
       justifyContent: 'space-between',
-      padding: 16,
-      width: '100%',
+      width: '100%', // Ensure header takes full width of its container
+      flexWrap: 'wrap', // Allow header items to wrap
     },
     logoContainer: {
       flexDirection: 'row',
@@ -111,17 +116,8 @@ const loadStyles = (theme) => {
       alignItems: 'center',
       justifyContent: 'flex-end',
       paddingHorizontal: 16,
-      height: 60,
-    },
-    menuBarItem: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: 8,
-      paddingHorizontal: 12,
-    },
-    menuBarItemText: {
-      color: currentTheme.colors.text,
-      fontSize: 18,
+      flex: 1, // Keep flexible but consider its behavior with wrapping,
+      flexWrap: 'wrap', // Allow items to wrap
     },
     drawerTrigger: {},
     menuBarItemActive: {

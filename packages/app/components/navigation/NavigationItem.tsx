@@ -2,9 +2,7 @@
 import { useNavigationItem } from 'app/hooks/navigation';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import useTheme from 'app/hooks/useTheme';
-import {
-  DrawerItem,
-} from '@react-navigation/drawer';
+import { DrawerItem } from '@react-navigation/drawer';
 
 interface NavigationItemProps {
   item: {
@@ -39,7 +37,6 @@ export const NavigationItem = ({
   const { icon, text } = item;
 
   return (
-
     <DrawerItem
       icon={() => (
         <IconComponent
@@ -53,13 +50,10 @@ export const NavigationItem = ({
         />
       )}
       label={text}
-      style={[
-        isCurrentPage && styles.menuBarItemActive,
-      ]}
+      style={[isCurrentPage && styles.menuBarItemActive]}
       labelStyle={[
         styles.menuBarItemText,
         isCurrentPage && styles.menuBarItemTextActive,
-        
       ]}
       onPress={handleItemPress}
     />
