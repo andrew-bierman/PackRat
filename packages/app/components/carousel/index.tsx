@@ -1,15 +1,14 @@
-import React, { useRef, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { ScrollView, Platform, Dimensions } from 'react-native';
-import { RStack } from '@packrat/ui';
+import { VirtualList, RStack } from '@packrat/ui';
 import ScrollButton from './ScrollButton';
-import useCustomStyles from 'app/hooks/useCustomStyles';
+import { ListRefContext } from '../../context/ListRef';
 
 const { height, width } = Dimensions.get('window');
 
 const Carousel = ({ children = [], itemWidth }) => {
-  const scrollViewRef = useRef();
+  const scrollViewRef = useContext(ListRefContext);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const styles = useCustomStyles(loadStyles);
 
   /**
    * Handles the scroll event.
@@ -54,32 +53,17 @@ const Carousel = ({ children = [], itemWidth }) => {
         }}
         disabled={currentIndex === 0}
       />
-
       <ScrollView
         ref={scrollViewRef}
         horizontal
         scrollEnabled={Platform.OS === 'web'}
         gestureEnabled={false} // Add this prop
-        style={styles.carousel}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ flexDirection: 'row' }}
-        pagingEnabled
-        onMomentumScrollEnd={handleScroll}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
       >
-        {children &&
-          children.map((child, index) => (
-            <RStack
-              key={index}
-              style={{
-                width: itemWidth + 10,
-                marginRight: 10,
-                marginTop: 10,
-                flexDirection: 'row',
-              }}
-            >
-              {child}
-            </RStack>
-          ))}
+        {children && <VirtualList data={children} itemWidth={itemWidth} />}
       </ScrollView>
       <ScrollButton
         direction="right"
@@ -91,12 +75,5 @@ const Carousel = ({ children = [], itemWidth }) => {
     </RStack>
   );
 };
-
-const loadStyles = () => ({
-  carousel: {
-    flexDirection: 'row',
-    width: Platform.OS === 'web' ? '100%' : width * 0.8,
-  },
-});
 
 export default Carousel;
