@@ -103,6 +103,12 @@ const nextConfig = function () {
       'expo-system-ui',
       'expo-web-browser',
       '@tanstack/react-query',
+      'react-native-table-component',
+      // Remove when we have a proper solution for this
+      'expo-router',
+      '@react-navigation/drawer',
+      '@bacons/react-views',
+      // End remove section
     ],
     experimental: {
       scrollRestoration: true,

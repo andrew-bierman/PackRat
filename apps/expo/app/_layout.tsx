@@ -1,18 +1,14 @@
-import { Slot } from 'expo-router';
-
-import { Platform, View } from 'react-native';
-
-import { Navigation } from 'app/components/navigation';
-
 import { Provider } from 'app/provider';
-import Footer from 'app/components/footer/Footer';
+import { Stack } from 'expo-router';
 
 export default function HomeLayout() {
   return (
     <Provider>
-      <Navigation />
-      <Slot />
-      {/* {Platform.OS === 'web' ? <Footer /> : null} */}
+      <Stack
+        screenOptions={{
+          headerShown: false,
+        }}
+      />
     </Provider>
   );
 }

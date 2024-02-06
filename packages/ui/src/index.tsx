@@ -25,7 +25,8 @@ import RH6 from './RH6';
 import XStack from './XStack';
 import YStack from './YStack';
 import RButton from './RButton';
-
+import RTabs from './RTabs';
+import SizableText from './SizableText';
 export { RSkeleton } from './RSkeleton';
 
 export { LoadingPlaceholder } from './LoadingPlaceholder';
@@ -61,6 +62,8 @@ export {
   XStack,
   YStack,
   RButton,
+  RTabs,
+  SizableText,
 };
 
 export * from './InputText';
@@ -82,7 +85,8 @@ export * from './RImage';
 export * from './RScrollview';
 export * from './XStack';
 export * from './YStack';
-
+export * from './RTabs';
+export * from './SizableText';
 // Future components
 // export * from './RCheckbox';
 // export * from './RSelect';

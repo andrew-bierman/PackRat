@@ -34,9 +34,7 @@ export default function HomeScreen() {
       )}
       <Stack.Screen
         options={{
-          // https://reactnavigation.org/docs/headers#setting-the-header-title
           title: 'Home',
-          name: 'Home',
         }}
       />
       <View style={mutualStyles}>
