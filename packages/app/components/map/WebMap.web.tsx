@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import mapboxgl from 'mapbox-gl';
-import { MAPBOX_ACCESS_TOKEN } from '@env';
+import { MAPBOX_ACCESS_TOKEN, NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN } from '@env';
 
 import { View, Modal, Alert } from 'react-native';
 import { isPolygonOrMultiPolygon } from '../../utils/mapFunctions';
@@ -14,7 +14,7 @@ import { useWebMap } from 'app/hooks/map/useWebMap';
 
 // import 'mapbox-gl/dist/mapbox-gl.css'
 
-mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
+mapboxgl.accessToken = NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN || MAPBOX_ACCESS_TOKEN;
 
 const DESTINATION = 'destination';
 const TRIP = 'trip';
