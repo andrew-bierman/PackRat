@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { BaseModal, RInput, RStack, RText } from '@packrat/ui';
-import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'app/hooks/router';
 import { format, intervalToDuration } from 'date-fns';
 // import { addTrip } from '../../store/tripsStore';
@@ -73,7 +72,7 @@ export const SaveTripContainer = ({
   search,
   form,
 }) => {
-  const user = useSelector((state) => state.auth.user);
+  const user = useAuthUser();
   const searchParams = useSearchParams();
   const packId = searchParams.get('packId');
 
