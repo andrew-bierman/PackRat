@@ -1,5 +1,6 @@
 import { AuthLoader } from 'app/auth/AuthLoader';
-import { Redirect } from 'components/Redirect';
+import { Redirect } from 'app/components/Redirect';
+import {Text} from '@packrat/ui';
 
 type Props = {
   children?: React.ReactNode;
@@ -8,7 +9,7 @@ type Props = {
 export const AuthWrapper = ({ children }: Props) => {
   return (
     <AuthLoader
-      loadingElement={<div>Loading...</div>}
+      loadingElement={<Text>Loading...</Text>}
       unauthorizedElement={<Redirect to="/sign-in" />}
     >
       {children}

@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'app/hooks/router';
 
 type RedirectProps = {
   to: string;
