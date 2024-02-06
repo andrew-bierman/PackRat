@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { cloneElement } from 'react';
 import { Platform } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import useSearchInput from 'app/hooks/search/useSearchInput';
+import useSearchInput from './useSearchInput';
 import useTheme from 'app/hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import {
@@ -14,17 +14,21 @@ import {
 } from '@packrat/ui';
 import { View, Pressable } from 'react-native';
 
-export const SearchInput = ({ onSelect, placeholder }) => {
+export const SearchInput = ({
+  onSelect,
+  placeholder,
+  resultItemComponent: ResultItemComponent,
+  results,
+  onChange,
+  searchString,
+}) => {
   const {
-    searchString,
-    setSearchString,
-    showSearchResults,
-    setShowSearchResults,
-    data,
-    handleSearchResultClick,
     handleClearSearch,
+    handleSearchResultClick,
+    handleSearchChange,
+    showSearchResults,
     isLoadingMobile,
-  } = useSearchInput(onSelect);
+  } = useSearchInput({ onSelect, onChange, searchString });
 
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
@@ -44,9 +48,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
             paddingLeft={35}
             paddingRight={55}
             placeholder={placeholder ?? 'Search'}
-            onChangeText={(text) => {
-              setSearchString(text);
-            }}
+            onChangeText={handleSearchChange}
             value={searchString}
           />
           <MaterialIcons
@@ -80,7 +82,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
         </RStack>
 
         <RStack style={{ position: 'relative' }}>
-          {data && data?.length > 0 && (
+          {showSearchResults && results && results?.length > 0 && (
             <RScrollView
               position="absolute"
               top="100%"
@@ -94,7 +96,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
               zIndex={20000}
             >
               <View role="list" style={{ width: '100%', gap: 8, padding: 8 }}>
-                {data.map((result, i) => (
+                {results.map((result, i) => (
                   <RStack
                     key={`result + ${i}`}
                     role="listitem"
@@ -105,16 +107,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
                       cursor: 'pointer',
                     }}
                   >
-                    <RStack style={{ flexDirection: 'row' }}>
-                      <RText fontWeight="400">{result.properties.name}</RText>
-                      <RText
-                        color={'gray'}
-                        opacity={100}
-                        textTransform={'capitalize'}
-                      >
-                        {result.properties.osm_value}
-                      </RText>
-                    </RStack>
+                    {cloneElement(ResultItemComponent, { item: result })}
                   </RStack>
                 ))}
               </View>
@@ -126,11 +119,11 @@ export const SearchInput = ({ onSelect, placeholder }) => {
   ) : isLoadingMobile ? (
     <RText>Loading...</RText>
   ) : (
-    <RStack style={{ width: '100%', alignSelf: 'center' }}>
+    <RStack
+      style={{ width: '100%', alignSelf: 'center', position: 'relative' }}
+    >
       <RInput
-        onChangeText={(text) => {
-          setSearchString(text);
-        }}
+        onChangeText={handleSearchChange}
         placeholder="Search"
         width={'100%'}
         borderRadius={4}
@@ -145,7 +138,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
         icon={<MaterialIcons name="search" size={24} color="gray" />}
       />
 
-      {showSearchResults && data?.length > 0 && (
+      {showSearchResults && results?.length > 0 && (
         <RScrollView
           position="absolute"
           top="100%"
@@ -157,10 +150,10 @@ export const SearchInput = ({ onSelect, placeholder }) => {
           borderRadius={12}
           backgroundColor={currentTheme.colors.white}
           showsVerticalScrollIndicator={false}
-          zIndex={10}
+          zIndex={20000}
         >
           <View role="list" style={{ width: '100%' }}>
-            {data.map((result, i) => (
+            {results.map((result, i) => (
               <Pressable
                 key={`result + ${i}`}
                 role="listitem"
@@ -168,12 +161,7 @@ export const SearchInput = ({ onSelect, placeholder }) => {
                   handleSearchResultClick(result);
                 }}
               >
-                <RStack style={{ flexDirection: 'row' }}>
-                  <RText fontWeight="400">{result.properties.name}</RText>
-                  <RText color="gray" textTransform={'capitalize'}>
-                    {result.properties.osm_value}
-                  </RText>
-                </RStack>
+                {cloneElement(ResultItemComponent, { item: result })}
               </Pressable>
             ))}
           </View>
@@ -182,6 +170,13 @@ export const SearchInput = ({ onSelect, placeholder }) => {
     </RStack>
   );
 };
+
+/* <RStack style={{ flexDirection: 'row' }}>
+  <RText fontWeight="400">{result.properties.name}</RText>
+  <RText color={'gray'} opacity={100} textTransform={'capitalize'}>
+    {result.properties.osm_value}
+  </RText>
+</RStack>; */
 
 const loadStyles = () => ({
   container: {
