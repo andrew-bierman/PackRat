@@ -29,8 +29,10 @@ const copyFile = (source, target) => {
 const compareFiles = async (path1, path2) => {
   const content1 = fs.readFileSync(path1, 'utf8');
   const content2 = fs.readFileSync(path2, 'utf8');
-  const result = diff(content1, content2);
-  if (result.length > 1 || (result.length === 1 && result[0][0] !== 0)) {
+  const diffs = diff(content1, content2);
+
+  if (diffs.some((part) => part[0] !== 0)) {
+    // Check if there's any change
     console.log(`Difference found in ${path.relative(tauriDir, path1)}`);
     const response = await prompt({
       type: 'select',
@@ -42,9 +44,20 @@ const compareFiles = async (path1, path2) => {
     if (response.action === 'Copy to Tauri directory') {
       copyFile(path1, path2);
     } else if (response.action === 'Show diff') {
-      console.log(result);
+      // Format and display the diff
+      diffs.forEach(([type, text]) => {
+        switch (type) {
+          case -1:
+            console.log(`- ${text}`);
+            break; // Removed text
+          case 1:
+            console.log(`+ ${text}`);
+            break; // Added text
+          default:
+            console.log(`  ${text}`); // Unchanged text
+        }
+      });
     }
-    // No action for 'Do nothing'
   }
 };
 
