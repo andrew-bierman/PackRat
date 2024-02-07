@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { DetailsHeader } from '../../components/details/header';
 import { createParam } from 'solito';
 import { TableContainer } from '../../components/pack_table/Table';
@@ -17,7 +17,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { convertPhotonGeoJsonToShape } from '../../utils/mapFunctions';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import { useFetchSingleTrip } from 'app/hooks/singletrips';
+import { useFetchSingleTrip, useTripWeather } from 'app/hooks/singletrips';
 import { RootState } from 'store/store';
 
 const { useParam } = createParam();
@@ -26,12 +26,6 @@ export function TripDetails() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
-  const weatherObject = useSelector(
-    (state: RootState) => state.weather.weatherObject,
-  );
-  const weatherWeek = useSelector(
-    (state: RootState) => state.weather.weatherWeek,
-  );
   console.log('trip detail');
   const dispatch = useDispatch();
   const [tripId] = useParam('tripId');
@@ -39,6 +33,8 @@ export function TripDetails() {
   // console.log("🚀 ~ file: TripDetails.js:34 ~ TripDetails ~ tripId:", tripId)
   const { data, isLoading, error, refetch, isOwner, isError } =
     useFetchSingleTrip(tripId);
+
+  const { weatherObject, weatherWeek } = useTripWeather(data);
 
   const link = `${CLIENT_URL}/trip/${tripId}`;
 
@@ -82,14 +78,14 @@ export function TripDetails() {
                 <View>
                   <TableContainer currentPack={data?.packs} />
                 </View>
-                <View style={{ marginTop: '5%' }}>
-                  <WeatherCard
-                    weatherObject={
-                      data?.weather ? JSON?.parse(data?.weather) : weatherObject
-                    }
-                    weatherWeek={weatherWeek}
-                  />
-                </View>
+                {weatherObject && weatherWeek ? (
+                  <View style={{ marginTop: '5%' }}>
+                    <WeatherCard
+                      weatherObject={weatherObject}
+                      weatherWeek={weatherWeek}
+                    />
+                  </View>
+                ) : null}
                 {/* <View style={{marginTop:'5%', backgroundColor:'red'}}> */}
                 {data?.geojson?.features.length && (
                   <TripCard
@@ -103,11 +99,7 @@ export function TripDetails() {
                     title="Map"
                     isMap={true}
                     shape={data.geojson}
-                    cords={
-                      data?.weather
-                        ? JSON?.parse(data?.weather)?.coord
-                        : weatherObject?.coord
-                    }
+                    cords={weatherObject?.coord}
                   />
                 )}
                 {/* </View> */}

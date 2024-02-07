@@ -16,14 +16,17 @@ import { useDispatch } from 'react-redux';
 import { View } from 'react-native';
 import { AddItemModal } from './AddItemModal';
 import useCustomStyles from 'app/hooks/useCustomStyles';
+import { useSearchParams } from 'app/hooks/common';
 
 export default function PackContainer({ isCreatingTrip = false }) {
   const dispatch = useDispatch();
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
 
   const user = useSelector((state) => state.auth.user);
-
-  const [currentPackId, setCurrentPackId] = useState(null);
+  const searchParams = useSearchParams();
+  const [currentPackId, setCurrentPackId] = useState(
+    searchParams.get('packId'),
+  );
   const [refetch, setRefetch] = useState(false);
   const styles = useCustomStyles(loadStyles);
 
@@ -58,7 +61,7 @@ export default function PackContainer({ isCreatingTrip = false }) {
     setCurrentPackId(selectedPack?.id);
 
     if (isCreatingTrip && selectedPack?.id) {
-      dispatch(updateNewTripPack(selectedPack?.id));
+      searchParams.set('packId', selectedPack?._id);
     }
   };
   // const currentPack = useSelector((state) =>

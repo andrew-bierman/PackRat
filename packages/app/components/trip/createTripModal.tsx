@@ -9,6 +9,7 @@ import { useGetPhotonDetails } from 'app/hooks/destination';
 
 // import { Picker } from '@react-native-picker/picker';
 import { DropdownComponent } from '../Dropdown';
+import { useSearchParams } from 'app/hooks/common';
 const options = [
   { label: 'Public', value: 'true' },
   { label: 'For me only', value: 'false' },
@@ -65,12 +66,15 @@ const NumberInput = (props) => {
   );
 };
 
-export const SaveTripContainer = ({ dateRange }) => {
-  const weatherObject = useSelector((state) => state.weather.weatherObject);
-  const search = useSelector((state) => state.search.selectedSearchResult);
-  const dropdown = useSelector((state) => state.dropdown);
+export const SaveTripContainer = ({
+  dateRange,
+  weatherObject,
+  search,
+  form,
+}) => {
   const user = useSelector((state) => state.auth.user);
-  const packId = useSelector((state) => state.trips.newTrip.packId);
+  const searchParams = useSearchParams();
+  const packId = searchParams.get('packId');
 
   // defining dispatch
   const { addTrip, isSuccess, data: response } = useAddTrip();
@@ -263,7 +267,7 @@ export const SaveTripContainer = ({ dateRange }) => {
         </RStack>
         <RStack style={{ flexDirection: 'row' }}>
           <RText>Selected Trail - </RText>
-          <RText>{dropdown?.currentTrail}</RText>
+          <RText>{form?.currentTrail}</RText>
         </RStack>
         <RStack style={{ flexDirection: 'row' }}>
           <RText>Selected Date Range - </RText>
