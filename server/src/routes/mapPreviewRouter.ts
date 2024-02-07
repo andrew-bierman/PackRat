@@ -1,10 +1,10 @@
-import express from 'express';
+import { Hono } from 'hono';
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
 import getMapPreview from '../controllers/mapPreview';
 import authTokenMiddleware from '../middleware/auth';
 import checkRole from '../middleware/checkRole';
 
-const router = express.Router();
+const router = new Hono();
 
 /**
  * @swagger
@@ -30,6 +30,10 @@ const router = express.Router();
  *    500:
  *     description: Error getting map preview
  */
-router.get('/*', tryCatchWrapper(getMapPreview));
+router.get(
+  '/*',
+  // tryCatchWrapper(getMapPreview)
+  getMapPreview,
+);
 
 export default router;

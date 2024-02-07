@@ -5,16 +5,19 @@ import { honoTRPCServer } from './trpc/server';
 import { cors } from 'hono/cors';
 // import { logger } from 'hono/logger';
 import { compress } from 'hono/compress';
+import router from './routes';
 
 interface Bindings {
   DB: IDBDatabase;
   JWT_VERIFICATION_KEY: string;
   APP_URL: string;
   CORS_ORIGIN: string;
+  MAPBOX_ACCESS_TOKEN: string;
 }
 
 const TRPC_API_ENDPOINT = '/api/trpc';
 const TRPC_PLAYGROUND_ENDPOINT = '/trpc-playground';
+const HTTP_ENDPOINT = '/api';
 
 const app = new Hono<{ Bindings: Bindings }>();
 
@@ -55,5 +58,8 @@ app.use(TRPC_PLAYGROUND_ENDPOINT, async (c, next) => {
   });
   return handler(c.req.raw);
 });
+
+// Set up HTTP routes
+app.route(`${HTTP_ENDPOINT}`, router);
 
 export default app;

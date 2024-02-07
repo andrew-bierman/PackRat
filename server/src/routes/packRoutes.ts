@@ -1,4 +1,4 @@
-import express from 'express';
+import { Hono } from 'hono';
 import {
   getPacks,
   getPackById,
@@ -15,7 +15,7 @@ import authTokenMiddleware from '../middleware/auth';
 import checkRole from '../middleware/checkRole';
 import { zodParser } from '../middleware/validators/zodParser';
 
-const router = express.Router();
+const router = new Hono();
 
 /**
  * @swagger
