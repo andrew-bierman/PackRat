@@ -151,6 +151,7 @@ module.exports = {
         '@typescript-eslint/ban-types': 'off',
         'no-unmodified-loop-condition': 'off',
         '@typescript-eslint/no-base-to-string': 'off',
+        '@typescript-eslint/unbound-method': 'off',
       },
       extends: [
         'plugin:@typescript-eslint/recommended',

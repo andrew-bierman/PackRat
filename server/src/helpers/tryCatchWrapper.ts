@@ -1,4 +1,4 @@
-import { Context, Next } from 'hono';
+import { type Context, type Next } from 'hono';
 
 export function tryCatchWrapper(fn) {
   return async (ctx: Context, next: Next) => {

@@ -15,7 +15,7 @@
 // import favoriteRouters from './favoriteRoutes';
 // import userRoutes from './userRoutes';
 import mapPreviewRouter from './mapPreviewRouter';
-import { Context, Hono, Next } from 'hono';
+import { type Context, Hono, type Next } from 'hono';
 
 const router = new Hono();
 
