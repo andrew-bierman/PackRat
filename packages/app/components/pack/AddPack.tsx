@@ -44,8 +44,7 @@ export const AddPack = ({ isCreatingTrip = false }) => {
   };
 
   const handleonValueChange = (itemValue) => {
-    if (itemValue === 'Yes') setIsPublic(true);
-    else setIsPublic(false);
+    setIsPublic(itemValue == 'true');
   };
 
   return (
