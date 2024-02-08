@@ -7,7 +7,6 @@ export const useDeletePack = (id) => {
   const router = useRouter();
 
   const handleDeletePack = () => {
-    console.log('id', id);
     dispatch(
       deletePack({
         id,
