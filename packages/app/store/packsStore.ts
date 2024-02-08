@@ -38,7 +38,7 @@ export const changePackStatus = createAsyncThunk(
   async (updatedPack) => {
     // const response = await axios.put(`${api}/pack`, updatedPack);
     // return response.data;
-    return await trpc.editPack.mutate(updatePack);
+    return await trpc.editPack.mutate(updatedPack);
   },
 );
 
@@ -133,22 +133,25 @@ export const updatePack = createAsyncThunk('packs/updatePack', async (pack) => {
   // });
   // return response.data;
   return await trpc.editPack.mutate({
-    packId: pack.id,
+    id: pack.id,
     name: pack.name,
     is_public: pack.is_public,
   });
 });
 
-export const deletePack = createAsyncThunk('packs/deletePack', async (pack) => {
-  // const response = await axios.delete(`${api}/pack`, {
-  //   data: { packId: pack.id },
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //   },
-  // });
-  // return response.data;
-  return await trpc.deletePack.mutate({ packId: pack.id });
-});
+export const deletePack = createAsyncThunk(
+  'packs/deletePack',
+  async ({ id }) => {
+    // const response = await axios.delete(`${api}/pack`, {
+    //   data: { packId: pack.id },
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    // });
+    // return response.data;
+    return await trpc.deletePack.mutate({ packId: id });
+  },
+);
 
 const packsAdapter = createEntityAdapter({
   selectId: (pack) => pack?.id,

@@ -12,7 +12,7 @@ export const useDeletePack = (id) => {
         id,
       }),
     );
-    router.replace('/feed');
+    router.replace('/packs');
   };
 
   return handleDeletePack;

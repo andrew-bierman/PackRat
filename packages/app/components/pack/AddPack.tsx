@@ -9,7 +9,6 @@ import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useAddNewPack } from 'app/hooks/packs';
 import { useRouter } from 'app/hooks/router';
-import { packSelectOptions } from 'app/constants/options';
 
 export const AddPack = ({ isCreatingTrip = false }) => {
   // Hooks
@@ -29,6 +28,7 @@ export const AddPack = ({ isCreatingTrip = false }) => {
     setIsPublic,
     isPublic,
     setName,
+    packSelectOptions,
   } = useAddNewPack();
 
   // routing
@@ -44,8 +44,7 @@ export const AddPack = ({ isCreatingTrip = false }) => {
   };
 
   const handleonValueChange = (itemValue) => {
-    if (itemValue === 'Yes') setIsPublic(true);
-    else setIsPublic(false);
+    setIsPublic(itemValue == 'true');
   };
 
   return (
@@ -105,6 +104,7 @@ const loadStyles = (theme, appTheme) => {
       paddingHorizontal: 18,
       gap: 20,
       marginTop: 20,
+      backgroundColor: currentTheme.colors.white,
     },
     desktopStyle: {
       flexDirection: 'row',
