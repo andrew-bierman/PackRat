@@ -28,7 +28,6 @@ export default function PackContainer({ isCreatingTrip = false }) {
   );
   const user = useAuthUser();
 
-  const [currentPackId, setCurrentPackId] = useState(null);
   const [refetch, setRefetch] = useState(false);
   const styles = useCustomStyles(loadStyles);
 
