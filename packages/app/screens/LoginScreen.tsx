@@ -38,7 +38,13 @@ export default function Login() {
 
   return (
     <RStack>
-      <View style={{ width: '100%', alignItems: 'center' }}>
+      <RStack
+        style={{
+          width: '100%',
+          alignItems: 'center',
+          backgroundColor: 'white',
+        }}
+      >
         <View style={{ paddingTop: 32, width: '90%', maxWidth: 290 }}>
           <RHeading fontSize={32} color="#212121" fontWeight="semibold">
             Welcome
@@ -176,7 +182,7 @@ export default function Login() {
             {/* Demo Login for Development end */}
           </RStack>
         </View>
-      </View>
+      </RStack>
     </RStack>
   );
 }
