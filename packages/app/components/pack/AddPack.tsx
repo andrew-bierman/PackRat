@@ -9,7 +9,6 @@ import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useAddNewPack } from 'app/hooks/packs';
 import { useRouter } from 'app/hooks/router';
-import { packSelectOptions } from 'app/constants/options';
 
 export const AddPack = ({ isCreatingTrip = false }) => {
   // Hooks
@@ -29,6 +28,7 @@ export const AddPack = ({ isCreatingTrip = false }) => {
     setIsPublic,
     isPublic,
     setName,
+    packSelectOptions,
   } = useAddNewPack();
 
   // routing
