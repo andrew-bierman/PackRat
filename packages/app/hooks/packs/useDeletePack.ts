@@ -7,12 +7,13 @@ export const useDeletePack = (id) => {
   const router = useRouter();
 
   const handleDeletePack = () => {
+    console.log('id', id);
     dispatch(
       deletePack({
         id,
       }),
     );
-    router.replace('/feed');
+    router.replace('/packs');
   };
 
   return handleDeletePack;

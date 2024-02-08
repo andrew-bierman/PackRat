@@ -139,16 +139,19 @@ export const updatePack = createAsyncThunk('packs/updatePack', async (pack) => {
   });
 });
 
-export const deletePack = createAsyncThunk('packs/deletePack', async (pack) => {
-  // const response = await axios.delete(`${api}/pack`, {
-  //   data: { packId: pack.id },
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //   },
-  // });
-  // return response.data;
-  return await trpc.deletePack.mutate({ packId: pack._id });
-});
+export const deletePack = createAsyncThunk(
+  'packs/deletePack',
+  async ({ id }) => {
+    // const response = await axios.delete(`${api}/pack`, {
+    //   data: { packId: pack.id },
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    // });
+    // return response.data;
+    return await trpc.deletePack.mutate({ packId: id });
+  },
+);
 
 const packsAdapter = createEntityAdapter({
   selectId: (pack) => pack._id,
