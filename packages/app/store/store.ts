@@ -17,19 +17,15 @@ import authReducer from './authStore';
 // import trailsReducer from './trailsStore';
 import trailsReducer2 from './trailsStore_copy'; // TODO: remove. This was super hacky fix for trailsReducer not working. No idea why it's not working.
 import searchReducer from './searchStore';
-import parksReducer from './parksStore';
+// import parksReducer from './parksStore';
 import itemsReducer from './itemsStore';
 import packsReducer from './packsStore';
-import favoritesReducer from './favoritesStore';
-import feedReducer from './feedStore';
 import singlePackReducer from './singlePackStore';
 import singleTripReducer from './singleTripStore';
 import tripsReducer from './tripsStore';
-import gpxReducer from './gpxStore';
 import destinationReducer from './destinationStore';
-import chatReducer from './chatStore';
 import globalItems from './globalItemsStore';
-import userStore from './userStore';
+// import userStore from './userStore';
 import offlineQueue from './offlineQueue';
 import progressReducer from './progressStore';
 import { type Reducer } from 'react';
@@ -42,19 +38,13 @@ const rootReducer = combineReducers({
   dropdown: dropdownReducer,
   search: searchReducer,
   weather: weatherReducer,
-  parks: parksReducer,
   items: itemsReducer,
   packs: packsReducer,
   trips: tripsReducer,
-  favorites: favoritesReducer,
   singlePack: singlePackReducer,
   singleTrip: singleTripReducer,
-  feed: feedReducer,
-  gpx: gpxReducer,
   destination: destinationReducer,
-  chat: chatReducer,
   globalItems,
-  userStore,
   offlineQueue,
   progress: progressReducer,
   // trails : trailsReducer

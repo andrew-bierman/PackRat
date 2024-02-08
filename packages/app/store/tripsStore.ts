@@ -6,10 +6,11 @@ import {
 import axios from 'app/config/axios';
 import { api } from '../constants/api';
 import { trpc } from '../trpc';
+import { RootState } from './store';
 
 export const deleteTrip = createAsyncThunk(
   'trips/deleteTrip',
-  async (tripId) => {
+  async (tripId: string) => {
     // const response = await axios.delete(`${api}/trip`, {
     //   headers: {
     //     'Content-Type': 'application/json',
@@ -25,10 +26,10 @@ export const deleteTrip = createAsyncThunk(
 
 export const fetchUserTrips = createAsyncThunk(
   'trips/fetchUserTrips',
-  async (ownerId) => {
+  async (owner_id: string) => {
     // const response = await axios.get(`${api}/trip/${ownerId}`);
     // return response.data;
-    return await trpc.getTrips.query({ ownerId });
+    return await trpc.getTrips.query({ owner_id });
   },
 );
 
@@ -164,9 +165,9 @@ export const {
 } = tripsSlice.actions;
 
 export const { selectAll: selectAllTrips, selectById: selectTripById } =
-  tripsAdapter.getSelectors((state) => state.trips);
+  tripsAdapter.getSelectors((state: RootState) => state.trips);
 
-export const selectIsLoading = (state) => state.trips.isLoading;
-export const selectError = (state) => state.trips.error;
+export const selectIsLoading = (state: RootState) => state.trips.isLoading;
+export const selectError = (state: RootState) => state.trips.error;
 
 export default tripsSlice.reducer;
