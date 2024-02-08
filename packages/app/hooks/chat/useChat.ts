@@ -1,19 +1,14 @@
-import { useDispatch } from 'react-redux';
 import { useSelector } from '../redux/useSelector';
 import { useState } from 'react';
 import { useGetUserChats } from './useGetUserChats';
 import { useGetAIResponse } from './useGetAIResponse';
+import { RootState } from 'store/store';
 
 export const useChat = (defaultChatId = null) => {
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state.auth.user);
+  const user = useSelector((state: RootState) => state.auth.user);
   const [conversationId, setConversationId] = useState(defaultChatId);
-  // const conversation = useSelector((state) =>
-  //   selectConversationById(state, conversationId),
-  // );
-  // const conversations = useSelector((state) => selectAllConversations(state));
+
   const [userInput, setUserInput] = useState('');
-  // const [parsedMessages, setParsedMessages] = useState([]);
 
   const { data: chatsData, refetch } = useGetUserChats(user._id);
 
@@ -27,7 +22,7 @@ export const useChat = (defaultChatId = null) => {
    * @param {string} historyString - The string containing the conversation history.
    * @return {Array} An array of objects representing each message in the conversation.
    */
-  const parseConversationHistory = (historyString) => {
+  const parseConversationHistory = (historyString: string) => {
     const historyArray = historyString.split('\n');
     return historyArray.reduce((accumulator, current) => {
       const isAI = current.startsWith('AI:');

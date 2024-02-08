@@ -9,6 +9,7 @@ import { Platform, ScrollView, StyleSheet } from 'react-native';
  * @return {JSX.Element} The rendered component.
  */
 export default function AboutRoute() {
+  console.log("TOKEN: "+ process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN);
   return (
     <>
       <About />

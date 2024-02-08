@@ -2,21 +2,21 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FlatList, View, ScrollView, Platform } from 'react-native';
 import Card from '../../components/feed/FeedCard';
-import {
-  getPublicPacks,
-  getPublicTrips,
-  getFavoritePacks,
-} from '../../store/feedStore';
-import {
-  changePackStatus,
-  fetchUserPacks,
-  selectAllPacks,
-} from '../../store/packsStore';
+// import {
+//   getPublicPacks,
+//   getPublicTrips,
+//   getFavoritePacks,
+// } from '../../store/feedStore';
+// import {
+//   changePackStatus,
+//   fetchUserPacks,
+//   selectAllPacks,
+// } from '../../store/packsStore';
 // import { fetchUserTrips, selectAllTrips } from '../../store/tripsStore';
 import { usefetchTrips } from 'app/hooks/trips';
 import { useRouter } from 'app/hooks/router';
 import { fuseSearch } from '../../utils/fuseSearch';
-import { fetchUserFavorites } from '../../store/favoritesStore';
+// import { fetchUserFavorites } from '../../store/favoritesStore';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import FeedSearchFilter from 'app/components/feed/FeedSearchFilter';
 import { useFeed } from 'app/hooks/feed';

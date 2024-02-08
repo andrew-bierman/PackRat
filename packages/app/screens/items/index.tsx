@@ -7,7 +7,7 @@ import useTheme from 'app/hooks/useTheme';
 import { AddItemGlobal } from 'app/components/item/AddItemGlobal';
 import { ItemsTable } from 'app/components/itemtable/itemTable';
 import { useDispatch, useSelector } from 'react-redux';
-import { getItemsGlobal } from 'app/store/globalItemsStore';
+// import { getItemsGlobal } from 'app/store/globalItemsStore';
 // import { Stack } from 'expo-router';
 import { executeOfflineRequests } from 'app/store/offlineQueue';
 import useCustomStyles from 'app/hooks/useCustomStyles';

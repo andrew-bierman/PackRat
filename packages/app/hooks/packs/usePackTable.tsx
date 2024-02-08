@@ -15,7 +15,7 @@ export const usePackTable = ({
   setRefetch,
   copy,
 }) => {
-  const user = useSelector((state) => state.auth.user);
+  const user = useSelector((state: RootState) => state.auth.user);
   const dispatch = useDispatch();
   let ids = [];
   if (currentPack?.items) {

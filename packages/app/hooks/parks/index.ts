@@ -1,7 +1,7 @@
 // useParks.js
 import { queryTrpc } from '../../trpc';
-import { store } from '../../store/store';
-import { setParks, setParkNames } from '../../store/parksStore';
+// import { store } from '../../store/store';
+// import { setParks, setParkNames } from '../../store/parksStore';
 
 function useParks({ latLng, selectedSearch, radius = 5000 }) {
   console.log('useParks -------------');

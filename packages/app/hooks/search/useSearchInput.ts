@@ -4,7 +4,7 @@ import {
   setSelectedSearchResult,
   clearSearchResults,
 } from '../../store/searchStore';
-import { setLatLng } from '../../store/weatherStore';
+// import { setLatLng } from '../../store/weatherStore';
 import { usePhotonDetail } from 'app/hooks/photonDetail';
 import { type RootState } from 'store/store';
 

@@ -9,11 +9,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import Hero from '../hero';
 import { useRouter } from 'app/hooks/router';
 import { first } from 'lodash';
-import {
-  photonDetails,
-  processGeoJSON,
-  setSelectedSearchResult,
-} from '../../store/destinationStore';
+// import {
+//   photonDetails,
+//   processGeoJSON,
+//   setSelectedSearchResult,
+// } from '../../store/destinationStore';
 import { hexToRGBA } from '../../utils/colorFunctions';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { RootState } from 'store/store';

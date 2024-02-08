@@ -2,8 +2,9 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { executeOfflineRequests } from 'app/store/offlineQueue';
-import { getItemsGlobal } from 'app/store/globalItemsStore';
+// import { getItemsGlobal } from 'app/store/globalItemsStore';
 import { checkNetworkConnected } from '~/utils/netInfo';
+import { RootState } from 'store/store';
 
 const useItems = () => {
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
@@ -30,9 +31,9 @@ const useItems = () => {
     fetchGlobalItems();
   }, [limit, page, refetch, isConnected]);
 
-  const data = useSelector((state) => state.globalItems);
-  const isLoading = useSelector((state) => state.globalItems.isLoading);
-  const isError = useSelector((state) => state.globalItems.isError);
+  const data = useSelector((state: RootState) => state.globalItems);
+  const isLoading = useSelector((state: RootState) => state.globalItems.isLoading);
+  const isError = useSelector((state: RootState) => state.globalItems.error);
 
   const toggleAddItemModal = () => {
     setIsAddItemModalOpen((prev) => !prev);

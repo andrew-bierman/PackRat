@@ -15,15 +15,15 @@ import TripCard from '../TripCard';
 import LargeCard from '../card/LargeCard';
 import WeatherCard from '../weather/WeatherCard';
 import { Ionicons } from '@expo/vector-icons';
-import {
-  processGeoJSON,
-  getDestination,
-  photonDetails,
-  setSelectedSearchResult,
-  setWeatherObject,
-  setWeatherWeek,
-} from '../../store/destinationStore';
-import { fetchWeather, fetchWeatherWeek } from '../../store/weatherStore';
+// import {
+//   processGeoJSON,
+//   getDestination,
+//   photonDetails,
+//   setSelectedSearchResult,
+//   setWeatherObject,
+//   setWeatherWeek,
+// } from '../../store/destinationStore';
+// import { fetchWeather, fetchWeatherWeek } from '../../store/weatherStore';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useFetchWeather, useFetchWeatherWeak } from 'app/hooks/weather';
 import { useGetDestination, useGetPhotonDetails } from 'app/hooks/destination';

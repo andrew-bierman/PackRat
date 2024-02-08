@@ -4,7 +4,7 @@ import { AuthWrapper } from 'auth/authWrapper';
 // export const runtime = 'experimental-edge'
 
 export default function Profile() {
-  return <ProfileContainer />;
+  return <ProfileContainer id={undefined}/>;
 }
 
 Profile.getLayout = function getLayout(page: any) {

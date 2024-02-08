@@ -19,7 +19,6 @@ import useAbout from 'app/hooks/about/useAbout';
 const AboutContent = ({ desktopContainer, isMobile }) => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
-
   const styles = useCustomStyles(loadStyles);
   console.log('isDark, isLight', isDark, isLight);
 

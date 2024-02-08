@@ -1,9 +1,10 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useRunQueryItem } from './useRunQueueItem';
 import { addOfflineRequest, setOfflineRequests } from 'app/store/offlineQueue';
+import { RootState } from 'store/store';
 
 export const useOfflineQueue = () => {
-  const { isConnected, requests } = useSelector((state) => state.offlineQueue);
+  const { isConnected, requests } = useSelector((state: RootState) => state.offlineQueue);
   const dispatch = useDispatch();
   const runQueryItem = useRunQueryItem();
   const processQueue = () => {

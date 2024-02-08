@@ -3,11 +3,11 @@ import { formatDistanceToNow } from 'date-fns';
 import { MaterialIcons, Entypo } from '@expo/vector-icons';
 import useTheme from '../../hooks/useTheme';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  // addFavorite,
-  selectFavoriteById,
-  selectAllFavorites,
-} from '../../store/favoritesStore';
+// import {
+//   addFavorite,
+//   selectFavoriteById,
+//   selectAllFavorites,
+// } from '../../store/favoritesStore';
 import { TouchableOpacity, View } from 'react-native';
 import { Link } from 'solito/link';
 import { DuplicateIcon } from '../DuplicateIcon/index';
@@ -15,6 +15,7 @@ import { truncateString } from '../../utils/truncateString';
 import { RText, RStack, RHeading } from '@packrat/ui';
 import { formatNumber } from 'app/utils/formatNumber';
 import { useAddFavorite } from 'app/hooks/favorites';
+import { RootState } from 'store/store';
 
 export default function Card({
   type,
@@ -31,14 +32,14 @@ export default function Card({
   owners,
   duration,
 }) {
-  const user = useSelector((state) => state.auth.user);
+  const user = useSelector((state: RootState) => state.auth.user);
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
 
   const { addFavorite } = useAddFavorite();
 
-  const favorites = useSelector(selectAllFavorites);
-  const dispatch = useDispatch();
+  // const favorites = useSelector(selectAllFavorites);
+  // const dispatch = useDispatch();
 
   const isFavorite =
     type !== 'trip' &&
@@ -65,14 +66,15 @@ export default function Card({
    *
    * @return {void} This function does not return a value.
    */
-  const handleRemoveFromFavorite = () => {
-    const favorite = favorites.find(
-      (favorite) => favorite.pack_id === _id && favorite.user_id === user._id,
-    );
-    if (favorite) {
-      dispatch(removeFavorite(favorite.id));
-    }
-  };
+  // Function never called.
+  // const handleRemoveFromFavorite = () => {
+  //   const favorite = favorites.find(
+  //     (favorite) => favorite.pack_id === _id && favorite.user_id === user._id,
+  //   );
+  //   if (favorite) {
+  //     dispatch(removeFavorite(favorite.id));
+  //   }
+  // };
 
   const truncatedName = truncateString(name, 25);
   const truncatedDestination = truncateString(destination, 25);

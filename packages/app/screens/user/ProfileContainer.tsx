@@ -170,7 +170,7 @@ const SkeletonUserDataCard = () => {
   );
 };
 
-export default function ProfileContainer({ id = null }) {
+export default function ProfileContainer({ id = null }: {id: string | undefined}) {
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
   const {
@@ -223,6 +223,7 @@ export default function ProfileContainer({ id = null }) {
                 type="favorites"
                 userId={user?._id}
                 isLoading={isLoading}
+                SkeletonComponent={SkeletonUserDataCard}
               />
             ) : (
               <RText
@@ -240,6 +241,8 @@ export default function ProfileContainer({ id = null }) {
                 data={packsList}
                 type="packs"
                 userId={user?.id}
+                isLoading={isLoading}
+                SkeletonComponent={SkeletonUserDataCard}
               />
             </View>
           )}
@@ -249,6 +252,8 @@ export default function ProfileContainer({ id = null }) {
                 data={tripsList}
                 type="trips"
                 userId={user?.id}
+                isLoading={isLoading}
+                SkeletonComponent={SkeletonUserDataCard}
               />
             </View>
           )}

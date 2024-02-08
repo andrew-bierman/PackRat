@@ -3,7 +3,19 @@ import { useState } from 'react';
 
 import { Adapt, Button, Dialog, Sheet } from 'tamagui';
 
-export const BaseDialog = ({ title, description, trigger, children }) => {
+interface BaseDialogProps { 
+  title: string;
+  description: string;
+  trigger: string;
+  children: string | JSX.Element | JSX.Element[] | (() => JSX.Element);
+}
+
+export const BaseDialog = ({
+  title,
+  description,
+  trigger,
+  children,
+}: BaseDialogProps) => {
   const [open, setOpen] = useState(false);
 
   return (
