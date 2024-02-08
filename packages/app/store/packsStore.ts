@@ -133,7 +133,7 @@ export const updatePack = createAsyncThunk('packs/updatePack', async (pack) => {
   // });
   // return response.data;
   return await trpc.editPack.mutate({
-    packId: pack._id,
+    _id: pack._id,
     name: pack.name,
     is_public: pack.is_public,
   });
