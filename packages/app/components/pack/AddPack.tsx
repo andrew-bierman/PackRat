@@ -104,6 +104,7 @@ const loadStyles = (theme, appTheme) => {
       paddingHorizontal: 18,
       gap: 20,
       marginTop: 20,
+      backgroundColor: currentTheme.colors.white,
     },
     desktopStyle: {
       flexDirection: 'row',
