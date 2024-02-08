@@ -4,7 +4,7 @@ import { View, Platform } from 'react-native';
 import { isObjectEmpty } from '../../utils/isObjectEmpty';
 import { defaultShape } from '../../utils/mapFunctions';
 import useTheme from '../../hooks/useTheme';
-import NativeMap from './NativeMap';
+import NativeMap from './NativeMap.native';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 
 export function MapContainer({ shape }) {
@@ -40,7 +40,6 @@ const loadStyles = () => ({
   },
   nativeContainer: {
     width: '100%',
-    marginBottom: 20,
     marginBottom: 20,
     paddingHorizontal: 5,
   },

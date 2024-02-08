@@ -4,64 +4,41 @@ import { theme } from '../../theme';
 import TripCard from '../../components/TripCard';
 import WeatherCard from '../../components/weather/WeatherCard';
 import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
-import { useEffect, useState, useRef, useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { GearList } from '../../components/GearList/GearList';
 import { SaveTripContainer } from 'app/components/trip/createTripModal';
 import TripDateRange from 'app/components/trip/TripDateRange';
-import { useFetchWeather, useFetchWeatherWeak } from 'app/hooks/weather';
 // import { photonDetails } from '../../store/destinationStore';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import useParks from 'app/hooks/parks';
 import useTrails from 'app/hooks/trails';
-import {
-  useCurrentDestination,
-  useGetPhotonDetails,
-} from 'app/hooks/destination';
-import { useGEOLocationSearch } from 'app/hooks/geojson';
-import { useCardTrip } from 'app/hooks/trips/useTripCard';
+import { useTrips } from './useTrips';
 
 export default function Trips() {
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
   // const [parksData, setParksData] = useState();
-  const [trails, setTrailsData] = useState();
-  const [dateRange, setDateRange] = useState({
-    startDate: undefined,
-    endDate: undefined,
-  });
-  const [osm] = useGEOLocationSearch();
-  const form = useCardTrip();
-  const placesAutoCompleteRef = useRef({});
-  const { currentDestination, latLng } = useCurrentDestination();
-  const { data: photonDetails } = useGetPhotonDetails({
-    properties: {
-      osm_id: osm?.osmId,
-      osm_type: osm?.osmType,
-    },
-  });
-
   const {
-    data: weatherData,
-    isLoading: weatherLoading,
-    isError: weatherError,
-  } = useFetchWeather(latLng);
-
-  const {
-    data: weatherWeekData,
-    isLoading: weekWeatherLoading,
-    isError: weekWeatherError,
-  } = useFetchWeatherWeak(latLng);
-
-  const {
-    data: parks,
-    error: parksError,
-    isLoading: parksLoading,
-    filteredParks: parksData,
-  } = useParks({
+    trails,
+    setTrailsData,
+    dateRange,
+    setDateRange,
+    osm,
+    form,
+    placesAutoCompleteRef,
+    currentDestination,
     latLng,
-  });
+    photonDetails,
+    weatherData,
+    weatherLoading,
+    weatherError,
+    weatherWeekData,
+    weekWeatherLoading,
+    weekWeatherError,
+    parks,
+    parksError,
+    parksLoading,
+    parksData,
+  } = useTrips();
 
   const { data, filteredTrails, error, isLoading } = useTrails({
     latLng,
