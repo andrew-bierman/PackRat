@@ -7,8 +7,13 @@ export const useAddNewPack = () => {
   const [name, setName] = useState('');
   const [isPublic, setIsPublic] = useState(false);
   const utils = queryTrpc.useContext();
-  // Use mutation for adding a pack
 
+  const packSelectOptions = [
+    { value: true, label: 'Yes' },
+    { value: false, label: 'No' },
+  ];
+
+  // Use mutation for adding a pack
   const addNewPack = () => {
     mutation.mutate({
       name,
@@ -80,5 +85,6 @@ export const useAddNewPack = () => {
     isPublic,
     setIsPublic,
     setName,
+    packSelectOptions,
   };
 };
