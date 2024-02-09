@@ -1,17 +1,17 @@
-import { useUserQuery } from './hooks';
+import { useAuthUserToken } from './hooks';
 
 export const AuthLoader = ({
   children,
   loadingElement,
   unauthorizedElement,
 }) => {
-  const { user, isLoading } = useUserQuery();
+  const { token, isLoading } = useAuthUserToken();
 
   if (isLoading) {
     return loadingElement;
   }
 
-  if (!isLoading && !user) {
+  if (!token) {
     return unauthorizedElement;
   }
 
