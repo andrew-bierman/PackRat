@@ -41,6 +41,7 @@
     "fix": "manypkg fix",
     "format:all": "prettier --write \"**/*.{js,jsx,ts,tsx}\"",
     "format": "yarn format:all",
+    "find:unused:deps": "node packages/cli/src/findUnusedDependencies.js",
     "ios": "cd apps/expo && yarn ios",
     "lint:all": "yarn lint:expo && yarn lint:server",
     "lint:expo": "cd apps/expo && yarn lint",
