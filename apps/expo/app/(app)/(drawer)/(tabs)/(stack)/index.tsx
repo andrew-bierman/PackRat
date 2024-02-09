@@ -8,6 +8,7 @@ import Dashboard from 'app/screens/dashboard';
 import useTheme from 'app/hooks/useTheme';
 import { current } from '@reduxjs/toolkit';
 import Head from 'expo-router/head';
+import Login from 'app/screens/LoginScreen';
 
 export default function HomeScreen() {
   const {
@@ -37,9 +38,7 @@ export default function HomeScreen() {
           title: 'Home',
         }}
       />
-      <View style={mutualStyles}>
-        {!user ? <LandingPage /> : <Dashboard />}
-      </View>
+      <View style={mutualStyles}>{!user ? <Login /> : <Dashboard />}</View>
     </>
   );
 }
