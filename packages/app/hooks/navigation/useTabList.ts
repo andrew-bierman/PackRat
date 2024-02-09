@@ -17,11 +17,13 @@ export const useTabList = () => {
             href: '/sign-in',
             icon: 'login',
             label: 'Login',
+            IconComponent: MaterialCommunityIcons,
           },
           {
-            href: 'register',
-            icon: 'person-add',
+            href: '/register',
+            icon: 'account-plus',
             label: 'Register',
+            IconComponent: MaterialCommunityIcons,
           },
         ];
 
