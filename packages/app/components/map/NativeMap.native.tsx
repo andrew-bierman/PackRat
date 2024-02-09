@@ -8,7 +8,6 @@ import {
   Alert,
   Linking,
 } from 'react-native';
-import Geolocation from '@react-native-community/geolocation';
 // import { check, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Mapbox, { ShapeSource, offlineManager, Camera } from '@rnmapbox/maps';
