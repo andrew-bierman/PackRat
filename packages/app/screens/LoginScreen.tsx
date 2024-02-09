@@ -45,50 +45,26 @@ export default function Login() {
 
   return (
     <ScrollView>
-      <RStack
-        style={{
-          width: '100%',
-          alignItems: 'center',
-          backgroundColor: 'white',
-        }}
-      >
-        <View style={{ paddingTop: 32, width: '90%', maxWidth: 290 }}>
-          <RHeading fontSize={32} color="#212121" fontWeight="semibold">
-            Welcome
-          </RHeading>
-          <RHeading
-            color="grey"
-            fontWeight="medium"
-            fontSize={14}
-            style={{ marginTop: 8 }}
-          >
-            Sign in to continue!
-          </RHeading>
-
-          <RStack style={{ marginTop: 16, gap: 8 }}>
-            <InputText
-              label="Email ID"
-              keyboardType="email-address"
-              control={control}
-              name="email"
-              rules={InputTextRules.email}
-            />
-            <InputText
-              label="Password"
-              secureTextEntry
-              control={control}
-              name="password"
-              rules={InputTextRules.password}
-            />
-
-            <RButton
-              disabled={!isValid}
-              onPress={handleSubmit(handleLogin)}
-              style={{ marginTop: 16 }}
-              backgroundColor="mediumpurple"
+      <RStack>
+        <RStack
+          style={{
+            width: '100%',
+            alignItems: 'center',
+            backgroundColor: 'white',
+          }}
+        >
+          <View style={{ paddingTop: 32, width: '90%', maxWidth: 290 }}>
+            <RHeading fontSize={32} color="#212121" fontWeight="semibold">
+              Welcome
+            </RHeading>
+            <RHeading
+              color="grey"
+              fontWeight="medium"
+              fontSize={14}
+              style={{ marginTop: 8 }}
             >
               Sign in to continue!
-            </RButton>
+            </RHeading>
 
             <RStack style={{ marginTop: 16, gap: 8 }}>
               <InputText
@@ -215,8 +191,8 @@ export default function Login() {
               )}
               {/* Demo Login for Development end */}
             </RStack>
-          </RStack>
-        </View>
+          </View>
+        </RStack>
       </RStack>
     </ScrollView>
   );
