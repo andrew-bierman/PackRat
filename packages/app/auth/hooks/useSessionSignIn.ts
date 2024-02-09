@@ -9,10 +9,11 @@ export const useSessionSignIn = () => {
 
   const sessionSignIn = useCallback((user) => {
     if (user?.token) {
-      Storage.setItem('session', user);
-      Storage.setItem('token', user.token);
-      setUser(user);
-      router.push('/');
+      (async () => {
+        setUser(user);
+        await Storage.setItem('token', user.token);
+        router.push('/');
+      })();
     }
   }, []);
 

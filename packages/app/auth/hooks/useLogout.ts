@@ -7,7 +7,6 @@ export const useLogout = () => {
   const logout = () => {
     setUser(null);
     Storage.removeItem('token');
-    Storage.removeItem('session');
   };
 
   return logout;

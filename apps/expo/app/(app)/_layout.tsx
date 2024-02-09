@@ -1,14 +1,10 @@
-import { Redirect, Slot, Stack } from 'expo-router';
-import { AuthLoader } from 'app/auth/AuthLoader';
-import { Text } from '@packrat/ui';
+import { Slot } from 'expo-router';
+import { AuthWrapper } from 'app/auth/AuthWrapper';
 
 export default function AppLayout() {
   return (
-    <AuthLoader
-      loadingElement={<Text>Loading</Text>}
-      unauthorizedElement={<Redirect href="/sign-in" />}
-    >
+    <AuthWrapper>
       <Slot />
-    </AuthLoader>
+    </AuthWrapper>
   );
 }
