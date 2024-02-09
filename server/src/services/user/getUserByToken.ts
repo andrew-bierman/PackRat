@@ -7,7 +7,7 @@ import User from '../../models/userModel';
  */
 export const getUserByTokenService = async (token: string): Promise<object> => {
   try {
-    const user: any = await User.findOne({ token: token }).lean();
+    const user: any = await User.findOne({ token }).lean();
 
     return user;
   } catch (error) {
