@@ -3769,7 +3769,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hookform/resolvers@npm:^3.3.1":
+"@hookform/resolvers@npm:^3.3.1, @hookform/resolvers@npm:^3.3.4":
   version: 3.3.4
   resolution: "@hookform/resolvers@npm:3.3.4"
   peerDependencies:
@@ -4800,7 +4800,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@packrat/ui@workspace:packages/ui"
   dependencies:
+    "@hookform/resolvers": "npm:^3.3.4"
     "@shopify/flash-list": "npm:^1.6.1"
+    "@tamagui-extras/form": "npm:^1.16.0"
     "@tamagui/animations-react-native": "npm:^1.88.13"
     "@tamagui/build": "npm:^1.88.13"
     "@tamagui/font-inter": "npm:^1.88.13"
@@ -6586,6 +6588,32 @@ __metadata:
   dependencies:
     defer-to-connect: "npm:^2.0.1"
   checksum: 10/fc9cb993e808806692e4a3337c90ece0ec00c89f4b67e3652a356b89730da98bc824273a6d67ca84d5f33cd85f317dcd5ce39d8cc0a2f060145a608a7cb8ce92
+  languageName: node
+  linkType: hard
+
+"@tamagui-extras/core@npm:1.11.0":
+  version: 1.11.0
+  resolution: "@tamagui-extras/core@npm:1.11.0"
+  peerDependencies:
+    react: ^18.2.0
+    react-native: 0.72.6
+    react-native-svg: ^13.9.0
+    tamagui: 1.29.3
+  checksum: 10/ab59c98d8d605cee26635c76d5c8b3596611e035cd67fb91e240bcb45246dbcc885e18513e3e7d8b38e3440c2fa94885d1a1011689daca35218792c15a6bfb1c
+  languageName: node
+  linkType: hard
+
+"@tamagui-extras/form@npm:^1.16.0":
+  version: 1.16.0
+  resolution: "@tamagui-extras/form@npm:1.16.0"
+  dependencies:
+    "@tamagui-extras/core": "npm:1.11.0"
+    react-hook-form: "npm:^7.43.9"
+  peerDependencies:
+    react: ^18.2.0
+    react-native: 0.72.6
+    tamagui: 1.29.3
+  checksum: 10/b494eee1bf8ccc1b62b52a3ee080c2ebd9259561f398e401d5fc36cf4023fd4143ea037b3a49e3b0ca6b4df69c0094a3816984959f58ec2b64b49f151f0ef763
   languageName: node
   linkType: hard
 
@@ -26016,7 +26044,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-hook-form@npm:^7.46.1":
+"react-hook-form@npm:^7.43.9, react-hook-form@npm:^7.46.1":
   version: 7.50.1
   resolution: "react-hook-form@npm:7.50.1"
   peerDependencies:

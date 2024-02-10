@@ -67,6 +67,7 @@ export {
 };
 
 export * from './InputText';
+export * from './form';
 
 export { config } from './tamagui.config';
 export * from 'tamagui';
