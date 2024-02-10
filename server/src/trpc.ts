@@ -2,7 +2,7 @@ import { TRPCError, initTRPC } from '@trpc/server';
 import type * as trpcExpress from '@trpc/server/adapters/express';
 import { getUserByTokenService } from './services/user/getUserByToken';
 
-const t = initTRPC.create();
+const t = initTRPC.context<Context>().create();
 
 /**
  * Create a context object that will be passed to all resolvers
@@ -42,7 +42,7 @@ export const createContext = async ({
   };
 };
 
-export type Context = inferAsyncReturnType<typeof createContext>;
+export type Context = Awaited<ReturnType<typeof createContext>>;
 
 /**
  * Export reusable router and procedure helpers
@@ -65,7 +65,7 @@ const isAuthenticated = t.middleware(async (opts) => {
       message: 'Invalid token',
     });
   }
-  return next(ctx);
+  return next({ ctx: { ...ctx, user: ctx.user } });
 });
 
 export const protectedProcedure = t.procedure.use(isAuthenticated);
