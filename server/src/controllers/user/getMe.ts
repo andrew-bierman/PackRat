@@ -1,5 +1,5 @@
 import { getUserByTokenService } from '../../services/user/getUserByToken';
-import { publicProcedure } from '../../trpc';
+import { protectedProcedure } from '../../trpc';
 
 /**
  * Retrieves the user information and sends it as a response.
@@ -19,10 +19,7 @@ export const getMe = async (req, res) => {
 };
 
 export function getMeRoute() {
-  return publicProcedure.query(async (opts) => {
-    const authHeader = opts.ctx.req.headers.authorization;
-    const token = authHeader.split(' ')[1];
-    const user = getUserByTokenService(token);
-    return user;
+  return protectedProcedure.query((opts) => {
+    return opts.ctx.user;
   });
 }
