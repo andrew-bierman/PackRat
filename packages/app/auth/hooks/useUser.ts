@@ -1,8 +1,8 @@
 import { useStorage } from 'app/hooks/storage/useStorage';
-import { queryTrpc } from 'app/trpc';
+import { useGetMe } from './useGetMe';
 
 export const useUserQuery = () => {
-  const { data: user, isLoading } = queryTrpc.getMe.useQuery(); // TODO move to custom hook. Might need to fix backend to return user object based on token
+  const { data: user, isLoading } = useGetMe();
 
   return { isLoading, user };
 };
