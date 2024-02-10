@@ -11,7 +11,7 @@ const Loader = () => {
       }}
     >
       <RSpinner color="#0a84ff" />
-      <RHeading style={{ color: '#0a84ff', fontSize: '$2' }}>Loading</RHeading>
+      <RHeading style={{ color: '#0a84ff', fontSize: 2 }}>Loading</RHeading>
     </RStack>
   );
 };

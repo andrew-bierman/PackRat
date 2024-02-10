@@ -117,6 +117,7 @@
     "react-native-select-dropdown": "^3.3.4",
     "react-native-svg": "13.9.0",
     "react-native-table-component": "https://github.com/slice312/react-native-table-component.git",
+    "react-native-url-polyfill": "^2.0.0",
     "react-native-vector-icons": "^9.2.0",
     "react-native-web": "~0.19.10",
     "react-native-webview": "13.2.2",
