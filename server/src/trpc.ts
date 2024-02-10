@@ -1,5 +1,5 @@
 import { TRPCError, initTRPC } from '@trpc/server';
-import * as trpcExpress from '@trpc/server/adapters/express';
+import type * as trpcExpress from '@trpc/server/adapters/express';
 import { getUserByTokenService } from './services/user/getUserByToken';
 
 const t = initTRPC.create();
@@ -55,7 +55,7 @@ export const publicProcedure = t.procedure;
 /**
  * Authentication middleware
  */
-const isAuthenticated = t.middleware((opts) => {
+const isAuthenticated = t.middleware(async (opts) => {
   const { ctx, next } = opts;
 
   if (!ctx.user) {
