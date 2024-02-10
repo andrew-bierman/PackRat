@@ -40,7 +40,7 @@ export function TripDetails() {
   // }, [dispatch, tripId]);
   const states = useSelector((state: RootState) => state);
 
-  const currentTrip = useSelector((state) => state.singleTrip.singleTrip);
+  const currentTrip = useSelector((state: RootState) => state.singleTrip.singleTrip);
 
   // const user = useSelector((state) => state.auth.user);
 
