@@ -38,7 +38,7 @@ const FeedSearchFilter = ({
 }) => {
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
-  const [search, setSearch] = useState("")
+  const [search, setSearch] = useState('');
   return (
     <View style={styles.filterContainer}>
       <View style={styles.searchContainer}>
@@ -50,10 +50,10 @@ const FeedSearchFilter = ({
             size="$30"
             placeholder={`Search ${feedType || 'Feed'}`}
             onChangeText={(value) => {
-              setSearch(value)
+              setSearch(value);
               debounce(() => {
-                setSearchQuery(value)
-              }, 500)
+                setSearchQuery(value);
+              }, 500);
             }}
             value={search}
           />
@@ -139,7 +139,12 @@ const FeedSearchFilter = ({
           <RButton onPress={handleCreateClick}>Create</RButton>
         )}
       </RStack>
-      <RSeparator style={{ margin: '10px 0' }} />
+      <RSeparator
+        marginTop={10}
+        marginBottom={10}
+        marginRight={0}
+        marginLeft={0}
+      />
     </View>
   );
 };
