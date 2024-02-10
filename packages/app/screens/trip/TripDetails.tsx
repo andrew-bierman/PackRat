@@ -21,7 +21,6 @@ import {
 const { useParam } = createParam();
 
 export function TripDetails() {
-  const { weatherObject, weatherWeek } = useWeather();
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
@@ -30,6 +29,7 @@ export function TripDetails() {
   // console.log("🚀 ~ file: TripDetails.js:34 ~ TripDetails ~ tripId:", tripId)
   const { data, isLoading, error, refetch, isOwner, isError } =
     useFetchSingleTrip(tripId);
+  const { weatherObject, weatherWeek } = , useTripWeather(data);
 
   const link = `${CLIENT_URL}/trip/${tripId}`;
 
