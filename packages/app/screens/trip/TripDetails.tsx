@@ -10,7 +10,7 @@ import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useFetchSingleTrip } from 'app/hooks/singletrips';
 import { RootState } from 'store/store';
-import useWeather from './useWeather';
+// import useWeather from './useWeather';
 import {
   TableContainerComponent,
   WeatherCardComponent,
