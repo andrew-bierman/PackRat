@@ -1,5 +1,5 @@
 import { DestinationPage } from 'app/components/destination';
-import { AuthWrapper } from 'auth/authWrapper';
+import { AuthWrapper } from 'app/auth/AuthWrapper';
 // import DestinationPage from "../../components/destination";
 
 // export const runtime = 'experimental-edge';

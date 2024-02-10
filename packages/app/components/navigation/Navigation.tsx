@@ -10,7 +10,7 @@ import { AuthStateListener } from '../../auth/AuthStateListener';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useIsMobileView } from 'app/hooks/common';
 import { useNavigate } from 'app/hooks/navigation';
-import { useAuthUser } from 'app/hooks/user/useAuthUser';
+import { useAuthUser } from 'app/auth/hooks';
 import { NavigationList } from './NavigationList';
 import { Button } from 'tamagui';
 import SVGLogoComponent from '../../components/logo';
