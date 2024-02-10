@@ -20,7 +20,7 @@ import { useUserPacks } from 'app/hooks/packs/useUserPacks';
 import { useFetchSinglePack } from '../../hooks/packs';
 import { useAuthUser } from 'app/auth/hooks';
 
-const { useParam, useParams } = createParam()
+const { useParam } = createParam();
 
 export function PackDetails() {
   const searchParams = new URLSearchParams(this.location.search);
@@ -79,7 +79,7 @@ export function PackDetails() {
             error={error}
             additionalComps={
               <>
-                <TableContainer currentPack={currentPack} copy={params} />
+                <TableContainer currentPack={currentPack} copy={canCopy} />
                 <View style={styles.boxStyle}>
                   <AddItemModal
                     currentPackId={currentPackId}
