@@ -9,6 +9,7 @@ import { CLIENT_URL } from '@env';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useFetchSingleTrip } from 'app/hooks/singletrips';
+import { RootState } from 'store/store';
 import useWeather from './useWeather';
 import {
   TableContainerComponent,
@@ -37,7 +38,7 @@ export function TripDetails() {
   //   if (!tripId) return;
   //   dispatch(fetchSingleTrip(tripId));
   // }, [dispatch, tripId]);
-  const states = useSelector((state) => state);
+  const states = useSelector((state: RootState) => state);
 
   const currentTrip = useSelector((state) => state.singleTrip.singleTrip);
 
