@@ -21,6 +21,7 @@ export const theme = {
     weatherIcon: '#0284c7',
     drawerIconColor: '#3B3B3B',
     white: '#FFFFFF',
+    black: '#000000',
   },
   font: {
     headerFont: 56,

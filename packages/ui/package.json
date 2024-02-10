@@ -31,7 +31,7 @@
     "@tanstack/react-virtual": "3.0.0-beta.54",
     "esbuild": "^0.19.5",
     "jotai": "^2.4.3",
-    "react": "18.2.0",
+    "react": "^18.2.0",
     "tamagui": "^1.88.13"
   },
   "devDependencies": {

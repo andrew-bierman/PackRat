@@ -18,7 +18,7 @@ import { AddItemModal } from './AddItemModal';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useUserPacks } from 'app/hooks/packs/useUserPacks';
 import { useFetchSinglePack } from '../../hooks/packs';
-import { RootState } from 'store/store';
+import { useAuthUser } from 'app/auth/hooks';
 
 const { useParam } = createParam();
 
@@ -28,9 +28,8 @@ export function PackDetails() {
   const [packId] = useParam('id');
   console.log(packId, 'packId');
   const link = `${CLIENT_URL}/packs/${packId}`;
-  const updated = useSelector((state: RootState) => state.packs.update);
   const [firstLoad, setFirstLoad] = useState(true);
-  const user = useSelector((state: RootState) => state.auth.user);
+  const user = useAuthUser();
   const userId = user?._id;
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
   const [refetch, setRefetch] = useState(false);
@@ -43,10 +42,6 @@ export function PackDetails() {
     error,
     refetch: refetchQuery,
   } = useFetchSinglePack(packId);
-
-  useEffect(() => {
-    refetchQuery();
-  }, [refetch, packId, updated]);
 
   // useEffect(() => {
   //   if (!packId) return;

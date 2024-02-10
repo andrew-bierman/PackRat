@@ -1,11 +1,11 @@
 import { createTRPCProxyClient, httpBatchLink } from '@trpc/client';
 import type { AppRouter } from 'server/src/routes/trpcRouter';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { api } from './constants/api';
 import { createTRPCReact } from '@trpc/react-query';
+import { Storage } from 'app/utils/storage';
 
-export const getToken = async (key: string) => {
-  const token = await AsyncStorage.getItem(key);
+export const getToken = async () => {
+  const token = await Storage.getItem('token');
   if (!token) return '';
   return token;
 };
@@ -15,7 +15,7 @@ export const trpc = createTRPCProxyClient<AppRouter>({
     httpBatchLink({
       url: `${api}/trpc`,
       async headers() {
-        const token = await getToken('session');
+        const token = await getToken();
         return {
           authorization: token ? `Bearer ${token}` : '',
         };

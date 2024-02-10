@@ -39,5 +39,3 @@ const calculateHeightForGivenWidth = (
 
   return newHeight;
 };
-
-export default SVGLogoComponent;

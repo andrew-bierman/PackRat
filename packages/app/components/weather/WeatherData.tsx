@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import WeatherCard from './WeatherCard';
 import { useFetchWeather, useFetchWeatherWeak } from 'app/hooks/weather';
 import { RText } from '@packrat/ui';
+import { parseCoordinates } from 'app/utils/coordinatesParser';
 
 /**
  * Generates a function comment for the given function body.
@@ -10,8 +11,12 @@ import { RText } from '@packrat/ui';
  * @return {JSX.Element|null} The WeatherCard component if weatherObject and weatherWeek are truthy, otherwise null.
  */
 export const WeatherData = ({ geoJSON }) => {
-  const { data: weatherObjectData } = useFetchWeather(geoJSON);
-  const { data: weatherWeekData } = useFetchWeatherWeak(geoJSON);
+  const latLng = useMemo(() => {
+    return parseCoordinates(geoJSON);
+  }, [geoJSON]);
+
+  const { data: weatherObjectData } = useFetchWeather(latLng);
+  const { data: weatherWeekData } = useFetchWeatherWeak(latLng);
 
   return weatherObjectData && weatherWeekData ? (
     <WeatherCard
