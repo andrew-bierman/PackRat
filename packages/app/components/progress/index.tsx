@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { Progress } from 'native-base';
 import useTheme from 'app/hooks/useTheme';
-import { type RootState } from 'app/store/store';
+import { useProgressStore } from 'app/global-state/progressStore';
 
 const ProgressBarComponent = () => {
   const { currentTheme } = useTheme();
-  const reduxTargetValue = useSelector(
-    (state: RootState) => state.progress.targetValue,
-  );
+  const { targetValue } = useProgressStore();
+
   const [localCurrentValue, setLocalCurrentValue] = useState(0);
   const [operationId, setOperationId] = useState(0);
 
@@ -21,23 +19,20 @@ const ProgressBarComponent = () => {
     setLocalCurrentValue(0);
 
     function incrementProgress() {
-      if (
-        localCurrentValue < reduxTargetValue &&
-        operationId === newOperationId
-      ) {
+      if (localCurrentValue < targetValue && operationId === newOperationId) {
         setLocalCurrentValue((prevValue) => prevValue + 1);
       }
     }
 
     // Start the increment
     incrementProgress();
-  }, [reduxTargetValue]);
+  }, [targetValue]);
 
   useEffect(() => {
-    if (localCurrentValue < reduxTargetValue && operationId !== 0) {
+    if (localCurrentValue < targetValue && operationId !== 0) {
       setLocalCurrentValue((prevValue) => prevValue + 1);
     }
-  }, [localCurrentValue, reduxTargetValue, operationId]);
+  }, [localCurrentValue, targetValue, operationId]);
 
   return (
     <Progress

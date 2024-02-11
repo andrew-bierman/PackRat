@@ -2,7 +2,6 @@ import { AntDesign } from '@expo/vector-icons';
 import { formatDistanceToNow } from 'date-fns';
 import { MaterialIcons, Entypo } from '@expo/vector-icons';
 import useTheme from '../../hooks/useTheme';
-import { useDispatch } from 'react-redux';
 import { TouchableOpacity, View } from 'react-native';
 import { Link } from 'solito/link';
 import { DuplicateIcon } from '../DuplicateIcon/index';
@@ -34,7 +33,6 @@ export default function Card({
   const { addFavorite } = useAddFavorite();
 
   const { data: favorites = [] } = useFetchUserFavorites(user?._id);
-  const dispatch = useDispatch();
 
   const isFavorite =
     type !== 'trip' &&
@@ -52,7 +50,6 @@ export default function Card({
       userId: user._id,
     };
 
-    // dispatch(addFavorite(data));
     addFavorite(data);
   };
 
@@ -66,7 +63,7 @@ export default function Card({
       (favorite) => favorite.pack_id === _id && favorite.user_id === user._id,
     );
     if (favorite) {
-      dispatch(removeFavorite(favorite.id));
+      // TODO IMPLEMENT remove favorite
     }
   };
 
