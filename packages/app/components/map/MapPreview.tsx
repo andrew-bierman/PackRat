@@ -1,4 +1,4 @@
-import { RImage } from '@packrat/ui';
+import { RImage, RText, YStack, RButton } from '@packrat/ui';
 import {
   getShapeSourceBounds,
   isLineString,
@@ -6,7 +6,32 @@ import {
   processShapeData,
   isPoint,
 } from '../../utils/mapFunctions';
-import { api } from '../../constants/api';
+import { useFetchMapPreview } from 'app/hooks/useFetchMapPreview';
+
+function MapImage({ uri }) {
+  const { image, refetch, isLoading, error, isError } = useFetchMapPreview(uri);
+
+  return isLoading ? (
+    <RText>Image loading...</RText>
+  ) : isError ? (
+    <YStack space="$2" alignItems="center">
+      <RText>{error.message}</RText>
+      <RButton onPress={() => refetch()} width="$12">
+        Retry
+      </RButton>
+    </YStack>
+  ) : (
+    <RImage
+      style={{
+        width: '100%',
+        height: '100%',
+      }}
+      source={{
+        uri: image,
+      }}
+    />
+  );
+}
 
 /**
  * Renders a preview of a map based on the given shape.
@@ -67,29 +92,15 @@ export default function MapPreview({ shape }) {
   } = shape.features[0].geometry;
   // console.log("🚀 ~ file: MapPreview.js:39 ~ MapPreview ~ coordinates:", isPoint(shape),MAPBOX_ACCESS_TOKEN)
 
-  const mapPreviewEndpoint = `${api}/mapPreview`;
-
   return isPoint(shape) ? (
-    <RImage
-      style={{
-        width: '100%',
-        height: '100%',
-      }}
-      source={{
-        uri: `${mapPreviewEndpoint}/pin-s+db4848(${lng},${lat})/${lng},${lat},8.63,0/900x400`,
-      }}
+    <MapImage
+      uri={`pin-s+db4848(${lng},${lat})/${lng},${lat},8.63,0/900x400`}
     />
   ) : (
-    <RImage
-      style={{
-        width: '100%',
-        height: '100%',
-      }}
-      source={{
-        uri: `${mapPreviewEndpoint}/geojson(${urlEncodedImageShapeGeoJSON})/[${bounds.join(
-          ',',
-        )}]/900x400?padding=50,30,30,30`,
-      }}
+    <MapImage
+      uri={`/geojson(${urlEncodedImageShapeGeoJSON})/[${bounds.join(
+        ',',
+      )}]/900x400?padding=50,30,30,30`}
     />
   );
 }

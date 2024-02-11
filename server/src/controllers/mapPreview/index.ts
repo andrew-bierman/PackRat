@@ -1,11 +1,8 @@
-import express, {
-  type NextFunction,
-  type Request,
-  type Response,
-} from 'express';
-import axios from 'axios';
-import { MAPBOX_ACCESS_TOKEN } from '../../config';
+import express, { NextFunction, Request, Response } from 'express';
+import { publicProcedure } from '../../trpc';
+import { z } from 'zod';
 import { MapPreviewError } from '../../helpers/errors';
+import getMapPreviewService from '../../services/mapPreview';
 
 /**
  *  Responds with map preview image from mapbox api
@@ -21,27 +18,21 @@ export default async function getMapPreview(
   next: NextFunction,
 ) {
   try {
-    const queryParams = Object.entries(req.query).reduce(
-      (acc, [key, val], i, arr) =>
-        `${acc}${key}=${val}${i == arr.length - 1 ? '' : '&'}`,
-      '',
-    );
-
-    const { data } = await axios.get(
-      `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/${req.originalUrl
-        .replace('/api', '')
-        .replace('/mapPreview/', '')
-        .replace(
-          '?' + queryParams,
-          '',
-        )}?access_token=${MAPBOX_ACCESS_TOKEN}&${queryParams}`,
-      { responseType: 'arraybuffer' },
+    const data = await getMapPreviewService(
+      req.originalUrl.replace('/api', '').replace('/mapPreview/', ''),
     );
 
     res.setHeader('Content-Type', 'image/png');
     res.send(data);
   } catch (error) {
-    console.log(error);
     next(MapPreviewError);
   }
+}
+
+export function getMapPreviewRoute() {
+  return publicProcedure.input(z.string()).query(async (opts) => {
+    const data = await getMapPreviewService(opts.input);
+    const base64Data = Buffer.from(data).toString('base64');
+    return base64Data;
+  });
 }
