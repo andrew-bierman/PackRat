@@ -4,7 +4,6 @@ import { RStack, RText, RButton, RSkeleton } from '@packrat/ui';
 import { Platform } from 'react-native';
 import UserDataCard from './UserDataCard';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import LargeCard from '../card/LargeCard';
 import { theme } from '../../theme';
 import useTheme from '../../hooks/useTheme';

@@ -1,32 +1,27 @@
 import { useState } from 'react';
-import { View } from 'react-native';
-import { useDispatch } from 'react-redux';
 import { useRouter } from 'app/hooks/router';
-import { RStack, RIconButton, BaseModal } from '@packrat/ui';
+import { RStack, RIconButton, BaseModal, View } from '@packrat/ui';
 import { Entypo } from '@expo/vector-icons';
 export const PackOptions = ({ Edit, Delete, Ignore }) => {
-  const dispatch = useDispatch();
   const router = useRouter();
   return (
-    <View>
-      <BaseModal triggerComponent={<MenuTriggerComponent />}>
-        <RStack style={{ flexDirection: 'row', alignItems: 'center' }}>
-          {Edit} Edit{' '}
-        </RStack>
-        <RStack style={{ flexDirection: 'row', alignItems: 'center' }}>
-          {Delete} Delete{' '}
-        </RStack>
-        <RStack
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'flex-end',
-          }}
-        >
-          {Ignore}{' '}
-        </RStack>
-      </BaseModal>
-    </View>
+    <BaseModal triggerComponent={<MenuTriggerComponent />}>
+      <RStack style={{ flexDirection: 'row', alignItems: 'center' }}>
+        {Edit} Edit{' '}
+      </RStack>
+      <RStack style={{ flexDirection: 'row', alignItems: 'center' }}>
+        {Delete} Delete{' '}
+      </RStack>
+      <RStack
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'flex-end',
+        }}
+      >
+        {Ignore}{' '}
+      </RStack>
+    </BaseModal>
   );
 };
 

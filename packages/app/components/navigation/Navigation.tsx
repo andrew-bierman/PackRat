@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   Platform,
 } from 'react-native';
-import { AuthStateListener } from '../../auth/AuthStateListener';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useIsMobileView } from 'app/hooks/common';
 import { useNavigate } from 'app/hooks/navigation';
@@ -40,7 +39,6 @@ export const Navigation = () => {
   ) : (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        {user && <AuthStateListener />}
         <View style={styles.header}>
           <Button
             key={'logo-nav'}

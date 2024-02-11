@@ -1,8 +1,8 @@
+import { useAuthUser } from 'app/auth/hooks';
 import { queryTrpc } from '../../trpc';
-import { store } from '../../store/store';
 
 export const useFetchSinglePack = (packId) => {
-  const user = store.getState().auth.user;
+  const user = useAuthUser();
   const { refetch, data, error, isLoading, isError } =
     queryTrpc.getPackById.useQuery(
       { packId },

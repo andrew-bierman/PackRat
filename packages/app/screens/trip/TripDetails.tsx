@@ -2,8 +2,6 @@ import React, { useEffect, useMemo } from 'react';
 import { DetailsHeader } from '../../components/details/header';
 import { createParam } from 'solito';
 import { TableContainer } from '../../components/pack_table/Table';
-import { selectPackById } from '../../store/packsStore';
-import { useSelector, useDispatch } from 'react-redux';
 import { View } from 'react-native';
 import { RText } from '@packrat/ui';
 import { DetailsComponent } from '../../components/details';
@@ -27,7 +25,6 @@ export function TripDetails() {
     useTheme();
   const styles = useCustomStyles(loadStyles);
   console.log('trip detail');
-  const dispatch = useDispatch();
   const [tripId] = useParam('tripId');
 
   // console.log("🚀 ~ file: TripDetails.js:34 ~ TripDetails ~ tripId:", tripId)
@@ -42,18 +39,6 @@ export function TripDetails() {
   //   if (!tripId) return;
   //   dispatch(fetchSingleTrip(tripId));
   // }, [dispatch, tripId]);
-  const states = useSelector((state: RootState) => state);
-
-  const currentTrip = useSelector(
-    (state: RootState) => state.singleTrip.singleTrip,
-  );
-
-
-  // check if user is owner of pack, and that pack and user exists
-  // const isOwner = currentTrip && user && currentTrip.owner_id === user._id;
-
-  // const isLoading = useSelector((state) => state.singleTrip.isLoading);
-  // const error = useSelector((state) => state.singleTrip.error);
   // const isError = error !== null;
 
   if (isLoading) return <RText>Loading...</RText>;

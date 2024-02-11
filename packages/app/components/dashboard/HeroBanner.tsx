@@ -1,21 +1,17 @@
 import React from 'react';
 import { RStack, RText } from '@packrat/ui';
 import LargeCard from '../card/LargeCard';
-import { SearchInput } from '../SearchInput';
 import { View } from 'react-native';
-import { theme } from '../../theme';
 import useTheme from '../../hooks/useTheme';
-import { useSelector, useDispatch } from 'react-redux';
+import { useAuthUser } from 'app/auth/hooks';
 import Hero from '../hero';
 import { useRouter } from 'app/hooks/router';
 import { first } from 'lodash';
 import { hexToRGBA } from '../../utils/colorFunctions';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import { type RootState } from 'store/store';
 import { PlacesAutocomplete } from 'app/components/PlacesAutocomplete/PlacesAutocomplete';
 
 const HeroSection = ({ onSelect }) => {
-  const dispatch = useDispatch();
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
@@ -32,8 +28,6 @@ const HeroSection = ({ onSelect }) => {
       const { osm_id, osm_type, name } = selectedResult.properties;
 
       const coordinates = selectedResult.geometry.coordinates;
-
-      const [lon, lat] = coordinates;
 
       if (!osm_id || !osm_type) {
         console.error(
@@ -54,7 +48,7 @@ const HeroSection = ({ onSelect }) => {
     }
   };
 
-  const user = useSelector((state: RootState) => state.auth?.user);
+  const user = useAuthUser();
 
   const firstNameOrUser = first(user?.name?.split(' ')) ?? 'User';
 

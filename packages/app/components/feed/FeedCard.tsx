@@ -2,19 +2,14 @@ import { AntDesign } from '@expo/vector-icons';
 import { formatDistanceToNow } from 'date-fns';
 import { MaterialIcons, Entypo } from '@expo/vector-icons';
 import useTheme from '../../hooks/useTheme';
-import { useSelector, useDispatch } from 'react-redux';
-import {
-  // addFavorite,
-  selectFavoriteById,
-  selectAllFavorites,
-} from '../../store/favoritesStore';
+import { useDispatch } from 'react-redux';
 import { TouchableOpacity, View } from 'react-native';
 import { Link } from 'solito/link';
 import { DuplicateIcon } from '../DuplicateIcon/index';
 import { truncateString } from '../../utils/truncateString';
 import { RText, RStack, RHeading } from '@packrat/ui';
 import { formatNumber } from 'app/utils/formatNumber';
-import { useAddFavorite } from 'app/hooks/favorites';
+import { useAddFavorite, useFetchUserFavorites } from 'app/hooks/favorites';
 import { useAuthUser } from 'app/auth/hooks';
 
 export default function Card({
@@ -38,7 +33,7 @@ export default function Card({
 
   const { addFavorite } = useAddFavorite();
 
-  const favorites = useSelector(selectAllFavorites);
+  const { data: favorites = [] } = useFetchUserFavorites(user?._id);
   const dispatch = useDispatch();
 
   const isFavorite =

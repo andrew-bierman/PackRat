@@ -8,7 +8,6 @@ import { useAuthUser } from 'app/auth/hooks';
 import { Button } from 'tamagui';
 import { EvilIcons } from '@expo/vector-icons';
 import SVGLogoComponent from 'app/components/logo';
-import { AuthStateListener } from 'app/auth/AuthStateListener';
 import useTheme from 'app/hooks/useTheme';
 import { DrawerActions } from '@react-navigation/native';
 
@@ -25,7 +24,6 @@ export default function StackLayout() {
         header: ({ navigation }) => (
           <SafeAreaView style={styles.safeArea}>
             <View style={styles.container}>
-              {user && <AuthStateListener />}
               <View style={styles.header}>
                 <Button
                   key={'logo-nav'}

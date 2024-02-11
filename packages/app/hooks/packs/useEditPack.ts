@@ -1,13 +1,7 @@
-import { useRouter } from 'app/hooks/router';
-import { useDispatch } from 'react-redux';
-import { updatePack } from 'app/store/packsStore';
+import { queryTrpc } from 'app/trpc';
 
 export const useEditPack = () => {
-  const dispatch = useDispatch();
+  const { mutate: mutatePack } = queryTrpc.editPack.useMutation();
 
-  const handleEditPack = (packDetails) => {
-    dispatch(updatePack(packDetails));
-  };
-
-  return handleEditPack;
+  return mutatePack;
 };

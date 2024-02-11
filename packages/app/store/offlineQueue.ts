@@ -1,35 +1,6 @@
-import {
-  createSlice,
-  createAsyncThunk,
-  createEntityAdapter,
-} from '@reduxjs/toolkit';
-import { addItemsGlobal, deleteGlobalItem } from './globalItemsStore';
-import NetInfo from '@react-native-community/netinfo';
+import { createSlice, createEntityAdapter } from '@reduxjs/toolkit';
 
-const items = {
-  deleteItem: deleteGlobalItem,
-  addGlobalItem: addItemsGlobal,
-};
 const offlineAdaptor = createEntityAdapter();
-
-interface offlineRequestObj {
-  method: string;
-  data: any;
-}
-export const executeOfflineRequests = createAsyncThunk(
-  'offline/execute',
-  async (data: [], { dispatch }) => {
-    data.forEach(async (item: offlineRequestObj) => {
-      try {
-        const method = items[item.method];
-        await dispatch(method(item.data));
-      } catch (err) {
-        console.warn(err);
-      }
-    });
-    return [];
-  },
-);
 
 const offlineSlice = createSlice({
   name: 'offline',
@@ -56,11 +27,6 @@ const offlineSlice = createSlice({
         isConnected: action.payload,
       };
     },
-  },
-  extraReducers: (builder) => {
-    builder.addCase(executeOfflineRequests.fulfilled, (state) => {
-      state.requests = [];
-    });
   },
 });
 
