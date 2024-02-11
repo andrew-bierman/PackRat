@@ -26,7 +26,7 @@ export const Tabs = () => {
         headerLeft: () => <DrawerToggleButton />,
       }}
     >
-      <Tabs.Screen
+      <ExpoTabs.Screen
         name="index"
         options={{
           headerShown: true,
@@ -36,7 +36,7 @@ export const Tabs = () => {
           ),
         }}
       />
-      <Tabs.Screen
+      <ExpoTabs.Screen
         name="feed/index"
         options={{
           headerShown: true,
@@ -50,7 +50,7 @@ export const Tabs = () => {
           ),
         }}
       />
-      <Tabs.Screen
+      <ExpoTabs.Screen
         name="profile/index"
         options={{
           headerShown: true,
@@ -61,7 +61,7 @@ export const Tabs = () => {
         }}
       />
 
-      <Tabs.Screen
+      <ExpoTabs.Screen
         name="(stack)"
         options={{
           href: null,
@@ -70,7 +70,7 @@ export const Tabs = () => {
         }}
       />
 
-      <Tabs.Screen
+      <ExpoTabs.Screen
         name="search"
         options={{
           headerShown: true,
