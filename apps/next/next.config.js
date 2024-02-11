@@ -109,6 +109,8 @@ const nextConfig = function () {
       '@react-navigation/drawer',
       '@bacons/react-views',
       // End remove section
+      '@rneui/themed',
+      '@rneui/base',
     ],
     experimental: {
       scrollRestoration: true,
