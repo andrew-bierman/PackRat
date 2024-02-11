@@ -10,7 +10,7 @@ export function Drawer() {
   return (
     <ExpoDrawer
       screenOptions={{
-        drawerPosition: 'right',
+        drawerPosition: 'left',
         drawerType: 'slide',
         drawerStyle: styles.drawerStyles,
         headerShown: false,

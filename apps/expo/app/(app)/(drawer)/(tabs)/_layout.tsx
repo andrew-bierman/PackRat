@@ -1,5 +1,5 @@
-import { Tab } from 'app/components/navigation';
+import { Tabs } from 'app/components/navigation';
 
-export default function TabsLaout() {
-  return <Tab />;
+export default function TabsLayout() {
+  return <Tabs />;
 }
