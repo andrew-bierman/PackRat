@@ -1,7 +1,6 @@
 import { Link } from 'solito/link';
-import { Stack, VStack, Text, Button } from 'native-base';
 import { RStack, RText, RButton, RSkeleton } from '@packrat/ui';
-import { Platform } from 'react-native';
+import { VirtualizedList } from 'react-native';
 import UserDataCard from './UserDataCard';
 import React, { useEffect, useState } from 'react';
 import LargeCard from '../card/LargeCard';
@@ -83,7 +82,6 @@ export default function UserDataContainer({
         style={{
           gap: 16,
           alignItems: 'center',
-          flex: 1,
           width: '100%',
           padding: 24,
         }}
@@ -98,12 +96,13 @@ export default function UserDataContainer({
         >
           {differentUser
             ? // ? `${userId}'s ${typeUppercase}`
-              `${typeUppercase}`
+            `${typeUppercase}`
             : `Your ${typeUppercase}`}
         </RText>
         <RStack
           style={{
             flexWrap: 'wrap',
+            flexDirection: 'row',
             justifyContent: 'center',
             alignItems: 'center',
             width: '100%',
@@ -125,8 +124,11 @@ export default function UserDataContainer({
             //     />
             //   ))
             // )
-            <FlatList
+            <VirtualizedList
+              getItemCount={() => data.length}
+              nestedScrollEnabled={true}
               data={data}
+              getItem={(item, index) => ({...item, key: index})}
               renderItem={({ item, index }) => (
                 <UserDataCard
                   key={item._id}
@@ -140,7 +142,7 @@ export default function UserDataContainer({
               )}
               keyExtractor={(item) => item._id}
               maxToRenderPerBatch={2}
-              // Other FlatList props like onEndReached for infinite scrolling
+            // Other FlatList props like onEndReached for infinite scrolling
             />
           ) : currentUser?._id === userId ? (
             <Link href="/">

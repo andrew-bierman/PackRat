@@ -42,14 +42,6 @@ export function PackDetails() {
     refetch: refetchQuery,
   } = useFetchSinglePack(packId);
 
-  // useEffect(() => {
-  //   if (!packId) return;
-  //   dispatch(fetchSinglePack(packId));
-
-  //   // if (userId) dispatch(fetchUserPacks({ ownerId: userId }));
-  //   setFirstLoad(false);
-  // }, [dispatch, packId, updated]); // TODO updated is a temporary fix to re-render when pack is update, due to bug in store
-
   const styles = useCustomStyles(loadStyles);
   const currentPackId = currentPack && currentPack._id;
 
@@ -58,7 +50,7 @@ export function PackDetails() {
 
   const isError = error !== null;
 
-  if (isLoading && firstLoad) return <RText>Loading...</RText>;
+  if (isLoading) return <RText>Loading...</RText>;
 
   return (
     <View
@@ -78,11 +70,7 @@ export function PackDetails() {
             error={error}
             additionalComps={
               <>
-                <TableContainer
-                  currentPack={currentPack}
-                  copy={canCopy}
-                  refetch={refetch}
-                />
+                <TableContainer currentPack={currentPack} copy={canCopy} />
                 <View style={styles.boxStyle}>
                   <AddItemModal
                     currentPackId={currentPackId}
