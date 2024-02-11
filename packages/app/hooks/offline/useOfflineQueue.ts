@@ -1,5 +1,5 @@
 import { useRunQueryItem } from './useRunQueueItem';
-import { useOfflineStore } from 'app/global-state';
+import { useOfflineStore } from '../../atoms';
 
 export const useOfflineQueue = () => {
   const { isConnected, requests, setRequests } = useOfflineStore();

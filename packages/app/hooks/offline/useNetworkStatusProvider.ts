@@ -1,5 +1,5 @@
 import NetInfo from '@react-native-community/netinfo';
-import { useOfflineStore } from 'app/global-state/';
+import { useOfflineStore } from '../../atoms';
 import { useEffect } from 'react';
 
 export const useNetworkStatusProvider = () => {

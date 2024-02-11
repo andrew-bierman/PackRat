@@ -1,5 +1,5 @@
 import { useNetworkStatusProvider } from 'app/hooks/offline';
-import { useProgressListener } from 'app/global-state/progressStore';
+import { useProgressListener } from '../atoms/progressStore';
 
 export const useAttachListeners = () => {
   useNetworkStatusProvider();
