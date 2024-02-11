@@ -16,5 +16,5 @@ export const useAuthUserToken = () => {
 export const useAuthUser = () => {
   const { user } = useUserQuery();
 
-  return user;
+  return user ? { ...user, id: user._id } : null;
 };
