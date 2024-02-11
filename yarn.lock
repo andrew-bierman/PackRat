@@ -10383,6 +10383,8 @@ __metadata:
     "@react-navigation/native": "npm:^6.1.6"
     "@react-navigation/native-stack": "npm:^6.9.12"
     "@reduxjs/toolkit": "npm:^1.9.3"
+    "@rneui/base": "npm:^4.0.0-rc.8"
+    "@rneui/themed": "npm:^4.0.0-rc.8"
     "@rnmapbox/maps": "npm:^10.0.0-beta.79"
     "@tamagui/animations-react-native": "npm:^1.88.13"
     "@tamagui/babel-plugin": "npm:^1.88.13"
@@ -10473,7 +10475,7 @@ __metadata:
     react-native-select-dropdown: "npm:^3.3.4"
     react-native-svg: "npm:13.9.0"
     react-native-table-component: "https://github.com/slice312/react-native-table-component.git"
-    react-native-vector-icons: "npm:^9.2.0"
+    react-native-vector-icons: "npm:^10.0.3"
     react-native-web: "npm:~0.19.10"
     react-native-webview: "npm:13.2.2"
     react-redux: "npm:^9.0.4"
@@ -16083,7 +16085,7 @@ __metadata:
     react-native-table-component: "https://github.com/slice312/react-native-table-component.git"
     react-native-url-polyfill: "npm:^2.0.0"
     react-native-vector-icons: "npm:^10.0.3"
-    react-native-web: "npm:~0.19.6"
+    react-native-web: "npm:~0.19.10"
     react-native-webview: "npm:13.2.2"
     react-redux: "npm:^9.0.4"
     react-responsive: "npm:^9.0.2"
@@ -26326,19 +26328,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-vector-icons@npm:^9.2.0":
-  version: 9.2.0
-  resolution: "react-native-vector-icons@npm:9.2.0"
-  dependencies:
-    prop-types: "npm:^15.7.2"
-    yargs: "npm:^16.1.1"
-  bin:
-    fa5-upgrade: bin/fa5-upgrade.sh
-    generate-icon: bin/generate-icon.js
-  checksum: 10/126c0a0ed17a2062dc099ba5b0909e674142f7fb5dabc672794a3b077cae16499ea8565ab03f8e211db8d32b8e09992410aa837222493a82d617a1bd9bbb561d
-  languageName: node
-  linkType: hard
-
 "react-native-web-internals@npm:1.89.12":
   version: 1.89.12
   resolution: "react-native-web-internals@npm:1.89.12"
@@ -26368,7 +26357,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-web@npm:^0.19.10, react-native-web@npm:~0.19.10, react-native-web@npm:~0.19.6":
+"react-native-web@npm:^0.19.10, react-native-web@npm:~0.19.10":
   version: 0.19.10
   resolution: "react-native-web@npm:0.19.10"
   dependencies:
