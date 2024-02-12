@@ -6,6 +6,7 @@ import { darkTheme, theme } from 'app/theme';
 import LandingPage from 'app/components/landing_page';
 import Dashboard from 'app/screens/dashboard';
 import useTheme from 'app/hooks/useTheme';
+import { useAuthUser } from 'app/auth/hooks';
 import { current } from '@reduxjs/toolkit';
 import Head from 'expo-router/head';
 import Login from 'app/screens/LoginScreen';
@@ -19,7 +20,7 @@ export default function HomeScreen() {
     currentTheme = theme,
   } = useTheme();
 
-  const user = useSelector((state) => state.auth.user);
+  const user = useAuthUser();
 
   const mutualStyles = {
     backgroundColor: currentTheme.colors.background,

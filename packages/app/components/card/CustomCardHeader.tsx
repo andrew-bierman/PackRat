@@ -4,7 +4,7 @@ import { View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Link } from 'solito/link';
 import { useCopyClipboard } from 'app/hooks/common';
-import { useAuthUser } from 'app/hooks/user/useAuthUser';
+import { useAuthUser } from 'app/auth/hooks';
 
 export const CustomCardHeader = ({ data, title, link, actionsComponent }) => {
   const { isCopied, handleCopyLink } = useCopyClipboard(link);

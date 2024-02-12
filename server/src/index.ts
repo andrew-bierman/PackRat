@@ -14,6 +14,7 @@ import { limiter } from './helpers/limiter';
 import * as trpcExpress from '@trpc/server/adapters/express';
 import { type inferAsyncReturnType, initTRPC } from '@trpc/server';
 import { appRouter } from './routes/trpcRouter';
+import { createContext } from './trpc';
 
 const app = express();
 
@@ -57,12 +58,6 @@ app.use(
     next(err);
   },
 );
-const createContext = ({
-  req,
-  res,
-}: trpcExpress.CreateExpressContextOptions) => ({ req, res });
-
-export type Context = inferAsyncReturnType<typeof createContext>;
 
 app.use(
   '/api/trpc',

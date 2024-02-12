@@ -1,5 +1,5 @@
 import { EvilIcons } from '@expo/vector-icons';
-import { useLogout } from '../login';
+import { useLogout } from 'app/auth/hooks';
 import { useTab } from './useTab';
 export const useTabItem = (item, onSelect) => {
   const logout = useLogout();

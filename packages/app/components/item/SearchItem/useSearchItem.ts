@@ -1,10 +1,10 @@
-import { useSelector } from 'react-redux';
 import { useMemo, useState } from 'react';
 import { useItems } from 'app/hooks/items';
 import { trpc } from 'app/trpc';
+import { useAuthUser } from 'app/auth/hooks';
 
 export const useSearchItem = () => {
-  const user = useSelector((state: any) => state.auth.user);
+  const user = useAuthUser()
   const [searchString, setSearchString] = useState('');
 
   const itemFilters = useMemo(() => {

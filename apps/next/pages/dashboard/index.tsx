@@ -1,6 +1,6 @@
 import Dashboard from 'app/screens/dashboard';
 
-import { AuthWrapper } from 'auth/authWrapper';
+import { AuthWrapper } from 'app/auth/AuthWrapper';
 
 // export const runtime = 'experimental-edge';
 

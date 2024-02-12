@@ -4,12 +4,13 @@ import { View, Text, SafeAreaView, TouchableOpacity } from 'react-native';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useIsMobileView } from 'app/hooks/common';
 import { useNavigate } from 'app/hooks/navigation';
-import { useAuthUser } from 'app/hooks/user/useAuthUser';
+import { useAuthUser } from 'app/auth/hooks';
 import { Button } from 'tamagui';
 import { EvilIcons } from '@expo/vector-icons';
 import SVGLogoComponent from 'app/components/logo';
 import { AuthStateListener } from 'app/auth/AuthStateListener';
 import useTheme from 'app/hooks/useTheme';
+import { DrawerActions } from '@react-navigation/native';
 
 export default function StackLayout() {
   const user = useAuthUser();
@@ -41,7 +42,7 @@ export default function StackLayout() {
                 <TouchableOpacity
                   style={styles.drawerTrigger}
                   onPress={() => {
-                    navigation.toggleDrawer();
+                    navigation.dispatch(DrawerActions.toggleDrawer());
                   }}
                 >
                   <EvilIcons
