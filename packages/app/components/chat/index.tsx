@@ -18,7 +18,7 @@ import { BaseModal, RStack } from '@packrat/ui';
 import { Box, VStack, HStack, Select } from 'native-base';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useChat } from 'app/hooks/chat/useChat';
-import { loadStyles } from './chatStyles';
+import { loadStyles } from './chat.style';
 // import { Select } from "tamagui";
 
 const MessageBubble = ({ message }) => {
