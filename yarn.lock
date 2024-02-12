@@ -2662,13 +2662,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@expo/html-elements@npm:^0.2.0":
-  version: 0.2.2
-  resolution: "@expo/html-elements@npm:0.2.2"
-  checksum: 10/b1f93315458aae46732ff07fe3cd055f64faebd12ac83a4a86abbbcc7264321dfe497ccbaf366b2299188f4f570daef5af4dd72e5d1428aef42b671232c51808
-  languageName: node
-  linkType: hard
-
 "@expo/image-utils@npm:0.3.22":
   version: 0.3.22
   resolution: "@expo/image-utils@npm:0.3.22"
@@ -8861,15 +8854,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@theme-ui/css@npm:^0.4.0-rc.1":
-  version: 0.4.0-rc.13
-  resolution: "@theme-ui/css@npm:0.4.0-rc.13"
-  dependencies:
-    csstype: "npm:^2.5.7"
-  checksum: 10/8561f443f431b45f4a9d868f5f94073eb79b53f52a08073b1334399cc1419201289d1ed7b59ae55e78770d67fb0d9ff95d0d7bbe783e84665e9597bf97cf4123
-  languageName: node
-  linkType: hard
-
 "@tmcw/togeojson@npm:^5.7.0":
   version: 5.8.1
   resolution: "@tmcw/togeojson@npm:5.8.1"
@@ -10954,7 +10938,6 @@ __metadata:
     burnt: "npm:^0.12.1"
     date-fns: "npm:^2.29.3"
     dotenv: "npm:^16.0.3"
-    dripsy: "npm:^4.3.4"
     eslint: "npm:^8.47.0"
     eslint-config-prettier: "npm:^9.0.0"
     eslint-config-standard-with-typescript: "npm:^38.0.0"
@@ -14258,13 +14241,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"csstype@npm:^2.5.7":
-  version: 2.6.21
-  resolution: "csstype@npm:2.6.21"
-  checksum: 10/bf9072344fac1b56dc390fbc410b411bbc2a03fa9c3d243a74ff5687f94777f9da03a5681ac01efc2e68b51055e2c7d6a489185a85a8f01c976a85f9eec3b75e
-  languageName: node
-  linkType: hard
-
 "csstype@npm:^3.0.2, csstype@npm:^3.1.3":
   version: 3.1.3
   resolution: "csstype@npm:3.1.3"
@@ -14875,18 +14851,6 @@ __metadata:
   version: 16.0.3
   resolution: "dotenv@npm:16.0.3"
   checksum: 10/d6788c8e40b35ad9a9ca29249dccf37fa6b3ad26700fcbc87f2f41101bf914f5193a04e36a3d23de70b1dcb8e5d5a3b21e151debace2c4cd08d868be500a1b29
-  languageName: node
-  linkType: hard
-
-"dripsy@npm:^4.3.4":
-  version: 4.3.4
-  resolution: "dripsy@npm:4.3.4"
-  dependencies:
-    "@expo/html-elements": "npm:^0.2.0"
-    "@theme-ui/css": "npm:^0.4.0-rc.1"
-    stable-hash: "npm:^0.0.2"
-    ts-toolbelt: "npm:^9.6.0"
-  checksum: 10/f83fc47972500896891c94f622db31bb90055098d1fdcb0c3f642999843129136670c87c5da2dcafec2136559499dc96a0e52d20622983423af54cbe16a6a81c
   languageName: node
   linkType: hard
 
@@ -30402,13 +30366,6 @@ __metadata:
   version: 6.15.5
   resolution: "ts-toolbelt@npm:6.15.5"
   checksum: 10/1816b11f6a4ca7b11da1e81613dda217535718862c9c7c1d9e5dbeb12abc765b6803dbc0c90ee8a5c1b782bc369e2851913005042921028d16e6ae8bf054b2da
-  languageName: node
-  linkType: hard
-
-"ts-toolbelt@npm:^9.6.0":
-  version: 9.6.0
-  resolution: "ts-toolbelt@npm:9.6.0"
-  checksum: 10/2c2dea2631dbd7372a79cccc6d09a377a6ca2f319f767fd239d2e312cd1d9165a90f8c1777a047227bfdcda6aeba3addbadce88fdfc7f43caf4534d385a43c82
   languageName: node
   linkType: hard
 
