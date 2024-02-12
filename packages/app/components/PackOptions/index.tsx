@@ -2,30 +2,38 @@ import { useState } from 'react';
 import { useRouter } from 'app/hooks/router';
 import { RStack, RIconButton, BaseModal, View } from '@packrat/ui';
 import { Entypo } from '@expo/vector-icons';
+import { useModalState } from './useModalState';
 export const PackOptions = ({ Edit, Delete, Ignore }) => {
-  const router = useRouter();
+  const { isModalOpen, openModal, closeModal } = useModalState();
+
   return (
-    <BaseModal triggerComponent={<MenuTriggerComponent />}>
-      <RStack style={{ flexDirection: 'row', alignItems: 'center' }}>
-        {Edit} Edit{' '}
-      </RStack>
-      <RStack style={{ flexDirection: 'row', alignItems: 'center' }}>
-        {Delete} Delete{' '}
-      </RStack>
-      <RStack
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'flex-end',
-        }}
+    <View>
+      <BaseModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        triggerComponent={<MenuTriggerComponent openModal={openModal} />}
       >
-        {Ignore}{' '}
-      </RStack>
-    </BaseModal>
+        <RStack style={{ flexDirection: 'row', alignItems: 'center' }}>
+          {Edit} Edit{' '}
+        </RStack>
+        <RStack style={{ flexDirection: 'row', alignItems: 'center' }}>
+          {Delete} Delete{' '}
+        </RStack>
+        <RStack
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'flex-end',
+          }}
+        >
+          {Ignore}{' '}
+        </RStack>
+      </BaseModal>
+    </View>
   );
 };
 
-const MenuTriggerComponent = ({ setIsModalOpen }) => {
+const MenuTriggerComponent = ({ openModal }) => {
   return (
     <View
       style={{
@@ -38,9 +46,7 @@ const MenuTriggerComponent = ({ setIsModalOpen }) => {
       <RIconButton
         backgroundColor="transparent"
         icon={<Entypo name="dots-three-horizontal" size={24} color="black" />}
-        onPress={() => {
-          setIsModalOpen(true);
-        }}
+        onPress={openModal}
       />
     </View>
   );

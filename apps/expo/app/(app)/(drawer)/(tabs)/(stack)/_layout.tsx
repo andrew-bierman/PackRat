@@ -10,6 +10,8 @@ import { EvilIcons } from '@expo/vector-icons';
 import SVGLogoComponent from 'app/components/logo';
 import useTheme from 'app/hooks/useTheme';
 import { DrawerActions } from '@react-navigation/native';
+import { Slot } from 'expo-router';
+import { DrawerToggleButton } from '@react-navigation/drawer';
 
 export default function StackLayout() {
   const user = useAuthUser();
@@ -17,44 +19,25 @@ export default function StackLayout() {
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
   const navigate = useNavigate();
+  // return <></>
   return (
     <Stack
       screenOptions={{
-        headerShown: true,
-        header: ({ navigation }) => (
-          <SafeAreaView style={styles.safeArea}>
-            <View style={styles.container}>
-              <View style={styles.header}>
-                <Button
-                  key={'logo-nav'}
-                  style={styles.logoContainer}
-                  onPress={() => navigate('/')}
-                  variant="outlined"
-                  chromeless
-                >
-                  <View style={styles.logoWrapper}>
-                    <SVGLogoComponent width={48} height={48} fill="#fff" />
-                  </View>
-                  <Text style={styles.logoText}>PackRat</Text>
-                </Button>
-                <TouchableOpacity
-                  style={styles.drawerTrigger}
-                  onPress={() => {
-                    navigation.dispatch(DrawerActions.toggleDrawer());
-                  }}
-                >
-                  <EvilIcons
-                    name="navicon"
-                    size={36}
-                    color={currentTheme.colors.iconColor}
-                  />
-                </TouchableOpacity>
-              </View>
-            </View>
-          </SafeAreaView>
-        ),
+        headerRight: () => <DrawerToggleButton />,
       }}
-    />
+    >
+      {/* <Stack.Screen
+        name="modal"
+        options={{
+          // https://reactnavigation.org/docs/headers#setting-the-header-title
+          title: 'Stack',
+          // http://reactnavigation.org/docs/headers#adjusting-header-styles
+
+          // https://reactnavigation.org/docs/headers#replacing-the-title-with-a-custom-component
+          presentation: 'modal',
+        }}
+      /> */}
+    </Stack>
   );
 }
 
