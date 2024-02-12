@@ -19,8 +19,7 @@ import { InformUser } from '../utils/ToastUtils';
 import useTheme from '../hooks/useTheme';
 import { useForm } from 'react-hook-form';
 import { useSession } from '../context/Auth/SessionProvider';
-import { useGoogleAuth } from 'app/hooks/login';
-import { useRegisterUser } from 'app/hooks/user';
+import { useRegisterUser, useGoogleAuth } from 'app/auth/hooks';
 
 export default function Register() {
   const { currentTheme } = useTheme();

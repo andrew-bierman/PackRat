@@ -7,6 +7,7 @@ import { convertWeight } from 'app/utils/convertWeight';
 import { RootState } from 'store/store';
 
 type WeightUnit = 'g' | 'kg' | 'oz' | 'lb' | 'lbs';
+import { useAuthUser } from 'app/auth/hooks';
 
 export const usePackTable = ({
   currentPack,
@@ -15,7 +16,7 @@ export const usePackTable = ({
   setRefetch,
   copy,
 }) => {
-  const user = useSelector((state) => state.auth.user);
+  const user = useAuthUser();
   const dispatch = useDispatch();
   let ids = [];
   if (currentPack?.items) {

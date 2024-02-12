@@ -8,6 +8,8 @@ import { loadStyles } from './appearanceStyle';
 import DemoCard from './DemoCard';
 import ThemeSwitch from './ThemeSwitch';
 import { DialogDemo } from '../../components/DialogDemo';
+import { Scroll } from '@tamagui/lucide-icons';
+import { ExampleDropdown } from '@packrat/ui';
 
 export default function AppearanceContainer() {
   const { isEnabled, toggleSwitch, currentTheme } = useAppearance();
@@ -40,6 +42,7 @@ export default function AppearanceContainer() {
             <Box>
               <Text>Kitchen Sink</Text>
               <DialogDemo />
+              <ExampleDropdown />
             </Box>
           )}
         </Box>

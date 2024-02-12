@@ -1,6 +1,6 @@
 import React from 'react';
 import Feed from 'app/screens/feed/Feed';
-import { AuthWrapper } from 'auth/authWrapper';
+import { AuthWrapper } from 'app/auth/AuthWrapper';
 
 // export const runtime = 'experimental-edge'
 

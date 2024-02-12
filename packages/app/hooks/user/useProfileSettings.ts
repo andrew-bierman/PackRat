@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import * as ImagePicker from 'expo-image-picker';
 import { editUser, updatePassword } from '../../store/authStore';
-import { useAuthUser } from './useAuthUser';
+import { useAuthUser } from '../../auth/hooks';
 
 const PROFILE_SETTINGS_DEFAULTS = {
   profileImage: '',

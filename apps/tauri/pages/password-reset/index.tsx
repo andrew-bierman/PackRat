@@ -1,5 +1,5 @@
 import { RequestPasswordReset } from 'app/components/password-reset';
-import { AuthWrapper } from 'auth/authWrapper';
+import { AuthWrapper } from 'app/auth/AuthWrapper';
 
 // export const runtime = 'experimental-edge'
 

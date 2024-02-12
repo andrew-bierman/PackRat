@@ -2,7 +2,7 @@ import React from 'react';
 import { RStack, RText } from '@packrat/ui';
 import LargeCard from '../card/LargeCard';
 import { SearchInput } from '../SearchInput';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 import { theme } from '../../theme';
 import useTheme from '../../hooks/useTheme';
 import { useSelector, useDispatch } from 'react-redux';
@@ -74,7 +74,9 @@ const HeroSection = ({ onSelect }) => {
           title: 'N/A',
           subtitle: 'N/A',
           source:
-            'https://github.com/andrew-bierman/PackRat/blob/main/apps/expo/assets/topographical-pattern.jpg?raw=true',
+            Platform.OS === 'web'
+              ? 'https://github.com/andrew-bierman/PackRat/blob/main/apps/expo/assets/topographical-pattern.png?raw=true'
+              : require('app/assets/topographical-pattern.png'),
           alt: 'hero',
         }}
       >
