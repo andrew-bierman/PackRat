@@ -3,7 +3,7 @@ import { FlatList, Platform, View } from 'react-native';
 import { Cell, Row, Table } from 'react-native-table-component';
 import { usePackTable } from 'app/hooks/packs/usePackTable';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import loadStyles from './packtable.styles';
+import loadStyles from './packtable.style';
 import {
   TotalWeightBox,
   WeightUnitDropdown,

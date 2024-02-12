@@ -3,7 +3,7 @@ import { View, Platform, ScrollView } from 'react-native';
 import { Desktop, Mobile, Tablet } from '../../media';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import loadStyles from './about.styles.ts';
+import loadStyles from './about.style';
 import AboutContent from './AboutContent';
 
 export default function About() {

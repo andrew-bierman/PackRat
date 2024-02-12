@@ -5,7 +5,7 @@ import { RButton, RStack } from '@packrat/ui';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import useAbout from 'app/hooks/about/useAbout';
-import loadStyles from './about.styles.ts';
+import loadStyles from './about.style';
 
 const AboutContent = ({ desktopContainer, isMobile }) => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
