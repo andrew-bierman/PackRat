@@ -1,6 +1,6 @@
 import { AuthLoader } from 'app/auth/AuthLoader';
 import { Redirect } from 'app/components/Redirect';
-import {Text} from '@packrat/ui';
+import { Text } from '@packrat/ui';
 
 type Props = {
   children?: React.ReactNode;

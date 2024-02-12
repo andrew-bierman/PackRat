@@ -20,7 +20,11 @@ export const useGEOLocationSearch = (): [
   const setGEOLocation = (geoJSON) => {
     const newSearchParams: GeoSearchParams = {};
 
-    if (geoJSON?.properties?.osm_id && geoJSON.properties.osm_type && geoJSON.properties.name) {
+    if (
+      geoJSON?.properties?.osm_id &&
+      geoJSON.properties.osm_type &&
+      geoJSON.properties.name
+    ) {
       newSearchParams.osmId = geoJSON.properties.osm_id;
       newSearchParams.osmType = geoJSON.properties.osm_type;
       newSearchParams.name = geoJSON.properties.name;
