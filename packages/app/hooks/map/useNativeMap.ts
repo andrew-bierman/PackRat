@@ -3,6 +3,7 @@ import { Alert } from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
 import { offlineManager } from '@rnmapbox/maps';
 import { useToast } from 'native-base';
+import { Dimensions } from 'react-native';
 
 import {
   calculateZoomLevel,
@@ -31,6 +32,16 @@ export const useNativeMap = ({ shape: shapeProp }) => {
   const [trailCenterPoint, setTrailCenterPoint] = useState(
     findTrailCenter(shape),
   );
+
+  const dw = Dimensions.get('screen').width;
+  const fullMapDimension = { width: dw || '100%', height: '100%' };
+  const previewMapStyle = {
+    width: dw * 0.9,
+    height: 220,
+    borderRadius: 20,
+    overflow: 'hidden',
+    alignSelf: 'center',
+  };
 
   const toast = useToast();
 
@@ -155,5 +166,8 @@ export const useNativeMap = ({ shape: shapeProp }) => {
     zoomLevel,
     getPosition,
     onDownload,
+    fullMapDimension,
+    previewMapStyle,
+    onMapPress,
   };
 };

@@ -39,14 +39,14 @@ const loadStyles = (theme) => {
   const { currentTheme } = theme;
   return {
     container: {
-      marginRight: 10,
+      margin: 10,
     },
     card: {
       flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
-      paddingHorizontal: 40,
-      paddingVertical: 60,
+      // paddingHorizontal: 40,
+      // paddingVertical: 60,
       backgroundColor: currentTheme.colors.primary,
     },
     icon: {
