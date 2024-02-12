@@ -16,6 +16,7 @@ import { DialogDemo } from '../../components/DialogDemo';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import useAppearance from 'app/hooks/appearance/useAppearance';
 import { Scroll } from '@tamagui/lucide-icons';
+import { ExampleDropdown } from '@packrat/ui';
 
 export default function AppearanceContainer() {
   const { isEnabled, toggleSwitch, currentTheme } = useAppearance();
@@ -71,6 +72,7 @@ export default function AppearanceContainer() {
             <Box>
               <Text>Kitchen Sink</Text>
               <DialogDemo />
+              <ExampleDropdown />
             </Box>
           )}
         </Box>
