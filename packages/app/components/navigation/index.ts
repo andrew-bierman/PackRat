@@ -1,2 +1,3 @@
 export { Navigation } from './Navigation';
-export { Tab } from './Tab';
+export { Tabs } from './Tabs';
+export { Drawer } from './Drawer';
