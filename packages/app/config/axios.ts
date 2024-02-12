@@ -2,10 +2,7 @@ import axios from 'axios';
 import { api } from 'app/constants/api';
 import { store } from '../store/store';
 import { InformUser } from 'app/utils/ToastUtils';
-import {
-  dispatchProgress,
-  progressActions,
-} from 'app/global-state/progressStore';
+import { dispatchProgress, progressActions } from '../atoms/progressStore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 let activeRequests = new Map();
