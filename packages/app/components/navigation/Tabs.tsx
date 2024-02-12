@@ -23,7 +23,7 @@ export const Tabs = () => {
     <ExpoTabs
       screenOptions={{
         headerShown: false,
-        headerLeft: () => <DrawerToggleButton />,
+        headerRight: () => <DrawerToggleButton />,
       }}
     >
       <ExpoTabs.Screen
@@ -65,7 +65,7 @@ export const Tabs = () => {
         name="(stack)"
         options={{
           href: null,
-          headerShown: true,
+          headerShown: false,
           headerTitle: formatHeaderTitle(),
         }}
       />
