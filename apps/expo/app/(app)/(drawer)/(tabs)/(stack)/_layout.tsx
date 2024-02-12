@@ -12,6 +12,7 @@ import { AuthStateListener } from 'app/auth/AuthStateListener';
 import useTheme from 'app/hooks/useTheme';
 import { DrawerActions } from '@react-navigation/native';
 import { Slot } from 'expo-router';
+import { DrawerToggleButton } from '@react-navigation/drawer';
 
 export default function StackLayout() {
   const user = useAuthUser();
@@ -21,8 +22,12 @@ export default function StackLayout() {
   const navigate = useNavigate();
   // return <></>
   return (
-    <Stack>
-      <Stack.Screen
+    <Stack
+      screenOptions={{
+        headerRight: () => <DrawerToggleButton />,
+      }}
+    >
+      {/* <Stack.Screen
         name="modal"
         options={{
           // https://reactnavigation.org/docs/headers#setting-the-header-title
@@ -32,7 +37,7 @@ export default function StackLayout() {
           // https://reactnavigation.org/docs/headers#replacing-the-title-with-a-custom-component
           presentation: 'modal',
         }}
-      />
+      /> */}
     </Stack>
   );
   return <Slot />;
