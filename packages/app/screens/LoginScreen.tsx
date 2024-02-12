@@ -13,7 +13,7 @@ import { Link } from 'solito/link';
 import { InformUser } from '../utils/ToastUtils';
 import useTheme from '../hooks/useTheme';
 import { InputText, InputTextRules } from '@packrat/ui';
-import { useGoogleAuth, useLogin } from 'app/hooks/login';
+import { useGoogleAuth, useLogin } from 'app/auth/hooks';
 
 const demoUser = {
   email: 'zoot3@email.com',
@@ -46,7 +46,13 @@ export default function Login() {
   return (
     <ScrollView>
       <RStack>
-        <View style={{ width: '100%', alignItems: 'center' }}>
+        <RStack
+          style={{
+            width: '100%',
+            alignItems: 'center',
+            backgroundColor: 'white',
+          }}
+        >
           <View style={{ paddingTop: 32, width: '90%', maxWidth: 290 }}>
             <RHeading fontSize={32} color="#212121" fontWeight="semibold">
               Welcome
@@ -186,7 +192,7 @@ export default function Login() {
               {/* Demo Login for Development end */}
             </RStack>
           </View>
-        </View>
+        </RStack>
       </RStack>
     </ScrollView>
   );

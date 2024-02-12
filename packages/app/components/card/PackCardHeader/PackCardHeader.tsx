@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { CustomCardHeader } from '../CustomCardHeader';
-import { useAuthUser } from 'app/hooks/user/useAuthUser';
+import { useAuthUser } from 'app/auth/hooks';
 import { ThreeDotsMenu, YStack, Button, EditableText } from '@packrat/ui';
 import { useDeletePack, useFetchSinglePack } from 'app/hooks/packs';
 import { usePackTitleInput } from './usePackTitleInput';

@@ -4,7 +4,6 @@ import DropdownComponent from '../Dropdown';
 import { AddItem } from '../item/AddItem';
 import { TableContainer } from '../pack_table/Table';
 // import { useAuth } from "../../auth/provider";
-import { useSelector } from 'react-redux';
 import { useUserPacks } from '../../hooks/packs/useUserPacks';
 import {
   fetchUserPacks,
@@ -17,16 +16,18 @@ import { View } from 'react-native';
 import { AddItemModal } from './AddItemModal';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useSearchParams } from 'app/hooks/common';
+import { useAuthUser } from 'app/auth/hooks';
 
 export default function PackContainer({ isCreatingTrip = false }) {
   const dispatch = useDispatch();
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
 
-  const user = useSelector((state) => state.auth.user);
   const searchParams = useSearchParams();
   const [currentPackId, setCurrentPackId] = useState(
     searchParams.get('packId'),
   );
+  const user = useAuthUser();
+
   const [refetch, setRefetch] = useState(false);
   const styles = useCustomStyles(loadStyles);
 

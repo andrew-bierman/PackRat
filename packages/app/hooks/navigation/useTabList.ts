@@ -5,7 +5,7 @@ import {
   MaterialIcons,
   AntDesign,
 } from '@expo/vector-icons';
-import { useAuthUser } from '../user/useAuthUser';
+import { useAuthUser } from 'app/auth/hooks';
 
 export const useTabList = () => {
   const user = useAuthUser();

@@ -1,9 +1,10 @@
 // useMatchesCurrentUser.ts
 import { useSelector } from 'react-redux';
 import { type RootState } from '../store/store';
+import { useAuthUser } from 'app/auth/hooks';
 
 export const useMatchesCurrentUser = (ownerId: string): boolean => {
-  const currentUser = useSelector((state: RootState) => state.auth.user);
+  const currentUser = useAuthUser();
 
   console.log('currentUse---r', currentUser);
   const currentUserId = currentUser?._id;
