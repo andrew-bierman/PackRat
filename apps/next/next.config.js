@@ -112,6 +112,7 @@ const nextConfig = function () {
       '@rneui/themed',
       '@rneui/base',
       'zeego',
+      'react-native-ratings',
     ],
     experimental: {
       scrollRestoration: true,
