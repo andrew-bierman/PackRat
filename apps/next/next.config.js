@@ -111,8 +111,9 @@ const nextConfig = function () {
       // End remove section
       '@rneui/themed',
       '@rneui/base',
-      'zeego',
       'react-native-ratings',
+      'react-native-size-matters',
+      'zeego',
     ],
     experimental: {
       scrollRestoration: true,
