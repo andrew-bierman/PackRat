@@ -95,6 +95,7 @@
     "fuse.js": "^6.6.2",
     "lodash": "^4.17.21",
     "mapbox-gl": "1.13.3",
+    "moti": "^0.27.2",
     "native-base": "^3.4.28",
     "normalize-css-color": "^1.0.2",
     "osmtogeojson": "^3.0.0-beta.5",

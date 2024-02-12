@@ -111,6 +111,7 @@ const nextConfig = function () {
       // End remove section
       '@rneui/themed',
       '@rneui/base',
+      'zeego',
     ],
     experimental: {
       scrollRestoration: true,
