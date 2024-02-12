@@ -3,14 +3,35 @@ import { ComponentProps, createContext, useContext } from 'react';
 import { useCallback, useMemo } from 'react';
 import Ionicons from '@expo/vector-icons/build/Ionicons';
 import RButton from '../RButton';
+import { View } from 'react-native';
+import { styled } from 'tamagui';
 
 const DropdownMenuRoot = Dropdown.Root;
 
 const DropdownMenuTrigger = Dropdown.Trigger;
 
-const DropdownMenuContent = Dropdown.Content;
+type ContentProps = ComponentProps<(typeof Dropdown)['Content']>;
 
-const DropdownMenuItem = Dropdown.Item;
+const CustomContent = styled(Dropdown.Content, {
+  padding: 10,
+  backgroundColor: 'white',
+});
+
+const DropdownMenuContent = Dropdown.create(CustomContent, 'Content');
+
+type ItemProps = React.ComponentProps<(typeof Dropdown)['Item']>;
+
+const CustomItem = styled(Dropdown.Item, {
+  padding: 10,
+  backgroundColor: 'white',
+  flexDirection: 'row',
+  alignItems: 'center',
+  hoverStyle: {
+    backgroundColor: 'gray',
+  },
+});
+
+const DropdownMenuItem = Dropdown.create(CustomItem, 'Item');
 
 const DropdownMenuItemTitle = Dropdown.ItemTitle;
 
@@ -41,7 +62,7 @@ const ExampleDropdown = () => {
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger>
-        <RButton>Open</RButton>
+        <RButton>Open Dropdown</RButton>
       </DropdownMenu.Trigger>
       <DropdownMenu.Content>
         <DropdownMenu.Item key="1">Item 1</DropdownMenu.Item>
