@@ -38,15 +38,6 @@ Mapbox.setAccessToken(MAPBOX_ACCESS_TOKEN);
 
 // console.log("MAPBOX_ACCESS_TOKEN", MAPBOX_ACCESS_TOKEN, typeof MAPBOX_ACCESS_TOKEN)
 // consts
-const dw = Dimensions.get('screen').width;
-const fullMapDimension = { width: dw, height: '100%' };
-const previewMapStyle = {
-  width: dw * 0.9,
-  height: 220,
-  borderRadius: 20,
-  overflow: 'hidden',
-  alignSelf: 'center',
-};
 
 // MapView.setConnected(true);
 
@@ -74,6 +65,8 @@ function NativeMap({ shape: shapeProp }) {
     zoomLevel,
     getPosition,
     onDownload,
+    fullMapDimension,
+    previewMapStyle,
   } = useNativeMap({ shape: shapeProp });
 
   function CircleCapComp() {
