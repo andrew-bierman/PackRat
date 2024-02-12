@@ -8,10 +8,10 @@ export const useSearchParams = () => {
   const searchParams = useSearchParamsSolito();
   const updateSearchParams = useUpdateSearchParams();
   const timerId = useRef(null);
-  const queue = useRef(Object.fromEntries(searchParams.entries()));
+  const queue = useRef(Object.fromEntries(searchParams?.entries?.() || []));
 
   const get = (key) => {
-    return searchParams.get(key);
+    return searchParams?.get(key);
   };
 
   const updateQue = (newQue) => {
@@ -27,7 +27,7 @@ export const useSearchParams = () => {
   };
 
   const set = (key, value) => {
-    updateQue({ ...queue.current, [key]: value });
+    updateQue({ ...queue.current, [key]: String(value) });
   };
 
   const reset = (params) => {

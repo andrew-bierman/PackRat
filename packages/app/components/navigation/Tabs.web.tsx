@@ -1,14 +1,14 @@
 import React from 'react';
-import { Tabs } from 'expo-router/tabs';
+import { Tabs as ExpoTabs } from 'expo-router/tabs';
 import { TabList } from './TabList';
 
-export const Tab = () => {
+export const Tabs = () => {
   return (
-    <Tabs
+    <ExpoTabs
       screenOptions={{
         headerShown: false,
       }}
       tabBar={() => <TabList />}
-    ></Tabs>
+    />
   );
 };
