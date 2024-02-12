@@ -8,7 +8,7 @@ import { DeletePackItemModal } from './DeletePackItemModal';
 import { EditPackItemModal } from './EditPackItemModal';
 import { formatNumber } from 'app/utils/formatNumber';
 import { AddItem } from '../item/AddItem';
-import loadStyles from './PackTableStyles';
+import loadStyles from './packtable.styles';
 import { IgnoreItemCheckbox } from './TableHelperComponents';
 
 const TableItem = ({

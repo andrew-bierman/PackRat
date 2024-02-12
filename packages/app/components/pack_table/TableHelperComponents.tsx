@@ -7,7 +7,7 @@ import useTheme from 'app/hooks/useTheme';
 import DropdownComponent from '../Dropdown';
 import { categoryIcons } from 'app/constants/pack/icons';
 import { formatNumber } from 'app/utils/formatNumber';
-import loadStyles from './PackTableStyles';
+import loadStyles from './packtable.styles';
 import React from 'react';
 
 const TitleRow = ({ title }) => {

@@ -8,7 +8,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { FAQ_ITEMS } from './constants';
 import { LandingPageAccordion } from './LandingPageAccordion';
-import loadStyles from './landingPageStyles';
+import loadStyles from './landingpage.styles';
 
 const LandingPage = () => {
   const { currentTheme } = useTheme();
