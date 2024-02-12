@@ -18,6 +18,7 @@ import { BaseModal, RStack } from '@packrat/ui';
 import { Box, VStack, HStack, Select } from 'native-base';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useChat } from 'app/hooks/chat/useChat';
+import { loadStyles } from './chat.style';
 // import { Select } from "tamagui";
 
 const MessageBubble = ({ message }) => {
@@ -29,6 +30,20 @@ const MessageBubble = ({ message }) => {
         {message.content}
       </Text>
     </View>
+  );
+};
+
+interface MessageListProps {
+  messages: any[];
+}
+
+const MessageList = ({ messages }: MessageListProps) => {
+  return (
+    <FlatList
+      data={messages}
+      renderItem={({ item }) => <MessageBubble message={item} />}
+      keyExtractor={(item, index) => index.toString()}
+    />
   );
 };
 
@@ -108,12 +123,7 @@ const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
           // </ScrollView>
         )}
       </RStack>
-      <FlatList
-        data={parsedMessages}
-        renderItem={({ item }) => <MessageBubble message={item} />}
-        keyExtractor={(item, index) => index.toString()}
-        contentContainerStyle={styles.flatList}
-      />
+      <MessageList messages={parsedMessages} />
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
@@ -139,79 +149,6 @@ const ChatModalTrigger = () => {
       </BaseModal>
     </View>
   );
-};
-
-const loadStyles = (theme) => {
-  const { currentTheme } = theme;
-
-  return {
-    container: { flex: 1, padding: 16 },
-    headerText: { fontSize: 24, fontWeight: 'bold' },
-    flatList: { flexGrow: 1, justifyContent: 'flex-end' },
-    inputContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      marginTop: 8,
-    },
-    input: {
-      flex: 1,
-      height: 40,
-      borderColor: currentTheme.colors.border,
-      borderWidth: 1,
-      borderRadius: 8,
-      paddingHorizontal: 12,
-    },
-    sendButton: {
-      backgroundColor: currentTheme.colors.background,
-      paddingHorizontal: 16,
-      paddingVertical: 8,
-      borderRadius: 8,
-      marginLeft: 8,
-    },
-    sendText: { color: currentTheme.colors.white },
-    aiBubble: {
-      alignSelf: 'flex-start',
-      backgroundColor: currentTheme.colors.primary,
-      borderRadius: 8,
-      paddingHorizontal: 12,
-      paddingVertical: 8,
-      marginVertical: 4,
-      marginHorizontal: 16,
-    },
-    userBubble: {
-      alignSelf: 'flex-end',
-      backgroundColor: '#e0e0e0',
-      borderRadius: 8,
-      paddingHorizontal: 12,
-      paddingVertical: 8,
-      marginVertical: 4,
-      marginHorizontal: 16,
-    },
-    aiText: { color: currentTheme.colors.white },
-    userText: { color: 'black' },
-    chatSelector: {
-      backgroundColor: '#e0e0e0',
-      padding: 10,
-      marginVertical: 5,
-      borderRadius: 5,
-    },
-    chatSelectorText: { fontSize: 16 },
-    chatSelectorContainer: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-    },
-    newChatButton: {
-      backgroundColor: currentTheme.colors.background,
-      paddingHorizontal: 16,
-      paddingVertical: 8,
-      borderRadius: 8,
-      marginLeft: 8,
-    },
-    newChatButtonText: {
-      color: currentTheme.colors.white,
-    },
-  };
 };
 
 export default ChatModalTrigger;
