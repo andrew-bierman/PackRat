@@ -1,7 +1,17 @@
 import { queryTrpc } from 'app/trpc';
 
 export const useEditPack = () => {
-  const { mutate: mutatePack } = queryTrpc.editPack.useMutation();
+  const utils = queryTrpc.useUtils();
 
-  return mutatePack;
+  const mutation = queryTrpc.editPack.useMutation();
+
+  const editPack = (updatedPack) => {
+    mutation.mutate(updatedPack, {
+      onSuccess: () => {
+        utils.getPacks.invalidate();
+      },
+    });
+  };
+
+  return { editPack, ...mutation };
 };
