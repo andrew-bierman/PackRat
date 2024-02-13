@@ -1,8 +1,13 @@
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { View, Text } from 'react-native';
 
+interface SidebarProps {
+  data: { title?: string; subtext?: string }[];
+  currentStep: number;
+}
+
 // /TODO: Review this logic.
-export const Sidebar = ({ data, currentStep }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ data, currentStep }) => {
   const displayData = Object.values(data).slice(0, currentStep + 1);
   const styles = useCustomStyles(loadStyles);
 

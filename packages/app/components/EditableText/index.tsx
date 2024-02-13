@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { updatePack } from '../../store/packsStore';
 // import { editTrip } from '../../store/tripsStore';
 import { useEditTrips } from 'app/hooks/trips';
-import LoadingPlaceholder from '../loading-placeholder';
+import LoadingPlaceholder from '../loader';
 interface EditableInputProps {
   data: {
     _id: string;
