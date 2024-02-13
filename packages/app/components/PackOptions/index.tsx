@@ -2,7 +2,18 @@ import { View } from 'react-native';
 import { RStack, RIconButton, BaseModal } from '@packrat/ui';
 import { Entypo } from '@expo/vector-icons';
 import { useModalState } from './useModalState';
-export const PackOptions = ({ Edit, Delete, Ignore }) => {
+
+interface PackOptionsProps {
+  Edit: React.ReactNode;
+  Delete: React.ReactNode;
+  Ignore: React.ReactNode;
+}
+
+export const PackOptions: React.FC<PackOptionsProps> = ({
+  Edit,
+  Delete,
+  Ignore,
+}) => {
   const { isModalOpen, openModal, closeModal } = useModalState();
 
   return (
