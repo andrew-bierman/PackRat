@@ -1,18 +1,15 @@
 import { useRouter } from 'app/hooks/router';
-import { useDispatch } from 'react-redux';
-import { deletePack } from 'app/store/packsStore';
+import { queryTrpc } from 'app/trpc';
 
 export const useDeletePack = (id) => {
-  const dispatch = useDispatch();
+  const { mutateAsync: deletePack } = queryTrpc.deletePack.useMutation();
   const router = useRouter();
 
-  const handleDeletePack = () => {
-    dispatch(
-      deletePack({
-        id,
-      }),
-    );
-    router.replace('/feed');
+  const handleDeletePack = async () => {
+    try {
+      await deletePack(id);
+      router.replace('/packs');
+    } catch {}
   };
 
   return handleDeletePack;

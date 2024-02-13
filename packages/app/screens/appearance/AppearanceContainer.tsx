@@ -1,21 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { VStack, Box, Text, Switch } from 'native-base';
-import { StyleSheet } from 'react-native';
-import useTheme from '../../hooks/useTheme';
-import {
-  Paragraph,
-  Card,
-  H2,
-  XStack,
-  Button,
-  Image,
-  ScrollView,
-} from 'tamagui';
+import { ScrollView } from 'tamagui';
 import { Card as RNPCard } from 'react-native-paper';
-import { DialogDemo } from '../../components/DialogDemo';
-import useCustomStyles from 'app/hooks/useCustomStyles';
 import useAppearance from 'app/hooks/appearance/useAppearance';
-import { Scroll } from '@tamagui/lucide-icons';
+import useCustomStyles from 'app/hooks/useCustomStyles';
+import { loadStyles } from './appearance.style';
+import DemoCard from './DemoCard';
+import ThemeSwitch from './ThemeSwitch';
+import { DialogDemo } from '../../components/DialogDemo';
 
 export default function AppearanceContainer() {
   const { isEnabled, toggleSwitch, currentTheme } = useAppearance();
@@ -26,42 +18,19 @@ export default function AppearanceContainer() {
     <ScrollView>
       <VStack style={styles.mainContainer}>
         <Box style={styles.infoSection}>
-          <Text style={{ color: currentTheme.colors.drawerIconColor }}>
-            Theme Changer
-          </Text>
-          <Switch
-            trackColor={{ false: '#767577', true: '#81b0ff' }}
-            thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={toggleSwitch}
-            value={isEnabled}
+          <ThemeSwitch
+            isEnabled={isEnabled}
+            toggleSwitch={toggleSwitch}
+            currentTheme={currentTheme}
           />
-          <Text style={{ color: currentTheme.colors.drawerIconColor }}>
-            {isEnabled ? 'Dark Mode' : 'Light Mode'}
-          </Text>
-          <DemoCard
-            // animation="bouncy"
-            size="$4"
-            width={250}
-            height={300}
-            scale={0.9}
-            hoverStyle={{ scale: 0.925 }}
-            pressStyle={{ scale: 0.875 }}
-          />
-          <Box>
-            <Box
-              alignSelf="center" // bg="primary.500"
-              _text={{
-                fontSize: 'md',
-                fontWeight: 'medium',
-                color: 'amber.100',
-                letterSpacing: 'lg',
-              }}
-              p={4}
-              bg={['primary.500']}
-            >
-              This is a Box from Native Base
-            </Box>
+          <DemoCard />
+          <Box
+            alignSelf="center"
+            _text={styles.nativeBaseBox}
+            p={4}
+            bg={['primary.500']}
+          >
+            This is a Box from Native Base
           </Box>
           ;{/* Paper */}
           <RNPCard>
@@ -78,35 +47,3 @@ export default function AppearanceContainer() {
     </ScrollView>
   );
 }
-
-export function DemoCard(props) {
-  return (
-    <Card elevate size="$4" bordered {...props}>
-      <Card.Header padded>
-        <H2>Sony A7IV</H2>
-        <Paragraph theme="alt2">Now available</Paragraph>
-      </Card.Header>
-      <Card.Footer padded>
-        <XStack flex={1} />
-        <Button borderRadius="$10">Purchase</Button>
-      </Card.Footer>
-      {/* <Card.Background>
-
-      </Card.Background> */}
-    </Card>
-  );
-}
-const loadStyles = () => ({
-  mainContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 25,
-  },
-  infoSection: {
-    flexDirection: 'column',
-    alignItems: 'center',
-    borderRadius: 12,
-    padding: 20,
-  },
-});

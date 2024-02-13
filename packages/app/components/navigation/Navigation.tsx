@@ -1,27 +1,44 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, SafeAreaView } from 'react-native';
-import { AuthStateListener } from '../../auth/AuthStateListener';
-import { Drawer } from './Drawer';
+import {
+  View,
+  Text,
+  SafeAreaView,
+  TouchableOpacity,
+  Platform,
+} from 'react-native';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useIsMobileView } from 'app/hooks/common';
 import { useNavigate } from 'app/hooks/navigation';
-import { useAuthUser } from 'app/hooks/user/useAuthUser';
+import { useAuthUser } from 'app/auth/hooks';
 import { NavigationList } from './NavigationList';
 import { Button } from 'tamagui';
 import SVGLogoComponent from '../../components/logo';
-import { Platform } from 'react-native';
-import { Image } from 'solito/image';
+import { Drawer } from './Drawer';
+import { EvilIcons } from '@expo/vector-icons';
+import useTheme from '../../hooks/useTheme';
 
 export const Navigation = () => {
   const user = useAuthUser();
   const isMobileView = useIsMobileView();
+  const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
   const navigate = useNavigate();
-
-  return (
+  return isMobileView ? (
+    <>
+      {Platform.OS === 'web' ? (
+        <SafeAreaView style={styles.safeArea}>
+          <View style={styles.container}>
+            <Text style={styles.logoText}>PackRat</Text>
+            <Drawer />
+          </View>
+        </SafeAreaView>
+      ) : (
+        <Drawer />
+      )}
+    </>
+  ) : (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        {user && <AuthStateListener />}
         <View style={styles.header}>
           <Button
             key={'logo-nav'}
@@ -30,24 +47,21 @@ export const Navigation = () => {
             variant="outlined"
             chromeless
           >
-            {/* FIX ME */}
             <View style={styles.logoWrapper}>
+              {/* FIX ME */}
               {Platform.OS === 'web' ? (
+                // <SVGLogoComponent />
                 <></>
               ) : (
-                <SVGLogoComponent width={48} height={48} fill="#fff" />
+                // <Text style={styles.logoText}>PackRat</Text>
+                <></>
               )}
             </View>
             <Text style={styles.logoText}>PackRat</Text>
           </Button>
-
-          {isMobileView ? (
-            <Drawer />
-          ) : (
-            <View style={styles.menuBar}>
-              <NavigationList />
-            </View>
-          )}
+          <View style={styles.menuBar}>
+            <NavigationList />
+          </View>
         </View>
       </View>
     </SafeAreaView>
@@ -58,22 +72,30 @@ const loadStyles = (theme) => {
   const { currentTheme } = theme;
 
   return {
+    drawerStyles: {
+      backgroundColor: currentTheme.colors.background,
+    },
     safeArea: {
       backgroundColor: currentTheme.colors.background,
     },
     container: {
       width: '100%',
+      maxWidth: '100%', // Ensure container does not exceed the viewport width
+      flex: 1, // Ensure container can grow to fit content
       backgroundColor: currentTheme.colors.background,
-      flexDirection: 'row',
+      flexDirection: 'row', // Keep flexDirection as row for alignment
       justifyContent: 'space-between',
       alignItems: 'center',
+      flexWrap: 'wrap', // Allow items to wrap
+      height: 60, // Ensure container takes full height of its container
+      padding: 16,
     },
     header: {
-      flexDirection: 'row',
+      flexDirection: 'row', // Keep flexDirection as row for initial alignment
       alignItems: 'center',
       justifyContent: 'space-between',
-      padding: 16,
-      width: '100%',
+      width: '100%', // Ensure header takes full width of its container
+      flexWrap: 'wrap', // Allow header items to wrap
     },
     logoContainer: {
       flexDirection: 'row',
@@ -92,17 +114,8 @@ const loadStyles = (theme) => {
       alignItems: 'center',
       justifyContent: 'flex-end',
       paddingHorizontal: 16,
-      height: 60,
-    },
-    menuBarItem: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: 8,
-      paddingHorizontal: 12,
-    },
-    menuBarItemText: {
-      color: currentTheme.colors.text,
-      fontSize: 18,
+      flex: 1, // Keep flexible but consider its behavior with wrapping,
+      flexWrap: 'wrap', // Allow items to wrap
     },
     drawerTrigger: {},
     menuBarItemActive: {

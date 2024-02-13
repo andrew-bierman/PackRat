@@ -1,11 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { View, Text } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
 import { format } from 'date-fns';
-import { fetchSinglePack } from '../../store/singlePackStore';
 import { CustomCard } from '../card';
 
-export const DetailsComponent = ({ type, data, additionalComps, link }) => {
+interface DetailsComponent {
+  type: string;
+  data: any; // Need type for this
+  isLoading: boolean;
+  error: Error;
+  additionalComps: React.JSX.Element;
+  link: string;
+}
+
+export const DetailsComponent = ({
+  type,
+  data,
+  isLoading,
+  error,
+  additionalComps,
+  link,
+}: DetailsComponent) => {
   const renderDetails = () => {
     switch (type) {
       case 'pack':
@@ -26,6 +40,7 @@ export const DetailsComponent = ({ type, data, additionalComps, link }) => {
                 </>
               }
               footer={data?.details}
+              destination={null}
               type="pack"
             />
           </>

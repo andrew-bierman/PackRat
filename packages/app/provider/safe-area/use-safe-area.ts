@@ -1,6 +1,6 @@
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-const useSafeArea = useSafeAreaInsets
+const useSafeArea = useSafeAreaInsets;
 
 // `export { useSafeAreaInsets as useSafeArea }` breaks autoimport, so do this instead
-export { useSafeArea }
+export { useSafeArea };

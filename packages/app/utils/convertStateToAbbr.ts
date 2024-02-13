@@ -5,7 +5,7 @@
  * @param {string} to - The conversion type. Possible values are "abbr" and "name".
  * @return {string} The converted region name or abbreviation.
  */
-export default function abbrRegion(input, to) {
+export default function abbrRegion(input: string, to: string) {
   const states = [
     ['Alabama', 'AL'],
     ['Alaska', 'AK'],

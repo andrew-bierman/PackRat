@@ -7,7 +7,7 @@ import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { usePasswordResetForm } from 'app/hooks/password-reset';
 
-export const PasswordResetForm = ({ token }) => {
+export const PasswordResetForm = ({ token }: { token: string }) => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);

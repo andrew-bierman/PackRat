@@ -6,7 +6,7 @@ import {
   Entypo,
   Fontisto,
 } from '@expo/vector-icons';
-import { useAuthUser } from '../user/useAuthUser';
+import { useAuthUser } from '../../auth/hooks';
 import { Platform } from 'react-native';
 
 export const useNavigationList = () => {

@@ -1,27 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { FlatList, View, ScrollView, Platform } from 'react-native';
+import React, { useState } from 'react';
+import { FlatList, View, Platform } from 'react-native';
 import Card from '../../components/feed/FeedCard';
-import {
-  getPublicPacks,
-  getPublicTrips,
-  getFavoritePacks,
-} from '../../store/feedStore';
-import {
-  changePackStatus,
-  fetchUserPacks,
-  selectAllPacks,
-} from '../../store/packsStore';
 // import { fetchUserTrips, selectAllTrips } from '../../store/tripsStore';
 import { usefetchTrips } from 'app/hooks/trips';
 import { useRouter } from 'app/hooks/router';
 import { fuseSearch } from '../../utils/fuseSearch';
-import { fetchUserFavorites } from '../../store/favoritesStore';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import FeedSearchFilter from 'app/components/feed/FeedSearchFilter';
 import { useFeed } from 'app/hooks/feed';
 import { RefreshControl } from 'react-native';
 import { RText } from '@packrat/ui';
+import { useAuthUser } from 'app/auth/hooks';
 
 const URL_PATHS = {
   userPacks: '/pack/',
@@ -49,12 +38,8 @@ const Feed = ({ feedType = 'public' }) => {
 
   const [refreshing, setRefreshing] = useState(false);
 
-  const dispatch = useDispatch();
-  const ownerId = useSelector((state) => state.auth.user?._id);
-  // const publicPacksData = useSelector((state) => state.feed.publicPacks);
-  // const userPacksData = useSelector(selectAllPacks);
-  // const publicTripsData = useSelector((state) => state.feed.publicTrips);
-  // const userTripsData = useSelector(selectAllTrips);
+  const user = useAuthUser();
+  const ownerId = user?._id;
 
   const styles = useCustomStyles(loadStyles);
   const { data, error, isLoading, refetch } = useFeed(
@@ -171,13 +156,16 @@ const Feed = ({ feedType = 'public' }) => {
             <Card key={item?._id} type={item?.type} {...item} />
           )}
           ListHeaderComponent={() => feedSearchFilterComponent}
-          ListEmptyComponent={() => <RText>{ERROR_MESSAGES[feedType]}</RText>}
+          ListEmptyComponent={() => (
+            <RText style={{ textAlign: 'center', marginTop: 20 }}>
+              {ERROR_MESSAGES[feedType]}
+            </RText>
+          )}
           showsVerticalScrollIndicator={false}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
           maxToRenderPerBatch={2}
-          contentContainerStyle={{ flex: 1 }}
         />
       </View>
     );

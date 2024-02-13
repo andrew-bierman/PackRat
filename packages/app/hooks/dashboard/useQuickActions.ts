@@ -1,15 +1,25 @@
 import { useRouter } from 'app/hooks/router';
+import { MaterialIcons } from '@expo/vector-icons';
 
-const quickActionData = [
+interface IQuickActionData {
+  action: string;
+  iconName: keyof typeof MaterialIcons.glyphMap;
+  text: string;
+  href?: string;
+}
+
+const quickActionData: IQuickActionData[] = [
   {
     action: 'createPack',
     iconName: 'backpack',
     text: 'Create a Pack',
+    href: '/pack/create',
   },
   {
     action: 'createTrip',
     iconName: 'navigation',
     text: 'Create a Trip',
+    href: '/trip/create',
   },
 ];
 
@@ -22,10 +32,9 @@ export const useQuickActions = () => {
    * @param {string} action - The selected action.
    */
   const handleActionSelect = (action) => {
-    if (action === 'createPack') {
-      router.push('/pack/create');
-    } else if (action === 'createTrip') {
-      router.push('/trip/create');
+    const selectedAction = quickActionData.find((a) => a.action === action);
+    if (selectedAction) {
+      router.push(selectedAction.href);
     }
   };
 

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Platform, StyleSheet, ScrollView, View } from 'react-native';
+import { Platform, View } from 'react-native';
 import { RIconButton, RStack, RText, RSkeleton } from '@packrat/ui';
+import { ScrollView } from 'react-native-gesture-handler';
 import UserDataContainer from '../../components/user/UserDataContainer';
 import useTheme from '../../hooks/useTheme';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 // import useGetPacks from "../../hooks/useGetPacks";
-import { useDispatch } from 'react-redux';
 import { useRouter } from 'app/hooks/router';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import Avatar from '../../components/Avatar/Avatar';
@@ -56,7 +56,7 @@ const Header = ({
     : `@${userEmailSplitFirstHalf}`;
 
   return (
-    <View style={{ width: '50%', ...styles.infoSection }}>
+    <View style={{ width: '90%', ...styles.infoSection }}>
       <RStack
         style={{ flexDirection: 'row', width: '100%', alignItems: 'center' }}
       >
@@ -187,74 +187,78 @@ export default function ProfileContainer({ id = null }) {
   } = useProfile(id);
 
   return (
-    <ScrollView>
-      <RStack
-        style={[
-          styles.mainContainer,
-          Platform.OS == 'web' ? { minHeight: '100vh' } : null,
-        ]}
-      >
-        <Header
-          user={user}
-          isLoading={isLoading}
-          error={error}
-          tripsCount={tripsCount}
-          packsCount={packsCount}
-          favoritesCount={favoritesCount}
-          isCurrentUser={isCurrentUser}
-        />
-        <View style={styles.mainContentContainer}>
-          <View style={styles.userDataContainer}>
-            {isLoading && (
-              <UserDataContainer
-                data={[]}
-                type="packs"
-                userId={user?._id}
-                isLoading={isLoading}
-                SkeletonComponent={SkeletonUserDataCard}
-              />
-            )}
-          </View>
+    <View>
+      <ScrollView nestedScrollEnabled={true}>
+        <ScrollView horizontal={true} contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <RStack
+            style={[
+              styles.mainContainer,
+              Platform.OS == 'web' ? { minHeight: '100vh' } : { minHeight: '100%' },
+            ]}
+          >
+            <Header
+              user={user}
+              isLoading={isLoading}
+              error={error}
+              tripsCount={tripsCount}
+              packsCount={packsCount}
+              favoritesCount={favoritesCount}
+              isCurrentUser={isCurrentUser}
+            />
+            <View style={styles.mainContentContainer}>
+              <View style={styles.userDataContainer}>
+                {isLoading && (
+                  <UserDataContainer
+                    data={[]}
+                    type="packs"
+                    userId={user?._id}
+                    isLoading={isLoading}
+                    SkeletonComponent={SkeletonUserDataCard}
+                  />
+                )}
+              </View>
 
-          <View style={styles.userDataContainer}>
-            {favoritesList.length > 0 ? (
-              <UserDataContainer
-                data={favoritesList}
-                type="favorites"
-                userId={user?._id}
-                isLoading={isLoading}
-              />
-            ) : (
-              <RText
-                fontSize={20}
-                fontWeight="bold"
-                color={currentTheme.colors.textColor}
-              >
-                No favorites yet
-              </RText>
-            )}
-          </View>
-          {packsList.length > 0 && (
-            <View style={styles.userDataContainer}>
-              <UserDataContainer
-                data={packsList}
-                type="packs"
-                userId={user?.id}
-              />
+              <View style={styles.userDataContainer}>
+                {favoritesList.length > 0 ? (
+                  <UserDataContainer
+                    data={favoritesList}
+                    type="favorites"
+                    userId={user?._id}
+                    isLoading={isLoading}
+                  />
+                ) : (
+                  <RText
+                    fontSize={20}
+                    fontWeight="bold"
+                    color={currentTheme.colors.textColor}
+                  >
+                    No favorites yet
+                  </RText>
+                )}
+              </View>
+              {packsList.length > 0 && (
+                <View style={styles.userDataContainer}>
+                  <UserDataContainer
+                    data={packsList}
+                    type="packs"
+                    userId={user?.id}
+                  />
+                </View>
+              )}
+              {tripsList.length > 0 && (
+                <View style={styles.userDataContainer}>
+                  <UserDataContainer
+                    data={tripsList}
+                    type="trips"
+                    userId={user?.id}
+                  />
+                </View>
+              )}
             </View>
-          )}
-          {tripsList.length > 0 && (
-            <View style={styles.userDataContainer}>
-              <UserDataContainer
-                data={tripsList}
-                type="trips"
-                userId={user?.id}
-              />
-            </View>
-          )}
-        </View>
-      </RStack>
-    </ScrollView>
+          </RStack>
+        </ScrollView>
+      </ScrollView>
+    </View>
   );
 }
 

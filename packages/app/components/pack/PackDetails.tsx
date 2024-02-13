@@ -4,7 +4,6 @@ import { DetailsHeader } from '../details/header';
 import { createParam } from 'solito';
 import { TableContainer } from '../pack_table/Table';
 import { fetchUserPacks, selectPackById } from '../../store/packsStore';
-import { useSelector, useDispatch } from 'react-redux';
 import { fetchSinglePack } from '../../store/singlePackStore';
 import { RText } from '@packrat/ui';
 import { DetailsComponent } from '../details';
@@ -18,7 +17,7 @@ import { AddItemModal } from './AddItemModal';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useUserPacks } from 'app/hooks/packs/useUserPacks';
 import { useFetchSinglePack } from '../../hooks/packs';
-
+import { useAuthUser } from 'app/auth/hooks';
 
 const { useParam } = createParam();
 
@@ -28,9 +27,8 @@ export function PackDetails() {
   const [packId] = useParam('id');
   console.log(packId, 'packId');
   const link = `${CLIENT_URL}/packs/${packId}`;
-  const updated = useSelector((state) => state.packs.update);
   const [firstLoad, setFirstLoad] = useState(true);
-  const user = useSelector((state) => state.auth.user);
+  const user = useAuthUser();
   const userId = user?._id;
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
   const [refetch, setRefetch] = useState(false);
@@ -44,18 +42,6 @@ export function PackDetails() {
     refetch: refetchQuery,
   } = useFetchSinglePack(packId);
 
-  useEffect(() => {
-    refetchQuery();
-  }, [refetch, packId, updated]);
-
-  // useEffect(() => {
-  //   if (!packId) return;
-  //   dispatch(fetchSinglePack(packId));
-
-  //   // if (userId) dispatch(fetchUserPacks({ ownerId: userId }));
-  //   setFirstLoad(false);
-  // }, [dispatch, packId, updated]); // TODO updated is a temporary fix to re-render when pack is update, due to bug in store
-
   const styles = useCustomStyles(loadStyles);
   const currentPackId = currentPack && currentPack._id;
 
@@ -64,7 +50,7 @@ export function PackDetails() {
 
   const isError = error !== null;
 
-  if (isLoading && firstLoad) return <RText>Loading...</RText>;
+  if (isLoading) return <RText>Loading...</RText>;
 
   return (
     <View

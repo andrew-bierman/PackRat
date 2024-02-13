@@ -2,23 +2,18 @@ import React from 'react';
 import { RStack, RText } from '@packrat/ui';
 import LargeCard from '../card/LargeCard';
 import { SearchInput } from '../SearchInput';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 import { theme } from '../../theme';
 import useTheme from '../../hooks/useTheme';
-import { useSelector, useDispatch } from 'react-redux';
+import { useAuthUser } from 'app/auth/hooks';
 import Hero from '../hero';
 import { useRouter } from 'app/hooks/router';
 import { first } from 'lodash';
-import {
-  photonDetails,
-  processGeoJSON,
-  setSelectedSearchResult,
-} from '../../store/destinationStore';
 import { hexToRGBA } from '../../utils/colorFunctions';
 import useCustomStyles from 'app/hooks/useCustomStyles';
+import { PlacesAutocomplete } from 'app/components/PlacesAutocomplete/PlacesAutocomplete';
 
 const HeroSection = ({ onSelect }) => {
-  const dispatch = useDispatch();
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
@@ -30,16 +25,11 @@ const HeroSection = ({ onSelect }) => {
    * @param {Object} selectedResult - The selected search result
    * @return {void}
    */
-  const handleSearchSelect = async (selectedResult) => {
+  const handleSearchSelect = (selectedResult) => {
     try {
-      // Set the selected search result in the Redux store
-      // dispatch(setSelectedSearchResult(selectedResult));
-
-      const { osm_id, osm_type } = selectedResult.properties;
+      const { osm_id, osm_type, name } = selectedResult.properties;
 
       const coordinates = selectedResult.geometry.coordinates;
-
-      const [lon, lat] = coordinates;
 
       if (!osm_id || !osm_type) {
         console.error(
@@ -48,11 +38,10 @@ const HeroSection = ({ onSelect }) => {
       } else {
         router.push({
           pathname: '/destination/query',
-          params: {
-            type: osm_type,
-            id: osm_id,
-            // lat,
-            // lon,
+          query: {
+            osmType: osm_type,
+            osmId: osm_id,
+            name,
           },
         });
       }
@@ -61,7 +50,7 @@ const HeroSection = ({ onSelect }) => {
     }
   };
 
-  const user = useSelector((state) => state.auth?.user);
+  const user = useAuthUser();
 
   const firstNameOrUser = first(user?.name?.split(' ')) ?? 'User';
 
@@ -81,7 +70,9 @@ const HeroSection = ({ onSelect }) => {
           title: 'N/A',
           subtitle: 'N/A',
           source:
-            'https://github.com/andrew-bierman/PackRat/blob/main/apps/expo/assets/topographical-pattern.jpg?raw=true',
+            Platform.OS === 'web'
+              ? 'https://github.com/andrew-bierman/PackRat/blob/main/apps/expo/assets/topographical-pattern.png?raw=true'
+              : require('app/assets/topographical-pattern.png'),
           alt: 'hero',
         }}
       >
@@ -105,7 +96,7 @@ const HeroSection = ({ onSelect }) => {
             }}
           >
             <RText style={styles.title}>{bannerText}</RText>
-            <SearchInput
+            <PlacesAutocomplete
               onSelect={handleSearchSelect}
               placeholder={'Search by park, city, or trail'}
             />
