@@ -1,6 +1,5 @@
 import { TouchableOpacity, Text, View } from 'react-native';
-import { TouchableOpacity, Text } from 'react-native';
-import { Card } from 'native-base';
+import { RCard } from '@packrat/ui';
 import { MaterialIcons } from '@expo/vector-icons';
 import React from 'react';
 import { theme } from '../../theme';
@@ -9,7 +8,7 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 
 interface QuickActionButtonProps {
   onPress: () => void;
-  iconName: string;
+  iconName: keyof typeof MaterialIcons.glyphMap;
   text: string;
 }
 
@@ -21,20 +20,22 @@ const QuickActionButton = ({
   const styles = useCustomStyles(loadStyles);
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
-      <Card style={styles.card}>
-        <MaterialIcons
-          name={iconName}
-          size={24}
-          color={theme.colors.iconColor}
-          style={styles.icon}
-        />
-        <Text style={styles.text}>{text}</Text>
-      </Card>
+      <RCard elevate style={styles.card}>
+        <RCard.Header padded alignItems="center">
+          <MaterialIcons
+            name={iconName}
+            size={24}
+            color={theme.colors.iconColor}
+            style={styles.icon}
+          />
+          <Text style={styles.text}>{text}</Text>
+        </RCard.Header>
+      </RCard>
     </TouchableOpacity>
   );
 };
 
-const loadStyles = (theme: any) => {
+const loadStyles = (theme) => {
   const { currentTheme } = theme;
   return {
     container: {
@@ -44,8 +45,8 @@ const loadStyles = (theme: any) => {
       flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
-      paddingHorizontal: 10,
-      paddingVertical: 20,
+      // paddingHorizontal: 40,
+      // paddingVertical: 60,
       backgroundColor: currentTheme.colors.primary,
     },
     icon: {

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { RText, RStack } from '@packrat/ui';
 import { Link } from 'solito/link';
-import { Dimensions, View, StyleProp, ViewStyle } from 'react-native';
+import { Dimensions, View } from 'react-native';
 import { getPublicPacks, getPublicTrips } from '../../store/feedStore';
 import useTheme from '../../hooks/useTheme';
 import Carousel from '../carousel';
@@ -10,35 +10,21 @@ import { useFeed } from 'app/hooks/feed';
 
 const { height, width } = Dimensions.get('window');
 
-interface FeedItem {
-  _id: string;
-  name: string;
-  type: string;
-  description: string;
-}
-
-interface FeedPreviewScrollProps {
-  itemWidth: number;
-}
-
-const FeedPreviewScroll: React.FC<FeedPreviewScrollProps> = ({ itemWidth }) => {
+const FeedPreviewScroll = () => {
   const styles = useCustomStyles(loadStyles);
   const { data: feedData, error, isLoading } = useFeed();
 
   return (
-    <Carousel itemWidth={itemWidth}>
-      {feedData?.map((item: FeedItem, index: number) => {
+    <Carousel itemWidth={250}>
+      {feedData?.map((item, index) => {
         const linkStr = `/${item.type}/${item._id}`;
         return linkStr ? (
           <Link href={linkStr} key={`${linkStr}`}>
             <View style={styles.cardStyles} key={index}>
-              <RStack
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                }}
-              >
-                <RText style={styles.feedItemTitle}>{item.name}</RText>
+              <RStack flexDirection="row" justifyContent="space-between">
+                <RText fontSize="$2" fontWeight="bold" color={'#F2F1EB'}>
+                  {item.name}
+                </RText>
                 <RText
                   fontSize="$1"
                   fontWeight="bold"
@@ -46,7 +32,7 @@ const FeedPreviewScroll: React.FC<FeedPreviewScrollProps> = ({ itemWidth }) => {
                   textTransform="capitalize"
                   paddingVertical={4}
                   paddingHorizontal={8}
-                  alignContent="center"
+                  alignSelf="center"
                   borderRadius={2}
                 >
                   {item.type}
@@ -61,11 +47,11 @@ const FeedPreviewScroll: React.FC<FeedPreviewScrollProps> = ({ itemWidth }) => {
   );
 };
 
-const FeedPreview: React.FC = () => {
-  return <FeedPreviewScroll itemWidth={250} />;
+const FeedPreview = () => {
+  return <FeedPreviewScroll />;
 };
 
-const loadStyles = (theme: any, appTheme: any) => {
+const loadStyles = (theme, appTheme) => {
   const { currentTheme } = theme;
   return {
     feedPreview: {

@@ -13,27 +13,19 @@ import { hexToRGBA } from '../../utils/colorFunctions';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { PlacesAutocomplete } from 'app/components/PlacesAutocomplete/PlacesAutocomplete';
 
-interface HeroSectionProps {
-  onSelect: (selectedResult: SearchResult) => void;
-}
-
-interface SearchResult {
-  properties: {
-    osm_id: number;
-    osm_type: string;
-  };
-  geometry: {
-    coordinates: [number, number];
-  };
-}
-
-const HeroSection: React.FC<HeroSectionProps> = ({ onSelect }) => {
+const HeroSection = ({ onSelect }) => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
   const router = useRouter();
 
-  const handleSearchSelect = async (selectedResult: SearchResult) => {
+  /**
+   * Handles the selection of a search result.
+   *
+   * @param {Object} selectedResult - The selected search result
+   * @return {void}
+   */
+  const handleSearchSelect = (selectedResult) => {
     try {
       const { osm_id, osm_type, name } = selectedResult.properties;
 
@@ -54,7 +46,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSelect }) => {
         });
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error('errorrrrrr', error);
     }
   };
 
@@ -94,8 +86,6 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSelect }) => {
             height: '100%',
             padding: 50,
           }}
-          title={''}
-          type={'search'}
         >
           <RStack
             style={{
@@ -117,7 +107,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSelect }) => {
   );
 };
 
-const loadStyles = (theme: any) => {
+const loadStyles = (theme) => {
   const { currentTheme } = theme;
   return {
     banner: {
