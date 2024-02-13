@@ -3,11 +3,14 @@ import { Platform } from 'react-native';
 import { Box, Button, VStack, Text, HStack, View } from 'native-base';
 import { theme } from '../theme';
 import useTheme from '../hooks/useTheme';
-import { useDispatch } from 'react-redux';
-import { scorePack } from '../store/packsStore';
 import { Svg, Circle, Path, G, Text as SvgText } from 'react-native-svg';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import { useGradingPie, useScoreData, useScoreProgress } from 'app/hooks/score';
+import {
+  useCalculateStore,
+  useGradingPie,
+  useScoreData,
+  useScoreProgress,
+} from 'app/hooks/score';
 
 const ScoreProgressChart = ({ score, size = 150, strokeWidth = 10 }) => {
   if (!score) return null;
@@ -142,7 +145,6 @@ const GradingPieChart = ({ scores, size = 150, strokeWidth = 10 }) => {
 };
 
 export default function ScoreContainer({ type, data, isOwner }) {
-  const dispatch = useDispatch();
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
@@ -157,13 +159,7 @@ export default function ScoreContainer({ type, data, isOwner }) {
     description,
   } = useScoreData(type, data);
 
-  const handleScoreClick = () => {
-    if (type === 'pack') {
-      dispatch(scorePack(id));
-    } else if (type === 'trip') {
-      dispatch(scoreTrip(id));
-    }
-  };
+  const handleScoreClick = useCalculateStore(id, type);
 
   return (
     <Box style={styles.box}>

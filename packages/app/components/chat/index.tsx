@@ -6,7 +6,6 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
 import useTheme from '../../hooks/useTheme';
 import { BaseModal, RStack } from '@packrat/ui';
 // import {

@@ -3,7 +3,6 @@ import { RStack, RText, RButton, RSkeleton } from '@packrat/ui';
 import { VirtualizedList } from 'react-native';
 import UserDataCard from './UserDataCard';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import LargeCard from '../card/LargeCard';
 import { theme } from '../../theme';
 import useTheme from '../../hooks/useTheme';
@@ -97,7 +96,7 @@ export default function UserDataContainer({
         >
           {differentUser
             ? // ? `${userId}'s ${typeUppercase}`
-            `${typeUppercase}`
+              `${typeUppercase}`
             : `Your ${typeUppercase}`}
         </RText>
         <RStack
@@ -127,9 +126,10 @@ export default function UserDataContainer({
             // )
             <VirtualizedList
               getItemCount={() => data.length}
+              getItem={(data, index) => data[index]}
               nestedScrollEnabled={true}
               data={data}
-              getItem={(item, index) => ({...item, key: index})}
+              horizontal={true}
               renderItem={({ item, index }) => (
                 <UserDataCard
                   key={item._id}
@@ -143,7 +143,11 @@ export default function UserDataContainer({
               )}
               keyExtractor={(item) => item._id}
               maxToRenderPerBatch={2}
-            // Other FlatList props like onEndReached for infinite scrolling
+              contentContainerStyle={{
+                flex: 1,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
             />
           ) : currentUser?._id === userId ? (
             <Link href="/">

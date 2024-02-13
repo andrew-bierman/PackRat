@@ -1,5 +1,6 @@
-import { View } from 'react-native';
-import { RStack, RIconButton, BaseModal } from '@packrat/ui';
+import { useState } from 'react';
+import { useRouter } from 'app/hooks/router';
+import { RStack, RIconButton, BaseModal, View } from '@packrat/ui';
 import { Entypo } from '@expo/vector-icons';
 import { useModalState } from './useModalState';
 export const PackOptions = ({ Edit, Delete, Ignore }) => {

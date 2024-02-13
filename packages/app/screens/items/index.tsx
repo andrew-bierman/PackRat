@@ -6,14 +6,10 @@ import { theme } from 'app/theme';
 import useTheme from 'app/hooks/useTheme';
 import { AddItemGlobal } from 'app/components/item/AddItemGlobal';
 import { ItemsTable } from 'app/components/itemtable/itemTable';
-import { useDispatch, useSelector } from 'react-redux';
-import { getItemsGlobal } from 'app/store/globalItemsStore';
 // import { Stack } from 'expo-router';
-import { executeOfflineRequests } from 'app/store/offlineQueue';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useItems } from 'app/hooks/items/useItems';
 import { BaseModal } from '@packrat/ui';
-import { RootState } from 'store/store';
 import { usePagination } from 'app/hooks/common';
 // import { checkNetworkConnected } from 'app/utils/netInfo';
 

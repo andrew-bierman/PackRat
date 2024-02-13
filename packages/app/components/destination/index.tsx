@@ -5,7 +5,6 @@ import { useRouter } from 'app/hooks/router';
 import { createParam } from 'solito';
 import useTheme from '../../hooks/useTheme';
 import { theme } from '../../theme';
-import { useDispatch, useSelector } from 'react-redux';
 import MapContainer from '../map/MapContainer';
 import {
   defaultShape,

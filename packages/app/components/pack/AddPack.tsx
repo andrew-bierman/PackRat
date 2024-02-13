@@ -4,7 +4,6 @@ import { RInput, RButton, RText, RLabel } from '@packrat/ui';
 import { BaseModal } from '@packrat/ui';
 import { addPack } from '../../store/packsStore';
 import { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useAddNewPack } from 'app/hooks/packs';

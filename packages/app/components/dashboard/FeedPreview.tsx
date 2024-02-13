@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { RText, RStack } from '@packrat/ui';
 import { Link } from 'solito/link';
 import { Dimensions, View } from 'react-native';
@@ -12,14 +11,7 @@ import { useFeed } from 'app/hooks/feed';
 const { height, width } = Dimensions.get('window');
 
 const FeedPreviewScroll = () => {
-  const dispatch = useDispatch();
   const styles = useCustomStyles(loadStyles);
-
-  // useEffect(() => {
-  //   dispatch(getPublicPacks());
-  //   dispatch(getPublicTrips());
-  // }, []);
-
   const { data: feedData, error, isLoading } = useFeed();
 
   return (
