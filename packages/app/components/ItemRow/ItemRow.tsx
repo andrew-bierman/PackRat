@@ -8,7 +8,7 @@ interface ItemRowProps {
   packName: string;
 }
 
-export const ItemRow = ({ packName }: ItemRowProps) => {
+export const ItemRow: React.FC<ItemRowProps> = ({ packName }) => {
   const { isChecked, handleChange } = useItemRow();
   const styles = useCustomStyles(loadStyles);
 
