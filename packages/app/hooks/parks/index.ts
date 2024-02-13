@@ -3,7 +3,7 @@ import { queryTrpc } from '../../trpc';
 import { store } from '../../store/store';
 import { setParks, setParkNames } from '../../store/parksStore';
 
-function useParks({ latLng, selectedSearch, radius = 5000 }) {
+function useParks({ latLng, radius = 5000 }) {
   console.log('useParks -------------');
   // const { data, error, isLoading } = await trpc.getParksOSM.query({
   //   lat,
@@ -16,7 +16,6 @@ function useParks({ latLng, selectedSearch, radius = 5000 }) {
     {
       lat,
       lon,
-      selectedSearch,
       radius,
     },
     {

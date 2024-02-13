@@ -17,6 +17,7 @@
     "build:ios": "cd apps/expo && yarn build:ios",
     "build:prod:docker": "docker build -t packrat-app -f Dockerfile.prod .",
     "build:prod": "yarn && yarn build:tsc && yarn build:next:static",
+    "build:prod:cloudflare-next": "cd apps/next && yarn build:cloudflare",
     "build:tsc:packages": "cd packages/validations && yarn build",
     "build:tsc:server": "cd server && yarn build",
     "build:tsc": "yarn build:tsc:packages && yarn build:tsc:server",
@@ -31,6 +32,7 @@
     "copy:env:expo": "cp .env apps/expo/.env",
     "copy:env:packages": "cp .env packages/.env",
     "copy:env:server": "cp .env server/.env",
+    "compare-next-tauri": "node packages/cli/src/compareNextToTauri.js",
     "dev:expo": "cd apps/expo && yarn start",
     "dev:next": "cd apps/next && yarn dev",
     "dev:server": "cd server && yarn start",
@@ -39,6 +41,7 @@
     "fix": "manypkg fix",
     "format:all": "prettier --write \"**/*.{js,jsx,ts,tsx}\"",
     "format": "yarn format:all",
+    "find:unused:deps": "node packages/cli/src/findUnusedDependencies.js",
     "ios": "cd apps/expo && yarn ios",
     "lint:all": "yarn lint:expo && yarn lint:server",
     "lint:expo": "cd apps/expo && yarn lint",
@@ -67,7 +70,7 @@
     "node": ">=18.16.1",
     "yarn": ">=4.0.0"
   },
-  "packageManager": "yarn@4.0.2",
+  "packageManager": "yarn@4.1.0",
   "dependencies": {
     "@babel/runtime": "^7.21.0",
     "@manypkg/cli": "^0.21.0",

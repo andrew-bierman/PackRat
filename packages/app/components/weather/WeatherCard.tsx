@@ -225,7 +225,7 @@ export default function WeatherCard({
                   }}
                   alt="waetherIcon"
                 />
-                <RText>{dayNumToString(restOfWeek[i]).slice(0, 3)}</RText>
+                <RText>{formatDay(restOfWeek[i])}</RText>
                 <RText style={{ fontWeight: 700 }}>
                   {convertToCelsius(day.main.temp)}
                 </RText>
@@ -246,7 +246,7 @@ export default function WeatherCard({
       >
         {restOfWeek.map((day, index) => (
           <RStack key={index} style={styles.weatherInfo}>
-            <RText>{dayNumToString(day).slice(0, 3)}</RText>
+            <RText>{formatDay(day)}</RText>
             <RText>{convertToCelsius(weatherWeek[index].main.temp)}</RText>
           </RStack>
         ))}
@@ -254,6 +254,10 @@ export default function WeatherCard({
     </RStack>
   );
 }
+
+const formatDay = (day) => {
+  return dayNumToString(day)?.slice?.(0, 3) || '';
+};
 
 const loadStyles = (theme) => {
   const { currentTheme } = theme;

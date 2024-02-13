@@ -15,6 +15,7 @@ import { truncateString } from '../../utils/truncateString';
 import { RText, RStack, RHeading } from '@packrat/ui';
 import { formatNumber } from 'app/utils/formatNumber';
 import { useAddFavorite } from 'app/hooks/favorites';
+import { useAuthUser } from 'app/auth/hooks';
 
 export default function Card({
   type,
@@ -31,7 +32,7 @@ export default function Card({
   owners,
   duration,
 }) {
-  const user = useSelector((state) => state.auth.user);
+  const user = useAuthUser();
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
 
@@ -177,7 +178,7 @@ export default function Card({
           <RStack
             style={{
               // alignItems: 'center',
-              justifyContent: 'space-between'
+              justifyContent: 'space-between',
             }}
           >
             <RStack

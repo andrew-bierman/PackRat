@@ -1,12 +1,30 @@
 import React from 'react';
 import { RStack, RSeparator } from '@packrat/ui';
 import { View } from 'react-native';
-import { SearchItem } from '../item/searchItem';
+import { SearchItem } from '../item/SearchItem';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { TripCardHeader } from './TripCardHeader';
 import { PackCardHeader } from './PackCardHeader';
 
-export const CustomCard = ({ title, content, footer, link, type, data }) => {
+interface CustomCardProps {
+  title: string;
+  content: React.JSX.Element;
+  footer: string;
+  link: string;
+  destination: any;
+  type: string;
+  data: any;
+}
+
+export const CustomCard = ({
+  title,
+  content,
+  footer,
+  link,
+  destination,
+  type,
+  data,
+}: CustomCardProps) => {
   const styles = useCustomStyles(loadStyles);
 
   if (!data) return null;
@@ -40,7 +58,7 @@ export const CustomCard = ({ title, content, footer, link, type, data }) => {
                 paddingLeft: 16,
               }}
             >
-              <SearchItem placeholder={'Search Item'} />
+              <SearchItem />
             </View>
             <RSeparator />
           </>

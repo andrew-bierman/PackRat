@@ -49,7 +49,7 @@ const UserDataCard = ({
   const handleChangeStatus = (index) => {
     updateState(index, true);
     if (type === 'pack') {
-      dispatch(changePackStatus({ _id, is_public: !is_public }));
+      dispatch(changePackStatus({ _id, is_public: !is_public, name }));
     } else if (type === 'trip') {
     }
   };
@@ -92,7 +92,7 @@ const UserDataCard = ({
                     {!differentUser && (
                       <RSwitch
                         checked={is_public}
-                        onToggle={() => {
+                        onCheckedChange={() => {
                           handleChangeStatus(index);
                         }}
                         size="$1.5"
