@@ -13,21 +13,16 @@ import { executeOfflineRequests } from 'app/store/offlineQueue';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useItems } from 'app/hooks/items/useItems';
 import { BaseModal } from '@packrat/ui';
-// import { checkNetworkConnected } from '~/utils/netInfo';
+import { RootState } from 'store/store';
+import { usePagination } from 'app/hooks/common';
+// import { checkNetworkConnected } from 'app/utils/netInfo';
 
 export default function Items() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
 
-  const {
-    data,
-    isFetching,
-    isError,
-    limit,
-    handleLimitChange,
-    page,
-    handlePageChange,
-  } = useItems();
+  const { limit, handleLimitChange, page, handlePageChange } = usePagination();
+  const { data, isFetching, isError } = useItems({ limit, page });
   const styles = useCustomStyles(loadStyles);
 
   return (
@@ -41,7 +36,7 @@ export default function Items() {
         <BaseModal
           title="Add a global Item"
           trigger="Add Item"
-          triggerComponent={<ModalTriggerButton />}
+          // triggerComponent={<ModalTriggerButton />}
         >
           <AddItemGlobal />
         </BaseModal>
@@ -106,6 +101,7 @@ const loadStyles = (theme) => {
       backgroundColor: currentTheme.colors.background,
       flexDirection: 'column',
       flex: 1,
+      paddingTop: 10,
     },
     button: {
       color: currentTheme.colors.white,

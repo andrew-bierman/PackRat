@@ -1,14 +1,16 @@
 import * as React from 'react';
 import Svg, { Defs, G, Path } from 'react-native-svg';
+import useAspectRatio from './useAspectRatio';
+
+const ORIGINAL_WIDTH = 29;
+const ORIGINAL_HEIGHT = 32;
 
 export default function SVGLogoComponent({
   width = 963.619,
   fill = 'fff',
   ...props
 }) {
-  // need to figure out how to get the dynamic viewbox and transform to work
-
-  const height = calculateHeightForGivenWidth(width);
+  const height = useAspectRatio(width, ORIGINAL_WIDTH, ORIGINAL_HEIGHT);
 
   return (
     <Svg
@@ -25,19 +27,3 @@ export default function SVGLogoComponent({
     </Svg>
   );
 }
-
-const ORIGINAL_WIDTH = 29;
-const ORIGINAL_HEIGHT = 32;
-
-const calculateHeightForGivenWidth = (
-  width,
-  originalWidth = ORIGINAL_WIDTH,
-  originalHeight = ORIGINAL_HEIGHT,
-) => {
-  const aspectRatio = originalHeight / originalWidth;
-  const newHeight = width * aspectRatio;
-
-  return newHeight;
-};
-
-export default SVGLogoComponent;

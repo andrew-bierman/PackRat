@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Platform } from 'react-native';
 import { RText, RStack } from '@packrat/ui';
-import { useSelector } from 'react-redux';
 import useTheme from '../../hooks/useTheme';
 import { theme } from '../../theme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
+import { RootState } from 'store/store';
 
 /**
  * Retrieves the appropriate container style based on the provided type.
@@ -48,9 +48,6 @@ export default function LargeCard({
   customStyle,
   children,
 }) {
-  const currentShape = useSelector(
-    (state) => state.search.selectedSearchResult,
-  );
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const containerStyle = customStyle || getContainerStyle(type);

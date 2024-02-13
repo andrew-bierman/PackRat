@@ -1,9 +1,26 @@
+import { Link, Slot } from 'expo-router';
+import { AuthWrapper } from 'app/auth/AuthWrapper';
 import { Stack } from 'expo-router';
-import { useSession } from 'app/context/Auth/SessionProvider';
-import { useProtectedRoute } from 'app/hooks/auth/useProtectedRoute';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export default function AppLayout() {
-  const { session } = useSession();
-  useProtectedRoute(session);
-  return <Stack />;
+  return (
+    <AuthWrapper>
+      <Stack>
+        <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="modal"
+          options={{
+            headerShown: true,
+            headerRight: () => (
+              <Link href="../">
+                <MaterialCommunityIcons name="close" size={24} color="black" />
+              </Link>
+            ),
+            presentation: 'modal',
+          }}
+        />
+      </Stack>
+    </AuthWrapper>
+  );
 }

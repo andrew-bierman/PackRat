@@ -11,7 +11,7 @@ export function MapContainer({ shape }) {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
-  if (isObjectEmpty(shape)) {
+  if (!shape || isObjectEmpty(shape)) {
     shape = defaultShape;
   }
 

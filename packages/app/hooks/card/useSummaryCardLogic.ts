@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 const useSummaryCardLogic = () => {
-  const [dummyData, setDummyData] = useState([
+  const [dummyData, setDummyData] = useState<string[]>([
     'First-aid kit',
     'Water bottles',
     'Tent',

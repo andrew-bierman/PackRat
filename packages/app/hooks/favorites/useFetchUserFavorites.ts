@@ -1,6 +1,6 @@
 import { queryTrpc } from '../../trpc';
 
-export const useFetchUserFavorites = (userId) => {
+export const useFetchUserFavorites = (userId: string) => {
   const enabled = !!userId;
 
   const { data, error, isLoading, refetch } =
@@ -13,5 +13,5 @@ export const useFetchUserFavorites = (userId) => {
       },
     );
 
-  return { data, error, isLoading, refetch };
+  return { data, error, isLoading, enabled, refetch };
 };
