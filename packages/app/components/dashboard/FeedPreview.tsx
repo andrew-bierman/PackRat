@@ -46,7 +46,7 @@ const FeedPreviewScroll: React.FC<FeedPreviewScrollProps> = ({ itemWidth }) => {
                   textTransform="capitalize"
                   paddingVertical={4}
                   paddingHorizontal={8}
-                  alignSelf="center"
+                  alignContent="center"
                   borderRadius={2}
                 >
                   {item.type}
@@ -61,11 +61,11 @@ const FeedPreviewScroll: React.FC<FeedPreviewScrollProps> = ({ itemWidth }) => {
   );
 };
 
-const FeedPreview = () => {
-  return <FeedPreviewScroll />;
+const FeedPreview: React.FC = () => {
+  return <FeedPreviewScroll itemWidth={250} />;
 };
 
-const loadStyles = (theme, appTheme) => {
+const loadStyles = (theme: any, appTheme: any) => {
   const { currentTheme } = theme;
   return {
     feedPreview: {
