@@ -12,10 +12,11 @@ import { RImage, RStack, RText } from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useDate } from 'app/hooks/weather/useDate';
 import { defaultWeatherObject } from '../../constants/defaultWeatherObj';
+import { defaultWeekObj } from '../../constants/defaultWeekObj';
 
 export default function WeatherCard({
   weatherObject = defaultWeatherObject,
-  weatherWeek = [],
+  weatherWeek = defaultWeekObj,
 }) {
   // Hooks
   const { currentTheme } = useTheme();

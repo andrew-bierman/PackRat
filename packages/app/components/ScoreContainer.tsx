@@ -264,3 +264,5 @@ const loadStyles = (theme: any) => {
     },
   };
 };
+
+export default ScoreContainer;
