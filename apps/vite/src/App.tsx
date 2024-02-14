@@ -4,10 +4,9 @@ import viteLogo from '/vite.svg';
 import './App.css';
 import '@tamagui/core/reset.css';
 
-import { Button, TamaguiProvider, YStack } from 'tamagui';
+import { RButton, YStack } from '@packrat/ui';
 import { LinearGradient } from 'tamagui/linear-gradient';
-import config from './tamagui.config';
-
+import LandingPage from 'app/components/landing_page';
 import {Provider} from 'app/provider'
 
 function App() {
@@ -15,6 +14,7 @@ function App() {
 
   return (
     <Provider>
+      <LandingPage />
       <>
         <div>
           <a href="https://vitejs.dev" target="_blank">
@@ -34,7 +34,7 @@ function App() {
           </p>
         </div>
           <YStack f={1} ai="center" jc="center">
-            <Button>Hello world</Button>
+            <RButton>Hello world</RButton>
             <LinearGradient zIndex={-1} fullscreen colors={['red', 'blue']} />
           </YStack>
         <p className="read-the-docs">
