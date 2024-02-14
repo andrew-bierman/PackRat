@@ -8,11 +8,13 @@ import { Button, TamaguiProvider, YStack } from 'tamagui';
 import { LinearGradient } from 'tamagui/linear-gradient';
 import config from './tamagui.config';
 
+import {Provider} from 'app/provider'
+
 function App() {
   const [count, setCount] = useState(0);
 
   return (
-    <TamaguiProvider config={config}>
+    <Provider>
       <>
         <div>
           <a href="https://vitejs.dev" target="_blank">
@@ -27,19 +29,19 @@ function App() {
           <button onClick={() => setCount((count) => count + 1)}>
             count is {count}
           </button>
-          <YStack f={1} ai="center" jc="center">
-            <Button>Hello world</Button>
-            {/* <LinearGradient zIndex={-1} fullscreen colors={['red', 'blue']} /> */}
-          </YStack>
           <p>
             Edit <code>src/App.tsx</code> and save to test HMR
           </p>
         </div>
+          <YStack f={1} ai="center" jc="center">
+            <Button>Hello world</Button>
+            <LinearGradient zIndex={-1} fullscreen colors={['red', 'blue']} />
+          </YStack>
         <p className="read-the-docs">
           Click on the Vite and React logos to learn more
         </p>
       </>
-    </TamaguiProvider>
+    </Provider>
   );
 }
 
