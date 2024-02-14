@@ -31614,6 +31614,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "vite@workspace:apps/vite"
   dependencies:
+    "@packrat/ui": "npm:*"
     "@tamagui/vite-plugin": "npm:^1.89.20"
     "@types/react": "npm:^18.2.55"
     "@types/react-dom": "npm:^18.2.19"
@@ -31621,6 +31622,7 @@ __metadata:
     "@typescript-eslint/parser": "npm:^6.21.0"
     "@vitejs/plugin-react": "npm:^4.2.1"
     "@vitejs/plugin-react-swc": "npm:^3.6.0"
+    app: "npm:*"
     eslint: "npm:^8.56.0"
     eslint-plugin-react-hooks: "npm:^4.6.0"
     eslint-plugin-react-refresh: "npm:^0.4.5"

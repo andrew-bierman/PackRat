@@ -9,8 +9,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@packrat/ui": "*",
     "@tamagui/vite-plugin": "^1.89.20",
     "@vitejs/plugin-react-swc": "^3.6.0",
+    "app": "*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
