@@ -7,7 +7,12 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 import useAbout from 'app/hooks/about/useAbout';
 import loadStyles from './about.style';
 
-const AboutContent = ({ desktopContainer, isMobile }) => {
+interface AboutContentProps {
+  desktopContainer: any;
+  isMobile: boolean;
+}
+
+const AboutContent = ({ desktopContainer, isMobile }: AboutContentProps) => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
 

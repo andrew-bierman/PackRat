@@ -14,10 +14,42 @@ import { useDate } from 'app/hooks/weather/useDate';
 import { defaultWeatherObject } from '../../constants/defaultWeatherObj';
 import { defaultWeekObj } from '../../constants/defaultWeekObj';
 
+interface WeatherObject {
+  name: string;
+  sys: {
+    country: string;
+  };
+  weather: {
+    description: any;
+    icon: string;
+  }[];
+  main: {
+    temp: number;
+    humidity: number;
+  };
+  wind: {
+    speed: number;
+  };
+}
+
+interface WeatherDay {
+  weather: {
+    icon: string;
+  }[];
+  main: {
+    temp: number;
+  };
+}
+
+interface WeatherCardProps {
+  weatherObject?: WeatherObject;
+  weatherWeek?: WeatherDay[];
+}
+
 export default function WeatherCard({
   weatherObject = defaultWeatherObject,
   weatherWeek = defaultWeekObj,
-}) {
+}: WeatherCardProps) {
   // Hooks
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
