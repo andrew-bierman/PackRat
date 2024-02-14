@@ -2,14 +2,15 @@ import { AntDesign } from '@expo/vector-icons';
 import { formatDistanceToNow } from 'date-fns';
 import { MaterialIcons, Entypo } from '@expo/vector-icons';
 import useTheme from '../../hooks/useTheme';
-import { TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import { Link } from 'solito/link';
 import { DuplicateIcon } from '../DuplicateIcon/index';
 import { truncateString } from '../../utils/truncateString';
-import { RText, RStack, RHeading } from '@packrat/ui';
+import { RText, RStack, RHeading, View } from '@packrat/ui';
 import { formatNumber } from 'app/utils/formatNumber';
 import { useAddFavorite, useFetchUserFavorites } from 'app/hooks/favorites';
 import { useAuthUser } from 'app/auth/hooks';
+import { useWindowDimensions } from 'react-native';
 
 export default function Card({
   type,
@@ -25,6 +26,8 @@ export default function Card({
   createdAt,
   owners,
   duration,
+  cardWidth,
+  cardMargin,
 }) {
   const user = useAuthUser();
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
@@ -76,12 +79,12 @@ export default function Card({
   if (duration) numberOfNights = JSON.parse(duration).numberOfNights;
 
   return (
-    <View style={{ alignItems: 'center', padding: 16 }}>
+    <View style={{ alignItems: 'center', margin: cardMargin }}>
       <View
         style={{
-          minHeight: 150,
-          minWidth: 300,
-          marginVertical: 'auto',
+          // flex: 1,
+          width: cardWidth,
+          // marginHorizontal: cardMargin,
           borderRadius: 15,
           overflow: 'hidden',
           borderColor: 'lightgray',

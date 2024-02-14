@@ -1,22 +1,30 @@
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { useVirtualizer } from '@tanstack/react-virtual'
-import { useRef } from 'react'
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useVirtualizer } from '@tanstack/react-virtual';
+import { useRef } from 'react';
 
 interface Props {
-  data: any[]
-  renderItem: (item: any) => React.ReactNode
-  itemHeight: number
+  data: any[];
+  renderItem: (item: any) => React.ReactNode;
+  itemHeight: number;
 }
 
-export const VirtualList = ({ data, renderItem, itemHeight }: Props): React.ReactNode => {
-  const { top, bottom } = useSafeAreaInsets()
+export const VirtualList = ({
+  data = [],
+  renderItem = () => null,
+  itemHeight = 100,
+}: Props): React.ReactNode => {
+  const { top, bottom } = useSafeAreaInsets();
 
-  const parentRef = useRef()
+  const parentRef = useRef();
   const rowVirtualizer = useVirtualizer({
     count: data.length,
     getScrollElement: () => parentRef.current as any,
     estimateSize: () => itemHeight,
-  })
+  });
+
+  console.log({ data, rowVirtualizer, parentRef });
+
+  // return <></>
 
   return (
     <div
@@ -37,7 +45,7 @@ export const VirtualList = ({ data, renderItem, itemHeight }: Props): React.Reac
         }}
       >
         {/* Only the visible items in the virtualizer, manually positioned to be in view */}
-        {rowVirtualizer.getVirtualItems().map((virtualItem) => (
+        {rowVirtualizer.getVirtualItems().map((virtualItem, index) => (
           <div
             key={virtualItem.key}
             style={{
@@ -54,5 +62,5 @@ export const VirtualList = ({ data, renderItem, itemHeight }: Props): React.Reac
         ))}
       </div>
     </div>
-  )
-}
+  );
+};

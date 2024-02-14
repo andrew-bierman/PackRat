@@ -49,5 +49,5 @@ export const usePublicFeed = (queryString, selectedTypes) => {
     return { data: null, error, isLoading };
   }
 
-  return { data, error: null, isLoading };
+  return { data, error: null, isLoading, refetch: () => {} };
 };

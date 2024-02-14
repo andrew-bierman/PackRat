@@ -114,6 +114,8 @@ const nextConfig = function () {
       'react-native-ratings',
       'react-native-size-matters',
       'zeego',
+      '@shopify/flash-list',
+      'recyclerlistview',
     ],
     experimental: {
       scrollRestoration: true,

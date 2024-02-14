@@ -1,23 +1,30 @@
-import { FlashList } from '@shopify/flash-list'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { useCallback } from 'react'
+import { FlashList, FlashListProps } from '@shopify/flash-list';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useCallback } from 'react';
 
-interface Props {
-  data: any[]
-  renderItem: (item: any) => React.ReactElement
-  itemHeight: number
+interface Props<TItem> extends FlashListProps<TItem> {
+  data: any[];
+  renderItem: (item: any) => React.ReactElement;
+  itemHeight: number;
+  ListHeaderComponent: React.ReactElement;
 }
 
-export function VirtualList<T>({ data, renderItem, itemHeight }: Props): React.ReactNode {
-  const { top, bottom } = useSafeAreaInsets()
+export function VirtualList<TItem>({
+  data,
+  renderItem,
+  itemHeight,
+  ...flashListProps
+}: Props<TItem>): React.ReactNode {
+  const { top, bottom } = useSafeAreaInsets();
 
   // FlashList's API is awkward.
   const render = useCallback(
     (item) => {
-      return renderItem(item.item)
+      console.log('item.item ', item.item);
+      return renderItem(item.item);
     },
-    [renderItem]
-  )
+    [renderItem],
+  );
 
   return (
     <FlashList
@@ -28,6 +35,7 @@ export function VirtualList<T>({ data, renderItem, itemHeight }: Props): React.R
       }}
       renderItem={render}
       estimatedItemSize={itemHeight}
+      {...flashListProps}
     />
-  )
+  );
 }

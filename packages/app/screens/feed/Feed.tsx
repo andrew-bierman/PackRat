@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FlatList, View, Platform } from 'react-native';
+import { FlatList, View, Platform, useWindowDimensions } from 'react-native';
 import Card from '../../components/feed/FeedCard';
 // import { fetchUserTrips, selectAllTrips } from '../../store/tripsStore';
 import { usefetchTrips } from 'app/hooks/trips';
@@ -9,7 +9,7 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 import FeedSearchFilter from 'app/components/feed/FeedSearchFilter';
 import { useFeed } from 'app/hooks/feed';
 import { RefreshControl } from 'react-native';
-import { RText } from '@packrat/ui';
+import { RText, VirtualList } from '@packrat/ui';
 import { useAuthUser } from 'app/auth/hooks';
 
 const URL_PATHS = {
@@ -128,33 +128,43 @@ const Feed = ({ feedType = 'public' }) => {
         handleCreateClick={handleCreateClick}
       />
     );
-    // return Platform.OS === 'web' ? (
-    //   <ScrollView
-    //     showsHorizontalScrollIndicator={false}
-    //     contentContainerStyle={{ flex: 1, paddingBottom: 10 }}
-    //     refreshControl={
-    //       <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-    //     }
-    //   >
-    //     <View style={styles.cardContainer}>
-    //       {/* {console.log({ data })} */}
-    //       {feedSearchFilterComponent}
-    //       {data?.map((item) => (
-    //         <Card key={item?._id} type={item?.type} {...item} />
-    //       ))}
-    //     </View>
-    //   </ScrollView>
-    // ) : (
+
+    const { width } = useWindowDimensions();
+
+    // Calculate the number of columns based on screen width
+    let numColumns;
+    if (width > 800) {
+      numColumns = 3;
+    } else if (width > 1200) {
+      numColumns = 4;
+    } else {
+      numColumns = 1; // Default to one column for narrower screens
+    }
+
+    // Calculate card width
+    const cardMargin = 16; // Assuming there's a margin of 16 pixels on each side of a card.
+    const cardWidth = (width - cardMargin * (numColumns + 1)) / numColumns;
+
     return (
       <View style={{ flex: 1, paddingBottom: 10 }}>
-        <FlatList
+        <VirtualList
           data={data}
+          renderItem={(item) => {
+            return (
+              <Card
+                key={item?._id}
+                type={item?.type}
+                {...item}
+                cardWidth={cardWidth}
+                cardMargin={cardMargin}
+              />
+            );
+          }}
+          itemHeight={200}
+          getItemCount={() => data.length}
           horizontal={false}
-          numColumns={Platform.OS === 'web' ? 4 : 1}
+          numColumns={Platform.OS === 'web' ? numColumns : 1}
           keyExtractor={(item) => item?._id + item?.type}
-          renderItem={({ item }) => (
-            <Card key={item?._id} type={item?.type} {...item} />
-          )}
           ListHeaderComponent={() => feedSearchFilterComponent}
           ListEmptyComponent={() => (
             <RText style={{ textAlign: 'center', marginTop: 20 }}>
@@ -166,6 +176,11 @@ const Feed = ({ feedType = 'public' }) => {
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
           maxToRenderPerBatch={2}
+          contentContainerStyle={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
         />
       </View>
     );
