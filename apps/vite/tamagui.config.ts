@@ -1,0 +1,1 @@
+export * from '@packrat/ui/src/tamagui.config'
