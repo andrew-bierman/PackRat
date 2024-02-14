@@ -9,12 +9,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@originjs/vite-plugin-commonjs": "^1.0.3",
     "@packrat/ui": "*",
     "@tamagui/vite-plugin": "^1.89.20",
     "@vitejs/plugin-react-swc": "^3.6.0",
     "app": "*",
+    "esbuild-plugin-flow": "^0.3.2",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-native": "^0.73.4",
+    "react-native-web": "^0.19.10"
   },
   "devDependencies": {
     "@types/react": "^18.2.55",
