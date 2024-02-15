@@ -29,7 +29,7 @@ import { Route as TripCreateImport } from './routes/trip/create'
 import { Route as TriptripIdImport } from './routes/trip/[tripId]'
 import { Route as ProfileidImport } from './routes/profile/[id]'
 import { Route as PackCreateImport } from './routes/pack/create'
-import { Route as PackidImport } from './routes/pack/[id]'
+import { Route as PackIdImport } from './routes/pack/$id'
 import { Route as DestinationdestinationIdImport } from './routes/destination/[destinationId]'
 import { Route as ProfileSettingsIndexImport } from './routes/profile/settings/index'
 
@@ -125,8 +125,8 @@ const PackCreateRoute = PackCreateImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const PackidRoute = PackidImport.update({
-  path: '/pack/[id]',
+const PackIdRoute = PackIdImport.update({
+  path: '/pack/$id',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -152,8 +152,8 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DestinationdestinationIdImport
       parentRoute: typeof rootRoute
     }
-    '/pack/[id]': {
-      preLoaderRoute: typeof PackidImport
+    '/pack/$id': {
+      preLoaderRoute: typeof PackIdImport
       parentRoute: typeof rootRoute
     }
     '/pack/create': {
@@ -236,7 +236,7 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren([
   IndexRoute,
   DestinationdestinationIdRoute,
-  PackidRoute,
+  PackIdRoute,
   PackCreateRoute,
   ProfileidRoute,
   TriptripIdRoute,

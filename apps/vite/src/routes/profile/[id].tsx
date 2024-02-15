@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Platform } from 'react-native';
 import ProfileContainer from 'app/screens/user/ProfileContainer';
-import { createParam } from 'solito';
+import { createParam } from 'app/hooks/params';
 import { AuthWrapper } from 'app/auth/AuthWrapper';
 
 const { useParam } = createParam();

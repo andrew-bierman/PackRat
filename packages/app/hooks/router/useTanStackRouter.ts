@@ -3,12 +3,17 @@ import { useNavigate, ToOptions } from '@tanstack/react-router';
 export function useTanStackRouter() {
   const navigate = useNavigate();
 
-  const push = (props: ToOptions) => {
-    const { href } = props;
-
-    navigate({
-      to: href,
-    });
+  const push = (props) => {
+    switch (typeof props) {
+      case 'string':
+        navigate({
+          to: props,
+        });
+        break;
+      case 'object':
+        navigate(props.url, { state: props.state });
+        break;
+    }
   };
 
   const replace = (url, as, options) => {

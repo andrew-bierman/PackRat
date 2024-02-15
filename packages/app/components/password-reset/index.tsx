@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View } from 'react-native';
 import { api } from '../../constants/api';
 import { PasswordResetForm } from './PasswordResetForm';
-import { createParam } from 'solito';
+import { createParam } from 'app/hooks/params';
 import { RequestPasswordResetEmailModal } from './RequestEmailModal';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 

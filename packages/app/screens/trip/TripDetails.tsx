@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { createParam } from 'solito';
+import { createParam } from 'app/hooks/params';
 import { TableContainer } from '../../components/pack_table/Table';
 import { View } from 'react-native';
 import { RText } from '@packrat/ui';
