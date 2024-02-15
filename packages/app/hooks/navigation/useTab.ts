@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { useRouter } from './useRouter';
+import { useRouter } from '@packrat/ui';
 
 export const useTab = () => {
   const router = useRouter();

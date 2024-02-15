@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useRouter } from 'app/hooks/router';
+import { useRouter } from '@packrat/ui';
 import { RStack, RIconButton, BaseModal, View } from '@packrat/ui';
 import { Entypo } from '@expo/vector-icons';
 import { useModalState } from './useModalState';

@@ -96,3 +96,9 @@ export * from './SizableText';
 // export * from './RTooltip';
 
 export * from './ErrorBoundary';
+
+export { useRouter } from 'solito/router';
+export type { SolitoAppProps } from 'solito';
+export { createParam } from 'solito';
+export { Link } from 'solito/link';
+export { useSearchParams, useUpdateSearchParams } from 'solito/navigation';
