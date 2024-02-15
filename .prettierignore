@@ -1,6 +1,9 @@
 # Docker related
 docker-compose.yml
 
+# Vite TanStack codegen
+routeTree.gen.ts
+
 # Node modules and package files
 node_modules/
 package-lock.json
