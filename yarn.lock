@@ -11442,6 +11442,7 @@ __metadata:
     "@tanstack/react-query": "npm:^4.36.1"
     "@tanstack/react-query-devtools": "npm:^4.36.1"
     "@tanstack/react-query-persist-client": "npm:^4.36.1"
+    "@tanstack/react-router": "npm:^1.16.2"
     "@tmcw/togeojson": "npm:^5.7.0"
     "@trpc/client": "npm:^10.38.5"
     "@trpc/react-query": "npm:^10.38.5"

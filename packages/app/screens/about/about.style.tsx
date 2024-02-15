@@ -1,4 +1,4 @@
-export default loadStyles = (theme) => {
+const loadStyles = (theme) => {
   const { currentTheme } = theme;
   return {
     container: {
@@ -129,3 +129,5 @@ export default loadStyles = (theme) => {
     },
   };
 };
+
+export default loadStyles;
