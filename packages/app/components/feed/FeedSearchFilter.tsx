@@ -26,6 +26,17 @@ const dataValues = [
   'Oldest',
 ];
 
+interface FeedSearchFilterProps {
+  feedType: string;
+  handleSortChange: (value: string) => void;
+  handleTogglePack: () => void;
+  handleToggleTrip: () => void;
+  selectedTypes: { pack: boolean; trip: boolean };
+  queryString: string;
+  setSearchQuery: (query: string) => void;
+  handleCreateClick: () => void;
+}
+
 const FeedSearchFilter = ({
   feedType,
   handleSortChange,
@@ -35,7 +46,7 @@ const FeedSearchFilter = ({
   queryString,
   setSearchQuery,
   handleCreateClick,
-}) => {
+}: FeedSearchFilterProps) => {
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
   const [search, setSearch] = useState('');
@@ -149,7 +160,7 @@ const FeedSearchFilter = ({
   );
 };
 
-const loadStyles = (theme) => {
+const loadStyles = (theme: any) => {
   const { currentTheme } = theme;
   return {
     mainContainer: {

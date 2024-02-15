@@ -7,6 +7,21 @@ import { truncateString } from '../../utils/truncateString';
 import { useEffect } from 'react';
 import { useEditPack } from 'app/hooks/packs';
 
+interface UserDataCardProps {
+  type: 'pack' | 'trip';
+  destination: string;
+  _id: string;
+  name: string;
+  total_weight?: number;
+  is_public: boolean;
+  favorited_by?: string[];
+  favorites_count: number;
+  createdAt: string;
+  state: boolean[];
+  setState: React.Dispatch<React.SetStateAction<boolean[]>>;
+  index: number;
+  differentUser: boolean;
+}
 const UserDataCard = ({
   type, // "pack" or "trip"
   destination,
@@ -21,7 +36,7 @@ const UserDataCard = ({
   setState,
   index,
   differentUser,
-}) => {
+}: UserDataCardProps) => {
   const { editPack: changePackStatus } = useEditPack();
 
   /**

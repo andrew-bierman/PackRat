@@ -12,7 +12,16 @@ import {
   useScoreProgress,
 } from 'app/hooks/score';
 
-const ScoreProgressChart = ({ score, size = 150, strokeWidth = 10 }) => {
+interface ScoreProgressChartProps {
+  score: number;
+  size?: number;
+  strokeWidth?: number;
+}
+const ScoreProgressChart: React.FC<ScoreProgressChartProps> = ({
+  score,
+  size = 150,
+  strokeWidth = 10,
+}) => {
   if (!score) return null;
   const styles = useCustomStyles(loadStyles);
 
@@ -58,7 +67,20 @@ const ScoreProgressChart = ({ score, size = 150, strokeWidth = 10 }) => {
 //   redundancyAndVersatility: redundancyAndVersatilityGrade,
 // },
 
-const GradingPieChart = ({ scores, size = 150, strokeWidth = 10 }) => {
+interface GradingPieChartProps {
+  scores: {
+    weight: number;
+    essentialItems: number;
+    redundancyAndVersatility: number;
+  };
+  size?: number;
+  strokeWidth?: number;
+}
+const GradingPieChart: React.FC<GradingPieChartProps> = ({
+  scores,
+  size = 150,
+  strokeWidth = 10,
+}) => {
   if (!scores) return null;
 
   const styles = useCustomStyles(loadStyles);
@@ -144,7 +166,16 @@ const GradingPieChart = ({ scores, size = 150, strokeWidth = 10 }) => {
   );
 };
 
-export default function ScoreContainer({ type, data, isOwner }) {
+interface ScoreContainerProps {
+  type: 'pack' | 'trip';
+  data: any;
+  isOwner: boolean;
+}
+export const ScoreContainer: React.FC<ScoreContainerProps> = ({
+  type,
+  data,
+  isOwner,
+}) => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
@@ -185,8 +216,8 @@ export default function ScoreContainer({ type, data, isOwner }) {
       </HStack>
     </Box>
   );
-}
-const loadStyles = (theme) => {
+};
+const loadStyles = (theme: any) => {
   const { currentTheme } = theme;
   return {
     box: {
@@ -233,3 +264,5 @@ const loadStyles = (theme) => {
     },
   };
 };
+
+export default ScoreContainer;
