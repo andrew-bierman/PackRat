@@ -119,6 +119,16 @@ const CardInfo = ({
   return useLoadingState({ isLoading, skeleton, content });
 };
 
+interface HeaderProps {
+  user: any;
+  isLoading: boolean;
+  error: string;
+  tripsCount: number;
+  packsCount: number;
+  favoritesCount: number;
+  isCurrentUser: boolean;
+}
+
 const Header = ({
   user,
   isLoading,
@@ -127,7 +137,7 @@ const Header = ({
   packsCount,
   favoritesCount,
   isCurrentUser,
-}) => {
+}: HeaderProps) => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
