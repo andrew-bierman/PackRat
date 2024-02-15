@@ -1,15 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { Box, Button, ScrollView, Tooltip } from 'native-base';
+import React from 'react';
+import { Box, ScrollView } from 'native-base';
 import useTheme from 'app/hooks/useTheme';
 import { AddItemGlobal } from 'app/components/item/AddItemGlobal';
 import { ItemsTable } from 'app/components/itemtable/itemTable';
-// import { Stack } from 'expo-router';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useItems } from 'app/hooks/items/useItems';
 import { BaseModal } from '@packrat/ui';
 import { usePagination } from 'app/hooks/common';
 import { loadStyles } from './itemsComponent.style';
-// import { checkNetworkConnected } from 'app/utils/netInfo';
 
 const useItemsWithPagination = () => {
   const { limit, handleLimitChange, page, handlePageChange } = usePagination();

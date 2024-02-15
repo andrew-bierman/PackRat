@@ -1,4 +1,4 @@
-import { View, Platform } from 'react-native';
+import { Platform } from 'react-native';
 export const loadStyles = (theme: any) => {
   const { currentTheme } = theme;
 
