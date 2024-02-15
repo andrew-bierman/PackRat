@@ -1,17 +1,15 @@
-import { useDispatch, useSelector } from 'react-redux';
 import { useRunQueryItem } from './useRunQueueItem';
-import { addOfflineRequest, setOfflineRequests } from 'app/store/offlineQueue';
+import { useOfflineStore } from '../../atoms';
 
 export const useOfflineQueue = () => {
-  const { isConnected, requests } = useSelector((state) => state.offlineQueue);
-  const dispatch = useDispatch();
+  const { isConnected, requests, setRequests } = useOfflineStore();
   const runQueryItem = useRunQueryItem();
   const processQueue = () => {
     const queuePromises = [];
     const requestsCopy = JSON.parse(JSON.stringify(requests));
     let runCount = 0;
     const onQueueEnd = () => {
-      dispatch(setOfflineRequests(requestsCopy.slice(runCount + 1)));
+      setRequests(requestsCopy.slice(runCount + 1));
     };
 
     requests.forEach((request) => {
@@ -37,7 +35,7 @@ export const useOfflineQueue = () => {
   };
 
   const handleAddOfflineRequest = (method, data) => {
-    dispatch(addOfflineRequest({ method, data }));
+    setRequests((prev) => [...prev, { method, data }]);
   };
 
   return {

@@ -2,11 +2,10 @@ import { AntDesign } from '@expo/vector-icons';
 import { formatDistanceToNow } from 'date-fns';
 import { View } from 'react-native';
 import { RH2, RText, RStack, RSwitch } from '@packrat/ui';
-import { changePackStatus } from '../../store/packsStore';
-import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'solito/link';
 import { truncateString } from '../../utils/truncateString';
 import { useEffect } from 'react';
+import { useEditPack } from 'app/hooks/packs';
 
 const UserDataCard = ({
   type, // "pack" or "trip"
@@ -23,7 +22,7 @@ const UserDataCard = ({
   index,
   differentUser,
 }) => {
-  const dispatch = useDispatch();
+  const { editPack: changePackStatus } = useEditPack();
 
   /**
    * Updates the state at the specified index with the given boolean value.
@@ -49,7 +48,7 @@ const UserDataCard = ({
   const handleChangeStatus = (index) => {
     updateState(index, true);
     if (type === 'pack') {
-      dispatch(changePackStatus({ _id, is_public: !is_public, name }));
+      changePackStatus({ _id, is_public: !is_public, name });
     } else if (type === 'trip') {
     }
   };
@@ -107,8 +106,8 @@ const UserDataCard = ({
                 style={{
                   fontSize: 12,
                   color: 'mediumpurple',
-                  marginLeft: '-0.5px',
-                  marginTop: '-3px',
+                  // marginLeft: '-0.5px',
+                  // marginTop: '-3px',
                 }}
               >
                 Total Weight: {total_weight}
@@ -118,8 +117,8 @@ const UserDataCard = ({
                 style={{
                   fontSize: 12,
                   color: 'mediumpurple',
-                  marginLeft: '-0.5px',
-                  marginTop: '-3px',
+                  // marginLeft: '-0.5px',
+                  // marginTop: '-3px',
                 }}
               >
                 Destination: {truncatedDestination}

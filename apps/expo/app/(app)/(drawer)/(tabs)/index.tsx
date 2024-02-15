@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useSelector } from 'react-redux';
 import { Platform, StyleSheet, View, Text } from 'react-native';
 import { Stack } from 'expo-router';
 import { darkTheme, theme } from 'app/theme';

@@ -1,8 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { View, Text } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
 import { format } from 'date-fns';
-import { fetchSinglePack } from '../../store/singlePackStore';
 import { CustomCard } from '../card';
 
 interface DetailsComponent {
