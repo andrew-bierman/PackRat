@@ -9097,6 +9097,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tanstack/history@npm:1.15.13":
+  version: 1.15.13
+  resolution: "@tanstack/history@npm:1.15.13"
+  checksum: 10/5d3c52db4c495ba965c31caafadfeba7e5bb514f79048426808fa581bfa26db9825ee8a3bca52ca55dfa91ed98455d388e0a2707df940cfe2d77f8e0aaa19fe6
+  languageName: node
+  linkType: hard
+
 "@tanstack/match-sorter-utils@npm:^8.7.0":
   version: 8.11.8
   resolution: "@tanstack/match-sorter-utils@npm:8.11.8"
@@ -9176,6 +9183,34 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tanstack/react-router@npm:1.16.2, @tanstack/react-router@npm:^1.16.2":
+  version: 1.16.2
+  resolution: "@tanstack/react-router@npm:1.16.2"
+  dependencies:
+    "@tanstack/history": "npm:1.15.13"
+    "@tanstack/react-store": "npm:^0.2.1"
+    tiny-invariant: "npm:^1.3.1"
+    tiny-warning: "npm:^1.0.3"
+  peerDependencies:
+    react: ">=16"
+    react-dom: ">=16"
+  checksum: 10/9e180460b6941f7eeee1ea866a7e28e7a6adb5056558aac5d82a087719115e706270cfd8ad810ea7cf70acdf2646ea38c1b68307d0c2b34c8c4c6f40f8ae527b
+  languageName: node
+  linkType: hard
+
+"@tanstack/react-store@npm:^0.2.1":
+  version: 0.2.1
+  resolution: "@tanstack/react-store@npm:0.2.1"
+  dependencies:
+    "@tanstack/store": "npm:0.1.3"
+    use-sync-external-store: "npm:^1.2.0"
+  peerDependencies:
+    react: ">=16"
+    react-dom: ">=16"
+  checksum: 10/bda3c394e0a2eac08d5c0545a18826ac52fd6d1dd6d142e27bf3a0005aa289015d9b28c25015c1954af410481b50b1a8e811144354fb3bae3b87b547ad32cc25
+  languageName: node
+  linkType: hard
+
 "@tanstack/react-table@npm:^8.10.7":
   version: 8.11.8
   resolution: "@tanstack/react-table@npm:8.11.8"
@@ -9196,6 +9231,58 @@ __metadata:
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
   checksum: 10/a154d30d92506b181ba8a95c7e0123491a66bf8b368f83358e83d5cf3875b6cf7f04e93fa0b1faa07adddb993f8230e8a5c08219dba47f317246a3d57d1e7da0
+  languageName: node
+  linkType: hard
+
+"@tanstack/router-cli@npm:^1.16.3":
+  version: 1.16.3
+  resolution: "@tanstack/router-cli@npm:1.16.3"
+  dependencies:
+    "@tanstack/router-generator": "npm:1.16.3"
+    chokidar: "npm:^3.5.3"
+    yargs: "npm:^17.6.2"
+  bin:
+    tsr: bin/tsr.cjs
+  checksum: 10/b0211fd788e6ececbbc3537656834cb5ec1222b059bbbd4389748dde793fac3b48188b11f28c5789bba08bdd9ca11ea890562e40b637c1993b371463cba8261c
+  languageName: node
+  linkType: hard
+
+"@tanstack/router-devtools@npm:^1.16.2":
+  version: 1.16.2
+  resolution: "@tanstack/router-devtools@npm:1.16.2"
+  dependencies:
+    "@tanstack/react-router": "npm:1.16.2"
+    date-fns: "npm:^2.29.1"
+  peerDependencies:
+    react: ">=16"
+    react-dom: ">=16"
+  checksum: 10/0c46f754d80d1938e155bef3d0ce997f19f28c2830c7b2c3b9fdefcd363125326b0cb6a6f5b2b302257c3f0a775863f30c85b2c805d4deb9ac52388f357e8b15
+  languageName: node
+  linkType: hard
+
+"@tanstack/router-generator@npm:1.16.3":
+  version: 1.16.3
+  resolution: "@tanstack/router-generator@npm:1.16.3"
+  dependencies:
+    prettier: "npm:^3.1.1"
+    zod: "npm:^3.22.4"
+  checksum: 10/76a5c9178acfd97ea666adbc652ff13adbd9ca76de5084675b6a5fdc3578a4013213c68d09bc74a1fff13f2fb2288b6a45f83d22f9cceddd892cc20c080291df
+  languageName: node
+  linkType: hard
+
+"@tanstack/router-vite-plugin@npm:^1.16.3":
+  version: 1.16.3
+  resolution: "@tanstack/router-vite-plugin@npm:1.16.3"
+  dependencies:
+    "@tanstack/router-generator": "npm:1.16.3"
+  checksum: 10/f0a39d1fbc778fea267b499bf19c481ef2b0b59818acfb59d7c15c971946b57d60628a58290441ace505227de0ff44c5cf893a67322a41ac0ff8e073f3cd6e21
+  languageName: node
+  linkType: hard
+
+"@tanstack/store@npm:0.1.3":
+  version: 0.1.3
+  resolution: "@tanstack/store@npm:0.1.3"
+  checksum: 10/90a528e004553538be099b61d357e9dd1af7c0fb35f37b3c50a8a17462c5cd8c8d269d912f60c6dfcc18387a961f8c5a48e0b1e848db7f9d6ad357e45529294b
   languageName: node
   linkType: hard
 
@@ -14752,7 +14839,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"date-fns@npm:^2.16.1, date-fns@npm:^2.28.0, date-fns@npm:^2.29.3":
+"date-fns@npm:^2.16.1, date-fns@npm:^2.28.0, date-fns@npm:^2.29.1, date-fns@npm:^2.29.3":
   version: 2.30.0
   resolution: "date-fns@npm:2.30.0"
   dependencies:
@@ -26702,7 +26789,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:^3.0.2":
+"prettier@npm:^3.0.2, prettier@npm:^3.1.1":
   version: 3.2.5
   resolution: "prettier@npm:3.2.5"
   bin:
@@ -30880,6 +30967,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tiny-invariant@npm:^1.3.1":
+  version: 1.3.1
+  resolution: "tiny-invariant@npm:1.3.1"
+  checksum: 10/872dbd1ff20a21303a2fd20ce3a15602cfa7fcf9b228bd694a52e2938224313b5385a1078cb667ed7375d1612194feaca81c4ecbe93121ca1baebe344de4f84c
+  languageName: node
+  linkType: hard
+
 "tiny-osmpbf@npm:^0.1.0":
   version: 0.1.0
   resolution: "tiny-osmpbf@npm:0.1.0"
@@ -30887,6 +30981,13 @@ __metadata:
     pbf: "npm:^3.0.4"
     tiny-inflate: "npm:^1.0.2"
   checksum: 10/db2ed9d353f535476a201ecf1fcab420a168499513804d5633ea2b62820900824d18237078adf649367d4ac85b4f512ab83ca7b1a9fea5ca787e756681f046c8
+  languageName: node
+  linkType: hard
+
+"tiny-warning@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "tiny-warning@npm:1.0.3"
+  checksum: 10/da62c4acac565902f0624b123eed6dd3509bc9a8d30c06e017104bedcf5d35810da8ff72864400ad19c5c7806fc0a8323c68baf3e326af7cb7d969f846100d71
   languageName: node
   linkType: hard
 
@@ -32032,6 +32133,10 @@ __metadata:
     "@originjs/vite-plugin-commonjs": "npm:^1.0.3"
     "@packrat/ui": "npm:*"
     "@tamagui/vite-plugin": "npm:^1.89.20"
+    "@tanstack/react-router": "npm:^1.16.2"
+    "@tanstack/router-cli": "npm:^1.16.3"
+    "@tanstack/router-devtools": "npm:^1.16.2"
+    "@tanstack/router-vite-plugin": "npm:^1.16.3"
     "@types/react": "npm:^18.2.55"
     "@types/react-dom": "npm:^18.2.19"
     "@typescript-eslint/eslint-plugin": "npm:^6.21.0"
@@ -33114,7 +33219,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zod@npm:^3.20.6, zod@npm:^3.22.2, zod@npm:^3.22.3":
+"zod@npm:^3.20.6, zod@npm:^3.22.2, zod@npm:^3.22.3, zod@npm:^3.22.4":
   version: 3.22.4
   resolution: "zod@npm:3.22.4"
   checksum: 10/73622ca36a916f785cf528fe612a884b3e0f183dbe6b33365a7d0fc92abdbedf7804c5e2bd8df0a278e1472106d46674281397a3dd800fa9031dc3429758c6ac
