@@ -215,7 +215,7 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
   return <View style={styles.mainContainer}>{renderData()}</View>;
 };
 
-const loadStyles = (theme) => {
+const loadStyles = (theme: any) => {
   const { currentTheme } = theme;
   return {
     mainContainer: {
