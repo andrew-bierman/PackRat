@@ -111,7 +111,7 @@ const UserDataCard = ({
                   marginTop: '-3px',
                 }}
               >
-                Total Weight: {total_weight}
+                Total Weight: {total_weight}g
               </RText>
             ) : (
               <RText

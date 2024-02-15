@@ -40,7 +40,7 @@ const ERROR_MESSAGES = {
 const Feed = ({ feedType = 'public' }) => {
   const router = useRouter();
 
-  const [queryString, setQueryString] = useState('');
+  const [queryString, setQueryString] = useState('Favorite');
   const [selectedTypes, setSelectedTypes] = useState({
     pack: true,
     trip: false,
@@ -49,7 +49,6 @@ const Feed = ({ feedType = 'public' }) => {
   const [searchQuery, setSearchQuery] = useState('');
 
   const [refreshing, setRefreshing] = useState(false);
-
   const dispatch = useDispatch();
   const ownerId = useSelector((state: RootState) => state.auth.user?.id);
   // const publicPacksData = useSelector((state) => state.feed.publicPacks);
@@ -64,6 +63,8 @@ const Feed = ({ feedType = 'public' }) => {
     feedType,
     selectedTypes,
   );
+
+  useEffect(() => {}, [data]);
 
   const onRefresh = () => {
     setRefreshing(true);
@@ -169,7 +170,12 @@ const Feed = ({ feedType = 'public' }) => {
           numColumns={Platform.OS === 'web' ? 4 : 1}
           keyExtractor={(item) => item?.id + item?.type}
           renderItem={({ item }) => (
-            <Card key={item?.id} type={item?.type} {...item} />
+            <Card
+              key={item?.id}
+              type={item?.type}
+              favorited_by={item?.userFavoritePacks}
+              {...item}
+            />
           )}
           ListHeaderComponent={() => feedSearchFilterComponent}
           ListEmptyComponent={() => (

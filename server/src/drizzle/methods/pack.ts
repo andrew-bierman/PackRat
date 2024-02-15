@@ -152,7 +152,14 @@ export class Pack {
         orderBy: orderByFunction,
         ...(includeRelated ? relations : {}),
       });
-      return packs;
+      return (await packs).map((pack: any) => ({
+        ...pack,
+        scores: JSON.parse(pack.scores as string),
+        grades: JSON.parse(pack.grades as string),
+        total_weight: this.computeTotalWeight(pack),
+        favorites_count: this.computeFavouritesCount(pack),
+        total_score: this.computeTotalScores(pack),
+      }));
     } catch (error) {
       throw new Error(`Failed to fetch packs: ${error.message}`);
     }
@@ -179,6 +186,35 @@ export class Pack {
     }
   }
 
+  async sortPacksByWeight(packs: any, queryBy: string) {
+    try {
+      let sortedPacks = packs.sort(
+        (pack1, pack2) => pack2.total_weight - pack1.total_weight,
+      );
+      if (queryBy === 'Lightest') {
+        sortedPacks = packs.sort(
+          (pack1, pack2) => pack1.total_weight - pack2.total_weight,
+        );
+      }
+      return sortedPacks;
+    } catch (error) {
+      throw new Error(`Failed to sort packs by weight: ${error.message}`);
+    }
+  }
+
+  async sortPacksByFavoritesCount(packs: any) {
+    try {
+      const sortedPacks = packs.sort(
+        (pack1, pack2) => pack2.favorites_count - pack1.favorites_count,
+      );
+      return sortedPacks;
+    } catch (error) {
+      throw new Error(
+        `Failed to sort packs by favorite count: ${error.message}`,
+      );
+    }
+  }
+
   // async sortPacksByOwner({
   //   ownerId,
   //   queryBy,
@@ -191,42 +227,32 @@ export class Pack {
   //   }
   // }
 
-  async computeTotalWeight(pack) {
-    if (pack.itemDocuments && pack.itemDocuments.length > 0) {
-      const totalWeight = pack.itemDocuments.reduce(
-        (total, itemDocument: any) => {
+  computeTotalWeight(pack) {
+    if (pack.itemPacks && pack.itemPacks.length > 0) {
+      const totalWeight = pack.itemPacks.reduce(
+        (total: number, itemPack: any) => {
           const weightInGrams = convertWeight(
-            itemDocument.weight,
-            itemDocument.unit,
+            itemPack.item.weight,
+            itemPack.item.unit,
             'g',
           );
-          return total + weightInGrams * itemDocument.quantity;
+          return total + weightInGrams * itemPack.item.quantity;
         },
         0,
       );
-      return {
-        ...pack,
-        total_weight: totalWeight,
-      };
-    } else {
-      return {
-        ...pack,
-        total_weight: 0,
-      };
+      return totalWeight;
     }
+    return 0;
   }
 
-  async computeFavouritesCount(pack) {
-    return {
-      ...pack,
-      favorites_count: pack.favorited_by?.length ?? 0,
-    };
+  computeFavouritesCount(pack) {
+    return pack.userFavoritePacks?.length ?? 0;
   }
 
-  async computeTotalScores(pack) {
-    if (!pack.scores) return { ...pack, total_score: 0 };
-
-    const scoresArray: number[] = Object.values(pack.scores);
+  computeTotalScores(pack) {
+    if (!pack.scores) return 0;
+    const scores = JSON.parse(pack.scores);
+    const scoresArray: number[] = Object.values(scores);
     const sum: number = scoresArray.reduce(
       (total: number, score: number) => total + score,
       0,
@@ -234,6 +260,6 @@ export class Pack {
     const average: number =
       scoresArray.length > 0 ? sum / scoresArray.length : 0;
 
-    return { ...pack, total_score: Math.round(average * 100) / 100 };
+    return Math.round(average * 100) / 100;
   }
 }

@@ -28,7 +28,7 @@ export const AddItem = ({
     initialData?.category?.name || '',
   );
 
-  const [unit, setUnit] = useState(initialData?.unit || '');
+  const [unit, setUnit] = useState(initialData?.unit || 'lb');
 
   const ownerId = useSelector((state) => state.auth.user.id);
 
@@ -50,12 +50,10 @@ export const AddItem = ({
     setName(initialData?.name || '');
     setWeight(initialData?.weight?.toString() || '');
     setQuantity(initialData?.quantity?.toString() || '');
-    setUnit(initialData?.unit || '');
+    setUnit(initialData?.unit || 'lb');
   }, [initialData]);
-
   const handleSubmit = () => {
     const PackId = packId || initialData.id;
-
     if (isEdit) {
       if (PackId && initialData.global) {
         editPackItem({
