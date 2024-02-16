@@ -7,7 +7,7 @@ import '@tamagui/core/reset.css';
 import { RButton, YStack } from '@packrat/ui';
 import { LinearGradient } from 'tamagui/linear-gradient';
 import LandingPage from 'app/components/landing_page';
-import {Provider} from 'app/provider'
+import { Provider } from 'app/provider';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -33,10 +33,10 @@ function App() {
             Edit <code>src/App.tsx</code> and save to test HMR
           </p>
         </div>
-          <YStack f={1} ai="center" jc="center">
-            <RButton>Hello world</RButton>
-            <LinearGradient zIndex={-1} fullscreen colors={['red', 'blue']} />
-          </YStack>
+        <YStack f={1} ai="center" jc="center">
+          <RButton>Hello world</RButton>
+          <LinearGradient zIndex={-1} fullscreen colors={['red', 'blue']} />
+        </YStack>
         <p className="read-the-docs">
           Click on the Vite and React logos to learn more
         </p>

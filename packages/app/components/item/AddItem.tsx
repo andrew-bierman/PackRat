@@ -4,6 +4,30 @@ import { ItemForm } from './ItemForm'; // assuming you moved the form related co
 import { useAddPackItem } from 'app/hooks/packs/useAddPackItem';
 import { useEditPackItem } from 'app/hooks/packs/useEditPackItem';
 
+interface AddItemProps {
+  _id: string;
+  isEdit: boolean;
+  initialData: {
+    global: string;
+    _id: string;
+    name?: string;
+    weight?: number;
+    quantity?: number;
+    category?: {
+      name: string;
+    };
+    unit?: string;
+  };
+  packId: string;
+  currentPack: any;
+  editAsDuplicate: any;
+  setPage: (page: number) => void;
+  page: number;
+  isItemPage: boolean;
+  closeModalHandler: () => void;
+  setIsAddItemModalOpen: (isOpen: boolean) => void;
+}
+
 export const AddItem = ({
   _id,
   isEdit,
@@ -16,7 +40,7 @@ export const AddItem = ({
   closeModalHandler,
   isItemPage,
   setIsAddItemModalOpen = () => {},
-}) => {
+}: AddItemProps) => {
   // Moved the state up to the parent component
   const [name, setName] = useState(initialData?.name || '');
   const [weight, setWeight] = useState(initialData?.weight?.toString() || '');

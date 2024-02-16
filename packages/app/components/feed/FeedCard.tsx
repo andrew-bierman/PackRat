@@ -11,6 +11,31 @@ import { formatNumber } from 'app/utils/formatNumber';
 import { useAddFavorite, useFetchUserFavorites } from 'app/hooks/favorites';
 import { useAuthUser } from 'app/auth/hooks';
 
+interface CardProps {
+  type: string;
+  _id: string;
+  owner: {
+    _id: string;
+    username: string;
+  };
+  name: string;
+  total_weight: number;
+  is_public: boolean;
+  favorited_by: Array<{
+    _id: string;
+  }>;
+  favorites_count: number;
+  owner_id: string;
+  destination: string;
+  createdAt: string;
+  owners: Array<{ any: any }>;
+  duration: string;
+}
+
+interface User {
+  _id: string;
+}
+
 export default function Card({
   type,
   _id,
@@ -25,7 +50,7 @@ export default function Card({
   createdAt,
   owners,
   duration,
-}) {
+}: CardProps) {
   const user = useAuthUser();
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();

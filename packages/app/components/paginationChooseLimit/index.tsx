@@ -4,7 +4,17 @@ import DropdownComponent from '../Dropdown';
 import { RLabel } from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 
-export const PaginationLimit = ({ limit, setLimit, setPage }) => {
+interface PaginationLimitProps {
+  limit: string;
+  setLimit: (limit: string) => void;
+  setPage: (page: number) => void;
+}
+
+export const PaginationLimit = ({
+  limit,
+  setLimit,
+  setPage,
+}: PaginationLimitProps) => {
   const styles = useCustomStyles(loadStyles);
   const data = ['10', '20', '50'];
 
