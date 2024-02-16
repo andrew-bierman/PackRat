@@ -187,7 +187,6 @@ export default function ProfileContainer({ id = null }) {
   return (
     <View>
       <ScrollView >
-        {/* <ScrollView horizontal={true} contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}> */}
           <RStack
             style={[
               styles.mainContainer,
@@ -255,7 +254,6 @@ export default function ProfileContainer({ id = null }) {
             </View>
           </RStack>
         </ScrollView>
-      {/* </ScrollView> */}
     </View>
   );
 }
