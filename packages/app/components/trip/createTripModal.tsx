@@ -15,7 +15,24 @@ const options = [
   { label: 'For me only', value: 'false' },
 ];
 
-const NumberInput = (props) => {
+interface SaveTripContainerProps {
+  dateRange: {
+    startDate: Date;
+    endDate: Date;
+  };
+  weatherObject: any;
+  search: any;
+  form: any;
+}
+
+interface NumberInputProps {
+  min?: number;
+  max?: number;
+  value: string;
+  onChangeText?: (text: string) => void;
+}
+
+const NumberInput: React.FC<NumberInputProps> = (props) => {
   const { min, max, value, ...otherProps } = props;
 
   // Custom validation function to enforce positive numbers only
@@ -71,7 +88,7 @@ export const SaveTripContainer = ({
   weatherObject,
   search,
   form,
-}) => {
+}: SaveTripContainerProps) => {
   const user = useAuthUser();
   const searchParams = useSearchParams();
   const packId = searchParams.get('packId');
