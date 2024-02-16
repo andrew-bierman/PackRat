@@ -5,35 +5,20 @@ import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import loadStyles from './about.style';
 import AboutContent from './AboutContent';
+import { useAboutContent } from './useAboutContent';
 
 export default function About() {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    useTheme();
+  const { isDark } = useTheme();
   const styles = useCustomStyles(loadStyles);
+  const aboutContent = useAboutContent(styles, true);
+
   return Platform.OS === 'web' ? (
     <ScrollView
       showsHorizontalScrollIndicator={false}
       contentContainerStyle={styles.menuBar}
     >
       <View style={[isDark ? styles.containerDark : styles.container]}>
-        <Desktop>
-          <AboutContent
-            desktopContainer={styles.webLogoContainer}
-            isMobile={false}
-          />
-        </Desktop>
-        <Tablet>
-          <AboutContent
-            desktopContainer={styles.mobileContainer}
-            isMobile={true}
-          />
-        </Tablet>
-        <Mobile>
-          <AboutContent
-            desktopContainer={styles.mobileContainer}
-            isMobile={true}
-          />
-        </Mobile>
+        {aboutContent}
       </View>
     </ScrollView>
   ) : (
