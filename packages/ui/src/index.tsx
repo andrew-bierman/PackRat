@@ -95,8 +95,7 @@ export * from './SizableText';
 // export * from './RToast';
 // export * from './RTooltip';
 
-export * from './ErrorBoundary';
-
+export { default as ErrorBoundary } from './ErrorBoundary';
 export { useRouter } from 'solito/router';
 export type { SolitoAppProps } from 'solito';
 export { createParam } from 'solito';

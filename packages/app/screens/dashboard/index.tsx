@@ -9,6 +9,7 @@ import FeedPreview from '../../components/dashboard/FeedPreview';
 import Section from '../../components/dashboard/Section';
 import SectionHeader from '../../components/dashboard/SectionHeader';
 import useCustomStyles from 'app/hooks/useCustomStyles';
+import { loadStyles } from './dashboard.style';
 
 const Dashboard = () => {
   const styles = useCustomStyles(loadStyles);
@@ -41,30 +42,6 @@ const Dashboard = () => {
       </RScrollView>
     </>
   );
-};
-
-const loadStyles = (theme: any) => {
-  const { currentTheme } = theme;
-  return {
-    container: {
-      flex: 1,
-      flexGrow: 1,
-      backgroundColor: currentTheme.colors.background,
-      width: '100%',
-    },
-    content: {
-      flexGrow: 1,
-      justifyContent: 'flex-start',
-      alignItems: 'stretch',
-      paddingHorizontal: 20,
-    },
-    cardContainer: {
-      flexDirection: 'column',
-      justifyContent: 'space-between',
-      marginBottom: 20,
-      width: '100%',
-    },
-  };
 };
 
 export default Dashboard;
