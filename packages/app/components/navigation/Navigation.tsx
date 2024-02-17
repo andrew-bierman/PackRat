@@ -6,11 +6,10 @@ import {
   TouchableOpacity,
   Platform,
 } from 'react-native';
-import { AuthStateListener } from '../../auth/AuthStateListener';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useIsMobileView } from 'app/hooks/common';
 import { useNavigate } from 'app/hooks/navigation';
-import { useAuthUser } from 'app/hooks/user/useAuthUser';
+import { useAuthUser } from 'app/auth/hooks';
 import { NavigationList } from './NavigationList';
 import { Button } from 'tamagui';
 import SVGLogoComponent from '../../components/logo';
@@ -40,7 +39,6 @@ export const Navigation = () => {
   ) : (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        {user && <AuthStateListener />}
         <View style={styles.header}>
           <Button
             key={'logo-nav'}

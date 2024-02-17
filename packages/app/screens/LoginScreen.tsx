@@ -1,12 +1,19 @@
 import { View } from 'react-native';
-import { RHeading, RStack, RButton, RText, RIconButton } from '@packrat/ui';
+import {
+  RHeading,
+  RStack,
+  RButton,
+  RText,
+  RIconButton,
+  ScrollView,
+} from '@packrat/ui';
 import { FontAwesome } from '@expo/vector-icons';
 import { NODE_ENV } from '@env';
 import { Link } from 'solito/link';
 import { InformUser } from '../utils/ToastUtils';
 import useTheme from '../hooks/useTheme';
 import { InputText, InputTextRules } from '@packrat/ui';
-import { useGoogleAuth, useLogin } from 'app/hooks/login';
+import { useGoogleAuth, useLogin } from 'app/auth/hooks';
 
 const demoUser = {
   email: 'zoot3@email.com',
@@ -37,146 +44,156 @@ export default function Login() {
   }
 
   return (
-    <RStack>
-      <View style={{ width: '100%', alignItems: 'center' }}>
-        <View style={{ paddingTop: 32, width: '90%', maxWidth: 290 }}>
-          <RHeading fontSize={32} color="#212121" fontWeight="semibold">
-            Welcome
-          </RHeading>
-          <RHeading
-            color="grey"
-            fontWeight="medium"
-            fontSize={14}
-            style={{ marginTop: 8 }}
-          >
-            Sign in to continue!
-          </RHeading>
-
-          <RStack style={{ marginTop: 16, gap: 8 }}>
-            <InputText
-              label="Email ID"
-              keyboardType="email-address"
-              control={control}
-              name="email"
-              rules={InputTextRules.email}
-            />
-            <InputText
-              label="Password"
-              secureTextEntry
-              control={control}
-              name="password"
-              rules={InputTextRules.password}
-            />
-
-            <RButton
-              disabled={!isValid}
-              onPress={handleSubmit(handleLogin)}
-              style={{ marginTop: 16 }}
-              backgroundColor="mediumpurple"
+    <ScrollView>
+      <RStack>
+        <RStack
+          style={{
+            width: '100%',
+            alignItems: 'center',
+            backgroundColor: 'white',
+          }}
+        >
+          <View style={{ paddingTop: 32, width: '90%', maxWidth: 290 }}>
+            <RHeading fontSize={32} color="#212121" fontWeight="semibold">
+              Welcome
+            </RHeading>
+            <RHeading
+              color="grey"
+              fontWeight="medium"
+              fontSize={14}
+              style={{ marginTop: 8 }}
             >
-              Sign in
-            </RButton>
-            <RStack
-              style={{
-                marginTop: 16,
-                flexDirection: 'row',
-                justifyContent: 'center',
-                gap: 4,
-              }}
-            >
-              <RText fontSize={14} color="grey">
-                I'm a new user.
-              </RText>
-              <Link href="/register">
-                <RText
-                  style={{
-                    color: '#818cf8',
-                    fontWeight: 400,
-                    fontSize: 12,
-                  }}
-                >
-                  Sign Up
+              Sign in to continue!
+            </RHeading>
+
+            <RStack style={{ marginTop: 16, gap: 8 }}>
+              <InputText
+                label="Email ID"
+                keyboardType="email-address"
+                control={control}
+                name="email"
+                rules={InputTextRules.email}
+              />
+              <InputText
+                label="Password"
+                secureTextEntry
+                control={control}
+                name="password"
+                rules={InputTextRules.password}
+              />
+
+              <RButton
+                disabled={!isValid}
+                onPress={handleSubmit(handleLogin)}
+                style={{ marginTop: 16 }}
+                backgroundColor="mediumpurple"
+              >
+                Sign in
+              </RButton>
+              <RStack
+                style={{
+                  marginTop: 16,
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  gap: 4,
+                }}
+              >
+                <RText fontSize={14} color="grey">
+                  I'm a new user.
                 </RText>
-              </Link>
-            </RStack>
+                <Link href="/register">
+                  <RText
+                    style={{
+                      color: '#818cf8',
+                      fontWeight: 400,
+                      fontSize: 12,
+                    }}
+                  >
+                    Sign Up
+                  </RText>
+                </Link>
+              </RStack>
 
-            <RStack style={{ flexDirection: 'row', justifyContent: 'center' }}>
-              <Link href="/password-reset">
-                <RText
-                  style={{
-                    color: '#818cf8',
-                    fontWeight: 400,
-                    fontSize: 12,
-                  }}
-                >
-                  Reset Password?
-                </RText>
-              </Link>
-            </RStack>
-            {/* Google Login starts */}
-            <RStack
-              style={{
-                marginTop: 8,
-                flexDirection: 'row',
-                justifyContent: 'center',
-              }}
-            >
-              <RText color="grey" fontWeight="medium" fontSize={14}>
-                Or
-              </RText>
-            </RStack>
-
-            {/* Google Login */}
-            {enableGoogleLogin && (
+              <RStack
+                style={{ flexDirection: 'row', justifyContent: 'center' }}
+              >
+                <Link href="/password-reset">
+                  <RText
+                    style={{
+                      color: '#818cf8',
+                      fontWeight: 400,
+                      fontSize: 12,
+                    }}
+                  >
+                    Reset Password?
+                  </RText>
+                </Link>
+              </RStack>
+              {/* Google Login starts */}
               <RStack
                 style={{
                   marginTop: 8,
                   flexDirection: 'row',
                   justifyContent: 'center',
-                  alignItems: 'center',
                 }}
               >
-                <RIconButton
-                  disabled={!isGoogleSignInReady}
-                  onPress={async () => await promptAsync()}
-                  backgroundColor="red"
-                  style={{ width: '100%', color: 'white' }}
-                  icon={
-                    <FontAwesome
-                      name="google"
-                      size={16}
-                      color={currentTheme.colors.white}
-                    />
-                  }
-                >
-                  Sign in with Google
-                </RIconButton>
+                <RText color="grey" fontWeight="medium" fontSize={14}>
+                  Or
+                </RText>
               </RStack>
-            )}
 
-            {/* Demo Login for Development start */}
-            {NODE_ENV !== 'production' && (
-              <RStack
-                style={{
-                  marginTop: 8,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              >
-                <RButton
-                  style={{ width: '100%' }}
-                  disabled={!isGoogleSignInReady}
-                  onPress={() => handleLogin(demoUser)}
-                  backgroundColor="purple"
+              {/* Google Login */}
+              {enableGoogleLogin && (
+                <RStack
+                  style={{
+                    marginTop: 8,
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
                 >
-                  Demo User
-                </RButton>
-              </RStack>
-            )}
-            {/* Demo Login for Development end */}
-          </RStack>
-        </View>
-      </View>
-    </RStack>
+                  <RIconButton
+                    disabled={!isGoogleSignInReady}
+                    onPress={async () => await promptAsync()}
+                    backgroundColor="red"
+                    style={{ width: '100%', color: 'white' }}
+                    icon={
+                      <FontAwesome
+                        name="google"
+                        size={16}
+                        color={currentTheme.colors.white}
+                      />
+                    }
+                  >
+                    Sign in with Google
+                  </RIconButton>
+                </RStack>
+              )}
+
+              {/* Demo Login for Development start */}
+              {NODE_ENV !== 'production' && (
+                <RStack
+                  style={{
+                    marginTop: 8,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <RButton
+                    style={{ width: '100%' }}
+                    disabled={!isGoogleSignInReady}
+                    onPress={() => handleLogin(demoUser)}
+                    backgroundColor="purple"
+                  >
+                    Demo User
+                  </RButton>
+                </RStack>
+              )}
+              {/* Demo Login for Development end */}
+            </RStack>
+          </View>
+        </RStack>
+      </RStack>
+    </ScrollView>
   );
 }

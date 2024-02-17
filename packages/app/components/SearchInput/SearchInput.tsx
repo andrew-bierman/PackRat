@@ -1,4 +1,4 @@
-import React, { cloneElement } from 'react';
+import React, { cloneElement, ReactNode } from 'react';
 import { Platform } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import useSearchInput from './useSearchInput';
@@ -13,6 +13,16 @@ import {
   RIconButton,
 } from '@packrat/ui';
 import { View, Pressable } from 'react-native';
+import { SearchBar } from '@rneui/themed';
+
+interface SearchInputProps {
+  onSelect: (result: any, index: number) => void;
+  results: any[];
+  onChange: (text: string) => void;
+  searchString?: string;
+  placeholder?: string;
+  resultItemComponent: ReactNode;
+}
 
 export const SearchInput = ({
   onSelect,
@@ -21,7 +31,7 @@ export const SearchInput = ({
   results,
   onChange,
   searchString,
-}) => {
+}: SearchInputProps) => {
   const {
     handleClearSearch,
     handleSearchResultClick,
@@ -116,28 +126,26 @@ export const SearchInput = ({
         </RStack>
       </RStack>
     </RStack>
-  ) : isLoadingMobile ? (
-    <RText>Loading...</RText>
   ) : (
-    <RStack
-      style={{ width: '100%', alignSelf: 'center', position: 'relative' }}
-    >
-      <RInput
+    <RStack minWidth="100%" alignSelf="center" position="relative">
+      <SearchBar
+        placeholder={placeholder ?? 'Search'}
         onChangeText={handleSearchChange}
-        placeholder="Search"
-        width={'100%'}
-        borderRadius={4}
-        backgroundColor="white"
         value={searchString}
-        fontSize={14}
-        paddingVertical={16}
-        paddingHorizontal={8}
+        onClear={handleClearSearch}
+        showLoading={isLoadingMobile}
+        platform={Platform.OS === 'ios' ? 'ios' : 'android'}
+        focusable
+        lightTheme
+        showCancel={true}
+        round
+        containerStyle={{
+          backgroundColor: 'transparent',
+          borderWidth: 0,
+          borderBottomWidth: 0,
+          borderTopWidth: 0,
+        }}
       />
-      <RIconButton
-        backgroundColor="transparent"
-        icon={<MaterialIcons name="search" size={24} color="gray" />}
-      />
-
       {showSearchResults && results?.length > 0 && (
         <RScrollView
           position="absolute"
@@ -170,13 +178,6 @@ export const SearchInput = ({
     </RStack>
   );
 };
-
-/* <RStack style={{ flexDirection: 'row' }}>
-  <RText fontWeight="400">{result.properties.name}</RText>
-  <RText color={'gray'} opacity={100} textTransform={'capitalize'}>
-    {result.properties.osm_value}
-  </RText>
-</RStack>; */
 
 const loadStyles = () => ({
   container: {

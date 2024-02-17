@@ -6,6 +6,30 @@ import { ItemCategoryEnum } from '../../constants/itemCategory';
 import useTheme from '../../hooks/useTheme';
 const data = ['lb', 'oz', 'kg', 'g'];
 
+interface ItemFormProps {
+  name: string;
+  setName: (text: string) => void;
+  weight: string;
+  setWeight: (text: string) => void;
+  quantity: string;
+  setQuantity: (text: string) => void;
+  unit: string;
+  setUnit: (value: string) => void;
+  categoryType: string;
+  setCategoryType: (value: string) => void;
+  handleSubmit: () => void;
+  showSubmitButton?: boolean;
+  isLoading: boolean;
+  isEdit: boolean;
+  currentPack: {
+    items: Array<{
+      category: {
+        name: string;
+      };
+    }>;
+  } | null;
+}
+
 export const ItemForm = ({
   name,
   setName,
@@ -22,7 +46,7 @@ export const ItemForm = ({
   isLoading,
   isEdit,
   currentPack,
-}) => {
+}: ItemFormProps) => {
   let hasWaterAdded = false;
   if (
     currentPack &&

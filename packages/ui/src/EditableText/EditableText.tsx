@@ -5,6 +5,15 @@ import { useEditableText } from './useEditableText';
 import { LoadingPlaceholder } from '../LoadingPlaceholder';
 import { useInputFocus } from './useInputFocus';
 
+interface EditableTextProps {
+  value: string;
+  onChange: (value: string) => void;
+  onSave: (value: string) => void;
+  isFocused: boolean;
+  defaultValue: string;
+  isLoading: boolean;
+}
+
 export const EditableText = ({
   value,
   onChange,
@@ -12,7 +21,7 @@ export const EditableText = ({
   isFocused,
   defaultValue,
   isLoading,
-}) => {
+}: EditableTextProps) => {
   const inputRef = useRef(null);
   const { currentValue, handleChange, handleSave } = useEditableText({
     value,

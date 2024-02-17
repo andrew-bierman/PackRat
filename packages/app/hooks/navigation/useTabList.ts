@@ -5,7 +5,7 @@ import {
   MaterialIcons,
   AntDesign,
 } from '@expo/vector-icons';
-import { useAuthUser } from '../user/useAuthUser';
+import { useAuthUser } from 'app/auth/hooks';
 
 export const useTabList = () => {
   const user = useAuthUser();
@@ -17,11 +17,13 @@ export const useTabList = () => {
             href: '/sign-in',
             icon: 'login',
             label: 'Login',
+            IconComponent: MaterialCommunityIcons,
           },
           {
-            href: 'register',
-            icon: 'person-add',
+            href: '/register',
+            icon: 'account-plus',
             label: 'Register',
+            IconComponent: MaterialCommunityIcons,
           },
         ];
 

@@ -8,7 +8,7 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 
 interface QuickActionButtonProps {
   onPress: () => void;
-  iconName: keyof typeof MaterialIcons.glyphMap;
+  iconName: string;
   text: string;
 }
 
@@ -35,18 +35,18 @@ const QuickActionButton = ({
   );
 };
 
-const loadStyles = (theme) => {
+const loadStyles = (theme: any) => {
   const { currentTheme } = theme;
   return {
     container: {
-      marginRight: 10,
+      margin: 10,
     },
     card: {
       flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
-      paddingHorizontal: 40,
-      paddingVertical: 60,
+      // paddingHorizontal: 40,
+      // paddingVertical: 60,
       backgroundColor: currentTheme.colors.primary,
     },
     icon: {

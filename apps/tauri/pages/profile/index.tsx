@@ -1,5 +1,5 @@
 import ProfileContainer from 'app/screens/user/ProfileContainer';
-import { AuthWrapper } from 'auth/authWrapper';
+import { AuthWrapper } from 'app/auth/AuthWrapper';
 
 // export const runtime = 'experimental-edge'
 

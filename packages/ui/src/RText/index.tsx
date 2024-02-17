@@ -1,6 +1,6 @@
 import { Paragraph, styled } from 'tamagui';
 // import { Text } from 'react-native';
-import { Text } from 'native-base';
+// import { Text } from 'native-base';
 
 const RText = styled(Paragraph, {
   fontFamily: '$body',

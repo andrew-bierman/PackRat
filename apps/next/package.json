@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 4000",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -20,9 +20,9 @@
     "@babel/plugin-transform-react-jsx": "^7.23.4",
     "@expo/next-adapter": "5.0.2",
     "@react-native/assets-registry": "^0.74.0",
-    "@tamagui/config": "^1.89.8",
-    "@tamagui/next-plugin": "^1.89.8",
-    "@tamagui/next-theme": "^1.89.8",
+    "@tamagui/config": "^1.89.20",
+    "@tamagui/next-plugin": "^1.89.20",
+    "@tamagui/next-theme": "^1.89.20",
     "app": "*",
     "babel-preset-expo": "9.5.2",
     "babel-preset-react-native": "^4.0.1",
@@ -36,7 +36,7 @@
     "react-dom": "^18.2.0",
     "react-native-web": "^0.19.10",
     "setimmediate": "^1.0.5",
-    "tamagui": "^1.89.8",
+    "tamagui": "^1.89.20",
     "url-loader": "^4.1.1",
     "vercel": "latest"
   },
@@ -49,6 +49,6 @@
     "eslint-plugin-next-on-pages": "^1.8.5",
     "patch-package": "^8.0.0",
     "postinstall-postinstall": "^2.1.0",
-    "wrangler": "3.24.0"
+    "wrangler": "^3.28.3"
   }
 }

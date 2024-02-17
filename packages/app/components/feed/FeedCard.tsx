@@ -2,19 +2,39 @@ import { AntDesign } from '@expo/vector-icons';
 import { formatDistanceToNow } from 'date-fns';
 import { MaterialIcons, Entypo } from '@expo/vector-icons';
 import useTheme from '../../hooks/useTheme';
-import { useSelector, useDispatch } from 'react-redux';
-import {
-  // addFavorite,
-  selectFavoriteById,
-  selectAllFavorites,
-} from '../../store/favoritesStore';
 import { TouchableOpacity, View } from 'react-native';
 import { Link } from 'solito/link';
 import { DuplicateIcon } from '../DuplicateIcon/index';
 import { truncateString } from '../../utils/truncateString';
 import { RText, RStack, RHeading } from '@packrat/ui';
 import { formatNumber } from 'app/utils/formatNumber';
-import { useAddFavorite } from 'app/hooks/favorites';
+import { useAddFavorite, useFetchUserFavorites } from 'app/hooks/favorites';
+import { useAuthUser } from 'app/auth/hooks';
+
+interface CardProps {
+  type: string;
+  _id: string;
+  owner: {
+    _id: string;
+    username: string;
+  };
+  name: string;
+  total_weight: number;
+  is_public: boolean;
+  favorited_by: Array<{
+    _id: string;
+  }>;
+  favorites_count: number;
+  owner_id: string;
+  destination: string;
+  createdAt: string;
+  owners: Array<{ any: any }>;
+  duration: string;
+}
+
+interface User {
+  _id: string;
+}
 
 export default function Card({
   type,
@@ -30,16 +50,14 @@ export default function Card({
   createdAt,
   owners,
   duration,
-  itemPacks,
-}) {
-  const user = useSelector((state) => state.auth.user);
+}: CardProps) {
+  const user = useAuthUser();
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
 
   const { addFavorite } = useAddFavorite();
 
-  const favorites = useSelector(selectAllFavorites);
-  const dispatch = useDispatch();
+  const { data: favorites = [] } = useFetchUserFavorites(user?._id);
 
   const isFavorite =
     type !== 'trip' &&
@@ -57,7 +75,6 @@ export default function Card({
       userId: user.id,
     };
 
-    // dispatch(addFavorite(data));
     addFavorite(data);
   };
 
@@ -71,7 +88,7 @@ export default function Card({
       (favorite) => favorite.pack_id === id && favorite.user_id === user.id,
     );
     if (favorite) {
-      dispatch(removeFavorite(favorite.id));
+      // TODO IMPLEMENT remove favorite
     }
   };
 

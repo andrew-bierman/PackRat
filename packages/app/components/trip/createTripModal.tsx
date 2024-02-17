@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { BaseModal, RInput, RStack, RText } from '@packrat/ui';
-import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'app/hooks/router';
 import { format, intervalToDuration } from 'date-fns';
 // import { addTrip } from '../../store/tripsStore';
@@ -10,12 +9,30 @@ import { useGetPhotonDetails } from 'app/hooks/destination';
 // import { Picker } from '@react-native-picker/picker';
 import { DropdownComponent } from '../Dropdown';
 import { useSearchParams } from 'app/hooks/common';
+import { useAuthUser } from 'app/auth/hooks';
 const options = [
   { label: 'Public', value: 'true' },
   { label: 'For me only', value: 'false' },
 ];
 
-const NumberInput = (props) => {
+interface SaveTripContainerProps {
+  dateRange: {
+    startDate: Date;
+    endDate: Date;
+  };
+  weatherObject: any;
+  search: any;
+  form: any;
+}
+
+interface NumberInputProps {
+  min?: number;
+  max?: number;
+  value: string;
+  onChangeText?: (text: string) => void;
+}
+
+const NumberInput: React.FC<NumberInputProps> = (props) => {
   const { min, max, value, ...otherProps } = props;
 
   // Custom validation function to enforce positive numbers only
@@ -71,8 +88,8 @@ export const SaveTripContainer = ({
   weatherObject,
   search,
   form,
-}) => {
-  const user = useSelector((state) => state.auth.user);
+}: SaveTripContainerProps) => {
+  const user = useAuthUser();
   const searchParams = useSearchParams();
   const packId = searchParams.get('packId');
 
