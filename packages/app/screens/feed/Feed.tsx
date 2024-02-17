@@ -26,7 +26,7 @@ const ERROR_MESSAGES = {
 };
 
 interface FeedItem {
-  _id: string;
+  id: string;
   type: string;
 }
 

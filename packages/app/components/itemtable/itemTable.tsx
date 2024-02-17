@@ -30,7 +30,7 @@ interface YourItemType {
   category?: { name: string };
   quantity: number;
   unit: string;
-  _id: string;
+  id: string;
   type: string;
 }
 
@@ -67,7 +67,7 @@ export const ItemsTable = ({
     );
   };
   const TableItem = ({ itemData }: TableItemProps) => {
-    const { name, weight, category, quantity, unit, _id, type } = itemData;
+    const { name, weight, category, quantity, unit, id, type } = itemData;
 
     const rowData = [
       name,

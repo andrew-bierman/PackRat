@@ -27,7 +27,7 @@ interface Message {
 }
 
 interface Chat {
-  _id: string;
+  id: string;
 }
 
 interface MessageBubbleProps {

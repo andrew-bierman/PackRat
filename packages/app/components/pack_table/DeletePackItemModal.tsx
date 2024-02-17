@@ -6,7 +6,7 @@ import { useDeleteItem } from 'app/hooks/items';
 
 interface DeletePackItemModalProps {
   itemId: string;
-  pack?: { _id: string };
+  pack?: { id: string };
 }
 
 export const DeletePackItemModal = ({

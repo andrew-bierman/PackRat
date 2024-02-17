@@ -3,13 +3,14 @@ import { View } from 'react-native';
 import { ItemForm } from './ItemForm'; // assuming you moved the form related code to a separate component
 import { useAddPackItem } from 'app/hooks/packs/useAddPackItem';
 import { useEditPackItem } from 'app/hooks/packs/useEditPackItem';
+import { useAuthUser } from 'app/auth/hooks';
 
 interface AddItemProps {
-  _id: string;
+  id: string;
   isEdit: boolean;
   initialData: {
     global: string;
-    _id: string;
+    id: string;
     name?: string;
     weight?: number;
     quantity?: number;
@@ -41,6 +42,8 @@ export const AddItem = ({
   isItemPage,
   setIsAddItemModalOpen = () => {},
 }: AddItemProps) => {
+  const user = useAuthUser();
+
   // Moved the state up to the parent component
   const [name, setName] = useState(initialData?.name || '');
   const [weight, setWeight] = useState(initialData?.weight?.toString() || '');
@@ -53,7 +56,7 @@ export const AddItem = ({
 
   const [unit, setUnit] = useState(initialData?.unit || 'lb');
 
-  const ownerId = useSelector((state) => state.auth.user.id);
+  const ownerId = user?.id;
 
   const {
     // mutation: addPackItemMutation

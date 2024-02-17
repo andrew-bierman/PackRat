@@ -13,16 +13,16 @@ import { useAuthUser } from 'app/auth/hooks';
 
 interface CardProps {
   type: string;
-  _id: string;
+  id: string;
   owner: {
-    _id: string;
+    id: string;
     username: string;
   };
   name: string;
   total_weight: number;
   is_public: boolean;
   favorited_by: Array<{
-    _id: string;
+    id: string;
   }>;
   favorites_count: number;
   owner_id: string;
@@ -33,7 +33,7 @@ interface CardProps {
 }
 
 interface User {
-  _id: string;
+  id: string;
 }
 
 export default function Card({
@@ -57,7 +57,7 @@ export default function Card({
 
   const { addFavorite } = useAddFavorite();
 
-  const { data: favorites = [] } = useFetchUserFavorites(user?._id);
+  const { data: favorites = [] } = useFetchUserFavorites(user?.id);
 
   const isFavorite =
     type !== 'trip' &&

@@ -10,7 +10,7 @@ import { useEditPack } from 'app/hooks/packs';
 interface UserDataCardProps {
   type: 'pack' | 'trip';
   destination: string;
-  _id: string;
+  id: string;
   name: string;
   total_weight?: number;
   is_public: boolean;
