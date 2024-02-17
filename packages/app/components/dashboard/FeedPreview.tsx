@@ -11,7 +11,7 @@ import { useFeed } from 'app/hooks/feed';
 const { height, width } = Dimensions.get('window');
 
 interface FeedItem {
-  _id: string;
+  id: string;
   name: string;
   type: string;
   description: string;

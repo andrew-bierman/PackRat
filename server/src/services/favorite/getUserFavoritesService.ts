@@ -1,4 +1,5 @@
 import { User } from '../../drizzle/methods/User';
+import { Pack } from '../../drizzle/methods/pack';
 
 /**
  * Retrieves the favorite packs associated with a specific user.
@@ -8,9 +9,17 @@ import { User } from '../../drizzle/methods/User';
  */
 export const getUserFavoritesService = async (
   userId: string,
-): Promise<string[]> => {
+): Promise<object[]> => {
   const userClass = new User();
+  const packClass = new Pack();
   const user = await userClass.findUser({ userId, includeFavorites: true });
-  const userFavorites = user.userFavoritePacks?.map((pack) => pack.packId);
+  const userFavorites = user.userFavoritePacks?.map((item) => ({
+    ...item.pack,
+    scores: JSON.parse(item.pack.scores as string),
+    grades: JSON.parse(item.pack.grades as string),
+    total_weight: packClass.computeTotalWeight(item.pack),
+    favorites_count: packClass.computeFavouritesCount(item.pack),
+    total_score: packClass.computeTotalScores(item.pack),
+  }));
   return userFavorites;
 };

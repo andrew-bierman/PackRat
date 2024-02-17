@@ -30,6 +30,8 @@
 //     throw new Error('All fields must be filled');
 //   }
 
+import { Pack } from '../drizzle/methods/pack';
+
 //   const pack = await prisma.pack.create({
 //     data: {
 //       name,
@@ -52,12 +54,14 @@
 //   return pack;
 // };
 
+export const DEFAULT_SORT = { createdAt: 'DESC' };
+
 export const SORT_OPTIONS = {
   Favorite: { favorites_count: 'DESC' },
   Lightest: { total_weight: 'ASC' },
   Heaviest: { total_weight: 'DESC' },
-  'Most Items': { items_count: 'DESC' },
-  'Fewest Items': { items_count: 'ASC' },
+  'Most Items': DEFAULT_SORT,
+  'Fewest Items': DEFAULT_SORT,
   Oldest: { createdAt: 'ASC' },
   'Most Recent': { updatedAt: 'DESC' },
   'Highest Score': { total_score: 'DESC' },
@@ -67,4 +71,43 @@ export const SORT_OPTIONS = {
   'Most Owners': { owners: 'DESC' },
 };
 
-export const DEFAULT_SORT = { createdAt: 'DESC' };
+interface SortFunctionProps {
+  packs: any[];
+  queryBy: string;
+  sortItems: boolean;
+  ownerId?: string;
+  is_public?: boolean;
+}
+
+export const sortFunction = async ({
+  packs,
+  queryBy,
+  sortItems,
+  ownerId,
+  is_public,
+}: SortFunctionProps) => {
+  const packClass = new Pack();
+  let packsData;
+  switch (queryBy) {
+    case 'Most Items':
+    case 'Fewest Items':
+      packsData = await packClass.sortPacksByItems({
+        queryBy,
+        sortItems,
+        ...(ownerId && { ownerId }),
+        ...(is_public && { is_public }),
+      });
+      break;
+    case 'Heaviest':
+    case 'Lightest':
+      packsData = await packClass.sortPacksByWeight(packs, queryBy);
+      break;
+    case 'Favorite':
+      packsData = await packClass.sortPacksByFavoritesCount(packs);
+      break;
+    default:
+      packsData = packs;
+      break;
+  }
+  return packsData;
+};

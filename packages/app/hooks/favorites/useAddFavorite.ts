@@ -14,6 +14,7 @@ export function useAddFavorite() {
       onSuccess: () => {
         // Invalidate and refetch. Update to be more specific
         utils.getFavoritePacksByUser.invalidate();
+        utils.getPublicPacks.invalidate();
       },
     });
   };

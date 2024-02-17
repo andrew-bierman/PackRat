@@ -10,7 +10,7 @@ import { useEditPack } from 'app/hooks/packs';
 interface UserDataCardProps {
   type: 'pack' | 'trip';
   destination: string;
-  _id: string;
+  id: string;
   name: string;
   total_weight?: number;
   is_public: boolean;
@@ -125,7 +125,7 @@ const UserDataCard = ({
                   // marginTop: '-3px',
                 }}
               >
-                Total Weight: {total_weight}
+                Total Weight: {total_weight}g
               </RText>
             ) : (
               <RText

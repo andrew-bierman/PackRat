@@ -182,8 +182,27 @@ export class User {
         ...(includeFavorites && {
           with: {
             userFavoritePacks: {
-              columns: {
-                packId: true,
+              columns: { packId: true },
+              with: {
+                pack: {
+                  with: {
+                    itemPacks: {
+                      columns: {},
+                      with: {
+                        item: {
+                          columns: {
+                            id: true,
+                            name: true,
+                            weight: true,
+                            quantity: true,
+                            unit: true,
+                          },
+                        },
+                      },
+                    },
+                    userFavoritePacks: { columns: { userId: true } },
+                  },
+                },
               },
             },
           },

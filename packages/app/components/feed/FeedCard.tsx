@@ -13,16 +13,16 @@ import { useAuthUser } from 'app/auth/hooks';
 
 interface CardProps {
   type: string;
-  _id: string;
+  id: string;
   owner: {
-    _id: string;
+    id: string;
     username: string;
   };
   name: string;
   total_weight: number;
   is_public: boolean;
   favorited_by: Array<{
-    _id: string;
+    id: string;
   }>;
   favorites_count: number;
   owner_id: string;
@@ -33,7 +33,7 @@ interface CardProps {
 }
 
 interface User {
-  _id: string;
+  id: string;
 }
 
 export default function Card({
@@ -57,12 +57,12 @@ export default function Card({
 
   const { addFavorite } = useAddFavorite();
 
-  const { data: favorites = [] } = useFetchUserFavorites(user?._id);
+  const { data: favorites = [] } = useFetchUserFavorites(user?.id);
 
   const isFavorite =
     type !== 'trip' &&
-    (favorited_by?.includes(user?.id) ||
-      favorited_by?.some((obj) => obj?.id === user?.id && user?.id));
+    // (favorited_by?.includes(user?.id) ||
+    favorited_by?.some((obj) => obj?.userId === user?.id && user?.id);
 
   /**
    * Handles adding an item to the user's favorites.
@@ -94,8 +94,8 @@ export default function Card({
 
   const truncatedName = truncateString(name, 25);
   const truncatedDestination = truncateString(destination, 25);
-  const formattedWeight = formatNumber(total_weight); // TODO convert to user preference once implemented
-
+  // const formattedWeight = formatNumber(total_weight); // TODO convert to user preference once implemented
+  const formattedWeight = total_weight;
   let numberOfNights;
 
   if (duration) numberOfNights = JSON.parse(duration).numberOfNights;
@@ -175,7 +175,7 @@ export default function Card({
                 ml={-0.5}
                 mt={-1}
               >
-                Total Weight: {formattedWeight}
+                Total Weight: {formattedWeight}g
               </RText>
             )}
 
@@ -277,7 +277,7 @@ export default function Card({
                         fontSize="$2"
                         fontWeight="400"
                       >
-                        {favorites_count > 0 ? favorites_count : 0}
+                        {favorites_count}
                       </RText>
                     </View>
                   </View>

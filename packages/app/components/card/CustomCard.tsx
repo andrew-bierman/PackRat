@@ -15,7 +15,7 @@ interface CustomCardProps {
   destination?: string;
   data: {
     owner_id: {
-      _id: string;
+      id: string;
       username?: string;
     };
     owners?: Array<{ name: string }> | null;

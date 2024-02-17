@@ -19,9 +19,9 @@ export const useSearchItem = () => {
   const results = data?.items || [];
 
   const handleSearchResultClick = (item) => {
-    const ownerId = user._id;
+    const ownerId = user.id;
     const packId = window.location.pathname.substring('/path/'.length);
-    const itemId = item?._id;
+    const itemId = item?.id;
 
     // TODO add optimistic updates
     (async () => {

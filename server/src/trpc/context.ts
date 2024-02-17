@@ -17,4 +17,6 @@ export const createContext = (honoContext: Context) => async () => {
   };
 };
 
+export type ExtendedContext = ReturnType<ReturnType<typeof createContext>>;
+
 export const getDB = () => DB;

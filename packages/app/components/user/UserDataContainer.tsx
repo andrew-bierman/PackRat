@@ -53,10 +53,9 @@ export default function UserDataContainer({
 
   const typeUppercaseSingular = typeUppercase.slice(0, -1);
 
-  const cardType = type === 'packs' ? 'pack' : 'trip';
+  const cardType = type === 'packs' || type === 'favorites' ? 'pack' : 'trip';
 
   const differentUser = userId && userId !== currentUser.id;
-
   // Map function to render multiple skeleton cards
   const skeletonCards =
     SkeletonComponent ||

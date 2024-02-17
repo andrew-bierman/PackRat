@@ -54,7 +54,7 @@ export default function PackContainer({ isCreatingTrip = false }) {
     setCurrentPackId(selectedPack?.id);
 
     if (isCreatingTrip && selectedPack?.id) {
-      searchParams.set('packId', selectedPack?._id);
+      searchParams.set('packId', selectedPack?.id);
     }
   };
 

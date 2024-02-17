@@ -46,7 +46,7 @@ export const userFavoritePacks = sqliteTable(
   'user_favorite_packs',
   {
     userId: text('user_id').references(() => user.id, { onDelete: 'cascade' }),
-    packId: text('pack_id').references(() => pack.id, { onDelete: 'set null' }),
+    packId: text('pack_id').references(() => pack.id, { onDelete: 'cascade' }),
   },
   (table) => {
     return {

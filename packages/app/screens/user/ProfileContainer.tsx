@@ -220,7 +220,7 @@ export default function ProfileContainer({ id = null }) {
                   <UserDataContainer
                     data={[]}
                     type="packs"
-                    userId={user?._id}
+                    userId={user?.id}
                     isLoading={isLoading}
                     SkeletonComponent={SkeletonUserDataCard}
                   />
@@ -232,7 +232,7 @@ export default function ProfileContainer({ id = null }) {
                   <UserDataContainer
                     data={favoritesList}
                     type="favorites"
-                    userId={user?._id}
+                    userId={user?.id}
                     isLoading={isLoading}
                   />
                 ) : (

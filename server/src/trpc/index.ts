@@ -1,6 +1,8 @@
 import { TRPCError, initTRPC } from '@trpc/server';
 import { auth } from './middlewares';
-const t = initTRPC.create();
+import { type ExtendedContext } from './context';
+
+const t = initTRPC.context<ExtendedContext>().create();
 
 /**
  * Export reusable router and procedure helpers

@@ -63,7 +63,7 @@ export const useProfileSettings = () => {
     } = user;
 
     updateUser({
-      userId: _id,
+      userId: id,
       email,
       name,
       username,

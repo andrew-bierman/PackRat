@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "210cb5ca-66c4-40ed-93fb-192b8581fdb2",
+  "id": "fd3c55d1-a504-4d53-9ffa-de8460bdbaae",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "conversation": {
@@ -1057,7 +1057,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "set null",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
