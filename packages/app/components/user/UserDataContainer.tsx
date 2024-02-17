@@ -1,16 +1,14 @@
 import { Link } from 'solito/link';
-import { Stack, VStack, Text, Button } from 'native-base';
 import { RStack, RText, RButton, RSkeleton } from '@packrat/ui';
-import { Platform } from 'react-native';
+import { VirtualizedList } from 'react-native';
 import UserDataCard from './UserDataCard';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import LargeCard from '../card/LargeCard';
 import { theme } from '../../theme';
 import useTheme from '../../hooks/useTheme';
 import { hexToRGBA } from 'app/utils/colorFunctions';
 import { View, FlatList } from 'react-native';
-import { RootState } from 'store/store';
+import { useAuthUser } from 'app/auth/hooks';
 
 // Skeleton version of the UserDataCard component
 const SkeletonUserDataCard = () => {
@@ -26,13 +24,21 @@ const SkeletonUserDataCard = () => {
   );
 };
 
+interface UserDataContainerProps {
+  data: any;
+  type: 'packs' | 'trips';
+  userId?: string;
+  isLoading: boolean;
+  SkeletonComponent?: React.ReactElement;
+}
+
 export default function UserDataContainer({
   data = [],
   type,
   userId,
   isLoading,
   SkeletonComponent,
-}) {
+}: UserDataContainerProps) {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const [dataState, setDataState] = useState(
@@ -41,7 +47,7 @@ export default function UserDataContainer({
   useEffect(() => {
     setDataState(Array(data.length).fill(false));
   }, [data]);
-  const currentUser = useSelector((state: RootState) => state.auth.user);
+  const currentUser = useAuthUser();
 
   const typeUppercase = type.charAt(0).toUpperCase() + type.slice(1);
 
@@ -84,7 +90,6 @@ export default function UserDataContainer({
         style={{
           gap: 16,
           alignItems: 'center',
-          flex: 1,
           width: '100%',
           padding: 24,
         }}
@@ -105,6 +110,7 @@ export default function UserDataContainer({
         <RStack
           style={{
             flexWrap: 'wrap',
+            flexDirection: 'row',
             justifyContent: 'center',
             alignItems: 'center',
             width: '100%',
@@ -126,8 +132,12 @@ export default function UserDataContainer({
             //     />
             //   ))
             // )
-            <FlatList
+            <VirtualizedList
+              getItemCount={() => data.length}
+              getItem={(data, index) => data[index]}
+              nestedScrollEnabled={true}
               data={data}
+              horizontal={true}
               renderItem={({ item, index }) => (
                 <UserDataCard
                   key={item.id}
@@ -141,7 +151,11 @@ export default function UserDataContainer({
               )}
               keyExtractor={(item) => item.id}
               maxToRenderPerBatch={2}
-              // Other FlatList props like onEndReached for infinite scrolling
+              contentContainerStyle={{
+                flex: 1,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
             />
           ) : currentUser?.id === userId ? (
             <Link href="/">

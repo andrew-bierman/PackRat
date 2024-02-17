@@ -1,4 +1,5 @@
-import { publicProcedure } from '../../trpc';
+import { getUserByTokenService } from '../../services/user/getUserByToken';
+import { protectedProcedure } from '../../trpc';
 
 /**
  * Retrieves the user information and sends it as a response.
@@ -8,14 +9,17 @@ import { publicProcedure } from '../../trpc';
  */
 // export const getMe = async (req, res) => {
 //   try {
-//     res.status(200).send(req.user);
+//     const authHeader = req.headers.authorization;
+//     const token = authHeader.split(' ')[1];
+//     const user = await getUserByTokenService(token);
+//     res.status(200).send(user);
 //   } catch (err) {
 //     res.status(401).send({ message: err.message });
 //   }
 // };
 
 export function getMeRoute() {
-  return publicProcedure.query(async (opts) => {
+  return protectedProcedure.query(async (opts) => {
     const { user }: any = opts.ctx;
     return user;
   });

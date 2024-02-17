@@ -1,14 +1,13 @@
-import { useDispatch } from 'react-redux';
 import NetInfo from '@react-native-community/netinfo';
+import { useOfflineStore } from '../../atoms';
 import { useEffect } from 'react';
-import { setNetworkStatus } from 'app/store/offlineQueue';
 
 export const useNetworkStatusProvider = () => {
-  const dispatch = useDispatch();
+  const { setIsConnected } = useOfflineStore();
 
   useEffect(() => {
     NetInfo.addEventListener((state) => {
-      dispatch(setNetworkStatus(state.isConnected));
+      setIsConnected(state.isConnected);
     });
   }, []);
 };

@@ -2,12 +2,26 @@ import { AntDesign } from '@expo/vector-icons';
 import { formatDistanceToNow } from 'date-fns';
 import { View } from 'react-native';
 import { RH2, RText, RStack, RSwitch } from '@packrat/ui';
-import { changePackStatus } from '../../store/packsStore';
-import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'solito/link';
 import { truncateString } from '../../utils/truncateString';
 import { useEffect } from 'react';
+import { useEditPack } from 'app/hooks/packs';
 
+interface UserDataCardProps {
+  type: 'pack' | 'trip';
+  destination: string;
+  _id: string;
+  name: string;
+  total_weight?: number;
+  is_public: boolean;
+  favorited_by?: string[];
+  favorites_count: number;
+  createdAt: string;
+  state: boolean[];
+  setState: React.Dispatch<React.SetStateAction<boolean[]>>;
+  index: number;
+  differentUser: boolean;
+}
 const UserDataCard = ({
   type, // "pack" or "trip"
   destination,
@@ -22,8 +36,8 @@ const UserDataCard = ({
   setState,
   index,
   differentUser,
-}) => {
-  const dispatch = useDispatch();
+}: UserDataCardProps) => {
+  const { editPack: changePackStatus } = useEditPack();
 
   /**
    * Updates the state at the specified index with the given boolean value.
@@ -49,7 +63,7 @@ const UserDataCard = ({
   const handleChangeStatus = (index) => {
     updateState(index, true);
     if (type === 'pack') {
-      dispatch(changePackStatus({ id, is_public: !is_public, name }));
+      changePackStatus({ id, is_public: !is_public, name });
     } else if (type === 'trip') {
     }
   };
@@ -107,8 +121,8 @@ const UserDataCard = ({
                 style={{
                   fontSize: 12,
                   color: 'mediumpurple',
-                  marginLeft: '-0.5px',
-                  marginTop: '-3px',
+                  // marginLeft: '-0.5px',
+                  // marginTop: '-3px',
                 }}
               >
                 Total Weight: {total_weight}
@@ -118,8 +132,8 @@ const UserDataCard = ({
                 style={{
                   fontSize: 12,
                   color: 'mediumpurple',
-                  marginLeft: '-0.5px',
-                  marginTop: '-3px',
+                  // marginLeft: '-0.5px',
+                  // marginTop: '-3px',
                 }}
               >
                 Destination: {truncatedDestination}

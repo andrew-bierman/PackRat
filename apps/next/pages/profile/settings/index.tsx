@@ -1,5 +1,5 @@
 import Settings from 'app/screens/user/Settings';
-import { AuthWrapper } from 'auth/authWrapper';
+import { AuthWrapper } from 'app/auth/AuthWrapper';
 
 // export const runtime = 'experimental-edge'
 

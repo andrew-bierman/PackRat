@@ -1,4 +1,4 @@
-import { useRouter as useExpoRouter } from 'app/hooks/router';
+import { useRouter as useSolitoRouter } from 'app/hooks/router';
 
 interface HrefObject {
   pathname?: string;
@@ -13,7 +13,7 @@ interface Router {
 }
 
 export const useRouter = (): Router => {
-  const { push } = useExpoRouter();
+  const router = useSolitoRouter();
 
-  return { push };
+  return router;
 };

@@ -4,7 +4,12 @@ import React from 'react';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useWater } from 'app/hooks/water';
 
-export default function Water({ currentPack, setWaterItem }) {
+interface WaterProps {
+  currentPack: any;
+  setWaterItem: any;
+}
+
+export default function Water({ currentPack, setWaterItem }: WaterProps) {
   const { handleWaterChange, addWater, waterWeight } = useWater(currentPack);
   const styles = useCustomStyles(loadStyles);
 

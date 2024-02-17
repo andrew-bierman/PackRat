@@ -1,28 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { FlatList, View, ScrollView, Platform } from 'react-native';
+import React, { useState } from 'react';
+import { FlatList, View, Platform } from 'react-native';
 import Card from '../../components/feed/FeedCard';
-import {
-  getPublicPacks,
-  getPublicTrips,
-  getFavoritePacks,
-} from '../../store/feedStore';
-import {
-  changePackStatus,
-  fetchUserPacks,
-  selectAllPacks,
-} from '../../store/packsStore';
 // import { fetchUserTrips, selectAllTrips } from '../../store/tripsStore';
 import { usefetchTrips } from 'app/hooks/trips';
 import { useRouter } from 'app/hooks/router';
 import { fuseSearch } from '../../utils/fuseSearch';
-import { fetchUserFavorites } from '../../store/favoritesStore';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import FeedSearchFilter from 'app/components/feed/FeedSearchFilter';
 import { useFeed } from 'app/hooks/feed';
 import { RefreshControl } from 'react-native';
 import { RText } from '@packrat/ui';
-import { RootState } from 'store/store';
+import { useAuthUser } from 'app/auth/hooks';
 
 const URL_PATHS = {
   userPacks: '/pack/',
@@ -37,7 +25,21 @@ const ERROR_MESSAGES = {
   userTrips: 'No User Trips Available',
 };
 
-const Feed = ({ feedType = 'public' }) => {
+interface FeedItem {
+  _id: string;
+  type: string;
+}
+
+interface SelectedTypes {
+  pack: boolean;
+  trip: boolean;
+}
+
+interface FeedProps {
+  feedType?: string;
+}
+
+const Feed = ({ feedType = 'public' }: FeedProps) => {
   const router = useRouter();
 
   const [queryString, setQueryString] = useState('');
@@ -50,12 +52,8 @@ const Feed = ({ feedType = 'public' }) => {
 
   const [refreshing, setRefreshing] = useState(false);
 
-  const dispatch = useDispatch();
-  const ownerId = useSelector((state: RootState) => state.auth.user?.id);
-  // const publicPacksData = useSelector((state) => state.feed.publicPacks);
-  // const userPacksData = useSelector(selectAllPacks);
-  // const publicTripsData = useSelector((state) => state.feed.publicTrips);
-  // const userTripsData = useSelector(selectAllTrips);
+  const user = useAuthUser();
+  const ownerId = user?._id;
 
   const styles = useCustomStyles(loadStyles);
   const { data, error, isLoading, refetch } = useFeed(

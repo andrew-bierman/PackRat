@@ -13,14 +13,11 @@ import { FontAwesome } from '@expo/vector-icons';
 import { useRouter } from 'app/hooks/router';
 // import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { Link } from 'solito/link';
-import { useSelector, useDispatch } from 'react-redux';
-import { signInWithGoogle, signUp } from '../store/authStore';
 import { InformUser } from '../utils/ToastUtils';
 import useTheme from '../hooks/useTheme';
 import { useForm } from 'react-hook-form';
 import { useSession } from '../context/Auth/SessionProvider';
-import { useGoogleAuth } from 'app/hooks/login';
-import { useRegisterUser } from 'app/hooks/user';
+import { useRegisterUser, useGoogleAuth } from 'app/auth/hooks';
 
 export default function Register() {
   const { currentTheme } = useTheme();

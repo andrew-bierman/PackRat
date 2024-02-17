@@ -13,6 +13,35 @@ import Loader from '../Loader';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { loadStyles } from './itemsTable.style';
 import { AddItem } from '../item/AddItem';
+
+interface ItemsTableProps {
+  limit: number;
+  setLimit: (limit: number) => void;
+  page: number;
+  setPage: (page: number) => void;
+  data: YourItemType[];
+  isLoading: boolean;
+  totalPages: number;
+}
+
+interface YourItemType {
+  name: string;
+  weight: number;
+  category?: { name: string };
+  quantity: number;
+  unit: string;
+  _id: string;
+  type: string;
+}
+
+interface TitleRowProps {
+  title: string;
+}
+
+interface TableItemProps {
+  itemData: YourItemType;
+}
+
 export const ItemsTable = ({
   limit,
   setLimit,
@@ -21,12 +50,12 @@ export const ItemsTable = ({
   data,
   isLoading,
   totalPages,
-}) => {
+}: ItemsTableProps) => {
   const flexArr = [2, 1, 1, 1, 0.65, 0.65, 0.65];
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
-  const TitleRow = ({ title }) => {
+  const TitleRow = ({ title }: TitleRowProps) => {
     const rowData = [
       <RStack style={{ flexDirection: 'row', ...styles.mainTitle }}>
         <Text style={styles.titleText}>{title}</Text>
@@ -37,8 +66,8 @@ export const ItemsTable = ({
       <Row data={rowData} style={[styles.title]} textStyle={styles.titleText} />
     );
   };
-  const TableItem = ({ itemData }) => {
-    const { name, weight, category, quantity, unit, id, type } = itemData;
+  const TableItem = ({ itemData }: TableItemProps) => {
+    const { name, weight, category, quantity, unit, _id, type } = itemData;
 
     const rowData = [
       name,

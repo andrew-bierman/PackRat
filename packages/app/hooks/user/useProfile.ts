@@ -2,11 +2,12 @@ import { useFetchUserFavorites } from '../favorites';
 import { useUserPacks } from '../packs';
 import { useUserTrips } from '../singletrips';
 import { useMatchesCurrentUser } from '../useMatchesCurrentUser';
-import { useAuthUser } from './useAuthUser';
+import { useAuthUser } from '../../auth/hooks';
 import { useGetUser } from './useGetUser';
 
 export const useProfile = (id = null) => {
   const authUser = useAuthUser();
+  const authUserId = authUser?._id;
 
   const userId = id ?? authUser?.id;
 
@@ -16,19 +17,19 @@ export const useProfile = (id = null) => {
     data: allPacks,
     isLoading: allPacksLoading,
     error: allPacksError,
-  } = useUserPacks((ownerId = authUser?.id)); // TODO: Add enabled as parameter
+  } = useUserPacks(authUserId); // TODO: Add enabled as parameter
 
   const {
     data: tripsData,
     isLoading: tripsIsLoading,
     error: tripsError,
-  } = useUserTrips((ownerId = authUser?.id)); // TODO: Add enabled as parameter
+  } = useUserTrips(authUserId); // TODO: Add enabled as parameter
 
   const {
     data: allFavorites,
     isLoading: allFavoritesLoading,
     error: allFavoritesError,
-  } = useFetchUserFavorites((ownerId = authUser?.id)); // TODO: Add enabled as parameter
+  } = useFetchUserFavorites(authUserId); // TODO: Add enabled as parameter
 
   const {
     data: userData,

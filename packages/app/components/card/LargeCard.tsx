@@ -12,7 +12,18 @@ import { RootState } from 'store/store';
  * @param {string} type - The type of container style to retrieve.
  * @return {Object} The container style object.
  */
-const getContainerStyle = (type) => {
+
+interface LargeCardProps {
+  title: string;
+  Icon?: React.ComponentType<any>;
+  ContentComponent?: React.ComponentType<any>;
+  contentProps?: object;
+  type: 'search' | 'map' | 'mobile';
+  customStyle?: object;
+  children?: React.ReactNode;
+}
+
+const getContainerStyle = (type: 'search' | 'map' | 'mobile') => {
   const styles = useCustomStyles(loadStyles);
   switch (type) {
     case 'search':
@@ -28,18 +39,10 @@ const getContainerStyle = (type) => {
 
 /**
  * Generate the function comment for the given function body.
- *
- * @param {Object} props - The props object containing the function parameters.
- * @param {string} props.title - The title of the large card.
- * @param {React.Component} props.Icon - The icon component of the large card.
- * @param {React.Component} props.ContentComponent - The content component of the large card.
- * @param {Object} props.contentProps - The props object for the content component.
- * @param {string} props.type - The type of the large card.
- * @param {Object} props.customStyle - The custom style object for the large card.
- * @param {React.Component} props.children - The children components of the large card.
+ * @param {LargeCardProps}
  * @return {React.Component} The rendered large card component.
  */
-export default function LargeCard({
+const LargeCard: React.FC<LargeCardProps> = ({
   title,
   Icon,
   ContentComponent,
@@ -47,7 +50,7 @@ export default function LargeCard({
   type,
   customStyle,
   children,
-}) {
+}) => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const containerStyle = customStyle || getContainerStyle(type);
@@ -74,7 +77,7 @@ export default function LargeCard({
           style={{
             color: currentTheme.colors.textPrimary,
             fontSize: currentTheme.font.size,
-            fontWeight: '600',
+            fontWeight: 600,
           }}
         >
           {title && <RText>{title}</RText>}
@@ -84,9 +87,9 @@ export default function LargeCard({
       {children}
     </RStack>
   );
-}
+};
 
-const loadStyles = (theme) => {
+const loadStyles = (theme: any) => {
   const { currentTheme } = theme;
 
   return {
@@ -132,3 +135,5 @@ const loadStyles = (theme) => {
     },
   };
 };
+
+export default LargeCard;

@@ -33,7 +33,7 @@ export const TrpcTanstackProvider: React.FC<{ children: React.ReactNode }> = ({
       httpBatchLink({
         url: `${api}/trpc`,
         async headers() {
-          const token = await getToken('session');
+          const token = await getToken();
           return {
             authorization: token ? `Bearer ${token}` : '',
           };

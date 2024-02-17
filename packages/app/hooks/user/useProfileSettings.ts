@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useUpdateUser } from './useUpdateUser';
 import * as ImagePicker from 'expo-image-picker';
-import { editUser, updatePassword } from '../../store/authStore';
-import { useAuthUser } from './useAuthUser';
+import { useAuthUser } from '../../auth/hooks';
+import { useUpdateUserPassword } from './useUpdateUserPassword';
 
 const PROFILE_SETTINGS_DEFAULTS = {
   profileImage: '',
@@ -15,9 +15,10 @@ const PROFILE_SETTINGS_DEFAULTS = {
 
 export const useProfileSettings = () => {
   const authUser = useAuthUser();
+  const updateUser = useUpdateUser();
+  const updateUserPassword = useUpdateUserPassword();
   const [user, setUser] = useState(authUser);
   const isReady = useRef(false);
-  const dispatch = useDispatch();
 
   const [passwords, setPasswords] = useState<any>({
     oldPassword: '',
@@ -61,24 +62,22 @@ export const useProfileSettings = () => {
       preferredWeight,
     } = user;
 
-    dispatch(
-      editUser({
-        userId: id,
-        email,
-        name,
-        username,
-        profileImage,
-        preferredWeather,
-        preferredWeight,
-      }),
-    );
+    updateUser({
+      userId: _id,
+      email,
+      name,
+      username,
+      profileImage,
+      preferredWeather,
+      preferredWeight,
+    });
   };
 
   const handleUpdatePassword = () => {
     const { email } = user;
     const { oldPassword, newPassword, confirmPassword } = passwords;
     if (newPassword !== confirmPassword) return;
-    dispatch(updatePassword({ email, oldPassword, newPassword }));
+    updateUserPassword({ email, password: newPassword });
   };
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { Switch } from 'tamagui';
@@ -26,6 +26,17 @@ const dataValues = [
   'Oldest',
 ];
 
+interface FeedSearchFilterProps {
+  feedType: string;
+  handleSortChange: (value: string) => void;
+  handleTogglePack: () => void;
+  handleToggleTrip: () => void;
+  selectedTypes: { pack: boolean; trip: boolean };
+  queryString: string;
+  setSearchQuery: (query: string) => void;
+  handleCreateClick: () => void;
+}
+
 const FeedSearchFilter = ({
   feedType,
   handleSortChange,
@@ -35,10 +46,10 @@ const FeedSearchFilter = ({
   queryString,
   setSearchQuery,
   handleCreateClick,
-}) => {
+}: FeedSearchFilterProps) => {
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
-  const debouncedSearch = debounce((query) => setSearchQuery(query), 500);
+  const [search, setSearch] = useState('');
   return (
     <View style={styles.filterContainer}>
       <View style={styles.searchContainer}>
@@ -49,8 +60,13 @@ const FeedSearchFilter = ({
           <RInput
             size="$30"
             placeholder={`Search ${feedType || 'Feed'}`}
-            // onChangeText={setSearchQuery}
-            onChangeText={debouncedSearch}
+            onChangeText={(value) => {
+              setSearch(value);
+              debounce(() => {
+                setSearchQuery(value);
+              }, 500);
+            }}
+            value={search}
           />
           <RIconButton
             backgroundColor="transparent"
@@ -134,12 +150,17 @@ const FeedSearchFilter = ({
           <RButton onPress={handleCreateClick}>Create</RButton>
         )}
       </RStack>
-      <RSeparator style={{ margin: '10px 0' }} />
+      <RSeparator
+        marginTop={10}
+        marginBottom={10}
+        marginRight={0}
+        marginLeft={0}
+      />
     </View>
   );
 };
 
-const loadStyles = (theme) => {
+const loadStyles = (theme: any) => {
   const { currentTheme } = theme;
   return {
     mainContainer: {
