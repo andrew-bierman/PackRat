@@ -30,7 +30,7 @@
     "@tanstack/react-table": "^8.10.7",
     "@tanstack/react-virtual": "3.0.0-beta.54",
     "esbuild": "^0.19.5",
-    "jotai": "^2.4.3",
+    "jotai": "^2.6.4",
     "react": "^18.2.0",
     "tamagui": "^1.89.20",
     "zeego": "^1.7.2"

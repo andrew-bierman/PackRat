@@ -1,4 +1,4 @@
-import React, { cloneElement } from 'react';
+import React, { cloneElement, ReactNode } from 'react';
 import { Platform } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import useSearchInput from './useSearchInput';
@@ -15,6 +15,15 @@ import {
 import { View, Pressable } from 'react-native';
 import { SearchBar } from '@rneui/themed';
 
+interface SearchInputProps {
+  onSelect: (result: any, index: number) => void;
+  results: any[];
+  onChange: (text: string) => void;
+  searchString?: string;
+  placeholder?: string;
+  resultItemComponent: ReactNode;
+}
+
 export const SearchInput = ({
   onSelect,
   placeholder,
@@ -22,7 +31,7 @@ export const SearchInput = ({
   results,
   onChange,
   searchString,
-}) => {
+}: SearchInputProps) => {
   const {
     handleClearSearch,
     handleSearchResultClick,

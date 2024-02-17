@@ -1,33 +1,33 @@
-import React, { useRef, useState } from 'react';
-import { ScrollView, Platform, Dimensions } from 'react-native';
+import React, { useRef, useState, ReactNode } from 'react';
+import {
+  ScrollView,
+  Platform,
+  Dimensions,
+  NativeScrollEvent,
+} from 'react-native';
 import { RStack } from '@packrat/ui';
 import ScrollButton from './ScrollButton';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 
+interface CarouselProps {
+  children?: ReactNode[];
+  itemWidth: number;
+}
+
 const { height, width } = Dimensions.get('window');
 
-const Carousel = ({ children = [], itemWidth }) => {
-  const scrollViewRef = useRef();
-  const [currentIndex, setCurrentIndex] = useState(0);
+const Carousel: React.FC<CarouselProps> = ({ children = [], itemWidth }) => {
+  const scrollViewRef = useRef<ScrollView>(null);
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
   const styles = useCustomStyles(loadStyles);
 
-  /**
-   * Handles the scroll event.
-   *
-   * @param {object} event - The scroll event object.
-   */
-  const handleScroll = (event) => {
+  const handleScroll = (event: { nativeEvent: NativeScrollEvent }) => {
     const contentOffset = event.nativeEvent.contentOffset;
     const newIndex = Math.round(contentOffset.x / itemWidth);
     setCurrentIndex(newIndex);
   };
 
-  /**
-   * Scrolls to the specified index.
-   *
-   * @param {number} index - The index to scroll to.
-   */
-  const scrollToIndex = (index) => {
+  const scrollToIndex = (index: number) => {
     if (index >= 0 && index < children.length && scrollViewRef.current) {
       scrollViewRef.current.scrollTo({
         x: index * (itemWidth + 20),
@@ -59,7 +59,7 @@ const Carousel = ({ children = [], itemWidth }) => {
         ref={scrollViewRef}
         horizontal
         scrollEnabled={Platform.OS === 'web'}
-        gestureEnabled={false} // Add this prop
+        // gestureEnabled={false} // Add this prop
         style={styles.carousel}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ flexDirection: 'row' }}

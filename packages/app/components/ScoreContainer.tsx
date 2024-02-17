@@ -167,8 +167,16 @@ const GradingPieChart: React.FC<GradingPieChartProps> = ({
   );
 };
 
-export default function ScoreContainer({ type, data, isOwner }) {
-  const dispatch = useDispatch();
+interface ScoreContainerProps {
+  type: 'pack' | 'trip';
+  data: any;
+  isOwner: boolean;
+}
+export const ScoreContainer: React.FC<ScoreContainerProps> = ({
+  type,
+  data,
+  isOwner,
+}) => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
@@ -257,3 +265,5 @@ const loadStyles = (theme: any) => {
     },
   };
 };
+
+export default ScoreContainer;
