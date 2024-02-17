@@ -11,13 +11,13 @@
   "dependencies": {
     "@originjs/vite-plugin-commonjs": "^1.0.3",
     "@packrat/ui": "*",
-    "@tamagui/vite-plugin": "^1.89.20",
+    "@tamagui/vite-plugin": "^1.89.28",
     "@vitejs/plugin-react-swc": "^3.6.0",
     "app": "*",
     "esbuild-plugin-flow": "^0.3.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-native": "0.72.10",
+    "react-native": "0.73.4",
     "react-native-web": "^0.19.10"
   },
   "devDependencies": {
@@ -30,6 +30,6 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
     "typescript": "^5.2.2",
-    "vite": "^5.1.0"
+    "vite": "^5.1.3"
   }
 }
