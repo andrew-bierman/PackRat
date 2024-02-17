@@ -13,7 +13,7 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useDate } from 'app/hooks/weather/useDate';
 import { defaultWeatherObject } from '../../constants/defaultWeatherObj';
 import { defaultWeekObj } from '../../constants/defaultWeekObj';
-import { loadStyles } from './weatherCard.style';
+import { loadStyles } from './WeatherCard.style';
 import { useWeatherInfo } from './useWeatherInfo';
 
 interface WeatherObject {

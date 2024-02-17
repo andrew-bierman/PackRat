@@ -1,6 +1,6 @@
 import { Feather, FontAwesome5 } from '@expo/vector-icons';
 import { RStack, RText } from '@packrat/ui';
-import { loadStyles } from './weatherCard.style';
+import { loadStyles } from './WeatherCard.style';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 export const useWeatherInfo = (iconName, iconColor, title, value) => {
   const styles = useCustomStyles(loadStyles);
