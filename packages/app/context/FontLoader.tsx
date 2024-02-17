@@ -20,10 +20,13 @@ import {
   Zocial,
 } from '@expo/vector-icons';
 
+import InterMedium from '@tamagui/font-inter/otf/Inter-Medium.otf';
+import InterBold from '@tamagui/font-inter/otf/Inter-Bold.otf';
+
 const FontLoader = ({ children }) => {
   const [loaded] = useFonts({
-    Inter: require('@tamagui/font-inter/otf/Inter-Medium.otf'),
-    InterBold: require('@tamagui/font-inter/otf/Inter-Bold.otf'),
+    Inter: InterMedium,
+    InterBold: InterBold,
     // Cache all icon fonts
     ...AntDesign.font,
     ...Entypo.font,
