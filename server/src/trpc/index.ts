@@ -1,6 +1,6 @@
 import { TRPCError, initTRPC } from '@trpc/server';
 import { auth } from './middlewares';
-import { ExtendedContext } from './context';
+import { type ExtendedContext } from './context';
 
 const t = initTRPC.context<ExtendedContext>().create();
 
