@@ -1,4 +1,4 @@
-export default loadStyles = (theme: any) => {
+const loadStyles = (theme: any) => {
   const { currentTheme } = theme;
   return {
     container: {

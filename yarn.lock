@@ -9188,7 +9188,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/react-router@npm:^1.16.2":
+"@tanstack/react-router@npm:1.16.5, @tanstack/react-router@npm:^1.16.2, @tanstack/react-router@npm:^1.16.5":
   version: 1.16.5
   resolution: "@tanstack/react-router@npm:1.16.5"
   dependencies:
@@ -9236,6 +9236,38 @@ __metadata:
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
   checksum: 10/a154d30d92506b181ba8a95c7e0123491a66bf8b368f83358e83d5cf3875b6cf7f04e93fa0b1faa07adddb993f8230e8a5c08219dba47f317246a3d57d1e7da0
+  languageName: node
+  linkType: hard
+
+"@tanstack/router-devtools@npm:^1.16.5":
+  version: 1.16.5
+  resolution: "@tanstack/router-devtools@npm:1.16.5"
+  dependencies:
+    "@tanstack/react-router": "npm:1.16.5"
+    date-fns: "npm:^2.29.1"
+  peerDependencies:
+    react: ">=16"
+    react-dom: ">=16"
+  checksum: 10/ec3ad3bb7d508a1359ec8618f31717a2ebfef36d44f96ab0e0f214e99a68d37ea5d4cb6a3e066f85e87f9f00d99cda0eb8e2af51bf39ae02d71c197e6e56b74d
+  languageName: node
+  linkType: hard
+
+"@tanstack/router-generator@npm:1.16.5":
+  version: 1.16.5
+  resolution: "@tanstack/router-generator@npm:1.16.5"
+  dependencies:
+    prettier: "npm:^3.1.1"
+    zod: "npm:^3.22.4"
+  checksum: 10/c9dd6e0a236d518440e7750365dc3a9eec0342a04fa0261b40f55d0c002d64998a2ca112a711b94d7ec9c98080350c247e730bbdf2279151a1a1420d3d2af00e
+  languageName: node
+  linkType: hard
+
+"@tanstack/router-vite-plugin@npm:^1.16.5":
+  version: 1.16.5
+  resolution: "@tanstack/router-vite-plugin@npm:1.16.5"
+  dependencies:
+    "@tanstack/router-generator": "npm:1.16.5"
+  checksum: 10/359003c68463a974c92ec18c30c6daf2881d0cbf204ad62085ca2d42d60b262958787e12e8fe3a06251e5aafaa5a835fc2d6a6c94c78e0f9b8b735234d263680
   languageName: node
   linkType: hard
 
@@ -14823,7 +14855,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"date-fns@npm:^2.16.1, date-fns@npm:^2.28.0, date-fns@npm:^2.29.3":
+"date-fns@npm:^2.16.1, date-fns@npm:^2.28.0, date-fns@npm:^2.29.1, date-fns@npm:^2.29.3":
   version: 2.30.0
   resolution: "date-fns@npm:2.30.0"
   dependencies:
@@ -26854,7 +26886,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:^3.0.2":
+"prettier@npm:^3.0.2, prettier@npm:^3.1.1":
   version: 3.2.5
   resolution: "prettier@npm:3.2.5"
   bin:
@@ -32177,6 +32209,9 @@ __metadata:
     "@originjs/vite-plugin-commonjs": "npm:^1.0.3"
     "@packrat/ui": "npm:*"
     "@tamagui/vite-plugin": "npm:^1.89.20"
+    "@tanstack/react-router": "npm:^1.16.5"
+    "@tanstack/router-devtools": "npm:^1.16.5"
+    "@tanstack/router-vite-plugin": "npm:^1.16.5"
     "@types/react": "npm:^18.2.55"
     "@types/react-dom": "npm:^18.2.19"
     "@typescript-eslint/eslint-plugin": "npm:^6.21.0"
@@ -33299,7 +33334,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zod@npm:^3.20.6, zod@npm:^3.22.2, zod@npm:^3.22.3":
+"zod@npm:^3.20.6, zod@npm:^3.22.2, zod@npm:^3.22.3, zod@npm:^3.22.4":
   version: 3.22.4
   resolution: "zod@npm:3.22.4"
   checksum: 10/73622ca36a916f785cf528fe612a884b3e0f183dbe6b33365a7d0fc92abdbedf7804c5e2bd8df0a278e1472106d46674281397a3dd800fa9031dc3429758c6ac
