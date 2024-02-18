@@ -1,9 +1,13 @@
 import { Platform, View } from 'react-native';
-import DropdownComponent from '../Dropdown';
-import { RInput, RButton, RText, RLabel } from '@packrat/ui';
+import {
+  RButton,
+  RText,
+  RLabel,
+  CustomForm,
+  CustomSelect,
+  CustomInput,
+} from '@packrat/ui';
 import { BaseModal } from '@packrat/ui';
-import { addPack } from '../../store/packsStore';
-import { useState } from 'react';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useAddNewPack } from 'app/hooks/packs';
@@ -38,8 +42,8 @@ export const AddPack = ({ isCreatingTrip = false }) => {
    * Handles the addition of a pack.
    * @return {void}
    */
-  const handleAddPack = () => {
-    addNewPack();
+  const handleAddPack = (data) => {
+    addNewPack(data);
   };
 
   const handleonValueChange = (itemValue) => {
@@ -49,33 +53,32 @@ export const AddPack = ({ isCreatingTrip = false }) => {
   return (
     <View style={styles.container}>
       <View style={styles.mobileStyle}>
-        <RInput
-          placeholder="Name"
-          value={name}
-          onChangeText={(text) => {
-            setName(text);
-          }}
-          width={Platform.OS === 'web' ? '25%' : '100%'}
-        />
-        <RLabel>Is Public:</RLabel>
-        <DropdownComponent
-          value={isPublic}
-          onValueChange={handleonValueChange}
-          data={packSelectOptions}
-          width="300px"
-          accessibilityLabel="Choose Service"
-          placeholder={'Is Public'}
-        />
-        <RButton
-          width={Platform.OS === 'web' ? null : '50%'}
-          onPress={() => {
-            handleAddPack();
-          }}
+        <CustomForm
+          onSubmit={handleAddPack}
+          defaultValues={{ isPublic: '0', name: '' }}
         >
-          <RText style={{ color: currentTheme.colors.text }}>
-            {isLoading ? 'Loading...' : 'Add Pack'}
-          </RText>
-        </RButton>
+          <CustomInput
+            placeholder="Name"
+            name="name"
+            label="Name"
+            style={{ width: '100%', textAlign: 'left' }}
+          />
+          <RLabel>Is Public:</RLabel>
+          <CustomSelect
+            onValueChange={handleonValueChange}
+            options={packSelectOptions}
+            name="isPublic"
+            style={{ width: '300px' }}
+            width="300px"
+            accessibilityLabel="Choose Service"
+            placeholder={'Is Public'}
+          />
+          <RButton style={{ width: '100%', marginTop: 40 }}>
+            <RText style={{ color: currentTheme.colors.text }}>
+              {isLoading ? 'Loading...' : 'Add Pack'}
+            </RText>
+          </RButton>
+        </CustomForm>
 
         {isError && <RText>Pack already exists</RText>}
       </View>

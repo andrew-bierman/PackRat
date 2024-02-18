@@ -4820,6 +4820,7 @@ __metadata:
   dependencies:
     "@hookform/resolvers": "npm:^3.3.4"
     "@shopify/flash-list": "npm:^1.6.1"
+    "@tamagui-extras/core": "npm:^1.11.0"
     "@tamagui-extras/form": "npm:^1.16.0"
     "@tamagui/animations-react-native": "npm:^1.89.20"
     "@tamagui/build": "npm:^1.89.20"
@@ -4833,8 +4834,10 @@ __metadata:
     "@tanstack/react-table": "npm:^8.10.7"
     "@tanstack/react-virtual": "npm:3.0.0-beta.54"
     esbuild: "npm:^0.19.5"
+    expo-image-picker: "npm:^14.7.1"
     jotai: "npm:^2.6.4"
     react: "npm:^18.2.0"
+    react-hook-form: "npm:^7.50.1"
     tamagui: "npm:^1.89.20"
     zeego: "npm:^1.7.2"
   languageName: unknown
@@ -7356,6 +7359,32 @@ __metadata:
   dependencies:
     defer-to-connect: "npm:^2.0.1"
   checksum: 10/fc9cb993e808806692e4a3337c90ece0ec00c89f4b67e3652a356b89730da98bc824273a6d67ca84d5f33cd85f317dcd5ce39d8cc0a2f060145a608a7cb8ce92
+  languageName: node
+  linkType: hard
+
+"@tamagui-extras/core@npm:1.11.0, @tamagui-extras/core@npm:^1.11.0":
+  version: 1.11.0
+  resolution: "@tamagui-extras/core@npm:1.11.0"
+  peerDependencies:
+    react: ^18.2.0
+    react-native: 0.72.6
+    react-native-svg: ^13.9.0
+    tamagui: 1.29.3
+  checksum: 10/ab59c98d8d605cee26635c76d5c8b3596611e035cd67fb91e240bcb45246dbcc885e18513e3e7d8b38e3440c2fa94885d1a1011689daca35218792c15a6bfb1c
+  languageName: node
+  linkType: hard
+
+"@tamagui-extras/form@npm:^1.16.0":
+  version: 1.16.0
+  resolution: "@tamagui-extras/form@npm:1.16.0"
+  dependencies:
+    "@tamagui-extras/core": "npm:1.11.0"
+    react-hook-form: "npm:^7.43.9"
+  peerDependencies:
+    react: ^18.2.0
+    react-native: 0.72.6
+    tamagui: 1.29.3
+  checksum: 10/b494eee1bf8ccc1b62b52a3ee080c2ebd9259561f398e401d5fc36cf4023fd4143ea037b3a49e3b0ca6b4df69c0094a3816984959f58ec2b64b49f151f0ef763
   languageName: node
   linkType: hard
 
@@ -17229,6 +17258,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"expo-image-loader@npm:~4.6.0":
+  version: 4.6.0
+  resolution: "expo-image-loader@npm:4.6.0"
+  peerDependencies:
+    expo: "*"
+  checksum: 10/02981667f03dc429cd9db37e0acc302e4a0c4bb5875dc087b1c26388ef64563481e52dddc1d42dd32794eb7051d1acf5bc0c078413469c29025a02d4d4af1154
+  languageName: node
+  linkType: hard
+
+"expo-image-picker@npm:^14.7.1":
+  version: 14.7.1
+  resolution: "expo-image-picker@npm:14.7.1"
+  dependencies:
+    expo-image-loader: "npm:~4.6.0"
+  peerDependencies:
+    expo: "*"
+  checksum: 10/43a139c2f52bc71ca9e5c520fe70ef3a2af229118d1cf4485947841f6e464440f974c9c07fc250fe7dd085fc63a812829c2f29e4ee98569af9be8dcecbd46162
+  languageName: node
+  linkType: hard
+
 "expo-image-picker@npm:~14.3.2":
   version: 14.3.2
   resolution: "expo-image-picker@npm:14.3.2"
@@ -27099,7 +27148,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-hook-form@npm:^7.43.9, react-hook-form@npm:^7.46.1":
+"react-hook-form@npm:^7.43.9, react-hook-form@npm:^7.46.1, react-hook-form@npm:^7.50.1":
   version: 7.50.1
   resolution: "react-hook-form@npm:7.50.1"
   peerDependencies:

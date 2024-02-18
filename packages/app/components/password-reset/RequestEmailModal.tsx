@@ -1,12 +1,22 @@
 import React from 'react';
-import { BaseModal, RInput } from '@packrat/ui';
+import {
+  BaseModal,
+  CustomForm,
+  CustomInput,
+  RInput,
+  useFormSubmitTrigger,
+} from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useRequestEmailModal } from 'app/hooks/password-reset';
+import { emailExists } from '@packrat/validations';
 
 export const RequestPasswordResetEmailModal = () => {
   const styles = useCustomStyles(loadStyles);
-  const { email, setEmail, loading, handleResetPasswordEmail } =
-    useRequestEmailModal();
+  const { loading, handleResetPasswordEmail } = useRequestEmailModal();
+
+  const [formRef, triggerSubmit] = useFormSubmitTrigger();
+
+  console.log(formRef);
 
   return (
     <BaseModal
@@ -16,8 +26,7 @@ export const RequestPasswordResetEmailModal = () => {
         {
           label: 'Send Email',
           color: '#818cf8',
-          onClick: handleResetPasswordEmail,
-          disabled: !email || loading,
+          onClick: (_, closeModal) => triggerSubmit(closeModal),
         },
         {
           label: 'Cancel',
@@ -28,15 +37,18 @@ export const RequestPasswordResetEmailModal = () => {
         },
       ]}
     >
-      <RInput
-        placeholder="Email"
-        autoCapitalize="none"
-        keyboardType="email-address"
-        value={email}
-        onChangeText={(value) => {
-          setEmail(value);
-        }}
-      />
+      <CustomForm
+        formRef={formRef}
+        onSubmit={handleResetPasswordEmail}
+        validationSchema={emailExists}
+      >
+        <CustomInput
+          placeholder="Email"
+          autoCapitalize="none"
+          keyboardType="email-address"
+          name="email"
+        />
+      </CustomForm>
       {/* <Center w="100%">
                 <Box safeArea p="2" py="8" w="90%" maxW="290">
                     {/* <Heading

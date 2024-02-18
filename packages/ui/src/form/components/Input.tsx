@@ -1,4 +1,4 @@
-import { LmInputRhf, type LmInputRhfProps } from '@tamagui-extras/form';
+import { LmInputRhf, type LmInputRhfProps } from '../lib';
 
 interface Props extends LmInputRhfProps {}
 
