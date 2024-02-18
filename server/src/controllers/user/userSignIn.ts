@@ -14,10 +14,11 @@ export const userSignIn = async (req, res) => {
     password,
   });
   await user.generateAuthToken();
-  res.status(200).send({ user });
+  res.status(200).json({ user });
 };
 
 export function userSignInRoute() {
+  
   return publicProcedure.input(validator.userSignIn).mutation(async (opts) => {
     const { input } = opts;
     const user: any = await (User as any).findByCredentials(input);

@@ -72,11 +72,11 @@ const UserDataCard = ({
   const truncatedDestination = truncateString(destination, 25);
 
   return (
-    <View style={{ alignItems: 'center', padding: 16 }}>
+    <View style={{ alignItems: 'center', justifyContent: "center", marginHorizontal: 8, marginVertical: 4, borderRadius: 8, }}>
       <View
         style={{
           minHeight: 150,
-          minWidth: 300,
+          minWidth: 250,
           border: '1px solid gray',
           borderLeft: `10px solid ${is_public ? 'green' : 'red'}`,
           borderRadius: 8,
@@ -143,54 +143,45 @@ const UserDataCard = ({
 
           <RStack
             style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              gap: 16,
-              justifyContent: 'space-between',
+              flexDirection: "row",
+              justifyContent: 'space-between'
             }}
           >
-            <RStack
+            <RText
               style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                width: '100%',
+                color: 'gray',
+                fontSize: 12,
+                fontWeight: '400',
               }}
             >
-              <RText
-                style={{
-                  color: 'gray',
-                  fontSize: 12,
-                  fontWeight: '400',
-                  flex: 1,
-                }}
+              {formatDistanceToNow(
+                new Date(
+                  !Number.isNaN(new Date(createdAt).getTime())
+                    ? createdAt
+                    : new Date(),
+                ).getTime(),
+                {
+                  addSuffix: true,
+                },
+              ) ?? 0}
+            </RText>
+            <View
+              style={{
+                justifyContent: "center",
+                alignItems: 'center',
+                gap: 10,
+              }}
+            >
+
+              <RText color="gray" fontWeight={400}
               >
-                {formatDistanceToNow(
-                  new Date(
-                    !Number.isNaN(new Date(createdAt).getTime())
-                      ? createdAt
-                      : new Date(),
-                  ).getTime(),
-                  {
-                    addSuffix: true,
-                  },
-                ) ?? 0}
+                {favorites_count}
               </RText>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  gap: 10,
-                }}
-              >
-                <AntDesign name="heart" size={16} color="red" />
-                <RText color="gray" fontWeight="400">
-                  {favorites_count}
-                </RText>
-              </View>
-            </RStack>
+              <AntDesign name="heart" size={16} color="red" style={{ display: "flex", position: "absolute", right: 0 }} />
+            </View>
           </RStack>
         </RStack>
-        <View style={{ alignItems: 'center' }}>
+        <View style={{ alignItems: 'center', justifyContent: "center" }}>
           <Link href={`/${type}/${_id}`}>
             <RText color="gray" fontWeight="bold">
               View Details
