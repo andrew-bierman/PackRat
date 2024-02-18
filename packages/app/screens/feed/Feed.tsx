@@ -25,7 +25,21 @@ const ERROR_MESSAGES = {
   userTrips: 'No User Trips Available',
 };
 
-const Feed = ({ feedType = 'public' }) => {
+interface FeedItem {
+  _id: string;
+  type: string;
+}
+
+interface SelectedTypes {
+  pack: boolean;
+  trip: boolean;
+}
+
+interface FeedProps {
+  feedType?: string;
+}
+
+const Feed = ({ feedType = 'public' }: FeedProps) => {
   const router = useRouter();
 
   const [queryString, setQueryString] = useState('');

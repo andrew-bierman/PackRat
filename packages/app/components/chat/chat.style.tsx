@@ -1,4 +1,4 @@
-export const loadStyles = (theme) => {
+export const loadStyles = (theme: any) => {
   const { currentTheme } = theme;
 
   return {

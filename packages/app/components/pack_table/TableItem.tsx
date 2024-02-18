@@ -11,6 +11,17 @@ import { AddItem } from '../item/AddItem';
 import loadStyles from './packtable.style';
 import { IgnoreItemCheckbox } from './TableHelperComponents';
 
+interface TableItemProps {
+  itemData: any;
+  checkedItems: string[];
+  handleCheckboxChange: (itemId: string) => void;
+  index: number;
+  flexArr: number[];
+  currentPack: any;
+  refetch: () => void;
+  setRefetch: () => void;
+}
+
 const TableItem = ({
   itemData,
   checkedItems,
@@ -20,7 +31,7 @@ const TableItem = ({
   currentPack,
   refetch,
   setRefetch = () => {},
-}) => {
+}: TableItemProps) => {
   const { name, weight, quantity, unit, _id } = itemData;
   const styles = useCustomStyles(loadStyles);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);

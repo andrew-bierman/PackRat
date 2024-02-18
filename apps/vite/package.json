@@ -1,5 +1,5 @@
 {
-  "name": "vite",
+  "name": "vite-app",
   "private": true,
   "version": "0.0.0",
   "scripts": {
@@ -12,19 +12,15 @@
     "@originjs/vite-plugin-commonjs": "^1.0.3",
     "@packrat/ui": "*",
     "@tamagui/vite-plugin": "^1.89.20",
-    "@tanstack/react-router": "^1.16.2",
-    "@tanstack/router-cli": "^1.16.3",
-    "@tanstack/router-devtools": "^1.16.2",
     "@vitejs/plugin-react-swc": "^3.6.0",
     "app": "*",
     "esbuild-plugin-flow": "^0.3.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-native": "^0.73.4",
+    "react-native": "0.72.10",
     "react-native-web": "^0.19.10"
   },
   "devDependencies": {
-    "@tanstack/router-vite-plugin": "^1.16.3",
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",
     "@typescript-eslint/eslint-plugin": "^6.21.0",

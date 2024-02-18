@@ -26,6 +26,7 @@
     "build:next:static": "cd apps/next && yarn build && yarn next export",
     "build": "yarn workspaces foreach --all run build",
     "check-deps": "check-dependency-version-consistency .",
+    "check-deps-fix": "yarn check-deps --fix --ignore-dep uuid",
     "check-types": "tsc --noEmit",
     "clean": "yarn workspaces foreach --all run clean && rm -rf dist types node_modules yarn.lock",
     "copy:env:all": "yarn copy:env:expo && yarn copy:env:server && yarn copy:env:packages",

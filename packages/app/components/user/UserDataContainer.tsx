@@ -24,13 +24,21 @@ const SkeletonUserDataCard = () => {
   );
 };
 
+interface UserDataContainerProps {
+  data: any;
+  type: 'packs' | 'trips';
+  userId?: string;
+  isLoading: boolean;
+  SkeletonComponent?: React.ReactElement;
+}
+
 export default function UserDataContainer({
   data = [],
   type,
   userId,
   isLoading,
   SkeletonComponent,
-}) {
+}: UserDataContainerProps) {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const [dataState, setDataState] = useState(

@@ -1,3 +1,3 @@
-import config from '@packrat/ui/src/tamagui.config'
+import config from '@packrat/ui/src/tamagui.config';
 
-export default config
+export default config;
