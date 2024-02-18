@@ -17,7 +17,7 @@ import DropdownComponent from 'app/components/Dropdown';
 import { debounce } from 'lodash';
 
 const dataValues = [
-  'Favorite',
+  'Favourite',
   'Most Recent',
   'Lightest',
   'Heaviest',

@@ -208,6 +208,7 @@ const Feed = ({ feedType = 'public' }) => {
 
   const urlPath = URL_PATHS[feedType];
   const createUrlPath = URL_PATHS[feedType] + 'create';
+  console.log(createUrlPath)
   const errorText = ERROR_MESSAGES[feedType];
 
   const handleCreateClick = () => {

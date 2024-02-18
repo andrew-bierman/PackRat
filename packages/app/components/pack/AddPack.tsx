@@ -103,7 +103,9 @@ const loadStyles = (theme, appTheme) => {
       width: '100%',
       paddingHorizontal: 18,
       gap: 20,
-      marginTop: 20,
+      // marginTop: 20,
+      paddingTop:20,
+      paddingBottom:"100%",
       backgroundColor: currentTheme.colors.white,
     },
     desktopStyle: {

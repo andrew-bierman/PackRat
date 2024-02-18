@@ -36,7 +36,7 @@ const LandingPage = () => {
             PackRat
           </RText>
         )}
-        <RText style={{ color: 'white', fontSize: 18 }}>
+        <RText style={{ color: 'white', fontSize: 18 ,marginTop:8}}>
           The Ultimate Travel App
         </RText>
       </View>

@@ -1,0 +1,26 @@
+—————————Client Env ———————————
+MONGODB_URI=mongodb+srv://andrewbierman:jSnSniWBTlbu4SjX@packratdb.fepglzk.mongodb.net/?retryWrites=true&w=majority
+NODE_ENV= development
+API_URL= your api url
+CLIENT_URL= http://localhost:8081/
+NPS_API = nmIahZCrtKA4LmZhm0Op7maCozN2HvvIheo1MsGQ
+GEOAPIFY_KEY = e91f611e9591468483c1dd90549c5e0e
+OPENWEATHER_KEY = e898d0fd17b77a99646ddbeb24905caf
+GOOGLE_PLACES_API_KEY = AIzaSyBTuWUrM5WaEzMZLq_9ps6ii4xwmWBlmJk
+MAPBOX_API_KEY = pk.eyJ1IjoiYW5kcmV3Ymllcm1hbiIsImEiOiJjbDhwYTVtc3kwMGprM3Buejg3d2doa2pvIn0.F_D3I0KRlQkQK70DkK7MlQ
+X_RAPIDAPI_KEY = 612811b69cmsh9ee95d4ecda19c2p17bf34jsn2a1dd68ae137
+MAPBOX_ACCESS_TOKEN = pk.eyJ1IjoiYW5kcmV3Ymllcm1hbiIsImEiOiJjbDhwYTVtc3kwMGprM3Buejg3d2doa2pvIn0.F_D3I0KRlQkQK70DkK7MlQ
+MAPBOX_DOWNLOADS_TOKEN = sk.eyJ1IjoiYW5kcmV3Ymllcm1hbiIsImEiOiJjbGZkZGV5cGExd2Q1NDJsN3JoM2syc3RoIn0.t5eEVBt8Kz1CJ37NPu0fmw
+
+MAPBOX_DOWNLOADS_TOKEN2=sk.eyJ1IjoiYW5kcmV3Ymllcm1hbiIsImEiOiJjbGk3dDQ5a3UwNThiM2VvNWVla3dwdjUxIn0.afUvquFq_0X_4f-TNyDDbg
+
+WEB_CLIENT_ID = 993694750638-876nvl8hfjfv6tqiqc1c4tmubvf8chpp.apps.googleusercontent.com
+IOS_CLIENT_ID = 993694750638-i30g2580sjc1rtob99l7fqrhrtqedi39.apps.googleusercontent.com
+ANDROID_CLIENT_ID = 993694750638-876nvl8hfjfv6tqiqc1c4tmubvf8chpp.apps.googleusercontent.com
+FIREBASE_API_KEY = AIzaSyBTuWUrM5WaEzMZLq_9ps6ii4xwmWBlmJk
+FIREBASE_AUTH_DOMAIN = packrat-364201.firebaseapp.com
+FIREBASE_PROJECT_ID = packrat-364201
+FIREBASE_STORAGE_BUCKET = packrat-364201.appspot.com
+FIREBASE_MESSAGING_SENDER_ID = 993694750638
+FIREBASE_APP_ID = 1:993694750638:web:0c508ea818ece7c4d3da3f
+FIREBASE_MEASUREMENT_ID = G-JHQSG95830

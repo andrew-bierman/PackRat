@@ -1,3 +1,4 @@
+import React from "React"
 import { RInput, RButton, RText, RStack, RRadio } from '@packrat/ui';
 import { View } from 'react-native';
 import { DropdownComponent } from '../Dropdown';
@@ -73,7 +74,6 @@ export const ItemForm = ({
             />
           )}
         </View>
-
         <RInput
           value={quantity}
           placeholder="Quantity"
@@ -88,6 +88,7 @@ export const ItemForm = ({
           onValueChange={(nextVal) => setCategoryType(nextVal)}
           data={radioOptions}
         />
+
 
         {showSubmitButton && (
           <RButton onPress={handleSubmit}>

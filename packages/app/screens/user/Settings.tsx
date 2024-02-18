@@ -35,13 +35,13 @@ export default function Settings() {
         marginHorizontal="auto"
       >
         <RStack>
-          <RH2>Profile</RH2>
+          <RH2 style={{color:"#fff"}}>Profile</RH2>
           <RSeparator marginVertical={8} />
         </RStack>
         <RStack alignItems="center" space style={{ flexDirection: 'row' }}>
           <Avatar size={90} src={user.profileImage} />
           <RStack space="$2">
-            <RH5 fontWeight="medium">Profile Picture</RH5>
+            <RH5 fontWeight="medium" style={{backgroundColor:"transparent"}}>Profile Picture</RH5>
             <RStack
               space="$2"
               alignItems="flex-end"
@@ -68,11 +68,11 @@ export default function Settings() {
         </RStack>
         <RStack space="$3" style={{ flexDirection: 'row' }}>
           <RStack space="$2">
-            <RLabel htmlFor="firstName">Name</RLabel>
+            <RLabel htmlFor="firstName" style={{color:"#fff"}}>Name</RLabel>
             <RInput id="name" value={user.name} onChange={handleChange} />
           </RStack>
           <RStack space="$2">
-            <RLabel htmlFor="username">Username</RLabel>
+            <RLabel htmlFor="username" style={{color:"#fff"}}>Username</RLabel>
             <RInput
               id="username"
               value={user.username}
@@ -82,14 +82,14 @@ export default function Settings() {
         </RStack>
 
         <RStack space="$2">
-          <RLabel htmlFor="email">Email</RLabel>
+          <RLabel htmlFor="email" style={{color:"#fff"}}>Email</RLabel>
           <RInput id="email" value={user.email} onChange={handleChange} />
         </RStack>
         <RStack space="$2">
           <RH5>Preferred units</RH5>
           <RStack space style={{ flexDirection: 'row' }}>
             <RStack space="$2" flexGrow={1}>
-              <RLabel>Weather: </RLabel>
+              <RLabel style={{color:"#fff"}}>Weather: </RLabel>
               <DropdownComponent
                 data={['celsius', 'fahrenheit']}
                 value={user.preferredWeather}
@@ -101,7 +101,7 @@ export default function Settings() {
               />
             </RStack>
             <RStack space="$2" flexGrow={1}>
-              <RLabel>Weight: </RLabel>
+              <RLabel style={{color:"#fff"}}>Weight: </RLabel>
               <DropdownComponent
                 data={['lb', 'oz', 'kg', 'g']}
                 value={user.preferredWeight}
@@ -122,12 +122,12 @@ export default function Settings() {
           Update profile
         </RButton>
         <RStack marginTop={20} marginBottom={10}>
-          <RH2>Change Password</RH2>
+          <RH2 style={{color:"#fff"}}>Change Password</RH2>
           <RSeparator marginVertical={8} />
-          <RText fontSize={16}>We will email you to verify the change.</RText>
+          <RText fontSize={16} style={{color:"#fff"}}>We will email you to verify the change.</RText>
         </RStack>
         <RStack space="$2">
-          <RLabel htmlFor="oldPassword">Old password</RLabel>
+          <RLabel htmlFor="oldPassword" style={{color:"#fff"}}>Old password</RLabel>
           <RInput
             id="oldPassword"
             value={passwords.oldPassword}
@@ -136,7 +136,7 @@ export default function Settings() {
           />
         </RStack>
         <RStack space="$2">
-          <RLabel htmlFor="newPassword">New password</RLabel>
+          <RLabel htmlFor="newPassword" style={{color:"#fff"}}>New password</RLabel>
           <RInput
             id="newPassword"
             value={passwords.newPassword}
@@ -145,7 +145,7 @@ export default function Settings() {
           />
         </RStack>
         <RStack space="$2">
-          <RLabel htmlFor="confirmPassword">Confirm new password</RLabel>
+          <RLabel htmlFor="confirmPassword" style={{color:"#fff"}}>Confirm new password</RLabel>
           <RInput
             id="confirmPassword"
             value={passwords.confirmPassword}

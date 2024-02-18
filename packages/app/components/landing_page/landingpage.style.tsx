@@ -1,3 +1,5 @@
+import { position } from 'native-base/lib/typescript/theme/styled-system';
+
 const loadStyles = (theme) => {
   const { currentTheme } = theme;
   return {
@@ -62,7 +64,10 @@ const loadStyles = (theme) => {
     },
     card: {
       marginBottom: 10,
-      width: '100%',
+      maxWidth: '100%',
+      overflow: 'hidden',
+      position: 'relative',
+      padding:12,
       backgroundColor: currentTheme.colors.secondaryBlue,
     },
     cardHeader: {
@@ -86,8 +91,13 @@ const loadStyles = (theme) => {
     },
     cardContent: {
       paddingHorizontal: 20,
-      paddingVertical: 10,
+      paddingTop: 20,
+      paddingBottom:20,
       fontSize: 16,
+      position: 'absolute',
+      top: '50%',
+      left: '10%',
+      transform: [{ translateX: -50 }, { translateY: -50 }],
       color: currentTheme.colors.text,
     },
   };
