@@ -28,7 +28,7 @@ import RButton from './RButton';
 import RTabs from './RTabs';
 import SizableText from './SizableText';
 export { RSkeleton } from './RSkeleton';
-export { Dropdown, ExampleDropdown } from './RDropdown/DropdownBase';
+export { DropdownMenu, ExampleDropdown } from './RDropdown/DropdownBase';
 
 export { LoadingPlaceholder } from './LoadingPlaceholder';
 
