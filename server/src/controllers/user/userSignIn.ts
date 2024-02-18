@@ -18,7 +18,6 @@ export const userSignIn = async (req, res) => {
 };
 
 export function userSignInRoute() {
-  
   return publicProcedure.input(validator.userSignIn).mutation(async (opts) => {
     const { input } = opts;
     const user: any = await (User as any).findByCredentials(input);
