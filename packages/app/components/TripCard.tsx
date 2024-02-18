@@ -10,6 +10,20 @@ import MapContainer from './map/MapContainer';
 import { useGEOLocationSearch } from 'app/hooks/geojson';
 import { PlacesAutocomplete } from './PlacesAutocomplete';
 
+interface TripCardProps {
+  title: string;
+  Icon: React.FC;
+  isMap: boolean;
+  shape?: any;
+  data?: string[];
+  isSearch: boolean;
+  isTrail: boolean;
+  isPark: boolean;
+  isLoading: boolean;
+  form?: any;
+  searchRef?: any;
+}
+
 export default function TripCard({
   title,
   Icon,
@@ -22,7 +36,7 @@ export default function TripCard({
   isTrail,
   isPark,
   isLoading,
-}) {
+}: TripCardProps) {
   const { isDark, currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
   const { currentTrail, currentPark, togglePlace } = form || {};

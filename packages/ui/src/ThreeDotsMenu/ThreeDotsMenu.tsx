@@ -1,7 +1,13 @@
+import React, { ReactNode } from 'react';
 import { MoreHorizontal } from '@tamagui/lucide-icons';
 import { Adapt, Button, Popover } from 'tamagui';
 
-export function ThreeDotsMenu({ children, onOpenChange }) {
+interface ThreeDotsMenuProps {
+  children: ReactNode;
+  onOpenChange: (open: boolean) => void;
+}
+
+export function ThreeDotsMenu({ children, onOpenChange }: ThreeDotsMenuProps) {
   return (
     <Popover
       size="$5"

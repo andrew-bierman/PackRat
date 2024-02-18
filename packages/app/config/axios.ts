@@ -2,17 +2,11 @@ import axios from 'axios';
 import { api } from 'app/constants/api';
 import { store } from '../store/store';
 import { InformUser } from 'app/utils/ToastUtils';
-import { setTargetProgress, resetProgress } from '../store/progressStore';
+import { dispatchProgress, progressActions } from '../atoms/progressStore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 let activeRequests = new Map();
 
-// Helper function to get the token
-// const getTokenFromState = () => {
-//   const state = store.getState();
-//   // @ts-ignore
-//   return state?.auth?.user?.token || null;
-// };
 const getTokenFromStorage = async () => {
   try {
     const token = await AsyncStorage.getItem('authToken');
@@ -42,7 +36,7 @@ const requestInterceptor = async (config) => {
     const aggregatedPercentage =
       Array.from(activeRequests.values()).reduce((acc, val) => acc + val, 0) /
       activeRequests.size;
-    store.dispatch(setTargetProgress(aggregatedPercentage));
+    dispatchProgress(progressActions.setTargetProgress(aggregatedPercentage));
   };
 
   config.onDownloadProgress = (progressEvent) => {
@@ -53,7 +47,7 @@ const requestInterceptor = async (config) => {
     const aggregatedPercentage =
       Array.from(activeRequests.values()).reduce((acc, val) => acc + val, 0) /
       activeRequests.size;
-    store.dispatch(setTargetProgress(aggregatedPercentage));
+    dispatchProgress(progressActions.setTargetProgress(aggregatedPercentage));
   };
 
   return config;
@@ -69,7 +63,7 @@ const responseInterceptor = (response) => {
 
   if (activeRequests.size === 0) {
     setTimeout(() => {
-      store.dispatch(resetProgress());
+      dispatchProgress(progressActions.resetProgress());
     }, 3000);
   }
 
@@ -101,7 +95,7 @@ const responseInterceptor2 = (response) => {
   }
 
   setTimeout(() => {
-    store.dispatch(resetProgress());
+    dispatchProgress(progressActions.resetProgress());
   }, 3000); // Adjust as needed
 
   return response;
@@ -113,7 +107,7 @@ const responseErrorInterceptor = (error) => {
 
   if (activeRequests.size === 0) {
     setTimeout(() => {
-      store.dispatch(resetProgress());
+      dispatchProgress(progressActions.resetProgress());
     }, 1500);
   }
 
@@ -147,7 +141,7 @@ const responseErrorInterceptor2 = (error) => {
   });
 
   setTimeout(() => {
-    store.dispatch(resetProgress());
+    dispatchProgress(progressActions.resetProgress());
   }, 1500); // Adjust as needed
 
   return Promise.reject(error);
