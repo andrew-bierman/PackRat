@@ -5,35 +5,39 @@ import { SearchInput } from '../SearchInput';
 import { Platform, View } from 'react-native';
 import { theme } from '../../theme';
 import useTheme from '../../hooks/useTheme';
-import { useSelector, useDispatch } from 'react-redux';
+import { useAuthUser } from 'app/auth/hooks';
 import Hero from '../hero';
 import { useRouter } from 'app/hooks/router';
 import { first } from 'lodash';
 import { hexToRGBA } from '../../utils/colorFunctions';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import { type RootState } from 'store/store';
 import { PlacesAutocomplete } from 'app/components/PlacesAutocomplete/PlacesAutocomplete';
 
-const HeroSection = ({ onSelect }) => {
-  const dispatch = useDispatch();
+interface HeroSectionProps {
+  onSelect: (selectedResult: SearchResult) => void;
+}
+
+interface SearchResult {
+  properties: {
+    osm_id: number;
+    osm_type: string;
+  };
+  geometry: {
+    coordinates: [number, number];
+  };
+}
+
+const HeroSection: React.FC<HeroSectionProps> = ({ onSelect }) => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
   const router = useRouter();
 
-  /**
-   * Handles the selection of a search result.
-   *
-   * @param {Object} selectedResult - The selected search result
-   * @return {void}
-   */
-  const handleSearchSelect = (selectedResult) => {
+  const handleSearchSelect = async (selectedResult: SearchResult) => {
     try {
       const { osm_id, osm_type, name } = selectedResult.properties;
 
       const coordinates = selectedResult.geometry.coordinates;
-
-      const [lon, lat] = coordinates;
 
       if (!osm_id || !osm_type) {
         console.error(
@@ -54,7 +58,7 @@ const HeroSection = ({ onSelect }) => {
     }
   };
 
-  const user = useSelector((state: RootState) => state.auth?.user);
+  const user = useAuthUser();
 
   const firstNameOrUser = first(user?.name?.split(' ')) ?? 'User';
 
@@ -90,6 +94,8 @@ const HeroSection = ({ onSelect }) => {
             height: '100%',
             padding: 50,
           }}
+          title={''}
+          type={'search'}
         >
           <RStack
             style={{
@@ -111,7 +117,7 @@ const HeroSection = ({ onSelect }) => {
   );
 };
 
-const loadStyles = (theme) => {
+const loadStyles = (theme: any) => {
   const { currentTheme } = theme;
   return {
     banner: {

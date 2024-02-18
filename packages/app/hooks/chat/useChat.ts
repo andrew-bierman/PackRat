@@ -1,18 +1,11 @@
-import { useDispatch } from 'react-redux';
-import { useSelector } from '../redux/useSelector';
 import { useState } from 'react';
 import { useGetUserChats } from './useGetUserChats';
 import { useGetAIResponse } from './useGetAIResponse';
 import { useAuthUser } from 'app/auth/hooks';
 
 export const useChat = (defaultChatId = null) => {
-  const dispatch = useDispatch();
   const user = useAuthUser();
   const [conversationId, setConversationId] = useState(defaultChatId);
-  // const conversation = useSelector((state) =>
-  //   selectConversationById(state, conversationId),
-  // );
-  // const conversations = useSelector((state) => selectAllConversations(state));
   const [userInput, setUserInput] = useState('');
   // const [parsedMessages, setParsedMessages] = useState([]);
 
