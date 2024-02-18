@@ -74,7 +74,7 @@
     "dotenv": "^16.0.3",
     "env": "^0.0.2",
     "eslint-plugin-react-native": "^4.0.0",
-    "expo": "^50.0.6",
+    "expo": "^49.0.15",
     "expo-application": "~5.3.0",
     "expo-auth-session": "~5.0.2",
     "expo-build-properties": "~0.8.3",
