@@ -50,7 +50,7 @@ export default defineConfig({
     alias: {
       extensions,
       '@env': resolve(__dirname, 'envResolver'),
-      'react-native': 'react-native-web',
+      // 'react-native': 'react-native-web',
       'react-native/Libraries/Image/AssetRegistry': resolve(
         __dirname,
         '../../node_modules/react-native-web/dist/modules/AssetRegistry',

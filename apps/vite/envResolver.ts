@@ -8,6 +8,8 @@ export const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:3000';
 
 export const NEXT_PUBLIC_ROUTER = 'tanstack';
 
+export const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 export default {
   NODE_ENV,
   API_URL,
@@ -15,4 +17,5 @@ export default {
   MAPBOX_ACCESS_TOKEN,
   CLIENT_URL,
   NEXT_PUBLIC_ROUTER,
+  NEXT_PUBLIC_API_URL,
 };
