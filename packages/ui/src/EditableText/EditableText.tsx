@@ -7,7 +7,7 @@ import { useInputFocus } from './useInputFocus';
 
 interface EditableTextProps {
   value: string;
-  onChange: (value: string) => void;
+  onChange: (value: string | undefined) => void;
   onSave: (value: string) => void;
   isFocused: boolean;
   defaultValue: string;
