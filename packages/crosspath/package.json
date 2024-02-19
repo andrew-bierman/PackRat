@@ -1,0 +1,24 @@
+{
+  "name": "@packrat/crosspath",
+  "private": true,
+  "version": "1.0.0",
+  "main": "src/index.tsx",
+  "module:jsx": "src",
+  "files": [
+    "types",
+    "dist"
+  ],
+  "scripts": {
+    "build": "tamagui-build",
+    "watch": "tamagui-build --watch",
+    "clean": "rm -rf dist types node_modules",
+    "postinstall": "yarn run build"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^4.36.1",
+    "solito": "^4.2.0"
+  },
+  "devDependencies": {
+    "@tamagui/build": "^1.89.20"
+  }
+}

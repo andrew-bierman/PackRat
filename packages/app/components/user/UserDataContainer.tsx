@@ -1,4 +1,4 @@
-import { Link } from '@packrat/ui';
+import { Link } from '@packrat/crosspath';
 import { RStack, RText, RButton, RSkeleton } from '@packrat/ui';
 import { VirtualizedList } from 'react-native';
 import UserDataCard from './UserDataCard';

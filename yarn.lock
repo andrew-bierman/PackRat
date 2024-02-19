@@ -4814,6 +4814,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@packrat/crosspath@npm:*, @packrat/crosspath@workspace:packages/crosspath":
+  version: 0.0.0-use.local
+  resolution: "@packrat/crosspath@workspace:packages/crosspath"
+  dependencies:
+    "@tamagui/build": "npm:^1.89.20"
+    "@tanstack/react-query": "npm:^4.36.1"
+    solito: "npm:^4.2.0"
+  languageName: unknown
+  linkType: soft
+
 "@packrat/ui@npm:*, @packrat/ui@workspace:packages/ui":
   version: 0.0.0-use.local
   resolution: "@packrat/ui@workspace:packages/ui"
@@ -11180,6 +11190,7 @@ __metadata:
     "@fortawesome/free-solid-svg-icons": "npm:^6.3.0"
     "@fortawesome/react-fontawesome": "npm:^0.2.0"
     "@hookform/resolvers": "npm:^3.3.1"
+    "@packrat/crosspath": "npm:*"
     "@packrat/ui": "npm:*"
     "@packrat/validations": "npm:*"
     "@react-native-async-storage/async-storage": "npm:1.18.2"

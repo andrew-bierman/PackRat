@@ -1,2 +1,1 @@
-export { createParam } from './createParam';
-export { useParam } from './useParam';
+export { createParam, useParam } from '@packrat/crosspath';
