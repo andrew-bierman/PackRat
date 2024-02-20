@@ -1,4 +1,4 @@
-export const api = "http://local:3000/api";
+export const api = "http://localhost:3000/api";
 
 // import { NODE_ENV, API_URL } from '@env';
 
