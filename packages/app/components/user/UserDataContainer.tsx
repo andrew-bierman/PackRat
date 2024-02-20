@@ -76,6 +76,22 @@ export default function UserDataContainer({
     SkeletonComponent ||
     [...Array(3)].map((_, idx) => <SkeletonUserDataCard key={idx} />);
 
+  if (isLoading) {
+    return (
+      <RStack
+        style={{
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: '100%',
+          padding: 4,
+        }}
+      >
+        {skeletonCards}
+      </RStack>
+    );
+  }
+
   return (
     <LargeCard
       customStyle={{
