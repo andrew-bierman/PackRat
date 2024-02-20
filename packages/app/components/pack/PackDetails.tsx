@@ -16,14 +16,16 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useUserPacks } from 'app/hooks/packs/useUserPacks';
 import { useFetchSinglePack } from '../../hooks/packs';
 import { useAuthUser } from 'app/auth/hooks';
+import { Text } from 'react-native';
 
-const { useParam } = createParam();
+
+
 
 export function PackDetails() {
+  const { useParam,  } = createParam();
   const searchParams = new URLSearchParams(this.location.search);
   const canCopy = searchParams.get('copy');
   const [packId] = useParam('id');
-  console.log(packId, 'packId');
   const link = `${CLIENT_URL}/packs/${packId}`;
   const [firstLoad, setFirstLoad] = useState(true);
   const user = useAuthUser();
@@ -40,6 +42,7 @@ export function PackDetails() {
     refetch: refetchQuery,
   } = useFetchSinglePack(packId);
 
+  
   const styles = useCustomStyles(loadStyles);
   const currentPackId = currentPack && currentPack._id;
 
@@ -48,9 +51,10 @@ export function PackDetails() {
 
   const isError = error !== null;
 
-  if (isLoading) return <RText>Loading...</RText>;
+  // if (isLoading) return <RText>Loading...</RText>;  ``
 
   return (
+  
     <View
       style={[
         styles.mainContainer,
