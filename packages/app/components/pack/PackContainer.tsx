@@ -37,6 +37,7 @@ export default function PackContainer({ isCreatingTrip = false }) {
     refetch: refetchQuery,
   } = useUserPacks((ownerId = user?._id));
 
+
   useEffect(() => {
     refetchQuery();
   }, [refetch]);

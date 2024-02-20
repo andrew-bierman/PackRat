@@ -183,7 +183,7 @@ export default function ProfileContainer({ id = null }) {
     isCurrentUser,
     error,
   } = useProfile(id);
-
+  
   return (
     <View>
       <ScrollView >

@@ -60,9 +60,8 @@ export default function UserDataContainer({
   const card = (item, index) => {
     return (
       <UserDataCard
-        
-        key={item._id}
-        {...item}
+        key={item.item._id}
+        {...item.item}
         type={cardType}
         state={dataState}
         setState={setDataState}
@@ -135,36 +134,6 @@ export default function UserDataContainer({
                 }}
               />
             </>
-            // <VirtualizedList
-            //   getItemCount={() => data.length}
-            //   getItem={(data, index) => data[index]}
-            //   nestedScrollEnabled={true}
-            //   data={data}
-            //   horizontal={true}
-            //   scrollEnabled={true}
-            //   renderItem={({ item, index }) => (
-            //     <UserDataCard
-            //       key={item._id}
-            //       {...item}
-            //       type={cardType}
-            //       state={dataState}
-            //       setState={setDataState}
-            //       index={index}
-            //       differentUser={differentUser}
-            //     />
-            //   )}
-            //   keyExtractor={(item) => item._id}
-            //   maxToRenderPerBatch={2}
-            //   contentContainerStyle={{
-            //     width : '100%',
-            //     height : '100%',
-            //     padding : 16
-            //     // flex: 1,
-            //     // justifyContent: 'center',
-            //     // alignItems: 'center',
-            //     // flexDirection : 'row'
-            //   }}
-            // />
           ) : currentUser?._id === userId ? (
             <Link href="/">
               <RButton
