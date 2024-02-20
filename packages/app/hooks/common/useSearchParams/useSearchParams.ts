@@ -27,7 +27,11 @@ export const useSearchParams = () => {
   };
 
   const set = (key, value) => {
-    updateQue({ ...queue.current, [key]: String(value) });
+    const entries = {};
+    for (const [key, value] of searchParams.entries()) {
+      entries[key] = value;
+    }
+    updateQue({ ...entries, [key]: String(value) });
   };
 
   const reset = (params) => {
