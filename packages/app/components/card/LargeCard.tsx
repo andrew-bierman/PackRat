@@ -4,7 +4,6 @@ import { RText, RStack } from '@packrat/ui';
 import useTheme from '../../hooks/useTheme';
 import { theme } from '../../theme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import { RootState } from 'store/store';
 
 /**
  * Retrieves the appropriate container style based on the provided type.

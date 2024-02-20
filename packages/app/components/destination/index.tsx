@@ -14,7 +14,6 @@ import TripCard from '../TripCard';
 import LargeCard from '../card/LargeCard';
 import WeatherCard from '../weather/WeatherCard';
 import { Ionicons } from '@expo/vector-icons';
-import { fetchWeather, fetchWeatherWeek } from '../../store/weatherStore';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import {
   useCurrentDestination,
