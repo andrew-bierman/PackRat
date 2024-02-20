@@ -41,7 +41,9 @@ export const CustomCard = ({
     <View style={
       [styles.mainContainer, {
         minHeight: !isWeb ? Dimensions.get('screen').height : 'auto',
-        // flex: 1,
+      },
+      isWeb && {
+        borderRadius: 10,
         padding: isWeb ? '15 25' : 0,
       }
     ]}>
@@ -103,14 +105,9 @@ const loadStyles = (theme) => {
       gap: 45,
       justifyContent: 'space-between',
       alignItems: 'center',
-      // paddingLeft: 25,
-      // paddingRight: 25,
-      // paddingTop: 15,
-      // paddingBottom: 15,
       marginBottom: 20,
       border: '1',
       alignSelf: 'center',
-      // borderRadius: 10,
     },
   };
 };

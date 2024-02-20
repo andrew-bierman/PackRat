@@ -20,8 +20,6 @@ import { useAuthUser } from 'app/auth/hooks';
 const { useParam } = createParam();
 
 const SECTION = {
-  HEADER: 'HEADER',
-  SEARCH: 'SEARCH',
   TABLE: 'TABLE',
   CTA: 'CTA',
   SCORECARD: 'SCORECARD',
@@ -86,12 +84,6 @@ export function PackDetails() {
                     {
                       console.log(item[1], 'item');
                       switch (item[1]) {
-                        case SECTION.HEADER:
-                          return null;
-                          break;
-                        case SECTION.SEARCH:
-                          return null;
-                          break;
                         case SECTION.TABLE:
                           return <TableContainer currentPack={currentPack} copy={canCopy} />;
                           break;
@@ -126,25 +118,6 @@ export function PackDetails() {
                   }}
                 />
                 </View>
-                {/* <TableContainer currentPack={currentPack} copy={canCopy} /> */}
-                {/* <View style={styles.boxStyle}>
-                  <AddItemModal
-                    currentPackId={currentPackId}
-                    currentPack={currentPack}
-                    isAddItemModalOpen={isAddItemModalOpen}
-                    setIsAddItemModalOpen={setIsAddItemModalOpen}
-                    // refetch={refetch}
-                    setRefetch={() => setRefetch((prev) => !prev)}
-                  />
-                </View>
-                <ScoreContainer
-                  type="pack"
-                  data={currentPack}
-                  isOwner={isOwner}
-                />
-                <View style={styles.boxStyle}>
-                  <ChatContainer />
-                </View> */}
               </>
             }
             link={link}
