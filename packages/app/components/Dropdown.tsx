@@ -127,7 +127,7 @@ export const DropdownComponent = ({
   ...props
 }) => {
   return (
-    <View style={{ ...style, width: width || '100%' }}>
+    <View style={{ ...style, width: width || '100%', flexDirection: 'row', justifyContent: 'center', }}>
       <RSelect placeholder={placeholder || 'Select'} {...props} />
     </View>
   );

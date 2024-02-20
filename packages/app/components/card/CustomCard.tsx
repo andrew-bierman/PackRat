@@ -1,6 +1,6 @@
 import React from 'react';
 import { RStack, RSeparator } from '@packrat/ui';
-import { View } from 'react-native';
+import { View, Dimensions, Platform } from 'react-native';
 import { SearchItem } from '../item/SearchItem';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { TripCardHeader } from './TripCardHeader';
@@ -35,13 +35,21 @@ export const CustomCard = ({
 
   if (!data) return null;
 
+  const isWeb = Platform.OS === 'web';
+
   return (
-    <View style={styles.mainContainer}>
-      <RStack style={{ width: '100%', gap: 30 }}>
+    <View style={
+      [styles.mainContainer, {
+        minHeight: !isWeb ? Dimensions.get('screen').height : 'auto',
+        // flex: 1,
+        padding: isWeb ? '15 25' : 0,
+      }
+    ]}>
+      <RStack style={{ width: '100%', gap: Platform.OS === 'web' ? 30 : 10, flex: 1 }}>
         <View
           style={{
             padding: 15,
-            paddingBottom: 0,
+            paddingBottom: isWeb ? 0 : 10,
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'center',
@@ -74,7 +82,7 @@ export const CustomCard = ({
             alignItems: 'center',
             justifyContent: 'center',
             paddingRight: 16,
-            paddingLeft: 16,
+            paddingLeft: 16
           }}
         >
           {content}
@@ -95,14 +103,14 @@ const loadStyles = (theme) => {
       gap: 45,
       justifyContent: 'space-between',
       alignItems: 'center',
-      paddingLeft: 25,
-      paddingRight: 25,
-      paddingTop: 15,
-      paddingBottom: 15,
+      // paddingLeft: 25,
+      // paddingRight: 25,
+      // paddingTop: 15,
+      // paddingBottom: 15,
       marginBottom: 20,
       border: '1',
       alignSelf: 'center',
-      borderRadius: 10,
+      // borderRadius: 10,
     },
   };
 };

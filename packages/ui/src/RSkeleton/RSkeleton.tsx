@@ -12,7 +12,7 @@ export const RSkeleton = ({ style }) => {
         alignItems: 'center',
         backgroundColor: '#e2e1eb',
         width: '100%',
-        borderRadius: '4px',
+        borderRadius: 4,
         ...style,
       }}
     >
