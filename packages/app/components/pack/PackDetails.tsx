@@ -3,8 +3,6 @@ import PackContainer from './PackContainer';
 import { DetailsHeader } from '../details/header';
 import { createParam } from 'solito';
 import { TableContainer } from '../pack_table/Table';
-import { fetchUserPacks, selectPackById } from '../../store/packsStore';
-import { fetchSinglePack } from '../../store/singlePackStore';
 import { RText } from '@packrat/ui';
 import { DetailsComponent } from '../details';
 import { Dimensions, Platform, View } from 'react-native';
