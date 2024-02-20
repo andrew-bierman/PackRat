@@ -77,15 +77,7 @@ export const Tabs = () => {
           tabBarLabel: 'Search',
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="magnify" size={size} color={color} />
-          ),
-          header: () => (
-            <SafeAreaView>
-              <PlacesAutocomplete
-                style={{ width: '100%' }}
-                placeholder="Search for a place"
-              />
-            </SafeAreaView>
-          ),
+          )
         }}
       />
 
