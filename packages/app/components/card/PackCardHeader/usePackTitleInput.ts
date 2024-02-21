@@ -4,7 +4,7 @@ import { useRef, useState } from 'react';
 export const usePackTitleInput = (data) => {
   const [isEditMode, setIsEditMode] = useState(false);
   const isEditModeRef = useRef(false);
-  const editPack = useEditPack();
+  const { editPack } = useEditPack();
 
   const handleActionsOpenChange = (state) => {
     if (!state && isEditModeRef.current) {
