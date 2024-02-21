@@ -8,10 +8,10 @@ import {
   RIconButton,
   InputText,
   InputTextRules,
+  ScrollView,
   CustomForm,
   CustomInput,
   SubmitButton,
-  ScrollView,
 } from '@packrat/ui';
 import { FontAwesome } from '@expo/vector-icons';
 import { useRouter } from 'app/hooks/router';
@@ -127,6 +127,7 @@ export default function Register() {
             </RStack>
           </CustomForm>
         </View>
+      </View>
     </ScrollView>
   );
 }
