@@ -36,7 +36,7 @@ export const EditableText = ({
       {isLoading && <LoadingPlaceholder color="#e2e1eb" />}
       <TextInput
         style={{
-          fontSize: '20px',
+          fontSize: 20,
           fontWeight: 'bold',
           // TODO change to theme value: currentTheme.colors.textPrimary
           // color: 'red',

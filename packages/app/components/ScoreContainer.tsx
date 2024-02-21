@@ -193,9 +193,11 @@ export const ScoreContainer: React.FC<ScoreContainerProps> = ({
 
   const handleScoreClick = useCalculateStore(id, type);
 
+  const isWeb = Platform.OS === 'web';
+
   return (
     <Box style={styles.box}>
-      <HStack style={styles.hStack}>
+      <HStack style={[styles.hStack, !isWeb && {flexDirection: 'column', gap: 10}]}>
         <VStack style={styles.vStack}>
           <Text style={styles.scoreText}>
             {isAlreadyScored ? title : 'Score this pack!'}
