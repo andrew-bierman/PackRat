@@ -27,10 +27,7 @@ export const useSearchParams = () => {
   };
 
   const set = (key, value) => {
-    const entries = {};
-    for (const [key, value] of searchParams.entries()) {
-      entries[key] = value;
-    }
+    const entries = Object.fromEntries(searchParams.entries());
     updateQue({ ...entries, [key]: String(value) });
   };
 
