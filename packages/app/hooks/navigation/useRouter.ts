@@ -1,4 +1,4 @@
-import { useRouter as useSolitoRouter } from 'app/hooks/router';
+import { useRouter as useSolitoRouter } from '@packrat/ui';
 
 interface HrefObject {
   pathname?: string;

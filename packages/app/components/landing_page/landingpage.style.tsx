@@ -13,7 +13,6 @@ const loadStyles = (theme) => {
       alignItems: 'center',
       width: '100%',
       backgroundColor: currentTheme.colors.background,
-      padding: 20,
     },
     secondaryContentContainer: {
       flex: 1,
@@ -39,29 +38,22 @@ const loadStyles = (theme) => {
       justifyContent: 'center',
       alignItems: 'center',
       paddingHorizontal: 20,
-      width: '100%',
     },
     introText: {
       fontSize: 24,
       fontWeight: 'bold',
       textAlign: 'center',
+      marginBottom: 20,
       color: currentTheme.colors.text,
-      marginBottom: 20, // Ensure spacing between text and next elements
-      paddingHorizontal: 10, // Adjust text alignment on smaller screens
+      // width: '80%',
+      // lineHeight: 1.5,
     },
     buttonContainer: {
       paddingHorizontal: 20,
       paddingBottom: 20,
-      // width: '100%', // Ensure buttons are well-spaced and aligned
-      display: 'flex',
-      justifyContent: 'center', // Center buttons horizontally
     },
     getStartedButton: {
       backgroundColor: '#34a89a',
-      paddingVertical: 12, // Increase padding for better touch area
-      paddingHorizontal: 30,
-      borderRadius: 8, // Rounded corners for modern look
-      alignItems: 'center', // Ensure text is centered within button
     },
     footerText: {
       color: currentTheme.colors.text,
@@ -79,8 +71,6 @@ const loadStyles = (theme) => {
       justifyContent: 'space-between',
       paddingHorizontal: 20,
       paddingVertical: 10,
-      textWrap: 'wrap',
-      width: '100%',
     },
     transparentButton: {
       backgroundColor: 'transparent',

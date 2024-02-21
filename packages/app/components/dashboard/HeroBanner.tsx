@@ -7,7 +7,7 @@ import { theme } from '../../theme';
 import useTheme from '../../hooks/useTheme';
 import { useAuthUser } from 'app/auth/hooks';
 import Hero from '../hero';
-import { useRouter } from 'app/hooks/router';
+import { useRouter } from '@packrat/ui';
 import { first } from 'lodash';
 import { hexToRGBA } from '../../utils/colorFunctions';
 import useCustomStyles from 'app/hooks/useCustomStyles';
@@ -21,7 +21,6 @@ interface SearchResult {
   properties: {
     osm_id: number;
     osm_type: string;
-    name: string;
   };
   geometry: {
     coordinates: [number, number];

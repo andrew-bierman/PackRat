@@ -1,9 +1,9 @@
 import React from 'react';
 import { Pressable } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { useRouter } from 'app/hooks/router';
+import { useRouter } from '@packrat/ui';
 
-export const DuplicateIcon = ({ link = null }: {link: string}) => {
+export const DuplicateIcon = ({ link = null }) => {
   if (!link) return null;
 
   const router = useRouter();

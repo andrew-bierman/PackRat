@@ -1,4 +1,4 @@
-import { useRouter } from 'app/hooks/router';
+import { useRouter } from '@packrat/ui';
 import { MaterialIcons } from '@expo/vector-icons';
 
 interface IQuickActionData {

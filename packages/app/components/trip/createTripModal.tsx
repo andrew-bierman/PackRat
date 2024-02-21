@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { BaseModal, RInput, RStack, RText } from '@packrat/ui';
-import { useRouter } from 'app/hooks/router';
+import { useRouter } from '@packrat/ui';
 import { format, intervalToDuration } from 'date-fns';
 // import { addTrip } from '../../store/tripsStore';
 import { useAddTrip } from 'app/hooks/trips';

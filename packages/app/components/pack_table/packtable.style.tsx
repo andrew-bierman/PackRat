@@ -1,5 +1,4 @@
 import { FlatList, Platform, View } from 'react-native';
-const isWeb = Platform.OS === 'web';
 const loadStyles = (theme) => {
   const { currentTheme } = theme;
   return {
@@ -9,7 +8,7 @@ const loadStyles = (theme) => {
       width: Platform.OS === 'web' ? '100%' : 310,
     },
     tableStyle: {
-      width: '100%',
+      width: Platform.OS === 'web' ? '100%' : 300,
       marginVertical: 20,
     },
     mainTitle: {
@@ -20,7 +19,7 @@ const loadStyles = (theme) => {
     },
     categoryRow: {
       padding: 10,
-      borderRadius: isWeb ? 5: 0,
+      borderRadius: 5,
       alignItems: 'center',
       justifyContent: 'flex-start',
     },

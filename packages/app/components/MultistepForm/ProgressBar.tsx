@@ -6,7 +6,6 @@ interface ProgressBarProps {
   steps: any[];
   currentStep: number;
 }
-
 export const ProgressBar: React.FC<ProgressBarProps> = ({
   steps,
   currentStep,

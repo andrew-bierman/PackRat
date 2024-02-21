@@ -7,7 +7,7 @@ import { useState } from 'react';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useAddNewPack } from 'app/hooks/packs';
-import { useRouter } from 'app/hooks/router';
+import { useRouter } from '@packrat/ui';
 
 export const AddPack = ({ isCreatingTrip = false }) => {
   // Hooks
@@ -85,7 +85,7 @@ export const AddPack = ({ isCreatingTrip = false }) => {
 
 export const AddPackContainer = ({ isCreatingTrip }) => {
   return (
-    <BaseModal title="Add Pack" trigger="Add Pack" footerComponent={undefined}>
+    <BaseModal title="Add Pack" trigger="Add Pack">
       <AddPack isCreatingTrip={isCreatingTrip} />
     </BaseModal>
   );

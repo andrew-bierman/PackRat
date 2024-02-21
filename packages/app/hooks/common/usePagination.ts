@@ -7,11 +7,11 @@ export const usePagination = () => {
   const limit = searchParams.get('limit');
   const page = searchParams.get('page');
 
-  const handleLimitChange = (newLimit: number) => {
+  const handleLimitChange = (newLimit) => {
     searchParams.set('limit', newLimit);
   };
 
-  const handlePageChange = (newPage: number) => {
+  const handlePageChange = (newPage) => {
     searchParams.set('page', newPage);
   };
 

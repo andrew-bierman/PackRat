@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Clipboard from '@react-native-community/clipboard';
 import { Platform } from 'react-native';
 
-export const useCopyClipboard = (link: string) => {
+export const useCopyClipboard = (link) => {
   const [isCopied, setIsCopied] = useState(false);
 
   const handleCopyLink = (overideLink = '') => {

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { FlatList, View, Platform } from 'react-native';
 import Card from '../../components/feed/FeedCard';
+// import { fetchUserTrips, selectAllTrips } from '../../store/tripsStore';
 import { usefetchTrips } from 'app/hooks/trips';
-import { useRouter } from 'app/hooks/router';
+import { useRouter } from '@packrat/ui';
 import { fuseSearch } from '../../utils/fuseSearch';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import FeedSearchFilter from 'app/components/feed/FeedSearchFilter';
@@ -10,6 +11,7 @@ import { useFeed } from 'app/hooks/feed';
 import { RefreshControl } from 'react-native';
 import { RText } from '@packrat/ui';
 import { useAuthUser } from 'app/auth/hooks';
+import { loadStyles } from './Feed.style';
 
 const URL_PATHS = {
   userPacks: '/pack/',
@@ -212,39 +214,6 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
   };
 
   return <View style={styles.mainContainer}>{renderData()}</View>;
-};
-
-const loadStyles = (theme) => {
-  const { currentTheme } = theme;
-  return {
-    mainContainer: {
-      flex: 1,
-      backgroundColor: currentTheme.colors.background,
-      fontSize: 18,
-      padding: 15,
-    },
-    filterContainer: {
-      backgroundColor: currentTheme.colors.card,
-      padding: 15,
-      fontSize: 18,
-      width: '100%',
-      borderRadius: 10,
-    },
-    searchContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginBottom: 10,
-      padding: 10,
-      borderRadius: 5,
-    },
-    cardContainer: {
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-      justifyContent: 'space-around',
-      alignItems: 'center',
-    },
-  };
 };
 
 export default Feed;

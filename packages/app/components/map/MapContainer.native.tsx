@@ -41,6 +41,7 @@ const loadStyles = () => ({
   nativeContainer: {
     width: '100%',
     marginBottom: 20,
+    marginBottom: 20,
     paddingHorizontal: 5,
   },
 });

@@ -35,12 +35,13 @@ export const AddItemModal = ({
           onClick: (_, closeModal) => closeModal(),
         },
       ]}
-      footerComponent={undefined}
     >
       <AddItem
         packId={currentPackId}
         currentPack={currentPack}
-        setRefetch={setRefetch}
+        setRefetch={() => {
+          setRefetch();
+        }}
       />
     </BaseModal>
   );

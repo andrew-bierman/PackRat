@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { Container, Text } from 'native-base';
-import { useRouter } from 'app/hooks/router';
-import { createParam } from 'solito';
+import { useRouter } from '@packrat/ui';
+import { createParam } from '@packrat/ui';
 import useTheme from '../../hooks/useTheme';
 import { theme } from '../../theme';
 import MapContainer from '../map/MapContainer';
@@ -14,6 +14,7 @@ import TripCard from '../TripCard';
 import LargeCard from '../card/LargeCard';
 import WeatherCard from '../weather/WeatherCard';
 import { Ionicons } from '@expo/vector-icons';
+import { fetchWeather, fetchWeatherWeek } from '../../store/weatherStore';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import {
   useCurrentDestination,
