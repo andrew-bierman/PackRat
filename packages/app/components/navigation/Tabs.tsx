@@ -78,14 +78,15 @@ export const Tabs = () => {
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="magnify" size={size} color={color} />
           ),
-          header: () => (
-            <SafeAreaView>
-              <PlacesAutocomplete
-                style={{ width: '100%' }}
-                placeholder="Search for a place"
-              />
-            </SafeAreaView>
-          ),
+          // TODO implement in the header
+          // header: () => (
+          //   <SafeAreaView>
+          //     <PlacesAutocomplete
+          //       style={{ width: '100%' }}
+          //       placeholder="Search for a place"
+          //     />
+          //   </SafeAreaView>
+          // ),
         }}
       />
 

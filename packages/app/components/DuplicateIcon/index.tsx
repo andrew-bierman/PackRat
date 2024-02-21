@@ -3,7 +3,7 @@ import { Pressable } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useRouter } from '@packrat/ui';
 
-export const DuplicateIcon = ({ link = null }) => {
+export const DuplicateIcon = ({ link = null }: {link: string}) => {
   if (!link) return null;
 
   const router = useRouter();

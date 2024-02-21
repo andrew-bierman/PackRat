@@ -3,11 +3,9 @@ import PackContainer from './PackContainer';
 import { DetailsHeader } from '../details/header';
 import { createParam } from '@packrat/ui';
 import { TableContainer } from '../pack_table/Table';
-import { fetchUserPacks, selectPackById } from '../../store/packsStore';
-import { fetchSinglePack } from '../../store/singlePackStore';
 import { RText } from '@packrat/ui';
 import { DetailsComponent } from '../details';
-import { Dimensions, Platform, View } from 'react-native';
+import { Dimensions, Platform, View, FlatList } from 'react-native';
 import { theme } from '../../theme';
 import { CLIENT_URL } from '@env';
 import ScoreContainer from '../ScoreContainer';
@@ -20,6 +18,13 @@ import { useFetchSinglePack } from '../../hooks/packs';
 import { useAuthUser } from 'app/auth/hooks';
 
 const { useParam } = createParam();
+
+const SECTION = {
+  TABLE: 'TABLE',
+  CTA: 'CTA',
+  SCORECARD: 'SCORECARD',
+  CHAT: 'CHAT'
+};
 
 export function PackDetails() {
   const searchParams = new URLSearchParams(this.location.search);
@@ -58,7 +63,7 @@ export function PackDetails() {
         styles.mainContainer,
         Platform.OS == 'web'
           ? { minHeight: '100vh' }
-          : Dimensions.get('screen').height,
+          : {minHeight: Dimensions.get('screen').height},
       ]}
     >
       {!isError && (
@@ -70,24 +75,48 @@ export function PackDetails() {
             error={error}
             additionalComps={
               <>
-                <TableContainer currentPack={currentPack} copy={canCopy} />
-                <View style={styles.boxStyle}>
-                  <AddItemModal
-                    currentPackId={currentPackId}
-                    currentPack={currentPack}
-                    isAddItemModalOpen={isAddItemModalOpen}
-                    setIsAddItemModalOpen={setIsAddItemModalOpen}
-                    // refetch={refetch}
-                    setRefetch={() => setRefetch((prev) => !prev)}
-                  />
-                </View>
-                <ScoreContainer
-                  type="pack"
-                  data={currentPack}
-                  isOwner={isOwner}
+              <View style={{flex: 1 }}>
+                <FlatList
+                  data={Object.entries(SECTION)}
+                  contentContainerStyle={{paddingBottom: 350}}
+                  keyExtractor={([key, val]) => val}
+                  renderItem={({item}) => {
+                    {
+                      console.log(item[1], 'item');
+                      switch (item[1]) {
+                        case SECTION.TABLE:
+                          return <TableContainer currentPack={currentPack} copy={canCopy} />;
+                          break;
+                        case SECTION.CTA:
+                          return <View style={styles.boxStyle}>
+                            <AddItemModal
+                              currentPackId={currentPackId}
+                              currentPack={currentPack}
+                              isAddItemModalOpen={isAddItemModalOpen}
+                              setIsAddItemModalOpen={setIsAddItemModalOpen}
+                              // refetch={refetch}
+                              setRefetch={() => setRefetch((prev) => !prev)}
+                            />
+                        </View>;
+                          break;
+                        case SECTION.SCORECARD:
+                          return <ScoreContainer
+                          type="pack"
+                          data={currentPack}
+                          isOwner={isOwner}
+                        />;
+                          break;
+                        case SECTION.CHAT:
+                          return <View style={styles.boxStyle}>
+                          <ChatContainer />
+                        </View>;
+                          break;
+                        default:
+                          return null;
+                      }
+                    }
+                  }}
                 />
-                <View style={styles.boxStyle}>
-                  <ChatContainer />
                 </View>
               </>
             }

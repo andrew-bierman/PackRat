@@ -62,7 +62,10 @@ export const AddItemGlobal = () => {
         setCategoryType={setCategoryType}
         handleSubmit={handleSubmit}
         isLoading={isLoading}
-      />
+        isEdit={false}
+        currentPack={{
+          items: []
+        }}/>
     </View>
   );
 };
