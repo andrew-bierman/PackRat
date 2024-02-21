@@ -5,23 +5,46 @@ import {
   FlatList,
   TextInput,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
 import useTheme from '../../hooks/useTheme';
 import { BaseModal, RStack } from '@packrat/ui';
-// import {
-//   getUserChats,
-//   getAIResponse,
-//   selectConversationById,
-//   selectAllConversations,
-// } from '../../store/chatStore';
 import { Box, VStack, HStack, Select } from 'native-base';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useChat } from 'app/hooks/chat/useChat';
 import { loadStyles } from './chat.style';
 // import { Select } from "tamagui";
 
-const MessageBubble = ({ message }) => {
+interface Message {
+  role: string;
+  content: string;
+}
+
+interface Chat {
+  _id: string;
+}
+
+interface MessageBubbleProps {
+  message: Message;
+}
+
+interface ChatSelectorProps {
+  conversation: Chat;
+  onSelect: (id: string) => void;
+  isActive: boolean;
+}
+
+interface ChatComponentProps {
+  showChatSelector?: boolean;
+  defaultChatId?: string | null;
+}
+
+interface ChatModalTriggerProps {
+  title: string;
+  trigger: string;
+}
+
+const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
   const styles = useCustomStyles(loadStyles);
   const isAI = message.role === 'ai';
   return (
@@ -47,7 +70,11 @@ const MessageList = ({ messages }: MessageListProps) => {
   );
 };
 
-const ChatSelector = ({ conversation, onSelect, isActive }) => {
+const ChatSelector: React.FC<ChatSelectorProps> = ({
+  conversation,
+  onSelect,
+  isActive,
+}) => {
   const styles = useCustomStyles(loadStyles);
   return (
     <TouchableOpacity
@@ -60,7 +87,10 @@ const ChatSelector = ({ conversation, onSelect, isActive }) => {
   );
 };
 
-const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
+const ChatComponent: React.FC<ChatComponentProps> = ({
+  showChatSelector = true,
+  defaultChatId = null,
+}) => {
   const styles = useCustomStyles(loadStyles);
   const {
     conversations,
@@ -139,12 +169,12 @@ const ChatComponent = ({ showChatSelector = true, defaultChatId = null }) => {
   );
 };
 
-const ChatModalTrigger = () => {
+const ChatModalTrigger: React.FC<ChatModalTriggerProps> = () => {
   const styles = useCustomStyles(loadStyles);
 
   return (
     <View style={styles.container}>
-      <BaseModal title="Chat" trigger="Open Chat">
+      <BaseModal title="Chat" trigger="Open Chat" footerComponent={undefined}>
         <ChatComponent />
       </BaseModal>
     </View>

@@ -4,7 +4,15 @@ import { useDeletePackItem } from 'app/hooks/packs/useDeletePackItem';
 import { BaseModal } from '@packrat/ui';
 import { useDeleteItem } from 'app/hooks/items';
 
-export const DeletePackItemModal = ({ itemId, pack }) => {
+interface DeletePackItemModalProps {
+  itemId: string;
+  pack?: { _id: string };
+}
+
+export const DeletePackItemModal = ({
+  itemId,
+  pack,
+}: DeletePackItemModalProps) => {
   const { deletePackItem } = useDeletePackItem();
   const { handleDeleteItem } = useDeleteItem();
   const deleteItemHandler = (_, closeModal) => {

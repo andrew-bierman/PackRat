@@ -1,17 +1,8 @@
 import { useEffect, useState } from 'react';
 import DropdownComponent from '../Dropdown';
-// import useGetPacks from '../../hooks/useGetPacks';
 import { AddItem } from '../item/AddItem';
 import { TableContainer } from '../pack_table/Table';
-// import { useAuth } from "../../auth/provider";
 import { useUserPacks } from '../../hooks/packs/useUserPacks';
-import {
-  fetchUserPacks,
-  selectPackById,
-  selectAllPacks,
-} from '../../store/packsStore';
-import { updateNewTripPack } from '../../store/tripsStore';
-import { useDispatch } from 'react-redux';
 import { View } from 'react-native';
 import { AddItemModal } from './AddItemModal';
 import useCustomStyles from 'app/hooks/useCustomStyles';
@@ -19,7 +10,6 @@ import { useSearchParams } from 'app/hooks/common';
 import { useAuthUser } from 'app/auth/hooks';
 
 export default function PackContainer({ isCreatingTrip = false }) {
-  const dispatch = useDispatch();
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
 
   const searchParams = useSearchParams();
@@ -30,12 +20,6 @@ export default function PackContainer({ isCreatingTrip = false }) {
 
   const [refetch, setRefetch] = useState(false);
   const styles = useCustomStyles(loadStyles);
-
-  // useEffect(() => {
-  //   if (user?._id) {
-  //     dispatch(fetchUserPacks({ ownerId: user?._id }));
-  //   }
-  // }, [dispatch, user?._id, refetch]);
 
   // TODO - improve refetch logic. Should be handled entirely by the hook
   const {
@@ -65,9 +49,6 @@ export default function PackContainer({ isCreatingTrip = false }) {
       searchParams.set('packId', selectedPack?._id);
     }
   };
-  // const currentPack = useSelector((state) =>
-  //   selectPackById(state, currentPackId),
-  // );
 
   const currentPack = packs?.find((pack) => pack._id === currentPackId);
 

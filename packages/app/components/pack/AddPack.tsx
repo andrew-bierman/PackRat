@@ -4,7 +4,6 @@ import { RInput, RButton, RText, RLabel } from '@packrat/ui';
 import { BaseModal } from '@packrat/ui';
 import { addPack } from '../../store/packsStore';
 import { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useAddNewPack } from 'app/hooks/packs';
@@ -86,7 +85,7 @@ export const AddPack = ({ isCreatingTrip = false }) => {
 
 export const AddPackContainer = ({ isCreatingTrip }) => {
   return (
-    <BaseModal title="Add Pack" trigger="Add Pack">
+    <BaseModal title="Add Pack" trigger="Add Pack" footerComponent={undefined}>
       <AddPack isCreatingTrip={isCreatingTrip} />
     </BaseModal>
   );

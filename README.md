@@ -6,6 +6,12 @@ With PackRat, you can create and manage trips, discover new destinations, and st
 
 So pack your bags, grab your friends, and get ready for your next adventure with PackRat!
 
+> [!NOTE]
+> This project is currently in alpha. Please report any issues or bugs you encounter. Thank you for your patience and support!
+
+> [!IMPORTANT]
+> This project is still in development and may contain bugs or issues. Please use the app with caution and report any problems you encounter. Thank you for your understanding and cooperation.
+
 **Build & CI:**
 ![Node.js CI](https://github.com/andrew-bierman/PackRat/actions/workflows/node.js.yml/badge.svg)
 ![Node.js CI for Dev Environment](https://github.com/andrew-bierman/PackRat/actions/workflows/node.js.dev.yml/badge.svg)
@@ -49,7 +55,7 @@ So pack your bags, grab your friends, and get ready for your next adventure with
       - [Server](#server)
       - [Client](#client)
     - [Debugging Yarn Environment Setup - Windows](#debugging-yarn-environment-setup---windows)
-  - [Docker Installation 🐳](#docker-installation-)
+  - [Docker Installation 🐳 \[Experimental\]](#docker-installation--experimental)
     - [Dependencies](#dependencies-1)
     - [Installation](#installation)
   - [How backend API's are setup](#how-backend-apis-are-setup)
@@ -70,6 +76,9 @@ So pack your bags, grab your friends, and get ready for your next adventure with
 
 ## Documentation 📚
 
+> [!WARNING]
+> While the app is in alpha, please be aware that there may be bugs or issues. We appreciate your patience and support as we work to improve the app. Data may be lost or corrupted during this time, so please use the app with caution. Thank you for your understanding and cooperation.
+>
 <div align="center">
 
 [![view - Documentation](https://img.shields.io/badge/view-Documentation-blue?style=for-the-badge)](/docs/ "Go to project documentation")
@@ -99,10 +108,12 @@ PackRat is built using the following technologies:
 
 ## 🗂 Folder layout
 
-The main apps are:
+The main folders are:
 
-- `expo` (native, web)
-- `next` (ssr web) -- not yet implemented
+- `apps`
+  - `expo` (native)
+  - `next` (web) -- ssr not yet implemented
+  - `tauri` (desktop) -- not yet implemented
 
 - `packages` shared packages across apps
   - `ui` includes your custom UI kit that will be optimized by Tamagui
@@ -119,9 +130,9 @@ The main apps are:
     - `hooks` - custom hooks for logic and data fetching with trpc
     - `media` - media query in react native config
     - `public` - web only assets like favicon
-/store - redux store. TRPC query reduced the need for a lot of these files. Will likely clean up soon.
-/theme - tracks dark and light mode theming logic and tamagui config
-/utils - utility functions that can be reused
+    - `atoms` - jotai atoms for global state
+    - `theme` - tracks dark and light mode theming logic and tamagui config
+    - `utils` - utility functions that can be reused
 
 ## UI Kit
 
@@ -269,16 +280,16 @@ cp gradle.properties.example gradle.properties
 ```
 
 
-1. Navigate back to the `PackRat` directory.
+8. Navigate back to the `PackRat` directory.
 
 ```
 cd ../..
 ```
 
-9. Navigate to the `server` directory.
+9. Navigate to the `next` directory.
 
 ```
-cd server
+cd apps/next
 ```
 
 10. Duplicate the `.env.example` file and rename it to `.env`. Open the file and replace the values with your own.
@@ -288,7 +299,26 @@ cd server
 cp .env.example .env
 ```
 
-1.  Navigate back to the `PackRat` directory.
+11. Navigate back to the `PackRat` directory.
+
+```
+cd ..
+```
+
+10. Navigate to the `server` directory.
+
+```
+cd server
+```
+
+11. Duplicate the `.env.example` file and rename it to `.env`. Open the file and replace the values with your own.
+        - If you have access to the development env file, skip this step. Otherwise, replace the values with your own.
+
+```
+cp .env.example .env
+```
+
+12.  Navigate back to the `PackRat` directory.
 
 ```
 cd ..
@@ -323,21 +353,34 @@ yarn start
 
 #### Client
 
-1. Navigate to the `client` directory.
+1. Navigate to the `expo` directory.
 
 ```
-cd client
+cd apps/expo
+```
+- Here you will be able to run the app on an iOS or Android simulator (or on your own device). See the [Expo documentation](https://docs.expo.io/get-started/installation/) for more information on how to set up your development environment.
+- If it is your first time running the app, you may need to build the app using the following command.
+
+```
+yarn run ios
+```
+```
+yarn run android
 ```
 
-2. Start the Expo server.
+2. Navigate to the `next` directory.
+
+```
+cd apps/next
+```
+
+3. Start the Expo/Next server.
 
 ```
 yarn start
 ```
-
-4. Here you will be able to run the app on an iOS or Android simulator (or on your own device), or on the web. See the [Expo documentation](https://docs.expo.io/get-started/installation/) for more information on how to set up your development environment.
-
 Note that the client and server are designed to run concurrently in development mode.
+
 
 
 ### Debugging Yarn Environment Setup - Windows
@@ -395,7 +438,7 @@ node -v
 - Restart your code editor if opened
 - If you any encounter errors, try restarting your system.
 
-## Docker Installation 🐳
+## Docker Installation 🐳 [Experimental]
 
 PackRat can also be installed using Docker. After setting up the development environment, follow the steps below to install and run the app using Docker.
 
@@ -446,6 +489,9 @@ docker run -p 3000:3000 packrat-server
 Please refer to README.md inside server folder.
 
 ## Contributing 🤝
+
+> [!TIP]
+> We have an active community of contributors and users who are happy to help. Join us on Discord to get involved!
 
 Contributions to PackRat are welcome! To contribute, follow these steps:
 

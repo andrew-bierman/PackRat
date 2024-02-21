@@ -13,13 +13,21 @@ import {
 } from './TableHelperComponents';
 import TableItem from './TableItem';
 
+interface TableContainerProps {
+  currentPack: any;
+  selectedPack: any;
+  refetch: () => void;
+  setRefetch: () => void;
+  copy: boolean;
+}
+
 export const TableContainer = ({
   currentPack,
   selectedPack,
   refetch,
   setRefetch = () => {},
   copy,
-}) => {
+}: TableContainerProps) => {
   const styles = useCustomStyles(loadStyles);
   const {
     isLoading,

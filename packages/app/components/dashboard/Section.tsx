@@ -1,11 +1,15 @@
-import { View } from 'react-native';
+import { GestureResponderEvent, View } from 'react-native';
 import { RCard } from '@packrat/ui';
 import React from 'react';
 import { theme } from '../../theme';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 
-const Section = ({ children, onPress }) => {
+interface SectionProps {
+  children: React.ReactNode;
+  onPress: (event: GestureResponderEvent) => void;
+}
+const Section: React.FC<SectionProps> = ({ children, onPress }) => {
   const styles = useCustomStyles(loadStyles);
   return (
     <View style={styles.section} onPress={onPress}>
@@ -16,7 +20,7 @@ const Section = ({ children, onPress }) => {
   );
 };
 
-const loadStyles = (theme) => {
+const loadStyles = (theme: any) => {
   const { currentTheme } = theme;
   return {
     section: {

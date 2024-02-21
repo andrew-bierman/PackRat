@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { addPackItem } from 'store/packsStore';
 import { ItemCategoryEnum } from 'app/constants/itemCategory';
+import { useAddPackItem } from 'app/hooks/packs/useAddPackItem';
 
 export const useWater = ({ currentPack, setWaterItem }) => {
   const [waterWeight, setWaterWeight] = useState(0);
-  const dispatch = useDispatch();
+  const { addPackItem } = useAddPackItem();
 
   /**
    * Update the water weight.
@@ -32,7 +31,7 @@ export const useWater = ({ currentPack, setWaterItem }) => {
       type: ItemCategoryEnum.WATER,
     };
 
-    dispatch(addPackItem(data));
+    addPackItem(data);
   };
 
   return { handleWaterChange, addWater, waterWeight };
