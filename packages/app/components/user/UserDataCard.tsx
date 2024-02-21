@@ -6,6 +6,7 @@ import { Link } from 'solito/link';
 import { truncateString } from '../../utils/truncateString';
 import { useEffect } from 'react';
 import { useEditPack } from 'app/hooks/packs';
+import { Platform } from 'react-native';
 
 interface UserDataCardProps {
   type: 'pack' | 'trip';
@@ -84,7 +85,7 @@ const UserDataCard = ({
       <View
         style={{
           minHeight: 150,
-          minWidth: 225,
+          minWidth: Platform.OS === 'web' ? 250 : 225,
           border: '1px solid gray',
           borderLeft: `10px solid ${is_public ? 'green' : 'red'}`,
           borderRadius: 8,
