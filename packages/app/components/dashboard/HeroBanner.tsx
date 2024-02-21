@@ -21,7 +21,6 @@ interface SearchResult {
   properties: {
     osm_id: number;
     osm_type: string;
-    name: string;
   };
   geometry: {
     coordinates: [number, number];

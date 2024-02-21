@@ -14,7 +14,7 @@ export const userSignIn = async (req, res) => {
     password,
   });
   await user.generateAuthToken();
-  res.status(200).json({ user });
+  res.status(200).send({ user });
 };
 
 export function userSignInRoute() {

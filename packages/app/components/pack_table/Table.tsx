@@ -70,10 +70,8 @@ export const TableContainer = ({
   }
   if (isLoading) return <RSkeleton style={{}} />;
   if (error) return <ErrorMessage message={error} />;
-
-  const isWeb = Platform.OS === 'web';
   return (
-    <View style={[styles.container, !isWeb && { width: '100%'}]}>
+    <View style={styles.container}>
       {data?.length ? (
         <>
           <Table style={styles.tableStyle} flexArr={flexArr}>

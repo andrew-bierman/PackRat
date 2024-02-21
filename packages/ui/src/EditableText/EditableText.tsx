@@ -6,8 +6,8 @@ import { LoadingPlaceholder } from '../LoadingPlaceholder';
 import { useInputFocus } from './useInputFocus';
 
 interface EditableTextProps {
-  value?: string;
-  onChange?: (value: string | undefined) => void;
+  value: string;
+  onChange: (value: string) => void;
   onSave: (value: string) => void;
   isFocused: boolean;
   defaultValue: string;
@@ -36,7 +36,7 @@ export const EditableText = ({
       {isLoading && <LoadingPlaceholder color="#e2e1eb" />}
       <TextInput
         style={{
-          fontSize: 20,
+          fontSize: '20px',
           fontWeight: 'bold',
           // TODO change to theme value: currentTheme.colors.textPrimary
           // color: 'red',

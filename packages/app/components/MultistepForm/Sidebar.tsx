@@ -5,7 +5,6 @@ interface SidebarProps {
   data: { title?: string; subtext?: string }[];
   currentStep: number;
 }
-
 // /TODO: Review this logic.
 export const Sidebar: React.FC<SidebarProps> = ({ data, currentStep }) => {
   const displayData = Object.values(data).slice(0, currentStep + 1);

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FlatList, View, Platform } from 'react-native';
 import Card from '../../components/feed/FeedCard';
+// import { fetchUserTrips, selectAllTrips } from '../../store/tripsStore';
 import { usefetchTrips } from 'app/hooks/trips';
 import { useRouter } from '@packrat/ui';
 import { fuseSearch } from '../../utils/fuseSearch';

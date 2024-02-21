@@ -17,21 +17,17 @@ export const useSearchParams = () => {
   const updateQue = (newQue) => {
     queue.current = newQue;
 
-    // Clear any existing timer to prevent multiple updates
-    if (timerId.current) {
-      clearTimeout(timerId.current);
-    }
-
     timerId.current = setTimeout(() => {
+      if (!isNaN(timerId.current)) {
+        clearTimeout(timerId.current);
+      }
+
       updateSearchParams(queue.current);
-      // Clear the timerId after the update is done
-      timerId.current = null;
     }, 500);
   };
 
   const set = (key, value) => {
-    const entries = Object.fromEntries(searchParams.entries());
-    updateQue({ ...entries, [key]: String(value) });
+    updateQue({ ...queue.current, [key]: String(value) });
   };
 
   const reset = (params) => {

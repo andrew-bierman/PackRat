@@ -1,7 +1,7 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { Platform, View } from 'react-native';
-import { RButton, RCard, RText, RStack, H1, H3 } from '@packrat/ui';
+import { RButton, RCard, RText, RStack } from '@packrat/ui';
 import useTheme from '../../hooks/useTheme';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -26,26 +26,17 @@ const LandingPage = () => {
         }}
       >
         {Platform.OS === 'web' ? (
-          <H1
-            style={{
-              color: 'white',
-              fontSize: currentTheme.font.headerFont,
-            }}
-          >
-            PackRat
-          </H1>
-        ) : (
           <RText
-            style={{
-              color: 'white',
-              fontSize: 20,
-              fontWeight: 600,
-            }}
+            style={{ color: 'white', fontSize: currentTheme.font.headerFont }}
           >
             PackRat
           </RText>
+        ) : (
+          <RText style={{ color: 'white', fontSize: 20, fontWeight: 600 }}>
+            PackRat
+          </RText>
         )}
-        <RText style={{ color: 'white', fontSize: 24 }}>
+        <RText style={{ color: 'white', fontSize: 18 }}>
           The Ultimate Travel App
         </RText>
       </View>
@@ -128,7 +119,7 @@ const LandingPage = () => {
               </RButton>
             </View>
           )}
-          <RStack width="100%" maxWidth={Platform.OS === 'web' ? 800 : '100%'}>
+          <RStack>
             {FAQ_ITEMS.map((item, index) => (
               <LandingPageAccordion
                 key={index}

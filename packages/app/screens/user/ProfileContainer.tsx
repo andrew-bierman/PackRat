@@ -152,7 +152,7 @@ const Header = ({
             <SettingsButton />
           </View>
         )}
-        <RStack style={{ alignItems: 'center', flex: 1 }}>
+        <RStack style={{ alignItems: 'center', flex: '1' }}>
           <View style={styles.userInfo}>
             <UserInfo isLoading={isLoading} user={user} />
           </View>
@@ -270,6 +270,7 @@ export default function ProfileContainer({ id = null }) {
             </View>
           </RStack>
         </ScrollView>
+      </ScrollView>
     </View>
   );
 }

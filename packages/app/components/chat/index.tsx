@@ -9,6 +9,12 @@ import {
 } from 'react-native';
 import useTheme from '../../hooks/useTheme';
 import { BaseModal, RStack } from '@packrat/ui';
+// import {
+//   getUserChats,
+//   getAIResponse,
+//   selectConversationById,
+//   selectAllConversations,
+// } from '../../store/chatStore';
 import { Box, VStack, HStack, Select } from 'native-base';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useChat } from 'app/hooks/chat/useChat';
@@ -174,7 +180,7 @@ const ChatModalTrigger: React.FC<ChatModalTriggerProps> = () => {
 
   return (
     <View style={styles.container}>
-      <BaseModal title="Chat" trigger="Open Chat" footerComponent={undefined}>
+      <BaseModal title="Chat" trigger="Open Chat">
         <ChatComponent />
       </BaseModal>
     </View>

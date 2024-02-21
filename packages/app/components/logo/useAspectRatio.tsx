@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-const useAspectRatio = (width: number, originalWidth: number, originalHeight: number): number => {
+const useAspectRatio = (width, originalWidth, originalHeight) => {
   return useMemo(() => {
     const aspectRatio = originalHeight / originalWidth;
     const newHeight = width * aspectRatio;

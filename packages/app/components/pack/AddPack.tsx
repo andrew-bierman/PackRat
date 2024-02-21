@@ -85,7 +85,7 @@ export const AddPack = ({ isCreatingTrip = false }) => {
 
 export const AddPackContainer = ({ isCreatingTrip }) => {
   return (
-    <BaseModal title="Add Pack" trigger="Add Pack" footerComponent={undefined}>
+    <BaseModal title="Add Pack" trigger="Add Pack">
       <AddPack isCreatingTrip={isCreatingTrip} />
     </BaseModal>
   );
