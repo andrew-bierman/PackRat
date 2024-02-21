@@ -1,4 +1,4 @@
-// export const api = "http://192.168.0.104:3000/api";
+// export const api = "http://add your ip address";
 
 import { NODE_ENV, API_URL, NEXT_PUBLIC_API_URL } from '@env';
 
