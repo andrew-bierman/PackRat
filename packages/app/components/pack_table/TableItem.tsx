@@ -32,7 +32,7 @@ const TableItem = ({
   refetch,
   setRefetch = () => {},
 }: TableItemProps) => {
-  const { name, weight, quantity, unit, id } = itemData;
+  const { name, weight, quantity, category, unit, id } = itemData;
   const styles = useCustomStyles(loadStyles);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   /**
@@ -58,10 +58,16 @@ const TableItem = ({
       name,
       `${formatNumber(weight)} ${unit}`,
       quantity,
+      category.name,
       <PackOptions
         Edit={
           <EditPackItemModal>
-            <AddItem id={id} packId={id} isEdit={true} initialData={itemData} />
+            <AddItem
+              id={id}
+              packId={currentPack.id}
+              isEdit={true}
+              initialData={itemData}
+            />
           </EditPackItemModal>
         }
         Delete={
@@ -87,10 +93,11 @@ const TableItem = ({
       name,
       `${formatNumber(weight)} ${unit}`,
       quantity,
+      category.name,
       <EditPackItemModal>
         <AddItem
           id={id}
-          packId={id}
+          packId={currentPack.id}
           isEdit={true}
           currentPack={currentPack}
           initialData={itemData}

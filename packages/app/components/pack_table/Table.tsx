@@ -99,10 +99,10 @@ export const TableContainer = ({
                   <CategoryRow category={category} />
                   <FlatList
                     data={items}
-                    keyExtractor={(item, index) => item.id}
+                    keyExtractor={(item, index) => item.item.id}
                     renderItem={({ item }) => (
                       <TableItem
-                        itemData={item}
+                        itemData={item.item}
                         checkedItems={checkedItems}
                         handleCheckboxChange={handleCheckboxChange}
                         flexArr={flexArr}

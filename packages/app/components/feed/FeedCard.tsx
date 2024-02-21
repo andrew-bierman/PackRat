@@ -175,7 +175,7 @@ export default function Card({
                 ml={-0.5}
                 mt={-1}
               >
-                Total Weight: {formattedWeight}g
+                Total Weight: {formattedWeight?.toFixed(2)}g
               </RText>
             )}
 

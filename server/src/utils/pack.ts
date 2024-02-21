@@ -57,9 +57,12 @@ import { Pack } from '../drizzle/methods/pack';
 export const DEFAULT_SORT = { createdAt: 'DESC' };
 
 export const SORT_OPTIONS = {
-  Favorite: { favorites_count: 'DESC' },
-  Lightest: { total_weight: 'ASC' },
-  Heaviest: { total_weight: 'DESC' },
+  // Favorite: { favorites_count: 'DESC' },
+  Favorite: DEFAULT_SORT,
+  // Lightest: { total_weight: 'ASC' },
+  Lightest: DEFAULT_SORT,
+  // Heaviest: { total_weight: 'DESC' },
+  Heaviest: DEFAULT_SORT,
   'Most Items': DEFAULT_SORT,
   'Fewest Items': DEFAULT_SORT,
   Oldest: { createdAt: 'ASC' },

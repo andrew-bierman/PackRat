@@ -79,27 +79,30 @@ export const AddItem = ({
     setUnit(initialData?.unit || 'lb');
   }, [initialData]);
   const handleSubmit = () => {
+    const parsedWeight = parseFloat(weight);
+    const parsedQuantity = parseInt(quantity, 10);
     const PackId = packId || initialData.id;
     if (isEdit) {
       if (PackId && initialData.global) {
         editPackItem({
           name,
-          weight,
-          quantity,
+          weight: parsedWeight,
+          quantity: parsedQuantity,
           unit,
           type: categoryType,
           id: initialData.id,
+          packId,
         });
         closeModalHandler();
       } else {
         editPackItem({
           name,
-          weight,
-          quantity,
+          weight: parsedWeight,
+          quantity: parsedQuantity,
           unit,
           type: categoryType,
           id,
-          // packId,
+          packId,
         });
         setPage(1);
         closeModalHandler();
@@ -107,8 +110,8 @@ export const AddItem = ({
     } else {
       addPackItem({
         name,
-        weight,
-        quantity,
+        weight: parsedWeight,
+        quantity: parsedQuantity,
         type: categoryType,
         unit,
         packId,

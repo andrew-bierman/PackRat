@@ -22,7 +22,7 @@ export const addItemService = async (
   quantity: number,
   unit: string,
   packId: string,
-  type: string,
+  type: 'Food' | 'Water' | 'Essentials',
   ownerId: string,
 ): Promise<object> => {
   let category: InsertItemCategory | null;

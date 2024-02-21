@@ -149,14 +149,14 @@ export const appRouter = trpcRouter({
   requestPasswordResetEmailAndToken: requestPasswordResetEmailAndTokenRoute(),
   handlePasswordReset: handlePasswordResetRoute(),
   // packs routes
-  getPublicPacks: getPublicPacksRoute(),
-  getPacks: getPacksRoute(),
-  getPackById: getPackByIdRoute(),
-  addPack: addPackRoute(),
-  editPack: editPackRoute(),
-  deletePack: deletePackRoute(),
-  scorePack: scorePackRoute(),
-  duplicatePublicPack: duplicatePublicPackRoute(),
+  getPublicPacks: getPublicPacksRoute(), // Done (Sorting by Items is left)
+  getPacks: getPacksRoute(), // Done (Sorting by Items is left)
+  getPackById: getPackByIdRoute(), // Done
+  addPack: addPackRoute(), // Done
+  editPack: editPackRoute(), // Done
+  deletePack: deletePackRoute(), // Done
+  scorePack: scorePackRoute(), // Done
+  duplicatePublicPack: duplicatePublicPackRoute(), // Not Implemented
   // osm routes
   getPhotonResults: getPhotonResultsRoute(),
   getTrailsOSM: getTrailsOSMRoute(),
@@ -172,14 +172,14 @@ export const appRouter = trpcRouter({
   getItems: getItemsRoute(),
   getItemById: getItemByIdRoute(),
   searchItemsByName: searchItemsByNameRoute(),
-  addItem: addItemRoute(),
-  editItem: editItemRoute(),
-  deleteItem: deleteItemRoute(),
-  addItemGlobal: addItemGlobalRoute(),
-  getItemsGlobally: getItemsGloballyRoute(),
-  addGlobalItemToPack: addGlobalItemToPackRoute(),
-  editGlobalItemAsDuplicate: editGlobalItemAsDuplicateRoute(),
-  deleteGlobalItem: deleteGlobalItemRoute(),
+  addItem: addItemRoute(), // Done
+  editItem: editItemRoute(), // Done
+  deleteItem: deleteItemRoute(), // Done
+  addItemGlobal: addItemGlobalRoute(), // Done
+  getItemsGlobally: getItemsGloballyRoute(), // Done
+  addGlobalItemToPack: addGlobalItemToPackRoute(), // Done
+  editGlobalItemAsDuplicate: editGlobalItemAsDuplicateRoute(), // Not Implemented
+  deleteGlobalItem: deleteGlobalItemRoute(), // Done
   // trails routes
   getTrails: getTrailsRoute(),
   // parks route

@@ -40,7 +40,7 @@ CREATE TABLE `item_owners` (
 	`item_id` text,
 	`owner_id` text,
 	PRIMARY KEY(`item_id`, `owner_id`),
-	FOREIGN KEY (`item_id`) REFERENCES `item`(`id`) ON UPDATE no action ON DELETE set null,
+	FOREIGN KEY (`item_id`) REFERENCES `item`(`id`) ON UPDATE no action ON DELETE cascade,
 	FOREIGN KEY (`owner_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
@@ -48,8 +48,8 @@ CREATE TABLE `item_packs` (
 	`item_id` text,
 	`pack_id` text,
 	PRIMARY KEY(`item_id`, `pack_id`),
-	FOREIGN KEY (`item_id`) REFERENCES `item`(`id`) ON UPDATE no action ON DELETE set null,
-	FOREIGN KEY (`pack_id`) REFERENCES `pack`(`id`) ON UPDATE no action ON DELETE set null
+	FOREIGN KEY (`item_id`) REFERENCES `item`(`id`) ON UPDATE no action ON DELETE cascade,
+	FOREIGN KEY (`pack_id`) REFERENCES `pack`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
 CREATE TABLE `node` (
@@ -70,9 +70,6 @@ CREATE TABLE `pack` (
 	`grades` text DEFAULT '{"weight":"","essentialItems":"","redundancyAndVersatility":""}',
 	`scores` text DEFAULT '{"weightScore":0,"essentialItemsScore":0,"redundancyAndVersatilityScore":0}',
 	`type` text DEFAULT 'pack',
-	`total_weight` real,
-	`total_score` integer DEFAULT 0,
-	`favorites_count` integer DEFAULT 0,
 	`created_at` text DEFAULT CURRENT_TIMESTAMP,
 	`updated_at` text DEFAULT CURRENT_TIMESTAMP,
 	FOREIGN KEY (`owner_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE set null

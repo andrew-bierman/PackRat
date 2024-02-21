@@ -84,7 +84,7 @@ export const ItemForm = ({
           <RInput
             value={weight}
             placeholder="Weight"
-            onChangeText={(text) => setWeight(parseFloat(text))}
+            onChangeText={(text) => setWeight(text)}
             flex={1}
           />
           {data && (
@@ -101,7 +101,7 @@ export const ItemForm = ({
         <RInput
           value={quantity}
           placeholder="Quantity"
-          onChangeText={(text) => setQuantity(parseInt(text))}
+          onChangeText={(text) => setQuantity(text)}
           width="100%"
           type="text"
         />

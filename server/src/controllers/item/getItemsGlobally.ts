@@ -8,19 +8,6 @@ import { z } from 'zod';
  * @param {Object} res - The response object.
  * @return {Object} The items, page, and total pages.
  */
-// export const getItemsGlobally = async (req, res, next) => {
-//   try {
-//     const result = await getItemsGloballyService(
-//       req.query.limit,
-//       req.query.page,
-//     );
-
-//     res.locals.data = result;
-//     responseHandler(res);
-//   } catch (error) {
-//     next(ItemNotFoundError);
-//   }
-// };
 
 export function getItemsGloballyRoute() {
   return publicProcedure
