@@ -11,6 +11,7 @@ export const getPackByIdService = async (packId: string) => {
       total_weight: packClass.computeTotalWeight(pack),
       favorites_count: packClass.computeFavouritesCount(pack),
       total_score: packClass.computeTotalScores(pack),
+      items: pack.itemPacks.map((itemPack) => itemPack.item),
     };
   } catch (error) {
     // Handle any potential errors here

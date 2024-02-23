@@ -50,10 +50,10 @@ export const ItemForm = ({
   let hasWaterAdded = false;
   if (
     currentPack &&
-    Array.isArray(currentPack.itemPacks) &&
-    currentPack.itemPacks.length > 0
+    Array.isArray(currentPack.items) &&
+    currentPack.items.length > 0
   ) {
-    hasWaterAdded = currentPack.itemPacks.some(
+    hasWaterAdded = currentPack.items.some(
       (item) => item.category && item.category.name === ItemCategoryEnum.WATER,
     );
   }

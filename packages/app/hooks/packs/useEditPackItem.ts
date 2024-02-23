@@ -16,8 +16,8 @@ export const useEditPackItem = (isItemPage) => {
       const previousPack = utils.getPackById.getData({
         packId: editedItem.packId,
       });
-      const itemIndex = previousPack.itemPacks.findIndex(
-        (itemPack) => itemPack.item.id === editedItem.id,
+      const itemIndex = previousPack.items.findIndex(
+        (item) => item.id === editedItem.id,
       );
       if (itemIndex === -1) {
         throw new Error('Item not found in the pack.');

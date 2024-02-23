@@ -43,7 +43,6 @@ export const AddItem = ({
   setIsAddItemModalOpen = () => {},
 }: AddItemProps) => {
   const user = useAuthUser();
-
   // Moved the state up to the parent component
   const [name, setName] = useState(initialData?.name || '');
   const [weight, setWeight] = useState(initialData?.weight?.toString() || '');
@@ -117,6 +116,7 @@ export const AddItem = ({
         packId,
         ownerId,
       });
+      // Todo: Need to empty the form fields
     }
   };
 

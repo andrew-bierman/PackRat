@@ -164,6 +164,7 @@ export class Pack {
         total_weight: this.computeTotalWeight(pack),
         favorites_count: this.computeFavouritesCount(pack),
         total_score: this.computeTotalScores(pack),
+        items: pack.itemPacks.map((itemPack) => itemPack.item),
       }));
     } catch (error) {
       throw new Error(`Failed to fetch packs: ${error.message}`);

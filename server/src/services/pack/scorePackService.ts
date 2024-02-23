@@ -19,8 +19,8 @@ export async function scorePackService(packId: string) {
     if (!pack) {
       throw new Error('Pack not found');
     }
-
-    const packScore = calculatePackScore(pack);
+    const items = pack.itemPacks.map((itemPack) => itemPack.item);
+    const packScore = calculatePackScore({ ...pack, items });
 
     const updatedPack = await packClass.update({
       id: pack.id,

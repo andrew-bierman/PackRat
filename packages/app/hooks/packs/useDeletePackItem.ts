@@ -7,8 +7,8 @@ export const useDeletePackItem = () => {
       const previousPack = utils.getPackById.getData({
         packId: deleteItem.packId,
       });
-      const itemIndex = previousPack.itemPacks.findIndex(
-        (itemPack) => itemPack.item.id === deleteItem.itemId,
+      const itemIndex = previousPack.items.findIndex(
+        (item) => item.id === deleteItem.itemId,
       );
       if (itemIndex === -1) {
         throw new Error('Item not found in the pack.');

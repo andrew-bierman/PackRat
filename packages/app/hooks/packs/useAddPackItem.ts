@@ -5,7 +5,6 @@ export const useAddPackItem = () => {
 
   // Use mutation for adding an item
   const mutation = queryTrpc.addItem.useMutation({
-    // **Item addition to the pack is managed in the backend**
     // onMutate: async (newItem) => {
     //   // Snapshot the previous value before the mutation
     //   console.log(newItem.packId);

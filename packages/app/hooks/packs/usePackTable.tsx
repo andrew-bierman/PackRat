@@ -16,8 +16,8 @@ export const usePackTable = ({
   const user = useAuthUser();
   const duplicatePackItem = useDuplicatePackItem();
   let ids = [];
-  if (currentPack?.itemPacks) {
-    ids = copy ? currentPack.itemPacks.map((itemPack) => itemPack.item.id) : [];
+  if (currentPack?.items) {
+    ids = copy ? currentPack.map((item) => item.id) : [];
   }
   const [checkedItems, setCheckedItems] = useState([...ids]);
 
@@ -32,7 +32,7 @@ export const usePackTable = ({
   };
 
   const [weightUnit, setWeightUnit] = useState<WeightUnit>('g');
-  const data = currentPack?.itemPacks;
+  const data = currentPack?.items;
   let totalFoodWeight = 0;
   let totalWaterWeight = 0;
   let totalBaseWeight = 0;
@@ -46,14 +46,12 @@ export const usePackTable = ({
       Todo better to move this all inside a utility function and pass them variables
       */
   data
-    ?.filter((itemPack) => !checkedItems.includes(itemPack.item.id))
-    .forEach((itemPack) => {
-      const categoryName = itemPack.item.category
-        ? itemPack.item.category.name
-        : 'Undefined';
-      const itemWeight = Number(itemPack.item.weight) || 0; // ensure it's a number
-      const itemQuantity = Number(itemPack.item.quantity) || 0; // ensure it's a number
-      const itemUnit = itemPack.item.unit || null;
+    ?.filter((item) => !checkedItems.includes(item.id))
+    .forEach((item) => {
+      const categoryName = item.category ? item.category.name : 'Undefined';
+      const itemWeight = Number(item.weight) || 0; // ensure it's a number
+      const itemQuantity = Number(item.quantity) || 0; // ensure it's a number
+      const itemUnit = item.unit || null;
 
       if (!copy) {
         switch (categoryName) {
@@ -71,7 +69,7 @@ export const usePackTable = ({
               itemUnit,
               weightUnit,
             );
-            foodItems.push(itemPack.item);
+            foodItems.push(item);
             break;
           }
           case ItemCategoryEnum.WATER: {
@@ -80,7 +78,7 @@ export const usePackTable = ({
               itemUnit,
               weightUnit,
             );
-            waterItem = itemPack.item;
+            waterItem = item;
             break;
           }
         }
@@ -99,11 +97,9 @@ export const usePackTable = ({
 
   // In your groupedData definition, provide a default category for items without one
   const groupedData = data
-    ?.filter((fItem) => !Array.isArray(fItem.item.category))
+    ?.filter((fItem) => !Array.isArray(fItem.category))
     ?.reduce((acc, fItem) => {
-      const categoryName = fItem.item.category
-        ? fItem.item.category.name
-        : 'Undefined';
+      const categoryName = fItem.category ? fItem.category.name : 'Undefined';
       (acc[categoryName] = acc[categoryName] || []).push(fItem);
       return acc;
     }, {});
