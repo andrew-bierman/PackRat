@@ -12,6 +12,7 @@ import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useAddNewPack } from 'app/hooks/packs';
 import { useRouter } from 'app/hooks/router';
+import { z } from 'zod';
 
 export const AddPack = ({ isCreatingTrip = false }) => {
   // Hooks
@@ -56,6 +57,7 @@ export const AddPack = ({ isCreatingTrip = false }) => {
         <CustomForm
           onSubmit={handleAddPack}
           defaultValues={{ isPublic: '0', name: '' }}
+          validationSchema={addPackSchema}
         >
           <CustomInput
             placeholder="Name"
@@ -147,3 +149,10 @@ const loadStyles = (theme, appTheme) => {
     },
   };
 };
+
+// TODO move to validations workspace
+
+export const addPackSchema = z.object({
+  name: z.string().nonempty(),
+  isPublic: z.union([z.literal('0'), z.literal('1')]),
+});

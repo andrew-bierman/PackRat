@@ -69,7 +69,7 @@ export const AddItem = ({
 
   const defaultValues = useMemo(() => {
     if (!initialData) {
-      return { unit: 'ln' };
+      return { unit: 'lb' };
     }
     const result = {
       name: initialData.name || '',

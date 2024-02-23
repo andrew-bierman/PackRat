@@ -15,8 +15,8 @@ import {
   CustomSelect,
 } from '@packrat/ui';
 import Avatar from 'app/components/Avatar/Avatar';
-import DropdownComponent from '../../components/Dropdown';
 import { useProfileSettings } from 'app/hooks/user';
+import { z } from 'zod';
 
 const weatherOptions = ['celsius', 'fahrenheit'].map((key) => ({
   label: key,
@@ -44,7 +44,11 @@ export default function Settings() {
           <RH2>Profile</RH2>
           <RSeparator marginVertical={8} />
         </RStack>
-        <CustomForm onSubmit={handleEditUser} defaultValues={{ ...user }}>
+        <CustomForm
+          onSubmit={handleEditUser}
+          validationSchema={userSettingsSchema}
+          defaultValues={{ ...user }}
+        >
           <RStack space="$3" width="fit-content" marginHorizontal="auto">
             <ImageUpload
               label="Profile Picture"
@@ -97,7 +101,7 @@ export default function Settings() {
           <RSeparator marginVertical={8} />
           <RText fontSize={16}>We will email you to verify the change.</RText>
         </RStack>
-        <CustomForm>
+        <CustomForm validationSchema={passwordChangeSchema}>
           <RStack space="$3" width="100%" marginHorizontal="auto">
             <RStack space="$2">
               <RLabel htmlFor="oldPassword">Old password</RLabel>
@@ -132,3 +136,30 @@ export default function Settings() {
     </RScrollView>
   ) : null;
 }
+
+// TODO move to validations workspace
+
+const userSettingsSchema = z.object({
+  name: z.string().min(1).nonempty(),
+  email: z.string().email().nonempty(),
+  username: z.string().nonempty(),
+  profileImage: z.string().optional(),
+  preferredWeather: z.union([z.literal('celsius'), z.literal('fahrenheit')]),
+  preferredWeight: z.union([
+    z.literal('lb'),
+    z.literal('oz'),
+    z.literal('kg'),
+    z.literal('g'),
+  ]),
+});
+
+const passwordChangeSchema = z
+  .object({
+    oldPassword: z.string().min(1, 'Old password is required'),
+    newPassword: z.string().nonempty(),
+    confirmPassword: z.string().nonempty(),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: 'New password and confirmation must match',
+    path: ['confirmPassword'], // This will attach the error to `passwordConfirm` field
+  });

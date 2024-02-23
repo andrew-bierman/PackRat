@@ -160,7 +160,7 @@ export const SaveTripContainer = ({
         onSubmit={handleCreateTrip}
         defaultValues={{ isPublic: '0' }}
       >
-        <RStack>
+        <RStack style={{ gap: 8 }}>
           <CustomInput placeholder="Trip Name" name="name" />
           <CustomInput placeholder="Trip Description" name="description" />
           <>

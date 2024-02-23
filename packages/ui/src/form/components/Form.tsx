@@ -13,7 +13,7 @@ export { useFormContext as useAppFormContext } from 'react-hook-form';
 
 interface Props extends Omit<UseFormProps, 'resolver'> {
   validationSchema?: any;
-  formRef: any;
+  formRef?: any;
   onSubmit?: FormSubmitHandler<FieldValues>;
   children: ReactNode;
 }
