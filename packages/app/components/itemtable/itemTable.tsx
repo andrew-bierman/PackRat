@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 import { Table, Row, Cell } from 'react-native-table-component';
 import { theme } from '../../theme';
@@ -13,6 +13,7 @@ import Loader from '../Loader';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { loadStyles } from './itemsTable.style';
 import { AddItem } from '../item/AddItem';
+import { DropdownMenu } from '@packrat/ui';
 
 interface ItemsTableProps {
   limit: number;
@@ -58,7 +59,10 @@ export const ItemsTable = ({
   const styles = useCustomStyles(loadStyles);
   const TitleRow = ({ title }: TitleRowProps) => {
     const rowData = [
-      <RStack style={{ flexDirection: 'row', ...styles.mainTitle }}>
+      <RStack
+        key="rowData"
+        style={{ flexDirection: 'row', ...styles.mainTitle }}
+      >
         <Text style={styles.titleText}>{title}</Text>
       </RStack>,
     ];
@@ -70,25 +74,81 @@ export const ItemsTable = ({
   const TableItem = ({ itemData }: TableItemProps) => {
     const { name, weight, category, quantity, unit, _id, type } = itemData;
 
+    const [isEditModalVisible, setEditModalVisible] = useState(undefined);
+    const [isDeleteModalVisible, setDeleteModalVisible] = useState(undefined);
+
+    const toggleEdit = () => {
+      setEditModalVisible(!isEditModalVisible);
+    };
+
+    const toggleDelete = () => {
+      setDeleteModalVisible(!isDeleteModalVisible);
+    };
+
     const rowData = [
-      name,
-      `${formatNumber(weight)} ${unit}`,
-      quantity,
-      `${category?.name || type}`,
-      <EditPackItemModal>
-        <AddItem
-          _id={_id}
-          isEdit={true}
-          isItemPage
-          initialData={itemData}
-          editAsDuplicate={false}
-          setPage={setPage}
-          page={page}
-        />
-      </EditPackItemModal>,
-      <DeletePackItemModal itemId={_id} />,
+      <Text style={styles.rowText} key="name">
+        {name}
+      </Text>,
+      <Text
+        style={styles.rowText}
+        key="weight"
+      >{`${formatNumber(weight)} ${unit}`}</Text>,
+      <Text style={styles.rowText} key="quantity">
+        {quantity}
+      </Text>,
+      <Text
+        style={styles.rowText}
+        key="category"
+      >{`${category?.name || type}`}</Text>,
+      <View
+        key="viewContainer"
+        style={{ flex: 1, justifyContent: 'center', alignItems: 'flex-end' }}
+      >
+        <DropdownMenu.Root>
+          <DropdownMenu.Trigger>
+            <AntDesign name="circledown" size={16} color="black" />
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Content>
+            <DropdownMenu.Item key="edit" onSelect={toggleEdit}>
+              <DropdownMenu.ItemTitle>Edit</DropdownMenu.ItemTitle>
+            </DropdownMenu.Item>
+            <DropdownMenu.Item key="delete" onSelect={toggleDelete}>
+              <DropdownMenu.ItemTitle>Delete</DropdownMenu.ItemTitle>
+            </DropdownMenu.Item>
+          </DropdownMenu.Content>
+        </DropdownMenu.Root>
+      </View>,
     ];
-    return <Row data={rowData} style={styles.row} flexArr={flexArr} />;
+    return (
+      <>
+        <Row data={rowData} style={styles.row} flexArr={flexArr} />
+        {isEditModalVisible && (
+          <EditPackItemModal
+            hideIcon={true}
+            isOpen={isEditModalVisible}
+            toggle={toggleEdit}
+          >
+            <AddItem
+              _id={_id}
+              isEdit={true}
+              isItemPage
+              initialData={itemData}
+              editAsDuplicate={false}
+              setPage={setPage}
+              page={page}
+            />
+          </EditPackItemModal>
+        )}
+        {isDeleteModalVisible && (
+          <DeletePackItemModal
+            toggle={toggleDelete}
+            hideIcon={true}
+            itemId={_id}
+            isOpen={isDeleteModalVisible}
+          />
+        )}
+      </>
+    );
   };
   /**
    * Handles the logic for navigating to the next page.
@@ -118,43 +178,36 @@ export const ItemsTable = ({
           marginTop: 20,
         }}
       >
-        <ScrollView
-          horizontal={true}
-          contentContainerStyle={{
-            flexGrow: 1,
-            justifyContent: 'center',
-          }}
+        <Table>
+          <TitleRow title="Global Items List" />
+          <Row
+            flexArr={flexArr}
+            data={[
+              'Item Name',
+              'Weight',
+              'Quantity',
+              'Category',
+              'Actions',
+            ].map((header, index) => (
+              <Cell key={index} data={header} textStyle={styles.headerText} />
+            ))}
+            style={styles.head}
+          />
+        </Table>
+        <Table
+          style={styles.tableStyle}
+          borderStyle={{ borderColor: 'transparent' }}
         >
-          <Table
-            style={styles.tableStyle}
-            borderStyle={{ borderColor: 'transparent' }}
-          >
-            <TitleRow title="Global Items List" />
-            <Row
-              flexArr={flexArr}
-              data={[
-                'Item Name',
-                'Weight',
-                'Quantity',
-                'Category',
-                'Edit',
-                'Delete',
-              ].map((header, index) => (
-                <Cell key={index} data={header} textStyle={styles.headerText} />
-              ))}
-              style={styles.head}
-            />
-            <ScrollView style={{ height: 400 }}>
-              {isLoading ? (
-                <Loader />
-              ) : (
-                data.map((item, index) => {
-                  return <TableItem key={index} itemData={item} />;
-                })
-              )}
-            </ScrollView>
-          </Table>
-        </ScrollView>
+          <ScrollView style={{ height: 400 }}>
+            {isLoading ? (
+              <Loader />
+            ) : (
+              data.map((item, index) => {
+                return <TableItem key={index} itemData={item} />;
+              })
+            )}
+          </ScrollView>
+        </Table>
         <View
           style={{
             display: 'flex',

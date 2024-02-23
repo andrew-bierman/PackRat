@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Button, Dialog } from 'tamagui';
 import { X } from '@tamagui/lucide-icons';
 import RButton from '@packrat/ui/src/RButton';
@@ -14,6 +14,9 @@ export interface BaseModalProps {
   footerButtons?: any[];
   triggerComponent?: React.DetailedReactHTMLElement<any, HTMLElement>;
   footerComponent: React.DetailedReactHTMLElement<any, HTMLElement>;
+  hideIcon?: boolean;
+  isOpen?: boolean | undefined;
+  toggle?: any;
 }
 
 export const BaseModal = ({
@@ -23,8 +26,17 @@ export const BaseModal = ({
   footerButtons,
   footerComponent,
   children,
+  hideIcon = false,
+  isOpen = undefined,
+  toggle,
 }: BaseModalProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    if(isOpen !== undefined) {
+      setIsModalOpen(isOpen)
+    }
+  }, [isOpen])
 
   const triggerElement = useMemo(() => {
     return triggerComponent ? (
@@ -52,7 +64,12 @@ export const BaseModal = ({
     return footerButtons.map(({ color, label, onClick, ...button }, index) => (
       <RButton
         key={index}
-        onPress={withModalCloseHandler(onClick, setIsModalOpen)}
+        onPress={withModalCloseHandler(onClick, () => {
+          setIsModalOpen(false)
+          if(toggle) {
+            toggle()
+          }
+        })}
         backgroundColor={color}
         disabled={button.disabled}
         color="white"
@@ -77,7 +94,7 @@ export const BaseModal = ({
         setIsModalOpen(open);
       }}
     >
-      <Dialog.Trigger asChild>{triggerElement}</Dialog.Trigger>
+     {!hideIcon && <Dialog.Trigger asChild>{triggerElement}</Dialog.Trigger>}
       <Dialog.Portal>
         <Dialog.Overlay
           key="overlay"
@@ -124,6 +141,12 @@ export const BaseModal = ({
           {footerElement}
           <Dialog.Close asChild>
             <Button
+              onPress={() => {
+                setIsModalOpen(false);
+                if(toggle) {
+                  toggle()
+                }
+              }}
               position="absolute"
               backgroundColor="transparent"
               top="$3"
