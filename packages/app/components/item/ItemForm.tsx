@@ -50,10 +50,10 @@ export const ItemForm = ({
   let hasWaterAdded = false;
   if (
     currentPack &&
-    Array.isArray(currentPack.itemPacks) &&
-    currentPack.itemPacks.length > 0
+    Array.isArray(currentPack.items) &&
+    currentPack.items.length > 0
   ) {
-    hasWaterAdded = currentPack.itemPacks.some(
+    hasWaterAdded = currentPack.items.some(
       (item) => item.category && item.category.name === ItemCategoryEnum.WATER,
     );
   }
@@ -84,7 +84,7 @@ export const ItemForm = ({
           <RInput
             value={weight}
             placeholder="Weight"
-            onChangeText={(text) => setWeight(parseFloat(text))}
+            onChangeText={(text) => setWeight(text)}
             flex={1}
           />
           {data && (
@@ -101,7 +101,7 @@ export const ItemForm = ({
         <RInput
           value={quantity}
           placeholder="Quantity"
-          onChangeText={(text) => setQuantity(parseInt(text))}
+          onChangeText={(text) => setQuantity(text)}
           width="100%"
           type="text"
         />

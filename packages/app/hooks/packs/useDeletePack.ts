@@ -7,7 +7,7 @@ export const useDeletePack = (id) => {
 
   const handleDeletePack = async () => {
     try {
-      await deletePack(id);
+      await deletePack({ packId: id });
       router.replace('/packs');
     } catch {}
   };

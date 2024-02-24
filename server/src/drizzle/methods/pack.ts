@@ -21,7 +21,7 @@ export class Pack {
       userFavoritePacks: { columns: { userId: true } },
       itemPacks: completeItems
         ? {
-            columns: {},
+            columns: { packId: true },
             with: {
               item: {
                 columns: {
@@ -30,6 +30,11 @@ export class Pack {
                   weight: true,
                   quantity: true,
                   unit: true,
+                },
+                with: {
+                  category: {
+                    columns: { id: true, name: true },
+                  },
                 },
               },
             },
@@ -159,6 +164,7 @@ export class Pack {
         total_weight: this.computeTotalWeight(pack),
         favorites_count: this.computeFavouritesCount(pack),
         total_score: this.computeTotalScores(pack),
+        items: pack.itemPacks.map((itemPack) => itemPack.item),
       }));
     } catch (error) {
       throw new Error(`Failed to fetch packs: ${error.message}`);

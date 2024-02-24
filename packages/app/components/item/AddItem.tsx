@@ -43,7 +43,6 @@ export const AddItem = ({
   setIsAddItemModalOpen = () => {},
 }: AddItemProps) => {
   const user = useAuthUser();
-
   // Moved the state up to the parent component
   const [name, setName] = useState(initialData?.name || '');
   const [weight, setWeight] = useState(initialData?.weight?.toString() || '');
@@ -79,27 +78,30 @@ export const AddItem = ({
     setUnit(initialData?.unit || 'lb');
   }, [initialData]);
   const handleSubmit = () => {
+    const parsedWeight = parseFloat(weight);
+    const parsedQuantity = parseInt(quantity, 10);
     const PackId = packId || initialData.id;
     if (isEdit) {
       if (PackId && initialData.global) {
         editPackItem({
           name,
-          weight,
-          quantity,
+          weight: parsedWeight,
+          quantity: parsedQuantity,
           unit,
           type: categoryType,
           id: initialData.id,
+          packId,
         });
         closeModalHandler();
       } else {
         editPackItem({
           name,
-          weight,
-          quantity,
+          weight: parsedWeight,
+          quantity: parsedQuantity,
           unit,
           type: categoryType,
           id,
-          // packId,
+          packId,
         });
         setPage(1);
         closeModalHandler();
@@ -107,13 +109,14 @@ export const AddItem = ({
     } else {
       addPackItem({
         name,
-        weight,
-        quantity,
+        weight: parsedWeight,
+        quantity: parsedQuantity,
         type: categoryType,
         unit,
         packId,
         ownerId,
       });
+      // Todo: Need to empty the form fields
     }
   };
 

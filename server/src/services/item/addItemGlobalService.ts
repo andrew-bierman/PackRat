@@ -19,7 +19,7 @@ export const addItemGlobalService = async (
   weight: number,
   quantity: number,
   unit: string,
-  type: string,
+  type: 'Food' | 'Water' | 'Essentials',
 ): Promise<object> => {
   let category: InsertItemCategory | null;
   if (!categories.includes(type)) {
@@ -27,95 +27,6 @@ export const addItemGlobalService = async (
   }
   const itemClass = new Item();
   const itemCategoryClass = new ItemCategory();
-  // switch (type) {
-  //   case ItemCategoryEnum.FOOD: {
-  //     const category = await itemCategory.findUniqueItem({
-  //       where: {
-  //         name: 'Food',
-  //       },
-  //     });
-
-  //     let newItem = await item.create({
-  //       name,
-  //       weight,
-  //       quantity,
-  //       unit,
-  //       categoryDocument: {
-  //         id: category.id,
-  //       },
-  //       global: true,
-  //     });
-  //     newItem = await item.findUniqueItem({
-  //       where: {
-  //         id: newItem.id,
-  //       },
-  //       with: { categoryDocument: { columns: { name: true } } },
-  //     });
-  //     break;
-  //   }
-  //   case ItemCategoryEnum.WATER: {
-  //     const category = await itemCategory.findUniqueItem({
-  //       where: {
-  //         name: 'Water',
-  //       },
-  //     });
-  //     newItem = await item.create({
-  //       name,
-  //       weight,
-  //       quantity: 1,
-  //       unit,
-  //       categoryDocument: {
-  //         id: category.id,
-  //       },
-  //       global: true,
-  //     });
-  //     newItem = await item.findUniqueItem({
-  //       where: {
-  //         id: newItem.id,
-  //       },
-  //       with: {
-  //         categoryDocument: {
-  //           columns: {
-  //             name: true,
-  //           },
-  //         },
-  //       },
-  //     });
-
-  //     break;
-  //   }
-  //   default: {
-  //     category = await itemCategory.findUniqueItem({
-  //       where: {
-  //         name: 'Essentials',
-  //       },
-  //     });
-
-  //     newItem = await item.create({
-  //       name,
-  //       weight,
-  //       quantity,
-  //       unit,
-  //       categoryDocument: {
-  //         id: category.id,
-  //       },
-  //       global: true,
-  //     });
-  //     newItem = await item.findUniqueItem({
-  //       where: {
-  //         id: newItem.id,
-  //       },
-  //       with: {
-  //         categoryDocument: {
-  //           columns: {
-  //             name: true,
-  //           },
-  //         },
-  //       },
-  //     });
-  //     break;
-  //   }
-  // }
   category = await itemCategoryClass.findItemCategory({ name: type });
   if (!category) {
     category = await itemCategoryClass.create({ name: type });

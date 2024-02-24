@@ -108,9 +108,9 @@ export const pack = sqliteTable('pack', {
       }),
     ),
   type: text('type').default('pack'),
-  total_weight: real('total_weight'),
-  total_score: integer('total_score').default(0),
-  favorites_count: integer('favorites_count').default(0),
+  // total_weight: real('total_weight'),
+  // total_score: integer('total_score').default(0),
+  // favorites_count: integer('favorites_count').default(0),
   createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
   updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`),
   // @@map("packs"): undefined,
@@ -194,7 +194,7 @@ export const item = sqliteTable('item', {
 export const itemOwners = sqliteTable(
   'item_owners',
   {
-    itemId: text('item_id').references(() => item.id, { onDelete: 'set null' }),
+    itemId: text('item_id').references(() => item.id, { onDelete: 'cascade' }),
     ownerId: text('owner_id').references(() => user.id, {
       onDelete: 'cascade',
     }),
@@ -223,8 +223,8 @@ export const itemOwnersRelations = relations(itemOwners, ({ one }) => ({
 export const itemPacks = sqliteTable(
   'item_packs',
   {
-    itemId: text('item_id').references(() => item.id, { onDelete: 'set null' }),
-    packId: text('pack_id').references(() => pack.id, { onDelete: 'set null' }),
+    itemId: text('item_id').references(() => item.id, { onDelete: 'cascade' }),
+    packId: text('pack_id').references(() => pack.id, { onDelete: 'cascade' }),
   },
   (table) => {
     return {

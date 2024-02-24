@@ -22,7 +22,7 @@ export const editItemService = async (
   weight?: number,
   unit?: string,
   quantity?: number,
-  type?: string,
+  type?: 'Food' | 'Water' | 'Essentials',
 ): Promise<object> => {
   let category: InsertItemCategory | null;
   const itemClass = new Item();
