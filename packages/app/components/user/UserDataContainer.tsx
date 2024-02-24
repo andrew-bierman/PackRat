@@ -1,5 +1,5 @@
 import { Link } from 'solito/link';
-import { RStack, RText, RButton, RSkeleton } from '@packrat/ui';
+import { RStack, RText, RButton, RSkeleton, VirtualList } from '@packrat/ui';
 import { VirtualizedList } from 'react-native';
 import UserDataCard from './UserDataCard';
 import React, { useEffect, useState } from 'react';
@@ -56,6 +56,21 @@ export default function UserDataContainer({
   const cardType = type === 'packs' || type === 'favorites' ? 'pack' : 'trip';
 
   const differentUser = userId && userId !== currentUser.id;
+
+  const Card = ({ item, index }) => {
+    return (
+      <UserDataCard
+        key={item.id}
+        {...item}
+        type={cardType}
+        state={dataState}
+        setState={setDataState}
+        index={index}
+        differentUser={differentUser}
+      />
+    );
+  };
+
   // Map function to render multiple skeleton cards
   const skeletonCards =
     SkeletonComponent ||
@@ -80,8 +95,6 @@ export default function UserDataContainer({
   return (
     <LargeCard
       customStyle={{
-        // backgroundColor: theme.colors.white,
-        // light transparent grey
         backgroundColor: hexToRGBA(currentTheme.colors.card, 0.2),
       }}
     >
@@ -89,6 +102,7 @@ export default function UserDataContainer({
         style={{
           gap: 16,
           alignItems: 'center',
+          justifyContent: 'center',
           width: '100%',
           padding: 24,
         }}
@@ -101,10 +115,7 @@ export default function UserDataContainer({
             fontWeight: 'bold',
           }}
         >
-          {differentUser
-            ? // ? `${userId}'s ${typeUppercase}`
-              `${typeUppercase}`
-            : `Your ${typeUppercase}`}
+          {differentUser ? `${typeUppercase}` : `Your ${typeUppercase}`}
         </RText>
         <RStack
           style={{
@@ -119,48 +130,30 @@ export default function UserDataContainer({
           {isLoading ? (
             skeletonCards
           ) : data && data.length > 0 ? (
-            //   data?.map((dataItem, index) => (
-            //     <UserDataCard
-            //       key={dataItem.id}
-            //       {...{ ...dataItem }}
-            //       type={cardType}
-            //       state={dataState}
-            //       setState={setDataState}
-            //       index={index}
-            //       differentUser={differentUser}
-            //     />
-            //   ))
-            // )
-            <VirtualizedList
-              getItemCount={() => data.length}
-              getItem={(data, index) => data[index]}
-              nestedScrollEnabled={true}
-              data={data}
-              horizontal={true}
-              renderItem={({ item, index }) => (
-                <UserDataCard
-                  key={item.id}
-                  {...item}
-                  type={cardType}
-                  state={dataState}
-                  setState={setDataState}
-                  index={index}
-                  differentUser={differentUser}
-                />
-              )}
-              keyExtractor={(item) => item.id}
-              maxToRenderPerBatch={2}
-              contentContainerStyle={{
-                flex: 1,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            />
+            <>
+              <VirtualizedList
+                showsHorizontalScrollIndicator={false}
+                showsVerticalScrollIndicator={false}
+                getItemCount={() => data.length}
+                getItem={(data, index) => data[index]}
+                data={data}
+                keyExtractor={(item) => item.id}
+                renderItem={Card}
+                scrollEnabled={true}
+                maxToRenderPerBatch={2}
+                horizontal={true}
+                nestedScrollEnabled={true}
+                contentContainerStyle={{
+                  paddingHorizontal: 3,
+                  paddingVertical: 3,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              />
+            </>
           ) : currentUser?.id === userId ? (
             <Link href="/">
-              <RButton
-                style={{ color: currentTheme.colors.white, width: '100%' }}
-              >
+              <RButton style={{ color: currentTheme.colors.white }}>
                 {`Create your first ${typeUppercaseSingular}`}
               </RButton>
             </Link>

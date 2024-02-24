@@ -1,16 +1,8 @@
 import { useEffect, useState } from 'react';
 import DropdownComponent from '../Dropdown';
-// import useGetPacks from '../../hooks/useGetPacks';
 import { AddItem } from '../item/AddItem';
 import { TableContainer } from '../pack_table/Table';
-// import { useAuth } from "../../auth/provider";
 import { useUserPacks } from '../../hooks/packs/useUserPacks';
-import {
-  fetchUserPacks,
-  selectPackById,
-  selectAllPacks,
-} from '../../store/packsStore';
-import { updateNewTripPack } from '../../store/tripsStore';
 import { View } from 'react-native';
 import { AddItemModal } from './AddItemModal';
 import useCustomStyles from 'app/hooks/useCustomStyles';

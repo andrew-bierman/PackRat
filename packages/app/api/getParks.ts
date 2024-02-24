@@ -9,7 +9,7 @@ import osmtogeojson from 'osmtogeojson';
  * @param {string} state - The abbreviation of the state to retrieve parks for.
  * @return {Array<string>} An array of park names.
  */
-export const getParksRapid = async (state) => {
+export const getParksRapid = async (state: string): Promise<string[]> => {
   let parksArray = [];
   const abbrState = abbrRegion(state, 'abbr') ?? '';
   if (abbrState) {
