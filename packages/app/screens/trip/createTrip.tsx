@@ -17,9 +17,6 @@ import { useTripsData } from './useTripsData';
 export default function Trips() {
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
-  // const [parksData, setParksData] = useState();
-  const [trails, setTrailsData] = useState();
-
   const form = useCardTrip();
   const placesAutoCompleteRef = useRef({});
   const {
@@ -40,7 +37,6 @@ export default function Trips() {
   return (
     <ScrollView nestedScrollEnabled={true}>
       <RStack style={styles.mutualStyles}>
-        {/* <MultiStepForm steps={steps} /> */}
         <RStack style={styles.container}>
           <TripCard
             title="Where are you heading?"
