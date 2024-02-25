@@ -1,44 +1,56 @@
-import { useState } from 'react';
-import { useRouter } from 'app/hooks/router';
-import { RStack, RIconButton, BaseModal } from '@packrat/ui';
+/* eslint-disable react/react-in-jsx-scope */
+import { RStack, RIconButton, BaseModal, View } from '@packrat/ui';
 import { Entypo } from '@expo/vector-icons';
 import { useModalState } from './useModalState';
-import { View } from 'react-native';
+import { Text } from 'react-native';
 
-interface PackOptionsProps {
+interface IPackOptions {
   Edit: React.ReactNode;
   Delete: React.ReactNode;
   Ignore: React.ReactNode;
+  isOpen?: boolean | undefined;
+  hideIcon?: boolean;
+  toggle?: Function | undefined;
 }
 
-export const PackOptions: React.FC<PackOptionsProps> = ({
+export const PackOptions = ({
   Edit,
   Delete,
   Ignore,
-}) => {
+  isOpen,
+  hideIcon = false,
+  toggle,
+}: IPackOptions) => {
   const { isModalOpen, openModal, closeModal } = useModalState();
 
   return (
     <RStack>
       <BaseModal
-        isOpen={isModalOpen}
+        isOpen={isOpen}
+        toggle={toggle}
+        hideIcon={hideIcon}
         onClose={closeModal}
         triggerComponent={<MenuTriggerComponent openModal={openModal} />}
       >
-        <RStack style={{ flexDirection: 'row', alignItems: 'center' }}>
-          {Edit} Edit{' '}
-        </RStack>
-        <RStack style={{ flexDirection: 'row', alignItems: 'center' }}>
-          {Delete} Delete{' '}
-        </RStack>
+        {Edit && (
+          <RStack style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Text>{Edit} Edit</Text>
+          </RStack>
+        )}
+        {Delete && (
+          <RStack style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Text> {Delete}Delete </Text>
+          </RStack>
+        )}
         <RStack
           style={{
+            width: 200,
             flexDirection: 'row',
             alignItems: 'center',
-            justifyContent: 'flex-end',
+            justifyContent: 'center',
           }}
         >
-          {Ignore}{' '}
+          <Text>{Ignore}</Text>
         </RStack>
       </BaseModal>
     </RStack>

@@ -71,7 +71,7 @@ const LargeCard: React.FC<LargeCardProps> = ({
           paddingVertical: 15,
         }}
       >
-        {Icon ? <Icon /> : null}
+        {Icon && <Icon />}
         <RText
           style={{
             color: currentTheme.colors.textPrimary,
@@ -82,7 +82,7 @@ const LargeCard: React.FC<LargeCardProps> = ({
           {title && <RText>{title}</RText>}
         </RText>
       </View>
-      {ContentComponent ? <ContentComponent {...contentProps} /> : null}
+      {ContentComponent && <ContentComponent {...contentProps} />}
       {children}
     </RStack>
   );

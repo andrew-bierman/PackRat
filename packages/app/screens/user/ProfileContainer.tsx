@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Platform, View } from 'react-native';
-import { RIconButton, RStack, RText, RSkeleton } from '@packrat/ui';
-import { ScrollView } from 'react-native-gesture-handler';
+import { Platform, View, RefreshControl } from 'react-native';
+import {
+  RIconButton,
+  RStack,
+  RText,
+  RSkeleton,
+  RScrollView,
+} from '@packrat/ui';
 import UserDataContainer from '../../components/user/UserDataContainer';
 import useTheme from '../../hooks/useTheme';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -145,7 +150,7 @@ const Header = ({
           </>
         )}
       </RStack>
-      {error ? <RText>{error}</RText> : null}
+      {error && <RText>{error}</RText>}
     </View>
   );
 };
@@ -172,6 +177,7 @@ const SkeletonUserDataCard = () => {
 
 export default function ProfileContainer({ id = null }) {
   const { currentTheme } = useTheme();
+  const [refreshing, setRefreshing] = React.useState(false);
   const styles = useCustomStyles(loadStyles);
   const {
     user,
@@ -184,11 +190,24 @@ export default function ProfileContainer({ id = null }) {
     isLoading,
     isCurrentUser,
     error,
+    refetch: refetchProfile,
   } = useProfile(id);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      refetchProfile();
+      setRefreshing(false);
+    }, 2000);
+  }, []);
 
   return (
     <View>
-      <ScrollView>
+      <RScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         <RStack
           style={[
             styles.mainContainer,
@@ -257,7 +276,7 @@ export default function ProfileContainer({ id = null }) {
             )}
           </View>
         </RStack>
-      </ScrollView>
+      </RScrollView>
     </View>
   );
 }

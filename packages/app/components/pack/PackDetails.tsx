@@ -1,10 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import PackContainer from './PackContainer';
 import { DetailsHeader } from '../details/header';
 import { TableContainer } from '../pack_table/Table';
-import { RText } from '@packrat/ui';
+import { RScrollView, RText } from '@packrat/ui';
 import { DetailsComponent } from '../details';
-import { Dimensions, Platform, View, FlatList } from 'react-native';
+import {
+  Dimensions,
+  Platform,
+  View,
+  FlatList,
+  RefreshControl,
+  Text,
+} from 'react-native';
 import { theme } from '../../theme';
 import { CLIENT_URL } from '@env';
 import ScoreContainer from '../ScoreContainer';
@@ -25,34 +32,47 @@ const SECTION = {
 };
 
 export function PackDetails() {
-  // const [canCopy, setCanCopy] = useParam('canCopy')
+  const styles = useCustomStyles(loadStyles);
+
   const canCopy = false;
   const [packId] = usePackId();
   const link = `${CLIENT_URL}/packs/${packId}`;
-  const [firstLoad, setFirstLoad] = useState(true);
-  const user = useAuthUser();
-  const userId = user?._id;
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
   const [refetch, setRefetch] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
-  const { data: userPacks, isLoading: isUserPacksLoading } =
-    useUserPacks(userId);
+  const user = useAuthUser();
+  const userId = user?._id;
+  const {
+    data: userPacks,
+    isLoading: isUserPacksLoading,
+    refetch: refetchUserPacks,
+  } = useUserPacks(userId);
   const {
     data: currentPack,
     isLoading,
     error,
-    refetch: refetchQuery,
+    refetch: refetchSinglePack,
   } = useFetchSinglePack(packId);
-
-  const styles = useCustomStyles(loadStyles);
   const currentPackId = currentPack && currentPack._id;
-
   // check if user is owner of pack, and that pack and user exists
   const isOwner = currentPack && user && currentPack.owner_id === user._id;
-
   const isError = error !== null;
 
-  if (isLoading) return <RText>Loading...</RText>;
+  if (isLoading) return <Text>Loading...</Text>;
+
+  const refetchData = () => {
+    refetchUserPacks();
+    refetchSinglePack();
+  };
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      refetchData();
+      setRefreshing(false);
+    }, 2000);
+  }, []);
 
   return (
     <View
@@ -74,12 +94,17 @@ export function PackDetails() {
               <>
                 <View style={{ flex: 1 }}>
                   <FlatList
+                    refreshControl={
+                      <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                      />
+                    }
                     data={Object.entries(SECTION)}
                     contentContainerStyle={{ paddingBottom: 350 }}
                     keyExtractor={([key, val]) => val}
                     renderItem={({ item }) => {
                       {
-                        console.log(item[1], 'item');
                         switch (item[1]) {
                           case SECTION.TABLE:
                             return (
@@ -115,12 +140,12 @@ export function PackDetails() {
                           case SECTION.CHAT:
                             return (
                               <View style={styles.boxStyle}>
-                                <ChatContainer />
+                                <ChatContainer title={''} trigger={''} />
                               </View>
                             );
                             break;
                           default:
-                            return null;
+                            return <Text></Text>;
                         }
                       }
                     }}

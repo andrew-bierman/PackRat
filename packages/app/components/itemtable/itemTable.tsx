@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import { Table, Row, Cell } from 'react-native-table-component';
-import { theme } from '../../theme';
 import { AntDesign } from '@expo/vector-icons';
 import useTheme from '../../hooks/useTheme';
 import { RButton, RStack } from '@packrat/ui';
@@ -9,11 +8,11 @@ import { formatNumber } from '../../utils/formatNumber';
 import { EditPackItemModal } from '../pack_table/EditPackItemModal';
 import { DeletePackItemModal } from '../pack_table/DeletePackItemModal';
 import { PaginationLimit } from '../paginationChooseLimit';
-import Loader from '../Loader';
+import Loader from 'app/components/Loader';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { loadStyles } from './itemsTable.style';
 import { AddItem } from '../item/AddItem';
-import { DropdownMenu } from '@packrat/ui';
+import { DropdownMenu, RScrollView } from '@packrat/ui';
 
 interface ItemsTableProps {
   limit: number;
@@ -43,6 +42,27 @@ interface TitleRowProps {
 interface TableItemProps {
   itemData: YourItemType;
 }
+
+const DropDown = ({ toggleDelete, toggleEdit }) => {
+  const styles = useCustomStyles(loadStyles);
+  return (
+    <View key="viewContainer" style={styles.dropdownContainer}>
+      <DropdownMenu.Root>
+        <DropdownMenu.Trigger>
+          <AntDesign name="circledown" size={16} color="black" />
+        </DropdownMenu.Trigger>
+        <DropdownMenu.Content>
+          <DropdownMenu.Item key="edit" onSelect={toggleEdit}>
+            <DropdownMenu.ItemTitle>Edit</DropdownMenu.ItemTitle>
+          </DropdownMenu.Item>
+          <DropdownMenu.Item key="delete" onSelect={toggleDelete}>
+            <DropdownMenu.ItemTitle>Delete</DropdownMenu.ItemTitle>
+          </DropdownMenu.Item>
+        </DropdownMenu.Content>
+      </DropdownMenu.Root>
+    </View>
+  );
+};
 
 export const ItemsTable = ({
   limit,
@@ -100,24 +120,11 @@ export const ItemsTable = ({
         style={styles.rowText}
         key="category"
       >{`${category?.name || type}`}</Text>,
-      <View
-        key="viewContainer"
-        style={{ flex: 1, justifyContent: 'center', alignItems: 'flex-end' }}
-      >
-        <DropdownMenu.Root>
-          <DropdownMenu.Trigger>
-            <AntDesign name="circledown" size={16} color="black" />
-          </DropdownMenu.Trigger>
-          <DropdownMenu.Content>
-            <DropdownMenu.Item key="edit" onSelect={toggleEdit}>
-              <DropdownMenu.ItemTitle>Edit</DropdownMenu.ItemTitle>
-            </DropdownMenu.Item>
-            <DropdownMenu.Item key="delete" onSelect={toggleDelete}>
-              <DropdownMenu.ItemTitle>Delete</DropdownMenu.ItemTitle>
-            </DropdownMenu.Item>
-          </DropdownMenu.Content>
-        </DropdownMenu.Root>
-      </View>,
+      <DropDown
+        key="dropdown"
+        toggleDelete={toggleDelete}
+        toggleEdit={toggleEdit}
+      />,
     ];
     return (
       <>
@@ -168,7 +175,7 @@ export const ItemsTable = ({
   };
 
   return (
-    <ScrollView>
+    <RScrollView>
       <View
         style={{
           flex: 1,
@@ -198,7 +205,7 @@ export const ItemsTable = ({
           style={styles.tableStyle}
           borderStyle={{ borderColor: 'transparent' }}
         >
-          <ScrollView style={{ height: 400 }}>
+          <RScrollView style={{ height: 400 }}>
             {isLoading ? (
               <Loader />
             ) : (
@@ -206,7 +213,7 @@ export const ItemsTable = ({
                 return <TableItem key={index} itemData={item} />;
               })
             )}
-          </ScrollView>
+          </RScrollView>
         </Table>
         <View
           style={{
@@ -254,7 +261,7 @@ export const ItemsTable = ({
           </RButton>
         </View>
       </View>
-      <PaginationLimit limit={limit} setLimit={setLimit} />
-    </ScrollView>
+      <PaginationLimit limit={limit} setLimit={setLimit} setPage={setPage} />
+    </RScrollView>
   );
 };

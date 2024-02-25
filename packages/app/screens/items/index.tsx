@@ -1,6 +1,6 @@
-import { View, Platform } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { RButton, RScrollView, RTooltip, RStack, BaseModal } from '@packrat/ui';
+import { View, Platform, RefreshControl } from 'react-native';
+import React from 'react';
+import { Box, Button, Tooltip } from 'native-base';
 import { MaterialIcons } from '@expo/vector-icons';
 import { theme } from 'app/theme';
 import useTheme from 'app/hooks/useTheme';
@@ -9,19 +9,33 @@ import { ItemsTable } from 'app/components/itemtable/itemTable';
 // import { Stack } from 'expo-router';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useItems } from 'app/hooks/items/useItems';
+import { BaseModal, RButton, RScrollView, RStack, RTooltip } from '@packrat/ui';
 import { usePagination } from 'app/hooks/common';
 // import { checkNetworkConnected } from 'app/utils/netInfo';
 
 export default function Items() {
+  const { limit, handleLimitChange, page, handlePageChange } = usePagination();
+  const { data, isFetching, isError, refetch } = useItems({ limit, page });
+  const styles = useCustomStyles(loadStyles);
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      refetch();
+      setRefreshing(false);
+    }, 2000);
+  }, []);
+
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
 
-  const { limit, handleLimitChange, page, handlePageChange } = usePagination();
-  const { data, isFetching, isError } = useItems({ limit, page });
-  const styles = useCustomStyles(loadStyles);
-
   return (
-    <RScrollView>
+    <RScrollView
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
       {/* <Stack.Screen
         options={{
           title: 'Items',

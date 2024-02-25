@@ -51,7 +51,6 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
 
   const [refreshing, setRefreshing] = useState(false);
 
-  const user = useAuthUser();
   const ownerId = user?._id;
 
   const styles = useCustomStyles(loadStyles);
@@ -61,12 +60,15 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
     feedType,
     selectedTypes,
   );
+  const user = useAuthUser();
 
-  const onRefresh = () => {
+  const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    refetch();
-    setRefreshing(false);
-  };
+    setTimeout(() => {
+      refetch();
+      setRefreshing(false);
+    }, 2000);
+  }, []);
 
   /**
    * Renders the data for the feed based on the feed type and search query.
@@ -111,10 +113,29 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
         handleCreateClick={handleCreateClick}
       />
     );
-
+    // return Platform.OS === 'web' ? (
+    //   <RScrollView
+    //     showsHorizontalScrollIndicator={false}
+    //     contentContainerStyle={{ flex: 1, paddingBottom: 10 }}
+    //     refreshControl={
+    //       <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+    //     }
+    //   >
+    //     <View style={styles.cardContainer}>
+    //       {/* {console.log({ data })} */}
+    //       {feedSearchFilterComponent}
+    //       {data?.map((item) => (
+    //         <Card key={item?._id} type={item?.type} {...item} />
+    //       ))}
+    //     </View>
+    //   </RScrollView>
+    // ) : (
     return (
       <View style={{ flex: 1, paddingBottom: Platform.OS === 'web' ? 10 : 0 }}>
         <FlatList
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
           data={data}
           horizontal={false}
           keyExtractor={(item) => item?._id + item?.type}
@@ -129,9 +150,6 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
             </RText>
           )}
           showsVerticalScrollIndicator={false}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }
           maxToRenderPerBatch={2}
         />
       </View>
