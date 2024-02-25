@@ -35,6 +35,7 @@ const TableItem = ({
   const { name, weight, quantity, unit, _id } = itemData;
   const styles = useCustomStyles(loadStyles);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
   /**
    * Executes the onTrigger function.
    *

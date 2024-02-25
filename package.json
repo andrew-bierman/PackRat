@@ -73,17 +73,17 @@
   },
   "packageManager": "yarn@4.1.0",
   "dependencies": {
-    "@babel/runtime": "^7.21.0",
-    "@manypkg/cli": "^0.21.0",
+    "@babel/runtime": "^7.23.9",
+    "@manypkg/cli": "^0.21.2",
     "check-dependency-version-consistency": "^4.1.0",
     "cross-env": "^7.0.3",
     "dotenv-cli": "^7.3.0",
     "eslint": "^8.56.0",
-    "husky": "^8.0.0",
-    "lint-staged": "^14.0.1",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2",
     "npm-run-all": "^4.1.5",
     "patch-package": "^8.0.0",
-    "typescript": "^5.2.2"
+    "typescript": "^5.3.3"
   },
   "lint-staged": {
     "client/**/*.{js,jsx,ts,tsx}": [
@@ -125,5 +125,8 @@
     "packing checklist app",
     "packing list app",
     "packing planner app"
-  ]
+  ],
+  "devDependencies": {
+    "yarn-upgrade-all": "^0.7.2"
+  }
 }

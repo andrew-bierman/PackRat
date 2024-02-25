@@ -4,6 +4,9 @@ import { Cell, Row, Table } from 'react-native-table-component';
 import { usePackTable } from 'app/hooks/packs/usePackTable';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import loadStyles from './packtable.style';
+import { DataTable } from '../../../ui/src/DataTable/Table';
+
+
 import {
   TotalWeightBox,
   WeightUnitDropdown,
@@ -72,10 +75,19 @@ export const TableContainer = ({
   if (error) return <ErrorMessage message={error} />;
 
   const isWeb = Platform.OS === 'web';
+
+
   return (
     <View style={[styles.container, !isWeb && { width: '100%'}]}>
       {data?.length ? (
         <>
+          
+          <DataTable
+            title='Pack List'
+            table={Object.entries(groupedData)}
+            headings={heading}
+          />
+
           <Table style={styles.tableStyle} flexArr={flexArr}>
             <TitleRow title="Pack List" />
             <Row
