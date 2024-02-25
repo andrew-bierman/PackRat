@@ -1,5 +1,5 @@
 import About from 'app/screens/about';
-import { Platform, ScrollView, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 // export const runtime = 'experimental-edge'
 

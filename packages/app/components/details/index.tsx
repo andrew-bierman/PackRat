@@ -4,7 +4,7 @@ import { format } from 'date-fns';
 import { CustomCard } from '../card';
 import { RStack } from '@packrat/ui';
 
-interface DetailsComponent {
+interface IDetailsComponent {
   type: string;
   data: any; // Need type for this
   isLoading: boolean;
@@ -20,7 +20,7 @@ export const DetailsComponent = ({
   error,
   additionalComps,
   link,
-}: DetailsComponent) => {
+}: IDetailsComponent) => {
   const renderDetails = () => {
     switch (type) {
       case 'pack':

@@ -1,4 +1,4 @@
-import { Platform, ScrollView, View } from 'react-native';
+import { Platform, View } from 'react-native';
 import { Stack, router, Link } from 'expo-router';
 import Head from 'expo-router/head';
 import { RText } from '@packrat/ui';

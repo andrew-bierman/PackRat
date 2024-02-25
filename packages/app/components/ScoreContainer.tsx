@@ -241,6 +241,7 @@ const loadStyles = (theme: any) => {
       width: Platform.OS == 'web' ? '60%' : '100%',
     },
     scoreText: {
+      paddingTop: 10,
       color: currentTheme.colors.textPrimary,
       fontSize: 26,
       fontWeight: 'bold',

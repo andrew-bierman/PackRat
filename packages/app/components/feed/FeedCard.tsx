@@ -2,7 +2,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { formatDistanceToNow } from 'date-fns';
 import { MaterialIcons, Entypo } from '@expo/vector-icons';
 import useTheme from '../../hooks/useTheme';
-import { TouchableOpacity, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import { Link } from 'solito/link';
 import { useRouter } from 'app/hooks/router';
 import { DuplicateIcon } from '../DuplicateIcon/index';
@@ -265,7 +265,7 @@ export default function Card({
                             gap: 8,
                           }}
                         >
-                          {user?._id === owner_id ? null : (
+                          {user?._id !== owner_id && (
                             <TouchableOpacity onPress={handleAddToFavorite}>
                               <AntDesign
                                 name="heart"

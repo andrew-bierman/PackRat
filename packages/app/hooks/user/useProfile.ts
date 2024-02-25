@@ -17,24 +17,28 @@ export const useProfile = (id = null) => {
     data: allPacks,
     isLoading: allPacksLoading,
     error: allPacksError,
+    refetch: refetchUserPacks,
   } = useUserPacks(authUserId); // TODO: Add enabled as parameter
 
   const {
     data: tripsData,
     isLoading: tripsIsLoading,
     error: tripsError,
+    refetch: refetchUserTrips,
   } = useUserTrips(authUserId); // TODO: Add enabled as parameter
 
   const {
     data: allFavorites,
     isLoading: allFavoritesLoading,
     error: allFavoritesError,
+    refetch: refetchUserFavorites,
   } = useFetchUserFavorites(authUserId); // TODO: Add enabled as parameter
 
   const {
     data: userData,
     isLoading: userIsLoading,
     error: userError,
+    refetch: refetchGetUser,
   } = useGetUser(id);
 
   const user = !isCurrentUser ? userData : authUser;
@@ -54,6 +58,13 @@ export const useProfile = (id = null) => {
   const packsCount = packsData?.length ?? 0;
   const favoritesCount = favoritesData?.length ?? 0;
 
+  const refetch = () => {
+    refetchUserPacks();
+    refetchUserTrips();
+    refetchUserFavorites();
+    refetchGetUser();
+  };
+
   return {
     user,
     favoritesList: Array.isArray(favoritesData) ? favoritesData : [],
@@ -65,5 +76,6 @@ export const useProfile = (id = null) => {
     isLoading,
     error,
     isCurrentUser,
+    refetch,
   };
 };
