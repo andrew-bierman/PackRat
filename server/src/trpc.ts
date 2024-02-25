@@ -1,8 +1,24 @@
 import { TRPCError, initTRPC } from '@trpc/server';
 import type * as trpcExpress from '@trpc/server/adapters/express';
 import { getUserByTokenService } from './services/user/getUserByToken';
+import { ZodError } from 'zod';
 
-const t = initTRPC.context<Context>().create();
+/**
+ * Create error formatter to handle Zod errors
+ */
+export const errorFormatter = (opts) => {
+  const { shape, error } = opts;
+  return {
+    ...shape,
+    data: {
+      ...shape.data,
+      zodError:
+        error.code === 'BAD_REQUEST' && error.cause instanceof ZodError
+          ? error.cause.flatten()
+          : null,
+    },
+  };
+};
 
 /**
  * Create a context object that will be passed to all resolvers
@@ -48,6 +64,9 @@ export type Context = Awaited<ReturnType<typeof createContext>>;
  * Export reusable router and procedure helpers
  * that can be used throughout the router
  */
+const t = initTRPC.context<Context>().create({
+  errorFormatter,
+});
 export const router = t.router;
 export const middleware = t.middleware;
 export const publicProcedure = t.procedure;
