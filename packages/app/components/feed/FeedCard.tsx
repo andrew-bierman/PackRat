@@ -101,11 +101,16 @@ export default function Card({
   if (duration) numberOfNights = JSON.parse(duration).numberOfNights;
 
   return (
-    <View style={{ alignItems: 'center', padding: 16 }}>
+    <View
+      style={{
+        alignItems: 'center',
+        padding: 16,
+        flex: 1,
+      }}
+    >
       <View
         style={{
-          minHeight: 150,
-          minWidth: 300,
+          width: '100%',
           marginVertical: 'auto',
           borderRadius: 15,
           overflow: 'hidden',
