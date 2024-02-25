@@ -7207,27 +7207,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-<<<<<<< HEAD
-"@swc/core-darwin-arm64@npm:1.4.2":
-  version: 1.4.2
-  resolution: "@swc/core-darwin-arm64@npm:1.4.2"
-  conditions: os=darwin & cpu=arm64
-  languageName: node
-  linkType: hard
-
-"@swc/core-darwin-x64@npm:1.4.1":
-  version: 1.4.1
-  resolution: "@swc/core-darwin-x64@npm:1.4.1"
-=======
-"@swc/core-darwin-x64@npm:1.4.2":
-  version: 1.4.2
-  resolution: "@swc/core-darwin-x64@npm:1.4.2"
->>>>>>> 28799f9cd41f334f223106c3656ca892832b0fc3
-  conditions: os=darwin & cpu=x64
-  languageName: node
-  linkType: hard
-
-<<<<<<< HEAD
 "@swc/core-darwin-x64@npm:1.4.2":
   version: 1.4.2
   resolution: "@swc/core-darwin-x64@npm:1.4.2"
@@ -7235,19 +7214,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@swc/core-linux-arm-gnueabihf@npm:1.4.1":
-  version: 1.4.1
-  resolution: "@swc/core-linux-arm-gnueabihf@npm:1.4.1"
-=======
-"@swc/core-linux-arm-gnueabihf@npm:1.4.2":
-  version: 1.4.2
-  resolution: "@swc/core-linux-arm-gnueabihf@npm:1.4.2"
->>>>>>> 28799f9cd41f334f223106c3656ca892832b0fc3
-  conditions: os=linux & cpu=arm
-  languageName: node
-  linkType: hard
-
-<<<<<<< HEAD
 "@swc/core-linux-arm-gnueabihf@npm:1.4.2":
   version: 1.4.2
   resolution: "@swc/core-linux-arm-gnueabihf@npm:1.4.2"
@@ -7255,19 +7221,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@swc/core-linux-arm64-gnu@npm:1.4.1":
-  version: 1.4.1
-  resolution: "@swc/core-linux-arm64-gnu@npm:1.4.1"
-=======
-"@swc/core-linux-arm64-gnu@npm:1.4.2":
-  version: 1.4.2
-  resolution: "@swc/core-linux-arm64-gnu@npm:1.4.2"
->>>>>>> 28799f9cd41f334f223106c3656ca892832b0fc3
-  conditions: os=linux & cpu=arm64 & libc=glibc
-  languageName: node
-  linkType: hard
-
-<<<<<<< HEAD
 "@swc/core-linux-arm64-gnu@npm:1.4.2":
   version: 1.4.2
   resolution: "@swc/core-linux-arm64-gnu@npm:1.4.2"
@@ -7275,19 +7228,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@swc/core-linux-arm64-musl@npm:1.4.1":
-  version: 1.4.1
-  resolution: "@swc/core-linux-arm64-musl@npm:1.4.1"
-=======
-"@swc/core-linux-arm64-musl@npm:1.4.2":
-  version: 1.4.2
-  resolution: "@swc/core-linux-arm64-musl@npm:1.4.2"
->>>>>>> 28799f9cd41f334f223106c3656ca892832b0fc3
-  conditions: os=linux & cpu=arm64 & libc=musl
-  languageName: node
-  linkType: hard
-
-<<<<<<< HEAD
 "@swc/core-linux-arm64-musl@npm:1.4.2":
   version: 1.4.2
   resolution: "@swc/core-linux-arm64-musl@npm:1.4.2"
@@ -7295,19 +7235,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@swc/core-linux-x64-gnu@npm:1.4.1":
-  version: 1.4.1
-  resolution: "@swc/core-linux-x64-gnu@npm:1.4.1"
-=======
-"@swc/core-linux-x64-gnu@npm:1.4.2":
-  version: 1.4.2
-  resolution: "@swc/core-linux-x64-gnu@npm:1.4.2"
->>>>>>> 28799f9cd41f334f223106c3656ca892832b0fc3
-  conditions: os=linux & cpu=x64 & libc=glibc
-  languageName: node
-  linkType: hard
-
-<<<<<<< HEAD
 "@swc/core-linux-x64-gnu@npm:1.4.2":
   version: 1.4.2
   resolution: "@swc/core-linux-x64-gnu@npm:1.4.2"
@@ -7315,19 +7242,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@swc/core-linux-x64-musl@npm:1.4.1":
-  version: 1.4.1
-  resolution: "@swc/core-linux-x64-musl@npm:1.4.1"
-=======
-"@swc/core-linux-x64-musl@npm:1.4.2":
-  version: 1.4.2
-  resolution: "@swc/core-linux-x64-musl@npm:1.4.2"
->>>>>>> 28799f9cd41f334f223106c3656ca892832b0fc3
-  conditions: os=linux & cpu=x64 & libc=musl
-  languageName: node
-  linkType: hard
-
-<<<<<<< HEAD
 "@swc/core-linux-x64-musl@npm:1.4.2":
   version: 1.4.2
   resolution: "@swc/core-linux-x64-musl@npm:1.4.2"
@@ -7335,19 +7249,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@swc/core-win32-arm64-msvc@npm:1.4.1":
-  version: 1.4.1
-  resolution: "@swc/core-win32-arm64-msvc@npm:1.4.1"
-=======
-"@swc/core-win32-arm64-msvc@npm:1.4.2":
-  version: 1.4.2
-  resolution: "@swc/core-win32-arm64-msvc@npm:1.4.2"
->>>>>>> 28799f9cd41f334f223106c3656ca892832b0fc3
-  conditions: os=win32 & cpu=arm64
-  languageName: node
-  linkType: hard
-
-<<<<<<< HEAD
 "@swc/core-win32-arm64-msvc@npm:1.4.2":
   version: 1.4.2
   resolution: "@swc/core-win32-arm64-msvc@npm:1.4.2"
@@ -7355,19 +7256,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@swc/core-win32-ia32-msvc@npm:1.4.1":
-  version: 1.4.1
-  resolution: "@swc/core-win32-ia32-msvc@npm:1.4.1"
-=======
-"@swc/core-win32-ia32-msvc@npm:1.4.2":
-  version: 1.4.2
-  resolution: "@swc/core-win32-ia32-msvc@npm:1.4.2"
->>>>>>> 28799f9cd41f334f223106c3656ca892832b0fc3
-  conditions: os=win32 & cpu=ia32
-  languageName: node
-  linkType: hard
-
-<<<<<<< HEAD
 "@swc/core-win32-ia32-msvc@npm:1.4.2":
   version: 1.4.2
   resolution: "@swc/core-win32-ia32-msvc@npm:1.4.2"
@@ -7375,19 +7263,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@swc/core-win32-x64-msvc@npm:1.4.1":
-  version: 1.4.1
-  resolution: "@swc/core-win32-x64-msvc@npm:1.4.1"
-=======
-"@swc/core-win32-x64-msvc@npm:1.4.2":
-  version: 1.4.2
-  resolution: "@swc/core-win32-x64-msvc@npm:1.4.2"
->>>>>>> 28799f9cd41f334f223106c3656ca892832b0fc3
-  conditions: os=win32 & cpu=x64
-  languageName: node
-  linkType: hard
-
-<<<<<<< HEAD
 "@swc/core-win32-x64-msvc@npm:1.4.2":
   version: 1.4.2
   resolution: "@swc/core-win32-x64-msvc@npm:1.4.2"
@@ -7395,60 +7270,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@swc/core@npm:^1.3.100":
-  version: 1.4.2
-  resolution: "@swc/core@npm:1.4.2"
-  dependencies:
-    "@swc/core-darwin-arm64": "npm:1.4.2"
-    "@swc/core-darwin-x64": "npm:1.4.2"
-    "@swc/core-linux-arm-gnueabihf": "npm:1.4.2"
-    "@swc/core-linux-arm64-gnu": "npm:1.4.2"
-    "@swc/core-linux-arm64-musl": "npm:1.4.2"
-    "@swc/core-linux-x64-gnu": "npm:1.4.2"
-    "@swc/core-linux-x64-musl": "npm:1.4.2"
-    "@swc/core-win32-arm64-msvc": "npm:1.4.2"
-    "@swc/core-win32-ia32-msvc": "npm:1.4.2"
-    "@swc/core-win32-x64-msvc": "npm:1.4.2"
-    "@swc/counter": "npm:^0.1.2"
-    "@swc/types": "npm:^0.1.5"
-  peerDependencies:
-    "@swc/helpers": ^0.5.0
-  dependenciesMeta:
-    "@swc/core-darwin-arm64":
-      optional: true
-    "@swc/core-darwin-x64":
-      optional: true
-    "@swc/core-linux-arm-gnueabihf":
-      optional: true
-    "@swc/core-linux-arm64-gnu":
-      optional: true
-    "@swc/core-linux-arm64-musl":
-      optional: true
-    "@swc/core-linux-x64-gnu":
-      optional: true
-    "@swc/core-linux-x64-musl":
-      optional: true
-    "@swc/core-win32-arm64-msvc":
-      optional: true
-    "@swc/core-win32-ia32-msvc":
-      optional: true
-    "@swc/core-win32-x64-msvc":
-      optional: true
-  peerDependenciesMeta:
-    "@swc/helpers":
-      optional: true
-  checksum: 10/750c09e35fb14317b1ff7f8f528eebd732988ce34736c3404805e70ff44e08a19ec6d0c16b9468fab602b596eb39cc6d2771f0483a62efd614768e046323b5f4
-  languageName: node
-  linkType: hard
-
-"@swc/core@npm:^1.3.107":
-  version: 1.4.1
-  resolution: "@swc/core@npm:1.4.1"
-=======
 "@swc/core@npm:^1.3.100, @swc/core@npm:^1.3.107":
   version: 1.4.2
   resolution: "@swc/core@npm:1.4.2"
->>>>>>> 28799f9cd41f334f223106c3656ca892832b0fc3
   dependencies:
     "@swc/core-darwin-arm64": "npm:1.4.2"
     "@swc/core-darwin-x64": "npm:1.4.2"
@@ -18230,9 +18054,9 @@ __metadata:
   linkType: hard
 
 "flow-parser@npm:0.*":
-  version: 0.229.0
-  resolution: "flow-parser@npm:0.229.0"
-  checksum: 10/02a06e66d7e78aa8c62849ef1e237d00235bad39994036cd79a385b59331638a93099120e5299eb3633ca987f8ec61c8e0014720a58a141ca8ee4d93c38a631d
+  version: 0.229.2
+  resolution: "flow-parser@npm:0.229.2"
+  checksum: 10/6308b26f8dbeed073ef2d1890d99cef59669a19e87afd6b071114867795dce71901f81207b9d89ed649f6cd826452f8f826702a49c7b2dc4bc94264d6cdd3bd3
   languageName: node
   linkType: hard
 
@@ -18244,8 +18068,8 @@ __metadata:
   linkType: hard
 
 "flow-remove-types@npm:^2.137.0":
-  version: 2.229.0
-  resolution: "flow-remove-types@npm:2.229.0"
+  version: 2.229.2
+  resolution: "flow-remove-types@npm:2.229.2"
   dependencies:
     hermes-parser: "npm:0.19.1"
     pirates: "npm:^3.0.2"
@@ -18253,7 +18077,7 @@ __metadata:
   bin:
     flow-node: flow-node
     flow-remove-types: flow-remove-types
-  checksum: 10/d2cb525e5b521eaa303a503fbbd44c634057268ab9f8c6db24a2b1e422caeeec69d9961017ff61f4b23421fe983e4b81dfa5ac6c7f466dfa9db12fd39718b7f1
+  checksum: 10/47db1a4f49b1cb55e7c98c4eaaa7019cbf40fbd46b06e70f383b168914d3e5c186e4ad4cde2a8529cd71fb73fe9cda29560d7340ab462bd4820c2a3d7e3589d1
   languageName: node
   linkType: hard
 
@@ -24191,17 +24015,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"moti@npm:^0.27.4":
-  version: 0.27.5
-  resolution: "moti@npm:0.27.5"
-  dependencies:
-    framer-motion: "npm:^6.5.1"
-  peerDependencies:
-    react-native-reanimated: "*"
-  checksum: 10/6848d00692584a881ed45c63258710d489c3e2b02ecf5fbdb507393d9305deceb541c325a2d1d64c5543e0c9a3a667b95804d6a994f0556b565c31ca8c49edb0
-  languageName: node
-  linkType: hard
-
 "mpath@npm:0.9.0":
   version: 0.9.0
   resolution: "mpath@npm:0.9.0"
@@ -27807,13 +27620,8 @@ __metadata:
   linkType: hard
 
 "react-remove-scroll-bar@npm:^2.3.3":
-<<<<<<< HEAD
-  version: 2.3.4
-  resolution: "react-remove-scroll-bar@npm:2.3.4"
-=======
   version: 2.3.5
   resolution: "react-remove-scroll-bar@npm:2.3.5"
->>>>>>> 28799f9cd41f334f223106c3656ca892832b0fc3
   dependencies:
     react-style-singleton: "npm:^2.2.1"
     tslib: "npm:^2.0.0"

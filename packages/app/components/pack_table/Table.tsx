@@ -5,6 +5,7 @@ import { usePackTable } from 'app/hooks/packs/usePackTable';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import loadStyles from './packtable.style';
 import { DataTable } from '../../../ui/src/DataTable/Table';
+import { PackOptions } from '../../components/PackOptions/index';
 
 
 import {
@@ -87,49 +88,6 @@ export const TableContainer = ({
             table={Object.entries(groupedData)}
             headings={heading}
           />
-
-          <Table style={styles.tableStyle} flexArr={flexArr}>
-            <TitleRow title="Pack List" />
-            <Row
-              flexArr={flexArr}
-              data={[
-                'Item Name',
-                `Weight`,
-                'Quantity',
-                'Category',
-                'Edit',
-                'Delete',
-                `${copy ? 'Copy' : 'Ignore'}`,
-              ].map((header, index) => (
-                <Cell key={index} data={header} textStyle={styles.headerText} />
-              ))}
-              style={styles.head}
-            />
-            <FlatList
-              data={Object.entries(groupedData)}
-              keyExtractor={([category, items]) => category}
-              renderItem={({ item: [category, items] }) => (
-                <>
-                  <CategoryRow category={category} />
-                  <FlatList
-                    data={items}
-                    keyExtractor={(item, index) => item._id}
-                    renderItem={({ item }) => (
-                      <TableItem
-                        itemData={item}
-                        checkedItems={checkedItems}
-                        handleCheckboxChange={handleCheckboxChange}
-                        flexArr={flexArr}
-                        currentPack={currentPack}
-                        refetch={refetch}
-                        setRefetch={setRefetch}
-                      />
-                    )}
-                  />
-                </>
-              )}
-            />
-          </Table>
           {copy ? (
             <RButton
               style={{
