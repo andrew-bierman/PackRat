@@ -53,9 +53,11 @@ export default function PackContainer({ isCreatingTrip = false }) {
 
     setCurrentPackId(selectedPack?._id);
 
-    if (isCreatingTrip && selectedPack?._id) {
-      searchParams.set('packId', selectedPack?._id);
-    }
+    // if (isCreatingTrip && selectedPack?._id) {
+    //   // searchParams.set('packId', selectedPack?._id);
+    //   setCurrentPackId(selectedPack._id);
+
+    // }
   };
 
   const currentPack = packs?.find((pack) => pack._id === currentPackId);
