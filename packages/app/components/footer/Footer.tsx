@@ -10,7 +10,6 @@ export default function Footer() {
     <View
       style={{
         width: '100%',
-        textAlign: 'center',
         backgroundColor: currentTheme.colors.card,
         padding: 15,
 

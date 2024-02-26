@@ -101,16 +101,22 @@ export default function Card({
   if (duration) numberOfNights = JSON.parse(duration).numberOfNights;
 
   return (
-    <View style={{ alignItems: 'center', padding: 16 }}>
+    <View
+      style={{
+        alignItems: 'center',
+        padding: 16,
+        flex: 1,
+      }}
+    >
       <View
         style={{
-          minHeight: 150,
-          minWidth: 300,
+          width: '100%',
+          maxWidth: 600,
           marginVertical: 'auto',
           borderRadius: 15,
           overflow: 'hidden',
           borderColor: 'lightgray',
-          borderWidth: '1',
+          borderWidth: 1,
           backgroundColor: `${currentTheme.colors.card}`,
         }}
       >
@@ -168,13 +174,7 @@ export default function Card({
             </RHeading>
 
             {type === 'pack' && (
-              <RText
-                fontSize="$1"
-                color="mediumpurple"
-                fontWeight="500"
-                ml={-0.5}
-                mt={-1}
-              >
+              <RText fontSize="$1" color="mediumpurple" ml={-0.5} mt={-1}>
                 Total Weight: {formattedWeight}
               </RText>
             )}
@@ -225,7 +225,7 @@ export default function Card({
                     gap: 100,
                   }}
                 >
-                  <RText fontSize="$1" color="gray" fontWeight="400" flex={1}>
+                  <RText fontSize="$1" color="gray" flex={1}>
                     {formatDistanceToNow(
                       new Date(
                         !Number.isNaN(new Date(createdAt).getTime())

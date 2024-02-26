@@ -3,11 +3,13 @@ import { useRouter } from 'app/hooks/router';
 import { RStack, RIconButton, BaseModal, View } from '@packrat/ui';
 import { Entypo } from '@expo/vector-icons';
 import { useModalState } from './useModalState';
+
 interface PackOptionsProps {
   Edit: React.ReactNode;
   Delete: React.ReactNode;
   Ignore: React.ReactNode;
 }
+
 export const PackOptions: React.FC<PackOptionsProps> = ({
   Edit,
   Delete,
