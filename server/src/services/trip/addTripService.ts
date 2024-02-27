@@ -1,21 +1,35 @@
 import { Trip } from '../../drizzle/methods/trip';
 import { TripGeoJson } from '../../drizzle/methods/TripGeoJson';
+import { GeoJson } from '../../drizzle/methods/GeoJson';
 
-export const addTripService = async (tripData: any, geojson_id: string) => {
+export const addTripService = async (tripDetails) => {
   try {
-    const tripGeoJsonClass = new TripGeoJson();
+    const { geoJSON, ...otherTripDetails } = tripDetails;
     const tripClass = new Trip();
-    // Create Trip
-    const newTrip = await tripClass.create(tripData);
+    const newTrip = await tripClass.create(otherTripDetails);
+    const geoJSONClass = new GeoJson();
+    const tripGeoJsonClass = new TripGeoJson();
 
-    await tripGeoJsonClass.create({
-      tripId: newTrip.id,
-      geojsonId: geojson_id,
-    });
-    return newTrip;
+    // Assuming geoJSON contains a FeatureCollection
+    for (const feature of geoJSON.features) {
+      const insertedGeoJSON = await geoJSONClass.create({
+        type: feature.type,
+        geojsonId: feature.id, // Ensure you have a unique identifier here
+        properties: JSON.stringify(feature.properties),
+        geometry: JSON.stringify(feature.geometry),
+      });
+
+      // Link the trip with the GeoJSON feature in trip_geojsons table
+      await tripGeoJsonClass.create({
+        tripId: newTrip.id,
+        geojsonId: insertedGeoJSON.id,
+      });
+    }
+
+    return { message: 'Trip and GeoJSON added successfully', trip: newTrip };
   } catch (error) {
     console.error(error);
-    throw new Error('Unable to add trip');
+    throw new Error('Unable to add trip and GeoJSON data');
   }
 };
 

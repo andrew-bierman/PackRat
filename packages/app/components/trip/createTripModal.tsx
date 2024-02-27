@@ -149,7 +149,7 @@ export const SaveTripContainer = ({
       duration: JSON.stringify(duration),
       weather: JSON.stringify(weatherObject),
       owner_id: user?.id,
-      packs: packId,
+      pack_id: packId,
       is_public: isPublic,
     };
 

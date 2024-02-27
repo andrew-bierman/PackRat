@@ -46,13 +46,13 @@ export const addTrip = z.object({
   start_date: z.string(),
   end_date: z.string(),
   destination: z.string(),
-  geojson_id: z.string(),
-  // geoJSON: z.object({
-  //   type: z.literal('FeatureCollection'),
-  //   features: z.array(featureSchema),
-  // }),
+  // geojson_id: z.string(),
+  geoJSON: z.object({
+    type: z.literal('FeatureCollection'),
+    features: z.array(featureSchema),
+  }),
   owner_id: z.string(),
-  packs_id: z.string(),
+  pack_id: z.string(),
   is_public: z.boolean(),
 });
 
