@@ -7550,8 +7550,8 @@ __metadata:
   linkType: hard
 
 "@tamagui/build@npm:^1.89.20":
-  version: 1.90.8
-  resolution: "@tamagui/build@npm:1.90.8"
+  version: 1.90.9
+  resolution: "@tamagui/build@npm:1.90.9"
   dependencies:
     "@babel/core": "npm:^7.23.3"
     "@types/fs-extra": "npm:^9.0.13"
@@ -7568,7 +7568,7 @@ __metadata:
     typescript: "*"
   bin:
     tamagui-build: tamagui-build.js
-  checksum: 10/f78b0eb3bc8a7cd8f26876ae9d96cd4ab4245e258195d925496aa80dcbed1c2ef00fe45499800697745a39ff2ab299eaa8d949e2814781b32aeb99a9b64fe948
+  checksum: 10/4c4f810311fecf15e2c29ba9da4447b77f0b789b45a2aa72badb9792bdc01f1512fe7b0604f540500cd0848ea90102f78d5a213f16a575504ef1cb4b27e99726
   languageName: node
   linkType: hard
 

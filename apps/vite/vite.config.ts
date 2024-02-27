@@ -49,6 +49,7 @@ export default defineConfig({
     // Add the resolve configuration
     alias: {
       extensions,
+      './resolver': './resolver.tanstack.ts',
       '@env': resolve(__dirname, 'envResolver'),
       // 'react-native': 'react-native-web',
       'react-native/Libraries/Image/AssetRegistry': resolve(
