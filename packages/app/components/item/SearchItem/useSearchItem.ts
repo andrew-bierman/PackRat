@@ -4,7 +4,7 @@ import { trpc } from 'app/trpc';
 import { useAuthUser } from 'app/auth/hooks';
 
 export const useSearchItem = () => {
-  const user = useAuthUser()
+  const user = useAuthUser();
   const [searchString, setSearchString] = useState('');
 
   const itemFilters = useMemo(() => {
@@ -19,14 +19,15 @@ export const useSearchItem = () => {
   const results = data?.items || [];
 
   const handleSearchResultClick = (item) => {
-    const ownerId = user._id;
-    const packId = window.location.pathname.substring('/path/'.length);
-    const itemId = item?._id;
+    const ownerId = user.id;
+    const packId = window.location.pathname.substring('/pack/'.length);
+    const itemId = item?.id;
 
     // TODO add optimistic updates
     (async () => {
       try {
-        await trpc.addGlobalItemToPack.query({ itemId, ownerId, packId });
+        // Works but we have to refresh (Incomplete)
+        await trpc.addGlobalItemToPack.mutate({ itemId, ownerId, packId });
       } catch {}
     })();
 

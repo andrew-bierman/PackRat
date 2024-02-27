@@ -75,6 +75,7 @@
   "dependencies": {
     "@babel/runtime": "^7.21.0",
     "@manypkg/cli": "^0.21.0",
+    "@prisma/extension-accelerate": "^0.6.2",
     "check-dependency-version-consistency": "^4.1.0",
     "cross-env": "^7.0.3",
     "dotenv-cli": "^7.3.0",
@@ -125,5 +126,8 @@
     "packing checklist app",
     "packing list app",
     "packing planner app"
-  ]
+  ],
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20231025.0"
+  }
 }

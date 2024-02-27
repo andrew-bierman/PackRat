@@ -6,7 +6,7 @@ export const getItems = z.object({
 });
 
 export const getItemById = z.object({
-  _id: JoiObjectId(),
+  id: JoiObjectId(),
 });
 
 export const getItemByName = z.object({
@@ -24,7 +24,7 @@ export const addItem = z.object({
 });
 
 export const editItem = z.object({
-  _id: JoiObjectId(),
+  id: JoiObjectId(),
   name: z.string().nonempty(),
   weight: z.string().nonempty(),
   quantity: z.string().nonempty(),

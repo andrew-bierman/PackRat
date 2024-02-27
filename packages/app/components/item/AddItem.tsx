@@ -3,13 +3,14 @@ import { View } from 'react-native';
 import { ItemForm } from './ItemForm'; // assuming you moved the form related code to a separate component
 import { useAddPackItem } from 'app/hooks/packs/useAddPackItem';
 import { useEditPackItem } from 'app/hooks/packs/useEditPackItem';
+import { useAuthUser } from 'app/auth/hooks';
 
 interface AddItemProps {
-  _id: string;
+  id: string;
   isEdit: boolean;
   initialData: {
     global: string;
-    _id: string;
+    id: string;
     name?: string;
     weight?: number;
     quantity?: number;
@@ -29,7 +30,7 @@ interface AddItemProps {
 }
 
 export const AddItem = ({
-  _id,
+  id,
   isEdit,
   initialData,
   packId,
@@ -41,6 +42,7 @@ export const AddItem = ({
   isItemPage,
   setIsAddItemModalOpen = () => {},
 }: AddItemProps) => {
+  const user = useAuthUser();
   // Moved the state up to the parent component
   const [name, setName] = useState(initialData?.name || '');
   const [weight, setWeight] = useState(initialData?.weight?.toString() || '');
@@ -51,7 +53,9 @@ export const AddItem = ({
     initialData?.category?.name || '',
   );
 
-  const [unit, setUnit] = useState(initialData?.unit || '');
+  const [unit, setUnit] = useState(initialData?.unit || 'lb');
+
+  const ownerId = user?.id;
 
   const {
     // mutation: addPackItemMutation
@@ -71,32 +75,33 @@ export const AddItem = ({
     setName(initialData?.name || '');
     setWeight(initialData?.weight?.toString() || '');
     setQuantity(initialData?.quantity?.toString() || '');
-    setUnit(initialData?.unit || '');
+    setUnit(initialData?.unit || 'lb');
   }, [initialData]);
-
   const handleSubmit = () => {
-    const PackId = packId || initialData._id;
-
+    const parsedWeight = parseFloat(weight);
+    const parsedQuantity = parseInt(quantity, 10);
+    const PackId = packId || initialData.id;
     if (isEdit) {
       if (PackId && initialData.global) {
         editPackItem({
           name,
-          weight,
-          quantity,
+          weight: parsedWeight,
+          quantity: parsedQuantity,
           unit,
           type: categoryType,
-          _id: initialData._id,
+          id: initialData.id,
+          packId,
         });
         closeModalHandler();
       } else {
         editPackItem({
           name,
-          weight,
-          quantity,
+          weight: parsedWeight,
+          quantity: parsedQuantity,
           unit,
           type: categoryType,
-          _id,
-          // packId,
+          id,
+          packId,
         });
         setPage(1);
         closeModalHandler();
@@ -104,12 +109,14 @@ export const AddItem = ({
     } else {
       addPackItem({
         name,
-        weight,
-        quantity,
+        weight: parsedWeight,
+        quantity: parsedQuantity,
         type: categoryType,
         unit,
         packId,
+        ownerId,
       });
+      // Todo: Need to empty the form fields
     }
   };
 

@@ -1,12 +1,16 @@
 import { ErrorFetchingGeoCodeError } from '../../helpers/errors';
 import { oneEntity } from '../../utils/oneEntity';
 
-export async function geoCodeService({ addressArray }: any) {
+export async function geoCodeService({
+  addressArray,
+  geoCodeUri,
+  geoapifyKey,
+}: any) {
   const address = await oneEntity(addressArray);
   const transform = address.split(', ').join('%20').split(' ').join('%20');
 
-  const GEO_CODE_URL = process.env.GEO_CODE_URL;
-  const GEOAPIFY_KEY = process.env.GEOAPIFY_KEY;
+  const GEO_CODE_URL = geoCodeUri;
+  const GEOAPIFY_KEY = geoapifyKey;
 
   let params = '?';
 
@@ -19,7 +23,12 @@ export async function geoCodeService({ addressArray }: any) {
   const url = GEO_CODE_URL + params;
 
   return await fetch(url)
-    .then(async (response) => response.json())
+    .then(async (response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
     .then((result) => {
       return { message: 'ok', result };
     })

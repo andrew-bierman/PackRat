@@ -5,10 +5,10 @@ export const RSkeleton = ({ style }) => {
   const fadeAnim = useSkeletonAnimation();
 
   const styles = StyleSheet.create({
-    text : {
-      fontSize : 24
-    }
-  })
+    text: {
+      fontSize: 24,
+    },
+  });
   return (
     <Animated.View
       style={{

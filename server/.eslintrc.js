@@ -9,6 +9,7 @@ module.exports = {
   extends: [
     'standard-with-typescript',
     'plugin:@typescript-eslint/recommended',
+    // 'plugin:drizzle/all', add this back when we are fully migrated to drizzle
     'prettier',
   ],
   parser: '@typescript-eslint/parser',
@@ -34,6 +35,7 @@ module.exports = {
     'tsconfig.*.json',
     'eslint.js',
     '.eslintrc.js',
+    'drizzle.config.ts',
   ],
   rules: {
     'prettier/prettier': 'error',
@@ -146,8 +148,10 @@ module.exports = {
         '@typescript-eslint/no-namespace': 'off',
         'import/no-duplicates': 'off',
         '@typescript-eslint/no-confusing-void-expression': 'off',
+        '@typescript-eslint/ban-types': 'off',
         'no-unmodified-loop-condition': 'off',
         '@typescript-eslint/no-base-to-string': 'off',
+        '@typescript-eslint/unbound-method': 'off',
       },
       extends: [
         'plugin:@typescript-eslint/recommended',

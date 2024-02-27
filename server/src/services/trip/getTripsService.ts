@@ -1,16 +1,15 @@
-import Trip from '../../models/tripModel';
+import { Trip } from '../../drizzle/methods/trip';
 
 /**
  * Retrieves trips belonging to a specific owner.
+ *  @param {PrismaClient} prisma - Prisma client.
  * @param {string} ownerId - The ID of the owner.
  * @return {Promise<object[]>} The trips owned by the specified owner.
  */
 export const getTripsService = async (ownerId: string): Promise<object[]> => {
   try {
-    const trips = await Trip.find({ owner_id: ownerId })
-      .populate('packs')
-      .lean();
-
+    const tripClass = new Trip();
+    const trips = await tripClass.findMany(ownerId);
     return trips;
   } catch (error) {
     console.error(error);

@@ -1,7 +1,9 @@
 {
   "compilerOptions": {
     "target": "ESNext",
+    "noImplicitAny": false,
     "module": "CommonJS",
+ "noEmitOnError": false,
     "lib": [
       "es6",
       "DOM"
@@ -16,11 +18,12 @@
     "moduleResolution": "Node",
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
-    "baseUrl": ".",
-    "paths":{
-      "@trpc":["trpc"],
-      "trpc":["../src/routes/index"]
-    },
+    // "baseUrl": ".",
+    // "paths":{
+    //   "@trpc":["trpc"],
+    //   "trpc":["../src/routes/index"],
+    //   "src":["../src"]
+    // },
     "declaration": true
   },
   "exclude": [
@@ -28,5 +31,5 @@
   ],
   "include": [
     "./src/**/*.ts"
-  ]
+, "src/drizzle.config.ts"  ]
 }

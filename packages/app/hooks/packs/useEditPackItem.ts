@@ -17,27 +17,27 @@ export const useEditPackItem = (isItemPage) => {
         packId: editedItem.packId,
       });
       const itemIndex = previousPack.items.findIndex(
-        (item) => item._id === editedItem._id,
+        (item) => item.id === editedItem.id,
       );
       if (itemIndex === -1) {
         throw new Error('Item not found in the pack.');
       }
-      const newQueryData = {
-        ...previousPack,
-        items: previousPack.items.map((item, index) => {
-          if (index === itemIndex) {
-            // Update the edited item properties
-            return {
-              ...item,
-              ...editedItem,
-            };
-          }
-          return item;
-        }),
-      };
+      // const newQueryData = {
+      //   ...previousPack,
+      //   items: previousPack.items.map((item, index) => {
+      //     if (index === itemIndex) {
+      //       // Update the edited item properties
+      //       return {
+      //         ...item,
+      //         ...editedItem,
+      //       };
+      //     }
+      //     return item;
+      //   }),
+      // };
 
-      // Update the data in the query
-      utils.getPackById.setData({ packId: editedItem.packId }, newQueryData);
+      // // Update the data in the query
+      // utils.getPackById.setData({ packId: editedItem.packId }, newQueryData);
 
       return {
         previousPack,
@@ -47,17 +47,17 @@ export const useEditPackItem = (isItemPage) => {
       console.log('Error');
       console.log(err);
 
-      if (context.previousPack) {
-        // Restore the previous pack data in case of an error
-        utils.getPackById.setData(
-          { packId: editedItem.packId },
-          context.previousPack,
-        );
-      }
+      // if (context.previousPack) {
+      //   // Restore the previous pack data in case of an error
+      //   utils.getPackById.setData(
+      //     { packId: editedItem.packId },
+      //     context.previousPack,
+      //   );
+      // }
     },
     onSuccess: (result) => {
       // Invalidate relevant queries after a successful edit
-      utils.getPackById.invalidate({ packId: result._id });
+      utils.getPackById.invalidate();
       utils.getItemsGlobally.invalidate();
     },
   });
@@ -76,7 +76,7 @@ export const useEditPackItem = (isItemPage) => {
       return {
         ...prevState,
         items: prevItems.map((item) => {
-          if (item._id !== newItem._id) return item;
+          if (item.id !== newItem.id) return item;
 
           return newItem;
         }),

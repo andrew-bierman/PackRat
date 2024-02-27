@@ -1,11 +1,12 @@
-import Item from '../../models/itemModel';
-import Pack from '../../models/packModel';
-import { ItemCategoryModel } from '../../models/itemCategory';
-import { ItemCategoryEnum } from '../../utils/itemCategory';
-
+// import { prisma } from '../../prisma';
+import { Item } from '../../drizzle/methods/Item';
+import { ItemPacks } from '../../drizzle/methods/ItemPacks';
+import { ItemCategory } from '../../drizzle/methods/itemcategory';
+import { ItemOwners } from '../../drizzle/methods/ItemOwners';
+import { ItemCategory as categories } from '../../utils/itemCategory';
+import { type InsertItemCategory } from '../../db/schema';
 /**
  * Generates a new item and adds it to a pack based on the given parameters.
- *
  * @param {string} name - The name of the item.
  * @param {number} weight - The weight of the item.
  * @param {number} quantity - The quantity of the item.
@@ -16,39 +17,55 @@ import { ItemCategoryEnum } from '../../utils/itemCategory';
  * @return {object} An object containing the newly created item and the pack ID.
  */
 export const addItemService = async (
-  name,
-  weight,
-  quantity,
-  unit,
-  packId,
-  type,
-  ownerId,
-) => {
-  let newItem = null;
-  const category = await ItemCategoryModel.findOne({
-    name: ItemCategoryEnum[type],
-  });
-
-  newItem = await Item.create({
+  name: string,
+  weight: number,
+  quantity: number,
+  unit: string,
+  packId: string,
+  type: 'Food' | 'Water' | 'Essentials',
+  ownerId: string,
+): Promise<object> => {
+  let category: InsertItemCategory | null;
+  if (!categories.includes(type)) {
+    throw new Error(`Category must be one of: ${categories.join(', ')}`);
+  }
+  const itemCategoryClass = new ItemCategory();
+  const itemClass = new Item();
+  const itemPacksClass = new ItemPacks();
+  const itemOwnersClass = new ItemOwners();
+  category = await itemCategoryClass.findItemCategory({ name: type });
+  if (!category) {
+    category = await itemCategoryClass.create({ name: type });
+  }
+  const item = await itemClass.create({
     name,
     weight,
     quantity,
     unit,
-    packs: [packId],
-    category: category ? category._id : null,
+    // packs: [packId],
+    categoryId: category.id,
   });
 
-  await Pack.updateOne({ _id: packId }, { $addToSet: { items: newItem._id } });
+  // await Pack.updateOne({ _id: packId }, { $addToSet: { items: newItem._id } });
+  await itemPacksClass.create({ itemId: item.id, packId });
+  await itemOwnersClass.create({ itemId: item.id, ownerId });
+  // const pack = await packClass.update(
+  //   {
+  //     itemDocuments: newItem.id,
+  //   },
+  //   packId,
+  // );
 
-  const updatedItem = await Item.findByIdAndUpdate(
-    newItem._id,
-    {
-      $addToSet: {
-        owners: ownerId,
-      },
-    },
-    { new: true },
-  ).populate('category');
+  // const updatedItem = await item.update(
+  //   {
+  //     owners: {
+  //       push: pack.owners.map((ownerId) => ownerId),
+  //     },
+  //   },
+  //   newItem.id,
+  //   and(eq(itemTable.id, newItem.id)),
+  // );
 
-  return { newItem: updatedItem, packId };
+  // return { newItem: updatedItem, packId };
+  return item;
 };

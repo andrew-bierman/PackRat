@@ -35,8 +35,8 @@ export const AddItemGlobal = () => {
     handleAddNewItem(
       {
         name,
-        weight,
-        quantity,
+        weight: parseFloat(weight),
+        quantity: parseInt(quantity, 10),
         type: categoryType,
         unit,
       },
@@ -64,8 +64,9 @@ export const AddItemGlobal = () => {
         isLoading={isLoading}
         isEdit={false}
         currentPack={{
-          items: []
-        }}/>
+          items: [],
+        }}
+      />
     </View>
   );
 };

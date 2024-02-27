@@ -5,11 +5,11 @@ export const useMatchesCurrentUser = (ownerId: string): boolean => {
   const currentUser = useAuthUser();
 
   console.log('currentUse---r', currentUser);
-  const currentUserId = currentUser?._id;
+  const currentUserId = currentUser?.id;
 
   console.log('currentUserId', currentUserId);
 
   console.log('ownerId', ownerId);
 
-  return currentUserId === ownerId; // Note: I adjusted `id` to `_id` based on your other code
+  return currentUserId === ownerId; // Note: I adjusted `id` to `id` based on your other code
 };

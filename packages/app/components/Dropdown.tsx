@@ -29,7 +29,7 @@
 //     let label = item;
 //     // Check if the item is an object
 //     if (typeof item === "object" && item !== null) {
-//       val = item.id || item._id || item.name;
+//       val = item.id || item.id || item.name;
 //       label = item.name;
 //     }
 //     return { label: String(label), value: val };
@@ -128,7 +128,12 @@ export const DropdownComponent = ({
 }) => {
   const isWeb = Platform.OS === 'web';
   return (
-    <View style={[{ ...style, width: width || '100%', }, !isWeb && {flexDirection: 'row', justifyContent: 'center'}]}>
+    <View
+      style={[
+        { ...style, width: width || '100%' },
+        !isWeb && { flexDirection: 'row', justifyContent: 'center' },
+      ]}
+    >
       <RSelect placeholder={placeholder || 'Select'} {...props} />
     </View>
   );

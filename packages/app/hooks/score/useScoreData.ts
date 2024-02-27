@@ -1,10 +1,10 @@
 export const useScoreData = (type, data) => {
-  const id = data._id;
-  const totalScore = data.totalScore;
+  const id = data.id;
+  const totalScore = data.total_score;
   const grades = data.grades;
   const scores = data.scores;
 
-  const isAlreadyScored = totalScore !== null;
+  const isAlreadyScored = totalScore !== 0;
 
   const textData = {
     pack: {

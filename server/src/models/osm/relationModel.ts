@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import myDB from '../dbConnection';
-import { toGeoJSON } from '../../utils/osmFunctions/modelHandlers';
+// import { toGeoJSON } from '../../utils/osmFunctions/modelHandlers';
 
 const { Schema } = mongoose;
 
@@ -29,10 +29,10 @@ RelationSchema.pre('save', async function (next) {
   next();
 });
 
-RelationSchema.method('toGeoJSON', async function () {
-  console.log('toGeoJSON instance in mongo schema', this);
-  return await toGeoJSON(this.constructor, this);
-});
+// RelationSchema.method('toGeoJSON', async function () {
+//   console.log('toGeoJSON instance in mongo schema', this);
+//   return await toGeoJSON(this.constructor, this);
+// });
 
 RelationSchema.method('toJSON', async function () {
   const { _id, ...object } = this.toObject();

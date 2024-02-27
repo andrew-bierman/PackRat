@@ -1,34 +1,26 @@
-import Item from '../../models/itemModel';
+import { Item } from '../../drizzle/methods/Item';
+// import { prisma } from '../../prisma';
 
 /**
  * Retrieves globally available items.
- *
+ * @param {PrismaClient} prisma - Prisma client.
  * @param {Object} req - The request object.
+ * @param {number} reqlimit - The limit for the number of items to retrieve.
+ * @param {number} reqpage - The page number.
  * @return {Object} An object containing items, page, and totalPages.
  */
 export const getItemsGloballyService = async (
-  reqlimit: any,
-  reqpage: any,
-  searchString?: string,
+  reqlimit: number,
+  reqpage: number,
 ) => {
-  // Ensure searchString is a string
-  searchString = typeof searchString === 'string' ? searchString : '';
-  const totalItems = await Item.countDocuments({
-    global: true,
-    name: { $regex: searchString, $options: 'i' },
-  });
+  const itemClass = new Item();
+  const totalItems = await itemClass.count();
   const limit = Number(reqlimit) || totalItems;
   const totalPages = Math.ceil(totalItems / limit);
   const page = Number(reqpage) || 1;
-  const startIndex = (page - 1) * limit;
+  const offset = (page - 1) * limit;
 
-  const items = await Item.find({ global: true })
-    .populate('category', 'name')
-    .skip(startIndex)
-    .limit(limit)
-    .sort({
-      createdAt: -1,
-    });
+  const items = await itemClass.findGlobal(limit, offset);
 
   return {
     items,

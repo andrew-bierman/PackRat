@@ -73,7 +73,7 @@ export const TableContainer = ({
 
   const isWeb = Platform.OS === 'web';
   return (
-    <View style={[styles.container, !isWeb && { width: '100%'}]}>
+    <View style={[styles.container, !isWeb && { width: '100%' }]}>
       {data?.length ? (
         <>
           <Table style={styles.tableStyle} flexArr={flexArr}>
@@ -101,7 +101,7 @@ export const TableContainer = ({
                   <CategoryRow category={category} />
                   <FlatList
                     data={items}
-                    keyExtractor={(item, index) => item._id}
+                    keyExtractor={(item, index) => item.id}
                     renderItem={({ item }) => (
                       <TableItem
                         itemData={item}

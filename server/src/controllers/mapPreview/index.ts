@@ -1,11 +1,6 @@
-import express, {
-  type NextFunction,
-  type Request,
-  type Response,
-} from 'express';
-import axios from 'axios';
-import { MAPBOX_ACCESS_TOKEN } from '../../config';
+// import { MAPBOX_ACCESS_TOKEN } from '../../config';
 import { MapPreviewError } from '../../helpers/errors';
+import { type Context, type Next } from 'hono';
 
 /**
  *  Responds with map preview image from mapbox api
@@ -15,33 +10,44 @@ import { MapPreviewError } from '../../helpers/errors';
  * @param {NextFunction} next - The next middleware
  * @returns {Promise} - Resolves with the preview image
  */
-export default async function getMapPreview(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
+const getMapPreview = async (ctx: Context, next: Next) => {
   try {
-    const queryParams = Object.entries(req.query).reduce(
+    const { env }: any = ctx;
+    const { MAPBOX_ACCESS_TOKEN } = env;
+
+    const queryParams = Object.entries(ctx.req.query).reduce(
       (acc, [key, val], i, arr) =>
         `${acc}${key}=${val}${i == arr.length - 1 ? '' : '&'}`,
       '',
     );
 
-    const { data } = await axios.get(
-      `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/${req.originalUrl
-        .replace('/api', '')
-        .replace('/mapPreview/', '')
-        .replace(
-          '?' + queryParams,
-          '',
-        )}?access_token=${MAPBOX_ACCESS_TOKEN}&${queryParams}`,
-      { responseType: 'arraybuffer' },
-    );
+    const url = `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/${ctx.req.path
+      .replace('/api', '')
+      .replace('/mapPreview/', '')
+      .replace(
+        '?' + queryParams,
+        '',
+      )}?access_token=${MAPBOX_ACCESS_TOKEN}&${queryParams}`;
 
-    res.setHeader('Content-Type', 'image/png');
-    res.send(data);
+    const response = await fetch(url, { method: 'GET' });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch map preview image');
+    }
+
+    const newResponse = new Response(response.body, {
+      headers: {
+        'Content-Type': 'image/png',
+      },
+    });
+
+    console.log('newResponse', newResponse);
+
+    return newResponse;
   } catch (error) {
     console.log(error);
-    next(MapPreviewError);
+    // next(MapPreviewError);
   }
-}
+};
+
+export default getMapPreview;

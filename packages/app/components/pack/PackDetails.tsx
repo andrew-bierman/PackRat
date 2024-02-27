@@ -23,7 +23,7 @@ const SECTION = {
   TABLE: 'TABLE',
   CTA: 'CTA',
   SCORECARD: 'SCORECARD',
-  CHAT: 'CHAT'
+  CHAT: 'CHAT',
 };
 
 export function PackDetails() {
@@ -34,7 +34,7 @@ export function PackDetails() {
   const link = `${CLIENT_URL}/packs/${packId}`;
   const [firstLoad, setFirstLoad] = useState(true);
   const user = useAuthUser();
-  const userId = user?._id;
+  const userId = user?.id;
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
   const [refetch, setRefetch] = useState(false);
 
@@ -48,10 +48,10 @@ export function PackDetails() {
   } = useFetchSinglePack(packId);
 
   const styles = useCustomStyles(loadStyles);
-  const currentPackId = currentPack && currentPack._id;
+  const currentPackId = currentPack && currentPack.id;
 
   // check if user is owner of pack, and that pack and user exists
-  const isOwner = currentPack && user && currentPack.owner_id === user._id;
+  const isOwner = currentPack && user && currentPack.owner_id === user.id;
 
   const isError = error !== null;
 
@@ -63,7 +63,7 @@ export function PackDetails() {
         styles.mainContainer,
         Platform.OS == 'web'
           ? { minHeight: '100vh' }
-          : {minHeight: Dimensions.get('screen').height},
+          : { minHeight: Dimensions.get('screen').height },
       ]}
     >
       {!isError && (
@@ -75,48 +75,59 @@ export function PackDetails() {
             error={error}
             additionalComps={
               <>
-              <View style={{flex: 1 }}>
-                <FlatList
-                  data={Object.entries(SECTION)}
-                  contentContainerStyle={{paddingBottom: 350}}
-                  keyExtractor={([key, val]) => val}
-                  renderItem={({item}) => {
-                    {
-                      console.log(item[1], 'item');
-                      switch (item[1]) {
-                        case SECTION.TABLE:
-                          return <TableContainer currentPack={currentPack} copy={canCopy} />;
-                          break;
-                        case SECTION.CTA:
-                          return <View style={styles.boxStyle}>
-                            <AddItemModal
-                              currentPackId={currentPackId}
-                              currentPack={currentPack}
-                              isAddItemModalOpen={isAddItemModalOpen}
-                              setIsAddItemModalOpen={setIsAddItemModalOpen}
-                              // refetch={refetch}
-                              setRefetch={() => setRefetch((prev) => !prev)}
-                            />
-                        </View>;
-                          break;
-                        case SECTION.SCORECARD:
-                          return <ScoreContainer
-                          type="pack"
-                          data={currentPack}
-                          isOwner={isOwner}
-                        />;
-                          break;
-                        case SECTION.CHAT:
-                          return <View style={styles.boxStyle}>
-                          <ChatContainer />
-                        </View>;
-                          break;
-                        default:
-                          return null;
+                <View style={{ flex: 1 }}>
+                  <FlatList
+                    data={Object.entries(SECTION)}
+                    contentContainerStyle={{ paddingBottom: 350 }}
+                    keyExtractor={([key, val]) => val}
+                    renderItem={({ item }) => {
+                      {
+                        console.log(item[1], 'item');
+                        switch (item[1]) {
+                          case SECTION.TABLE:
+                            return (
+                              <TableContainer
+                                currentPack={currentPack}
+                                copy={canCopy}
+                              />
+                            );
+                            break;
+                          case SECTION.CTA:
+                            return (
+                              <View style={styles.boxStyle}>
+                                <AddItemModal
+                                  currentPackId={currentPackId}
+                                  currentPack={currentPack}
+                                  isAddItemModalOpen={isAddItemModalOpen}
+                                  setIsAddItemModalOpen={setIsAddItemModalOpen}
+                                  // refetch={refetch}
+                                  setRefetch={() => setRefetch((prev) => !prev)}
+                                />
+                              </View>
+                            );
+                            break;
+                          case SECTION.SCORECARD:
+                            return (
+                              <ScoreContainer
+                                type="pack"
+                                data={currentPack}
+                                isOwner={isOwner}
+                              />
+                            );
+                            break;
+                          case SECTION.CHAT:
+                            return (
+                              <View style={styles.boxStyle}>
+                                <ChatContainer />
+                              </View>
+                            );
+                            break;
+                          default:
+                            return null;
+                        }
                       }
-                    }
-                  }}
-                />
+                    }}
+                  />
                 </View>
               </>
             }

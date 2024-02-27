@@ -27,7 +27,7 @@ export default function PackContainer({ isCreatingTrip = false }) {
     error,
     isLoading,
     refetch: refetchQuery,
-  } = useUserPacks((ownerId = user?._id));
+  } = useUserPacks((ownerId = user?.id));
 
   useEffect(() => {
     refetchQuery();
@@ -41,16 +41,16 @@ export default function PackContainer({ isCreatingTrip = false }) {
    */
   const handlePack = (val) => {
     // const selectedPack = packs.find((pack) => pack.name == val);
-    const selectedPack = packs.find((pack) => pack._id == val);
+    const selectedPack = packs.find((pack) => pack.id == val);
 
-    setCurrentPackId(selectedPack?._id);
+    setCurrentPackId(selectedPack?.id);
 
-    if (isCreatingTrip && selectedPack?._id) {
-      searchParams.set('packId', selectedPack?._id);
+    if (isCreatingTrip && selectedPack?.id) {
+      searchParams.set('packId', selectedPack?.id);
     }
   };
 
-  const currentPack = packs?.find((pack) => pack._id === currentPackId);
+  const currentPack = packs?.find((pack) => pack.id === currentPackId);
 
   const dataValues = packs?.map((item) => item?.name) ?? [];
 
@@ -59,7 +59,7 @@ export default function PackContainer({ isCreatingTrip = false }) {
       <DropdownComponent
         data={packs ?? []}
         textKey={'name'}
-        valueKey={'_id'}
+        valueKey={'id'}
         value={currentPackId}
         onValueChange={handlePack}
         placeholder={'Select a Pack'}

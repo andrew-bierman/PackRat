@@ -32,7 +32,7 @@ export const AddPack = ({ isCreatingTrip = false }) => {
 
   // routing
   if (isSuccess && !isCreatingTrip && response) {
-    router.push(`/pack/${response.createdPack._id}`);
+    router.push(`/pack/${response.id}`);
   }
   /**
    * Handles the addition of a pack.

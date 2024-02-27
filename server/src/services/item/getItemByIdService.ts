@@ -1,13 +1,15 @@
-import Item from '../../models/itemModel';
+// import { prisma } from '../../prisma';
+
+import { Item } from '../../drizzle/methods/Item';
 
 /**
  * Retrieves an item from the database by its ID.
- *
- * @param {_id} _id - The ID of the item to retrieve.
+ * @param {PrismaClient} prisma - Prisma client.
+ * @param {string} id - The ID of the item to retrieve.
  * @return {Promise<Object>} The retrieved item.
  */
-export const getItemByIdService = async (_id) => {
-  const item = await Item.findById({ _id });
-
+export const getItemByIdService = async (id: string): Promise<object> => {
+  const itemClass = new Item();
+  const item = await itemClass.findItem({ id });
   return item;
 };

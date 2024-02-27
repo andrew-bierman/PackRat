@@ -1,7 +1,7 @@
 import { Types } from 'mongoose';
 
 export type PackType = {
-  _id: Types.ObjectId;
+  id: Types.ObjectId;
   name: string;
   items: Types.ObjectId[];
   owner_id: Types.ObjectId;

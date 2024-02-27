@@ -14,7 +14,7 @@ export const useFetchSinglePack = (packId) => {
         cacheTime: Infinity,
       },
     );
-  const isOwner = data && user && data.owner_id === user._id;
+  const isOwner = data && user && data.owner_id === user.id;
 
   return { refetch, data, error, isLoading, isOwner, isError };
 };

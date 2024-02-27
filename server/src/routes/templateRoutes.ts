@@ -1,4 +1,4 @@
-import express from 'express';
+import { Hono } from 'hono';
 import {
   getTemplates,
   getTemplateById,
@@ -22,7 +22,7 @@ import checkRole from '../middleware/checkRole';
 //   deleteTemplate: (req,res,next) => next(),
 // };
 
-const router = express.Router();
+const router = new Hono();
 
 /**
  * @swagger

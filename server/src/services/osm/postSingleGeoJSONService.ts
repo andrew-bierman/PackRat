@@ -1,13 +1,12 @@
 import {
-  findOrCreateOne,
   ensureIdProperty,
-  ensureModelProperty,
+  processElement,
 } from '../../utils/osmFunctions/modelHandlers';
 import { isGeoJSONFormat } from '../../utils/osmFunctions/dataFormatters';
 
 /**
  * This function posts a single GeoJSON object to the service.
- *
+ * @param {any} prisma - Prisma client.
  * @param {any} geojson - The GeoJSON object to be posted.
  * @throws {Error} If the geoJSON is invalid or missing.
  * @return {Promise<any>} A Promise that resolves to the newly created instance.
@@ -18,7 +17,6 @@ export const postSingleGeoJSONService = async (geojson) => {
   }
 
   const processedElement = ensureIdProperty(geojson);
-  const Model: any = ensureModelProperty(processedElement);
-  const newInstance = await findOrCreateOne(Model, processedElement);
+  const newInstance = await processElement(processedElement);
   return newInstance;
 };

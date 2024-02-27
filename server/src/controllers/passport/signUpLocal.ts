@@ -1,9 +1,9 @@
-// integrate passport js for email/passport sign in and google sign in
-
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
-import User from '../../models/userModel';
-import bcrypt from 'bcrypt';
+
+import bcrypt from 'bcryptjs';
+
+import { prisma } from '../../prisma';
 
 // Passport Configuration
 // Local Strategy
@@ -15,7 +15,7 @@ passport.use(
     },
     async (email, password, done) => {
       try {
-        const user = await User.findOne({ email });
+        const user = await prisma.user.findUnique({ where: { email } });
 
         if (!user) {
           return done(null, false, { message: 'Incorrect email.' });
@@ -24,7 +24,7 @@ passport.use(
         const validPassword = await bcrypt.compare(password, user.password);
 
         if (!validPassword) {
-          return done(null, false, { message: 'Incorrect passwordsss.' });
+          return done(null, false, { message: 'Incorrect password.' });
         }
 
         return done(null, user);
@@ -46,7 +46,9 @@ export const signUpLocal = async (req, res, next) => {
   const { email, password, name } = req.body;
 
   try {
-    const existingUser = await User.findOne({ email });
+    const existingUser = await prisma.user.findUnique({
+      where: { email },
+    });
 
     if (existingUser) {
       return res.status(400).json({ error: 'Email already in use' });
@@ -56,13 +58,13 @@ export const signUpLocal = async (req, res, next) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create a new user
-    const newUser = new User({
-      email,
-      password: hashedPassword,
-      name,
+    const newUser = await prisma.user.create({
+      data: {
+        email,
+        password: hashedPassword,
+        name,
+      },
     });
-
-    await newUser.save();
 
     // Authenticate the user
     passport.authenticate('local', (err, user, info) => {
@@ -94,8 +96,11 @@ passport.serializeUser((user, done) => {
   done(null, user.id);
 });
 
-passport.deserializeUser((id, done) => {
-  User.findById(id, (err, user) => {
-    done(err, user);
-  });
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await prisma.user.findUnique({ where: { id } });
+    done(null, user);
+  } catch (error) {
+    done(error, null);
+  }
 });

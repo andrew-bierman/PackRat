@@ -14,7 +14,7 @@ export function useGetAIResponse() {
     //       {
     //         message: userInput,
     //         sender: userId,
-    //         _id: Date.now().toString(),
+    //         id: Date.now().toString(),
     //       },
     //     ],
     //   };

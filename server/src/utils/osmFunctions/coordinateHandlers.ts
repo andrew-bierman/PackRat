@@ -14,9 +14,13 @@ export async function createInstanceFromCoordinates(
     return null;
   }
 
-  const instance = new Model({ lon, lat });
-  await instance.save();
-  return instance._id;
+  const instance = await Model.create({
+    data: {
+      lon,
+      lat,
+    },
+  });
+  return instance.id;
 }
 
 /**
@@ -87,11 +91,11 @@ export async function handleGeometry(Model: any, geometry: any) {
       Model,
       geometry.coordinates,
     );
-    nodes.push(instance._id);
+    nodes.push(instance.id);
   } else {
     for (const coords of geometry.coordinates) {
       const instance = await createInstanceFromCoordinates(Model, coords);
-      nodes.push(instance._id);
+      nodes.push(instance.id);
     }
   }
 
