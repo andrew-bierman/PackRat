@@ -1,5 +1,6 @@
 const { withExpo } = require('@expo/next-adapter');
 const { withTamagui } = require('@tamagui/next-plugin');
+const { withCrossPath } = require('@packrat/crosspath/adapter');
 const { join } = require('path');
 const path = require('path');
 const webpack = require('webpack');
@@ -37,6 +38,7 @@ const plugins = [
     //   'Touchable',
     // ],
   }),
+  withCrossPath('solito'),
   withExpo,
 ];
 

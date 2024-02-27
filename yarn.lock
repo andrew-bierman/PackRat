@@ -7526,9 +7526,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+<<<<<<< Updated upstream
 "@tamagui/build@npm:1.89.30, @tamagui/build@npm:^1.89.20":
   version: 1.89.30
   resolution: "@tamagui/build@npm:1.89.30"
+=======
+"@tamagui/build@npm:^1.89.20":
+  version: 1.90.9
+  resolution: "@tamagui/build@npm:1.90.9"
+>>>>>>> Stashed changes
   dependencies:
     "@babel/core": "npm:^7.23.3"
     "@types/fs-extra": "npm:^9.0.13"
@@ -7545,7 +7551,11 @@ __metadata:
     typescript: "*"
   bin:
     tamagui-build: tamagui-build.js
+<<<<<<< Updated upstream
   checksum: 10/5390afeb8fdc85ce1e6346c84161606111937d873b82a3bce3f261a1d7981d921754b39d2bad5fcbe35b182ac1b96bfed7aaaefac924e08a9cb945eb754557c6
+=======
+  checksum: 10/4c4f810311fecf15e2c29ba9da4447b77f0b789b45a2aa72badb9792bdc01f1512fe7b0604f540500cd0848ea90102f78d5a213f16a575504ef1cb4b27e99726
+>>>>>>> Stashed changes
   languageName: node
   linkType: hard
 
