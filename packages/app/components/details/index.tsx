@@ -33,7 +33,9 @@ export const DetailsComponent = ({
               content={
                 <>
                   {data?.description && (
-                    <Text>Description: {data?.description}</Text>
+                    <View>
+                      <Text>Description: {data?.description}</Text>
+                    </View>
                   )}
 
                   {additionalComps}
@@ -58,22 +60,30 @@ export const DetailsComponent = ({
                   {
                     <>
                       {data?.description && (
-                        <Text>Description: {data?.description}</Text>
+                        <View>
+                          <Text>Description: {data?.description}</Text>
+                        </View>
                       )}
                       {data?.destination && (
-                        <Text>Destination: {data?.destination}</Text>
+                        <View>
+                          <Text>Destination: {data?.destination}</Text>
+                        </View>
                       )}
                       {data.start_date && (
-                        <Text>
-                          Start Date:{' '}
-                          {format(new Date(data.start_date), 'MM/dd/yyyy')}
-                        </Text>
+                        <View>
+                          <Text>
+                            Start Date:{' '}
+                            {format(new Date(data.start_date), 'MM/dd/yyyy')}
+                          </Text>
+                        </View>
                       )}
                       {data.end_date && (
-                        <Text>
-                          End Date:{' '}
-                          {format(new Date(data.end_date), 'MM/dd/yyyy')}
-                        </Text>
+                        <View>
+                          <Text>
+                            End Date:{' '}
+                            {format(new Date(data.end_date), 'MM/dd/yyyy')}
+                          </Text>
+                        </View>
                       )}
                     </>
                   }

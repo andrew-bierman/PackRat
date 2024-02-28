@@ -1,4 +1,4 @@
-export const api = "http://192.168.1.5:3000/api";
+export const api = "http://192.168.100.12:3000/api";
 
 // import { NODE_ENV, API_URL, NEXT_PUBLIC_API_URL } from '@env';
 

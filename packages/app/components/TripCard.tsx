@@ -9,6 +9,7 @@ import Carousel from './carousel';
 import MapContainer from './map/MapContainer';
 import { useGEOLocationSearch } from 'app/hooks/geojson';
 import { PlacesAutocomplete } from './PlacesAutocomplete';
+import { View } from 'native-base';
 
 interface TripCardProps {
   title: string;
@@ -95,7 +96,9 @@ export default function TripCard({
       </RStack>
       {isMap ? (
         isLoading ? (
-          <Text>Loading....</Text>
+          <View>
+            <Text>Loading....</Text>
+          </View>
         ) : (
           <MapContainer shape={shape} />
         )

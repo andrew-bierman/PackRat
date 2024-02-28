@@ -31,7 +31,9 @@ export const PasswordResetForm = ({ token }: { token: string }) => {
         onPress={handlePasswordReset}
         disabled={!password || loading}
       >
-        <Text>{loading ? 'Loading...' : 'Reset Password'}</Text>
+        <View>
+          <Text>{loading ? 'Loading...' : 'Reset Password'}</Text>
+        </View>
       </Button>
     </View>
   );

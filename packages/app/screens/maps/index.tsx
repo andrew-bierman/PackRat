@@ -92,9 +92,8 @@ export default function DownloadedMaps() {
                       borderRadius: 10,
                     }}
                     source={{
-                      uri: `${api}/mapPreview/${
-                        pack?.bounds[0] + ',' + pack?.bounds[1]
-                      },10,60,60/600x600`,
+                      uri: `${api}/mapPreview/${pack?.bounds[0] + ',' + pack?.bounds[1]
+                        },10,60,60/600x600`,
                     }}
                   />
                 )}
@@ -113,7 +112,9 @@ export default function DownloadedMaps() {
           })}
         </View>
       ) : (
-        <Text>loading...</Text>
+        <View>
+          <Text>loading...</Text>
+        </View>
       )}
       {showMap ? (
         <Modal visible={true}>
@@ -158,7 +159,7 @@ export default function DownloadedMaps() {
                 id={'cicleCap'}
                 coordinate={
                   shape?.features[0]?.geometry?.coordinates[
-                    shape?.features[0]?.geometry?.coordinates?.length - 1
+                  shape?.features[0]?.geometry?.coordinates?.length - 1
                   ]
                 }
               >
