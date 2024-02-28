@@ -6,7 +6,17 @@ import { theme } from '../../theme';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 
-const QuickActionButton = ({ onPress, iconName, text }) => {
+interface QuickActionButtonProps {
+  onPress: () => void;
+  iconName: keyof typeof MaterialIcons.glyphMap;
+  text: string;
+}
+
+const QuickActionButton = ({
+  onPress,
+  iconName,
+  text,
+}: QuickActionButtonProps) => {
   const styles = useCustomStyles(loadStyles);
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
@@ -25,18 +35,18 @@ const QuickActionButton = ({ onPress, iconName, text }) => {
   );
 };
 
-const loadStyles = (theme) => {
+const loadStyles = (theme: any) => {
   const { currentTheme } = theme;
   return {
     container: {
-      marginRight: 10,
+      margin: 10,
     },
     card: {
       flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
-      paddingHorizontal: 40,
-      paddingVertical: 60,
+      // paddingHorizontal: 40,
+      // paddingVertical: 60,
       backgroundColor: currentTheme.colors.primary,
     },
     icon: {

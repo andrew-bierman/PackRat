@@ -1,9 +1,7 @@
 import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { RText, RStack } from '@packrat/ui';
-import { Link } from 'expo-router';
+import { Link } from 'solito/link';
 import { Dimensions, View } from 'react-native';
-import { getPublicPacks, getPublicTrips } from '../../store/feedStore';
 import useTheme from '../../hooks/useTheme';
 import Carousel from '../carousel';
 import useCustomStyles from 'app/hooks/useCustomStyles';
@@ -11,28 +9,35 @@ import { useFeed } from 'app/hooks/feed';
 
 const { height, width } = Dimensions.get('window');
 
-const FeedPreviewScroll = () => {
-  const dispatch = useDispatch();
+interface FeedItem {
+  _id: string;
+  name: string;
+  type: string;
+  description: string;
+}
+
+interface FeedPreviewScrollProps {
+  itemWidth: number;
+}
+
+const FeedPreviewScroll: React.FC<FeedPreviewScrollProps> = ({ itemWidth }) => {
   const styles = useCustomStyles(loadStyles);
-
-  // useEffect(() => {
-  //   dispatch(getPublicPacks());
-  //   dispatch(getPublicTrips());
-  // }, []);
-
   const { data: feedData, error, isLoading } = useFeed();
 
   return (
-    <Carousel itemWidth={250}>
-      {feedData?.map((item, index) => {
+    <Carousel itemWidth={itemWidth}>
+      {feedData?.map((item: FeedItem, index: number) => {
         const linkStr = `/${item.type}/${item._id}`;
         return linkStr ? (
           <Link href={linkStr} key={`${linkStr}`}>
             <View style={styles.cardStyles} key={index}>
-              <RStack flexDirection="row" justifyContent="space-between">
-                <RText fontSize="$2" fontWeight="bold" color={'#F2F1EB'}>
-                  {item.name}
-                </RText>
+              <RStack
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                }}
+              >
+                <RText style={styles.feedItemTitle}>{item.name}</RText>
                 <RText
                   fontSize="$1"
                   fontWeight="bold"
@@ -40,7 +45,7 @@ const FeedPreviewScroll = () => {
                   textTransform="capitalize"
                   paddingVertical={4}
                   paddingHorizontal={8}
-                  alignSelf="center"
+                  alignContent="center"
                   borderRadius={2}
                 >
                   {item.type}
@@ -55,11 +60,11 @@ const FeedPreviewScroll = () => {
   );
 };
 
-const FeedPreview = () => {
-  return <FeedPreviewScroll />;
+const FeedPreview: React.FC = () => {
+  return <FeedPreviewScroll itemWidth={250} />;
 };
 
-const loadStyles = (theme, appTheme) => {
+const loadStyles = (theme: any, appTheme: any) => {
   const { currentTheme } = theme;
   return {
     feedPreview: {
@@ -94,4 +99,4 @@ const loadStyles = (theme, appTheme) => {
   };
 };
 
-export default FeedPreviewScroll;
+export default FeedPreview;

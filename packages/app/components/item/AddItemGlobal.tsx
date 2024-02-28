@@ -1,25 +1,24 @@
-import { useContext, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { View } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import { addItemsGlobal, addItemOffline } from '../../store/globalItemsStore';
-import { addOfflineRequest } from '../../store/offlineQueue';
-import { queryTrpc } from '../../trpc';
+
 import { ItemForm } from './ItemForm'; // assuming you moved the form related code to a separate component
-import { useModal } from '@packrat/ui/src/modal';
+import { useModal } from '@packrat/ui';
+import { useAddItem, useItems } from 'app/hooks/items';
+import { usePagination } from 'app/hooks/common';
 
 export const AddItemGlobal = () => {
-  const utils = queryTrpc.useContext();
-  const dispatch = useDispatch();
-  const isLoading = useSelector((state) => state.items.isLoading);
-  const { isConnected } = useSelector((state) => state.offlineQueue);
+  const { limit, page } = usePagination();
+  const { isLoading } = useItems({ limit, page });
 
   const [name, setName] = useState('');
   const [weight, setWeight] = useState('');
   const [quantity, setQuantity] = useState('');
-  const [unit, setUnit] = useState('');
+  const [unit, setUnit] = useState('lb');
 
   const [categoryType, setCategoryType] = useState('');
   const { setIsModalOpen } = useModal();
+
+  const { handleAddNewItem } = useAddItem();
 
   /**
    * Resets the add form by setting all the input values to an empty string.
@@ -32,35 +31,20 @@ export const AddItemGlobal = () => {
     setUnit('');
   };
 
-  // handle updates to initialData
-
-  /**
-   * Handles the form submission.
-   *
-   * @return {void}
-   */
   const handleSubmit = () => {
-    if (!isConnected) {
-      const item = { name, weight, quantity, type: categoryType, unit };
-      dispatch(addItemOffline({ ...item, weight: Number(item.weight) }));
-      dispatch(addOfflineRequest({ method: 'addGlobalItem', data: item }));
-    } else {
-      dispatch(
-        addItemsGlobal({
-          name,
-          weight,
-          quantity,
-          type: categoryType,
-          unit,
-        }),
-      );
-    }
-
-    resetAddForm();
-    setIsModalOpen(false);
-    if (utils.getItemsGlobally) {
-      utils.getItemsGlobally.invalidate();
-    }
+    handleAddNewItem(
+      {
+        name,
+        weight,
+        quantity,
+        type: categoryType,
+        unit,
+      },
+      () => {
+        setIsModalOpen(false);
+        resetAddForm();
+      },
+    );
   };
 
   return (
@@ -78,6 +62,10 @@ export const AddItemGlobal = () => {
         setCategoryType={setCategoryType}
         handleSubmit={handleSubmit}
         isLoading={isLoading}
+        isEdit={false}
+        currentPack={{
+          items: [],
+        }}
       />
     </View>
   );

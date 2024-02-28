@@ -11,7 +11,7 @@ export function MapContainer({ shape }) {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
-  if (isObjectEmpty(shape)) {
+  if (!shape || isObjectEmpty(shape)) {
     shape = defaultShape;
   }
 
@@ -40,7 +40,6 @@ const loadStyles = () => ({
   },
   nativeContainer: {
     width: '100%',
-    marginBottom: 20,
     marginBottom: 20,
     paddingHorizontal: 5,
   },

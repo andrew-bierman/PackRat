@@ -4,187 +4,36 @@ import { theme } from '../../theme';
 import TripCard from '../../components/TripCard';
 import WeatherCard from '../../components/weather/WeatherCard';
 import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState, useRef, useMemo } from 'react';
 import { GearList } from '../../components/GearList/GearList';
 import { SaveTripContainer } from 'app/components/trip/createTripModal';
 import TripDateRange from 'app/components/trip/TripDateRange';
-import { useFetchWeather, useFetchWeatherWeak } from 'app/hooks/weather';
-// import { photonDetails } from '../../store/destinationStore';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import useParks from 'app/hooks/parks';
-import useTrails from 'app/hooks/trails';
-import { useGetPhotonDetails } from 'app/hooks/destination';
-import { WeatherData } from 'app/components/weather/WeatherData';
+import { useCardTrip } from 'app/hooks/trips/useTripCard';
+import { useTripsData } from './useTripsData';
+
 export default function Trips() {
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
-  // const [parksData, setParksData] = useState();
   const [trails, setTrailsData] = useState();
-  const [dateRange, setDateRange] = useState({
-    startDate: undefined,
-    endDate: undefined,
-  });
-  const dispatch = useDispatch();
-  const searchResult = useSelector(
-    (state) => state.search.selectedSearchResult,
-  );
 
-  const { latLng, selectedSearch } = useSelector((state) => state.weather);
-
-  // const [photonDetails, setPhotonDetails] = useState(null);
-  // const photonDetailsStore = useSelector(
-  //   (state) => state.destination.photonDetails,
-  // );
-  console.log(
-    '🚀 ~ file: createTrip.js:41 ~ Trips ~ selectedSearch:',
-    selectedSearch,
-  );
+  const form = useCardTrip();
+  const placesAutoCompleteRef = useRef({});
   const {
-    data: weatherData,
-    isLoading: weatherLoading,
-    isError: weatherError,
-  } = useFetchWeather(latLng);
-
-  const {
-    data: weatherWeekData,
-    isLoading: weekWeatherLoading,
-    isError: weekWeatherError,
-  } = useFetchWeatherWeak(latLng);
-
-  const {
-    data: parks,
-    error: parksError,
-    isLoading: parksLoading,
-    filteredParks: parksData,
-  } = useParks({
-    latLng,
-    selectedSearch,
-  });
-
-  console.log('filtered parks', parksData, parksError);
-  const { data, filteredTrails, error, isLoading } = useTrails({
-    latLng,
-    selectedSearch,
-  });
-  // useEffect(() => {
-  //   setTrailsData(trailsObject);
-  // }, [trailsObject]);
-
-  // useEffect(() => {
-  // setParksData(parksObject);
-  // }, [parksObject]);
-
-  const { data: photonDetails } = useGetPhotonDetails({
-    properties: {
-      osm_id: searchResult.properties?.osm_id,
-      osm_type: searchResult.properties?.osm_type,
-    },
-  });
-
-  const steps = [
-    {
-      name: 'Step 1',
-      component: () => (
-        <TripCard
-          title="Where are you heading?"
-          isSearch={true}
-          Icon={() => (
-            <FontAwesome
-              name="map"
-              size={20}
-              color={theme.colors.cardIconColor}
-            />
-          )}
-        />
-      ),
-      sidebarData: {
-        title: 'Where are you heading?',
-        Icon: () => (
-          <FontAwesome
-            name="map"
-            size={20}
-            color={theme.colors.cardIconColor}
-          />
-        ),
-      },
-    },
-    {
-      name: 'Step 2',
-      component: () => (
-        <WeatherCard
-          weatherObject={weatherData}
-          weatherWeek={weatherWeekData}
-        />
-      ),
-    },
-    {
-      name: 'Step 3',
-      component: () => (
-        <TripCard
-          title="Nearby Trails"
-          value="Trail List"
-          isTrail={true}
-          data={trails || []}
-          Icon={() => (
-            <FontAwesome5
-              name="hiking"
-              size={20}
-              color={theme.colors.cardIconColor}
-            />
-          )}
-        />
-      ),
-    },
-    {
-      name: 'Step 4',
-      component: () => (
-        <TripCard
-          title="Nearby Parks"
-          value="Parks List"
-          data={parksData}
-          Icon={() => (
-            <FontAwesome5
-              name="mountain"
-              size={20}
-              color={theme.colors.cardIconColor}
-            />
-          )}
-        />
-      ),
-    },
-    {
-      name: 'Step 5',
-      component: GearList,
-    },
-    {
-      name: 'Step 6',
-      component: () => (
-        <TripDateRange dateRange={dateRange} setDateRange={setDateRange} />
-      ),
-    },
-    {
-      name: 'Step 7',
-      component: () => (
-        <TripCard
-          Icon={() => (
-            <FontAwesome5
-              name="route"
-              size={24}
-              color={theme.colors.cardIconColor}
-            />
-          )}
-          title="Map"
-          isMap={true}
-        />
-      ),
-    },
-    {
-      name: 'Step 8',
-      component: () => <SaveTripContainer dateRange={dateRange} />,
-    },
-  ];
+    dateRange,
+    setDateRange,
+    currentDestination,
+    photonDetails,
+    weatherData,
+    weatherLoading,
+    weatherError,
+    weatherWeekData,
+    weekWeatherLoading,
+    weekWeatherError,
+    parksData,
+    filteredTrails,
+  } = useTripsData();
 
   return (
     <ScrollView nestedScrollEnabled={true}>
@@ -194,6 +43,7 @@ export default function Trips() {
           <TripCard
             title="Where are you heading?"
             isSearch={true}
+            searchRef={placesAutoCompleteRef}
             Icon={() => (
               <FontAwesome
                 name="map"
@@ -215,6 +65,7 @@ export default function Trips() {
             title="Nearby Trails"
             value="Trail List"
             isTrail={true}
+            form={form}
             data={filteredTrails || []}
             Icon={() => (
               <FontAwesome5
@@ -229,6 +80,7 @@ export default function Trips() {
             value="Parks List"
             isPark={true}
             data={parksData}
+            form={form}
             Icon={() => (
               <FontAwesome5
                 name="mountain"
@@ -253,9 +105,13 @@ export default function Trips() {
               shape={photonDetails}
             />
           )}
-          {photonDetails && <WeatherData geoJSON={photonDetails} />}
           <RStack>
-            <SaveTripContainer dateRange={dateRange} />
+            <SaveTripContainer
+              dateRange={dateRange}
+              search={currentDestination}
+              weatherObject={weatherData}
+              form={form}
+            />
           </RStack>
         </RStack>
       </RStack>

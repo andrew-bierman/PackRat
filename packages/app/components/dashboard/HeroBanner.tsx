@@ -2,43 +2,43 @@ import React from 'react';
 import { RStack, RText } from '@packrat/ui';
 import LargeCard from '../card/LargeCard';
 import { SearchInput } from '../SearchInput';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 import { theme } from '../../theme';
 import useTheme from '../../hooks/useTheme';
-import { useSelector, useDispatch } from 'react-redux';
+import { useAuthUser } from 'app/auth/hooks';
 import Hero from '../hero';
-import { useRouter } from 'expo-router';
-import {
-  photonDetails,
-  processGeoJSON,
-  setSelectedSearchResult,
-} from '../../store/destinationStore';
+import { useRouter } from 'app/hooks/router';
+import { first } from 'lodash';
 import { hexToRGBA } from '../../utils/colorFunctions';
 import useCustomStyles from 'app/hooks/useCustomStyles';
+import { PlacesAutocomplete } from 'app/components/PlacesAutocomplete/PlacesAutocomplete';
 
-const HeroSection = ({ onSelect }) => {
-  const dispatch = useDispatch();
+interface HeroSectionProps {
+  onSelect: (selectedResult: SearchResult) => void;
+}
+
+interface SearchResult {
+  properties: {
+    osm_id: number;
+    osm_type: string;
+    name: string;
+  };
+  geometry: {
+    coordinates: [number, number];
+  };
+}
+
+const HeroSection: React.FC<HeroSectionProps> = ({ onSelect }) => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
   const router = useRouter();
 
-  /**
-   * Handles the selection of a search result.
-   *
-   * @param {Object} selectedResult - The selected search result
-   * @return {void}
-   */
-  const handleSearchSelect = async (selectedResult) => {
+  const handleSearchSelect = async (selectedResult: SearchResult) => {
     try {
-      // Set the selected search result in the Redux store
-      // dispatch(setSelectedSearchResult(selectedResult));
-
-      const { osm_id, osm_type } = selectedResult.properties;
+      const { osm_id, osm_type, name } = selectedResult.properties;
 
       const coordinates = selectedResult.geometry.coordinates;
-
-      const [lon, lat] = coordinates;
 
       if (!osm_id || !osm_type) {
         console.error(
@@ -47,11 +47,10 @@ const HeroSection = ({ onSelect }) => {
       } else {
         router.push({
           pathname: '/destination/query',
-          params: {
-            type: osm_type,
-            id: osm_id,
-            // lat,
-            // lon,
+          query: {
+            osmType: osm_type,
+            osmId: osm_id,
+            name,
           },
         });
       }
@@ -60,10 +59,9 @@ const HeroSection = ({ onSelect }) => {
     }
   };
 
-  const user = useSelector((state) => state.auth?.user);
+  const user = useAuthUser();
 
-  const { name } = user;
-  const firstNameOrUser = name.split(' ')[0] ?? 'User';
+  const firstNameOrUser = first(user?.name?.split(' ')) ?? 'User';
 
   const cardBackgroundColor = hexToRGBA(currentTheme.colors.secondaryBlue, 0.5);
 
@@ -80,7 +78,10 @@ const HeroSection = ({ onSelect }) => {
         imageDetails={{
           title: 'N/A',
           subtitle: 'N/A',
-          source: require('../../assets/topographical-pattern.png'),
+          source:
+            Platform.OS === 'web'
+              ? 'https://github.com/andrew-bierman/PackRat/blob/main/apps/expo/assets/topographical-pattern.png?raw=true'
+              : require('app/assets/topographical-pattern.png'),
           alt: 'hero',
         }}
       >
@@ -94,6 +95,8 @@ const HeroSection = ({ onSelect }) => {
             height: '100%',
             padding: 50,
           }}
+          title={''}
+          type={'search'}
         >
           <RStack
             style={{
@@ -104,7 +107,7 @@ const HeroSection = ({ onSelect }) => {
             }}
           >
             <RText style={styles.title}>{bannerText}</RText>
-            <SearchInput
+            <PlacesAutocomplete
               onSelect={handleSearchSelect}
               placeholder={'Search by park, city, or trail'}
             />
@@ -115,7 +118,7 @@ const HeroSection = ({ onSelect }) => {
   );
 };
 
-const loadStyles = (theme) => {
+const loadStyles = (theme: any) => {
   const { currentTheme } = theme;
   return {
     banner: {

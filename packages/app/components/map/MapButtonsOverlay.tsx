@@ -17,6 +17,20 @@ import useTheme from '../../hooks/useTheme';
 import { mapboxStyles } from '../../utils/mapFunctions';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 
+interface MapButtonsOverlayProps {
+  mapFullscreen: boolean;
+  enableFullScreen: () => void;
+  disableFullScreen: () => void;
+  handleChangeMapStyle: (style: string) => void;
+  downloadable: boolean;
+  downloading: boolean;
+  fetchLocation: () => void;
+  onDownload: () => void;
+  handleGpxUpload?: () => void;
+  progress?: number;
+  navigateToMaps: () => void;
+}
+
 const MapButtonsOverlay = ({
   mapFullscreen,
   enableFullScreen,
@@ -29,7 +43,7 @@ const MapButtonsOverlay = ({
   handleGpxUpload,
   progress,
   navigateToMaps,
-}) => {
+}: MapButtonsOverlayProps) => {
   console.log('newwwww');
   const [showStyleOptions, setShowStyleOptions] = useState(false);
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
@@ -157,7 +171,7 @@ const MapButtonsOverlay = ({
             >
               <Image
                 style={styles.downloadIcon}
-                source={require('../../assets/download.svg')}
+                source={require('app/assets/download.svg')}
               />
               <Text style={styles.downloadText}>
                 {downloading

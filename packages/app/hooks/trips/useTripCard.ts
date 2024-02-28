@@ -1,29 +1,29 @@
-import { useDispatch } from 'react-redux';
-import { useSelector } from '../redux/useSelector';
-import { addPark, addTrail } from 'app/store/dropdownStore';
-import { selectAllTrails } from 'app/store/trailsStore';
+import { useForm } from 'react-hook-form';
 
 export const useCardTrip = () => {
-  const dispatch = useDispatch();
-  const currentTrail = useSelector((state) => state.dropdown.currentTrail);
-  const currentPark = useSelector((state) => state.dropdown.currentPark);
-  const trailsDetails = useSelector(selectAllTrails); // updated selector for new trails slice
-  const currentShape = trailsDetails.filter(
-    (trail: any) => trail.properties.name == currentTrail,
-  );
+  const form = useForm({
+    defaultValues: {
+      currentPark: '',
+      currentTrail: '',
+    },
+  });
+  const { reset, watch, getValues } = form;
+  const currentTrail = watch('currentTrail');
+  const currentPark = watch('currentPark');
 
-  const addTrailFn = (isTrail, isPark, value) => {
-    if (isTrail) {
-      dispatch(addTrail(value));
-    } else if (isPark) {
-      dispatch(addPark(value));
-    }
+  const togglePlace = (isPark, value) => {
+    const name = isPark ? 'currentPark' : 'currentTrail';
+    const formValues = getValues();
+    const newValue = formValues[name] === value ? '' : value;
+
+    console.log(name, value);
+
+    reset({ ...formValues, [name]: newValue });
   };
 
   return {
     currentTrail,
     currentPark,
-    currentShape,
-    addTrailFn,
+    togglePlace,
   };
 };

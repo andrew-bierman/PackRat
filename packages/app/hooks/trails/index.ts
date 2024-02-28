@@ -1,11 +1,9 @@
-// import { useDispatch } from 'react-redux';
 import { queryTrpc } from '../../trpc';
 // import { trpc } from '../../context/tRPC';
 import { setTrails, setFilteredTrails } from '../../store/trailsStore_copy'; // Importing the actions
 import { store } from '../../store/store';
 
 function useTrails({ latLng, selectedSearch, radius = 1000 }) {
-  // const dispatch = useDispatch();
   // const { data, error, isLoading } = await trpc.getTrailsOSM.query({
   //   lat,
   //   lon,

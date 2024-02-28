@@ -4,12 +4,10 @@ import { RInput, RButton, RText, RLabel } from '@packrat/ui';
 import { BaseModal } from '@packrat/ui';
 import { addPack } from '../../store/packsStore';
 import { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useAddNewPack } from 'app/hooks/packs';
-import { useRouter } from 'expo-router';
-import { packSelectOptions } from 'app/constants/options';
+import { useRouter } from 'app/hooks/router';
 
 export const AddPack = ({ isCreatingTrip = false }) => {
   // Hooks
@@ -29,6 +27,7 @@ export const AddPack = ({ isCreatingTrip = false }) => {
     setIsPublic,
     isPublic,
     setName,
+    packSelectOptions,
   } = useAddNewPack();
 
   // routing
@@ -44,8 +43,7 @@ export const AddPack = ({ isCreatingTrip = false }) => {
   };
 
   const handleonValueChange = (itemValue) => {
-    if (itemValue === 'Yes') setIsPublic(true);
-    else setIsPublic(false);
+    setIsPublic(itemValue == 'true');
   };
 
   return (
@@ -87,7 +85,7 @@ export const AddPack = ({ isCreatingTrip = false }) => {
 
 export const AddPackContainer = ({ isCreatingTrip }) => {
   return (
-    <BaseModal title="Add Pack" trigger="Add Pack">
+    <BaseModal title="Add Pack" trigger="Add Pack" footerComponent={undefined}>
       <AddPack isCreatingTrip={isCreatingTrip} />
     </BaseModal>
   );
@@ -105,6 +103,7 @@ const loadStyles = (theme, appTheme) => {
       paddingHorizontal: 18,
       gap: 20,
       marginTop: 20,
+      backgroundColor: currentTheme.colors.white,
     },
     desktopStyle: {
       flexDirection: 'row',

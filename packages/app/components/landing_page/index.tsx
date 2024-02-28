@@ -1,97 +1,19 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { ImageBackground, Platform, View } from 'react-native';
-import { RButton, RCard, RText, RStack } from '@packrat/ui';
+import { Platform, View } from 'react-native';
+import { RButton, RCard, RText, RStack, H1, H3 } from '@packrat/ui';
 import useTheme from '../../hooks/useTheme';
-import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
-import { theme } from '../../theme';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+
 import useCustomStyles from 'app/hooks/useCustomStyles';
-
-const dataArray = [
-  {
-    title: 'Create and manage trips',
-    content:
-      'Easily create new trips and manage existing ones by adding details such as dates, locations, and activities.',
-    iconName: 'directions',
-  },
-  {
-    title: 'Map integration with route planning',
-    content:
-      'PackRat integrates with OpenStreetMap to provide users with accurate maps and directions to their destinations.',
-    iconName: 'map',
-  },
-  {
-    title: 'Activity suggestions',
-    content:
-      'The app suggests popular outdoor activities based on the location and season of the trip.',
-    iconName: 'landscape',
-  },
-  {
-    title: 'Packing list',
-    content:
-      'Users can create and manage packing lists for their trips to ensure they have everything they need.',
-    iconName: 'backpack',
-  },
-  {
-    title: 'Weather forecast',
-    content:
-      'PackRat provides up-to-date weather forecasts for the trip location to help users prepare accordingly.',
-    iconName: 'wb-sunny',
-  },
-  {
-    title: 'Save your hikes and packs, and sync between devices',
-    content:
-      'User authentication ensures privacy and data security, while enabling you to save and sync your hikes and packs between devices.',
-    iconName: 'lock',
-  },
-];
-
-const CustomAccordion = ({ title, content, iconName }) => {
-  const [expanded, setExpanded] = useState(false);
-  const styles = useCustomStyles(loadStyles);
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    useTheme();
-
-  /**
-   * Toggles the value of 'expanded' and updates the state.
-   *
-   * @return {void} No return value
-   */
-  const toggleExpanded = () => {
-    setExpanded(!expanded);
-  };
-
-  return (
-    <RCard style={styles.card}>
-      <View style={styles.cardHeader}>
-        <MaterialIcons name={iconName} style={styles.icon} />
-        <View style={{ flex: 1 }}>
-          <RText style={styles.featureText}>{title}</RText>
-        </View>
-        <RButton
-          backgroundColor="transparent"
-          style={styles.transparentButton}
-          onPress={toggleExpanded}
-        >
-          <MaterialIcons
-            name={expanded ? 'keyboard-arrow-down' : 'keyboard-arrow-up'}
-            style={styles.icon}
-          />
-        </RButton>
-      </View>
-      {expanded && (
-        <RCard.Header>
-          <RText style={styles.cardContent}>{content}</RText>
-        </RCard.Header>
-      )}
-    </RCard>
-  );
-};
+import { FAQ_ITEMS } from './constants';
+import { LandingPageAccordion } from './LandingPageAccordion';
+import loadStyles from './landingpage.style';
 
 const LandingPage = () => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    useTheme();
+  const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
+
   return (
     <RStack style={styles.container}>
       <View
@@ -100,28 +22,38 @@ const LandingPage = () => {
           textAlign: 'center',
           paddingVertical: 18,
           marginTop: Platform.OS !== 'web' ? 25 : 1,
+          flex: 1,
         }}
       >
         {Platform.OS === 'web' ? (
+          <H1
+            style={{
+              color: 'white',
+              fontSize: currentTheme.font.headerFont,
+            }}
+          >
+            PackRat
+          </H1>
+        ) : (
           <RText
-            style={{ color: 'white', fontSize: currentTheme.font.headerFont }}
+            style={{
+              color: 'white',
+              fontSize: 20,
+              fontWeight: 600,
+            }}
           >
             PackRat
           </RText>
-        ) : (
-          <RText style={{ color: 'white', fontSize: 20, fontWeight: 600 }}>
-            PackRat
-          </RText>
         )}
-        <RText style={{ color: 'white', fontSize: 18 }}>
+        <RText style={{ color: 'white', fontSize: 24 }}>
           The Ultimate Travel App
         </RText>
       </View>
       <View style={styles.secondaryContentContainer}>
         {/* <ImageBackground
-          source={require("../../assets/background-image.png")}
-          style={styles.backgroundImage}
-        > */}
+            source={require("../../assets/background-image.png")}
+            style={styles.backgroundImage}
+          > */}
         <View style={styles.overlay} />
         <View style={styles.contentContainer}>
           <RText style={styles.introText}>
@@ -196,9 +128,9 @@ const LandingPage = () => {
               </RButton>
             </View>
           )}
-          <RStack>
-            {dataArray.map((item, index) => (
-              <CustomAccordion
+          <RStack width="100%" maxWidth={Platform.OS === 'web' ? 800 : '100%'}>
+            {FAQ_ITEMS.map((item, index) => (
+              <LandingPageAccordion
                 key={index}
                 title={item.title}
                 content={item.content}
@@ -222,100 +154,6 @@ const LandingPage = () => {
       </View>
     </RStack>
   );
-};
-
-const loadStyles = (theme) => {
-  const { currentTheme } = theme;
-  return {
-    mutualStyles: {
-      backgroundColor: currentTheme.colors.background,
-      flex: 1,
-      flexDirection: 'column',
-      height: '100%',
-    },
-    container: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      width: '100%',
-    },
-    secondaryContentContainer: {
-      flex: 1,
-      width: '100%',
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: currentTheme.colors.background,
-    },
-    appBadges: {
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginVertical: 20,
-      marginBottom: 20,
-    },
-    backgroundImage: {
-      flex: 1,
-      resizeMode: 'cover',
-      justifyContent: 'center',
-    },
-    contentContainer: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      paddingHorizontal: 20,
-    },
-    introText: {
-      fontSize: 24,
-      fontWeight: 'bold',
-      textAlign: 'center',
-      marginBottom: 20,
-      color: currentTheme.colors.text,
-      width: '80%',
-      lineHeight: 1.5,
-    },
-    card: {
-      marginBottom: 10,
-      width: '100%',
-      backgroundColor: currentTheme.colors.secondaryBlue,
-    },
-    cardHeader: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      paddingHorizontal: 20,
-      paddingVertical: 10,
-    },
-    transparentButton: {
-      backgroundColor: 'transparent',
-    },
-    icon: {
-      fontSize: 28,
-      color: '#34a89a',
-      marginRight: 10,
-    },
-    featureText: {
-      fontSize: 18,
-      color: currentTheme.colors.text,
-    },
-    cardContent: {
-      paddingHorizontal: 20,
-      paddingVertical: 10,
-      fontSize: 16,
-      color: currentTheme.colors.text,
-    },
-    buttonContainer: {
-      paddingHorizontal: 20,
-      paddingBottom: 20,
-    },
-    getStartedButton: {
-      backgroundColor: '#34a89a',
-    },
-    footerText: {
-      color: currentTheme.colors.text,
-      fontSize: 18,
-      fontWeight: 'bold',
-    },
-  };
 };
 
 export default LandingPage;

@@ -1,34 +1,25 @@
 import React from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
-import { useDispatch, useSelector } from 'react-redux';
-import { deletePackItem } from '../../store/packsStore';
-import {
-  deleteGlobalItem,
-  deleteItemOffline,
-  getItemsGlobal,
-} from '../../store/globalItemsStore';
-import { addOfflineRequest } from '../../store/offlineQueue';
 import { useDeletePackItem } from 'app/hooks/packs/useDeletePackItem';
-import { queryTrpc, trpc } from '../../trpc';
 import { BaseModal } from '@packrat/ui';
+import { useDeleteItem } from 'app/hooks/items';
 
-export const DeletePackItemModal = ({ itemId, pack }) => {
-  const utils = queryTrpc.useContext();
-  const dispatch = useDispatch();
-  const { isConnected } = useSelector((state) => state.offlineQueue);
+interface DeletePackItemModalProps {
+  itemId: string;
+  pack?: { _id: string };
+}
 
+export const DeletePackItemModal = ({
+  itemId,
+  pack,
+}: DeletePackItemModalProps) => {
   const { deletePackItem } = useDeletePackItem();
+  const { handleDeleteItem } = useDeleteItem();
   const deleteItemHandler = (_, closeModal) => {
     if (pack) {
       deletePackItem({ itemId, packId: pack._id });
     } else {
-      if (isConnected) {
-        dispatch(deleteGlobalItem(itemId));
-        utils.getItemsGlobally.invalidate();
-      } else {
-        dispatch(deleteItemOffline(itemId));
-        dispatch(addOfflineRequest({ method: 'deleteItem', data: itemId }));
-      }
+      handleDeleteItem(itemId);
     }
     closeModal();
   };

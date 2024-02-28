@@ -2,19 +2,39 @@ import { AntDesign } from '@expo/vector-icons';
 import { formatDistanceToNow } from 'date-fns';
 import { MaterialIcons, Entypo } from '@expo/vector-icons';
 import useTheme from '../../hooks/useTheme';
-import { useSelector, useDispatch } from 'react-redux';
-import {
-  // addFavorite,
-  selectFavoriteById,
-  selectAllFavorites,
-} from '../../store/favoritesStore';
 import { TouchableOpacity, View } from 'react-native';
-import { Link } from 'expo-router';
+import { Link } from 'solito/link';
 import { DuplicateIcon } from '../DuplicateIcon/index';
 import { truncateString } from '../../utils/truncateString';
 import { RText, RStack, RHeading } from '@packrat/ui';
 import { formatNumber } from 'app/utils/formatNumber';
-import { useAddFavorite } from 'app/hooks/favorites';
+import { useAddFavorite, useFetchUserFavorites } from 'app/hooks/favorites';
+import { useAuthUser } from 'app/auth/hooks';
+
+interface CardProps {
+  type: string;
+  _id: string;
+  owner: {
+    _id: string;
+    username: string;
+  };
+  name: string;
+  total_weight: number;
+  is_public: boolean;
+  favorited_by: Array<{
+    _id: string;
+  }>;
+  favorites_count: number;
+  owner_id: string;
+  destination: string;
+  createdAt: string;
+  owners: Array<{ any: any }>;
+  duration: string;
+}
+
+interface User {
+  _id: string;
+}
 
 export default function Card({
   type,
@@ -30,15 +50,14 @@ export default function Card({
   createdAt,
   owners,
   duration,
-}) {
-  const user = useSelector((state) => state.auth.user);
+}: CardProps) {
+  const user = useAuthUser();
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
 
   const { addFavorite } = useAddFavorite();
 
-  const favorites = useSelector(selectAllFavorites);
-  const dispatch = useDispatch();
+  const { data: favorites = [] } = useFetchUserFavorites(user?._id);
 
   const isFavorite =
     type !== 'trip' &&
@@ -56,7 +75,6 @@ export default function Card({
       userId: user._id,
     };
 
-    // dispatch(addFavorite(data));
     addFavorite(data);
   };
 
@@ -70,7 +88,7 @@ export default function Card({
       (favorite) => favorite.pack_id === _id && favorite.user_id === user._id,
     );
     if (favorite) {
-      dispatch(removeFavorite(favorite.id));
+      // TODO IMPLEMENT remove favorite
     }
   };
 
@@ -83,16 +101,22 @@ export default function Card({
   if (duration) numberOfNights = JSON.parse(duration).numberOfNights;
 
   return (
-    <View style={{ alignItems: 'center', padding: 16 }}>
+    <View
+      style={{
+        alignItems: 'center',
+        padding: 16,
+        flex: 1,
+      }}
+    >
       <View
         style={{
-          minHeight: 150,
-          minWidth: 300,
+          width: '100%',
+          maxWidth: 600,
           marginVertical: 'auto',
           borderRadius: 15,
           overflow: 'hidden',
           borderColor: 'lightgray',
-          borderWidth: '1',
+          borderWidth: 1,
           backgroundColor: `${currentTheme.colors.card}`,
         }}
       >
@@ -150,13 +174,7 @@ export default function Card({
             </RHeading>
 
             {type === 'pack' && (
-              <RText
-                fontSize="$1"
-                color="mediumpurple"
-                fontWeight="500"
-                ml={-0.5}
-                mt={-1}
-              >
+              <RText fontSize="$1" color="mediumpurple" ml={-0.5} mt={-1}>
                 Total Weight: {formattedWeight}
               </RText>
             )}
@@ -175,14 +193,17 @@ export default function Card({
           </RStack>
 
           <RStack
-            style={{ alignItems: 'center', justifyContent: 'space-between' }}
+            style={{
+              // alignItems: 'center',
+              justifyContent: 'space-between',
+            }}
           >
             <RStack
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                width: '100%',
+                // width: '100%',
               }}
             >
               <View
@@ -204,7 +225,7 @@ export default function Card({
                     gap: 100,
                   }}
                 >
-                  <RText fontSize="$1" color="gray" fontWeight="400" flex={1}>
+                  <RText fontSize="$1" color="gray" flex={1}>
                     {formatDistanceToNow(
                       new Date(
                         !Number.isNaN(new Date(createdAt).getTime())

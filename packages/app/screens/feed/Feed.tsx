@@ -1,27 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { FlatList, View, ScrollView, Platform } from 'react-native';
+import React, { useState } from 'react';
+import { FlatList, View, Platform } from 'react-native';
 import Card from '../../components/feed/FeedCard';
-import {
-  getPublicPacks,
-  getPublicTrips,
-  getFavoritePacks,
-} from '../../store/feedStore';
-import {
-  changePackStatus,
-  fetchUserPacks,
-  selectAllPacks,
-} from '../../store/packsStore';
-// import { fetchUserTrips, selectAllTrips } from '../../store/tripsStore';
 import { usefetchTrips } from 'app/hooks/trips';
-import { useRouter } from 'expo-router';
+import { useRouter } from 'app/hooks/router';
 import { fuseSearch } from '../../utils/fuseSearch';
-import { fetchUserFavorites } from '../../store/favoritesStore';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import FeedSearchFilter from 'app/components/feed/FeedSearchFilter';
 import { useFeed } from 'app/hooks/feed';
 import { RefreshControl } from 'react-native';
 import { RText } from '@packrat/ui';
+import { useAuthUser } from 'app/auth/hooks';
 
 const URL_PATHS = {
   userPacks: '/pack/',
@@ -36,7 +24,21 @@ const ERROR_MESSAGES = {
   userTrips: 'No User Trips Available',
 };
 
-const Feed = ({ feedType = 'public' }) => {
+interface FeedItem {
+  _id: string;
+  type: string;
+}
+
+interface SelectedTypes {
+  pack: boolean;
+  trip: boolean;
+}
+
+interface FeedProps {
+  feedType?: string;
+}
+
+const Feed = ({ feedType = 'public' }: FeedProps) => {
   const router = useRouter();
 
   const [queryString, setQueryString] = useState('');
@@ -49,12 +51,8 @@ const Feed = ({ feedType = 'public' }) => {
 
   const [refreshing, setRefreshing] = useState(false);
 
-  const dispatch = useDispatch();
-  const ownerId = useSelector((state) => state.auth.user?._id);
-  // const publicPacksData = useSelector((state) => state.feed.publicPacks);
-  // const userPacksData = useSelector(selectAllPacks);
-  // const publicTripsData = useSelector((state) => state.feed.publicTrips);
-  // const userTripsData = useSelector(selectAllTrips);
+  const user = useAuthUser();
+  const ownerId = user?._id;
 
   const styles = useCustomStyles(loadStyles);
   const { data, error, isLoading, refetch } = useFeed(
@@ -70,21 +68,6 @@ const Feed = ({ feedType = 'public' }) => {
     setRefreshing(false);
   };
 
-  console.log('🚀 ~ file: Feed.js:180 ~ Feed ~ feedData:', data);
-  // useEffect(() => {
-  //   if (feedType === 'public') {
-  //     dispatch(getPublicPacks(queryString));
-  // dispatch(getPublicTrips(queryString));
-  //     dispatch(fetchUserFavorites(ownerId));
-  //   } else if (feedType === 'userPacks' && ownerId) {
-  //     dispatch(fetchUserPacks({ ownerId, queryString }));
-  //   } else if (feedType === 'userTrips' && ownerId) {
-  //     dispatch(fetchUserTrips(ownerId));
-  //   } else if (feedType === 'favoritePacks') {
-  //     dispatch(getFavoritePacks());
-  //   }
-  // }, [queryString, feedType, ownerId]);
-
   /**
    * Renders the data for the feed based on the feed type and search query.
    *
@@ -92,21 +75,6 @@ const Feed = ({ feedType = 'public' }) => {
    */
   const renderData = () => {
     let arrayData = data;
-
-    // if (feedType === 'public') {
-    //   if (selectedTypes?.pack) {
-    //     data = [...data, ...publicPacksData];
-    //   }
-    //   if (selectedTypes?.trip) {
-    //     data = [...data, ...publicTripsData];
-    //   }
-    // } else if (feedType === 'userPacks') {
-    //   data = userPacksData;
-    // } else if (feedType === 'userTrips') {
-    //   data = userTripsData;
-    // } else if (feedType === 'favoritePacks') {
-    //   data = userPacksData.filter((pack) => pack.isFavorite);
-    // }
 
     // Fuse search
     const keys = ['name', 'items.name', 'items.category'];
@@ -122,7 +90,10 @@ const Feed = ({ feedType = 'public' }) => {
       feedType !== 'userTrips'
         ? fuseSearch(arrayData, searchQuery, keys, options)
         : data;
-    console.log('🚀 ~ file: Feed.js:231 ~ renderData ~ results:', results);
+    console.log(
+      '🚀 ../.. file: Feed.js:231 ../.. renderData ../.. results:',
+      results,
+    );
 
     // Convert fuse results back into the format we want
     // if searchQuery is empty, use the original data
@@ -140,41 +111,27 @@ const Feed = ({ feedType = 'public' }) => {
         handleCreateClick={handleCreateClick}
       />
     );
-    // return Platform.OS === 'web' ? (
-    //   <ScrollView
-    //     showsHorizontalScrollIndicator={false}
-    //     contentContainerStyle={{ flex: 1, paddingBottom: 10 }}
-    //     refreshControl={
-    //       <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-    //     }
-    //   >
-    //     <View style={styles.cardContainer}>
-    //       {/* {console.log({ data })} */}
-    //       {feedSearchFilterComponent}
-    //       {data?.map((item) => (
-    //         <Card key={item?._id} type={item?.type} {...item} />
-    //       ))}
-    //     </View>
-    //   </ScrollView>
-    // ) : (
+
     return (
       <View style={{ flex: 1, paddingBottom: 10 }}>
         <FlatList
           data={data}
           horizontal={false}
-          numColumns={Platform.OS === 'web' ? 4 : 1}
           keyExtractor={(item) => item?._id + item?.type}
           renderItem={({ item }) => (
             <Card key={item?._id} type={item?.type} {...item} />
           )}
           ListHeaderComponent={() => feedSearchFilterComponent}
-          ListEmptyComponent={() => <RText>{ERROR_MESSAGES[feedType]}</RText>}
+          ListEmptyComponent={() => (
+            <RText style={{ textAlign: 'center', marginTop: 20 }}>
+              {ERROR_MESSAGES[feedType]}
+            </RText>
+          )}
           showsVerticalScrollIndicator={false}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
           maxToRenderPerBatch={2}
-          contentContainerStyle={{ flex: 1 }}
         />
       </View>
     );

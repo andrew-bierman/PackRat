@@ -45,7 +45,7 @@ const sendPasswordResetEmail = async (email, resetUrl) => {
     await sgMail.send(mailOptions);
     console.log('Password reset email sent successfully');
   } catch (error) {
-    console.error('Error sending password reset email:', error);
+    throw new Error(error);
   }
 };
 
@@ -76,7 +76,7 @@ export const requestPasswordResetEmailAndToken = async (req, res) => {
     );
 
     const resetUrl = `${CLIENT_URL}/password-reset?token=${resetToken}`;
-    sendPasswordResetEmail(email, resetUrl);
+    await sendPasswordResetEmail(email, resetUrl);
 
     res.locals.data = { message: 'Password reset email sent successfully' };
     responseHandler(res);

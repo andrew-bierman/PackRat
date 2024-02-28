@@ -1,9 +1,10 @@
-import { useDispatch } from 'react-redux';
-import { useSelector } from '../redux/useSelector';
 import { useState } from 'react';
-import { duplicatePackItem } from 'app/store/packsStore';
 import { ItemCategoryEnum } from 'app/constants/itemCategory';
 import { convertWeight } from 'app/utils/convertWeight';
+import { useAuthUser } from 'app/auth/hooks';
+import { useDuplicatePackItem } from './useDuplicatePackItem';
+
+type WeightUnit = 'g' | 'kg' | 'oz' | 'lb' | 'lbs';
 
 export const usePackTable = ({
   currentPack,
@@ -12,8 +13,8 @@ export const usePackTable = ({
   setRefetch,
   copy,
 }) => {
-  const user = useSelector((state) => state.auth.user);
-  const dispatch = useDispatch();
+  const user = useAuthUser();
+  const duplicatePackItem = useDuplicatePackItem();
   let ids = [];
   if (currentPack?.items) {
     ids = copy ? currentPack.items.map((item) => item._id) : [];
@@ -26,17 +27,17 @@ export const usePackTable = ({
       ownerId: user._id,
       items: checkedItems,
     };
-    dispatch(duplicatePackItem(data));
+
+    duplicatePackItem(data);
   };
 
-  const [weightUnit, setWeightUnit] = useState('g');
-  const isLoading = useSelector((state: any) => state.packs.isLoading);
-
-  const error = useSelector((state: any) => state.items.error);
+  const [weightUnit, setWeightUnit] = useState<WeightUnit>('g');
   const data = currentPack?.items;
   let totalFoodWeight = 0;
   let totalWaterWeight = 0;
   let totalBaseWeight = 0;
+  const isLoading = !data;
+  const error = false;
 
   let waterItem;
   const foodItems = [];
@@ -105,7 +106,6 @@ export const usePackTable = ({
 
   return {
     user,
-    dispatch,
     ids,
     checkedItems,
     setCheckedItems,

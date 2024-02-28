@@ -1,20 +1,21 @@
 import { useState } from 'react';
 import { EvilIcons } from '@expo/vector-icons';
-import { usePathname } from 'expo-router';
-import { useLogout } from '../login';
+import { useLogout } from '../../auth/hooks';
 import { useNavigate } from './useNavigate';
 
 export const useNavigationItem = (item, onSelect) => {
-  const pathname = usePathname();
   const logout = useLogout();
   const navigate = useNavigate();
   const { iconSource, href } = item;
   const IconComponent = iconSource || EvilIcons;
-  const isCurrentPage = pathname === href;
+  // TODO: add current page logic
+  // const isCurrentPage = pathname === href;
+  const isCurrentPage = true;
 
   const handleItemPress = () => {
-    if (item.href === 'logout') {
+    if (item.href === '/logout') {
       logout();
+      navigate('/');
       return;
     }
     onSelect?.();

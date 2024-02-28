@@ -1,7 +1,5 @@
 import { useNavigationList } from 'app/hooks/navigation';
 import { NavigationItem } from './NavigationItem';
-import { useAuthUser } from 'app/hooks/user/useAuthUser';
-import { MaterialIcons } from '@expo/vector-icons';
 import { useIsMobileView } from 'app/hooks/common';
 
 export const NavigationList = ({
@@ -10,7 +8,6 @@ export const NavigationList = ({
 }) => {
   const isMobileView = useIsMobileView();
   const { navigationItems } = useNavigationList();
-
   return (
     <>
       {navigationItems?.map((item) => (

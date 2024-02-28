@@ -1,16 +1,27 @@
 import React from 'react';
 import { RStack, RImage } from '@packrat/ui';
-import { Platform, View } from 'react-native';
+import { ImageSourcePropType, Platform, View } from 'react-native';
 import { theme } from '../../theme';
 import { isObjectEmpty } from '../../utils/isObjectEmpty';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 
-const Hero = ({ children, imageDetails }) => {
+interface HeroProps {
+  children: React.JSX.Element;
+  imageDetails: {
+    title: string;
+    subtitle: string;
+    source: ImageSourcePropType;
+    alt: string;
+  };
+}
+
+const Hero = ({ children, imageDetails }: HeroProps) => {
   if (isObjectEmpty(imageDetails || {})) {
     imageDetails = {
       title: 'N/A',
       subtitle: 'N/A',
-      source: require('../../assets/topographical-pattern.jpg'),
+      source:
+        'https://github.com/andrew-bierman/PackRat/blob/main/apps/expo/assets/topographical-pattern.jpg?raw=true',
       alt: 'hero',
     };
   }
