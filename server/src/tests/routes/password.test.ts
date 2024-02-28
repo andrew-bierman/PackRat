@@ -1,18 +1,17 @@
-import mongoose from 'mongoose';
-import { createCaller } from '../../routes/trpcRouter';
 import { userSignUp } from '@packrat/validations';
 import { generateMock } from '@anatine/zod-mock';
+import { setupTest, teardownTest } from '../utils/testHelpers';
+
+let caller;
 
 beforeEach(async () => {
-  process.env.NODE_ENV = 'test';
-  await mongoose.connect(process.env.MONGODB_URI ?? '');
+  const testSetup = await setupTest();
+  caller = testSetup.caller;
 });
 
 afterEach(async () => {
-  await mongoose.disconnect();
+  await teardownTest();
 });
-
-const caller = createCaller({});
 
 let user: any = generateMock(userSignUp);
 
