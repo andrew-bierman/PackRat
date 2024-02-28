@@ -38,16 +38,21 @@ export const CustomCard = ({
   const isWeb = Platform.OS === 'web';
 
   return (
-    <View style={
-      [styles.mainContainer, {
-        minHeight: !isWeb ? Dimensions.get('screen').height : 'auto',
-      },
-      isWeb && {
-        borderRadius: 10,
-        padding: isWeb ? '15 25' : 0,
-      }
-    ]}>
-      <RStack style={{ width: '100%', gap: Platform.OS === 'web' ? 30 : 10, flex: 1 }}>
+    <View
+      style={[
+        styles.mainContainer,
+        {
+          minHeight: !isWeb ? Dimensions.get('screen').height : 'auto',
+        },
+        isWeb && {
+          borderRadius: 10,
+          padding: isWeb ? '15 25' : 0,
+        },
+      ]}
+    >
+      <RStack
+        style={{ width: '100%', gap: Platform.OS === 'web' ? 30 : 10, flex: 1 }}
+      >
         <View
           style={{
             padding: 15,
@@ -84,7 +89,7 @@ export const CustomCard = ({
             alignItems: 'center',
             justifyContent: 'center',
             paddingRight: 16,
-            paddingLeft: 16
+            paddingLeft: 16,
           }}
         >
           {content}

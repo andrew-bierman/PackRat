@@ -64,8 +64,9 @@ export const AddItemGlobal = () => {
         isLoading={isLoading}
         isEdit={false}
         currentPack={{
-          items: []
-        }}/>
+          items: [],
+        }}
+      />
     </View>
   );
 };

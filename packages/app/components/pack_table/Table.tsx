@@ -73,7 +73,7 @@ export const TableContainer = ({
 
   const isWeb = Platform.OS === 'web';
   return (
-    <View style={[styles.container, !isWeb && { width: '100%'}]}>
+    <View style={[styles.container, !isWeb && { width: '100%' }]}>
       {data?.length ? (
         <>
           <Table style={styles.tableStyle} flexArr={flexArr}>

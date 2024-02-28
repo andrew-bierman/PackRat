@@ -105,7 +105,12 @@ export function requestPasswordResetEmailAndTokenRoute() {
       );
       const resetUrl = `${CLIENT_URL}/password-reset?token=${resetToken}`;
       sendPasswordResetEmail(email, resetUrl);
-      return { message: 'Password reset email sent successfully' };
+
+      //* returning resetToken for Test environment
+      return {
+        message: 'Password reset email sent successfully',
+        resetToken: (process.env.NODE_ENV = 'test' && resetToken),
+      };
     });
 }
 

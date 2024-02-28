@@ -20,7 +20,7 @@ const loadStyles = (theme) => {
     },
     categoryRow: {
       padding: 10,
-      borderRadius: isWeb ? 5: 0,
+      borderRadius: isWeb ? 5 : 0,
       alignItems: 'center',
       justifyContent: 'flex-start',
     },
