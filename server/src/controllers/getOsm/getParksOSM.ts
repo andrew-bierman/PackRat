@@ -6,7 +6,7 @@ import {
 import { responseHandler } from '../../helpers/responseHandler';
 import { publicProcedure } from '../../trpc';
 import { z } from 'zod';
-import * as validators from '@packrat/validations';
+// import * as validators from '@packrat/validations';
 
 /**
  * Retrieves parks data from OpenStreetMap based on the provided latitude, longitude, and radius.
@@ -31,8 +31,9 @@ import * as validators from '@packrat/validations';
 // };
 
 export function getParksOSMRoute() {
-  return publicProcedure.input(validators.getParksOSM).query(async (opts) => {
-    const { lat = 45.5231, lon = -122.6765, radius = 50000 } = opts.input;
+  return publicProcedure.query(async (opts) => {
+    // const { lat = 45.5231, lon = -122.6765, radius = 50000 } = opts.input;
+    const { lat = 45.5231, lon = -122.6765, radius = 50000 } = opts.rawInput;
     const { env }: any = opts.ctx;
     return await getParksOSMService(lat, lon, radius, env.OSM_URI);
   });

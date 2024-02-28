@@ -60,6 +60,36 @@ export class Trip {
               username: true,
             },
           },
+          packs: {
+            columns: { id: true, name: true },
+            with: {
+              itemPacks: {
+                columns: { packId: true },
+                with: {
+                  item: {
+                    columns: {
+                      id: true,
+                      name: true,
+                      weight: true,
+                      quantity: true,
+                      unit: true,
+                    },
+                    with: {
+                      category: {
+                        columns: { id: true, name: true },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          tripGeojsons: {
+            columns: {},
+            with: {
+              geojson: true,
+            },
+          },
         },
       });
       return trip;

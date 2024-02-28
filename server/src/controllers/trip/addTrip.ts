@@ -48,7 +48,7 @@ import * as validator from '../../middleware/validators/index';
 
 export function addTripRoute() {
   return publicProcedure.input(validator.addTrip).mutation(async (opts) => {
-    const { geojson_id, ...tripData } = opts.input;
-    return await addTripService(tripData, geojson_id);
+    const tripData = opts.input;
+    return await addTripService(tripData);
   });
 }

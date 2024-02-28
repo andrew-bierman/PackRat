@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "0623875e-4fed-469b-9897-12836c2135c6",
+  "id": "6d79a1bb-4374-4457-9aa7-88fccb14e9db",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "conversation": {
@@ -499,7 +499,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "set null",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -767,7 +767,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "set null",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         },
         "trip_packs_id_pack_id_fk": {

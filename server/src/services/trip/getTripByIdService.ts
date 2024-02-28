@@ -13,7 +13,18 @@ export const getTripByIdService = async (tripId: string): Promise<object> => {
     if (!trip) {
       throw new Error('Trip cannot be found');
     }
-    return trip;
+    const packs = {
+      ...trip.packs,
+      items: trip.packs?.itemPacks?.map((itemPack) => itemPack.item),
+    };
+    const geojsonData = trip.tripGeojsons?.map(
+      (tripGeojson) => tripGeojson.geojson,
+    );
+    return {
+      ...trip,
+      geojson: { type: 'FeatureCollection', features: geojsonData },
+      packs,
+    };
   } catch (error) {
     console.error(error);
     throw new Error('Trip cannot be found');
