@@ -29,6 +29,7 @@ import RTabs from './RTabs';
 import SizableText from './SizableText';
 export { RSkeleton } from './RSkeleton';
 export { DropdownMenu, ExampleDropdown } from './RDropdown/DropdownBase';
+export {ContextMenu, ExampleContextMenu} from './RContextMenu';
 
 export { LoadingPlaceholder } from './LoadingPlaceholder';
 
