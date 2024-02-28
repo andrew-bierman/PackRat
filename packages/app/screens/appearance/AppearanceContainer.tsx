@@ -1,5 +1,5 @@
 import React from 'react';
-import { VStack, Box, Text, Switch } from 'native-base';
+import { VStack, Box, Text, Switch, View } from 'native-base';
 import { ScrollView } from 'tamagui';
 import { Card as RNPCard } from 'react-native-paper';
 import useAppearance from 'app/hooks/appearance/useAppearance';
@@ -38,7 +38,9 @@ export default function AppearanceContainer() {
           </RNPCard>
           {showKitchenSink && (
             <Box>
-              <Text>Kitchen Sink</Text>
+              <View>
+                <Text>Kitchen Sink</Text>
+              </View>
               <DialogDemo />
             </Box>
           )}

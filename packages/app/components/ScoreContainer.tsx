@@ -197,18 +197,22 @@ export const ScoreContainer: React.FC<ScoreContainerProps> = ({
 
   return (
     <Box style={styles.box}>
-      <HStack style={[styles.hStack, !isWeb && {flexDirection: 'column', gap: 10}]}>
+      <HStack style={[styles.hStack, !isWeb && { flexDirection: 'column', gap: 10 }]}>
         <VStack style={styles.vStack}>
-          <Text style={styles.scoreText}>
-            {isAlreadyScored ? title : 'Score this pack!'}
-          </Text>
-          <Text>{subheader}</Text>
-          <Text style={{ fontWeight: 300 }}>{description}</Text>
-          {isOwner && (
-            <Button style={styles.button} onPress={handleScoreClick}>
-              <Text>Calculate Score</Text>
-            </Button>
-          )}
+          <View>
+            <Text style={styles.scoreText}>
+              {isAlreadyScored ? title : 'Score this pack!'}
+            </Text>
+            <Text>{subheader}</Text>
+            <Text style={{ fontWeight: 300 }}>{description}</Text>
+            {isOwner && (
+              <Button style={styles.button} onPress={handleScoreClick}>
+                <View>
+                  <Text>Calculate Score</Text>
+                </View>
+              </Button>
+            )}
+          </View>
         </VStack>
         {isAlreadyScored && (
           <>

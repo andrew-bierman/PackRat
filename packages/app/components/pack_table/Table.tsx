@@ -4,6 +4,10 @@ import { Cell, Row, Table } from 'react-native-table-component';
 import { usePackTable } from 'app/hooks/packs/usePackTable';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import loadStyles from './packtable.style';
+import { DataTable } from '../../../ui/src/DataTable/Table';
+import { PackOptions } from '../../components/PackOptions/index';
+
+
 import {
   TotalWeightBox,
   WeightUnitDropdown,
@@ -72,52 +76,18 @@ export const TableContainer = ({
   if (error) return <ErrorMessage message={error} />;
 
   const isWeb = Platform.OS === 'web';
+
+
   return (
     <View style={[styles.container, !isWeb && { width: '100%'}]}>
       {data?.length ? (
         <>
-          <Table style={styles.tableStyle} flexArr={flexArr}>
-            <TitleRow title="Pack List" />
-            <Row
-              flexArr={flexArr}
-              data={[
-                'Item Name',
-                `Weight`,
-                'Quantity',
-                'Category',
-                'Edit',
-                'Delete',
-                `${copy ? 'Copy' : 'Ignore'}`,
-              ].map((header, index) => (
-                <Cell key={index} data={header} textStyle={styles.headerText} />
-              ))}
-              style={styles.head}
-            />
-            <FlatList
-              data={Object.entries(groupedData)}
-              keyExtractor={([category, items]) => category}
-              renderItem={({ item: [category, items] }) => (
-                <>
-                  <CategoryRow category={category} />
-                  <FlatList
-                    data={items}
-                    keyExtractor={(item, index) => item._id}
-                    renderItem={({ item }) => (
-                      <TableItem
-                        itemData={item}
-                        checkedItems={checkedItems}
-                        handleCheckboxChange={handleCheckboxChange}
-                        flexArr={flexArr}
-                        currentPack={currentPack}
-                        refetch={refetch}
-                        setRefetch={setRefetch}
-                      />
-                    )}
-                  />
-                </>
-              )}
-            />
-          </Table>
+          
+          <DataTable
+            title='Pack List'
+            table={Object.entries(groupedData)}
+            headings={heading}
+          />
           {copy ? (
             <RButton
               style={{

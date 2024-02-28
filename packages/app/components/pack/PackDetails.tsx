@@ -17,6 +17,7 @@ import { useUserPacks } from 'app/hooks/packs/useUserPacks';
 import { useFetchSinglePack } from '../../hooks/packs';
 import { useAuthUser } from 'app/auth/hooks';
 
+
 const { useParam } = createParam();
 
 const SECTION = {
@@ -66,6 +67,9 @@ export function PackDetails() {
           : {minHeight: Dimensions.get('screen').height},
       ]}
     >
+
+
+
       {!isError && (
         <>
           <DetailsComponent
