@@ -1,0 +1,7 @@
+{
+  "name": "@packrat/cli",
+  "dependencies": {
+    "enquirer": "^2.4.1",
+    "ignore": "^5.3.1"
+  }
+}
