@@ -53,13 +53,10 @@ describe('Favorite routes', () => {
     // test("Get user's favorites", async () => {
     //   if (pack) {
     //     const userId = user._id.toString();
-
     //     const currentUser = await caller.getUserFavorites({
     //       userId,
     //     });
-
     //     const favorites = currentUser.favorites;
-
     //     expect(favorites).toBeDefined();
     //   }
     // });

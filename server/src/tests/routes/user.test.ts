@@ -4,7 +4,7 @@ import { userSignUp } from '../../middleware/validators';
 import { createCaller } from '../../routes/trpcRouter';
 
 beforeEach(async () => {
-  process.env.NODE_ENV = 'test';  
+  process.env.NODE_ENV = 'test';
   await mongoose.connect(process.env.MONGODB_URI ?? '');
 });
 
@@ -63,18 +63,14 @@ describe('User routes', () => {
     //   const userToBeUpdated = {
     //     username: `${user.username}_updated`,
     //   };
-
     //   const updatedUser = await caller
     //     .editUser({
     //       userId: user.id,
     //       ...userToBeUpdated,
     //     })
     //     .then((updatedUser) => updatedUser.toJSON());
-
-
     //   expect(updatedUser.id).toEqual(user.id);
     //   expect(updatedUser.username).toEqual(userToBeUpdated.username);
-
     //   user = { ...user, username: updatedUser.username };
     // });
   });
@@ -83,8 +79,6 @@ describe('User routes', () => {
     //! getMe() function always returns undefined may be due to tests not having sessions
     // test('Get current user', async () => {
     //   const currentUser = await caller.getMe();
-
-
     //   expect((currentUser as any).id).toEqual(user.id);
     // });
   });
