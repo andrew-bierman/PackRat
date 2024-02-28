@@ -38,10 +38,10 @@ describe('Favorite routes', () => {
         const userId = user._id.toString();
 
         //! addToFavoriteRoute is returning user's data instead of returning added favorites
-        const currentUser = (await caller.addToFavorite({
+        const currentUser = await caller.addToFavorite({
           packId,
           userId,
-        })) as any;
+        });
 
         expect(currentUser?._id.toString()).toEqual(userId);
       }

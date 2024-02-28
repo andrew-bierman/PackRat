@@ -74,7 +74,7 @@ describe('Template routes', () => {
       };
 
       //! addTemplateService should return created template
-      const createdTemplate = (await caller.addTemplate(input)) as any;
+      const createdTemplate = await caller.addTemplate(input);
 
       expect(createdTemplate?.message).toEqual('Template added successfully');
     });

@@ -48,9 +48,9 @@ describe('User routes', () => {
 
   describe('Get user by Id', () => {
     test('Get user by Id', async () => {
-      const currentUser = (await caller.getUserById({
+      const currentUser = await caller.getUserById({
         userId: user.id,
-      })) as any;
+      });
 
       expect(currentUser._id.toString()).toEqual(user.id);
     });
@@ -181,9 +181,9 @@ describe('Delete user', () => {
 
   describe('Get user by Id', () => {
     test('Get user by Id', async () => {
-      const deletedUser = (await caller.getUserById({
+      const deletedUser = await caller.getUserById({
         userId: userToBeDeleted.id,
-      })) as any;
+      });
 
       expect(deletedUser).toBeNull();
     });
