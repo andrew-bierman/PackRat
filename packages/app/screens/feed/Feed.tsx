@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FlatList, View, Platform } from 'react-native';
 import Card from '../../components/feed/FeedCard';
 import { usefetchTrips } from 'app/hooks/trips';
-import { useRouter } from '@packrat/ui';
+import { useRouter } from 'app/hooks/router';
 import { fuseSearch } from '../../utils/fuseSearch';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import FeedSearchFilter from 'app/components/feed/FeedSearchFilter';

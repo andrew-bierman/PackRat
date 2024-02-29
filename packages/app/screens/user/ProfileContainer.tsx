@@ -6,7 +6,7 @@ import UserDataContainer from '../../components/user/UserDataContainer';
 import useTheme from '../../hooks/useTheme';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 // import useGetPacks from "../../hooks/useGetPacks";
-import { useRouter } from '@packrat/ui';
+import { useRouter } from 'app/hooks/router';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import Avatar from '../../components/Avatar/Avatar';
 import { useProfile } from 'app/hooks/user';

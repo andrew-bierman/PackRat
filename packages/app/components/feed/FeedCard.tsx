@@ -4,7 +4,7 @@ import { MaterialIcons, Entypo } from '@expo/vector-icons';
 import useTheme from '../../hooks/useTheme';
 import { TouchableOpacity, View } from 'react-native';
 import { Link } from '@packrat/ui';
-import { useRouter } from '@packrat/ui';
+import { useRouter } from 'app/hooks/router';
 import { DuplicateIcon } from '../DuplicateIcon/index';
 import { truncateString } from '../../utils/truncateString';
 import { RText, RStack, RHeading, ContextMenu } from '@packrat/ui';

@@ -1,4 +1,4 @@
-import { useRouter } from '@packrat/ui';
+import { useRouter } from 'app/hooks/router';
 import { queryTrpc } from 'app/trpc';
 
 export const useDeletePack = (id) => {

@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useUserSetter } from './useUserSetter';
 import { Storage } from 'app/utils/storage';
-import { useRouter } from '@packrat/ui';
+import { useRouter } from 'app/hooks/router';
 
 export const useSessionSignIn = () => {
   const setUser = useUserSetter();

@@ -7,7 +7,7 @@ import { theme } from '../../theme';
 import useTheme from '../../hooks/useTheme';
 import { useAuthUser } from 'app/auth/hooks';
 import Hero from '../hero';
-import { useRouter } from '@packrat/ui';
+import { useRouter } from 'app/hooks/router';
 import { first } from 'lodash';
 import { hexToRGBA } from '../../utils/colorFunctions';
 import useCustomStyles from 'app/hooks/useCustomStyles';

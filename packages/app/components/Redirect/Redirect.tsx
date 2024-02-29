@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useRouter } from '@packrat/ui';
+import { useRouter } from 'app/hooks/router';
 
 type RedirectProps = {
   to: string;
