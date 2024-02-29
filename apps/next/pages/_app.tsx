@@ -12,7 +12,7 @@ import { TamaguiProvider } from 'tamagui';
 
 import Head from 'next/head';
 import React from 'react';
-import type { SolitoAppProps } from 'solito';
+import type { SolitoAppProps } from '@packrat/ui';
 import { Navigation } from 'app/components/navigation';
 import { PortalProvider } from 'tamagui';
 

@@ -2,7 +2,7 @@ import { cache, useRef } from 'react';
 import {
   useSearchParams as useSearchParamsSolito,
   useUpdateSearchParams,
-} from 'solito/navigation';
+} from '@packrat/ui';
 
 export const useSearchParams = () => {
   const searchParams = useSearchParamsSolito();

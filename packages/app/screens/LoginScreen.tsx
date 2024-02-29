@@ -9,7 +9,7 @@ import {
 } from '@packrat/ui';
 import { FontAwesome } from '@expo/vector-icons';
 import { NODE_ENV } from '@env';
-import { Link } from 'solito/link';
+import { Link } from '@packrat/ui';
 import { InformUser } from '../utils/ToastUtils';
 import useTheme from '../hooks/useTheme';
 import { InputText, InputTextRules } from '@packrat/ui';

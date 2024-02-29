@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PackContainer from './PackContainer';
 import { DetailsHeader } from '../details/header';
-import { createParam } from 'solito';
+import { createParam } from '@packrat/ui';
 import { TableContainer } from '../pack_table/Table';
 import { RText } from '@packrat/ui';
 import { DetailsComponent } from '../details';
