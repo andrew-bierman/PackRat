@@ -1,10 +1,11 @@
 import React from 'react';
 import { Platform } from 'react-native';
-import { Box, View } from 'native-base';
+import { View } from 'native-base';
 import {
   YStack as VStack,
   XStack as HStack,
   RText as Text,
+  RStack as Box,
   RButton as Button,
 } from '@packrat/ui';
 import { theme } from '../theme';

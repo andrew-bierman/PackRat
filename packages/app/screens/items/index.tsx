@@ -1,10 +1,10 @@
 import { View, Platform } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { Box } from 'native-base';
 import {
   RButton as Button,
   RScrollView as ScrollView,
   RTooltip as Tooltip,
+  RStack as Box,
 } from '@packrat/ui';
 import { MaterialIcons } from '@expo/vector-icons';
 import { theme } from 'app/theme';

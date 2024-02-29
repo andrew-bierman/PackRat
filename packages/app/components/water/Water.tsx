@@ -1,6 +1,10 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Box } from 'native-base';
-import { RButton as Button, RInput as Input, RText as Text } from '@packrat/ui';
+import {
+  RButton as Button,
+  RInput as Input,
+  RText as Text,
+  RStack as Box,
+} from '@packrat/ui';
 import React from 'react';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useWater } from 'app/hooks/water';
