@@ -11,9 +11,9 @@ import {
   ScrollView,
 } from '@packrat/ui';
 import { FontAwesome } from '@expo/vector-icons';
-import { useRouter } from 'app/hooks/router';
+import { useRouter } from '@packrat/ui';
 // import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { Link } from 'solito/link';
+import { Link } from '@packrat/ui';
 import { InformUser } from '../utils/ToastUtils';
 import useTheme from '../hooks/useTheme';
 import { useForm } from 'react-hook-form';

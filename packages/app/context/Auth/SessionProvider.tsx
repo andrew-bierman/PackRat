@@ -1,4 +1,4 @@
-import { useRouter } from 'app/hooks/router';
+import { useRouter } from '@packrat/ui';
 
 import React, { useEffect } from 'react';
 import { useStorageState } from 'app/hooks/storage/useStorageState';

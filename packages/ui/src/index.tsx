@@ -29,7 +29,7 @@ import RTabs from './RTabs';
 import SizableText from './SizableText';
 export { RSkeleton } from './RSkeleton';
 export { DropdownMenu, ExampleDropdown } from './RDropdown/DropdownBase';
-export {ContextMenu, ExampleContextMenu} from './RContextMenu';
+export { ContextMenu, ExampleContextMenu } from './RContextMenu';
 
 export { LoadingPlaceholder } from './LoadingPlaceholder';
 
@@ -96,4 +96,9 @@ export * from './SizableText';
 // export * from './RToast';
 // export * from './RTooltip';
 
-export * from './ErrorBoundary';
+export { default as ErrorBoundary } from './ErrorBoundary';
+export { useRouter } from 'solito/router';
+export type { SolitoAppProps } from 'solito';
+export { createParam } from 'solito';
+export { Link } from 'solito/link';
+export { useSearchParams, useUpdateSearchParams } from 'solito/navigation';
