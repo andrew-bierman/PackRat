@@ -11,6 +11,8 @@ import { AddItem } from '../item/AddItem';
 import loadStyles from './packtable.style';
 import { IgnoreItemCheckbox } from './TableHelperComponents';
 
+
+
 interface TableItemProps {
   itemData: any;
   checkedItems: string[];
