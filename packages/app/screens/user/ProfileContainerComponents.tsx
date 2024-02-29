@@ -3,7 +3,7 @@ import { Platform, View } from 'react-native';
 import { RIconButton, RStack, RText, RSkeleton } from '@packrat/ui';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 // import useGetPacks from "../../hooks/useGetPacks";
-import { useRouter } from '@packrat/ui';
+import { useRouter } from 'app/hooks/router';
 
 export const SettingsButton = () => {
   const router = useRouter();
