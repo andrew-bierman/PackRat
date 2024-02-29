@@ -1,7 +1,7 @@
 // frontend/components/PasswordResetForm.js
 import React from 'react';
 import { View } from 'react-native';
-import { Button, Input, Text, Toast } from 'native-base';
+import { RButton as Button, RInput as Input, RText as Text } from '@packrat/ui';
 import axios from 'app/config/axios';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';

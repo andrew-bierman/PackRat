@@ -11,7 +11,8 @@ import {
 // import { check, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Mapbox, { ShapeSource, offlineManager, Camera } from '@rnmapbox/maps';
-import { AlertDialog, Button, Input } from 'native-base';
+import { AlertDialog } from 'native-base';
+import { RButton as Button, RInput as Input } from '@packrat/ui';
 
 // get mapbox access token from .env file
 import { MAPBOX_ACCESS_TOKEN } from '@env';

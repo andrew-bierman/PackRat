@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
-import { Container, Text } from 'native-base';
+import { RText as Text } from '@packrat/ui';
 import { useRouter } from 'app/hooks/router';
 import { createParam } from 'solito';
 import useTheme from '../../hooks/useTheme';

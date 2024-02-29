@@ -5,11 +5,8 @@ import {
   FlatList,
   TextInput,
   TouchableOpacity,
-  ScrollView,
 } from 'react-native';
-import useTheme from '../../hooks/useTheme';
-import { BaseModal, RStack } from '@packrat/ui';
-import { Box, VStack, HStack, Select } from 'native-base';
+import { BaseModal, RStack, RSelect as Select } from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useChat } from 'app/hooks/chat/useChat';
 import { loadStyles } from './chat.style';

@@ -1,6 +1,12 @@
 import React from 'react';
 import { Platform } from 'react-native';
-import { Box, Button, VStack, Text, HStack, View } from 'native-base';
+import { Box, View } from 'native-base';
+import {
+  YStack as VStack,
+  XStack as HStack,
+  RText as Text,
+  RButton as Button,
+} from '@packrat/ui';
 import { theme } from '../theme';
 import useTheme from '../hooks/useTheme';
 import { Svg, Circle, Path, G, Text as SvgText } from 'react-native-svg';

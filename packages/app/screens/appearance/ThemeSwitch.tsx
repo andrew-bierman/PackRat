@@ -1,5 +1,6 @@
 import React from 'react';
-import { Text, Switch } from 'native-base';
+import { Switch } from 'native-base';
+import { RText as Text } from '@packrat/ui';
 
 const ThemeSwitch = ({ isEnabled, toggleSwitch, currentTheme }) => (
   <>
