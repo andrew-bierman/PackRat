@@ -326,12 +326,13 @@ export default function Card({
           <ContextMenu.ItemTitle>View {type}</ContextMenu.ItemTitle>
         </ContextMenu.Item>
         <ContextMenu.Item
+          textValue={`View owner`}
           key="owner"
           onSelect={() => {
             push(`/profile/${owner_id}`);
           }}
         >
-          View owner
+          <ContextMenu.ItemTitle>View Owner</ContextMenu.ItemTitle>
         </ContextMenu.Item>
       </ContextMenu.Content>
     </ContextMenu.Root>
