@@ -154,7 +154,6 @@ export const SaveTripContainer = ({
     };
 
     // creating a trip
-    console.log('create trip data ->', data);
     addTrip(data);
     closeModal();
   };

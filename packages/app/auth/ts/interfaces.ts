@@ -1,4 +1,4 @@
-import { UserRole } from './types';
+import { type UserRole } from './types';
 
 export interface User {
   createdAt: string;

@@ -46,8 +46,6 @@ export const getTrailsRapid = async (
 
     return trailsArray;
   } catch (error) {
-    console.log('message====>' + error.message);
-    console.error('error:' + error);
     return [];
   }
 };
@@ -83,7 +81,6 @@ export const getTrailsOSM = async (
 
     return geojsonData;
   } catch (error) {
-    console.error('Error fetching trails:', error);
     return {};
   }
 };

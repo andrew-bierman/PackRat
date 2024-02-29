@@ -43,8 +43,6 @@ export const useChat = (defaultChatId = null) => {
     ? parseConversationHistory(conversation.history)
     : [];
 
-  console.log('parsedMessages:', parsedMessages);
-
   /**
    * Handles sending a message.
    *

@@ -2,9 +2,9 @@ import { AuthLoader } from 'app/auth/AuthLoader';
 import { Redirect } from 'app/components/Redirect';
 import { Text } from '@packrat/ui';
 
-type Props = {
+interface Props {
   children?: React.ReactNode;
-};
+}
 
 export const AuthWrapper = ({ children }: Props) => {
   return (

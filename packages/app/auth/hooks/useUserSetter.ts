@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { getQueryKey } from '@trpc/react-query';
 import { queryTrpc } from 'app/trpc';
 import { useQueryClient } from '@tanstack/react-query';
-import { User } from '../ts';
+import { type User } from '../ts';
 
 export const useUserSetter = () => {
   const queryClient = useQueryClient();

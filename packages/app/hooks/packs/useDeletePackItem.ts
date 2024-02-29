@@ -4,7 +4,6 @@ export const useDeletePackItem = () => {
   const utils = queryTrpc.useContext();
   const mutation = queryTrpc.deleteItem.useMutation({
     onMutate: async (deleteItem) => {
-      console.log(deleteItem);
       const previousPack = utils.getPackById.getData({
         packId: deleteItem.packId,
       });
@@ -30,8 +29,6 @@ export const useDeletePackItem = () => {
       };
     },
     onError: (err, deleteItem, context) => {
-      console.log('Error');
-      console.log(err);
       if (context.previousPack) {
         utils.getPackById.setData(
           { packId: deleteItem.packId },

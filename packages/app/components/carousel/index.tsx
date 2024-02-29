@@ -1,9 +1,9 @@
-import React, { useRef, useState, ReactNode } from 'react';
+import React, { useRef, useState, type ReactNode } from 'react';
 import {
   ScrollView,
   Platform,
   Dimensions,
-  NativeScrollEvent,
+  type NativeScrollEvent,
 } from 'react-native';
 import { RStack } from '@packrat/ui';
 import ScrollButton from './ScrollButton';

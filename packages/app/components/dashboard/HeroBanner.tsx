@@ -54,9 +54,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSelect }) => {
           },
         });
       }
-    } catch (error) {
-      console.error('errorrrrrr', error);
-    }
+    } catch (error) {}
   };
 
   const user = useAuthUser();

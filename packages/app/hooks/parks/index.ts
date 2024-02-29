@@ -4,7 +4,6 @@ import { store } from '../../store/store';
 import { setParks, setParkNames } from '../../store/parksStore';
 
 function useParks({ latLng, radius = 5000 }) {
-  console.log('useParks -------------');
   // const { data, error, isLoading } = await trpc.getParksOSM.query({
   //   lat,
   //   lon,
@@ -23,10 +22,6 @@ function useParks({ latLng, radius = 5000 }) {
       refetchOnWindowFocus: false,
     },
   );
-
-  console.log('------------------------------------');
-  console.log('data in useParks', data);
-  console.log(data);
 
   if (data) {
     const parks = data.features;

@@ -1,4 +1,4 @@
-import React, { cloneElement, ReactNode } from 'react';
+import React, { cloneElement, type ReactNode } from 'react';
 import { Platform } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import useSearchInput from './useSearchInput';

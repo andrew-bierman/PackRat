@@ -8,12 +8,9 @@ export const useAddPackItem = () => {
     onMutate: async (newItem) => {
       // Snapshot the previous value before the mutation
 
-      console.log(newItem.packId);
       const previousPack = utils.getPackById.getData({
         packId: newItem.packId,
       });
-      console.log('previus data');
-      console.log(previousPack);
       const newQueryData = {
         ...previousPack,
         items: [
@@ -27,15 +24,12 @@ export const useAddPackItem = () => {
           },
         ],
       };
-      console.log(newQueryData);
       utils.getPackById.setData({ packId: newItem.packId }, newQueryData);
       return {
         previousPack,
       };
     },
     onError: (err, newItem, context) => {
-      console.log('Error');
-      console.log(err);
       if (context.previousPack) {
         utils.getPackById.setData(
           { packId: newItem.packId },

@@ -11173,7 +11173,7 @@ __metadata:
     burnt: "npm:^0.12.1"
     date-fns: "npm:^2.29.3"
     dotenv: "npm:^16.0.3"
-    eslint: "npm:^8.56.0"
+    eslint: "npm:^8.57.0"
     eslint-config-prettier: "npm:^9.0.0"
     eslint-config-standard-with-typescript: "npm:^38.0.0"
     eslint-plugin-import: "npm:^2.28.1"
@@ -16722,7 +16722,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^8.56.0":
+"eslint@npm:^8.57.0":
   version: 8.57.0
   resolution: "eslint@npm:8.57.0"
   dependencies:
@@ -17067,7 +17067,7 @@ __metadata:
     date-fns: "npm:^2.29.3"
     dotenv: "npm:^16.0.3"
     env: "npm:^0.0.2"
-    eslint: "npm:^8.56.0"
+    eslint: "npm:^8.57.0"
     eslint-config-prettier: "npm:^9.0.0"
     eslint-config-standard-with-typescript: "npm:^38.0.0"
     eslint-plugin-import: "npm:^2.28.1"
@@ -25570,7 +25570,7 @@ __metadata:
     check-dependency-version-consistency: "npm:^4.1.0"
     cross-env: "npm:^7.0.3"
     dotenv-cli: "npm:^7.3.0"
-    eslint: "npm:^8.56.0"
+    eslint: "npm:^8.57.0"
     husky: "npm:^8.0.0"
     lint-staged: "npm:^14.0.1"
     npm-run-all: "npm:^4.1.5"
@@ -28956,7 +28956,7 @@ __metadata:
     cross-env: "npm:^7.0.3"
     csurf: "npm:^1.11.0"
     dotenv: "npm:^16.0.3"
-    eslint: "npm:^8.56.0"
+    eslint: "npm:^8.57.0"
     eslint-config-prettier: "npm:^9.0.0"
     eslint-config-standard-with-typescript: "npm:^38.0.0"
     eslint-plugin-import: "npm:^2.28.1"
@@ -31910,7 +31910,7 @@ __metadata:
     "@vitejs/plugin-react-swc": "npm:^3.6.0"
     app: "npm:*"
     esbuild-plugin-flow: "npm:^0.3.2"
-    eslint: "npm:^8.56.0"
+    eslint: "npm:^8.57.0"
     eslint-plugin-react-hooks: "npm:^4.6.0"
     eslint-plugin-react-refresh: "npm:^0.4.5"
     react: "npm:^18.2.0"

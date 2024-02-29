@@ -60,7 +60,6 @@ export const useAddNewPack = () => {
       };
     },
     onError: (_error, _pack, context) => {
-      console.log(context.oldQueryData);
       utils.getPacks.setData(
         {
           ownerId: _pack.owner_id,

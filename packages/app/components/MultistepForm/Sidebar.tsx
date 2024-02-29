@@ -2,7 +2,7 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 import { View, Text } from 'react-native';
 
 interface SidebarProps {
-  data: { title?: string; subtext?: string }[];
+  data: Array<{ title?: string; subtext?: string }>;
   currentStep: number;
 }
 

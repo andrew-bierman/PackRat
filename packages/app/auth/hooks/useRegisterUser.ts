@@ -37,9 +37,7 @@ export const useRegisterUser = (): UseRegisterUserReturn => {
       signUp({ name, username, email, password }).then((user) => {
         sessionSignIn(user);
       });
-    } catch (e) {
-      console.log('Error', e);
-    }
+    } catch (e) {}
   };
 
   return { form, registerUser };

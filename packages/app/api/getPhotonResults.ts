@@ -35,7 +35,6 @@ export const getPhotonResults = async (
     const resultsArray = response.data.features;
     return resultsArray;
   } catch (error) {
-    console.error('Error fetching photon results:', error);
     return [];
   }
 };

@@ -20,9 +20,7 @@ export const getParksRapid = async (state: string): Promise<string[]> => {
           parksArray.push(item);
         });
       })
-      .catch((err) => {
-        console.error('error:' + err);
-      });
+      .catch((err) => {});
   }
   if (parksArray.length > 0) {
     parksArray = parksArray.map((park) => park.name);
@@ -60,7 +58,6 @@ export const getParksOSM = async (lat: number, lon: number): Promise<any> => {
     const geojsonData = osmtogeojson(response.data);
     return geojsonData;
   } catch (error) {
-    console.error('Error fetching parks:', error);
     return null; // You may want to handle the error differently, but this is a basic example.
   }
 };

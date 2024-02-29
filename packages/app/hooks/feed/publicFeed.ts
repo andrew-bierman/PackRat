@@ -45,7 +45,6 @@ export const usePublicFeed = (queryString, selectedTypes) => {
         ...publicTrips.data.map((item) => ({ ...item, type: 'trip' })),
       ];
   } catch (error) {
-    console.error(error);
     return { data: null, error, isLoading };
   }
 
