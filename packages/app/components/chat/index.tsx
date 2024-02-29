@@ -8,8 +8,7 @@ import {
   ScrollView,
 } from 'react-native';
 import useTheme from '../../hooks/useTheme';
-import { BaseModal, RStack } from '@packrat/ui';
-import { Box, VStack, HStack, Select } from 'native-base';
+import { BaseModal, RStack, Select } from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useChat } from 'app/hooks/chat/useChat';
 import { loadStyles } from './chat.style';
@@ -107,7 +106,7 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
       <RStack style={{ alignItems: 'center' }}>
         {showChatSelector && (
           <Select
-            selectedValue={conversationId}
+            value={conversationId}
             minWidth="200px" // Adjust width as needed
             accessibilityLabel="Select a conversation"
             placeholder="Select a conversation"
