@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { Text } from 'react-native';
 import { format } from 'date-fns';
 import { CustomCard } from '../card';
+import { RStack } from '@packrat/ui';
 
 interface DetailsComponent {
   type: string;
@@ -33,7 +34,9 @@ export const DetailsComponent = ({
               content={
                 <>
                   {data?.description && (
-                    <Text>Description: {data?.description}</Text>
+                    <RStack>
+                      <Text>Description: {data?.description}</Text>
+                    </RStack>
                   )}
 
                   {additionalComps}
@@ -58,50 +61,62 @@ export const DetailsComponent = ({
                   {
                     <>
                       {data?.description && (
-                        <Text>Description: {data?.description}</Text>
+                        <RStack>
+                          <Text>Description: {data?.description}</Text>
+                        </RStack>
                       )}
                       {data?.destination && (
-                        <Text>Destination: {data?.destination}</Text>
+                        <RStack>
+                          <Text>Destination: {data?.destination}</Text>
+                        </RStack>
                       )}
                       {data.start_date && (
-                        <Text>
-                          Start Date:{' '}
-                          {format(new Date(data.start_date), 'MM/dd/yyyy')}
-                        </Text>
+                        <RStack>
+                          <Text>
+                            Start Date:{' '}
+                            {format(new Date(data.start_date), 'MM/dd/yyyy')}
+                          </Text>
+                        </RStack>
                       )}
                       {data.end_date && (
-                        <Text>
-                          End Date:{' '}
-                          {format(new Date(data.end_date), 'MM/dd/yyyy')}
-                        </Text>
+                        <RStack>
+                          <Text>
+                            End Date:{' '}
+                            {format(new Date(data.end_date), 'MM/dd/yyyy')}
+                          </Text>
+                        </RStack>
                       )}
                     </>
                   }
-                  {<View style={{ marginTop: '10%' }}>{additionalComps}</View>}
+                  {
+                    <RStack style={{ marginTop: '10%' }}>
+                      {additionalComps}
+                    </RStack>
+                  }
                 </>
               }
               destination={data?.destination}
               footer={data?.details}
               type="trip"
             />
-            {/* <View>
+            {/* <RStack>
               <Text>{data?.title}</Text>
-            </View>
-            <View>
+            </RStack>
+            <RStack>
               <Text>{data?.details}</Text>
-            </View> */}
+            </RStack> */}
           </>
         );
       case 'item':
         // Add item-specific logic here
         return (
           <>
-            <View>
+            <RStack>
               <Text>{data.name}</Text>
-            </View>
-            <View>
+            </RStack>
+            <RStack>
               <Text>{data.description}</Text>
-            </View>
+            </RStack>
           </>
         );
       default:
@@ -110,5 +125,5 @@ export const DetailsComponent = ({
     }
   };
 
-  return <View>{renderDetails()}</View>;
+  return <RStack>{renderDetails()}</RStack>;
 };
