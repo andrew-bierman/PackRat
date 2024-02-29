@@ -13,6 +13,8 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useDate } from 'app/hooks/weather/useDate';
 import { defaultWeatherObject } from '../../constants/defaultWeatherObj';
 import { defaultWeekObj } from '../../constants/defaultWeekObj';
+import { loadStyles } from './WeatherCard.style';
+import { useWeatherInfo } from './useWeatherInfo';
 
 interface WeatherObject {
   name: string;
@@ -56,6 +58,25 @@ export default function WeatherCard({
   const { dateFormatted, day, restOfWeek } = useDate();
 
   const weatherIconUrl = `https://openweathermap.org/img/wn/${weatherObject.weather[0].icon}@2x.png`;
+
+  const precipitationInfo = useWeatherInfo(
+    'cloud-rain',
+    currentTheme.colors.weatherIcon,
+    'PRECIPITATION',
+    '0%',
+  );
+  const humidityInfo = useWeatherInfo(
+    'droplet',
+    currentTheme.colors.weatherIcon,
+    'HUMIDITY',
+    `${weatherObject.main.humidity}%`,
+  );
+  const windInfo = useWeatherInfo(
+    'wind',
+    currentTheme.colors.weatherIcon,
+    'WIND',
+    convertToKmh(weatherObject.wind.speed),
+  );
 
   return (
     <RStack
@@ -167,60 +188,9 @@ export default function WeatherCard({
         }}
       >
         <RStack style={styles.card}>
-          <RStack style={styles.weatherInfo}>
-            <RStack style={styles.iconsSection}>
-              <FontAwesome5
-                name="cloud-rain"
-                size={18}
-                color={currentTheme.colors.weatherIcon}
-              />
-              <RText
-                style={{
-                  color: currentTheme.colors.weatherIcon,
-                  fontWeight: 600,
-                }}
-              >
-                PRECIPITATION
-              </RText>
-            </RStack>
-            <RText>0%</RText>
-          </RStack>
-          <RStack style={styles.weatherInfo}>
-            <RStack style={styles.iconsSection}>
-              <Feather
-                name="droplet"
-                size={18}
-                color={currentTheme.colors.weatherIcon}
-              />
-              <RText
-                style={{
-                  color: currentTheme.colors.weatherIcon,
-                  fontWeight: 600,
-                }}
-              >
-                HUMIDITY
-              </RText>
-            </RStack>
-            <RText>{weatherObject.main.humidity}%</RText>
-          </RStack>
-          <RStack style={styles.weatherInfo}>
-            <RStack style={styles.iconsSection}>
-              <Feather
-                name="wind"
-                size={18}
-                color={currentTheme.colors.weatherIcon}
-              />
-              <RText
-                style={{
-                  color: currentTheme.colors.weatherIcon,
-                  fontWeight: 600,
-                }}
-              >
-                WIND
-              </RText>
-            </RStack>
-            <RText>{convertToKmh(weatherObject.wind.speed)}</RText>
-          </RStack>
+          {precipitationInfo}
+          {humidityInfo}
+          {windInfo}
         </RStack>
 
         <RStack
@@ -290,56 +260,4 @@ export default function WeatherCard({
 
 const formatDay = (day) => {
   return dayNumToString(day)?.slice?.(0, 3) || '';
-};
-
-const loadStyles = (theme) => {
-  const { currentTheme } = theme;
-  return {
-    desktopContainer: {
-      gap: 15,
-      alignItems: 'center',
-      justifyContent: 'space-around',
-      backgroundColor: currentTheme.colors.card,
-      padding: 30,
-      alignSelf: 'center',
-    },
-
-    card: {
-      gap: 10,
-      borderColor: currentTheme.colors.border,
-      borderWidth: 1,
-      padding: 18,
-      borderRadius: 8,
-      shadowColor: 'black',
-    },
-
-    cardContainer: {
-      alignItems: 'flex-start',
-      gap: 8,
-      borderColor: currentTheme.colors.border,
-      borderWidth: 1,
-      padding: 18,
-      borderRadius: 8,
-      shadowColor: 'black',
-      justifyContent: 'space-between',
-    },
-
-    weatherInfo: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      gap: 10,
-    },
-    weatherCard: {
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      gap: 10,
-    },
-    iconsSection: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: 15,
-      flex: 1,
-    },
-  };
 };

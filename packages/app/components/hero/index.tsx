@@ -4,6 +4,7 @@ import { ImageSourcePropType, Platform, View } from 'react-native';
 import { theme } from '../../theme';
 import { isObjectEmpty } from '../../utils/isObjectEmpty';
 import useCustomStyles from 'app/hooks/useCustomStyles';
+import { loadStyles } from './hero.style';
 
 interface HeroProps {
   children: React.JSX.Element;
@@ -41,23 +42,5 @@ const Hero = ({ children, imageDetails }: HeroProps) => {
     </View>
   );
 };
-
-const loadStyles = () => ({
-  heroContainer: {
-    backgroundRepeat: 'repeat',
-    backgroundSize: 'cover',
-
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
-  },
-  heroImage: {
-    width: '100%',
-    height: '100%',
-    resizeMode: 'cover',
-    opacity: 0.5,
-    position: 'absolute',
-  },
-});
 
 export default Hero;
