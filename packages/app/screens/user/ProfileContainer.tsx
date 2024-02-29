@@ -44,16 +44,13 @@ const Header = ({
   favoritesCount,
   isCurrentUser,
 }) => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    useTheme();
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
   const profileImage = user?.profileImage ?? null;
   const userRealName = user?.name ?? null;
   const userEmail = user?.email ?? null;
   const userEmailSplitFirstHalf = userEmail?.split('@')[0] ?? null;
-  const username = user?.username
-    ? `@${user?.username}`
-    : `@${userEmailSplitFirstHalf}`;
+  const username = user?.username ? `@${user?.username}` : `@${userEmailSplitFirstHalf}`;
 
   return (
     <View style={{ width: '90%', ...styles.infoSection }}>
@@ -65,7 +62,7 @@ const Header = ({
             <SettingsButton />
           </View>
         )}
-        <RStack style={{ alignItems: 'center', flex: '1' }}>
+        <RStack style={{ alignItems: 'center', flex: 1 }}>
           <View style={styles.userInfo}>
             {isLoading ? (
               <>
@@ -87,6 +84,7 @@ const Header = ({
               </>
             ) : (
               <>
+
                 <Avatar src={user?.profileImage} />
                 <RText style={{ marginTop: 16, ...styles.userName }}>
                   {userRealName}
@@ -185,11 +183,10 @@ export default function ProfileContainer({ id = null }) {
     isCurrentUser,
     error,
   } = useProfile(id);
-
+  
   return (
     <View>
-      <ScrollView nestedScrollEnabled={true}>
-        <ScrollView horizontal={true} contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <ScrollView >
           <RStack
             style={[
               styles.mainContainer,
@@ -257,7 +254,6 @@ export default function ProfileContainer({ id = null }) {
             </View>
           </RStack>
         </ScrollView>
-      </ScrollView>
     </View>
   );
 }
@@ -267,8 +263,9 @@ const loadStyles = (theme) => {
   return {
     mainContainer: {
       backgroundColor: currentTheme.colors.background,
-      flex: 1,
+      // flex: 1,
       alignItems: 'center',
+      justifyItems : "center",
       padding: 20,
     },
     infoSection: {

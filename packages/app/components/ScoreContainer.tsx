@@ -17,6 +17,7 @@ interface ScoreProgressChartProps {
   size?: number;
   strokeWidth?: number;
 }
+
 const ScoreProgressChart: React.FC<ScoreProgressChartProps> = ({
   score,
   size = 150,

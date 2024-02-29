@@ -1,4 +1,4 @@
-import { View } from 'react-native';
+import { GestureResponderEvent, View } from 'react-native';
 import { RCard } from '@packrat/ui';
 import React from 'react';
 import { theme } from '../../theme';
@@ -7,7 +7,7 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 
 interface SectionProps {
   children: React.ReactNode;
-  onPress?: () => void;
+  onPress: (event: GestureResponderEvent) => void;
 }
 const Section: React.FC<SectionProps> = ({ children, onPress }) => {
   const styles = useCustomStyles(loadStyles);

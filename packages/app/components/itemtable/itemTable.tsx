@@ -25,6 +25,7 @@ interface ItemsTableProps {
 }
 
 interface YourItemType {
+  global: string;
   name: string;
   weight: number;
   category?: { name: string };
@@ -76,6 +77,7 @@ export const ItemsTable = ({
       `${category?.name || type}`,
       <EditPackItemModal>
         <AddItem
+          _id={_id}
           isEdit={true}
           isItemPage
           initialData={itemData}

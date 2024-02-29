@@ -8,7 +8,6 @@ import { useEffect, useState, useRef, useMemo } from 'react';
 import { GearList } from '../../components/GearList/GearList';
 import { SaveTripContainer } from 'app/components/trip/createTripModal';
 import TripDateRange from 'app/components/trip/TripDateRange';
-// import { photonDetails } from '../../store/destinationStore';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useCardTrip } from 'app/hooks/trips/useTripCard';
@@ -17,7 +16,6 @@ import { useTripsData } from './useTripsData';
 export default function Trips() {
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
-  // const [parksData, setParksData] = useState();
   const [trails, setTrailsData] = useState();
 
   const form = useCardTrip();

@@ -1,5 +1,5 @@
 import { Link } from 'solito/link';
-import { RStack, RText, RButton, RSkeleton } from '@packrat/ui';
+import { RStack, RText, RButton, RSkeleton, VirtualList } from '@packrat/ui';
 import { VirtualizedList } from 'react-native';
 import UserDataCard from './UserDataCard';
 import React, { useEffect, useState } from 'react';
@@ -57,32 +57,28 @@ export default function UserDataContainer({
 
   const differentUser = userId && userId !== currentUser._id;
 
+  const card = (item, index) => {
+    return (
+      <UserDataCard
+        key={item.item._id}
+        {...item.item}
+        type={cardType}
+        state={dataState}
+        setState={setDataState}
+        index={index}
+        differentUser={differentUser}
+      />
+    )
+  }
+
   // Map function to render multiple skeleton cards
   const skeletonCards =
     SkeletonComponent ||
     [...Array(3)].map((_, idx) => <SkeletonUserDataCard key={idx} />);
 
-  if (isLoading) {
-    return (
-      <RStack
-        style={{
-          flexWrap: 'wrap',
-          justifyContent: 'center',
-          alignItems: 'center',
-          width: '100%',
-          padding: 4,
-        }}
-      >
-        {skeletonCards}
-      </RStack>
-    );
-  }
-
   return (
     <LargeCard
       customStyle={{
-        // backgroundColor: theme.colors.white,
-        // light transparent grey
         backgroundColor: hexToRGBA(currentTheme.colors.card, 0.2),
       }}
     >
@@ -90,6 +86,7 @@ export default function UserDataContainer({
         style={{
           gap: 16,
           alignItems: 'center',
+          justifyContent : "center",
           width: '100%',
           padding: 24,
         }}
@@ -103,8 +100,7 @@ export default function UserDataContainer({
           }}
         >
           {differentUser
-            ? // ? `${userId}'s ${typeUppercase}`
-              `${typeUppercase}`
+            ? `${typeUppercase}`
             : `Your ${typeUppercase}`}
         </RText>
         <RStack
@@ -120,47 +116,28 @@ export default function UserDataContainer({
           {isLoading ? (
             skeletonCards
           ) : data && data.length > 0 ? (
-            //   data?.map((dataItem, index) => (
-            //     <UserDataCard
-            //       key={dataItem._id}
-            //       {...{ ...dataItem }}
-            //       type={cardType}
-            //       state={dataState}
-            //       setState={setDataState}
-            //       index={index}
-            //       differentUser={differentUser}
-            //     />
-            //   ))
-            // )
-            <VirtualizedList
-              getItemCount={() => data.length}
-              getItem={(data, index) => data[index]}
-              nestedScrollEnabled={true}
-              data={data}
-              horizontal={true}
-              renderItem={({ item, index }) => (
-                <UserDataCard
-                  key={item._id}
-                  {...item}
-                  type={cardType}
-                  state={dataState}
-                  setState={setDataState}
-                  index={index}
-                  differentUser={differentUser}
-                />
-              )}
-              keyExtractor={(item) => item._id}
-              maxToRenderPerBatch={2}
-              contentContainerStyle={{
-                flex: 1,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            />
+            <>
+              <VirtualizedList
+                showsHorizontalScrollIndicator={false}
+                showsVerticalScrollIndicator={false}
+                getItemCount={() => data.length}
+                getItem={(data, index) => data[index]}
+                data={data}
+                keyExtractor={(item) => item._id}
+                renderItem={card}
+                scrollEnabled={true}
+                maxToRenderPerBatch={2}
+                horizontal={true}
+                contentContainerStyle={{
+                  paddingHorizontal : 3,
+                  paddingVertical : 3
+                }}
+              />
+            </>
           ) : currentUser?._id === userId ? (
             <Link href="/">
               <RButton
-                style={{ color: currentTheme.colors.white, width: '100%' }}
+                style={{ color: currentTheme.colors.white,  }}
               >
                 {`Create your first ${typeUppercaseSingular}`}
               </RButton>

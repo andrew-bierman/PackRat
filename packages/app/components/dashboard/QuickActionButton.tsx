@@ -8,7 +8,7 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 
 interface QuickActionButtonProps {
   onPress: () => void;
-  iconName: string;
+  iconName: keyof typeof MaterialIcons.glyphMap;
   text: string;
 }
 

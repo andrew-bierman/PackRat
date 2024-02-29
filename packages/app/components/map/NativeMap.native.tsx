@@ -348,7 +348,6 @@ const loadStyles = () => ({
     width: '100%',
     backgroundColor: 'white',
     marginBottom: 20,
-    marginBottom: 20,
     paddingHorizontal: 5,
   },
   map: {

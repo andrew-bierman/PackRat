@@ -13,7 +13,7 @@ import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 import { theme } from 'app/theme';
 import useTheme from 'app/hooks/useTheme';
 import ErrorBoundary from '@packrat/ui';
-import { useCustomStyles } from 'app/hooks/useCustomStyles';
+import useCustomStyles from 'app/hooks/useCustomStyles';
 
 Mapbox.setAccessToken(MAPBOX_ACCESS_TOKEN);
 

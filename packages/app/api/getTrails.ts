@@ -1,5 +1,6 @@
 import { X_RAPIDAPI_KEY } from '@env';
 import axios from 'app/config/axios';
+import { api } from 'constants/api';
 import osmtogeojson from 'osmtogeojson';
 
 /**
@@ -38,7 +39,7 @@ export const getTrailsRapid = async (
     });
 
     if (trailsArray[1] !== undefined) {
-      trailsArray = trailsArray[1]?.map((trail: any) => trail.name);
+      trailsArray = trailsArray.map((trail: any) => trail.name);
     } else {
       trailsArray = [];
     }

@@ -1,8 +1,21 @@
 import { createContext, useContext, useState } from 'react';
 
-export const ModalContext = createContext({});
+interface ModalProviderProps {
+  children?: any;
+  isModalOpen: boolean;
+  setIsModalOpen: (value: boolean) => void;
+}
 
-export const ModalProvider = ({ children, isModalOpen, setIsModalOpen }) => {
+export const ModalContext = createContext<ModalProviderProps>({
+  isModalOpen: false,
+  setIsModalOpen: () => {},
+});
+
+export const ModalProvider = ({
+  children,
+  isModalOpen,
+  setIsModalOpen,
+}: ModalProviderProps) => {
   const _value = { isModalOpen, setIsModalOpen };
 
   return (

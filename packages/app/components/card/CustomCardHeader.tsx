@@ -35,7 +35,7 @@ export const CustomCardHeader = ({ data, title, link, actionsComponent }) => {
                   name="check"
                   size={24}
                   color="green"
-                  onPress={handleCopyLink}
+                  onPress={() => handleCopyLink(link)}
                 />
                 <RText color="green">Copied</RText>
               </View>
@@ -45,7 +45,7 @@ export const CustomCardHeader = ({ data, title, link, actionsComponent }) => {
                   name="link"
                   size={24}
                   color="black"
-                  onPress={handleCopyLink}
+                  onPress={() => handleCopyLink(link)}
                 />
                 <RText color="black">Copy</RText>
               </View>

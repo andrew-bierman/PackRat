@@ -18,7 +18,7 @@ import {
   loadStyles,
 } from './TripDetailsComponents';
 
-const { useParam } = createParam();
+const { useParams } = createParam();
 
 export function TripDetails() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =

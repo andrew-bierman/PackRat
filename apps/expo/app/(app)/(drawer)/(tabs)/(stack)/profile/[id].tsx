@@ -6,7 +6,6 @@ import Head from 'expo-router/head';
 
 const Profile = () => {
   const { id } = useSearchParams();
-
   return (
     <>
       {Platform.OS === 'web' && (
