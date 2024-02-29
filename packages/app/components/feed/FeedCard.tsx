@@ -106,11 +106,17 @@ export default function Card({
   return (
     <ContextMenu.Root>
       <ContextMenu.Trigger>
-        <View style={{ alignItems: 'center', padding: 16 }}>
+        <View
+          style={{
+            alignItems: 'center',
+            padding: 16,
+            flex: 1,
+          }}
+        >
           <View
             style={{
-              minHeight: 150,
-              minWidth: 300,
+              width: '100%',
+              maxWidth: 600,
               marginVertical: 'auto',
               borderRadius: 15,
               overflow: 'hidden',
@@ -130,8 +136,13 @@ export default function Card({
                       width: '100%',
                     }}
                   >
-                    <Link href={type === 'pack' ? '/pack/' + _id : '/trip/' + _id}>
-                      <RText fontSize={18} color={currentTheme.colors.textColor}>
+                    <Link
+                      href={type === 'pack' ? '/pack/' + _id : '/trip/' + _id}
+                    >
+                      <RText
+                        fontSize={18}
+                        color={currentTheme.colors.textColor}
+                      >
                         {truncatedName}
                       </RText>
                     </Link>
@@ -173,25 +184,13 @@ export default function Card({
                 </RHeading>
 
                 {type === 'pack' && (
-                  <RText
-                    fontSize="$1"
-                    color="mediumpurple"
-                    fontWeight="500"
-                    ml={-0.5}
-                    mt={-1}
-                  >
+                  <RText fontSize="$1" color="mediumpurple" ml={-0.5} mt={-1}>
                     Total Weight: {formattedWeight}
                   </RText>
                 )}
 
                 {type === 'trip' && (
-                  <RText
-                    fontSize="$1"
-                    color="mediumpurple"
-                    fontWeight="500"
-                    ml={-0.5}
-                    mt={-1}
-                  >
+                  <RText fontSize="$1" color="mediumpurple" ml={-0.5} mt={-1}>
                     {truncatedDestination}
                   </RText>
                 )}
@@ -230,7 +229,7 @@ export default function Card({
                         gap: 100,
                       }}
                     >
-                      <RText fontSize="$1" color="gray" fontWeight="400" flex={1}>
+                      <RText fontSize="$1" color="gray" flex={1}>
                         {formatDistanceToNow(
                           new Date(
                             !Number.isNaN(new Date(createdAt).getTime())
@@ -253,7 +252,10 @@ export default function Card({
                   >
                     {type === 'pack' && (
                       <View>
-                        <RText fontSize="$2" color={currentTheme.colors.textColor}>
+                        <RText
+                          fontSize="$2"
+                          color={currentTheme.colors.textColor}
+                        >
                           Favorites
                         </RText>
                         <View
@@ -289,7 +291,10 @@ export default function Card({
                     )}
                     {type === 'trip' && (
                       <View>
-                        <RText fontSize="$2" color={currentTheme.colors.textColor}>
+                        <RText
+                          fontSize="$2"
+                          color={currentTheme.colors.textColor}
+                        >
                           Nights
                         </RText>
                         <RText
@@ -311,14 +316,21 @@ export default function Card({
         </View>
       </ContextMenu.Trigger>
       <ContextMenu.Content>
-        <ContextMenu.Item textValue={`View ${type}`} key="view" onSelect={() => {
-          push(type === 'pack' ? '/pack/' + _id : '/trip/' + _id)
-        }}>
-          <ContextMenu.ItemTitle>
-            View {type}
-          </ContextMenu.ItemTitle>
+        <ContextMenu.Item
+          textValue={`View ${type}`}
+          key="view"
+          onSelect={() => {
+            push(type === 'pack' ? '/pack/' + _id : '/trip/' + _id);
+          }}
+        >
+          <ContextMenu.ItemTitle>View {type}</ContextMenu.ItemTitle>
         </ContextMenu.Item>
-        <ContextMenu.Item key="owner" onSelect={() => { push(`/profile/${owner_id}`) }}>
+        <ContextMenu.Item
+          key="owner"
+          onSelect={() => {
+            push(`/profile/${owner_id}`);
+          }}
+        >
           View owner
         </ContextMenu.Item>
       </ContextMenu.Content>
