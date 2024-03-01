@@ -16,7 +16,7 @@
     "start": "yarn run wrangler:dev",
     "test:expect": "mocha 'generated/test/**/*.spec.js'",
     "test:generate": "npx openapi-generator url http://localhost:3000/swagger.json -d ./generated -t javascript",
-    "test": "jest"
+    "test": "jest",
     "prisma:format": "npx prisma format --schema=src/prisma/schema.prisma",
     "prisma:generate": "npx prisma generate --schema=src/prisma/schema.prisma --data-proxy",
     "prisma:validate": "npx prisma validate --schema=src/prisma/schema.prisma",
@@ -108,7 +108,7 @@
     "typescript": "^5.2.2",
     "uuid": "^9.0.0",
     "validator": "^13.9.0",
-    "wrangler": "^3.28.3",
+    "wrangler": "^3.30.1",
     "zod": "^3.22.2"
   },
   "devDependencies": {
