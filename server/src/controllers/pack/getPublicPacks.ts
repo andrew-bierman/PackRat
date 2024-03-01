@@ -3,6 +3,7 @@ import { PackNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { getPublicPacksService } from '../../services/pack/pack.service';
 import { z } from 'zod';
+import { QueryType } from '../../helpers/queryTypeEnum'
 
 /**
  * Retrieves public packs based on the given query parameter.
@@ -12,9 +13,9 @@ import { z } from 'zod';
  */
 export const getPublicPacks = async (req, res, next) => {
   try {
-    const { queryBy } = req.query;
+    const { queryBy, type, pageSize, cursor } = req.query;
 
-    const publicPacks = await getPublicPacksService(queryBy);
+    const publicPacks = await getPublicPacksService(queryBy, type, pageSize, cursor);
 
     res.locals.data = publicPacks;
     responseHandler(res);
@@ -25,9 +26,9 @@ export const getPublicPacks = async (req, res, next) => {
 
 export function getPublicPacksRoute() {
   return publicProcedure
-    .input(z.object({ queryBy: z.string() }))
+    .input(z.object({ queryBy: z.string(), type: z.string().optional(), pageSize: z.number().optional(), cursor: z.number().optional() }))
     .query(async (opts) => {
-      const { queryBy } = opts.input;
-      return await getPublicPacksService(queryBy);
+      const { queryBy, type = QueryType.Default, pageSize, cursor } = opts.input;
+      return await getPublicPacksService(queryBy, pageSize, type, cursor);
     });
 }
