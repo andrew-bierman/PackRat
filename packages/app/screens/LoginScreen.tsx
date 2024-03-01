@@ -8,7 +8,7 @@ import {
   RIconButton,
   ScrollView,
   Form,
-  CustomInput,
+  FormInput,
   SubmitButton,
 } from '@packrat/ui';
 import { FontAwesome } from '@expo/vector-icons';
@@ -66,12 +66,12 @@ export default function Login() {
               validationSchema={userSignInSchema}
               style={{ marginTop: 16, gap: 8 }}
             >
-              <CustomInput
+              <FormInput
                 label="Email ID"
                 keyboardType="email-address"
                 name="email"
               />
-              <CustomInput label="Password" secureTextEntry name="password" />
+              <FormInput label="Password" secureTextEntry name="password" />
 
               <SubmitButton
                 style={{ marginTop: 16, backgroundColor: 'mediumpurple' }}

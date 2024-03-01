@@ -12,7 +12,7 @@ import {
   RButton,
   RInput,
   Form,
-  CustomInput,
+  FormInput,
 } from '@packrat/ui';
 import { AntDesign } from '@expo/vector-icons';
 import DropdownComponent from 'app/components/Dropdown';
@@ -61,7 +61,7 @@ const FeedSearchFilter = ({
             space={3}
             style={{ flexDirection: 'row', justifyContent: 'center' }}
           >
-            <CustomInput
+            <FormInput
               placeholder={`Search ${feedType || 'Feed'}`}
               name="search"
             />

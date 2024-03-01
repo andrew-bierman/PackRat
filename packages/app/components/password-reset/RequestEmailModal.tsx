@@ -2,7 +2,7 @@ import React from 'react';
 import {
   BaseModal,
   Form,
-  CustomInput,
+  FormInput,
   RInput,
   useFormSubmitTrigger,
 } from '@packrat/ui';
@@ -42,7 +42,7 @@ export const RequestPasswordResetEmailModal = () => {
         onSubmit={handleResetPasswordEmail}
         validationSchema={emailExists}
       >
-        <CustomInput
+        <FormInput
           placeholder="Email"
           autoCapitalize="none"
           keyboardType="email-address"

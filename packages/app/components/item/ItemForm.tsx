@@ -3,7 +3,7 @@ import {
   RText,
   RStack,
   Form,
-  CustomInput,
+  FormInput,
   SubmitButton,
   CustomSelect,
   CustomRadioGroup,
@@ -63,7 +63,7 @@ export const ItemForm = ({
     <View>
       <Form validationSchema={validationSchema} defaultValues={defaultValues}>
         <RStack style={{ gap: 8 }}>
-          <CustomInput
+          <FormInput
             name="name"
             placeholder="Item Name"
             style={{ width: '100%' }}
@@ -77,7 +77,7 @@ export const ItemForm = ({
             }}
           >
             <View>
-              <CustomInput name="weight" placeholder="Weight" />
+              <FormInput name="weight" placeholder="Weight" />
             </View>
             {data && (
               <CustomSelect
@@ -89,7 +89,7 @@ export const ItemForm = ({
               />
             )}
           </View>
-          <CustomInput
+          <FormInput
             name="quantity"
             placeholder="Quantity"
             style={{ width: '100%' }}

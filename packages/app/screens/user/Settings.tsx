@@ -11,7 +11,7 @@ import {
   RLabel,
   Form,
   ImageUpload,
-  CustomInput,
+  FormInput,
   CustomSelect,
 } from '@packrat/ui';
 import Avatar from 'app/components/Avatar/Avatar';
@@ -58,16 +58,16 @@ export default function Settings() {
             <RStack space="$3" style={{ flexDirection: 'row' }}>
               <RStack space="$2">
                 <RLabel htmlFor="firstName">Name</RLabel>
-                <CustomInput id="name" name="name" />
+                <FormInput id="name" name="name" />
               </RStack>
               <RStack space="$2">
                 <RLabel htmlFor="username">Username</RLabel>
-                <CustomInput id="username" name="username" />
+                <FormInput id="username" name="username" />
               </RStack>
             </RStack>
             <RStack space="$2">
               <RLabel htmlFor="email">Email</RLabel>
-              <CustomInput id="email" name="email" />
+              <FormInput id="email" name="email" />
             </RStack>
             <RStack space="$2">
               <RH5>Preferred units</RH5>
@@ -105,7 +105,7 @@ export default function Settings() {
           <RStack space="$3" width="100%" marginHorizontal="auto">
             <RStack space="$2">
               <RLabel htmlFor="oldPassword">Old password</RLabel>
-              <CustomInput
+              <FormInput
                 id="oldPassword"
                 name="oldPassword"
                 secureTextEntry={true}
@@ -113,7 +113,7 @@ export default function Settings() {
             </RStack>
             <RStack space="$2">
               <RLabel htmlFor="newPassword">New password</RLabel>
-              <CustomInput
+              <FormInput
                 id="newPassword"
                 name="newPassword"
                 secureTextEntry={true}
@@ -121,7 +121,7 @@ export default function Settings() {
             </RStack>
             <RStack space="$2">
               <RLabel htmlFor="confirmPassword">Confirm new password</RLabel>
-              <CustomInput
+              <FormInput
                 id="confirmPassword"
                 name="confirmPassword"
                 secureTextEntry={true}

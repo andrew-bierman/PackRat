@@ -11,7 +11,7 @@ import useTheme from '../../hooks/useTheme';
 import {
   BaseModal,
   Form,
-  CustomInput,
+  FormInput,
   CustomSelect,
   RStack,
   SubmitButton,
@@ -168,7 +168,7 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
         <MessageList messages={parsedMessages} />
         <Form validationSchema={sendMessage}>
           <RStack style={{ marginTop: 16, gap: 8 }}>
-            <CustomInput name="message" placeholder="Type a message..." />
+            <FormInput name="message" placeholder="Type a message..." />
             <SubmitButton onSubmit={handleSendMessage}>
               <Text style={styles.sendText}>Send</Text>
             </SubmitButton>

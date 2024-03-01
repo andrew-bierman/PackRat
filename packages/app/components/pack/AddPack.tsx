@@ -5,7 +5,7 @@ import {
   RLabel,
   Form,
   CustomSelect,
-  CustomInput,
+  FormInput,
 } from '@packrat/ui';
 import { BaseModal } from '@packrat/ui';
 import useTheme from '../../hooks/useTheme';
@@ -59,7 +59,7 @@ export const AddPack = ({ isCreatingTrip = false }) => {
           defaultValues={{ isPublic: '0', name: '' }}
           validationSchema={addPackSchema}
         >
-          <CustomInput
+          <FormInput
             placeholder="Name"
             name="name"
             label="Name"

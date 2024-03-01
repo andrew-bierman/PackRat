@@ -10,7 +10,7 @@ import {
   InputTextRules,
   ScrollView,
   Form,
-  CustomInput,
+  FormInput,
   SubmitButton,
 } from '@packrat/ui';
 import { FontAwesome } from '@expo/vector-icons';
@@ -46,17 +46,17 @@ export default function Register() {
           </RHeading>
           <Form validationSchema={userSignUp}>
             <RStack style={{ marginTop: 16, gap: 8 }}>
-              <CustomInput label="Name" name="name" />
+              <FormInput label="Name" name="name" />
 
-              <CustomInput
+              <FormInput
                 label="Email ID"
                 keyboardType="email-address"
                 name="email"
               />
 
-              <CustomInput label="Username" name="username" />
+              <FormInput label="Username" name="username" />
 
-              <CustomInput label="Password" secureTextEntry name="password" />
+              <FormInput label="Password" secureTextEntry name="password" />
 
               <SubmitButton
                 onSubmit={registerUser}

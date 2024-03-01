@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {
   BaseModal,
   Form,
-  CustomInput,
+  FormInput,
   CustomSelect,
   RInput,
   RStack,
@@ -161,8 +161,8 @@ export const SaveTripContainer = ({
         defaultValues={{ isPublic: '0' }}
       >
         <RStack style={{ gap: 8 }}>
-          <CustomInput placeholder="Trip Name" name="name" />
-          <CustomInput placeholder="Trip Description" name="description" />
+          <FormInput placeholder="Trip Name" name="name" />
+          <FormInput placeholder="Trip Description" name="description" />
           <>
             {/* <Text mt={4}>Duration</Text>
           <Input
