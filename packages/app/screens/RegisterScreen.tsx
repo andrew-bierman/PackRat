@@ -8,7 +8,7 @@ import {
   RIconButton,
   InputText,
   InputTextRules,
-  ScrollView,
+  RScrollView,
   Form,
   FormInput,
   SubmitButton,
@@ -30,7 +30,9 @@ export default function Register() {
   const { promptAsync } = useGoogleAuth();
 
   return (
-    <ScrollView contentContainerStyle={{ paddingBottom: 20 }}>
+    <RScrollView
+      contentContainerStyle={{ paddingBottom: 20, backgroundColor: 'white' }}
+    >
       <View style={{ width: '100%', alignItems: 'center' }}>
         <View style={{ paddingTop: 32, width: '90%', maxWidth: 290 }}>
           <RHeading fontSize={32} color="#212121" fontWeight="semibold">
@@ -128,6 +130,6 @@ export default function Register() {
           </Form>
         </View>
       </View>
-    </ScrollView>
+    </RScrollView>
   );
 }

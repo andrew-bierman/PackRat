@@ -17,6 +17,29 @@ export const createContext = (honoContext: Context) => async () => {
   };
 };
 
-export type ExtendedContext = ReturnType<ReturnType<typeof createContext>>;
+/**
+ * Defines your inner context shape.
+ * Add fields here that the inner context brings.
+ */
+interface CreateInnerContextOptions {
+  user?: any; // Replace `any` with your actual user type
+}
+
+/**
+ * Inner context. Will always be available in your procedures, in contrast to the outer context.
+ *
+ * Also useful for:
+ * - testing, so you don't have to mock Next.js' `req`/`res`
+ * - tRPC's `createServerSideHelpers` where we don't have `req`/`res`
+ *
+ * @link https://trpc.io/docs/v11/context#inner-and-outer-context
+ */
+export async function createContextInner(opts: CreateInnerContextOptions = {}) {
+  return {
+    user: opts.user,
+  };
+}
+
+export type ExtendedContext = Awaited<ReturnType<typeof createContextInner>>;
 
 export const getDB = () => DB;

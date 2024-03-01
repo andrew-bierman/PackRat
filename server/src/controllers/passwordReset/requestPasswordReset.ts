@@ -29,13 +29,12 @@ export function requestPasswordResetEmailAndTokenRoute() {
         clientUrl,
         user.id,
       );
-      const resetUrl = `${CLIENT_URL}/password-reset?token=${resetToken}`;
-      sendPasswordResetEmail(email, resetUrl);
+      resetEmail(email, resetUrl, env.SMTP_EMAIL, env.SENDGRID_API_KEY);
 
       //* returning resetToken for Test environment
       return {
         message: 'Password reset email sent successfully',
-        resetToken: (process.env.NODE_ENV = 'test' && resetToken),
+        // resetToken: (process.env.NODE_ENV === 'test' ? resetToken : null),
       };
     });
 }

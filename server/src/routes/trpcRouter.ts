@@ -1,7 +1,6 @@
 import { getPhotonDetailsRoute } from './../controllers/getOsm/getPhotonDetails';
 
 import { googleSigninRoute } from '../controllers/passport';
-import { router as trpcRouter, createCallerFactory } from '../trpc';
 
 import {
   userSignInRoute,
@@ -86,6 +85,7 @@ import {
   router as trpcRouter,
   publicProcedure,
   protectedProcedure,
+  createCallerFactory,
 } from '../trpc';
 import { z } from 'zod';
 
