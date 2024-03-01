@@ -4841,15 +4841,15 @@ __metadata:
     "@shopify/flash-list": "npm:^1.6.1"
     "@tamagui-extras/core": "npm:^1.11.0"
     "@tamagui-extras/form": "npm:^1.16.0"
-    "@tamagui/animations-react-native": "npm:^1.89.20"
-    "@tamagui/build": "npm:^1.89.20"
-    "@tamagui/font-inter": "npm:^1.89.20"
-    "@tamagui/progress": "npm:^1.89.20"
-    "@tamagui/react-native-media-driver": "npm:^1.89.20"
-    "@tamagui/shorthands": "npm:^1.89.20"
-    "@tamagui/switch": "npm:^1.89.20"
-    "@tamagui/themes": "npm:^1.89.20"
-    "@tamagui/toast": "npm:^1.89.20"
+    "@tamagui/animations-react-native": "npm:^1.90.15"
+    "@tamagui/build": "npm:^1.90.15"
+    "@tamagui/font-inter": "npm:^1.90.15"
+    "@tamagui/progress": "npm:^1.90.15"
+    "@tamagui/react-native-media-driver": "npm:^1.90.15"
+    "@tamagui/shorthands": "npm:^1.90.15"
+    "@tamagui/switch": "npm:^1.90.15"
+    "@tamagui/themes": "npm:^1.90.15"
+    "@tamagui/toast": "npm:^1.90.15"
     "@tanstack/react-table": "npm:^8.10.7"
     "@tanstack/react-virtual": "npm:3.0.0-beta.54"
     esbuild: "npm:^0.19.5"
@@ -4857,7 +4857,7 @@ __metadata:
     jotai: "npm:^2.6.4"
     react: "npm:^18.2.0"
     react-hook-form: "npm:^7.50.1"
-    tamagui: "npm:^1.89.20"
+    tamagui: "npm:^1.90.15"
     zeego: "npm:^1.7.2"
   languageName: unknown
   linkType: soft
@@ -7407,9 +7407,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/accordion@npm:1.89.26":
-  version: 1.89.26
-  resolution: "@tamagui/accordion@npm:1.89.26"
+"@tamagui/accordion@npm:1.90.15":
+  version: 1.90.15
+  resolution: "@tamagui/accordion@npm:1.90.15"
   dependencies:
     "@tamagui/collapsible": "npm:1.90.15"
     "@tamagui/collection": "npm:1.90.15"
