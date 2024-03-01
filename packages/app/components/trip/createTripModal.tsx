@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
   BaseModal,
-  CustomForm,
+  Form,
   CustomInput,
   CustomSelect,
   RInput,
@@ -154,7 +154,7 @@ export const SaveTripContainer = ({
         },
       ]}
     >
-      <CustomForm
+      <Form
         validationSchema={addTripForm}
         formRef={formRef}
         onSubmit={handleCreateTrip}
@@ -252,7 +252,7 @@ export const SaveTripContainer = ({
             )}
           </RStack>
         </RStack>
-      </CustomForm>
+      </Form>
     </BaseModal>
   );
 };

@@ -2,7 +2,7 @@ import React from 'react';
 import {
   RText,
   RStack,
-  CustomForm,
+  Form,
   CustomInput,
   SubmitButton,
   CustomSelect,
@@ -61,10 +61,7 @@ export const ItemForm = ({
 
   return (
     <View>
-      <CustomForm
-        validationSchema={validationSchema}
-        defaultValues={defaultValues}
-      >
+      <Form validationSchema={validationSchema} defaultValues={defaultValues}>
         <RStack style={{ gap: 8 }}>
           <CustomInput
             name="name"
@@ -112,7 +109,7 @@ export const ItemForm = ({
           )}
         </RStack>
         <Test />
-      </CustomForm>
+      </Form>
     </View>
   );
 };

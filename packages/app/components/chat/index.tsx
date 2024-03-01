@@ -10,7 +10,7 @@ import {
 import useTheme from '../../hooks/useTheme';
 import {
   BaseModal,
-  CustomForm,
+  Form,
   CustomInput,
   CustomSelect,
   RStack,
@@ -119,7 +119,7 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
     <View style={styles.container}>
       <RStack style={{ alignItems: 'center' }}>
         {showChatSelector && (
-          <CustomForm validationSchema={sendMessage}>
+          <Form validationSchema={sendMessage}>
             <>
               {options?.length ? (
                 <>
@@ -134,7 +134,7 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
                 <Text>You don't have conversations yet</Text>
               )}
             </>
-          </CustomForm>
+          </Form>
           // <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           //   <Box
           //     borderRadius="lg"
@@ -166,14 +166,14 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
           // </ScrollView>
         )}
         <MessageList messages={parsedMessages} />
-        <CustomForm validationSchema={sendMessage}>
+        <Form validationSchema={sendMessage}>
           <RStack style={{ marginTop: 16, gap: 8 }}>
             <CustomInput name="message" placeholder="Type a message..." />
             <SubmitButton onSubmit={handleSendMessage}>
               <Text style={styles.sendText}>Send</Text>
             </SubmitButton>
           </RStack>
-        </CustomForm>
+        </Form>
       </RStack>
     </View>
   );

@@ -7,7 +7,7 @@ import {
   RText,
   RIconButton,
   ScrollView,
-  CustomForm,
+  Form,
   CustomInput,
   SubmitButton,
 } from '@packrat/ui';
@@ -62,7 +62,7 @@ export default function Login() {
               Sign in to continue!
             </RHeading>
 
-            <CustomForm
+            <Form
               validationSchema={userSignInSchema}
               style={{ marginTop: 16, gap: 8 }}
             >
@@ -79,7 +79,7 @@ export default function Login() {
               >
                 Sign in
               </SubmitButton>
-            </CustomForm>
+            </Form>
             <RStack
               style={{
                 marginTop: 16,

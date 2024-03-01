@@ -2,7 +2,7 @@ import { type ReactNode } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   FieldValues,
-  Form,
+  Form as RHFForm,
   FormProvider,
   FormSubmitHandler,
   UseFormProps,
@@ -20,7 +20,7 @@ interface Props extends Omit<UseFormProps, 'resolver'> {
 
 // TODO change the name to "Form" after handling tamagui all components export,
 // which is cause of a name collision
-export const CustomForm = ({
+export const Form = ({
   validationSchema,
   onSubmit,
   children,
@@ -41,7 +41,7 @@ export const CustomForm = ({
 
   return (
     <FormProvider {...form}>
-      <Form onSubmit={form.handleSubmit(onSubmit)}>{children}</Form>
+      <RHFForm onSubmit={form.handleSubmit(onSubmit)}>{children}</RHFForm>
     </FormProvider>
   );
 };

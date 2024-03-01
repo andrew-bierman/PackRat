@@ -9,7 +9,7 @@ import {
   RH2,
   RScrollView,
   RLabel,
-  CustomForm,
+  Form,
   ImageUpload,
   CustomInput,
   CustomSelect,
@@ -44,7 +44,7 @@ export default function Settings() {
           <RH2>Profile</RH2>
           <RSeparator marginVertical={8} />
         </RStack>
-        <CustomForm
+        <Form
           onSubmit={handleEditUser}
           validationSchema={userSettingsSchema}
           defaultValues={{ ...user }}
@@ -94,14 +94,14 @@ export default function Settings() {
               Update profile
             </RButton>
           </RStack>
-        </CustomForm>
+        </Form>
 
         <RStack marginTop={20} marginBottom={10}>
           <RH2>Change Password</RH2>
           <RSeparator marginVertical={8} />
           <RText fontSize={16}>We will email you to verify the change.</RText>
         </RStack>
-        <CustomForm validationSchema={passwordChangeSchema}>
+        <Form validationSchema={passwordChangeSchema}>
           <RStack space="$3" width="100%" marginHorizontal="auto">
             <RStack space="$2">
               <RLabel htmlFor="oldPassword">Old password</RLabel>
@@ -131,7 +131,7 @@ export default function Settings() {
               Change password
             </RButton>
           </RStack>
-        </CustomForm>
+        </Form>
       </RStack>
     </RScrollView>
   ) : null;

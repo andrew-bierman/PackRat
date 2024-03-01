@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   BaseModal,
-  CustomForm,
+  Form,
   CustomInput,
   RInput,
   useFormSubmitTrigger,
@@ -37,7 +37,7 @@ export const RequestPasswordResetEmailModal = () => {
         },
       ]}
     >
-      <CustomForm
+      <Form
         formRef={formRef}
         onSubmit={handleResetPasswordEmail}
         validationSchema={emailExists}
@@ -48,7 +48,7 @@ export const RequestPasswordResetEmailModal = () => {
           keyboardType="email-address"
           name="email"
         />
-      </CustomForm>
+      </Form>
       {/* <Center w="100%">
                 <Box safeArea p="2" py="8" w="90%" maxW="290">
                     {/* <Heading

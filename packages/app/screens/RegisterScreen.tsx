@@ -9,7 +9,7 @@ import {
   InputText,
   InputTextRules,
   ScrollView,
-  CustomForm,
+  Form,
   CustomInput,
   SubmitButton,
 } from '@packrat/ui';
@@ -44,7 +44,7 @@ export default function Register() {
           >
             Sign up to continue!
           </RHeading>
-          <CustomForm validationSchema={userSignUp}>
+          <Form validationSchema={userSignUp}>
             <RStack style={{ marginTop: 16, gap: 8 }}>
               <CustomInput label="Name" name="name" />
 
@@ -125,7 +125,7 @@ export default function Register() {
               </RStack>
               {/* Google register */}
             </RStack>
-          </CustomForm>
+          </Form>
         </View>
       </View>
     </ScrollView>

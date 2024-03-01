@@ -11,7 +11,7 @@ import {
   RSeparator,
   RButton,
   RInput,
-  CustomForm,
+  Form,
   CustomInput,
 } from '@packrat/ui';
 import { AntDesign } from '@expo/vector-icons';
@@ -56,7 +56,7 @@ const FeedSearchFilter = ({
   return (
     <View style={styles.filterContainer}>
       <View style={styles.searchContainer}>
-        <CustomForm onSubmit={onSearch}>
+        <Form onSubmit={onSearch}>
           <RStack
             space={3}
             style={{ flexDirection: 'row', justifyContent: 'center' }}
@@ -76,7 +76,7 @@ const FeedSearchFilter = ({
               }
             />
           </RStack>
-        </CustomForm>
+        </Form>
       </View>
       <RSeparator />
       <RStack

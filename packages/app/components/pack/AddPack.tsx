@@ -3,7 +3,7 @@ import {
   RButton,
   RText,
   RLabel,
-  CustomForm,
+  Form,
   CustomSelect,
   CustomInput,
 } from '@packrat/ui';
@@ -54,7 +54,7 @@ export const AddPack = ({ isCreatingTrip = false }) => {
   return (
     <View style={styles.container}>
       <View style={styles.mobileStyle}>
-        <CustomForm
+        <Form
           onSubmit={handleAddPack}
           defaultValues={{ isPublic: '0', name: '' }}
           validationSchema={addPackSchema}
@@ -80,7 +80,7 @@ export const AddPack = ({ isCreatingTrip = false }) => {
               {isLoading ? 'Loading...' : 'Add Pack'}
             </RText>
           </RButton>
-        </CustomForm>
+        </Form>
 
         {isError && <RText>Pack already exists</RText>}
       </View>
