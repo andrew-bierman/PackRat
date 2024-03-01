@@ -95,7 +95,9 @@ export default function TripCard({
       </RStack>
       {isMap ? (
         isLoading ? (
-          <Text>Loading....</Text>
+          <RStack>
+            <Text>Loading....</Text>
+          </RStack>
         ) : (
           <MapContainer shape={shape} />
         )

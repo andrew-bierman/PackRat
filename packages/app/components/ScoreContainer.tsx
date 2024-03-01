@@ -197,7 +197,9 @@ export const ScoreContainer: React.FC<ScoreContainerProps> = ({
 
   return (
     <Box style={styles.box}>
-      <HStack style={[styles.hStack, !isWeb && {flexDirection: 'column', gap: 10}]}>
+      <HStack
+        style={[styles.hStack, !isWeb && { flexDirection: 'column', gap: 10 }]}
+      >
         <VStack style={styles.vStack}>
           <Text style={styles.scoreText}>
             {isAlreadyScored ? title : 'Score this pack!'}

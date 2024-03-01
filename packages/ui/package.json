@@ -41,6 +41,6 @@
     "zeego": "^1.7.2"
   },
   "devDependencies": {
-    "@tamagui/build": "^1.89.20"
+    "@tamagui/build": "^1.90.15"
   }
 }

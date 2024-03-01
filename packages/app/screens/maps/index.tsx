@@ -11,6 +11,7 @@ import {
   getShapeSourceBounds,
 } from 'app/utils/mapFunctions';
 import { api } from 'app/constants/api';
+import { RStack } from '@packrat/ui';
 
 function CircleCapComp() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
@@ -113,7 +114,9 @@ export default function DownloadedMaps() {
           })}
         </View>
       ) : (
-        <Text>loading...</Text>
+        <RStack>
+          <Text>loading...</Text>
+        </RStack>
       )}
       {showMap ? (
         <Modal visible={true}>
