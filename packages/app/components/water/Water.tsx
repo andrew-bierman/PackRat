@@ -1,10 +1,5 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import {
-  RButton as Button,
-  RInput as Input,
-  RText as Text,
-  RStack as Box,
-} from '@packrat/ui';
+import { RButton, RInput, RText, RStack } from '@packrat/ui';
 import React from 'react';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useWater } from 'app/hooks/water';
@@ -19,8 +14,8 @@ export default function Water({ currentPack, setWaterItem }: WaterProps) {
   const styles = useCustomStyles(loadStyles);
 
   return (
-    <Box style={styles.waterContainer}>
-      <Box
+    <RStack style={styles.waterContainer}>
+      <RStack
         style={{
           display: 'flex',
           flexDirection: 'row',
@@ -33,8 +28,8 @@ export default function Water({ currentPack, setWaterItem }: WaterProps) {
           color="black"
           style={{ marginRight: 10 }}
         />
-        <Text style={{ marginRight: 20 }}>Water:</Text>
-        <Input
+        <RText style={{ marginRight: 20 }}>Water:</RText>
+        <RInput
           style={{ flex: 1, placeholderTextColor: '#000' }}
           keyboardType="numeric"
           type="number"
@@ -42,12 +37,12 @@ export default function Water({ currentPack, setWaterItem }: WaterProps) {
           value={String(currentPack?.water ?? waterWeight)}
           onChangeText={handleWaterChange}
         />
-        <Text style={{ marginLeft: 20 }}>(Oz)</Text>
-      </Box>
-      <Button style={{ width: '8rem' }} onPress={addWater}>
+        <RText style={{ marginLeft: 20 }}>(Oz)</RText>
+      </RStack>
+      <RButton style={{ width: '8rem' }} onPress={addWater}>
         Add
-      </Button>
-    </Box>
+      </RButton>
+    </RStack>
   );
 }
 
