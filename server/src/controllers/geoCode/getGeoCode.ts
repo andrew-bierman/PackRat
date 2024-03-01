@@ -25,8 +25,7 @@ import { geoCodeService } from '../../services/geocode/geoCodeService';
 
 export function getGeoCodeRoute() {
   return publicProcedure.query(async (opts) => {
-    // const { addressArray } = opts.input;
-    const { addressArray } = opts.rawInput;
+    const { addressArray } = opts.input;
     const { env }: any = opts.ctx;
     const result: any = await geoCodeService({
       addressArray,

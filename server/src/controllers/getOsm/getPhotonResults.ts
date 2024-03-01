@@ -7,6 +7,7 @@ import { responseHandler } from '../../helpers/responseHandler';
 import { publicProcedure } from '../../trpc';
 import { z } from 'zod';
 // import * as validators from '@packrat/validations';
+import * as validator from '../../middleware/validators';
 
 /**
  * Retrieves Photon results based on a search string.
@@ -29,9 +30,10 @@ import { z } from 'zod';
 // };
 
 export function getPhotonResultsRoute() {
-  return publicProcedure.query(async (opts) => {
-    // const response = await getPhotonResultsService(opts.input.searchString);
-    const response = await getPhotonResultsService(opts.rawInput.searchString);
-    return response.features;
-  });
+  return publicProcedure
+    .input(validator.getPhotonResults)
+    .query(async (opts) => {
+      const response = await getPhotonResultsService(opts.input.searchString);
+      return response.features;
+    });
 }
