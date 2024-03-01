@@ -29,7 +29,13 @@ export function requestPasswordResetEmailAndTokenRoute() {
         clientUrl,
         user.id,
       );
-      await resetEmail(email, resetUrl, env.STMP_EMAIL, env.SEND_GRID_API_KEY);
-      return { message: 'Password reset email sent successfully' };
+      const resetUrl = `${CLIENT_URL}/password-reset?token=${resetToken}`;
+      sendPasswordResetEmail(email, resetUrl);
+
+      //* returning resetToken for Test environment
+      return {
+        message: 'Password reset email sent successfully',
+        resetToken: (process.env.NODE_ENV = 'test' && resetToken),
+      };
     });
 }

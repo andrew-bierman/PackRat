@@ -6,7 +6,6 @@ import { InformUser } from 'app/utils/ToastUtils';
 
 export const useRequestEmailModal = () => {
   const { currentTheme } = useTheme();
-  const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
 
   /**
@@ -14,14 +13,15 @@ export const useRequestEmailModal = () => {
    *
    * @return {Promise<void>} A promise that resolves when the password reset email is sent successfully.
    */
-  const handleResetPasswordEmail = async (_, closeModal) => {
+  const handleResetPasswordEmail = async (closeModal, { email }) => {
+    console.log(email);
     try {
       setLoading(true);
       // Call your API to initiate the password reset process
       // Pass the email entered by the user to the API endpoint
       // The API endpoint should send an email with a reset link to the provided email
       // TODO - switch to RTK query
-      await axios.post(`${api}/password-reset`, { email });
+      // await axios.post(`${api}/password-reset`, { email });
       setLoading(false);
       closeModal();
       InformUser({
@@ -43,8 +43,6 @@ export const useRequestEmailModal = () => {
   };
 
   return {
-    email,
-    setEmail,
     loading,
     handleResetPasswordEmail,
   };

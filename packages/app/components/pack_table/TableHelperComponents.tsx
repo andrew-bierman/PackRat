@@ -122,7 +122,9 @@ const TotalWeightBox = ({ label, weight, unit }: TotalWeightBoxProps) => {
 };
 
 const ErrorMessage = ({ message }: ErrorMessageProps) => (
-  <RText>{message}</RText>
+  <RStack>
+    <RText>{message}</RText>
+  </RStack>
 );
 
 export {
