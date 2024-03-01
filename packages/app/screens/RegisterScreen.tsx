@@ -9,6 +9,9 @@ import {
   InputText,
   InputTextRules,
   ScrollView,
+  Form,
+  FormInput,
+  SubmitButton,
 } from '@packrat/ui';
 import { FontAwesome } from '@expo/vector-icons';
 import { useRouter } from 'app/hooks/router';
@@ -19,17 +22,11 @@ import useTheme from '../hooks/useTheme';
 import { useForm } from 'react-hook-form';
 import { useSession } from '../context/Auth/SessionProvider';
 import { useRegisterUser, useGoogleAuth } from 'app/auth/hooks';
+import { userSignUp } from '@packrat/validations';
 
 export default function Register() {
   const { currentTheme } = useTheme();
-  const {
-    registerUser,
-    form: {
-      control,
-      handleSubmit,
-      formState: { isValid },
-    },
-  } = useRegisterUser();
+  const { registerUser } = useRegisterUser();
   const { promptAsync } = useGoogleAuth();
 
   return (
@@ -47,109 +44,89 @@ export default function Register() {
           >
             Sign up to continue!
           </RHeading>
-          <RStack style={{ marginTop: 16, gap: 8 }}>
-            <InputText
-              label="Name"
-              control={control}
-              name="name"
-              rules={InputTextRules.name}
-            />
+          <Form validationSchema={userSignUp}>
+            <RStack style={{ marginTop: 16, gap: 8 }}>
+              <FormInput label="Name" name="name" />
 
-            <InputText
-              label="Email ID"
-              keyboardType="email-address"
-              control={control}
-              name="email"
-              rules={InputTextRules.email}
-            />
+              <FormInput
+                label="Email ID"
+                keyboardType="email-address"
+                name="email"
+              />
 
-            <InputText
-              control={control}
-              label="Username"
-              name="username"
-              rules={InputTextRules.username}
-            />
+              <FormInput label="Username" name="username" />
 
-            <InputText
-              label="Password"
-              secureTextEntry
-              control={control}
-              name="password"
-              rules={InputTextRules.password}
-            />
+              <FormInput label="Password" secureTextEntry name="password" />
 
-            <RButton
-              disabled={!isValid}
-              onPress={handleSubmit(registerUser)}
-              // onPress={() => registerUser()}
-              style={{ marginTop: 16 }}
-              backgroundColor="mediumpurple"
-            >
-              {'Sign up'}
-            </RButton>
-            <RStack
-              style={{
-                marginTop: 16,
-                flexDirection: 'row',
-                justifyContent: 'center',
-                gap: 4,
-              }}
-            >
-              <RText fontSize={14} color="grey">
-                Already a User?
-              </RText>
-              <Link href="/sign-in">
-                <RText
-                  style={{
-                    color: '#818cf8',
-                    fontSize: 14,
-                    fontWeight: 400,
-                  }}
-                >
-                  Login Here
-                </RText>
-              </Link>
-            </RStack>
-            {/* Google register */}
-            <RStack
-              style={{
-                marginTop: 8,
-                flexDirection: 'row',
-                justifyContent: 'center',
-              }}
-            >
-              <RText color="grey" fontWeight="medium" fontSize={14}>
-                Or
-              </RText>
-            </RStack>
-            {/* Google register */}
-            <RStack
-              style={{
-                marginTop: 8,
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              <RIconButton
-                onPress={async () => await promptAsync()}
-                backgroundColor="red"
-                style={{ width: '100%', color: 'white' }}
-                icon={
-                  <FontAwesome
-                    name="google"
-                    size={16}
-                    color={currentTheme.colors.white}
-                  />
-                }
+              <SubmitButton
+                onSubmit={registerUser}
+                style={{ marginTop: 16, backgroundColor: 'mediumpurple' }}
               >
-                Sign up with Google
-              </RIconButton>
+                {'Sign up'}
+              </SubmitButton>
+              <RStack
+                style={{
+                  marginTop: 16,
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  gap: 4,
+                }}
+              >
+                <RText fontSize={14} color="grey">
+                  Already a User?
+                </RText>
+                <Link href="/sign-in">
+                  <RText
+                    style={{
+                      color: '#818cf8',
+                      fontSize: 14,
+                      fontWeight: 400,
+                    }}
+                  >
+                    Login Here
+                  </RText>
+                </Link>
+              </RStack>
+              {/* Google register */}
+              <RStack
+                style={{
+                  marginTop: 8,
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                }}
+              >
+                <RText color="grey" fontWeight="medium" fontSize={14}>
+                  Or
+                </RText>
+              </RStack>
+              {/* Google register */}
+              <RStack
+                style={{
+                  marginTop: 8,
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <RIconButton
+                  onPress={async () => await promptAsync()}
+                  backgroundColor="red"
+                  style={{ width: '100%', color: 'white' }}
+                  icon={
+                    <FontAwesome
+                      name="google"
+                      size={16}
+                      color={currentTheme.colors.white}
+                    />
+                  }
+                >
+                  Sign up with Google
+                </RIconButton>
+              </RStack>
+              {/* Google register */}
             </RStack>
-            {/* Google register */}
-          </RStack>
+          </Form>
         </View>
-        {/* {addUser.isSuccess && router.push("/sign-in")} */}
       </View>
     </ScrollView>
   );
