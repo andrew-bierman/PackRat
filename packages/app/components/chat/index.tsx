@@ -6,7 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
-import { BaseModal, RStack, RSelect as Select } from '@packrat/ui';
+import { BaseModal, RStack, RSelect } from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useChat } from 'app/hooks/chat/useChat';
 import { loadStyles } from './chat.style';
@@ -67,25 +67,25 @@ const MessageList = ({ messages }: MessageListProps) => {
   );
 };
 
-const ChatSelector: React.FC<ChatSelectorProps> = ({
+const Chator: React.FC<ChatorProps> = ({
   conversation,
-  onSelect,
+  on,
   isActive,
 }) => {
   const styles = useCustomStyles(loadStyles);
   return (
     <TouchableOpacity
       key={conversation._id}
-      onPress={() => onSelect(conversation._id)}
-      style={[styles.chatSelector, isActive && styles.activeChatSelector]}
+      onPress={() => on(conversation._id)}
+      style={[styles.chator, isActive && styles.activeChator]}
     >
-      <Text style={styles.chatSelectorText}>{conversation._id}</Text>
+      <Text style={styles.chatorText}>{conversation._id}</Text>
     </TouchableOpacity>
   );
 };
 
 const ChatComponent: React.FC<ChatComponentProps> = ({
-  showChatSelector = true,
+  showChator = true,
   defaultChatId = null,
 }) => {
   const styles = useCustomStyles(loadStyles);
@@ -102,8 +102,8 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
   return (
     <View style={styles.container}>
       <RStack style={{ alignItems: 'center' }}>
-        {showChatSelector && (
-          <Select
+        {showChator && (
+          <RSelect
             selectedValue={conversationId}
             minWidth="200px" // Adjust width as needed
             accessibilityLabel="Select a conversation"
@@ -112,13 +112,13 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
             width="200px" // Adjust width as needed
           >
             {conversations?.map((conversation) => (
-              <Select.Item
+              <RSelect.Item
                 key={conversation._id}
                 label={conversation._id}
                 value={conversation._id}
               />
             ))}
-          </Select>
+          </RSelect>
           // <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           //   <Box
           //     borderRadius="lg"
