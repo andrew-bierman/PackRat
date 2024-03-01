@@ -3,7 +3,7 @@ import {
   BaseModal,
   Form,
   FormInput,
-  CustomSelect,
+  FormSelect,
   RInput,
   RStack,
   RText,
@@ -201,7 +201,7 @@ export const SaveTripContainer = ({
             />
           </HStack> */}
 
-            <CustomSelect
+            <FormSelect
               options={isPublicOptions}
               placeholder="Is Public"
               name="public"

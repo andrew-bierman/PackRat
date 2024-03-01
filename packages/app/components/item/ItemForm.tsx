@@ -5,8 +5,8 @@ import {
   Form,
   FormInput,
   SubmitButton,
-  CustomSelect,
-  CustomRadioGroup,
+  FormSelect,
+  FormRadioGroup,
   useAppFormContext,
 } from '@packrat/ui';
 import { View } from 'react-native';
@@ -80,7 +80,7 @@ export const ItemForm = ({
               <FormInput name="weight" placeholder="Weight" />
             </View>
             {data && (
-              <CustomSelect
+              <FormSelect
                 options={data}
                 name="unit"
                 onValueChange={console.log}
@@ -94,7 +94,7 @@ export const ItemForm = ({
             placeholder="Quantity"
             style={{ width: '100%' }}
           />
-          <CustomRadioGroup name="type" options={radioOptions} />
+          <FormRadioGroup name="type" options={radioOptions} />
 
           {showSubmitButton && (
             <SubmitButton onSubmit={handleSubmit}>

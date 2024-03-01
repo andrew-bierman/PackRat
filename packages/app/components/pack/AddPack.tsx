@@ -4,7 +4,7 @@ import {
   RText,
   RLabel,
   Form,
-  CustomSelect,
+  FormSelect,
   FormInput,
 } from '@packrat/ui';
 import { BaseModal } from '@packrat/ui';
@@ -66,7 +66,7 @@ export const AddPack = ({ isCreatingTrip = false }) => {
             style={{ width: '100%', textAlign: 'left' }}
           />
           <RLabel>Is Public:</RLabel>
-          <CustomSelect
+          <FormSelect
             onValueChange={handleonValueChange}
             options={packSelectOptions}
             name="isPublic"

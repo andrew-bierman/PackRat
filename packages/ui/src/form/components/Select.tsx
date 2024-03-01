@@ -5,6 +5,6 @@ interface Props
 
 // TODO change the name to "Input" after handling tamagui all components export,
 // which is cause of a name collision
-export const CustomSelect = (props: Props) => {
+export const FormSelect = (props: Props) => {
   return <LmSelectRhf {...props} />;
 };

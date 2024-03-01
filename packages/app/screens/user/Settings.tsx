@@ -12,7 +12,7 @@ import {
   Form,
   ImageUpload,
   FormInput,
-  CustomSelect,
+  FormSelect,
 } from '@packrat/ui';
 import Avatar from 'app/components/Avatar/Avatar';
 import { useProfileSettings } from 'app/hooks/user';
@@ -74,7 +74,7 @@ export default function Settings() {
               <RStack space style={{ flexDirection: 'row' }}>
                 <RStack space="$2" flexGrow={1}>
                   <RLabel>Weather: </RLabel>
-                  <CustomSelect
+                  <FormSelect
                     options={weatherOptions}
                     name="preferredWeather"
                     style={{ width: '100%' }}
@@ -82,7 +82,7 @@ export default function Settings() {
                 </RStack>
                 <RStack space="$2" flexGrow={1}>
                   <RLabel>Weight: </RLabel>
-                  <CustomSelect
+                  <FormSelect
                     options={weightOptions}
                     name="preferredWeight"
                     style={{ width: '100%' }}

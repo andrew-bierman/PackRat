@@ -12,7 +12,7 @@ import {
   BaseModal,
   Form,
   FormInput,
-  CustomSelect,
+  FormSelect,
   RStack,
   SubmitButton,
 } from '@packrat/ui';
@@ -123,7 +123,7 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
             <>
               {options?.length ? (
                 <>
-                  <CustomSelect
+                  <FormSelect
                     options={options}
                     style={{ width: '100%' }}
                     placeholder="Select conversation ..."

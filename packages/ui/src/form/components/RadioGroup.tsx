@@ -5,6 +5,6 @@ interface Props
 
 // TODO change the name to "Input" after handling tamagui all components export,
 // which is cause of a name collision
-export const CustomRadioGroup = (props: Props) => {
+export const FormRadioGroup = (props: Props) => {
   return <LmRadioGroupRhf {...props} />;
 };
