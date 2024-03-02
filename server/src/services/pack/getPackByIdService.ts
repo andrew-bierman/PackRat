@@ -4,7 +4,7 @@ export const getPackByIdService = async (packId: string) => {
   try {
     const packClass = new Pack();
     const pack = await packClass.findPack({ id: packId });
-    return {
+    const packData = {
       ...pack,
       scores: JSON.parse(pack.scores as string),
       grades: JSON.parse(pack.grades as string),
@@ -13,6 +13,7 @@ export const getPackByIdService = async (packId: string) => {
       total_score: packClass.computeTotalScores(pack),
       items: pack.itemPacks.map((itemPack) => itemPack.item),
     };
+    return packData;
   } catch (error) {
     // Handle any potential errors here
     console.error(error);

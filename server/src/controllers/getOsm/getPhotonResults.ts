@@ -6,7 +6,8 @@ import {
 import { responseHandler } from '../../helpers/responseHandler';
 import { publicProcedure } from '../../trpc';
 import { z } from 'zod';
-import * as validators from '@packrat/validations';
+// import * as validators from '@packrat/validations';
+import * as validator from '../../middleware/validators';
 
 /**
  * Retrieves Photon results based on a search string.
@@ -30,7 +31,7 @@ import * as validators from '@packrat/validations';
 
 export function getPhotonResultsRoute() {
   return publicProcedure
-    .input(validators.getPhotonResults)
+    .input(validator.getPhotonResults)
     .query(async (opts) => {
       const response = await getPhotonResultsService(opts.input.searchString);
       return response.features;

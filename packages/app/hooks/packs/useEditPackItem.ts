@@ -10,18 +10,20 @@ export const useEditPackItem = (isItemPage) => {
 
   const mutation = queryTrpc.editItem.useMutation({
     onMutate: async (editedItem) => {
-      if (!editedItem.packId) {
-        return;
-      }
-      const previousPack = utils.getPackById.getData({
-        packId: editedItem.packId,
-      });
-      const itemIndex = previousPack.items.findIndex(
-        (item) => item.id === editedItem.id,
-      );
-      if (itemIndex === -1) {
-        throw new Error('Item not found in the pack.');
-      }
+      // if (!editedItem.packId) {
+      //   return;
+      // }
+      // console.log('Edited Item: ', editedItem);
+      // const previousPack = utils.getPackById.getData({
+      //   packId: editedItem.packId,
+      // });
+      // console.log('Previous Pack: ', previousPack);
+      // const itemIndex = previousPack.items.findIndex(
+      //   (item) => item.id === editedItem.id,
+      // );
+      // if (itemIndex === -1) {
+      //   throw new Error('Item not found in the pack.');
+      // }
       // const newQueryData = {
       //   ...previousPack,
       //   items: previousPack.items.map((item, index) => {
@@ -35,13 +37,11 @@ export const useEditPackItem = (isItemPage) => {
       //     return item;
       //   }),
       // };
-
       // // Update the data in the query
       // utils.getPackById.setData({ packId: editedItem.packId }, newQueryData);
-
-      return {
-        previousPack,
-      };
+      // return {
+      //   previousPack,
+      // };
     },
     onError: (err, editedItem, context) => {
       console.log('Error');
@@ -58,6 +58,7 @@ export const useEditPackItem = (isItemPage) => {
     onSuccess: (result) => {
       // Invalidate relevant queries after a successful edit
       utils.getPackById.invalidate();
+      utils.getTripById.invalidate();
       utils.getItemsGlobally.invalidate();
     },
   });

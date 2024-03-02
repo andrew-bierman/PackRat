@@ -86,7 +86,7 @@ export const pack = sqliteTable('pack', {
     .$defaultFn(() => createId()),
   name: text('name').notNull(),
   owner_id: text('owner_id').references(() => user.id, {
-    onDelete: 'set null',
+    onDelete: 'cascade',
   }),
   is_public: integer('is_public', { mode: 'boolean' }).default(false),
   grades: text('grades', { mode: 'json' })
@@ -296,9 +296,9 @@ export const trip = sqliteTable('trip', {
   end_date: text('end_date').notNull(),
   destination: text('destination').notNull(),
   owner_id: text('owner_id').references(() => user.id, {
-    onDelete: 'set null',
+    onDelete: 'cascade',
   }),
-  packs_id: text('packs_id').references(() => pack.id, {
+  pack_id: text('packs_id').references(() => pack.id, {
     onDelete: 'set null',
   }),
   is_public: integer('is_public', { mode: 'boolean' }),
@@ -332,7 +332,7 @@ export const tripRelations = relations(trip, ({ one, many }) => ({
     references: [user.id],
   }),
   packs: one(pack, {
-    fields: [trip.packs_id],
+    fields: [trip.pack_id],
     references: [pack.id],
   }),
   // geojsons: many(tripGeojsons),
@@ -451,7 +451,7 @@ export const geojson = sqliteTable('geojson', {
 });
 
 export const geojsonRelations = relations(geojson, ({ many }) => ({
-  // trips: many(tripGeojsons),
+  trips: many(tripGeojsons),
   tripGeojsons: many(tripGeojsons),
 }));
 
