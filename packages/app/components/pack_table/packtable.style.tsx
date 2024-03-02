@@ -1,4 +1,4 @@
-import { FlatList, Platform, View } from 'react-native';
+import { Platform } from 'react-native';
 const isWeb = Platform.OS === 'web';
 const loadStyles = (theme) => {
   const { currentTheme } = theme;
