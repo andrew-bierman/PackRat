@@ -1,5 +1,5 @@
 import { createDb } from '../../db/client';
-import { type InsertGeoJson, geojson as GeoJsonTable } from '../../db/schema';
+import { type InsertGeoJson, geojson } from '../../db/schema';
 import { getDB } from '../../trpc/context';
 
 export class GeoJson {
@@ -8,14 +8,15 @@ export class GeoJson {
     return dbInstance;
   }
 
-  async create(data: InsertGeoJson) {
+  async create(geoJSONData: InsertGeoJson) {
     try {
-      const geojson = (await this.createInstance())
-        .insert(GeoJsonTable)
-        .values(data)
+      const db = await this.createInstance();
+      const record = await db
+        .insert(geojson)
+        .values(geoJSONData)
         .returning()
         .get();
-      return geojson;
+      return record;
     } catch (error) {
       throw new Error(`Failed to create geojson record: ${error.message}`);
     }
