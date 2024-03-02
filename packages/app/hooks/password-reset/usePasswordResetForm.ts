@@ -32,7 +32,6 @@ export const usePasswordResetForm = ({ token }) => {
         },
       });
     } catch (error) {
-      console.log('Error here', error);
       setLoading(false);
       InformUser({
         title: 'Error resetting password',

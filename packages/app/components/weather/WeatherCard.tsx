@@ -19,10 +19,10 @@ interface WeatherObject {
   sys: {
     country: string;
   };
-  weather: {
+  weather: Array<{
     description: any;
     icon: string;
-  }[];
+  }>;
   main: {
     temp: number;
     humidity: number;
@@ -33,9 +33,9 @@ interface WeatherObject {
 }
 
 interface WeatherDay {
-  weather: {
+  weather: Array<{
     icon: string;
-  }[];
+  }>;
   main: {
     temp: number;
   };

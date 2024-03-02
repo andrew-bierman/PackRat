@@ -95,7 +95,7 @@ export const ItemForm = ({
             style={{ width: '100%' }}
           />
           <FormRadioGroup name="type" options={radioOptions} />
-
+          
           {showSubmitButton && (
             <SubmitButton onSubmit={handleSubmit}>
               <RText style={{ color: currentTheme.colors.text }}>

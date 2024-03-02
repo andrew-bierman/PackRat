@@ -16,8 +16,6 @@ export const useCardTrip = () => {
     const formValues = getValues();
     const newValue = formValues[name] === value ? '' : value;
 
-    console.log(name, value);
-
     reset({ ...formValues, [name]: newValue });
   };
 

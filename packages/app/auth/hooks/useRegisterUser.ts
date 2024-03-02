@@ -14,9 +14,7 @@ export const useRegisterUser = (): UseRegisterUserReturn => {
       signUp(data).then((user) => {
         sessionSignIn(user);
       });
-    } catch (e) {
-      console.log('Error', e);
-    }
+    } catch (e) {}
   };
 
   return { registerUser };

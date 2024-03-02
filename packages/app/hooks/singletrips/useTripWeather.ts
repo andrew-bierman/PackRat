@@ -6,9 +6,7 @@ export const useTripWeather = (tripData) => {
   const tripWeather = useMemo(() => {
     try {
       return tripData?.weather ? JSON?.parse(tripData?.weather) : undefined;
-    } catch {
-      return;
-    }
+    } catch {}
   }, [tripData]);
 
   const latLng = useMemo(() => {

@@ -1,4 +1,4 @@
-import { GestureResponderEvent, View } from 'react-native';
+import { type GestureResponderEvent, View } from 'react-native';
 import { RCard } from '@packrat/ui';
 import React from 'react';
 import { theme } from '../../theme';

@@ -30,7 +30,6 @@ export function PackDetails() {
   const searchParams = new URLSearchParams(this.location.search);
   const canCopy = searchParams.get('copy');
   const [packId] = useParam('id');
-  console.log(packId, 'packId');
   const link = `${CLIENT_URL}/packs/${packId}`;
   const [firstLoad, setFirstLoad] = useState(true);
   const user = useAuthUser();
@@ -82,7 +81,6 @@ export function PackDetails() {
                     keyExtractor={([key, val]) => val}
                     renderItem={({ item }) => {
                       {
-                        console.log(item[1], 'item');
                         switch (item[1]) {
                           case SECTION.TABLE:
                             return (

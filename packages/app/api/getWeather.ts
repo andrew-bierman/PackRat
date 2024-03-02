@@ -26,9 +26,7 @@ export const getWeather = async (
     const response = await fetch(url);
     const json = await response.json();
     weatherObject = json;
-  } catch (err) {
-    console.error('error:' + err);
-  }
+  } catch (err) {}
 
   weatherObject.state = state;
   return weatherObject;

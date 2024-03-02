@@ -31,7 +31,6 @@ export const useRequestEmailModal = () => {
         duration: 5000,
       });
     } catch (error) {
-      console.log('Error here', error);
       setLoading(false);
       InformUser({
         title: error?.response?.data?.error,
