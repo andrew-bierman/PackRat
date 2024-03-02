@@ -1,7 +1,11 @@
 import React from 'react';
+import * as DropdownMenu from 'zeego/dropdown-menu'
+import { MaterialIcons, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+
+import { RIconButton } from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useState } from 'react';
-import { FlatList, Platform, View } from 'react-native';
+import { FlatList, Platform, View, Text } from 'react-native';
 import { Cell, Row, Table } from 'react-native-table-component';
 import { PackOptions } from '../PackOptions';
 import { DeletePackItemModal } from './DeletePackItemModal';
@@ -10,6 +14,14 @@ import { formatNumber } from 'app/utils/formatNumber';
 import { AddItem } from '../item/AddItem';
 import loadStyles from './packtable.style';
 import { IgnoreItemCheckbox } from './TableHelperComponents';
+type ItemProps = React.ComponentProps<typeof DropdownMenu['Item']>
+const DropdownMenuItem = DropdownMenu.create((props: ItemProps) => {
+  return <DropdownMenu.Item {...props}>
+    <Text>Hello world</Text>
+  </DropdownMenu.Item>
+}, 'Item')
+ 
+type ModalName = 'edit' | 'delete';
 
 interface TableItemProps {
   itemData: any;
@@ -33,19 +45,15 @@ const TableItem = ({
   setRefetch = () => {},
 }: TableItemProps) => {
   const { name, weight, quantity, unit, _id } = itemData;
+  const [activeModal, setActiveModal] = useState<ModalName>(null);
   const styles = useCustomStyles(loadStyles);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  /**
-   * Executes the onTrigger function.
-   *
-   * @param {None} None - No parameters required.
-   * @return {None} No return value.
-   */
-  const onTrigger = () => {
-    setIsEditModalOpen(true);
-  };
-  const closeModalHandler = () => {
-    setIsEditModalOpen(false);
+
+  const openModal = (modalName: ModalName) => () => {
+    setActiveModal(modalName);
+  }
+
+  const closeModal = () => {
+    setActiveModal(null)
   };
 
   let rowData = [];
@@ -58,34 +66,27 @@ const TableItem = ({
       name,
       `${formatNumber(weight)} ${unit}`,
       quantity,
-      <PackOptions
-        Edit={
-          <EditPackItemModal>
-            <AddItem
-              _id={_id}
-              packId={_id}
-              isEdit={true}
-              initialData={itemData}
-            />
-          </EditPackItemModal>
-        }
-        Delete={
-          <DeletePackItemModal
-            itemId={_id}
-            pack={currentPack}
-            refetch={refetch}
-            setRefetch={setRefetch}
-          />
-        }
-        Ignore={
-          <IgnoreItemCheckbox
-            itemId={_id}
-            isChecked={checkedItems.includes(_id)}
-            handleCheckboxChange={handleCheckboxChange}
-          />
-        }
-        editTrigger={onTrigger}
-      />,
+      <DropdownMenu.Root>
+      <DropdownMenu.Trigger>
+        <RIconButton
+          backgroundColor="transparent"
+          icon={<MaterialIcons name="more-horiz" size={25} />}
+          onPress={openModal}
+          style={{ padding: 0}}
+        />
+      </DropdownMenu.Trigger>
+      <DropdownMenu.Content>
+        <DropdownMenu.Item key="Edit" onSelect={openModal('edit')}>
+          <DropdownMenu.ItemTitle>Edit</DropdownMenu.ItemTitle>
+          </DropdownMenu.Item>
+        <DropdownMenu.Item key="Delete" onSelect={openModal('delete')}>
+          <DropdownMenu.ItemTitle>Delete</DropdownMenu.ItemTitle>
+        </DropdownMenu.Item>
+        <DropdownMenu.Item key="Ignore">
+          <DropdownMenu.ItemTitle>Ignore</DropdownMenu.ItemTitle>
+        </DropdownMenu.Item>
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
     ];
   } else {
     rowData = [
@@ -121,7 +122,25 @@ const TableItem = ({
    */
 
   // Here, you can set a default category if item.category is null or undefined
-  return <Row data={rowData} style={styles.row} flexArr={flexArr} />;
+  return <>
+  <View style={{position: 'absolute'}}>
+    <EditPackItemModal isOpen={activeModal === 'edit'} onClose={closeModal}>
+        <AddItem
+          _id={_id}
+          packId={_id}
+          isEdit={true}
+          initialData={itemData}
+        />
+      </EditPackItemModal>
+      <DeletePackItemModal
+          itemId={_id}
+          pack={currentPack}
+          isOpen={activeModal === 'delete'}
+          onClose={closeModal}
+        />
+  </View>
+  <Row data={rowData} style={styles.row} flexArr={flexArr} />
+  </>;
 };
 
 export default TableItem;

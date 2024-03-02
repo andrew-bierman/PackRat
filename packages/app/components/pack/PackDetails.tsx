@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+
 import PackContainer from './PackContainer';
 import { DetailsHeader } from '../details/header';
 import { TableContainer } from '../pack_table/Table';

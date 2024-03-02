@@ -7,11 +7,15 @@ import { useDeleteItem } from 'app/hooks/items';
 interface DeletePackItemModalProps {
   itemId: string;
   pack?: { _id: string };
+  isOpen?: Boolean;
+  onClose?: () => void;
 }
 
 export const DeletePackItemModal = ({
   itemId,
   pack,
+  isOpen,
+  onClose
 }: DeletePackItemModalProps) => {
   const { deletePackItem } = useDeletePackItem();
   const { handleDeleteItem } = useDeleteItem();
@@ -27,7 +31,7 @@ export const DeletePackItemModal = ({
   const footerButtons = [
     {
       label: 'Cancel',
-      onClick: (_, closeModal) => closeModal(),
+      onClick: (_, closeModal) => onClose(),
       color: 'gray',
       disabled: false,
     },
@@ -42,7 +46,9 @@ export const DeletePackItemModal = ({
   return (
     <BaseModal
       title={'Delete Item'}
-      triggerComponent={<MaterialIcons name="delete" size={20} color="black" />}
+      isOpen={isOpen}
+      onClose={onClose}
+      showTrigger={false}
       footerButtons={footerButtons}
     >
       Are you sure you want to delete this item?

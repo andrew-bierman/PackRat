@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Text } from 'react-native';
 import { useRouter } from 'app/hooks/router';
 import { RStack, RIconButton, BaseModal } from '@packrat/ui';
 import { Entypo } from '@expo/vector-icons';
@@ -16,6 +17,7 @@ export const PackOptions: React.FC<PackOptionsProps> = ({
   Ignore,
 }) => {
   const { isModalOpen, openModal, closeModal } = useModalState();
+  console.log(isModalOpen, 'isModalOpen');
 
   return (
     <RStack>
@@ -25,10 +27,10 @@ export const PackOptions: React.FC<PackOptionsProps> = ({
         triggerComponent={<MenuTriggerComponent openModal={openModal} />}
       >
         <RStack style={{ flexDirection: 'row', alignItems: 'center' }}>
-          {Edit} Edit{' '}
+          {Edit} <Text>Edit{' '}</Text>
         </RStack>
         <RStack style={{ flexDirection: 'row', alignItems: 'center' }}>
-          {Delete} Delete{' '}
+          <Text>{Delete} Delete{' '}</Text>
         </RStack>
         <RStack
           style={{
@@ -37,7 +39,7 @@ export const PackOptions: React.FC<PackOptionsProps> = ({
             justifyContent: 'flex-end',
           }}
         >
-          {Ignore}{' '}
+          <Text>{Ignore}{' '}</Text>
         </RStack>
       </BaseModal>
     </RStack>
@@ -52,11 +54,12 @@ const MenuTriggerComponent = ({ openModal }) => {
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
+        // backgroundColor: 'red'
       }}
     >
       <RIconButton
         backgroundColor="transparent"
-        icon={<Entypo name="dots-three-horizontal" size={24} color="black" />}
+        icon={<Entypo name="dots-three-horizontal" size={10} color="black" />}
         onPress={openModal}
       />
     </View>
