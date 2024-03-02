@@ -35,3 +35,7 @@ export const duplicatePublicPack = z.object({
 export const getPublicPacks = z.object({
   queryBy: z.string(),
 });
+
+export const sendMessage = z.object({
+  message: z.string().nonempty(),
+});

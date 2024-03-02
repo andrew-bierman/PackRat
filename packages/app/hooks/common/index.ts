@@ -6,3 +6,4 @@ export { useSearchParam } from './useSearchParam';
 export { useDebouncedValue } from './useDebouncedValue';
 export * from './useSearchParams';
 export { useScreenWidth } from './useScreenWidth';
+export { useDebounce } from './useDebounce';

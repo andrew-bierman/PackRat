@@ -36,8 +36,22 @@ export const sendWelcomeEmail = async (
         'Content-Type': 'application/json',
         Authorization: `Bearer ${sendGridApiKey}`,
       },
-      body: JSON.stringify(emailData),
-    });
+      subject: 'Thanks for joining in PackRat!!',
+      text: `Welcome to the app, ${name}. Let me know how you get along with the app.`,
+      mailSettings: {
+        sandboxMode: {
+          enable: process.env.NODE_ENV === 'test',
+        },
+      },
+    })
+      .then((res: any) => {
+        console.log('Email Sent');
+        return res;
+      })
+      .catch((err: any) => {
+        console.log('Email did not  Send', err);
+        return err;
+      });
 
     if (!response.ok) {
       console.log('Email did not Send');

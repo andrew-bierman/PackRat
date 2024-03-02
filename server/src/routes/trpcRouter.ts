@@ -1,6 +1,6 @@
 import { getPhotonDetailsRoute } from './../controllers/getOsm/getPhotonDetails';
 
-import { googleSigninRoute } from '../controllers/passport/signInGoogle';
+import { googleSigninRoute } from '../controllers/passport';
 
 import {
   userSignInRoute,
@@ -85,6 +85,7 @@ import {
   router as trpcRouter,
   publicProcedure,
   protectedProcedure,
+  createCallerFactory,
 } from '../trpc';
 import { z } from 'zod';
 
@@ -191,5 +192,7 @@ export const appRouter = trpcRouter({
   getUserFavorites: getUserFavoritesRoute(),
   getFavoritePacksByUser: getFavoritePacksByUserRoute(),
 });
+
+export const createCaller = createCallerFactory(appRouter);
 
 export type AppRouter = typeof appRouter;

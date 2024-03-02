@@ -1,9 +1,13 @@
-import { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { ItemForm } from './ItemForm'; // assuming you moved the form related code to a separate component
 import { useAddPackItem } from 'app/hooks/packs/useAddPackItem';
 import { useEditPackItem } from 'app/hooks/packs/useEditPackItem';
-import { useAuthUser } from 'app/auth/hooks';
+import {
+  addItem as addItemSchema,
+  editItem as editItemSchema,
+  type Item,
+} from '@packrat/validations';
+import { useMemo } from 'react';
 
 interface AddItemProps {
   id: string;
@@ -42,21 +46,6 @@ export const AddItem = ({
   isItemPage,
   setIsAddItemModalOpen = () => {},
 }: AddItemProps) => {
-  const user = useAuthUser();
-  // Moved the state up to the parent component
-  const [name, setName] = useState(initialData?.name || '');
-  const [weight, setWeight] = useState(initialData?.weight?.toString() || '');
-  const [quantity, setQuantity] = useState(
-    initialData?.quantity?.toString() || '',
-  );
-  const [categoryType, setCategoryType] = useState(
-    initialData?.category?.name || '',
-  );
-
-  const [unit, setUnit] = useState(initialData?.unit || 'lb');
-
-  const ownerId = user?.id;
-
   const {
     // mutation: addPackItemMutation
     isLoading,
@@ -70,72 +59,48 @@ export const AddItem = ({
     editPackItem,
   } = useEditPackItem(isItemPage);
 
-  // handle updates to initialData
-  useEffect(() => {
-    setName(initialData?.name || '');
-    setWeight(initialData?.weight?.toString() || '');
-    setQuantity(initialData?.quantity?.toString() || '');
-    setUnit(initialData?.unit || 'lb');
-  }, [initialData]);
-  const handleSubmit = () => {
-    const parsedWeight = parseFloat(weight);
-    const parsedQuantity = parseInt(quantity, 10);
-    const PackId = packId || initialData.id;
+  const handleSubmit = (data: Item) => {
     if (isEdit) {
-      if (PackId && initialData.global) {
-        editPackItem({
-          name,
-          weight: parsedWeight,
-          quantity: parsedQuantity,
-          unit,
-          type: categoryType,
-          id: initialData.id,
-          packId,
-        });
-        closeModalHandler();
-      } else {
-        editPackItem({
-          name,
-          weight: parsedWeight,
-          quantity: parsedQuantity,
-          unit,
-          type: categoryType,
-          id,
-          packId,
-        });
-        setPage(1);
-        closeModalHandler();
-      }
+      editPackItem(data);
     } else {
-      addPackItem({
-        name,
-        weight: parsedWeight,
-        quantity: parsedQuantity,
-        type: categoryType,
-        unit,
-        packId,
-        ownerId,
-      });
-      // Todo: Need to empty the form fields
+      addPackItem(data);
     }
+
+    closeModalHandler();
   };
+
+  const defaultValues = useMemo(() => {
+    if (!initialData) {
+      return { unit: 'lb' };
+    }
+    const result = {
+      name: initialData.name || '',
+      weight: String(initialData.weight),
+      quantity: String(initialData.quantity),
+      type: initialData.category?.name,
+      unit: initialData.unit,
+      id: undefined,
+    };
+
+    if (isEdit) {
+      result.id = initialData.id;
+
+      return result;
+    }
+
+    return { ...result, packId };
+  }, [initialData, isEdit, packId]);
+
+  console.log({ defaultValues });
 
   return (
     <View>
       <ItemForm
-        name={name}
-        setName={setName}
-        weight={weight}
-        setWeight={setWeight}
-        quantity={quantity}
-        setQuantity={setQuantity}
-        unit={unit}
-        setUnit={setUnit}
+        validationSchema={isEdit ? editItemSchema : addItemSchema}
         handleSubmit={handleSubmit}
+        defaultValues={defaultValues}
         isLoading={isLoading}
         isEdit={isEdit}
-        categoryType={categoryType}
-        setCategoryType={setCategoryType}
         currentPack={currentPack}
       />
     </View>

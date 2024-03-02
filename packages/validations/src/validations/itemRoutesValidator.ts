@@ -23,6 +23,8 @@ export const addItem = z.object({
   ownerId: z.string().optional(),
 });
 
+export type Item = z.infer<typeof addItem>;
+
 export const editItem = z.object({
   id: JoiObjectId(),
   name: z.string().nonempty(),
