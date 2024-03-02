@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useRouter } from 'app/hooks/router';
-import { RStack, RIconButton, BaseModal, View } from '@packrat/ui';
+import { RStack, RIconButton, BaseModal } from '@packrat/ui';
 import { Entypo } from '@expo/vector-icons';
 import { useModalState } from './useModalState';
 
@@ -18,7 +18,7 @@ export const PackOptions: React.FC<PackOptionsProps> = ({
   const { isModalOpen, openModal, closeModal } = useModalState();
 
   return (
-    <View>
+    <RStack>
       <BaseModal
         isOpen={isModalOpen}
         onClose={closeModal}
@@ -40,7 +40,7 @@ export const PackOptions: React.FC<PackOptionsProps> = ({
           {Ignore}{' '}
         </RStack>
       </BaseModal>
-    </View>
+    </RStack>
   );
 };
 

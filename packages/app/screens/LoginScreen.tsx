@@ -6,7 +6,7 @@ import {
   RButton,
   RText,
   RIconButton,
-  ScrollView,
+  RScrollView,
   Form,
   FormInput,
   SubmitButton,
@@ -40,7 +40,7 @@ export default function Login() {
   }
 
   return (
-    <ScrollView>
+    <RScrollView>
       <RStack>
         <RStack
           style={{
@@ -181,6 +181,6 @@ export default function Login() {
           </View>
         </RStack>
       </RStack>
-    </ScrollView>
+    </RScrollView>
   );
 }
