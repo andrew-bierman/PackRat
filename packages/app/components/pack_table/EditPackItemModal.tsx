@@ -4,11 +4,11 @@ import { AddItem } from '../item/AddItem';
 import { View } from 'react-native';
 import { BaseModal, useModal } from '@packrat/ui';
 
-export const EditPackItemModal = ({ children }) => {
+export const EditPackItemModal = ({ children, isOpen, onClose }) => {
   const footerButtons = [
     {
       label: 'Cancel',
-      onClick: (_, closeModal) => closeModal(),
+      onClick: (_, closeModal) => onClose(),
       color: '#B22222',
       disabled: false,
     },
@@ -20,15 +20,15 @@ export const EditPackItemModal = ({ children }) => {
     : null;
 
   return (
-    <View>
       <BaseModal
         title={'Edit Item'}
-        triggerComponent={<MaterialIcons name="edit" size={20} color="black" />}
+        isOpen={isOpen}
+        onClose={onClose}
         footerButtons={footerButtons}
+        showTrigger={false}
       >
         <ModalContent />
       </BaseModal>
-    </View>
   );
 };
 

@@ -70,6 +70,21 @@ export const TableContainer = ({
   if (isLoading) return <RSkeleton style={{}} />;
   if (error) return <ErrorMessage message={error} />;
   const isWeb = Platform.OS === 'web';
+
+  const headerRow = isWeb ? [
+    'Item Name',
+    `Weight`,
+    'Quantity',
+    'Category',
+    'Edit',
+    'Delete',
+    `${copy ? 'Copy' : 'Ignore'}`,
+  ] : [
+    'Item Name',
+    `Weight`,
+    'Quantity',
+    ''
+  ];
   return (
     <View style={[styles.container, !isWeb && { width: '100%' }]}>
       {data?.length ? (
@@ -78,15 +93,7 @@ export const TableContainer = ({
             <TitleRow title="Pack List" />
             <Row
               flexArr={flexArr}
-              data={[
-                'Item Name',
-                `Weight`,
-                'Quantity',
-                'Category',
-                'Edit',
-                'Delete',
-                `${copy ? 'Copy' : 'Ignore'}`,
-              ].map((header, index) => (
+              data={headerRow.map((header, index) => (
                 <Cell key={index} data={header} textStyle={styles.headerText} />
               ))}
               style={styles.head}

@@ -14,6 +14,9 @@ export interface BaseModalProps {
   footerButtons?: any[];
   triggerComponent?: React.DetailedReactHTMLElement<any, HTMLElement>;
   footerComponent: React.DetailedReactHTMLElement<any, HTMLElement>;
+  isOpen?: Boolean;
+  onClose?: () => void;
+  showTrigger?: Boolean;
 }
 
 export const BaseModal = ({
@@ -23,8 +26,12 @@ export const BaseModal = ({
   footerButtons,
   footerComponent,
   children,
+  onClose,
+  isOpen,
+  showTrigger = true
 }: BaseModalProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
 
   const triggerElement = useMemo(() => {
     return triggerComponent ? (
@@ -69,15 +76,18 @@ export const BaseModal = ({
     );
   }, [footerComponent]);
 
+  console.log(isModalOpen, 'dialog')
+
   return (
     <Dialog
       modal
-      open={isModalOpen}
+      open={isModalOpen || isOpen}
       onOpenChange={(open) => {
         setIsModalOpen(open);
+        if (!open && onClose) onClose();
       }}
     >
-      <Dialog.Trigger asChild>{triggerElement}</Dialog.Trigger>
+      {showTrigger && <Dialog.Trigger asChild>{triggerElement}</Dialog.Trigger>}      
       <Dialog.Portal>
         <Dialog.Overlay
           key="overlay"
