@@ -2,7 +2,7 @@ import { publicProcedure } from '../../trpc';
 import { ErrorFetchingGeoCodeError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { oneEntity } from '../../utils/oneEntity';
-import * as validators from '@packrat/validations';
+// import * as validators from '@packrat/validations';
 import { geoCodeService } from '../../services/geocode/geoCodeService';
 
 // /**
@@ -24,7 +24,7 @@ import { geoCodeService } from '../../services/geocode/geoCodeService';
 // };
 
 export function getGeoCodeRoute() {
-  return publicProcedure.input(validators.AddressArray).query(async (opts) => {
+  return publicProcedure.query(async (opts) => {
     const { addressArray } = opts.input;
     const { env }: any = opts.ctx;
     const result: any = await geoCodeService({

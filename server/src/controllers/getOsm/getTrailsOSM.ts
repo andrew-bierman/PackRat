@@ -5,7 +5,9 @@ import {
 } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { publicProcedure } from '../../trpc';
-import * as validators from '@packrat/validations';
+import * as z from 'zod';
+// import * as validators from '@packrat/validations';
+import * as validator from '../../middleware/validators';
 
 /**
  * Retrieves trails data from OpenStreetMap (OSM) based on the provided latitude, longitude, and radius.
@@ -29,7 +31,7 @@ import * as validators from '@packrat/validations';
 // };
 
 export function getTrailsOSMRoute() {
-  return publicProcedure.input(validators.getTrailsOSM).query(async (opts) => {
+  return publicProcedure.input(validator.getTrailsOSM).query(async (opts) => {
     const { lat = 45.5231, lon = -122.6765, radius = 50000 } = opts.input;
     const { env }: any = opts.ctx;
     return await getTrailsOsmService(env.OSM_URI, lat, lon, radius);

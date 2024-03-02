@@ -11,8 +11,8 @@ import { DropdownComponent } from '../Dropdown';
 import { useSearchParams } from 'app/hooks/common';
 import { useAuthUser } from 'app/auth/hooks';
 const options = [
-  { label: 'Public', value: 'true' },
-  { label: 'For me only', value: 'false' },
+  { label: 'Public', value: true },
+  { label: 'For me only', value: false },
 ];
 
 interface SaveTripContainerProps {
@@ -104,7 +104,6 @@ export const SaveTripContainer = ({
   // const [endDate, setEndDate] = useState("");
 
   const [isPublic, setIsPublic] = useState(true);
-
   const geoJSONData = useGetPhotonDetails({
     properties: search?.properties
       ? {
@@ -159,7 +158,7 @@ export const SaveTripContainer = ({
     closeModal();
   };
   if (isSuccess && response) {
-    router.push(`/trip/${response.trip.id}`);
+    router.push(`/trip/${response.id}`);
   }
   /**
    * Handles the change in value.
@@ -258,9 +257,10 @@ export const SaveTripContainer = ({
 
           <DropdownComponent
             onValueChange={(itemValue) => {
-              setIsPublic(itemValue);
+              setIsPublic(itemValue == 'true');
             }}
-            data={['Public', 'For me only']}
+            // data={['Public', 'For me only']}
+            data={options}
             value={isPublic}
             placeholder="Is Public"
             style={{ marginTop: 4, marginBottom: 4 }}

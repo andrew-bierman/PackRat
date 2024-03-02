@@ -4,15 +4,15 @@ export const useDeletePackItem = () => {
   const utils = queryTrpc.useContext();
   const mutation = queryTrpc.deleteItem.useMutation({
     onMutate: async (deleteItem) => {
-      const previousPack = utils.getPackById.getData({
-        packId: deleteItem.packId,
-      });
-      const itemIndex = previousPack.items.findIndex(
-        (item) => item.id === deleteItem.itemId,
-      );
-      if (itemIndex === -1) {
-        throw new Error('Item not found in the pack.');
-      }
+      // const previousPack = utils.getPackById.getData({
+      //   packId: deleteItem.packId,
+      // });
+      // const itemIndex = previousPack.items.findIndex(
+      //   (item) => item.id === deleteItem.itemId,
+      // );
+      // if (itemIndex === -1) {
+      //   throw new Error('Item not found in the pack.');
+      // }
       // const newQueryData = {
       //   ...previousPack,
       //   items: previousPack.itemPacks.filter((itemPack, index) => {
@@ -21,10 +21,9 @@ export const useDeletePackItem = () => {
       //   validatorPack: deleteItem.packId,
       // };
       // utils.getPackById.setData({ packId: deleteItem.packId }, newQueryData);
-
-      return {
-        previousPack,
-      };
+      // return {
+      //   previousPack,
+      // };
     },
     onError: (err, deleteItem, context) => {
       console.log('Error');
@@ -38,6 +37,7 @@ export const useDeletePackItem = () => {
     },
     onSuccess: (result) => {
       utils.getPackById.invalidate();
+      utils.getTripById.invalidate();
     },
   });
 

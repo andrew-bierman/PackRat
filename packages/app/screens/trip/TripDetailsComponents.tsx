@@ -23,7 +23,8 @@ const WeatherCardComponent = ({ weatherObject, weatherWeek, data }) => (
 );
 
 const TripCardComponent = ({ data, weatherObject, currentTheme }) =>
-  data?.geojson?.features.length && (
+  data?.geojson?.features?.length && (
+    // data?.geojson && (
     <TripCard
       Icon={() => (
         <FontAwesome5

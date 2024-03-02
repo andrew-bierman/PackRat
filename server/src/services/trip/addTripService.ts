@@ -1,32 +1,38 @@
-import { Trip } from '../../drizzle/methods/trip';
+import { GeoJson } from '../../drizzle/methods/Geojson';
 import { TripGeoJson } from '../../drizzle/methods/TripGeoJson';
-import { GeoJson } from '../../drizzle/methods/GeoJson';
+import { Trip } from '../../drizzle/methods/trip';
+import { validateGeojsonId, validateGeojsonType } from '../../utils/geojson';
 
-export const addTripService = async (tripDetails) => {
+export const addTripService = async (tripData: any) => {
   try {
-    const { geoJSON, ...otherTripDetails } = tripDetails;
+    const { geoJSON, ...otherTripData } = tripData;
     const tripClass = new Trip();
-    const newTrip = await tripClass.create(otherTripDetails);
-    const geoJSONClass = new GeoJson();
+    // Create Trip
+    const newTrip = await tripClass.create(otherTripData);
+    const geojsonClass = new GeoJson();
     const tripGeoJsonClass = new TripGeoJson();
-
-    // Assuming geoJSON contains a FeatureCollection
-    for (const feature of geoJSON.features) {
-      const insertedGeoJSON = await geoJSONClass.create({
-        type: feature.type,
-        geojsonId: feature.id, // Ensure you have a unique identifier here
-        properties: JSON.stringify(feature.properties),
-        geometry: JSON.stringify(feature.geometry),
+    if (!geoJSON) {
+      throw new Error("Geojson data doesn't exist");
+    }
+    geoJSON.features.map(async (feature) => {
+      const { id, type, properties, geometry } = feature;
+      if (!validateGeojsonId(id) || !validateGeojsonType(type)) {
+        throw new Error('Invalid geojson Id or geojson type');
+      }
+      const insertedGeoJson = await geojsonClass.create({
+        properties,
+        type,
+        geojsonId: id,
+        geometry,
       });
-
-      // Link the trip with the GeoJSON feature in trip_geojsons table
       await tripGeoJsonClass.create({
         tripId: newTrip.id,
-        geojsonId: insertedGeoJSON.id,
+        geojsonId: insertedGeoJson.id,
       });
-    }
+    });
 
-    return { message: 'Trip and GeoJSON added successfully', trip: newTrip };
+    return newTrip;
+    
   } catch (error) {
     console.error(error);
     throw new Error('Unable to add trip and GeoJSON data');
