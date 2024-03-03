@@ -85,7 +85,7 @@ export const Tabs = () => {
       <ExpoTabs.Screen
         name="search"
         options={{
-          headerShown: true,
+          headerShown: false,
           tabBarLabel: 'Search',
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="magnify" size={size} color={color} />
