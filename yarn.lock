@@ -24455,7 +24455,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"miniflare@npm:3.20240223.0, miniflare@npm:^3.20231218.1":
+"miniflare@npm:3.20240223.0, miniflare@npm:^3.20231218.1, miniflare@npm:^3.20240223.0":
   version: 3.20240223.0
   resolution: "miniflare@npm:3.20240223.0"
   dependencies:
@@ -29933,6 +29933,7 @@ __metadata:
     jsonwebtoken: "npm:^9.0.1"
     langchain: "npm:^0.0.203"
     migrate-mongo: "npm:^10.0.0"
+    miniflare: "npm:^3.20240223.0"
     mocha: "npm:^10.2.0"
     mock-aws-s3: "npm:^4.0.2"
     mongoose: "npm:^7.4.0"
