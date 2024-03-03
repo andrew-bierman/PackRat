@@ -8,12 +8,8 @@ export const Route = createFileRoute('/appearance/')({
 
 export default function Appearance() {
   return (
-    <>
+    <AuthWrapper>
       <AppearanceContainer />
-    </>
+    </AuthWrapper>
   );
 }
-
-Appearance.getLayout = function getLayout(page: any) {
-  return <AuthWrapper>{page}</AuthWrapper>;
-};

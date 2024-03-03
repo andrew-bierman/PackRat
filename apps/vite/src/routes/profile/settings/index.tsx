@@ -8,12 +8,8 @@ export const Route = createFileRoute('/profile/settings/')({
 
 export default function SettingsPage() {
   return (
-    <>
+    <AuthWrapper>
       <Settings />
-    </>
+    </AuthWrapper>
   );
 }
-
-SettingsPage.getLayout = function getLayout(page: any) {
-  return <AuthWrapper>{page}</AuthWrapper>;
-};

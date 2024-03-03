@@ -8,12 +8,8 @@ export const Route = createFileRoute('/feed/')({
 
 export default function FeedNav() {
   return (
-    <>
+    <AuthWrapper>
       <Feed />
-    </>
+    </AuthWrapper>
   );
 }
-
-FeedNav.getLayout = function getLayout(page: any) {
-  return <AuthWrapper>{page}</AuthWrapper>;
-};

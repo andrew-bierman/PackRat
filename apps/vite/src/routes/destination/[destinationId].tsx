@@ -9,12 +9,8 @@ export const Route = createFileRoute('/destination/[destinationId]')({
 
 export default function Destination() {
   return (
-    <>
+    <AuthWrapper>
       <DestinationPage />
-    </>
+    </AuthWrapper>
   );
 }
-
-Destination.getLayout = function getLayout(page: any) {
-  return <AuthWrapper>{page}</AuthWrapper>;
-};

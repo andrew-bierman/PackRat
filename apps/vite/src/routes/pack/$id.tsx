@@ -9,18 +9,10 @@ export const Route = createFileRoute('/pack/$id')({
 
 function PackScreen() {
   return (
-    <>
+    <AuthWrapper>
       <PackDetails />
-    </>
+    </AuthWrapper>
   );
 }
 
 export default PackScreen;
-
-PackScreen.getLayout = function getLayout(page: any) {
-  return (
-    <body>
-      <AuthWrapper>{page}</AuthWrapper>;
-    </body>
-  );
-};
