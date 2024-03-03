@@ -25,6 +25,7 @@ const extensions = [
   '.css',
   '.json',
   '.mjs',
+  '.tanstack.ts',
 ];
 
 const development = process.env.NODE_ENV === 'development';
@@ -49,6 +50,7 @@ export default defineConfig({
     // Add the resolve configuration
     alias: {
       extensions,
+      './resolver': './resolver.tanstack.js',
       '@env': resolve(__dirname, 'envResolver'),
       // 'react-native': 'react-native-web',
       'react-native/Libraries/Image/AssetRegistry': resolve(

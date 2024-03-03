@@ -3,6 +3,7 @@ const { withTamagui } = require('@tamagui/next-plugin');
 const { join } = require('path');
 const path = require('path');
 const webpack = require('webpack');
+const { withCrossPath } = require('@packrat/crosspath/adapter');
 const million = require('million/compiler');
 
 const boolVals = {
@@ -38,6 +39,7 @@ const plugins = [
     // ],
   }),
   withExpo,
+  withCrossPath('solito'),
 ];
 
 const nextConfig = function () {

@@ -12,7 +12,7 @@
     "useUnknownInCatchVariables": false,
     "baseUrl": ".",
     "paths": {
-      "@trpc": ["../../server/src/routes/index"]
+      "@trpc": ["../../server/src/routes/index"],
     },
   },
   "exclude": [
