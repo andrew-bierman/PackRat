@@ -8,8 +8,9 @@ import { useGetPhotonDetails } from 'app/hooks/destination';
 
 // import { Picker } from '@react-native-picker/picker';
 import { DropdownComponent } from '../Dropdown';
-import { useSearchParams } from 'app/hooks/common';
 import { useAuthUser } from 'app/auth/hooks';
+import { usePackId } from 'app/hooks/packs';
+
 const options = [
   { label: 'Public', value: 'true' },
   { label: 'For me only', value: 'false' },
@@ -90,8 +91,7 @@ export const SaveTripContainer = ({
   form,
 }: SaveTripContainerProps) => {
   const user = useAuthUser();
-  const searchParams = useSearchParams();
-  const packId = searchParams.get('packId');
+  const [packId] = usePackId();
 
   // defining dispatch
   const { addTrip, isSuccess, data: response } = useAddTrip();

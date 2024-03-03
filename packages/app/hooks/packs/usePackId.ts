@@ -1,7 +1,6 @@
 import { createParam } from '@packrat/crosspath';
 
 const { useParam } = createParam<{ id: string }>();
-
-export const useProfileId = () => {
+export const usePackId = () => {
   return useParam('id');
 };

@@ -14,17 +14,16 @@ import { updateNewTripPack } from '../../store/tripsStore';
 import { View } from 'react-native';
 import { AddItemModal } from './AddItemModal';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import { useSearchParams } from 'app/hooks/common';
 import { useAuthUser } from 'app/auth/hooks';
+import { usePackId } from 'app/hooks/packs';
 
 export default function PackContainer({ isCreatingTrip = false }) {
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
 
-  const searchParams = useSearchParams();
-  const [currentPackId, setCurrentPackId] = useState(
-    searchParams.get('packId'),
-  );
+  const [packIdParam] = usePackId();
+  const [currentPackId, setCurrentPackId] = useState(packIdParam);
   const user = useAuthUser();
+  console.log({ currentPackId });
 
   const [refetch, setRefetch] = useState(false);
   const styles = useCustomStyles(loadStyles);

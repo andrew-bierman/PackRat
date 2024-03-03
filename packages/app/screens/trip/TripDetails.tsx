@@ -17,14 +17,13 @@ import {
   ScoreContainerComponent,
   loadStyles,
 } from './TripDetailsComponents';
-
-const { useParam } = createParam();
+import { useTripId } from 'app/hooks/trips';
 
 export function TripDetails() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
-  const [tripId] = useParam('tripId');
+  const [tripId] = useTripId();
 
   // console.log("🚀 ~ file: TripDetails.js:34 ~ TripDetails ~ tripId:", tripId)
   const { data, isLoading, error, refetch, isOwner, isError } =
