@@ -1,1 +1,0 @@
-export { useParam } from './useParam';

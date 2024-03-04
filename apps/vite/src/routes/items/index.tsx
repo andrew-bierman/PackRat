@@ -8,12 +8,8 @@ export const Route = createFileRoute('/items/')({
 
 export default function ItemsPage() {
   return (
-    <>
+    <AuthWrapper>
       <Items />
-    </>
+    </AuthWrapper>
   );
 }
-
-ItemsPage.getLayout = function getLayout(page: any) {
-  return <AuthWrapper>{page}</AuthWrapper>;
-};

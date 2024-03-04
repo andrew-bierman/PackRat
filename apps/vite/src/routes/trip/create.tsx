@@ -8,12 +8,8 @@ export const Route = createFileRoute('/trip/create')({
 
 export default function Trip() {
   return (
-    <>
+    <AuthWrapper>
       <CreateTrip />
-    </>
+    </AuthWrapper>
   );
 }
-
-Trip.getLayout = function getLayout(page: any) {
-  return <AuthWrapper>{page}</AuthWrapper>;
-};

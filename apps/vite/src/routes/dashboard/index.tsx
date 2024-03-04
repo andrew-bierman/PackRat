@@ -9,12 +9,8 @@ export const Route = createFileRoute('/dashboard/')({
 
 export default function DashboardPage() {
   return (
-    <>
+    <AuthWrapper>
       <Dashboard />
-    </>
+    </AuthWrapper>
   );
 }
-
-DashboardPage.getLayout = function getLayout(page: any) {
-  return <AuthWrapper>{page}</AuthWrapper>;
-};

@@ -8,11 +8,11 @@ export const Route = createFileRoute('/packs/')({
 });
 
 function Packs() {
-  return <Feed feedType="userPacks" />;
+  return (
+    <AuthWrapper>
+      <Feed feedType="userPacks" />
+    </AuthWrapper>
+  );
 }
 
 export default Packs;
-
-Packs.getLayout = function getLayout(page: any) {
-  return <AuthWrapper>{page}</AuthWrapper>;
-};

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PackContainer from './PackContainer';
 import { DetailsHeader } from '../details/header';
-import { createParam } from 'app/hooks/params';
 import { TableContainer } from '../pack_table/Table';
 import { fetchUserPacks, selectPackById } from '../../store/packsStore';
 import { fetchSinglePack } from '../../store/singlePackStore';
@@ -16,16 +15,14 @@ import { AddItem } from '../item/AddItem';
 import { AddItemModal } from './AddItemModal';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useUserPacks } from 'app/hooks/packs/useUserPacks';
+import { usePackId } from 'app/hooks/packs/usePackId';
 import { useFetchSinglePack } from '../../hooks/packs';
 import { useAuthUser } from 'app/auth/hooks';
-
-const { useParam } = createParam();
 
 export function PackDetails() {
   // const [canCopy, setCanCopy] = useParam('canCopy')
   const canCopy = false;
-  const [packId] = useParam('id');
-  console.log(packId, 'packId');
+  const [packId] = usePackId();
   const link = `${CLIENT_URL}/packs/${packId}`;
   const [firstLoad, setFirstLoad] = useState(true);
   const user = useAuthUser();

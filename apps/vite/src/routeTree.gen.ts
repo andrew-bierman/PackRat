@@ -26,8 +26,8 @@ import { Route as DashboardIndexImport } from './routes/dashboard/index'
 import { Route as AppearanceIndexImport } from './routes/appearance/index'
 import { Route as AboutIndexImport } from './routes/about/index'
 import { Route as TripCreateImport } from './routes/trip/create'
-import { Route as TriptripIdImport } from './routes/trip/[tripId]'
-import { Route as ProfileidImport } from './routes/profile/[id]'
+import { Route as TripTripIdImport } from './routes/trip/$tripId'
+import { Route as ProfileIdImport } from './routes/profile/$id'
 import { Route as PackCreateImport } from './routes/pack/create'
 import { Route as PackIdImport } from './routes/pack/$id'
 import { Route as DestinationdestinationIdImport } from './routes/destination/[destinationId]'
@@ -110,13 +110,13 @@ const TripCreateRoute = TripCreateImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const TriptripIdRoute = TriptripIdImport.update({
-  path: '/trip/[tripId]',
+const TripTripIdRoute = TripTripIdImport.update({
+  path: '/trip/$tripId',
   getParentRoute: () => rootRoute,
 } as any)
 
-const ProfileidRoute = ProfileidImport.update({
-  path: '/profile/[id]',
+const ProfileIdRoute = ProfileIdImport.update({
+  path: '/profile/$id',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -160,12 +160,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PackCreateImport
       parentRoute: typeof rootRoute
     }
-    '/profile/[id]': {
-      preLoaderRoute: typeof ProfileidImport
+    '/profile/$id': {
+      preLoaderRoute: typeof ProfileIdImport
       parentRoute: typeof rootRoute
     }
-    '/trip/[tripId]': {
-      preLoaderRoute: typeof TriptripIdImport
+    '/trip/$tripId': {
+      preLoaderRoute: typeof TripTripIdImport
       parentRoute: typeof rootRoute
     }
     '/trip/create': {
@@ -238,8 +238,8 @@ export const routeTree = rootRoute.addChildren([
   DestinationdestinationIdRoute,
   PackIdRoute,
   PackCreateRoute,
-  ProfileidRoute,
-  TriptripIdRoute,
+  ProfileIdRoute,
+  TripTripIdRoute,
   TripCreateRoute,
   AboutIndexRoute,
   AppearanceIndexRoute,

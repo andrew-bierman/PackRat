@@ -8,7 +8,11 @@ export const Route = createFileRoute('/pack/create')({
 });
 
 function CreatePack() {
-  return <AddPack />;
+  return (
+    <AuthWrapper>
+      <AddPack />
+    </AuthWrapper>
+  );
 }
 
 export default CreatePack;
