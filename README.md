@@ -54,7 +54,11 @@ So pack your bags, grab your friends, and get ready for your next adventure with
       - [Root](#root)
       - [Server](#server)
       - [Client](#client)
-    - [Debugging Yarn Environment Setup - Windows](#debugging-yarn-environment-setup---windows)
+    - [Debugging 🐛](#debugging-)
+      - [Debugging Yarn Environment Setup - Windows](#debugging-yarn-environment-setup---windows)
+      - [Debugging Client Environment Setup 🐛](#debugging-client-environment-setup-)
+        - [Expo](#expo)
+        - [Debugging Dependencies](#debugging-dependencies)
   - [Docker Installation 🐳 \[Experimental\]](#docker-installation--experimental)
     - [Dependencies](#dependencies-1)
     - [Installation](#installation)
@@ -383,7 +387,9 @@ Note that the client and server are designed to run concurrently in development 
 
 
 
-### Debugging Yarn Environment Setup - Windows
+### Debugging 🐛
+
+#### Debugging Yarn Environment Setup - Windows
 
 **Check yarn and node version:**
 ```
@@ -437,6 +443,35 @@ node -v
   ```
 - Restart your code editor if opened
 - If you any encounter errors, try restarting your system.
+
+#### Debugging Client Environment Setup 🐛
+##### Expo
+- If you encounter any issues with the Expo client, try running the following commands:
+- ```
+  npx expo-doctor
+  ```
+- ```
+  npx expo install --fix
+  ```
+- ```
+  npx expo prebuild --clean
+  ```
+- ```
+  npx expo run:ios --no-build-cache
+- ```
+  npx expo start --clear
+  ```
+
+##### Debugging Dependencies
+- If you encounter issues with dependencies, try running the following commands from root directory:
+- ```
+  yarn regen
+  ```
+- ```
+  yarn clean
+  ```
+
+Additionally, if the error is occurring in nextjs that you check the transpilePackages in next.config.js and check if the problematic package is there.
 
 ## Docker Installation 🐳 [Experimental]
 

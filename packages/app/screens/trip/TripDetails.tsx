@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { createParam } from 'app/hooks/params';
 import { TableContainer } from '../../components/pack_table/Table';
 import { View } from 'react-native';
-import { RText } from '@packrat/ui';
+import { RStack, RText } from '@packrat/ui';
 import { DetailsComponent } from '../../components/details';
 import { Platform, StyleSheet } from 'react-native';
 import { CLIENT_URL } from '@env';
@@ -37,7 +37,22 @@ export function TripDetails() {
   //   dispatch(fetchSingleTrip(tripId));
   // }, [dispatch, tripId]);
 
-  if (isLoading) return <RText>Loading...</RText>;
+  if (isLoading) {
+    return (
+      <RStack>
+        <RText>Loading...</RText>;
+      </RStack>
+    );
+  }
+
+  if (isError) {
+    return (
+      <RStack>
+        <RText>There was an error</RText>;
+      </RStack>
+    );
+  }
+
   return (
     <View
       style={[
