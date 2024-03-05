@@ -10,6 +10,7 @@ import { RText, RStack, RHeading, ContextMenu } from '@packrat/ui';
 import { formatNumber } from 'app/utils/formatNumber';
 import { useAddFavorite, useFetchUserFavorites } from 'app/hooks/favorites';
 import { useAuthUser } from 'app/auth/hooks';
+import { useRouter } from 'app/hooks/router';
 
 interface CardProps {
   type: string;
