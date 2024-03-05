@@ -76,5 +76,6 @@ export default defineConfig({
         ),
       ],
     },
+    include: ['@packrat/validations'],
   },
 });
