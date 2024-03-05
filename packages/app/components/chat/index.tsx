@@ -110,7 +110,7 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
   } = useChat({ defaultChatId });
 
   const options = Array.isArray(conversations)
-    ? conversations.map((conversation) => conversation._id)
+    ? conversations.map((conversation) => conversation.id)
     : [];
 
   console.log(options);

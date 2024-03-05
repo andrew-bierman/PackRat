@@ -137,7 +137,7 @@ export default function Card({
                     }}
                   >
                     <Link
-                      href={type === 'pack' ? '/pack/' + _id : '/trip/' + _id}
+                      href={type === 'pack' ? '/pack/' + id : '/trip/' + id}
                     >
                       <RText
                         fontSize={18}
@@ -169,7 +169,7 @@ export default function Card({
                             size={24}
                             color={currentTheme.colors.cardIconColor}
                           />
-                          <DuplicateIcon link={`/pack/${_id}?copy=true`} />
+                          <DuplicateIcon link={`/pack/${id}?copy=true`} />
                         </View>
                       )}
                       {type === 'trip' && (
@@ -265,7 +265,7 @@ export default function Card({
                             gap: 8,
                           }}
                         >
-                          {user?._id === owner_id ? null : (
+                          {user?.id === owner_id ? null : (
                             <TouchableOpacity onPress={handleAddToFavorite}>
                               <AntDesign
                                 name="heart"
@@ -320,7 +320,7 @@ export default function Card({
           textValue={`View ${type}`}
           key="view"
           onSelect={() => {
-            router.push(type === 'pack' ? '/pack/' + _id : '/trip/' + _id);
+            router.push(type === 'pack' ? '/pack/' + id : '/trip/' + id);
           }}
         >
           <ContextMenu.ItemTitle>View {type}</ContextMenu.ItemTitle>
