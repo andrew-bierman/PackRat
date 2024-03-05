@@ -5,12 +5,9 @@ export const NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN =
 
 export const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export const NEXT_PUBLIC_ROUTER = 'solito';
-
 export default {
   NODE_ENV,
   API_URL,
   NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN,
   NEXT_PUBLIC_API_URL,
-  NEXT_PUBLIC_ROUTER,
 };
