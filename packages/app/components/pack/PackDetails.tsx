@@ -17,6 +17,13 @@ import { usePackId } from 'app/hooks/packs/usePackId';
 import { useFetchSinglePack } from '../../hooks/packs';
 import { useAuthUser } from 'app/auth/hooks';
 
+const SECTION = {
+  TABLE: 'TABLE',
+  CTA: 'CTA',
+  SCORECARD: 'SCORECARD',
+  CHAT: 'CHAT',
+};
+
 export function PackDetails() {
   // const [canCopy, setCanCopy] = useParam('canCopy')
   const canCopy = false;
