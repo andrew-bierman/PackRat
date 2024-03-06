@@ -18,9 +18,16 @@ export const AddItemGlobal = () => {
 
   const handleSubmit = (data: Item) => {
     console.log({ data });
-    handleAddNewItem(data, () => {
-      setIsModalOpen(false);
-    });
+    handleAddNewItem(
+      {
+        ...data,
+        weight: Number(data.weight),
+        quantity: Number(data.quantity),
+      },
+      () => {
+        setIsModalOpen(false);
+      },
+    );
   };
 
   return (
