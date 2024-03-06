@@ -9,6 +9,7 @@ import {
   useForm,
   useFormContext,
 } from 'react-hook-form';
+import { Platform } from 'react-native';
 export { useFormContext as useAppFormContext } from 'react-hook-form';
 
 interface Props extends Omit<UseFormProps, 'resolver'> {
@@ -41,7 +42,11 @@ export const Form = ({
 
   return (
     <FormProvider {...form}>
-      <RHFForm onSubmit={form.handleSubmit(onSubmit)}>{children}</RHFForm>
+      {Platform.OS === 'web' ? (
+        <RHFForm onSubmit={form.handleSubmit(onSubmit)}>{children}</RHFForm>
+      ) : (
+        <>{children}</>
+      )}
     </FormProvider>
   );
 };
