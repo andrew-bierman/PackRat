@@ -13,6 +13,20 @@ export const getItemByName = z.object({
   name: z.string(),
 });
 
+export const itemFormSchema = z.object({
+  name: z.string(),
+  weight: z.union([z.string(), z.number()]),
+  quantity: z.union([z.string(), z.number()]),
+  unit: z.string(),
+  type: z.string(),
+});
+
+export const addItemFormSchema = itemFormSchema;
+
+export const editItemFormSchema = itemFormSchema.extend({
+  id: z.string(),
+});
+
 export const addItem = z.object({
   name: z.string().nonempty(),
   weight: z.string().nonempty(),

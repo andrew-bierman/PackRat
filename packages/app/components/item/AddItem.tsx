@@ -3,11 +3,12 @@ import { ItemForm } from './ItemForm'; // assuming you moved the form related co
 import { useAddPackItem } from 'app/hooks/packs/useAddPackItem';
 import { useEditPackItem } from 'app/hooks/packs/useEditPackItem';
 import {
-  addItem as addItemSchema,
-  editItem as editItemSchema,
+  addItemFormSchema,
+  editItemFormSchema,
   type Item,
 } from '@packrat/validations';
 import { useMemo } from 'react';
+import { useAuthUser } from 'app/auth/hooks';
 
 interface AddItemProps {
   id: string;
@@ -42,7 +43,7 @@ export const AddItem = ({
   editAsDuplicate,
   setPage = (page: number) => {}, // temp fix, need props type
   page,
-  closeModalHandler,
+  closeModalHandler = () => {},
   isItemPage,
   setIsAddItemModalOpen = () => {},
 }: AddItemProps) => {
@@ -53,6 +54,9 @@ export const AddItem = ({
     addPackItem,
   } = useAddPackItem();
 
+  const user = useAuthUser();
+  const ownerId = user?.id;
+
   const {
     // mutation: addPackItemMutation
 
@@ -61,9 +65,21 @@ export const AddItem = ({
 
   const handleSubmit = (data: Item) => {
     if (isEdit) {
-      editPackItem(data);
+      console.log({ data });
+      editPackItem({
+        ...data,
+        id: initialData.id,
+        weight: Number(data.weight),
+        quantity: Number(data.quantity),
+      });
     } else {
-      addPackItem(data);
+      addPackItem({
+        ...data,
+        packId,
+        ownerId,
+        weight: Number(data.weight),
+        quantity: Number(data.quantity),
+      });
     }
 
     closeModalHandler();
@@ -96,7 +112,7 @@ export const AddItem = ({
   return (
     <View>
       <ItemForm
-        validationSchema={isEdit ? editItemSchema : addItemSchema}
+        validationSchema={isEdit ? editItemFormSchema : addItemFormSchema}
         handleSubmit={handleSubmit}
         defaultValues={defaultValues}
         isLoading={isLoading}
