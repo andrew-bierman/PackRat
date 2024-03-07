@@ -148,8 +148,11 @@ UserSchema.pre<IUser>('save', async function (next) {
       generatedUsername = `${generatedUsername}${counter}`;
       counter++;
     }
-
-    user.username = generatedUsername;
+    if (generatedUsername) {
+      user.username = generatedUsername;
+    } else {
+      throw new Error('generatedUsername is not defined');
+    }
   }
 
   next();

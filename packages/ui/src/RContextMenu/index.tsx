@@ -1,5 +1,5 @@
-import {ComponentProps} from 'react';
-import * as ZeegoContextMenu from "zeego/context-menu";
+import { ComponentProps } from 'react';
+import * as ZeegoContextMenu from 'zeego/context-menu';
 import RButton from '../RButton';
 
 type ContentProps = ComponentProps<(typeof ZeegoContextMenu)['Content']>;
@@ -9,21 +9,23 @@ const ContextMenu = {
   ...ZeegoContextMenu,
   Content: ZeegoContextMenu.create(
     (props: ContentProps) => (
-      <ZeegoContextMenu.Content 
-        {...props} 
+      <ZeegoContextMenu.Content
+        {...props}
         style={{
           backgroundColor: 'white',
           padding: 10,
           borderRadius: 8,
           gap: 10,
           boxShadow: '0px 0px 16px -8px #484848',
-        }} 
+        }}
       />
-    ), 'Content'),
+    ),
+    'Content',
+  ),
   Item: ZeegoContextMenu.create(
     (props: ItemProps) => (
-      <ZeegoContextMenu.Item 
-        {...props} 
+      <ZeegoContextMenu.Item
+        {...props}
         style={{
           padding: 10,
           backgroundColor: 'white',
@@ -34,7 +36,9 @@ const ContextMenu = {
           },
         }}
       />
-    ), 'Item'),
+    ),
+    'Item',
+  ),
 };
 
 const ExampleContextMenu = () => {
@@ -53,4 +57,3 @@ const ExampleContextMenu = () => {
 };
 
 export { ContextMenu, ExampleContextMenu };
-

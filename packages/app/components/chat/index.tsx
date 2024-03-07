@@ -7,6 +7,15 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { BaseModal, RStack, RSelect } from '@packrat/ui';
+import {
+  BaseModal,
+  Form,
+  FormInput,
+  FormSelect,
+  RStack,
+  SubmitButton,
+} from '@packrat/ui';
+import { sendMessage } from '@packrat/validations';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useChat } from 'app/hooks/chat/useChat';
 import { loadStyles } from './chat.style';
@@ -99,26 +108,32 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
     setConversationId,
   } = useChat({ defaultChatId });
 
+  const options = Array.isArray(conversations)
+    ? conversations.map((conversation) => conversation._id)
+    : [];
+
+  console.log(options);
+
   return (
     <View style={styles.container}>
       <RStack style={{ alignItems: 'center' }}>
         {showChator && (
-          <RSelect
-            selectedValue={conversationId}
-            minWidth="200px" // Adjust width as needed
-            accessibilityLabel="Select a conversation"
-            placeholder="Select a conversation"
-            onValueChange={(itemValue) => setConversationId(itemValue)}
-            width="200px" // Adjust width as needed
-          >
-            {conversations?.map((conversation) => (
-              <RSelect.Item
-                key={conversation._id}
-                label={conversation._id}
-                value={conversation._id}
-              />
-            ))}
-          </RSelect>
+          <Form validationSchema={sendMessage}>
+            <>
+              {options?.length ? (
+                <>
+                  <FormSelect
+                    options={options}
+                    style={{ width: '100%' }}
+                    placeholder="Select conversation ..."
+                    name="conversation"
+                  />
+                </>
+              ) : (
+                <Text>You don't have conversations yet</Text>
+              )}
+            </>
+          </Form>
           // <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           //   <Box
           //     borderRadius="lg"
@@ -149,19 +164,16 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
           //   </Box>
           // </ScrollView>
         )}
+        <MessageList messages={parsedMessages} />
+        <Form validationSchema={sendMessage}>
+          <RStack style={{ marginTop: 16, gap: 8 }}>
+            <FormInput name="message" placeholder="Type a message..." />
+            <SubmitButton onSubmit={handleSendMessage}>
+              <Text style={styles.sendText}>Send</Text>
+            </SubmitButton>
+          </RStack>
+        </Form>
       </RStack>
-      <MessageList messages={parsedMessages} />
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          onChangeText={setUserInput}
-          value={userInput}
-          placeholder="Type a message..."
-        />
-        <TouchableOpacity style={styles.sendButton} onPress={handleSendMessage}>
-          <Text style={styles.sendText}>Send</Text>
-        </TouchableOpacity>
-      </View>
     </View>
   );
 };
