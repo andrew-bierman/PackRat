@@ -1,26 +1,27 @@
 {
-    "compilerOptions": {
-      "strictNullChecks": true,
-      "noUncheckedIndexedAccess": true,
-      "paths": {
-        "app/*": ["./packages/app/*"],
-        "@packrat/api/*": ["./packages/api/*"],
-        "@packrat/ui/*": ["./packages/ui/*"],
-        "server/*": ["./server/*"],
-      },
-      "plugins": [
-        {
-          "name": "@nderscore/tamagui-typescript-plugin",
-          "pathToApp": "apps/next",
-          "defaultTheme": "light",
-          "colorTileSize": 18,
-          "completionFilters": {
-            "showColorTokens": true,
-            "showTrueTokens": true,
-            "custom": {}
-          }
-        }
-      ]
+  "compilerOptions": {
+    "strictNullChecks": true,
+    "noUncheckedIndexedAccess": true,
+    "module": "commonJS",
+    "paths": {
+      "app/*": ["./packages/app/*"],
+      "@packrat/api/*": ["./packages/api/*"],
+      "@packrat/ui/*": ["./packages/ui/*"],
+      "server/*": ["./server/*"]
     },
-    "extends": "expo/tsconfig.base"
-  }
+    "plugins": [
+      {
+        "name": "@nderscore/tamagui-typescript-plugin",
+        "pathToApp": "apps/next",
+        "defaultTheme": "light",
+        "colorTileSize": 18,
+        "completionFilters": {
+          "showColorTokens": true,
+          "showTrueTokens": true,
+          "custom": {}
+        }
+      }
+    ]
+  },
+  "extends": "expo/tsconfig.base"
+}

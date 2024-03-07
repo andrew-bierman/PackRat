@@ -32,7 +32,7 @@ export const createContext = async ({
 
   // Extract the token from the request headers, verify it, and retrieve the user. Add the user to the context object.
   const getUserFromHeader = async () => {
-    let user = null;
+    let user: any = null;
 
     // Extract the token from the request headers
     const authHeader = req.headers.authorization || '';
@@ -41,8 +41,10 @@ export const createContext = async ({
     if (authHeader.startsWith('Bearer ')) {
       const token = authHeader.split(' ')[1];
 
-      // Try to verify the token and retrieve the user
-      user = await getUserByTokenService(token);
+      // Check if token is defined
+      if (token) {
+        user = await getUserByTokenService(token);
+      }
     }
 
     return user;

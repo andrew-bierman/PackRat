@@ -1,6 +1,8 @@
+import type { Document as MongooseDocument } from 'mongoose';
 import Item from '../../models/itemModel';
 import Pack from '../../models/packModel';
 import { ItemCategoryModel } from '../../models/itemCategory';
+import type { ObjectId } from 'mongodb';
 
 /**
  * Edits a global item by creating a duplicate item in a specific pack.
@@ -14,20 +16,38 @@ import { ItemCategoryModel } from '../../models/itemCategory';
  * @param {string} type - The type/category of the duplicate item.
  * @return {Promise<object>} The newly created duplicate item.
  */
+
+type ItemType = MongooseDocument & {
+  createdAt: Date;
+  updatedAt: Date;
+  weight: number;
+  name: string;
+  packs: ObjectId[];
+  quantity: number;
+  unit: string;
+  owners: ObjectId[];
+  global: boolean;
+  category?: ObjectId;
+};
+
 export const editGlobalItemAsDuplicateService = async (
-  itemId,
-  packId,
-  name,
-  weight,
-  quantity,
-  unit,
-  type,
-) => {
+  itemId: string,
+  packId: string,
+  name: string,
+  weight: number,
+  quantity: number,
+  unit: string,
+  type: string,
+): Promise<ItemType | null> => {
   const category = await ItemCategoryModel.findOne({
     name: type,
   });
 
-  let newItem = await Item.create({
+  if (!category) {
+    throw new Error(`No category found with: ${type}`);
+  }
+
+  let newItem: ItemType | null = await Item.create({
     name,
     weight,
     unit,
@@ -37,9 +57,9 @@ export const editGlobalItemAsDuplicateService = async (
     packs: [packId],
   });
 
-  newItem = await Item.findById(newItem._id).populate('category', 'name');
+  newItem = await Item.findById(newItem?._id).populate('category', 'name');
 
-  await Pack.updateOne({ _id: packId }, { $addToSet: { items: newItem._id } });
+  await Pack.updateOne({ _id: packId }, { $addToSet: { items: newItem?._id } });
 
   await Pack.updateOne({ _id: packId }, { $pull: { items: itemId } });
 
