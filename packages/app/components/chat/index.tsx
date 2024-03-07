@@ -6,7 +6,6 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
-import { BaseModal, RStack, RSelect } from '@packrat/ui';
 import {
   BaseModal,
   Form,
@@ -15,7 +14,7 @@ import {
   RStack,
   SubmitButton,
 } from '@packrat/ui';
-import { sendMessage } from '@packrat/validations';
+// import { sendMessage } from '@packrat/validations';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useChat } from 'app/hooks/chat/useChat';
 import { loadStyles } from './chat.style';
@@ -76,16 +75,16 @@ const MessageList = ({ messages }: MessageListProps) => {
   );
 };
 
-const Chator: React.FC<ChatorProps> = ({
+const Chator: React.FC<ChatSelectorProps> = ({
   conversation,
-  on,
+  onSelect,
   isActive,
 }) => {
   const styles = useCustomStyles(loadStyles);
   return (
     <TouchableOpacity
       key={conversation._id}
-      onPress={() => on(conversation._id)}
+      onPress={() => onSelect(conversation._id)}
       style={[styles.chator, isActive && styles.activeChator]}
     >
       <Text style={styles.chatorText}>{conversation._id}</Text>
@@ -94,7 +93,7 @@ const Chator: React.FC<ChatorProps> = ({
 };
 
 const ChatComponent: React.FC<ChatComponentProps> = ({
-  showChator = true,
+  showChatSelector = true,
   defaultChatId = null,
 }) => {
   const styles = useCustomStyles(loadStyles);
@@ -117,8 +116,10 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
   return (
     <View style={styles.container}>
       <RStack style={{ alignItems: 'center' }}>
-        {showChator && (
-          <Form validationSchema={sendMessage}>
+        {showChatSelector && (
+          <Form
+          // validationSchema={sendMessage}
+          >
             <>
               {options?.length ? (
                 <>
@@ -165,7 +166,9 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
           // </ScrollView>
         )}
         <MessageList messages={parsedMessages} />
-        <Form validationSchema={sendMessage}>
+        <Form
+        // validationSchema={sendMessage}
+        >
           <RStack style={{ marginTop: 16, gap: 8 }}>
             <FormInput name="message" placeholder="Type a message..." />
             <SubmitButton onSubmit={handleSendMessage}>
