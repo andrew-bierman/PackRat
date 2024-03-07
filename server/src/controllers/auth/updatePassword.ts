@@ -25,6 +25,8 @@ export const updatePassword = async (req, res, next) => {
 
     if (!isMatch) throw new Error('Incorrect password');
 
+    if (!JWT_SECRET) throw new Error('JWT_SECRET is not defined');
+
     const salt = await bcrypt.genSalt(parseInt(JWT_SECRET));
 
     newPassword = await bcrypt.hash(newPassword, salt);

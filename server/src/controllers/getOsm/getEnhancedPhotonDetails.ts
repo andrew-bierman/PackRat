@@ -50,6 +50,10 @@ export const getEnhancedPhotonDetails = async (req, res, next) => {
 
   const nominatimUrl = `https://nominatim.openstreetmap.org/lookup?format=json&osm_ids=${type[0]}${id}&addressdetails=1`;
 
+  if (!overpassUrl) {
+    throw new Error('OSM_URI is not defined');
+  }
+
   const overpassPromise = axios.post(overpassUrl, overpassQuery, {
     headers: { 'Content-Type': 'text/plain' },
   });
