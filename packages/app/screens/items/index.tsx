@@ -19,13 +19,11 @@ export default function Items() {
   const styles = useCustomStyles(loadStyles);
   const [refreshing, setRefreshing] = React.useState(false);
 
-  const onRefresh = React.useCallback(() => {
+  const onRefresh = () => {
     setRefreshing(true);
-    setTimeout(() => {
-      refetch();
-      setRefreshing(false);
-    }, 2000);
-  }, []);
+    refetch();
+    setRefreshing(false);
+  };
 
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
@@ -45,7 +43,7 @@ export default function Items() {
         <BaseModal
           title="Add a global Item"
           trigger="Add Item"
-          // triggerComponent={<ModalTriggerButton />}
+        // triggerComponent={<ModalTriggerButton />}
         >
           <AddItemGlobal />
         </BaseModal>

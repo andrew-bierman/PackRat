@@ -62,13 +62,11 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
   );
   const user = useAuthUser();
 
-  const onRefresh = React.useCallback(() => {
+  const onRefresh = () => {
     setRefreshing(true);
-    setTimeout(() => {
-      refetch();
-      setRefreshing(false);
-    }, 2000);
-  }, []);
+    refetch();
+    setRefreshing(false);
+  };
 
   /**
    * Renders the data for the feed based on the feed type and search query.

@@ -62,17 +62,15 @@ export function PackDetails() {
   if (isLoading) return <Text>Loading...</Text>;
 
   const refetchData = () => {
+    setRefreshing(true);
     refetchUserPacks();
     refetchSinglePack();
   };
 
-  const onRefresh = useCallback(() => {
-    setRefreshing(true);
-    setTimeout(() => {
-      refetchData();
-      setRefreshing(false);
-    }, 2000);
-  }, []);
+  const onRefresh = () => {
+    refetchData();
+    setRefreshing(false);
+  };
 
   return (
     <View

@@ -7,19 +7,19 @@ import { useProfileId } from 'app/hooks/user';
 
 const Profile = () => {
   const { id } = useProfileId();
-
+  const metaTitle = id ? `${id}'s Profile` : "Profile"
   return (
     <>
       {Platform.OS === 'web' && (
         <Head>
-          <title>{`${id}'s Profile`}</title>
-          <meta name="description" content={`${id}'s Profile`} />
+          <title>{metaTitle}</title>
+          <meta name="description" content={metaTitle} />
         </Head>
       )}
       <Stack.Screen
         options={{
-          title: `${id}'s Profile`,
-          name: `${id}'s Profile`,
+          title: metaTitle,
+          name: metaTitle,
         }}
       />
       <ProfileContainer id={id} />

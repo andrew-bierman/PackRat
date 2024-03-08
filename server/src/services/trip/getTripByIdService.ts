@@ -29,7 +29,7 @@ export const getTripByIdService = async (tripId: string): Promise<object> => {
 
     return tripObject;
   } catch (error) {
-    console.error(error);
+    console.log("error", error);
     throw new Error('Trip cannot be found');
   }
 };

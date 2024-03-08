@@ -193,13 +193,11 @@ export default function ProfileContainer({ id = null }) {
     refetch: refetchProfile,
   } = useProfile(id);
 
-  const onRefresh = React.useCallback(() => {
+  const onRefresh = () => {
     setRefreshing(true);
-    setTimeout(() => {
-      refetchProfile();
-      setRefreshing(false);
-    }, 2000);
-  }, []);
+    refetchProfile();
+    setRefreshing(false);
+  };
 
   return (
     <View>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useDeletePackItem } from 'app/hooks/packs/useDeletePackItem';
-import { BaseModal } from '@packrat/ui';
+import { BaseAlert } from '@packrat/ui';
 import { useDeleteItem } from 'app/hooks/items';
 
 interface DeletePackItemModalProps {
@@ -46,7 +46,7 @@ export const DeletePackItemModal = ({
   ];
 
   return (
-    <BaseModal
+    <BaseAlert
       isOpen={isOpen}
       toggle={toggle}
       hideIcon={hideIcon}
@@ -55,6 +55,6 @@ export const DeletePackItemModal = ({
       footerButtons={footerButtons}
     >
       Are you sure you want to delete this item?
-    </BaseModal>
+    </BaseAlert>
   );
 };
