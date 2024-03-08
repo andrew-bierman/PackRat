@@ -39,7 +39,12 @@ RelationSchema.method('toJSON', async function () {
   // object.id = _id.toString();
   // Asynchronously populate the members (you may need to add your own logic to populate based on type)
   for (const member of object.members) {
-    member.refId = await mongoose.model(member.type).findById(member.refId);
+    if (member.type) {
+      const refId = await mongoose.model(member.type).findById(member.refId);
+      if (refId) {
+        member.refId = refId;
+      }
+    }
   }
   return object;
 });

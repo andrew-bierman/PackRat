@@ -1,4 +1,8 @@
+import type { IUser } from '../../models/userModel';
+import type { Document as MongooseDocument } from 'mongoose';
 import User from '../../models/userModel';
+
+import type { ObjectId } from 'mongodb';
 import Pack from '../../models/packModel';
 
 /**
@@ -7,10 +11,13 @@ import Pack from '../../models/packModel';
  * @param {string} userId - The ID of the user.
  * @return {Promise<object>} The updated user object.
  */
+
+type UserType = MongooseDocument & IUser & { _id: ObjectId };
+
 export const addToFavoriteService = async (
   packId: string,
   userId: string,
-): Promise<object> => {
+): Promise<UserType | null> => {
   try {
     const exists = await User.find(
       { favorites: { $in: [packId] } },

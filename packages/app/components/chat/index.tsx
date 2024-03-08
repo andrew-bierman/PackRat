@@ -5,9 +5,7 @@ import {
   FlatList,
   TextInput,
   TouchableOpacity,
-  ScrollView,
 } from 'react-native';
-import useTheme from '../../hooks/useTheme';
 import {
   BaseModal,
   Form,
@@ -16,7 +14,7 @@ import {
   RStack,
   SubmitButton,
 } from '@packrat/ui';
-import { sendMessage } from '@packrat/validations';
+// import { sendMessage } from '@packrat/validations';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useChat } from 'app/hooks/chat/useChat';
 import { loadStyles } from './chat.style';
@@ -77,7 +75,7 @@ const MessageList = ({ messages }: MessageListProps) => {
   );
 };
 
-const ChatSelector: React.FC<ChatSelectorProps> = ({
+const Chator: React.FC<ChatSelectorProps> = ({
   conversation,
   onSelect,
   isActive,
@@ -87,9 +85,9 @@ const ChatSelector: React.FC<ChatSelectorProps> = ({
     <TouchableOpacity
       key={conversation._id}
       onPress={() => onSelect(conversation._id)}
-      style={[styles.chatSelector, isActive && styles.activeChatSelector]}
+      style={[styles.chator, isActive && styles.activeChator]}
     >
-      <Text style={styles.chatSelectorText}>{conversation._id}</Text>
+      <Text style={styles.chatorText}>{conversation._id}</Text>
     </TouchableOpacity>
   );
 };
@@ -119,7 +117,9 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
     <View style={styles.container}>
       <RStack style={{ alignItems: 'center' }}>
         {showChatSelector && (
-          <Form validationSchema={sendMessage}>
+          <Form
+          // validationSchema={sendMessage}
+          >
             <>
               {options?.length ? (
                 <>
@@ -166,7 +166,9 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
           // </ScrollView>
         )}
         <MessageList messages={parsedMessages} />
-        <Form validationSchema={sendMessage}>
+        <Form
+        // validationSchema={sendMessage}
+        >
           <RStack style={{ marginTop: 16, gap: 8 }}>
             <FormInput name="message" placeholder="Type a message..." />
             <SubmitButton onSubmit={handleSendMessage}>

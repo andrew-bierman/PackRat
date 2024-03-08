@@ -63,7 +63,9 @@ export async function fromGeoJSON(Model: any, geoJSON: any) {
   // Extract OSM ID and type from properties, if available
   if (geoJSON.id) {
     const { type, id } = extractIdAndType(geoJSON.id);
-    instance.osm_type = type.toLowerCase(); // Standardize osm_type to be lowercase
+    if (type) {
+      instance.osm_type = type.toLowerCase(); // Standardize osm_type to be lowercase
+    }
     instance.osm_id = id;
   }
 
@@ -307,7 +309,7 @@ export async function findOrCreateMany(Model = Way, data: any) {
     throw new Error('Data is not iterable, cannot proceed.');
   }
 
-  const instances = [];
+  const instances: any[] = [];
 
   for (const element of data) {
     const instance = await processElement(element);
