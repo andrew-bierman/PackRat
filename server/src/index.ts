@@ -32,7 +32,7 @@ app.use(morgan('tiny'));
 
 // Applying CORS middleware with provided options, if any.
 if (corsOptions) {
-  app.use(cors());
+  app.use(cors(corsOptions as any));
 }
 
 // Parse incoming JSON bodies. Limit set to prevent large payloads.

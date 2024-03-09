@@ -2,7 +2,7 @@
   "name": "@packrat/crosspath",
   "private": true,
   "version": "1.0.0",
-  "main": "src/index.tsx",
+  "main": "dist/index.js",
   "module:jsx": "src",
   "types": "./types/lib-interface.d.ts",
   "exports": {

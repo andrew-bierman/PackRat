@@ -15,7 +15,7 @@ module.exports.withCrossPath =
         ];
 
         config.resolve.alias = {
-          './resolver': `./resolver.${adapter}.js`,
+          '@crosspath-resolver': `./resolver.${adapter}.js`,
           ...(config.resolve?.alias ?? {}),
         };
 

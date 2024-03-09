@@ -7579,7 +7579,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/build@npm:1.91.3, @tamagui/build@npm:^1.91.3":
+"@tamagui/build@npm:1.91.3, @tamagui/build@npm:^1.90.15, @tamagui/build@npm:^1.91.3":
   version: 1.91.3
   resolution: "@tamagui/build@npm:1.91.3"
   dependencies:
@@ -32040,7 +32040,11 @@ __metadata:
   dependencies:
     "@originjs/vite-plugin-commonjs": "npm:^1.0.3"
     "@packrat/ui": "npm:*"
+    "@packrat/validations": "npm:*"
     "@tamagui/vite-plugin": "npm:^1.91.3"
+    "@tanstack/react-router": "npm:^1.16.5"
+    "@tanstack/router-devtools": "npm:^1.16.5"
+    "@tanstack/router-vite-plugin": "npm:^1.16.5"
     "@types/react": "npm:^18.2.55"
     "@types/react-dom": "npm:^18.2.19"
     "@typescript-eslint/eslint-plugin": "npm:^6.21.0"

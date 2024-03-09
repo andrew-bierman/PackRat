@@ -1,2 +1,2 @@
 // @ts-ignore
-export * from './resolver';
+export * from '@crosspath-resolver';
