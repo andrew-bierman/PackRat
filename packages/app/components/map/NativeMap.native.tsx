@@ -11,7 +11,8 @@ import {
 // import { check, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Mapbox, { ShapeSource, offlineManager, Camera } from '@rnmapbox/maps';
-import { AlertDialog, Button, Input } from 'native-base';
+import { AlertDialog } from 'native-base';
+import { RButton, RInput } from '@packrat/ui';
 
 // get mapbox access token from .env file
 import { MAPBOX_ACCESS_TOKEN } from '@env';
@@ -282,7 +283,7 @@ function NativeMap({ shape: shapeProp }) {
                 Enter the name you wish to save this map as:
               </AlertDialog.Header>
               <AlertDialog.Body>
-                <Input
+                <RInput
                   onChangeText={(text) => {
                     setMapName(text);
                   }}
@@ -293,8 +294,8 @@ function NativeMap({ shape: shapeProp }) {
                 />
               </AlertDialog.Body>
               <AlertDialog.Footer>
-                <Button.Group space={2}>
-                  <Button
+                <RButton.Group space={2}>
+                  <RButton
                     variant="unstyled"
                     colorScheme="coolGray"
                     onPress={() => {
@@ -303,8 +304,8 @@ function NativeMap({ shape: shapeProp }) {
                     ref={cancelRef}
                   >
                     Cancel
-                  </Button>
-                  <Button
+                  </RButton>
+                  <RButton
                     colorScheme="success"
                     onPress={async () => {
                       setShowMapNameInputDialog(false);
@@ -324,8 +325,8 @@ function NativeMap({ shape: shapeProp }) {
                     }}
                   >
                     OK
-                  </Button>
-                </Button.Group>
+                  </RButton>
+                </RButton.Group>
               </AlertDialog.Footer>
             </AlertDialog.Content>
           </AlertDialog>
