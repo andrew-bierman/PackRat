@@ -65,12 +65,12 @@ export default function TripCard({
       }}
       style={
         isSearch
-          ? styles.searchContainer
-          : isMap
-            ? styles.mapCard
-            : styles.containerMobile
-              ? styles.containerMobile
-              : styles.mutualStyles
+        ? styles.searchContainer
+        : isMap
+          ? styles.mapCard
+          : styles.containerMobile
+            ? styles.containerMobile
+            : styles.mutualStyles
       }
     >
       <RStack
@@ -180,7 +180,6 @@ const loadStyles = (theme) => {
       padding: currentTheme.size.cardPadding,
       paddingHorizontal: currentTheme.padding.paddingInside,
       marginBottom: 20,
-      height: Platform.OS === 'web' ? 650 : '100%',
       overflow: 'hidden',
       alignSelf: 'center',
     },
