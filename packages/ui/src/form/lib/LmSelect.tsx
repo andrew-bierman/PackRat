@@ -1,29 +1,31 @@
-import { getFontSize, Select, SelectProps, ThemeProps, YStack } from 'tamagui'
-import { LinearGradient } from '@tamagui/linear-gradient'
+import { getFontSize, Select, SelectProps, ThemeProps, YStack } from 'tamagui';
+import { LinearGradient } from '@tamagui/linear-gradient';
 import {
   CaretDownRegular,
   CaretUpRegular,
   CheckRegular,
   colormap,
   ThemeColors,
-} from '@tamagui-extras/core'
-import { useId, useMemo, useState } from 'react'
-import { LmFormFieldContainer } from './LmFormFieldContainer'
-import { LmFormContainerBaseTypes } from './formContainerTypes'
+} from '@tamagui-extras/core';
+import { useId, useMemo, useState } from 'react';
+import { LmFormFieldContainer } from './LmFormFieldContainer';
+import { LmFormContainerBaseTypes } from './formContainerTypes';
 
-type GetAltThemeNames<S> = (S extends `${string}_${infer Alt}` ? GetAltThemeNames<Alt> : S) | S
+type GetAltThemeNames<S> =
+  | (S extends `${string}_${infer Alt}` ? GetAltThemeNames<Alt> : S)
+  | S;
 
 export type LmSelectProps = SelectProps &
   LmFormContainerBaseTypes & {
-    value?: string
-    options: { label: string; value: string | number }[]
-    colorVariant?: ThemeColors
-    themeName?: ThemeProps['name']
-    width?: number | string
-    placeholder?: string
-    dropDownLabel?: string // above the items list
-    fullWidth?: boolean
-  }
+    value?: string;
+    options: { label: string; value: string | number }[];
+    colorVariant?: ThemeColors;
+    themeName?: ThemeProps['name'];
+    width?: number | string;
+    placeholder?: string;
+    dropDownLabel?: string; // above the items list
+    fullWidth?: boolean;
+  };
 
 export function LmSelect({
   value,
@@ -46,14 +48,18 @@ export function LmSelect({
   containerProps,
   ...rest
 }: LmSelectProps) {
-  const [selectVal, setSelectVal] = useState<string>(value ?? defaultValue ?? '')
-  const id = useId()
+  const [selectVal, setSelectVal] = useState<string>(
+    value ?? defaultValue ?? '',
+  );
+  const id = useId();
   // rest.size = rest.size || '$4'
 
   return (
     <LmFormFieldContainer
       id={id}
-      theme={colorVariant ? (colormap[colorVariant] as any) : themeName || undefined}
+      theme={
+        colorVariant ? (colormap[colorVariant] as any) : themeName || undefined
+      }
       error={error}
       required={required}
       labelProps={labelProps}
@@ -71,9 +77,9 @@ export function LmSelect({
         {...rest}
         value={selectVal}
         onValueChange={(val) => {
-          setSelectVal(val)
+          setSelectVal(val);
           if (typeof onValueChange === 'function') {
-            onValueChange(val)
+            onValueChange(val);
           }
         }}
       >
@@ -122,14 +128,18 @@ export function LmSelect({
               {useMemo(
                 () =>
                   options.map((item, i) => (
-                    <Select.Item index={i} key={item.value} value={`${item.value}`}>
+                    <Select.Item
+                      index={i}
+                      key={item.value}
+                      value={`${item.value}`}
+                    >
                       <Select.ItemText>{item.label}</Select.ItemText>
                       <Select.ItemIndicator marginLeft="auto">
                         <CheckRegular size={16} />
                       </Select.ItemIndicator>
                     </Select.Item>
                   )),
-                [options]
+                [options],
               )}
             </Select.Group>
             {/* Native gets an extra icon */}
@@ -144,7 +154,9 @@ export function LmSelect({
                 width={'$4'}
                 pointerEvents="none"
               >
-                <CaretDownRegular size={getFontSize((rest.size ?? '$true') as any)} />
+                <CaretDownRegular
+                  size={getFontSize((rest.size ?? '$true') as any)}
+                />
               </YStack>
             )}
           </Select.Viewport>
@@ -170,5 +182,5 @@ export function LmSelect({
         </Select.Content>
       </Select>
     </LmFormFieldContainer>
-  )
+  );
 }

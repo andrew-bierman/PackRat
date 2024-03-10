@@ -13,7 +13,7 @@ import {
 } from '@packrat/ui';
 import { FontAwesome } from '@expo/vector-icons';
 import { NODE_ENV } from '@env';
-import { Link } from 'solito/link';
+import { Link } from '@packrat/crosspath';
 import { InformUser } from '../utils/ToastUtils';
 import useTheme from '../hooks/useTheme';
 import { useGoogleAuth, useLogin } from 'app/auth/hooks';

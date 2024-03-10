@@ -1,7 +1,15 @@
-import { ColorTokens, Slider, SliderProps, SliderThumbProps, styled, Text, XStack } from 'tamagui'
-import { useId, useState } from 'react'
-import { LmFormFieldContainer } from './LmFormFieldContainer'
-import { LmFormContainerBaseTypes } from './formContainerTypes'
+import {
+  ColorTokens,
+  Slider,
+  SliderProps,
+  SliderThumbProps,
+  styled,
+  Text,
+  XStack,
+} from 'tamagui';
+import { useId, useState } from 'react';
+import { LmFormFieldContainer } from './LmFormFieldContainer';
+import { LmFormContainerBaseTypes } from './formContainerTypes';
 
 const CustomSliderTrack = styled(Slider.Track, {
   variants: {
@@ -9,31 +17,31 @@ const CustomSliderTrack = styled(Slider.Track, {
       ':string': (color) => {
         return {
           backgroundColor: color,
-        }
+        };
       },
     },
   } as const,
-})
+});
 const CustomSliderTrackActive = styled(Slider.TrackActive, {
   variants: {
     colorCustom: {
       ':string': (color: string) => {
         return {
           backgroundColor: color,
-        }
+        };
       },
     },
   } as const,
-})
+});
 
 export type LmSliderProps = SliderProps &
   LmFormContainerBaseTypes & {
-    defaultValue?: number[]
-    color?: ColorTokens | string
-    colorActiveOnly?: boolean
-    thumbProps?: SliderThumbProps
-    showValue?: boolean
-  }
+    defaultValue?: number[];
+    color?: ColorTokens | string;
+    colorActiveOnly?: boolean;
+    thumbProps?: SliderThumbProps;
+    showValue?: boolean;
+  };
 
 export function LmSlider({
   thumbProps,
@@ -51,9 +59,9 @@ export function LmSlider({
   containerProps,
   ...sliderProps
 }: LmSliderProps) {
-  const id = useId()
-  const [value, setValue] = useState<number[]>(defaultValue)
-  const trackColor = color ? `${color}Dark` : undefined
+  const id = useId();
+  const [value, setValue] = useState<number[]>(defaultValue);
+  const trackColor = color ? `${color}Dark` : undefined;
   return (
     <LmFormFieldContainer
       id={id}
@@ -77,13 +85,15 @@ export function LmSlider({
           step={1}
           {...sliderProps}
           onValueChange={(v) => {
-            setValue(v)
+            setValue(v);
             if (typeof sliderProps.onValueChange === 'function') {
-              sliderProps.onValueChange(v)
+              sliderProps.onValueChange(v);
             }
           }}
         >
-          <CustomSliderTrack colorCustom={!colorActiveOnly ? trackColor : undefined}>
+          <CustomSliderTrack
+            colorCustom={!colorActiveOnly ? trackColor : undefined}
+          >
             <CustomSliderTrackActive colorCustom={trackColor} />
           </CustomSliderTrack>
           <Slider.Thumb
@@ -101,5 +111,5 @@ export function LmSlider({
         {showValue && <Text>{value[0]}</Text>}
       </XStack>
     </LmFormFieldContainer>
-  )
+  );
 }

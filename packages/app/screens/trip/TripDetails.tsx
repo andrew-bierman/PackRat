@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
-import { createParam } from 'solito';
+import { createParam } from 'app/hooks/params';
 import { format } from 'date-fns';
-
 import { TableContainer } from '../../components/pack_table/Table';
 import { View } from 'react-native';
 import { RText, RStack } from '@packrat/ui';
@@ -20,8 +19,7 @@ import {
   ScoreContainerComponent,
   loadStyles,
 } from './TripDetailsComponents';
-
-const { useParam } = createParam();
+import { useTripId } from 'app/hooks/trips';
 
 const SECTION = {
   DESCRIPTION: 'DESCRIPTION',
@@ -35,7 +33,7 @@ export function TripDetails() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
-  const [tripId] = useParam('tripId');
+  const [tripId] = useTripId();
 
   // console.log("🚀 ~ file: TripDetails.js:34 ~ TripDetails ~ tripId:", tripId)
   const { data, isLoading, error, refetch, isOwner, isError } =

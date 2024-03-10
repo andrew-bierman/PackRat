@@ -1,11 +1,11 @@
-import { Controller, FieldValues } from 'react-hook-form'
-import { LmRhfProps } from './lmRhfProps'
-import { LmAutocomplete, LmAutocompleteProps } from '../LmAutocomplete'
+import { Controller, FieldValues } from 'react-hook-form';
+import { LmRhfProps } from './lmRhfProps';
+import { LmAutocomplete, LmAutocompleteProps } from '../LmAutocomplete';
 
 export type LmAutocompleteRhfProps<T extends FieldValues> = LmRhfProps<T> &
   LmAutocompleteProps & {
-    matchId?: boolean
-  }
+    matchId?: boolean;
+  };
 
 export function LmAutocompleteRhf<T extends FieldValues = FieldValues>({
   name,
@@ -24,12 +24,14 @@ export function LmAutocompleteRhf<T extends FieldValues = FieldValues>({
       control={control}
       defaultValue={defaultValue}
       render={({ field: { onChange, value }, fieldState: { error } }) => {
-        let currentValue = multiple ? value || [] : value || null
+        let currentValue = multiple ? value || [] : value || null;
         if (matchId) {
           // @ts-ignore
           currentValue = multiple
-            ? (value || []).map((i: any) => options.find((j) => (j.value || j) === i))
-            : options.find((i) => (i.value || i) === value) || null
+            ? (value || []).map((i: any) =>
+                options.find((j) => (j.value || j) === i),
+              )
+            : options.find((i) => (i.value || i) === value) || null;
         }
 
         return (
@@ -40,20 +42,22 @@ export function LmAutocompleteRhf<T extends FieldValues = FieldValues>({
             options={options}
             error={!!error}
             onChange={(v) => {
-              let changedVal = v
+              let changedVal = v;
               if (matchId) {
                 // @ts-ignore
-                changedVal = Array.isArray(v) ? v.map((i: any) => i?.value || i) : v?.value || v
+                changedVal = Array.isArray(v)
+                  ? v.map((i: any) => i?.value || i)
+                  : v?.value || v;
               }
-              onChange(changedVal)
+              onChange(changedVal);
               if (typeof inputProps.onChange === 'function') {
-                inputProps.onChange(v)
+                inputProps.onChange(v);
               }
             }}
             helperText={error ? error.message : inputProps.helperText}
           />
-        )
+        );
       }}
     />
-  )
+  );
 }

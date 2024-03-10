@@ -1,17 +1,17 @@
-import { Input, InputProps, Stack, TextArea } from 'tamagui'
-import { forwardRef, useId, useState } from 'react'
-import { LmFormFieldContainer } from './LmFormFieldContainer'
-import { LmFormContainerBaseTypes } from './formContainerTypes'
-import { Pressable } from 'react-native'
-import { EyeRegular, EyeSlashRegular, IconProps } from '@tamagui-extras/core'
+import { Input, InputProps, Stack, TextArea } from 'tamagui';
+import { forwardRef, useId, useState } from 'react';
+import { LmFormFieldContainer } from './LmFormFieldContainer';
+import { LmFormContainerBaseTypes } from './formContainerTypes';
+import { Pressable } from 'react-native';
+import { EyeRegular, EyeSlashRegular, IconProps } from '@tamagui-extras/core';
 
 export type LmInputProps = InputProps &
   LmFormContainerBaseTypes & {
-    multiline?: boolean
-    isPassword?: boolean
-    fullWidth?: boolean
-    passwordIconProps?: IconProps
-  }
+    multiline?: boolean;
+    isPassword?: boolean;
+    fullWidth?: boolean;
+    passwordIconProps?: IconProps;
+  };
 
 export const LmInput = forwardRef(function LmInputEl(
   {
@@ -29,23 +29,23 @@ export const LmInput = forwardRef(function LmInputEl(
     fullWidth,
     ...rest
   }: LmInputProps,
-  ref
+  ref,
 ) {
-  const genId = useId()
-  const [show, setShow] = useState<boolean>(false)
-  const id = rest.id || genId
+  const genId = useId();
+  const [show, setShow] = useState<boolean>(false);
+  const id = rest.id || genId;
   const currentInputProps = {
     ...rest,
-  }
+  };
   if (error) {
-    currentInputProps.theme = 'red'
-    currentInputProps.borderColor = error ? '$red8' : undefined
+    currentInputProps.theme = 'red';
+    currentInputProps.borderColor = error ? '$red8' : undefined;
   }
   if (fullWidth) {
-    currentInputProps.minWidth = '100%'
+    currentInputProps.minWidth = '100%';
   }
 
-  let secureTextEntry = !!(rest.secureTextEntry || isPassword)
+  let secureTextEntry = !!(rest.secureTextEntry || isPassword);
 
   return (
     <LmFormFieldContainer
@@ -68,13 +68,18 @@ export const LmInput = forwardRef(function LmInputEl(
           ref={ref as any}
         />
       ) : secureTextEntry ? (
-        <Stack position={'relative'} width={fullWidth ? '100%' : currentInputProps?.width}>
+        <Stack
+          position={'relative'}
+          width={fullWidth ? '100%' : currentInputProps?.width}
+        >
           <Input
             {...currentInputProps}
             ref={ref as any}
             secureTextEntry={!show}
             autoCapitalize="none"
-            placeholderTextColor={rest.placeholderTextColor as InputProps['placeholderTextColor']}
+            placeholderTextColor={
+              rest.placeholderTextColor as InputProps['placeholderTextColor']
+            }
           />
           <Pressable
             style={{
@@ -91,7 +96,7 @@ export const LmInput = forwardRef(function LmInputEl(
                   }),
             }}
             onPress={() => {
-              setShow((state) => !state)
+              setShow((state) => !state);
             }}
           >
             {show ? (
@@ -105,5 +110,5 @@ export const LmInput = forwardRef(function LmInputEl(
         <Input {...currentInputProps} autoCapitalize="none" ref={ref as any} />
       )}
     </LmFormFieldContainer>
-  )
-})
+  );
+});

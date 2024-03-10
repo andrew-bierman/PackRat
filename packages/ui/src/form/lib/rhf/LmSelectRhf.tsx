@@ -1,8 +1,9 @@
-import { LmSelect, LmSelectProps } from '../LmSelect'
-import { Controller, FieldValues } from 'react-hook-form'
-import { LmRhfProps } from './lmRhfProps'
+import { LmSelect, LmSelectProps } from '../LmSelect';
+import { Controller, FieldValues } from 'react-hook-form';
+import { LmRhfProps } from './lmRhfProps';
 
-export type LmSelectRhfProps<T extends FieldValues> = LmSelectProps & LmRhfProps<T> & {}
+export type LmSelectRhfProps<T extends FieldValues> = LmSelectProps &
+  LmRhfProps<T> & {};
 
 export function LmSelectRhf<T extends FieldValues>({
   name,
@@ -12,7 +13,7 @@ export function LmSelectRhf<T extends FieldValues>({
   ...inputProps
 }: LmSelectRhfProps<T>) {
   if (inputProps.required) {
-    rules.required = 'This field is required'
+    rules.required = 'This field is required';
   }
   return (
     <Controller
@@ -20,7 +21,10 @@ export function LmSelectRhf<T extends FieldValues>({
       rules={rules}
       control={control}
       defaultValue={defaultValue}
-      render={({ field: { onChange, value, ref }, fieldState: { error, invalid } }) => (
+      render={({
+        field: { onChange, value, ref },
+        fieldState: { error, invalid },
+      }) => (
         <LmSelect
           {...inputProps}
           value={value ?? ''}
@@ -30,5 +34,5 @@ export function LmSelectRhf<T extends FieldValues>({
         />
       )}
     />
-  )
+  );
 }

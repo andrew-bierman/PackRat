@@ -1,23 +1,23 @@
-import { SizableStack, SizeTokens, XStack, XStackProps } from 'tamagui'
-import { ComponentType, useId, useState } from 'react'
-import { LmFormFieldContainer } from './LmFormFieldContainer'
-import { LmFormContainerBaseTypes } from './formContainerTypes'
-import { IconProps, StarFill } from '@tamagui-extras/core'
+import { SizableStack, SizeTokens, XStack, XStackProps } from 'tamagui';
+import { ComponentType, useId, useState } from 'react';
+import { LmFormFieldContainer } from './LmFormFieldContainer';
+import { LmFormContainerBaseTypes } from './formContainerTypes';
+import { IconProps, StarFill } from '@tamagui-extras/core';
 
 export type LmStarRatingProps = LmFormContainerBaseTypes & {
-  count?: number
-  onChange?: (rating: number | null) => void
-  value?: number | null
-  size?: SizeTokens
-  disabled?: boolean
-  iconProps?: IconProps
-  gap?: XStackProps['gap']
-  Icon?: ComponentType<IconProps>
-  colorActive?: IconProps['color']
-  colorHover?: IconProps['color']
-  colorActiveHover?: IconProps['color']
-  color?: IconProps['color']
-}
+  count?: number;
+  onChange?: (rating: number | null) => void;
+  value?: number | null;
+  size?: SizeTokens;
+  disabled?: boolean;
+  iconProps?: IconProps;
+  gap?: XStackProps['gap'];
+  Icon?: ComponentType<IconProps>;
+  colorActive?: IconProps['color'];
+  colorHover?: IconProps['color'];
+  colorActiveHover?: IconProps['color'];
+  color?: IconProps['color'];
+};
 
 export function LmStarRating({
   count = 5,
@@ -42,10 +42,10 @@ export function LmStarRating({
   color = '$gray7',
   ...sizeableStackProps
 }: LmStarRatingProps) {
-  const id = useId()
-  const [rating, setRating] = useState<number | null>(value)
-  const [hoverRating, setHoverRating] = useState<number | null>(null)
-  const arr = Array.from(Array(count).keys())
+  const id = useId();
+  const [rating, setRating] = useState<number | null>(value);
+  const [hoverRating, setHoverRating] = useState<number | null>(null);
+  const arr = Array.from(Array(count).keys());
   return (
     <LmFormFieldContainer
       id={id}
@@ -60,16 +60,16 @@ export function LmStarRating({
     >
       <XStack gap={gap}>
         {arr.map((value) => {
-          const currentRating = value + 1
-          const filled = currentRating <= (rating || 0)
-          const hovered = currentRating <= (hoverRating || 0)
+          const currentRating = value + 1;
+          const filled = currentRating <= (rating || 0);
+          const hovered = currentRating <= (hoverRating || 0);
           const currentColor = filled
             ? hovered
               ? colorActiveHover
               : colorActive
             : hovered
-            ? colorHover
-            : color
+              ? colorHover
+              : color;
           return (
             <SizableStack
               key={`${currentRating}`}
@@ -78,32 +78,33 @@ export function LmStarRating({
               circular
               onHoverIn={() => {
                 if (disabled) {
-                  return
+                  return;
                 }
-                setHoverRating(currentRating)
+                setHoverRating(currentRating);
               }}
               onHoverOut={() => {
                 if (disabled) {
-                  return
+                  return;
                 }
-                setHoverRating(null)
+                setHoverRating(null);
               }}
               onPress={() => {
                 if (disabled) {
-                  return
+                  return;
                 }
-                const newRating = rating === currentRating ? null : currentRating
-                setRating(newRating)
+                const newRating =
+                  rating === currentRating ? null : currentRating;
+                setRating(newRating);
                 if (typeof onChange === 'function') {
-                  onChange(newRating)
+                  onChange(newRating);
                 }
               }}
             >
               <Icon {...iconProps} size={size} color={currentColor} />
             </SizableStack>
-          )
+          );
         })}
       </XStack>
     </LmFormFieldContainer>
-  )
+  );
 }

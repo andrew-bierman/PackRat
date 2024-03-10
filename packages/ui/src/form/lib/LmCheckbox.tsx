@@ -1,4 +1,4 @@
-import { ReactNode, useId } from 'react'
+import { ReactNode, useId } from 'react';
 import {
   Checkbox,
   CheckboxProps,
@@ -11,21 +11,21 @@ import {
   XStack,
   XStackProps,
   YStack,
-} from 'tamagui'
-import { CheckRegular, MinusRegular } from '@tamagui-extras/core'
+} from 'tamagui';
+import { CheckRegular, MinusRegular } from '@tamagui-extras/core';
 
 export type LmCheckboxProps = XStackProps & {
-  checkboxProps?: Omit<CheckboxProps, 'disabled'>
-  label?: ReactNode
-  onChange?: CheckboxProps['onCheckedChange']
-  value?: boolean
-  error?: boolean
-  helperText?: ReactNode
-  helperTextProps?: ParagraphProps
-  size?: SizeTokens
-  required?: boolean
-  labelProps?: Omit<LabelProps, 'htmlFor' | 'ref'>
-}
+  checkboxProps?: Omit<CheckboxProps, 'disabled'>;
+  label?: ReactNode;
+  onChange?: CheckboxProps['onCheckedChange'];
+  value?: boolean;
+  error?: boolean;
+  helperText?: ReactNode;
+  helperTextProps?: ParagraphProps;
+  size?: SizeTokens;
+  required?: boolean;
+  labelProps?: Omit<LabelProps, 'htmlFor' | 'ref'>;
+};
 
 export function LmCheckbox({
   label,
@@ -42,7 +42,7 @@ export function LmCheckbox({
   disabled,
   ...stackProps
 }: LmCheckboxProps) {
-  const id = useId()
+  const id = useId();
   return (
     <XStack space alignItems={'center'} {...stackProps}>
       <Checkbox
@@ -51,16 +51,22 @@ export function LmCheckbox({
         {...checkboxProps}
         disabled={disabled}
         defaultChecked={value || checkboxProps?.defaultChecked}
-        borderColor={error ? '$red8' : checkboxProps?.borderColor ?? '$borderColor'}
+        borderColor={
+          error ? '$red8' : checkboxProps?.borderColor ?? '$borderColor'
+        }
         size={size}
         onCheckedChange={(checked) => {
           if (typeof onChange === 'function') {
-            onChange(checked)
+            onChange(checked);
           }
         }}
       >
         <Checkbox.Indicator>
-          {checkboxProps?.checked === 'indeterminate' ? <MinusRegular /> : <CheckRegular />}
+          {checkboxProps?.checked === 'indeterminate' ? (
+            <MinusRegular />
+          ) : (
+            <CheckRegular />
+          )}
         </Checkbox.Indicator>
       </Checkbox>
       {label && (
@@ -83,5 +89,5 @@ export function LmCheckbox({
         </YStack>
       )}
     </XStack>
-  )
+  );
 }

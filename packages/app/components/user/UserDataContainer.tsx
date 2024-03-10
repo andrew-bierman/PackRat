@@ -1,4 +1,4 @@
-import { Link } from 'solito/link';
+import { Link } from '@packrat/crosspath';
 import { RStack, RText, RButton, RSkeleton, VirtualList } from '@packrat/ui';
 import { VirtualizedList } from 'react-native';
 import UserDataCard from './UserDataCard';
