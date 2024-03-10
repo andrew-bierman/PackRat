@@ -3,6 +3,7 @@ import { queryTrpc } from '../../trpc';
 export const usePublicFeed = (queryString, selectedTypes) => {
   let data = [];
   let isLoading = true;
+  let refetch = () => {};
   try {
     const queryOptions = {
       refetchOnWindowFocus: false,
@@ -11,7 +12,11 @@ export const usePublicFeed = (queryString, selectedTypes) => {
       cacheTime: 1000 * 60 * 5, // 5 min
     };
 
-    const publicPacks = queryTrpc.getPublicPacks.useQuery(
+    const {
+      status: statusPacks,
+      data: packsData,
+      refetch: refetchPacks,
+    } = queryTrpc.getPublicPacks.useQuery(
       { queryBy: queryString ?? 'Favorite' },
       {
         ...queryOptions,
@@ -22,32 +27,34 @@ export const usePublicFeed = (queryString, selectedTypes) => {
       },
     );
 
-    const publicTrips = queryTrpc.getPublicTripsRoute.useQuery(
+    const {
+      status: statusTrips,
+      data: tripsData,
+      refetch: refetchTrips,
+    } = queryTrpc.getPublicTripsRoute.useQuery(
       { queryBy: queryString ?? 'Favorite' },
       {
         ...queryOptions,
-        enabled: publicPacks?.status === 'success',
+        enabled: statusPacks === 'success',
       },
     );
 
-    isLoading =
-      publicPacks?.status !== 'success' && publicTrips?.status !== 'success';
+    refetch = () => {
+      refetchTrips();
+      refetchPacks();
+    };
 
-    if (selectedTypes.pack && publicPacks?.status === 'success')
-      data = [
-        ...data,
-        ...publicPacks.data.map((item) => ({ ...item, type: 'pack' })),
-      ];
+    isLoading = statusPacks !== 'success' && statusTrips !== 'success';
 
-    if (selectedTypes.trip && publicTrips?.status === 'success')
-      data = [
-        ...data,
-        ...publicTrips.data.map((item) => ({ ...item, type: 'trip' })),
-      ];
+    if (selectedTypes.pack && statusPacks === 'success')
+      data = [...data, ...packsData.map((item) => ({ ...item, type: 'pack' }))];
+
+    if (selectedTypes.trip && statusTrips === 'success')
+      data = [...data, ...tripsData.map((item) => ({ ...item, type: 'trip' }))];
   } catch (error) {
     console.error(error);
     return { data: null, error, isLoading };
   }
 
-  return { data, error: null, isLoading };
+  return { data, error: null, isLoading, refetch };
 };

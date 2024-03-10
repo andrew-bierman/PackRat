@@ -8,6 +8,20 @@ const loadStyles = (theme) => {
       padding: 10,
       width: Platform.OS === 'web' ? '100%' : 310,
     },
+    dropdownContainer:
+      Platform.OS === 'web'
+        ? {
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'flex-start',
+            marginLeft: 15,
+          }
+        : {
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginRight: 40,
+          },
     tableStyle: {
       width: '100%',
       marginVertical: 20,
@@ -74,6 +88,10 @@ const loadStyles = (theme) => {
       paddingHorizontal: 25,
       marginVertical: 30,
       flex: 1,
+    },
+    rowText: {
+      fontSize: 12,
+      paddingRight: 4,
     },
   };
 };

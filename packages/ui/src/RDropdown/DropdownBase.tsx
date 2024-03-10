@@ -3,7 +3,7 @@ import { ComponentProps, createContext, useContext } from 'react';
 import { useCallback, useMemo } from 'react';
 import Ionicons from '@expo/vector-icons/build/Ionicons';
 import RButton from '../RButton';
-import { View } from 'react-native';
+import { Platform } from 'react-native';
 import { styled } from 'tamagui';
 
 const DropdownMenuRoot = Dropdown.Root;
@@ -12,24 +12,36 @@ const DropdownMenuTrigger = Dropdown.Trigger;
 
 type ContentProps = ComponentProps<(typeof Dropdown)['Content']>;
 
-const CustomContent = styled(Dropdown.Content, {
+const CustomContent = styled(Dropdown.Content, Platform.OS === 'web' ? {
+  backgroundColor: 'white',
+  minWidth: 160,
+  shadowColor: '#000',
+  borderRadius: 8,
+  shadowOffset: {
+    width: 0,
+    height: 8,
+  },
+  shadowOpacity: 0.2,
+  shadowRadius: 16,
+  padding: 12,
+} : {
   padding: 10,
   backgroundColor: 'white',
 });
 
 const DropdownMenuContent = Dropdown.create(CustomContent, 'Content');
 
-type ItemProps = React.ComponentProps<(typeof Dropdown)['Item']>;
-
-const CustomItem = styled(Dropdown.Item, {
-  padding: 10,
-  backgroundColor: 'white',
-  flexDirection: 'row',
-  alignItems: 'center',
-  hoverStyle: {
-    backgroundColor: 'gray',
-  },
-});
+const CustomItem = styled(Dropdown.Item,
+  {
+    padding: 10,
+    backgroundColor: 'white',
+    flexDirection: 'row',
+    alignItems: 'center',
+    hoverStyle: {
+      backgroundColor: 'gray',
+    }
+  }
+);
 
 const DropdownMenuItem = Dropdown.create(CustomItem, 'Item');
 
@@ -68,7 +80,6 @@ const ExampleDropdown = () => {
         <DropdownMenu.Item key="1">Item 1</DropdownMenu.Item>
         <DropdownMenu.Item key="2">Item 2</DropdownMenu.Item>
         <DropdownMenu.Item key="3">Item 3</DropdownMenu.Item>
-        {/* generate 20 more in a loop */}
         {Array.from({ length: 20 }).map((_, i) => (
           <DropdownMenu.Item key={`${i}key`}>{`Item ${i}`}</DropdownMenu.Item>
         ))}

@@ -1,17 +1,18 @@
 import React from 'react';
-import { View, Platform, ScrollView } from 'react-native';
+import { View, Platform } from 'react-native';
 import { Desktop, Mobile, Tablet } from '../../media';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import loadStyles from './about.style';
 import AboutContent from './AboutContent';
+import { RScrollView } from '@packrat/ui';
 
 export default function About() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
   return Platform.OS === 'web' ? (
-    <ScrollView
+    <RScrollView
       showsHorizontalScrollIndicator={false}
       contentContainerStyle={styles.menuBar}
     >
@@ -35,7 +36,7 @@ export default function About() {
           />
         </Mobile>
       </View>
-    </ScrollView>
+    </RScrollView>
   ) : (
     <View style={[isDark ? styles.containerDark : styles.container]}>
       <AboutContent desktopContainer={styles.logoContainer} isMobile={true} />

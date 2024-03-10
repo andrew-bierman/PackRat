@@ -69,7 +69,7 @@ export const CustomCard = ({
           )}
         </View>
         <RSeparator />
-        {type === 'pack' ? (
+        {type === 'pack' && (
           <>
             <View
               style={{
@@ -83,7 +83,7 @@ export const CustomCard = ({
             </View>
             <RSeparator />
           </>
-        ) : null}
+        )}
         <View
           style={{
             paddingRight: 16,

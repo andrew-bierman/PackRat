@@ -1,4 +1,6 @@
 import { theme } from './../../theme';
+import { Platform } from 'react-native';
+
 export const loadStyles = () => {
   const currentTheme = theme;
   return {
@@ -7,6 +9,19 @@ export const loadStyles = () => {
       padding: 10,
       width: '100%',
     },
+    dropdownContainer:
+      Platform.OS === 'web'
+        ? {
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'flex-start',
+            marginLeft: 30,
+          }
+        : {
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'flex-end',
+          },
     tableStyle: {
       width: '100%',
       paddingHorizontal: 20,
@@ -46,6 +61,7 @@ export const loadStyles = () => {
     headerText: {
       fontWeight: 'bold',
       color: '#000000',
+      fontSize: 12,
     },
     row: {
       flexDirection: 'row',
@@ -72,6 +88,10 @@ export const loadStyles = () => {
       display: 'flex',
       flexDirection: 'row-reverse',
       justifyContent: 'space-around',
+    },
+    rowText: {
+      fontSize: 12,
+      paddingRight: 4,
     },
   };
 };

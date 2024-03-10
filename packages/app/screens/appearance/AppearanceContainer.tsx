@@ -8,6 +8,7 @@ import { loadStyles } from './appearance.style';
 import DemoCard from './DemoCard';
 import ThemeSwitch from './ThemeSwitch';
 import { DialogDemo } from '../../components/DialogDemo';
+import { RScrollView } from '@packrat/ui';
 
 export default function AppearanceContainer() {
   const { isEnabled, toggleSwitch, currentTheme } = useAppearance();
