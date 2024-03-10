@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View } from 'react-native';
 import {
   RHeading,
@@ -30,14 +30,16 @@ export default function Login() {
     useGoogleAuth();
   const { currentTheme } = useTheme();
 
-  if (hasError) {
-    InformUser({
-      title: 'Wrong-password',
-      duration: 3000,
-      placement: 'top-right',
-      style: { backgroundColor: currentTheme.colors.error },
-    });
-  }
+  useEffect(() => {
+    if (hasError) {
+      InformUser({
+        title: 'Wrong-password',
+        duration: 3000,
+        placement: 'top-right',
+        style: { backgroundColor: currentTheme.colors.error },
+      });
+    }
+  }, [hasError, currentTheme.colors.error]);
 
   return (
     <RScrollView>
