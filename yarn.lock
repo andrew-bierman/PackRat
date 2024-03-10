@@ -4837,7 +4837,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@packrat/crosspath@workspace:packages/crosspath"
   dependencies:
-    "@tamagui/build": "npm:^1.90.15"
+    "@tamagui/build": "npm:^1.91.3"
     typescript: "npm:^5.3.3"
   peerDependencies:
     "@tanstack/react-query": ^4.36.1
@@ -7579,7 +7579,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/build@npm:1.91.3, @tamagui/build@npm:^1.90.15, @tamagui/build@npm:^1.91.3":
+"@tamagui/build@npm:1.91.3, @tamagui/build@npm:^1.91.3":
   version: 1.91.3
   resolution: "@tamagui/build@npm:1.91.3"
   dependencies:
