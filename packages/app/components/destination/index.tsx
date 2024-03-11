@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { RText } from '@packrat/ui';
 import { useRouter } from 'app/hooks/router';
-import { createParam } from 'solito';
+import { createParam } from 'app/hooks/params';
 import useTheme from '../../hooks/useTheme';
 import { theme } from '../../theme';
 import MapContainer from '../map/MapContainer';

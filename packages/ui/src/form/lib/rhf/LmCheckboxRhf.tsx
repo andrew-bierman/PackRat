@@ -1,8 +1,9 @@
-import { Controller, FieldValues } from 'react-hook-form'
-import { LmRhfProps } from './lmRhfProps'
-import { LmCheckbox, LmCheckboxProps } from '../LmCheckbox'
+import { Controller, FieldValues } from 'react-hook-form';
+import { LmRhfProps } from './lmRhfProps';
+import { LmCheckbox, LmCheckboxProps } from '../LmCheckbox';
 
-type LmCheckboxRhfProps<T extends FieldValues> = LmCheckboxProps & LmRhfProps<T>
+type LmCheckboxRhfProps<T extends FieldValues> = LmCheckboxProps &
+  LmRhfProps<T>;
 
 export function LmCheckboxRhf<T extends FieldValues>({
   name,
@@ -12,7 +13,7 @@ export function LmCheckboxRhf<T extends FieldValues>({
   ...inputProps
 }: LmCheckboxRhfProps<T>) {
   if (inputProps.required) {
-    rules.required = 'This field is required'
+    rules.required = 'This field is required';
   }
   return (
     <Controller
@@ -30,5 +31,5 @@ export function LmCheckboxRhf<T extends FieldValues>({
         />
       )}
     />
-  )
+  );
 }

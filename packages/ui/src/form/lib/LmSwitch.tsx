@@ -1,11 +1,11 @@
-import { Label, StackProps, Switch, SwitchProps, XStack } from 'tamagui'
-import { useId } from 'react'
+import { Label, StackProps, Switch, SwitchProps, XStack } from 'tamagui';
+import { useId } from 'react';
 
 export type LmSwitchProps = SwitchProps & {
-  labelLeft?: string
-  labelRight?: string
-  thumbProps?: StackProps
-}
+  labelLeft?: string;
+  labelRight?: string;
+  thumbProps?: StackProps;
+};
 
 export function LmSwitch({
   labelLeft,
@@ -15,7 +15,7 @@ export function LmSwitch({
   thumbProps,
   ...rest
 }: LmSwitchProps) {
-  const id = useId()
+  const id = useId();
   return (
     <XStack alignItems={'center'} space={'$4'}>
       {labelLeft && (
@@ -32,5 +32,5 @@ export function LmSwitch({
         </Label>
       )}
     </XStack>
-  )
+  );
 }

@@ -1,8 +1,9 @@
-import { Controller, FieldValues } from 'react-hook-form'
-import { LmInput, LmInputProps } from '../LmInput'
-import { LmRhfProps } from './lmRhfProps'
+import { Controller, FieldValues } from 'react-hook-form';
+import { LmInput, LmInputProps } from '../LmInput';
+import { LmRhfProps } from './lmRhfProps';
 
-export type LmInputRhfProps<T extends FieldValues = FieldValues> = LmInputProps & LmRhfProps<T>
+export type LmInputRhfProps<T extends FieldValues = FieldValues> =
+  LmInputProps & LmRhfProps<T>;
 
 export function LmInputRhf<T extends FieldValues = FieldValues>({
   name,
@@ -12,7 +13,7 @@ export function LmInputRhf<T extends FieldValues = FieldValues>({
   ...inputProps
 }: LmInputRhfProps<T>) {
   if (inputProps.required) {
-    rules.required = 'This field is required'
+    rules.required = 'This field is required';
   }
   return (
     <Controller<T>
@@ -20,7 +21,10 @@ export function LmInputRhf<T extends FieldValues = FieldValues>({
       rules={rules}
       control={control}
       defaultValue={defaultValue}
-      render={({ field: { onChange, value, onBlur, ref }, fieldState: { error } }) => (
+      render={({
+        field: { onChange, value, onBlur, ref },
+        fieldState: { error },
+      }) => (
         <LmInput
           {...inputProps}
           ref={ref}
@@ -32,5 +36,5 @@ export function LmInputRhf<T extends FieldValues = FieldValues>({
         />
       )}
     />
-  )
+  );
 }

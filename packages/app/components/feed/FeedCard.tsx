@@ -3,14 +3,14 @@ import { formatDistanceToNow } from 'date-fns';
 import { MaterialIcons, Entypo } from '@expo/vector-icons';
 import useTheme from '../../hooks/useTheme';
 import { TouchableOpacity, View } from 'react-native';
-import { Link } from 'solito/link';
-import { useRouter } from 'app/hooks/router';
+import { Link } from '@packrat/crosspath';
 import { DuplicateIcon } from '../DuplicateIcon/index';
 import { truncateString } from '../../utils/truncateString';
 import { RText, RStack, RHeading, ContextMenu } from '@packrat/ui';
 import { formatNumber } from 'app/utils/formatNumber';
 import { useAddFavorite, useFetchUserFavorites } from 'app/hooks/favorites';
 import { useAuthUser } from 'app/auth/hooks';
+import { useRouter } from 'app/hooks/router';
 
 interface CardProps {
   type: string;

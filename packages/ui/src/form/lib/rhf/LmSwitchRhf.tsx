@@ -1,8 +1,9 @@
-import { Controller, FieldValues } from 'react-hook-form'
-import { LmRhfProps } from './lmRhfProps'
-import { LmSwitch, LmSwitchProps } from '../LmSwitch'
+import { Controller, FieldValues } from 'react-hook-form';
+import { LmRhfProps } from './lmRhfProps';
+import { LmSwitch, LmSwitchProps } from '../LmSwitch';
 
-export type LmSwitchRhfProps<T extends FieldValues> = LmSwitchProps & LmRhfProps<T> & {}
+export type LmSwitchRhfProps<T extends FieldValues> = LmSwitchProps &
+  LmRhfProps<T> & {};
 
 export function LmSwitchRhf<T extends FieldValues>({
   name,
@@ -18,8 +19,13 @@ export function LmSwitchRhf<T extends FieldValues>({
       control={control}
       defaultValue={defaultValue}
       render={({ field: { onChange, value } }) => (
-        <LmSwitch {...inputProps} onCheckedChange={onChange} value={value} checked={!!value} />
+        <LmSwitch
+          {...inputProps}
+          onCheckedChange={onChange}
+          value={value}
+          checked={!!value}
+        />
       )}
     />
-  )
+  );
 }

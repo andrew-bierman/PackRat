@@ -1,15 +1,13 @@
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Platform } from 'react-native';
 import ProfileContainer from 'app/screens/user/ProfileContainer';
-import { createParam } from 'solito';
+import { useProfileId } from 'app/hooks/user';
 import { AuthWrapper } from 'app/auth/AuthWrapper';
-
-const { useParam } = createParam();
 
 // export const runtime = 'experimental-edge'
 
 const Profile = () => {
-  const [id] = useParam('id');
+  const [id] = useProfileId();
 
   return (
     <>
