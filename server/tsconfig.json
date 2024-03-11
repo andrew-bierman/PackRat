@@ -31,5 +31,10 @@
   ],
   "include": [
     "./src/**/*.ts"
-, "src/drizzle.config.ts"  ]
+, "src/drizzle.config.ts"  ],
+  "types": [
+    "@cloudflare/workers-types",
+    "jest",
+    "jest-environment-miniflare/globals"
+  ]
 }
