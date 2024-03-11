@@ -31,8 +31,21 @@ export default function Register() {
 
   return (
     <RScrollView contentContainerStyle={{ paddingBottom: 20 }}>
-      <View style={{ width: '100%', alignItems: 'center' }}>
-        <View style={{ paddingTop: 32, width: '90%', maxWidth: 290 }}>
+      <View
+        style={{
+          width: '100%',
+          alignItems: 'center',
+          backgroundColor: 'white',
+        }}
+      >
+        <View
+          style={{
+            paddingTop: 32,
+            paddingBottom: 32,
+            width: '90%',
+            maxWidth: 290,
+          }}
+        >
           <RHeading fontSize={32} color="#212121" fontWeight="semibold">
             Welcome
           </RHeading>

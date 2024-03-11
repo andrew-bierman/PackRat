@@ -1,49 +1,34 @@
 import React, { useMemo } from 'react';
 import { View, Text, SafeAreaView, StyleSheet, Platform } from 'react-native';
-import { RButton } from '@packrat/ui';
+import { RButton, Container } from '@packrat/ui';
 import { useIsMobileView } from 'app/hooks/common';
 import { useNavigate } from 'app/hooks/navigation';
 import { NavigationList } from '../NavigationList';
 import { Drawer } from '../Drawer';
 import { useScrollTop } from 'app/hooks/common/useScrollTop';
+import { useScreenWidth } from 'app/hooks/common';
 import useTheme from 'app/hooks/useTheme';
 
 export const Navbar = () => {
   const { currentTheme } = useTheme();
-  const isMobileView = useIsMobileView();
-  const navigate = useNavigate();
   const scrollTop = useScrollTop();
+  const { screenWidth } = useScreenWidth();
   const isScrolled = !!scrollTop;
   const styles = useMemo(() => {
-    return StyleSheet.create(loadStyles(currentTheme, isScrolled));
-  }, [isScrolled, currentTheme]);
+    return StyleSheet.create(loadStyles(currentTheme, isScrolled, screenWidth));
+  }, [isScrolled, currentTheme, screenWidth]);
 
-  return isMobileView ? (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.container}>
-        <Text style={styles.logoText}>PackRat</Text>
-        <Drawer />
-      </View>
-    </SafeAreaView>
-  ) : (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <RButton
-            key={'logo-nav'}
-            style={styles.logoContainer}
-            onPress={() => navigate('/')}
-            variant="outlined"
-            chromeless
-          >
+  return (
+    <>
+      <SafeAreaView style={styles.safeArea}>
+        <Container>
+          <View style={styles.container}>
             <Text style={styles.logoText}>PackRat</Text>
-          </RButton>
-          <View style={styles.menuBar}>
-            <NavigationList />
+            <Drawer />
           </View>
-        </View>
-      </View>
-    </SafeAreaView>
+        </Container>
+      </SafeAreaView>
+    </>
   );
 };
 
@@ -55,7 +40,7 @@ const NavbarStyles = {
   floatingSpacing: 4,
 };
 
-const loadStyles = (currentTheme, isScrolled) => {
+const loadStyles = (currentTheme, isScrolled, screenWidth) => {
   const isWeb = Platform.OS === 'web';
   const isFloating = isWeb && isScrolled;
   const backgroundColor = isFloating
@@ -68,8 +53,17 @@ const loadStyles = (currentTheme, isScrolled) => {
     },
     safeArea: {
       backgroundColor,
-      ...(isWeb ? { position: 'fixed', top: 0, left: 0, zIndex: 100 } : {}),
+      ...(isWeb
+        ? {
+            position: 'fixed',
+            top: 0,
+            left: screenWidth <= 1140 ? 0 : 'calc(50% - 570px)',
+            zIndex: 100,
+          }
+        : {}),
       width: '100%',
+      maxWidth: 1140,
+      margin: 'auto',
       transition: NavbarStyles.transition,
       ...(isFloating
         ? {

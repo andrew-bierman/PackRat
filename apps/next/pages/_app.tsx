@@ -16,7 +16,7 @@ import React from 'react';
 import type { SolitoAppProps } from 'solito';
 import { Navigation, Navbar } from 'app/components/navigation';
 import { PortalProvider } from 'tamagui';
-import { MainContent } from '@packrat/ui';
+import { Container, MainContentWeb } from '@packrat/ui';
 
 if (process.env.NODE_ENV === 'production') {
   require('../public/tamagui.css');
@@ -39,7 +39,9 @@ function MyApp({ Component, pageProps }: SolitoAppProps) {
       <Provider>
         <Navbar />
         <PortalProvider>
-          <MainContent>{getLayout(<Component {...pageProps} />)}</MainContent>
+          <MainContentWeb>
+            <Container>{getLayout(<Component {...pageProps} />)}</Container>
+          </MainContentWeb>
         </PortalProvider>
       </Provider>
     </>
