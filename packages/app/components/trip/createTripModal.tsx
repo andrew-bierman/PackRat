@@ -28,6 +28,7 @@ interface SaveTripContainerProps {
   weatherObject: any;
   search: any;
   form: any;
+  handleSubmit?: (cb: any) => () => void;
 }
 
 const isPublicOptions = ['For me only', 'Public'].map((key, index) => ({
@@ -40,6 +41,7 @@ export const SaveTripContainer = ({
   weatherObject,
   search,
   form,
+  handleSubmit
 }: SaveTripContainerProps) => {
   const user = useAuthUser();
   const [packId] = usePackId();
@@ -145,10 +147,12 @@ export const SaveTripContainer = ({
     <BaseModal
       title="Save Trip"
       trigger="Save Trip"
+      gateKeeper={handleSubmit}
       footerButtons={[
         {
           label: 'Save',
           onClick: (_, closeModal) => submitTrigger(closeModal),
+          disabled: false
         },
       ]}
     >

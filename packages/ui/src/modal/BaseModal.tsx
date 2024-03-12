@@ -14,6 +14,7 @@ export interface BaseModalProps {
   footerButtons?: any[];
   triggerComponent?: React.DetailedReactHTMLElement<any, HTMLElement>;
   footerComponent: React.DetailedReactHTMLElement<any, HTMLElement>;
+  gateKeeper?: (cb: () => void) => () => void;
 }
 
 export const BaseModal = ({
@@ -23,13 +24,16 @@ export const BaseModal = ({
   footerButtons,
   footerComponent,
   children,
+  gateKeeper
 }: BaseModalProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const openModal = () => setIsModalOpen(true);
+  
   const triggerElement = useMemo(() => {
     return triggerComponent ? (
       <RButton
-        onPress={() => setIsModalOpen(true)}
+        onPress={gateKeeper ? gateKeeper(openModal) : openModal}
         style={{ backgroundColor: 'transparent' }}
         backgroundColor={'transparent'}
       >
@@ -39,7 +43,7 @@ export const BaseModal = ({
       <RButton
         top={5}
         alignSelf={'center'}
-        onPress={() => setIsModalOpen(true)}
+        onPress={gateKeeper ? gateKeeper(openModal) : openModal}
       >
         {trigger}
       </RButton>

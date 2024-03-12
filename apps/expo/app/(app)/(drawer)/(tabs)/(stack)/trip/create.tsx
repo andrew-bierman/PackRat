@@ -1,6 +1,6 @@
 import CreateTrip from 'app/screens/trip/createTrip';
 
-import { Platform } from 'react-native';
+import { Platform , View} from 'react-native';
 import { Stack } from 'expo-router';
 import Head from 'expo-router/head';
 
@@ -23,7 +23,9 @@ export default function Trip() {
           // https://reactnavigation.org/docs/headers#replacing-the-title-with-a-custom-component
         }}
       />
-      <CreateTrip />
+      <View style={{height: 500, backgroundColor: 'red', display: 'none'}}>
+        <CreateTrip />
+      </View>
     </>
   );
 }

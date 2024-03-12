@@ -27,8 +27,8 @@ export const addTrip = z.object({
 });
 
 export const addTripForm = z.object({
-  name: z.string().nonempty(),
-  description: z.string().nonempty(),
+  name: z.string().trim().min(1),
+  description: z.string().trim().min(1),
   isPublic: z.union([z.literal('0'), z.literal('1')]),
 });
 

@@ -23,7 +23,7 @@ export const useGEOLocationSearch = (): [
       geoJSON.properties.osm_type &&
       geoJSON.properties.name
     ) {
-      newSearchParams.osmId = geoJSON.properties.osm_id;
+      newSearchParams.osmId = String(geoJSON.properties.osm_id);
       newSearchParams.osmType = geoJSON.properties.osm_type;
       newSearchParams.name = geoJSON.properties.name;
     }

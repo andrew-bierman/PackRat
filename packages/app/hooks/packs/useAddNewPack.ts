@@ -15,6 +15,7 @@ export const useAddNewPack = () => {
 
   // Use mutation for adding a pack
   const addNewPack = (data) => {
+    console.log('mutating');
     mutation.mutate({
       name: data.name,
       is_public: data.isPublic === packSelectOptions[0].value,
