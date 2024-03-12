@@ -17,7 +17,7 @@ import { useForm, useFormContext } from "react-hook-form"
 
 export const AddPackFormBody = ({ handleonValueChange, packSelectOptions, currentTheme, isLoading, onSubmit}) => {
   const { handleSubmit,formState } = useFormContext();
-  console.log(formState.errors, 'errors');
+
   return (
           <>
             <FormInput
@@ -49,11 +49,6 @@ export const AddPack = ({ isCreatingTrip = false }) => {
   // Hooks
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
-
-  
-  const something = useFormContext();
-  console.log(something, 'something');
-
   const styles = useCustomStyles(loadStyles);
   const router = useRouter();
 
@@ -80,8 +75,6 @@ export const AddPack = ({ isCreatingTrip = false }) => {
    * @return {void}
    */
   const handleAddPack = (data) => {
-    console.log(data, 'what is data');
-    console.log('here');
     addNewPack(data);
   };
 
@@ -95,7 +88,6 @@ export const AddPack = ({ isCreatingTrip = false }) => {
         <Form
           onSubmit={handleAddPack}
           defaultValues={{ isPublic: '0', name: '' }}
-        
           validationSchema={addPackSchema}
         >
           <AddPackFormBody handleonValueChange={handleonValueChange} packSelectOptions={packSelectOptions} currentTheme={currentTheme} isLoading={isLoading} onSubmit={handleAddPack} /> 

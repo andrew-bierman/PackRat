@@ -33,8 +33,6 @@ export const Form = ({
     resolver: validationSchema ? zodResolver(validationSchema) : undefined,
   });
 
-  console.log(form.formState.defaultValues, 'formState');
-
   if (formRef && !formRef?.current && typeof onSubmit === 'function') {
     formRef.current = {
       submit: (...params) =>

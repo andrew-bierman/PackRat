@@ -8,11 +8,8 @@ import { AddItemModal } from './AddItemModal';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useAuthUser } from 'app/auth/hooks';
 import { usePackId } from 'app/hooks/packs';
-import { useFormContext } from 'react-hook-form';
 
 export default function PackContainer({ isCreatingTrip = false, setPackId}) {
-  const f = useFormContext();
-  console.log(f, 'formcontext');
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
 
   const [packIdParam] = usePackId();

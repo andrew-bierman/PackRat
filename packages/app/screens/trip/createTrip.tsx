@@ -1,10 +1,10 @@
 import _ from 'lodash';
-import { useEffect, useState, useRef, useMemo } from 'react';
-import { ScrollView, Touchable, Pressable } from 'react-native';
+import { useState, useRef } from 'react';
+import { ScrollView } from 'react-native';
 import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
 import { FormProvider } from 'react-hook-form';
 
-import { RStack, RText } from '@packrat/ui';
+import { RStack } from '@packrat/ui';
 import { theme } from '../../theme';
 import TripCard from '../../components/TripCard';
 import WeatherCard from '../../components/weather/WeatherCard';
@@ -13,7 +13,6 @@ import { SaveTripContainer } from 'app/components/trip/createTripModal';
 import TripDateRange from 'app/components/trip/TripDateRange';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import { useCardTrip } from 'app/hooks/trips/useTripCard';
 import { useTripsData } from './useTripsData';
 
 
@@ -22,7 +21,6 @@ export default function Trips() {
   const styles = useCustomStyles(loadStyles);
   const [trails, setTrailsData] = useState();
 
-  // const form = useCardTrip();
   const placesAutoCompleteRef = useRef({});
   const {
     dateRange,
@@ -52,19 +50,11 @@ export default function Trips() {
     currentDestination,
     togglePlace
   };
-  console.log(formErrors, 'formErrors');
-
-  useEffect(() => {
-    console.log(dateRange, 'date range changed');
-  }, [dateRange]);
 
   const isOsmMissing = formErrors.osm;
-  console.log(isOsmMissing, formErrors, 'whatttt')
-
-  const sref = useRef(null);
 
   return (
-    <ScrollView nestedScrollEnabled={true} ref={sref} >
+    <ScrollView nestedScrollEnabled={true} >
       <FormProvider {...form}>
         <RStack style={styles.mutualStyles}>
           {/* <MultiStepForm steps={steps} /> */}

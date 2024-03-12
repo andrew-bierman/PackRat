@@ -13,21 +13,7 @@ import {
 } from 'app/hooks/destination';
 import { useGEOLocationSearch } from 'app/hooks/geojson';
 import { useSearchParams } from 'app/hooks/common';
-
-// const TripSchema = z.object({
-//   dateRange: z.object({
-//     startDate: z.date(),
-//     endDate: z.date()
-//   }).required(),
-//   packId: z.string().trim().min(1),
-//   osm: z.object({
-//     osmId: z.string().trim().min(1),
-//     osmType: z.string().trim().min(1),
-//     name: z.string().trim().min(1)
-//   }).required(),
-// }).required();
-
-const TripSchema = z.object({});
+import { AddTripValidationSchema } from '@packrat/validations';
 
 export const useTripsData = () => {
   const searchParams = useSearchParams();
@@ -47,7 +33,7 @@ export const useTripsData = () => {
         name: ''
       }
     },
-    resolver: zodResolver(TripSchema)
+    resolver: zodResolver(AddTripValidationSchema)
   });
 
   const { control, watch, setValue, formState, handleSubmit, getValues, reset, trigger } = form;
@@ -66,7 +52,6 @@ export const useTripsData = () => {
     if (defaultPackId) setPackId(defaultPackId);
   }, [])
 
-  //TODO: review this code snippet to see if it causes any potential issues
   const togglePlace = (isPark, value) => {
     const name = isPark ? 'currentPark' : 'currentTrail';
     const formValues = getValues();
@@ -77,10 +62,6 @@ export const useTripsData = () => {
     reset({ ...formValues, [name]: newValue });
   };
 
-  // const [dateRange, setDateRange] = useState({
-  //   startDate: undefined,
-  //   endDate: undefined,
-  // });
   const [osm] = useGEOLocationSearch();
   const { currentDestination, latLng } = useCurrentDestination();
   const { data: photonDetails } = useGetPhotonDetails({
@@ -91,7 +72,6 @@ export const useTripsData = () => {
   });
 
   useEffect(() => {
-    console.log(osm, 'updated osm');
     if (osm.name && osm.osmId && osm.osmType) {
       setOsm({...osm});
     }

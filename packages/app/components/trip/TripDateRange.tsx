@@ -113,7 +113,7 @@ const TripDateRange = ({ dateRange, setDateRange }: TripDateRangeProps) => {
               }}
             >
               <RText style={{ color: currentTheme.colors.text }}>
-                Pick Date Ranges
+                Pick Date Range
               </RText>
             </RButton>
             {
