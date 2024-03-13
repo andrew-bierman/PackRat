@@ -17,7 +17,7 @@ export default function PackContainer({ isCreatingTrip = false, setPackId}) {
 
   const [packIdParam] = usePackId();
   const { setParams  } = useParams();
-  setParams({packId: '1'});
+
   const [currentPackId, setCurrentPackId] = useState(packIdParam);
   const user = useAuthUser();
   console.log({ currentPackId });
@@ -50,7 +50,7 @@ export default function PackContainer({ isCreatingTrip = false, setPackId}) {
     setCurrentPackId(selectedPack?._id);
 
     if (isCreatingTrip && selectedPack?._id) {
-      // searchParams.set('packId', selectedPack?._id);
+      setParams({packId: selectedPack?._id});
       if (setPackId) setPackId(selectedPack?._id);
     }
   };
