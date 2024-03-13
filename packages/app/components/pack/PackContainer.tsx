@@ -21,6 +21,8 @@ export default function PackContainer({ isCreatingTrip = false }) {
   const styles = useCustomStyles(loadStyles);
 
   // TODO - improve refetch logic. Should be handled entirely by the hook
+
+  let ownerId;
   const {
     data: packs,
     error,
