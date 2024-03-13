@@ -13,7 +13,7 @@ import {
 } from 'app/hooks/destination';
 import { useGEOLocationSearch } from 'app/hooks/geojson';
 import { useSearchParams } from 'app/hooks/common';
-import { AddTripValidationSchema } from '@packrat/validations';
+import { AddTripValidationSchema } from '@packrat/validations/src/validations/tripRoutesValidator';
 
 export const useTripsData = () => {
   const searchParams = useSearchParams();
