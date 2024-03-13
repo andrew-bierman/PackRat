@@ -8,11 +8,16 @@ import { AddItemModal } from './AddItemModal';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useAuthUser } from 'app/auth/hooks';
 import { usePackId } from 'app/hooks/packs';
+import { createParam } from '@packrat/crosspath';
+
+const { useParams } = createParam<{ packId: string }>();
 
 export default function PackContainer({ isCreatingTrip = false, setPackId}) {
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
 
   const [packIdParam] = usePackId();
+  const { setParams  } = useParams();
+  setParams({packId: '1'});
   const [currentPackId, setCurrentPackId] = useState(packIdParam);
   const user = useAuthUser();
   console.log({ currentPackId });
@@ -45,7 +50,7 @@ export default function PackContainer({ isCreatingTrip = false, setPackId}) {
     setCurrentPackId(selectedPack?._id);
 
     if (isCreatingTrip && selectedPack?._id) {
-      searchParams.set('packId', selectedPack?._id);
+      // searchParams.set('packId', selectedPack?._id);
       if (setPackId) setPackId(selectedPack?._id);
     }
   };

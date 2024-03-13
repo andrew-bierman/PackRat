@@ -12,11 +12,11 @@ import {
   useGetPhotonDetails,
 } from 'app/hooks/destination';
 import { useGEOLocationSearch } from 'app/hooks/geojson';
-import { useSearchParams } from 'app/hooks/common';
+import { usePackId } from 'app/hooks/packs/usePackId';
 import { AddTripValidationSchema } from '@packrat/validations/src/validations/tripRoutesValidator';
 
 export const useTripsData = () => {
-  const searchParams = useSearchParams();
+  const [defaultPackId] = usePackId();
 
   const form = useForm({
     defaultValues: {
@@ -48,7 +48,7 @@ export const useTripsData = () => {
   const setOsm = (updatedOsm) => setValue('osm', updatedOsm, { shouldValidate: true });
 
   useEffect(() => {
-    const defaultPackId = searchParams.get('packId');
+    // const defaultPackId = searchParams.get('packId');
     if (defaultPackId) setPackId(defaultPackId);
   }, [])
 
