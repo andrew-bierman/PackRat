@@ -76,7 +76,7 @@ const TableItem = ({
   const rowActionItems = [
     { label: 'Edit', onSelect: () => openModal('edit') },
     { label: 'Delete', onSelect: () => openModal('delete')},
-    { label: 'Ignore'}
+    { label: 'Ignore', onSelect: () => {}}
   ];
 
   let rowData = [];
