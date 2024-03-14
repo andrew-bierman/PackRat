@@ -76,8 +76,6 @@ export const BaseModal = ({
     );
   }, [footerComponent]);
 
-  console.log(isModalOpen, 'dialog')
-
   return (
     <Dialog
       modal

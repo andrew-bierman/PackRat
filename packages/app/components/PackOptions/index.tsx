@@ -18,7 +18,6 @@ export const PackOptions: React.FC<PackOptionsProps> = ({
   Ignore,
 }) => {
   const { isModalOpen, openModal, closeModal } = useModalState();
-  console.log(isModalOpen, 'isModalOpen');
 
   return (
     <RStack>
