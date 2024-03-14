@@ -59,6 +59,8 @@ export default function PackContainer({ isCreatingTrip = false, setPackId}) {
 
   const dataValues = packs?.map((item) => item?.name) ?? [];
 
+  console.log(currentPack, dataValues, currentPackId, 'current data');
+
   return dataValues?.length > 0 ? (
     <View style={styles.mainContainer}>
       <DropdownComponent

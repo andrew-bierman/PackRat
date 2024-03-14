@@ -13,10 +13,10 @@ import {
 } from 'app/hooks/destination';
 import { useGEOLocationSearch } from 'app/hooks/geojson';
 import { usePackId } from 'app/hooks/packs/usePackId';
+import { usePackIdQParam } from 'app/hooks/packs/usePackIdQParam';
 import { AddTripValidationSchema } from '@packrat/validations/src/validations/tripRoutesValidator';
 
 export const useTripsData = () => {
-  const [defaultPackId] = usePackId();
 
   const form = useForm({
     defaultValues: {
@@ -47,8 +47,10 @@ export const useTripsData = () => {
   const setPackId = (updatedPackId) => setValue('packId', updatedPackId, { shouldValidate: true });
   const setOsm = (updatedOsm) => setValue('osm', updatedOsm, { shouldValidate: true });
 
+  const [defaultPackId] = usePackIdQParam();
+
   useEffect(() => {
-    // const defaultPackId = searchParams.get('packId');
+    console.log(defaultPackId, 'default pack id');
     if (defaultPackId) setPackId(defaultPackId);
   }, [])
 
