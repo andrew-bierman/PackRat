@@ -15,11 +15,6 @@ import { AddItem } from '../item/AddItem';
 import loadStyles from './packtable.style';
 import { IgnoreItemCheckbox } from './TableHelperComponents';
 type ItemProps = React.ComponentProps<typeof DropdownMenu['Item']>
-const DropdownMenuItem = DropdownMenu.create((props: ItemProps) => {
-  return <DropdownMenu.Item {...props}>
-    <Text>Hello world</Text>
-  </DropdownMenu.Item>
-}, 'Item')
  
 type ModalName = 'edit' | 'delete';
 
@@ -32,6 +27,28 @@ interface TableItemProps {
   currentPack: any;
   refetch: () => void;
   setRefetch: () => void;
+}
+
+export const ZDropdown = ({ dropdownItems = [], openModal = () => {} }) => {
+  return (
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger>
+        <RIconButton
+          backgroundColor="transparent"
+          icon={<MaterialIcons name="more-horiz" size={25} />}
+          onPress={openModal}
+          style={{ padding: 0}}
+        />
+      </DropdownMenu.Trigger>
+      <DropdownMenu.Content>
+        {dropdownItems.map(({label, onSelect = () => {}}) => (
+          <DropdownMenu.Item key={label} onSelect={onSelect}>
+            <DropdownMenu.ItemTitle>{label}</DropdownMenu.ItemTitle>
+          </DropdownMenu.Item>  
+        ))}
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
+  );
 }
 
 const TableItem = ({
@@ -56,6 +73,12 @@ const TableItem = ({
     setActiveModal(null)
   };
 
+  const rowActionItems = [
+    { label: 'Edit', onSelect: () => openModal('edit') },
+    { label: 'Delete', onSelect: () => openModal('delete')},
+    { label: 'Ignore'}
+  ];
+
   let rowData = [];
   if (
     Platform.OS === 'android' ||
@@ -66,27 +89,7 @@ const TableItem = ({
       name,
       `${formatNumber(weight)} ${unit}`,
       quantity,
-      <DropdownMenu.Root>
-      <DropdownMenu.Trigger>
-        <RIconButton
-          backgroundColor="transparent"
-          icon={<MaterialIcons name="more-horiz" size={25} />}
-          onPress={openModal}
-          style={{ padding: 0}}
-        />
-      </DropdownMenu.Trigger>
-      <DropdownMenu.Content>
-        <DropdownMenu.Item key="Edit" onSelect={openModal('edit')}>
-          <DropdownMenu.ItemTitle>Edit</DropdownMenu.ItemTitle>
-          </DropdownMenu.Item>
-        <DropdownMenu.Item key="Delete" onSelect={openModal('delete')}>
-          <DropdownMenu.ItemTitle>Delete</DropdownMenu.ItemTitle>
-        </DropdownMenu.Item>
-        <DropdownMenu.Item key="Ignore">
-          <DropdownMenu.ItemTitle>Ignore</DropdownMenu.ItemTitle>
-        </DropdownMenu.Item>
-      </DropdownMenu.Content>
-    </DropdownMenu.Root>
+      <ZDropdown dropdownItems={rowActionItems} openModal={openModal} />,
     ];
   } else {
     rowData = [
