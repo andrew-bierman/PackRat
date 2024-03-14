@@ -28,7 +28,6 @@ export function PackDetails() {
   // const [canCopy, setCanCopy] = useParam('canCopy')
   const canCopy = false;
   const [packId] = usePackId();
-  console.log(packId, 'what is pack Id');
   const link = `${CLIENT_URL}/packs/${packId}`;
   const [firstLoad, setFirstLoad] = useState(true);
   const user = useAuthUser();

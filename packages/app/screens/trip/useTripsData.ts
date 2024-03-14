@@ -50,7 +50,6 @@ export const useTripsData = () => {
   const [defaultPackId] = usePackIdQParam();
 
   useEffect(() => {
-    console.log(defaultPackId, 'default pack id');
     if (defaultPackId) setPackId(defaultPackId);
   }, [])
 
@@ -58,8 +57,6 @@ export const useTripsData = () => {
     const name = isPark ? 'currentPark' : 'currentTrail';
     const formValues = getValues();
     const newValue = formValues[name] === value ? '' : value;
-
-    console.log(name, value);
 
     reset({ ...formValues, [name]: newValue });
   };

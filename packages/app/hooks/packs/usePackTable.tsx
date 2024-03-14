@@ -32,7 +32,6 @@ export const usePackTable = ({
   };
 
   const [weightUnit, setWeightUnit] = useState<WeightUnit>('g');
-  console.log(currentPack, 'still current');
   const data = currentPack?.items;
   let totalFoodWeight = 0;
   let totalWaterWeight = 0;
@@ -98,12 +97,9 @@ export const usePackTable = ({
 
   // In your groupedData definition, provide a default category for items without one
   const groupedData = data
-    ?.filter((fItem) => !Array.isArray(fItem.category) || Object.keys(fItem)?.filter(k => k !== 'category')?.length > 0)
+    ?.filter((fItem) => !Array.isArray(fItem.category))
     ?.reduce((acc, item) => {
-      let itemCategoryName = null;
-      if (Array.isArray(item.category) && item.category.length === 1) itemCategoryName = item.category[0];
-      else itemCategoryName = item.category?.name;
-      const categoryName = itemCategoryName ? itemCategoryName : 'Undefined';
+      const categoryName = item.category ? item.category?.name : 'Undefined';
       (acc[categoryName] = acc[categoryName] || []).push(item);
       return acc;
     }, {});

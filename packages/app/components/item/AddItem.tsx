@@ -44,7 +44,6 @@ export const AddItem = ({
   isItemPage,
   setIsAddItemModalOpen = () => {},
 }: AddItemProps) => {
-  console.log(packId, 'did we have this?')
   const {
     // mutation: addPackItemMutation
     isLoading,
@@ -68,7 +67,6 @@ export const AddItem = ({
       closeModalHandler();
   };
 
-  console.log(initialData, 'initialData')
   const defaultValues = useMemo(() => {
     if (!initialData) {
       return { unit: 'lb', packId };
@@ -90,8 +88,6 @@ export const AddItem = ({
 
     return { ...result, packId };
   }, [initialData, isEdit, packId]);
-
-  console.log({ defaultValues }, isEdit, 'isEdit');
 
   return (
     <View>

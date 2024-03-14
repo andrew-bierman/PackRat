@@ -18,8 +18,8 @@ export const addItem = z.object({
   weight: z.string().nonempty(),
   quantity: z.string().nonempty(),
   unit: z.string().nonempty(),
-  type: z.string().optional(),
   packId: JoiObjectId(),
+  type: z.string().optional(),
   ownerId: z.string().optional(),
 });
 
@@ -36,7 +36,7 @@ export const editItem = z.object({
 
 export const deleteItem = z.object({
   itemId: JoiObjectId().nonempty(),
-  // packId: JoiObjectId().nonempty(),
+  packId: JoiObjectId().nonempty(),
 });
 
 export const addItemGlobal = z.object({
@@ -48,7 +48,7 @@ export const addItemGlobal = z.object({
 });
 
 export const addGlobalItemToPack = z.object({
-  // packId: z.string(),
+  packId: z.string(),
   itemId: z.string(),
   ownerId: z.string(),
 });
@@ -59,7 +59,7 @@ export const deleteGlobalItem = z.object({
 
 export const editGlobalItemAsDuplicate = z.object({
   itemId: z.string(),
-  // packId: z.string(),
+  packId: z.string(),
   name: z.string(),
   weight: z.number(),
   quantity: z.number(),

@@ -1,5 +1,4 @@
 import { queryTrpc } from '../../trpc';
-import { usePackId } from './usePackId';
 
 export const useAddPackItem = () => {
   const utils = queryTrpc.useContext();
@@ -8,13 +7,10 @@ export const useAddPackItem = () => {
   const mutation = queryTrpc.addItem.useMutation({
     onMutate: async (newItem) => {
       // Snapshot the previous value before the mutation
-
-      console.log(newItem.packId, newItem, 'newItem');
       
       const previousPack = utils.getPackById.getData({
         packId: newItem.packId,
       });
-      console.log('previus data', previousPack);
       const newQueryData = {
         ...previousPack,
         items: [
