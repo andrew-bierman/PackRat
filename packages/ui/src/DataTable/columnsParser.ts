@@ -1,7 +1,7 @@
 import { createColumnHelper } from '@tanstack/react-table';
 
 type DataType = {
-  [key: string]: string | number;
+  [key: string | number]: string | number;
 };
 
 export const createColumns = <T extends DataType>(data: T[]) => {
@@ -12,7 +12,8 @@ export const createColumns = <T extends DataType>(data: T[]) => {
   if (keys.length > 0) {
     // Map over the keys to create columns
     const columns = keys.map((key) => {
-      return columnHelper.accessor(key as keyof T, {
+      return columnHelper.accessor((row) => row[key], {
+        id: key.toString(),
         cell: (info) => info.getValue(),
         footer: (info) => info.column.id,
       });

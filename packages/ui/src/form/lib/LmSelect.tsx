@@ -1,5 +1,11 @@
-import { getFontSize, Select, SelectProps, ThemeProps, YStack } from 'tamagui';
-import { LinearGradient } from '@tamagui/linear-gradient';
+import {
+  getFontSize,
+  Select as OriginalSelect,
+  SelectProps,
+  ThemeProps,
+  YStack as OriginalYStack,
+} from 'tamagui';
+import { LinearGradient as OriginalLinearGradient } from '@tamagui/linear-gradient';
 import {
   CaretDownRegular,
   CaretUpRegular,
@@ -10,6 +16,10 @@ import {
 import { useId, useMemo, useState } from 'react';
 import { LmFormFieldContainer } from './LmFormFieldContainer';
 import { LmFormContainerBaseTypes } from './formContainerTypes';
+
+const YStack: any = OriginalYStack;
+const Select: any = OriginalSelect;
+const LinearGradient: any = OriginalLinearGradient;
 
 type GetAltThemeNames<S> =
   | (S extends `${string}_${infer Alt}` ? GetAltThemeNames<Alt> : S)
@@ -32,7 +42,7 @@ export function LmSelect({
   colorVariant,
   themeName,
   options = [],
-  width = 200,
+  width = 200 as any,
   placeholder = '',
   dropDownLabel,
   required,

@@ -1,17 +1,13 @@
-import React, {
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  forwardRef,
-  useImperativeHandle,
-} from 'react';
-import { Button, Dialog, DialogContent } from 'tamagui';
+import React, { useMemo, useState } from 'react';
+import { Button as OriginalButton, Dialog as OriginalDialog } from 'tamagui';
 import { X } from '@tamagui/lucide-icons';
-import RButton from '@packrat/ui/src/RButton';
+import OriginalRButton from '@packrat/ui/src/RButton';
 import RStack from '@packrat/ui/src/RStack';
 import { useModal, ModalProvider } from './provider';
-import { Platform, Dimensions } from 'react-native';
+
+const Dialog: any = OriginalDialog;
+const Button: any = OriginalButton;
+const RButton: any = OriginalRButton;
 
 export interface BaseModalProps {
   id?: string;
