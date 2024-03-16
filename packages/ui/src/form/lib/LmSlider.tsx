@@ -10,9 +10,15 @@ import {
 import { useId, useState } from 'react';
 import { LmFormFieldContainer } from './LmFormFieldContainer';
 import { LmFormContainerBaseTypes } from './formContainerTypes';
+import { ComponentPropsWithoutRef } from 'react';
 
 const XStack: any = OriginalXStack;
 const Slider: any = OriginalSlider;
+
+type CustomSliderTrackProps = ComponentPropsWithoutRef<typeof Slider.Track> & {
+  colorCustom?: string;
+  children?: (props: any) => React.ReactElement;
+};
 
 const CustomSliderTrack = styled(Slider.Track, {
   variants: {
@@ -24,7 +30,8 @@ const CustomSliderTrack = styled(Slider.Track, {
       },
     },
   } as const,
-});
+}) as React.FC<CustomSliderTrackProps>;
+
 const CustomSliderTrackActive = styled(Slider.TrackActive, {
   variants: {
     colorCustom: {
