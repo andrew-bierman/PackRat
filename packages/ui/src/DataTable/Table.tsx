@@ -1,15 +1,19 @@
 import { flexRender } from '@tanstack/react-table';
 import {
   H3,
-  H4,
+  H4 as OriginalH4,
   ListItem,
   Paragraph,
   ScrollView,
   Separator,
   View,
-  XStack,
-  YStack,
+  XStack as OriginalXStack,
+  YStack as OriginalYStack,
 } from 'tamagui';
+
+const H4: any = OriginalH4;
+const XStack: any = OriginalXStack;
+const YStack: any = OriginalYStack;
 
 export function DataTable({
   title,
@@ -52,7 +56,7 @@ export function DataTable({
               pos="relative"
               py="$3"
               px="$4"
-              $sm={{ flexDirection: 'column' }}
+              $sm={{ flexDirection: 'column' } as any}
             >
               {headerGroup.headers.map((header) => (
                 <View

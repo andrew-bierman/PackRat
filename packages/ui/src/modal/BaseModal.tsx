@@ -1,9 +1,13 @@
 import React, { useMemo, useState } from 'react';
-import { Button, Dialog } from 'tamagui';
+import { Button as OriginalButton, Dialog as OriginalDialog } from 'tamagui';
 import { X } from '@tamagui/lucide-icons';
-import RButton from '@packrat/ui/src/RButton';
+import OriginalRButton from '@packrat/ui/src/RButton';
 import RStack from '@packrat/ui/src/RStack';
 import { useModal, ModalProvider } from './provider';
+
+const Dialog: any = OriginalDialog;
+const Button: any = OriginalButton;
+const RButton: any = OriginalRButton;
 
 export interface BaseModalProps {
   id?: string;

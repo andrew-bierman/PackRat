@@ -15,7 +15,7 @@ type ContentProps = ComponentProps<(typeof Dropdown)['Content']>;
 const CustomContent = styled(Dropdown.Content, {
   padding: 10,
   backgroundColor: 'white',
-});
+} as any);
 
 const DropdownMenuContent = Dropdown.create(CustomContent, 'Content');
 
@@ -29,7 +29,7 @@ const CustomItem = styled(Dropdown.Item, {
   hoverStyle: {
     backgroundColor: 'gray',
   },
-});
+} as any);
 
 const DropdownMenuItem = Dropdown.create(CustomItem, 'Item');
 

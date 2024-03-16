@@ -1,11 +1,14 @@
-import { Spinner, YStack } from 'tamagui';
+import { Spinner as OriginalSpinner, YStack as OriginalYStack } from 'tamagui';
 
-function RSpinner({size = 'small', color = 'blue'}) {
+const YStack: any = OriginalYStack;
+const Spinner: any = OriginalSpinner;
+
+function RSpinner({ size = 'small', color = 'blue' }) {
   return (
     <YStack alignItems="center">
       <Spinner size={size} color={color} />
     </YStack>
-  )
+  );
 }
 
 export default RSpinner;

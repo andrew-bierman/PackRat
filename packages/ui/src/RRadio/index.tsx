@@ -1,13 +1,15 @@
-import { RadioGroup, Label, XStack } from 'tamagui';
+import { RadioGroup as OriginalRadioGroup, Label, XStack } from 'tamagui';
 
-const RRadio = ({value, data, onValueChange, ...props}) => {
-  if(!data) return null;
+const RadioGroup: any = OriginalRadioGroup;
+
+const RRadio = ({ value, data, onValueChange, ...props }) => {
+  if (!data) return null;
   return (
-    <RadioGroup 
-      value={value} 
-      size="$4" 
-      space="$2" 
-      onValueChange={onValueChange} 
+    <RadioGroup
+      value={value}
+      size="$4"
+      space="$2"
+      onValueChange={onValueChange}
       {...props}
     >
       {data.map((value) => (
@@ -15,13 +17,10 @@ const RRadio = ({value, data, onValueChange, ...props}) => {
           <RadioGroup.Item value={value} key={value}>
             <RadioGroup.Indicator />
           </RadioGroup.Item>
-          <Label htmlFor={value}>
-            {value}
-          </Label>
+          <Label htmlFor={value}>{value}</Label>
         </XStack>
       ))}
-      
     </RadioGroup>
-  )
-  }
+  );
+};
 export default RRadio;

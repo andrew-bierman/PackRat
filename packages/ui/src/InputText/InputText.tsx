@@ -62,7 +62,7 @@ export const InputText: React.ForwardRefExoticComponent<InputTextProps> =
                 autoFocus={autoFocus}
                 placeholder={placeholder}
                 secureTextEntry={secureTextEntry}
-                ref={inputRef}
+                ref={inputRef as any}
                 {...rest}
               />
             </>

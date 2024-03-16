@@ -4,14 +4,17 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Form,
   Input,
-  Text,
+  Text as OriginalText,
   Button,
   TextArea,
   Label,
-  XStack,
+  XStack as OriginalXStack,
   YStack,
 } from 'tamagui';
 import * as z from 'zod';
+
+const Text: any = OriginalText;
+const XStack: any = OriginalXStack;
 
 interface FieldProps {
   inputComponent?: string;
@@ -129,7 +132,7 @@ const ReusableForm = forwardRef<any, ReusableFormProps>((props, ref) => {
             />
             <RenderError
               error={field.errorMessage}
-              fieldError={errors[field.name]?.message}
+              fieldError={errors[field.name]?.message as string | undefined}
             />
             <RenderHelperText text={field.helperText} />
           </YStack>
