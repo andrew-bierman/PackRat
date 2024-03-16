@@ -13,6 +13,12 @@ import {
 import { api } from 'app/constants/api';
 import { RStack } from '@packrat/ui';
 
+interface Pack {
+  bounds: [[number, number], [number, number]];
+  metadata: any;
+  //...
+}
+
 function CircleCapComp() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
@@ -34,9 +40,9 @@ function CircleCapComp() {
 export default function DownloadedMaps() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
-  const [offlinePacks, setOfflinePacks] = useState(null);
+  const [offlinePacks, setOfflinePacks] = useState<any[]>([]);
   const [showMap, setShowMap] = useState(false);
-  const [pack, setPack] = useState(null);
+  const [pack, setPack] = useState<Pack | null>(null);
 
   let shape, zoomLevel;
   if (pack != null) {
@@ -44,10 +50,12 @@ export default function DownloadedMaps() {
     const dw = Dimensions.get('screen').width;
     const bounds = getShapeSourceBounds(shape);
 
-    zoomLevel = calculateZoomLevel(bounds[0].concat(bounds[1]), {
-      width: dw,
-      height: 360,
-    });
+    if (bounds && bounds[0] && bounds[1]) {
+      zoomLevel = calculateZoomLevel(bounds[0].concat(bounds[1]), {
+        width: dw,
+        height: 360,
+      });
+    }
   }
 
   useEffect(() => {
@@ -71,47 +79,48 @@ export default function DownloadedMaps() {
       </Text>
       {offlinePacks ? (
         <View style={{ gap: 4 }}>
-          {offlinePacks.map(({ pack }) => {
-            const metadata = JSON.parse(pack.metadata);
-            return (
-              <TouchableOpacity
-                style={{
-                  padding: 20,
-                }}
-                onPress={() => {
-                  console.log('pack object', pack);
-                  console.log('pack metadata', pack.metadata);
-                  setPack(pack);
-                  setShowMap(true);
-                }}
-              >
-                {pack && (
-                  <Image
-                    style={{
-                      width: '100%',
-                      height: 200,
-                      borderRadius: 10,
-                    }}
-                    source={{
-                      uri: `${api}/mapPreview/${
-                        pack?.bounds[0] + ',' + pack?.bounds[1]
-                      },10,60,60/600x600`,
-                    }}
-                  />
-                )}
-                <Text
+          {offlinePacks &&
+            offlinePacks.map(({ pack }) => {
+              const metadata = JSON.parse(pack.metadata);
+              return (
+                <TouchableOpacity
                   style={{
-                    fontSize: 16,
-                    fontWeight: 'bold',
-                    marginTop: 5,
-                    color: currentTheme.colors.text,
+                    padding: 20,
+                  }}
+                  onPress={() => {
+                    console.log('pack object', pack);
+                    console.log('pack metadata', pack.metadata);
+                    setPack(pack);
+                    setShowMap(true);
                   }}
                 >
-                  {metadata.name}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
+                  {pack && (
+                    <Image
+                      style={{
+                        width: '100%',
+                        height: 200,
+                        borderRadius: 10,
+                      }}
+                      source={{
+                        uri: `${api}/mapPreview/${
+                          pack?.bounds[0] + ',' + pack?.bounds[1]
+                        },10,60,60/600x600`,
+                      }}
+                    />
+                  )}
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      fontWeight: 'bold',
+                      marginTop: 5,
+                      color: currentTheme.colors.text,
+                    }}
+                  >
+                    {metadata.name}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
         </View>
       ) : (
         <RStack>
@@ -130,10 +139,14 @@ export default function DownloadedMaps() {
           >
             <Mapbox.Camera
               zoomLevel={zoomLevel}
-              centerCoordinate={[
-                (pack.bounds[0][0] + pack.bounds[1][0]) / 2,
-                (pack.bounds[0][1] + pack.bounds[1][1]) / 2,
-              ]}
+              centerCoordinate={
+                pack
+                  ? [
+                      (pack.bounds[0][0] + pack.bounds[1][0]) / 2,
+                      (pack.bounds[0][1] + pack.bounds[1][1]) / 2,
+                    ]
+                  : [0, 0] // default value if pack is null
+              }
               animationMode={'flyTo'}
               animationDuration={2000}
             />
@@ -145,7 +158,6 @@ export default function DownloadedMaps() {
               cluster
               clusterRadius={80}
               clusterMaxZoomLevel={14}
-              style={{ zIndex: 1 }}
             >
               <Mapbox.LineLayer
                 id="layer1"
@@ -190,4 +202,4 @@ const styles = StyleSheet.create({
     lineWidth: 4,
     lineOpacity: 1,
   },
-});
+} as any);

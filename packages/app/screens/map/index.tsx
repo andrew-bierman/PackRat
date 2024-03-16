@@ -133,22 +133,24 @@ export default function Map() {
 
       const bounds = getShapeSourceBounds(shape);
 
-      mapViewRef.current.fitBounds(bounds, {
-        edgePadding: {
-          top: 5,
-          right: 5,
-          bottom: 5,
-          left: 5,
-        },
-      });
+      if (mapViewRef.current) {
+        mapViewRef.current.fitBounds(bounds, {
+          edgePadding: {
+            top: 5,
+            right: 5,
+            bottom: 5,
+            left: 5,
+          },
+        });
 
-      mapViewRef.current.setCamera({
-        centerCoordinate: mapViewRef.current.getCenter(),
-        zoomLevel: Math.min(
-          mapViewRef.current.zoomLevel,
-          mapViewRef.current.getZoomForBounds(bounds, { padding: 50 }),
-        ),
-      });
+        mapViewRef.current.setCamera({
+          centerCoordinate: mapViewRef.current.getCenter(),
+          zoomLevel: Math.min(
+            mapViewRef.current.zoomLevel,
+            mapViewRef.current.getZoomForBounds(bounds, { padding: 50 }),
+          ),
+        });
+      }
     }
 
     // function handleMapIdle() {
