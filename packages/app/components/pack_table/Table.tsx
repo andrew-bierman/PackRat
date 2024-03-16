@@ -15,10 +15,10 @@ import TableItem from './TableItem';
 
 interface TableContainerProps {
   currentPack: any;
-  selectedPack: any;
-  refetch: () => void;
-  setRefetch: () => void;
-  copy: boolean;
+  selectedPack?: any;
+  refetch?: any;
+  setRefetch?: any;
+  copy?: any;
 }
 
 export const TableContainer = ({

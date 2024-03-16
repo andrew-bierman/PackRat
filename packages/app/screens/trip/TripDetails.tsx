@@ -29,6 +29,15 @@ const SECTION = {
   SCORE: 'SCORE',
 };
 
+interface TripData {
+  packs?: any;
+  end_date?: string;
+  start_date?: string;
+  destination?: string;
+  description?: string;
+  [key: string]: any;
+}
+
 export function TripDetails() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
@@ -36,8 +45,17 @@ export function TripDetails() {
   const [tripId] = useTripId();
 
   // console.log("🚀 ~ file: TripDetails.js:34 ~ TripDetails ~ tripId:", tripId)
-  const { data, isLoading, error, refetch, isOwner, isError } =
-    useFetchSingleTrip(tripId);
+  const {
+    data: rawData,
+    isLoading,
+    error,
+    refetch,
+    isOwner,
+    isError,
+  } = useFetchSingleTrip(tripId);
+
+  const data = rawData as TripData;
+
   const { weatherObject, weatherWeek } = useTripWeather(data);
 
   const link = `${CLIENT_URL}/trip/${tripId}`;
@@ -51,6 +69,8 @@ export function TripDetails() {
 
   if (isError) return <RText>There was an error</RText>;
 
+  const errorProp = error instanceof Error ? error : new Error(error?.message);
+
   return (
     <View
       style={[
@@ -60,79 +80,94 @@ export function TripDetails() {
           : { minHeight: Dimensions.get('screen').height },
       ]}
     >
-          <DetailsComponent
-            type="trip"
-            data={data}
-            isLoading={isLoading}
-            error={error}
-            additionalComps={
-              <View>
-                <FlatList
-                  data={Object.entries(SECTION)}
-                  contentContainerStyle={{ paddingBottom: Platform.OS !== 'web' ? 350 : 0 }}
-                  keyExtractor={([key, val]) => val}
-                  renderItem={({item}) => {
-                    {
-                      switch (item[1]) {
-                        case SECTION.DESCRIPTION:
-                          return <View style={{ marginBottom: '5%' }}>
-                            {data?.description && (
-                              <RStack>
-                                <Text>Description: {data?.description}</Text>
-                              </RStack>
-                            )}
-                            {data?.destination && (
-                              <RStack>
-                                <Text>Destination: {data?.destination}</Text>
-                              </RStack>
-                            )}
-                            {data.start_date && (
-                              <RStack>
-                                <Text>
-                                  Start Date:{' '}
-                                  {format(new Date(data.start_date), 'MM/dd/yyyy')}
-                                </Text>
-                              </RStack>
-                            )}
-                            {data.end_date && (
-                              <RStack>
-                                <Text>
-                                  End Date:{' '}
-                                  {format(new Date(data.end_date), 'MM/dd/yyyy')}
-                                </Text>
-                              </RStack>
-                            )}
-                          </View>;
-                        case SECTION.TABLE:
-                          return <TableContainerComponent currentPack={data?.packs} />;
-                        case SECTION.WEATHER:
-                          return <WeatherCardComponent
+      <DetailsComponent
+        type="trip"
+        data={data}
+        isLoading={isLoading}
+        error={errorProp}
+        additionalComps={
+          <View>
+            <FlatList
+              data={Object.entries(SECTION)}
+              contentContainerStyle={{
+                paddingBottom: Platform.OS !== 'web' ? 350 : 0,
+              }}
+              keyExtractor={([key, val]) => val}
+              renderItem={({ item }) => {
+                {
+                  switch (item[1]) {
+                    case SECTION.DESCRIPTION:
+                      return (
+                        <View style={{ marginBottom: '5%' }}>
+                          {data?.description && (
+                            <RStack>
+                              <Text>Description: {data?.description}</Text>
+                            </RStack>
+                          )}
+                          {data?.destination && (
+                            <RStack>
+                              <Text>Destination: {data?.destination}</Text>
+                            </RStack>
+                          )}
+                          {data.start_date && (
+                            <RStack>
+                              <Text>
+                                Start Date:{' '}
+                                {format(
+                                  new Date(data.start_date),
+                                  'MM/dd/yyyy',
+                                )}
+                              </Text>
+                            </RStack>
+                          )}
+                          {data.end_date && (
+                            <RStack>
+                              <Text>
+                                End Date:{' '}
+                                {format(new Date(data.end_date), 'MM/dd/yyyy')}
+                              </Text>
+                            </RStack>
+                          )}
+                        </View>
+                      );
+                    case SECTION.TABLE:
+                      return (
+                        <TableContainerComponent currentPack={data?.packs} />
+                      );
+                    case SECTION.WEATHER:
+                      return (
+                        <WeatherCardComponent
                           weatherObject={weatherObject}
                           weatherWeek={weatherWeek}
                           data={data}
-                        />;
-                        case SECTION.TRIP:
-                          return <TripCardComponent
+                        />
+                      );
+                    case SECTION.TRIP:
+                      return (
+                        <TripCardComponent
                           data={data}
                           weatherObject={weatherObject}
                           currentTheme={currentTheme}
-                        />;
-                        case SECTION.SCORE:
-                          return <ScoreContainer
+                        />
+                      );
+                    case SECTION.SCORE:
+                      return (
+                        <ScoreContainer
                           type="trip"
                           data={data}
                           isOwner={isOwner}
-                        />;
-                        default:
-                          return null;
-                      }
-                    }
-                  }}
-                />
-              </View>
-            }
-            link={link}
-          />
+                        />
+                      );
+                    default:
+                      return null;
+                  }
+                }
+              }}
+            />
+          </View>
+        }
+        link={link}
+      />
     </View>
   );
 }

@@ -13,15 +13,17 @@ import { PlacesAutocomplete } from './PlacesAutocomplete';
 interface TripCardProps {
   title: string;
   Icon: React.FC;
-  isMap: boolean;
+  isMap?: boolean;
   shape?: any;
   data?: string[];
-  isSearch: boolean;
-  isTrail: boolean;
-  isPark: boolean;
-  isLoading: boolean;
+  isSearch?: boolean;
+  isTrail?: boolean;
+  isPark?: boolean;
+  isLoading?: boolean;
   form?: any;
   searchRef?: any;
+  cords?: any;
+  value?: string;
 }
 
 export default function TripCard({
@@ -65,12 +67,12 @@ export default function TripCard({
       }}
       style={
         isSearch
-        ? styles.searchContainer
-        : isMap
-          ? styles.mapCard
-          : styles.containerMobile
-            ? styles.containerMobile
-            : styles.mutualStyles
+          ? styles.searchContainer
+          : isMap
+            ? styles.mapCard
+            : styles.containerMobile
+              ? styles.containerMobile
+              : styles.mutualStyles
       }
     >
       <RStack

@@ -1,9 +1,9 @@
 import { Ionicons } from '@expo/vector-icons';
 import {
   RInput,
-  RSeparator,
-  RText,
-  RStack,
+  RSeparator as OriginalRSeparator,
+  RText as OriginalRText,
+  RStack as OriginalRStack,
   RButton,
   RH5,
   RH2,
@@ -12,11 +12,16 @@ import {
   Form,
   ImageUpload,
   FormInput,
-  FormSelect,
+  FormSelect as OriginalFormSelect,
 } from '@packrat/ui';
 import Avatar from 'app/components/Avatar/Avatar';
 import { useProfileSettings } from 'app/hooks/user';
 import { z } from 'zod';
+
+const RStack: any = OriginalRStack;
+const RSeparator: any = OriginalRSeparator;
+const FormSelect: any = OriginalFormSelect;
+const RText: any = OriginalRText;
 
 const weatherOptions = ['celsius', 'fahrenheit'].map((key) => ({
   label: key,

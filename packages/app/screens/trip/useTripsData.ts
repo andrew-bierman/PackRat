@@ -16,12 +16,21 @@ export const useTripsData = () => {
   });
   const [osm] = useGEOLocationSearch();
   const { currentDestination, latLng } = useCurrentDestination();
-  const { data: photonDetails } = useGetPhotonDetails({
-    properties: {
-      osm_id: osm?.osmId,
-      osm_type: osm?.osmType,
-    },
-  });
+  const { data: photonDetails } = useGetPhotonDetails(
+    osm && osm.osmId && osm.osmType
+      ? {
+          properties: {
+            osm_id: osm.osmId,
+            osm_type: osm.osmType,
+          },
+        }
+      : {
+          properties: {
+            osm_id: '',
+            osm_type: '',
+          },
+        },
+  );
 
   const {
     data: weatherData,

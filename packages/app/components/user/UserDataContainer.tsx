@@ -1,5 +1,11 @@
 import { Link } from '@packrat/crosspath';
-import { RStack, RText, RButton, RSkeleton, VirtualList } from '@packrat/ui';
+import {
+  RStack,
+  RText as OriginalRText,
+  RButton,
+  RSkeleton,
+  VirtualList,
+} from '@packrat/ui';
 import { VirtualizedList } from 'react-native';
 import UserDataCard from './UserDataCard';
 import React, { useEffect, useState } from 'react';
@@ -9,6 +15,8 @@ import useTheme from '../../hooks/useTheme';
 import { hexToRGBA } from 'app/utils/colorFunctions';
 import { View, FlatList } from 'react-native';
 import { useAuthUser } from 'app/auth/hooks';
+
+const RText: any = OriginalRText;
 
 // Skeleton version of the UserDataCard component
 const SkeletonUserDataCard = () => {
@@ -26,7 +34,7 @@ const SkeletonUserDataCard = () => {
 
 interface UserDataContainerProps {
   data: any;
-  type: 'packs' | 'trips';
+  type: 'packs' | 'trips' | 'favorites';
   userId?: string;
   isLoading: boolean;
   SkeletonComponent?: React.ReactElement;

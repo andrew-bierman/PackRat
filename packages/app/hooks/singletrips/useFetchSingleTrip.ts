@@ -1,9 +1,9 @@
 import { queryTrpc } from '../../trpc';
 import { useAuthUser } from 'app/auth/hooks';
-export const useFetchSingleTrip = (tripId) => {
+export const useFetchSingleTrip = <T = any>(tripId) => {
   const user = useAuthUser();
   const { refetch, data, error, isLoading, isError } =
-    queryTrpc.getTripById.useQuery(
+    queryTrpc.getTripById.useQuery<T>(
       { tripId },
       {
         enabled: true,
