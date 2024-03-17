@@ -132,8 +132,7 @@
     "tamagui": "^1.91.3",
     "togpx": "^0.5.4",
     "uuid": "3.4.0",
-    "xmldom": "^0.6.0",
-    "zod": "^3.22.2"
+    "xmldom": "^0.6.0"
   },
   "devDependencies": {
     "@babel/core": "^7.23.7",

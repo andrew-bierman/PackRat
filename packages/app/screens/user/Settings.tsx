@@ -13,10 +13,11 @@ import {
   ImageUpload,
   FormInput,
   FormSelect,
+  SubmitButton,
 } from '@packrat/ui';
 import Avatar from 'app/components/Avatar/Avatar';
 import { useProfileSettings } from 'app/hooks/user';
-import { z } from 'zod';
+import { userSettingsSchema, passwordChangeSchema } from '@packrat/validations';
 
 const weatherOptions = ['celsius', 'fahrenheit'].map((key) => ({
   label: key,
@@ -44,11 +45,7 @@ export default function Settings() {
           <RH2>Profile</RH2>
           <RSeparator marginVertical={8} />
         </RStack>
-        <Form
-          onSubmit={handleEditUser}
-          validationSchema={userSettingsSchema}
-          defaultValues={{ ...user }}
-        >
+        <Form validationSchema={userSettingsSchema} defaultValues={{ ...user }}>
           <RStack space="$3" width="fit-content" marginHorizontal="auto">
             <ImageUpload
               label="Profile Picture"
@@ -90,9 +87,13 @@ export default function Settings() {
                 </RStack>
               </RStack>
             </RStack>
-            <RButton color="white" style={{ backgroundColor: '#0284c7' }}>
+            <SubmitButton
+              onSubmit={handleEditUser}
+              color="white"
+              style={{ backgroundColor: '#0284c7' }}
+            >
               Update profile
-            </RButton>
+            </SubmitButton>
           </RStack>
         </Form>
 
@@ -136,30 +137,3 @@ export default function Settings() {
     </RScrollView>
   ) : null;
 }
-
-// TODO move to validations workspace
-
-const userSettingsSchema = z.object({
-  name: z.string().min(1).nonempty(),
-  email: z.string().email().nonempty(),
-  username: z.string().nonempty(),
-  profileImage: z.string().optional(),
-  preferredWeather: z.union([z.literal('celsius'), z.literal('fahrenheit')]),
-  preferredWeight: z.union([
-    z.literal('lb'),
-    z.literal('oz'),
-    z.literal('kg'),
-    z.literal('g'),
-  ]),
-});
-
-const passwordChangeSchema = z
-  .object({
-    oldPassword: z.string().min(1, 'Old password is required'),
-    newPassword: z.string().nonempty(),
-    confirmPassword: z.string().nonempty(),
-  })
-  .refine((data) => data.newPassword === data.confirmPassword, {
-    message: 'New password and confirmation must match',
-    path: ['confirmPassword'], // This will attach the error to `passwordConfirm` field
-  });
