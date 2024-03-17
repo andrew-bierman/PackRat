@@ -42,7 +42,7 @@ export const ZDropdown = ({ dropdownItems = [], openModal = () => {} }) => {
       </DropdownMenu.Trigger>
       <DropdownMenu.Content>
         {dropdownItems.map(({label, onSelect = () => {}}) => (
-          <DropdownMenu.Item key={label} onSelect={onSelect}>
+          <DropdownMenu.Item key={label} onSelect={onSelect()}>
             <DropdownMenu.ItemTitle>{label}</DropdownMenu.ItemTitle>
           </DropdownMenu.Item>  
         ))}
@@ -66,6 +66,7 @@ const TableItem = ({
   const styles = useCustomStyles(loadStyles);
 
   const openModal = (modalName: ModalName) => () => {
+    console.log('here');
     setActiveModal(modalName);
   }
 
