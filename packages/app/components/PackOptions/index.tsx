@@ -29,7 +29,7 @@ export const PackOptions: React.FC<PackOptionsProps> = ({
           {Edit} <Text>Edit{' '}</Text>
         </RStack>
         <RStack style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Text>{Delete} Delete{' '}</Text>
+          {Delete} <Text>Delete{' '}</Text>
         </RStack>
         <RStack
           style={{
@@ -38,7 +38,7 @@ export const PackOptions: React.FC<PackOptionsProps> = ({
             justifyContent: 'flex-end',
           }}
         >
-          <Text>{Ignore}{' '}</Text>
+          {Ignore} <Text>{' '}</Text>
         </RStack>
       </BaseModal>
     </RStack>
@@ -53,7 +53,6 @@ const MenuTriggerComponent = ({ openModal }) => {
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        // backgroundColor: 'red'
       }}
     >
       <RIconButton
