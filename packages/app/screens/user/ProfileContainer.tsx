@@ -71,7 +71,7 @@ const Header = ({
               <>
                 <RSkeleton
                   style={{
-                    borderRadius: '100%',
+                    borderRadius: 100,
                     height: 100,
                     width: 100,
                   }}
@@ -101,18 +101,10 @@ const Header = ({
       <RStack style={{ flexDirection: 'row', ...styles.card }}>
         {isLoading ? (
           <>
-            <RSkeleton
-              style={{ borderRadius: '100%', width: 50, height: 50 }}
-            />
-            <RSkeleton
-              style={{ borderRadius: '100%', width: 50, height: 50 }}
-            />
-            <RSkeleton
-              style={{ borderRadius: '100%', width: 50, height: 50 }}
-            />
-            <RSkeleton
-              style={{ borderRadius: '100%', width: 50, height: 50 }}
-            />
+            <RSkeleton style={{ borderRadius: 100, width: 50, height: 50 }} />
+            <RSkeleton style={{ borderRadius: 100, width: 50, height: 50 }} />
+            <RSkeleton style={{ borderRadius: 100, width: 50, height: 50 }} />
+            <RSkeleton style={{ borderRadius: 100, width: 50, height: 50 }} />
           </>
         ) : (
           <>
