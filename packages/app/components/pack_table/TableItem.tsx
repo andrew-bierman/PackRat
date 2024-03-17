@@ -66,7 +66,6 @@ const TableItem = ({
   const styles = useCustomStyles(loadStyles);
 
   const openModal = (modalName: ModalName) => () => {
-    console.log('here');
     setActiveModal(modalName);
   }
 
