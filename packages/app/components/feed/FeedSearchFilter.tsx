@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { Switch } from 'tamagui';
@@ -11,10 +11,11 @@ import {
   RSeparator,
   RButton,
   RInput,
+  Form,
+  FormInput,
 } from '@packrat/ui';
 import { AntDesign } from '@expo/vector-icons';
 import DropdownComponent from 'app/components/Dropdown';
-import { debounce } from 'lodash';
 
 const dataValues = [
   'Favorite',
@@ -26,6 +27,17 @@ const dataValues = [
   'Oldest',
 ];
 
+interface FeedSearchFilterProps {
+  feedType: string;
+  handleSortChange: (value: string) => void;
+  handleTogglePack: () => void;
+  handleToggleTrip: () => void;
+  selectedTypes: { pack: boolean; trip: boolean };
+  queryString: string;
+  setSearchQuery: (query: string) => void;
+  handleCreateClick: () => void;
+}
+
 const FeedSearchFilter = ({
   feedType,
   handleSortChange,
@@ -35,39 +47,36 @@ const FeedSearchFilter = ({
   queryString,
   setSearchQuery,
   handleCreateClick,
-}) => {
+}: FeedSearchFilterProps) => {
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
-  const [search, setSearch] = useState('');
+
+  const onSearch = ({ search }) => console.log(search);
+
   return (
     <View style={styles.filterContainer}>
       <View style={styles.searchContainer}>
-        <RStack
-          space={3}
-          style={{ flexDirection: 'row', justifyContent: 'center' }}
-        >
-          <RInput
-            size="$30"
-            placeholder={`Search ${feedType || 'Feed'}`}
-            onChangeText={(value) => {
-              setSearch(value);
-              debounce(() => {
-                setSearchQuery(value);
-              }, 500);
-            }}
-            value={search}
-          />
-          <RIconButton
-            backgroundColor="transparent"
-            icon={
-              <AntDesign
-                name="search1"
-                size={24}
-                color={currentTheme.colors.cardIconColor}
-              />
-            }
-          />
-        </RStack>
+        <Form onSubmit={onSearch}>
+          <RStack
+            space={3}
+            style={{ flexDirection: 'row', justifyContent: 'center' }}
+          >
+            <FormInput
+              placeholder={`Search ${feedType || 'Feed'}`}
+              name="search"
+            />
+            <RIconButton
+              backgroundColor="transparent"
+              icon={
+                <AntDesign
+                  name="search1"
+                  size={24}
+                  color={currentTheme.colors.cardIconColor}
+                />
+              }
+            />
+          </RStack>
+        </Form>
       </View>
       <RSeparator />
       <RStack
@@ -149,7 +158,7 @@ const FeedSearchFilter = ({
   );
 };
 
-const loadStyles = (theme) => {
+const loadStyles = (theme: any) => {
   const { currentTheme } = theme;
   return {
     mainContainer: {

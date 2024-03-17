@@ -1,7 +1,6 @@
 import React from 'react';
 import { Platform } from 'react-native';
-import { Box, Button, VStack, Text, HStack, View } from 'native-base';
-import { theme } from '../theme';
+import { YStack, XStack, RText, RStack, RButton } from '@packrat/ui';
 import useTheme from '../hooks/useTheme';
 import { Svg, Circle, Path, G, Text as SvgText } from 'react-native-svg';
 import useCustomStyles from 'app/hooks/useCustomStyles';
@@ -12,7 +11,17 @@ import {
   useScoreProgress,
 } from 'app/hooks/score';
 
-const ScoreProgressChart = ({ score, size = 150, strokeWidth = 10 }) => {
+interface ScoreProgressChartProps {
+  score: number;
+  size?: number;
+  strokeWidth?: number;
+}
+
+const ScoreProgressChart: React.FC<ScoreProgressChartProps> = ({
+  score,
+  size = 150,
+  strokeWidth = 10,
+}) => {
   if (!score) return null;
   const styles = useCustomStyles(loadStyles);
 
@@ -23,8 +32,8 @@ const ScoreProgressChart = ({ score, size = 150, strokeWidth = 10 }) => {
   );
 
   return (
-    <View style={styles.container}>
-      <View style={styles.graphWrapper}>
+    <RStack style={styles.container}>
+      <RStack style={styles.graphWrapper}>
         <Svg width={size} height={size}>
           <Circle
             cx={size / 2}
@@ -46,9 +55,9 @@ const ScoreProgressChart = ({ score, size = 150, strokeWidth = 10 }) => {
             fill="transparent"
           />
         </Svg>
-        <Text style={styles.label}>{score.toFixed(2)}</Text>
-      </View>
-    </View>
+        <RText style={styles.label}>{score.toFixed(2)}</RText>
+      </RStack>
+    </RStack>
   );
 };
 
@@ -58,7 +67,20 @@ const ScoreProgressChart = ({ score, size = 150, strokeWidth = 10 }) => {
 //   redundancyAndVersatility: redundancyAndVersatilityGrade,
 // },
 
-const GradingPieChart = ({ scores, size = 150, strokeWidth = 10 }) => {
+interface GradingPieChartProps {
+  scores: {
+    weight: number;
+    essentialItems: number;
+    redundancyAndVersatility: number;
+  };
+  size?: number;
+  strokeWidth?: number;
+}
+const GradingPieChart: React.FC<GradingPieChartProps> = ({
+  scores,
+  size = 150,
+  strokeWidth = 10,
+}) => {
   if (!scores) return null;
 
   const styles = useCustomStyles(loadStyles);
@@ -77,8 +99,8 @@ const GradingPieChart = ({ scores, size = 150, strokeWidth = 10 }) => {
   } = useGradingPie(scores);
 
   return (
-    <View style={styles.container}>
-      <View style={styles.graphWrapper}>
+    <RStack style={styles.container}>
+      <RStack style={styles.graphWrapper}>
         <Svg height="160" width="160" viewBox="0 0 180 180">
           <G rotation={-90} originX="90" originY="90">
             {total === 0 ? (
@@ -138,13 +160,22 @@ const GradingPieChart = ({ scores, size = 150, strokeWidth = 10 }) => {
             )}
           </G>
         </Svg>
-        <Text style={styles.label}>{total.toFixed(2)}</Text>
-      </View>
-    </View>
+        <RText style={styles.label}>{total.toFixed(2)}</RText>
+      </RStack>
+    </RStack>
   );
 };
 
-export default function ScoreContainer({ type, data, isOwner }) {
+interface ScoreContainerProps {
+  type: 'pack' | 'trip';
+  data: any;
+  isOwner: boolean;
+}
+export const ScoreContainer: React.FC<ScoreContainerProps> = ({
+  type,
+  data,
+  isOwner,
+}) => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
@@ -161,32 +192,36 @@ export default function ScoreContainer({ type, data, isOwner }) {
 
   const handleScoreClick = useCalculateStore(id, type);
 
+  const isWeb = Platform.OS === 'web';
+
   return (
-    <Box style={styles.box}>
-      <HStack style={styles.hStack}>
-        <VStack style={styles.vStack}>
-          <Text style={styles.scoreText}>
+    <RStack style={styles.box}>
+      <XStack
+        style={[styles.hStack, !isWeb && { flexDirection: 'column', gap: 10 }]}
+      >
+        <YStack style={styles.vStack}>
+          <RText style={styles.scoreText}>
             {isAlreadyScored ? title : 'Score this pack!'}
-          </Text>
-          <Text>{subheader}</Text>
-          <Text style={{ fontWeight: 300 }}>{description}</Text>
+          </RText>
+          <RText>{subheader}</RText>
+          <RText style={{ fontWeight: 300 }}>{description}</RText>
           {isOwner && (
-            <Button style={styles.button} onPress={handleScoreClick}>
-              <Text>Calculate Score</Text>
-            </Button>
+            <RButton style={styles.button} onPress={handleScoreClick}>
+              <RText>Calculate Score</RText>
+            </RButton>
           )}
-        </VStack>
+        </YStack>
         {isAlreadyScored && (
           <>
             <ScoreProgressChart score={totalScore} />
             <GradingPieChart scores={scores} />
           </>
         )}
-      </HStack>
-    </Box>
+      </XStack>
+    </RStack>
   );
-}
-const loadStyles = (theme) => {
+};
+const loadStyles = (theme: any) => {
   const { currentTheme } = theme;
   return {
     box: {
@@ -233,3 +268,5 @@ const loadStyles = (theme) => {
     },
   };
 };
+
+export default ScoreContainer;

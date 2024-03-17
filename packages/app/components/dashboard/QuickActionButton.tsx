@@ -35,7 +35,7 @@ const QuickActionButton = ({
   );
 };
 
-const loadStyles = (theme) => {
+const loadStyles = (theme: any) => {
   const { currentTheme } = theme;
   return {
     container: {

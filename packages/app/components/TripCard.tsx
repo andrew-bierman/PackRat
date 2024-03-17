@@ -10,6 +10,20 @@ import MapContainer from './map/MapContainer';
 import { useGEOLocationSearch } from 'app/hooks/geojson';
 import { PlacesAutocomplete } from './PlacesAutocomplete';
 
+interface TripCardProps {
+  title: string;
+  Icon: React.FC;
+  isMap: boolean;
+  shape?: any;
+  data?: string[];
+  isSearch: boolean;
+  isTrail: boolean;
+  isPark: boolean;
+  isLoading: boolean;
+  form?: any;
+  searchRef?: any;
+}
+
 export default function TripCard({
   title,
   Icon,
@@ -22,7 +36,7 @@ export default function TripCard({
   isTrail,
   isPark,
   isLoading,
-}) {
+}: TripCardProps) {
   const { isDark, currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
   const { currentTrail, currentPark, togglePlace } = form || {};
@@ -51,12 +65,12 @@ export default function TripCard({
       }}
       style={
         isSearch
-          ? styles.searchContainer
-          : isMap
-            ? styles.mapCard
-            : styles.containerMobile
-              ? styles.containerMobile
-              : styles.mutualStyles
+        ? styles.searchContainer
+        : isMap
+          ? styles.mapCard
+          : styles.containerMobile
+            ? styles.containerMobile
+            : styles.mutualStyles
       }
     >
       <RStack
@@ -81,7 +95,9 @@ export default function TripCard({
       </RStack>
       {isMap ? (
         isLoading ? (
-          <Text>Loading....</Text>
+          <RStack>
+            <Text>Loading....</Text>
+          </RStack>
         ) : (
           <MapContainer shape={shape} />
         )
@@ -164,7 +180,6 @@ const loadStyles = (theme) => {
       padding: currentTheme.size.cardPadding,
       paddingHorizontal: currentTheme.padding.paddingInside,
       marginBottom: 20,
-      height: Platform.OS === 'web' ? 650 : '100%',
       overflow: 'hidden',
       alignSelf: 'center',
     },

@@ -10,7 +10,36 @@ import { formatNumber } from 'app/utils/formatNumber';
 import loadStyles from './packtable.style';
 import React from 'react';
 
-const TitleRow = ({ title }) => {
+interface WeightUnitDropdownProps {
+  value: string;
+  onChange: (itemValue: string) => void;
+}
+
+interface TotalWeightBoxProps {
+  label: string;
+  weight: number;
+  unit: string;
+}
+
+interface IgnoreItemCheckboxProps {
+  itemId: string;
+  isChecked: boolean;
+  handleCheckboxChange: (itemId: string) => void;
+}
+
+interface ErrorMessageProps {
+  message: string;
+}
+
+interface CategoryRowProps {
+  category: string;
+}
+
+interface TitleRowProps {
+  title: string;
+}
+
+const TitleRow = ({ title }: TitleRowProps) => {
   const styles = useCustomStyles(loadStyles);
   const rowData = [
     <RStack style={{ flexDirection: 'row', ...styles.mainTitle }}>
@@ -25,7 +54,7 @@ const TitleRow = ({ title }) => {
   );
 };
 
-const CategoryRow = ({ category }) => {
+const CategoryRow = ({ category }: CategoryRowProps) => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
@@ -49,7 +78,11 @@ const CategoryRow = ({ category }) => {
   );
 };
 
-const IgnoreItemCheckbox = ({ itemId, isChecked, handleCheckboxChange }) => (
+const IgnoreItemCheckbox = ({
+  itemId,
+  isChecked,
+  handleCheckboxChange,
+}: IgnoreItemCheckboxProps) => (
   <View
     style={{
       justifyContent: 'center',
@@ -66,7 +99,7 @@ const IgnoreItemCheckbox = ({ itemId, isChecked, handleCheckboxChange }) => (
   </View>
 );
 
-const WeightUnitDropdown = ({ value, onChange }) => {
+const WeightUnitDropdown = ({ value, onChange }: WeightUnitDropdownProps) => {
   return (
     <DropdownComponent
       value={value}
@@ -78,7 +111,7 @@ const WeightUnitDropdown = ({ value, onChange }) => {
   );
 };
 
-const TotalWeightBox = ({ label, weight, unit }) => {
+const TotalWeightBox = ({ label, weight, unit }: TotalWeightBoxProps) => {
   const styles = useCustomStyles(loadStyles);
   return (
     <View style={styles.totalWeightBox}>
@@ -88,7 +121,11 @@ const TotalWeightBox = ({ label, weight, unit }) => {
   );
 };
 
-const ErrorMessage = ({ message }) => <RText>{message}</RText>;
+const ErrorMessage = ({ message }: ErrorMessageProps) => (
+  <RStack>
+    <RText>{message}</RText>
+  </RStack>
+);
 
 export {
   WeightUnitDropdown,

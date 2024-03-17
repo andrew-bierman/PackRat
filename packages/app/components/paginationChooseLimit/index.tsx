@@ -4,7 +4,13 @@ import DropdownComponent from '../Dropdown';
 import { RLabel } from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 
-export const PaginationLimit = ({ limit, setLimit, setPage }) => {
+interface PaginationLimitProps {
+  limit: string;
+  setLimit: (limit: string) => void;
+  setPage: (page: number) => void;
+}
+
+export const PaginationLimit = ({ limit, setLimit }: PaginationLimitProps) => {
   const styles = useCustomStyles(loadStyles);
   const data = ['10', '20', '50'];
 
@@ -17,8 +23,7 @@ export const PaginationLimit = ({ limit, setLimit, setPage }) => {
         accessibilityLabel="choose the number of items to be displayed"
         placeholder="Choose a value"
         onValueChange={(itemValue: string) => {
-          setLimit(+itemValue);
-          setPage(1);
+          setLimit(itemValue);
         }}
         data={data}
       />

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { FlatList, View, Platform } from 'react-native';
 import Card from '../../components/feed/FeedCard';
-// import { fetchUserTrips, selectAllTrips } from '../../store/tripsStore';
 import { usefetchTrips } from 'app/hooks/trips';
 import { useRouter } from 'app/hooks/router';
 import { fuseSearch } from '../../utils/fuseSearch';
@@ -25,7 +24,21 @@ const ERROR_MESSAGES = {
   userTrips: 'No User Trips Available',
 };
 
-const Feed = ({ feedType = 'public' }) => {
+interface FeedItem {
+  _id: string;
+  type: string;
+}
+
+interface SelectedTypes {
+  pack: boolean;
+  trip: boolean;
+}
+
+interface FeedProps {
+  feedType?: string;
+}
+
+const Feed = ({ feedType = 'public' }: FeedProps) => {
   const router = useRouter();
 
   const [queryString, setQueryString] = useState('');
@@ -55,21 +68,6 @@ const Feed = ({ feedType = 'public' }) => {
     setRefreshing(false);
   };
 
-  console.log('🚀 ../.. file: Feed.js:180 ../.. Feed ../.. feedData:', data);
-  // useEffect(() => {
-  //   if (feedType === 'public') {
-  //     dispatch(getPublicPacks(queryString));
-  // dispatch(getPublicTrips(queryString));
-  //     dispatch(fetchUserFavorites(ownerId));
-  //   } else if (feedType === 'userPacks' && ownerId) {
-  //     dispatch(fetchUserPacks({ ownerId, queryString }));
-  //   } else if (feedType === 'userTrips' && ownerId) {
-  //     dispatch(fetchUserTrips(ownerId));
-  //   } else if (feedType === 'favoritePacks') {
-  //     dispatch(getFavoritePacks());
-  //   }
-  // }, [queryString, feedType, ownerId]);
-
   /**
    * Renders the data for the feed based on the feed type and search query.
    *
@@ -77,21 +75,6 @@ const Feed = ({ feedType = 'public' }) => {
    */
   const renderData = () => {
     let arrayData = data;
-
-    // if (feedType === 'public') {
-    //   if (selectedTypes?.pack) {
-    //     data = [...data, ...publicPacksData];
-    //   }
-    //   if (selectedTypes?.trip) {
-    //     data = [...data, ...publicTripsData];
-    //   }
-    // } else if (feedType === 'userPacks') {
-    //   data = userPacksData;
-    // } else if (feedType === 'userTrips') {
-    //   data = userTripsData;
-    // } else if (feedType === 'favoritePacks') {
-    //   data = userPacksData.filter((pack) => pack.isFavorite);
-    // }
 
     // Fuse search
     const keys = ['name', 'items.name', 'items.category'];
@@ -128,29 +111,12 @@ const Feed = ({ feedType = 'public' }) => {
         handleCreateClick={handleCreateClick}
       />
     );
-    // return Platform.OS === 'web' ? (
-    //   <ScrollView
-    //     showsHorizontalScrollIndicator={false}
-    //     contentContainerStyle={{ flex: 1, paddingBottom: 10 }}
-    //     refreshControl={
-    //       <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-    //     }
-    //   >
-    //     <View style={styles.cardContainer}>
-    //       {/* {console.log({ data })} */}
-    //       {feedSearchFilterComponent}
-    //       {data?.map((item) => (
-    //         <Card key={item?._id} type={item?.type} {...item} />
-    //       ))}
-    //     </View>
-    //   </ScrollView>
-    // ) : (
+
     return (
       <View style={{ flex: 1, paddingBottom: 10 }}>
         <FlatList
           data={data}
           horizontal={false}
-          numColumns={Platform.OS === 'web' ? 4 : 1}
           keyExtractor={(item) => item?._id + item?.type}
           renderItem={({ item }) => (
             <Card key={item?._id} type={item?.type} {...item} />

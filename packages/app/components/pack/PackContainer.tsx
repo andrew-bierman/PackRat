@@ -1,30 +1,21 @@
 import { useEffect, useState } from 'react';
 import DropdownComponent from '../Dropdown';
-// import useGetPacks from '../../hooks/useGetPacks';
 import { AddItem } from '../item/AddItem';
 import { TableContainer } from '../pack_table/Table';
-// import { useAuth } from "../../auth/provider";
 import { useUserPacks } from '../../hooks/packs/useUserPacks';
-import {
-  fetchUserPacks,
-  selectPackById,
-  selectAllPacks,
-} from '../../store/packsStore';
-import { updateNewTripPack } from '../../store/tripsStore';
 import { View } from 'react-native';
 import { AddItemModal } from './AddItemModal';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import { useSearchParams } from 'app/hooks/common';
 import { useAuthUser } from 'app/auth/hooks';
+import { usePackId } from 'app/hooks/packs';
 
 export default function PackContainer({ isCreatingTrip = false }) {
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
 
-  const searchParams = useSearchParams();
-  const [currentPackId, setCurrentPackId] = useState(
-    searchParams.get('packId'),
-  );
+  const [packIdParam] = usePackId();
+  const [currentPackId, setCurrentPackId] = useState(packIdParam);
   const user = useAuthUser();
+  console.log({ currentPackId });
 
   const [refetch, setRefetch] = useState(false);
   const styles = useCustomStyles(loadStyles);

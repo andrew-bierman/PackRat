@@ -22,7 +22,7 @@ export async function findUserAndUpdate(
         returnOriginal: false,
       },
     );
-    if (val.id) {
+    if (val && val.id) {
       return true;
     } else {
       return false;

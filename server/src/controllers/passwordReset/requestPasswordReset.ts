@@ -12,10 +12,19 @@ import { responseHandler } from '../../helpers/responseHandler';
 import { publicProcedure } from '../../trpc';
 import * as validator from '../../middleware/validators/index';
 import { z } from 'zod';
+
+if (!SEND_GRID_API_KEY) {
+  throw new Error('SEND_GRID_API_KEY is not defined');
+}
+
 sgMail.setApiKey(SEND_GRID_API_KEY);
 
 // Generate a password reset token that includes the user's email address
 const generatePasswordResetToken = (email) => {
+  if (!JWT_SECRET) {
+    throw new Error('JWT_SECRET is not defined');
+  }
+
   const payload = { email };
   const secret = JWT_SECRET;
   const expiresIn = '1h';
@@ -23,6 +32,10 @@ const generatePasswordResetToken = (email) => {
 };
 
 const sendPasswordResetEmail = async (email, resetUrl) => {
+  if (!STMP_EMAIL) {
+    throw new Error('STMP_EMAIL is not defined');
+  }
+
   const mailOptions = {
     to: email,
     from: {
@@ -75,6 +88,10 @@ export const requestPasswordResetEmailAndToken = async (req, res) => {
       },
     );
 
+    if (!CLIENT_URL) {
+      throw new Error('CLIENT_URL is not defined');
+    }
+
     const resetUrl = `${CLIENT_URL}/password-reset?token=${resetToken}`;
     await sendPasswordResetEmail(email, resetUrl);
 
@@ -105,7 +122,12 @@ export function requestPasswordResetEmailAndTokenRoute() {
       );
       const resetUrl = `${CLIENT_URL}/password-reset?token=${resetToken}`;
       sendPasswordResetEmail(email, resetUrl);
-      return { message: 'Password reset email sent successfully' };
+
+      //* returning resetToken for Test environment
+      return {
+        message: 'Password reset email sent successfully',
+        resetToken: process.env.NODE_ENV === 'test' && resetToken,
+      };
     });
 }
 

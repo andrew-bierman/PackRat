@@ -1,11 +1,38 @@
-import { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { ItemForm } from './ItemForm'; // assuming you moved the form related code to a separate component
 import { useAddPackItem } from 'app/hooks/packs/useAddPackItem';
 import { useEditPackItem } from 'app/hooks/packs/useEditPackItem';
+import {
+  addItem as addItemSchema,
+  editItem as editItemSchema,
+  type Item,
+} from '@packrat/validations';
+import { useMemo } from 'react';
+
+interface AddItemProps {
+  isEdit: boolean;
+  initialData: {
+    global: string;
+    _id: string;
+    name?: string;
+    weight?: number;
+    quantity?: number;
+    category?: {
+      name: string;
+    };
+    unit?: string;
+  };
+  packId: string;
+  currentPack: any;
+  editAsDuplicate: any;
+  setPage: (page: number) => void;
+  page: number;
+  isItemPage: boolean;
+  closeModalHandler: () => void;
+  setIsAddItemModalOpen: (isOpen: boolean) => void;
+}
 
 export const AddItem = ({
-  _id,
   isEdit,
   initialData,
   packId,
@@ -16,19 +43,7 @@ export const AddItem = ({
   closeModalHandler,
   isItemPage,
   setIsAddItemModalOpen = () => {},
-}) => {
-  // Moved the state up to the parent component
-  const [name, setName] = useState(initialData?.name || '');
-  const [weight, setWeight] = useState(initialData?.weight?.toString() || '');
-  const [quantity, setQuantity] = useState(
-    initialData?.quantity?.toString() || '',
-  );
-  const [categoryType, setCategoryType] = useState(
-    initialData?.category?.name || '',
-  );
-
-  const [unit, setUnit] = useState(initialData?.unit || '');
-
+}: AddItemProps) => {
   const {
     // mutation: addPackItemMutation
     isLoading,
@@ -42,69 +57,48 @@ export const AddItem = ({
     editPackItem,
   } = useEditPackItem(isItemPage);
 
-  // handle updates to initialData
-  useEffect(() => {
-    setName(initialData?.name || '');
-    setWeight(initialData?.weight?.toString() || '');
-    setQuantity(initialData?.quantity?.toString() || '');
-    setUnit(initialData?.unit || '');
-  }, [initialData]);
+  const handleSubmit = (data: Item) => {
+    if (isEdit) {
+      editPackItem(data);
+    } else {
+      addPackItem(data);
+    }
 
-  const handleSubmit = () => {
-    const PackId = packId || initialData._id;
+    closeModalHandler();
+  };
+
+  const defaultValues = useMemo(() => {
+    if (!initialData) {
+      return { unit: 'lb' };
+    }
+    const result = {
+      name: initialData.name || '',
+      weight: String(initialData.weight),
+      quantity: String(initialData.quantity),
+      type: initialData.category?.name,
+      unit: initialData.unit,
+      _id: undefined,
+    };
 
     if (isEdit) {
-      if (PackId && initialData.global) {
-        editPackItem({
-          name,
-          weight,
-          quantity,
-          unit,
-          type: categoryType,
-          _id: initialData._id,
-        });
-        closeModalHandler();
-      } else {
-        editPackItem({
-          name,
-          weight,
-          quantity,
-          unit,
-          type: categoryType,
-          _id,
-          // packId,
-        });
-        setPage(1);
-        closeModalHandler();
-      }
-    } else {
-      addPackItem({
-        name,
-        weight,
-        quantity,
-        type: categoryType,
-        unit,
-        packId,
-      });
+      result._id = initialData._id;
+
+      return result;
     }
-  };
+
+    return { ...result, packId };
+  }, [initialData, isEdit, packId]);
+
+  console.log({ defaultValues });
 
   return (
     <View>
       <ItemForm
-        name={name}
-        setName={setName}
-        weight={weight}
-        setWeight={setWeight}
-        quantity={quantity}
-        setQuantity={setQuantity}
-        unit={unit}
-        setUnit={setUnit}
+        validationSchema={isEdit ? editItemSchema : addItemSchema}
         handleSubmit={handleSubmit}
+        defaultValues={defaultValues}
         isLoading={isLoading}
         isEdit={isEdit}
-        categoryType={categoryType}
-        setCategoryType={setCategoryType}
         currentPack={currentPack}
       />
     </View>

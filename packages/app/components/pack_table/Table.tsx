@@ -13,13 +13,21 @@ import {
 } from './TableHelperComponents';
 import TableItem from './TableItem';
 
+interface TableContainerProps {
+  currentPack: any;
+  selectedPack: any;
+  refetch: () => void;
+  setRefetch: () => void;
+  copy: boolean;
+}
+
 export const TableContainer = ({
   currentPack,
   selectedPack,
   refetch,
   setRefetch = () => {},
   copy,
-}) => {
+}: TableContainerProps) => {
   const styles = useCustomStyles(loadStyles);
   const {
     isLoading,
@@ -62,8 +70,10 @@ export const TableContainer = ({
   }
   if (isLoading) return <RSkeleton style={{}} />;
   if (error) return <ErrorMessage message={error} />;
+
+  const isWeb = Platform.OS === 'web';
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, !isWeb && { width: '100%' }]}>
       {data?.length ? (
         <>
           <Table style={styles.tableStyle} flexArr={flexArr}>
