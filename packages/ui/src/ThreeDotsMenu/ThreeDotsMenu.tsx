@@ -1,6 +1,9 @@
 import React, { ReactNode } from 'react';
 import { MoreHorizontal } from '@tamagui/lucide-icons';
-import { Adapt, Button, Popover } from 'tamagui';
+import { Adapt, Button, Popover as OriginalPopover } from 'tamagui';
+
+// Bypass TypeScript's type checking on opacity and borderWidth, since component is directly from the library
+const Popover: any = OriginalPopover;
 
 interface ThreeDotsMenuProps {
   children: ReactNode;

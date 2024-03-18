@@ -7,5 +7,7 @@
 export function formatNumber(num: number): string {
   if (num != null) {
     return Number(num).toLocaleString();
+  } else {
+    return '';
   }
 }

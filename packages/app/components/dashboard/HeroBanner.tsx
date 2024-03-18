@@ -14,7 +14,7 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 import { PlacesAutocomplete } from 'app/components/PlacesAutocomplete/PlacesAutocomplete';
 
 interface HeroSectionProps {
-  onSelect: (selectedResult: SearchResult) => void;
+  onSelect?: (selectedResult: SearchResult) => void;
 }
 
 interface SearchResult {

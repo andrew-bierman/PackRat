@@ -19,20 +19,20 @@ interface ItemsTableProps {
   setLimit: (limit: number) => void;
   page: number;
   setPage: (page: number) => void;
-  data: YourItemType[];
+  data: ItemType[];
   isLoading: boolean;
   totalPages: number;
 }
 
-interface YourItemType {
-  global: string;
-  name: string;
-  weight: number;
+interface ItemType {
+  global?: string;
+  name?: string;
+  weight?: number;
   category?: { name: string };
-  quantity: number;
-  unit: string;
-  _id: string;
-  type: string;
+  quantity?: number;
+  unit?: string;
+  _id?: string;
+  type?: string;
 }
 
 interface TitleRowProps {

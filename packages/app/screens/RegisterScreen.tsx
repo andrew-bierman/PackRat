@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { View } from 'react-native';
 import {
-  RHeading,
+  RHeading as OriginalRHeading,
   RStack,
   RButton,
-  RText,
+  RText as OriginalRText,
   RIconButton,
   InputText,
   InputTextRules,
@@ -16,7 +16,7 @@ import {
 import { FontAwesome } from '@expo/vector-icons';
 import { useRouter } from 'app/hooks/router';
 // import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { Link } from '@packrat/crosspath';
+import { Link as OriginalLink } from '@packrat/crosspath';
 import { InformUser } from '../utils/ToastUtils';
 import useTheme from '../hooks/useTheme';
 import { useForm } from 'react-hook-form';
@@ -24,13 +24,17 @@ import { useSession } from '../context/Auth/SessionProvider';
 import { useRegisterUser, useGoogleAuth } from 'app/auth/hooks';
 import { userSignUp } from '@packrat/validations';
 
+const RText: any = OriginalRText;
+const RHeading: any = OriginalRHeading;
+const Link: any = OriginalLink;
+
 export default function Register() {
   const { currentTheme } = useTheme();
   const { registerUser } = useRegisterUser();
   const { promptAsync } = useGoogleAuth();
 
   return (
-    <RScrollView contentContainerStyle={{ paddingBottom: 20 }}>
+    <RScrollView contentContainerStyle={{ paddingBottom: 20 } as any}>
       <View style={{ width: '100%', alignItems: 'center' }}>
         <View style={{ paddingTop: 32, width: '90%', maxWidth: 290 }}>
           <RHeading fontSize={32} color="#212121" fontWeight="semibold">

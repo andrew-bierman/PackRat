@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Platform, View } from 'react-native';
-import { RIconButton, RStack, RText, RSkeleton } from '@packrat/ui';
+import {
+  RIconButton,
+  RStack,
+  RText as OriginalRText,
+  RSkeleton,
+} from '@packrat/ui';
 import { ScrollView } from 'react-native-gesture-handler';
 import UserDataContainer from '../../components/user/UserDataContainer';
 import useTheme from '../../hooks/useTheme';
@@ -10,6 +15,8 @@ import { useRouter } from 'app/hooks/router';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import Avatar from '../../components/Avatar/Avatar';
 import { useProfile } from 'app/hooks/user';
+
+const RText: any = OriginalRText;
 
 const SettingsButton = () => {
   const router = useRouter();
@@ -160,7 +167,15 @@ const SkeletonUserDataCard = () => {
         padding: 10,
         margin: 5,
         width: '90%',
-        boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
+        // boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 1,
       }}
     >
       <RSkeleton style={{ marginBottom: 8, height: 50, width: '70%' }} />
@@ -214,7 +229,7 @@ export default function ProfileContainer({ id = null }) {
                   type="packs"
                   userId={user?._id}
                   isLoading={isLoading}
-                  SkeletonComponent={SkeletonUserDataCard}
+                  SkeletonComponent={SkeletonUserDataCard()}
                 />
               )}
             </View>
@@ -243,6 +258,7 @@ export default function ProfileContainer({ id = null }) {
                   data={packsList}
                   type="packs"
                   userId={user?.id}
+                  isLoading={false}
                 />
               </View>
             )}
@@ -252,6 +268,7 @@ export default function ProfileContainer({ id = null }) {
                   data={tripsList}
                   type="trips"
                   userId={user?.id}
+                  isLoading={false}
                 />
               </View>
             )}

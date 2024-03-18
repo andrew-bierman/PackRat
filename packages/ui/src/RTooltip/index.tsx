@@ -1,7 +1,30 @@
-import { Paragraph, Tooltip, TooltipProps, Button, TooltipGroup, YStack } from 'tamagui';
-import { View } from 'react-native';
+import {
+  Paragraph as OriginalParagraph,
+  Tooltip as OriginalTooltip,
+  TooltipProps,
+  Button,
+  TooltipGroup,
+  YStack as OriginalYStack,
+} from 'tamagui';
 
-function RTooltip({ Icon, Label, placement = "top", ...props }: TooltipProps & { Icon?: any }) {
+const YStack: any = OriginalYStack;
+const Tooltip: any = OriginalTooltip;
+const Paragraph: any = OriginalParagraph;
+
+type ExtendedPlacement = TooltipProps['placement'] | 'top-left';
+
+interface RTooltipProps extends Omit<TooltipProps, 'placement'> {
+  Icon?: any;
+  Label?: string;
+  placement?: ExtendedPlacement;
+}
+
+function RTooltip({
+  Icon,
+  Label,
+  placement = 'top',
+  ...props
+}: RTooltipProps & { Icon?: any }) {
   return (
     <TooltipGroup delay={{ open: 3000, close: 100 }}>
       <YStack space="$2" alignSelf="center">
@@ -33,7 +56,7 @@ function RTooltip({ Icon, Label, placement = "top", ...props }: TooltipProps & {
         </Tooltip>
       </YStack>
     </TooltipGroup>
-  )
+  );
 }
 
 export default RTooltip;

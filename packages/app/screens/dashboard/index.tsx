@@ -23,7 +23,9 @@ const Dashboard = () => {
           ]}
         >
           <View>
-            <HeroBanner style={styles.cardContainer} />
+            <View style={styles.cardContainer}>
+              <HeroBanner />
+            </View>
 
             <Section>
               <SectionHeader

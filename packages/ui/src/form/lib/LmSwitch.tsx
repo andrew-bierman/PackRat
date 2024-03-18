@@ -1,5 +1,13 @@
-import { Label, StackProps, Switch, SwitchProps, XStack } from 'tamagui';
+import {
+  Label,
+  StackProps,
+  Switch,
+  SwitchProps,
+  XStack as OriginalXStack,
+} from 'tamagui';
 import { useId } from 'react';
+
+const XStack: any = OriginalXStack;
 
 export type LmSwitchProps = SwitchProps & {
   labelLeft?: string;

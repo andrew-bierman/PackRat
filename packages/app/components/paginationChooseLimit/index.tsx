@@ -5,9 +5,9 @@ import { RLabel } from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 
 interface PaginationLimitProps {
-  limit: string;
-  setLimit: (limit: string) => void;
-  setPage: (page: number) => void;
+  limit: string | number;
+  setLimit: (limit: string | number) => void;
+  setPage?: (page: number) => void;
 }
 
 export const PaginationLimit = ({ limit, setLimit }: PaginationLimitProps) => {

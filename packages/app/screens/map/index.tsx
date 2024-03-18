@@ -6,7 +6,7 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
-import Mapbox from '@rnmapbox/maps';
+import MapboxOriginal from '@rnmapbox/maps';
 // get mapbox access token from .env file
 import { MAPBOX_ACCESS_TOKEN } from '@env';
 import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
@@ -14,6 +14,8 @@ import { theme } from 'app/theme';
 import useTheme from 'app/hooks/useTheme';
 import { ErrorBoundary } from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
+
+const Mapbox = MapboxOriginal as any;
 
 Mapbox.setAccessToken(MAPBOX_ACCESS_TOKEN);
 
@@ -25,7 +27,7 @@ export default function Map() {
 
   // sourcery skip: avoid-function-declarations-in-blocks
   function CustomizedMap() {
-    const mapViewRef = useRef(null);
+    const mapViewRef = useRef<any>(null);
 
     const [style, setStyle] = React.useState(
       'mapbox://styles/mapbox/outdoors-v11',
@@ -133,22 +135,24 @@ export default function Map() {
 
       const bounds = getShapeSourceBounds(shape);
 
-      mapViewRef.current.fitBounds(bounds, {
-        edgePadding: {
-          top: 5,
-          right: 5,
-          bottom: 5,
-          left: 5,
-        },
-      });
+      if (mapViewRef.current) {
+        mapViewRef.current.fitBounds(bounds, {
+          edgePadding: {
+            top: 5,
+            right: 5,
+            bottom: 5,
+            left: 5,
+          },
+        });
 
-      mapViewRef.current.setCamera({
-        centerCoordinate: mapViewRef.current.getCenter(),
-        zoomLevel: Math.min(
-          mapViewRef.current.zoomLevel,
-          mapViewRef.current.getZoomForBounds(bounds, { padding: 50 }),
-        ),
-      });
+        mapViewRef.current.setCamera({
+          centerCoordinate: mapViewRef.current.getCenter(),
+          zoomLevel: Math.min(
+            mapViewRef.current.zoomLevel,
+            mapViewRef.current.getZoomForBounds(bounds, { padding: 50 }),
+          ),
+        });
+      }
     }
 
     // function handleMapIdle() {

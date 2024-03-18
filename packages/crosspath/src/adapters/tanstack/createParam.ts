@@ -3,28 +3,35 @@ import {
   useSearch,
 } from '@tanstack/react-router';
 import { useRouter } from './useRouter';
-import { CreateParam, CreateParamOptions } from '../../model';
+import { CreateParamOptions } from '../../model';
 
-export const createParam: CreateParam = <T>() => ({
-  useParam: useParam<T>,
-  useParams: useParams<T>,
-});
+export type CreateParam = {
+  useParam: <T extends object>(
+    key: keyof T,
+    options?: CreateParamOptions,
+  ) => [value: any, setValue: (value: any) => void];
+  useParams: <T extends object>() => {
+    params: T;
+    setParams: (value: Partial<T>) => void;
+  };
+};
 
-const useParam = <T>(
+const useParam = <T extends object>(
   key: keyof T,
   options: CreateParamOptions,
 ): [value: any, setValue: (value: any) => void] => {
   const { initial, parse, stringify } = options || {};
   const { push } = useRouter();
-  const screenParams = useTanstackParams({ strict: false }) || {};
-  const searchParams = useSearch({ strict: false }) || {};
+  const screenParams = (useTanstackParams({ strict: false }) ||
+    {}) as Partial<T>;
+  const searchParams = (useSearch({ strict: false }) || {}) as Partial<T>;
   console.log({ searchParams });
 
   const param = screenParams[key] || searchParams[key] || initial;
-  const parsedParam = parse ? parse(param) : param;
+  const parsedParam = parse ? parse(param as any) : param;
 
   const setParam = (value: any) => {
-    if (screenParams[key]) {
+    if (key in screenParams) {
       return console.error("You can't update screen params");
     }
     const stringifiedValue = stringify ? stringify(value) : value;
@@ -46,7 +53,11 @@ const useParams = <T>(): {
   const params = { ...screenParams, searchParams };
 
   const setParams = (value: Partial<T>) => {
-    if (Object.keys(value).some((key) => screenParams.hasOwnProperty(key))) {
+    if (
+      Object.keys(value).some((key) =>
+        (screenParams as object).hasOwnProperty(key),
+      )
+    ) {
       return console.error("You can't update screen params");
     }
 
@@ -54,4 +65,9 @@ const useParams = <T>(): {
   };
 
   return { params, setParams };
+};
+
+export const createParam: CreateParam = {
+  useParam,
+  useParams,
 };

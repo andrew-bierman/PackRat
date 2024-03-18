@@ -38,6 +38,12 @@ interface FeedProps {
   feedType?: string;
 }
 
+interface UseFeedResult {
+  data: any[] | null;
+  error: any | null;
+  isLoading: boolean;
+  refetch: () => void;
+}
 const Feed = ({ feedType = 'public' }: FeedProps) => {
   const router = useRouter();
 
@@ -60,7 +66,7 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
     ownerId,
     feedType,
     selectedTypes,
-  );
+  ) as UseFeedResult;
 
   const onRefresh = () => {
     setRefreshing(true);

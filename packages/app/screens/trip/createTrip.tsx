@@ -13,6 +13,30 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useCardTrip } from 'app/hooks/trips/useTripCard';
 import { useTripsData } from './useTripsData';
 
+interface PhotonDetails {
+  type?: 'FeatureCollection';
+  features?: Array<{
+    type?: 'Feature';
+    id?: string | number;
+    properties?: unknown;
+    geometry?:
+      | {
+          type?: 'Point';
+          coordinates?: number[];
+          bbox?: any;
+        }
+      | {
+          type?: 'MultiPoint';
+          coordinates?: number[][];
+          bbox?: any;
+        };
+    bbox?: any;
+  }>;
+  bbox?: any;
+  IsError?: boolean;
+  isLoading?: boolean;
+}
+
 export default function Trips() {
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
@@ -24,7 +48,6 @@ export default function Trips() {
     dateRange,
     setDateRange,
     currentDestination,
-    photonDetails,
     weatherData,
     weatherLoading,
     weatherError,
@@ -34,6 +57,8 @@ export default function Trips() {
     parksData,
     filteredTrails,
   } = useTripsData();
+
+  const photonDetails = useTripsData().photonDetails as PhotonDetails;
 
   return (
     <ScrollView nestedScrollEnabled={true}>

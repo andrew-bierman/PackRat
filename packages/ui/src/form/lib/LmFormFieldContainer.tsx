@@ -1,7 +1,7 @@
 import {
   FontSizeTokens,
-  Label,
-  Paragraph,
+  Label as OriginalLabel,
+  Paragraph as OriginalParagraph,
   SizeTokens,
   styled,
   ThemeableStack,
@@ -9,6 +9,9 @@ import {
   YStack,
 } from 'tamagui';
 import { LmFormContainerBaseTypes } from './formContainerTypes';
+
+const Label: any = OriginalLabel;
+const Paragraph: any = OriginalParagraph;
 
 type LmFormContainerProps = ThemeableStackProps &
   LmFormContainerBaseTypes & {
@@ -22,7 +25,7 @@ const StackContainer = styled(ThemeableStack, {
     fullWidth: {
       true: {
         width: '100%',
-      },
+      } as any,
     },
     labelInline: {
       true: {
@@ -44,6 +47,7 @@ export function LmFormFieldContainer({
   required,
   error,
   helperTextProps,
+  alignItems,
   ...rest
 }: LmFormContainerProps) {
   return (

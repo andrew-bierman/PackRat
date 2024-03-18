@@ -22,8 +22,8 @@ import { useFormSubmitTrigger } from '@packrat/ui/src/form';
 
 interface SaveTripContainerProps {
   dateRange: {
-    startDate: Date;
-    endDate: Date;
+    startDate: Date | null;
+    endDate: Date | null;
   };
   weatherObject: any;
   search: any;

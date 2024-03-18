@@ -38,6 +38,10 @@ const TripCardComponent = ({ data, weatherObject, currentTheme }) =>
       cords={
         data?.weather ? JSON?.parse(data?.weather)?.coord : weatherObject?.coord
       }
+      isSearch={false}
+      isTrail={false}
+      isPark={false}
+      isLoading={false}
     />
   );
 

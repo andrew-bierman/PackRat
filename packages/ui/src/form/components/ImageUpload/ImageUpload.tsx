@@ -1,10 +1,14 @@
 import { Ionicons } from '@expo/vector-icons';
 
-import RStack from '../../../RStack';
-import RH5 from '../../../RH5';
-import RButton from '../../../RButton';
+import OriginalRStack from '../../../RStack';
+import OriginalRH5 from '../../../RH5';
+import OriginalRButton from '../../../RButton';
 import { useImageUpload } from './useImageUpload';
 import { cloneElement } from 'react';
+
+const RButton: any = OriginalRButton;
+const RStack: any = OriginalRStack;
+const RH5: any = OriginalRH5;
 
 export const ImageUpload = ({ previewElement, name, label }) => {
   const { pickImage, removeImage, src } = useImageUpload(name);

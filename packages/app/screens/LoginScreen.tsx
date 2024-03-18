@@ -1,23 +1,28 @@
 import React from 'react';
 import { View } from 'react-native';
 import {
-  RHeading,
+  RHeading as OriginalRHeading,
   RStack,
   RButton,
-  RText,
+  RText as OriginalRText,
   RIconButton,
   RScrollView,
-  Form,
+  Form as OriginalForm,
   FormInput,
   SubmitButton,
 } from '@packrat/ui';
 import { FontAwesome } from '@expo/vector-icons';
 import { NODE_ENV } from '@env';
-import { Link } from '@packrat/crosspath';
+import { Link as OriginalLink } from '@packrat/crosspath';
 import { InformUser } from '../utils/ToastUtils';
 import useTheme from '../hooks/useTheme';
 import { useGoogleAuth, useLogin } from 'app/auth/hooks';
 import { userSignIn as userSignInSchema } from '@packrat/validations';
+
+const RText: any = OriginalRText;
+const RHeading: any = OriginalRHeading;
+const Form: any = OriginalForm;
+const Link: any = OriginalLink;
 
 const demoUser = {
   email: 'zoot3@email.com',
@@ -168,10 +173,9 @@ export default function Login() {
                 }}
               >
                 <RButton
-                  style={{ width: '100%' }}
+                  style={{ width: '100%', backgroundColor: 'purple' }}
                   disabled={!isGoogleSignInReady}
                   onPress={() => handleLogin(demoUser)}
-                  backgroundColor="purple"
                 >
                   Demo User
                 </RButton>

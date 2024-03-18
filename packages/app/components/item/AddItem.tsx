@@ -11,9 +11,10 @@ import { useMemo } from 'react';
 
 interface AddItemProps {
   isEdit: boolean;
+  _id?: string;
   initialData: {
-    global: string;
-    _id: string;
+    global?: string;
+    _id?: string;
     name?: string;
     weight?: number;
     quantity?: number;
@@ -22,14 +23,14 @@ interface AddItemProps {
     };
     unit?: string;
   };
-  packId: string;
-  currentPack: any;
+  packId?: string;
+  currentPack?: any;
   editAsDuplicate: any;
   setPage: (page: number) => void;
   page: number;
   isItemPage: boolean;
-  closeModalHandler: () => void;
-  setIsAddItemModalOpen: (isOpen: boolean) => void;
+  closeModalHandler?: () => void;
+  setIsAddItemModalOpen?: (isOpen: boolean) => void;
 }
 
 export const AddItem = ({

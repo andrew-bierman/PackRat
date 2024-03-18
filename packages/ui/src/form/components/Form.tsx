@@ -43,7 +43,9 @@ export const Form = ({
   return (
     <FormProvider {...form}>
       {Platform.OS === 'web' ? (
-        <RHFForm onSubmit={form.handleSubmit(onSubmit)}>{children}</RHFForm>
+        <RHFForm onSubmit={form.handleSubmit(onSubmit || (() => {})) as any}>
+          {children}
+        </RHFForm>
       ) : (
         <>{children}</>
       )}

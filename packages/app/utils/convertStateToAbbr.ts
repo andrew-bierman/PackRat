@@ -93,17 +93,11 @@ export default function abbrRegion(input: string, to: string) {
     input = input?.replace(/\w\S*/g, function (txt) {
       return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
     });
-    for (i = 0; i < regions.length; i++) {
-      if (regions[i][0] == input) {
-        return regions[i][1];
-      }
-    }
+    const region = regions.find((region) => region[0] === input);
+    return region ? region[1] : undefined;
   } else if (to == 'name') {
     input = input.toUpperCase();
-    for (i = 0; i < regions.length; i++) {
-      if (regions[i][1] == input) {
-        return regions[i][0];
-      }
-    }
+    const region = regions.find((region) => region[1] === input);
+    return region ? region[0] : undefined;
   }
 }

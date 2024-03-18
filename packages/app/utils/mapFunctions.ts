@@ -106,16 +106,18 @@ function getShapeSourceBounds(shape) {
 
 /**
  * Handles the shape source load and calculates the zoom level based on the width and height.
- *
+ * @param {object} shape - The shape object containing the coordinates.
  * @param {number} width - The width of the shape.
  * @param {number} height - The height of the shape.
  * @return {number|null} The calculated zoom level or null if there are no coordinates.
  */
-function handleShapeSourceLoad(width, height) {
+function handleShapeSourceLoad(shape, width, height) {
   if (shape?.features[0]?.geometry?.coordinates?.length > 1) {
     let bounds = getShapeSourceBounds(shape);
-    bounds = bounds[0].concat(bounds[1]);
-    return calculateZoomLevel(bounds, { width, height });
+    if (bounds && bounds[0] && bounds[1]) {
+      bounds = [bounds[0].concat(bounds[1])];
+      return calculateZoomLevel(bounds[0], { width, height });
+    }
   }
   return null;
 }
