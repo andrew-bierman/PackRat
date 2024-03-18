@@ -1,5 +1,14 @@
 import React from 'react';
-import { Card, H2, Paragraph, XStack, Button } from 'tamagui';
+import {
+  Card,
+  H2,
+  Paragraph,
+  XStack as OriginalXStack,
+  Button as OriginalButton,
+} from 'tamagui';
+
+const XStack: any = OriginalXStack;
+const Button: any = OriginalButton;
 
 const DemoCard = () => (
   <Card

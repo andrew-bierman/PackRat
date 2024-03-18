@@ -14,8 +14,27 @@ import { useCardTrip } from 'app/hooks/trips/useTripCard';
 import { useTripsData } from './useTripsData';
 
 interface PhotonDetails {
-  IsError: boolean;
-  isLoading: boolean;
+  type?: 'FeatureCollection';
+  features?: Array<{
+    type?: 'Feature';
+    id?: string | number;
+    properties?: unknown;
+    geometry?:
+      | {
+          type?: 'Point';
+          coordinates?: number[];
+          bbox?: any;
+        }
+      | {
+          type?: 'MultiPoint';
+          coordinates?: number[][];
+          bbox?: any;
+        };
+    bbox?: any;
+  }>;
+  bbox?: any;
+  IsError?: boolean;
+  isLoading?: boolean;
 }
 
 export default function Trips() {

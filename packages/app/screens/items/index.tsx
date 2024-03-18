@@ -41,7 +41,7 @@ export default function Items() {
             setLimit={handleLimitChange}
             page={page}
             setPage={handlePageChange}
-            data={data.items}
+            data={data.items as any}
             isLoading={isFetching}
             totalPages={data?.totalPages}
           />

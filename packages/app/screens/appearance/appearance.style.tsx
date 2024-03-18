@@ -19,5 +19,5 @@ export const loadStyles = () =>
       fontWeight: 'medium',
       color: 'amber.100',
       letterSpacing: 'lg',
-    },
+    } as any,
   });
