@@ -25,14 +25,14 @@ interface ItemsTableProps {
 }
 
 interface YourItemType {
-  global: string;
-  name: string;
-  weight: number;
+  global?: string;
+  name?: string;
+  weight?: number;
   category?: { name: string };
-  quantity: number;
-  unit: string;
-  _id: string;
-  type: string;
+  quantity?: number;
+  unit?: string;
+  _id?: string;
+  type?: string;
 }
 
 interface TitleRowProps {

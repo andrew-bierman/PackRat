@@ -76,7 +76,7 @@ const ModalTriggerButton = ({ setIsModalOpen }) => {
       {Platform.OS === 'web' && (
         <RTooltip
           label="Add a global item"
-          placement="top left"
+          placement="top-left"
           openDelay={500}
         >
           <RButton width={8} height={8} style={{ backgroundColor: 'none' }}>

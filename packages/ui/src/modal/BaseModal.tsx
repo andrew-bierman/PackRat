@@ -17,7 +17,7 @@ export interface BaseModalProps {
   buttonColor?: string;
   footerButtons?: any[];
   triggerComponent?: React.DetailedReactHTMLElement<any, HTMLElement>;
-  footerComponent: React.DetailedReactHTMLElement<any, HTMLElement>;
+  footerComponent?: React.DetailedReactHTMLElement<any, HTMLElement>;
 }
 
 export const BaseModal = ({

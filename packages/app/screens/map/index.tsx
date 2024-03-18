@@ -27,7 +27,7 @@ export default function Map() {
 
   // sourcery skip: avoid-function-declarations-in-blocks
   function CustomizedMap() {
-    const mapViewRef = useRef(null);
+    const mapViewRef = useRef<any>(null);
 
     const [style, setStyle] = React.useState(
       'mapbox://styles/mapbox/outdoors-v11',

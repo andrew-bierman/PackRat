@@ -16,7 +16,7 @@ import {
 import { FontAwesome } from '@expo/vector-icons';
 import { useRouter } from 'app/hooks/router';
 // import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { Link } from '@packrat/crosspath';
+import { Link as OriginalLink } from '@packrat/crosspath';
 import { InformUser } from '../utils/ToastUtils';
 import useTheme from '../hooks/useTheme';
 import { useForm } from 'react-hook-form';
@@ -26,6 +26,7 @@ import { userSignUp } from '@packrat/validations';
 
 const RText: any = OriginalRText;
 const RHeading: any = OriginalRHeading;
+const Link: any = OriginalLink;
 
 export default function Register() {
   const { currentTheme } = useTheme();
