@@ -60,7 +60,7 @@ const ModalTriggerButton = ({ setIsModalOpen }) => {
       style={{
         display: 'flex',
         flexDirection: 'row',
-        marginTop: '2rem',
+        marginTop: 20,
         justifyContent: 'center',
         alignItems: 'center',
       }}
@@ -75,11 +75,11 @@ const ModalTriggerButton = ({ setIsModalOpen }) => {
       </RButton>
       {Platform.OS === 'web' && (
         <RTooltip
-          label="Add a global item"
+          Label="Add a global item"
           placement="top-left"
-          openDelay={500}
+          delay={{ open: 500 }}
         >
-          <RButton width={8} height={8} style={{ backgroundColor: 'none' }}>
+          <RButton style={{ backgroundColor: 'none', width: 8, height: 8 }}>
             <MaterialIcons
               name="info-outline"
               size={20}

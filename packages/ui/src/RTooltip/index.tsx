@@ -11,9 +11,12 @@ const YStack: any = OriginalYStack;
 const Tooltip: any = OriginalTooltip;
 const Paragraph: any = OriginalParagraph;
 
-interface RTooltipProps extends TooltipProps {
+type ExtendedPlacement = TooltipProps['placement'] | 'top-left';
+
+interface RTooltipProps extends Omit<TooltipProps, 'placement'> {
   Icon?: any;
   Label?: string;
+  placement?: ExtendedPlacement;
 }
 
 function RTooltip({
