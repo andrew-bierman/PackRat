@@ -7,7 +7,6 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useState } from 'react';
 import { FlatList, Platform, View, Text } from 'react-native';
 import { Cell, Row, Table } from 'react-native-table-component';
-import { PackOptions } from '../PackOptions';
 import { DeletePackItemModal } from './DeletePackItemModal';
 import { EditPackItemModal } from './EditPackItemModal';
 import { formatNumber } from 'app/utils/formatNumber';
@@ -29,14 +28,13 @@ interface TableItemProps {
   setRefetch: () => void;
 }
 
-export const ZDropdown = ({ dropdownItems = [], openModal = () => {} }) => {
+export const ZDropdown = ({ dropdownItems = []}) => {
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger>
         <RIconButton
           backgroundColor="transparent"
           icon={<MaterialIcons name="more-horiz" size={25} />}
-          onPress={openModal}
           style={{ padding: 0}}
         />
       </DropdownMenu.Trigger>
@@ -89,7 +87,7 @@ const TableItem = ({
       name,
       `${formatNumber(weight)} ${unit}`,
       quantity,
-      <ZDropdown dropdownItems={rowActionItems} openModal={openModal} />,
+      <ZDropdown dropdownItems={rowActionItems} />
     ];
   } else {
     rowData = [
