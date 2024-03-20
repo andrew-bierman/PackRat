@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { Switch } from 'tamagui';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 import {
   RIconButton,
   RSwitch,
@@ -173,6 +173,7 @@ const loadStyles = (theme: any) => {
       fontSize: 18,
       width: '100%',
       borderRadius: 10,
+      marginTop: Platform.OS !== 'web' ? 20 : 0,
     },
     searchContainer: {
       flexDirection: 'row',
