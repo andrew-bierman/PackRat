@@ -22,7 +22,7 @@ type NavigationItem = {
   text: string;
   iconSource: any;
 } | {
-  type: NavigationItemTypeEnum.DIVIDER, component: React.ComponentType<any>
+  type: NavigationItemTypeEnum.DIVIDER, Component: React.ComponentType<any>
 };
 
 export const useNavigationList = () => {
@@ -58,7 +58,7 @@ const staticNavigationItems = [
 const loggeOutMenuItems: NavigationItem[] = [
   {
     type: NavigationItemTypeEnum.DIVIDER,
-    component: Separator
+    Component: Separator
   },
   {
     type: NavigationItemTypeEnum.LINK,
@@ -125,7 +125,7 @@ const logedInMenuItems: NavigationItem[] = [
   },
   {
     type: NavigationItemTypeEnum.DIVIDER,
-    component: Separator
+    Component: Separator
   },
   {
     type: NavigationItemTypeEnum.LINK,
