@@ -49,7 +49,14 @@ export default function Login() {
             backgroundColor: 'white',
           }}
         >
-          <View style={{ paddingTop: 32, width: '90%', maxWidth: 290 }}>
+          <View
+            style={{
+              paddingTop: 32,
+              paddingBottom: 32,
+              width: '90%',
+              maxWidth: 290,
+            }}
+          >
             <RHeading fontSize={32} color="#212121" fontWeight="semibold">
               Welcome
             </RHeading>

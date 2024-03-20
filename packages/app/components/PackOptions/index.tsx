@@ -3,6 +3,7 @@ import { useRouter } from 'app/hooks/router';
 import { RStack, RIconButton, BaseModal } from '@packrat/ui';
 import { Entypo } from '@expo/vector-icons';
 import { useModalState } from './useModalState';
+import { View } from 'react-native';
 
 interface PackOptionsProps {
   Edit: React.ReactNode;
