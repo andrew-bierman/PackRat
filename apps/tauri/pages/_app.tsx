@@ -29,7 +29,7 @@ function MyApp({ Component, pageProps }: SolitoAppProps) {
         <title>PackRat</title>
         <meta
           name="description"
-          content="Expo + Next.js with Solito. By Fernando Rojo."
+          content="PackRat is a versatile adventure planner tailored for outdoor enthusiasts. It simplifies the process of organizing trips from a simple day hike to cross-country journeys."
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>

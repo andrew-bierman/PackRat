@@ -24,6 +24,13 @@ export default function StackLayout() {
     <Stack
       screenOptions={{
         headerRight: () => <DrawerToggleButton />,
+        headerTitleStyle: {
+          fontSize: 24,
+        },
+        headerStyle: {
+          backgroundColor: currentTheme.colors.secondaryBlue,
+        },
+        headerTintColor: currentTheme.colors.text,
       }}
     />
   );

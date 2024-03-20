@@ -4,8 +4,8 @@ import { TabList } from './TabList';
 import { DrawerToggleButton } from '@react-navigation/drawer';
 import { Stack, usePathname } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { SafeAreaView } from 'react-native';
 import { BlurView } from 'expo-blur';
+import useTheme from 'app/hooks/useTheme';
 
 export const Tabs = () => {
   const formatHeaderTitle = () => {
@@ -18,9 +18,14 @@ export const Tabs = () => {
     return title || 'Stack';
   };
 
+  const { currentTheme } = useTheme();
+
   return (
     <ExpoTabs
       screenOptions={{
+        tabBarStyle: {
+          position: 'absolute',
+        },
         headerShown: false,
         headerRight: () => <DrawerToggleButton />,
         tabBarBackground: () => (
@@ -32,10 +37,17 @@ export const Tabs = () => {
               bottom: 0,
               right: 0,
             }}
-            intensity={50} // Adjust the blur intensity
+            intensity={80} // Adjust the blur intensity
             tint="light" // TODO make this dynamic
           />
         ),
+        headerTitleStyle: {
+          fontSize: 24,
+        },
+        headerStyle: {
+          backgroundColor: currentTheme.colors.secondaryBlue,
+        },
+        headerTintColor: currentTheme.colors.text,
       }}
     >
       <ExpoTabs.Screen

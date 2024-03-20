@@ -113,7 +113,7 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
     );
 
     return (
-      <View style={{ flex: 1, paddingBottom: 10 }}>
+      <View style={{ flex: 1, paddingBottom: Platform.OS === 'web' ? 10 : 0 }}>
         <FlatList
           data={data}
           horizontal={false}
@@ -122,6 +122,7 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
             <Card key={item?._id} type={item?.type} {...item} />
           )}
           ListHeaderComponent={() => feedSearchFilterComponent}
+          ListFooterComponent={() => <View style={{ height: 50 }} />}
           ListEmptyComponent={() => (
             <RText style={{ textAlign: 'center', marginTop: 20 }}>
               {ERROR_MESSAGES[feedType]}
@@ -175,6 +176,7 @@ const loadStyles = (theme) => {
       backgroundColor: currentTheme.colors.background,
       fontSize: 18,
       padding: 15,
+      ...(Platform.OS !== "web" && {paddingVertical: 0})
     },
     filterContainer: {
       backgroundColor: currentTheme.colors.card,
@@ -182,6 +184,7 @@ const loadStyles = (theme) => {
       fontSize: 18,
       width: '100%',
       borderRadius: 10,
+      marginTop:20
     },
     searchContainer: {
       flexDirection: 'row',
