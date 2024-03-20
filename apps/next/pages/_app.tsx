@@ -6,6 +6,7 @@ import 'setimmediate';
 import '@tamagui/core/reset.css';
 import '@tamagui/polyfill-dev';
 import '@tamagui/font-inter/css/400.css';
+import '../styles/global.css';
 import 'raf/polyfill';
 import { Provider } from 'app/provider';
 import { TamaguiProvider } from 'tamagui';
@@ -13,8 +14,9 @@ import { TamaguiProvider } from 'tamagui';
 import Head from 'next/head';
 import React from 'react';
 import type { SolitoAppProps } from 'solito';
-import { Navigation } from 'app/components/navigation';
+import { Navigation, Navbar } from 'app/components/navigation';
 import { PortalProvider } from 'tamagui';
+import { Container, MainContentWeb } from '@packrat/ui';
 
 if (process.env.NODE_ENV === 'production') {
   require('../public/tamagui.css');
@@ -35,9 +37,11 @@ function MyApp({ Component, pageProps }: SolitoAppProps) {
       </Head>
       {/* Disabling provider until tamagui + next js config is complete */}
       <Provider>
-        <Navigation />
+        <Navbar />
         <PortalProvider>
-          {getLayout(<Component {...pageProps} />)}
+          <MainContentWeb>
+            <Container>{getLayout(<Component {...pageProps} />)}</Container>
+          </MainContentWeb>
         </PortalProvider>
       </Provider>
     </>
