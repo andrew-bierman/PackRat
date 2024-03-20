@@ -7,7 +7,6 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
 import useTheme from 'app/hooks/useTheme';
 
-
 export const Tabs = () => {
   const formatHeaderTitle = () => {
     const pathname = usePathname();
@@ -16,11 +15,10 @@ export const Tabs = () => {
       ?.replace(/-/g, ' ')
       ?.replace(/\b\w/g, (l) => l.toUpperCase());
 
-
     return title || 'Stack';
   };
-   
-  const {currentTheme} = useTheme();
+
+  const { currentTheme } = useTheme();
 
   return (
     <ExpoTabs
@@ -43,13 +41,13 @@ export const Tabs = () => {
             tint="light" // TODO make this dynamic
           />
         ),
-            headerTitleStyle:{
-              fontSize:currentTheme.font.desktop,
-            },
-            headerStyle: {
-              backgroundColor: currentTheme.colors.secondaryBlue,
-            },
-            headerTintColor: currentTheme.colors.text,
+        headerTitleStyle: {
+          fontSize: 24,
+        },
+        headerStyle: {
+          backgroundColor: currentTheme.colors.secondaryBlue,
+        },
+        headerTintColor: currentTheme.colors.text,
       }}
     >
       <ExpoTabs.Screen
