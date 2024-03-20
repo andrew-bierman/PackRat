@@ -41,7 +41,7 @@ export const NavigationItem = ({
       icon={() => (
         <IconComponent
           name={icon}
-          size={isMobileView ? 24 : 18}
+          size={isMobileView ? 24 : 14}
           color={
             isCurrentPage
               ? currentTheme.colors.iconColor
@@ -68,12 +68,11 @@ const loadStyles = (theme) => {
       justifyContent: 'left',
       flexDirection: 'row',
       alignItems: 'center',
-      gap: 8,
       paddingHorizontal: 12,
     },
     menuBarItemText: {
       color: currentTheme.colors.text,
-      fontSize: 18,
+      fontSize: 15,
     },
     menuBarItemActive: {
       // Apply styles for the active item

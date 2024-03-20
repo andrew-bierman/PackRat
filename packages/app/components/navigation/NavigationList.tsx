@@ -10,15 +10,21 @@ export const NavigationList = ({
   const { navigationItems } = useNavigationList();
   return (
     <>
-      {navigationItems?.map((item) => (
-        <NavigationItem
-          item={item}
-          itemStyle={itemStyle}
-          key={item.href}
-          onSelect={onItemSelect}
-          isMobileView={isMobileView}
-        />
-      ))}
+      {navigationItems?.map(({ type, ...Item }) => {
+        return (
+            {type === 'link' ? (
+              <NavigationItem
+                item={Item}
+                itemStyle={itemStyle}
+                key={Item.href}
+                onSelect={onItemSelect}
+                isMobileView={isMobileView}
+              />
+            ) : (
+              <Item.component />
+            )}
+        );
+      })}
     </>
   );
 };
