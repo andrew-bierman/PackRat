@@ -10,9 +10,17 @@ import { getDB } from '../../trpc/context';
 import bcrypt from 'bcryptjs';
 
 export class User {
+  private db: any;
+
+  constructor(db?: any) {
+    this.db = db;
+  }
+
   async createInstance() {
-    const dbInstance = await createDb(getDB());
-    return dbInstance;
+    if (!this.db) {
+      this.db = await createDb(getDB());
+    }
+    return this.db;
   }
 
   async save(user) {

@@ -23,6 +23,7 @@ export const createContext = (honoContext: Context) => async () => {
  */
 interface CreateInnerContextOptions {
   user?: any; // Replace `any` with your actual user type
+  env?: any; // Replace `any` with your actual env type
 }
 
 /**
@@ -35,8 +36,11 @@ interface CreateInnerContextOptions {
  * @link https://trpc.io/docs/v11/context#inner-and-outer-context
  */
 export async function createContextInner(opts: CreateInnerContextOptions = {}) {
+  DB = opts.env.DB;
+
   return {
     user: opts.user,
+    env: opts.env,
   };
 }
 

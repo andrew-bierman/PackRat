@@ -36,13 +36,13 @@ export const sendWelcomeEmail = async (
         'Content-Type': 'application/json',
         Authorization: `Bearer ${sendGridApiKey}`,
       },
-      subject: 'Thanks for joining in PackRat!!',
-      text: `Welcome to the app, ${name}. Let me know how you get along with the app.`,
-      mailSettings: {
-        sandboxMode: {
-          enable: process.env.NODE_ENV === 'test',
-        },
-      },
+      // subject: 'Thanks for joining in PackRat!!',
+      // text: `Welcome to the app, ${name}. Let me know how you get along with the app.`,
+      // mailSettings: {
+      //   sandboxMode: {
+      //     enable: process.env.NODE_ENV === 'test',
+      //   },
+      // },
     })
       .then((res: any) => {
         console.log('Email Sent');

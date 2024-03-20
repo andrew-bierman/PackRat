@@ -109,88 +109,88 @@ export const appRouter = trpcRouter({
       return 'Hello World';
     }),
   }),
-  hello2: helloRouter,
-  hello3: publicProcedure.query(async (opts) => {
-    return 'Hello World';
-  }),
-  helloRouter2: helloRouter2(),
-  protectedHello: protectedProcedure.query(async (opts) => 'Hello World'),
-  // user routes
-  getUserById: getUserByIdRoute(),
-  signIn: userSignInRoute(),
+  // hello2: helloRouter,
+  // hello3: publicProcedure.query(async (opts) => {
+  //   return 'Hello World';
+  // }),
+  // helloRouter2: helloRouter2(),
+  // protectedHello: protectedProcedure.query(async (opts) => 'Hello World'),
+  // // user routes
+  // getUserById: getUserByIdRoute(),
+  // signIn: userSignInRoute(),
   signUp: signUpRoute(),
-  resetPassword: resetPasswordRoute(),
-  getGoogleAuthURL: getGoogleAuthURLRoute(),
-  googleSignin: googleSigninRoute(),
-  editUser: editUserRoute(),
-  deleteUser: deleteUserRoute(),
-  getMe: getMeRoute(),
-  emailExists: emailExistsRoute(),
-  checkCode: checkCodeRoute(),
-  getUsers: getUsersRoute(),
-  resetPasswordEmail: sentEmailRoute(),
-  updatePassword: updatePasswordRoute(),
-  // weather routes
-  getWeather: getWeatherRoute(),
-  getWeatherWeek: getWeatherWeekRoute(),
-  // trips routes
-  getPublicTripsRoute: getPublicTripsRoute(),
-  getTrips: getTripsRoute(),
-  getTripById: getTripByIdRoute(),
-  addTrip: addTripRoute(),
-  editTrip: editTripRoute(),
-  deleteTrip: deleteTripRoute(),
-  // templates routes
-  getTemplates: getTemplatesRoute(),
-  getTemplateById: getTemplateByIdRoute(),
-  addTemplate: addTemplateRoute(),
-  editTemplate: editTemplateRoute(),
-  deleteTemplate: deleteTemplateRoute(),
-  // password reset routes
-  requestPasswordResetEmailAndToken: requestPasswordResetEmailAndTokenRoute(),
-  handlePasswordReset: handlePasswordResetRoute(),
-  // packs routes
-  getPublicPacks: getPublicPacksRoute(), // Done (Sorting by Items is left)
-  getPacks: getPacksRoute(), // Done (Sorting by Items is left)
-  getPackById: getPackByIdRoute(), // Done
-  addPack: addPackRoute(), // Done
-  editPack: editPackRoute(), // Done
-  deletePack: deletePackRoute(), // Done
-  scorePack: scorePackRoute(), // Done
-  duplicatePublicPack: duplicatePublicPackRoute(), // Not Implemented
-  // osm routes
-  getPhotonResults: getPhotonResultsRoute(),
-  getTrailsOSM: getTrailsOSMRoute(),
-  getParksOSM: getParksOSMRoute(),
-  getOsm: getOsmRoute(),
-  postSingleGeoJSON: postSingleGeoJSONRoute(),
-  getDestination: getDestinationRoute(),
-  getPhotonDetails: getPhotonDetailsRoute(),
-  // open ai routes
-  getAIResponse: getAIResponseRoute(),
-  getUserChats: getUserChatsRoute(),
-  // item routes
-  getItems: getItemsRoute(),
-  getItemById: getItemByIdRoute(),
-  searchItemsByName: searchItemsByNameRoute(),
-  addItem: addItemRoute(), // Done
-  editItem: editItemRoute(), // Done
-  deleteItem: deleteItemRoute(), // Done
-  addItemGlobal: addItemGlobalRoute(), // Done
-  getItemsGlobally: getItemsGloballyRoute(), // Done
-  addGlobalItemToPack: addGlobalItemToPackRoute(), // Done
-  editGlobalItemAsDuplicate: editGlobalItemAsDuplicateRoute(), // Not Implemented
-  deleteGlobalItem: deleteGlobalItemRoute(), // Done
-  // trails routes
-  getTrails: getTrailsRoute(),
-  // parks route
-  getParks: getParksRoute(),
-  // geo code routes
-  getGeoCode: getGeoCodeRoute(),
-  // favorite routes
-  addToFavorite: addToFavoriteRoute(),
-  getUserFavorites: getUserFavoritesRoute(),
-  getFavoritePacksByUser: getFavoritePacksByUserRoute(),
+  // resetPassword: resetPasswordRoute(),
+  // getGoogleAuthURL: getGoogleAuthURLRoute(),
+  // googleSignin: googleSigninRoute(),
+  // editUser: editUserRoute(),
+  // deleteUser: deleteUserRoute(),
+  // getMe: getMeRoute(),
+  // emailExists: emailExistsRoute(),
+  // checkCode: checkCodeRoute(),
+  // getUsers: getUsersRoute(),
+  // resetPasswordEmail: sentEmailRoute(),
+  // updatePassword: updatePasswordRoute(),
+  // // weather routes
+  // getWeather: getWeatherRoute(),
+  // getWeatherWeek: getWeatherWeekRoute(),
+  // // trips routes
+  // getPublicTripsRoute: getPublicTripsRoute(),
+  // getTrips: getTripsRoute(),
+  // getTripById: getTripByIdRoute(),
+  // addTrip: addTripRoute(),
+  // editTrip: editTripRoute(),
+  // deleteTrip: deleteTripRoute(),
+  // // templates routes
+  // getTemplates: getTemplatesRoute(),
+  // getTemplateById: getTemplateByIdRoute(),
+  // addTemplate: addTemplateRoute(),
+  // editTemplate: editTemplateRoute(),
+  // deleteTemplate: deleteTemplateRoute(),
+  // // password reset routes
+  // requestPasswordResetEmailAndToken: requestPasswordResetEmailAndTokenRoute(),
+  // handlePasswordReset: handlePasswordResetRoute(),
+  // // packs routes
+  // getPublicPacks: getPublicPacksRoute(), // Done (Sorting by Items is left)
+  // getPacks: getPacksRoute(), // Done (Sorting by Items is left)
+  // getPackById: getPackByIdRoute(), // Done
+  // addPack: addPackRoute(), // Done
+  // editPack: editPackRoute(), // Done
+  // deletePack: deletePackRoute(), // Done
+  // scorePack: scorePackRoute(), // Done
+  // duplicatePublicPack: duplicatePublicPackRoute(), // Not Implemented
+  // // osm routes
+  // getPhotonResults: getPhotonResultsRoute(),
+  // getTrailsOSM: getTrailsOSMRoute(),
+  // getParksOSM: getParksOSMRoute(),
+  // getOsm: getOsmRoute(),
+  // postSingleGeoJSON: postSingleGeoJSONRoute(),
+  // getDestination: getDestinationRoute(),
+  // getPhotonDetails: getPhotonDetailsRoute(),
+  // // open ai routes
+  // getAIResponse: getAIResponseRoute(),
+  // getUserChats: getUserChatsRoute(),
+  // // item routes
+  // getItems: getItemsRoute(),
+  // getItemById: getItemByIdRoute(),
+  // searchItemsByName: searchItemsByNameRoute(),
+  // addItem: addItemRoute(), // Done
+  // editItem: editItemRoute(), // Done
+  // deleteItem: deleteItemRoute(), // Done
+  // addItemGlobal: addItemGlobalRoute(), // Done
+  // getItemsGlobally: getItemsGloballyRoute(), // Done
+  // addGlobalItemToPack: addGlobalItemToPackRoute(), // Done
+  // editGlobalItemAsDuplicate: editGlobalItemAsDuplicateRoute(), // Not Implemented
+  // deleteGlobalItem: deleteGlobalItemRoute(), // Done
+  // // trails routes
+  // getTrails: getTrailsRoute(),
+  // // parks route
+  // getParks: getParksRoute(),
+  // // geo code routes
+  // getGeoCode: getGeoCodeRoute(),
+  // // favorite routes
+  // addToFavorite: addToFavoriteRoute(),
+  // getUserFavorites: getUserFavoritesRoute(),
+  // getFavoritePacksByUser: getFavoritePacksByUserRoute(),
 });
 
 export const createCaller = createCallerFactory(appRouter);

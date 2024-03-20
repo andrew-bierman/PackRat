@@ -29,7 +29,7 @@ export function signUpRoute() {
   return publicProcedure.input(validator.userSignUp).mutation(async (opts) => {
     let { email, password, name, username } = opts.input;
     const { env }: any = opts.ctx;
-    const userClass = new User();
+    const userClass = new User(env.db);
     const validatedEmail = validateEmail(email);
     const validatedPassword = validatePassword(password);
     const validatedUsername = validateUsername(username);
@@ -48,12 +48,12 @@ export function signUpRoute() {
       name,
     });
     await userClass.generateAuthToken(JWT_SECRET, user.id);
-    await sendWelcomeEmail(
-      user.email,
-      user.name,
-      STMP_EMAIL,
-      SEND_GRID_API_KEY,
-    );
+    // await sendWelcomeEmail(
+    //   user.email,
+    //   user.name,
+    //   STMP_EMAIL,
+    //   SEND_GRID_API_KEY,
+    // );
     return user;
   });
 }

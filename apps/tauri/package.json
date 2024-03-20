@@ -50,6 +50,6 @@
     "eslint-plugin-next-on-pages": "^1.8.5",
     "patch-package": "^8.0.0",
     "postinstall-postinstall": "^2.1.0",
-    "wrangler": "^3.30.1"
+    "wrangler": "^3.34.2"
   }
 }
