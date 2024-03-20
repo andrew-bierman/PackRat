@@ -7,14 +7,14 @@ import { cors } from 'hono/cors';
 import { compress } from 'hono/compress';
 import router from './routes';
 
-export type Bindings = {
+export interface Bindings {
   DB: IDBDatabase;
   JWT_VERIFICATION_KEY: string;
   JWT_SECRET: string;
   APP_URL: string;
   CORS_ORIGIN: string;
   MAPBOX_ACCESS_TOKEN: string;
-};
+}
 
 const TRPC_API_ENDPOINT = '/api/trpc';
 const TRPC_PLAYGROUND_ENDPOINT = '/trpc-playground';

@@ -5,7 +5,7 @@ import {
   teardownTest,
   createTRPCClient,
 } from '../utils/testHelpers';
-import { Miniflare } from 'miniflare';
+import { type Miniflare } from 'miniflare';
 import { expect } from '@jest/globals';
 
 let miniflare: Miniflare;

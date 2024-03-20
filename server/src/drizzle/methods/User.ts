@@ -243,10 +243,10 @@ export class User {
       .where(eq(userFavoritePacks.packId, packId))
       .as('subQuery');
     const isFavorite = (
-      (await (await this.createInstance())
+      await (await this.createInstance())
         .select()
         .from(UserTable)
-        .where(eq(UserTable.id, userId))) as any
+        .where(eq(UserTable.id, userId))
     ).select({ favoriteDocuments: subQuery });
     return isFavorite;
   }

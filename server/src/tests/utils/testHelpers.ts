@@ -3,10 +3,10 @@ import { Miniflare } from 'miniflare';
 import { createTRPCProxyClient, httpBatchLink } from '@trpc/client';
 import jwt from 'hono/jwt';
 import superjson from 'superjson';
-import app, { Bindings } from '../../index';
+import app, { type Bindings } from '../../index';
 import { readMigrationFiles } from 'drizzle-orm/migrator';
 import { createDb } from '../../db/client';
-import { AppRouter } from '../../routes/trpcRouter';
+import { type AppRouter } from '../../routes/trpcRouter';
 
 const JWT_SECRET = 'test';
 

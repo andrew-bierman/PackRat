@@ -1,4 +1,4 @@
-import { Miniflare } from 'miniflare';
+import { type Miniflare } from 'miniflare';
 import {
   getDb,
   getBindings,
@@ -10,7 +10,7 @@ import {
 describe('T4 App API Server', () => {
   // in case we have parallelized tests...
   let serverId = 0;
-  let servers: Miniflare[] = [];
+  const servers: Miniflare[] = [];
   beforeEach(async () => {
     serverId = serverId + 1;
     servers[serverId] = createMiniflare();
