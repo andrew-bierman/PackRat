@@ -1,4 +1,4 @@
-import React, { cloneElement, isValidElement, useEffect,useRef } from 'react';
+import React, { cloneElement, isValidElement } from 'react';
 import { BaseModal, useModal } from '@packrat/ui';
 
 export const EditPackItemModal = ({ children, isOpen, onClose, showTrigger}) => {
@@ -18,14 +18,6 @@ export const EditPackItemModal = ({ children, isOpen, onClose, showTrigger}) => 
   const ModalContent = isValidElement(children)
     ? withCloseModalHandler(children)
     : null;
-
-    const modalRef = useRef(null);
-
-    useEffect(() => {
-      setTimeout(() => {
-        console.log(modalRef.current, modalRef.current?.setIsModalOpen, 'eRef');
-      }, 5000)
-    }, [])
 
   return (
       <BaseModal
