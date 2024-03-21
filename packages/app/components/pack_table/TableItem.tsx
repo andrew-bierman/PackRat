@@ -52,12 +52,26 @@ const TableItem = ({
     { label: 'Ignore', onSelect: () => {}}
   ];
 
-  const rowData = [
+  let rowData = [];
+  if (
+    Platform.OS === 'android' ||
+    Platform.OS === 'ios' ||
+    window.innerWidth < 900
+  ) {
+    rowData = [
       name,
       `${formatNumber(weight)} ${unit}`,
       quantity,
-      <ZDropdown dropdownItems={rowActionItems} />,
-    ];
+      <ZDropdown.Native dropdownItems={rowActionItems} />,
+    ]
+  } else {
+    rowData = [
+      name,
+      `${formatNumber(weight)} ${unit}`,
+      quantity,
+      <ZDropdown.Web dropdownItems={rowActionItems} />,
+    ]
+  }
 
   /*
   * this _id is passed as pack id but it is a item id which is confusing
