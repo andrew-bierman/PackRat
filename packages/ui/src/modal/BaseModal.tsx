@@ -33,7 +33,7 @@ export const BaseModal = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    if (isModalOpen !== isOpen) setIsModalOpen(!!isOpen);
+    if (isOpen !== undefined && isModalOpen !== isOpen) setIsModalOpen(!!isOpen);
   }, [isOpen]);
 
   const triggerElement = useMemo(() => {
