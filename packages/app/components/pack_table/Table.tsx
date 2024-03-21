@@ -73,15 +73,7 @@ export const TableContainer = ({
 
   const isWeb = Platform.OS === 'web';
 
-  const headerRow = isWeb ? [
-    'Item Name',
-    `Weight`,
-    'Quantity',
-    'Category',
-    'Edit',
-    'Delete',
-    `${copy ? 'Copy' : 'Ignore'}`,
-  ] : [
+  const headerRow = [
     'Item Name',
     `Weight`,
     'Quantity',

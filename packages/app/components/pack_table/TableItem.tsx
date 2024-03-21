@@ -1,19 +1,15 @@
 import React from 'react';
-import * as DropdownMenu from 'zeego/dropdown-menu'
-import { MaterialIcons, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
-import { RIconButton } from '@packrat/ui';
+
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useState } from 'react';
-import { FlatList, Platform, View, Text } from 'react-native';
-import { Cell, Row, Table } from 'react-native-table-component';
+import { Row } from 'react-native-table-component';
 import { DeletePackItemModal } from './DeletePackItemModal';
 import { EditPackItemModal } from './EditPackItemModal';
 import { formatNumber } from 'app/utils/formatNumber';
 import { AddItem } from '../item/AddItem';
-import loadStyles from './packtable.style';
-import { IgnoreItemCheckbox } from './TableHelperComponents';
-type ItemProps = React.ComponentProps<typeof DropdownMenu['Item']>
+import loadStyles from './packtable.style'
+import { ZDropdown } from '@packrat/ui';
  
 type ModalName = 'edit' | 'delete';
 
@@ -26,27 +22,6 @@ interface TableItemProps {
   currentPack: any;
   refetch: () => void;
   setRefetch: () => void;
-}
-
-export const ZDropdown = ({ dropdownItems = []}) => {
-  return (
-    <DropdownMenu.Root>
-      <DropdownMenu.Trigger>
-        <RIconButton
-          backgroundColor="transparent"
-          icon={<MaterialIcons name="more-horiz" size={25} />}
-          style={{ padding: 0}}
-        />
-      </DropdownMenu.Trigger>
-      <DropdownMenu.Content>
-        {dropdownItems.map(({label, onSelect = () => {}}) => (
-          <DropdownMenu.Item key={label} onSelect={onSelect()}>
-            <DropdownMenu.ItemTitle>{label}</DropdownMenu.ItemTitle>
-          </DropdownMenu.Item>  
-        ))}
-      </DropdownMenu.Content>
-    </DropdownMenu.Root>
-  );
 }
 
 const TableItem = ({
@@ -68,8 +43,8 @@ const TableItem = ({
   }
 
   const closeModal = () => {
-    setActiveModal(null)
-  };
+    setActiveModal(null);
+  } 
 
   const rowActionItems = [
     { label: 'Edit', onSelect: () => openModal('edit') },
@@ -77,45 +52,12 @@ const TableItem = ({
     { label: 'Ignore', onSelect: () => {}}
   ];
 
-  let rowData = [];
-  if (
-    Platform.OS === 'android' ||
-    Platform.OS === 'ios' ||
-    window.innerWidth < 900
-  ) {
-    rowData = [
+  const rowData = [
       name,
       `${formatNumber(weight)} ${unit}`,
       quantity,
-      <ZDropdown dropdownItems={rowActionItems} />
+      <ZDropdown dropdownItems={rowActionItems} />,
     ];
-  } else {
-    rowData = [
-      name,
-      `${formatNumber(weight)} ${unit}`,
-      quantity,
-      <EditPackItemModal>
-        <AddItem
-          _id={_id}
-          packId={_id}
-          isEdit={true}
-          currentPack={currentPack}
-          initialData={itemData}
-        />
-      </EditPackItemModal>,
-      <DeletePackItemModal
-        itemId={_id}
-        pack={currentPack}
-        refetch={refetch}
-        setRefetch={setRefetch}
-      />,
-      <IgnoreItemCheckbox
-        itemId={_id}
-        isChecked={checkedItems.includes(_id)}
-        handleCheckboxChange={handleCheckboxChange}
-      />,
-    ];
-  }
 
   /*
   * this _id is passed as pack id but it is a item id which is confusing
@@ -124,8 +66,7 @@ const TableItem = ({
 
   // Here, you can set a default category if item.category is null or undefined
   return <>
-  <View style={{position: 'absolute'}}>
-    <EditPackItemModal isOpen={activeModal === 'edit'} onClose={closeModal}>
+      <EditPackItemModal showTrigger={false} isOpen={activeModal === 'edit'} onClose={closeModal}>
         <AddItem
           _id={_id}
           packId={_id}
@@ -134,12 +75,12 @@ const TableItem = ({
         />
       </EditPackItemModal>
       <DeletePackItemModal
+          showTrigger={false}
           itemId={_id}
           pack={currentPack}
           isOpen={activeModal === 'delete'}
           onClose={closeModal}
         />
-  </View>
   <Row data={rowData} style={styles.row} flexArr={flexArr} />
   </>;
 };

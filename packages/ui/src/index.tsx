@@ -37,6 +37,7 @@ export { LoadingPlaceholder } from './LoadingPlaceholder';
 
 export { EditableText } from './EditableText';
 export { ThreeDotsMenu } from './ThreeDotsMenu';
+export { ZDropdown } from './ZDropdown';
 
 export {
   RH1,

@@ -1,5 +1,4 @@
 import React from 'react';
-import { MaterialIcons } from '@expo/vector-icons';
 import { useDeletePackItem } from 'app/hooks/packs/useDeletePackItem';
 import { BaseModal } from '@packrat/ui';
 import { useDeleteItem } from 'app/hooks/items';
@@ -9,13 +8,15 @@ interface DeletePackItemModalProps {
   pack?: { _id: string };
   isOpen?: Boolean;
   onClose?: () => void;
+  showTrigger?: Boolean;
 }
 
 export const DeletePackItemModal = ({
   itemId,
   pack,
   isOpen,
-  onClose
+  onClose,
+  showTrigger
 }: DeletePackItemModalProps) => {
   const { deletePackItem } = useDeletePackItem();
   const { handleDeleteItem } = useDeleteItem();
@@ -31,7 +32,10 @@ export const DeletePackItemModal = ({
   const footerButtons = [
     {
       label: 'Cancel',
-      onClick: (_, closeModal) => onClose(),
+      onClick: (_, closeModal) => {
+        closeModal()
+        if (onClose) onClose();
+      },
       color: 'gray',
       disabled: false,
     },
@@ -48,7 +52,7 @@ export const DeletePackItemModal = ({
       title={'Delete Item'}
       isOpen={isOpen}
       onClose={onClose}
-      showTrigger={false}
+      showTrigger={showTrigger !== undefined ? showTrigger : true}
       footerButtons={footerButtons}
     >
       Are you sure you want to delete this item?
