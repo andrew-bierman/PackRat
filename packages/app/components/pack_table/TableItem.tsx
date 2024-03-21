@@ -1,4 +1,5 @@
 import React from 'react';
+import { Platform } from 'react-native';
 
 
 import useCustomStyles from 'app/hooks/useCustomStyles';
