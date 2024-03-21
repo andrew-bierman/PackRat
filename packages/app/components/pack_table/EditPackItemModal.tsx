@@ -1,14 +1,14 @@
-import React, { cloneElement, isValidElement, useMemo, useState } from 'react';
-import { MaterialIcons } from '@expo/vector-icons';
-import { AddItem } from '../item/AddItem';
-import { View } from 'react-native';
+import React, { cloneElement, isValidElement, useEffect,useRef } from 'react';
 import { BaseModal, useModal } from '@packrat/ui';
 
-export const EditPackItemModal = ({ children, isOpen, onClose }) => {
+export const EditPackItemModal = ({ children, isOpen, onClose, showTrigger}) => {
   const footerButtons = [
     {
       label: 'Cancel',
-      onClick: (_, closeModal) => onClose(),
+      onClick: (_, closeModal) => {
+        closeModal()
+        if (onClose) onClose();
+      },
       color: '#B22222',
       disabled: false,
     },
@@ -19,13 +19,21 @@ export const EditPackItemModal = ({ children, isOpen, onClose }) => {
     ? withCloseModalHandler(children)
     : null;
 
+    const modalRef = useRef(null);
+
+    useEffect(() => {
+      setTimeout(() => {
+        console.log(modalRef.current, modalRef.current?.setIsModalOpen, 'eRef');
+      }, 5000)
+    }, [])
+
   return (
       <BaseModal
         title={'Edit Item'}
         isOpen={isOpen}
         onClose={onClose}
         footerButtons={footerButtons}
-        showTrigger={false}
+        showTrigger={showTrigger !== undefined ? showTrigger : true}
       >
         <ModalContent />
       </BaseModal>

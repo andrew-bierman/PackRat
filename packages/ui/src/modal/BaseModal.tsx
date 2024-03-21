@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState, forwardRef, useImperativeHandle } from 'react';
 import { Button, Dialog } from 'tamagui';
 import { X } from '@tamagui/lucide-icons';
 import RButton from '@packrat/ui/src/RButton';
@@ -31,6 +31,10 @@ export const BaseModal = ({
   showTrigger = true
 }: BaseModalProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (isModalOpen !== isOpen) setIsModalOpen(!!isOpen);
+  }, [isOpen]);
 
   const triggerElement = useMemo(() => {
     return triggerComponent ? (
@@ -78,7 +82,7 @@ export const BaseModal = ({
   return (
     <Dialog
       modal
-      open={isModalOpen || !!isOpen}
+      open={isModalOpen}
       onOpenChange={(open) => {
         setIsModalOpen(open);
         if (!open && onClose) onClose();
