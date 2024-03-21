@@ -27,6 +27,7 @@ import YStack from './YStack';
 import RButton from './RButton';
 import RTabs from './RTabs';
 import SizableText from './SizableText';
+import ZDropdown from './ZDropdown';
 export { RSkeleton } from './RSkeleton';
 export { DropdownMenu, ExampleDropdown } from './RDropdown/DropdownBase';
 export { ContextMenu, ExampleContextMenu } from './RContextMenu';
@@ -37,7 +38,6 @@ export { LoadingPlaceholder } from './LoadingPlaceholder';
 
 export { EditableText } from './EditableText';
 export { ThreeDotsMenu } from './ThreeDotsMenu';
-export { ZDropdown } from './ZDropdown';
 
 export {
   RH1,
@@ -69,6 +69,7 @@ export {
   RButton,
   RTabs,
   SizableText,
+  ZDropdown
 };
 
 export * from './InputText';

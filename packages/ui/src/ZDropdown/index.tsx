@@ -7,7 +7,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { RIconButton } from '@packrat/ui';
 
   
-const CustomContent = styled(DropdownMenu.Content, Platform.OS === 'web' ? {
+const CustomContent = styled(DropdownMenu.Content, {
         backgroundColor: 'white',
         minWidth: 160,
         shadowColor: '#000',
@@ -19,9 +19,6 @@ const CustomContent = styled(DropdownMenu.Content, Platform.OS === 'web' ? {
         shadowOpacity: 0.2,
         shadowRadius: 16,
         padding: 12,
-    } : {
-        padding: 10,
-        backgroundColor: 'white',
     });
   
   const DropdownMenuContent = DropdownMenu.create(CustomContent, 'Content');
@@ -40,7 +37,7 @@ const CustomContent = styled(DropdownMenu.Content, Platform.OS === 'web' ? {
   
   const DropdownMenuItem = DropdownMenu.create(CustomItem, 'Item');
 
-  export const ZDropdown = ({ dropdownItems = []}) => {
+  export const ZDropdownWeb = ({ dropdownItems = []}) => {
     return (
       <DropdownMenu.Root>
         <DropdownMenu.Trigger>
@@ -60,3 +57,29 @@ const CustomContent = styled(DropdownMenu.Content, Platform.OS === 'web' ? {
       </DropdownMenu.Root>
     );
   }
+
+  export const ZDropdownNative = ({ dropdownItems = []}) => {
+    return (
+      <DropdownMenu.Root>
+        <DropdownMenu.Trigger>
+          <RIconButton
+            backgroundColor="transparent"
+            icon={<MaterialIcons name="more-horiz" size={25} />}
+            style={{ padding: 0}}
+          />
+        </DropdownMenu.Trigger>
+        <DropdownMenu.Content>
+          {dropdownItems.map(({label, onSelect = () => {}}) => (
+            <DropdownMenu.Item key={label} onSelect={onSelect()}>
+              <DropdownMenu.ItemTitle>{label}</DropdownMenu.ItemTitle>
+            </DropdownMenu.Item>  
+          ))}
+        </DropdownMenu.Content>
+      </DropdownMenu.Root>
+    );
+  }
+
+  export default {
+    Web: ZDropdownWeb,
+    Native: ZDropdownNative
+  };
