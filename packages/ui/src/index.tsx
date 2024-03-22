@@ -30,6 +30,8 @@ import SizableText from './SizableText';
 export { RSkeleton } from './RSkeleton';
 export { DropdownMenu, ExampleDropdown } from './RDropdown/DropdownBase';
 export { ContextMenu, ExampleContextMenu } from './RContextMenu';
+export { MainContentWeb } from './MainContentWeb';
+export { Container } from './Container';
 
 export { LoadingPlaceholder } from './LoadingPlaceholder';
 

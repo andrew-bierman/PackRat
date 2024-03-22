@@ -146,6 +146,7 @@ const loadStyles = (theme: any) => {
       backgroundRepeat: 'repeat',
       backgroundSize: 'cover',
       marginBottom: 20,
+      marginTop: 20,
       alignItems: 'center',
       justifyContent: 'center',
       width: '100%',
