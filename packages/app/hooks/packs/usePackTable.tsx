@@ -17,6 +17,7 @@ export const usePackTable = ({
   const duplicatePackItem = useDuplicatePackItem();
   let ids = [];
   if (currentPack?.items) {
+    
     ids = copy ? currentPack.items.map((item) => item._id) : [];
   }
   const [checkedItems, setCheckedItems] = useState([...ids]);
@@ -52,7 +53,6 @@ export const usePackTable = ({
       const itemWeight = Number(item.weight) || 0; // ensure it's a number
       const itemQuantity = Number(item.quantity) || 0; // ensure it's a number
       const itemUnit = item.unit || null;
-
       if (!copy) {
         switch (categoryName) {
           case ItemCategoryEnum.ESSENTIALS: {
@@ -97,13 +97,13 @@ export const usePackTable = ({
 
   // In your groupedData definition, provide a default category for items without one
   const groupedData = data
-    ?.filter((fItem) => !Array.isArray(fItem.category))
+    ?.filter((fItem) => Array.isArray(fItem.category))
     ?.reduce((acc, item) => {
       const categoryName = item.category ? item.category.name : 'Undefined';
       (acc[categoryName] = acc[categoryName] || []).push(item);
       return acc;
     }, {});
-
+    
   return {
     user,
     ids,

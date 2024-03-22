@@ -43,8 +43,7 @@ export const SaveTripContainer = ({
   form,
 }: SaveTripContainerProps) => {
   const user = useAuthUser();
-  const [packId] = usePackId();
-
+  const [packIdParam] = usePackId();
   // defining dispatch
   const { addTrip, isSuccess, data: response } = useAddTrip();
   const [formRef, submitTrigger] = useFormSubmitTrigger();
@@ -97,14 +96,14 @@ export const SaveTripContainer = ({
       duration: JSON.stringify(duration),
       weather: JSON.stringify(weatherObject),
       owner_id: user?._id,
-      packs: packId,
+      packs: packIdParam,
       is_public: isPublic === '1',
     };
 
     // creating a trip
     console.log('create trip data ->', data);
     addTrip(data);
-    closeModal();
+    // closeModal();
   };
   if (isSuccess && response) {
     router.push(`/trip/${response.trip._id}`);
