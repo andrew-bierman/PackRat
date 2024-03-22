@@ -25,7 +25,7 @@ const ThirdPartyProviders = ({ children, isDark = false }) => {
   // const { isDark } = useTheme()
 
   return (
-    // <FontLoader>
+    <FontLoader>
       <NativeBaseProvider
         theme={isDark ? nativeBaseDarkTheme : nativeBaseLightTheme}
       >
@@ -39,7 +39,7 @@ const ThirdPartyProviders = ({ children, isDark = false }) => {
           </TamaguiTheme>
         </TamaguiProvider>
       </NativeBaseProvider>
-    // </FontLoader>
+    </FontLoader>
   );
 };
 
