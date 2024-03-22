@@ -1,4 +1,10 @@
-import * as Haptics from 'expo-haptics';
+import {
+  selectionAsync,
+  notificationAsync,
+  NotificationFeedbackType,
+  impactAsync,
+  ImpactFeedbackStyle,
+} from 'expo-haptics';
 import { useCallback, useMemo } from 'react';
 import { Platform } from 'react-native';
 
@@ -7,36 +13,27 @@ export const useHaptic = () => {
     if (Platform.OS === 'web') {
       return () => {};
     }
-    return () => action(Haptics.ImpactFeedbackStyle[type]);
+    return () => action(type);
   }, []);
 
   return useMemo(
     () => ({
-      selection: Platform.OS === 'web' ? undefined : Haptics.selectionAsync,
+      selection: Platform.OS === 'web' ? undefined : selectionAsync,
       success: createFeedbackHandler(
-        Haptics.notificationAsync,
-        Haptics.NotificationFeedbackType.Success,
+        notificationAsync,
+        NotificationFeedbackType.Success,
       ),
       error: createFeedbackHandler(
-        Haptics.notificationAsync,
-        Haptics.NotificationFeedbackType.Error,
+        notificationAsync,
+        NotificationFeedbackType.Error,
       ),
       warning: createFeedbackHandler(
-        Haptics.notificationAsync,
-        Haptics.NotificationFeedbackType.Warning,
+        notificationAsync,
+        NotificationFeedbackType.Warning,
       ),
-      light: createFeedbackHandler(
-        Haptics.impactAsync,
-        Haptics.ImpactFeedbackStyle.Light,
-      ),
-      medium: createFeedbackHandler(
-        Haptics.impactAsync,
-        Haptics.ImpactFeedbackStyle.Medium,
-      ),
-      heavy: createFeedbackHandler(
-        Haptics.impactAsync,
-        Haptics.ImpactFeedbackStyle.Heavy,
-      ),
+      light: createFeedbackHandler(impactAsync, ImpactFeedbackStyle.Light),
+      medium: createFeedbackHandler(impactAsync, ImpactFeedbackStyle.Medium),
+      heavy: createFeedbackHandler(impactAsync, ImpactFeedbackStyle.Heavy),
     }),
     [],
   );

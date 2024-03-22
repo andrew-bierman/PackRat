@@ -104,6 +104,7 @@ const nextConfig = function () {
       'expo-status-bar',
       'expo-system-ui',
       'expo-web-browser',
+      'expo-haptics',
       '@tanstack/react-query',
       'react-native-table-component',
       // Remove when we have a proper solution for this
