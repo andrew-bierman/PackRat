@@ -63,7 +63,7 @@ export const AddItem = ({
       addPackItem(data);
     }
 
-    // closeModalHandler();
+    closeModalHandler();
   };
 
   const defaultValues = useMemo(() => {

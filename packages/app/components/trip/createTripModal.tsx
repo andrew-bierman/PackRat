@@ -103,7 +103,7 @@ export const SaveTripContainer = ({
     // creating a trip
     console.log('create trip data ->', data);
     addTrip(data);
-    // closeModal();
+    closeModal();
   };
   if (isSuccess && response) {
     router.push(`/trip/${response.trip._id}`);
