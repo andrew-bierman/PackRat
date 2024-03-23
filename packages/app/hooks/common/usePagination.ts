@@ -18,9 +18,11 @@ export const usePagination = () => {
     handleLimitChange: (newLimit) => {
       push({ query: { limit: Number(newLimit), page: 1 } });
     },
-    handlePageChange: setPage,
-    limit,
-    page,
+    handlePageChange: (newPage) => {
+      setPage(Number(newPage));
+    },
+    limit: Number(limit),
+    page: Number(page),
   };
 };
 

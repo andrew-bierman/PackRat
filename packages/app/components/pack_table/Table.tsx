@@ -50,7 +50,6 @@ export const TableContainer = ({
     setRefetch,
     copy,
   });
-
   let flexArr = [2, 1, 1, 1, 0.65, 0.65, 0.65];
   let heading = [
     'Item Name',
@@ -70,7 +69,6 @@ export const TableContainer = ({
   }
   if (isLoading) return <RSkeleton style={{}} />;
   if (error) return <ErrorMessage message={error} />;
-
   const isWeb = Platform.OS === 'web';
   return (
     <View style={[styles.container, !isWeb && { width: '100%' }]}>
