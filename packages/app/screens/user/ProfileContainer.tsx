@@ -145,7 +145,7 @@ const Header = ({
           </>
         )}
       </RStack>
-      {error ? <RText>{error.message}</RText> : null}
+      {error ? <RText>{error}</RText> : null}
     </View>
   );
 };
@@ -171,7 +171,6 @@ const SkeletonUserDataCard = () => {
 };
 
 export default function ProfileContainer({ id = null }) {
-  console.log('ProfileContainerrrrrrr', id);
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
   const {
@@ -212,7 +211,7 @@ export default function ProfileContainer({ id = null }) {
               {isLoading && (
                 <UserDataContainer
                   data={[]}
-                  type={'packs' || 'trips'}
+                  type="packs"
                   userId={user?._id}
                   isLoading={isLoading}
                   SkeletonComponent={SkeletonUserDataCard}
