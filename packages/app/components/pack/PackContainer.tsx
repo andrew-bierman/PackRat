@@ -7,12 +7,18 @@ import { View } from 'react-native';
 import { AddItemModal } from './AddItemModal';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useAuthUser } from 'app/auth/hooks';
-import { usePackId } from 'app/hooks/packs';
+import { usePackId, usePackIdQParam } from 'app/hooks/packs';
+import { createParam } from '@packrat/crosspath';
 
-export default function PackContainer({ isCreatingTrip = false }) {
+const { useParams } = createParam<{ packId: string }>();
+
+export default function PackContainer({ isCreatingTrip = false, setPackId}) {
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
 
   const [packIdParam] = usePackId();
+  const [__, setPackIdQParam] = usePackIdQParam();
+  const { setParams  } = useParams();
+
   const [currentPackId, setCurrentPackId] = useState(packIdParam);
   const user = useAuthUser();
   console.log({ currentPackId });
@@ -45,7 +51,8 @@ export default function PackContainer({ isCreatingTrip = false }) {
     setCurrentPackId(selectedPack?._id);
 
     if (isCreatingTrip && selectedPack?._id) {
-      searchParams.set('packId', selectedPack?._id);
+      setPackIdQParam(selectedPack?._id)
+      if (setPackId) setPackId(selectedPack?._id);
     }
   };
 

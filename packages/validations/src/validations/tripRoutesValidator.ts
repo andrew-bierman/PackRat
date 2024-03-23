@@ -12,6 +12,19 @@ export const getTripById = z.object({
   tripId: JoiObjectId().nonempty(),
 });
 
+export const AddTripValidationSchema = z.object({
+  dateRange: z.object({
+    startDate: z.date(),
+    endDate: z.date()
+  }).required(),
+  packId: z.string().trim().min(1),
+  osm: z.object({
+    osmId: z.string().trim().min(1),
+    osmType: z.string().trim().min(1),
+    name: z.string().trim().min(1)
+  }).required(),
+}).required();
+
 export const addTrip = z.object({
   name: z.string().nonempty(),
   description: z.string().nonempty(),
@@ -27,8 +40,8 @@ export const addTrip = z.object({
 });
 
 export const addTripForm = z.object({
-  name: z.string().nonempty(),
-  description: z.string().nonempty(),
+  name: z.string().trim().min(1),
+  description: z.string().trim().min(1),
   isPublic: z.union([z.literal('0'), z.literal('1')]),
 });
 

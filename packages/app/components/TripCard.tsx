@@ -1,6 +1,6 @@
 import { RCard, RParagraph, RStack, RText } from '@packrat/ui';
 import { Platform } from 'react-native';
-import { Text } from 'tamagui';
+import { Paragraph, Text } from 'tamagui';
 import { useCardTrip } from 'app/hooks/trips/useTripCard';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import useTheme from '../hooks/useTheme';
@@ -22,6 +22,9 @@ interface TripCardProps {
   isLoading: boolean;
   form?: any;
   searchRef?: any;
+  showError?:boolean;
+  isError?: boolean
+  errorMessage?: string;
 }
 
 export default function TripCard({
@@ -36,6 +39,9 @@ export default function TripCard({
   isTrail,
   isPark,
   isLoading,
+  showError,
+  isError,
+  errorMessage
 }: TripCardProps) {
   const { isDark, currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
@@ -63,15 +69,19 @@ export default function TripCard({
         flexDirection: !isMap ? 'row' : 'column',
         width: '90%',
       }}
-      style={
+      style={[
         isSearch
         ? styles.searchContainer
         : isMap
           ? styles.mapCard
           : styles.containerMobile
             ? styles.containerMobile
-            : styles.mutualStyles
-      }
+            : styles.mutualStyles,
+        (showError && isError) && {
+          border: `2px solid ${currentTheme.colors.error}`,
+          flexWrap: 'wrap'
+        }
+      ]}
     >
       <RStack
         style={{
@@ -102,7 +112,18 @@ export default function TripCard({
           <MapContainer shape={shape} />
         )
       ) : isSearch ? (
-        <PlacesAutocomplete ref={searchRef} onSelect={handleSelectLocation} />
+        <RStack>
+          <PlacesAutocomplete ref={searchRef} onSelect={handleSelectLocation} />
+          {
+            (showError && isError) && (
+              <Paragraph
+                color='$red10'
+              >
+                {errorMessage}
+              </Paragraph>
+            )
+          }
+        </RStack>
       ) : (
         <RStack style={{ width: '80%' }}>
           <Carousel iconColor={isDark ? '#fff' : '#000'}>

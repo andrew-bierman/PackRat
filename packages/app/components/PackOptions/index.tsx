@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { View } from 'react-native';
 import { useRouter } from 'app/hooks/router';
 import { RStack, RIconButton, BaseModal } from '@packrat/ui';
 import { Entypo } from '@expo/vector-icons';

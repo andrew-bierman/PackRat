@@ -99,7 +99,7 @@ export const usePackTable = ({
   const groupedData = data
     ?.filter((fItem) => !Array.isArray(fItem.category))
     ?.reduce((acc, item) => {
-      const categoryName = item.category ? item.category.name : 'Undefined';
+      const categoryName = item.category ? item.category?.name : 'Undefined';
       (acc[categoryName] = acc[categoryName] || []).push(item);
       return acc;
     }, {});

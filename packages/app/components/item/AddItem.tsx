@@ -63,13 +63,13 @@ export const AddItem = ({
     } else {
       addPackItem(data);
     }
-
-    closeModalHandler();
+    if (closeModalHandler)
+      closeModalHandler();
   };
 
   const defaultValues = useMemo(() => {
     if (!initialData) {
-      return { unit: 'lb' };
+      return { unit: 'lb', packId };
     }
     const result = {
       name: initialData.name || '',
@@ -88,8 +88,6 @@ export const AddItem = ({
 
     return { ...result, packId };
   }, [initialData, isEdit, packId]);
-
-  console.log({ defaultValues });
 
   return (
     <View>

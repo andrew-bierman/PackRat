@@ -10,6 +10,8 @@ import {
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import useTheme from '../../hooks/useTheme';
 import { RStack, RText, RButton } from '@packrat/ui';
+import { Paragraph } from 'tamagui';
+import { useFormContext } from 'react-hook-form';
 
 interface DateRange {
   startDate: Date | null;
@@ -23,6 +25,8 @@ interface TripDateRangeProps {
 const TripDateRange = ({ dateRange, setDateRange }: TripDateRangeProps) => {
   const { currentTheme } = useTheme();
   const [open, setOpen] = React.useState(false);
+
+  const { formState } = useFormContext();
 
   const onDismiss = React.useCallback(() => {
     setOpen(false);
@@ -57,6 +61,7 @@ const TripDateRange = ({ dateRange, setDateRange }: TripDateRangeProps) => {
         gap: 2,
         marginVertical: 10,
         alignItems: 'center',
+        border: formState.errors.dateRange ? `2px solid ${currentTheme.colors.error}` : 'none'
       }}
     >
       <RStack
@@ -111,6 +116,15 @@ const TripDateRange = ({ dateRange, setDateRange }: TripDateRangeProps) => {
                 Pick Date Range
               </RText>
             </RButton>
+            {
+              formState.errors.dateRange && (
+                <Paragraph
+                  color='$red10'
+                >
+                  Please select a date range for the trip
+                </Paragraph>
+              )
+            }
             <DatePickerModal
               locale="en"
               label="Select Date"

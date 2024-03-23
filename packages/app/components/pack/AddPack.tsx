@@ -13,6 +13,37 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useAddNewPack } from 'app/hooks/packs';
 import { useRouter } from 'app/hooks/router';
 import { z } from 'zod';
+import { useForm, useFormContext } from "react-hook-form"
+
+export const AddPackFormBody = ({ handleonValueChange, packSelectOptions, currentTheme, isLoading, onSubmit}) => {
+  const { handleSubmit,formState } = useFormContext();
+
+  return (
+          <>
+            <FormInput
+              placeholder="Name"
+              name="name"
+              label="Name"
+              style={{ width: '100%', textAlign: 'left' }}
+            />
+            <RLabel>Is Public:</RLabel>
+            <FormSelect
+              onValueChange={handleonValueChange}
+              options={packSelectOptions}
+              name="isPublic"
+              style={{ width: '300px' }}
+              width="300px"
+              accessibilityLabel="Choose Service"
+              placeholder={'Is Public'}
+            />
+            <RButton type='submit' style={{ width: '100%', marginTop: 40 }} onPress={handleSubmit(onSubmit)}>
+              <RText style={{ color: currentTheme.colors.text }}>
+                {isLoading ? 'Loading...' : 'Add Pack'}
+              </RText>
+            </RButton>
+          </>
+  );
+}
 
 export const AddPack = ({ isCreatingTrip = false }) => {
   // Hooks
@@ -59,29 +90,8 @@ export const AddPack = ({ isCreatingTrip = false }) => {
           defaultValues={{ isPublic: '0', name: '' }}
           validationSchema={addPackSchema}
         >
-          <FormInput
-            placeholder="Name"
-            name="name"
-            label="Name"
-            style={{ width: '100%', textAlign: 'left' }}
-          />
-          <RLabel>Is Public:</RLabel>
-          <FormSelect
-            onValueChange={handleonValueChange}
-            options={packSelectOptions}
-            name="isPublic"
-            style={{ width: '300px' }}
-            width="300px"
-            accessibilityLabel="Choose Service"
-            placeholder={'Is Public'}
-          />
-          <RButton style={{ width: '100%', marginTop: 40 }}>
-            <RText style={{ color: currentTheme.colors.text }}>
-              {isLoading ? 'Loading...' : 'Add Pack'}
-            </RText>
-          </RButton>
-        </Form>
-
+          <AddPackFormBody handleonValueChange={handleonValueChange} packSelectOptions={packSelectOptions} currentTheme={currentTheme} isLoading={isLoading} onSubmit={handleAddPack} /> 
+          </Form>
         {isError && <RText>Pack already exists</RText>}
       </View>
     </View>
@@ -153,6 +163,6 @@ const loadStyles = (theme, appTheme) => {
 // TODO move to validations workspace
 
 export const addPackSchema = z.object({
-  name: z.string().nonempty(),
+  name: z.string().trim().min(1),
   isPublic: z.union([z.literal('0'), z.literal('1')]),
-});
+}).required();

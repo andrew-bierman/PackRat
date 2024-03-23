@@ -3,9 +3,13 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { AddPackContainer } from '../pack/AddPack';
 import useTheme from '../../hooks/useTheme';
 import PackContainer from '../pack/PackContainer';
+import { Paragraph } from 'tamagui';
+import { useFormContext } from 'react-hook-form';
 
-export const GearList = () => {
+export const GearList = ({ setPackId }) => {
   const { currentTheme } = useTheme();
+  const { formState } = useFormContext();
+
   return (
     <RStack
       alignSelf="center"
@@ -24,6 +28,7 @@ export const GearList = () => {
         marginVertical: 10,
         alignItems: 'center',
         padding: 30,
+        border: formState.errors.packId ? `2px solid ${currentTheme.colors.error}` : 'none'
       }}
     >
       <RStack>
@@ -55,7 +60,16 @@ export const GearList = () => {
       </RStack>
 
       <AddPackContainer isCreatingTrip={true} />
-      <PackContainer isCreatingTrip={true} />
+      <PackContainer isCreatingTrip={true} setPackId={setPackId} />
+      {
+        formState.errors.packId && (
+          <Paragraph
+            color='$red10'
+          >
+            Please select a pack
+          </Paragraph>
+        )
+      }
     </RStack>
   );
 };
