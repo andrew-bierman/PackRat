@@ -7,11 +7,11 @@ const ThemeSwitch = ({ isEnabled, toggleSwitch, currentTheme }) => (
       Theme Changer
     </RText>
     <RSwitch
-      trackColor={{ false: '#767577', true: '#81b0ff' }}
+      trackColor={!isEnabled ? '#767577' : '#81b0ff'}
       thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
       ios_backgroundColor="#3e3e3e"
-      onValueChange={toggleSwitch}
-      value={isEnabled}
+      onCheckedChange={toggleSwitch}
+      checked={isEnabled}
     />
     <RText style={{ color: currentTheme.colors.drawerIconColor }}>
       {isEnabled ? 'Dark Mode' : 'Light Mode'}

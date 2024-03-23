@@ -50,7 +50,6 @@ export const AddItem = ({
     isError,
     addPackItem,
   } = useAddPackItem();
-
   const {
     // mutation: addPackItemMutation
 
@@ -77,7 +76,7 @@ export const AddItem = ({
       quantity: String(initialData.quantity),
       type: initialData.category?.name,
       unit: initialData.unit,
-      _id: undefined,
+      _id: packId,
     };
 
     if (isEdit) {
@@ -100,6 +99,7 @@ export const AddItem = ({
         isLoading={isLoading}
         isEdit={isEdit}
         currentPack={currentPack}
+        packId={packId}
       />
     </View>
   );

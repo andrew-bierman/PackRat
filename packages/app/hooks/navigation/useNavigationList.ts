@@ -8,26 +8,29 @@ import {
 } from '@expo/vector-icons';
 import { useAuthUser } from '../../auth/hooks';
 import { Platform } from 'react-native';
+import { Separator } from 'tamagui';
+
+enum NavigationItemTypeEnum {
+  LINK = 'link',
+  DIVIDER = 'divider',
+};
+
+type NavigationItem = {
+  type: NavigationItemTypeEnum.LINK;
+  href: string;
+  icon: string;
+  text: string;
+  iconSource: any;
+} | {
+  type: NavigationItemTypeEnum.DIVIDER, Component: React.ComponentType<any>
+};
 
 export const useNavigationList = () => {
   const user = useAuthUser();
   const navigationItems = useMemo(() => {
     const additionalMenuItems = user
       ? logedInMenuItems
-      : [
-          {
-            href: '/sign-in',
-            icon: 'login',
-            text: 'Login',
-            iconSource: MaterialIcons,
-          },
-          {
-            href: '/register',
-            icon: 'person-add',
-            text: 'Register',
-            iconSource: MaterialIcons,
-          },
-        ];
+      : loggeOutMenuItems
 
     return [...staticNavigationItems, ...additionalMenuItems];
   }, [user]);
@@ -37,12 +40,14 @@ export const useNavigationList = () => {
 
 const staticNavigationItems = [
   {
+    type: NavigationItemTypeEnum.LINK,
     href: '/',
     icon: 'home',
     text: 'Home',
     iconSource: Entypo,
   },
   {
+    type: NavigationItemTypeEnum.LINK,
     href: '/about',
     icon: 'info',
     text: 'About',
@@ -50,20 +55,44 @@ const staticNavigationItems = [
   },
 ];
 
-const logedInMenuItems = [
+const loggeOutMenuItems: NavigationItem[] = [
   {
+    type: NavigationItemTypeEnum.DIVIDER,
+    Component: Separator
+  },
+  {
+    type: NavigationItemTypeEnum.LINK,
+    href: '/sign-in',
+    icon: 'login',
+    text: 'Login',
+    iconSource: MaterialIcons,
+  },
+  {
+    type: NavigationItemTypeEnum.LINK,
+    href: '/register',
+    icon: 'person-add',
+    text: 'Register',
+    iconSource: MaterialIcons,
+  },
+];
+
+const logedInMenuItems: NavigationItem[] = [
+  {
+    type: NavigationItemTypeEnum.LINK,
     href: '/feed',
     icon: 'newspaper-variant',
     text: 'Feed',
     iconSource: MaterialCommunityIcons,
   },
   {
+    type: NavigationItemTypeEnum.LINK,
     href: '/trips',
     icon: 'routes',
     text: 'Trips',
     iconSource: MaterialCommunityIcons,
   },
   {
+    type: NavigationItemTypeEnum.LINK,
     href: '/packs',
     icon: 'backpack',
     text: 'Packs',
@@ -72,32 +101,41 @@ const logedInMenuItems = [
   ...(Platform.OS != 'web'
     ? [
         {
+          type: NavigationItemTypeEnum.LINK,
           href: '/maps',
           icon: 'map',
           text: 'Downloaded Maps',
           iconSource: Entypo,
         },
       ]
-    : []),
+    : []) as NavigationItem[] ,
   {
+    type: NavigationItemTypeEnum.LINK,
     href: '/items',
     icon: 'tent',
     text: 'Items',
     iconSource: Fontisto,
   },
   {
+    type: NavigationItemTypeEnum.LINK,
     href: '/profile',
     icon: 'book',
     text: 'Profile',
     iconSource: FontAwesome,
   },
   {
+    type: NavigationItemTypeEnum.DIVIDER,
+    Component: Separator
+  },
+  {
+    type: NavigationItemTypeEnum.LINK,
     href: '/appearance',
     icon: 'theme-light-dark',
     text: 'Appearance',
     iconSource: MaterialCommunityIcons,
   },
   {
+    type: NavigationItemTypeEnum.LINK,
     href: '/logout',
     icon: 'logout',
     text: 'Logout',
