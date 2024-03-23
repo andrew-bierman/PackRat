@@ -17,7 +17,6 @@ export const usePackTable = ({
   const duplicatePackItem = useDuplicatePackItem();
   let ids = [];
   if (currentPack?.items) {
-    
     ids = copy ? currentPack.items.map((item) => item._id) : [];
   }
   const [checkedItems, setCheckedItems] = useState([...ids]);
@@ -97,13 +96,13 @@ export const usePackTable = ({
 
   // In your groupedData definition, provide a default category for items without one
   const groupedData = data
-    ?.filter((fItem) => Array.isArray(fItem.category))
+    ?.filter((fItem) => !Array.isArray(fItem.category))
     ?.reduce((acc, item) => {
       const categoryName = item.category ? item.category.name : 'Undefined';
       (acc[categoryName] = acc[categoryName] || []).push(item);
       return acc;
     }, {});
-    
+
   return {
     user,
     ids,
