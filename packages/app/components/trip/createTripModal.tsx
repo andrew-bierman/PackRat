@@ -43,7 +43,7 @@ export const SaveTripContainer = ({
   form,
 }: SaveTripContainerProps) => {
   const user = useAuthUser();
-  const [packIdParam] = usePackId();
+  const [packId] = usePackId();
   // defining dispatch
   const { addTrip, isSuccess, data: response } = useAddTrip();
   const [formRef, submitTrigger] = useFormSubmitTrigger();
@@ -96,7 +96,7 @@ export const SaveTripContainer = ({
       duration: JSON.stringify(duration),
       weather: JSON.stringify(weatherObject),
       owner_id: user?._id,
-      packs: packIdParam,
+      packs: packId,
       is_public: isPublic === '1',
     };
 
