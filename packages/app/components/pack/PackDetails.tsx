@@ -55,86 +55,84 @@ export function PackDetails() {
   if (isLoading) return <RText>Loading...</RText>;
 
   return (
-    <>
-      <View
-        style={[
-          styles.mainContainer,
-          Platform.OS == 'web'
-            ? { minHeight: '100vh' }
-            : { minHeight: Dimensions.get('screen').height },
-        ]}
-      >
-        {!isError && (
-          <>
-            <DetailsComponent
-              type="pack"
-              data={currentPack}
-              isLoading={isLoading}
-              error={error}
-              additionalComps={
-                <>
-                  <View style={{ flex: 1 }}>
-                    <FlatList
-                      data={Object.entries(SECTION)}
-                      contentContainerStyle={{ paddingBottom: 350 }}
-                      keyExtractor={([key, val]) => val}
-                      renderItem={({ item }) => {
-                        {
-                          console.log(item[1], 'item');
-                          switch (item[1]) {
-                            case SECTION.TABLE:
-                              return (
-                                <TableContainer
+    <View
+      style={[
+        styles.mainContainer,
+        Platform.OS == 'web'
+          ? { minHeight: '100vh' }
+          : { minHeight: Dimensions.get('screen').height },
+      ]}
+    >
+      {!isError && (
+        <>
+          <DetailsComponent
+            type="pack"
+            data={currentPack}
+            isLoading={isLoading}
+            error={error}
+            additionalComps={
+              <>
+                <View style={{ flex: 1 }}>
+                  <FlatList
+                    data={Object.entries(SECTION)}
+                    contentContainerStyle={{ paddingBottom: 350 }}
+                    keyExtractor={([key, val]) => val}
+                    renderItem={({ item }) => {
+                      {
+                        console.log(item[1], 'item');
+                        switch (item[1]) {
+                          case SECTION.TABLE:
+                            return (
+                              <TableContainer
+                                currentPack={currentPack}
+                                copy={canCopy}
+                              />
+                            );
+                            break;
+                          case SECTION.CTA:
+                            return (
+                              <View style={styles.boxStyle}>
+                                <AddItemModal
+                                  currentPackId={currentPackId}
                                   currentPack={currentPack}
-                                  copy={canCopy}
+                                  isAddItemModalOpen={isAddItemModalOpen}
+                                  setIsAddItemModalOpen={setIsAddItemModalOpen}
+                                  // refetch={refetch}
+                                  setRefetch={() => setRefetch((prev) => !prev)}
                                 />
-                              );
-                              break;
-                            case SECTION.CTA:
-                              return (
-                                <View style={styles.boxStyle}>
-                                  <AddItemModal
-                                    currentPackId={currentPackId}
-                                    currentPack={currentPack}
-                                    isAddItemModalOpen={isAddItemModalOpen}
-                                    setIsAddItemModalOpen={setIsAddItemModalOpen}
-                                    // refetch={refetch}
-                                    setRefetch={() => setRefetch((prev) => !prev)}
-                                  />
-                                </View>
-                              );
-                              break;
-                            case SECTION.SCORECARD:
-                              return (
-                                <ScoreContainer
-                                  type="pack"
-                                  data={currentPack}
-                                  isOwner={isOwner}
-                                />
-                              );
-                              break;
-                            case SECTION.CHAT:
-                              return (
-                                <View style={styles.boxStyle}>
-                                  <ChatContainer />
-                                </View>
-                              );
-                              break;
-                            default:
-                              return null;
-                          }
+                              </View>
+                            );
+                            break;
+                          case SECTION.SCORECARD:
+                            return (
+                              <ScoreContainer
+                                type="pack"
+                                data={currentPack}
+                                isOwner={isOwner}
+                              />
+                            );
+                            break;
+                          case SECTION.CHAT:
+                            return (
+                              <View style={styles.boxStyle}>
+                                <ChatContainer />
+                              </View>
+                            );
+                            break;
+                          default:
+                            return null;
                         }
-                      }}
-                    />
-                  </View>
-                </>
-              }
-              link={link}
-            />
-          </>
-        )}
-      </View>
-    </>
+                      }
+                    }}
+                  />
+                </View>
+              </>
+            }
+            link={link}
+          />
+        </>
+      )}
+    </View>
   );
 }
 
