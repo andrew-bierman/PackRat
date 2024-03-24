@@ -11,13 +11,15 @@ const ContextMenu = {
     (props: ContentProps) => (
       <ZeegoContextMenu.Content
         {...props}
-        style={{
-          backgroundColor: 'white',
-          padding: 10,
-          borderRadius: 8,
-          gap: 10,
-          boxShadow: '0px 0px 16px -8px #484848',
-        }}
+        style={
+          {
+            backgroundColor: 'white',
+            padding: 10,
+            borderRadius: 8,
+            gap: 10,
+            boxShadow: '0px 0px 16px -8px #484848',
+          } as any
+        }
       />
     ),
     'Content',
@@ -26,15 +28,17 @@ const ContextMenu = {
     (props: ItemProps) => (
       <ZeegoContextMenu.Item
         {...props}
-        style={{
-          padding: 10,
-          backgroundColor: 'white',
-          flexDirection: 'row',
-          alignItems: 'center',
-          hoverStyle: {
-            backgroundColor: 'gray',
-          },
-        }}
+        style={
+          {
+            padding: 10,
+            backgroundColor: 'white',
+            flexDirection: 'row',
+            alignItems: 'center',
+            hoverStyle: {
+              backgroundColor: 'gray',
+            },
+          } as any
+        }
       />
     ),
     'Item',

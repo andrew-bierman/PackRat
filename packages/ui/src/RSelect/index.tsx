@@ -1,6 +1,15 @@
 import { useMemo } from 'react';
 import { Check, ChevronDown } from '@tamagui/lucide-icons';
-import { Adapt, Select, Sheet, YStack, getFontSize } from 'tamagui';
+import {
+  Adapt,
+  Select as OriginalSelect,
+  Sheet,
+  YStack as OriginalYStack,
+  getFontSize,
+} from 'tamagui';
+
+const YStack: any = OriginalYStack;
+const Select: any = OriginalSelect;
 
 // Entry point for the Select component
 export default function RSelect(props) {
@@ -106,8 +115,8 @@ export function SelectItem(props) {
           </Sheet.Frame>
           <Sheet.Overlay
             animation="lazy"
-            enterStyle={{ opacity: 0 }}
-            exitStyle={{ opacity: 0 }}
+            enterStyle={{ opacity: 0 } as any}
+            exitStyle={{ opacity: 0 } as any}
           />
         </Sheet>
       </Adapt>

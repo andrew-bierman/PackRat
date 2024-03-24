@@ -1,7 +1,15 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useState } from 'react';
 
-import { Adapt, Button, Dialog, Sheet } from 'tamagui';
+import {
+  Adapt,
+  Button,
+  Dialog as OriginalDialog,
+  Sheet as OriginalSheet,
+} from 'tamagui';
+
+const Dialog: any = OriginalDialog;
+const Sheet: any = OriginalSheet;
 
 interface BaseDialogProps {
   title: string;

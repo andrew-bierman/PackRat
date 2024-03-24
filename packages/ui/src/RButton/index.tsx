@@ -9,7 +9,7 @@ interface HapticRButtonProps extends ButtonProps {
 const StyledButton = styled(Button, {
   backgroundColor: '#0C66A1', // temp fix, we need to set up proper tamagui theme
   color: 'white',
-});
+} as any);
 
 const RButton: React.FC<HapticRButtonProps> = ({
   hapticStrength,
