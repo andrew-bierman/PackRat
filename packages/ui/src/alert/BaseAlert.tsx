@@ -1,11 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Button, Dialog } from 'tamagui';
+import { Button, AlertDialog } from 'tamagui';
 import { X } from '@tamagui/lucide-icons';
 import RButton from '@packrat/ui/src/RButton';
 import RStack from '@packrat/ui/src/RStack';
-import { useModal, ModalProvider } from './provider';
+import { useAlert, AlertProvider } from './provider';
 
-export interface BaseModalProps {
+export interface BaseAlertProps {
   id?: string;
   title: string;
   trigger?: string;
@@ -19,7 +19,7 @@ export interface BaseModalProps {
   toggle?: any;
 }
 
-export const BaseModal = ({
+export const BaseAlert = ({
   triggerComponent,
   title,
   trigger,
@@ -29,29 +29,29 @@ export const BaseModal = ({
   hideIcon = false,
   isOpen = undefined,
   toggle,
-}: BaseModalProps) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+}: BaseAlertProps) => {
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
 
   useEffect(() => {
     if(isOpen !== undefined) {
-      setIsModalOpen(isOpen)
+      setIsAlertOpen(isOpen)
     }
   }, [isOpen])
 
   const triggerElement = useMemo(() => {
     return triggerComponent ? (
       <RButton
-        onPress={() => setIsModalOpen(true)}
+        onPress={() => setIsAlertOpen(true)}
         style={{ backgroundColor: 'transparent' }}
         backgroundColor={'transparent'}
       >
-        {React.cloneElement(triggerComponent, { setIsModalOpen })}
+        {React.cloneElement(triggerComponent, { setIsAlertOpen })}
       </RButton>
     ) : (
       <RButton
         top={5}
         alignSelf={'center'}
-        onPress={() => setIsModalOpen(true)}
+        onPress={() => setIsAlertOpen(true)}
       >
         {trigger}
       </RButton>
@@ -64,8 +64,8 @@ export const BaseModal = ({
     return footerButtons.map(({ color, label, onClick, ...button }, index) => (
       <RButton
         key={index}
-        onPress={withModalCloseHandler(onClick, () => {
-          setIsModalOpen(false)
+        onPress={withAlertCloseHandler(onClick, () => {
+          setIsAlertOpen(false)
           if(toggle) {
             toggle()
           }
@@ -82,21 +82,21 @@ export const BaseModal = ({
 
   const footerElement = useMemo(() => {
     return (
-      footerComponent && React.cloneElement(footerComponent, { setIsModalOpen })
+      footerComponent && React.cloneElement(footerComponent, { setIsAlertOpen })
     );
   }, [footerComponent]);
 
   return (
-    <Dialog
+    <AlertDialog
       modal
-      open={isModalOpen}
+      open={isAlertOpen}
       onOpenChange={(open) => {
-        setIsModalOpen(open);
+        setIsAlertOpen(open);
       }}
     >
-     {!hideIcon && <Dialog.Trigger asChild>{triggerElement}</Dialog.Trigger>}
-      <Dialog.Portal>
-        <Dialog.Overlay
+     {!hideIcon && <AlertDialog.Trigger asChild>{triggerElement}</AlertDialog.Trigger>}
+      <AlertDialog.Portal>
+        <AlertDialog.Overlay
           key="overlay"
           animation="quick"
           opacity={0.5}
@@ -105,7 +105,7 @@ export const BaseModal = ({
           minWidth={400}
         />
 
-        <Dialog.Content
+        <AlertDialog.Content
           bordered
           elevate
           key="content"
@@ -122,15 +122,15 @@ export const BaseModal = ({
           exitStyle={{ x: 0, y: 10, opacity: 0, scale: 0.95 }}
           gap="$4"
         >
-          <Dialog.Title>{title}</Dialog.Title>
-          <Dialog.Description>
-            <ModalProvider
-              isModalOpen={isModalOpen}
-              setIsModalOpen={setIsModalOpen}
+          <AlertDialog.Title>{title}</AlertDialog.Title>
+          <AlertDialog.Description>
+            <AlertProvider
+              isAlertOpen={isAlertOpen}
+              setIsAlertOpen={setIsAlertOpen}
             >
               {children}
-            </ModalProvider>
-          </Dialog.Description>
+            </AlertProvider>
+          </AlertDialog.Description>
 
           <RStack
             style={{ alignSelf: 'flex-end', flexDirection: 'row' }}
@@ -139,10 +139,10 @@ export const BaseModal = ({
             {memoFooterButtons}
           </RStack>
           {footerElement}
-          <Dialog.Close asChild>
+          <AlertDialog.Cancel asChild>
             <Button
               onPress={() => {
-                setIsModalOpen(false);
+                setIsAlertOpen(false);
                 if(toggle) {
                   toggle()
                 }
@@ -155,14 +155,14 @@ export const BaseModal = ({
               circular
               icon={X}
             />
-          </Dialog.Close>
-        </Dialog.Content>
-      </Dialog.Portal>
-    </Dialog>
+          </AlertDialog.Cancel>
+        </AlertDialog.Content>
+      </AlertDialog.Portal>
+    </AlertDialog>
   );
 };
 
-const withModalCloseHandler =
+const withAlertCloseHandler =
   (fn, closeHandler) =>
   (...args) =>
     fn?.(...args, closeHandler.bind(null, false));

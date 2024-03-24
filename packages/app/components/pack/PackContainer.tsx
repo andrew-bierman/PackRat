@@ -59,36 +59,38 @@ export default function PackContainer({ isCreatingTrip = false }) {
 
   const dataValues = packs?.map((item) => item?.name) ?? [];
 
-  return dataValues?.length > 0 ? (
-    <View style={styles.mainContainer}>
-      <DropdownComponent
-        data={packs ?? []}
-        textKey={'name'}
-        valueKey={'_id'}
-        value={currentPackId}
-        onValueChange={handlePack}
-        placeholder={'Select a Pack'}
-        width={300}
-      />
-      {currentPackId && (
-        <>
-          <AddItemModal
-            currentPackId={currentPackId}
-            currentPack={currentPack}
-            isAddItemModalOpen={isAddItemModalOpen}
-            setIsAddItemModalOpen={setIsAddItemModalOpen}
-          />
-          <TableContainer
-            key={`table - ${currentPackId}`}
-            currentPack={currentPack}
-            selectedPack={currentPackId}
-            refetch={refetch}
-            setRefetch={setRefetch}
-          />
-        </>
-      )}
-    </View>
-  ) : null;
+  return (
+    dataValues?.length > 0 && (
+      <View style={styles.mainContainer}>
+        <DropdownComponent
+          data={packs ?? []}
+          textKey={'name'}
+          valueKey={'_id'}
+          value={currentPackId}
+          onValueChange={handlePack}
+          placeholder={'Select a Pack'}
+          width={300}
+        />
+        {currentPackId && (
+          <>
+            <AddItemModal
+              currentPackId={currentPackId}
+              currentPack={currentPack}
+              isAddItemModalOpen={isAddItemModalOpen}
+              setIsAddItemModalOpen={setIsAddItemModalOpen}
+            />
+            <TableContainer
+              key={`table - ${currentPackId}`}
+              currentPack={currentPack}
+              selectedPack={currentPackId}
+              refetch={refetch}
+              setRefetch={setRefetch}
+            />
+          </>
+        )}
+      </View>
+    )
+  );
 }
 
 const loadStyles = () => ({

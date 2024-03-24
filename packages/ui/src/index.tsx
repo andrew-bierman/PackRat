@@ -76,6 +76,7 @@ export * from './form';
 export { config } from './tamagui.config';
 // export * from 'tamagui';
 export * from './modal';
+export * from './alert';
 export * from './dialog';
 export * from '@tamagui/toast';
 export * from './toast';

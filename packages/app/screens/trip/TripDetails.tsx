@@ -48,7 +48,7 @@ export function TripDetails() {
   // }, [dispatch, tripId]);
 
   if (isLoading) return <RText>Loading...</RText>;
-
+  console.log("isError", isError)
   if (isError) return <RText>There was an error</RText>;
 
   return (

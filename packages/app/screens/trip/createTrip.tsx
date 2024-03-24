@@ -1,5 +1,4 @@
-import { RStack } from '@packrat/ui';
-import { ScrollView } from 'react-native';
+import { RScrollView, RStack } from '@packrat/ui';
 import { theme } from '../../theme';
 import TripCard from '../../components/TripCard';
 import WeatherCard from '../../components/weather/WeatherCard';
@@ -36,7 +35,7 @@ export default function Trips() {
   } = useTripsData();
 
   return (
-    <ScrollView nestedScrollEnabled={true}>
+    <RScrollView nestedScrollEnabled={true}>
       <RStack style={styles.mutualStyles}>
         {/* <MultiStepForm steps={steps} /> */}
         <RStack style={styles.container}>
@@ -115,7 +114,7 @@ export default function Trips() {
           </RStack>
         </RStack>
       </RStack>
-    </ScrollView>
+    </RScrollView>
   );
 }
 

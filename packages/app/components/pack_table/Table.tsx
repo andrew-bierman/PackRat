@@ -1,5 +1,6 @@
+/* eslint-disable react/react-in-jsx-scope */
 import { RButton, RCheckbox, RSkeleton, RStack, RText } from '@packrat/ui';
-import { FlatList, Platform, View } from 'react-native';
+import { FlatList, Platform, Text, View } from 'react-native';
 import { Cell, Row, Table } from 'react-native-table-component';
 import { usePackTable } from 'app/hooks/packs/usePackTable';
 import useCustomStyles from 'app/hooks/useCustomStyles';
@@ -82,10 +83,11 @@ export const TableContainer = ({
                 'Item Name',
                 `Weight`,
                 'Quantity',
-                'Category',
-                'Edit',
-                'Delete',
-                `${copy ? 'Copy' : 'Ignore'}`,
+                // 'Category',
+                'Actions',
+                // 'Edit',
+                // 'Delete',
+                // `${copy ? 'Copy' : 'Ignore'}`,
               ].map((header, index) => (
                 <Cell key={index} data={header} textStyle={styles.headerText} />
               ))}
@@ -145,7 +147,7 @@ export const TableContainer = ({
           />
         </>
       ) : (
-        <RText style={styles.noItemsText}>Add your First Item</RText>
+        <Text style={styles.noItemsText}>Add your First Item</Text>
       )}
       <WeightUnitDropdown value={weightUnit} onChange={setWeightUnit} />
     </View>

@@ -4,7 +4,12 @@ import { AddItem } from '../item/AddItem';
 import { View } from 'react-native';
 import { BaseModal, useModal } from '@packrat/ui';
 
-export const EditPackItemModal = ({ children }) => {
+export const EditPackItemModal = ({
+  children,
+  hideIcon = false,
+  isOpen,
+  toggle,
+}) => {
   const footerButtons = [
     {
       label: 'Cancel',
@@ -22,7 +27,10 @@ export const EditPackItemModal = ({ children }) => {
   return (
     <View>
       <BaseModal
+        isOpen={isOpen}
+        toggle={toggle}
         title={'Edit Item'}
+        hideIcon={hideIcon}
         triggerComponent={<MaterialIcons name="edit" size={20} color="black" />}
         footerButtons={footerButtons}
       >

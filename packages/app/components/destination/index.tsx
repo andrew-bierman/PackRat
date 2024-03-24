@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { ScrollView, View } from 'react-native';
-import { RText } from '@packrat/ui';
+import { View } from 'react-native';
+import { Container, Text } from 'native-base';
 import { useRouter } from 'app/hooks/router';
 import { createParam } from 'app/hooks/params';
 import useTheme from '../../hooks/useTheme';
@@ -21,6 +21,7 @@ import {
 } from 'app/hooks/destination';
 import { WeatherData } from '../weather/WeatherData';
 import { useGEOLocationSearch } from 'app/hooks/geojson';
+import { RScrollView } from '@packrat/ui';
 
 const DestinationHeader = ({ geoJSON, selectedSearchResult }) => {
   const styles = useCustomStyles(loadStyles);
@@ -99,7 +100,7 @@ export const DestinationPage = () => {
   const map = () => <MapContainer shape={shape} />;
 
   return (
-    <ScrollView>
+    <RScrollView>
       {!isLoading && !isError && (
         <View style={styles.container}>
           <DestinationHeader
@@ -122,7 +123,7 @@ export const DestinationPage = () => {
           <WeatherData geoJSON={currentDestination} />
         </View>
       )}
-    </ScrollView>
+    </RScrollView>
   );
 };
 

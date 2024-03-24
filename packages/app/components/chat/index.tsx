@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -163,7 +163,7 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
           //       <Text style={styles.newChatButtonText}>New Chat</Text>
           //     </TouchableOpacity>
           //   </Box>
-          // </ScrollView>
+          // </RScrollView>
         )}
         <MessageList messages={parsedMessages} />
         <Form

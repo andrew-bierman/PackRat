@@ -20,6 +20,7 @@ const loaderStyles = {
     marginTop: 20,
     justifyContent: 'center',
     gap: 8,
+    alignItems: 'center',
   },
   heading: {
     color: '#0a84ff',

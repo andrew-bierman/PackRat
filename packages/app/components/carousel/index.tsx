@@ -1,11 +1,6 @@
-import React, { useRef, useState, ReactNode } from 'react';
-import {
-  ScrollView,
-  Platform,
-  Dimensions,
-  NativeScrollEvent,
-} from 'react-native';
-import { RStack } from '@packrat/ui';
+import React, { useRef, useState, type ReactNode } from 'react';
+import { Platform, Dimensions, type NativeScrollEvent } from 'react-native';
+import { RStack, RScrollView } from '@packrat/ui';
 import ScrollButton from './ScrollButton';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 
@@ -17,7 +12,7 @@ interface CarouselProps {
 const { height, width } = Dimensions.get('window');
 
 const Carousel: React.FC<CarouselProps> = ({ children = [], itemWidth }) => {
-  const scrollViewRef = useRef<ScrollView>(null);
+  const scrollViewRef = useRef<RScrollView>(null);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const styles = useCustomStyles(loadStyles);
 
@@ -55,7 +50,7 @@ const Carousel: React.FC<CarouselProps> = ({ children = [], itemWidth }) => {
         disabled={currentIndex === 0}
       />
 
-      <ScrollView
+      <RScrollView
         ref={scrollViewRef}
         horizontal
         scrollEnabled={Platform.OS === 'web'}
@@ -80,7 +75,7 @@ const Carousel: React.FC<CarouselProps> = ({ children = [], itemWidth }) => {
               {child}
             </RStack>
           ))}
-      </ScrollView>
+      </RScrollView>
       <ScrollButton
         direction="right"
         onPress={() => {
