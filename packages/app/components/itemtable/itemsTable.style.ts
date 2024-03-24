@@ -46,6 +46,7 @@ export const loadStyles = () => {
     headerText: {
       fontWeight: 'bold',
       color: '#000000',
+      fontSize: 12,
     },
     row: {
       flexDirection: 'row',
@@ -72,6 +73,10 @@ export const loadStyles = () => {
       display: 'flex',
       flexDirection: 'row-reverse',
       justifyContent: 'space-around',
+    },
+    rowText: {
+      fontSize: 12,
+      paddingRight: 4,
     },
   };
 };
