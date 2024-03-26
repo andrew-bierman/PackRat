@@ -2,7 +2,6 @@ import { util } from 'zod';
 import { queryTrpc } from '../../trpc';
 import { useItemsUpdater } from 'app/hooks/items';
 import { useOfflineQueue } from 'app/hooks/offline';
-import { ItemCategoryEnum } from 'app/constants/itemCategory';
 
 // TODO refactor pack / items, separate logic
 export const useEditPackItem = (isItemPage) => {
