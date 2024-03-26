@@ -2,6 +2,7 @@ import { util } from 'zod';
 import { queryTrpc } from '../../trpc';
 import { useItemsUpdater } from 'app/hooks/items';
 import { useOfflineQueue } from 'app/hooks/offline';
+import { ItemCategoryEnum } from 'app/constants/itemCategory';
 
 // TODO refactor pack / items, separate logic
 export const useEditPackItem = (isItemPage) => {
@@ -30,6 +31,9 @@ export const useEditPackItem = (isItemPage) => {
             return {
               ...item,
               ...editedItem,
+              category: ItemCategoryEnum[editedItem.type] ? {
+                name: ItemCategoryEnum[editedItem.type]
+              } : undefined
             };
           }
           return item;
