@@ -1,7 +1,6 @@
 import Item from '../../models/itemModel';
 import Pack from '../../models/packModel';
 import { ItemCategoryModel } from '../../models/itemCategory';
-import { ItemCategoryEnum } from '../../utils/itemCategory';
 import type { Document as MongooseDocument } from 'mongoose';
 import type { ObjectId } from 'mongodb';
 /**
@@ -40,7 +39,7 @@ export const addItemService = async (
   ownerId,
 ) => {
   const category = await ItemCategoryModel.findOne({
-    name: ItemCategoryEnum[type],
+    name: type,
   });
 
   const newItem: ItemType | null = await Item.create({
