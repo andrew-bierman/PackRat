@@ -1,4 +1,3 @@
-import { ItemCategoryEnum } from 'server/src/utils/itemCategory';
 import { queryTrpc } from '../../trpc';
 
 export const useAddPackItem = () => {
