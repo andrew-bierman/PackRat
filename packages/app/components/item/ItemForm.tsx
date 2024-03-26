@@ -57,9 +57,9 @@ export const ItemForm = ({
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
 
-  const radioOptions = Object.values(ItemCategoryEnum)
-    .filter((value) => !(hasWaterAdded && value === ItemCategoryEnum.WATER))
-    .map((radioOption) => ({ label: radioOption, value: radioOption }));
+  const radioOptions = Object.entries(ItemCategoryEnum)
+    .filter(([_, value]) => !(hasWaterAdded && value === ItemCategoryEnum.WATER))
+    .map(([key, value]) => ({ label: value, value: key }));
 
   return (
     <View>
