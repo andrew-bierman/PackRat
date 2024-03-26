@@ -31,9 +31,7 @@ export const useEditPackItem = (isItemPage) => {
             return {
               ...item,
               ...editedItem,
-              category: ItemCategoryEnum[editedItem.type] ? {
-                name: ItemCategoryEnum[editedItem.type]
-              } : undefined
+              category: editedItem.type ? editedItem.type : undefined
             };
           }
           return item;

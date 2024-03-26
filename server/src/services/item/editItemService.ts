@@ -1,6 +1,5 @@
 import Item from '../../models/itemModel';
 import { ItemCategoryModel } from '../../models/itemCategory';
-import { ItemCategoryEnum } from '../../utils/itemCategory';
 
 /**
  * Edit an item in the service.
@@ -22,7 +21,7 @@ export const editItemService = async (
   type,
 ) => {
   const category = await ItemCategoryModel.findOne({
-    name: ItemCategoryEnum[type],
+    name: type,
   });
 
   if (!category) {
