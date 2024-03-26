@@ -35,7 +35,7 @@ export const Navbar = () => {
 const NavbarStyles = {
   floatingBg: 'rgba(52,168,154, 0.7)',
   floatingRadius: 25,
-  floatingBlur: 'blur(16px)',
+  floatingBlur: 'blur(2px)',
   transition: 'all 0.2s ease-in-out',
   floatingSpacing: 4,
 };
@@ -67,7 +67,7 @@ const loadStyles = (currentTheme, isScrolled, screenWidth) => {
       transition: NavbarStyles.transition,
       ...(isFloating
         ? {
-            backgroundFilter: NavbarStyles.floatingBlur,
+            backdropFilter: NavbarStyles.floatingBlur,
             marginTop: NavbarStyles.floatingSpacing,
             padding: NavbarStyles.floatingSpacing,
             borderRadius: NavbarStyles.floatingRadius,

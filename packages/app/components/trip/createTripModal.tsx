@@ -44,7 +44,6 @@ export const SaveTripContainer = ({
 }: SaveTripContainerProps) => {
   const user = useAuthUser();
   const [packId] = usePackId();
-
   // defining dispatch
   const { addTrip, isSuccess, data: response } = useAddTrip();
   const [formRef, submitTrigger] = useFormSubmitTrigger();

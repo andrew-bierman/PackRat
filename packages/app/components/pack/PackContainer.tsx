@@ -8,10 +8,10 @@ import { AddItemModal } from './AddItemModal';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useAuthUser } from 'app/auth/hooks';
 import { usePackId } from 'app/hooks/packs';
+import { createParam } from '@packrat/crosspath';
 
 export default function PackContainer({ isCreatingTrip = false }) {
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
-
   const [packIdParam] = usePackId();
   const [currentPackId, setCurrentPackId] = useState(packIdParam);
   const user = useAuthUser();
@@ -19,8 +19,12 @@ export default function PackContainer({ isCreatingTrip = false }) {
 
   const [refetch, setRefetch] = useState(false);
   const styles = useCustomStyles(loadStyles);
+  const { useParams } = createParam<{ id: number }>();
+  const {params, setParams} = useParams('id');
 
   // TODO - improve refetch logic. Should be handled entirely by the hook
+
+  let ownerId;
   const {
     data: packs,
     error,
@@ -45,7 +49,9 @@ export default function PackContainer({ isCreatingTrip = false }) {
     setCurrentPackId(selectedPack?._id);
 
     if (isCreatingTrip && selectedPack?._id) {
-      searchParams.set('packId', selectedPack?._id);
+     setParams({
+      id: selectedPack?._id
+     }) 
     }
   };
 
