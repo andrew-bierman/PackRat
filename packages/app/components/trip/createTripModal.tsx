@@ -19,6 +19,7 @@ import { DropdownComponent } from '../Dropdown';
 import { useAuthUser } from 'app/auth/hooks';
 import { addTripForm } from '@packrat/validations/src/validations/tripRoutesValidator';
 import { useFormSubmitTrigger } from '@packrat/ui/src/form';
+import { usePackId } from 'app/hooks/packs';
 
 interface SaveTripContainerProps {
   dateRange: {
@@ -154,7 +155,7 @@ export const SaveTripContainer = ({
     >
       <Form
         validationSchema={addTripForm}
-        formRef={formRef}
+        ref={formRef}
         onSubmit={handleCreateTrip}
         defaultValues={{ isPublic: '0' }}
       >

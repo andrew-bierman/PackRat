@@ -57,10 +57,8 @@ export const AddPack = ({ isCreatingTrip = false }) => {
     <View style={styles.container}>
       <View style={styles.mobileStyle}>
         <Form
-          onSubmit={handleAddPack}
           defaultValues={{ isPublic: '0', name: '' }}
           validationSchema={addPackSchema}
-          formElProps={{ style: styles.form }}
         >
           <FormInput
             placeholder="Name"
@@ -78,7 +76,10 @@ export const AddPack = ({ isCreatingTrip = false }) => {
             accessibilityLabel="Choose Service"
             placeholder={'Is Public'}
           />
-          <SubmitButton style={{ width: '100%', marginTop: 40 }}>
+          <SubmitButton
+            style={{ width: '100%', marginTop: 40 }}
+            onSubmit={handleAddPack}
+          >
             <RText style={{ color: currentTheme.colors.text }}>
               {isLoading ? 'Loading...' : 'Add Pack'}
             </RText>
