@@ -25,6 +25,9 @@ const WaySchema = new Schema(
 
 // WaySchema.plugin(autopopulate);
 
+// Adding an index to the 'osm_id' field
+WaySchema.index({ osm_id: 1 }, { unique: true });
+
 WaySchema.pre('save', async function (next) {
   try {
     if (this.osm_type !== 'way') {
