@@ -51,7 +51,7 @@ const FeedSearchFilter = ({
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
 
-  const onSearch = ({ search }) => console.log(search);
+  const onSearch = ({ search }) => setSearchQuery(search);
 
   return (
     <View style={styles.filterContainer}>

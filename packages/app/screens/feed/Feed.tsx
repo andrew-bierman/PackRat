@@ -98,7 +98,6 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
     // Convert fuse results back into the format we want
     // if searchQuery is empty, use the original data
     arrayData = searchQuery ? results.map((result) => result.item) : data;
-
     const feedSearchFilterComponent = (
       <FeedSearchFilter
         feedType={feedType}
@@ -115,7 +114,7 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
     return (
       <View style={{ flex: 1, paddingBottom: Platform.OS === 'web' ? 10 : 0 }}>
         <FlatList
-          data={data}
+          data={searchQuery?arrayData:data}
           horizontal={false}
           keyExtractor={(item) => item?._id + item?.type}
           renderItem={({ item }) => (
@@ -176,7 +175,7 @@ const loadStyles = (theme) => {
       backgroundColor: currentTheme.colors.background,
       fontSize: 18,
       padding: 15,
-      ...(Platform.OS !== "web" && {paddingVertical: 0})
+      ...(Platform.OS !== 'web' && { paddingVertical: 0 }),
     },
     filterContainer: {
       backgroundColor: currentTheme.colors.card,
@@ -184,7 +183,7 @@ const loadStyles = (theme) => {
       fontSize: 18,
       width: '100%',
       borderRadius: 10,
-      marginTop:20
+      marginTop: 20,
     },
     searchContainer: {
       flexDirection: 'row',
