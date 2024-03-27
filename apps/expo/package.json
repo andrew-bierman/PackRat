@@ -139,8 +139,7 @@
     "togpx": "^0.5.4",
     "uuid": "3.4.0",
     "xmldom": "^0.6.0",
-    "zeego": "^1.7.2",
-    "zod": "^3.22.2"
+    "zeego": "^1.7.2"
   },
   "devDependencies": {
     "@babel/core": "^7.23.7",

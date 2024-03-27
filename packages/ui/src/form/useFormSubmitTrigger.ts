@@ -1,10 +1,9 @@
 import { useRef } from 'react';
 
 export const useFormSubmitTrigger = () => {
-  const formRef = useRef(null);
+  const formRef = useRef<{ submit: (...params: any) => void }>(null);
 
   const triggerFormSubmit = (...params) => {
-    console.log(params);
     formRef.current?.submit?.(...params);
   };
 

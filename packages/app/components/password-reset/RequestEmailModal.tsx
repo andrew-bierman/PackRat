@@ -16,8 +16,6 @@ export const RequestPasswordResetEmailModal = () => {
 
   const [formRef, triggerSubmit] = useFormSubmitTrigger();
 
-  console.log(formRef);
-
   return (
     <BaseModal
       title="Reset Password"
@@ -38,7 +36,7 @@ export const RequestPasswordResetEmailModal = () => {
       ]}
     >
       <Form
-        formRef={formRef}
+        ref={formRef}
         onSubmit={handleResetPasswordEmail}
         validationSchema={emailExists}
       >

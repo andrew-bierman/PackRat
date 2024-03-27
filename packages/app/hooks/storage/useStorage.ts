@@ -30,8 +30,8 @@ export function useStorage(key: string): UseStateHook<string> {
       setState(null);
     };
 
-    storageEvents.addListener('change', handleChange);
-    storageEvents.addListener('remove', handleRemove);
+    storageEvents.once('change', handleChange);
+    storageEvents.once('remove', handleRemove);
 
     return () => {
       storageEvents.removeListener('change', handleChange);
