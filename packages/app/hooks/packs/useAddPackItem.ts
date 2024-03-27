@@ -23,6 +23,9 @@ export const useAddPackItem = () => {
             global: false,
             packs: [newItem._id],
             _id: Date.now().toString(),
+            category: newItem.type ? {
+              name: newItem.type
+            } : undefined
           },
         ],
       };
