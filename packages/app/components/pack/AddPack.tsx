@@ -6,6 +6,8 @@ import {
   Form,
   FormSelect,
   FormInput,
+  useFormSubmitTrigger,
+  SubmitButton,
 } from '@packrat/ui';
 import { BaseModal } from '@packrat/ui';
 import useTheme from '../../hooks/useTheme';
@@ -20,6 +22,7 @@ export const AddPack = ({ isCreatingTrip = false }) => {
     useTheme();
   const styles = useCustomStyles(loadStyles);
   const router = useRouter();
+  const [formRef, submitTrigger] = useFormSubmitTrigger();
 
   const {
     addNewPack,
@@ -55,9 +58,9 @@ export const AddPack = ({ isCreatingTrip = false }) => {
     <View style={styles.container}>
       <View style={styles.mobileStyle}>
         <Form
-          onSubmit={handleAddPack}
           defaultValues={{ isPublic: '0', name: '' }}
           validationSchema={addPackSchema}
+          formRef={formRef}
         >
           <FormInput
             placeholder="Name"
@@ -75,11 +78,11 @@ export const AddPack = ({ isCreatingTrip = false }) => {
             accessibilityLabel="Choose Service"
             placeholder={'Is Public'}
           />
-          <RButton style={{ width: '100%', marginTop: 40 }}>
+          <SubmitButton style={{ width: '100%', marginTop: 40 }} onSubmit={handleAddPack}>
             <RText style={{ color: currentTheme.colors.text }}>
               {isLoading ? 'Loading...' : 'Add Pack'}
             </RText>
-          </RButton>
+          </SubmitButton>
         </Form>
 
         {isError && <RText>Pack already exists</RText>}
