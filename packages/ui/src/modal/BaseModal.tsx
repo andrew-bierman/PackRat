@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState, forwardRef, useImperativeHandle } from 'react';
 import { Button, Dialog } from 'tamagui';
 import { X } from '@tamagui/lucide-icons';
 import RButton from '@packrat/ui/src/RButton';
@@ -14,6 +14,9 @@ export interface BaseModalProps {
   footerButtons?: any[];
   triggerComponent?: React.DetailedReactHTMLElement<any, HTMLElement>;
   footerComponent: React.DetailedReactHTMLElement<any, HTMLElement>;
+  isOpen?: Boolean;
+  onClose?: () => void;
+  showTrigger?: Boolean;
 }
 
 export const BaseModal = ({
@@ -23,8 +26,15 @@ export const BaseModal = ({
   footerButtons,
   footerComponent,
   children,
+  onClose,
+  isOpen,
+  showTrigger = true
 }: BaseModalProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (isOpen !== undefined && isModalOpen !== isOpen) setIsModalOpen(!!isOpen);
+  }, [isOpen]);
 
   const triggerElement = useMemo(() => {
     return triggerComponent ? (
@@ -75,9 +85,10 @@ export const BaseModal = ({
       open={isModalOpen}
       onOpenChange={(open) => {
         setIsModalOpen(open);
+        if (!open && onClose) onClose();
       }}
     >
-      <Dialog.Trigger asChild>{triggerElement}</Dialog.Trigger>
+      {showTrigger && <Dialog.Trigger asChild>{triggerElement}</Dialog.Trigger>}
       <Dialog.Portal>
         <Dialog.Overlay
           key="overlay"
