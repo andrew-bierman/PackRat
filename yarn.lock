@@ -17217,6 +17217,7 @@ __metadata:
     expo-document-picker: "npm:~11.5.4"
     expo-file-system: "npm:~15.4.4"
     expo-font: "npm:~11.4.0"
+    expo-haptics: "npm:~12.8.1"
     expo-image-picker: "npm:^14.7.1"
     expo-linear-gradient: "npm:~12.3.0"
     expo-linking: "npm:~5.0.2"
@@ -17394,6 +17395,15 @@ __metadata:
   peerDependencies:
     expo: "*"
   checksum: 10/4310e76a5f2ba113d6362de15c592585ce6de8a31c9a74806eb7c9702976e311bc2b838212513b92af15b98d2a5cd3460fdaa0a7a26f96ee6a881b9fe24d9d7a
+  languageName: node
+  linkType: hard
+
+"expo-haptics@npm:~12.8.1":
+  version: 12.8.1
+  resolution: "expo-haptics@npm:12.8.1"
+  peerDependencies:
+    expo: "*"
+  checksum: 10/62caee68d368c95ec91d0477c14ff538d66bb0c4707521153fc0ff396b72289fda158cd3858edb710f8a65ed9633709f9909af202506007da299813241bdff0b
   languageName: node
   linkType: hard
 
