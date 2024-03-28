@@ -202,7 +202,7 @@ export const SaveTripContainer = ({
             <FormSelect
               options={isPublicOptions}
               placeholder="Is Public"
-              name="public"
+              name="isPublic"
               style={{ marginTop: 4, marginBottom: 4 }}
               width={150}
             />
