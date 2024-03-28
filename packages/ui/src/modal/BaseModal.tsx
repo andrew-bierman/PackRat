@@ -1,9 +1,18 @@
-import React, { useEffect, useMemo, useRef, useState, forwardRef, useImperativeHandle } from 'react';
-import { Button, Dialog } from 'tamagui';
+import React, {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  forwardRef,
+  useImperativeHandle,
+} from 'react';
+import { Button, Dialog, DialogContent } from 'tamagui';
 import { X } from '@tamagui/lucide-icons';
 import RButton from '@packrat/ui/src/RButton';
 import RStack from '@packrat/ui/src/RStack';
 import { useModal, ModalProvider } from './provider';
+import { Platform, Dimensions } from 'react-native';
+
 
 export interface BaseModalProps {
   id?: string;
@@ -28,12 +37,13 @@ export const BaseModal = ({
   children,
   onClose,
   isOpen,
-  showTrigger = true
+  showTrigger = true,
 }: BaseModalProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    if (isOpen !== undefined && isModalOpen !== isOpen) setIsModalOpen(!!isOpen);
+    if (isOpen !== undefined && isModalOpen !== isOpen)
+      setIsModalOpen(!!isOpen);
   }, [isOpen]);
 
   const triggerElement = useMemo(() => {
@@ -79,6 +89,8 @@ export const BaseModal = ({
     );
   }, [footerComponent]);
 
+  const dialogContentStyle = Platform.OS !== 'web' ? { maxWidth: Dimensions.get('screen').width - 36 } : undefined;
+
   return (
     <Dialog
       modal
@@ -87,6 +99,7 @@ export const BaseModal = ({
         setIsModalOpen(open);
         if (!open && onClose) onClose();
       }}
+      
     >
       {showTrigger && <Dialog.Trigger asChild>{triggerElement}</Dialog.Trigger>}
       <Dialog.Portal>
@@ -96,7 +109,6 @@ export const BaseModal = ({
           opacity={0.5}
           enterStyle={{ opacity: 0 }}
           exitStyle={{ opacity: 0 }}
-          minWidth={400}
         />
 
         <Dialog.Content
@@ -115,16 +127,15 @@ export const BaseModal = ({
           enterStyle={{ x: 0, y: -20, opacity: 0, scale: 0.9 }}
           exitStyle={{ x: 0, y: 10, opacity: 0, scale: 0.95 }}
           gap="$4"
+          style={dialogContentStyle}
         >
           <Dialog.Title>{title}</Dialog.Title>
-          <Dialog.Description>
-            <ModalProvider
-              isModalOpen={isModalOpen}
-              setIsModalOpen={setIsModalOpen}
-            >
-              {children}
-            </ModalProvider>
-          </Dialog.Description>
+          <ModalProvider
+            isModalOpen={isModalOpen}
+            setIsModalOpen={setIsModalOpen}
+          >
+            {children}
+          </ModalProvider>
 
           <RStack
             style={{ alignSelf: 'flex-end', flexDirection: 'row' }}
