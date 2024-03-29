@@ -19,6 +19,9 @@ export const NavigationList = ({
           style={ {
             width: '100%',
             borderRadius: 8,
+            marginBottom: isMobileView ? 25 : 0,
+            backgroundColor: currentTheme.colors.background,
+            color: currentTheme.colors.white
           }}
           hoverStyle={ {
             bg: currentTheme.colors.secondaryBlue,
