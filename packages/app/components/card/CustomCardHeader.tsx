@@ -3,13 +3,12 @@ import { RStack, RText } from '@packrat/ui';
 import { View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Link } from '@packrat/crosspath';
-import { useCopyClipboard } from 'app/hooks/common';
+import { useCopyClipboard, } from 'app/hooks/common';
 import { useAuthUser } from 'app/auth/hooks';
 
 export const CustomCardHeader = ({ data, title, link, actionsComponent }) => {
-  const { isCopied, handleCopyLink } = useCopyClipboard(link);
+  const { isCopied, handleCopyLink } = useCopyClipboard(data.items);
   const user = useAuthUser();
-
   return (
     <>
       <RStack>
@@ -37,7 +36,7 @@ export const CustomCardHeader = ({ data, title, link, actionsComponent }) => {
                   name="check"
                   size={24}
                   color="green"
-                  onPress={() => handleCopyLink(link)}
+                  onPress={() => handleCopyLink(data.items)}
                 />
                 <RText color="green">Copied</RText>
               </View>
@@ -47,7 +46,7 @@ export const CustomCardHeader = ({ data, title, link, actionsComponent }) => {
                   name="link"
                   size={24}
                   color="black"
-                  onPress={() => handleCopyLink(link)}
+                  onPress={() => handleCopyLink(data.items)}
                 />
                 <RText color="black">Copy</RText>
               </View>

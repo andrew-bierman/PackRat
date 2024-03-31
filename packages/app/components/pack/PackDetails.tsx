@@ -17,6 +17,8 @@ import { useUserPacks } from 'app/hooks/packs/useUserPacks';
 import { usePackId } from 'app/hooks/packs/usePackId';
 import { useFetchSinglePack } from '../../hooks/packs';
 import { useAuthUser } from 'app/auth/hooks';
+import { useCopyClipboard, } from 'app/hooks/common';
+
 
 const SECTION = {
   TABLE: 'TABLE',
@@ -27,6 +29,7 @@ const SECTION = {
 
 export function PackDetails() {
   // const [canCopy, setCanCopy] = useParam('canCopy')
+  const {copiedData} = useCopyClipboard()
   const canCopy = false;
   const [packId] = usePackId();
   const link = `${CLIENT_URL}/packs/${packId}`;

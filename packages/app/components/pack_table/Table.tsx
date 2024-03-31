@@ -12,6 +12,8 @@ import {
   TitleRow,
 } from './TableHelperComponents';
 import TableItem from './TableItem';
+import { useCopyClipboard } from 'app/hooks/common/useCopyClipboard';
+import { Button } from 'tamagui';
 
 interface TableContainerProps {
   currentPack: any;
@@ -29,6 +31,7 @@ export const TableContainer = ({
   copy,
 }: TableContainerProps) => {
   const styles = useCustomStyles(loadStyles);
+  const { getClipboardData,copiedData } = useCopyClipboard();
   const {
     isLoading,
     error,
@@ -79,6 +82,16 @@ export const TableContainer = ({
   ];
   return (
     <View style={[styles.container, !isWeb && { width: '100%' }]}>
+     <RButton
+              style={{
+                width: 300,
+                marginHorizontal: 'auto',
+                marginTop: 10,
+              }}
+              onPress={getClipboardData}
+            >
+              paste
+            </RButton>
       {data?.length ? (
         <>
           <Table style={styles.tableStyle} flexArr={flexArr}>
@@ -97,7 +110,7 @@ export const TableContainer = ({
                 <>
                   <CategoryRow category={category} />
                   <FlatList
-                    data={items}
+                    data={copiedData?copiedData:items}
                     keyExtractor={(item, index) => item._id}
                     renderItem={({ item }) => (
                       <TableItem
