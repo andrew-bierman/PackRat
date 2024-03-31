@@ -87,6 +87,7 @@ const TableItem = ({
           packId={_id}
           isEdit={true}
           initialData={itemData}
+          setRefetch={setRefetch}
         />
       </EditPackItemModal>
       <DeletePackItemModal
