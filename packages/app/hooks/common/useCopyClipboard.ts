@@ -2,17 +2,18 @@ import { useState } from 'react';
 import Clipboard from '@react-native-community/clipboard';
 import { Platform } from 'react-native';
 
-export const useCopyClipboard = (link?: string) => {
+export const useCopyClipboard = (link?: any) => {
   const [isCopied, setIsCopied] = useState(false);
-  const [copiedData,setCopiedData] = useState('')
+  const [copiedData,setCopiedData] = useState([])
 
   const handleCopyLink = (overideLink = '') => {
     const copyLink = link || overideLink;
 
     if (Platform.OS === 'web') {
       navigator.clipboard
-        .writeText(JSON.stringify(copyLink))
+        .writeText(copyLink)
         .then(() => {
+       setCopiedData(copyLink)
 
           console.log('Text copied to clipboard',copyLink);
         })
@@ -20,7 +21,8 @@ export const useCopyClipboard = (link?: string) => {
           console.error('Failed to copy text to clipboard', err);
         });
     } else {
-      Clipboard.setString(JSON.stringify(copyLink));
+      Clipboard.setString(copyLink);
+      setCopiedData(copyLink)
     }
 
     setIsCopied(true);
@@ -35,25 +37,6 @@ export const useCopyClipboard = (link?: string) => {
     //   duration: 2000,
     // });
   };
-async function getClipboardData(){
-  if(Platform.OS === 'web'){
-  const itemsParse = await navigator.clipboard.readText()
-  try {
-    const parsedData = JSON.parse(itemsParse);
-    setCopiedData(parsedData);
-  } catch (error) {
-    console.error("Failed to parse clipboard content", error);
-  }
-    }
-    else{
-  const items = await Clipboard.getString();
-  try { 
-    const parsedItems = JSON.parse(items);
-    setCopiedData(parsedItems);
-  } catch (error) {
-    console.error("Failed to parse clipboard content", error);
-  }
-    }
-}
-return { handleCopyLink, isCopied ,copiedData,getClipboardData };
+console.log(copiedData,isCopied)
+  return { handleCopyLink, isCopied ,copiedData };
 };
