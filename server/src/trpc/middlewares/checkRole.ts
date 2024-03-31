@@ -10,39 +10,39 @@ import { type User } from '../../db/schema';
  */
 export const checkRole =
   (roles: string[]) =>
-  async ({ ctx, next }) => {
-    const user: User = ctx.user;
+    async ({ ctx, next }) => {
+      const user: User = ctx.user;
 
-    try {
-      // Make sure all roles are valid.
-      roles.forEach((role) => RoleSchema.parse(role));
+      try {
+        // Make sure all roles are valid.
+        roles.forEach((role) => RoleSchema.parse(role));
 
-      // Check if user's role is in the allowed roles list.
-      if (!roles.includes(user.role)) {
-        throw new TRPCError({
-          code: 'FORBIDDEN',
-          message: 'Insufficient permissions',
+        // Check if user's role is in the allowed roles list.
+        if (!roles.includes(user.role)) {
+          throw new TRPCError({
+            code: 'FORBIDDEN',
+            message: 'Insufficient permissions',
+          });
+        }
+
+        return next({
+          ctx,
         });
+      } catch (err) {
+        if (err instanceof ZodError) {
+          console.error('Invalid role provided:', err.errors);
+          throw new TRPCError({
+            code: 'BAD_REQUEST',
+            message: 'Invalid role provided.',
+          });
+        } else {
+          console.error(err.message);
+          throw new TRPCError({
+            code: 'INTERNAL_SERVER_ERROR',
+            message: 'Internal server error',
+          });
+        }
       }
-
-      return next({
-        ctx,
-      });
-    } catch (err) {
-      if (err instanceof ZodError) {
-        console.error('Invalid role provided:', err.errors);
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: 'Invalid role provided.',
-        });
-      } else {
-        console.error(err.message);
-        throw new TRPCError({
-          code: 'INTERNAL_SERVER_ERROR',
-          message: 'Internal server error',
-        });
-      }
-    }
-  };
+    };
 
 export default checkRole;

@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ES2017",
+    "target": "ES2020",
     "noImplicitAny": false,
     "module": "ESNext",
     "noEmitOnError": false,
@@ -32,6 +32,7 @@
   },
   "exclude": [
     "node_modules",
+    "test"
   ],
   "include": [
     "./src/**/*.ts",
