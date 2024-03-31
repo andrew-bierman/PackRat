@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { Request } from 'express';
 
 export const userSignUp = z.object({
   name: z.string().min(1),
@@ -26,11 +25,6 @@ export const resetPassword = z.object({
   password: z.string(),
 });
 
-enum UserRoles {
-  user = 'user',
-  admin = 'admin',
-}
-
 export const addToFavorite = z.object({
   packId: z.string(),
   userId: z.string(),
@@ -42,7 +36,7 @@ export const editUser = z.object({
   password: z.string().optional(),
   email: z.string().optional(),
   code: z.string().optional(),
-  role: z.nativeEnum(UserRoles).optional(),
+  role: z.enum(["user", "admin"]).optional(),
   username: z.string().optional(),
   profileImage: z.string().optional(),
   preferredWeather: z.string().optional(),
