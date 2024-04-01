@@ -217,7 +217,9 @@ export default function Card({
                       gap: 8,
                     }}
                   >
-                    <Link href={`/profile/${owner_id}`}>
+                    <Link
+                      href={`/profile/${type === 'pack' ? owner_id : owner?._id}`}
+                    >
                       <RText color={currentTheme.colors.textColor}>
                         View {owner?.username ? '@' + owner?.username : 'Owner'}
                       </RText>

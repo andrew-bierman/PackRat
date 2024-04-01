@@ -2,6 +2,7 @@ import { View } from 'react-native';
 import { ItemForm } from './ItemForm'; // assuming you moved the form related code to a separate component
 import { useAddPackItem } from 'app/hooks/packs/useAddPackItem';
 import { useEditPackItem } from 'app/hooks/packs/useEditPackItem';
+import { usePackId } from 'app/hooks/packs/usePackId';
 import {
   addItem as addItemSchema,
   editItem as editItemSchema,
@@ -44,6 +45,9 @@ export const AddItem = ({
   isItemPage,
   setIsAddItemModalOpen = () => {},
 }: AddItemProps) => {
+
+  const [currPackId] = usePackId();
+
   const {
     // mutation: addPackItemMutation
     isLoading,
@@ -58,11 +62,14 @@ export const AddItem = ({
 
   const handleSubmit = (data: Item) => {
     if (isEdit) {
-      editPackItem(data);
+      editPackItem({
+        ...data,
+        packId: currPackId
+      });
     } else {
       addPackItem(data);
     }
-
+    if (closeModalHandler)
     closeModalHandler();
   };
 
