@@ -30,7 +30,7 @@ export default function PackContainer({ isCreatingTrip = false }) {
     error,
     isLoading,
     refetch: refetchQuery,
-  } = useUserPacks((ownerId = user?._id));
+  } = useUserPacks(user?._id);
 
   useEffect(() => {
     refetchQuery();

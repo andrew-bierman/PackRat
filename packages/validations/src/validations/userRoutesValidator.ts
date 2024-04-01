@@ -72,3 +72,28 @@ export const updatePassword = z.object({
   email: z.string().email().nonempty(),
   password: z.string().nonempty(),
 });
+
+export const userSettingsSchema = z.object({
+  name: z.string().min(1).nonempty(),
+  email: z.string().email().nonempty(),
+  username: z.string().nonempty(),
+  profileImage: z.string().optional(),
+  preferredWeather: z.union([z.literal('celsius'), z.literal('fahrenheit')]),
+  preferredWeight: z.union([
+    z.literal('lb'),
+    z.literal('oz'),
+    z.literal('kg'),
+    z.literal('g'),
+  ]),
+});
+
+export const passwordChangeSchema = z
+  .object({
+    oldPassword: z.string().min(1, 'Old password is required'),
+    newPassword: z.string().nonempty(),
+    confirmPassword: z.string().nonempty(),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: 'New password and confirmation must match',
+    path: ['confirmPassword'], // This will attach the error to `passwordConfirm` field
+  });
