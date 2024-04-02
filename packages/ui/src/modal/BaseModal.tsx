@@ -24,6 +24,7 @@ export interface BaseModalProps {
   triggerComponent?: React.DetailedReactHTMLElement<any, HTMLElement>;
   footerComponent: React.DetailedReactHTMLElement<any, HTMLElement>;
   isOpen?: Boolean;
+  onOpen?: () => void;
   onClose?: () => void;
   showTrigger?: Boolean;
 }
@@ -36,6 +37,7 @@ export const BaseModal = ({
   footerComponent,
   children,
   onClose,
+  onOpen,
   isOpen,
   showTrigger = true,
 }: BaseModalProps) => {
@@ -97,6 +99,7 @@ export const BaseModal = ({
       open={isModalOpen}
       onOpenChange={(open) => {
         setIsModalOpen(open);
+        if (open && onOpen) onOpen();
         if (!open && onClose) onClose();
       }}
       
