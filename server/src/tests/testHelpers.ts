@@ -1,7 +1,7 @@
-import { appRouter } from '../src/routes/trpcRouter';
-import { createCallerFactory } from '../src/trpc';
+import { appRouter } from '../routes/trpcRouter';
+import { createCallerFactory } from '../trpc';
 import { createId } from '@paralleldrive/cuid2';
-import { createDb } from '../src/db/client';
+import { createDb } from '../db/client';
 
 
 
