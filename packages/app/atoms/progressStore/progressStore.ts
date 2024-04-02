@@ -55,8 +55,7 @@ export const useProgressListener = () => {
 
   useEffect(() => {
     const handler = (evt) => dispatch(evt);
-    progressEvents.addListener('dispatch', handler);
-
+    progressEvents.once('dispatch', handler);
     return () => {
       progressEvents.removeListener('dispatch', handler);
     };

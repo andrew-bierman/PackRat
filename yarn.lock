@@ -11368,7 +11368,6 @@ __metadata:
     typescript: "npm:^5.3.3"
     uuid: "npm:3.4.0"
     xmldom: "npm:^0.6.0"
-    zod: "npm:^3.22.2"
   languageName: unknown
   linkType: soft
 
@@ -17274,7 +17273,6 @@ __metadata:
     uuid: "npm:3.4.0"
     xmldom: "npm:^0.6.0"
     zeego: "npm:^1.7.2"
-    zod: "npm:^3.22.2"
   languageName: unknown
   linkType: soft
 
