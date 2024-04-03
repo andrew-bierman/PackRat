@@ -1,5 +1,5 @@
 import React, { cloneElement, ReactNode, forwardRef } from 'react';
-import { Platform, TextInput, } from 'react-native';
+import { Platform, TextInput } from 'react-native';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import useSearchInput from './useSearchInput';
 import useTheme from 'app/hooks/useTheme';
@@ -142,8 +142,6 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
           position="relative"
           backgroundColor={currentTheme.colors.text}
           borderRadius={8}
-          
-          
         >
           <RStack
             flexDirection="row"
@@ -195,8 +193,8 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
             )}
           </RStack>
           {showSearchResults && results?.length > 0 && (
-              <RScrollView keyboardShouldPersistTaps='handled'>
-              <View role="list" style={{ width: '100%', }}>
+            <RScrollView keyboardShouldPersistTaps="handled">
+              <View role="list" style={{ width: '100%' }}>
                 {results.map((result, i) => (
                   <Pressable
                     key={`result + ${i}`}
