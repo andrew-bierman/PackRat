@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { FlatList, View, Platform } from 'react-native';
 import Card from '../../components/feed/FeedCard';
 import { usefetchTrips } from 'app/hooks/trips';
@@ -10,6 +10,8 @@ import { useFeed } from 'app/hooks/feed';
 import { RefreshControl } from 'react-native';
 import { RText } from '@packrat/ui';
 import { useAuthUser } from 'app/auth/hooks';
+import { useFocusEffect } from 'expo-router';
+import { createParam } from '@packrat/crosspath';
 
 const URL_PATHS = {
   userPacks: '/pack/',
@@ -38,8 +40,21 @@ interface FeedProps {
   feedType?: string;
 }
 
+const { useParams } = createParam<{ refresh: boolean }>();
+
 const Feed = ({ feedType = 'public' }: FeedProps) => {
   const router = useRouter();
+
+  const { params, setParams } = useParams('refresh');
+
+  useFocusEffect(
+    useCallback(() => {
+      if (params.refresh) {
+        refetch();
+        setParams({ refresh: false });
+      }
+    }, [params]),
+  );
 
   const [queryString, setQueryString] = useState('');
   const [selectedTypes, setSelectedTypes] = useState({
@@ -176,7 +191,7 @@ const loadStyles = (theme) => {
       backgroundColor: currentTheme.colors.background,
       fontSize: 18,
       padding: 15,
-      ...(Platform.OS !== "web" && {paddingVertical: 0})
+      ...(Platform.OS !== 'web' && { paddingVertical: 0 }),
     },
     filterContainer: {
       backgroundColor: currentTheme.colors.card,
@@ -184,7 +199,7 @@ const loadStyles = (theme) => {
       fontSize: 18,
       width: '100%',
       borderRadius: 10,
-      marginTop:20
+      marginTop: 20,
     },
     searchContainer: {
       flexDirection: 'row',

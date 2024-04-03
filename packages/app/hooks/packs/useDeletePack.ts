@@ -8,7 +8,9 @@ export const useDeletePack = (id) => {
   const handleDeletePack = async () => {
     try {
       await deletePack({ packId: id });
-      router.replace('/packs');
+
+      router.replace({pathname:"/packs", query: { refresh: true} });
+
     } catch {}
   };
 
