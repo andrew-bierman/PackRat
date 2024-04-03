@@ -11,7 +11,7 @@
     "lint": "eslint . --fix --ext .ts",
     "setup": "echo \"No setup needed\"",
     "start:pm2": "pm2 start dist/index.js --name server",
-    "start:prod": "node dist/index.js",
+    "start:prod": "node --import tsx dist/index.js",
     "start:ts-node": "ts-node src/index.ts",
     "start": "nodemon",
     "test:expect": "mocha 'generated/test/**/*.spec.js'",
@@ -101,7 +101,7 @@
     "prettier": "^3.0.2",
     "ts-jest": "^29.1.1",
     "ts-node": "^10.9.1",
-    "tsx": "^4.7.0"
+    "tsx": "^4.7.1"
   },
   "engines": {
     "node": ">=16.0.0"
