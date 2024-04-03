@@ -50,13 +50,14 @@ const FeedSearchFilter = ({
 }: FeedSearchFilterProps) => {
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
+  const [searchValue, setSearchValue] = useState('');
 
-  const onSearch = ({ search }) => console.log(search);
+  const onSearch = (search) => setSearchQuery(search);
 
   return (
     <View style={styles.filterContainer}>
       <View style={styles.searchContainer}>
-        <Form onSubmit={onSearch}>
+        <Form>
           <RStack
             space={3}
             style={{ flexDirection: 'row', justifyContent: 'center' }}
@@ -64,9 +65,12 @@ const FeedSearchFilter = ({
             <FormInput
               placeholder={`Search ${feedType || 'Feed'}`}
               name="search"
+              value={searchValue}
+              onChange={(event) => setSearchValue(event.nativeEvent.text)}
             />
             <RIconButton
               backgroundColor="transparent"
+              onPress={() => onSearch(searchValue)}
               icon={
                 <AntDesign
                   name="search1"
