@@ -128,9 +128,9 @@ export default function Settings() {
                 secureTextEntry={true}
               />
             </RStack>
-            <RButton color="white" style={{ backgroundColor: '#0284c7' }}>
+            <SubmitButton onSubmit={handleUpdatePassword} color="white" style={{ backgroundColor: '#0284c7' }}>
               Change password
-            </RButton>
+            </SubmitButton>
           </RStack>
         </Form>
       </RStack>
