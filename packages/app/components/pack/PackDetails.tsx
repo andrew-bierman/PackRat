@@ -17,6 +17,7 @@ import { useUserPacks } from 'app/hooks/packs/useUserPacks';
 import { usePackId } from 'app/hooks/packs/usePackId';
 import { useFetchSinglePack } from '../../hooks/packs';
 import { useAuthUser } from 'app/auth/hooks';
+import { useIsAuthUserPack } from 'app/hooks/packs/useIsAuthUserPack';
 
 const SECTION = {
   TABLE: 'TABLE',
@@ -44,6 +45,7 @@ export function PackDetails() {
     error,
     refetch: refetchQuery,
   } = useFetchSinglePack(packId);
+  const isAuthUserPack = useIsAuthUserPack(currentPack);
 
   const styles = useCustomStyles(loadStyles);
   const currentPackId = currentPack && currentPack._id;
@@ -87,11 +89,11 @@ export function PackDetails() {
                               <TableContainer
                                 currentPack={currentPack}
                                 copy={canCopy}
+                                hasPermissions={isAuthUserPack}
                               />
                             );
-                            break;
                           case SECTION.CTA:
-                            return (
+                            return isAuthUserPack ? (
                               <View style={styles.boxStyle}>
                                 <AddItemModal
                                   currentPackId={currentPackId}
@@ -102,8 +104,7 @@ export function PackDetails() {
                                   setRefetch={() => setRefetch((prev) => !prev)}
                                 />
                               </View>
-                            );
-                            break;
+                            ) : null;
                           case SECTION.SCORECARD:
                             return (
                               <ScoreContainer
@@ -112,14 +113,12 @@ export function PackDetails() {
                                 isOwner={isOwner}
                               />
                             );
-                            break;
                           case SECTION.CHAT:
                             return (
                               <View style={styles.boxStyle}>
                                 <ChatContainer />
                               </View>
                             );
-                            break;
                           default:
                             return null;
                         }
