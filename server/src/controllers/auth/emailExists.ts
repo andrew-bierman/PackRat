@@ -11,7 +11,7 @@ import { emailExistsService } from '../../services/user/emailExistsService';
 export function emailExistsRoute() {
   return publicProcedure.input(validator.emailExists).mutation(async (opts) => {
     const { email } = opts.input;
-    const { env }: any = opts.ctx;
+    const { env } = opts.ctx;
     return await emailExistsService({
       sendGridApiKey: env.SEND_GRID_API_KEY,
       smtpEmail: env.STMP_EMAIL,

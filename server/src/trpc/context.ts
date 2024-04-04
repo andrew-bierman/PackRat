@@ -1,6 +1,6 @@
 import { type Context } from 'hono';
 import { extractTokenAndGetUser } from './utils/auth';
-import { createDb } from '../db/client';
+import { DbClient } from '../db/client';
 
 let DB: D1Database;
 
@@ -13,13 +13,12 @@ export const createContext = (honoContext: Context) => async () => {
   const { env, req } = honoContext;
   const { DB: db, ...restEnv } = env
   DB = db;
-  const drizzleClient = await createDb(honoContext.env.DB)
+  await DbClient.init(honoContext.env.DB)
   const user = await extractTokenAndGetUser(req.raw, env.JWT_SECRET);
 
   return {
     env: restEnv as ContextEnv,
-    user,
-    db: drizzleClient
+    user
   };
 };
 

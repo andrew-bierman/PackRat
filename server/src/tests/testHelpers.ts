@@ -1,7 +1,7 @@
 import { appRouter } from '../routes/trpcRouter';
 import { createCallerFactory } from '../trpc';
 import { createId } from '@paralleldrive/cuid2';
-import { createDb } from '../db/client';
+import { DbClient } from '../db/client';
 
 
 
@@ -32,12 +32,12 @@ const createCaller = createCallerFactory(appRouter)
 
 export async function setupTest(env: Record<string, any>) {
   const { DB, ...rest } = env
-  const db = await createDb(env.DB)
-
+  // const db = await createDb(env.DB)
+  await DbClient.init(env.DB)
   const ctx = {
     user: TEST_USER,
     env: rest,
-    db
+    // db
   }
 
   const caller = createCaller(ctx)

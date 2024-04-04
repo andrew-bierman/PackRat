@@ -35,7 +35,7 @@ export async function emailExistsService({
  * @param {string} email - The email address to send the notice to.
  * @return {Promise} - A promise that resolves to an object indicating the status of the email sending process.
  */
-async function sendEmailNotice({
+export async function sendEmailNotice({
   email,
   smtpEmail,
   sendGridApiKey,

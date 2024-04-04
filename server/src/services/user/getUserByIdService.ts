@@ -6,7 +6,7 @@ import { User } from '../../drizzle/methods/User';
  * @param {string} userId - The ID of the user.
  * @return {Promise<object>} The user object.
  */
-export const getUserByIdService = async (userId: string): Promise<object> => {
+export const getUserByIdService = async (userId: string) => {
   try {
     const userClass = new User();
     const user = await userClass.findUser({ userId });

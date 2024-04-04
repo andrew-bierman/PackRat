@@ -1,19 +1,14 @@
 import * as jwt from 'hono/jwt';
 import { eq, and } from 'drizzle-orm';
-import { createDb } from '../../db/client';
+import { DbClient } from '../../db/client';
 import {
   type InsertUser,
   user as UserTable,
   userFavoritePacks,
 } from '../../db/schema';
-import { getDB } from '../../trpc/context';
 import bcrypt from 'bcryptjs';
 
 export class User {
-  async createInstance() {
-    const dbInstance = await createDb(getDB());
-    return dbInstance;
-  }
 
   async save(user) {
     if (user.username) {
@@ -29,7 +24,7 @@ export class User {
   }
 
   async getUserByUsername(username) {
-    return (await this.createInstance())
+    return DbClient.instance
       .select()
       .from(UserTable)
       .where(eq(UserTable.username, username))
@@ -42,7 +37,7 @@ export class User {
   }
 
   async doesUsernameExist(username) {
-    const result: any = await (await this.createInstance())
+    const result: any = await DbClient.instance
       .select()
       .from(UserTable)
       .where(eq(UserTable.username, username))
@@ -58,7 +53,7 @@ export class User {
   }
 
   async updateUserWithNewUsername(user, username) {
-    return (await this.createInstance())
+    return DbClient.instance
       .update(UserTable)
       .set({ ...user, username })
       .where(eq(UserTable.id, user.id))
@@ -68,7 +63,7 @@ export class User {
 
   async create(user: InsertUser) {
     try {
-      const createdUser = (await this.createInstance())
+      const createdUser = DbClient.instance
         .insert(UserTable)
         .values(user)
         .returning()
@@ -84,7 +79,7 @@ export class User {
     try {
       const token = await jwt.sign({ id }, jwtSecret);
       const filter = eq(UserTable.id, id);
-      await (await this.createInstance())
+      await DbClient.instance
         .update(UserTable)
         .set({ token })
         .where(filter);
@@ -108,25 +103,24 @@ export class User {
     if (!jwtSecret) throw new Error('jwtSecret is not defined');
     const resetToken = await jwt.sign({ id }, jwtSecret);
     const filter = eq(UserTable.id, id);
-    await (
-      await this.createInstance()
-    )
-      .update(UserTable)
-      .set({
-        passwordResetToken: resetToken,
-        passwordResetTokenExpiration: new Date(
-          Date.now() + 24 * 60 * 60 * 1000,
-        ),
-      })
-      .where(filter)
-      .returning()
-      .get();
+    await
+      DbClient.instance
+        .update(UserTable)
+        .set({
+          passwordResetToken: resetToken,
+          passwordResetTokenExpiration: new Date(
+            Date.now() + 24 * 60 * 60 * 1000,
+          ),
+        })
+        .where(filter)
+        .returning()
+        .get();
     return `${clientUrl}/password-reset?token=${resetToken}`;
   }
 
   async update(data: Partial<InsertUser>, filter = eq(UserTable.id, data.id)) {
     try {
-      const updatedUser = (await this.createInstance())
+      const updatedUser = DbClient.instance
         .update(UserTable)
         .set(data)
         .where(filter)
@@ -139,7 +133,7 @@ export class User {
 
   async delete(id: string, filter = eq(UserTable.id, id)) {
     try {
-      return (await this.createInstance())
+      return DbClient.instance
         .delete(UserTable)
         .where(filter)
         .returning();
@@ -150,7 +144,7 @@ export class User {
 
   async findMany() {
     try {
-      const users = (await this.createInstance()).query.user.findMany({});
+      const users = DbClient.instance.query.user.findMany({});
       return users;
     } catch (error) {
       throw new Error(`Failed to get users: ${error.message}`);
@@ -168,6 +162,7 @@ export class User {
     code?: string;
     includeFavorites?: boolean;
   }) {
+
     try {
       let filter = null;
       if (userId) {
@@ -177,7 +172,7 @@ export class User {
       } else if (email) {
         filter = eq(UserTable.email, email);
       }
-      const user = (await this.createInstance()).query.user.findFirst({
+      const user = DbClient.instance.query.user.findFirst({
         where: filter,
         ...(includeFavorites && {
           with: {
@@ -229,13 +224,13 @@ export class User {
   }
 
   async findFavorite(userId: string, packId: string) {
-    const subQuery = (await this.createInstance())
+    const subQuery = DbClient.instance
       .select()
       .from(userFavoritePacks)
       .where(eq(userFavoritePacks.packId, packId))
       .as('subQuery');
     const isFavorite = (
-      (await (await this.createInstance())
+      (await DbClient.instance
         .select()
         .from(UserTable)
         .where(eq(UserTable.id, userId))) as any
@@ -247,7 +242,7 @@ export class User {
     try {
       if (!jwtSecret) throw new Error('JwtSecret is not defined');
       const decoded = await jwt.verify(token, jwtSecret);
-      const user = (await this.createInstance())
+      const user = DbClient.instance
         .select()
         .from(UserTable)
         .where(
