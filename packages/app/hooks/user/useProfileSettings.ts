@@ -38,11 +38,11 @@ export const useProfileSettings = () => {
     });
   };
 
-  const handleUpdatePassword = () => {
+  const handleUpdatePassword = (data) => {
     const { email } = user;
-    const { oldPassword, newPassword, confirmPassword } = passwords;
+    const { oldPassword, newPassword, confirmPassword } = data;
     if (newPassword !== confirmPassword) return;
-    updateUserPassword({ email, password: newPassword });
+    updateUserPassword({ email, oldPassword, password: newPassword });
   };
 
   return {

@@ -15,7 +15,7 @@ import * as validator from '../../middleware/validators/index';
  */
 export const updatePassword = async (req, res, next) => {
   try {
-    let { email, oldPassword, newPassword } = req.body;
+    let { email, oldPassword, password: newPassword } = req.body;
 
     const user = await User.findOne({ email });
 
