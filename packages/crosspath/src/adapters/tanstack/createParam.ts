@@ -18,7 +18,6 @@ const useParam = <T>(
   const { push } = useRouter();
   const screenParams = useTanstackParams({ strict: false }) || {};
   const searchParams = useSearch({ strict: false }) || {};
-  console.log({ searchParams });
 
   const param = screenParams[key] || searchParams[key] || initial;
   const parsedParam = parse ? parse(param) : param;
