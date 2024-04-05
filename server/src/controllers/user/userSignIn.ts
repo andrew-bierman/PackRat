@@ -20,11 +20,10 @@ import { User } from '../../drizzle/methods/User';
 
 export function userSignInRoute() {
   return publicProcedure.input(validator.userSignIn).mutation(async (opts) => {
-    const { input }: any = opts;
-    const { env }: any = opts.ctx;
+    const { input } = opts;
+    const { env } = opts.ctx;
     const userClass = new User();
     const user = await userClass.findByCredentials(input.email, input.password);
-    // console.log('user', user);
     await userClass.generateAuthToken(env.JWT_SECRET, user.id);
     return user;
   });

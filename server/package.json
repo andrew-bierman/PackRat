@@ -16,7 +16,7 @@
     "start": "yarn run wrangler:dev",
     "test:expect": "mocha 'generated/test/**/*.spec.js'",
     "test:generate": "npx openapi-generator url http://localhost:3000/swagger.json -d ./generated -t javascript",
-    "test": "echo \"No tests yet\"",
+    "test": "vitest",
     "prisma:format": "npx prisma format --schema=src/prisma/schema.prisma",
     "prisma:generate": "npx prisma generate --schema=src/prisma/schema.prisma --data-proxy",
     "prisma:validate": "npx prisma validate --schema=src/prisma/schema.prisma",
@@ -108,10 +108,11 @@
     "typescript": "^5.2.2",
     "uuid": "^9.0.0",
     "validator": "^13.9.0",
-    "wrangler": "^3.28.3",
     "zod": "^3.22.2"
   },
   "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "^0.1.9",
+    "@cloudflare/workers-types": "^4.20240329.0",
     "@openapitools/openapi-generator-cli": "^2.7.0",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "cross-env": "^7.0.3",
@@ -131,7 +132,9 @@
     "prettier": "^3.0.2",
     "prisma": "^5.7.0",
     "ts-node": "^10.9.1",
-    "tsx": "^4.7.0"
+    "tsx": "^4.7.0",
+    "vitest": "1.3.0",
+    "wrangler": "^3.41.0"
   },
   "engines": {
     "node": ">=16.0.0"

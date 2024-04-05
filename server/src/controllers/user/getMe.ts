@@ -20,7 +20,7 @@ import { protectedProcedure } from '../../trpc';
 
 export function getMeRoute() {
   return protectedProcedure.query(async (opts) => {
-    const { user }: any = opts.ctx;
+    const { user } = opts.ctx;
     return user;
   });
 }

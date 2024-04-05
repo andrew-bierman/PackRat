@@ -31,7 +31,7 @@ export function resetPasswordRoute() {
     .input(validator.resetPassword)
     .mutation(async (opts) => {
       const { resetToken, password } = opts.input;
-      const { env }: any = opts.ctx;
+      const { env } = opts.ctx;
       const JWT_SECRET = env.JWT_SECRET;
       const userClass = new User();
       const user = await userClass.validateResetToken(resetToken, JWT_SECRET);

@@ -157,14 +157,14 @@ export const appRouter = trpcRouter({
   deletePack: deletePackRoute(), // Done
   scorePack: scorePackRoute(), // Done
   duplicatePublicPack: duplicatePublicPackRoute(), // Not Implemented
-  // osm routes
-  getPhotonResults: getPhotonResultsRoute(),
-  getTrailsOSM: getTrailsOSMRoute(),
-  getParksOSM: getParksOSMRoute(),
-  getOsm: getOsmRoute(),
-  postSingleGeoJSON: postSingleGeoJSONRoute(),
-  getDestination: getDestinationRoute(),
-  getPhotonDetails: getPhotonDetailsRoute(),
+  // // osm routes
+  // getPhotonResults: getPhotonResultsRoute(),
+  // getTrailsOSM: getTrailsOSMRoute(),
+  // getParksOSM: getParksOSMRoute(),
+  // getOsm: getOsmRoute(),
+  // postSingleGeoJSON: postSingleGeoJSONRoute(),
+  // getDestination: getDestinationRoute(),
+  // getPhotonDetails: getPhotonDetailsRoute(),
   // open ai routes
   getAIResponse: getAIResponseRoute(),
   getUserChats: getUserChatsRoute(),
@@ -179,14 +179,14 @@ export const appRouter = trpcRouter({
   getItemsGlobally: getItemsGloballyRoute(), // Done
   addGlobalItemToPack: addGlobalItemToPackRoute(), // Done
   editGlobalItemAsDuplicate: editGlobalItemAsDuplicateRoute(), // Not Implemented
-  deleteGlobalItem: deleteGlobalItemRoute(), // Done
+  // deleteGlobalItem: deleteGlobalItemRoute(), // Done
   // trails routes
   getTrails: getTrailsRoute(),
-  // parks route
+  // // parks route
   getParks: getParksRoute(),
   // geo code routes
   getGeoCode: getGeoCodeRoute(),
-  // favorite routes
+  // // favorite routes
   addToFavorite: addToFavoriteRoute(),
   getUserFavorites: getUserFavoritesRoute(),
   getFavoritePacksByUser: getFavoritePacksByUserRoute(),
