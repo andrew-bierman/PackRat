@@ -120,8 +120,8 @@ function NativeMap({ shape: shapeProp }) {
             isPoint(shape)
               ? pointLatLong
               : isPolygonOrMultiPolygon(shape)
-                ? multiPolygonBounds(shape.features[0])
-                : trailCenterPoint
+              ? multiPolygonBounds(shape.features[0])
+              : trailCenterPoint
           }
           animationMode={'flyTo'}
           animationDuration={2000}

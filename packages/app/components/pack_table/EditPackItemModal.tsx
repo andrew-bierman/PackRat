@@ -1,12 +1,17 @@
 import React, { cloneElement, isValidElement } from 'react';
 import { BaseModal, useModal } from '@packrat/ui';
 
-export const EditPackItemModal = ({ children, isOpen, onClose, showTrigger}) => {
+export const EditPackItemModal = ({
+  children,
+  isOpen,
+  onClose,
+  showTrigger,
+}) => {
   const footerButtons = [
     {
       label: 'Cancel',
       onClick: (_, closeModal) => {
-        closeModal()
+        closeModal();
         if (onClose) onClose();
       },
       color: '#B22222',
@@ -20,15 +25,15 @@ export const EditPackItemModal = ({ children, isOpen, onClose, showTrigger}) => 
     : null;
 
   return (
-      <BaseModal
-        title={'Edit Item'}
-        isOpen={isOpen}
-        onClose={onClose}
-        footerButtons={footerButtons}
-        showTrigger={showTrigger !== undefined ? showTrigger : true}
-      >
-        <ModalContent />
-      </BaseModal>
+    <BaseModal
+      title={'Edit Item'}
+      isOpen={isOpen}
+      onClose={onClose}
+      footerButtons={footerButtons}
+      showTrigger={showTrigger !== undefined ? showTrigger : true}
+    >
+      <ModalContent />
+    </BaseModal>
   );
 };
 

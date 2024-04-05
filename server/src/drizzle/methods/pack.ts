@@ -145,8 +145,8 @@ export class Pack {
       const modifiedFilter = ownerId
         ? eq(PackTable.owner_id, ownerId)
         : is_public
-          ? eq(PackTable.is_public, is_public)
-          : null;
+        ? eq(PackTable.is_public, is_public)
+        : null;
       const orderByFunction = this.getOrderBy({ sortOption });
       const relations = this.getRelations({
         includeRelated,
@@ -177,8 +177,8 @@ export class Pack {
       const modifiedFilter = ownerId
         ? eq(PackTable.owner_id, ownerId)
         : is_public
-          ? eq(PackTable.is_public, is_public)
-          : null;
+        ? eq(PackTable.is_public, is_public)
+        : null;
       const orderByFunction: any = this.getOrderBy({ sortItems, queryBy });
       const sortedPacks = (await this.createInstance())
         .select()

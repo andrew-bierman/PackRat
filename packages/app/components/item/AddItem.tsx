@@ -45,7 +45,6 @@ export const AddItem = ({
   isItemPage,
   setIsAddItemModalOpen = () => {},
 }: AddItemProps) => {
-
   const [currPackId] = usePackId();
 
   const ownerId = user?.id;
@@ -66,13 +65,12 @@ export const AddItem = ({
     if (isEdit) {
       editPackItem({
         ...data,
-        packId: currPackId
+        packId: currPackId,
       });
     } else {
       addPackItem(data);
     }
-    if (closeModalHandler)
-    closeModalHandler();
+    if (closeModalHandler) closeModalHandler();
   };
 
   const defaultValues = useMemo(() => {
