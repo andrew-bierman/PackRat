@@ -1,9 +1,6 @@
 name: android-build-apk
-on:
-  push:
-    branches: [ "**" ]
-  pull_request:
-    branches: [ "**" ]
+on: push
+  
 
 jobs:
   install-and-test:
@@ -23,7 +20,7 @@ jobs:
           yarn install
       - name: Build Android Release
         run: |
-          cd client/android && ./gradlew assembleRelease
+          cd apps/expo/android && ./gradlew assembleRelease
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
         with:
