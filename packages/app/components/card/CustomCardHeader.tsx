@@ -17,7 +17,7 @@ export const CustomCardHeader = ({ data, title, link, actionsComponent }) => {
       </RStack>
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <View style={{ marginRight: 20, marginLeft: 20 }}>
-          <Link href={`/profile/${data.owner_id._id}`}>
+          <Link href={`/profile/${data.owner_id.id}`}>
             <RText>
               {user?.id === data.owner_id
                 ? 'Your Profile'

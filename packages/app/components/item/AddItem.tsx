@@ -85,11 +85,11 @@ export const AddItem = ({
       quantity: String(initialData.quantity),
       type: initialData.category?.name,
       unit: initialData.unit,
-      _id: packId,
+      id: packId,
     };
 
     if (isEdit) {
-      result._id = initialData._id;
+      result.id = initialData.id;
 
       return result;
     }

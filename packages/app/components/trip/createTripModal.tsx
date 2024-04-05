@@ -95,7 +95,7 @@ export const SaveTripContainer = ({
       // trail: dropdown.currentTrail,
       duration: JSON.stringify(duration),
       weather: JSON.stringify(weatherObject),
-      owner_id: user?._id,
+      owner_id: user?.id,
       packs: packId,
       is_public: isPublic === '1',
     };

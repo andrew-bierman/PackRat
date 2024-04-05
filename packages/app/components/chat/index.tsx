@@ -83,11 +83,11 @@ const Chator: React.FC<ChatSelectorProps> = ({
   const styles = useCustomStyles(loadStyles);
   return (
     <TouchableOpacity
-      key={conversation._id}
-      onPress={() => onSelect(conversation._id)}
+      key={conversation.id}
+      onPress={() => onSelect(conversation.id)}
       style={[styles.chator, isActive && styles.activeChator]}
     >
-      <Text style={styles.chatorText}>{conversation._id}</Text>
+      <Text style={styles.chatorText}>{conversation.id}</Text>
     </TouchableOpacity>
   );
 };
@@ -108,7 +108,7 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
   } = useChat({ defaultChatId });
 
   const options = Array.isArray(conversations)
-    ? conversations.map((conversation) => conversation._id)
+    ? conversations.map((conversation) => conversation.id)
     : [];
 
   console.log(options);

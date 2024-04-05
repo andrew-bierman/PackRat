@@ -30,7 +30,7 @@ export default function PackContainer({ isCreatingTrip = false }) {
     error,
     isLoading,
     refetch: refetchQuery,
-  } = useUserPacks(user?._id);
+  } = useUserPacks(user?.id);
 
   useEffect(() => {
     refetchQuery();
@@ -48,10 +48,10 @@ export default function PackContainer({ isCreatingTrip = false }) {
 
     setCurrentPackId(selectedPack?.id);
 
-    if (isCreatingTrip && selectedPack?._id) {
+    if (isCreatingTrip && selectedPack?.id) {
      setParams({
-      id: selectedPack?._id
-     }) 
+      id: selectedPack?.id
+     })
     }
   };
 

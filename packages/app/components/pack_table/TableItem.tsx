@@ -36,7 +36,7 @@ const TableItem = ({
   refetch,
   setRefetch = () => {},
 }: TableItemProps) => {
-  const { name, weight, quantity, unit, _id } = itemData;
+  const { name, weight, quantity, unit, id } = itemData;
   const [activeModal, setActiveModal] = useState<ModalName>(null);
   const styles = useCustomStyles(loadStyles);
 
@@ -80,11 +80,11 @@ const TableItem = ({
         isOpen={activeModal === 'edit'}
         onClose={closeModal}
       >
-        <AddItem _id={_id} packId={_id} isEdit={true} initialData={itemData} />
+        <AddItem id={id} packId={id} isEdit={true} initialData={itemData} />
       </EditPackItemModal>
       <DeletePackItemModal
         showTrigger={false}
-        itemId={_id}
+        itemId={id}
         pack={currentPack}
         isOpen={activeModal === 'delete'}
         onClose={closeModal}

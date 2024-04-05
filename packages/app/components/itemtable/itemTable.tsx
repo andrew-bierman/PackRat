@@ -77,7 +77,7 @@ export const ItemsTable = ({
       `${category?.name || type}`,
       <EditPackItemModal>
         <AddItem
-          _id={_id}
+          id={id}
           isEdit={true}
           isItemPage
           initialData={itemData}
