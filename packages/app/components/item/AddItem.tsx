@@ -47,8 +47,6 @@ export const AddItem = ({
 }: AddItemProps) => {
   const [currPackId] = usePackId();
 
-  const ownerId = user?.id;
-
   const {
     // mutation: addPackItemMutation
     isLoading,
