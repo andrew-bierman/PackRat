@@ -53,14 +53,6 @@ const loadStyles = (currentTheme, isScrolled, screenWidth) => {
     },
     safeArea: {
       backgroundColor,
-      ...(isWeb
-        ? {
-            position: 'fixed',
-            top: 0,
-            left: screenWidth <= 1140 ? 0 : 'calc(50% - 570px)',
-            zIndex: 100,
-          }
-        : {}),
       width: '100%',
       maxWidth: 1140,
       margin: 'auto',
@@ -71,6 +63,15 @@ const loadStyles = (currentTheme, isScrolled, screenWidth) => {
             marginTop: NavbarStyles.floatingSpacing,
             padding: NavbarStyles.floatingSpacing,
             borderRadius: NavbarStyles.floatingRadius,
+          }
+        : {}),
+      ...(isWeb
+        ? {
+            position: 'fixed',
+            top: 0,
+            left: screenWidth <= 1140 ? 0 : 'calc(50% - 570px)',
+            zIndex: 100,
+            width: '100vw',
           }
         : {}),
     },
