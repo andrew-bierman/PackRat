@@ -14,4 +14,4 @@ export const router = t.router;
 export const middleware = t.middleware;
 export const publicProcedure = t.procedure;
 export const protectedProcedure = t.procedure.use(auth);
-export const createCallerFactory = t.createCallerFactory
+export const createCallerFactory = t.createCallerFactory;
