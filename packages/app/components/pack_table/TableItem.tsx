@@ -9,7 +9,7 @@ import { EditPackItemModal } from './EditPackItemModal';
 import { formatNumber } from 'app/utils/formatNumber';
 import { AddItem } from '../item/AddItem';
 import loadStyles from './packtable.style';
-import { ZDropdown } from '@packrat/ui';
+import { RText, ZDropdown } from '@packrat/ui';
 
 type ModalName = 'edit' | 'delete';
 
@@ -54,7 +54,12 @@ const TableItem = ({
     { label: 'Ignore', onSelect: () => {} },
   ];
 
-  let rowData = [name, `${formatNumber(weight)} ${unit}`, quantity];
+  let rowData = [
+    <RText px={8}>{name}</RText>,
+    <RText px={8}>{`${formatNumber(weight)} ${unit}`}</RText>,
+    <RText px={8}>{quantity}</RText>,
+  ];
+
   if (hasPermissions) {
     if (
       Platform.OS === 'android' ||
