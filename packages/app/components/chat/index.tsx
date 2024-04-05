@@ -5,6 +5,7 @@ import {
   FlatList,
   TextInput,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
 import {
   BaseModal,
@@ -18,6 +19,7 @@ import {
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useChat } from 'app/hooks/chat/useChat';
 import { loadStyles } from './chat.style';
+import { Box } from 'native-base';
 // import { Select } from "tamagui";
 
 interface Message {
@@ -42,14 +44,17 @@ interface ChatSelectorProps {
 interface ChatComponentProps {
   showChatSelector?: boolean;
   defaultChatId?: string | null;
+  itemTypeId?: string | null;
 }
 
 interface ChatModalTriggerProps {
   title: string;
   trigger: string;
+  itemTypeId: string | null;
 }
 
 const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
+  console.log('messages', message);
   const styles = useCustomStyles(loadStyles);
   const isAI = message.role === 'ai';
   return (
@@ -75,95 +80,82 @@ const MessageList = ({ messages }: MessageListProps) => {
   );
 };
 
-const Chator: React.FC<ChatSelectorProps> = ({
-  conversation,
-  onSelect,
-  isActive,
-}) => {
-  const styles = useCustomStyles(loadStyles);
-  return (
-    <TouchableOpacity
-      key={conversation._id}
-      onPress={() => onSelect(conversation._id)}
-      style={[styles.chator, isActive && styles.activeChator]}
-    >
-      <Text style={styles.chatorText}>{conversation._id}</Text>
-    </TouchableOpacity>
-  );
-};
+// const ChatSelector: React.FC<ChatSelectorProps> = ({
+//   conversation,
+//   onSelect,
+//   isActive,
+// }) => {
+//   const styles = useCustomStyles(loadStyles);
+//   return (
+//     <TouchableOpacity
+//       key={conversation._id}
+//       onPress={() => onSelect(conversation._id)}
+//       style={[styles.chator, isActive && styles.activeChator]}
+//     >
+//       <Text style={styles.chatorText}>{conversation._id}</Text>
+//     </TouchableOpacity>
+//   );
+// };
 
 const ChatComponent: React.FC<ChatComponentProps> = ({
   showChatSelector = true,
   defaultChatId = null,
+  itemTypeId = null,
 }) => {
   const styles = useCustomStyles(loadStyles);
   const {
     conversations,
-    conversationId,
+    typeId,
     parsedMessages,
     userInput,
     handleSendMessage,
     setUserInput,
-    setConversationId,
-  } = useChat({ defaultChatId });
+    setTypeId,
+  } = useChat({ itemTypeId });
 
   const options = Array.isArray(conversations)
     ? conversations.map((conversation) => conversation._id)
     : [];
 
-  console.log(options);
+  console.log('conversations', conversations);
 
   return (
     <View style={styles.container}>
       <RStack style={{ alignItems: 'center' }}>
         {showChatSelector && (
-          <Form
-          // validationSchema={sendMessage}
-          >
-            <>
-              {options?.length ? (
-                <>
-                  <FormSelect
-                    options={options}
-                    style={{ width: '100%' }}
-                    placeholder="Select conversation ..."
-                    name="conversation"
-                  />
-                </>
-              ) : (
-                <Text>You don't have conversations yet</Text>
-              )}
-            </>
-          </Form>
-          // <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          //   <Box
-          //     borderRadius="lg"
-          //     borderColor="coolGray.200"
-          //     borderWidth={1}
-          //     p={3}
-          //   >
-          //     <FlatList
-          //       data={conversations}
-          //       renderItem={({ item }) => (
-          //         <ChatSelector
-          //           conversation={item}
-          //           onSelect={setConversationId}
-          //         />
-          //       )}
-          //       keyExtractor={(item) => item._id}
-          //       contentContainerStyle={styles.flatList}
-          //     />
-          //     <TouchableOpacity
-          //       style={styles.newChatButton}
-          //       onPress={() => {
-          //         setConversationId(null);
-          //         setParsedMessages([]);
-          //       }}
-          //     >
-          //       <Text style={styles.newChatButtonText}>New Chat</Text>
-          //     </TouchableOpacity>
-          //   </Box>
-          // </ScrollView>
+          <>
+            {!options?.length && <Text>You don't have conversations yet</Text>}
+
+            {/* <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              <Box
+                borderRadius="lg"
+                borderColor="coolGray.200"
+                borderWidth={1}
+                p={3}
+              >
+                <FlatList
+                  data={conversations}
+                  renderItem={({ item }) => (
+                    <ChatSelector
+                      conversation={item}
+                      onSelect={setConversationId}
+                    />
+                  )}
+                  keyExtractor={(item) => item._id}
+                  contentContainerStyle={styles.flatList}
+                />
+                <TouchableOpacity
+                  style={styles.newChatButton}
+                  onPress={() => {
+                    setConversationId(null);
+                    // setParsedMessages([]);
+                  }}
+                >
+                  <Text style={styles.newChatButtonText}>New Chat</Text>
+                </TouchableOpacity>
+              </Box>
+            </ScrollView> */}
+          </>
         )}
         <MessageList messages={parsedMessages} />
         <Form
@@ -181,13 +173,13 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
   );
 };
 
-const ChatModalTrigger: React.FC<ChatModalTriggerProps> = () => {
+const ChatModalTrigger: React.FC<ChatModalTriggerProps> = ({ itemTypeId }) => {
   const styles = useCustomStyles(loadStyles);
 
   return (
     <View style={styles.container}>
       <BaseModal title="Chat" trigger="Open Chat" footerComponent={undefined}>
-        <ChatComponent />
+        <ChatComponent itemTypeId={itemTypeId} />
       </BaseModal>
     </View>
   );

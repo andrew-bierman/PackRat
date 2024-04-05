@@ -1,15 +1,21 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useGetUserChats } from './useGetUserChats';
 import { useGetAIResponse } from './useGetAIResponse';
 import { useAuthUser } from 'app/auth/hooks';
 
-export const useChat = (defaultChatId = null) => {
+export const useChat = (itemTypeId = null) => {
   const user = useAuthUser();
-  const [conversationId, setConversationId] = useState(defaultChatId);
+  const [typeId, setTypeId] = useState(itemTypeId);
+  console.log('typeId:', typeId);
   const [userInput, setUserInput] = useState('');
   // const [parsedMessages, setParsedMessages] = useState([]);
 
-  const { data: chatsData, refetch } = useGetUserChats(user._id);
+  const { data: chatsData, refetch } = useGetUserChats(
+    user._id,
+    typeId.itemTypeId,
+  );
+
+  console.log('chatsData:', chatsData);
 
   const { getAIResponse } = useGetAIResponse();
 
@@ -21,26 +27,37 @@ export const useChat = (defaultChatId = null) => {
    * @param {string} historyString - The string containing the conversation history.
    * @return {Array} An array of objects representing each message in the conversation.
    */
-  const parseConversationHistory = (historyString) => {
-    const historyArray = historyString.split('\n');
-    return historyArray.reduce((accumulator, current) => {
-      const isAI = current.startsWith('AI:');
-      const content = isAI ? current.substring(3) : current;
-      const role = isAI ? 'ai' : 'user';
-      if (content) {
-        accumulator.push({ role, content });
-      }
-      return accumulator;
-    }, []);
+  const parseConversationHistory = (conversations) => {
+    return conversations.flatMap((conversation) => {
+      const historyArray = conversation.history.split('\n');
+      return historyArray.reduce((accumulator, current) => {
+        const isAI = current.startsWith('AI:');
+        const content = isAI ? current.substring(3) : current;
+        const role = isAI ? 'ai' : 'user';
+        if (content) {
+          accumulator.push({ role, content });
+        }
+        return accumulator;
+      }, []);
+    });
   };
 
-  const conversation = conversations?.find(
-    (chat) => chat._id === conversationId,
-  );
+  // const conversation = conversations?.find(
+  //   (chat) => chat._id === conversationId,
+  // );
+
+  // useEffect(() => {
+  //   console.log('conversation:', conversation);
+  //   setParsedMessages(
+  //     conversation ? parseConversationHistory(conversation.history) : [],
+  //   );
+  // }, [conversationId]);
+
+  // console.log('parsedMessages:', parsedMessages);/
 
   // Compute parsedMessages directly
-  const parsedMessages = conversation
-    ? parseConversationHistory(conversation.history)
+  const parsedMessages = conversations
+    ? parseConversationHistory(conversations)
     : [];
 
   console.log('parsedMessages:', parsedMessages);
@@ -50,19 +67,23 @@ export const useChat = (defaultChatId = null) => {
    *
    * @return {Promise<void>} This function returns nothing.
    */
-  const handleSendMessage = async () => {
-    await getAIResponse({ userId: user._id, conversationId, userInput });
+  const handleSendMessage = async (userMessage) => {
+    await getAIResponse({
+      userId: user._id,
+      userInput: userMessage,
+      itemTypeId: typeId.itemTypeId,
+    });
     refetch();
     setUserInput('');
   };
 
   return {
     conversations,
-    conversationId,
+    typeId,
     parsedMessages,
     userInput,
     handleSendMessage,
     setUserInput,
-    setConversationId,
+    setTypeId,
   };
 };

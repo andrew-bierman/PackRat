@@ -9,7 +9,7 @@ import Conversation from '../../models/openai/conversationModel';
  * @return {Promise<Object>} An object containing the user's conversations.
  * @throws {Error} If the userId is invalid or if the user is not found.
  */
-export const getUserChatsService = async (userId) => {
+export const getUserChatsService = async (userId, itemTypeId) => {
   if (!mongoose.Types.ObjectId.isValid(userId)) {
     throw new Error('Invalid userId');
   }
@@ -19,7 +19,7 @@ export const getUserChatsService = async (userId) => {
     throw new Error('User not found');
   }
 
-  const conversations = await Conversation.find({ userId }).exec();
+  const conversations = await Conversation.find({ userId, itemTypeId }).exec();
 
   return { conversations };
 };

@@ -7,13 +7,14 @@ import { z } from 'zod';
 /**
  * Retrieves the chats of a user.
  * @param {string} req.params.userId - The ID of the user.
+ * @param {string} req.params.itemTypeId - The ID of the pack or trip.
  * @returns {object} The conversations of the user.
  */
 export const getUserChats = async (req, res, next) => {
   try {
-    const { userId } = req.params;
+    const { userId, itemTypeId } = req.params;
 
-    const result = await getUserChatsService(userId);
+    const result = await getUserChatsService(userId, itemTypeId);
 
     res.locals.data = result;
     responseHandler(res);
@@ -24,9 +25,9 @@ export const getUserChats = async (req, res, next) => {
 
 export function getUserChatsRoute() {
   return publicProcedure
-    .input(z.object({ userId: z.string() }))
+    .input(z.object({ userId: z.string(), itemTypeId: z.string() }))
     .query(async (opts) => {
-      const { userId } = opts.input;
-      return getUserChatsService(userId);
+      const { userId, itemTypeId } = opts.input;
+      return getUserChatsService(userId, itemTypeId);
     });
 }

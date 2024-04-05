@@ -55,6 +55,10 @@ export function PackDetails() {
 
   if (isLoading) return <RText>Loading...</RText>;
 
+  console.log(
+    'hhhhhhhhhhhhhhhhhhheeeeeeeeeeeeeeeeeeeeellllllllllllllllllooooooooooooooooooooooo',
+  );
+
   return (
     <View
       style={[
@@ -116,7 +120,11 @@ export function PackDetails() {
                           case SECTION.CHAT:
                             return (
                               <View style={styles.boxStyle}>
-                                <ChatContainer />
+                                <ChatContainer
+                                  itemTypeId={currentPackId}
+                                  title="Chat"
+                                  trigger="Open Chat"
+                                />
                               </View>
                             );
                             break;

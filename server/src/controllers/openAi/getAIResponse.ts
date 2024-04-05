@@ -12,13 +12,9 @@ import { getAIResponseService } from './langchain';
  */
 export const getAIResponse = async (req, res, next) => {
   try {
-    const { userId, conversationId, userInput } = req.body;
+    const { userId, userInput, itemTypeId } = req.body;
 
-    const result = await getAIResponseService(
-      userId,
-      conversationId,
-      userInput,
-    );
+    const result = await getAIResponseService(userId, userInput, itemTypeId);
 
     res.locals.data = result;
     responseHandler(res);
@@ -32,12 +28,12 @@ export function getAIResponseRoute() {
     .input(
       z.object({
         userId: z.string(),
-        conversationId: z.string(),
         userInput: z.string(),
+        itemTypeId: z.string(),
       }),
     )
     .mutation(async (opts) => {
-      const { userId, conversationId, userInput } = opts.input;
-      return getAIResponseService(userId, conversationId, userInput);
+      const { userId, userInput, itemTypeId } = opts.input;
+      return getAIResponseService(userId, userInput, itemTypeId);
     });
 }
