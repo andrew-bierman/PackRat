@@ -120,14 +120,6 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
           <Form
           // validationSchema={sendMessage}
           >
-            {conversations?.map((conversation) => (
-              <Select.Item
-                key={conversation.id}
-                label={conversation.id}
-                value={conversation.id}
-              />
-            ))}
-          </Select>
             <>
               {options?.length ? (
                 <>
