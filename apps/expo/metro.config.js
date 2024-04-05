@@ -15,7 +15,7 @@ config.transformer.minifierConfig.compress.drop_console = true;
 config.resolver.assetExts.push('cjs');
 
 // Include 'mjs' and 'cjs' in source extensions
-config.resolver.sourceExts.push('mjs', 'cjs');
+config.resolver.sourceExts.push('mjs', 'cjs', '.solito.js');
 
 // Find the project and workspace directories
 const projectRoot = __dirname;
@@ -30,5 +30,22 @@ config.resolver.nodeModulesPaths = [
 ];
 // Force Metro to resolve (sub)dependencies only from the `nodeModulesPaths`
 config.resolver.disableHierarchicalLookup = true;
+
+const customAliases = {
+  '@crosspath-resolver': './resolver.solito.js',
+};
+
+config.resolver.extraNodeModules = new Proxy(
+  {
+    ...config.resolver.extraNodeModules,
+    ...customAliases,
+  },
+  {
+    get: (target, name) =>
+      target.hasOwnProperty(name)
+        ? target[name]
+        : path.join(projectRoot, 'node_modules', name),
+  },
+);
 
 module.exports = config;

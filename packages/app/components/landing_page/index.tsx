@@ -1,7 +1,7 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { Platform, View } from 'react-native';
-import { RButton, RCard, RText, RStack, H1, H3 } from '@packrat/ui';
+import { RButton, RCard, RText, RStack, RH1, RH3 } from '@packrat/ui';
 import useTheme from '../../hooks/useTheme';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -26,14 +26,14 @@ const LandingPage = () => {
         }}
       >
         {Platform.OS === 'web' ? (
-          <H1
+          <RH1
             style={{
               color: 'white',
               fontSize: currentTheme.font.headerFont,
             }}
           >
             PackRat
-          </H1>
+          </RH1>
         ) : (
           <RText
             style={{

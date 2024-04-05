@@ -18,10 +18,12 @@ export const addItem = z.object({
   weight: z.string().nonempty(),
   quantity: z.string().nonempty(),
   unit: z.string().nonempty(),
-  packId: JoiObjectId(),
+  packId: JoiObjectId().nonempty(),
   type: z.string().optional(),
   ownerId: z.string().optional(),
 });
+
+export type Item = z.infer<typeof addItem>;
 
 export const editItem = z.object({
   id: JoiObjectId(),

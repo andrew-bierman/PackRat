@@ -1,7 +1,7 @@
 // frontend/components/PasswordResetForm.js
 import React from 'react';
 import { View } from 'react-native';
-import { Button, Input, Text, Toast } from 'native-base';
+import { RButton, RInput, RText } from '@packrat/ui';
 import axios from 'app/config/axios';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
@@ -17,7 +17,7 @@ export const PasswordResetForm = ({ token }: { token: string }) => {
 
   return (
     <View style={styles.container}>
-      <Input
+      <RInput
         placeholder="New Password"
         secureTextEntry
         value={password}
@@ -25,14 +25,14 @@ export const PasswordResetForm = ({ token }: { token: string }) => {
           setPassword(value);
         }}
       />
-      <Button
+      <RButton
         block
         style={styles.button}
         onPress={handlePasswordReset}
         disabled={!password || loading}
       >
-        <Text>{loading ? 'Loading...' : 'Reset Password'}</Text>
-      </Button>
+        <RText>{loading ? 'Loading...' : 'Reset Password'}</RText>
+      </RButton>
     </View>
   );
 };

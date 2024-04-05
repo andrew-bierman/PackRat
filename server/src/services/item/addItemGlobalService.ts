@@ -14,6 +14,23 @@ import { ItemCategory as categories } from '../../utils/itemCategory';
  * @param {string} type - The category of the item.
  * @return {Promise<Object>} The newly created item.
  */
+
+type ItemType = MongooseDocument & {
+  createdAt: Date;
+  updatedAt: Date;
+  weight: number;
+  name: string;
+  quantity: number;
+  unit: string;
+  global: boolean;
+  category?: ObjectId;
+};
+
+type CategoryType = MongooseDocument & {
+  name: string;
+  _id: ObjectId;
+};
+
 export const addItemGlobalService = async (
   name: string,
   weight: number,

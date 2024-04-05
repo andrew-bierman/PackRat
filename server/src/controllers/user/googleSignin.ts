@@ -14,6 +14,21 @@ import { User } from '../../drizzle/methods/User';
 import { and, eq } from 'drizzle-orm';
 import { User as UserTable } from '../../db/schema';
 
+interface GoogleUserInfo {
+  id?: string | null;
+  email?: string | null;
+  name?: string | null;
+}
+
+interface AlreadySigninInfo {
+  googleId?: string | null;
+  email?: string | null;
+  name?: string | null;
+  password?: any;
+  generateAuthToken?: any;
+  token: any;
+}
+
 const oauth2Client = new google.auth.OAuth2(
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,

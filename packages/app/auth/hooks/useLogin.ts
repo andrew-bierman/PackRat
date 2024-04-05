@@ -8,7 +8,6 @@ interface UserForm {
 }
 
 interface UseLoginReturn {
-  form: UseFormReturn<UserForm>;
   handleLogin: (data: UserForm) => void;
   hasError: boolean;
 }
@@ -16,12 +15,6 @@ interface UseLoginReturn {
 export const useLogin = (): UseLoginReturn => {
   const { mutateAsync: signIn, error } = queryTrpc.signIn.useMutation();
   const sessionSignIn = useSessionSignIn();
-  const form = useForm({
-    defaultValues: {
-      email: '',
-      password: '',
-    },
-  });
 
   const handleLogin: UseLoginReturn['handleLogin'] = (data) => {
     const { email, password } = data;
@@ -30,5 +23,5 @@ export const useLogin = (): UseLoginReturn => {
     });
   };
 
-  return { form, handleLogin, hasError: !!error };
+  return { handleLogin, hasError: !!error };
 };

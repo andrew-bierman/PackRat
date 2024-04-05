@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, Text } from 'react-native';
-import { format } from 'date-fns';
+import { Text } from 'react-native';
 import { CustomCard } from '../card';
+import { RStack } from '@packrat/ui';
 
 interface DetailsComponent {
   type: string;
@@ -33,7 +33,9 @@ export const DetailsComponent = ({
               content={
                 <>
                   {data?.description && (
-                    <Text>Description: {data?.description}</Text>
+                    <RStack>
+                      <Text>Description: {data?.description}</Text>
+                    </RStack>
                   )}
 
                   {additionalComps}
@@ -53,55 +55,23 @@ export const DetailsComponent = ({
               data={data}
               title={data?.name}
               link={link}
-              content={
-                <>
-                  {
-                    <>
-                      {data?.description && (
-                        <Text>Description: {data?.description}</Text>
-                      )}
-                      {data?.destination && (
-                        <Text>Destination: {data?.destination}</Text>
-                      )}
-                      {data.start_date && (
-                        <Text>
-                          Start Date:{' '}
-                          {format(new Date(data.start_date), 'MM/dd/yyyy')}
-                        </Text>
-                      )}
-                      {data.end_date && (
-                        <Text>
-                          End Date:{' '}
-                          {format(new Date(data.end_date), 'MM/dd/yyyy')}
-                        </Text>
-                      )}
-                    </>
-                  }
-                  {<View style={{ marginTop: '10%' }}>{additionalComps}</View>}
-                </>
-              }
+              content={<>{additionalComps}</>}
               destination={data?.destination}
               footer={data?.details}
               type="trip"
             />
-            {/* <View>
-              <Text>{data?.title}</Text>
-            </View>
-            <View>
-              <Text>{data?.details}</Text>
-            </View> */}
           </>
         );
       case 'item':
         // Add item-specific logic here
         return (
           <>
-            <View>
+            <RStack>
               <Text>{data.name}</Text>
-            </View>
-            <View>
+            </RStack>
+            <RStack>
               <Text>{data.description}</Text>
-            </View>
+            </RStack>
           </>
         );
       default:
@@ -110,5 +80,5 @@ export const DetailsComponent = ({
     }
   };
 
-  return <View>{renderDetails()}</View>;
+  return <RStack>{renderDetails()}</RStack>;
 };

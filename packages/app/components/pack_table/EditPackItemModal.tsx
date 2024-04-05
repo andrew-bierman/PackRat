@@ -1,14 +1,19 @@
-import React, { cloneElement, isValidElement, useMemo, useState } from 'react';
-import { MaterialIcons } from '@expo/vector-icons';
-import { AddItem } from '../item/AddItem';
-import { View } from 'react-native';
+import React, { cloneElement, isValidElement } from 'react';
 import { BaseModal, useModal } from '@packrat/ui';
 
-export const EditPackItemModal = ({ children }) => {
+export const EditPackItemModal = ({
+  children,
+  isOpen,
+  onClose,
+  showTrigger,
+}) => {
   const footerButtons = [
     {
       label: 'Cancel',
-      onClick: (_, closeModal) => closeModal(),
+      onClick: (_, closeModal) => {
+        closeModal();
+        if (onClose) onClose();
+      },
       color: '#B22222',
       disabled: false,
     },
@@ -20,15 +25,15 @@ export const EditPackItemModal = ({ children }) => {
     : null;
 
   return (
-    <View>
-      <BaseModal
-        title={'Edit Item'}
-        triggerComponent={<MaterialIcons name="edit" size={20} color="black" />}
-        footerButtons={footerButtons}
-      >
-        <ModalContent />
-      </BaseModal>
-    </View>
+    <BaseModal
+      title={'Edit Item'}
+      isOpen={isOpen}
+      onClose={onClose}
+      footerButtons={footerButtons}
+      showTrigger={showTrigger !== undefined ? showTrigger : true}
+    >
+      <ModalContent />
+    </BaseModal>
   );
 };
 

@@ -36,7 +36,7 @@ export const editUser = z.object({
   password: z.string().optional(),
   email: z.string().optional(),
   code: z.string().optional(),
-  role: z.enum(["user", "admin"]).optional(),
+  role: z.enum(['user', 'admin']).optional(),
   username: z.string().optional(),
   profileImage: z.string().optional(),
   preferredWeather: z.string().optional(),
@@ -76,6 +76,7 @@ export const emailExists = z.object({
 });
 
 export const updatePassword = z.object({
-  email: z.string().email(),
-  password: z.string(),
+  email: z.string().email().nonempty(),
+  oldPassword: z.string().nonempty(),
+  password: z.string().nonempty(),
 });

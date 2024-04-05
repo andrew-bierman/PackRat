@@ -1,9 +1,7 @@
-import { appRouter } from '../routes/trpcRouter';
-import { createCallerFactory } from '../trpc';
+import { appRouter } from '../../routes/trpcRouter';
+import { createCallerFactory } from '../../trpc';
 import { createId } from '@paralleldrive/cuid2';
-import { DbClient } from '../db/client';
-
-
+import { DbClient } from '../../db/client';
 
 const TEST_USER = {
   email: 'test@test.com',
@@ -18,30 +16,28 @@ const TEST_USER = {
   preferredWeather: 'test',
   preferredWeight: 'test',
   profileImage: 'test',
-  role: 'user' as "user",
+  role: 'user' as const,
   token: 'test',
   updatedAt: new Date().toISOString(),
   username: 'test',
   userFavoritePacks: [],
-  id: createId()
-}
+  id: createId(),
+};
 
-
-const createCaller = createCallerFactory(appRouter)
-
+const createCaller = createCallerFactory(appRouter);
 
 export async function setupTest(env: Record<string, any>) {
-  const { DB, ...rest } = env
+  const { DB, ...rest } = env;
   // const db = await createDb(env.DB)
-  await DbClient.init(env.DB)
+  await DbClient.init(env.DB);
   const ctx = {
     user: TEST_USER,
     env: rest,
     // db
-  }
+  };
 
-  const caller = createCaller(ctx)
+  const caller = createCaller(ctx);
   return caller;
 }
 
-export type trpcCaller = Awaited<ReturnType<typeof setupTest>>
+export type trpcCaller = Awaited<ReturnType<typeof setupTest>>;

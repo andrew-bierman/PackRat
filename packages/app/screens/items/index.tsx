@@ -1,6 +1,6 @@
 import { View, Platform } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { Box, Button, ScrollView, Tooltip } from 'native-base';
+import { RButton, RScrollView, RTooltip, RStack, BaseModal } from '@packrat/ui';
 import { MaterialIcons } from '@expo/vector-icons';
 import { theme } from 'app/theme';
 import useTheme from 'app/hooks/useTheme';
@@ -9,7 +9,6 @@ import { ItemsTable } from 'app/components/itemtable/itemTable';
 // import { Stack } from 'expo-router';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useItems } from 'app/hooks/items/useItems';
-import { BaseModal } from '@packrat/ui';
 import { usePagination } from 'app/hooks/common';
 // import { checkNetworkConnected } from 'app/utils/netInfo';
 
@@ -22,13 +21,13 @@ export default function Items() {
   const styles = useCustomStyles(loadStyles);
 
   return (
-    <ScrollView>
+    <RScrollView>
       {/* <Stack.Screen
         options={{
           title: 'Items',
         }}
       /> */}
-      <Box style={styles.container}>
+      <RStack style={styles.container}>
         <BaseModal
           title="Add a global Item"
           trigger="Add Item"
@@ -47,8 +46,8 @@ export default function Items() {
             totalPages={data?.totalPages}
           />
         )}
-      </Box>
-    </ScrollView>
+      </RStack>
+    </RScrollView>
   );
 }
 
@@ -66,24 +65,28 @@ const ModalTriggerButton = ({ setIsModalOpen }) => {
         alignItems: 'center',
       }}
     >
-      <Button
+      <RButton
         style={styles.button}
         onPress={() => {
           setIsModalOpen(true);
         }}
       >
         Add Item
-      </Button>
+      </RButton>
       {Platform.OS === 'web' && (
-        <Tooltip label="Add a global item" placement="top left" openDelay={500}>
-          <Button width={8} height={8} style={{ backgroundColor: 'none' }}>
+        <RTooltip
+          label="Add a global item"
+          placement="top left"
+          openDelay={500}
+        >
+          <RButton width={8} height={8} style={{ backgroundColor: 'none' }}>
             <MaterialIcons
               name="info-outline"
               size={20}
               color={currentTheme.colors.background}
             />
-          </Button>
-        </Tooltip>
+          </RButton>
+        </RTooltip>
       )}
     </View>
   );

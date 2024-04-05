@@ -51,6 +51,7 @@ const loadStyles = (theme) => {
       flexGrow: 1,
       backgroundColor: currentTheme.colors.background,
       width: '100%',
+      paddingBottom: 50,
     },
     content: {
       flexGrow: 1,

@@ -77,7 +77,7 @@ export const ItemsTable = ({
       `${category?.name || type}`,
       <EditPackItemModal>
         <AddItem
-          _id={_id}
+          id={id}
           isEdit={true}
           isItemPage
           initialData={itemData}
@@ -191,7 +191,6 @@ export const ItemsTable = ({
               borderWidth: 1,
               borderStyle: 'solid',
             }}
-            disabled={page === totalPages}
             onPress={handleNextPage}
           >
             <AntDesign
@@ -202,7 +201,7 @@ export const ItemsTable = ({
           </RButton>
         </View>
       </View>
-      <PaginationLimit limit={limit} setLimit={setLimit} setPage={setPage} />
+      <PaginationLimit limit={limit} setLimit={setLimit} />
     </ScrollView>
   );
 };

@@ -51,6 +51,10 @@ export function buildMessage(
   if (options.customMessage) return options.customMessage;
 
   const entityConfig = ENTITIES[entityKey];
+  if (!entityConfig) {
+    throw new Error(`No entity configuration found for key "${entityKey}"`);
+  }
+
   const baseEntity = options.isPlural
     ? entityConfig.plural
     : entityConfig.singular;

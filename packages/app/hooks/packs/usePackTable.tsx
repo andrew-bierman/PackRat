@@ -52,7 +52,6 @@ export const usePackTable = ({
       const itemWeight = Number(item.weight) || 0; // ensure it's a number
       const itemQuantity = Number(item.quantity) || 0; // ensure it's a number
       const itemUnit = item.unit || null;
-
       if (!copy) {
         switch (categoryName) {
           case ItemCategoryEnum.ESSENTIALS: {

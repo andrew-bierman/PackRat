@@ -18,7 +18,7 @@ const enableMillionJS = true;
 const plugins = [
   withTamagui({
     config: '../../packages/ui/src/tamagui.config.ts',
-    components: ['tamagui'],
+    components: ['tamagui', '@tamagui-extras/form'],
     importsWhitelist: ['constants.js', 'colors.js'],
     outputCSS:
       process.env.NODE_ENV === 'production' ? './public/tamagui.css' : null,
@@ -102,6 +102,7 @@ const nextConfig = function () {
       'expo-status-bar',
       'expo-system-ui',
       'expo-web-browser',
+      'expo-haptics',
       '@tanstack/react-query',
       'react-native-table-component',
       // Remove when we have a proper solution for this

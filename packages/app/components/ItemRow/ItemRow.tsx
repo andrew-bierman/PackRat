@@ -1,4 +1,5 @@
-import { Box, Container, Text } from 'native-base';
+import { Container } from 'native-base';
+import { RText } from '@packrat/ui';
 import Checkbox from 'expo-checkbox';
 import { FontAwesome } from '@expo/vector-icons';
 import useCustomStyles from 'app/hooks/useCustomStyles';
@@ -19,7 +20,7 @@ export const ItemRow: React.FC<ItemRowProps> = ({ packName }) => {
         value={isChecked}
         onValueChange={handleChange}
       />
-      <Text
+      <RText
         style={{
           flex: 1,
           // textDecoration: isChecked ? "line-through" : "",
@@ -27,12 +28,12 @@ export const ItemRow: React.FC<ItemRowProps> = ({ packName }) => {
         }}
       >
         {packName}
-      </Text>
-      <Box style={styles.icons}>
+      </RText>
+      <RStack style={styles.icons}>
         <FontAwesome name="dot-circle-o" size={24} color="black" />
         <FontAwesome name="pencil" size={24} color="black" />
         <FontAwesome name="trash" size={24} color="black" />
-      </Box>
+      </RStack>
     </Container>
   );
 };

@@ -26,6 +26,12 @@ export const addTrip = z.object({
   is_public: z.boolean(),
 });
 
+export const addTripForm = z.object({
+  name: z.string().nonempty(),
+  description: z.string().nonempty(),
+  isPublic: z.union([z.literal('0'), z.literal('1')]),
+});
+
 export const editTrip = z.object({
   id: JoiObjectId().nonempty(),
   name: z.string().nonempty(),
