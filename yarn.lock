@@ -5287,7 +5287,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@packrat/crosspath@workspace:packages/crosspath"
   dependencies:
-    "@tamagui/build": "npm:^1.91.3"
+    "@tamagui/build": "npm:^1.94.3"
     typescript: "npm:^5.3.3"
   peerDependencies:
     "@tanstack/react-query": ^4.36.1
@@ -5304,15 +5304,15 @@ __metadata:
     "@shopify/flash-list": "npm:^1.6.1"
     "@tamagui-extras/core": "npm:^1.11.0"
     "@tamagui-extras/form": "npm:^1.16.0"
-    "@tamagui/animations-react-native": "npm:^1.91.3"
-    "@tamagui/build": "npm:^1.91.3"
-    "@tamagui/font-inter": "npm:^1.91.3"
-    "@tamagui/progress": "npm:^1.91.3"
-    "@tamagui/react-native-media-driver": "npm:^1.91.3"
-    "@tamagui/shorthands": "npm:^1.91.3"
-    "@tamagui/switch": "npm:^1.91.3"
-    "@tamagui/themes": "npm:^1.91.3"
-    "@tamagui/toast": "npm:^1.91.3"
+    "@tamagui/animations-react-native": "npm:^1.94.3"
+    "@tamagui/build": "npm:^1.94.3"
+    "@tamagui/font-inter": "npm:^1.94.3"
+    "@tamagui/progress": "npm:^1.94.3"
+    "@tamagui/react-native-media-driver": "npm:^1.94.3"
+    "@tamagui/shorthands": "npm:^1.94.3"
+    "@tamagui/switch": "npm:^1.94.3"
+    "@tamagui/themes": "npm:^1.94.3"
+    "@tamagui/toast": "npm:^1.94.3"
     "@tanstack/react-table": "npm:^8.10.7"
     "@tanstack/react-virtual": "npm:3.0.0-beta.54"
     esbuild: "npm:^0.19.5"
@@ -5320,7 +5320,7 @@ __metadata:
     jotai: "npm:^2.6.4"
     react: "npm:^18.2.0"
     react-hook-form: "npm:^7.50.1"
-    tamagui: "npm:^1.91.3"
+    tamagui: "npm:^1.94.3"
     zeego: "npm:^1.7.2"
   languageName: unknown
   linkType: soft
@@ -8067,7 +8067,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/animations-react-native@npm:1.94.3, @tamagui/animations-react-native@npm:^1.91.3":
+"@tamagui/animations-react-native@npm:1.94.3, @tamagui/animations-react-native@npm:^1.94.3":
   version: 1.94.3
   resolution: "@tamagui/animations-react-native@npm:1.94.3"
   dependencies:
@@ -8108,7 +8108,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/babel-plugin@npm:^1.91.3":
+"@tamagui/babel-plugin@npm:^1.94.3":
   version: 1.94.3
   resolution: "@tamagui/babel-plugin@npm:1.94.3"
   dependencies:
@@ -8121,7 +8121,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/build@npm:1.94.3, @tamagui/build@npm:^1.91.3":
+"@tamagui/build@npm:1.94.3, @tamagui/build@npm:^1.94.3":
   version: 1.94.3
   resolution: "@tamagui/build@npm:1.94.3"
   dependencies:
@@ -8288,7 +8288,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/config@npm:^1.91.3":
+"@tamagui/config@npm:^1.94.3":
   version: 1.94.3
   resolution: "@tamagui/config@npm:1.94.3"
   dependencies:
@@ -8454,7 +8454,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/font-inter@npm:1.94.3, @tamagui/font-inter@npm:^1.91.3":
+"@tamagui/font-inter@npm:1.94.3, @tamagui/font-inter@npm:^1.94.3":
   version: 1.94.3
   resolution: "@tamagui/font-inter@npm:1.94.3"
   dependencies:
@@ -8640,7 +8640,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/linear-gradient@npm:1.94.3, @tamagui/linear-gradient@npm:^1.91.3":
+"@tamagui/linear-gradient@npm:1.94.3, @tamagui/linear-gradient@npm:^1.94.3":
   version: 1.94.3
   resolution: "@tamagui/linear-gradient@npm:1.94.3"
   dependencies:
@@ -8670,7 +8670,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/lucide-icons@npm:^1.91.3":
+"@tamagui/lucide-icons@npm:^1.94.3":
   version: 1.94.3
   resolution: "@tamagui/lucide-icons@npm:1.94.3"
   dependencies:
@@ -8683,7 +8683,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/next-plugin@npm:^1.91.3":
+"@tamagui/next-plugin@npm:^1.94.3":
   version: 1.94.3
   resolution: "@tamagui/next-plugin@npm:1.94.3"
   dependencies:
@@ -8706,7 +8706,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/next-theme@npm:^1.91.3":
+"@tamagui/next-theme@npm:^1.94.3":
   version: 1.94.3
   resolution: "@tamagui/next-theme@npm:1.94.3"
   dependencies:
@@ -8798,7 +8798,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/progress@npm:1.94.3, @tamagui/progress@npm:^1.91.3":
+"@tamagui/progress@npm:1.94.3, @tamagui/progress@npm:^1.94.3":
   version: 1.94.3
   resolution: "@tamagui/progress@npm:1.94.3"
   dependencies:
@@ -8844,7 +8844,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/react-native-media-driver@npm:1.94.3, @tamagui/react-native-media-driver@npm:^1.91.3":
+"@tamagui/react-native-media-driver@npm:1.94.3, @tamagui/react-native-media-driver@npm:^1.94.3":
   version: 1.94.3
   resolution: "@tamagui/react-native-media-driver@npm:1.94.3"
   dependencies:
@@ -9007,7 +9007,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/shorthands@npm:1.94.3, @tamagui/shorthands@npm:^1.91.3":
+"@tamagui/shorthands@npm:1.94.3, @tamagui/shorthands@npm:^1.94.3":
   version: 1.94.3
   resolution: "@tamagui/shorthands@npm:1.94.3"
   checksum: 10/77acd18b7c48944bc5d3c574d5faa6f381cae2c19a10c95ddb34084e73933422a190862b9b750211be0870af08e284569fcc873b526f1b5140afed8357673dc0
@@ -9108,7 +9108,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/switch@npm:1.94.3, @tamagui/switch@npm:^1.91.3":
+"@tamagui/switch@npm:1.94.3, @tamagui/switch@npm:^1.94.3":
   version: 1.94.3
   resolution: "@tamagui/switch@npm:1.94.3"
   dependencies:
@@ -9165,7 +9165,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/theme-base@npm:^1.91.3":
+"@tamagui/theme-base@npm:^1.94.3":
   version: 1.94.3
   resolution: "@tamagui/theme-base@npm:1.94.3"
   checksum: 10/677f462040ab73ddc35a43a9dcd655c33890e275ca7a857e4d4180a96e5faa7844b9bc4397a3db28193dd46fe85e253d5aa3ac1099b889b2efd92f960ce20c9c
@@ -9194,7 +9194,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/themes@npm:1.94.3, @tamagui/themes@npm:^1.91.3":
+"@tamagui/themes@npm:1.94.3, @tamagui/themes@npm:^1.94.3":
   version: 1.94.3
   resolution: "@tamagui/themes@npm:1.94.3"
   dependencies:
@@ -9213,7 +9213,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/toast@npm:^1.91.3":
+"@tamagui/toast@npm:^1.94.3":
   version: 1.94.3
   resolution: "@tamagui/toast@npm:1.94.3"
   dependencies:
@@ -9427,7 +9427,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/vite-plugin@npm:^1.91.3":
+"@tamagui/vite-plugin@npm:^1.94.3":
   version: 1.94.3
   resolution: "@tamagui/vite-plugin@npm:1.94.3"
   dependencies:
@@ -11875,18 +11875,18 @@ __metadata:
     "@rneui/base": "npm:^4.0.0-rc.8"
     "@rneui/themed": "npm:^4.0.0-rc.8"
     "@rnmapbox/maps": "npm:^10.0.0-beta.79"
-    "@tamagui/animations-react-native": "npm:^1.91.3"
-    "@tamagui/babel-plugin": "npm:^1.91.3"
-    "@tamagui/config": "npm:^1.91.3"
-    "@tamagui/font-inter": "npm:^1.91.3"
-    "@tamagui/linear-gradient": "npm:^1.91.3"
-    "@tamagui/lucide-icons": "npm:^1.91.3"
-    "@tamagui/progress": "npm:^1.91.3"
-    "@tamagui/react-native-media-driver": "npm:^1.91.3"
-    "@tamagui/shorthands": "npm:^1.91.3"
-    "@tamagui/switch": "npm:^1.91.3"
-    "@tamagui/theme-base": "npm:^1.91.3"
-    "@tamagui/themes": "npm:^1.91.3"
+    "@tamagui/animations-react-native": "npm:^1.94.3"
+    "@tamagui/babel-plugin": "npm:^1.94.3"
+    "@tamagui/config": "npm:^1.94.3"
+    "@tamagui/font-inter": "npm:^1.94.3"
+    "@tamagui/linear-gradient": "npm:^1.94.3"
+    "@tamagui/lucide-icons": "npm:^1.94.3"
+    "@tamagui/progress": "npm:^1.94.3"
+    "@tamagui/react-native-media-driver": "npm:^1.94.3"
+    "@tamagui/shorthands": "npm:^1.94.3"
+    "@tamagui/switch": "npm:^1.94.3"
+    "@tamagui/theme-base": "npm:^1.94.3"
+    "@tamagui/themes": "npm:^1.94.3"
     "@tanstack/eslint-plugin-query": "npm:^5.14.6"
     "@tanstack/query-async-storage-persister": "npm:^4.36.1"
     "@tanstack/react-query": "npm:^4.36.1"
@@ -11978,7 +11978,7 @@ __metadata:
     server: "npm:*"
     solito: "npm:^4.2.0"
     superjson: "npm:^2.0.0"
-    tamagui: "npm:^1.91.3"
+    tamagui: "npm:^1.94.3"
     togpx: "npm:^0.5.4"
     typescript: "npm:^5.3.3"
     uuid: "npm:3.4.0"
@@ -18320,18 +18320,18 @@ __metadata:
     "@rneui/base": "npm:^4.0.0-rc.8"
     "@rneui/themed": "npm:^4.0.0-rc.8"
     "@rnmapbox/maps": "npm:^10.0.0-beta.79"
-    "@tamagui/animations-react-native": "npm:^1.91.3"
-    "@tamagui/babel-plugin": "npm:^1.91.3"
-    "@tamagui/config": "npm:^1.91.3"
-    "@tamagui/font-inter": "npm:^1.91.3"
-    "@tamagui/linear-gradient": "npm:^1.91.3"
-    "@tamagui/lucide-icons": "npm:^1.91.3"
-    "@tamagui/progress": "npm:^1.91.3"
-    "@tamagui/react-native-media-driver": "npm:^1.91.3"
-    "@tamagui/shorthands": "npm:^1.91.3"
-    "@tamagui/switch": "npm:^1.91.3"
-    "@tamagui/theme-base": "npm:^1.91.3"
-    "@tamagui/themes": "npm:^1.91.3"
+    "@tamagui/animations-react-native": "npm:^1.94.3"
+    "@tamagui/babel-plugin": "npm:^1.94.3"
+    "@tamagui/config": "npm:^1.94.3"
+    "@tamagui/font-inter": "npm:^1.94.3"
+    "@tamagui/linear-gradient": "npm:^1.94.3"
+    "@tamagui/lucide-icons": "npm:^1.94.3"
+    "@tamagui/progress": "npm:^1.94.3"
+    "@tamagui/react-native-media-driver": "npm:^1.94.3"
+    "@tamagui/shorthands": "npm:^1.94.3"
+    "@tamagui/switch": "npm:^1.94.3"
+    "@tamagui/theme-base": "npm:^1.94.3"
+    "@tamagui/themes": "npm:^1.94.3"
     "@tanstack/eslint-plugin-query": "npm:^5.14.6"
     "@tanstack/query-async-storage-persister": "npm:^4.36.1"
     "@tanstack/react-query": "npm:^4.36.1"
@@ -18428,7 +18428,7 @@ __metadata:
     serve: "npm:^14.2.0"
     server: "npm:*"
     superjson: "npm:^2.0.0"
-    tamagui: "npm:^1.91.3"
+    tamagui: "npm:^1.94.3"
     togpx: "npm:^0.5.4"
     typescript: "npm:^5.3.3"
     uuid: "npm:3.4.0"
@@ -25743,9 +25743,9 @@ __metadata:
     "@cloudflare/workers-types": "npm:^4.20240329.0"
     "@expo/next-adapter": "npm:5.0.2"
     "@react-native/assets-registry": "npm:^0.74.0"
-    "@tamagui/config": "npm:^1.91.3"
-    "@tamagui/next-plugin": "npm:^1.91.3"
-    "@tamagui/next-theme": "npm:^1.91.3"
+    "@tamagui/config": "npm:^1.94.3"
+    "@tamagui/next-plugin": "npm:^1.94.3"
+    "@tamagui/next-theme": "npm:^1.94.3"
     "@types/node": "npm:^20.8.3"
     app: "npm:*"
     babel-plugin-module-resolver: "npm:^5.0.0"
@@ -25764,7 +25764,7 @@ __metadata:
     react-dom: "npm:^18.2.0"
     react-native-web: "npm:^0.19.10"
     setimmediate: "npm:^1.0.5"
-    tamagui: "npm:^1.91.3"
+    tamagui: "npm:^1.94.3"
     url-loader: "npm:^4.1.1"
     vercel: "npm:latest"
     wrangler: "npm:^3.41.0"
@@ -31954,7 +31954,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tamagui@npm:^1.91.3":
+"tamagui@npm:^1.94.3":
   version: 1.94.3
   resolution: "tamagui@npm:1.94.3"
   dependencies:
@@ -32066,9 +32066,9 @@ __metadata:
     "@cloudflare/workers-types": "npm:^4.20240329.0"
     "@expo/next-adapter": "npm:5.0.2"
     "@react-native/assets-registry": "npm:^0.74.0"
-    "@tamagui/config": "npm:^1.91.3"
-    "@tamagui/next-plugin": "npm:^1.91.3"
-    "@tamagui/next-theme": "npm:^1.91.3"
+    "@tamagui/config": "npm:^1.94.3"
+    "@tamagui/next-plugin": "npm:^1.94.3"
+    "@tamagui/next-theme": "npm:^1.94.3"
     "@tauri-apps/cli": "npm:^1.5.9"
     "@types/node": "npm:^20.8.3"
     app: "npm:*"
@@ -32088,7 +32088,7 @@ __metadata:
     react-dom: "npm:^18.2.0"
     react-native-web: "npm:^0.19.10"
     setimmediate: "npm:^1.0.5"
-    tamagui: "npm:^1.91.3"
+    tamagui: "npm:^1.94.3"
     url-loader: "npm:^4.1.1"
     vercel: "npm:latest"
     wrangler: "npm:^3.41.0"
@@ -33605,7 +33605,7 @@ __metadata:
     "@originjs/vite-plugin-commonjs": "npm:^1.0.3"
     "@packrat/ui": "npm:*"
     "@packrat/validations": "npm:*"
-    "@tamagui/vite-plugin": "npm:^1.91.3"
+    "@tamagui/vite-plugin": "npm:^1.94.3"
     "@tanstack/react-router": "npm:^1.16.5"
     "@tanstack/router-devtools": "npm:^1.16.5"
     "@tanstack/router-vite-plugin": "npm:^1.16.5"
