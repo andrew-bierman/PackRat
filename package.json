@@ -129,6 +129,6 @@
     "packing planner app"
   ],
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20231025.0"
+    "@cloudflare/workers-types": "^4.20240329.0"
   }
 }
