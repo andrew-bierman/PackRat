@@ -11,7 +11,11 @@
   "dependencies": {
     "@originjs/vite-plugin-commonjs": "^1.0.3",
     "@packrat/ui": "*",
-    "@tamagui/vite-plugin": "^1.90.6",
+    "@packrat/validations": "*",
+    "@tamagui/vite-plugin": "^1.91.3",
+    "@tanstack/react-router": "^1.16.5",
+    "@tanstack/router-devtools": "^1.16.5",
+    "@tanstack/router-vite-plugin": "^1.16.5",
     "@vitejs/plugin-react-swc": "^3.6.0",
     "app": "*",
     "esbuild-plugin-flow": "^0.3.2",
@@ -29,7 +33,7 @@
     "eslint": "^8.56.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
-    "typescript": "^5.2.2",
+    "typescript": "^5.3.3",
     "vite": "^5.1.0"
   }
 }

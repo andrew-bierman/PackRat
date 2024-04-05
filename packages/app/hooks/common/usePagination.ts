@@ -1,24 +1,29 @@
-import { useState } from 'react';
 import { DEFAULT_LIMIT, DEFAULT_PAGE } from 'app/constants/pagination';
-import { useSearchParams } from './useSearchParams';
+import { createParam, useRouter } from '@packrat/crosspath';
+
+const { useParam } = createParam<{ limit: number; page: number }>();
 
 export const usePagination = () => {
-  const searchParams = useSearchParams();
-  const limit = searchParams.get('limit');
-  const page = searchParams.get('page');
-
-  const handleLimitChange = (newLimit: number) => {
-    searchParams.set('limit', newLimit);
-  };
-
-  const handlePageChange = (newPage: number) => {
-    searchParams.set('page', newPage);
-  };
+  const { push } = useRouter();
+  const [limit] = useParam('limit', {
+    initial: String(DEFAULT_LIMIT),
+    parse: parseParam,
+  });
+  const [page, setPage] = useParam('page', {
+    initial: String(DEFAULT_PAGE),
+    parse: parseParam,
+  });
 
   return {
-    handleLimitChange,
-    handlePageChange,
-    limit: limit ? +limit : DEFAULT_LIMIT,
-    page: page ? +page : DEFAULT_PAGE,
+    handleLimitChange: (newLimit) => {
+      push({ query: { limit: Number(newLimit), page: 1 } });
+    },
+    handlePageChange: (newPage) => {
+      setPage(Number(newPage));
+    },
+    limit: Number(limit),
+    page: Number(page),
   };
 };
+
+const parseParam = (param) => Number(param);

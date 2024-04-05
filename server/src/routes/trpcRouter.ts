@@ -192,4 +192,6 @@ export const appRouter = trpcRouter({
   getFavoritePacksByUser: getFavoritePacksByUserRoute(),
 });
 
+export const createCaller = createCallerFactory(appRouter);
+
 export type AppRouter = typeof appRouter;

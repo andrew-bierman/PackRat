@@ -1,26 +1,29 @@
-import { RInput, RButton, RText, RStack, RRadio } from '@packrat/ui';
+import React from 'react';
+import {
+  RText,
+  RStack,
+  Form,
+  FormInput,
+  SubmitButton,
+  FormSelect,
+  FormRadioGroup,
+  useAppFormContext,
+} from '@packrat/ui';
 import { View } from 'react-native';
-import { DropdownComponent } from '../Dropdown';
-import { theme } from '../../theme';
+
 import { ItemCategoryEnum } from '../../constants/itemCategory';
 import useTheme from '../../hooks/useTheme';
-const data = ['lb', 'oz', 'kg', 'g'];
+import { type Item } from '@packrat/validations';
+
+const data = ['lb', 'oz', 'kg', 'g'].map((key) => ({ label: key, value: key }));
 
 interface ItemFormProps {
-  name: string;
-  setName: (text: string) => void;
-  weight: string;
-  setWeight: (text: string) => void;
-  quantity: string;
-  setQuantity: (text: string) => void;
-  unit: string;
-  setUnit: (value: string) => void;
-  categoryType: string;
-  setCategoryType: (value: string) => void;
-  handleSubmit: () => void;
+  handleSubmit: (data: Item) => void;
   showSubmitButton?: boolean;
   isLoading: boolean;
   isEdit: boolean;
+  defaultValues: Partial<Item>;
+  validationSchema: any;
   currentPack: {
     items: Array<{
       category: {
@@ -28,24 +31,18 @@ interface ItemFormProps {
       };
     }>;
   } | null;
+  packId : number
 }
 
 export const ItemForm = ({
-  name,
-  setName,
-  weight,
-  setWeight,
-  quantity,
-  setQuantity,
-  unit,
-  setUnit,
-  categoryType,
-  setCategoryType,
   handleSubmit,
   showSubmitButton = true,
   isLoading,
   isEdit,
+  defaultValues,
+  validationSchema,
   currentPack,
+  packId
 }: ItemFormProps) => {
   let hasWaterAdded = false;
   if (
@@ -59,72 +56,73 @@ export const ItemForm = ({
   }
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
-
-  const radioOptions = Object.values(ItemCategoryEnum).filter(
-    (value) => !(hasWaterAdded && value === ItemCategoryEnum.WATER),
-  );
+  
+  const radioOptions = Object.values(ItemCategoryEnum)
+    .filter((value) => !(hasWaterAdded && value === ItemCategoryEnum.WATER))
+    .map((radioOption) => ({ label: radioOption, value: radioOption }));
 
   return (
     <View>
-      <RStack style={{ gap: 8 }}>
-        <RInput
-          value={name}
-          placeholder="Item Name"
-          onChangeText={(text) => setName(text)}
-          width="100%"
-        />
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            width: '100%',
-          }}
-        >
-          <RInput
-            value={weight}
-            placeholder="Weight"
-            onChangeText={(text) => setWeight(text)}
-            flex={1}
+      <Form validationSchema={validationSchema} defaultValues={defaultValues} onSubmit={handleSubmit}>
+        <RStack style={{ gap: 8 }}>
+          <FormInput
+            name="name"
+            placeholder="Item Name"
+            style={{ width: '100%' }}
           />
-          {data && (
-            <DropdownComponent
-              data={data}
-              value={unit}
-              onValueChange={setUnit}
-              placeholder={'Unit'}
-              width="100"
-            />
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              width: '100%',
+              gap: 8,
+            }}
+          >
+            <View>
+              <FormInput name="weight" placeholder="Weight" />
+            </View>
+            {data && (
+              <FormSelect
+                options={data}
+                name="unit"
+                onValueChange={console.log}
+                placeholder={'Unit'}
+                width="100"
+              />
+            )}
+          </View>
+          <FormInput
+            name="quantity"
+            placeholder="Quantity"
+            style={{ width: '100%' }}
+          />
+          <FormRadioGroup name="type" options={radioOptions} />
+
+          {showSubmitButton && (
+            <SubmitButton onSubmit={handleSubmit}>
+              <RText style={{ color: currentTheme.colors.text }}>
+                {isLoading
+                  ? 'Loading..'
+                  : isEdit == true
+                    ? 'Edit item'
+                    : 'Add Item'}
+              </RText>
+            </SubmitButton>
           )}
-        </View>
-
-        <RInput
-          value={quantity}
-          placeholder="Quantity"
-          onChangeText={(text) => setQuantity(text)}
-          width="100%"
-          type="text"
-        />
-        <RRadio
-          value={categoryType}
-          name="category"
-          accessibilityLabel="category for the type of item"
-          onValueChange={(nextVal) => setCategoryType(nextVal)}
-          data={radioOptions}
-        />
-
-        {showSubmitButton && (
-          <RButton onPress={handleSubmit}>
-            <RText style={{ color: currentTheme.colors.text }}>
-              {isLoading
-                ? 'Loading..'
-                : isEdit == true
-                  ? 'Edit item'
-                  : 'Add Item'}
-            </RText>
-          </RButton>
-        )}
-      </RStack>
+          <FormInput
+            name="packId"
+            defaultValue={packId}
+            style={{ display: 'none' }}
+          />
+          
+        </RStack>
+        <Test />
+      </Form>
     </View>
   );
 };
+
+function Test() {
+  console.log(useAppFormContext().formState.errors);
+  return null;
+}

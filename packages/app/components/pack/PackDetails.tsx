@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+
 import PackContainer from './PackContainer';
 import { DetailsHeader } from '../details/header';
-import { createParam } from 'solito';
 import { TableContainer } from '../pack_table/Table';
 import { RText } from '@packrat/ui';
 import { DetailsComponent } from '../details';
@@ -14,10 +14,10 @@ import { AddItem } from '../item/AddItem';
 import { AddItemModal } from './AddItemModal';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useUserPacks } from 'app/hooks/packs/useUserPacks';
+import { usePackId } from 'app/hooks/packs/usePackId';
 import { useFetchSinglePack } from '../../hooks/packs';
 import { useAuthUser } from 'app/auth/hooks';
-
-const { useParam } = createParam();
+import { useIsAuthUserPack } from 'app/hooks/packs/useIsAuthUserPack';
 
 const SECTION = {
   TABLE: 'TABLE',
@@ -27,10 +27,9 @@ const SECTION = {
 };
 
 export function PackDetails() {
-  const searchParams = new URLSearchParams(this.location.search);
-  const canCopy = searchParams.get('copy');
-  const [packId] = useParam('id');
-  console.log(packId, 'packId');
+  // const [canCopy, setCanCopy] = useParam('canCopy')
+  const canCopy = false;
+  const [packId] = usePackId();
   const link = `${CLIENT_URL}/packs/${packId}`;
   const [firstLoad, setFirstLoad] = useState(true);
   const user = useAuthUser();
@@ -46,6 +45,7 @@ export function PackDetails() {
     error,
     refetch: refetchQuery,
   } = useFetchSinglePack(packId);
+  const isAuthUserPack = useIsAuthUserPack(currentPack);
 
   const styles = useCustomStyles(loadStyles);
   const currentPackId = currentPack && currentPack.id;
@@ -89,11 +89,11 @@ export function PackDetails() {
                               <TableContainer
                                 currentPack={currentPack}
                                 copy={canCopy}
+                                hasPermissions={isAuthUserPack}
                               />
                             );
-                            break;
                           case SECTION.CTA:
-                            return (
+                            return isAuthUserPack ? (
                               <View style={styles.boxStyle}>
                                 <AddItemModal
                                   currentPackId={currentPackId}
@@ -104,8 +104,7 @@ export function PackDetails() {
                                   setRefetch={() => setRefetch((prev) => !prev)}
                                 />
                               </View>
-                            );
-                            break;
+                            ) : null;
                           case SECTION.SCORECARD:
                             return (
                               <ScoreContainer
@@ -114,14 +113,12 @@ export function PackDetails() {
                                 isOwner={isOwner}
                               />
                             );
-                            break;
                           case SECTION.CHAT:
                             return (
                               <View style={styles.boxStyle}>
                                 <ChatContainer />
                               </View>
                             );
-                            break;
                           default:
                             return null;
                         }

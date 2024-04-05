@@ -8,6 +8,9 @@ import { UserFavoritePacks } from '../../drizzle/methods/UserFavoritePacks';
  * @param {string} userId - The ID of the user.
  * @return {Promise<object>} The updated user object.
  */
+
+type UserType = MongooseDocument & IUser & { _id: ObjectId };
+
 export const addToFavoriteService = async (
   packId: string,
   userId: string,

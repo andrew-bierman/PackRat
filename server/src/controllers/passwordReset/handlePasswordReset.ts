@@ -18,6 +18,10 @@ export function handlePasswordResetRoute() {
         throw new Error('No user found with this email address');
       }
 
+      if (!user.passwordResetTokenExpiration) {
+        throw new Error('Password reset token expiration is not defined');
+      }
+
       if (Date.now() > user.passwordResetTokenExpiration.getTime()) {
         return { error: 'Password reset token has expired' };
       }

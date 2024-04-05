@@ -9,24 +9,31 @@ import {
   RH2,
   RScrollView,
   RLabel,
+  Form,
+  ImageUpload,
+  FormInput,
+  FormSelect,
+  SubmitButton,
 } from '@packrat/ui';
 import Avatar from 'app/components/Avatar/Avatar';
-import DropdownComponent from '../../components/Dropdown';
 import { useProfileSettings } from 'app/hooks/user';
+import { userSettingsSchema, passwordChangeSchema } from '@packrat/validations';
+
+const weatherOptions = ['celsius', 'fahrenheit'].map((key) => ({
+  label: key,
+  value: key,
+}));
+
+const weightOptions = ['lb', 'oz', 'kg', 'g'].map((key) => ({
+  label: key,
+  value: key,
+}));
 
 export default function Settings() {
-  const {
-    user,
-    passwords,
-    pickImage,
-    handleChange,
-    handleEditUser,
-    handlePasswordsChange,
-    handleUpdatePassword,
-    removeProfileImage,
-  } = useProfileSettings();
+  const { user, handleEditUser, handlePasswordsChange, handleUpdatePassword } =
+    useProfileSettings();
 
-  return (
+  return user ? (
     <RScrollView>
       <RStack
         space="$3"
@@ -38,129 +45,95 @@ export default function Settings() {
           <RH2>Profile</RH2>
           <RSeparator marginVertical={8} />
         </RStack>
-        <RStack alignItems="center" space style={{ flexDirection: 'row' }}>
-          <Avatar size={90} src={user.profileImage} />
-          <RStack space="$2">
-            <RH5 fontWeight="medium">Profile Picture</RH5>
-            <RStack
-              space="$2"
-              alignItems="flex-end"
-              style={{ flexDirection: 'row' }}
-            >
-              <RButton
-                size="$3"
-                icon={<Ionicons name="cloud-upload-outline" size={24} />}
-                color="white"
-                style={{ backgroundColor: '#0284c7' }}
-                onPress={pickImage}
-              >
-                Upload
-              </RButton>
-              <RButton
-                size="$3"
-                onPress={removeProfileImage}
-                style={{ backgroundColor: 'transparent' }}
-              >
-                Remove
-              </RButton>
-            </RStack>
-          </RStack>
-        </RStack>
-        <RStack space="$3" style={{ flexDirection: 'row' }}>
-          <RStack space="$2">
-            <RLabel htmlFor="firstName">Name</RLabel>
-            <RInput id="name" value={user.name} onChange={handleChange} />
-          </RStack>
-          <RStack space="$2">
-            <RLabel htmlFor="username">Username</RLabel>
-            <RInput
-              id="username"
-              value={user.username}
-              onChange={handleChange}
+        <Form validationSchema={userSettingsSchema} defaultValues={{ ...user }}>
+          <RStack space="$3" width="fit-content" marginHorizontal="auto">
+            <ImageUpload
+              label="Profile Picture"
+              name="profileImage"
+              previewElement={<Avatar size={90} />}
             />
+            <RStack space="$3" style={{ flexDirection: 'row' }}>
+              <RStack space="$2">
+                <RLabel htmlFor="firstName">Name</RLabel>
+                <FormInput id="name" name="name" />
+              </RStack>
+              <RStack space="$2">
+                <RLabel htmlFor="username">Username</RLabel>
+                <FormInput id="username" name="username" />
+              </RStack>
+            </RStack>
+            <RStack space="$2">
+              <RLabel htmlFor="email">Email</RLabel>
+              <FormInput id="email" name="email" />
+            </RStack>
+            <RStack space="$2">
+              <RH5>Preferred units</RH5>
+              <RStack space style={{ flexDirection: 'row' }}>
+                <RStack space="$2" flexGrow={1}>
+                  <RLabel>Weather: </RLabel>
+                  <FormSelect
+                    options={weatherOptions}
+                    name="preferredWeather"
+                    style={{ width: '100%' }}
+                  />
+                </RStack>
+                <RStack space="$2" flexGrow={1}>
+                  <RLabel>Weight: </RLabel>
+                  <FormSelect
+                    options={weightOptions}
+                    name="preferredWeight"
+                    style={{ width: '100%' }}
+                  />
+                </RStack>
+              </RStack>
+            </RStack>
+            <SubmitButton
+              onSubmit={handleEditUser}
+              color="white"
+              style={{ backgroundColor: '#0284c7' }}
+            >
+              Update profile
+            </SubmitButton>
           </RStack>
-        </RStack>
+        </Form>
 
-        <RStack space="$2">
-          <RLabel htmlFor="email">Email</RLabel>
-          <RInput id="email" value={user.email} onChange={handleChange} />
-        </RStack>
-        <RStack space="$2">
-          <RH5>Preferred units</RH5>
-          <RStack space style={{ flexDirection: 'row' }}>
-            <RStack space="$2" flexGrow={1}>
-              <RLabel>Weather: </RLabel>
-              <DropdownComponent
-                data={['celsius', 'fahrenheit']}
-                value={user.preferredWeather}
-                onValueChange={(value) =>
-                  handleChange({ target: { id: 'preferredWeather', value } })
-                }
-                width="100%"
-                placeholder=""
-              />
-            </RStack>
-            <RStack space="$2" flexGrow={1}>
-              <RLabel>Weight: </RLabel>
-              <DropdownComponent
-                data={['lb', 'oz', 'kg', 'g']}
-                value={user.preferredWeight}
-                onValueChange={(value) =>
-                  handleChange({ target: { id: 'preferredWeight', value } })
-                }
-                width="100%"
-                placeholder=""
-              />
-            </RStack>
-          </RStack>
-        </RStack>
-        <RButton
-          color="white"
-          style={{ backgroundColor: '#0284c7' }}
-          onPress={handleEditUser}
-        >
-          Update profile
-        </RButton>
         <RStack marginTop={20} marginBottom={10}>
           <RH2>Change Password</RH2>
           <RSeparator marginVertical={8} />
           <RText fontSize={16}>We will email you to verify the change.</RText>
         </RStack>
-        <RStack space="$2">
-          <RLabel htmlFor="oldPassword">Old password</RLabel>
-          <RInput
-            id="oldPassword"
-            value={passwords.oldPassword}
-            secureTextEntry={true}
-            onChange={handlePasswordsChange}
-          />
-        </RStack>
-        <RStack space="$2">
-          <RLabel htmlFor="newPassword">New password</RLabel>
-          <RInput
-            id="newPassword"
-            value={passwords.newPassword}
-            secureTextEntry={true}
-            onChange={handlePasswordsChange}
-          />
-        </RStack>
-        <RStack space="$2">
-          <RLabel htmlFor="confirmPassword">Confirm new password</RLabel>
-          <RInput
-            id="confirmPassword"
-            value={passwords.confirmPassword}
-            secureTextEntry={true}
-            onChange={handlePasswordsChange}
-          />
-        </RStack>
-        <RButton
-          color="white"
-          style={{ backgroundColor: '#0284c7' }}
-          onPress={handleUpdatePassword}
-        >
-          Change password
-        </RButton>
+        <Form validationSchema={passwordChangeSchema}>
+          <RStack space="$3" width="100%" marginHorizontal="auto">
+            <RStack space="$2">
+              <RLabel htmlFor="oldPassword">Old password</RLabel>
+              <FormInput
+                id="oldPassword"
+                name="oldPassword"
+                secureTextEntry={true}
+              />
+            </RStack>
+            <RStack space="$2">
+              <RLabel htmlFor="newPassword">New password</RLabel>
+              <FormInput
+                id="newPassword"
+                name="newPassword"
+                secureTextEntry={true}
+              />
+            </RStack>
+            <RStack space="$2">
+              <RLabel htmlFor="confirmPassword">Confirm new password</RLabel>
+              <FormInput
+                id="confirmPassword"
+                name="confirmPassword"
+                secureTextEntry={true}
+              />
+            </RStack>
+            <SubmitButton onSubmit={handleUpdatePassword} color="white" style={{ backgroundColor: '#0284c7' }}>
+              Change password
+            </SubmitButton>
+          </RStack>
+        </Form>
       </RStack>
     </RScrollView>
-  );
+  ) : null;
 }

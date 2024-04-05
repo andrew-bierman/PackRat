@@ -12,6 +12,7 @@
     "android": "cd apps/expo && yarn android",
     "api": "cd packages/api && yarn dev",
     "build-ui": "cd packages/ui && yarn build",
+    "build-crosspath": "cd packages/crosspath && yarn build",
     "build:android": "cd apps/expo && yarn build:android",
     "build:expo": "yarn expo:export",
     "build:ios": "cd apps/expo && yarn build:ios",
@@ -49,7 +50,7 @@
     "lint:server": "cd server && yarn lint",
     "lint": "yarn lint:all",
     "next": "cd apps/next && yarn dev",
-    "postinstall": "yarn build-ui && yarn build:validations",
+    "postinstall": "yarn build-ui && yarn build:validations && yarn build-crosspath",
     "preinstall": "npx only-allow yarn",
     "regen": "yarn install --refresh-lockfile",
     "server": "cd server && yarn start",
@@ -84,7 +85,7 @@
     "lint-staged": "^14.0.1",
     "npm-run-all": "^4.1.5",
     "patch-package": "^8.0.0",
-    "typescript": "^5.2.2"
+    "typescript": "^5.3.3"
   },
   "lint-staged": {
     "client/**/*.{js,jsx,ts,tsx}": [

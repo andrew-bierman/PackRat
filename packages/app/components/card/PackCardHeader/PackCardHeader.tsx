@@ -2,7 +2,7 @@ import React from 'react';
 
 import { CustomCardHeader } from '../CustomCardHeader';
 import { useAuthUser } from 'app/auth/hooks';
-import { ThreeDotsMenu, YStack, Button, EditableText } from '@packrat/ui';
+import { ThreeDotsMenu, YStack, RButton, EditableText } from '@packrat/ui';
 import { useDeletePack, useFetchSinglePack } from 'app/hooks/packs';
 import { usePackTitleInput } from './usePackTitleInput';
 
@@ -35,8 +35,8 @@ export const PackCardHeader = ({ data, title, link }: PackCardHeaderProps) => {
         user?.id === data.owner_id && (
           <ThreeDotsMenu onOpenChange={handleActionsOpenChange}>
             <YStack space="$1">
-              <Button onPress={handleEdit}>Edit</Button>
-              <Button onPress={handleDeletePack}>Delete</Button>
+              <RButton onPress={handleEdit}>Edit</RButton>
+              <RButton onPress={handleDeletePack}>Delete</RButton>
             </YStack>
           </ThreeDotsMenu>
         )

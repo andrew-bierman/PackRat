@@ -1,9 +1,9 @@
 import React from 'react';
-import { RStack, RText } from '@packrat/ui';
+import { RStack, RText, RButton } from '@packrat/ui';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+
 import LargeCard from '../card/LargeCard';
-import { SearchInput } from '../SearchInput';
 import { Platform, View } from 'react-native';
-import { theme } from '../../theme';
 import useTheme from '../../hooks/useTheme';
 import { useAuthUser } from 'app/auth/hooks';
 import Hero from '../hero';
@@ -38,7 +38,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSelect }) => {
     try {
       const { osm_id, osm_type, name } = selectedResult.properties;
 
-      const coordinates = selectedResult.geometry.coordinates;
+      // const coordinates = selectedResult.geometry.coordinates;
 
       if (!osm_id || !osm_type) {
         console.error(
@@ -69,8 +69,6 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSelect }) => {
     firstNameOrUser !== 'User'
       ? `Let's find a new trail, ${firstNameOrUser}`
       : "Let's find a new trail";
-
-  // console.log("cardBackgroundColor", cardBackgroundColor)
 
   return (
     <View style={styles.banner}>
@@ -107,10 +105,32 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSelect }) => {
             }}
           >
             <RText style={styles.title}>{bannerText}</RText>
-            <PlacesAutocomplete
-              onSelect={handleSearchSelect}
-              placeholder={'Search by park, city, or trail'}
-            />
+            {Platform.OS === 'web' ? (
+              <PlacesAutocomplete
+                onSelect={handleSearchSelect}
+                placeholder={'Search by park, city, or trail'}
+              />
+            ) : (
+              <RButton
+                style={{
+                  backgroundColor: currentTheme.colors.text,
+                  minWidth: '100%',
+                  flexDirection: 'row',
+                }}
+                onPress={() => {
+                  router.push('/search');
+                }}
+              >
+                <MaterialCommunityIcons
+                  name="magnify"
+                  size={24}
+                  color={currentTheme.colors.background}
+                />
+                <RText color={currentTheme.colors.textDarkGrey} opacity={0.6}>
+                  Search by park, city, or trail
+                </RText>
+              </RButton>
+            )}
           </RStack>
         </LargeCard>
       </Hero>
@@ -126,6 +146,7 @@ const loadStyles = (theme: any) => {
       backgroundRepeat: 'repeat',
       backgroundSize: 'cover',
       marginBottom: 20,
+      marginTop: 20,
       alignItems: 'center',
       justifyContent: 'center',
       width: '100%',

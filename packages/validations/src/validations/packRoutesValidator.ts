@@ -35,3 +35,12 @@ export const duplicatePublicPack = z.object({
 export const getPublicPacks = z.object({
   queryBy: z.string(),
 });
+
+export const sendMessage = z.object({
+  message: z.string().nonempty(),
+});
+
+export const addPackSchema = z.object({
+  name: z.string().nonempty(),
+  isPublic: z.union([z.literal('0'), z.literal('1')]),
+});

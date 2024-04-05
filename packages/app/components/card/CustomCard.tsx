@@ -86,8 +86,6 @@ export const CustomCard = ({
         ) : null}
         <View
           style={{
-            alignItems: 'center',
-            justifyContent: 'center',
             paddingRight: 16,
             paddingLeft: 16,
           }}

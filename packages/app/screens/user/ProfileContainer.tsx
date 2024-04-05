@@ -71,7 +71,7 @@ const Header = ({
               <>
                 <RSkeleton
                   style={{
-                    borderRadius: '100%',
+                    borderRadius: 100,
                     height: 100,
                     width: 100,
                   }}
@@ -101,18 +101,10 @@ const Header = ({
       <RStack style={{ flexDirection: 'row', ...styles.card }}>
         {isLoading ? (
           <>
-            <RSkeleton
-              style={{ borderRadius: '100%', width: 50, height: 50 }}
-            />
-            <RSkeleton
-              style={{ borderRadius: '100%', width: 50, height: 50 }}
-            />
-            <RSkeleton
-              style={{ borderRadius: '100%', width: 50, height: 50 }}
-            />
-            <RSkeleton
-              style={{ borderRadius: '100%', width: 50, height: 50 }}
-            />
+            <RSkeleton style={{ borderRadius: 100, width: 50, height: 50 }} />
+            <RSkeleton style={{ borderRadius: 100, width: 50, height: 50 }} />
+            <RSkeleton style={{ borderRadius: 100, width: 50, height: 50 }} />
+            <RSkeleton style={{ borderRadius: 100, width: 50, height: 50 }} />
           </>
         ) : (
           <>
@@ -194,7 +186,7 @@ export default function ProfileContainer({ id = null }) {
             styles.mainContainer,
             Platform.OS == 'web'
               ? { minHeight: '100vh' }
-              : { minHeight: '100%' },
+              : { minHeight: '100%', paddingBottom: 40 },
           ]}
         >
           <Header
@@ -212,7 +204,7 @@ export default function ProfileContainer({ id = null }) {
                 <UserDataContainer
                   data={[]}
                   type="packs"
-                  userId={user?.id}
+                  userId={user?._id}
                   isLoading={isLoading}
                   SkeletonComponent={SkeletonUserDataCard}
                 />
@@ -224,7 +216,7 @@ export default function ProfileContainer({ id = null }) {
                 <UserDataContainer
                   data={favoritesList}
                   type="favorites"
-                  userId={user?.id}
+                  userId={user?._id}
                   isLoading={isLoading}
                 />
               ) : (

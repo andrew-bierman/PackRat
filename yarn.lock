@@ -34,6 +34,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@anatine/zod-mock@npm:^3.13.3":
+  version: 3.13.3
+  resolution: "@anatine/zod-mock@npm:3.13.3"
+  dependencies:
+    randexp: "npm:^0.5.3"
+  peerDependencies:
+    "@faker-js/faker": ^7.0.0 || ^8.0.0
+    zod: ^3.21.4
+  checksum: 10/e19a51190b2b52879814f2c259113040a579a062fc2edcc5728c846ce2f9354f9bef426e7ad2c39ff3ce972813687cfc6309c743a64dd945f170bf6e4bed7a3e
+  languageName: node
+  linkType: hard
+
 "@anthropic-ai/sdk@npm:^0.9.1":
   version: 0.9.1
   resolution: "@anthropic-ai/sdk@npm:0.9.1"
@@ -3295,6 +3307,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@faker-js/faker@npm:^8.3.1":
+  version: 8.4.1
+  resolution: "@faker-js/faker@npm:8.4.1"
+  checksum: 10/5983c2ea64f26055ad6648de748878e11ebe2fb751e3c7435ae141cdffabc2dccfe4c4f49da69a3d2add71e21b415c683ac5fba196fab0d5ed6779fbec436c80
+  languageName: node
+  linkType: hard
+
 "@fastify/busboy@npm:^1.2.1":
   version: 1.2.1
   resolution: "@fastify/busboy@npm:1.2.1"
@@ -4128,7 +4147,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hookform/resolvers@npm:^3.3.1":
+"@hookform/resolvers@npm:^3.3.4":
   version: 3.3.4
   resolution: "@hookform/resolvers@npm:3.3.4"
   peerDependencies:
@@ -5283,26 +5302,44 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@packrat/crosspath@npm:*, @packrat/crosspath@workspace:packages/crosspath":
+  version: 0.0.0-use.local
+  resolution: "@packrat/crosspath@workspace:packages/crosspath"
+  dependencies:
+    "@tamagui/build": "npm:^1.91.3"
+    typescript: "npm:^5.3.3"
+  peerDependencies:
+    "@tanstack/react-query": ^4.36.1
+    react: ^18.2.0
+    solito: ^4.2.0
+  languageName: unknown
+  linkType: soft
+
 "@packrat/ui@npm:*, @packrat/ui@workspace:packages/ui":
   version: 0.0.0-use.local
   resolution: "@packrat/ui@workspace:packages/ui"
   dependencies:
+    "@hookform/resolvers": "npm:^3.3.4"
     "@shopify/flash-list": "npm:^1.6.1"
-    "@tamagui/animations-react-native": "npm:^1.90.6"
-    "@tamagui/build": "npm:^1.90.6"
-    "@tamagui/font-inter": "npm:^1.90.6"
-    "@tamagui/progress": "npm:^1.90.6"
-    "@tamagui/react-native-media-driver": "npm:^1.90.6"
-    "@tamagui/shorthands": "npm:^1.90.6"
-    "@tamagui/switch": "npm:^1.90.6"
-    "@tamagui/themes": "npm:^1.90.6"
-    "@tamagui/toast": "npm:^1.90.6"
+    "@tamagui-extras/core": "npm:^1.11.0"
+    "@tamagui-extras/form": "npm:^1.16.0"
+    "@tamagui/animations-react-native": "npm:^1.91.3"
+    "@tamagui/build": "npm:^1.91.3"
+    "@tamagui/font-inter": "npm:^1.91.3"
+    "@tamagui/progress": "npm:^1.91.3"
+    "@tamagui/react-native-media-driver": "npm:^1.91.3"
+    "@tamagui/shorthands": "npm:^1.91.3"
+    "@tamagui/switch": "npm:^1.91.3"
+    "@tamagui/themes": "npm:^1.91.3"
+    "@tamagui/toast": "npm:^1.91.3"
     "@tanstack/react-table": "npm:^8.10.7"
     "@tanstack/react-virtual": "npm:3.0.0-beta.54"
     esbuild: "npm:^0.19.5"
+    expo-image-picker: "npm:^14.7.1"
     jotai: "npm:^2.6.4"
     react: "npm:^18.2.0"
-    tamagui: "npm:^1.90.6"
+    react-hook-form: "npm:^7.50.1"
+    tamagui: "npm:^1.91.3"
     zeego: "npm:^1.7.2"
   languageName: unknown
   linkType: soft
@@ -5314,7 +5351,7 @@ __metadata:
     "@types/express": "npm:^4.17.17"
     "@types/node": "npm:^20.8.3"
     express: "npm:^4.18.2"
-    typescript: "npm:^5.2.2"
+    typescript: "npm:^5.3.3"
     zod: "npm:^3.22.2"
   languageName: unknown
   linkType: soft
@@ -7932,6 +7969,27 @@ __metadata:
     "@tamagui/stacks": "npm:1.94.3"
     "@tamagui/use-controllable-state": "npm:1.94.3"
   peerDependencies:
+    react: ^18.2.0
+    react-native: 0.72.6
+    tamagui: 1.29.3
+  checksum: 10/b494eee1bf8ccc1b62b52a3ee080c2ebd9259561f398e401d5fc36cf4023fd4143ea037b3a49e3b0ca6b4df69c0094a3816984959f58ec2b64b49f151f0ef763
+  languageName: node
+  linkType: hard
+
+"@tamagui/accordion@npm:1.91.3":
+  version: 1.91.3
+  resolution: "@tamagui/accordion@npm:1.91.3"
+  dependencies:
+    "@tamagui/collapsible": "npm:1.91.3"
+    "@tamagui/collection": "npm:1.91.3"
+    "@tamagui/compose-refs": "npm:1.91.3"
+    "@tamagui/constants": "npm:1.91.3"
+    "@tamagui/core": "npm:1.91.3"
+    "@tamagui/create-context": "npm:1.91.3"
+    "@tamagui/polyfill-dev": "npm:1.91.3"
+    "@tamagui/stacks": "npm:1.91.3"
+    "@tamagui/use-controllable-state": "npm:1.91.3"
+  peerDependencies:
     react: "*"
   checksum: 10/632ef81e25df7ed209fd6786044ef05d6914efc7a6f3e661d8cfe8778b337f774b78c062bbb6356cfdb5c4ca45742f2095dddd37edc0e451ed380865b97af43e
   languageName: node
@@ -9428,6 +9486,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tanstack/history@npm:1.15.13":
+  version: 1.15.13
+  resolution: "@tanstack/history@npm:1.15.13"
+  checksum: 10/5d3c52db4c495ba965c31caafadfeba7e5bb514f79048426808fa581bfa26db9825ee8a3bca52ca55dfa91ed98455d388e0a2707df940cfe2d77f8e0aaa19fe6
+  languageName: node
+  linkType: hard
+
 "@tanstack/match-sorter-utils@npm:^8.7.0":
   version: 8.15.1
   resolution: "@tanstack/match-sorter-utils@npm:8.15.1"
@@ -9507,6 +9572,34 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tanstack/react-router@npm:1.19.1, @tanstack/react-router@npm:^1.16.5":
+  version: 1.19.1
+  resolution: "@tanstack/react-router@npm:1.19.1"
+  dependencies:
+    "@tanstack/history": "npm:1.15.13"
+    "@tanstack/react-store": "npm:^0.2.1"
+    tiny-invariant: "npm:^1.3.1"
+    tiny-warning: "npm:^1.0.3"
+  peerDependencies:
+    react: ">=16"
+    react-dom: ">=16"
+  checksum: 10/49772f5feb028ee347b3ef725e168325c91e6ccc4472304a42c43bc540e2421226c399f0c15da6ab6c21e73dd36850b4fd101ac9634a1dfe28420d2a78f239e0
+  languageName: node
+  linkType: hard
+
+"@tanstack/react-store@npm:^0.2.1":
+  version: 0.2.1
+  resolution: "@tanstack/react-store@npm:0.2.1"
+  dependencies:
+    "@tanstack/store": "npm:0.1.3"
+    use-sync-external-store: "npm:^1.2.0"
+  peerDependencies:
+    react: ">=16"
+    react-dom: ">=16"
+  checksum: 10/bda3c394e0a2eac08d5c0545a18826ac52fd6d1dd6d142e27bf3a0005aa289015d9b28c25015c1954af410481b50b1a8e811144354fb3bae3b87b547ad32cc25
+  languageName: node
+  linkType: hard
+
 "@tanstack/react-table@npm:^8.10.7":
   version: 8.15.3
   resolution: "@tanstack/react-table@npm:8.15.3"
@@ -9534,6 +9627,39 @@ __metadata:
   version: 8.15.3
   resolution: "@tanstack/table-core@npm:8.15.3"
   checksum: 10/671220918527a6b88a1963d956b565158ae62983138b3f5423ed623fdba1ccd731949e081ff5c4484ddfa5630db74090b05b6c3eabb266f60e53948238af54c5
+  languageName: node
+  linkType: hard
+
+"@tanstack/router-generator@npm:1.19.0":
+  version: 1.19.0
+  resolution: "@tanstack/router-generator@npm:1.19.0"
+  dependencies:
+    prettier: "npm:^3.1.1"
+    zod: "npm:^3.22.4"
+  checksum: 10/759b0ab5e4bb4a222bdec4c24547735a716b79b245021d1a24ea4bffc106ebf32a00f056043c3ed10883467084865a6c3e98ebc2d9d35aa30393270ca7ff2b92
+  languageName: node
+  linkType: hard
+
+"@tanstack/router-vite-plugin@npm:^1.16.5":
+  version: 1.19.0
+  resolution: "@tanstack/router-vite-plugin@npm:1.19.0"
+  dependencies:
+    "@tanstack/router-generator": "npm:1.19.0"
+  checksum: 10/6675b5e19456499c1bb4cfc764744e89b83216499496a3dd2f475b4ed5abe0244f9c19b14a166f0d8c29688a1095c6eb2df1a30a5712240382634d8a02dcb364
+  languageName: node
+  linkType: hard
+
+"@tanstack/store@npm:0.1.3":
+  version: 0.1.3
+  resolution: "@tanstack/store@npm:0.1.3"
+  checksum: 10/90a528e004553538be099b61d357e9dd1af7c0fb35f37b3c50a8a17462c5cd8c8d269d912f60c6dfcc18387a961f8c5a48e0b1e848db7f9d6ad357e45529294b
+  languageName: node
+  linkType: hard
+
+"@tanstack/table-core@npm:8.13.2":
+  version: 8.13.2
+  resolution: "@tanstack/table-core@npm:8.13.2"
+  checksum: 10/7381147fd9d50905cb581e1498f2924a3b46646872248b25cb4f287419b0819919211da983873921497efb82e4ca40b20db86dac332027a371df4d84cddc9532
   languageName: node
   linkType: hard
 
@@ -10217,7 +10343,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jest@npm:^29.5.3":
+"@types/jest@npm:^29.5.11":
   version: 29.5.12
   resolution: "@types/jest@npm:29.5.12"
   dependencies:
@@ -11725,7 +11851,8 @@ __metadata:
     "@fortawesome/fontawesome-svg-core": "npm:^6.3.0"
     "@fortawesome/free-solid-svg-icons": "npm:^6.3.0"
     "@fortawesome/react-fontawesome": "npm:^0.2.0"
-    "@hookform/resolvers": "npm:^3.3.1"
+    "@hookform/resolvers": "npm:^3.3.4"
+    "@packrat/crosspath": "npm:*"
     "@packrat/ui": "npm:*"
     "@packrat/validations": "npm:*"
     "@react-native-async-storage/async-storage": "npm:1.18.2"
@@ -11739,29 +11866,30 @@ __metadata:
     "@rneui/base": "npm:^4.0.0-rc.8"
     "@rneui/themed": "npm:^4.0.0-rc.8"
     "@rnmapbox/maps": "npm:^10.0.0-beta.79"
-    "@tamagui/animations-react-native": "npm:^1.90.6"
-    "@tamagui/babel-plugin": "npm:^1.90.6"
-    "@tamagui/config": "npm:^1.90.6"
-    "@tamagui/font-inter": "npm:^1.90.6"
-    "@tamagui/linear-gradient": "npm:^1.90.6"
-    "@tamagui/lucide-icons": "npm:^1.90.6"
-    "@tamagui/progress": "npm:^1.90.6"
-    "@tamagui/react-native-media-driver": "npm:^1.90.6"
-    "@tamagui/shorthands": "npm:^1.90.6"
-    "@tamagui/switch": "npm:^1.90.6"
-    "@tamagui/theme-base": "npm:^1.90.6"
-    "@tamagui/themes": "npm:^1.90.6"
+    "@tamagui/animations-react-native": "npm:^1.91.3"
+    "@tamagui/babel-plugin": "npm:^1.91.3"
+    "@tamagui/config": "npm:^1.91.3"
+    "@tamagui/font-inter": "npm:^1.91.3"
+    "@tamagui/linear-gradient": "npm:^1.91.3"
+    "@tamagui/lucide-icons": "npm:^1.91.3"
+    "@tamagui/progress": "npm:^1.91.3"
+    "@tamagui/react-native-media-driver": "npm:^1.91.3"
+    "@tamagui/shorthands": "npm:^1.91.3"
+    "@tamagui/switch": "npm:^1.91.3"
+    "@tamagui/theme-base": "npm:^1.91.3"
+    "@tamagui/themes": "npm:^1.91.3"
     "@tanstack/eslint-plugin-query": "npm:^5.14.6"
     "@tanstack/query-async-storage-persister": "npm:^4.36.1"
     "@tanstack/react-query": "npm:^4.36.1"
     "@tanstack/react-query-devtools": "npm:^4.36.1"
     "@tanstack/react-query-persist-client": "npm:^4.36.1"
+    "@tanstack/react-router": "npm:^1.16.5"
     "@tmcw/togeojson": "npm:^5.7.0"
     "@trpc/client": "npm:^10.45.1"
     "@trpc/react-query": "npm:^10.45.1"
     "@trpc/server": "npm:^10.45.1"
     "@tsconfig/react-native": "npm:^3.0.2"
-    "@types/jest": "npm:^29.5.3"
+    "@types/jest": "npm:^29.5.11"
     "@types/lodash": "npm:^4.14.202"
     "@types/node": "npm:^20.8.3"
     "@types/react": "npm:^18.2.55"
@@ -11792,7 +11920,7 @@ __metadata:
     expo-document-picker: "npm:~11.5.4"
     expo-file-system: "npm:~15.4.4"
     expo-font: "npm:~11.4.0"
-    expo-image-picker: "npm:~14.3.2"
+    expo-image-picker: "npm:^14.7.1"
     expo-linking: "npm:~5.0.2"
     expo-location: "npm:~16.1.0"
     expo-random: "npm:~13.2.0"
@@ -11817,7 +11945,7 @@ __metadata:
     prettier: "npm:^3.0.2"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
-    react-hook-form: "npm:^7.46.1"
+    react-hook-form: "npm:^7.50.1"
     react-native: "npm:0.72.10"
     react-native-dotenv: "npm:^3.4.8"
     react-native-elements: "npm:^3.4.3"
@@ -11841,12 +11969,11 @@ __metadata:
     server: "npm:*"
     solito: "npm:^4.2.0"
     superjson: "npm:^2.0.0"
-    tamagui: "npm:^1.90.6"
+    tamagui: "npm:^1.91.3"
     togpx: "npm:^0.5.4"
-    typescript: "npm:^5.2.2"
+    typescript: "npm:^5.3.3"
     uuid: "npm:3.4.0"
     xmldom: "npm:^0.6.0"
-    zod: "npm:^3.22.2"
   languageName: unknown
   linkType: soft
 
@@ -12006,6 +12133,19 @@ __metadata:
     es-object-atoms: "npm:^1.0.0"
     es-shim-unscopables: "npm:^1.0.2"
   checksum: 10/7dffcc665aa965718ad6de7e17ac50df0c5e38798c0a5bf9340cf24feb8594df6ec6f3fcbe714c1577728a1b18b5704b15669474b27bceeca91ef06ce2a23c31
+  languageName: node
+  linkType: hard
+
+"array.prototype.findlast@npm:^1.2.4":
+  version: 1.2.4
+  resolution: "array.prototype.findlast@npm:1.2.4"
+  dependencies:
+    call-bind: "npm:^1.0.5"
+    define-properties: "npm:^1.2.1"
+    es-abstract: "npm:^1.22.3"
+    es-errors: "npm:^1.3.0"
+    es-shim-unscopables: "npm:^1.0.2"
+  checksum: 10/1711e48058cabbad24cb694fa3721b760e56004758142c439880a19b9b206e3584b94bbad41e5f68e0da8785db1d09250061a46769baa90a0d2e09c05987c82d
   languageName: node
   linkType: hard
 
@@ -13427,6 +13567,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"bs-logger@npm:0.x":
+  version: 0.2.6
+  resolution: "bs-logger@npm:0.2.6"
+  dependencies:
+    fast-json-stable-stringify: "npm:2.x"
+  checksum: 10/e6d3ff82698bb3f20ce64fb85355c5716a3cf267f3977abe93bf9c32a2e46186b253f48a028ae5b96ab42bacd2c826766d9ae8cf6892f9b944656be9113cf212
+  languageName: node
+  linkType: hard
+
 "bser@npm:2.1.1":
   version: 2.1.1
   resolution: "bser@npm:2.1.1"
@@ -13564,7 +13713,7 @@ __metadata:
     hono: "npm:^3.9.1"
     server: "npm:*"
     trpc-panel: "npm:^1.3.4"
-    typescript: "npm:^5.2.2"
+    typescript: "npm:^5.3.3"
   languageName: unknown
   linkType: soft
 
@@ -14244,7 +14393,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"clsx@npm:^2.0.0":
+"clsx@npm:^2.0.0, clsx@npm:^2.1.0":
   version: 2.1.0
   resolution: "clsx@npm:2.1.0"
   checksum: 10/2e0ce7c3b6803d74fc8147c408f88e79245583202ac14abd9691e2aebb9f312de44270b79154320d10bb7804a9197869635d1291741084826cff20820f31542b
@@ -18169,7 +18318,7 @@ __metadata:
     "@fortawesome/fontawesome-svg-core": "npm:^6.3.0"
     "@fortawesome/free-solid-svg-icons": "npm:^6.3.0"
     "@fortawesome/react-fontawesome": "npm:^0.2.0"
-    "@hookform/resolvers": "npm:^3.3.1"
+    "@hookform/resolvers": "npm:^3.3.4"
     "@react-native-async-storage/async-storage": "npm:1.18.2"
     "@react-native-community/clipboard": "npm:^1.5.1"
     "@react-native-community/geolocation": "npm:^3.0.6"
@@ -18184,18 +18333,18 @@ __metadata:
     "@rneui/base": "npm:^4.0.0-rc.8"
     "@rneui/themed": "npm:^4.0.0-rc.8"
     "@rnmapbox/maps": "npm:^10.0.0-beta.79"
-    "@tamagui/animations-react-native": "npm:^1.90.6"
-    "@tamagui/babel-plugin": "npm:^1.90.6"
-    "@tamagui/config": "npm:^1.90.6"
-    "@tamagui/font-inter": "npm:^1.90.6"
-    "@tamagui/linear-gradient": "npm:^1.90.6"
-    "@tamagui/lucide-icons": "npm:^1.90.6"
-    "@tamagui/progress": "npm:^1.90.6"
-    "@tamagui/react-native-media-driver": "npm:^1.90.6"
-    "@tamagui/shorthands": "npm:^1.90.6"
-    "@tamagui/switch": "npm:^1.90.6"
-    "@tamagui/theme-base": "npm:^1.90.6"
-    "@tamagui/themes": "npm:^1.90.6"
+    "@tamagui/animations-react-native": "npm:^1.91.3"
+    "@tamagui/babel-plugin": "npm:^1.91.3"
+    "@tamagui/config": "npm:^1.91.3"
+    "@tamagui/font-inter": "npm:^1.91.3"
+    "@tamagui/linear-gradient": "npm:^1.91.3"
+    "@tamagui/lucide-icons": "npm:^1.91.3"
+    "@tamagui/progress": "npm:^1.91.3"
+    "@tamagui/react-native-media-driver": "npm:^1.91.3"
+    "@tamagui/shorthands": "npm:^1.91.3"
+    "@tamagui/switch": "npm:^1.91.3"
+    "@tamagui/theme-base": "npm:^1.91.3"
+    "@tamagui/themes": "npm:^1.91.3"
     "@tanstack/eslint-plugin-query": "npm:^5.14.6"
     "@tanstack/query-async-storage-persister": "npm:^4.36.1"
     "@tanstack/react-query": "npm:^4.36.1"
@@ -18206,7 +18355,7 @@ __metadata:
     "@trpc/react-query": "npm:^10.45.1"
     "@trpc/server": "npm:^10.45.1"
     "@tsconfig/react-native": "npm:^3.0.2"
-    "@types/jest": "npm:^29.5.3"
+    "@types/jest": "npm:^29.5.11"
     "@types/lodash": "npm:^4.14.202"
     "@types/node": "npm:^20.8.3"
     "@types/react": "npm:^18.2.55"
@@ -18241,7 +18390,8 @@ __metadata:
     expo-document-picker: "npm:~11.5.4"
     expo-file-system: "npm:~15.4.4"
     expo-font: "npm:~11.4.0"
-    expo-image-picker: "npm:~14.3.2"
+    expo-haptics: "npm:~12.8.1"
+    expo-image-picker: "npm:^14.7.1"
     expo-linear-gradient: "npm:~12.3.0"
     expo-linking: "npm:~5.0.2"
     expo-location: "npm:~16.1.0"
@@ -18264,7 +18414,7 @@ __metadata:
     prettier: "npm:^3.0.2"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
-    react-hook-form: "npm:^7.46.1"
+    react-hook-form: "npm:^7.50.1"
     react-native: "npm:0.72.10"
     react-native-dotenv: "npm:^3.4.8"
     react-native-elements: "npm:^3.4.3"
@@ -18291,13 +18441,12 @@ __metadata:
     serve: "npm:^14.2.0"
     server: "npm:*"
     superjson: "npm:^2.0.0"
-    tamagui: "npm:^1.90.6"
+    tamagui: "npm:^1.91.3"
     togpx: "npm:^0.5.4"
-    typescript: "npm:^5.2.2"
+    typescript: "npm:^5.3.3"
     uuid: "npm:3.4.0"
     xmldom: "npm:^0.6.0"
     zeego: "npm:^1.7.2"
-    zod: "npm:^3.22.2"
   languageName: unknown
   linkType: soft
 
@@ -18421,6 +18570,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"expo-haptics@npm:~12.8.1":
+  version: 12.8.1
+  resolution: "expo-haptics@npm:12.8.1"
+  peerDependencies:
+    expo: "*"
+  checksum: 10/62caee68d368c95ec91d0477c14ff538d66bb0c4707521153fc0ff396b72289fda158cd3858edb710f8a65ed9633709f9909af202506007da299813241bdff0b
+  languageName: node
+  linkType: hard
+
 "expo-head@npm:0.0.20":
   version: 0.0.20
   resolution: "expo-head@npm:0.0.20"
@@ -18434,23 +18592,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-image-loader@npm:~4.3.0":
-  version: 4.3.0
-  resolution: "expo-image-loader@npm:4.3.0"
+"expo-image-loader@npm:~4.6.0":
+  version: 4.6.0
+  resolution: "expo-image-loader@npm:4.6.0"
   peerDependencies:
     expo: "*"
-  checksum: 10/0440ac80a7b2331cdfd0db88aac0ba2fe61689e6347e2c6bedba6bf3220b95410c724ac9004252486870b582fc36d47d4bff008bba7052dcee2830256950974f
+  checksum: 10/02981667f03dc429cd9db37e0acc302e4a0c4bb5875dc087b1c26388ef64563481e52dddc1d42dd32794eb7051d1acf5bc0c078413469c29025a02d4d4af1154
   languageName: node
   linkType: hard
 
-"expo-image-picker@npm:~14.3.2":
-  version: 14.3.2
-  resolution: "expo-image-picker@npm:14.3.2"
+"expo-image-picker@npm:^14.7.1":
+  version: 14.7.1
+  resolution: "expo-image-picker@npm:14.7.1"
   dependencies:
-    expo-image-loader: "npm:~4.3.0"
+    expo-image-loader: "npm:~4.6.0"
   peerDependencies:
     expo: "*"
-  checksum: 10/18b0c1f200c8ccc8683e9f859123d073a5580197135d269423d23109065eb79dbca68c79b6b30ab32f34d44d3a8e9fc77709b90f3cadd11d55012221fb804cc7
+  checksum: 10/43a139c2f52bc71ca9e5c520fe70ef3a2af229118d1cf4485947841f6e464440f974c9c07fc250fe7dd085fc63a812829c2f29e4ee98569af9be8dcecbd46162
   languageName: node
   linkType: hard
 
@@ -18818,7 +18976,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-json-stable-stringify@npm:^2.0.0, fast-json-stable-stringify@npm:^2.1.0":
+"fast-json-stable-stringify@npm:2.x, fast-json-stable-stringify@npm:^2.0.0, fast-json-stable-stringify@npm:^2.1.0":
   version: 2.1.0
   resolution: "fast-json-stable-stringify@npm:2.1.0"
   checksum: 10/2c20055c1fa43c922428f16ca8bb29f2807de63e5c851f665f7ac9790176c01c3b40335257736b299764a8d383388dabc73c8083b8e1bc3d99f0a941444ec60e
@@ -20081,6 +20239,15 @@ __metadata:
     pify: "npm:^2.0.0"
     pinkie-promise: "npm:^2.0.0"
   checksum: 10/18109d6b9d55643d2b98b59c3cfae7073ccfe39829632f353d516cc124d836c2ddebe48a23f04af63d66a621b6d86dd4cbd7e6af906f2458a7fe510ffc4bd424
+  languageName: node
+  linkType: hard
+
+"goober@npm:^2.1.14":
+  version: 2.1.14
+  resolution: "goober@npm:2.1.14"
+  peerDependencies:
+    csstype: ^3.0.10
+  checksum: 10/372f18333ef64c403d29be7c1175cc9cd74cb947ec52cd42fbb1cf3f9870ac1dfec9c7671192cbf47ebc0ec17d8b05b6ef9a2b92952397d5b555a692381d5eaa
   languageName: node
   linkType: hard
 
@@ -22205,7 +22372,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-util@npm:^29.7.0":
+"jest-util@npm:^29.0.0, jest-util@npm:^29.7.0":
   version: 29.7.0
   resolution: "jest-util@npm:29.7.0"
   dependencies:
@@ -22272,7 +22439,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest@npm:^29.6.2":
+"jest@npm:^29.7.0":
   version: 29.7.0
   resolution: "jest@npm:29.7.0"
   dependencies:
@@ -23700,7 +23867,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash.memoize@npm:^4.1.2":
+"lodash.memoize@npm:4.x, lodash.memoize@npm:^4.1.2":
   version: 4.1.2
   resolution: "lodash.memoize@npm:4.1.2"
   checksum: 10/192b2168f310c86f303580b53acf81ab029761b9bd9caa9506a019ffea5f3363ea98d7e39e7e11e6b9917066c9d36a09a11f6fe16f812326390d8f3a54a1a6da
@@ -23996,7 +24163,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"make-error@npm:^1.1.1":
+"make-error@npm:1.x, make-error@npm:^1.1.1":
   version: 1.3.6
   resolution: "make-error@npm:1.3.6"
   checksum: 10/b86e5e0e25f7f777b77fabd8e2cbf15737972869d852a22b7e73c17623928fccb826d8e46b9951501d3f20e51ad74ba8c59ed584f610526a48f8ccf88aaec402
@@ -25589,9 +25756,9 @@ __metadata:
     "@cloudflare/workers-types": "npm:^4.20240117.0"
     "@expo/next-adapter": "npm:5.0.2"
     "@react-native/assets-registry": "npm:^0.74.0"
-    "@tamagui/config": "npm:^1.90.6"
-    "@tamagui/next-plugin": "npm:^1.90.6"
-    "@tamagui/next-theme": "npm:^1.90.6"
+    "@tamagui/config": "npm:^1.91.3"
+    "@tamagui/next-plugin": "npm:^1.91.3"
+    "@tamagui/next-theme": "npm:^1.91.3"
     "@types/node": "npm:^20.8.3"
     app: "npm:*"
     babel-plugin-module-resolver: "npm:^5.0.0"
@@ -25610,7 +25777,7 @@ __metadata:
     react-dom: "npm:^18.2.0"
     react-native-web: "npm:^0.19.10"
     setimmediate: "npm:^1.0.5"
-    tamagui: "npm:^1.90.6"
+    tamagui: "npm:^1.91.3"
     url-loader: "npm:^4.1.1"
     vercel: "npm:latest"
     wrangler: "npm:^3.28.3"
@@ -26907,7 +27074,7 @@ __metadata:
     lint-staged: "npm:^14.0.1"
     npm-run-all: "npm:^4.1.5"
     patch-package: "npm:^8.0.0"
-    typescript: "npm:^5.2.2"
+    typescript: "npm:^5.3.3"
   languageName: unknown
   linkType: soft
 
@@ -27912,7 +28079,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:^3.0.2":
+"prettier@npm:^3.0.2, prettier@npm:^3.1.1":
   version: 3.2.5
   resolution: "prettier@npm:3.2.5"
   bin:
@@ -28402,6 +28569,16 @@ __metadata:
   dependencies:
     performance-now: "npm:^2.1.0"
   checksum: 10/4c4b4c826b09d2aec6ca809f1a3c3c12136e7ec8d13fbb91f495dd2c99cd43345240e003da3bfd16036a432e635049fc6d9f69f9187f5f22ea88bb146ec75881
+  languageName: node
+  linkType: hard
+
+"randexp@npm:^0.5.3":
+  version: 0.5.3
+  resolution: "randexp@npm:0.5.3"
+  dependencies:
+    drange: "npm:^1.0.2"
+    ret: "npm:^0.2.0"
+  checksum: 10/e67238fe5b0a71b1bfe56b964f59fc10d37c0cb05bf686ec624696897b1c9b3cf7a371f8d3257b7c829a67a2a4a9c2c136c1decdad147bc3f62b2147f5cafb2b
   languageName: node
   linkType: hard
 
@@ -29729,6 +29906,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ret@npm:^0.2.0":
+  version: 0.2.2
+  resolution: "ret@npm:0.2.2"
+  checksum: 10/9f16517f77a3b508c529bc22187c132cd7907cd9270601d6794e1c8a58f6990872b4697b4edfdebb4f87017f9f0a285007b740a9ffb8236805b923fd1bc84eb1
+  languageName: node
+  linkType: hard
+
 "retry-request@npm:^5.0.0":
   version: 5.0.2
   resolution: "retry-request@npm:5.0.2"
@@ -30317,6 +30501,7 @@ __metadata:
     "@types/bcrypt": "npm:^5.0.0"
     "@types/cors": "npm:^2.8.13"
     "@types/csurf": "npm:^1.11.2"
+    "@types/jest": "npm:^29.5.11"
     "@types/mongoose": "npm:^5.11.97"
     "@types/node": "npm:^20.8.3"
     "@types/swagger-jsdoc": "npm:^6.0.1"
@@ -30357,7 +30542,7 @@ __metadata:
     hono: "npm:^3.10.1"
     http2: "npm:^3.3.7"
     i: "npm:^0.3.7"
-    jest: "npm:^29.6.2"
+    jest: "npm:^29.7.0"
     joi: "npm:^17.9.2"
     jsonwebtoken: "npm:^9.0.1"
     langchain: "npm:^0.0.203"
@@ -30388,8 +30573,8 @@ __metadata:
     trpc-panel: "npm:^1.3.4"
     trpc-playground: "npm:^1.0.4"
     ts-node: "npm:^10.9.1"
-    tsx: "npm:^4.7.0"
-    typescript: "npm:^5.2.2"
+    tsx: "npm:^4.7.1"
+    typescript: "npm:^5.3.3"
     uuid: "npm:^9.0.0"
     validator: "npm:^13.9.0"
     vitest: "npm:1.3.0"
@@ -31911,9 +32096,9 @@ __metadata:
     "@cloudflare/workers-types": "npm:^4.20240117.0"
     "@expo/next-adapter": "npm:5.0.2"
     "@react-native/assets-registry": "npm:^0.74.0"
-    "@tamagui/config": "npm:^1.90.6"
-    "@tamagui/next-plugin": "npm:^1.90.6"
-    "@tamagui/next-theme": "npm:^1.90.6"
+    "@tamagui/config": "npm:^1.91.3"
+    "@tamagui/next-plugin": "npm:^1.91.3"
+    "@tamagui/next-theme": "npm:^1.91.3"
     "@tauri-apps/cli": "npm:^1.5.9"
     "@types/node": "npm:^20.8.3"
     app: "npm:*"
@@ -31933,7 +32118,7 @@ __metadata:
     react-dom: "npm:^18.2.0"
     react-native-web: "npm:^0.19.10"
     setimmediate: "npm:^1.0.5"
-    tamagui: "npm:^1.90.6"
+    tamagui: "npm:^1.91.3"
     url-loader: "npm:^4.1.1"
     vercel: "npm:latest"
     wrangler: "npm:^3.28.3"
@@ -32164,6 +32349,13 @@ __metadata:
   version: 1.0.3
   resolution: "tiny-inflate@npm:1.0.3"
   checksum: 10/f620114fb51ea4a16ea7b4c62d6dd753f8faf41808a133c53d431ed4bf2ca377b21443653a0096894f2be22ca11bb327f148e7e5431f9246068917724ec01ffc
+  languageName: node
+  linkType: hard
+
+"tiny-invariant@npm:^1.3.1":
+  version: 1.3.3
+  resolution: "tiny-invariant@npm:1.3.3"
+  checksum: 10/5e185c8cc2266967984ce3b352a4e57cb89dad5a8abb0dea21468a6ecaa67cd5bb47a3b7a85d08041008644af4f667fb8b6575ba38ba5fb00b3b5068306e59fe
   languageName: node
   linkType: hard
 
@@ -32423,6 +32615,39 @@ __metadata:
   version: 0.1.13
   resolution: "ts-interface-checker@npm:0.1.13"
   checksum: 10/9f7346b9e25bade7a1050c001ec5a4f7023909c0e1644c5a96ae20703a131627f081479e6622a4ecee2177283d0069e651e507bedadd3904fc4010ab28ffce00
+  languageName: node
+  linkType: hard
+
+"ts-jest@npm:^29.1.1":
+  version: 29.1.2
+  resolution: "ts-jest@npm:29.1.2"
+  dependencies:
+    bs-logger: "npm:0.x"
+    fast-json-stable-stringify: "npm:2.x"
+    jest-util: "npm:^29.0.0"
+    json5: "npm:^2.2.3"
+    lodash.memoize: "npm:4.x"
+    make-error: "npm:1.x"
+    semver: "npm:^7.5.3"
+    yargs-parser: "npm:^21.0.1"
+  peerDependencies:
+    "@babel/core": ">=7.0.0-beta.0 <8"
+    "@jest/types": ^29.0.0
+    babel-jest: ^29.0.0
+    jest: ^29.0.0
+    typescript: ">=4.3 <6"
+  peerDependenciesMeta:
+    "@babel/core":
+      optional: true
+    "@jest/types":
+      optional: true
+    babel-jest:
+      optional: true
+    esbuild:
+      optional: true
+  bin:
+    ts-jest: cli.js
+  checksum: 10/5e40e7b933a1f3aa0d304d3c53913d1a7125fc79cd44e22b332f6e25dfe13008ddc7ac647066bb4f914d76083f7e8949f0bc156d793c30f3419f4ffd8180968b
   languageName: node
   linkType: hard
 
@@ -33435,7 +33660,11 @@ __metadata:
   dependencies:
     "@originjs/vite-plugin-commonjs": "npm:^1.0.3"
     "@packrat/ui": "npm:*"
-    "@tamagui/vite-plugin": "npm:^1.90.6"
+    "@packrat/validations": "npm:*"
+    "@tamagui/vite-plugin": "npm:^1.91.3"
+    "@tanstack/react-router": "npm:^1.16.5"
+    "@tanstack/router-devtools": "npm:^1.16.5"
+    "@tanstack/router-vite-plugin": "npm:^1.16.5"
     "@types/react": "npm:^18.2.55"
     "@types/react-dom": "npm:^18.2.19"
     "@typescript-eslint/eslint-plugin": "npm:^6.21.0"
@@ -33451,7 +33680,7 @@ __metadata:
     react-dom: "npm:^18.2.0"
     react-native: "npm:0.72.10"
     react-native-web: "npm:^0.19.10"
-    typescript: "npm:^5.2.2"
+    typescript: "npm:^5.3.3"
     vite: "npm:^5.1.0"
   languageName: unknown
   linkType: soft
@@ -34495,7 +34724,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yargs-parser@npm:^21.1.1":
+"yargs-parser@npm:^21.0.1, yargs-parser@npm:^21.1.1":
   version: 21.1.1
   resolution: "yargs-parser@npm:21.1.1"
   checksum: 10/9dc2c217ea3bf8d858041252d43e074f7166b53f3d010a8c711275e09cd3d62a002969a39858b92bbda2a6a63a585c7127014534a560b9c69ed2d923d113406e

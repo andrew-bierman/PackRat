@@ -1,4 +1,3 @@
-import { util } from 'zod';
 import { queryTrpc } from '../../trpc';
 import { useItemsUpdater } from 'app/hooks/items';
 import { useOfflineQueue } from 'app/hooks/offline';
@@ -10,38 +9,41 @@ export const useEditPackItem = (isItemPage) => {
 
   const mutation = queryTrpc.editItem.useMutation({
     onMutate: async (editedItem) => {
-      // if (!editedItem.packId) {
-      //   return;
-      // }
-      // console.log('Edited Item: ', editedItem);
-      // const previousPack = utils.getPackById.getData({
-      //   packId: editedItem.packId,
-      // });
-      // console.log('Previous Pack: ', previousPack);
-      // const itemIndex = previousPack.items.findIndex(
-      //   (item) => item.id === editedItem.id,
-      // );
-      // if (itemIndex === -1) {
-      //   throw new Error('Item not found in the pack.');
-      // }
-      // const newQueryData = {
-      //   ...previousPack,
-      //   items: previousPack.items.map((item, index) => {
-      //     if (index === itemIndex) {
-      //       // Update the edited item properties
-      //       return {
-      //         ...item,
-      //         ...editedItem,
-      //       };
-      //     }
-      //     return item;
-      //   }),
-      // };
-      // // Update the data in the query
-      // utils.getPackById.setData({ packId: editedItem.packId }, newQueryData);
-      // return {
-      //   previousPack,
-      // };
+      if (!editedItem.packId) {
+        return;
+      }
+      const previousPack = utils.getPackById.getData({
+        packId: editedItem.packId,
+      });
+      const itemIndex = previousPack.items.findIndex(
+        (item) => item._id === editedItem._id,
+      );
+      if (itemIndex === -1) {
+        throw new Error('Item not found in the pack.');
+      }
+      const newQueryData = {
+        ...previousPack,
+        items: previousPack.items.map((item, index) => {
+          if (index === itemIndex) {
+            // Update the edited item properties
+            return {
+              ...item,
+              ...editedItem,
+              category: editedItem.type ? {
+                name: editedItem.type
+              } : undefined
+            };
+          }
+          return item;
+        }),
+      };
+
+      // Update the data in the query
+      utils.getPackById.setData({ packId: editedItem.packId }, newQueryData);
+
+      return {
+        previousPack,
+      };
     },
     onError: (err, editedItem, context) => {
       console.log('Error');
