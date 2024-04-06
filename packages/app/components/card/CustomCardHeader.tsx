@@ -12,7 +12,7 @@ export const CustomCardHeader = ({ data, title, link, actionsComponent }) => {
 
   return (
     <>
-      <RStack style={{flex: 1}}>
+      <RStack style={{ flex: 1 }}>
         <RText>{title}</RText>
       </RStack>
       <View>

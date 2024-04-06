@@ -13,7 +13,6 @@ import RStack from '@packrat/ui/src/RStack';
 import { useModal, ModalProvider } from './provider';
 import { Platform, Dimensions } from 'react-native';
 
-
 export interface BaseModalProps {
   id?: string;
   title: string;
@@ -91,7 +90,10 @@ export const BaseModal = ({
     );
   }, [footerComponent]);
 
-  const dialogContentStyle = Platform.OS !== 'web' ? { maxWidth: Dimensions.get('screen').width - 36 } : undefined;
+  const dialogContentStyle =
+    Platform.OS !== 'web'
+      ? { maxWidth: Dimensions.get('screen').width - 36 }
+      : undefined;
 
   return (
     <Dialog
@@ -102,7 +104,6 @@ export const BaseModal = ({
         if (open && onOpen) onOpen();
         if (!open && onClose) onClose();
       }}
-      
     >
       {showTrigger && <Dialog.Trigger asChild>{triggerElement}</Dialog.Trigger>}
       <Dialog.Portal>

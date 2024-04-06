@@ -28,7 +28,9 @@ const DataList = ({ data }: DataListProps) => {
   };
 
   const results = fuseSearch(data, searchQuery, keys, options);
-  const filteredData = searchQuery ? results.map(result => result.item) : data;
+  const filteredData = searchQuery
+    ? results.map((result) => result.item)
+    : data;
 
   // ref for bottom sheet
   const bottomSheetRef = useRef(null);
@@ -37,64 +39,73 @@ const DataList = ({ data }: DataListProps) => {
   const snapPoints = useMemo(() => ['25%', '50%'], []);
 
   return (
-     <>
-     {Platform.OS == 'web' ? (
-    <BaseModal
-    
-    title="See all"
-    trigger="See all"
-    footerButtons={[
-      {
-        label: 'Cancel',
-        color: '#B22222',
-        onClick: (_, closeModal) => closeModal(),
-      },
-    ]}
-    footerComponent={undefined}
-  >
+    <>
+      {Platform.OS == 'web' ? (
+        <BaseModal
+          title="See all"
+          trigger="See all"
+          footerButtons={[
+            {
+              label: 'Cancel',
+              color: '#B22222',
+              onClick: (_, closeModal) => closeModal(),
+            },
+          ]}
+          footerComponent={undefined}
+        >
+          <View style={{ width: 'auto%', paddingBottom: 10 }}>
+            <SearchFilter
+              isSortHidden={true}
+              value={searchQuery}
+              onChange={() => {
+                setSearchQuery;
+              }}
+            />
+            <FlatList
+              data={filteredData.slice(0, 2)}
+              horizontal={false}
+              keyExtractor={(item) => item?._id + item?.type}
+              renderItem={({ item }) => (
+                <Card key={item?._id} type={item?.type} {...item} />
+              )}
+              showsVerticalScrollIndicator={false}
+              maxToRenderPerBatch={2}
+            />
+          </View>
+        </BaseModal>
+      ) : (
+        <BaseDialog
+          title="See all"
+          trigger="See all"
+          footerButtons={[
+            {
+              label: 'Cancel',
+              color: '#B22222',
+              onClick: (_, closeModal) => closeModal(),
+            },
+          ]}
+          footerComponent={undefined}
+        >
+          <SearchFilter
+            isSortHidden={true}
+            value={searchQuery}
+            onChange={() => {
+              setSearchQuery;
+            }}
+          />
 
-      <View style={{width:'auto%', paddingBottom:   10  }}>
-        <SearchFilter isSortHidden={true} value={searchQuery} onChange={()=>{setSearchQuery}} />
-        <FlatList
-          data={filteredData.slice(0,2)}
-          horizontal={false}
-          keyExtractor={(item) => item?._id + item?.type}
-          renderItem={({ item }) => (
-            <Card key={item?._id} type={item?.type} {...item} />
-          )}
-          showsVerticalScrollIndicator={false}
-          maxToRenderPerBatch={2}
-        />
-      </View>
-    </BaseModal>
-    ): (
-    <BaseDialog
-      title="See all"
-      trigger="See all"
-      footerButtons={[
-        {
-          label: 'Cancel',
-          color: '#B22222',
-          onClick: (_, closeModal) => closeModal(),
-        },
-      ]}
-      footerComponent={undefined}  
-    
-    >
-        <SearchFilter isSortHidden={true} value={searchQuery} onChange={()=>{setSearchQuery}} />
-
-      <FlatList
-        data={filteredData}
-        horizontal={false}
-        keyExtractor={(item) => item?._id + item?.type}
-        renderItem={({ item }) => (
-          <Card key={item?._id} type={item?.type} {...item} />
-        )}
-        showsVerticalScrollIndicator={false}
-        maxToRenderPerBatch={2}
-      />  
-    </BaseDialog>
-    )}
+          <FlatList
+            data={filteredData}
+            horizontal={false}
+            keyExtractor={(item) => item?._id + item?.type}
+            renderItem={({ item }) => (
+              <Card key={item?._id} type={item?.type} {...item} />
+            )}
+            showsVerticalScrollIndicator={false}
+            maxToRenderPerBatch={2}
+          />
+        </BaseDialog>
+      )}
     </>
   );
 };

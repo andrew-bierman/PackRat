@@ -16,16 +16,18 @@ export const useAddPackItem = () => {
       const newQueryData = {
         ...previousPack,
         items: [
-          ...previousPack?.items ?? [],
+          ...(previousPack?.items ?? []),
           {
             ...newItem,
             owners: [],
             global: false,
             packs: [newItem._id],
             _id: Date.now().toString(),
-            category: newItem.type ? {
-              name: newItem.type
-            } : undefined
+            category: newItem.type
+              ? {
+                  name: newItem.type,
+                }
+              : undefined,
           },
         ],
       };
