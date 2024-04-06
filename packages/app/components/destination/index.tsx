@@ -96,8 +96,6 @@ export const DestinationPage = () => {
 
   const shape = geoJSON ?? defaultShape;
 
-  const map = () => <MapContainer shape={shape} />;
-
   return (
     <ScrollView>
       {!isLoading && !isError && (
@@ -115,7 +113,7 @@ export const DestinationPage = () => {
                 color={currentTheme.colors.textPrimary}
               />
             )}
-            ContentComponent={map}
+            ContentComponent={MapContainer}
             contentProps={{ shape }}
             type="map"
           />
