@@ -18,7 +18,7 @@ export const DeletePackItemModal = ({
   isOpen,
   onClose,
   triggerComponent,
-  showTrigger
+  showTrigger,
 }: DeletePackItemModalProps) => {
   const { deletePackItem } = useDeletePackItem();
   const { handleDeleteItem } = useDeleteItem();
@@ -35,7 +35,7 @@ export const DeletePackItemModal = ({
     {
       label: 'Cancel',
       onClick: (_, closeModal) => {
-        closeModal()
+        closeModal();
         if (onClose) onClose();
       },
       color: 'gray',

@@ -55,11 +55,7 @@ export const DetailsComponent = ({
               data={data}
               title={data?.name}
               link={link}
-              content={
-                <>
-                  {additionalComps}
-                </>
-              }
+              content={<>{additionalComps}</>}
               destination={data?.destination}
               footer={data?.details}
               type="trip"

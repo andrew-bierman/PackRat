@@ -78,13 +78,15 @@ export const ItemsTable = ({
       `${formatNumber(weight)} ${unit}`,
       quantity,
       `${category?.name || type}`,
-      <EditPackItemModal 
-        triggerComponent={<MaterialIcons
+      <EditPackItemModal
+        triggerComponent={
+          <MaterialIcons
             name="edit"
             size={20}
             color={currentTheme.colors.primary}
           />
-        }>
+        }
+      >
         <AddItem
           _id={_id}
           isEdit={true}
@@ -95,7 +97,7 @@ export const ItemsTable = ({
           page={page}
         />
       </EditPackItemModal>,
-      <DeletePackItemModal 
+      <DeletePackItemModal
         itemId={_id}
         triggerComponent={
           <MaterialIcons
@@ -159,7 +161,15 @@ export const ItemsTable = ({
                 'Edit',
                 'Delete',
               ].map((header, index) => (
-                <Cell key={index} data={<RText style={{fontSize: screenWidth <= 425 ? 11 : 15}}>{header}</RText>} textStyle={styles.headerText} />
+                <Cell
+                  key={index}
+                  data={
+                    <RText style={{ fontSize: screenWidth <= 425 ? 11 : 15 }}>
+                      {header}
+                    </RText>
+                  }
+                  textStyle={styles.headerText}
+                />
               ))}
               style={styles.head}
             />

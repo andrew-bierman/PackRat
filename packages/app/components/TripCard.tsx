@@ -65,12 +65,12 @@ export default function TripCard({
       }}
       style={
         isSearch
-        ? styles.searchContainer
-        : isMap
-          ? styles.mapCard
-          : styles.containerMobile
-            ? styles.containerMobile
-            : styles.mutualStyles
+          ? styles.searchContainer
+          : isMap
+            ? styles.mapCard
+            : styles.containerMobile
+              ? styles.containerMobile
+              : styles.mutualStyles
       }
     >
       <RStack

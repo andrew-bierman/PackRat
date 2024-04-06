@@ -53,7 +53,7 @@ const FeedSearchFilter = ({
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
 
-  const onSearch = ({ search }) =>setSearchQuery(search);
+  const onSearch = ({ search }) => setSearchQuery(search);
 
   return (
     <View style={styles.filterContainer}>
@@ -81,78 +81,80 @@ const FeedSearchFilter = ({
         </Form>
       </View>
       <RSeparator />
-      {!isSortHidden && ( <RStack
-        // flex={1}
-        flexWrap="wrap"
-        flexDirection="row"
-        justifyContent="space-between"
-        alignItems="center"
-        padding={2}
-        margin={2}
-      >
-        {feedType === 'public' && (
+      {!isSortHidden && (
+        <RStack
+          // flex={1}
+          flexWrap="wrap"
+          flexDirection="row"
+          justifyContent="space-between"
+          alignItems="center"
+          padding={2}
+          margin={2}
+        >
+          {feedType === 'public' && (
+            <RStack
+              style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}
+            >
+              <RText
+                fontSize={18}
+                fontWeight="bold"
+                color={currentTheme.colors.textColor}
+              >
+                Packs
+              </RText>
+
+              <RSwitch
+                id="single-switch"
+                size="$1.5"
+                width="$4"
+                checked={selectedTypes.pack}
+                onCheckedChange={handleTogglePack}
+              >
+                <Switch.Thumb />
+              </RSwitch>
+              <RText
+                fontSize={18}
+                fontWeight="bold"
+                color={currentTheme.colors.textColor}
+              >
+                Trips
+              </RText>
+              <RSwitch
+                id="two-switch"
+                size="$1.5"
+                width="$4"
+                checked={selectedTypes.trip}
+                onCheckedChange={handleToggleTrip}
+              >
+                <Switch.Thumb />
+              </RSwitch>
+            </RStack>
+          )}
           <RStack
             style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}
           >
             <RText
-              fontSize={18}
+              fontSize={17}
               fontWeight="bold"
               color={currentTheme.colors.textColor}
             >
-              Packs
+              Sort By:
             </RText>
-
-            <RSwitch
-              id="single-switch"
-              size="$1.5"
-              width="$4"
-              checked={selectedTypes.pack}
-              onCheckedChange={handleTogglePack}
-            >
-              <Switch.Thumb />
-            </RSwitch>
-            <RText
-              fontSize={18}
-              fontWeight="bold"
-              color={currentTheme.colors.textColor}
-            >
-              Trips
-            </RText>
-            <RSwitch
-              id="two-switch"
-              size="$1.5"
-              width="$4"
-              checked={selectedTypes.trip}
-              onCheckedChange={handleToggleTrip}
-            >
-              <Switch.Thumb />
-            </RSwitch>
+            <DropdownComponent
+              value={queryString}
+              data={dataValues}
+              onValueChange={handleSortChange}
+              placeholder="Sort By"
+              style={styles.dropdown}
+              width={150}
+            />
           </RStack>
-        )}
-        <RStack style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
-          <RText
-            fontSize={17}
-            fontWeight="bold"
-            color={currentTheme.colors.textColor}
-          >
-            Sort By:
-          </RText>
-          <DropdownComponent
-            value={queryString}
-            data={dataValues}
-            onValueChange={handleSortChange}
-            placeholder="Sort By"
-            style={styles.dropdown}
-            width={150}
-          />
+          {(feedType === 'userPacks' || feedType === 'userTrips') && (
+            <RButton onPress={handleCreateClick}>Create</RButton>
+          )}
         </RStack>
-        {(feedType === 'userPacks' || feedType === 'userTrips') && (
-          <RButton onPress={handleCreateClick}>Create</RButton>
-        )}
-      </RStack>)}
+      )}
 
-      
-     
       <RSeparator
         marginTop={10}
         marginBottom={10}

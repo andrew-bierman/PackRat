@@ -48,7 +48,12 @@ export default function Settings() {
           <RSeparator marginVertical={8} />
         </RStack>
         <Form validationSchema={userSettingsSchema} defaultValues={{ ...user }}>
-          <RStack space="$3" width="fit-content" maw="100%" marginHorizontal="auto">
+          <RStack
+            space="$3"
+            width="fit-content"
+            maw="100%"
+            marginHorizontal="auto"
+          >
             <ImageUpload
               label="Profile Picture"
               name="profileImage"
@@ -130,7 +135,11 @@ export default function Settings() {
                 secureTextEntry={true}
               />
             </RStack>
-            <SubmitButton onSubmit={handleUpdatePassword} color="white" style={{ backgroundColor: '#0284c7' }}>
+            <SubmitButton
+              onSubmit={handleUpdatePassword}
+              color="white"
+              style={{ backgroundColor: '#0284c7' }}
+            >
               Change password
             </SubmitButton>
           </RStack>

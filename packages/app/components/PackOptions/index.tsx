@@ -27,10 +27,10 @@ export const PackOptions: React.FC<PackOptionsProps> = ({
         triggerComponent={<MenuTriggerComponent openModal={openModal} />}
       >
         <RStack style={{ flexDirection: 'row', alignItems: 'center' }}>
-          {Edit} <Text>Edit{' '}</Text>
+          {Edit} <Text>Edit </Text>
         </RStack>
         <RStack style={{ flexDirection: 'row', alignItems: 'center' }}>
-          {Delete} <Text>Delete{' '}</Text>
+          {Delete} <Text>Delete </Text>
         </RStack>
         <RStack
           style={{
@@ -39,7 +39,7 @@ export const PackOptions: React.FC<PackOptionsProps> = ({
             justifyContent: 'flex-end',
           }}
         >
-          {Ignore} <Text>{' '}</Text>
+          {Ignore} <Text> </Text>
         </RStack>
       </BaseModal>
     </RStack>

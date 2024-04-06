@@ -176,7 +176,7 @@ const loadStyles = (theme) => {
       backgroundColor: currentTheme.colors.background,
       fontSize: 18,
       padding: 15,
-      ...(Platform.OS !== "web" && {paddingVertical: 0})
+      ...(Platform.OS !== 'web' && { paddingVertical: 0 }),
     },
     filterContainer: {
       backgroundColor: currentTheme.colors.card,
@@ -184,7 +184,7 @@ const loadStyles = (theme) => {
       fontSize: 18,
       width: '100%',
       borderRadius: 10,
-      marginTop:20
+      marginTop: 20,
     },
     searchContainer: {
       flexDirection: 'row',

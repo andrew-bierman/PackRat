@@ -20,7 +20,7 @@ export default function PackContainer({ isCreatingTrip = false }) {
   const [refetch, setRefetch] = useState(false);
   const styles = useCustomStyles(loadStyles);
   const { useParams } = createParam<{ id: number }>();
-  const {params, setParams} = useParams('id');
+  const { params, setParams } = useParams('id');
 
   // TODO - improve refetch logic. Should be handled entirely by the hook
 
@@ -49,9 +49,9 @@ export default function PackContainer({ isCreatingTrip = false }) {
     setCurrentPackId(selectedPack?._id);
 
     if (isCreatingTrip && selectedPack?._id) {
-     setParams({
-      id: selectedPack?._id
-     }) 
+      setParams({
+        id: selectedPack?._id,
+      });
     }
   };
 

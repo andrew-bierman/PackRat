@@ -98,7 +98,7 @@
     "migrate-mongo": "^10.0.0",
     "mocha": "^10.2.0",
     "openapi-generator": "^0.1.39",
-    "prettier": "^3.0.2",
+    "prettier": "^3.2.5",
     "ts-jest": "^29.1.1",
     "ts-node": "^10.9.1",
     "tsx": "^4.7.1"

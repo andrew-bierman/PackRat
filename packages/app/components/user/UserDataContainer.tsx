@@ -1,6 +1,13 @@
 import { Link } from '@packrat/crosspath';
-import { RStack, RText, RButton, RSkeleton, VirtualList, BaseModal } from '@packrat/ui';
-import {  VirtualizedList } from 'react-native';
+import {
+  RStack,
+  RText,
+  RButton,
+  RSkeleton,
+  VirtualList,
+  BaseModal,
+} from '@packrat/ui';
+import { VirtualizedList } from 'react-native';
 import UserDataCard from './UserDataCard';
 import React, { useEffect, useState } from 'react';
 import LargeCard from '../card/LargeCard';
@@ -151,14 +158,9 @@ export default function UserDataContainer({
                   alignItems: 'center',
                 }}
               />
-          
-              
-      <DataList data={data} /> 
-      
- 
-     
-            </>
 
+              <DataList data={data} />
+            </>
           ) : // <VirtualizedList
           //   getItemCount={() => data.length}
           //   getItem={(data, index) => data[index]}
@@ -197,7 +199,7 @@ export default function UserDataContainer({
             </Link>
           ) : (
             <></>
-            )}
+          )}
         </RStack>
       </RStack>
     </LargeCard>
