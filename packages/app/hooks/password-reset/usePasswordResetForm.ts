@@ -9,8 +9,6 @@ export const usePasswordResetForm = ({ token }) => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // const { token } = useSearchParams();
-
   /**
    * Handles the password reset.
    *

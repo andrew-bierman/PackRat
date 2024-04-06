@@ -6,20 +6,24 @@ import {
 } from '../../services/user/user.service';
 
 export async function emailExistsService({ email }: { email?: string }) {
-  const val = await findUserByEmail(email);
-  if (val) {
-    sendEmailNotice(email).then(async (result1: any) => {
-      if (result1.status) {
-        const { newcode } = result1;
-        findUserAndUpdate(email, newcode, 'code').then(async (result2: any) => {
-          if (result2.status) {
-            return result2;
-          }
-        });
-      }
-    });
-  } else {
-    return val;
+  if (email) {
+    const val = await findUserByEmail(email);
+    if (val) {
+      sendEmailNotice(email).then(async (result1: any) => {
+        if (result1.status) {
+          const { newcode } = result1;
+          findUserAndUpdate(email, newcode, 'code').then(
+            async (result2: any) => {
+              if (result2.status) {
+                return result2;
+              }
+            },
+          );
+        }
+      });
+    } else {
+      return val;
+    }
   }
 }
 

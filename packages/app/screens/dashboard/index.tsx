@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform, View } from 'react-native';
+import { GestureResponderEvent, Platform, View } from 'react-native';
 import { RStack, RScrollView } from '@packrat/ui';
 import { theme } from '../../theme';
 import useTheme from '../../hooks/useTheme';
@@ -51,6 +51,7 @@ const loadStyles = (theme) => {
       flexGrow: 1,
       backgroundColor: currentTheme.colors.background,
       width: '100%',
+      paddingBottom: 50,
     },
     content: {
       flexGrow: 1,

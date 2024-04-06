@@ -6,6 +6,10 @@ export async function getTrailsOsmService(lat, lon, radius) {
   // set default values for lat, lon, and radius
   const overpassUrl = process.env.OSM_URI;
 
+  if (!overpassUrl) {
+    throw new Error('OSM_URI is not defined in the environment variables'); // But it is defined so this is okay
+  }
+
   const overpassQuery = `
        [out:json][timeout:25];
        (

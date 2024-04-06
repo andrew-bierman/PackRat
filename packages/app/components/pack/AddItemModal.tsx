@@ -25,23 +25,21 @@ export const AddItemModal = ({
       trigger="Add Item"
       footerButtons={[
         {
-          label: 'Save',
-          color: `${currentTheme.colors.secondaryBlue}`,
-          onClick: (_, closeModal) => closeModal(),
-        },
-        {
           label: 'Cancel',
           color: '#B22222',
           onClick: (_, closeModal) => closeModal(),
         },
       ]}
+      footerComponent={undefined}
+      isOpen={isAddItemModalOpen}
+      onOpen={() => setIsAddItemModalOpen(true)}
+      onClose={() => setIsAddItemModalOpen(false)}
     >
       <AddItem
         packId={currentPackId}
         currentPack={currentPack}
-        setRefetch={() => {
-          setRefetch();
-        }}
+        setRefetch={setRefetch}
+        closeModalHandler={() => setIsAddItemModalOpen(false)}
       />
     </BaseModal>
   );

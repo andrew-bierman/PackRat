@@ -11,5 +11,5 @@ export default function ItemsPage() {
 }
 
 ItemsPage.getLayout = function getLayout(page: any) {
-    return <AuthWrapper>{page}</AuthWrapper>;
+  return <AuthWrapper>{page}</AuthWrapper>;
 };

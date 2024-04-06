@@ -1,9 +1,14 @@
-import { Animated, Text } from 'react-native';
+import { StyleSheet, Animated, Text } from 'react-native';
 import { useSkeletonAnimation } from './useSkeletonAnimation';
 
 export const RSkeleton = ({ style }) => {
   const fadeAnim = useSkeletonAnimation();
 
+  const styles = StyleSheet.create({
+    text: {
+      fontSize: 24,
+    },
+  });
   return (
     <Animated.View
       style={{
@@ -12,11 +17,11 @@ export const RSkeleton = ({ style }) => {
         alignItems: 'center',
         backgroundColor: '#e2e1eb',
         width: '100%',
-        borderRadius: '4px',
+        borderRadius: 4,
         ...style,
       }}
     >
-      <Text style={{ fontSize: '24px' }}> </Text>
+      <Text style={styles.text}> </Text>
     </Animated.View>
   );
 };

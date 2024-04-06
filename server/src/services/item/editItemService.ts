@@ -24,6 +24,10 @@ export const editItemService = async (
     name: type,
   });
 
+  if (!category) {
+    throw new Error(`No category found with name: ${type}`);
+  }
+
   const newItem = await Item.findOneAndUpdate(
     { _id },
     {

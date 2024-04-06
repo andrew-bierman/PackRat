@@ -23,6 +23,10 @@ export async function getPhotonDetailsService(id, type) {
 
   const overpassUrl = process.env.OSM_URI;
 
+  if (!overpassUrl) {
+    throw new Error('OSM_URI is not defined in the environment variables'); // It exists so this is okay, this is to pass type check
+  }
+
   const overpassQuery = `[out:json][timeout:25];${type}(${id});(._;>;);out body;`;
 
   console.log('overpassQuery', overpassQuery);

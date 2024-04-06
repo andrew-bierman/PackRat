@@ -25,6 +25,11 @@ export function getUserFavoritesRoute() {
     .query(async (opts) => {
       const { userId } = opts.input;
       const user = await User.findById({ _id: userId }).populate('favorites');
+
+      if (!user) {
+        throw new Error('User not found');
+      }
+
       return user.favorites;
     });
 }
