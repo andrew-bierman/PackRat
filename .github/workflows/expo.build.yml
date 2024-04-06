@@ -49,9 +49,9 @@ jobs:
      
 
     - name: Run Local Build for Android
-      working-directory: ./apps/expo
+      # working-directory: ./apps/expo
       run: eas build --non-interactive --platform android --local
 
     - name: Run Local Build for iOS
-      working-directory: ./apps/expo
+      # working-directory: ./apps/expo
       run: eas build --non-interactive --platform ios --local
