@@ -9,7 +9,7 @@ import MapPreview from './MapPreview';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useWebMap } from 'app/hooks/map/useWebMap';
 import useGpxUpload from './useGpxUpload';
-// import 'mapbox-gl/dist/mapbox-gl.css'
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 mapboxgl.accessToken = NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN || MAPBOX_ACCESS_TOKEN;
 
@@ -31,6 +31,7 @@ const WebMap = ({ shape: shapeProp }) => {
     fetchGpxDownload,
     downloading,
     mapContainer,
+    startNavigation,
   } = useWebMap({ shape: shapeProp });
 
   const handleGpxUpload = useGpxUpload(setShape);
@@ -59,6 +60,7 @@ const WebMap = ({ shape: shapeProp }) => {
         downloadable={downloadable}
         downloading={downloading}
         navigateToMaps={openMaps}
+        startNavigation={startNavigation}
         onDownload={fetchGpxDownload}
         handleGpxUpload={handleGpxUpload}
         shape={shape}

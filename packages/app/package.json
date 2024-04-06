@@ -98,7 +98,7 @@
     "immer": "^10.0.3",
     "jotai": "^2.6.4",
     "lodash": "^4.17.21",
-    "mapbox-gl": "1.13.3",
+    "mapbox-gl": "2.4.0",
     "moti": "^0.27.2",
     "native-base": "^3.4.28",
     "normalize-css-color": "^1.0.2",

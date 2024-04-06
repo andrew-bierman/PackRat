@@ -1,3 +1,7 @@
 body {
   background-color: rgba(2, 132, 199) !important;
 }
+
+.mapboxgl-ctrl button.mapboxgl-ctrl-geolocate{
+  display: none;
+}
