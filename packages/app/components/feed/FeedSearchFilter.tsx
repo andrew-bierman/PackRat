@@ -29,6 +29,7 @@ const dataValues = [
 
 interface FeedSearchFilterProps {
   feedType: string;
+  isSortHidden: boolean;
   handleSortChange: (value: string) => void;
   handleTogglePack: () => void;
   handleToggleTrip: () => void;
@@ -40,6 +41,7 @@ interface FeedSearchFilterProps {
 
 const FeedSearchFilter = ({
   feedType,
+  isSortHidden,
   handleSortChange,
   handleTogglePack,
   handleToggleTrip,
@@ -51,7 +53,7 @@ const FeedSearchFilter = ({
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
 
-  const onSearch = ({ search }) => console.log(search);
+  const onSearch = ({ search }) =>setSearchQuery(search);
 
   return (
     <View style={styles.filterContainer}>
@@ -79,7 +81,7 @@ const FeedSearchFilter = ({
         </Form>
       </View>
       <RSeparator />
-      <RStack
+      {!isSortHidden && ( <RStack
         // flex={1}
         flexWrap="wrap"
         flexDirection="row"
@@ -147,7 +149,10 @@ const FeedSearchFilter = ({
         {(feedType === 'userPacks' || feedType === 'userTrips') && (
           <RButton onPress={handleCreateClick}>Create</RButton>
         )}
-      </RStack>
+      </RStack>)}
+
+      
+     
       <RSeparator
         marginTop={10}
         marginBottom={10}
