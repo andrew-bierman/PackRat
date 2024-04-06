@@ -7,8 +7,9 @@ import {
   addItem as addItemSchema,
   editItem as editItemSchema,
   type Item,
-} from '@packrat/validations';
+} from 'server/src/middleware/validators/itemRoutesValidator';
 import { useMemo } from 'react';
+import { useAuthUser } from 'app/auth/hooks';
 
 interface AddItemProps {
   isEdit: boolean;
@@ -46,6 +47,10 @@ export const AddItem = ({
   setIsAddItemModalOpen = () => {},
 }: AddItemProps) => {
   const [currPackId] = usePackId();
+
+  const user = useAuthUser();
+
+  const ownerId = user?.id;
 
   const {
     // mutation: addPackItemMutation
@@ -105,6 +110,7 @@ export const AddItem = ({
         isEdit={isEdit}
         currentPack={currentPack}
         packId={packId}
+        ownerId={ownerId}
       />
     </View>
   );

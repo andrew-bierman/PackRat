@@ -10,16 +10,26 @@ export function LmInputRhf<T extends FieldValues = FieldValues>({
   control,
   rules = {},
   defaultValue,
+  isNumeric = false, // Add an isNumeric prop to specify if the input should be treated as numeric
   ...inputProps
-}: LmInputRhfProps<T>) {
+}: LmInputRhfProps<T> & { isNumeric?: boolean }) {
   if (inputProps.required) {
     rules.required = 'This field is required';
   }
+
+  const handleOnChange = isNumeric
+    ? (text) => {
+        const number = parseFloat(text);
+        // Check if the parsed number is NaN. If so, return an empty string; otherwise, return the number.
+        return isNaN(number) ? '' : number;
+      }
+    : (text) => text;
+
   return (
     <Controller<T>
       name={name}
-      rules={rules}
       control={control}
+      rules={rules}
       defaultValue={defaultValue}
       render={({
         field: { onChange, value, onBlur, ref },
@@ -28,10 +38,10 @@ export function LmInputRhf<T extends FieldValues = FieldValues>({
         <LmInput
           {...inputProps}
           ref={ref}
-          value={value ?? ''}
+          value={(value ?? '').toString()} // Ensure value is defined before calling toString()
           onBlur={onBlur}
           error={!!error}
-          onChangeText={onChange}
+          onChangeText={(text) => onChange(handleOnChange(text))}
           helperText={error ? error.message : inputProps.helperText}
         />
       )}
