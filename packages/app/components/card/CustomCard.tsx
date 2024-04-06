@@ -60,6 +60,7 @@ export const CustomCard = ({
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'center',
+            gap: 16,
           }}
         >
           {type === 'trip' ? (
@@ -107,6 +108,7 @@ const loadStyles = (theme) => {
       flex: 1,
       gap: 45,
       justifyContent: 'space-between',
+      width: '100%',
       alignItems: 'center',
       marginBottom: 20,
       border: '1',

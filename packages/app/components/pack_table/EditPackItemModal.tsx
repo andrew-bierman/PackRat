@@ -1,7 +1,7 @@
 import React, { cloneElement, isValidElement } from 'react';
 import { BaseModal, useModal } from '@packrat/ui';
 
-export const EditPackItemModal = ({ children, isOpen, onClose, showTrigger}) => {
+export const EditPackItemModal = ({ children, isOpen, onClose, showTrigger,   triggerComponent}) => {
   const footerButtons = [
     {
       label: 'Cancel',
@@ -25,6 +25,7 @@ export const EditPackItemModal = ({ children, isOpen, onClose, showTrigger}) => 
         isOpen={isOpen}
         onClose={onClose}
         footerButtons={footerButtons}
+        triggerComponent={triggerComponent}
         showTrigger={showTrigger !== undefined ? showTrigger : true}
       >
         <ModalContent />
