@@ -31,7 +31,8 @@ interface ItemFormProps {
       };
     }>;
   } | null;
-  packId: number;
+  packId: string;
+  ownerId: string;
 }
 
 export const ItemForm = ({
@@ -43,6 +44,7 @@ export const ItemForm = ({
   validationSchema,
   currentPack,
   packId,
+  ownerId,
 }: ItemFormProps) => {
   let hasWaterAdded = false;
   if (
@@ -83,7 +85,7 @@ export const ItemForm = ({
             }}
           >
             <View>
-              <FormInput name="weight" placeholder="Weight" />
+              <FormInput name="weight" placeholder="Weight" isNumeric />
             </View>
             {data && (
               <FormSelect
@@ -98,6 +100,7 @@ export const ItemForm = ({
           <FormInput
             name="quantity"
             placeholder="Quantity"
+            isNumeric
             style={{ width: '100%' }}
           />
           <FormRadioGroup name="type" options={radioOptions} />
@@ -108,14 +111,19 @@ export const ItemForm = ({
                 {isLoading
                   ? 'Loading..'
                   : isEdit == true
-                  ? 'Edit item'
-                  : 'Add Item'}
+                    ? 'Edit item'
+                    : 'Add Item'}
               </RText>
             </SubmitButton>
           )}
           <FormInput
             name="packId"
             defaultValue={packId}
+            style={{ display: 'none' }}
+          />
+          <FormInput
+            name="ownerId"
+            defaultValue={ownerId}
             style={{ display: 'none' }}
           />
         </RStack>
