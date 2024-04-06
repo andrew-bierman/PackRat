@@ -12,20 +12,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+
+
       - name: Install yarn dependencies
         run: |
           yarn install
+
+
   build-android:
     needs: install-and-test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+
       - name: Install yarn dependencies
         run: |
           yarn install
+
       - name: Build Android Release
         run: |
           cd apps/expo/android && ./gradlew assembleRelease
+
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
         with:
