@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Platform,
   View,
@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 // import { check, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import Mapbox, { ShapeSource, offlineManager, Camera } from '@rnmapbox/maps';
+import Mapbox, { Camera, UserTrackingMode, UserLocation } from '@rnmapbox/maps';
 import { AlertDialog } from 'native-base';
 import { RButton, RInput } from '@packrat/ui';
 
@@ -69,6 +69,8 @@ function NativeMap({ shape: shapeProp }) {
     fullMapDimension,
     previewMapStyle,
   } = useNativeMap({ shape: shapeProp });
+
+  const [userLocation, setUserLocation] = useState(null);
 
   function CircleCapComp() {
     return (
@@ -145,6 +147,22 @@ function NativeMap({ shape: shapeProp }) {
             />
           </View>
         </Mapbox.PointAnnotation>
+
+        {/* navigation */}
+        {userLocation && (
+          <>
+            <Camera
+              centerCoordinate={userLocation}
+              zoomLevel={14}
+              followUserLocation
+              followZoomLevel={18}
+              followUserMode={UserTrackingMode.FollowWithCourse}
+            />
+
+            <UserLocation animated={true} showsUserHeadingIndicator={true} />
+          </>
+        )}
+
         {/* trail */}
         {isPoint(shape) ? (
           <Mapbox.PointAnnotation
@@ -254,6 +272,11 @@ function NativeMap({ shape: shapeProp }) {
           }
         }}
         progress={progress}
+        startNavigation={async () => {
+          getPosition((location) => {
+            setUserLocation([location.longitude, location.latitude]);
+          });
+        }}
       />
     </View>
   );
