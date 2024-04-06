@@ -1,6 +1,6 @@
 import { publicProcedure } from '../../trpc';
 import { getUserByIdService } from '../../services/user/getUserByIdService';
-import * as validator from '../../middleware/validators/index';
+import * as validator from '@packrat/validations';
 /**
  * Retrieves a user by their ID from the database and returns the user object as a JSON response.
  * @param {Object} req - The request object.

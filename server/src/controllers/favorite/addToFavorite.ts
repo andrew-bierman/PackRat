@@ -1,6 +1,6 @@
 import { addToFavoriteService } from '../../services/favorite/favorite.service';
 import { publicProcedure } from '../../trpc';
-import * as validator from '../../middleware/validators/index';
+import * as validator from '@packrat/validations';
 
 // import { prisma } from '../../prisma';
 /**

@@ -1,6 +1,6 @@
 import { publicProcedure } from '../../trpc';
 import { resetEmail } from '../../utils/accountEmail';
-import * as validator from '../../middleware/validators/index';
+import * as validator from '@packrat/validations';
 import { User } from '../../drizzle/methods/User';
 
 /**

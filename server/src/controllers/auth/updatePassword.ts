@@ -1,6 +1,6 @@
 import { publicProcedure } from '../../trpc';
 import { findUserAndUpdate } from '../../services/user/user.service';
-import * as validator from '../../middleware/validators/index';
+import * as validator from '@packrat/validations';
 // import { prisma } from '../../prisma';
 
 /**
