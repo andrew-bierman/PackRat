@@ -82,6 +82,7 @@
     "expo-checkbox": "~2.4.0",
     "expo-constants": "~14.4.2",
     "expo-crypto": "~12.4.1",
+    "expo-dev-client": "~2.4.13",
     "expo-document-picker": "~11.5.4",
     "expo-file-system": "~15.4.4",
     "expo-font": "~11.4.0",
