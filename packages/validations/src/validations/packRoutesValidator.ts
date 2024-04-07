@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import JoiObjectId from './objectIdValidator';
 
 export const getPacks = z.object({
   ownerId: z.string(),
@@ -7,7 +6,7 @@ export const getPacks = z.object({
 });
 
 export const getPackById = z.object({
-  packId: JoiObjectId(),
+  packId: z.string(),
 });
 
 export const addPack = z.object({
@@ -23,7 +22,7 @@ export const editPack = z.object({
 });
 
 export const deletePack = z.object({
-  packId: JoiObjectId(),
+  packId: z.string(),
 });
 
 export const getPublicPacks = z.object({
@@ -37,7 +36,6 @@ export const sendMessage = z.object({
 export const addPackSchema = z.object({
   name: z.string().nonempty(),
   isPublic: z.union([z.literal('0'), z.literal('1')]),
-  packId: z.string(),
 });
 
 export const duplicatePublicPack = z.object({

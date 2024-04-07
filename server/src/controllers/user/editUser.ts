@@ -1,12 +1,7 @@
 import { publicProcedure } from '../../trpc';
 import * as validator from '@packrat/validations';
 import { User } from '../../drizzle/methods/User';
-import {
-  validateEmail,
-  validateUsername,
-  validatePassword,
-  hashPassword,
-} from '../../utils/user';
+import { hashPassword } from '../../utils/user';
 import bcrypt from 'bcryptjs';
 
 /**
@@ -56,17 +51,16 @@ export function editUserRoute() {
     const JWT_SECRET = env.JWT_SECRET;
     const userClass = new User();
     if (password) {
-      const validatedPassword = validatePassword(password);
-      password = await hashPassword(JWT_SECRET, validatedPassword);
+      password = await hashPassword(JWT_SECRET, password);
     }
     const data = {
       id,
       ...(name && { name }),
       ...(password && { password }),
-      ...(email && { email: validateEmail(email) }),
+      ...(email && { email }),
       ...(code && { code }),
       ...(role && { role }),
-      ...(username && { username: validateUsername(username) }),
+      ...(username && { username }),
       ...(profileImage && { profileImage }),
       ...(preferredWeather && { preferredWeather }),
       ...(preferredWeight && { preferredWeight }),

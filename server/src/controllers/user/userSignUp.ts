@@ -3,12 +3,7 @@ import { sendWelcomeEmail } from '../../utils/accountEmail';
 import { publicProcedure } from '../../trpc';
 import * as validator from '@packrat/validations';
 import { User } from '../../drizzle/methods/User';
-import {
-  validateEmail,
-  validatePassword,
-  validateUsername,
-  hashPassword,
-} from '../../utils/user';
+import { hashPassword } from '../../utils/user';
 // export const userSignup = async (req: Request, res: Response) => {
 //   const { email } = req.body;
 //   console.log(`the request body received is ${JSON.stringify(req.body)}`);
@@ -30,9 +25,6 @@ export function signUpRoute() {
     let { email, password, name, username } = opts.input;
     const { env }: any = opts.ctx;
     const userClass = new User();
-    const validatedEmail = validateEmail(email);
-    const validatedPassword = validatePassword(password);
-    const validatedUsername = validateUsername(username);
     const userExists = await userClass.findUser({ email });
     if (userExists) {
       throw new Error('Email already registered');
@@ -40,10 +32,10 @@ export function signUpRoute() {
     const STMP_EMAIL = env.STMP_EMAIL;
     const SEND_GRID_API_KEY = env.SEND_GRID_API_KEY;
     const JWT_SECRET = env.JWT_SECRET;
-    password = await hashPassword(JWT_SECRET, validatedPassword);
+    password = await hashPassword(JWT_SECRET, password);
     const user = await userClass.create({
-      email: validatedEmail,
-      username: validatedUsername,
+      email,
+      username,
       password,
       name,
     });

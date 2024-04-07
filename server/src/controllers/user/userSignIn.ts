@@ -24,6 +24,9 @@ export function userSignInRoute() {
     const { env } = opts.ctx;
     const userClass = new User();
     const user = await userClass.findByCredentials(input.email, input.password);
+    if (!user) {
+      throw new Error('User not found');
+    }
     await userClass.generateAuthToken(env.JWT_SECRET, user.id);
     return user;
   });

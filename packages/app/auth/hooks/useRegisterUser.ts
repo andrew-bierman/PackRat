@@ -1,5 +1,6 @@
 import { queryTrpc } from 'app/trpc';
 import { useSessionSignIn } from './useSessionSignIn';
+import { getErrorMessageFromError } from 'app/utils/apiUtils';
 
 interface UseRegisterUserReturn {
   registerUser: (data: any) => void;
@@ -10,13 +11,11 @@ export const useRegisterUser = (): UseRegisterUserReturn => {
   const sessionSignIn = useSessionSignIn();
 
   const registerUser: UseRegisterUserReturn['registerUser'] = (data) => {
-    try {
-      signUp(data).then((user) => {
+    signUp(data)
+      .then((user) => {
         sessionSignIn(user);
-      });
-    } catch (e) {
-      console.log('Error', e);
-    }
+      })
+      .catch(() => {});
   };
 
   return { registerUser };

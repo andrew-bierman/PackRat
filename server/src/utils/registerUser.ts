@@ -57,14 +57,3 @@ export const register = async ({
 
   return user;
 };
-
-/**
- * Validates whether an email address is in the correct format.
- *
- * @param {string} email - The email address to be validated.
- * @return {boolean} Whether the email address is valid or not.
- */
-export const validateEmail = function (email: string) {
-  const re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-  return re.test(email);
-};

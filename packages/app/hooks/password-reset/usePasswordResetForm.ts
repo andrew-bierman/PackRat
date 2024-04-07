@@ -23,7 +23,7 @@ export const usePasswordResetForm = ({ token }) => {
       setLoading(false);
       InformUser({
         title: 'Password reset successful',
-        placement: 'top-right',
+        placement: 'bottom',
         duration: 3000,
         style: {
           backgroundColor: currentTheme.colors.error,
@@ -32,14 +32,6 @@ export const usePasswordResetForm = ({ token }) => {
     } catch (error) {
       console.log('Error here', error);
       setLoading(false);
-      InformUser({
-        title: 'Error resetting password',
-        placement: 'top-right',
-        duration: 5000,
-        style: {
-          backgroundColor: currentTheme.colors.error,
-        },
-      });
     }
   };
 

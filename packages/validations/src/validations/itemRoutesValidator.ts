@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import JoiObjectId from './objectIdValidator';
 
 export const getItemByName = z.object({
   name: z.string(),
@@ -26,11 +25,11 @@ export const addItem = z.object({
 export type Item = z.infer<typeof addItem>;
 
 export const editItem = z.object({
-  id: JoiObjectId(),
+  id: z.string(),
   name: z.string().nonempty(),
-  weight: z.string().nonempty(),
-  quantity: z.string().nonempty(),
-  unit: z.string().nonempty(),
+  weight: z.number(),
+  quantity: z.number(),
+  unit: z.string(),
   type: z.string(),
 });
 

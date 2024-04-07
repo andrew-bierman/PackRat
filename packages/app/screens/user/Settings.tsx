@@ -45,7 +45,10 @@ export default function Settings() {
           <RH2>Profile</RH2>
           <RSeparator marginVertical={8} />
         </RStack>
-        <Form validationSchema={userSettingsSchema} defaultValues={{ ...user }}>
+        <Form
+          validationSchema={userSettingsSchema}
+          defaultValues={{ ...user, profileImage: user.profileImage || '' }}
+        >
           <RStack space="$3" width="fit-content" marginHorizontal="auto">
             <ImageUpload
               label="Profile Picture"

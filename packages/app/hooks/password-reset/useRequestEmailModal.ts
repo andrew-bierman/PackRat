@@ -4,6 +4,7 @@ import useTheme from 'app/hooks/useTheme';
 import { useState } from 'react';
 import { InformUser } from 'app/utils/ToastUtils';
 
+// TODO add password reset functionality
 export const useRequestEmailModal = () => {
   const { currentTheme } = useTheme();
   const [loading, setLoading] = useState(false);
@@ -27,7 +28,7 @@ export const useRequestEmailModal = () => {
       InformUser({
         title: 'Password reset email sent',
         style: { backgroundColor: currentTheme.colors.textPrimary },
-        placement: 'top-right',
+        placement: 'bottom',
         duration: 5000,
       });
     } catch (error) {
@@ -36,7 +37,7 @@ export const useRequestEmailModal = () => {
       InformUser({
         title: error?.response?.data?.error,
         duration: 7000,
-        placement: 'top-right',
+        placement: 'bottom',
         style: { backgroundColor: currentTheme.colors.error },
       });
     }

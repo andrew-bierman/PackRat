@@ -158,7 +158,7 @@ export const appRouter = trpcRouter({
   scorePack: scorePackRoute(), // Done
   duplicatePublicPack: duplicatePublicPackRoute(), // Not Implemented
   // // osm routes
-  // getPhotonResults: getPhotonResultsRoute(),
+  getPhotonResults: getPhotonResultsRoute(),
   // getTrailsOSM: getTrailsOSMRoute(),
   // getParksOSM: getParksOSMRoute(),
   // getOsm: getOsmRoute(),
@@ -179,7 +179,7 @@ export const appRouter = trpcRouter({
   getItemsGlobally: getItemsGloballyRoute(), // Done
   addGlobalItemToPack: addGlobalItemToPackRoute(), // Done
   editGlobalItemAsDuplicate: editGlobalItemAsDuplicateRoute(), // Not Implemented
-  // deleteGlobalItem: deleteGlobalItemRoute(), // Done
+  deleteGlobalItem: deleteGlobalItemRoute(), // Done,
   // trails routes
   getTrails: getTrailsRoute(),
   // // parks route

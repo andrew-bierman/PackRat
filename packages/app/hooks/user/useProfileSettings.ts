@@ -30,8 +30,6 @@ export const useProfileSettings = () => {
   const handleEditUser = (data) => {
     const { id } = user;
 
-    console.log({ data });
-
     updateUser({
       userId: id,
       ...data,
