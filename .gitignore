@@ -6,7 +6,7 @@ old/
 .zip
 Podfile
 Podfile.lock
-gradle.properties
+
 client.zip
 *.zip
 .vscode
