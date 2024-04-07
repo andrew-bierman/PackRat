@@ -1,6 +1,4 @@
 module.exports = ({ config }) => {
-    console.log(JSON.stringify(config))
-    console.log(process.env);
     return {
       ...config,
       plugins: config.plugins.map(i => {
