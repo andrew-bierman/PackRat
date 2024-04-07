@@ -1,44 +1,34 @@
-import axios from 'axios';
-import { api } from 'app/constants/api';
 import useTheme from 'app/hooks/useTheme';
 import { useState } from 'react';
-import { InformUser } from 'app/utils/ToastUtils';
+import { queryTrpc } from 'app/trpc';
+import { createParam } from '@packrat/crosspath';
 
-export const usePasswordResetForm = ({ token }) => {
-  const { currentTheme } = useTheme();
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
+const { useParam } = createParam<{ token: string }>();
+
+export const usePasswordResetForm = () => {
+  const { mutateAsync: resetPassword, isLoading: loading } =
+    queryTrpc.resetPassword.useMutation();
+  const [resetToken] = useParam('token');
+  const [isPasswordUpdated, setIsPasswordUpdated] = useState(false);
 
   /**
    * Handles the password reset.
    *
    * @return {Promise<void>} - A promise that resolves when the password reset is complete.
    */
-  const handlePasswordReset = async () => {
+  const handlePasswordReset = async ({ password }) => {
     try {
-      setLoading(true);
-      // TODO - switch to RTK query
-      await axios.post(`${api}/password-reset/${token}`, { password });
-      setPassword('');
-      setLoading(false);
-      InformUser({
-        title: 'Password reset successful',
-        placement: 'bottom',
-        duration: 3000,
-        style: {
-          backgroundColor: currentTheme.colors.error,
-        },
-      });
+      await resetPassword({ password, resetToken });
+      setIsPasswordUpdated(true);
     } catch (error) {
       console.log('Error here', error);
-      setLoading(false);
     }
   };
 
   return {
-    password,
-    setPassword,
+    resetToken,
     loading,
     handlePasswordReset,
+    isPasswordUpdated,
   };
 };

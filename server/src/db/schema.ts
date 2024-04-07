@@ -36,8 +36,8 @@ export const user = sqliteTable('user', {
     .$type<'admin' | 'user'>(),
   username: text('username').notNull().unique(), // Trim + Lowercase + Validation
   profileImage: text('profile_image'),
-  preferredWeather: text('preferred_weather'),
-  preferredWeight: text('preferred_weight'),
+  preferredWeather: text('preferred_weather').default('celsius'),
+  preferredWeight: text('preferred_weight').default('lb'),
   createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
   updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`),
 });
