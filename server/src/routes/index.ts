@@ -79,22 +79,26 @@ router.use('/api/mapPreview', mapPreviewRouter);
 // Static routes for serving the React Native Web app
 if (process.env.NODE_ENV === 'production') {
   const __dirname = path.resolve();
+  const serverType = process.env.REACT_APP_SERVER_TYPE || 'vite';
 
   // Serve the client's index.html file at the root route
   router.get('/', (req, res) => {
-    // Attach the CSRF token cookie to the response
+// Attach the CSRF token cookie to the response
     // res.cookie("XSRF-TOKEN", req.csrfToken());
 
-    res.sendFile(path.resolve(__dirname, '../apps/next', 'out', 'index.html'));
+    const basePath = serverType === 'next' ? '../apps/next/out' : '../apps/vite/dist';
+    res.sendFile(path.resolve(__dirname, basePath, 'index.html'));
   });
 
-  // Serve the static assets from the client's dist app
-  router.use(express.static(path.join(__dirname, '../apps/next/out')));
+  // Serve the static assets
+  const staticPath = serverType === 'next' ? '../apps/next/out' : '../apps/vite/dist';
+  router.use(express.static(path.join(__dirname, staticPath)));
 
   // Serve the client's index.html file at all other routes NOT starting with /api
   router.get(/^(?!\/?api).*/, (req, res) => {
     // res.cookie("XSRF-TOKEN", req.csrfToken());
-    res.sendFile(path.resolve(__dirname, '../apps/next', 'out', 'index.html'));
+    const basePath = serverType === 'next' ? '../apps/next/out' : '../apps/vite/dist';
+    res.sendFile(path.resolve(__dirname, basePath, 'index.html'));
   });
 }
 
