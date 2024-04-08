@@ -4,7 +4,7 @@ import { styled } from 'tamagui';
 import { MaterialIcons } from '@expo/vector-icons';
 
 
-import { RIconButton } from '@packrat/ui';
+// import { RIconButton } from '@packrat/ui';
 
   
 const CustomContent = styled(DropdownMenu.Content, {
@@ -41,11 +41,12 @@ const CustomContent = styled(DropdownMenu.Content, {
     return (
       <DropdownMenu.Root>
         <DropdownMenu.Trigger>
-          <RIconButton
+          <></>
+          {/* <RIconButton
             backgroundColor="transparent"
             icon={<MaterialIcons name="more-horiz" size={25} />}
             style={{ padding: 0}}
-          />
+          /> */}
         </DropdownMenu.Trigger>
         <CustomContent>
           {dropdownItems.map(({label, onSelect = () => {}}) => (
@@ -62,11 +63,12 @@ const CustomContent = styled(DropdownMenu.Content, {
     return (
       <DropdownMenu.Root>
         <DropdownMenu.Trigger>
-          <RIconButton
+          <></>
+          {/* <RIconButton
             backgroundColor="transparent"
             icon={<MaterialIcons name="more-horiz" size={25} />}
             style={{ padding: 0}}
-          />
+          /> */}
         </DropdownMenu.Trigger>
         <DropdownMenu.Content>
           {dropdownItems.map(({label, onSelect = () => {}}) => (
