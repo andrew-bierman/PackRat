@@ -8,7 +8,7 @@ if (NODE_ENV === 'production') {
   // api = API_URL;
   api = NEXT_PUBLIC_API_URL;
 } else {
-  api = 'http://localhost:3000/api';
+  api = 'http://192.168.0.83:3000/api';
   // api = "https://packrat.onrender.com";
 }
 

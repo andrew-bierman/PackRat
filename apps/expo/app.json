@@ -55,8 +55,7 @@
             "deploymentTarget": "13.0"
           }
         }
-      ],
-      "./plugins/withGradleProperties.js"
+      ]
     ],
     "extra": {
       "eas": {
