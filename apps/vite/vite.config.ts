@@ -1,6 +1,6 @@
 import { tamaguiExtractPlugin, tamaguiPlugin } from '@tamagui/vite-plugin';
 import react from '@vitejs/plugin-react-swc';
-import { defineConfig } from 'vite';
+import { defineConfig, transformWithEsbuild } from 'vite';
 import { resolve } from 'path';
 import esbuildFlowPlugin from 'esbuild-plugin-flow';
 import { TanStackRouterVite } from '@tanstack/router-vite-plugin';
@@ -33,6 +33,27 @@ const development = process.env.NODE_ENV === 'development';
 export default defineConfig({
   clearScreen: true,
   plugins: [
+    {
+      name: 'treat-js-files-as-jsx',
+      async transform(code, id) {
+        // Use an array to specify directories or path patterns for files to be transformed
+        const includePatterns = [
+          /node_modules\/@expo\/vector-icons/,
+          /node_modules\/react-native-table-component/,
+          /src\/.*\.js$/, // Specifically match .js files in the src directory
+        ];
+        
+        // Check if the current file's path matches any pattern in includePatterns
+        const shouldTransform = includePatterns.some(pattern => pattern.test(id));
+        if (!shouldTransform) return null;
+
+        // Proceed with JSX transformation if conditions are met
+        return transformWithEsbuild(code, id, {
+          loader: 'jsx',
+          jsx: 'automatic',
+        });
+      },
+    },
     react(),
     TanStackRouterVite(),
     tamaguiPlugin(tamaguiConfig),
@@ -69,7 +90,9 @@ export default defineConfig({
       // https://github.com/vitejs/vite-plugin-react/issues/192#issuecomment-1627384670
       jsx: 'automatic',
       // need either this or the plugin below
-      loader: { '.js': 'jsx' },
+      loader: {
+        '.js': 'jsx'
+      },
       plugins: [
         esbuildFlowPlugin(/\.(flow|jsx?)$/, (path) =>
           /\.jsx$/.test(path) ? 'jsx' : 'jsx',
@@ -77,5 +100,6 @@ export default defineConfig({
       ],
     },
     include: ['@packrat/validations'],
+    exclude: [],
   },
 });
