@@ -19,13 +19,13 @@ import {
   SimpleLineIcons,
   Zocial,
 } from '@expo/vector-icons';
-import Inter from '@tamagui/font-inter/otf/Inter-Medium.otf';
-import InterBold from '@tamagui/font-inter/otf/Inter-Bold.otf';
+// import Inter from '@tamagui/font-inter/otf/Inter-Medium.otf';
+// import InterBold from '@tamagui/font-inter/otf/Inter-Bold.otf';
 
 const FontLoader = ({ children }) => {
   const [loaded] = useFonts({
-    Inter,
-    InterBold,
+    // Inter,
+    // InterBold,
     // Cache all icon fonts
     ...AntDesign.font,
     ...Entypo.font,
