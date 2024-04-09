@@ -13,6 +13,10 @@ export const deleteItemService = async (itemId, packId) => {
 
   const item = await Item.findById(itemId);
 
+  if (!item) {
+    throw new Error(`No item found with id: ${itemId}`);
+  }
+
   if (item.global) {
     await Pack.updateOne({ _id: packId }, { $pull: { items: itemId } });
 

@@ -10,7 +10,7 @@ import { parseCoordinates } from 'app/utils/coordinatesParser';
  * @param {Object} geoJSON - The GeoJSON data.
  * @return {JSX.Element|null} The WeatherCard component if weatherObject and weatherWeek are truthy, otherwise null.
  */
-export const WeatherData = ({ geoJSON }) => {
+export const WeatherData = (geoJSON: any): JSX.Element => {
   const latLng = useMemo(() => {
     return parseCoordinates(geoJSON);
   }, [geoJSON]);

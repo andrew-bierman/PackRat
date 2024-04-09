@@ -95,7 +95,9 @@ export default function TripCard({
       </RStack>
       {isMap ? (
         isLoading ? (
-          <Text>Loading....</Text>
+          <RStack>
+            <Text>Loading....</Text>
+          </RStack>
         ) : (
           <MapContainer shape={shape} />
         )
@@ -178,7 +180,6 @@ const loadStyles = (theme) => {
       padding: currentTheme.size.cardPadding,
       paddingHorizontal: currentTheme.padding.paddingInside,
       marginBottom: 20,
-      height: Platform.OS === 'web' ? 650 : '100%',
       overflow: 'hidden',
       alignSelf: 'center',
     },

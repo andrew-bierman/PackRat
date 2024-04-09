@@ -1,8 +1,8 @@
 import Item from '../../models/itemModel';
 import Pack from '../../models/packModel';
 import { ItemCategoryModel } from '../../models/itemCategory';
-import { ItemCategoryEnum } from '../../utils/itemCategory';
-
+import type { Document as MongooseDocument } from 'mongoose';
+import type { ObjectId } from 'mongodb';
 /**
  * Generates a new item and adds it to a pack based on the given parameters.
  *
@@ -15,6 +15,20 @@ import { ItemCategoryEnum } from '../../utils/itemCategory';
  * @param {string} ownerId - The ID of the owner of the item.
  * @return {object} An object containing the newly created item and the pack ID.
  */
+
+type ItemType = MongooseDocument & {
+  createdAt: Date;
+  updatedAt: Date;
+  weight: number;
+  name: string;
+  packs: ObjectId[];
+  quantity: number;
+  unit: string;
+  owners: ObjectId[];
+  global: boolean;
+  category?: ObjectId;
+};
+
 export const addItemService = async (
   name,
   weight,
@@ -24,12 +38,11 @@ export const addItemService = async (
   type,
   ownerId,
 ) => {
-  let newItem = null;
   const category = await ItemCategoryModel.findOne({
-    name: ItemCategoryEnum[type],
+    name: type,
   });
 
-  newItem = await Item.create({
+  const newItem: ItemType | null = await Item.create({
     name,
     weight,
     quantity,
@@ -38,7 +51,7 @@ export const addItemService = async (
     category: category ? category._id : null,
   });
 
-  await Pack.updateOne({ _id: packId }, { $addToSet: { items: newItem._id } });
+  await Pack.updateOne({ _id: packId }, { $addToSet: { items: newItem?._id } });
 
   const updatedItem = await Item.findByIdAndUpdate(
     newItem._id,

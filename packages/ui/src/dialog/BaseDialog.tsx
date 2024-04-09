@@ -3,7 +3,19 @@ import { useState } from 'react';
 
 import { Adapt, Button, Dialog, Sheet } from 'tamagui';
 
-export const BaseDialog = ({ title, description, trigger, children }) => {
+interface BaseDialogProps {
+  title: string;
+  description: string;
+  trigger: string;
+  children: string | JSX.Element | JSX.Element[] | (() => JSX.Element);
+}
+
+export const BaseDialog = ({
+  title,
+  description,
+  trigger,
+  children,
+}: BaseDialogProps) => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -18,7 +30,7 @@ export const BaseDialog = ({ title, description, trigger, children }) => {
       </Dialog.Trigger>
       <Adapt when="sm" platform="touch">
         <Sheet zIndex={200000} modal dismissOnSnapToBottom>
-          <Sheet.Frame padding="$4" gap>
+          <Sheet.Frame padding="$4" gap="$4">
             <Adapt.Contents />
           </Sheet.Frame>
 
@@ -52,7 +64,7 @@ export const BaseDialog = ({ title, description, trigger, children }) => {
           ]}
           enterStyle={{ x: 0, y: -20, opacity: 0, scale: 0.9 }}
           exitStyle={{ x: 0, y: 10, opacity: 0, scale: 0.95 }}
-          gap
+          gap="$4"
         >
           <Dialog.Title>{title}</Dialog.Title>
 

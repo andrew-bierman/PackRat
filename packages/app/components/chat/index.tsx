@@ -5,17 +5,16 @@ import {
   FlatList,
   TextInput,
   TouchableOpacity,
-  ScrollView,
 } from 'react-native';
-import useTheme from '../../hooks/useTheme';
-import { BaseModal, RStack } from '@packrat/ui';
-// import {
-//   getUserChats,
-//   getAIResponse,
-//   selectConversationById,
-//   selectAllConversations,
-// } from '../../store/chatStore';
-import { Box, VStack, HStack, Select } from 'native-base';
+import {
+  BaseModal,
+  Form,
+  FormInput,
+  FormSelect,
+  RStack,
+  SubmitButton,
+} from '@packrat/ui';
+// import { sendMessage } from '@packrat/validations';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useChat } from 'app/hooks/chat/useChat';
 import { loadStyles } from './chat.style';
@@ -76,7 +75,7 @@ const MessageList = ({ messages }: MessageListProps) => {
   );
 };
 
-const ChatSelector: React.FC<ChatSelectorProps> = ({
+const Chator: React.FC<ChatSelectorProps> = ({
   conversation,
   onSelect,
   isActive,
@@ -86,9 +85,9 @@ const ChatSelector: React.FC<ChatSelectorProps> = ({
     <TouchableOpacity
       key={conversation._id}
       onPress={() => onSelect(conversation._id)}
-      style={[styles.chatSelector, isActive && styles.activeChatSelector]}
+      style={[styles.chator, isActive && styles.activeChator]}
     >
-      <Text style={styles.chatSelectorText}>{conversation._id}</Text>
+      <Text style={styles.chatorText}>{conversation._id}</Text>
     </TouchableOpacity>
   );
 };
@@ -108,26 +107,34 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
     setConversationId,
   } = useChat({ defaultChatId });
 
+  const options = Array.isArray(conversations)
+    ? conversations.map((conversation) => conversation._id)
+    : [];
+
+  console.log(options);
+
   return (
     <View style={styles.container}>
       <RStack style={{ alignItems: 'center' }}>
         {showChatSelector && (
-          <Select
-            selectedValue={conversationId}
-            minWidth="200px" // Adjust width as needed
-            accessibilityLabel="Select a conversation"
-            placeholder="Select a conversation"
-            onValueChange={(itemValue) => setConversationId(itemValue)}
-            width="200px" // Adjust width as needed
+          <Form
+          // validationSchema={sendMessage}
           >
-            {conversations?.map((conversation) => (
-              <Select.Item
-                key={conversation._id}
-                label={conversation._id}
-                value={conversation._id}
-              />
-            ))}
-          </Select>
+            <>
+              {options?.length ? (
+                <>
+                  <FormSelect
+                    options={options}
+                    style={{ width: '100%' }}
+                    placeholder="Select conversation ..."
+                    name="conversation"
+                  />
+                </>
+              ) : (
+                <Text>You don't have conversations yet</Text>
+              )}
+            </>
+          </Form>
           // <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           //   <Box
           //     borderRadius="lg"
@@ -158,19 +165,18 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
           //   </Box>
           // </ScrollView>
         )}
+        <MessageList messages={parsedMessages} />
+        <Form
+        // validationSchema={sendMessage}
+        >
+          <RStack style={{ marginTop: 16, gap: 8 }}>
+            <FormInput name="message" placeholder="Type a message..." />
+            <SubmitButton onSubmit={handleSendMessage}>
+              <Text style={styles.sendText}>Send</Text>
+            </SubmitButton>
+          </RStack>
+        </Form>
       </RStack>
-      <MessageList messages={parsedMessages} />
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          onChangeText={setUserInput}
-          value={userInput}
-          placeholder="Type a message..."
-        />
-        <TouchableOpacity style={styles.sendButton} onPress={handleSendMessage}>
-          <Text style={styles.sendText}>Send</Text>
-        </TouchableOpacity>
-      </View>
     </View>
   );
 };
@@ -180,7 +186,7 @@ const ChatModalTrigger: React.FC<ChatModalTriggerProps> = () => {
 
   return (
     <View style={styles.container}>
-      <BaseModal title="Chat" trigger="Open Chat">
+      <BaseModal title="Chat" trigger="Open Chat" footerComponent={undefined}>
         <ChatComponent />
       </BaseModal>
     </View>

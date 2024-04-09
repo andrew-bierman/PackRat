@@ -13,6 +13,9 @@ import * as validator from '../../middleware/validators/index';
 export const userSignup = async (req, res) => {
   const { email } = req.body;
   await (User as any).alreadyLogin(email);
+  if (!JWT_SECRET) {
+    throw new Error('JWT_SECRET is not defined');
+  }
   const salt = await bcrypt.genSalt(parseInt(JWT_SECRET));
   req.body.password = await bcrypt.hash(req.body.password, salt);
   const user = new User(req.body);
@@ -26,6 +29,9 @@ export function signUpRoute() {
   return publicProcedure.input(validator.userSignUp).mutation(async (opts) => {
     const { email, password } = opts.input;
     await (User as any).alreadyLogin(email);
+    if (!JWT_SECRET) {
+      throw new Error('JWT_SECRET is not defined');
+    }
     const salt = await bcrypt.genSalt(parseInt(JWT_SECRET));
     opts.input.password = await bcrypt.hash(password, salt);
     const user = new User(opts.input);

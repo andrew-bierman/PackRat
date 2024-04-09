@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
 import { RText, RStack } from '@packrat/ui';
-import { Link } from 'solito/link';
+import { Link } from '@packrat/crosspath';
 import { Dimensions, View } from 'react-native';
-import { getPublicPacks, getPublicTrips } from '../../store/feedStore';
 import useTheme from '../../hooks/useTheme';
 import Carousel from '../carousel';
 import useCustomStyles from 'app/hooks/useCustomStyles';

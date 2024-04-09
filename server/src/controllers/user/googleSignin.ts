@@ -12,6 +12,21 @@ import {
 import utilsService from '../../utils/utils.service';
 import { UserAlreadyExistsError } from '../../helpers/errors';
 
+interface GoogleUserInfo {
+  id?: string | null;
+  email?: string | null;
+  name?: string | null;
+}
+
+interface AlreadySigninInfo {
+  googleId?: string | null;
+  email?: string | null;
+  name?: string | null;
+  password?: any;
+  generateAuthToken?: any;
+  token: any;
+}
+
 const oauth2Client = new google.auth.OAuth2(
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
@@ -36,9 +51,9 @@ const getGoogleUserInfo = async (code) => {
 export const googleSignin = async (req, res, next) => {
   try {
     const code = req.query.code;
-    const userInfo = await getGoogleUserInfo(code);
+    const userInfo: GoogleUserInfo = await getGoogleUserInfo(code);
 
-    const alreadyGoogleSignin = await User.findOne({
+    const alreadyGoogleSignin: AlreadySigninInfo | null = await User.findOne({
       email: userInfo.email,
       name: userInfo.name,
       password: utilsService.randomPasswordGenerator(8),

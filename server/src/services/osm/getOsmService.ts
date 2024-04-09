@@ -8,6 +8,11 @@ import {
 
 export const getOsmService = async ({ activityType, startPoint, endPoint }) => {
   const overpassUrl = process.env.OSM_URI;
+
+  if (!overpassUrl) {
+    throw new Error('OSM_URI is not defined in the environment variables');
+  }
+
   try {
     const overpassQuery = await formatOverpassQuery(
       activityType,

@@ -1,5 +1,13 @@
 import React, { useState } from 'react';
-import { BaseModal, RInput, RStack, RText } from '@packrat/ui';
+import {
+  BaseModal,
+  Form,
+  FormInput,
+  FormSelect,
+  RInput,
+  RStack,
+  RText,
+} from '@packrat/ui';
 import { useRouter } from 'app/hooks/router';
 import { format, intervalToDuration } from 'date-fns';
 // import { addTrip } from '../../store/tripsStore';
@@ -8,12 +16,10 @@ import { useGetPhotonDetails } from 'app/hooks/destination';
 
 // import { Picker } from '@react-native-picker/picker';
 import { DropdownComponent } from '../Dropdown';
-import { useSearchParams } from 'app/hooks/common';
 import { useAuthUser } from 'app/auth/hooks';
-const options = [
-  { label: 'Public', value: 'true' },
-  { label: 'For me only', value: 'false' },
-];
+import { addTripForm } from '@packrat/validations/src/validations/tripRoutesValidator';
+import { useFormSubmitTrigger } from '@packrat/ui/src/form';
+import { usePackId } from 'app/hooks/packs';
 
 interface SaveTripContainerProps {
   dateRange: {
@@ -25,63 +31,10 @@ interface SaveTripContainerProps {
   form: any;
 }
 
-interface NumberInputProps {
-  min?: number;
-  max?: number;
-  value: string;
-  onChangeText?: (text: string) => void;
-}
-
-const NumberInput: React.FC<NumberInputProps> = (props) => {
-  const { min, max, value, ...otherProps } = props;
-
-  // Custom validation function to enforce positive numbers only
-  const validateNumber = (text) => {
-    const sanitizedText = text.replace(/[^0-9-]/g, ''); // Allow only numbers and minus sign
-
-    if (sanitizedText === '') {
-      return '';
-    }
-
-    const number = parseInt(sanitizedText, 10);
-
-    if (isNaN(number) || number < 0) {
-      // Check for NaN and negative numbers
-      return '';
-    }
-
-    if (typeof min !== 'undefined' && number < min) {
-      return min.toString();
-    }
-
-    if (typeof max !== 'undefined' && number > max) {
-      return max.toString();
-    }
-
-    return sanitizedText;
-  };
-
-  /**
-   * Handles the change event of the text input.
-   *
-   * @param {string} text - The text input value.
-   * @return {void}
-   */
-  const handleChangeText = (text) => {
-    const validatedText = validateNumber(text);
-    // Pass the sanitized text back to the parent component
-    otherProps.onChangeText?.(validatedText);
-  };
-
-  return (
-    <RInput
-      {...otherProps}
-      value={value}
-      keyboardType="numeric"
-      onChangeText={handleChangeText}
-    />
-  );
-};
+const isPublicOptions = ['For me only', 'Public'].map((key, index) => ({
+  label: key,
+  value: String(index),
+}));
 
 export const SaveTripContainer = ({
   dateRange,
@@ -90,20 +43,11 @@ export const SaveTripContainer = ({
   form,
 }: SaveTripContainerProps) => {
   const user = useAuthUser();
-  const searchParams = useSearchParams();
-  const packId = searchParams.get('packId');
-
+  const [packId] = usePackId();
   // defining dispatch
   const { addTrip, isSuccess, data: response } = useAddTrip();
+  const [formRef, submitTrigger] = useFormSubmitTrigger();
   const router = useRouter();
-  // trip info states value
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  // const [numberOfNights, setNumberOfNights] = useState("");
-  // const [startDate, setStartDate] = useState("");
-  // const [endDate, setEndDate] = useState("");
-
-  const [isPublic, setIsPublic] = useState(true);
 
   const geoJSONData = useGetPhotonDetails({
     properties: search?.properties
@@ -115,7 +59,10 @@ export const SaveTripContainer = ({
   });
 
   // create trip
-  const handleCreateTrip = async (_, closeModal) => {
+  const handleCreateTrip = async (
+    closeModal,
+    { name, description, isPublic },
+  ) => {
     // duration object
     const startDate = dateRange.startDate
       ? format(dateRange.startDate, 'MM/dd/yyyy')
@@ -150,7 +97,7 @@ export const SaveTripContainer = ({
       weather: JSON.stringify(weatherObject),
       owner_id: user?._id,
       packs: packId,
-      is_public: isPublic,
+      is_public: isPublic === '1',
     };
 
     // creating a trip
@@ -201,25 +148,21 @@ export const SaveTripContainer = ({
       footerButtons={[
         {
           label: 'Save',
-          onClick: handleCreateTrip,
+          onClick: (_, closeModal) => submitTrigger(closeModal),
         },
       ]}
     >
-      <RStack>
-        <RInput
-          placeholder="Trip Name"
-          onChange={(event) => {
-            setName(event.target.value);
-          }}
-        />
-        <RInput
-          placeholder="Trip Description"
-          onChange={(event) => {
-            setDescription(event.target.value);
-          }}
-        />
-        <>
-          {/* <Text mt={4}>Duration</Text>
+      <Form
+        validationSchema={addTripForm}
+        ref={formRef}
+        onSubmit={handleCreateTrip}
+        defaultValues={{ isPublic: '0' }}
+      >
+        <RStack style={{ gap: 8 }}>
+          <FormInput placeholder="Trip Name" name="name" />
+          <FormInput placeholder="Trip Description" name="description" />
+          <>
+            {/* <Text mt={4}>Duration</Text>
           <Input
             placeholder="Number of nights"
             min={0}
@@ -256,59 +199,58 @@ export const SaveTripContainer = ({
             />
           </HStack> */}
 
-          <DropdownComponent
-            onValueChange={(itemValue) => {
-              setIsPublic(itemValue);
-            }}
-            data={['Public', 'For me only']}
-            value={isPublic}
-            placeholder="Is Public"
-            style={{ marginTop: 4, marginBottom: 4 }}
-            width={150}
-          />
-        </>
-        <>
-          <RText>Trip Weather</RText>
-          <RText>
-            Temparature - {weatherObject?.main?.temp}, Humidity -{' '}
-            {weatherObject?.main?.humidity}
-          </RText>
-        </>
-        <RStack style={{ flexDirection: 'row' }}>
-          <RText>Pack</RText>
-          <RText>`Selected Pack Name`</RText>
-        </RStack>
-        <RStack style={{ flexDirection: 'row' }}>
-          <RText>Trip Location - </RText>
-          <RText>{search?.properties?.name}</RText>
-        </RStack>
-        <RStack style={{ flexDirection: 'row' }}>
-          <RText>Selected Trail - </RText>
-          <RText>{form?.currentTrail}</RText>
-        </RStack>
-        <RStack style={{ flexDirection: 'row' }}>
-          <RText>Selected Date Range - </RText>
-          <RText>
-            {dateRange.startDate
-              ? format(dateRange.startDate, 'MM/dd/yyyy')
-              : ''}{' '}
-            - {dateRange.endDate ? format(dateRange.endDate, 'MM/dd/yyyy') : ''}
-          </RText>
-        </RStack>
-        <RStack style={{ flexDirection: 'row' }}>
-          <RText>Duration {'(Number of nights) - '} </RText>
-          {dateRange.startDate && dateRange.endDate && (
+            <FormSelect
+              options={isPublicOptions}
+              placeholder="Is Public"
+              name="isPublic"
+              style={{ marginTop: 4, marginBottom: 4 }}
+              width={150}
+            />
+          </>
+          <>
+            <RText>Trip Weather</RText>
             <RText>
-              {
-                intervalToDuration({
-                  start: dateRange.startDate,
-                  end: dateRange.endDate,
-                }).days
-              }
+              Temparature - {weatherObject?.main?.temp}, Humidity -{' '}
+              {weatherObject?.main?.humidity}
             </RText>
-          )}
+          </>
+          <RStack style={{ flexDirection: 'row' }}>
+            <RText>Pack</RText>
+            <RText>`Selected Pack Name`</RText>
+          </RStack>
+          <RStack style={{ flexDirection: 'row' }}>
+            <RText>Trip Location - </RText>
+            <RText>{search?.properties?.name}</RText>
+          </RStack>
+          <RStack style={{ flexDirection: 'row' }}>
+            <RText>Selected Trail - </RText>
+            <RText>{form?.currentTrail}</RText>
+          </RStack>
+          <RStack style={{ flexDirection: 'row' }}>
+            <RText>Selected Date Range - </RText>
+            <RText>
+              {dateRange.startDate
+                ? format(dateRange.startDate, 'MM/dd/yyyy')
+                : ''}{' '}
+              -{' '}
+              {dateRange.endDate ? format(dateRange.endDate, 'MM/dd/yyyy') : ''}
+            </RText>
+          </RStack>
+          <RStack style={{ flexDirection: 'row' }}>
+            <RText>Duration {'(Number of nights) - '} </RText>
+            {dateRange.startDate && dateRange.endDate && (
+              <RText>
+                {
+                  intervalToDuration({
+                    start: dateRange.startDate,
+                    end: dateRange.endDate,
+                  }).days
+                }
+              </RText>
+            )}
+          </RStack>
         </RStack>
-      </RStack>
+      </Form>
     </BaseModal>
   );
 };

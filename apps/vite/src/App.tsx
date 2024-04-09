@@ -1,48 +1,28 @@
-import { useState } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
-import './App.css';
-import '@tamagui/core/reset.css';
+import React, { StrictMode } from 'react';
+import ReactDOM from 'react-dom/client';
+import { RouterProvider, createRouter } from '@tanstack/react-router';
+import './styles/global.css';
 
-import { RButton, YStack } from '@packrat/ui';
-import { LinearGradient } from 'tamagui/linear-gradient';
-import LandingPage from 'app/components/landing_page';
-import { Provider } from 'app/provider';
+// Import the generated route tree
+import { routeTree } from './routeTree.gen';
 
-function App() {
-  const [count, setCount] = useState(0);
+// Create a new router instance
+const router = createRouter({ routeTree });
 
-  return (
-    <Provider>
-      <LandingPage />
-      <>
-        <div>
-          <a href="https://vitejs.dev" target="_blank">
-            <img src={viteLogo} className="logo" alt="Vite logo" />
-          </a>
-          <a href="https://react.dev" target="_blank">
-            <img src={reactLogo} className="logo react" alt="React logo" />
-          </a>
-        </div>
-        <h1>Vite + React</h1>
-        <div className="card">
-          <button onClick={() => setCount((count) => count + 1)}>
-            count is {count}
-          </button>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test HMR
-          </p>
-        </div>
-        <YStack f={1} ai="center" jc="center">
-          <RButton>Hello world</RButton>
-          <LinearGradient zIndex={-1} fullscreen colors={['red', 'blue']} />
-        </YStack>
-        <p className="read-the-docs">
-          Click on the Vite and React logos to learn more
-        </p>
-      </>
-    </Provider>
-  );
+// Register the router instance for type safety
+declare module '@tanstack/react-router' {
+  interface Register {
+    router: typeof router;
+  }
 }
 
-export default App;
+// Render the app
+const rootElement = document.getElementById('app')!;
+if (!rootElement.innerHTML) {
+  const root = ReactDOM.createRoot(rootElement);
+  root.render(
+    <StrictMode>
+      <RouterProvider router={router} />
+    </StrictMode>,
+  );
+}

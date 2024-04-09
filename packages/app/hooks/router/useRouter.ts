@@ -1,1 +1,1 @@
-export { useRouter } from 'solito/router';
+export { useRouter } from '@packrat/crosspath';

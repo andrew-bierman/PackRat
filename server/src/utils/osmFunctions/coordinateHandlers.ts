@@ -80,7 +80,7 @@ export async function handleGeometry(Model: any, geometry: any) {
     return [];
   }
 
-  const nodes = [];
+  const nodes: any[] = [];
 
   if (geometry.type === 'Point') {
     const instance = await createInstanceFromCoordinates(
@@ -113,7 +113,7 @@ export function handleGeoJSONGeometry(geometry: any) {
     return [];
   }
 
-  const nodes = [];
+  const nodes: any[] = [];
 
   if (geometry.type === 'Point') {
     nodes.push(geometry.coordinates);
