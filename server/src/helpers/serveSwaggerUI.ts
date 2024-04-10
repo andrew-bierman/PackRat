@@ -1,9 +1,7 @@
 import { ItemCategory } from '../utils/itemCategory';
 import swaggerUi from 'swagger-ui-express';
 import specs from '../swaggerOptions';
-import { prisma } from '../prisma';
 import { type Request, type Response } from 'express';
-import { type ItemCategoryName } from '@prisma/client/edge';
 
 /**
  * Serves the Swagger UI for the given app.
@@ -17,18 +15,6 @@ export const serveSwaggerUI = (app: any) => {
     app.get('/swagger.json', (req: Request, res: Response) => {
       res.setHeader('Content-Type', 'application/json');
       res.send(specs);
-    });
-
-    app.get('/seed/category', (req: Request, res: Response) => {
-      console.log('Seeding...');
-      ItemCategory.forEach(async (category) => {
-        await prisma.itemCategory.create({
-          data: {
-            name: category as ItemCategoryName,
-          },
-        });
-      });
-      res.status(200).send('Seeding done');
     });
   }
 };

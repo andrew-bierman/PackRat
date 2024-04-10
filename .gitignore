@@ -21,6 +21,11 @@ google-services.json
 wrangler.toml
 .wrangler/
 
+# Vitest
+.vitest
+vitest.config.js
+vitest.config.js.*
+
 # Tamagui
 .tamagui
 
