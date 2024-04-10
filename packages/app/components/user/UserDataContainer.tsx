@@ -34,7 +34,7 @@ const SkeletonUserDataCard = () => {
 
 interface UserDataContainerProps {
   data: any;
-  type: 'packs' | 'trips';
+  type: 'packs' | 'trips' | 'favorites';
   userId?: string;
   isLoading: boolean;
   SkeletonComponent?: React.ReactElement;
@@ -61,8 +61,6 @@ export default function UserDataContainer({
 
   const typeUppercaseSingular = typeUppercase.slice(0, -1);
 
-  const cardType = type === 'packs' ? 'pack' : 'trip';
-
   const differentUser = userId && userId !== currentUser._id;
 
   const Card = ({ item, index }) => {
@@ -70,7 +68,6 @@ export default function UserDataContainer({
       <UserDataCard
         key={item._id}
         {...item}
-        type={cardType}
         state={dataState}
         setState={setDataState}
         index={index}
