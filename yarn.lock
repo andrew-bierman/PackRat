@@ -9560,9 +9560,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/react-router@npm:1.26.16, @tanstack/react-router@npm:^1.16.5":
-  version: 1.26.16
-  resolution: "@tanstack/react-router@npm:1.26.16"
+"@tanstack/react-router@npm:1.26.18, @tanstack/react-router@npm:^1.16.5":
+  version: 1.26.18
+  resolution: "@tanstack/react-router@npm:1.26.18"
   dependencies:
     "@tanstack/history": "npm:1.26.10"
     "@tanstack/react-store": "npm:^0.2.1"
@@ -9571,7 +9571,7 @@ __metadata:
   peerDependencies:
     react: ">=16.8"
     react-dom: ">=16.8"
-  checksum: 10/da15fdb511e748d48278816a8140b97e041f05d4136d57fd37de0766cc760ba13fabc237f29778a36b114461593585ce05b18fc9c158b511c2c1d11878c9248e
+  checksum: 10/a3bd606f4cb95cb8b4827633089de994af083df04fc05083a4c52eaba45709a8a189907eb100ad4ac35381c2f30d20926ef17581d19809d0e089fb5e4d6435cc
   languageName: node
   linkType: hard
 
@@ -9612,17 +9612,17 @@ __metadata:
   linkType: hard
 
 "@tanstack/router-devtools@npm:^1.16.5":
-  version: 1.26.16
-  resolution: "@tanstack/router-devtools@npm:1.26.16"
+  version: 1.26.18
+  resolution: "@tanstack/router-devtools@npm:1.26.18"
   dependencies:
-    "@tanstack/react-router": "npm:1.26.16"
+    "@tanstack/react-router": "npm:1.26.18"
     clsx: "npm:^2.1.0"
     date-fns: "npm:^2.29.1"
     goober: "npm:^2.1.14"
   peerDependencies:
     react: ">=16.8"
     react-dom: ">=16.8"
-  checksum: 10/78f7516beb4d8cdeea21904c511ad3e6235f03b2a372dfd29ef78341c04f8b6fd0d0da4bc9ca2cfaa5dcd5cd97aa1180845b7e6d7c525d2aa534d87657c0b328
+  checksum: 10/ddc231e0af1a2965a7c0f61a28006421bcb1f750962f12016e2dce05da97f824e4f554599af6f33f432a62c51cad19aee7fb959e7c132c1758425d439227076b
   languageName: node
   linkType: hard
 
@@ -10475,11 +10475,11 @@ __metadata:
   linkType: hard
 
 "@types/node@npm:*, @types/node@npm:>=12.12.47, @types/node@npm:>=13.7.0, @types/node@npm:^20.8.3":
-  version: 20.12.6
-  resolution: "@types/node@npm:20.12.6"
+  version: 20.12.7
+  resolution: "@types/node@npm:20.12.7"
   dependencies:
     undici-types: "npm:~5.26.4"
-  checksum: 10/9feaa7f1c86b2541638f5446bdc4fd949a0ef6a53784db3d01296c503bb6e3e224bec4964f9a55b3ea669a200de824bfc6c944caf573019975e3c83fdc5f696e
+  checksum: 10/b4a28a3b593a9bdca5650880b6a9acef46911d58cf7cfa57268f048e9a7157a7c3196421b96cea576850ddb732e3b54bc982c8eb5e1e5ef0635d4424c2fce801
   languageName: node
   linkType: hard
 
@@ -12379,8 +12379,8 @@ __metadata:
   linkType: hard
 
 "aws-sdk@npm:^2.1494.0":
-  version: 2.1595.0
-  resolution: "aws-sdk@npm:2.1595.0"
+  version: 2.1596.0
+  resolution: "aws-sdk@npm:2.1596.0"
   dependencies:
     buffer: "npm:4.9.2"
     events: "npm:1.1.1"
@@ -12392,7 +12392,7 @@ __metadata:
     util: "npm:^0.12.4"
     uuid: "npm:8.0.0"
     xml2js: "npm:0.6.2"
-  checksum: 10/2a54f80e50643ca1cdc55213b5d74da900dce8eb268899873b7e3119b01c49d9fcf4ebb7eb87234170cbe7d400322ce9b0d953c5ed351b22d9de88eae3ff5c45
+  checksum: 10/87dbfe5978d52f597894f97e943030dc51a1b5c169187389ccae27d17f4c3427d61f3743d951dcb4df0993c7c18a480e0be5921e2a31aecc1ed6e3190170a167
   languageName: node
   linkType: hard
 
@@ -16217,9 +16217,9 @@ __metadata:
   linkType: hard
 
 "electron-to-chromium@npm:^1.4.668":
-  version: 1.4.730
-  resolution: "electron-to-chromium@npm:1.4.730"
-  checksum: 10/cd896fa98ec889c81169984a60c4e46400051a3b8c16133412d9467ee2d85e040663d2384ee6ab7f7fb1c57685b21e42f73bfd3852039142454d80b71e783cd3
+  version: 1.4.731
+  resolution: "electron-to-chromium@npm:1.4.731"
+  checksum: 10/ec73815fd0dc77e6ba74771c6bb57822d5bdef3267f9cc1c80c378c01682afef346b6f2d423b0277ce4635e709788a950716425866df5e1c30ea756724338f26
   languageName: node
   linkType: hard
 
@@ -31068,12 +31068,12 @@ __metadata:
   linkType: hard
 
 "socks@npm:^2.7.1":
-  version: 2.8.1
-  resolution: "socks@npm:2.8.1"
+  version: 2.8.3
+  resolution: "socks@npm:2.8.3"
   dependencies:
     ip-address: "npm:^9.0.5"
     smart-buffer: "npm:^4.2.0"
-  checksum: 10/a3cc38e0716ab53a2db3fa00c703ca682ad54dbbc9ed4c7461624a999be6fa7cdc79fc904c411618e698d5eff55a55aa6d9329169a7db11636d0200814a2b5aa
+  checksum: 10/ffcb622c22481dfcd7589aae71fbfd71ca34334064d181df64bf8b7feaeee19706aba4cffd1de35cc7bbaeeaa0af96be2d7f40fcbc7bc0ab69533a7ae9ffc4fb
   languageName: node
   linkType: hard
 
