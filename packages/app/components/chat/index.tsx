@@ -20,7 +20,8 @@ import { useChat } from 'app/hooks/chat/useChat';
 import { loadStyles } from './chat.style';
 // import { Select } from "tamagui";
 
-// TODO check if we fixed chat screen on another branch
+// TODO check if we've fixed the chat screen on another branch
+// link: https://github.com/andrew-bierman/PackRat/issues/ ???
 
 interface Message {
   role: string;
