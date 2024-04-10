@@ -14,11 +14,14 @@ import {
   RStack,
   SubmitButton,
 } from '@packrat/ui';
-// import { sendMessage } from '@packrat/validations';
+import { sendMessage } from '@packrat/validations';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useChat } from 'app/hooks/chat/useChat';
 import { loadStyles } from './chat.style';
 // import { Select } from "tamagui";
+
+// TODO check if we've fixed the chat screen on another branch
+// link: https://github.com/andrew-bierman/PackRat/issues/ ???
 
 interface Message {
   role: string;
@@ -117,9 +120,7 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
     <View style={styles.container}>
       <RStack style={{ alignItems: 'center' }}>
         {showChatSelector && (
-          <Form
-          // validationSchema={sendMessage}
-          >
+          <Form>
             <>
               {options?.length ? (
                 <>
@@ -166,9 +167,7 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
           // </ScrollView>
         )}
         <MessageList messages={parsedMessages} />
-        <Form
-        // validationSchema={sendMessage}
-        >
+        <Form validationSchema={sendMessage}>
           <RStack style={{ marginTop: 16, gap: 8 }}>
             <FormInput name="message" placeholder="Type a message..." />
             <SubmitButton onSubmit={handleSendMessage}>

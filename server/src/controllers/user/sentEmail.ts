@@ -1,6 +1,6 @@
 import { publicProcedure } from '../../trpc';
 import { resetEmail } from '../../utils/accountEmail';
-import * as validator from '../../middleware/validators/index';
+import * as validator from '@packrat/validations';
 import { User } from '../../drizzle/methods/User';
 
 /**
@@ -31,7 +31,7 @@ import { User } from '../../drizzle/methods/User';
 // };
 
 export function sentEmailRoute() {
-  return publicProcedure.input(validator.sentEmail).query(async (opts) => {
+  return publicProcedure.input(validator.sentEmail).mutation(async (opts) => {
     const { email } = opts.input;
     const { env }: any = opts.ctx;
     const STMP_EMAIL = env.STMP_EMAIL;

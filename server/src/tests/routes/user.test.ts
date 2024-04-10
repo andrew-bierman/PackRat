@@ -1,5 +1,5 @@
 import { generateMock } from '@anatine/zod-mock';
-import { userSignUp } from '../../middleware/validators';
+import { userSignUp } from '@packrat/validations';
 import { setupTest, teardownTest } from '../utils/testHelpers';
 
 let caller;

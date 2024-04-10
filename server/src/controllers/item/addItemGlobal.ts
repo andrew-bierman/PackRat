@@ -1,6 +1,6 @@
 import { addItemGlobalService } from '../../services/item/item.service';
 import { publicProcedure } from '../../trpc';
-import * as validator from '../../middleware/validators/index';
+import * as validator from '@packrat/validations';
 
 /**
  * Adds an item globally.

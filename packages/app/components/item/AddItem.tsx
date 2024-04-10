@@ -7,7 +7,7 @@ import {
   addItem as addItemSchema,
   editItem as editItemSchema,
   type Item,
-} from 'server/src/middleware/validators/itemRoutesValidator';
+} from '@packrat/validations';
 import { useMemo } from 'react';
 import { useAuthUser } from 'app/auth/hooks';
 
@@ -82,8 +82,8 @@ export const AddItem = ({
     }
     const result = {
       name: initialData.name || '',
-      weight: String(initialData.weight),
-      quantity: String(initialData.quantity),
+      weight: initialData.weight,
+      quantity: initialData.quantity,
       type: initialData.category?.name,
       unit: initialData.unit,
       id: packId,

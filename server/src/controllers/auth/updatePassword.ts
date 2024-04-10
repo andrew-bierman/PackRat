@@ -1,6 +1,7 @@
 import { publicProcedure } from '../../trpc';
 import { findUserAndUpdate } from '../../services/user/user.service';
-import * as validator from '../../middleware/validators/index';
+import * as validator from '@packrat/validations';
+import { hashPassword } from '../../utils/user';
 // import { prisma } from '../../prisma';
 
 /**
@@ -46,7 +47,10 @@ export function updatePasswordRoute() {
     .input(validator.updatePassword)
     .mutation(async (opts) => {
       const { email, password } = opts.input;
-      const user = await findUserAndUpdate(email, password, 'password');
+      const { env }: any = opts.ctx;
+      const JWT_SECRET = env.JWT_SECRET;
+      const hashedPassword = await hashPassword(JWT_SECRET, password);
+      const user = await findUserAndUpdate(email, hashedPassword, 'password');
       return user;
     });
 }

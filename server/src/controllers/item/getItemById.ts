@@ -1,6 +1,6 @@
 import { publicProcedure } from '../../trpc';
 import { getItemByIdService } from '../../services/item/item.service';
-import * as validator from '../../middleware/validators/index';
+import * as validator from '@packrat/validations';
 
 /**
  * Retrieves an item by its ID.
