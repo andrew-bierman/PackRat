@@ -9,7 +9,7 @@ import { AuthWrapper } from 'app/auth/AuthWrapper';
 const Profile = () => {
   const [id] = useProfileId();
 
-  console.log({ id });
+  console.log({ id }, '');
 
   return (
     <>
