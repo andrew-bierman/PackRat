@@ -12,7 +12,7 @@
     "@originjs/vite-plugin-commonjs": "^1.0.3",
     "@packrat/ui": "*",
     "@packrat/validations": "*",
-    "@tamagui/vite-plugin": "^1.94.3",
+    "@tamagui/vite-plugin": "1.92.1",
     "@tanstack/react-router": "^1.16.5",
     "@tanstack/router-devtools": "^1.16.5",
     "@tanstack/router-vite-plugin": "^1.16.5",
