@@ -9,6 +9,7 @@ interface DeletePackItemModalProps {
   isOpen?: Boolean;
   onClose?: () => void;
   showTrigger?: Boolean;
+  triggerComponent?: React.DetailedReactHTMLElement<any, HTMLElement>;
 }
 
 export const DeletePackItemModal = ({
@@ -16,6 +17,7 @@ export const DeletePackItemModal = ({
   pack,
   isOpen,
   onClose,
+  triggerComponent,
   showTrigger,
 }: DeletePackItemModalProps) => {
   const { deletePackItem } = useDeletePackItem();
@@ -52,6 +54,7 @@ export const DeletePackItemModal = ({
       title={'Delete Item'}
       isOpen={isOpen}
       onClose={onClose}
+      triggerComponent={triggerComponent}
       showTrigger={showTrigger !== undefined ? showTrigger : true}
       footerButtons={footerButtons}
     >

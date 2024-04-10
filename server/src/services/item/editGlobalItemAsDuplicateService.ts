@@ -16,20 +16,6 @@ import { type InsertItemCategory } from '../../db/schema';
  * @param {string} type - The type/category of the duplicate item.
  * @return {Promise<object>} The newly created duplicate item.
  */
-
-type ItemType = MongooseDocument & {
-  createdAt: Date;
-  updatedAt: Date;
-  weight: number;
-  name: string;
-  packs: ObjectId[];
-  quantity: number;
-  unit: string;
-  owners: ObjectId[];
-  global: boolean;
-  category?: ObjectId;
-};
-
 export const editGlobalItemAsDuplicateService = async (
   itemId: string,
   packId: string,

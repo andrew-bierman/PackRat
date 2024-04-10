@@ -64,13 +64,13 @@ export const ZDropdownNative = ({ dropdownItems = [] }) => {
           style={{ padding: 0 }}
         />
       </DropdownMenu.Trigger>
-      <DropdownMenu.Content>
+      <CustomContent>
         {dropdownItems.map(({ label, onSelect = () => {} }) => (
           <DropdownMenu.Item key={label} onSelect={onSelect()}>
             <DropdownMenu.ItemTitle>{label}</DropdownMenu.ItemTitle>
           </DropdownMenu.Item>
         ))}
-      </DropdownMenu.Content>
+      </CustomContent>
     </DropdownMenu.Root>
   );
 };

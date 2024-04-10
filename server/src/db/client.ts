@@ -7,22 +7,20 @@ export const createDb = async (d1: D1Database) => {
 
 export type DrizzleClient = Awaited<ReturnType<typeof createDb>>;
 
-class DbClient {
-  private static _instance: DrizzleClient | null = null;
-
-  public static get instance(): DrizzleClient {
-    if (!DbClient._instance) {
+const DbClient = {
+  _instance: null as DrizzleClient | null,
+  get instance(): DrizzleClient {
+    if (!this._instance) {
       throw new Error('Database client instance not initialized.');
     }
-    return DbClient._instance;
-  }
-
-  public static async init(d1Db: D1Database): Promise<void> {
+    return this._instance;
+  },
+  async init(d1Db: D1Database): Promise<void> {
     if (d1Db) {
       this._instance = await createDb(d1Db);
     }
-  }
-}
+  },
+};
 
 export { DbClient };
 

@@ -23,9 +23,8 @@ export async function destinationAdvice(
           [advice.key]: response,
         })),
       );
-    const adviceResults: Array<Record<string, string>> = await Promise.all(
-      advicePromises,
-    );
+    const adviceResults: Array<Record<string, string>> =
+      await Promise.all(advicePromises);
 
     // Initialize DestinationAdviceResponse with default values
     const initialResponse: DestinationAdviceResponse = {

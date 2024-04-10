@@ -21,7 +21,7 @@
     "build:prod:cloudflare-next": "cd apps/next && yarn build:cloudflare",
     "build:tsc:packages": "cd packages/validations && yarn build",
     "build:tsc:server": "cd server && yarn build",
-    "build:tsc": "yarn build:tsc:packages && yarn build:tsc:server",
+    "build:tsc": "yarn build:tsc:packages",
     "build:validations": "cd packages/validations && yarn build",
     "build:web": "cd apps/next && yarn build",
     "build:next:static": "cd apps/next && yarn build && yarn next export",
@@ -85,6 +85,7 @@
     "lint-staged": "^14.0.1",
     "npm-run-all": "^4.1.5",
     "patch-package": "^8.0.0",
+    "prettier": "^3.2.5",
     "typescript": "^5.3.3"
   },
   "lint-staged": {

@@ -6,6 +6,7 @@ export const EditPackItemModal = ({
   isOpen,
   onClose,
   showTrigger,
+  triggerComponent,
 }) => {
   const footerButtons = [
     {
@@ -30,6 +31,7 @@ export const EditPackItemModal = ({
       isOpen={isOpen}
       onClose={onClose}
       footerButtons={footerButtons}
+      triggerComponent={triggerComponent}
       showTrigger={showTrigger !== undefined ? showTrigger : true}
     >
       <ModalContent />

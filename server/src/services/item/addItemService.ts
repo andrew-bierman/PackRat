@@ -5,6 +5,7 @@ import { ItemCategory } from '../../drizzle/methods/itemcategory';
 import { ItemOwners } from '../../drizzle/methods/ItemOwners';
 import { ItemCategory as categories } from '../../utils/itemCategory';
 import { type InsertItemCategory } from '../../db/schema';
+
 /**
  * Generates a new item and adds it to a pack based on the given parameters.
  * @param {string} name - The name of the item.
@@ -16,20 +17,6 @@ import { type InsertItemCategory } from '../../db/schema';
  * @param {string} ownerId - The ID of the owner of the item.
  * @return {object} An object containing the newly created item and the pack ID.
  */
-
-type ItemType = MongooseDocument & {
-  createdAt: Date;
-  updatedAt: Date;
-  weight: number;
-  name: string;
-  packs: ObjectId[];
-  quantity: number;
-  unit: string;
-  owners: ObjectId[];
-  global: boolean;
-  category?: ObjectId;
-};
-
 export const addItemService = async (
   name: string,
   weight: number,
