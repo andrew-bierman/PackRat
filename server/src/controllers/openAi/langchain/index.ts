@@ -81,21 +81,21 @@ async function getPackInformation(packId) {
       )
       .join(', ')}. 
     The pack is ${packData.is_public ? 'public' : 'private'}, favorited by ${
-    packData.favorited_by.length
-  } users, created on ${new Date(packData.createdAt).toLocaleDateString()}. 
+      packData.favorited_by.length
+    } users, created on ${new Date(packData.createdAt).toLocaleDateString()}. 
     It is graded as ${packData.grades.weight}, ${
-    packData.grades.essentialItems
-  }, and ${
-    packData.grades.redundancyAndVersatility
-  } in weight, essential items, and redundancy/versatility respectively. 
+      packData.grades.essentialItems
+    }, and ${
+      packData.grades.redundancyAndVersatility
+    } in weight, essential items, and redundancy/versatility respectively. 
     The scores are: weight ${packData.scores.weightScore}, essential items ${
-    packData.scores.essentialItemsScore
-  }, and redundancy/versatility ${
-    packData.scores.redundancyAndVersatilityScore
-  }, 
+      packData.scores.essentialItemsScore
+    }, and redundancy/versatility ${
+      packData.scores.redundancyAndVersatilityScore
+    }, 
     totaling ${packData.totalScore} with a total weight of ${
-    packData.total_weight
-  }g. 
+      packData.total_weight
+    }g. 
     Provide feedback for optimization considering safety, comfort, and efficiency.`;
 }
 
@@ -107,25 +107,25 @@ async function getTripInformation(tripId) {
     tripData.description
   }'. 
     Duration: ${tripData.duration}, Weather: ${
-    tripData.weather
-  }, from ${new Date(tripData.start_date).toLocaleDateString()} to ${new Date(
-    tripData.end_date,
-  ).toLocaleDateString()}, 
+      tripData.weather
+    }, from ${new Date(tripData.start_date).toLocaleDateString()} to ${new Date(
+      tripData.end_date,
+    ).toLocaleDateString()}, 
     heading to ${
       tripData.destination
     }. Destination GeoJSON Details: ${JSON.stringify(
-    tripData.geojson,
-    null,
-    2,
-  )}. 
+      tripData.geojson,
+      null,
+      2,
+    )}. 
     Owned by ${tripData.owner_id.name}, and it's ${
-    tripData.is_public ? 'public' : 'private'
-  }. 
+      tripData.is_public ? 'public' : 'private'
+    }. 
     Created on ${new Date(
       tripData.createdAt,
     ).toLocaleDateString()}, last updated on ${new Date(
-    tripData.updatedAt,
-  ).toLocaleDateString()}. 
+      tripData.updatedAt,
+    ).toLocaleDateString()}. 
     Please provide insights and recommendations for preparation and things to consider for a safe and enjoyable trip.`;
 }
 
