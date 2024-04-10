@@ -20,7 +20,7 @@ export const useProfile = (id = null) => {
   } = useUserPacks(authUserId); // TODO: Add enabled as parameter
 
   const {
-    data: tripsData,
+    data: allTrips,
     isLoading: tripsIsLoading,
     error: tripsError,
   } = useUserTrips(authUserId); // TODO: Add enabled as parameter
@@ -49,6 +49,7 @@ export const useProfile = (id = null) => {
 
   const packsData = !isCurrentUser ? user?.packs : allPacks;
   const favoritesData = !isCurrentUser ? user?.favorites : allFavorites;
+  const tripsData = !isCurrentUser ? user?.trips : allTrips;
 
   const tripsCount = tripsData?.length ?? 0;
   const packsCount = packsData?.length ?? 0;
