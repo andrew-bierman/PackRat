@@ -222,5 +222,6 @@ const loadStyles = () => ({
     marginTop: 20,
     marginBottom: 15,
     maxWidth: 400,
+    width: '100%',
   },
 });

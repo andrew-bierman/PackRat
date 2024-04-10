@@ -1,5 +1,12 @@
 import { Link } from '@packrat/crosspath';
-import { RStack, RText, RButton, RSkeleton, VirtualList } from '@packrat/ui';
+import {
+  RStack,
+  RText,
+  RButton,
+  RSkeleton,
+  VirtualList,
+  BaseModal,
+} from '@packrat/ui';
 import { VirtualizedList } from 'react-native';
 import UserDataCard from './UserDataCard';
 import React, { useEffect, useState } from 'react';
@@ -9,6 +16,7 @@ import useTheme from '../../hooks/useTheme';
 import { hexToRGBA } from 'app/utils/colorFunctions';
 import { View, FlatList } from 'react-native';
 import { useAuthUser } from 'app/auth/hooks';
+import DataList from './UserDetailList';
 
 // Skeleton version of the UserDataCard component
 const SkeletonUserDataCard = () => {
@@ -150,6 +158,8 @@ export default function UserDataContainer({
                   alignItems: 'center',
                 }}
               />
+
+              <DataList data={data} />
             </>
           ) : currentUser?.id === userId ? (
             <Link href="/">

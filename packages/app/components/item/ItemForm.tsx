@@ -31,8 +31,7 @@ interface ItemFormProps {
       };
     }>;
   } | null;
-  packId: string;
-  ownerId: string;
+  packId: number;
 }
 
 export const ItemForm = ({
@@ -44,7 +43,6 @@ export const ItemForm = ({
   validationSchema,
   currentPack,
   packId,
-  ownerId,
 }: ItemFormProps) => {
   let hasWaterAdded = false;
   if (
@@ -119,11 +117,6 @@ export const ItemForm = ({
           <FormInput
             name="packId"
             defaultValue={packId}
-            style={{ display: 'none' }}
-          />
-          <FormInput
-            name="ownerId"
-            defaultValue={ownerId}
             style={{ display: 'none' }}
           />
         </RStack>

@@ -36,9 +36,11 @@ export default function Settings() {
   return user ? (
     <RScrollView>
       <RStack
-        space="$3"
+        gap={8}
         width="fit-content"
+        maw="100%"
         paddingVertical={20}
+        paddingHorizontal={8}
         marginHorizontal="auto"
       >
         <RStack>
@@ -46,30 +48,35 @@ export default function Settings() {
           <RSeparator marginVertical={8} />
         </RStack>
         <Form validationSchema={userSettingsSchema} defaultValues={{ ...user }}>
-          <RStack space="$3" width="fit-content" marginHorizontal="auto">
+          <RStack
+            space="$3"
+            width="fit-content"
+            maw="100%"
+            marginHorizontal="auto"
+          >
             <ImageUpload
               label="Profile Picture"
               name="profileImage"
               previewElement={<Avatar size={90} />}
             />
-            <RStack space="$3" style={{ flexDirection: 'row' }}>
-              <RStack space="$2">
+            <RStack gap={16} style={{ flexDirection: 'row' }}>
+              <RStack f={1}>
                 <RLabel htmlFor="firstName">Name</RLabel>
                 <FormInput id="name" name="name" />
               </RStack>
-              <RStack space="$2">
+              <RStack f={1}>
                 <RLabel htmlFor="username">Username</RLabel>
                 <FormInput id="username" name="username" />
               </RStack>
             </RStack>
-            <RStack space="$2">
+            <RStack>
               <RLabel htmlFor="email">Email</RLabel>
               <FormInput id="email" name="email" />
             </RStack>
-            <RStack space="$2">
+            <RStack>
               <RH5>Preferred units</RH5>
-              <RStack space style={{ flexDirection: 'row' }}>
-                <RStack space="$2" flexGrow={1}>
+              <RStack gap={16} style={{ flexDirection: 'row' }}>
+                <RStack f={1}>
                   <RLabel>Weather: </RLabel>
                   <FormSelect
                     options={weatherOptions}
@@ -77,7 +84,7 @@ export default function Settings() {
                     style={{ width: '100%' }}
                   />
                 </RStack>
-                <RStack space="$2" flexGrow={1}>
+                <RStack f={1}>
                   <RLabel>Weight: </RLabel>
                   <FormSelect
                     options={weightOptions}
