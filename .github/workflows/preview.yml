@@ -38,4 +38,3 @@ jobs:
         uses: expo/expo-github-action/preview@v8
         with:
           command: cd apps/expo && eas update --auto
-u
