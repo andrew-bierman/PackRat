@@ -38,4 +38,4 @@ jobs:
         uses: expo/expo-github-action/preview@v8
         with:
           working-directory: apps/expo
-          command: eas build --auto
+          command: eas build --platform android --profile preview
