@@ -14,7 +14,7 @@ export const PasswordResetAlert = () => {
       }}
     >
       <RText style={{ color: 'white', fontWeight: 'bold', fontSize: 24 }}>
-        Password reset successfully!
+        Password reset completed successfully!
       </RText>
       <RText
         style={{
