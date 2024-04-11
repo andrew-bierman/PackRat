@@ -66,6 +66,7 @@
     "test": "yarn test:all",
     "upgrade:tamagui:canary": "yarn up '*tamagui*'@canary '@tamagui/*'@canary",
     "upgrade:tamagui": "yarn up '*tamagui*'@latest '@tamagui/*'@latest",
+    "upgrade:cloudflare": "yarn up '@cloudflare/*'@latest wrangler@latest",
     "web": "cd apps/next && yarn dev"
   },
   "engines": {
@@ -130,6 +131,6 @@
     "packing planner app"
   ],
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20240329.0"
+    "@cloudflare/workers-types": "^4.20240405.0"
   }
 }

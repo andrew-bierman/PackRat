@@ -9,8 +9,9 @@ module.exports = {
   extends: [
     'standard-with-typescript',
     'plugin:@typescript-eslint/recommended',
-    // 'plugin:drizzle/all', add this back when we are fully migrated to drizzle
+    'plugin:drizzle/all', // add this back when we are fully migrated to drizzle
     'prettier',
+    'plugin:next-on-pages/recommended',
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -21,7 +22,7 @@ module.exports = {
     sourceType: 'module',
     project: './tsconfig.json',
   },
-  plugins: ['@typescript-eslint', 'prettier'],
+  plugins: ['@typescript-eslint', 'prettier', 'next-on-pages'],
   ignorePatterns: [
     'node_modules/',
     'dist/',
@@ -38,6 +39,7 @@ module.exports = {
     'drizzle.config.ts',
   ],
   rules: {
+    'next-on-pages/no-unsupported-configs': 'warn',
     'prettier/prettier': 'error',
     'constructor-super': 'error',
     'for-direction': 'error',

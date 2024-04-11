@@ -42,13 +42,13 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "@cloudflare/next-on-pages": "^1.8.5",
-    "@cloudflare/workers-types": "^4.20240329.0",
+    "@cloudflare/next-on-pages": "^1.11.0",
+    "@cloudflare/workers-types": "^4.20240405.0",
     "@types/node": "^20.8.3",
     "babel-plugin-module-resolver": "^5.0.0",
     "eslint-plugin-next-on-pages": "^1.8.5",
     "patch-package": "^8.0.0",
     "postinstall-postinstall": "^2.1.0",
-    "wrangler": "^3.41.0"
+    "wrangler": "^3.49.0"
   }
 }
