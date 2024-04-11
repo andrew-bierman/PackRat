@@ -4368,7 +4368,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mapbox/geojson-rewind@npm:0.5.2, @mapbox/geojson-rewind@npm:^0.5.2":
+"@mapbox/geojson-rewind@npm:0.5.2, @mapbox/geojson-rewind@npm:^0.5.0, @mapbox/geojson-rewind@npm:^0.5.2":
   version: 0.5.2
   resolution: "@mapbox/geojson-rewind@npm:0.5.2"
   dependencies:
@@ -4403,6 +4403,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@mapbox/mapbox-gl-supported@npm:^2.0.0":
+  version: 2.0.1
+  resolution: "@mapbox/mapbox-gl-supported@npm:2.0.1"
+  checksum: 10/36877eb32510e43ad524152fc95bb29e04e3ba7129d0f81ccb3704a71badac7e53e6ef0a203d3ae6d4fd289844fb6229e7ec31c9e66934c4a74b33ee1a7fde0f
+  languageName: node
+  linkType: hard
+
 "@mapbox/node-pre-gyp@npm:^1.0.11, @mapbox/node-pre-gyp@npm:^1.0.5":
   version: 1.0.11
   resolution: "@mapbox/node-pre-gyp@npm:1.0.11"
@@ -4429,7 +4436,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mapbox/tiny-sdf@npm:^1.1.1":
+"@mapbox/tiny-sdf@npm:^1.1.1, @mapbox/tiny-sdf@npm:^1.2.5":
   version: 1.2.5
   resolution: "@mapbox/tiny-sdf@npm:1.2.5"
   checksum: 10/14084de2a2c7bcaca7556e3e50723c95503902dfcf3c51b91bd4b32655495b86d07838eca52e183a2ef1639101eb0b6a95c44527e17732946dd3f710dc8dd5af
@@ -11331,7 +11338,7 @@ __metadata:
     immer: "npm:^10.0.3"
     jotai: "npm:^2.6.4"
     lodash: "npm:^4.17.21"
-    mapbox-gl: "npm:1.13.3"
+    mapbox-gl: "npm:2.4.0"
     moti: "npm:^0.27.2"
     native-base: "npm:^3.4.28"
     normalize-css-color: "npm:^1.0.2"
@@ -18837,7 +18844,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"gl-matrix@npm:^3.2.1":
+"gl-matrix@npm:^3.2.1, gl-matrix@npm:^3.3.0":
   version: 3.4.3
   resolution: "gl-matrix@npm:3.4.3"
   checksum: 10/25ca2f7c762b7547cf462614ac7e0b98cffb131899f014e60a7e50395f4e9304efbb31dc73921e5af2a355cff663bee984d2710765f6730853e90d1c54d5d8e3
@@ -22948,6 +22955,37 @@ __metadata:
   languageName: node
   linkType: hard
 
+"mapbox-gl@npm:2.4.0":
+  version: 2.4.0
+  resolution: "mapbox-gl@npm:2.4.0"
+  dependencies:
+    "@mapbox/geojson-rewind": "npm:^0.5.0"
+    "@mapbox/geojson-types": "npm:^1.0.2"
+    "@mapbox/jsonlint-lines-primitives": "npm:^2.0.2"
+    "@mapbox/mapbox-gl-supported": "npm:^2.0.0"
+    "@mapbox/point-geometry": "npm:^0.1.0"
+    "@mapbox/tiny-sdf": "npm:^1.2.5"
+    "@mapbox/unitbezier": "npm:^0.0.0"
+    "@mapbox/vector-tile": "npm:^1.3.1"
+    "@mapbox/whoots-js": "npm:^3.1.0"
+    csscolorparser: "npm:~1.0.3"
+    earcut: "npm:^2.2.2"
+    geojson-vt: "npm:^3.2.1"
+    gl-matrix: "npm:^3.3.0"
+    grid-index: "npm:^1.1.0"
+    minimist: "npm:^1.2.5"
+    murmurhash-js: "npm:^1.0.0"
+    pbf: "npm:^3.2.1"
+    potpack: "npm:^1.0.1"
+    quickselect: "npm:^2.0.0"
+    rw: "npm:^1.3.3"
+    supercluster: "npm:^7.1.3"
+    tinyqueue: "npm:^2.0.3"
+    vt-pbf: "npm:^3.1.1"
+  checksum: 10/1f6e5f0aadabbdebe93a4ec92ef267bb5b6a32b4e613e1b76f77efe541b41976d532d5da46d128166569cf575c54e5432397009d4c00c3c5e4dd0f5f38d66111
+  languageName: node
+  linkType: hard
+
 "markdown-it-anchor@npm:^8.4.1":
   version: 8.6.7
   resolution: "markdown-it-anchor@npm:8.6.7"
@@ -23791,7 +23829,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimist@npm:^1.2.0, minimist@npm:^1.2.6":
+"minimist@npm:^1.2.0, minimist@npm:^1.2.5, minimist@npm:^1.2.6":
   version: 1.2.8
   resolution: "minimist@npm:1.2.8"
   checksum: 10/908491b6cc15a6c440ba5b22780a0ba89b9810e1aea684e253e43c4e3b8d56ec1dcdd7ea96dde119c29df59c936cde16062159eae4225c691e19c70b432b6e6f
@@ -30303,7 +30341,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"supercluster@npm:^7.1.0":
+"supercluster@npm:^7.1.0, supercluster@npm:^7.1.3":
   version: 7.1.5
   resolution: "supercluster@npm:7.1.5"
   dependencies:

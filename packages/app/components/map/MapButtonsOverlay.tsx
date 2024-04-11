@@ -29,6 +29,7 @@ interface MapButtonsOverlayProps {
   handleGpxUpload?: () => void;
   progress?: number;
   navigateToMaps: () => void;
+  startNavigation: () => void;
 }
 
 const MapButtonsOverlay = ({
@@ -43,6 +44,7 @@ const MapButtonsOverlay = ({
   handleGpxUpload,
   progress,
   navigateToMaps,
+  startNavigation,
 }: MapButtonsOverlayProps) => {
   console.log('newwwww');
   const [showStyleOptions, setShowStyleOptions] = useState(false);
@@ -125,11 +127,7 @@ const MapButtonsOverlay = ({
                 left: 10,
               },
             ]}
-            onPress={() => {
-              Platform.OS == 'web'
-                ? alert('Sorry, currently not implemented')
-                : Alert.alert('Sorry, currently not implemented');
-            }}
+            onPress={startNavigation}
           >
             <MaterialCommunityIcons
               name="navigation-variant-outline"

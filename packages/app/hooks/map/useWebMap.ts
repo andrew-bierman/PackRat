@@ -457,6 +457,37 @@ export const useWebMap = ({ shape: shapeProp }) => {
     }
   };
   console.log(isPolygonOrMultiPolygon(shape) || showModal, 'polygon or not');
+
+  /**
+   * Starts navigation
+   *
+   * @see https://docs.mapbox.com/mapbox-gl-js/example/locate-user/
+   */
+  const startNavigation = (): void => {
+    let geolocateControl = new mapboxgl.GeolocateControl({
+      positionOptions: {
+        enableHighAccuracy: true,
+      },
+      trackUserLocation: true, // this enables the navigation
+      showUserHeading: true,
+    });
+    // There isn't a suitable way to customize the control button,
+    // so we hide it (check global.css) and instead use our own custom button where we manually trigger the navigation
+    map?.current.addControl(geolocateControl);
+
+    /**
+     * Triggers navigation.
+     * Re-triggers navigation (after 1s) if it was triggered before control was added to map.
+     *
+     * @see https://docs.mapbox.com/mapbox-gl-js/api/markers/#geolocatecontrol#trigger
+     */
+    const trigger = () => {
+      const controlAdded = geolocateControl.trigger();
+      if (!controlAdded) setTimeout(trigger, 1000);
+    };
+    trigger();
+  };
+
   return {
     mapContainer,
     lng,
@@ -481,5 +512,6 @@ export const useWebMap = ({ shape: shapeProp }) => {
     map,
     shape,
     setShape,
+    startNavigation,
   };
 };
