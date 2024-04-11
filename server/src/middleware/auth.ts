@@ -72,7 +72,7 @@ const findUser = async (decoded: JwtPayload, token: string): Promise<User> => {
   //     token,
   //   },
   // });
-  let user = null;
+  const user = null;
   if (!user) throw new Error('User associated with this token not found.');
   return user;
 };
