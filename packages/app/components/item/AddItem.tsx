@@ -78,7 +78,7 @@ export const AddItem = ({
 
   const defaultValues = useMemo(() => {
     if (!initialData) {
-      return { unit: 'lb' };
+      return { unit: 'lb', ownerId };
     }
     const result = {
       name: initialData.name || '',
