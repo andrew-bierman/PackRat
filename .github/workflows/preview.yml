@@ -1,9 +1,13 @@
 name: preview
-on: push
+on: 
+  push:
+    branches: [ "**" ]
+  pull_request:
+    branches: [ "**" ]
 
 jobs:
   update:
-    name: EAS Update
+    name: EAS Android Preview Build
     runs-on: ubuntu-latest
     permissions:
       contents: read
