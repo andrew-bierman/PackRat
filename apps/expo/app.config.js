@@ -7,7 +7,7 @@ module.exports = ({ config }) => {
                 "@rnmapbox/maps",
                 {
                   "RNMapboxMapsImpl": "mapbox",
-                  "RNMapboxMapsDownloadToken": process.env.MAPBOX_DOWNLOADS_TOKEN2
+                  "RNMapboxMapsDownloadToken": process.env.MAPBOX_DOWNLOADS_TOKEN
                 }
               ]
         }
