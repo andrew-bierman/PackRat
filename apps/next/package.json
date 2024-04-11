@@ -14,7 +14,7 @@
     "pages:preview": "npm run pages:build && wrangler pages dev .vercel/output/static --compatibility-date=2024-01-17 --compatibility-flag=nodejs_compat",
     "pages:deploy": "npm run pages:build && wrangler pages deploy .vercel/output/static",
     "pages:dev": "npx @cloudflare/next-on-pages --watch",
-    "build:cloudflare": "npx @cloudflare/next-on-pages@1"
+    "build:cloudflare": "yarn pages:build"
   },
   "dependencies": {
     "@babel/core": "^7.23.7",
