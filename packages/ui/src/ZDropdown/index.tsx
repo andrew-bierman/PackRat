@@ -41,7 +41,6 @@ const CustomContent = styled(DropdownMenu.Content, {
     return (
       <DropdownMenu.Root>
         <DropdownMenu.Trigger>
-          {/* <></> */}
           <RIconButton
             backgroundColor="transparent"
             icon={<MaterialIcons name="more-horiz" size={25} />}
@@ -63,7 +62,6 @@ const CustomContent = styled(DropdownMenu.Content, {
     return (
       <DropdownMenu.Root>
         <DropdownMenu.Trigger>
-          {/* <></> */}
           <RIconButton
             backgroundColor="transparent"
             icon={<MaterialIcons name="more-horiz" size={25} />}
