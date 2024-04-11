@@ -14,6 +14,7 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 import { loadStyles } from './itemsTable.style';
 import { AddItem } from '../item/AddItem';
 import { useScreenWidth } from 'app/hooks/common';
+import { useDeleteItem } from 'app/hooks/items';
 
 interface ItemsTableProps {
   limit: number;
@@ -55,6 +56,7 @@ export const ItemsTable = ({
 }: ItemsTableProps) => {
   const flexArr = [1.5, 1, 1, 1, 0.65, 0.65, 0.65];
   const { screenWidth } = useScreenWidth();
+  const { handleDeleteItem } = useDeleteItem();
 
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
@@ -79,6 +81,7 @@ export const ItemsTable = ({
       quantity,
       `${category?.name || type}`,
       <EditPackItemModal
+        key="edit-pack-item"
         triggerComponent={
           <MaterialIcons
             name="edit"
@@ -88,7 +91,7 @@ export const ItemsTable = ({
         }
       >
         <AddItem
-          id={id}
+          packId={id}
           isEdit={true}
           isItemPage
           initialData={itemData}
@@ -98,7 +101,10 @@ export const ItemsTable = ({
         />
       </EditPackItemModal>,
       <DeletePackItemModal
-        itemId={_id}
+        key="delete-pack-item"
+        onConfirm={(closeModal) => {
+          handleDeleteItem(id, closeModal);
+        }}
         triggerComponent={
           <MaterialIcons
             name="delete"
@@ -220,6 +226,7 @@ export const ItemsTable = ({
               borderWidth: 1,
               borderStyle: 'solid',
             }}
+            disabled={page === totalPages}
             onPress={handleNextPage}
           >
             <AntDesign

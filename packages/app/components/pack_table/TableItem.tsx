@@ -15,8 +15,8 @@ type ModalName = 'edit' | 'delete';
 
 interface TableItemProps {
   itemData: any;
-  checkedItems: string[];
   handleCheckboxChange: (itemId: string) => void;
+  onDelete: (params: { itemId: string; packId: string }) => void;
   index: number;
   hasPermissions: boolean;
   flexArr: number[];
@@ -27,9 +27,7 @@ interface TableItemProps {
 
 const TableItem = ({
   itemData,
-  checkedItems,
-  handleCheckboxChange,
-  index,
+  onDelete,
   hasPermissions,
   flexArr,
   currentPack,
@@ -51,7 +49,8 @@ const TableItem = ({
   const rowActionItems = [
     { label: 'Edit', onSelect: () => openModal('edit') },
     { label: 'Delete', onSelect: () => openModal('delete') },
-    { label: 'Ignore', onSelect: () => {} },
+    // TODO Implement Ignore Pack Item functional
+    // { label: 'Ignore', onSelect: () => {} },
   ];
 
   let rowData = [
@@ -88,9 +87,7 @@ const TableItem = ({
         <AddItem id={id} packId={id} isEdit={true} initialData={itemData} />
       </EditPackItemModal>
       <DeletePackItemModal
-        showTrigger={false}
-        itemId={id}
-        pack={currentPack}
+        onConfirm={() => onDelete({ itemId: id, packId: currentPack.id })}
         isOpen={activeModal === 'delete'}
         onClose={closeModal}
       />

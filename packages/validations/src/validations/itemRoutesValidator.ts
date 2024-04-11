@@ -20,6 +20,7 @@ export const addItem = z.object({
   packId: z.string(),
   type: z.string(),
   ownerId: z.string(),
+  id: z.string().optional(),
 });
 
 export type Item = z.infer<typeof addItem>;

@@ -32,6 +32,9 @@ const development = process.env.NODE_ENV === 'development';
 
 export default defineConfig({
   clearScreen: true,
+  server: {
+    port: 4000,
+  },
   plugins: [
     react(),
     TanStackRouterVite(),

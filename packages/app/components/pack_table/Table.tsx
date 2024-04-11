@@ -12,6 +12,7 @@ import {
   TitleRow,
 } from './TableHelperComponents';
 import TableItem from './TableItem';
+import { useDeletePackItem } from 'app/hooks/packs/useDeletePackItem';
 
 interface TableContainerProps {
   currentPack: any;
@@ -54,6 +55,7 @@ export const TableContainer = ({
   });
   const headerRow = ['Item Name', `Weight`, 'Quantity', ''];
   let flexArr = [2, 1, 1, 1, 0.65, 0.65, 0.65];
+  const { deletePackItem } = useDeletePackItem();
 
   if (
     Platform.OS === 'android' ||
@@ -91,7 +93,7 @@ export const TableContainer = ({
                     renderItem={({ item }) => (
                       <TableItem
                         itemData={item}
-                        checkedItems={checkedItems}
+                        onDelete={deletePackItem}
                         handleCheckboxChange={handleCheckboxChange}
                         flexArr={flexArr}
                         currentPack={currentPack}
