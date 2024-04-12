@@ -1,9 +1,11 @@
-import { tamaguiExtractPlugin, tamaguiPlugin } from '@tamagui/vite-plugin';
+import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
-import { defineConfig, transformWithEsbuild } from 'vite';
 import { resolve } from 'path';
 import esbuildFlowPlugin from 'esbuild-plugin-flow';
 import { TanStackRouterVite } from '@tanstack/router-vite-plugin';
+import { tamaguiExtractPlugin, tamaguiPlugin } from '@tamagui/vite-plugin';
+import * as esbuild from 'esbuild';
+import { readFileSync } from 'fs';
 
 const shouldExtract = process.env.EXTRACT === '1';
 
@@ -14,6 +16,7 @@ const tamaguiConfig = {
 
 // https://tamagui.dev/docs/intro/installation
 const extensions = [
+  '.mjs',
   '.web.tsx',
   '.tsx',
   '.web.ts',
@@ -30,30 +33,20 @@ const extensions = [
 
 const development = process.env.NODE_ENV === 'development';
 
+const rollupPlugin = (matchers: RegExp[]) => ({
+  name: 'js-in-jsx',
+  load(id: string) {
+    if (matchers.some((matcher) => matcher.test(id)) && id.endsWith('.js')) {
+      const file = readFileSync(id, { encoding: 'utf-8' });
+      return esbuild.transformSync(file, { loader: 'jsx', jsx: 'automatic' });
+    }
+  },
+});
+
 export default defineConfig({
   clearScreen: true,
+  cacheDir: '../../node_modules/.vite/vite-app',
   plugins: [
-    {
-      name: 'treat-js-files-as-jsx',
-      async transform(code, id) {
-        // Use an array to specify directories or path patterns for files to be transformed
-        const includePatterns = [
-          /node_modules\/@expo\/vector-icons/,
-          /node_modules\/react-native-table-component/,
-          /src\/.*\.js$/, // Specifically match .js files in the src directory
-        ];
-        
-        // Check if the current file's path matches any pattern in includePatterns
-        const shouldTransform = includePatterns.some(pattern => pattern.test(id));
-        if (!shouldTransform) return null;
-
-        // Proceed with JSX transformation if conditions are met
-        return transformWithEsbuild(code, id, {
-          loader: 'jsx',
-          jsx: 'automatic',
-        });
-      },
-    },
     react(),
     TanStackRouterVite(),
     tamaguiPlugin(tamaguiConfig),
@@ -94,12 +87,35 @@ export default defineConfig({
         '.js': 'jsx'
       },
       plugins: [
-        esbuildFlowPlugin(/\.(flow|jsx?)$/, (path) =>
-          /\.jsx$/.test(path) ? 'jsx' : 'jsx',
+        esbuildFlowPlugin(
+          /\.(flow|jsx?)$/,
+          (path) => (/\.jsx$/.test(path) ? 'jsx' : 'jsx'),
         ),
       ],
     },
     include: ['@packrat/validations'],
     exclude: [],
+  },
+  build: {
+    commonjsOptions: { transformMixedEsModules: true },
+    rollupOptions: {
+      plugins: [
+        rollupPlugin([/react-native-vector-icons/, /@expo\/vector-icons/, /react-native-table-component/]),
+      ],
+    },
+  },
+  server: {
+    port: 4200,
+    host: 'localhost',
+  },
+  preview: {
+    port: 4300,
+    host: 'localhost',
+  },
+  test: {
+    globals: true,
+    cache: { dir: '../../node_modules/.vitest' },
+    environment: 'jsdom',
+    include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
   },
 });
