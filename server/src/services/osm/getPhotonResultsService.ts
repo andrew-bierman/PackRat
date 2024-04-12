@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 export async function getPhotonResultsService(searchString) {
   const params = {
     q: searchString,
@@ -17,8 +15,12 @@ export async function getPhotonResultsService(searchString) {
     )
     .join('&');
 
-  const response = await axios.get(
-    `https://photon.komoot.io/api/?${queryString}`,
-  );
-  return response;
+  const response = await fetch(`https://photon.komoot.io/api/?${queryString}`);
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  const data = await response.json();
+  return data;
 }

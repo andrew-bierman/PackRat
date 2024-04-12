@@ -1,3 +1,4 @@
+mongodb-data
 *.env
 node_modules
 # yarn.lock
@@ -19,6 +20,11 @@ google-services.json
 # Wrangler
 wrangler.toml
 .wrangler/
+
+# Vitest
+.vitest
+vitest.config.js
+vitest.config.js.*
 
 # Tamagui
 .tamagui

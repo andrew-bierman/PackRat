@@ -9,7 +9,7 @@ export const useChat = (defaultChatId = null) => {
   const [userInput, setUserInput] = useState('');
   // const [parsedMessages, setParsedMessages] = useState([]);
 
-  const { data: chatsData, refetch } = useGetUserChats(user._id);
+  const { data: chatsData, refetch } = useGetUserChats(user.id);
 
   const { getAIResponse } = useGetAIResponse();
 
@@ -35,7 +35,7 @@ export const useChat = (defaultChatId = null) => {
   };
 
   const conversation = conversations?.find(
-    (chat) => chat._id === conversationId,
+    (chat) => chat.id === conversationId,
   );
 
   // Compute parsedMessages directly
@@ -51,7 +51,7 @@ export const useChat = (defaultChatId = null) => {
    * @return {Promise<void>} This function returns nothing.
    */
   const handleSendMessage = async () => {
-    await getAIResponse({ userId: user._id, conversationId, userInput });
+    await getAIResponse({ userId: user.id, conversationId, userInput });
     refetch();
     setUserInput('');
   };

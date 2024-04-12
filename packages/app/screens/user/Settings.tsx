@@ -1,3 +1,4 @@
+import React from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import {
   RInput,
@@ -47,11 +48,14 @@ export default function Settings() {
           <RH2>Profile</RH2>
           <RSeparator marginVertical={8} />
         </RStack>
-        <Form validationSchema={userSettingsSchema} defaultValues={{ ...user }}>
+        <Form
+          validationSchema={userSettingsSchema}
+          defaultValues={{ ...user, profileImage: user.profileImage || '' }}
+        >
           <RStack
             space="$3"
-            width="fit-content"
             maw="100%"
+            width="fit-content"
             marginHorizontal="auto"
           >
             <ImageUpload

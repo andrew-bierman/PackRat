@@ -1,28 +1,27 @@
-import Pack from '../../models/packModel';
+import { Pack } from '../../drizzle/methods/pack';
 
 /**
  * Adds a new pack service.
- *
+ * @param {PrismaClient} prisma - Prisma client.
  * @param {string} name - The name of the pack.
  * @param {string} owner_id - The ID of the pack owner.
  * @return {Object} An object containing the created pack.
  */
-export const addPackService = async (name, owner_id, is_public) => {
-  const newPack = {
-    name,
-    owner_id,
-    items: [],
-    is_public,
-    favorited_by: [],
-    createdAt: new Date(),
-    owners: [owner_id],
-  };
 
-  console.log('newPack', newPack);
+export const addPackService = async (
+  name: string,
+  owner_id: string,
+  is_public: boolean,
+): Promise<object> => {
+  const packClass = new Pack();
+  // Check if a pack with the same name already exists
+  const existingPack = await packClass.findPack({ name });
 
-  const exists = await Pack.find({ name });
-
-  const createdPack = await Pack.create(newPack);
-
-  return { createdPack };
+  if (existingPack) {
+    // A pack with the same name already exists
+    throw new Error('A pack with the same name already exists');
+  }
+  // Create the new pack
+  const createdPack = await packClass.create({ name, owner_id, is_public });
+  return createdPack;
 };

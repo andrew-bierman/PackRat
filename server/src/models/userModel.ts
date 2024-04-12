@@ -1,7 +1,7 @@
 import mongoose, { Schema, type Document, type Model } from 'mongoose';
 import myDB from './dbConnection';
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
+import bycrypt from 'bcryptjs';
+import * as jwt from 'hono/jwt';
 import { JWT_SECRET, CLIENT_URL } from '../config';
 import validator from 'validator';
 
@@ -122,9 +122,9 @@ UserSchema.statics.validateResetToken = async function (
   token: string,
 ): Promise<IUser> {
   if (!JWT_SECRET) throw new Error('JWT_SECRET is not defined');
-  const decoded: any = jwt.verify(token, JWT_SECRET);
+  const decoded: any = await jwt.verify(token, JWT_SECRET);
   const user = await User.findOne({
-    _id: decoded._id,
+    id: decoded.id,
     passwordResetToken: token,
   });
 
@@ -161,9 +161,7 @@ UserSchema.pre<IUser>('save', async function (next) {
 UserSchema.methods.generateAuthToken = async function (): Promise<string> {
   const user = this;
   if (!JWT_SECRET) throw new Error('JWT_SECRET is not defined');
-  const token = await jwt.sign({ _id: user._id.toString() }, JWT_SECRET, {
-    expiresIn: '7 days',
-  });
+  const token = await jwt.sign({ id: user.id.toString() }, JWT_SECRET);
   user.token = token;
   await user.save();
   return token;
@@ -173,13 +171,11 @@ UserSchema.methods.generateResetToken = async function (): Promise<string> {
   const user = this;
   if (user.passwordResetToken) {
     if (!JWT_SECRET) throw new Error('JWT_SECRET is not defined');
-    const decoded: any = jwt.verify(user.passwordResetToken, JWT_SECRET);
-    if (decoded._id) return user.passwordResetToken;
+    const decoded: any = await jwt.verify(user.passwordResetToken, JWT_SECRET);
+    if (decoded.id) return user.passwordResetToken;
   }
   if (!JWT_SECRET) throw new Error('JWT_SECRET is not defined');
-  const resetToken = await jwt.sign({ _id: user._id.toString() }, JWT_SECRET, {
-    expiresIn: '12h',
-  });
+  const resetToken = await jwt.sign({ id: user.id.toString() }, JWT_SECRET);
   user.passwordResetToken = resetToken;
   await user.save();
   return `${CLIENT_URL}/password-reset?token=${resetToken}`;

@@ -7,7 +7,6 @@ import {
   Form,
   FormSelect,
   FormInput,
-  useFormSubmitTrigger,
   SubmitButton,
 } from '@packrat/ui';
 import { BaseModal } from '@packrat/ui';
@@ -23,7 +22,6 @@ export const AddPack = ({ isCreatingTrip = false }) => {
     useTheme();
   const styles = useCustomStyles(loadStyles);
   const router = useRouter();
-  const [formRef, submitTrigger] = useFormSubmitTrigger();
 
   const {
     addNewPack,
@@ -41,7 +39,7 @@ export const AddPack = ({ isCreatingTrip = false }) => {
 
   // routing
   if (isSuccess && !isCreatingTrip && response) {
-    router.push(`/pack/${response.createdPack._id}`);
+    router.push(`/pack/${response.id}`);
   }
   /**
    * Handles the addition of a pack.
@@ -61,7 +59,6 @@ export const AddPack = ({ isCreatingTrip = false }) => {
         <Form
           defaultValues={{ isPublic: '0', name: '' }}
           validationSchema={addPackSchema}
-          formRef={formRef}
         >
           <FormInput
             placeholder="Name"

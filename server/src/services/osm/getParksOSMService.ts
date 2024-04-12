@@ -1,13 +1,8 @@
 import { updateDatabaseWithGeoJSONDataFromOverpass } from '../../controllers/getOsm';
 import osmtogeojson from 'osmtogeojson';
-import axios from 'axios';
 
-export async function getParksOSMService(lat, lon, radius) {
-  const overpassUrl = process.env.OSM_URI;
-  if (!overpassUrl) {
-    throw new Error('OSM_URI is not defined in the environment variables');
-  }
-
+export async function getParksOSMService(lat, lon, radius, osmUri) {
+  const overpassUrl = osmUri;
   const overpassQuery = `
         [out:json][timeout:25];
         (
@@ -17,10 +12,18 @@ export async function getParksOSMService(lat, lon, radius) {
         out tags geom qt;
         `;
 
-  const response = await axios.post(overpassUrl, overpassQuery, {
+  const response = await fetch(overpassUrl, {
+    method: 'POST',
     headers: { 'Content-Type': 'text/plain' },
+    body: overpassQuery,
   });
-  const geojsonData = osmtogeojson(response.data);
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  const data = await response.json();
+  const geojsonData = osmtogeojson(data);
   console.log('geojsonData==============', geojsonData);
 
   updateDatabaseWithGeoJSONDataFromOverpass(geojsonData);

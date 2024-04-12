@@ -1,29 +1,32 @@
-import nodemailer from 'nodemailer';
-import smtpTransport from 'nodemailer-smtp-transport';
 import {
   findUserAndUpdate,
   findUserByEmail,
 } from '../../services/user/user.service';
 
-export async function emailExistsService({ email }: { email?: string }) {
-  if (email) {
+export async function emailExistsService({
+  email,
+  smtpEmail,
+  sendGridApiKey,
+}: {
+  email: string;
+  sendGridApiKey: string;
+  smtpEmail: string;
+}) {
+  try {
     const val = await findUserByEmail(email);
-    if (val) {
-      sendEmailNotice(email).then(async (result1: any) => {
-        if (result1.status) {
-          const { newcode } = result1;
-          findUserAndUpdate(email, newcode, 'code').then(
-            async (result2: any) => {
-              if (result2.status) {
-                return result2;
-              }
-            },
-          );
-        }
-      });
-    } else {
-      return val;
+    if (!val) {
+      throw new Error(val);
     }
+    const result1 = await sendEmailNotice({ sendGridApiKey, smtpEmail, email });
+    if (result1.status) {
+      const { newcode } = result1;
+      const result2 = await findUserAndUpdate(email, newcode, 'code');
+      if (result2.status) {
+        return result2;
+      }
+    }
+  } catch (error) {
+    throw new Error(error.message);
   }
 }
 
@@ -32,33 +35,48 @@ export async function emailExistsService({ email }: { email?: string }) {
  * @param {string} email - The email address to send the notice to.
  * @return {Promise} - A promise that resolves to an object indicating the status of the email sending process.
  */
-async function sendEmailNotice(email) {
-  return await new Promise((resolve, reject) => {
+export async function sendEmailNotice({
+  email,
+  smtpEmail,
+  sendGridApiKey,
+}: {
+  email: string;
+  sendGridApiKey: string;
+  smtpEmail: string;
+}): Promise<any> {
+  try {
     const newcode = Math.floor(Math.random() * 999999 + 111111);
-    const transporter = nodemailer.createTransport(
-      smtpTransport({
-        service: 'gmail',
-        host: 'smtp.gmail.com',
-        auth: {
-          user: process.env.EMAIL,
-          pass: process.env.APPPASSWORD,
+    const emailData = {
+      personalizations: [
+        {
+          to: [{ email }],
+          subject: 'PackRat verification code',
         },
-      }),
-    );
-
-    const mailOptions = {
-      from: 'Hailemelekot@gmail.com',
-      to: email,
-      subject: 'PackRat verification code',
-      text: 'Your verification code is ' + newcode,
+      ],
+      from: {
+        // email: 'Hailemelekot@gmail.com'
+        email: smtpEmail,
+      },
+      content: [
+        {
+          type: 'text/plain',
+          value: 'Your verification code is ' + newcode,
+        },
+      ],
     };
-
-    transporter.sendMail(mailOptions, function (error, info) {
-      if (error) {
-        resolve({ status: false });
-      } else {
-        resolve({ status: true, newcode });
-      }
+    const response = await fetch('https://api.sendgrid.com/v3/mail/send', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${sendGridApiKey}`,
+      },
+      body: JSON.stringify(emailData),
     });
-  });
+    if (!response.ok) {
+      return { status: false };
+    }
+    return { status: true, newcode };
+  } catch (error) {
+    console.error('Error sending email notice:', error);
+  }
 }
