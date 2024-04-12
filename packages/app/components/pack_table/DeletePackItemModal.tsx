@@ -5,7 +5,7 @@ import { useDeleteItem } from 'app/hooks/items';
 
 interface DeletePackItemModalProps {
   itemId: string;
-  pack?: { _id: string };
+  pack?: { id: string };
   isOpen?: Boolean;
   onClose?: () => void;
   showTrigger?: Boolean;
@@ -24,7 +24,7 @@ export const DeletePackItemModal = ({
   const { handleDeleteItem } = useDeleteItem();
   const deleteItemHandler = (_, closeModal) => {
     if (pack) {
-      deletePackItem({ itemId, packId: pack._id });
+      deletePackItem({ itemId, packId: pack.id });
     } else {
       handleDeleteItem(itemId);
     }

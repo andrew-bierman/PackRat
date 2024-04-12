@@ -1,0 +1,23 @@
+name = "packrat_api"
+main = "src/index.ts"
+compatibility_date = "2024-03-14"
+compatibility_flags = ["nodejs_compat"]
+
+[[ d1_databases ]]
+binding = "DB"
+database_name = "production"
+database_id = "3f9677cd-7dd9-4a2c-92c6-be5dbbf47baa"
+
+# Add vars below
+# [vars]
+# GOOGLE_CLIENT_ID=""
+# GOOGLE_CLIENT_SECRET=""
+# STMP_EMAIL=""
+# STMP_PASSWORD=""
+# JWT_SECRET=""
+# SEND_GRID_API_KEY=""
+# MAPBOX_ACCESS_TOKEN=""
+# OSM_URI=""
+# WEATHER_URL=""
+# WEATHER_WEEK_URL=""
+# OPENWEATHER_KEY=""

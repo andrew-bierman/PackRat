@@ -29,7 +29,7 @@
 //     let label = item;
 //     // Check if the item is an object
 //     if (typeof item === "object" && item !== null) {
-//       val = item.id || item._id || item.name;
+//       val = item.id || item.id || item.name;
 //       label = item.name;
 //     }
 //     return { label: String(label), value: val };

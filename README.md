@@ -59,6 +59,7 @@ So pack your bags, grab your friends, and get ready for your next adventure with
       - [Debugging Client Environment Setup 🐛](#debugging-client-environment-setup-)
         - [Expo](#expo)
         - [Debugging Dependencies](#debugging-dependencies)
+        - [Debugging Cloudflare Wrangler and D1](#debugging-cloudflare-wrangler-and-d1)
   - [Docker Installation 🐳 \[Experimental\]](#docker-installation--experimental)
     - [Dependencies](#dependencies-1)
     - [Installation](#installation)
@@ -254,7 +255,7 @@ yarn setup
 ```
 
 #### Manual Setup 📝
-- Note, if automated set up works the following manual config is taken care of already. 
+- Note, if automated set up works the following manual config is taken care of already.
 
 1. Navigate to the `PackRat` directory if you are not already there.
 
@@ -346,11 +347,12 @@ cd ..
 cd server
 ```
 
-11. Duplicate the `.env.example` file and rename it to `.env`. Open the file and replace the values with your own.
-        - If you have access to the development env file, skip this step. Otherwise, replace the values with your own.
+11.  Duplicate the `.wrangler.toml.example` file and rename it to `wrangler.toml`. Open the file and replace the values with your own.
+        - If you have access to the development wrangler file, skip this step. Otherwise, replace the values with your own.
+        -
 
 ```
-cp .env.example .env
+cp .wrangler.toml.example wrangler.toml
 ```
 
 12.  Navigate back to the `PackRat` directory.
@@ -513,6 +515,11 @@ node -v
   ```
 
 Additionally, if the error is occurring in nextjs that you check the transpilePackages in next.config.js and check if the problematic package is there.
+
+##### Debugging Cloudflare Wrangler and D1
+- Some helpful tips for debugging Cloudflare Wrangler and D1:
+- If you encounter issues with Wrangler or D1, make sure you can see the sqlite database in the .wrangler directory.
+- You can open the database with a sqlite browser to see if the data is being stored correctly.
 
 ## Docker Installation 🐳 [Experimental]
 

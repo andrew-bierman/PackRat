@@ -61,12 +61,14 @@ export default function UserDataContainer({
 
   const typeUppercaseSingular = typeUppercase.slice(0, -1);
 
-  const differentUser = userId && userId !== currentUser._id;
+  const cardType = type === 'packs' || type === 'favorites' ? 'pack' : 'trip';
+
+  const differentUser = userId && userId !== currentUser.id;
 
   const Card = ({ item, index }) => {
     return (
       <UserDataCard
-        key={item._id}
+        key={item.id}
         {...item}
         state={dataState}
         setState={setDataState}
@@ -142,7 +144,7 @@ export default function UserDataContainer({
                 getItemCount={() => data.length}
                 getItem={(data, index) => data[index]}
                 data={data}
-                keyExtractor={(item) => item._id}
+                keyExtractor={(item) => item.id}
                 renderItem={Card}
                 scrollEnabled={true}
                 maxToRenderPerBatch={2}
@@ -158,37 +160,7 @@ export default function UserDataContainer({
 
               <DataList data={data} />
             </>
-          ) : // <VirtualizedList
-          //   getItemCount={() => data.length}
-          //   getItem={(data, index) => data[index]}
-          //   nestedScrollEnabled={true}
-          //   data={data}
-          //   horizontal={true}
-          //   scrollEnabled={true}
-          //   renderItem={({ item, index }) => (
-          //     <UserDataCard
-          //       key={item._id}
-          //       {...item}
-          //       type={cardType}
-          //       state={dataState}
-          //       setState={setDataState}
-          //       index={index}
-          //       differentUser={differentUser}
-          //     />
-          //   )}
-          //   keyExtractor={(item) => item._id}
-          //   maxToRenderPerBatch={2}
-          //   contentContainerStyle={{
-          //     width : '100%',
-          //     height : '100%',
-          //     padding : 16
-          //     // flex: 1,
-          //     // justifyContent: 'center',
-          //     // alignItems: 'center',
-          //     // flexDirection : 'row'
-          //   }}
-          // />
-          currentUser?._id === userId ? (
+          ) : currentUser?.id === userId ? (
             <Link href="/">
               <RButton style={{ color: currentTheme.colors.white }}>
                 {`Create your first ${typeUppercaseSingular}`}

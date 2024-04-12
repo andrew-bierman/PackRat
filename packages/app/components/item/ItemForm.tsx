@@ -83,7 +83,7 @@ export const ItemForm = ({
             }}
           >
             <View>
-              <FormInput name="weight" placeholder="Weight" />
+              <FormInput name="weight" placeholder="Weight" isNumeric />
             </View>
             {data && (
               <FormSelect
@@ -98,6 +98,7 @@ export const ItemForm = ({
           <FormInput
             name="quantity"
             placeholder="Quantity"
+            isNumeric
             style={{ width: '100%' }}
           />
           <FormRadioGroup name="type" options={radioOptions} />

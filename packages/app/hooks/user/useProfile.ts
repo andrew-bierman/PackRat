@@ -7,8 +7,9 @@ import { useGetUser } from './useGetUser';
 
 export const useProfile = (id = null) => {
   const authUser = useAuthUser();
+  const authUserId = authUser?.id;
 
-  const userId = id ?? authUser?._id;
+  const userId = id ?? authUser?.id;
 
   const isCurrentUser = useMatchesCurrentUser(userId); // TODO: Implement this hook in more components
 

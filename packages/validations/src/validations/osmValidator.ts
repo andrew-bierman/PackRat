@@ -1,7 +1,5 @@
 import { z } from 'zod';
 
-const JoiObjectId = z.string().regex(/^[0-9a-fA-F]{24}$/g);
-
 export const getOsm = z.object({
   activityType: z.string(),
   startPoint: z.object({ latitude: z.number(), longitude: z.number() }),
