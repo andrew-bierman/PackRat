@@ -23,7 +23,7 @@
     "build:tsc:server": "cd server && yarn build",
     "build:tsc": "yarn build:tsc:packages",
     "build:validations": "cd packages/validations && yarn build",
-    "build:web": "yarn build:vite",
+    "build:web": "yarn build:vite && yarn build:next:static",
     "build:next:static": "cd apps/next && yarn build && yarn next export",
     "build:vite": "cd apps/vite && yarn build",
     "build": "yarn workspaces foreach --all run build",
