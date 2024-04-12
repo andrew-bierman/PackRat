@@ -33,13 +33,14 @@
   "exclude": [
     "node_modules",
     "dist",
-    "src/**/*.test.ts",
-    "src/**/*.spec.ts",
   ],
   "include": [
     "./src/**/*.ts",
-    "src/drizzle.config.ts",
-    "src/vitest.config.ts",
-    "src/worker-configuration.d.ts"
+    "src/**/*.test.ts",
+    "src/**/*.spec.ts",
+    "./drizzle.config.ts",
+    "./vitest.config.ts",
+    "./vitest.config.d.ts",
+    "./worker-configuration.d.ts"
   ]
 }
