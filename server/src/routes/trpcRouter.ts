@@ -1,7 +1,6 @@
 import { getPhotonDetailsRoute } from './../controllers/getOsm/getPhotonDetails';
 
-import { googleSigninRoute } from '../controllers/passport';
-import { router as trpcRouter, createCallerFactory } from '../trpc';
+import { googleSigninRoute } from '../controllers/passport/signInGoogle';
 
 import {
   userSignInRoute,
@@ -50,14 +49,7 @@ import {
   getPublicPacksRoute,
   scorePackRoute,
 } from '../controllers/pack';
-import {
-  getDestinationRoute,
-  getOsmRoute,
-  getParksOSMRoute,
-  getPhotonResultsRoute,
-  getTrailsOSMRoute,
-  postSingleGeoJSONRoute,
-} from '../controllers/getOsm';
+
 import { getAIResponseRoute, getUserChatsRoute } from '../controllers/openAi';
 import {
   addGlobalItemToPackRoute,
@@ -80,8 +72,48 @@ import {
   getFavoritePacksByUserRoute,
   getUserFavoritesRoute,
 } from '../controllers/favorite';
+import {
+  getDestinationRoute,
+  getOsmRoute,
+  getParksOSMRoute,
+  getPhotonResultsRoute,
+  getTrailsOSMRoute,
+  postSingleGeoJSONRoute,
+} from '../controllers/getOsm';
+
+import {
+  router as trpcRouter,
+  publicProcedure,
+  protectedProcedure,
+} from '../trpc';
+import { z } from 'zod';
+
+export const helloRouter = trpcRouter({
+  world: publicProcedure.input(z.string()).query(async ({ input }) => {
+    console.log('input', input);
+    return `Hello ${input}!`;
+  }),
+});
+
+export const helloRouter2 = () => {
+  return publicProcedure.query(async ({ input }) => {
+    console.log('input', input);
+    return `Hello ${input}!`;
+  });
+};
 
 export const appRouter = trpcRouter({
+  hello1: trpcRouter({
+    world: publicProcedure.query(() => {
+      return 'Hello World';
+    }),
+  }),
+  hello2: helloRouter,
+  hello3: publicProcedure.query(async (opts) => {
+    return 'Hello World';
+  }),
+  helloRouter2: helloRouter2(),
+  protectedHello: protectedProcedure.query(async (opts) => 'Hello World'),
   // user routes
   getUserById: getUserByIdRoute(),
   signIn: userSignInRoute(),
@@ -92,7 +124,7 @@ export const appRouter = trpcRouter({
   editUser: editUserRoute(),
   deleteUser: deleteUserRoute(),
   getMe: getMeRoute(),
-  emaileExists: emailExistsRoute(),
+  emailExists: emailExistsRoute(),
   checkCode: checkCodeRoute(),
   getUsers: getUsersRoute(),
   resetPasswordEmail: sentEmailRoute(),
@@ -117,15 +149,15 @@ export const appRouter = trpcRouter({
   requestPasswordResetEmailAndToken: requestPasswordResetEmailAndTokenRoute(),
   handlePasswordReset: handlePasswordResetRoute(),
   // packs routes
-  getPublicPacks: getPublicPacksRoute(),
-  getPacks: getPacksRoute(),
-  getPackById: getPackByIdRoute(),
-  addPack: addPackRoute(),
-  editPack: editPackRoute(),
-  deletePack: deletePackRoute(),
-  scorePack: scorePackRoute(),
-  duplicatePublicPack: duplicatePublicPackRoute(),
-  // osm routes
+  getPublicPacks: getPublicPacksRoute(), // Done (Sorting by Items is left)
+  getPacks: getPacksRoute(), // Done (Sorting by Items is left)
+  getPackById: getPackByIdRoute(), // Done
+  addPack: addPackRoute(), // Done
+  editPack: editPackRoute(), // Done
+  deletePack: deletePackRoute(), // Done
+  scorePack: scorePackRoute(), // Done
+  duplicatePublicPack: duplicatePublicPackRoute(), // Not Implemented
+  // // osm routes
   getPhotonResults: getPhotonResultsRoute(),
   getTrailsOSM: getTrailsOSMRoute(),
   getParksOSM: getParksOSMRoute(),
@@ -140,26 +172,24 @@ export const appRouter = trpcRouter({
   getItems: getItemsRoute(),
   getItemById: getItemByIdRoute(),
   searchItemsByName: searchItemsByNameRoute(),
-  addItem: addItemRoute(),
-  editItem: editItemRoute(),
-  deleteItem: deleteItemRoute(),
-  addItemGlobal: addItemGlobalRoute(),
-  getItemsGlobally: getItemsGloballyRoute(),
-  addGlobalItemToPack: addGlobalItemToPackRoute(),
-  editGlobalItemAsDuplicate: editGlobalItemAsDuplicateRoute(),
-  deleteGlobalItem: deleteGlobalItemRoute(),
+  addItem: addItemRoute(), // Done
+  editItem: editItemRoute(), // Done
+  deleteItem: deleteItemRoute(), // Done
+  addItemGlobal: addItemGlobalRoute(), // Done
+  getItemsGlobally: getItemsGloballyRoute(), // Done
+  addGlobalItemToPack: addGlobalItemToPackRoute(), // Done
+  editGlobalItemAsDuplicate: editGlobalItemAsDuplicateRoute(), // Not Implemented
+  deleteGlobalItem: deleteGlobalItemRoute(), // Done,
   // trails routes
   getTrails: getTrailsRoute(),
-  // parks route
+  // // parks route
   getParks: getParksRoute(),
   // geo code routes
   getGeoCode: getGeoCodeRoute(),
-  // favorite routes
+  // // favorite routes
   addToFavorite: addToFavoriteRoute(),
   getUserFavorites: getUserFavoritesRoute(),
   getFavoritePacksByUser: getFavoritePacksByUserRoute(),
 });
-
-export const createCaller = createCallerFactory(appRouter);
 
 export type AppRouter = typeof appRouter;

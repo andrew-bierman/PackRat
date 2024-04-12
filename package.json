@@ -21,7 +21,7 @@
     "build:prod:cloudflare-next": "cd apps/next && yarn build:cloudflare",
     "build:tsc:packages": "cd packages/validations && yarn build",
     "build:tsc:server": "cd server && yarn build",
-    "build:tsc": "yarn build:tsc:packages && yarn build:tsc:server",
+    "build:tsc": "yarn build:tsc:packages",
     "build:validations": "cd packages/validations && yarn build",
     "build:web": "cd apps/next && yarn build",
     "build:next:static": "cd apps/next && yarn build && yarn next export",
@@ -66,16 +66,18 @@
     "test": "yarn test:all",
     "upgrade:tamagui:canary": "yarn up '*tamagui*'@canary '@tamagui/*'@canary",
     "upgrade:tamagui": "yarn up '*tamagui*'@latest '@tamagui/*'@latest",
+    "upgrade:cloudflare": "yarn up '@cloudflare/*'@latest wrangler@latest",
     "web": "cd apps/next && yarn dev"
   },
   "engines": {
     "node": ">=18.16.1",
     "yarn": ">=4.0.0"
   },
-  "packageManager": "yarn@4.1.0",
+  "packageManager": "yarn@4.1.1",
   "dependencies": {
     "@babel/runtime": "^7.21.0",
     "@manypkg/cli": "^0.21.0",
+    "@prisma/extension-accelerate": "^0.6.2",
     "check-dependency-version-consistency": "^4.1.0",
     "cross-env": "^7.0.3",
     "dotenv-cli": "^7.3.0",
@@ -127,5 +129,8 @@
     "packing checklist app",
     "packing list app",
     "packing planner app"
-  ]
+  ],
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240405.0"
+  }
 }

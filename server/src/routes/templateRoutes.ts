@@ -1,4 +1,4 @@
-import express from 'express';
+import { Hono } from 'hono';
 import {
   getTemplates,
   getTemplateById,
@@ -11,7 +11,7 @@ import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
 import authTokenMiddleware from '../middleware/auth';
 import checkRole from '../middleware/checkRole';
 
-// import * as validator from "../middleware/validators/index.js";
+// import * as validator from "@packrat/validations";
 
 // TODO - add validators, this is just a placeholder
 // REMOVED THIS SINCE VALIDATION IS NOT REALLY DONE HERE
@@ -22,7 +22,7 @@ import checkRole from '../middleware/checkRole';
 //   deleteTemplate: (req,res,next) => next(),
 // };
 
-const router = express.Router();
+const router = new Hono();
 
 /**
  * @swagger

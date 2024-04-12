@@ -1,4 +1,4 @@
-import express from 'express';
+import { Hono } from 'hono';
 import {
   getPacks,
   getPackById,
@@ -9,13 +9,13 @@ import {
   scorePack,
   duplicatePublicPack,
 } from '../controllers/pack/index';
-import * as validator from '../middleware/validators/index';
+import * as validator from '@packrat/validations';
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
 import authTokenMiddleware from '../middleware/auth';
 import checkRole from '../middleware/checkRole';
 import { zodParser } from '../middleware/validators/zodParser';
 
-const router = express.Router();
+const router = new Hono();
 
 /**
  * @swagger
@@ -172,7 +172,7 @@ router.post(
  *           schema:
  *             type: object
  *             properties:
- *               _id:
+ *               id:
  *                 type: string
  *               name:
  *                 type: string

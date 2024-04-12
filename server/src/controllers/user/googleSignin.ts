@@ -1,4 +1,3 @@
-import User from '../../models/userModel';
 import { sendWelcomeEmail, resetEmail } from '../../utils/accountEmail';
 import { google } from 'googleapis';
 import {
@@ -11,6 +10,9 @@ import {
 } from '../../config';
 import utilsService from '../../utils/utils.service';
 import { UserAlreadyExistsError } from '../../helpers/errors';
+import { User } from '../../drizzle/methods/User';
+import { and, eq } from 'drizzle-orm';
+import { User as UserTable } from '../../db/schema';
 
 interface GoogleUserInfo {
   id?: string | null;
@@ -51,32 +53,39 @@ const getGoogleUserInfo = async (code) => {
 export const googleSignin = async (req, res, next) => {
   try {
     const code = req.query.code;
-    const userInfo: GoogleUserInfo = await getGoogleUserInfo(code);
-
-    const alreadyGoogleSignin: AlreadySigninInfo | null = await User.findOne({
-      email: userInfo.email,
-      name: userInfo.name,
-      password: utilsService.randomPasswordGenerator(8),
-      googleId: userInfo.id,
-    });
+    const userInfo = await getGoogleUserInfo(code);
+    const userDoc = new User();
+    const alreadyGoogleSignin = await userDoc.findById(
+      null,
+      and(
+        eq(UserTable.googleId, userInfo.id),
+        eq(UserTable.email, userInfo.email),
+        eq(UserTable.name, userInfo.name),
+        eq(UserTable.password, utilsService.randomPasswordGenerator(8)),
+      ),
+    );
     if (!alreadyGoogleSignin) {
-      const isLocalLogin = await User.findOne({ email: userInfo.email });
+      const isLocalLogin = await userDoc.findByEmail(userInfo.email);
+
       if (isLocalLogin) {
         next(UserAlreadyExistsError);
       }
-      const user = new User({
+      const generatedPassword = utilsService.randomPasswordGenerator(8);
+
+      const user = await userDoc.create({
         email: userInfo.email,
         name: userInfo.name,
-        password: utilsService.randomPasswordGenerator(8),
+        password: generatedPassword,
         googleId: userInfo.id,
       });
-      await user.save();
-      await user.generateAuthToken();
+
+      await userDoc.generateAuthToken(JWT_SECRET, user.id);
+
       sendWelcomeEmail(user.email, user.name);
       res.redirect(`${UI_ROOT_URI}?token=${user.token}`);
     } else {
       alreadyGoogleSignin.googleId = userInfo.id;
-      await alreadyGoogleSignin.generateAuthToken();
+      await userDoc.generateAuthToken(JWT_SECRET, alreadyGoogleSignin.id);
       res.redirect(`${UI_ROOT_URI}?token=${alreadyGoogleSignin.token}`);
     }
   } catch (err) {

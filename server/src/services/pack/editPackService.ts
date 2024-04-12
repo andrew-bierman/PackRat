@@ -1,16 +1,24 @@
-import Pack from '../../models/packModel';
+import { Pack } from '../../drizzle/methods/pack';
 
 /**
  * Edits a pack in the service.
- *
- * @param {string} packId - The ID of the pack to be edited.
- * @param {object} packData - The updated data for the pack.
- * @return {object} The updated pack object.
+ * @param {PrismaClient} prisma - Prisma client.
+ * @param {string} packId
+ * @param {object} packData
+ * @return {object}
  */
-export const editPackService = async (packId, packData) => {
-  const updatedPack = await Pack.findOneAndUpdate({ _id: packId }, packData, {
-    returnOriginal: false,
-  });
-
+export const editPackService = async (packData: any): Promise<object> => {
+  const packClass = new Pack();
+  const { id, name, is_public } = packData;
+  const pack = await packClass.findPack({ id });
+  if (!pack) {
+    throw new Error('Pack not found');
+  }
+  const updatedData = {
+    id,
+    is_public,
+    name: name || pack.name,
+  };
+  const updatedPack = await packClass.update(updatedData);
   return updatedPack;
 };

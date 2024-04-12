@@ -4,43 +4,40 @@ export const useDeletePackItem = () => {
   const utils = queryTrpc.useContext();
   const mutation = queryTrpc.deleteItem.useMutation({
     onMutate: async (deleteItem) => {
-      console.log(deleteItem);
-      const previousPack = utils.getPackById.getData({
-        packId: deleteItem.packId,
-      });
-      const itemIndex = previousPack.items.findIndex(
-        (item) => item._id === deleteItem.itemId,
-      );
-      if (itemIndex === -1) {
-        return {
-          previousPack,
-        };
-      }
-      const newQueryData = {
-        ...previousPack,
-        items: previousPack.items.filter((item, index) => {
-          return index !== itemIndex;
-        }),
-        validatorPack: deleteItem.packId,
-      };
-      utils.getPackById.setData({ packId: deleteItem.packId }, newQueryData);
-
-      return {
-        previousPack,
-      };
+      // const previousPack = utils.getPackById.getData({
+      //   packId: deleteItem.packId,
+      // });
+      // const itemIndex = previousPack.items.findIndex(
+      //   (item) => item.id === deleteItem.itemId,
+      // );
+      // if (itemIndex === -1) {
+      //   throw new Error('Item not found in the pack.');
+      // }
+      // const newQueryData = {
+      //   ...previousPack,
+      //   items: previousPack.itemPacks.filter((itemPack, index) => {
+      //     return index !== itemIndex;
+      //   }),
+      //   validatorPack: deleteItem.packId,
+      // };
+      // utils.getPackById.setData({ packId: deleteItem.packId }, newQueryData);
+      // return {
+      //   previousPack,
+      // };
     },
     onError: (err, deleteItem, context) => {
       console.log('Error');
       console.log(err);
-      if (context.previousPack) {
-        utils.getPackById.setData(
-          { packId: deleteItem.packId },
-          context.previousPack,
-        );
-      }
+      // if (context.previousPack) {
+      //   utils.getPackById.setData(
+      //     { packId: deleteItem.packId },
+      //     context.previousPack,
+      //   );
+      // }
     },
     onSuccess: (result) => {
       utils.getPackById.invalidate();
+      utils.getTripById.invalidate();
     },
   });
 

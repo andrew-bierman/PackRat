@@ -1,10 +1,14 @@
-import Item from '../../models/itemModel';
-import { ItemCategoryModel } from '../../models/itemCategory';
+// import { prisma } from '../../prisma';
+
+import { type InsertItemCategory } from '../../db/schema';
+import { Item } from '../../drizzle/methods/Item';
+import { ItemCategory } from '../../drizzle/methods/itemcategory';
+import { ItemCategory as categories } from '../../utils/itemCategory';
 
 /**
  * Edit an item in the service.
- *
- * @param {_id} _id - the ID of the item to be edited
+ * @param {PrismaClient} prisma - Prisma client.
+ * @param {string} id - the ID of the item to be edited
  * @param {string} name - the new name of the item
  * @param {number} weight - the new weight of the item
  * @param {string} unit - the new unit of the item
@@ -13,34 +17,32 @@ import { ItemCategoryModel } from '../../models/itemCategory';
  * @return {Promise<object>} - the edited item
  */
 export const editItemService = async (
-  _id,
-  name,
-  weight,
-  unit,
-  quantity,
-  type,
-) => {
-  const category = await ItemCategoryModel.findOne({
-    name: type,
-  });
-
-  if (!category) {
-    throw new Error(`No category found with name: ${type}`);
+  id: string,
+  name?: string,
+  weight?: number,
+  unit?: string,
+  quantity?: number,
+  type?: 'Food' | 'Water' | 'Essentials',
+): Promise<object> => {
+  let category: InsertItemCategory | null;
+  const itemClass = new Item();
+  const itemCategoryClass = new ItemCategory();
+  if (type && !categories.includes(type)) {
+    throw new Error(`Category must be one of: ${categories.join(', ')}`);
+  } else {
+    category = await itemCategoryClass.findItemCategory({ name: type });
+    if (!category) {
+      category = await itemCategoryClass.create({ name: type });
+    }
   }
-
-  const newItem = await Item.findOneAndUpdate(
-    { _id },
-    {
-      name,
-      weight,
-      unit,
-      quantity,
-      category: category.id,
-    },
-    {
-      returnOriginal: false,
-    },
-  ).populate('category', 'name');
+  const item = await itemClass.findItem({ id });
+  const newItem = await itemClass.update(id, {
+    name: name || item.name,
+    weight: weight || item.weight,
+    unit: unit || item.unit,
+    quantity: quantity || item.quantity,
+    categoryId: category.id || item.categoryId,
+  });
 
   return newItem;
 };
