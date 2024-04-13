@@ -1,4 +1,4 @@
-name: android-preview-build
+name: android-preview-build-local
 on: 
   push:
     branches: [ "**" ]
@@ -7,7 +7,7 @@ on:
 
 jobs:
   update:
-    name: EAS Android Preview Build
+    name: EAS Android Preview Build Local
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -42,4 +42,4 @@ jobs:
         uses: expo/expo-github-action/preview@v8
         with:
           working-directory: apps/expo
-          command: eas build --platform android --profile preview
+          command: eas build --platform android --profile preview --local
