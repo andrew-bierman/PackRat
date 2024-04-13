@@ -71,5 +71,6 @@ export const emailExists = z.object({
 
 export const updatePassword = z.object({
   email: z.string().email().nonempty(),
+  oldPassword: z.string().nonempty(),
   password: z.string().nonempty(),
 });

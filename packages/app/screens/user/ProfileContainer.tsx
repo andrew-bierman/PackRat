@@ -44,13 +44,16 @@ const Header = ({
   favoritesCount,
   isCurrentUser,
 }) => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } = useTheme();
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    useTheme();
   const styles = useCustomStyles(loadStyles);
   const profileImage = user?.profileImage ?? null;
   const userRealName = user?.name ?? null;
   const userEmail = user?.email ?? null;
   const userEmailSplitFirstHalf = userEmail?.split('@')[0] ?? null;
-  const username = user?.username ? `@${user?.username}` : `@${userEmailSplitFirstHalf}`;
+  const username = user?.username
+    ? `@${user?.username}`
+    : `@${userEmailSplitFirstHalf}`;
 
   return (
     <View style={{ width: '90%', ...styles.infoSection }}>
@@ -68,7 +71,7 @@ const Header = ({
               <>
                 <RSkeleton
                   style={{
-                    borderRadius: '100%',
+                    borderRadius: 100,
                     height: 100,
                     width: 100,
                   }}
@@ -84,7 +87,6 @@ const Header = ({
               </>
             ) : (
               <>
-
                 <Avatar src={user?.profileImage} />
                 <RText style={{ marginTop: 16, ...styles.userName }}>
                   {userRealName}
@@ -99,18 +101,10 @@ const Header = ({
       <RStack style={{ flexDirection: 'row', ...styles.card }}>
         {isLoading ? (
           <>
-            <RSkeleton
-              style={{ borderRadius: '100%', width: 50, height: 50 }}
-            />
-            <RSkeleton
-              style={{ borderRadius: '100%', width: 50, height: 50 }}
-            />
-            <RSkeleton
-              style={{ borderRadius: '100%', width: 50, height: 50 }}
-            />
-            <RSkeleton
-              style={{ borderRadius: '100%', width: 50, height: 50 }}
-            />
+            <RSkeleton style={{ borderRadius: 100, width: 50, height: 50 }} />
+            <RSkeleton style={{ borderRadius: 100, width: 50, height: 50 }} />
+            <RSkeleton style={{ borderRadius: 100, width: 50, height: 50 }} />
+            <RSkeleton style={{ borderRadius: 100, width: 50, height: 50 }} />
           </>
         ) : (
           <>
@@ -186,74 +180,76 @@ export default function ProfileContainer({ id = null }) {
   
   return (
     <View>
-      <ScrollView >
-          <RStack
-            style={[
-              styles.mainContainer,
-              Platform.OS == 'web' ? { minHeight: '100vh' } : { minHeight: '100%' },
-            ]}
-          >
-            <Header
-              user={user}
-              isLoading={isLoading}
-              error={error}
-              tripsCount={tripsCount}
-              packsCount={packsCount}
-              favoritesCount={favoritesCount}
-              isCurrentUser={isCurrentUser}
-            />
-            <View style={styles.mainContentContainer}>
-              <View style={styles.userDataContainer}>
-                {isLoading && (
-                  <UserDataContainer
-                    data={[]}
-                    type="packs"
-                    userId={user?._id}
-                    isLoading={isLoading}
-                    SkeletonComponent={SkeletonUserDataCard}
-                  />
-                )}
-              </View>
-
-              <View style={styles.userDataContainer}>
-                {favoritesList.length > 0 ? (
-                  <UserDataContainer
-                    data={favoritesList}
-                    type="favorites"
-                    userId={user?._id}
-                    isLoading={isLoading}
-                  />
-                ) : (
-                  <RText
-                    fontSize={20}
-                    fontWeight="bold"
-                    color={currentTheme.colors.textColor}
-                  >
-                    No favorites yet
-                  </RText>
-                )}
-              </View>
-              {packsList.length > 0 && (
-                <View style={styles.userDataContainer}>
-                  <UserDataContainer
-                    data={packsList}
-                    type="packs"
-                    userId={user?.id}
-                  />
-                </View>
-              )}
-              {tripsList.length > 0 && (
-                <View style={styles.userDataContainer}>
-                  <UserDataContainer
-                    data={tripsList}
-                    type="trips"
-                    userId={user?.id}
-                  />
-                </View>
+      <ScrollView>
+        <RStack
+          style={[
+            styles.mainContainer,
+            Platform.OS == 'web'
+              ? { minHeight: '100vh' }
+              : { minHeight: '100%', paddingBottom: 40 },
+          ]}
+        >
+          <Header
+            user={user}
+            isLoading={isLoading}
+            error={error}
+            tripsCount={tripsCount}
+            packsCount={packsCount}
+            favoritesCount={favoritesCount}
+            isCurrentUser={isCurrentUser}
+          />
+          <View style={styles.mainContentContainer}>
+            <View style={styles.userDataContainer}>
+              {isLoading && (
+                <UserDataContainer
+                  data={[]}
+                  type="packs"
+                  userId={user?._id}
+                  isLoading={isLoading}
+                  SkeletonComponent={SkeletonUserDataCard}
+                />
               )}
             </View>
-          </RStack>
-        </ScrollView>
+
+            <View style={styles.userDataContainer}>
+              {favoritesList.length > 0 ? (
+                <UserDataContainer
+                  data={favoritesList}
+                  type="favorites"
+                  userId={user?._id}
+                  isLoading={isLoading}
+                />
+              ) : (
+                <RText
+                  fontSize={20}
+                  fontWeight="bold"
+                  color={currentTheme.colors.textColor}
+                >
+                  No favorites yet
+                </RText>
+              )}
+            </View>
+            {packsList.length > 0 && (
+              <View style={styles.userDataContainer}>
+                <UserDataContainer
+                  data={packsList}
+                  type="packs"
+                  userId={user?.id}
+                />
+              </View>
+            )}
+            {tripsList.length > 0 && (
+              <View style={styles.userDataContainer}>
+                <UserDataContainer
+                  data={tripsList}
+                  type="trips"
+                  userId={user?.id}
+                />
+              </View>
+            )}
+          </View>
+        </RStack>
+      </ScrollView>
     </View>
   );
 }
@@ -265,7 +261,7 @@ const loadStyles = (theme) => {
       backgroundColor: currentTheme.colors.background,
       // flex: 1,
       alignItems: 'center',
-      justifyItems : "center",
+      justifyItems: 'center',
       padding: 20,
     },
     infoSection: {

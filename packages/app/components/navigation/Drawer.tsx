@@ -1,64 +1,80 @@
-import { View, TouchableOpacity, Modal, SafeAreaView } from 'react-native';
-import { AntDesign, EvilIcons } from '@expo/vector-icons';
-import useTheme from '../../hooks/useTheme';
+import React from 'react';
+import { Menu } from '@tamagui/lucide-icons';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import { NavigationList } from './NavigationList';
-import { useDrawer } from 'app/hooks/navigation';
+import useTheme from '../../hooks/useTheme';
 
-export const Drawer = () => {
+import { Adapt, Button, Popover, Text } from 'tamagui';
+import { NavigationList } from './NavigationList';
+
+export function Drawer() {
   const { currentTheme } = useTheme();
-  const { isDrawerOpen, toggleDrawer, closeDrower } = useDrawer();
   const styles = useCustomStyles(loadStyles);
 
   return (
-    <>
-      <View>
-        {!isDrawerOpen && (
-          <TouchableOpacity style={styles.drawerTrigger} onPress={toggleDrawer}>
-            <EvilIcons
-              name={isDrawerOpen ? 'close' : 'navicon'}
-              size={36}
-              color={currentTheme.colors.iconColor}
-            />
-          </TouchableOpacity>
-        )}
-      </View>
-      <Modal
-        visible={isDrawerOpen}
-        transparent={true}
-        animationType="fade"
-        onRequestClose={toggleDrawer}
-      >
-        <View style={styles.modalOverlay}>
-          <TouchableOpacity
-            style={styles.fullScreenTouchable}
-            onPress={toggleDrawer}
+    <Popover size="$5" allowFlip placement="bottom" hoverable>
+      <Popover.Trigger asChild>
+        <Button
+          icon={<Menu strokeWidth={3} />}
+          bg="transparent"
+          outlineColor="transparent"
+          color="white"
+          fontWeight="bold"
+          focusStyle={{
+            bg: 'transparent',
+            outlineColor: 'transparent',
+          }}
+          hoverStyle={{
+            outlineColor: 'white',
+            bg: 'transparent',
+          }}
+        >
+          Menu
+        </Button>
+      </Popover.Trigger>
+      <Adapt when="sm" platform="touch">
+        <Popover.Sheet modal dismissOnSnapToBottom>
+          <Popover.Sheet.Frame padding="$4">
+            <Adapt.Contents />
+          </Popover.Sheet.Frame>
+
+          <Popover.Sheet.Overlay
+            animation="lazy"
+            enterStyle={{ opacity: 0 }}
+            exitStyle={{ opacity: 0 }}
           />
-          <View style={styles.drawerContainer}>
-            <SafeAreaView style={styles.drawerWrapper}>
-              <View>
-                <NavigationList
-                  itemStyle={styles.navigationItem}
-                  onItemSelect={closeDrower}
-                />
-              </View>
-              <TouchableOpacity
-                style={styles.closeButton}
-                onPress={toggleDrawer}
-              >
-                <AntDesign
-                  name="close"
-                  size={24}
-                  color={currentTheme.colors.iconColor}
-                />
-              </TouchableOpacity>
-            </SafeAreaView>
-          </View>
-        </View>
-      </Modal>
-    </>
+        </Popover.Sheet>
+      </Adapt>
+      <Popover.Content
+        borderWidth={1}
+        borderColor="$borderColor"
+        style={styles.popover}
+        bg={currentTheme.colors.background}
+        enterStyle={{ opacity: 0 }}
+        exitStyle={{ opacity: 0 }}
+        elevate
+        animation={[
+          'quick',
+          {
+            opacity: {
+              overshootClamping: true,
+            },
+          },
+        ]}
+      >
+        <Popover.Arrow
+          borderWidth={1}
+          borderColor="$borderColor"
+          bg={currentTheme.colors.background}
+        />
+        <NavigationList
+          itemStyle={styles.navigationItem}
+          onItemSelect={() => {}}
+        />
+        <Popover.Close asChild />
+      </Popover.Content>
+    </Popover>
   );
-};
+}
 
 const loadStyles = (theme) => {
   const { currentTheme } = theme;
@@ -85,6 +101,9 @@ const loadStyles = (theme) => {
       flexDirection: 'row',
       alignItems: 'center',
       paddingVertical: 8,
+    },
+    popover: {
+      alignItems: 'flex-start',
     },
   };
 };

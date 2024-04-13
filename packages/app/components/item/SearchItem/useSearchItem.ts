@@ -4,7 +4,7 @@ import { trpc } from 'app/trpc';
 import { useAuthUser } from 'app/auth/hooks';
 
 export const useSearchItem = () => {
-  const user = useAuthUser()
+  const user = useAuthUser();
   const [searchString, setSearchString] = useState('');
 
   const itemFilters = useMemo(() => {

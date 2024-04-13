@@ -1,4 +1,3 @@
-import { util } from 'zod';
 import { queryTrpc } from '../../trpc';
 import { useItemsUpdater } from 'app/hooks/items';
 import { useOfflineQueue } from 'app/hooks/offline';
@@ -30,6 +29,11 @@ export const useEditPackItem = (isItemPage) => {
             return {
               ...item,
               ...editedItem,
+              category: editedItem.type
+                ? {
+                    name: editedItem.type,
+                  }
+                : undefined,
             };
           }
           return item;

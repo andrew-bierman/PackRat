@@ -1,5 +1,12 @@
-import { Link } from 'solito/link';
-import { RStack, RText, RButton, RSkeleton, VirtualList } from '@packrat/ui';
+import { Link } from '@packrat/crosspath';
+import {
+  RStack,
+  RText,
+  RButton,
+  RSkeleton,
+  VirtualList,
+  BaseModal,
+} from '@packrat/ui';
 import { VirtualizedList } from 'react-native';
 import UserDataCard from './UserDataCard';
 import React, { useEffect, useState } from 'react';
@@ -9,6 +16,7 @@ import useTheme from '../../hooks/useTheme';
 import { hexToRGBA } from 'app/utils/colorFunctions';
 import { View, FlatList } from 'react-native';
 import { useAuthUser } from 'app/auth/hooks';
+import DataList from './UserDetailList';
 
 // Skeleton version of the UserDataCard component
 const SkeletonUserDataCard = () => {
@@ -26,7 +34,7 @@ const SkeletonUserDataCard = () => {
 
 interface UserDataContainerProps {
   data: any;
-  type: 'packs' | 'trips';
+  type: 'packs' | 'trips' | 'favorites';
   userId?: string;
   isLoading: boolean;
   SkeletonComponent?: React.ReactElement;
@@ -53,28 +61,43 @@ export default function UserDataContainer({
 
   const typeUppercaseSingular = typeUppercase.slice(0, -1);
 
-  const cardType = type === 'packs' ? 'pack' : 'trip';
+  const cardType = type === 'packs' || type === 'favorites' ? 'pack' : 'trip';
 
-  const differentUser = userId && userId !== currentUser._id;
+  const differentUser = userId && userId !== currentUser.id;
 
-  const card = (item, index) => {
+  const Card = ({ item, index }) => {
     return (
       <UserDataCard
-        key={item.item._id}
-        {...item.item}
-        type={cardType}
+        key={item.id}
+        {...item}
         state={dataState}
         setState={setDataState}
         index={index}
         differentUser={differentUser}
       />
-    )
-  }
+    );
+  };
 
   // Map function to render multiple skeleton cards
   const skeletonCards =
     SkeletonComponent ||
     [...Array(3)].map((_, idx) => <SkeletonUserDataCard key={idx} />);
+
+  if (isLoading) {
+    return (
+      <RStack
+        style={{
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: '100%',
+          padding: 4,
+        }}
+      >
+        {skeletonCards}
+      </RStack>
+    );
+  }
 
   return (
     <LargeCard
@@ -86,7 +109,7 @@ export default function UserDataContainer({
         style={{
           gap: 16,
           alignItems: 'center',
-          justifyContent : "center",
+          justifyContent: 'center',
           width: '100%',
           padding: 24,
         }}
@@ -99,9 +122,7 @@ export default function UserDataContainer({
             fontWeight: 'bold',
           }}
         >
-          {differentUser
-            ? `${typeUppercase}`
-            : `Your ${typeUppercase}`}
+          {differentUser ? `${typeUppercase}` : `Your ${typeUppercase}`}
         </RText>
         <RStack
           style={{
@@ -123,22 +144,25 @@ export default function UserDataContainer({
                 getItemCount={() => data.length}
                 getItem={(data, index) => data[index]}
                 data={data}
-                keyExtractor={(item) => item._id}
-                renderItem={card}
+                keyExtractor={(item) => item.id}
+                renderItem={Card}
                 scrollEnabled={true}
                 maxToRenderPerBatch={2}
                 horizontal={true}
+                nestedScrollEnabled={true}
                 contentContainerStyle={{
-                  paddingHorizontal : 3,
-                  paddingVertical : 3
+                  paddingHorizontal: 3,
+                  paddingVertical: 3,
+                  justifyContent: 'center',
+                  alignItems: 'center',
                 }}
               />
+
+              <DataList data={data} />
             </>
-          ) : currentUser?._id === userId ? (
+          ) : currentUser?.id === userId ? (
             <Link href="/">
-              <RButton
-                style={{ color: currentTheme.colors.white,  }}
-              >
+              <RButton style={{ color: currentTheme.colors.white }}>
                 {`Create your first ${typeUppercaseSingular}`}
               </RButton>
             </Link>

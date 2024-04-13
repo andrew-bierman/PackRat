@@ -29,6 +29,9 @@ import RTabs from './RTabs';
 import SizableText from './SizableText';
 export { RSkeleton } from './RSkeleton';
 export { DropdownMenu, ExampleDropdown } from './RDropdown/DropdownBase';
+export { ContextMenu, ExampleContextMenu } from './RContextMenu';
+export { MainContentWeb } from './MainContentWeb';
+export { Container } from './Container';
 
 export { LoadingPlaceholder } from './LoadingPlaceholder';
 
@@ -65,12 +68,14 @@ export {
   RButton,
   RTabs,
   SizableText,
+  ZDropdown,
 };
 
 export * from './InputText';
+export * from './form';
 
 export { config } from './tamagui.config';
-export * from 'tamagui';
+// export * from 'tamagui';
 export * from './modal';
 export * from './dialog';
 export * from '@tamagui/toast';

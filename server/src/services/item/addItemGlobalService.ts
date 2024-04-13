@@ -2,7 +2,8 @@ import Item from '../../models/itemModel';
 import Pack from '../../models/packModel';
 import { ItemCategoryModel } from '../../models/itemCategory';
 import { ItemCategoryEnum } from '../../utils/itemCategory';
-
+import type { Document as MongooseDocument } from 'mongoose';
+import type { ObjectId } from 'mongodb';
 /**
  * Adds an item to the global service.
  *
@@ -13,6 +14,23 @@ import { ItemCategoryEnum } from '../../utils/itemCategory';
  * @param {string} type - The category of the item.
  * @return {Promise<Object>} The newly created item.
  */
+
+type ItemType = MongooseDocument & {
+  createdAt: Date;
+  updatedAt: Date;
+  weight: number;
+  name: string;
+  quantity: number;
+  unit: string;
+  global: boolean;
+  category?: ObjectId;
+};
+
+type CategoryType = MongooseDocument & {
+  name: string;
+  _id: ObjectId;
+};
+
 export const addItemGlobalService = async (
   name,
   weight,
@@ -20,8 +38,8 @@ export const addItemGlobalService = async (
   unit,
   type,
 ) => {
-  let category = null;
-  let newItem = null;
+  let category: CategoryType | null = null;
+  let newItem: ItemType | null = null;
 
   switch (type) {
     case ItemCategoryEnum.FOOD: {
@@ -34,11 +52,11 @@ export const addItemGlobalService = async (
         weight,
         quantity,
         unit,
-        category: category._id,
+        category: category?._id,
         global: true,
       });
 
-      newItem = await Item.findById(newItem.id).populate('category', 'name');
+      newItem = await Item.findById(newItem?.id).populate('category', 'name');
 
       break;
     }
@@ -52,11 +70,11 @@ export const addItemGlobalService = async (
         weight,
         quantity: 1,
         unit,
-        category: category._id,
+        category: category?._id,
         global: true,
       });
 
-      newItem = await Item.findById(newItem.id).populate('category', 'name');
+      newItem = await Item.findById(newItem?.id).populate('category', 'name');
 
       break;
     }
@@ -70,7 +88,7 @@ export const addItemGlobalService = async (
         weight,
         quantity,
         unit,
-        category: category._id,
+        category: category?._id,
         global: true,
       });
 

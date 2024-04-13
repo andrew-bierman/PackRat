@@ -15,7 +15,7 @@ import * as validator from '../../middleware/validators/index';
  */
 export const updatePassword = async (req, res, next) => {
   try {
-    let { email, oldPassword, newPassword } = req.body;
+    let { email, oldPassword, password: newPassword } = req.body;
 
     const user = await User.findOne({ email });
 
@@ -24,6 +24,8 @@ export const updatePassword = async (req, res, next) => {
     const isMatch = await bcrypt.compare(oldPassword, user.password);
 
     if (!isMatch) throw new Error('Incorrect password');
+
+    if (!JWT_SECRET) throw new Error('JWT_SECRET is not defined');
 
     const salt = await bcrypt.genSalt(parseInt(JWT_SECRET));
 

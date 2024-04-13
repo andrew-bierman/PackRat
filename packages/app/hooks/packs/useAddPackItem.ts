@@ -8,7 +8,6 @@ export const useAddPackItem = () => {
     onMutate: async (newItem) => {
       // Snapshot the previous value before the mutation
 
-      console.log(newItem.packId);
       const previousPack = utils.getPackById.getData({
         packId: newItem.packId,
       });
@@ -17,13 +16,18 @@ export const useAddPackItem = () => {
       const newQueryData = {
         ...previousPack,
         items: [
-          ...previousPack.items,
+          ...(previousPack?.items ?? []),
           {
             ...newItem,
             owners: [],
             global: false,
             packs: [newItem._id],
             _id: Date.now().toString(),
+            category: newItem.type
+              ? {
+                  name: newItem.type,
+                }
+              : undefined,
           },
         ],
       };

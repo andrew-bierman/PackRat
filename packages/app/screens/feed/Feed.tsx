@@ -68,21 +68,6 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
     setRefreshing(false);
   };
 
-  console.log('🚀 ../.. file: Feed.js:180 ../.. Feed ../.. feedData:', data);
-  // useEffect(() => {
-  //   if (feedType === 'public') {
-  //     dispatch(getPublicPacks(queryString));
-  // dispatch(getPublicTrips(queryString));
-  //     dispatch(fetchUserFavorites(ownerId));
-  //   } else if (feedType === 'userPacks' && ownerId) {
-  //     dispatch(fetchUserPacks({ ownerId, queryString }));
-  //   } else if (feedType === 'userTrips' && ownerId) {
-  //     dispatch(fetchUserTrips(ownerId));
-  //   } else if (feedType === 'favoritePacks') {
-  //     dispatch(getFavoritePacks());
-  //   }
-  // }, [queryString, feedType, ownerId]);
-
   /**
    * Renders the data for the feed based on the feed type and search query.
    *
@@ -90,21 +75,6 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
    */
   const renderData = () => {
     let arrayData = data;
-
-    // if (feedType === 'public') {
-    //   if (selectedTypes?.pack) {
-    //     data = [...data, ...publicPacksData];
-    //   }
-    //   if (selectedTypes?.trip) {
-    //     data = [...data, ...publicTripsData];
-    //   }
-    // } else if (feedType === 'userPacks') {
-    //   data = userPacksData;
-    // } else if (feedType === 'userTrips') {
-    //   data = userTripsData;
-    // } else if (feedType === 'favoritePacks') {
-    //   data = userPacksData.filter((pack) => pack.isFavorite);
-    // }
 
     // Fuse search
     const keys = ['name', 'items.name', 'items.category'];
@@ -141,34 +111,18 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
         handleCreateClick={handleCreateClick}
       />
     );
-    // return Platform.OS === 'web' ? (
-    //   <ScrollView
-    //     showsHorizontalScrollIndicator={false}
-    //     contentContainerStyle={{ flex: 1, paddingBottom: 10 }}
-    //     refreshControl={
-    //       <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-    //     }
-    //   >
-    //     <View style={styles.cardContainer}>
-    //       {/* {console.log({ data })} */}
-    //       {feedSearchFilterComponent}
-    //       {data?.map((item) => (
-    //         <Card key={item?._id} type={item?.type} {...item} />
-    //       ))}
-    //     </View>
-    //   </ScrollView>
-    // ) : (
+
     return (
-      <View style={{ flex: 1, paddingBottom: 10 }}>
+      <View style={{ flex: 1, paddingBottom: Platform.OS === 'web' ? 10 : 0 }}>
         <FlatList
           data={data}
           horizontal={false}
-          numColumns={Platform.OS === 'web' ? 4 : 1}
           keyExtractor={(item) => item?._id + item?.type}
           renderItem={({ item }) => (
             <Card key={item?._id} type={item?.type} {...item} />
           )}
           ListHeaderComponent={() => feedSearchFilterComponent}
+          ListFooterComponent={() => <View style={{ height: 50 }} />}
           ListEmptyComponent={() => (
             <RText style={{ textAlign: 'center', marginTop: 20 }}>
               {ERROR_MESSAGES[feedType]}
@@ -222,6 +176,7 @@ const loadStyles = (theme) => {
       backgroundColor: currentTheme.colors.background,
       fontSize: 18,
       padding: 15,
+      ...(Platform.OS !== 'web' && { paddingVertical: 0 }),
     },
     filterContainer: {
       backgroundColor: currentTheme.colors.card,
@@ -229,6 +184,7 @@ const loadStyles = (theme) => {
       fontSize: 18,
       width: '100%',
       borderRadius: 10,
+      marginTop: 20,
     },
     searchContainer: {
       flexDirection: 'row',

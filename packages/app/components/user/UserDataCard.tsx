@@ -2,10 +2,11 @@ import { AntDesign } from '@expo/vector-icons';
 import { formatDistanceToNow } from 'date-fns';
 import { View } from 'react-native';
 import { RH2, RText, RStack, RSwitch } from '@packrat/ui';
-import { Link } from 'solito/link';
+import { Link } from '@packrat/crosspath';
 import { truncateString } from '../../utils/truncateString';
 import { useEffect } from 'react';
 import { useEditPack } from 'app/hooks/packs';
+import { Platform } from 'react-native';
 
 interface UserDataCardProps {
   type: 'pack' | 'trip';
@@ -71,11 +72,19 @@ const UserDataCard = ({
   const truncatedDestination = truncateString(destination, 25);
 
   return (
-    <View style={{ alignItems: 'center', justifyContent: "center", marginHorizontal: 8, marginVertical: 4, borderRadius: 8, }}>
+    <View
+      style={{
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginHorizontal: 8,
+        marginVertical: 4,
+        borderRadius: 8,
+      }}
+    >
       <View
         style={{
           minHeight: 150,
-          minWidth: 250,
+          minWidth: Platform.OS === 'web' ? 250 : 225,
           border: '1px solid gray',
           borderLeft: `10px solid ${is_public ? 'green' : 'red'}`,
           borderRadius: 8,
@@ -142,8 +151,8 @@ const UserDataCard = ({
 
           <RStack
             style={{
-              flexDirection: "row",
-              justifyContent: 'space-between'
+              flexDirection: 'row',
+              justifyContent: 'space-between',
             }}
           >
             <RText
@@ -166,21 +175,24 @@ const UserDataCard = ({
             </RText>
             <View
               style={{
-                justifyContent: "center",
+                justifyContent: 'center',
                 alignItems: 'center',
                 gap: 10,
               }}
             >
-
-              <RText color="gray" fontWeight={400}
-              >
+              <RText color="gray" fontWeight={400}>
                 {favorites_count}
               </RText>
-              <AntDesign name="heart" size={16} color="red" style={{ display: "flex", position: "absolute", right: 0 }} />
+              <AntDesign
+                name="heart"
+                size={16}
+                color="red"
+                style={{ display: 'flex', position: 'absolute', right: 0 }}
+              />
             </View>
           </RStack>
         </RStack>
-        <View style={{ alignItems: 'center', justifyContent: "center" }}>
+        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
           <Link href={`/${type}/${_id}`}>
             <RText color="gray" fontWeight="bold">
               View Details

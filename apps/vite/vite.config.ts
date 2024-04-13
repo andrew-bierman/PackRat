@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react-swc';
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
 import esbuildFlowPlugin from 'esbuild-plugin-flow';
+import { TanStackRouterVite } from '@tanstack/router-vite-plugin';
 
 const shouldExtract = process.env.EXTRACT === '1';
 
@@ -24,6 +25,7 @@ const extensions = [
   '.css',
   '.json',
   '.mjs',
+  '.tanstack.ts',
 ];
 
 const development = process.env.NODE_ENV === 'development';
@@ -32,6 +34,7 @@ export default defineConfig({
   clearScreen: true,
   plugins: [
     react(),
+    TanStackRouterVite(),
     tamaguiPlugin(tamaguiConfig),
     shouldExtract ? tamaguiExtractPlugin(tamaguiConfig) : null,
   ].filter(Boolean),
@@ -47,8 +50,9 @@ export default defineConfig({
     // Add the resolve configuration
     alias: {
       extensions,
+      '@crosspath-resolver': './resolver.tanstack.js',
       '@env': resolve(__dirname, 'envResolver'),
-      'react-native': 'react-native-web',
+      // 'react-native': 'react-native-web',
       'react-native/Libraries/Image/AssetRegistry': resolve(
         __dirname,
         '../../node_modules/react-native-web/dist/modules/AssetRegistry',
@@ -72,5 +76,6 @@ export default defineConfig({
         ),
       ],
     },
+    include: ['@packrat/validations'],
   },
 });

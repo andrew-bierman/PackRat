@@ -4,9 +4,8 @@ import { TabList } from './TabList';
 import { DrawerToggleButton } from '@react-navigation/drawer';
 import { Stack, usePathname } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { PlacesAutocomplete } from 'app/components/PlacesAutocomplete';
-import { SafeAreaView } from 'react-native';
-import { RText } from '@packrat/ui';
+import { BlurView } from 'expo-blur';
+import useTheme from 'app/hooks/useTheme';
 
 export const Tabs = () => {
   const formatHeaderTitle = () => {
@@ -19,11 +18,36 @@ export const Tabs = () => {
     return title || 'Stack';
   };
 
+  const { currentTheme } = useTheme();
+
   return (
     <ExpoTabs
       screenOptions={{
+        tabBarStyle: {
+          position: 'absolute',
+        },
         headerShown: false,
         headerRight: () => <DrawerToggleButton />,
+        tabBarBackground: () => (
+          <BlurView
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              bottom: 0,
+              right: 0,
+            }}
+            intensity={80} // Adjust the blur intensity
+            tint="light" // TODO make this dynamic
+          />
+        ),
+        headerTitleStyle: {
+          fontSize: 24,
+        },
+        headerStyle: {
+          backgroundColor: currentTheme.colors.secondaryBlue,
+        },
+        headerTintColor: currentTheme.colors.text,
       }}
     >
       <ExpoTabs.Screen
@@ -73,19 +97,20 @@ export const Tabs = () => {
       <ExpoTabs.Screen
         name="search"
         options={{
-          headerShown: true,
+          headerShown: false,
           tabBarLabel: 'Search',
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="magnify" size={size} color={color} />
           ),
-          header: () => (
-            <SafeAreaView>
-              <PlacesAutocomplete
-                style={{ width: '100%' }}
-                placeholder="Search for a place"
-              />
-            </SafeAreaView>
-          ),
+          // TODO implement in the header
+          // header: () => (
+          //   <SafeAreaView>
+          //     <PlacesAutocomplete
+          //       style={{ width: '100%' }}
+          //       placeholder="Search for a place"
+          //     />
+          //   </SafeAreaView>
+          // ),
         }}
       />
 

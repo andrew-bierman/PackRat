@@ -8,10 +8,17 @@ import { responseHandler } from '../../helpers/responseHandler';
 import { z } from 'zod';
 import { publicProcedure } from '../../trpc';
 
+if (!SEND_GRID_API_KEY) {
+  throw new Error('SEND_GRID_API_KEY is not defined');
+}
+
 sgMail.setApiKey(SEND_GRID_API_KEY);
 
 // Verify a password reset token and return the user's email address
 const verifyPasswordResetToken = (token) => {
+  if (!JWT_SECRET) {
+    throw new Error('JWT_SECRET is not defined');
+  }
   const secret = JWT_SECRET;
   try {
     const decoded: any = jwt.verify(token, secret);
@@ -33,6 +40,10 @@ export const handlePasswordReset = async (req, res) => {
 
     if (!user) {
       throw new Error('No user found with this email address');
+    }
+
+    if (!user.passwordResetTokenExpiration) {
+      throw new Error('Password reset token expiration is not defined');
     }
 
     if (Date.now() > user.passwordResetTokenExpiration.getTime()) {
@@ -68,6 +79,10 @@ export function handlePasswordResetRoute() {
 
       if (!user) {
         return { error: 'No user found with this email address' };
+      }
+
+      if (!user.passwordResetTokenExpiration) {
+        throw new Error('Password reset token expiration is not defined');
       }
 
       if (Date.now() > user.passwordResetTokenExpiration.getTime()) {

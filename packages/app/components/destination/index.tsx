@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
-import { Container, Text } from 'native-base';
+import { RText } from '@packrat/ui';
 import { useRouter } from 'app/hooks/router';
-import { createParam } from 'solito';
+import { createParam } from 'app/hooks/params';
 import useTheme from '../../hooks/useTheme';
 import { theme } from '../../theme';
 import MapContainer from '../map/MapContainer';
@@ -52,21 +52,21 @@ const DestinationHeader = ({ geoJSON, selectedSearchResult }) => {
 
   return (
     <View style={styles.headerContainer}>
-      <Text style={styles.headerText}>
+      <RText style={styles.headerText}>
         {name !== 'N/A' ? name : 'Destination'}
-      </Text>
-      <Text style={styles.headerSubText}>
+      </RText>
+      <RText style={styles.headerSubText}>
         {county !== 'N/A' && `${county}, `}
         {state !== 'N/A' && `${state}, `}
         {country !== 'N/A' ? country : ''}
-      </Text>
+      </RText>
       <View style={styles.languageContainer}>
         {Object.entries(languageNames).map(([key, value], index) => {
           if (index < 3 && typeof value === 'string') {
             return (
-              <Text key={key} style={styles.languageText}>
+              <RText key={key} style={styles.languageText}>
                 {`${key.split(':')[1].toUpperCase()}: ${value}`}
-              </Text>
+              </RText>
             );
           }
         })}
