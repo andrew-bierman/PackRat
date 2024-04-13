@@ -1,4 +1,4 @@
-name: android-preview-build
+name: android-preview-build-local
 on: 
   push:
   branches: [ "**" ]
