@@ -5,6 +5,7 @@ import { SearchItem } from '../item/SearchItem';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { TripCardHeader } from './TripCardHeader';
 import { PackCardHeader } from './PackCardHeader';
+import { useAuthUser } from 'app/auth/hooks/useUser';
 
 interface CustomCardProps {
   title: string;
@@ -32,10 +33,12 @@ export const CustomCard = ({
   data,
 }: CustomCardProps) => {
   const styles = useCustomStyles(loadStyles);
+  const authUser = useAuthUser();
 
   if (!data) return null;
 
   const isWeb = Platform.OS === 'web';
+  console.log(data);
 
   return (
     <View
@@ -70,7 +73,7 @@ export const CustomCard = ({
           )}
         </View>
         <RSeparator />
-        {type === 'pack' ? (
+        {type === 'pack' && authUser.id === data.owner_id ? (
           <>
             <View
               style={{

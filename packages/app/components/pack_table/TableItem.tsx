@@ -67,14 +67,16 @@ const TableItem = ({
     <RText px={8}>{quantity}</RText>,
   ];
 
-  if (
-    Platform.OS === 'android' ||
-    Platform.OS === 'ios' ||
-    window.innerWidth < 900
-  ) {
-    rowData.push(<ZDropdown.Native dropdownItems={rowActionItems} />);
-  } else {
-    rowData.push(<ZDropdown.Web dropdownItems={rowActionItems} />);
+  if (hasPermissions) {
+    if (
+      Platform.OS === 'android' ||
+      Platform.OS === 'ios' ||
+      window.innerWidth < 900
+    ) {
+      rowData.push(<ZDropdown.Native dropdownItems={rowActionItems} />);
+    } else {
+      rowData.push(<ZDropdown.Web dropdownItems={rowActionItems} />);
+    }
   }
 
   /*
