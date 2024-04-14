@@ -9,7 +9,7 @@ module.exports = {
   extends: [
     'standard-with-typescript',
     'plugin:@typescript-eslint/recommended',
-    'plugin:drizzle/all', // add this back when we are fully migrated to drizzle
+    // 'plugin:drizzle/all', // add this back when we are fully migrated to drizzle
     'prettier',
     'plugin:next-on-pages/recommended',
   ],
@@ -37,6 +37,8 @@ module.exports = {
     'eslint.js',
     '.eslintrc.js',
     'drizzle.config.ts',
+    'vitest.config.*.ts',
+    'worker-configurations.*',
   ],
   rules: {
     'next-on-pages/no-unsupported-configs': 'warn',
