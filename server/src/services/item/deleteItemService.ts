@@ -12,37 +12,11 @@ import { ItemPacks } from '../../drizzle/methods/ItemPacks';
  */
 export const deleteItemService = async (
   itemId: string,
-  packId?: string,
+  packId: string,
 ): Promise<object> => {
-  const itemClass = new Item();
   const ItemPacksClass = new ItemPacks();
-  const item = await itemClass.findItem({ id: itemId });
-  if (item.global) {
-    // update here
-    // await pack.update({
-    //   where: {
-    //     id: packId,
-    //   },
-    //   data: {
-    //     itemDocuments: {
-    //       disconnect: { id: itemId },
-    //     },
-    //   },
-    // });
-    // update here
-    // await item.update({
-    //   where: {
-    //     id: itemId,
-    //   },
-    //   data: {
-    //     packDocuments: {
-    //       disconnect: { id: packId },
-    //     },
-    //   },
-    // });
-    await ItemPacksClass.delete(itemId, packId);
-  }
+  console.log(itemId);
+  await ItemPacksClass.delete(itemId, packId);
 
-  await itemClass.delete(itemId);
   return { message: 'Item deleted successfully' };
 };

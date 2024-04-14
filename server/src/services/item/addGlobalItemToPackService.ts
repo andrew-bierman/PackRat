@@ -28,6 +28,6 @@ export const addGlobalItemToPackService = async (
     throw new Error('Global Item does not exist!');
   }
   await itemPacksClass.create({ itemId: item.id, packId });
-  await itemOwnersClass.create({ itemId: item.id, ownerId });
+  // await itemOwnersClass.create({ itemId: item.id, ownerId });
   return item;
 };

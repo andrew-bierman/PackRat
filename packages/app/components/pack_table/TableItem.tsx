@@ -10,6 +10,7 @@ import { formatNumber } from 'app/utils/formatNumber';
 import { AddItem } from '../item/AddItem';
 import loadStyles from './packtable.style';
 import { RText, ZDropdown } from '@packrat/ui';
+import { useAuthUser } from 'app/auth/hooks';
 
 type ModalName = 'edit' | 'delete';
 
@@ -37,6 +38,7 @@ const TableItem = ({
   const { name, weight, quantity, unit, id } = itemData;
   const [activeModal, setActiveModal] = useState<ModalName>(null);
   const styles = useCustomStyles(loadStyles);
+  const authUser = useAuthUser();
 
   const openModal = (modalName: ModalName) => () => {
     setActiveModal(modalName);
@@ -47,11 +49,17 @@ const TableItem = ({
   };
 
   const rowActionItems = [
-    { label: 'Edit', onSelect: () => openModal('edit') },
     { label: 'Delete', onSelect: () => openModal('delete') },
     // TODO Implement Ignore Pack Item functional
     // { label: 'Ignore', onSelect: () => {} },
   ];
+
+  if (authUser.id === itemData.ownerId) {
+    rowActionItems.unshift({
+      label: 'Edit',
+      onSelect: () => openModal('edit'),
+    });
+  }
 
   let rowData = [
     <RText px={8}>{name}</RText>,
@@ -59,16 +67,14 @@ const TableItem = ({
     <RText px={8}>{quantity}</RText>,
   ];
 
-  if (hasPermissions) {
-    if (
-      Platform.OS === 'android' ||
-      Platform.OS === 'ios' ||
-      window.innerWidth < 900
-    ) {
-      rowData.push(<ZDropdown.Native dropdownItems={rowActionItems} />);
-    } else {
-      rowData.push(<ZDropdown.Web dropdownItems={rowActionItems} />);
-    }
+  if (
+    Platform.OS === 'android' ||
+    Platform.OS === 'ios' ||
+    window.innerWidth < 900
+  ) {
+    rowData.push(<ZDropdown.Native dropdownItems={rowActionItems} />);
+  } else {
+    rowData.push(<ZDropdown.Web dropdownItems={rowActionItems} />);
   }
 
   /*

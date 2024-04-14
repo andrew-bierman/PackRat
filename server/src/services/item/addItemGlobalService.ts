@@ -20,6 +20,7 @@ export const addItemGlobalService = async (
   quantity: number,
   unit: string,
   type: 'Food' | 'Water' | 'Essentials',
+  ownerId: string,
 ): Promise<object> => {
   let category: InsertItemCategory | null;
   if (!categories.includes(type)) {
@@ -38,6 +39,7 @@ export const addItemGlobalService = async (
     unit,
     categoryId: category.id,
     global: true,
+    ownerId,
   });
   return newItem;
 };

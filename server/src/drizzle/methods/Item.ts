@@ -1,4 +1,4 @@
-import { and, count, eq, sql } from 'drizzle-orm';
+import { and, count, eq, sql, ilike, like } from 'drizzle-orm';
 import { createDb } from '../../db/client';
 import { type InsertItem, item as ItemTable } from '../../db/schema';
 import { getDB } from '../../trpc/context';
@@ -106,10 +106,14 @@ export class Item {
     }
   }
 
-  async findGlobal(limit: number, offset: number) {
+  async findGlobal(limit: number, offset: number, searchString: string) {
     try {
+      console.log(searchString);
       const items = (await this.createInstance()).query.item.findMany({
-        where: eq(ItemTable.global, true),
+        where: and(
+          eq(ItemTable.global, true),
+          searchString ? like(ItemTable.name, `${searchString}%`) : undefined,
+        ),
         with: {
           category: {
             columns: { id: true, name: true },

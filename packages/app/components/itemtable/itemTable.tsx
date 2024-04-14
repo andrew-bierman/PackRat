@@ -15,6 +15,7 @@ import { loadStyles } from './itemsTable.style';
 import { AddItem } from '../item/AddItem';
 import { useScreenWidth } from 'app/hooks/common';
 import { useDeleteItem } from 'app/hooks/items';
+import { useAuthUser } from 'app/auth/hooks';
 
 interface ItemsTableProps {
   limit: number;
@@ -73,46 +74,56 @@ export const ItemsTable = ({
     );
   };
   const TableItem = ({ itemData }: TableItemProps) => {
-    const { name, weight, category, quantity, unit, id, type } = itemData;
+    const { name, weight, category, quantity, unit, id, type, ownerId } =
+      itemData;
+    const authUser = useAuthUser();
 
     const rowData = [
       name,
       `${formatNumber(weight)} ${unit}`,
       quantity,
       `${category?.name || type}`,
-      <EditPackItemModal
-        key="edit-pack-item"
-        triggerComponent={
-          <MaterialIcons
-            name="edit"
-            size={20}
-            color={currentTheme.colors.primary}
+      authUser.id === ownerId ? (
+        <EditPackItemModal
+          key="edit-pack-item"
+          triggerComponent={
+            <MaterialIcons
+              name="edit"
+              size={20}
+              color={currentTheme.colors.primary}
+            />
+          }
+        >
+          <AddItem
+            packId={id}
+            isEdit={true}
+            isItemPage
+            initialData={itemData}
+            editAsDuplicate={false}
+            setPage={setPage}
+            page={page}
           />
-        }
-      >
-        <AddItem
-          packId={id}
-          isEdit={true}
-          isItemPage
-          initialData={itemData}
-          editAsDuplicate={false}
-          setPage={setPage}
-          page={page}
+        </EditPackItemModal>
+      ) : (
+        ''
+      ),
+      authUser.id === ownerId ? (
+        <DeletePackItemModal
+          key="delete-pack-item"
+          onConfirm={(closeModal) => {
+            handleDeleteItem(id, closeModal);
+          }}
+          triggerComponent={
+            <MaterialIcons
+              name="delete"
+              size={20}
+              color={currentTheme.colors.error}
+            />
+          }
         />
-      </EditPackItemModal>,
-      <DeletePackItemModal
-        key="delete-pack-item"
-        onConfirm={(closeModal) => {
-          handleDeleteItem(id, closeModal);
-        }}
-        triggerComponent={
-          <MaterialIcons
-            name="delete"
-            size={20}
-            color={currentTheme.colors.error}
-          />
-        }
-      />,
+      ) : (
+        ''
+      ),
     ];
     return <Row data={rowData} style={styles.row} flexArr={flexArr} />;
   };
@@ -121,9 +132,7 @@ export const ItemsTable = ({
    *
    * @return {undefined} This function doesn't return anything.
    */
-  const handleNextPage = () => {
-    setPage(page + 1);
-  };
+  const handleNextPage = () => {};
   /**
    * Handles the action of going to the previous page.
    *

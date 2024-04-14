@@ -185,6 +185,9 @@ export const item = sqliteTable('item', {
   categoryId: text('category_id').references(() => itemCategory.id, {
     onDelete: 'set null',
   }),
+  ownerId: text('owner_id').references(() => user.id, {
+    onDelete: 'cascade',
+  }),
   global: integer('global', { mode: 'boolean' }).default(false),
   createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
   updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`),
