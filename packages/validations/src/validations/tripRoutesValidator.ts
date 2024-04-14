@@ -3,7 +3,7 @@ import { z } from 'zod';
 export const addTripForm = z.object({
   name: z.string().nonempty(),
   description: z.string().nonempty(),
-  isPublic: z.union([z.literal('0'), z.literal('1')]),
+  is_public: z.union([z.literal('0'), z.literal('1')]),
 });
 
 // @ts-ignore
@@ -42,11 +42,9 @@ export const getTripById = z.object({
   tripId: z.string(),
 });
 
-export const addTrip = z.object({
-  name: z.string(),
-  description: z.string(),
+export const addTripDetails = z.object({
   duration: z.string(),
-  weather: z.string(),
+  weather: z.string().optional(),
   start_date: z.string(),
   end_date: z.string(),
   destination: z.string(),
@@ -56,8 +54,9 @@ export const addTrip = z.object({
   }),
   owner_id: z.string(),
   pack_id: z.string(),
-  is_public: z.boolean(),
 });
+
+export const addTrip = addTripDetails.merge(addTripForm);
 
 export const editTrip = z.object({
   id: z.string(),

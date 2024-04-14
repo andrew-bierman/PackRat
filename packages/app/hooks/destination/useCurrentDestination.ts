@@ -5,12 +5,12 @@ import { parseCoordinates } from 'app/utils/coordinatesParser';
 
 export const useCurrentDestination = () => {
   const [osm] = useGEOLocationSearch();
-  const { data } = usePhotonDetail(osm.name, true);
+  const { data, isError, isLoading } = usePhotonDetail(osm.name, true);
   const currentDestination = useMemo(() => {
     return data?.find((destination) => {
       return (
         destination.properties.osm_type === osm.osmType &&
-        String(destination.properties.osm_id) === osm.osmId &&
+        destination.properties.osm_id === osm.osmId &&
         destination.geometry?.type === 'Point'
       );
     });
@@ -22,5 +22,5 @@ export const useCurrentDestination = () => {
     return parseCoordinates(currentDestination);
   }, [currentDestination]);
 
-  return { currentDestination, latLng };
+  return { currentDestination, latLng, isError, isLoading };
 };

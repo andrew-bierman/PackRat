@@ -16,19 +16,12 @@ import { useGetPhotonDetails } from 'app/hooks/destination';
 
 // import { Picker } from '@react-native-picker/picker';
 import { DropdownComponent } from '../Dropdown';
-import { useAuthUser } from 'app/auth/hooks';
 import { addTripForm } from '@packrat/validations/src/validations/tripRoutesValidator';
 import { useFormSubmitTrigger } from '@packrat/ui/src/form';
 import { usePackId } from 'app/hooks/packs';
 
 interface SaveTripContainerProps {
-  dateRange: {
-    startDate: Date;
-    endDate: Date;
-  };
-  weatherObject: any;
-  search: any;
-  form: any;
+  tripStore: any;
 }
 
 const isPublicOptions = ['For me only', 'Public'].map((key, index) => ({
@@ -36,110 +29,31 @@ const isPublicOptions = ['For me only', 'Public'].map((key, index) => ({
   value: String(index),
 }));
 
-export const SaveTripContainer = ({
-  dateRange,
-  weatherObject,
-  search,
-  form,
-}: SaveTripContainerProps) => {
-  const user = useAuthUser();
-  const [packId] = usePackId();
-  // defining dispatch
+export const SaveTripContainer = ({ tripStore }: SaveTripContainerProps) => {
   const { addTrip, isSuccess, data: response } = useAddTrip();
   const [formRef, submitTrigger] = useFormSubmitTrigger();
   const router = useRouter();
-
-  const geoJSONData = useGetPhotonDetails({
-    properties: search?.properties
-      ? {
-          osm_id: search?.properties?.osm_id,
-          osm_type: search?.properties?.osm_type,
-        }
-      : undefined,
-  });
 
   // create trip
   const handleCreateTrip = async (
     closeModal,
     { name, description, isPublic },
   ) => {
-    // duration object
-    const startDate = dateRange.startDate
-      ? format(dateRange.startDate, 'MM/dd/yyyy')
-      : '';
-    const endDate = dateRange.endDate
-      ? format(dateRange.endDate, 'MM/dd/yyyy')
-      : '';
-    const numNights =
-      dateRange.startDate && dateRange.endDate
-        ? intervalToDuration({
-            start: dateRange.startDate,
-            end: dateRange.endDate,
-          }).days
-        : '';
-    const duration = {
-      numberOfNights: numNights,
-      startDate,
-      endDate,
-    };
-
-    const { data: geoJSON } = geoJSONData;
-
     const data = {
       name,
       description,
-      start_date: startDate,
-      end_date: endDate,
-      destination: search?.properties?.name,
-      geoJSON,
+      start_date: format(tripStore.start_date, 'MM/dd/yyyy'),
+      end_date: format(tripStore.end_date, 'MM/dd/yyyy'),
       // trail: dropdown.currentTrail,
-      duration: JSON.stringify(duration),
-      weather: JSON.stringify(weatherObject),
-      owner_id: user?.id,
-      packs: packId,
       is_public: isPublic === '1',
     };
 
-    // creating a trip
-    console.log('create trip data ->', data);
     addTrip(data);
     closeModal();
   };
   if (isSuccess && response) {
     router.push(`/trip/${response.id}`);
   }
-  /**
-   * Handles the change in value.
-   *
-   * @param {type} itemValue - the new value of the item
-   * @return {undefined}
-   */
-  const handleValueChange = (itemValue) => {
-    setIsPublic(itemValue);
-  };
-
-  /**
-   * Renders an item for the Picker component.
-   *
-   * @param {object} item - The item to be rendered.
-   * @return {JSX.Element} The rendered Picker.Item component.
-   */
-  const renderItem = ({ item }) => (
-    <Picker.Item label={item.label} value={item.value} />
-  );
-
-  /**
-   * Returns the layout information for a given item index.
-   *
-   * @param {object} _ - placeholder parameter
-   * @param {number} index - the index of the item
-   * @return {object} - an object containing the layout information
-   */
-  const getItemLayout = (_, index) => ({
-    length: 30, // height of each item
-    offset: 30 * index, // calculate the offset based on item height
-    index,
-  });
 
   return (
     <BaseModal
@@ -210,8 +124,8 @@ export const SaveTripContainer = ({
           <>
             <RText>Trip Weather</RText>
             <RText>
-              Temparature - {weatherObject?.main?.temp}, Humidity -{' '}
-              {weatherObject?.main?.humidity}
+              Temparature - {tripStore?.weather?.main?.temp}, Humidity -{' '}
+              {tripStore?.weather?.main?.humidity}
             </RText>
           </>
           <RStack style={{ flexDirection: 'row' }}>
@@ -220,35 +134,26 @@ export const SaveTripContainer = ({
           </RStack>
           <RStack style={{ flexDirection: 'row' }}>
             <RText>Trip Location - </RText>
-            <RText>{search?.properties?.name}</RText>
+            <RText>{tripStore?.destination}</RText>
           </RStack>
           <RStack style={{ flexDirection: 'row' }}>
             <RText>Selected Trail - </RText>
-            <RText>{form?.currentTrail}</RText>
+            <RText>{tripStore?.destination}</RText>
           </RStack>
-          <RStack style={{ flexDirection: 'row' }}>
-            <RText>Selected Date Range - </RText>
-            <RText>
-              {dateRange.startDate
-                ? format(dateRange.startDate, 'MM/dd/yyyy')
-                : ''}{' '}
-              -{' '}
-              {dateRange.endDate ? format(dateRange.endDate, 'MM/dd/yyyy') : ''}
-            </RText>
-          </RStack>
-          <RStack style={{ flexDirection: 'row' }}>
-            <RText>Duration {'(Number of nights) - '} </RText>
-            {dateRange.startDate && dateRange.endDate && (
-              <RText>
-                {
-                  intervalToDuration({
-                    start: dateRange.startDate,
-                    end: dateRange.endDate,
-                  }).days
-                }
-              </RText>
-            )}
-          </RStack>
+          {tripStore.duration ? (
+            <>
+              <RStack style={{ flexDirection: 'row' }}>
+                <RText>Selected Date Range - </RText>
+                <RText>
+                  {tripStore.duration.startDate} - {tripStore.duration.endDate}
+                </RText>
+              </RStack>
+              <RStack style={{ flexDirection: 'row' }}>
+                <RText>Duration {'(Number of nights) - '} </RText>
+                <RText>{tripStore.duration.numberOfNights}</RText>
+              </RStack>
+            </>
+          ) : null}
         </RStack>
       </Form>
     </BaseModal>

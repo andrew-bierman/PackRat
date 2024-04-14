@@ -159,12 +159,12 @@ export const appRouter = trpcRouter({
   duplicatePublicPack: duplicatePublicPackRoute(), // Not Implemented
   // // osm routes
   getPhotonResults: getPhotonResultsRoute(),
-  // getTrailsOSM: getTrailsOSMRoute(),
-  // getParksOSM: getParksOSMRoute(),
-  // getOsm: getOsmRoute(),
-  // postSingleGeoJSON: postSingleGeoJSONRoute(),
-  // getDestination: getDestinationRoute(),
-  // getPhotonDetails: getPhotonDetailsRoute(),
+  getTrailsOSM: getTrailsOSMRoute(),
+  getParksOSM: getParksOSMRoute(),
+  getOsm: getOsmRoute(),
+  postSingleGeoJSON: postSingleGeoJSONRoute(),
+  getDestination: getDestinationRoute(),
+  getPhotonDetails: getPhotonDetailsRoute(),
   // open ai routes
   getAIResponse: getAIResponseRoute(),
   getUserChats: getUserChatsRoute(),
