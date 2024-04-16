@@ -11,7 +11,7 @@
   "dependencies": {
     "@originjs/vite-plugin-commonjs": "^1.0.3",
     "@packrat/ui": "*",
-    "@tamagui/vite-plugin": "^1.90.6",
+    "@tamagui/vite-plugin": "1.92.1",
     "@vitejs/plugin-react-swc": "^3.6.0",
     "app": "*",
     "esbuild-plugin-flow": "^0.3.2",
