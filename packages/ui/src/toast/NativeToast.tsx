@@ -1,11 +1,11 @@
-import { Toast, useToastState } from '@tamagui/toast'
-import { YStack } from 'tamagui'
+import { Toast, useToastState } from '@tamagui/toast';
+import { YStack } from 'tamagui';
 
 export const NativeToast = (): React.ReactNode => {
-  const currentToast = useToastState()
+  const currentToast = useToastState();
 
   if (!currentToast || currentToast.isHandledNatively) {
-    return null
+    return null;
   }
 
   return (
@@ -22,8 +22,10 @@ export const NativeToast = (): React.ReactNode => {
     >
       <YStack>
         <Toast.Title>{currentToast.title}</Toast.Title>
-        {!!currentToast.message && <Toast.Description>{currentToast.message}</Toast.Description>}
+        {!!currentToast.message && (
+          <Toast.Description>{currentToast.message}</Toast.Description>
+        )}
       </YStack>
     </Toast>
-  )
-}
+  );
+};

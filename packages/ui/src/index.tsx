@@ -69,7 +69,7 @@ export {
   RButton,
   RTabs,
   SizableText,
-  ZDropdown
+  ZDropdown,
 };
 
 export * from './InputText';

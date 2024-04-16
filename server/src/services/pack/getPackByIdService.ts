@@ -1,26 +1,22 @@
-import Pack from '../../models/packModel';
-import mongoose from 'mongoose';
+import { Pack } from '../../drizzle/methods/pack';
 
-/**
- * Retrieves a pack by its ID from the database.
- *
- * @param {string} packId - The ID of the pack to retrieve.
- * @return {Promise<Object>} - A promise that resolves to the retrieved pack object.
- */
-export const getPackByIdService = async (packId) => {
-  const objectId = new mongoose.Types.ObjectId(packId);
-  const pack = await Pack.findById(objectId)
-    .populate({
-      path: 'items',
-      populate: {
-        path: 'category',
-        select: 'name',
-      },
-    })
-    .populate({
-      path: 'owners',
-    })
-    .lean();
-
-  return pack;
+export const getPackByIdService = async (packId: string) => {
+  try {
+    const packClass = new Pack();
+    const pack = await packClass.findPack({ id: packId });
+    const packData = {
+      ...pack,
+      scores: JSON.parse(pack.scores as string),
+      grades: JSON.parse(pack.grades as string),
+      total_weight: packClass.computeTotalWeight(pack),
+      favorites_count: packClass.computeFavouritesCount(pack),
+      total_score: packClass.computeTotalScores(pack),
+      items: pack.itemPacks.map((itemPack) => itemPack.item),
+    };
+    return packData;
+  } catch (error) {
+    // Handle any potential errors here
+    console.error(error);
+    throw error;
+  }
 };

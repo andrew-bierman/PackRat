@@ -18,9 +18,11 @@ export const useLogin = (): UseLoginReturn => {
 
   const handleLogin: UseLoginReturn['handleLogin'] = (data) => {
     const { email, password } = data;
-    signIn({ email, password }).then((user) => {
-      sessionSignIn(user);
-    });
+    signIn({ email, password })
+      .then((user) => {
+        sessionSignIn(user);
+      })
+      .catch(() => {});
   };
 
   return { handleLogin, hasError: !!error };

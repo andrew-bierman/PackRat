@@ -1,6 +1,4 @@
 import { publicProcedure } from '../../trpc';
-import { FailedToRetrieveUserChats } from '../../helpers/errors';
-import { responseHandler } from '../../helpers/responseHandler';
 import { getUserChatsService } from '../../services/openAi/openAi.service';
 import { z } from 'zod';
 
@@ -22,6 +20,7 @@ export const getUserChats = async (req, res, next) => {
     next(FailedToRetrieveUserChats);
   }
 };
+
 
 export function getUserChatsRoute() {
   return publicProcedure

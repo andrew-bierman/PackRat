@@ -13,24 +13,25 @@ import { Separator } from 'tamagui';
 enum NavigationItemTypeEnum {
   LINK = 'link',
   DIVIDER = 'divider',
-};
+}
 
-type NavigationItem = {
-  type: NavigationItemTypeEnum.LINK;
-  href: string;
-  icon: string;
-  text: string;
-  iconSource: any;
-} | {
-  type: NavigationItemTypeEnum.DIVIDER, Component: React.ComponentType<any>
-};
+type NavigationItem =
+  | {
+      type: NavigationItemTypeEnum.LINK;
+      href: string;
+      icon: string;
+      text: string;
+      iconSource: any;
+    }
+  | {
+      type: NavigationItemTypeEnum.DIVIDER;
+      Component: React.ComponentType<any>;
+    };
 
 export const useNavigationList = () => {
   const user = useAuthUser();
   const navigationItems = useMemo(() => {
-    const additionalMenuItems = user
-      ? logedInMenuItems
-      : loggeOutMenuItems
+    const additionalMenuItems = user ? logedInMenuItems : loggeOutMenuItems;
 
     return [...staticNavigationItems, ...additionalMenuItems];
   }, [user]);
@@ -58,7 +59,7 @@ const staticNavigationItems = [
 const loggeOutMenuItems: NavigationItem[] = [
   {
     type: NavigationItemTypeEnum.DIVIDER,
-    Component: Separator
+    Component: Separator,
   },
   {
     type: NavigationItemTypeEnum.LINK,
@@ -98,7 +99,7 @@ const logedInMenuItems: NavigationItem[] = [
     text: 'Packs',
     iconSource: MaterialIcons,
   },
-  ...(Platform.OS != 'web'
+  ...((Platform.OS != 'web'
     ? [
         {
           type: NavigationItemTypeEnum.LINK,
@@ -108,7 +109,7 @@ const logedInMenuItems: NavigationItem[] = [
           iconSource: Entypo,
         },
       ]
-    : []) as NavigationItem[] ,
+    : []) as NavigationItem[]),
   {
     type: NavigationItemTypeEnum.LINK,
     href: '/items',
@@ -125,7 +126,7 @@ const logedInMenuItems: NavigationItem[] = [
   },
   {
     type: NavigationItemTypeEnum.DIVIDER,
-    Component: Separator
+    Component: Separator,
   },
   {
     type: NavigationItemTypeEnum.LINK,

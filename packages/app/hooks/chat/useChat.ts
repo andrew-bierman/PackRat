@@ -55,6 +55,7 @@ export const useChat = (itemTypeId = null) => {
 
   // console.log('parsedMessages:', parsedMessages);/
 
+
   // Compute parsedMessages directly
   const parsedMessages = conversations
     ? parseConversationHistory(conversations)
@@ -73,6 +74,7 @@ export const useChat = (itemTypeId = null) => {
       userInput: userMessage,
       itemTypeId: typeId.itemTypeId,
     });
+
     refetch();
     setUserInput('');
   };

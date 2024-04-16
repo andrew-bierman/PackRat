@@ -1,10 +1,10 @@
 import React from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import { Dimensions, ScrollView, Text, View } from 'react-native';
 import { Table, Row, Cell } from 'react-native-table-component';
 import { theme } from '../../theme';
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, MaterialIcons } from '@expo/vector-icons';
 import useTheme from '../../hooks/useTheme';
-import { RButton, RStack } from '@packrat/ui';
+import { RButton, RStack, RText } from '@packrat/ui';
 import { formatNumber } from '../../utils/formatNumber';
 import { EditPackItemModal } from '../pack_table/EditPackItemModal';
 import { DeletePackItemModal } from '../pack_table/DeletePackItemModal';
@@ -13,6 +13,7 @@ import Loader from '../Loader';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { loadStyles } from './itemsTable.style';
 import { AddItem } from '../item/AddItem';
+import { useScreenWidth } from 'app/hooks/common';
 
 interface ItemsTableProps {
   limit: number;
@@ -31,7 +32,7 @@ interface YourItemType {
   category?: { name: string };
   quantity: number;
   unit: string;
-  _id: string;
+  id: string;
   type: string;
 }
 
@@ -52,7 +53,9 @@ export const ItemsTable = ({
   isLoading,
   totalPages,
 }: ItemsTableProps) => {
-  const flexArr = [2, 1, 1, 1, 0.65, 0.65, 0.65];
+  const flexArr = [1.5, 1, 1, 1, 0.65, 0.65, 0.65];
+  const { screenWidth } = useScreenWidth();
+
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
@@ -68,16 +71,24 @@ export const ItemsTable = ({
     );
   };
   const TableItem = ({ itemData }: TableItemProps) => {
-    const { name, weight, category, quantity, unit, _id, type } = itemData;
+    const { name, weight, category, quantity, unit, id, type } = itemData;
 
     const rowData = [
       name,
       `${formatNumber(weight)} ${unit}`,
       quantity,
       `${category?.name || type}`,
-      <EditPackItemModal>
+      <EditPackItemModal
+        triggerComponent={
+          <MaterialIcons
+            name="edit"
+            size={20}
+            color={currentTheme.colors.primary}
+          />
+        }
+      >
         <AddItem
-          _id={_id}
+          id={id}
           isEdit={true}
           isItemPage
           initialData={itemData}
@@ -86,7 +97,16 @@ export const ItemsTable = ({
           page={page}
         />
       </EditPackItemModal>,
-      <DeletePackItemModal itemId={_id} />,
+      <DeletePackItemModal
+        itemId={_id}
+        triggerComponent={
+          <MaterialIcons
+            name="delete"
+            size={20}
+            color={currentTheme.colors.error}
+          />
+        }
+      />,
     ];
     return <Row data={rowData} style={styles.row} flexArr={flexArr} />;
   };
@@ -111,8 +131,8 @@ export const ItemsTable = ({
     <ScrollView>
       <View
         style={{
+          paddingVertical: 16,
           flex: 1,
-          padding: 16,
           paddingTop: 30,
           backgroundColor: '#fff',
           marginTop: 20,
@@ -123,6 +143,7 @@ export const ItemsTable = ({
           contentContainerStyle={{
             flexGrow: 1,
             justifyContent: 'center',
+            maxWidth: '100%',
           }}
         >
           <Table
@@ -140,7 +161,15 @@ export const ItemsTable = ({
                 'Edit',
                 'Delete',
               ].map((header, index) => (
-                <Cell key={index} data={header} textStyle={styles.headerText} />
+                <Cell
+                  key={index}
+                  data={
+                    <RText style={{ fontSize: screenWidth <= 425 ? 11 : 15 }}>
+                      {header}
+                    </RText>
+                  }
+                  textStyle={styles.headerText}
+                />
               ))}
               style={styles.head}
             />

@@ -1,12 +1,12 @@
-import type { Document as MongooseDocument } from 'mongoose';
-import Item from '../../models/itemModel';
-import Pack from '../../models/packModel';
-import { ItemCategoryModel } from '../../models/itemCategory';
-import type { ObjectId } from 'mongodb';
+import { Item } from '../../drizzle/methods/Item';
+import { ItemPacks } from '../../drizzle/methods/ItemPacks';
+import { ItemCategory } from '../../drizzle/methods/itemcategory';
+import { ItemCategory as categories } from '../../utils/itemCategory';
+import { type InsertItemCategory } from '../../db/schema';
 
 /**
  * Edits a global item by creating a duplicate item in a specific pack.
- *
+ * @param {PrismaClient} prisma - Prisma client.
  * @param {string} itemId - The ID of the item to be edited.
  * @param {string} packId - The ID of the pack where the duplicate item will be created.
  * @param {string} name - The name of the duplicate item.
@@ -16,20 +16,6 @@ import type { ObjectId } from 'mongodb';
  * @param {string} type - The type/category of the duplicate item.
  * @return {Promise<object>} The newly created duplicate item.
  */
-
-type ItemType = MongooseDocument & {
-  createdAt: Date;
-  updatedAt: Date;
-  weight: number;
-  name: string;
-  packs: ObjectId[];
-  quantity: number;
-  unit: string;
-  owners: ObjectId[];
-  global: boolean;
-  category?: ObjectId;
-};
-
 export const editGlobalItemAsDuplicateService = async (
   itemId: string,
   packId: string,
@@ -38,41 +24,45 @@ export const editGlobalItemAsDuplicateService = async (
   quantity: number,
   unit: string,
   type: string,
-): Promise<ItemType | null> => {
-  const category = await ItemCategoryModel.findOne({
-    name: type,
-  });
-
-  if (!category) {
-    throw new Error(`No category found with: ${type}`);
+): Promise<object> => {
+  let category: InsertItemCategory | null;
+  if (!categories.includes(type)) {
+    throw new Error(`Category must be one of: ${categories.join(', ')}`);
   }
-
-  let newItem: ItemType | null = await Item.create({
+  const itemClass = new Item();
+  const itemCategoryClass = new ItemCategory();
+  const ItemPacksClass = new ItemPacks();
+  category = await itemCategoryClass.findItemCategory({ name: type });
+  if (!category) {
+    category = await itemCategoryClass.create({ name: type });
+  }
+  const newItem = await itemClass.create({
     name,
     weight,
     unit,
     quantity,
-    category: category._id,
     global: false,
-    packs: [packId],
+    categoryId: category.id,
   });
 
-  newItem = await Item.findById(newItem?._id).populate('category', 'name');
-
-  await Pack.updateOne({ _id: packId }, { $addToSet: { items: newItem?._id } });
-
-  await Pack.updateOne({ _id: packId }, { $pull: { items: itemId } });
-
-  await Item.updateOne(
-    {
-      _id: itemId,
-    },
-    {
-      $pull: {
-        packs: packId,
-      },
-    },
-  );
+  // TODO update pack
+  // await prisma.pack.update({
+  //   where: {
+  //     id: packId,
+  //   },
+  //   data: {
+  //     itemDocuments: {
+  //       newItem.id
+  //     },
+  //     disconnect: [{ id: itemId }, { id: packId }],
+  //   },
+  // },
+  // });
+  await ItemPacksClass.updateRelation({
+    oldItemId: itemId,
+    newItemId: newItem.id,
+    packId,
+  });
 
   return newItem;
 };

@@ -1,52 +1,48 @@
-import mongoose from 'mongoose';
-import User from '../../models/userModel';
-import Conversation from '../../models/openai/conversationModel';
-import { Configuration, OpenAIApi } from 'openai';
+import OpenAI from 'openai';
+import { Conversation } from '../../drizzle/methods/Conversation';
+import { User } from '../../drizzle/methods/User';
 
 /**
  * Retrieves AI response for a given user input in a conversation.
- *
+ * @param {PrismaClient} prisma - Prisma client.
  * @param {string} userId - The ID of the user.
  * @param {string} conversationId - The ID of the conversation.
  * @param {string} userInput - The user input in the conversation.
  * @returns {Object} - The AI response and the updated conversation.
  */
 export const getAIResponseService = async (
-  userId,
-  conversationId,
-  userInput,
-) => {
-  if (!process.env.OPENAI_API_KEY) {
+  userId: string,
+  conversationId: string,
+  userInput: string,
+  openAIAPIKey = null,
+): Promise<object> => {
+  if (!openAIAPIKey) {
     throw new Error(
       'Failed to get response from AI. OPENAI_API_KEY is not set.',
     );
   }
 
-  const configuration = new Configuration({
-    apiKey: process.env.OPENAI_API_KEY,
+  const conversationClass = new Conversation();
+  const userClass = new User();
+  const openai = new OpenAI({
+    apiKey: openAIAPIKey,
   });
+  const user = await userClass.findUser({ userId });
 
-  const openai = new OpenAIApi(configuration);
-
-  if (!mongoose.Types.ObjectId.isValid(userId)) {
-    throw new Error('Invalid userId');
-  }
-
-  const user = await User.findById(userId).exec();
   if (!user) {
     throw new Error('User not found');
   }
 
-  let conversation = await Conversation.findOne({
+  let conversation: any = await conversationClass.findConversation(
     userId,
-    _id: conversationId,
-  });
+    conversationId,
+  );
 
   console.log('conversation after find ---->', conversation);
 
   let conversationHistory = conversation ? conversation.history : '';
-  const messages: any[] = conversationHistory
-    ? conversationHistory.split('\n').map((message, i) => ({
+  const messages = conversationHistory
+    ? conversationHistory.split('\n').map((message: any, i: number) => ({
         role: i % 2 === 0 ? 'user' : 'assistant',
         content: message,
       }))
@@ -60,30 +56,29 @@ export const getAIResponseService = async (
 
   messages.push({ role: 'user', content: userInput });
 
-  const response = await openai.createChatCompletion({
+  const response = await openai.chat.completions.create({
     model: 'gpt-3.5-turbo',
     messages,
   });
 
-  const aiResponse =
-    response?.data?.choices?.[0]?.message?.content?.trim() || '';
+  const aiResponse = response.choices[0].message.content.trim();
   conversationHistory += `\n${userInput}\nAI: ${aiResponse}`;
 
   if (conversation) {
     // Update existing conversation
-    conversation.history = conversationHistory;
+    await conversationClass.update({
+      history: conversationHistory,
+      id: conversation.id,
+    });
   } else {
     // Create new conversation
-    conversation = new Conversation({
+    conversation = await conversationClass.create({
       userId,
       history: conversationHistory,
     });
   }
-
-  await conversation.save();
-
   return {
     aiResponse,
-    conversation: conversation.toJSON(),
+    conversation,
   };
 };

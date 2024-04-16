@@ -15,12 +15,15 @@ import {
   RStack,
   SubmitButton,
 } from '@packrat/ui';
-// import { sendMessage } from '@packrat/validations';
+import { sendMessage } from '@packrat/validations';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useChat } from 'app/hooks/chat/useChat';
 import { loadStyles } from './chat.style';
 import { Box } from 'native-base';
 // import { Select } from "tamagui";
+
+// TODO check if we've fixed the chat screen on another branch
+// link: https://github.com/andrew-bierman/PackRat/issues/ ???
 
 interface Message {
   role: string;
@@ -28,7 +31,7 @@ interface Message {
 }
 
 interface Chat {
-  _id: string;
+  id: string;
 }
 
 interface MessageBubbleProps {
@@ -81,6 +84,7 @@ const MessageList = ({ messages }: MessageListProps) => {
   );
 };
 
+
 // const ChatSelector: React.FC<ChatSelectorProps> = ({
 //   conversation,
 //   onSelect,
@@ -97,6 +101,7 @@ const MessageList = ({ messages }: MessageListProps) => {
 //     </TouchableOpacity>
 //   );
 // };
+
 
 const ChatComponent: React.FC<ChatComponentProps> = ({
   showChatSelector = true,
@@ -115,7 +120,7 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
   } = useChat({ itemTypeId });
 
   const options = Array.isArray(conversations)
-    ? conversations.map((conversation) => conversation._id)
+    ? conversations.map((conversation) => conversation.id)
     : [];
 
   return (

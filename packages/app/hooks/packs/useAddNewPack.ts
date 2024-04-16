@@ -18,7 +18,7 @@ export const useAddNewPack = () => {
     mutation.mutate({
       name: data.name,
       is_public: data.isPublic === packSelectOptions[0].value,
-      owner_id: user?._id,
+      owner_id: user?.id,
     });
   };
 

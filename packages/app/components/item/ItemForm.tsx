@@ -31,7 +31,7 @@ interface ItemFormProps {
       };
     }>;
   } | null;
-  packId : number
+  packId: number;
 }
 
 export const ItemForm = ({
@@ -42,7 +42,7 @@ export const ItemForm = ({
   defaultValues,
   validationSchema,
   currentPack,
-  packId
+  packId,
 }: ItemFormProps) => {
   let hasWaterAdded = false;
   if (
@@ -56,14 +56,18 @@ export const ItemForm = ({
   }
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
-  
+
   const radioOptions = Object.values(ItemCategoryEnum)
     .filter((value) => !(hasWaterAdded && value === ItemCategoryEnum.WATER))
     .map((radioOption) => ({ label: radioOption, value: radioOption }));
 
   return (
     <View>
-      <Form validationSchema={validationSchema} defaultValues={defaultValues} onSubmit={handleSubmit}>
+      <Form
+        validationSchema={validationSchema}
+        defaultValues={defaultValues}
+        onSubmit={handleSubmit}
+      >
         <RStack style={{ gap: 8 }}>
           <FormInput
             name="name"
@@ -79,7 +83,7 @@ export const ItemForm = ({
             }}
           >
             <View>
-              <FormInput name="weight" placeholder="Weight" />
+              <FormInput name="weight" placeholder="Weight" isNumeric />
             </View>
             {data && (
               <FormSelect
@@ -94,6 +98,7 @@ export const ItemForm = ({
           <FormInput
             name="quantity"
             placeholder="Quantity"
+            isNumeric
             style={{ width: '100%' }}
           />
           <FormRadioGroup name="type" options={radioOptions} />
@@ -114,7 +119,6 @@ export const ItemForm = ({
             defaultValue={packId}
             style={{ display: 'none' }}
           />
-          
         </RStack>
         <Test />
       </Form>

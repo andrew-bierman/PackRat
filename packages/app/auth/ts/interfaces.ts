@@ -11,5 +11,5 @@ export interface User {
   token: string;
   updatedAt: string;
   username: string;
-  _id: string;
+  id: string;
 }

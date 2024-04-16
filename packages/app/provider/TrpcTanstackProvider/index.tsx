@@ -6,8 +6,7 @@ import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { onlineManager } from '@tanstack/react-query';
 import NetInfo from '@react-native-community/netinfo';
-import { queryTrpc, getToken } from '../../trpc';
-import { httpBatchLink } from '@trpc/client';
+import { queryTrpc, trpc } from '../../trpc';
 import { api } from 'app/constants/api';
 import { Platform } from 'react-native';
 
@@ -28,21 +27,6 @@ export const TrpcTanstackProvider: React.FC<{ children: React.ReactNode }> = ({
     });
   }, []);
 
-  const trpcClient = queryTrpc.createClient({
-    links: [
-      httpBatchLink({
-        url: `${api}/trpc`,
-        async headers() {
-          const token = await getToken();
-          return {
-            authorization: token ? `Bearer ${token}` : '',
-          };
-        },
-      }),
-    ],
-    transformer: undefined,
-  });
-
   return (
     <PersistQueryClientProvider
       onSuccess={async () =>
@@ -53,7 +37,7 @@ export const TrpcTanstackProvider: React.FC<{ children: React.ReactNode }> = ({
       persistOptions={{ persister }}
       client={queryClient}
     >
-      <queryTrpc.Provider client={trpcClient} queryClient={queryClient}>
+      <queryTrpc.Provider client={trpc} queryClient={queryClient}>
         <QueryClientProvider client={queryClient}>
           {children}
           {Platform.OS === 'web' && (
