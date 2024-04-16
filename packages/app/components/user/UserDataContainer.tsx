@@ -34,7 +34,7 @@ const SkeletonUserDataCard = () => {
 
 interface UserDataContainerProps {
   data: any;
-  type: 'packs' | 'trips';
+  type: 'packs' | 'trips' | 'favorites';
   userId?: string;
   isLoading: boolean;
   SkeletonComponent?: React.ReactElement;
@@ -70,7 +70,6 @@ export default function UserDataContainer({
       <UserDataCard
         key={item.id}
         {...item}
-        type={cardType}
         state={dataState}
         setState={setDataState}
         index={index}
