@@ -31,10 +31,7 @@ export function LmInputRhf<T extends FieldValues = FieldValues>({
           value={value ?? ''}
           onBlur={onBlur}
           error={!!error}
-          onChangeText={(text) => {
-            console.log('onChangeText called with:', text);
-            onChange(text);
-          }}
+          onChangeText={onChange}
           helperText={error ? error.message : inputProps.helperText}
         />
       )}

@@ -81,10 +81,7 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
       minMatchCharLength: 1,
     };
 
-    const results =
-      feedType !== 'userTrips'
-        ? fuseSearch(arrayData, searchQuery, keys, options)
-        : data;
+    const results = fuseSearch(arrayData, searchQuery, keys, options);
 
     // Convert fuse results back into the format we want
     // if searchQuery is empty, use the original data
