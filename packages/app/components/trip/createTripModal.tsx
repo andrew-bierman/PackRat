@@ -19,7 +19,7 @@ import { DropdownComponent } from '../Dropdown';
 import { useAuthUser } from 'app/auth/hooks';
 import { addTripForm } from '@packrat/validations/src/validations/tripRoutesValidator';
 import { useFormSubmitTrigger } from '@packrat/ui/src/form';
-import { usePackId } from 'app/hooks/packs/usePackId';
+import { usePackId } from 'app/hooks/packs';
 
 interface SaveTripContainerProps {
   dateRange: {
@@ -95,7 +95,7 @@ export const SaveTripContainer = ({
       // trail: dropdown.currentTrail,
       duration: JSON.stringify(duration),
       weather: JSON.stringify(weatherObject),
-      owner_id: user?._id,
+      owner_id: user?.id,
       packs: packId,
       is_public: isPublic === '1',
     };
@@ -106,7 +106,7 @@ export const SaveTripContainer = ({
     closeModal();
   };
   if (isSuccess && response) {
-    router.push(`/trip/${response.trip._id}`);
+    router.push(`/trip/${response.id}`);
   }
   /**
    * Handles the change in value.
@@ -154,7 +154,7 @@ export const SaveTripContainer = ({
     >
       <Form
         validationSchema={addTripForm}
-        formRef={formRef}
+        ref={formRef}
         onSubmit={handleCreateTrip}
         defaultValues={{ isPublic: '0' }}
       >

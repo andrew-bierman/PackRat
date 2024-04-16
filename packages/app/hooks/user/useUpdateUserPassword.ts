@@ -1,16 +1,7 @@
-import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
-import { api } from 'app/constants/api';
+import { queryTrpc } from 'app/trpc';
 
 export const useUpdateUserPassword = () => {
-  const { mutate: mutateUser } = useMutation({
-    mutationFn: updateUserMutation,
-  });
+  const { mutate: mutateUser } = queryTrpc.updatePassword.useMutation();
 
   return mutateUser;
-};
-
-const updateUserMutation = async (data) => {
-  const response = await axios.post(`${api}/user/updatepassword`, data);
-  return response.data;
 };

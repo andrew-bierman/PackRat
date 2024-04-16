@@ -1,3 +1,4 @@
+import React from 'react';
 import { Platform, View } from 'react-native';
 import {
   RButton,
@@ -6,7 +7,6 @@ import {
   Form,
   FormSelect,
   FormInput,
-  useFormSubmitTrigger,
   SubmitButton,
 } from '@packrat/ui';
 import { BaseModal } from '@packrat/ui';
@@ -14,7 +14,7 @@ import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useAddNewPack } from 'app/hooks/packs';
 import { useRouter } from 'app/hooks/router';
-import { z } from 'zod';
+import { addPackSchema } from '@packrat/validations';
 
 export const AddPack = ({ isCreatingTrip = false }) => {
   // Hooks
@@ -40,7 +40,7 @@ export const AddPack = ({ isCreatingTrip = false }) => {
 
   // routing
   if (isSuccess && !isCreatingTrip && response) {
-    router.push(`/pack/${response.createdPack._id}`);
+    router.push(`/pack/${response.id}`);
   }
   /**
    * Handles the addition of a pack.
@@ -78,7 +78,10 @@ export const AddPack = ({ isCreatingTrip = false }) => {
             accessibilityLabel="Choose Service"
             placeholder={'Is Public'}
           />
-          <SubmitButton style={{ width: '100%', marginTop: 40 }} onSubmit={handleAddPack}>
+          <SubmitButton
+            style={{ width: '100%', marginTop: 40 }}
+            onSubmit={handleAddPack}
+          >
             <RText style={{ color: currentTheme.colors.text }}>
               {isLoading ? 'Loading...' : 'Add Pack'}
             </RText>
@@ -152,10 +155,3 @@ const loadStyles = (theme, appTheme) => {
     },
   };
 };
-
-// TODO move to validations workspace
-
-export const addPackSchema = z.object({
-  name: z.string().nonempty(),
-  isPublic: z.union([z.literal('0'), z.literal('1')]),
-});

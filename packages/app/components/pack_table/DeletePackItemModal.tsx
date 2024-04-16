@@ -5,10 +5,11 @@ import { useDeleteItem } from 'app/hooks/items';
 
 interface DeletePackItemModalProps {
   itemId: string;
-  pack?: { _id: string };
+  pack?: { id: string };
   isOpen?: Boolean;
   onClose?: () => void;
   showTrigger?: Boolean;
+  triggerComponent?: React.DetailedReactHTMLElement<any, HTMLElement>;
 }
 
 export const DeletePackItemModal = ({
@@ -16,13 +17,14 @@ export const DeletePackItemModal = ({
   pack,
   isOpen,
   onClose,
-  showTrigger
+  triggerComponent,
+  showTrigger,
 }: DeletePackItemModalProps) => {
   const { deletePackItem } = useDeletePackItem();
   const { handleDeleteItem } = useDeleteItem();
   const deleteItemHandler = (_, closeModal) => {
     if (pack) {
-      deletePackItem({ itemId, packId: pack._id });
+      deletePackItem({ itemId, packId: pack.id });
     } else {
       handleDeleteItem(itemId);
     }
@@ -33,7 +35,7 @@ export const DeletePackItemModal = ({
     {
       label: 'Cancel',
       onClick: (_, closeModal) => {
-        closeModal()
+        closeModal();
         if (onClose) onClose();
       },
       color: 'gray',
@@ -52,6 +54,7 @@ export const DeletePackItemModal = ({
       title={'Delete Item'}
       isOpen={isOpen}
       onClose={onClose}
+      triggerComponent={triggerComponent}
       showTrigger={showTrigger !== undefined ? showTrigger : true}
       footerButtons={footerButtons}
     >

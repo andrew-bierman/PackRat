@@ -1,3 +1,4 @@
+import React from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import {
   RInput,
@@ -13,10 +14,11 @@ import {
   ImageUpload,
   FormInput,
   FormSelect,
+  SubmitButton,
 } from '@packrat/ui';
 import Avatar from 'app/components/Avatar/Avatar';
 import { useProfileSettings } from 'app/hooks/user';
-import { z } from 'zod';
+import { userSettingsSchema, passwordChangeSchema } from '@packrat/validations';
 
 const weatherOptions = ['celsius', 'fahrenheit'].map((key) => ({
   label: key,
@@ -35,9 +37,11 @@ export default function Settings() {
   return user ? (
     <RScrollView>
       <RStack
-        space="$3"
+        gap={8}
         width="fit-content"
+        maw="100%"
         paddingVertical={20}
+        paddingHorizontal={8}
         marginHorizontal="auto"
       >
         <RStack>
@@ -45,34 +49,38 @@ export default function Settings() {
           <RSeparator marginVertical={8} />
         </RStack>
         <Form
-          onSubmit={handleEditUser}
           validationSchema={userSettingsSchema}
-          defaultValues={{ ...user }}
+          defaultValues={{ ...user, profileImage: user.profileImage || '' }}
         >
-          <RStack space="$3" width="fit-content" marginHorizontal="auto">
+          <RStack
+            space="$3"
+            maw="100%"
+            width="fit-content"
+            marginHorizontal="auto"
+          >
             <ImageUpload
               label="Profile Picture"
               name="profileImage"
               previewElement={<Avatar size={90} />}
             />
-            <RStack space="$3" style={{ flexDirection: 'row' }}>
-              <RStack space="$2">
+            <RStack gap={16} style={{ flexDirection: 'row' }}>
+              <RStack f={1}>
                 <RLabel htmlFor="firstName">Name</RLabel>
                 <FormInput id="name" name="name" />
               </RStack>
-              <RStack space="$2">
+              <RStack f={1}>
                 <RLabel htmlFor="username">Username</RLabel>
                 <FormInput id="username" name="username" />
               </RStack>
             </RStack>
-            <RStack space="$2">
+            <RStack>
               <RLabel htmlFor="email">Email</RLabel>
               <FormInput id="email" name="email" />
             </RStack>
-            <RStack space="$2">
+            <RStack>
               <RH5>Preferred units</RH5>
-              <RStack space style={{ flexDirection: 'row' }}>
-                <RStack space="$2" flexGrow={1}>
+              <RStack gap={16} style={{ flexDirection: 'row' }}>
+                <RStack f={1}>
                   <RLabel>Weather: </RLabel>
                   <FormSelect
                     options={weatherOptions}
@@ -80,7 +88,7 @@ export default function Settings() {
                     style={{ width: '100%' }}
                   />
                 </RStack>
-                <RStack space="$2" flexGrow={1}>
+                <RStack f={1}>
                   <RLabel>Weight: </RLabel>
                   <FormSelect
                     options={weightOptions}
@@ -90,9 +98,13 @@ export default function Settings() {
                 </RStack>
               </RStack>
             </RStack>
-            <RButton color="white" style={{ backgroundColor: '#0284c7' }}>
+            <SubmitButton
+              onSubmit={handleEditUser}
+              color="white"
+              style={{ backgroundColor: '#0284c7' }}
+            >
               Update profile
-            </RButton>
+            </SubmitButton>
           </RStack>
         </Form>
 
@@ -127,39 +139,16 @@ export default function Settings() {
                 secureTextEntry={true}
               />
             </RStack>
-            <RButton color="white" style={{ backgroundColor: '#0284c7' }}>
+            <SubmitButton
+              onSubmit={handleUpdatePassword}
+              color="white"
+              style={{ backgroundColor: '#0284c7' }}
+            >
               Change password
-            </RButton>
+            </SubmitButton>
           </RStack>
         </Form>
       </RStack>
     </RScrollView>
   ) : null;
 }
-
-// TODO move to validations workspace
-
-const userSettingsSchema = z.object({
-  name: z.string().min(1).nonempty(),
-  email: z.string().email().nonempty(),
-  username: z.string().nonempty(),
-  profileImage: z.string().optional(),
-  preferredWeather: z.union([z.literal('celsius'), z.literal('fahrenheit')]),
-  preferredWeight: z.union([
-    z.literal('lb'),
-    z.literal('oz'),
-    z.literal('kg'),
-    z.literal('g'),
-  ]),
-});
-
-const passwordChangeSchema = z
-  .object({
-    oldPassword: z.string().min(1, 'Old password is required'),
-    newPassword: z.string().nonempty(),
-    confirmPassword: z.string().nonempty(),
-  })
-  .refine((data) => data.newPassword === data.confirmPassword, {
-    message: 'New password and confirmation must match',
-    path: ['confirmPassword'], // This will attach the error to `passwordConfirm` field
-  });

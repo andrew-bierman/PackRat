@@ -31,11 +31,15 @@ export const AddItemModal = ({
         },
       ]}
       footerComponent={undefined}
+      isOpen={isAddItemModalOpen}
+      onOpen={() => setIsAddItemModalOpen(true)}
+      onClose={() => setIsAddItemModalOpen(false)}
     >
       <AddItem
         packId={currentPackId}
         currentPack={currentPack}
         setRefetch={setRefetch}
+        closeModalHandler={() => setIsAddItemModalOpen(false)}
       />
     </BaseModal>
   );

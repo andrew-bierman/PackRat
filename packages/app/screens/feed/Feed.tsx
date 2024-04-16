@@ -25,7 +25,7 @@ const ERROR_MESSAGES = {
 };
 
 interface FeedItem {
-  _id: string;
+  id: string;
   type: string;
 }
 
@@ -41,7 +41,7 @@ interface FeedProps {
 const Feed = ({ feedType = 'public' }: FeedProps) => {
   const router = useRouter();
 
-  const [queryString, setQueryString] = useState('');
+  const [queryString, setQueryString] = useState('Favorite');
   const [selectedTypes, setSelectedTypes] = useState({
     pack: true,
     trip: false,
@@ -52,7 +52,7 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
   const [refreshing, setRefreshing] = useState(false);
 
   const user = useAuthUser();
-  const ownerId = user?._id;
+  const ownerId = user?.id;
 
   const styles = useCustomStyles(loadStyles);
   const { data, error, isLoading, refetch } = useFeed(
@@ -116,9 +116,14 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
         <FlatList
           data={searchQuery?arrayData:data}
           horizontal={false}
-          keyExtractor={(item) => item?._id + item?.type}
+          keyExtractor={(item) => item?.id + item?.type}
           renderItem={({ item }) => (
-            <Card key={item?._id} type={item?.type} {...item} />
+            <Card
+              key={item?.id}
+              type={item?.type}
+              favorited_by={item?.userFavoritePacks}
+              {...item}
+            />
           )}
           ListHeaderComponent={() => feedSearchFilterComponent}
           ListFooterComponent={() => <View style={{ height: 50 }} />}
