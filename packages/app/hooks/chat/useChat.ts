@@ -15,8 +15,6 @@ export const useChat = (itemTypeId = null) => {
     typeId.itemTypeId,
   );
 
-  console.log('chatsData:', chatsData);
-
   const { getAIResponse } = useGetAIResponse();
 
   const conversations = chatsData?.conversations;
@@ -29,13 +27,15 @@ export const useChat = (itemTypeId = null) => {
    */
   const parseConversationHistory = (conversations) => {
     return conversations.flatMap((conversation) => {
-      const historyArray = conversation.history.split('\n');
-      return historyArray.reduce((accumulator, current) => {
-        const isAI = current.startsWith('AI:');
-        const content = isAI ? current.substring(3) : current;
+      const historyArray = conversation.history.split(/(AI:|User:)/);
+      return historyArray.reduce((accumulator, current, index) => {
+        if (index % 2 === 0) return accumulator; // Skip the empty strings from split
+        const isAI = current === 'AI:';
+        const content = historyArray[index + 1]; // Content is the next item
         const role = isAI ? 'ai' : 'user';
-        if (content) {
-          accumulator.push({ role, content });
+        if (content.trim()) {
+          // Check if content is not just whitespace
+          accumulator.push({ role, content: content.trim() });
         }
         return accumulator;
       }, []);
@@ -60,7 +60,7 @@ export const useChat = (itemTypeId = null) => {
     ? parseConversationHistory(conversations)
     : [];
 
-  console.log('parsedMessages:', parsedMessages);
+  // console.log('parsedMessages:', parsedMessages);
 
   /**
    * Handles sending a message.

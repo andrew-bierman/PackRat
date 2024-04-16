@@ -146,7 +146,7 @@ function processConversationHistory(
   userInput,
   aiResponse,
 ) {
-  return `${conversationHistory}\n${userInput}\nAI: ${aiResponse}`;
+  return `${conversationHistory}\nUser: ${userInput}\nAI: ${aiResponse}`;
 }
 
 function getConversationHistory(conversationHistory: string, prompt: string) {

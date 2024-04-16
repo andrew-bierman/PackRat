@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -76,6 +76,7 @@ const MessageList = ({ messages }: MessageListProps) => {
       data={messages}
       renderItem={({ item }) => <MessageBubble message={item} />}
       keyExtractor={(item, index) => index.toString()}
+      style={{ maxWidth: 500, maxHeight: 500, flex: 1 }}
     />
   );
 };
@@ -117,52 +118,28 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
     ? conversations.map((conversation) => conversation._id)
     : [];
 
-  console.log('conversations', conversations);
-
   return (
     <View style={styles.container}>
       <RStack style={{ alignItems: 'center' }}>
         {showChatSelector && (
           <>
             {!options?.length && <Text>You don't have conversations yet</Text>}
-
-            {/* <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              <Box
-                borderRadius="lg"
-                borderColor="coolGray.200"
-                borderWidth={1}
-                p={3}
-              >
-                <FlatList
-                  data={conversations}
-                  renderItem={({ item }) => (
-                    <ChatSelector
-                      conversation={item}
-                      onSelect={setConversationId}
-                    />
-                  )}
-                  keyExtractor={(item) => item._id}
-                  contentContainerStyle={styles.flatList}
-                />
-                <TouchableOpacity
-                  style={styles.newChatButton}
-                  onPress={() => {
-                    setConversationId(null);
-                    // setParsedMessages([]);
-                  }}
-                >
-                  <Text style={styles.newChatButtonText}>New Chat</Text>
-                </TouchableOpacity>
-              </Box>
-            </ScrollView> */}
           </>
         )}
-        <MessageList messages={parsedMessages} />
+        <ScrollView style={{ maxWidth: 500, maxHeight: 500 }}>
+          <MessageList messages={parsedMessages} />
+        </ScrollView>
         <Form
         // validationSchema={sendMessage}
         >
           <RStack style={{ marginTop: 16, gap: 8 }}>
-            <FormInput name="message" placeholder="Type a message..." />
+            <FormInput
+              name="message"
+              placeholder="Type a message..."
+              value={userInput}
+              onChange={(e) => setUserInput(e.target.value)}
+              onChangeText={(text) => setUserInput(text)}
+            />
             <SubmitButton onSubmit={handleSendMessage}>
               <Text style={styles.sendText}>Send</Text>
             </SubmitButton>
