@@ -45,6 +45,7 @@ export const addItemService = async (
     unit,
     // packs: [packId],
     categoryId: category.id,
+    ownerId,
   });
 
   // await Pack.updateOne({ _id: packId }, { $addToSet: { items: newItem._id } });

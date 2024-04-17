@@ -19,6 +19,7 @@ export const usePackTable = ({
   if (currentPack?.items) {
     ids = copy ? currentPack.map((item) => item.id) : [];
   }
+
   const [checkedItems, setCheckedItems] = useState([...ids]);
 
   const handleDuplicate = () => {

@@ -66,10 +66,7 @@ export const AddItem = ({
 
   const handleSubmit = (data: Item) => {
     if (isEdit) {
-      editPackItem({
-        ...data,
-        packId: currPackId,
-      });
+      editPackItem(data);
     } else {
       addPackItem(data);
     }
@@ -78,15 +75,17 @@ export const AddItem = ({
 
   const defaultValues = useMemo(() => {
     if (!initialData) {
-      return { unit: 'lb', ownerId };
+      return { unit: 'lb', ownerId, packId };
     }
     const result = {
+      id: '',
+      ownerId,
       name: initialData.name || '',
       weight: initialData.weight,
       quantity: initialData.quantity,
       type: initialData.category?.name,
       unit: initialData.unit,
-      id: packId,
+      packId,
     };
 
     if (isEdit) {
@@ -95,10 +94,8 @@ export const AddItem = ({
       return result;
     }
 
-    return { ...result, packId };
-  }, [initialData, isEdit, packId]);
-
-  console.log({ defaultValues });
+    return result;
+  }, [initialData, isEdit, packId, ownerId]);
 
   return (
     <View>
@@ -109,8 +106,6 @@ export const AddItem = ({
         isLoading={isLoading}
         isEdit={isEdit}
         currentPack={currentPack}
-        packId={packId}
-        ownerId={ownerId}
       />
     </View>
   );

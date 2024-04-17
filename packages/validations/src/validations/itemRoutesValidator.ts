@@ -20,6 +20,7 @@ export const addItem = z.object({
   packId: z.string(),
   type: z.string(),
   ownerId: z.string(),
+  id: z.string().optional(),
 });
 
 export type Item = z.infer<typeof addItem>;
@@ -50,7 +51,7 @@ export const editGlobalItemAsDuplicate = z.object({
 
 export const deleteItem = z.object({
   itemId: z.string(),
-  packId: z.string().optional(),
+  packId: z.string(),
 });
 
 export const addItemGlobal = z.object({
@@ -59,6 +60,7 @@ export const addItemGlobal = z.object({
   quantity: z.number(),
   unit: z.string(),
   type: z.string(),
+  ownerId: z.string(),
 });
 
 export const getItemsGlobally = z.object({

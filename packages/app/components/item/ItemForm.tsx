@@ -7,7 +7,6 @@ import {
   SubmitButton,
   FormSelect,
   FormRadioGroup,
-  useAppFormContext,
 } from '@packrat/ui';
 import { View } from 'react-native';
 
@@ -21,17 +20,16 @@ interface ItemFormProps {
   handleSubmit: (data: Item) => void;
   showSubmitButton?: boolean;
   isLoading: boolean;
-  isEdit: boolean;
+  isEdit?: boolean;
   defaultValues: Partial<Item>;
   validationSchema: any;
-  currentPack: {
+  currentPack?: {
     items: Array<{
       category: {
         name: string;
       };
     }>;
   } | null;
-  packId: number;
 }
 
 export const ItemForm = ({
@@ -42,7 +40,6 @@ export const ItemForm = ({
   defaultValues,
   validationSchema,
   currentPack,
-  packId,
 }: ItemFormProps) => {
   let hasWaterAdded = false;
   if (
@@ -89,7 +86,6 @@ export const ItemForm = ({
               <FormSelect
                 options={data}
                 name="unit"
-                onValueChange={console.log}
                 placeholder={'Unit'}
                 width="100"
               />
@@ -114,19 +110,8 @@ export const ItemForm = ({
               </RText>
             </SubmitButton>
           )}
-          <FormInput
-            name="packId"
-            defaultValue={packId}
-            style={{ display: 'none' }}
-          />
         </RStack>
-        <Test />
       </Form>
     </View>
   );
 };
-
-function Test() {
-  console.log(useAppFormContext().formState.errors);
-  return null;
-}

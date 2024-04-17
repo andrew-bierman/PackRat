@@ -82,7 +82,6 @@ export function PackDetails() {
                     keyExtractor={([key, val]) => val}
                     renderItem={({ item }) => {
                       {
-                        console.log(item[1], 'item');
                         switch (item[1]) {
                           case SECTION.TABLE:
                             return (

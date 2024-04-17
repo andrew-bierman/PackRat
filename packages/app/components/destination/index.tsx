@@ -5,12 +5,12 @@ import { useRouter } from 'app/hooks/router';
 import { createParam } from 'app/hooks/params';
 import useTheme from '../../hooks/useTheme';
 import { theme } from '../../theme';
-import MapContainer from '../map/MapContainer';
+import MapContainer from 'app/components/map/MapContainer';
 import {
   defaultShape,
   convertPhotonGeoJsonToShape,
 } from '../../utils/mapFunctions';
-import TripCard from '../TripCard';
+import TripCard from '../trip/TripCard';
 import LargeCard from '../card/LargeCard';
 import WeatherCard from '../weather/WeatherCard';
 import { Ionicons } from '@expo/vector-icons';

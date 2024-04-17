@@ -84,12 +84,11 @@ export default defineConfig({
       jsx: 'automatic',
       // need either this or the plugin below
       loader: {
-        '.js': 'jsx'
+        '.js': 'jsx',
       },
       plugins: [
-        esbuildFlowPlugin(
-          /\.(flow|jsx?)$/,
-          (path) => (/\.jsx$/.test(path) ? 'jsx' : 'jsx'),
+        esbuildFlowPlugin(/\.(flow|jsx?)$/, (path) =>
+          /\.jsx$/.test(path) ? 'jsx' : 'jsx',
         ),
       ],
     },
@@ -100,7 +99,11 @@ export default defineConfig({
     commonjsOptions: { transformMixedEsModules: true },
     rollupOptions: {
       plugins: [
-        rollupPlugin([/react-native-vector-icons/, /@expo\/vector-icons/, /react-native-table-component/]),
+        rollupPlugin([
+          /react-native-vector-icons/,
+          /@expo\/vector-icons/,
+          /react-native-table-component/,
+        ]),
       ],
     },
   },
