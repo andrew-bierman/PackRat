@@ -25,6 +25,8 @@ export default function Trips() {
   const {
     currentDestination,
     photonDetails,
+    isPhotonLoading,
+    hasPhotonError,
     weatherData,
     weatherLoading,
     weatherError,
@@ -45,8 +47,6 @@ export default function Trips() {
     start_date: tripStore.start_date,
     end_date: tripStore.end_date,
   };
-
-  console.log({ tripStore, isValid });
 
   return (
     <ScrollView nestedScrollEnabled={true}>
@@ -75,15 +75,14 @@ export default function Trips() {
           />
           <GearList />
           <TripDateRange dateRange={dateRange} setDateRange={setDateRange} />
-          {!photonDetails?.IsError && (
-            <TripMapCard
-              isLoading={photonDetails?.isLoading}
-              shape={photonDetails}
-            />
+          {!hasPhotonError && photonDetails ? (
+            <TripMapCard isLoading={isPhotonLoading} shape={photonDetails} />
+          ) : null}
+          {isValid && (
+            <RStack>
+              <SaveTripContainer tripStore={tripStore} />
+            </RStack>
           )}
-          <RStack>
-            <SaveTripContainer tripStore={tripStore} />
-          </RStack>
         </RStack>
       </RStack>
     </ScrollView>

@@ -18,7 +18,8 @@ import { useGetPhotonDetails } from 'app/hooks/destination';
 import { DropdownComponent } from '../Dropdown';
 import { addTripForm } from '@packrat/validations/src/validations/tripRoutesValidator';
 import { useFormSubmitTrigger } from '@packrat/ui/src/form';
-import { usePackId } from 'app/hooks/packs';
+import { useUserPackById } from 'app/hooks/packs';
+import { formatCreateTripValuesForAPI } from 'app/utils/tripUtils';
 
 interface SaveTripContainerProps {
   tripStore: any;
@@ -33,19 +34,12 @@ export const SaveTripContainer = ({ tripStore }: SaveTripContainerProps) => {
   const { addTrip, isSuccess, data: response } = useAddTrip();
   const [formRef, submitTrigger] = useFormSubmitTrigger();
   const router = useRouter();
+  const selectedPack = useUserPackById();
 
-  // create trip
-  const handleCreateTrip = async (
-    closeModal,
-    { name, description, isPublic },
-  ) => {
+  const handleCreateTrip = async (closeModal, values) => {
     const data = {
-      name,
-      description,
-      start_date: format(tripStore.start_date, 'MM/dd/yyyy'),
-      end_date: format(tripStore.end_date, 'MM/dd/yyyy'),
-      // trail: dropdown.currentTrail,
-      is_public: isPublic === '1',
+      ...formatCreateTripValuesForAPI(tripStore),
+      ...values,
     };
 
     addTrip(data);
@@ -70,7 +64,7 @@ export const SaveTripContainer = ({ tripStore }: SaveTripContainerProps) => {
         validationSchema={addTripForm}
         ref={formRef}
         onSubmit={handleCreateTrip}
-        defaultValues={{ isPublic: '0' }}
+        defaultValues={{ is_public: '0' }}
       >
         <RStack style={{ gap: 8 }}>
           <FormInput placeholder="Trip Name" name="name" />
@@ -116,28 +110,26 @@ export const SaveTripContainer = ({ tripStore }: SaveTripContainerProps) => {
             <FormSelect
               options={isPublicOptions}
               placeholder="Is Public"
-              name="isPublic"
+              name="is_public"
               style={{ marginTop: 4, marginBottom: 4 }}
               width={150}
             />
           </>
-          <>
-            <RText>Trip Weather</RText>
-            <RText>
-              Temparature - {tripStore?.weather?.main?.temp}, Humidity -{' '}
-              {tripStore?.weather?.main?.humidity}
-            </RText>
-          </>
+          {tripStore?.weather ? (
+            <>
+              <RText>Trip Weather</RText>
+              <RText>
+                Temparature - {tripStore?.weather?.main?.temp}, Humidity -{' '}
+                {tripStore?.weather?.main?.humidity}
+              </RText>
+            </>
+          ) : null}
           <RStack style={{ flexDirection: 'row' }}>
-            <RText>Pack</RText>
-            <RText>`Selected Pack Name`</RText>
+            <RText>Pack - </RText>
+            <RText>{selectedPack?.name}</RText>
           </RStack>
           <RStack style={{ flexDirection: 'row' }}>
             <RText>Trip Location - </RText>
-            <RText>{tripStore?.destination}</RText>
-          </RStack>
-          <RStack style={{ flexDirection: 'row' }}>
-            <RText>Selected Trail - </RText>
             <RText>{tripStore?.destination}</RText>
           </RStack>
           {tripStore.duration ? (

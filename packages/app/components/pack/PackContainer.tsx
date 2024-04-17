@@ -12,14 +12,12 @@ import { createParam } from '@packrat/crosspath';
 
 export default function PackContainer({ isCreatingTrip = false }) {
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
-  const [packIdParam] = usePackId();
+  const [packIdParam, setPackIdParam] = usePackId();
   const [currentPackId, setCurrentPackId] = useState(packIdParam);
   const user = useAuthUser();
 
   const [refetch, setRefetch] = useState(false);
   const styles = useCustomStyles(loadStyles);
-  const { useParams } = createParam<{ id: number }>();
-  const { params, setParams } = useParams('id');
 
   // TODO - improve refetch logic. Should be handled entirely by the hook
 
@@ -48,15 +46,20 @@ export default function PackContainer({ isCreatingTrip = false }) {
     setCurrentPackId(selectedPack?.id);
 
     if (isCreatingTrip && selectedPack?.id) {
-      setParams({
-        id: selectedPack?.id,
-      });
+      setPackIdParam(selectedPack?.id);
     }
   };
 
   const currentPack = packs?.find((pack) => pack.id === currentPackId);
 
   const dataValues = packs?.map((item) => item?.name) ?? [];
+
+  useEffect(() => {
+    const firstPack = packs.find(({ id }) => !!id);
+    if (!packIdParam && firstPack?.id && isCreatingTrip) {
+      setPackIdParam(firstPack.id);
+    }
+  }, [packIdParam, packs, isCreatingTrip]);
 
   return dataValues?.length > 0 ? (
     <View style={styles.mainContainer}>

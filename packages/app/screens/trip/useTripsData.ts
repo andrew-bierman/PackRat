@@ -11,7 +11,11 @@ import { useGEOLocationSearch } from 'app/hooks/geojson';
 export const useTripsData = () => {
   const [osm] = useGEOLocationSearch();
   const { currentDestination, latLng } = useCurrentDestination();
-  const { data: photonDetails } = useGetPhotonDetails({
+  const {
+    data: photonDetails,
+    isError: hasPhotonError,
+    isLoading: isPhotonLoading,
+  } = useGetPhotonDetails({
     properties: {
       osm_id: osm?.osmId,
       osm_type: osm?.osmType,
@@ -48,6 +52,8 @@ export const useTripsData = () => {
     currentDestination,
     latLng,
     photonDetails,
+    hasPhotonError,
+    isPhotonLoading,
     weatherData,
     weatherLoading,
     weatherError,

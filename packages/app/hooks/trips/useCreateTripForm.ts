@@ -1,11 +1,11 @@
 import { useCreateTripStore } from 'app/screens/trip/createTripStore';
 import { useValidateSchema } from 'app/hooks/common';
-import { format } from 'date-fns';
 import { addTripDetails } from '@packrat/validations';
 import { useEffect, useMemo } from 'react';
 import { type addTripKey } from 'app/screens/trip/createTripStore/store';
 import { useAuthUser } from 'app/auth/hooks';
 import { usePackId } from 'app/hooks/packs';
+import { formatCreateTripValuesForAPI } from 'app/utils/tripUtils';
 
 export const useCreateTripForm = (
   weather,
@@ -18,7 +18,7 @@ export const useCreateTripForm = (
 
   const { isValid, validate } = useValidateSchema(
     addTripDetails,
-    formatBeforeValidate,
+    formatCreateTripValuesForAPI,
   );
 
   const togglePlace = (value: any) => {
@@ -41,8 +41,6 @@ export const useCreateTripForm = (
     validate(createTripFormValues);
   }, [createTripFormValues, validate]);
 
-  console.log({ createTripFormValues });
-
   return {
     tripStore: createTripFormValues,
     isValid,
@@ -50,11 +48,3 @@ export const useCreateTripForm = (
     setDateRange,
   };
 };
-
-const formatBeforeValidate = (values) => ({
-  ...values,
-  start_date: format(values?.start_date, 'MM/dd/yyyy'),
-  end_date: format(values?.end_date, 'MM/dd/yyyy'),
-  duration: JSON.stringify(values.duration),
-  weather: JSON.stringify(values.weather),
-});
