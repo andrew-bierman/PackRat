@@ -1,81 +1,100 @@
 import { z } from 'zod';
 
-const JoiObjectId = z.string().regex(/^[0-9a-fA-F]{24}$/g);
+const emailValidator = z
+  .string()
+  .email()
+  .transform((str) => str.trim().toLowerCase());
+
+const passwordValidator = z
+  .string()
+  .min(7)
+  .refine((str) => !str.includes('password'), {
+    message: `The password cannot contain the word 'password'`,
+  });
 
 export const userSignUp = z.object({
   name: z.string().min(1).nonempty(),
-  email: z.string().email().nonempty(),
-  password: z.string().nonempty(),
+  email: emailValidator,
+  password: passwordValidator,
   username: z.string().nonempty(),
 });
 
 export const userSignIn = z.object({
-  email: z.string().email().nonempty(),
-  password: z.string().nonempty(),
-});
-
-export const getUserById = z.object({
-  userId: JoiObjectId.nonempty(),
+  email: emailValidator,
+  password: passwordValidator,
 });
 
 export const sentEmail = z.object({
-  email: z.string().email().nonempty(),
+  email: emailValidator,
 });
 
 export const resetPassword = z.object({
   resetToken: z.string().nonempty(),
-  password: z.string().nonempty(),
-});
-
-export const addToFavorite = z.object({
-  packId: JoiObjectId.nonempty(),
-  userId: JoiObjectId.nonempty(),
-});
-
-export const editUser = z.object({
-  userId: JoiObjectId.nonempty(),
-});
-
-export const deleteUser = z.object({
-  userId: JoiObjectId.nonempty(),
-});
-
-export const linkFirebaseAuth = z.object({
-  firebaseAuthToken: z.string().nonempty(),
-});
-
-export const createMongoDBUser = z.object({
-  email: z.string().email().nonempty(),
-  name: z.string().min(1).nonempty(),
-  password: z.string().nonempty(),
+  password: passwordValidator,
 });
 
 export const getFirebaseUserByEmail = z.object({
-  email: z.string().email().nonempty(),
-});
-
-export const login = z.object({
-  email: z.string().email().nonempty(),
-  password: z.string().nonempty(),
+  email: emailValidator,
 });
 
 export const checkCode = z.object({
-  email: z.string().email().nonempty(),
+  email: emailValidator,
   code: z.string().nonempty(),
 });
 
 export const emailExists = z.object({
-  email: z.string().email().nonempty(),
+  email: emailValidator,
+});
+
+export const getUserById = z.object({
+  userId: z.string().nonempty(),
+});
+
+export const addToFavorite = z.object({
+  packId: z.string(),
+  userId: z.string(),
+});
+
+export const editUser = z.object({
+  id: z.string(),
+  name: z.string().optional(),
+  password: passwordValidator.optional(),
+  email: z.string().optional(),
+  code: z.string().optional(),
+  role: z.enum(['user', 'admin']).optional(),
+  username: z.string().optional(),
+  profileImage: z.string().optional().nullable(),
+  preferredWeather: z.string().optional(),
+  preferredWeight: z.string().optional(),
+});
+
+export const deleteUser = z.object({
+  userId: z.string(),
+});
+
+export const linkFirebaseAuth = z.object({
+  firebaseAuthToken: z.string(),
+});
+
+export const createMongoDBUser = z.object({
+  email: z.string().email(),
+  name: z.string().min(1),
+  password: passwordValidator,
+});
+
+export const login = z.object({
+  email: z.string().email(),
+  password: passwordValidator,
 });
 
 export const updatePassword = z.object({
-  email: z.string().email().nonempty(),
-  password: z.string().nonempty(),
+  email: emailValidator,
+  password: passwordValidator,
 });
 
 export const userSettingsSchema = z.object({
   name: z.string().min(1).nonempty(),
-  email: z.string().email().nonempty(),
+  email: emailValidator,
   username: z.string().nonempty(),
   profileImage: z.string().optional(),
   preferredWeather: z.union([z.literal('celsius'), z.literal('fahrenheit')]),
@@ -89,9 +108,9 @@ export const userSettingsSchema = z.object({
 
 export const passwordChangeSchema = z
   .object({
-    oldPassword: z.string().min(1, 'Old password is required'),
-    newPassword: z.string().nonempty(),
-    confirmPassword: z.string().nonempty(),
+    oldPassword: passwordValidator,
+    newPassword: passwordValidator,
+    confirmPassword: passwordValidator,
   })
   .refine((data) => data.newPassword === data.confirmPassword, {
     message: 'New password and confirmation must match',

@@ -7,7 +7,6 @@ import useTheme from '../hooks/useTheme';
 import { theme } from '../theme/index';
 import Carousel from './carousel';
 import MapContainer from './map/MapContainer';
-import { useGEOLocationSearch } from 'app/hooks/geojson';
 import { PlacesAutocomplete } from './PlacesAutocomplete';
 
 interface TripCardProps {
@@ -40,15 +39,9 @@ export default function TripCard({
   const { isDark, currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
   const { currentTrail, currentPark, togglePlace } = form || {};
-  const [, setGEOLocation] = useGEOLocationSearch();
 
   const handleValueChange = (value) => {
     togglePlace(isPark, value);
-  };
-
-  const handleSelectLocation = (geoJSON) => {
-    setGEOLocation(geoJSON);
-    return '';
   };
 
   return (
@@ -65,12 +58,12 @@ export default function TripCard({
       }}
       style={
         isSearch
-        ? styles.searchContainer
-        : isMap
-          ? styles.mapCard
-          : styles.containerMobile
-            ? styles.containerMobile
-            : styles.mutualStyles
+          ? styles.searchContainer
+          : isMap
+            ? styles.mapCard
+            : styles.containerMobile
+              ? styles.containerMobile
+              : styles.mutualStyles
       }
     >
       <RStack

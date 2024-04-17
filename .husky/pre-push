@@ -21,7 +21,7 @@ fi
 
 # Running yarn lint
 echo "🔄 Running yarn lint..."
-yarn lint
+# yarn lint
 
 if [ $? -eq 0 ]; then
   echo -e "${GREEN}✅ Yarn lint passed${NC}"

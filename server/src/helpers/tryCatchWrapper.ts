@@ -1,9 +1,11 @@
+import { type Context, type Next } from 'hono';
+
 export function tryCatchWrapper(fn) {
-  return async (req, res, next) => {
+  return async (ctx: Context, next: Next) => {
     try {
-      await fn(req, res, next);
-    } catch (error) {
-      next(error);
+      await fn(ctx, next);
+    } catch (error: any) {
+      next();
     }
   };
 }

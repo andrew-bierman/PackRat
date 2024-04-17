@@ -1,6 +1,9 @@
 import { queryTrpc } from '../trpc';
 
-export const usePhotonDetail = (searchString, showSearchResults = false) => {
+export const usePhotonDetail = (
+  searchString = '',
+  showSearchResults = false,
+) => {
   const { isError, isLoading, data, refetch } =
     queryTrpc.getPhotonResults.useQuery(
       { searchString },

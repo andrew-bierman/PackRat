@@ -13,9 +13,9 @@ interface PackCardHeaderProps {
 }
 
 export const PackCardHeader = ({ data, title, link }: PackCardHeaderProps) => {
-  const { isLoading } = useFetchSinglePack(data?._id);
+  const { isLoading } = useFetchSinglePack(data?.id);
   const user = useAuthUser();
-  const handleDeletePack = useDeletePack(data._id);
+  const handleDeletePack = useDeletePack(data.id);
   const { handleActionsOpenChange, handleEdit, handleSaveTitle, isEditMode } =
     usePackTitleInput(data);
 

@@ -1,9 +1,16 @@
 import { useMemo, useState } from 'react';
 import { useItems } from 'app/hooks/items';
-import { trpc } from 'app/trpc';
+import { queryTrpc } from 'app/trpc';
 import { useAuthUser } from 'app/auth/hooks';
+import { useFetchSinglePack } from 'app/hooks/packs';
 
 export const useSearchItem = () => {
+  const packId = window.location.pathname.substring('/pack/'.length);
+  const currentPack = useFetchSinglePack(packId);
+  const { mutateAsync: addItemToPack } =
+    queryTrpc.addGlobalItemToPack.useMutation();
+  const utils = queryTrpc.useUtils();
+
   const user = useAuthUser();
   const [searchString, setSearchString] = useState('');
 
@@ -16,17 +23,30 @@ export const useSearchItem = () => {
   }, [searchString]);
 
   const { data } = useItems(itemFilters);
-  const results = data?.items || [];
+  const results = useMemo(() => {
+    const packItems = currentPack?.data?.items;
+    if (!Array.isArray(data?.items)) {
+      return [];
+    }
+
+    return data.items.filter((globalItem) => {
+      if (!Array.isArray(packItems)) {
+        return true;
+      }
+
+      return !packItems.some(({ id }) => id === globalItem.id);
+    });
+  }, [data]);
 
   const handleSearchResultClick = (item) => {
-    const ownerId = user._id;
-    const packId = window.location.pathname.substring('/path/'.length);
-    const itemId = item?._id;
+    const ownerId = user.id;
+    const packId = window.location.pathname.substring('/pack/'.length);
+    const itemId = item?.id;
 
-    // TODO add optimistic updates
     (async () => {
       try {
-        await trpc.addGlobalItemToPack.query({ itemId, ownerId, packId });
+        await addItemToPack({ itemId, ownerId, packId });
+        utils.getPackById.invalidate();
       } catch {}
     })();
 

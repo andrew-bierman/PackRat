@@ -1,3 +1,4 @@
+import React from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import {
   RInput,
@@ -36,40 +37,50 @@ export default function Settings() {
   return user ? (
     <RScrollView>
       <RStack
-        space="$3"
+        gap={8}
         width="fit-content"
+        maw="100%"
         paddingVertical={20}
+        paddingHorizontal={8}
         marginHorizontal="auto"
       >
         <RStack>
           <RH2>Profile</RH2>
           <RSeparator marginVertical={8} />
         </RStack>
-        <Form validationSchema={userSettingsSchema} defaultValues={{ ...user }}>
-          <RStack space="$3" width="fit-content" marginHorizontal="auto">
+        <Form
+          validationSchema={userSettingsSchema}
+          defaultValues={{ ...user, profileImage: user.profileImage || '' }}
+        >
+          <RStack
+            space="$3"
+            maw="100%"
+            width="fit-content"
+            marginHorizontal="auto"
+          >
             <ImageUpload
               label="Profile Picture"
               name="profileImage"
               previewElement={<Avatar size={90} />}
             />
-            <RStack space="$3" style={{ flexDirection: 'row' }}>
-              <RStack space="$2">
+            <RStack gap={16} style={{ flexDirection: 'row' }}>
+              <RStack f={1}>
                 <RLabel htmlFor="firstName">Name</RLabel>
                 <FormInput id="name" name="name" />
               </RStack>
-              <RStack space="$2">
+              <RStack f={1}>
                 <RLabel htmlFor="username">Username</RLabel>
                 <FormInput id="username" name="username" />
               </RStack>
             </RStack>
-            <RStack space="$2">
+            <RStack>
               <RLabel htmlFor="email">Email</RLabel>
               <FormInput id="email" name="email" />
             </RStack>
-            <RStack space="$2">
+            <RStack>
               <RH5>Preferred units</RH5>
-              <RStack space style={{ flexDirection: 'row' }}>
-                <RStack space="$2" flexGrow={1}>
+              <RStack gap={16} style={{ flexDirection: 'row' }}>
+                <RStack f={1}>
                   <RLabel>Weather: </RLabel>
                   <FormSelect
                     options={weatherOptions}
@@ -77,7 +88,7 @@ export default function Settings() {
                     style={{ width: '100%' }}
                   />
                 </RStack>
-                <RStack space="$2" flexGrow={1}>
+                <RStack f={1}>
                   <RLabel>Weight: </RLabel>
                   <FormSelect
                     options={weightOptions}
@@ -128,9 +139,13 @@ export default function Settings() {
                 secureTextEntry={true}
               />
             </RStack>
-            <RButton color="white" style={{ backgroundColor: '#0284c7' }}>
+            <SubmitButton
+              onSubmit={handleUpdatePassword}
+              color="white"
+              style={{ backgroundColor: '#0284c7' }}
+            >
               Change password
-            </RButton>
+            </SubmitButton>
           </RStack>
         </Form>
       </RStack>

@@ -3,9 +3,10 @@ import { TableContainer } from '../../components/pack_table/Table';
 import { View } from 'react-native';
 import ScoreContainer from '../../components/ScoreContainer';
 import WeatherCard from '../../components/weather/WeatherCard';
-import TripCard from '../../components/TripCard';
+import TripCard from '../../components/trip/TripCard';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { theme } from '../../theme';
+import { TripMapCard } from 'app/components/trip/TripCards';
 
 const TableContainerComponent = ({ currentPack }) => (
   <View>
@@ -23,21 +24,13 @@ const WeatherCardComponent = ({ weatherObject, weatherWeek, data }) => (
 );
 
 const TripCardComponent = ({ data, weatherObject, currentTheme }) =>
-  data?.geojson?.features.length && (
-    <TripCard
-      Icon={() => (
-        <FontAwesome5
-          name="route"
-          size={24}
-          color={currentTheme.colors.cardIconColor}
-        />
-      )}
-      title="Map"
-      isMap={true}
+  data?.geojson?.features?.length && (
+    // data?.geojson && (
+    <TripMapCard
       shape={data.geojson}
-      cords={
-        data?.weather ? JSON?.parse(data?.weather)?.coord : weatherObject?.coord
-      }
+      // cords={
+      //   data?.weather ? JSON?.parse(data?.weather)?.coord : weatherObject?.coord
+      // }
     />
   );
 
