@@ -28,6 +28,7 @@ export const useChat = (itemTypeId = null) => {
    * @return {Array} An array of objects representing each message in the conversation.
    */
   const parseConversationHistory = (conversation) => {
+    if (!conversation) return [];
     const historyArray = conversation.history.split(/(AI:|User:)/);
     return historyArray.reduce((accumulator, current, index) => {
       if (index % 2 === 0) return accumulator; // Skip the empty strings from split
