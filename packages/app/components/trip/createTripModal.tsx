@@ -42,6 +42,7 @@ export const SaveTripContainer = ({ tripStore }: SaveTripContainerProps) => {
       ...values,
     };
 
+    console.warn('createTripData', data)
     addTrip(data);
     closeModal();
   };
