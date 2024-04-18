@@ -116,7 +116,6 @@ export default function Card({
           <View
             style={{
               width: '100%',
-              maxWidth: 600,
               marginVertical: 'auto',
               borderRadius: 15,
               overflow: 'hidden',
