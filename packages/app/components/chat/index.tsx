@@ -117,17 +117,13 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
     setTypeId,
   } = useChat({ itemTypeId });
 
-  const options = Array.isArray(conversations)
-    ? conversations.map((conversation) => conversation.id)
-    : [];
+  const options = conversations ? [conversations.id] : [];
 
   return (
     <View style={styles.container}>
       <RStack style={{ alignItems: 'center' }}>
         {showChatSelector && (
-          <>
-            {!options?.length && <Text>You don't have conversations yet</Text>}
-          </>
+          <>{!options && <Text>You don't have conversations yet</Text>}</>
         )}
         <ScrollView style={{ maxWidth: 500, maxHeight: 500 }}>
           <MessageList messages={parsedMessages} />

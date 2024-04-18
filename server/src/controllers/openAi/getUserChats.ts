@@ -1,4 +1,6 @@
 import { publicProcedure } from '../../trpc';
+import { FailedToRetrieveUserChats } from '../../helpers/errors';
+import { responseHandler } from '../../helpers/responseHandler';
 import { getUserChatsService } from '../../services/openAi/openAi.service';
 import { z } from 'zod';
 
@@ -8,18 +10,18 @@ import { z } from 'zod';
  * @param {string} req.params.itemTypeId - The ID of the pack or trip.
  * @returns {object} The conversations of the user.
  */
-export const getUserChats = async (req, res, next) => {
-  try {
-    const { userId, itemTypeId } = req.params;
+// export const getUserChats = async (req, res, next) => {
+//   try {
+//     const { userId, itemTypeId } = req.params;
 
-    const result = await getUserChatsService(userId, itemTypeId);
+//     const result = await getUserChatsService(userId, itemTypeId);
 
-    res.locals.data = result;
-    responseHandler(res);
-  } catch (error) {
-    next(FailedToRetrieveUserChats);
-  }
-};
+//     res.locals.data = result;
+//     responseHandler(res);
+//   } catch (error) {
+//     next(FailedToRetrieveUserChats);
+//   }
+// };
 
 export function getUserChatsRoute() {
   return publicProcedure

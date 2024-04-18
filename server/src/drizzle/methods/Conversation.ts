@@ -48,11 +48,11 @@ export class Conversation {
     }
   }
 
-  async findConversation(userId: string, conversationId: string) {
+  async findConversation(userId: string, itemTypeId: string) {
     try {
       const filter = and(
         eq(ConversationTable.userId, userId),
-        eq(ConversationTable.id, conversationId),
+        eq(ConversationTable.itemTypeId, itemTypeId),
       );
       const conversation = (await this.createInstance())
         .select()

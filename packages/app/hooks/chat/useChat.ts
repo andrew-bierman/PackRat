@@ -6,14 +6,16 @@ import { useAuthUser } from 'app/auth/hooks';
 export const useChat = (itemTypeId = null) => {
   const user = useAuthUser();
   const [typeId, setTypeId] = useState(itemTypeId);
-  console.log('typeId:', typeId);
+
   const [userInput, setUserInput] = useState('');
   // const [parsedMessages, setParsedMessages] = useState([]);
 
   const { data: chatsData, refetch } = useGetUserChats(
-    user._id,
+    user.id,
     typeId.itemTypeId,
   );
+
+  // console.log('chatsData:', chatsData.conversations);
 
   const { getAIResponse } = useGetAIResponse();
 
@@ -25,21 +27,19 @@ export const useChat = (itemTypeId = null) => {
    * @param {string} historyString - The string containing the conversation history.
    * @return {Array} An array of objects representing each message in the conversation.
    */
-  const parseConversationHistory = (conversations) => {
-    return conversations.flatMap((conversation) => {
-      const historyArray = conversation.history.split(/(AI:|User:)/);
-      return historyArray.reduce((accumulator, current, index) => {
-        if (index % 2 === 0) return accumulator; // Skip the empty strings from split
-        const isAI = current === 'AI:';
-        const content = historyArray[index + 1]; // Content is the next item
-        const role = isAI ? 'ai' : 'user';
-        if (content.trim()) {
-          // Check if content is not just whitespace
-          accumulator.push({ role, content: content.trim() });
-        }
-        return accumulator;
-      }, []);
-    });
+  const parseConversationHistory = (conversation) => {
+    const historyArray = conversation.history.split(/(AI:|User:)/);
+    return historyArray.reduce((accumulator, current, index) => {
+      if (index % 2 === 0) return accumulator; // Skip the empty strings from split
+      const isAI = current === 'AI:';
+      const content = historyArray[index + 1]; // Content is the next item
+      const role = isAI ? 'ai' : 'user';
+      if (content.trim()) {
+        // Check if content is not just whitespace
+        accumulator.push({ role, content: content.trim() });
+      }
+      return accumulator;
+    }, []);
   };
 
   // const conversation = conversations?.find(
@@ -69,7 +69,7 @@ export const useChat = (itemTypeId = null) => {
    */
   const handleSendMessage = async (userMessage) => {
     await getAIResponse({
-      userId: user._id,
+      userId: user.id,
       userInput: userMessage,
       itemTypeId: typeId.itemTypeId,
     });

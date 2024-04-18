@@ -13,5 +13,6 @@ interface Env {
   WEATHER_URL: 'test';
   WEATHER_WEEK_URL: 'test';
   OPENWEATHER_KEY: 'test';
+  OPENAI_API_KEY: 'test';
   DB: D1Database;
 }
