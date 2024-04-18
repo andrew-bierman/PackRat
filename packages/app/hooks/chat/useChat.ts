@@ -15,11 +15,9 @@ export const useChat = (itemTypeId = null) => {
     typeId.itemTypeId,
   );
 
-  // console.log('chatsData:', chatsData.conversations);
-
   const { getAIResponse } = useGetAIResponse();
 
-  const conversations = chatsData?.conversations;
+  const conversations = chatsData?.conversations?.history || '';
 
   /**
    * Parses a conversation history string and returns an array of objects representing each message in the conversation.
@@ -29,7 +27,7 @@ export const useChat = (itemTypeId = null) => {
    */
   const parseConversationHistory = (conversation) => {
     if (!conversation) return [];
-    const historyArray = conversation.history.split(/(AI:|User:)/);
+    const historyArray = conversation.split(/(AI:|User:)/);
     return historyArray.reduce((accumulator, current, index) => {
       if (index % 2 === 0) return accumulator; // Skip the empty strings from split
       const isAI = current === 'AI:';

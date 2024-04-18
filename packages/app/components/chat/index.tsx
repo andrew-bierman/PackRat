@@ -57,7 +57,6 @@ interface ChatModalTriggerProps {
 }
 
 const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
-  console.log('messages', message);
   const styles = useCustomStyles(loadStyles);
   const isAI = message.role === 'ai';
   return (

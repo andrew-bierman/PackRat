@@ -57,10 +57,6 @@ export function PackDetails() {
 
   if (isLoading) return <RText>Loading...</RText>;
 
-  console.log(
-    'hhhhhhhhhhhhhhhhhhheeeeeeeeeeeeeeeeeeeeellllllllllllllllllooooooooooooooooooooooo',
-  );
-
   return (
     <View
       style={[
