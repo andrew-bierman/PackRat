@@ -899,7 +899,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-arrow-functions@npm:^7.0.0, @babel/plugin-transform-arrow-functions@npm:^7.24.1":
+"@babel/plugin-transform-arrow-functions@npm:^7.0.0, @babel/plugin-transform-arrow-functions@npm:^7.0.0-0, @babel/plugin-transform-arrow-functions@npm:^7.24.1":
   version: 7.24.1
   resolution: "@babel/plugin-transform-arrow-functions@npm:7.24.1"
   dependencies:
@@ -1241,7 +1241,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-nullish-coalescing-operator@npm:^7.24.1":
+"@babel/plugin-transform-nullish-coalescing-operator@npm:^7.0.0-0, @babel/plugin-transform-nullish-coalescing-operator@npm:^7.24.1":
   version: 7.24.1
   resolution: "@babel/plugin-transform-nullish-coalescing-operator@npm:7.24.1"
   dependencies:
@@ -1262,17 +1262,6 @@ __metadata:
   peerDependencies:
     "@babel/core": ^7.0.0-0
   checksum: 10/3247bd7d409574fc06c59e0eb573ae7470d6d61ecf780df40b550102bb4406747d8f39dcbec57eb59406df6c565a86edd3b429e396ad02e4ce201ad92050832e
-  languageName: node
-  linkType: hard
-
-"@babel/plugin-transform-object-assign@npm:^7.16.7":
-  version: 7.24.1
-  resolution: "@babel/plugin-transform-object-assign@npm:7.24.1"
-  dependencies:
-    "@babel/helper-plugin-utils": "npm:^7.24.0"
-  peerDependencies:
-    "@babel/core": ^7.0.0-0
-  checksum: 10/50d4eba8146521eea8ac6dedbab665ca35d7b00e8db875a04162ef0767be219b382f24266ba293fd44856bb3e9efa3e2b1c6ce1a8827856616736d0d7603847a
   languageName: node
   linkType: hard
 
@@ -1314,7 +1303,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-optional-chaining@npm:^7.24.1":
+"@babel/plugin-transform-optional-chaining@npm:^7.0.0-0, @babel/plugin-transform-optional-chaining@npm:^7.24.1":
   version: 7.24.1
   resolution: "@babel/plugin-transform-optional-chaining@npm:7.24.1"
   dependencies:
@@ -1485,7 +1474,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-shorthand-properties@npm:^7.0.0, @babel/plugin-transform-shorthand-properties@npm:^7.24.1":
+"@babel/plugin-transform-shorthand-properties@npm:^7.0.0, @babel/plugin-transform-shorthand-properties@npm:^7.0.0-0, @babel/plugin-transform-shorthand-properties@npm:^7.24.1":
   version: 7.24.1
   resolution: "@babel/plugin-transform-shorthand-properties@npm:7.24.1"
   dependencies:
@@ -1519,7 +1508,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-template-literals@npm:^7.0.0, @babel/plugin-transform-template-literals@npm:^7.24.1":
+"@babel/plugin-transform-template-literals@npm:^7.0.0, @babel/plugin-transform-template-literals@npm:^7.0.0-0, @babel/plugin-transform-template-literals@npm:^7.24.1":
   version: 7.24.1
   resolution: "@babel/plugin-transform-template-literals@npm:7.24.1"
   dependencies:
@@ -18427,6 +18416,7 @@ __metadata:
     expo-checkbox: "npm:~2.4.0"
     expo-constants: "npm:~14.4.2"
     expo-crypto: "npm:~12.4.1"
+    expo-dev-client: "npm:~2.4.13"
     expo-document-picker: "npm:~11.5.4"
     expo-file-system: "npm:~15.4.4"
     expo-font: "npm:~11.4.0"
@@ -18465,7 +18455,7 @@ __metadata:
     react-native-ios-utilities: "npm:^4.3.0"
     react-native-paper: "npm:^5.10.6"
     react-native-paper-dates: "npm:^0.18.12"
-    react-native-reanimated: "npm:~3.3.0"
+    react-native-reanimated: "npm:~3.8.1"
     react-native-safe-area-context: "npm:4.6.3"
     react-native-screens: "npm:~3.22.0"
     react-native-select-dropdown: "npm:^3.3.4"
@@ -18579,6 +18569,67 @@ __metadata:
   languageName: node
   linkType: hard
 
+"expo-dev-client@npm:~2.4.13":
+  version: 2.4.13
+  resolution: "expo-dev-client@npm:2.4.13"
+  dependencies:
+    expo-dev-launcher: "npm:2.4.15"
+    expo-dev-menu: "npm:3.2.4"
+    expo-dev-menu-interface: "npm:1.3.0"
+    expo-manifests: "npm:~0.7.0"
+    expo-updates-interface: "npm:~0.10.0"
+  peerDependencies:
+    expo: "*"
+  checksum: 10/65c474cb28f18f1a000a1ff1eec97cd39c39ae992eff175c5ca0b16615ad6a5b81cf2b3bbb06b8cef0e71aeba4de3a92939268b65dbee1862ab95e8fbe83a7b6
+  languageName: node
+  linkType: hard
+
+"expo-dev-launcher@npm:2.4.15":
+  version: 2.4.15
+  resolution: "expo-dev-launcher@npm:2.4.15"
+  dependencies:
+    expo-dev-menu: "npm:3.2.3"
+    resolve-from: "npm:^5.0.0"
+    semver: "npm:^7.5.3"
+  peerDependencies:
+    expo: "*"
+  checksum: 10/d1ed90be355511296d59755148f97d1c198ea782140383e0cd495c457fc39f8eaceaaaf850f4b864a408ca72b6803e0c216e596c254194f8fb4fdc66dbb57b60
+  languageName: node
+  linkType: hard
+
+"expo-dev-menu-interface@npm:1.3.0":
+  version: 1.3.0
+  resolution: "expo-dev-menu-interface@npm:1.3.0"
+  peerDependencies:
+    expo: "*"
+  checksum: 10/ebe884399d4ab75d4eee7ced509727c4eb9f8f9b0113ed06c52af819e579911e58adb3174573b423d3c5f0099fc34c35b1ecd744125f90485e94b3124f501abf
+  languageName: node
+  linkType: hard
+
+"expo-dev-menu@npm:3.2.3":
+  version: 3.2.3
+  resolution: "expo-dev-menu@npm:3.2.3"
+  dependencies:
+    expo-dev-menu-interface: "npm:1.3.0"
+    semver: "npm:^7.5.3"
+  peerDependencies:
+    expo: "*"
+  checksum: 10/d2d5cfe47d591691e5e8932a15dad8c4f3c64e52da22fc0eeefdc71158a6c7cbaa466383c2d1ca9da517435d7bf0e0373aacf982c700d19c1300efb0fa3c978a
+  languageName: node
+  linkType: hard
+
+"expo-dev-menu@npm:3.2.4":
+  version: 3.2.4
+  resolution: "expo-dev-menu@npm:3.2.4"
+  dependencies:
+    expo-dev-menu-interface: "npm:1.3.0"
+    semver: "npm:^7.5.3"
+  peerDependencies:
+    expo: "*"
+  checksum: 10/f5817193d26d70431009cc049a6f498889e5ea1f66f2481daa5d92be3fbdb08645f3fdd29ca845f3c56ac15dbd69909f1f3d27e4e37b2413aa59d8b139d47bba
+  languageName: node
+  linkType: hard
+
 "expo-document-picker@npm:~11.5.4":
   version: 11.5.4
   resolution: "expo-document-picker@npm:11.5.4"
@@ -18652,6 +18703,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"expo-json-utils@npm:~0.7.0":
+  version: 0.7.1
+  resolution: "expo-json-utils@npm:0.7.1"
+  checksum: 10/27a71332bb1cf652ae611a96eb78b526fb2a47a5df4f74fcb88551d041d0ca399df3e54f1ff1d0b9c41a219e616ef9c4c667215ca02da7f4f2aadf110f9850ee
+  languageName: node
+  linkType: hard
+
 "expo-keep-awake@npm:~12.3.0":
   version: 12.3.0
   resolution: "expo-keep-awake@npm:12.3.0"
@@ -18689,6 +18747,15 @@ __metadata:
   peerDependencies:
     expo: "*"
   checksum: 10/ae882938b4f1e14bbfc4e821992dc54c2ef9d329c6d97ffb743b7274dfb98782177ba584e443495a3a8e4c6a0f2537617954370b614f026798125fd959e787f7
+  languageName: node
+  linkType: hard
+
+"expo-manifests@npm:~0.7.0":
+  version: 0.7.2
+  resolution: "expo-manifests@npm:0.7.2"
+  dependencies:
+    expo-json-utils: "npm:~0.7.0"
+  checksum: 10/0b9ff12d397b2621459cc279ca453b8ff80958ff6e0c076c5745fe81a77c6374896606310050db10aea6fcef194a43705784698fecc2bff52bd0dcc0e1d9925d
   languageName: node
   linkType: hard
 
@@ -18827,6 +18894,15 @@ __metadata:
   peerDependencies:
     expo: "*"
   checksum: 10/8dd61716de0c1b2120c03d488b3265d01329cb8d208243dcf351e872fb41cfc6e471f7d5e0fd5ed2d187e4cb7742a17bf096c72aa31e254a87e68d6b779707e8
+  languageName: node
+  linkType: hard
+
+"expo-updates-interface@npm:~0.10.0":
+  version: 0.10.1
+  resolution: "expo-updates-interface@npm:0.10.1"
+  peerDependencies:
+    expo: "*"
+  checksum: 10/e2655fd9740458b1e0f64c9f54b46bbe0f7fe9e290a586f18c8a494e66c2fc4222e15ea2610fd8c0c26d6f684f63f2eaa43da59385632feeee2d6ca76763e0af
   languageName: node
   linkType: hard
 
@@ -29071,24 +29147,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-reanimated@npm:~3.3.0":
-  version: 3.3.0
-  resolution: "react-native-reanimated@npm:3.3.0"
+"react-native-reanimated@npm:~3.8.1":
+  version: 3.8.1
+  resolution: "react-native-reanimated@npm:3.8.1"
   dependencies:
-    "@babel/plugin-transform-object-assign": "npm:^7.16.7"
+    "@babel/plugin-transform-arrow-functions": "npm:^7.0.0-0"
+    "@babel/plugin-transform-nullish-coalescing-operator": "npm:^7.0.0-0"
+    "@babel/plugin-transform-optional-chaining": "npm:^7.0.0-0"
+    "@babel/plugin-transform-shorthand-properties": "npm:^7.0.0-0"
+    "@babel/plugin-transform-template-literals": "npm:^7.0.0-0"
     "@babel/preset-typescript": "npm:^7.16.7"
     convert-source-map: "npm:^2.0.0"
     invariant: "npm:^2.2.4"
   peerDependencies:
     "@babel/core": ^7.0.0-0
-    "@babel/plugin-proposal-nullish-coalescing-operator": ^7.0.0-0
-    "@babel/plugin-proposal-optional-chaining": ^7.0.0-0
-    "@babel/plugin-transform-arrow-functions": ^7.0.0-0
-    "@babel/plugin-transform-shorthand-properties": ^7.0.0-0
-    "@babel/plugin-transform-template-literals": ^7.0.0-0
     react: "*"
     react-native: "*"
-  checksum: 10/44496b834461dc6968f9add6a318d4ebc40c0989021fd4fab78832cef9507873cb7b9737ad2f7d9c8ac072b84870bfbddd2c27b94de4024d9103017388d7e3ed
+  checksum: 10/522635aed0ec2aa1c0887f34d770289ad8453f868ef6656c19eb4f5a35d0c264cb8e670ce6278433cb5597a8190165b3753ac52fc27ddb882d4467aae6f43117
   languageName: node
   linkType: hard
 

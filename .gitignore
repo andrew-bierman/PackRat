@@ -5,10 +5,9 @@ node_modules
 # dist
 old/
 .zip
-app.json
 Podfile
 Podfile.lock
-gradle.properties
+
 client.zip
 *.zip
 .vscode
