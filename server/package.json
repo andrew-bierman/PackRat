@@ -37,10 +37,8 @@
   "author": "Andrew Bierman",
   "license": "ISC",
   "dependencies": {
-    "@elysiajs/trpc": "^0.7.0",
-    "@hono/node-server": "^1.11.0",
-    "@hono/trpc-server": "^0.1.1",
-    "@libsql/client": "^0.4.0-pre.5",
+    "@hono/node-server": "^1.10.1",
+    "@hono/trpc-server": "^0.1.0",
     "@packrat/validations": "*",
     "@paralleldrive/cuid2": "^2.2.2",
     "@prisma/client": "^5.7.0",
