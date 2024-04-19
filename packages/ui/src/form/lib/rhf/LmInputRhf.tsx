@@ -11,19 +11,26 @@ export function LmInputRhf<T extends FieldValues = FieldValues>({
   rules = {},
   defaultValue,
   isNumeric = false, // Add an isNumeric prop to specify if the input should be treated as numeric
+  isDecimal = false,
+  keyboardType,
   ...inputProps
-}: LmInputRhfProps<T> & { isNumeric?: boolean }) {
+}: LmInputRhfProps<T> & { isNumeric?: boolean; isDecimal?: boolean }) {
   if (inputProps.required) {
     rules.required = 'This field is required';
   }
 
-  const handleOnChange = isNumeric
-    ? (text) => {
-        const number = parseFloat(text);
-        // Check if the parsed number is NaN. If so, return an empty string; otherwise, return the number.
-        return isNaN(number) ? '' : number;
-      }
-    : (text) => text;
+  const handleOnChange =
+    isNumeric || isDecimal
+      ? (text) => {
+          if (isDecimal && /^\d+\.$/.test(text)) {
+            return text;
+          }
+
+          const number = parseFloat(text);
+          // Check if the parsed number is NaN. If so, return an empty string; otherwise, return the number.
+          return isNaN(number) ? '' : number;
+        }
+      : (text) => text;
 
   return (
     <Controller<T>
@@ -38,6 +45,11 @@ export function LmInputRhf<T extends FieldValues = FieldValues>({
         <LmInput
           {...inputProps}
           ref={ref}
+          keyboardType={getInputKeyboardType({
+            isNumeric,
+            isDecimal,
+            defaultKeyBoardType: keyboardType,
+          })}
           value={(value ?? '').toString()} // Ensure value is defined before calling toString()
           onBlur={onBlur}
           error={!!error}
@@ -48,3 +60,19 @@ export function LmInputRhf<T extends FieldValues = FieldValues>({
     />
   );
 }
+
+const getInputKeyboardType = ({
+  isNumeric = false,
+  isDecimal = false,
+  defaultKeyBoardType,
+}) => {
+  if (isNumeric) {
+    return 'number-pwd';
+  }
+
+  if (isDecimal) {
+    return 'decimal-pwd';
+  }
+
+  return defaultKeyBoardType;
+};
