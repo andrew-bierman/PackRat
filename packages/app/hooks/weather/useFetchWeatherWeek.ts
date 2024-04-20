@@ -3,6 +3,8 @@ import { queryTrpc } from '../../trpc';
 export const useFetchWeatherWeak = (latLng, isDisabled = false) => {
   const { lat, lon } = latLng || {};
   const isEnabled = !isDisabled && Boolean(lat && lon);
+  console.log({ isEnabled, isDisabled, latLng });
+
   const { refetch, data, error, isLoading, isError } =
     queryTrpc.getWeatherWeek.useQuery(
       { lat, lon },
