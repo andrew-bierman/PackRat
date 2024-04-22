@@ -18,9 +18,6 @@ jobs:
         with:
           node-version: 20.x
 
-      - name: Install dependencies
-        uses: ./.github/actions/install-deps
-
       - name: Create initial comment
         uses: actions/github-script@v6
         id: create_comment
@@ -35,6 +32,9 @@ jobs:
               body: commentBody
             });
             core.setOutput('comment_id', commentId);
+
+      - name: Install dependencies
+        uses: ./.github/actions/install-deps
 
       - name: Run tests
         id: run_tests
