@@ -68,6 +68,7 @@
     "upgrade:tamagui:canary": "yarn up '*tamagui*'@canary '@tamagui/*'@canary",
     "upgrade:tamagui": "yarn up '*tamagui*'@latest '@tamagui/*'@latest",
     "upgrade:cloudflare": "yarn up '@cloudflare/*'@latest wrangler@latest",
+    "upgrade:hono": "yarn up '@hono/*'@latest 'hono'@latest",
     "web": "cd apps/next && yarn dev"
   },
   "engines": {
