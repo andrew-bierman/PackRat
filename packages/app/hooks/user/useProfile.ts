@@ -7,8 +7,6 @@ import { useGetUser } from './useGetUser';
 
 export const useProfile = (id = null) => {
   const authUser = useAuthUser();
-  const authUserId = authUser?.id;
-
   const userId = id ?? authUser?.id;
 
   const isCurrentUser = useMatchesCurrentUser(userId); // TODO: Implement this hook in more components
@@ -35,11 +33,12 @@ export const useProfile = (id = null) => {
     data: userData,
     isLoading: userIsLoading,
     error: userError,
-  } = useGetUser(id);
+  } = useGetUser(userId);
 
   const user = !isCurrentUser ? userData : authUser;
 
-  const isLoading = userIsLoading || allPacksLoading || tripsIsLoading || allFavoritesLoading;
+  const isLoading =
+    userIsLoading || allPacksLoading || tripsIsLoading || allFavoritesLoading;
 
   const error = userError || allPacksError || tripsError || allFavoritesError;
 
