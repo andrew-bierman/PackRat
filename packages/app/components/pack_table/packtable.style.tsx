@@ -1,3 +1,4 @@
+import { color } from '@tamagui/themes/types/tokens';
 import { FlatList, Platform, View } from 'react-native';
 const isWeb = Platform.OS === 'web';
 const loadStyles = (theme) => {
@@ -51,6 +52,7 @@ const loadStyles = (theme) => {
       flexDirection: 'row',
       height: 60,
       alignItems: 'center',
+      // color: currentTheme.colors.text,
       backgroundColor: currentTheme.colors.white,
       borderBottomWidth: 1,
       borderBottomColor: currentTheme.colors.border,

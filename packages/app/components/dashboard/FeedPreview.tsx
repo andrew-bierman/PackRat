@@ -6,6 +6,7 @@ import useTheme from '../../hooks/useTheme';
 import Carousel from '../carousel';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useFeed } from 'app/hooks/feed';
+import { background } from 'native-base/lib/typescript/theme/styled-system';
 
 const { height, width } = Dimensions.get('window');
 
@@ -39,6 +40,7 @@ const FeedPreviewScroll: React.FC<FeedPreviewScrollProps> = ({ itemWidth }) => {
               >
                 <RText style={styles.feedItemTitle}>{item.name}</RText>
                 <RText
+                  style={styles.feedItemType}
                   fontSize="$1"
                   fontWeight="bold"
                   backgroundColor={'#F2F1EB'}
@@ -66,6 +68,8 @@ const FeedPreview: React.FC = () => {
 
 const loadStyles = (theme: any, appTheme: any) => {
   const { currentTheme } = theme;
+
+  console.log('currentTheme', currentTheme);
   return {
     feedPreview: {
       flexDirection: 'row',
@@ -94,6 +98,13 @@ const loadStyles = (theme: any, appTheme: any) => {
       fontWeight: 'bold',
       fontSize: 16,
       color: currentTheme.colors.text,
+      marginBottom: 5,
+    },
+    feedItemType: {
+      fontWeight: 'bold',
+      fontSize: 16,
+      color: currentTheme.colors.text,
+      backgroundColor: currentTheme.colors.background,
       marginBottom: 5,
     },
   };
