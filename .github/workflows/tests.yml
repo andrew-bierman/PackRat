@@ -39,25 +39,27 @@ jobs:
       - name: Run tests
         id: run_tests
         run: |
-          yarn test 2>&1 | tee test_logs.txt
+          yarn test > test_logs.txt 2>&1
           echo "::set-output name=logs::$(cat test_logs.txt)"
+          echo "::set-output name=status::$?"
 
       - name: Update comment with test results
         uses: actions/github-script@v6
         env:
           COMMENT_ID: ${{ steps.create_comment.outputs.comment_id }}
           TEST_LOGS: ${{ steps.run_tests.outputs.logs }}
+          TEST_STATUS: ${{ steps.run_tests.outputs.status }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const commentId = process.env.COMMENT_ID;
             const testLogs = process.env.TEST_LOGS;
-            const testStatus = `${{ job.status }}`;
+            const testStatus = process.env.TEST_STATUS;
 
             let commentBody = '';
             let emoji = '';
 
-            if (testStatus === 'success') {
+            if (testStatus === '0') {
               commentBody = '✅ Tests passed successfully! 🎉\n\n';
               emoji = '💚';
             } else {
@@ -78,5 +80,5 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              labels: [`tests-${testStatus}${emoji}`]
+              labels: [`tests-${testStatus === '0' ? 'success' : 'failure'}${emoji}`]
             });
