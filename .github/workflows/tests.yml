@@ -37,13 +37,17 @@ jobs:
       - name: Install dependencies
         uses: ./.github/actions/install-deps
 
-      - name: Run tests
+        - name: Run tests
         id: run_tests
         run: |
           yarn test > test_logs.txt 2>&1
           echo "::set-output name=logs::$(cat test_logs.txt)"
           echo "::set-output name=status::$?"
 
+      - name: Check test logs
+        run: |
+          cat test_logs.txt
+          
       - name: Update comment with test results
         uses: actions/github-script@v6
         if: always() && github.event_name == 'pull_request'
