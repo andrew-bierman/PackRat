@@ -1,36 +1,32 @@
-import { setupTest, teardownTest } from '../utils/testHelpers';
-
-let caller;
-
-beforeEach(async () => {
-  const testSetup = await setupTest();
-  caller = testSetup.caller;
-});
-
-afterEach(async () => {
-  await teardownTest();
-});
+import { describe, it, expect, beforeEach } from 'vitest';
+import { setupTest } from '../utils/testHelpers';
+import type { trpcCaller } from '../utils/testHelpers';
+import { env } from 'cloudflare:test';
 
 describe('Get weather information', () => {
-  test('Get weather information', async () => {
+  let caller: trpcCaller;
+
+  beforeEach(async () => {
+    caller = await setupTest(env);
+  });
+
+  it('Get weather information', async () => {
     const coordinates = {
       lat: 20.5937,
       lon: 78.9629,
     };
     const weather = await caller.getWeather(coordinates);
-
     expect(weather).toBeDefined();
     expect(weather?.coord?.lon).toEqual(coordinates?.lon);
     expect(weather?.coord?.lat).toEqual(coordinates?.lat);
   });
 
-  test('Get weekly weather information', async () => {
+  it('Get weekly weather information', async () => {
     const coordinates = {
       lat: 20.5937,
       lon: 78.9629,
     };
     const weather = await caller.getWeatherWeek(coordinates);
-
     expect(weather).toBeDefined();
     expect(weather?.city?.coord?.lon).toEqual(coordinates?.lon);
     expect(weather?.city?.coord?.lat).toEqual(coordinates?.lat);
