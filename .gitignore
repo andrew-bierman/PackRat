@@ -25,6 +25,10 @@ wrangler.toml
 vitest.config.js
 vitest.config.js.*
 
+# Drizzle
+drizzle.config.js
+drizzle.config.js.*
+
 # Tamagui
 .tamagui
 
