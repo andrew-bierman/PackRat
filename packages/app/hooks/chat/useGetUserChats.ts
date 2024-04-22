@@ -1,8 +1,8 @@
 import { queryTrpc } from '../../trpc';
 
-export function useGetUserChats(userId) {
+export function useGetUserChats(userId, itemTypeId) {
   const query = queryTrpc.getUserChats.useQuery(
-    { userId },
+    { userId, itemTypeId },
     {
       enabled: !!userId,
       refetchOnWindowFocus: false,
@@ -10,9 +10,10 @@ export function useGetUserChats(userId) {
     },
   );
 
-  const SelectById = (id) => {
-    return query.data?.find((chat) => chat.id === id);
-  };
+  // const SelectById = (id) => {
+  //   return query.data?.find((chat) => chat._id === id);
+  // };
+
 
   return {
     ...query, // This spreads in properties like data, isLoading, isError, etc.

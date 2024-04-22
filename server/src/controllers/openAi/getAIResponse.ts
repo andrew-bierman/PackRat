@@ -9,25 +9,31 @@ import { z } from 'zod';
  * @param {Object} res - The response object.
  * @return {Object} The AI response and updated conversation object.
  */
+export const getAIResponse = async (req, res, next) => {
+  try {
+    const { userId, userInput, itemTypeId } = req.body;
+
+    const result = await getAIResponseService(userId, userInput, itemTypeId);
+
+    res.locals.data = result;
+    responseHandler(res);
+  } catch (error) {
+    next(GetResponseFromAIError);
+  }
+};
+
 
 export function getAIResponseRoute() {
   return publicProcedure
     .input(
       z.object({
         userId: z.string(),
-        conversationId: z.string(),
         userInput: z.string(),
+        itemTypeId: z.string(),
       }),
     )
     .mutation(async (opts) => {
-      const { userId, conversationId, userInput } = opts.input;
-      const { env }: any = opts.ctx;
-      const openAIAPIKey = env.OPENAI_API_KEY;
-      return await getAIResponseService(
-        userId,
-        conversationId,
-        userInput,
-        openAIAPIKey,
-      );
+      const { userId, userInput, itemTypeId } = opts.input;
+      return getAIResponseService(userId, userInput, itemTypeId);
     });
 }

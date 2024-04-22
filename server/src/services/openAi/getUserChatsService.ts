@@ -7,16 +7,16 @@ import { User } from '../../drizzle/methods/User';
  * @return {Promise<Object>} An object containing the user's conversations.
  * @throws {Error} If the userId is invalid or if the user is not found.
  */
-export const getUserChatsService = async (userId: string): Promise<object> => {
-  const conversationClass = new Conversation();
-  const userClass = new User();
-  const user = await userClass.findUser({ userId });
+export const getUserChatsService = async (userId, itemTypeId) => {
+  if (!mongoose.Types.ObjectId.isValid(userId)) {
+    throw new Error('Invalid userId');
+  }
 
   if (!user) {
     throw new Error('User not found');
   }
 
-  const conversations = await conversationClass.findMany(userId);
+  const conversations = await Conversation.find({ userId, itemTypeId }).exec();
 
   return { conversations };
 };
