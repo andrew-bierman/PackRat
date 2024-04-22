@@ -1,0 +1,52 @@
+name: Run Tests
+
+on:
+  pull_request:
+    branches: ["**"]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+
+      - name: Install dependencies
+        uses: ./.github/actions/install-deps
+
+      - name: Run tests
+        id: run_tests
+        run: |
+          yarn test 2>&1 | tee test_logs.txt
+          echo "::set-output name=logs::$(cat test_logs.txt)"
+
+      - name: Comment on PR (Success)
+        if: success()
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: 'Tests passed successfully! :green_heart:\n\n<details><summary>Test Logs</summary>\n\n```\n${{ steps.run_tests.outputs.logs }}\n```\n</details>'
+            })
+
+      - name: Comment on PR (Failure)
+        if: failure()
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: 'Tests failed for this pull request. :x:\n\n<details><summary>Test Logs</summary>\n\n```\n${{ steps.run_tests.outputs.logs }}\n```\n</details>'
+            })
