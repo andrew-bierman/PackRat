@@ -6,12 +6,17 @@ repo:
 test:
   - '**/*.spec.ts'
   - '**/*.spec.js'
+  - '**/*.test.ts'
+  - '**/*.test.js'
+  - '**/tests/**/*.ts'
+  - '**/tests/**/*.js'
+
 
 # Add 'frontend' label to any change in the 'client' directory
 frontend:
-  - 'client/**/*.{ts,js}'
-  - any: ['client/**/*.ts', 'client/**/*.js']
-    all: ['!client/src/main.ts', '!client/src/main.js']
+  - 'apps/**/*.{ts,js}'
+  - any: ['apps/**/*.ts', 'apps/**/*.js']
+    all: ['!apps/src/main.ts', '!apps/src/main.js']
 
 # Add 'backend' label to any change in the 'server' directory
 backend:
@@ -24,19 +29,18 @@ AnyChange:
   - '**/.*/**'
   - '**/.*/**/.*'
 
-# Workflow configuration starts here
+client:
+  - apps/**/*
 
-name: Pull request labeler
-on: [ pull_request_target ]
+expo:
+  - apps/expo/**/*
 
-jobs:
-  triage:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: write
-    steps:
-      - uses: actions/labeler@v4
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          
+next:
+  - apps/next/**/*
+
+vite:
+  - apps/vite/**/*
+
+api:
+  - api/**/*
+  - server/**/*
