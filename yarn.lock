@@ -3954,10 +3954,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hono/node-server@npm:^1.2.0":
-  version: 1.9.1
-  resolution: "@hono/node-server@npm:1.9.1"
-  checksum: 10/48e67703c9cdf27963ddf112db15f3dabd3e67aa17dcae0e3114b2404b9cf019024a016b57174801f7126fc86176649ddbf1b5609467ef8e1e3dee4c8e8dfd4b
+"@hono/node-server@npm:^1.10.1":
+  version: 1.11.0
+  resolution: "@hono/node-server@npm:1.11.0"
+  checksum: 10/b1845ea663b70513a65a76b92f660fc7d736cbeab2ea83b6044a6671bd1e2082b63b5a290c918bba16193b9e8d7e96f4a9dbec410861068e56f8b50d3959fb98
   languageName: node
   linkType: hard
 
@@ -13239,7 +13239,7 @@ __metadata:
   resolution: "bun-server@workspace:apps/bun-server"
   dependencies:
     "@elysiajs/html": "npm:^0.7.3"
-    "@hono/node-server": "npm:^1.2.0"
+    "@hono/node-server": "npm:^1.10.1"
     elysia: "npm:^0.7.21"
     hono: "npm:^3.9.1"
     server: "npm:*"
@@ -29401,7 +29401,7 @@ __metadata:
   dependencies:
     "@anatine/zod-mock": "npm:^3.13.3"
     "@faker-js/faker": "npm:^8.3.1"
-    "@hono/node-server": "npm:^1.2.0"
+    "@hono/node-server": "npm:^1.10.1"
     "@hono/trpc-server": "npm:^0.1.0"
     "@openapitools/openapi-generator-cli": "npm:^2.7.0"
     "@packrat/validations": "npm:*"

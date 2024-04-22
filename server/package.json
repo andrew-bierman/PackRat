@@ -21,7 +21,7 @@
   "author": "Andrew Bierman",
   "license": "ISC",
   "dependencies": {
-    "@hono/node-server": "^1.2.0",
+    "@hono/node-server": "^1.10.1",
     "@hono/trpc-server": "^0.1.0",
     "@packrat/validations": "*",
     "@sendgrid/mail": "^7.7.0",
