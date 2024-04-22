@@ -1,8 +1,10 @@
 name: Run Tests
 
 on:
+  push:
+    branches: ['**']
   pull_request:
-    branches: ["**"]
+    branches: ['**']
 
 jobs:
   test:
@@ -14,10 +16,25 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18.x
+          node-version: 20.x
 
       - name: Install dependencies
         uses: ./.github/actions/install-deps
+
+      - name: Create initial comment
+        uses: actions/github-script@v6
+        id: create_comment
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const commentBody = '🚀 Running tests... Please wait for the results! 🕐';
+            const { data: { id: commentId } } = await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: commentBody
+            });
+            core.setOutput('comment_id', commentId);
 
       - name: Run tests
         id: run_tests
@@ -25,28 +42,41 @@ jobs:
           yarn test 2>&1 | tee test_logs.txt
           echo "::set-output name=logs::$(cat test_logs.txt)"
 
-      - name: Comment on PR (Success)
-        if: success()
+      - name: Update comment with test results
         uses: actions/github-script@v6
+        env:
+          COMMENT_ID: ${{ steps.create_comment.outputs.comment_id }}
+          TEST_LOGS: ${{ steps.run_tests.outputs.logs }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: 'Tests passed successfully! :green_heart:\n\n<details><summary>Test Logs</summary>\n\n```\n${{ steps.run_tests.outputs.logs }}\n```\n</details>'
-            })
+            const commentId = process.env.COMMENT_ID;
+            const testLogs = process.env.TEST_LOGS;
+            const testStatus = `${{ job.status }}`;
 
-      - name: Comment on PR (Failure)
-        if: failure()
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            github.rest.issues.createComment({
+            let commentBody = '';
+            let emoji = '';
+
+            if (testStatus === 'success') {
+              commentBody = '✅ Tests passed successfully! 🎉\n\n';
+              emoji = '💚';
+            } else {
+              commentBody = '❌ Tests failed for this pull request. 😞\n\n';
+              emoji = '❤️';
+            }
+
+            commentBody += `<details><summary>Test Logs</summary>\n\n\`\`\`\n${testLogs}\n\`\`\`\n</details>`;
+
+            await github.rest.issues.updateComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: commentId,
+              body: commentBody
+            });
+
+            await github.rest.issues.addLabels({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: 'Tests failed for this pull request. :x:\n\n<details><summary>Test Logs</summary>\n\n```\n${{ steps.run_tests.outputs.logs }}\n```\n</details>'
-            })
+              labels: [`tests-${testStatus}${emoji}`]
+            });
