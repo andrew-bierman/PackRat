@@ -18,7 +18,6 @@ import { usePackId } from 'app/hooks/packs/usePackId';
 import { useFetchSinglePack } from '../../hooks/packs';
 import { useAuthUser } from 'app/auth/hooks';
 import { useIsAuthUserPack } from 'app/hooks/packs/useIsAuthUserPack';
-import { useEditPack } from 'app/hooks/packs/useEditPack';
 
 const SECTION = {
   TABLE: 'TABLE',
@@ -37,7 +36,6 @@ export function PackDetails() {
   const userId = user?.id;
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
   const [refetch, setRefetch] = useState(false);
-  const { editPack } = useEditPack();
 
   const { data: userPacks, isLoading: isUserPacksLoading } =
     useUserPacks(userId);
@@ -51,14 +49,6 @@ export function PackDetails() {
 
   const styles = useCustomStyles(loadStyles);
   const currentPackId = currentPack && currentPack.id;
-  const handleSavePack = () => {
-     const packDetails = {
-      id: currentPack.id,
-      name: currentPack.name,
-      is_public: currentPack.is_public,
-    };
-    editPack(packDetails);
-  }
 
   // check if user is owner of pack, and that pack and user exists
   const isOwner = currentPack && user && currentPack.owner_id === user.id;
@@ -134,7 +124,6 @@ export function PackDetails() {
                       }
                     }}
                   />
-                  <RButton onPress={handleSavePack}>Save Pack</RButton>
                 </View>
               </>
             }

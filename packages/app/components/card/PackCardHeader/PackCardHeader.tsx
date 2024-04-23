@@ -14,6 +14,7 @@ import {
 import { useDeletePack, useFetchSinglePack } from 'app/hooks/packs';
 import { usePackTitleInput } from './usePackTitleInput';
 import { useRouter } from 'app/hooks/router';
+import { useEditPack } from 'app/hooks/packs/useEditPack';
 
 interface PackCardHeaderProps {
   data: any;
@@ -30,6 +31,16 @@ export const PackCardHeader = ({ data, title, link }: PackCardHeaderProps) => {
 
   const { currentTheme } = useTheme();
   const router = useRouter();
+  const { editPack } = useEditPack();
+
+  const handleSavePack = () => {
+    const packDetails = {
+     id: data.id,
+     name: data.name,
+     is_public: data.is_public,
+   };
+   editPack(packDetails);
+ }
   return (
     <CustomCardHeader
       data={data}
@@ -68,6 +79,7 @@ export const PackCardHeader = ({ data, title, link }: PackCardHeaderProps) => {
           <ThreeDotsMenu onOpenChange={handleActionsOpenChange}>
             <YStack space="$1">
               <RButton onPress={handleEdit}>Edit</RButton>
+              <RButton onPress={handleSavePack}>Save</RButton>
               <RButton onPress={handleDeletePack}>Delete</RButton>
             </YStack>
           </ThreeDotsMenu>
