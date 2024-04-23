@@ -4,7 +4,8 @@ import * as Google from 'expo-auth-session/providers/google';
 import { queryTrpc } from 'app/trpc';
 import { useSessionSignIn } from './useSessionSignIn';
 
-const webClientId = String(process.env.NEXT_PUBLIC_GOOGLE_ID);
+const webClientId =
+  '993694750638-876nvl8hfjfv6tqiqc1c4tmubvf8chpp.apps.googleusercontent.com';
 const iosClientId = String(process.env.IOS_CLIENT_ID);
 const androidClientId = String(process.env.ANDROID_CLIENT_ID);
 
@@ -16,7 +17,12 @@ export const useGoogleAuth = () => {
     {
       idToken: token,
     },
-    { enabled: !!token, onSuccess: (user) => sessionSignIn(user) },
+    {
+      enabled: !!token,
+      onSuccess: (user) => {
+        sessionSignIn(user);
+      },
+    },
   );
 
   const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
