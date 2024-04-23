@@ -1,18 +1,16 @@
-import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
-import { api } from 'app/constants/api';
 import { useUserSetter } from 'app/auth/hooks';
+import { queryTrpc } from 'app/trpc';
 
 export const useUpdateUser = () => {
-  const { mutateAsync: mutateUserAsync } = useMutation({
-    mutationFn: updateUserMutation,
-  });
+  const { mutateAsync: mutateUserAsync } = queryTrpc.editUser.useMutation();
   const setUser = useUserSetter();
 
   const updateUser = (user) => {
     (async () => {
       try {
-        const updatedUser = await mutateUserAsync(user);
+        const { userId, ...rest } = user;
+        const updatedUser = await mutateUserAsync({ id: userId, ...rest });
+        // @ts-ignore
         setUser(updatedUser);
       } catch {
         console.error('Failed to update the user');
@@ -21,9 +19,4 @@ export const useUpdateUser = () => {
   };
 
   return updateUser;
-};
-
-const updateUserMutation = async (user) => {
-  const response = await axios.put(`${api}/user/`, user);
-  return response.data;
 };

@@ -1,94 +1,65 @@
-import express, { type NextFunction } from 'express';
-import mongoose from 'mongoose';
-import cors from 'cors';
-import { isCelebrateError, errors } from 'celebrate';
-import { MONGODB_URI } from './config';
-import routes from './routes/index';
-import { serveSwaggerUI } from './helpers/serveSwaggerUI';
-import { corsOptions } from './helpers/corsOptions';
-import { errorHandler } from './helpers/errorHandler';
-import helmet from 'helmet';
-import compression from 'compression';
-import morgan from 'morgan';
-import { limiter } from './helpers/limiter';
-import * as trpcExpress from '@trpc/server/adapters/express';
-import { type inferAsyncReturnType, initTRPC } from '@trpc/server';
+import { Hono } from 'hono';
+import { fetchHandler } from 'trpc-playground/handlers/fetch';
 import { appRouter } from './routes/trpcRouter';
-import { createContext } from './trpc';
+import { honoTRPCServer } from './trpc/server';
+import { cors } from 'hono/cors';
+// import { logger } from 'hono/logger';
+import { compress } from 'hono/compress';
+import router from './routes';
 
-const app = express();
-
-// Apply security-related HTTP headers.
-// app.use(helmet({ crossOriginResourcePolicy: false }));
-
-// Apply gzip compression to improve response times.
-app.use(compression());
-
-// Log HTTP requests.
-app.use(morgan('tiny'));
-
-// Apply rate limiting to prevent brute-force attacks.
-// app.use(limiter);
-
-// Applying CORS middleware with provided options, if any.
-if (corsOptions) {
-  app.use(cors(corsOptions as any));
+interface Bindings {
+  DB: IDBDatabase;
+  JWT_VERIFICATION_KEY: string;
+  APP_URL: string;
+  CORS_ORIGIN: string;
+  MAPBOX_ACCESS_TOKEN: string;
 }
 
-// Parse incoming JSON bodies. Limit set to prevent large payloads.
-app.use(express.json({ limit: '50mb' }));
+const TRPC_API_ENDPOINT = '/api/trpc';
+const TRPC_PLAYGROUND_ENDPOINT = '/trpc-playground';
+const HTTP_ENDPOINT = '/api';
 
-// Register the main API routes.
-app.use(routes);
+const app = new Hono<{ Bindings: Bindings }>();
 
-// Serve the Swagger UI for API documentation, ideally only in development environments. Available at /api-docs.
-serveSwaggerUI(app);
-
-// Middleware to capture and log Celebrate validation errors.
+//  Setup compression
 app.use(
-  (
-    err: Error,
-    req: express.Request,
-    res: express.Response,
-    next: NextFunction,
-  ): void => {
-    if (isCelebrateError(err)) {
-      console.error(err);
-    }
-    next(err);
-  },
-);
-
-app.use(
-  '/api/trpc',
-  trpcExpress.createExpressMiddleware({
-    router: appRouter,
-    createContext,
+  '*',
+  compress({
+    encoding: 'deflate',
   }),
 );
 
-// Celebrate middleware to return validation errors
-// Middleware provided by Celebrate to format and return validation errors to the client.
-app.use(errors());
-
-// Custom error handling middleware.
-app.use(errorHandler);
-
-// Attempting to connect to MongoDB.
-const connectionString = MONGODB_URI ?? '';
-mongoose
-  .connect(connectionString)
-  .then(() => {
-    console.log('MongoDB connected successfully.');
-  })
-  .catch((err) => {
-    console.error('Failed to connect to MongoDB:', err);
+//  Setup CORS
+app.use('*', async (c, next) => {
+  const CORS_ORIGIN = String(c.env.CORS_ORIGIN);
+  const corsMiddleware = cors({
+    // origin: CORS_ORIGIN,
+    origin: '*', // temporary
+    credentials: true,
+    allowHeaders: ['Content-Type', 'Authorization'],
+    allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   });
-
-// Determine the port from the environment or default to 3000 if none is provided.
-const port = process.env.PORT || 3000;
-
-// Start the Express server.
-app.listen(port, () => {
-  console.log(`Server is running and listening on port ${port}.`);
+  return corsMiddleware(c, next);
 });
+
+// Setup logging
+// tRPC is already logging requests, but you can add your own middleware
+// app.use('*', logger());
+
+//  Setup tRPC server
+app.use(`${TRPC_API_ENDPOINT}/*`, honoTRPCServer({ router: appRouter }));
+
+//  Setup tRPC Playground
+app.use(TRPC_PLAYGROUND_ENDPOINT, async (c, next) => {
+  const handler = await fetchHandler({
+    router: appRouter,
+    trpcApiEndpoint: TRPC_API_ENDPOINT,
+    playgroundEndpoint: TRPC_PLAYGROUND_ENDPOINT,
+  });
+  return handler(c.req.raw);
+});
+
+// Set up HTTP routes
+app.route(`${HTTP_ENDPOINT}`, router);
+
+export default app;

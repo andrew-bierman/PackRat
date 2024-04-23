@@ -11,7 +11,8 @@ import { useWebMap } from 'app/hooks/map/useWebMap';
 import useGpxUpload from './useGpxUpload';
 // import 'mapbox-gl/dist/mapbox-gl.css'
 
-mapboxgl.accessToken = NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN || MAPBOX_ACCESS_TOKEN;
+mapboxgl.accessToken =
+  'pk.eyJ1IjoiYW5kcmV3Ymllcm1hbiIsImEiOiJjbDhwYTVtc3kwMGprM3Buejg3d2doa2pvIn0.F_D3I0KRlQkQK70DkK7MlQ';
 
 const DESTINATION = 'destination';
 const TRIP = 'trip';

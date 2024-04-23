@@ -48,7 +48,7 @@ So pack your bags, grab your friends, and get ready for your next adventure with
   - [Local installation 📲](#local-installation-)
     - [Dependencies](#dependencies)
     - [Environment Setup](#environment-setup)
-      - [Automated Setup 🛠️](#automated-setup-️)
+      - [Automated Setup (Unix) 🛠️](#automated-setup-unix-️)
       - [Manual Setup 📝](#manual-setup-)
     - [Yarn Setup](#yarn-setup)
       - [Root](#root)
@@ -59,6 +59,7 @@ So pack your bags, grab your friends, and get ready for your next adventure with
       - [Debugging Client Environment Setup 🐛](#debugging-client-environment-setup-)
         - [Expo](#expo)
         - [Debugging Dependencies](#debugging-dependencies)
+        - [Debugging Cloudflare Wrangler and D1](#debugging-cloudflare-wrangler-and-d1)
   - [Docker Installation 🐳 \[Experimental\]](#docker-installation--experimental)
     - [Dependencies](#dependencies-1)
     - [Installation](#installation)
@@ -146,6 +147,7 @@ The main folders are:
 - `apps`
   - `expo` (native)
   - `next` (web) -- ssr not yet implemented
+  - `vite` (web)
   - `tauri` (desktop) -- not yet implemented
 
 - `packages` shared packages across apps
@@ -245,7 +247,7 @@ cd PackRat
    - If you have access to the development env files, use those. Otherwise, replace the values with your own.
    - See the `.env.example` files in the `apps/expo` and `server` directories for the necessary environment variables.
 
-#### Automated Setup 🛠️
+#### Automated Setup (Unix) 🛠️
 
 1. Run the setup script from the `PackRat` directory.
 ```
@@ -253,6 +255,7 @@ yarn setup
 ```
 
 #### Manual Setup 📝
+- Note, if automated set up works the following manual config is taken care of already.
 
 1. Navigate to the `PackRat` directory if you are not already there.
 
@@ -319,7 +322,7 @@ cp gradle.properties.example gradle.properties
 cd ../..
 ```
 
-9. Navigate to the `next` directory.
+9. Navigate to one of the client directories such as `next`, `expo`, `vite`.
 
 ```
 cd apps/next
@@ -344,11 +347,12 @@ cd ..
 cd server
 ```
 
-11. Duplicate the `.env.example` file and rename it to `.env`. Open the file and replace the values with your own.
-        - If you have access to the development env file, skip this step. Otherwise, replace the values with your own.
+11.  Duplicate the `.wrangler.toml.example` file and rename it to `wrangler.toml`. Open the file and replace the values with your own.
+        - If you have access to the development wrangler file, skip this step. Otherwise, replace the values with your own.
+        -
 
 ```
-cp .env.example .env
+cp .wrangler.toml.example wrangler.toml
 ```
 
 12.  Navigate back to the `PackRat` directory.
@@ -386,6 +390,10 @@ yarn start
 
 #### Client
 
+- Note, we have a few options for running the client.
+  - For native we support both iOS and Android. You can run the app on either platform. Additionally, we support MacOS, Linux, and Windows for the desktop app with Tauri.
+  - For web, we are using Next.js for server-side rendering. (This is not yet implemented.) We also have a Vite build that provides a faster development experience.
+
 1. Navigate to the `expo` directory.
 
 ```
@@ -407,7 +415,13 @@ yarn run android
 cd apps/next
 ```
 
-3. Start the Expo/Next server.
+3. Navigate to the `vite` directory.
+
+```
+cd apps/vite
+```
+
+4. Start the Expo/Next/Vite server.
 
 ```
 yarn start
@@ -501,6 +515,11 @@ node -v
   ```
 
 Additionally, if the error is occurring in nextjs that you check the transpilePackages in next.config.js and check if the problematic package is there.
+
+##### Debugging Cloudflare Wrangler and D1
+- Some helpful tips for debugging Cloudflare Wrangler and D1:
+- If you encounter issues with Wrangler or D1, make sure you can see the sqlite database in the .wrangler directory.
+- You can open the database with a sqlite browser to see if the data is being stored correctly.
 
 ## Docker Installation 🐳 [Experimental]
 

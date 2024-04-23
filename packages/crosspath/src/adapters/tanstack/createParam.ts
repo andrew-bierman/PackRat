@@ -42,7 +42,7 @@ const useParams = <T>(): {
   const { push } = useRouter();
   const screenParams = (useTanstackParams({ strict: false }) || {}) as T;
   const searchParams = (useSearch({ strict: false }) || {}) as T;
-  const params = { ...screenParams, searchParams };
+  const params = { ...screenParams, ...searchParams };
 
   const setParams = (value: Partial<T>) => {
     if (Object.keys(value).some((key) => screenParams.hasOwnProperty(key))) {

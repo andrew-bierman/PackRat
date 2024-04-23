@@ -1,4 +1,4 @@
-import express from 'express';
+import { Hono } from 'hono';
 import {
   getDestination,
   getOsm,
@@ -13,7 +13,7 @@ import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
 import authTokenMiddleware from '../middleware/auth';
 import checkRole from '../middleware/checkRole';
 
-const router = express.Router();
+const router = new Hono();
 
 /**
  * @swagger

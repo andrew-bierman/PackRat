@@ -1,7 +1,7 @@
-import User from '../../models/userModel';
+import { User } from '../../drizzle/methods/User';
 
-export async function checkCodeService({ email, code }: any) {
-  return await User.find({
-    $and: [{ email: email.toLowerCase() }, { code }],
-  });
+export async function checkCodeService(email: string, code: string) {
+  const userClass = new User();
+  const user = await userClass.findUser({ email, code });
+  return user;
 }

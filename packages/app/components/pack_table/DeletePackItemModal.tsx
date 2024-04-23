@@ -1,39 +1,26 @@
 import React from 'react';
 import { useDeletePackItem } from 'app/hooks/packs/useDeletePackItem';
-import { BaseModal } from '@packrat/ui';
+import { BaseModal, CloseModalHandler } from '@packrat/ui';
 import { useDeleteItem } from 'app/hooks/items';
 
 interface DeletePackItemModalProps {
-  itemId: string;
-  pack?: { _id: string };
-  isOpen?: Boolean;
+  onConfirm: (closeModal: CloseModalHandler) => void;
+  isOpen?: boolean;
   onClose?: () => void;
-  showTrigger?: Boolean;
+  triggerComponent?: React.DetailedReactHTMLElement<any, HTMLElement>;
 }
 
 export const DeletePackItemModal = ({
-  itemId,
-  pack,
+  onConfirm,
   isOpen,
   onClose,
-  showTrigger
+  triggerComponent,
 }: DeletePackItemModalProps) => {
-  const { deletePackItem } = useDeletePackItem();
-  const { handleDeleteItem } = useDeleteItem();
-  const deleteItemHandler = (_, closeModal) => {
-    if (pack) {
-      deletePackItem({ itemId, packId: pack._id });
-    } else {
-      handleDeleteItem(itemId);
-    }
-    closeModal();
-  };
-
   const footerButtons = [
     {
       label: 'Cancel',
       onClick: (_, closeModal) => {
-        closeModal()
+        closeModal();
         if (onClose) onClose();
       },
       color: 'gray',
@@ -41,7 +28,7 @@ export const DeletePackItemModal = ({
     },
     {
       label: 'Delete',
-      onClick: deleteItemHandler,
+      onClick: (_, closeModal) => onConfirm(closeModal),
       color: '#B22222',
       disabled: false,
     },
@@ -50,9 +37,10 @@ export const DeletePackItemModal = ({
   return (
     <BaseModal
       title={'Delete Item'}
+      triggerComponent={triggerComponent}
       isOpen={isOpen}
       onClose={onClose}
-      showTrigger={showTrigger !== undefined ? showTrigger : true}
+      showTrigger={!!triggerComponent}
       footerButtons={footerButtons}
     >
       Are you sure you want to delete this item?

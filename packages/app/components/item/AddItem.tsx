@@ -9,12 +9,13 @@ import {
   type Item,
 } from '@packrat/validations';
 import { useMemo } from 'react';
+import { useAuthUser } from 'app/auth/hooks';
 
 interface AddItemProps {
   isEdit: boolean;
   initialData: {
     global: string;
-    _id: string;
+    id: string;
     name?: string;
     weight?: number;
     quantity?: number;
@@ -47,8 +48,11 @@ export const AddItem = ({
   setIsAddItemModalOpen = () => {},
   setRefetch,
 }: AddItemProps) => {
-
   const [currPackId] = usePackId();
+
+  const user = useAuthUser();
+
+  const ownerId = user?.id;
 
   const {
     // mutation: addPackItemMutation
@@ -65,10 +69,7 @@ export const AddItem = ({
   const handleSubmit = (data: Item) => {
     
     if (isEdit) {
-      editPackItem({
-        ...data,
-        packId: currPackId
-      });
+      editPackItem(data);
     } else {
       addPackItem(data);
     }
@@ -79,27 +80,27 @@ export const AddItem = ({
 
   const defaultValues = useMemo(() => {
     if (!initialData) {
-      return { unit: 'lb' };
+      return { unit: 'lb', ownerId, packId };
     }
     const result = {
+      id: '',
+      ownerId,
       name: initialData.name || '',
-      weight: String(initialData.weight),
-      quantity: String(initialData.quantity),
+      weight: initialData.weight,
+      quantity: initialData.quantity,
       type: initialData.category?.name,
       unit: initialData.unit,
-      _id: packId,
+      packId,
     };
 
     if (isEdit) {
-      result._id = initialData._id;
+      result.id = initialData.id;
 
       return result;
     }
 
-    return { ...result, packId };
-  }, [initialData, isEdit, packId]);
-
-  console.log({ defaultValues });
+    return result;
+  }, [initialData, isEdit, packId, ownerId]);
 
   return (
     <View>
@@ -110,7 +111,6 @@ export const AddItem = ({
         isLoading={isLoading}
         isEdit={isEdit}
         currentPack={currentPack}
-        packId={packId}
       />
     </View>
   );

@@ -272,7 +272,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"_id\":\"\",\r\n    \"name\":\"\",\r\n    \"owner_id\":\"\"\r\n\r\n}",
+							"raw": "{\r\n    \"id\":\"\",\r\n    \"name\":\"\",\r\n    \"owner_id\":\"\"\r\n\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"

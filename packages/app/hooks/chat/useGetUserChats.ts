@@ -11,7 +11,7 @@ export function useGetUserChats(userId) {
   );
 
   const SelectById = (id) => {
-    return query.data?.find((chat) => chat._id === id);
+    return query.data?.find((chat) => chat.id === id);
   };
 
   return {

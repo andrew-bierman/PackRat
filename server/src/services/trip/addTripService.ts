@@ -1,102 +1,135 @@
-import Trip from '../../models/tripModel';
-import Node from '../../models/osm/nodeModel';
-import Way from '../../models/osm/wayModel';
-import Relation from '../../models/osm/relationModel';
-import GeoJSON from '../../models/geojsonModel';
+import { GeoJson } from '../../drizzle/methods/Geojson';
+import { TripGeoJson } from '../../drizzle/methods/TripGeoJson';
+import { Trip } from '../../drizzle/methods/trip';
+import { validateGeojsonId, validateGeojsonType } from '../../utils/geojson';
 
-/**
- * Adds a trip to the database.
- * @param {Object} tripDetails - The trip details.
- * @return {Promise<string>} A promise that resolves to a success message.
- */
-export const addTripService = async (tripDetails): Promise<string> => {
+export const addTripService = async (tripData: any) => {
   try {
-    const {
-      name,
-      description,
-      duration,
-      weather,
-      start_date,
-      end_date,
-      destination,
-      geoJSON, // This should be the FeatureCollection
-      owner_id,
-      packs,
-      is_public,
-    } = tripDetails;
-
-    // Save all the Features from the FeatureCollection
-    // @ts-expect-error - getting typescript error here
-    const savedGeoJSONs = await GeoJSON.saveMany(geoJSON.features);
-
-    const geojsonIds = savedGeoJSONs?.map((feature) => feature._id);
-
-    const newTrip = await Trip.create({
-      name,
-      description,
-      duration,
-      weather,
-      start_date,
-      end_date,
-      destination,
-      geojson: geojsonIds, // Reference all saved GeoJSONs' IDs
-      owner_id,
-      packs,
-      is_public,
+    const { geoJSON, ...otherTripData } = tripData;
+    const tripClass = new Trip();
+    // Create Trip
+    const newTrip = await tripClass.create(otherTripData);
+    const geojsonClass = new GeoJson();
+    const tripGeoJsonClass = new TripGeoJson();
+    if (!geoJSON) {
+      throw new Error("Geojson data doesn't exist");
+    }
+    geoJSON.features.map(async (feature) => {
+      const { id, type, properties, geometry } = feature;
+      if (!validateGeojsonId(id) || !validateGeojsonType(type)) {
+        throw new Error('Invalid geojson Id or geojson type');
+      }
+      const insertedGeoJson = await geojsonClass.create({
+        properties,
+        type,
+        geojsonId: id,
+        geometry,
+      });
+      await tripGeoJsonClass.create({
+        tripId: newTrip.id,
+        geojsonId: insertedGeoJson.id,
+      });
     });
 
-    // @ts-expect-error - getting typescript error here
-    return { message: 'Trip added successfully', trip: newTrip };
+    return newTrip;
   } catch (error) {
     console.error(error);
-    throw new Error('Unable to add trip');
+    throw new Error('Unable to add trip and GeoJSON data');
   }
 };
 
-/**
- * Generates a new OSM object based on the provided geoJSON.
- *
- * @param {object} geoJSON - The geoJSON object representing the OSM object.
- * @throws {Error} Throws an error if the geoJSON object is invalid or missing.
- * @return {object} An object containing the osm_ref and osm_type properties of the newly created OSM object.
- */
-const createOSMObject = async (geoJSON) => {
-  // Check if geoJSON object is valid
-  if (!geoJSON?.properties) {
-    throw new Error('Invalid or missing geoJSON');
-  }
+// import { PrismaClient } from '@prisma/client/edge';
+// import { Trip } from '../../prisma/methods';
 
-  // Access the OSM type directly from geoJSON properties
-  const osmType = geoJSON.properties.osm_type;
+// export const addTripService = async (
+//   prisma: PrismaClient,
+//   tripData,
+// ): Promise<any> => {
+//   try {
+//     const {
+//       name,
+//       description,
+//       duration,
+//       weather,
+//       start_date,
+//       end_date,
+//       destination,
+//       geoJSON,
+//       owner_id,
+//       packs,
+//       is_public,
+//     } = tripData;
 
-  let OSMModel;
-  if (osmType === 'N') {
-    OSMModel = Node;
-  } else if (osmType === 'W') {
-    OSMModel = Way;
-  } else if (osmType === 'R') {
-    OSMModel = Relation;
-  } else {
-    throw new Error('Invalid OSM type');
-  }
+//     // Save all the Features from the FeatureCollection
 
-  // Create the corresponding OSM object
-  const osmData = new OSMModel({
-    osm_id: geoJSON.properties.osm_id,
-    osm_type:
-      OSMModel === Node ? 'node' : OSMModel === Way ? 'way' : 'relation', // Here change "W" to "way"
-    tags: geoJSON.properties,
-    geoJSON,
-  });
+//     const savedGeoJSONs = await Promise.all(
+//       geoJSON.features.map((feature) =>
+//         prisma.geoJSON.create({ data: feature }),
+//       ),
+//     );
 
-  // Save the OSM object and return its _id
-  await osmData.save();
+//     const geojsonIds = savedGeoJSONs.map((feature) => feature.id);
 
-  console.log('osmData', osmData);
+//     const newTrip = await prisma.trip.create({
+//       data: {
+//         name,
+//         description,
+//         duration,
+//         weather,
+//         start_date,
+//         end_date,
+//         destination,
+//         geojson: geojsonIds.map((id) => ({ $oid: id })),
+//         is_public,
+//         ownerDocument: {
+//           connect: { id: owner_id },
+//         },
+//         packs: packs,
+//       },
+//     });
 
-  return {
-    osm_ref: osmData._id,
-    osm_type:
-      OSMModel === Node ? 'Node' : OSMModel === Way ? 'Way' : 'Relation',
-  };
-};
+//     return {
+//       message: 'Trip added successfully',
+//       trip: await Trip(newTrip)?.toJSON(prisma),
+//     };
+//   } catch (error) {
+//     console.error(error);
+//     throw new Error('Unable to add trip');
+//   }
+// };
+
+// // This function is un-used now. Trip model does not have osm related properties
+// // const createOSMObject = async (geoJSON) => {
+// //   if (!geoJSON?.properties) {
+// //     throw new Error('Invalid or missing geoJSON');
+// //   }
+
+// //   const osmType = geoJSON.properties.osm_type;
+
+// //   if (osmType !== 'N' && osmType !== 'W' && osmType !== 'R') {
+// //     throw new Error('Invalid OSM type');
+// //   }
+
+// //   let osmModel;
+// //   if (osmType === 'N') {
+// //     osmModel = prisma.node;
+// //   } else if (osmType === 'W') {
+// //     osmModel = prisma.way;
+// //   } else if (osmType === 'R') {
+// //     osmModel = prisma.relation;
+// //   }
+
+// //   const osmData = await osmModel.create({
+// //     data: {
+// //       osm_id: geoJSON.properties.osm_id,
+// //       osm_type: osmType === 'N' ? 'node' : osmType === 'W' ? 'way' : 'relation',
+// //       tags: geoJSON.properties,
+// //       geoJSON,
+// //     },
+// //   });
+
+// //   return {
+// //     osm_ref: osmData.id,
+// //     osm_type: osmType === 'N' ? 'Node' : osmType === 'W' ? 'Way' : 'Relation',
+// //   };
+// // };
