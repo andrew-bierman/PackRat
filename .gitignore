@@ -5,10 +5,9 @@ node_modules
 # dist
 old/
 .zip
-app.json
 Podfile
 Podfile.lock
-gradle.properties
+
 client.zip
 *.zip
 .vscode
@@ -25,6 +24,11 @@ wrangler.toml
 .vitest
 vitest.config.js
 vitest.config.js.*
+
+# Drizzle
+drizzle.config.js
+drizzle.config.js.*
+drizzle.config.d.ts
 
 # Tamagui
 .tamagui

@@ -80,7 +80,7 @@ export const ItemForm = ({
             }}
           >
             <View>
-              <FormInput name="weight" placeholder="Weight" isNumeric />
+              <FormInput name="weight" placeholder="Weight" isDecimal={true} />
             </View>
             {data && (
               <FormSelect
@@ -102,11 +102,7 @@ export const ItemForm = ({
           {showSubmitButton && (
             <SubmitButton onSubmit={handleSubmit}>
               <RText style={{ color: currentTheme.colors.text }}>
-                {isLoading
-                  ? 'Loading..'
-                  : isEdit == true
-                    ? 'Edit item'
-                    : 'Add Item'}
+                {isLoading ? 'Loading..' : isEdit ? 'Edit item' : 'Add Item'}
               </RText>
             </SubmitButton>
           )}
