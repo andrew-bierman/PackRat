@@ -48,6 +48,8 @@ export const addTripDetails = z.object({
   start_date: z.string(),
   end_date: z.string(),
   destination: z.string(),
+  park: z.string().optional(),
+  trail: z.string().optional(),
   geoJSON: z.object({
     type: z.literal('FeatureCollection'),
     features: z.array(featureSchema),
