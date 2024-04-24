@@ -142,6 +142,8 @@ export const ItemsTable = ({
     setPage(page - 1);
   };
 
+  console.log('data', currentTheme.colors.background);
+
   return (
     <ScrollView>
       <View
@@ -149,7 +151,10 @@ export const ItemsTable = ({
           paddingVertical: 16,
           flex: 1,
           paddingTop: 30,
-          backgroundColor: '#fff',
+          backgroundColor:
+            currentTheme.colors.background === '#0284c7'
+              ? 'white'
+              : currentTheme.colors.background,
           marginTop: 20,
         }}
       >

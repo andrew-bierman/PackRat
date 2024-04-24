@@ -39,7 +39,9 @@ const PlaceItem = ({ item }) => {
   const { currentTheme } = useTheme();
   return (
     <RStack style={{ flexDirection: 'row' }}>
-      <RText fontWeight="400">{item.properties.name}</RText>
+      <RText fontWeight="400" color={currentTheme.colors.textDarkGrey}>
+        {item.properties.name}
+      </RText>
       <RText
         color={currentTheme.colors.textDarkGrey}
         opacity={100}
