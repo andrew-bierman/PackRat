@@ -1,0 +1,9 @@
+name: 'Install Dependencies'
+description: 'Install Node.js dependencies'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Install dependencies
+      run: yarn install --frozen-lockfile
+      shell: bash
