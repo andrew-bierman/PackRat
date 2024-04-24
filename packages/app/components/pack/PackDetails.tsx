@@ -19,6 +19,7 @@ import { useFetchSinglePack } from '../../hooks/packs';
 import { useAuthUser } from 'app/auth/hooks';
 import { useIsAuthUserPack } from 'app/hooks/packs/useIsAuthUserPack';
 
+
 const SECTION = {
   TABLE: 'TABLE',
   CTA: 'CTA',

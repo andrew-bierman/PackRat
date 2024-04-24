@@ -9,7 +9,6 @@ import { useAuthUser } from 'app/auth/hooks';
 export const CustomCardHeader = ({ data, title, link, actionsComponent }) => {
   const { isCopied, handleCopyLink } = useCopyClipboard(link);
   const user = useAuthUser();
-
   return (
     <>
       <RStack style={{ flex: 1 }}>

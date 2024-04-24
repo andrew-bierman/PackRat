@@ -22,6 +22,7 @@ export const AddPack = ({ isCreatingTrip = false }) => {
     useTheme();
   const styles = useCustomStyles(loadStyles);
   const router = useRouter();
+  const [formRef, submitTrigger] = useFormSubmitTrigger();
 
   const {
     addNewPack,
@@ -59,6 +60,7 @@ export const AddPack = ({ isCreatingTrip = false }) => {
         <Form
           defaultValues={{ isPublic: '0', name: '' }}
           validationSchema={addPackSchema}
+          formRef={formRef}
         >
           <FormInput
             placeholder="Name"

@@ -98,7 +98,6 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
     // Convert fuse results back into the format we want
     // if searchQuery is empty, use the original data
     arrayData = searchQuery ? results.map((result) => result.item) : data;
-
     const feedSearchFilterComponent = (
       <FeedSearchFilter
         feedType={feedType}
@@ -115,7 +114,7 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
     return (
       <View style={{ flex: 1, paddingBottom: Platform.OS === 'web' ? 10 : 0 }}>
         <FlatList
-          data={data}
+          data={searchQuery?arrayData:data}
           horizontal={false}
           keyExtractor={(item) => item?.id + item?.type}
           renderItem={({ item }) => (
