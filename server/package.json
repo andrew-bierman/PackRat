@@ -51,7 +51,7 @@
     "google-auth-library": "^8.8.0",
     "googleapis": "^118.0.0",
     "helmet": "^7.0.0",
-    "hono": "^3.9.1",
+    "hono": "^4.2.7",
     "i": "^0.3.7",
     "joi": "^17.9.2",
     "jsonwebtoken": "^9.0.1",
