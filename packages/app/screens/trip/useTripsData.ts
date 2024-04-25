@@ -47,8 +47,6 @@ export const useTripsData = () => {
     selectedSearch: osm.name,
   });
 
-  console.warn({ currentDestination, latLng, filteredTrails, filteredTrailsError: error, osm, weekWeatherError, weatherError , weatherLoading , weekWeatherLoading })
-
   return {
     osm,
     currentDestination,

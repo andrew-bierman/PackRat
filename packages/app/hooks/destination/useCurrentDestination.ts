@@ -10,7 +10,7 @@ export const useCurrentDestination = () => {
     return data?.find((destination) => {
       return (
         destination.properties.osm_type === osm.osmType &&
-        destination.properties.osm_id === osm.osmId &&
+        `${destination.properties.osm_id}` === `${osm.osmId}` &&
         destination.geometry?.type === 'Point'
       );
     });

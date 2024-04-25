@@ -9,7 +9,6 @@ if (NODE_ENV === 'production') {
   api = NEXT_PUBLIC_API_URL;
 } else {
   api = 'http://localhost:8787/api';
-  // api = 'https://packrat_api.abbierman101.workers.dev/api';
   // api = "https://packrat.onrender.com";
 }
 
