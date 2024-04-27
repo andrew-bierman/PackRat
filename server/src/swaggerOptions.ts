@@ -32,7 +32,7 @@ const options = {
 
   servers: [
     {
-      url: 'http://localhost:8787',
+      url: 'http://localhost:8080',
       description: 'Development server',
     },
     {

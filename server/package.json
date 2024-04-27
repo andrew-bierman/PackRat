@@ -21,7 +21,7 @@
     "prisma:generate": "npx prisma generate --schema=src/prisma/schema.prisma --data-proxy",
     "prisma:validate": "npx prisma validate --schema=src/prisma/schema.prisma",
     "prisma:pull": "npx prisma db pull --schema=src/prisma/schema.prisma",
-    "wrangler:dev": "npx wrangler dev --port 8787 --local",
+    "wrangler:dev": "npx wrangler dev --port 8080 --local",
     "wrangler:dev2": "npx wrangler pages dev --proxy 3001 --local --persist-to=./db.sqlite --d1=DB -- npm run dev",
     "generate": "drizzle-kit generate:sqlite --schema=./src/db/schema.ts --out=./migrations",
     "migrate": "wrangler d1 migrations apply production",
