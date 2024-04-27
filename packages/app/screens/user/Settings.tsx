@@ -1,5 +1,5 @@
 import React from 'react';
-import { Ionicons } from '@expo/vector-icons';
+import { AntDesign, Ionicons } from '@expo/vector-icons';
 import {
   RInput,
   RSeparator,
@@ -15,9 +15,12 @@ import {
   FormInput,
   FormSelect,
   SubmitButton,
+  RIconButton,
 } from '@packrat/ui';
 import Avatar from 'app/components/Avatar/Avatar';
 import { useProfileSettings } from 'app/hooks/user';
+import { useRouter } from 'app/hooks/router';
+import useTheme from 'app/hooks/useTheme';
 import { userSettingsSchema, passwordChangeSchema } from '@packrat/validations';
 
 const weatherOptions = ['celsius', 'fahrenheit'].map((key) => ({
@@ -34,6 +37,9 @@ export default function Settings() {
   const { user, handleEditUser, handlePasswordsChange, handleUpdatePassword } =
     useProfileSettings();
 
+    const { currentTheme } = useTheme();
+  const router = useRouter();
+
   return user ? (
     <RScrollView>
       <RStack
@@ -44,9 +50,28 @@ export default function Settings() {
         paddingHorizontal={8}
         marginHorizontal="auto"
       >
-        <RStack>
+        <RStack
+         style={{
+          display: 'flex',
+          alignItems: 'center',
+          flexDirection: 'row',
+        }}
+        >
+        <RIconButton
+            backgroundColor="transparent"
+            icon={
+              <AntDesign
+                name="arrowleft"
+                size={24}
+                color={currentTheme.colors.black}
+              />
+            }
+            onPress={()=>{
+              router.back();
+              }}
+          />
           <RH2>Profile</RH2>
-          <RSeparator marginVertical={8} />
+          
         </RStack>
         <Form
           validationSchema={userSettingsSchema}
