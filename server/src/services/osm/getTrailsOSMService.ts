@@ -4,7 +4,7 @@ import { updateDatabaseWithGeoJSONDataFromOverpass } from '../../controllers/get
 export async function getTrailsOsmService(osmUri, lat, lon, radius) {
   // set default values for lat, lon, and radius;
 
-  if (!overpassUrl) {
+  if (!osmUri) {
     throw new Error('OSM_URI is not defined in the environment variables'); // But it is defined so this is okay
   }
 

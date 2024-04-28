@@ -347,6 +347,7 @@ export const conversation = sqliteTable('conversation', {
     .primaryKey()
     .$defaultFn(() => createId()),
   userId: text('user_id').notNull(),
+  itemTypeId: text('itemTypeId').notNull(),
   history: text('history').notNull(),
   createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
   updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`),

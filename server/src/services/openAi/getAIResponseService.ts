@@ -6,15 +6,15 @@ import { User } from '../../drizzle/methods/User';
  * Retrieves AI response for a given user input in a conversation.
  * @param {PrismaClient} prisma - Prisma client.
  * @param {string} userId - The ID of the user.
- * @param {string} conversationId - The ID of the conversation.
+ * @param {string} itemTypeId - The ID of the conversation.
  * @param {string} userInput - The user input in the conversation.
  * @returns {Object} - The AI response and the updated conversation.
  */
 export const getAIResponseService = async (
   userId: string,
-  conversationId: string,
+  itemTypeId: string,
   userInput: string,
-  openAIAPIKey = null,
+  openAIAPIKey: string,
 ): Promise<object> => {
   if (!openAIAPIKey) {
     throw new Error(
@@ -35,24 +35,23 @@ export const getAIResponseService = async (
 
   let conversation: any = await conversationClass.findConversation(
     userId,
-    conversationId,
+    itemTypeId,
   );
 
-  console.log('conversation after find ---->', conversation);
-
   let conversationHistory = conversation ? conversation.history : '';
-  const messages = conversationHistory
-    ? conversationHistory.split('\n').map((message: any, i: number) => ({
-        role: i % 2 === 0 ? 'user' : 'assistant',
-        content: message,
-      }))
-    : [
-        {
-          role: 'system',
-          content:
-            'You are a helpful Outdoor Adventure Planning assistant for PackRat. Please assist the user with planning their trip using the following information:',
-        },
-      ];
+
+  const historyArray = conversationHistory.split(/(User:|AI:)/);
+  const messages = historyArray.reduce((accumulator, current, index) => {
+    if (index % 3 === 0) return accumulator; // Skip the empty strings from split
+    const isAI = current === 'AI:';
+    const content = historyArray[index + 1]; // Content is the next item
+    const role = isAI ? 'assistant' : 'user';
+    if (content && content.trim()) {
+      // Check if content exists and is not just whitespace
+      accumulator.push({ role, content: content.trim() });
+    }
+    return accumulator;
+  }, []);
 
   messages.push({ role: 'user', content: userInput });
 
@@ -62,18 +61,19 @@ export const getAIResponseService = async (
   });
 
   const aiResponse = response.choices[0].message.content.trim();
-  conversationHistory += `\n${userInput}\nAI: ${aiResponse}`;
+  conversationHistory += `\nUser: ${userInput}\nAI: ${aiResponse}`;
 
   if (conversation) {
     // Update existing conversation
-    await conversationClass.update({
-      history: conversationHistory,
+    conversation = await conversationClass.update({
       id: conversation.id,
+      history: conversationHistory,
     });
   } else {
     // Create new conversation
     conversation = await conversationClass.create({
       userId,
+      itemTypeId,
       history: conversationHistory,
     });
   }

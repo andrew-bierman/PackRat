@@ -42,6 +42,7 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
       handleSearchChange,
       showSearchResults,
       isLoadingMobile,
+      isVisible,
     } = useSearchInput({ onSelect, onChange, searchString });
 
     const { currentTheme } = useTheme();
@@ -95,7 +96,12 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
               )}
             </RStack>
 
-            <RStack style={{ position: 'relative' }}>
+            <RStack
+              style={{
+                position: 'relative',
+                display: isVisible ? 'block' : 'none',
+              }}
+            >
               {showSearchResults && results && results?.length > 0 && (
                 <RScrollView
                   position="absolute"

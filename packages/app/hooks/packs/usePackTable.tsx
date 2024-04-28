@@ -3,8 +3,7 @@ import { ItemCategoryEnum } from 'app/constants/itemCategory';
 import { convertWeight } from 'app/utils/convertWeight';
 import { useAuthUser } from 'app/auth/hooks';
 import { useDuplicatePackItem } from './useDuplicatePackItem';
-
-type WeightUnit = 'g' | 'kg' | 'oz' | 'lb' | 'lbs';
+import { useItemWeightUnit } from 'app/hooks/items';
 
 export const usePackTable = ({
   currentPack,
@@ -21,6 +20,7 @@ export const usePackTable = ({
   }
 
   const [checkedItems, setCheckedItems] = useState([...ids]);
+  const [weightUnit, setWeightUnit] = useItemWeightUnit();
 
   const handleDuplicate = () => {
     const data = {
@@ -32,7 +32,6 @@ export const usePackTable = ({
     duplicatePackItem(data);
   };
 
-  const [weightUnit, setWeightUnit] = useState<WeightUnit>('g');
   const data = currentPack?.items;
   let totalFoodWeight = 0;
   let totalWaterWeight = 0;
