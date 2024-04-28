@@ -9,9 +9,9 @@ export const useCurrentDestination = () => {
   const currentDestination = useMemo(() => {
     return data?.find((destination) => {
       return (
-        destination?.properties.osm_type === osm.osmType &&
-        destination?.properties.osm_id.toString() === osm.osmId &&
-        destination?.geometry?.type === 'Point'
+        destination.properties.osm_type === osm.osmType &&
+        `${destination.properties.osm_id}` === `${osm.osmId}` &&
+        destination.geometry?.type === 'Point'
       );
     });
   }, [osm.osmId, osm.osmType, data]);

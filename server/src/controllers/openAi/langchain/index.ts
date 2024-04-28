@@ -17,8 +17,9 @@ const prompt =
 
 export const getAIResponseService = async (
   userId: string,
-  conversationId: string,
+  // conversationId: string | null,
   userInput: string,
+  itemTypeId?: string | null,
   packId?: string,
   tripId?: string,
 ) => {
@@ -32,9 +33,21 @@ export const getAIResponseService = async (
   // find last conversation if present
   let conversation = await Conversation.findOne({
     userId,
-    _id: conversationId,
+    // _id: conversationId,
+    itemTypeId,
   });
-  let conversationHistory = conversation ? conversation.history : '';
+
+  // if conversation is not found, create a new one
+  if (!conversation) {
+    conversation = new Conversation({
+      userId,
+      itemTypeId,
+      history: '',
+    });
+    await conversation.save();
+  }
+
+  let conversationHistory = conversation.history;
 
   // format the last conversation history
   const messages = getConversationHistory(conversationHistory, prompt);
@@ -56,7 +69,6 @@ export const getAIResponseService = async (
   conversation = await saveConversationHistory(
     conversation,
     conversationHistory,
-    userId,
   );
   console.log('conversationHistory:', conversation);
   return { aiResponse, conversation };
@@ -134,7 +146,7 @@ function processConversationHistory(
   userInput,
   aiResponse,
 ) {
-  return `${conversationHistory}\n${userInput}\nAI: ${aiResponse}`;
+  return `${conversationHistory}\nUser: ${userInput}\nAI: ${aiResponse}`;
 }
 
 function getConversationHistory(conversationHistory: string, prompt: string) {
@@ -153,16 +165,8 @@ function getConversationHistory(conversationHistory: string, prompt: string) {
       ];
 }
 
-async function saveConversationHistory(
-  conversation,
-  conversationHistory,
-  userId,
-) {
-  if (conversation) {
-    conversation.history = conversationHistory;
-  } else {
-    conversation = new Conversation({ userId, history: conversationHistory });
-  }
+async function saveConversationHistory(conversation, conversationHistory) {
+  conversation.history = conversationHistory;
   await conversation.save();
   return conversation;
 }

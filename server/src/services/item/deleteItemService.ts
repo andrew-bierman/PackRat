@@ -15,7 +15,9 @@ export const deleteItemService = async (
   packId: string,
 ): Promise<object> => {
   const ItemPacksClass = new ItemPacks();
-  console.log(itemId);
+  const itemClass = new Item();
+
+  await itemClass.delete(itemId);
   await ItemPacksClass.delete(itemId, packId);
 
   return { message: 'Item deleted successfully' };
