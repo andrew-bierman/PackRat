@@ -42,8 +42,6 @@ module.exports = function (api) {
           include: 'TAMAGUI_TARGET',
         },
       ],
-      'react-native-reanimated/plugin',
-
     ],
   };
 };
