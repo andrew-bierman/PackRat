@@ -7,5 +7,6 @@ import { useAuthUser } from 'app/auth/hooks';
 export default function Home() {
   const user = useAuthUser();
 
+  
   return <>{!user ? <LandingPage /> : <Dashboard />}</>;
 }

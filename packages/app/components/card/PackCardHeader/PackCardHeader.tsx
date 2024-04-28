@@ -28,6 +28,8 @@ export const PackCardHeader = ({ data, title, link }: PackCardHeaderProps) => {
           defaultValue={title}
           isFocused={isEditMode}
           onSave={handleSaveTitle}
+          value={''}
+          onChange={undefined}
         />
       }
       link={link}

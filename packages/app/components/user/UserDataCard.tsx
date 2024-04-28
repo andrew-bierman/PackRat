@@ -39,7 +39,6 @@ const UserDataCard = ({
   differentUser,
 }: UserDataCardProps) => {
   const { editPack: changePackStatus } = useEditPack();
-
   /**
    * Updates the state at the specified index with the given boolean value.
    *

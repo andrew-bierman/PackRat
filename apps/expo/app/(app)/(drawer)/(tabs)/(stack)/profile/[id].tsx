@@ -7,7 +7,6 @@ import { useProfileId } from 'app/hooks/user';
 
 const Profile = () => {
   const { id } = useProfileId();
-
   return (
     <>
       {Platform.OS === 'web' && (

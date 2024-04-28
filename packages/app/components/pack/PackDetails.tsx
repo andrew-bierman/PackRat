@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-
+import React, { useEffect, useState } from 'react';
 import PackContainer from './PackContainer';
 import { DetailsHeader } from '../details/header';
 import { TableContainer } from '../pack_table/Table';
@@ -33,7 +32,7 @@ export function PackDetails() {
   const link = `${CLIENT_URL}/packs/${packId}`;
   const [firstLoad, setFirstLoad] = useState(true);
   const user = useAuthUser();
-  const userId = user?._id;
+  const userId = user?.id;
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
   const [refetch, setRefetch] = useState(false);
 
@@ -48,10 +47,10 @@ export function PackDetails() {
   const isAuthUserPack = useIsAuthUserPack(currentPack);
 
   const styles = useCustomStyles(loadStyles);
-  const currentPackId = currentPack && currentPack._id;
+  const currentPackId = currentPack && currentPack.id;
 
   // check if user is owner of pack, and that pack and user exists
-  const isOwner = currentPack && user && currentPack.owner_id === user._id;
+  const isOwner = currentPack && user && currentPack.owner_id === user.id;
 
   const isError = error !== null;
 

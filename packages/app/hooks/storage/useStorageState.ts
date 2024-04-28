@@ -37,7 +37,7 @@ export async function setStorageItemAsync(key: string, value: string | null) {
 export function useStorageState(key: string): UseStateHook<string> {
   // Public
   const [state, setState] = useAsyncState<string>();
-
+  
   // Get
   React.useEffect(() => {
     const getToken = async () => {
@@ -61,7 +61,7 @@ export function useStorageState(key: string): UseStateHook<string> {
     } catch (e) {
       console.error('Local storage is unavailable:', e);
     }
-  }, [key]);
+  }, []);
 
   // Set
   const setValue = React.useCallback(
