@@ -26,6 +26,7 @@ export const EditPackItemModal = ({
     : null;
 
   return (
+    
     <BaseModal
       title={'Edit Item'}
       isOpen={isOpen}

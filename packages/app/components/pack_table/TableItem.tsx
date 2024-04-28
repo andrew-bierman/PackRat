@@ -11,6 +11,7 @@ import { AddItem } from '../item/AddItem';
 import loadStyles from './packtable.style';
 import { RText, ZDropdown } from '@packrat/ui';
 import { useAuthUser } from 'app/auth/hooks';
+import { View } from 'tamagui';
 
 type ModalName = 'edit' | 'delete';
 
@@ -39,7 +40,6 @@ const TableItem = ({
   const [activeModal, setActiveModal] = useState<ModalName>(null);
   const styles = useCustomStyles(loadStyles);
   const authUser = useAuthUser();
-
   const openModal = (modalName: ModalName) => () => {
     setActiveModal(modalName);
   };
@@ -63,8 +63,21 @@ const TableItem = ({
 
   let rowData = [
     <RText px={8}>{name}</RText>,
-    <RText px={8}>{`${formatNumber(weight)} ${unit}`}</RText>,
-    <RText px={8}>{quantity}</RText>,
+    <RText px={0}>{`${formatNumber(weight)} ${unit}`}</RText>,
+    <RText px={0}>{quantity}</RText>,
+
+    <EditPackItemModal
+      showTrigger={true}
+      isOpen={activeModal === 'edit'}
+      onClose={closeModal}
+    >
+      <AddItem id={id} packId={id} isEdit={true} initialData={itemData} />
+    </EditPackItemModal>,
+    <DeletePackItemModal
+      onConfirm={() => onDelete({ itemId: id, packId: currentPack.id })}
+      isOpen={activeModal === 'delete'}
+      onClose={closeModal}
+    />,
   ];
 
   if (hasPermissions) {
@@ -87,18 +100,6 @@ const TableItem = ({
   // Here, you can set a default category if item.category is null or undefined
   return (
     <>
-      <EditPackItemModal
-        showTrigger={false}
-        isOpen={activeModal === 'edit'}
-        onClose={closeModal}
-      >
-        <AddItem id={id} packId={id} isEdit={true} initialData={itemData} />
-      </EditPackItemModal>
-      <DeletePackItemModal
-        onConfirm={() => onDelete({ itemId: id, packId: currentPack.id })}
-        isOpen={activeModal === 'delete'}
-        onClose={closeModal}
-      />
       <Row data={rowData} style={styles.row} flexArr={flexArr} />
     </>
   );

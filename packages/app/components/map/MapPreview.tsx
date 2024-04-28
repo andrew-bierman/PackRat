@@ -4,6 +4,8 @@ export default function MapPreview({ shape }) {
   const processedShape = useProcessedShape(shape);
   const mapPreviewData = useMapPreviewData(shape, processedShape);
 
+  console.log('mapPreviewData mapPreviewData', mapPreviewData?.uri, processedShape)
+
   if (!mapPreviewData) return null;
 
   return (

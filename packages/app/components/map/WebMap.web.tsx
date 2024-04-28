@@ -9,6 +9,7 @@ import MapPreview from './MapPreview';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useWebMap } from 'app/hooks/map/useWebMap';
 import useGpxUpload from './useGpxUpload';
+import { RText } from '@packrat/ui';
 // import 'mapbox-gl/dist/mapbox-gl.css'
 
 mapboxgl.accessToken =
@@ -17,6 +18,7 @@ mapboxgl.accessToken =
 const DESTINATION = 'destination';
 const TRIP = 'trip';
 const WebMap = ({ shape: shapeProp }) => {
+  console.log('shape shape shape', shape)
   const [downloadable, setDownloadable] = useState(false);
   const styles = useCustomStyles(loadStyles);
   const {

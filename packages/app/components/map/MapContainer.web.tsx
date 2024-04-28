@@ -2,12 +2,13 @@ import React from 'react';
 
 import { View, Platform } from 'react-native';
 
-import WebMap from './WebMap';
+import WebMap from './WebMap.web.tsx';
 import { isObjectEmpty } from '../../utils/isObjectEmpty';
 import { defaultShape } from '../../utils/mapFunctions';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 
 export function MapContainer({ shape }) {
+  console.log('MAPshape shape', shape)
   if (!shape || isObjectEmpty(shape)) {
     shape = defaultShape;
   }

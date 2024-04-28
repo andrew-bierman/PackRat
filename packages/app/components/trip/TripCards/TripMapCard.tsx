@@ -1,5 +1,5 @@
 import { RStack, RText } from '@packrat/ui';
-import MapContainer from 'app/components/map/MapContainer';
+import MapContainer from 'app/components/map/MapContainer.web.tsx';
 import useTheme from 'app/hooks/useTheme';
 import { TripCardBase } from './TripCardBase';
 import { FontAwesome5 } from '@expo/vector-icons';
@@ -10,6 +10,7 @@ type TripMapCardProps = {
 };
 
 export const TripMapCard = ({ isLoading, shape }: TripMapCardProps) => {
+  console.log('MAP isLoading ', shape)
   const { currentTheme } = useTheme();
 
   return (

@@ -21,6 +21,7 @@ const useProcessedShape = (shape) => {
 
 const useMapPreviewData = (shape, processedShape) => {
   const [mapPreviewData, setMapPreviewData] = useState(null);
+  console.log('mappreiveshape shape', processedShape, shape)
 
   useEffect(() => {
     if (!processedShape) return;
@@ -47,7 +48,7 @@ const useMapPreviewData = (shape, processedShape) => {
         coordinates: [shape.features[0].geometry.coordinates[0]],
       },
     };
-
+    console.log('polygonObj polygonObj', polygonObj)
     if (isPolygonOrMultiPolygon(shape)) {
       imageShape.features.push([shape.features[0].geometry.coordinates[0]]);
     } else {
@@ -65,14 +66,19 @@ const useMapPreviewData = (shape, processedShape) => {
       JSON.stringify(imageShape, null, 0),
     );
 
+    console.log('urlEncodedImageShapeGeoJSONurlEncodedImageShapeGeoJSON', urlEncodedImageShapeGeoJSON)
+
     let bounds = getShapeSourceBounds(shape);
+    console.log('bounds bounds', bounds)
     bounds = bounds[0].concat(bounds[1]);
+    
 
     const {
       coordinates: [lng, lat],
     } = shape.features[0].geometry;
 
     const mapPreviewEndpoint = `${api}/mapPreview`;
+    console.log('mapPreviewEndpointmapPreviewEndpoint', mapPreviewEndpoint)
 
     const data = {
       isPoint: isPoint(shape),
@@ -82,7 +88,7 @@ const useMapPreviewData = (shape, processedShape) => {
             ',',
           )}]/900x400?padding=50,30,30,30`,
     };
-
+    console.log('datadatadatadata', data )
     setMapPreviewData(data);
   }, [shape, processedShape]);
 

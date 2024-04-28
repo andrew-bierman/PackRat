@@ -163,6 +163,7 @@ export const useWebMap = ({ shape: shapeProp }) => {
     } else if (map.current && shape.features[0].geometry.type !== 'Point') {
       removeTrailLayer(map.current);
       addTrailLayer(map.current);
+      console.log('trailCenterPointRef trailCenterPointRef', trailCenterPointRef)
       map.current.setCenter(trailCenterPointRef.current);
       map.current.setZoom(zoomLevelRef.current);
     }

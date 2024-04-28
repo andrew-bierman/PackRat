@@ -23,10 +23,12 @@ CREATE TABLE `item` (
 	`quantity` integer NOT NULL,
 	`unit` text NOT NULL,
 	`category_id` text,
+	`owner_id` text,
 	`global` integer DEFAULT false,
 	`created_at` text DEFAULT CURRENT_TIMESTAMP,
 	`updated_at` text DEFAULT CURRENT_TIMESTAMP,
-	FOREIGN KEY (`category_id`) REFERENCES `item_category`(`id`) ON UPDATE no action ON DELETE set null
+	FOREIGN KEY (`category_id`) REFERENCES `item_category`(`id`) ON UPDATE no action ON DELETE set null,
+	FOREIGN KEY (`owner_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
 CREATE TABLE `item_category` (
@@ -138,8 +140,8 @@ CREATE TABLE `user` (
 	`role` text DEFAULT 'user',
 	`username` text NOT NULL,
 	`profile_image` text,
-	`preferred_weather` text,
-	`preferred_weight` text,
+	`preferred_weather` text DEFAULT 'celsius',
+	`preferred_weight` text DEFAULT 'lb',
 	`created_at` text DEFAULT CURRENT_TIMESTAMP,
 	`updated_at` text DEFAULT CURRENT_TIMESTAMP
 );

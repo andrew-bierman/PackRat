@@ -53,8 +53,8 @@ export const TableContainer = ({
     setRefetch,
     copy,
   });
-  const headerRow = ['Item Name', `Weight`, 'Quantity', ''];
-  let flexArr = [2, 1, 1, 1, 0.65, 0.65, 0.65];
+  const headerRow = ['Item Name', `Weight`, 'Quantity', 'Edit', 'Delete', 'Ignore'];
+  let flexArr = [4, 1, 1, 1, 1, 1];
   const { deletePackItem } = useDeletePackItem();
 
   if (

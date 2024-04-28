@@ -33,6 +33,7 @@ export const useTripsData = () => {
     isLoading: weekWeatherLoading,
     isError: weekWeatherError,
   } = useFetchWeatherWeak(latLng);
+  console.log('weatherWeekData', currentDestination)
 
   const {
     error: parksError,
@@ -41,7 +42,7 @@ export const useTripsData = () => {
   } = useParks({
     latLng,
   });
-
+  
   const { data, filteredTrails, error, isLoading } = useTrails({
     latLng,
     selectedSearch: osm.name,
