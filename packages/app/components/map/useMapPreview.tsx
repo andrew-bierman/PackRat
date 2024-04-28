@@ -25,7 +25,7 @@ const useMapPreviewData = (shape, processedShape) => {
 
   useEffect(() => {
     if (!processedShape) return;
-
+    console.log('processedShape', processedShape)
     const lineProperties = {
       stroke: '#16b22d',
       'stroke-width': 4,
@@ -34,13 +34,14 @@ const useMapPreviewData = (shape, processedShape) => {
     const pointProperties = {
       'marker-color': '#16b22d',
     };
-
+    
     if (isLineString(shape)) {
+     
       shape.features[0].properties = lineProperties;
     }
 
     const imageShape = { type: 'FeatureCollection', features: [] };
-
+    console.log('imageShape', imageShape)
     const polygonObj = {
       ...shape.features[0],
       geometry: {
@@ -48,7 +49,7 @@ const useMapPreviewData = (shape, processedShape) => {
         coordinates: [shape.features[0].geometry.coordinates[0]],
       },
     };
-    console.log('polygonObj polygonObj', polygonObj)
+    console.log('polygonObj polygonObj', isPolygonOrMultiPolygon(shape))
     if (isPolygonOrMultiPolygon(shape)) {
       imageShape.features.push([shape.features[0].geometry.coordinates[0]]);
     } else {
@@ -56,6 +57,7 @@ const useMapPreviewData = (shape, processedShape) => {
     }
 
     processedShape.features.forEach((feature) => {
+      console.log(feature.properties.meta, 'feature.properties.meta')
       if (feature.properties.meta == 'end') {
         feature.properties = pointProperties;
         imageShape.features.push(feature);
@@ -63,14 +65,14 @@ const useMapPreviewData = (shape, processedShape) => {
     });
 
     const urlEncodedImageShapeGeoJSON = encodeURIComponent(
-      JSON.stringify(imageShape, null, 0),
+      JSON.stringify(imageShape),
     );
 
     console.log('urlEncodedImageShapeGeoJSONurlEncodedImageShapeGeoJSON', urlEncodedImageShapeGeoJSON)
 
     let bounds = getShapeSourceBounds(shape);
-    console.log('bounds bounds', bounds)
     bounds = bounds[0].concat(bounds[1]);
+    console.log('bounds bounds', bounds)
     
 
     const {
@@ -78,17 +80,19 @@ const useMapPreviewData = (shape, processedShape) => {
     } = shape.features[0].geometry;
 
     const mapPreviewEndpoint = `${api}/mapPreview`;
-    console.log('mapPreviewEndpointmapPreviewEndpoint', mapPreviewEndpoint)
+    console.log('mapPreviewEndpointmapPreviewEndpoint', bounds)
 
     const data = {
       isPoint: isPoint(shape),
       uri: isPoint(shape)
         ? `${mapPreviewEndpoint}/pin-s+db4848(${lng},${lat})/${lng},${lat},8.63,0/900x400`
         : `${mapPreviewEndpoint}/geojson(${urlEncodedImageShapeGeoJSON})/[${bounds.join(
-            ',',
+            ' , ',
           )}]/900x400?padding=50,30,30,30`,
     };
-    console.log('datadatadatadata', data )
+    console.log('datadatadatadata', `${mapPreviewEndpoint}/geojson(${urlEncodedImageShapeGeoJSON})/[${bounds.join(
+      ' , ',
+    )}]/900x400?padding=50,30,30,30`, )
     setMapPreviewData(data);
   }, [shape, processedShape]);
 

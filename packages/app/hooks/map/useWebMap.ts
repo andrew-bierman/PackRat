@@ -144,6 +144,7 @@ export const useWebMap = ({ shape: shapeProp }) => {
         //   .addTo(mapInstance);
 
         mapInstance.on('move', () => {
+          console.log('Move is done')
           const { lng, lat } = mapInstance.getCenter();
           setLng(lng.toFixed(4));
           setLat(lat.toFixed(4));
@@ -158,6 +159,7 @@ export const useWebMap = ({ shape: shapeProp }) => {
   }, [mapFullscreen]);
 
   useEffect(() => {
+    console.log('shape.features[0].geometry.type ',shape.features[0].geometry.type)
     if (map.current && isPoint(shape)) {
       addPoints(map.current);
     } else if (map.current && shape.features[0].geometry.type !== 'Point') {

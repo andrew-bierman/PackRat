@@ -55,6 +55,7 @@ export default function Card({
   duration,
 }: CardProps) {
   const user = useAuthUser();
+  console.log('owner_id', owner_id)
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
 
@@ -220,7 +221,7 @@ export default function Card({
                   >
                     <Link
                       href={`/profile/${
-                        type === 'pack' ? owner_id : owner?.id
+                        type === 'pack' ? owner?.id : owner_id
                       }`}
                     >
                       <RText color={currentTheme.colors.textColor}>

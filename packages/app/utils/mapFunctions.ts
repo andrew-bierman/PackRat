@@ -83,7 +83,6 @@ function getShapeSourceBounds(shape) {
   shape.features[0].geometry.coordinates.forEach((coord) => {
     const lng = coord[0];
     const lat = coord[1];
-
     if (lng < minLng) {
       minLng = lng;
     }
@@ -96,6 +95,7 @@ function getShapeSourceBounds(shape) {
     if (lat > maxLat) {
       maxLat = lat;
     }
+    console.log('minLat ', minLat, ' maxlat ', maxLat)
   });
 
   return [
