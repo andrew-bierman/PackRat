@@ -16,6 +16,12 @@
     },
     "preview": {
       "distribution": "internal",
+      "env": {
+        "EXPO_PUBLIC_GOOGLE_ID": "993694750638-876nvl8hfjfv6tqiqc1c4tmubvf8chpp.apps.googleusercontent.com",
+        "EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN": "pk.eyJ1IjoiYW5kcmV3Ymllcm1hbiIsImEiOiJjbDhwYTVtc3kwMGprM3Buejg3d2doa2pvIn0.F_D3I0KRlQkQK70DkK7MlQ",
+        "EXPO_PUBLIC_API_URL": "https://packrat_api.abbierman101.workers.dev/api",
+        "EXPO_PUBLIC_CLIENT_URL": "http://localhost:4200"
+      },
       "ios": {
         "resourceClass": "m-medium"
       }
@@ -26,7 +32,7 @@
       }
     }
   },
-  
+
   "submit": {
     "production": {}
   }
