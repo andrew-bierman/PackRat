@@ -1,5 +1,5 @@
 import React, { cloneElement, ReactNode, forwardRef } from 'react';
-import { Platform, TextInput, } from 'react-native';
+import { Platform, TextInput } from 'react-native';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import useSearchInput from './useSearchInput';
 import useTheme from 'app/hooks/useTheme';
@@ -42,6 +42,7 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
       handleSearchChange,
       showSearchResults,
       isLoadingMobile,
+      isVisible,
     } = useSearchInput({ onSelect, onChange, searchString });
 
     const { currentTheme } = useTheme();
@@ -95,7 +96,12 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
               )}
             </RStack>
 
-            <RStack style={{ position: 'relative' }}>
+            <RStack
+              style={{
+                position: 'relative',
+                display: isVisible ? 'block' : 'none',
+              }}
+            >
               {showSearchResults && results && results?.length > 0 && (
                 <RScrollView
                   position="absolute"
@@ -142,8 +148,6 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
           position="relative"
           backgroundColor={currentTheme.colors.text}
           borderRadius={8}
-          
-          
         >
           <RStack
             flexDirection="row"
@@ -195,8 +199,8 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
             )}
           </RStack>
           {showSearchResults && results?.length > 0 && (
-              <RScrollView keyboardShouldPersistTaps='handled'>
-              <View role="list" style={{ width: '100%', }}>
+            <RScrollView keyboardShouldPersistTaps="handled">
+              <View role="list" style={{ width: '100%' }}>
                 {results.map((result, i) => (
                   <Pressable
                     key={`result + ${i}`}
@@ -224,5 +228,6 @@ const loadStyles = () => ({
     marginTop: 20,
     marginBottom: 15,
     maxWidth: 400,
+    width: '100%',
   },
 });

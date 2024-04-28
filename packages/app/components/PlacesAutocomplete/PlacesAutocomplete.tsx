@@ -1,5 +1,5 @@
 import { forwardRef, useImperativeHandle, useRef } from 'react';
-import {TextInput} from 'react-native';
+import { TextInput } from 'react-native';
 import { SearchInput } from '../SearchInput';
 import { RStack, RText } from '@packrat/ui';
 import useTheme from 'app/hooks/useTheme';
@@ -20,7 +20,6 @@ export const PlacesAutocomplete = forwardRef<any>(
       }),
       [search],
     );
-    
 
     return (
       <SearchInput
@@ -37,11 +36,15 @@ export const PlacesAutocomplete = forwardRef<any>(
 );
 
 const PlaceItem = ({ item }) => {
-  const {currentTheme} = useTheme();
+  const { currentTheme } = useTheme();
   return (
     <RStack style={{ flexDirection: 'row' }}>
       <RText fontWeight="400">{item.properties.name}</RText>
-      <RText color={currentTheme.colors.textDarkGrey} opacity={100} textTransform={'capitalize'}>
+      <RText
+        color={currentTheme.colors.textDarkGrey}
+        opacity={100}
+        textTransform={'capitalize'}
+      >
         {item.properties.osm_value}
       </RText>
     </RStack>

@@ -5,6 +5,7 @@ import { SearchItem } from '../item/SearchItem';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { TripCardHeader } from './TripCardHeader';
 import { PackCardHeader } from './PackCardHeader';
+import { useAuthUser } from 'app/auth/hooks/useUser';
 
 interface CustomCardProps {
   title: string;
@@ -15,7 +16,7 @@ interface CustomCardProps {
   destination?: string;
   data: {
     owner_id: {
-      _id: string;
+      id: string;
       username?: string;
     };
     owners?: Array<{ name: string }> | null;
@@ -32,10 +33,12 @@ export const CustomCard = ({
   data,
 }: CustomCardProps) => {
   const styles = useCustomStyles(loadStyles);
+  const authUser = useAuthUser();
 
   if (!data) return null;
 
   const isWeb = Platform.OS === 'web';
+  console.log(data);
 
   return (
     <View
@@ -60,6 +63,7 @@ export const CustomCard = ({
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'center',
+            gap: 16,
           }}
         >
           {type === 'trip' ? (
@@ -69,7 +73,7 @@ export const CustomCard = ({
           )}
         </View>
         <RSeparator />
-        {type === 'pack' ? (
+        {type === 'pack' && authUser.id === data.owner_id ? (
           <>
             <View
               style={{
@@ -107,6 +111,7 @@ const loadStyles = (theme) => {
       flex: 1,
       gap: 45,
       justifyContent: 'space-between',
+      width: '100%',
       alignItems: 'center',
       marginBottom: 20,
       border: '1',

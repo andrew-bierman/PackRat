@@ -14,7 +14,7 @@ export function useGetAIResponse() {
     //       {
     //         message: userInput,
     //         sender: userId,
-    //         _id: Date.now().toString(),
+    //         id: Date.now().toString(),
     //       },
     //     ],
     //   };
@@ -42,11 +42,11 @@ export function useGetAIResponse() {
     },
   });
 
-  const getAIResponse = async ({ userId, conversationId, userInput }) => {
+  const getAIResponse = async ({ userId, userInput, itemTypeId }) => {
     return mutation.mutate({
       userId,
-      conversationId,
-      userInput,
+      userInput: userInput.message,
+      itemTypeId,
     });
   };
 

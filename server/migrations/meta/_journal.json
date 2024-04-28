@@ -1,0 +1,27 @@
+{
+  "version": "5",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1709105161010,
+      "tag": "0000_previous_radioactive_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1712780313472,
+      "tag": "0001_same_iron_patriot",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1713116052484,
+      "tag": "0002_numerous_tyger_tiger",
+      "breakpoints": true
+    }
+  ]
+}

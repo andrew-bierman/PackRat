@@ -1,6 +1,4 @@
 import { editGlobalItemAsDuplicateService } from '../../services/item/item.service';
-import { UnableToDeleteItemError } from '../../helpers/errors';
-import { responseHandler } from '../../helpers/responseHandler';
 import { z } from 'zod';
 import { publicProcedure } from '../../trpc';
 
@@ -19,27 +17,27 @@ import { publicProcedure } from '../../trpc';
  * @param {Object} res - The response object.
  * @return {Object} The updated item.
  */
-export const editGlobalItemAsDuplicate = async (req, res, next) => {
-  try {
-    const { itemId } = req.params;
-    const { packId, name, weight, quantity, unit, type } = req.body;
+// export const editGlobalItemAsDuplicate = async (req, res, next) => {
+//   try {
+//     const { itemId } = req.params;
+//     const { packId, name, weight, quantity, unit, type } = req.body;
 
-    const newItem = await editGlobalItemAsDuplicateService(
-      itemId,
-      packId,
-      name,
-      weight,
-      quantity,
-      unit,
-      type,
-    );
+//     const newItem = await editGlobalItemAsDuplicateService(
+//       itemId,
+//       packId,
+//       name,
+//       weight,
+//       quantity,
+//       unit,
+//       type,
+//     );
 
-    res.locals.data = newItem;
-    responseHandler(res);
-  } catch (error) {
-    next(UnableToDeleteItemError);
-  }
-};
+//     res.locals.data = newItem;
+//     responseHandler(res);
+//   } catch (error) {
+//     next(UnableToDeleteItemError);
+//   }
+// };
 
 export function editGlobalItemAsDuplicateRoute() {
   return publicProcedure
@@ -56,7 +54,7 @@ export function editGlobalItemAsDuplicateRoute() {
     )
     .mutation(async (opts) => {
       const { itemId, packId, name, weight, quantity, unit, type } = opts.input;
-      return await editGlobalItemAsDuplicateService(
+      const item = await editGlobalItemAsDuplicateService(
         itemId,
         packId,
         name,
@@ -65,5 +63,6 @@ export function editGlobalItemAsDuplicateRoute() {
         unit,
         type,
       );
+      return item;
     });
 }

@@ -9,7 +9,9 @@ module.exports = {
   extends: [
     'standard-with-typescript',
     'plugin:@typescript-eslint/recommended',
+    // 'plugin:drizzle/all', // add this back when we are fully migrated to drizzle
     'prettier',
+    'plugin:next-on-pages/recommended',
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -20,7 +22,7 @@ module.exports = {
     sourceType: 'module',
     project: './tsconfig.json',
   },
-  plugins: ['@typescript-eslint', 'prettier'],
+  plugins: ['@typescript-eslint', 'prettier', 'next-on-pages'],
   ignorePatterns: [
     'node_modules/',
     'dist/',
@@ -34,8 +36,12 @@ module.exports = {
     'tsconfig.*.json',
     'eslint.js',
     '.eslintrc.js',
+    'drizzle.config.ts',
+    'vitest.config.*.ts',
+    'worker-configurations.*',
   ],
   rules: {
+    'next-on-pages/no-unsupported-configs': 'warn',
     'prettier/prettier': 'error',
     'constructor-super': 'error',
     'for-direction': 'error',
@@ -146,8 +152,10 @@ module.exports = {
         '@typescript-eslint/no-namespace': 'off',
         'import/no-duplicates': 'off',
         '@typescript-eslint/no-confusing-void-expression': 'off',
+        '@typescript-eslint/ban-types': 'off',
         'no-unmodified-loop-condition': 'off',
         '@typescript-eslint/no-base-to-string': 'off',
+        '@typescript-eslint/unbound-method': 'off',
       },
       extends: [
         'plugin:@typescript-eslint/recommended',

@@ -1,3 +1,4 @@
+import React from 'react';
 import { RStack, RText } from '@packrat/ui';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { AddPackContainer } from '../pack/AddPack';

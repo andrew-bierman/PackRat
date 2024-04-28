@@ -10,7 +10,7 @@ import { useFeed } from 'app/hooks/feed';
 const { height, width } = Dimensions.get('window');
 
 interface FeedItem {
-  _id: string;
+  id: string;
   name: string;
   type: string;
   description: string;
@@ -27,7 +27,7 @@ const FeedPreviewScroll: React.FC<FeedPreviewScrollProps> = ({ itemWidth }) => {
   return (
     <Carousel itemWidth={itemWidth}>
       {feedData?.map((item: FeedItem, index: number) => {
-        const linkStr = `/${item.type}/${item._id}`;
+        const linkStr = `/${item.type}/${item.id}`;
         return linkStr ? (
           <Link href={linkStr} key={`${linkStr}`}>
             <View style={styles.cardStyles} key={index}>

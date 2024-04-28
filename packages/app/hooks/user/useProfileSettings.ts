@@ -28,21 +28,19 @@ export const useProfileSettings = () => {
   };
 
   const handleEditUser = (data) => {
-    const { _id } = user;
-
-    console.log({ data });
+    const { id } = user;
 
     updateUser({
-      userId: _id,
+      userId: id,
       ...data,
     });
   };
 
-  const handleUpdatePassword = () => {
+  const handleUpdatePassword = (data) => {
     const { email } = user;
-    const { oldPassword, newPassword, confirmPassword } = passwords;
+    const { oldPassword, newPassword, confirmPassword } = data;
     if (newPassword !== confirmPassword) return;
-    updateUserPassword({ email, password: newPassword });
+    updateUserPassword({ email, oldPassword, password: newPassword });
   };
 
   return {

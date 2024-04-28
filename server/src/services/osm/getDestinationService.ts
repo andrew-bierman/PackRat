@@ -1,19 +1,22 @@
-import Way from '../../models/osm/wayModel';
-import Node from '../../models/osm/nodeModel';
+import { Way } from '../../drizzle/methods/Way';
+import { Node } from '../../drizzle/methods/Node';
 
 /**
  * Retrieves the destination service based on the given ID.
- *
+ * @param {PrismaClient} prisma - Prisma client.
  * @param {string} id - The ID of the destination service.
  * @return {Promise<any>} A promise that resolves to the destination service.
  */
 export const getDestinationService = async (id) => {
-  let destination = await Way.findById(id);
+  const wayClass = new Way();
+  const nodeClass = new Node();
+  const way = await wayClass.findUniqueWay({ where: { id } });
 
-  // If not found in Way, search in Node
-  if (!destination) {
-    destination = await Node.findById(id);
+  if (way) {
+    return way;
   }
 
-  return destination;
+  const node = await nodeClass.findUniqueNode({ where: { id } });
+
+  return node;
 };

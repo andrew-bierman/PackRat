@@ -1,13 +1,13 @@
+mongodb-data
 *.env
 node_modules
 # yarn.lock
 # dist
 old/
 .zip
-app.json
 Podfile
 Podfile.lock
-gradle.properties
+
 client.zip
 *.zip
 .vscode
@@ -19,6 +19,16 @@ google-services.json
 # Wrangler
 wrangler.toml
 .wrangler/
+
+# Vitest
+.vitest
+vitest.config.js
+vitest.config.js.*
+
+# Drizzle
+drizzle.config.js
+drizzle.config.js.*
+drizzle.config.d.ts
 
 # Tamagui
 .tamagui

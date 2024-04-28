@@ -12,9 +12,7 @@ export function CombinedProvider({ children }: { children: React.ReactNode }) {
     <JotaiProvider>
       <TrpcTanstackProvider>
         <SessionProvider>
-          <ThemeProvider>
-            {children}
-          </ThemeProvider>
+          <ThemeProvider>{children}</ThemeProvider>
         </SessionProvider>
       </TrpcTanstackProvider>
     </JotaiProvider>

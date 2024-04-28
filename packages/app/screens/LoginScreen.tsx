@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View } from 'react-native';
 import {
   RHeading,
@@ -14,7 +14,6 @@ import {
 import { FontAwesome } from '@expo/vector-icons';
 import { NODE_ENV } from '@env';
 import { Link } from '@packrat/crosspath';
-import { InformUser } from '../utils/ToastUtils';
 import useTheme from '../hooks/useTheme';
 import { useGoogleAuth, useLogin } from 'app/auth/hooks';
 import { userSignIn as userSignInSchema } from '@packrat/validations';
@@ -25,19 +24,10 @@ const demoUser = {
 };
 
 export default function Login() {
-  const { handleLogin, hasError } = useLogin();
+  const { handleLogin } = useLogin();
   const { enableGoogleLogin, isGoogleSignInReady, promptAsync } =
     useGoogleAuth();
   const { currentTheme } = useTheme();
-
-  if (hasError) {
-    InformUser({
-      title: 'Wrong-password',
-      duration: 3000,
-      placement: 'top-right',
-      style: { backgroundColor: currentTheme.colors.error },
-    });
-  }
 
   return (
     <RScrollView>
