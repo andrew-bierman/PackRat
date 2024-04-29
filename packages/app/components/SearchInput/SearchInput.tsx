@@ -111,6 +111,11 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
                   maxHeight={150}
                   borderWidth={1}
                   borderRadius={12}
+                  backgroundColor={
+                    !isDark
+                      ? currentTheme.colors.white
+                      : currentTheme.colors.black
+                  }
                   style={{
                     borderColor: isDark ? '#F8F8F8' : '##D1D5DB',
                   }}
