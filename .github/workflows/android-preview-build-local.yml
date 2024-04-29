@@ -47,11 +47,11 @@ jobs:
       - name: Prebuild
         run: yarn run prebuild:expo
 
-      - name: Build APK
+      - name: Build APK for Preview
         uses: expo/expo-github-action/preview@v8
         with:
           working-directory: apps/expo
-          command: eas build --platform android --profile development --local --output ${{ github.workspace }}/app-release.apk
+          command: eas build --platform android --profile preview --local --output ${{ github.workspace }}/app-release.apk
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v2
