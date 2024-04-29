@@ -101,7 +101,7 @@ export const AddPackContainer = ({ isCreatingTrip }) => {
 };
 
 const loadStyles = (theme, appTheme) => {
-  const { currentTheme } = theme;
+  const { isDark, currentTheme } = theme;
   return {
     container: {
       flexDirection: 'column',
@@ -111,8 +111,10 @@ const loadStyles = (theme, appTheme) => {
       width: '100%',
       paddingHorizontal: 18,
       gap: 20,
-      marginTop: 20,
-      backgroundColor: currentTheme.colors.white,
+      paddingTop: 20,
+      backgroundColor: isDark
+        ? currentTheme.colors.background
+        : currentTheme.colors.white,
     },
     desktopStyle: {
       flexDirection: 'row',

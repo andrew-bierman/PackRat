@@ -70,7 +70,7 @@ export const ItemsTable = ({
     ];
 
     return (
-      <Row data={rowData} style={[styles.title]} textStyle={styles.titleText} />
+      <Row data={rowData} style={styles.title} textStyle={styles.titleText} />
     );
   };
   const TableItem = ({ itemData }: TableItemProps) => {
@@ -79,10 +79,14 @@ export const ItemsTable = ({
     const authUser = useAuthUser();
 
     const rowData = [
-      name,
-      `${formatNumber(weight)} ${unit}`,
-      quantity,
-      `${category?.name || type}`,
+      <RText style={{ color: isDark ? 'white' : 'black' }}>{name}</RText>,
+      <RText style={{ color: isDark ? 'white' : 'black' }}>
+        {formatNumber(weight)} {unit}
+      </RText>,
+      <RText style={{ color: isDark ? 'white' : 'black' }}>{quantity}</RText>,
+      <RText style={{ color: isDark ? 'white' : 'black' }}>
+        {category?.name || type}
+      </RText>,
       authUser.id === ownerId ? (
         <EditPackItemModal
           key="edit-pack-item"
@@ -125,7 +129,18 @@ export const ItemsTable = ({
         ''
       ),
     ];
-    return <Row data={rowData} style={styles.row} flexArr={flexArr} />;
+    return (
+      <Row
+        data={rowData}
+        style={{
+          backgroundColor: isDark ? '#1A1A1D' : 'white',
+          borderBottomWidth: !isDark ? 1 : 'none',
+          borderBottomColor: !isDark ? '#D1D5DB' : 'none',
+          ...styles.row,
+        }}
+        flexArr={flexArr}
+      />
+    );
   };
   /**
    * Handles the logic for navigating to the next page.
@@ -142,8 +157,6 @@ export const ItemsTable = ({
     setPage(page - 1);
   };
 
-  console.log('data', currentTheme.colors.background);
-
   return (
     <ScrollView>
       <View
@@ -151,11 +164,8 @@ export const ItemsTable = ({
           paddingVertical: 16,
           flex: 1,
           paddingTop: 30,
-          backgroundColor:
-            currentTheme.colors.background === '#0284c7'
-              ? 'white'
-              : currentTheme.colors.background,
           marginTop: 20,
+          backgroundColor: isDark ? '#1A1A1D' : 'white',
         }}
       >
         <ScrollView
