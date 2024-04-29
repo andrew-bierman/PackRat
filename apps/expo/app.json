@@ -59,9 +59,10 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "267945b1-d9ac-4621-8541-826a2c70576d"
+        "projectId": "9da94b36-90f1-4b3e-830a-b205816809e7"
       }
     },
-    "owner": "packrat"
+    "owner": "andrewbierman"
   }
+
 }

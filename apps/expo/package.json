@@ -27,7 +27,8 @@
     "build:ios:output": "eas build --platform ios --profile development --local --output /home/runner/work/PackRat/PackRat/app-release.ipa --json --non-interactive",
     "prebuild": "npx expo prebuild",
     "prebuild:clean": "npx expo prebuild --clean",
-    "build:clean": "yarn run prebuild:clean && yarn run build"
+    "build:clean": "yarn run prebuild:clean && yarn run build",
+    "build:android:preview": "eas build --platform android --profile preview --local"
   },
   "dependencies": {
     "@babel/runtime": "^7.21.0",

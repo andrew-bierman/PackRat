@@ -1,4 +1,4 @@
-name: android-preview-and-release-build
+name: android-preview-build-local
 on:
   push:
     branches: [ "**" ]
@@ -42,10 +42,13 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Install dependencies
-        run: yarn install
+        uses: ./.github/actions/install-deps
 
       - name: Prebuild
         run: yarn run prebuild:expo
+
+      - name: Create preview
+        run: eas build --platform android --profile preview --local
 
       - name: Build APK for Preview
         uses: expo/expo-github-action/preview@v8
