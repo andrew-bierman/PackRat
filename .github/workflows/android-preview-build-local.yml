@@ -41,6 +41,11 @@ jobs:
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
 
+      - name: Set Environment Tokens
+        uses: ./.github/actions/set-env-tokens
+        with:
+          mapbox_token: ${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}
+
       - name: Install dependencies
         run: yarn install
 
