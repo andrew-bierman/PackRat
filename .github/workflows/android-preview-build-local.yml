@@ -44,6 +44,9 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
+      - name: Prebuild
+        run: yarn run prebuild:expo
+
       - name: Build APK
         uses: expo/expo-github-action/preview@v8
         with:

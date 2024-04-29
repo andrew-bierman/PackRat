@@ -69,7 +69,8 @@
     "upgrade:tamagui": "yarn up '*tamagui*'@latest '@tamagui/*'@latest",
     "upgrade:cloudflare": "yarn up '@cloudflare/*'@latest wrangler@latest",
     "upgrade:hono": "yarn up '@hono/*'@latest 'hono'@latest",
-    "web": "cd apps/next && yarn dev"
+    "web": "cd apps/next && yarn dev",
+    "prebuild:expo": "cd apps/expo && yarn run prebuild:clean"
   },
   "engines": {
     "node": ">=18.16.1",
