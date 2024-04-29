@@ -7,12 +7,22 @@ import TripCard from '../../components/trip/TripCard';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { theme } from '../../theme';
 import { TripMapCard } from 'app/components/trip/TripCards';
+import { useFetchSinglePack } from 'app/hooks/packs';
+import { RSkeleton, RText } from '@packrat/ui';
 
-const TableContainerComponent = ({ currentPack }) => (
-  <View>
-    <TableContainer currentPack={currentPack} />
-  </View>
-);
+const TableContainerComponent = ({ currentPack }) => {
+    const { data, isLoading } = useFetchSinglePack(currentPack.id || currentPack)
+
+    if (isLoading) return <RSkeleton style={{}} />;
+
+    if (data === null) return <RText>Pack Not Found</RText>;
+
+    return (
+        <View>
+            <TableContainer currentPack={data} />
+        </View>
+    );
+};
 
 const WeatherCardComponent = ({ weatherObject, weatherWeek, data }) => (
   <View style={{ marginTop: '5%' }}>

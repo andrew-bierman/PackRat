@@ -11,6 +11,10 @@ const ConversationSchema = new Schema(
     },
     history: {
       type: String,
+      // required: true,
+    },
+    itemTypeId: {
+      type: String,
       required: true,
     },
   },
