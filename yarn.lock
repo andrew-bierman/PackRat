@@ -7726,9 +7726,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rnmapbox/maps@npm:^10.0.0-beta.79":
-  version: 10.1.19
-  resolution: "@rnmapbox/maps@npm:10.1.19"
+"@rnmapbox/maps@npm:^10.1.21":
+  version: 10.1.21
+  resolution: "@rnmapbox/maps@npm:10.1.21"
   dependencies:
     "@turf/along": "npm:6.5.0"
     "@turf/distance": "npm:6.5.0"
@@ -7747,7 +7747,7 @@ __metadata:
       optional: true
     mapbox-gl:
       optional: true
-  checksum: 10/e29ac81060c3aad95a4f4eb1cef2ddd4e653df54a96836253e18547946f839774e2969a4c8f0c383ae005c2f0d06004753ef2202b4d3ff4b9d7140fcfb5d2966
+  checksum: 10/06762dcdf5552fd569362b7c1e10422ee5e6f32e207e52adcada6bb8ac2252a9d35cd4c6e9d9c2e127bd9bb94b95b0f7964c60b128d3d490c2ee8553038cf9d1
   languageName: node
   linkType: hard
 
@@ -12117,7 +12117,7 @@ __metadata:
     "@reduxjs/toolkit": "npm:^1.9.3"
     "@rneui/base": "npm:^4.0.0-rc.8"
     "@rneui/themed": "npm:^4.0.0-rc.8"
-    "@rnmapbox/maps": "npm:^10.0.0-beta.79"
+    "@rnmapbox/maps": "npm:^10.1.21"
     "@tamagui/animations-react-native": "npm:1.92.1"
     "@tamagui/babel-plugin": "npm:1.92.1"
     "@tamagui/config": "npm:1.92.1"
@@ -18616,7 +18616,7 @@ __metadata:
     "@reduxjs/toolkit": "npm:^1.9.3"
     "@rneui/base": "npm:^4.0.0-rc.8"
     "@rneui/themed": "npm:^4.0.0-rc.8"
-    "@rnmapbox/maps": "npm:^10.0.0-beta.79"
+    "@rnmapbox/maps": "npm:^10.1.21"
     "@tamagui/animations-react-native": "npm:1.92.1"
     "@tamagui/babel-plugin": "npm:1.92.1"
     "@tamagui/config": "npm:1.92.1"

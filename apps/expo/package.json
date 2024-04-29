@@ -52,7 +52,7 @@
     "@reduxjs/toolkit": "^1.9.3",
     "@rneui/base": "^4.0.0-rc.8",
     "@rneui/themed": "^4.0.0-rc.8",
-    "@rnmapbox/maps": "^10.0.0-beta.79",
+    "@rnmapbox/maps": "^10.1.21",
     "@tamagui/animations-react-native": "1.92.1",
     "@tamagui/babel-plugin": "1.92.1",
     "@tamagui/config": "1.92.1",
