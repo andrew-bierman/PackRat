@@ -56,7 +56,7 @@ jobs:
         uses: expo/expo-github-action/preview@v8
         with:
           working-directory: apps/expo
-          command:
+          command: |
           export MAPBOX_DOWNLOADS_TOKEN={{ secrets.MAPBOX_DOWNLOADS_TOKEN }
           eas build --platform android --profile preview --local --output ${{ github.workspace }}/app-release.apk
 
