@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import PackContainer from './PackContainer';
 import { DetailsHeader } from '../details/header';
 import { TableContainer } from '../pack_table/Table';
-import { RText } from '@packrat/ui';
+import { RButton, RText } from '@packrat/ui';
 import { DetailsComponent } from '../details';
 import { Dimensions, Platform, View, FlatList } from 'react-native';
 import { theme } from '../../theme';
@@ -78,7 +78,7 @@ export function PackDetails() {
                 <View style={{ flex: 1 }}>
                   <FlatList
                     data={Object.entries(SECTION)}
-                    contentContainerStyle={{ paddingBottom: 350 }}
+                    contentContainerStyle={{ paddingBottom:50 }}
                     keyExtractor={([key, val]) => val}
                     renderItem={({ item }) => {
                       {
@@ -115,7 +115,11 @@ export function PackDetails() {
                           case SECTION.CHAT:
                             return (
                               <View style={styles.boxStyle}>
-                                <ChatContainer />
+                                <ChatContainer
+                                  itemTypeId={currentPackId}
+                                  title="Chat"
+                                  trigger="Open Chat"
+                                />
                               </View>
                             );
                           default:
