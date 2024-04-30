@@ -57,14 +57,16 @@ jobs:
           yarn run prebuild:expo
 
       - name: Create preview
+        id: build
         run: |
           echo "Using Mapbox Token: $MAPBOX_DOWNLOADS_TOKEN"
           export MAPBOX_DOWNLOADS_TOKEN=${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}
           eas build --platform android --profile preview --local
-          echo "apk_path=$(find apps/expo -name '*.apk')" >> $GITHUB_OUTPUT
+          echo "apk_path=$(find -name '*.apk')" >> $GITHUB_OUTPUT
         working-directory: apps/expo
         env:
           DEBUG: "true"
+        continue-on-error: true
 
       - name: Upload APK
         uses: actions/upload-artifact@v3
@@ -77,40 +79,5 @@ jobs:
         uses: peter-evans/commit-comment@v2
         with:
           body: |
-            Android APK build completed!
-            You can download the APK file from the following link:
-            https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifacts
-
-# <<<<<<< feat/upgrade-expo-50
-
-#       - name: Set Environment Tokens
-#         run: export MAPBOX_TOKEN=${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}
-
-#       - name: Create preview
-#         run: |
-#           eas build --platform android --profile preview --local
-
-#       - name: Build APK for Preview
-#         uses: expo/expo-github-action/preview@v8
-#         continue-on-error: true
-#         with:
-#           working-directory: apps/expo
-#           command: |
-#             eas build --platform android --profile preview --local --output ${{ github.workspace }}/app-release.apk
-
-#       - name: Upload APK artifact
-#         uses: actions/upload-artifact@v2
-#         with:
-#           name: app-release
-#           path: ${{ github.workspace }}/app-release.apk
-
-
-
-
-#       # - name: Set Environment Tokens
-#       #   uses: ./.github/actions/set-env-tokens
-#       #   continue-on-error: true
-#       #   with:
-#           # mapbox_token: ${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}
-# =======
-
+            Android APK build ${{ steps.build.outcome == 'success' && 'completed' || 'failed' }}!
+            ${{ steps.build.outcome == 'success' && format('You can download the APK file from the following link:\nhttps://github.com/{0}/actions/runs/{1}#artifacts', github.repository, github.run_id) || 'Please check the workflow logs for more details on the build failure.' }}
