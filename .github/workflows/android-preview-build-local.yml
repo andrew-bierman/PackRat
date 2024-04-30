@@ -41,8 +41,8 @@ jobs:
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
 
-      - name: Set Environment Tokens
-        run: echo "MAPBOX_DOWNLOADS_TOKEN=${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}" >> $GITHUB_ENV
+      # - name: Set Environment Tokens
+      #   run: echo "MAPBOX_DOWNLOADS_TOKEN=${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}" >> $GITHUB_ENV
 
       # - name: Set Environment Tokens
       #   uses: ./.github/actions/set-env-tokens
@@ -56,14 +56,15 @@ jobs:
       - name: Prebuild
         run: yarn run prebuild:expo
 
-      - name: Create preview
-        run: eas build --platform android --profile preview --local
+      # - name: Create preview
+      #   run: eas build --platform android --profile preview --local
 
       - name: Build APK for Preview
         uses: expo/expo-github-action/preview@v8
         with:
           working-directory: apps/expo
           command: |
+            export MAPBOX_DOWNLOADS_TOKEN=${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}
             eas build --platform android --profile preview --local --output ${{ github.workspace }}/app-release.apk
 
       - name: Upload APK artifact
