@@ -1765,7 +1765,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.13.10, @babel/runtime@npm:^7.18.6, @babel/runtime@npm:^7.20.0, @babel/runtime@npm:^7.21.0, @babel/runtime@npm:^7.23.2, @babel/runtime@npm:^7.6.2, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.8.7, @babel/runtime@npm:^7.9.2":
+"@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.13.10, @babel/runtime@npm:^7.18.6, @babel/runtime@npm:^7.20.0, @babel/runtime@npm:^7.21.0, @babel/runtime@npm:^7.23.2, @babel/runtime@npm:^7.6.2, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.8.7, @babel/runtime@npm:^7.9.2":
   version: 7.24.4
   resolution: "@babel/runtime@npm:7.24.4"
   dependencies:
@@ -6769,16 +6769,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/clipboard@npm:^1.5.1":
-  version: 1.5.1
-  resolution: "@react-native-community/clipboard@npm:1.5.1"
-  peerDependencies:
-    react: ">=16.0"
-    react-native: ">=0.57.0"
-  checksum: 10/aa0ca9bf98e95c7d628d5783de9c9a289f2dbfa70b45d0d62dddfa67efdac273798665df12c7b4391dee0125a2d4bf43ddd42ead2f14fb9749f054434ab92f90
-  languageName: node
-  linkType: hard
-
 "@react-native-community/geolocation@npm:^3.0.6":
   version: 3.2.1
   resolution: "@react-native-community/geolocation@npm:3.2.1"
@@ -8531,6 +8521,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tamagui/constants@npm:1.95.3":
+  version: 1.95.3
+  resolution: "@tamagui/constants@npm:1.95.3"
+  peerDependencies:
+    react: "*"
+  checksum: 10/9665d47307b586c6f8baa246615c3f3dab70a887d41e7a19b9f17814f754de52c7fc47d0dd9678b5a428555fcfd58d85f4299e3916af13b65f047fe83e6e4b61
+  languageName: node
+  linkType: hard
+
 "@tamagui/core@npm:1.92.1":
   version: 1.92.1
   resolution: "@tamagui/core@npm:1.92.1"
@@ -9555,6 +9554,17 @@ __metadata:
   peerDependencies:
     react: "*"
   checksum: 10/0d1aa367be44a2d355fceec49157ff8adf34b67916039eac1fab3703ba971b7ccd2dfe0d1909ee2c3bf18bf95ad4a8295c24671539abfe660b39e9f835b445e6
+  languageName: node
+  linkType: hard
+
+"@tamagui/use-did-finish-ssr@npm:^1.95.3":
+  version: 1.95.3
+  resolution: "@tamagui/use-did-finish-ssr@npm:1.95.3"
+  dependencies:
+    "@tamagui/constants": "npm:1.95.3"
+  peerDependencies:
+    react: "*"
+  checksum: 10/cf6b49dd12c184046ceb6598ad6ee22eca0cbf27754faae6782ccbdc04579ac48125efb59534d1c5dfa2fb176ffda6022def49db3c53ca7e9affb36123bf66c5
   languageName: node
   linkType: hard
 
@@ -12107,7 +12117,6 @@ __metadata:
     "@packrat/ui": "npm:*"
     "@packrat/validations": "npm:*"
     "@react-native-async-storage/async-storage": "npm:1.21.0"
-    "@react-native-community/clipboard": "npm:^1.5.1"
     "@react-native-community/geolocation": "npm:^3.0.6"
     "@react-native-community/netinfo": "npm:11.1.0"
     "@react-native-google-signin/google-signin": "npm:^9.0.2"
@@ -12130,6 +12139,7 @@ __metadata:
     "@tamagui/switch": "npm:1.92.1"
     "@tamagui/theme-base": "npm:1.92.1"
     "@tamagui/themes": "npm:1.92.1"
+    "@tamagui/use-did-finish-ssr": "npm:^1.95.3"
     "@tanstack/eslint-plugin-query": "npm:^5.14.6"
     "@tanstack/query-async-storage-persister": "npm:^4.36.1"
     "@tanstack/react-query": "npm:^4.36.1"
@@ -12176,7 +12186,7 @@ __metadata:
     expo-linking: "npm:~6.2.2"
     expo-location: "npm:~16.5.5"
     expo-random: "npm:~13.6.0"
-    expo-router: "npm:~3.4.8"
+    expo-router: "npm:~3.4.10"
     expo-secure-store: "npm:~12.8.1"
     expo-splash-screen: "npm:~0.26.4"
     expo-standard-web-crypto: "npm:^1.7.0"
@@ -18604,7 +18614,6 @@ __metadata:
     "@fortawesome/react-fontawesome": "npm:^0.2.0"
     "@hookform/resolvers": "npm:^3.3.4"
     "@react-native-async-storage/async-storage": "npm:1.21.0"
-    "@react-native-community/clipboard": "npm:^1.5.1"
     "@react-native-community/geolocation": "npm:^3.0.6"
     "@react-native-community/netinfo": "npm:11.1.0"
     "@react-native-google-signin/google-signin": "npm:^9.0.2"
@@ -18669,6 +18678,7 @@ __metadata:
     expo-blur: "npm:~12.9.2"
     expo-build-properties: "npm:~0.11.1"
     expo-checkbox: "npm:~2.7.0"
+    expo-clipboard: "npm:~5.0.1"
     expo-constants: "npm:~15.4.5"
     expo-crypto: "npm:~12.8.1"
     expo-dev-client: "npm:~3.3.11"
@@ -18681,7 +18691,7 @@ __metadata:
     expo-linking: "npm:~6.2.2"
     expo-location: "npm:~16.5.5"
     expo-random: "npm:~13.6.0"
-    expo-router: "npm:~3.4.8"
+    expo-router: "npm:~3.4.10"
     expo-secure-store: "npm:~12.8.1"
     expo-splash-screen: "npm:~0.26.4"
     expo-standard-web-crypto: "npm:^1.7.0"
@@ -18797,6 +18807,15 @@ __metadata:
   version: 2.7.0
   resolution: "expo-checkbox@npm:2.7.0"
   checksum: 10/7591030d37142cb256d899ceb3ceb157a922ac6c0463059cf8e0881d21133bbcf5df7439c36cf6fea74bada1cda471fb874cae26bf5f7796a1c20b6fd71a5ea4
+  languageName: node
+  linkType: hard
+
+"expo-clipboard@npm:~5.0.1":
+  version: 5.0.1
+  resolution: "expo-clipboard@npm:5.0.1"
+  peerDependencies:
+    expo: "*"
+  checksum: 10/d3ac75dddcc4c453ae6268ccc63814b333fb81ea4b565c0a02baae1b422dc9c1da581412aa166cf6e1fe82e1660cd0d698f7a11209b5daf013df61a4d60652cc
   languageName: node
   linkType: hard
 
@@ -19039,9 +19058,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-router@npm:~3.4.8":
-  version: 3.4.9
-  resolution: "expo-router@npm:3.4.9"
+"expo-router@npm:~3.4.10":
+  version: 3.4.10
+  resolution: "expo-router@npm:3.4.10"
   dependencies:
     "@expo/metro-runtime": "npm:3.1.3"
     "@expo/server": "npm:^0.3.0"
@@ -19050,7 +19069,7 @@ __metadata:
     "@react-navigation/native": "npm:~6.1.6"
     "@react-navigation/native-stack": "npm:~6.9.12"
     expo-splash-screen: "npm:~0.26.5"
-    react-helmet-async: "npm:^1.3.0"
+    react-native-helmet-async: "npm:2.0.4"
     schema-utils: "npm:^4.0.1"
   peerDependencies:
     "@react-navigation/drawer": ^6.5.8
@@ -19068,7 +19087,7 @@ __metadata:
       optional: true
     react-native-reanimated:
       optional: true
-  checksum: 10/c55338ada25f0ef687c259c4008d60855728aa5587fa6a5c10fb41ed146f49f69bf8f990958fa6dc0fc15c731f51ee63c5ef89b213b17be40a6e93d0c4a02997
+  checksum: 10/36af650ce3634ab04b1e0e488ecf2560d052985057fe0f839cc2729824ac5cedac03f689ca3af703e92d40a5102465802731df0ae3c4cddd400e39783427dd05
   languageName: node
   linkType: hard
 
@@ -29056,7 +29075,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-fast-compare@npm:^3.2.0":
+"react-fast-compare@npm:^3.2.2":
   version: 3.2.2
   resolution: "react-fast-compare@npm:3.2.2"
   checksum: 10/a6826180ba75cefba1c8d3ac539735f9b627ca05d3d307fe155487f5d0228d376dac6c9708d04a283a7b9f9aee599b637446635b79c8c8753d0b4eece56c125c
@@ -29069,22 +29088,6 @@ __metadata:
   peerDependencies:
     react: ">=17.0.0"
   checksum: 10/1dc433319341ec3dca84513c4197ef4f4c8232604d35f83546a8abfb41d9591f934b66aaaa4dc3dc8b1b65f488705a2a48ae6c1d9792660119a9cdedeab4ca8f
-  languageName: node
-  linkType: hard
-
-"react-helmet-async@npm:^1.3.0":
-  version: 1.3.0
-  resolution: "react-helmet-async@npm:1.3.0"
-  dependencies:
-    "@babel/runtime": "npm:^7.12.5"
-    invariant: "npm:^2.2.4"
-    prop-types: "npm:^15.7.2"
-    react-fast-compare: "npm:^3.2.0"
-    shallowequal: "npm:^1.1.0"
-  peerDependencies:
-    react: ^16.6.0 || ^17.0.0 || ^18.0.0
-    react-dom: ^16.6.0 || ^17.0.0 || ^18.0.0
-  checksum: 10/73d6383dd5d5794cad3837cf6b71d7e23afa6f3ba745e50a9d0d6bf42ff0ab175e4292f250ffe757f4bd782e64c37c4583fb884340cd63891deb33e144628661
   languageName: node
   linkType: hard
 
@@ -29188,6 +29191,19 @@ __metadata:
   peerDependencies:
     react-native: ">= 0.59"
   checksum: 10/f8a0e85225c3e13c086b29e92c5cd93bfb8515c0d7ef6483f78e6215cfa0ebaa7e4ea8db9a2e65971d2ff45912d9386c1e9ba52bdc31e1739c44a8762e4c3ee2
+  languageName: node
+  linkType: hard
+
+"react-native-helmet-async@npm:2.0.4":
+  version: 2.0.4
+  resolution: "react-native-helmet-async@npm:2.0.4"
+  dependencies:
+    invariant: "npm:^2.2.4"
+    react-fast-compare: "npm:^3.2.2"
+    shallowequal: "npm:^1.1.0"
+  peerDependencies:
+    react: ^16.6.0 || ^17.0.0 || ^18.0.0
+  checksum: 10/217bd0eaa61d426a512634369c70c44ce8b92127ec626dc40c65b72b1be1534ed3ed00ba2dd1a9ad77d1716ce8fd1e6db3f7209534303a652d9932a962d2c830
   languageName: node
   linkType: hard
 
