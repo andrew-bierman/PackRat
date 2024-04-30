@@ -150,7 +150,7 @@ const FeedSearchFilter = ({
               onValueChange={handleSortChange}
               placeholder="Sort By"
               style={styles.dropdown}
-              width={150}
+              width={160}
             />
           </RStack>
           {(feedType === 'userPacks' || feedType === 'userTrips') && (
