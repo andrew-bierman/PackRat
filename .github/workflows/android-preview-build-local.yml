@@ -14,8 +14,6 @@ jobs:
       pull-requests: write
     steps:
       - name: Check for EXPO_TOKEN
-        env:
-          MAPBOX_DOWNLOADS_TOKEN: ${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}
         run: |
           if [ -z "${{ secrets.EXPO_TOKEN }}" ]; then
             echo "You must provide an EXPO_TOKEN secret linked to this project's Expo account in this repo's secrets."
@@ -62,7 +60,9 @@ jobs:
           echo "Using Mapbox Token: $MAPBOX_DOWNLOADS_TOKEN"
           export MAPBOX_DOWNLOADS_TOKEN=${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}
           eas build --platform android --profile preview --local
-          echo "apk_path=$(find -name '*.apk')" >> $GITHUB_OUTPUT
+          apk_path=$(find . -name '*.apk')
+          echo "apk_path=${apk_path}" >> $GITHUB_ENV
+          echo "::set-output name=apk_path::${apk_path}"
         working-directory: apps/expo
         env:
           DEBUG: "true"
