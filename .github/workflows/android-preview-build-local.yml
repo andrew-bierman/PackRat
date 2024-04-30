@@ -1,15 +1,13 @@
 name: android-preview-build-local
-on: 
+on:
   push:
     branches: [ "**" ]
   pull_request:
     branches: [ "**" ]
 
-
-  
 jobs:
   update:
-    name: EAS Android Preview Build Local
+    name: EAS Android Build Local
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -20,7 +18,7 @@ jobs:
           MAPBOX_DOWNLOADS_TOKEN: ${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}
         run: |
           if [ -z "${{ secrets.EXPO_TOKEN }}" ]; then
-            echo "You must provide an EXPO_TOKEN secret linked to this project's Expo account in this repo's secrets. Learn more: https://docs.expo.dev/eas-update/github-actions"
+            echo "You must provide an EXPO_TOKEN secret linked to this project's Expo account in this repo's secrets."
             exit 1
           fi
 
@@ -32,6 +30,12 @@ jobs:
         with:
           node-version: 20.x
           cache: yarn
+
+      # - name: Set up JDK 17
+      #   uses: actions/setup-java@v3
+      #   with:
+      #     java-version: '17'
+      #     distribution: 'temurin'
 
       - name: Setup EAS
         uses: expo/expo-github-action@v8
@@ -46,12 +50,34 @@ jobs:
       - name: Install dependencies
         uses: ./.github/actions/install-deps
 
+      - name: Prebuild
+        run: |
+          echo "Using Mapbox Token: $MAPBOX_DOWNLOADS_TOKEN"
+          export MAPBOX_DOWNLOADS_TOKEN=${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}
+          yarn run prebuild:expo
+
       - name: Create preview
+        id: build
         run: |
           echo "Using Mapbox Token: $MAPBOX_DOWNLOADS_TOKEN"
           export MAPBOX_DOWNLOADS_TOKEN=${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}
           eas build --platform android --profile preview --local
+          echo "apk_path=$(find -name '*.apk')" >> $GITHUB_OUTPUT
         working-directory: apps/expo
         env:
-          DEBUG: "true"  # Enable this if your build supports debug output for more verbose logging
+          DEBUG: "true"
+        # continue-on-error: true
 
+      # - name: Upload APK
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: android-apk
+      #     path: ${{ steps.build.outputs.apk_path }}
+
+      # - name: Create Commit Comment
+      #   if: github.event_name == 'push'
+      #   uses: peter-evans/commit-comment@v2
+      #   with:
+      #     body: |
+      #       Android APK build ${{ steps.build.outcome == 'success' && 'completed' || 'failed' }}!
+      #       ${{ steps.build.outcome == 'success' && format('You can download the APK file from the following link:\nhttps://github.com/{0}/actions/runs/{1}#artifacts', github.repository, github.run_id) || 'Please check the workflow logs for more details on the build failure.' }}
