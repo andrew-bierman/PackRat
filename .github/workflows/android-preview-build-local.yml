@@ -41,24 +41,17 @@ jobs:
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
 
-      # - name: Set Environment Tokens
-      #   run: echo "MAPBOX_DOWNLOADS_TOKEN=${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}" >> $GITHUB_ENV
-
-      # - name: Set Environment Tokens
-      #   uses: ./.github/actions/set-env-tokens
-      #   continue-on-error: true
-      #   with:
-          # mapbox_token: ${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}
-
       - name: Install dependencies
         uses: ./.github/actions/install-deps
 
       - name: Prebuild
         run: yarn run prebuild:expo
 
+      - name: Set Environment Tokens
+        run: export MAPBOX_TOKEN=${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}
+
       - name: Create preview
         run: |
-          export MAPBOX_DOWNLOADS_TOKEN=${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}
           eas build --platform android --profile preview --local
 
       - name: Build APK for Preview
@@ -74,3 +67,12 @@ jobs:
         with:
           name: app-release
           path: ${{ github.workspace }}/app-release.apk
+
+
+
+
+      # - name: Set Environment Tokens
+      #   uses: ./.github/actions/set-env-tokens
+      #   continue-on-error: true
+      #   with:
+          # mapbox_token: ${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}
