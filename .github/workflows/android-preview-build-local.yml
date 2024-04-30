@@ -61,10 +61,25 @@ jobs:
           echo "Using Mapbox Token: $MAPBOX_DOWNLOADS_TOKEN"
           export MAPBOX_DOWNLOADS_TOKEN=${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}
           eas build --platform android --profile preview --local
+          echo "apk_path=$(find apps/expo -name '*.apk')" >> $GITHUB_OUTPUT
         working-directory: apps/expo
         env:
-          DEBUG: "true"  # Enable this if your build supports debug output for more verbose logging
+          DEBUG: "true"
 
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: android-apk
+          path: ${{ steps.build.outputs.apk_path }}
+
+      - name: Create Commit Comment
+        if: github.event_name == 'push'
+        uses: peter-evans/commit-comment@v2
+        with:
+          body: |
+            Android APK build completed!
+            You can download the APK file from the following link:
+            https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifacts
 
 # <<<<<<< feat/upgrade-expo-50
 
