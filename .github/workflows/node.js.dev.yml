@@ -42,7 +42,7 @@ jobs:
     #   run: yarn policies set-version
 
     - name: Install dependencies
-      run: yarn install
+      uses: ./.github/actions/install-deps
 
     - name: Debug more
       run: |
