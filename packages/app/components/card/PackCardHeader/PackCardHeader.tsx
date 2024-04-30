@@ -29,18 +29,18 @@ export const PackCardHeader = ({ data, title, link }: PackCardHeaderProps) => {
   const { handleActionsOpenChange, handleEdit, handleSaveTitle, isEditMode } =
     usePackTitleInput(data);
 
-  const { currentTheme } = useTheme();
+  const { isDark, currentTheme } = useTheme();
   const router = useRouter();
   const { editPack } = useEditPack();
 
   const handleSavePack = () => {
     const packDetails = {
-     id: data.id,
-     name: data.name,
-     is_public: data.is_public,
-   };
-   editPack(packDetails);
- }
+      id: data.id,
+      name: data.name,
+      is_public: data.is_public,
+    };
+    editPack(packDetails);
+  };
   return (
     <CustomCardHeader
       data={data}
@@ -58,12 +58,12 @@ export const PackCardHeader = ({ data, title, link }: PackCardHeaderProps) => {
               <AntDesign
                 name="arrowleft"
                 size={24}
-                color={currentTheme.colors.black}
+                color={isDark ? 'white' : 'black'}
               />
             }
-            onPress={()=>{
+            onPress={() => {
               router.back();
-              }}
+            }}
           />
           <EditableText
             isLoading={isLoading}

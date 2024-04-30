@@ -228,8 +228,8 @@ const loadStyles = (theme: any) => {
       paddingHorizontal: 25,
       marginVertical: 15,
       padding: 26,
-      borderColor: currentTheme.colors.border,
-      borderWidth: 2,
+      // borderColor: currentTheme.colors.border,
+      // borderWidth: 2,
     },
     hStack: {
       justifyContent: 'space-between',
