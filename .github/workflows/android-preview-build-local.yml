@@ -56,15 +56,17 @@ jobs:
       - name: Prebuild
         run: yarn run prebuild:expo
 
-      # - name: Create preview
-      #   run: eas build --platform android --profile preview --local
+      - name: Create preview
+        run: |
+          export MAPBOX_DOWNLOADS_TOKEN=${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}
+          eas build --platform android --profile preview --local
 
       - name: Build APK for Preview
         uses: expo/expo-github-action/preview@v8
+        continue-on-error: true
         with:
           working-directory: apps/expo
           command: |
-            export MAPBOX_DOWNLOADS_TOKEN=${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}
             eas build --platform android --profile preview --local --output ${{ github.workspace }}/app-release.apk
 
       - name: Upload APK artifact
