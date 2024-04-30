@@ -49,10 +49,24 @@ jobs:
 
       - name: Install dependencies
         uses: ./.github/actions/install-deps
-# <<<<<<< feat/upgrade-expo-50
 
-#       - name: Prebuild
-#         run: yarn run prebuild:expo
+      - name: Prebuild
+        run: |
+          echo "Using Mapbox Token: $MAPBOX_DOWNLOADS_TOKEN"
+          export MAPBOX_DOWNLOADS_TOKEN=${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}
+          yarn run prebuild:expo
+
+      - name: Create preview
+        run: |
+          echo "Using Mapbox Token: $MAPBOX_DOWNLOADS_TOKEN"
+          export MAPBOX_DOWNLOADS_TOKEN=${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}
+          eas build --platform android --profile preview --local
+        working-directory: apps/expo
+        env:
+          DEBUG: "true"  # Enable this if your build supports debug output for more verbose logging
+
+
+# <<<<<<< feat/upgrade-expo-50
 
 #       - name: Set Environment Tokens
 #         run: export MAPBOX_TOKEN=${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}
@@ -85,13 +99,3 @@ jobs:
 #           # mapbox_token: ${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}
 # =======
 
-      - name: Create preview
-        run: |
-          echo "Using Mapbox Token: $MAPBOX_DOWNLOADS_TOKEN"
-          export MAPBOX_DOWNLOADS_TOKEN=${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}
-          eas build --platform android --profile preview --local
-        working-directory: apps/expo
-        env:
-          DEBUG: "true"  # Enable this if your build supports debug output for more verbose logging
-
-# >>>>>>> andrew_testing
