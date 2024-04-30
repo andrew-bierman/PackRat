@@ -61,8 +61,8 @@ jobs:
           export MAPBOX_DOWNLOADS_TOKEN=${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}
           eas build --platform android --profile preview --local
           apk_path=$(find . -name '*.apk')
+          echo "APK Path: ${apk_path}"
           echo "apk_path=${apk_path}" >> $GITHUB_ENV
-          echo "::set-output name=apk_path::${apk_path}"
         working-directory: apps/expo
         env:
           DEBUG: "true"
@@ -72,7 +72,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: android-apk
-          path: ${{ steps.build.outputs.apk_path }}
+          path: /home/runner/work/PackRat/PackRat/apps/expo/build-*.apk
 
       - name: Create Commit Comment
         if: github.event_name == 'push'
