@@ -20,7 +20,16 @@
     "copy:gradle": "cp gradle.properties.example gradle.properties",
     "copy:pod": "cp Podfile.example Podfile",
     "move:gradle": "mv gradle.properties android/gradle.properties",
-    "move:pod": "mv Podfile ios/Podfile"
+    "move:pod": "mv Podfile ios/Podfile",
+    "build:android": "yarn run prebuild:clean && yarn run build:android:preview",
+    "build:android:output": "eas build --platform android --profile development --local --output /home/runner/work/PackRat/PackRat/app-release.apk --json --non-interactive",
+    "build:ios": "eas build --platform ios --profile production --local",
+    "build:ios:output": "eas build --platform ios --profile development --local --output /home/runner/work/PackRat/PackRat/app-release.ipa --json --non-interactive",
+    "prebuild": "npx expo prebuild",
+    "prebuild:clean": "npx expo prebuild --clean",
+    "build:clean": "yarn run prebuild:clean && yarn run build",
+    "build:android:preview": "eas build --platform android --profile preview --local",
+    "build:android:production": "eas build --platform android --profile production --local"
   },
   "dependencies": {
     "@babel/runtime": "^7.21.0",
