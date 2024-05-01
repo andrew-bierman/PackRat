@@ -225,7 +225,7 @@ export const ItemsTable = ({
           <RButton
             style={{
               width: 50,
-              backgroundColor: '#0284c7',
+              backgroundColor: page < 2 ? 'gray' : '#0284c7',
               borderRadius: 5,
               borderColor: page < 2 ? 'gray' : '#0284c7',
               borderWidth: 1,
@@ -237,16 +237,16 @@ export const ItemsTable = ({
             <AntDesign
               name="left"
               size={16}
-              color={page < 2 ? 'gray' : 'white'}
+              color='white'
             />
           </RButton>
           <RButton
             style={{
               marginLeft: 10,
               width: 50,
-              backgroundColor: '#0284c7',
+              backgroundColor: page === totalPages ? 'gray' : '#0284c7',
               borderRadius: 5,
-              borderColor: page === totalPages ? 'gray' : 'white',
+              borderColor: page === totalPages ? 'gray' : '#0284c7',
               borderWidth: 1,
               borderStyle: 'solid',
             }}
@@ -256,7 +256,7 @@ export const ItemsTable = ({
             <AntDesign
               name="right"
               size={16}
-              color={page === totalPages ? 'gray' : 'white'}
+              color='white'
             />
           </RButton>
         </View>

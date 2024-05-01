@@ -5293,6 +5293,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@packrat/config@workspace:packages/config":
+  version: 0.0.0-use.local
+  resolution: "@packrat/config@workspace:packages/config"
+  languageName: unknown
+  linkType: soft
+
 "@packrat/crosspath@npm:*, @packrat/crosspath@workspace:packages/crosspath":
   version: 0.0.0-use.local
   resolution: "@packrat/crosspath@workspace:packages/crosspath"
