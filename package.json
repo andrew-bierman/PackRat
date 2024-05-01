@@ -53,8 +53,9 @@
     "lint": "yarn lint:all",
     "next": "cd apps/next && yarn dev",
     "prebuild:expo": "cd apps/expo && yarn run prebuild:clean",
-    "postinstall": "yarn build-ui && yarn build:validations && yarn build-crosspath && yarn setup:env",
+    "postinstall": "yarn build-ui && yarn build:validations && yarn build-crosspath && yarn setup:env && yarn fix:packages",
     "preinstall": "npx only-allow yarn",
+    "fix:packages": "yarn patch-package",
     "regen": "yarn install --refresh-lockfile",
     "setup:env": "npx ts-node .github/scripts/env.ts",
     "server": "cd server && yarn start",
@@ -91,6 +92,7 @@
     "lint-staged": "^14.0.1",
     "npm-run-all": "^4.1.5",
     "patch-package": "^8.0.0",
+    "postinstall-postinstall": "^2.1.0",
     "prettier": "^3.2.5",
     "typescript": "^5.3.3"
   },
@@ -134,5 +136,8 @@
     "packing checklist app",
     "packing list app",
     "packing planner app"
-  ]
+  ],
+  "resolutions": {
+    "@react-native/assets-registry": "0.74.81"
+  }
 }
