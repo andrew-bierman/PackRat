@@ -36,7 +36,10 @@ export default function Login() {
           style={{
             width: '100%',
             alignItems: 'center',
-            backgroundColor: 'white',
+            backgroundColor:
+              currentTheme.colors.background === '#0284c7'
+                ? 'white'
+                : currentTheme.colors.background,
           }}
         >
           <View
@@ -47,7 +50,15 @@ export default function Login() {
               maxWidth: 290,
             }}
           >
-            <RHeading fontSize={32} color="#212121" fontWeight="semibold">
+            <RHeading
+              fontSize={32}
+              color={
+                currentTheme.colors.background === '#0284c7'
+                  ? currentTheme.colors.black
+                  : 'white'
+              }
+              fontWeight="semibold"
+            >
               Welcome
             </RHeading>
             <RHeading

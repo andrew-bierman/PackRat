@@ -53,6 +53,7 @@ export default function Card({
   createdAt,
   owners,
   duration,
+  itemPacks,
 }: CardProps) {
   const user = useAuthUser();
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
@@ -101,6 +102,11 @@ export default function Card({
   const truncatedName = truncateString(name, 25);
   const truncatedDestination = truncateString(destination, 25);
   const formattedWeight = convertWeight(total_weight, 'g', weightUnit);
+  // const formattedWeight = formatNumber(total_weight); // TODO convert to user preference once implemented
+  const quantity = itemPacks?.reduce(
+    (accumulator, currentValue) => accumulator + currentValue?.item?.quantity ?? 0,
+    0,
+  ) ?? 0;
   let numberOfNights;
 
   if (duration) numberOfNights = JSON.parse(duration).numberOfNights;
@@ -189,7 +195,12 @@ export default function Card({
                     Total Weight: {formatNumber(formattedWeight)} {weightUnit}
                   </RText>
                 )}
-
+                {type === 'pack' && (
+                  <RText fontSize="$1" color="mediumpurple" ml={-0.5} mt={-1}>
+                    Total Quantity: {quantity}
+                  </RText>
+                )}
+             
                 {type === 'trip' && (
                   <RText fontSize="$1" color="mediumpurple" ml={-0.5} mt={-1}>
                     {truncatedDestination}

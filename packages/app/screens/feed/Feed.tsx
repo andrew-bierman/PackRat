@@ -71,6 +71,9 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
   let arrayData = data;
 
   const filteredData = useMemo(() => {
+    if (!arrayData) {
+      return [];
+    }
     // Fuse search
     const keys = ['name', 'items.name', 'items.category'];
     const options = {
