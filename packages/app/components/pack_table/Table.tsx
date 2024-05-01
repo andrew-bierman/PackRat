@@ -13,6 +13,7 @@ import {
 } from './TableHelperComponents';
 import TableItem from './TableItem';
 import { useDeletePackItem } from 'app/hooks/packs/useDeletePackItem';
+import { useIsAuthUserPack } from 'app/hooks/packs/useIsAuthUserPack';
 
 interface TableContainerProps {
   currentPack: any;
@@ -32,6 +33,8 @@ export const TableContainer = ({
   copy,
 }: TableContainerProps) => {
   const styles = useCustomStyles(loadStyles);
+  const isAuthUserPack = useIsAuthUserPack(currentPack);
+  console.log('hasPermissionshasPermissions', hasPermissions)
   const {
     isLoading,
     error,
@@ -53,8 +56,8 @@ export const TableContainer = ({
     setRefetch,
     copy,
   });
-  const headerRow = ['Item Name', `Weight`, 'Quantity', 'Edit', 'Delete', 'Ignore'];
-  let flexArr = [4, 1, 1, 1, 1, 1];
+  const headerRow = ['Item Name', `Weight`, 'Quantity', ''];
+  let flexArr = [2, 1, 1, 1,];
   const { deletePackItem } = useDeletePackItem();
 
   if (
@@ -97,7 +100,7 @@ export const TableContainer = ({
                         handleCheckboxChange={handleCheckboxChange}
                         flexArr={flexArr}
                         currentPack={currentPack}
-                        hasPermissions={hasPermissions}
+                        hasPermissions={isAuthUserPack}
                         refetch={refetch}
                         setRefetch={setRefetch}
                       />

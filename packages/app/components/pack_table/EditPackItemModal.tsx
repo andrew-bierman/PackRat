@@ -33,7 +33,7 @@ export const EditPackItemModal = ({
       onClose={onClose}
       footerButtons={footerButtons}
       triggerComponent={triggerComponent}
-      showTrigger={showTrigger !== undefined ? showTrigger : true}
+      showTrigger={!!triggerComponent}
     >
       <ModalContent />
     </BaseModal>

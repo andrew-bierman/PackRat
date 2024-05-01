@@ -4,6 +4,7 @@ import {
   isPolygonOrMultiPolygon,
   processShapeData,
   isPoint,
+  isShapeDownloadable
 } from '../../utils/mapFunctions';
 import { api } from '../../constants/api';
 import { useState, useEffect } from 'react';
@@ -13,6 +14,7 @@ const useProcessedShape = (shape) => {
 
   useEffect(() => {
     const processed = processShapeData(shape);
+    console.log('isShapeDownloadable(shape)' , isShapeDownloadable(shape))
     setProcessedShape(processed);
   }, [shape]);
 
@@ -21,11 +23,9 @@ const useProcessedShape = (shape) => {
 
 const useMapPreviewData = (shape, processedShape) => {
   const [mapPreviewData, setMapPreviewData] = useState(null);
-  console.log('mappreiveshape shape', processedShape, shape)
 
   useEffect(() => {
     if (!processedShape) return;
-    console.log('processedShape', processedShape)
     const lineProperties = {
       stroke: '#16b22d',
       'stroke-width': 4,
@@ -41,7 +41,6 @@ const useMapPreviewData = (shape, processedShape) => {
     }
 
     const imageShape = { type: 'FeatureCollection', features: [] };
-    console.log('imageShape', imageShape)
     const polygonObj = {
       ...shape.features[0],
       geometry: {
@@ -49,7 +48,6 @@ const useMapPreviewData = (shape, processedShape) => {
         coordinates: [shape.features[0].geometry.coordinates[0]],
       },
     };
-    console.log('polygonObj polygonObj', isPolygonOrMultiPolygon(shape))
     if (isPolygonOrMultiPolygon(shape)) {
       imageShape.features.push([shape.features[0].geometry.coordinates[0]]);
     } else {
@@ -57,7 +55,6 @@ const useMapPreviewData = (shape, processedShape) => {
     }
 
     processedShape.features.forEach((feature) => {
-      console.log(feature.properties.meta, 'feature.properties.meta')
       if (feature.properties.meta == 'end') {
         feature.properties = pointProperties;
         imageShape.features.push(feature);
@@ -90,9 +87,6 @@ const useMapPreviewData = (shape, processedShape) => {
             ' , ',
           )}]/900x400?padding=50,30,30,30`,
     };
-    console.log('datadatadatadata', `${mapPreviewEndpoint}/geojson(${urlEncodedImageShapeGeoJSON})/[${bounds.join(
-      ' , ',
-    )}]/900x400?padding=50,30,30,30`, )
     setMapPreviewData(data);
   }, [shape, processedShape]);
 

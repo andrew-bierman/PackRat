@@ -95,7 +95,6 @@ function getShapeSourceBounds(shape) {
     if (lat > maxLat) {
       maxLat = lat;
     }
-    console.log('minLat ', minLat, ' maxlat ', maxLat)
   });
 
   return [
@@ -222,6 +221,7 @@ const processShapeData = (shape) => {
   processedShape.features = [];
 
   shape.features.forEach((feature) => {
+    
     if (feature.geometry.type === 'LineString') {
       // Make sure coordinates are in the correct format
       feature.geometry.coordinates = ensure2DArray(
@@ -244,7 +244,7 @@ const processShapeData = (shape) => {
           },
         };
       });
-
+      console.log('Points ', points)
       processedShape.features.push(...points);
 
       // Keep the original LineString feature

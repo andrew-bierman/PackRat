@@ -1,6 +1,7 @@
 import React from 'react';
 import { Platform } from 'react-native';
-
+import { Feather } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useState } from 'react';
 import { Row } from 'react-native-table-component';
@@ -11,7 +12,7 @@ import { AddItem } from '../item/AddItem';
 import loadStyles from './packtable.style';
 import { RText, ZDropdown } from '@packrat/ui';
 import { useAuthUser } from 'app/auth/hooks';
-import { View } from 'tamagui';
+import * as DropdownMenu from 'zeego/dropdown-menu';
 
 type ModalName = 'edit' | 'delete';
 
@@ -40,7 +41,9 @@ const TableItem = ({
   const [activeModal, setActiveModal] = useState<ModalName>(null);
   const styles = useCustomStyles(loadStyles);
   const authUser = useAuthUser();
+  console.log('hasPermissions', hasPermissions)
   const openModal = (modalName: ModalName) => () => {
+    console.log('model name', modalName);
     setActiveModal(modalName);
   };
 
@@ -65,29 +68,19 @@ const TableItem = ({
     <RText px={8}>{name}</RText>,
     <RText px={0}>{`${formatNumber(weight)} ${unit}`}</RText>,
     <RText px={0}>{quantity}</RText>,
-
-    <EditPackItemModal
-      showTrigger={true}
-      isOpen={activeModal === 'edit'}
-      onClose={closeModal}
-    >
-      <AddItem id={id} packId={id} isEdit={true} initialData={itemData} />
-    </EditPackItemModal>,
-    <DeletePackItemModal
-      onConfirm={() => onDelete({ itemId: id, packId: currentPack.id })}
-      isOpen={activeModal === 'delete'}
-      onClose={closeModal}
-    />,
   ];
-
+  console.log('Platform.OS', hasPermissions)
   if (hasPermissions) {
+    
     if (
       Platform.OS === 'android' ||
       Platform.OS === 'ios' ||
       window.innerWidth < 900
     ) {
+      console.log('This one 1')
       rowData.push(<ZDropdown.Native dropdownItems={rowActionItems} />);
     } else {
+      console.log('This one 4')
       rowData.push(<ZDropdown.Web dropdownItems={rowActionItems} />);
     }
   }
@@ -100,6 +93,18 @@ const TableItem = ({
   // Here, you can set a default category if item.category is null or undefined
   return (
     <>
+      <EditPackItemModal
+        isOpen={activeModal === 'edit'}
+        onClose={closeModal}
+      >
+        <AddItem id={id} packId={id} isEdit={true} initialData={itemData} />
+      </EditPackItemModal>
+      <DeletePackItemModal
+        onConfirm={() => onDelete({ itemId: id, packId: currentPack.id })}
+        isOpen={activeModal === 'delete'}
+        onClose={closeModal}
+      />
+      ,
       <Row data={rowData} style={styles.row} flexArr={flexArr} />
     </>
   );

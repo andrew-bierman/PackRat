@@ -12,6 +12,8 @@ import { type Context, type Next } from 'hono';
  */
 const getMapPreview = async (ctx: Context, next: Next) => {
   try {
+    console.log('ctx.req.query ctx.req.query', ctx.req.query)
+
     const { env }: any = ctx;
     const { MAPBOX_ACCESS_TOKEN } = env;
 
