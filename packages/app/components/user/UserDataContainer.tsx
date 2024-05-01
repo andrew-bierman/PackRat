@@ -115,11 +115,12 @@ export default function UserDataContainer({
         }}
       >
         <RText
-          color={currentTheme.colors.textColor}
+          // color={currentTheme.colors.black}
           style={{
             textTransform: 'capitalize',
             fontSize: 24,
             fontWeight: 'bold',
+            color: currentTheme.colors.textColor,
           }}
         >
           {differentUser ? `${typeUppercase}` : `Your ${typeUppercase}`}

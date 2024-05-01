@@ -12,6 +12,7 @@ import { first } from 'lodash';
 import { hexToRGBA } from '../../utils/colorFunctions';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { PlacesAutocomplete } from 'app/components/PlacesAutocomplete/PlacesAutocomplete';
+import { background } from 'native-base/lib/typescript/theme/styled-system';
 
 interface HeroSectionProps {
   onSelect: (selectedResult: SearchResult) => void;

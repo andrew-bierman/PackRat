@@ -13,6 +13,7 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useDate } from 'app/hooks/weather/useDate';
 import { defaultWeatherObject } from '../../constants/defaultWeatherObj';
 import { defaultWeekObj } from '../../constants/defaultWeekObj';
+import { background } from 'native-base/lib/typescript/theme/styled-system';
 
 interface WeatherObject {
   name: string;
@@ -274,15 +275,20 @@ export default function WeatherCard({
         }}
         flex={1}
         justifyContent="space-around"
-        backgroundColor={'#eaeaea'}
+        backgroundColor={styles.tempColor.backgroundColor}
         style={styles.card}
       >
-        {restOfWeek.map((day, index) => (
-          <RStack key={index} style={styles.weatherInfo}>
-            <RText>{formatDay(day)}</RText>
-            <RText>{convertToCelsius(weatherWeek[index].main.temp)}</RText>
-          </RStack>
-        ))}
+        {restOfWeek.map((day, index) => {
+          console.log('dayyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy', day);
+          return (
+            <RStack key={index} style={styles.weatherInfo}>
+              <RText style={{ color: styles.tempColor.color }}>{day}</RText>
+              <RText style={{ color: styles.tempColor.color }}>
+                {convertToCelsius(weatherWeek[index].main.temp)}
+              </RText>
+            </RStack>
+          );
+        })}
       </RStack>
     </RStack>
   );
@@ -311,6 +317,14 @@ const loadStyles = (theme) => {
       padding: 18,
       borderRadius: 8,
       shadowColor: 'black',
+    },
+
+    tempColor: {
+      color: currentTheme.colors.background === '#0284c7' ? 'black' : 'white',
+      backgroundColor:
+        currentTheme.colors.background === '#0284c7'
+          ? '#eaeaea'
+          : currentTheme.colors.textDarkGrey,
     },
 
     cardContainer: {
