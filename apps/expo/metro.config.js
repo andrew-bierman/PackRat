@@ -33,6 +33,7 @@ config.resolver.disableHierarchicalLookup = true;
 
 const customAliases = {
   '@crosspath-resolver': './resolver.solito.js',
+  '@env': path.resolve(projectRoot, 'envResolver.ts'),
 };
 
 config.resolver.extraNodeModules = new Proxy(

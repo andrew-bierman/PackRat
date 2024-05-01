@@ -1,9 +1,5 @@
-import { NODE_ENV, API_URL, NEXT_PUBLIC_API_URL } from '@env';
+// export const api = "http://add your ip address";
 
-let api = API_URL ?? NEXT_PUBLIC_API_URL;
+import { API_URL } from '@env';
 
-if(!api && NODE_ENV !== 'production') {
-  api = 'http://localhost:8787/api';
-}
-
-export { api };
+export const api = API_URL;
