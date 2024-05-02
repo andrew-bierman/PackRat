@@ -1,9 +1,9 @@
 import Dashboard from 'app/screens/dashboard';
 
 import { AuthWrapper } from 'app/auth/AuthWrapper';
-import { createFileRoute } from '@tanstack/react-router';
+import { createLazyFileRoute } from '@tanstack/react-router';
 
-export const Route = createFileRoute('/dashboard/')({
+export const Route = createLazyFileRoute('/dashboard/')({
   component: DashboardPage,
 });
 

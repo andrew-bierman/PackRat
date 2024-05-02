@@ -1,8 +1,8 @@
 import ProfileContainer from 'app/screens/user/ProfileContainer';
 import { AuthWrapper } from 'app/auth/AuthWrapper';
-import { createFileRoute } from '@tanstack/react-router';
+import { createLazyFileRoute } from '@tanstack/react-router';
 
-export const Route = createFileRoute('/profile/')({
+export const Route = createLazyFileRoute('/profile/')({
   component: Profile,
 });
 

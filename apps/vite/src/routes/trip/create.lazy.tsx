@@ -1,8 +1,8 @@
 import CreateTrip from 'app/screens/trip/createTrip';
 import { AuthWrapper } from 'app/auth/AuthWrapper';
-import { createFileRoute } from '@tanstack/react-router';
+import { createLazyFileRoute } from '@tanstack/react-router';
 
-export const Route = createFileRoute('/trip/create')({
+export const Route = createLazyFileRoute('/trip/create')({
   component: CreateTrip,
 });
 

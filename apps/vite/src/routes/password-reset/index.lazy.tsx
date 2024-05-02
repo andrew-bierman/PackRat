@@ -1,7 +1,7 @@
 import { RequestPasswordReset } from 'app/components/password-reset';
-import { createFileRoute } from '@tanstack/react-router';
+import { createLazyFileRoute } from '@tanstack/react-router';
 
-export const Route = createFileRoute('/password-reset/')({
+export const Route = createLazyFileRoute('/password-reset/')({
   component: ResetPasswordRoute,
 });
 
