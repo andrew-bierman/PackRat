@@ -1,15 +1,15 @@
 import Feed from 'app/screens/feed/Feed';
 import { AuthWrapper } from 'app/auth/AuthWrapper';
-import { createFileRoute } from '@tanstack/react-router';
+import { createLazyFileRoute } from '@tanstack/react-router';
 
-export const Route = createFileRoute('/trips/')({
+export const Route = createLazyFileRoute('/feed/')({
   component: FeedNav,
 });
 
 export default function FeedNav() {
   return (
     <AuthWrapper>
-      <Feed feedType="userTrips" />
+      <Feed />
     </AuthWrapper>
   );
 }

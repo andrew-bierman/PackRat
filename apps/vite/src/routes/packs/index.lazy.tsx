@@ -1,9 +1,9 @@
 import React from 'react';
 import Feed from 'app/screens/feed/Feed';
 import { AuthWrapper } from 'app/auth/AuthWrapper';
-import { createFileRoute } from '@tanstack/react-router';
+import { createLazyFileRoute } from '@tanstack/react-router';
 
-export const Route = createFileRoute('/packs/')({
+export const Route = createLazyFileRoute('/packs/')({
   component: Packs,
 });
 

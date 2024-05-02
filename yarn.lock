@@ -5320,6 +5320,7 @@ __metadata:
     "@shopify/flash-list": "npm:^1.6.1"
     "@tamagui-extras/core": "npm:^1.11.0"
     "@tamagui-extras/form": "npm:^1.16.0"
+    "@tamagui/adapt": "npm:1.92.1"
     "@tamagui/animations-react-native": "npm:1.92.1"
     "@tamagui/build": "npm:1.92.1"
     "@tamagui/font-inter": "npm:1.92.1"

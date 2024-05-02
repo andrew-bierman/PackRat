@@ -1,8 +1,8 @@
 import React from 'react';
 import LoginScreen from 'app/screens/LoginScreen';
-import { createFileRoute } from '@tanstack/react-router';
+import { createLazyFileRoute } from '@tanstack/react-router';
 
-export const Route = createFileRoute('/sign-in/')({
+export const Route = createLazyFileRoute('/sign-in/')({
   component: Login,
 });
 

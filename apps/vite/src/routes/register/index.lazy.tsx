@@ -1,8 +1,8 @@
 import React from 'react';
 import RegisterScreen from 'app/screens/RegisterScreen';
-import { createFileRoute } from '@tanstack/react-router';
+import { createLazyFileRoute } from '@tanstack/react-router';
 
-export const Route = createFileRoute('/register/')({
+export const Route = createLazyFileRoute('/register/')({
   component: Register,
 });
 

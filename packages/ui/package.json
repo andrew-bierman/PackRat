@@ -22,6 +22,7 @@
     "@shopify/flash-list": "^1.6.1",
     "@tamagui-extras/core": "^1.11.0",
     "@tamagui-extras/form": "^1.16.0",
+    "@tamagui/adapt": "1.92.1",
     "@tamagui/animations-react-native": "1.92.1",
     "@tamagui/font-inter": "1.92.1",
     "@tamagui/progress": "1.92.1",
