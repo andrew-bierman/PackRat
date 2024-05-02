@@ -37,11 +37,11 @@ export default function Settings() {
   const { user, handleEditUser, handlePasswordsChange, handleUpdatePassword } =
     useProfileSettings();
 
-    const { currentTheme } = useTheme();
+  const { isDark, currentTheme } = useTheme();
   const router = useRouter();
 
   return user ? (
-    <RScrollView>
+    <RScrollView style={{ backgroundColor: isDark ? '#1A1A1D' : 'white' }}>
       <RStack
         gap={8}
         width="fit-content"
@@ -51,27 +51,26 @@ export default function Settings() {
         marginHorizontal="auto"
       >
         <RStack
-         style={{
-          display: 'flex',
-          alignItems: 'center',
-          flexDirection: 'row',
-        }}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            flexDirection: 'row',
+          }}
         >
-        <RIconButton
+          <RIconButton
             backgroundColor="transparent"
             icon={
               <AntDesign
                 name="arrowleft"
                 size={24}
-                color={currentTheme.colors.black}
+                color={isDark ? 'white' : 'black'}
               />
             }
-            onPress={()=>{
+            onPress={() => {
               router.back();
-              }}
+            }}
           />
           <RH2>Profile</RH2>
-          
         </RStack>
         <Form
           validationSchema={userSettingsSchema}
@@ -146,6 +145,7 @@ export default function Settings() {
                 id="oldPassword"
                 name="oldPassword"
                 secureTextEntry={true}
+                passwordIconProps={{ color: 'black' }}
               />
             </RStack>
             <RStack space="$2">

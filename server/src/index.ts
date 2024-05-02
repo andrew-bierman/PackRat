@@ -21,15 +21,12 @@ const HTTP_ENDPOINT = '/api';
 
 const app = new Hono<{ Bindings: Bindings }>();
 
-//  Setup compression
-app.use(
-  '*',
-  compress({
-    encoding: 'deflate',
-  }),
-);
+// SETUP COMPRESSION
+//  Note: On Cloudflare Workers, the response body will be compressed automatically, so there is no need to use this middleware.
+//  Bun: This middleware uses CompressionStream which is not yet supported in bun.
+//  ref: https://hono.dev/middleware/builtin/compress
 
-//  Setup CORS
+// SETUP CORS
 app.use('*', async (c, next) => {
   const CORS_ORIGIN = String(c.env.CORS_ORIGIN);
   const corsMiddleware = cors({
@@ -42,14 +39,14 @@ app.use('*', async (c, next) => {
   return corsMiddleware(c, next);
 });
 
-// Setup logging
-// tRPC is already logging requests, but you can add your own middleware
-// app.use('*', logger());
+// SETUP LOGGING
+//  tRPC is already logging requests, but you can add your own middleware
+//  app.use('*', logger());
 
-//  Setup tRPC server
+// SETUP TRPC SERVER
 app.use(`${TRPC_API_ENDPOINT}/*`, honoTRPCServer({ router: appRouter }));
 
-//  Setup tRPC Playground
+// SETUP TRPC PLAYGROUND
 app.use(TRPC_PLAYGROUND_ENDPOINT, async (c, next) => {
   const handler = await fetchHandler({
     router: appRouter,
@@ -59,7 +56,7 @@ app.use(TRPC_PLAYGROUND_ENDPOINT, async (c, next) => {
   return handler(c.req.raw);
 });
 
-// Set up HTTP routes
+// SET UP HTTP ROUTES
 app.route(`${HTTP_ENDPOINT}`, router);
 
-export default app;
+export default app; 

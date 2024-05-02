@@ -9,23 +9,24 @@ import { theme } from '../../theme';
 import { TripMapCard } from 'app/components/trip/TripCards';
 import { useFetchSinglePack } from 'app/hooks/packs';
 import { RSkeleton, RText } from '@packrat/ui';
+import useTheme from '../../hooks/useTheme';
 
 const TableContainerComponent = ({ currentPack }) => {
-    const { data, isLoading } = useFetchSinglePack(currentPack.id || currentPack)
+  const { data, isLoading } = useFetchSinglePack(currentPack.id || currentPack);
 
-    if (isLoading) return <RSkeleton style={{}} />;
+  if (isLoading) return <RSkeleton style={{}} />;
 
-    if (data === null) return <RText>Pack Not Found</RText>;
+  if (data === null) return <RText>Pack Not Found</RText>;
 
-    return (
-        <View>
-            <TableContainer currentPack={data} />
-        </View>
-    );
+  return (
+    <View>
+      <TableContainer currentPack={data} />
+    </View>
+  );
 };
 
 const WeatherCardComponent = ({ weatherObject, weatherWeek, data }) => (
-  <View style={{ marginTop: '5%' }}>
+  <View style={{ marginTop: '5%', marginBottom: '1%' }}>
     <WeatherCard
       weatherObject={data?.weather ? JSON?.parse(data?.weather) : weatherObject}
       weatherWeek={weatherWeek}
@@ -51,7 +52,7 @@ const ScoreContainerComponent = ({ data, isOwner }) => (
 );
 
 const loadStyles = (theme) => {
-  const { currentTheme } = theme;
+  const { isDark, currentTheme } = theme;
   return {
     mainContainer: {
       backgroundColor: currentTheme.colors.background,
@@ -65,12 +66,14 @@ const loadStyles = (theme) => {
       backgroundColor: currentTheme.colors.cardIconColor,
       flexDirection: 'column',
       minHeight: '100vh',
-
       padding: 25,
       fontSize: 26,
     },
     dropdown: {
       backgroundColor: currentTheme.colors.white,
+    },
+    descriptionText: {
+      color: !isDark ? '#000' : '#fff',
     },
   };
 };

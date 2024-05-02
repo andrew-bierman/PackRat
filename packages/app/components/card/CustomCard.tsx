@@ -104,10 +104,10 @@ export const CustomCard = ({
 };
 
 const loadStyles = (theme) => {
-  const { currentTheme } = theme;
+  const { isDark, currentTheme } = theme;
   return {
     mainContainer: {
-      backgroundColor: currentTheme.colors.card,
+      backgroundColor: !isDark ? currentTheme.colors.card : '#1A1A1D',
       flex: 1,
       gap: 45,
       justifyContent: 'space-between',
