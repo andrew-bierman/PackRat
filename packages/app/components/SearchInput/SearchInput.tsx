@@ -45,7 +45,7 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
       isVisible,
     } = useSearchInput({ onSelect, onChange, searchString });
 
-    const { currentTheme } = useTheme();
+    const { isDark, currentTheme } = useTheme();
     const styles = useCustomStyles(loadStyles);
     if (Platform.OS === 'web') {
       return (
@@ -111,13 +111,27 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
                   maxHeight={150}
                   borderWidth={1}
                   borderRadius={12}
-                  backgroundColor={currentTheme.colors.white}
+                  backgroundColor={
+                    !isDark
+                      ? currentTheme.colors.white
+                      : currentTheme.colors.black
+                  }
+                  style={{
+                    borderColor: isDark ? '#F8F8F8' : '##D1D5DB',
+                  }}
                   showsVerticalScrollIndicator={false}
                   zIndex={20000}
                 >
                   <View
                     role="list"
-                    style={{ width: '100%', gap: 8, padding: 8 }}
+                    style={{
+                      width: '100%',
+                      gap: 8,
+                      padding: 8,
+                      backgroundColor: isDark
+                        ? '#1A1A1D'
+                        : currentTheme.colors.white,
+                    }}
                   >
                     {results.map((result, i) => (
                       <RStack

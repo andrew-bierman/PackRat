@@ -2,6 +2,7 @@ import { Platform } from 'react-native';
 const isWeb = Platform.OS === 'web';
 const loadStyles = (theme) => {
   const { currentTheme } = theme;
+  console.log('currentTheme', currentTheme);
   return {
     container: {
       flex: 1,
@@ -27,13 +28,13 @@ const loadStyles = (theme) => {
     title: {
       height: 50,
       backgroundColor: currentTheme.colors.primary,
-      borderRadius: 10,
+      borderRadius: 2,
       justifyContent: 'center',
       paddingLeft: 15,
     },
     titleText: {
       fontWeight: 'bold',
-      color: currentTheme.colors.text,
+      color: 'white',
     },
     head: {
       height: 50,
@@ -44,7 +45,10 @@ const loadStyles = (theme) => {
     },
     headerText: {
       fontWeight: 'bold',
-      color: '#000000',
+      color:
+        currentTheme.colors.background === '#1A1A1D'
+          ? currentTheme.colors.text
+          : 'black',
       fontSize: Platform.OS === 'web' ? 12 : 8,
     },
     row: {
@@ -52,7 +56,10 @@ const loadStyles = (theme) => {
       height: 60,
       alignItems: 'center',
       // color: currentTheme.colors.text,
-      backgroundColor: currentTheme.colors.white,
+      backgroundColor:
+        currentTheme.colors.background === '#1A1A1D'
+          ? currentTheme.colors.black
+          : currentTheme.colors.white,
       borderBottomWidth: 1,
       borderBottomColor: currentTheme.colors.border,
     },

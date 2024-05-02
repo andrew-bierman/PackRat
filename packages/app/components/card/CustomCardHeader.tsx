@@ -5,10 +5,12 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Link } from '@packrat/crosspath';
 import { useCopyClipboard, useScreenWidth } from 'app/hooks/common';
 import { useAuthUser } from 'app/auth/hooks';
+import useTheme from '../../hooks/useTheme';
 
 export const CustomCardHeader = ({ data, title, link, actionsComponent }) => {
   const { isCopied, handleCopyLink } = useCopyClipboard(link);
   const user = useAuthUser();
+  const { isDark } = useTheme();
 
   return (
     <>
@@ -45,10 +47,10 @@ export const CustomCardHeader = ({ data, title, link, actionsComponent }) => {
               <MaterialCommunityIcons
                 name="link"
                 size={24}
-                color="black"
+                color={isDark ? 'white' : 'black'}
                 onPress={() => handleCopyLink(link)}
               />
-              <RText color="black">Copy</RText>
+              <RText style={{ color: isDark ? 'white' : 'black' }}>Copy</RText>
             </View>
           )}
         </View>
