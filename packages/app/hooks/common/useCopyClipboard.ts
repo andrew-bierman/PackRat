@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Clipboard from '@react-native-community/clipboard';
+import * as Clipboard from 'expo-clipboard';
 import { Platform } from 'react-native';
 
 export const useCopyClipboard = (link: string) => {
@@ -18,7 +18,11 @@ export const useCopyClipboard = (link: string) => {
           console.error('Failed to copy text to clipboard', err);
         });
     } else {
-      Clipboard.setString(copyLink);
+      Clipboard.setStringAsync(copyLink).then(() => {
+        console.log('Text copied to clipboard');
+      }).catch((err) => {
+        console.error('Failed to copy text to clipboard', err);
+      });
     }
 
     setIsCopied(true);
