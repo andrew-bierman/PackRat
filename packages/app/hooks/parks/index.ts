@@ -4,7 +4,6 @@ import { store } from '../../store/store';
 import { setParks, setParkNames } from '../../store/parksStore';
 
 function useParks({ latLng, radius = 5000 }) {
-  console.log('useParks -------------');
   // const { data, error, isLoading } = await trpc.getParksOSM.query({
   //   lat,
   //   lon,
@@ -24,10 +23,6 @@ function useParks({ latLng, radius = 5000 }) {
     },
   );
 
-  console.log('------------------------------------');
-  console.log('data in useParks', data);
-  console.log(data);
-
   if (data) {
     const parks = data.features;
     const filteredParks = parks
@@ -38,10 +33,6 @@ function useParks({ latLng, radius = 5000 }) {
       .map((park) => park.properties.name)
       .slice(0, 25);
 
-    console.log(
-      '🚀 ~ file: index.js:32 ~ useParks ~ filteredParks:',
-      filteredParks,
-    );
     // store.dispatch(setParks(parks));
     // store.dispatch(setParkNames(filteredParks));
     return { data, error, isLoading, parks, filteredParks };

@@ -81,17 +81,21 @@ export function TripDetails() {
                         <View style={{ marginBottom: '5%' }}>
                           {data?.description && (
                             <RStack>
-                              <Text>Description: {data?.description}</Text>
+                              <Text style={styles.descriptionText}>
+                                Description: {data?.description}
+                              </Text>
                             </RStack>
                           )}
                           {data?.destination && (
                             <RStack>
-                              <Text>Destination: {data?.destination}</Text>
+                              <Text style={styles.descriptionText}>
+                                Destination: {data?.destination}
+                              </Text>
                             </RStack>
                           )}
                           {data.start_date && (
                             <RStack>
-                              <Text>
+                              <Text style={styles.descriptionText}>
                                 Start Date:{' '}
                                 {format(
                                   new Date(data.start_date),
@@ -102,7 +106,7 @@ export function TripDetails() {
                           )}
                           {data.end_date && (
                             <RStack>
-                              <Text>
+                              <Text style={styles.descriptionText}>
                                 End Date:{' '}
                                 {format(new Date(data.end_date), 'MM/dd/yyyy')}
                               </Text>

@@ -14,7 +14,6 @@ import {
 import { FontAwesome } from '@expo/vector-icons';
 import { NODE_ENV } from '@env';
 import { Link } from '@packrat/crosspath';
-import { InformUser } from '../utils/ToastUtils';
 import useTheme from '../hooks/useTheme';
 import { useGoogleAuth, useLogin } from 'app/auth/hooks';
 import { userSignIn as userSignInSchema } from '@packrat/validations';
@@ -25,21 +24,10 @@ const demoUser = {
 };
 
 export default function Login() {
-  const { handleLogin, hasError } = useLogin();
+  const { handleLogin } = useLogin();
   const { enableGoogleLogin, isGoogleSignInReady, promptAsync } =
     useGoogleAuth();
   const { currentTheme } = useTheme();
-
-  useEffect(() => {
-    if (hasError) {
-      InformUser({
-        title: 'Wrong-password',
-        duration: 3000,
-        placement: 'top-right',
-        style: { backgroundColor: currentTheme.colors.error },
-      });
-    }
-  }, [hasError, currentTheme.colors.error]);
 
   return (
     <RScrollView>
@@ -48,7 +36,10 @@ export default function Login() {
           style={{
             width: '100%',
             alignItems: 'center',
-            backgroundColor: 'white',
+            backgroundColor:
+              currentTheme.colors.background === '#0284c7'
+                ? 'white'
+                : currentTheme.colors.background,
           }}
         >
           <View
@@ -59,7 +50,15 @@ export default function Login() {
               maxWidth: 290,
             }}
           >
-            <RHeading fontSize={32} color="#212121" fontWeight="semibold">
+            <RHeading
+              fontSize={32}
+              color={
+                currentTheme.colors.background === '#0284c7'
+                  ? currentTheme.colors.black
+                  : 'white'
+              }
+              fontWeight="semibold"
+            >
               Welcome
             </RHeading>
             <RHeading

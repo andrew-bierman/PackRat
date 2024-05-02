@@ -70,9 +70,9 @@ function checkRedundancy(packItems: any) {
   let presentRedundantItems = 0;
 
   // Create a set of unique lowercase item names for efficient comparison
-  const uniquePackItems = new Set(
-    packItems.map((item: any) => item.name.toLowerCase()),
-  );
+  // const uniquePackItems = new Set(
+  //   packItems.map((item: any) => item.name.toLowerCase()),
+  // );
 
   for (const item in redundantItems) {
     // Check if the pack contains more than one item that matches or partially matches any name in the array
@@ -104,11 +104,11 @@ function checkRedundancy(packItems: any) {
 export function calculatePackScore(packData: any) {
   console.log('Calculating pack score...');
   console.log('packData: ', packData);
-  const { items } = packData;
+  const itemDocuments = packData.items;
   // console.log("weight: ", weight);
   // console.log('items: ', items)
 
-  const totalWeight = packData.items.reduce((total: number, item: any) => {
+  const totalWeight = itemDocuments.reduce((total: number, item: any) => {
     if (item.unit === 'lb') {
       return total + item.weight * 16 * item.quantity; // Considering 1 lb equals 16 oz
     } else {
@@ -124,8 +124,8 @@ export function calculatePackScore(packData: any) {
   // Calculate the scores for each factor, using the helper functions defined above
 
   const weightScore = Math.max(11 - Math.floor(totalWeight / 10), 1);
-  const essentialItemsScore = checkEssentialItems(items);
-  const redundancyAndVersatilityScore = checkRedundancy(items);
+  const essentialItemsScore = checkEssentialItems(itemDocuments);
+  const redundancyAndVersatilityScore = checkRedundancy(itemDocuments);
 
   // Calculate the scores for each factor
   // const weightScore = (weight / 10) * 100;
@@ -153,15 +153,15 @@ export function calculatePackScore(packData: any) {
 
   return {
     totalScore: roundedScore,
-    grades: {
+    grades: JSON.stringify({
       weight: weightGrade,
       essentialItems: essentialItemsGrade,
       redundancyAndVersatility: redundancyAndVersatilityGrade,
-    },
-    scores: {
+    }),
+    scores: JSON.stringify({
       weightScore,
       essentialItemsScore,
       redundancyAndVersatilityScore,
-    },
+    }),
   };
 }

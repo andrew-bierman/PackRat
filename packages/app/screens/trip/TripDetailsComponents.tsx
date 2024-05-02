@@ -3,18 +3,30 @@ import { TableContainer } from '../../components/pack_table/Table';
 import { View } from 'react-native';
 import ScoreContainer from '../../components/ScoreContainer';
 import WeatherCard from '../../components/weather/WeatherCard';
-import TripCard from '../../components/TripCard';
+import TripCard from '../../components/trip/TripCard';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { theme } from '../../theme';
+import { TripMapCard } from 'app/components/trip/TripCards';
+import { useFetchSinglePack } from 'app/hooks/packs';
+import { RSkeleton, RText } from '@packrat/ui';
+import useTheme from '../../hooks/useTheme';
 
-const TableContainerComponent = ({ currentPack }) => (
-  <View>
-    <TableContainer currentPack={currentPack} />
-  </View>
-);
+const TableContainerComponent = ({ currentPack }) => {
+  const { data, isLoading } = useFetchSinglePack(currentPack.id || currentPack);
+
+  if (isLoading) return <RSkeleton style={{}} />;
+
+  if (data === null) return <RText>Pack Not Found</RText>;
+
+  return (
+    <View>
+      <TableContainer currentPack={data} />
+    </View>
+  );
+};
 
 const WeatherCardComponent = ({ weatherObject, weatherWeek, data }) => (
-  <View style={{ marginTop: '5%' }}>
+  <View style={{ marginTop: '5%', marginBottom: '1%' }}>
     <WeatherCard
       weatherObject={data?.weather ? JSON?.parse(data?.weather) : weatherObject}
       weatherWeek={weatherWeek}
@@ -23,21 +35,13 @@ const WeatherCardComponent = ({ weatherObject, weatherWeek, data }) => (
 );
 
 const TripCardComponent = ({ data, weatherObject, currentTheme }) =>
-  data?.geojson?.features.length && (
-    <TripCard
-      Icon={() => (
-        <FontAwesome5
-          name="route"
-          size={24}
-          color={currentTheme.colors.cardIconColor}
-        />
-      )}
-      title="Map"
-      isMap={true}
+  data?.geojson?.features?.length && (
+    // data?.geojson && (
+    <TripMapCard
       shape={data.geojson}
-      cords={
-        data?.weather ? JSON?.parse(data?.weather)?.coord : weatherObject?.coord
-      }
+      // cords={
+      //   data?.weather ? JSON?.parse(data?.weather)?.coord : weatherObject?.coord
+      // }
     />
   );
 
@@ -48,7 +52,7 @@ const ScoreContainerComponent = ({ data, isOwner }) => (
 );
 
 const loadStyles = (theme) => {
-  const { currentTheme } = theme;
+  const { isDark, currentTheme } = theme;
   return {
     mainContainer: {
       backgroundColor: currentTheme.colors.background,
@@ -62,12 +66,14 @@ const loadStyles = (theme) => {
       backgroundColor: currentTheme.colors.cardIconColor,
       flexDirection: 'column',
       minHeight: '100vh',
-
       padding: 25,
       fontSize: 26,
     },
     dropdown: {
       backgroundColor: currentTheme.colors.white,
+    },
+    descriptionText: {
+      color: !isDark ? '#000' : '#fff',
     },
   };
 };

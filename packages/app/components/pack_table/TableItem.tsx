@@ -10,13 +10,14 @@ import { formatNumber } from 'app/utils/formatNumber';
 import { AddItem } from '../item/AddItem';
 import loadStyles from './packtable.style';
 import { RText, ZDropdown } from '@packrat/ui';
+import { useAuthUser } from 'app/auth/hooks';
 
 type ModalName = 'edit' | 'delete';
 
 interface TableItemProps {
   itemData: any;
-  checkedItems: string[];
   handleCheckboxChange: (itemId: string) => void;
+  onDelete: (params: { itemId: string; packId: string }) => void;
   index: number;
   hasPermissions: boolean;
   flexArr: number[];
@@ -27,18 +28,17 @@ interface TableItemProps {
 
 const TableItem = ({
   itemData,
-  checkedItems,
-  handleCheckboxChange,
-  index,
+  onDelete,
   hasPermissions,
   flexArr,
   currentPack,
   refetch,
   setRefetch = () => {},
 }: TableItemProps) => {
-  const { name, weight, quantity, unit, _id } = itemData;
+  const { name, weight, quantity, unit, id } = itemData;
   const [activeModal, setActiveModal] = useState<ModalName>(null);
   const styles = useCustomStyles(loadStyles);
+  const authUser = useAuthUser();
 
   const openModal = (modalName: ModalName) => () => {
     setActiveModal(modalName);
@@ -49,10 +49,17 @@ const TableItem = ({
   };
 
   const rowActionItems = [
-    { label: 'Edit', onSelect: () => openModal('edit') },
     { label: 'Delete', onSelect: () => openModal('delete') },
-    { label: 'Ignore', onSelect: () => {} },
+    // TODO Implement Ignore Pack Item functional
+    // { label: 'Ignore', onSelect: () => {} },
   ];
+
+  if (authUser.id === itemData.ownerId) {
+    rowActionItems.unshift({
+      label: 'Edit',
+      onSelect: () => openModal('edit'),
+    });
+  }
 
   let rowData = [
     <RText px={8}>{name}</RText>,
@@ -73,7 +80,7 @@ const TableItem = ({
   }
 
   /*
-  * this _id is passed as pack id but it is a item id which is confusing
+  * this id is passed as pack id but it is a item id which is confusing
   Todo need to change the name for this passing argument and remaining functions which are getting it
    */
 
@@ -85,12 +92,10 @@ const TableItem = ({
         isOpen={activeModal === 'edit'}
         onClose={closeModal}
       >
-        <AddItem _id={_id} packId={_id} isEdit={true} initialData={itemData} />
+        <AddItem id={id} packId={id} isEdit={true} initialData={itemData} />
       </EditPackItemModal>
       <DeletePackItemModal
-        showTrigger={false}
-        itemId={_id}
-        pack={currentPack}
+        onConfirm={() => onDelete({ itemId: id, packId: currentPack.id })}
         isOpen={activeModal === 'delete'}
         onClose={closeModal}
       />

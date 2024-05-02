@@ -8,16 +8,18 @@ import {
   addItemGlobal as addItemSchema,
   type Item,
 } from '@packrat/validations';
+import { useAuthUser } from 'app/auth/hooks';
+
 export const AddItemGlobal = () => {
   const { limit, page } = usePagination();
   const { isLoading } = useItems({ limit, page });
+  const authUser = useAuthUser();
 
   const { setIsModalOpen } = useModal();
 
   const { handleAddNewItem } = useAddItem();
 
   const handleSubmit = (data: Item) => {
-    console.log({ data });
     handleAddNewItem(data, () => {
       setIsModalOpen(false);
     });
@@ -29,7 +31,7 @@ export const AddItemGlobal = () => {
         handleSubmit={handleSubmit}
         isLoading={isLoading}
         validationSchema={addItemSchema}
-        defaultValues={{ unit: 'lb' }}
+        defaultValues={{ unit: 'lb', ownerId: authUser.id }}
       />
     </View>
   );

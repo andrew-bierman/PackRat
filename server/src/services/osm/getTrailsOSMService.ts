@@ -1,12 +1,10 @@
 import osmtogeojson from 'osmtogeojson';
-import axios from 'axios';
 import { updateDatabaseWithGeoJSONDataFromOverpass } from '../../controllers/getOsm/updateDatabaseWithGeoJSONDataFromOverpass';
 
-export async function getTrailsOsmService(lat, lon, radius) {
-  // set default values for lat, lon, and radius
-  const overpassUrl = process.env.OSM_URI;
+export async function getTrailsOsmService(osmUri, lat, lon, radius) {
+  // set default values for lat, lon, and radius;
 
-  if (!overpassUrl) {
+  if (!osmUri) {
     throw new Error('OSM_URI is not defined in the environment variables'); // But it is defined so this is okay
   }
 
@@ -18,10 +16,18 @@ export async function getTrailsOsmService(lat, lon, radius) {
        out tags geom qt;
        `;
 
-  const response = await axios.post(overpassUrl, overpassQuery, {
+  const response = await fetch(osmUri, {
+    method: 'POST',
     headers: { 'Content-Type': 'text/plain' },
+    body: overpassQuery,
   });
-  const geojsonData = osmtogeojson(response.data);
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  const data = await response.json();
+  const geojsonData = osmtogeojson(data);
 
   updateDatabaseWithGeoJSONDataFromOverpass(geojsonData);
 

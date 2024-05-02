@@ -1,6 +1,4 @@
 import { publicProcedure } from '../../trpc';
-import { ItemNotFoundError } from '../../helpers/errors';
-import { responseHandler } from '../../helpers/responseHandler';
 import { getItemsGloballyService } from '../../services/item/item.service';
 import { z } from 'zod';
 
@@ -10,22 +8,8 @@ import { z } from 'zod';
  * @param {Object} res - The response object.
  * @return {Object} The items, page, and total pages.
  */
-export const getItemsGlobally = async (req, res, next) => {
-  try {
-    const result = await getItemsGloballyService(
-      req.query.limit,
-      req.query.page,
-      req.query.searchString,
-    );
-    res.locals.data = result;
-    responseHandler(res);
-  } catch (error) {
-    next(ItemNotFoundError);
-  }
-};
 
 export function getItemsGloballyRoute() {
-  console.log('Route');
   return publicProcedure
     .input(
       z.object({
@@ -35,10 +19,11 @@ export function getItemsGloballyRoute() {
       }),
     )
     .query(async (opts) => {
-      return await getItemsGloballyService(
-        opts.input.limit,
-        opts.input.page,
-        opts.input.searchString,
-      );
+      const { limit, page, searchString } = opts.input;
+      const result = await getItemsGloballyService(limit, page, searchString);
+      return {
+        ...result,
+        items: result.items,
+      };
     });
 }

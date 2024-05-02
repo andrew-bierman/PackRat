@@ -7,7 +7,6 @@ import {
   Form,
   FormSelect,
   FormInput,
-  useFormSubmitTrigger,
   SubmitButton,
 } from '@packrat/ui';
 import { BaseModal } from '@packrat/ui';
@@ -23,7 +22,6 @@ export const AddPack = ({ isCreatingTrip = false }) => {
     useTheme();
   const styles = useCustomStyles(loadStyles);
   const router = useRouter();
-  const [formRef, submitTrigger] = useFormSubmitTrigger();
 
   const {
     addNewPack,
@@ -41,7 +39,7 @@ export const AddPack = ({ isCreatingTrip = false }) => {
 
   // routing
   if (isSuccess && !isCreatingTrip && response) {
-    router.push(`/pack/${response.createdPack._id}`);
+    router.push(`/pack/${response.id}`);
   }
   /**
    * Handles the addition of a pack.
@@ -61,7 +59,6 @@ export const AddPack = ({ isCreatingTrip = false }) => {
         <Form
           defaultValues={{ isPublic: '0', name: '' }}
           validationSchema={addPackSchema}
-          formRef={formRef}
         >
           <FormInput
             placeholder="Name"
@@ -104,7 +101,7 @@ export const AddPackContainer = ({ isCreatingTrip }) => {
 };
 
 const loadStyles = (theme, appTheme) => {
-  const { currentTheme } = theme;
+  const { isDark, currentTheme } = theme;
   return {
     container: {
       flexDirection: 'column',
@@ -114,8 +111,10 @@ const loadStyles = (theme, appTheme) => {
       width: '100%',
       paddingHorizontal: 18,
       gap: 20,
-      marginTop: 20,
-      backgroundColor: currentTheme.colors.white,
+      paddingTop: 20,
+      backgroundColor: isDark
+        ? currentTheme.colors.background
+        : currentTheme.colors.white,
     },
     desktopStyle: {
       flexDirection: 'row',
