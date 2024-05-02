@@ -244,8 +244,12 @@ cd PackRat
 ```
 
 3. Set up the environment variables for the client and server.
-   - If you have access to the development env files, use those. Otherwise, replace the values with your own.
-   - See the `.env.example` files in the `apps/expo` and `server` directories for the necessary environment variables.
+   - If you have access to the development env values, use those. Otherwise, replace the values with your own.
+   - See the `.env.example` file in the root directory for the required environment variables. You can duplicate this file and rename it to `.env.local` to set up your environment variables.
+   - Note, for the replacement steps, these replaced values should now be strings with the mapbox secret key for download token, in the following format:
+```
+"sk..."
+```
 
 #### Automated Setup (Unix) 🛠️
 
@@ -259,103 +263,28 @@ yarn setup
 
 1. Navigate to the `PackRat` directory if you are not already there.
 
-2. Navigate to the `apps/expo` directory.
+2. Copy the `.env.example` file and rename it to `.env.local`.
+   - Open the file and replace the values with your own or use the development env values.
+   - Note, there is a postinstall script that will copy the .env.local file to the client directories, adding the necessary environment variables with prefixes.
 
 ```
-cd apps/expo
+cp .env.example .env.local
 ```
 
-- Note that for the client to run, you need to also make the following changes:
-     - Copy the `app.example.json` file and rename it to `app.json`. Open the file and replace the `MAPBOX_DOWNLOADS_TOKEN_FROM_ENV` value with your own Mapbox API key.
-     - Navigate to the ios directory. Copy the `Podfile.example` file and rename it to `Podfile`. Open the file and replace the `MAPBOX_DOWNLOADS_TOKEN_FROM_ENV` value with your own Mapbox access token.
-     - Navigate to the android directory. Copy the `gradle.properties.example` file and rename it to `gradle.properties`. Open the file and replace the `MAPBOX_DOWNLOADS_TOKEN_FROM_ENV` value with your own Mapbox downloads token.
-     - See the [Mapbox documentation](https://docs.mapbox.com/help/getting-started/access-tokens/) for more information on how to obtain Mapbox API keys and access tokens.
-
-2. Duplicate the `.env.example` file and rename it to `.env`. Open the file and replace the values with your own.
-   - If you have access to the development env file, skip this step. Otherwise, replace the values with your own.
-
-```
-cp .env.example .env
-```
-
-1. Duplicate the `app.example.json` file and rename it to `app.json`. Open the file and replace the `MAPBOX_DOWNLOADS_TOKEN_FROM_ENV` value with your own Mapbox API key.
-
-```
-cp app.example.json app.json
-```
-
-4. Navigate to the ios directory.
-
-```
-cd ios
-```
-
-5. Duplicate the `Podfile.example` file and rename it to `Podfile`. Open the file and replace the `MAPBOX_DOWNLOADS_TOKEN_FROM_ENV` value with your own Mapbox access token.
-
-```
-cp Podfile.example Podfile
-```
-
-6. Navigate to the android directory.
-
-```
-cd ../android
-
-```
-
-7. Duplicate the `gradle.properties.example` file and rename it to `gradle.properties`. Open the file and replace the `MAPBOX_DOWNLOADS_TOKEN_FROM_ENV` value with your own Mapbox downloads token.
-
-```
-cp gradle.properties.example gradle.properties
-```
-
-- Note, for the replacement steps, these replaced values should now be strings with the mapbox secret key for download token, in the following format:
-
-```
-"sk..."
-```
-
-
-8. Navigate back to the `PackRat` directory.
-
-```
-cd ../..
-```
-
-9. Navigate to one of the client directories such as `next`, `expo`, `vite`.
-
-```
-cd apps/next
-```
-
-10. Duplicate the `.env.example` file and rename it to `.env`. Open the file and replace the values with your own.
-        - If you have access to the development env file, skip this step. Otherwise, replace the values with your own.
-
-```
-cp .env.example .env
-```
-
-11. Navigate back to the `PackRat` directory.
-
-```
-cd ..
-```
-
-10. Navigate to the `server` directory.
+3.  Navigate to the `server` directory.
 
 ```
 cd server
 ```
 
-11.  Duplicate the `.wrangler.toml.example` file and rename it to `wrangler.toml`. Open the file and replace the values with your own.
+4.  Duplicate the `.wrangler.toml.example` file and rename it to `wrangler.toml`. Open the file and replace the values with your own.
         - If you have access to the development wrangler file, skip this step. Otherwise, replace the values with your own.
-        -
 
 ```
 cp .wrangler.toml.example wrangler.toml
 ```
 
-12.  Navigate back to the `PackRat` directory.
+5.  Navigate back to the `PackRat` directory.
 
 ```
 cd ..

@@ -1,46 +1,77 @@
-# Add 'repo' label to any root file changes
-repo:
-  - '*'
+# Add 'root' label to any root file changes
+# Quotation marks are required for the leading asterisk
+root:
+- changed-files:
+  - any-glob-to-any-file: '*'
 
-# Add 'test' label to any change to *.spec.ts and *.spec.js files within the entire repository
+## Equivalent of the above mentioned configuration using another syntax
+docs:
+- changed-files:
+  - any-glob-to-any-file: ['docs/*', 'guides/*', '**/*.md']
+
+# Add 'feature' label to any PR where the head branch name starts with `feature` or has a `feature` section in the name
+feature:
+ - head-branch: ['^feature', 'feature']
+
+# Add 'release' label to any PR that is opened against the `main` branch
+release:
+ - base-branch: 'main'
+
+# Add 'test' label to any change to *.spec.ts, *.spec.js, *.test.ts, *.test.js files within the entire repository
 test:
-  - '**/*.spec.ts'
-  - '**/*.spec.js'
-  - '**/*.test.ts'
-  - '**/*.test.js'
-  - '**/tests/**/*.ts'
-  - '**/tests/**/*.js'
-
+- changed-files:
+  - any-glob-to-any-file:
+    - '**/*.spec.ts'
+    - '**/*.spec.js'
+    - '**/*.test.ts'
+    - '**/*.test.js'
+    - '**/tests/**/*.ts'
+    - '**/tests/**/*.js'
 
 # Add 'frontend' label to any change in the 'client' directory
 frontend:
-  - 'apps/**/*.{ts,js}'
-  - any: ['apps/**/*.ts', 'apps/**/*.js']
-    all: ['!apps/src/main.ts', '!apps/src/main.js']
+- changed-files:
+  - any-glob-to-any-file:
+    - 'apps/**/*.{ts,js}'
+    - any: 'apps/**/*.ts'
+    - any: 'apps/**/*.js'
+  - all-globs-to-all-files:
+    - '!apps/src/main.ts'
+    - '!apps/src/main.js'
 
 # Add 'backend' label to any change in the 'server' directory
 backend:
-  - 'server/**/*.{ts,js}'
+- changed-files:
+  - any-glob-to-any-file: 'server/**/*.{ts,js}'
 
 # Add the 'AnyChange' label to any changes within the entire repository
 AnyChange:
-  - '**'
-  - '**/.*'
-  - '**/.*/**'
-  - '**/.*/**/.*'
+- changed-files:
+  - any-glob-to-any-file: '**'
 
+# Add 'client' label to any change in the 'apps' directory
 client:
-  - apps/**/*
+- changed-files:
+  - any-glob-to-any-file: 'apps/**/*'
 
+# Add 'expo' label to any changes in the 'apps/expo' directory
 expo:
-  - apps/expo/**/*
+- changed-files:
+  - any-glob-to-any-file: 'apps/expo/**/*'
 
+# Add 'next' label to any changes in the 'apps/next' directory
 next:
-  - apps/next/**/*
+- changed-files:
+  - any-glob-to-any-file: 'apps/next/**/*'
 
+# Add 'vite' label to any changes in the 'apps/vite' directory
 vite:
-  - apps/vite/**/*
+- changed-files:
+  - any-glob-to-any-file: 'apps/vite/**/*'
 
+# Add 'api' label to any changes in the 'api' or 'server' directories
 api:
-  - api/**/*
-  - server/**/*
+- changed-files:
+  - any-glob-to-any-file:
+    - 'api/**/*'
+    - 'server/**/*'

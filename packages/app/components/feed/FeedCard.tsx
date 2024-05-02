@@ -105,7 +105,7 @@ export default function Card({
   const formattedWeight = convertWeight(total_weight, 'g', weightUnit);
   // const formattedWeight = formatNumber(total_weight); // TODO convert to user preference once implemented
   const quantity = itemPacks?.reduce(
-    (accumulator, currentValue) => accumulator + currentValue?.item?.quantity ?? 0,
+    (accumulator, currentValue) => accumulator + currentValue?.item?.quantity,
     0,
   ) ?? 0;
   let numberOfNights;
@@ -201,7 +201,7 @@ export default function Card({
                     Total Quantity: {quantity}
                   </RText>
                 )}
-             
+
                 {type === 'trip' && (
                   <RText fontSize="$1" color="mediumpurple" ml={-0.5} mt={-1}>
                     {truncatedDestination}
