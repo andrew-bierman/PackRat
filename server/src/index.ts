@@ -33,7 +33,6 @@ app.use('*', async (c, next) => {
     // origin: CORS_ORIGIN,
     origin: '*', // temporary
     credentials: true,
-    allowHeaders: ['Content-Type', 'Authorization'],
     allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   });
   return corsMiddleware(c, next);
@@ -59,4 +58,4 @@ app.use(TRPC_PLAYGROUND_ENDPOINT, async (c, next) => {
 // SET UP HTTP ROUTES
 app.route(`${HTTP_ENDPOINT}`, router);
 
-export default app; 
+export default app;
