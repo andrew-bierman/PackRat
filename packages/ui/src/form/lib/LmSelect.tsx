@@ -6,7 +6,7 @@ import {
   CheckRegular,
   colormap,
   ThemeColors,
-} from '@tamagui-extras/core';
+} from '../../extras/lib/core/src';
 import { useId, useMemo, useState } from 'react';
 import { LmFormFieldContainer } from './LmFormFieldContainer';
 import { LmFormContainerBaseTypes } from './formContainerTypes';

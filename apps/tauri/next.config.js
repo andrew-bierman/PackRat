@@ -18,7 +18,7 @@ const enableMillionJS = true;
 const plugins = [
   withTamagui({
     config: '../../packages/ui/src/tamagui.config.ts',
-    components: ['tamagui', '@tamagui-extras/form'],
+    components: ['tamagui', '@tamagui-extras/form', '@tamagui-extras/core'],
     importsWhitelist: ['constants.js', 'colors.js'],
     outputCSS:
       process.env.NODE_ENV === 'production' ? './public/tamagui.css' : null,
@@ -110,6 +110,8 @@ const nextConfig = function () {
       '@react-navigation/drawer',
       '@bacons/react-views',
       // End remove section
+      '@tamagui-extras/form',
+      '@tamagui-extras/core',
     ],
     experimental: {
       scrollRestoration: true,
