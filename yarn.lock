@@ -5347,7 +5347,7 @@ __metadata:
   dependencies:
     "@types/express": "npm:^4.17.17"
     "@types/node": "npm:^20.8.3"
-    express: "npm:^4.18.2"
+    express: "npm:^4.19.2"
     typescript: "npm:^5.3.3"
     zod: "npm:^3.22.2"
   languageName: unknown
@@ -13720,7 +13720,7 @@ __metadata:
     "@elysiajs/html": "npm:^0.7.3"
     "@hono/node-server": "npm:^1.11.0"
     elysia: "npm:^0.7.21"
-    hono: "npm:^4.2.6"
+    hono: "npm:^4.2.7"
     server: "npm:*"
     trpc-panel: "npm:^1.3.4"
     typescript: "npm:^5.3.3"
@@ -18976,7 +18976,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"express@npm:^4.17.3, express@npm:^4.18.2":
+"express@npm:^4.17.3, express@npm:^4.18.2, express@npm:^4.19.2":
   version: 4.19.2
   resolution: "express@npm:4.19.2"
   dependencies:
@@ -20773,6 +20773,13 @@ __metadata:
   version: 4.2.6
   resolution: "hono@npm:4.2.6"
   checksum: 10/bcd3f8162906cb61a2e5ded85d516be85e0e75ae5731483c620a78f2cf54d587e22d5f2421c809de4c72bbe32854714420361c134c8712b7f5084ba339c4cf5f
+  languageName: node
+  linkType: hard
+
+"hono@npm:^4.2.7":
+  version: 4.2.9
+  resolution: "hono@npm:4.2.9"
+  checksum: 10/b35ab755b84dbb649138b16889b5e7b752391cadb4a73f658af9e2c0133a6db28f472125f6ba996d3353e25b4d85d15ed724c3fe0f178b969e65d7324c108731
   languageName: node
   linkType: hard
 
