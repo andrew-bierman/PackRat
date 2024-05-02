@@ -26,7 +26,7 @@
     "build:tsc": "yarn build:tsc:packages",
     "build:validations": "cd packages/validations && yarn build",
     "build:vite": "cd apps/vite && yarn build",
-    "build:web": "yarn build:vite && yarn build:next:static",
+    "build:web": "yarn build:vite",
     "build": "yarn workspaces foreach --all run build",
     "check-deps-fix": "yarn check-deps --fix --ignore-dep uuid",
     "check-deps": "check-dependency-version-consistency .",
