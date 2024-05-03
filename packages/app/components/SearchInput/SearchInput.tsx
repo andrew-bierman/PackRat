@@ -243,5 +243,8 @@ const loadStyles = () => ({
     marginBottom: 15,
     maxWidth: 400,
     width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
