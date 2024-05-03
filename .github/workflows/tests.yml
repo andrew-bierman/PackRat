@@ -63,13 +63,16 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
+            const commentIdentifier = '<!-- test_results -->';
             const commentId = process.env.COMMENT_ID;
             const testLogs = `${{ steps.run_tests.outputs.stdout }}\n${{ steps.run_tests.outputs.stderr }}`;
             const testStatus = `${{ steps.run_tests.outcome }}`;
+            const workflowUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
 
-            let commentBody = '<!-- test_results -->\n';
+            const includeTestLogs = false; // Set this to true when you want to include the test logs
+
+            let commentBody = `${commentIdentifier}\n`;
             let emoji = '';
-
             if (testStatus === 'success') {
               commentBody += '✅ Tests passed successfully! 🎉\n\n';
               emoji = '💚';
@@ -78,7 +81,11 @@ jobs:
               emoji = '❤️';
             }
 
-            commentBody += `<details><summary>Test Logs</summary>\n\n\`\`\`\n${testLogs}\n\`\`\`\n</details>`;
+            commentBody += `[View Test Workflow](${workflowUrl})\n\n`;
+
+            if (includeTestLogs) {
+              commentBody += `<details><summary>Test Logs</summary>\n\n\`\`\`\n${testLogs}\n\`\`\`\n</details>`;
+            }
 
             await github.rest.issues.updateComment({
               owner: context.repo.owner,
