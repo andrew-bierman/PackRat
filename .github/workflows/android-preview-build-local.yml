@@ -1,9 +1,9 @@
 name: android-preview-build-local
 on:
   push:
-    branches: [ "**" ]
+    branches: ['**']
   pull_request:
-    branches: [ "**" ]
+    branches: ['**']
 
 jobs:
   update:
@@ -65,7 +65,7 @@ jobs:
           echo "apk_path=${apk_path}" >> $GITHUB_ENV
         working-directory: apps/expo
         env:
-          DEBUG: "true"
+          DEBUG: 'true'
         continue-on-error: true
 
       - name: Upload APK
@@ -74,10 +74,58 @@ jobs:
           name: android-apk
           path: /home/runner/work/PackRat/PackRat/apps/expo/build-*.apk
 
-      - name: Create Commit Comment
-        if: github.event_name == 'push'
-        uses: peter-evans/commit-comment@v2
+      - name: Find or create comment
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        id: find_or_create_comment
         with:
-          body: |
-            Android APK build ${{ steps.build.outcome == 'success' && 'completed' || 'failed' }}!
-            ${{ steps.build.outcome == 'success' && format('You can download the APK file from the following link:\nhttps://github.com/{0}/actions/runs/{1}#artifacts', github.repository, github.run_id) || 'Please check the workflow logs for more details on the build failure.' }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const commentIdentifier = '<!-- build_results -->';
+            const comments = await github.rest.issues.listComments({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+            });
+
+            const existingComment = comments.data.find(comment => comment.body.startsWith(commentIdentifier));
+
+            if (existingComment) {
+              core.setOutput('comment_id', existingComment.id);
+            } else {
+              const commentBody = `${commentIdentifier}\n🚀 Android APK build started... Please wait for the results! 🕐`;
+              const { data: { id: commentId } } = await github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: commentBody
+              });
+              core.setOutput('comment_id', commentId);
+            }
+
+      - name: Update PR comment
+        if: always() && github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const commentIdentifier = '<!-- build_results -->';
+            const commentId = '${{ steps.find_or_create_comment.outputs.comment_id }}';
+            const buildOutcome = '${{ steps.build.outcome }}';
+            const buildStatus = buildOutcome == 'success' ? 'completed' : 'failed';
+            const workflowUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+
+            let commentBody = `${commentIdentifier}\nAndroid APK build ${buildStatus}!`;
+
+            if (buildOutcome == 'success') {
+              commentBody += `\nYou can download the APK file from the following link:\n${workflowUrl}#artifacts`;
+            } else {
+              commentBody += '\nPlease check the workflow logs for more details on the build failure.';
+            }
+
+            await github.rest.issues.updateComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: commentId,
+              body: commentBody
+            });
