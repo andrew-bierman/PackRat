@@ -23,5 +23,6 @@ jobs:
 
       - name: Labeler
         uses: actions/labeler@v5
+        continue-on-error: true
         with:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"

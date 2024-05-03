@@ -24,10 +24,7 @@ test:
 
 frontend:
   - changed-files:
-    - any-glob-to-any-file: 'apps/**/*.{ts,js}'
-    - all-globs-to-all-files:
-      - '!apps/src/main.ts'
-      - '!apps/src/main.js'
+    - any-glob-to-any-file: 'apps/**/*.{ts,js, jsx, tsx}'
 
 backend:
   - changed-files:
