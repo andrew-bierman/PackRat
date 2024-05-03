@@ -147,7 +147,9 @@ export const ItemsTable = ({
    *
    * @return {undefined} This function doesn't return anything.
    */
-  const handleNextPage = () => {};
+  const handleNextPage = () => {
+    setPage(page + 1)
+  };
   /**
    * Handles the action of going to the previous page.
    *
