@@ -58,3 +58,7 @@ api:
     - any-glob-to-any-file:
       - 'api/**/*'
       - 'server/**/*'
+
+github:
+  - changed-files:
+    - any-glob-to-any-file: '.github/**/*'
