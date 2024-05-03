@@ -21342,14 +21342,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hono@npm:^4.1.4, hono@npm:^4.2.6":
-  version: 4.2.9
-  resolution: "hono@npm:4.2.9"
-  checksum: 10/b35ab755b84dbb649138b16889b5e7b752391cadb4a73f658af9e2c0133a6db28f472125f6ba996d3353e25b4d85d15ed724c3fe0f178b969e65d7324c108731
-  languageName: node
-  linkType: hard
-
-"hono@npm:^4.2.7":
+"hono@npm:^4.1.4, hono@npm:^4.2.6, hono@npm:^4.2.7":
   version: 4.2.9
   resolution: "hono@npm:4.2.9"
   checksum: 10/b35ab755b84dbb649138b16889b5e7b752391cadb4a73f658af9e2c0133a6db28f472125f6ba996d3353e25b4d85d15ed724c3fe0f178b969e65d7324c108731
