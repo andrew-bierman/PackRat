@@ -73,6 +73,7 @@
     "upgrade:hono": "yarn up '@hono/*'@latest 'hono'@latest",
     "upgrade:tamagui:canary": "yarn up '*tamagui*'@canary '@tamagui/*'@canary",
     "upgrade:tamagui": "yarn up '*tamagui*'@latest '@tamagui/*'@latest",
+    "upgrade:drizzle": "yarn up 'drizzle-*'@latest",
     "web": "cd apps/next && yarn dev"
   },
   "engines": {
