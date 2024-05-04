@@ -4,8 +4,6 @@ const RadioGroup: any = OriginalRadioGroup;
 
 const RRadio = ({ value, data, onValueChange, ...props }) => {
   if (!data) return null;
-const RRadio = ({ value, data, onValueChange, ...props }) => {
-  if (!data) return null;
   return (
     <RadioGroup
       value={value}

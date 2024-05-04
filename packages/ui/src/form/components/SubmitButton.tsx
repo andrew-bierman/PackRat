@@ -1,7 +1,7 @@
 import { LmSubmitButtonRhf, type LmButtonRhfProps } from '../lib';
 
 interface Props<T extends {}> extends LmButtonRhfProps<T> {
-  onSubmit?: (values: T) => void;
+  onSubmit: (values: T) => void;
 }
 
 export const SubmitButton = <T extends {}>({

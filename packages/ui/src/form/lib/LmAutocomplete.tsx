@@ -3,7 +3,7 @@ import {
   Input as OriginalInput,
   ListItem as OriginalListItem,
   ListItemTitle as OriginalListItemTitle,
-  ScrollView,
+  ScrollView as OriginalScrollView,
   SizeTokens,
   ThemeName,
   XGroup,
@@ -37,6 +37,7 @@ const XStack: any = OriginalXStack;
 const ListItemTitle: any = OriginalListItemTitle;
 const ListItem: any = OriginalListItem;
 const Button: any = OriginalButton;
+const ScrollView: any = OriginalScrollView;
 
 type Option = { label: string; value: string | number };
 export type LmAutocompleteProps = LmFormContainerBaseTypes & {

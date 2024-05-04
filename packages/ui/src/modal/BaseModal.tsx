@@ -1,9 +1,10 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Button as OriginalButton, Dialog as OriginalDialog } from 'tamagui';
 import { X } from '@tamagui/lucide-icons';
 import OriginalRButton from '@packrat/ui/src/RButton';
 import RStack from '@packrat/ui/src/RStack';
-import { useModal, ModalProvider } from './provider';
+import { ModalProvider } from './provider';
+import { Platform, Dimensions } from 'react-native';
 
 const Dialog: any = OriginalDialog;
 const Button: any = OriginalButton;

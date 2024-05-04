@@ -35,13 +35,8 @@ export const Form = forwardRef<any, Props>(
       [form, onSubmit],
     );
 
-  return (
-    <FormProvider {...form}>
-      {Platform.OS === 'web' ? (
-        <RHFForm onSubmit={form.handleSubmit(onSubmit || (() => {})) as any}>
-          {children}
-        </RHFForm>
-      ) : (
+    return (
+      <FormProvider {...form}>
         <>{children}</>
       </FormProvider>
     );

@@ -14,6 +14,11 @@ import { LmFormContainerBaseTypes } from './formContainerTypes';
 const XStack: any = OriginalXStack;
 const Slider: any = OriginalSlider;
 
+interface CustomSliderTrackProps {
+  colorCustom?: string;
+  children: (props: any) => React.ReactElement;
+}
+
 const CustomSliderTrack = styled(Slider.Track, {
   variants: {
     colorCustom: {
@@ -24,7 +29,8 @@ const CustomSliderTrack = styled(Slider.Track, {
       },
     },
   } as const,
-});
+}) as React.FC<CustomSliderTrackProps>;
+
 const CustomSliderTrackActive = styled(Slider.TrackActive, {
   variants: {
     colorCustom: {
