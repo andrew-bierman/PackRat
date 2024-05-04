@@ -1,5 +1,5 @@
-import React, { cloneElement, ReactNode, forwardRef } from 'react';
-import { Platform, TextInput } from 'react-native';
+import React, { cloneElement, type ReactNode, forwardRef } from 'react';
+import { Platform, type TextInput } from 'react-native';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import useSearchInput from './useSearchInput';
 import useTheme from 'app/hooks/useTheme';
@@ -25,7 +25,7 @@ interface SearchInputProps {
 }
 
 export const SearchInput = forwardRef<TextInput, SearchInputProps>(
-  (
+  function SearchInput(
     {
       onSelect,
       placeholder,
@@ -35,7 +35,7 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
       searchString,
     },
     inputRef,
-  ) => {
+  ) {
     const {
       handleClearSearch,
       handleSearchResultClick,
@@ -243,5 +243,8 @@ const loadStyles = () => ({
     marginBottom: 15,
     maxWidth: 400,
     width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
