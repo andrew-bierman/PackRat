@@ -77,7 +77,7 @@ export const AddPack = ({ isCreatingTrip = false }) => {
             placeholder={'Is Public'}
           />
           <SubmitButton
-            style={{ width: '100%', marginTop: 40 }}
+            style={{ width: '300px', marginTop: 40, marginBottom:20 }}
             onSubmit={handleAddPack}
           >
             <RText style={{ color: currentTheme.colors.text }}>
