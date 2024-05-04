@@ -1,0 +1,53 @@
+name: 'Backend Deployment'
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+    paths:
+      - 'packages/api/**'
+
+jobs:
+  deploy:
+    name: Deploy to Cloudflare Workers
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+
+      - name: 'Bun setup'
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: 'Bun install'
+        run: bun install
+
+      - name: Migrate database
+        run: cd packages/api && bun run migrate
+        env:
+          NO_D1_WARNING: true
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+
+      - name: Deploy
+        uses: cloudflare/wrangler-action@v3.3.2
+        with:
+          wranglerVersion: '3.15.0'
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          workingDirectory: packages/api
+          command: deploy src/worker.ts
+          packageManager: bun
+          secrets: |
+            APP_URL
+            JWT_VERIFICATION_KEY
+            CI
+        env:
+          APP_URL: ${{ secrets.NEXT_PUBLIC_APP_URL }}
+          JWT_VERIFICATION_KEY: ${{ secrets.JWT_VERIFICATION_KEY }}
+          CI: true
+          NO_D1_WARNING: true
