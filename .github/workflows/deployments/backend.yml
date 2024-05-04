@@ -7,6 +7,7 @@ on:
       - master
     paths:
       - 'packages/api/**'
+      - 'server/**'
 
 jobs:
   deploy:
@@ -20,16 +21,15 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: 'Bun setup'
-        uses: oven-sh/setup-bun@v1
-        with:
-          bun-version: latest
+      - name: Setup JS Runtime environment
+        uses: ./.github/actions/setup-js-runtime
 
-      - name: 'Bun install'
-        run: bun install
+      - name: Install dependencies
+        uses: ./.github/actions/install-deps
 
       - name: Migrate database
-        run: cd packages/api && bun run migrate
+        # run: cd packages/api && bun run migrate
+        run: cd server && yarn run migrate:prod
         env:
           NO_D1_WARNING: true
           CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
@@ -39,8 +39,9 @@ jobs:
         with:
           wranglerVersion: '3.15.0'
           apiToken: ${{ secrets.CF_API_TOKEN }}
-          workingDirectory: packages/api
-          command: deploy src/worker.ts
+        #   workingDirectory: packages/api
+          workingDirectory: server
+          command: yarn run deploy:prod
           packageManager: bun
           secrets: |
             APP_URL
