@@ -1,5 +1,6 @@
 mongodb-data
 *.env
+.env.local
 node_modules
 # yarn.lock
 # dist

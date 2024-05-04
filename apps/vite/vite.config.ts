@@ -37,6 +37,7 @@ const rollupPlugin = (matchers: RegExp[]) => ({
   name: 'js-in-jsx',
   load(id: string) {
     if (matchers.some((matcher) => matcher.test(id)) && id.endsWith('.js')) {
+      console.log('Processing file:', id);
       const file = readFileSync(id, { encoding: 'utf-8' });
       return esbuild.transformSync(file, { loader: 'jsx', jsx: 'automatic' });
     }
@@ -61,9 +62,9 @@ export default defineConfig({
     'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
   },
   resolve: {
+    extensions,
     // Add the resolve configuration
     alias: {
-      extensions,
       '@crosspath-resolver': './resolver.tanstack.js',
       '@env': resolve(__dirname, 'envResolver'),
       // 'react-native': 'react-native-web',
@@ -87,8 +88,8 @@ export default defineConfig({
         '.js': 'jsx',
       },
       plugins: [
-        esbuildFlowPlugin(/\.(flow|jsx?)$/, (path) =>
-          /\.jsx$/.test(path) ? 'jsx' : 'jsx',
+        esbuildFlowPlugin(/\.(flow|jsx)$/, (path) =>
+          /\.jsx?$/.test(path) ? 'jsx' : 'jsx',
         ),
       ],
     },
@@ -103,6 +104,10 @@ export default defineConfig({
           /react-native-vector-icons/,
           /@expo\/vector-icons/,
           /react-native-table-component/,
+          /@expo/,
+          /expo-router/,
+          /expo-clipboard/,
+          /expo-modules-core/,
         ]),
       ],
     },
