@@ -21,7 +21,7 @@
     "wrangler:dev2": "npx wrangler pages dev --proxy 3001 --local --persist-to=./db.sqlite --d1=DB -- npm run dev",
     "generate": "drizzle-kit generate:sqlite --schema=./src/db/schema.ts --out=./migrations",
     "migrate": "yarn run migrate:local",
-    "migrate:prod": "wrangler d1 migrations apply production",
+    "migrate:prod": "wrangler d1 migrations apply production --remote",
     "migrate:local": "wrangler d1 migrations apply production --local",
     "migrate:down": "yarn run migrate:down:local",
     "migrate:down:local": "drizzle-kit drop",
