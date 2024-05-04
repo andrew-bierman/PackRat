@@ -9,7 +9,6 @@ const iosClientId = String(process.env.IOS_CLIENT_ID);
 const androidClientId = String(process.env.ANDROID_CLIENT_ID);
 
 export const useGoogleAuth = () => {
-  console.log('webClientId', webClientId);
   const [token, setToken] = useState('');
   const sessionSignIn = useSessionSignIn();
 
