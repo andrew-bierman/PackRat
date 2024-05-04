@@ -75,10 +75,10 @@ export function PackDetails() {
             error={error}
             additionalComps={
               <>
-                <View style={{ flex: 1 }}>
+                <View>
                   <FlatList
                     data={Object.entries(SECTION)}
-                    contentContainerStyle={{ paddingBottom:50 }}
+                    contentContainerStyle={{ paddingBottom: 50 }}
                     keyExtractor={([key, val]) => val}
                     renderItem={({ item }) => {
                       {
@@ -93,16 +93,14 @@ export function PackDetails() {
                             );
                           case SECTION.CTA:
                             return isAuthUserPack ? (
-                              <View style={styles.boxStyle}>
-                                <AddItemModal
-                                  currentPackId={currentPackId}
-                                  currentPack={currentPack}
-                                  isAddItemModalOpen={isAddItemModalOpen}
-                                  setIsAddItemModalOpen={setIsAddItemModalOpen}
-                                  // refetch={refetch}
-                                  setRefetch={() => setRefetch((prev) => !prev)}
-                                />
-                              </View>
+                              <AddItemModal
+                                currentPackId={currentPackId}
+                                currentPack={currentPack}
+                                isAddItemModalOpen={isAddItemModalOpen}
+                                setIsAddItemModalOpen={setIsAddItemModalOpen}
+                                // refetch={refetch}
+                                setRefetch={() => setRefetch((prev) => !prev)}
+                              />
                             ) : null;
                           case SECTION.SCORECARD:
                             return (
@@ -152,7 +150,6 @@ const loadStyles = (theme) => {
     packsContainer: {
       flexDirection: 'column',
       minHeight: '100vh',
-
       padding: 25,
       fontSize: 26,
     },
@@ -160,10 +157,10 @@ const loadStyles = (theme) => {
       backgroundColor: currentTheme.colors.white,
     },
     boxStyle: {
-      padding: 10,
+      padding: 5,
       borderRadius: 10,
       width: '100%',
-      minHeight: 100,
+      minHeight: 400,
     },
   };
 };
