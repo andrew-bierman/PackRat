@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { FlatList, View, Platform } from 'react-native';
 import Card from '../../components/feed/FeedCard';
 import { usefetchTrips } from 'app/hooks/trips';
@@ -68,14 +68,12 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
     setRefreshing(false);
   };
 
-  /**
-   * Renders the data for the feed based on the feed type and search query.
-   *
-   * @return {ReactNode} The rendered feed data.
-   */
-  const renderData = () => {
-    let arrayData = data;
+  let arrayData = data;
 
+  const filteredData = useMemo(() => {
+    if (!arrayData) {
+      return [];
+    }
     // Fuse search
     const keys = ['name', 'items.name', 'items.category'];
     const options = {
@@ -86,19 +84,19 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
       minMatchCharLength: 1,
     };
 
-    const results =
-      feedType !== 'userTrips'
-        ? fuseSearch(arrayData, searchQuery, keys, options)
-        : data;
-    console.log(
-      '🚀 ../.. file: Feed.js:231 ../.. renderData ../.. results:',
-      results,
-    );
+    const results = fuseSearch(arrayData, searchQuery, keys, options);
 
     // Convert fuse results back into the format we want
     // if searchQuery is empty, use the original data
-    arrayData = searchQuery ? results.map((result) => result.item) : data;
+    return searchQuery ? results.map((result) => result.item) : data;
+  }, [searchQuery, data]);
 
+  /**
+   * Renders the data for the feed based on the feed type and search query.
+   *
+   * @return {ReactNode} The rendered feed data.
+   */
+  const renderData = () => {
     const feedSearchFilterComponent = (
       <FeedSearchFilter
         feedType={feedType}
@@ -115,7 +113,7 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
     return (
       <View style={{ flex: 1, paddingBottom: Platform.OS === 'web' ? 10 : 0 }}>
         <FlatList
-          data={data}
+          data={filteredData}
           horizontal={false}
           keyExtractor={(item) => item?.id + item?.type}
           renderItem={({ item }) => (

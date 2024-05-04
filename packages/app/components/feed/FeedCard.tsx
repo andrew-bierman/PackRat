@@ -11,6 +11,8 @@ import { formatNumber } from 'app/utils/formatNumber';
 import { useAddFavorite, useFetchUserFavorites } from 'app/hooks/favorites';
 import { useAuthUser } from 'app/auth/hooks';
 import { useRouter } from 'app/hooks/router';
+import { useItemWeightUnit } from 'app/hooks/items';
+import { convertWeight } from 'app/utils/convertWeight';
 
 interface CardProps {
   type: string;
@@ -51,12 +53,14 @@ export default function Card({
   createdAt,
   owners,
   duration,
+  itemPacks,
 }: CardProps) {
   const user = useAuthUser();
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
 
   const { addFavorite } = useAddFavorite();
+  const [weightUnit] = useItemWeightUnit();
 
   const { data: favorites = [] } = useFetchUserFavorites(user?.id);
 
@@ -97,8 +101,12 @@ export default function Card({
 
   const truncatedName = truncateString(name, 25);
   const truncatedDestination = truncateString(destination, 25);
+  const formattedWeight = convertWeight(total_weight, 'g', weightUnit);
   // const formattedWeight = formatNumber(total_weight); // TODO convert to user preference once implemented
-  const formattedWeight = total_weight;
+  const quantity = itemPacks?.reduce(
+    (accumulator, currentValue) => accumulator + currentValue?.item?.quantity,
+    0,
+  ) ?? 0;
   let numberOfNights;
 
   if (duration) numberOfNights = JSON.parse(duration).numberOfNights;
@@ -184,7 +192,12 @@ export default function Card({
 
                 {type === 'pack' && (
                   <RText fontSize="$1" color="mediumpurple" ml={-0.5} mt={-1}>
-                    Total Weight: {formattedWeight}
+                    Total Weight: {formatNumber(formattedWeight)} {weightUnit}
+                  </RText>
+                )}
+                {type === 'pack' && (
+                  <RText fontSize="$1" color="mediumpurple" ml={-0.5} mt={-1}>
+                    Total Quantity: {quantity}
                   </RText>
                 )}
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text , ScrollView} from 'react-native';
 import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 import { RButton, RStack } from '@packrat/ui';
 import useTheme from '../../hooks/useTheme';
@@ -22,7 +22,7 @@ const AboutContent = ({ desktopContainer, isMobile }: AboutContentProps) => {
   const { handleGithubLink, handleDiscordLink, aboutSections } = useAbout();
 
   return (
-    <View>
+    <ScrollView>
       <View style={styles.textContainer}>
         <View style={styles.headerContainer}>
           <Text style={[isDark ? styles.headerDark : styles.header]}>
@@ -67,7 +67,7 @@ const AboutContent = ({ desktopContainer, isMobile }: AboutContentProps) => {
           </View>
         </RStack>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 

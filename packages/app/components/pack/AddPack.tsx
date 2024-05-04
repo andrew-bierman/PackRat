@@ -82,7 +82,7 @@ export const AddPack = ({ isCreatingTrip = false, onSuccess }) => {
             placeholder={'Is Public'}
           />
           <SubmitButton
-            style={{ width: '100%', marginTop: 40 }}
+            style={{ width: '300px', marginTop: 40, marginBottom:20 }}
             onSubmit={handleAddPack}
           >
             <RText style={{ color: currentTheme.colors.text }}>
@@ -116,7 +116,7 @@ const PackModalContent = ({ isCreatingTrip }: { isCreatingTrip?: boolean }) => {
 };
 
 const loadStyles = (theme, appTheme) => {
-  const { currentTheme } = theme;
+  const { isDark, currentTheme } = theme;
   return {
     container: {
       flexDirection: 'column',
@@ -126,8 +126,10 @@ const loadStyles = (theme, appTheme) => {
       width: '100%',
       paddingHorizontal: 18,
       gap: 20,
-      marginTop: 20,
-      backgroundColor: currentTheme.colors.white,
+      paddingTop: 20,
+      backgroundColor: isDark
+        ? currentTheme.colors.background
+        : currentTheme.colors.white,
     },
     desktopStyle: {
       flexDirection: 'row',

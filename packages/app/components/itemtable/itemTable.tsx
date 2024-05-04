@@ -70,7 +70,7 @@ export const ItemsTable = ({
     ];
 
     return (
-      <Row data={rowData} style={[styles.title]} textStyle={styles.titleText} />
+      <Row data={rowData} style={styles.title} textStyle={styles.titleText} />
     );
   };
   const TableItem = ({ itemData }: TableItemProps) => {
@@ -79,10 +79,14 @@ export const ItemsTable = ({
     const authUser = useAuthUser();
 
     const rowData = [
-      name,
-      `${formatNumber(weight)} ${unit}`,
-      quantity,
-      `${category?.name || type}`,
+      <RText style={{ color: isDark ? 'white' : 'black' }}>{name}</RText>,
+      <RText style={{ color: isDark ? 'white' : 'black' }}>
+        {formatNumber(weight)} {unit}
+      </RText>,
+      <RText style={{ color: isDark ? 'white' : 'black' }}>{quantity}</RText>,
+      <RText style={{ color: isDark ? 'white' : 'black' }}>
+        {category?.name || type}
+      </RText>,
       authUser.id === ownerId ? (
         <EditPackItemModal
           key="edit-pack-item"
@@ -125,14 +129,27 @@ export const ItemsTable = ({
         ''
       ),
     ];
-    return <Row data={rowData} style={styles.row} flexArr={flexArr} />;
+    return (
+      <Row
+        data={rowData}
+        style={{
+          backgroundColor: isDark ? '#1A1A1D' : 'white',
+          borderBottomWidth: !isDark ? 1 : 'none',
+          borderBottomColor: !isDark ? '#D1D5DB' : 'none',
+          ...styles.row,
+        }}
+        flexArr={flexArr}
+      />
+    );
   };
   /**
    * Handles the logic for navigating to the next page.
    *
    * @return {undefined} This function doesn't return anything.
    */
-  const handleNextPage = () => {};
+  const handleNextPage = () => {
+    setPage(page + 1)
+  };
   /**
    * Handles the action of going to the previous page.
    *
@@ -149,8 +166,8 @@ export const ItemsTable = ({
           paddingVertical: 16,
           flex: 1,
           paddingTop: 30,
-          backgroundColor: '#fff',
           marginTop: 20,
+          backgroundColor: isDark ? '#1A1A1D' : 'white',
         }}
       >
         <ScrollView
@@ -210,7 +227,7 @@ export const ItemsTable = ({
           <RButton
             style={{
               width: 50,
-              backgroundColor: '#0284c7',
+              backgroundColor: page < 2 ? 'gray' : '#0284c7',
               borderRadius: 5,
               borderColor: page < 2 ? 'gray' : '#0284c7',
               borderWidth: 1,
@@ -222,16 +239,16 @@ export const ItemsTable = ({
             <AntDesign
               name="left"
               size={16}
-              color={page < 2 ? 'gray' : 'white'}
+              color='white'
             />
           </RButton>
           <RButton
             style={{
               marginLeft: 10,
               width: 50,
-              backgroundColor: '#0284c7',
+              backgroundColor: page === totalPages ? 'gray' : '#0284c7',
               borderRadius: 5,
-              borderColor: page === totalPages ? 'gray' : 'white',
+              borderColor: page === totalPages ? 'gray' : '#0284c7',
               borderWidth: 1,
               borderStyle: 'solid',
             }}
@@ -241,7 +258,7 @@ export const ItemsTable = ({
             <AntDesign
               name="right"
               size={16}
-              color={page === totalPages ? 'gray' : 'white'}
+              color='white'
             />
           </RButton>
         </View>

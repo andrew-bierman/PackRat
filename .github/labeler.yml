@@ -1,46 +1,61 @@
-# Add 'repo' label to any root file changes
-repo:
-  - '*'
+root:
+  - changed-files:
+    - any-glob-to-any-file: '*'
 
-# Add 'test' label to any change to *.spec.ts and *.spec.js files within the entire repository
+docs:
+  - changed-files:
+    - any-glob-to-any-file: '{docs/**/*,guides/**/*,**/*.md}'
+
+feature:
+  - head-branch: ['^feature', 'feature']
+
+release:
+  - base-branch: 'main'
+
 test:
-  - '**/*.spec.ts'
-  - '**/*.spec.js'
-  - '**/*.test.ts'
-  - '**/*.test.js'
-  - '**/tests/**/*.ts'
-  - '**/tests/**/*.js'
+  - changed-files:
+    - any-glob-to-any-file:
+      - '**/*.spec.ts'
+      - '**/*.spec.js'
+      - '**/*.test.ts'
+      - '**/*.test.js'
+      - '**/tests/**/*.ts'
+      - '**/tests/**/*.js'
 
-
-# Add 'frontend' label to any change in the 'client' directory
 frontend:
-  - 'apps/**/*.{ts,js}'
-  - any: ['apps/**/*.ts', 'apps/**/*.js']
-    all: ['!apps/src/main.ts', '!apps/src/main.js']
+  - changed-files:
+    - any-glob-to-any-file: 'apps/**/*.{ts,js, jsx, tsx}'
 
-# Add 'backend' label to any change in the 'server' directory
 backend:
-  - 'server/**/*.{ts,js}'
+  - changed-files:
+    - any-glob-to-any-file: 'server/**/*.{ts,js}'
 
-# Add the 'AnyChange' label to any changes within the entire repository
 AnyChange:
-  - '**'
-  - '**/.*'
-  - '**/.*/**'
-  - '**/.*/**/.*'
+  - changed-files:
+    - any-glob-to-any-file: '*'
 
 client:
-  - apps/**/*
+  - changed-files:
+    - any-glob-to-any-file: 'apps/**/*'
 
 expo:
-  - apps/expo/**/*
+  - changed-files:
+    - any-glob-to-any-file: 'apps/expo/**/*'
 
 next:
-  - apps/next/**/*
+  - changed-files:
+    - any-glob-to-any-file: 'apps/next/**/*'
 
 vite:
-  - apps/vite/**/*
+  - changed-files:
+    - any-glob-to-any-file: 'apps/vite/**/*'
 
 api:
-  - api/**/*
-  - server/**/*
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'api/**/*'
+      - 'server/**/*'
+
+github:
+  - changed-files:
+    - any-glob-to-any-file: '.github/**/*'

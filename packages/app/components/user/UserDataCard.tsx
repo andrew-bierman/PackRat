@@ -107,7 +107,9 @@ const UserDataCard = ({
                   fontWeight: 'bold',
                 }}
               >
-                <RText style={{ fontSize: 16 }}>{truncatedName}</RText>
+                <RText style={{ fontSize: 16, color: 'black' }}>
+                  {truncatedName}
+                </RText>
                 {state[index] ? (
                   <RText style={{ fontSize: 16 }}>Loading....</RText>
                 ) : (
