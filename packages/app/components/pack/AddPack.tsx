@@ -8,45 +8,50 @@ import {
   FormSelect,
   FormInput,
   SubmitButton,
+  useModal,
 } from '@packrat/ui';
 import { BaseModal } from '@packrat/ui';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import { useAddNewPack } from 'app/hooks/packs';
+import { useAddNewPack, usePackId } from 'app/hooks/packs';
 import { useRouter } from 'app/hooks/router';
 import { addPackSchema } from '@packrat/validations';
 
-export const AddPack = ({ isCreatingTrip = false }) => {
+export const AddPack = ({ isCreatingTrip = false, onSuccess }) => {
   // Hooks
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
   const router = useRouter();
+  const [_, setPackIdParam] = usePackId();
 
   const {
-    addNewPack,
-    isSuccess,
-    isError,
+    addNewPackAsync,
     response,
-    error,
+    isError,
     isLoading,
-    name,
     setIsPublic,
-    isPublic,
-    setName,
     packSelectOptions,
   } = useAddNewPack();
 
-  // routing
-  if (isSuccess && !isCreatingTrip && response) {
-    router.push(`/pack/${response.id}`);
-  }
   /**
    * Handles the addition of a pack.
    * @return {void}
    */
-  const handleAddPack = (data) => {
-    addNewPack(data);
+  const handleAddPack = async (data) => {
+    try {
+      await addNewPackAsync(data);
+      onSuccess?.();
+      if (!response?.id) {
+        return;
+      }
+      if (!isCreatingTrip) {
+        router.push(`/pack/${response.id}`);
+        return;
+      }
+
+      setPackIdParam(response.id);
+    } catch {}
   };
 
   const handleonValueChange = (itemValue) => {
@@ -95,8 +100,18 @@ export const AddPack = ({ isCreatingTrip = false }) => {
 export const AddPackContainer = ({ isCreatingTrip }) => {
   return (
     <BaseModal title="Add Pack" trigger="Add Pack" footerComponent={undefined}>
-      <AddPack isCreatingTrip={isCreatingTrip} />
+      <PackModalContent isCreatingTrip={isCreatingTrip} />
     </BaseModal>
+  );
+};
+
+const PackModalContent = ({ isCreatingTrip }: { isCreatingTrip?: boolean }) => {
+  const { setIsModalOpen } = useModal();
+  return (
+    <AddPack
+      isCreatingTrip={isCreatingTrip}
+      onSuccess={() => setIsModalOpen(false)}
+    />
   );
 };
 
