@@ -18,7 +18,8 @@ module.exports = function (api) {
           moduleName: '@env',
           path: '.env',
           safe: false,
-          allowUndefined: true,
+          // WARN: Build must fails instead of succeeds when variable are undefined.
+          allowUndefined: false,
         },
       ],
       [
