@@ -32,7 +32,6 @@ export const addTripService = async (tripData: any) => {
     });
 
     return newTrip;
-    
   } catch (error) {
     console.error(error);
     throw new Error('Unable to add trip and GeoJSON data');

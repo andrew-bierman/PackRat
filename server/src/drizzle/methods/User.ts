@@ -9,7 +9,6 @@ import {
 import bcrypt from 'bcryptjs';
 
 export class User {
-
   async save(user) {
     if (user.username) {
       return this.getUserByUsername(user.username);
@@ -79,10 +78,7 @@ export class User {
     try {
       const token = await jwt.sign({ id }, jwtSecret);
       const filter = eq(UserTable.id, id);
-      await DbClient.instance
-        .update(UserTable)
-        .set({ token })
-        .where(filter);
+      await DbClient.instance.update(UserTable).set({ token }).where(filter);
       return token;
     } catch (error) {
       throw new Error(`Failed to generate token: ${error.message}`);
@@ -103,18 +99,17 @@ export class User {
     if (!jwtSecret) throw new Error('jwtSecret is not defined');
     const resetToken = await jwt.sign({ id }, jwtSecret);
     const filter = eq(UserTable.id, id);
-    await
-      DbClient.instance
-        .update(UserTable)
-        .set({
-          passwordResetToken: resetToken,
-          passwordResetTokenExpiration: new Date(
-            Date.now() + 24 * 60 * 60 * 1000,
-          ),
-        })
-        .where(filter)
-        .returning()
-        .get();
+    await DbClient.instance
+      .update(UserTable)
+      .set({
+        passwordResetToken: resetToken,
+        passwordResetTokenExpiration: new Date(
+          Date.now() + 24 * 60 * 60 * 1000,
+        ),
+      })
+      .where(filter)
+      .returning()
+      .get();
     return `${clientUrl}/password-reset?token=${resetToken}`;
   }
 
@@ -133,10 +128,7 @@ export class User {
 
   async delete(id: string, filter = eq(UserTable.id, id)) {
     try {
-      return DbClient.instance
-        .delete(UserTable)
-        .where(filter)
-        .returning();
+      return DbClient.instance.delete(UserTable).where(filter).returning();
     } catch (error) {
       throw new Error(`Failed to delete a user: ${error.message}`);
     }
@@ -162,7 +154,6 @@ export class User {
     code?: string;
     includeFavorites?: boolean;
   }) {
-
     try {
       let filter = null;
       if (userId) {
