@@ -15,7 +15,7 @@ import { AlertDialog } from 'native-base';
 import { RButton, RInput } from '@packrat/ui';
 
 // get mapbox access token from .env file
-import { MAPBOX_ACCESS_TOKEN } from '@env';
+import { MAPBOX_ACCESS_TOKEN } from 'app/envs';
 
 import { theme } from '../../theme';
 import MapButtonsOverlay from './MapButtonsOverlay';
