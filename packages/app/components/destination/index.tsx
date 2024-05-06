@@ -16,6 +16,7 @@ import { useGEOLocationSearch } from 'app/hooks/geojson';
 import { useFetchWeather, useFetchWeatherWeak } from '../../hooks/weather';
 import { PlacesAutocomplete } from '../PlacesAutocomplete/PlacesAutocomplete';
 import { useRouter } from 'app/hooks/router';
+import { zIndex } from '@tamagui/themes/types/tokens';
 
 const DestinationHeader = ({ geoJSON, selectedSearchResult }) => {
   const styles = useCustomStyles(loadStyles);
@@ -135,10 +136,18 @@ export const DestinationPage = () => {
 
   return (
     <ScrollView>
-      {isLoading && <RText style={{width: "90%", alignSelf: "center"}}>Loading...</RText>}
+      {isLoading && (
+        <RText style={{ width: '90%', alignSelf: 'center' }}>Loading...</RText>
+      )}
       {!isLoading && !isError && (
         <View style={styles.container}>
-          <View style={styles.headerContainer}>
+          <View
+            style={{
+              zIndex: 1,
+              width: '100%',
+              ...styles.headerContainer,
+            }}
+          >
             <RStack
               style={{
                 width: '100%',
