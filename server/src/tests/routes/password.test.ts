@@ -1,45 +1,39 @@
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { userSignUp } from '@packrat/validations';
 import { generateMock } from '@anatine/zod-mock';
-import { setupTest, teardownTest } from '../utils/testHelpers';
-
-let caller;
-
-beforeEach(async () => {
-  const testSetup = await setupTest();
-  caller = testSetup.caller;
-});
-
-afterEach(async () => {
-  await teardownTest();
-});
-
-let user: any = generateMock(userSignUp);
+import { generateMockUser, setupTest } from '../utils/testHelpers';
+import type { trpcCaller } from '../utils/testHelpers';
+import type { User } from '../../db/schema';
+import { env } from 'cloudflare:test';
 
 describe('Reset password routes', () => {
+  let caller: trpcCaller;
+  let user;
   const passwordToBeUpdated = 'Updated@123';
-  let token;
+  let token: string;
+
+  beforeEach(async () => {
+    caller = await setupTest(env);
+    user = generateMockUser();
+  });
 
   describe('Create user', () => {
-    test('Create user', async () => {
+    it('Create user', async () => {
       const currentUser = await caller.signUp(user);
-
-      user = { ...currentUser.toJSON(), password: user.password };
+      user = { ...currentUser, password: user.password };
     });
   });
 
   describe('Request password reset', () => {
-    test('Request password reset', async () => {
+    it('Request password reset', async () => {
       if (user) {
         const response = await caller.requestPasswordResetEmailAndToken({
           email: user.email,
         });
-
         expect(response.message).toEqual(
           'Password reset email sent successfully',
         );
-
         expect(response.resetToken).toBeDefined();
-
         token = response.resetToken;
       }
     });
@@ -47,18 +41,18 @@ describe('Reset password routes', () => {
 
   describe('Reset password', () => {
     //! reset password function does not accept password as argument and only verifies token without updating password
-    test('Reset password', async () => {
+    it('Reset password', async () => {
       // if (token) {
-      // const response = await caller.handlePasswordReset({
-      //   token,
-      // });
-      // expect(response).toBeUndefined();
-      // const currentUser = await caller.signIn({
-      //   email: user.email,
-      //   password: passwordToBeUpdated,
-      // });
-      // expect(currentUser.id).toEqual(user.id);
-      // expect(currentUser.token).toBeDefined();
+      //   const response = await caller.handlePasswordReset({
+      //     token,
+      //   });
+      //   expect(response).toBeUndefined();
+      //   const currentUser = await caller.signIn({
+      //     email: user.email,
+      //     password: passwordToBeUpdated,
+      //   });
+      //   expect(currentUser.id).toEqual(user.id);
+      //   expect(currentUser.token).toBeDefined();
       // }
     });
   });

@@ -1,18 +1,17 @@
 import osmtogeojson from 'osmtogeojson';
-import axios from 'axios';
 import {
   ErrorProcessingOverpassError,
   ErrorRetrievingOverpassError,
   InvalidRequestParamsError,
 } from '../../helpers/errors';
 
-export const getOsmService = async ({ activityType, startPoint, endPoint }) => {
-  const overpassUrl = process.env.OSM_URI;
-
-  if (!overpassUrl) {
-    throw new Error('OSM_URI is not defined in the environment variables');
-  }
-
+export const getOsmService = async ({
+  activityType,
+  startPoint,
+  endPoint,
+  osmURI,
+}) => {
+  const overpassUrl = osmURI;
   try {
     const overpassQuery = await formatOverpassQuery(
       activityType,
@@ -20,18 +19,21 @@ export const getOsmService = async ({ activityType, startPoint, endPoint }) => {
       endPoint,
     );
 
-    const response = await axios.post(overpassUrl, overpassQuery, {
-      headers: { 'Content-Type': 'text/plain' },
+    const res = await fetch(overpassUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'text/plain',
+      },
+      body: overpassQuery,
     });
 
-    if (response.status === 200) {
-      const responseFormat = response.data;
-      const geojsonData = osmtogeojson(responseFormat);
-      return geojsonData;
-    } else {
-      // throw ErrorProcessingOverpassError;
-      return ErrorProcessingOverpassError;
-    }
+    if (!res.ok) return ErrorProcessingOverpassError;
+
+    const json = await res.json();
+
+    const responseFormat = json;
+    const geojsonData = osmtogeojson(responseFormat);
+    return geojsonData;
   } catch (error) {
     // throw ErrorRetrievingOverpassError;
     return ErrorRetrievingOverpassError;

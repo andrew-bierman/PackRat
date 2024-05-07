@@ -21,8 +21,8 @@ export const useAddPackItem = () => {
             ...newItem,
             owners: [],
             global: false,
-            packs: [newItem._id],
-            _id: Date.now().toString(),
+            packs: [newItem.id],
+            id: Date.now().toString(),
             category: newItem.type
               ? {
                   name: newItem.type,
@@ -40,12 +40,12 @@ export const useAddPackItem = () => {
     onError: (err, newItem, context) => {
       console.log('Error');
       console.log(err);
-      if (context.previousPack) {
-        utils.getPackById.setData(
-          { packId: newItem.packId },
-          context.previousPack,
-        );
-      }
+      // if (context.previousPack) {
+      //   utils.getPackById.setData(
+      //     { packId: newItem.packId },
+      //     context.previousPack,
+      //   );
+      // }
     },
     onSuccess: () => {
       utils.getPackById.invalidate();

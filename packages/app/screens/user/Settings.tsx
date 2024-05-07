@@ -1,4 +1,5 @@
-import { Ionicons } from '@expo/vector-icons';
+import React from 'react';
+import { AntDesign, Ionicons } from '@expo/vector-icons';
 import {
   RInput,
   RSeparator,
@@ -14,9 +15,12 @@ import {
   FormInput,
   FormSelect,
   SubmitButton,
+  RIconButton,
 } from '@packrat/ui';
 import Avatar from 'app/components/Avatar/Avatar';
 import { useProfileSettings } from 'app/hooks/user';
+import { useRouter } from 'app/hooks/router';
+import useTheme from 'app/hooks/useTheme';
 import { userSettingsSchema, passwordChangeSchema } from '@packrat/validations';
 
 const weatherOptions = ['celsius', 'fahrenheit'].map((key) => ({
@@ -33,8 +37,11 @@ export default function Settings() {
   const { user, handleEditUser, handlePasswordsChange, handleUpdatePassword } =
     useProfileSettings();
 
+  const { isDark, currentTheme } = useTheme();
+  const router = useRouter();
+
   return user ? (
-    <RScrollView>
+    <RScrollView style={{ backgroundColor: isDark ? '#1A1A1D' : 'white' }}>
       <RStack
         gap={8}
         width="fit-content"
@@ -43,15 +50,36 @@ export default function Settings() {
         paddingHorizontal={8}
         marginHorizontal="auto"
       >
-        <RStack>
+        <RStack
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            flexDirection: 'row',
+          }}
+        >
+          <RIconButton
+            backgroundColor="transparent"
+            icon={
+              <AntDesign
+                name="arrowleft"
+                size={24}
+                color={isDark ? 'white' : 'black'}
+              />
+            }
+            onPress={() => {
+              router.back();
+            }}
+          />
           <RH2>Profile</RH2>
-          <RSeparator marginVertical={8} />
         </RStack>
-        <Form validationSchema={userSettingsSchema} defaultValues={{ ...user }}>
+        <Form
+          validationSchema={userSettingsSchema}
+          defaultValues={{ ...user, profileImage: user.profileImage || '' }}
+        >
           <RStack
             space="$3"
-            width="fit-content"
             maw="100%"
+            width="fit-content"
             marginHorizontal="auto"
           >
             <ImageUpload
@@ -117,6 +145,7 @@ export default function Settings() {
                 id="oldPassword"
                 name="oldPassword"
                 secureTextEntry={true}
+                passwordIconProps={{ color: 'black' }}
               />
             </RStack>
             <RStack space="$2">

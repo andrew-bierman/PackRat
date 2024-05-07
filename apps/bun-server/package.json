@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@elysiajs/html": "^0.7.3",
-    "@hono/node-server": "^1.10.1",
+    "@hono/node-server": "^1.11.0",
     "elysia": "^0.7.21",
     "hono": "^4.2.7",
     "server": "*",

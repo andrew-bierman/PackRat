@@ -7,9 +7,7 @@ import { useGetUser } from './useGetUser';
 
 export const useProfile = (id = null) => {
   const authUser = useAuthUser();
-  const authUserId = authUser?._id;
-
-  const userId = id ?? authUser?._id;
+  const userId = id ?? authUser?.id;
 
   const isCurrentUser = useMatchesCurrentUser(userId); // TODO: Implement this hook in more components
 
@@ -17,48 +15,42 @@ export const useProfile = (id = null) => {
     data: allPacks,
     isLoading: allPacksLoading,
     error: allPacksError,
-  } = useUserPacks(authUserId); // TODO: Add enabled as parameter
+  } = useUserPacks(userId); // TODO: Add enabled as parameter
 
   const {
-    data: tripsData,
+    data: allTrips,
     isLoading: tripsIsLoading,
     error: tripsError,
-  } = useUserTrips(authUserId); // TODO: Add enabled as parameter
+  } = useUserTrips(userId); // TODO: Add enabled as parameter
 
   const {
     data: allFavorites,
     isLoading: allFavoritesLoading,
     error: allFavoritesError,
-  } = useFetchUserFavorites(authUserId); // TODO: Add enabled as parameter
+  } = useFetchUserFavorites(userId); // TODO: Add enabled as parameter
 
   const {
     data: userData,
     isLoading: userIsLoading,
     error: userError,
-  } = useGetUser(id);
+  } = useGetUser(userId);
 
   const user = !isCurrentUser ? userData : authUser;
 
-  const isLoading = !isCurrentUser
-    ? userIsLoading
-    : allPacksLoading || tripsIsLoading || allFavoritesLoading;
+  const isLoading =
+    userIsLoading || allPacksLoading || tripsIsLoading || allFavoritesLoading;
 
-  const error = !isCurrentUser
-    ? userError
-    : allPacksError || tripsError || allFavoritesError;
+  const error = userError || allPacksError || tripsError || allFavoritesError;
 
-  const packsData = !isCurrentUser ? user?.packs : allPacks;
-  const favoritesData = !isCurrentUser ? user?.favorites : allFavorites;
-
-  const tripsCount = tripsData?.length ?? 0;
-  const packsCount = packsData?.length ?? 0;
-  const favoritesCount = favoritesData?.length ?? 0;
+  const tripsCount = allTrips?.length ?? 0;
+  const packsCount = allPacks?.length ?? 0;
+  const favoritesCount = allFavorites?.length ?? 0;
 
   return {
     user,
-    favoritesList: Array.isArray(favoritesData) ? favoritesData : [],
-    packsList: Array.isArray(packsData) ? packsData : [],
-    tripsList: Array.isArray(tripsData) ? tripsData : [],
+    favoritesList: Array.isArray(allFavorites) ? allFavorites : [],
+    packsList: Array.isArray(allPacks) ? allPacks : [],
+    tripsList: Array.isArray(allTrips) ? allTrips : [],
     tripsCount,
     packsCount,
     favoritesCount,

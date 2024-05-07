@@ -51,9 +51,6 @@ export const loadStyles = () => {
       flexDirection: 'row',
       height: 60,
       alignItems: 'center',
-      backgroundColor: '#FFFFFF',
-      borderBottomWidth: 1,
-      borderBottomColor: '#D1D5DB',
       paddingLeft: 10,
     },
     infoContainer: {

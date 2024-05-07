@@ -8,6 +8,7 @@ import { Drawer } from '../Drawer';
 import { useScrollTop } from 'app/hooks/common/useScrollTop';
 import { useScreenWidth } from 'app/hooks/common';
 import useTheme from 'app/hooks/useTheme';
+import { RImage } from '@packrat/ui';
 
 export const Navbar = () => {
   const { currentTheme } = useTheme();
@@ -23,7 +24,21 @@ export const Navbar = () => {
       <SafeAreaView style={styles.safeArea}>
         <Container>
           <View style={styles.container}>
-            <Text style={styles.logoText}>PackRat</Text>
+            <View style={styles.logoContainer}>
+              <RImage
+                source={{
+                  // TODO: Update this to use the PackRat logo from the assets folder
+                  uri: 'https://github.com/andrew-bierman/PackRat/blob/main/packages/app/assets/packrat_icon.png?raw=true',
+                  width: 40,
+                  height: 40,
+                }}
+                width={40}
+                height={40}
+                style={styles.logo}
+                alt="PackRat Logo"
+              />
+              <Text style={styles.logoText}>PackRat</Text>
+            </View>
             <Drawer />
           </View>
         </Container>
@@ -99,8 +114,8 @@ const loadStyles = (currentTheme, isScrolled, screenWidth) => {
       flexDirection: 'row',
       alignItems: 'center',
     },
-    logoWrapper: {
-      marginHorizontal: 10,
+    logo: {
+      marginRight: 10,
     },
     logoText: {
       color: currentTheme.colors.text,

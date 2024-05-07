@@ -11,7 +11,7 @@ import { Platform } from 'react-native';
 interface UserDataCardProps {
   type: 'pack' | 'trip';
   destination: string;
-  _id: string;
+  id: string;
   name: string;
   total_weight?: number;
   is_public: boolean;
@@ -26,7 +26,7 @@ interface UserDataCardProps {
 const UserDataCard = ({
   type, // "pack" or "trip"
   destination,
-  _id,
+  id,
   name,
   total_weight,
   is_public,
@@ -64,7 +64,7 @@ const UserDataCard = ({
   const handleChangeStatus = (index) => {
     updateState(index, true);
     if (type === 'pack') {
-      changePackStatus({ _id, is_public: !is_public, name });
+      changePackStatus({ id, is_public: !is_public, name });
     } else if (type === 'trip') {
     }
   };
@@ -107,7 +107,9 @@ const UserDataCard = ({
                   fontWeight: 'bold',
                 }}
               >
-                <RText style={{ fontSize: 16 }}>{truncatedName}</RText>
+                <RText style={{ fontSize: 16, color: 'black' }}>
+                  {truncatedName}
+                </RText>
                 {state[index] ? (
                   <RText style={{ fontSize: 16 }}>Loading....</RText>
                 ) : (
@@ -134,7 +136,7 @@ const UserDataCard = ({
                   // marginTop: '-3px',
                 }}
               >
-                Total Weight: {total_weight}
+                Total Weight: {total_weight}g
               </RText>
             ) : (
               <RText
@@ -194,7 +196,7 @@ const UserDataCard = ({
           </RStack>
         </RStack>
         <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-          <Link href={`/${type}/${_id}`}>
+          <Link href={`/${type}/${id}`}>
             <RText color="gray" fontWeight="bold">
               View Details
             </RText>

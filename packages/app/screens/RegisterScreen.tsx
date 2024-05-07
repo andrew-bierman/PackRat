@@ -17,7 +17,6 @@ import { FontAwesome } from '@expo/vector-icons';
 import { useRouter } from 'app/hooks/router';
 // import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { Link } from '@packrat/crosspath';
-import { InformUser } from '../utils/ToastUtils';
 import useTheme from '../hooks/useTheme';
 import { useForm } from 'react-hook-form';
 import { useSession } from '../context/Auth/SessionProvider';
@@ -35,7 +34,10 @@ export default function Register() {
         style={{
           width: '100%',
           alignItems: 'center',
-          backgroundColor: 'white',
+          backgroundColor:
+            currentTheme.colors.background === '#0284c7'
+              ? 'white'
+              : currentTheme.colors.background,
         }}
       >
         <View
@@ -46,7 +48,15 @@ export default function Register() {
             maxWidth: 290,
           }}
         >
-          <RHeading fontSize={32} color="#212121" fontWeight="semibold">
+          <RHeading
+            fontSize={32}
+            color={
+              currentTheme.colors.background === '#0284c7'
+                ? currentTheme.colors.black
+                : 'white'
+            }
+            fontWeight="semibold"
+          >
             Welcome
           </RHeading>
           <RHeading

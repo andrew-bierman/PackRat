@@ -11,19 +11,21 @@ import { formatNumber } from 'app/utils/formatNumber';
 import { useAddFavorite, useFetchUserFavorites } from 'app/hooks/favorites';
 import { useAuthUser } from 'app/auth/hooks';
 import { useRouter } from 'app/hooks/router';
+import { useItemWeightUnit } from 'app/hooks/items';
+import { convertWeight } from 'app/utils/convertWeight';
 
 interface CardProps {
   type: string;
-  _id: string;
+  id: string;
   owner: {
-    _id: string;
+    id: string;
     username: string;
   };
   name: string;
   total_weight: number;
   is_public: boolean;
   favorited_by: Array<{
-    _id: string;
+    id: string;
   }>;
   favorites_count: number;
   owner_id: string;
@@ -34,12 +36,12 @@ interface CardProps {
 }
 
 interface User {
-  _id: string;
+  id: string;
 }
 
 export default function Card({
   type,
-  _id,
+  id,
   owner,
   name,
   total_weight,
@@ -51,21 +53,23 @@ export default function Card({
   createdAt,
   owners,
   duration,
+  itemPacks,
 }: CardProps) {
   const user = useAuthUser();
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
 
   const { addFavorite } = useAddFavorite();
+  const [weightUnit] = useItemWeightUnit();
 
-  const { data: favorites = [] } = useFetchUserFavorites(user?._id);
+  const { data: favorites = [] } = useFetchUserFavorites(user?.id);
 
   const router = useRouter();
 
   const isFavorite =
     type !== 'trip' &&
-    (favorited_by?.includes(user?._id) ||
-      favorited_by?.some((obj) => obj?._id === user?._id && user?.id));
+    // (favorited_by?.includes(user?.id) ||
+    favorited_by?.some((obj) => obj?.userId === user?.id && user?.id);
 
   /**
    * Handles adding an item to the user's favorites.
@@ -74,8 +78,8 @@ export default function Card({
    */
   const handleAddToFavorite = () => {
     const data = {
-      packId: _id,
-      userId: user._id,
+      packId: id,
+      userId: user.id,
     };
 
     addFavorite(data);
@@ -88,7 +92,7 @@ export default function Card({
    */
   const handleRemoveFromFavorite = () => {
     const favorite = favorites.find(
-      (favorite) => favorite.pack_id === _id && favorite.user_id === user._id,
+      (favorite) => favorite.pack_id === id && favorite.user_id === user.id,
     );
     if (favorite) {
       // TODO IMPLEMENT remove favorite
@@ -97,8 +101,12 @@ export default function Card({
 
   const truncatedName = truncateString(name, 25);
   const truncatedDestination = truncateString(destination, 25);
-  const formattedWeight = formatNumber(total_weight); // TODO convert to user preference once implemented
-
+  const formattedWeight = convertWeight(total_weight, 'g', weightUnit);
+  // const formattedWeight = formatNumber(total_weight); // TODO convert to user preference once implemented
+  const quantity = itemPacks?.reduce(
+    (accumulator, currentValue) => accumulator + currentValue?.item?.quantity ?? 0,
+    0,
+  ) ?? 0;
   let numberOfNights;
 
   if (duration) numberOfNights = JSON.parse(duration).numberOfNights;
@@ -116,7 +124,6 @@ export default function Card({
           <View
             style={{
               width: '100%',
-              maxWidth: 600,
               marginVertical: 'auto',
               borderRadius: 15,
               overflow: 'hidden',
@@ -137,7 +144,7 @@ export default function Card({
                     }}
                   >
                     <Link
-                      href={type === 'pack' ? '/pack/' + _id : '/trip/' + _id}
+                      href={type === 'pack' ? '/pack/' + id : '/trip/' + id}
                     >
                       <RText
                         fontSize={18}
@@ -169,7 +176,7 @@ export default function Card({
                             size={24}
                             color={currentTheme.colors.cardIconColor}
                           />
-                          <DuplicateIcon link={`/pack/${_id}?copy=true`} />
+                          <DuplicateIcon link={`/pack/${id}?copy=true`} />
                         </View>
                       )}
                       {type === 'trip' && (
@@ -185,10 +192,15 @@ export default function Card({
 
                 {type === 'pack' && (
                   <RText fontSize="$1" color="mediumpurple" ml={-0.5} mt={-1}>
-                    Total Weight: {formattedWeight}
+                    Total Weight: {formatNumber(formattedWeight)} {weightUnit}
                   </RText>
                 )}
-
+                {type === 'pack' && (
+                  <RText fontSize="$1" color="mediumpurple" ml={-0.5} mt={-1}>
+                    Total Quantity: {quantity}
+                  </RText>
+                )}
+             
                 {type === 'trip' && (
                   <RText fontSize="$1" color="mediumpurple" ml={-0.5} mt={-1}>
                     {truncatedDestination}
@@ -218,7 +230,9 @@ export default function Card({
                     }}
                   >
                     <Link
-                      href={`/profile/${type === 'pack' ? owner_id : owner?._id}`}
+                      href={`/profile/${
+                        type === 'pack' ? owner_id : owner?.id
+                      }`}
                     >
                       <RText color={currentTheme.colors.textColor}>
                         View {owner?.username ? '@' + owner?.username : 'Owner'}
@@ -267,7 +281,7 @@ export default function Card({
                             gap: 8,
                           }}
                         >
-                          {user?._id === owner_id ? null : (
+                          {user?.id === owner_id ? null : (
                             <TouchableOpacity onPress={handleAddToFavorite}>
                               <AntDesign
                                 name="heart"
@@ -322,7 +336,7 @@ export default function Card({
           textValue={`View ${type}`}
           key="view"
           onSelect={() => {
-            router.push(type === 'pack' ? '/pack/' + _id : '/trip/' + _id);
+            router.push(type === 'pack' ? '/pack/' + id : '/trip/' + id);
           }}
         >
           <ContextMenu.ItemTitle>View {type}</ContextMenu.ItemTitle>

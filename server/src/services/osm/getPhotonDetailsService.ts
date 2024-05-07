@@ -1,7 +1,6 @@
 import osmtogeojson from 'osmtogeojson';
-import axios from 'axios';
 
-export async function getPhotonDetailsService(id, type) {
+export async function getPhotonDetailsService(id, type, osmUri) {
   type = type.toLowerCase(); // Standardize osm_type to be lowercase
 
   switch (type) {
@@ -21,21 +20,20 @@ export async function getPhotonDetailsService(id, type) {
       break;
   }
 
-  const overpassUrl = process.env.OSM_URI;
-
-  if (!overpassUrl) {
-    throw new Error('OSM_URI is not defined in the environment variables'); // It exists so this is okay, this is to pass type check
-  }
-
   const overpassQuery = `[out:json][timeout:25];${type}(${id});(._;>;);out body;`;
 
   console.log('overpassQuery', overpassQuery);
-  const response = await axios.post(overpassUrl, overpassQuery, {
+  const response = await fetch(osmUri, {
+    method: 'POST',
     headers: { 'Content-Type': 'text/plain' },
+    body: overpassQuery,
   });
 
-  // console.log("response", response);
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
 
-  const geojsonData = osmtogeojson(response.data);
+  const data = await response.json();
+  const geojsonData = osmtogeojson(data);
   return geojsonData;
 }

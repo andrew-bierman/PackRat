@@ -1,7 +1,7 @@
 import { publicProcedure } from '../../trpc';
 import { UserNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
-import User from '../../models/userModel';
+import { User } from '../../drizzle/methods/User';
 
 // Middleware to check if user is authenticated
 // export const isAuthenticated = async (req, res, next) => {
@@ -21,20 +21,25 @@ import User from '../../models/userModel';
  * @param {Object} res - The response object.
  * @return {Promise} The JSON response containing the users.
  */
-export const getUsers = async (req, res, next) => {
-  try {
-    const users = await User.find({}).populate('packs trips');
+// export const getUsers = async (req, res, next) => {
+//   try {
+//     const users = await prisma.user.findMany({
+//       include: {
+//         favorites: true,
+//       },
+//     });
 
-    res.locals.data = users;
-    responseHandler(res);
-  } catch (error) {
-    next(UserNotFoundError);
-  }
-};
+//     res.locals.data = users;
+//     responseHandler(res);
+//   } catch (error) {
+//     next(UserNotFoundError);
+//   }
+// };
 
 export function getUsersRoute() {
-  return publicProcedure.query(async (input) => {
-    const users = await User.find({}).populate('packs trips');
+  return publicProcedure.query(async (opts) => {
+    const userClass = new User();
+    const users = await userClass.findMany();
     return users;
   });
 }

@@ -1,7 +1,4 @@
-import Way from '../../models/osm/wayModel';
-import Node from '../../models/osm/nodeModel';
-import Relation from '../../models/osm/relationModel';
-
+import { Node } from '../../drizzle/methods/Node';
 import {
   createInstanceFromCoordinates,
   coordinatesToInstances,
@@ -15,9 +12,28 @@ import {
   extractIdAndType,
 } from './dataFormatters';
 
+export const modelMappingFunc = (type: string) => {
+  switch (type) {
+    case 'node':
+    case 'n': // In case 'n' is sent
+    case 'N': // In case 'N' is sent
+      return 'Node';
+    case 'way':
+    case 'w': // Map 'W' to Way
+    case 'W': // Map 'W' to Way
+      return 'Way';
+    case 'relation':
+    case 'r': // In case 'r' is sent
+    case 'R': // In case 'R' is sent
+      return 'Relation';
+    default:
+      return null;
+  }
+};
+
 /**
  * Generates a new instance in the database from OpenStreetMap (OSM) data.
- *
+ * @prisma {PrismaClient} prisma - Prisma client.
  * @param {any} Model - the database model to create the instance in
  * @param {any} data - the OSM data to create the instance from
  * @return {Promise<any>} the newly created instance
@@ -31,23 +47,23 @@ export async function fromOSM(Model: any, data: any) {
     tags: propertiesToTags(data.tags),
     updated_at: data.timestamp,
   };
-
+  const nodeClass = new Node();
   // Find or create nodes
   const ids = data.nodes.map((node: any) => node.id);
-  const instances = await (Node as any).findOrCreateMany(ids, data.nodes);
+  const instances = await nodeClass.create(data.nodes);
 
   // Add nodes to instance
   instanceData.nodes = instances.map((instance: any) => instance._id);
 
   // Create instance
-  const newInstance = await Model.create(instanceData);
+  const newInstance = await Model.create({ data: instanceData });
 
   return newInstance;
 }
 
 /**
  * Generates a new instance of a model from a GeoJSON object.
- *
+ * @param {PrismaClient} prisma - Prisma client.
  * @param {any} Model - the model to create an instance of
  * @param {any} geoJSON - the GeoJSON object to generate the instance from
  * @return {Promise<any>} the newly created instance
@@ -57,36 +73,41 @@ export async function fromGeoJSON(Model: any, geoJSON: any) {
   // console.log("fromGeoJSON geoJSON", geoJSON);
   // console.log("fromGeoJSON Model", Model);
 
-  const instance = new Model();
-  instance.tags = new Map();
-
+  let osm_type;
+  let osm_id;
   // Extract OSM ID and type from properties, if available
   if (geoJSON.id) {
-    const { type, id } = extractIdAndType(geoJSON.id);
-    if (type) {
-      instance.osm_type = type.toLowerCase(); // Standardize osm_type to be lowercase
-    }
-    instance.osm_id = id;
+    const extractedObj = extractIdAndType(geoJSON.id);
+    osm_type = extractedObj.type;
+    osm_id = extractedObj.id;
   }
 
   // Convert properties to tags
-  instance.tags = propertiesToTags(geoJSON.properties || {});
+  const tags = propertiesToTags(geoJSON.properties || {});
 
   // Convert coordinates to nodes
-  instance.nodes = await coordinatesToInstances(
-    Node,
+  const nodes = await coordinatesToInstances(
+    Model.node,
     handleGeoJSONGeometry(geoJSON.geometry),
   );
-
+  let instanceGeoJSON;
   // Set the GeoJSON representation
   if (isGeoJSONFormat(geoJSON)) {
-    instance.geoJSON = geoJSON;
+    instanceGeoJSON = geoJSON;
   } else {
     console.error('geoJSON is not in GeoJSON format');
   }
-
-  // Save and return the new instance
-  await instance.save();
+  const instance = await Model.create({
+    data: {
+      osm_id,
+      osm_type,
+      geoJSON: instanceGeoJSON,
+      nodes: {
+        connect: nodes.map((node) => ({ id: node.id })),
+      },
+      tags,
+    },
+  });
   return instance;
 }
 
@@ -97,6 +118,7 @@ export async function fromGeoJSON(Model: any, geoJSON: any) {
  * @param {any} instance - the instance to convert
  * @return {Promise<any>} the GeoJSON object
  */
+
 export async function toGeoJSON(Model: any, instance: any) {
   // console.log("toGeoJSON instance", instance);
 
@@ -118,37 +140,19 @@ export async function toGeoJSON(Model: any, instance: any) {
   }
 
   // Retrieve the Node documents from the database
-  const nodes = await Node.find({ _id: { $in: instance.nodes } }).exec();
+  // const nodes = []
+  // await Node.find({ _id: { $in: instance.nodes } }).exec();
 
-  nodes.forEach((node: any) => {
-    // assuming nodes are already saved and their ids are stored in `nodes`
-    // we can fetch the node data here using findById or leave it as it is if id is enough
-    geoJSON.geometry.coordinates.push([node.lat, node.lon]);
-  });
+  // nodes.forEach((node: any) => {
+  //   // assuming nodes are already saved and their ids are stored in `nodes`
+  //   // we can fetch the node data here using findById or leave it as it is if id is enough
+  //   geoJSON.geometry.coordinates.push([node.lat, node.lon]);
+  // });
 
   return geoJSON;
 }
 
 // Mapping of types to Models
-const modelMappingFunc = (type: string) => {
-  console.log('modelMappingFunc type', type);
-  switch (type) {
-    case 'node':
-    case 'n': // In case 'n' is sent
-    case 'N': // In case 'N' is sent
-      return Node;
-    case 'way':
-    case 'w': // Map 'W' to Way
-    case 'W': // Map 'W' to Way
-      return Way;
-    case 'relation':
-    case 'r': // In case 'r' is sent
-    case 'R': // In case 'R' is sent
-      return Relation;
-    default:
-      return null;
-  }
-};
 
 /**
  * Finds an existing model based on the provided id and type.
@@ -159,12 +163,12 @@ const modelMappingFunc = (type: string) => {
  * @return {Promise<any>} A promise that resolves to the found item, or null if not found.
  */
 export function findExisting(Model: any, id: any, type: string) {
-  return Model.findOne({ osm_id: id, osm_type: type });
+  return Model.findFirst({ where: { osm_id: id, osm_type: type } });
 }
 
 /**
  * Updates an instance object using GeoJSON data.
- *
+ * @param {PrismaClient} prisma - Prisma client.
  * @param {any} instance - The instance to be updated.
  * @param {any} geoJSON - The GeoJSON data used to update the instance.
  * @return {Promise<any>} - The updated instance.
@@ -173,7 +177,7 @@ export async function updateInstanceFromGeoJSON(instance: any, geoJSON: any) {
   instance.updated_at = geoJSON.properties.timestamp;
   instance.tags = propertiesToTags(geoJSON.properties);
   instance.nodes = await coordinatesToInstances(
-    Node,
+    instance.node,
     handleGeoJSONGeometry(geoJSON.geometry),
   );
   instance.geoJSON = geoJSON;
@@ -181,9 +185,9 @@ export async function updateInstanceFromGeoJSON(instance: any, geoJSON: any) {
 }
 
 /**
- * Creates a new instance based on the given `Model` and `element`.
- *
- * @param {any} Model - The model to use for creating the instance.
+ * Creates a new instance based on the given `osm_type` and `element`.
+ * @param {PrismaClient} prisma - Prisma client.
+ * @param {any} osm_type - The model to use for creating the instance.
  * @param {any} element - The element to create the instance from.
  * @return {any} The newly created instance.
  */
@@ -232,7 +236,7 @@ export function ensureIdProperty(element: any) {
 
 /**
  * Ensures the model property of the given element.
- *
+ * @param {PrismaClient} prisma - Prisma client.
  * @param {any} element - The element to ensure the model property for.
  * @return {ModelForElement | undefined} - The model for the element, or undefined if the type is invalid.
  */
@@ -252,7 +256,7 @@ export function ensureModelProperty(element: any) {
 
 /**
  * Processes an element.
- *
+ * @param {PrismaClient} prisma - Prisma client.
  * @param {any} element - The element to be processed.
  * @return {Promise<any>} The processed element instance.
  */
@@ -276,7 +280,11 @@ export async function processElement(element: any) {
   if (instance) {
     if (isGeoJSONFormat(element)) {
       instance = await updateInstanceFromGeoJSON(instance, element);
-      await instance.save();
+      const { id, ...data } = instance;
+      await (ModelForElement as any).update({
+        where: { id },
+        data,
+      });
     }
   } else {
     instance = await createNewInstance(ModelForElement, element);
@@ -285,25 +293,14 @@ export async function processElement(element: any) {
 }
 
 /**
- * Creates or finds a single instance of a model.
- *
- * @param {typeof Way} Model - The model to create or find an instance of.
- * @param {any} element - The element used to create or find the instance.
- * @return {Promise<any>} A promise that resolves to the created or found instance.
- */
-export async function findOrCreateOne(Model = Way, element: any) {
-  return await processElement(element);
-}
-
-/**
  * Finds or creates multiple instances of a specified model.
- *
+ * @param {PrismaClient} prisma - Prisma client.
  * @param {typeof Way} Model - The model to find or create instances of.
  * @param {any} data - The data to find or create instances with.
  * @throws {Error} If the data is not iterable.
  * @returns {Array<any>} An array of instances that were found or created.
  */
-export async function findOrCreateMany(Model = Way, data: any) {
+export async function findOrCreateMany(data: any) {
   // Check if data is iterable
   if (!Array.isArray(data)) {
     throw new Error('Data is not iterable, cannot proceed.');

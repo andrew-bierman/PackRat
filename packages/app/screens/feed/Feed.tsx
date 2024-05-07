@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { FlatList, View, Platform } from 'react-native';
 import Card from '../../components/feed/FeedCard';
 import { usefetchTrips } from 'app/hooks/trips';
@@ -25,7 +25,7 @@ const ERROR_MESSAGES = {
 };
 
 interface FeedItem {
-  _id: string;
+  id: string;
   type: string;
 }
 
@@ -41,7 +41,7 @@ interface FeedProps {
 const Feed = ({ feedType = 'public' }: FeedProps) => {
   const router = useRouter();
 
-  const [queryString, setQueryString] = useState('');
+  const [queryString, setQueryString] = useState('Favorite');
   const [selectedTypes, setSelectedTypes] = useState({
     pack: true,
     trip: false,
@@ -52,7 +52,7 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
   const [refreshing, setRefreshing] = useState(false);
 
   const user = useAuthUser();
-  const ownerId = user?._id;
+  const ownerId = user?.id;
 
   const styles = useCustomStyles(loadStyles);
   const { data, error, isLoading, refetch } = useFeed(
@@ -68,14 +68,12 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
     setRefreshing(false);
   };
 
-  /**
-   * Renders the data for the feed based on the feed type and search query.
-   *
-   * @return {ReactNode} The rendered feed data.
-   */
-  const renderData = () => {
-    let arrayData = data;
+  let arrayData = data;
 
+  const filteredData = useMemo(() => {
+    if (!arrayData) {
+      return [];
+    }
     // Fuse search
     const keys = ['name', 'items.name', 'items.category'];
     const options = {
@@ -86,19 +84,19 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
       minMatchCharLength: 1,
     };
 
-    const results =
-      feedType !== 'userTrips'
-        ? fuseSearch(arrayData, searchQuery, keys, options)
-        : data;
-    console.log(
-      '🚀 ../.. file: Feed.js:231 ../.. renderData ../.. results:',
-      results,
-    );
+    const results = fuseSearch(arrayData, searchQuery, keys, options);
 
     // Convert fuse results back into the format we want
     // if searchQuery is empty, use the original data
-    arrayData = searchQuery ? results.map((result) => result.item) : data;
+    return searchQuery ? results.map((result) => result.item) : data;
+  }, [searchQuery, data]);
 
+  /**
+   * Renders the data for the feed based on the feed type and search query.
+   *
+   * @return {ReactNode} The rendered feed data.
+   */
+  const renderData = () => {
     const feedSearchFilterComponent = (
       <FeedSearchFilter
         feedType={feedType}
@@ -115,11 +113,16 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
     return (
       <View style={{ flex: 1, paddingBottom: Platform.OS === 'web' ? 10 : 0 }}>
         <FlatList
-          data={data}
+          data={filteredData}
           horizontal={false}
-          keyExtractor={(item) => item?._id + item?.type}
+          keyExtractor={(item) => item?.id + item?.type}
           renderItem={({ item }) => (
-            <Card key={item?._id} type={item?.type} {...item} />
+            <Card
+              key={item?.id}
+              type={item?.type}
+              favorited_by={item?.userFavoritePacks}
+              {...item}
+            />
           )}
           ListHeaderComponent={() => feedSearchFilterComponent}
           ListFooterComponent={() => <View style={{ height: 50 }} />}
