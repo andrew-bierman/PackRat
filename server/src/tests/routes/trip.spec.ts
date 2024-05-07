@@ -1,29 +1,35 @@
 import { describe, it, expect, beforeAll } from 'vitest';
 import { setupTest } from '../testHelpers';
 import type { trpcCaller } from '../testHelpers';
-import type { Pack, Trip, User } from '../../db/schema';
+import type { Trip, User } from '../../db/schema';
 import { env } from 'cloudflare:test';
+import { Trip as TripClass } from '../../drizzle/methods/trip';
+import { Pack as PackClass } from '../../drizzle/methods/pack';
+import { User as UserClass } from '../../drizzle/methods/User';
 
 describe('Trip Routes', () => {
   let caller: trpcCaller;
+  const tripClass = new TripClass();
+  const packClass = new PackClass();
+  const userClass = new UserClass();
+
   let trip: Trip;
   let owner: User;
-  let pack: Pack;
 
   beforeAll(async () => {
     caller = await setupTest(env);
-    owner = await caller.signUp({
+    owner = await userClass.create({
       email: 'test@abc.com',
       name: 'test',
       username: 'test',
       password: 'test123',
     });
-    pack = await caller.addPack({
+    const pack = await packClass.create({
       name: 'test',
       owner_id: owner.id,
       is_public: true,
     });
-    trip = await caller.addTrip({
+    trip = await tripClass.create({
       name: 'test',
       description: 'test',
       duration: '1h',
@@ -31,10 +37,6 @@ describe('Trip Routes', () => {
       start_date: new Date().toDateString(),
       end_date: new Date().toDateString(),
       destination: 'test',
-      geoJSON: {
-        type: 'FeatureCollection',
-        features: [],
-      },
       owner_id: owner.id,
       pack_id: pack.id,
       is_public: true,
@@ -54,30 +56,26 @@ describe('Trip Routes', () => {
 
   describe('Get trips by owner', () => {
     it('Get trips by owner', async () => {
-      if (trip) {
-        const ownerId = trip.owner_id;
-        const [ownerTrip] = await caller.getTrips({
-          owner_id: ownerId,
-        });
-        expect(ownerTrip?.owner_id).toEqual(ownerId);
-      }
+      const ownerId = trip.owner_id;
+      const [ownerTrip] = await caller.getTrips({
+        owner_id: ownerId,
+      });
+      expect(ownerTrip?.owner_id).toEqual(ownerId);
     });
   });
 
   describe('editTrip', () => {
     it('should edit trip name', async () => {
-      if (trip) {
-        const nameToBeUpdated = 'updated trip';
-        const updatedTrip = await caller.editTrip({
-          ...trip,
-          id: trip?.id,
-          start_date: trip.start_date,
-          end_date: trip.end_date,
-          is_public: true,
-          name: nameToBeUpdated,
-        });
-        expect(updatedTrip.name).toEqual(nameToBeUpdated);
-      }
+      const nameToBeUpdated = 'updated trip';
+      const updatedTrip = await caller.editTrip({
+        ...trip,
+        id: trip?.id,
+        start_date: trip.start_date,
+        end_date: trip.end_date,
+        is_public: true,
+        name: nameToBeUpdated,
+      });
+      expect(updatedTrip.name).toEqual(nameToBeUpdated);
     });
   });
 
@@ -87,7 +85,7 @@ describe('Trip Routes', () => {
       const input = {
         ...partialTrip,
         geoJSON: {
-          type: 'FeatureCollection',
+          type: 'FeatureCollection' as const,
           features: [],
         },
       };
