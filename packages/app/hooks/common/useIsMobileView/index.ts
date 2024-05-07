@@ -6,5 +6,5 @@ export const useIsMobileView = () => {
 
   const { screenWidth } = useScreenWidth();
 
-  return screenWidth < 1900; // hard coded for now, will be replaced with media queries
+  return screenWidth < 768; // hard coded for now, will be replaced with media queries
 };

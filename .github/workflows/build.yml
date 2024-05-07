@@ -1,29 +1,49 @@
 name: android-build-apk
 on:
   push:
-    branches: [ "**" ]
+    branches: ['**']
   pull_request:
-    branches: [ "**" ]
+    branches: ['**']
 
 jobs:
   install-and-test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Install yarn dependencies
-        run: |
-          yarn install
+
+      - name: Install dependencies
+        uses: ./.github/actions/install-deps
   build-android:
     needs: install-and-test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Install yarn dependencies
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.x
+          cache: yarn
+
+      - name: Install dependencies
+        uses: ./.github/actions/install-deps
+
+      - name: Prebuild
         run: |
-          yarn install
+          echo "Using Mapbox Token: $MAPBOX_DOWNLOADS_TOKEN"
+          export MAPBOX_DOWNLOADS_TOKEN=${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}
+          yarn run prebuild:expo
+
       - name: Build Android Release
         run: |
-          cd client/android && ./gradlew assembleRelease
+          cd apps/expo/android && ./gradlew assembleRelease
+
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
         with:

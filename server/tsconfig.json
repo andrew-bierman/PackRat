@@ -31,12 +31,16 @@
     "declaration": true
   },
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "dist",
   ],
   "include": [
     "./src/**/*.ts",
-    "src/drizzle.config.ts",
-    "vitest.config.ts",
-    "worker-configuration.d.ts"
+    "src/**/*.test.ts",
+    "src/**/*.spec.ts",
+    "./drizzle.config.ts",
+    "./vitest.config.ts",
+    "./vitest.config.d.ts",
+    "./worker-configuration.d.ts"
   ]
 }

@@ -1,0 +1,111 @@
+name: iOS App Release Build
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    branches: ['**']
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Setup repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+          cache: 'yarn'
+
+      - name: Setup EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Setup environment variables
+        run: |
+          echo "MAPBOX_DOWNLOADS_TOKEN=$MAPBOX_DOWNLOADS_TOKEN" >> $GITHUB_ENV
+
+      - name: Prebuild
+        run: |
+          echo "Using Mapbox Token: $MAPBOX_DOWNLOADS_TOKEN"
+          export MAPBOX_DOWNLOADS_TOKEN=${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}
+          yarn run prebuild:expo
+
+      - name: Build iOS app
+        id: build
+        run: |
+          echo "Using Mapbox Token: $MAPBOX_DOWNLOADS_TOKEN"
+          export MAPBOX_DOWNLOADS_TOKEN=${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}
+          eas build --platform ios --profile preview --local --non-interactive --output ${{ github.workspace }}/app-release.ipa
+        env:
+          DEBUG: 'true'
+        continue-on-error: true
+
+      - name: Upload IPA artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-release
+          path: ${{ github.workspace }}/app-release.ipa
+
+      - name: Find or create comment
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        id: find_or_create_comment
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const commentIdentifier = '<!-- build_results -->';
+            const comments = await github.rest.issues.listComments({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+            });
+
+            const existingComment = comments.data.find(comment => comment.body.startsWith(commentIdentifier));
+
+            if (existingComment) {
+              core.setOutput('comment_id', existingComment.id);
+            } else {
+              const commentBody = `${commentIdentifier}\n🚀 iOS app build started... Please wait for the results! 🕐`;
+              const { data: { id: commentId } } = await github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: commentBody
+              });
+              core.setOutput('comment_id', commentId);
+            }
+      - name: Update PR comment
+        if: always() && github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const commentIdentifier = '<!-- build_results -->';
+            const commentId = '${{ steps.find_or_create_comment.outputs.comment_id }}';
+            const buildOutcome = '${{ steps.build.outcome }}';
+            const buildStatus = buildOutcome == 'success' ? 'completed' : 'failed';
+            const workflowUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+
+            let commentBody = `${commentIdentifier}\niOS app build ${buildStatus}!`;
+
+            if (buildOutcome == 'success') {
+              commentBody += `\nYou can download the IPA file from the following link:\n${workflowUrl}#artifacts`;
+            } else {
+              commentBody += '\nPlease check the workflow logs for more details on the build failure.';
+            }
+
+            await github.rest.issues.updateComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: commentId,
+              body: commentBody
+            });

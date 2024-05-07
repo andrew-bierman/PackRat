@@ -1,50 +1,36 @@
-import axios from 'axios';
-import { api } from 'app/constants/api';
 import useTheme from 'app/hooks/useTheme';
-import { useState } from 'react';
 import { InformUser } from 'app/utils/ToastUtils';
+import { queryTrpc } from 'app/trpc';
 
 export const useRequestEmailModal = () => {
   const { currentTheme } = useTheme();
-  const [email, setEmail] = useState('');
-  const [loading, setLoading] = useState(false);
+  const { mutateAsync: requestResetPassword, isLoading: loading } =
+    queryTrpc.resetPasswordEmail.useMutation();
 
   /**
    * Initiates the password reset process by calling the API.
    *
    * @return {Promise<void>} A promise that resolves when the password reset email is sent successfully.
    */
-  const handleResetPasswordEmail = async (_, closeModal) => {
+  const handleResetPasswordEmail = async (closeModal, { email }) => {
     try {
-      setLoading(true);
+      await requestResetPassword({ email });
       // Call your API to initiate the password reset process
       // Pass the email entered by the user to the API endpoint
       // The API endpoint should send an email with a reset link to the provided email
       // TODO - switch to RTK query
-      await axios.post(`${api}/password-reset`, { email });
-      setLoading(false);
+      // await axios.post(`${api}/password-reset`, { email });
       closeModal();
       InformUser({
         title: 'Password reset email sent',
         style: { backgroundColor: currentTheme.colors.textPrimary },
-        placement: 'top-right',
+        placement: 'bottom',
         duration: 5000,
       });
-    } catch (error) {
-      console.log('Error here', error);
-      setLoading(false);
-      InformUser({
-        title: error?.response?.data?.error,
-        duration: 7000,
-        placement: 'top-right',
-        style: { backgroundColor: currentTheme.colors.error },
-      });
-    }
+    } catch (error) {}
   };
 
   return {
-    email,
-    setEmail,
     loading,
     handleResetPasswordEmail,
   };

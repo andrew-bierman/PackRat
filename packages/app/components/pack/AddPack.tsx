@@ -1,45 +1,57 @@
+import React from 'react';
 import { Platform, View } from 'react-native';
-import DropdownComponent from '../Dropdown';
-import { RInput, RButton, RText, RLabel } from '@packrat/ui';
+import {
+  RButton,
+  RText,
+  RLabel,
+  Form,
+  FormSelect,
+  FormInput,
+  SubmitButton,
+  useModal,
+} from '@packrat/ui';
 import { BaseModal } from '@packrat/ui';
-import { addPack } from '../../store/packsStore';
-import { useState } from 'react';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import { useAddNewPack } from 'app/hooks/packs';
+import { useAddNewPack, usePackId } from 'app/hooks/packs';
 import { useRouter } from 'app/hooks/router';
+import { addPackSchema } from '@packrat/validations';
 
-export const AddPack = ({ isCreatingTrip = false }) => {
+export const AddPack = ({ isCreatingTrip = false, onSuccess }) => {
   // Hooks
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
   const router = useRouter();
+  const [_, setPackIdParam] = usePackId();
 
   const {
-    addNewPack,
-    isSuccess,
-    isError,
+    addNewPackAsync,
     response,
-    error,
+    isError,
     isLoading,
-    name,
     setIsPublic,
-    isPublic,
-    setName,
     packSelectOptions,
   } = useAddNewPack();
 
-  // routing
-  if (isSuccess && !isCreatingTrip && response) {
-    router.push(`/pack/${response.id}`);
-  }
   /**
    * Handles the addition of a pack.
    * @return {void}
    */
-  const handleAddPack = () => {
-    addNewPack();
+  const handleAddPack = async (data) => {
+    try {
+      await addNewPackAsync(data);
+      onSuccess?.();
+      if (!response?.id) {
+        return;
+      }
+      if (!isCreatingTrip) {
+        router.push(`/pack/${response.id}`);
+        return;
+      }
+
+      setPackIdParam(response.id);
+    } catch {}
   };
 
   const handleonValueChange = (itemValue) => {
@@ -49,33 +61,35 @@ export const AddPack = ({ isCreatingTrip = false }) => {
   return (
     <View style={styles.container}>
       <View style={styles.mobileStyle}>
-        <RInput
-          placeholder="Name"
-          value={name}
-          onChangeText={(text) => {
-            setName(text);
-          }}
-          width={Platform.OS === 'web' ? '25%' : '100%'}
-        />
-        <RLabel>Is Public:</RLabel>
-        <DropdownComponent
-          value={isPublic}
-          onValueChange={handleonValueChange}
-          data={packSelectOptions}
-          width="300px"
-          accessibilityLabel="Choose Service"
-          placeholder={'Is Public'}
-        />
-        <RButton
-          width={Platform.OS === 'web' ? null : '50%'}
-          onPress={() => {
-            handleAddPack();
-          }}
+        <Form
+          defaultValues={{ isPublic: '0', name: '' }}
+          validationSchema={addPackSchema}
         >
-          <RText style={{ color: currentTheme.colors.text }}>
-            {isLoading ? 'Loading...' : 'Add Pack'}
-          </RText>
-        </RButton>
+          <FormInput
+            placeholder="Name"
+            name="name"
+            label="Name"
+            style={{ width: '100%', textAlign: 'left' }}
+          />
+          <RLabel>Is Public:</RLabel>
+          <FormSelect
+            onValueChange={handleonValueChange}
+            options={packSelectOptions}
+            name="isPublic"
+            style={{ width: '300px' }}
+            width="300px"
+            accessibilityLabel="Choose Service"
+            placeholder={'Is Public'}
+          />
+          <SubmitButton
+            style={{ width: '300px', marginTop: 40, marginBottom:20 }}
+            onSubmit={handleAddPack}
+          >
+            <RText style={{ color: currentTheme.colors.text }}>
+              {isLoading ? 'Loading...' : 'Add Pack'}
+            </RText>
+          </SubmitButton>
+        </Form>
 
         {isError && <RText>Pack already exists</RText>}
       </View>
@@ -86,13 +100,23 @@ export const AddPack = ({ isCreatingTrip = false }) => {
 export const AddPackContainer = ({ isCreatingTrip }) => {
   return (
     <BaseModal title="Add Pack" trigger="Add Pack" footerComponent={undefined}>
-      <AddPack isCreatingTrip={isCreatingTrip} />
+      <PackModalContent isCreatingTrip={isCreatingTrip} />
     </BaseModal>
   );
 };
 
+const PackModalContent = ({ isCreatingTrip }: { isCreatingTrip?: boolean }) => {
+  const { setIsModalOpen } = useModal();
+  return (
+    <AddPack
+      isCreatingTrip={isCreatingTrip}
+      onSuccess={() => setIsModalOpen(false)}
+    />
+  );
+};
+
 const loadStyles = (theme, appTheme) => {
-  const { currentTheme } = theme;
+  const { isDark, currentTheme } = theme;
   return {
     container: {
       flexDirection: 'column',
@@ -102,8 +126,10 @@ const loadStyles = (theme, appTheme) => {
       width: '100%',
       paddingHorizontal: 18,
       gap: 20,
-      marginTop: 20,
-      backgroundColor: currentTheme.colors.white,
+      paddingTop: 20,
+      backgroundColor: isDark
+        ? currentTheme.colors.background
+        : currentTheme.colors.white,
     },
     desktopStyle: {
       flexDirection: 'row',

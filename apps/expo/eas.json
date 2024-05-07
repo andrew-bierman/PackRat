@@ -4,6 +4,7 @@
   },
   "build": {
     "development": {
+      "developmentClient": true,
       "distribution": "internal",
       "android": {
         "gradleCommand": ":app:assembleDebug"
@@ -25,6 +26,7 @@
       }
     }
   },
+
   "submit": {
     "production": {}
   }

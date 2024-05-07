@@ -1,6 +1,6 @@
 import { publicProcedure } from '../../trpc';
 import { getTripsService } from '../../services/trip/getTripsService';
-import * as validator from '../../middleware/validators/index';
+import * as validator from '@packrat/validations';
 
 /**
  * Retrieves trips belonging to a specific owner.

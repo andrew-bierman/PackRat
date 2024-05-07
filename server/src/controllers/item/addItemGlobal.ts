@@ -1,6 +1,6 @@
 import { addItemGlobalService } from '../../services/item/item.service';
 import { publicProcedure } from '../../trpc';
-import * as validator from '../../middleware/validators/index';
+import * as validator from '@packrat/validations';
 
 /**
  * Adds an item globally.
@@ -32,13 +32,14 @@ export function addItemGlobalRoute() {
   return publicProcedure
     .input(validator.addItemGlobal)
     .mutation(async (opts) => {
-      const { name, weight, quantity, unit, type } = opts.input;
+      const { name, weight, quantity, unit, type, ownerId } = opts.input;
       const item = await addItemGlobalService(
         name,
         weight,
         quantity,
         unit,
         type,
+        ownerId,
       );
       return item;
     });

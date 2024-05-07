@@ -21,6 +21,7 @@ export class Pack {
                 columns: {
                   id: true,
                   name: true,
+                  ownerId: true,
                   weight: true,
                   quantity: true,
                   unit: true,

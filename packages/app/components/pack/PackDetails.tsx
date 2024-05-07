@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+
 import PackContainer from './PackContainer';
 import { DetailsHeader } from '../details/header';
-import { createParam } from 'solito';
 import { TableContainer } from '../pack_table/Table';
-import { RText } from '@packrat/ui';
+import { RButton, RText } from '@packrat/ui';
 import { DetailsComponent } from '../details';
 import { Dimensions, Platform, View, FlatList } from 'react-native';
 import { theme } from '../../theme';
@@ -14,10 +14,10 @@ import { AddItem } from '../item/AddItem';
 import { AddItemModal } from './AddItemModal';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useUserPacks } from 'app/hooks/packs/useUserPacks';
+import { usePackId } from 'app/hooks/packs/usePackId';
 import { useFetchSinglePack } from '../../hooks/packs';
 import { useAuthUser } from 'app/auth/hooks';
-
-const { useParam } = createParam();
+import { useIsAuthUserPack } from 'app/hooks/packs/useIsAuthUserPack';
 
 const SECTION = {
   TABLE: 'TABLE',
@@ -27,10 +27,9 @@ const SECTION = {
 };
 
 export function PackDetails() {
-  const searchParams = new URLSearchParams(this.location.search);
-  const canCopy = searchParams.get('copy');
-  const [packId] = useParam('id');
-  console.log(packId, 'packId');
+  // const [canCopy, setCanCopy] = useParam('canCopy')
+  const canCopy = false;
+  const [packId] = usePackId();
   const link = `${CLIENT_URL}/packs/${packId}`;
   const [firstLoad, setFirstLoad] = useState(true);
   const user = useAuthUser();
@@ -46,6 +45,7 @@ export function PackDetails() {
     error,
     refetch: refetchQuery,
   } = useFetchSinglePack(packId);
+  const isAuthUserPack = useIsAuthUserPack(currentPack);
 
   const styles = useCustomStyles(loadStyles);
   const currentPackId = currentPack && currentPack.id;
@@ -75,37 +75,33 @@ export function PackDetails() {
             error={error}
             additionalComps={
               <>
-                <View style={{ flex: 1 }}>
+                <View>
                   <FlatList
                     data={Object.entries(SECTION)}
-                    contentContainerStyle={{ paddingBottom: 350 }}
+                    contentContainerStyle={{ paddingBottom: 50 }}
                     keyExtractor={([key, val]) => val}
                     renderItem={({ item }) => {
                       {
-                        console.log(item[1], 'item');
                         switch (item[1]) {
                           case SECTION.TABLE:
                             return (
                               <TableContainer
                                 currentPack={currentPack}
                                 copy={canCopy}
+                                hasPermissions={isAuthUserPack}
                               />
                             );
-                            break;
                           case SECTION.CTA:
-                            return (
-                              <View style={styles.boxStyle}>
-                                <AddItemModal
-                                  currentPackId={currentPackId}
-                                  currentPack={currentPack}
-                                  isAddItemModalOpen={isAddItemModalOpen}
-                                  setIsAddItemModalOpen={setIsAddItemModalOpen}
-                                  // refetch={refetch}
-                                  setRefetch={() => setRefetch((prev) => !prev)}
-                                />
-                              </View>
-                            );
-                            break;
+                            return isAuthUserPack ? (
+                              <AddItemModal
+                                currentPackId={currentPackId}
+                                currentPack={currentPack}
+                                isAddItemModalOpen={isAddItemModalOpen}
+                                setIsAddItemModalOpen={setIsAddItemModalOpen}
+                                // refetch={refetch}
+                                setRefetch={() => setRefetch((prev) => !prev)}
+                              />
+                            ) : null;
                           case SECTION.SCORECARD:
                             return (
                               <ScoreContainer
@@ -114,14 +110,16 @@ export function PackDetails() {
                                 isOwner={isOwner}
                               />
                             );
-                            break;
                           case SECTION.CHAT:
                             return (
                               <View style={styles.boxStyle}>
-                                <ChatContainer />
+                                <ChatContainer
+                                  itemTypeId={currentPackId}
+                                  title="Chat"
+                                  trigger="Open Chat"
+                                />
                               </View>
                             );
-                            break;
                           default:
                             return null;
                         }
@@ -152,7 +150,6 @@ const loadStyles = (theme) => {
     packsContainer: {
       flexDirection: 'column',
       minHeight: '100vh',
-
       padding: 25,
       fontSize: 26,
     },
@@ -160,10 +157,10 @@ const loadStyles = (theme) => {
       backgroundColor: currentTheme.colors.white,
     },
     boxStyle: {
-      padding: 10,
+      padding: 5,
       borderRadius: 10,
       width: '100%',
-      minHeight: 100,
+      minHeight: 400,
     },
   };
 };

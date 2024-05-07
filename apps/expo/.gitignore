@@ -1,5 +1,4 @@
 # For users to edit
-app.json
 .env
 
 .expo/
@@ -12,6 +11,10 @@ npm-debug.*
 *.mobileprovision
 *.orig.*
 web-build/
+
+# iOS and Android build folders
+ios/
+android/
 
 # macOS
 .DS_Store

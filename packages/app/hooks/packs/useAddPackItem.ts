@@ -5,31 +5,38 @@ export const useAddPackItem = () => {
 
   // Use mutation for adding an item
   const mutation = queryTrpc.addItem.useMutation({
-    // onMutate: async (newItem) => {
-    //   // Snapshot the previous value before the mutation
-    //   console.log(newItem.packId);
-    //   const previousPack = utils.getPackById.getData({
-    //     packId: newItem.packId,
-    //   });
-    //   const newQueryData = {
-    //     ...previousPack,
-    //     items: [
-    //       ...previousPack.items,
-    //       {
-    //         ...newItem,
-    //         owners: [],
-    //         global: false,
-    //         packs: [newItem.id],
-    //         id: Date.now().toString(),
-    //       },
-    //     ],
-    //   };
-    //   console.log(newQueryData);
-    //   utils.getPackById.setData({ packId: newItem.packId }, newQueryData);
-    //   return {
-    //     previousPack,
-    //   };
-    // },
+    onMutate: async (newItem) => {
+      // Snapshot the previous value before the mutation
+
+      const previousPack = utils.getPackById.getData({
+        packId: newItem.packId,
+      });
+      console.log('previus data');
+      console.log(previousPack);
+      const newQueryData = {
+        ...previousPack,
+        items: [
+          ...(previousPack?.items ?? []),
+          {
+            ...newItem,
+            owners: [],
+            global: false,
+            packs: [newItem.id],
+            id: Date.now().toString(),
+            category: newItem.type
+              ? {
+                  name: newItem.type,
+                }
+              : undefined,
+          },
+        ],
+      };
+      console.log(newQueryData);
+      utils.getPackById.setData({ packId: newItem.packId }, newQueryData);
+      return {
+        previousPack,
+      };
+    },
     onError: (err, newItem, context) => {
       console.log('Error');
       console.log(err);
