@@ -12,7 +12,7 @@ import {
   SubmitButton,
 } from '@packrat/ui';
 import { FontAwesome } from '@expo/vector-icons';
-import { NODE_ENV } from 'app/envs';
+import { NODE_ENV } from '@packrat/config';
 import { Link } from '@packrat/crosspath';
 import useTheme from '../hooks/useTheme';
 import { useGoogleAuth, useLogin } from 'app/auth/hooks';

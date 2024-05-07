@@ -8,14 +8,12 @@ import {
   Alert,
   Linking,
 } from 'react-native';
-// import { check, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Mapbox, { ShapeSource, offlineManager, Camera } from '@rnmapbox/maps';
 import { AlertDialog } from 'native-base';
 import { RButton, RInput } from '@packrat/ui';
 
-// get mapbox access token from .env file
-import { MAPBOX_ACCESS_TOKEN } from 'app/envs';
+import { MAPBOX_ACCESS_TOKEN } from '@packrat/config';
 
 import { theme } from '../../theme';
 import MapButtonsOverlay from './MapButtonsOverlay';
