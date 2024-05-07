@@ -17,6 +17,9 @@ config.resolver.assetExts.push('cjs');
 // Include 'mjs' and 'cjs' in source extensions
 config.resolver.sourceExts.push('mjs', 'cjs', '.solito.js');
 
+// Remove 'import' from unstable_conditionNames, to fix the issue with 'import.meta'
+config.resolver.unstable_conditionNames = ['require'];
+
 // Find the project and workspace directories
 const projectRoot = __dirname;
 const workspaceRoot = path.resolve(projectRoot, '../../'); // Adjust as per your project structure
