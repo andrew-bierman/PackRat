@@ -3,7 +3,7 @@ import * as DropdownMenu from 'zeego/dropdown-menu';
 import { styled } from 'tamagui';
 import { MaterialIcons } from '@expo/vector-icons';
 
-import { RIconButton } from '@packrat/ui';
+import RIconButton from '../RIconButton';
 
 const CustomContent = styled(DropdownMenu.Content, {
   backgroundColor: 'white',
@@ -45,7 +45,7 @@ export const ZDropdownWeb = ({ dropdownItems = [] }) => {
       </DropdownMenu.Trigger>
       <CustomContent>
         {dropdownItems.map(({ label, onSelect = () => {} }) => (
-          <CustomItem key={label} onSelect={onSelect()}>
+          <CustomItem key={label} onSelect={onSelect}>
             <DropdownMenu.ItemTitle>{label}</DropdownMenu.ItemTitle>
           </CustomItem>
         ))}
@@ -64,13 +64,13 @@ export const ZDropdownNative = ({ dropdownItems = [] }) => {
           style={{ padding: 0 }}
         />
       </DropdownMenu.Trigger>
-      <CustomContent>
+      <DropdownMenu.Content>
         {dropdownItems.map(({ label, onSelect = () => {} }) => (
-          <DropdownMenu.Item key={label} onSelect={onSelect()}>
+          <DropdownMenu.Item key={label} onSelect={onSelect}>
             <DropdownMenu.ItemTitle>{label}</DropdownMenu.ItemTitle>
           </DropdownMenu.Item>
         ))}
-      </CustomContent>
+      </DropdownMenu.Content>
     </DropdownMenu.Root>
   );
 };
