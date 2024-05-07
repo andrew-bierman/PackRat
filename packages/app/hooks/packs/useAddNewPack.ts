@@ -22,6 +22,15 @@ export const useAddNewPack = () => {
     });
   };
 
+  // TODO Refactor pack creation
+  const addNewPackAsync = (data) => {
+    return mutation.mutateAsync({
+      name: data.name,
+      is_public: data.isPublic === packSelectOptions[0].value,
+      owner_id: user?.id,
+    });
+  };
+
   const mutation = queryTrpc.addPack.useMutation({
     onMutate: async (packData) => {
       utils.getPacks.cancel({
@@ -76,6 +85,7 @@ export const useAddNewPack = () => {
   return {
     mutation,
     addNewPack,
+    addNewPackAsync,
     isLoading: mutation.isLoading,
     isError: mutation.isError,
     isSuccess: mutation.isSuccess,

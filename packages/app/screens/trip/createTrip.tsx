@@ -69,13 +69,13 @@ export default function Trips() {
             )}
           <TripTrailCard
             data={filteredTrails || []}
-            onToggle={togglePlace}
-            selectedValue=""
+            onToggle={(trail) => togglePlace('trail', trail)}
+            selectedValue={tripStore.trail}
           />
           <TripParkCard
             data={parksData || []}
-            onToggle={togglePlace}
-            selectedValue=""
+            onToggle={(park) => togglePlace('park', park)}
+            selectedValue={tripStore.park}
           />
           <GearList />
           <TripDateRange dateRange={dateRange} setDateRange={setDateRange} />

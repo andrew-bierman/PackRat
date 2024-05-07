@@ -16,6 +16,9 @@ declare module '@tanstack/react-router' {
   }
 }
 
+import * as WebBrowser from 'expo-web-browser';
+WebBrowser.maybeCompleteAuthSession();
+
 // Render the app
 const rootElement = document.getElementById('app')!;
 if (!rootElement.innerHTML) {
