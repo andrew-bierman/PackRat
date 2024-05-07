@@ -1,24 +1,20 @@
 diff --git a/node_modules/osm-polygon-features/index.js b/node_modules/osm-polygon-features/index.js
-index 4fcec74..8c71aee 100644
+index 4fcec74..189cbfd 100644
 --- a/node_modules/osm-polygon-features/index.js
 +++ b/node_modules/osm-polygon-features/index.js
 @@ -1 +1 @@
 -module.exports = require('./polygon-features.json')
-+module.exports = require('osm-polygon-features/polygon-features')
++module.exports = require('./polygon-features')
 diff --git a/node_modules/osm-polygon-features/polygon-features.json b/node_modules/osm-polygon-features/polygon-features.js
-similarity index 97%
+similarity index 99%
 rename from node_modules/osm-polygon-features/polygon-features.json
 rename to node_modules/osm-polygon-features/polygon-features.js
-index 8a86d16..536309d 100644
+index 8a86d16..09e9df0 100644
 --- a/node_modules/osm-polygon-features/polygon-features.json
 +++ b/node_modules/osm-polygon-features/polygon-features.js
-@@ -1,8 +1,4 @@
+@@ -1,4 +1,4 @@
 -[
--    {
--        "key": "building",
--        "polygon": "all"
--    },
 +module.exports = [
      {
-         "key": "highway",
-         "polygon": "whitelist",
+         "key": "building",
+         "polygon": "all"
