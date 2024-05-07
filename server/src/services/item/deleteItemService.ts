@@ -10,10 +10,7 @@ import { ItemPacks } from '../../drizzle/methods/ItemPacks';
  * @param {string} packId - The ID of the pack that the item belongs to.
  * @return {Promise<object>} - The deleted item object.
  */
-export const deleteItemService = async (
-  itemId: string,
-  packId?: string,
-): Promise<object> => {
+export const deleteItemService = async (itemId: string, packId?: string) => {
   const itemClass = new Item();
   const ItemPacksClass = new ItemPacks();
   const item = await itemClass.findItem({ id: itemId });
