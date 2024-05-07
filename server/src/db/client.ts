@@ -23,7 +23,7 @@ class DbClient {
     if (d1Db) {
       this._instance = await createDb(d1Db);
     }
-  },
+  }
 };
 
 export { DbClient };
