@@ -16571,7 +16571,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"drizzle-kit@npm:^0.20.14":
+"drizzle-kit@npm:^0.20.17":
   version: 0.20.17
   resolution: "drizzle-kit@npm:0.20.17"
   dependencies:
@@ -16598,7 +16598,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"drizzle-orm@npm:^0.30.7":
+"drizzle-orm@npm:^0.30.10":
   version: 0.30.10
   resolution: "drizzle-orm@npm:0.30.10"
   peerDependencies:
@@ -31388,8 +31388,8 @@ __metadata:
     cross-env: "npm:^7.0.3"
     csurf: "npm:^1.11.0"
     dotenv: "npm:^16.0.3"
-    drizzle-kit: "npm:^0.20.14"
-    drizzle-orm: "npm:^0.30.7"
+    drizzle-kit: "npm:^0.20.17"
+    drizzle-orm: "npm:^0.30.10"
     drizzle-zod: "npm:^0.5.1"
     eslint: "npm:^8.56.0"
     eslint-config-prettier: "npm:^9.0.0"

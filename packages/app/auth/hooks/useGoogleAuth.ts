@@ -17,7 +17,12 @@ export const useGoogleAuth = () => {
     {
       idToken: token,
     },
-    { enabled: !!token, onSuccess: (user) => sessionSignIn(user) },
+    {
+      enabled: !!token,
+      onSuccess: (user) => {
+        sessionSignIn(user);
+      },
+    },
   );
 
   const [request, response, promptAsync] = Google.useIdTokenAuthRequest({

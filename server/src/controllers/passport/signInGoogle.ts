@@ -168,76 +168,84 @@ export function googleSigninRoute() {
   return publicProcedure
     .input(z.object({ idToken: z.string().nonempty() }))
     .query(async (opts) => {
-      const { idToken } = opts.input;
-      const { env }: any = opts.ctx;
+      try {
+        const { idToken } = opts.input;
+        const { env }: any = opts.ctx;
 
-      const decodedToken: any = jwt.decode(idToken);
-      if (!decodedToken) {
-        throw new Error('Invalid ID token');
-      }
+        const decodedToken: any = jwt.decode(idToken);
+        if (!decodedToken) {
+          throw new Error('Invalid ID token');
+        }
 
-      const {
-        payload: { email, name, sub: googleId },
-      } = decodedToken;
-      const userClass = new User();
-      const alreadyGoogleSignin = await userClass.findUnique({
-        where: {
-          email,
-          googleId,
-        },
-      });
-      if (!alreadyGoogleSignin) {
-        const isLocalLogin = await userClass.findUnique({
+        const {
+          payload: { email, name, sub: googleId },
+        } = decodedToken;
+
+        const userClass = new User();
+        const alreadyGoogleSignin = await userClass.findUnique({
           where: {
             email,
-          },
-        });
-
-        if (isLocalLogin) {
-          throw new Error('Already user registered on that email address');
-        }
-        const randomPassword = utilsService.randomPasswordGenerator(8);
-        const username = utilsService.randomUserNameCode(email, 4);
-
-        const user = await userClass.create({
-          email,
-          name,
-          password: randomPassword,
-          googleId,
-          username,
-        });
-        await userClass.generateAuthToken(env.JWT_SECRET, user.id);
-
-        sendWelcomeEmail(
-          user.email,
-          user.name,
-          env.STMP_EMAIL,
-          env.SEND_GRID_API_KEY,
-        );
-        return user;
-      } else {
-        if (!alreadyGoogleSignin.password) {
-          alreadyGoogleSignin.password =
-            utilsService.randomPasswordGenerator(8);
-        }
-
-        await userClass.generateAuthToken(
-          env.JWT_SECRET,
-          alreadyGoogleSignin.id,
-        );
-
-        const updatedUser = await userClass.update(
-          {
             googleId,
           },
-          alreadyGoogleSignin.id,
-          and(
-            eq(UserTable.googleId, alreadyGoogleSignin.googleId),
-            eq(UserTable.email, alreadyGoogleSignin.email),
-          ),
-        );
+        });
 
-        return { user: updatedUser };
+        if (!alreadyGoogleSignin) {
+          const isLocalLogin = await userClass.findUnique({
+            where: {
+              email,
+            },
+          });
+
+          if (isLocalLogin) {
+            throw new Error('Already user registered on that email address');
+          }
+
+          const randomPassword = utilsService.randomPasswordGenerator(8);
+          const username = utilsService.randomUserNameCode(email, 4);
+
+          const user = await userClass.create({
+            email,
+            name,
+            password: randomPassword,
+            googleId,
+            username,
+          });
+
+          await userClass.generateAuthToken(env.JWT_SECRET, user.id);
+
+          sendWelcomeEmail(
+            user.email,
+            user.name,
+            env.STMP_EMAIL,
+            env.SEND_GRID_API_KEY,
+          );
+          return user;
+        } else {
+          if (!alreadyGoogleSignin.password) {
+            alreadyGoogleSignin.password =
+              utilsService.randomPasswordGenerator(8);
+          }
+
+          await userClass.generateAuthToken(
+            env.JWT_SECRET,
+            alreadyGoogleSignin.id,
+          );
+
+          const updatedUser = await userClass.update(
+            {
+              googleId,
+            },
+            and(
+              eq(UserTable.id, alreadyGoogleSignin.id),
+              eq(UserTable.googleId, alreadyGoogleSignin.googleId),
+              eq(UserTable.email, alreadyGoogleSignin.email),
+            ),
+          );
+          return updatedUser?.[0];
+        }
+      } catch (error) {
+        console.error(error);
+        throw new Error(`Google Signin failed: ${error.message}`);
       }
     });
 }
