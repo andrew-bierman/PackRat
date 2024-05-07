@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text } from 'react-native';
+import { Platform, Text } from 'react-native';
 import { useRouter } from 'app/hooks/router';
 import useTheme from 'app/hooks/useTheme';
 import { CustomCardHeader } from '../CustomCardHeader';
@@ -21,19 +21,25 @@ export const TripCardHeader = ({ data, title, link }) => {
             flexDirection: 'row',
           }}
         >
-          <RIconButton
-            backgroundColor="transparent"
-            icon={
-              <AntDesign
-                name="arrowleft"
-                size={24}
-                color={isDark ? 'white' : 'black'}
-              />
-            }
-            onPress={() => {
-              router.back();
-            }}
-          />
+          {Platform.OS === 'web' && (
+            <RIconButton
+              backgroundColor="transparent"
+              icon={
+                <AntDesign
+                  name="arrowleft"
+                  size={24}
+                  color={isDark ? 'white' : 'black'}
+                />
+              }
+              onPress={() => {
+                if (Platform.OS === 'web') {
+                  window?.history?.back();
+                } else {
+                  router.back();
+                }
+              }}
+            />
+          )}
           <Text style={{ color: isDark ? 'white' : 'black' }}>{title}</Text>
         </RStack>
       }

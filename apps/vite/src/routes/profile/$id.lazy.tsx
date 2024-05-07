@@ -1,9 +1,9 @@
 import ProfileContainer from 'app/screens/user/ProfileContainer';
 import { useProfileId } from 'app/hooks/user';
 
-import { createFileRoute } from '@tanstack/react-router';
+import { createLazyFileRoute } from '@tanstack/react-router';
 
-export const Route = createFileRoute('/profile/$id')({
+export const Route = createLazyFileRoute('/profile/$id')({
   component: Profile,
 });
 

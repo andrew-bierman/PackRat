@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { createParam } from '@packrat/crosspath';
 
 interface GeoSearchParams {
-  osmId?: string;
+  osmId?: number;
   osmType?: string;
   name?: string;
 }
@@ -31,5 +31,13 @@ export const useGEOLocationSearch = (): [
     setParams(newSearchParams);
   };
 
-  return [osm, setGEOLocation];
+  const formattedOSM = useMemo<GeoSearchParams>(
+    () => ({
+      ...osm,
+      osmId: Number(osm.osmId),
+    }),
+    [osm],
+  );
+
+  return [formattedOSM, setGEOLocation];
 };

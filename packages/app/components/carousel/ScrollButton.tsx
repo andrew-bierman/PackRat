@@ -10,6 +10,7 @@ import {
   ViewStyle,
 } from 'react-native';
 import useCustomStyles from 'app/hooks/useCustomStyles';
+import useTheme from 'app/hooks/useTheme';
 
 interface ScrollButtonProps {
   direction: 'left' | 'right';
@@ -19,6 +20,7 @@ interface ScrollButtonProps {
 
 const ScrollButton = ({ direction, onPress, disabled }: ScrollButtonProps) => {
   const styles = useCustomStyles(loadStyles);
+  const { isDark } = useTheme();
   return (
     <TouchableOpacity
       activeOpacity={0.8}
@@ -26,8 +28,8 @@ const ScrollButton = ({ direction, onPress, disabled }: ScrollButtonProps) => {
       style={styles.scrollButton}
       disabled={disabled}
     >
-      {direction === 'left' && <Text style={styles.iconStyles}>&lang;</Text>}
-      {direction != 'left' && <Text style={styles.iconStyles}>&rang;</Text>}
+      {direction === 'left' && <Text style={[styles.iconStyles, {color: isDark? 'white':  'grey', }]}>&lang;</Text>}
+      {direction != 'left' && <Text style={[styles.iconStyles, {color: isDark? 'white':  'grey', }]}>&rang;</Text>}
     </TouchableOpacity>
   );
 };

@@ -15,7 +15,10 @@ export const CustomCardHeader = ({ data, title, link, actionsComponent }) => {
   return (
     <>
       <RStack style={{ flex: 1 }}>
-        <RText>{title}</RText>
+      {typeof title === "string" ? 
+            <RText>{title}</RText>
+        : title
+      }
       </RStack>
       <View>
         <Link href={`/profile/${data.owner_id.id || data.owner_id}`}>

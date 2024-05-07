@@ -1,9 +1,9 @@
 // import Map from "app/screens/map";
 
 // export default Map;
-import { createFileRoute } from '@tanstack/react-router';
+import { createLazyFileRoute } from '@tanstack/react-router';
 
-export const Route = createFileRoute('/map/')({
+export const Route = createLazyFileRoute('/map/')({
   component: () => null,
 });
 

@@ -251,4 +251,25 @@ export class User {
       throw new Error(`Failed to validate reset token: ${error.message}`);
     }
   }
+
+  async findUnique(query: { where: { email?: string; googleId?: string } }) {
+    try {
+      const conditions = [];
+      if (query.where.email) {
+        conditions.push(eq(UserTable.email, query.where.email));
+      }
+      if (query.where.googleId) {
+        conditions.push(eq(UserTable.googleId, query.where.googleId));
+      }
+      const user = await DbClient.instance
+        .select()
+        .from(UserTable)
+        .where(and(...conditions))
+        .limit(1)
+        .get();
+      return user || null;
+    } catch (error) {
+      throw new Error(`Failed to find user: ${error.message}`);
+    }
+  }
 }
