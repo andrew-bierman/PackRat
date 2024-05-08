@@ -51,6 +51,9 @@ jobs:
       - name: Install dependencies
         uses: ./.github/actions/install-deps
 
+      - name: Setup API
+        run: cp -n server/wrangler.toml.example server/wrangler.toml
+
       - name: Run tests
         id: run_tests
         run: |
