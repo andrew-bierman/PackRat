@@ -240,7 +240,7 @@ const loadStyles = (theme: any) => {
       alignItems: 'center',
       width: '100%',
     },
-    scoreText: {ustifyContent: 'space-between',
+    scoreText: {
       color: currentTheme.colors.textPrimary,
       fontSize: 26,
       fontWeight: 'bold',
