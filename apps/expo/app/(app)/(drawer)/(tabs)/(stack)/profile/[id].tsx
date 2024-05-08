@@ -1,11 +1,12 @@
-import { useSearchParams, Stack } from 'expo-router';
+import { Stack } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Platform } from 'react-native';
 import ProfileContainer from 'app/screens/user/ProfileContainer';
 import Head from 'expo-router/head';
+import { useProfileId } from 'app/hooks/user';
 
 const Profile = () => {
-  const { id } = useSearchParams();
+  const { id } = useProfileId();
 
   return (
     <>

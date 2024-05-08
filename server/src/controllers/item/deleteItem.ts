@@ -1,5 +1,5 @@
 import { deleteItemService } from '../../services/item/item.service';
-import * as validator from '../../middleware/validators/index';
+import * as validator from '@packrat/validations';
 import { publicProcedure } from '../../trpc';
 
 /**

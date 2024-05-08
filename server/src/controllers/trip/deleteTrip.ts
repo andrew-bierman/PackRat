@@ -1,5 +1,5 @@
 import { publicProcedure } from '../../trpc';
-import * as validator from '../../middleware/validators/index';
+import * as validator from '@packrat/validations';
 import { Trip } from '../../drizzle/methods/trip';
 
 // import { prisma } from '../../prisma';

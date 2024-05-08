@@ -12,7 +12,7 @@ import {
   editGlobalItemAsDuplicate,
   deleteGlobalItem,
 } from '../controllers/item/index';
-import * as validator from '../middleware/validators/index';
+import * as validator from '@packrat/validations';
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
 import authTokenMiddleware from '../middleware/auth';
 import checkRole from '../middleware/checkRole';

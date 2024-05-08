@@ -306,7 +306,7 @@ export async function findOrCreateMany(data: any) {
     throw new Error('Data is not iterable, cannot proceed.');
   }
 
-  const instances = [];
+  const instances: any[] = [];
 
   for (const element of data) {
     const instance = await processElement(element);

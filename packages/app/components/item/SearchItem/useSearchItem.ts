@@ -1,9 +1,16 @@
 import { useMemo, useState } from 'react';
 import { useItems } from 'app/hooks/items';
-import { trpc } from 'app/trpc';
+import { queryTrpc } from 'app/trpc';
 import { useAuthUser } from 'app/auth/hooks';
+import { useFetchSinglePack, usePackId } from 'app/hooks/packs';
 
 export const useSearchItem = () => {
+  const [packId] = usePackId();
+  const currentPack = useFetchSinglePack(packId);
+  const { mutateAsync: addItemToPack } =
+    queryTrpc.addGlobalItemToPack.useMutation();
+  const utils = queryTrpc.useUtils();
+
   const user = useAuthUser();
   const [searchString, setSearchString] = useState('');
 
@@ -16,18 +23,29 @@ export const useSearchItem = () => {
   }, [searchString]);
 
   const { data } = useItems(itemFilters);
-  const results = data?.items || [];
+  const results = useMemo(() => {
+    const packItems = currentPack?.data?.items;
+    if (!Array.isArray(data?.items)) {
+      return [];
+    }
+
+    return data.items.filter((globalItem) => {
+      if (!Array.isArray(packItems)) {
+        return true;
+      }
+
+      return !packItems.some(({ id }) => id === globalItem.id);
+    });
+  }, [data]);
 
   const handleSearchResultClick = (item) => {
     const ownerId = user.id;
-    const packId = window.location.pathname.substring('/pack/'.length);
     const itemId = item?.id;
 
-    // TODO add optimistic updates
     (async () => {
       try {
-        // Works but we have to refresh (Incomplete)
-        await trpc.addGlobalItemToPack.mutate({ itemId, ownerId, packId });
+        await addItemToPack({ itemId, ownerId, packId });
+        utils.getPackById.invalidate();
       } catch {}
     })();
 

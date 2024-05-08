@@ -5,6 +5,7 @@ import { ItemCategory } from '../../drizzle/methods/itemcategory';
 import { ItemOwners } from '../../drizzle/methods/ItemOwners';
 import { ItemCategory as categories } from '../../utils/itemCategory';
 import { type InsertItemCategory } from '../../db/schema';
+
 /**
  * Generates a new item and adds it to a pack based on the given parameters.
  * @param {string} name - The name of the item.
@@ -44,6 +45,7 @@ export const addItemService = async (
     unit,
     // packs: [packId],
     categoryId: category.id,
+    ownerId,
   });
 
   // await Pack.updateOne({ _id: packId }, { $addToSet: { items: newItem._id } });

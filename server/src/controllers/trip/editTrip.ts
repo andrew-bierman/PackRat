@@ -3,7 +3,7 @@ import { UnableToEditTripError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 
 // import { prisma } from '../../prisma';
-import * as validator from '../../middleware/validators/index';
+import * as validator from '@packrat/validations';
 import { Trip } from '../../drizzle/methods/trip';
 
 /**

@@ -1,6 +1,6 @@
 import { publicProcedure } from '../../trpc';
 import { editItemService } from '../../services/item/item.service';
-import * as validator from '../../middleware/validators/index';
+import * as validator from '@packrat/validations';
 
 // export const editItem = async (req, res, next) => {
 //   try {

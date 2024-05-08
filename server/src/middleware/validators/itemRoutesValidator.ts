@@ -30,6 +30,8 @@ export const editItem = z.object({
   type: z.string().optional(),
 });
 
+export type Item = z.infer<typeof addItem>;
+
 export const deleteItem = z.object({
   itemId: z.string(),
   packId: z.string().optional(),

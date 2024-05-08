@@ -6,28 +6,28 @@ import { useUserPacks } from '../../hooks/packs/useUserPacks';
 import { View } from 'react-native';
 import { AddItemModal } from './AddItemModal';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import { useSearchParams } from 'app/hooks/common';
 import { useAuthUser } from 'app/auth/hooks';
+import { usePackId } from 'app/hooks/packs';
+import { createParam } from '@packrat/crosspath';
 
 export default function PackContainer({ isCreatingTrip = false }) {
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
-
-  const searchParams = useSearchParams();
-  const [currentPackId, setCurrentPackId] = useState(
-    searchParams.get('packId'),
-  );
+  const [packIdParam, setPackIdParam] = usePackId();
+  const [currentPackId, setCurrentPackId] = useState(packIdParam);
   const user = useAuthUser();
 
   const [refetch, setRefetch] = useState(false);
   const styles = useCustomStyles(loadStyles);
 
   // TODO - improve refetch logic. Should be handled entirely by the hook
+
+  let ownerId;
   const {
     data: packs,
     error,
     isLoading,
     refetch: refetchQuery,
-  } = useUserPacks((ownerId = user?.id));
+  } = useUserPacks(user?.id);
 
   useEffect(() => {
     refetchQuery();
@@ -46,13 +46,20 @@ export default function PackContainer({ isCreatingTrip = false }) {
     setCurrentPackId(selectedPack?.id);
 
     if (isCreatingTrip && selectedPack?.id) {
-      searchParams.set('packId', selectedPack?.id);
+      setPackIdParam(selectedPack?.id);
     }
   };
 
   const currentPack = packs?.find((pack) => pack.id === currentPackId);
 
   const dataValues = packs?.map((item) => item?.name) ?? [];
+
+  useEffect(() => {
+    const firstPack = packs.find(({ id }) => !!id);
+    if (!packIdParam && firstPack?.id && isCreatingTrip) {
+      setPackIdParam(firstPack.id);
+    }
+  }, [packIdParam, packs, isCreatingTrip]);
 
   return dataValues?.length > 0 ? (
     <View style={styles.mainContainer}>

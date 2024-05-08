@@ -48,7 +48,7 @@ So pack your bags, grab your friends, and get ready for your next adventure with
   - [Local installation 📲](#local-installation-)
     - [Dependencies](#dependencies)
     - [Environment Setup](#environment-setup)
-      - [Automated Setup 🛠️](#automated-setup-️)
+      - [Automated Setup (Unix) 🛠️](#automated-setup-unix-️)
       - [Manual Setup 📝](#manual-setup-)
     - [Yarn Setup](#yarn-setup)
       - [Root](#root)
@@ -59,11 +59,41 @@ So pack your bags, grab your friends, and get ready for your next adventure with
       - [Debugging Client Environment Setup 🐛](#debugging-client-environment-setup-)
         - [Expo](#expo)
         - [Debugging Dependencies](#debugging-dependencies)
+        - [Debugging Cloudflare Wrangler and D1](#debugging-cloudflare-wrangler-and-d1)
   - [Docker Installation 🐳 \[Experimental\]](#docker-installation--experimental)
     - [Dependencies](#dependencies-1)
     - [Installation](#installation)
   - [How backend API's are setup](#how-backend-apis-are-setup)
   - [Contributing 🤝](#contributing-)
+  - [User Stories:](#user-stories)
+  - [User Features:](#user-features)
+    - [Registration and Authentication:](#registration-and-authentication)
+    - [Main Dashboard:](#main-dashboard)
+    - [Destination Search:](#destination-search)
+    - [Accessing Profile Information:](#accessing-profile-information)
+    - [Profile User Overview:](#profile-user-overview)
+    - [Favorite Trips and Packs:](#favorite-trips-and-packs)
+    - [Profile Management:](#profile-management)
+    - [Appearance Theme Customization:](#appearance-theme-customization)
+    - [Profile Editing:](#profile-editing)
+  - [Pack Features:](#pack-features)
+    - [Pack Creation and Access Settings:](#pack-creation-and-access-settings)
+    - [Adding Items to Packs:](#adding-items-to-packs)
+    - [Pack Scoring System:](#pack-scoring-system)
+    - [Navigating to the Dashboard:](#navigating-to-the-dashboard)
+  - [Trip Features:](#trip-features)
+    - [Trip Creation and Management:](#trip-creation-and-management)
+    - [Setting up a Trip:](#setting-up-a-trip)
+    - [Accessing Saved Trips:](#accessing-saved-trips)
+    - [Viewing Trip Details:](#viewing-trip-details)
+  - [Items Feature:](#items-feature)
+    - [Dashboard:](#dashboard)
+    - [Adding Items:](#adding-items)
+  - [Feed Feature:](#feed-feature)
+    - [Exploring Backpackers:](#exploring-backpackers)
+    - [Pack List Interaction:](#pack-list-interaction)
+    - [Item Management:](#item-management)
+    - [Returning to Feed Dashboard:](#returning-to-feed-dashboard)
   - [👏 Special Thanks](#-special-thanks)
   - [License 📝](#license-)
 
@@ -117,6 +147,7 @@ The main folders are:
 - `apps`
   - `expo` (native)
   - `next` (web) -- ssr not yet implemented
+  - `vite` (web)
   - `tauri` (desktop) -- not yet implemented
 
 - `packages` shared packages across apps
@@ -213,10 +244,14 @@ cd PackRat
 ```
 
 3. Set up the environment variables for the client and server.
-   - If you have access to the development env files, use those. Otherwise, replace the values with your own.
-   - See the `.env.example` files in the `apps/expo` and `server` directories for the necessary environment variables.
+   - If you have access to the development env values, use those. Otherwise, replace the values with your own.
+   - See the `.env.example` file in the root directory for the required environment variables. You can duplicate this file and rename it to `.env.local` to set up your environment variables.
+   - Note, for the replacement steps, these replaced values should now be strings with the mapbox secret key for download token, in the following format:
+```
+"sk..."
+```
 
-#### Automated Setup 🛠️
+#### Automated Setup (Unix) 🛠️
 
 1. Run the setup script from the `PackRat` directory.
 ```
@@ -224,105 +259,32 @@ yarn setup
 ```
 
 #### Manual Setup 📝
+- Note, if automated set up works the following manual config is taken care of already.
 
 1. Navigate to the `PackRat` directory if you are not already there.
 
-2. Navigate to the `apps/expo` directory.
+2. Copy the `.env.example` file and rename it to `.env.local`.
+   - Open the file and replace the values with your own or use the development env values.
+   - Note, there is a postinstall script that will copy the .env.local file to the client directories, adding the necessary environment variables with prefixes.
 
 ```
-cd apps/expo
+cp .env.example .env.local
 ```
 
-- Note that for the client to run, you need to also make the following changes:
-     - Copy the `app.example.json` file and rename it to `app.json`. Open the file and replace the `MAPBOX_DOWNLOADS_TOKEN_FROM_ENV` value with your own Mapbox API key.
-     - Navigate to the ios directory. Copy the `Podfile.example` file and rename it to `Podfile`. Open the file and replace the `MAPBOX_DOWNLOADS_TOKEN_FROM_ENV` value with your own Mapbox access token.
-     - Navigate to the android directory. Copy the `gradle.properties.example` file and rename it to `gradle.properties`. Open the file and replace the `MAPBOX_DOWNLOADS_TOKEN_FROM_ENV` value with your own Mapbox downloads token.
-     - See the [Mapbox documentation](https://docs.mapbox.com/help/getting-started/access-tokens/) for more information on how to obtain Mapbox API keys and access tokens.
-
-2. Duplicate the `.env.example` file and rename it to `.env`. Open the file and replace the values with your own.
-   - If you have access to the development env file, skip this step. Otherwise, replace the values with your own.
-
-```
-cp .env.example .env
-```
-
-1. Duplicate the `app.example.json` file and rename it to `app.json`. Open the file and replace the `MAPBOX_DOWNLOADS_TOKEN_FROM_ENV` value with your own Mapbox API key.
-
-```
-cp app.example.json app.json
-```
-
-4. Navigate to the ios directory.
-
-```
-cd ios
-```
-
-5. Duplicate the `Podfile.example` file and rename it to `Podfile`. Open the file and replace the `MAPBOX_DOWNLOADS_TOKEN_FROM_ENV` value with your own Mapbox access token.
-
-```
-cp Podfile.example Podfile
-```
-
-6. Navigate to the android directory.
-
-```
-cd ../android
-
-```
-
-7. Duplicate the `gradle.properties.example` file and rename it to `gradle.properties`. Open the file and replace the `MAPBOX_DOWNLOADS_TOKEN_FROM_ENV` value with your own Mapbox downloads token.
-
-```
-cp gradle.properties.example gradle.properties
-```
-
-- Note, for the replacement steps, these replaced values should now be strings with the mapbox secret key for download token, in the following format:
-
-```
-"sk..."
-```
-
-
-8. Navigate back to the `PackRat` directory.
-
-```
-cd ../..
-```
-
-9. Navigate to the `next` directory.
-
-```
-cd apps/next
-```
-
-10. Duplicate the `.env.example` file and rename it to `.env`. Open the file and replace the values with your own.
-        - If you have access to the development env file, skip this step. Otherwise, replace the values with your own.
-
-```
-cp .env.example .env
-```
-
-11. Navigate back to the `PackRat` directory.
-
-```
-cd ..
-```
-
-10. Navigate to the `server` directory.
+3.  Navigate to the `server` directory.
 
 ```
 cd server
 ```
 
-11. Duplicate the `.env.example` file and rename it to `.env`. Open the file and replace the values with your own.
-        - If you have access to the development env file, skip this step. Otherwise, replace the values with your own.
+4.  Duplicate the `.wrangler.toml.example` file and rename it to `wrangler.toml`. Open the file and replace the values with your own.
+        - If you have access to the development wrangler file, skip this step. Otherwise, replace the values with your own.
 
 ```
-cp .env.example .env
+cp .wrangler.toml.example wrangler.toml
 ```
 
-12.  Navigate back to the `PackRat` directory.
+5.  Navigate back to the `PackRat` directory.
 
 ```
 cd ..
@@ -357,6 +319,10 @@ yarn start
 
 #### Client
 
+- Note, we have a few options for running the client.
+  - For native we support both iOS and Android. You can run the app on either platform. Additionally, we support MacOS, Linux, and Windows for the desktop app with Tauri.
+  - For web, we are using Next.js for server-side rendering. (This is not yet implemented.) We also have a Vite build that provides a faster development experience.
+
 1. Navigate to the `expo` directory.
 
 ```
@@ -378,7 +344,13 @@ yarn run android
 cd apps/next
 ```
 
-3. Start the Expo/Next server.
+3. Navigate to the `vite` directory.
+
+```
+cd apps/vite
+```
+
+4. Start the Expo/Next/Vite server.
 
 ```
 yarn start
@@ -473,6 +445,11 @@ node -v
 
 Additionally, if the error is occurring in nextjs that you check the transpilePackages in next.config.js and check if the problematic package is there.
 
+##### Debugging Cloudflare Wrangler and D1
+- Some helpful tips for debugging Cloudflare Wrangler and D1:
+- If you encounter issues with Wrangler or D1, make sure you can see the sqlite database in the .wrangler directory.
+- You can open the database with a sqlite browser to see if the data is being stored correctly.
+
 ## Docker Installation 🐳 [Experimental]
 
 PackRat can also be installed using Docker. After setting up the development environment, follow the steps below to install and run the app using Docker.
@@ -537,6 +514,161 @@ Contributions to PackRat are welcome! To contribute, follow these steps:
 5. Open a pull request.
 6. Wait for your pull request to be reviewed and merged.
 7. Celebrate! 🎉
+
+
+## User Stories:
+<details>
+<summary><b>User Stories 📖</b> (Click to expand)</summary>
+
+## User Features:
+
+### Registration and Authentication:
+- Users can create an account by accessing the menu and selecting the 'Register' option. Additionally, they have the option to sign up directly from the login page.
+
+### Main Dashboard:
+- On the main page, users have several options to choose from:
+- Quick actions
+- Search for new trails
+- Access other menu options
+- View their feed, which displays previously created packs.
+- Users can search for a destination directly on the main dashboard, which will then redirect them to the maps interface.
+
+### Destination Search:
+- Users have the capability to search for a destination directly on the main dashboard.
+- Upon initiating a search, users are redirected to the maps interface for further exploration and planning.
+
+
+
+### Accessing Profile Information:
+- Users can conveniently access their profile information from the menu under the Profile feature.
+
+### Profile User Overview:
+- The dashboard provides users with a comprehensive overview of their profile.
+- It prominently displays the user's username and account photo for quick identification.
+
+### Favorite Trips and Packs:
+- Users have immediate access to their favorite trips and packs directly from the dashboard.
+- By selecting the "View details" option, users can delve into more details about their favorite trips and packs.
+
+### Profile Management:
+- Users can effortlessly manage their profile information from the dashboard.
+- By clicking on the settings button icon, users are directed to the profile settings section where they can make necessary updates seamlessly.
+
+### Appearance Theme Customization:
+- Users have the option to personalize their experience by changing the theme.
+- They can choose between light mode or dark mode based on their preference.
+- Additionally, users have the option to purchase additional themes for further customization. (Note: This feature may require updates.)
+
+
+
+### Profile Editing:
+- Users can easily edit their profile settings by clicking the "show dialog" option.
+- This allows them to update their name and “food preferences”, with a wide range of options to choose from. (Note: This feature may require updates.)
+
+
+
+## Pack Features:
+
+### Pack Creation and Access Settings:
+- Users are prompted to input a name for their pack when creating it.
+- Users have the option to choose the accessibility setting for their pack, deciding whether it will be public or private.
+
+### Adding Items to Packs:
+- When users add an item to the pack, they are required to provide:
+- The name of the item.
+- The weight of the item.
+- The quantity of the item.
+- The category the item belongs to (food, water, essentials).
+- After providing the necessary details, users click "Add Item" to include it in the pack dashboard.
+
+### Pack Scoring System:
+- Users can view their pack score, which is generated based on several criteria:
+- The total weight of the pack.
+- The presence of essential items.
+- The degree of redundancy in items.
+- The versatility of the items included.
+
+### Navigating to the Dashboard:
+- Users can easily return to the dashboard by following these steps:
+1. Access the menu.
+2. Select the "Home" option.
+
+## Trip Features:
+
+### Trip Creation and Management:
+- Users have two methods for creating a trip:
+- Directly from the main page dashboard using the quick actions feature.
+- By navigating to the 'Trips' option in the menu.
+
+### Setting up a Trip:
+- Users initiate trip setup by selecting their backpacking destination.
+- Nearby trails and parks are displayed for exploration.
+- Users can:
+- Choose gear from their saved packs.
+- Create a new pack and add items directly on the page.
+- Select the target date for their trip using a calendar to specify the duration.
+- A map showcasing the trip destination is provided for reference.
+- Once all details are confirmed, users:
+- Save their trip.
+- Input a name and description.
+- Choose the trip's accessibility setting (public or private).
+- A weather forecast and summary of the destination, trails, dates, and trip duration are displayed for easy reference.
+
+### Accessing Saved Trips:
+- Users can easily access their saved trips from the menu by selecting the 'Trips' option.
+- Within the 'Trips' section, users can:
+- Organize their trips by sorting them from favorites to most recent.
+- Utilize a search bar to quickly locate a specific trip by name.
+
+### Viewing Trip Details:
+- When users select a trip from the dashboard, they are presented with detailed information including:
+- The trip's description.
+- Destination.
+- Start and end dates.
+- Additionally, users can:
+- Conveniently view the weather forecast for the selected dates directly on the same page.
+- Access the maps interface for further exploration.
+- At the bottom of the page, users can find the Trip Score, providing an overall assessment of the trip's suitability and preparedness.
+
+
+## Items Feature:
+
+### Dashboard:
+- Users are able to view their items used in their saved packs.
+- They can sort how many items will show up on screen. They can choose from 10, 20, and 50.
+- Users have the option to add new items.
+
+### Adding Items:
+- User needs to fill out the following fields:
+- Item Name
+- Weight – they can choose the unit of measurement. Includes lb, kg, oz, and g.
+- Quantity
+- Category
+
+
+## Feed Feature:
+
+### Exploring Backpackers:
+- Users can browse through a list of other backpackers.
+- Navigate the page using the search and sort options.
+
+### Pack List Interaction:
+- Upon opening a pack list, users have several options available:
+- They can view the profile of the backpacker associated with the pack.
+- Users also have the ability to copy the pack list for their own use.
+- The pack list includes detailed information such as item name, weight, quantity, and category.
+
+### Item Management:
+- Users can interact with items on the pack list by:
+- Editing, deleting, or ignoring items as needed.
+- The total weight of the pack is dynamically calculated and displayed at the bottom of the page.
+- Users can easily add new items to the pack list as well.
+- At the bottom of the page, users can view the Pack Score.
+
+### Returning to Feed Dashboard:
+- Users can navigate back to the feed dashboard by accessing the menu and selecting the "feed" option.
+
+</details>
 
 ## 👏 Special Thanks
 

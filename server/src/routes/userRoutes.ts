@@ -15,7 +15,7 @@ import {
   getMe,
 } from '../controllers/user/index';
 import auth from '../middleware/auth';
-import * as validator from '../middleware/validators/index';
+import * as validator from '@packrat/validations';
 
 import {
   signInLocal,

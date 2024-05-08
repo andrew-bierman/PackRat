@@ -5,6 +5,7 @@ import { SearchItem } from '../item/SearchItem';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { TripCardHeader } from './TripCardHeader';
 import { PackCardHeader } from './PackCardHeader';
+import { useAuthUser } from 'app/auth/hooks/useUser';
 
 interface CustomCardProps {
   title: string;
@@ -32,10 +33,12 @@ export const CustomCard = ({
   data,
 }: CustomCardProps) => {
   const styles = useCustomStyles(loadStyles);
+  const authUser = useAuthUser();
 
   if (!data) return null;
 
   const isWeb = Platform.OS === 'web';
+  console.log(data);
 
   return (
     <View
@@ -60,6 +63,7 @@ export const CustomCard = ({
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'center',
+            gap: 16,
           }}
         >
           {type === 'trip' ? (
@@ -69,7 +73,7 @@ export const CustomCard = ({
           )}
         </View>
         <RSeparator />
-        {type === 'pack' ? (
+        {type === 'pack' && authUser.id === data.owner_id ? (
           <>
             <View
               style={{
@@ -86,8 +90,6 @@ export const CustomCard = ({
         ) : null}
         <View
           style={{
-            alignItems: 'center',
-            justifyContent: 'center',
             paddingRight: 16,
             paddingLeft: 16,
           }}
@@ -102,13 +104,14 @@ export const CustomCard = ({
 };
 
 const loadStyles = (theme) => {
-  const { currentTheme } = theme;
+  const { isDark, currentTheme } = theme;
   return {
     mainContainer: {
-      backgroundColor: currentTheme.colors.card,
+      backgroundColor: !isDark ? currentTheme.colors.card : '#1A1A1D',
       flex: 1,
       gap: 45,
       justifyContent: 'space-between',
+      width: '100%',
       alignItems: 'center',
       marginBottom: 20,
       border: '1',
