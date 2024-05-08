@@ -1,6 +1,6 @@
 import { publicProcedure } from '../../trpc';
 import { getTripByIdService } from '../../services/trip/getTripByIdService';
-import * as validator from '../../middleware/validators/index';
+import * as validator from '@packrat/validations';
 /**
  * Retrieves a trip by its ID and returns the trip details.
  * @param {Object} req - The request object.

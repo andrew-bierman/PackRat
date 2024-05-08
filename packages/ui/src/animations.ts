@@ -1,5 +1,5 @@
-import { createAnimations } from '@tamagui/animations-react-native'
-import type { AnimationDriver } from '@tamagui/web'
+import { createAnimations } from '@tamagui/animations-react-native';
+import type { AnimationDriver } from '@tamagui/web';
 
 export const animations: AnimationDriver = createAnimations({
   bouncy: {
@@ -19,4 +19,4 @@ export const animations: AnimationDriver = createAnimations({
     mass: 1.2,
     stiffness: 250,
   },
-})
+});

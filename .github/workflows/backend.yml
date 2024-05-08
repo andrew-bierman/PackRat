@@ -1,0 +1,54 @@
+name: 'Backend Deployment'
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+    paths:
+      - 'packages/api/**'
+      - 'server/**'
+
+jobs:
+  deploy:
+    name: Deploy to Cloudflare Workers
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+
+      - name: Setup JS Runtime environment
+        uses: ./.github/actions/setup-js-runtime
+
+      - name: Install dependencies
+        uses: ./.github/actions/install-deps
+
+      - name: Migrate database
+        # run: cd packages/api && bun run migrate
+        run: cd server && yarn run migrate:prod
+        env:
+          NO_D1_WARNING: true
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+
+      - name: Deploy
+        uses: cloudflare/wrangler-action@v3.3.2
+        with:
+          wranglerVersion: '3.15.0'
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+        #   workingDirectory: packages/api
+          workingDirectory: server
+          command: yarn run deploy:prod
+          packageManager: bun
+          secrets: |
+            APP_URL
+            JWT_VERIFICATION_KEY
+            CI
+        env:
+          APP_URL: ${{ secrets.NEXT_PUBLIC_APP_URL }}
+          JWT_VERIFICATION_KEY: ${{ secrets.JWT_VERIFICATION_KEY }}
+          CI: true
+          NO_D1_WARNING: true

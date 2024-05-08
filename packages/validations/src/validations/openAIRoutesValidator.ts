@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import JoiObjectId from './objectIdValidator';
 
 export const getAIResponse = z.object({
   userId: z.string(),

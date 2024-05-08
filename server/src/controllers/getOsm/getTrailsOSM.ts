@@ -7,7 +7,7 @@ import { responseHandler } from '../../helpers/responseHandler';
 import { publicProcedure } from '../../trpc';
 import * as z from 'zod';
 // import * as validators from '@packrat/validations';
-import * as validator from '../../middleware/validators';
+import * as validator from '@packrat/validations';
 
 /**
  * Retrieves trails data from OpenStreetMap (OSM) based on the provided latitude, longitude, and radius.

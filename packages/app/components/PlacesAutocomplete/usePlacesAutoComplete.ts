@@ -9,7 +9,7 @@ export const usePlacesAutoComplete = (onSelect) => {
 
   const handleSelect = (result) => {
     onSelect(result);
-
+    setSearch('');
     // return new value of the input
     return result.properties.name;
   };

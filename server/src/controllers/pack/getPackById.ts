@@ -1,6 +1,6 @@
 import { publicProcedure } from '../../trpc';
 import { getPackByIdService } from '../../services/pack/pack.service';
-import * as validator from '../../middleware/validators/index';
+import * as validator from '@packrat/validations';
 
 /**
  * Retrieves a pack by its ID and returns it as a JSON response.

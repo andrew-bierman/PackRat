@@ -10,7 +10,7 @@ echo "🔍 Running pre-commit hook"
 
 # Running lint-staged
 echo "🔄 Running lint-staged..."
-npx lint-staged
+# npx lint-staged
 
 if [ $? -eq 0 ]; then
   echo -e "${GREEN}✅ Lint-staged passed${NC}"

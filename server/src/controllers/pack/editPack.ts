@@ -2,7 +2,7 @@ import { publicProcedure } from '../../trpc';
 import { UnableToEditPackError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { editPackService } from '../../services/pack/pack.service';
-import * as validator from '../../middleware/validators/index';
+import * as validator from '@packrat/validations';
 
 /**
  * Edits a pack in the database.

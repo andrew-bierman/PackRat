@@ -1,10 +1,10 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { Platform, View } from 'react-native';
-import { RButton, RCard, RText, RStack, H1, H3 } from '@packrat/ui';
+import { RButton, RCard, RText, RStack, RH1, RH3 } from '@packrat/ui';
 import useTheme from '../../hooks/useTheme';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-
+import { Link } from '@packrat/crosspath';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { FAQ_ITEMS } from './constants';
 import { LandingPageAccordion } from './LandingPageAccordion';
@@ -26,14 +26,14 @@ const LandingPage = () => {
         }}
       >
         {Platform.OS === 'web' ? (
-          <H1
+          <RH1
             style={{
               color: 'white',
               fontSize: currentTheme.font.headerFont,
             }}
           >
             PackRat
-          </H1>
+          </RH1>
         ) : (
           <RText
             style={{
@@ -140,6 +140,7 @@ const LandingPage = () => {
           </RStack>
         </View>
         <View style={styles.buttonContainer}>
+        <Link href="/sign-in">
           <RButton
             style={styles.getStartedButton}
             onPress={() => {
@@ -148,6 +149,7 @@ const LandingPage = () => {
           >
             <RText style={styles.footerText}>Get Started</RText>
           </RButton>
+          </Link>
         </View>
         <StatusBar style="auto" />
         {/* </ImageBackground> */}

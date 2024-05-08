@@ -1,6 +1,6 @@
 import { publicProcedure } from '../../trpc';
 import { getPublicTripsService } from '../../services/trip/getPublicTripService';
-import * as validator from '../../middleware/validators';
+import * as validator from '@packrat/validations';
 import { z } from 'zod';
 
 /**

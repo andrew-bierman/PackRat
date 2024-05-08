@@ -15,12 +15,12 @@ export function getItemsGloballyRoute() {
       z.object({
         limit: z.number(),
         page: z.number(),
-        // searchString: z.string().optional(),
+        searchString: z.string().optional(),
       }),
     )
     .query(async (opts) => {
-      const { limit, page } = opts.input;
-      const result = await getItemsGloballyService(limit, page);
+      const { limit, page, searchString } = opts.input;
+      const result = await getItemsGloballyService(limit, page, searchString);
       return {
         ...result,
         items: result.items,
