@@ -13,7 +13,6 @@ import { ItemPacks } from '../../drizzle/methods/ItemPacks';
 export const deleteItemService = async (itemId: string, packId?: string) => {
   const itemClass = new Item();
   const ItemPacksClass = new ItemPacks();
-  const itemClass = new Item();
 
   await itemClass.delete(itemId);
   await ItemPacksClass.delete(itemId, packId);
