@@ -6,7 +6,7 @@ import { Trip } from '../../drizzle/methods/trip';
  * @param {string} ownerId - The ID of the owner.
  * @return {Promise<object[]>} The trips owned by the specified owner.
  */
-export const getTripsService = async (ownerId: string): Promise<object[]> => {
+export const getTripsService = async (ownerId: string) => {
   try {
     const tripClass = new Trip();
     const trips = await tripClass.findMany(ownerId);
