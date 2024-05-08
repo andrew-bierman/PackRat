@@ -43,13 +43,13 @@
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@cloudflare/next-on-pages": "^1.11.2",
-    "@cloudflare/workers-types": "^4.20240502.0",
+    "@cloudflare/workers-types": "^4.20240419.0",
     "@tauri-apps/cli": "^1.5.9",
     "@types/node": "^20.8.3",
     "babel-plugin-module-resolver": "^5.0.0",
     "eslint-plugin-next-on-pages": "^1.11.0",
     "patch-package": "^8.0.0",
     "postinstall-postinstall": "^2.1.0",
-    "wrangler": "^3.53.1"
+    "wrangler": "^3.51.2"
   }
 }
