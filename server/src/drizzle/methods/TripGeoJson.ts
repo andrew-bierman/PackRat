@@ -1,16 +1,10 @@
-import { createDb } from '../../db/client';
+import { DbClient } from '../../db/client';
 import { type InsertTripGeoJson, tripGeojsons } from '../../db/schema';
-import { getDB } from '../../trpc/context';
 
 export class TripGeoJson {
-  async createInstance() {
-    const dbInstance = await createDb(getDB());
-    return dbInstance;
-  }
-
   async create(tripGeoJson: InsertTripGeoJson) {
     try {
-      const record = (await this.createInstance())
+      const record = await DbClient.instance
         .insert(tripGeojsons)
         .values(tripGeoJson)
         .returning()

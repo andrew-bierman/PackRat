@@ -1,7 +1,7 @@
-import { appRouter } from '../../routes/trpcRouter';
-import { createCallerFactory } from '../../trpc';
+import { appRouter } from '../routes/trpcRouter';
+import { createCallerFactory } from '../trpc';
 import { createId } from '@paralleldrive/cuid2';
-import { DbClient } from '../../db/client';
+import { DbClient } from '../db/client';
 
 const TEST_USER = {
   email: 'test@test.com',

@@ -25,7 +25,7 @@ export const addItemService = async (
   packId: string,
   type: 'Food' | 'Water' | 'Essentials',
   ownerId: string,
-): Promise<object> => {
+) => {
   let category: InsertItemCategory | null;
   if (!categories.includes(type)) {
     throw new Error(`Category must be one of: ${categories.join(', ')}`);

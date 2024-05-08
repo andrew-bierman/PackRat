@@ -27,7 +27,6 @@ export const AddPack = ({ isCreatingTrip = false, onSuccess }) => {
 
   const {
     addNewPackAsync,
-    response,
     isError,
     isLoading,
     setIsPublic,
@@ -40,8 +39,11 @@ export const AddPack = ({ isCreatingTrip = false, onSuccess }) => {
    */
   const handleAddPack = async (data) => {
     try {
-      await addNewPackAsync(data);
+
+    const response = await addNewPackAsync(data);
+
       onSuccess?.();
+
       if (!response?.id) {
         return;
       }
@@ -49,8 +51,9 @@ export const AddPack = ({ isCreatingTrip = false, onSuccess }) => {
         router.push(`/pack/${response.id}`);
         return;
       }
-
+    
       setPackIdParam(response.id);
+
     } catch {}
   };
 

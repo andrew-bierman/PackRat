@@ -1,20 +1,14 @@
 import { eq } from 'drizzle-orm';
-import { createDb } from '../../db/client';
+import { DbClient } from '../../db/client';
 import {
   type InsertTemplate,
   template as TemplateTable,
 } from '../../db/schema';
-import { getDB } from '../../trpc/context';
 
 export class Template {
-  async createInstance() {
-    const dbInstance = await createDb(getDB());
-    return dbInstance;
-  }
-
   async findTemplate(templateId: string, includeRelated: boolean = false) {
     try {
-      const template = (await this.createInstance()).query.template.findFirst({
+      const template = await DbClient.instance.query.template.findFirst({
         where: eq(TemplateTable.id, templateId),
         // If includeRelated is true, then include with property
         ...(includeRelated && {
@@ -36,7 +30,7 @@ export class Template {
 
   async findMany() {
     try {
-      const templates = (await this.createInstance()).query.template.findMany({
+      const templates = await DbClient.instance.query.template.findMany({
         with: {
           createdBy: {
             columns: {
@@ -53,7 +47,7 @@ export class Template {
 
   async create(data: InsertTemplate) {
     try {
-      const createdTemplate = (await this.createInstance())
+      const createdTemplate = await DbClient.instance
         .insert(TemplateTable)
         .values(data)
         .returning()
@@ -69,7 +63,7 @@ export class Template {
     filter = eq(TemplateTable.id, data.templateId),
   ) {
     try {
-      const updatedTemplate = (await this.createInstance())
+      const updatedTemplate = await DbClient.instance
         .update(TemplateTable)
         .set({
           type: data.type,
@@ -85,7 +79,7 @@ export class Template {
 
   async delete(id: string, filter = eq(TemplateTable.id, id)) {
     try {
-      const deletedTemplate = (await this.createInstance())
+      const deletedTemplate = await DbClient.instance
         .delete(TemplateTable)
         .where(filter)
         .returning();
