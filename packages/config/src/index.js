@@ -1,68 +1,92 @@
 /**
- * API URL taken from environment variables. It falls back through several environment variables depending on the runtime environment.
- * @type {string}
+ * @typedef {Object} EnvSource
+ * @property {string} prefix - The prefix used for environment variables in this source.
+ * @property {Object} source - The environment object (e.g., process.env or import.meta.env).
  */
-export const API_URL =
-  process.env.NEXT_PUBLIC_API_URL ||
-  process.env.EXPO_PUBLIC_API_URL ||
-  (typeof import.meta !== 'undefined' ? import.meta.env?.VITE_API_URL : undefined);
 
 /**
- * Google Client ID for OAuth purposes, taken from environment variables. It uses different environment variables based on the runtime environment.
- * @type {string}
+ * Array of environment sources with their prefixes and corresponding environment objects.
+ * @type {EnvSource[]}
  */
-export const GOOGLE_ID =
-  process.env.NEXT_PUBLIC_GOOGLE_ID ||
-  process.env.EXPO_PUBLIC_GOOGLE_ID ||
-  (typeof import.meta !== 'undefined' ? import.meta.env?.VITE_GOOGLE_ID : undefined);
+const envSources = [
+  {
+    prefix: 'NEXT_PUBLIC_',
+    source: process.env,
+  },
+  {
+    prefix: 'EXPO_PUBLIC_',
+    source: process.env,
+  },
+  {
+    prefix: 'VITE_',
+    source: process.env, // This is a temporary solution until Expo supports import.meta.env.
+    // source: import.meta.env,
+  },
+];
 
 /**
- * iOS Client ID for authentication with services, typically used in OAuth flows, taken from different environment variables based on the runtime environment.
- * @type {string}
+ * Array of base names for the environment variables to retrieve.
+ * @type {string[]}
  */
-export const IOS_CLIENT_ID =
-  process.env.NEXT_PUBLIC_IOS_CLIENT_ID ||
-  process.env.EXPO_PUBLIC_IOS_CLIENT_ID ||
-  (typeof import.meta !== 'undefined' ? import.meta.env?.VITE_IOS_CLIENT_ID : undefined);
+const envMappings = [
+  'API_URL',
+  'GOOGLE_ID',
+  'IOS_CLIENT_ID',
+  'ANDROID_CLIENT_ID',
+  'MAPBOX_ACCESS_TOKEN',
+  'APP',
+  'CLIENT_URL',
+];
 
 /**
- * Android Client ID for authentication purposes, typically used in OAuth flows, taken from different environment variables based on the runtime environment.
- * @type {string}
+ * Retrieves the value of an environment variable based on the provided key and environment sources.
+ * @param {string} key - The base name of the environment variable.
+ * @returns {string|undefined} - The value of the environment variable, or undefined if not found.
  */
-export const ANDROID_CLIENT_ID =
-  process.env.NEXT_PUBLIC_ANDROID_CLIENT_ID ||
-  process.env.EXPO_PUBLIC_ANDROID_CLIENT_ID ||
-  (typeof import.meta !== 'undefined' ? import.meta.env?.VITE_ANDROID_CLIENT_ID : undefined);
+function getEnvValue(key) {
+  for (const { prefix, source } of envSources) {
+    if (source) {
+      const envKey = prefix + key;
+      if (source[envKey]) {
+        return source[envKey];
+      }
+    }
+  }
+  return undefined;
+}
 
 /**
- * Mapbox Access Token for using Mapbox APIs, fetched from environment variables, based on the runtime environment.
- * @type {string}
+ * Object containing the retrieved environment variable values.
+ * @type {Object}
  */
-export const MAPBOX_ACCESS_TOKEN =
-  process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN ||
-  process.env.EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN ||
-  (typeof import.meta !== 'undefined' ? import.meta.env?.VITE_MAPBOX_ACCESS_TOKEN : undefined);
+const envConfig = envMappings.reduce((config, key) => {
+  config[key] = getEnvValue(key);
+  return config;
+}, {});
+
+envConfig.NODE_ENV = process.env.NODE_ENV;
+
+export const {
+  API_URL,
+  GOOGLE_ID,
+  IOS_CLIENT_ID,
+  ANDROID_CLIENT_ID,
+  MAPBOX_ACCESS_TOKEN,
+  APP,
+  CLIENT_URL,
+  NODE_ENV,
+} = envConfig;
 
 /**
- * Generic application configuration variable, potentially used for defining behavior across different environments, fetched from environment variables.
- * @type {string}
+ * Example output:
+ * {
+ *   API_URL: 'https://api.example.com',
+ *   GOOGLE_ID: 'abc123',
+ *   IOS_CLIENT_ID: 'def456',
+ *   ANDROID_CLIENT_ID: 'ghi789',
+ *   MAPBOX_ACCESS_TOKEN: 'xyz123',
+ *   APP: 'my-app',
+ *   CLIENT_URL: 'https://example.com',
+ *   NODE_ENV: 'production'
+ * }
  */
-export const APP =
-  process.env.NEXT_PUBLIC_APP ||
-  process.env.EXPO_PUBLIC_APP ||
-  (typeof import.meta !== 'undefined' ? import.meta.env?.VITE_APP : undefined);
-
-/**
- * Client URL for the application, useful for OAuth redirects, API callbacks, etc., taken from environment variables.
- * @type {string}
- */
-export const CLIENT_URL =
-  process.env.NEXT_PUBLIC_CLIENT_URL ||
-  process.env.EXPO_PUBLIC_CLIENT_URL ||
-  (typeof import.meta !== 'undefined' ? import.meta.env?.VITE_CLIENT_URL : undefined);
-
-/**
- * Node environment setting which is typically 'development' or 'production'. This can be used to toggle between different behaviors based on the deployment environment.
- * @type {string}
- */
-export const NODE_ENV = process.env.NODE_ENV || 'development';
