@@ -8,7 +8,8 @@
     "build:tsc": "tsc || exit 0",
     "build:vite": "vite build --debug",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "clean": "rm -rf dist "
   },
   "dependencies": {
     "@originjs/vite-plugin-commonjs": "^1.0.3",
