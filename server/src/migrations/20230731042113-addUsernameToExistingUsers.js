@@ -14,7 +14,6 @@
 //   }
 // };
 
-
 export const up = async (db) => {
   console.log('Adding usernames to existing users...');
 

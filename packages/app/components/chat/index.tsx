@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -7,13 +7,23 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import useTheme from '../../hooks/useTheme';
-import { BaseModal, RStack } from '@packrat/ui';
-import { Box, VStack, HStack, Select } from 'native-base';
+import {
+  BaseModal,
+  Form,
+  FormInput,
+  FormSelect,
+  RStack,
+  SubmitButton,
+} from '@packrat/ui';
+import { sendMessage } from '@packrat/validations';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useChat } from 'app/hooks/chat/useChat';
 import { loadStyles } from './chat.style';
+import { Box } from 'native-base';
 // import { Select } from "tamagui";
+
+// TODO check if we've fixed the chat screen on another branch
+// link: https://github.com/andrew-bierman/PackRat/issues/ ???
 
 interface Message {
   role: string;
@@ -37,11 +47,13 @@ interface ChatSelectorProps {
 interface ChatComponentProps {
   showChatSelector?: boolean;
   defaultChatId?: string | null;
+  itemTypeId?: string | null;
 }
 
 interface ChatModalTriggerProps {
   title: string;
   trigger: string;
+  itemTypeId: string | null;
 }
 
 const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
@@ -66,116 +78,85 @@ const MessageList = ({ messages }: MessageListProps) => {
       data={messages}
       renderItem={({ item }) => <MessageBubble message={item} />}
       keyExtractor={(item, index) => index.toString()}
+      style={{ maxWidth: 500, maxHeight: 500, flex: 1 }}
     />
   );
 };
 
-const ChatSelector: React.FC<ChatSelectorProps> = ({
-  conversation,
-  onSelect,
-  isActive,
-}) => {
-  const styles = useCustomStyles(loadStyles);
-  return (
-    <TouchableOpacity
-      key={conversation.id}
-      onPress={() => onSelect(conversation.id)}
-      style={[styles.chatSelector, isActive && styles.activeChatSelector]}
-    >
-      <Text style={styles.chatSelectorText}>{conversation.id}</Text>
-    </TouchableOpacity>
-  );
-};
+// const ChatSelector: React.FC<ChatSelectorProps> = ({
+//   conversation,
+//   onSelect,
+//   isActive,
+// }) => {
+//   const styles = useCustomStyles(loadStyles);
+//   return (
+//     <TouchableOpacity
+//       key={conversation._id}
+//       onPress={() => onSelect(conversation._id)}
+//       style={[styles.chator, isActive && styles.activeChator]}
+//     >
+//       <Text style={styles.chatorText}>{conversation._id}</Text>
+//     </TouchableOpacity>
+//   );
+// };
 
 const ChatComponent: React.FC<ChatComponentProps> = ({
   showChatSelector = true,
   defaultChatId = null,
+  itemTypeId = null,
 }) => {
   const styles = useCustomStyles(loadStyles);
   const {
     conversations,
-    conversationId,
+    typeId,
     parsedMessages,
     userInput,
     handleSendMessage,
     setUserInput,
-    setConversationId,
-  } = useChat({ defaultChatId });
+    setTypeId,
+  } = useChat({ itemTypeId });
 
   return (
     <View style={styles.container}>
       <RStack style={{ alignItems: 'center' }}>
         {showChatSelector && (
-          <Select
-            selectedValue={conversationId}
-            minWidth="200px" // Adjust width as needed
-            accessibilityLabel="Select a conversation"
-            placeholder="Select a conversation"
-            onValueChange={(itemValue) => setConversationId(itemValue)}
-            width="200px" // Adjust width as needed
-          >
-            {conversations?.map((conversation) => (
-              <Select.Item
-                key={conversation.id}
-                label={conversation.id}
-                value={conversation.id}
-              />
-            ))}
-          </Select>
-          // <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          //   <Box
-          //     borderRadius="lg"
-          //     borderColor="coolGray.200"
-          //     borderWidth={1}
-          //     p={3}
-          //   >
-          //     <FlatList
-          //       data={conversations}
-          //       renderItem={({ item }) => (
-          //         <ChatSelector
-          //           conversation={item}
-          //           onSelect={setConversationId}
-          //         />
-          //       )}
-          //       keyExtractor={(item) => item.id}
-          //       contentContainerStyle={styles.flatList}
-          //     />
-          //     <TouchableOpacity
-          //       style={styles.newChatButton}
-          //       onPress={() => {
-          //         setConversationId(null);
-          //         setParsedMessages([]);
-          //       }}
-          //     >
-          //       <Text style={styles.newChatButtonText}>New Chat</Text>
-          //     </TouchableOpacity>
-          //   </Box>
-          // </ScrollView>
+          <>
+            {!parsedMessages?.length && (
+              <Text>You don't have conversations yet</Text>
+            )}
+          </>
         )}
+        <ScrollView style={{ maxWidth: 500, maxHeight: 500 }}>
+          <MessageList messages={parsedMessages} />
+        </ScrollView>
+        <Form
+        // validationSchema={sendMessage}
+        >
+          <RStack style={{ marginTop: 16, gap: 8 }}>
+            <FormInput
+              name="message"
+              placeholder="Type a message..."
+              value={userInput}
+              onChange={(e) => setUserInput(e.target.value)}
+              onChangeText={(text) => setUserInput(text)}
+            />
+            <SubmitButton onSubmit={handleSendMessage}>
+              <Text style={styles.sendText}>Send</Text>
+            </SubmitButton>
+          </RStack>
+        </Form>
       </RStack>
-      <MessageList messages={parsedMessages} />
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          onChangeText={setUserInput}
-          value={userInput}
-          placeholder="Type a message..."
-        />
-        <TouchableOpacity style={styles.sendButton} onPress={handleSendMessage}>
-          <Text style={styles.sendText}>Send</Text>
-        </TouchableOpacity>
-      </View>
     </View>
   );
 };
 
-const ChatModalTrigger: React.FC<ChatModalTriggerProps> = () => {
+const ChatModalTrigger: React.FC<ChatModalTriggerProps> = ({ itemTypeId }) => {
   const styles = useCustomStyles(loadStyles);
 
   return (
     <View style={styles.container}>
       <BaseModal title="Chat" trigger="Open Chat" footerComponent={undefined}>
-        <ChatComponent />
+        <ChatComponent itemTypeId={itemTypeId} />
       </BaseModal>
     </View>
   );

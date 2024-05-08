@@ -1,0 +1,1 @@
+ALTER TABLE item ADD `owner_id` text REFERENCES user(id);

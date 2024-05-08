@@ -11,9 +11,9 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import useTheme from '../../hooks/useTheme';
 import { RStack, RText, RButton } from '@packrat/ui';
 
-interface DateRange {
-  startDate: Date | null;
-  endDate: Date | null;
+export interface DateRange {
+  start_date: Date | null;
+  end_date: Date | null;
 }
 interface TripDateRangeProps {
   dateRange: DateRange;
@@ -31,7 +31,7 @@ const TripDateRange = ({ dateRange, setDateRange }: TripDateRangeProps) => {
   const onConfirm = React.useCallback(
     ({ startDate, endDate }) => {
       setOpen(false);
-      setDateRange({ startDate, endDate });
+      setDateRange({ start_date: startDate, end_date: endDate });
     },
     [setOpen],
   );
@@ -91,12 +91,12 @@ const TripDateRange = ({ dateRange, setDateRange }: TripDateRangeProps) => {
           <RStack
             style={{ justifyContent: 'center', flex: 1, alignItems: 'center' }}
           >
-            {dateRange.startDate && dateRange.endDate && (
+            {dateRange.start_date && dateRange.end_date && (
               <RStack style={{ marginBottom: 5 }}>
                 <RText>Selected Date Range - </RText>
                 <RText>
-                  {format(dateRange?.startDate, 'MM/dd/yyyy')} -{' '}
-                  {format(dateRange?.endDate, 'MM/dd/yyyy')}
+                  {format(dateRange?.start_date, 'MM/dd/yyyy')} -{' '}
+                  {format(dateRange?.end_date, 'MM/dd/yyyy')}
                 </RText>
               </RStack>
             )}
@@ -120,8 +120,8 @@ const TripDateRange = ({ dateRange, setDateRange }: TripDateRangeProps) => {
                 startDate: new Date(),
               }}
               onDismiss={onDismiss}
-              startDate={dateRange?.startDate}
-              endDate={dateRange?.endDate}
+              startDate={dateRange?.start_date}
+              endDate={dateRange?.end_date}
               onConfirm={onConfirm}
             />
           </RStack>

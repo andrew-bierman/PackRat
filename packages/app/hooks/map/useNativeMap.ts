@@ -2,7 +2,6 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Alert } from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
 import { offlineManager } from '@rnmapbox/maps';
-import { useToast } from 'native-base';
 import { Dimensions } from 'react-native';
 
 import {
@@ -42,8 +41,6 @@ export const useNativeMap = ({ shape: shapeProp }) => {
     overflow: 'hidden',
     alignSelf: 'center',
   };
-
-  const toast = useToast();
 
   // consts
   let bounds = getShapeSourceBounds(shape);

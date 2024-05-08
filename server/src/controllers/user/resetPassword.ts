@@ -1,7 +1,7 @@
 import { publicProcedure } from '../../trpc';
-import * as validator from '../../middleware/validators/index';
+import * as validator from '@packrat/validations';
 import { User } from '../../drizzle/methods/User';
-import { validatePassword, hashPassword } from '../../utils/user';
+import { hashPassword } from '../../utils/user';
 /**
  * Resets the user's password.
  * @param {Object} req - The request object.
@@ -35,10 +35,7 @@ export function resetPasswordRoute() {
       const JWT_SECRET = env.JWT_SECRET;
       const userClass = new User();
       const user = await userClass.validateResetToken(resetToken, JWT_SECRET);
-      const hashedPassword = await hashPassword(
-        JWT_SECRET,
-        validatePassword(password),
-      );
+      const hashedPassword = await hashPassword(JWT_SECRET, password);
       await userClass.update({ id: user.id, password: hashedPassword });
       return 'Successfully reset password';
     });

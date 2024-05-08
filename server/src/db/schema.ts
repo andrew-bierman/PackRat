@@ -36,8 +36,8 @@ export const user = sqliteTable('user', {
     .$type<'admin' | 'user'>(),
   username: text('username').notNull().unique(), // Trim + Lowercase + Validation
   profileImage: text('profile_image'),
-  preferredWeather: text('preferred_weather'),
-  preferredWeight: text('preferred_weight'),
+  preferredWeather: text('preferred_weather').default('celsius'),
+  preferredWeight: text('preferred_weight').default('lb'),
   createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
   updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`),
 });
@@ -184,6 +184,9 @@ export const item = sqliteTable('item', {
   unit: text('unit').notNull(),
   categoryId: text('category_id').references(() => itemCategory.id, {
     onDelete: 'set null',
+  }),
+  ownerId: text('owner_id').references(() => user.id, {
+    onDelete: 'cascade',
   }),
   global: integer('global', { mode: 'boolean' }).default(false),
   createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
@@ -344,6 +347,7 @@ export const conversation = sqliteTable('conversation', {
     .primaryKey()
     .$defaultFn(() => createId()),
   userId: text('user_id').notNull(),
+  itemTypeId: text('itemTypeId').notNull(),
   history: text('history').notNull(),
   createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
   updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`),

@@ -11,7 +11,7 @@ import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
 import authTokenMiddleware from '../middleware/auth';
 import checkRole from '../middleware/checkRole';
 
-// import * as validator from "../middleware/validators/index.js";
+// import * as validator from "@packrat/validations";
 
 // TODO - add validators, this is just a placeholder
 // REMOVED THIS SINCE VALIDATION IS NOT REALLY DONE HERE

@@ -1,3 +1,3 @@
-import { Label } from 'tamagui'
+import { Label } from 'tamagui';
 
 export default Label;

@@ -1,6 +1,6 @@
 import { env } from 'cloudflare:test';
 import { describe, it, expect, beforeAll, vi } from 'vitest';
-import { setupTest, type trpcCaller } from '../testHelpers';
+import { setupTest, type trpcCaller } from '../utils/testHelpers';
 import { User } from '../../drizzle/methods/User';
 import { type User as UserType } from '../../db/schema';
 

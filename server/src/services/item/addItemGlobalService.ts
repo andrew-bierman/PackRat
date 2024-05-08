@@ -38,6 +38,7 @@ export const addItemGlobalService = async (
     unit,
     categoryId: category.id,
     global: true,
+    ownerId,
   });
   return newItem;
 };

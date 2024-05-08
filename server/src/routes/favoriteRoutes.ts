@@ -1,5 +1,5 @@
 import { Hono } from 'hono';
-import * as validator from '../middleware/validators/index';
+import * as validator from '@packrat/validations';
 import {
   addToFavorite,
   getFavoritePacksByUser,
