@@ -12,7 +12,7 @@ export const addPackService = async (
   name: string,
   owner_id: string,
   is_public: boolean,
-): Promise<object> => {
+) => {
   const packClass = new Pack();
   // Check if a pack with the same name already exists
   const existingPack = await packClass.findPack({ name });
