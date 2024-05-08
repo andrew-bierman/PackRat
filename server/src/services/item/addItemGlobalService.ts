@@ -20,8 +20,7 @@ export const addItemGlobalService = async (
   quantity: number,
   unit: string,
   type: 'Food' | 'Water' | 'Essentials',
-  ownerId: string,
-): Promise<object> => {
+) => {
   let category: InsertItemCategory | null;
   if (!categories.includes(type)) {
     throw new Error(`Category must be one of: ${categories.join(', ')}`);

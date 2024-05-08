@@ -58,14 +58,12 @@ describe('Pack routes', () => {
 
   describe('editPack', () => {
     it('should update pack name', async () => {
-      if (pack) {
-        const nameToBeUpdated = 'updated pack';
-        const updatedPack = await caller.editPack({
-          ...pack,
-          name: nameToBeUpdated,
-        });
-        expect(updatedPack.name).toEqual(nameToBeUpdated);
-      }
+      const nameToBeUpdated = 'updated pack';
+      const updatedPack = await caller.editPack({
+        ...pack,
+        name: nameToBeUpdated,
+      });
+      expect(updatedPack.name).toEqual(nameToBeUpdated);
     });
   });
 
