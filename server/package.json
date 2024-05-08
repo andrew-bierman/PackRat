@@ -116,6 +116,7 @@
     "@openapitools/openapi-generator-cli": "^2.7.0",
     "@types/jest": "^29.5.11",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@vitest/ui": "^1.6.0",
     "cross-env": "^7.0.3",
     "drizzle-kit": "^0.20.17",
     "eslint": "^8.56.0",
