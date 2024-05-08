@@ -267,7 +267,6 @@ const loadStyles = (theme: any) => {
       fontSize: 24,
     },
     subheader: {
-      display:'inline-block',
       textAlignVertical: 'center',
     }
   };
