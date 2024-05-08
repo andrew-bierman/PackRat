@@ -44,7 +44,7 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "@cloudflare/next-on-pages": "^1.11.2",
+    "@cloudflare/next-on-pages": "^1.11.0",
     "@cloudflare/workers-types": "^4.20240419.0",
     "@types/node": "^20.8.3",
     "babel-plugin-module-resolver": "^5.0.0",

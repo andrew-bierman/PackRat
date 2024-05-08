@@ -1842,7 +1842,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@cloudflare/next-on-pages@npm:^1.11.2":
+"@cloudflare/next-on-pages@npm:^1.11.0":
   version: 1.11.2
   resolution: "@cloudflare/next-on-pages@npm:1.11.2"
   dependencies:
@@ -1871,7 +1871,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@cloudflare/vitest-pool-workers@npm:^0.2.6":
+"@cloudflare/vitest-pool-workers@npm:^0.2.2":
   version: 0.2.6
   resolution: "@cloudflare/vitest-pool-workers@npm:0.2.6"
   dependencies:
@@ -26433,7 +26433,7 @@ __metadata:
     "@babel/plugin-proposal-private-methods": "npm:^7.18.6"
     "@babel/plugin-proposal-private-property-in-object": "npm:^7.21.11"
     "@babel/plugin-transform-react-jsx": "npm:^7.23.4"
-    "@cloudflare/next-on-pages": "npm:^1.11.2"
+    "@cloudflare/next-on-pages": "npm:^1.11.0"
     "@cloudflare/workers-types": "npm:^4.20240419.0"
     "@expo/next-adapter": "npm:5.0.2"
     "@react-native/assets-registry": "npm:0.74.81"
@@ -31354,7 +31354,7 @@ __metadata:
   resolution: "server@workspace:server"
   dependencies:
     "@anatine/zod-mock": "npm:^3.13.4"
-    "@cloudflare/vitest-pool-workers": "npm:^0.2.6"
+    "@cloudflare/vitest-pool-workers": "npm:^0.2.2"
     "@cloudflare/workers-types": "npm:^4.20240419.0"
     "@elysiajs/trpc": "npm:^0.7.0"
     "@faker-js/faker": "npm:^8.4.1"
@@ -33020,7 +33020,7 @@ __metadata:
     "@babel/plugin-proposal-private-methods": "npm:^7.18.6"
     "@babel/plugin-proposal-private-property-in-object": "npm:^7.21.11"
     "@babel/plugin-transform-react-jsx": "npm:^7.23.4"
-    "@cloudflare/next-on-pages": "npm:^1.11.2"
+    "@cloudflare/next-on-pages": "npm:^1.11.0"
     "@cloudflare/workers-types": "npm:^4.20240419.0"
     "@expo/next-adapter": "npm:5.0.2"
     "@react-native/assets-registry": "npm:0.74.81"
