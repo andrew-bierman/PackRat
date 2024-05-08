@@ -1,3 +1,3 @@
-import { H4} from 'tamagui';
+import { H4 } from 'tamagui';
 
 export default H4;

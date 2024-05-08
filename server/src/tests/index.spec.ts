@@ -1,6 +1,6 @@
 import { env } from 'cloudflare:test';
 import { describe, it, expect, beforeAll } from 'vitest';
-import { setupTest, type trpcCaller } from './testHelpers';
+import { setupTest, type trpcCaller } from './utils/testHelpers';
 
 describe('Hello World worker', () => {
   let caller: trpcCaller;

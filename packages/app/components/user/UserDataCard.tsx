@@ -2,7 +2,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { formatDistanceToNow } from 'date-fns';
 import { View } from 'react-native';
 import { RH2, RText, RStack, RSwitch } from '@packrat/ui';
-import { Link } from 'solito/link';
+import { Link } from '@packrat/crosspath';
 import { truncateString } from '../../utils/truncateString';
 import { useEffect } from 'react';
 import { useEditPack } from 'app/hooks/packs';
@@ -107,7 +107,9 @@ const UserDataCard = ({
                   fontWeight: 'bold',
                 }}
               >
-                <RText style={{ fontSize: 16 }}>{truncatedName}</RText>
+                <RText style={{ fontSize: 16, color: 'black' }}>
+                  {truncatedName}
+                </RText>
                 {state[index] ? (
                   <RText style={{ fontSize: 16 }}>Loading....</RText>
                 ) : (

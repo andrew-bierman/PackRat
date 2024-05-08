@@ -9,15 +9,24 @@ export const useAddNewPack = () => {
   const utils = queryTrpc.useContext();
 
   const packSelectOptions = [
-    { value: true, label: 'Yes' },
-    { value: false, label: 'No' },
+    { value: '1', label: 'Yes' },
+    { value: '0', label: 'No' },
   ];
 
   // Use mutation for adding a pack
-  const addNewPack = () => {
+  const addNewPack = (data) => {
     mutation.mutate({
-      name,
-      is_public: isPublic,
+      name: data.name,
+      is_public: data.isPublic === packSelectOptions[0].value,
+      owner_id: user?.id,
+    });
+  };
+
+  // TODO Refactor pack creation
+  const addNewPackAsync = (data) => {
+    return mutation.mutateAsync({
+      name: data.name,
+      is_public: data.isPublic === packSelectOptions[0].value,
       owner_id: user?.id,
     });
   };
@@ -76,6 +85,7 @@ export const useAddNewPack = () => {
   return {
     mutation,
     addNewPack,
+    addNewPackAsync,
     isLoading: mutation.isLoading,
     isError: mutation.isError,
     isSuccess: mutation.isSuccess,

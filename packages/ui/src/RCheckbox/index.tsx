@@ -1,7 +1,7 @@
-import { Check } from '@tamagui/lucide-icons'
-import { Checkbox, XStack, Label } from 'tamagui'
+import { Check } from '@tamagui/lucide-icons';
+import { Checkbox, XStack, Label } from 'tamagui';
 
-const RCheckbox = ({id, value, ...props}) => {
+const RCheckbox = ({ id, value, ...props }) => {
   return (
     <XStack space="$2">
       <Checkbox id={id} {...props}>
@@ -13,6 +13,7 @@ const RCheckbox = ({id, value, ...props}) => {
         {value}
       </Label>
     </XStack>
-)}
+  );
+};
 
 export default RCheckbox;

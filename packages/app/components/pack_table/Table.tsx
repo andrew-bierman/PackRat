@@ -12,6 +12,7 @@ import {
   TitleRow,
 } from './TableHelperComponents';
 import TableItem from './TableItem';
+import { useDeletePackItem } from 'app/hooks/packs/useDeletePackItem';
 
 interface TableContainerProps {
   currentPack: any;
@@ -19,11 +20,13 @@ interface TableContainerProps {
   refetch: () => void;
   setRefetch: () => void;
   copy: boolean;
+  hasPermissions: boolean;
 }
 
 export const TableContainer = ({
   currentPack,
   selectedPack,
+  hasPermissions,
   refetch,
   setRefetch = () => {},
   copy,
@@ -50,28 +53,21 @@ export const TableContainer = ({
     setRefetch,
     copy,
   });
-
+  const headerRow = ['Item Name', `Weight`, 'Quantity', ''];
   let flexArr = [2, 1, 1, 1, 0.65, 0.65, 0.65];
-  let heading = [
-    'Item Name',
-    'Weight',
-    'Quantity',
-    'Edit',
-    'Delete',
-    `${copy ? 'Copy' : 'Ignore'}`,
-  ];
+  const { deletePackItem } = useDeletePackItem();
+
   if (
     Platform.OS === 'android' ||
     Platform.OS === 'ios' ||
     window.innerWidth < 900
   ) {
     flexArr = [1, 1, 1, 1];
-    heading = ['Item Name', 'Weight', 'Quantity', 'Options'];
   }
   if (isLoading) return <RSkeleton style={{}} />;
   if (error) return <ErrorMessage message={error} />;
-
   const isWeb = Platform.OS === 'web';
+
   return (
     <View style={[styles.container, !isWeb && { width: '100%' }]}>
       {data?.length ? (
@@ -80,15 +76,7 @@ export const TableContainer = ({
             <TitleRow title="Pack List" />
             <Row
               flexArr={flexArr}
-              data={[
-                'Item Name',
-                `Weight`,
-                'Quantity',
-                'Category',
-                'Edit',
-                'Delete',
-                `${copy ? 'Copy' : 'Ignore'}`,
-              ].map((header, index) => (
+              data={headerRow.map((header, index) => (
                 <Cell key={index} data={header} textStyle={styles.headerText} />
               ))}
               style={styles.head}
@@ -105,10 +93,11 @@ export const TableContainer = ({
                     renderItem={({ item }) => (
                       <TableItem
                         itemData={item}
-                        checkedItems={checkedItems}
+                        onDelete={deletePackItem}
                         handleCheckboxChange={handleCheckboxChange}
                         flexArr={flexArr}
                         currentPack={currentPack}
+                        hasPermissions={hasPermissions}
                         refetch={refetch}
                         setRefetch={setRefetch}
                       />

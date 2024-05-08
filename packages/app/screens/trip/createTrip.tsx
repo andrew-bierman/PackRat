@@ -1,30 +1,32 @@
+import React from 'react';
 import { RStack } from '@packrat/ui';
 import { ScrollView } from 'react-native';
 import { theme } from '../../theme';
-import TripCard from '../../components/TripCard';
 import WeatherCard from '../../components/weather/WeatherCard';
-import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
-import { useEffect, useState, useRef, useMemo } from 'react';
+import { useState, useRef } from 'react';
 import { GearList } from '../../components/GearList/GearList';
 import { SaveTripContainer } from 'app/components/trip/createTripModal';
 import TripDateRange from 'app/components/trip/TripDateRange';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import { useCardTrip } from 'app/hooks/trips/useTripCard';
+import { useCreateTripForm } from 'app/hooks/trips/useCreateTripForm';
 import { useTripsData } from './useTripsData';
+import {
+  TripMapCard,
+  TripParkCard,
+  TripSearchCard,
+  TripTrailCard,
+} from 'app/components/trip/TripCards';
 
 export default function Trips() {
-  const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
-  const [trails, setTrailsData] = useState();
 
-  const form = useCardTrip();
   const placesAutoCompleteRef = useRef({});
   const {
-    dateRange,
-    setDateRange,
     currentDestination,
     photonDetails,
+    isPhotonLoading,
+    hasPhotonError,
     weatherData,
     weatherLoading,
     weatherError,
@@ -35,23 +37,23 @@ export default function Trips() {
     filteredTrails,
   } = useTripsData();
 
+  const { isValid, setDateRange, togglePlace, tripStore } = useCreateTripForm(
+    weatherData,
+    currentDestination,
+    photonDetails,
+  );
+
+  const dateRange = {
+    start_date: tripStore.start_date,
+    end_date: tripStore.end_date,
+  };
+
   return (
     <ScrollView nestedScrollEnabled={true}>
       <RStack style={styles.mutualStyles}>
         {/* <MultiStepForm steps={steps} /> */}
         <RStack style={styles.container}>
-          <TripCard
-            title="Where are you heading?"
-            isSearch={true}
-            searchRef={placesAutoCompleteRef}
-            Icon={() => (
-              <FontAwesome
-                name="map"
-                size={20}
-                color={currentTheme.colors.cardIconColor}
-              />
-            )}
-          />
+          <TripSearchCard searchRef={placesAutoCompleteRef} />
           {!weekWeatherError &&
             !weatherError &&
             !weatherLoading &&
@@ -61,58 +63,26 @@ export default function Trips() {
                 weatherWeek={weatherWeekData}
               />
             )}
-          <TripCard
-            title="Nearby Trails"
-            value="Trail List"
-            isTrail={true}
-            form={form}
+          <TripTrailCard
             data={filteredTrails || []}
-            Icon={() => (
-              <FontAwesome5
-                name="hiking"
-                size={20}
-                color={currentTheme.colors.cardIconColor}
-              />
-            )}
+            onToggle={(trail) => togglePlace('trail', trail)}
+            selectedValue={tripStore.trail}
           />
-          <TripCard
-            title="Nearby Parks"
-            value="Parks List"
-            isPark={true}
-            data={parksData}
-            form={form}
-            Icon={() => (
-              <FontAwesome5
-                name="mountain"
-                size={20}
-                color={currentTheme.colors.cardIconColor}
-              />
-            )}
+          <TripParkCard
+            data={parksData || []}
+            onToggle={(park) => togglePlace('park', park)}
+            selectedValue={tripStore.park}
           />
           <GearList />
           <TripDateRange dateRange={dateRange} setDateRange={setDateRange} />
-          {!photonDetails?.IsError && !photonDetails?.isLoading && (
-            <TripCard
-              Icon={() => (
-                <FontAwesome5
-                  name="route"
-                  size={24}
-                  color={currentTheme.colors.cardIconColor}
-                />
-              )}
-              title="Map"
-              isMap={true}
-              shape={photonDetails}
-            />
+          {!hasPhotonError && photonDetails ? (
+            <TripMapCard isLoading={isPhotonLoading} shape={photonDetails} />
+          ) : null}
+          {isValid && (
+            <RStack>
+              <SaveTripContainer tripStore={tripStore} />
+            </RStack>
           )}
-          <RStack>
-            <SaveTripContainer
-              dateRange={dateRange}
-              search={currentDestination}
-              weatherObject={weatherData}
-              form={form}
-            />
-          </RStack>
         </RStack>
       </RStack>
     </ScrollView>

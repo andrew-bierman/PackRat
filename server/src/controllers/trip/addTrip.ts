@@ -1,6 +1,6 @@
 import { publicProcedure } from '../../trpc';
 import { addTripService } from '../../services/trip/addTripService';
-import * as validator from '../../middleware/validators/index';
+import * as validator from '@packrat/validations';
 /**
  * Adds a trip to the database.
  * @param {Object} req - The request object containing the trip details.

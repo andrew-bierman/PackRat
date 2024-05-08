@@ -1,5 +1,5 @@
 import React from 'react';
-import { VStack, Box, Text, Switch } from 'native-base';
+import { YStack, RStack, RText } from '@packrat/ui';
 import { ScrollView } from 'tamagui';
 import { Card as RNPCard } from 'react-native-paper';
 import useAppearance from 'app/hooks/appearance/useAppearance';
@@ -16,34 +16,24 @@ export default function AppearanceContainer() {
 
   return (
     <ScrollView>
-      <VStack style={styles.mainContainer}>
-        <Box style={styles.infoSection}>
+      <YStack style={styles.mainContainer}>
+        <RStack style={styles.infoSection}>
           <ThemeSwitch
             isEnabled={isEnabled}
             toggleSwitch={toggleSwitch}
             currentTheme={currentTheme}
           />
           <DemoCard />
-          <Box
-            alignSelf="center"
-            _text={styles.nativeBaseBox}
-            p={4}
-            bg={['primary.500']}
-          >
-            This is a Box from Native Base
-          </Box>
-          ;{/* Paper */}
-          <RNPCard>
-            <RNPCard.Title title="React Native Paper Card" />
-          </RNPCard>
           {showKitchenSink && (
-            <Box>
-              <Text>Kitchen Sink</Text>
+            <RStack>
+              <RStack>
+                <RText>Kitchen Sink</RText>
+              </RStack>
               <DialogDemo />
-            </Box>
+            </RStack>
           )}
-        </Box>
-      </VStack>
+        </RStack>
+      </YStack>
     </ScrollView>
   );
 }

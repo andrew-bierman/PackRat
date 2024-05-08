@@ -7,7 +7,7 @@ import { responseHandler } from '../../helpers/responseHandler';
 import { publicProcedure } from '../../trpc';
 import { z } from 'zod';
 // import * as validators from '@packrat/validations';
-import * as validator from '../../middleware/validators';
+import * as validator from '@packrat/validations';
 
 /**
  * Retrieves parks data from OpenStreetMap based on the provided latitude, longitude, and radius.

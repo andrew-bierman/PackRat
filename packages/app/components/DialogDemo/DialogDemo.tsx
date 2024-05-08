@@ -40,7 +40,7 @@ export const DialogDemo = () => {
 
           <SelectDemoItem />
         </Fieldset>
-        <XStack alignSelf="flex-end" gap>
+        <XStack alignSelf="flex-end" gap="$4">
           <Dialog.Close displayWhenAdapted asChild>
             <Button theme="alt1" aria-label="Close">
               Save changes

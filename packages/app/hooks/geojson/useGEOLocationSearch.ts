@@ -1,21 +1,19 @@
 import { useMemo } from 'react';
-import { useSearchParams } from 'app/hooks/common';
-import { parseCoordinates } from 'app/utils/coordinatesParser';
+import { createParam } from '@packrat/crosspath';
 
 interface GeoSearchParams {
-  osmId?: string;
+  osmId?: number;
   osmType?: string;
   name?: string;
 }
+
+const { useParams } = createParam<GeoSearchParams>();
 
 export const useGEOLocationSearch = (): [
   GeoSearchParams,
   (geoJSON: any) => void,
 ] => {
-  const searchParams = useSearchParams();
-  const osmId = searchParams.get('osmId');
-  const osmType = searchParams.get('osmType');
-  const name = searchParams.get('name');
+  const { params: osm, setParams } = useParams();
 
   const setGEOLocation = (geoJSON) => {
     const newSearchParams: GeoSearchParams = {};
@@ -30,12 +28,16 @@ export const useGEOLocationSearch = (): [
       newSearchParams.name = geoJSON.properties.name;
     }
 
-    searchParams.reset(newSearchParams);
+    setParams(newSearchParams);
   };
 
-  const osm = useMemo(() => {
-    return { osmType, osmId, name };
-  }, [osmType, osmId, name]);
+  const formattedOSM = useMemo<GeoSearchParams>(
+    () => ({
+      ...osm,
+      osmId: Number(osm.osmId),
+    }),
+    [osm],
+  );
 
-  return [osm, setGEOLocation];
+  return [formattedOSM, setGEOLocation];
 };

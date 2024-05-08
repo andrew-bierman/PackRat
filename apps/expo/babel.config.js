@@ -11,9 +11,7 @@ module.exports = function (api) {
     ],
 
     plugins: [
-      // NOTE: `expo-router/babel` is a temporary extension to `babel-preset-expo`.
       'react-native-reanimated/plugin',
-      require.resolve('expo-router/babel'),
       [
         'module:react-native-dotenv',
         {
