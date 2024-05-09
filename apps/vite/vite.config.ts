@@ -47,7 +47,7 @@ const rollupPlugin = (matchers: RegExp[]) => ({
 export default defineConfig(({ mode }) => {
   // Load env file based on `mode` in the current working directory.
   // Set the third parameter to '' to load all env regardless of the `VITE_` prefix.
-  const env = loadEnv(mode, process.cwd(), '')
+  // const env = loadEnv(mode, process.cwd(), '');
 
   return {
     clearScreen: true,
@@ -69,10 +69,10 @@ export default defineConfig(({ mode }) => {
       // This will allow you to access the environment variables in your code from process.env, instead of having to use import.meta.env. This is because Expo does not support import.meta.env and throws an error when you try to use it (ie packages/config/src/index.ts).
       // https://stackoverflow.com/a/77824845/19816812
       // https://github.com/expo/expo/issues/21099
-      ...Object.keys(env).reduce((prev, key) => {
-        prev[`process.env.${key}`] = JSON.stringify(env[key]);
-        return prev;
-      }, {}),
+      // ...Object.keys(env).reduce((prev, key) => {
+      //   prev[`process.env.${key}`] = JSON.stringify(env[key]);
+      //   return prev;
+      // }, {}),
     },
     resolve: {
       extensions,
