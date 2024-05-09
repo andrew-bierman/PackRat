@@ -3,10 +3,11 @@ import * as Google from 'expo-auth-session/providers/google';
 
 import { queryTrpc } from 'app/trpc';
 import { useSessionSignIn } from './useSessionSignIn';
+import { GOOGLE_ID, IOS_CLIENT_ID, ANDROID_CLIENT_ID } from '@packrat/config';
 
-const webClientId = import.meta.env.VITE_PUBLIC_GOOGLE_ID as string;
-const iosClientId = String(process.env.IOS_CLIENT_ID);
-const androidClientId = String(process.env.ANDROID_CLIENT_ID);
+const webClientId = String(GOOGLE_ID);
+const iosClientId = String(IOS_CLIENT_ID);
+const androidClientId = String(ANDROID_CLIENT_ID);
 
 export const useGoogleAuth = () => {
   const [token, setToken] = useState('');
