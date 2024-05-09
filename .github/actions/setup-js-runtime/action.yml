@@ -7,7 +7,11 @@ runs:
       uses: actions/setup-node@v3
       with:
         node-version: '20.x'
-        cache: 'yarn'
+        # cache: 'yarn'
+
+    - name: Enable corepack
+      run: corepack enable
+      shell: bash
 
     - name: Cache Yarn packages
       uses: actions/cache@v2
@@ -16,6 +20,14 @@ runs:
         key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
         restore-keys: |
           ${{ runner.os }}-yarn-
+
+    - name: Cache Node modules
+      uses: actions/cache@v2
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-node_modules-
 
     - name: Install dependencies
       run: yarn install --immutable
