@@ -3,9 +3,6 @@ description: 'Sets up Node.js and caches Node modules'
 runs:
   using: 'composite'
   steps:
-    - name: Cancel Previous Runs
-      uses: styfle/cancel-workflow-action
-      
     - name: Setup Node
       uses: actions/setup-node@v3
       with:
