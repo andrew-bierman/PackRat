@@ -31,9 +31,5 @@ jobs:
       - name: Lint code
         run: yarn lint
 
-      - name: Run tests
-        continue-on-error: true
-        run: yarn test
-
       - name: Build
         run: yarn build:prod

@@ -13,10 +13,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Use Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20.x'
+      - name: Setup JS Runtime environment
+        uses: ./.github/actions/setup-js-runtime
 
       - name: Find or create comment
         uses: actions/github-script@v6
