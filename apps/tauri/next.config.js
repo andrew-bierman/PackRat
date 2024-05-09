@@ -3,6 +3,7 @@ const { withTamagui } = require('@tamagui/next-plugin');
 const { join } = require('path');
 const path = require('path');
 const webpack = require('webpack');
+const { withCrossPath } = require('@packrat/crosspath/adapter');
 const million = require('million/compiler');
 
 const boolVals = {
@@ -18,7 +19,7 @@ const enableMillionJS = true;
 const plugins = [
   withTamagui({
     config: '../../packages/ui/src/tamagui.config.ts',
-    components: ['tamagui', '@tamagui-extras/form', '@tamagui-extras/core'],
+    components: ['tamagui'],
     importsWhitelist: ['constants.js', 'colors.js'],
     outputCSS:
       process.env.NODE_ENV === 'production' ? './public/tamagui.css' : null,
@@ -38,6 +39,7 @@ const plugins = [
     // ],
   }),
   withExpo,
+  withCrossPath('solito'),
 ];
 
 const nextConfig = function () {
@@ -69,6 +71,7 @@ const nextConfig = function () {
       'expo-font',
       'expo-asset',
       'expo-constants',
+      'expo-clipboard',
       'expo-file-system',
       'expo-linking',
       'expo-permissions',
@@ -110,8 +113,11 @@ const nextConfig = function () {
       '@react-navigation/drawer',
       '@bacons/react-views',
       // End remove section
-      '@tamagui-extras/form',
-      '@tamagui-extras/core',
+      '@rneui/themed',
+      '@rneui/base',
+      'react-native-ratings',
+      'react-native-size-matters',
+      'zeego',
     ],
     experimental: {
       scrollRestoration: true,
