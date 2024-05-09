@@ -20,6 +20,7 @@ export const addItemGlobalService = async (
   quantity: number,
   unit: string,
   type: 'Food' | 'Water' | 'Essentials',
+  ownerId: string,
 ) => {
   let category: InsertItemCategory | null;
   if (!categories.includes(type)) {

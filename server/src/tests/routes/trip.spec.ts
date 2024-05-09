@@ -88,6 +88,7 @@ describe('Trip Routes', () => {
           type: 'FeatureCollection' as const,
           features: [],
         },
+        is_public: '1' as const,
       };
 
       const createdTrip = await caller.addTrip(input);
