@@ -1,3 +1,6 @@
+import { Platform } from 'react-native';
+import { viteSource } from './sources/vite';
+
 /**
  * @typedef {Object} EnvSource
  * @property {string} prefix - The prefix used for environment variables in this source.
@@ -17,11 +20,8 @@ const envSources = [
     prefix: 'EXPO_PUBLIC_',
     source: process.env,
   },
-  {
-    prefix: 'VITE_',
-    source: process.env, // This is a temporary solution until Expo supports import.meta.env.
-    // source: import.meta.env,
-  },
+  // Hacky way to prevent expo from crashing when running build due to import.meta.env not being supported
+  Platform.OS === 'web' ? viteSource : null,
 ];
 
 /**
