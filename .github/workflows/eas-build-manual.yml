@@ -20,6 +20,11 @@ on:
           - preview
           - local
 
+concurrency: 
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+
 jobs:
   update:
     name: EAS ${{ github.event.inputs.platform }} ${{ github.event.inputs.build-type }} Build
