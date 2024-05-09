@@ -41,9 +41,11 @@ jobs:
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
 
-      - name: Setup environment variables
+      - name: Export secrets as environment variables
+        env:
+          JSON_SECRETS: '${{ toJSON(secrets) }}'
         run: |
-          echo "MAPBOX_DOWNLOADS_TOKEN=$MAPBOX_DOWNLOADS_TOKEN" >> $GITHUB_ENV
+          eval "$(jq -r 'to_entries | map("export \(.key)=\(.value|tostring)") | .[]' <<< "$JSON_SECRETS")"
 
       - name: Install dependencies
         uses: ./.github/actions/install-deps
