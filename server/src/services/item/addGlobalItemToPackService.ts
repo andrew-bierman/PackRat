@@ -16,7 +16,7 @@ export const addGlobalItemToPackService = async (
   packId: string,
   itemId: string,
   ownerId: string,
-): Promise<object> => {
+) => {
   const itemClass = new Item();
   const itemPacksClass = new ItemPacks();
   const item = await itemClass.findItem({

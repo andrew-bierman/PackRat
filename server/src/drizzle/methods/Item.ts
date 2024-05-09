@@ -1,17 +1,11 @@
-import { and, count, eq, sql, ilike, like } from 'drizzle-orm';
-import { createDb } from '../../db/client';
+import { DbClient } from '../../db/client';
+import { and, count, eq, sql } from 'drizzle-orm';
 import { type InsertItem, item as ItemTable } from '../../db/schema';
-import { getDB } from '../../trpc/context';
 
 export class Item {
-  async createInstance() {
-    const dbInstance = await createDb(getDB());
-    return dbInstance;
-  }
-
   async create(data: InsertItem) {
     try {
-      const item = (await this.createInstance())
+      const item = await DbClient.instance
         .insert(ItemTable)
         .values(data)
         .returning()
@@ -28,7 +22,7 @@ export class Item {
     filter = eq(ItemTable.id, id),
   ) {
     try {
-      const item = (await this.createInstance())
+      const item = await DbClient.instance
         .update(ItemTable)
         .set(data)
         .where(filter)
@@ -42,7 +36,7 @@ export class Item {
 
   async delete(id: string, filter = eq(ItemTable.id, id)) {
     try {
-      const deletedItem = (await this.createInstance())
+      const deletedItem = await DbClient.instance
         .delete(ItemTable)
         .where(filter)
         .returning()
@@ -58,7 +52,7 @@ export class Item {
       const filter = isGlobal
         ? and(eq(ItemTable.id, id), eq(ItemTable.global, true))
         : eq(ItemTable.id, id);
-      const item = (await this.createInstance()).query.item.findFirst({
+      const item = await DbClient.instance.query.item.findFirst({
         where: filter,
         with: {
           category: {
@@ -91,7 +85,7 @@ export class Item {
 
   async findMany() {
     try {
-      const items = (await this.createInstance()).query.item.findMany({
+      const items = await DbClient.instance.query.item.findMany({
         with: {
           itemPacks: {
             columns: {
@@ -108,12 +102,8 @@ export class Item {
 
   async findGlobal(limit: number, offset: number, searchString: string) {
     try {
-      console.log(searchString);
-      const items = (await this.createInstance()).query.item.findMany({
-        where: and(
-          eq(ItemTable.global, true),
-          searchString ? like(ItemTable.name, `${searchString}%`) : undefined,
-        ),
+      const items = await DbClient.instance.query.item.findMany({
+        where: eq(ItemTable.global, true),
         with: {
           category: {
             columns: { id: true, name: true },
@@ -132,7 +122,7 @@ export class Item {
   async findItemsByName(name: string) {
     try {
       const searchName = `%${name}%`;
-      const query = (await this.createInstance())
+      const query = await DbClient.instance
         .select()
         .from(ItemTable)
         .where(sql`lower(${ItemTable.name}) LIKE ${sql.placeholder('name')}`)
@@ -146,7 +136,7 @@ export class Item {
 
   async count() {
     try {
-      const totalCount = await (await this.createInstance())
+      const totalCount = await DbClient.instance
         .select({ value: count() })
         .from(ItemTable)
         .where(eq(ItemTable.global, true))

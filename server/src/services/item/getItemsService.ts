@@ -8,12 +8,12 @@ import { Item } from '../../drizzle/methods/Item';
  * @param {string} packId - The ID of the pack.
  * @return {Promise<Array<Object>>} An array of items.
  */
-export const getItemsService = async (packId?: string): Promise<object[]> => {
+export const getItemsService = async (packId?: string) => {
   const itemClass = new Item();
   const items = await itemClass.findMany();
   if (packId) {
     const filteredItems = items.filter(
-      (item: any) => item.itemPacks[0]?.packId === packId,
+      (item) => item.itemPacks[0]?.packId === packId,
     );
     console.log(filteredItems);
     return filteredItems;

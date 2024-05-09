@@ -7,7 +7,7 @@ import { Pack } from '../../drizzle/methods/pack';
  * @param {object} packData
  * @return {object}
  */
-export const editPackService = async (packData: any): Promise<object> => {
+export const editPackService = async (packData: any) => {
   const packClass = new Pack();
   const { id, name, is_public } = packData;
   const pack = await packClass.findPack({ id });
