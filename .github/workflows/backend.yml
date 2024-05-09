@@ -9,6 +9,11 @@ on:
       - 'packages/api/**'
       - 'server/**'
 
+concurrency: 
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+
 jobs:
   deploy:
     name: Deploy to Cloudflare Workers
@@ -42,13 +47,14 @@ jobs:
         #   workingDirectory: packages/api
           workingDirectory: server
           command: yarn run deploy:prod
-          packageManager: bun
+          # packageManager: bun
+          packageManager: yarn
           secrets: |
             APP_URL
             JWT_VERIFICATION_KEY
             CI
         env:
-          APP_URL: ${{ secrets.NEXT_PUBLIC_APP_URL }}
-          JWT_VERIFICATION_KEY: ${{ secrets.JWT_VERIFICATION_KEY }}
+          APP_URL: ${{ secrets.VITE_PUBLIC_APP_URL }}
+          JWT_VERIFICATION_KEY: ${{ secrets.JWT_SECRET }}
           CI: true
           NO_D1_WARNING: true

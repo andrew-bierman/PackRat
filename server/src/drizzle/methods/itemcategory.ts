@@ -1,23 +1,17 @@
 import { eq } from 'drizzle-orm';
-import { createDb } from '../../db/client';
+import { DbClient } from '../../db/client';
 import {
   type InsertItemCategory,
   itemCategory as ItemCategoryTable,
 } from '../../db/schema';
-import { getDB } from '../../trpc/context';
 
 export class ItemCategory {
-  async createInstance() {
-    const dbInstance = await createDb(getDB());
-    return dbInstance;
-  }
-
   async findItemCategory({ id, name }: { id?: string; name?: any }) {
     try {
       const filter = id
         ? eq(ItemCategoryTable.id, id)
         : eq(ItemCategoryTable.name, name);
-      const itemCategory = (await this.createInstance())
+      const itemCategory = await DbClient.instance
         .select()
         .from(ItemCategoryTable)
         .where(filter)
@@ -32,7 +26,7 @@ export class ItemCategory {
 
   async create(data: InsertItemCategory) {
     try {
-      const category = (await this.createInstance())
+      const category = await DbClient.instance
         .insert(ItemCategoryTable)
         .values(data)
         .returning()

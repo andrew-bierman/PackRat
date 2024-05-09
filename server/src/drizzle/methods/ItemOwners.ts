@@ -1,19 +1,13 @@
-import { createDb } from '../../db/client';
+import { DbClient } from '../../db/client';
 import {
   type InsertItemOwner,
   itemOwners as ItemOwnersTable,
 } from '../../db/schema';
-import { getDB } from '../../trpc/context';
 
 export class ItemOwners {
-  async createInstance() {
-    const dbInstance = await createDb(getDB());
-    return dbInstance;
-  }
-
   async create(itemOwner: InsertItemOwner) {
     try {
-      const record = (await this.createInstance())
+      const record = await DbClient.instance
         .insert(ItemOwnersTable)
         .values(itemOwner)
         .returning()

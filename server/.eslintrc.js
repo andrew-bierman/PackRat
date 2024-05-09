@@ -156,6 +156,7 @@ module.exports = {
         'no-unmodified-loop-condition': 'off',
         '@typescript-eslint/no-base-to-string': 'off',
         '@typescript-eslint/unbound-method': 'off',
+        '@typescript-eslint/no-extraneous-class': 'off'
       },
       extends: [
         'plugin:@typescript-eslint/recommended',
