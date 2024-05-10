@@ -20,6 +20,7 @@ import {
   loadStyles,
 } from './TripDetailsComponents';
 import { useTripId } from 'app/hooks/trips';
+import { formatTripActivityLabel } from 'app/utils/tripUtils';
 
 const SECTION = {
   DESCRIPTION: 'DESCRIPTION',
@@ -83,6 +84,13 @@ export function TripDetails() {
                             <RStack>
                               <Text style={styles.descriptionText}>
                                 Description: {data?.description}
+                              </Text>
+                            </RStack>
+                          )}
+                          {data?.type && (
+                            <RStack>
+                              <Text style={styles.descriptionText}>
+                                Activity: {formatTripActivityLabel(data?.type)}
                               </Text>
                             </RStack>
                           )}

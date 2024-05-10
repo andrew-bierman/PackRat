@@ -33,7 +33,9 @@ export const setDateRange = ({
   payload: { start_date, end_date },
 });
 
-export const createTripInitialState: Partial<Record<addTripKey, any>> = {};
+export const createTripInitialState: Partial<Record<addTripKey, any>> = {
+  type: 'trip',
+};
 
 export const createTripReducer = (
   state,

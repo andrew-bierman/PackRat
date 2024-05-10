@@ -16,6 +16,7 @@ import {
   TripParkCard,
   TripSearchCard,
   TripTrailCard,
+  TripActivityCard,
 } from 'app/components/trip/TripCards';
 
 export default function Trips() {
@@ -37,11 +38,8 @@ export default function Trips() {
     filteredTrails,
   } = useTripsData();
 
-  const { isValid, setDateRange, togglePlace, tripStore } = useCreateTripForm(
-    weatherData,
-    currentDestination,
-    photonDetails,
-  );
+  const { isValid, setDateRange, togglePlace, tripStore, setTripValue } =
+    useCreateTripForm(weatherData, currentDestination, photonDetails);
 
   const dateRange = {
     start_date: tripStore.start_date,
@@ -74,6 +72,10 @@ export default function Trips() {
             selectedValue={tripStore.park}
           />
           <GearList />
+          <TripActivityCard
+            selectedValue={tripStore.type}
+            onChange={(activity) => setTripValue('type', activity)}
+          />
           <TripDateRange dateRange={dateRange} setDateRange={setDateRange} />
           {!hasPhotonError && photonDetails ? (
             <TripMapCard isLoading={isPhotonLoading} shape={photonDetails} />
