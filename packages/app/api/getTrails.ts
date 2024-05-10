@@ -1,4 +1,3 @@
-import { X_RAPIDAPI_KEY } from '@env';
 import axios from 'app/config/axios';
 import { api } from 'constants/api';
 import osmtogeojson from 'osmtogeojson';

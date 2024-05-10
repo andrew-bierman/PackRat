@@ -6,7 +6,7 @@ import { View } from 'react-native';
 import { RText, RStack } from '@packrat/ui';
 import { DetailsComponent } from '../../components/details';
 import { Platform, StyleSheet, FlatList, Dimensions, Text } from 'react-native';
-import { CLIENT_URL } from '@env';
+import { CLIENT_URL } from '@packrat/config';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useFetchSingleTrip, useTripWeather } from 'app/hooks/singletrips';
