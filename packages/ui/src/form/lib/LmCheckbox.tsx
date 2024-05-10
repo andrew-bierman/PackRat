@@ -12,7 +12,7 @@ import {
   XStackProps,
   YStack,
 } from 'tamagui';
-import { CheckRegular, MinusRegular } from '@tamagui-extras/core';
+import { CheckRegular, MinusRegular } from '../../extras/lib/core/src';
 
 export type LmCheckboxProps = XStackProps & {
   checkboxProps?: Omit<CheckboxProps, 'disabled'>;

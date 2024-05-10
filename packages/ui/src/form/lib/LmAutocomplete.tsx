@@ -29,7 +29,7 @@ import {
   LmPopoverProps,
   SquareRegular,
   usePopoverState,
-} from '@tamagui-extras/core';
+} from '../../extras/lib/core/src';
 import { Platform, useWindowDimensions } from 'react-native';
 
 type Option = { label: string; value: string | number };
