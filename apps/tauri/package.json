@@ -29,7 +29,7 @@
     "metro-react-native-babel-preset": "^0.77.0",
     "metro-react-native-babel-transformer": "^0.77.0",
     "million": "^2.6.4",
-    "next": "^13.5.2",
+    "next": "^14.1.1",
     "next-fonts": "^1.5.1",
     "raf": "^3.4.1",
     "react": "^18.2.0",
