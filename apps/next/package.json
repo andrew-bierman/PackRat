@@ -38,7 +38,6 @@
     "react-dom": "18.2.0",
     "react-native-web": "^0.19.10",
     "setimmediate": "^1.0.5",
-    "sharp": "^0.33.3",
     "tamagui": "^1.96.0",
     "url-loader": "^4.1.1",
     "vercel": "latest"
