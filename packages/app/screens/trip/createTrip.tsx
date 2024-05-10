@@ -80,7 +80,7 @@ export default function Trips() {
           {!hasPhotonError && photonDetails ? (
             <TripMapCard isLoading={isPhotonLoading} shape={photonDetails} />
           ) : null}
-          {isValid && (
+          {!isValid && (
             <RStack>
               <SaveTripContainer tripStore={tripStore} />
             </RStack>
