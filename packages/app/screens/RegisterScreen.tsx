@@ -98,7 +98,7 @@ export default function Register() {
                 <RText fontSize={14} color="grey">
                   Already a User?
                 </RText>
-                <Link href="/sign-in">
+                <Link href="/sign-in" style={{ textDecoration: 'none' }}>
                   <RText
                     style={{
                       color: '#818cf8',

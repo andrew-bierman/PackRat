@@ -162,7 +162,7 @@ export default function UserDataContainer({
               <DataList data={data} />
             </>
           ) : currentUser?.id === userId ? (
-            <Link href="/">
+            <Link href="/" style={{ textDecoration: 'none' }}>
               <RButton style={{ color: currentTheme.colors.white }}>
                 {`Create your first ${typeUppercaseSingular}`}
               </RButton>

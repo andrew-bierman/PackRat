@@ -196,7 +196,7 @@ const UserDataCard = ({
           </RStack>
         </RStack>
         <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-          <Link href={`/${type}/${id}`}>
+          <Link href={`/${type}/${id}`} style={{ textDecoration: 'none' }}>
             <RText color="gray" fontWeight="bold">
               View Details
             </RText>

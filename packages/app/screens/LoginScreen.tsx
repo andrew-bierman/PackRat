@@ -99,7 +99,7 @@ export default function Login() {
               <RText fontSize={14} color="grey">
                 I'm a new user.
               </RText>
-              <Link href="/register">
+              <Link href="/register" style={{ textDecoration: 'none' }}>
                 <RText
                   style={{
                     color: '#818cf8',
@@ -113,7 +113,7 @@ export default function Login() {
             </RStack>
 
             <RStack style={{ flexDirection: 'row', justifyContent: 'center' }}>
-              <Link href="/password-reset">
+              <Link href="/password-reset" style={{ textDecoration: 'none' }}>
                 <RText
                   style={{
                     color: '#818cf8',

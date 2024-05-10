@@ -27,7 +27,11 @@ const FeedPreviewScroll: React.FC<FeedPreviewScrollProps> = ({ itemWidth }) => {
       {feedData?.map((item: FeedItem, index: number) => {
         const linkStr = `/${item.type}/${item.id}`;
         return linkStr ? (
-          <Link href={linkStr} key={`${linkStr}`}>
+          <Link
+            href={linkStr}
+            key={`${linkStr}`}
+            style={{ textDecoration: 'none' }}
+          >
             <View style={styles.cardStyles} key={index}>
               <RStack
                 style={{
