@@ -203,7 +203,7 @@ export const ScoreContainer: React.FC<ScoreContainerProps> = ({
           <RText style={styles.scoreText}>
             {isAlreadyScored ? title : 'Score this pack!'}
           </RText>
-          <RText style={styles.subheader}>{subheader}</RText>
+          <RText>{subheader}</RText>
           <RText style={{ fontWeight: 300 }}>{description}</RText>
           {isOwner && (
             <RButton style={styles.button} onPress={handleScoreClick}>
@@ -236,9 +236,9 @@ const loadStyles = (theme: any) => {
       alignItems: 'center',
     },
     vStack: {
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      width: '100%',
+      justifyContent: 'center',
+      alignItems: 'flex-start',
+      width: Platform.OS == 'web' ? '60%' : '100%',
     },
     scoreText: {
       color: currentTheme.colors.textPrimary,
@@ -266,9 +266,6 @@ const loadStyles = (theme: any) => {
       fontWeight: '700',
       fontSize: 24,
     },
-    subheader: {
-      textAlignVertical: 'center',
-    }
   };
 };
 
