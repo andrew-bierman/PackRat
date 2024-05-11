@@ -4,17 +4,19 @@ import {
   isPolygonOrMultiPolygon,
   processShapeData,
   isPoint,
-  isShapeDownloadable
+  isShapeDownloadable,
 } from '../../utils/mapFunctions';
 import { api } from '../../constants/api';
 import { useState, useEffect } from 'react';
+import simplify from 'simplify-geojson';
 
 const useProcessedShape = (shape) => {
   const [processedShape, setProcessedShape] = useState(null);
 
   useEffect(() => {
+    // const simplifiedShape = simplify(shape, 0.009);
     const processed = processShapeData(shape);
-    console.log('isShapeDownloadable(shape)' , isShapeDownloadable(shape))
+    // console.log('processed', simplifiedShape, shape);
     setProcessedShape(processed);
   }, [shape]);
 
@@ -34,9 +36,7 @@ const useMapPreviewData = (shape, processedShape) => {
     const pointProperties = {
       'marker-color': '#16b22d',
     };
-    
     if (isLineString(shape)) {
-     
       shape.features[0].properties = lineProperties;
     }
 
@@ -60,33 +60,32 @@ const useMapPreviewData = (shape, processedShape) => {
         imageShape.features.push(feature);
       }
     });
-
+    console.log('imageShape', imageShape);
+    
     const urlEncodedImageShapeGeoJSON = encodeURIComponent(
       JSON.stringify(imageShape),
     );
 
-    console.log('urlEncodedImageShapeGeoJSONurlEncodedImageShapeGeoJSON', urlEncodedImageShapeGeoJSON)
+    console.log('urlEncodedImageShapeGeoJSON', imageShape);
 
     let bounds = getShapeSourceBounds(shape);
     bounds = bounds[0].concat(bounds[1]);
-    console.log('bounds bounds', bounds)
-    
+    console.log('bounds', bounds);
 
     const {
       coordinates: [lng, lat],
     } = shape.features[0].geometry;
 
     const mapPreviewEndpoint = `${api}/mapPreview`;
-    console.log('mapPreviewEndpointmapPreviewEndpoint', bounds)
+    console.log('mapPreviewEndpoint', mapPreviewEndpoint);
 
     const data = {
       isPoint: isPoint(shape),
       uri: isPoint(shape)
         ? `${mapPreviewEndpoint}/pin-s+db4848(${lng},${lat})/${lng},${lat},8.63,0/900x400`
-        : `${mapPreviewEndpoint}/geojson(${urlEncodedImageShapeGeoJSON})/[${bounds.join(
-            ' , ',
-          )}]/900x400?padding=50,30,30,30`,
+        : `${mapPreviewEndpoint}/geojson(${urlEncodedImageShapeGeoJSON})/[${bounds.join(',')}]/900x400?padding=50,30,30,30`,
     };
+
     setMapPreviewData(data);
   }, [shape, processedShape]);
 

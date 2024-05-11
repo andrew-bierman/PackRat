@@ -10,7 +10,6 @@ type TripMapCardProps = {
 };
 
 export const TripMapCard = ({ isLoading, shape }: TripMapCardProps) => {
-  console.log('MAP isLoading ', shape)
   const { currentTheme } = useTheme();
 
   return (

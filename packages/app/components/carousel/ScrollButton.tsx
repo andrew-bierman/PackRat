@@ -19,6 +19,7 @@ interface ScrollButtonProps {
 }
 
 const ScrollButton = ({ direction, onPress, disabled }: ScrollButtonProps) => {
+  console.log('direction', onPress)
   const styles = useCustomStyles(loadStyles);
   const { isDark } = useTheme();
   return (

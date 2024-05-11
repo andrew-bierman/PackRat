@@ -22,7 +22,7 @@ export async function getPhotonDetailsService(id, type, osmUri) {
 
   const overpassQuery = `[out:json][timeout:25];${type}(${id});(._;>;);out body;`;
 
-  console.log('overpassQuery', overpassQuery);
+  console.log('overpassQuery', overpassQuery, osmUri);
   const response = await fetch(osmUri, {
     method: 'POST',
     headers: { 'Content-Type': 'text/plain' },
@@ -32,7 +32,7 @@ export async function getPhotonDetailsService(id, type, osmUri) {
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
-
+  
   const data = await response.json();
   const geojsonData = osmtogeojson(data);
   return geojsonData;

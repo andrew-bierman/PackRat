@@ -8,7 +8,6 @@ import { defaultShape } from '../../utils/mapFunctions';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 
 export function MapContainer({ shape }) {
-  console.log('MAPshape shape', shape)
   if (!shape || isObjectEmpty(shape)) {
     shape = defaultShape;
   }

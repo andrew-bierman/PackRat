@@ -18,7 +18,6 @@ mapboxgl.accessToken =
 const DESTINATION = 'destination';
 const TRIP = 'trip';
 const WebMap = ({ shape: shapeProp }) => {
-  console.log('shape shape shape', shape)
   const [downloadable, setDownloadable] = useState(false);
   const styles = useCustomStyles(loadStyles);
   const {

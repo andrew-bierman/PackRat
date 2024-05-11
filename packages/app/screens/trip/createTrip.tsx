@@ -45,7 +45,6 @@ export default function Trips() {
     photonDetails,
   );
 
-  console.log('isValid isValid', isValid)
 
   const dateRange = {
     start_date: tripStore.start_date,

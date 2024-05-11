@@ -12,7 +12,7 @@ import { type Context, type Next } from 'hono';
  */
 const getMapPreview = async (ctx: Context, next: Next) => {
   try {
-    console.log('ctx.req.query ctx.req.query', ctx.req.query)
+    console.log('ctx.req.query ctx.req.query', ctx.req.query);
 
     const { env }: any = ctx;
     const { MAPBOX_ACCESS_TOKEN } = env;
@@ -32,9 +32,8 @@ const getMapPreview = async (ctx: Context, next: Next) => {
       )}?access_token=${MAPBOX_ACCESS_TOKEN}&${queryParams}`;
 
     const response = await fetch(url, { method: 'GET' });
-
     if (!response.ok) {
-      throw new Error('Failed to fetch map preview image');
+      throw new Error('Failed to fetch map preview image', response);
     }
 
     const newResponse = new Response(response.body, {
@@ -48,7 +47,7 @@ const getMapPreview = async (ctx: Context, next: Next) => {
     return newResponse;
   } catch (error) {
     console.log(error);
-    // next(MapPreviewError);
+    next(MapPreviewError);
   }
 };
 
