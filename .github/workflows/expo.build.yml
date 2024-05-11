@@ -11,32 +11,16 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  setup:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Install Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '20'
-
-      - name: Setup EAS
-        uses: expo/expo-github-action@v8
-        with:
-          eas-version: latest
-          token: ${{ secrets.EXPO_TOKEN }}
-
-      - name: Install dependencies
-        uses: ./.github/actions/install-deps
-
   build-android:
-    needs: setup
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
+      - name: Setup Standard Environment
+        uses: ./.github/actions/setup-standard-environment
+        with:
+          expo-token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Setup Java
         uses: actions/setup-java@v2
@@ -52,16 +36,20 @@ jobs:
           MAPBOX_DOWNLOADS_TOKEN: ${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}
 
   build-ios:
-    needs: setup
     runs-on: macos-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Setup Xcode
-        uses: maxim-lobanov/setup-xcode@v1
+      - name: Setup Common Dependencies
+        uses: ./.github/actions/setup-common-deps
         with:
-          xcode-version: latest-stable
+          expo-token: ${{ secrets.EXPO_TOKEN }}
+
+      # - name: Setup Xcode
+      #   uses: maxim-lobanov/setup-xcode@v1
+      #   with:
+      #     xcode-version: latest-stable
 
       - name: Run Local Build for iOS
         working-directory: ./apps/expo
