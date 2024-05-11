@@ -6,54 +6,66 @@ on:
   pull_request:
     branches: [ "**" ]
 
-concurrency: 
+concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-
 jobs:
-  build:
+  setup:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Install Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '20' # Use the version you prefer
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'
 
-    - name: 🏗 Setup EAS
-      uses: expo/expo-github-action@v8
-      with:
-        eas-version: latest
-        token: ${{ secrets.EXPO_TOKEN }}
+      - name: Setup EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
 
-    - name: Install dependencies
-      uses: ./.github/actions/install-deps
+      - name: Install dependencies
+        uses: ./.github/actions/install-deps
 
-    # - name: 🚀 Build app
-    #   working-directory: ./client
-    #   run: eas build --non-interactive --platform all --local
+  build-android:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-#    - name: Install dependencies
-#      working-directory: ./client
-#      run: yarn install
+      - name: Setup Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'adopt'
 
-#    - name: Install EAS CLI
-#      run: yarn global add eas-cli
+      - name: Run Local Build for Android
+        working-directory: ./apps/expo
+        run: |
+          eas build --non-interactive --platform android --local
+        env:
+          MAPBOX_DOWNLOADS_TOKEN: ${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}
 
-#    - name: Configure build
-#      working-directory: ./client
-#      run: npx eas build:configure
+  build-ios:
+    needs: setup
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    # If you need additional setup or configurations, add them here
+      - name: Setup Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
 
-    - name: Run Local Build for Android
-      working-directory: ./apps/expo
-      run: eas build --non-interactive --platform android --local
-
-    - name: Run Local Build for iOS
-      working-directory: ./apps/expo
-      run: eas build --non-interactive --platform ios --local
+      - name: Run Local Build for iOS
+        working-directory: ./apps/expo
+        run: |
+          eas build --non-interactive --platform ios --local
+        env:
+          MAPBOX_DOWNLOADS_TOKEN: ${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}
