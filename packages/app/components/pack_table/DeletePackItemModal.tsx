@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDeletePackItem } from 'app/hooks/packs/useDeletePackItem';
-import { BaseModal, CloseModalHandler } from '@packrat/ui';
+import { BaseModal, CloseModalHandler, RText } from '@packrat/ui';
 import { useDeleteItem } from 'app/hooks/items';
 
 interface DeletePackItemModalProps {
@@ -42,8 +42,9 @@ export const DeletePackItemModal = ({
       onClose={onClose}
       showTrigger={!!triggerComponent}
       footerButtons={footerButtons}
+      footerComponent={undefined}
     >
-      Are you sure you want to delete this item?
+      <RText>Are you sure you want to delete this item?</RText>
     </BaseModal>
   );
 };
