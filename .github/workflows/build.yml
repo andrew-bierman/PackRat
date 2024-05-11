@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: ['**']
 
-concurrency: 
+concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
@@ -19,6 +19,7 @@ jobs:
 
       - name: Install dependencies
         uses: ./.github/actions/install-deps
+
   build-android:
     needs: install-and-test
     runs-on: ubuntu-latest
@@ -30,12 +31,9 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-          
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20.x
-          cache: yarn
+
+      - name: Setup JS Runtime environment
+        uses: ./.github/actions/setup-js-runtime
 
       - name: Install dependencies
         uses: ./.github/actions/install-deps
