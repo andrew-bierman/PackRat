@@ -38,12 +38,12 @@ describe('Template routes', () => {
       if (template) {
         const isGlobalTemplate = !template?.isGlobalTemplate;
         //! need to convert dates to string for input
-        const updatedTemplate = await caller.editTemplate({
+        const [updatedTemplate] = await caller.editTemplate({
           templateId: template?.id?.toString(),
           type: template?.type,
           isGlobalTemplate,
         });
-        expect(updatedTemplate.isGlobalTemplate).toEqual(isGlobalTemplate);
+        expect(updatedTemplate?.isGlobalTemplate).toEqual(isGlobalTemplate);
         template = updatedTemplate;
       }
     });

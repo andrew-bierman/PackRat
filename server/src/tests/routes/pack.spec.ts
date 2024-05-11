@@ -61,6 +61,8 @@ describe('Pack routes', () => {
       const nameToBeUpdated = 'updated pack';
       const updatedPack = await caller.editPack({
         ...pack,
+        id: pack?.id?.toString(),
+        is_public: pack?.is_public === null ? false : pack?.is_public,
         name: nameToBeUpdated,
       });
       expect(updatedPack.name).toEqual(nameToBeUpdated);
@@ -73,6 +75,12 @@ describe('Pack routes', () => {
       const input = {
         ...partialPack,
         name: 'test 123',
+        is_public:
+          partialPack.is_public === null ? false : partialPack.is_public,
+        owner_id:
+          partialPack.owner_id === null
+            ? 'default_owner_id'
+            : partialPack.owner_id,
       };
       const createdPack = await caller.addPack(input);
       expect(createdPack).toBeDefined();

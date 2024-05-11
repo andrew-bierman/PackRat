@@ -18,14 +18,16 @@ describe('Trip Routes', () => {
         queryBy: 'Favorite',
       });
       expect(trips).toBeDefined();
-      trip = trips[0];
+      if (trips?.[0]) {
+        trip = trips[0];
+      }
     });
   });
 
   describe('Get trips by owner', () => {
     it('Get trips by owner', async () => {
       if (trip) {
-        const ownerId = trip?.owner?.id.toString();
+        const ownerId = trip.owner_id?.toString();
         const [ownerTrip] = await caller.getTrips({
           owner_id: ownerId,
         });

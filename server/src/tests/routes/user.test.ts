@@ -1,6 +1,7 @@
 import { generateMock } from '@anatine/zod-mock';
 import { userSignUp } from '@packrat/validations';
-import { generateMockUser, setupTest, trpcCaller } from '../utils/testHelpers';
+import { generateMockUser, setupTest } from '../utils/testHelpers';
+import type { trpcCaller } from '../utils/testHelpers';
 import { describe, it, expect, beforeEach, beforeAll, afterEach } from 'vitest';
 import { type User as UserType } from '../../db/schema';
 import { env } from 'cloudflare:test';
@@ -55,8 +56,7 @@ describe('User routes', () => {
       const currentUser = await caller.getUserById({
         userId: testUser.id,
       });
-
-      expect(currentUser.id.toString()).toEqual(testUser.id);
+      expect(currentUser?.id.toString()).toEqual(testUser.id);
     });
   });
 

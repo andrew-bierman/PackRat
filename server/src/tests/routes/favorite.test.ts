@@ -1,8 +1,8 @@
-import { generateMockUser, setupTest, trpcCaller } from '../utils/testHelpers';
+import { generateMockUser, setupTest } from '../utils/testHelpers';
+import type { trpcCaller } from '../utils/testHelpers';
 import { describe, it, expect, beforeEach, afterEach, beforeAll } from 'vitest';
 import { env } from 'cloudflare:test';
 import { type User as UserType } from '../../db/schema';
-
 
 describe('Favorite routes', () => {
   let caller: trpcCaller;
@@ -31,13 +31,18 @@ describe('Favorite routes', () => {
         const packId = pack?.id.toString();
         const userId = user.id.toString();
 
-        //! addToFavoriteRoute is returning user's data instead of returning added favorites
-        const currentUser = await caller.addToFavorite({
+        const response = await caller.addToFavorite({
           packId,
           userId,
         });
 
-        expect(currentUser?.id.toString()).toEqual(userId);
+        // Assert the type of currentUser
+        const currentUser = response as unknown as {
+          id: string;
+          [key: string]: any;
+        };
+
+        expect(currentUser.id.toString()).toEqual(userId);
       }
     });
   });

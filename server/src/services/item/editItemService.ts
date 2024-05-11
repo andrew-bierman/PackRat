@@ -24,7 +24,15 @@ export const editItemService = async (
   quantity?: number,
   type?: 'Food' | 'Water' | 'Essentials',
 ) => {
-  let category: InsertItemCategory | null;
+  let category:
+    | {
+        id: string;
+        name: 'Food' | 'Water' | 'Essentials';
+        createdAt: string | null;
+        updatedAt: string | null;
+      }
+    | null
+    | undefined;
   const itemClass = new Item();
   const itemCategoryClass = new ItemCategory();
   if (type && !categories.includes(type)) {
@@ -32,7 +40,9 @@ export const editItemService = async (
   } else {
     category = await itemCategoryClass.findItemCategory({ name: type });
     if (!category) {
-      category = await itemCategoryClass.create({ name: type });
+      category = await itemCategoryClass.create({
+        name: type as 'Food' | 'Water' | 'Essentials',
+      });
     }
   }
   const item = await itemClass.findItem({ id });
