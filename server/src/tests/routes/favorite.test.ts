@@ -3,7 +3,6 @@ import { describe, it, expect, beforeEach, afterEach, beforeAll } from 'vitest';
 import { env } from 'cloudflare:test';
 import { type User as UserType } from '../../db/schema';
 
-
 describe('Favorite routes', () => {
   let caller: trpcCaller;
   let user;

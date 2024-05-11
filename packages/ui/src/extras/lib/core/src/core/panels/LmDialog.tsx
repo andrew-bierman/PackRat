@@ -6,25 +6,25 @@ import {
   SizeTokens,
   VisuallyHidden,
   XStack,
-} from 'tamagui'
-import { ReactNode } from 'react'
-import { XRegular } from '../content/icons'
-import { useWindowDimensions } from 'react-native'
-import { LmDialogActions, LmDialogHeader } from './LmDialogActions'
-import { LmDialogContent } from './LmDialogContent'
+} from 'tamagui';
+import { ReactNode } from 'react';
+import { XRegular } from '../content/icons';
+import { useWindowDimensions } from 'react-native';
+import { LmDialogActions, LmDialogHeader } from './LmDialogActions';
+import { LmDialogContent } from './LmDialogContent';
 
 export type LmDialogProps = DialogProps & {
-  trigger?: ReactNode
-  title?: string
-  description?: string
-  hideCloseButton?: boolean
-  fullScreen?: boolean
-  contentPadding?: SizeTokens
-  dialogHeight?: string | number
-  dialogWidth?: string | number
-  dialogContentProps?: DialogContentProps
-  preventClickOutside?: boolean
-}
+  trigger?: ReactNode;
+  title?: string;
+  description?: string;
+  hideCloseButton?: boolean;
+  fullScreen?: boolean;
+  contentPadding?: SizeTokens;
+  dialogHeight?: string | number;
+  dialogWidth?: string | number;
+  dialogContentProps?: DialogContentProps;
+  preventClickOutside?: boolean;
+};
 
 export function LmDialog({
   children,
@@ -40,7 +40,7 @@ export function LmDialog({
   preventClickOutside,
   ...dialogProps
 }: LmDialogProps) {
-  const { width, height } = useWindowDimensions()
+  const { width, height } = useWindowDimensions();
   return (
     <Dialog modal {...dialogProps}>
       {trigger && <Dialog.Trigger asChild>{trigger}</Dialog.Trigger>}
@@ -92,10 +92,10 @@ export function LmDialog({
               })}
           {...(preventClickOutside && {
             onEscapeKeyDown: (ev) => {
-              ev.preventDefault()
+              ev.preventDefault();
             },
             onInteractOutside: (ev) => {
-              ev.preventDefault()
+              ev.preventDefault();
             },
           })}
           {...dialogContentProps}
@@ -140,9 +140,9 @@ export function LmDialog({
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog>
-  )
+  );
 }
 
-LmDialog.Actions = LmDialogActions
-LmDialog.Content = LmDialogContent
-LmDialog.Header = LmDialogHeader
+LmDialog.Actions = LmDialogActions;
+LmDialog.Content = LmDialogContent;
+LmDialog.Header = LmDialogHeader;

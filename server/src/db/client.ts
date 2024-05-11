@@ -24,7 +24,7 @@ class DbClient {
       this._instance = await createDb(d1Db);
     }
   }
-};
+}
 
 export { DbClient };
 

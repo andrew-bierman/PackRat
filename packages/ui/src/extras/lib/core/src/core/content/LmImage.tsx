@@ -1,6 +1,6 @@
-import { Image, ImageProps, Stack } from 'tamagui'
+import { Image, ImageProps, Stack } from 'tamagui';
 
-export type LmImageProps = ImageProps
+export type LmImageProps = ImageProps;
 
 export function LmImage({ aspectRatio, ...props }: LmImageProps) {
   if (aspectRatio) {
@@ -14,7 +14,7 @@ export function LmImage({ aspectRatio, ...props }: LmImageProps) {
           resizeMode={'contain'}
         />
       </Stack>
-    )
+    );
   }
-  return <Image {...props} />
+  return <Image {...props} />;
 }

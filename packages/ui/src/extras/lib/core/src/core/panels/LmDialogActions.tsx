@@ -1,8 +1,8 @@
-import { SizeTokens, XStack, XStackProps } from 'tamagui'
+import { SizeTokens, XStack, XStackProps } from 'tamagui';
 
 export type LmDialogActionsProps = XStackProps & {
-  contentPadding?: SizeTokens
-}
+  contentPadding?: SizeTokens;
+};
 
 export function LmDialogActions({
   children,
@@ -20,10 +20,14 @@ export function LmDialogActions({
     >
       {children}
     </XStack>
-  )
+  );
 }
 
-export function LmDialogHeader({ children, contentPadding = '$4', ...rest }: LmDialogActionsProps) {
+export function LmDialogHeader({
+  children,
+  contentPadding = '$4',
+  ...rest
+}: LmDialogActionsProps) {
   return (
     <XStack
       justifyContent={'space-between'}
@@ -35,5 +39,5 @@ export function LmDialogHeader({ children, contentPadding = '$4', ...rest }: LmD
     >
       {children}
     </XStack>
-  )
+  );
 }
