@@ -50,7 +50,10 @@ export async function fromOSM(Model: any, data: any) {
   const nodeClass = new Node();
   // Find or create nodes
   const ids = data.nodes.map((node: any) => node.id);
-  const instances = await nodeClass.create(data.nodes);
+
+  const instances = await Promise.all(
+    data.nodes.map(async (node: any) => await nodeClass.create(node)),
+  );
 
   // Add nodes to instance
   instanceData.nodes = instances.map((instance: any) => instance._id);

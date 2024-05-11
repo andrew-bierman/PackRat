@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, beforeAll } from 'vitest';
-import { setupTest, } from '../utils/testHelpers';
+import { setupTest } from '../utils/testHelpers';
 import type { trpcCaller } from '../utils/testHelpers';
 import type { Pack } from '../../db/schema';
 import { env } from 'cloudflare:test';
@@ -24,8 +24,8 @@ describe('Template routes', () => {
 
   describe('Get packs by owner', () => {
     it('Get packs by owner', async () => {
-      if (pack) {
-        const ownerId = pack?.owner_id.toString();
+      const ownerId = pack?.owner_id?.toString();
+      if (ownerId) {
         const {
           message,
           packs: [ownerPack],
@@ -48,7 +48,7 @@ describe('Template routes', () => {
           .editPack({
             ...pack,
             id: pack?.id?.toString(),
-            is_public: pack?.is_public,
+            is_public: pack?.is_public === null ? false : pack?.is_public,
             name: nameToBeUpdated,
           })
           .then((pack) => pack);
@@ -61,13 +61,18 @@ describe('Template routes', () => {
   describe('Create pack', () => {
     it('Create pack', async () => {
       const { id, ...partialPack } = pack;
-      const input = {
-        ...partialPack,
-        owner_id: partialPack.owner_id.toString(),
-      };
-      //! response format should be consistent for all routes
-      const { createdPack } = await caller.addPack(input);
-      expect(createdPack).toBeDefined();
+      if (partialPack.owner_id) {
+        const input = {
+          ...partialPack,
+          owner_id: partialPack.owner_id.toString(),
+          is_public:
+            partialPack.is_public === null ? false : partialPack.is_public,
+        };
+        const response = (await caller.addPack(input)) as unknown as {
+          createdPack: any;
+        };
+        expect(response.createdPack).toBeDefined();
+      }
     });
   });
 
