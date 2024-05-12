@@ -104,7 +104,7 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
             >
               {showSearchResults && results && results?.length > 0 && (
                 <RScrollView
-                  position="absolute"
+                  position="relative"
                   top="100%"
                   left="0"
                   right="0"
