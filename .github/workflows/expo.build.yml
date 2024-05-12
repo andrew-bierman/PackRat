@@ -35,6 +35,12 @@ jobs:
         env:
           MAPBOX_DOWNLOADS_TOKEN: ${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}
 
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: android-apk
+          path: /home/runner/work/PackRat/PackRat/apps/expo/build-*.apk
+
   build-ios:
     runs-on: macos-latest
     steps:
@@ -57,3 +63,9 @@ jobs:
           eas build --non-interactive --platform ios --local
         env:
           MAPBOX_DOWNLOADS_TOKEN: ${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}
+
+      - name: Upload IPA
+        uses: actions/upload-artifact@v3
+        with:
+          name: ios-ipa
+          path: /home/runner/work/PackRat/PackRat/apps/expo/build-*.ipa
