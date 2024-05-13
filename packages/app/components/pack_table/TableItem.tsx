@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Platform } from 'react-native';
 
 import useCustomStyles from 'app/hooks/useCustomStyles';
@@ -40,8 +40,11 @@ const TableItem = ({
   const styles = useCustomStyles(loadStyles);
   const authUser = useAuthUser();
 
-  const openModal = (modalName: ModalName) =>  {
+  useEffect(() => {
+    setActiveModal(null);
+  }, [itemData]);
 
+  const openModal = (modalName: ModalName) => {
     setActiveModal(modalName);
   };
 
@@ -49,17 +52,20 @@ const TableItem = ({
     setActiveModal(null);
   };
 
-  const rowActionItems = [
+  let rowActionItems = [
     { label: 'Delete', onSelect: () => openModal('delete') },
     // TODO Implement Ignore Pack Item functional
     // { label: 'Ignore', onSelect: () => {} },
   ];
 
   if (authUser.id === itemData.ownerId) {
-    rowActionItems.unshift({
-      label: 'Edit',
-      onSelect: () => openModal('edit'),
-    });
+    rowActionItems = [
+      {
+        label: 'Edit',
+        onSelect: () => openModal('edit'),
+      },
+      ...rowActionItems,
+    ];
   }
 
   let rowData = [
@@ -93,6 +99,7 @@ const TableItem = ({
         showTrigger={false}
         isOpen={activeModal === 'edit'}
         onClose={closeModal}
+        
       >
         <AddItem id={id} packId={id} isEdit={true} initialData={itemData} />
       </EditPackItemModal>
