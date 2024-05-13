@@ -40,7 +40,8 @@ const TableItem = ({
   const styles = useCustomStyles(loadStyles);
   const authUser = useAuthUser();
 
-  const openModal = (modalName: ModalName) => () => {
+  const openModal = (modalName: ModalName) =>  {
+
     setActiveModal(modalName);
   };
 
@@ -88,6 +89,7 @@ const TableItem = ({
   return (
     <>
       <EditPackItemModal
+        triggerComponent={undefined}
         showTrigger={false}
         isOpen={activeModal === 'edit'}
         onClose={closeModal}

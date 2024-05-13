@@ -30,6 +30,7 @@ export const EditPackItemModal = ({
       title={'Edit Item'}
       isOpen={isOpen}
       onClose={onClose}
+      footerComponent={undefined}
       footerButtons={footerButtons}
       triggerComponent={triggerComponent}
       showTrigger={showTrigger !== undefined ? showTrigger : true}
