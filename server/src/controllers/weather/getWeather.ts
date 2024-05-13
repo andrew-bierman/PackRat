@@ -26,7 +26,7 @@ export function getWeatherRoute() {
     .input(z.object({ lat: z.number(), lon: z.number() }))
     .query(async (opts) => {
       const { lat, lon } = opts.input;
-      const { env }: any = opts.ctx;
+      const { env } = opts.ctx;
       return await getWeatherService(
         env.WEATHER_URL,
         env.OPENWEATHER_KEY,

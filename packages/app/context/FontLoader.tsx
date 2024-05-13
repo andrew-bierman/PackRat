@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useFonts } from 'expo-font';
 // import { SplashScreen } from 'expo-router';
+import { APP } from '@env';
 
 // Expo vector icons
 import {
@@ -49,7 +50,7 @@ const FontLoader = ({ children }) => {
     }
   }, [loaded]);
 
-  if (!loaded) return null;
+  if (!loaded && APP !== 'vite') return null;
 
   return children;
 };

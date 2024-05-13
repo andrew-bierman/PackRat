@@ -77,6 +77,8 @@
     "upgrade:drizzle": "yarn up 'drizzle-*'@latest",
     "upgrade:next": "yarn up 'next'@latest 'next-*'@latest",
     "upgrade:million": "yarn up 'million'@latest",
+    "upgrade:tauri": "yarn up '@tauri-apps/*'@latest",
+    "upgrade:tauri:canary": "yarn up '@tauri-apps/*'@next",
     "web": "cd apps/next && yarn dev"
   },
   "engines": {
