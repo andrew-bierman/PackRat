@@ -234,7 +234,7 @@ export default function Card({
                     <Link
                       href={`/profile/${
                         type === 'pack' ? owner_id : owner?.id
-                        }`}
+                      }`}
                       style={{ textDecoration: 'none' }}
                     >
                       <RText color={currentTheme.colors.textColor}>

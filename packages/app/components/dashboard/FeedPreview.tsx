@@ -54,7 +54,9 @@ const FeedPreviewScroll: React.FC<FeedPreviewScrollProps> = ({ itemWidth }) => {
                   {item.type}
                 </RText>
               </RStack>
-              <RText>{item.description}</RText>
+              <RText style={{ color: styles.feedItemType.color }}>
+                {item.description}
+              </RText>
             </View>
           </Link>
         ) : null;
