@@ -1,4 +1,1 @@
-export const viteSource = {
-  prefix: 'VITE_',
-  source: import.meta.env,
-};
+export const viteSource = import.meta.env,
